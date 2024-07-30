@@ -38,6 +38,7 @@ export class JobClosingComponent implements OnInit {
   subscriptions: any[] = [];
   viewMode: boolean = false;
   editMode: boolean = false;
+  isloading: boolean = false;
   isDisableSaveBtn: boolean = false;
   branchCode: String = this.commonService.branchCode;
   yearMonth: String = this.commonService.yearSelected;
@@ -56,7 +57,24 @@ export class JobClosingComponent implements OnInit {
     this.branchCode = this.commonService.branchCode;
     this.yearMonth = this.commonService.yearSelected;
     // this.voctype = this.commonService.getqueryParamMainVocType()
-    this.setvalues()
+    if (this.content?.FLAG) {
+      if (this.content.FLAG == 'VIEW') {
+        this.viewMode = true;
+        this.LOCKVOUCHERNO = true;
+      }
+      if (this.content.FLAG == 'EDIT') {
+        this.viewMode = true;
+        this.LOCKVOUCHERNO = true;
+      }
+      if (this.content?.FLAG) {
+        this.jobCloseingFrom.controls.FLAG.setValue(this.content.FLAG)
+      }
+    } else {
+      this.generateVocNo()
+      this.setvalues()
+      this.setvoucherTypeMaster()
+    }
+
   }
   setAllInitialValues() {
     console.log(this.content)
@@ -267,6 +285,9 @@ export class JobClosingComponent implements OnInit {
     metal_loc: ['', [Validators.required]],
     doc_ref: ['',],
     remarks: ['',],
+    FLAG: [null],
+    MAIN_VOCTYPE: ['']
+    
   });
 
   setDetaills() {
@@ -351,6 +372,10 @@ export class JobClosingComponent implements OnInit {
     this.jobCloseingFrom.controls.vocType.setValue(this.commonService.getqueryParamVocType())
     this.jobCloseingFrom.controls.vocNo.setValue(this.commonService.popMetalValueOnNet)
     this.jobCloseingFrom.controls.vocdate.setValue(this.commonService.currentDate)
+    this.jobCloseingFrom.controls.MAIN_VOCTYPE.setValue(
+      this.commonService.getqueryParamMainVocType()
+    )
+    this.setvoucherTypeMaster()
 
   }
 
@@ -358,6 +383,49 @@ export class JobClosingComponent implements OnInit {
     if(event.key == 'Tab' && event.target.value == ''){
       this.showOverleyPanel(event,form)
     }
+  }
+  minDate: any;
+  maxDate: any;
+  LOCKVOUCHERNO: boolean = true;
+  setvoucherTypeMaster() {
+    let frm = this.jobCloseingFrom.value
+    const vocTypeMaster = this.comService.getVoctypeMasterByVocTypeMain(frm.BRANCH_CODE, frm.VOCTYPE, frm.MAIN_VOCTYPE)
+    this.LOCKVOUCHERNO = vocTypeMaster.LOCKVOUCHERNO
+    this.minDate = vocTypeMaster.BLOCKBACKDATEDENTRIES ? new Date() : null;
+    this.maxDate = vocTypeMaster.BLOCKFUTUREDATE ? new Date() : null;
+  }
+  ValidatingVocNo() {
+    if (this.content?.FLAG == 'VIEW') return
+    this.comService.showSnackBarMsg('MSG81447');
+    let API = `ValidatingVocNo/${this.comService.getqueryParamMainVocType()}/${this.jobCloseingFrom.value.vocNo}`
+    API += `/${this.comService.branchCode}/${this.comService.getqueryParamVocType()}`
+    API += `/${this.comService.yearSelected}`
+    this.isloading = true;
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        this.isloading = false;
+        this.comService.closeSnackBarMsg()
+        let data = this.comService.arrayEmptyObjectToString(result.dynamicData[0])
+        if (data && data[0]?.RESULT == 0) {
+          this.comService.toastErrorByMsgId('Voucher Number Already Exists')
+          this.generateVocNo()
+          return
+        }
+      }, err => {
+        this.isloading = false;
+        this.generateVocNo()
+        this.comService.toastErrorByMsgId('Error Something went wrong')
+      })
+    this.subscriptions.push(Sub)
+  }
+  generateVocNo() {
+    const API = `GenerateNewVoucherNumber/GenerateNewVocNum/${this.comService.getqueryParamVocType()}/${this.comService.branchCode}/${this.comService.yearSelected}/${this.comService.formatYYMMDD(this.currentDate)}`;
+    this.dataService.getDynamicAPI(API)
+      .subscribe((resp) => {
+        if (resp.status == "Success") {
+          this.jobCloseingFrom.controls.vocNo.setValue(resp.newvocno);
+        }
+      });
   }
 
   formSubmit() {

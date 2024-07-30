@@ -34,7 +34,7 @@ export class WaxProcessReturnComponent implements OnInit {
   isDisableSaveBtn: boolean = false;
   currentDate = new Date();
   companyName = this.comService.allbranchMaster['BRANCH_NAME'];
-
+  isloading: boolean = false;
   private subscriptions: Subscription[] = [];
   user: MasterSearchModel = {
     PAGENO: 1,
@@ -115,7 +115,7 @@ export class WaxProcessReturnComponent implements OnInit {
   waxprocessFrom: FormGroup = this.formBuilder.group({
     voctype: ['', [Validators.required]],
     vocDate: [new Date()],
-    vocno: [1, [Validators.required]],
+    vocno: ['', [Validators.required]],
     enteredBy: [''],
     process: ['', [Validators.required]],
     worker: ['', [Validators.required]],
@@ -123,6 +123,8 @@ export class WaxProcessReturnComponent implements OnInit {
     toprocess: [''],
     waxcode: [''],
     remark: [''],
+    FLAG: [null],
+    MAIN_VOCTYPE: ['']
   });
 
 
@@ -139,7 +141,31 @@ export class WaxProcessReturnComponent implements OnInit {
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
     this.waxprocessFrom.controls.voctype.setValue(this.comService.getqueryParamVocType());
+    if (this.content?.FLAG) {
+      if (this.content.FLAG == 'VIEW') {
+        this.viewMode = true;
+        this.LOCKVOUCHERNO = true;
+      }
+      if (this.content.FLAG == 'EDIT') {
+        this.viewMode = true;
+        this.LOCKVOUCHERNO = true;
+      }
+      if (this.content?.FLAG) {
+        this.waxprocessFrom.controls.FLAG.setValue(this.content.FLAG)
+      }
+    } else {
+      this.generateVocNo()
+      this.setFormValues()
+      this.setvoucherTypeMaster()
+    }
 
+  }
+  setFormValues(){
+    if (!this.content) return
+    this.waxprocessFrom.controls.MAIN_VOCTYPE.setValue(
+      this.comService.getqueryParamMainVocType()
+    )
+    this.setvoucherTypeMaster()
   }
 
   userDataSelected(value: any) {
@@ -181,7 +207,49 @@ export class WaxProcessReturnComponent implements OnInit {
       this.showOverleyPanel(event, form)
     }
   }
-
+  minDate: any;
+  maxDate: any;
+  LOCKVOUCHERNO: boolean = true;
+  setvoucherTypeMaster() {
+    let frm = this.waxprocessFrom.value
+    const vocTypeMaster = this.comService.getVoctypeMasterByVocTypeMain(frm.BRANCH_CODE, frm.VOCTYPE, frm.MAIN_VOCTYPE)
+    this.LOCKVOUCHERNO = vocTypeMaster.LOCKVOUCHERNO
+    this.minDate = vocTypeMaster.BLOCKBACKDATEDENTRIES ? new Date() : null;
+    this.maxDate = vocTypeMaster.BLOCKFUTUREDATE ? new Date() : null;
+  }
+  ValidatingVocNo() {
+    if (this.content?.FLAG == 'VIEW') return
+    this.comService.showSnackBarMsg('MSG81447');
+    let API = `ValidatingVocNo/${this.comService.getqueryParamMainVocType()}/${this.waxprocessFrom.value.vocno}`
+    API += `/${this.comService.branchCode}/${this.comService.getqueryParamVocType()}`
+    API += `/${this.comService.yearSelected}`
+    this.isloading = true;
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        this.isloading = false;
+        this.comService.closeSnackBarMsg()
+        let data = this.comService.arrayEmptyObjectToString(result.dynamicData[0])
+        if (data && data[0]?.RESULT == 0) {
+          this.comService.toastErrorByMsgId('Voucher Number Already Exists')
+          this.generateVocNo()
+          return
+        }
+      }, err => {
+        this.isloading = false;
+        this.generateVocNo()
+        this.comService.toastErrorByMsgId('Error Something went wrong')
+      })
+    this.subscriptions.push(Sub)
+  }
+  generateVocNo() {
+    const API = `GenerateNewVoucherNumber/GenerateNewVocNum/${this.comService.getqueryParamVocType()}/${this.comService.branchCode}/${this.comService.yearSelected}/${this.comService.formatYYMMDD(this.currentDate)}`;
+    this.dataService.getDynamicAPI(API)
+      .subscribe((resp) => {
+        if (resp.status == "Success") {
+          this.waxprocessFrom.controls.vocno.setValue(resp.newvocno);
+        }
+      });
+  }
   removedata() {
     this.tableData.pop();
   }

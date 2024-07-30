@@ -14,6 +14,13 @@ import Swal from 'sweetalert2';
   styleUrls: ['./process-transfer-details.component.scss']
 })
 export class ProcessTransferDetailsComponent implements OnInit {
+  @ViewChild('MetaloverlayToWorker') MetaloverlayToWorker!: MasterSearchComponent;
+  @ViewChild('MetaloverlayjobNoSearch') MetaloverlayjobNoSearch!: MasterSearchComponent;
+  @ViewChild('MetalfromProcessMasterOverlay') MetalfromProcessMasterOverlay!: MasterSearchComponent;
+  @ViewChild('MetaltoProcessMasterOverlay') MetaltoProcessMasterOverlay!: MasterSearchComponent;
+  @ViewChild('MetalfromWorkerMasterOverley') MetalfromWorkerMasterOverley!: MasterSearchComponent;
+  @ViewChild('MetalstockCodeOverlay') MetalstockCodeOverlay!: MasterSearchComponent;
+  @ViewChild('MetaloverleyLocation') MetaloverleyLocation!: MasterSearchComponent;
   @ViewChild('overlayToWorker') overlayToWorker!: MasterSearchComponent;
   @ViewChild('overlayjobNoSearch') overlayjobNoSearch!: MasterSearchComponent;
   @ViewChild('fromProcessMasterOverlay') fromProcessMasterOverlay!: MasterSearchComponent;
@@ -534,8 +541,8 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.setValueWithDecimal('TO_STONE_WT', parentDetail.TO_STONE_WT, 'STONE')
     this.setValueWithDecimal('PUREWT', parentDetail.PUREWT, 'AMOUNT')
     this.setValueWithDecimal('PURITY', parentDetail.PURITY, 'PURITY')
-    this.setValueWithDecimal('SCRAP_WT', parentDetail.SCRAP_WT, 'METAL')
-    if (parentDetail.APPROVED_USER != '') {
+    this.setValueWithDecimal('scrapWeight', parentDetail.SCRAP_WT, 'METAL')
+    if (this.commonService.nullToString(parentDetail.APPROVED_USER) != '') {
       this.nullToStringSetValue('APPROVED_USER', parentDetail.APPROVED_USER)
       this.approvalReqFlag = true
       this.processTransferdetailsForm.controls.approveddate.setValue(
@@ -653,9 +660,9 @@ export class ProcessTransferDetailsComponent implements OnInit {
     let strCondition = ''
     let form = this.processTransferdetailsForm.value;
     if (this.emptyToZero(form.METAL_FromIronWeight) != 0) {
-      strCondition = " SUBCODE = 0 AND (PURITY = " + form.PURITY + " OR EXCLUDE_TRANSFER_WT = 1)";
+      strCondition = " SUBCODE = 0 AND (PURITY = " + this.emptyToZero(form.PURITY) + " OR EXCLUDE_TRANSFER_WT = 1)";
     } else {
-      strCondition = " SUBCODE = 0 AND PURITY = " + form.PURITY;
+      strCondition = `SUBCODE = 0 AND PURITY = ${this.emptyToZero(form.PURITY)}`;
     }
     this.metalScrapStockCode.WHERECONDITION = strCondition
   }
@@ -1681,7 +1688,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
           LOOKUPDATA.SEARCH_VALUE = ''
         }
       }, err => {
-        this.commonService.toastErrorByMsgId('Error something went wrong')
+        this.commonService.toastErrorByMsgId('MSG1531')
       })
     this.subscriptions.push(Sub)
   }
@@ -2609,7 +2616,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
           this.stockCodeScrapValidate()
         }
       }, err => {
-        this.commonService.toastErrorByMsgId('Error something went wrong')
+        this.commonService.toastErrorByMsgId('MSG1531')
       })
     this.subscriptions.push(Sub)
   }
@@ -2643,6 +2650,18 @@ export class ProcessTransferDetailsComponent implements OnInit {
       case 'location':
         this.overleyLocation.showOverlayPanel(event);
         break;
+      case 'METAL_FRM_PROCESS_CODE':
+        this.MetalfromProcessMasterOverlay.showOverlayPanel(event);
+        break;
+      case 'METAL_TO_PROCESS_CODE':
+        this.MetaltoProcessMasterOverlay.showOverlayPanel(event);
+        break;
+      case 'METAL_FRM_WORKER_CODE':
+        this.MetalfromWorkerMasterOverley.showOverlayPanel(event);
+        break;
+      case 'METAL_TO_WORKER_CODE':
+        this.MetaloverlayToWorker.showOverlayPanel(event);
+        break;
       default:
         // Optionally handle the default case if needed
         break;
@@ -2667,7 +2686,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       this.subscriptions = []; // Clear the array
     }
   }
-  /** METAL SECTION VALIDATIONS */
+  /** METAL SECTION VALIDATIONS STARTS*/
   MToStockCode_Validating() {
 
   }
@@ -2717,7 +2736,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
               }
             }
         }, err => {
-          this.commonService.toastErrorByMsgId('Error something went wrong')
+          this.commonService.toastErrorByMsgId('MSG1531')
         })
       this.subscriptions.push(Sub)
 
@@ -2765,23 +2784,28 @@ export class ProcessTransferDetailsComponent implements OnInit {
   MToGrossWt_Validating() {
     try {
       let form = this.processTransferdetailsForm.value;
-      if ((this.commonService.emptyToZero(form.METAL_GrossWeightTo) + this.commonService.emptyToZero(form.METAL_ScrapGrWt) + this.commonService.emptyToZero(form.METAL_LossBooked)) > this.commonService.emptyToZero(form.METAL_GrossWeightFrom)) {
+      if(this.emptyToZero(this.FORM_VALIDATER.METAL_GrossWeightTo) == this.emptyToZero(form.METAL_GrossWeightTo)){
+        return
+      }
+      if ((this.emptyToZero(form.METAL_GrossWeightTo) + this.emptyToZero(form.METAL_ScrapGrWt) + this.emptyToZero(form.METAL_LossBooked)) > this.emptyToZero(form.METAL_GrossWeightFrom)) {
         if (!form.blnAllowGain) {
           this.setValueWithDecimal('METAL_GrossWeightTo', this.FORM_VALIDATER.METAL_GrossWeightTo, 'METAL')
           this.commonService.toastErrorByMsgId("MSG1910");
           return;
         }
+        this.commonService.toastErrorByMsgId("MSG3787");
+        this.setValueWithDecimal('METAL_GrossWeightTo', this.FORM_VALIDATER.METAL_GrossWeightTo, 'METAL')
         //TODO
         // if (MessageBox.Show(objCommonFunctions.GetMessage("MSG3787") + " " + objCommonFunctions.GetMessage("MSG3658"), objCommonFunctions.GetMessage("MSG2100"), MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.No) {
         //   txtMToGrossWt.Text = txtMToGrossWt.Tag.ToString();
         //   return;
         // }
       }
-      let txtToIronWt = ((this.commonService.emptyToZero(form.METAL_FromIronWeight)) / (this.commonService.emptyToZero(form.METAL_FromIronWeight) + this.commonService.emptyToZero(form.METAL_FromNetWeight)) * ((this.commonService.emptyToZero(form.METAL_GrossWeightTo) + this.commonService.emptyToZero(form.METAL_LossBooked)) - this.commonService.emptyToZero(form.METAL_TO_STONE_WT)));
-      let txtBalGrWt = (this.commonService.emptyToZero(form.METAL_GrossWeightFrom) - (this.commonService.emptyToZero(form.GrossWeightTo) + this.commonService.emptyToZero(form.METAL_ScrapGrWt) + this.commonService.emptyToZero(form.METAL_LossBooked)));
-      let txtBalIronWt = (this.commonService.emptyToZero(form.METAL_FromIronWeight) - (this.commonService.emptyToZero(txtToIronWt) + this.commonService.emptyToZero(form.METAL_ToIronScrapWt)));
-      let txtBalNetWt = (this.commonService.emptyToZero(txtBalGrWt) - (this.commonService.emptyToZero(form.METAL_BalStoneWt) + this.commonService.emptyToZero(form.METAL_BalIronWt)));
-      let txtBalPureWt = ((this.commonService.emptyToZero(txtBalNetWt) * form.PURITY));
+      let txtToIronWt = ((this.emptyToZero(form.METAL_FromIronWeight)) / (this.emptyToZero(form.METAL_FromIronWeight) + this.emptyToZero(form.METAL_FromNetWeight)) * ((this.emptyToZero(form.METAL_GrossWeightTo) + this.emptyToZero(form.METAL_LossBooked)) - this.emptyToZero(form.METAL_TO_STONE_WT)));
+      let txtBalGrWt = (this.emptyToZero(form.METAL_GrossWeightFrom) - (this.emptyToZero(form.GrossWeightTo) + this.emptyToZero(form.METAL_ScrapGrWt) + this.emptyToZero(form.METAL_LossBooked)));
+      let txtBalIronWt = (this.emptyToZero(form.METAL_FromIronWeight) - (this.emptyToZero(txtToIronWt) + this.emptyToZero(form.METAL_ToIronScrapWt)));
+      let txtBalNetWt = (this.emptyToZero(txtBalGrWt) - (this.emptyToZero(form.METAL_BalStoneWt) + this.emptyToZero(form.METAL_BalIronWt)));
+      let txtBalPureWt = ((this.emptyToZero(txtBalNetWt) * form.PURITY));
       this.setValueWithDecimal('METAL_ToIronWt', txtToIronWt, 'METAL')
       this.setValueWithDecimal('METAL_BalGrWt', txtBalGrWt, 'METAL')
       this.setValueWithDecimal('METAL_BalIronWt', txtBalIronWt, 'METAL')
@@ -2800,6 +2824,9 @@ export class ProcessTransferDetailsComponent implements OnInit {
   txtMScrapGrWt_Validating(): void {
     try {
       let form = this.processTransferdetailsForm.value;
+      if(this.emptyToZero(this.FORM_VALIDATER.METAL_ScrapGrWt) == this.emptyToZero(form.METAL_ScrapGrWt)){
+        return
+      }
       let txtMToGrossWt = 0
       if ((this.emptyToZero(form.METAL_GrossWeightTo)) > (this.emptyToZero(form.METAL_ScrapGrWt) + this.emptyToZero(form.METAL_LossBooked))) {
         txtMToGrossWt = (this.emptyToZero(form.METAL_GrossWeightFrom) - (this.emptyToZero(form.METAL_ScrapGrWt) + this.emptyToZero(form.METAL_LossBooked)));
@@ -2886,6 +2913,9 @@ export class ProcessTransferDetailsComponent implements OnInit {
   txtToIronWt_Validating(): void {
     try {
       let form = this.processTransferdetailsForm.value;
+      if (this.emptyToZero(this.FORM_VALIDATER.METAL_ToIronWt) == this.emptyToZero(form.METAL_ToIronWt)) {
+        return;
+      }
       if (this.emptyToZero(this.FORM_VALIDATER.METAL_ToIronWt) == this.emptyToZero(form.METAL_ToIronWt) && this.emptyToZero(form.METAL_ToIronWt) != 0) {
         return;
       }
@@ -2932,6 +2962,9 @@ export class ProcessTransferDetailsComponent implements OnInit {
   txtToIronScrapWt_Validating(): void {
     try {
       let form = this.processTransferdetailsForm.value;
+      if (this.emptyToZero(this.FORM_VALIDATER.METAL_ToIronScrapWt) == this.emptyToZero(form.METAL_ToIronScrapWt)) {
+        return;
+      }
       if (this.emptyToZero(this.FORM_VALIDATER.METAL_ToIronScrapWt) == this.emptyToZero(form.METAL_ToIronScrapWt) && this.emptyToZero(form.METAL_ToIronScrapWt) != 0) {
         return;
       }

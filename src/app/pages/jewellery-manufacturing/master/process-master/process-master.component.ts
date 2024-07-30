@@ -369,7 +369,7 @@ export class ProcessMasterComponent implements OnInit {
 
   showMaxContentAlert(): void {
     if (this.processMasterForm.value.processCode == '') {
-      this.commonService.toastErrorByMsgId('Process Code cannot be empty')
+      this.commonService.toastErrorByMsgId('MSG1680')//Process Code cannot be empty
     }
   }
 
@@ -448,15 +448,18 @@ export class ProcessMasterComponent implements OnInit {
     let form = this.processMasterForm.value
     if (this.commonService.emptyToZero(form.loss_standard) < this.commonService.emptyToZero(form.loss_min)) {
       this.lossData = true;
-      this.toastr.error('Standard % should be Greater than Minimum %');
+      this.commonService.toastErrorByMsgId('MSG1438');
+     // this.toastr.error('Standard % should be Greater than Minimum %');
     }
     if (this.commonService.emptyToZero(form.loss_standard) > this.commonService.emptyToZero(form.loss_max)) {
       this.lossData = true;
-      this.toastr.error('Standard % should be Lesser than Maximum %');
+      this.commonService.toastErrorByMsgId('MSG1808');
     }
     if (this.commonService.emptyToZero(form.loss_min) > this.commonService.emptyToZero(form.loss_max)) {
       this.lossData = true;
-      this.toastr.error('Minimum % should be Lesser than Maximum %');
+      this.commonService.toastErrorByMsgId('MSG1810');
+      
+      //this.toastr.error('Minimum % should be Lesser than Maximum %');
     }
     return this.lossData
   }
@@ -471,9 +474,9 @@ export class ProcessMasterComponent implements OnInit {
     // }
 
     if (this.commonService.emptyToZero(recLoss) < this.commonService.emptyToZero(minRec)) {
-      console.log("a")
       this.recoveryData = true;
-      this.toastr.error('Standard % should be Greater than Minimum %');
+      this.commonService.toastErrorByMsgId('MSG1438');
+     // this.toastr.error('Standard % should be Greater than Minimum %');
 
     }
     return this.recoveryData
@@ -544,35 +547,35 @@ export class ProcessMasterComponent implements OnInit {
     }
 
     if (this.formattedTime > this.formattedMaxTime) {
-      this.commonService.toastErrorByMsgId('Standard Time  should not be Greater than Maximum Time');
+       this.commonService.toastErrorByMsgId('MSG7901');//Standard Time  should not be Greater than Maximum Time
       return true;
     }
     if (form.loss == true) {
       if (this.commonService.emptyToZero(form.loss_standard) == 0) {
-        this.commonService.toastErrorByMsgId('Loss Standard % Cannot Be Zero');
+        this.commonService.toastErrorByMsgId('MSG1395');//loss cannot be empty
         return true;
       }
       else if (this.commonService.emptyToZero(form.loss_min) == 0) {
-        this.commonService.toastErrorByMsgId('Loss Minimum % Cannot Be Zero');
+        this.commonService.toastErrorByMsgId('MSG1395');
         return true;
       }
       else if (this.commonService.emptyToZero(form.loss_max) == 0) {
-        this.commonService.toastErrorByMsgId('Loss Maximum % Cannot Be Zero');
+        this.commonService.toastErrorByMsgId('MSG1395');
         return true;
       }
       else if (form.LOSS_ACCODE == '') {
-        this.commonService.toastErrorByMsgId('Loss Account Code Cannot Be Empty');
+        this.commonService.toastErrorByMsgId('MSG1395');
         return true;
       }
     }
 
     if (form.recovery == true) {
       if (this.commonService.emptyToZero(form.standard_end) == 0) {
-        this.commonService.toastErrorByMsgId('Recovery Standard % Cannot be Zero');
+        this.commonService.toastErrorByMsgId('MSG81365');// Recovery Minimum % Cannot be Zero
         return true;
       }
       else if (form.min_end == '') {
-        this.commonService.toastErrorByMsgId(' Recovery Minimum % Cannot be Zero');
+        this.commonService.toastErrorByMsgId('MSG81365');
         return true;
       }
       // else if (form.RECOV_ACCODE == '') {
@@ -583,7 +586,7 @@ export class ProcessMasterComponent implements OnInit {
 
     if (form.allowGain == true) {
       if (form.GAIN_ACCODE == '') {
-        this.commonService.toastErrorByMsgId('Gain Account Code Cannot be Empty');
+        this.commonService.toastErrorByMsgId('MSG3865');//Gain Account Code Cannot be Empty
         return true;
       }
     }
@@ -594,19 +597,19 @@ export class ProcessMasterComponent implements OnInit {
     }
 
     if (!form.processCode) {
-      this.commonService.toastErrorByMsgId('Process Code cannot be empty');
+       this.commonService.toastErrorByMsgId('MSG1680');//Process Code cannot be empty
       return true;
     }
     if (!form.processDesc) {
-      this.commonService.toastErrorByMsgId('Description cannot be empty');
+      this.commonService.toastErrorByMsgId('MSG1193');//Description cannot be empty
       return true;
     }
-    if (form.processType == null) {
-      this.commonService.toastErrorByMsgId('Process Type cannot be empty');
-      return true;
-    }
+    // if (form.processType == null) {
+    //   this.commonService.toastErrorByMsgId('Process Type cannot be empty');
+    //   return true;
+    // }
     if (this.commonService.nullToString(form.WIPaccount) == '') {
-      this.commonService.toastErrorByMsgId('WIPaccount cannot be empty');
+      this.commonService.toastErrorByMsgId('MSG2497');
       return true;
     }
     return false;
@@ -746,7 +749,7 @@ export class ProcessMasterComponent implements OnInit {
 
   checkCode(): boolean {
     if (this.processMasterForm.value.processCode == '') {
-      this.commonService.toastErrorByMsgId('Process Code cannot be empty')
+      this.commonService.toastErrorByMsgId('MSG1680');//Process Code cannot be empty
       return true
     }
     return false
@@ -755,7 +758,7 @@ export class ProcessMasterComponent implements OnInit {
     if (this.checkCode()) return
 
     if (this.processMasterForm.value.processCode == e.Process_Code) {
-      this.commonService.toastErrorByMsgId('Cannot select the Same Process Code');
+      this.commonService.toastErrorByMsgId('MSG1121')//code already exsist
       return;
     }
 
@@ -818,7 +821,7 @@ export class ProcessMasterComponent implements OnInit {
   WIPaccountSelected(e: any) {
     if (this.checkCode()) return
     if (this.isSameAccountCodeSelected(e.ACCODE, 'WIPaccount')) {
-      this.commonService.toastErrorByMsgId('Accode already selected');
+      this.commonService.toastErrorByMsgId('MSG1121')//code already exsist
       this.processMasterForm.controls.WIPaccount.setValue('');
       return;
     }
@@ -827,7 +830,7 @@ export class ProcessMasterComponent implements OnInit {
   }
   LOSS_ACCODESelected(e: any) {
     if (this.isSameAccountCodeSelected(e.ACCODE, 'LOSS_ACCODE')) {
-      this.commonService.toastErrorByMsgId('Accode already selected');
+      this.commonService.toastErrorByMsgId('MSG1121')//code already exsist
       this.processMasterForm.controls.LOSS_ACCODE.setValue('');
       return;
     }
@@ -837,7 +840,7 @@ export class ProcessMasterComponent implements OnInit {
   RECOV_ACCODESelected(e: any) {
     if (this.isSameAccountCodeSelected(e.ACCODE, 'RECOV_ACCODE')) {
       this.processMasterForm.controls.RECOV_ACCODE.setValue('');
-      this.commonService.toastErrorByMsgId('Accode already selected');
+      this.commonService.toastErrorByMsgId('MSG1121')//code already exsist
       return;
     }
     this.processMasterForm.controls.RECOV_ACCODE.setValue(e.ACCODE);
@@ -847,7 +850,7 @@ export class ProcessMasterComponent implements OnInit {
   GAIN_ACCODESelected(e: any) {
     if (this.isSameAccountCodeSelected(e.ACCODE, 'GAIN_ACCODE')) {
       this.processMasterForm.controls.GAIN_ACCODE.setValue('');
-      this.commonService.toastErrorByMsgId('Accode already selected');
+      this.commonService.toastErrorByMsgId('MSG1121')//code already exsist
       return;
     }
     this.processMasterForm.controls.GAIN_ACCODE.setValue(e.ACCODE);
@@ -862,7 +865,8 @@ export class ProcessMasterComponent implements OnInit {
     }
     if (this.isSameAccountCodeSelected(event.target.value, formname)) {
       this.processMasterForm.controls[formname].setValue('');
-      this.commonService.toastErrorByMsgId('Accode already selected');
+      this.commonService.toastErrorByMsgId('MSG1121')//code already exsist
+      //this.commonService.toastErrorByMsgId('Accode already selected');
       return;
     }
     this.accodeValidateSP(formname, event.target.value)
@@ -882,13 +886,13 @@ export class ProcessMasterComponent implements OnInit {
         // this.isDisableSaveBtn = false;
         let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
         if (data.length > 0) {
-          this.commonService.toastErrorByMsgId('Accode already exists in other process')
+          this.commonService.toastErrorByMsgId('MSG1121')//Accode already exists in other process
           this.processMasterForm.controls[formControlName].setValue('')
           return
         }
 
       }, err => {
-        this.commonService.toastErrorByMsgId('network issue found')
+        this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
       })
     this.subscriptions.push(Sub)
   }
@@ -914,7 +918,7 @@ export class ProcessMasterComponent implements OnInit {
             }
            
           }, err => {
-            this.commonService.toastErrorByMsgId('network issue found')
+            this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
           })
         this.subscriptions.push(Sub)
       }
@@ -977,7 +981,7 @@ export class ProcessMasterComponent implements OnInit {
                 this.showErrorDialog(result.message || 'Error please try again');
               }
             } else {
-              this.toastr.error('Not deleted');
+              this.commonService.toastErrorByMsgId('MSG1880');// Not Deleted
             }
           }, err => alert(err));
         this.subscriptions.push(Sub);
@@ -1154,7 +1158,7 @@ export class ProcessMasterComponent implements OnInit {
   }
   showAlertIfCodeIsEmpty(): void {
     if (this.processMasterForm.value.processCode == '') {
-      this.commonService.toastErrorByMsgId('Process Code cannot be empty')
+      this.commonService.toastErrorByMsgId('MSG1680')//Process Code cannot be empty
     }
   }
 

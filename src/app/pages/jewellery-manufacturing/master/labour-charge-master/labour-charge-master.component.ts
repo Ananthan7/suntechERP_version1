@@ -489,7 +489,7 @@ export class LabourChargeMasterComponent implements OnInit {
   }
   checkCode(): boolean {
     if (this.metallabourMasterForm.value.metallabour_code == '') {
-      this.commonService.toastErrorByMsgId('Please Enter the Code')
+      this.commonService.toastErrorByMsgId('MSG1124')// Please Enter the Code
       return true
     }
     return false
@@ -497,7 +497,7 @@ export class LabourChargeMasterComponent implements OnInit {
 
   checkCodeDia(): boolean {
     if (this.diamondlabourMasterForm.value.labour_code == '') {
-      this.commonService.toastErrorByMsgId('Please Enter the Code')
+      this.commonService.toastErrorByMsgId('MSG1124')
       return true
     }
     return false
@@ -851,7 +851,7 @@ export class LabourChargeMasterComponent implements OnInit {
       .subscribe((result) => {
         this.commonService.closeSnackBarMsg()
         if (result.status == "Success") {
-          this.commonService.toastErrorByMsgId('Code Already Exists')
+          this.commonService.toastErrorByMsgId('MSG1121')//Code Already Exists
           this.diamondlabourMasterForm.controls.labour_code.setValue('')
           this.renderer.selectRootElement('#code')?.focus();
         }
@@ -897,7 +897,7 @@ export class LabourChargeMasterComponent implements OnInit {
           this.handleLookupError(FORMNAME, LOOKUPDATA);
         }
       }, err => {
-        this.commonService.toastErrorByMsgId('network issue found')
+        this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
       })
     this.subscriptions.push(Sub)
   }
@@ -985,7 +985,7 @@ export class LabourChargeMasterComponent implements OnInit {
           return;
         }
       }, err => {
-        this.commonService.toastErrorByMsgId('network issue found');
+        this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
       });
 
     this.subscriptions.push(Sub);
@@ -1055,48 +1055,69 @@ export class LabourChargeMasterComponent implements OnInit {
     this.activeModal.close(data);
   }
 
-  submitValidation(): boolean {
-    if (this.content && this.content.FLAG == 'VIEW') return true
-    if (this.content && this.content.FLAG == 'EDIT') {
-      this.updatelabourChargeMaster()
+
+
+  submitValidation(form: any) {
+
+    if (this.commonService.nullToString(form.divisions) == '') {
+      this.commonService.toastErrorByMsgId('MSG1207') //"divisions cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.labour_code) == '') {
+      this.commonService.toastErrorByMsgId('MSG1365')//"labour_code cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.labour_description) == '') {
+      this.commonService.toastErrorByMsgId('MSG1193')//"labour_description cannot be empty"
       return true
     }
 
-    if (this.diamondlabourMasterForm.invalid && this.metallabourMasterForm.invalid) {
-      this.toastr.error('Select all required fields')
+    else if (this.commonService.nullToString(form.labourType) == '') {
+      this.commonService.toastErrorByMsgId('MSG7820')//"labourType cannot be empty"
       return true
     }
 
-    if (this.diamondlabourMasterForm.value.selling_rate == 0 && this.diamondlabourMasterForm.value.selling == 0) {
-      this.toastr.error('Select Either Selling % or Selling Rate');
+    else if (this.commonService.nullToString(form.process) == '') {
+      this.commonService.toastErrorByMsgId('MSG1680')//"process cannot be empty"
       return true
     }
-    if (this.diamondlabourMasterForm.value.ctWtFrom == 0 && this.diamondlabourMasterForm.value.ctWtTo == 0) {
-      this.toastr.error('Select ctWtFrom & ctWtTo Value');
+    else if (this.commonService.nullToString(form.labour_ac) == '') {
+      this.commonService.toastErrorByMsgId('MSG1366')//"labour_ac cannot be empty"
       return true
     }
-    if (this.diamondlabourMasterForm.value.size_from > this.diamondlabourMasterForm.value.size_to) {
+    else if (this.commonService.nullToString(form.cost_rate) == '') {
+      this.commonService.toastErrorByMsgId('MSG1594')//"cost_rate cannot be empty"
+      return true
+    }
+
+    else if (this.commonService.nullToString(form.unitList) == '') {
+      this.commonService.toastErrorByMsgId('MSG1927')//"unitList cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.currency) == '') {
+      this.commonService.toastErrorByMsgId('MSG1173')//"currency cannot be empty"
+      return true
+    }
+    else if (this.diamondlabourMasterForm.value.selling_rate == 0 && this.diamondlabourMasterForm.value.selling == 0) {
+      this.commonService.toastErrorByMsgId('MSG7728') //"Select Either Selling % or Selling Rate"
+      return true
+    }
+
+    else if (this.diamondlabourMasterForm.value.size_from > this.diamondlabourMasterForm.value.size_to) {
+     // this.commonService.toastErrorByMsgId('MSG2496') //"Size From should be lesser than Size To"
       this.toastr.error('Size From should be lesser than Size To')
       return true
     }
 
-
-    if (this.diamondlabourMasterForm.value.wtFrom > this.diamondlabourMasterForm.value.wtTo) {
-      this.toastr.error('Weight From should be lesser than Weight To')
+    else if (this.diamondlabourMasterForm.value.ctWtFrom > this.diamondlabourMasterForm.value.ctWtTo) {
+      this.commonService.toastErrorByMsgId('MSG3805')//Weight From should be lesser than Weight To
       return true
     }
 
-    if (this.metallabourMasterForm.value.ctWtFrom > this.metallabourMasterForm.value.ctWtTo) {
-      this.toastr.error('carat From should be lesser than Weight To')
-      return true
-    }
 
-    if (this.metallabourMasterForm.value.size_from > this.metallabourMasterForm.value.size_to) {
-      this.toastr.error('size From should be lesser than Weight To')
-      return true
-    }
     return false;
   }
+
   setPostData() {
     let diamondForm = this.diamondlabourMasterForm.value
     let metalForm = this.metallabourMasterForm.value
@@ -1144,8 +1165,13 @@ export class LabourChargeMasterComponent implements OnInit {
     }
   }
   formSubmit() {
-    if (this.submitValidation()) return
-
+    if (this.content && this.content.FLAG == 'VIEW') return
+    if (this.content && this.content.FLAG == 'EDIT') {
+      this.updatelabourChargeMaster()
+      return
+    }
+    //if (this.submitValidation()) return
+    if (this.submitValidation(this.diamondlabourMasterForm.value)) return;
 
     let API = 'LabourChargeMasterDj/InsertLabourChargeMaster'
     let postData = this.setPostData();
@@ -1179,15 +1205,8 @@ export class LabourChargeMasterComponent implements OnInit {
   }
 
   updatelabourChargeMaster() {
-    //  if (this.submitValidation()) return
-    if (this.diamondlabourMasterForm.value.wtFrom > this.diamondlabourMasterForm.value.wtTo) {
-      this.toastr.error('Weight From should be lesser than Weight To')
-      return
-    }
-    if (this.diamondlabourMasterForm.invalid) {
-      this.toastr.error('select all required fields')
-      return
-    }
+ 
+    if (this.submitValidation(this.diamondlabourMasterForm.value)) return;
 
     let API = 'LabourChargeMasterDj/UpdateLabourChargeMaster/' + this.content.CODE;
     let postData = this.setPostData()
@@ -1268,7 +1287,7 @@ export class LabourChargeMasterComponent implements OnInit {
                 });
               }
             } else {
-              this.toastr.error('Not deleted')
+              this.commonService.toastErrorByMsgId('MSG1880');// Not Deleted
             }
           }, err => alert('delete ' + err))
         this.subscriptions.push(Sub)

@@ -1,1063 +1,1840 @@
 <!-- header section starts -->
 <div class="card-content border-bottom d-flex justify-content-between p-2">
-    <h5 class="pos-modaltitle" id="modal-dia-metal"> POS Customer Master
-    </h5>
-    <button type="button" class="btn btn-close close-btn" (click)="close()">
-        <i class="feather icon-x close-icon"></i>
-    </button>
+  <h5 class="pos-modaltitle" id="modal-dia-metal">POS Customer Master</h5>
+  <button type="button" class="btn btn-close close-btn" (click)="close()">
+    <i class="feather icon-x close-icon"></i>
+  </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="customerSave()" (cancelClick)="close()"></modal-header>
+<modal-header
+  (saveClick)="customerSave()"
+  (cancelClick)="close()"
+></modal-header>
 <!-- content section -->
 <div class="container-fluid pt-3">
-    <form [formGroup]="posCustomerMasterMainForm">
-        <div class="row">
-            <div class="col-md-10">
-                <div class="row mb-1 ">
-                    <div class="col-md-4">
-                        <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-4 col-form-label" id="ID001">Code</label>
-                            <div class="col-md-8">
-                                <mat-form-field style="width: 100%;" appearance="outline">
-                                    <input matInput="text" formControlName="code" />
-                                </mat-form-field>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-6 col-form-label" id="ID002">Parent Pos Code</label>
-                            <div class="col-md-6">
-                                <mat-form-field style="width: -webkit-fill-available;" appearance="outline">
-                                    <input matInput="text" formControlName="parentPosCode" />
-                                    <master-search [MasterSearchData]="parentPosCode" class="masterSearch"
-                                    (newRowClick)="parentPosSelected($event)"></master-search>
-                                </mat-form-field>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-6 col-form-label" id="ID003">Ref By</label>
-                            <div class="col-md-6">
-                                <mat-form-field style="width: -webkit-fill-available;" appearance="outline">
-                                    <input matInput="text" formControlName="refBy"/>
-                                    <master-search [MasterSearchData]="refByCode" class="masterSearch"
-                                    (newRowClick)="refBySelected($event)"></master-search>
-                                </mat-form-field>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+  <form [formGroup]="posCustomerMasterMainForm">
+    <div class="row">
+      <div class="col-md-10">
+        <div class="row mb-1">
+          <div class="col-md-4">
+            <div class="row mb-1">
+              <label
+                for="inputPassword"
+                class="col-sm-4 col-form-label"
+                id="ID001"
+                >Code</label
+              >
+              <div class="col-md-8">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <input matInput="text" formControlName="code" />
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="row mb-1">
+              <label
+                for="inputPassword"
+                class="col-sm-6 col-form-label"
+                id="ID002"
+                >Parent Pos Code</label
+              >
+              <div class="col-md-6">
+                <mat-form-field
+                  style="width: -webkit-fill-available"
+                  appearance="outline"
+                >
+                  <input matInput="text" formControlName="parentPosCode" />
+                  <master-search
+                    [MasterSearchData]="parentPosCode"
+                    class="masterSearch"
+                    (newRowClick)="parentPosSelected($event)"
+                  ></master-search>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="row mb-1">
+              <label
+                for="inputPassword"
+                class="col-sm-6 col-form-label"
+                id="ID003"
+                >Ref By</label
+              >
+              <div class="col-md-6">
+                <mat-form-field
+                  style="width: -webkit-fill-available"
+                  appearance="outline"
+                >
+                  <input matInput="text" formControlName="refBy" />
+                  <master-search
+                    [MasterSearchData]="refByCode"
+                    class="masterSearch"
+                    (newRowClick)="refBySelected($event)"
+                  ></master-search>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row mb-1">
+          <div class="col-md-8">
+            <div class="row mb-1">
+              <div class="col-md-6">
                 <div class="row mb-1">
-                    <div class="col-md-8">
-                        <div class="row mb-1">
-                            <div class="col-md-6">
-                                <div class="row mb-1">
-                                    <label for="inputPassword" class="col-sm-4 col-form-label" id="ID004">Name</label>
-                                    <div class="col-md-8">
-                                        <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
-                                            <mat-select formControlName="name">
-                                                <mat-option *ngFor="let data of nameList" [value]="data.ENGLISH">{{
-                                                    data.ENGLISH }}</mat-option>
-                                            </mat-select>
-                                            <mat-error id="ID005" *ngIf="
-                                                posCustomerMasterMainForm.controls.name.hasError(
-                                                    'required'
-                                                  )
-                                                ">
-                                                Name is <strong>required</strong>
-                                            </mat-error>
-                                        </mat-form-field>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <mat-form-field style="width: 100%;" appearance="outline">
-                                    <input matInput="text" formControlName="nameDesc" />
-                                </mat-form-field>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="row mb-1">
-                            <div class="col-md-6 mt-1">
-                                <mat-checkbox formControlName="creditCardLimitCheck" id="ID006">Credit Limit</mat-checkbox>
-                            </div>
-                            <div class="col-md-6">
-                                <mat-form-field style="width: 100%;" appearance="outline">
-                                    <input matInput="text" formControlName="creditCardLimit" />
-                                </mat-form-field>
-                            </div>
-                        </div>
-                    </div>
+                  <label
+                    for="inputPassword"
+                    class="col-sm-4 col-form-label"
+                    id="ID004"
+                    >Name</label
+                  >
+                  <div class="col-md-8">
+                    <mat-form-field
+                      appearance="outline"
+                      style="width: -webkit-fill-available"
+                    >
+                      <mat-select formControlName="name">
+                        <mat-option
+                          *ngFor="let data of nameList"
+                          [value]="data.ENGLISH"
+                          >{{ data.ENGLISH }}</mat-option
+                        >
+                      </mat-select>
+                      <mat-error
+                        id="ID005"
+                        *ngIf="
+                          posCustomerMasterMainForm.controls.name.hasError(
+                            'required'
+                          )
+                        "
+                      >
+                        Name is <strong>required</strong>
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
                 </div>
-                <div class="row mb-1">
-                    <div class="col-md-2">
-                        <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-4 col-form-label" id="ID007">Gender</label>
-                            <div class="col-md-8">
-                                <mat-form-field style="width:100%" appearance="outline">
-                                    <mat-select formControlName="gender">
-                                        <mat-option *ngFor="let data of genderList" [value]="data.ENGLISH">{{
-                                            data.ENGLISH }}</mat-option>
-                                    </mat-select>
-                                    <mat-error *ngIf="
-                                                posCustomerMasterMainForm.controls.gender.hasError(
-                                                    'required'
-                                                  )
-                                                " id="ID008">
-                                        Gender is <strong>required</strong>
-                                    </mat-error>
-                                </mat-form-field>
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="col-md-2">
-                        <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-6 col-form-label" id="ID009">Marital St.</label>
-                            <div class="col-md-6">
-                                <mat-form-field style="width:100%" appearance="outline">
-                                    <mat-select formControlName="maritalSt">
-                                        <mat-option *ngFor="let data of maritalStatusList" [value]="data.ENGLISH">{{
-                                            data.ENGLISH
-                                            }}</mat-option>
-                                    </mat-select>
-                                    <mat-error *ngIf="
-                                    posCustomerMasterMainForm.controls.name.hasError(
-                                        'required'
-                                      ) " id="ID005">
-                                        Name is <strong>required</strong>
-                                    </mat-error>
-                                </mat-form-field>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-6 col-form-label" id="ID010">Date of Birth</label>
-                            <div class="col-md-6">
-                                <mat-form-field style="width:100%" appearance="outline">
-                                    <input matInput [matDatepicker]="dob" [max]="vocMaxDate" name="dob"
-                                        placeholder="DD/MM/YYYY" DateValidation formControlName="dob" />
-                                    <mat-datepicker-toggle matSuffix [for]="dob"></mat-datepicker-toggle>
-                                    <mat-datepicker [startAt]="currentDate" #dob></mat-datepicker>
-                                </mat-form-field>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-6 col-form-label" id="ID011">Wedding Date</label>
-                            <div class="col-md-6">
-                                <mat-form-field style="width:100%" appearance="outline">
-                                    <input matInput [matDatepicker]="weddate" [max]="vocMaxDate" name="weddate"
-                                        placeholder="DD/MM/YYYY" DateValidation formControlName="weddate" />
-                                    <mat-datepicker-toggle matSuffix [for]="weddate"></mat-datepicker-toggle>
-                                    <mat-datepicker [startAt]="currentDate" #weddate></mat-datepicker>
-                                </mat-form-field>
-                            </div>
-                        </div>
-                    </div>
+              </div>
+              <div class="col-md-6">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <input matInput="text" formControlName="nameDesc" />
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="row mb-1">
+              <div class="col-md-6 mt-1">
+                <mat-checkbox formControlName="creditCardLimitCheck" id="ID006"
+                  >Credit Limit</mat-checkbox
+                >
+              </div>
+              <div class="col-md-6">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <input matInput="number" formControlName="creditCardLimit" />
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row mb-1">
+          <div class="col-md-2">
+            <div class="row mb-1">
+              <label
+                for="inputPassword"
+                class="col-sm-4 col-form-label"
+                id="ID007"
+                >Gender</label
+              >
+              <div class="col-md-8">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <mat-select formControlName="gender">
+                    <mat-option
+                      *ngFor="let data of genderList"
+                      [value]="data.ENGLISH"
+                      >{{ data.ENGLISH }}</mat-option
+                    >
+                  </mat-select>
+                  <mat-error
+                    *ngIf="
+                      posCustomerMasterMainForm.controls.gender.hasError(
+                        'required'
+                      )
+                    "
+                    id="ID008"
+                  >
+                    Gender is <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-2">
+            <div class="row mb-1">
+              <label
+                for="inputPassword"
+                class="col-sm-6 col-form-label"
+                id="ID009"
+                >Marital St.</label
+              >
+              <div class="col-md-6">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <mat-select formControlName="maritalSt">
+                    <mat-option
+                      *ngFor="let data of maritalStatusList"
+                      [value]="data.ENGLISH"
+                      >{{ data.ENGLISH }}</mat-option
+                    >
+                  </mat-select>
+                  <mat-error
+                    *ngIf="
+                      posCustomerMasterMainForm.controls.name.hasError(
+                        'required'
+                      )
+                    "
+                    id="ID005"
+                  >
+                    Name is <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="row mb-1">
+              <label
+                for="inputPassword"
+                class="col-sm-6 col-form-label"
+                id="ID010"
+                >Date of Birth</label
+              >
+              <div class="col-md-6">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <input
+                    matInput
+                    [matDatepicker]="dob"
+                    [max]="vocMaxDate"
+                    name="dob"
+                    placeholder="DD/MM/YYYY"
+                    DateValidation
+                    formControlName="dob"
+                  />
+                  <mat-datepicker-toggle
+                    matSuffix
+                    [for]="dob"
+                  ></mat-datepicker-toggle>
+                  <mat-datepicker [startAt]="currentDate" #dob></mat-datepicker>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="row mb-1">
+              <label
+                for="inputPassword"
+                class="col-sm-6 col-form-label"
+                id="ID011"
+                >Wedding Date</label
+              >
+              <div class="col-md-6">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <input
+                    matInput
+                    [matDatepicker]="weddate"
+                    [max]="vocMaxDate"
+                    name="weddate"
+                    placeholder="DD/MM/YYYY"
+                    DateValidation
+                    formControlName="weddate"
+                  />
+                  <mat-datepicker-toggle
+                    matSuffix
+                    [for]="weddate"
+                  ></mat-datepicker-toggle>
+                  <mat-datepicker
+                    [startAt]="currentDate"
+                    #weddate
+                  ></mat-datepicker>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row mb-1">
+          <div class="col-md-4">
+            <div class="row mb-1">
+              <label
+                for="inputPassword"
+                class="col-sm-4 col-form-label"
+                id="ID012"
+                >Country(R)</label
+              >
+              <div class="col-md-2">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <input matInput="text" formControlName="country" />
+                </mat-form-field>
+              </div>
+              <div class="col-md-6">
+                <mat-form-field
+                  style="width: -webkit-fill-available"
+                  appearance="outline"
+                >
+                  <input matInput="text" formControlName="countryCode" />
+                  <master-search
+                    [MasterSearchData]="countryCodeData"
+                    class="masterSearch"
+                    (newRowClick)="countrySelected($event)"
+                  ></master-search>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row mb-1">
+              <label
+                for="inputPassword"
+                class="col-sm-4 col-form-label"
+                id="ID013"
+                >Mobile</label
+              >
+              <div class="col-md-2">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <input matInput="text" formControlName="moblieCountry" />
+                </mat-form-field>
+              </div>
+              <div class="col-md-6">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <input
+                    matInput="text"
+                    formControlName="moblieNumber"
+                    class="text-right"
+                  />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row mb-1">
+              <label
+                for="inputPassword"
+                class="col-sm-4 col-form-label"
+                id="ID014"
+                >Mobile 1</label
+              >
+              <div class="col-md-2">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <input
+                    matInput="text"
+                    formControlName="moblie1Country"
+                    class="text-right"
+                  />
+                </mat-form-field>
+              </div>
+              <div class="col-md-6">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <input matInput="text" formControlName="moblie1Number" />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row mb-1">
+              <label
+                for="inputPassword"
+                class="col-sm-4 col-form-label"
+                id="ID015"
+                >Email ID</label
+              >
+              <div class="col-md-8">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <input matInput="text" formControlName="emailId" />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row mb-1">
+              <label
+                for="inputPassword"
+                class="col-sm-4 col-form-label"
+                id="ID016"
+                >Tel.(R)</label
+              >
+              <div class="col-md-2">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <input
+                    matInput="text"
+                    formControlName="telRCountry"
+                    class="text-right"
+                  />
+                </mat-form-field>
+              </div>
+              <div class="col-md-6">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <input matInput="text" formControlName="telRNumber" />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row mb-1">
+              <label
+                for="inputPassword"
+                class="col-sm-4 col-form-label"
+                id="ID017"
+                >Tel.(O)</label
+              >
+              <div class="col-md-2">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <input
+                    matInput="text"
+                    formControlName="tel0Country"
+                    class="text-right"
+                  />
+                </mat-form-field>
+              </div>
+              <div class="col-md-6">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <input matInput="text" formControlName="tel0number" />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row mb-1">
+              <label
+                for="inputPassword"
+                class="col-sm-4 col-form-label"
+                id="ID018"
+                >Fax No.</label
+              >
+              <div class="col-md-8">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <input matInput="text" formControlName="faxNo" />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row mb-1">
+              <label
+                for="inputPassword"
+                class="col-sm-4 col-form-label"
+                id="ID019"
+                >Cust. Type</label
+              >
+              <div class="col-md-8">
+                <mat-form-field
+                  style="width: -webkit-fill-available"
+                  appearance="outline"
+                >
+                  <input matInput="text" formControlName="custType" />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row mb-1">
+              <label
+                for="inputPassword"
+                class="col-sm-4 col-form-label"
+                id="ID020"
+                >Nationality</label
+              >
+              <div class="col-md-8">
+                <mat-form-field
+                  style="width: -webkit-fill-available"
+                  appearance="outline"
+                >
+                  <input matInput="text" formControlName="nationality" />
+                  <master-search
+                    [MasterSearchData]="nationalityCode"
+                    class="masterSearch"
+                    (newRowClick)="nationalitySelected($event)"
+                  ></master-search>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row mb-1">
+              <label
+                for="inputPassword"
+                class="col-sm-4 col-form-label"
+                id="ID021"
+                >State</label
+              >
+              <div class="col-md-8">
+                <mat-form-field
+                  style="width: -webkit-fill-available"
+                  appearance="outline"
+                >
+                  <input
+                    matInput="text"
+                    formControlName="state"
+                    class="text-right"
+                  />
+                  <master-search
+                    [MasterSearchData]="stateCode"
+                    class="masterSearch"
+                    (newRowClick)="stateSelected($event)"
+                  ></master-search>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row mb-1">
+              <label
+                for="inputPassword"
+                class="col-sm-4 col-form-label"
+                id="ID022"
+                >City</label
+              >
+              <div class="col-md-8">
+                <mat-form-field
+                  style="width: -webkit-fill-available"
+                  appearance="outline"
+                >
+                  <input matInput="text" formControlName="city" />
+                  <master-search
+                    [MasterSearchData]="cityCodeData"
+                    class="masterSearch"
+                    (newRowClick)="citySelected($event)"
+                  ></master-search>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row mb-1">
+              <label
+                for="inputPassword"
+                class="col-sm-4 col-form-label"
+                id="ID023"
+                >Language</label
+              >
+              <div class="col-md-8">
+                <mat-form-field
+                  style="width: -webkit-fill-available"
+                  appearance="outline"
+                >
+                  <input matInput="text" formControlName="language" />
+                  <master-search
+                    [MasterSearchData]="languageCodeData"
+                    class="masterSearch"
+                    (newRowClick)="languageSelected($event)"
+                  ></master-search>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row mb-1">
+              <label
+                for="inputPassword"
+                class="col-sm-4 col-form-label"
+                id="ID024"
+                >Fav. Celebration</label
+              >
+              <div class="col-md-8">
+                <mat-form-field
+                  style="width: -webkit-fill-available"
+                  appearance="outline"
+                >
+                  <input matInput="text" formControlName="favCelebration" />
+                  <master-search
+                    [MasterSearchData]="favCelebrationCode"
+                    class="masterSearch"
+                    (newRowClick)="favCelebrationSelected($event)"
+                  ></master-search>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row border">
+              <div class="col-md-12 p-3 text-center">
+                <h6 id="ID025">Tax Registration Details</h6>
+              </div>
+              <div class="row mb-1 m-1">
+                <label
+                  for="inputPassword"
+                  class="col-sm-5 col-form-label"
+                  id="ID026"
+                  >VAT</label
+                >
+                <div class="col-md-7">
+                  <mat-form-field style="width: 100%" appearance="outline">
+                    <input matInput="text" formControlName="vat" />
+                  </mat-form-field>
                 </div>
-                <div class="row mb-1">
-                    <div class="col-md-4">
+              </div>
+              <div class="row mb-1 m-1">
+                <label
+                  for="inputPassword"
+                  class="col-sm-5 col-form-label"
+                  id="ID027"
+                  >PAN NO</label
+                >
+                <div class="col-md-7">
+                  <mat-form-field style="width: 100%" appearance="outline">
+                    <input matInput="text" formControlName="panNo" />
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+            <div class="row mb-1">
+              <label
+                for="inputPassword"
+                class="col-sm-3 col-form-label"
+                id="ID028"
+                >Whatsapp</label
+              >
+              <div class="col-md-2">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <input
+                    matInput="text"
+                    formControlName="whatsappCountryCode"
+                  />
+                </mat-form-field>
+              </div>
+              <div class="col-md-7">
+                <mat-form-field style="width: 96%" appearance="outline">
+                  <input
+                    matInput="text"
+                    formControlName="whatsappNumber"
+                    class="text-right"
+                  />
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-8">
+            <mat-tab-group>
+              <mat-tab label="Other Detail">
+                <div class="row mt-2">
+                  <div class="col-md-12">
+                    <div class="row mb-1">
+                      <div class="col-md-6">
                         <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-4 col-form-label" id="ID012">Country(R)</label>
-                            <div class="col-md-2">
-                                <mat-form-field style="width: 100%;" appearance="outline">
-                                    <input matInput="text" formControlName="country" />
-                                </mat-form-field>
-                            </div>
-                            <div class="col-md-6">
-                                <mat-form-field style="width: -webkit-fill-available;" appearance="outline">
-                                    <input matInput="text" formControlName="countryCode" />
-                                    <master-search [MasterSearchData]="countryCode" class="masterSearch"
-                                    (newRowClick)="countrySelected($event)"></master-search>
-                                </mat-form-field>
-                            </div>
-                        </div>
-                        <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-4 col-form-label" id="ID013">Mobile</label>
-                            <div class="col-md-2">
-                                <mat-form-field style="width: 100%;" appearance="outline">
-                                    <input matInput="text" formControlName="moblieCountry" />
-                                </mat-form-field>
-                            </div>
-                            <div class="col-md-6">
-                                <mat-form-field style="width: 100%;" appearance="outline">
-                                    <input matInput="text" formControlName="moblieNumber" />
-                                </mat-form-field>
-                            </div>
-                        </div>
-                        <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-4 col-form-label" id="ID014">Mobile 1</label>
-                            <div class="col-md-2">
-                                <mat-form-field style="width: 100%;" appearance="outline">
-                                    <input matInput="text" formControlName="moblie1Country" />
-                                </mat-form-field>
-                            </div>
-                            <div class="col-md-6">
-                                <mat-form-field style="width: 100%;" appearance="outline">
-                                    <input matInput="text" formControlName="moblie1Number" />
-                                </mat-form-field>
-                            </div>
-                        </div>
-                        <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-4 col-form-label" id="ID015">Email ID</label>
-                            <div class="col-md-8">
-                                <mat-form-field style="width: 100%;" appearance="outline">
-                                    <input matInput="text" formControlName="emailId" />
-                                </mat-form-field>
-                            </div>
-                        </div>
-                        <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-4 col-form-label" id="ID016">Tel.(R)</label>
-                            <div class="col-md-2">
-                                <mat-form-field style="width: 100%;" appearance="outline">
-                                    <input matInput="text" formControlName="telRCountry" />
-                                </mat-form-field>
-                            </div>
-                            <div class="col-md-6">
-                                <mat-form-field style="width: 100%;" appearance="outline">
-                                    <input matInput="text" formControlName="telRNumber" />
-                                </mat-form-field>
-                            </div>
-                        </div>
-                        <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-4 col-form-label" id="ID017">Tel.(O)</label>
-                            <div class="col-md-2">
-                                <mat-form-field style="width: 100%;" appearance="outline">
-                                    <input matInput="text" formControlName="tel0Country" />
-                                </mat-form-field>
-                            </div>
-                            <div class="col-md-6">
-                                <mat-form-field style="width: 100%;" appearance="outline">
-                                    <input matInput="text" formControlName="tel0number" />
-                                </mat-form-field>
-                            </div>
+                          <label
+                            for="inputPassword"
+                            class="col-sm-5 col-form-label"
+                            id="ID029"
+                            >Spouse</label
+                          >
+                          <div class="col-md-7">
+                            <mat-form-field
+                              style="width: 100%"
+                              appearance="outline"
+                            >
+                              <input matInput="text" formControlName="spouse" />
+                            </mat-form-field>
+                          </div>
                         </div>
                         <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-4 col-form-label" id="ID018">Fax No.</label>
-                            <div class="col-md-8">
-                                <mat-form-field style="width: 100%;" appearance="outline">
-                                    <input matInput="text" formControlName="faxNo" />
-                                </mat-form-field>
-                            </div>
+                          <label
+                            for="inputPassword"
+                            class="col-sm-5 col-form-label"
+                            id="ID030"
+                            >Company</label
+                          >
+                          <div class="col-md-7">
+                            <mat-form-field
+                              style="width: 100%"
+                              appearance="outline"
+                            >
+                              <input
+                                matInput="text"
+                                formControlName="company"
+                              />
+                            </mat-form-field>
+                          </div>
                         </div>
                         <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-4 col-form-label" id="ID019">Cust. Type</label>
-                            <div class="col-md-8">
-                                <mat-form-field style="width: -webkit-fill-available;" appearance="outline">
-                                    <input matInput="text" formControlName="custType" />
-                                </mat-form-field>
-                            </div>
+                          <label
+                            for="inputPassword"
+                            class="col-sm-5 col-form-label"
+                            id="ID031"
+                            >Zodiac Sign</label
+                          >
+                          <div class="col-md-7">
+                            <mat-form-field
+                              style="width: 100%"
+                              appearance="outline"
+                            >
+                              <input
+                                matInput="text"
+                                formControlName="zodiacSign"
+                              />
+                            </mat-form-field>
+                          </div>
                         </div>
                         <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-4 col-form-label" id="ID020">Nationality</label>
-                            <div class="col-md-8">
-                                <mat-form-field style="width: -webkit-fill-available;" appearance="outline">
-                                    <input matInput="text" formControlName="nationality" />
-                                    <master-search [MasterSearchData]="nationalityCode" class="masterSearch"
-                                    (newRowClick)="nationalitySelected($event)"></master-search>
-                                </mat-form-field>
-                            </div>
+                          <label
+                            for="inputPassword"
+                            class="col-sm-5 col-form-label"
+                            id="ID032"
+                            >No. of Children</label
+                          >
+                          <div class="col-md-7">
+                            <mat-form-field
+                              style="width: 100%"
+                              appearance="outline"
+                            >
+                              <input
+                                matInput="text"
+                                formControlName="noOfChildren"
+                                class="text-right"
+                              />
+                            </mat-form-field>
+                          </div>
                         </div>
                         <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-4 col-form-label" id="ID021">State</label>
-                            <div class="col-md-8">
-                                <mat-form-field style="width: -webkit-fill-available;" appearance="outline">
-                                    <input matInput="text" formControlName="state" />
-                                    <master-search [MasterSearchData]="stateCode" class="masterSearch"
-                                    (newRowClick)="stateSelected($event)"></master-search>
-                                </mat-form-field>
-                            </div>
+                          <label
+                            for="inputPassword"
+                            class="col-sm-5 col-form-label"
+                            id="ID033"
+                            >Religion</label
+                          >
+                          <div class="col-md-7">
+                            <mat-form-field
+                              style="width: -webkit-fill-available"
+                              appearance="outline"
+                            >
+                              <input
+                                matInput="text"
+                                formControlName="religion"
+                              />
+                              <master-search
+                                [MasterSearchData]="religionCode"
+                                class="masterSearch"
+                                (newRowClick)="religionSelected($event)"
+                              ></master-search>
+                            </mat-form-field>
+                          </div>
                         </div>
                         <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-4 col-form-label" id="ID022">City</label>
-                            <div class="col-md-8">
-                                <mat-form-field style="width: -webkit-fill-available;" appearance="outline">
-                                    <input matInput="text" formControlName="city" />
-                                    <master-search [MasterSearchData]="cityCode" class="masterSearch"
-                                    (newRowClick)="citySelected($event)"></master-search>
-                                </mat-form-field>
-                            </div>
+                          <label
+                            for="inputPassword"
+                            class="col-sm-5 col-form-label"
+                            id="ID034"
+                            >Category</label
+                          >
+                          <div class="col-md-7">
+                            <mat-form-field
+                              style="width: -webkit-fill-available"
+                              appearance="outline"
+                            >
+                              <input
+                                matInput="text"
+                                formControlName="category"
+                              />
+                              <master-search
+                                [MasterSearchData]="categoryCode"
+                                class="masterSearch"
+                                (newRowClick)="categorySelected($event)"
+                              ></master-search>
+                            </mat-form-field>
+                          </div>
                         </div>
                         <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-4 col-form-label" id="ID023">Language</label>
-                            <div class="col-md-8">
-                                <mat-form-field style="width: -webkit-fill-available;" appearance="outline">
-                                    <input matInput="text" formControlName="language" />
-                                    <master-search [MasterSearchData]="languageCode" class="masterSearch"
-                                    (newRowClick)="languageSelected($event)"></master-search>
-                                </mat-form-field>
-                            </div>
+                          <label
+                            for="inputPassword"
+                            class="col-sm-5 col-form-label"
+                            id="ID035"
+                            >Cust Status</label
+                          >
+                          <div class="col-md-7">
+                            <mat-form-field
+                              style="width: -webkit-fill-available"
+                              appearance="outline"
+                            >
+                              <input
+                                matInput="text"
+                                formControlName="custStatus"
+                              />
+                              <master-search
+                                [MasterSearchData]="custStatusCode"
+                                class="masterSearch"
+                                (newRowClick)="custStatusSelected($event)"
+                              ></master-search>
+                            </mat-form-field>
+                          </div>
                         </div>
                         <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-4 col-form-label" id="ID024">Fav. Celebration</label>
-                            <div class="col-md-8">
-                                <mat-form-field style="width: -webkit-fill-available;" appearance="outline">
-                                    <input matInput="text" formControlName="favCelebration" />
-                                    <master-search [MasterSearchData]="favCelebrationCode" class="masterSearch"
-                                    (newRowClick)="favCelebrationSelected($event)"></master-search>
-                                </mat-form-field>
-                            </div>
-                        </div>
-                        <div class="row border">
-                            <div class="col-md-12 p-3 text-center">
-                                <h6 id="ID025">Tax Registration Details</h6>
-                            </div>
-                            <div class="row mb-1 m-1">
-                                <label for="inputPassword" class="col-sm-5 col-form-label" id="ID026">VAT</label>
-                                <div class="col-md-7">
-                                    <mat-form-field style="width: 100%;" appearance="outline">
-                                        <input matInput="text" formControlName="vat" />
-                                    </mat-form-field>
-                                </div>
-                            </div>
-                            <div class="row mb-1 m-1">
-                                <label for="inputPassword" class="col-sm-5 col-form-label" id="ID027">PAN NO</label>
-                                <div class="col-md-7">
-                                    <mat-form-field style="width: 100%;" appearance="outline">
-                                        <input matInput="text" formControlName="panNo" />
-                                    </mat-form-field>
-                                </div>
-                            </div>
+                          <label
+                            for="inputPassword"
+                            class="col-sm-5 col-form-label"
+                            id="ID036"
+                            >Income</label
+                          >
+                          <div class="col-md-7">
+                            <mat-form-field
+                              style="width: -webkit-fill-available"
+                              appearance="outline"
+                            >
+                              <input
+                                matInput="text"
+                                formControlName="income"
+                                class="text-right"
+                              />
+                            </mat-form-field>
+                          </div>
                         </div>
                         <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-4 col-form-label" id="ID028">Whatsapp</label>
-                            <div class="col-md-2">
-                                <mat-form-field style="width: 100%;" appearance="outline">
-                                    <input matInput="text" formControlName="whatsappCountryCode" />
-                                </mat-form-field>
-                            </div>
-                            <div class="col-md-6">
-                                <mat-form-field style="width: 100%;" appearance="outline">
-                                    <input matInput="text" formControlName="whatsappNumber" />
-                                </mat-form-field>
-                            </div>
+                          <label
+                            for="inputPassword"
+                            class="col-sm-5 col-form-label"
+                            id="ID037"
+                            >Blood Group</label
+                          >
+                          <div class="col-md-7">
+                            <mat-form-field
+                              style="width: -webkit-fill-available"
+                              appearance="outline"
+                            >
+                              <mat-select formControlName="bloodGroup">
+                                <mat-option
+                                  *ngFor="let data of bloodGroupList"
+                                  [value]="data.ENGLISH"
+                                  >{{ data.ENGLISH }}</mat-option
+                                >
+                              </mat-select>
+                              <mat-error
+                                *ngIf="
+                                  posCustomerMasterMainForm.controls.name.hasError(
+                                    'required'
+                                  )
+                                "
+                                id="ID005"
+                              >
+                                Name is <strong>required</strong>
+                              </mat-error>
+                            </mat-form-field>
+                          </div>
                         </div>
+                        <div class="row mb-1">
+                          <label
+                            for="inputPassword"
+                            class="col-sm-5 col-form-label"
+                            id="ID038"
+                            >Cust. ID Type</label
+                          >
+                          <div class="col-md-7">
+                            <mat-form-field
+                              style="width: -webkit-fill-available"
+                              appearance="outline"
+                            >
+                              <input
+                                matInput="text"
+                                formControlName="custIdType"
+                              />
+                            </mat-form-field>
+                          </div>
+                        </div>
+                        <div class="row mb-1">
+                          <label
+                            for="inputPassword"
+                            class="col-sm-5 col-form-label"
+                            id="ID039"
+                            >Cust. ID</label
+                          >
+                          <div class="col-md-7">
+                            <mat-form-field
+                              style="width: -webkit-fill-available"
+                              appearance="outline"
+                            >
+                              <input matInput="text" formControlName="custID" />
+                            </mat-form-field>
+                          </div>
+                        </div>
+                        <div class="row mb-1">
+                          <label
+                            for="inputPassword"
+                            class="col-sm-5 col-form-label"
+                            id="ID040"
+                            >Cust ID Exp Date</label
+                          >
+                          <div class="col-md-7">
+                            <mat-form-field
+                              appearance="outline"
+                              style="width: -webkit-fill-available"
+                            >
+                              <input
+                                matInput
+                                [matDatepicker]="custDate"
+                                [max]="vocMaxDate"
+                                name="custDate"
+                                placeholder="DD/MM/YYYY"
+                                DateValidation
+                                formControlName="custDate"
+                              />
+                              <mat-datepicker-toggle
+                                matSuffix
+                                [for]="custDate"
+                              ></mat-datepicker-toggle>
+                              <mat-datepicker
+                                [startAt]="currentDate"
+                                #custDate
+                              ></mat-datepicker>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                        <div class="row mb-1">
+                          <label
+                            for="inputPassword"
+                            class="col-sm-5 col-form-label"
+                            id="ID041"
+                            >P.O.Box</label
+                          >
+                          <div class="col-md-7">
+                            <mat-form-field
+                              style="width: -webkit-fill-available"
+                              appearance="outline"
+                            >
+                              <input matInput="text" formControlName="POBox" />
+                            </mat-form-field>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="row mb-1">
+                          <label
+                            for="inputPassword"
+                            class="col-form-label col-sm-12"
+                            id="ID042"
+                            >Address(Personal)</label
+                          >
+                          <div class="col-sm-12">
+                            <mat-form-field
+                              style="width: 100%"
+                              appearance="outline"
+                            >
+                              <textarea
+                                matInput
+                                rows="3"
+                                formControlName="address"
+                              ></textarea>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                        <div class="row mb-1">
+                          <label
+                            for="inputPassword"
+                            class="col-form-label col-sm-12"
+                            id="ID043"
+                            >Official Address</label
+                          >
+                          <div class="col-md-12">
+                            <mat-form-field
+                              style="width: 100%"
+                              appearance="outline"
+                            >
+                              <textarea
+                                matInput
+                                rows="3"
+                                formControlName="officialAddress"
+                              ></textarea>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                        <div class="row mb-1">
+                          <label
+                            for="inputPassword"
+                            class="col-form-label col-sm-12"
+                            id="ID044"
+                            >Delivery Address</label
+                          >
+                          <div class="col-sm-12">
+                            <mat-form-field
+                              style="width: 100%"
+                              appearance="outline"
+                            >
+                              <textarea
+                                matInput
+                                rows="3"
+                                formControlName="deliveryAddress"
+                              ></textarea>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                        <div class="row mb-1">
+                          <label
+                            for="inputPassword"
+                            class="col-form-label col-sm-12"
+                            id="ID045"
+                            >Remarks</label
+                          >
+                          <div class="col-sm-12">
+                            <mat-form-field
+                              style="width: 100%"
+                              appearance="outline"
+                            >
+                              <textarea
+                                matInput
+                                rows="3"
+                                formControlName="remarks"
+                              ></textarea>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                    <div class="col-md-8">
-                        <mat-tab-group>
-                            <mat-tab label="Other Detail">
-                                <div class="row mt-2">
-                                    <div class="col-md-12">
-                                        <div class="row mb-1">
-                                            <div class="col-md-6">
-                                                <div class="row mb-1">
-                                                    <label for="inputPassword"
-                                                        class="col-sm-5 col-form-label" id="ID029">Spouse</label>
-                                                    <div class="col-md-7">
-                                                        <mat-form-field style="width: 100%;" appearance="outline">
-                                                            <input matInput="text" formControlName="spouse" />
-                                                        </mat-form-field>
-                                                    </div>
-                                                </div>
-                                                <div class="row mb-1">
-                                                    <label for="inputPassword"
-                                                        class="col-sm-5 col-form-label" id="ID030">Company</label>
-                                                    <div class="col-md-7">
-                                                        <mat-form-field style="width: 100%;" appearance="outline">
-                                                            <input matInput="text" formControlName="company" />
-                                                        </mat-form-field>
-                                                    </div>
-                                                </div>
-                                                <div class="row mb-1">
-                                                    <label for="inputPassword" class="col-sm-5 col-form-label" id="ID031">Zodiac
-                                                        Sign</label>
-                                                    <div class="col-md-7">
-                                                        <mat-form-field style="width: 100%;" appearance="outline">
-                                                            <input matInput="text" formControlName="zodiacSign" />
-                                                        </mat-form-field>
-                                                    </div>
-                                                </div>
-                                                <div class="row mb-1">
-                                                    <label for="inputPassword" class="col-sm-5 col-form-label" id="ID032">No. of
-                                                        Children</label>
-                                                    <div class="col-md-7">
-                                                        <mat-form-field style="width: 100%;" appearance="outline">
-                                                            <input matInput="text" formControlName="noOfChildren" />
-                                                        </mat-form-field>
-                                                    </div>
-                                                </div>
-                                                <div class="row mb-1">
-                                                    <label for="inputPassword"
-                                                        class="col-sm-5 col-form-label" id="ID033">Religion</label>
-                                                    <div class="col-md-7">
-                                                        <mat-form-field style="width: -webkit-fill-available;" appearance="outline">
-                                                            <input matInput="text" formControlName="religion" />
-                                                            <master-search [MasterSearchData]="religionCode" class="masterSearch"
-                                                            (newRowClick)="religionSelected($event)"></master-search>
-                                                        </mat-form-field>
-                                                    </div>
-                                                </div>
-                                                <div class="row mb-1">
-                                                    <label for="inputPassword"
-                                                        class="col-sm-5 col-form-label" id="ID034">Category</label>
-                                                    <div class="col-md-7">
-                                                        <mat-form-field style="width: -webkit-fill-available;" appearance="outline">
-                                                            <input matInput="text" formControlName="category" />
-                                                            <master-search [MasterSearchData]="categoryCode" class="masterSearch"
-                                                            (newRowClick)="categorySelected($event)"></master-search>
-                                                        </mat-form-field>
-                                                    </div>
-                                                </div>
-                                                <div class="row mb-1">
-                                                    <label for="inputPassword" class="col-sm-5 col-form-label" id="ID035">Cust
-                                                        Status</label>
-                                                    <div class="col-md-7">
-                                                        <mat-form-field style="width: -webkit-fill-available;" appearance="outline">
-                                                            <input matInput="text" formControlName="custStatus" />
-                                                            <master-search [MasterSearchData]="custStatusCode" class="masterSearch"
-                                                            (newRowClick)="custStatusSelected($event)"></master-search>
-                                                        </mat-form-field>
-                                                    </div>
-                                                </div>
-                                                <div class="row mb-1">
-                                                    <label for="inputPassword"
-                                                        class="col-sm-5 col-form-label" id="ID036">Income</label>
-                                                    <div class="col-md-7">
-                                                        <mat-form-field style="width: -webkit-fill-available;" appearance="outline">
-                                                            <input matInput="text" formControlName="income" />
-                                                        </mat-form-field>
-                                                    </div>
-                                                </div>
-                                                <div class="row mb-1">
-                                                    <label for="inputPassword" class="col-sm-5 col-form-label" id="ID037">Blood
-                                                        Group</label>
-                                                    <div class="col-md-7">
-                                                        <mat-form-field style="width: -webkit-fill-available;" appearance="outline">
-                                                            <mat-select formControlName="bloodGroup">
-                                                                <mat-option *ngFor="let data of bloodGroupList"
-                                                                    [value]="data.ENGLISH">{{ data.ENGLISH
-                                                                    }}</mat-option>
-                                                            </mat-select>
-                                                            <mat-error *ngIf="
-                                                            posCustomerMasterMainForm.controls.name.hasError(
-                                                                'required')" id="ID005">
-                                                                Name is <strong>required</strong>
-                                                            </mat-error>
-                                                        </mat-form-field>
-                                                    </div>
-                                                </div>
-                                                <div class="row mb-1">
-                                                    <label for="inputPassword" class="col-sm-5 col-form-label" id="ID038">Cust. ID
-                                                        Type</label>
-                                                    <div class="col-md-7">
-                                                        <mat-form-field style="width: -webkit-fill-available;" appearance="outline">
-                                                            <input matInput="text" formControlName="custIdType" />
-                                                        </mat-form-field>
-                                                    </div>
-                                                </div>
-                                                <div class="row mb-1">
-                                                    <label for="inputPassword" class="col-sm-5 col-form-label" id="ID039">Cust.
-                                                        ID</label>
-                                                    <div class="col-md-7">
-                                                        <mat-form-field style="width: -webkit-fill-available;" appearance="outline">
-                                                            <input matInput="text" formControlName="custID" />
-                                                        </mat-form-field>
-                                                    </div>
-                                                </div>
-                                                <div class="row mb-1">
-                                                    <label for="inputPassword" class="col-sm-5 col-form-label" id="ID040">Cust ID
-                                                        Exp Date</label>
-                                                    <div class="col-md-7">
-                                                        <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
-                                                            <input matInput [matDatepicker]="custDate"
-                                                                [max]="vocMaxDate" name="custDate"
-                                                                placeholder="DD/MM/YYYY" DateValidation
-                                                                formControlName="custDate" />
-                                                            <mat-datepicker-toggle matSuffix
-                                                                [for]="custDate"></mat-datepicker-toggle>
-                                                            <mat-datepicker [startAt]="currentDate"
-                                                                #custDate></mat-datepicker>
-                                                        </mat-form-field>
-                                                    </div>
-                                                </div>
-                                                <div class="row mb-1">
-                                                    <label for="inputPassword"
-                                                        class="col-sm-5 col-form-label" id="ID041">P.O.Box</label>
-                                                    <div class="col-md-7">
-                                                        <mat-form-field style="width: -webkit-fill-available;" appearance="outline">
-                                                            <input matInput="text" formControlName="POBox" />
-                                                        </mat-form-field>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="row mb-1">
-                                                    <label for="inputPassword"
-                                                        class="col-form-label col-sm-12" id="ID042">Address(Personal)</label>
-                                                    <div class="col-sm-12">
-                                                        <mat-form-field style="width: 100%;" appearance="outline">
-                                                            <textarea matInput rows="3"
-                                                                formControlName="address"></textarea>
-                                                        </mat-form-field>
-                                                    </div>
-                                                </div>
-                                                <div class="row mb-1">
-                                                    <label for="inputPassword" class="col-form-label col-sm-12" id="ID043">Official
-                                                        Address</label>
-                                                    <div class="col-md-12">
-                                                        <mat-form-field style="width: 100%;" appearance="outline">
-                                                            <textarea matInput rows="3"
-                                                                formControlName="officialAddress"></textarea>
-                                                        </mat-form-field>
-                                                    </div>
-                                                </div>
-                                                <div class="row mb-1">
-                                                    <label for="inputPassword" class="col-form-label col-sm-12" id="ID044">Delivery
-                                                        Address</label>
-                                                    <div class="col-sm-12">
-                                                        <mat-form-field style="width: 100%;" appearance="outline">
-                                                            <textarea matInput rows="3"
-                                                                formControlName="deliveryAddress"></textarea>
-                                                        </mat-form-field>
-                                                    </div>
-                                                </div>
-                                                <div class="row mb-1">
-                                                    <label for="inputPassword"
-                                                        class="col-form-label col-sm-12" id="ID045">Remarks</label>
-                                                    <div class="col-sm-12">
-                                                        <mat-form-field style="width: 100%;" appearance="outline"> 
-                                                            <textarea matInput rows="3"
-                                                                formControlName="remarks"></textarea>
-                                                        </mat-form-field>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </mat-tab>
-                            <mat-tab label="Preference">
-                                <div class="row my-1">
-                                    <div class="col-md-6 border">
-                                        <div class="row mb-1">
-                                            <div class="col-md-12">
-                                                <h6 id="ID046">Prefered Contact</h6>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-5 pt-3">
-                                            <mat-checkbox formControlName="sms" id="ID047">SMS</mat-checkbox>
-                                        </div>
-                                        <div class="col-md-5 pt-3">
-                                            <mat-checkbox formControlName="phoneCall" id="ID048">PHONE CALL</mat-checkbox>
-                                        </div>
-                                        <div class="col-md-5 pt-3">
-                                            <mat-checkbox formControlName="email" id="ID049">EMAIL</mat-checkbox>
-                                        </div>
-                                        <div class="col-md-5 pt-3">
-                                            <mat-checkbox formControlName="whatsapp" id="ID050">WHATSAPP</mat-checkbox>
-                                        </div>
-                                        <div class="col-md-5 pt-3">
-                                            <mat-checkbox formControlName="notInterested" id="ID051">NOT INTERESTED</mat-checkbox>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 border">
-                                        <div class="row mb-1">
-                                            <div class="row mb-1">
-                                                <div class="col-md-12">
-                                                    <h6 id="ID052">Known About</h6>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="col-md-5 pt-3">
-                                                    <mat-checkbox formControlName=" tv" id="ID053">TV</mat-checkbox>
-                                                </div>
-                                                <div class="col-md-5 pt-3">
-                                                    <mat-checkbox formControlName="outdoor" id="ID054">OUTDOOR</mat-checkbox>
-                                                </div>
-                                                <div class="col-md-5 pt-3">
-                                                    <mat-checkbox formControlName="online" id="ID055">ONLINE</mat-checkbox>
-                                                </div>
-                                                <div class="col-md-5 pt-3">
-                                                    <mat-checkbox formControlName="socialMedia" id="ID056">SOCIAL
-                                                        MEDIA</mat-checkbox>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="col-md-5 pt-3">
-                                                    <mat-checkbox formControlName="newspaper" id="ID057">NEWSPAPER</mat-checkbox>
-                                                </div>
-                                                <div class="col-md-5 pt-3">
-                                                    <mat-checkbox formControlName="radio" id="ID058">RADIO</mat-checkbox>
-                                                </div>
-                                                <div class="col-md-5 pt-3">
-                                                    <mat-checkbox formControlName="other" id="ID059">OTHERS</mat-checkbox>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </mat-tab>
-                            <mat-tab label="Interested In">
-                                <div class="row mb-1">
-                                    <div class="col-md-12">
-                                        <div class="col-md-5 pt-3">
-                                            <mat-checkbox formControlName="promotionalOffers" id="ID060">Promotional
-                                                Offers</mat-checkbox>
-                                        </div>
-                                        <div class="col-md-5 pt-3">
-                                            <mat-checkbox formControlName="sportsEvents" id="ID061">Sports Events</mat-checkbox>
-                                        </div>
-                                        <div class="col-md-5 pt-3">
-                                            <mat-checkbox formControlName="charityEvents" id="ID062">Charity Events</mat-checkbox>
-                                        </div>
-                                        <div class="col-md-5 pt-3">
-                                            <mat-checkbox formControlName="stageShows" id="ID063">Stage Shows</mat-checkbox>
-                                        </div>
-                                        <div class="col-md-5 pt-3">
-                                            <mat-checkbox formControlName="seminars" id="ID064">Seminars</mat-checkbox>
-                                        </div>
-                                        <div class="col-md-5 pt-3">
-                                            <mat-checkbox formControlName="personalSkills" id="ID065">Personal
-                                                Skills</mat-checkbox>
-                                        </div>
-                                    </div>
-                                </div>
-                            </mat-tab>
-                            <mat-tab label="Opinion">
-                                <div class="row mt-2">
-                                    <div class="col-md-10">
-                                        <div class="row mb-1">
-                                            <label for="inputPassword" class="col-sm-5 col-form-label" id="ID066">Product
-                                                Selection</label>
-                                            <div class="col-md-7">
-                                                <mat-form-field style="width: 100%;" appearance="outline">
-                                                    <mat-select formControlName="productSelection">
-                                                        <mat-option *ngFor="let data of opinionList"
-                                                        [value]="data.ENGLISH">{{ data.ENGLISH
-                                                        }}</mat-option>
-                                                    </mat-select>
-                                                    <mat-error *ngIf="
-                                                    posCustomerMasterMainForm.controls.name.hasError(
-                                                        'required')" id="ID005">
-                                                        Name is <strong>required</strong>
-                                                    </mat-error>
-                                                </mat-form-field>
-                                            </div>
-                                        </div>
-                                        <div class="row mb-1">
-                                            <label for="inputPassword" class="col-sm-5 col-form-label" id="ID067">Service</label>
-                                            <div class="col-md-7">
-                                                <mat-form-field style="width: 100%;" appearance="outline">
-                                                    <mat-select formControlName="service">
-                                                        <mat-option *ngFor="let data of opinionList"
-                                                        [value]="data.ENGLISH">{{ data.ENGLISH
-                                                        }}</mat-option>
-                                                    </mat-select>
-                                                    <mat-error *ngIf="
-                                                    posCustomerMasterMainForm.controls.name.hasError(
-                                                        'required')" id="ID005">
-                                                        Name is <strong>required</strong>
-                                                    </mat-error>
-                                                </mat-form-field>
-                                            </div>
-                                        </div>
-                                        <div class="row mb-1">
-                                            <label for="inputPassword" class="col-sm-5 col-form-label" id="ID068">Making
-                                                Changes</label>
-                                            <div class="col-md-7">
-                                                <mat-form-field style="width: 100%;" appearance="outline">
-                                                    <mat-select formControlName="makingChanges">
-                                                        <mat-option *ngFor="let data of opinionList"
-                                                        [value]="data.ENGLISH">{{ data.ENGLISH
-                                                        }}</mat-option>
-                                                    </mat-select>
-                                                    <mat-error *ngIf="
-                                                    posCustomerMasterMainForm.controls.name.hasError(
-                                                        'required')" id="ID005">
-                                                        Name is <strong>required</strong>
-                                                    </mat-error>
-                                                </mat-form-field>
-                                            </div>
-                                        </div>
-                                        <div class="row mb-1">
-                                            <label for="inputPassword" class="col-sm-5 col-form-label" id="ID069">Brand
-                                                Name</label>
-                                            <div class="col-md-7">
-                                                <mat-form-field style="width: 100%;" appearance="outline">
-                                                    <mat-select formControlName="brand">
-                                                        <mat-option *ngFor="let data of opinionList"
-                                                        [value]="data.ENGLISH">{{ data.ENGLISH
-                                                        }}</mat-option>
-                                                    </mat-select>
-                                                    <mat-error *ngIf="
-                                                    posCustomerMasterMainForm.controls.name.hasError(
-                                                        'required')" id="ID005">
-                                                        Name is <strong>required</strong>
-                                                    </mat-error>
-                                                </mat-form-field>
-                                            </div>
-                                        </div>
-                                        <div class="row mb-1">
-                                            <label for="inputPassword" class="col-sm-5 col-form-label" id="ID070">Buy-Back
-                                                Policy</label>
-                                            <div class="col-md-7">
-                                                <mat-form-field style="width: 100%;" appearance="outline">
-                                                    <mat-select formControlName="buyBackPolicy">
-                                                        <mat-option *ngFor="let data of opinionList"
-                                                                    [value]="data.ENGLISH">{{ data.ENGLISH
-                                                                    }}</mat-option>
-                                                            </mat-select>
-                                                            <mat-error *ngIf="
-                                                            posCustomerMasterMainForm.controls.name.hasError(
-                                                                'required')" id="ID005">
-                                                                Name is <strong>required</strong>
-                                                            </mat-error>
-                                                </mat-form-field>
-                                            </div>
-                                        </div>
-                                        <div class="row mb-1">
-                                            <label for="inputPassword" class="col-sm-5 col-form-label" id="ID071">Location and
-                                                Parking Facility</label>
-                                            <div class="col-md-7">
-                                                <mat-form-field style="width: 100%;" appearance="outline">
-                                                    <mat-select formControlName="loactionandParkingFacility">
-                                                        <mat-option *ngFor="let data of opinionList"
-                                                        [value]="data.ENGLISH">{{ data.ENGLISH
-                                                        }}</mat-option>
-                                                    </mat-select>
-                                                    <mat-error *ngIf="
-                                                    posCustomerMasterMainForm.controls.name.hasError(
-                                                        'required')" id="ID005">
-                                                        Name is <strong>required</strong>
-                                                    </mat-error>
-                                                </mat-form-field>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </mat-tab>
-                            <mat-tab label="Rating">
-                                <div class="row mb-1">
-                                    <div class="col-md-12 mt-2">
-                                        <div class="row mb-1">
-                                            <label for="inputPassword" class="col-sm-6 col-form-label" id="ID072">Staff
-                                                Courtesy</label>
-                                            <div class="col-md-6">
-                                                <mat-form-field style="width: 100%;" appearance="outline">
-                                                    <mat-select formControlName="staffCourtesy">
-                                                        <mat-option *ngFor="let data of ratingList"
-                                                        [value]="data.ENGLISH">{{ data.ENGLISH
-                                                        }}</mat-option>
-                                                    </mat-select>
-                                                    <mat-error *ngIf="
-                                                    posCustomerMasterMainForm.controls.name.hasError(
-                                                        'required')" id="ID005">
-                                                        Name is <strong>required</strong>
-                                                    </mat-error>
-                                                </mat-form-field>
-                                            </div>
-                                        </div>
-                                        <div class="row mb-1">
-                                            <label for="inputPassword" class="col-sm-6 col-form-label" id="ID073">Product knowledge
-                                                of our staff</label>
-                                            <div class="col-md-6">
-                                                <mat-form-field style="width: 100%;" appearance="outline">
-                                                    <mat-select formControlName="productKnowledgeOfOurStaff">
-                                                        <mat-option *ngFor="let data of ratingList"
-                                                        [value]="data.ENGLISH">{{ data.ENGLISH
-                                                        }}</mat-option>
-                                                    </mat-select>
-                                                    <mat-error *ngIf="
-                                                    posCustomerMasterMainForm.controls.name.hasError(
-                                                        'required')" id="ID005">
-                                                        Name is <strong>required</strong>
-                                                    </mat-error>
-                                                </mat-form-field>
-                                            </div>
-                                        </div>
-                                        <div class="row mb-1">
-                                            <label for="inputPassword" class="col-sm-6 col-form-label" id="ID074">Location and
-                                                ambience of shop</label>
-                                            <div class="col-md-6">
-                                                <mat-form-field style="width: 100%;" appearance="outline">
-                                                    <mat-select formControlName="locationandAmbienceOfShop">
-                                                        <mat-option *ngFor="let data of ratingList"
-                                                        [value]="data.ENGLISH">{{ data.ENGLISH
-                                                        }}</mat-option>
-                                                    </mat-select>
-                                                    <mat-error *ngIf="
-                                                    posCustomerMasterMainForm.controls.name.hasError(
-                                                        'required')" id="ID005">
-                                                        Name is <strong>required</strong>
-                                                    </mat-error>
-                                                </mat-form-field>
-                                            </div>
-                                        </div>
-                                        <div class="row mb-1">
-                                            <label for="inputPassword" class="col-sm-6 col-form-label" id="ID075">Variety and
-                                                quality of jewellery</label>
-                                            <div class="col-md-6">
-                                                <mat-form-field style="width: 100%;" appearance="outline">
-                                                    <mat-select formControlName="varietyAndQualityOfJewellery">
-                                                        <mat-option *ngFor="let data of ratingList"
-                                                        [value]="data.ENGLISH">{{ data.ENGLISH
-                                                        }}</mat-option>
-                                                    </mat-select>
-                                                    <mat-error *ngIf="
-                                                    posCustomerMasterMainForm.controls.name.hasError(
-                                                        'required')" id="ID005">
-                                                        Name is <strong>required</strong>
-                                                    </mat-error>
-                                                </mat-form-field>
-                                            </div>
-                                        </div>
-                                        <div class="row mb-1">
-                                            <label for="inputPassword" class="col-sm-6 col-form-label" id="ID076">Overall
-                                                experience</label>
-                                            <div class="col-md-6">
-                                                <mat-form-field style="width: 100%;" appearance="outline">
-                                                    <mat-select formControlName="overallExperience">
-                                                        <mat-option *ngFor="let data of ratingList"
-                                                        [value]="data.ENGLISH">{{ data.ENGLISH
-                                                        }}</mat-option>
-                                                    </mat-select>
-                                                    <mat-error *ngIf="
-                                                    posCustomerMasterMainForm.controls.name.hasError(
-                                                        'required')" id="ID005">
-                                                        Name is <strong>required</strong>
-                                                    </mat-error>
-                                                </mat-form-field>
-                                            </div>
-                                        </div>
-                                        <div class="row mb-1">
-                                            <label for="inputPassword" class="col-sm-6 col-form-label" id="ID077">Showroom
-                                                Accessibility</label>
-                                            <div class="col-md-6">
-                                                <mat-form-field style="width: 100%;" appearance="outline">
-                                                    <mat-select formControlName="showroomAccessibility">
-                                                        <mat-option *ngFor="let data of ratingList"
-                                                        [value]="data.ENGLISH">{{ data.ENGLISH
-                                                        }}</mat-option>
-                                                    </mat-select>
-                                                    <mat-error *ngIf="
-                                                    posCustomerMasterMainForm.controls.name.hasError(
-                                                        'required')" id="ID005">
-                                                        Name is <strong>required</strong>
-                                                    </mat-error>
-                                                </mat-form-field>
-                                            </div>
-                                        </div>
-                                        <div class="row mb-1">
-                                            <label for="inputPassword" class="col-sm-6 col-form-label" id="ID078">Product Range
-                                                Availability</label>
-                                            <div class="col-md-6">
-                                                <mat-form-field style="width: 100%;" appearance="outline">
-                                                    <mat-select formControlName="productRangeAvailability">
-                                                        <mat-option *ngFor="let data of ratingList"
-                                                        [value]="data.ENGLISH">{{ data.ENGLISH
-                                                        }}</mat-option>
-                                                </mat-select>
-                                                <mat-error id="ID005" *ngIf="
-                                                posCustomerMasterMainForm.controls.name.hasError(
-                                                    'required')">
-                                                    Name is <strong>required</strong>
-                                                </mat-error>
-                                                </mat-form-field>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </mat-tab>
-                            <mat-tab label="Other Details">
-                                <div class="row">
-                                    <div class="col-md-10">
-                                        <div class="row mb-1 mt-2">
-                                            <h6 id="ID079">Other Details</h6>
-                                        </div>
-                                        <!-- <div class="row mb-1">
+                  </div>
+                </div>
+              </mat-tab>
+              <mat-tab label="Preference">
+                <div class="row my-1">
+                  <div class="col-md-6 border">
+                    <div class="row mb-1">
+                      <div class="col-md-12">
+                        <h6 id="ID046">Prefered Contact</h6>
+                      </div>
+                    </div>
+                    <div class="col-md-5 pt-3">
+                      <mat-checkbox formControlName="sms" id="ID047"
+                        >SMS</mat-checkbox
+                      >
+                    </div>
+                    <div class="col-md-5 pt-3">
+                      <mat-checkbox formControlName="phoneCall" id="ID048"
+                        >PHONE CALL</mat-checkbox
+                      >
+                    </div>
+                    <div class="col-md-5 pt-3">
+                      <mat-checkbox formControlName="email" id="ID049"
+                        >EMAIL</mat-checkbox
+                      >
+                    </div>
+                    <div class="col-md-5 pt-3">
+                      <mat-checkbox formControlName="whatsapp" id="ID050"
+                        >WHATSAPP</mat-checkbox
+                      >
+                    </div>
+                    <div class="col-md-5 pt-3">
+                      <mat-checkbox formControlName="notInterested" id="ID051"
+                        >NOT INTERESTED</mat-checkbox
+                      >
+                    </div>
+                  </div>
+                  <div class="col-md-6 border">
+                    <div class="row mb-1">
+                      <div class="row mb-1">
+                        <div class="col-md-12">
+                          <h6 id="ID052">Known About</h6>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="col-md-5 pt-3">
+                          <mat-checkbox formControlName=" tv" id="ID053"
+                            >TV</mat-checkbox
+                          >
+                        </div>
+                        <div class="col-md-5 pt-3">
+                          <mat-checkbox formControlName="outdoor" id="ID054"
+                            >OUTDOOR</mat-checkbox
+                          >
+                        </div>
+                        <div class="col-md-5 pt-3">
+                          <mat-checkbox formControlName="online" id="ID055"
+                            >ONLINE</mat-checkbox
+                          >
+                        </div>
+                        <div class="col-md-5 pt-3">
+                          <mat-checkbox formControlName="socialMedia" id="ID056"
+                            >SOCIAL MEDIA</mat-checkbox
+                          >
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="col-md-5 pt-3">
+                          <mat-checkbox formControlName="newspaper" id="ID057"
+                            >NEWSPAPER</mat-checkbox
+                          >
+                        </div>
+                        <div class="col-md-5 pt-3">
+                          <mat-checkbox formControlName="radio" id="ID058"
+                            >RADIO</mat-checkbox
+                          >
+                        </div>
+                        <div class="col-md-5 pt-3">
+                          <mat-checkbox formControlName="other" id="ID059"
+                            >OTHERS</mat-checkbox
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </mat-tab>
+              <mat-tab label="Interested In">
+                <div class="row mb-1">
+                  <div class="col-md-12">
+                    <div class="col-md-5 pt-3">
+                      <mat-checkbox
+                        formControlName="promotionalOffers"
+                        id="ID060"
+                        >Promotional Offers</mat-checkbox
+                      >
+                    </div>
+                    <div class="col-md-5 pt-3">
+                      <mat-checkbox formControlName="sportsEvents" id="ID061"
+                        >Sports Events</mat-checkbox
+                      >
+                    </div>
+                    <div class="col-md-5 pt-3">
+                      <mat-checkbox formControlName="charityEvents" id="ID062"
+                        >Charity Events</mat-checkbox
+                      >
+                    </div>
+                    <div class="col-md-5 pt-3">
+                      <mat-checkbox formControlName="stageShows" id="ID063"
+                        >Stage Shows</mat-checkbox
+                      >
+                    </div>
+                    <div class="col-md-5 pt-3">
+                      <mat-checkbox formControlName="seminars" id="ID064"
+                        >Seminars</mat-checkbox
+                      >
+                    </div>
+                    <div class="col-md-5 pt-3">
+                      <mat-checkbox formControlName="personalSkills" id="ID065"
+                        >Personal Skills</mat-checkbox
+                      >
+                    </div>
+                  </div>
+                </div>
+              </mat-tab>
+              <mat-tab label="Opinion">
+                <div class="row mt-2">
+                  <div class="col-md-10">
+                    <div class="row mb-1">
+                      <label
+                        for="inputPassword"
+                        class="col-sm-5 col-form-label"
+                        id="ID066"
+                        >Product Selection</label
+                      >
+                      <div class="col-md-7">
+                        <mat-form-field
+                          style="width: 100%"
+                          appearance="outline"
+                        >
+                          <mat-select formControlName="productSelection">
+                            <mat-option
+                              *ngFor="let data of opinionList"
+                              [value]="data.ENGLISH"
+                              >{{ data.ENGLISH }}</mat-option
+                            >
+                          </mat-select>
+                          <mat-error
+                            *ngIf="
+                              posCustomerMasterMainForm.controls.name.hasError(
+                                'required'
+                              )
+                            "
+                            id="ID005"
+                          >
+                            Name is <strong>required</strong>
+                          </mat-error>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div class="row mb-1">
+                      <label
+                        for="inputPassword"
+                        class="col-sm-5 col-form-label"
+                        id="ID067"
+                        >Service</label
+                      >
+                      <div class="col-md-7">
+                        <mat-form-field
+                          style="width: 100%"
+                          appearance="outline"
+                        >
+                          <mat-select formControlName="service">
+                            <mat-option
+                              *ngFor="let data of opinionList"
+                              [value]="data.ENGLISH"
+                              >{{ data.ENGLISH }}</mat-option
+                            >
+                          </mat-select>
+                          <mat-error
+                            *ngIf="
+                              posCustomerMasterMainForm.controls.name.hasError(
+                                'required'
+                              )
+                            "
+                            id="ID005"
+                          >
+                            Name is <strong>required</strong>
+                          </mat-error>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div class="row mb-1">
+                      <label
+                        for="inputPassword"
+                        class="col-sm-5 col-form-label"
+                        id="ID068"
+                        >Making Changes</label
+                      >
+                      <div class="col-md-7">
+                        <mat-form-field
+                          style="width: 100%"
+                          appearance="outline"
+                        >
+                          <mat-select formControlName="makingChanges">
+                            <mat-option
+                              *ngFor="let data of opinionList"
+                              [value]="data.ENGLISH"
+                              >{{ data.ENGLISH }}</mat-option
+                            >
+                          </mat-select>
+                          <mat-error
+                            *ngIf="
+                              posCustomerMasterMainForm.controls.name.hasError(
+                                'required'
+                              )
+                            "
+                            id="ID005"
+                          >
+                            Name is <strong>required</strong>
+                          </mat-error>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div class="row mb-1">
+                      <label
+                        for="inputPassword"
+                        class="col-sm-5 col-form-label"
+                        id="ID069"
+                        >Brand Name</label
+                      >
+                      <div class="col-md-7">
+                        <mat-form-field
+                          style="width: 100%"
+                          appearance="outline"
+                        >
+                          <mat-select formControlName="brand">
+                            <mat-option
+                              *ngFor="let data of opinionList"
+                              [value]="data.ENGLISH"
+                              >{{ data.ENGLISH }}</mat-option
+                            >
+                          </mat-select>
+                          <mat-error
+                            *ngIf="
+                              posCustomerMasterMainForm.controls.name.hasError(
+                                'required'
+                              )
+                            "
+                            id="ID005"
+                          >
+                            Name is <strong>required</strong>
+                          </mat-error>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div class="row mb-1">
+                      <label
+                        for="inputPassword"
+                        class="col-sm-5 col-form-label"
+                        id="ID070"
+                        >Buy-Back Policy</label
+                      >
+                      <div class="col-md-7">
+                        <mat-form-field
+                          style="width: 100%"
+                          appearance="outline"
+                        >
+                          <mat-select formControlName="buyBackPolicy">
+                            <mat-option
+                              *ngFor="let data of opinionList"
+                              [value]="data.ENGLISH"
+                              >{{ data.ENGLISH }}</mat-option
+                            >
+                          </mat-select>
+                          <mat-error
+                            *ngIf="
+                              posCustomerMasterMainForm.controls.name.hasError(
+                                'required'
+                              )
+                            "
+                            id="ID005"
+                          >
+                            Name is <strong>required</strong>
+                          </mat-error>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div class="row mb-1">
+                      <label
+                        for="inputPassword"
+                        class="col-sm-5 col-form-label"
+                        id="ID071"
+                        >Location and Parking Facility</label
+                      >
+                      <div class="col-md-7">
+                        <mat-form-field
+                          style="width: 100%"
+                          appearance="outline"
+                        >
+                          <mat-select
+                            formControlName="loactionandParkingFacility"
+                          >
+                            <mat-option
+                              *ngFor="let data of opinionList"
+                              [value]="data.ENGLISH"
+                              >{{ data.ENGLISH }}</mat-option
+                            >
+                          </mat-select>
+                          <mat-error
+                            *ngIf="
+                              posCustomerMasterMainForm.controls.name.hasError(
+                                'required'
+                              )
+                            "
+                            id="ID005"
+                          >
+                            Name is <strong>required</strong>
+                          </mat-error>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </mat-tab>
+              <mat-tab label="Rating">
+                <div class="row mb-1">
+                  <div class="col-md-12 mt-2">
+                    <div class="row mb-1">
+                      <label
+                        for="inputPassword"
+                        class="col-sm-6 col-form-label"
+                        id="ID072"
+                        >Staff Courtesy</label
+                      >
+                      <div class="col-md-6">
+                        <mat-form-field
+                          style="width: 100%"
+                          appearance="outline"
+                        >
+                          <mat-select formControlName="staffCourtesy">
+                            <mat-option
+                              *ngFor="let data of ratingList"
+                              [value]="data.ENGLISH"
+                              >{{ data.ENGLISH }}</mat-option
+                            >
+                          </mat-select>
+                          <mat-error
+                            *ngIf="
+                              posCustomerMasterMainForm.controls.name.hasError(
+                                'required'
+                              )
+                            "
+                            id="ID005"
+                          >
+                            Name is <strong>required</strong>
+                          </mat-error>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div class="row mb-1">
+                      <label
+                        for="inputPassword"
+                        class="col-sm-6 col-form-label"
+                        id="ID073"
+                        >Product knowledge of our staff</label
+                      >
+                      <div class="col-md-6">
+                        <mat-form-field
+                          style="width: 100%"
+                          appearance="outline"
+                        >
+                          <mat-select
+                            formControlName="productKnowledgeOfOurStaff"
+                          >
+                            <mat-option
+                              *ngFor="let data of ratingList"
+                              [value]="data.ENGLISH"
+                              >{{ data.ENGLISH }}</mat-option
+                            >
+                          </mat-select>
+                          <mat-error
+                            *ngIf="
+                              posCustomerMasterMainForm.controls.name.hasError(
+                                'required'
+                              )
+                            "
+                            id="ID005"
+                          >
+                            Name is <strong>required</strong>
+                          </mat-error>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div class="row mb-1">
+                      <label
+                        for="inputPassword"
+                        class="col-sm-6 col-form-label"
+                        id="ID074"
+                        >Location and ambience of shop</label
+                      >
+                      <div class="col-md-6">
+                        <mat-form-field
+                          style="width: 100%"
+                          appearance="outline"
+                        >
+                          <mat-select
+                            formControlName="locationandAmbienceOfShop"
+                          >
+                            <mat-option
+                              *ngFor="let data of ratingList"
+                              [value]="data.ENGLISH"
+                              >{{ data.ENGLISH }}</mat-option
+                            >
+                          </mat-select>
+                          <mat-error
+                            *ngIf="
+                              posCustomerMasterMainForm.controls.name.hasError(
+                                'required'
+                              )
+                            "
+                            id="ID005"
+                          >
+                            Name is <strong>required</strong>
+                          </mat-error>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div class="row mb-1">
+                      <label
+                        for="inputPassword"
+                        class="col-sm-6 col-form-label"
+                        id="ID075"
+                        >Variety and quality of jewellery</label
+                      >
+                      <div class="col-md-6">
+                        <mat-form-field
+                          style="width: 100%"
+                          appearance="outline"
+                        >
+                          <mat-select
+                            formControlName="varietyAndQualityOfJewellery"
+                          >
+                            <mat-option
+                              *ngFor="let data of ratingList"
+                              [value]="data.ENGLISH"
+                              >{{ data.ENGLISH }}</mat-option
+                            >
+                          </mat-select>
+                          <mat-error
+                            *ngIf="
+                              posCustomerMasterMainForm.controls.name.hasError(
+                                'required'
+                              )
+                            "
+                            id="ID005"
+                          >
+                            Name is <strong>required</strong>
+                          </mat-error>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div class="row mb-1">
+                      <label
+                        for="inputPassword"
+                        class="col-sm-6 col-form-label"
+                        id="ID076"
+                        >Overall experience</label
+                      >
+                      <div class="col-md-6">
+                        <mat-form-field
+                          style="width: 100%"
+                          appearance="outline"
+                        >
+                          <mat-select formControlName="overallExperience">
+                            <mat-option
+                              *ngFor="let data of ratingList"
+                              [value]="data.ENGLISH"
+                              >{{ data.ENGLISH }}</mat-option
+                            >
+                          </mat-select>
+                          <mat-error
+                            *ngIf="
+                              posCustomerMasterMainForm.controls.name.hasError(
+                                'required'
+                              )
+                            "
+                            id="ID005"
+                          >
+                            Name is <strong>required</strong>
+                          </mat-error>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div class="row mb-1">
+                      <label
+                        for="inputPassword"
+                        class="col-sm-6 col-form-label"
+                        id="ID077"
+                        >Showroom Accessibility</label
+                      >
+                      <div class="col-md-6">
+                        <mat-form-field
+                          style="width: 100%"
+                          appearance="outline"
+                        >
+                          <mat-select formControlName="showroomAccessibility">
+                            <mat-option
+                              *ngFor="let data of ratingList"
+                              [value]="data.ENGLISH"
+                              >{{ data.ENGLISH }}</mat-option
+                            >
+                          </mat-select>
+                          <mat-error
+                            *ngIf="
+                              posCustomerMasterMainForm.controls.name.hasError(
+                                'required'
+                              )
+                            "
+                            id="ID005"
+                          >
+                            Name is <strong>required</strong>
+                          </mat-error>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div class="row mb-1">
+                      <label
+                        for="inputPassword"
+                        class="col-sm-6 col-form-label"
+                        id="ID078"
+                        >Product Range Availability</label
+                      >
+                      <div class="col-md-6">
+                        <mat-form-field
+                          style="width: 100%"
+                          appearance="outline"
+                        >
+                          <mat-select
+                            formControlName="productRangeAvailability"
+                          >
+                            <mat-option
+                              *ngFor="let data of ratingList"
+                              [value]="data.ENGLISH"
+                              >{{ data.ENGLISH }}</mat-option
+                            >
+                          </mat-select>
+                          <mat-error
+                            id="ID005"
+                            *ngIf="
+                              posCustomerMasterMainForm.controls.name.hasError(
+                                'required'
+                              )
+                            "
+                          >
+                            Name is <strong>required</strong>
+                          </mat-error>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </mat-tab>
+              <mat-tab label="Other Details">
+                <div class="row">
+                  <div class="col-md-10">
+                    <div class="row mb-1 mt-2">
+                      <h6 id="ID079">Other Details</h6>
+                    </div>
+                    <!-- <div class="row mb-1">
                                             <h6>Details</h6>
                                         </div> -->
-                                        <div class="row mb-1">
-                                            <label for="inputPassword" class="col-sm-4 col-form-label" id="ID080">Reason of
-                                                Purchase</label>
-                                            <div class="col-md-8">
-                                                <mat-form-field style="width: 100%;" appearance="outline">
-                                                    <mat-select formControlName="reasonOfPurchase">
-                                                        <mat-option></mat-option>
-                                                    </mat-select>
-                                                </mat-form-field>
-                                            </div>
-                                        </div>
-                                        <div class="row mb-1">
-                                            <label for="inputPassword" class="col-sm-4 col-form-label" id="ID081">Gift Purchased
-                                                For</label>
-                                            <div class="col-md-8">
-                                                <mat-form-field style="width: -webkit-fill-available;" appearance="outline">
-                                                    <input matInput="text" formControlName="gifrPurchased" />
-                                                    <master-search class="masterSearch"></master-search>
-                                                </mat-form-field>
-                                            </div>
-                                        </div>
-                                        <div class="row mb-1">
-                                            <label for="inputPassword" class="col-sm-4 col-form-label" id="ID082">Occasion Of
-                                                Purchase</label>
-                                            <div class="col-md-8">
-                                                <mat-form-field style="width: -webkit-fill-available;" appearance="outline">
-                                                    <input matInput="text" formControlName="occasionOfPurchase" />
-                                                    <master-search class="masterSearch"></master-search>
-                                                </mat-form-field>
-                                            </div>
-                                        </div>
-                                        <div class="row mb-1">
-                                            <label for="inputPassword" class="col-sm-4 col-form-label" id="ID083">Age Group</label>
-                                            <div class="col-md-8">
-                                                <mat-form-field style="width: -webkit-fill-available;" appearance="outline">
-                                                    <input matInput="text" formControlName="ageGroup" />
-                                                    <master-search class="masterSearch"></master-search>
-                                                </mat-form-field>
-                                            </div>
-                                        </div>
-                                        <div class="row mb-1">
-                                            <label for="inputPassword" class="col-sm-7 col-form-label" id="ID084">Did You Get What
-                                                You Are Looking For</label>
-                                        </div>
-                                        <div class="row mb-1">
-                                            <div class="col-md-12">
-                                                <mat-form-field style="width: 100%;" appearance="outline">
-                                                    <mat-select formControlName="lookingFor">
-                                                        <mat-option></mat-option>
-                                                    </mat-select>
-                                                </mat-form-field>
-                                            </div>
-                                        </div>
-                                        <div class="row mb-1">
-                                            <label for="inputPassword" class="col-sm-7 col-form-label" id="ID085">Will See You in
-                                                Next Visit Within:</label>
-                                        </div>
-                                        <div class="row mb-1">
-                                            <div class="col-md-12">
-                                                <mat-form-field style="width: -webkit-fill-available;" appearance="outline">
-                                                    <input matInput="text" formControlName="nextVisit" />
-                                                    <master-search class="masterSearch"></master-search>
-                                                </mat-form-field>
-                                            </div>
-                                        </div>
-                                        <div class="row mt-3">
-                                            <label for="inputPassword"
-                                                class="col-sm-4 col-form-label" id="ID086">Occupation</label>
-                                            <div class="col-md-8">
-                                                <mat-form-field style="width: -webkit-fill-available;" appearance="outline">
-                                                    <input matInput="text" formControlName="occupation" />
-                                                    <master-search class="masterSearch"></master-search>
-                                                </mat-form-field>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </mat-tab>
-                        </mat-tab-group>
-                    </div>
-                </div>
-
-            </div>
-            <div class="col-md-2">
-                <div class="row mb-1">
-                    <div class="col-md-10 p-2 mt-1">
-                        <div class="icons">
-                            <div class="image_box"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row mb-1">
-                    <div class="col-md-6">
-                        <div class="text-center d-flex justify-content-between mt-2">
-                            <div class="p-1 bd-highlight">
-                                <button type="button" class="btn btn-primary add-btn">
-                                    <i class="fas fa-camera-retro"></i>
-                                </button>
-                                <!-- <input type="file" name="uploadproduct" class="uploadproduct"> -->
-                            </div>
-                            <div class="p-1 bd-highlight">
-                                <button type="button" class="btn btn-primary add-btn">
-                                    <i class="fas fa-image"></i>
-                                </button>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-                <div class="row mb-1">
-                    <label for="inputPassword" class="col-sm-4 col-form-label" id="ID087">Created Branch</label>
-                    <div class="col-md-8">
-                        <mat-form-field style="width: 100%;" appearance="outline">
-                            <h6> {{branchCode}} </h6>
-                            <input [disabled]="true" matInput="text" formControlName="createdBranch" />
+                    <div class="row mb-1">
+                      <label
+                        for="inputPassword"
+                        class="col-sm-4 col-form-label"
+                        id="ID080"
+                        >Reason of Purchase</label
+                      >
+                      <div class="col-md-8">
+                        <mat-form-field
+                          style="width: 100%"
+                          appearance="outline"
+                        >
+                          <mat-select formControlName="reasonOfPurchase">
+                            <mat-option></mat-option>
+                          </mat-select>
                         </mat-form-field>
+                      </div>
                     </div>
-                </div>
-                <div class="row mb-1">
-                    <label for="inputPassword" class="col-sm-4 col-form-label" id="ID088">Opened On</label>
-                    <div class="col-md-8">
-                        <mat-form-field style="width:100%" appearance="outline">
-                            <input matInput [matDatepicker]="openedOn" [max]="vocMaxDate" name="openedOn"
-                                placeholder="DD/MM/YYYY" DateValidation formControlName="openedOn" />
-                            <mat-datepicker-toggle matSuffix [for]="openedOn"></mat-datepicker-toggle>
-                            <mat-datepicker [startAt]="currentDate" #openedOn></mat-datepicker>
+                    <div class="row mb-1">
+                      <label
+                        for="inputPassword"
+                        class="col-sm-4 col-form-label"
+                        id="ID081"
+                        >Gift Purchased For</label
+                      >
+                      <div class="col-md-8">
+                        <mat-form-field
+                          style="width: -webkit-fill-available"
+                          appearance="outline"
+                        >
+                          <input
+                            matInput="text"
+                            formControlName="gifrPurchased"
+                          />
+                          <master-search class="masterSearch"></master-search>
                         </mat-form-field>
+                      </div>
                     </div>
-                </div>
-                <div class="row mb-1">
-                    <div class="col-md-11 border">
-                        <div class="row mb-1 text-center">
-                            <label for="inputPassword" class="col-form-label" id="ID089">Last Sales Details</label>
-                        </div>
-                        <div class="row mb-1">
-                            <div class="col-md-12">
-                                <div class="row mb-1">
-                                    <label for="inputPassword" class="col-sm-4 col-form-label" id="ID090">Voucher</label>
-                                    <div class="col-md-8">
-                                        <mat-form-field style="width: 100%;" appearance="outline">
-                                            <input matInput="text" formControlName="voucher" />
-                                        </mat-form-field>
-                                    </div>
-                                </div>
-                                <div class="row mb-1">
-                                    <label for="inputPassword" class="col-sm-4 col-form-label" id="ID091">Date</label>
-                                    <div class="col-md-8">
-                                        <mat-form-field style="width: 100%;" appearance="outline">
-                                            <input matInput [matDatepicker]="date" [max]="vocMaxDate" name="date"
-                                                placeholder="DD/MM/YYYY" DateValidation formControlName="date" />
-                                            <mat-datepicker-toggle matSuffix [for]="date"></mat-datepicker-toggle>
-                                            <mat-datepicker [startAt]="currentDate" #date></mat-datepicker>
-                                        </mat-form-field>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <label for="inputPassword" class="col-sm-4 col-form-label" id="ID092">Branch Loc.</label>
-                                    <div class="col-md-8  mt-3">
-                                        <mat-form-field style="width: 100%;" appearance="outline">
-                                            <input matInput="text" formControlName="branchLoc" />
-                                        </mat-form-field>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <label for="inputPassword" class="col-sm-4 col-form-label" id="ID093">Amount</label>
-                                    <div class="col-md-8 mt-2">
-                                        <mat-form-field style="width: 100%;" appearance="outline">
-                                            <input matInput="text" formControlName="amount" />
-                                        </mat-form-field>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <label for="inputPassword" class="col-sm-4 col-form-label" id="ID094">Total Sales</label>
-                                    <div class="col-md-8 mt-3">
-                                        <mat-form-field style="width: 100%;" appearance="outline">
-                                            <input matInput="text" formControlName="totalSale" />
-                                        </mat-form-field>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="row mb-1">
+                      <label
+                        for="inputPassword"
+                        class="col-sm-4 col-form-label"
+                        id="ID082"
+                        >Occasion Of Purchase</label
+                      >
+                      <div class="col-md-8">
+                        <mat-form-field
+                          style="width: -webkit-fill-available"
+                          appearance="outline"
+                        >
+                          <input
+                            matInput="text"
+                            formControlName="occasionOfPurchase"
+                          />
+                          <master-search class="masterSearch"></master-search>
+                        </mat-form-field>
+                      </div>
                     </div>
+                    <div class="row mb-1">
+                      <label
+                        for="inputPassword"
+                        class="col-sm-4 col-form-label"
+                        id="ID083"
+                        >Age Group</label
+                      >
+                      <div class="col-md-8">
+                        <mat-form-field
+                          style="width: -webkit-fill-available"
+                          appearance="outline"
+                        >
+                          <input matInput="text" formControlName="ageGroup" />
+                          <master-search class="masterSearch"></master-search>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div class="row mb-1">
+                      <label
+                        for="inputPassword"
+                        class="col-sm-7 col-form-label"
+                        id="ID084"
+                        >Did You Get What You Are Looking For</label
+                      >
+                    </div>
+                    <div class="row mb-1">
+                      <div class="col-md-12">
+                        <mat-form-field
+                          style="width: 100%"
+                          appearance="outline"
+                        >
+                          <mat-select formControlName="lookingFor">
+                            <mat-option></mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div class="row mb-1">
+                      <label
+                        for="inputPassword"
+                        class="col-sm-7 col-form-label"
+                        id="ID085"
+                        >Will See You in Next Visit Within:</label
+                      >
+                    </div>
+                    <div class="row mb-1">
+                      <div class="col-md-12">
+                        <mat-form-field
+                          style="width: -webkit-fill-available"
+                          appearance="outline"
+                        >
+                          <input matInput="text" formControlName="nextVisit" />
+                          <master-search class="masterSearch"></master-search>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div class="row mt-3">
+                      <label
+                        for="inputPassword"
+                        class="col-sm-4 col-form-label"
+                        id="ID086"
+                        >Occupation</label
+                      >
+                      <div class="col-md-8">
+                        <mat-form-field
+                          style="width: -webkit-fill-available"
+                          appearance="outline"
+                        >
+                          <input matInput="text" formControlName="occupation" />
+                          <master-search class="masterSearch"></master-search>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-            </div>
+              </mat-tab>
+            </mat-tab-group>
+          </div>
         </div>
-    </form>
+      </div>
+      <div class="col-md-2">
+        <div class="row mb-1">
+          <div class="col-md-10 p-2 mt-1">
+            <div class="icons">
+              <div class="image_box"></div>
+            </div>
+          </div>
+        </div>
+        <div class="row mb-1">
+          <div class="col-md-6">
+            <div class="text-center d-flex justify-content-between mt-2">
+              <div class="p-1 bd-highlight">
+                <button type="button" class="btn btn-primary add-btn">
+                  <i class="fas fa-camera-retro"></i>
+                </button>
+                <!-- <input type="file" name="uploadproduct" class="uploadproduct"> -->
+              </div>
+              <div class="p-1 bd-highlight">
+                <button type="button" class="btn btn-primary add-btn">
+                  <i class="fas fa-image"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row mb-1">
+          <label for="inputPassword" class="col-sm-4 col-form-label" id="ID087"
+            >Created Branch</label
+          >
+          <div class="col-md-8">
+            <mat-form-field style="width: 100%" appearance="outline">
+              <h6>{{ branchCode }}</h6>
+              <input
+                [disabled]="true"
+                matInput="text"
+                formControlName="createdBranch"
+              />
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row mb-1">
+          <label for="inputPassword" class="col-sm-4 col-form-label" id="ID088"
+            >Opened On</label
+          >
+          <div class="col-md-8">
+            <mat-form-field style="width: 100%" appearance="outline">
+              <input
+                matInput
+                [matDatepicker]="openedOn"
+                [max]="vocMaxDate"
+                name="openedOn"
+                placeholder="DD/MM/YYYY"
+                DateValidation
+                formControlName="openedOn"
+              />
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="openedOn"
+              ></mat-datepicker-toggle>
+              <mat-datepicker
+                [startAt]="currentDate"
+                #openedOn
+              ></mat-datepicker>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row mb-1">
+          <div class="col-md-11 border">
+            <div class="row mb-1 text-center">
+              <label for="inputPassword" class="col-form-label" id="ID089"
+                >Last Sales Details</label
+              >
+            </div>
+            <div class="row mb-1">
+              <div class="col-md-12">
+                <div class="row mb-1">
+                  <label
+                    for="inputPassword"
+                    class="col-sm-4 col-form-label"
+                    id="ID090"
+                    >Voucher</label
+                  >
+                  <div class="col-md-8">
+                    <mat-form-field style="width: 100%" appearance="outline">
+                      <input matInput="text" formControlName="voucher" />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row mb-1">
+                  <label
+                    for="inputPassword"
+                    class="col-sm-4 col-form-label"
+                    id="ID091"
+                    >Date</label
+                  >
+                  <div class="col-md-8">
+                    <mat-form-field style="width: 100%" appearance="outline">
+                      <input
+                        matInput
+                        [matDatepicker]="date"
+                        [max]="vocMaxDate"
+                        name="date"
+                        placeholder="DD/MM/YYYY"
+                        DateValidation
+                        formControlName="date"
+                      />
+                      <mat-datepicker-toggle
+                        matSuffix
+                        [for]="date"
+                      ></mat-datepicker-toggle>
+                      <mat-datepicker
+                        [startAt]="currentDate"
+                        #date
+                      ></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <label
+                    for="inputPassword"
+                    class="col-sm-4 col-form-label"
+                    id="ID092"
+                    >Branch Loc.</label
+                  >
+                  <div class="col-md-8 mt-3">
+                    <mat-form-field style="width: 100%" appearance="outline">
+                      <input matInput="text" formControlName="branchLoc" />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <label
+                    for="inputPassword"
+                    class="col-sm-4 col-form-label"
+                    id="ID093"
+                    >Amount</label
+                  >
+                  <div class="col-md-8 mt-2">
+                    <mat-form-field style="width: 100%" appearance="outline">
+                      <input
+                        matInput="number"
+                        formControlName="amount"
+                        class="text-right"
+                      />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                  <label
+                    for="inputPassword"
+                    class="col-sm-4 col-form-label"
+                    id="ID094"
+                    >Total Sales</label
+                  >
+                  <div class="col-md-8 mt-3">
+                    <mat-form-field style="width: 100%" appearance="outline">
+                      <input
+                        matInput="number"
+                        formControlName="totalSale"
+                        class="text-right"
+                      />
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
 </div>

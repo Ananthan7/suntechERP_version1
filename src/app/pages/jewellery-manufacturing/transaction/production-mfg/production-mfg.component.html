@@ -77,7 +77,7 @@
                     By</label>
                   <div class="col-md-6">
                     <mat-form-field style="width: 80%;">
-                      <input type="text" matInput formControlName="enteredby" />
+                      <input type="text" matInput formControlName="enteredby" UpperCaseDirective  (focusout)="validateLookupField($event,enteredByCodeData,'enteredby')"/>
                     </mat-form-field>
                     <master-search [MasterSearchData]="enteredByCodeData" *ngIf="!viewMode"
                 (newRowClick)="userDataSelected($event)"></master-search>
@@ -102,7 +102,7 @@
                       <input type="number" matInput
                         SixDecimalInput
                         class="text-right" readonly
-                        formControlName="currencyrate" />
+                        formControlName="currencyrate"  (focusout)="validateLookupField($event,currencyMasterData,'currencyrate')"/>
                     </mat-form-field>
                     <master-search
                       [MasterSearchData]="currencyMasterData"
@@ -150,7 +150,7 @@
                           <input type="text" matInput
                             SixDecimalInput
                             class="text-right"
-                            formControlName="metalrate" />
+                            formControlName="metalrate"  (focusout)="validateLookupField($event,rateTypeMasterData,'metalrate')"/>
                         </mat-form-field>
                         <master-search
                           [MasterSearchData]="rateTypeMasterData"
@@ -172,7 +172,7 @@
                       <div class="col-md-5">
                         <mat-form-field style="width: 80%;">
                           <input type="text" matInput
-                            formControlName="branchto" />
+                            formControlName="branchto" UpperCaseDirective  (focusout)="validateLookupField($event,branchCodeData,'branchto')"/>
                         </mat-form-field>
                         <master-search [MasterSearchData]="branchCodeData"
                         (newRowClick)="branchSelected($event)"></master-search>
@@ -194,7 +194,7 @@
                       <div class="col-md-4">
                         <mat-form-field style="width: 80%;">
                           <input type="number" matInput
-                            formControlName="basecurrencyrate" class="text-right"/>
+                            formControlName="basecurrencyrate" class="text-right" UpperCaseDirective  (focusout)="validateLookupField($event,CurrencyCodeData,'basecurrencyrate')"/>
                         </mat-form-field>
                         <master-search
                         [MasterSearchData]="CurrencyCodeData"
@@ -218,7 +218,7 @@
               </menu-buttons>
               <div class="col-sm-2">
                 <mat-form-field style="width: 80%;">
-                  <input type="text" matInput />
+                  <input type="text" matInput UpperCaseDirective/>
                 </mat-form-field>
                 <master-search>
                 </master-search>

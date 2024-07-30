@@ -42,7 +42,7 @@ export class CustomerPriceMasterComponent implements OnInit {
   { title: 'SELLING_RATE', field: 'SELLING_RATE' },
   ];
   columnheader2: any[] = ['DESIGN_CODE', 'LABOUR_CODE', 'LABTYPE', 'METHOD', 'DIVISION', 'CURRENCY_CODE', 'UNITCODE', 'COST_RATE', 'SELLING_PER', 'CRACCODE', 'DIVISION_CODE', 'SELLING_RATE', 'CUSTOMER_CODE', 'REFMID', 'DT_VALID_FROM'];
-  subscriptions: any=[];
+  subscriptions: any = [];
   @Input() content!: any;
   tableData: any[] = [];
   tableDatalabour: any[] = [];
@@ -121,10 +121,10 @@ export class CustomerPriceMasterComponent implements OnInit {
     this.stonepricing();
     this.labourcharge();
     this.designcharge();
-  //  this.getStonePriceData()
-  //  this.getLabourChargeMasterList()
+    //  this.getStonePriceData()
+    //  this.getLabourChargeMasterList()
   }
-  setInitialValues(){
+  setInitialValues() {
     this.customerpricemasterForm.controls.date.setValue(this.commonService.currentDate)
     this.customerpricemasterForm.controls.MAIN_VOCTYPE.setValue(this.commonService.getqueryParamMainVocType())
     this.customerpricemasterForm.controls.BRANCH_CODE.setValue(this.commonService.branchCode)
@@ -147,7 +147,7 @@ export class CustomerPriceMasterComponent implements OnInit {
   }
 
   stonepricing() {
-  
+
     //this.customerpricemasterForm.controls.priceScheme.setValue(e.PRICE_CODE)
     let postData = {
       "SPID": "097",
@@ -162,14 +162,14 @@ export class CustomerPriceMasterComponent implements OnInit {
         if (result.status == "Success") {
           this.tableDatastone = result.dynamicData[0] || []
           if (this.tableDatastone?.length > 0) {
-           // this.fillPriceSchemeDetails()
+            // this.fillPriceSchemeDetails()
           } else {
-            this.commonService.toastErrorByMsgId('price sheme not found')
+            this.commonService.toastErrorByMsgId('MSG2267')//Grid fields not found
           }
 
         }
       }, err => {
-        this.commonService.toastErrorByMsgId('Server Error')
+        this.commonService.toastErrorByMsgId('MSG81451')// Server Error
       })
     this.subscriptions.push(Sub)
   }
@@ -192,20 +192,20 @@ export class CustomerPriceMasterComponent implements OnInit {
           this.tableDatalabour = result.dynamicData[0] || []
           if (this.tableDatalabour?.length > 0) {
             console.log(result.dynamicData[0]);
-           // this.fillPriceSchemeDetails()
+            // this.fillPriceSchemeDetails()
           } else {
-            this.commonService.toastErrorByMsgId('price sheme not found')
+            this.commonService.toastErrorByMsgId('MSG2267')//Grid fields not found
           }
 
         }
       }, err => {
-        this.commonService.toastErrorByMsgId('Server Error')
+        this.commonService.toastErrorByMsgId('MSG81451')// Server Error
       })
     this.subscriptions.push(Sub)
   }
 
   designcharge() {
-  
+
     //this.customerpricemasterForm.controls.priceScheme.setValue(e.PRICE_CODE)
     let postData = {
       "SPID": "097",
@@ -220,14 +220,14 @@ export class CustomerPriceMasterComponent implements OnInit {
         if (result.status == "Success") {
           this.designChanges = result.dynamicData[0] || []
           if (this.designChanges?.length > 0) {
-           // this.fillPriceSchemeDetails()
+            // this.fillPriceSchemeDetails()
           } else {
-            this.commonService.toastErrorByMsgId('price sheme not found')
+            this.commonService.toastErrorByMsgId('MSG2267')//Grid fields not found
           }
 
         }
       }, err => {
-        this.commonService.toastErrorByMsgId('Server Error')
+        this.commonService.toastErrorByMsgId('MSG81451')// Server Error
       })
     this.subscriptions.push(Sub)
   }
@@ -272,7 +272,7 @@ export class CustomerPriceMasterComponent implements OnInit {
 
   }
 
-  
+
   selectRow(rowKey: any) {
     if (!this.selectedKeys.includes(rowKey)) {
       this.selectedKeys.push(rowKey); // Add the row key to the selected keys array
@@ -437,7 +437,7 @@ export class CustomerPriceMasterComponent implements OnInit {
     });
     return data
   }
-  setPostData(form:any) {
+  setPostData(form: any) {
     return {
       "MID": 0,
       "CUSTOMER_CODE": form.customercode,
@@ -497,32 +497,32 @@ export class CustomerPriceMasterComponent implements OnInit {
       ]
     }
   }
-  submitValidation(){
-    let form = this.customerpricemasterForm.value
-    console.log(form.labourType);
-    
-    if (this.commonService.nullToString(form.pricecode) == '') {
-      this.toastr.error('pricecode required')
+
+
+
+  submitValidations(form: any) {
+    if (this.commonService.nullToString(form.customercode) == '' ) {
+      this.commonService.toastErrorByMsgId('MSG7822')//"customercode cannot be empty" MSG7822 
       return true
     }
-    if (this.commonService.nullToString(form.customercode) == '') {
-      this.toastr.error('customercode required')
+    else if (this.commonService.nullToString(form.pricecode) == '') {
+      this.commonService.toastErrorByMsgId('MSG1660') //"pricecode cannot be empty"
+      console.log( this.commonService.toastErrorByMsgId); 
       return true
     }
-    // if (this.commonService.nullToString(form.labourType) == '') {
-    //   this.toastr.error('labourType required')
-    //   return true
-    // }
-    return false
+
+    return false;
   }
 
   formSubmit() {
-    if (this.submitValidation()) return;
+
     if (this.content && this.content.FLAG == 'VIEW') return
     if (this.content && this.content.FLAG == 'EDIT') {
       this.update()
       return
     }
+
+    if (this.submitValidations(this.customerpricemasterForm.value)) return;
 
     let API = 'CustomerPriceMaster/InsertCustomerPriceMaster'
     let postData = this.setPostData(this.customerpricemasterForm.value)
@@ -548,14 +548,15 @@ export class CustomerPriceMasterComponent implements OnInit {
             });
           }
         } else {
-          this.toastr.error('Not saved')
+          this.toastr.error('MSG2272')//Error occured, please try again
         }
       }, err => alert(err))
     // this.subscriptions.push(Sub)
   }
 
-  update() {// need change in API for updating this API not working 
-    if (this.submitValidation())return
+  update() {
+
+    if (this.submitValidations(this.customerpricemasterForm.value)) return;
 
     let API = 'CustomerPriceMaster/UpdateCustomerPriceMaster/' + this.content.PRICECODE
     let postData = this.setPostData(this.customerpricemasterForm.value)
@@ -579,7 +580,7 @@ export class CustomerPriceMasterComponent implements OnInit {
             });
           }
         } else {
-          this.toastr.error('Not saved')
+          this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
         }
       }, err => alert(err))
     this.subscriptions.push(Sub)
@@ -644,7 +645,7 @@ export class CustomerPriceMasterComponent implements OnInit {
                 });
               }
             } else {
-              this.toastr.error('Not deleted')
+              this.commonService.toastErrorByMsgId('MSG1880');// Not Deleted
             }
           }, err => alert(err))
         this.subscriptions.push(Sub)
@@ -652,11 +653,11 @@ export class CustomerPriceMasterComponent implements OnInit {
     });
   }
 
-  
+
   /**use: validate all lookups to check data exists in db */
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     const inputValue = event.target.value.toUpperCase();
-     LOOKUPDATA.SEARCH_VALUE = event.target.value
+    LOOKUPDATA.SEARCH_VALUE = event.target.value
     if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
@@ -664,7 +665,7 @@ export class CustomerPriceMasterComponent implements OnInit {
     }
     this.commonService.toastInfoByMsgId('MSG81447');
     let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
-    let Sub: Subscription = this.dataService.postDynamicAPI(API,param)
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
       .subscribe((result) => {
         this.isDisableSaveBtn = false;
         let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
@@ -677,7 +678,7 @@ export class CustomerPriceMasterComponent implements OnInit {
           return
         }
       }, err => {
-        this.commonService.toastErrorByMsgId('network issue found')
+        this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
       })
     this.subscriptions.push(Sub)
   }
@@ -728,7 +729,7 @@ export class CustomerPriceMasterComponent implements OnInit {
     }
   }
 
- 
+
 
   // showOverleyPanel(event: any, formControlName: string) {
 
@@ -744,6 +745,6 @@ export class CustomerPriceMasterComponent implements OnInit {
       default:
     }
   }
-  
+
 
 }

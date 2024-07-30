@@ -316,7 +316,7 @@ export class ProcessTransferComponent implements OnInit {
           return
         }
       }, err => {
-        this.commonService.toastErrorByMsgId('Error Something went wrong')
+        this.commonService.toastErrorByMsgId('MSG1531')
       })
     this.subscriptions.push(Sub)
   }
@@ -333,14 +333,14 @@ export class ProcessTransferComponent implements OnInit {
         this.commonService.closeSnackBarMsg()
         let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
         if (data && data[0]?.RESULT == 0) {
-          this.commonService.toastErrorByMsgId('Voucher Number Already Exists')
+          this.commonService.toastErrorByMsgId('MSG2007')
           this.generateVocNo()
           return
         }
       }, err => {
         this.isloading = false;
         this.generateVocNo()
-        this.commonService.toastErrorByMsgId('Error Something went wrong')
+        this.commonService.toastErrorByMsgId('MSG1531')
       })
     this.subscriptions.push(Sub)
   }
@@ -556,7 +556,7 @@ export class ProcessTransferComponent implements OnInit {
 
   deleteClicked() {
     if (!this.content.VOCTYPE) {
-      this.commonService.showSnackBarMsg('Please select data to delete')
+      this.commonService.showSnackBarMsg('MSG1632')
       return
     }
     this.showConfirmationDialog().then((result) => {
@@ -571,13 +571,13 @@ export class ProcessTransferComponent implements OnInit {
           .subscribe((result) => {
             this.commonService.closeSnackBarMsg()
             if (result && result.status == "Success") {
-              this.showSuccessDialog('deleted successfully')
+              this.showSuccessDialog(this.commonService.getMsgByID('MSG81450'))
             } else {
-              this.commonService.showSnackBarMsg('Error Something went wrong')
+              this.commonService.showSnackBarMsg('MSG1531')
             }
           }, err => {
             this.commonService.closeSnackBarMsg()
-            this.commonService.showSnackBarMsg('Error Something went wrong')
+            this.commonService.showSnackBarMsg('MSG1531')
           })
         this.subscriptions.push(Sub)
       }

@@ -168,7 +168,7 @@ export class ApprovalMasterComponent implements OnInit {
     let userData = [];
     userData = this.tableData.filter((item: any) => item.USER_CODE == data.UsersName)
     if (userData.length > 0) {
-      this.toastr.error('Same User cannot be added.')
+      this.commonService.toastErrorByMsgId('MSG1932')
     }
     else {
       console.log(value);
@@ -212,7 +212,7 @@ export class ApprovalMasterComponent implements OnInit {
 
   emailid(data: any, value: any) {
     if (!this.commonService.validateEmail(data.target.value)) {
-      this.commonService.toastErrorByMsgId('Invalid Email Address')
+      this.commonService.toastErrorByMsgId('MSG1332')
       return
     }
 
@@ -239,11 +239,11 @@ export class ApprovalMasterComponent implements OnInit {
 
 
     if (this.approvalMasterForm.value.code == '') {
-      this.toastr.error("Code Cannot be empty")
+      this.commonService.toastErrorByMsgId('MSG3568')
     }
 
     if (this.approvalMasterForm.value.description == '') {
-      this.toastr.error("Description cannot be empty")
+      this.commonService.toastErrorByMsgId('MSG3569')
     }
 
 
@@ -356,7 +356,7 @@ export class ApprovalMasterComponent implements OnInit {
           return
         }
       }, err => {
-        this.commonService.toastErrorByMsgId('network issue found')
+        this.commonService.toastErrorByMsgId('MSG2272')
       })
     this.subscriptions.push(Sub)
   }
@@ -371,6 +371,22 @@ export class ApprovalMasterComponent implements OnInit {
 
 
   }
+  
+  submitValidations(form: any) {
+    if (this.commonService.nullToString(form.code) == '' && this.approvalMasterForm.invalid) {
+      this.commonService.toastErrorByMsgId('MSG1124') //"Code cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.description) == '' && this.approvalMasterForm.invalid) {
+      this.commonService.toastErrorByMsgId('MSG1193')//"description cannot be empty"
+      return true
+    }
+    else if (this.checkFinalApproval()) {
+      this.toastr.error('Final option should be selected');
+      return true
+    }
+    return false;
+  }
 
   formSubmit() {
 
@@ -384,6 +400,8 @@ export class ApprovalMasterComponent implements OnInit {
       this.update();
       return;
     }
+
+    if (this.submitValidations(this.approvalMasterForm.value)) return;
 
     let conditionMet = false;
 
@@ -401,48 +419,25 @@ export class ApprovalMasterComponent implements OnInit {
       console.log('mobileNo:', mobileNo);
       console.log('emailId:', emailId);
 
-      //   if ((orgMessageChecked == true || emailChecked == true) && (!mobileNo.trim() || !emailId.trim())) {
-      //     console.log("Condition met: selected fields cannot be empty");
-      //     this.toastr.error("selected fields cannot be empty")
-      //     conditionMet = true;
-      //     return; // Prevent further execution for the current item
-      //   }
-      // });
 
       if (orgMessageChecked != '') {
         if (!mobileNo.trim()) {
-          console.log("Condition met: mobile number must be filled for Message Checked");
-          this.toastr.error("Mobile number must be filled for Message Checked");
+          this.commonService.toastErrorByMsgId('MSG2480');
           conditionMet = true;
-          return; // Prevent further execution for the current item
+          return;
         }
       }
 
       if (emailChecked != '') {
         if (!emailId.trim()) {
-          console.log("Condition met: emailId must be filled for email Checked");
-          this.toastr.error("Email ID must be filled for email Checked");
+          this.commonService.toastErrorByMsgId('MSG81478');
           conditionMet = true;
-          return; // Prevent further execution for the current item
+          return; 
         }
       }
     });
 
 
-    if (this.approvalMasterForm.value.code == '' && this.approvalMasterForm.invalid) {
-      this.toastr.error("Code Cannot be empty")
-      return;
-    }
-
-    else if (this.approvalMasterForm.value.description == '' && this.approvalMasterForm.invalid) {
-      this.toastr.error("Description cannot be empty")
-      return;
-    }
-    //  Continue with the rest of your code for submission
-    else if (this.checkFinalApproval()) {
-      this.toastr.error('Final option should be selected');
-      return;
-    }
 
 
     // if (this.approvalMasterForm.invalid) {
@@ -587,12 +582,9 @@ export class ApprovalMasterComponent implements OnInit {
   // }
 
 
-  update() {
 
-    if (this.approvalMasterForm.invalid) {
-      this.toastr.error('Please select all required fields');
-      return;
-    }
+  update() {
+    if (this.submitValidations(this.approvalMasterForm.value)) return;
 
     let conditionMet = false;
 
@@ -612,39 +604,20 @@ export class ApprovalMasterComponent implements OnInit {
 
       if (orgMessageChecked != '') {
         if (!mobileNo.trim()) {
-          console.log("Condition met: mobile number must be filled for Message Checked");
-          this.toastr.error("Mobile number must be filled for Message Checked");
+          this.commonService.toastErrorByMsgId('MSG2480');
           conditionMet = true;
-          return; // Prevent further execution for the current item
+          return;
         }
       }
 
       if (emailChecked != '') {
         if (!emailId.trim()) {
-          console.log("Condition met: emailId must be filled for email Checked");
-          this.toastr.error("Email ID must be filled for email Checked");
+          this.commonService.toastErrorByMsgId('MSG81478');
           conditionMet = true;
-          return; // Prevent further execution for the current item
+          return; 
         }
       }
     });
-
-
-    if (this.approvalMasterForm.value.code == '' && this.approvalMasterForm.invalid) {
-      this.toastr.error("Code Cannot be empty")
-      return;
-    }
-
-    else if (this.approvalMasterForm.value.description == '' && this.approvalMasterForm.invalid) {
-      this.toastr.error("Description cannot be empty")
-      return;
-    }
-    //  Continue with the rest of your code for submission
-    else if (this.checkFinalApproval()) {
-      this.toastr.error('Final option should be selected');
-      return;
-    }
-
 
     if (!conditionMet) {
 
@@ -745,7 +718,7 @@ export class ApprovalMasterComponent implements OnInit {
                 });
               }
             } else {
-              this.toastr.error('Not deleted')
+              this.commonService.toastErrorByMsgId('MSG1880')//Not deleted
             }
           }, err => alert(err))
         this.subscriptions.push(Sub)

@@ -5,6 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { Subscription } from 'rxjs';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 
 @Component({
   selector: 'app-production-stock-detail',
@@ -30,6 +31,8 @@ export class ProductionStockDetailComponent implements OnInit {
   DETAILSCREEN_DATA:any;
   currentDate: any = new Date();
   HEADERDETAILS:any;
+  viewMode: boolean = false;
+  editMode: boolean = false;
   productionItemsDetailsFrom: FormGroup = this.formBuilder.group({
     stockCode  : [''],
     tagLines : [''],
@@ -159,6 +162,155 @@ export class ProductionStockDetailComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
+
+  priceCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 82,
+    SEARCH_FIELD: 'PRICE_CODE',
+    SEARCH_HEADING: 'Price Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "PRICE_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
+  priceOneCodeSelected(e: any) {
+    if (this.isSamepriceCodeSelected(e.PRICE_CODE)) {
+      this.commonService.toastErrorByMsgId('cannot select the same Price code');
+      return;
+    }
+    this.productionItemsDetailsFrom.controls.price1per.setValue(e.PRICE_CODE);
+  }
+
+  pricetwoCodeSelected(e: any) {
+    if (this.isSamepriceCodeSelected(e.PRICE_CODE)) {
+      this.commonService.toastErrorByMsgId('cannot select the same Price code');
+      return;
+    }
+    this.productionItemsDetailsFrom.controls.price2per.setValue(e.PRICE_CODE);
+  }
+
+  pricethreeCodeSelected(e: any) {
+    if (this.isSamepriceCodeSelected(e.PRICE_CODE)) {
+      this.commonService.toastErrorByMsgId('cannot select the same Price code');
+      return;
+    }
+    this.productionItemsDetailsFrom.controls.price3per.setValue(e.PRICE_CODE);
+  }
+
+  pricefourCodeSelected(e: any) {
+    if (this.isSamepriceCodeSelected(e.PRICE_CODE)) {
+      this.commonService.toastErrorByMsgId('cannot select the same Price code');
+      return;
+    }
+    this.productionItemsDetailsFrom.controls.price4per.setValue(e.PRICE_CODE);
+  }
+
+  pricefiveCodeSelected(e: any) {
+    if (this.isSamepriceCodeSelected(e.PRICE_CODE)) {
+      this.commonService.toastErrorByMsgId('cannot select the same Price code');
+      return;
+    }
+    this.productionItemsDetailsFrom.controls.price5per.setValue(e.PRICE_CODE);
+  }
+
+  private isSamepriceCodeSelected(PRICE_CODE: any): boolean {
+    return (
+      this.productionItemsDetailsFrom.value.price1per === PRICE_CODE ||
+      this.productionItemsDetailsFrom.value.price2per === PRICE_CODE ||
+      this.productionItemsDetailsFrom.value.price3per === PRICE_CODE ||
+      this.productionItemsDetailsFrom.value.price4per === PRICE_CODE ||
+      this.productionItemsDetailsFrom.value.price5per === PRICE_CODE
+    );
+  }
+
+  settingChrgData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
+  settingChrgSelected(e: any) {
+    this.productionItemsDetailsFrom.controls.settingChrg.setValue(e.PRICE_CODE);
+    this.productionItemsDetailsFrom.controls.settingChrgDesc.setValue(e.PRICE_CODE);
+  }
+
+  polishChrgData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
+  polishChrgSelected(e: any) {
+    this.productionItemsDetailsFrom.controls.polishChrg.setValue(e.PRICE_CODE);
+    this.productionItemsDetailsFrom.controls.polishChrgDesc.setValue(e.PRICE_CODE);
+  }
+
+  rhodiumChrgData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
+  rhodiumChrgSelected(e: any) {
+    this.productionItemsDetailsFrom.controls.rhodiumChrg.setValue(e.PRICE_CODE);
+    this.productionItemsDetailsFrom.controls.rhodiumChrgDesc.setValue(e.PRICE_CODE);
+  }
+
+  labourChrgData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
+  labourChrgSelected(e: any) {
+    this.productionItemsDetailsFrom.controls.labourChrg.setValue(e.PRICE_CODE);
+    this.productionItemsDetailsFrom.controls.labourChrgDesc.setValue(e.PRICE_CODE);
+  }
+
+  miscChrgData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
+  miscChrgSelected(e: any) {
+    this.productionItemsDetailsFrom.controls.miscChrg.setValue(e.PRICE_CODE);
+    this.productionItemsDetailsFrom.controls.miscChrgDesc.setValue(e.PRICE_CODE);
+  }
+
+
 
   close(data?: any) {
     this.activeModal.close(data);
@@ -373,6 +525,36 @@ export class ProductionStockDetailComponent implements OnInit {
       })
     })
   }
+      /**use: validate all lookups to check data exists in db */
+      validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+        LOOKUPDATA.SEARCH_VALUE = event.target.value
+        if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
+        let param = {
+          LOOKUPID: LOOKUPDATA.LOOKUPID,
+          WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+        }
+        this.commonService.toastInfoByMsgId('MSG81447');
+        let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
+        let Sub: Subscription = this.dataService.postDynamicAPI(API,param)
+          .subscribe((result) => {
+            let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+            if (data.length == 0) {
+              this.commonService.toastErrorByMsgId('MSG1531')
+              this.productionItemsDetailsFrom.controls[FORMNAME].setValue('')
+              LOOKUPDATA.SEARCH_VALUE = ''
+              return
+            }
+           
+          }, err => {
+            this.commonService.toastErrorByMsgId('network issue found')
+          })
+        this.subscriptions.push(Sub)
+      }
+
+  continue(){
+
+  }
+
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {
       this.subscriptions.forEach((subscription) => subscription.unsubscribe()); // unsubscribe all subscription

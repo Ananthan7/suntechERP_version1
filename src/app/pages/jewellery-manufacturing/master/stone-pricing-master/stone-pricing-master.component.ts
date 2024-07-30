@@ -534,6 +534,70 @@ export class StonePricingMasterComponent implements OnInit {
     }
   }
 
+
+
+  submitValidation(form: any) {
+
+    if (this.commonService.nullToString(form.price_code) == '') {
+      this.commonService.toastErrorByMsgId('MSG1660') //"price_code cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.shape) == '') {
+      this.commonService.toastErrorByMsgId('MSG1796')//"shape cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.clarity) == '') {
+      this.commonService.toastErrorByMsgId('MSG1118')//"clarity cannot be empty"
+      return true
+    }
+
+    else if (this.commonService.nullToString(form.currency) == '') {
+      this.commonService.toastErrorByMsgId('MSG1172')//"currency cannot be empty"
+      return true
+    }
+
+    else if (this.commonService.nullToString(form.carat_wt) == '') {
+      this.commonService.toastErrorByMsgId('MSG1095')//"carat_wt cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.wt_from) == '') {
+      this.commonService.toastErrorByMsgId('MSG3565')//"wt_from cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.wt_to) == '') {
+      this.commonService.toastErrorByMsgId('MSG3565')//"wt_to cannot be empty"
+      return true
+    }
+
+    else if (this.commonService.nullToString(form.issue_rate) == '') {
+      this.commonService.toastErrorByMsgId('MSG1723')//"issue_rate cannot be empty"
+      return true
+    }
+
+    // else if (this.commonService.nullToString(form.currency) == '') {
+    //   this.commonService.toastErrorByMsgId('MSG1173')//"currency cannot be empty"
+    //   return true
+    // }
+    // else if (this.diamondlabourMasterForm.value.selling_rate == 0 && this.diamondlabourMasterForm.value.selling == 0) {
+    //   this.commonService.toastErrorByMsgId('MSG7728') //"Select Either Selling % or Selling Rate"
+    //   return true
+    // }
+
+    // else if (this.diamondlabourMasterForm.value.size_from > this.diamondlabourMasterForm.value.size_to) {
+    //  // this.commonService.toastErrorByMsgId('MSG2496') //"Size From should be lesser than Size To"
+    //   this.toastr.error('Size From should be lesser than Size To')
+    //   return true
+    // }
+
+    // else if (this.diamondlabourMasterForm.value.ctWtFrom > this.diamondlabourMasterForm.value.ctWtTo) {
+    //   this.commonService.toastErrorByMsgId('MSG3805')//Weight From should be lesser than Weight To
+    //   return true
+    // }
+
+
+    return false;
+  }
+
   formSubmit() {
 
     if (this.content && this.content.FLAG == 'VIEW') return
@@ -541,10 +605,11 @@ export class StonePricingMasterComponent implements OnInit {
       this.update()
       return
     }
-    if (this.stonePrizeMasterForm.invalid) {
-      this.toastr.error('select all required fields')
-      return
-    }
+    if (this.submitValidation(this.stonePrizeMasterForm.value)) return;
+    // if (this.stonePrizeMasterForm.invalid) {
+    //   this.toastr.error('select all required fields')
+    //   return
+    // }
 
     if (this.stonePrizeMasterForm.value.selling === '' && this.stonePrizeMasterForm.value.selling_rate === '') {
       this.toastr.error('Enter values either Selling % or Selling Rate');
@@ -607,7 +672,7 @@ export class StonePricingMasterComponent implements OnInit {
     let sub: Subscription = this.dataService.getDynamicAPICustom(API).subscribe(
       (result) => {
         if (result.status == 'Success') {
-          this.commonService.toastErrorByMsgId('Code already exists')
+          this.commonService.toastErrorByMsgId('MSG1121')//code already exsist
           // Reset the form control value
           this.stonePrizeMasterForm.controls.price_code.setValue('');
         }
@@ -623,10 +688,10 @@ export class StonePricingMasterComponent implements OnInit {
   }
   update() {
     console.log(this.stonePrizeMasterForm.value);
-    if (this.stonePrizeMasterForm.invalid) {
-      this.toastr.error('select all required fields')
-      return
-    }
+    // if (this.stonePrizeMasterForm.invalid) {
+    //   this.toastr.error('select all required fields')
+    //   return
+    // }
 
     if (this.stonePrizeMasterForm.value.sieve_form > this.stonePrizeMasterForm.value.sieve_to) {
       this.toastr.error('Sieve From Should not be Greater than Sieve To');
@@ -731,7 +796,7 @@ export class StonePricingMasterComponent implements OnInit {
                 });
               }
             } else {
-              this.toastr.error('Not deleted')
+              this.commonService.toastErrorByMsgId('MSG1880');// Not Deleted
             }
           }, err => alert(err))
         this.subscriptions.push(Sub)
@@ -858,7 +923,7 @@ export class StonePricingMasterComponent implements OnInit {
           }
          
         }, err => {
-          this.commonService.toastErrorByMsgId('network issue found')
+          this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
         })
       this.subscriptions.push(Sub)
     }
