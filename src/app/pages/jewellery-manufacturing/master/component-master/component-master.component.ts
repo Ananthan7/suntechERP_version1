@@ -482,7 +482,7 @@ export class ComponentMasterComponent implements OnInit {
 
   checkCode(): boolean {
     if (this.componentmasterForm.value.code == '') {
-      this.commonService.toastErrorByMsgId('please enter code')
+      this.commonService.toastErrorByMsgId('MSG1593')
       return true
     }
     return false
@@ -528,11 +528,12 @@ export class ComponentMasterComponent implements OnInit {
       .subscribe((result) => {
         if (result.response) {
           if (result.status == "Success") {
-            this.commonService.toastSuccessByText('Last number updated')
+           // this.commonService.toastSuccessByText('Last number updated')
+           console.log('Last number updated');
 
           }
         } else {
-          this.toastr.error('Not saved')
+          this.commonService.toastErrorByMsgId('MSG2272')
         }
       }, err => alert(err))
     this.subscriptions.push(Sub)
@@ -1331,15 +1332,34 @@ export class ComponentMasterComponent implements OnInit {
     }
     return postData
   }
+
+
+  submitValidations(form: any) {
+    if (this.commonService.nullToString(form.code) =='') {
+      this.commonService.toastErrorByMsgId('MSG1124') //"Code cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.codedes) == '') {
+      this.commonService.toastErrorByMsgId('MSG1193')//"description cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.processSeq) == '') {
+      this.commonService.toastErrorByMsgId('MSG1680')//"process seq cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.costCenter) == '') {
+      this.commonService.toastErrorByMsgId('MSG1150')//"Cost center cannot be empty"
+      return true
+    }
+    return false;
+  }
+
   formSubmit() {
     if (this.content && this.content.FLAG == 'EDIT') {
       this.update()
       return
     }
-    if (this.componentmasterForm.invalid) {
-      this.toastr.error('select all required fields')
-      return
-    }
+    if (this.submitValidations(this.componentmasterForm.value)) return;
     let postData = this.setPostData()
 
     let Sub: Subscription = this.dataService.postDynamicAPI('DesignMaster/InsertDesignMaster', postData)
@@ -1348,7 +1368,7 @@ export class ComponentMasterComponent implements OnInit {
           this.updatePrefixMaster()
           this.showSuccessDialog(this.commonService.getMsgByID('MSG2239') || 'Saved Successfully')
         } else if (result.status == "Failed") {
-          this.showErrorDialog('Code Already Exists')
+          this.commonService.toastErrorByMsgId('MSG1121')
         }
         else {
           this.commonService.toastErrorByMsgId('MSG3577')
@@ -1360,10 +1380,8 @@ export class ComponentMasterComponent implements OnInit {
   }
 
   update() {
-    if (this.componentmasterForm.invalid) {
-      this.toastr.error('select all required fields')
-      return
-    }
+
+    if (this.submitValidations(this.componentmasterForm.value)) return;
 
     let API = 'DesignMaster/UpdateDesignMaster/' + this.content.DESIGN_CODE
     let postData = this.setPostData()
@@ -1413,7 +1431,7 @@ export class ComponentMasterComponent implements OnInit {
           // this.componentmasterForm.controls.jobno.setValue(result.dynamicData[0][0].JOB_NO)
         }
       }, err => {
-        this.commonService.toastErrorByMsgId('Server Error')
+        this.commonService.toastErrorByMsgId('MSG81451')
       })
     this.subscriptions.push(Sub)
   }
@@ -1422,7 +1440,7 @@ export class ComponentMasterComponent implements OnInit {
   deleteComponentMaster() {
     if (this.content && this.content.FLAG == 'VIEW') return
     if (!this.content.DESIGN_CODE) {
-      this.showDeleteErrorDialog('Please Select data to delete!');
+      this.commonService.toastErrorByMsgId('MSG1644');
       return;
     }
 
@@ -1439,10 +1457,10 @@ export class ComponentMasterComponent implements OnInit {
                 this.showErrorDialog(result.message || 'Error please try again');
               }
             } else {
-              this.toastr.error('Not deleted');
+              this.commonService.toastErrorByMsgId('MSG1880');// Not Deleted
             }
           }, err => {
-            this.commonService.toastErrorByMsgId('network error')
+            this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
           });
         this.subscriptions.push(Sub);
       }
@@ -1531,7 +1549,7 @@ export class ComponentMasterComponent implements OnInit {
         }
         //this.alloyMasterFormChecks(FORMNAME)// for validations
       }, err => {
-        this.commonService.toastErrorByMsgId('network issue found')
+        this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
       })
     this.subscriptions.push(Sub)
   }

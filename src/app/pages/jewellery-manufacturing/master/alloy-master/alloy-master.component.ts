@@ -504,7 +504,7 @@ export class AlloyMasterComponent implements OnInit {
         }
         this.alloyMasterFormChecks(FORMNAME)// for validations
       }, err => {
-        this.commonService.toastErrorByMsgId('network issue found')
+        this.commonService.toastErrorByMsgId('MSG1531')
       })
     this.subscriptions.push(Sub)
   }
@@ -547,12 +547,12 @@ export class AlloyMasterComponent implements OnInit {
           if (this.priceSchemeDetails?.length > 0) {
             this.fillPriceSchemeDetails()
           } else {
-            this.commonService.toastErrorByMsgId('price sheme not found')
+            this.commonService.toastErrorByMsgId('MSG1531')
           }
 
         }
       }, err => {
-        this.commonService.toastErrorByMsgId('Server Error')
+        this.commonService.toastErrorByMsgId('MSG1531')
       })
     this.subscriptions.push(Sub)
   }
@@ -800,11 +800,10 @@ export class AlloyMasterComponent implements OnInit {
       .subscribe((result) => {
         if (result.response) {
           if (result.status == "Success") {
-            this.commonService.toastSuccessByText('Last number updated')
-
+          console.log('Last number updated')
           }
         } else {
-          this.toastr.error('Not saved')
+          this.commonService.toastErrorByMsgId('MSG3577')
         }
       }, err => alert(err))
     this.subscriptions.push(Sub)
@@ -815,7 +814,7 @@ export class AlloyMasterComponent implements OnInit {
     //   return true;
     // }else{
     if (this.alloyMastereForm.value.code == '') {
-      this.commonService.toastErrorByMsgId('Please enter the Prefix Code');
+      this.commonService.toastErrorByMsgId('MSG1628');
       return true
     }
     return false
@@ -823,7 +822,7 @@ export class AlloyMasterComponent implements OnInit {
   }
   checkCode() {
     if (this.alloyMastereForm.value.code == '') {
-      this.commonService.toastErrorByMsgId('Please enter the Prefix Code');
+      this.commonService.toastErrorByMsgId('MSG1628');
       return true;
     }
     return false;
@@ -859,7 +858,7 @@ export class AlloyMasterComponent implements OnInit {
   /** checking for same account code selection */
   private isSamepriceCodeSelected(PRICE_CODE: any): boolean {
     return (
-      this.alloyMastereForm.value.PRICE1 === PRICE_CODE ||
+      this.alloyMastereForm.value.price1code === PRICE_CODE ||
       this.alloyMastereForm.value.price2code === PRICE_CODE ||
       this.alloyMastereForm.value.price3code === PRICE_CODE ||
       this.alloyMastereForm.value.price4code === PRICE_CODE ||
@@ -871,7 +870,7 @@ export class AlloyMasterComponent implements OnInit {
   priceCodeone(e: any) {
     if (this.checkStockCode()) return
     if (this.alloyMastereForm.value.price2code === this.alloyMastereForm.value.price1code || this.alloyMastereForm.value.price3code === this.alloyMastereForm.value.PRICE1 || this.alloyMastereForm.value.price4code === this.alloyMastereForm.value.PRICE1 || this.alloyMastereForm.value.price5code === this.alloyMastereForm.value.PRICE1) {
-      this.commonService.toastErrorByMsgId('cannot select the same Price code');
+      this.commonService.toastErrorByMsgId('MSG1659');
       return;
     }
   }
@@ -879,7 +878,7 @@ export class AlloyMasterComponent implements OnInit {
   priceTwoCode(e: any) {
     if (this.checkStockCode()) return
     if (this.alloyMastereForm.value.price2code === this.alloyMastereForm.value.price1code || this.alloyMastereForm.value.price3code === this.alloyMastereForm.value.price2code || this.alloyMastereForm.value.price4code === this.alloyMastereForm.value.price2code || this.alloyMastereForm.value.price5code === this.alloyMastereForm.value.price2code) {
-      this.commonService.toastErrorByMsgId('cannot select the same Price code');
+      this.commonService.toastErrorByMsgId('MSG1659');
       return;
     }
   }
@@ -887,7 +886,7 @@ export class AlloyMasterComponent implements OnInit {
   priceThreeCode(e: any) {
     if (this.checkStockCode()) return
     if (this.alloyMastereForm.value.price3code === this.alloyMastereForm.value.price1code || this.alloyMastereForm.value.price3code === this.alloyMastereForm.value.price2code || this.alloyMastereForm.value.price4code === this.alloyMastereForm.value.price3code || this.alloyMastereForm.value.price5code === this.alloyMastereForm.value.price3code) {
-      this.commonService.toastErrorByMsgId('cannot select the same Price code');
+      this.commonService.toastErrorByMsgId('MSG1659');
       return;
     }
   }
@@ -896,7 +895,7 @@ export class AlloyMasterComponent implements OnInit {
   priceFourCode(e: any) {
     if (this.checkStockCode()) return
     if (this.alloyMastereForm.value.price4code === this.alloyMastereForm.value.price1code || this.alloyMastereForm.value.price4code === this.alloyMastereForm.value.price2code || this.alloyMastereForm.value.price4code === this.alloyMastereForm.value.price3code || this.alloyMastereForm.value.price5code === this.alloyMastereForm.value.price4code) {
-      this.commonService.toastErrorByMsgId('cannot select the same Price code');
+      this.commonService.toastErrorByMsgId('MSG1659');
       return;
     }
   }
@@ -904,14 +903,14 @@ export class AlloyMasterComponent implements OnInit {
   priceFiveCode(e: any) {
     if (this.checkStockCode()) return
     if (this.alloyMastereForm.value.price5code === this.alloyMastereForm.value.price1code || this.alloyMastereForm.value.price5code === this.alloyMastereForm.value.price2code || this.alloyMastereForm.value.price5code === this.alloyMastereForm.value.price3code || this.alloyMastereForm.value.price5code === this.alloyMastereForm.value.price4code) {
-      this.commonService.toastErrorByMsgId('cannot select the same Price code');
+      this.commonService.toastErrorByMsgId('MSG1659');
       return;
     }
   }
 
   priceOneCodeSelected(e: any) {
     if (this.isSamepriceCodeSelected(e.PRICE_CODE)) {
-      this.commonService.toastErrorByMsgId('cannot select the same Price code');
+      this.commonService.toastErrorByMsgId('MSG1659');
       return;
     }
     if (this.checkStockCode()) return
@@ -924,7 +923,7 @@ export class AlloyMasterComponent implements OnInit {
 
   priceTwoCodeSelected(e: any) {
     if (this.isSamepriceCodeSelected(e.PRICE_CODE)) {
-      this.commonService.toastErrorByMsgId('cannot select the same Price code');
+      this.commonService.toastErrorByMsgId('MSG1659');
       return;
     }
     if (this.checkStockCode()) return
@@ -933,7 +932,7 @@ export class AlloyMasterComponent implements OnInit {
 
   priceThreeCodeSelected(e: any) {
     if (this.isSamepriceCodeSelected(e.PRICE_CODE)) {
-      this.commonService.toastErrorByMsgId('cannot select the same Price code');
+      this.commonService.toastErrorByMsgId('MSG1659');
       return;
     }
     if (this.checkStockCode()) return
@@ -942,7 +941,7 @@ export class AlloyMasterComponent implements OnInit {
 
   priceFourCodeSelected(e: any) {
     if (this.isSamepriceCodeSelected(e.PRICE_CODE)) {
-      this.commonService.toastErrorByMsgId('cannot select the same Price code');
+      this.commonService.toastErrorByMsgId('MSG1659');
       return;
     }
     if (this.checkStockCode()) return
@@ -951,7 +950,7 @@ export class AlloyMasterComponent implements OnInit {
   }
   priceFiveCodeSelected(e: any) {
     if (this.isSamepriceCodeSelected(e.PRICE_CODE)) {
-      this.commonService.toastErrorByMsgId('cannot select the same Price code');
+      this.commonService.toastErrorByMsgId('MSG1659');
       return;
     }
     if (this.checkStockCode()) return
@@ -1382,16 +1381,35 @@ export class AlloyMasterComponent implements OnInit {
 
     return postData
   }
+
+
+  submitValidations(form: any) {
+    if (this.commonService.nullToString(form.code) == '') {
+      this.commonService.toastErrorByMsgId('MSG1124') //"Code cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.costCenter) == '') {
+      this.commonService.toastErrorByMsgId('MSG1150')//"costCenter cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.currency) == '') {
+      this.commonService.toastErrorByMsgId('MSG1173')//"currency cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.description) == '') {
+      this.commonService.toastErrorByMsgId('MSG1193')//"description cannot be empty"
+      return true
+    }
+    return false;
+  }
+
   formSubmit() {
     if (this.content?.FLAG == 'VIEW') return
     if (this.content?.FLAG == 'EDIT') {
       this.updateMeltingType()
       return
     }
-    if (this.alloyMastereForm.invalid) {
-      this.toastr.error('select all required fields')
-      return
-    }
+    if (this.submitValidations(this.alloyMastereForm.value)) return;
     let API = "DiamondStockMaster/InsertDiamondStockMaster";
     let postData = this.setPostData()
 
@@ -1401,7 +1419,7 @@ export class AlloyMasterComponent implements OnInit {
           this.updatePrefixMaster()
           this.showSuccessDialog(this.commonService.getMsgByID('MSG2239') || 'Saved Successfully')
         } else if (result.status == "Failed") {
-          this.showErrorDialog('Code Already Exists')
+          this.commonService.toastErrorByMsgId('MSG1121')
         }
         else {
           this.commonService.toastErrorByMsgId('MSG3577')
@@ -1441,7 +1459,7 @@ export class AlloyMasterComponent implements OnInit {
   deleteAlloyMaster() {
     if (this.content && this.content.FLAG == 'VIEW') return
     if (!this.content?.STOCK_CODE) {
-      this.showDeleteErrorDialog('Please Select data to delete!');
+      this.commonService.toastErrorByMsgId('MSG2347');
       return;
     }
 
@@ -1454,13 +1472,13 @@ export class AlloyMasterComponent implements OnInit {
               if (result.status == "Success") {
                 this.showSuccessDialog(this.content?.STOCK_CODE + ' Deleted successfully');
               } else {
-                this.showErrorDialog(result.message || 'Error please try again');
+                this.commonService.toastErrorByMsgId('MSG2272');
               }
             } else {
-              this.toastr.error('Not deleted');
+              this.commonService.toastErrorByMsgId('MSG1880');
             }
           }, err => {
-            this.commonService.toastErrorByMsgId('network error')
+            this.commonService.toastErrorByMsgId('MSG1531')
           });
         this.subscriptions.push(Sub);
       }
@@ -1520,13 +1538,11 @@ export class AlloyMasterComponent implements OnInit {
   }
 
   fillPriceSchemeDetails1() {
-    console.log('hiii')
     // this.resetAllPriceDetails()
     let form = this.alloyMastereForm.value;
     this.priceSchemeDetails.forEach((item: any, i: any, strpriceLC: any) => {
       //  this.alloyMastereForm.controls[item.PRICE_NUMBER].setValue(item.PRICE_CODE)
       if (item.PRICE_NUMBER == 'PRICE1') {
-        console.log('hello')
         console.log(item.PRICE_NUMBER)
         //this.alloyMastereForm.controls.price1code.setValue(item.PRICE_CODE)
         this.alloyMastereForm.controls.price1Lc.setValue(this.TagPrice_Calculation(item));

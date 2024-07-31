@@ -31,8 +31,10 @@ export class GoldExchangeDetailsComponent implements OnInit {
   zeroMQtyVal: any;
   userName = localStorage.getItem("username");
   userbranch = localStorage.getItem("userbranch");
-  branchCode?: String;
-  yearMonth?: String;
+  yearMonth?: any =
+    localStorage.getItem("YEAR") || this.comService.yearSelected;
+  branchCode?: any =
+    localStorage.getItem("userbranch") || this.comService.branchCode;
   selected = "gms";
   partyCurrency = "";
   viewOnly: boolean = false;
@@ -152,7 +154,6 @@ export class GoldExchangeDetailsComponent implements OnInit {
     this.getKaratDetails();
 
     console.log(this.exchangeDetails);
-    
 
     if (this.exchangeDetails && Object.keys(this.exchangeDetails).length > 0)
       this.setExchangeDetails();
@@ -171,20 +172,14 @@ export class GoldExchangeDetailsComponent implements OnInit {
   }
 
   getExchangeStockCodes(stockCode: string) {
-    // let param = {
-    //   BRANCH_CODE: this.comService.branchCode,
-    //   STOCK_CODE: stockCode,
-
-    // }
-
-    // let sub: Subscription = this.suntechApi.getDynamicAPIwithParams('RetailsalesExchangeLookup',param)
-
-    const API = `RetailsalesExchangeLookup/${this.comService.branchCode}/${stockCode}`;
+    const API = `RetailsalesExchangeLookup/${this.branchCode}/${stockCode}`;
 
     let sub: Subscription = this.suntechApi
       .getDynamicAPI(API)
-      .subscribe((resp) => {
-        let _data = resp.response[0];
+      .subscribe((res) => {
+        console.log(res);
+
+        let _data = res.response[0];
 
         this.standardPurity = _data.PURITY;
         this.minPurity = _data.PURITY_FROM;
@@ -195,17 +190,7 @@ export class GoldExchangeDetailsComponent implements OnInit {
           "RATE"
         );
 
-        this.goldExchangeDetailsForm.controls.metalRate.setValue(
-          this.comService.decimalQuantityFormat(
-            this.comService.CCToFC(
-              this.partyCurrency,
-              this.comService.emptyToZero(metalRate)
-            ),
-            "RATE"
-          )
-        );
-
-        // this.goldExchangeDetailsForm.controls.metalRate.setValue(metalRate);
+        this.goldExchangeDetailsForm.controls.metalRate.setValue(metalRate);
 
         localStorage.setItem("defaultMetalRate", metalRate);
 
@@ -224,27 +209,19 @@ export class GoldExchangeDetailsComponent implements OnInit {
         this.goldExchangeDetailsForm.value.stoneWeight
       ) *
       this.comService.emptyToZero(this.goldExchangeDetailsForm.value.stoneRate);
-    console.log(
-      this.comService.emptyToZero(
-        this.goldExchangeDetailsForm.value.stoneWeight
-      )
-    );
-    console.log(
-      this.comService.emptyToZero(this.goldExchangeDetailsForm.value.stoneRate)
-    );
 
     console.log(stoneDiffrence);
 
-    // (this.comService.emptyToZero(
-    //   this.goldExchangeDetailsForm.value.grossWeight
-    // ) -
-    //   this.comService.emptyToZero(
-    //     this.goldExchangeDetailsForm.value.stoneWeight
-    //   ) -
-    //   this.comService.emptyToZero(
-    //     this.goldExchangeDetailsForm.value.chargableWeight
-    //   )) *
-    // this.comService.emptyToZero(this.goldExchangeDetailsForm.value.purity);
+    (this.comService.emptyToZero(
+      this.goldExchangeDetailsForm.value.grossWeight
+    ) -
+      this.comService.emptyToZero(
+        this.goldExchangeDetailsForm.value.stoneWeight
+      ) -
+      this.comService.emptyToZero(
+        this.goldExchangeDetailsForm.value.chargableWeight
+      )) *
+      this.comService.emptyToZero(this.goldExchangeDetailsForm.value.purity);
 
     this.goldExchangeDetailsForm.controls.stoneDiffer.setValue(
       this.comService.decimalQuantityFormat(
@@ -344,8 +321,34 @@ export class GoldExchangeDetailsComponent implements OnInit {
   }
 
   changeStoneweight(event: any) {
-    console.log(event.target.value);
+    console.log(this.goldExchangeDetailsForm.value.stoneWeight);
+    console.log(
+      this.comService.decimalQuantityFormat(
+        this.comService.CCToFC(
+          this.partyCurrency,
+          this.comService.emptyToZero(
+            this.goldExchangeDetailsForm.value.grossWeight
+          )
+        ),
+        "METAL"
+      )
+    );
 
+    this.goldExchangeDetailsForm.controls["netWeight"].setValue(
+      this.goldExchangeDetailsForm.value.stoneWeight -
+        this.comService.decimalQuantityFormat(
+          this.goldExchangeDetailsForm.value.grossWeight,
+          "METAL"
+        )
+    );
+
+    this.goldExchangeDetailsForm.controls["chargableWeight"].setValue(
+      this.goldExchangeDetailsForm.value.stoneWeight -
+        this.comService.decimalQuantityFormat(
+          this.goldExchangeDetailsForm.value.grossWeight,
+          "METAL"
+        )
+    );
     this.updateStoneDiffrence();
   }
 
@@ -367,13 +370,8 @@ export class GoldExchangeDetailsComponent implements OnInit {
     );
     const mudWeight = this.goldExchangeDetailsForm.value.mudWeight;
 
-    if (mudWeight > grossWt) {
-      this.goldExchangeDetailsForm.controls.metalRate.setValue(
-        this.comService.decimalQuantityFormat(
-          this.comService.emptyToZero(this.zeroMQtyVal),
-          "AMOUNT"
-        )
-      );
+    if (mudWeight < grossWt) {
+      this.goldExchangeDetailsForm.controls.metalRate.setValue(metalRate);
     }
     const ozWeight = this.comService.decimalQuantityFormat(
       this.comService.emptyToZero(pureWt || 0) / 31.1035,
@@ -406,29 +404,24 @@ export class GoldExchangeDetailsComponent implements OnInit {
       )
     );
 
-    this.goldExchangeDetailsForm.controls.metalAmount.setValue(
-      this.comService.CCToFC(this.partyCurrency, metalAmount)
-    );
+    this.goldExchangeDetailsForm.controls.metalAmount.setValue(metalAmount);
 
-    // this.goldExchangeDetailsForm.controls.metalAmount.setValue(
-    //   metalAmount);
-    console.log("finished");
+    // this.goldExchangeDetailsForm.controls.metalAmount.setValue(metalAmount);
 
     this.updateNetTotal();
     this.updateStoneDiffrence();
-    console.log("finished");
   }
 
   changeMakingRate(event: any) {
     console.log(event.target.value);
 
-    console.log(this.goldExchangeDetailsForm.controls.unitAmount.setValue(
-      this.comService.emptyToZero(
-        event.target.value * this.goldExchangeDetailsForm.value.grossWeight
+    console.log(
+      this.goldExchangeDetailsForm.controls.unitAmount.setValue(
+        this.comService.emptyToZero(
+          event.target.value * this.goldExchangeDetailsForm.value.grossWeight
+        )
       )
-    )
-  );
-    
+    );
 
     this.goldExchangeDetailsForm.controls.unitAmount.setValue(
       this.comService.emptyToZero(
@@ -476,7 +469,6 @@ export class GoldExchangeDetailsComponent implements OnInit {
     console.log(event.target.value);
     this.checkMetalRateLimit(event.target.value, "RATE", event.target.value);
     console.log(this.checkMetalRateLimit);
-    
 
     // this.goldExchangeDetailsForm.controls.metalAmount.setValue(this.comService.emptyToZero(
     //   event.target.value * this.goldExchangeDetailsForm.value.grossWeight));
@@ -561,6 +553,12 @@ export class GoldExchangeDetailsComponent implements OnInit {
   }
 
   updateNetTotal() {
+    console.log(
+      this.comService.emptyToZero(this.goldExchangeDetailsForm.value.unitAmount)
+    );
+
+    console.log();
+
     const netTotalAmount =
       this.comService.emptyToZero(
         this.goldExchangeDetailsForm.value.unitAmount
@@ -573,10 +571,7 @@ export class GoldExchangeDetailsComponent implements OnInit {
       );
 
     this.goldExchangeDetailsForm.controls.netAmount.setValue(
-      this.comService.CCToFC(
-        this.partyCurrency,
-        this.comService.emptyToZero(netTotalAmount)
-      )
+      this.comService.emptyToZero(netTotalAmount)
     );
 
     // this.goldExchangeDetailsForm.controls.netAmount.setValue(this.comService.emptyToZero(
@@ -593,7 +588,6 @@ export class GoldExchangeDetailsComponent implements OnInit {
 
   checkMetalRateLimit(event: any, object: string, metalRate: any) {
     const defaultMetalRate = localStorage.getItem("defaultMetalRate") || 0;
-    
 
     if (object == "RATE") {
       if (
@@ -763,7 +757,6 @@ export class GoldExchangeDetailsComponent implements OnInit {
       this.exchangeDetails != undefined &&
       Object.keys(this.exchangeDetails).length > 0
     ) {
-      
       this.goldExchangeDetailsForm.controls.stockCode.setValue(
         this.exchangeDetails.DIVISION_CODE
       );
@@ -1061,7 +1054,7 @@ export class GoldExchangeDetailsComponent implements OnInit {
 
   formSubmit() {
     if (this.content && this.content.FLAG == "EDIT") {
-      // this.update()
+      this.update();
       return;
     }
     if (this.goldExchangeDetailsForm.invalid) {

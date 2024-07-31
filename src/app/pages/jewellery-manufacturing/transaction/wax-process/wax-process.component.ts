@@ -30,6 +30,7 @@ export class WaxProcessComponent implements OnInit {
   vocMaxDate = new Date();
   viewMode: boolean = false;
   currentDate = new Date();
+  isloading: boolean = false;
   isSaved: boolean = false;
   editMode: boolean = false;
   isDisableSaveBtn: boolean = false;
@@ -119,9 +120,24 @@ export class WaxProcessComponent implements OnInit {
     this.yearMonth = this.commonService.yearSelected;
 
     // console.log(this.content);
-    if (this.content) {
-      // this.setFormValues()
+    if (this.content?.FLAG) {
+      if (this.content.FLAG == 'VIEW') {
+        this.viewMode = true;
+        this.LOCKVOUCHERNO = true;
+      }
+      if (this.content.FLAG == 'EDIT') {
+        this.viewMode = true;
+        this.LOCKVOUCHERNO = true;
+      }
+      if (this.content?.FLAG) {
+        this.waxprocessFrom.controls.FLAG.setValue(this.content.FLAG)
+      }
+    } else {
+      this.generateVocNo()
+      this.setFormValues()
+      this.setvoucherTypeMaster()
     }
+
 
   }
 
@@ -166,7 +182,49 @@ export class WaxProcessComponent implements OnInit {
       });
     }
   }
-
+  minDate: any;
+  maxDate: any;
+  LOCKVOUCHERNO: boolean = true;
+  setvoucherTypeMaster() {
+    let frm = this.waxprocessFrom.value
+    const vocTypeMaster = this.commonService.getVoctypeMasterByVocTypeMain(frm.BRANCH_CODE, frm.VOCTYPE, frm.MAIN_VOCTYPE)
+    this.LOCKVOUCHERNO = vocTypeMaster.LOCKVOUCHERNO
+    this.minDate = vocTypeMaster.BLOCKBACKDATEDENTRIES ? new Date() : null;
+    this.maxDate = vocTypeMaster.BLOCKFUTUREDATE ? new Date() : null;
+  }
+  ValidatingVocNo() {
+    if (this.content?.FLAG == 'VIEW') return
+    this.commonService.showSnackBarMsg('MSG81447');
+    let API = `ValidatingVocNo/${this.commonService.getqueryParamMainVocType()}/${this.waxprocessFrom.value.vocno}`
+    API += `/${this.commonService.branchCode}/${this.commonService.getqueryParamVocType()}`
+    API += `/${this.commonService.yearSelected}`
+    this.isloading = true;
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        this.isloading = false;
+        this.commonService.closeSnackBarMsg()
+        let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+        if (data && data[0]?.RESULT == 0) {
+          this.commonService.toastErrorByMsgId('Voucher Number Already Exists')
+          this.generateVocNo()
+          return
+        }
+      }, err => {
+        this.isloading = false;
+        this.generateVocNo()
+        this.commonService.toastErrorByMsgId('Error Something went wrong')
+      })
+    this.subscriptions.push(Sub)
+  }
+  generateVocNo() {
+    const API = `GenerateNewVoucherNumber/GenerateNewVocNum/${this.commonService.getqueryParamVocType()}/${this.commonService.branchCode}/${this.commonService.yearSelected}/${this.commonService.formatYYMMDD(this.currentDate)}`;
+    this.dataService.getDynamicAPI(API)
+      .subscribe((resp) => {
+        if (resp.status == "Success") {
+          this.waxprocessFrom.controls.vocno.setValue(resp.newvocno);
+        }
+      });
+  }
   // designtextevent(data: any, value: any) {
   //   this.tableData[value.data.SRNO - 1].design = data.job_description;
   // }
@@ -217,22 +275,20 @@ export class WaxProcessComponent implements OnInit {
     workercode: ['', [Validators.required]],
     enteredBy: [''],
     remarks: [''],
+    FLAG: [null],
+    MAIN_VOCTYPE: ['']
   });
 
 
-  // setFormValues() {
-  //   if (!this.content) return
-  //   this.waxprocessFrom.controls.job_number.setValue(this.content.APPR_CODE)
-  //   this.waxprocessFrom.controls.design.setValue(this.content.job_description)
-
-  //   this.dataService.getDynamicAPI('JobWaxIssue/GetJobWaxIssue/' + this.content.job_number).subscribe((data) => {
-  //     if (data.status == 'Success') {
-  //       // this.tableData = data.response.WaxProcessDetails;
-  //       console.log(data.response.WaxProcessDetails);
-
-  //     }
-  //   });
-  // }
+  setFormValues() {
+    if (!this.content) return
+    // this.waxprocessFrom.controls.job_number.setValue(this.content.APPR_CODE)
+    // this.waxprocessFrom.controls.design.setValue(this.content.job_description)
+    this.waxprocessFrom.controls.MAIN_VOCTYPE.setValue(
+      this.commonService.getqueryParamMainVocType()
+    )
+    this.setvoucherTypeMaster()
+  }
 
 
 
