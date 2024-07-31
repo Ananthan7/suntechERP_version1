@@ -316,10 +316,10 @@ export class WorkerMasterComponent implements OnInit {
   /**USE: delete worker master from row */
   deleteWorkerMaster() {
     if (this.content && this.content.FLAG == 'VIEW') return
-    if (!this.content.WORKER_CODE) {
-      this.showDeleteErrorDialog('Please Select data to delete!');
-      return;
-    }
+    // if (!this.content.WORKER_CODE) {
+    //   this.showDeleteErrorDialog('Please Select data to delete!');
+    //   return;
+    // }
   
     this.showConfirmationDialog().then((result) => {
       if (result.isConfirmed) {
@@ -445,7 +445,7 @@ export class WorkerMasterComponent implements OnInit {
         if (result.status == "Success") { //
           let data = result.dynamicData[0]
           if (data.length > 0) {
-            this.commonService.toastErrorByMsgId('worker cannot be inactive')
+            this.commonService.toastErrorByMsgId('MSG3758')
             this.workerMasterForm.controls.Active.setValue(true)
             this.workerMasterForm.controls.Active.disable();
           }
