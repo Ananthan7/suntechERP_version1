@@ -3107,45 +3107,56 @@ export class ProcessTransferDetailsComponent implements OnInit {
         let processData = this.sequenceDetails.filter((item: any) => item.seq_code == form.SEQ_CODE && item.PROCESS_CODE == form.METAL_FRM_PROCESS_CODE)
         if (processData?.length > 0) {
           if (this.emptyToZero(processData[0]["MAX_LOSS"]) > 0) {
-            nMax_Loss = (this.emptyToZero(form.METAL_FromNetWeight) * this.emptyToZero(processData[0]["MAX_LOSS"])) / 100;
+            nMax_Loss = this.commonService.lossQtyCalculate(form.METAL_FromNetWeight,processData[0]["MAX_LOSS"])
             if (this.emptyToZero(txtLossBooked) > nMax_Loss) {
               this.commonService.getMsgByID("MSG1397") + nMax_Loss;
-              txtLossBooked = nMax_Loss;
+              this.setValueWithDecimal('METAL_LossBooked', nMax_Loss, 'METAL')
               return;
             }
           }
           if (this.emptyToZero(processData[0]["MIN_LOSS"]) > 0) {
-            nMin_Loss = (this.emptyToZero(form.METAL_FromNetWeight) * this.emptyToZero(processData[0]["MIN_LOSS"])) / 100;
+            nMin_Loss = this.commonService.lossQtyCalculate(form.METAL_FromNetWeight,processData[0]["MIN_LOSS"]);
             if (this.emptyToZero(txtLossBooked) < nMin_Loss) {
               this.commonService.getMsgByID("MSG1397") + nMin_Loss;
-              txtLossBooked = nMin_Loss;
+              this.setValueWithDecimal('METAL_LossBooked', nMin_Loss, 'METAL')
               return;
             }
           }
         }
       }
+      form = this.processTransferdetailsForm.value;
       let txtMToGrossWt = this.emptyToZero(form.METAL_GrossWeightTo);
       if ((this.emptyToZero(form.METAL_GrossWeightFrom) - (this.emptyToZero(txtLossBooked) + this.emptyToZero(txtMToGrossWt) + this.emptyToZero(form.METAL_ScrapGrWt))) < 0 && this.emptyToZero(txtMToGrossWt) > 0) {
         txtMToGrossWt = (this.emptyToZero(form.METAL_GrossWeightFrom) - (this.emptyToZero(form.METAL_ScrapGrWt) + this.emptyToZero(txtLossBooked)));
-      }
-      else if ((this.emptyToZero(txtLossBooked) + this.emptyToZero(txtMToGrossWt) + this.emptyToZero(form.METAL_ScrapGrWt)) > 0 && this.emptyToZero(txtMToGrossWt) > 0) {
+      } else if ((this.emptyToZero(txtLossBooked) + this.emptyToZero(txtMToGrossWt) + this.emptyToZero(form.METAL_ScrapGrWt)) > 0 && this.emptyToZero(txtMToGrossWt) > 0) {
         txtMToGrossWt = (this.emptyToZero(form.METAL_GrossWeightFrom) - (this.emptyToZero(form.METAL_ScrapGrWt) + this.emptyToZero(txtLossBooked)));
       }
-
       let txtLossPureWt = ((this.emptyToZero(txtLossBooked) * form.PURITY));
-
       let txtToIronWt = ((this.emptyToZero(form.METAL_FromIronWeight)) / (this.emptyToZero(form.METAL_FromIronWeight) + this.emptyToZero(form.METAL_FromNetWeight)) * ((this.emptyToZero(txtMToGrossWt) + this.emptyToZero(txtLossBooked)) - this.emptyToZero(form.METAL_TO_STONE_WT)));
 
       let txtMToNetWt = (this.emptyToZero(txtMToGrossWt) - (this.emptyToZero(form.METAL_TO_STONE_WT) + this.emptyToZero(txtToIronWt)));
-      let txtMToPureWt = ((this.emptyToZero(txtMToNetWt) * form.PURITY));
+      let txtMToPureWt = this.commonService.pureWeightCalculate(txtMToNetWt,form.PURITY);
 
       let txtMScrapNetWt = (this.emptyToZero(form.METAL_ScrapGrWt) - this.emptyToZero(form.METAL_ScrapStoneWt));
-      let txtMScrapPureWt = ((this.emptyToZero(txtMScrapNetWt) * form.PURITY));
+      let txtMScrapPureWt = this.commonService.pureWeightCalculate(txtMScrapNetWt,form.PURITY);
 
       let txtBalGrWt = (this.emptyToZero(form.METAL_GrossWeightFrom) - (this.emptyToZero(txtMToGrossWt) + this.emptyToZero(form.METAL_ScrapGrWt) + this.emptyToZero(txtLossBooked)));
       let txtBalIronWt = (this.emptyToZero(form.METAL_FromIronWeight) - (this.emptyToZero(txtToIronWt) + this.emptyToZero(form.METAL_ToIronScrapWt)));
       let txtBalNetWt = (this.emptyToZero(txtBalGrWt) - (this.emptyToZero(form.METAL_BalStoneWt) + this.emptyToZero(txtBalIronWt)));
-      let txtBalPureWt = ((this.emptyToZero(txtBalNetWt) * form.PURITY));
+      let txtBalPureWt = this.commonService.pureWeightCalculate(txtBalNetWt,form.PURITY);
+      
+      this.setValueWithDecimal('METAL_LossBooked', txtLossBooked, 'METAL')
+      this.setValueWithDecimal('METAL_GrossWeightTo', txtMToGrossWt, 'METAL')
+      this.setValueWithDecimal('METAL_LossPureWt', txtLossPureWt, 'METAL')
+      this.setValueWithDecimal('METAL_ToIronWt', txtToIronWt, 'METAL')
+      this.setValueWithDecimal('METAL_ToNetWt', txtMToNetWt, 'METAL')
+      this.setValueWithDecimal('METAL_ToPureWt', txtMToPureWt, 'METAL')
+      this.setValueWithDecimal('METAL_ScrapNetWt', txtMScrapNetWt, 'METAL')
+      this.setValueWithDecimal('METAL_ScrapPureWt', txtMScrapPureWt, 'METAL')
+      this.setValueWithDecimal('METAL_BalGrWt', txtBalGrWt, 'METAL')
+      this.setValueWithDecimal('METAL_BalNetWt', txtBalNetWt, 'METAL')
+      this.setValueWithDecimal('METAL_BalPureWt', txtBalPureWt, 'METAL')
+      this.setValueWithDecimal('METAL_BalIronWt', txtBalIronWt, 'METAL')
 
       this.CalculateMetalBalance();
       this.CalculateNetAndPureWt();
