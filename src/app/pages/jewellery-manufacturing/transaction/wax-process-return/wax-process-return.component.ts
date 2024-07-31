@@ -1,3 +1,9 @@
+/*
+MODULE : JEWELLERY MANUFACTURING
+MENU_SCREEN_NAME : <FILL THE NEMU NAME HERE>
+DEVELOPER : ANANTHA
+*/
+
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -230,14 +236,14 @@ export class WaxProcessReturnComponent implements OnInit {
         this.comService.closeSnackBarMsg()
         let data = this.comService.arrayEmptyObjectToString(result.dynamicData[0])
         if (data && data[0]?.RESULT == 0) {
-          this.comService.toastErrorByMsgId('Voucher Number Already Exists')
+          this.comService.toastErrorByMsgId('Voucher Number Already Exists')//CHINNU -  MESSAGE HARD CODED
           this.generateVocNo()
           return
         }
       }, err => {
         this.isloading = false;
         this.generateVocNo()
-        this.comService.toastErrorByMsgId('Error Something went wrong')
+        this.comService.toastErrorByMsgId('Error Something went wrong')//CHINNU -  MESSAGE HARD CODED
       })
     this.subscriptions.push(Sub)
   }
@@ -261,7 +267,7 @@ export class WaxProcessReturnComponent implements OnInit {
       return
     }
     if (this.waxprocessFrom.invalid) {
-      this.toastr.error('select all required fields')
+      this.toastr.error('select all required fields')//CHINNU -  MESSAGE HARD CODED
       return
     }
 
@@ -353,7 +359,7 @@ export class WaxProcessReturnComponent implements OnInit {
 
   update() {
     if (this.waxprocessFrom.invalid) {
-      this.toastr.error('select all required fields')
+      this.toastr.error('select all required fields')//CHINNU -  MESSAGE HARD CODED
       return
     }
 
@@ -557,7 +563,7 @@ export class WaxProcessReturnComponent implements OnInit {
         }
 
       }, err => {
-        this.comService.toastErrorByMsgId('network issue found')
+        this.comService.toastErrorByMsgId('network issue found')//CHINNU -  MESSAGE HARD CODED
       })
     this.subscriptions.push(Sub)
   }
