@@ -592,7 +592,7 @@ export class ProcessMasterComponent implements OnInit {
     }
 
     if (form.RecoveryProcess == true && form.recovery == false) {
-      this.commonService.toastErrorByMsgId('Recovery details Must be Filled');
+       this.commonService.toastErrorByMsgId('MSG81365');//Recovery details Must be Filled
       return true
     }
 

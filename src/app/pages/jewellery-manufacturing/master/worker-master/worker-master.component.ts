@@ -316,10 +316,10 @@ export class WorkerMasterComponent implements OnInit {
   /**USE: delete worker master from row */
   deleteWorkerMaster() {
     if (this.content && this.content.FLAG == 'VIEW') return
-    if (!this.content.WORKER_CODE) {
-      this.showDeleteErrorDialog('Please Select data to delete!');
-      return;
-    }
+    // if (!this.content.WORKER_CODE) {
+    //   this.showDeleteErrorDialog('Please Select data to delete!');
+    //   return;
+    // }
   
     this.showConfirmationDialog().then((result) => {
       if (result.isConfirmed) {

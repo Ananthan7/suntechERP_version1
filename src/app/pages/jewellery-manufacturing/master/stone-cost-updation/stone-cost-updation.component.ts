@@ -26,7 +26,7 @@ export class StoneCostUpdationComponent implements OnInit {
   @ViewChild('overlayclaritySearch') overlayclaritySearch!: MasterSearchComponent;
 
 
-  
+
   tableData: any[] = [];
   columnhead: any[] = ['Sr No', 'Customer', 'So Number', 'Job Number', 'Job Ref#', 'Pcs', 'Weight', 'Rate', 'Amount', 'New Rate LC', 'New Amount LC', 'New Rate FC', 'New Amount FC',];
   divisionMS: any = 'ID';
@@ -35,7 +35,7 @@ export class StoneCostUpdationComponent implements OnInit {
   branchCode?: String;
   yearMonth?: String;
   currentDate = new Date();
-  text: string="Deduct";
+  text: string = "Deduct";
   selection!: number;
   userName = this.commonService.userName;
   @Input() content!: any;
@@ -57,12 +57,12 @@ export class StoneCostUpdationComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-   this.branchCode = this.commonService.branchCode;
-   this.yearMonth = this.commonService.yearSelected;
-   this.stonecostupdationFrom.controls.voctype.setValue(this.commonService.getqueryParamVocType())
-  //  this.setCompanyCurrency()
-  //   this.basesetCompanyCurrency()
-   this.setvalues()
+    this.branchCode = this.commonService.branchCode;
+    this.yearMonth = this.commonService.yearSelected;
+    this.stonecostupdationFrom.controls.voctype.setValue(this.commonService.getqueryParamVocType())
+    //  this.setCompanyCurrency()
+    //   this.basesetCompanyCurrency()
+    this.setvalues()
   }
 
 
@@ -75,20 +75,20 @@ export class StoneCostUpdationComponent implements OnInit {
     this.activeModal.close(data);
   }
 
-  change(event:any){
+  change(event: any) {
     console.log(event);
     this.text = event.target.value;
-    if(event.target.checked == true){
-      this.text="Add";
-     
-    }else{
-      this.text="Deduct";
+    if (event.target.checked == true) {
+      this.text = "Add";
+
+    } else {
+      this.text = "Deduct";
     }
   }
 
   stonecostupdationFrom: FormGroup = this.formBuilder.group({
     voctype: ['', [Validators.required]],
-    vocdate: [ ''],
+    vocdate: [''],
     vocno: ['', [Validators.required]],
     stockcodediv: [''],
     stockcode: [''],
@@ -108,11 +108,11 @@ export class StoneCostUpdationComponent implements OnInit {
     clarity: [''],
     sieve_set: [''],
     remarks: [''],
-    valueTarget:[''],
-    text:[false],
+    valueTarget: [''],
+    text: [false],
   });
 
-  setvalues(){ 
+  setvalues() {
     this.stonecostupdationFrom.controls.voctype.setValue(this.commonService.getqueryParamVocType())
     this.stonecostupdationFrom.controls.vocno.setValue(this.commonService.popMetalValueOnNet)
     this.stonecostupdationFrom.controls.vocdate.setValue(this.commonService.currentDate)
@@ -120,7 +120,7 @@ export class StoneCostUpdationComponent implements OnInit {
     // this.stonecostupdationFrom.controls.itemcurrency_rate.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
     this.stonecostupdationFrom.controls.basecurrency.setValue(this.commonService.compCurrency)
     // this.stonecostupdationFrom.controls.basecurrency_rate.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
-  
+
   }
 
   stockCodeData: MasterSearchModel = {
@@ -269,142 +269,157 @@ export class StoneCostUpdationComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
- /**USE: to set currency on selected change*/
- currencyDataSelected(event: any) {
-  if (event.target?.value) {
-    this.stonecostupdationFrom.controls.itemcurrency.setValue((event.target.value).toUpperCase())
-  } else {
-    this.stonecostupdationFrom.controls.itemcurrency.setValue(event.CURRENCY_CODE)
-  }
-  this.setCurrencyRate()
-}
-
-/**USE: to set currency from company parameter */
-setCompanyCurrency() {
-  let CURRENCY_CODE = this.commonService.getCompanyParamValue('COMPANYCURRENCY')
-  this.stonecostupdationFrom.controls.itemcurrency.setValue(CURRENCY_CODE);
-  this.setCurrencyRate()
-}
-/**USE: to set currency from branch currency master */
-setCurrencyRate() {
-  const CURRENCY_RATE: any[] = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == this.stonecostupdationFrom.value.itemcurrency);
-  if (CURRENCY_RATE.length > 0) {
-    this.stonecostupdationFrom.controls.itemcurrency_rate.setValue(
-      this.commonService.decimalQuantityFormat(CURRENCY_RATE[0].CONV_RATE, 'RATE')
-    );
-  } else {
-    this.stonecostupdationFrom.controls.itemcurrency.setValue('')
-    this.stonecostupdationFrom.controls.itemcurrency_rate.setValue('')
-    this.commonService.toastErrorByMsgId('MSG1531')
-  }
-}
-
-/**USE: to set basecurrency on selected change*/
-basecurrencyDataSelected(event: any) {
-  if (event.target?.value) {
-    this.stonecostupdationFrom.controls.basecurrency.setValue((event.target.value).toUpperCase())
-  } else {
-    this.stonecostupdationFrom.controls.basecurrency.setValue(event.CURRENCY_CODE)
-  }
-  this.setCurrencyRate()
-}
-/**USE: to set currency from company parameter */
-basesetCompanyCurrency() {
-  let CURRENCY_CODE = this.commonService.getCompanyParamValue('COMPANYCURRENCY')
-  this.stonecostupdationFrom.controls.basecurrency.setValue(CURRENCY_CODE);
-  this.basesetCurrencyRate()
-}
-/**USE: to set currency from branch currency master */
-basesetCurrencyRate() {
-  const CURRENCY_RATE: any[] = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == this.stonecostupdationFrom.value.basecurrency);
-  if (CURRENCY_RATE.length > 0) {
-    this.stonecostupdationFrom.controls.basecurrency_rate.setValue(
-      this.commonService.decimalQuantityFormat(CURRENCY_RATE[0].CONV_RATE, 'RATE')
-    );
-  } else {
-    this.stonecostupdationFrom.controls.basecurrency.setValue('')
-    this.stonecostupdationFrom.controls.basecurrency_rate.setValue('')
-    this.commonService.toastErrorByMsgId('MSG1531')
-  }
-}
- setPostData(){
-  return{
-  "MID": 0,
-  "BRANCH_CODE": this.branchCode,
-  "VOCTYPE": this.stonecostupdationFrom.value.voctype,
-  "VOCNO": this.stonecostupdationFrom.value.vocno,
-  "VOCDATE": this.stonecostupdationFrom.value.vocdate,
-  "YEARMONTH": this.yearMonth,
-  "DIVCODE": "string",
-  "STOCK_CODE": this.stonecostupdationFrom.value.stockcode,
-  "RATELC": this.stonecostupdationFrom.value.currentrate_LC,
-  "RATEFC": this.stonecostupdationFrom.value.currentrate_FC,
-  "NEW_RATELC": this.stonecostupdationFrom.value.newrate_FC,
-  "NEW_RATEFC": this.stonecostupdationFrom.value.newrate_FC,
-  "SMAN_CODE": "string",
-  "REMARKS": this.stonecostupdationFrom.value.remarks,
-  "SHAPE": this.stonecostupdationFrom.value.shape,
-  "SIZE": this.stonecostupdationFrom.value.size,
-  "SIEVE": this.stonecostupdationFrom.value.sieve,
-  "COLOR": this.stonecostupdationFrom.value.color,
-  "CLARITY": this.stonecostupdationFrom.value.clarity,
-  "SIEVE_SET": this.stonecostupdationFrom.value.sieve_set,
-  "SYSTEM_DATE": "2024-01-20T08:08:50.955Z",
-  "NAVSEQNO": 0,
-  "AUTOPOSTING": true,
-  "POSTDATE": "string",
-  "CURRENCY_CODE": this.stonecostupdationFrom.value.itemcurrency,
-  "CURRENCY_RATE": this.stonecostupdationFrom.value.itemcurrency_rate,
-  "BASE_CURRENCY": this.stonecostupdationFrom.value.basecurrency,
-  "BASE_CURR_RATE":this.stonecostupdationFrom.value.basecurrency_rate,
-  "BASE_CONV_RATE": 0,
-  "HTUSERNAME": "string",
-  "Details": [
-    {
-      "UNIQUEID": 0,
-      "DT_BRANCH_CODE": "string",
-      "DT_VOCTYPE": "str",
-      "DT_VOCNO": 0,
-      "DT_YEARMONTH": "string",
-      "SRNO": 0,
-      "JOB_NUMBER": "string",
-      "UNQ_JOB_ID": "string",
-      "UNQ_DESIGN_ID": "string",
-      "DT_DIVCODE": "string",
-      "DT_STOCK_CODE": "string",
-      "DT_RATELC": 0,
-      "DT_RATEFC": 0,
-      "DT_NEW_RATELC": 0,
-      "DT_NEW_RATEFC": 0,
-      "PCS": 0,
-      "GROSS_WT": 0,
-      "AMOUNTLC": 0,
-      "AMOUNTFC": 0,
-      "NEW_AMOUNTLC": 0,
-      "NEW_AMOUNTFC": 0,
-      "TRN_BRANCH_CODE": "string",
-      "TRN_VOCTYPE": "str",
-      "TRN_VOCNO": 0,
-      "TRN_YEARMONTH": "string",
-      "REFMID": 0,
-      "PROCESS_CODE": "string",
-      "WORKER_CODE": "string"
+  /**USE: to set currency on selected change*/
+  currencyDataSelected(event: any) {
+    if (event.target?.value) {
+      this.stonecostupdationFrom.controls.itemcurrency.setValue((event.target.value).toUpperCase())
+    } else {
+      this.stonecostupdationFrom.controls.itemcurrency.setValue(event.CURRENCY_CODE)
     }
-  ]
-};
-}
+    this.setCurrencyRate()
+  }
+
+  /**USE: to set currency from company parameter */
+  setCompanyCurrency() {
+    let CURRENCY_CODE = this.commonService.getCompanyParamValue('COMPANYCURRENCY')
+    this.stonecostupdationFrom.controls.itemcurrency.setValue(CURRENCY_CODE);
+    this.setCurrencyRate()
+  }
+  /**USE: to set currency from branch currency master */
+  setCurrencyRate() {
+    const CURRENCY_RATE: any[] = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == this.stonecostupdationFrom.value.itemcurrency);
+    if (CURRENCY_RATE.length > 0) {
+      this.stonecostupdationFrom.controls.itemcurrency_rate.setValue(
+        this.commonService.decimalQuantityFormat(CURRENCY_RATE[0].CONV_RATE, 'RATE')
+      );
+    } else {
+      this.stonecostupdationFrom.controls.itemcurrency.setValue('')
+      this.stonecostupdationFrom.controls.itemcurrency_rate.setValue('')
+      this.commonService.toastErrorByMsgId('MSG1531')
+    }
+  }
+
+  /**USE: to set basecurrency on selected change*/
+  basecurrencyDataSelected(event: any) {
+    if (event.target?.value) {
+      this.stonecostupdationFrom.controls.basecurrency.setValue((event.target.value).toUpperCase())
+    } else {
+      this.stonecostupdationFrom.controls.basecurrency.setValue(event.CURRENCY_CODE)
+    }
+    this.setCurrencyRate()
+  }
+  /**USE: to set currency from company parameter */
+  basesetCompanyCurrency() {
+    let CURRENCY_CODE = this.commonService.getCompanyParamValue('COMPANYCURRENCY')
+    this.stonecostupdationFrom.controls.basecurrency.setValue(CURRENCY_CODE);
+    this.basesetCurrencyRate()
+  }
+  /**USE: to set currency from branch currency master */
+  basesetCurrencyRate() {
+    const CURRENCY_RATE: any[] = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == this.stonecostupdationFrom.value.basecurrency);
+    if (CURRENCY_RATE.length > 0) {
+      this.stonecostupdationFrom.controls.basecurrency_rate.setValue(
+        this.commonService.decimalQuantityFormat(CURRENCY_RATE[0].CONV_RATE, 'RATE')
+      );
+    } else {
+      this.stonecostupdationFrom.controls.basecurrency.setValue('')
+      this.stonecostupdationFrom.controls.basecurrency_rate.setValue('')
+      this.commonService.toastErrorByMsgId('MSG1531')
+    }
+  }
+  setPostData() {
+    return {
+      "MID": 0,
+      "BRANCH_CODE": this.branchCode,
+      "VOCTYPE": this.stonecostupdationFrom.value.voctype,
+      "VOCNO": this.stonecostupdationFrom.value.vocno,
+      "VOCDATE": this.stonecostupdationFrom.value.vocdate,
+      "YEARMONTH": this.yearMonth,
+      "DIVCODE": "string",
+      "STOCK_CODE": this.stonecostupdationFrom.value.stockcode,
+      "RATELC": this.stonecostupdationFrom.value.currentrate_LC,
+      "RATEFC": this.stonecostupdationFrom.value.currentrate_FC,
+      "NEW_RATELC": this.stonecostupdationFrom.value.newrate_FC,
+      "NEW_RATEFC": this.stonecostupdationFrom.value.newrate_FC,
+      "SMAN_CODE": "string",
+      "REMARKS": this.stonecostupdationFrom.value.remarks,
+      "SHAPE": this.stonecostupdationFrom.value.shape,
+      "SIZE": this.stonecostupdationFrom.value.size,
+      "SIEVE": this.stonecostupdationFrom.value.sieve,
+      "COLOR": this.stonecostupdationFrom.value.color,
+      "CLARITY": this.stonecostupdationFrom.value.clarity,
+      "SIEVE_SET": this.stonecostupdationFrom.value.sieve_set,
+      "SYSTEM_DATE": "2024-01-20T08:08:50.955Z",
+      "NAVSEQNO": 0,
+      "AUTOPOSTING": true,
+      "POSTDATE": "string",
+      "CURRENCY_CODE": this.stonecostupdationFrom.value.itemcurrency,
+      "CURRENCY_RATE": this.stonecostupdationFrom.value.itemcurrency_rate,
+      "BASE_CURRENCY": this.stonecostupdationFrom.value.basecurrency,
+      "BASE_CURR_RATE": this.stonecostupdationFrom.value.basecurrency_rate,
+      "BASE_CONV_RATE": 0,
+      "HTUSERNAME": "string",
+      "Details": [
+        {
+          "UNIQUEID": 0,
+          "DT_BRANCH_CODE": "string",
+          "DT_VOCTYPE": "str",
+          "DT_VOCNO": 0,
+          "DT_YEARMONTH": "string",
+          "SRNO": 0,
+          "JOB_NUMBER": "string",
+          "UNQ_JOB_ID": "string",
+          "UNQ_DESIGN_ID": "string",
+          "DT_DIVCODE": "string",
+          "DT_STOCK_CODE": "string",
+          "DT_RATELC": 0,
+          "DT_RATEFC": 0,
+          "DT_NEW_RATELC": 0,
+          "DT_NEW_RATEFC": 0,
+          "PCS": 0,
+          "GROSS_WT": 0,
+          "AMOUNTLC": 0,
+          "AMOUNTFC": 0,
+          "NEW_AMOUNTLC": 0,
+          "NEW_AMOUNTFC": 0,
+          "TRN_BRANCH_CODE": "string",
+          "TRN_VOCTYPE": "str",
+          "TRN_VOCNO": 0,
+          "TRN_YEARMONTH": "string",
+          "REFMID": 0,
+          "PROCESS_CODE": "string",
+          "WORKER_CODE": "string"
+        }
+      ]
+    };
+  }
+
+  submitValidation(form: any) {
+
+    if (this.commonService.nullToString(form.voctype) == '') {
+      this.commonService.toastErrorByMsgId('MSG1939') //"voctype cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.vocno) == '') {
+      this.commonService.toastErrorByMsgId('MSG1937')//"vocno cannot be empty"
+      return true
+    }
+
+    return false;
+  }
 
   formSubmit() {
+
+
+
     if (this.content && this.content.FLAG == 'VIEW') return
-    if(this.content && this.content.FLAG == 'EDIT'){
+    if (this.content && this.content.FLAG == 'EDIT') {
       this.update()
       return
     }
-    if (this.stonecostupdationFrom.invalid) {
-      this.toastr.error('select all required fields')
-      return
-    }
-  
+
+    if (this.submitValidation(this.stonecostupdationFrom.value)) return;
+
     let API = 'JobStoneRecostDJ/InsertJobStoneRecostDJ'
     let postData = this.setPostData()
     this.isloading = true;
@@ -428,7 +443,7 @@ basesetCurrencyRate() {
               }
             });
           }
-        }else {
+        } else {
           this.commonService.toastErrorByMsgId('MSG3577')
         }
       }, err => {
@@ -444,13 +459,10 @@ basesetCurrencyRate() {
   // }
 
 
-  update(){
-    if (this.stonecostupdationFrom.invalid) {
-      this.toastr.error('select all required fields')
-      return
-    }
-  
-    let API = 'JobStoneRecostDJ/UpdateJobStoneRecostDJ/'+ this.branchCode + this.stonecostupdationFrom.value.voctype + this.stonecostupdationFrom.value.vocno + this.yearMonth;
+  update() {
+    if (this.submitValidation(this.stonecostupdationFrom.value)) return;
+
+    let API = 'JobStoneRecostDJ/UpdateJobStoneRecostDJ/' + this.branchCode + this.stonecostupdationFrom.value.voctype + this.stonecostupdationFrom.value.vocno + this.yearMonth;
     let postData = this.setPostData()
     this.isloading = true;
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
@@ -474,11 +486,11 @@ basesetCurrencyRate() {
             });
           }
         } else {
-          this.comService.toastErrorByMsgId('Not saved')
+          this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
         }
       }, err => {
         this.isloading = false;
-        this.comService.toastErrorByMsgId('Not saved')
+        this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
       })
     this.subscriptions.push(Sub)
   }
@@ -508,7 +520,7 @@ basesetCurrencyRate() {
       confirmButtonText: 'Yes, delete!'
     }).then((result) => {
       if (result.isConfirmed) {
-        let API = 'JobStoneRecostDJ/DeleteJobStoneRecostDJ/'+ this.branchCode + this.stonecostupdationFrom.value.voctype + this.stonecostupdationFrom.value.vocno + this.yearMonth;
+        let API = 'JobStoneRecostDJ/DeleteJobStoneRecostDJ/' + this.branchCode + this.stonecostupdationFrom.value.voctype + this.stonecostupdationFrom.value.vocno + this.yearMonth;
         let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
           .subscribe((result) => {
             if (result) {
@@ -542,7 +554,7 @@ basesetCurrencyRate() {
                 });
               }
             } else {
-              this.toastr.error('Not deleted')
+              this.commonService.toastErrorByMsgId('MSG1880');// Not Deleted
             }
           }, err => alert(err))
         this.subscriptions.push(Sub)
@@ -600,7 +612,7 @@ basesetCurrencyRate() {
         console.warn(`No overlay found for form control: ${formControlName}`);
     }
   }
-  
+
 
   // showOverleyPanel(event: any, formControlName: string) {
 
@@ -632,7 +644,7 @@ basesetCurrencyRate() {
   //     this.overlayclaritySearch.showOverlayPanel(event)
   //   }
   // }
-  
+
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {
       this.subscriptions.forEach(subscription => subscription.unsubscribe());// unsubscribe all subscription

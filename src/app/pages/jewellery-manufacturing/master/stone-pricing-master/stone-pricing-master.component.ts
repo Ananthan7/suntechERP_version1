@@ -574,6 +574,16 @@ export class StonePricingMasterComponent implements OnInit {
       return true
     }
 
+    if (this.stonePrizeMasterForm.value.selling === '' && this.stonePrizeMasterForm.value.selling_rate === '') {
+      this.commonService.toastErrorByMsgId('MSG7728');//Enter values either Selling % or Selling Rate
+      return;
+    }
+
+    if (this.stonePrizeMasterForm.value.sieve_form > this.stonePrizeMasterForm.value.sieve_to) {
+      this.toastr.error('Sieve From Should not be Greater than Sieve To');
+      return;
+    }
+
     // else if (this.commonService.nullToString(form.currency) == '') {
     //   this.commonService.toastErrorByMsgId('MSG1173')//"currency cannot be empty"
     //   return true
@@ -606,22 +616,6 @@ export class StonePricingMasterComponent implements OnInit {
       return
     }
     if (this.submitValidation(this.stonePrizeMasterForm.value)) return;
-    // if (this.stonePrizeMasterForm.invalid) {
-    //   this.toastr.error('select all required fields')
-    //   return
-    // }
-
-    if (this.stonePrizeMasterForm.value.selling === '' && this.stonePrizeMasterForm.value.selling_rate === '') {
-      this.toastr.error('Enter values either Selling % or Selling Rate');
-      return;
-    }
-
-    if (this.stonePrizeMasterForm.value.sieve_form > this.stonePrizeMasterForm.value.sieve_to) {
-      this.toastr.error('Sieve From Should not be Greater than Sieve To');
-      return;
-    }
-
-    else {
 
       let API = 'StonePriceMasterDJ/InsertStonePriceMaster'
       let postData = this.setPostData()
@@ -651,7 +645,6 @@ export class StonePricingMasterComponent implements OnInit {
           this.commonService.toastErrorByMsgId('MSG3577')
         })
       this.subscriptions.push(Sub)
-    }
   }
   checkCodeExists(event: any) {
     if (this.content && this.content.FLAG == 'EDIT') {
@@ -687,16 +680,8 @@ export class StonePricingMasterComponent implements OnInit {
     this.subscriptions.push(sub);
   }
   update() {
-    console.log(this.stonePrizeMasterForm.value);
-    // if (this.stonePrizeMasterForm.invalid) {
-    //   this.toastr.error('select all required fields')
-    //   return
-    // }
 
-    if (this.stonePrizeMasterForm.value.sieve_form > this.stonePrizeMasterForm.value.sieve_to) {
-      this.toastr.error('Sieve From Should not be Greater than Sieve To');
-      return;
-    }
+    if (this.submitValidation(this.stonePrizeMasterForm.value)) return;
 
     let API = 'StonePriceMasterDJ/UpdateStonePriceMaster/' + this.stonePrizeMasterForm.value.price_code
 
