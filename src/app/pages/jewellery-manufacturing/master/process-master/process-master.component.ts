@@ -537,12 +537,12 @@ export class ProcessMasterComponent implements OnInit {
     if (form.ApprovalRequired == true && this.commonService.nullToString(form.approvalProcess) == '') {
       this.processMasterForm.controls.approvalProcess.setValidators(Validators.required)
       this.approvalProcessInput.nativeElement.focus();
-      this.commonService.toastErrorByMsgId('Approval Process must be Required');
+      this.commonService.toastErrorByMsgId('MSG81513 ');//Approval Process must be Required
       return true;
     }
 
     if (form.TimeCalculateonProcess == true && this.formattedTime == 0 && this.formattedMaxTime == 0) {
-      this.commonService.toastErrorByMsgId('Standard Time  and  Maximum Time must be Required');
+      this.commonService.toastErrorByMsgId('MSG81516');//Standard Time  and  Maximum Time must be Required
       return true;
     }
 

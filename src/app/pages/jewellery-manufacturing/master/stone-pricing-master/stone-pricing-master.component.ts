@@ -580,7 +580,7 @@ export class StonePricingMasterComponent implements OnInit {
     }
 
     if (this.stonePrizeMasterForm.value.sieve_form > this.stonePrizeMasterForm.value.sieve_to) {
-      this.toastr.error('Sieve From Should not be Greater than Sieve To');
+      this.commonService.toastErrorByMsgId('MSG81518');// Sieve From Should not be Greater than Sieve To
       return;
     }
 

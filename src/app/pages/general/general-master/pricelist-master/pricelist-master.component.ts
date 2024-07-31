@@ -381,7 +381,7 @@ export class PricelistMasterComponent implements OnInit {
 
   handleSuccessResponse(result: any) {
     Swal.fire({
-      title: this.content.PRICE_CODE + ' Deleted Successfully',
+      title: this.content.PRICE_CODE + this.commonService.toastErrorByMsgId('MSG81450'),//' Deleted Successfully'
       text: '',
       icon: 'success',
       confirmButtonColor: '#336699',
