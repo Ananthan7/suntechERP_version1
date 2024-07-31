@@ -1,4 +1,8 @@
-
+/*
+MODULE : JEWELLERY MANUFACTURING
+MENU_SCREEN_NAME : <ADD MENU NAME>
+DEVELOPER : ANANTHA
+*/
 
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
