@@ -1,3 +1,9 @@
+/*
+MODULE : JEWELLERY MANUFACTURING
+MENU_SCREEN_NAME : <ADD MENU NAME HERE>
+DEVELOPER : ANANTHA
+*/
+
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -172,14 +178,14 @@ export class StoneReturnComponent implements OnInit {
         this.commonService.closeSnackBarMsg()
         let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
         if (data && data[0]?.RESULT == 0) {
-          this.commonService.toastErrorByMsgId('Voucher Number Already Exists')
+          this.commonService.toastErrorByMsgId('Voucher Number Already Exists')//CHINNU -  MESSAGE HARD CODED
           this.generateVocNo()
           return
         }
       }, err => {
         this.isloading = false;
         this.generateVocNo()
-        this.commonService.toastErrorByMsgId('Error Something went wrong')
+        this.commonService.toastErrorByMsgId('Error Something went wrong')//CHINNU -  MESSAGE HARD CODED
       })
     this.subscriptions.push(Sub)
   }
@@ -218,7 +224,7 @@ export class StoneReturnComponent implements OnInit {
               })
             });
           } else {
-            this.commonService.toastErrorByMsgId('Detail data not found')
+            this.commonService.toastErrorByMsgId('Detail data not found')//CHINNU -  MESSAGE HARD CODED
           }
           this.stonereturnFrom.controls.basecurrency.setValue(data.BASE_CURRENCY)
           this.stonereturnFrom.controls.basecurrencyrate.setValue(data.BASE_CURR_RATE)
@@ -304,7 +310,7 @@ export class StoneReturnComponent implements OnInit {
     }
     if (DATA.FLAG == 'SAVE') this.closeDetailScreen();
     if (DATA.FLAG == 'CONTINUE') {
-      this.commonService.showSnackBarMsg('Details added successfully')
+      this.commonService.showSnackBarMsg('Details added successfully')//CHINNU -  MESSAGE HARD CODED
     };
   }
   closeDetailScreen() {
@@ -433,7 +439,7 @@ export class StoneReturnComponent implements OnInit {
       return
     }
     if (this.stonereturnFrom.invalid) {
-      this.toastr.error('select all required fields')
+      this.toastr.error('select all required fields')//CHINNU -  MESSAGE HARD CODED
       return
     }
 
@@ -467,7 +473,7 @@ export class StoneReturnComponent implements OnInit {
 
   update() {
     if (this.stonereturnFrom.invalid) {
-      this.toastr.error('select all required fields')
+      this.toastr.error('select all required fields')//CHINNU -  MESSAGE HARD CODED
       return
     }
     let FG = this.stonereturnFrom.value
@@ -598,7 +604,7 @@ export class StoneReturnComponent implements OnInit {
           return
         }
       }, err => {
-        this.commonService.toastErrorByMsgId('Error Something went wrong')
+        this.commonService.toastErrorByMsgId('Error Something went wrong')//CHINNU -  MESSAGE HARD CODED
       })
     this.subscriptions.push(Sub)
   }
