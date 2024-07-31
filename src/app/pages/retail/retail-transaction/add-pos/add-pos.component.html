@@ -2811,11 +2811,11 @@
                       [readonly]="viewOnly || !allowDescription" />
                   </mat-form-field>
                 </div>
-                <div class="col-md-2" *ngIf="!!this.lineItemForm.value.fcn_li_location">
+                <div class="col-md-2" *ngIf="this.lineItemForm.value.fcn_li_location">
                   <mat-form-field>
                     <mat-label>Location </mat-label>
                     <input type="text" matInput formControlName="fcn_li_location" id="fcn_li_location"
-                      [readonly]="viewOnly" />
+                      readonly />
                     <!-- BUG_01711 - Should be able to enter location.-->
                   </mat-form-field>
                 </div>
@@ -3485,7 +3485,7 @@
           <mat-form-field>
             <mat-label>Expiry Date</mat-label>
             <input matInput [matDatepicker]="expDateAttachment" name="expDate" formControlName="expDate"
-              placeholder="DD/MM/YYYY" [min]="currentDate" [readonly]="viewOnly" />
+              placeholder="DD/MM/YYYY" [min]="currentDate" [readonly]="viewOnly" DateValidation />
             <mat-datepicker-toggle matSuffix [for]="expDateAttachment"></mat-datepicker-toggle>
             <mat-datepicker [startAt]="currentDate" #expDateAttachment></mat-datepicker>
 
@@ -3533,9 +3533,9 @@
                 <a href="javascript:void(0)" (click)="openAttachment(data)">
                   <i class="fa fa-paperclip" style="color: #337ab7"></i>
                 </a>
-                <!-- <a href="javascript:void(0)" (click)="deleteAttachment(data)">
+                <a href="javascript:void(0)" (click)="deleteAttachment(data)">
                   <i class="fa fa-trash" style="color: red; margin-left: 10px;"></i>
-                </a> -->
+                </a>
               </ng-container>
             </div>
           </dx-data-grid>
