@@ -2814,7 +2814,7 @@ editLineItem:boolean=false;
     // $('.dx-link-save').hide();
 
     // console.log(event.target.value)
-    this.open(this.mymodal);
+    // this.open(this.mymodal);
 
     this.updateBtn = true;
 
@@ -2826,52 +2826,51 @@ editLineItem:boolean=false;
 
     this.disableSaveBtn = true;
 
-    let API = `RetailSalesStockValidation/${value.STOCK_CODE}/${this.strBranchcode}/${this.vocType}/${this.strUser}/%27%27/%27%27/${this.convertDateToYMD(this.vocDataForm.value.vocdate)}`
-    await
-      this.suntechApi.getDynamicAPI(API)
-        .subscribe(async (resp: any) => {
-          this.snackBar.dismiss();
-          console.log('===========edit====getPOSStockCodeValidation=====================');
-          console.log(resp);
-          console.log('====================================');
-          if (resp != null) {
-            if (resp.resultStatus.RESULT_TYPE == 'Success') {
-              let stockInfos = resp.stockInfo;
-              console.log(stockInfos);
-              // this.setMetalRate(stockInfos.KARAT_CODE);
-              this.newLineItem.IS_BARCODED_ITEM = stockInfos.IS_BARCODED_ITEM;
-              this.newLineItem.DONT_SHOW_STOCKBAL = stockInfos.DONT_SHOW_STOCKBAL;
-              this.newLineItem.PCS_TO_GMS = stockInfos.PCS_TO_GMS;
-              this.newLineItem.GSTVATONMAKING = stockInfos.GSTVATONMAKING;
-              this.allowDescription=stockInfos.ALLOWEDITDESCRIPTION;
-              // this.newLineItem.ALLOWEDITDESCRIPTION = stockInfos.ALLOWEDITDESCRIPTION;
-              this.disableSaveBtn = false;
-              this.validatePCS = stockInfos.VALIDATE_PCS;
-              this.enablePieces = stockInfos.ENABLE_PCS;
-              this.lineItemPcs=stockInfos.BALANCE_PCS;
-              this.managePcsGrossWt();
-              if (stockInfos.DIVISIONMS == 'M')
-                this.setMetalRate(stockInfos.KARAT_CODE);
-              this.newLineItem.BLOCK_GRWT = this.comFunc.stringToBoolean(stockInfos.BLOCK_GRWT?.toString());
-              this.newLineItem.DIVISION = stockInfos.DIVISION;
-              this.divisionCode = stockInfos.DIVISION;
-              this.newLineItem.MAKING_ON = stockInfos.MAKING_ON;
-              this.newLineItem.LESSTHANCOST = stockInfos.LESSTHANCOST;
-
-
-              if (this.newLineItem.IS_BARCODED_ITEM != undefined && this.newLineItem.TPROMOTIONALITEM != undefined) {
-
-                if (!this.newLineItem?.IS_BARCODED_ITEM || this.comFunc.stringToBoolean(this.newLineItem?.TPROMOTIONALITEM.toString()))
-                  this.removeValidationsForForms(this.lineItemForm, ['fcn_li_rate', 'fcn_li_total_amount']);
-                else
-                  /* need to check this for diamond item */
-                  this.setMakingValidation();
-              }
-
+    let API = `RetailSalesStockValidation/${value.STOCK_CODE}/${this.strBranchcode}/${this.vocType}/${this.strUser}/%27%27/%27%27/${this.convertDateToYMD(this.vocDataForm.value.vocdate)}`;
+  
+    try {
+      const resp = await this.suntechApi.getDynamicAPI(API).toPromise();
+      this.snackBar.dismiss();
+      console.log('===========edit====getPOSStockCodeValidation=====================');
+      console.log(resp);
+      console.log('====================================');
+      if (resp != null) {
+        if (resp.resultStatus.RESULT_TYPE == 'Success') {
+          let stockInfos = resp.stockInfo;
+          console.log(stockInfos);
+          this.newLineItem.IS_BARCODED_ITEM = stockInfos.IS_BARCODED_ITEM;
+          this.newLineItem.DONT_SHOW_STOCKBAL = stockInfos.DONT_SHOW_STOCKBAL;
+          this.newLineItem.PCS_TO_GMS = stockInfos.PCS_TO_GMS;
+          this.newLineItem.GSTVATONMAKING = stockInfos.GSTVATONMAKING;
+          this.newLineItem.TPROMOTIONALITEM=stockInfos.TPROMOTIONALITEM;
+          this.allowDescription = stockInfos.ALLOWEDITDESCRIPTION;
+          this.disableSaveBtn = false;
+          this.validatePCS = stockInfos.VALIDATE_PCS;
+          this.enablePieces = stockInfos.ENABLE_PCS;
+          this.lineItemPcs = stockInfos.BALANCE_PCS;
+        
+         
+          if (stockInfos.DIVISIONMS == 'M') this.setMetalRate(stockInfos.KARAT_CODE);
+          this.newLineItem.BLOCK_GRWT = this.comFunc.stringToBoolean(stockInfos.BLOCK_GRWT?.toString());
+          this.newLineItem.DIVISION = stockInfos.DIVISION;
+          this.divisionCode = stockInfos.DIVISION;
+          this.newLineItem.MAKING_ON = stockInfos.MAKING_ON;
+          this.newLineItem.LESSTHANCOST = stockInfos.LESSTHANCOST;
+          this.newLineItem.TPROMOTIONALITEM=stockInfos.TPROMOTIONALITEM;
+          this.managePcsGrossWt();
+          if (this.newLineItem.IS_BARCODED_ITEM != undefined && this.newLineItem.TPROMOTIONALITEM != undefined) {
+            if (!this.newLineItem?.IS_BARCODED_ITEM || this.comFunc.stringToBoolean(this.newLineItem?.TPROMOTIONALITEM.toString())) {
+              this.removeValidationsForForms(this.lineItemForm, ['fcn_li_rate', 'fcn_li_total_amount']);
+            } else {
+              this.setMakingValidation();
             }
           }
-
-        })
+        }
+      }
+    } catch (error) {
+      console.error('Error during API call:', error);
+      this.snackBar.dismiss();
+    }
     // }
 
 
@@ -3044,6 +3043,7 @@ editLineItem:boolean=false;
     // this.getStockDesc(events);
 
     this.lineItemCommaSeparation();
+    this.open(this.mymodal);
   }
   metalRateChange() {
     let form = this.exchangeForm.value
@@ -12853,11 +12853,10 @@ changeGiftVoucherAmount(data:any){
   }
 
   deleteAttachment(data: any) {
-    const index = this.attachedImageList.findIndex((item: any) => item.url === data.data.ATTACHMENT_PATH);
+    const index = this.transAttachmentList.findIndex((item: any) => item.UNIQUEID === data.data.UNIQUEID);
     if (index !== -1) {
-      this.attachedImageList.splice(index, 1);
-      this.transAttachmentList[data.rowIndex].ATTACHMENT_PATH = "";
-      // data.data.ATTACHMENT_PATH = "";
+      this.transAttachmentList.splice(index, 1);
+      this.transAttachmentList = [...this.transAttachmentList];
     }
   }
 
@@ -12949,23 +12948,23 @@ changeGiftVoucherAmount(data:any){
 
 
 
-
   saveAttachment() {
     if (!this.attachmentForm.invalid && this.attachedImageList.length) {
       const formData = new FormData();
-
+  
+      const uniqueId = this.generateUniqueId();
+  
       formData.append('VOCNO', this.vocDataForm.value.fcn_voc_no);
       formData.append('VOCTYPE', this.vocType);
       formData.append('VOCDATE', this.convertDateWithTimeZero(new Date(this.vocDataForm.value.vocdate).toISOString()));
       formData.append('REFMID', this.vocDataForm.value.fcn_voc_no);
       formData.append('ATTACHMENT_PATH', '');
-
+  
       formData.append('SRNO', '1');
       formData.append('REMARKS', this.attachmentForm.value.remarks || '');
-      formData.append('UNIQUEID', '1');
+      formData.append('UNIQUEID', uniqueId);
       formData.append('CODE', '');
-      formData.append('ATTACH_TYPE', this.attachedImageList[0].file.type
-        || '');
+      formData.append('ATTACH_TYPE', this.attachedImageList[0].file.type || '');
       formData.append('EXPIRE_DATE', this.convertDateToYMD(this.attachmentForm.value.expDate));
       formData.append('BRANCH_CODE', this.strBranchcode);
       formData.append('YEARMONTH', this.baseYear);
@@ -12978,38 +12977,35 @@ changeGiftVoucherAmount(data:any){
       formData.append('DOCUMENT_DATE', '');
       formData.append('DOCUMENT_NO', '');
       formData.append('FROM_KYC', 'false');
-
+  
       for (let i = 0; i < this.attachedImageList.length; i++) {
         formData.append(`Model.Images[${i}].Image.File`, this.attachedImageList[i].file, this.attachedImageList[i].file.name);
-    }
-    
-
-      // for (let i = 0; i < this.attachedImageList.length; i++) {
-      //   formData.append(`Model.Images[${i}].Image.File`, this.attachedImageList[i], this.attachedImageList[i].file.name
-      // );
-      // }
-
+      }
+  
       this.transAttachmentListData.push(formData);
-
+  
       this.transAttachmentList.push({
         "REFMID": 0,
         "REMARKS": this.attachmentForm.value.remarks || '',
-        "ATTACHMENT_PATH": this.attachedImageList ? this.attachedImageList[0].url
-          : '',
+        "ATTACHMENT_PATH": this.attachedImageList ? this.attachedImageList[0].url : '',
         "DOC_TYPE": this.attachmentForm.value.docType || '',
         "EXPIRE_DATE": this.convertDateToYMD(this.attachmentForm.value.expDate) || this.dummyDate,
-        "VOCTYPE": this.vocType
+        "VOCTYPE": this.vocType,
+        "UNIQUEID": uniqueId
       });
-
+  
       this.attachmentForm.reset();
       this.attachmentForm.markAsPristine();
       this.attachmentForm.markAsUntouched();
-
-      // this.submitAttachment();
     } else {
-      this.snackBar.open('Please fill all fields', 'OK', { duration: 1000 })
+      this.snackBar.open('Please fill all fields', 'OK', { duration: 1000 });
     }
   }
+  
+  generateUniqueId() {
+    return 'id-' + Math.random().toString(36).substr(2, 16);
+  }
+  
   submitAttachment() {
     // if (!this.attachmentForm.invalid) {
     const modifiedFormData = new FormData();
