@@ -839,16 +839,16 @@ export class StonePricingMasterComponent implements OnInit {
 
   sievefromDataSelected(data: any) {
     console.log(data);
-    const finalsieve_form = this.commonService.dataSplitPop(data.CODE);
+   // const finalsieve_form = this.commonService.dataSplitPop(data.CODE);
 
-    this.stonePrizeMasterForm.controls.sieve_form.setValue(finalsieve_form);
+    this.stonePrizeMasterForm.controls.sieve_form.setValue(data.CODE);
     this.stonePrizeMasterForm.controls.sieve_from_desc.setValue(data.DESCRIPTION);
   }
   sievetoDataSelected(data: any) {
     console.log(data);
-    const finalsieve_to = this.commonService.dataSplitPop(data.CODE);
+   // const finalsieve_to = this.commonService.dataSplitPop(data.CODE);
 
-    this.stonePrizeMasterForm.controls.sieve_to.setValue(finalsieve_to);
+    this.stonePrizeMasterForm.controls.sieve_to.setValue(data.CODE);
     this.stonePrizeMasterForm.controls.sieve_to_desc.setValue(data.DESCRIPTION)
 
 
