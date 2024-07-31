@@ -26,10 +26,11 @@
                                         class="text-right" maxlength="12"
                                         [readonly]="viewMode"
                                         (keydown)="lookupKeyPress($event,'jobno')"
-                                        (focusout)="jobNumberValidate($event)"/>
+                                        (focusout)="jobNumberValidate($event)" />
                                 </mat-form-field>
                                 <master-search
-                                    [MasterSearchData]="jobnoCodeData" #overlayjobNoSearch
+                                    [MasterSearchData]="jobnoCodeData"
+                                    #overlayjobNoSearch
                                     *ngIf="!viewMode"
                                     (newRowClick)="jobnoCodeSelected($event)"></master-search>
                             </div>
@@ -62,10 +63,11 @@
                                         formControlName="process"
                                         [readonly]="viewMode"
                                         (keydown)="lookupKeyPress($event,'process')"
-                                        (focusout)="validateLookupField($event,ProcessCodeData,'process')"/>
+                                        (focusout)="validateLookupField($event,ProcessCodeData,'process')" />
                                 </mat-form-field>
                                 <master-search
-                                    [MasterSearchData]="ProcessCodeData" #overlayprocess
+                                    [MasterSearchData]="ProcessCodeData"
+                                    #overlayprocess
                                     *ngIf="!viewMode"
                                     (newRowClick)="ProcessCodeSelected($event)"></master-search>
                             </div>
@@ -100,11 +102,12 @@
                                     <input type="text" matInput
                                         formControlName="worker"
                                         [readonly]="viewMode"
-                                        (keydown)="lookupKeyPress($event,'worker')" 
-                                        (focusout)="validateLookupField($event,WorkerCodeData,'worker')"/>
+                                        (keydown)="lookupKeyPress($event,'worker')"
+                                        (focusout)="validateLookupField($event,WorkerCodeData,'worker')" />
                                 </mat-form-field>
                                 <master-search
-                                    [MasterSearchData]="WorkerCodeData" #overlayworkercode
+                                    [MasterSearchData]="WorkerCodeData"
+                                    #overlayworkercode
                                     *ngIf="!viewMode"
                                     (newRowClick)="WorkerCodeSelected($event)"></master-search>
                             </div>
@@ -147,11 +150,12 @@
                                     <input type="text" matInput
                                         formControlName="location"
                                         [readonly]="viewMode"
-                                        (keydown)="lookupKeyPress($event,'location')" 
-                                        (focusout)="validateLookupField($event,locationCodeData,'location')"/>
+                                        (keydown)="lookupKeyPress($event,'location')"
+                                        (focusout)="validateLookupField($event,locationCodeData,'location')" />
                                 </mat-form-field>
                                 <master-search
-                                    [MasterSearchData]="locationCodeData" #overlaylocationSearch
+                                    [MasterSearchData]="locationCodeData"
+                                    #overlaylocationSearch
                                     *ngIf="!viewMode"
                                     (newRowClick)="locationCodeSelected($event)">
                                 </master-search>
@@ -169,11 +173,12 @@
                                     <input type="text" matInput
                                         formControlName="stockcode"
                                         [readonly]="viewMode"
-                                        (keydown)="lookupKeyPress($event,'stockcode')" 
-                                        (focusout)="validateLookupField($event,stockCodeData,'stockcode')"/>
+                                        (keydown)="lookupKeyPress($event,'stockcode')"
+                                        (focusout)="validateLookupField($event,stockCodeData,'stockcode')" />
                                 </mat-form-field>
                                 <master-search
-                                    [MasterSearchData]="stockCodeData" #overlaystockcodeSearch
+                                    [MasterSearchData]="stockCodeData"
+                                    #overlaystockcodeSearch
                                     *ngIf="!viewMode"
                                     (newRowClick)="StockCodeSelected($event)"></master-search>
                             </div>
@@ -219,9 +224,10 @@
                                 :</label>
                             <div class="col-md-2">
                                 <mat-form-field style="width: 100%;">
+                                     <!-- write new focusout for this -->
                                     <input type="text" matInput
                                         formControlName="stoneweight"
-                                        class="text-right" MetalDecimalInput
+                                        class="text-right" MetalDecimalInpu
                                         [readonly]="viewMode" [max]="13" />
                                 </mat-form-field>
                             </div>
@@ -229,6 +235,7 @@
                                 class="col-sm-2 col-form-label">Net Weight
                                 :</label>
                             <div class="col-md-2">
+                                <!-- write new focusout for this -->
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
                                         formControlName="netweight" [max]="13"
@@ -246,6 +253,7 @@
                                     <input type="text" matInput
                                         formControlName="grossweight" [max]="6"
                                         class="text-right" MetalDecimalInput
+                                        (focusout)="grossWeightChange()"
                                         [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
@@ -254,6 +262,7 @@
                                 :</label>
                             <div class="col-md-2">
                                 <mat-form-field style="width: 100%;">
+                                     <!-- write new focusout for this -->
                                     <input type="text" matInput
                                         formControlName="topurity"
                                         class="text-right" AmountDecimalInput
