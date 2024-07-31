@@ -75,18 +75,30 @@ export class MeltingIssueComponent implements OnInit {
     VIEW_TABLE: true,
   }
 
-  WorkerCodeData: MasterSearchModel = {
+  // WorkerCodeData: MasterSearchModel = {
+  //   PAGENO: 1,
+  //   RECORDS: 10,
+  //   LOOKUPID: 260,
+  //   SEARCH_FIELD: 'WORKER_CODE',
+  //   SEARCH_HEADING: 'Worker Master',
+  //   SEARCH_VALUE: '',
+  //   WHERECONDITION: `@StrSubJobNo='',
+  //   @StrFromProcess='',
+  //   @StrFromWorker='',
+  //   @StrBranchCode=${this.commonService.branchCode},
+	//   @blnProcessAuthroize=1`,
+  //   VIEW_INPUT: true,
+  //   VIEW_TABLE: true,
+  
+  // }
+  workerCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 260,
+    LOOKUPID: 254,
     SEARCH_FIELD: 'WORKER_CODE',
-    SEARCH_HEADING: 'Worker Master',
+    SEARCH_HEADING: 'Worker Search',
     SEARCH_VALUE: '',
-    WHERECONDITION: `@StrSubJobNo='',
-    @StrFromProcess='',
-    @StrFromWorker='',
-    @StrBranchCode=${this.commonService.branchCode},
-	  @blnProcessAuthroize=1`,
+    WHERECONDITION: "@strProcess='',@blnActive=1",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -126,7 +138,7 @@ export class MeltingIssueComponent implements OnInit {
     SEARCH_FIELD: 'job_number',
     SEARCH_HEADING: 'Job Number',
     SEARCH_VALUE: '',
-    WHERECONDITION: "job_number<> ''",
+    WHERECONDITION: `JOB_CLOSED_ON is null and  Branch_code = '${this.comService.branchCode}'`,
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -483,8 +495,8 @@ export class MeltingIssueComponent implements OnInit {
         strJob_Number: '',
         strUnq_Job_Id: '',
         strMetalStone: '',
-        strProcess_Code: '',
-        strWorker_Code: '',
+        strProcess_Code: this.comService.nullToString(form.PROCESS_CODE),
+        strWorker_Code: this.comService.nullToString(form.WORKER_CODE),
         strStock_Code: '',
         strUserName: '',
       }
@@ -507,6 +519,7 @@ export class MeltingIssueComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
+
 
   ProcesscodeValidate(event: any) {
     if (event.target.value == '') {

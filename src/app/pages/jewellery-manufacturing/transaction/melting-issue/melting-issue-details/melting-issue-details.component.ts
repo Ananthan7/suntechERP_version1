@@ -43,7 +43,7 @@ export class MeltingIssueDetailsComponent implements OnInit {
     SEARCH_FIELD: 'job_number',
     SEARCH_HEADING: 'Job Number',
     SEARCH_VALUE: '',
-    WHERECONDITION: "job_number<> ''",
+    WHERECONDITION: `JOB_CLOSED_ON is null and  Branch_code = '${this.comService.branchCode}'`,
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -188,7 +188,7 @@ export class MeltingIssueDetailsComponent implements OnInit {
     this.setValueWithDecimal('topurity', this.content.PURE_WT, 'THREE')
     this.setValueWithDecimal('grossweight', this.content.GROSS_WT, 'METAL')
     this.setValueWithDecimal('purity', this.content.PURITY, 'PURITY')
-    this.setValueWithDecimal('netweight', this.content.NET_WT, 'THREE')
+    this.setValueWithDecimal('netweight', this.content.NET_WT, 'METAL')
     this.setValueWithDecimal('waxweight', this.content.WAX_WT, 'THREE')
     this.setValueWithDecimal('stoneweight', this.content.STONE_WT, 'STONE')
     this.setValueWithDecimal('diffgrwt', this.content.JOB_PURITY, 'PURITY')
@@ -251,7 +251,7 @@ export class MeltingIssueDetailsComponent implements OnInit {
   });
   submitValidations() {
     let form = this.meltingIssuedetailsFrom.value
-    if (this.comService.nullToString(form.jobNumber)== '') {
+    if (this.comService.nullToString(form.jobNumber) == '') {
       this.toastr.error('JMSG1601')
       return
     }
@@ -299,7 +299,7 @@ export class MeltingIssueDetailsComponent implements OnInit {
       "PUREWT": this.meltingIssuedetailsFrom.value.pureweight,
       "PUDIFF": 0,
       "IRON_WT": 0,
-      "NET_WT": this.meltingIssuedetailsFrom.value.netweight,
+      "NET_WT": this.meltingIssuedetailsFrom.value.netweight,//add emptytozero for all number fields
       "TOTAL_WEIGHT": 0,
       "IRON_PER": 0,
       "STONEDIFF": 0,
@@ -335,6 +335,45 @@ export class MeltingIssueDetailsComponent implements OnInit {
       "ATTACHMENT_FILE": "string"
     }
   }
+  emptyToZero(value: any) {
+    //common function for all number checking
+    return this.comService.emptyToZero(value)
+  }
+  //functions for weight calculations starts //continue..
+  grossWeightChange() {
+    //dont make functions complicated write with same name in input
+    //use only simple methods
+    // use same names for same feilds
+    let form = this.meltingIssuedetailsFrom.value;
+    let netweight = this.comService.netWeightCalculate(form.grossweight, form.stoneweight)
+    this.setValueWithDecimal('netweight', netweight, 'METAL')
+    let pureweight = this.comService.pureWeightCalculate(netweight, form.purity)
+    this.setValueWithDecimal('pureweight', pureweight, 'METAL')
+
+  }
+  stoneWeightChange() {
+    //dont make functions complicated write with same name in input
+    //use only simple methods
+    // use same names for same feilds
+    let form = this.meltingIssuedetailsFrom.value;
+    let netweight = this.comService.netWeightCalculate(form.grossweight, form.stoneweight)
+    this.setValueWithDecimal('netweight', netweight, 'METAL')
+    let pureweight = this.comService.pureWeightCalculate(netweight, form.purity)
+    this.setValueWithDecimal('pureweight', pureweight, 'METAL')
+
+  }
+  netWeightChange() {
+    //dont make functions complicated write with same name in input
+    //use only simple methods
+    // use same names for same feilds
+    let form = this.meltingIssuedetailsFrom.value;
+    let netweight = this.comService.netWeightCalculate(form.grossweight, form.stoneweight)
+    this.setValueWithDecimal('netweight', netweight, 'METAL')
+    let pureweight = this.comService.pureWeightCalculate(netweight, form.purity)
+    this.setValueWithDecimal('pureweight', pureweight, 'METAL')
+
+  }
+
 
 
   // deleteRecord() {
@@ -404,28 +443,28 @@ export class MeltingIssueDetailsComponent implements OnInit {
   // }
   showOverleyPanel(event: any, formControlName: string) {
     if (this.meltingIssuedetailsFrom.value[formControlName] != '') return;
-  switch (formControlName) {
-    case 'jobno':
-      this.overlayjobNoSearch.showOverlayPanel(event);
-      break;
-    case 'process':
-      this.overlayprocess.showOverlayPanel(event);
-      break;
-    case 'worker':
-      this.overlayworkercode.showOverlayPanel(event);
-      break;
-    case 'location':
-      this.overlaylocationSearch.showOverlayPanel(event);
-      break;
-    case 'stockcode':
-      this.overlaystockcodeSearch.showOverlayPanel(event);
-      break;
-    default:
-}
+    switch (formControlName) {
+      case 'jobno':
+        this.overlayjobNoSearch.showOverlayPanel(event);
+        break;
+      case 'process':
+        this.overlayprocess.showOverlayPanel(event);
+        break;
+      case 'worker':
+        this.overlayworkercode.showOverlayPanel(event);
+        break;
+      case 'location':
+        this.overlaylocationSearch.showOverlayPanel(event);
+        break;
+      case 'stockcode':
+        this.overlaystockcodeSearch.showOverlayPanel(event);
+        break;
+      default:
+    }
   }
   lookupKeyPress(event: any, form?: any) {
-    if(event.key == 'Tab' && event.target.value == ''){
-      this.showOverleyPanel(event,form)
+    if (event.key == 'Tab' && event.target.value == '') {
+      this.showOverleyPanel(event, form)
     }
   }
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
@@ -494,7 +533,7 @@ export class MeltingIssueDetailsComponent implements OnInit {
           this.meltingIssuedetailsFrom.controls.netweight.setValue(data[0].NETWT)
           this.meltingIssuedetailsFrom.controls.stoneweight.setValue(data[0].STONE)
           this.meltingIssuedetailsFrom.controls.mainstock.setValue(data[0].MAIN_STOCK_CODE)
-          this.setValueWithDecimal('topurity', data[0].PURE_WT.toFixed(3), 'THREE')
+          this.setValueWithDecimal('topurity', data[0].PURE_WT, 'THREE') // this is mistake
           this.setValueWithDecimal('grossweight', data[0].METAL, 'METAL')
           this.setValueWithDecimal('purity', data[0].PURITY, 'PURITY')
           this.setValueWithDecimal('waxweight', data[0].KARAT, 'THREE')
