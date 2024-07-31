@@ -540,13 +540,15 @@ export class StonePricingMasterComponent implements OnInit {
     }
   }
 
-  formSubmit() {
 
-    if (this.content && this.content.FLAG == 'VIEW') return
-    if (this.content && this.content.FLAG == 'EDIT') {
-      this.update()
-      return
+
+  submitValidation(form: any) {
+
+    if (this.commonService.nullToString(form.price_code) == '') {
+      this.commonService.toastErrorByMsgId('MSG1660') //"price_code cannot be empty"
+      return true
     }
+<<<<<<< HEAD
     if (this.stonePrizeMasterForm.invalid) {
       this.toastr.error('select all required fields')//CHINNU -  MESSAGE HARD CODED
       return
@@ -554,6 +556,42 @@ export class StonePricingMasterComponent implements OnInit {
 
     if (this.stonePrizeMasterForm.value.selling === '' && this.stonePrizeMasterForm.value.selling_rate === '') {
       this.toastr.error('Enter values either Selling % or Selling Rate');//CHINNU -  MESSAGE HARD CODED
+=======
+    else if (this.commonService.nullToString(form.shape) == '') {
+      this.commonService.toastErrorByMsgId('MSG1796')//"shape cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.clarity) == '') {
+      this.commonService.toastErrorByMsgId('MSG1118')//"clarity cannot be empty"
+      return true
+    }
+
+    else if (this.commonService.nullToString(form.currency) == '') {
+      this.commonService.toastErrorByMsgId('MSG1172')//"currency cannot be empty"
+      return true
+    }
+
+    else if (this.commonService.nullToString(form.carat_wt) == '') {
+      this.commonService.toastErrorByMsgId('MSG1095')//"carat_wt cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.wt_from) == '') {
+      this.commonService.toastErrorByMsgId('MSG3565')//"wt_from cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.wt_to) == '') {
+      this.commonService.toastErrorByMsgId('MSG3565')//"wt_to cannot be empty"
+      return true
+    }
+
+    else if (this.commonService.nullToString(form.issue_rate) == '') {
+      this.commonService.toastErrorByMsgId('MSG1723')//"issue_rate cannot be empty"
+      return true
+    }
+
+    if (this.stonePrizeMasterForm.value.selling === '' && this.stonePrizeMasterForm.value.selling_rate === '') {
+      this.commonService.toastErrorByMsgId('MSG7728');//Enter values either Selling % or Selling Rate
+>>>>>>> origin/ERP_Staging
       return;
     }
 
@@ -562,7 +600,38 @@ export class StonePricingMasterComponent implements OnInit {
       return;
     }
 
-    else {
+    // else if (this.commonService.nullToString(form.currency) == '') {
+    //   this.commonService.toastErrorByMsgId('MSG1173')//"currency cannot be empty"
+    //   return true
+    // }
+    // else if (this.diamondlabourMasterForm.value.selling_rate == 0 && this.diamondlabourMasterForm.value.selling == 0) {
+    //   this.commonService.toastErrorByMsgId('MSG7728') //"Select Either Selling % or Selling Rate"
+    //   return true
+    // }
+
+    // else if (this.diamondlabourMasterForm.value.size_from > this.diamondlabourMasterForm.value.size_to) {
+    //  // this.commonService.toastErrorByMsgId('MSG2496') //"Size From should be lesser than Size To"
+    //   this.toastr.error('Size From should be lesser than Size To')
+    //   return true
+    // }
+
+    // else if (this.diamondlabourMasterForm.value.ctWtFrom > this.diamondlabourMasterForm.value.ctWtTo) {
+    //   this.commonService.toastErrorByMsgId('MSG3805')//Weight From should be lesser than Weight To
+    //   return true
+    // }
+
+
+    return false;
+  }
+
+  formSubmit() {
+
+    if (this.content && this.content.FLAG == 'VIEW') return
+    if (this.content && this.content.FLAG == 'EDIT') {
+      this.update()
+      return
+    }
+    if (this.submitValidation(this.stonePrizeMasterForm.value)) return;
 
       let API = 'StonePriceMasterDJ/InsertStonePriceMaster'
       let postData = this.setPostData()
@@ -592,7 +661,6 @@ export class StonePricingMasterComponent implements OnInit {
           this.commonService.toastErrorByMsgId('MSG3577')
         })
       this.subscriptions.push(Sub)
-    }
   }
   checkCodeExists(event: any) {
     if (this.content && this.content.FLAG == 'EDIT') {
@@ -613,7 +681,11 @@ export class StonePricingMasterComponent implements OnInit {
     let sub: Subscription = this.dataService.getDynamicAPICustom(API).subscribe(
       (result) => {
         if (result.status == 'Success') {
+<<<<<<< HEAD
           this.commonService.toastErrorByMsgId('Code already exists')//CHINNU -  MESSAGE HARD CODED
+=======
+          this.commonService.toastErrorByMsgId('MSG1121')//code already exsist
+>>>>>>> origin/ERP_Staging
           // Reset the form control value
           this.stonePrizeMasterForm.controls.price_code.setValue('');
         }
@@ -628,6 +700,7 @@ export class StonePricingMasterComponent implements OnInit {
     this.subscriptions.push(sub);
   }
   update() {
+<<<<<<< HEAD
     console.log(this.stonePrizeMasterForm.value);
     if (this.stonePrizeMasterForm.invalid) {
       this.toastr.error('select all required fields')//CHINNU -  MESSAGE HARD CODED
@@ -638,6 +711,10 @@ export class StonePricingMasterComponent implements OnInit {
       this.toastr.error('Sieve From Should not be Greater than Sieve To');//CHINNU -  MESSAGE HARD CODED
       return;
     }
+=======
+
+    if (this.submitValidation(this.stonePrizeMasterForm.value)) return;
+>>>>>>> origin/ERP_Staging
 
     let API = 'StonePriceMasterDJ/UpdateStonePriceMaster/' + this.stonePrizeMasterForm.value.price_code
 
@@ -737,7 +814,7 @@ export class StonePricingMasterComponent implements OnInit {
                 });
               }
             } else {
-              this.toastr.error('Not deleted')
+              this.commonService.toastErrorByMsgId('MSG1880');// Not Deleted
             }
           }, err => alert(err))
         this.subscriptions.push(Sub)
@@ -864,7 +941,11 @@ export class StonePricingMasterComponent implements OnInit {
           }
          
         }, err => {
+<<<<<<< HEAD
           this.commonService.toastErrorByMsgId('network issue found')//CHINNU -  MESSAGE HARD CODED
+=======
+          this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+>>>>>>> origin/ERP_Staging
         })
       this.subscriptions.push(Sub)
     }

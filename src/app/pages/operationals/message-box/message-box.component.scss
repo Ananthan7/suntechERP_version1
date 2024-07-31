@@ -1,0 +1,163 @@
+::ng-deep {
+    body[data-layout-mode="dark"] {
+      #gridContainer {
+        td,
+        .dx-widget,
+        .dx-datagrid-total-footer,
+        .dx-datagrid-nowrap {
+          color: #fff;
+          background-color: #03314d;
+        }
+        .dx-datagrid-headers {
+          td {
+            color: #fff;
+            background-color: #105c8b !important;
+          }
+        }
+        .dx-datagrid-summary-item,
+        .dx-datagrid-text-content {
+          color: #fff;
+        }
+      }
+      //ng select styles
+      .ng-select .ng-select-container {
+        border: none !important;
+        color: #fff !important;
+        background-color: #326c90 !important;
+      }
+  
+      .p-float-label {
+        input {
+          border: none !important;
+          background-color: #326c90 !important;
+        }
+        label {
+          color: #fff !important;
+          border-radius: 10px !important;
+          background-color: #326c90 !important;
+        }
+      }
+    }
+  }
+  .cardhead {
+    font-family: "Mulish";
+    font-weight: 600 !important;
+    font-size: 21px;
+    line-height: 24px;
+    color: #336699;
+  }
+  .card {
+    min-height: 70vh;
+  }
+  label {
+    color: #326c90 !important;
+  }
+  .addbtn {
+    display: flex;
+    justify-content: flex-end;
+  }
+  .largebtn {
+    font-family: "Mulish", sans-serif !important;
+    font-size: 13px;
+    min-width: 160px;
+    min-height: 35px;
+    color: #fff;
+    background-color: #3599cc;
+    padding: 1px 1px 2px 1px !important;
+    border-radius: 25px;
+    font-weight: bold;
+  }
+  .list-group-item {
+    font-size: 12px;
+    font-weight: 600;
+    color: #336699;
+    font-family: "Mulish", sans-serif !important;
+  }
+  .list-group-item:hover {
+    cursor: pointer;
+  }
+  .active {
+    color: #fff;
+  }
+  
+  :host ::ng-deep {
+    //input styles
+    .p-float-label {
+      width: 100%;
+      font-size: 14px;
+  
+      i {
+        font-size: 15px;
+      }
+  
+      input {
+        height: 20px;
+        width: 100%;
+        font-family: "Mulish", sans-serif !important;
+        font-weight: 600;
+        background-color: #f2f4ff;
+        font-size: 14px;
+        border: 1px solid rgba(178, 178, 178, 0.26);
+        box-shadow: none;
+        border-radius: 10px;
+        color: #1a1a1a;
+      }
+    }
+  
+    .datepick {
+      width: 100%;
+      input {
+        //44vw
+        width: 100% !important;
+        border-radius: 10px !important;
+        border: none !important;
+        border: 1px solid #d4d5d6 !important;
+        background-color: #f2f4ff !important;
+      }
+    }
+    /*skip and save button*/
+    .btn-outline-info {
+      font-family: "Mulish", sans-serif !important;
+      font-size: 13px;
+      border: 1.2px solid #3599cc !important;
+      min-width: 90px;
+      min-height: 26px;
+      color: #3599cc;
+      padding: 1px 1px 2px 1px !important;
+      text-transform: capitalize;
+    }
+    .btn-outline-info:hover {
+      background-color: #3599cc;
+      color: #fff;
+    }
+    .savebtn {
+      font-family: "Mulish", sans-serif !important;
+      font-size: 13px;
+      min-width: 90px;
+      min-height: 27px;
+      color: #fff;
+      background-color: #3599cc;
+      padding: 1px 1px 2px 1px !important;
+      border-radius: 5px;
+    }
+  }
+  
+  /* Button styles starts */
+  .save {
+    height: 26px;
+    background-color: #3599cc;
+  }
+  .skip {
+    height: 26px;
+    border: 1px solid #3599cc;
+    color: #3599cc;
+  }
+  
+  .buttonsection {
+    width: 100%;
+    display: flex;
+    justify-content: right;
+    // align-items: center;
+  }
+  /* Button styles ends */
+  

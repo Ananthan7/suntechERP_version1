@@ -23,72 +23,66 @@
       <div class="col-md-4">
         <div class="row mb-1">
           <label for="inputPassword" class="col-sm-4 col-form-label"
-            >Voc Type</label
-          >
+            id="ID001">Voc Type</label>
           <div class="col-md-4">
-            <mat-form-field style="width: 100%">
+            <mat-form-field style="width: 100%" appearance="outline">
               <input type="text" matInput formControlName="vocType" />
             </mat-form-field>
           </div>
           <div class="col-md-4">
-            <mat-form-field style="width: 100%">
+            <mat-form-field style="width: 100%" appearance="outline">
               <input type="text" matInput formControlName="vocNo" />
             </mat-form-field>
           </div>
         </div>
         <div class="row mb-1">
           <label for="inputPassword" class="col-sm-4 col-form-label"
-            >Voc Date</label
-          >
+           id="ID002" >Voc Date</label>
           <div class="col-md-8">
-            <mat-form-field style="width: 100%">
+            <mat-form-field style="width: 100%" appearance="outline">
               <input
                 matInput
                 [matDatepicker]="vocDate"
                 [max]="currentDate"
                 formControlName="vocDate"
                 placeholder="DD/MM/YYYY"
-                DateValidation
-              />
+                DateValidation/>
               <mat-datepicker-toggle
                 matSuffix
-                [for]="vocDate"
-              ></mat-datepicker-toggle>
+                [for]="vocDate"></mat-datepicker-toggle>
               <mat-datepicker [startAt]="currentDate" #vocDate></mat-datepicker>
             </mat-form-field>
           </div>
         </div>
         <div class="row mb-1">
           <label for="inputPassword" class="col-sm-4 col-form-label"
-            >Entered By</label
-          >
+           id="ID003" >Entered By</label>
           <div class="col-md-8">
-            <mat-form-field style="width: 70%">
+            <mat-form-field style="width: -webkit-fill-available;" appearance="outline">
               <input type="text" matInput formControlName="enteredBy" />
+              <master-search class="masterSearch"
+                [MasterSearchData]="enteredByCode"
+                (newRowClick)="enteredBySelected($event)"
+              ></master-search>
             </mat-form-field>
-            <master-search
-              [MasterSearchData]="enteredByCode"
-              (newRowClick)="enteredBySelected($event)"
-            ></master-search>
           </div>
         </div>
       </div>
       <div class="col-md-7">
         <div class="row mb-1">
           <label for="inputPassword" class="col-sm-3 col-form-label"
-            >Customer</label
-          >
+           id="ID004" >Customer</label>
           <div class="col-md-3">
-            <mat-form-field style="width: 70%">
+            <mat-form-field style="width: -webkit-fill-available;" appearance="outline">
               <input type="text" matInput formControlName="customerCode" />
+              <master-search class="masterSearch"
+                [MasterSearchData]="customerCodeData"
+                (newRowClick)="customerCodeSelected($event)"
+              ></master-search>
             </mat-form-field>
-            <master-search
-              [MasterSearchData]="customerCodeData"
-              (newRowClick)="customerCodeSelected($event)"
-            ></master-search>
           </div>
           <div class="col-md-6">
-            <mat-form-field style="width: 100%">
+            <mat-form-field style="width: 100%" appearance="outline">
               <input type="text" matInput formControlName="customerName" />
             </mat-form-field>
           </div>
@@ -96,30 +90,27 @@
 
         <div class="row mb-1">
           <label for="inputPassword" class="col-sm-3 col-form-label"
-            >Order #</label
-          >
+           id="ID005" >Order #</label>
           <div class="col-md-3">
-            <mat-form-field style="width: 70%">
+            <mat-form-field style="width: -webkit-fill-available;" appearance="outline">
               <input type="text" matInput formControlName="order" />
+              <master-search class="masterSearch"
+                [MasterSearchData]="orderCodeData"
+                (newRowClick)="orderCodeSelected($event)"
+              ></master-search>
             </mat-form-field>
-            <master-search
-              [MasterSearchData]="orderCodeData"
-              (newRowClick)="orderCodeSelected($event)"
-            ></master-search>
           </div>
           <label for="inputPassword" class="col-sm-3 col-form-label"
-            >Order Date</label
-          >
+           id="ID006" >Order Date</label>
           <div class="col-md-3">
-            <mat-form-field style="width: 100%">
+            <mat-form-field style="width: 100%" appearance="outline">
               <input
                 matInput
                 [matDatepicker]="OrderDate"
                 [max]="currentDate"
                 formControlName="orderDate"
                 placeholder="DD/MM/YYYY"
-                DateValidation
-              />
+                DateValidation/>
               <mat-datepicker-toggle
                 matSuffix
                 [for]="OrderDate"
@@ -133,33 +124,30 @@
         </div>
         <div class="row mb-1">
           <label for="inputPassword" class="col-sm-3 col-form-label"
-            >Order Amount</label
-          >
+           id="ID007" >Order Amount</label>
           <div class="col-md-3">
-            <mat-form-field style="width: 100%">
-              <input type="number" matInput formControlName="orderAmount" />
+            <mat-form-field style="width: 100%" appearance="outline">
+              <input type="number" matInput formControlName="orderAmount" class="text-right" />
             </mat-form-field>
           </div>
           <label for="inputPassword" class="col-sm-3 col-form-label"
-            >Adv.Received</label
-          >
+           id="ID008" >Adv.Received</label>
           <div class="col-md-3">
-            <mat-form-field style="width: 100%">
-              <input type="number" matInput formControlName="advReceived" />
+            <mat-form-field style="width: 100%" appearance="outline">
+              <input type="number" matInput formControlName="advReceived" class="text-right"/>
             </mat-form-field>
           </div>
         </div>
         <div class="row">
           <label for="inputPassword" class="col-sm-4 col-form-label"
-            >Journal Ref:</label
-          >
+           id="ID009" >Journal Ref:</label>
         </div>
       </div>
     </div>
     <div class="row mb-2">
       <div class="col-md-12 text-center">
         <div class="p-1 bg-color">
-          <h5 class="pos-modaltitle mb-0">Order Details</h5>
+          <h5 class="pos-modaltitle mb-0" id="ID010">Order Details</h5>
         </div>
       </div>
     </div>
@@ -167,95 +155,87 @@
       <div class="col-md-4">
         <div class="row mb-1">
           <label for="inputPassword" class="col-sm-4 col-form-label"
-            >Mode of Refund</label
-          >
-          <div class="col-md-6">
-            <mat-form-field>
+           id="ID011" >Mode of Refund</label>
+          <div class="col-md-8">
+            <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
               <mat-select
                 formControlName="modeOfRefundSelect"
-                (selectionChange)="changeitem($event)"
-              >
-                <mat-option value="Cash">Cash</mat-option>
-                <mat-option value="Cheque">Cheque</mat-option>
+                (selectionChange)="changeitem($event)">
+                <mat-option value="Cash" id="ID024">Cash</mat-option>
+                <mat-option value="Cheque" id="ID025">Cheque</mat-option>
               </mat-select>
             </mat-form-field>
           </div>
         </div>
         <div class="row mb-1">
-          <label for="inputPassword" class="col-sm-1 col-form-label">A/C</label>
+          <label for="inputPassword" class="col-sm-1 col-form-label" id="ID012">A/C</label>
           <div class="col-md-3">
-            <mat-form-field style="width: 70%">
+            <mat-form-field style="width: -webkit-fill-available;" appearance="outline">
               <input type="text" matInput formControlName="ac" />
+              <master-search class="masterSearch"
+                [MasterSearchData]="acCode" 
+                (newRowClick)="acCodeSelected($event)"
+              ></master-search>
             </mat-form-field>
-            <master-search
-              [MasterSearchData]="acCode"
-              (newRowClick)="acCodeSelected($event)"
-            ></master-search>
           </div>
-          <div class="col-md-7">
-            <mat-form-field style="width: 100%">
+          <div class="col-md-8">
+            <mat-form-field style="width: -webkit-fill-available;" appearance="outline">
               <input type="text" matInput formControlName="acCode" />
             </mat-form-field>
           </div>
         </div>
         <div class="row mb-1">
           <label for="inputPassword" class="col-sm-3 col-form-label"
-            >Currency</label
-          >
+           id="ID013" >Currency</label>
           <div class="col-md-3">
-            <mat-form-field style="width: 100%">
+            <mat-form-field style="width: 100%" appearance="outline">
               <input type="text" matInput formControlName="currency" />
             </mat-form-field>
           </div>
           <div class="col-md-6">
-            <mat-form-field style="width: 100%">
+            <mat-form-field style="width: 100%" appearance="outline">
               <input type="text" matInput formControlName="currencyRate" />
             </mat-form-field>
           </div>
         </div>
         <div class="row mb-1">
           <label for="inputPassword" class="col-sm-3 col-form-label"
-            >Order Age</label
-          >
+           id="ID014" >Order Age</label>
           <div class="col-md-3">
-            <mat-form-field style="width: 100%">
+            <mat-form-field style="width: 100%" appearance="outline">
               <input type="text" matInput formControlName="orderAge" />
             </mat-form-field>
           </div>
           <label for="inputPassword" class="col-sm-3 col-form-label"
-            >No Item</label
-          >
+           id="ID015" >No Item</label>
           <div class="col-md-3">
-            <mat-form-field style="width: 100%">
+            <mat-form-field style="width: 100%" appearance="outline">
               <input type="text" matInput formControlName="noItem" />
             </mat-form-field>
           </div>
         </div>
       </div>
       <fieldset class="col-md-3 mt-3">
-        <legend>Cheque Details</legend>
+        <legend id="ID016">Cheque Details</legend>
         <!-- <h6 class="pt-2 bg-gray">Cheque Details</h6> -->
         <div class="row mb-1">
           <label for="inputPassword" class="col-sm-4 col-form-label"
-            >Cheq No</label
-          >
+           id="ID017" >Cheq No</label>
           <div class="col-md-8">
-            <mat-form-field style="width: 100%">
+            <mat-form-field style="width: 100%" appearance="outline">
               <input
                 type="text"
                 matInput
                 formControlName="cheqNo"
-                [readonly]="cashMode"
-              />
+                [readonly]="cashMode"/>
             </mat-form-field>
           </div>
         </div>
         <div class="row mb-1">
           <label for="inputPassword" class="col-sm-4 col-form-label"
-            >Cheq Date</label
-          >
+            id="ID018">Cheq Date</label>
           <div class="col-md-8">
-            <mat-form-field style="width: 100%">
+            <mat-form-field style="width: 100%" appearance="outline">
               <input
                 type="text"
                 matInput
@@ -264,8 +244,7 @@
                 formControlName="cheqDate"
                 placeholder="DD/MM/YYYY"
                 [readonly]="cashMode"
-                DateValidation
-              />
+                DateValidation/>
               <mat-datepicker-toggle
                 matSuffix
                 [for]="cheqDate"
@@ -279,10 +258,9 @@
         </div>
         <div class="row mb-1">
           <label for="inputPassword" class="col-sm-4 col-form-label"
-            >Cheq Bank</label
-          >
+           id="ID019" >Cheq Bank</label>
           <div class="col-md-8">
-            <mat-form-field style="width: 100%">
+            <mat-form-field style="width: 100%" appearance="outline">
               <input
                 type="text"
                 matInput
@@ -294,16 +272,14 @@
         </div>
         <div class="row mb-1">
           <label for="inputPassword" class="col-sm-4 col-form-label"
-            >Dep Bank</label
-          >
+           id="ID020" >Dep Bank</label>
           <div class="col-md-8">
-            <mat-form-field style="width: 100%">
+            <mat-form-field style="width: 100%" appearance="outline">
               <input
                 type="text"
                 matInput
                 formControlName="depBank"
-                [readonly]="cashMode"
-              />
+                [readonly]="cashMode"/>
             </mat-form-field>
           </div>
         </div>
@@ -311,11 +287,10 @@
       <div class="col-md-3">
         <div class="row mb-1">
           <label for="inputPassword" class="col-sm-6 col-form-label"
-            >Cancellation Charge</label
-          >
+           id="ID021" >Cancellation Charge</label>
           <div class="col-md-6">
-            <mat-form-field style="width: 100%">
-              <input
+            <mat-form-field style="width: 100%" appearance="outline">
+              <input class="text-right"
                 type="number"
                 matInput
                 formControlName="cancellationCharge"
@@ -325,26 +300,24 @@
         </div>
         <div class="row mb-1">
           <label for="inputPassword" class="col-sm-6 col-form-label"
-            >Refund Amount</label
-          >
+           id="ID022" >Refund Amount</label>
           <div class="col-md-6">
-            <mat-form-field style="width: 100%">
-              <input type="number" matInput formControlName="refundAmount" />
+            <mat-form-field style="width: 100%" appearance="outline">
+              <input type="number" matInput formControlName="refundAmount" class="text-right" />
             </mat-form-field>
           </div>
         </div>
         <div class="row mb-1">
           <label for="inputPassword" class="col-sm-6 col-form-label"
-            >Order Cancel A/c</label
-          >
+           id="ID023" >Order Cancel A/c</label>
           <div class="col-md-6">
-            <mat-form-field style="width: 70%">
+            <mat-form-field style="width: -webkit-fill-available;" appearance="outline">
               <input type="text" matInput formControlName="orderCancel" />
+              <master-search class="masterSearch"
+                [MasterSearchData]="orderCancelCode"
+                (newRowClick)="orderCancelSelected($event)"
+              ></master-search>
             </mat-form-field>
-            <master-search
-              [MasterSearchData]="orderCancelCode"
-              (newRowClick)="orderCancelSelected($event)"
-            ></master-search>
           </div>
         </div>
       </div>

@@ -28,7 +28,16 @@ export class MeltingIssueComponent implements OnInit {
   columnhead: any[] = ['SRNO', 'DIV', 'Job No', 'Stock Code', 'Main Stock', 'Process', 'Worker', 'Pcs', 'Gross Weight', 'Purity', 'Pure Weight', 'Rate', 'Amount']
   columnheader: any[] = ['Sr#', 'SO No', 'Party Code', 'Party Name', 'Job Number', 'Job Description', 'Design Code', 'UNQ Design ID', 'Process', 'Worker', 'Metal Required', 'Metal Allocated', 'Allocated Pure', 'Job Pcs']
   columnhead1: any[] = ['Sr#', 'Ingredients', 'Qty']
-  db1: any[] = ['Sr#', 'Division', 'Stock Code', 'Description', 'Alloy', 'Alloy Qty', 'Rate', 'Amount']
+  db1: any[] = [
+    {title:'Sr#', field: 'SRNO',format:'',alignment: 'left' },
+    { title: 'SRNO', field: 'SRNO', format: '', alignment: 'left' },
+    { title: 'Stock Code', field: 'STOCKCODE', format: '', alignment: 'left' },
+    { title: 'Description', field: 'DESCRIPTION', format: '', alignment: 'left' },
+    { title: 'Alloy', field: 'ALLOY', format: '', alignment: 'right',useMetalDecimalInput: false },
+    { title: 'Alloy Qty', field: 'ALLOYQTY', format: '', alignment: 'right',useMetalDecimalInput: false },
+    { title: 'Rate', field: 'RATE', format: '', alignment: 'right' ,useAmountDecimalInput: false},
+    { title: 'Amount', field: 'AMOUNT', format: '', alignment: 'right',useAmountDecimalInput: false },
+  ]
   @Input() content!: any;
   tableData: any[] = [];
   sequenceDetails: any[] = []
@@ -69,13 +78,19 @@ export class MeltingIssueComponent implements OnInit {
   WorkerCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 19,
+    LOOKUPID: 260,
     SEARCH_FIELD: 'WORKER_CODE',
-    SEARCH_HEADING: 'Worker Code',
+    SEARCH_HEADING: 'Worker Master',
     SEARCH_VALUE: '',
-    WHERECONDITION: "WORKER_CODE<> ''",
+    WHERECONDITION: `@StrSubJobNo='',
+    @StrFromProcess='',
+    @StrFromWorker='',
+    @StrBranchCode=${this.commonService.branchCode},
+	  @blnProcessAuthroize=1`,
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true
   }
 
   ProcessCodeData: MasterSearchModel = {
@@ -85,7 +100,7 @@ export class MeltingIssueComponent implements OnInit {
     SEARCH_FIELD: 'Process_Code',
     SEARCH_HEADING: 'Process Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "PROCESS_CODE<> ''",
+    WHERECONDITION: "ISNULL(PROCESS_TYPE, '') = '3'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -138,6 +153,7 @@ export class MeltingIssueComponent implements OnInit {
     worker: [''],
     workerdes: [''],
     subjobno: ['', [Validators.required]],
+    subjobnodes:[''],
     color: [''],
     time: [''],  // Not in table
     remarks: [''],
@@ -271,7 +287,7 @@ export class MeltingIssueComponent implements OnInit {
           return
         }
       }, err => {
-        this.commonService.toastErrorByMsgId('Error Something went wrong')
+        this.commonService.toastErrorByMsgId('MSG1531')
       })
     this.subscriptions.push(Sub)
   }
@@ -373,14 +389,14 @@ export class MeltingIssueComponent implements OnInit {
         this.comService.closeSnackBarMsg()
         let data = this.comService.arrayEmptyObjectToString(result.dynamicData[0])
         if (data && data[0]?.RESULT == 0) {
-          this.comService.toastErrorByMsgId('Voucher Number Already Exists')
+          this.comService.toastErrorByMsgId('MSG2007')
           this.generateVocNo()
           return
         }
       }, err => {
         this.isloading = false;
         this.generateVocNo()
-        this.comService.toastErrorByMsgId('Error Something went wrong')
+        this.comService.toastErrorByMsgId('MSG1531')
       })
     this.subscriptions.push(Sub)
   }
@@ -413,6 +429,12 @@ export class MeltingIssueComponent implements OnInit {
   //     this.commonService.toastErrorByMsgId('MSG1531')
   //   }
   // }
+  nullToStringSetValue(formControlName: string, value: any) {
+    this.meltingIssueFrom.controls[formControlName].setValue(
+      this.commonService.nullToString(value)
+    )
+    this.meltingIssueFrom.controls[formControlName] = this.commonService.nullToString(value)
+  }
 
   close(data?: any) {
     //TODO reset forms and data before closing
@@ -451,6 +473,76 @@ export class MeltingIssueComponent implements OnInit {
     this.meltingIssueFrom.controls.worker.setValue(e.WORKER_CODE);
     this.meltingIssueFrom.controls.workerdes.setValue(e.DESCRIPTION);
   }
+  WorkerCodeValidate(event ?: any) {
+    this.showOverleyPanel(event, 'worker')
+    let form = this.meltingIssueFrom.value;
+    let postData = {
+      "SPID": "103",
+      "parameter": {
+        strBranch_Code: this.comService.nullToString(form.BRANCH_CODE),
+        strJob_Number: '',
+        strUnq_Job_Id: '',
+        strMetalStone: '',
+        strProcess_Code: '',
+        strWorker_Code: '',
+        strStock_Code: '',
+        strUserName: '',
+      }
+    }
+
+    this.comService.showSnackBarMsg('MSG81447')
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        this.comService.closeSnackBarMsg()
+        if (result.dynamicData && result.dynamicData[0].length > 0) {
+
+        } else {
+          this.overlayworkercode.showOverlayPanel(event)
+          this.meltingIssueFrom.controls.worker.setValue('')
+          this.comService.toastErrorByMsgId('MSG1531')
+        }
+      }, err => {
+        this.comService.closeSnackBarMsg()
+        this.comService.toastErrorByMsgId('MSG1747')
+      })
+    this.subscriptions.push(Sub)
+  }
+
+  ProcesscodeValidate(event: any) {
+    if (event.target.value == '') {
+      return
+    }
+    let form = this.meltingIssueFrom.value
+    let postData = {
+      "SPID": "083",
+      "parameter": {
+        'StrCurrentUser': this.commonService.nullToString(this.commonService.userName),
+        'StrProcessCode': this.commonService.nullToString(event.target.value),
+        'StrSubJobNo': this.commonService.nullToString(form.UNQ_JOB_ID),
+        'StrBranchCode': this.commonService.branchCode
+      }
+    }
+    this.commonService.showSnackBarMsg('MSG81447')
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        this.commonService.closeSnackBarMsg()
+        if (result.status == "Success" && result.dynamicData[0]) {
+          let data = result.dynamicData[0]
+          if (data.length == 0) {
+            this.nullToStringSetValue('FRM_PROCESS_CODE', '')
+            this.commonService.toastErrorByMsgId('MSG1531')
+            return
+          }
+        } else {
+          this.commonService.toastErrorByMsgId('MSG1747')
+        }
+      }, err => {
+        this.commonService.closeSnackBarMsg()
+        this.commonService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
+  }
+
   @ViewChild('mymodal') public mymodal!: NgbModal;
 
   open(modalname?: any) {
@@ -549,6 +641,29 @@ export class MeltingIssueComponent implements OnInit {
   //     console.error('Invalid index');
   //   }
   // }
+  }
+  submitValidations(form: any) {
+    if (this.commonService.nullToString(form.voctype) == '') {
+      this.commonService.toastErrorByMsgId('MSG1939')
+      return true;
+    }
+    if (this.commonService.nullToString(form.vocdate) == '') {
+      this.commonService.toastErrorByMsgId('VocDate is Required')
+      return true;
+    }
+    if (this.commonService.nullToString(form.jobno) == '') {
+      this.commonService.toastErrorByMsgId('MSG3783')
+      return true;
+    }
+    if (this.commonService.nullToString(form.processcode) == '') {
+      this.commonService.toastErrorByMsgId('MSG7628')
+      return true;
+    }
+    if (this.commonService.nullToString(form.worker) == '') {
+      this.commonService.toastErrorByMsgId('MSG1951')
+      return true;
+    }
+    return false
   }
 
   setValuesToHeaderGrid(DATA: any) {
@@ -680,6 +795,9 @@ export class MeltingIssueComponent implements OnInit {
     }
   }
   formSubmit() {
+    if (this.submitValidations(this.meltingIssueFrom.value)) {
+      return
+    }
 
     if (this.content && this.content.FLAG == 'EDIT') {
       this.update()
@@ -893,9 +1011,10 @@ export class MeltingIssueComponent implements OnInit {
         this.commonService.closeSnackBarMsg()
         if (result.dynamicData && result.dynamicData[0].length > 0) {
           let data = result.dynamicData[0]
+          console.log(data)
           this.meltingIssueFrom.controls.processcode.setValue(data[0].PROCESS)
           this.meltingIssueFrom.controls.worker.setValue(data[0].WORKER)
-          // this.meltingIssueFrom.controls.stockcode.setValue(data[0].STOCK_CODE)
+          this.meltingIssueFrom.controls.subjobnodes.setValue(data[0].DESCRIPTION)
           // this.meltingIssueFrom.controls.pureweight.setValue(data[0].PUREWT)
           // this.meltingIssueFrom.controls.pcs.setValue(data[0].PCS)
           this.meltingIssueFrom.controls.workerdes.setValue(data[0].WORKERDESC)

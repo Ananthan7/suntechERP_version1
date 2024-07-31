@@ -139,8 +139,8 @@
                         :</label>
                     <div class="col-sm-3">
                         <mat-form-field style="width: 90%" appearance="outline">
-                            <input matInput type="text" [readonly]="viewMode || codeEnableMetal" MetalDecimalInput
-                                [max]="13" formControlName="metalcost_rate" class="text-right"
+                            <input matInput type="text" [readonly]="viewMode || codeEnableMetal" AmountDecimalInput
+                                [max]="12" formControlName="metalcost_rate" class="text-right"
                                 oninput="this.value = this.value.toUpperCase()" />
                         </mat-form-field>
                     </div>
@@ -164,7 +164,7 @@
                     <div class="col-sm-3">
                         <mat-form-field style="width: 90%" appearance="outline">
                             <input matInput type="text" [readonly]="viewMode|| viewsellingrateMetal || codeEnableMetal"
-                                [max]="10" AmountDecimalInput formControlName="metalselling_rate"
+                                [max]="12" AmountDecimalInput formControlName="metalselling_rate"
                                 (keypress)="salesChange('metalselling_rate')" class="text-right" />
                         </mat-form-field>
                     </div>
@@ -213,7 +213,7 @@
                         :</label>
                     <div class="col-sm-3">
                         <mat-form-field style="width: 90%" appearance="outline">
-                            <input matInput type="text" [readonly]="viewMode || codeEnableMetal"
+                            <input matInput type="text" [readonly]="viewMode || codeEnableMetal" maxlength="12"
                                 formControlName="wastage" class="text-right" AmountDecimalInput />
                         </mat-form-field>
                     </div>
@@ -251,7 +251,7 @@
                     <div class="col-sm-3">
                         <mat-form-field style="width: 90%" appearance="outline">
                             <input matInput type="text" [readonly]="viewMode || codeEnableMetal"
-                                formControlName="purity" class="text-right" SixDecimalInput
+                                formControlName="purity" class="text-right" SixDecimalInput maxlength="15"
                                 oninput="this.value = this.value.toUpperCase()" />
                         </mat-form-field>
                     </div>

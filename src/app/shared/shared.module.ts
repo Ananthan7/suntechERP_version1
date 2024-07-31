@@ -91,6 +91,7 @@ import { BarcodeScannerLivestreamModule } from 'ngx-barcode-scanner';
 import { PurityDecimalDirective } from './directives/format-purity-decimal.directive ';
 import { FormatRateDecimalDirective } from './directives/format-rate-decimal.directive';
 import { AlphabetsOnlyDirective } from './directives/alphabets-only.directive';
+import { NextInputDirective } from './directives/next-input.directive';
 
 
 @NgModule({
@@ -118,6 +119,7 @@ import { AlphabetsOnlyDirective } from './directives/alphabets-only.directive';
     MenuButtonsComponent,
     AllowLeadingZeroDirective,
     AmountDecimalDirective,
+    NextInputDirective,
     MetalDecimalDirective,
     StoneDecimalDirective,
     FormatRateDecimalDirective,
@@ -215,6 +217,7 @@ import { AlphabetsOnlyDirective } from './directives/alphabets-only.directive';
     NoEmptySpaceDirective,
     AllowLeadingZeroDirective,
     AmountDecimalDirective,
+    NextInputDirective,
     MetalDecimalDirective,
     StoneDecimalDirective,
     FormatRateDecimalDirective,

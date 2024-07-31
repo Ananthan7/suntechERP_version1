@@ -25,7 +25,7 @@ export class MeltingTypeComponent implements OnInit {
   @ViewChild('overlaystockCodeSearch') overlaystockCodeSearch!: MasterSearchComponent;
 
 
-  
+
   @Input() content!: any;
 
   tableData: any[] = [];
@@ -173,7 +173,7 @@ export class MeltingTypeComponent implements OnInit {
     const sub = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
         if (result.status == 'Success') {
-          this.commonService.toastErrorByMsgId('Code Already Exists!')
+          this.commonService.toastErrorByMsgId('MSG1121')//code already exsist
           // Clear the input value
           this.meltingTypeForm.controls.code.setValue('');
           this.codeEnabled()
@@ -193,32 +193,32 @@ export class MeltingTypeComponent implements OnInit {
     }
   }
 
-    /**use: validate all lookups to check data exists in db */
-    validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
-      LOOKUPDATA.SEARCH_VALUE = event.target.value
-      if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
-      let param = {
-        LOOKUPID: LOOKUPDATA.LOOKUPID,
-        WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
-      }
-      this.commonService.toastInfoByMsgId('MSG81447');
-      let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
-      let Sub: Subscription = this.dataService.postDynamicAPI(API,param)
-        .subscribe((result) => {
-          this.isDisableSaveBtn = false;
-          let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
-          if (data.length == 0) {
-            this.commonService.toastErrorByMsgId('MSG1531')
-            this.meltingTypeForm.controls[FORMNAME].setValue('')
-            LOOKUPDATA.SEARCH_VALUE = ''
-            return
-          }
-         
-        }, err => {
-          this.commonService.toastErrorByMsgId('network issue found')
-        })
-      this.subscriptions.push(Sub)
+  /**use: validate all lookups to check data exists in db */
+  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    LOOKUPDATA.SEARCH_VALUE = event.target.value
+    if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
+    let param = {
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
     }
+    this.commonService.toastInfoByMsgId('MSG81447');
+    let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
+      .subscribe((result) => {
+        this.isDisableSaveBtn = false;
+        let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+        if (data.length == 0) {
+          this.commonService.toastErrorByMsgId('MSG1531')
+          this.meltingTypeForm.controls[FORMNAME].setValue('')
+          LOOKUPDATA.SEARCH_VALUE = ''
+          return
+        }
+
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+      })
+    this.subscriptions.push(Sub)
+  }
 
   // validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
   //   LOOKUPDATA.SEARCH_VALUE = event.target.value
@@ -261,16 +261,16 @@ export class MeltingTypeComponent implements OnInit {
     const formValue = this.meltingTypeForm.value;
 
     if (!formValue.code) {
-      this.toastr.error('Code cannot be empty');
+      this.commonService.toastErrorByMsgId('MSG1124') //"Code cannot be empty"
       return;
     }
 
     if (!formValue.description) {
-      this.toastr.error('Description cannot be empty');
+      this.commonService.toastErrorByMsgId('MSG1193')//"description cannot be empty"
       return;
     }
     if (!formValue.color) {
-      this.toastr.error('Color cannot be empty');
+      this.commonService.toastErrorByMsgId('MSG1125')//"color cannot be empty"
       return;
     }
     let length = this.tableData.length;
@@ -299,20 +299,21 @@ export class MeltingTypeComponent implements OnInit {
       return true;
     }
     let form = this.meltingTypeForm.value
-    if (this.commonService.nullToString(form.code) == '') {
-      this.toastr.error('Code is required');
-      return true;
-    }
-    if (this.commonService.nullToString(form.description) == '') {
-      this.toastr.error('description is required');
-      return true;
-    }
-    if (this.commonService.nullToString(form.color) == '') {
-      this.toastr.error('color is required');
-      return true;
-    }
+    // if (this.commonService.nullToString(form.code) == '') {
+    //   this.toastr.error('Code is required');
+    //   return true;
+    // }
+    // if (this.commonService.nullToString(form.description) == '') {
+    //   this.toastr.error('description is required');
+    //   return true;
+    // }
+    // if (this.commonService.nullToString(form.color) == '') {
+    //   this.toastr.error('color is required');
+    //   return true;
+    // }
     if (this.tableData.length == 0) {
-      this.toastr.error('details not added');
+      this.commonService.toastErrorByMsgId('MSG1453') //details not added
+      // this.toastr.error('details not added');
       return true;
     }
 
@@ -321,10 +322,10 @@ export class MeltingTypeComponent implements OnInit {
       .reduce((acc, val) => acc + val, 0);
 
     if (totalAlloyPer !== 100 && totalAlloyPer > 100) {
-      this.toastr.error('Alloy Percentage should not be greater than 100');
+      this.commonService.toastErrorByMsgId('MSG7954')
       return true
     } else if ((totalAlloyPer !== 100 && totalAlloyPer < 100)) {
-      this.toastr.error('Alloy Percentage should not be lesser than 100');
+      this.commonService.toastErrorByMsgId('MSG7954')
       return true
     }
 
@@ -333,11 +334,13 @@ export class MeltingTypeComponent implements OnInit {
     const defaultAlloyPer = this.tableData.some(item => item.ALLOY_PER == 0);
 
     if (defaultAlloyPer) {
-      this.toastr.error("Alloy %  cannot be Zero's ");
+      this.commonService.toastErrorByMsgId('MSG7954')
+     // this.toastr.error("Alloy %  cannot be Zero's ");
       return true;
     }
     if (defaultAlloyEmpty) {
-      this.toastr.error('Default Alloy cannot be empty');
+      this.commonService.toastErrorByMsgId('MSG1817')
+     // this.toastr.error('Default Alloy cannot be empty');
       return true;
     }
 
@@ -358,8 +361,27 @@ export class MeltingTypeComponent implements OnInit {
       "MELTING_TYPE_DETAIL": this.tableData,
     }
   }
+
+  submitValidation(form: any) {
+    if (this.commonService.nullToString(form.code) == '') {
+      this.commonService.toastErrorByMsgId('MSG1124') //"Code cannot be empty"
+      return true
+    }
+
+    else if (this.commonService.nullToString(form.description) == '') {
+      this.commonService.toastErrorByMsgId('MSG1193')//"description cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.color) == '') {
+      this.commonService.toastErrorByMsgId('MSG1125')//"color cannot be empty"
+      return true
+    }
+    return false;
+  }
+
   formSubmit() {
     if (this.submitValidations()) return;
+    if (this.submitValidation(this.meltingTypeForm.value)) return;
 
     let API = 'MeltingType/InsertMeltingType';
     let postData = this.setPostData(this.meltingTypeForm.value)
@@ -457,7 +479,7 @@ export class MeltingTypeComponent implements OnInit {
       .subscribe((result: any) => {
         let data = result.response;
         if (!data) {
-          this.commonService.toastErrorByMsgId('data not found')
+          this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
           return
         }
         this.meltingTypeForm.controls.mid.setValue(data.MID);
@@ -571,7 +593,7 @@ export class MeltingTypeComponent implements OnInit {
                 });
               }
             } else {
-              this.toastr.error('Not deleted')
+              this.commonService.toastErrorByMsgId('MSG1880');// Not Deleted
             }
           }, err => alert(err))
         this.subscriptions.push(Sub)
@@ -627,7 +649,7 @@ export class MeltingTypeComponent implements OnInit {
     let stockData = [];
     stockData = this.tableData.filter((item: any) => item.DEF_ALLOY_STOCK == data.STOCK_CODE)
     if (stockData.length > 0) {
-      this.toastr.error('Same Alloy code cannot be added.')
+      this.commonService.toastErrorByMsgId('MSG1121')
     }
     else {
       console.log(value);
@@ -643,7 +665,7 @@ export class MeltingTypeComponent implements OnInit {
   // }
 
   alloyPer(data: any, value: any) {
-    this.tableData[value.data.SRNO - 1].ALLOY_PER = this.commonService.decimalQuantityFormat(data.target.value,'AMOUNT');
+    this.tableData[value.data.SRNO - 1].ALLOY_PER = this.commonService.decimalQuantityFormat(data.target.value, 'AMOUNT');
   }
 
   karatCodSearch(data: any) {
@@ -666,7 +688,7 @@ export class MeltingTypeComponent implements OnInit {
     }
   }
 
-  
+
   showOverleyPanel(event: any, formControlName: string) {
     switch (formControlName) {
       case 'color':
@@ -681,7 +703,7 @@ export class MeltingTypeComponent implements OnInit {
       default:
     }
   }
-  
+
 
   // showOverleyPanel(event: any, formControlName: string) {
 

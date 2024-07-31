@@ -1,0 +1,44 @@
+<app-loader [isLoading]="isLoading"></app-loader>
+<div class="col-md-12 col-sm-12">
+    <div class="card p-2">
+        <div class="ps-2 pt-2" style="border-bottom: 1px solid #afafaf;">
+            <h5>Message Box</h5>
+        </div>
+        <div class="col-md-12 col-sm-12 p-2" *ngIf="!isViewForm">
+            <dx-data-grid id="gridContainer" [dataSource]="tableData"
+                [allowColumnResizing]="true"
+                height="450"
+                [columnAutoWidth]="true" [showRowLines]="true"
+                [showBorders]="true"
+                (onRowInserted)="onSaving($event)"
+                (onRowUpdated)="updateData($event)"
+                (onRowRemoved)="deleteData($event)">
+                <dxo-paging [pageSize]="tableData.length"> </dxo-paging>
+                <!-- <dxo-search-panel [visible]="true"></dxo-search-panel> -->
+                <dxo-filter-row visible="true"></dxo-filter-row>
+                <!-- <dxo-editing mode="row" [allowUpdating]="true"
+                    [allowAdding]="true"
+                    [allowDeleting]="true"
+                    fixed="true">
+                </dxo-editing> -->
+                <!-- <dxi-column dataField="slno" caption="#"> </dxi-column> -->
+                <dxi-column dataField="MSG_ID" caption="MSG_ID">
+                    <dxi-validation-rule type="required"
+                        message="MSG_ID is required">
+                    </dxi-validation-rule>
+                </dxi-column>
+                <dxi-column dataField="MSG_ENGLISH" caption="MSG_ENGLISH">
+                    <dxi-validation-rule type="required"
+                        message="MSG_ENGLISH is required"></dxi-validation-rule>
+                </dxi-column>
+                <dxi-column dataField="MSG_ARABIC" caption="MSG_ARABIC">
+                    <dxi-validation-rule type="required"></dxi-validation-rule>
+                </dxi-column>
+                <!-- <dxi-column dataField="date" dataType="date"> -->
+                <!-- </dxi-column> -->
+                <!-- <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling> -->
+            </dx-data-grid>
+        </div>
+
+    </div>
+</div>

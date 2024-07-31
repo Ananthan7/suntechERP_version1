@@ -149,7 +149,11 @@ export class WorkerMasterComponent implements OnInit {
 
   checkCode(): boolean {
     if (this.workerMasterForm.value.WorkerCode == '') {
+<<<<<<< HEAD
       this.commonService.toastErrorByMsgId('please enter Worker code')//CHINNU -  MESSAGE HARD CODED
+=======
+      this.commonService.toastErrorByMsgId('MSG1951')// Worker code CANNOT BE EMPTY
+>>>>>>> origin/ERP_Staging
       return true
     }
     return false
@@ -245,11 +249,19 @@ export class WorkerMasterComponent implements OnInit {
   }
   submitValidations(form: any) {
     if (this.commonService.nullToString(form.WorkerCode) == '') {
+<<<<<<< HEAD
       this.toastr.error("Worker Code cannot be empty")//CHINNU -  MESSAGE HARD CODED
       return true
     }
     else if (this.commonService.nullToString(form.WorkerDESCRIPTION) == '') {
       this.toastr.error("Description cannot be empty")//CHINNU -  MESSAGE HARD CODED
+=======
+      this.commonService.toastErrorByMsgId('MSG1951')// Worker code CANNOT BE EMPTY
+      return true
+    }
+    else if (this.commonService.nullToString(form.WorkerDESCRIPTION) == '') {
+      this.commonService.toastErrorByMsgId('MSG1193')//"description cannot be empty"
+>>>>>>> origin/ERP_Staging
       return true
     }
     return false;
@@ -280,7 +292,7 @@ export class WorkerMasterComponent implements OnInit {
           if (result.status == "Success") {
             this.showSuccessDialog(this.commonService.getMsgByID('MSG2443') || 'Success');
           } else {
-            this.showErrorDialog('Error please try again');
+            this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
           }
         }else {
           this.commonService.toastErrorByMsgId('MSG3577')
@@ -304,7 +316,7 @@ export class WorkerMasterComponent implements OnInit {
           if (result.status == "Success") {
             this.showSuccessDialog(this.commonService.getMsgByID('MSG2443') || 'Success');
           } else {
-            this.showErrorDialog('Error please try again');
+            this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
           }
         }else {
           this.commonService.toastErrorByMsgId('MSG3577')
@@ -322,10 +334,10 @@ export class WorkerMasterComponent implements OnInit {
   /**USE: delete worker master from row */
   deleteWorkerMaster() {
     if (this.content && this.content.FLAG == 'VIEW') return
-    if (!this.content.WORKER_CODE) {
-      this.showDeleteErrorDialog('Please Select data to delete!');
-      return;
-    }
+    // if (!this.content.WORKER_CODE) {
+    //   this.showDeleteErrorDialog('Please Select data to delete!');
+    //   return;
+    // }
   
     this.showConfirmationDialog().then((result) => {
       if (result.isConfirmed) {
@@ -339,10 +351,14 @@ export class WorkerMasterComponent implements OnInit {
                 this.showErrorDialog(result.message || 'Error please try again');
               }
             } else {
-              this.toastr.error('Not deleted');
+              this.commonService.toastErrorByMsgId('MSG1880');// Not Deleted
             }
           }, err => {
+<<<<<<< HEAD
             this.commonService.toastErrorByMsgId('network error')//CHINNU -  MESSAGE HARD CODED
+=======
+            this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+>>>>>>> origin/ERP_Staging
           });
         this.subscriptions.push(Sub);
       }
@@ -426,7 +442,8 @@ export class WorkerMasterComponent implements OnInit {
           })
         }
       }, err => {
-        this.toastr.error('Server Error', '', {
+        this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+        this.toastr.error('MSG2272', '', {
           timeOut: 3000,
         })
       })
@@ -435,7 +452,11 @@ export class WorkerMasterComponent implements OnInit {
   CheckWorkerwiseMetalBalanceBoth(event: any) {
     // if(event.checked) return
     if (this.workerMasterForm.value.WorkerCode == '') {
+<<<<<<< HEAD
       this.commonService.toastErrorByMsgId('please select workercode')//CHINNU -  MESSAGE HARD CODED
+=======
+      this.commonService.toastErrorByMsgId('MSG1951')// Worker code CANNOT BE EMPTY
+>>>>>>> origin/ERP_Staging
       return
     }
     let postData = {
@@ -456,7 +477,11 @@ export class WorkerMasterComponent implements OnInit {
           }
         }
       }, err => {
+<<<<<<< HEAD
         this.commonService.toastErrorByMsgId('Server Error')//CHINNU -  MESSAGE HARD CODED
+=======
+        this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+>>>>>>> origin/ERP_Staging
       })
     this.subscriptions.push(Sub)
   }
@@ -465,7 +490,12 @@ export class WorkerMasterComponent implements OnInit {
     this.btndisable = true;
     if (this.content && this.content.FLAG == 'EDIT') return;
     if (this.workerMasterForm.value.WorkerCode == '') {
+<<<<<<< HEAD
       this.commonService.toastErrorByMsgId('Worker Code Required');//CHINNU -  MESSAGE HARD CODED
+=======
+      this.commonService.toastErrorByMsgId('MSG1951')// Worker code CANNOT BE EMPTY
+      // this.commonService.toastErrorByMsgId('Worker Code Required');
+>>>>>>> origin/ERP_Staging
       return;
     }
 
@@ -569,7 +599,11 @@ export class WorkerMasterComponent implements OnInit {
             }
            
           }, err => {
+<<<<<<< HEAD
             this.commonService.toastErrorByMsgId('network issue found')//CHINNU -  MESSAGE HARD CODED
+=======
+            this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+>>>>>>> origin/ERP_Staging
           })
         this.subscriptions.push(Sub)
       }

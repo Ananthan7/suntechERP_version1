@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { OperationalsComponent } from './operationals.component';
 import { ProductAnalysisSalesOrderModule } from '../operationals/product-analysis-sales-order/product-analysis-sales-order.module';
+import { MessageBoxModule } from '../operationals/message-box/message-box.module';
 
 const routes: Routes = [
   {
@@ -23,7 +24,11 @@ const routes: Routes = [
   {
     path: 'product-analysis-sales-order',
     loadChildren: ()=> import('../operationals/product-analysis-sales-order/product-analysis-sales-order.module').then(m => ProductAnalysisSalesOrderModule )
-  }
+  },
+  {
+    path: 'messagebox',
+    loadChildren: ()=> import('../operationals/message-box/message-box.module').then(m => MessageBoxModule )
+  } 
 ];
 
 @NgModule({

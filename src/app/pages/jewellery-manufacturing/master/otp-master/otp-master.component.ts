@@ -62,16 +62,28 @@ export class OtpMasterComponent implements OnInit {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
+
+  submitValidation(form: any) {
+
+    if (this.commonService.nullToString(form.branch) == '') {
+      this.commonService.toastErrorByMsgId('MSG1076') //"branch cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.branchdesc) == '') {
+      this.commonService.toastErrorByMsgId('MSG1194')//"branchdesc cannot be empty"
+      return true
+    }
+    return false;
+  }
+
   formSubmit(){
     if (this.content && this.content.FLAG == 'VIEW') return
     if(this.content && this.content.FLAG == 'EDIT'){
       this.update()
       return
     }
-    if (this.otpForm.invalid) {
-      this.toastr.error('select all required fields')
-      return
-    }
+
+    if (this.submitValidation(this.otpForm.value)) return;
   
     let API = 'OTPMaster/InsertOTPMaster'
     let postData = {
@@ -104,16 +116,13 @@ export class OtpMasterComponent implements OnInit {
             });
           }
         } else {
-          this.toastr.error('Not saved')
+          this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
         }
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
   update(){
-    if (this.otpForm.invalid) {
-      this.toastr.error('select all required fields')
-      return
-    }
+    if (this.submitValidation(this.otpForm.value)) return;
   
     let API = 'OTPMaster/UpdateOTPMaster/'+this.content.MID
     let postData = 
@@ -149,7 +158,7 @@ export class OtpMasterComponent implements OnInit {
             });
           }
         } else {
-          this.toastr.error('Not saved')
+          this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
         }
       }, err => alert(err))
     this.subscriptions.push(Sub)
@@ -213,7 +222,7 @@ export class OtpMasterComponent implements OnInit {
                 });
               }
             } else {
-              this.toastr.error('Not deleted')
+              this.commonService.toastErrorByMsgId('MSG1880');// Not Deleted
             }
           }, err => alert(err))
         this.subscriptions.push(Sub)

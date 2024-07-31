@@ -358,7 +358,11 @@ export class DesignMasterComponent implements OnInit {
           return
         }
       }, err => {
+<<<<<<< HEAD
         this.commonService.toastErrorByMsgId('network issue found')//CHINNU -  MESSAGE HARD CODED
+=======
+        this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+>>>>>>> origin/ERP_Staging
       })
     this.subscriptions.push(Sub)
   }
@@ -1264,7 +1268,7 @@ onFileChangedimage(event: any) {
                 });
               }
             } else {
-              this.toastr.error('Not deleted')
+              this.commonService.toastErrorByMsgId('MSG1880');// Not Deleted
             }
           }, err => alert(err))
         this.subscriptions.push(Sub)
@@ -1278,16 +1282,55 @@ onFileChangedimage(event: any) {
       this.subscriptions = []; // Clear the array
     }
   }
+
+  submitValidations(form: any) {
+    if (this.commonService.nullToString(form.code) == '') {
+      this.commonService.toastErrorByMsgId('MSG1124') //"Code cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.designdesc) == '') {
+      this.commonService.toastErrorByMsgId('MSG3569')//"designdesc cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.prefix) == '') {
+      this.commonService.toastErrorByMsgId('MSG1657')//"prefix cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.costcenter) == '') {
+      this.commonService.toastErrorByMsgId('MSG1150')//"costCenter cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.karat) == '') {
+      this.commonService.toastErrorByMsgId('MSG1602')//"karat cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.currency) == '') {
+      this.commonService.toastErrorByMsgId('MSG1173')//"currency cannot be empty"
+      return true
+    }
+    return false;
+  }
+
+
   formSubmit(){
     if (this.content && this.content.FLAG == 'VIEW') return
     if(this.content && this.content.FLAG == 'EDIT'){
       this.update()
       return
     }
+<<<<<<< HEAD
     if (this.designmasterForm.invalid) {
       this.toastr.error('select all required fields')//CHINNU -  MESSAGE HARD CODED
       return
     }
+=======
+
+    if (this.submitValidations(this.designmasterForm.value)) return;
+    // if (this.designmasterForm.invalid) {
+    //   this.toastr.error('select all required fields')
+    //   return
+    // }
+>>>>>>> origin/ERP_Staging
   
     let API = 'DesignMaster/InsertDesignMaster'
     let postData = {
@@ -1778,10 +1821,19 @@ onFileChangedimage(event: any) {
 
   update(){
 
+<<<<<<< HEAD
     if (this.designmasterForm.invalid) {
       this.toastr.error('select all required fields')//CHINNU -  MESSAGE HARD CODED
       return
     }
+=======
+    // if (this.designmasterForm.invalid) {
+    //   this.toastr.error('select all required fields')
+    //   return
+    // }
+
+    if (this.submitValidations(this.designmasterForm.value)) return;
+>>>>>>> origin/ERP_Staging
 
   console.log(this.designmasterForm,'working');
   
@@ -2266,7 +2318,7 @@ onFileChangedimage(event: any) {
             });
           }
         } else {
-          this.toastr.error('Not saved')
+          this.commonService.toastErrorByMsgId('MSG3577')
         }
       }, err => alert(err))
     this.subscriptions.push(Sub)
@@ -2354,7 +2406,7 @@ onFileChangedimage(event: any) {
                 });
               }
             } else {
-              this.toastr.error('Not deleted')
+              this.commonService.toastErrorByMsgId('MSG1880');// Not Deleted
             }
           }, err => alert(err))
         this.subscriptions.push(Sub)

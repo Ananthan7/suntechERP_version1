@@ -45,7 +45,7 @@ export class RepairDetailsComponent implements OnInit {
     private toastr: ToastrService,
     private dataService: SuntechAPIService,
     private comService: CommonServiceService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.getQueryParams(this.queryParams);
@@ -215,7 +215,7 @@ export class RepairDetailsComponent implements OnInit {
   stockCodeSelected(value: any) {
     console.log(value);
     this.repairjewelleryreceiptdetailsFrom.controls.own_stock.setValue(value.STOCK_CODE);
-  }
+  }
 
   stoneTypeCodeSelected(e: any) {
     this.repairjewelleryreceiptdetailsFrom.controls.stone_type.setValue(e.CODE);
@@ -304,7 +304,7 @@ export class RepairDetailsComponent implements OnInit {
       );
 
       this.repairjewelleryreceiptdetailsFrom.controls["total_amount"].setValue(
-        this.comService.decimalQuantityFormat(this.receiptData.AMOUNT, "THREE")
+        this.comService.decimalQuantityFormat(this.receiptData.AMOUNT, "AMOUNT")
       );
 
       this.repairjewelleryreceiptdetailsFrom.controls["status"].setValue(
@@ -578,5 +578,11 @@ export class RepairDetailsComponent implements OnInit {
       this.subscriptions.forEach((subscription) => subscription.unsubscribe());
       this.subscriptions = [];
     }
+  }
+
+  total_amount_change(event: any) {
+    this.repairjewelleryreceiptdetailsFrom.controls.total_amount.setValue(this.comService.decimalQuantityFormat(event.target.value, 'AMOUNT'));
+    console.log(this.comService.decimalQuantityFormat(event.target.value, 'AMOUNT'));
+
   }
 }

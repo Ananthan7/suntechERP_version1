@@ -40,8 +40,10 @@ export class GoldExchangeComponent implements OnInit {
 
   @Input() content!: any;
 
-  branchCode?: String;
-  yearMonth?: String;
+  yearMonth?: any =
+    localStorage.getItem("YEAR") || this.comService.yearSelected;
+  branchCode?: any =
+    localStorage.getItem("userbranch") || this.comService.branchCode;
   companyCurrency?: String;
   isCurrencyUpdate: boolean = false;
   private subscriptions: Subscription[] = [];
@@ -588,11 +590,13 @@ export class GoldExchangeComponent implements OnInit {
     this.partyCodeChange({ target: { value: e.ACCODE } });
   }
 
-  // partyCurrencyCodeSelected(e: any) {
-  //   console.log(e);
-  //   this.goldExchangeForm.controls.partyCurrencyCode.setValue(e.CURRENCY_CODE);
-  //   this.goldExchangeForm.controls.partyCurrency.setValue(e.CURRENCY_CODE);
-  // }
+  partyCurrencyCodeSelected(e: any) {
+    console.log(e);
+    this.goldExchangeForm.controls.partyCurrCode.setValue(e["Currency"]);
+    this.goldExchangeForm.controls.partyCurrCodeDesc.setValue(
+      this.comService.decimalQuantityFormat(e["Conv Rate"], "RATE")
+    );
+  }
 
   itemCurrencyCodeSelected(e: any) {
     this.goldExchangeForm.controls.itemCurr.setValue(e["Currency"]);

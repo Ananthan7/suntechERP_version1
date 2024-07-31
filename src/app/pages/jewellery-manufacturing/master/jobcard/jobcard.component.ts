@@ -667,7 +667,11 @@ export class JobcardComponent implements OnInit {
         this.urls = result.response[0].imagepath;
         console.log(this.urls)
       }, err => {
+<<<<<<< HEAD
         this.commonService.toastErrorByMsgId('Server Error')//CHINNU -  MESSAGE HARD CODED
+=======
+        this.commonService.toastErrorByMsgId('MSG81451')//Server Error
+>>>>>>> origin/ERP_Staging
       })
     this.subscriptions.push(Sub)
 
@@ -897,7 +901,11 @@ export class JobcardComponent implements OnInit {
 
 
       }, err => {
+<<<<<<< HEAD
         this.commonService.toastErrorByMsgId('Server Error');//CHINNU -  MESSAGE HARD CODED
+=======
+        this.commonService.toastErrorByMsgId('MSG81451')//Server Error
+>>>>>>> origin/ERP_Staging
       });
     this.subscriptions.push(Sub);
   }
@@ -1054,6 +1062,58 @@ export class JobcardComponent implements OnInit {
     this.urls = this.content.PICTURE_NAME
   }
 
+  submitValidations(form: any) {
+    if (this.commonService.nullToString(form.orderType) == '') {
+      this.commonService.toastErrorByMsgId('MSG1535') //"orderType cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.designcode) == '') {
+      this.commonService.toastErrorByMsgId('MSG1197')//"designcode cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.customer) == '') {
+      this.commonService.toastErrorByMsgId('MSG7822')//"customer cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.costcode) == '') {
+      this.commonService.toastErrorByMsgId('MSG1151')//"costcode cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.karat) == '') {
+      this.commonService.toastErrorByMsgId('MSG1362')//"karat cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.color) == '') {
+      this.commonService.toastErrorByMsgId('MSG1125')//"color cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.salesman) == '') {
+      this.commonService.toastErrorByMsgId('MSG3652')//"salesman cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.seqcode) == '') {
+      this.commonService.toastErrorByMsgId('MSG3571')//"seqcode cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.totalpcs) == '') {
+      this.commonService.toastErrorByMsgId('MSG1563')//"totalpcs cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.pending) == '') {
+      this.commonService.toastErrorByMsgId('MSG1572')//"pending cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.pending1) == '') {
+      this.commonService.toastErrorByMsgId('MSG1572')//"pending1 cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.parts) == '') {
+      this.commonService.toastErrorByMsgId('MSG7997')//"parts cannot be empty"
+      return true
+    }
+    return false;
+  }
+
 
   formSubmit() {
     if (this.content && this.content.FLAG == 'VIEW') return
@@ -1061,10 +1121,18 @@ export class JobcardComponent implements OnInit {
       this.update()
       return
     }
+<<<<<<< HEAD
     if (this.jobCardFrom.invalid) {
       this.toastr.error('select all required fields')//CHINNU -  MESSAGE HARD CODED
       return
     }
+=======
+    if (this.submitValidations(this.jobCardFrom.value)) return;
+    // if (this.jobCardFrom.invalid) {
+    //   this.toastr.error('select all required fields')
+    //   return
+    // }
+>>>>>>> origin/ERP_Staging
 
     let API = 'JobMasterDj/InsertJobMasterDJ'
     let postData = {
@@ -1300,10 +1368,17 @@ export class JobcardComponent implements OnInit {
 
 
   update() {
+<<<<<<< HEAD
     if (this.jobCardFrom.invalid) {
       this.toastr.error('select all required fields')//CHINNU -  MESSAGE HARD CODED
       return
     }
+=======
+    // if (this.jobCardFrom.invalid) {
+    //   this.toastr.error('select all required fields')
+    //   return
+    // }
+>>>>>>> origin/ERP_Staging
 
     let API = `JobMasterDj/UpdateJobMasterDJ/${this.branchCode}/${this.jobCardFrom.value.jobno}`;
     let postData = {
@@ -1632,7 +1707,7 @@ export class JobcardComponent implements OnInit {
                 });
               }
             } else {
-              this.toastr.error('Not deleted')
+              this.commonService.toastErrorByMsgId('MSG1880')//Not deleted
             }
           }, err => alert(err))
         this.subscriptions.push(Sub)
@@ -1656,7 +1731,11 @@ export class JobcardComponent implements OnInit {
           this.jobCardFrom.controls.jobno.setValue(result.dynamicData[0][0].JOB_NO)
         }
       }, err => {
+<<<<<<< HEAD
         this.commonService.toastErrorByMsgId('Server Error')//CHINNU -  MESSAGE HARD CODED
+=======
+        this.commonService.toastErrorByMsgId('MSG81451')//Server Error
+>>>>>>> origin/ERP_Staging
       })
     this.subscriptions.push(Sub)
   }
@@ -1790,7 +1869,11 @@ export class JobcardComponent implements OnInit {
           this.handleLookupError(FORMNAME, LOOKUPDATA);
         }
       }, err => {
+<<<<<<< HEAD
         this.commonService.toastErrorByMsgId('network issue found')//CHINNU -  MESSAGE HARD CODED
+=======
+        this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+>>>>>>> origin/ERP_Staging
       })
     this.subscriptions.push(Sub)
   }
