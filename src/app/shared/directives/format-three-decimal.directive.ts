@@ -65,7 +65,7 @@ export class FormatThreeDecimalDirective {
 
     const isNegative = value.charAt(0) === '-';
 
-    value = value.replace(/[^0-9.]/g, '');
+    value = value.replace(/[^0-9.-]/g, '');
     const parts = value.split('.');
     let integerPart = parts[0];
     if (isNegative) {

@@ -46,7 +46,7 @@ export class FourDecimalDirective {
     let str = '0000';
 
     // Remove non-numeric characters except the decimal point
-    value = value.replace(/[^0-9.]/g, '');
+    value = value.replace(/[^0-9.-]/g, '');
 
     // Split the value into integer and fractional parts
     const parts = value.split('.');

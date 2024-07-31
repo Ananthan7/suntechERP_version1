@@ -93,6 +93,16 @@ export class CommonServiceService {
   balancePcsCalculate(METAL_FromPCS: any, METAL_ToPCS: any, METAL_ScrapPCS: any) {
     return (this.emptyToZero(METAL_FromPCS) - (this.emptyToZero(METAL_ToPCS) + this.emptyToZero(METAL_ScrapPCS)));
   }
+  lossQtyCalculate(GROSS_WT: any, STD_LOSS: any) {
+    let txtLossQty = ((this.emptyToZero(GROSS_WT) * this.emptyToZero(STD_LOSS)) / 100);
+    txtLossQty = this.decimalQuantityFormat(txtLossQty, 'METAL')
+    return this.emptyToZero(txtLossQty)
+  }
+  lossPureWtCalculate(lossQty: any, jobPurity: any) {
+    let lossPureWt = (this.emptyToZero(lossQty) * this.emptyToZero(jobPurity));
+    lossPureWt = this.decimalQuantityFormat(lossPureWt, 'METAL')
+    return this.emptyToZero(lossPureWt)
+  }
   // FORM FEILD CALCULATIONS ENDS
 
   getCurrecnyRate(currencyCode: string) {

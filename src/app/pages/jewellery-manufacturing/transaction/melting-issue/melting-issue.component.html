@@ -146,7 +146,7 @@
                                         (focusout)="WorkerCodeValidate($event)"/>
                                 </mat-form-field>
                                 <master-search class="masterSearch"
-                                    [MasterSearchData]="WorkerCodeData" #overlayworkercode
+                                    [MasterSearchData]="workerCodeData" #overlayworkercode
                                     *ngIf="!viewMode"
                                     (newRowClick)="WorkerCodeSelected($event)"></master-search>
                             </div>
