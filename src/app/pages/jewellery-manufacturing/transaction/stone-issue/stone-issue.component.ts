@@ -1,3 +1,9 @@
+/*
+MODULE : JEWELLERY MANUFACTURING
+MENU_SCREEN_NAME : <ADD MENU NAME>
+DEVELOPER : ANANTHA
+*/
+
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -238,14 +244,14 @@ export class StoneIssueComponent implements OnInit {
         this.comService.closeSnackBarMsg()
         let data = this.comService.arrayEmptyObjectToString(result.dynamicData[0])
         if (data && data[0]?.RESULT == 0) {
-          this.comService.toastErrorByMsgId('Voucher Number Already Exists')
+          this.comService.toastErrorByMsgId('Voucher Number Already Exists')//CHINNU -  MESSAGE HARD CODED
           this.generateVocNo()
           return
         }
       }, err => {
         this.isloading = false;
         this.generateVocNo()
-        this.comService.toastErrorByMsgId('Error Something went wrong')
+        this.comService.toastErrorByMsgId('Error Something went wrong')//CHINNU -  MESSAGE HARD CODED
       })
     this.subscriptions.push(Sub)
   }
@@ -392,7 +398,7 @@ export class StoneIssueComponent implements OnInit {
     }
     if (DATA.FLAG == 'SAVE') this.closeDetailScreen();
     if (DATA.FLAG == 'CONTINUE') {
-      this.comService.showSnackBarMsg('Details added successfully')
+      this.comService.showSnackBarMsg('Details added successfully')//CHINNU -  MESSAGE HARD CODED
     };
   }
   closeDetailScreen() {
@@ -439,15 +445,15 @@ export class StoneIssueComponent implements OnInit {
   }
   submitValidations(form: any) {
     if (this.stoneIssueData.length == 0) {
-      this.comService.toastErrorByMsgId('details not added')
+      this.comService.toastErrorByMsgId('details not added')//CHINNU -  MESSAGE HARD CODED
       return true
     }
     if (form.VOCTYPE == '') {
-      this.comService.toastErrorByMsgId('VOCTYPE is required')
+      this.comService.toastErrorByMsgId('VOCTYPE is required')//CHINNU -  MESSAGE HARD CODED
       return true
     }
     if (form.vocdate == '') {
-      this.comService.toastErrorByMsgId('vocdate is required')
+      this.comService.toastErrorByMsgId('vocdate is required')//CHINNU -  MESSAGE HARD CODED
       return true
     }
     return false
@@ -516,7 +522,7 @@ export class StoneIssueComponent implements OnInit {
   deleteRecord() {
     if (this.content && this.content.FLAG == 'VIEW') return
     if (!this.content?.VOCTYPE) {
-      this.showDeleteErrorDialog('Please Select data to delete!');
+      this.showDeleteErrorDialog('Please Select data to delete!');//CHINNU -  MESSAGE HARD CODED
       return;
     }
 
@@ -533,10 +539,10 @@ export class StoneIssueComponent implements OnInit {
                 this.showErrorDialog(result.message || 'Error please try again');
               }
             } else {
-              this.toastr.error('Not deleted');
+              this.toastr.error('Not deleted');//CHINNU -  MESSAGE HARD CODED
             }
           }, err => {
-            this.comService.toastErrorByMsgId('network error')
+            this.comService.toastErrorByMsgId('network error')//CHINNU -  MESSAGE HARD CODED
           });
         this.subscriptions.push(Sub);
       }
@@ -627,7 +633,7 @@ export class StoneIssueComponent implements OnInit {
           return
         }
       }, err => {
-        this.comService.toastErrorByMsgId('Error Something went wrong')
+        this.comService.toastErrorByMsgId('Error Something went wrong')//CHINNU -  MESSAGE HARD CODED
       })
     this.subscriptions.push(Sub)
   }
