@@ -256,6 +256,7 @@ export class MeltingIssueDetailsComponent implements OnInit {
       return
     }
     return false;
+    
   }
 
   formSubmit(flag: any) {
@@ -374,6 +375,17 @@ export class MeltingIssueDetailsComponent implements OnInit {
 
   }
 
+  pureWeightChange() {
+    //dont make functions complicated write with same name in input
+    //use only simple methods
+    // use same names for same feilds
+    let form = this.meltingIssuedetailsFrom.value;
+    let purity = this.comService.pureWeightCalculate(form.netweight, form.purity)
+    this.setValueWithDecimal('purity', purity, 'PURITY')
+    let topurity = this.comService.pureWeightCalculate(purity, form.pureweight)
+    this.setValueWithDecimal('topurity', topurity, 'METAL')
+
+  }
 
 
   // deleteRecord() {
@@ -491,7 +503,7 @@ export class MeltingIssueDetailsComponent implements OnInit {
           return
         }
       }, err => {
-        this.commonService.toastErrorByMsgId('Error Something went wrong')
+        this.commonService.toastErrorByMsgId('MSG2272')
       })
     this.subscriptions.push(Sub)
   }
@@ -518,6 +530,7 @@ export class MeltingIssueDetailsComponent implements OnInit {
         if (result.dynamicData && result.dynamicData[0].length > 0) {
           let data = result.dynamicData[0]
           console.log(data[0], 'datapassing')
+          this.meltingIssuedetailsFrom.controls.jobdes.setValue(data[0].DESCRIPTION)
           this.meltingIssuedetailsFrom.controls.process.setValue(data[0].PROCESS)
           this.meltingIssuedetailsFrom.controls.worker.setValue(data[0].WORKER)
           this.meltingIssuedetailsFrom.controls.stockcode.setValue(data[0].STOCK_CODE)
