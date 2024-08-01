@@ -2532,7 +2532,7 @@ editLineItem:boolean=false;
     this.lineItemModalForSalesReturn = false;
     this.isNewCustomer = isNewCustomer;
     this.updateBtn = false;
-    if (!this.viewOnly && !this.editOnly||isNewItem) {
+    if ((!this.viewOnly && !this.editOnly||isNewItem) && !this.editLineItem) {
       this.salesReturnsItems_forVoc = [];
       this.salesReturnForm.reset();
       this.lineItemForm.reset();
@@ -2848,6 +2848,12 @@ editLineItem:boolean=false;
           this.validatePCS = stockInfos.VALIDATE_PCS;
           this.enablePieces = stockInfos.ENABLE_PCS;
           this.lineItemPcs = stockInfos.BALANCE_PCS;
+
+          this.blockMinimumPrice = stockInfos.BLOCK_MINIMUMPRICE;
+          this.blockMinimumPriceValue = this.comFunc.transformDecimalVB(
+            this.comFunc.allbranchMaster?.BAMTDECIMALS,
+            stockInfos.MIN_SAL_PRICE
+          );
         
          
           if (stockInfos.DIVISIONMS == 'M') this.setMetalRate(stockInfos.KARAT_CODE);
@@ -9348,7 +9354,8 @@ printReceiptDetailsWeb() {
   async rateFunc(value: any) {
     let isAuth: any = false;
     const preVal = this.comFunc.emptyToZero(localStorage.getItem('fcn_li_rate'));
-console.log(this.blockMinimumPriceValue)
+      console.log(this.blockMinimumPriceValue);
+      console.log(this.blockMinimumPrice);
     if (this.blockMinimumPrice == 'B') {
       if (this.lineItemModalForSalesReturn || this.comFunc.emptyToZero(this.blockMinimumPriceValue) >=this.comFunc.emptyToZero(value)) {
         if (this.userwiseDiscount) {
