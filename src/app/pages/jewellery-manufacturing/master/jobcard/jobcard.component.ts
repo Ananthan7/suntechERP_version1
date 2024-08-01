@@ -1086,11 +1086,11 @@ export class JobcardComponent implements OnInit {
       return true
     }
     else if (this.commonService.nullToString(form.pending) == '') {
-      this.commonService.toastErrorByMsgId('')//"pending cannot be empty"
+      this.commonService.toastErrorByMsgId('MSG1572')//"pending cannot be empty"
       return true
     }
     else if (this.commonService.nullToString(form.pending1) == '') {
-      this.commonService.toastErrorByMsgId('')//"pending1 cannot be empty"
+      this.commonService.toastErrorByMsgId('MSG1572')//"pending1 cannot be empty"
       return true
     }
     else if (this.commonService.nullToString(form.parts) == '') {
@@ -1099,19 +1099,6 @@ export class JobcardComponent implements OnInit {
     }
     return false;
   }
-
-  // orderType: ['', [Validators.required]],
-  // designcode: ['', [Validators.required]],
-  // customer: ['', [Validators.required]],
-  // costcode: ['', [Validators.required]],
-  // karat: ['', [Validators.required]],
-  // color: ['', [Validators.required]],
-  // salesman: ['', [Validators.required]],
-  // seqcode: ['', [Validators.required]],
-  // totalpcs: ['1', [Validators.required]],
-  // pending: ['1', [Validators.required]],
-  // pending1: ['1', [Validators.required]],
-  // parts: ['1', [Validators.required]],
 
 
   formSubmit() {

@@ -113,10 +113,10 @@ subscriptions: any;
       this.update()
       return
     }
-    if (this.picturetypemasterForm.invalid) {
-      this.toastr.error('select all required fields')
-      return
-    }
+    // if (this.picturetypemasterForm.invalid) {
+    //   this.toastr.error('select all required fields')
+    //   return
+    // }
   
     let API = ''
     let postData = {
@@ -150,10 +150,10 @@ subscriptions: any;
     this.subscriptions.push(Sub)
   }
   update(){
-    if (this.picturetypemasterForm.invalid) {
-      this.toastr.error('select all required fields')
-      return
-    }
+    // if (this.picturetypemasterForm.invalid) {
+    //   this.toastr.error('select all required fields')
+    //   return
+    // }
   
     let API = 'ComponentSizeSetMaster/UpdateComponentSizeSetMaster/'+this.content.COMPSET_CODE
     let postData = 
@@ -248,7 +248,7 @@ subscriptions: any;
                 });
               }
             } else {
-              this.toastr.error('Not deleted')
+              this.commonService.toastErrorByMsgId('MSG1880');// Not Deleted
             }
           }, err => alert(err))
         this.subscriptions.push(Sub)

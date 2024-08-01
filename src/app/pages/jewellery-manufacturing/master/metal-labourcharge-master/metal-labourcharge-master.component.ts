@@ -480,7 +480,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
   }
   checkCode(): boolean {
     if (this.metallabourMasterForm.value.metallabour_code == '') {
-      this.commonService.toastErrorByMsgId('Labour code is required')
+      this.commonService.toastErrorByMsgId('MSG1124')// Please Enter the Code
       return true
     }
     return false
@@ -488,7 +488,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
 
   checkCodeDia(): boolean {
     if (this.diamondlabourMasterForm.value.labour_code == '') {
-      this.commonService.toastErrorByMsgId('Please Enter the Code')
+      this.commonService.toastErrorByMsgId('MSG1124')// Please Enter the Code
       return true
     }
     return false
@@ -828,7 +828,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
     // Check if Ct Wt From is greater than Ct Wt To
     if (size_from > size_to) {
       // Display an error message
-      this.commonService.toastErrorByMsgId('Size From should be lesser than Weight To');
+      this.commonService.toastErrorByMsgId('MSG81517') //Size From should be lesser than Size To
       // Clear the value of Ct Wt To input field
       this.diamondlabourMasterForm.controls.size_to.setValue('');
     }
@@ -859,7 +859,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
       .subscribe((result) => {
         this.commonService.closeSnackBarMsg()
         if (result.status == "Success") {
-          this.commonService.toastErrorByMsgId('Code Already Exists')
+          this.commonService.toastErrorByMsgId('MSG1121')//Code Already Exists
           this.diamondlabourMasterForm.controls.labour_code.setValue('')
         }
       });
@@ -890,7 +890,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
             }
            
           }, err => {
-            this.commonService.toastErrorByMsgId('network issue found')
+            this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
           })
         this.subscriptions.push(Sub)
       }
@@ -940,44 +940,64 @@ export class MetalLabourchargeMasterComponent implements OnInit {
         this.metallabourMasterForm.controls['purity'].setValue(result.response.PURITY);
 
       }, err => {
-        this.commonService.toastErrorByMsgId('Server Error')
+      this.commonService.toastErrorByMsgId('MSG81451')//Server Error occured, please try again
       })
     this.subscriptions.push(Sub)
 
   }
 
+  // metalDivision: ['', [Validators.required]],
+  // metallabour_code: ['', [Validators.required]],
+  // metallabour_description: ['', [Validators.required]],
+  // metallabourType: ['', [Validators.required]],
+  // metalcurrency: ['', [Validators.required]],
+  // metalunitList: ['', [Validators.required]],
+
+  submitValidation(form:any){
 
 
-  submitValidation(): boolean {
-    if (this.content && this.content.FLAG == 'VIEW') return true
-    if (this.content && this.content.FLAG == 'EDIT') {
-      this.updatelabourChargeMaster()
+    
+    if (this.commonService.nullToString(form.metalDivision) == '') {
+      this.commonService.toastErrorByMsgId('MSG1207') //"metalDivision cannot be empty"
       return true
     }
-    if (this.metallabourMasterForm.invalid) {
-      this.toastr.error('select all required fields')
+    else if (this.commonService.nullToString(form.metallabour_code) == '') {
+      this.commonService.toastErrorByMsgId('MSG1365')//"labour_code cannot be empty"
       return true
     }
-    if (this.commonService.nullToString(this.metallabourMasterForm.value.metallabour_code) == '') {
-      this.toastr.error('Labour code is required')
+    else if (this.commonService.nullToString(form.metallabour_description) == '') {
+      this.commonService.toastErrorByMsgId('MSG1193')//"labour_description cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.metallabourType) == '') {
+      this.commonService.toastErrorByMsgId('MSG7820')//"labourType cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.metalcurrency) == '') {
+      this.commonService.toastErrorByMsgId('MSG1173')//"currency cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.metalunitList) == '') {
+      this.commonService.toastErrorByMsgId('MSG1927')//"unitList cannot be empty"
       return true
     }
     if (this.metallabourMasterForm.value.wtFrom > this.metallabourMasterForm.value.wtTo) {
-      this.toastr.error('Weight From should be lesser than Weight To')
+      this.commonService.toastErrorByMsgId('MSG3805')// Weight From should be lesser than Weight To
       return true
     }
 
     if (this.metallabourMasterForm.value.ctWtFrom > this.metallabourMasterForm.value.ctWtTo) {
-      this.toastr.error('carat From should be lesser than Weight To')
+      this.commonService.toastErrorByMsgId('MSG3765')// carat From should be lesser than Weight To
       return true
     }
 
     if (this.metallabourMasterForm.value.size_from > this.metallabourMasterForm.value.size_to) {
-      this.toastr.error('size From should be lesser than Weight To')
+      this.commonService.toastErrorByMsgId('MSG81517')// size From should be lesser than Weight To
       return true
     }
     return false;
   }
+
   setPostData() {
     let diamondForm = this.diamondlabourMasterForm.value
     let metalForm = this.metallabourMasterForm.value
@@ -1025,7 +1045,14 @@ export class MetalLabourchargeMasterComponent implements OnInit {
     }
   }
   formSubmit() {
-    if (this.submitValidation()) return
+
+    if (this.content && this.content.FLAG == 'VIEW') return
+    if (this.content && this.content.FLAG == 'EDIT') {
+      this.updatelabourChargeMaster()
+      return
+    }
+
+    if (this.submitValidation(this.metallabourMasterForm.value)) return
 
     let API = 'LabourChargeMasterDj/InsertLabourChargeMaster'
     let postData = this.setPostData();
@@ -1140,7 +1167,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
                 });
               }
             } else {
-              this.toastr.error('Not deleted')
+                 this.commonService.toastErrorByMsgId('MSG1880');// Not Deleted
             }
           }, err => alert('delete ' + err))
         this.subscriptions.push(Sub)

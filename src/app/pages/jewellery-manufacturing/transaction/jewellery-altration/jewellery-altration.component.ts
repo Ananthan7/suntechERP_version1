@@ -504,7 +504,7 @@ export class JewelleryAltrationComponent implements OnInit {
   }
   submitValidations(form: any) {
     if (form.VOCTYPE == '') {
-      this.comService.toastErrorByMsgId('VOCTYPE is required')
+      this.comService.toastErrorByMsgId('MSG1939')//VOCTYPE is required
       return true
     }
     if (form.vocdate == '') {
@@ -548,7 +548,7 @@ export class JewelleryAltrationComponent implements OnInit {
         
       }, err => {
         this.isloading = false;
-        this.toastr.error('Not saved')
+        this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
       })
     this.subscriptions.push(Sub)
   }
@@ -583,7 +583,7 @@ export class JewelleryAltrationComponent implements OnInit {
         
       }, err => {
         this.isloading = false;
-        this.comService.toastErrorByMsgId('Not saved')
+        this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
       })
     this.subscriptions.push(Sub)
   }
@@ -649,7 +649,7 @@ export class JewelleryAltrationComponent implements OnInit {
                 });
               }
             } else {
-              this.toastr.error('Not deleted')
+              this.commonService.toastErrorByMsgId('MSG1880');// Not Deleted
             }
           }, err => alert(err))
         this.subscriptions.push(Sub)
@@ -701,7 +701,7 @@ export class JewelleryAltrationComponent implements OnInit {
         }
 
       }, err => {
-        this.comService.toastErrorByMsgId('network issue found')
+        this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
       })
     this.subscriptions.push(Sub)
   }

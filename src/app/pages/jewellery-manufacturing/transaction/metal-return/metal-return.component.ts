@@ -321,14 +321,14 @@ this.setvoucherTypeMaster()
         this.commonService.closeSnackBarMsg()
         let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
         if (data && data[0]?.RESULT == 0) {
-          this.commonService.toastErrorByMsgId('Voucher Number Already Exists')
+          this.commonService.toastErrorByMsgId('MSG2284')//Voucher Number Already Exists
           this.generateVocNo()
           return
         }
       }, err => {
         this.isloading = false;
         this.generateVocNo()
-        this.commonService.toastErrorByMsgId('Error Something went wrong')
+        this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
       })
     this.subscriptions.push(Sub)
   }
@@ -379,16 +379,25 @@ this.setvoucherTypeMaster()
       "Details": this.metalReturnDetailsData,
     }
   }
+  submitValidations(form: any) {
+    if (this.commonService.nullToString(form.VOCTYPE) == '') {
+      this.commonService.toastErrorByMsgId('MSG1939')// VOCTYPE  CANNOT BE EMPTY
+      return true
+    }
+    return false;
+  }
 
   formSubmit() {
-    if (this.metalReturnForm.invalid || this.metalReturnDetailsData.length == 0) {
-      this.toastr.error('select all required fields')
-      return
-    }
+    // if (this.metalReturnForm.invalid || this.metalReturnDetailsData.length == 0) {
+    //   this.toastr.error('select all required fields')
+    //   return
+    // }
     if (this.content && this.content.FLAG == 'EDIT') {
       this.updateMeltingType()
       return
     }
+
+    if (this.submitValidations(this.metalReturnForm.value)) return;
 
     let API = 'JobMetalReturnMasterDJ/InsertJobMetalReturnMasterDJ'
     let postData = this.setPostData(this.metalReturnForm.value)
@@ -415,12 +424,16 @@ this.setvoucherTypeMaster()
           }
       }, err => {
         this.isloading = false;
-        this.toastr.error('Not saved')
+        this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
       })
     this.subscriptions.push(Sub)
   }
 
   updateMeltingType() {
+
+    if (this.submitValidations(this.metalReturnForm.value)) return;
+
+    
     let form = this.metalReturnForm.value
     let API = `JobMetalReturnMasterDJ/UpdateJobMetalReturnMasterDJ/${form.BRANCH_CODE}/${form.VOCTYPE}/${form.VOCNO}/${form.YEARMONTH}`
     let postData = this.setPostData(this.metalReturnForm.value)
@@ -446,7 +459,8 @@ this.setvoucherTypeMaster()
           }
       }, err =>{
         this.isloading = false;
-        this.toastr.error('Not saved')
+        this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+
       })
     this.subscriptions.push(Sub)
   }
@@ -509,7 +523,7 @@ this.setvoucherTypeMaster()
                 });
               }
             } else {
-              this.toastr.error('Not deleted')
+              this.commonService.toastErrorByMsgId('MSG1880');// Not Deleted
             }
           }, err => alert(err))
         this.subscriptions.push(Sub)
@@ -600,7 +614,7 @@ this.setvoucherTypeMaster()
           return;
         }
       }, err => {
-        this.commonService.toastErrorByMsgId('Error Something went wrong');
+        this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
       });
   
     this.subscriptions.push(Sub);

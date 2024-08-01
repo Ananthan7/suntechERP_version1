@@ -338,7 +338,7 @@ export class SequenceMasterComponent implements OnInit {
     this.dataSource.forEach((item: any) => {
       if (item.isChecked == true && item.STD_LOSS > item.MAX_LOSS) {
         this.checkCondtion = true;
-        this.toastr.error('Max loss must be Greater than the Standard Loss')
+        this.commonService.toastErrorByMsgId('MSG1808')//Max Loss cannot be less than Std Loss
       }
       if (item.isChecked == true && item.STD_LOSS < item.MAX_LOSS) {
         this.checkCondtion = false
@@ -701,7 +701,7 @@ export class SequenceMasterComponent implements OnInit {
     let max: number = parseFloat(data['MAX_LOSS'])
     let std: number = parseFloat(data['STD_LOSS'])
     if (max < std) {
-      this.commonService.toastErrorByMsgId('Max Loss cannot be less than Std Loss')
+      this.commonService.toastErrorByMsgId('MSG1808')//Max Loss cannot be less than Std Loss
       this.dataSource[data.SRNO].MAX_LOSS = 0
       return false;
     }

@@ -49,7 +49,7 @@ export class FormatRateDecimalDirective {
       value = '0';
     }
 
-    value = value.replace(/[^0-9.]/g, '');
+    value = value.replace(/[^0-9.-]/g, '');
 
     value = this.applyFormat(value, formatString);
     

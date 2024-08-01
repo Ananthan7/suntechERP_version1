@@ -481,29 +481,29 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
   });
 
 
-
   removedata() {
     this.tableData.pop();
   }
-  submitValidations() {
-    const form = this.jewelleryaltrationdetailsFrom.value;
-    if (!form.stockcode) {
-      this.toastr.error('Stockcode required');
-      return false;
+  submitValidations(form:any) {
+
+    if (form.stockcode == '') {
+      this.comService.toastErrorByMsgId('MSG1816')//stockcode is required
+      return true
     }
-    if (!form.description) {
-      this.toastr.error('Description required field is empty');
-      return false;
+    if (form.description == '') {
+      this.comService.toastErrorByMsgId('MSG1193')//description is required
+      return true
     }
-    if (!form.costcode) {
-      this.toastr.error('Costcode required field is empty');
-      return false;
+    if (form.costcode == '') {
+      this.comService.toastErrorByMsgId('MSG1151')//costcode is required
+      return true
     }
-    if (!form.metalcolor) {
-      this.toastr.error('Metalcolor required field is empty');
-      return false;
+    if (form.Metalcolor == '') {
+      this.comService.toastErrorByMsgId('MSG1125')//costcode is required
+      return true
     }
-    return true; 
+    return false
+  
   }
   // formSubmit(flag: any) {
   //   if (this.submitValidations()) return;
@@ -520,9 +520,11 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
   // }
   formSubmit(flag: any) {
     // Check if the form is valid
-    if (!this.submitValidations()) {
-      return;
-    }
+    // if (!this.submitValidations()) {
+    //   return;
+    // }
+    if (this.submitValidations(this.jewelleryaltrationdetailsFrom.value)) return;
+
     const dataToParent = {
       FLAG: flag,
       POSTDATA: this.setPostData()
@@ -1072,7 +1074,8 @@ validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string)
       }
 
     }, err => {
-      this.comService.toastErrorByMsgId('network issue found')
+      this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+
     })
   this.subscriptions.push(Sub)
   }

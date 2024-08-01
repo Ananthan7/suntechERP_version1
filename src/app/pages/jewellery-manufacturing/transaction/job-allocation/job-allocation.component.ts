@@ -113,7 +113,17 @@ export class JobAllocationComponent implements OnInit {
     this.jobalocationFrom.controls.userName.setValue(e.UsersName);
   }
 
-
+  submitValidations(form: any) {
+    if (this.commonService.nullToString(form.vocType) == '') {
+      this.commonService.toastErrorByMsgId('MSG1939')// vocType  CANNOT BE EMPTY
+      return true
+    }
+    else if (this.commonService.nullToString(form.vocNum) == '') {
+      this.commonService.toastErrorByMsgId('MSG1940')//"vocNum cannot be empty"
+      return true
+    }
+    return false;
+  }
 
   formSubmit() {
 
@@ -121,10 +131,7 @@ export class JobAllocationComponent implements OnInit {
       this.update()
       return
     }
-    if (this.jobalocationFrom.invalid) {
-      this.toastr.error('select all required fields')
-      return
-    }
+    if (this.submitValidations(this.jobalocationFrom.value)) return;
 
     let API = 'JobAllocationMaster/InsertJobAllocationMaster'
     let postData = {
@@ -193,10 +200,7 @@ export class JobAllocationComponent implements OnInit {
   }
 
   update() {
-    if (this.jobalocationFrom.invalid) {
-      this.toastr.error('select all required fields')
-      return
-    }
+    if (this.submitValidations(this.jobalocationFrom.value)) return;
 
     let API = 'JobAllocationMaster/UpdateJobAllocationMaster/' + this.jobalocationFrom.value.branchCode + this.jobalocationFrom.value.vocType + this.jobalocationFrom.value.yearMonth + this.jobalocationFrom.value.vocNo;
     let postData =
@@ -323,7 +327,7 @@ export class JobAllocationComponent implements OnInit {
                 });
               }
             } else {
-              this.toastr.error('Not deleted')
+              this.commonService.toastErrorByMsgId('MSG1880');// Not Deleted
             }
           }, err => alert(err))
         this.subscriptions.push(Sub)
@@ -366,7 +370,7 @@ export class JobAllocationComponent implements OnInit {
         }
 
       }, err => {
-        this.commonService.toastErrorByMsgId('network issue found')
+        this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
       })
     this.subscriptions.push(Sub)
   }
