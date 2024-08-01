@@ -97,7 +97,7 @@ export class MetalBranchTransferInAutoRepairDetailsComponent implements OnInit {
   partycodeselecteddata(e:any){
     console.log(e);
     this.diamondBranchTransferinAutoRepairDetailForm.controls.partyCode.setValue(e.ACCODE);
-    this.diamondBranchTransferinAutoRepairDetailForm.controls.partName.setValue(e.ACCOUNT_HEAD);
+    this.diamondBranchTransferinAutoRepairDetailForm.controls.partyName.setValue(e.ACCOUNT_HEAD);
 
   }
 
@@ -227,7 +227,7 @@ removedatas(){
       "DIVISION_CODE": "s",
       "STOCK_ACTION": "s",
       "STOCK_CODE": this.diamondBranchTransferinAutoRepairDetailForm.value.Stockcode,
-      "SUPPLIER": "string",
+      "SUPPLIER": this.diamondBranchTransferinAutoRepairDetailForm.value.partyCode,
       "PCS": this.diamondBranchTransferinAutoRepairDetailForm.value.pcs,
       "GROSSWT": this.diamondBranchTransferinAutoRepairDetailForm.value.gross_weight,
       "STONEWT": this.diamondBranchTransferinAutoRepairDetailForm.value.stone_weight,
@@ -297,7 +297,7 @@ removedatas(){
       "DT_VOCTYPE": "str",
       "DT_VOCNO": 0,
       "DT_YEARMONTH": "string",
-      "SUPPLIERDESC": "string",
+      "SUPPLIERDESC": this.diamondBranchTransferinAutoRepairDetailForm.value.partyName,
       "IMPYEARMONTH": "string",
       "IMPVOCTYPE": "str",
       "IMPVOCNO": 0,
@@ -360,7 +360,8 @@ removedatas(){
       "ORDER_STATUS": true
 
     }
- 
+    console.log(details);
+    this.close(details);
   }
 
   updateMeltingType() {

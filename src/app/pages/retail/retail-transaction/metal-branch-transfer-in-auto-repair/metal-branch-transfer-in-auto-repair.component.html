@@ -105,7 +105,7 @@
                                             <div class="col-md-3">
                                                 <div class="position-relative d-flex">
                                                     <mat-form-field style="width: 100%;">
-                                                        <input class="text-right" type="number" matInput
+                                                        <input class="text-right" type="text" matInput
                                                             formControlName="itemCurrencyDesc" />
                                                     </mat-form-field>
                                                 </div>
@@ -173,7 +173,7 @@
                                                     <input type="text" matInput formControlName="branchTo" />
                                                 </mat-form-field>
                                                 <master-search [MasterSearchData]="branchToCodeData"
-                                                (newRowClick)="branchToCodeSelected($event)"></master-search>
+                                                    (newRowClick)="branchToCodeSelected($event)"></master-search>
                                             </div>
                                             <div class="col-sm-4">
                                                 <mat-form-field style="width: 100%;">
@@ -191,7 +191,7 @@
                                                     <input type="text" matInput formControlName="locationTo" />
                                                 </mat-form-field>
                                                 <master-search [MasterSearchData]="locationToCodeData"
-                                                (newRowClick)="locationToCodeSelected($event)"></master-search>
+                                                    (newRowClick)="locationToCodeSelected($event)"></master-search>
                                             </div>
 
                                             <label for="inputPassword" class="col-sm-3 col-form-label ">
@@ -201,7 +201,7 @@
                                                     <input type="text" matInput formControlName="returnlocationTo" />
                                                 </mat-form-field>
                                                 <master-search [MasterSearchData]="returnlocationToCodeData"
-                                                (newRowClick)="returnlocationToCodeSelected($event)"></master-search>
+                                                    (newRowClick)="returnlocationToCodeSelected($event)"></master-search>
 
                                             </div>
                                         </div>
@@ -214,7 +214,7 @@
                                                     <input type="text" matInput formControlName="shipTo" />
                                                 </mat-form-field>
                                                 <master-search [MasterSearchData]="shipToCodeData"
-                                                (newRowClick)="shipToCodeSelected($event)"></master-search>
+                                                    (newRowClick)="shipToCodeSelected($event)"></master-search>
                                             </div>
                                             <div class="col-sm-4">
                                                 <mat-form-field style="width: 100%;">
@@ -242,7 +242,8 @@
                                             </label>
                                             <div class="col-sm-2">
                                                 <mat-form-field style="width: 100%;">
-                                                    <input type="number" matInput formControlName="creditDays" (change)="credit_Date2($event)" />
+                                                    <input type="number" matInput formControlName="creditDays"
+                                                        (change)="credit_Date2($event)" />
                                                 </mat-form-field>
 
                                             </div>
@@ -253,7 +254,8 @@
                                                         DateValidation />
                                                     <mat-datepicker-toggle matSuffix
                                                         [for]="creditDays"></mat-datepicker-toggle>
-                                                    <mat-datepicker [startAt]="currentDate" #creditDays></mat-datepicker>
+                                                    <mat-datepicker [startAt]="currentDate"
+                                                        #creditDays></mat-datepicker>
                                                 </mat-form-field>
                                             </div>
                                         </div>
@@ -295,7 +297,7 @@
                                                     <input type="text" matInput formControlName="scrapTransfer" />
                                                 </mat-form-field>
                                                 <master-search [MasterSearchData]="scrapTransferCodeData"
-                                                (newRowClick)="scrapTransferCodeSelected($event)"></master-search>
+                                                    (newRowClick)="scrapTransferCodeSelected($event)"></master-search>
                                             </div>
                                         </div>
 
@@ -353,7 +355,7 @@
                                                         <input type="text" matInput formControlName="stateCode" />
                                                     </mat-form-field>
                                                     <master-search [MasterSearchData]="stateCodeData"
-                                                    (newRowClick)="stateCodeSelected($event)"></master-search>
+                                                        (newRowClick)="stateCodeSelected($event)"></master-search>
                                                 </div>
                                             </div>
 
