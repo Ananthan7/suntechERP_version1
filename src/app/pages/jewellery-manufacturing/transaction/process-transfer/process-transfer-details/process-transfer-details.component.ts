@@ -481,7 +481,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     )
 
     this.stockCodeScrapValidate()
-    this.getTimeAndLossDetails()
+    // this.getTimeAndLossDetails()
     this.getSequenceDetailData()
     //set where conditions
     this.setFromProcessWhereCondition()
