@@ -520,7 +520,7 @@ export class CastingTreeUpComponent implements OnInit {
       return true
     }
     else if (this.commonService.nullToString(form.stoneWt) == '') {
-      this.commonService.toastErrorByMsgId('')//"stoneWt cannot be empty"
+      this.commonService.toastErrorByMsgId('MSG3746')//"stoneWt cannot be empty"
       return true
     }
     else if (this.commonService.nullToString(form.treeNo) == '') {

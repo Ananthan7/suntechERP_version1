@@ -83,15 +83,34 @@ export class QuotationProcessComponent implements OnInit {
     narration :[''],
   });
 
+  submitValidations(form: any) {
+    if (this.comService.nullToString(form.voctype) == '') {
+      this.comService.toastErrorByMsgId('MSG1939')// voctype  CANNOT BE EMPTY
+      return true
+    }
+    else if (this.comService.nullToString(form.vocno) == '') {
+      this.comService.toastErrorByMsgId('MSG1940')//"vocno cannot be empty"
+      return true
+    }
+    else if (this.comService.nullToString(form.salesman) == '') {
+      this.comService.toastErrorByMsgId('MSG2320')//"salesman cannot be empty"
+      return true
+    }
+    return false;
+  }
+
   formSubmit(){
     if(this.content && this.content.FLAG == 'EDIT'){
       this.update()
       return
     }
-    if (this.quotationProcessFrom.invalid) {
-      this.toastr.error('select all required fields')
-      return
-    }
+    // if (this.quotationProcessFrom.invalid) {
+    //   this.toastr.error('select all required fields')
+    //   return
+    // }
+
+    if (this.submitValidations(this.quotationProcessFrom.value)) return;
+
   
     let API = 'JobQuotProcessMasterDJ/InsertJobQuotProcessMasterDJ'
     let postData = {
@@ -185,7 +204,7 @@ export class QuotationProcessComponent implements OnInit {
             });
           }
         } else {
-          this.toastr.error('Not saved')
+          this.comService.toastErrorByMsgId('MSG2272')//Error occured, please try again
         }
       }, err => alert(err))
     this.subscriptions.push(Sub)
@@ -195,10 +214,12 @@ export class QuotationProcessComponent implements OnInit {
 
 
   update(){
-    if (this.quotationProcessFrom.invalid) {
-      this.toastr.error('select all required fields')
-      return
-    }
+    // if (this.quotationProcessFrom.invalid) {
+    //   this.toastr.error('select all required fields')
+    //   return
+    // }
+    if (this.submitValidations(this.quotationProcessFrom.value)) return;
+
   
     let API = 'JobQuotProcessMasterDJ/UpdateJobQuotProcessMasterDJ/'+ this.quotationProcessFrom.value.branchCode + this.quotationProcessFrom.value.voctype + this.quotationProcessFrom.value.vocno + this.quotationProcessFrom.value.yearMonth
     let postData = {
@@ -292,7 +313,8 @@ export class QuotationProcessComponent implements OnInit {
             });
           }
         } else {
-          this.toastr.error('Not saved')
+          this.comService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+
         }
       }, err => alert(err))
     this.subscriptions.push(Sub)
@@ -356,7 +378,8 @@ export class QuotationProcessComponent implements OnInit {
                 });
               }
             } else {
-              this.toastr.error('Not deleted')
+              this.comService.toastErrorByMsgId('MSG1880');// Not Deleted
+
             }
           }, err => alert(err))
         this.subscriptions.push(Sub)
@@ -392,7 +415,8 @@ export class QuotationProcessComponent implements OnInit {
           return
         }
       }, err => {
-        this.comService.toastErrorByMsgId('Error Something went wrong')
+        this.comService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+
       })
     this.subscriptions.push(Sub)
   }
