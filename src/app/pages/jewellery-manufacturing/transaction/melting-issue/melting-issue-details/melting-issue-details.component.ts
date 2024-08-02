@@ -249,18 +249,48 @@ export class MeltingIssueDetailsComponent implements OnInit {
     topurity: ['', [Validators.required]],
     FLAG: [null]
   });
-  submitValidations() {
-    let form = this.meltingIssuedetailsFrom.value
-    if (this.comService.nullToString(form.jobNumber) == '') {
-      this.toastr.error('JMSG1601')
-      return
+  submitValidations(form: any) {
+    if (this.comService.nullToString(form.jobno) == '') {
+      this.comService.toastErrorByMsgId('MSG1358')//Job number is required
+      return true
     }
-    return false;
-    
+    if (this.comService.nullToString(form.worker) == '') {
+      this.comService.toastErrorByMsgId('MSG1951')//Worker code is required
+      return true
+    }
+    if (this.comService.nullToString(form.process) == '') {
+      this.comService.toastErrorByMsgId('MSG1680')//Process code is required
+      return true
+    }
+    if (this.comService.nullToString(form.waxweight) == '') {
+      this.comService.toastErrorByMsgId('MSG1816')//waxweight  is required
+      return true
+    }
+    if (this.comService.emptyToZero(form.lossweight) == 0) {
+      this.comService.toastErrorByMsgId('MSG1293')//lossweight  is required
+      return true
+    }
+    if (this.comService.emptyToZero(form.ticketno) == 0) {
+      this.comService.toastErrorByMsgId('MSG1293')//Ticket NUmber  is required
+      return true
+    }
+    if (this.comService.emptyToZero(form.lotno) == 0) {
+      this.comService.toastErrorByMsgId('MSG1293')//Lot Number is required
+      return true
+    }
+    if (this.comService.emptyToZero(form.barno) == 0) {
+      this.comService.toastErrorByMsgId('MSG1293')//Bar Number is required
+      return true
+    }
+    if (this.comService.emptyToZero(form.silver) == 0) {
+      this.comService.toastErrorByMsgId('MSG1293')//Silver is required
+      return true
+    }
+    return false
   }
-
+  /**use: to save data to grid*/
   formSubmit(flag: any) {
-    if (this.submitValidations()) return;
+    if (this.submitValidations(this.meltingIssuedetailsFrom.value)) return;
     let dataToparent = {
       FLAG: flag,
       POSTDATA: this.setPostData()
@@ -271,7 +301,6 @@ export class MeltingIssueDetailsComponent implements OnInit {
       // this.resetStockDetails()
     }
   }
-
   setPostData() {
     let form = this.meltingIssuedetailsFrom.value
     let currRate = this.comService.getCurrecnyRate(this.comService.compCurrency)

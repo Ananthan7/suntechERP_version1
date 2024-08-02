@@ -597,6 +597,7 @@ export class MeltingIssueComponent implements OnInit {
   }
 
   openaddMeltingIssueDetails(dataToChild?: any) {
+    console.log(this.openaddMeltingIssueDetails)
     if (!this.meltingIssueFrom.get('meltingtype')?.value) {
       // this.showErrorToast();
     } else {
