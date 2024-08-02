@@ -179,14 +179,16 @@ export class MetalIssueComponent implements OnInit {
         this.comService.closeSnackBarMsg()
         let data = this.comService.arrayEmptyObjectToString(result.dynamicData[0])
         if (data && data[0]?.RESULT == 0) {
-          this.comService.toastErrorByMsgId('Voucher Number Already Exists')
+          this.comService.toastErrorByMsgId('MSG2284')//Voucher Number Already Exists
+
           this.generateVocNo()
           return
         }
       }, err => {
         this.isloading = false;
         this.generateVocNo()
-        this.comService.toastErrorByMsgId('Error Something went wrong')
+        this.comService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+
       })
     this.subscriptions.push(Sub)
   }
@@ -432,15 +434,11 @@ export class MetalIssueComponent implements OnInit {
   }
   submitValidations(form: any) {
     if (form.VOCTYPE == '') {
-      this.comService.toastErrorByMsgId('VOCTYPE is required')
-      return true
-    }
-    if (form.vocdate == '') {
-      this.comService.toastErrorByMsgId('vocdate is required')
+      this.comService.toastErrorByMsgId('MSG1939')//VOCTYPE is required
       return true
     }
     if (form.worker == '') {
-      this.comService.toastErrorByMsgId('worker is required')
+      this.comService.toastErrorByMsgId('MSG1951')// worker is required
       return true
     }
     if (this.tableData?.length <= 0) {
@@ -484,7 +482,8 @@ export class MetalIssueComponent implements OnInit {
         }
       }, err => {
         this.isloading = false;
-        this.comService.toastErrorByMsgId('Not saved')
+        this.comService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+
         console.log(err);
       })
     this.subscriptions.push(Sub)
@@ -518,7 +517,8 @@ export class MetalIssueComponent implements OnInit {
         }
       }, err => {
         this.isloading = false;
-        this.comService.toastErrorByMsgId('Not saved')
+        this.comService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+
       })
     this.subscriptions.push(Sub)
   }
@@ -584,7 +584,7 @@ export class MetalIssueComponent implements OnInit {
                 });
               }
             } else {
-              this.toastr.error('Not deleted')
+              this.comService.toastErrorByMsgId('MSG1880');// Not Deleted
             }
           }, err => alert(err))
         this.subscriptions.push(Sub)
@@ -632,7 +632,8 @@ export class MetalIssueComponent implements OnInit {
           return
         }
       }, err => {
-        this.comService.toastErrorByMsgId('Error Something went wrong')
+        this.comService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+
       })
     this.subscriptions.push(Sub)
   }

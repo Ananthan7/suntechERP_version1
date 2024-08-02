@@ -172,6 +172,8 @@ export class DiamondQuotationComponent implements OnInit {
       })
       return
     }
+   
+    
     const modalRef: NgbModalRef = this.modalService.open(AddNewdetailComponent, {
       size: 'xl',
       backdrop: true,//'static'
@@ -213,6 +215,47 @@ export class DiamondQuotationComponent implements OnInit {
       })
     }
   }
+
+  submitValidations(form: any) {
+    if (this.commonService.nullToString(form.voucherType) == '') {
+      this.commonService.toastErrorByMsgId('MSG1939')// voucherType  CANNOT BE EMPTY
+      return true
+    }
+    else if (this.commonService.nullToString(form.orderType) == '') {
+      this.commonService.toastErrorByMsgId('MSG81501')//"orderType cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.PartyCode) == '') {
+      this.commonService.toastErrorByMsgId('MSG1549')//"PartyCode cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.SalesmanCode) == '') {
+      this.commonService.toastErrorByMsgId('MSG2320')//"SalesmanCode cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.wholeSaleRate) == '') {
+      this.commonService.toastErrorByMsgId('')//"wholeSaleRate cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.partyCurrencyType) == '') {
+      this.commonService.toastErrorByMsgId('MSG1550')//"partyCurrencyType cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.partyCurrencyRate) == '') {
+      this.commonService.toastErrorByMsgId('MSG1550')//"partyCurrencyRate cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.ItemCurrency) == '') {
+      this.commonService.toastErrorByMsgId('MSG1352')//"ItemCurrency cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.ItemCurrencyRate) == '') {
+      this.commonService.toastErrorByMsgId('MSG1352')//"ItemCurrencyRate cannot be empty"
+      return true
+    }
+    return false;
+  }
+
   /**USE:  final save API call*/
   formSubmit():void {
     if (this.content && this.content.FLAG == 'EDIT') {
@@ -220,6 +263,9 @@ export class DiamondQuotationComponent implements OnInit {
       // this.updateWorkerMaster()
       return
     }
+
+    if (this.submitValidations(this.PartyDetailsOrderForm.value)) return;
+
     
     let detailsToSave:any[] = []
     console.log(this.detailData,'this.detailData');

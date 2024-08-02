@@ -49,7 +49,7 @@ export class PurityDecimalDirective {
     }
 
     // Remove non-numeric characters except the decimal point
-    value = value.replace(/[^0-9.]/g, '');
+    value = value.replace(/[^0-9.-]/g, '');
 
     // Apply the custom format string
     value = this.applyFormat(value, formatString);

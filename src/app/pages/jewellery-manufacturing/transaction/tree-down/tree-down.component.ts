@@ -293,14 +293,22 @@ export class TreeDownComponent implements OnInit {
         this.commonService.closeSnackBarMsg()
         let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
         if (data && data[0]?.RESULT == 0) {
+<<<<<<< HEAD
           this.commonService.toastErrorByMsgId('Voucher Number Already Exists')//CHINNU -  MESSAGE HARD CODED
+=======
+          this.commonService.toastErrorByMsgId('MSG2284')//Voucher Number Already Exists
+>>>>>>> origin/ERP_Staging
           this.generateVocNo()
           return
         }
       }, err => {
         this.isloading = false;
         this.generateVocNo()
+<<<<<<< HEAD
         this.commonService.toastErrorByMsgId('Error Something went wrong')//CHINNU -  MESSAGE HARD CODED
+=======
+        this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+>>>>>>> origin/ERP_Staging
       })
     this.subscriptions.push(Sub)
   }
@@ -317,16 +325,66 @@ export class TreeDownComponent implements OnInit {
   removedata() {
     this.tableData.pop();
   }
+
+  submitValidations(form: any) {
+    if (this.commonService.nullToString(form.processCode) == '') {
+      this.commonService.toastErrorByMsgId('MSG1680')// processCode CANNOT BE EMPTY
+      return true
+    }
+    else if (this.commonService.nullToString(form.worker) == '') {
+      this.commonService.toastErrorByMsgId('MSG1951')//"worker cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.convFact) == '') {
+      this.commonService.toastErrorByMsgId('MSG1141')//"convFact cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.waxWt) == '') {
+      this.commonService.toastErrorByMsgId('')//"waxWt cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.reqMetal) == '') {
+      this.commonService.toastErrorByMsgId('')//"reqMetal cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.toProcess) == '') {
+      this.commonService.toastErrorByMsgId('MSG1907')//"toProcess cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.karatCode) == '') {
+      this.commonService.toastErrorByMsgId('MSG1363')//"karatCode cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.toWorker) == '') {
+      this.commonService.toastErrorByMsgId('MSG1912')//"toWorker cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.color) == '') {
+      this.commonService.toastErrorByMsgId('MSG1125')//"color cannot be empty"
+      return true
+    }
+    return false;
+  }
+
   formSubmit() {
 
     if (this.content && this.content.FLAG == 'EDIT') {
       this.update()
       return
     }
+<<<<<<< HEAD
     if (this.treeDownFrom.invalid) {
       this.toastr.error('select all required fields')//CHINNU -  MESSAGE HARD CODED
       return
     }
+=======
+
+    if (this.submitValidations(this.treeDownFrom.value)) return;
+    // if (this.treeDownFrom.invalid) {
+    //   this.toastr.error('select all required fields')
+    //   return
+    // }
+>>>>>>> origin/ERP_Staging
 
     let API = 'JobTreeMasterDJ/InsertJobTreeMasterDJ'
     let postData = {
@@ -457,10 +515,19 @@ export class TreeDownComponent implements OnInit {
 
 
   update() {
+<<<<<<< HEAD
     if (this.treeDownFrom.invalid) {
       this.toastr.error('select all required fields')//CHINNU -  MESSAGE HARD CODED
       return
     }
+=======
+
+    if (this.submitValidations(this.treeDownFrom.value)) return;
+    // if (this.treeDownFrom.invalid) {
+    //   this.toastr.error('select all required fields')
+    //   return
+    // }
+>>>>>>> origin/ERP_Staging
 
     let API = 'JobTreeMasterDJ/UpdateJobTreeMasterDJ/' + this.treeDownFrom.value.branchCode + this.treeDownFrom.value.voctype + this.treeDownFrom.value.vocno + this.treeDownFrom.value.yearMonth;
     let postData = {
@@ -638,7 +705,7 @@ export class TreeDownComponent implements OnInit {
                 });
               }
             } else {
-              this.toastr.error('Not deleted')
+              this.commonService.toastErrorByMsgId('MSG1880');// Not Deleted
             }
           }, err => alert(err))
         this.subscriptions.push(Sub)
@@ -700,7 +767,11 @@ export class TreeDownComponent implements OnInit {
         }
 
       }, err => {
+<<<<<<< HEAD
         this.commonService.toastErrorByMsgId('network issue found')//CHINNU -  MESSAGE HARD CODED
+=======
+        this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+>>>>>>> origin/ERP_Staging
       })
     this.subscriptions.push(Sub)
   }

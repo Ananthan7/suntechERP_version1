@@ -471,7 +471,11 @@ export class WorkerMasterComponent implements OnInit {
         if (result.status == "Success") { //
           let data = result.dynamicData[0]
           if (data.length > 0) {
+<<<<<<< HEAD
             this.commonService.toastErrorByMsgId('worker cannot be inactive')//CHINNU -  MESSAGE HARD CODED
+=======
+            this.commonService.toastErrorByMsgId('MSG3758')
+>>>>>>> origin/ERP_Staging
             this.workerMasterForm.controls.Active.setValue(true)
             this.workerMasterForm.controls.Active.disable();
           }

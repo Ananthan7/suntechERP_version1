@@ -236,14 +236,22 @@ export class WaxProcessReturnComponent implements OnInit {
         this.comService.closeSnackBarMsg()
         let data = this.comService.arrayEmptyObjectToString(result.dynamicData[0])
         if (data && data[0]?.RESULT == 0) {
+<<<<<<< HEAD
           this.comService.toastErrorByMsgId('Voucher Number Already Exists')//CHINNU -  MESSAGE HARD CODED
+=======
+          this.comService.toastErrorByMsgId('MSG2284')//Voucher Number Already Exists
+>>>>>>> origin/ERP_Staging
           this.generateVocNo()
           return
         }
       }, err => {
         this.isloading = false;
         this.generateVocNo()
+<<<<<<< HEAD
         this.comService.toastErrorByMsgId('Error Something went wrong')//CHINNU -  MESSAGE HARD CODED
+=======
+        this.comService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+>>>>>>> origin/ERP_Staging
       })
     this.subscriptions.push(Sub)
   }
@@ -260,16 +268,46 @@ export class WaxProcessReturnComponent implements OnInit {
     this.tableData.pop();
   }
 
+
+  submitValidations(form: any) {
+    if (this.comService.nullToString(form.voctype) == '') {
+      this.comService.toastErrorByMsgId('MSG1939')// voctype code CANNOT BE EMPTY
+      return true
+    }
+    else if (this.comService.nullToString(form.vocno) == '') {
+      this.comService.toastErrorByMsgId('MSG3661')//"vocno cannot be empty"
+      return true
+    }
+    else if (this.comService.nullToString(form.process) == '') {
+      this.comService.toastErrorByMsgId('MSG1680')//"process cannot be empty"
+      return true
+    }
+    else if (this.comService.nullToString(form.worker) == '') {
+      this.comService.toastErrorByMsgId('MSG1951')//"worker cannot be empty"
+      return true
+    }
+    return false;
+  }
+
   formSubmit() {
 
     if (this.content && this.content.FLAG == 'EDIT') {
       this.update()
       return
     }
+<<<<<<< HEAD
     if (this.waxprocessFrom.invalid) {
       this.toastr.error('select all required fields')//CHINNU -  MESSAGE HARD CODED
       return
     }
+=======
+    // if (this.waxprocessFrom.invalid) {
+    //   this.toastr.error('select all required fields')
+    //   return
+    // }
+
+    if (this.submitValidations(this.waxprocessFrom.value)) return;
+>>>>>>> origin/ERP_Staging
 
     let API = 'JobWaxReturn/InsertJobWaxReturn'
     let postData = {
@@ -358,10 +396,19 @@ export class WaxProcessReturnComponent implements OnInit {
 
 
   update() {
+<<<<<<< HEAD
     if (this.waxprocessFrom.invalid) {
       this.toastr.error('select all required fields')//CHINNU -  MESSAGE HARD CODED
       return
     }
+=======
+    // if (this.waxprocessFrom.invalid) {
+    //   this.toastr.error('select all required fields')
+    //   return
+    // }
+
+    if (this.submitValidations(this.waxprocessFrom.value)) return;
+>>>>>>> origin/ERP_Staging
 
     let API = 'JobWaxReturn/UpdateJobWaxReturn/' + this.waxprocessFrom.value.branchCode + this.waxprocessFrom.value.voctype + this.waxprocessFrom.value.vocno + this.waxprocessFrom.value.yearMonth
     let postData = {
@@ -505,7 +552,7 @@ export class WaxProcessReturnComponent implements OnInit {
                 });
               }
             } else {
-              this.toastr.error('Not deleted')
+              this.comService.toastErrorByMsgId('MSG1880');// Not Deleted
             }
           }, err => alert(err))
         this.subscriptions.push(Sub)
@@ -563,7 +610,11 @@ export class WaxProcessReturnComponent implements OnInit {
         }
 
       }, err => {
+<<<<<<< HEAD
         this.comService.toastErrorByMsgId('network issue found')//CHINNU -  MESSAGE HARD CODED
+=======
+        this.comService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+>>>>>>> origin/ERP_Staging
       })
     this.subscriptions.push(Sub)
   }

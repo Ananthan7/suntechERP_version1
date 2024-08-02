@@ -178,14 +178,22 @@ export class StoneReturnComponent implements OnInit {
         this.commonService.closeSnackBarMsg()
         let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
         if (data && data[0]?.RESULT == 0) {
+<<<<<<< HEAD
           this.commonService.toastErrorByMsgId('Voucher Number Already Exists')//CHINNU -  MESSAGE HARD CODED
+=======
+          this.commonService.toastErrorByMsgId('MSG2284')//Voucher Number Already Exists
+>>>>>>> origin/ERP_Staging
           this.generateVocNo()
           return
         }
       }, err => {
         this.isloading = false;
         this.generateVocNo()
+<<<<<<< HEAD
         this.commonService.toastErrorByMsgId('Error Something went wrong')//CHINNU -  MESSAGE HARD CODED
+=======
+        this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+>>>>>>> origin/ERP_Staging
       })
     this.subscriptions.push(Sub)
   }
@@ -224,7 +232,11 @@ export class StoneReturnComponent implements OnInit {
               })
             });
           } else {
+<<<<<<< HEAD
             this.commonService.toastErrorByMsgId('Detail data not found')//CHINNU -  MESSAGE HARD CODED
+=======
+            this.commonService.toastErrorByMsgId('MSG1200')//	Detail record not found
+>>>>>>> origin/ERP_Staging
           }
           this.stonereturnFrom.controls.basecurrency.setValue(data.BASE_CURRENCY)
           this.stonereturnFrom.controls.basecurrencyrate.setValue(data.BASE_CURR_RATE)
@@ -421,7 +433,7 @@ export class StoneReturnComponent implements OnInit {
       "REMARKS": this.commonService.nullToString(form.remark),
       "NAVSEQNO": 0,
       "BASE_CURRENCY": this.commonService.nullToString(form.basecurrency),
-      "BASE_CURR_RATE": this.commonService.nullToString(form.basecurrencyrate),
+      "BASE_CURR_RATE": this.commonService.emptyToZero(form.basecurrencyrate),
       "BASE_CONV_RATE": 0,
       "AUTOPOSTING": true,
       "POSTDATE": this.commonService.formatDateTime(this.currentDate),
@@ -433,15 +445,36 @@ export class StoneReturnComponent implements OnInit {
       "Details": this.stoneReturnData,
     }
   }
+
+  submitValidations(form: any) {
+    if (this.commonService.nullToString(form.currency) == '') {
+      this.commonService.toastErrorByMsgId('MSG1173')// currency code CANNOT BE EMPTY
+      return true
+    }
+    else if (this.commonService.nullToString(form.currencyrate) == '') {
+      this.commonService.toastErrorByMsgId('MSG1177')//"currencyrate cannot be empty"
+      return true
+    }
+    return false;
+  }
+
   formSubmit() {
     if (this.content && this.content.FLAG == 'EDIT') {
       this.update()
       return
     }
+<<<<<<< HEAD
     if (this.stonereturnFrom.invalid) {
       this.toastr.error('select all required fields')//CHINNU -  MESSAGE HARD CODED
       return
     }
+=======
+    if (this.submitValidations(this.stonereturnFrom.value)) return;
+    // if (this.stonereturnFrom.invalid) {
+    //   this.toastr.error('select all required fields')
+    //   return
+    // }
+>>>>>>> origin/ERP_Staging
 
     let API = 'JobStoneReturnMasterDJ/InsertJobStoneReturnMasterDJ'
     let postData = this.setPostData(this.stonereturnFrom.value);
@@ -472,10 +505,18 @@ export class StoneReturnComponent implements OnInit {
 
 
   update() {
+<<<<<<< HEAD
     if (this.stonereturnFrom.invalid) {
       this.toastr.error('select all required fields')//CHINNU -  MESSAGE HARD CODED
       return
     }
+=======
+    // if (this.stonereturnFrom.invalid) {
+    //   this.toastr.error('select all required fields')
+    //   return
+    // }
+    if (this.submitValidations(this.stonereturnFrom.value)) return;
+>>>>>>> origin/ERP_Staging
     let FG = this.stonereturnFrom.value
     let API = `JobStoneReturnMasterDJ/UpdateJobStoneReturnMasterDJ/${FG.BRANCH_CODE}/${FG.VOCTYPE}/${FG.VOCNO}/${FG.YEARMONTH}`
     let postData = this.setPostData(this.stonereturnFrom.value)
@@ -561,7 +602,7 @@ export class StoneReturnComponent implements OnInit {
                 });
               }
             } else {
-              this.toastr.error('Not deleted')
+              this.commonService.toastErrorByMsgId('MSG1880');// Not Deleted
             }
           }, err => alert(err))
         this.subscriptions.push(Sub)
@@ -604,7 +645,11 @@ export class StoneReturnComponent implements OnInit {
           return
         }
       }, err => {
+<<<<<<< HEAD
         this.commonService.toastErrorByMsgId('Error Something went wrong')//CHINNU -  MESSAGE HARD CODED
+=======
+        this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+>>>>>>> origin/ERP_Staging
       })
     this.subscriptions.push(Sub)
   }

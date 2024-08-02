@@ -238,14 +238,16 @@ export class StoneIssueComponent implements OnInit {
         this.comService.closeSnackBarMsg()
         let data = this.comService.arrayEmptyObjectToString(result.dynamicData[0])
         if (data && data[0]?.RESULT == 0) {
-          this.comService.toastErrorByMsgId('Voucher Number Already Exists')
+          this.comService.toastErrorByMsgId('MSG2284')//Voucher Number Already Exists
+
           this.generateVocNo()
           return
         }
       }, err => {
         this.isloading = false;
         this.generateVocNo()
-        this.comService.toastErrorByMsgId('Error Something went wrong')
+        this.comService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+
       })
     this.subscriptions.push(Sub)
   }
@@ -439,15 +441,11 @@ export class StoneIssueComponent implements OnInit {
   }
   submitValidations(form: any) {
     if (this.stoneIssueData.length == 0) {
-      this.comService.toastErrorByMsgId('details not added')
+      this.comService.toastErrorByMsgId('MSG1453')//No details found!!
       return true
     }
     if (form.VOCTYPE == '') {
-      this.comService.toastErrorByMsgId('VOCTYPE is required')
-      return true
-    }
-    if (form.vocdate == '') {
-      this.comService.toastErrorByMsgId('vocdate is required')
+      this.comService.toastErrorByMsgId('MSG1939')// voctype  CANNOT BE EMPTY
       return true
     }
     return false
@@ -515,10 +513,10 @@ export class StoneIssueComponent implements OnInit {
   /**USE: delete worker master from row */
   deleteRecord() {
     if (this.content && this.content.FLAG == 'VIEW') return
-    if (!this.content?.VOCTYPE) {
-      this.showDeleteErrorDialog('Please Select data to delete!');
-      return;
-    }
+    // if (!this.content?.VOCTYPE) {
+    //   this.showDeleteErrorDialog('Please Select data to delete!');
+    //   return;
+    // }
 
     this.showConfirmationDialog().then((result) => {
       if (result.isConfirmed) {
@@ -533,10 +531,10 @@ export class StoneIssueComponent implements OnInit {
                 this.showErrorDialog(result.message || 'Error please try again');
               }
             } else {
-              this.toastr.error('Not deleted');
+              this.comService.toastErrorByMsgId('MSG1880');// Not Deleted
             }
           }, err => {
-            this.comService.toastErrorByMsgId('network error')
+            this.comService.toastErrorByMsgId('MSG2272')//Error occured, please try again
           });
         this.subscriptions.push(Sub);
       }
@@ -627,7 +625,8 @@ export class StoneIssueComponent implements OnInit {
           return
         }
       }, err => {
-        this.comService.toastErrorByMsgId('Error Something went wrong')
+        this.comService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+
       })
     this.subscriptions.push(Sub)
   }

@@ -831,8 +831,12 @@ export class LabourChargeMasterComponent implements OnInit {
     // Check if Ct Wt From is greater than Ct Wt To
     if (size_from > size_to) {
       // Display an error message
+<<<<<<< HEAD
       this.commonService.toastErrorByMsgId('Size From should be lesser than Size To');
       //CHINNU -  MESSAGE HARD CODED
+=======
+      this.commonService.toastErrorByMsgId('MSG81517');//Size From should be lesser than Size To
+>>>>>>> origin/ERP_Staging
       // Clear the value of Ct Wt To input field
       this.diamondlabourMasterForm.controls.size_to.setValue('');
     }
@@ -1133,7 +1137,7 @@ export class LabourChargeMasterComponent implements OnInit {
 
     else if (this.diamondlabourMasterForm.value.size_from > this.diamondlabourMasterForm.value.size_to) {
      // this.commonService.toastErrorByMsgId('MSG2496') //"Size From should be lesser than Size To"
-      this.toastr.error('Size From should be lesser than Size To')
+     this.commonService.toastErrorByMsgId('MSG81517') //Size From should be lesser than Size To
       return true
     }
 
