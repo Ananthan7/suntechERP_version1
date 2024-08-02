@@ -94,7 +94,7 @@ export class MeltingIssueComponent implements OnInit {
   workerCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 254,
+    LOOKUPID: 19,
     SEARCH_FIELD: 'WORKER_CODE',
     SEARCH_HEADING: 'Worker Search',
     SEARCH_VALUE: '',
@@ -597,6 +597,7 @@ export class MeltingIssueComponent implements OnInit {
   }
 
   openaddMeltingIssueDetails(dataToChild?: any) {
+    console.log(this.openaddMeltingIssueDetails)
     if (!this.meltingIssueFrom.get('meltingtype')?.value) {
       // this.showErrorToast();
     } else {
@@ -665,7 +666,7 @@ export class MeltingIssueComponent implements OnInit {
       return true;
     }
     if (this.commonService.nullToString(form.jobno) == '') {
-      this.commonService.toastErrorByMsgId('MSG3783')
+      this.commonService.toastErrorByMsgId("MSG3783")
       return true;
     }
     if (this.commonService.nullToString(form.processcode) == '') {
@@ -690,7 +691,7 @@ export class MeltingIssueComponent implements OnInit {
     }
     if (DATA.FLAG == 'SAVE') this.closeDetailScreen();
     if (DATA.FLAG == 'CONTINUE') {
-      this.commonService.showSnackBarMsg('Details added successfully')
+      this.commonService.showSnackBarMsg('MSG81512')
     };
   }
   closeDetailScreen() {

@@ -249,17 +249,48 @@ export class MeltingIssueDetailsComponent implements OnInit {
     topurity: ['', [Validators.required]],
     FLAG: [null]
   });
-  submitValidations() {
-    let form = this.meltingIssuedetailsFrom.value
-    if (this.comService.nullToString(form.jobNumber) == '') {
-      this.toastr.error('JMSG1601')
-      return
+  submitValidations(form: any) {
+    if (this.comService.nullToString(form.jobno) == '') {
+      this.comService.toastErrorByMsgId('MSG1358')//Job number is required
+      return true
     }
-    return false;
+    if (this.comService.nullToString(form.worker) == '') {
+      this.comService.toastErrorByMsgId('MSG1951')//Worker code is required
+      return true
+    }
+    if (this.comService.nullToString(form.process) == '') {
+      this.comService.toastErrorByMsgId('MSG1680')//Process code is required
+      return true
+    }
+    if (this.comService.nullToString(form.waxweight) == '') {
+      this.comService.toastErrorByMsgId('MSG1816')//waxweight  is required
+      return true
+    }
+    if (this.comService.emptyToZero(form.lossweight) == 0) {
+      this.comService.toastErrorByMsgId('MSG1293')//lossweight  is required
+      return true
+    }
+    if (this.comService.emptyToZero(form.ticketno) == 0) {
+      this.comService.toastErrorByMsgId('MSG1293')//Ticket NUmber  is required
+      return true
+    }
+    if (this.comService.emptyToZero(form.lotno) == 0) {
+      this.comService.toastErrorByMsgId('MSG1293')//Lot Number is required
+      return true
+    }
+    if (this.comService.emptyToZero(form.barno) == 0) {
+      this.comService.toastErrorByMsgId('MSG1293')//Bar Number is required
+      return true
+    }
+    if (this.comService.emptyToZero(form.silver) == 0) {
+      this.comService.toastErrorByMsgId('MSG1293')//Silver is required
+      return true
+    }
+    return false
   }
-
+  /**use: to save data to grid*/
   formSubmit(flag: any) {
-    if (this.submitValidations()) return;
+    if (this.submitValidations(this.meltingIssuedetailsFrom.value)) return;
     let dataToparent = {
       FLAG: flag,
       POSTDATA: this.setPostData()
@@ -270,7 +301,6 @@ export class MeltingIssueDetailsComponent implements OnInit {
       // this.resetStockDetails()
     }
   }
-
   setPostData() {
     let form = this.meltingIssuedetailsFrom.value
     let currRate = this.comService.getCurrecnyRate(this.comService.compCurrency)
@@ -374,6 +404,17 @@ export class MeltingIssueDetailsComponent implements OnInit {
 
   }
 
+  pureWeightChange() {
+    //dont make functions complicated write with same name in input
+    //use only simple methods
+    // use same names for same feilds
+    let form = this.meltingIssuedetailsFrom.value;
+    let purity = this.comService.pureWeightCalculate(form.netweight, form.purity)
+    this.setValueWithDecimal('purity', purity, 'PURITY')
+    let topurity = this.comService.pureWeightCalculate(purity, form.pureweight)
+    this.setValueWithDecimal('topurity', topurity, 'METAL')
+
+  }
 
 
   // deleteRecord() {
@@ -491,7 +532,7 @@ export class MeltingIssueDetailsComponent implements OnInit {
           return
         }
       }, err => {
-        this.commonService.toastErrorByMsgId('Error Something went wrong')
+        this.commonService.toastErrorByMsgId('MSG2272')
       })
     this.subscriptions.push(Sub)
   }
@@ -518,6 +559,7 @@ export class MeltingIssueDetailsComponent implements OnInit {
         if (result.dynamicData && result.dynamicData[0].length > 0) {
           let data = result.dynamicData[0]
           console.log(data[0], 'datapassing')
+          this.meltingIssuedetailsFrom.controls.jobdes.setValue(data[0].DESCRIPTION)
           this.meltingIssuedetailsFrom.controls.process.setValue(data[0].PROCESS)
           this.meltingIssuedetailsFrom.controls.worker.setValue(data[0].WORKER)
           this.meltingIssuedetailsFrom.controls.stockcode.setValue(data[0].STOCK_CODE)
