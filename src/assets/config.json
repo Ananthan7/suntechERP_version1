@@ -1,9 +1,10 @@
 {  
     "baseUrl": "http://94.200.156.234:85/api/",
-    "//baseUrl": "http://5.195.165.122:94/api/",
+    "//baseUrl_JHR": "http://192.168.1.103:106/api/",
+    "//baseUrl_MEENA": "http://5.195.165.122:94/api/",
     "//baseUrl": "http://94.200.156.234:443/api/",
     "//baseUrl": "http://185.56.89.191:181/api/",
-    "//baseUrl": "http://192.168.1.25:92/api/"
+    "//baseUrl_BHIMA": "http://192.168.1.25:92/api/"
 }
 
     

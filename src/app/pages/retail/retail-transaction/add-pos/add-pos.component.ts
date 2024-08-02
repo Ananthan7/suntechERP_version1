@@ -575,7 +575,7 @@ editLineItem:boolean=false;
   mainVocType: any = '';
   autoPosting: any;
   isAutoPosting: boolean = false;
-  baseYear: any = localStorage.getItem('YEAR') || '';
+  baseYear:  any = '';
   updateBtn!: boolean;
   all_branch: any;
   orderedItemEditId: any;
@@ -764,7 +764,7 @@ editLineItem:boolean=false;
   ) {
     this.strBranchcode = localStorage.getItem('userbranch');
     this.strUser = localStorage.getItem('username');
-    this.baseYear = localStorage.getItem('YEAR');
+    // this.baseYear = localStorage.getItem('YEAR');
     let branchParams: any = localStorage.getItem('BRANCH_PARAMETER')
     this.comFunc.allbranchMaster = JSON.parse(branchParams);
     this.isGiftTypeRequired = this.comFunc.allbranchMaster.BRNCHSHOW_GIFTMODULE ? this.comFunc.allbranchMaster.BRNCHSHOW_GIFTMODULE : false;
@@ -1211,7 +1211,7 @@ editLineItem:boolean=false;
     return optionExists ? null : { optionNotFound: true };
   }
 
-  getArgs() {
+  async getArgs() {
     console.log('======content==============================');
     console.log(this.content);
     console.log('====================================');
@@ -1224,7 +1224,7 @@ editLineItem:boolean=false;
       this.LOCKVOUCHERNO = true;
       this.vocDataForm.controls.fcn_voc_no.setValue(this.content.VOCNO);
       this.vocDataForm.controls.vocdate.setValue(this.content.VOCDATE);
-      this.getFinancialYear();
+      await this.getFinancialYear();
 
       this.strBranchcode = this.content.BRANCH_CODE;
       this.vocType = this.content.VOCTYPE;
@@ -1245,8 +1245,8 @@ editLineItem:boolean=false;
 
 
     } else {
-      this.getFinancialYear();
-      this.generateVocNo();
+      await this.getFinancialYear();
+      await this.generateVocNo();
       this.voucherDetails = this.comFunc.getVoctypeMasterByVocTypeMain(this.strBranchcode, this.vocDataForm.value.voc_type, this.mainVocType)
       // this.setVoucherTypeMaster();
 
@@ -2329,7 +2329,7 @@ editLineItem:boolean=false;
         "VOCDATE": new Date().toISOString(),
         "BRANCH_CODE": this.strBranchcode,
         "REC_BRANCHCODE": this.strBranchcode,
-        "YEARMONTH": this.baseYear || localStorage.getItem('YEAR'),
+        "YEARMONTH": this.baseYear,
         "RECEIPT_MODE": RECEIPT_MODE,
         "CURRENCY_CODE": this.comFunc.compCurrency,
         // "CURRENCY_RATE": this.comFunc.currencyRate ?? '1',
@@ -2337,7 +2337,7 @@ editLineItem:boolean=false;
         "AMOUNT_FC": AMOUNT_FC,
         "AMOUNT_CC": AMOUNT_CC,
         "DESCRIPTION": "",
-        "FYEARCODE": this.baseYear || localStorage.getItem('YEAR'),
+        "FYEARCODE": this.baseYear,
         // "FYEARCODE": "2023",
 
         "ARECVOCNO": ARECVOCNO,
@@ -2381,7 +2381,7 @@ editLineItem:boolean=false;
         "REC_COMM_AMOUNTCC": COMMISSION_RATE,
         "POS_CREDIT_ACCODE": "0",
         "POS_CREDIT_ACNAME": "0",
-        "DT_YEARMONTH": this.baseYear || localStorage.getItem('YEAR'),
+        "DT_YEARMONTH": this.baseYear,
         // "DT_YEARMONTH": "2022",
         "RECEIPT_TYPE": PAYMENT_MODE,
         "GIFT_CARD_BRANCH": "0",
@@ -3594,7 +3594,7 @@ editLineItem:boolean=false;
             this.customerDetails?.CREDIT_LIMIT_STATUS || false,
           PANCARDNO: this.customerDetails?.PANCARDNO || '111111' || '',
           VOCTYPE: this.vocType || '',
-          YEARMONTH: this.baseYear || localStorage.getItem('YEAR'),
+          YEARMONTH: this.baseYear,
           VOCNO: this.vocDataForm.value.fcn_voc_no || 0,
           VOCDATE: this.convertDateWithTimeZero(
             new Date(this.vocDataForm.value.vocdate).toISOString()
@@ -5430,7 +5430,7 @@ editLineItem:boolean=false;
       DT_BRANCH_CODE: this.strBranchcode,
       DT_VOCNO: 0, // to 0
       DT_VOCTYPE: this.vocType, // change
-      DT_YEARMONTH: this.baseYear || localStorage.getItem('YEAR'),
+      DT_YEARMONTH: this.baseYear,
       SUPPLIERDISC: '',
       DTKarat: 0,
       JAWAHARAYN: this.exchangeForm.value.fcn_exchange_jawahara || 0,
@@ -6336,7 +6336,7 @@ editLineItem:boolean=false;
       DT_VOCNO: '0', // to 0
       DT_VOCTYPE: this.vocType, // change
       // "DT_VOCTYPE":  this.vocType, // change
-      DT_YEARMONTH: this.baseYear || localStorage.getItem('YEAR'),
+      DT_YEARMONTH: this.baseYear,
       DT_BLOCKPSRIMPORT: false,
       // GIFT_ITEM: false,
 
@@ -7970,7 +7970,7 @@ editLineItem:boolean=false;
       data.DT_VOCTYPE = this.vocType;
       data.DT_BRANCH_CODE = this.strBranchcode;
       data.DT_VOCNO = 0;
-      data.DT_YEARMONTH = this.baseYear || localStorage.getItem('YEAR');
+      data.DT_YEARMONTH = this.baseYear;
       data.OT_TRANSFER_TIME = new Date();
       // new fields added - 27-12-2023
       data.ORIGINALKARAT_RATE = Number(data.POPKARAT_RATE) || 0;
@@ -8312,7 +8312,7 @@ editLineItem:boolean=false;
             this.customerDetails?.CREDIT_LIMIT_STATUS || false,
           PANCARDNO: this.customerDetails?.PANCARDNO || '111111' || '',
           VOCTYPE: this.vocType || '',
-          YEARMONTH: this.baseYear || localStorage.getItem('YEAR'),
+          YEARMONTH: this.baseYear,
           VOCNO: this.vocDataForm.value.fcn_voc_no || 0,
           VOCDATE: this.convertDateWithTimeZero(
             new Date(this.vocDataForm.value.vocdate).toISOString()
@@ -10910,7 +10910,7 @@ printReceiptDetailsWeb() {
       VOCDATE: this.convertDateWithTimeZero(
         new Date(this.vocDataForm.value.vocdate).toISOString()
       ),
-      YEARMONTH: this.baseYear || localStorage.getItem('YEAR'),
+      YEARMONTH: this.baseYear,
       PARTYNAME: this.customerDataForm.value.fcn_customer_name,
       // "PARTYNAME": "Urwashi Jani",
       TEL1: this.customerDetails?.TEL1 || '',
@@ -11206,7 +11206,7 @@ printReceiptDetailsWeb() {
       VOCDATE: this.convertDateWithTimeZero(
         new Date(this.vocDataForm.value.vocdate).toISOString()
       ),
-      YEARMONTH: this.baseYear || localStorage.getItem('YEAR'),
+      YEARMONTH: this.baseYear,
       PARTYCODE: this.comFunc.basePartyCode,
       PARTY_CURRENCY: this.comFunc.compCurrency,
       PARTY_CURR_RATE: 1,
@@ -11626,7 +11626,7 @@ printReceiptDetailsWeb() {
       VOCDATE: this.convertDateWithTimeZero(
         new Date(this.vocDataForm.value.vocdate).toISOString()
       ),
-      YEARMONTH: this.baseYear || localStorage.getItem('YEAR'),
+      YEARMONTH: this.baseYear,
       PARTYNAME: this.customerDataForm.value.fcn_customer_name,
       TEL1: this.customerDetails?.TEL1 || '',
       TEL2: this.customerDetails?.TEL2 || '',
