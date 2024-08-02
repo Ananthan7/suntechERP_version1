@@ -515,22 +515,22 @@ export class CastingTreeUpComponent implements OnInit {
       this.commonService.toastErrorByMsgId('MSG3661')// vocNo code CANNOT BE EMPTY
       return true
     }
-    else if (this.commonService.nullToString(form.tree) == '') {
-      this.commonService.toastErrorByMsgId('')//"tree cannot be empty"
-      return true
-    }
+    // else if (this.commonService.nullToString(form.tree) == '') {
+    //   this.commonService.toastErrorByMsgId('')//"tree cannot be empty"
+    //   return true
+    // }
     else if (this.commonService.nullToString(form.stoneWt) == '') {
-      this.commonService.toastErrorByMsgId('')//"stoneWt cannot be empty"
+      this.commonService.toastErrorByMsgId('MSG3746')//"stoneWt cannot be empty"
       return true
     }
-    else if (this.commonService.nullToString(form.treeNo) == '') {
-      this.commonService.toastErrorByMsgId('')//"treeNo cannot be empty"
-      return true
-    }
-    else if (this.commonService.nullToString(form.waxWt) == '') {
-      this.commonService.toastErrorByMsgId('')//"waxWt cannot be empty"
-      return true
-    }
+    // else if (this.commonService.nullToString(form.treeNo) == '') {
+    //   this.commonService.toastErrorByMsgId('')//"treeNo cannot be empty"
+    //   return true
+    // }
+    // else if (this.commonService.nullToString(form.waxWt) == '') {
+    //   this.commonService.toastErrorByMsgId('')//"waxWt cannot be empty"
+    //   return true
+    // }
     else if (this.commonService.nullToString(form.toWorker) == '') {
       this.commonService.toastErrorByMsgId('MSG1912')//"toWorker cannot be empty"
       return true
@@ -548,10 +548,6 @@ export class CastingTreeUpComponent implements OnInit {
       return
     }
     if (this.submitValidations(this.castingTreeUpFrom.value)) return;
-    //  if (this.castingTreeUpFrom.invalid) {
-    //   this.toastr.error('select all required fields')
-    //   return
-    // }
 
     let API = 'JobTreeMasterDJ/InsertJobTreeMasterDJ'
     let postData = {
@@ -623,10 +619,7 @@ export class CastingTreeUpComponent implements OnInit {
 
 
   update() {
-    // if (this.castingTreeUpFrom.invalid) {
-    //   this.toastr.error('select all required fields')
-    //   return
-    // }
+ 
     if (this.submitValidations(this.castingTreeUpFrom.value)) return;
 
     let API = `JobTreeMasterDJ/UpdateJobTreeMasterDJ/${this.branchCode}/${this.castingTreeUpFrom.value.vocType}/${this.castingTreeUpFrom.value.vocNo}/${this.commonService.yearSelected}`;

@@ -167,7 +167,7 @@ export class WaxProcessComponent implements OnInit {
     let jobNumberData = [];
     jobNumberData = this.tableDataJob.filter((item: any) => item.JOB_NUMBER == data.job_number)
     if (jobNumberData.length > 0) {
-      this.toastr.error('Same Job Number cannot be added.')
+      this.toastr.error('MSG2052')
     }
     else {
       // console.log(value);

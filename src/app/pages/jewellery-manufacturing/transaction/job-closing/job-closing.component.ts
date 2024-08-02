@@ -407,14 +407,14 @@ export class JobClosingComponent implements OnInit {
         this.comService.closeSnackBarMsg()
         let data = this.comService.arrayEmptyObjectToString(result.dynamicData[0])
         if (data && data[0]?.RESULT == 0) {
-          this.comService.toastErrorByMsgId('Voucher Number Already Exists')
+          this.comService.toastErrorByMsgId('MSG2284')//Voucher Number Already Exists
           this.generateVocNo()
           return
         }
       }, err => {
         this.isloading = false;
         this.generateVocNo()
-        this.comService.toastErrorByMsgId('Error Something went wrong')
+        this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
       })
     this.subscriptions.push(Sub)
   }
@@ -428,15 +428,39 @@ export class JobClosingComponent implements OnInit {
       });
   }
 
+
+  
+  submitValidations(form: any) {
+    if (this.commonService.nullToString(form.vocType) == '') {
+      this.commonService.toastErrorByMsgId('MSG1939')// vocType  CANNOT BE EMPTY
+      return true
+    }
+    else if (this.commonService.nullToString(form.vocNo) == '') {
+      this.commonService.toastErrorByMsgId('MSG1940')//"vocNo cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.stone_loc) == '') {
+      this.commonService.toastErrorByMsgId('')//"stone_loc cannot be empty"
+      return true
+    }
+    // else if (this.commonService.nullToString(form.metal_loc) == '') {
+    //   this.commonService.toastErrorByMsgId('MSG1189')//"metal_loc cannot be empty"
+    //   return true
+    // }
+    return false;
+  }
+
   formSubmit() {
     if (this.content && this.content.FLAG == 'EDIT') {
       this.update()
       return
     }
-    if (this.jobCloseingFrom.invalid) {
-      this.toastr.error('select all required fields')
-      return
-    }
+    if (this.submitValidations(this.jobCloseingFrom.value)) return;
+
+    // if (this.jobCloseingFrom.invalid) {
+    //   this.toastr.error('select all required fields')
+    //   return
+    // }
 
     let API = 'JobClosingMaster/InsertJobClosingMasterDJ'
     let postData = {
@@ -592,10 +616,12 @@ export class JobClosingComponent implements OnInit {
 
   update() {
     console.log(this.update)
-    if (this.jobCloseingFrom.invalid) {
-      this.toastr.error('select all required fields')
-      return
-    }
+    // if (this.jobCloseingFrom.invalid) {
+    //   this.toastr.error('select all required fields')
+    //   return
+    // }
+    if (this.submitValidations(this.jobCloseingFrom.value)) return;
+
 
     let API = `JobClosingMasterDJ/UpdateJobClosingMasterDJ/${this.branchCode}/${this.jobCloseingFrom.value.voctype}/${this.jobCloseingFrom.value.vocno}/${this.commonService.yearSelected}`
     let postData = {
@@ -768,7 +794,7 @@ export class JobClosingComponent implements OnInit {
         }
 
       }, err => {
-        this.comService.toastErrorByMsgId('network issue found')
+        this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
       })
     this.subscriptions.push(Sub)
   }

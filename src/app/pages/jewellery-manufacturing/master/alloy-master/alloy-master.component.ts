@@ -340,40 +340,85 @@ export class AlloyMasterComponent implements OnInit {
     });
   }
 
-
-
   setupFormSubscription(): void {
+    const form = this.alloyMastereForm.value;
+  
     if (this.alloyMastereForm.get('price1Lc') && this.alloyMastereForm.get('price1Fc')) {
       this.alloyMastereForm.get('price1Lc')!.valueChanges.subscribe(value => {
         // Update value of price1Fc whenever price1Lc changes
-        this.alloyMastereForm.get('price1Fc')!.setValue(value);
+        this.alloyMastereForm.get('price1Fc')!.setValue(this.commonService.CCToFC(value, form.currencyRate));
+        // Update percentage calculation
+        this.alloyMastereForm.get('price1per')!.setValue(this.percentageCalculate(value));
       });
     }
-    if (this.alloyMastereForm.get('price2Lc') && this.alloyMastereForm.get('price1Fc')) {
+    if (this.alloyMastereForm.get('price2Lc') && this.alloyMastereForm.get('price2Fc')) {
       this.alloyMastereForm.get('price2Lc')!.valueChanges.subscribe(value => {
-        // Update value of price1Fc whenever price1Lc changes
-        this.alloyMastereForm.get('price2Fc')!.setValue(value);
+        // Update value of price2Fc whenever price2Lc changes
+        this.alloyMastereForm.get('price2Fc')!.setValue(this.commonService.CCToFC(value, form.currencyRate));
+        // Update percentage calculation
+        this.alloyMastereForm.get('price2per')!.setValue(this.percentageCalculate(value));
       });
     }
-    if (this.alloyMastereForm.get('price3Lc') && this.alloyMastereForm.get('price1Fc')) {
+    if (this.alloyMastereForm.get('price3Lc') && this.alloyMastereForm.get('price3Fc')) {
       this.alloyMastereForm.get('price3Lc')!.valueChanges.subscribe(value => {
-        // Update value of price1Fc whenever price1Lc changes
-        this.alloyMastereForm.get('price3Fc')!.setValue(value);
+        // Update value of price3Fc whenever price3Lc changes
+        this.alloyMastereForm.get('price3Fc')!.setValue(this.commonService.CCToFC(value, form.currencyRate));
+        // Update percentage calculation
+        this.alloyMastereForm.get('price3per')!.setValue(this.percentageCalculate(value));
       });
     }
-    if (this.alloyMastereForm.get('price4Lc') && this.alloyMastereForm.get('price1Fc')) {
+    if (this.alloyMastereForm.get('price4Lc') && this.alloyMastereForm.get('price4Fc')) {
       this.alloyMastereForm.get('price4Lc')!.valueChanges.subscribe(value => {
-        // Update value of price1Fc whenever price1Lc changes
-        this.alloyMastereForm.get('price4Fc')!.setValue(value);
+        // Update value of price4Fc whenever price4Lc changes
+        this.alloyMastereForm.get('price4Fc')!.setValue(this.commonService.CCToFC(value, form.currencyRate));
+        // Update percentage calculation
+        this.alloyMastereForm.get('price4per')!.setValue(this.percentageCalculate(value));
       });
     }
-    if (this.alloyMastereForm.get('price5Lc') && this.alloyMastereForm.get('price1Fc')) {
+    if (this.alloyMastereForm.get('price5Lc') && this.alloyMastereForm.get('price5Fc')) {
       this.alloyMastereForm.get('price5Lc')!.valueChanges.subscribe(value => {
-        // Update value of price1Fc whenever price1Lc changes
-        this.alloyMastereForm.get('price5Fc')!.setValue(value);
+        // Update value of price5Fc whenever price5Lc changes
+        this.alloyMastereForm.get('price5Fc')!.setValue(this.commonService.CCToFC(value, form.currencyRate));
+        // Update percentage calculation
+        this.alloyMastereForm.get('price5per')!.setValue(this.percentageCalculate(value));
       });
     }
   }
+  
+
+
+  // setupFormSubscription(): void {
+  //   if (this.alloyMastereForm.get('price1Lc') && this.alloyMastereForm.get('price1Fc')) {
+  //     this.alloyMastereForm.get('price1Lc')!.valueChanges.subscribe(value => {
+  //       // Update value of price1Fc whenever price1Lc changes
+  //       this.alloyMastereForm.get('price1Fc')!.setValue(value);
+  //     });
+  //   }
+  //   if (this.alloyMastereForm.get('price2Lc') && this.alloyMastereForm.get('price1Fc')) {
+  //     this.alloyMastereForm.get('price2Lc')!.valueChanges.subscribe(value => {
+  //       // Update value of price1Fc whenever price1Lc changes
+  //       this.alloyMastereForm.get('price2Fc')!.setValue(value);
+  //     });
+  //   }
+  //   if (this.alloyMastereForm.get('price3Lc') && this.alloyMastereForm.get('price1Fc')) {
+  //     this.alloyMastereForm.get('price3Lc')!.valueChanges.subscribe(value => {
+  //       // Update value of price1Fc whenever price1Lc changes
+  //       this.alloyMastereForm.get('price3Fc')!.setValue(value);
+  //     });
+  //   }
+  //   if (this.alloyMastereForm.get('price4Lc') && this.alloyMastereForm.get('price1Fc')) {
+  //     this.alloyMastereForm.get('price4Lc')!.valueChanges.subscribe(value => {
+  //       // Update value of price1Fc whenever price1Lc changes
+  //       this.alloyMastereForm.get('price4Fc')!.setValue(value);
+  //     });
+  //   }
+  //   if (this.alloyMastereForm.get('price5Lc') && this.alloyMastereForm.get('price1Fc')) {
+  //     this.alloyMastereForm.get('price5Lc')!.valueChanges.subscribe(value => {
+  //       // Update value of price1Fc whenever price1Lc changes
+  //       this.alloyMastereForm.get('price5Fc')!.setValue(value);
+  //     });
+  //   }
+  // }
 
   @ViewChild('codeInput')
   codeInput!: ElementRef;
@@ -928,6 +973,9 @@ export class AlloyMasterComponent implements OnInit {
     }
     if (this.checkStockCode()) return
     this.alloyMastereForm.controls.price2code.setValue(e.PRICE_CODE);
+    if (this.priceSchemeDetails?.length > 0) {
+      this.fillPriceSchemeDetails()
+    }
   }
 
   priceThreeCodeSelected(e: any) {
@@ -937,6 +985,9 @@ export class AlloyMasterComponent implements OnInit {
     }
     if (this.checkStockCode()) return
     this.alloyMastereForm.controls.price3code.setValue(e.PRICE_CODE);
+    if (this.priceSchemeDetails?.length > 0) {
+      this.fillPriceSchemeDetails()
+    }
   }
 
   priceFourCodeSelected(e: any) {
@@ -946,6 +997,9 @@ export class AlloyMasterComponent implements OnInit {
     }
     if (this.checkStockCode()) return
     this.alloyMastereForm.controls.price4code.setValue(e.PRICE_CODE);
+    if (this.priceSchemeDetails?.length > 0) {
+      this.fillPriceSchemeDetails()
+    }
 
   }
   priceFiveCodeSelected(e: any) {
@@ -955,6 +1009,9 @@ export class AlloyMasterComponent implements OnInit {
     }
     if (this.checkStockCode()) return
     this.alloyMastereForm.controls.price5code.setValue(e.PRICE_CODE);
+    if (this.priceSchemeDetails?.length > 0) {
+      this.fillPriceSchemeDetails()
+    }
   }
 
   HSNCenterSelected(e: any) {

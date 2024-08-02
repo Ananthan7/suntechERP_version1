@@ -960,7 +960,7 @@ export class AddNewdetailComponent implements OnInit {
         }
   
       }, err => {
-        this.commonService.toastErrorByMsgId('network issue found')
+        this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
       })
     this.subscriptions.push(Sub)
   }

@@ -246,7 +246,7 @@ export class MetalReturnDetailsComponent implements OnInit {
     let GROSS_WT = this.comService.emptyToZero(form.GROSS_WT)
     let STONE_WT = this.comService.emptyToZero(form.STONE_WT)
     if (STONE_WT > GROSS_WT) {
-      this.comService.toastErrorByMsgId('Stone weight cannot be greater than gross weight')
+      this.comService.toastErrorByMsgId('MSG1844')//Stone weight cannot be greater than gross weight
       return true
     }
     this.setValueWithDecimal('NET_WT', GROSS_WT - STONE_WT, 'THREE')
@@ -375,7 +375,7 @@ export class MetalReturnDetailsComponent implements OnInit {
   submitValidations() {
     let form = this.metalReturnDetailsForm.value
     if (form.jobNumber == '') {
-      this.toastr.error('Job Number required')
+      this.comService.toastErrorByMsgId('MSG1358')//Job Number required
       return
     }
     return false;
@@ -453,7 +453,7 @@ export class MetalReturnDetailsComponent implements OnInit {
                 });
               }
             } else {
-              this.toastr.error('Not deleted')
+              this.comService.toastErrorByMsgId('MSG1880');// Not Deleted
             }
           }, err => alert(err))
         this.subscriptions.push(Sub)
@@ -753,7 +753,7 @@ export class MetalReturnDetailsComponent implements OnInit {
           return
         }
       }, err => {
-        this.comService.toastErrorByMsgId('Error Something went wrong')
+        this.comService.toastErrorByMsgId('MSG2272')//Error occured, please try again
       })
     this.subscriptions.push(Sub)
   }

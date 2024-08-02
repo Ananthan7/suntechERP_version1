@@ -28,9 +28,7 @@
                                 <mat-form-field style="width: 80%;" appearance="outline">
                                     <input type="text" matInput formControlName="codedes" UpperCaseDirective
                                         autocomplete="off"
-                                        (focusout)="validateLookupField($event,codeCodeData,'codedes')"
-                                        [readonly]="viewMode || editMode"
-                                        (keydown)="lookupKeyPress($event,'codedes')" />
+                                        [readonly]="viewMode || editMode" />
                                     <master-search [MasterSearchData]="codeCodeData" class="mstrScrch"
                                         (newRowClick)="codeCodeSelected($event)" #overlaycodedescSearch
                                         *ngIf="!editMode && !viewMode">

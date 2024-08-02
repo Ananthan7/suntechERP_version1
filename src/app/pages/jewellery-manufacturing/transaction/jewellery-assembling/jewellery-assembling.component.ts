@@ -634,7 +634,7 @@ export class JewelleryAssemblingComponent implements OnInit {
                   });
                 }
               } else {
-                this.toastr.error('Not deleted')
+                this.commonService.toastErrorByMsgId('MSG1880');// Not Deleted
               }
             }, err => alert(err))
           this.subscriptions.push(Sub)

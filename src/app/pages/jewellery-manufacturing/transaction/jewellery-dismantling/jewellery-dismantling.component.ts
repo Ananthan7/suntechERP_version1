@@ -342,12 +342,27 @@ setPostData(){
 }
 }
 
+submitValidations(form: any) {
+  if (this.commonService.nullToString(form.voctype) == '') {
+    this.commonService.toastErrorByMsgId('MSG1939')// voctype  CANNOT BE EMPTY
+    return true
+  }
+  else if (this.commonService.nullToString(form.vocdate) == '') {
+    this.commonService.toastErrorByMsgId('MSG1331')//"vocdate cannot be empty"
+    return true
+  }
+
+  return false;
+}
+
+
   formSubmit(){
 
     if(this.content && this.content.FLAG == 'EDIT'){
       this.update()
       return
     }
+    if (this.submitValidations(this.jewellerydismantlingFrom.value)) return;
     // if (this.jewellerydismantlingFrom.invalid) {
     //   this.toastr.error('select all required fields')
     //   return
@@ -380,7 +395,7 @@ setPostData(){
           }
       }, err => {
         this.isloading = false;
-        this.comService.toastErrorByMsgId('Not saved')
+        this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
         console.log(err);
       })
     this.subscriptions.push(Sub)
@@ -416,7 +431,7 @@ setPostData(){
           }
       }, err => {
         this.isloading = false;
-        this.comService.toastErrorByMsgId('Not saved')
+        this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
       })
     this.subscriptions.push(Sub)
   }
@@ -482,7 +497,8 @@ setPostData(){
                 });
               }
             } else {
-              this.toastr.error('Not deleted')
+              this.commonService.toastErrorByMsgId('MSG1880');// Not Deleted
+
             }
           }, err => alert(err))
         this.subscriptions.push(Sub)

@@ -341,7 +341,7 @@ export class StoneIssueDetailComponent implements OnInit {
           }
         }
       }, err => {
-        this.comService.toastErrorByMsgId('Error Something went wrong');
+        this.comService.toastErrorByMsgId('MSG2272')//Error occured, please try again
       });
     this.subscriptions.push(Sub);
   }
@@ -395,25 +395,25 @@ export class StoneIssueDetailComponent implements OnInit {
           return
         }
       }, err => {
-        this.comService.toastErrorByMsgId('Error Something went wrong')
+        this.comService.toastErrorByMsgId('MSG2272')//Error occured, please try again
       })
     this.subscriptions.push(Sub)
   }
   submitValidations(form: any) {
     if (this.comService.nullToString(form.jobNumber) == '') {
-      this.comService.toastErrorByMsgId('Job number is required')
+      this.comService.toastErrorByMsgId('MSG1358')//Job number is required
       return true
     }
     if (this.comService.nullToString(form.worker) == '') {
-      this.comService.toastErrorByMsgId('Worker code is required')
+      this.comService.toastErrorByMsgId('MSG1951')//Worker code is required
       return true
     }
     if (this.comService.nullToString(form.process) == '') {
-      this.comService.toastErrorByMsgId('Process code is required')
+      this.comService.toastErrorByMsgId('MSG1680')//Process code is required
       return true
     }
     if (this.comService.nullToString(form.stockCode) == '') {
-      this.comService.toastErrorByMsgId('Stock code is required')
+      this.comService.toastErrorByMsgId('MSG1816')//Stock code is required
       return true
     }
     return false

@@ -298,10 +298,6 @@ export class DiamondJobBoqIssueComponent implements OnInit {
    
   }
 
-  // vocType: ['',[Validators.required]],
-  // vocNo : ['',[Validators.required]],
-  // location : ['',[Validators.required]],
-
   submitValidations(form: any) {
     if (this.commonService.nullToString(form.vocType) == '') {
       this.commonService.toastErrorByMsgId('MSG1939')// vocType code CANNOT BE EMPTY
@@ -325,10 +321,6 @@ export class DiamondJobBoqIssueComponent implements OnInit {
       return
     }
     if (this.submitValidations(this.diamondJobBoqIssue.value)) return;
-    // if (this.diamondJobBoqIssue.invalid) {
-    //   this.toastr.error('select all required fields')
-    //   return
-    // }
 
     let API = 'JobMetalReturnMasterDJ/InsertJobMetalReturnMasterDJ'
     let postData ={
