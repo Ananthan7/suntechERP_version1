@@ -21,21 +21,21 @@ export class MetalBranchTransferInAutoRepairDetailsComponent implements OnInit {
   @Input() content!: any;
   @Input()
   selectedIndex!: number | null;
-  tableData: any[] = [];  
-  tableDatas: any[] = [];  
-  firstTableWidth : any;
-  secondTableWidth : any;
-  columnheadItemDetails:any[] = ['Sr.No','Div','Description','Remarks','Pcs','Gr.Wt','Repair Type','Type'];
-  columnheadItemDetails1:any[] = ['Comp Code','Description','Pcs','Size Set','Size Code','Type','Category','Shape','Height','Width','Length','Radius','Remarks'];
+  tableData: any[] = [];
+  tableDatas: any[] = [];
+  firstTableWidth: any;
+  secondTableWidth: any;
+  columnheadItemDetails: any[] = ['Sr.No', 'Div', 'Description', 'Remarks', 'Pcs', 'Gr.Wt', 'Repair Type', 'Type'];
+  columnheadItemDetails1: any[] = ['Comp Code', 'Description', 'Pcs', 'Size Set', 'Size Code', 'Type', 'Category', 'Shape', 'Height', 'Width', 'Length', 'Radius', 'Remarks'];
   divisionMS: any = 'ID';
-  columnheadItemDetails2:any[] = ['SI.No' , 'Tax%' , 'Tax Amount'];
+  columnheadItemDetails2: any[] = ['SI.No', 'Tax%', 'Tax Amount'];
   branchCode?: String;
   yearMonth?: String;
   currentDate = new FormControl(new Date());
-  isdisabled:boolean=true;
+  isdisabled: boolean = true;
   private subscriptions: Subscription[] = [];
   table: any;
-  status: boolean= true;
+  status: boolean = true;
   viewMode: boolean = false;
   selectedTabIndex = 0;
   urls: string | ArrayBuffer | null | undefined;
@@ -57,7 +57,7 @@ export class MetalBranchTransferInAutoRepairDetailsComponent implements OnInit {
 
 
   ngOnInit(): void {
-  
+
   }
 
 
@@ -94,24 +94,24 @@ export class MetalBranchTransferInAutoRepairDetailsComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   };
-  partycodeselecteddata(e:any){
+  partycodeselecteddata(e: any) {
     console.log(e);
     this.diamondBranchTransferinAutoRepairDetailForm.controls.partyCode.setValue(e.ACCODE);
-    this.diamondBranchTransferinAutoRepairDetailForm.controls.partName.setValue(e.ACCOUNT_HEAD);
+    this.diamondBranchTransferinAutoRepairDetailForm.controls.partyName.setValue(e.ACCOUNT_HEAD);
 
   }
 
   locationCodeData: MasterSearchModel = {
-      PAGENO: 1,
-      RECORDS: 10,
-      LOOKUPID: 155,
-      LOAD_ONCLICK: true,
-      ORDER_TYPE: 0,
-      WHERECONDITION: "@Strbranch='"+ this.userbranch+"',@strUsercode= '"+this.userName+"',@stravoidforsales= 0",
-      SEARCH_FIELD: "Location",
-      SEARCH_VALUE: "",
-      VIEW_INPUT: true,
-      VIEW_TABLE: true,
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 155,
+    LOAD_ONCLICK: true,
+    ORDER_TYPE: 0,
+    WHERECONDITION: "@Strbranch='" + this.userbranch + "',@strUsercode= '" + this.userName + "',@stravoidforsales= 0",
+    SEARCH_FIELD: "Location",
+    SEARCH_VALUE: "",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
   }
   locationToCodeSelected(e: any) {
     console.log(e);
@@ -119,68 +119,68 @@ export class MetalBranchTransferInAutoRepairDetailsComponent implements OnInit {
   }
 
   diamondBranchTransferinAutoRepairDetailForm: FormGroup = this.formBuilder.group({
-    Stockcode : [''],
-    StockcodeDes : [''],
-    to_stock_code : [''],
-    to_stock_codeDesc : [''],
-    bar_no : [''],
-    ticket_no : [''],
-    lot_no : [''],
-    bar_code_pcs : [''],
-    partyCode : [''],
+    Stockcode: [''],
+    StockcodeDes: [''],
+    to_stock_code: [''],
+    to_stock_codeDesc: [''],
+    bar_no: [''],
+    ticket_no: [''],
+    lot_no: [''],
+    bar_code_pcs: [''],
+    partyCode: [''],
     partyName: [''],
-    locationfrom : [''],
-    repair_item : [''],
-    bag_no : [''],
-    gst_code : [''],
-    pcs : [''],
+    locationfrom: [''],
+    repair_item: [''],
+    bag_no: [''],
+    gst_code: [''],
+    pcs: [''],
     unit_weight: [''],
-    gross_weight : [''],
-    stone_weight : [''],
-    purity : [''],
+    gross_weight: [''],
+    stone_weight: [''],
+    purity: [''],
     pure_weight: [''],
-    pure_weight_2:[''],
+    pure_weight_2: [''],
     net_weight: [''],
-    Chargable_weight:[''],
+    Chargable_weight: [''],
     kundan_pcs_1: [''],
-    kundan_pcs_2 : [''],
-    carat : [''],
-    making_charges_qty : [''],
-    making_charges_rate : [''],
-    making_charges_amt : [''],
-    metal_value : [''],
-    metal_value_unit : [''],
-    metal_value_qty : [''],
-    metal_value_rate : [''],
-    metal_value_amt : [''],
-    stone_value_qty : [''],
-    stone_value_rate : [''],
-    stone_value_amt : [''],
-    wastage_per_1 : [''],
-    wastage_per_2 : [''],
-    wastage_amt : [''],
-    stamp_charges_rate : [''],
-    stamp_charges_amt : [''],
-    kundan_value_unit : [''],
-    kundan_value_qty_fc : [''],
-    kundan_value_qty_cc : [''],
-    kundan_value_amt : [''],
-    total_value : [''],
-    total_tax_rate : [''],
-    total_tax_amt : [''],
-    net_value : [''],
-    purity_diff : [''],
-    stone_diff : [''],
-    total_amount : [''],
-    cgst_per : [''],
-    cgst_fc : [''],
-    sgst_per : [''],
-    sgst_fc : [''],
-    igst_per : [''],
-    igst_fc : [''],
-    round : [''],
-    total_fc : [''],
-    total_cc : [''],
+    kundan_pcs_2: [''],
+    carat: [''],
+    making_charges_qty: [''],
+    making_charges_rate: [''],
+    making_charges_amt: [''],
+    metal_value: [''],
+    metal_value_unit: [''],
+    metal_value_qty: [''],
+    metal_value_rate: [''],
+    metal_value_amt: [''],
+    stone_value_qty: [''],
+    stone_value_rate: [''],
+    stone_value_amt: [''],
+    wastage_per_1: [''],
+    wastage_per_2: [''],
+    wastage_amt: [''],
+    stamp_charges_rate: [''],
+    stamp_charges_amt: [''],
+    kundan_value_unit: [''],
+    kundan_value_qty_fc: [''],
+    kundan_value_qty_cc: [''],
+    kundan_value_amt: [''],
+    total_value: [''],
+    total_tax_rate: [''],
+    total_tax_amt: [''],
+    net_value: [''],
+    purity_diff: [''],
+    stone_diff: [''],
+    total_amount: [''],
+    cgst_per: [''],
+    cgst_fc: [''],
+    sgst_per: [''],
+    sgst_fc: [''],
+    igst_per: [''],
+    igst_fc: [''],
+    round: [''],
+    total_fc: [''],
+    total_cc: [''],
   });
 
 
@@ -192,20 +192,20 @@ export class MetalBranchTransferInAutoRepairDetailsComponent implements OnInit {
 
   adddata() {
 
-}
+  }
 
 
-adddatas() {
-  
-}
+  adddatas() {
 
-removedata(){
-  this.tableData.pop();
-}
+  }
 
-removedatas(){
-  this.tableDatas.pop();
-}
+  removedata() {
+    this.tableData.pop();
+  }
+
+  removedatas() {
+    this.tableDatas.pop();
+  }
 
 
 
@@ -220,14 +220,14 @@ removedatas(){
     }
     // let API = 'MetalBarcodeTransferAuto/InsertMetalBarcodeTransferAuto'
 
-    let details ={
+    let details = {
 
       "UNIQUEID": 0,
       "SRNO": 0,
       "DIVISION_CODE": "s",
       "STOCK_ACTION": "s",
       "STOCK_CODE": this.diamondBranchTransferinAutoRepairDetailForm.value.Stockcode,
-      "SUPPLIER": "string",
+      "SUPPLIER": this.diamondBranchTransferinAutoRepairDetailForm.value.partyCode,
       "PCS": this.diamondBranchTransferinAutoRepairDetailForm.value.pcs,
       "GROSSWT": this.diamondBranchTransferinAutoRepairDetailForm.value.gross_weight,
       "STONEWT": this.diamondBranchTransferinAutoRepairDetailForm.value.stone_weight,
@@ -297,16 +297,16 @@ removedatas(){
       "DT_VOCTYPE": "str",
       "DT_VOCNO": 0,
       "DT_YEARMONTH": "string",
-      "SUPPLIERDESC": "string",
+      "SUPPLIERDESC": this.diamondBranchTransferinAutoRepairDetailForm.value.partyName,
       "IMPYEARMONTH": "string",
       "IMPVOCTYPE": "str",
       "IMPVOCNO": 0,
       "IMPBATCHNO": 0,
       "IMPMID": 0,
       "BASE_CONV_RATE": 0,
-      "LOT_NO":  this.diamondBranchTransferinAutoRepairDetailForm.value.lot_no,
+      "LOT_NO": this.diamondBranchTransferinAutoRepairDetailForm.value.lot_no,
       "BAR_NO": this.diamondBranchTransferinAutoRepairDetailForm.value.bar_no,//"string",
-      "TICKET_NO":  this.diamondBranchTransferinAutoRepairDetailForm.value.ticket_no,//"string",
+      "TICKET_NO": this.diamondBranchTransferinAutoRepairDetailForm.value.ticket_no,//"string",
       "TAX_AMOUNTFC": this.diamondBranchTransferinAutoRepairDetailForm.value.total_tax_amt,
       "TAX_AMOUNTCC": 0,
       "TAX_P": this.diamondBranchTransferinAutoRepairDetailForm.value.total_tax_rate,
@@ -346,7 +346,7 @@ removedatas(){
       "KUNDAN_RATEFC": this.diamondBranchTransferinAutoRepairDetailForm.value.kundan_value_amt,
       "KUNDAN_RATECC": 0,
       "BATCHSRNO": 0,
-      "BARCODEDPCS":  this.diamondBranchTransferinAutoRepairDetailForm.value.bar_code_pcs,
+      "BARCODEDPCS": this.diamondBranchTransferinAutoRepairDetailForm.value.bar_code_pcs,
       "BARCODEDQTY": 0,
       "BAGREMARKS": "string",
       "REPAIRITEM": this.diamondBranchTransferinAutoRepairDetailForm.value.repair_item,
@@ -360,17 +360,18 @@ removedatas(){
       "ORDER_STATUS": true
 
     }
- 
+    console.log(details);
+    this.close(details);
   }
 
   updateMeltingType() {
- 
-    }
-      /**USE: delete Melting Type From Row */
-  deleteMeltingType() {
- 
+
   }
-  
+  /**USE: delete Melting Type From Row */
+  deleteMeltingType() {
+
+  }
+
 
 
   openaddalloyallocation() {
@@ -383,9 +384,9 @@ removedatas(){
 
   }
 
-  deleteTableData(){
- 
-    
+  deleteTableData() {
+
+
   }
 
 }
