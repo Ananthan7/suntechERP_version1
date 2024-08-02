@@ -155,22 +155,19 @@ export class IndexedApiService {
         this.comFunc.SalespersonMasterData = data;
       }
     });
-    /** End set basic api data */
-  }
-  setVocTypeDataOnLoad(branch: any){
     this.inDb.getAllData('VocTypeMaster').subscribe((data) => {
       console.log(data,'data');
       
       if (data.length == 0 || data.length == 1) {
-        this.getVocTypeMaster(branch);
+        this.getVocTypeMaster();
       } else {
         this.comFunc.VocTypeMasterData = data;
       }
     });
+    /** End set basic api data */
   }
-
-  getVocTypeMaster(branch:any) {
-    let API = `VoctypeMaster/GetVoctypeMasterWithBranchCode/${branch}`
+  getVocTypeMaster(branch?:any) {
+    let API = `VoctypeMaster/GetVoctypeMasterWithBranchCode/${this.comFunc.branchCode}`
     this.suntechApi.getDynamicAPI(API).subscribe((data) => {
       if (data.status == 'Success') {
         this.comFunc.VocTypeMasterData = data.response;
@@ -388,7 +385,7 @@ export class IndexedApiService {
     });
   }
   getKaratMasterList() {
-    this.suntechApi.getDynamicAPICustom('karatMaster/GetKaratMasterList').subscribe((resp) => {
+    this.suntechApi.getDynamicAPI('karatMaster/GetKaratMasterList').subscribe((resp) => {
       if (resp.status == 'Success') {
         this.comFunc.karatMasterData = resp.response;
         this.inDb.bulkInsert('karatMaster', resp.response);

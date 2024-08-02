@@ -45,7 +45,7 @@
                     id="jobNoSearch"
                     autocomplete="off"
                     (keydown)="lookupKeyPress($event,'JOB_NUMBER')"
-                    (focusout)="jobNumberValidate($event)"
+                    (change)="jobNumberValidate($event)"
                     formControlName="JOB_NUMBER" [readonly]="viewMode" />
                   <master-search class="masterSearch"
                     [MasterSearchData]="jobNoSearch"
@@ -682,6 +682,7 @@
                         <mat-form-field appearance="outline"
                           style="width: 130px;">
                           <input type="text" matInput class="text-right"
+                            MetalDecimalInput
                             formControlName="METAL_STD_LOSS" />
                         </mat-form-field>
                       </td>
@@ -727,6 +728,7 @@
                           style="width: 130px;">
                           <input type="text" matInput maxlength="10"
                             (focusout)="txtLossBooked_Validating()"
+                            MetalDecimalInput
                             formControlName="METAL_LossBooked" class="text-right"/>
                         </mat-form-field>
                       </td>
@@ -768,7 +770,7 @@
                         <mat-form-field appearance="outline"
                           style="width: 130px;">
                           <input type="text" matInput class="text-right"
-                            MetalDecimalInput
+                            UpperCaseDirective
                             formControlName="METAL_ScrapLocCode" />
                         </mat-form-field>
                       </td>
@@ -777,6 +779,7 @@
                         <mat-form-field appearance="outline"
                           style="width: 130px;">
                           <input type="text" matInput class="text-right"
+                            MetalDecimalInput
                             formControlName="METAL_GainGrWt" />
                         </mat-form-field>
                       </td>
@@ -810,7 +813,7 @@
                         <mat-form-field appearance="outline"
                           style="width: 130px;">
                           <input type="text" matInput class="text-right"
-                            (focusout)="txtMScrapStockCode_Validating()"
+                            (change)="txtMScrapStockCode_Validating()"
                             (keydown)="lookupKeyPress($event,'METAL_ScrapStockCode')"
                             formControlName="METAL_ScrapStockCode" />
                             <master-search class="masterSearch"
@@ -1122,22 +1125,6 @@
                 </div>
                 <div class="row">
                   <div class="col-md-6">
-                    <div class="row mb-2">
-                      <label for="input"
-                        class="col-sm-4 col-form-label">Consumed</label>
-                      <div class="col-sm-7">
-                        <mat-form-field appearance="outline" style="width: 70%;">
-                          <input type="text" matInput
-                            formControlName="consumed" readonly />
-                          <datetime-picker class="masterSearch"
-                            [DateTimeModelData]="consumedTimeData"
-                            *ngIf="!viewMode"
-                            (datetimeClick)="consumedChange($event)"
-                            (updateDuration)="consumedInMinutes($event)">
-                          </datetime-picker>
-                        </mat-form-field>
-                      </div>
-                    </div>
                     <div class="row mb-3">
                       <label for="input" class="col-sm-4 col-form-label">Variance
                         %</label>
@@ -1153,6 +1140,24 @@
                           <input type="text" matInput readonly
                             formControlName="variance"
                             class="text-right" />
+                        </mat-form-field>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="row mb-2">
+                      <label for="input"
+                        class="col-sm-4 col-form-label">Consumed</label>
+                      <div class="col-sm-7">
+                        <mat-form-field appearance="outline" style="width: 70%;">
+                          <input type="text" matInput
+                            formControlName="consumed" readonly />
+                          <datetime-picker class="masterSearch"
+                            [DateTimeModelData]="consumedTimeData"
+                            *ngIf="!viewMode"
+                            (datetimeClick)="consumedChange($event)"
+                            (updateDuration)="consumedInMinutes($event)">
+                          </datetime-picker>
                         </mat-form-field>
                       </div>
                     </div>
