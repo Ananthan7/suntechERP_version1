@@ -106,15 +106,26 @@ export class JobCreationComponent implements OnInit {
     console.log(e);
     this.jobCreationFrom.controls.processCode.setValue(e.Process_Code);
   }
+
+  submitValidations(form: any) {
+    if (this.commonService.nullToString(form.processCode) == '') {
+      this.commonService.toastErrorByMsgId('MSG1680')// processCode  CANNOT BE EMPTY
+      return true
+    }
+    return false;
+  }
+
+
   formSubmit() {
     if (this.content && this.content.FLAG == "EDIT") {
       this.update();
       return;
     }
-    if (this.jobCreationFrom.invalid) {
-      this.toastr.error("select all required fields");
-      return;
-    }
+    if (this.submitValidations(this.jobCreationFrom.value)) return;
+    // if (this.jobCreationFrom.invalid) {
+    //   this.toastr.error("select all required fields");
+    //   return;
+    // }
 
     let API = "JobAllocationMaster/InsertJobAllocationMaster/";
     let postData = {
@@ -198,10 +209,11 @@ export class JobCreationComponent implements OnInit {
   }
 
   update() {
-    if (this.jobCreationFrom.invalid) {
-      this.toastr.error("select all required fields");
-      return;
-    }
+    // if (this.jobCreationFrom.invalid) {
+    //   this.toastr.error("select all required fields");
+    //   return;
+    // }
+    if (this.submitValidations(this.jobCreationFrom.value)) return;
 
     let API ="JobAllocationMaster/UpdateJobAllocationMaster/"+this.jobCreationFrom.value.vocType+this.jobCreationFrom.value.branchCode+this.jobCreationFrom.value.yearMonth + this.jobCreationFrom.value.vocno;
     let postData = {
@@ -334,7 +346,7 @@ export class JobCreationComponent implements OnInit {
                   });
                 }
               } else {
-                this.toastr.error("Not deleted");
+                this.commonService.toastErrorByMsgId('MSG1880');// Not Deleted
               }
             },
             (err) => alert(err)

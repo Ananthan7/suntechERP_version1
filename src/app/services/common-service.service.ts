@@ -672,7 +672,7 @@ export class CommonServiceService {
   }
 
   nullToString(value: any) {
-    value = !value ? '' : value.toString();
+    value = !value || typeof value=='object' ? '' : value.toString();
     return value
   }
 

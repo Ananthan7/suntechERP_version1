@@ -173,7 +173,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     SEARCH_VALUE: '',
     WHERECONDITION: `@StrToProcess ='',
     @StrToWorker='',
-	  @blntoWorkerFocus =1`,
+	  @blntoWorkerFocus=0`,
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -555,9 +555,18 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.fromWorkerMasterSearch.WHERECONDITION += `@blnProcessAuthroize=1`
   }
   setToWorkerWhereCondition() {
-    this.toWorkerMasterSearch.WHERECONDITION = `@StrToProcess='stk pp',`
+    let form = this.processTransferdetailsForm.value
+    if (this.designType == 'METAL') {
+      this.toWorkerMasterSearch.WHERECONDITION = `@StrToProcess='${this.commonService.nullToString(form.TO_PROCESS_CODE)}',`
+    } else {
+      this.toWorkerMasterSearch.WHERECONDITION = `@StrToProcess='${this.commonService.nullToString(form.METAL_TO_PROCESS_CODE)}',`
+    }
     this.toWorkerMasterSearch.WHERECONDITION += `@StrToWorker='',`
-    this.toWorkerMasterSearch.WHERECONDITION += `@blntoWorkerFocus=1`
+    if (this.commonService.nullToString(form.TO_PROCESS_CODE) == '') {
+      this.toWorkerMasterSearch.WHERECONDITION += `@blntoWorkerFocus=1`
+    } else {
+      this.toWorkerMasterSearch.WHERECONDITION += `@blntoWorkerFocus=0`
+    }
   }
   frmMetalStockWhereCondition() {
     this.stockCodeSearch.WHERECONDITION = `SUBCODE = 0 AND`
@@ -1038,7 +1047,8 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.nullToStringSetValue('TO_PCS', this.commonService.emptyToZero(data[0].FRM_PCS))
     this.setValueWithDecimal('PURITY', data[0].PURITY, 'PURITY')
     this.setValueWithDecimal('METAL_LossBooked', data[0].STD_LOSS, 'AMOUNT')
-
+    this.setToProcessWhereCondition()
+    this.setToWorkerWhereCondition()
     // setTimeDetails
     this.processTransferdetailsForm.controls.STD_TIME.setValue(
       this.commonService.convertTimeMinutesToDHM(data[0].STD_TIME)
@@ -1105,6 +1115,8 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.nullToStringSetValue('TO_PCS', this.commonService.emptyToZero(data[0].FRM_PCS))
     this.setValueWithDecimal('PURITY', data[0].PURITY, 'PURITY')
     this.setValueWithDecimal('STD_LOSS', data[0].STD_LOSS, 'AMOUNT')
+    this.setToProcessWhereCondition()
+    this.setToWorkerWhereCondition()
 
     // setTimeDetails
     this.processTransferdetailsForm.controls.STD_TIME.setValue(
@@ -1182,12 +1194,13 @@ export class ProcessTransferDetailsComponent implements OnInit {
       let txtFromGrossWeight = (this.emptyToZero(form.METAL_FromNetWeight) + this.emptyToZero(form.METAL_FromIronWeight) + nWeightInGram);
       let TxtToGrossWt = (this.emptyToZero(txtFromGrossWeight) - this.emptyToZero(form.METAL_LossBooked));
 
-      this.setValueWithDecimal('METAL_GrossWeightFrom', txtFromGrossWeight, 'STONE')
-      this.setValueWithDecimal('METAL_GrossWeightTo', TxtToGrossWt, 'STONE')
+      this.setValueWithDecimal('METAL_GrossWeightFrom', txtFromGrossWeight, 'METAL')
+      this.setValueWithDecimal('METAL_GrossWeightTo', TxtToGrossWt, 'METAL')
       let nGrossWt = this.emptyToZero(txtFromGrossWeight) - this.emptyToZero(form.METAL_LossBooked);
       this.FORM_VALIDATER = this.processTransferdetailsForm.value;
     }
     this.CalculateMetalBalance()
+    this.Split_Loss_Metal()
   }
   // for diamond tab
   calculateSTNMTLdata(result: any) {
@@ -1537,6 +1550,8 @@ export class ProcessTransferDetailsComponent implements OnInit {
           let data = result.dynamicData[0]
           if (data.length == 0) {
             this.nullToStringSetValue('TO_PROCESS_CODE', '')
+            this.setToProcessWhereCondition()
+            this.setToWorkerWhereCondition()
             this.commonService.toastErrorByMsgId('MSG1531')
             return
           }
@@ -2415,7 +2430,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       this.resetOnLoadWeights('MSG7611')
     }
   }
-  Split_MetalLoss() {
+  Split_Loss_Metal() {
     let form = this.processTransferdetailsForm.value;
     if (form.METALLAB_TYPE != '') {
       let k = 0;
@@ -2423,7 +2438,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
 
       for (let i = 0; i < this.metalDetailData.length; i++) {
         if (this.metalDetailData[i].METALSTONE == "M") {
-          if (this.emptyToZero(form.lossQty) == 0) { this.metalDetailData[i].LOSS_QTY = 0; }
+          if (this.emptyToZero(form.METAL_LossBooked) == 0) { this.metalDetailData[i].LOSS_QTY = 0; }
           if (this.emptyToZero(form.METAL_GainGrWt) == 0) { this.metalDetailData[i].GAIN_WT = 0; }
           dblMaster_Metal = (this.emptyToZero(this.metalDetailData[i].GROSS_WT) + this.emptyToZero(this.metalDetailData[i].LOSS_QTY)) - this.emptyToZero(form.METAL_TO_STONE_WT);
           dblMaster_Metal = this.commonService.decimalQuantityFormat(dblMaster_Metal, 'METAL')
@@ -2726,7 +2741,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
               this.setValueWithDecimal('METAL_BalIronWt', txtBalIronWt, 'METAL')
               this.setValueWithDecimal('METAL_BalNetWt', txtBalNetWt, 'METAL')
               this.setValueWithDecimal('METAL_BalPureWt', txtBalPureWt, 'METAL')
-              this.Split_MetalLoss();
+              this.Split_Loss_Metal();
               this.processTransferdetailsForm.controls.METAL_ScrapGrWt.disable()
             }
             else {
@@ -2809,10 +2824,10 @@ export class ProcessTransferDetailsComponent implements OnInit {
       this.setValueWithDecimal('METAL_BalIronWt', txtBalIronWt, 'METAL')
       this.setValueWithDecimal('METAL_BalNetWt', txtBalNetWt, 'METAL')
       this.setValueWithDecimal('METAL_BalPureWt', txtBalPureWt, 'METAL')
-
+      this.FORM_VALIDATER.METAL_GrossWeightTo = form.METAL_GrossWeightTo
       this.CalculateNetAndPureWt()
       this.CalculateMetalBalance()
-      this.Split_MetalLoss()
+      this.Split_Loss_Metal()
     } catch (Exception) {
       this.commonService.toastInfoByMsgId("MSG2100");
       return;
@@ -2846,10 +2861,10 @@ export class ProcessTransferDetailsComponent implements OnInit {
       let txtBalIronWt = (this.emptyToZero(form.METAL_FromIronWeight) - (this.emptyToZero(txtToIronWt) + this.emptyToZero(txtToIronScrapWt)));
       let txtBalNetWt = (this.emptyToZero(txtBalGrWt) - (this.emptyToZero(form.METAL_BalStoneWt) + this.emptyToZero(txtBalIronWt)));
       let txtBalPureWt = ((this.emptyToZero(txtBalNetWt) * this.emptyToZero(form.PURITY)));
-
+      this.FORM_VALIDATER.METAL_ScrapGrWt = form.METAL_ScrapGrWt
       this.CalculateNetAndPureWt();
       this.CalculateMetalBalance();
-      this.Split_MetalLoss();
+      this.Split_Loss_Metal();
     } catch (Exception) {
       this.commonService.toastInfoByMsgId("MSG2100");
       return;
@@ -2862,7 +2877,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       if (this.emptyToZero(this.FORM_VALIDATER.METAL_TO_STONE_WT) == this.emptyToZero(form.METAL_TO_STONE_WT)) {
         return;
       }
-
+      
       if (this.emptyToZero(form.METAL_TO_STONE_WT) > this.emptyToZero(form.METAL_FRM_STONE_WT)) {
         this.setValueWithDecimal('METAL_TO_STONE_WT', this.FORM_VALIDATER.METAL_TO_STONE_WT, 'STONE')
         this.commonService.toastErrorByMsgId("MSG7855")
@@ -2870,10 +2885,10 @@ export class ProcessTransferDetailsComponent implements OnInit {
       }
       let txtMToGrossWt = (this.emptyToZero(form.METAL_GrossWeightFrom) - (this.emptyToZero(form.METAL_ScrapGrWt) + this.emptyToZero(form.METAL_LossBooked) + (this.emptyToZero(form.METAL_FRM_STONE_WT) - this.emptyToZero(form.METAL_TO_STONE_WT))));
       this.setValueWithDecimal('METAL_GrossWeightTo', txtMToGrossWt, 'STONE')
-
+      this.FORM_VALIDATER.METAL_TO_STONE_WT = form.METAL_TO_STONE_WT
       this.CalculateNetAndPureWt();
       this.CalculateMetalBalance();
-      this.Split_MetalLoss();
+      this.Split_Loss_Metal();
     } catch (err) {
       this.commonService.toastInfoByMsgId("MSG2100");
       return;
@@ -2886,6 +2901,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       if (this.emptyToZero(this.FORM_VALIDATER.METAL_ScrapStoneWt) == this.emptyToZero(form.METAL_ScrapStoneWt)) {
         return;
       }
+      
       let txtMToStoneWt = this.emptyToZero(form.METAL_TO_STONE_WT)
       if ((this.emptyToZero(form.METAL_TO_STONE_WT)) > (this.emptyToZero(form.METAL_ScrapStoneWt))) {
         txtMToStoneWt = (this.emptyToZero(form.METAL_FRM_STONE_WT) - (this.emptyToZero(form.METAL_ScrapStoneWt)));
@@ -2899,9 +2915,9 @@ export class ProcessTransferDetailsComponent implements OnInit {
       let txtBalStoneWt = (this.emptyToZero(form.METAL_FRM_STONE_WT) - (this.emptyToZero(txtMToStoneWt) + this.emptyToZero(form.METAL_ScrapStoneWt)));
       this.setValueWithDecimal('METAL_TO_STONE_WT', txtMToStoneWt, 'STONE')
       this.setValueWithDecimal('METAL_BalStoneWt', txtBalStoneWt, 'STONE')
-
+      this.FORM_VALIDATER.METAL_ScrapStoneWt = form.METAL_ScrapStoneWt
       this.CalculateNetAndPureWt();
-      this.Split_MetalLoss();
+      this.Split_Loss_Metal();
     } catch (Exception) {
       this.commonService.toastInfoByMsgId("MSG2100");
       return;
@@ -2917,6 +2933,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       if (this.emptyToZero(this.FORM_VALIDATER.METAL_ToIronWt) == this.emptyToZero(form.METAL_ToIronWt) && this.emptyToZero(form.METAL_ToIronWt) != 0) {
         return;
       }
+      
       let txtToIronWt = this.emptyToZero(form.METAL_ToIronWt)
       if ((this.emptyToZero(form.METAL_ToIronWt) + this.emptyToZero(form.METAL_ToIronScrapWt)) > this.emptyToZero(form.METAL_FromIronWeight)) {//Iron weight cannot be greater than
         let msg = this.commonService.getMsgByID("MSG81351") + " " + this.emptyToZero(form.METAL_FromIronWeight)
@@ -2944,13 +2961,14 @@ export class ProcessTransferDetailsComponent implements OnInit {
         txtBalNetWt = (this.emptyToZero(txtBalGrWt) - (this.emptyToZero(form.METAL_BalStoneWt) + this.emptyToZero(txtBalIronWt)));
         txtBalPureWt = ((this.emptyToZero(txtBalNetWt) * form.PURITY));
       }
+      this.FORM_VALIDATER.METAL_ToIronWt = form.METAL_ToIronWt
       this.setValueWithDecimal('METAL_BalIronWt', txtBalIronWt, 'STONE')
       this.setValueWithDecimal('METAL_ToNetWt', txtMToNetWt, 'STONE')
       this.setValueWithDecimal('METAL_ToPureWt', txtMToPureWt, 'STONE')
       this.setValueWithDecimal('METAL_BalGrWt', txtBalGrWt, 'STONE')
       this.setValueWithDecimal('METAL_BalNetWt', txtBalNetWt, 'STONE')
       this.setValueWithDecimal('METAL_BalPureWt', txtBalPureWt, 'STONE')
-      this.Split_MetalLoss();
+      this.Split_Loss_Metal();
     } catch (err) {
       this.commonService.toastInfoByMsgId("MSG2100");
       return;
@@ -2966,7 +2984,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       if (this.emptyToZero(this.FORM_VALIDATER.METAL_ToIronScrapWt) == this.emptyToZero(form.METAL_ToIronScrapWt) && this.emptyToZero(form.METAL_ToIronScrapWt) != 0) {
         return;
       }
-
+      
       if ((this.emptyToZero(form.METAL_ToIronScrapWt) + this.emptyToZero(form.METAL_ToIronWt)) > this.emptyToZero(form.METAL_FromIronWeight)) {//Iron weight cannot be greater than
         let msg = this.commonService.getMsgByID("MSG81351") + " " + this.emptyToZero(form.METAL_FromIronWeight)
         this.commonService.toastErrorByMsgId(msg)
@@ -2993,14 +3011,14 @@ export class ProcessTransferDetailsComponent implements OnInit {
         txtBalNetWt = (this.emptyToZero(txtBalGrWt) - (this.emptyToZero(form.METAL_BalStoneWt) + this.emptyToZero(txtBalIronWt)));
         txtBalPureWt = ((this.emptyToZero(txtBalNetWt) * form.PURITY));
       }
-
+      this.FORM_VALIDATER.METAL_ToIronScrapWt = form.METAL_ToIronScrapWt
       this.setValueWithDecimal('METAL_ScrapGrWt', txtMScrapGrWt, 'STONE')
       this.setValueWithDecimal('METAL_ScrapNetWt', txtMScrapNetWt, 'STONE')
       this.setValueWithDecimal('METAL_ScrapPureWt', txtMScrapPureWt, 'STONE')
       this.setValueWithDecimal('METAL_BalGrWt', txtBalGrWt, 'STONE')
       this.setValueWithDecimal('METAL_BalNetWt', txtBalNetWt, 'STONE')
       this.setValueWithDecimal('METAL_BalPureWt', txtBalPureWt, 'STONE')
-      this.Split_MetalLoss();
+      this.Split_Loss_Metal();
     } catch (err) {
       this.commonService.toastInfoByMsgId("MSG2100");
       return;
@@ -3095,6 +3113,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       if (this.emptyToZero(this.FORM_VALIDATER.METAL_LossBooked) == this.emptyToZero(form.METAL_LossBooked)) {
         return;
       }
+      
       let txtLossBooked = form.METAL_LossBooked
       if (this.emptyToZero(txtLossBooked) > this.emptyToZero(form.METAL_FromNetWeight)) {
         let msg = this.commonService.getMsgByID("MSG1397") + " " + form.METAL_FromNetWeight;
@@ -3107,7 +3126,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
         let processData = this.sequenceDetails.filter((item: any) => item.seq_code == form.SEQ_CODE && item.PROCESS_CODE == form.METAL_FRM_PROCESS_CODE)
         if (processData?.length > 0) {
           if (this.emptyToZero(processData[0]["MAX_LOSS"]) > 0) {
-            nMax_Loss = this.commonService.lossQtyCalculate(form.METAL_FromNetWeight,processData[0]["MAX_LOSS"])
+            nMax_Loss = this.commonService.lossQtyCalculate(form.METAL_FromNetWeight, processData[0]["MAX_LOSS"])
             if (this.emptyToZero(txtLossBooked) > nMax_Loss) {
               this.commonService.getMsgByID("MSG1397") + nMax_Loss;
               this.setValueWithDecimal('METAL_LossBooked', nMax_Loss, 'METAL')
@@ -3115,7 +3134,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
             }
           }
           if (this.emptyToZero(processData[0]["MIN_LOSS"]) > 0) {
-            nMin_Loss = this.commonService.lossQtyCalculate(form.METAL_FromNetWeight,processData[0]["MIN_LOSS"]);
+            nMin_Loss = this.commonService.lossQtyCalculate(form.METAL_FromNetWeight, processData[0]["MIN_LOSS"]);
             if (this.emptyToZero(txtLossBooked) < nMin_Loss) {
               this.commonService.getMsgByID("MSG1397") + nMin_Loss;
               this.setValueWithDecimal('METAL_LossBooked', nMin_Loss, 'METAL')
@@ -3135,16 +3154,15 @@ export class ProcessTransferDetailsComponent implements OnInit {
       let txtToIronWt = ((this.emptyToZero(form.METAL_FromIronWeight)) / (this.emptyToZero(form.METAL_FromIronWeight) + this.emptyToZero(form.METAL_FromNetWeight)) * ((this.emptyToZero(txtMToGrossWt) + this.emptyToZero(txtLossBooked)) - this.emptyToZero(form.METAL_TO_STONE_WT)));
 
       let txtMToNetWt = (this.emptyToZero(txtMToGrossWt) - (this.emptyToZero(form.METAL_TO_STONE_WT) + this.emptyToZero(txtToIronWt)));
-      let txtMToPureWt = this.commonService.pureWeightCalculate(txtMToNetWt,form.PURITY);
+      let txtMToPureWt = this.commonService.pureWeightCalculate(txtMToNetWt, form.PURITY);
 
       let txtMScrapNetWt = (this.emptyToZero(form.METAL_ScrapGrWt) - this.emptyToZero(form.METAL_ScrapStoneWt));
-      let txtMScrapPureWt = this.commonService.pureWeightCalculate(txtMScrapNetWt,form.PURITY);
+      let txtMScrapPureWt = this.commonService.pureWeightCalculate(txtMScrapNetWt, form.PURITY);
 
       let txtBalGrWt = (this.emptyToZero(form.METAL_GrossWeightFrom) - (this.emptyToZero(txtMToGrossWt) + this.emptyToZero(form.METAL_ScrapGrWt) + this.emptyToZero(txtLossBooked)));
       let txtBalIronWt = (this.emptyToZero(form.METAL_FromIronWeight) - (this.emptyToZero(txtToIronWt) + this.emptyToZero(form.METAL_ToIronScrapWt)));
       let txtBalNetWt = (this.emptyToZero(txtBalGrWt) - (this.emptyToZero(form.METAL_BalStoneWt) + this.emptyToZero(txtBalIronWt)));
-      let txtBalPureWt = this.commonService.pureWeightCalculate(txtBalNetWt,form.PURITY);
-      
+      let txtBalPureWt = this.commonService.pureWeightCalculate(txtBalNetWt, form.PURITY);
       this.setValueWithDecimal('METAL_LossBooked', txtLossBooked, 'METAL')
       this.setValueWithDecimal('METAL_GrossWeightTo', txtMToGrossWt, 'METAL')
       this.setValueWithDecimal('METAL_LossPureWt', txtLossPureWt, 'METAL')
@@ -3160,7 +3178,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
 
       this.CalculateMetalBalance();
       this.CalculateNetAndPureWt();
-      this.Split_MetalLoss();
+      this.Split_Loss_Metal();
     } catch (Exception) {
       this.commonService.toastErrorByMsgId("MSG2100");
       return;

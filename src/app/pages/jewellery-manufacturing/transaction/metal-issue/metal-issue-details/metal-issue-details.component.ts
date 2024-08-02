@@ -411,23 +411,23 @@ export class MetalIssueDetailsComponent implements OnInit {
   }
   submitValidations(form: any) {
     if (this.comService.nullToString(form.jobNumber) == '') {
-      this.comService.toastErrorByMsgId('Job number is required')
+      this.comService.toastErrorByMsgId('MSG1358')//Job number is required
       return true
     }
     if (this.comService.nullToString(form.workerCode) == '') {
-      this.comService.toastErrorByMsgId('Worker code is required')
+      this.comService.toastErrorByMsgId('MSG1951')//Worker code is required
       return true
     }
     if (this.comService.nullToString(form.processCode) == '') {
-      this.comService.toastErrorByMsgId('Process code is required')
+      this.comService.toastErrorByMsgId('MSG1680')//Process code is required
       return true
     }
     if (this.comService.nullToString(form.stockCode) == '') {
-      this.comService.toastErrorByMsgId('Stock code is required')
+      this.comService.toastErrorByMsgId('MSG1816')//Stock code is required
       return true
     }
     if (this.comService.emptyToZero(form.GROSS_WT) == 0) {
-      this.comService.toastErrorByMsgId('Gross weight is required')
+      this.comService.toastErrorByMsgId('MSG1293')//Gross weight is required
       return true
     }
     return false
@@ -474,7 +474,7 @@ export class MetalIssueDetailsComponent implements OnInit {
     let GROSS_WT = this.comService.emptyToZero(form.GROSS_WT)
     let STONE_WT = this.comService.emptyToZero(form.STONE_WT)
     if (STONE_WT > GROSS_WT) {
-      this.comService.toastErrorByMsgId('Stone weight cannot be greater than gross weight')
+      this.comService.toastErrorByMsgId('MSG1840')//	Stone weight cannot be greater than gross weight
       return true
     }
     this.setValueWithDecimal('NET_WT', GROSS_WT - STONE_WT, 'THREE')
@@ -778,7 +778,8 @@ export class MetalIssueDetailsComponent implements OnInit {
           return;
         }
       }, err => {
-        this.comService.toastErrorByMsgId('Error Something went wrong');
+        this.comService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+
       });
   
     this.subscriptions.push(Sub);

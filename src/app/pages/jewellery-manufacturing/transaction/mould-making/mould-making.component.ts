@@ -16,11 +16,11 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrls: ['./mould-making.component.scss']
 })
 export class MouldMakingComponent implements OnInit {
-  
-  @Input() content!: any; 
+
+  @Input() content!: any;
   tableData: any[] = [];
   userName = localStorage.getItem('username');
-  columnheads : any[] = ['Stock Code','Description','Psc','Gross Weight','Rate','Amount','Location'];
+  columnheads: any[] = ['Stock Code', 'Description', 'Psc', 'Gross Weight', 'Rate', 'Amount', 'Location'];
   branchCode?: String;
   yearMonth?: String;
   allMode: string;
@@ -35,84 +35,84 @@ export class MouldMakingComponent implements OnInit {
 
   private subscriptions: Subscription[] = [];
   user: MasterSearchModel = {
-  PAGENO: 1,
-  RECORDS: 10,
-  LOOKUPID: 73,
-  SEARCH_FIELD: 'UsersName',
-  SEARCH_HEADING: 'User',
-  SEARCH_VALUE: '',
-  WHERECONDITION: "UsersName<> ''",
-  VIEW_INPUT: true,
-  VIEW_TABLE: true,
-  LOAD_ONCLICK: true,
-}
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 73,
+    SEARCH_FIELD: 'UsersName',
+    SEARCH_HEADING: 'User',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "UsersName<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
 
 
-ProcessCodeData: MasterSearchModel = {
-  PAGENO: 1,
-  RECORDS: 10,
-  LOOKUPID: 20,
-  SEARCH_FIELD: 'process_code',
-  SEARCH_HEADING: 'Process Code',
-  SEARCH_VALUE: '',
-  WHERECONDITION: "PROCESS_CODE<> ''",
-  VIEW_INPUT: true,
-  VIEW_TABLE: true,
-}
+  ProcessCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 20,
+    SEARCH_FIELD: 'process_code',
+    SEARCH_HEADING: 'Process Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "PROCESS_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
 
 
-WorkerCodeData: MasterSearchModel = {
-  PAGENO: 1,
-  RECORDS: 10,
-  LOOKUPID: 19,
-  SEARCH_FIELD: 'WORKER_CODE',
-  SEARCH_HEADING: 'Worker Code',
-  SEARCH_VALUE: '',
-  WHERECONDITION: "WORKER_CODE<> ''",
-  VIEW_INPUT: true,
-  VIEW_TABLE: true,
-}
+  WorkerCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 19,
+    SEARCH_FIELD: 'WORKER_CODE',
+    SEARCH_HEADING: 'Worker Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "WORKER_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
 
 
-jobnoCodeData: MasterSearchModel = {
-  PAGENO: 1,
-  RECORDS: 10,
-  LOOKUPID: 46,
-  SEARCH_FIELD: 'job_number',
-  SEARCH_HEADING: 'Job Number',
-  SEARCH_VALUE: '',
-  WHERECONDITION: "job_number<> ''",
-  VIEW_INPUT: true,
-  VIEW_TABLE: true,
-}
+  jobnoCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 46,
+    SEARCH_FIELD: 'job_number',
+    SEARCH_HEADING: 'Job Number',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "job_number<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
 
 
-mouldCodeData: MasterSearchModel = {
-  PAGENO: 1,
-  RECORDS: 10,
-  LOOKUPID: 3,
-  SEARCH_FIELD: 'CODE',
-  SEARCH_HEADING: 'Mould Code',
-  SEARCH_VALUE: '',
-  WHERECONDITION: "CODE<> ''",
-  VIEW_INPUT: true,
-  VIEW_TABLE: true,
-}
+  mouldCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Mould Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
 
-stockCodeData: MasterSearchModel = {
-  PAGENO: 1,
-  RECORDS: 10,
-  LOOKUPID: 23,
-  SEARCH_FIELD: 'STOCK_CODE',
-  SEARCH_HEADING: 'Stock type',
-  SEARCH_VALUE: '',
-  WHERECONDITION: "STOCK_CODE<> ''",
-  VIEW_INPUT: true,
-  VIEW_TABLE: true,
-}
+  stockCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 23,
+    SEARCH_FIELD: 'STOCK_CODE',
+    SEARCH_HEADING: 'Stock type',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "STOCK_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
 
 
- constructor(
+  constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
     private formBuilder: FormBuilder,
@@ -121,7 +121,7 @@ stockCodeData: MasterSearchModel = {
     private snackBar: MatSnackBar,
     private comService: CommonServiceService,
     private commonService: CommonServiceService,
-  ) { 
+  ) {
     this.allMode = 'allPages';
     this.checkBoxesMode = themes.current().startsWith('material') ? 'always' : 'onClick';
   }
@@ -132,14 +132,14 @@ stockCodeData: MasterSearchModel = {
     this.setCompanyCurrency();
     this.setvalues()
     this.setAllInitialValues()
-  
-     //this.content provide the data and flag from main grid to the form
-     if (this.content?.FLAG) {
+
+    //this.content provide the data and flag from main grid to the form
+    if (this.content?.FLAG) {
       if (this.content.FLAG == 'VIEW' || this.content.FLAG == 'DELETE') {
         this.viewMode = true;
       }
       this.isSaved = true;
-      if(this.content.FLAG == 'DELETE'){
+      if (this.content.FLAG == 'DELETE') {
         this.deleteRecord()
       }
       this.mouldMakingForm.controls.FLAG.setValue(this.content.FLAG)
@@ -147,10 +147,10 @@ stockCodeData: MasterSearchModel = {
     } else {
       this.setvalues()
     }
-  
+
   }
 
-  setvalues(){
+  setvalues() {
     this.mouldMakingForm.controls.vocher.setValue(this.comService.getqueryParamVocType())
     this.mouldMakingForm.controls.fromProcess.setValue(this.comService.getqueryParamVocType())
     this.mouldMakingForm.controls.fromWorker.setValue(this.comService.getqueryParamVocType())
@@ -166,66 +166,66 @@ stockCodeData: MasterSearchModel = {
 
   userDataSelected(value: any) {
     console.log(value);
-       this.mouldMakingForm.controls.enteredBy.setValue(value.UsersName);
+    this.mouldMakingForm.controls.enteredBy.setValue(value.UsersName);
   }
 
-  ProcessCodeSelected(e:any){
+  ProcessCodeSelected(e: any) {
     console.log(e);
     this.mouldMakingForm.controls.fromProcess.setValue(e.Process_Code);
     this.mouldMakingForm.controls.toProcess.setValue(e.Process_Code);
   }
-  
-  WorkerCodeSelected(e:any){
+
+  WorkerCodeSelected(e: any) {
     console.log(e);
     this.mouldMakingForm.controls.fromWorker.setValue(e.WORKER_CODE);
     this.mouldMakingForm.controls.toWorker.setValue(e.WORKER_CODE);
   }
 
-  jobnoCodeSelected(e:any){
+  jobnoCodeSelected(e: any) {
     console.log(e);
     this.mouldMakingForm.controls.jobNo.setValue(e.job_number);
     this.jobNumberValidate({ target: { value: e.job_number } })
   }
 
-  mouldCodeSelected(e:any){
+  mouldCodeSelected(e: any) {
     console.log(e);
     this.mouldMakingForm.controls.mouldType.setValue(e.CODE);
   }
 
-  stockCodeSelected(e:any){
+  stockCodeSelected(e: any) {
     console.log(e);
     this.mouldMakingForm.controls.stockcode.setValue(e.STOCK_CODE);
   }
 
-  stock_codetemp(data:any,value: any){
+  stock_codetemp(data: any, value: any) {
     console.log(data);
     this.tableData[value.data.SN - 1].stock_code = data.STOCK_CODE;
   }
 
-  descriptiontemp(data:any,value: any){
+  descriptiontemp(data: any, value: any) {
     console.log(value);
     console.log(data);
     this.tableData[value.data.SN - 1].stock_code = data.STOCK_CODE;
     this.tableData[value.data.SN - 1].description = data.DESCRIPTION;
   }
 
-  Psctemp(data:any,value: any){
+  Psctemp(data: any, value: any) {
     this.tableData[value.data.SN - 1].Psc = data.target.value;
   }
 
-  gross_weighttemp(data:any,value: any){
+  gross_weighttemp(data: any, value: any) {
     this.tableData[value.data.SN - 1].gross_weight = data.target.value;
   }
 
-  ratetemp(data:any,value: any){
+  ratetemp(data: any, value: any) {
     this.tableData[value.data.SN - 1].rate = data.target.value;
   }
 
-  amounttemp(data:any,value: any){
+  amounttemp(data: any, value: any) {
     this.tableData[value.data.SN - 1].amount = data.target.value;
   }
 
-  locationtemp(data:any,value: any){
+  locationtemp(data: any, value: any) {
     this.tableData[value.data.SN - 1].location = data.target.value;
   }
 
@@ -233,12 +233,12 @@ stockCodeData: MasterSearchModel = {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
-  
 
-  addTableData(){
+
+  addTableData() {
     let length = this.tableData.length;
     let sn = length + 1;
-    let data =  {
+    let data = {
       "SN": sn,
       "stock_code": "",
       "description": "",
@@ -251,9 +251,9 @@ stockCodeData: MasterSearchModel = {
     this.tableData.push(data);
   }
 
- 
-  
- onSelectionChanged(event: any) {
+
+
+  onSelectionChanged(event: any) {
     const values = event.selectedRowKeys;
     console.log(values);
     let indexes: Number[] = [];
@@ -265,41 +265,41 @@ stockCodeData: MasterSearchModel = {
     }, indexes);
     this.selectedIndexes = indexes;
     console.log(this.selectedIndexes);
-    
+
   }
 
-  deleteTableData(){
+  deleteTableData() {
     console.log(this.selectedIndexes);
-  
+
     if (this.selectedIndexes.length > 0) {
       this.tableData = this.tableData.filter((data, index) => !this.selectedIndexes.includes(index));
     } else {
       this.snackBar.open('Please select record', 'OK', { duration: 2000 }); // need proper err msg.
-    }   
+    }
   }
-  
+
   mouldMakingForm: FormGroup = this.formBuilder.group({
-    uniq : [''],
-    uniqNo : [''],
-    job : [''],
+    uniq: [''],
+    uniqNo: [''],
+    job: [''],
     MID: [0],
-    vocher :['',[Validators.required]],
-    vocherNo:[1],
-    vocDate : [''],
-    enteredBy : [''],
-    fromProcess : ['',[Validators.required]],
-    fromWorker : ['',[Validators.required]],
-    jobNo : ['',[Validators.required]],
-    mouldNo : ['',[Validators.required]],
-    mouldType : ['',[Validators.required]],
-    noOfParts : [''],
-    narration : [''],
-    toProcess : ['',[Validators.required]],
-    toWorker : ['',[Validators.required]],
-    designCode : ['',[Validators.required]],
-    itemCurrency : [''],
-    itemCurrencyRate : [1.000000],
-    location :[''],
+    vocher: ['', [Validators.required]],
+    vocherNo: [1],
+    vocDate: [''],
+    enteredBy: [''],
+    fromProcess: ['', [Validators.required]],
+    fromWorker: ['', [Validators.required]],
+    jobNo: ['', [Validators.required]],
+    mouldNo: ['', [Validators.required]],
+    mouldType: ['', [Validators.required]],
+    noOfParts: [''],
+    narration: [''],
+    toProcess: ['', [Validators.required]],
+    toWorker: ['', [Validators.required]],
+    designCode: ['', [Validators.required]],
+    itemCurrency: [''],
+    itemCurrencyRate: [1.000000],
+    location: [''],
 
   });
   setAllInitialValues() {
@@ -309,18 +309,18 @@ stockCodeData: MasterSearchModel = {
       .subscribe((result) => {
         if (result.response) {
           let data = result.response
-            // data.Details.forEach((element: any) => {
-            // this.tableData.push({
-            //   SN: element.SRNO,
-            //   stock_code: element.STOCK_CODE,
-            //   description: element.DISCPER,
-            //   Psc: element.PCS,
-            //   gross_weight: element.GRWT,
-            //   rate: element.RATEFC,
-            //   amount: element.VALUEFC,
-            //   location: element.LOCTYPE_CODE,
+          // data.Details.forEach((element: any) => {
+          // this.tableData.push({
+          //   SN: element.SRNO,
+          //   stock_code: element.STOCK_CODE,
+          //   description: element.DISCPER,
+          //   Psc: element.PCS,
+          //   gross_weight: element.GRWT,
+          //   rate: element.RATEFC,
+          //   amount: element.VALUEFC,
+          //   location: element.LOCTYPE_CODE,
 
-            // })
+          // })
           // });
           this.mouldMakingForm.controls.MID.setValue(data.MID)
           this.mouldMakingForm.controls.vocherNo.setValue(data.VOCNO)
@@ -350,145 +350,190 @@ stockCodeData: MasterSearchModel = {
       })
     this.subscriptions.push(Sub)
   }
-  setPostData(){
+  setPostData() {
     let form = this.mouldMakingForm.value
     return {
       "MID": this.commonService.emptyToZero(this.content?.MID),
-      "BRANCH_CODE":  this.branchCode,
-      "VOCTYPE":this.mouldMakingForm.value.vocher || "",
-       "VOCNO": 0,
-       "VOCDATE": this.mouldMakingForm.value.vocDate || "",
-       "YEARMONTH": this.yearMonth,
-       "JOB_NUMBER": this.mouldMakingForm.value.jobNo || "",
-       "JOB_DESCRIPTION": this.mouldMakingForm.value.job || "",
-       "DESIGN_CODE": this.mouldMakingForm.value.designCode || "",
-       "MOULD_NUMBER":this.comService.nullToString(form.mouldNo),
-       "MOULD_LOCATION": this.mouldMakingForm.value.location || "",
-       "MOULD_TYPE":this.mouldMakingForm.value.mouldType || "",
-       "UNQ_JOB_ID": this.mouldMakingForm.value.uniq,
-       "UNQ_DESIGN_ID": this.mouldMakingForm.value.uniqNo,
-       "JOB_SO_MID": 0,
-       "JOB_SO_NUMBER": 0,
-       "PARTYCODE":this.mouldMakingForm.value.noOfParts || "",
-       "PARTY_CURRENCY": "",
-       "PARTY_CURR_RATE": 0,
-       "ITEM_CURRENCY": this.mouldMakingForm.value.itemCurrency || "",
-       "ITEM_CURR_RATE": this.mouldMakingForm.value.itemCurrencyRate || "",
-       "VALUE_DATE": "2023-10-19T08:59:58.514Z",
-       "SALESPERSON_CODE": this.mouldMakingForm.value.enteredBy,
-       "TOTAL_PCS": 0,
-       "TOTAL_GRWT": 0,
-       "TOTAL_DISCAMTFC": 0,
-       "TOTAL_DISCAMTCC": 0,
-       "ITEM_VALUE_FC": 0,
-       "ITEM_VALUE_CC": 0,
-       "PARTY_VALUE_FC": 0,
-       "PARTY_VALUE_CC": 0,
-       "NET_VALUE_FC": 0,
-       "NET_VALUE_CC": 0,
-       "ADDL_VALUE_FC": 0,
-       "ADDL_VALUE_CC": 0,
-       "GROSS_VALUE_FC": 0,
-       "GROSS_VALUE_CC": 0,
-       "REMARKS": this.mouldMakingForm.value.narration || "",
-       "SYSTEM_DATE": "2023-10-19T08:59:58.514Z",
-       "CONSIGNMENTID": 0,
-       "ROUND_VALUE_CC": 0,
-       "NAVSEQNO": 0,
-       "SUPINVNO": "string",
-       "SUPINVDATE": "2023-10-19T08:59:58.514Z",
-       "PAYMENTREMARKS": "",
-       "HHACCOUNT_HEAD": "",
-       "D2DTRANSFER": "",
-       "BASE_CURRENCY": "",
-       "BASE_CURR_RATE": 0,
-       "BASE_CONV_RATE": 0,
-       "AUTOPOSTING": true,
-       "POSTDATE": "",
-       "PRINT_COUNT": 0,
-       "DOC_REF": "",
-       "PICTURE_NAME": "",
-       "FROM_WORKER_CODE":this.mouldMakingForm.value.fromWorker || "",
-       "TO_WORKER_CODE": this.mouldMakingForm.value.toWorker || "",
-       "FROM_PROCESS_CODE":this.mouldMakingForm.value.fromProcess || "",
-       "TO_PROCESS_CODE": this.mouldMakingForm.value.toProcess || "",
-       "PARTS": 0,
-   "Details": [
-     {
-       "UNIQUEID": 0,
-       "SRNO": 0,
-       "STOCK_CODE": "",
-       "PCS": 0,
-       "GRWT": 0,
-       "RATEFC": 0,
-       "RATECC": 0,
-       "VALUEFC": 0,
-       "VALUECC": 0,
-       "DISCPER": 0,
-       "DISCAMTFC": 0,
-       "DISCAMTCC": 0,
-       "NETVALUEFC": 0,
-       "NETVALUECC": 0,
-       "LOCTYPE_CODE": "",
-       "STOCK_DOCDESC": "",
-       "DETDIVISION": "",
-       "BASE_CONV_RATE": 0,
-       "DIVISION_CODE": "",
-       "POSTDATE": "",
-       "DETLINEREMARKS": "",
-       "DT_BRANCH_CODE": "",
-       "DT_VOCTYPE": "",
-       "DT_VOCNO": 0,
-       "DT_YEARMONTH": "",
-       "TOTAL_AMOUNTCC": 0,
-       "TOTAL_AMOUNTFC": 0
-     }
-   ]
-     }
+      "BRANCH_CODE": this.branchCode,
+      "VOCTYPE": this.mouldMakingForm.value.vocher || "",
+      "VOCNO": 0,
+      "VOCDATE": this.mouldMakingForm.value.vocDate || "",
+      "YEARMONTH": this.yearMonth,
+      "JOB_NUMBER": this.mouldMakingForm.value.jobNo || "",
+      "JOB_DESCRIPTION": this.mouldMakingForm.value.job || "",
+      "DESIGN_CODE": this.mouldMakingForm.value.designCode || "",
+      "MOULD_NUMBER": this.comService.nullToString(form.mouldNo),
+      "MOULD_LOCATION": this.mouldMakingForm.value.location || "",
+      "MOULD_TYPE": this.mouldMakingForm.value.mouldType || "",
+      "UNQ_JOB_ID": this.mouldMakingForm.value.uniq,
+      "UNQ_DESIGN_ID": this.mouldMakingForm.value.uniqNo,
+      "JOB_SO_MID": 0,
+      "JOB_SO_NUMBER": 0,
+      "PARTYCODE": this.mouldMakingForm.value.noOfParts || "",
+      "PARTY_CURRENCY": "",
+      "PARTY_CURR_RATE": 0,
+      "ITEM_CURRENCY": this.mouldMakingForm.value.itemCurrency || "",
+      "ITEM_CURR_RATE": this.mouldMakingForm.value.itemCurrencyRate || "",
+      "VALUE_DATE": "2023-10-19T08:59:58.514Z",
+      "SALESPERSON_CODE": this.mouldMakingForm.value.enteredBy,
+      "TOTAL_PCS": 0,
+      "TOTAL_GRWT": 0,
+      "TOTAL_DISCAMTFC": 0,
+      "TOTAL_DISCAMTCC": 0,
+      "ITEM_VALUE_FC": 0,
+      "ITEM_VALUE_CC": 0,
+      "PARTY_VALUE_FC": 0,
+      "PARTY_VALUE_CC": 0,
+      "NET_VALUE_FC": 0,
+      "NET_VALUE_CC": 0,
+      "ADDL_VALUE_FC": 0,
+      "ADDL_VALUE_CC": 0,
+      "GROSS_VALUE_FC": 0,
+      "GROSS_VALUE_CC": 0,
+      "REMARKS": this.mouldMakingForm.value.narration || "",
+      "SYSTEM_DATE": "2023-10-19T08:59:58.514Z",
+      "CONSIGNMENTID": 0,
+      "ROUND_VALUE_CC": 0,
+      "NAVSEQNO": 0,
+      "SUPINVNO": "string",
+      "SUPINVDATE": "2023-10-19T08:59:58.514Z",
+      "PAYMENTREMARKS": "",
+      "HHACCOUNT_HEAD": "",
+      "D2DTRANSFER": "",
+      "BASE_CURRENCY": "",
+      "BASE_CURR_RATE": 0,
+      "BASE_CONV_RATE": 0,
+      "AUTOPOSTING": true,
+      "POSTDATE": "",
+      "PRINT_COUNT": 0,
+      "DOC_REF": "",
+      "PICTURE_NAME": "",
+      "FROM_WORKER_CODE": this.mouldMakingForm.value.fromWorker || "",
+      "TO_WORKER_CODE": this.mouldMakingForm.value.toWorker || "",
+      "FROM_PROCESS_CODE": this.mouldMakingForm.value.fromProcess || "",
+      "TO_PROCESS_CODE": this.mouldMakingForm.value.toProcess || "",
+      "PARTS": 0,
+      "Details": [
+        {
+          "UNIQUEID": 0,
+          "SRNO": 0,
+          "STOCK_CODE": "",
+          "PCS": 0,
+          "GRWT": 0,
+          "RATEFC": 0,
+          "RATECC": 0,
+          "VALUEFC": 0,
+          "VALUECC": 0,
+          "DISCPER": 0,
+          "DISCAMTFC": 0,
+          "DISCAMTCC": 0,
+          "NETVALUEFC": 0,
+          "NETVALUECC": 0,
+          "LOCTYPE_CODE": "",
+          "STOCK_DOCDESC": "",
+          "DETDIVISION": "",
+          "BASE_CONV_RATE": 0,
+          "DIVISION_CODE": "",
+          "POSTDATE": "",
+          "DETLINEREMARKS": "",
+          "DT_BRANCH_CODE": "",
+          "DT_VOCTYPE": "",
+          "DT_VOCNO": 0,
+          "DT_YEARMONTH": "",
+          "TOTAL_AMOUNTCC": 0,
+          "TOTAL_AMOUNTFC": 0
+        }
+      ]
+    }
   }
-  formSubmit(){
 
-    if(this.content && this.content.FLAG == 'EDIT'){
+  submitValidations(form: any) {
+    if (this.commonService.nullToString(form.vocher) == '') {
+      this.commonService.toastErrorByMsgId('MSG1940')// vocher  CANNOT BE EMPTY
+      return true
+    }
+    else if (this.commonService.nullToString(form.fromProcess) == '') {
+      this.commonService.toastErrorByMsgId('MSG1295')//"fromProcess cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.fromWorker) == '') {
+      this.commonService.toastErrorByMsgId('MSG1296')//"fromWorker cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.jobNo) == '') {
+      this.commonService.toastErrorByMsgId('MSG1358')//"jobNo cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.mouldNo) == '') {
+      this.commonService.toastErrorByMsgId('MSG7964')//"mouldNo cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.mouldType) == '') {
+      this.commonService.toastErrorByMsgId('MSG7966')//"mouldType cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.toProcess) == '') {
+      this.commonService.toastErrorByMsgId('MSG1907')//"toProcess cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.toWorker) == '') {
+      this.commonService.toastErrorByMsgId('MSG1912')//"toWorker cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.designCode) == '') {
+      this.commonService.toastErrorByMsgId('MSG1197	')//"designCode cannot be empty"
+      return true
+    }
+    return false;
+  }
+
+  formSubmit() {
+
+    if (this.content && this.content.FLAG == 'EDIT') {
       this.update()
       return
     }
-    if (this.mouldMakingForm.invalid) {
-      this.toastr.error('select all required fields')
-      return
-    }
-  
+    // if (this.mouldMakingForm.invalid) {
+    //   this.toastr.error('select all required fields')
+    //   return
+    // }
+    if (this.submitValidations(this.mouldMakingForm.value)) return;
+
+
     let API = 'JobMouldHeaderDJ/InsertJobMouldHeaderDJ'
     let postData = this.setPostData()
     this.isloading = true;
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
         this.isloading = false;
-          if (result && result.status.trim() == "Success") {
-            Swal.fire({
-              title: this.commonService.getMsgByID('MSG2443') || 'Success',
-              text: '',
-              icon: 'success',
-              confirmButtonColor: '#336699',
-              confirmButtonText: 'Ok'
-            }).then((result: any) => {
-              if (result.value) {
-                this.mouldMakingForm.reset()
-                this.isSaved = true;
-                this.close('reloadMainGrid')
-              }
-            });
-          }else {
-            this.comService.toastErrorByMsgId('MSG3577')
-          }
+        if (result && result.status.trim() == "Success") {
+          Swal.fire({
+            title: this.commonService.getMsgByID('MSG2443') || 'Success',
+            text: '',
+            icon: 'success',
+            confirmButtonColor: '#336699',
+            confirmButtonText: 'Ok'
+          }).then((result: any) => {
+            if (result.value) {
+              this.mouldMakingForm.reset()
+              this.isSaved = true;
+              this.close('reloadMainGrid')
+            }
+          });
+        } else {
+          this.comService.toastErrorByMsgId('MSG3577')
+        }
       }, err => {
         this.isloading = false;
-        this.toastr.error('Not saved')
+        this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
       })
     this.subscriptions.push(Sub)
   }
 
- 
+
   update() {
+    if (this.submitValidations(this.mouldMakingForm.value)) return;
+
     let form = this.mouldMakingForm.value
     let API = `JobMouldHeaderDJ/UpdateJobMouldHeaderDJ/${this.branchCode}/${this.mouldMakingForm.value.vocher}/${this.mouldMakingForm.value.vocherNo}/${this.commonService.yearSelected}`;
     let postData = this.setPostData()
@@ -496,31 +541,32 @@ stockCodeData: MasterSearchModel = {
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
         this.isloading = false;
-          if (result && result.status == "Success") {
-            this.isSaved = true;
-            Swal.fire({
-              title: this.comService.getMsgByID('MSG2443') || 'Success',
-              text: '',
-              icon: 'success',
-              confirmButtonColor: '#336699',
-              confirmButtonText: 'Ok'
-            }).then((result: any) => {
-              if (result.value) {
-                this.mouldMakingForm.reset()
-                this.tableData = []
-                this.close('reloadMainGrid')
-              }
-            });
-          }else {
-            this.comService.toastErrorByMsgId('MSG3577')
-          }
+        if (result && result.status == "Success") {
+          this.isSaved = true;
+          Swal.fire({
+            title: this.comService.getMsgByID('MSG2443') || 'Success',
+            text: '',
+            icon: 'success',
+            confirmButtonColor: '#336699',
+            confirmButtonText: 'Ok'
+          }).then((result: any) => {
+            if (result.value) {
+              this.mouldMakingForm.reset()
+              this.tableData = []
+              this.close('reloadMainGrid')
+            }
+          });
+        } else {
+          this.comService.toastErrorByMsgId('MSG3577')
+        }
       }, err => {
         this.isloading = false;
-        this.comService.toastErrorByMsgId('Not saved')
+        this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+
       })
     this.subscriptions.push(Sub)
   }
-  
+
   deleteRecord() {
     if (!this.content.VOCTYPE) {
       Swal.fire({
@@ -545,9 +591,9 @@ stockCodeData: MasterSearchModel = {
       confirmButtonText: 'Yes, delete!'
     }).then((result) => {
       if (result.isConfirmed) {
-        let API = 'JobMouldHeaderDJ/DeleteJobMouldHeaderDJ/' + 
-        this.content.BRANCH_CODE + '/' + this.content.VOCTYPE + '/' +
-        this.content.VOCNO + '/' + this.content.YEARMONTH;
+        let API = 'JobMouldHeaderDJ/DeleteJobMouldHeaderDJ/' +
+          this.content.BRANCH_CODE + '/' + this.content.VOCTYPE + '/' +
+          this.content.VOCNO + '/' + this.content.YEARMONTH;
         let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
           .subscribe((result) => {
             if (result) {
@@ -581,7 +627,7 @@ stockCodeData: MasterSearchModel = {
                 });
               }
             } else {
-              this.toastr.error('Not deleted')
+              this.commonService.toastErrorByMsgId('MSG1880');// Not Deleted
             }
           }, err => alert(err))
         this.subscriptions.push(Sub)
@@ -605,7 +651,7 @@ stockCodeData: MasterSearchModel = {
         this.comService.closeSnackBarMsg()
         if (result.dynamicData && result.dynamicData[0].length > 0) {
           let data = result.dynamicData[0]
-          console.log(data,'data')
+          console.log(data, 'data')
           this.mouldMakingForm.controls.mouldNo.setValue(data[0].MOULD_NUMBER)
           this.mouldMakingForm.controls.mouldType.setValue(data[0].MOULD_TYPE)
           this.mouldMakingForm.controls.toProcess.setValue(data[0].PROCESS)
@@ -616,7 +662,7 @@ stockCodeData: MasterSearchModel = {
           this.mouldMakingForm.controls.designCode.setValue(data[0].DESIGN_CODE)
           // this.mouldMakingForm.controls.fromProcess.setValue(data[0].PROCESSDESC)
           // this.mouldMakingForm.controls.fromWorker.setValue(data[0].WORKERDESC)
-      
+
 
         } else {
           this.comService.toastErrorByMsgId('MSG1747')
@@ -648,7 +694,7 @@ stockCodeData: MasterSearchModel = {
             console.log(data, 'pppp')
             this.jobNumberDetailData = data
             this.mouldMakingForm.controls.jobNo.setValue(data[0].UNQ_JOB_ID)
-          
+
 
 
             this.subJobNumberValidate()

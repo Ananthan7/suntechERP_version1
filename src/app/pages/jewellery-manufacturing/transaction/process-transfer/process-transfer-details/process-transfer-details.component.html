@@ -726,6 +726,7 @@
                         <mat-form-field appearance="outline"
                           style="width: 130px;">
                           <input type="text" matInput maxlength="10"
+                            (focusout)="txtLossBooked_Validating()"
                             formControlName="METAL_LossBooked" class="text-right"/>
                         </mat-form-field>
                       </td>

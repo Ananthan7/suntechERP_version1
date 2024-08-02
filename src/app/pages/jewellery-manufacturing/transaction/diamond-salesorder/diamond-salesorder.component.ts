@@ -741,6 +741,59 @@ export class DiamondSalesorderComponent implements OnInit {
     }
     this.postDataToSave.push(postData)
   }
+
+  // voucherDate: ['', [Validators.required]],
+  // orderType: ['', [Validators.required]],
+  // PartyCode: ['', [Validators.required]],
+  // SalesmanCode: ['', [Validators.required]],
+  // rateType: ['', [Validators.required]],
+  // wholeSaleRate: ['', [Validators.required]],
+  // partyCurrencyType: ['', [Validators.required]],
+  // partyCurrencyRate: ['', [Validators.required]],
+  // ItemCurrency: ['', [Validators.required]],
+  // ItemCurrencyRate: ['', [Validators.required]],
+
+  submitValidations(form: any) {
+    if (this.commonService.nullToString(form.voucherType) == '') {
+      this.commonService.toastErrorByMsgId('MSG1939')// voucherType  CANNOT BE EMPTY
+      return true
+    }
+    else if (this.commonService.nullToString(form.orderType) == '') {
+      this.commonService.toastErrorByMsgId('MSG81501')//"orderType cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.PartyCode) == '') {
+      this.commonService.toastErrorByMsgId('MSG1549')//"PartyCode cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.SalesmanCode) == '') {
+      this.commonService.toastErrorByMsgId('MSG2320')//"SalesmanCode cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.wholeSaleRate) == '') {
+      this.commonService.toastErrorByMsgId('')//"wholeSaleRate cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.partyCurrencyType) == '') {
+      this.commonService.toastErrorByMsgId('MSG1550')//"partyCurrencyType cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.partyCurrencyRate) == '') {
+      this.commonService.toastErrorByMsgId('MSG1550')//"partyCurrencyRate cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.ItemCurrency) == '') {
+      this.commonService.toastErrorByMsgId('MSG1352')//"ItemCurrency cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.ItemCurrencyRate) == '') {
+      this.commonService.toastErrorByMsgId('MSG1352')//"ItemCurrencyRate cannot be empty"
+      return true
+    }
+    return false;
+  }
+
+
   /**USE:  final save API call*/
   formSubmit(): void {
     if (this.content && this.content.FLAG == 'EDIT') {
@@ -748,6 +801,8 @@ export class DiamondSalesorderComponent implements OnInit {
       // this.updateWorkerMaster()
       return
     }
+    if (this.submitValidations(this.PartyDetailsOrderForm.value)) return;
+
     let summaryData: any
     if (this.detailData[0] && this.detailData[0].DATA['SUMMARYDETAILS']) {
       summaryData = this.detailData[0].DATA['SUMMARYDETAILS']
@@ -1033,7 +1088,7 @@ export class DiamondSalesorderComponent implements OnInit {
         }
   
       }, err => {
-        this.commonService.toastErrorByMsgId('network issue found')
+        this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
       })
     this.subscriptions.push(Sub)
   }
