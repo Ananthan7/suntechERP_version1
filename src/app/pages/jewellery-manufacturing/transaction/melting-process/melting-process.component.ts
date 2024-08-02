@@ -351,14 +351,15 @@ export class MeltingProcessComponent implements OnInit {
         this.comService.closeSnackBarMsg()
         let data = this.comService.arrayEmptyObjectToString(result.dynamicData[0])
         if (data && data[0]?.RESULT == 0) {
-          this.comService.toastErrorByMsgId('Voucher Number Already Exists')
+          this.comService.toastErrorByMsgId('MSG2284')//Voucher Number Already Exists
           this.generateVocNo()
           return
         }
       }, err => {
         this.isloading = false;
         this.generateVocNo()
-        this.comService.toastErrorByMsgId('Error Something went wrong')
+        this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+
       })
     this.subscriptions.push(Sub)
   }
@@ -502,7 +503,8 @@ export class MeltingProcessComponent implements OnInit {
           this.meltingProcessFrom.controls[FORMNAME].setValue(data);
         }
       }, err => {
-        this.commonService.toastErrorByMsgId('Error Something went wrong');
+        this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+
       }
     );
 
@@ -617,6 +619,18 @@ export class MeltingProcessComponent implements OnInit {
     }
   }
 
+  submitValidations(form: any) {
+    if (this.commonService.nullToString(form.vocType) == '') {
+      this.commonService.toastErrorByMsgId('MSG1939')// vocType  CANNOT BE EMPTY
+      return true
+    }
+    else if (this.commonService.nullToString(form.vocNo) == '') {
+      this.commonService.toastErrorByMsgId('MSG1940')//"vocNo cannot be empty"
+      return true
+    }
+    return false;
+  }
+
   formSubmit() {
 
     if (this.content && this.content.FLAG == 'EDIT') {
@@ -624,6 +638,7 @@ export class MeltingProcessComponent implements OnInit {
       return
     }
 
+    if (this.submitValidations(this.meltingProcessFrom.value)) return;
 
 
     // if (this.meltingProcessFrom.invalid) {
@@ -657,7 +672,8 @@ export class MeltingProcessComponent implements OnInit {
         }
       }, err => {
         this.isloading = false;
-        this.toastr.error('Not saved')
+        this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+
       })
     this.subscriptions.push(Sub)
   }
@@ -671,6 +687,9 @@ export class MeltingProcessComponent implements OnInit {
   // }
 
   update() {
+    if (this.submitValidations(this.meltingProcessFrom.value)) return;
+
+    
     let form = this.meltingProcessFrom.value
     let API = `JobMeltingProcessDJ/UpdateJobMeltingProcessDJ/${this.branchCode}/${this.meltingProcessFrom.value.vocType}/${this.meltingProcessFrom.value.vocNo}/${this.commonService.yearSelected}`
     let postData = this.setPostData()
@@ -698,7 +717,8 @@ export class MeltingProcessComponent implements OnInit {
         }
       }, err => {
         this.isloading = false;
-        this.comService.toastErrorByMsgId('Not saved')
+        this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+
       })
     this.subscriptions.push(Sub)
   }
@@ -780,7 +800,8 @@ export class MeltingProcessComponent implements OnInit {
                 });
               }
             } else {
-              this.toastr.error('Not deleted')
+              this.commonService.toastErrorByMsgId('MSG1880');// Not Deleted
+
             }
           }, err => alert(err))
         this.subscriptions.push(Sub)

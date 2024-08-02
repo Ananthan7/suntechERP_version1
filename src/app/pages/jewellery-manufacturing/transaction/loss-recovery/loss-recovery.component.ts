@@ -181,15 +181,31 @@ export class LossRecoveryComponent implements OnInit {
     radioScrapReturn : true,
     radioFinalLoss : true,
   });
+
+  submitValidations(form: any) {
+    if (this.comService.nullToString(form.vocType) == '') {
+      this.comService.toastErrorByMsgId('MSG1939')// vocType  CANNOT BE EMPTY
+      return true
+    }
+    else if (this.comService.nullToString(form.VocNo) == '') {
+      this.comService.toastErrorByMsgId('MSG1940')//"VocNo cannot be empty"
+      return true
+    }
+    return false;
+  }
+
   formSubmit() {
     if (this.content && this.content.FLAG == "EDIT") {
       this.update();
       return;
     }
-    if (this.lossRecoveryFrom.invalid) {
-      this.toastr.error("select all required fields");
-      return;
-    }
+    // if (this.lossRecoveryFrom.invalid) {
+    //   this.toastr.error("select all required fields");
+    //   return;
+    // }
+
+    if (this.submitValidations(this.lossRecoveryFrom.value)) return;
+
 
     let API = "ProdLossRecovery/InsertProdLossRecovery";
     let postData = {
@@ -368,10 +384,12 @@ export class LossRecoveryComponent implements OnInit {
   this.subscriptions.push(Sub);
   }
   update() {
-    if (this.lossRecoveryFrom.invalid) {
-      this.toastr.error("select all required fields");
-      return;
-    }
+    // if (this.lossRecoveryFrom.invalid) {
+    //   this.toastr.error("select all required fields");
+    //   return;
+    // }
+    if (this.submitValidations(this.lossRecoveryFrom.value)) return;
+
 
     let API ="ProdLossRecovery/UpdateProdLossRecovery/" + this.lossRecoveryFrom.value.mid;
       let postData = {

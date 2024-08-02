@@ -356,19 +356,15 @@ export class StoneReturnDetailsComponent implements OnInit {
 
   submitValidations(form: any) {
     if (this.comService.nullToString(form.jobNumber) == '') {
-      this.toastr.error('Job Number code required')
-      return true
-    }
-    if (this.comService.nullToString(form.subjobno) == '') {
-      this.toastr.error('Sub Job Number code required')
+      this.comService.toastErrorByMsgId('MSG1358')//Job Number code required
       return true
     }
     if (this.comService.nullToString(form.process) == '') {
-      this.toastr.error('process code required')
+      this.comService.toastErrorByMsgId('MSG1680')//process code required
       return true
     }
     if (this.comService.nullToString(form.worker) == '') {
-      this.toastr.error('worker code required')
+      this.comService.toastErrorByMsgId('MSG1951')//worker code required
       return true
     }
     return false
@@ -608,7 +604,7 @@ export class StoneReturnDetailsComponent implements OnInit {
         }
       }, err => {
         this.comService.closeSnackBarMsg();
-        this.comService.toastErrorByMsgId('Error Something went wrong');
+        this.comService.toastErrorByMsgId('MSG2272')//Error occured, please try again
       });
 
     this.subscriptions.push(Sub);

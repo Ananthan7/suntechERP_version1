@@ -298,17 +298,37 @@ export class DiamondJobBoqIssueComponent implements OnInit {
    
   }
 
+  // vocType: ['',[Validators.required]],
+  // vocNo : ['',[Validators.required]],
+  // location : ['',[Validators.required]],
+
+  submitValidations(form: any) {
+    if (this.commonService.nullToString(form.vocType) == '') {
+      this.commonService.toastErrorByMsgId('MSG1939')// vocType code CANNOT BE EMPTY
+      return true
+    }
+    else if (this.commonService.nullToString(form.vocNo) == '') {
+      this.commonService.toastErrorByMsgId('MSG3661')//"vocNo cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.location) == '') {
+      this.commonService.toastErrorByMsgId('MSG1381')//"location cannot be empty"
+      return true
+    }
+    return false;
+  }
+
 
   formSubmit() {
     if (this.content && this.content.FLAG == 'EDIT') {
       // this.updateMeltingType()
       return
     }
-
-    if (this.diamondJobBoqIssue.invalid) {
-      this.toastr.error('select all required fields')
-      return
-    }
+    if (this.submitValidations(this.diamondJobBoqIssue.value)) return;
+    // if (this.diamondJobBoqIssue.invalid) {
+    //   this.toastr.error('select all required fields')
+    //   return
+    // }
 
     let API = 'JobMetalReturnMasterDJ/InsertJobMetalReturnMasterDJ'
     let postData ={
@@ -370,6 +390,9 @@ export class DiamondJobBoqIssueComponent implements OnInit {
   }
 
   updateMeltingType() {
+
+    if (this.submitValidations(this.diamondJobBoqIssue.value)) return;
+    
     let API = 'JobMetalReturnMasterDJ/UpdateJobMetalReturnMasterDJ/'+ this.diamondJobBoqIssue.value.brnachCode + this.diamondJobBoqIssue.value.voctype + this.diamondJobBoqIssue.value.vocNo + this.diamondJobBoqIssue.value.yearMoth ;
       let postData ={}
   
@@ -454,7 +477,8 @@ export class DiamondJobBoqIssueComponent implements OnInit {
                 });
               }
             } else {
-              this.toastr.error('Not deleted')
+              this.commonService.toastErrorByMsgId('MSG1880');// Not Deleted
+
             }
           }, err => alert(err))
         this.subscriptions.push(Sub)
@@ -539,7 +563,7 @@ export class DiamondJobBoqIssueComponent implements OnInit {
         }
   
       }, err => {
-        this.commonService.toastErrorByMsgId('network issue found')
+        this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
       })
     this.subscriptions.push(Sub)
   }
