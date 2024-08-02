@@ -223,9 +223,9 @@ export class JewelleryAltrationComponent implements OnInit {
 
 
   jewelleryaltrationFrom: FormGroup = this.formBuilder.group({
-    voctype: [''],
+    voctype: ['', [Validators.required]],
     vocno: [''],
-    vocdate: [''],
+    vocdate: ['', [Validators.required]],
     metalrate: [''],
     metalratetype: [''],
     costcode: [''],
@@ -508,7 +508,7 @@ export class JewelleryAltrationComponent implements OnInit {
       return true
     }
     if (form.vocdate == '') {
-      this.comService.toastErrorByMsgId('vocdate is required')
+      this.comService.toastErrorByMsgId('MSG1331')//vocdate is required
       return true
     }
     return false
@@ -518,10 +518,8 @@ export class JewelleryAltrationComponent implements OnInit {
       this.update()
       return
     }
-    if (this.jewelleryaltrationFrom.invalid) {
-      this.toastr.error('select all required fields')
-      return
-    }
+    if (this.submitValidations(this.jewelleryaltrationFrom.value)) return;
+  
     let API = 'DiamondJewelAlteration/InsertDiamondJewelAlteration'
     let postData = this.setPostData()
     this.isloading = true;
@@ -555,6 +553,8 @@ export class JewelleryAltrationComponent implements OnInit {
 
 
   update() {
+    if (this.submitValidations(this.jewelleryaltrationFrom.value)) return;
+
     let form = this.jewelleryaltrationFrom.value
     let API = `DiamondJewelAlteration/UpdateDiamondJewelAlteration/${this.branchCode}/${form.voctype}/${form.vocno}/${this.yearMonth}`
     let postData = this.setPostData()

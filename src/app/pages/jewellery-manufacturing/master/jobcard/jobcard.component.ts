@@ -105,10 +105,10 @@ export class JobcardComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 10,
-    SEARCH_FIELD: '',
+    SEARCH_FIELD: 'DESCRIPTION',
     SEARCH_HEADING: 'Length Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "TYPES = 'LENGTH MASTER'",
+    WHERECONDITION: "DESCRIPTION<>''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -450,21 +450,35 @@ export class JobcardComponent implements OnInit {
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
   }
+  // sizeCodeData: MasterSearchModel = {
+  //   PAGENO: 1,
+  //   RECORDS: 10,
+  //   LOOKUPID: 74,
+  //   SEARCH_FIELD: '',
+  //   SEARCH_HEADING: 'Size ',
+  //   SEARCH_VALUE: '',
+  //   WHERECONDITION: `DESIGN_CODE='${this.jobCardFrom.value.designcode}'`,
+  //   // WHERECONDITION: `kARAT_CODE = '${this.jobCardFrom.value.karat}' and PURITY = '${this.jobCardFrom.value.purity}'`,
+  //   VIEW_INPUT: true,
+  //   VIEW_TABLE: true,
+  //   LOAD_ONCLICK: true,
+  // }
+
   sizeCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 74,
-    SEARCH_FIELD: '',
+    LOOKUPID: 89,
+    SEARCH_FIELD: 'COMPSIZE_CODE',
     SEARCH_HEADING: 'Size ',
     SEARCH_VALUE: '',
-    WHERECONDITION: `DESIGN_CODE='${this.jobCardFrom.value.designcode}'`,
+    WHERECONDITION: "COMPSIZE_CODE<>''",
     // WHERECONDITION: `kARAT_CODE = '${this.jobCardFrom.value.karat}' and PURITY = '${this.jobCardFrom.value.purity}'`,
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
   }
 
-
+  
   setCompanyCurrency() {
     let CURRENCY_CODE = this.commonService.compCurrency;
     this.jobCardFrom.controls.currency.setValue(CURRENCY_CODE);
@@ -619,7 +633,7 @@ export class JobcardComponent implements OnInit {
 
   sizeCodeSelected(e: any) {
     console.log(e);
-    this.jobCardFrom.controls.size.setValue(e.ATTR_CODE);
+    this.jobCardFrom.controls.size.setValue(e.COMPSIZE_CODE);
   }
 
 

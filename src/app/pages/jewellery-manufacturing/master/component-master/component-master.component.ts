@@ -281,11 +281,11 @@ export class ComponentMasterComponent implements OnInit {
   sieveCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 38,
-    SEARCH_FIELD: 'btnSieve',
-    SEARCH_HEADING: 'Cost Code',
+    LOOKUPID: 86,
+    SEARCH_FIELD: 'SIEVE SET MASTER',
+    SEARCH_HEADING: 'SIEVE',
     SEARCH_VALUE: '',
-    WHERECONDITION: "TYPES='SIEVE MASTER'",
+    WHERECONDITION: "TYPES='SIEVE SET MASTER''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -498,6 +498,8 @@ export class ComponentMasterComponent implements OnInit {
           this.prefixMasterDetail = result.response;
           this.prefixMasterDetail.LAST_NO = this.incrementAndPadNumber(this.prefixMasterDetail.LAST_NO, 1)
           this.componentmasterForm.controls.code.setValue(this.prefixMasterDetail.PREFIX_CODE + this.prefixMasterDetail.LAST_NO)
+          this.componentmasterForm.controls.codedes.setValue(result.response.DESCRIPTION)
+          
         } else {
           // this.alloyMastereForm.controls.code.setValue('')
           this.commonService.toastErrorByMsgId('MSG1531')
@@ -591,13 +593,13 @@ export class ComponentMasterComponent implements OnInit {
 
   shapegridCodeSelected(value: any, data: any, controlName: string) {
     if (this.checkCode()) return
-    this.tableData[data.data.SRNO - 1].CARAT = value.KARAT_CODE;
+    this.tableData[data.data.SRNO - 1].SHAPE = value.CODE;
   }
 
 
   sizegridCodeSelected(value: any, data: any, controlName: string) {
     if (this.checkCode()) return
-    this.tableData[data.data.SRNO - 1].CARAT = value.KARAT_CODE;
+    this.tableData[data.data.SRNO - 1].DSIZE = value.COMPSIZE_CODE;
   }
 
   stocktypeCodeSelected(value: any, data: any, controlName: string) {
@@ -1547,89 +1549,21 @@ export class ComponentMasterComponent implements OnInit {
           LOOKUPDATA.SEARCH_VALUE = ''
           return
         }
-        //this.alloyMasterFormChecks(FORMNAME)// for validations
+        this.componentMasterFormChecks(FORMNAME)// for validations
       }, err => {
         this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
       })
     this.subscriptions.push(Sub)
   }
 
-  // validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
-  //   LOOKUPDATA.SEARCH_VALUE = event.target.value
+  //PrefixMaster/GetPrefixMasterDetail/DPM1/DMCC
+  componentMasterFormChecks(FORMNAME: string) {
+    if (FORMNAME == 'code') {
+    this.prefixCodeValidate()
+    }
+  }
+  
 
-  //   if (this.editMode && FORMNAME === 'code') {
-  //     return;
-  //   }
-  //   if (this.editMode && FORMNAME === 'codedes') {
-  //     return;
-  //   }
-
-  //   if (event.target.value == '' || this.viewMode == true) return
-  //   let param = {
-  //     LOOKUPID: LOOKUPDATA.LOOKUPID,
-  //     WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
-  //   }
-  //   this.commonService.showSnackBarMsg('MSG81447');
-  //   let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
-  //   let Sub: Subscription = this.dataService.getDynamicAPI(API)
-  //     .subscribe((result) => {
-  //       let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
-  //       if (data.length == 0) {
-  //         this.commonService.toastErrorByMsgId('MSG1531')
-  //         this.componentmasterForm.controls[FORMNAME].setValue('')
-  //         LOOKUPDATA.SEARCH_VALUE = ''
-  //         return
-  //       }
-  //     }, err => {
-  //       this.commonService.toastErrorByMsgId('network issue found')
-  //     })
-  //   this.subscriptions.push(Sub)
-  // }
-
-  // validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
-  //   LOOKUPDATA.SEARCH_VALUE = event.target.value
-  //   if (event.target.value == '' || this.viewMode == true) return
-  //   let param = {
-  //     LOOKUPID: LOOKUPDATA.LOOKUPID,
-  //     WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
-  //   }
-  //   this.commonService.showSnackBarMsg('MSG81447');
-  //   let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
-  //   let Sub: Subscription = this.dataService.getDynamicAPI(API)
-  //     .subscribe((result) => {
-  //       this.commonService.closeSnackBarMsg()
-  //       this.isDisableSaveBtn = false;
-  //       let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
-  //       if (data.length == 0) {
-  //         this.commonService.toastErrorByMsgId('MSG1531')
-  //         this.stonePrizeMasterForm.controls[FORMNAME].setValue('')
-  //         LOOKUPDATA.SEARCH_VALUE = ''
-  //         return
-  //       }
-  //     }, err => {
-  //       this.commonService.toastErrorByMsgId('network issue found')
-  //     })
-  //   this.subscriptions.push(Sub)
-  // }
-
-  // onFileChangedimage(event: any) {
-
-  //   this.images = [];
-
-  //   if (event.target.files && event.target.files.length > 0) {
-
-  //     for (let i = 0; i < event.target.files.length; i++) {
-  //       let reader = new FileReader();
-
-  //       let file = event.target.files[i];
-  //       reader.readAsDataURL(file);
-  //       reader.onload = () => {
-  //         this.images.push(reader.result as string);
-  //       };
-  //     }
-  //   }
-
-  // }
   onFileChangedimage(event: any): void {
     this.images = [];
     this.imageNames = [];
@@ -1794,11 +1728,10 @@ export class ComponentMasterComponent implements OnInit {
     switch (formControlName) {
       case 'code':
         this.overlaycodedescSearch.showOverlayPanel(event);
-       
         break;
-      case 'codedes':
-        this.overlaycodedescSearch.showOverlayPanel(event);
-        break;
+      // case 'codedes':
+      //   this.overlaycodedescSearch.showOverlayPanel(event);
+      //   break;
       case 'sizeSet':
         this.overlaysizeSetSearch.showOverlayPanel(event);
         break;

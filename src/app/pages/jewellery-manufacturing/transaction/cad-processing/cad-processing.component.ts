@@ -579,10 +579,6 @@ submitValidations(form: any) {
       return
     }
     if (this.submitValidations(this.cadProcessingForm.value)) return;
-    // if (this.cadProcessingForm.invalid) {
-    //   this.toastr.error('select all required fields')
-    //   return
-    // }
 
     let API = 'JobCadProcessDJ/InsertJobCadProcessDJ'
     let postData ={
