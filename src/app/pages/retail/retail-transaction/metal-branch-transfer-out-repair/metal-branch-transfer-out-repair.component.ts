@@ -29,6 +29,8 @@ export class MetalBranchTransferOutRepairComponent implements OnInit {
   selectedTabIndex = 0;
   selectedTabIndexLineItem=0;
   // setAllInitialValues: any;
+  userName = localStorage.getItem('username');
+  userbranch = localStorage.getItem('userbranch');
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -102,7 +104,101 @@ export class MetalBranchTransferOutRepairComponent implements OnInit {
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
     this.metalBranchTransferOutRepairForm.controls.vocType.setValue(this.comService.getqueryParamVocType());
+    this.generateVocNo();
+    
   }
+
+  generateVocNo() {
+    let API = `GenerateNewVoucherNumber/GenerateNewVocNum/${this.comService.getqueryParamVocType()}/${this.branchCode
+      }/${this.yearMonth}/${this.convertDateToYMD(this.currentDate)}`;
+    let sub: Subscription = this.dataService
+      .getDynamicAPI(API)
+      .subscribe((res) => {
+        if (res.status == "Success") {
+          this.metalBranchTransferOutRepairForm.controls.vocNo.setValue(res.newvocno);
+          // this.metalBranchTransferOutRepairForm.controls.voc_NO.setValue(res.newvocno);
+
+        }
+      });
+  }
+
+  convertDateToYMD(str: any) {
+    var date = new Date(str),
+      mnth = ("0" + (date.getMonth() + 1)).slice(-2),
+      day = ("0" + date.getDate()).slice(-2);
+    return [date.getFullYear(), mnth, day].join("-");
+  }
+
+  salesManCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 73,
+    SEARCH_FIELD: 'UsersName',
+    SEARCH_HEADING: 'User Name ',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "UsersName<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  salesManCodeSelected(e: any) {
+    console.log(e);
+    this.metalBranchTransferOutRepairForm.controls.enteredBy.setValue(e.UsersName);
+  }
+
+  
+  locationToCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 155,
+    LOAD_ONCLICK: true,
+    ORDER_TYPE: 0,
+    WHERECONDITION: "@Strbranch='" + this.userbranch + "',@strUsercode= '" + this.userName + "',@stravoidforsales= 0",
+    SEARCH_FIELD: "Location",
+    SEARCH_VALUE: "",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  locationToCodeSelected(e: any) {
+    console.log(e);
+    this.metalBranchTransferOutRepairForm.controls.locationTo.setValue(e.Location);
+  }
+
+    returnlocationToCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 155,
+    LOAD_ONCLICK: true,
+    ORDER_TYPE: 0,
+    WHERECONDITION: "@Strbranch='" + this.userbranch + "',@strUsercode= '" + this.userName + "',@stravoidforsales= 0",
+    SEARCH_FIELD: "Location",
+    SEARCH_VALUE: "",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  returnlocationToCodeSelected(e: any) {
+    console.log(e);
+    this.metalBranchTransferOutRepairForm.controls.returnLocation.setValue(e.Location);
+  }
+
+  
+  branchToCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 13,
+    SEARCH_FIELD: 'BRANCH_CODE',
+    SEARCH_HEADING: 'BRANCH CODE',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "BRANCH_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  branchToCodeSelected(e: any) {
+    console.log(e);
+    this.metalBranchTransferOutRepairForm.controls.branchToCode.setValue(e.BRANCH_CODE);
+    this.metalBranchTransferOutRepairForm.controls.branchtoDesc.setValue(e.BRANCH_NAME);
+
+  }
+
 
   close(data?: any) {
     //TODO reset forms and data before closing
