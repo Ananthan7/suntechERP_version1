@@ -543,42 +543,42 @@ export class ComponentMasterComponent implements OnInit {
 
   sieveToCodeSelected(value: any, data: any, controlName: string) {
     if (this.checkCode()) return
-    this.tableData[data.data.SRNO - 1].CARAT = value.KARAT_CODE;
+    this.tableData[data.data.SRNO - 1].SIEVE_TO = value.SIEVE_TO;
   }
 
   sieveFromCodeSelected(value: any, data: any, controlName: string) {
     if (this.checkCode()) return
-    this.tableData[data.data.SRNO - 1].CARAT = value.KARAT_CODE;
+    this.tableData[data.data.SRNO - 1].SIEVE_FROM = value.SIEVE_FROM;
   }
 
   extClarityCodeSelected(value: any, data: any, controlName: string) {
     if (this.checkCode()) return
-    this.tableData[data.data.SRNO - 1].CARAT = value.KARAT_CODE;
+    this.tableData[data.data.SRNO - 1].CLARITY = value.CLARITY;
   }
 
   extColorCodeSelected(value: any, data: any, controlName: string) {
     if (this.checkCode()) return
-    this.tableData[data.data.SRNO - 1].CARAT = value.KARAT_CODE;
+    this.tableData[data.data.SRNO - 1].COLOR = value.COLOR;
   }
 
   pointerWtCodeSelected(value: any, data: any, controlName: string) {
     if (this.checkCode()) return
-    this.tableData[data.data.SRNO - 1].CARAT = value.KARAT_CODE;
+    this.tableData[data.data.SRNO - 1].POINTER_WT = value.POINTER_WT;
   }
 
   processCodeSelected(value: any, data: any, controlName: string) {
     if (this.checkCode()) return
-    this.tableData[data.data.SRNO - 1].CARAT = value.KARAT_CODE;
+    this.tableData[data.data.SRNO - 1].PROCESS_TYPE = value.PROCESS_TYPE;
   }
 
   descriptionCodeSelected(value: any, data: any, controlName: string) {
     if (this.checkCode()) return
-    this.tableData[data.data.SRNO - 1].CARAT = value.KARAT_CODE;
+    this.tableData[data.data.SRNO - 1].DESCRIPTION = value.DESCRIPTION;
   }
 
   sieveCodeSelected(value: any, data: any, controlName: string) {
     if (this.checkCode()) return
-    this.tableData[data.data.SRNO - 1].CARAT = value.KARAT_CODE;
+    this.tableData[data.data.SRNO - 1].SIEVE = value.SIEVE;
   }
 
   clarityCodeSelected(value: any, data: any, controlName: string) {
@@ -606,17 +606,18 @@ export class ComponentMasterComponent implements OnInit {
     if (this.checkCode()) return
     this.tableData[data.data.SRNO - 1].STOCK_FCCOST = value.CODE;
   }
+  karatCodeSelected(value: any, data: any, controlName: string) {
+    if (this.checkCode()) return
+    this.tableData[data.data.SRNO - 1].CARAT = value.KARAT_CODE;
+    //this.componentmasterForm.controls.karat.setValue(e.KARAT_CODE);
+  }
 
   categoryCodeSelected(e: any) {
     if (this.checkCode()) return
     console.log(e);
     this.componentmasterForm.controls.category.setValue(e.CODE);
   }
-  karatCodeSelected(value: any, data: any, controlName: string) {
-    if (this.checkCode()) return
-    this.tableData[data.data.SRNO - 1].CARAT = value.KARAT_CODE;
-    //this.componentmasterForm.controls.karat.setValue(e.KARAT_CODE);
-  }
+ 
   codeCodeSelected(e: any) {
     console.log(e);
     const prefixCode = e.PREFIX_CODE.toUpperCase();
@@ -859,7 +860,7 @@ export class ComponentMasterComponent implements OnInit {
         this.commonService.allbranchMaster?.BMQTYDECIMALS,
         this.content.RADIUS));
 
-    this.PICTURE_NAME = this.content.PICTURE_NAME
+    this.images = this.content.PICTURE_NAME
 
   }
 
@@ -1563,38 +1564,102 @@ export class ComponentMasterComponent implements OnInit {
     }
   }
   
-
+  // onFileChangedimage(event: any): void {
+  //   this.images = [];
+  //   this.imageNames = [];
+  //   this.PICTURE_NAME = "";  // Clear PICTURE_NAME initially
+  
+  //   if (event.target.files && event.target.files.length > 0) {
+  //     const files = event.target.files;
+  //     const totalFiles = files.length;
+  //     let loadedFiles = 0;
+  
+  //     for (let i = 0; i < totalFiles; i++) {
+  //       const reader = new FileReader();
+  //       const file = files[i];
+  
+  //       // Save file names or other metadata instead of the entire base64 data
+  //       this.imageNames.push(file.name);
+  
+  //       reader.readAsDataURL(file);
+  //       reader.onload = (() => {
+  //         this.images.push(reader.result as string);
+  //         loadedFiles++;
+  
+  //         // Update PICTURE_NAME after all files are loaded
+  //         if (loadedFiles === totalFiles) {
+  //           this.PICTURE_NAME = this.imageNames.join(',') || "";
+  //         }
+  //       }).bind(this);  // Ensure `this` context is maintained
+  //     }
+  //   }
+  // }
+  
   onFileChangedimage(event: any): void {
+    // Clear the previous images and names
     this.images = [];
     this.imageNames = [];
-
+    this.PICTURE_NAME = "";
+  
     if (event.target.files && event.target.files.length > 0) {
       const files = event.target.files;
       const totalFiles = files.length;
       let loadedFiles = 0;
-
+  
       for (let i = 0; i < totalFiles; i++) {
         const reader = new FileReader();
         const file = files[i];
-
-        // Save file names or other metadata instead of the entire base64 data
+  
+        // Save file names or other metadata
         this.imageNames.push(file.name);
-
-        reader.readAsDataURL(file);
-        reader.onload = () => {
-          this.images.push(reader.result as string);
+  
+        reader.onload = ((event: ProgressEvent<FileReader>) => {
+          this.images.push(event.target?.result as string);
           loadedFiles++;
-
+  
           // Update PICTURE_NAME after all files are loaded
           if (loadedFiles === totalFiles) {
             this.PICTURE_NAME = this.imageNames.join(',') || "";
           }
-        };
+        });
+  
+        reader.readAsDataURL(file);
       }
-    } else {
-      this.PICTURE_NAME = "";  // Clear PICTURE_NAME if no files are selected
     }
   }
+  
+
+  // onFileChangedimage(event: any): void {
+  //   this.images = [];
+  //   this.imageNames = [];
+
+  //   if (event.target.files && event.target.files.length > 0) {
+  //     const files = event.target.files;
+  //     const totalFiles = files.length;
+  //     let loadedFiles = 0;
+
+  //     for (let i = 0; i < totalFiles; i++) {
+  //       const reader = new FileReader();
+  //       const file = files[i];
+
+  //       // Save file names or other metadata instead of the entire base64 data
+  //       this.imageNames.push(file.name);
+
+  //       reader.readAsDataURL(file);
+  //       reader.onload = () => {
+  //         this.images.push(reader.result as string);
+  //         loadedFiles++;
+
+  //         // Update PICTURE_NAME after all files are loaded
+  //         if (loadedFiles === totalFiles) {
+  //           this.PICTURE_NAME = this.imageNames.join(',') || "";
+  //         }
+  //       };
+  //     }
+  //   } else {
+  //     this.PICTURE_NAME = "";  // Clear PICTURE_NAME if no files are selected
+  //   }
+  // }
 
   stockType(data: any, value: any) {
     this.tableData[value.data.SRNO - 1].STOCK_FCCOST = data.target.value;
@@ -1644,6 +1709,10 @@ export class ComponentMasterComponent implements OnInit {
   extColor(data: any, value: any) {
     this.tableData[value.data.SRNO - 1].EXT_Color = data.target.value;
   }
+  // extColor(data: any, value: any) {
+  //   this.tableData[value.data.SRNO - 1].EXT_Color = data.target.value;
+  // }
+
   stockCodeValidate(event: any) {
     console.log(this.stockCodeData)
     let postData = {
