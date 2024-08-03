@@ -294,6 +294,7 @@ editLineItem:boolean=false;
   advanceReceiptForm: FormGroup;
   othersReceiptForm: FormGroup;
   giftReceiptForm: FormGroup;
+  schemeReceiptForm: FormGroup;
   customerReceiptForm: FormGroup;
 
   boardingPassForm: FormGroup;
@@ -952,6 +953,13 @@ editLineItem:boolean=false;
       giftAmtFC: ['', [Validators.required, Validators.min(0.1)]],
     });
 
+     this.schemeReceiptForm = this.formBuilder.group({
+      paymentsCreditGIftVoc: ['', Validators.required],
+      giftVocNo: ['', Validators.required],
+      giftBranch: ['', Validators.required],
+      giftAmtFC: ['', [Validators.required, Validators.min(0.1)]],
+    });
+
     this.customerReceiptForm = this.formBuilder.group({
       customAcCodeList: ['', Validators.required],
       customerAmtLC: ['', Validators.required],
@@ -1057,16 +1065,16 @@ editLineItem:boolean=false;
         this.comFunc.divisionMasterList = data;
       }
     });
-    this.indexedDb.getAllData('countryMaster').subscribe((data) => {
-      if (data.length > 0) {
-        this.comFunc.countryMaster = data;
-      }
-    });
-    this.indexedDb.getAllData('nationalityMaster').subscribe((data) => {
-      if (data.length > 0) {
-        this.comFunc.nationalityMaster = data;
-      }
-    });
+    // this.indexedDb.getAllData('countryMaster').subscribe((data) => {
+    //   if (data.length > 0) {
+    //     this.comFunc.countryMaster = data;
+    //   }
+    // });
+    // this.indexedDb.getAllData('nationalityMaster').subscribe((data) => {
+    //   if (data.length > 0) {
+    //     this.comFunc.nationalityMaster = data;
+    //   }
+    // });
     // this.indexedDb.getAllData('idMaster').subscribe((data) => {
     //   if (data.length > 0) {
     //     console.log('idMaster', data);
@@ -9586,7 +9594,7 @@ printReceiptDetailsWeb() {
         this.comFunc.allbranchMaster?.BAMTDECIMALS,
         // _exchangeMetalRate * _exchangeNetWt
         this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_metal_rate) *
-        this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_net_wt)
+        this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_chargeable_wt)
       )
     );
   }
