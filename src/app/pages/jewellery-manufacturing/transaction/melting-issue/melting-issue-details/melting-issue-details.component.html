@@ -24,7 +24,7 @@
                                     <input type="text" matInput
                                         formControlName="jobno"
                                         class="text-right" maxlength="12"
-                                        [readonly]="viewMode"
+                                        readonly
                                         (keydown)="lookupKeyPress($event,'jobno')"
                                         (focusout)="jobNumberValidate($event)" />
                                 </mat-form-field>
@@ -49,7 +49,7 @@
                                     <input type="text" matInput
                                         formControlName="jobpurity"
                                         class="text-right" PurityDecimal
-                                        [readonly]="viewMode" />
+                                        readonly />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -61,7 +61,7 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput
                                         formControlName="process"
-                                        [readonly]="viewMode"
+                                        readonly
                                         (keydown)="lookupKeyPress($event,'process')"
                                         (focusout)="validateLookupField($event,ProcessCodeData,'process')" />
                                 </mat-form-field>
@@ -101,7 +101,7 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput
                                         formControlName="worker"
-                                        [readonly]="viewMode"
+                                        readonly
                                         (keydown)="lookupKeyPress($event,'worker')"
                                         (focusout)="validateLookupField($event,WorkerCodeData,'worker')" />
                                 </mat-form-field>
@@ -266,7 +266,7 @@
                                     <input type="text" matInput
                                         formControlName="topurity"
                                         class="text-right" AmountDecimalInput
-                                        [readonly]="viewMode" />
+                                        readonly />
                                 </mat-form-field>
                             </div>
                             <label for="inputPassword"
