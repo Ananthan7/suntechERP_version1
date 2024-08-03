@@ -142,6 +142,7 @@ export class MeltingIssueDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.branchCode = this.comService.branchCode;
+    console.log(this.content)
     if (this.content && this.content.FLAG) {
       this.setInitialValue()
       this.meltingIssuedetailsFrom.controls.FLAG.setValue(this.content.FLAG)
@@ -150,7 +151,20 @@ export class MeltingIssueDetailsComponent implements OnInit {
 
       }
     }
+   this.dataTochild()
   }
+  dataTochild(dataToChild?:any){
+    console.log(this.content.HEADERDETAILS,'pick')
+    this.meltingIssuedetailsFrom.controls.jobno.setValue(this.content.jobno || this.content.HEADERDETAILS.jobno);
+    this.meltingIssuedetailsFrom.controls.jobdes.setValue(this.content.jobdes || this.content.HEADERDETAILS.subJobDescription);
+    this.meltingIssuedetailsFrom.controls.jobpurity.setValue(this.content.jobpurity || this.content.HEADERDETAILS.jobpurity);
+    this.meltingIssuedetailsFrom.controls.process.setValue(this.content.process || this.content.HEADERDETAILS.processcode);
+    this.meltingIssuedetailsFrom.controls.processdes.setValue(this.content.processdes || this.content.HEADERDETAILS.processdes);
+    this.meltingIssuedetailsFrom.controls.worker.setValue(this.content.worker || this.content.HEADERDETAILS.worker);
+    this.meltingIssuedetailsFrom.controls.workerdes.setValue(this.content.workerdes || this.content.HEADERDETAILS.workerdes);
+    // this.meltingIssuedetailsFrom.controls.jobdes.setValue(this.content.jobdes || this.content.HEADERDETAILS.subJobDescription);
+    // this.meltingIssuedetailsFrom.controls.jobdes.setValue(this.content.jobdes || this.content.HEADERDETAILS.subJobDescription);  
+    }
   setInitialValue() {
     console.log(this.content, 'content');
     if (!this.content) return;
