@@ -430,7 +430,6 @@ export class MeltingIssueDetailsComponent implements OnInit {
 
   }
 
-
   // deleteRecord() {
   //   if (!this.content.WORKER_CODE) {
   //     Swal.fire({
@@ -576,7 +575,7 @@ export class MeltingIssueDetailsComponent implements OnInit {
           this.meltingIssuedetailsFrom.controls.jobdes.setValue(data[0].DESCRIPTION)
           this.meltingIssuedetailsFrom.controls.process.setValue(data[0].PROCESS)
           this.meltingIssuedetailsFrom.controls.worker.setValue(data[0].WORKER)
-          this.meltingIssuedetailsFrom.controls.stockcode.setValue(data[0].STOCK_CODE)
+          this.meltingIssuedetailsFrom.controls.stockcode.setValue(data[0].DIVCODE)
           this.meltingIssuedetailsFrom.controls.pureweight.setValue(data[0].PUREWT)
           this.meltingIssuedetailsFrom.controls.pcs.setValue(data[0].PCS)
           this.meltingIssuedetailsFrom.controls.workerdes.setValue(data[0].WORKERDESC)
@@ -584,7 +583,8 @@ export class MeltingIssueDetailsComponent implements OnInit {
           this.meltingIssuedetailsFrom.controls.grossweight.setValue(data[0].NETWT)
           this.meltingIssuedetailsFrom.controls.purity.setValue(data[0].PURITY)
           this.meltingIssuedetailsFrom.controls.waxweight.setValue(data[0].WAX_WEIGHT)
-          this.meltingIssuedetailsFrom.controls.stockdes.setValue(data[0].STOCK_DESCRIPTION)
+          this.meltingIssuedetailsFrom.controls.stockdes.setValue(data[0].STOCK_CODE)
+          this.meltingIssuedetailsFrom.controls.tostock.setValue(data[0].STOCK_DESCRIPTION)
           this.meltingIssuedetailsFrom.controls.topurity.setValue(data[0].PURE_WT)
           this.meltingIssuedetailsFrom.controls.netweight.setValue(data[0].NETWT)
           this.meltingIssuedetailsFrom.controls.stoneweight.setValue(data[0].STONE)

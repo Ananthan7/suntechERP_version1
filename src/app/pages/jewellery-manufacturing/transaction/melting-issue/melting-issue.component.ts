@@ -580,13 +580,10 @@ export class MeltingIssueComponent implements OnInit {
     // this.modalRef.componentInstance.itemData = item;
   }
 
-  closeModal() {
-    // Check if the modal reference exists before trying to close
-    if (this.modalRef) {
-      // Close the modal using the reference
-      this.modalRef.close();
-    }
+  closeModal(modal: any) {
+    modal.dismiss('cancel');
   }
+
   close1(data: any = null) {
     this.modalService.dismissAll(data);
   }
@@ -599,8 +596,10 @@ export class MeltingIssueComponent implements OnInit {
   openaddMeltingIssueDetails(dataToChild?: any) {
     console.log(this.openaddMeltingIssueDetails)
     if (!this.meltingIssueFrom.get('meltingtype')?.value) {
-      // this.showErrorToast();
-    } else {
+      // Show error toast or message
+      this.commonService.toastErrorByMsgId('MSG1431	');
+      return; // Stop further execution
+    }
     if (dataToChild) {
       dataToChild.FLAG = this.content?.FLAG || 'EDIT'
       dataToChild.HEADERDETAILS = this.meltingIssueFrom.value;
@@ -616,6 +615,7 @@ export class MeltingIssueComponent implements OnInit {
       windowClass: 'modal-full-width',
     });
   }
+  
   // onRowClickHandler(event: any) {
 
   //   this.selectRowIndex = (event.dataIndex)
@@ -655,7 +655,7 @@ export class MeltingIssueComponent implements OnInit {
   //     console.error('Invalid index');
   //   }
   // }
-  }
+  
   submitValidations(form: any) {
     if (this.commonService.nullToString(form.voctype) == '') {
       this.commonService.toastErrorByMsgId('MSG1939')
@@ -670,7 +670,7 @@ export class MeltingIssueComponent implements OnInit {
       return true;
     }
     if (this.commonService.nullToString(form.processcode) == '') {
-      this.commonService.toastErrorByMsgId('MSG7628')
+      this.commonService.toastErrorByMsgId('MSG1680')
       return true;
     }
     if (this.commonService.nullToString(form.worker) == '') {
@@ -970,7 +970,7 @@ export class MeltingIssueComponent implements OnInit {
             }
           }, err => {
             console.error('API call failed:', err);
-            this.toastr.error('Deletion failed');
+            this.toastr.error('MSG138');
           });
 
         this.subscriptions.push(Sub);

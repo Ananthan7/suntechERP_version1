@@ -306,15 +306,25 @@
                                         AmountDecimalInput></dxi-column>
 
                                     <dxo-summary>
-                                        <dxi-total-item column="SRNO">
+                                        <dxi-total-item column="Pcs"
+                                            summaryType="sum"
+                                            [valueFormat]="gridAmountDecimalFormat"
+                                            displayFormat="{0}">
                                         </dxi-total-item>
-                                        <dxi-total-item column="Pcs">
+                                        <dxi-total-item column="Gross Weight"
+                                            summaryType="sum"
+                                            [valueFormat]="gridAmountDecimalFormat"
+                                            displayFormat="{0}">
                                         </dxi-total-item>
-                                        <dxi-total-item column="Gross Weight">
+                                        <dxi-total-item column="Pure Weight"
+                                            summaryType="sum"
+                                            [valueFormat]="gridAmountDecimalFormat"
+                                            displayFormat="{0}">
                                         </dxi-total-item>
-                                        <dxi-total-item column="Pure Weight">
-                                        </dxi-total-item>
-                                        <dxi-total-item column="Amount">
+                                        <dxi-total-item column="Amount"
+                                            summaryType="sum"
+                                            [valueFormat]="gridAmountDecimalFormat"
+                                            displayFormat="{0}">
                                         </dxi-total-item>
                                     </dxo-summary>
                                 </dx-data-grid>
@@ -344,7 +354,7 @@
 
                                     </dxi-column>
                                 </dx-data-grid>
-                                <button class="btn btn-sm btn-outline-primary"
+                                <button class="btn btn-primary add-btn"
                                     (click)="open(mymodal)">Add Alloy
                                 </button>
 
@@ -355,8 +365,8 @@
                                                 class="modal-header d-flex justify-content-end">
                                                 <h5 class="meltingissueheading"
                                                     id="modal-dia-metal"
-                                                    style="text-align:right;">Melting
-                                                    Issue </h5>
+                                                    style="text-align:right;">Alloy Allocation
+                                                     </h5>
                                                 <button style="border: none"
                                                     type="button" class="close "
                                                     aria-label="Close"
@@ -404,8 +414,11 @@
                                                                 style="width: 70%;">
                                                                 <input
                                                                     type="text"
+                                                                    class="text-right"
                                                                     matInput
-                                                                    formControlName="remarks" />
+                                                                    [max]="10"
+                                                                    formControlName="alloyQty"
+                                                                    MetalDecimalInput />
                                                             </mat-form-field>
                                                         </div>
                                                     </div>
@@ -414,7 +427,8 @@
                                                         <button type="button"
                                                             class="btn btn-primary">Apply</button>
                                                         <button type="button"
-                                                            class="btn btn-primary">Cancel</button>
+                                                            class="btn btn-primary"
+                                                            (click)="closeModal(modal)">Cancel</button>
                                                     </div>
                                                 </div>
                                             </div>
