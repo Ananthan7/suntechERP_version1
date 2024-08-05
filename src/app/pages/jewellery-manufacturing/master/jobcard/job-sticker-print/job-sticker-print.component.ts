@@ -90,34 +90,69 @@ export class JobStickerPrintComponent implements OnInit {
 
   }
 
+  // getfiltercode() {
+
+  //   let API = 'JobMasterDj/GetJobMasterDjHeaderDetail/' + this.branchCode + '/' + this.jobstickerpointForm.value.jobrange + '?DBBranch=' + this.branchCode;
+  //   // let API = 'JobMasterDj/GetJobMasterDjHeaderDetail/'+ this.branchCode+'/45353539'+'?DBBranch='+ this.branchCode;
+  //   let Sub: Subscription = this.dataService.getDynamicAPICustom(API)
+  //     .subscribe((result) => {
+  //       if (result.status == "Success") {
+  //         this.tableDataProcess.push(result.response);
+  //         console.log(this.tableDataProcess)
+  //       }
+  //       else {
+  //         this.commonService.toastErrorByMsgId(result.status)
+  //       }
+  //       // this.jobCardFrom.controls['color'].setValue(result.response.COLOR);
+  //       // this.jobCardFrom.controls['karat'].setValue(result.response.KARAT_CODE);
+  //       // this.jobCardFrom.controls['subcat'].setValue(result.response.SUBCATEGORY_CODE);
+  //       // this.jobCardFrom.controls['prefix'].setValue(result.response.JOB_PREFIX);
+  //       // this.jobCardFrom.controls['brand'].setValue(result.response.BRAND_CODE);
+  //       // this.jobCardFrom.controls['jobtype'].setValue(result.response.DESIGN_TYPE);
+  //       // this.jobCardFrom.controls['type'].setValue(result.response.TYPE_CODE);
+  //       // this.jobCardFrom.controls['purity'].setValue(result.response.PURITY);
+
+  //     }, err => {
+  //       this.commonService.toastErrorByMsgId('MSG81451')//Server Error
+  //     })
+  //   this.subscriptions.push(Sub)
+
+  // }
+
   getfiltercode() {
-
-    let API = 'JobMasterDj/GetJobMasterDjHeaderDetail/' + this.branchCode + '/' + this.jobstickerpointForm.value.jobrange + '?DBBranch=' + this.branchCode;
-    // let API = 'JobMasterDj/GetJobMasterDjHeaderDetail/'+ this.branchCode+'/45353539'+'?DBBranch='+ this.branchCode;
-    let Sub: Subscription = this.dataService.getDynamicAPICustom(API)
-      .subscribe((result) => {
-        if (result.status == "Success") {
-          this.tableDataProcess.push(result.response);
-          console.log(this.tableDataProcess)
+    let postData = {
+      "SPID": "107",
+      "USP_FROMTO_JOBNUMBERFILTER": {
+        "strBranchCode": "DMCC",
+        "strVocType": "TMU",
+        "intVocNo": 1234,
+        "intMid": 5678,
+        "YearMonth": "202401",
+        "FromJobNumber": this.jobstickerpointForm.value.jobrange,
+        "ToJobNumber": this.jobstickerpointForm.value.jobrangeDesc,
+        "chkSingleJob": true
+      }
+    };
+  
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe(
+        (result) => {
+          if (result.status == "Success") {
+            this.tableDataProcess = result.dynamicData[0] || [];
+          } else {
+            console.error("API returned an error:", result);
+            this.commonService.toastErrorByMsgId('MSG1531');
+          }
+        },
+        (err) => {
+          console.error("API call failed:", err);
+          this.commonService.toastErrorByMsgId('MSG1531');
         }
-        else {
-          this.commonService.toastErrorByMsgId(result.status)
-        }
-        // this.jobCardFrom.controls['color'].setValue(result.response.COLOR);
-        // this.jobCardFrom.controls['karat'].setValue(result.response.KARAT_CODE);
-        // this.jobCardFrom.controls['subcat'].setValue(result.response.SUBCATEGORY_CODE);
-        // this.jobCardFrom.controls['prefix'].setValue(result.response.JOB_PREFIX);
-        // this.jobCardFrom.controls['brand'].setValue(result.response.BRAND_CODE);
-        // this.jobCardFrom.controls['jobtype'].setValue(result.response.DESIGN_TYPE);
-        // this.jobCardFrom.controls['type'].setValue(result.response.TYPE_CODE);
-        // this.jobCardFrom.controls['purity'].setValue(result.response.PURITY);
-
-      }, err => {
-        this.commonService.toastErrorByMsgId('MSG81451')//Server Error
-      })
-    this.subscriptions.push(Sub)
-
+      );
+  
+    this.subscriptions.push(Sub);
   }
+  
 
 
   priceSchemeValidate() {

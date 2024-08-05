@@ -32,6 +32,7 @@ export class ComponentMasterComponent implements OnInit {
   isPCSDisabled: boolean = false;
   iskaratDisabled: boolean = false;
   tableData: any[] = [];
+  maindetails: any[] = [];
   selectedIndexes: any = [];
   columnhead: any[] = ['Srno', 'Div.', 'Stock Code', 'Karat', 'Stock Type', 'Pcs', 'Wt/Ct', 'Color', 'Clarity', 'Shape', 'Sieve Std.', 'Description', 'Size', 'Process Type', 'Remarks', 'Pointer Wt', 'Ext.Clarity', 'Sieve From', 'Description', 'Sieve To', 'Description']
   columnhead2: any[] = ['',]
@@ -183,10 +184,10 @@ export class ComponentMasterComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 3,
-    SEARCH_FIELD: 'TYPES',
+    SEARCH_FIELD: 'types',
     SEARCH_HEADING: 'Shape',
     SEARCH_VALUE: '',
-    WHERECONDITION: " TYPES='SHAPE MASTER'",
+    WHERECONDITION: "types='SHAPE MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -219,7 +220,7 @@ export class ComponentMasterComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 15,
-    SEARCH_FIELD: 'COST_CODE',
+    SEARCH_FIELD: 'TYPE',
     SEARCH_HEADING: 'Cost Code',
     SEARCH_VALUE: '',
     WHERECONDITION: "TYPE = 'PRECIOUS STONES'",
@@ -231,7 +232,7 @@ export class ComponentMasterComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 15,
-    SEARCH_FIELD: 'COST_CODE',
+    SEARCH_FIELD: 'TYPE',
     SEARCH_HEADING: 'Cost Code',
     SEARCH_VALUE: '',
     WHERECONDITION: "TYPE = 'PRECIOUS STONES'",
@@ -244,10 +245,10 @@ export class ComponentMasterComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 3,
-    SEARCH_FIELD: 'STOCK_CODE',
-    SEARCH_HEADING: 'Stock Type',
+    SEARCH_FIELD: 'types',
+    SEARCH_HEADING: 'stone Type',
     SEARCH_VALUE: '',
-    WHERECONDITION: "TYPES = 'STONE TYPE MASTER'",
+    WHERECONDITION: "types = 'STONE TYPE MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -258,7 +259,7 @@ export class ComponentMasterComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 3,
-    SEARCH_FIELD: 'btnColor',
+    SEARCH_FIELD: 'Types',
     SEARCH_HEADING: 'Color Code',
     SEARCH_VALUE: '',
     WHERECONDITION: "Types = 'COLOR MASTER'",
@@ -269,8 +270,8 @@ export class ComponentMasterComponent implements OnInit {
   clarityCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 37,
-    SEARCH_FIELD: 'CODE',
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'Types',
     SEARCH_HEADING: 'Code',
     SEARCH_VALUE: '',
     WHERECONDITION: "Types = 'CLARITY MASTER'",
@@ -281,11 +282,11 @@ export class ComponentMasterComponent implements OnInit {
   sieveCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 86,
-    SEARCH_FIELD: 'SIEVE SET MASTER',
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'types',
     SEARCH_HEADING: 'SIEVE',
     SEARCH_VALUE: '',
-    WHERECONDITION: "TYPES='SIEVE SET MASTER''",
+    WHERECONDITION: "types = 'SIEVE MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -305,11 +306,11 @@ export class ComponentMasterComponent implements OnInit {
   processCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 20,
-    SEARCH_FIELD: 'process_code',
-    SEARCH_HEADING: 'Code',
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'TYPES',
+    SEARCH_HEADING: 'SETTING TYPE MASTER',
     SEARCH_VALUE: '',
-    WHERECONDITION: "process_code<>''",
+    WHERECONDITION: "TYPES='SETTING TYPE MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -330,10 +331,10 @@ export class ComponentMasterComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 3,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Code',
+    SEARCH_FIELD: 'Types',
+    SEARCH_HEADING: 'Color Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<>''",
+    WHERECONDITION: "Types = 'COLOR MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -342,10 +343,10 @@ export class ComponentMasterComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 3,
-    SEARCH_FIELD: 'CODE',
+    SEARCH_FIELD: 'Types',
     SEARCH_HEADING: 'Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<>''",
+    WHERECONDITION: "Types = 'CLARITY MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -353,11 +354,11 @@ export class ComponentMasterComponent implements OnInit {
   sieveFromCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 38,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Code',
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'types',
+    SEARCH_HEADING: 'SIEVE MASTER',
     SEARCH_VALUE: '',
-    WHERECONDITION: "TYPES='SIEVE MASTER'",
+    WHERECONDITION: "types = 'SIEVE MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -365,11 +366,11 @@ export class ComponentMasterComponent implements OnInit {
   sieveToCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 38,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Cost Code',
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'types',
+    SEARCH_HEADING: 'Sieve To',
     SEARCH_VALUE: '',
-    WHERECONDITION: "TYPES='SIEVE MASTER'",
+    WHERECONDITION: "types = 'SIEVE MASTER' AND CODE > ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -419,6 +420,7 @@ export class ComponentMasterComponent implements OnInit {
         this.maindesigndetails()
         this.editableMode = true;
         this.editMode = true;
+        console.log(this.content)
       } else if (this.content?.FLAG == 'DELETE') {
         this.viewMode = true;
         this.deleteComponentMaster()
@@ -467,14 +469,27 @@ export class ComponentMasterComponent implements OnInit {
   }
 
 
+  // sizeCodeData: MasterSearchModel = {
+  //   PAGENO: 1,
+  //   RECORDS: 10,
+  //   LOOKUPID: 89,
+  //   SEARCH_FIELD: 'COMPSIZE_CODE',
+  //   SEARCH_HEADING: 'Size',
+  //   SEARCH_VALUE: '',
+  //   WHERECONDITION: `COMPSET_CODE='${this.componentmasterForm.value.sizeSet}'`,
+  //   VIEW_INPUT: true,
+  //   VIEW_TABLE: true,
+  //   LOAD_ONCLICK: true,
+  // }
+
   sizeCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 89,
-    SEARCH_FIELD: 'COMPSIZE_CODE',
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'types',
     SEARCH_HEADING: 'Size',
     SEARCH_VALUE: '',
-    WHERECONDITION: `COMPSET_CODE='${this.componentmasterForm.value.sizeSet}'`,
+    WHERECONDITION: "types = 'SIZE MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -543,32 +558,34 @@ export class ComponentMasterComponent implements OnInit {
 
   sieveToCodeSelected(value: any, data: any, controlName: string) {
     if (this.checkCode()) return
-    this.tableData[data.data.SRNO - 1].SIEVE_TO = value.SIEVE_TO;
+    this.tableData[data.data.SRNO - 1].SIEVE_TO = value.CODE;
   }
 
   sieveFromCodeSelected(value: any, data: any, controlName: string) {
     if (this.checkCode()) return
-    this.tableData[data.data.SRNO - 1].SIEVE_FROM = value.SIEVE_FROM;
+    this.tableData[data.data.SRNO - 1].SIEVE_FROM = value.CODE;
+
+    this.sieveToCodeData.WHERECONDITION = `types = 'SIEVE MASTER' AND CODE > '${value.SIEVE_FROM}'`;
   }
 
   extClarityCodeSelected(value: any, data: any, controlName: string) {
     if (this.checkCode()) return
-    this.tableData[data.data.SRNO - 1].CLARITY = value.CLARITY;
+    this.tableData[data.data.SRNO - 1].EXT_CLARITY = value.CODE;
   }
 
   extColorCodeSelected(value: any, data: any, controlName: string) {
     if (this.checkCode()) return
-    this.tableData[data.data.SRNO - 1].COLOR = value.COLOR;
+    this.tableData[data.data.SRNO - 1].EXT_Color = value.CODE;
   }
 
   pointerWtCodeSelected(value: any, data: any, controlName: string) {
     if (this.checkCode()) return
-    this.tableData[data.data.SRNO - 1].POINTER_WT = value.POINTER_WT;
+    this.tableData[data.data.SRNO - 1].POINTER_WT = value.CODE;
   }
 
   processCodeSelected(value: any, data: any, controlName: string) {
     if (this.checkCode()) return
-    this.tableData[data.data.SRNO - 1].PROCESS_TYPE = value.PROCESS_TYPE;
+    this.tableData[data.data.SRNO - 1].PROCESS_TYPE = value.CODE;
   }
 
   descriptionCodeSelected(value: any, data: any, controlName: string) {
@@ -578,7 +595,7 @@ export class ComponentMasterComponent implements OnInit {
 
   sieveCodeSelected(value: any, data: any, controlName: string) {
     if (this.checkCode()) return
-    this.tableData[data.data.SRNO - 1].SIEVE = value.SIEVE;
+    this.tableData[data.data.SRNO - 1].SIEVE = value.CODE;
   }
 
   clarityCodeSelected(value: any, data: any, controlName: string) {
@@ -599,7 +616,7 @@ export class ComponentMasterComponent implements OnInit {
 
   sizegridCodeSelected(value: any, data: any, controlName: string) {
     if (this.checkCode()) return
-    this.tableData[data.data.SRNO - 1].DSIZE = value.COMPSIZE_CODE;
+    this.tableData[data.data.SRNO - 1].DSIZE = value.CODE;
   }
 
   stocktypeCodeSelected(value: any, data: any, controlName: string) {
@@ -608,7 +625,7 @@ export class ComponentMasterComponent implements OnInit {
   }
   karatCodeSelected(value: any, data: any, controlName: string) {
     if (this.checkCode()) return
-    this.tableData[data.data.SRNO - 1].CARAT = value.KARAT_CODE;
+    this.tableData[data.data.SRNO - 1].KARAT_CODE = value.KARAT_CODE;
     //this.componentmasterForm.controls.karat.setValue(e.KARAT_CODE);
   }
 
@@ -750,12 +767,14 @@ export class ComponentMasterComponent implements OnInit {
 
     let srno = length + 1;
     let data = {
+
+      "UNIQUEID": 0,
       "SRNO": srno,
       "DIVCODE": "",
       "STOCK_CODE": "",
-      "CARAT": "",
+      "CARAT": 0,
       "STOCK_FCCOST": "",
-      "PCS": "",
+      "PCS": 0,
       "GROSS_WT": "",
       "COLOR": "",
       "CLARITY": "",
@@ -770,6 +789,34 @@ export class ComponentMasterComponent implements OnInit {
       "EXT_CLARITY": "",
       "SIEVE_FROM": "",
       "SIEVE_TO": "",
+      "METALSTONE": "",
+      "KARAT_CODE": "",
+      "RATE_TYPE": "",
+      "CURRENCY_CODE": "",
+      "KARAT":"",
+      "PRICEID":"",
+      "SIZE_FROM":"",
+      "SIZE_TO":"",
+      "PART_CODE":"",
+      "LABCHGCODE":"",
+      "PRICECODE":"",
+      "DLABCHGCODE":"",
+      "DPRICECODE":"",
+      "RATEFC": 0,
+      "DMMETALPERCENTAGE": 0,
+      "AMOUNTFC": 0,
+      "AMOUNTLC": 0,
+      "MAKINGRATE": 0,
+      "MAKINGAMOUNT": 0,
+      "METALPER": 0,
+      "METALRATE": 0,
+      "CURR_RATE": 0,
+      "LABOURCODE": "",
+      "DETLINEREMARKS": "",
+      "SIEVE_SET": "",
+      "STONE_TYPE": "",
+       "PURITY": 0,
+      "OTHER_ATTR": "sting"
 
     };
     this.tableData.push(data);
@@ -1430,7 +1477,7 @@ export class ComponentMasterComponent implements OnInit {
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
       .subscribe((result) => {
         if (result.status == "Success") {
-          //this.jobnumber = result.dynamicData[0][0].JOB_NO || []
+          this.maindetails = result.dynamicData[0][0].JOB_NO || []
           // this.componentmasterForm.controls.jobno.setValue(result.dynamicData[0][0].JOB_NO)
         }
       }, err => {
@@ -1734,7 +1781,7 @@ export class ComponentMasterComponent implements OnInit {
         if (result.status == "Success" && result.dynamicData[0]) {
           let data = result.dynamicData[0];
           if (data) {
-            this.tableData[event.SRNO - 1].CARAT = data[0].KARAT_CODE
+            this.tableData[event.SRNO - 1].KARAT_CODE = data[0].KARAT_CODE
             this.tableData[event.SRNO - 1].DIVCODE = data[0].DIVISION
             this.tableData[event.SRNO - 1].DESCRIPTION = data[0].DESCRIPTION
             this.tableData[event.SRNO - 1].SIEVE = data[0].SIEVE

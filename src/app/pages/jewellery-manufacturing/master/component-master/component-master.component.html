@@ -367,7 +367,7 @@
                                     <dxi-column dataField="STOCK_CODE" caption="Stock Code"
                                         cellTemplate="stockCodetemp">
                                     </dxi-column>
-                                    <dxi-column dataField="CARAT" caption="Karat" cellTemplate="karattemp">
+                                    <dxi-column dataField="KARAT_CODE" caption="Karat" cellTemplate="karattemp">
                                     </dxi-column>
                                     <dxi-column dataField="STOCK_FCCOST" caption="Stone Type"
                                         cellTemplate="stockTypetemp">
@@ -578,7 +578,7 @@
 
                             <mat-tab label="Main Design Details">
                                 <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
-                                    [allowColumnReordering]="true" [allowColumnResizing]="true"
+                                    [allowColumnReordering]="true" [allowColumnResizing]="true" [dataSource]="maindetails" 
                                     [columnAutoWidth]="true">
                                     <dxo-paging [enabled]="false"></dxo-paging>
                                     <dxo-editing mode="cell" [allowUpdating]="true">
