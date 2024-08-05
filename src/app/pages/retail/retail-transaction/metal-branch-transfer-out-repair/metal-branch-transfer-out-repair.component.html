@@ -48,8 +48,8 @@
                                         <mat-form-field style="width: 70%;">
                                             <input type="text" matInput formControlName="enteredBy" />
                                         </mat-form-field>
-                                        <master-search  [MasterSearchData]="salesManCodeData"
-                                        (newRowClick)="salesManCodeSelected($event)" ></master-search>
+                                        <master-search [MasterSearchData]="salesManCodeData"
+                                            (newRowClick)="salesManCodeSelected($event)"></master-search>
                                     </div>
                                 </div>
                                 <div class="row ">
@@ -103,7 +103,8 @@
                                     </div>
                                     <div class="col-md-4">
                                         <mat-form-field style="width: 100%;">
-                                            <input class="text-right" type="number" matInput formControlName="metalRateAmt" />
+                                            <input class="text-right" type="number" matInput
+                                                formControlName="metalRateAmt" />
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-3">
@@ -116,8 +117,8 @@
                                         <mat-form-field style="width: 70%;">
                                             <input type="text" matInput formControlName="branchToCode" />
                                         </mat-form-field>
-                                        <master-search  [MasterSearchData]="branchToCodeData"
-                                        (newRowClick)="branchToCodeSelected($event)"></master-search>
+                                        <master-search [MasterSearchData]="branchToCodeData"
+                                            (newRowClick)="branchToCodeSelected($event)"></master-search>
                                     </div>
                                     <div class="col-sm-6">
                                         <mat-form-field style="width: 100%;">
@@ -132,7 +133,7 @@
                                             <input type="text" matInput formControlName="locationTo" />
                                         </mat-form-field>
                                         <master-search [MasterSearchData]="locationToCodeData"
-                                        (newRowClick)="locationToCodeSelected($event)"></master-search>
+                                            (newRowClick)="locationToCodeSelected($event)"></master-search>
                                     </div>
                                     <label for="inputPassword" class="col-sm-2 col-form-label">Return Location :
                                     </label>
@@ -141,7 +142,7 @@
                                             <input type="text" matInput formControlName="returnLocation" />
                                         </mat-form-field>
                                         <master-search [MasterSearchData]="returnlocationToCodeData"
-                                        (newRowClick)="returnlocationToCodeSelected($event)"></master-search>
+                                            (newRowClick)="returnlocationToCodeSelected($event)"></master-search>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -159,7 +160,8 @@
                                     </label>
                                     <div class="col-sm-2">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="number" class="text-center" matInput formControlName="creditDays" />
+                                            <input type="number" class="text-center" matInput
+                                                formControlName="creditDays" />
                                         </mat-form-field>
                                     </div>
                                     <div class="col-sm-3">
@@ -176,7 +178,8 @@
                                     </label>
                                     <div class="col-sm-8">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="number" class="text-center" matInput formControlName="reference" />
+                                            <input type="number" class="text-center" matInput
+                                                formControlName="reference" />
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -416,7 +419,7 @@
                             </div>
                             <div class="col-md-2 offset-md-2">
                                 <mat-form-field style="width: 100%;">
-                                    <input  type="number" class="text-right" matInput formControlName="stoneDiffNum" />
+                                    <input type="number" class="text-right" matInput formControlName="stoneDiffNum" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -424,8 +427,7 @@
                             <label for="inputPassword" class="col-sm-2 col-form-label">Narration : </label>
                             <div class="col-md-10">
                                 <mat-form-field style="width: 100%;">
-                                    <textarea matInput formControlName="narration" appNoEmptySpace
-                                        rows="3"></textarea>
+                                    <textarea matInput formControlName="narration" appNoEmptySpace rows="3"></textarea>
                                 </mat-form-field>
                             </div>
                         </div>
@@ -436,7 +438,7 @@
                                 : </label>
                             <div class="col-md-6">
                                 <mat-form-field style="width: 100%;">
-                                    <input  type="number" class="text-right" matInput formControlName="totalAmount" />
+                                    <input type="number" class="text-right" matInput formControlName="totalAmount" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -445,7 +447,7 @@
                                 : </label>
                             <div class="col-md-6">
                                 <mat-form-field style="width: 100%;">
-                                    <input  type="number" class="text-right" matInput formControlName="otherAmount" />
+                                    <input type="number" class="text-right" matInput formControlName="otherAmount" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -454,7 +456,7 @@
                                 : </label>
                             <div class="col-md-6">
                                 <mat-form-field style="width: 100%;">
-                                    <input  type="number" class="text-right" matInput formControlName="tcsAmount" />
+                                    <input type="number" class="text-right" matInput formControlName="tcsAmount" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -474,7 +476,7 @@
                                 : </label>
                             <div class="col-md-6">
                                 <mat-form-field style="width: 100%;">
-                                    <input  type="number" class="text-right" matInput formControlName="roundTo" />
+                                    <input type="number" class="text-right" matInput formControlName="roundTo" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -483,7 +485,7 @@
                                 : </label>
                             <div class="col-md-6">
                                 <mat-form-field style="width: 100%;">
-                                    <input  type="number" class="text-right" matInput formControlName="netAmount" />
+                                    <input type="number" class="text-right" matInput formControlName="netAmount" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -492,7 +494,7 @@
                                 : </label>
                             <div class="col-md-6">
                                 <mat-form-field style="width: 100%;">
-                                    <input  type="number" class="text-right" matInput formControlName="netAmountLc" />
+                                    <input type="number" class="text-right" matInput formControlName="netAmountLc" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -519,7 +521,8 @@
                         </mat-form-field>
                     </div>
                     <div class="col-md-3">
-                        <button type="button" class="btn btn-outline-primary add-btn w-100">Process / Delivered to Driver</button>
+                        <button type="button" class="btn btn-outline-primary add-btn w-100">Process / Delivered to
+                            Driver</button>
                     </div>
                     <div class="col-md-3">
                         <button type="button" class="btn btn-outline-primary add-btn w-100">Print Barcode</button>

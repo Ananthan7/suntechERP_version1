@@ -18,16 +18,16 @@ import { MetalBranchTransferOutRepairDetailComponent } from './metal-branch-tran
 })
 export class MetalBranchTransferOutRepairComponent implements OnInit {
   @Input() content!: any;
-  tableData: any[] = [];  
-  metalBranchTransferOutRepairDetailsData: any[]  =[];
-  columnheadItemDetails:any[] = ['Sr.Code','Stock Desc','Pcs','GrWt','St.Wt','Kun.Wt','Net.Wt','Purity','Pure Wt','Mkq.Rate','Tax%'];
+  tableData: any[] = [];
+  metalBranchTransferOutRepairDetailsData: any[] = [];
+  columnheadItemDetails: any[] = ['Sr.Code', 'Stock Desc', 'Pcs', 'GrWt', 'St.Wt', 'Kun.Wt', 'Net.Wt', 'Purity', 'Pure Wt', 'Mkq.Rate', 'Tax%'];
   branchCode?: String;
   yearMonth?: String;
   currentDate = new Date();
   private subscriptions: Subscription[] = [];
   viewMode: boolean = false;
   selectedTabIndex = 0;
-  selectedTabIndexLineItem=0;
+  selectedTabIndexLineItem = 0;
   // setAllInitialValues: any;
   userName = localStorage.getItem('username');
   userbranch = localStorage.getItem('userbranch');
@@ -45,67 +45,67 @@ export class MetalBranchTransferOutRepairComponent implements OnInit {
 
 
   metalBranchTransferOutRepairForm: FormGroup = this.formBuilder.group({
-    vocType:[''],
-    vocNo:[''],
-    vocDate:[''],
-    enteredBy:[''],
-    itemCurrency:[''],
-    itemCurrencyAmt:[''],
-    BaseCurrency:[''],
-    BaseCurrencyAmt:[''],
-    transferStatus:[''],
-    metalRate:[''],
-    metalRateAmt:[''],
-    branchToCode:[''],
-    branchtoDesc:[''],
-    locationTo:[''],
-    returnLocation:[''],
-    deliveryOn:[''],
-    creditDate:[''],
-    reference:[''],
-    posVocNo:[''],
-    posVocType:[''],
-    batchSino:[''],
-    batchSICode:[''],
-    batchSiDes:[''],
-    salesReturn:[''],
-    salesTransfer:[''],
-    inclusiveTax:[''],
-    applyTcs:[''],
-    transport:[''],
-    lrNo:[''],
-    vehicle:[''],
-    DocReference:[''],
-    stateCode:[''],
-    stateDesc:[''],
-    taxCode:[''],
-    type:[''],
-    importMBCYear:[''],
-    mbcVocNo:[''],
-    purityDiff:[''],
-    stoneDiff:[''],
-    stoneDiffNum:[''],
-    narration:[''],
-    totalAmount:[''],
-    otherAmount:[''],
-    tcsAmount:[''],
-    totalGst:[''],
-    roundTo:[''],
-    netAmount:[''],
-    netAmountLc:[''],
-    driveCode:[''],
-    driveCodeDes:[''],
-    fixed:[''],
-    creditDays:[''],
-    Document:[''],
-  }); 
-  
+    vocType: [''],
+    vocNo: [''],
+    vocDate: [''],
+    enteredBy: [''],
+    itemCurrency: [''],
+    itemCurrencyAmt: [''],
+    BaseCurrency: [''],
+    BaseCurrencyAmt: [''],
+    transferStatus: [''],
+    metalRate: [''],
+    metalRateAmt: [''],
+    branchToCode: [''],
+    branchtoDesc: [''],
+    locationTo: [''],
+    returnLocation: [''],
+    deliveryOn: [''],
+    creditDate: [''],
+    reference: [''],
+    posVocNo: [''],
+    posVocType: [''],
+    batchSino: [''],
+    batchSICode: [''],
+    batchSiDes: [''],
+    salesReturn: [''],
+    salesTransfer: [''],
+    inclusiveTax: [''],
+    applyTcs: [''],
+    transport: [''],
+    lrNo: [''],
+    vehicle: [''],
+    DocReference: [''],
+    stateCode: [''],
+    stateDesc: [''],
+    taxCode: [''],
+    type: [''],
+    importMBCYear: [''],
+    mbcVocNo: [''],
+    purityDiff: [''],
+    stoneDiff: [''],
+    stoneDiffNum: [''],
+    narration: [''],
+    totalAmount: [''],
+    otherAmount: [''],
+    tcsAmount: [''],
+    totalGst: [''],
+    roundTo: [''],
+    netAmount: [''],
+    netAmountLc: [''],
+    driveCode: [''],
+    driveCodeDes: [''],
+    fixed: [''],
+    creditDays: [''],
+    Document: [''],
+  });
+
   ngOnInit(): void {
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
     this.metalBranchTransferOutRepairForm.controls.vocType.setValue(this.comService.getqueryParamVocType());
     this.generateVocNo();
-    
+
   }
 
   generateVocNo() {
@@ -145,7 +145,7 @@ export class MetalBranchTransferOutRepairComponent implements OnInit {
     this.metalBranchTransferOutRepairForm.controls.enteredBy.setValue(e.UsersName);
   }
 
-  
+
   locationToCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -163,7 +163,7 @@ export class MetalBranchTransferOutRepairComponent implements OnInit {
     this.metalBranchTransferOutRepairForm.controls.locationTo.setValue(e.Location);
   }
 
-    returnlocationToCodeData: MasterSearchModel = {
+  returnlocationToCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 155,
@@ -180,7 +180,7 @@ export class MetalBranchTransferOutRepairComponent implements OnInit {
     this.metalBranchTransferOutRepairForm.controls.returnLocation.setValue(e.Location);
   }
 
-  
+
   branchToCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -205,7 +205,7 @@ export class MetalBranchTransferOutRepairComponent implements OnInit {
     this.activeModal.close(data);
   }
 
- 
+
 
 
 
@@ -219,17 +219,17 @@ export class MetalBranchTransferOutRepairComponent implements OnInit {
     modalRef.result.then((postData) => {
       // console.log(postData);      
       if (postData) {
-        console.log('Data from modal:', postData);    
-        if (postData.reopen= true) {
+        console.log('Data from modal:', postData);
+        if (postData.reopen = true) {
           this.openAddDetail();
-        }   
+        }
         this.metalBranchTransferOutRepairDetailsData.push(postData);
 
       }
     });
   }
 
-  removedata(){
+  removedata() {
 
   }
 
@@ -257,7 +257,7 @@ export class MetalBranchTransferOutRepairComponent implements OnInit {
     this.metalBranchTransferOutRepairForm.controls.BaseCurrencyAmt.setValue(this.content.BASE_CONV_RATE);
     this.metalBranchTransferOutRepairForm.controls.stateCode.setValue(this.content.GST_STATE_CODE);
     this.metalBranchTransferOutRepairForm.controls.metalRate.setValue(this.content.METAL_TYPE);
-    this.metalBranchTransferOutRepairForm.controls.metalRateAmt.setValue(this.content.METAL_TYPERATE);     
+    this.metalBranchTransferOutRepairForm.controls.metalRateAmt.setValue(this.content.METAL_TYPERATE);
   }
 
   formSubmit() {
@@ -276,7 +276,7 @@ export class MetalBranchTransferOutRepairComponent implements OnInit {
       "BRANCH_CODE": this.branchCode,
       "VOCTYPE": this.metalBranchTransferOutRepairForm.value.vocType,
       "VOCNO": this.metalBranchTransferOutRepairForm.value.vocNo,
-      "VOCDATE":this.metalBranchTransferOutRepairForm.value.vocDate,
+      "VOCDATE": this.metalBranchTransferOutRepairForm.value.vocDate,
       "VALUE_DATE": "2024-03-08T09:59:42.749Z",
       "YEARMONTH": this.yearMonth,
       "TRANSFERSTATUS": this.metalBranchTransferOutRepairForm.value.transferStatus,
@@ -308,7 +308,7 @@ export class MetalBranchTransferOutRepairComponent implements OnInit {
       "SCRAPTRANSFER": true,
       "SALESPERSON_CODE": this.metalBranchTransferOutRepairForm.value.enteredBy,
       "INVREFNO": "string",
-      "DELIVEREDDATE": this.metalBranchTransferOutRepairForm.value.deliveryOn, 
+      "DELIVEREDDATE": this.metalBranchTransferOutRepairForm.value.deliveryOn,
       "PHYSTKTRANSTO_BR": "string",
       "OUSTATUSNEW": 0,
       "TOTAL_NETWT": 0,
@@ -391,7 +391,7 @@ export class MetalBranchTransferOutRepairComponent implements OnInit {
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
         if (result.response) {
-          if (result.status == " Success ") {
+          if (result.status == "Success") {
             Swal.fire({
               title: result.message || 'Success',
               text: '',
@@ -414,14 +414,14 @@ export class MetalBranchTransferOutRepairComponent implements OnInit {
   }
 
   update() {
-    console.log(this.branchCode,'working')
-    let API = `RepairDelivery/UpdateRepairDelivery/${this.branchCode}/${this.metalBranchTransferOutRepairForm.value.voctype}/${this.metalBranchTransferOutRepairForm.value.vocNo}/${this.comService.yearSelected}` ;
-    let postData ={
+    console.log(this.branchCode, 'working')
+    let API = `RepairDelivery/UpdateRepairDelivery/${this.branchCode}/${this.metalBranchTransferOutRepairForm.value.voctype}/${this.metalBranchTransferOutRepairForm.value.vocNo}/${this.comService.yearSelected}`;
+    let postData = {
       "MID": 0,
       "BRANCH_CODE": this.branchCode,
       "VOCTYPE": this.metalBranchTransferOutRepairForm.value.vocType,
       "VOCNO": this.metalBranchTransferOutRepairForm.value.vocNo,
-      "VOCDATE":this.metalBranchTransferOutRepairForm.value.vocDate,
+      "VOCDATE": this.metalBranchTransferOutRepairForm.value.vocDate,
       "VALUE_DATE": "2024-03-08T09:59:42.749Z",
       "YEARMONTH": this.yearMonth,
       "TRANSFERSTATUS": this.metalBranchTransferOutRepairForm.value.transferStatus,
@@ -453,7 +453,7 @@ export class MetalBranchTransferOutRepairComponent implements OnInit {
       "SCRAPTRANSFER": true,
       "SALESPERSON_CODE": this.metalBranchTransferOutRepairForm.value.enteredBy,
       "INVREFNO": "string",
-      "DELIVEREDDATE": this.metalBranchTransferOutRepairForm.value.deliveryOn, 
+      "DELIVEREDDATE": this.metalBranchTransferOutRepairForm.value.deliveryOn,
       "PHYSTKTRANSTO_BR": "string",
       "OUSTATUSNEW": 0,
       "TOTAL_NETWT": 0,
@@ -533,37 +533,37 @@ export class MetalBranchTransferOutRepairComponent implements OnInit {
       "GENSEQNO": 0,
       "Details": this.metalBranchTransferOutRepairDetailsData,
     }
-      
-  
-      let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
-        .subscribe((result) => {
-          if (result.response) {
-            if (result.status == "Success") {
-              Swal.fire({
-                title: result.message || 'Success',
-                text: '',
-                icon: 'success',
-                confirmButtonColor: '#336699',
-                confirmButtonText: 'Ok'
-              }).then((result: any) => {
-                if (result.value) {
-                  this.metalBranchTransferOutRepairForm.reset()
-                  this.tableData = []
-                  this.close('reloadMainGrid')
-                }
-              });
-            }
-          } else {
-            this.toastr.error('Not saved')
+
+
+    let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
+      .subscribe((result) => {
+        if (result.response) {
+          if (result.status == "Success") {
+            Swal.fire({
+              title: result.message || 'Success',
+              text: '',
+              icon: 'success',
+              confirmButtonColor: '#336699',
+              confirmButtonText: 'Ok'
+            }).then((result: any) => {
+              if (result.value) {
+                this.metalBranchTransferOutRepairForm.reset()
+                this.tableData = []
+                this.close('reloadMainGrid')
+              }
+            });
           }
-        }, err => alert(err))
-      this.subscriptions.push(Sub)
-    }
-      /**USE: delete Melting Type From Row */
-      
+        } else {
+          this.toastr.error('Not saved')
+        }
+      }, err => alert(err))
+    this.subscriptions.push(Sub)
+  }
+  /**USE: delete Melting Type From Row */
+
   deleteMetalBranchTransferOutRepair() {
     if (this.content && this.content.FLAG == 'VIEW') return
-    if (!this.content.BRANCH_CODE&&!this.content.VOCTYPE&&!this.content.VOCNO&&!this.content.YEARMONTH) {
+    if (!this.content.BRANCH_CODE && !this.content.VOCTYPE && !this.content.VOCNO && !this.content.YEARMONTH) {
 
       Swal.fire({
         title: '',
