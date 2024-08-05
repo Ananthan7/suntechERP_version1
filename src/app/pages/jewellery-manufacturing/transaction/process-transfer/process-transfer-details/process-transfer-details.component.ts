@@ -2988,18 +2988,18 @@ export class ProcessTransferDetailsComponent implements OnInit {
       let txtBalPureWt = 0
       if (this.blnScrapIronItem == false) {
         txtMToNetWt = (this.emptyToZero(form.GrossWeightTo) - (this.emptyToZero(form.METAL_TO_STONE_WT) + this.emptyToZero(txtToIronWt)));
-        txtMToPureWt = ((this.emptyToZero(txtMToNetWt) * form.PURITY));
+        txtMToPureWt = this.commonService.pureWeightCalculate(txtMToNetWt,form.PURITY);
 
         txtBalGrWt = (this.emptyToZero(form.GrossWeightFrom) - (this.emptyToZero(form.GrossWeightTo) + this.emptyToZero(form.METAL_LossBooked) + this.emptyToZero(form.lossQty)));
         txtBalNetWt = (this.emptyToZero(txtBalGrWt) - (this.emptyToZero(form.METAL_BalStoneWt) + this.emptyToZero(txtBalIronWt)));
-        txtBalPureWt = ((this.emptyToZero(txtBalNetWt) * form.PURITY));
+        txtBalPureWt = this.commonService.pureWeightCalculate(txtBalNetWt,form.PURITY);
       }
       else {
         txtMToNetWt = (this.emptyToZero(form.GrossWeightTo) - (this.emptyToZero(form.METAL_TO_STONE_WT) + this.emptyToZero(txtToIronWt)));
-        txtMToPureWt = ((this.emptyToZero(txtMToNetWt) * form.PURITY));
+        txtMToPureWt = this.commonService.pureWeightCalculate(txtMToNetWt,form.PURITY);
         txtBalGrWt = (this.emptyToZero(form.GrossWeightFrom) - (this.emptyToZero(form.GrossWeightTo) + this.emptyToZero(form.METAL_ScrapGrWt) + this.emptyToZero(form.METAL_LossBooked)));
         txtBalNetWt = (this.emptyToZero(txtBalGrWt) - (this.emptyToZero(form.METAL_BalStoneWt) + this.emptyToZero(txtBalIronWt)));
-        txtBalPureWt = ((this.emptyToZero(txtBalNetWt) * form.PURITY));
+        txtBalPureWt = this.commonService.pureWeightCalculate(txtBalNetWt,form.PURITY);
       }
       this.FORM_VALIDATER.METAL_ToIronWt = form.METAL_ToIronWt
       this.setValueWithDecimal('METAL_BalIronWt', txtBalIronWt, 'STONE')
