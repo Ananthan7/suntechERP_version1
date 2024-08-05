@@ -571,7 +571,7 @@ export class MetalBranchTransferInAutoRepairComponent implements OnInit {
   update() {
     let API = 'MetalBarcodeTransferAuto/UpdateMetalBarcodeTransferAuto/' + this.content.BRANCH_CODE + this.content.VOCTYPE + this.content.VOCNO + this.content.YEARMONTH
     let postData = {
-     "MID": 0,
+      "MID": 0,
       "BRANCH_CODE": "string",
       "VOCTYPE": this.metalBranchTransferinAutoRepairForm.value.voctype,
       "VOCNO": this.metalBranchTransferinAutoRepairForm.value.vocNo,
