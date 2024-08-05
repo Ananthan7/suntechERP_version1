@@ -506,7 +506,7 @@
                       <div class="col-sm-7">
                         <!-- <mat-form-field appearance="outline" style="width: 100%;">
                           <input type="date" matInput formControlName="startdate"
-                            id="startdate" (change)="onStartDateChange()" />
+                            id="startdate" (focusout)="onStartDateChange()" />
                         </mat-form-field> -->
                         <mat-form-field appearance="outline" style="width: 100%">
                           <input matInput DateValidation readonly
@@ -628,7 +628,7 @@
                           <input class="form-check-input" type="checkbox"
                             [disabled]="viewMode"
                             name="flexRadioDefault" id="flexRadioDefault1"
-                            (change)="selectAllBtnChange($event)">
+                            (focusout)="selectAllBtnChange($event)">
                         </div>
                       </div>
                     </div>
@@ -813,7 +813,7 @@
                         <mat-form-field appearance="outline"
                           style="width: 130px;">
                           <input type="text" matInput class="text-right"
-                            (change)="txtMScrapStockCode_Validating()"
+                            (focusout)="txtMScrapStockCode_Validating()"
                             (keydown)="lookupKeyPress($event,'METAL_ScrapStockCode')"
                             formControlName="METAL_ScrapStockCode" />
                             <master-search class="masterSearch"
@@ -1057,7 +1057,7 @@
                       <div class="col-sm-7">
                         <!-- <mat-form-field appearance="outline" style="width: 100%;">
                           <input type="date" matInput formControlName="startdate"
-                            id="startdate" (change)="onStartDateChange()" />
+                            id="startdate" (focusout)="onStartDateChange()" />
                         </mat-form-field> -->
                         <mat-form-field appearance="outline" style="width: 100%">
                           <input matInput DateValidation readonly
@@ -1211,7 +1211,7 @@
                 cellTemplate="Setted">
                 <div *dxTemplate="let data1 of 'Setted'">
                   <input type="checkbox" [disabled]="viewMode"
-                    [checked]="data1.value" (change)="settedCheckbox(data1)" />
+                    [checked]="data1.value" (focusout)="settedCheckbox(data1)" />
                 </div>
               </dxi-column>
               <dxi-column dataField="GEN" caption="Setting Type"
