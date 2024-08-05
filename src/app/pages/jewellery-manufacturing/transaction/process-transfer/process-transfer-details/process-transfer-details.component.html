@@ -29,7 +29,7 @@
                 <mat-form-field appearance="outline" style="width: 100%;">
                   <input type="text" matInput
                     [readonly]="viewMode"
-                    (change)="barcodeNumberValidate($event)"
+                    (focusout)="barcodeNumberValidate($event)"
                     formControlName="barCodeNumber" />
                 </mat-form-field>
               </div>
@@ -97,7 +97,7 @@
                 <mat-form-field appearance="outline" style="width: 76%;">
                   <input type="text" matInput UpperCaseDirective
                     (keydown)="lookupKeyPress($event,'APPROVED_USER')"
-                    (change)="validateLookupField($event,userDetailNet,'APPROVED_USER')"
+                    (focusout)="validateLookupField($event,userDetailNet,'APPROVED_USER')"
                     formControlName="APPROVED_USER" [readonly]="viewMode" />
                   <master-search class="masterSearch"
                     [MasterSearchData]="userDetailNet"
@@ -153,7 +153,7 @@
                             style="width: 110px;">
                             <input type="text" matInput UpperCaseDirective
                               (keydown)="lookupKeyPress($event,'FRM_PROCESS_CODE')"
-                              (change)="fromProcesscodeValidate($event)"
+                              (focusout)="fromProcesscodeValidate($event)"
                               formControlName="FRM_PROCESS_CODE"
                               [readonly]="viewMode" />
                             <master-search class="masterSearch"
@@ -171,7 +171,7 @@
                             <input type="text" matInput [readonly]="viewMode"
                               UpperCaseDirective
                               (keydown)="lookupKeyPress($event,'TO_PROCESS_CODE')"
-                              (change)="toProcesscodeValidate($event)"
+                              (focusout)="toProcesscodeValidate($event)"
                               formControlName="TO_PROCESS_CODE" />
                             <master-search class="masterSearch"
                               *ngIf="!viewMode" #toProcessMasterOverlay
@@ -191,7 +191,7 @@
                             <input type="text" matInput [readonly]="viewMode"
                               UpperCaseDirective
                               (keydown)="lookupKeyPress($event,'FRM_WORKER_CODE')"
-                              (change)="fromWorkercodeValidate($event)"
+                              (focusout)="fromWorkercodeValidate($event)"
                               formControlName="FRM_WORKER_CODE" />
                             <master-search class="masterSearch"
                               *ngIf="!viewMode" #fromWorkerMasterOverley
@@ -208,7 +208,7 @@
                             <input type="text" matInput [readonly]="viewMode"
                               UpperCaseDirective
                                (keydown)="lookupKeyPress($event,'TO_WORKER_CODE')"
-                              (change)="toWorkercodeValidate($event)"
+                              (focusout)="toWorkercodeValidate($event)"
                               formControlName="TO_WORKER_CODE" />
                             <master-search class="masterSearch"
                               *ngIf="!viewMode"  #overlayToWorker
@@ -256,7 +256,7 @@
                           <input type="text" matInput [readonly]="viewMode"
                             class="text-right"
                             MetalDecimalInput [max]="10"
-                            (change)="toMetalWeightChange('FRM_METAL_WT','TO_METAL_WT')"
+                            (focusout)="toMetalWeightChange('FRM_METAL_WT','TO_METAL_WT')"
                             formControlName="TO_METAL_WT" />
                         </mat-form-field>
                       </td>
@@ -281,7 +281,7 @@
                           <input type="text" matInput [readonly]="viewMode"
                             class="text-right"
                           NumberOnly maxlength="10"
-                            (change)="checkFromToValues('FRM_PCS','TO_PCS')"
+                            (focusout)="checkFromToValues('FRM_PCS','TO_PCS')"
                             formControlName="TO_PCS" />
                         </mat-form-field>
                       </td>
@@ -314,7 +314,7 @@
                           <input type="text" matInput [readonly]="viewMode"
                             class="text-right"
                             MetalDecimalInput [max]="10"
-                            (change)="GrossWeightToChange($event)"
+                            (focusout)="GrossWeightToChange($event)"
                             formControlName="GrossWeightTo" />
                         </mat-form-field>
                       </td>
@@ -334,7 +334,7 @@
                           <input type="text" matInput readonly
                             class="text-right"
                             formControlName="TO_STONE_PCS" NumberOnly
-                            (change)="checkFromToValues('FRM_STONE_PCS','TO_STONE_PCS')"
+                            (focusout)="checkFromToValues('FRM_STONE_PCS','TO_STONE_PCS')"
                             maxlength="10" />
                         </mat-form-field>
                       </td>
@@ -367,7 +367,7 @@
                           <input type="text" matInput readonly
                             class="text-right"
                             StoneDecimalInput [max]="10"
-                            (change)="checkFromToValues('FRM_STONE_WT','TO_STONE_WT')"
+                            (focusout)="checkFromToValues('FRM_STONE_WT','TO_STONE_WT')"
                             formControlName="TO_STONE_WT" />
                         </mat-form-field>
                       </td>
@@ -427,7 +427,7 @@
                               style="width: 100px;">
                               <input type="text" matInput maxlength="15"
                                  (keydown)="lookupKeyPress($event,'stockCode')"
-                                (change)="stockCodeScrapValidate($event)"
+                                (focusout)="stockCodeScrapValidate($event)"
                                 formControlName="stockCode" [readonly]="viewMode" />
                               <master-search class="masterSearch" *ngIf="!viewMode"
                                 [MasterSearchData]="stockCodeSearch" #stockCodeOverlay
@@ -443,7 +443,7 @@
                               <input type="text" matInput
                                 [readonly]="viewMode || !locationSearchFlag"
                                 class="text-right"
-                                (change)="scrapWeightChange($event)"
+                                (focusout)="scrapWeightChange($event)"
                                 formControlName="scrapWeight" MetalDecimalInput
                                 maxlength="10" />
                             </mat-form-field>
@@ -470,7 +470,7 @@
                               <input type="text" matInput [readonly]="viewMode"
                                 class="text-right" id="txtLossQty"
                                 MetalDecimalInput [max]="10"
-                                (change)="lossQtyChange($event)"
+                                (focusout)="lossQtyChange($event)"
                                 formControlName="lossQty" />
                             </mat-form-field>
                           </td>
@@ -506,7 +506,7 @@
                       <div class="col-sm-7">
                         <!-- <mat-form-field appearance="outline" style="width: 100%;">
                           <input type="date" matInput formControlName="startdate"
-                            id="startdate" (change)="onStartDateChange()" />
+                            id="startdate" (focusout)="onStartDateChange()" />
                         </mat-form-field> -->
                         <mat-form-field appearance="outline" style="width: 100%">
                           <input matInput DateValidation readonly
@@ -628,7 +628,7 @@
                           <input class="form-check-input" type="checkbox"
                             [disabled]="viewMode"
                             name="flexRadioDefault" id="flexRadioDefault1"
-                            (change)="selectAllBtnChange($event)">
+                            (focusout)="selectAllBtnChange($event)">
                         </div>
                       </div>
                     </div>
@@ -694,7 +694,7 @@
                           <mat-form-field appearance="outline"
                             style="width: 130px;">
                             <input type="text" matInput
-                              (change)="SPvalidateLookupField($event,fromProcessMasterSearch,'METAL_FRM_PROCESS_CODE')"
+                              (focusout)="SPvalidateLookupField($event,fromProcessMasterSearch,'METAL_FRM_PROCESS_CODE')"
                                 formControlName="METAL_FRM_PROCESS_CODE" 
                                (keydown)="lookupKeyPress($event,'METAL_FRM_PROCESS_CODE')">
                             <master-search class="masterSearch"
@@ -712,7 +712,7 @@
                             style="width: 130px;">
                             <input type="text" matInput [readonly]="viewMode"
                                (keydown)="lookupKeyPress($event,'METAL_TO_PROCESS_CODE')"
-                              (change)="SPvalidateLookupField($event,toProcessMasterSearch,'METAL_TO_PROCESS_CODE')"
+                              (focusout)="SPvalidateLookupField($event,toProcessMasterSearch,'METAL_TO_PROCESS_CODE')"
                               formControlName="METAL_TO_PROCESS_CODE" />
                             <master-search class="masterSearch"
                               *ngIf="!viewMode" #MetaltoProcessMasterOverlay
@@ -727,7 +727,7 @@
                         <mat-form-field appearance="outline"
                           style="width: 130px;">
                           <input type="text" matInput maxlength="10"
-                            (change)="txtLossBooked_Validating()"
+                            (focusout)="txtLossBooked_Validating()"
                             MetalDecimalInput
                             formControlName="METAL_LossBooked" class="text-right"/>
                         </mat-form-field>
@@ -800,7 +800,7 @@
                           <input type="text" matInput
                             UpperCaseDirective 
                              (keydown)="lookupKeyPress($event,'METAL_ToStockCode')"
-                            (change)="MToStockCode_Validating()"
+                            (focusout)="MToStockCode_Validating()"
                             formControlName="METAL_ToStockCode" />
                             <master-search class="masterSearch"
                               *ngIf="!viewMode"
@@ -813,7 +813,7 @@
                         <mat-form-field appearance="outline"
                           style="width: 130px;">
                           <input type="text" matInput class="text-right"
-                            (change)="txtMScrapStockCode_Validating()"
+                            (focusout)="txtMScrapStockCode_Validating()"
                             (keydown)="lookupKeyPress($event,'METAL_ScrapStockCode')"
                             formControlName="METAL_ScrapStockCode" />
                             <master-search class="masterSearch"
@@ -841,7 +841,7 @@
                           style="width: 130px;">
                           <input type="text" matInput class="text-right"
                             NumberOnly
-                            (change)="MToPCS_Validating()"
+                            (focusout)="MToPCS_Validating()"
                             formControlName="METAL_ToPCS" />
                         </mat-form-field>
                       </td>
@@ -851,7 +851,7 @@
                           style="width: 130px;">
                           <input type="text" matInput class="text-right"
                             NumberOnly
-                            (change)="MScrapPCS_Validating()"
+                            (focusout)="MScrapPCS_Validating()"
                             formControlName="METAL_ScrapPCS" />
                         </mat-form-field>
                       </td>
@@ -878,7 +878,7 @@
                         <mat-form-field appearance="outline"
                           style="width: 130px;">
                           <input type="text" matInput class="text-right"
-                            MetalDecimalInput (change)="MToGrossWt_Validating()"
+                            MetalDecimalInput (focusout)="MToGrossWt_Validating()"
                             formControlName="METAL_GrossWeightTo" />
                         </mat-form-field>
                       </td>
@@ -886,7 +886,7 @@
                         <mat-form-field appearance="outline"
                           style="width: 130px;">
                           <input type="text" matInput MetalDecimalInput
-                            (change)="txtMScrapGrWt_Validating()"
+                            (focusout)="txtMScrapGrWt_Validating()"
                             formControlName="METAL_ScrapGrWt" class="text-right"/>
                         </mat-form-field>
                       </td>
@@ -914,7 +914,7 @@
                           style="width: 130px;">
                           <input type="text" matInput class="text-right"
                             StoneDecimalInput
-                            (change)="MToStoneWt_Validating()"
+                            (focusout)="MToStoneWt_Validating()"
                             formControlName="METAL_TO_STONE_WT" />
                         </mat-form-field>
                       </td>
@@ -923,7 +923,7 @@
                         <mat-form-field appearance="outline"
                           style="width: 130px;">
                           <input type="text" matInput StoneDecimalInput
-                            (change)="txtMScrapStoneWt_Validating()"
+                            (focusout)="txtMScrapStoneWt_Validating()"
                             formControlName="METAL_ScrapStoneWt" class="text-right"/>
                         </mat-form-field>
                       </td>
@@ -951,7 +951,7 @@
                           style="width: 130px;">
                           <input type="text" matInput class="text-right"
                             formControlName="METAL_ToIronWt" MetalDecimalInput
-                            (change)="txtToIronWt_Validating()"
+                            (focusout)="txtToIronWt_Validating()"
                              />
                         </mat-form-field>
                       </td>
@@ -960,7 +960,7 @@
                         <mat-form-field appearance="outline"
                           style="width: 130px;">
                           <input type="text" matInput class="text-right"
-                            (change)="txtToIronScrapWt_Validating()"
+                            (focusout)="txtToIronScrapWt_Validating()"
                             formControlName="METAL_ToIronScrapWt"
                             MetalDecimalInput />
                         </mat-form-field>
@@ -1057,7 +1057,7 @@
                       <div class="col-sm-7">
                         <!-- <mat-form-field appearance="outline" style="width: 100%;">
                           <input type="date" matInput formControlName="startdate"
-                            id="startdate" (change)="onStartDateChange()" />
+                            id="startdate" (focusout)="onStartDateChange()" />
                         </mat-form-field> -->
                         <mat-form-field appearance="outline" style="width: 100%">
                           <input matInput DateValidation readonly
@@ -1211,7 +1211,7 @@
                 cellTemplate="Setted">
                 <div *dxTemplate="let data1 of 'Setted'">
                   <input type="checkbox" [disabled]="viewMode"
-                    [checked]="data1.value" (change)="settedCheckbox(data1)" />
+                    [checked]="data1.value" (focusout)="settedCheckbox(data1)" />
                 </div>
               </dxi-column>
               <dxi-column dataField="GEN" caption="Setting Type"
