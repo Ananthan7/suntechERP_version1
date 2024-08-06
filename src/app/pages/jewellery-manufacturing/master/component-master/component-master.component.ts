@@ -420,7 +420,6 @@ export class ComponentMasterComponent implements OnInit {
         this.maindesigndetails()
         this.editableMode = true;
         this.editMode = true;
-        console.log(this.content)
       } else if (this.content?.FLAG == 'DELETE') {
         this.viewMode = true;
         this.deleteComponentMaster()
@@ -482,10 +481,24 @@ export class ComponentMasterComponent implements OnInit {
   //   LOAD_ONCLICK: true,
   // }
 
-  sizeCodeData: MasterSearchModel = {
+  sizegridCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 3,
+    SEARCH_FIELD: 'types',
+    SEARCH_HEADING: 'Size',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "types = 'SIZE MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
+
+
+  sizeCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 89,
     SEARCH_FIELD: 'types',
     SEARCH_HEADING: 'Size',
     SEARCH_VALUE: '',
@@ -816,7 +829,7 @@ export class ComponentMasterComponent implements OnInit {
       "SIEVE_SET": "",
       "STONE_TYPE": "",
        "PURITY": 0,
-      "OTHER_ATTR": "sting"
+      "OTHER_ATTR": ""
 
     };
     this.tableData.push(data);
@@ -1477,7 +1490,7 @@ export class ComponentMasterComponent implements OnInit {
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
       .subscribe((result) => {
         if (result.status == "Success") {
-          this.maindetails = result.dynamicData[0][0].JOB_NO || []
+          this.maindetails = result.dynamicData[0] || []
           // this.componentmasterForm.controls.jobno.setValue(result.dynamicData[0][0].JOB_NO)
         }
       }, err => {
