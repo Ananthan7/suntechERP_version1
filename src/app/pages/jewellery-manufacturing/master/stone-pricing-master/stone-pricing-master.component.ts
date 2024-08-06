@@ -805,7 +805,7 @@ export class StonePricingMasterComponent implements OnInit {
     //StonePriceMasterDJ/GetSeivesetLookupDatafill/DMCC?SieveSet=%2B14
     // Construct the API URL with the selected sieve_set value
    // let API = 'StonePriceMasterDJ/GetSeivesetLookupDatafill/' + this.userbranch + '?SieveSet=' + this.stonePrizeMasterForm.value.sieve_set;
-    let API = 'StonePriceMasterDJ/GetSeivesetLookupDatafill/?SieveSet=' + this.stonePrizeMasterForm.value.sieve_set;
+    let API = 'StonePriceMasterDJ/GetSeivesetLookupDatafill?SieveSet=' + this.stonePrizeMasterForm.value.sieve_set;
 
 
     let Sub: Subscription = this.dataService.getDynamicAPICustom(API).subscribe((result) => {

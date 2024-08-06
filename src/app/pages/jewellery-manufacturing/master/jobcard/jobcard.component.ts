@@ -91,11 +91,11 @@ export class JobcardComponent implements OnInit {
   commentsCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 3,
+    LOOKUPID: 267,
     SEARCH_FIELD: '',
     SEARCH_HEADING: 'Comments ',
     SEARCH_VALUE: '',
-    WHERECONDITION: "TYPES ='COMMENTS MASTER'",
+    WHERECONDITION: "@strAcCode=''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -628,7 +628,7 @@ export class JobcardComponent implements OnInit {
 
   commentsCodeSelected(e: any) {
     console.log(e);
-    this.jobCardFrom.controls.comments.setValue(e.DESCRIPTION);
+    this.jobCardFrom.controls.comments.setValue(e['Account Description']);
   }
 
   sizeCodeSelected(e: any) {

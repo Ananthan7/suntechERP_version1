@@ -580,7 +580,7 @@ export class AlloyMasterComponent implements OnInit {
     if (this.checkStockCode()) return
     this.alloyMastereForm.controls.priceScheme.setValue(e.PRICE_CODE)
     let postData = {
-      "SPID": "066",
+      "SPID": "107",
       "parameter": {
         "PRICE_SCHEME_CODE": this.alloyMastereForm.value.priceScheme,
       }
