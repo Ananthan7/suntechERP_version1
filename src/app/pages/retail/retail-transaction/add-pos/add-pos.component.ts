@@ -2756,11 +2756,26 @@ editLineItem:boolean=false;
       this.ordered_items.splice(itemIndex, 1);
     }
 
-    // Reassign serial numbers
+    this.currentLineItems = this.currentLineItems.filter((item:any) => item.SRNO !== event.data.sn_no);
+
     this.ordered_items.forEach((item, index) => {
       item.sn_no = index + 1;
     });
-    this.currentLineItems = this.currentLineItems.filter((item: any) => item.SRNO !== event.data.ID);
+
+    this.currentLineItems.forEach((item:any, index:any) => {
+      item.SRNO = index + 1;
+    });
+
+    // const itemIndex = this.ordered_items.findIndex(item => item.sn_no === event.data.sn_no);
+    // if (itemIndex > -1) {
+    //   this.ordered_items.splice(itemIndex, 1);
+    // }
+
+    // // Reassign serial numbers
+    // this.ordered_items.forEach((item, index) => {
+    //   item.sn_no = index + 1;
+    // });
+    // this.currentLineItems = this.currentLineItems.filter((item: any) => item.SRNO !== event.data.ID);
 
     // // this.ordered_items.splice(event.data.ID, 1);
     // // this.currentLineItems.splice(event.data.ID, 1);
@@ -7117,6 +7132,7 @@ editLineItem:boolean=false;
           });
         } else {
           let itemsLengths = this.ordered_items[this.ordered_items.length - 1];
+          let newSRNO = this.calculateNextSRNO();
           // alert(JSON.stringify(itemsLengths));
 
           // alert(itemsLengths);
@@ -7138,8 +7154,8 @@ editLineItem:boolean=false;
           console.log(this.newLineItem);
 
           var values: any = {
-            ID: this.ordered_items.length + 1,
-            sn_no: this.ordered_items.length + 1,
+            ID: newSRNO,
+            sn_no: newSRNO,
             stock_code: this.newLineItem.STOCK_CODE,
             mkg_amount: this.lineItemForm.value.fcn_ad_making_amount || 0,
             // total_amount: temp_resp.PRICE1LC,
@@ -7195,7 +7211,8 @@ editLineItem:boolean=false;
           }
           console.log(this.ordered_items);
           this.sumTotalValues();
-          this.setPosItemData(this.order_items_slno_length, this.newLineItem);
+          this.setPosItemData(newSRNO, this.newLineItem);
+          // this.setPosItemData(this.order_items_slno_length, this.newLineItem);
           this.newLineItem.STOCK_CODE = '';
 
           this.li_division_val = '';
@@ -13670,5 +13687,11 @@ changeGiftVoucherAmount(data:any){
    
       });
   }
+
+  calculateNextSRNO(): number {
+    const srnos = this.currentLineItems.map((item:any) => item.SRNO);
+    const maxSRNO = srnos.length > 0 ? Math.max(...srnos) : 0;
+    return maxSRNO + 1;
+}
 }
 
