@@ -33,8 +33,10 @@ export class MeltingIssueDetailsComponent implements OnInit {
   userName = localStorage.getItem('username');
   viewMode: boolean = false;
   private subscriptions: Subscription[] = [];
-
-
+  editMode: boolean = false;
+  isViewStock: boolean = false;
+  isDisableSaveBtn: boolean = false;
+  tableDatastocklist = [];
 
   jobnoCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -98,11 +100,13 @@ export class MeltingIssueDetailsComponent implements OnInit {
     VIEW_TABLE: true,
   }
 
+
+
   StockCodeSelected(e: any) {
     console.log(e);
-    this.meltingIssuedetailsFrom.controls.stockcode.setValue(e.STOCK_CODE);
-    this.meltingIssuedetailsFrom.controls.stockdes.setValue(e.DESCRIPTION);
-    this.meltingIssuedetailsFrom.controls.tostock.setValue(e.DIVISION_CODE);
+    this.meltingIssuedetailsFrom.controls.stockdes.setValue(e.STOCK_CODE);
+    this.meltingIssuedetailsFrom.controls.tostock.setValue(e.DESCRIPTION);
+    this.meltingIssuedetailsFrom.controls.stockcode.setValue(e.DIVISION_CODE);
 
   }
 
@@ -523,32 +527,33 @@ export class MeltingIssueDetailsComponent implements OnInit {
   }
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     LOOKUPDATA.SEARCH_VALUE = event.target.value
-
-    if (event.target.value == '' || this.viewMode == true) return
+    if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
       WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
     }
-    this.commonService.showSnackBarMsg('MSG81447');
-    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
-    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+    this.commonService.toastInfoByMsgId('MSG81447');
+    let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
       .subscribe((result) => {
-        this.commonService.closeSnackBarMsg()
+        this.isDisableSaveBtn = false;
         let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
         if (data.length == 0) {
           this.commonService.toastErrorByMsgId('MSG1531')
           this.meltingIssuedetailsFrom.controls[FORMNAME].setValue('')
           LOOKUPDATA.SEARCH_VALUE = ''
-          if (FORMNAME === 'process' || FORMNAME === 'worker' || FORMNAME === 'location' || FORMNAME === 'stockcode') {
+      if (FORMNAME === 'process' || FORMNAME === 'worker' || FORMNAME === 'location' || FORMNAME === 'stockcode') {
             this.showOverleyPanel(event, FORMNAME);
           }
           return
         }
+
       }, err => {
-        this.commonService.toastErrorByMsgId('MSG2272')
+        this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
       })
     this.subscriptions.push(Sub)
   }
+    
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {
       this.subscriptions.forEach(subscription => subscription.unsubscribe());// unsubscribe all subscription
@@ -663,6 +668,13 @@ export class MeltingIssueDetailsComponent implements OnInit {
         this.comService.toastErrorByMsgId('MSG1531')
       })
     this.subscriptions.push(Sub)
+  }
+  stockClicked() {
+    this.isViewStock = true;
+  }
+
+  closeStockPopup() {
+    this.isViewStock = false;
   }
 }
 
