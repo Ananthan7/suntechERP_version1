@@ -1,9 +1,3 @@
-/*
-MODULE : JEWELLERY MANUFACTURING
-MENU_SCREEN_NAME : <ADD MENU NAME HERE>
-DEVELOPER : ANANTHA
-*/
-
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -178,22 +172,14 @@ export class StoneReturnComponent implements OnInit {
         this.commonService.closeSnackBarMsg()
         let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
         if (data && data[0]?.RESULT == 0) {
-<<<<<<< HEAD
-          this.commonService.toastErrorByMsgId('Voucher Number Already Exists')//CHINNU -  MESSAGE HARD CODED
-=======
           this.commonService.toastErrorByMsgId('MSG2284')//Voucher Number Already Exists
->>>>>>> origin/ERP_Staging
           this.generateVocNo()
           return
         }
       }, err => {
         this.isloading = false;
         this.generateVocNo()
-<<<<<<< HEAD
-        this.commonService.toastErrorByMsgId('Error Something went wrong')//CHINNU -  MESSAGE HARD CODED
-=======
         this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
->>>>>>> origin/ERP_Staging
       })
     this.subscriptions.push(Sub)
   }
@@ -232,11 +218,7 @@ export class StoneReturnComponent implements OnInit {
               })
             });
           } else {
-<<<<<<< HEAD
-            this.commonService.toastErrorByMsgId('Detail data not found')//CHINNU -  MESSAGE HARD CODED
-=======
             this.commonService.toastErrorByMsgId('MSG1200')//	Detail record not found
->>>>>>> origin/ERP_Staging
           }
           this.stonereturnFrom.controls.basecurrency.setValue(data.BASE_CURRENCY)
           this.stonereturnFrom.controls.basecurrencyrate.setValue(data.BASE_CURR_RATE)
@@ -322,7 +304,7 @@ export class StoneReturnComponent implements OnInit {
     }
     if (DATA.FLAG == 'SAVE') this.closeDetailScreen();
     if (DATA.FLAG == 'CONTINUE') {
-      this.commonService.showSnackBarMsg('Details added successfully')//CHINNU -  MESSAGE HARD CODED
+      this.commonService.showSnackBarMsg('Details added successfully')
     };
   }
   closeDetailScreen() {
@@ -463,18 +445,11 @@ export class StoneReturnComponent implements OnInit {
       this.update()
       return
     }
-<<<<<<< HEAD
-    if (this.stonereturnFrom.invalid) {
-      this.toastr.error('select all required fields')//CHINNU -  MESSAGE HARD CODED
-      return
-    }
-=======
     if (this.submitValidations(this.stonereturnFrom.value)) return;
     // if (this.stonereturnFrom.invalid) {
     //   this.toastr.error('select all required fields')
     //   return
     // }
->>>>>>> origin/ERP_Staging
 
     let API = 'JobStoneReturnMasterDJ/InsertJobStoneReturnMasterDJ'
     let postData = this.setPostData(this.stonereturnFrom.value);
@@ -505,18 +480,11 @@ export class StoneReturnComponent implements OnInit {
 
 
   update() {
-<<<<<<< HEAD
-    if (this.stonereturnFrom.invalid) {
-      this.toastr.error('select all required fields')//CHINNU -  MESSAGE HARD CODED
-      return
-    }
-=======
     // if (this.stonereturnFrom.invalid) {
     //   this.toastr.error('select all required fields')
     //   return
     // }
     if (this.submitValidations(this.stonereturnFrom.value)) return;
->>>>>>> origin/ERP_Staging
     let FG = this.stonereturnFrom.value
     let API = `JobStoneReturnMasterDJ/UpdateJobStoneReturnMasterDJ/${FG.BRANCH_CODE}/${FG.VOCTYPE}/${FG.VOCNO}/${FG.YEARMONTH}`
     let postData = this.setPostData(this.stonereturnFrom.value)
@@ -645,11 +613,7 @@ export class StoneReturnComponent implements OnInit {
           return
         }
       }, err => {
-<<<<<<< HEAD
-        this.commonService.toastErrorByMsgId('Error Something went wrong')//CHINNU -  MESSAGE HARD CODED
-=======
         this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
->>>>>>> origin/ERP_Staging
       })
     this.subscriptions.push(Sub)
   }
@@ -662,3 +626,4 @@ export class StoneReturnComponent implements OnInit {
   }
 
 }
+

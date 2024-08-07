@@ -1,9 +1,3 @@
-/*
-MODULE : JEWELLERY MANUFACTURING
-MENU_SCREEN_NAME : <FILL THE NEMU NAME HERE>
-DEVELOPER : ANANTHA
-*/
-
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -236,22 +230,14 @@ export class WaxProcessReturnComponent implements OnInit {
         this.comService.closeSnackBarMsg()
         let data = this.comService.arrayEmptyObjectToString(result.dynamicData[0])
         if (data && data[0]?.RESULT == 0) {
-<<<<<<< HEAD
-          this.comService.toastErrorByMsgId('Voucher Number Already Exists')//CHINNU -  MESSAGE HARD CODED
-=======
           this.comService.toastErrorByMsgId('MSG2284')//Voucher Number Already Exists
->>>>>>> origin/ERP_Staging
           this.generateVocNo()
           return
         }
       }, err => {
         this.isloading = false;
         this.generateVocNo()
-<<<<<<< HEAD
-        this.comService.toastErrorByMsgId('Error Something went wrong')//CHINNU -  MESSAGE HARD CODED
-=======
         this.comService.toastErrorByMsgId('MSG2272')//Error occured, please try again
->>>>>>> origin/ERP_Staging
       })
     this.subscriptions.push(Sub)
   }
@@ -295,19 +281,12 @@ export class WaxProcessReturnComponent implements OnInit {
       this.update()
       return
     }
-<<<<<<< HEAD
-    if (this.waxprocessFrom.invalid) {
-      this.toastr.error('select all required fields')//CHINNU -  MESSAGE HARD CODED
-      return
-    }
-=======
     // if (this.waxprocessFrom.invalid) {
     //   this.toastr.error('select all required fields')
     //   return
     // }
 
     if (this.submitValidations(this.waxprocessFrom.value)) return;
->>>>>>> origin/ERP_Staging
 
     let API = 'JobWaxReturn/InsertJobWaxReturn'
     let postData = {
@@ -396,19 +375,12 @@ export class WaxProcessReturnComponent implements OnInit {
 
 
   update() {
-<<<<<<< HEAD
-    if (this.waxprocessFrom.invalid) {
-      this.toastr.error('select all required fields')//CHINNU -  MESSAGE HARD CODED
-      return
-    }
-=======
     // if (this.waxprocessFrom.invalid) {
     //   this.toastr.error('select all required fields')
     //   return
     // }
 
     if (this.submitValidations(this.waxprocessFrom.value)) return;
->>>>>>> origin/ERP_Staging
 
     let API = 'JobWaxReturn/UpdateJobWaxReturn/' + this.waxprocessFrom.value.branchCode + this.waxprocessFrom.value.voctype + this.waxprocessFrom.value.vocno + this.waxprocessFrom.value.yearMonth
     let postData = {
@@ -610,11 +582,7 @@ export class WaxProcessReturnComponent implements OnInit {
         }
 
       }, err => {
-<<<<<<< HEAD
-        this.comService.toastErrorByMsgId('network issue found')//CHINNU -  MESSAGE HARD CODED
-=======
         this.comService.toastErrorByMsgId('MSG2272')//Error occured, please try again
->>>>>>> origin/ERP_Staging
       })
     this.subscriptions.push(Sub)
   }
