@@ -293,22 +293,14 @@ export class TreeDownComponent implements OnInit {
         this.commonService.closeSnackBarMsg()
         let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
         if (data && data[0]?.RESULT == 0) {
-<<<<<<< HEAD
-          this.commonService.toastErrorByMsgId('Voucher Number Already Exists')//CHINNU -  MESSAGE HARD CODED
-=======
           this.commonService.toastErrorByMsgId('MSG2284')//Voucher Number Already Exists
->>>>>>> origin/ERP_Staging
           this.generateVocNo()
           return
         }
       }, err => {
         this.isloading = false;
         this.generateVocNo()
-<<<<<<< HEAD
-        this.commonService.toastErrorByMsgId('Error Something went wrong')//CHINNU -  MESSAGE HARD CODED
-=======
         this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
->>>>>>> origin/ERP_Staging
       })
     this.subscriptions.push(Sub)
   }
@@ -372,19 +364,12 @@ export class TreeDownComponent implements OnInit {
       this.update()
       return
     }
-<<<<<<< HEAD
-    if (this.treeDownFrom.invalid) {
-      this.toastr.error('select all required fields')//CHINNU -  MESSAGE HARD CODED
-      return
-    }
-=======
 
     if (this.submitValidations(this.treeDownFrom.value)) return;
     // if (this.treeDownFrom.invalid) {
     //   this.toastr.error('select all required fields')
     //   return
     // }
->>>>>>> origin/ERP_Staging
 
     let API = 'JobTreeMasterDJ/InsertJobTreeMasterDJ'
     let postData = {
@@ -515,19 +500,12 @@ export class TreeDownComponent implements OnInit {
 
 
   update() {
-<<<<<<< HEAD
-    if (this.treeDownFrom.invalid) {
-      this.toastr.error('select all required fields')//CHINNU -  MESSAGE HARD CODED
-      return
-    }
-=======
 
     if (this.submitValidations(this.treeDownFrom.value)) return;
     // if (this.treeDownFrom.invalid) {
     //   this.toastr.error('select all required fields')
     //   return
     // }
->>>>>>> origin/ERP_Staging
 
     let API = 'JobTreeMasterDJ/UpdateJobTreeMasterDJ/' + this.treeDownFrom.value.branchCode + this.treeDownFrom.value.voctype + this.treeDownFrom.value.vocno + this.treeDownFrom.value.yearMonth;
     let postData = {
@@ -767,11 +745,7 @@ export class TreeDownComponent implements OnInit {
         }
 
       }, err => {
-<<<<<<< HEAD
-        this.commonService.toastErrorByMsgId('network issue found')//CHINNU -  MESSAGE HARD CODED
-=======
         this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
->>>>>>> origin/ERP_Staging
       })
     this.subscriptions.push(Sub)
   }
