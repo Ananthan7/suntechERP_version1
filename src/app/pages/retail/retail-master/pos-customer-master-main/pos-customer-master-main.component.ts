@@ -467,34 +467,6 @@ export class PosCustomerMasterMainComponent implements OnInit {
 
       if (!this.posCustomerMasterMainForm.invalid) {
         const posCustomer = {
-<<<<<<< HEAD
-          CODE: this.posCustomerMasterMainForm.value.code || '',
-          NAME: this.posCustomerMasterMainForm.value.nameDesc || '',
-          COMPANY: this.posCustomerMasterMainForm.value.company || '',
-          ADDRESS: this.posCustomerMasterMainForm.value.address || '',
-          POBOX_NO: this.posCustomerMasterMainForm.value.POBox || '',
-          STATE: this.posCustomerMasterMainForm.value.state || '',
-          CITY: this.posCustomerMasterMainForm.value.city || '',
-          ZIPCODE: '',
-          COUNTRY_CODE: this.posCustomerMasterMainForm.value.country || '',
-          EMAIL: this.posCustomerMasterMainForm.value.email || '',
-          TEL1: this.posCustomerMasterMainForm.value.telRNumber || '',
-          TEL2: this.posCustomerMasterMainForm.value.tel0number || '',
-          MOBILE: `${this.posCustomerMasterMainForm.value.moblieNumber}` || '',
-          FAX: this.posCustomerMasterMainForm.value.faxNo || '',
-          MARITAL_ST: this.posCustomerMasterMainForm.value.maritalSt || 'Unknown', //CHINNU - IS THIS VALUE HARDCODED
-          WED_DATE: this.posCustomerMasterMainForm.value.weddate || this.dummyDate,
-          SPOUSE_NAME: this.posCustomerMasterMainForm.value.spouse || '',
-          REMARKS: this.posCustomerMasterMainForm.value.remarks || '',
-          DATE_OF_BIRTH: this.posCustomerMasterMainForm.value.dob || this.dummyDate,
-          OPENING_ON: this.posCustomerMasterMainForm.value.openedOn ?? "1900-01-01T00:00:00",//CHINNU - THIS SHOULD BE CURRENT DATE RIGHT?
-          GENDER: this.posCustomerMasterMainForm.value.gender || '',
-          REGION: '',
-          NATIONALITY: this.posCustomerMasterMainForm.value.nationality || '',
-          RELIGION: this.posCustomerMasterMainForm.value.religion || '',
-          TYPE: '',
-          CATEGORY: this.posCustomerMasterMainForm.value.category || '',
-=======
           CODE: this.posCustomerMasterMainForm.value.code || "",
           NAME: this.posCustomerMasterMainForm.value.nameDesc || "",
           COMPANY: this.posCustomerMasterMainForm.value.company || "",
@@ -526,7 +498,6 @@ export class PosCustomerMasterMainComponent implements OnInit {
           RELIGION: this.posCustomerMasterMainForm.value.religion || "",
           TYPE: "",
           CATEGORY: this.posCustomerMasterMainForm.value.category || "",
->>>>>>> origin/ERP_Staging
           INCOME: 0,
           CUST_STATUS: this.posCustomerMasterMainForm.value.custStatus || "",
           MID: 0,
@@ -587,13 +558,8 @@ export class PosCustomerMasterMainComponent implements OnInit {
           ZODIAC_SIGN: this.posCustomerMasterMainForm.value.zodiacSign || "",
           DESIGNATION: "",
           LEVELFLAG: 0,
-<<<<<<< HEAD
-          INCOMERANGE: '',
-          LAST_UPDATED_DATE: "1900-01-01T00:00:00",//CHINNU - SHOULD BE CURRENT DATE?
-=======
           INCOMERANGE: "",
           LAST_UPDATED_DATE: "1900-01-01T00:00:00",
->>>>>>> origin/ERP_Staging
 
           TAXOFFICENO: "",
           SALESMANNAME: "",
@@ -623,15 +589,6 @@ export class PosCustomerMasterMainComponent implements OnInit {
           SUGGESTION: "",
           AMLNAMEVALIDATION: false,
           AML_TYPE: false,
-<<<<<<< HEAD
-          UN_NUMBER: '',
-          NAME_1: '',
-          NAME_2: '',
-          NAME_3: '',
-          NAME_4: '',
-          NAME_5: '',
-          DOB_2: "1900-01-01T00:00:00",//CHINNU - NO DATA FROM API? CHECK BELOW FIELDS ALSO
-=======
           UN_NUMBER: "",
           NAME_1: "",
           NAME_2: "",
@@ -639,7 +596,6 @@ export class PosCustomerMasterMainComponent implements OnInit {
           NAME_4: "",
           NAME_5: "",
           DOB_2: "1900-01-01T00:00:00",
->>>>>>> origin/ERP_Staging
           DOB_3: "1900-01-01T00:00:00",
           DOB_4: "1900-01-01T00:00:00",
           DOB_5: "1900-01-01T00:00:00",
@@ -657,19 +613,6 @@ export class PosCustomerMasterMainComponent implements OnInit {
           PASSPORT_NO_4: "",
           PASSPORT_NO_5: "",
           LISTED_ON_DATE: "1900-01-01T00:00:00",
-<<<<<<< HEAD
-          NATIONAL_IDENTIFICATION_NO: this.posCustomerMasterMainForm.value.fcn_cust_detail_idcard || '',
-          OTHER_INFORMATION: '',
-          LINKS: '',
-          FATHERNAME: '',
-          PROMO_NEEDED: '',
-          PROMO_HOW_OFTEN: '',
-          CHILDNAME1: '',
-          CHILDNAME2: '',
-          CHILDNAME3: '',
-          CHILDNAME4: '',
-          CHILDDATEOFBIRTH1: "1900-01-01T00:00:00",//CHINNU - NO DATA FROM API?
-=======
           NATIONAL_IDENTIFICATION_NO:
             this.posCustomerMasterMainForm.value.fcn_cust_detail_idcard || "",
           OTHER_INFORMATION: "",
@@ -682,7 +625,6 @@ export class PosCustomerMasterMainComponent implements OnInit {
           CHILDNAME3: "",
           CHILDNAME4: "",
           CHILDDATEOFBIRTH1: "1900-01-01T00:00:00",
->>>>>>> origin/ERP_Staging
           CHILDDATEOFBIRTH2: "1900-01-01T00:00:00",
           CHILDDATEOFBIRTH3: "1900-01-01T00:00:00",
           CHILDDATEOFBIRTH4: "1900-01-01T00:00:00",
@@ -827,7 +769,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
               this.customerDetails.GENDER
             );
             this.posCustomerMasterMainForm.controls.fcn_cust_detail_marital_status.setValue(
-              this.customerDetails.MARITAL_ST//CHINNU - BELOW LINE IS ALSO FOR MARITAL STATUS
+              this.customerDetails.MARITAL_ST
             );
             this.posCustomerMasterMainForm.controls.fcn_cust_detail_marital_status.setValue(
               this.customerDetails.MARITAL_ST
@@ -837,15 +779,9 @@ export class PosCustomerMasterMainComponent implements OnInit {
             );
             // this.snackBar.open('Customer details saved successfully');
             // this.snackBar.dismiss();
-<<<<<<< HEAD
-            this.snackBar.open('Customer details saved successfully', '', {
-              duration: 1000 // time in milliseconds
-            });//CHINNU - NO MESSAGE ID FOR THE ABOVE MESSAGE?
-=======
             this.snackBar.open("Customer details saved successfully", "", {
               duration: 1000, // time in milliseconds
             });
->>>>>>> origin/ERP_Staging
 
             // ${data.AMLDIGICOMPANYNAME}/${data.AMLDIGIUSERNAME}/${data.AMLDIGIPASSWORD}/${data.CODE}/${data.FIRSTNAME}/${data.MIDDLENAME}/${data.LASTNAME}/%27%27/${data.POSCustIDNo}/${data.NATIONALITY}/${data.DATE_OF_BIRTH}/${data.CUST_Type}/${data.AMLUSERID}/${data.AMLDIGITHRESHOLD}/${data.AMLDIGICOMPANYNAME}/1/${data.DIGIIPPATH}`);
             if (this.amlNameValidation && !this.customerDetails.DIGISCREENED) {
@@ -954,51 +890,6 @@ export class PosCustomerMasterMainComponent implements OnInit {
 
                     this.snackBar.open("Loading...");
 
-<<<<<<< HEAD
-                  this.snackBar.open('Loading...');
-
-                  this.apiService
-                    .putDynamicAPI(
-                      `PosCustomerMaster/UpdateDigiScreened/code=${this.customerDetails.CODE}/DigiScreened=true`,
-                      ''
-                    )
-                    .subscribe((resp) => {
-                      this.snackBar.dismiss();
-                      if (resp.status == "Success") {
-                        // this.customerDetails = resp.response;
-                        this.customerDetails.DIGISCREENED = resp.response != null ? resp.response?.DIGISCREENED : true;
-                      } else {
-                        this.snackBar.open('Digiscreen Failed');//CHINNU - NO MESSAGE ID
-                      }
-
-                      console.log('====================================');
-                      console.log('resp', resp);
-                      console.log('====================================');
-                    });
-
-                  if (data.response.isMatched != null) {
-                    this.snackBar.dismiss();
-
-                    if (data.response.isMatched.toUpperCase() == 'YES') {
-                      // if (data.response == 'yes') {
-                      this.openDialog('Warning', 'We cannot proceed', true);//CHINNU - NO MESSAGE ID
-                      this.dialogBox.afterClosed().subscribe((data: any) => {
-                        if (data == 'OK') {
-                          // this.modalReference.close();
-                          // this.closeModal();
-                        }
-                      });
-                      // need to use put api
-                      this.amlNameValidationData = true;
-
-                      this.apiService
-                        .putDynamicAPI(
-                          `PosCustomerMaster/updateCustomerAmlNameValidation/code=${this.customerDetails.CODE}/AmlNameValidation=true`,
-                          ''
-                        )
-                        // .updateAMLNameValidation(this.customerDetails.CODE, true)
-                        .subscribe((resp) => {
-=======
                     this.apiService
                       .putDynamicAPI(
                         `PosCustomerMaster/UpdateDigiScreened/code=${this.customerDetails.CODE}/DigiScreened=true`,
@@ -1007,7 +898,6 @@ export class PosCustomerMasterMainComponent implements OnInit {
                       .subscribe((resp) => {
                         this.snackBar.dismiss();
                         if (resp.status == "Success") {
->>>>>>> origin/ERP_Staging
                           // this.customerDetails = resp.response;
                           this.customerDetails.DIGISCREENED =
                             resp.response != null

@@ -1,9 +1,3 @@
-/*
-MODULE : JEWELLERY MANUFACTURING
-MENU_SCREEN_NAME : <FILL THE CORRECT MENU NAME>
-DEVELOPER : ANANTHA
-*/
-
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
@@ -211,22 +205,14 @@ export class WaxProcessComponent implements OnInit {
         this.commonService.closeSnackBarMsg()
         let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
         if (data && data[0]?.RESULT == 0) {
-<<<<<<< HEAD
-          this.commonService.toastErrorByMsgId('Voucher Number Already Exists')//CHINNU -  MESSAGE HARD CODED
-=======
           this.commonService.toastErrorByMsgId('MSG2284')//Voucher Number Already Exists
->>>>>>> origin/ERP_Staging
           this.generateVocNo()
           return
         }
       }, err => {
         this.isloading = false;
         this.generateVocNo()
-<<<<<<< HEAD
-        this.commonService.toastErrorByMsgId('Error Something went wrong')//CHINNU -  MESSAGE HARD CODED
-=======
         this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
->>>>>>> origin/ERP_Staging
       })
     this.subscriptions.push(Sub)
   }
@@ -443,18 +429,11 @@ export class WaxProcessComponent implements OnInit {
   }
 
   update() {
-<<<<<<< HEAD
-    if (this.waxprocessFrom.invalid) {
-      this.toastr.error('select all required fields')//CHINNU -  MESSAGE HARD CODED
-      return
-    }
-=======
     // if (this.waxprocessFrom.invalid) {
     //   this.toastr.error('select all required fields')
     //   return
     // }
     if (this.submitValidations(this.waxprocessFrom.value)) return;
->>>>>>> origin/ERP_Staging
 
     let API = 'JobWaxIssue/UpdateJobWaxIssue/' + this.content.BRANCH_CODE + this.content.VOCTYPE + this.content.VOCNO + this.content.YEARMONTH
     let postData = {
