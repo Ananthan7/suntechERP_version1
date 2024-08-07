@@ -1,9 +1,3 @@
-/*
-MODULE : JEWELLERY MANUFACTURING
-MENU_SCREEN_NAME : CUSTOMER PRICE MASTER
-DEVELOPER : AKHIL / BESKEY
-*/
-
 import { Component, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -170,20 +164,12 @@ export class CustomerPriceMasterComponent implements OnInit {
           if (this.tableDatastone?.length > 0) {
             // this.fillPriceSchemeDetails()
           } else {
-<<<<<<< HEAD
-            this.commonService.toastErrorByMsgId('price sheme not found')//CHINNU -  MESSAGE HARD CODED
-=======
             this.commonService.toastErrorByMsgId('MSG2267')//Grid fields not found
->>>>>>> origin/ERP_Staging
           }
 
         }
       }, err => {
-<<<<<<< HEAD
-        this.commonService.toastErrorByMsgId('Server Error')//CHINNU -  MESSAGE HARD CODED
-=======
         this.commonService.toastErrorByMsgId('MSG81451')// Server Error
->>>>>>> origin/ERP_Staging
       })
     this.subscriptions.push(Sub)
   }
@@ -208,20 +194,12 @@ export class CustomerPriceMasterComponent implements OnInit {
             console.log(result.dynamicData[0]);
             // this.fillPriceSchemeDetails()
           } else {
-<<<<<<< HEAD
-            this.commonService.toastErrorByMsgId('price sheme not found')//CHINNU -  MESSAGE HARD CODED
-=======
             this.commonService.toastErrorByMsgId('MSG2267')//Grid fields not found
->>>>>>> origin/ERP_Staging
           }
 
         }
       }, err => {
-<<<<<<< HEAD
-        this.commonService.toastErrorByMsgId('Server Error')//CHINNU -  MESSAGE HARD CODED
-=======
         this.commonService.toastErrorByMsgId('MSG81451')// Server Error
->>>>>>> origin/ERP_Staging
       })
     this.subscriptions.push(Sub)
   }
@@ -244,20 +222,12 @@ export class CustomerPriceMasterComponent implements OnInit {
           if (this.designChanges?.length > 0) {
             // this.fillPriceSchemeDetails()
           } else {
-<<<<<<< HEAD
-            this.commonService.toastErrorByMsgId('price sheme not found')//CHINNU -  MESSAGE HARD CODED
-=======
             this.commonService.toastErrorByMsgId('MSG2267')//Grid fields not found
->>>>>>> origin/ERP_Staging
           }
 
         }
       }, err => {
-<<<<<<< HEAD
-        this.commonService.toastErrorByMsgId('Server Error')//CHINNU -  MESSAGE HARD CODED
-=======
         this.commonService.toastErrorByMsgId('MSG81451')// Server Error
->>>>>>> origin/ERP_Staging
       })
     this.subscriptions.push(Sub)
   }
@@ -527,18 +497,6 @@ export class CustomerPriceMasterComponent implements OnInit {
       ]
     }
   }
-<<<<<<< HEAD
-  submitValidation(){
-    let form = this.customerpricemasterForm.value
-    console.log(form.labourType);
-    
-    if (this.commonService.nullToString(form.pricecode) == '') {
-      this.toastr.error('pricecode required')//CHINNU -  MESSAGE HARD CODED
-      return true
-    }
-    if (this.commonService.nullToString(form.customercode) == '') {
-      this.toastr.error('customercode required')//CHINNU -  MESSAGE HARD CODED
-=======
 
 
 
@@ -550,7 +508,6 @@ export class CustomerPriceMasterComponent implements OnInit {
     else if (this.commonService.nullToString(form.pricecode) == '') {
       this.commonService.toastErrorByMsgId('MSG1660') //"pricecode cannot be empty"
       console.log( this.commonService.toastErrorByMsgId); 
->>>>>>> origin/ERP_Staging
       return true
     }
 
@@ -591,11 +548,7 @@ export class CustomerPriceMasterComponent implements OnInit {
             });
           }
         } else {
-<<<<<<< HEAD
-          this.toastr.error('Not saved')//CHINNU -  MESSAGE HARD CODED
-=======
           this.toastr.error('MSG2272')//Error occured, please try again
->>>>>>> origin/ERP_Staging
         }
       }, err => alert(err))
     // this.subscriptions.push(Sub)
@@ -725,11 +678,7 @@ export class CustomerPriceMasterComponent implements OnInit {
           return
         }
       }, err => {
-<<<<<<< HEAD
-        this.commonService.toastErrorByMsgId('network issue found')//CHINNU - MESSAGE HARD CODED
-=======
         this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
->>>>>>> origin/ERP_Staging
       })
     this.subscriptions.push(Sub)
   }

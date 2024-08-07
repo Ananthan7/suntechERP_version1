@@ -1,9 +1,3 @@
-/*
-MODULE : JEWELLERY MANUFACTURING
-MENU_SCREEN_NAME : ALLOY MASTER
-DEVELOPER : AKHIL / BESKEY
-*/
-
 import { Component, ElementRef, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
@@ -438,7 +432,7 @@ export class AlloyMasterComponent implements OnInit {
     // 'DiamondStockMaster/GetDiamondStockMasterWithMid/2649104'
     this.alloyMastereForm.controls.code.setValue(this.content.STOCK_CODE)
     this.alloyMastereForm.controls.description.setValue(this.content.STOCK_DESCRIPTION)
-    this.alloyMastereForm.controls.description.setValue(this.content.STOCK_DESCRIPTION)//CHINNU - LINE REPEAT
+    this.alloyMastereForm.controls.description.setValue(this.content.STOCK_DESCRIPTION)
     this.alloyMastereForm.controls.brand.setValue(this.content.BRAND_CODE)
     this.alloyMastereForm.controls.category.setValue(this.content.CATEGORY_CODE)
     this.alloyMastereForm.controls.costCenter.setValue(this.content.COST_CODE)
@@ -598,11 +592,7 @@ export class AlloyMasterComponent implements OnInit {
           if (this.priceSchemeDetails?.length > 0) {
             this.fillPriceSchemeDetails()
           } else {
-<<<<<<< HEAD
-            this.commonService.toastErrorByMsgId('price sheme not found') // CHINNU HARD CODING OF MESSAGE
-=======
             this.commonService.toastErrorByMsgId('MSG1531')
->>>>>>> origin/ERP_Staging
           }
 
         }
@@ -855,12 +845,7 @@ export class AlloyMasterComponent implements OnInit {
       .subscribe((result) => {
         if (result.response) {
           if (result.status == "Success") {
-<<<<<<< HEAD
-            this.commonService.toastSuccessByText('Last number updated')//CHINNU - ANANTHA NEEDS TO CHECK THIS
-
-=======
           console.log('Last number updated')
->>>>>>> origin/ERP_Staging
           }
         } else {
           this.commonService.toastErrorByMsgId('MSG3577')
@@ -874,11 +859,7 @@ export class AlloyMasterComponent implements OnInit {
     //   return true;
     // }else{
     if (this.alloyMastereForm.value.code == '') {
-<<<<<<< HEAD
-      this.commonService.toastErrorByMsgId('Please enter the Prefix Code'); //CHINNU -  MESSAGE HARD CODED
-=======
       this.commonService.toastErrorByMsgId('MSG1628');
->>>>>>> origin/ERP_Staging
       return true
     }
     return false
@@ -886,11 +867,7 @@ export class AlloyMasterComponent implements OnInit {
   }
   checkCode() {
     if (this.alloyMastereForm.value.code == '') {
-<<<<<<< HEAD
-      this.commonService.toastErrorByMsgId('Please enter the Prefix Code');//CHINNU -  MESSAGE HARD CODED
-=======
       this.commonService.toastErrorByMsgId('MSG1628');
->>>>>>> origin/ERP_Staging
       return true;
     }
     return false;
@@ -938,11 +915,7 @@ export class AlloyMasterComponent implements OnInit {
   priceCodeone(e: any) {
     if (this.checkStockCode()) return
     if (this.alloyMastereForm.value.price2code === this.alloyMastereForm.value.price1code || this.alloyMastereForm.value.price3code === this.alloyMastereForm.value.PRICE1 || this.alloyMastereForm.value.price4code === this.alloyMastereForm.value.PRICE1 || this.alloyMastereForm.value.price5code === this.alloyMastereForm.value.PRICE1) {
-<<<<<<< HEAD
-      this.commonService.toastErrorByMsgId('cannot select the same Price code');//CHINNU -  MESSAGE HARD CODED
-=======
       this.commonService.toastErrorByMsgId('MSG1659');
->>>>>>> origin/ERP_Staging
       return;
     }
   }
@@ -950,11 +923,7 @@ export class AlloyMasterComponent implements OnInit {
   priceTwoCode(e: any) {
     if (this.checkStockCode()) return
     if (this.alloyMastereForm.value.price2code === this.alloyMastereForm.value.price1code || this.alloyMastereForm.value.price3code === this.alloyMastereForm.value.price2code || this.alloyMastereForm.value.price4code === this.alloyMastereForm.value.price2code || this.alloyMastereForm.value.price5code === this.alloyMastereForm.value.price2code) {
-<<<<<<< HEAD
-      this.commonService.toastErrorByMsgId('cannot select the same Price code');//CHINNU -  MESSAGE HARD CODED
-=======
       this.commonService.toastErrorByMsgId('MSG1659');
->>>>>>> origin/ERP_Staging
       return;
     }
   }
@@ -962,11 +931,7 @@ export class AlloyMasterComponent implements OnInit {
   priceThreeCode(e: any) {
     if (this.checkStockCode()) return
     if (this.alloyMastereForm.value.price3code === this.alloyMastereForm.value.price1code || this.alloyMastereForm.value.price3code === this.alloyMastereForm.value.price2code || this.alloyMastereForm.value.price4code === this.alloyMastereForm.value.price3code || this.alloyMastereForm.value.price5code === this.alloyMastereForm.value.price3code) {
-<<<<<<< HEAD
-      this.commonService.toastErrorByMsgId('cannot select the same Price code');//CHINNU -  MESSAGE HARD CODED
-=======
       this.commonService.toastErrorByMsgId('MSG1659');
->>>>>>> origin/ERP_Staging
       return;
     }
   }
@@ -975,11 +940,7 @@ export class AlloyMasterComponent implements OnInit {
   priceFourCode(e: any) {
     if (this.checkStockCode()) return
     if (this.alloyMastereForm.value.price4code === this.alloyMastereForm.value.price1code || this.alloyMastereForm.value.price4code === this.alloyMastereForm.value.price2code || this.alloyMastereForm.value.price4code === this.alloyMastereForm.value.price3code || this.alloyMastereForm.value.price5code === this.alloyMastereForm.value.price4code) {
-<<<<<<< HEAD
-      this.commonService.toastErrorByMsgId('cannot select the same Price code');//CHINNU -  MESSAGE HARD CODED
-=======
       this.commonService.toastErrorByMsgId('MSG1659');
->>>>>>> origin/ERP_Staging
       return;
     }
   }
@@ -987,22 +948,14 @@ export class AlloyMasterComponent implements OnInit {
   priceFiveCode(e: any) {
     if (this.checkStockCode()) return
     if (this.alloyMastereForm.value.price5code === this.alloyMastereForm.value.price1code || this.alloyMastereForm.value.price5code === this.alloyMastereForm.value.price2code || this.alloyMastereForm.value.price5code === this.alloyMastereForm.value.price3code || this.alloyMastereForm.value.price5code === this.alloyMastereForm.value.price4code) {
-<<<<<<< HEAD
-      this.commonService.toastErrorByMsgId('cannot select the same Price code');//CHINNU -  MESSAGE HARD CODED
-=======
       this.commonService.toastErrorByMsgId('MSG1659');
->>>>>>> origin/ERP_Staging
       return;
     }
   }
 
   priceOneCodeSelected(e: any) {
     if (this.isSamepriceCodeSelected(e.PRICE_CODE)) {
-<<<<<<< HEAD
-      this.commonService.toastErrorByMsgId('cannot select the same Price code');//CHINNU -  MESSAGE HARD CODED
-=======
       this.commonService.toastErrorByMsgId('MSG1659');
->>>>>>> origin/ERP_Staging
       return;
     }
     if (this.checkStockCode()) return
@@ -1015,11 +968,7 @@ export class AlloyMasterComponent implements OnInit {
 
   priceTwoCodeSelected(e: any) {
     if (this.isSamepriceCodeSelected(e.PRICE_CODE)) {
-<<<<<<< HEAD
-      this.commonService.toastErrorByMsgId('cannot select the same Price code');//CHINNU -  MESSAGE HARD CODED
-=======
       this.commonService.toastErrorByMsgId('MSG1659');
->>>>>>> origin/ERP_Staging
       return;
     }
     if (this.checkStockCode()) return
@@ -1031,11 +980,7 @@ export class AlloyMasterComponent implements OnInit {
 
   priceThreeCodeSelected(e: any) {
     if (this.isSamepriceCodeSelected(e.PRICE_CODE)) {
-<<<<<<< HEAD
-      this.commonService.toastErrorByMsgId('cannot select the same Price code');//CHINNU -  MESSAGE HARD CODED
-=======
       this.commonService.toastErrorByMsgId('MSG1659');
->>>>>>> origin/ERP_Staging
       return;
     }
     if (this.checkStockCode()) return
@@ -1047,11 +992,7 @@ export class AlloyMasterComponent implements OnInit {
 
   priceFourCodeSelected(e: any) {
     if (this.isSamepriceCodeSelected(e.PRICE_CODE)) {
-<<<<<<< HEAD
-      this.commonService.toastErrorByMsgId('cannot select the same Price code');//CHINNU -  MESSAGE HARD CODED
-=======
       this.commonService.toastErrorByMsgId('MSG1659');
->>>>>>> origin/ERP_Staging
       return;
     }
     if (this.checkStockCode()) return
@@ -1063,11 +1004,7 @@ export class AlloyMasterComponent implements OnInit {
   }
   priceFiveCodeSelected(e: any) {
     if (this.isSamepriceCodeSelected(e.PRICE_CODE)) {
-<<<<<<< HEAD
-      this.commonService.toastErrorByMsgId('cannot select the same Price code');//CHINNU -  MESSAGE HARD CODED
-=======
       this.commonService.toastErrorByMsgId('MSG1659');
->>>>>>> origin/ERP_Staging
       return;
     }
     if (this.checkStockCode()) return
@@ -1345,7 +1282,7 @@ export class AlloyMasterComponent implements OnInit {
       MARKETCOSTFC: this.commonService.emptyToZero(this.alloyMastereForm.value.marketcost),
       MARKETCOSTLC: 0,
       RRR_PRICE_UPDATED: false,
-      RRR_PRICE_UPDDATE: "2023-11-27T07:30:26.960Z",//CHINNU -  WHY HARD CODED
+      RRR_PRICE_UPDDATE: "2023-11-27T07:30:26.960Z",
       SALESCODE: 0,
       RRR_PUR_CARAT: 0,
       RRR_PUR_PERCENT: 0,
@@ -1529,14 +1466,7 @@ export class AlloyMasterComponent implements OnInit {
       this.updateMeltingType()
       return
     }
-<<<<<<< HEAD
-    if (this.alloyMastereForm.invalid) {
-      this.toastr.error('select all required fields')//CHINNU -  ANANTHA TO CHECK THIS
-      return
-    }
-=======
     if (this.submitValidations(this.alloyMastereForm.value)) return;
->>>>>>> origin/ERP_Staging
     let API = "DiamondStockMaster/InsertDiamondStockMaster";
     let postData = this.setPostData()
 
@@ -1586,11 +1516,7 @@ export class AlloyMasterComponent implements OnInit {
   deleteAlloyMaster() {
     if (this.content && this.content.FLAG == 'VIEW') return
     if (!this.content?.STOCK_CODE) {
-<<<<<<< HEAD
-      this.showDeleteErrorDialog('Please Select data to delete!');//CHINNU -  MESSAGE HARD CODED
-=======
       this.commonService.toastErrorByMsgId('MSG2347');
->>>>>>> origin/ERP_Staging
       return;
     }
 
@@ -1609,11 +1535,7 @@ export class AlloyMasterComponent implements OnInit {
               this.commonService.toastErrorByMsgId('MSG1880');
             }
           }, err => {
-<<<<<<< HEAD
-            this.commonService.toastErrorByMsgId('network error')//CHINNU -  MESSAGE HARD CODED
-=======
             this.commonService.toastErrorByMsgId('MSG1531')
->>>>>>> origin/ERP_Staging
           });
         this.subscriptions.push(Sub);
       }
