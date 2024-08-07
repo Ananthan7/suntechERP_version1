@@ -1989,8 +1989,13 @@ editLineItem:boolean=false;
   }
 
   getMaritalStatus() {
-    this.maritalStatusList = this.comFunc.getComboFilterByID('Marital Status');
-    this.genderList = this.comFunc.getComboFilterByID('gender');
+    this.maritalStatusList = this.comFunc.getComboFilterByID('Marital Status').filter((value:any, index:any, self:any) =>
+      index === self.findIndex((t:any) => t.ENGLISH === value.ENGLISH)
+    );
+    this.genderList = this.comFunc.getComboFilterByID('gender').filter((value:any, index:any, self:any) =>
+      index === self.findIndex((t:any) => t.ENGLISH === value.ENGLISH)
+    );
+
     console.log('gender ', this.genderList);
 
   }
@@ -4175,19 +4180,42 @@ editLineItem:boolean=false;
   //     option.toLowerCase().includes(filterValue)
   //   );
   // }
+
   private _filterMasters(
-    arrName: any,
+    arrName: any[],
     value: string,
     optVal1: any,
     optVal2: any = null
   ): any[] {
     const filterValue = (value || '').toLowerCase();
-    return arrName.filter(
-      (option: any) =>
+    const uniqueCodes = new Set(); 
+  
+    return arrName.filter((option: any) => {
+      const matches =
         option[optVal1].toLowerCase().includes(filterValue) ||
-        option[optVal2].toLowerCase().includes(filterValue)
-    );
+        (optVal2 && option[optVal2].toLowerCase().includes(filterValue));
+  
+      if (matches && !uniqueCodes.has(option[optVal1])) {
+        uniqueCodes.add(option[optVal1]); 
+        return true; 
+      }
+      return false;
+    });
   }
+  
+  // private _filterMasters(
+  //   arrName: any,
+  //   value: string,
+  //   optVal1: any,
+  //   optVal2: any = null
+  // ): any[] {
+  //   const filterValue = (value || '').toLowerCase();
+  //   return arrName.filter(
+  //     (option: any) =>
+  //       option[optVal1].toLowerCase().includes(filterValue) ||
+  //       option[optVal2].toLowerCase().includes(filterValue)
+  //   );
+  // }
 
   private _filterSalesPerson(value: string): any[] {
     const filterValue = value.toLowerCase() || '';
@@ -4271,14 +4299,31 @@ editLineItem:boolean=false;
   }
 
   private _filterIdType(value: string): string[] {
-    value = value != null ? value.toString().toLowerCase() : '';
-    const filterValue = value;
-    // const filterValue = value.toString().toLowerCase() || '';
-
-    return this.idTypeOptions.filter((option) =>
-      option.toLowerCase().includes(filterValue)
-    );
+    const filterValue = value != null ? value.toString().toLowerCase() : '';
+    const uniqueOptions = new Set<string>(); 
+  
+    return this.idTypeOptions.filter((option) => {
+      const lowerCaseOption = option.toLowerCase();
+      const matches = lowerCaseOption.includes(filterValue);
+  
+      if (matches && !uniqueOptions.has(lowerCaseOption)) {
+        uniqueOptions.add(lowerCaseOption); 
+        return true; 
+      }
+      return false; 
+    });
   }
+  
+
+  // private _filterIdType(value: string): string[] {
+  //   value = value != null ? value.toString().toLowerCase() : '';
+  //   const filterValue = value;
+  //   // const filterValue = value.toString().toLowerCase() || '';
+
+  //   return this.idTypeOptions.filter((option) =>
+  //     option.toLowerCase().includes(filterValue)
+  //   );
+  // }
 
   getExchangeStockCodes() {
 
