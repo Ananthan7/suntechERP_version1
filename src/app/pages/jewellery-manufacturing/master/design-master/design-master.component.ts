@@ -1,9 +1,3 @@
-/*
-MODULE : JEWELLERY MANUFACTURING
-MENU_SCREEN_NAME : DESIGN MASTER
-DEVELOPER : AKHIL / BESKEY / ANANTHA
-*/
-
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
@@ -358,11 +352,7 @@ export class DesignMasterComponent implements OnInit {
           return
         }
       }, err => {
-<<<<<<< HEAD
-        this.commonService.toastErrorByMsgId('network issue found')//CHINNU -  MESSAGE HARD CODED
-=======
         this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
->>>>>>> origin/ERP_Staging
       })
     this.subscriptions.push(Sub)
   }
@@ -1318,19 +1308,12 @@ onFileChangedimage(event: any) {
       this.update()
       return
     }
-<<<<<<< HEAD
-    if (this.designmasterForm.invalid) {
-      this.toastr.error('select all required fields')//CHINNU -  MESSAGE HARD CODED
-      return
-    }
-=======
 
     if (this.submitValidations(this.designmasterForm.value)) return;
     // if (this.designmasterForm.invalid) {
     //   this.toastr.error('select all required fields')
     //   return
     // }
->>>>>>> origin/ERP_Staging
   
     let API = 'DesignMaster/InsertDesignMaster'
     let postData = {
@@ -1821,19 +1804,12 @@ onFileChangedimage(event: any) {
 
   update(){
 
-<<<<<<< HEAD
-    if (this.designmasterForm.invalid) {
-      this.toastr.error('select all required fields')//CHINNU -  MESSAGE HARD CODED
-      return
-    }
-=======
     // if (this.designmasterForm.invalid) {
     //   this.toastr.error('select all required fields')
     //   return
     // }
 
     if (this.submitValidations(this.designmasterForm.value)) return;
->>>>>>> origin/ERP_Staging
 
   console.log(this.designmasterForm,'working');
   
@@ -2331,7 +2307,7 @@ onFileChangedimage(event: any) {
         if (result.checkifExists) {
           Swal.fire({
             title: '',
-            text: result.message || 'Design Code Already Exists!',//CHINNU -  MESSAGE HARD CODED
+            text: result.message || 'Design Code Already Exists!',
             icon: 'warning',
             confirmButtonColor: '#336699',
             confirmButtonText: 'Ok'
@@ -2919,3 +2895,6 @@ onFileChangedimage(event: any) {
   //   }
   // }
 }
+
+
+ 

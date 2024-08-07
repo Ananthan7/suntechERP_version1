@@ -1,9 +1,3 @@
-/*
-MODULE : JEWELLERY MANUFACTURING
-MENU_SCREEN_NAME : APPROVAL MASTER
-DEVELOPER : AKHIL / BESKEY
-*/
-
 import { Input, OnInit, Component, ViewChild, ElementRef, Renderer2 } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
@@ -140,7 +134,7 @@ export class ApprovalMasterComponent implements OnInit {
         if (result.checkifExists) {
           Swal.fire({
             title: '',
-            text: result.message || 'Approval Already Exists!',//CHINNU - MESSAGE HARD CODED
+            text: result.message || 'Approval Already Exists!',
             icon: 'warning',
             confirmButtonColor: '#336699',
             confirmButtonText: 'Ok'
@@ -174,11 +168,7 @@ export class ApprovalMasterComponent implements OnInit {
     let userData = [];
     userData = this.tableData.filter((item: any) => item.USER_CODE == data.UsersName)
     if (userData.length > 0) {
-<<<<<<< HEAD
-      this.toastr.error('Same User cannot be added.')//CHINNU - MESSAGE HARD CODED
-=======
       this.commonService.toastErrorByMsgId('MSG1932')
->>>>>>> origin/ERP_Staging
     }
     else {
       console.log(value);
@@ -222,11 +212,7 @@ export class ApprovalMasterComponent implements OnInit {
 
   emailid(data: any, value: any) {
     if (!this.commonService.validateEmail(data.target.value)) {
-<<<<<<< HEAD
-      this.commonService.toastErrorByMsgId('Invalid Email Address')//CHINNU - MESSAGE HARD CODED
-=======
       this.commonService.toastErrorByMsgId('MSG1332')
->>>>>>> origin/ERP_Staging
       return
     }
 
@@ -242,7 +228,7 @@ export class ApprovalMasterComponent implements OnInit {
         dataField: 'USER_CODE',
         caption: 'User Id',
         cellTemplate: 'usertemp',
-        validationRules: [{ type: 'required', message: 'User Id is required' }]//CHINNU - MESSAGE HARD CODED
+        validationRules: [{ type: 'required', message: 'User Id is required' }]
       },
       // Other columns in your DataGrid
     ],
@@ -253,19 +239,11 @@ export class ApprovalMasterComponent implements OnInit {
 
 
     if (this.approvalMasterForm.value.code == '') {
-<<<<<<< HEAD
-      this.toastr.error("Code Cannot be empty")//CHINNU - MESSAGE HARD CODED
-    }
-
-    if (this.approvalMasterForm.value.description == '') {
-      this.toastr.error("Description cannot be empty")//CHINNU - MESSAGE HARD CODED
-=======
       this.commonService.toastErrorByMsgId('MSG3568')
     }
 
     if (this.approvalMasterForm.value.description == '') {
       this.commonService.toastErrorByMsgId('MSG3569')
->>>>>>> origin/ERP_Staging
     }
 
 
@@ -378,11 +356,7 @@ export class ApprovalMasterComponent implements OnInit {
           return
         }
       }, err => {
-<<<<<<< HEAD
-        this.commonService.toastErrorByMsgId('network issue found')//CHINNU - MESSAGE HARD CODED
-=======
         this.commonService.toastErrorByMsgId('MSG2272')
->>>>>>> origin/ERP_Staging
       })
     this.subscriptions.push(Sub)
   }
@@ -448,12 +422,7 @@ export class ApprovalMasterComponent implements OnInit {
 
       if (orgMessageChecked != '') {
         if (!mobileNo.trim()) {
-<<<<<<< HEAD
-          console.log("Condition met: mobile number must be filled for Message Checked");
-          this.toastr.error("Mobile number must be filled for Message Checked");//CHINNU - MESSAGE HARD CODED
-=======
           this.commonService.toastErrorByMsgId('MSG2480');
->>>>>>> origin/ERP_Staging
           conditionMet = true;
           return;
         }
@@ -461,12 +430,7 @@ export class ApprovalMasterComponent implements OnInit {
 
       if (emailChecked != '') {
         if (!emailId.trim()) {
-<<<<<<< HEAD
-          console.log("Condition met: emailId must be filled for email Checked");
-          this.toastr.error("Email ID must be filled for email Checked");//CHINNU - MESSAGE HARD CODED
-=======
           this.commonService.toastErrorByMsgId('MSG81478');
->>>>>>> origin/ERP_Staging
           conditionMet = true;
           return; 
         }
@@ -474,23 +438,6 @@ export class ApprovalMasterComponent implements OnInit {
     });
 
 
-<<<<<<< HEAD
-    if (this.approvalMasterForm.value.code == '' && this.approvalMasterForm.invalid) {
-      this.toastr.error("Code Cannot be empty")//CHINNU - MESSAGE HARD CODED
-      return;
-    }
-
-    else if (this.approvalMasterForm.value.description == '' && this.approvalMasterForm.invalid) {
-      this.toastr.error("Description cannot be empty")//CHINNU - MESSAGE HARD CODED
-      return;
-    }
-    //  Continue with the rest of your code for submission
-    else if (this.checkFinalApproval()) {
-      this.toastr.error('Final option should be selected');//CHINNU - MESSAGE HARD CODED
-      return;
-    }
-=======
->>>>>>> origin/ERP_Staging
 
 
     // if (this.approvalMasterForm.invalid) {
@@ -636,15 +583,8 @@ export class ApprovalMasterComponent implements OnInit {
 
 
 
-<<<<<<< HEAD
-    if (this.approvalMasterForm.invalid) {
-      this.toastr.error('Please select all required fields');//CHINNU - MESSAGE HARD CODED
-      return;
-    }
-=======
   update() {
     if (this.submitValidations(this.approvalMasterForm.value)) return;
->>>>>>> origin/ERP_Staging
 
     let conditionMet = false;
 
@@ -664,12 +604,7 @@ export class ApprovalMasterComponent implements OnInit {
 
       if (orgMessageChecked != '') {
         if (!mobileNo.trim()) {
-<<<<<<< HEAD
-          console.log("Condition met: mobile number must be filled for Message Checked");
-          this.toastr.error("Mobile number must be filled for Message Checked");//CHINNU - MESSAGE HARD CODED
-=======
           this.commonService.toastErrorByMsgId('MSG2480');
->>>>>>> origin/ERP_Staging
           conditionMet = true;
           return;
         }
@@ -677,38 +612,13 @@ export class ApprovalMasterComponent implements OnInit {
 
       if (emailChecked != '') {
         if (!emailId.trim()) {
-<<<<<<< HEAD
-          console.log("Condition met: emailId must be filled for email Checked");
-          this.toastr.error("Email ID must be filled for email Checked");//CHINNU - MESSAGE HARD CODED
-=======
           this.commonService.toastErrorByMsgId('MSG81478');
->>>>>>> origin/ERP_Staging
           conditionMet = true;
           return; 
         }
       }
     });
 
-<<<<<<< HEAD
-
-    if (this.approvalMasterForm.value.code == '' && this.approvalMasterForm.invalid) {
-      this.toastr.error("Code Cannot be empty")//CHINNU - MESSAGE HARD CODED
-      return;
-    }
-
-    else if (this.approvalMasterForm.value.description == '' && this.approvalMasterForm.invalid) {
-      this.toastr.error("Description cannot be empty")//CHINNU - MESSAGE HARD CODED
-      return;
-    }
-    //  Continue with the rest of your code for submission
-    else if (this.checkFinalApproval()) {
-      this.toastr.error('Final option should be selected');//CHINNU - MESSAGE HARD CODED
-      return;
-    }
-
-
-=======
->>>>>>> origin/ERP_Staging
     if (!conditionMet) {
 
       const API = 'ApprovalMaster/UpdateApprovalMaster/' + this.content.APPR_CODE;
@@ -823,3 +733,5 @@ export class ApprovalMasterComponent implements OnInit {
     }
   }
 }
+
+

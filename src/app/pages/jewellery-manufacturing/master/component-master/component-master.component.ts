@@ -1,9 +1,3 @@
-/*
-MODULE : JEWELLERY MANUFACTURING
-MENU_SCREEN_NAME : COMPONENT MASTER
-DEVELOPER : AKHIL / BESKEY
-*/
-
 import { Component, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -516,11 +510,7 @@ export class ComponentMasterComponent implements OnInit {
 
   checkCode(): boolean {
     if (this.componentmasterForm.value.code == '') {
-<<<<<<< HEAD
-      this.commonService.toastErrorByMsgId('please enter code')//CHINNU -  MESSAGE HARD CODED
-=======
       this.commonService.toastErrorByMsgId('MSG1593')
->>>>>>> origin/ERP_Staging
       return true
     }
     return false
@@ -568,20 +558,12 @@ export class ComponentMasterComponent implements OnInit {
       .subscribe((result) => {
         if (result.response) {
           if (result.status == "Success") {
-<<<<<<< HEAD
-            this.commonService.toastSuccessByText('Last number updated')//CHINNU -  MESSAGE HARD CODED
-
-          }
-        } else {
-          this.toastr.error('Not saved')//CHINNU -  MESSAGE HARD CODED
-=======
            // this.commonService.toastSuccessByText('Last number updated')
            console.log('Last number updated');
 
           }
         } else {
           this.commonService.toastErrorByMsgId('MSG2272')
->>>>>>> origin/ERP_Staging
         }
       }, err => alert(err))
     this.subscriptions.push(Sub)
@@ -1440,14 +1422,7 @@ export class ComponentMasterComponent implements OnInit {
       this.update()
       return
     }
-<<<<<<< HEAD
-    if (this.componentmasterForm.invalid) {
-      this.toastr.error('select all required fields')//CHINNU -  MESSAGE HARD CODED
-      return
-    }
-=======
     if (this.submitValidations(this.componentmasterForm.value)) return;
->>>>>>> origin/ERP_Staging
     let postData = this.setPostData()
 
     let Sub: Subscription = this.dataService.postDynamicAPI('DesignMaster/InsertDesignMaster', postData)
@@ -1456,11 +1431,7 @@ export class ComponentMasterComponent implements OnInit {
           this.updatePrefixMaster()
           this.showSuccessDialog(this.commonService.getMsgByID('MSG2239') || 'Saved Successfully')
         } else if (result.status == "Failed") {
-<<<<<<< HEAD
-          this.showErrorDialog('Code Already Exists')//CHINNU -  MESSAGE HARD CODED
-=======
           this.commonService.toastErrorByMsgId('MSG1121')
->>>>>>> origin/ERP_Staging
         }
         else {
           this.commonService.toastErrorByMsgId('MSG3577')
@@ -1472,15 +1443,8 @@ export class ComponentMasterComponent implements OnInit {
   }
 
   update() {
-<<<<<<< HEAD
-    if (this.componentmasterForm.invalid) {
-      this.toastr.error('select all required fields')//CHINNU -  MESSAGE HARD CODED
-      return
-    }
-=======
 
     if (this.submitValidations(this.componentmasterForm.value)) return;
->>>>>>> origin/ERP_Staging
 
     let API = 'DesignMaster/UpdateDesignMaster/' + this.content.DESIGN_CODE
     let postData = this.setPostData()
@@ -1530,11 +1494,7 @@ export class ComponentMasterComponent implements OnInit {
           // this.componentmasterForm.controls.jobno.setValue(result.dynamicData[0][0].JOB_NO)
         }
       }, err => {
-<<<<<<< HEAD
-        this.commonService.toastErrorByMsgId('Server Error')//CHINNU -  MESSAGE HARD CODED
-=======
         this.commonService.toastErrorByMsgId('MSG81451')
->>>>>>> origin/ERP_Staging
       })
     this.subscriptions.push(Sub)
   }
@@ -1543,11 +1503,7 @@ export class ComponentMasterComponent implements OnInit {
   deleteComponentMaster() {
     if (this.content && this.content.FLAG == 'VIEW') return
     if (!this.content.DESIGN_CODE) {
-<<<<<<< HEAD
-      this.showDeleteErrorDialog('Please Select data to delete!');//CHINNU -  MESSAGE HARD CODED
-=======
       this.commonService.toastErrorByMsgId('MSG1644');
->>>>>>> origin/ERP_Staging
       return;
     }
 
@@ -1559,22 +1515,15 @@ export class ComponentMasterComponent implements OnInit {
           .subscribe((result) => {
             if (result) {
               if (result.status == "Success") {
-                this.showSuccessDialog('Deleted Successfully');//CHINNU -  MESSAGE HARD CODED
+                this.showSuccessDialog('Deleted Successfully');
               } else {
-                this.showErrorDialog(result.message || 'Error please try again');//CHINNU -  MESSAGE HARD CODED
+                this.showErrorDialog(result.message || 'Error please try again');
               }
             } else {
-<<<<<<< HEAD
-              this.toastr.error('Not deleted');//CHINNU -  MESSAGE HARD CODED
-            }
-          }, err => {
-            this.commonService.toastErrorByMsgId('network error')//CHINNU -  MESSAGE HARD CODED
-=======
               this.commonService.toastErrorByMsgId('MSG1880');// Not Deleted
             }
           }, err => {
             this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
->>>>>>> origin/ERP_Staging
           });
         this.subscriptions.push(Sub);
       }
@@ -1663,11 +1612,7 @@ export class ComponentMasterComponent implements OnInit {
         }
         this.componentMasterFormChecks(FORMNAME)// for validations
       }, err => {
-<<<<<<< HEAD
-        this.commonService.toastErrorByMsgId('network issue found')//CHINNU -  MESSAGE HARD CODED
-=======
         this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
->>>>>>> origin/ERP_Staging
       })
     this.subscriptions.push(Sub)
   }
@@ -1977,3 +1922,6 @@ export class ComponentMasterComponent implements OnInit {
   //   }
   // }
 }
+
+
+ 
