@@ -33,8 +33,10 @@ export class MeltingIssueDetailsComponent implements OnInit {
   userName = localStorage.getItem('username');
   viewMode: boolean = false;
   private subscriptions: Subscription[] = [];
-
-
+  editMode: boolean = false;
+  isViewStock: boolean = false;
+  isDisableSaveBtn: boolean = false;
+  tableDatastocklist = [];
 
   jobnoCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -98,11 +100,13 @@ export class MeltingIssueDetailsComponent implements OnInit {
     VIEW_TABLE: true,
   }
 
+
+
   StockCodeSelected(e: any) {
     console.log(e);
-    this.meltingIssuedetailsFrom.controls.stockcode.setValue(e.STOCK_CODE);
-    this.meltingIssuedetailsFrom.controls.stockdes.setValue(e.DESCRIPTION);
-    this.meltingIssuedetailsFrom.controls.tostock.setValue(e.DIVISION_CODE);
+    this.meltingIssuedetailsFrom.controls.stockdes.setValue(e.STOCK_CODE);
+    this.meltingIssuedetailsFrom.controls.tostock.setValue(e.DESCRIPTION);
+    this.meltingIssuedetailsFrom.controls.stockcode.setValue(e.DIVISION_CODE);
 
   }
 
@@ -142,6 +146,7 @@ export class MeltingIssueDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.branchCode = this.comService.branchCode;
+    console.log(this.content)
     if (this.content && this.content.FLAG) {
       this.setInitialValue()
       this.meltingIssuedetailsFrom.controls.FLAG.setValue(this.content.FLAG)
@@ -150,7 +155,20 @@ export class MeltingIssueDetailsComponent implements OnInit {
 
       }
     }
+   this.dataTochild()
   }
+  dataTochild(dataToChild?:any){
+    console.log(this.content.HEADERDETAILS,'pick')
+    this.meltingIssuedetailsFrom.controls.jobno.setValue(this.content.jobno || this.content.HEADERDETAILS.jobno);
+    this.meltingIssuedetailsFrom.controls.jobdes.setValue(this.content.jobdes || this.content.HEADERDETAILS.subJobDescription);
+    this.meltingIssuedetailsFrom.controls.jobpurity.setValue(this.content.jobpurity || this.content.HEADERDETAILS.jobpurity);
+    this.meltingIssuedetailsFrom.controls.process.setValue(this.content.process || this.content.HEADERDETAILS.processcode);
+    this.meltingIssuedetailsFrom.controls.processdes.setValue(this.content.processdes || this.content.HEADERDETAILS.processdes);
+    this.meltingIssuedetailsFrom.controls.worker.setValue(this.content.worker || this.content.HEADERDETAILS.worker);
+    this.meltingIssuedetailsFrom.controls.workerdes.setValue(this.content.workerdes || this.content.HEADERDETAILS.workerdes);
+    // this.meltingIssuedetailsFrom.controls.jobdes.setValue(this.content.jobdes || this.content.HEADERDETAILS.subJobDescription);
+    // this.meltingIssuedetailsFrom.controls.jobdes.setValue(this.content.jobdes || this.content.HEADERDETAILS.subJobDescription);  
+    }
   setInitialValue() {
     console.log(this.content, 'content');
     if (!this.content) return;
@@ -249,17 +267,48 @@ export class MeltingIssueDetailsComponent implements OnInit {
     topurity: ['', [Validators.required]],
     FLAG: [null]
   });
-  submitValidations() {
-    let form = this.meltingIssuedetailsFrom.value
-    if (this.comService.nullToString(form.jobNumber) == '') {
-      this.toastr.error('JMSG1601')
-      return
+  submitValidations(form: any) {
+    if (this.comService.nullToString(form.jobno) == '') {
+      this.comService.toastErrorByMsgId('MSG1358')//Job number is required
+      return true
     }
-    return false;
+    if (this.comService.nullToString(form.worker) == '') {
+      this.comService.toastErrorByMsgId('MSG1951')//Worker code is required
+      return true
+    }
+    if (this.comService.nullToString(form.process) == '') {
+      this.comService.toastErrorByMsgId('MSG1680')//Process code is required
+      return true
+    }
+    if (this.comService.nullToString(form.waxweight) == '') {
+      this.comService.toastErrorByMsgId('MSG1816')//waxweight  is required
+      return true
+    }
+    if (this.comService.emptyToZero(form.lossweight) == 0) {
+      this.comService.toastErrorByMsgId('MSG1293')//lossweight  is required
+      return true
+    }
+    if (this.comService.emptyToZero(form.ticketno) == 0) {
+      this.comService.toastErrorByMsgId('MSG1293')//Ticket NUmber  is required
+      return true
+    }
+    if (this.comService.emptyToZero(form.lotno) == 0) {
+      this.comService.toastErrorByMsgId('MSG1293')//Lot Number is required
+      return true
+    }
+    if (this.comService.emptyToZero(form.barno) == 0) {
+      this.comService.toastErrorByMsgId('MSG1293')//Bar Number is required
+      return true
+    }
+    if (this.comService.emptyToZero(form.silver) == 0) {
+      this.comService.toastErrorByMsgId('MSG1293')//Silver is required
+      return true
+    }
+    return false
   }
-
+  /**use: to save data to grid*/
   formSubmit(flag: any) {
-    if (this.submitValidations()) return;
+    if (this.submitValidations(this.meltingIssuedetailsFrom.value)) return;
     let dataToparent = {
       FLAG: flag,
       POSTDATA: this.setPostData()
@@ -270,7 +319,6 @@ export class MeltingIssueDetailsComponent implements OnInit {
       // this.resetStockDetails()
     }
   }
-
   setPostData() {
     let form = this.meltingIssuedetailsFrom.value
     let currRate = this.comService.getCurrecnyRate(this.comService.compCurrency)
@@ -374,7 +422,17 @@ export class MeltingIssueDetailsComponent implements OnInit {
 
   }
 
+  pureWeightChange() {
+    //dont make functions complicated write with same name in input
+    //use only simple methods
+    // use same names for same feilds
+    let form = this.meltingIssuedetailsFrom.value;
+    let purity = this.comService.pureWeightCalculate(form.netweight, form.purity)
+    this.setValueWithDecimal('purity', purity, 'PURITY')
+    let topurity = this.comService.pureWeightCalculate(purity, form.pureweight)
+    this.setValueWithDecimal('topurity', topurity, 'METAL')
 
+  }
 
   // deleteRecord() {
   //   if (!this.content.WORKER_CODE) {
@@ -469,32 +527,33 @@ export class MeltingIssueDetailsComponent implements OnInit {
   }
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     LOOKUPDATA.SEARCH_VALUE = event.target.value
-
-    if (event.target.value == '' || this.viewMode == true) return
+    if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
       WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
     }
-    this.commonService.showSnackBarMsg('MSG81447');
-    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
-    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+    this.commonService.toastInfoByMsgId('MSG81447');
+    let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
       .subscribe((result) => {
-        this.commonService.closeSnackBarMsg()
+        this.isDisableSaveBtn = false;
         let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
         if (data.length == 0) {
           this.commonService.toastErrorByMsgId('MSG1531')
           this.meltingIssuedetailsFrom.controls[FORMNAME].setValue('')
           LOOKUPDATA.SEARCH_VALUE = ''
-          if (FORMNAME === 'process' || FORMNAME === 'worker' || FORMNAME === 'location' || FORMNAME === 'stockcode') {
+      if (FORMNAME === 'process' || FORMNAME === 'worker' || FORMNAME === 'location' || FORMNAME === 'stockcode') {
             this.showOverleyPanel(event, FORMNAME);
           }
           return
         }
+
       }, err => {
-        this.commonService.toastErrorByMsgId('Error Something went wrong')
+        this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
       })
     this.subscriptions.push(Sub)
   }
+    
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {
       this.subscriptions.forEach(subscription => subscription.unsubscribe());// unsubscribe all subscription
@@ -518,9 +577,10 @@ export class MeltingIssueDetailsComponent implements OnInit {
         if (result.dynamicData && result.dynamicData[0].length > 0) {
           let data = result.dynamicData[0]
           console.log(data[0], 'datapassing')
+          this.meltingIssuedetailsFrom.controls.jobdes.setValue(data[0].DESCRIPTION)
           this.meltingIssuedetailsFrom.controls.process.setValue(data[0].PROCESS)
           this.meltingIssuedetailsFrom.controls.worker.setValue(data[0].WORKER)
-          this.meltingIssuedetailsFrom.controls.stockcode.setValue(data[0].STOCK_CODE)
+          this.meltingIssuedetailsFrom.controls.stockcode.setValue(data[0].DIVCODE)
           this.meltingIssuedetailsFrom.controls.pureweight.setValue(data[0].PUREWT)
           this.meltingIssuedetailsFrom.controls.pcs.setValue(data[0].PCS)
           this.meltingIssuedetailsFrom.controls.workerdes.setValue(data[0].WORKERDESC)
@@ -528,7 +588,8 @@ export class MeltingIssueDetailsComponent implements OnInit {
           this.meltingIssuedetailsFrom.controls.grossweight.setValue(data[0].NETWT)
           this.meltingIssuedetailsFrom.controls.purity.setValue(data[0].PURITY)
           this.meltingIssuedetailsFrom.controls.waxweight.setValue(data[0].WAX_WEIGHT)
-          this.meltingIssuedetailsFrom.controls.stockdes.setValue(data[0].STOCK_DESCRIPTION)
+          this.meltingIssuedetailsFrom.controls.stockdes.setValue(data[0].STOCK_CODE)
+          this.meltingIssuedetailsFrom.controls.tostock.setValue(data[0].STOCK_DESCRIPTION)
           this.meltingIssuedetailsFrom.controls.topurity.setValue(data[0].PURE_WT)
           this.meltingIssuedetailsFrom.controls.netweight.setValue(data[0].NETWT)
           this.meltingIssuedetailsFrom.controls.stoneweight.setValue(data[0].STONE)
@@ -607,6 +668,13 @@ export class MeltingIssueDetailsComponent implements OnInit {
         this.comService.toastErrorByMsgId('MSG1531')
       })
     this.subscriptions.push(Sub)
+  }
+  stockClicked() {
+    this.isViewStock = true;
+  }
+
+  closeStockPopup() {
+    this.isViewStock = false;
   }
 }
 

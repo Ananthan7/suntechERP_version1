@@ -348,7 +348,7 @@ submitValidations(form: any) {
     return true
   }
   else if (this.commonService.nullToString(form.vocdate) == '') {
-    this.commonService.toastErrorByMsgId('')//"vocdate cannot be empty"
+    this.commonService.toastErrorByMsgId('MSG1331')//"vocdate cannot be empty"
     return true
   }
 

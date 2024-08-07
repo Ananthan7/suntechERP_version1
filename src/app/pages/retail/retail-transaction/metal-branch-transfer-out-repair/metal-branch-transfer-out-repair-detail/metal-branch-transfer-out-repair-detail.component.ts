@@ -26,7 +26,7 @@ import { AlloyAllocationComponent } from "src/app/pages/jewellery-manufacturing/
 })
 export class MetalBranchTransferOutRepairDetailComponent implements OnInit {
   @Input() content!: any;
-  tableData: any[] = []; 
+  tableData: any[] = [];
   columnheadItemDetails2: any[] = ["SI.No", "Tax%", "Tax Amount"];
   branchCode?: String;
   yearMonth?: String;
@@ -40,14 +40,14 @@ export class MetalBranchTransferOutRepairDetailComponent implements OnInit {
     private toastr: ToastrService,
     private dataService: SuntechAPIService,
     private comService: CommonServiceService
-  ) {}
+  ) { }
 
   stockCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 23,
     SEARCH_FIELD: 'STOCK_CODE',
-    SEARCH_HEADING: 'Stock Code',    SEARCH_VALUE: '',
+    SEARCH_HEADING: 'Stock Code', SEARCH_VALUE: '',
     WHERECONDITION: "STOCK_CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
@@ -72,78 +72,78 @@ export class MetalBranchTransferOutRepairDetailComponent implements OnInit {
     SEARCH_FIELD: "ACCODE",
     SEARCH_HEADING: "Supplier",
     SEARCH_VALUE: "",
-    WHERECONDITION: "BRANCH_CODE = '"+ this.userbranch+"' AND AC_OnHold = 0",
+    WHERECONDITION: "BRANCH_CODE = '" + this.userbranch + "' AND AC_OnHold = 0",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   };
-  
+
   metalBranchTransferOutRepairDetailsForm: FormGroup = this.formBuilder.group({
-    stockCode:[''],
-    stockCodeDes:[''],
-    toStockCode:[''],
-    toStockCodeDesc:[''],
-    barno:[''],
-    ticketNo:[''],
-    lotNo:[''],
-    barNo:[''],
-    supplier:[''],
-    supplierDesc:[''],
-    LoactionFrom:[''],
-    repairItem:[''],
-    bagNo:[''],
-    gstCode:[''],
-    pieces:[''],
-    unitWeight:[''],
-    grossWeight:[''],
-    stoneWeight:[''],
-    purity:[''],
-    pureWeight:[''],
-    pureWeightCode:[''],
-    netWeight:[''],
-    chargableWeight:[''],
-    kundanWt:[''],
-    kundantPcs:[''],
-    carat:[''],
-    makingChargesQuantity:[''],
-    makingChargesRate:[''],
-    makingChargesAmount:[''],
-    metalValueValues:[''],
-    metalValueUnit:[''],
-    metalValueQuantity:[''],
-    metalValueRate:[''],
-    metalValueAmount:[''],
-    stoneValueQuantity:[''],
-    stoneValueRate:[''],
-    stoneValueAmount:[''],
-    wastageQuantityone:[''],
-    wastageQuantity:[''],
-    wasteageAmount:[''],
-    stampCharges:[true],
-    stampChargesRate:[''],
-    stampChargesAmount:[''],
-    kundanValueunit:[''],
-    kundanValueQuantityone:[''],
-    kundanValueQuantity:[''],
-    kundanValueAmount:[''],
-    totalValue:[''],
-    totalTaxRate:[''],
-    totalTaxAmount:[''],
-    netValue:[''],
-    purityDiff:[''],
-    stoneDiff:[''],
-    totalAmount:[''],
-    cgst:[''],
-    cgstAmt:[''],
-    sgst:[''],
-    sgstAmount:[''],
-    igst:[''],
-    igstAmt:[''],
-    round:[''],
-    total:[''],
-    totalRate:[''],
+    stockCode: [''],
+    stockCodeDes: [''],
+    toStockCode: [''],
+    toStockCodeDesc: [''],
+    barno: [''],
+    ticketNo: [''],
+    lotNo: [''],
+    barNo: [''],
+    supplier: [''],
+    supplierDesc: [''],
+    LoactionFrom: [''],
+    repairItem: [''],
+    bagNo: [''],
+    gstCode: [''],
+    pieces: [''],
+    unitWeight: [''],
+    grossWeight: [''],
+    stoneWeight: [''],
+    purity: [''],
+    pureWeight: [''],
+    pureWeightCode: [''],
+    netWeight: [''],
+    chargableWeight: [''],
+    kundanWt: [''],
+    kundantPcs: [''],
+    carat: [''],
+    makingChargesQuantity: [''],
+    makingChargesRate: [''],
+    makingChargesAmount: [''],
+    metalValueValues: [''],
+    metalValueUnit: [''],
+    metalValueQuantity: [''],
+    metalValueRate: [''],
+    metalValueAmount: [''],
+    stoneValueQuantity: [''],
+    stoneValueRate: [''],
+    stoneValueAmount: [''],
+    wastageQuantityone: [''],
+    wastageQuantity: [''],
+    wasteageAmount: [''],
+    stampCharges: [true],
+    stampChargesRate: [''],
+    stampChargesAmount: [''],
+    kundanValueunit: [''],
+    kundanValueQuantityone: [''],
+    kundanValueQuantity: [''],
+    kundanValueAmount: [''],
+    totalValue: [''],
+    totalTaxRate: [''],
+    totalTaxAmount: [''],
+    netValue: [''],
+    purityDiff: [''],
+    stoneDiff: [''],
+    totalAmount: [''],
+    cgst: [''],
+    cgstAmt: [''],
+    sgst: [''],
+    sgstAmount: [''],
+    igst: [''],
+    igstAmt: [''],
+    round: [''],
+    total: [''],
+    totalRate: [''],
   });
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   close(data?: any) {
     //TODO reset forms and data before closing
@@ -202,7 +202,7 @@ export class MetalBranchTransferOutRepairDetailComponent implements OnInit {
     this.metalBranchTransferOutRepairDetailsForm.controls.stampChargesAmount.setValue(this.content.STAMPCHARGE_AMTFC);
   }
 
- 
+
 
   formSubmit() {
     if (this.content && this.content.FLAG == 'EDIT') {
@@ -379,8 +379,8 @@ export class MetalBranchTransferOutRepairDetailComponent implements OnInit {
   }
 
   update() {
-    console.log(this.branchCode,'working')
-    let API = `RepairDelivery/UpdateRepairDelivery/${this.branchCode}/${this.metalBranchTransferOutRepairDetailsForm.value.voctype}/${this.metalBranchTransferOutRepairDetailsForm.value.vocNo}/${this.comService.yearSelected}` ;
+    console.log(this.branchCode, 'working')
+    let API = `RepairDelivery/UpdateRepairDelivery/${this.branchCode}/${this.metalBranchTransferOutRepairDetailsForm.value.voctype}/${this.metalBranchTransferOutRepairDetailsForm.value.vocNo}/${this.comService.yearSelected}`;
     let postData = {
       "UNIQUEID": 0,
       "SRNO": 0,
@@ -541,37 +541,37 @@ export class MetalBranchTransferOutRepairDetailComponent implements OnInit {
       "SORDER_MID": 0,
       "ORDER_STATUS": true
     }
-      
-  
-      let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
-        .subscribe((result) => {
-          if (result.response) {
-            if (result.status == "Success") {
-              Swal.fire({
-                title: result.message || 'Success',
-                text: '',
-                icon: 'success',
-                confirmButtonColor: '#336699',
-                confirmButtonText: 'Ok'
-              }).then((result: any) => {
-                if (result.value) {
-                  this.metalBranchTransferOutRepairDetailsForm.reset()
-                  this.tableData = []
-                  this.close('reloadMainGrid')
-                }
-              });
-            }
-          } else {
-            this.toastr.error('Not saved')
+
+
+    let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
+      .subscribe((result) => {
+        if (result.response) {
+          if (result.status == "Success") {
+            Swal.fire({
+              title: result.message || 'Success',
+              text: '',
+              icon: 'success',
+              confirmButtonColor: '#336699',
+              confirmButtonText: 'Ok'
+            }).then((result: any) => {
+              if (result.value) {
+                this.metalBranchTransferOutRepairDetailsForm.reset()
+                this.tableData = []
+                this.close('reloadMainGrid')
+              }
+            });
           }
-        }, err => alert(err))
-      this.subscriptions.push(Sub)
-    }
-      /**USE: delete Melting Type From Row */
-      
+        } else {
+          this.toastr.error('Not saved')
+        }
+      }, err => alert(err))
+    this.subscriptions.push(Sub)
+  }
+  /**USE: delete Melting Type From Row */
+
   deleteMetalBranchTransferOutRepairDetails() {
     if (this.content && this.content.FLAG == 'VIEW') return
-    if (!this.content.BRANCH_CODE&&!this.content.VOCTYPE&&!this.content.VOCNO&&!this.content.YEARMONTH) {
+    if (!this.content.BRANCH_CODE && !this.content.VOCTYPE && !this.content.VOCNO && !this.content.YEARMONTH) {
 
       Swal.fire({
         title: '',
@@ -640,22 +640,22 @@ export class MetalBranchTransferOutRepairDetailComponent implements OnInit {
   stockCodeSelected(e: any) {
     console.log(e);
     this.metalBranchTransferOutRepairDetailsForm.controls.stockCode.setValue(e.STOCK_CODE);
-    this.metalBranchTransferOutRepairDetailsForm.controls.stockCodeDes.setValue(e.DESCRIPTION );
+    this.metalBranchTransferOutRepairDetailsForm.controls.stockCodeDes.setValue(e.DESCRIPTION);
   }
   toStockCodeSelected(e: any) {
     console.log(e);
     this.metalBranchTransferOutRepairDetailsForm.controls.toStockCode.setValue(e.STOCK_CODE);
-    this.metalBranchTransferOutRepairDetailsForm.controls.toStockCodeDesc.setValue(e.DESCRIPTION );
+    this.metalBranchTransferOutRepairDetailsForm.controls.toStockCodeDesc.setValue(e.DESCRIPTION);
   }
 
-  supplierSelected(e:any){
+  supplierSelected(e: any) {
     console.log(e);
     this.metalBranchTransferOutRepairDetailsForm.controls.supplier.setValue(e.ACCODE);
-    this.metalBranchTransferOutRepairDetailsForm.controls.supplierDesc.setValue(e['ACCOUNT HEAD']);
+    this.metalBranchTransferOutRepairDetailsForm.controls.supplierDesc.setValue(e.ACCOUNT_HEAD);
 
   }
 
-  
+
 
   locationCodeSelected(e: any) {
     console.log(e);

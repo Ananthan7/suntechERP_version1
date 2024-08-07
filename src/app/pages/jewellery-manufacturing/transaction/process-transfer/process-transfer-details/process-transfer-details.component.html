@@ -45,7 +45,7 @@
                     id="jobNoSearch"
                     autocomplete="off"
                     (keydown)="lookupKeyPress($event,'JOB_NUMBER')"
-                    (focusout)="jobNumberValidate($event)"
+                    (change)="jobNumberValidate($event)"
                     formControlName="JOB_NUMBER" [readonly]="viewMode" />
                   <master-search class="masterSearch"
                     [MasterSearchData]="jobNoSearch"
@@ -506,7 +506,7 @@
                       <div class="col-sm-7">
                         <!-- <mat-form-field appearance="outline" style="width: 100%;">
                           <input type="date" matInput formControlName="startdate"
-                            id="startdate" (change)="onStartDateChange()" />
+                            id="startdate" (focusout)="onStartDateChange()" />
                         </mat-form-field> -->
                         <mat-form-field appearance="outline" style="width: 100%">
                           <input matInput DateValidation readonly
@@ -628,7 +628,7 @@
                           <input class="form-check-input" type="checkbox"
                             [disabled]="viewMode"
                             name="flexRadioDefault" id="flexRadioDefault1"
-                            (change)="selectAllBtnChange($event)">
+                            (focusout)="selectAllBtnChange($event)">
                         </div>
                       </div>
                     </div>
@@ -682,6 +682,7 @@
                         <mat-form-field appearance="outline"
                           style="width: 130px;">
                           <input type="text" matInput class="text-right"
+                            MetalDecimalInput
                             formControlName="METAL_STD_LOSS" />
                         </mat-form-field>
                       </td>
@@ -727,6 +728,7 @@
                           style="width: 130px;">
                           <input type="text" matInput maxlength="10"
                             (focusout)="txtLossBooked_Validating()"
+                            MetalDecimalInput
                             formControlName="METAL_LossBooked" class="text-right"/>
                         </mat-form-field>
                       </td>
@@ -768,7 +770,7 @@
                         <mat-form-field appearance="outline"
                           style="width: 130px;">
                           <input type="text" matInput class="text-right"
-                            MetalDecimalInput
+                            UpperCaseDirective
                             formControlName="METAL_ScrapLocCode" />
                         </mat-form-field>
                       </td>
@@ -777,6 +779,7 @@
                         <mat-form-field appearance="outline"
                           style="width: 130px;">
                           <input type="text" matInput class="text-right"
+                            MetalDecimalInput
                             formControlName="METAL_GainGrWt" />
                         </mat-form-field>
                       </td>
@@ -986,7 +989,7 @@
                         <mat-form-field appearance="outline"
                           style="width: 130px;">
                           <input type="text" matInput class="text-right"
-                            MetalDecimalInput
+                            readonly
                             formControlName="METAL_ToNetWt" />
                         </mat-form-field>
                       </td>
@@ -1054,7 +1057,7 @@
                       <div class="col-sm-7">
                         <!-- <mat-form-field appearance="outline" style="width: 100%;">
                           <input type="date" matInput formControlName="startdate"
-                            id="startdate" (change)="onStartDateChange()" />
+                            id="startdate" (focusout)="onStartDateChange()" />
                         </mat-form-field> -->
                         <mat-form-field appearance="outline" style="width: 100%">
                           <input matInput DateValidation readonly
@@ -1122,22 +1125,6 @@
                 </div>
                 <div class="row">
                   <div class="col-md-6">
-                    <div class="row mb-2">
-                      <label for="input"
-                        class="col-sm-4 col-form-label">Consumed</label>
-                      <div class="col-sm-7">
-                        <mat-form-field appearance="outline" style="width: 70%;">
-                          <input type="text" matInput
-                            formControlName="consumed" readonly />
-                          <datetime-picker class="masterSearch"
-                            [DateTimeModelData]="consumedTimeData"
-                            *ngIf="!viewMode"
-                            (datetimeClick)="consumedChange($event)"
-                            (updateDuration)="consumedInMinutes($event)">
-                          </datetime-picker>
-                        </mat-form-field>
-                      </div>
-                    </div>
                     <div class="row mb-3">
                       <label for="input" class="col-sm-4 col-form-label">Variance
                         %</label>
@@ -1153,6 +1140,24 @@
                           <input type="text" matInput readonly
                             formControlName="variance"
                             class="text-right" />
+                        </mat-form-field>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="row mb-2">
+                      <label for="input"
+                        class="col-sm-4 col-form-label">Consumed</label>
+                      <div class="col-sm-7">
+                        <mat-form-field appearance="outline" style="width: 70%;">
+                          <input type="text" matInput
+                            formControlName="consumed" readonly />
+                          <datetime-picker class="masterSearch"
+                            [DateTimeModelData]="consumedTimeData"
+                            *ngIf="!viewMode"
+                            (datetimeClick)="consumedChange($event)"
+                            (updateDuration)="consumedInMinutes($event)">
+                          </datetime-picker>
                         </mat-form-field>
                       </div>
                     </div>
@@ -1206,7 +1211,7 @@
                 cellTemplate="Setted">
                 <div *dxTemplate="let data1 of 'Setted'">
                   <input type="checkbox" [disabled]="viewMode"
-                    [checked]="data1.value" (change)="settedCheckbox(data1)" />
+                    [checked]="data1.value" (focusout)="settedCheckbox(data1)" />
                 </div>
               </dxi-column>
               <dxi-column dataField="GEN" caption="Setting Type"

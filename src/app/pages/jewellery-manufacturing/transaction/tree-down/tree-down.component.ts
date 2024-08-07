@@ -339,14 +339,14 @@ export class TreeDownComponent implements OnInit {
       this.commonService.toastErrorByMsgId('MSG1141')//"convFact cannot be empty"
       return true
     }
-    else if (this.commonService.nullToString(form.waxWt) == '') {
-      this.commonService.toastErrorByMsgId('')//"waxWt cannot be empty"
-      return true
-    }
-    else if (this.commonService.nullToString(form.reqMetal) == '') {
-      this.commonService.toastErrorByMsgId('')//"reqMetal cannot be empty"
-      return true
-    }
+    // else if (this.commonService.nullToString(form.waxWt) == '') {
+    //   this.commonService.toastErrorByMsgId('')//"waxWt cannot be empty"
+    //   return true
+    // }
+    // else if (this.commonService.nullToString(form.reqMetal) == '') {
+    //   this.commonService.toastErrorByMsgId('')//"reqMetal cannot be empty"
+    //   return true
+    // }
     else if (this.commonService.nullToString(form.toProcess) == '') {
       this.commonService.toastErrorByMsgId('MSG1907')//"toProcess cannot be empty"
       return true

@@ -443,10 +443,10 @@ export class JobClosingComponent implements OnInit {
       this.commonService.toastErrorByMsgId('')//"stone_loc cannot be empty"
       return true
     }
-    else if (this.commonService.nullToString(form.metal_loc) == '') {
-      this.commonService.toastErrorByMsgId('MSG1189')//"metal_loc cannot be empty"
-      return true
-    }
+    // else if (this.commonService.nullToString(form.metal_loc) == '') {
+    //   this.commonService.toastErrorByMsgId('MSG1189')//"metal_loc cannot be empty"
+    //   return true
+    // }
     return false;
   }
 

@@ -72,12 +72,14 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput
                                         formControlName="meltingtype"
+                                        UpperCaseDirective
                                         [readonly]="viewMode" #codeInput1
-                                        (keydown)="lookupKeyPress($event,'meltingtype')" 
-                                        (focusout)="meltingTypeValidate($event)"/>
+                                        (keydown)="lookupKeyPress($event,'meltingtype')"
+                                        (focusout)="meltingTypeValidate($event)" />
                                 </mat-form-field>
                                 <master-search class="masterSearch"
-                                    [MasterSearchData]="MeltingCodeData" #overlayMeltingType
+                                    [MasterSearchData]="MeltingCodeData"
+                                    #overlayMeltingType
                                     *ngIf="!viewMode"
                                     (newRowClick)="MeltingCodeSelected($event)"></master-search>
                             </div>
@@ -93,19 +95,19 @@
                                     <input type="text" matInput
                                         formControlName="jobno" maxlength="12"
                                         [readonly]="viewMode" class="text-right"
-                                        (keydown)="lookupKeyPress($event,'jobno')" 
-                                        (focusout)="jobNumberValidate($event)"/>
+                                        (keydown)="lookupKeyPress($event,'jobno')"
+                                        (focusout)="jobNumberValidate($event)" />
                                 </mat-form-field>
                                 <master-search class="masterSearch"
                                     [MasterSearchData]="jobnoCodeData"
-                                    *ngIf="!viewMode"  #overlayjobNoSearch
+                                    *ngIf="!viewMode" #overlayjobNoSearch
                                     (newRowClick)="jobnoCodeSelected($event)"></master-search>
                             </div>
                             <div class="col-md-4">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
                                         formControlName="jobdes" maxlength="20"
-                                        [readonly]="viewMode" />
+                                        readonly />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -117,20 +119,23 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput
                                         formControlName="processcode"
+                                        UpperCaseDirective
                                         [readonly]="viewMode" maxlength="6"
-                                        (keydown)="lookupKeyPress($event,'processcode')" 
+                                        (keydown)="lookupKeyPress($event,'processcode')"
                                         (focusout)="ProcesscodeValidate($event)" />
                                 </mat-form-field>
                                 <master-search class="masterSearch"
-                                    [MasterSearchData]="ProcessCodeData" #overlayprocesscode
+                                    [MasterSearchData]="ProcessCodeData"
+                                    #overlayprocesscode
                                     *ngIf="!viewMode"
                                     (newRowClick)="ProcessCodeSelected($event)"></master-search>
                             </div>
                             <div class="col-md-4">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
-                                        formControlName="processdes" maxlength="20"
-                                        [readonly]="viewMode" />
+                                        formControlName="processdes"
+                                        maxlength="20"
+                                        readonly />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -141,20 +146,22 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput
                                         formControlName="worker" maxlength="6"
-                                        [readonly]="viewMode"
-                                        (keydown)="lookupKeyPress($event,'worker')" 
-                                        (focusout)="WorkerCodeValidate($event)"/>
+                                        [readonly]="viewMode" UpperCaseDirective
+                                        (keydown)="lookupKeyPress($event,'worker')"
+                                        (focusout)="WorkerCodeValidate($event)" />
                                 </mat-form-field>
                                 <master-search class="masterSearch"
-                                    [MasterSearchData]="workerCodeData" #overlayworkercode
+                                    [MasterSearchData]="workerCodeData"
+                                    #overlayworkercode
                                     *ngIf="!viewMode"
                                     (newRowClick)="WorkerCodeSelected($event)"></master-search>
                             </div>
                             <div class="col-md-4">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
-                                        formControlName="workerdes" maxlength="20"
-                                        [readonly]="viewMode" />
+                                        formControlName="workerdes"
+                                        maxlength="20"
+                                        readonly />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -167,7 +174,8 @@
                             <div class="col-md-4">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
-                                        formControlName="subjobno" maxlength="20"
+                                        formControlName="subjobno"
+                                        maxlength="20"
                                         class="text-right" NumberOnly
                                         readonly />
                                 </mat-form-field>
@@ -175,7 +183,8 @@
                             <div class="col-md-4">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
-                                        formControlName="subjobnodes" maxlength="20"
+                                        formControlName="subjobnodes"
+                                        maxlength="20"
                                         readonly />
                                 </mat-form-field>
                             </div>
@@ -187,7 +196,7 @@
                                 <mat-form-field style="width:112%;">
                                     <input type="text" matInput
                                         formControlName="color"
-                                        [readonly]="viewMode" />
+                                        readonly />
                                 </mat-form-field>
                             </div>
                             <label for="inputPassword"
@@ -196,8 +205,8 @@
                             <div class="col-md-2"
                                 style="margin-top: 12px; margin-left: -62px;">
                                 <input type="text" matInput
-                                    formControlName="jobpurity"
-                                    [readonly]="viewMode" />
+                                    formControlName="jobpurity" PurityDecimal
+                                    readonly />
                             </div>
                         </div>
                         <div class="row">
@@ -207,7 +216,7 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput
                                         formControlName="time"
-                                        [readonly]="viewMode" />
+                                        readonly />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -251,50 +260,73 @@
                                         backgroundcolor="#000">
                                     </dxi-column> -->
                                     <dxi-column [width]="100" dataField="SRNO"
-                                        caption="SRNO"></dxi-column>
+                                        caption="SRNO"
+                                        alignment="left"></dxi-column>
                                     <dxi-column [width]="100"
                                         dataField="DIVCODE"
-                                        caption="DIV"></dxi-column>
+                                        caption="DIV"
+                                        alignment="left"></dxi-column>
                                     <dxi-column [width]="100"
                                         dataField="JOB_NUMBER"
-                                        caption="Job No"></dxi-column>
+                                        caption="Job No"
+                                        alignment="left"></dxi-column>
                                     <dxi-column [width]="100"
                                         dataField="STOCK_CODE"
-                                        caption="Stock Code"></dxi-column>
+                                        caption="Stock Code"
+                                        alignment="left"></dxi-column>
                                     <dxi-column [width]="100"
                                         dataField="Main Stock"
-                                        caption="Main Stock"></dxi-column>
+                                        caption="Main Stock"
+                                        alignment="left"></dxi-column>
                                     <dxi-column [width]="100"
                                         dataField="PROCESS_CODE"
-                                        caption="Process"></dxi-column>
+                                        caption="Process"
+                                        alignment="left"></dxi-column>
                                     <dxi-column [width]="100"
                                         dataField="WORKER_CODE"
-                                        caption="Worker"></dxi-column>
+                                        caption="Worker"
+                                        alignment="left"></dxi-column>
                                     <dxi-column [width]="100" dataField="PCS"
-                                        caption="Pcs"></dxi-column>
+                                        caption="Pcs"
+                                        alignment="right"></dxi-column>
                                     <dxi-column [width]="100"
                                         dataField="GROSS_WT"
-                                        caption="Gross Weight"></dxi-column>
+                                        caption="Gross Weight" alignment="right"
+                                        MetalDecimalInput></dxi-column>
                                     <dxi-column [width]="100" dataField="PURITY"
-                                        caption="Purity"></dxi-column>
+                                        caption="Purity" alignment="right"
+                                        PurityDecimal></dxi-column>
                                     <dxi-column [width]="100"
                                         dataField="PUREWT"
-                                        caption="Pure Weight"></dxi-column>
+                                        caption="Pure Weight" alignment="right"
+                                        MetalDecimalInput></dxi-column>
                                     <dxi-column [width]="100" dataField="Rate"
-                                        caption="Rate"></dxi-column>
+                                        caption="Rate" alignment="right"
+                                        AmountDecimalInput></dxi-column>
                                     <dxi-column [width]="100" dataField="Amount"
-                                        caption="Amount"></dxi-column>
+                                        caption="Amount" alignment="right"
+                                        AmountDecimalInput></dxi-column>
 
                                     <dxo-summary>
-                                        <dxi-total-item column="SRNO">
+                                        <dxi-total-item column="Pcs"
+                                            summaryType="sum"
+                                            [valueFormat]="gridAmountDecimalFormat"
+                                            displayFormat="{0}">
                                         </dxi-total-item>
-                                        <dxi-total-item column="Pcs">
+                                        <dxi-total-item column="Gross Weight"
+                                            summaryType="sum"
+                                            [valueFormat]="gridAmountDecimalFormat"
+                                            displayFormat="{0}">
                                         </dxi-total-item>
-                                        <dxi-total-item column="Gross Weight">
+                                        <dxi-total-item column="Pure Weight"
+                                            summaryType="sum"
+                                            [valueFormat]="gridAmountDecimalFormat"
+                                            displayFormat="{0}">
                                         </dxi-total-item>
-                                        <dxi-total-item column="Pure Weight">
-                                        </dxi-total-item>
-                                        <dxi-total-item column="Amount">
+                                        <dxi-total-item column="Amount"
+                                            summaryType="sum"
+                                            [valueFormat]="gridAmountDecimalFormat"
+                                            displayFormat="{0}">
                                         </dxi-total-item>
                                     </dxo-summary>
                                 </dx-data-grid>
@@ -324,7 +356,7 @@
 
                                     </dxi-column>
                                 </dx-data-grid>
-                                <button class="btn btn-sm btn-outline-primary"
+                                <button class="btn btn-primary add-btn"
                                     (click)="open(mymodal)">Add Alloy
                                 </button>
 
@@ -335,8 +367,9 @@
                                                 class="modal-header d-flex justify-content-end">
                                                 <h5 class="meltingissueheading"
                                                     id="modal-dia-metal"
-                                                    style="text-align:right;">Melting
-                                                    Issue </h5>
+                                                    style="text-align:right;">Alloy
+                                                    Allocation
+                                                </h5>
                                                 <button style="border: none"
                                                     type="button" class="close "
                                                     aria-label="Close"
@@ -351,7 +384,7 @@
                                                     <dx-data-grid #dataGrid
                                                         id="gridContainer"
                                                         keyExpr="ID"
-                                                        [showBorders]="true" 
+                                                        [showBorders]="true"
                                                         [allowColumnReordering]="true"
                                                         [allowColumnResizing]="true"
                                                         [columnAutoWidth]="true">
@@ -384,8 +417,11 @@
                                                                 style="width: 70%;">
                                                                 <input
                                                                     type="text"
+                                                                    class="text-right"
                                                                     matInput
-                                                                    formControlName="remarks" />
+                                                                    [max]="10"
+                                                                    formControlName="alloyQty"
+                                                                    MetalDecimalInput />
                                                             </mat-form-field>
                                                         </div>
                                                     </div>
@@ -394,7 +430,8 @@
                                                         <button type="button"
                                                             class="btn btn-primary">Apply</button>
                                                         <button type="button"
-                                                            class="btn btn-primary">Cancel</button>
+                                                            class="btn btn-primary"
+                                                            (click)="closeModal(modal)">Cancel</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -437,6 +474,7 @@
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
                                         formControlName="issued"
+                                        MetalDecimalInput
                                         [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
@@ -448,6 +486,7 @@
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
                                         formControlName="required"
+                                        MetalDecimalInput
                                         [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
@@ -459,6 +498,7 @@
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
                                         formControlName="allocated"
+                                        MetalDecimalInput
                                         [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
@@ -469,6 +509,7 @@
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
                                         formControlName="balance"
+                                        MetalDecimalInput
                                         [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>

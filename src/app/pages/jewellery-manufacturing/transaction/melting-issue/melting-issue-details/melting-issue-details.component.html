@@ -8,7 +8,8 @@
 <!-- modal header component -->
 <modal-header (saveClick)="formSubmit('SAVE')" (cancelClick)="close()"
     (continueClick)="formSubmit('CONTINUE')" [isViewContinue]="true"
-    [isViewStock]="true"></modal-header>
+    [isViewDelete]="false" [isViewMore]="false"
+    [isViewStock]="true" (click)="stockClicked()"></modal-header>
 <div class="row">
     <div class="col-md-12">
         <form [formGroup]="meltingIssuedetailsFrom">
@@ -23,8 +24,8 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput
                                         formControlName="jobno"
-                                        class="text-right" maxlength="12"
-                                        [readonly]="viewMode"
+                                        class="text-left" maxlength="12"
+                                        readonly
                                         (keydown)="lookupKeyPress($event,'jobno')"
                                         (focusout)="jobNumberValidate($event)" />
                                 </mat-form-field>
@@ -38,7 +39,7 @@
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
                                         formControlName="jobdes"
-                                        [readonly]="viewMode" />
+                                        readonly />
                                 </mat-form-field>
                             </div>
                             <label for="inputPassword"
@@ -49,7 +50,7 @@
                                     <input type="text" matInput
                                         formControlName="jobpurity"
                                         class="text-right" PurityDecimal
-                                        [readonly]="viewMode" />
+                                        readonly />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -61,7 +62,7 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput
                                         formControlName="process"
-                                        [readonly]="viewMode"
+                                        readonly UpperCaseDirective
                                         (keydown)="lookupKeyPress($event,'process')"
                                         (focusout)="validateLookupField($event,ProcessCodeData,'process')" />
                                 </mat-form-field>
@@ -75,7 +76,7 @@
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
                                         formControlName="processdes"
-                                        [readonly]="viewMode" />
+                                        readonly />
                                 </mat-form-field>
                             </div>
                             <label for="inputPassword"
@@ -85,6 +86,7 @@
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
                                         formControlName="diffgrwt"
+                                        maxlength="10"
                                         class="text-right" MetalDecimalInput
                                         [readonly]="viewMode" />
                                 </mat-form-field>
@@ -101,7 +103,7 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput
                                         formControlName="worker"
-                                        [readonly]="viewMode"
+                                        readonly UpperCaseDirective
                                         (keydown)="lookupKeyPress($event,'worker')"
                                         (focusout)="validateLookupField($event,WorkerCodeData,'worker')" />
                                 </mat-form-field>
@@ -115,7 +117,7 @@
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
                                         formControlName="workerdes"
-                                        [readonly]="viewMode" />
+                                        readonly />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -127,7 +129,7 @@
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
                                         formControlName="treeno"
-                                        class="text-right" NumberOnly
+                                        class="text-right" MetalDecimalInput
                                         [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
@@ -136,8 +138,8 @@
                                 :</label>
                             <div class="col-md-2">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="number" matInput
-                                        formControlName="waxweight" [max]="13"
+                                    <input type="text" matInput
+                                        formControlName="waxweight" [max]="10"
                                         class="text-right" MetalDecimalInput
                                         [readonly]="viewMode" />
                                 </mat-form-field>
@@ -149,7 +151,7 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput
                                         formControlName="location"
-                                        [readonly]="viewMode"
+                                        [readonly]="viewMode" UpperCaseDirective
                                         (keydown)="lookupKeyPress($event,'location')"
                                         (focusout)="validateLookupField($event,locationCodeData,'location')" />
                                 </mat-form-field>
@@ -172,6 +174,7 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput
                                         formControlName="stockcode"
+                                        UpperCaseDirective
                                         [readonly]="viewMode"
                                         (keydown)="lookupKeyPress($event,'stockcode')"
                                         (focusout)="validateLookupField($event,stockCodeData,'stockcode')" />
@@ -216,6 +219,7 @@
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
                                         formControlName="mainstock"
+                                        maxlength="20"
                                         [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
@@ -224,11 +228,11 @@
                                 :</label>
                             <div class="col-md-2">
                                 <mat-form-field style="width: 100%;">
-                                     <!-- write new focusout for this -->
+                                    <!-- write new focusout for this -->
                                     <input type="text" matInput
                                         formControlName="stoneweight"
-                                        class="text-right" MetalDecimalInpu
-                                        [readonly]="viewMode" [max]="13" />
+                                        class="text-right" MetalDecimalInput
+                                        [readonly]="viewMode" [max]="10" />
                                 </mat-form-field>
                             </div>
                             <label for="inputPassword"
@@ -238,7 +242,7 @@
                                 <!-- write new focusout for this -->
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
-                                        formControlName="netweight" [max]="13"
+                                        formControlName="netweight" [max]="10"
                                         class="text-right" MetalDecimalInput
                                         [readonly]="viewMode" />
                                 </mat-form-field>
@@ -251,7 +255,7 @@
                             <div class="col-md-2">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
-                                        formControlName="grossweight" [max]="6"
+                                        formControlName="grossweight" [max]="10"
                                         class="text-right" MetalDecimalInput
                                         (focusout)="grossWeightChange()"
                                         [readonly]="viewMode" />
@@ -262,11 +266,11 @@
                                 :</label>
                             <div class="col-md-2">
                                 <mat-form-field style="width: 100%;">
-                                     <!-- write new focusout for this -->
+                                    <!-- write new focusout for this -->
                                     <input type="text" matInput
-                                        formControlName="topurity"
+                                        formControlName="topurity" [max]="10"
                                         class="text-right" AmountDecimalInput
-                                        [readonly]="viewMode" />
+                                        readonly />
                                 </mat-form-field>
                             </div>
                             <label for="inputPassword"
@@ -290,7 +294,8 @@
                                     <input type="text" matInput
                                         formControlName="purity"
                                         class="text-right" PurityDecimal
-                                        [readonly]="viewMode" />
+                                        [readonly]="viewMode" [max]="10"
+                                        (focusout)="pureWeightChange()" />
                                 </mat-form-field>
                             </div>
                             <label for="inputPassword"
@@ -300,7 +305,7 @@
                                 <div class="text-area">
                                     <textarea class="border-bottom" rows="3"
                                         matInput
-                                        formControlName="remarks"
+                                        formControlName="remarks" maxlength="40"
                                         [readonly]="viewMode"></textarea>
                                 </div>
                             </div>
@@ -312,7 +317,7 @@
                             <div class="col-md-2">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
-                                        formControlName="lossweight"
+                                        formControlName="lossweight" [max]="10"
                                         class="text-right" MetalDecimalInput
                                         [readonly]="viewMode" />
                                 </mat-form-field>
@@ -324,7 +329,7 @@
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
                                         formControlName="ticketno"
-                                        class="text-right" NumberOnly
+                                        class="text-left" maxlength="10"
                                         [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
@@ -347,8 +352,8 @@
                             <div class="col-md-2">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
-                                        formControlName="lotno"
-                                        class="text-right" NumberOnly
+                                        formControlName="lotno" maxlength="10"
+                                        class="text-left"
                                         [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
@@ -358,8 +363,8 @@
                             <div class="col-md-2">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
-                                        formControlName="barno"
-                                        class="text-right" NumberOnly
+                                        formControlName="barno" maxlength="10"
+                                        class="text-left"
                                         [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
@@ -370,7 +375,7 @@
                             <div class="col-md-2">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
-                                        formControlName="tgold"
+                                        formControlName="tgold" maxlength="10"
                                         [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
@@ -380,7 +385,7 @@
                             <div class="col-md-2">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
-                                        formControlName="silver"
+                                        formControlName="silver" maxlength="20"
                                         [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
@@ -391,3 +396,32 @@
         </form>
     </div>
 </div>
+<!-- Stock List Modal -->
+<div *ngIf="isViewStock" class="modal fade show d-block" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Stock List</h5>
+          <button type="button" class="close" aria-label="Close" (click)="closeStockPopup()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <dx-data-grid id="gridContainer" [dataSource]="tableDatastocklist" [showBorders]="true" [columnAutoWidth]="true"
+                        [showRowLines]="true" [showColumnLines]="true" [allowColumnReordering]="true" class="mt-3">
+            <ng-container>
+              <dxi-column dataField="SRNO" caption="SRNO" alignment="left"> </dxi-column>
+              <dxi-column dataField="STOCK_CODE" caption="STOCK CODE" alignment="left"> </dxi-column>
+              <dxi-column dataField="PURITY" caption="PURITY" alignment="left"> </dxi-column>
+              <dxi-column dataField="GROSS_WT" caption="Gross Weight" alignment="left"> </dxi-column>
+              <dxi-column dataField="PURE_WT" caption="Pure Weight" alignment="left"> </dxi-column>
+              <dxi-column dataField="RCVD_Gross_Weight" caption="Rcvd. Gross Wt." alignment="left"> </dxi-column>
+            </ng-container>
+          </dx-data-grid>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary">Apply</button>
+        </div>
+      </div>
+    </div>
+  </div>

@@ -233,10 +233,10 @@ export class DiamondQuotationComponent implements OnInit {
       this.commonService.toastErrorByMsgId('MSG2320')//"SalesmanCode cannot be empty"
       return true
     }
-    else if (this.commonService.nullToString(form.wholeSaleRate) == '') {
-      this.commonService.toastErrorByMsgId('')//"wholeSaleRate cannot be empty"
-      return true
-    }
+    // else if (this.commonService.nullToString(form.wholeSaleRate) == '') {
+    //   this.commonService.toastErrorByMsgId('')//"wholeSaleRate cannot be empty"
+    //   return true
+    // }
     else if (this.commonService.nullToString(form.partyCurrencyType) == '') {
       this.commonService.toastErrorByMsgId('MSG1550')//"partyCurrencyType cannot be empty"
       return true

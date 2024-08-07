@@ -188,7 +188,8 @@ export class ProcessTransferComponent implements OnInit {
   maxDate: any;
   setVocTypeMaster(){
     let frm = this.processTransferFrom.value
-    const vocTypeMaster = this.commonService.getVoctypeMasterByVocTypeMain(frm.BRANCH_CODE, frm.VOCTYPE, frm.MAIN_VOCTYPE)
+    console.log(this.commonService.VocTypeMasterData);
+    const vocTypeMaster:any = this.commonService.getVoctypeMasterByVocTypeMain(frm.BRANCH_CODE, frm.VOCTYPE, frm.MAIN_VOCTYPE)
     this.LOCKVOUCHERNO = vocTypeMaster.LOCKVOUCHERNO
     this.minDate = vocTypeMaster.BLOCKBACKDATEDENTRIES ? new Date() : null;
     this.maxDate = vocTypeMaster.BLOCKFUTUREDATE ? new Date() : null;
@@ -402,20 +403,6 @@ export class ProcessTransferComponent implements OnInit {
     }
   }
 
-
-  private calculateIronScrapWeight(data: any): number {
-    let toIronScrapWt = (this.commonService.emptyToZero(data.METAL_FromIronWeight) + this.commonService.emptyToZero(data.METAL_FromNetWeight))
-    toIronScrapWt = toIronScrapWt * (this.commonService.emptyToZero(data.METAL_ScrapGrWt) - this.commonService.emptyToZero(data.METAL_ScrapStoneWt));
-    toIronScrapWt = this.commonService.emptyToZero(data.METAL_FromIronWeight) / this.commonService.emptyToZero(data.METAL_ToIronScrapWt)
-    return this.commonService.emptyToZero(toIronScrapWt)
-  }
-  //calculate Loss Pure Qty
-  private calculateLossPureQty(detailScreenData: any): number {
-    detailScreenData.lossQty = this.commonService.emptyToZero(detailScreenData.lossQty);
-    detailScreenData.PURITY = this.commonService.emptyToZero(detailScreenData.PURITY);
-    let value = detailScreenData.lossQty * detailScreenData.PURITY
-    return this.commonService.emptyToZero(value)
-  }
   submitValidations(form: any) {
     // if (this.commonService.nullToString(form.VOCNO) == 0) {
     //   this.commonService.toastErrorByMsgId('MSG1940')

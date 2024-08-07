@@ -742,16 +742,6 @@ export class DiamondSalesorderComponent implements OnInit {
     this.postDataToSave.push(postData)
   }
 
-  // voucherDate: ['', [Validators.required]],
-  // orderType: ['', [Validators.required]],
-  // PartyCode: ['', [Validators.required]],
-  // SalesmanCode: ['', [Validators.required]],
-  // rateType: ['', [Validators.required]],
-  // wholeSaleRate: ['', [Validators.required]],
-  // partyCurrencyType: ['', [Validators.required]],
-  // partyCurrencyRate: ['', [Validators.required]],
-  // ItemCurrency: ['', [Validators.required]],
-  // ItemCurrencyRate: ['', [Validators.required]],
 
   submitValidations(form: any) {
     if (this.commonService.nullToString(form.voucherType) == '') {
@@ -770,10 +760,10 @@ export class DiamondSalesorderComponent implements OnInit {
       this.commonService.toastErrorByMsgId('MSG2320')//"SalesmanCode cannot be empty"
       return true
     }
-    else if (this.commonService.nullToString(form.wholeSaleRate) == '') {
-      this.commonService.toastErrorByMsgId('')//"wholeSaleRate cannot be empty"
-      return true
-    }
+    // else if (this.commonService.nullToString(form.wholeSaleRate) == '') {
+    //   this.commonService.toastErrorByMsgId('')//"wholeSaleRate cannot be empty"
+    //   return true
+    // }
     else if (this.commonService.nullToString(form.partyCurrencyType) == '') {
       this.commonService.toastErrorByMsgId('MSG1550')//"partyCurrencyType cannot be empty"
       return true

@@ -86,6 +86,7 @@ export class AddPosComponent implements OnInit {
   RECEIPT_MODEL: any = {}
   disableSaveBtn: boolean = false;
   isRateCannotLessCost: boolean = false;
+  isNewButtonDisabled:boolean=true;
 allowDescription:boolean=false;
 editLineItem:boolean=false;
   amountDecimalFormat: any;
@@ -245,6 +246,7 @@ editLineItem:boolean=false;
 
   salesPersonFilteredOptions!: Observable<any[]>;
   salesPersonOptions: any[] = [];
+  schemeList: any[] = [];
   netTotal: any;
   idTypeFilteredOptions!: Observable<any[]>;
   idTypeOptions: any[] = [''];
@@ -294,6 +296,7 @@ editLineItem:boolean=false;
   advanceReceiptForm: FormGroup;
   othersReceiptForm: FormGroup;
   giftReceiptForm: FormGroup;
+  schemeReceiptForm: FormGroup;
   customerReceiptForm: FormGroup;
 
   boardingPassForm: FormGroup;
@@ -575,7 +578,7 @@ editLineItem:boolean=false;
   mainVocType: any = '';
   autoPosting: any;
   isAutoPosting: boolean = false;
-  baseYear: any = localStorage.getItem('YEAR') || '';
+  baseYear:  any = '';
   updateBtn!: boolean;
   all_branch: any;
   orderedItemEditId: any;
@@ -764,7 +767,7 @@ editLineItem:boolean=false;
   ) {
     this.strBranchcode = localStorage.getItem('userbranch');
     this.strUser = localStorage.getItem('username');
-    this.baseYear = localStorage.getItem('YEAR');
+    // this.baseYear = localStorage.getItem('YEAR');
     let branchParams: any = localStorage.getItem('BRANCH_PARAMETER')
     this.comFunc.allbranchMaster = JSON.parse(branchParams);
     this.isGiftTypeRequired = this.comFunc.allbranchMaster.BRNCHSHOW_GIFTMODULE ? this.comFunc.allbranchMaster.BRNCHSHOW_GIFTMODULE : false;
@@ -952,6 +955,14 @@ editLineItem:boolean=false;
       giftAmtFC: ['', [Validators.required, Validators.min(0.1)]],
     });
 
+     this.schemeReceiptForm = this.formBuilder.group({
+      scheme_code: ['', Validators.required],
+      scheme_name: ['', Validators.required],
+      schemeNo: ['', Validators.required],
+      schemeAmtFC: ['', [Validators.required, Validators.min(0.1)]],
+
+    });
+
     this.customerReceiptForm = this.formBuilder.group({
       customAcCodeList: ['', Validators.required],
       customerAmtLC: ['', Validators.required],
@@ -1057,16 +1068,16 @@ editLineItem:boolean=false;
         this.comFunc.divisionMasterList = data;
       }
     });
-    this.indexedDb.getAllData('countryMaster').subscribe((data) => {
-      if (data.length > 0) {
-        this.comFunc.countryMaster = data;
-      }
-    });
-    this.indexedDb.getAllData('nationalityMaster').subscribe((data) => {
-      if (data.length > 0) {
-        this.comFunc.nationalityMaster = data;
-      }
-    });
+    // this.indexedDb.getAllData('countryMaster').subscribe((data) => {
+    //   if (data.length > 0) {
+    //     this.comFunc.countryMaster = data;
+    //   }
+    // });
+    // this.indexedDb.getAllData('nationalityMaster').subscribe((data) => {
+    //   if (data.length > 0) {
+    //     this.comFunc.nationalityMaster = data;
+    //   }
+    // });
     // this.indexedDb.getAllData('idMaster').subscribe((data) => {
     //   if (data.length > 0) {
     //     console.log('idMaster', data);
@@ -1147,13 +1158,19 @@ editLineItem:boolean=false;
     });
   }
 
-  setVoucherTypeMaster(){
-    let frm = this.vocDataForm.value
-    const vocTypeMaster = this.comFunc.getVoctypeMasterByVocTypeMain(frm.BRANCH_CODE, frm.VOCTYPE, frm.MAIN_VOCTYPE)
-    this.LOCKVOUCHERNO = vocTypeMaster.LOCKVOUCHERNO
-    this.minDate = vocTypeMaster.BLOCKBACKDATEDENTRIES ? new Date() : null;
-    this.maxDate = vocTypeMaster.BLOCKFUTUREDATE ? new Date() : null;
-  }
+
+
+  SchemeMasterFindData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 59,
+    SEARCH_FIELD: "SCHEME_CODE",
+    SEARCH_HEADING: "Scheme Master",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "SCHEME_CODE<>''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  };
 
   // async getAllCompanyParameters() {
   //   let map = new Map();
@@ -1211,7 +1228,7 @@ editLineItem:boolean=false;
     return optionExists ? null : { optionNotFound: true };
   }
 
-  getArgs() {
+  async getArgs() {
     console.log('======content==============================');
     console.log(this.content);
     console.log('====================================');
@@ -1224,7 +1241,7 @@ editLineItem:boolean=false;
       this.LOCKVOUCHERNO = true;
       this.vocDataForm.controls.fcn_voc_no.setValue(this.content.VOCNO);
       this.vocDataForm.controls.vocdate.setValue(this.content.VOCDATE);
-      this.getFinancialYear();
+      await this.getFinancialYear();
 
       this.strBranchcode = this.content.BRANCH_CODE;
       this.vocType = this.content.VOCTYPE;
@@ -1234,6 +1251,8 @@ editLineItem:boolean=false;
       if (this.content.FLAG == "EDIT") {
         this.editOnly = true;
         this.enableFormControls(true);
+        this.voucherDetails = this.comFunc.getVoctypeMasterByVocTypeMain(this.strBranchcode, this.vocDataForm.value.voc_type, this.mainVocType)
+        console.log(this.voucherDetails)
       }
       if (this.content.FLAG == 'VIEW') {
         this.viewOnly = true;
@@ -1245,11 +1264,10 @@ editLineItem:boolean=false;
 
 
     } else {
-      this.getFinancialYear();
-      this.generateVocNo();
+      await this.getFinancialYear();
+      await this.generateVocNo();
       this.voucherDetails = this.comFunc.getVoctypeMasterByVocTypeMain(this.strBranchcode, this.vocDataForm.value.voc_type, this.mainVocType)
       // this.setVoucherTypeMaster();
-
     }
 
     if (!this.viewOnly && !this.editOnly)
@@ -1333,7 +1351,14 @@ editLineItem:boolean=false;
           // alert(this.retailSaleDataVocNo);
           // alert(this.retailSReturnVocNo);
           // alert(this.metalPurchaseDataVocNo);
-          this.karatRateDetails = karatRate;
+          this.karatRateDetails = 
+          // karatRate;
+
+          karatRate.map((item:any) => {
+            item.KARAT_RATE = this.comFunc.decimalQuantityFormat(item.KARAT_RATE, 'AMOUNT');
+            item.POPKARAT_RATE = this.comFunc.decimalQuantityFormat(item.POPKARAT_RATE, 'AMOUNT');
+            return item;
+          });
 
           if (data.VOCNO == retailSaleData.VOCNO) {
             this.vocDataForm.controls['fcn_voc_no'].setValue(
@@ -1772,7 +1797,7 @@ editLineItem:boolean=false;
     });
   }
   ngOnInit(): void {
-    console.log(this.comFunc.allCompanyParameters, 'this.allCompanyParameters');
+    this.isNewButtonDisabled=true;
 
     /* this.receiptDetailsList = [
       {
@@ -1964,8 +1989,13 @@ editLineItem:boolean=false;
   }
 
   getMaritalStatus() {
-    this.maritalStatusList = this.comFunc.getComboFilterByID('Marital Status');
-    this.genderList = this.comFunc.getComboFilterByID('gender');
+    this.maritalStatusList = this.comFunc.getComboFilterByID('Marital Status').filter((value:any, index:any, self:any) =>
+      index === self.findIndex((t:any) => t.ENGLISH === value.ENGLISH)
+    );
+    this.genderList = this.comFunc.getComboFilterByID('gender').filter((value:any, index:any, self:any) =>
+      index === self.findIndex((t:any) => t.ENGLISH === value.ENGLISH)
+    );
+
     console.log('gender ', this.genderList);
 
   }
@@ -2127,7 +2157,13 @@ editLineItem:boolean=false;
     }
     else if (this.selectedTabIndex == 4) {
       return this.giftReceiptForm.invalid;
-    } else {
+    } 
+    //SCHEME_UPDATE
+    // else if (this.selectedTabIndex == 5) {
+    //   return this.customerReceiptForm.invalid;
+    // } 
+    
+    else {
       return this.customerReceiptForm.invalid;
     }
   }
@@ -2291,6 +2327,28 @@ editLineItem:boolean=false;
         PAYMENT_MODE = 'CUSTOMER'
         ARECMID = 0;
       }
+    
+//SCHEME_UPDATE
+    //   else if (this.selectedTabIndex == 6) {
+    //     RECEIPT_MODE = 'SADV';
+    //     ARECVOCNO = '';
+    //     this.isCCTransaction = false;
+
+    //     AMOUNT_FC = this.comFunc.emptyToZero(this.schemeReceiptForm.value.schemeAmtFC);
+    //     AMOUNT_CC = this.comFunc.FCToCC(
+    //           this.vocDataForm.value.txtCurrency,
+    //           this.comFunc.emptyToZero(this.schemeReceiptForm.value.schemeAmtFC), this.vocDataForm.value.txtCurRate);
+    
+    //     IGST_PER = 0;
+    //     HSN_CODE = '0';
+    //     GST_CODE = '0';
+    //     IGST_ACCODE = "0";
+    //     IGST_AMOUNTFC = 0;
+    //     IGST_AMOUNTCC = 0;
+    //     CARD_NO = '0';
+    //     PAYMENT_MODE = 'SADV';
+    //     ARECMID = 0;
+    // }
 
       this.receiptDetailsList?.forEach((e: any, i: any) => {
         e.SRNO = i + 1;
@@ -2329,7 +2387,7 @@ editLineItem:boolean=false;
         "VOCDATE": new Date().toISOString(),
         "BRANCH_CODE": this.strBranchcode,
         "REC_BRANCHCODE": this.strBranchcode,
-        "YEARMONTH": this.baseYear || localStorage.getItem('YEAR'),
+        "YEARMONTH": this.baseYear,
         "RECEIPT_MODE": RECEIPT_MODE,
         "CURRENCY_CODE": this.comFunc.compCurrency,
         // "CURRENCY_RATE": this.comFunc.currencyRate ?? '1',
@@ -2337,7 +2395,7 @@ editLineItem:boolean=false;
         "AMOUNT_FC": AMOUNT_FC,
         "AMOUNT_CC": AMOUNT_CC,
         "DESCRIPTION": "",
-        "FYEARCODE": this.baseYear || localStorage.getItem('YEAR'),
+        "FYEARCODE": this.baseYear,
         // "FYEARCODE": "2023",
 
         "ARECVOCNO": ARECVOCNO,
@@ -2381,7 +2439,7 @@ editLineItem:boolean=false;
         "REC_COMM_AMOUNTCC": COMMISSION_RATE,
         "POS_CREDIT_ACCODE": "0",
         "POS_CREDIT_ACNAME": "0",
-        "DT_YEARMONTH": this.baseYear || localStorage.getItem('YEAR'),
+        "DT_YEARMONTH": this.baseYear,
         // "DT_YEARMONTH": "2022",
         "RECEIPT_TYPE": PAYMENT_MODE,
         "GIFT_CARD_BRANCH": "0",
@@ -2453,16 +2511,19 @@ editLineItem:boolean=false;
     //   'Are you sure want to close ?',
     //   false
     // );
-
+    if(this.viewOnly){
+  this.modalService.dismissAll(data);
+}   else{
     this.openDialog('Warning', this.comFunc.getMsgByID('MSG1212'), false);
 
     this.dialogBox.afterClosed().subscribe((action: any) => {
-      if (action == 'Yes') {
+     if (action == 'Yes') {
 
-        this.modalService.dismissAll(data);
+      this.modalService.dismissAll(data);
 
-      } 
-    });
+    } 
+       });
+}
 
   }
 
@@ -2532,7 +2593,7 @@ editLineItem:boolean=false;
     this.lineItemModalForSalesReturn = false;
     this.isNewCustomer = isNewCustomer;
     this.updateBtn = false;
-    if (!this.viewOnly && !this.editOnly||isNewItem) {
+    if ((!this.viewOnly && !this.editOnly||isNewItem) && !this.editLineItem) {
       this.salesReturnsItems_forVoc = [];
       this.salesReturnForm.reset();
       this.lineItemForm.reset();
@@ -2700,11 +2761,26 @@ editLineItem:boolean=false;
       this.ordered_items.splice(itemIndex, 1);
     }
 
-    // Reassign serial numbers
+    this.currentLineItems = this.currentLineItems.filter((item:any) => item.SRNO !== event.data.sn_no);
+
     this.ordered_items.forEach((item, index) => {
       item.sn_no = index + 1;
     });
-    this.currentLineItems = this.currentLineItems.filter((item: any) => item.SRNO !== event.data.ID);
+
+    this.currentLineItems.forEach((item:any, index:any) => {
+      item.SRNO = index + 1;
+    });
+
+    // const itemIndex = this.ordered_items.findIndex(item => item.sn_no === event.data.sn_no);
+    // if (itemIndex > -1) {
+    //   this.ordered_items.splice(itemIndex, 1);
+    // }
+
+    // // Reassign serial numbers
+    // this.ordered_items.forEach((item, index) => {
+    //   item.sn_no = index + 1;
+    // });
+    // this.currentLineItems = this.currentLineItems.filter((item: any) => item.SRNO !== event.data.ID);
 
     // // this.ordered_items.splice(event.data.ID, 1);
     // // this.currentLineItems.splice(event.data.ID, 1);
@@ -2848,6 +2924,12 @@ editLineItem:boolean=false;
           this.validatePCS = stockInfos.VALIDATE_PCS;
           this.enablePieces = stockInfos.ENABLE_PCS;
           this.lineItemPcs = stockInfos.BALANCE_PCS;
+
+          this.blockMinimumPrice = stockInfos.BLOCK_MINIMUMPRICE;
+          this.blockMinimumPriceValue = this.comFunc.transformDecimalVB(
+            this.comFunc.allbranchMaster?.BAMTDECIMALS,
+            stockInfos.MIN_SAL_PRICE
+          );
         
          
           if (stockInfos.DIVISIONMS == 'M') this.setMetalRate(stockInfos.KARAT_CODE);
@@ -3588,7 +3670,7 @@ editLineItem:boolean=false;
             this.customerDetails?.CREDIT_LIMIT_STATUS || false,
           PANCARDNO: this.customerDetails?.PANCARDNO || '111111' || '',
           VOCTYPE: this.vocType || '',
-          YEARMONTH: this.baseYear || localStorage.getItem('YEAR'),
+          YEARMONTH: this.baseYear,
           VOCNO: this.vocDataForm.value.fcn_voc_no || 0,
           VOCDATE: this.convertDateWithTimeZero(
             new Date(this.vocDataForm.value.vocdate).toISOString()
@@ -4098,19 +4180,42 @@ editLineItem:boolean=false;
   //     option.toLowerCase().includes(filterValue)
   //   );
   // }
+
   private _filterMasters(
-    arrName: any,
+    arrName: any[],
     value: string,
     optVal1: any,
     optVal2: any = null
   ): any[] {
     const filterValue = (value || '').toLowerCase();
-    return arrName.filter(
-      (option: any) =>
+    const uniqueCodes = new Set(); 
+  
+    return arrName.filter((option: any) => {
+      const matches =
         option[optVal1].toLowerCase().includes(filterValue) ||
-        option[optVal2].toLowerCase().includes(filterValue)
-    );
+        (optVal2 && option[optVal2].toLowerCase().includes(filterValue));
+  
+      if (matches && !uniqueCodes.has(option[optVal1])) {
+        uniqueCodes.add(option[optVal1]); 
+        return true; 
+      }
+      return false;
+    });
   }
+  
+  // private _filterMasters(
+  //   arrName: any,
+  //   value: string,
+  //   optVal1: any,
+  //   optVal2: any = null
+  // ): any[] {
+  //   const filterValue = (value || '').toLowerCase();
+  //   return arrName.filter(
+  //     (option: any) =>
+  //       option[optVal1].toLowerCase().includes(filterValue) ||
+  //       option[optVal2].toLowerCase().includes(filterValue)
+  //   );
+  // }
 
   private _filterSalesPerson(value: string): any[] {
     const filterValue = value.toLowerCase() || '';
@@ -4194,14 +4299,31 @@ editLineItem:boolean=false;
   }
 
   private _filterIdType(value: string): string[] {
-    value = value != null ? value.toString().toLowerCase() : '';
-    const filterValue = value;
-    // const filterValue = value.toString().toLowerCase() || '';
-
-    return this.idTypeOptions.filter((option) =>
-      option.toLowerCase().includes(filterValue)
-    );
+    const filterValue = value != null ? value.toString().toLowerCase() : '';
+    const uniqueOptions = new Set<string>(); 
+  
+    return this.idTypeOptions.filter((option) => {
+      const lowerCaseOption = option.toLowerCase();
+      const matches = lowerCaseOption.includes(filterValue);
+  
+      if (matches && !uniqueOptions.has(lowerCaseOption)) {
+        uniqueOptions.add(lowerCaseOption); 
+        return true; 
+      }
+      return false; 
+    });
   }
+  
+
+  // private _filterIdType(value: string): string[] {
+  //   value = value != null ? value.toString().toLowerCase() : '';
+  //   const filterValue = value;
+  //   // const filterValue = value.toString().toLowerCase() || '';
+
+  //   return this.idTypeOptions.filter((option) =>
+  //     option.toLowerCase().includes(filterValue)
+  //   );
+  // }
 
   getExchangeStockCodes() {
 
@@ -4242,6 +4364,7 @@ editLineItem:boolean=false;
       let recModeCC;
       let recModeOthers;
       let recModeAdvance;
+      let recModeSchemeAdvance;
       let recModeGift;
       console.log(_resp);
 
@@ -4278,6 +4401,14 @@ editLineItem:boolean=false;
           (value.CC_BRANCHCODE == '' || value.CC_BRANCHCODE == userBranch)
         );
       });
+
+//SCHEME_UPDATE
+      // recModeSchemeAdvance = _resp.filter(function (value: any) {
+      //   return (
+      //     value.MODE == 3 &&
+      //     (value.CC_BRANCHCODE == '' || value.CC_BRANCHCODE == userBranch)
+      //   );
+      // });
       recModeGift = _resp.filter(function (value: any) {
         return (
           value.MODE == 4 &&
@@ -4316,6 +4447,11 @@ editLineItem:boolean=false;
 
       this.recModeAdvanceData = recModeAdvance.map((t: any) => t.CREDIT_CODE);
       this.advanceReceiptForm.controls.paymentsAdvance.setValue(this.recModeAdvanceData[0]);
+//SCHME_UPDATED
+      // this.schemeReceiptForm.controls.paymentsAdvance.setValue(
+      //   recModeSchemeAdvance.map((t: any) => t.CREDIT_CODE)[0]
+      // );
+      
 
       this.receiptModeAdvanceOthers =
         this.advanceReceiptForm.controls.paymentsAdvance.valueChanges.pipe(
@@ -5424,7 +5560,7 @@ editLineItem:boolean=false;
       DT_BRANCH_CODE: this.strBranchcode,
       DT_VOCNO: 0, // to 0
       DT_VOCTYPE: this.vocType, // change
-      DT_YEARMONTH: this.baseYear || localStorage.getItem('YEAR'),
+      DT_YEARMONTH: this.baseYear,
       SUPPLIERDISC: '',
       DTKarat: 0,
       JAWAHARAYN: this.exchangeForm.value.fcn_exchange_jawahara || 0,
@@ -6330,7 +6466,7 @@ editLineItem:boolean=false;
       DT_VOCNO: '0', // to 0
       DT_VOCTYPE: this.vocType, // change
       // "DT_VOCTYPE":  this.vocType, // change
-      DT_YEARMONTH: this.baseYear || localStorage.getItem('YEAR'),
+      DT_YEARMONTH: this.baseYear,
       DT_BLOCKPSRIMPORT: false,
       // GIFT_ITEM: false,
 
@@ -7041,6 +7177,7 @@ editLineItem:boolean=false;
           });
         } else {
           let itemsLengths = this.ordered_items[this.ordered_items.length - 1];
+          let newSRNO = this.calculateNextSRNO();
           // alert(JSON.stringify(itemsLengths));
 
           // alert(itemsLengths);
@@ -7062,8 +7199,8 @@ editLineItem:boolean=false;
           console.log(this.newLineItem);
 
           var values: any = {
-            ID: this.ordered_items.length + 1,
-            sn_no: this.ordered_items.length + 1,
+            ID: newSRNO,
+            sn_no: newSRNO,
             stock_code: this.newLineItem.STOCK_CODE,
             mkg_amount: this.lineItemForm.value.fcn_ad_making_amount || 0,
             // total_amount: temp_resp.PRICE1LC,
@@ -7119,7 +7256,8 @@ editLineItem:boolean=false;
           }
           console.log(this.ordered_items);
           this.sumTotalValues();
-          this.setPosItemData(this.order_items_slno_length, this.newLineItem);
+          this.setPosItemData(newSRNO, this.newLineItem);
+          // this.setPosItemData(this.order_items_slno_length, this.newLineItem);
           this.newLineItem.STOCK_CODE = '';
 
           this.li_division_val = '';
@@ -7964,7 +8102,7 @@ editLineItem:boolean=false;
       data.DT_VOCTYPE = this.vocType;
       data.DT_BRANCH_CODE = this.strBranchcode;
       data.DT_VOCNO = 0;
-      data.DT_YEARMONTH = this.baseYear || localStorage.getItem('YEAR');
+      data.DT_YEARMONTH = this.baseYear;
       data.OT_TRANSFER_TIME = new Date();
       // new fields added - 27-12-2023
       data.ORIGINALKARAT_RATE = Number(data.POPKARAT_RATE) || 0;
@@ -8306,7 +8444,7 @@ editLineItem:boolean=false;
             this.customerDetails?.CREDIT_LIMIT_STATUS || false,
           PANCARDNO: this.customerDetails?.PANCARDNO || '111111' || '',
           VOCTYPE: this.vocType || '',
-          YEARMONTH: this.baseYear || localStorage.getItem('YEAR'),
+          YEARMONTH: this.baseYear,
           VOCNO: this.vocDataForm.value.fcn_voc_no || 0,
           VOCDATE: this.convertDateWithTimeZero(
             new Date(this.vocDataForm.value.vocdate).toISOString()
@@ -8454,6 +8592,7 @@ editLineItem:boolean=false;
               if (res != null) {
                 if (res.status == 'SUCCESS') {
                   this.snackBar.open('POS Updated Successfully', 'OK');
+                  this.isNewButtonDisabled=false;
 
                   this.vocDataForm.controls['fcn_voc_no'].setValue(res.response.retailSales.VOCNO);
 
@@ -8495,6 +8634,7 @@ editLineItem:boolean=false;
             if (res != null) {
               if (res.status == 'SUCCESS') {
                 // this.close('reloadMainGrid');
+                this.isNewButtonDisabled=false;
 
                 this.vocDataForm.controls['fcn_voc_no'].setValue(res.response.retailSales.VOCNO);
 
@@ -9348,7 +9488,8 @@ printReceiptDetailsWeb() {
   async rateFunc(value: any) {
     let isAuth: any = false;
     const preVal = this.comFunc.emptyToZero(localStorage.getItem('fcn_li_rate'));
-console.log(this.blockMinimumPriceValue)
+      console.log(this.blockMinimumPriceValue);
+      console.log(this.blockMinimumPrice);
     if (this.blockMinimumPrice == 'B') {
       if (this.lineItemModalForSalesReturn || this.comFunc.emptyToZero(this.blockMinimumPriceValue) >=this.comFunc.emptyToZero(value)) {
         if (this.userwiseDiscount) {
@@ -9579,7 +9720,7 @@ console.log(this.blockMinimumPriceValue)
         this.comFunc.allbranchMaster?.BAMTDECIMALS,
         // _exchangeMetalRate * _exchangeNetWt
         this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_metal_rate) *
-        this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_net_wt)
+        this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_chargeable_wt)
       )
     );
   }
@@ -10903,7 +11044,7 @@ console.log(this.blockMinimumPriceValue)
       VOCDATE: this.convertDateWithTimeZero(
         new Date(this.vocDataForm.value.vocdate).toISOString()
       ),
-      YEARMONTH: this.baseYear || localStorage.getItem('YEAR'),
+      YEARMONTH: this.baseYear,
       PARTYNAME: this.customerDataForm.value.fcn_customer_name,
       // "PARTYNAME": "Urwashi Jani",
       TEL1: this.customerDetails?.TEL1 || '',
@@ -11199,7 +11340,7 @@ console.log(this.blockMinimumPriceValue)
       VOCDATE: this.convertDateWithTimeZero(
         new Date(this.vocDataForm.value.vocdate).toISOString()
       ),
-      YEARMONTH: this.baseYear || localStorage.getItem('YEAR'),
+      YEARMONTH: this.baseYear,
       PARTYCODE: this.comFunc.basePartyCode,
       PARTY_CURRENCY: this.comFunc.compCurrency,
       PARTY_CURR_RATE: 1,
@@ -11619,7 +11760,7 @@ console.log(this.blockMinimumPriceValue)
       VOCDATE: this.convertDateWithTimeZero(
         new Date(this.vocDataForm.value.vocdate).toISOString()
       ),
-      YEARMONTH: this.baseYear || localStorage.getItem('YEAR'),
+      YEARMONTH: this.baseYear,
       PARTYNAME: this.customerDataForm.value.fcn_customer_name,
       TEL1: this.customerDetails?.TEL1 || '',
       TEL2: this.customerDetails?.TEL2 || '',
@@ -12300,6 +12441,31 @@ console.log(this.blockMinimumPriceValue)
 
       }
     }
+//SCHME_UPDATED
+
+    // if (this.receiptModesList?.['BTN_SCHEME'] == true && this.selectedTabIndex == 6) {
+    //   this.schemeReceiptForm.controls.scheme_code.setValue(
+    //     '');
+        
+    //     this.schemeReceiptForm.controls.scheme_name.setValue(
+    //      '');
+     
+
+    //   if (data != null && data != undefined) {
+
+    //     this.schemeReceiptForm.controls.paymentsCreditGIftVoc.setValue(
+    //      data?.RECEIPT_MODE);
+
+    //     this.schemeReceiptForm.controls.giftBranch.setValue(
+    //       data['REC_BRANCHCODE']);
+
+    //     this.schemeReceiptForm.controls.giftVocNo.setValue(
+    //       data['ARECVOCNO']);
+
+    //     this.schemeReceiptForm.controls.giftAmtFC.setValue(
+    //       this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(data['AMOUNT_FC']).toString()));
+    //   }
+    // }
 
 
     this.setReceiptItemCommaSeparation();
@@ -13540,5 +13706,37 @@ changeGiftVoucherAmount(data:any){
     });
     this.lineItemForm.get('fcn_li_division')?.disable();
   }
+
+  schemeCodeSelected(e: any) {
+    console.log(e);
+
+    this.schemeReceiptForm.controls.scheme_code.setValue(e.SCHEME_CODE);
+    this.schemeReceiptForm.controls.scheme_name.setValue(e.SCHEME_NAME);
+
+    let postData = {
+      "SCHEMECODE": e.SCHEME_CODE,
+      "POSCUSTCODE": 'BD0003',
+      "BRANCH":this.comFunc.nullToString(this.strBranchcode),
+      "VOCDATE":  this.convertDateWithTimeZero(
+        new Date(this.vocDataForm.value.vocdate).toISOString()
+      ),
+      "SCHEMEREDEEM": ""
+    };
+
+    this.suntechApi.postDynamicAPI(`RetailSalesDataInDotnet/SchemeCodeValidation`, postData)
+      .subscribe((result: any) => {
+        console.log(result);
+        this.schemeList=result.response;
+        this.schemeReceiptForm.controls.schemeNo.setValue(this.schemeList[0].ARECVOCNO);
+        this.schemeReceiptForm.controls.schemeAmtFC.setValue(this.schemeList[0].AMOUNT_FC);
+   
+      });
+  }
+
+  calculateNextSRNO(): number {
+    const srnos = this.currentLineItems.map((item:any) => item.SRNO);
+    const maxSRNO = srnos.length > 0 ? Math.max(...srnos) : 0;
+    return maxSRNO + 1;
+}
 }
 

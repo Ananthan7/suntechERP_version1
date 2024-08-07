@@ -55,11 +55,11 @@ export class ProductionEntryDetailsComponent implements OnInit {
   customerCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 6,
-    SEARCH_FIELD: 'CUSTOMER_CODE',
+    LOOKUPID: 81,
+    SEARCH_FIELD: 'ACCODE',
     SEARCH_HEADING: 'Customer Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "account_mode in ('B','R','P')",
+    WHERECONDITION: "ACCODE<>''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   };
@@ -283,7 +283,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
     STOCK_CODE: [''],
     STOCK_DESCRIPTION: [''],
     JOB_SO_NUMBER: [''],
-    pricescheme:[''],
+    pricescheme: [''],
   });
 
   constructor(
@@ -308,13 +308,13 @@ export class ProductionEntryDetailsComponent implements OnInit {
         this.urls = result.response[0].imagepath;
         console.log(this.urls)
       }, err => {
-        this.commonService.toastErrorByMsgId('Server Error')
+        this.commonService.toastErrorByMsgId('MSG81451')//Server Error
       })
     this.subscriptions.push(Sub)
 
   }
 
-  setInitialLoadValue(){
+  setInitialLoadValue() {
     this.branchCode = this.commonService.branchCode;
     this.HEADERDETAILS = this.content[0].HEADERDETAILS
     this.productiondetailsFrom.controls.VOCDATE.setValue(this.HEADERDETAILS.vocDate)
@@ -322,9 +322,9 @@ export class ProductionEntryDetailsComponent implements OnInit {
   customerCodeScpSelected(e: any) {
     console.log(e);
     this.productiondetailsFrom.controls.customer.setValue(e.ACCODE);
-    this.productiondetailsFrom.controls.customerDesc.setValue(e['ACCOUNT HEAD']);
+    this.productiondetailsFrom.controls.customerDesc.setValue(e.ACCOUNT_HEAD);
   }
-  karatCodeSelected(e:any){
+  karatCodeSelected(e: any) {
     console.log(e);
     this.productiondetailsFrom.controls.KARAT.setValue(e.KARAT_CODE);
   }
@@ -332,7 +332,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
     console.log(e);
     this.productiondetailsFrom.controls.costcode.setValue(e.COST_CODE);
   }
-  prefixCodeSelected(e:any){
+  prefixCodeSelected(e: any) {
     console.log(e);
     this.productiondetailsFrom.controls.PREFIX.setValue(e.PREFIX_CODE);
   }
@@ -360,7 +360,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
     console.log(e);
     this.productiondetailsFrom.controls.price5.setValue(e.PRICE_CODE);
   }
-  
+
   designSelected(value: any) {
     console.log(value);
     this.productiondetailsFrom.controls.DESIGN_CODE.setValue(value.DESIGN_CODE);
@@ -409,7 +409,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
           if (data[0] && data[0].UNQ_JOB_ID != '') {
             this.productiondetailsFrom.controls.subjobno.setValue(data[0].UNQ_JOB_ID)
             this.productiondetailsFrom.controls.subjobnoDesc.setValue(data[0].JOB_DESCRIPTION)
-             this.productiondetailsFrom.controls.JOB_DATE.setValue(data[0].JOB_DATE)
+            this.productiondetailsFrom.controls.JOB_DATE.setValue(data[0].JOB_DATE)
             this.productiondetailsFrom.controls.DESIGN_CODE.setValue(data[0].DESIGN_CODE)
             this.productiondetailsFrom.controls.DESIGN_DESCRIPTION.setValue(data[0].DESCRIPTION)
             this.productiondetailsFrom.controls.JOB_PCS.setValue(data[0].JOB_PCS_TOTAL)
@@ -452,8 +452,8 @@ export class ProductionEntryDetailsComponent implements OnInit {
         this.commonService.closeSnackBarMsg()
         if (result.dynamicData && result.dynamicData[0].length > 0) {
           let data = result.dynamicData[0]
-          console.log(data[0],'data[0]');
-          
+          console.log(data[0], 'data[0]');
+
           this.productiondetailsFrom.controls.process.setValue(data[0].PROCESS)
           this.productiondetailsFrom.controls.processname.setValue(data[0].PROCESSDESC)
           this.productiondetailsFrom.controls.worker.setValue(data[0].WORKER)
@@ -466,9 +466,9 @@ export class ProductionEntryDetailsComponent implements OnInit {
             this.commonService.decimalQuantityFormat(Number(data[0].NETWT), 'METAL'))
           this.productiondetailsFrom.controls.PUREWT.setValue(data[0].PUREWT)
           this.productiondetailsFrom.controls.PURITY.setValue(
-            this.commonService.decimalQuantityFormat(data[0].PURITY,'PURITY'))
+            this.commonService.decimalQuantityFormat(data[0].PURITY, 'PURITY'))
           this.productiondetailsFrom.controls.Job_Purity.setValue(
-            this.commonService.decimalQuantityFormat(data[0].PURITY,'PURITY'))
+            this.commonService.decimalQuantityFormat(data[0].PURITY, 'PURITY'))
           this.productiondetailsFrom.controls.JOB_SO_NUMBER.setValue(data[0].JOB_SO_NUMBER)
           this.productiondetailsFrom.controls.STOCK_CODE.setValue(data[0].STOCK_CODE)
           this.productiondetailsFrom.controls.DIVCODE.setValue(data[0].DIVCODE)
@@ -506,8 +506,8 @@ export class ProductionEntryDetailsComponent implements OnInit {
 
     modalRef.result.then((dataFromStockScreen) => {
       if (dataFromStockScreen) {
-        console.log(dataFromStockScreen,'data comming from stock detail screen');
-        
+        console.log(dataFromStockScreen, 'data comming from stock detail screen');
+
         this.StockDetailData.STOCK_FORM_DETAILS = dataFromStockScreen.STOCK_FORM_DETAILS;
         this.StockDetailData.STOCK_COMPONENT_GRID = dataFromStockScreen.STOCK_COMPONENT_GRID;
       }
@@ -539,8 +539,8 @@ export class ProductionEntryDetailsComponent implements OnInit {
   }
   formDetailCount: number = 0;
   formSubmit() {
-    this.formDetailCount+=1
-    
+    this.formDetailCount += 1
+
 
     this.StockDetailData.DETAIL_FORM_DATA = this.productiondetailsFrom.value
     this.close(this.StockDetailData);
@@ -577,7 +577,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
               });
             }
           } else {
-            this.toastr.error("Not saved");
+            this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
           }
         },
         (err) => alert(err)
@@ -648,7 +648,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
                   });
                 }
               } else {
-                this.toastr.error("Not deleted");
+                this.commonService.toastErrorByMsgId('MSG1880');// Not Deleted
               }
             },
             (err) => alert(err)
@@ -658,33 +658,32 @@ export class ProductionEntryDetailsComponent implements OnInit {
     });
   }
 
-        /**use: validate all lookups to check data exists in db */
-        validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
-          LOOKUPDATA.SEARCH_VALUE = event.target.value
-          if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
-          let param = {
-            LOOKUPID: LOOKUPDATA.LOOKUPID,
-            WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
-          }
-          this.commonService.toastInfoByMsgId('MSG81447');
-          let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
-          let Sub: Subscription = this.dataService.postDynamicAPI(API,param)
-            .subscribe((result) => {
-              let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
-              if (data.length == 0) {
-                this.commonService.toastErrorByMsgId('MSG1531')
-                this.productiondetailsFrom.controls[FORMNAME].setValue('')
-                LOOKUPDATA.SEARCH_VALUE = ''
-                return
-              }
-             
-            }, err => {
-              this.commonService.toastErrorByMsgId('network issue found')
-            })
-          this.subscriptions.push(Sub)
+  /**use: validate all lookups to check data exists in db */
+  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    LOOKUPDATA.SEARCH_VALUE = event.target.value
+    if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
+    let param = {
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+    }
+    this.commonService.toastInfoByMsgId('MSG81447');
+    let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
+      .subscribe((result) => {
+        let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+        if (data.length == 0) {
+          this.commonService.toastErrorByMsgId('MSG1531')
+          this.productiondetailsFrom.controls[FORMNAME].setValue('')
+          LOOKUPDATA.SEARCH_VALUE = ''
+          return
         }
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+      })
+    this.subscriptions.push(Sub)
+  }
 
-  continue(){}
+  continue() { }
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {
       this.subscriptions.forEach((subscription) => subscription.unsubscribe()); // unsubscribe all subscription

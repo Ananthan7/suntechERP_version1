@@ -267,14 +267,14 @@ export class PriceschemesMasterComponent implements OnInit {
     }
     if (!this.validateForm()) return;
 
-    if (this.priceSchemaMasterForm.value.price4 !== undefined && this.priceSchemaMasterForm.value.price3 == '') {
+    if (this.priceSchemaMasterForm.value.price1 !== undefined && this.priceSchemaMasterForm.value.price2 == '') {
 
-      this.toastr.error('Price 3 cannot be empty');
+      this.toastr.error('Price 1 cannot be empty');
       return;
     }
 
-    if (this.priceSchemaMasterForm.value.price5 !== undefined && this.priceSchemaMasterForm.value.price4 == '') {
-      this.toastr.error('Price 4 cannot be empty');
+    if (this.priceSchemaMasterForm.value.price2 !== undefined && this.priceSchemaMasterForm.value.price2 == '') {
+      this.toastr.error('Price2 cannot be empty');
       return;
     }
 
@@ -299,15 +299,15 @@ export class PriceschemesMasterComponent implements OnInit {
   update() {
     if (!this.validateForm()) return;
 
-    if (this.priceSchemaMasterForm.value.price4 !== '' && this.priceSchemaMasterForm.value.price3 == '') {
+    if (this.priceSchemaMasterForm.value.price1 !== '' && this.priceSchemaMasterForm.value.price1 == '') {
 
-      this.toastr.error('Price 3 cannot be empty');
+      this.toastr.error('Price 1 cannot be empty');
       return;
     }
 
-    if (this.priceSchemaMasterForm.value.price5 !== '' && this.priceSchemaMasterForm.value.price4 == '') {
+    if (this.priceSchemaMasterForm.value.price2 !== '' && this.priceSchemaMasterForm.value.price2 == '') {
 
-      this.toastr.error('Price 4 cannot be empty');
+      this.toastr.error('Price 2 cannot be empty');
       return;
     }
 
@@ -537,7 +537,7 @@ export class PriceschemesMasterComponent implements OnInit {
     console.log(this.priceSchemaMasterForm.value);
     
     if (this.isSameAccountCodeSelected(event.target.value,FORMNAME)) {
-      this.commonService.toastErrorByMsgId('Cannot select the same Account Code');
+      this.commonService.toastErrorByMsgId('MSG3657');
       this.priceSchemaMasterForm.controls[FORMNAME].setValue('')
       return;
     }
@@ -559,8 +559,9 @@ export class PriceschemesMasterComponent implements OnInit {
           LOOKUPDATA.SEARCH_VALUE = ''
           return
         }
+    
       }, err => {
-        this.commonService.toastErrorByMsgId('network issue found')
+        this.commonService.toastErrorByMsgId('MSG1531')
       })
     this.subscriptions.push(Sub)
   }

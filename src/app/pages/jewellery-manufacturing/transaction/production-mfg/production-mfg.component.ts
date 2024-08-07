@@ -583,21 +583,49 @@ export class ProductionMfgComponent implements OnInit {
     })
   }
 
+  submitValidations(form: any) {
+    if (this.commonService.nullToString(form.voctype) == '') {
+      this.commonService.toastErrorByMsgId('MSG1939')// voctype code CANNOT BE EMPTY
+      return true
+    }
+    if (this.commonService.nullToString(form.vocDate) == '') {
+      this.commonService.toastErrorByMsgId('MSG1331')// vocDate code CANNOT BE EMPTY
+      return true
+    }
+    if (this.commonService.nullToString(form.vocno) == '') {
+      this.commonService.toastErrorByMsgId('MSG3661')// vocno code CANNOT BE EMPTY
+      return true
+    }
+    if (this.commonService.nullToString(form.currency) == '') {
+      this.commonService.toastErrorByMsgId('MSG1172')// currency code CANNOT BE EMPTY
+      return true
+    }
+    if (this.commonService.nullToString(form.currencyrate) == '') {
+      this.commonService.toastErrorByMsgId('MSG1178')// currencyrate code CANNOT BE EMPTY
+      return true
+    }
+    return false;
+  }
+
+
   formSubmit() {
     console.log(this.DetailScreenDataToSave)
     if (this.content && this.content.FLAG == "EDIT") {
       this.update();
       return;
     }
-    if (this.productionFrom.invalid) {
-      this.toastr.error("select all required fields");
-      return;
-    }
+    if (this.submitValidations(this.productionFrom.value)) return;
 
-    if(this.DetailScreenDataToSave.length == 0){
-      this.toastr.error("Enter the Production Entry Details");
-      return;
-    }
+
+    // if (this.productionFrom.invalid) {
+    //   this.toastr.error("select all required fields");
+    //   return;
+    // }
+
+    // if(this.DetailScreenDataToSave.length == 0){
+    //   this.toastr.error("Enter the Production Entry Details");
+    //   return;
+    // }
 
     let postData = {
       "MID": 0,
@@ -680,10 +708,13 @@ export class ProductionMfgComponent implements OnInit {
 
 
   update() {
-    if (this.productionFrom.invalid) {
-      this.toastr.error("select all required fields");
-      return;
-    }
+    // if (this.productionFrom.invalid) {
+    //   this.toastr.error("select all required fields");
+    //   return;
+    // }
+
+    if (this.submitValidations(this.productionFrom.value)) return;
+
 
     let API = "JobProductionMaster/UpdateJobProductionMaster/" + this.productionFrom.value.branchCode + this.productionFrom.value.voctype + this.productionFrom.value.vocno + this.productionFrom.value.vocdate;
     let postData = {}
@@ -790,7 +821,7 @@ export class ProductionMfgComponent implements OnInit {
             }
            
           }, err => {
-            this.commonService.toastErrorByMsgId('network issue found')
+            this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
           })
         this.subscriptions.push(Sub)
       }
