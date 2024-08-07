@@ -84,7 +84,7 @@
                             <div class="col-md-2">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
-                                        formControlName="diffgrwt"
+                                        formControlName="diffgrwt" maxlength="10"
                                         class="text-right" MetalDecimalInput
                                         [readonly]="viewMode" />
                                 </mat-form-field>
@@ -127,7 +127,7 @@
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
                                         formControlName="treeno"
-                                        class="text-right" NumberOnly
+                                        class="text-right" MetalDecimalInput
                                         [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
@@ -136,8 +136,8 @@
                                 :</label>
                             <div class="col-md-2">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="number" matInput
-                                        formControlName="waxweight" [max]="13"
+                                    <input type="text" matInput
+                                        formControlName="waxweight" [max]="10"
                                         class="text-right" MetalDecimalInput
                                         [readonly]="viewMode" />
                                 </mat-form-field>
@@ -215,7 +215,7 @@
                             <div class="col-md-2">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
-                                        formControlName="mainstock"
+                                        formControlName="mainstock" maxlength="20"
                                         [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
@@ -227,8 +227,8 @@
                                      <!-- write new focusout for this -->
                                     <input type="text" matInput
                                         formControlName="stoneweight"
-                                        class="text-right" MetalDecimalInpu
-                                        [readonly]="viewMode" [max]="13" />
+                                        class="text-right" MetalDecimalInput
+                                        [readonly]="viewMode" [max]="10" />
                                 </mat-form-field>
                             </div>
                             <label for="inputPassword"
@@ -238,7 +238,7 @@
                                 <!-- write new focusout for this -->
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
-                                        formControlName="netweight" [max]="13"
+                                        formControlName="netweight" [max]="10"
                                         class="text-right" MetalDecimalInput
                                         [readonly]="viewMode" />
                                 </mat-form-field>
@@ -251,7 +251,7 @@
                             <div class="col-md-2">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
-                                        formControlName="grossweight" [max]="6"
+                                        formControlName="grossweight" [max]="10"
                                         class="text-right" MetalDecimalInput
                                         (focusout)="grossWeightChange()"
                                         [readonly]="viewMode" />
@@ -264,7 +264,7 @@
                                 <mat-form-field style="width: 100%;">
                                      <!-- write new focusout for this -->
                                     <input type="text" matInput
-                                        formControlName="topurity"
+                                        formControlName="topurity"  [max]="10"
                                         class="text-right" AmountDecimalInput
                                         readonly />
                                 </mat-form-field>
@@ -290,7 +290,7 @@
                                     <input type="text" matInput
                                         formControlName="purity"
                                         class="text-right" PurityDecimal
-                                        [readonly]="viewMode" 
+                                        [readonly]="viewMode" [max]="10"
                                         (focusout)="pureWeightChange()"/>
                                 </mat-form-field>
                             </div>
@@ -301,7 +301,7 @@
                                 <div class="text-area">
                                     <textarea class="border-bottom" rows="3"
                                         matInput
-                                        formControlName="remarks"
+                                        formControlName="remarks" maxlength="40"
                                         [readonly]="viewMode"></textarea>
                                 </div>
                             </div>
@@ -313,7 +313,7 @@
                             <div class="col-md-2">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
-                                        formControlName="lossweight"
+                                        formControlName="lossweight" [max]="10"
                                         class="text-right" MetalDecimalInput
                                         [readonly]="viewMode" />
                                 </mat-form-field>
@@ -324,8 +324,8 @@
                             <div class="col-md-2">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
-                                        formControlName="ticketno"
-                                        class="text-left" 
+                                        formControlName="ticketno" 
+                                        class="text-left" maxlength="10"
                                         [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
@@ -348,7 +348,7 @@
                             <div class="col-md-2">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
-                                        formControlName="lotno"
+                                        formControlName="lotno" maxlength="10"
                                         class="text-left" 
                                         [readonly]="viewMode" />
                                 </mat-form-field>
@@ -359,7 +359,7 @@
                             <div class="col-md-2">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
-                                        formControlName="barno"
+                                        formControlName="barno" maxlength="10"
                                         class="text-left" 
                                         [readonly]="viewMode" />
                                 </mat-form-field>
@@ -371,7 +371,7 @@
                             <div class="col-md-2">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
-                                        formControlName="tgold"
+                                        formControlName="tgold" maxlength="10"
                                         [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
@@ -381,7 +381,7 @@
                             <div class="col-md-2">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
-                                        formControlName="silver"
+                                        formControlName="silver" maxlength="20"
                                         [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
