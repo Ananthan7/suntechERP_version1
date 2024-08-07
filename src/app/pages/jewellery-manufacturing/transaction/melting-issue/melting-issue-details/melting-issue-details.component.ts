@@ -106,7 +106,8 @@ export class MeltingIssueDetailsComponent implements OnInit {
     console.log(e);
     this.meltingIssuedetailsFrom.controls.stockdes.setValue(e.STOCK_CODE);
     this.meltingIssuedetailsFrom.controls.tostock.setValue(e.DESCRIPTION);
-    this.meltingIssuedetailsFrom.controls.stockcode.setValue(e.DIVISION_CODE);
+    this.meltingIssuedetailsFrom.controls.stockcode.setValue(e.DIVISION_CODE); 
+    this.meltingIssuedetailsFrom.controls.mainstock.setValue(e.STOCK_CODE);
 
   }
 
@@ -260,11 +261,11 @@ export class MeltingIssueDetailsComponent implements OnInit {
     silver: [''],
     ticketno: ['', [Validators.required]],
     barno: ['', [Validators.required]],
-    location: [''],
+    location: ['000GEN'],
     pcs: [''],
     netweight: [''],
     pureweight: ['', [Validators.required]],
-    topurity: ['', [Validators.required]],
+    topurity: ['100.00', [Validators.required]],
     FLAG: [null]
   });
   submitValidations(form: any) {
@@ -308,7 +309,7 @@ export class MeltingIssueDetailsComponent implements OnInit {
   }
   /**use: to save data to grid*/
   formSubmit(flag: any) {
-    if (this.submitValidations(this.meltingIssuedetailsFrom.value)) return;
+    // if (this.submitValidations(this.meltingIssuedetailsFrom.value)) return;
     let dataToparent = {
       FLAG: flag,
       POSTDATA: this.setPostData()
