@@ -72,6 +72,7 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput
                                         formControlName="meltingtype"
+                                        UpperCaseDirective
                                         [readonly]="viewMode" #codeInput1
                                         (keydown)="lookupKeyPress($event,'meltingtype')"
                                         (focusout)="meltingTypeValidate($event)" />
@@ -118,6 +119,7 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput
                                         formControlName="processcode"
+                                        UpperCaseDirective
                                         [readonly]="viewMode" maxlength="6"
                                         (keydown)="lookupKeyPress($event,'processcode')"
                                         (focusout)="ProcesscodeValidate($event)" />
@@ -144,7 +146,7 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput
                                         formControlName="worker" maxlength="6"
-                                        [readonly]="viewMode"
+                                        [readonly]="viewMode" UpperCaseDirective
                                         (keydown)="lookupKeyPress($event,'worker')"
                                         (focusout)="WorkerCodeValidate($event)" />
                                 </mat-form-field>
@@ -365,8 +367,9 @@
                                                 class="modal-header d-flex justify-content-end">
                                                 <h5 class="meltingissueheading"
                                                     id="modal-dia-metal"
-                                                    style="text-align:right;">Alloy Allocation
-                                                     </h5>
+                                                    style="text-align:right;">Alloy
+                                                    Allocation
+                                                </h5>
                                                 <button style="border: none"
                                                     type="button" class="close "
                                                     aria-label="Close"

@@ -120,14 +120,27 @@ export class JobStickerPrintComponent implements OnInit {
   // }
 
   getfiltercode() {
+    // let postData = {
+    //   "SPID": "107",
+    //   "USP_FROMTO_JOBNUMBERFILTER": {
+    //     "strBranchCode": "",
+    //     "strVocType": "",
+    //     "intVocNo": 0,
+    //     "intMid": 0,
+    //     "YearMonth": "",
+    //     "FromJobNumber": this.jobstickerpointForm.value.jobrange,
+    //     "ToJobNumber": this.jobstickerpointForm.value.jobrangeDesc,
+    //     "chkSingleJob": true
+    //   }
+    // };
     let postData = {
       "SPID": "107",
-      "USP_FROMTO_JOBNUMBERFILTER": {
-        "strBranchCode": "DMCC",
-        "strVocType": "TMU",
-        "intVocNo": 1234,
-        "intMid": 5678,
-        "YearMonth": "202401",
+      "Parameter ": {
+        "strBranchCode": "",
+        "strVocType": "",
+        "intVocNo": 0,
+        "intMid": 0,
+        "YearMonth": "",
         "FromJobNumber": this.jobstickerpointForm.value.jobrange,
         "ToJobNumber": this.jobstickerpointForm.value.jobrangeDesc,
         "chkSingleJob": true

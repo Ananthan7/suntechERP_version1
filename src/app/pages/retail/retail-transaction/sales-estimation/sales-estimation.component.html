@@ -1,19 +1,19 @@
 <div id="print_invoice_est" style="display: none">
   <div class="bill_header">
-    <h3>ESTIMATION</h3>
+    <h3 id="ID001">ESTIMATION</h3>
     <table style="width: 100%">
       <tr class="top_header">
         <td style="border-bottom-style: hidden; width: 55%">
-          <label style="float: left; text-align: start">Customer Name </label>
-          <label style="float: right; text-align: end">
+          <label style="float: left; text-align: start" id="ID002">Customer Name </label>
+          <label style="float: right; text-align: end" id="ID003">
             {{ this.customerDataForm.value.fcn_customer_name || "" }}
           </label>
         </td>
         <td style="border-bottom-style: hidden; width: 45%">
-          <label style="float: left; text-align: start; width: 60px">INVOICE NO
+          <label style="float: left; text-align: start; width: 60px" id="ID004">INVOICE NO
           </label>
 
-          <label style="float: right; text-align: end">
+          <label style="float: right; text-align: end" id="ID005">
             {{ this.vocDataForm.value.fcn_voc_no || "" }}
           </label>
         </td>
@@ -21,29 +21,29 @@
 
       <tr class="top_header" style="border-bottom: hidden">
         <td>
-          <label style="float: left; text-align: start">ID No/Passport </label>
-          <label style="float: right; text-align: end">
+          <label style="float: left; text-align: start" id="ID006">ID No/Passport </label>
+          <label style="float: right; text-align: end" id="ID007">
             {{ this.customerDataForm.value.fcn_customer_id_number || "" }}
           </label>
         </td>
         <td>
-          <label style="float: left; text-align: start; width: 60px">Bill Date
+          <label style="float: left; text-align: start; width: 60px" id="ID008">Bill Date
           </label>
-          <label style="float: right; text-align: end">
+          <label style="float: right; text-align: end" id="ID009">
             {{ this.convertDate(this.vocDataForm.value.vocdate) || "" }}
           </label>
         </td>
       </tr>
       <tr class="top_header">
         <td>
-          <label style="float: left; text-align: start">Mobile Number</label>
-          <label style="float: right; text-align: end">
+          <label style="float: left; text-align: start" id="ID010">Mobile Number</label>
+          <label style="float: right; text-align: end" id="ID011">
             {{ this.customerDataForm.value.fcn_customer_mobile || "" }}
           </label>
         </td>
         <td>
-          <label style="float: left; text-align: start">Salesman</label>
-          <label style="float: right; text-align: end; width: 60px">
+          <label style="float: left; text-align: start" id="ID012">Salesman</label>
+          <label style="float: right; text-align: end; width: 60px" id="ID013">
             {{ this.vocDataForm.value.sales_person || "" }}
           </label>
         </td>
@@ -52,41 +52,41 @@
     <table *ngFor="let data of ordered_items">
       <thead>
         <tr>
-          <th class="text" style="width: 20%">Description</th>
-          <th class="text" style="width: 10%">Pcs</th>
-          <th class="text" class="numbers">{{ data.pcs }}</th>
-          <th class="text" style="width: 18%">Total MKG</th>
-          <th class="numbers">
+          <th class="text" style="width: 20%" id="ID014">Description</th>
+          <th class="text" style="width: 10%" id="ID015">Pcs</th>
+          <th class="text" class="numbers" id="ID016">{{ data.pcs }}</th>
+          <th class="text" style="width: 18%" id="ID017">Total MKG</th>
+          <th class="numbers" id="ID018">
             {{ data.making_amt | decimalFormat : this.comFunc.amtDecimals }}
           </th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td class="text" rowspan="3">{{ data.stock_code }}</td>
+          <td class="text" rowspan="3" id="ID019">{{ data.stock_code }}</td>
           <!-- <td class="text" rowspan="3">{{ data.description }}</td> -->
-          <td>MKG</td>
-          <td class="numbers">{{ data.rate }}</td>
-          <td class="text">Net amount (exc.VAT)</td>
-          <td class="numbers">
+          <td id="ID020">MKG</td>
+          <td class="numbers" id="ID021">{{ data.rate }}</td>
+          <td class="text" id="ID022">Net amount (exc.VAT)</td>
+          <td class="numbers" id="ID023">
             {{ data.gross_amt | decimalFormat : this.comFunc.amtDecimals }}
           </td>
         </tr>
         <tr>
-          <td class="text">QTY/ Gms</td>
-          <td class="numbers">
+          <td class="text" id="ID024">QTY/ Gms</td>
+          <td class="numbers" id="ID025">
             {{ data.weight | decimalFormat : this.comFunc.mQtyDecimals }}
           </td>
-          <td class="text">Tax amount</td>
-          <td class="numbers">
+          <td class="text" id="ID026">Tax amount</td>
+          <td class="numbers" id="ID027">
             {{ data.tax_amount | decimalFormat : this.comFunc.amtDecimals }}
           </td>
           <!-- <td class="numbers">{{ this.comFunc.transformDecimalVB(
               this.comFunc.amtDecimals, data.tax_amount) }}</td> -->
         </tr>
         <tr>
-          <td class="text">Total</td>
-          <td colspan="3" class="numbers">
+          <td class="text" id="ID028">Total</td>
+          <td colspan="3" class="numbers" id="ID029">
             {{ data.net_amount | decimalFormat : this.comFunc.amtDecimals }}
           </td>
         </tr>
@@ -96,8 +96,8 @@
     <table>
       <tbody>
         <tr>
-          <td class="text" style="width: 20%">Total Before VAT</td>
-          <td class="numbers">
+          <td class="text" style="width: 20%" id="ID030">Total Before VAT</td>
+          <td class="numbers" id="ID031">
             {{
             prnt_inv_total_gross_amt
             | decimalFormat : this.comFunc.amtDecimals
@@ -105,8 +105,8 @@
           </td>
         </tr>
         <tr>
-          <td class="text" style="width: 20%">VAT 5%</td>
-          <td class="numbers">
+          <td class="text" style="width: 20%" id="ID032">VAT 5%</td>
+          <td class="numbers" id="ID033">
             {{
             prnt_inv_total_tax_amount
             | decimalFormat : this.comFunc.amtDecimals
@@ -114,8 +114,8 @@
           </td>
         </tr>
         <tr>
-          <td class="text" style="width: 20%">Total With VAT</td>
-          <td class="numbers">
+          <td class="text" id="ID034" style="width: 20%">Total With VAT</td>
+          <td class="numbers" id="ID035">
             {{
             order_items_total_gross_amount
             | decimalFormat : this.comFunc.amtDecimals
@@ -134,7 +134,7 @@
     <tr>
       <td style="border: hidden; vertical-align: top">
         <div style="font-weight: bold; text-align: center; font-size: 24px">
-          <h4 style="margin: 5px 0px">Estimation</h4>
+          <h4 style="margin: 5px 0px" id="ID036">Estimation</h4>
         </div>
       </td>
     </tr>
@@ -143,15 +143,15 @@
   <table style="width: 100%">
     <tr>
       <td style="border-bottom-style: hidden">
-        <label style="font-weight: bold">Customer Name </label>
-        <label style="float: right">{{
+        <label style="font-weight: bold" id="ID037">Customer Name </label>
+        <label style="float: right" id="ID038">{{
           this.customerDataForm.value.fcn_customer_name
           }}</label>
         <!-- <label style="float: right">{{ inv_customer_name }}</label> -->
       </td>
       <td style="border-bottom-style: hidden">
-        <label style="font-weight: bold">INVOICE NO </label>
-        <label style="font-weight: bold; float: right">
+        <label style="font-weight: bold" id="ID039">INVOICE NO </label>
+        <label style="font-weight: bold; float: right" id="ID040">
           {{ this.vocDataForm.value.fcn_voc_no }}
           <!-- {{ inv_number }} -->
         </label>
@@ -159,14 +159,14 @@
     </tr>
     <tr style="border-bottom: hidden">
       <td>
-        <label style="font-weight: bold">ID No/Passport </label>
-        <label style="float: right">{{
+        <label style="font-weight: bold" id="ID041">ID No/Passport </label>
+        <label style="float: right" id="ID042">{{
           this.customerDataForm.value.fcn_customer_id_number
           }}</label>
       </td>
       <td>
-        <label style="font-weight: bold">Bill Date </label>
-        <label style="float: right">
+        <label style="font-weight: bold" id="ID043">Bill Date </label>
+        <label style="float: right" id="ID044">
           <!-- {{ inv_bill_date }} -->
           {{ this.convertDate(this.vocDataForm.value.vocdate) }}
         </label>
@@ -174,15 +174,15 @@
     </tr>
     <tr>
       <td>
-        <label style="font-weight: bold">Mobile Number</label>
-        <label style="float: right">
+        <label style="font-weight: bold" id="ID045">Mobile Number</label>
+        <label style="float: right" id="ID046">
           <!-- {{ inv_cust_mobile_no }} -->
           {{ this.customerDataForm.value.fcn_customer_mobile }}
         </label>
       </td>
       <td>
-        <label style="font-weight: bold">Salesman</label>
-        <label style="float: right">
+        <label style="font-weight: bold" id="ID047">Salesman</label>
+        <label style="float: right" id="ID048">
           <!-- {{ inv_sales_man }} -->
           {{ this.vocDataForm.value.sales_person }}
         </label>
@@ -228,58 +228,58 @@
     <table class="table" style="margin-left: 0px; width: 100%">
       <thead style="background: #eaecea; -webkit-print-color-adjust: exact">
         <tr style="text-align-last: center">
-          <th style="vertical-align: middle; text-align: center">No</th>
-          <th style="vertical-align: middle; text-align: center">
+          <th style="vertical-align: middle; text-align: center" id="ID049">No</th>
+          <th style="vertical-align: middle; text-align: center" id="ID050">
             Description
           </th>
-          <th style="vertical-align: middle; text-align: center">Pcs</th>
-          <th style="vertical-align: middle; text-align: center">Qty/Gms</th>
-          <th style="vertical-align: middle; text-align: center">
+          <th style="vertical-align: middle; text-align: center" id="ID015">Pcs</th>
+          <th style="vertical-align: middle; text-align: center" id="ID051">Qty/Gms</th>
+          <th style="vertical-align: middle; text-align: center" id="ID052">
             Rate (Mkg/Pcs)
           </th>
-          <th style="vertical-align: middle; text-align: center">
+          <th style="vertical-align: middle; text-align: center" id="ID053">
             Net Amount (Excl.VAT)
           </th>
-          <th style="vertical-align: middle; text-align: center">Discount</th>
-          <th style="vertical-align: middle; text-align: center">VAT %</th>
-          <th style="vertical-align: middle; text-align: center">Tax Amount</th>
-          <th style="vertical-align: middle; text-align: center">
+          <th style="vertical-align: middle; text-align: center" id="ID054">Discount</th>
+          <th style="vertical-align: middle; text-align: center" id="ID055">VAT %</th>
+          <th style="vertical-align: middle; text-align: center" id="ID056">Tax Amount</th>
+          <th style="vertical-align: middle; text-align: center" id="ID057">
             Net Amount (Incl.VAT)
           </th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let cli of ordered_items; let id = index">
-          <td style="border-bottom-style: hidden; text-align: center">
+          <td style="border-bottom-style: hidden; text-align: center" id="ID058">
             {{ cli.sn_no }}
           </td>
-          <td style="border-bottom-style: hidden">
+          <td style="border-bottom-style: hidden" id="ID059">
             {{ cli.description }} - {{ cli.stock_code }}
           </td>
-          <td style="border-bottom-style: hidden; text-align-last: right">
+          <td style="border-bottom-style: hidden; text-align-last: right" id="ID060">
             {{ cli.pcs }}
           </td>
-          <td style="border-bottom-style: hidden; text-align-last: right">
+          <td style="border-bottom-style: hidden; text-align-last: right" id="ID061">
             {{ cli.weight }}
           </td>
-          <td style="border-bottom-style: hidden; text-align-last: right">
+          <td style="border-bottom-style: hidden; text-align-last: right" id="ID062">
             {{ cli.rate | number : "1.2" }}
           </td>
-          <td style="border-bottom-style: hidden; text-align-last: right">
+          <td style="border-bottom-style: hidden; text-align-last: right" id="ID063">
             {{ cli.gross_amt | number : "1.2" }}
             <!-- {{ cli.mkg_amount| number:'1.2' }} -->
           </td>
-          <td style="border-bottom-style: hidden; text-align-last: right">
+          <td style="border-bottom-style: hidden; text-align-last: right" id="ID064">
             {{ cli.dis_amt | number : "1.2" }}
           </td>
-          <td style="border-bottom-style: hidden; text-align-last: right">
+          <td style="border-bottom-style: hidden; text-align-last: right" id="ID065">
             {{ cli.taxPer | number : "1.2" }}
             <!-- {{ branch_tax_percentage }} -->
           </td>
-          <td style="border-bottom-style: hidden; text-align-last: right">
+          <td style="border-bottom-style: hidden; text-align-last: right" id="ID066">
             {{ cli.tax_amount | number : "1.2" }}
           </td>
-          <td style="border-bottom-style: hidden; text-align-last: right">
+          <td style="border-bottom-style: hidden; text-align-last: right" id="ID067">
             {{ cli.net_amount | number : "1.2" }}
           </td>
         </tr>
@@ -313,14 +313,14 @@
         <tr>
           <td style="border-right-style: hidden" colspan="2">
             <div>
-              <p style="float: left">({{ prnt_inv_total_pcs }} items)</p>
-              <p style="float: right">Total</p>
+              <p style="float: left" id="ID068">({{ prnt_inv_total_pcs }} items)</p>
+              <p style="float: right" id="ID069">Total</p>
             </div>
           </td>
           <!-- <td style="border-right-style: hidden;"></td> -->
           <!-- <td style="border-right-style: hidden;">({{prnt_inv_total_pcs}} items)</td>
             <td style="border-right-style: hidden;">Total</td> -->
-          <td style="font-weight: 600; text-align-last: right">
+          <td style="font-weight: 600; text-align-last: right" id="ID070">
             {{ prnt_inv_total_pcs }}
           </td>
           <td style="font-weight: 600; text-align-last: right">
@@ -331,49 +331,49 @@
             &nbsp;
             <!-- {{order_items_total_amount | number:'1.2' }} -->
           </td>
-          <td style="font-weight: 600; text-align-last: right">
+          <td style="font-weight: 600; text-align-last: right" id="ID071">
             {{ prnt_inv_total_gross_amt | number : "1.2" }}
             <!-- {{ prnt_inv_net_total_without_tax }} -->
           </td>
           <td style="font-weight: 600; text-align-last: right">&nbsp;</td>
-          <td style="font-weight: 600; text-align-last: right">
+          <td style="font-weight: 600; text-align-last: right" id="ID072">
             {{ prnt_inv_total_tax_amount | number : "1.2" }}
           </td>
-          <td style="font-weight: 600; text-align-last: right">
+          <td style="font-weight: 600; text-align-last: right" id="ID073">
             <!-- {{ prnt_inv_net_total_with_tax }} -->
             {{ order_items_total_gross_amount | number : "1.2" }}
           </td>
         </tr>
         <tr>
-          <td colspan="8" style="font-weight: 600; text-align-last: right">
+          <td colspan="8" style="font-weight: 600; text-align-last: right" id="ID074">
             Total Before VAT
           </td>
-          <td style="text-align-last: right">
+          <td style="text-align-last: right" id="ID075">
             {{ prnt_inv_total_gross_amt | number : "1.2" }}
             <!-- {{ prnt_inv_net_total_without_tax }} -->
           </td>
         </tr>
         <tr>
-          <td colspan="8" style="font-weight: 600; text-align-last: right">
+          <td colspan="8" style="font-weight: 600; text-align-last: right" id="ID076">
             Total Discount
           </td>
-          <td style="text-align-last: right">
+          <td style="text-align-last: right" id="ID077">
             {{ order_items_total_discount_amount | number : "1.2" }}
           </td>
         </tr>
         <tr>
-          <td colspan="8" style="font-weight: 600; text-align-last: right">
+          <td colspan="8" style="font-weight: 600; text-align-last: right" id="ID078">
             Total VAT 5%
           </td>
-          <td style="text-align-last: right">
+          <td style="text-align-last: right" id="ID079">
             {{ prnt_inv_total_tax_amount | number : "1.2" }}
           </td>
         </tr>
         <tr>
-          <td colspan="8" style="font-weight: 600; text-align-last: right">
+          <td colspan="8" style="font-weight: 600; text-align-last: right" id="ID080">
             Net Amount
           </td>
-          <td style="text-align-last: right">
+          <td style="text-align-last: right" id="ID081">
             {{ order_items_total_gross_amount | number : "1.2" }}
             <!-- {{ prnt_inv_net_total_with_tax }} -->
           </td>
@@ -382,22 +382,22 @@
         <tr [style]="
             invReturnSalesTotalNetTotal != 0 ? 'border-bottom: hidden' : ''
           " *ngIf="invReturnSalesTotalNetTotal != 0">
-          <td colspan="9" style="font-weight: 600;">
+          <td colspan="9" style="font-weight: 600;" id="ID082">
             Sales Return : {{ invReturnSalesTotalNetTotal | number : "1.2" }}
           </td>
         </tr>
         <tr *ngIf="order_total_exchange != 0">
-          <td colspan="9" style="font-weight: 600">
+          <td colspan="9" style="font-weight: 600" id="ID083">
             Exchange : {{ order_total_exchange | number : "1.2" }}
           </td>
         </tr>
         <tr hidden>
-          <td colspan="9" style="font-weight: 600">
+          <td colspan="9" style="font-weight: 600" id="ID084">
             Recieved : {{ prnt_received_amount | number : "1.2" }}
           </td>
         </tr>
         <tr hidden>
-          <td colspan="9" style="text-transform: capitalize">
+          <td colspan="9" style="text-transform: capitalize" id="ID085">
             {{
             prnt_received_amount_words != ""
             ? prnt_received_amount_words +
@@ -408,8 +408,8 @@
         </tr>
 
         <tr style="border-top: 1px solid #000">
-          <td colspan="3">Confirmed on behalf of</td>
-          <td colspan="6" style="font-weight: 600; text-align-last: right">
+          <td colspan="3" id="ID086">Confirmed on behalf of</td>
+          <td colspan="6" style="font-weight: 600; text-align-last: right" id="ID087">
             <!-- Meena Jewellery -->
             {{ this.comFunc.allbranchMaster.BRANCH_NAME }}
             <!-- Suntech Business Solutions -->
@@ -422,18 +422,18 @@
           <td colspan="3"></td>
         </tr>
         <tr>
-          <td colspan="3" style="font-weight: 600; font-size: 14px; text-align: center">
+          <td colspan="3" style="font-weight: 600; font-size: 14px; text-align: center" id="ID088">
             CUSTOMER'S SIGNATURE
           </td>
-          <td colspan="3" style="font-weight: 600; font-size: 14px; text-align: center">
+          <td colspan="3" style="font-weight: 600; font-size: 14px; text-align: center" id="ID089">
             INVOICE CHECKED BY
           </td>
-          <td colspan="3" style="font-weight: 600; font-size: 14px; text-align: center">
+          <td colspan="3" style="font-weight: 600; font-size: 14px; text-align: center" id="ID090">
             AUTHORISED SIGNATURE
           </td>
         </tr>
         <tr>
-          <td colspan="9" style="font-weight: 300; text-align-last: center; font-size: 14px">
+          <td colspan="9" style="font-weight: 300; text-align-last: center; font-size: 14px" id="ID091">
             THANK YOU FOR SHOPPING WITH US
           </td>
         </tr>
@@ -493,14 +493,14 @@
             </div> -->
           <div class="col-md-1 d-flex justify-content-center align-items-center">
             <div>
-              <button type="button" color="primary" mat-flat-button (click)="addNew()">
+              <button type="button" color="primary" mat-flat-button (click)="addNew()" id="ID092">
                 New
               </button>
             </div>
           </div>
           <div class="col-md-2 mt-3">
             <div class="form-group row">
-              <label class="col-form-label col-sm-4" id="ID001">
+              <label class="col-form-label col-sm-4" id="ID093">
                 {{ vocno_lbl }} :
               </label>
               <!-- <mat-form-field>
@@ -518,7 +518,7 @@
 
           <div class="col-md-2 mt-3">
             <div class="form-group row">
-              <label class="col-form-label col-sm-5" id="ID001">Currency :</label>
+              <label class="col-form-label col-sm-5" id="ID094">Currency :</label>
               <div class="col-sm-6">
                 <mat-form-field appearance="outline">
                   <input type="text" matInput id="txtCurrency" formControlName="txtCurrency" readOnly
@@ -536,7 +536,7 @@
 
           <div class="col-md-3 mt-3">
             <div class="form-group row">
-              <label class="col-form-label col-sm-2" id="ID001">Cur&nbsp;Rate:</label>
+              <label class="col-form-label col-sm-2" id="ID095">Cur&nbsp;Rate:</label>
               <div class="col-sm-4">
                 <mat-form-field appearance="outline">
                   <input class="st_txt_right" type="text" matInput id="txtCurRate" SixDecimalInput
@@ -563,7 +563,7 @@
 
           <div class="col-md-3 mt-3">
             <div class="form-group row">
-              <label class="col-form-label col-sm-4" id="ID001">{{ sales_person_lbl }} :</label>
+              <label class="col-form-label col-sm-4" id="ID096">{{ sales_person_lbl }} :</label>
               <div class="col-sm-7">
                 <mat-form-field appearance="outline">
                   <input type="text" matInput formControlName="sales_person" id="sales_person"
@@ -577,10 +577,10 @@
                     </mat-option>
                   </mat-autocomplete>
 
-                  <mat-error *ngIf="vocDataForm.controls.sales_person.hasError('required')">
+                  <mat-error *ngIf="vocDataForm.controls.sales_person.hasError('required')" id="ID097">
                     Salesman Code cannot be Empty
                   </mat-error>
-                  <mat-error *ngIf="vocDataForm.controls.sales_person.hasError('notInOptions')">
+                  <mat-error *ngIf="vocDataForm.controls.sales_person.hasError('notInOptions')" id="ID098">
                     Invalid value
                   </mat-error>
                 </mat-form-field>
@@ -591,10 +591,10 @@
 
           <div class="col-md-1 d-flex justify-content-center align-items-center" style="background-color: #d6d8da">
             <div class="form-group row">
-              <div class="font-weight-bold" style="font-size: 20px; font-weight: 400; color: #0d4f9e">
+              <div class="font-weight-bold" style="font-size: 20px; font-weight: 400; color: #0d4f9e" id="ID099">
                 Net Total
               </div>
-              <div style="font-size: 22px; font-weight: 500">
+              <div style="font-size: 22px; font-weight: 500" id="ID100">
                 {{comFunc.compCurrency}} {{ order_items_total_net_amount |
                 decimalFormat : "AMOUNT" }}
               </div>
@@ -614,7 +614,7 @@
             <div class="row">
               <div class="col-md-3">
                 <div class="form-group row">
-                  <label class="col-form-label col-sm-3" id="ID001">Mobile Number</label>
+                  <label class="col-form-label col-sm-3" id="ID101">Mobile Number</label>
                   <div class="col-sm-9 mt-2">
                     <mat-form-field appearance="outline">
                       <input type="text" style="text-align: right;"
@@ -625,7 +625,7 @@
                           [readonly]="viewOnly" /> -->
                       <mat-error *ngIf="
                           customerDataForm.controls.fcn_customer_mobile.hasError(
-                            'required')">
+                            'required')" id="ID102">
                         Mobile Number is <strong>required</strong>
                       </mat-error>
                     </mat-form-field>
@@ -635,18 +635,18 @@
 
               <div class="col-md-2">
                 <div class="form-group row">
-                  <label class="col-form-label col-sm-3 mt-1" id="ID001">Name</label>
+                  <label class="col-form-label col-sm-3 mt-1" id="ID103">Name</label>
                   <div class="col-sm-9 mt-2">
                     <mat-form-field appearance="outline">
                       <input type="text" matInput formControlName="fcn_customer_name" (change)="nameChange($event)"
                         [readonly]="true" />
                       <!-- <input type="text" matInput [pattern]="noWhiteSpacePattern" formControlName="fcn_customer_name" (change)="nameChange($event)"  [readonly]="viewOnly" /> -->
                       <mat-error *ngIf="
-                        customerDataForm.controls.fcn_customer_name.hasError('required')">
+                        customerDataForm.controls.fcn_customer_name.hasError('required')" id="ID104">
                         Name is <strong>required</strong>
                       </mat-error>
                       <mat-error *ngIf="
-                        customerDataForm.controls.fcn_customer_name.hasError('pattern')">
+                        customerDataForm.controls.fcn_customer_name.hasError('pattern')" id="ID105">
                         Whitespace Not Allowed
                       </mat-error>
                     </mat-form-field>
@@ -656,7 +656,7 @@
 
               <div class="col-md-2">
                 <div class="form-group row">
-                  <label class="col-form-label col-sm-3 mt-1" id="ID001">Code</label>
+                  <label class="col-form-label col-sm-3 mt-1" id="ID106">Code</label>
                   <div class="col-sm-9 mt-2">
                     <mat-form-field appearance="outline">
                       <input type="text" matInput formControlName="fcn_customer_code" (change)="nameChange($event)"
@@ -668,7 +668,7 @@
                       " /> -->
                       <!-- <input type="text" matInput [pattern]="noWhiteSpacePattern" formControlName="fcn_customer_name" (change)="nameChange($event)"  [readonly]="viewOnly" /> -->
                       <mat-error *ngIf="
-                        customerDataForm.controls.fcn_customer_code.hasError('required')">
+                        customerDataForm.controls.fcn_customer_code.hasError('required')" id="ID107">
                         Code is <strong>required</strong>
                       </mat-error>
                     </mat-form-field>
@@ -678,7 +678,7 @@
 
               <div class="col-md-3">
                 <div class="form-group row">
-                  <label class="col-form-label col-sm-3 mt-1" id="ID001">ID Type</label>
+                  <label class="col-form-label col-sm-3 mt-1" id="ID108">ID Type</label>
                   <div class="col-sm-8 mt-2">
                     <mat-form-field appearance="outline">
                       <input type="text" matInput formControlName="fcn_customer_id_type" [matAutocomplete]="idtype"
@@ -690,7 +690,7 @@
                         </mat-option>
                       </mat-autocomplete>
                       <mat-error *ngIf="
-                          customerDataForm.controls.fcn_customer_id_type.hasError('required')">
+                          customerDataForm.controls.fcn_customer_id_type.hasError('required')" id="ID109">
                         ID Type is <strong>required</strong>
                       </mat-error>
                     </mat-form-field>
@@ -700,12 +700,12 @@
 
               <div class="col-md-2">
                 <div class="form-group row">
-                  <label class="col-form-label col-sm-3 mt-1" id="ID001">ID#</label>
+                  <label class="col-form-label col-sm-3 mt-1" id="ID110">ID#</label>
                   <div class="col-sm-9 mt-2">
                     <mat-form-field appearance="outline">
                       <input type="text" matInput formControlName="fcn_customer_id_number" [readonly]="true" />
                       <mat-error *ngIf="
-                        customerDataForm.controls.fcn_customer_id_number.hasError('required')">
+                        customerDataForm.controls.fcn_customer_id_number.hasError('required')" id="ID111">
                         ID# is <strong>required</strong>
                       </mat-error>
                     </mat-form-field>
@@ -717,7 +717,7 @@
             <div class="row">
               <div class="col-md-3">
                 <div class="form-group row">
-                  <label class="col-form-label col-sm-3 mt-1" id="ID001">Expiry Date</label>
+                  <label class="col-form-label col-sm-3 mt-1" id="ID112">Expiry Date</label>
                   <div class="col-sm-9 mt-2">
                     <mat-form-field appearance="outline">
                       <input matInput [matDatepicker]="expDate" name="fcn_customer_exp_date"
@@ -725,7 +725,7 @@
                       <mat-datepicker-toggle matSuffix [for]="expDate"></mat-datepicker-toggle>
                       <mat-datepicker [startAt]="currentDate" #expDate></mat-datepicker>
 
-                      <mat-error *ngIf="customerDataForm.controls.fcn_customer_exp_date.hasError('required')">
+                      <mat-error *ngIf="customerDataForm.controls.fcn_customer_exp_date.hasError('required')" id="ID113">
                         Expiry date is <strong>required</strong>
                       </mat-error>
                     </mat-form-field>
@@ -735,7 +735,7 @@
 
               <div class="col-md-2 text-right mt-2">
                 <button type="button" style="font-size: 12px;" (click)="open(more_customer_detail_modal)"
-                  mat-flat-button color="primary" [disabled]="viewOnly">
+                  mat-flat-button color="primary" [disabled]="viewOnly" id="ID114">
                   {{this.customerDetails.MOBILE == null || undefined ? "Add Customer" : "Edit Customer" }}
                 </button>
               </div>
@@ -1160,26 +1160,26 @@
               <div class="card m-t-10">
                 <div class="card-header">
                   <b (click)="open(sales_payment_modal)" style="
-                    color: #0861a9; cursor: pointer; text-decoration: underline;">Receipt Details</b>
+                    color: #0861a9; cursor: pointer; text-decoration: underline;" id="ID115">Receipt Details</b>
                   <span style="float: right"><button type="submit" (click)="open(sales_payment_modal)"
-                      class="btn btnsml btn-secondary w-30">Add </button>
+                      class="btn btnsml btn-secondary w-30" id="ID116">Add </button>
                   </span>
                 </div>
                 <div class="card-body receipt-details">
                   <table class="tabletd_gray">
                     <tr>
-                      <th>Mode</th>
-                      <th>Currency</th>
-                      <th>Amount LC</th>
+                      <th id="ID117">Mode</th>
+                      <th id="ID118">Currency</th>
+                      <th id="ID119">Amount LC</th>
                       <th>&nbsp;</th>
                     </tr>
                     <tr *ngFor="
                       let rec_details of receiptDetailsList;
                       let id = index
                     ">
-                      <td>{{ rec_details.RECEIPT_MODE }}</td>
-                      <td>{{ rec_details.CURRENCY_CODE }}</td>
-                      <td style="text-align: right; padding-right: 3px">
+                      <td id="ID120">{{ rec_details.RECEIPT_MODE }}</td>
+                      <td id="ID121">{{ rec_details.CURRENCY_CODE }}</td>
+                      <td style="text-align: right; padding-right: 3px" id="ID122">
                         {{ rec_details.AMOUNT_FC }}
                       </td>
                       <td *ngIf="viewOnly">
@@ -1216,24 +1216,24 @@
       <div class="card" style="background-color: #ececec !important">
         <div class="card-body">
           <div class="row">
-            <div class="col-xl-12 col-md-6" style="height: 140px; overflow-y: scroll">
+            <div class="col-xl-12 col-md-6">
               <table class="tabletd_gray">
                 <tr>
-                  <th style="width: 30%">Karat</th>
+                  <th style="width: 30%" id="ID123">Karat</th>
                   <!-- <th style="width: 50%">Karat </th> -->
                   <!-- <th>Selling Price</th>
                   <th>Buying Price</th> -->
-                  <th style="width: 35%">Sale</th>
-                  <th style="width: 35%">Purchase Rate</th>
+                  <th style="width: 35%" id="ID124">Sale</th>
+                  <th style="width: 35%" id="ID125">Purchase Rate</th>
                 </tr>
                 <tr *ngFor="let krd of karatRateDetails; let id = index">
-                  <td>{{ krd.KARAT_CODE }}</td>
+                  <td id="ID126">{{ krd.KARAT_CODE }}</td>
                   <td style="text-align: right; padding-right: 3px">
                     <input type="number" (change)="changeKaratRate($event, id)" style="text-align: right"
                       onwheel="this.blur()" [value]="krd.KARAT_RATE" class="karat_code" readonly />
                     <!-- {{ krd.KARAT_RATE }} -->
                   </td>
-                  <td style="text-align: right; padding-right: 3px">
+                  <td style="text-align: right; padding-right: 3px" id="ID127">
                     {{ krd.POPKARAT_RATE }}
                   </td>
                 </tr>
@@ -1244,7 +1244,7 @@
               <table class="m-t-10 rhs-table-1">
                 <tr>
                   <!-- <td class="td-w-40">Amount</td> -->
-                  <td class="td-w-40">Item Total</td>
+                  <td class="td-w-40" id="ID128">Item Total</td>
                   <!-- <td class="td-w-40">Total Amount</td> -->
                   <td>
                     <input type="text" class="form-control textboxcorner" id value="{{
@@ -1253,7 +1253,7 @@
                   </td>
                 </tr>
                 <tr>
-                  <td class="td-w-40">Tax Amount</td>
+                  <td class="td-w-40" id="ID129">Tax Amount</td>
                   <td>
                     <input type="text" class="form-control textboxcorner" id value="{{
                         this.order_items_total_tax | decimalFormat : 'AMOUNT'
@@ -1262,7 +1262,7 @@
                 </tr>
                 <tr>
                   <!-- <td class="td-w-40">Amount with tax</td> -->
-                  <td class="td-w-40">Gross Total</td>
+                  <td class="td-w-40" id="ID130">Gross Total</td>
                   <td>
                     <input type="text" class="form-control textboxcorner" id value="{{
                         order_items_total_gross_amount | decimalFormat : 'AMOUNT'
@@ -1270,7 +1270,7 @@
                   </td>
                 </tr>
                 <tr>
-                  <td class="td-w-40" style="background: #adacab">
+                  <td class="td-w-40" style="background: #adacab" id="ID131">
                     Sales Return
                   </td>
                   <td>
@@ -1280,7 +1280,7 @@
                   </td>
                 </tr>
                 <tr>
-                  <td class="td-w-40" style="background: #adacab">Exchange</td>
+                  <td class="td-w-40" style="background: #adacab" id="ID132">Exchange</td>
                   <td>
                     <input type="text" class="form-control textboxcorner" id value="{{
                         order_total_exchange | decimalFormat : 'AMOUNT'
@@ -1289,7 +1289,7 @@
                 </tr>
                 <tr>
                   <td class="td-w-40" style="background-color: #1a61a9; color: #fff">
-                    <b>Roundoff Discount</b>
+                    <b id="ID133">Roundoff Discount</b>
                   </td>
                   <td>
                     <input type="text" class="form-control textboxcorner" id="discountInput"
@@ -1303,7 +1303,7 @@
                 </tr>
                 <tr>
                   <td class="td-w-40" style="background-color: #1a61a9; color: #fff">
-                    <b>Net Amount</b>
+                    <b id="ID134">Net Amount</b>
                   </td>
                   <td>
                     <input type="text" class="form-control textboxcorner" id value="{{
@@ -1314,7 +1314,7 @@
 
                 <tr>
                   <td class="td-w-40" style="background-color: #1a61a9; color: #fff">
-                    <b>Receipt Total</b>
+                    <b id="ID135">Receipt Total</b>
                     <!-- <b>Received</b> -->
                   </td>
                   <td>
@@ -1327,7 +1327,7 @@
 
                 <tr>
                   <td class="td-w-40" style="background-color: #1a61a9; color: #fff">
-                    <b>VAT Round Off</b>
+                    <b id="ID136">VAT Round Off</b>
                   </td>
                   <td>
                     <input type="text" class="form-control textboxcorner" id="vatroundoff" [(ngModel)]="vatRoundOffAmt"
@@ -1345,7 +1345,7 @@
             <div class="col-md-6 col-xl-6" (click)="viewOnly || isSaved ? '' : saveOrder()" *ngIf="!viewOnly">
               <div class="touch-big-button touch-big-button-black">
                 <div class="touch-big-button-inner">
-                  <i class="fa fa-save"></i> <span> Save Bill</span>
+                  <i class="fa fa-save"></i> <span id="ID137"> Save Bill</span>
                 </div>
               </div>
             </div>
@@ -1363,7 +1363,7 @@
               *ngIf="!viewOnly">
               <div class="touch-big-button touch-big-button-black">
                 <div class="touch-big-button-inner">
-                  <i class="fa fa-save"></i> <span> Save & Continue</span>
+                  <i class="fa fa-save"></i> <span id="ID138"> Save & Continue</span>
                 </div>
               </div>
             </div>
@@ -1374,7 +1374,7 @@
               <div class="touch-big-button touch-big-button-black">
                 <div class="touch-big-button-inner">
                   <i class="fa fa-book"></i>
-                  <span> Audit Trail</span>
+                  <span id="ID139"> Audit Trail</span>
                 </div>
               </div>
             </div>
@@ -1382,7 +1382,7 @@
             <div class="col-md-6 col-xl-6" *ngIf="!viewOnly" (click)="cancelBill()">
               <div class="touch-big-button">
                 <div class="touch-big-button-inner">
-                  <i class="fa fa-window-close"></i> <span> Cancel Bill</span>
+                  <i class="fa fa-window-close"></i> <span id="ID140"> Cancel Bill</span>
                 </div>
               </div>
             </div>
@@ -1393,7 +1393,7 @@
               <!-- *ngIf="!viewOnly" -->
               <div class="touch-big-button">
                 <div class="touch-big-button-inner">
-                  <i class="fa fa-print"></i> <span> Print Bill</span>
+                  <i class="fa fa-print"></i> <span id="ID141"> Print Bill</span>
                 </div>
               </div>
             </div>
@@ -1428,7 +1428,7 @@
             <div class="form-group row">
               <div class="col-md-4">
                 <mat-form-field>
-                  <mat-label>Receipt Mode </mat-label>
+                  <mat-label id="ID142">Receipt Mode </mat-label>
                   <input type="text" matInput formControlName="paymentsCash" [matAutocomplete]="receiptmode"
                     [readonly]="viewOnly" />
                   <mat-autocomplete #receiptmode="matAutocomplete" autoActiveFirstOption>
@@ -1438,31 +1438,31 @@
                   </mat-autocomplete>
                   <mat-error *ngIf="
                       cashreceiptForm.controls.paymentsCash.hasError('required')
-                    ">
+                    " id="ID143">
                     Receipt Mode is <strong>required</strong>
                   </mat-error>
                 </mat-form-field>
               </div>
               <div class="col-md-4">
                 <mat-form-field>
-                  <mat-label>Amount LC</mat-label>
+                  <mat-label id="ID144">Amount LC</mat-label>
                   <input type="text" class="st_txt_right" matInput formControlName="cashAmtLC" id="cashAmtLC"
                     [placeholder]="zeroAmtVal" readonly AmountDecimalInput />
                 </mat-form-field>
               </div>
               <div class="col-md-4">
                 <mat-form-field>
-                  <mat-label>Amount FC</mat-label>
+                  <mat-label id="ID145">Amount FC</mat-label>
                   <input type="text" class="st_txt_right" matInput formControlName="cashAmtFC" id="cashAmtFC"
                     (focusout)="
                     changeReceiptAmtFC($event, 'cashreceiptForm', 'cashAmtLC')
                   " [placeholder]="zeroAmtVal" AmountDecimalInput [readonly]="viewOnly" />
                   <mat-error *ngIf="
                       cashreceiptForm.controls.cashAmtFC.hasError('required')
-                    ">
+                    " id="ID146">
                     Amount FC is <strong>required</strong>
                   </mat-error>
-                  <mat-error *ngIf="cashreceiptForm.controls.cashAmtFC.hasError('min')">
+                  <mat-error *ngIf="cashreceiptForm.controls.cashAmtFC.hasError('min')" id="ID147">
                     Amount FC is should Not Be Zero
                   </mat-error>
                 </mat-form-field>
@@ -1485,7 +1485,7 @@
             <div class="form-group row">
               <div class="col-md-4">
                 <mat-form-field>
-                  <mat-label>Receipt Mode </mat-label>
+                  <mat-label id="ID148">Receipt Mode </mat-label>
                   <input type="text" matInput formControlName="paymentsCreditCard" [matAutocomplete]="receiptmodecc"
                     [readonly]="viewOnly" />
                   <mat-autocomplete #receiptmodecc="matAutocomplete" autoActiveFirstOption>
@@ -1497,40 +1497,40 @@
                       creditCardReceiptForm.controls.paymentsCreditCard.hasError(
                         'required'
                       )
-                    ">
+                    " id="ID149">
                     Receipt Mode is <strong>required</strong>
                   </mat-error>
                 </mat-form-field>
               </div>
               <div class="col-md-4">
                 <mat-form-field>
-                  <mat-label>CC No.</mat-label>
+                  <mat-label id="ID150">CC No.</mat-label>
                   <input type="number" matInput formControlName="cardCCNo" id="cardCCNo" maxlength="19"
                     [readonly]="viewOnly" />
                   <mat-error *ngIf="
                       creditCardReceiptForm.controls.cardCCNo.hasError(
                         'required'
                       )
-                    ">
+                    " id="ID151">
                     CC No. is <strong>required</strong>
                   </mat-error>
                 </mat-form-field>
               </div>
               <div class="col-md-4">
                 <mat-form-field>
-                  <mat-label>Amount </mat-label>
+                  <mat-label id="ID152">Amount </mat-label>
                   <input type="number" class="st_txt_right" matInput formControlName="cardAmtFC" id="cardAmtFC"
                     placeholder="0.00" [readonly]="viewOnly" />
                   <mat-error *ngIf="
                       creditCardReceiptForm.controls.cardAmtFC.hasError(
                         'required'
                       )
-                    ">
+                    " id="ID153">
                     Amount is <strong>required</strong>
                   </mat-error>
                   <mat-error *ngIf="
                       creditCardReceiptForm.controls.cardAmtFC.hasError('min')
-                    ">
+                    " id="ID154">
                     Amount is should Not Be Zero
                   </mat-error>
                 </mat-form-field>
@@ -1546,7 +1546,7 @@
             <div class="form-group row">
               <div class="col-md-4">
                 <mat-form-field>
-                  <mat-label>Receipt Mode </mat-label>
+                  <mat-label id="ID142">Receipt Mode </mat-label>
                   <input type="text" matInput formControlName="paymentsAdvance" id="paymentsAdvance"
                     [matAutocomplete]="paymentsAdvance" [readonly]="viewOnly" />
                   <mat-autocomplete #paymentsAdvance="matAutocomplete" autoActiveFirstOption>
@@ -1558,14 +1558,14 @@
                       advanceReceiptForm.controls.paymentsAdvance.hasError(
                         'required'
                       )
-                    ">
+                    " id="ID143">
                     Receipt Mode is <strong>required</strong>
                   </mat-error>
                 </mat-form-field>
               </div>
               <div class="col-md-4">
                 <mat-form-field class="example-full-width">
-                  <mat-label>Branch</mat-label>
+                  <mat-label id="ID155">Branch</mat-label>
                   <input type="text" matInput formControlName="advanceBranch" [matAutocomplete]="advanceBranch"
                     id="advanceBranch" (focusout)="changeBranch($event)" [readonly]="viewOnly" />
                   <mat-autocomplete #advanceBranch="matAutocomplete" autoActiveFirstOption>
@@ -1579,14 +1579,14 @@
                       advanceReceiptForm.controls.advanceBranch.hasError(
                         'required'
                       )
-                    ">
+                    " id="ID156">
                     Branch is <strong>required</strong>
                   </mat-error>
                 </mat-form-field>
               </div>
               <div class="col-md-4">
                 <mat-form-field>
-                  <mat-label>Year</mat-label>
+                  <mat-label id="ID157">Year</mat-label>
                   <input matInput type="text" id="advanceYear" formControlName="advanceYear" id="advanceYear"
                     [matAutocomplete]="advanceYear" [readonly]="viewOnly" />
                   <mat-autocomplete #advanceYear="matAutocomplete" autoActiveFirstOption>
@@ -1598,7 +1598,7 @@
                       advanceReceiptForm.controls.advanceYear.hasError(
                         'required'
                       )
-                    ">
+                    " id="ID158">
                     Year is <strong>required</strong>
                   </mat-error>
                 </mat-form-field>
@@ -1609,7 +1609,7 @@
             <div class="form-group row">
               <div class="col-md-6">
                 <mat-form-field>
-                  <mat-label>Rec No.</mat-label>
+                  <mat-label id="ID159">Rec No.</mat-label>
                   <input type="text" matInput formControlName="advanceRecNo" value="" id="advanceRecNo"
                     (change)="changeAdvanceVocNo($event)" [readonly]="viewOnly" />
 
@@ -1617,26 +1617,26 @@
                       advanceReceiptForm.controls.advanceRecNo.hasError(
                         'required'
                       )
-                    ">
+                    " id="ID160">
                     Rec No. is <strong>required</strong>
                   </mat-error>
                 </mat-form-field>
               </div>
               <div class="col-md-6">
                 <mat-form-field>
-                  <mat-label>Amount</mat-label>
+                  <mat-label id="ID161">Amount</mat-label>
                   <input type="number" class="st_txt_right" matInput formControlName="advanceAmount" id="advanceAmount"
                     [readonly]="viewOnly" />
                   <mat-error *ngIf="
                       advanceReceiptForm.controls.advanceAmount.hasError(
                         'required'
                       )
-                    ">
+                    " id="ID162">
                     Amount is <strong>required</strong>
                   </mat-error>
                   <mat-error *ngIf="
                       advanceReceiptForm.controls.advanceAmount.hasError('min')
-                    ">
+                    " id="ID163">
                     Amount is should Not Be Zero
                   </mat-error>
                 </mat-form-field>
@@ -1647,14 +1647,14 @@
             <div class="form-group row">
               <div class="col-md-6">
                 <mat-form-field>
-                  <mat-label>Vat Amount Paid LC</mat-label>
+                  <mat-label id="ID164">Vat Amount Paid LC</mat-label>
                   <input type="number" class="st_txt_right" matInput formControlName="advanceVatAmountLC"
                     id="advanceVatAmountLC" placeholder="0.00" readonly />
                 </mat-form-field>
               </div>
               <div class="col-md-6">
                 <mat-form-field>
-                  <mat-label>Vat Amount Paid FC</mat-label>
+                  <mat-label id="ID165">Vat Amount Paid FC</mat-label>
                   <input type="number" class="st_txt_right" matInput formControlName="advanceVatAmountFC"
                     id="advanceVatAmountFC" placeholder="0.00" readonly />
                 </mat-form-field>
@@ -1670,7 +1670,7 @@
             <div class="form-group row">
               <div class="col-md-6">
                 <mat-form-field>
-                  <mat-label>Receipt Mode </mat-label>
+                  <mat-label id="ID148">Receipt Mode </mat-label>
                   <input type="text" matInput formControlName="paymentsOthers" id="paymentsOthers"
                     [matAutocomplete]="receiptmodeOthers" [readonly]="viewOnly" />
                   <mat-autocomplete #receiptmodeOthers="matAutocomplete" autoActiveFirstOption>
@@ -1682,26 +1682,26 @@
                       othersReceiptForm.controls.paymentsOthers.hasError(
                         'required'
                       )
-                    ">
+                    " id="ID149">
                     Receipt Mode is <strong>required</strong>
                   </mat-error>
                 </mat-form-field>
               </div>
               <div class="col-md-6">
                 <mat-form-field>
-                  <mat-label>Amount</mat-label>
+                  <mat-label id="ID161">Amount</mat-label>
                   <input type="number" class="st_txt_right" matInput formControlName="othersAmtFC" id="othersAmtFC"
                     placeholder="0.00" [readonly]="viewOnly" />
                   <mat-error *ngIf="
                       othersReceiptForm.controls.othersAmtFC.hasError(
                         'required'
                       )
-                    ">
+                    " id="ID162">
                     Amount is <strong>required</strong>
                   </mat-error>
                   <mat-error *ngIf="
                       othersReceiptForm.controls.othersAmtFC.hasError('min')
-                    ">
+                    " id="ID166">
                     Amount is should be Greater than Zero
                   </mat-error>
                 </mat-form-field>
@@ -1716,7 +1716,7 @@
             <div class="form-group row">
               <div class="col-md-6">
                 <mat-form-field>
-                  <mat-label>Receipt Mode </mat-label>
+                  <mat-label id="ID148">Receipt Mode </mat-label>
                   <input type="text" matInput formControlName="paymentsCreditGIftVoc" id="paymentsCreditGIftVoc"
                     [matAutocomplete]="paymentsCreditGIftVoc" [readonly]="viewOnly" />
                   <mat-autocomplete #paymentsCreditGIftVoc="matAutocomplete" autoActiveFirstOption>
@@ -1728,14 +1728,14 @@
                       giftReceiptForm.controls.paymentsCreditGIftVoc.hasError(
                         'required'
                       )
-                    ">
+                    " id="ID149">
                     Receipt Mode <strong>required</strong>
                   </mat-error>
                 </mat-form-field>
               </div>
               <div class="col-md-6">
                 <mat-form-field class="example-full-width">
-                  <mat-label>Branch</mat-label>
+                  <mat-label id="ID155">Branch</mat-label>
                   <input type="text" matInput formControlName="giftBranch" [matAutocomplete]="giftBranch"
                     id="giftBranch" (focusout)="changeBranch($event)" [readonly]="viewOnly" />
                   <mat-autocomplete #giftBranch="matAutocomplete" autoActiveFirstOption>
@@ -1747,7 +1747,7 @@
                   </mat-autocomplete>
                   <mat-error *ngIf="
                       giftReceiptForm.controls.giftBranch.hasError('required')
-                    ">
+                    " id="ID156">
                     Branch is <strong>required</strong>
                   </mat-error>
                 </mat-form-field>
@@ -1758,27 +1758,27 @@
             <div class="form-group row">
               <div class="col-md-6">
                 <mat-form-field>
-                  <mat-label>Voc No.</mat-label>
+                  <mat-label id="ID167">Voc No.</mat-label>
                   <input type="text" matInput formControlName="giftVocNo" value="" id="giftVocNo"
                     [readonly]="viewOnly" />
                   <mat-error *ngIf="
                       giftReceiptForm.controls.giftVocNo.hasError('required')
-                    ">
+                    " id="ID168">
                     Voc No. is <strong>required</strong>
                   </mat-error>
                 </mat-form-field>
               </div>
               <div class="col-md-6">
                 <mat-form-field>
-                  <mat-label>Amount</mat-label>
+                  <mat-label id="ID161">Amount</mat-label>
                   <input type="number" class="st_txt_right" matInput formControlName="giftAmtFC" id="giftAmtFC"
                     placeholder="0.00" [readonly]="viewOnly" />
                   <mat-error *ngIf="
                       giftReceiptForm.controls.giftAmtFC.hasError('required')
-                    ">
+                    " id="ID162">
                     Amount is <strong>required</strong>
                   </mat-error>
-                  <mat-error *ngIf="giftReceiptForm.controls.giftAmtFC.hasError('min')">
+                  <mat-error *ngIf="giftReceiptForm.controls.giftAmtFC.hasError('min')" id="ID166">
                     Amount is should be Greater than Zero
                   </mat-error>
                 </mat-form-field>
@@ -1793,7 +1793,7 @@
             <div class="form-group row">
               <div class="col-md-4">
                 <mat-form-field>
-                  <mat-label>Select Accode</mat-label>
+                  <mat-label id="ID169">Select Accode</mat-label>
                   <input type="text" matInput formControlName="customAcCodeList" [matAutocomplete]="customAcCodeList"
                     id="customAcCodeList" [readonly]="viewOnly" />
                   <mat-autocomplete #customAcCodeList="matAutocomplete" autoActiveFirstOption
@@ -1806,21 +1806,21 @@
                       customerReceiptForm.controls.customAcCodeList.hasError(
                         'required'
                       )
-                    ">
+                    " id="ID170">
                     Accode is <strong>required</strong>
                   </mat-error>
                 </mat-form-field>
               </div>
               <div class="col-md-4">
                 <mat-form-field>
-                  <mat-label>Amount LC</mat-label>
+                  <mat-label id="ID144">Amount LC</mat-label>
                   <input type="number" class="st_txt_right" matInput formControlName="customerAmtLC" id="customerAmtLC"
                     placeholder="0.00" readonly />
                 </mat-form-field>
               </div>
               <div class="col-md-4">
                 <mat-form-field>
-                  <mat-label>Amount FC</mat-label>
+                  <mat-label id="ID145">Amount FC</mat-label>
                   <input type="number" class="st_txt_right" matInput formControlName="customerAmtFC" id="customerAmtFC"
                     (focusout)="
                       changeReceiptAmtFC(
@@ -1834,12 +1834,12 @@
                       customerReceiptForm.controls.customerAmtFC.hasError(
                         'required'
                       )
-                    ">
+                    " id="ID146">
                     Amount FC is <strong>required</strong>
                   </mat-error>
                   <mat-error *ngIf="
                       customerReceiptForm.controls.customerAmtFC.hasError('min')
-                    ">
+                    " id="ID171">
                     Amount FC is should be Greater than Zero
                   </mat-error>
                 </mat-form-field>
@@ -1859,13 +1859,13 @@
     <div style="padding-bottom: 20px">
       <div style="text-align: right; padding: 10px">
         <button *ngIf="!viewOnly" class="btn btn-secondary btn-m-r-10" [disabled]="viewOnly"
-          (click)="saveReceipt('Continue')">
+          (click)="saveReceipt('Continue')" id="ID172">
           Continue
         </button>
-        <button *ngIf="!viewOnly" class="btn btn-primary btn-m-r-10" [disabled]="viewOnly" (click)="saveReceipt()">
+        <button *ngIf="!viewOnly" class="btn btn-primary btn-m-r-10" [disabled]="viewOnly" (click)="saveReceipt()" id="ID173">
           SAVE
         </button>
-        <button class="btn btn-danger" #closeModalButton (click)="modal.dismiss('Cross click')">
+        <button class="btn btn-danger" #closeModalButton (click)="modal.dismiss('Cross click')" id="ID174">
           CLOSE
         </button>
         &nbsp;
@@ -1889,13 +1889,13 @@
             <div class="form-group row">
               <div class="col-md-2">
                 <mat-form-field>
-                  <mat-label>Division</mat-label>
+                  <mat-label id="ID175">Division</mat-label>
                   <input type="text" matInput formControlName="fcn_exchange_division" readonly />
                 </mat-form-field>
               </div>
               <div class="col-md-3">
                 <mat-form-field>
-                  <mat-label>Stock Code</mat-label>
+                  <mat-label id="ID176">Stock Code</mat-label>
                   <input type="text" matInput formControlName="fcn_exchange_item_code" id="fcn_exchange_item_code"
                     [matAutocomplete]="stockId" [readonly]="viewOnly" (change)="exchangeStockCode($event)" />
                   <mat-autocomplete #stockId="matAutocomplete" (optionSelected)="getStockforExchange()"
@@ -1922,7 +1922,7 @@
               </div>
               <div class="col-md-7">
                 <mat-form-field>
-                  <mat-label>Item Description </mat-label>
+                  <mat-label id="ID177">Item Description </mat-label>
                   <input type="text" matInput formControlName="fcn_exchange_item_desc" readonly />
                 </mat-form-field>
               </div>
@@ -1934,7 +1934,7 @@
           <div class="form-group row">
             <div class="col-md-3">
               <mat-form-field>
-                <mat-label>Pcs </mat-label>
+                <mat-label id="ID178">Pcs </mat-label>
                 <!-- oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" -->
                 <input type="number" class="text-right" [min]="0" [maxLength]="8"
                   (keyup)="this.comFunc.enforceMinMax($event.target)" matInput formControlName="fcn_exchange_pcs"
@@ -1943,7 +1943,7 @@
             </div>
             <div class="col-md-3">
               <mat-form-field>
-                <mat-label>Gross Wt</mat-label>
+                <mat-label id="ID179">Gross Wt</mat-label>
                 <input type="number" [min]="0" [maxLength]="10" (keyup)="this.comFunc.enforceMinMax($event.target)"
                   class="st_txt_right" id="fcn_exchange_gross_wt" matInput formControlName="fcn_exchange_gross_wt"
                   (focusout)="getExchangeNwtWt($event)" [readonly]="viewOnly" MetalDecimalInput />
@@ -1951,7 +1951,7 @@
             </div>
             <div class="col-md-3">
               <mat-form-field>
-                <mat-label>Stone Wt</mat-label>
+                <mat-label id="ID180">Stone Wt</mat-label>
                 <input type="text" [min]="0" [maxLength]="10" (keyup)="this.comFunc.enforceMinMax($event.target)"
                   [max]="this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_gross_wt)" class="st_txt_right"
                   matInput formControlName="fcn_exchange_stone_wt" (change)="changeExchangeStoneWt($event)"
@@ -1960,7 +1960,7 @@
             </div>
             <div class="col-md-3">
               <mat-form-field>
-                <mat-label>Net Wt </mat-label>
+                <mat-label id="ID181">Net Wt </mat-label>
                 <input type="text" [min]="0" [maxLength]="10" (keyup)="this.comFunc.enforceMinMax($event.target)"
                   class="st_txt_right" matInput formControlName="fcn_exchange_net_wt" readonly id="fcn_exchange_net_wt"
                   [max]="this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_gross_wt)"
@@ -1974,7 +1974,7 @@
           <div class="form-group row">
             <div class="col-md-3">
               <mat-form-field>
-                <mat-label>Chargable Wt </mat-label>
+                <mat-label id="ID182">Chargable Wt </mat-label>
                 <input type="text" [min]="0" [maxLength]="14" (keyup)="this.comFunc.enforceMinMax($event.target)"
                   class="st_txt_right" matInput formControlName="fcn_exchange_chargeable_wt" readonly
                   id="fcn_exchange_chargeable_wt"
@@ -1983,7 +1983,7 @@
             </div>
             <div class="col-md-3">
               <mat-form-field>
-                <mat-label>Purity </mat-label>
+                <mat-label id="ID183">Purity </mat-label>
                 <input type="number" [min]="this._exchangeItemchange?.PURITY_FROM || 0"
                   [max]="this._exchangeItemchange?.PURITY_TO" [step]="0.01" [maxLength]="14"
                   (change)="changeExPurity($event)" class="st_txt_right" matInput formControlName="fcn_exchange_purity"
@@ -1992,7 +1992,7 @@
             </div>
             <div class="col-md-3">
               <mat-form-field>
-                <mat-label>Pure Weight</mat-label>
+                <mat-label id="ID184">Pure Weight</mat-label>
                 <input class="st_txt_right" type="text" [min]="0" [maxLength]="14"
                   (change)="this.comFunc.enforceMinMax($event.target)" matInput
                   formControlName="fcn_exchange_pure_weight" id="fcn_exchange_pure_weight" readonly MetalDecimalInput />
@@ -2000,14 +2000,14 @@
             </div>
             <div class="col-md-3">
               <mat-form-field>
-                <mat-label>Purity Difference</mat-label>
+                <mat-label id="ID185">Purity Difference</mat-label>
                 <input type="text" [min]="0" [maxLength]="14" (keyup)="this.comFunc.enforceMinMax($event.target)"
                   class="st_txt_right" matInput formControlName="fcn_exchange_purity_diff" readonly MetalDecimalInput />
               </mat-form-field>
             </div>
             <div class="col-md-3">
               <mat-form-field>
-                <mat-label>Stone Rate</mat-label>
+                <mat-label id="ID186">Stone Rate</mat-label>
                 <input [min]="0" [maxLength]="14" (keyup)="this.comFunc.enforceMinMax($event.target)"
                   class="st_txt_right" matInput readonly formControlName="fcn_exchange_stone_rate"
                   id="fcn_exchange_stone_rate" (change)="changeExchangeStoneRate($event)" AmountDecimalInput />
@@ -2015,7 +2015,7 @@
             </div>
             <div class="col-md-3">
               <mat-form-field>
-                <mat-label>Stone Amount</mat-label>
+                <mat-label id="ID187">Stone Amount</mat-label>
                 <input [min]="0" [maxLength]="14" (keyup)="this.comFunc.enforceMinMax($event.target)" [min]="0"
                   class="st_txt_right" matInput formControlName="fcn_exchange_stone_amount"
                   id="fcn_exchange_stone_amount" (change)="changeExStoneAmount($event)" readonly AmountDecimalInput />
@@ -2023,7 +2023,7 @@
             </div>
             <div class="col-md-3">
               <mat-form-field>
-                <mat-label>Metal Rate </mat-label>
+                <mat-label id="ID188">Metal Rate </mat-label>
                 <input type="text" [min]="0" [maxLength]="14" (change)="metalRateChange()"
                   (keyup)="this.comFunc.enforceMinMax($event.target)" class="st_txt_right" matInput
                   formControlName="fcn_exchange_metal_rate" readonly />
@@ -2031,7 +2031,7 @@
             </div>
             <div class="col-md-3">
               <mat-form-field>
-                <mat-label>Making Rate </mat-label>
+                <mat-label id="ID189">Making Rate </mat-label>
                 <input [min]="0" [maxLength]="14" (keyup)="this.comFunc.enforceMinMax($event.target)"
                   class="st_txt_right" matInput formControlName="fcn_exchange_making_rate" readonly
                   (change)="changeExMakingRate($event)" AmountDecimalInput />
@@ -2039,14 +2039,14 @@
             </div>
             <div class="col-md-3">
               <mat-form-field>
-                <mat-label>Making Amount </mat-label>
+                <mat-label id="ID190">Making Amount </mat-label>
                 <input type="number" [min]="0" [maxLength]="14" (keyup)="this.comFunc.enforceMinMax($event.target)"
                   class="st_txt_right" matInput formControlName="fcn_exchange_making_amt" [readonly]="true" />
               </mat-form-field>
             </div>
             <div class="col-md-3">
               <mat-form-field>
-                <mat-label>Metal Amount</mat-label>
+                <mat-label id="ID191">Metal Amount</mat-label>
                 <input type="text" AmountDecimalInput [max]="14" class="st_txt_right" matInput
                   formControlName="fcn_exchange_metal_amount" (change)="changeExchangeMetalAmt($event)"
                   [readonly]="viewOnly" />
@@ -2054,7 +2054,7 @@
             </div>
             <div class="col-md-3">
               <mat-form-field>
-                <mat-label>Net Amount</mat-label>
+                <mat-label id="ID192">Net Amount</mat-label>
                 <input type="text" AmountDecimalInput [max]="14" (keyup)="this.comFunc.enforceMinMax($event.target)"
                   class="st_txt_right" matInput formControlName="fcn_exchange_net_amount" [readonly]="true"
                   (change)="changeExNetAmt($event)" />
@@ -2095,15 +2095,15 @@
 
     <div style="padding-bottom: 20px">
       <div style="text-align: right; padding: 10px">
-        <button mat-flat-button color="accent" (click)="addItemtoExchange('continueBtn')" [disabled]="viewOnly">
+        <button mat-flat-button color="accent" (click)="addItemtoExchange('continueBtn')" [disabled]="viewOnly" id="ID172">
           CONTINUE
         </button>
         &nbsp;
-        <button mat-flat-button color="primary" (click)="addItemtoExchange('saveBtn')" [disabled]="viewOnly">
+        <button mat-flat-button color="primary" (click)="addItemtoExchange('saveBtn')" [disabled]="viewOnly" id="ID173">
           SAVE
         </button>
         &nbsp;
-        <button mat-flat-button color="warn" (click)="modal.dismiss('Cross click')">
+        <button mat-flat-button color="warn" (click)="modal.dismiss('Cross click')" id="ID193">
           CANCEL
         </button>
         &nbsp;
@@ -2132,7 +2132,7 @@
                     value="{{ fcn_returns_fin_year_val }}" [readonly]="viewOnly" />
                 </mat-form-field> -->
               <mat-form-field>
-                <mat-label>Fin Year</mat-label>
+                <mat-label id="">Fin Year</mat-label>
                 <input matInput type="text" id="fcn_returns_fin_year" formControlName="fcn_returns_fin_year"
                   [matAutocomplete]="year" />
                 <mat-autocomplete #year="matAutocomplete" autoActiveFirstOption>
@@ -2148,7 +2148,7 @@
                   <input type="text" matInput formControlName="fcn_returns_branch" value="{{ fcn_returns_branch_val }}" />
                 </mat-form-field> -->
               <mat-form-field class="example-full-width">
-                <mat-label>Branch</mat-label>
+                <mat-label id="ID155">Branch</mat-label>
                 <input type="text" matInput formControlName="fcn_returns_branch" [matAutocomplete]="branch"
                   (focusout)="changeBranch($event)" [readonly]="viewOnly" />
                 <mat-autocomplete #branch="matAutocomplete" autoActiveFirstOption>
@@ -2165,7 +2165,7 @@
 
             <div class="col-md-3">
               <mat-form-field>
-                <mat-label>Voc Type</mat-label>
+                <mat-label id="ID195">Voc Type</mat-label>
                 <mat-select formControlName="fcn_returns_voc_type" [disabled]="viewOnly">
                   <mat-option *ngFor="let voctype of vocTypesinSalesReturn" [value]="voctype.VOCTYPE">
                     {{ voctype.VOCTYPE }}
@@ -2175,7 +2175,7 @@
                     salesReturnForm.controls.fcn_returns_voc_type.hasError(
                       'required'
                     )
-                  ">
+                  " id="ID196">
                   VOC Type is <strong>required</strong>
                 </mat-error>
               </mat-form-field>
@@ -2191,7 +2191,7 @@
 
             <div class="col-md-2">
               <mat-form-field>
-                <mat-label>Voc No</mat-label>
+                <mat-label id="ID167">Voc No</mat-label>
                 <input type="text" matInput formControlName="fcn_returns_voc_no"
                   (change)="getRetailSReturn_EvnFn($event)"
                   [readonly]="viewOnly || this.sales_returns_items.length > 0" />
@@ -2207,27 +2207,27 @@
           <div class="form-group row">
             <div class="col-md-3">
               <mat-form-field>
-                <mat-label>Voc Date</mat-label>
+                <mat-label id="ID197">Voc Date</mat-label>
                 <input type="text" matInput formControlName="fcn_returns_voc_date" [readonly]="viewOnly" />
               </mat-form-field>
             </div>
             <div class="col-md-3">
               <mat-form-field>
-                <mat-label>Salesman</mat-label>
+                <mat-label id="ID198">Salesman</mat-label>
                 <input type="text" matInput formControlName="fcn_returns_sales_man"
                   value="{{ fcn_returns_sales_man_val }}" [readonly]="viewOnly" />
               </mat-form-field>
             </div>
             <div class="col-md-3">
               <mat-form-field>
-                <mat-label>Cust Code</mat-label>
+                <mat-label id="ID199">Cust Code</mat-label>
                 <input type="text" matInput formControlName="fcn_returns_cust_code"
                   value="{{ fcn_returns_cust_code_val }}" [readonly]="viewOnly" />
               </mat-form-field>
             </div>
             <div class="col-md-3">
               <mat-form-field>
-                <mat-label>Cust Mobile</mat-label>
+                <mat-label id="ID200">Cust Mobile</mat-label>
                 <input type="number" oninput="validity.valid||(value='');" matInput
                   formControlName="fcn_returns_cust_mobile" value="{{ fcn_returns_cust_mobile_val }}"
                   [readonly]="viewOnly" />
@@ -2241,24 +2241,24 @@
         <table class="container table table-responsive table-striped" id="adjustsalesreturn_table">
           <tbody>
             <tr>
-              <th style="text-align: center">Division</th>
-              <th>Item Code</th>
-              <th>Item Desc</th>
-              <th>Gross Weight</th>
-              <th>VAT Amount</th>
-              <th>Amount</th>
-              <th>Select</th>
+              <th style="text-align: center" id="ID175">Division</th>
+              <th id="ID201">Item Code</th>
+              <th id="ID202">Item Desc</th>
+              <th id="ID203">Gross Weight</th>
+              <th id="ID204">VAT Amount</th>
+              <th id="ID161">Amount</th>
+              <th id="ID205">Select</th>
             </tr>
 
             <tr *ngFor="let slsReturn of salesReturnsItems_forVoc; let id = index"
               (dblclick)="changeRetailSalesReturnVal(slsReturn)" class="sales-return-row">
-              <td style="text-align: center">{{ slsReturn.DIVISION_CODE }}</td>
-              <td>{{ slsReturn.STOCK_CODE }}</td>
-              <td>{{ slsReturn.STOCK_DOCDESC }}</td>
-              <td style="text-align: center">
+              <td style="text-align: center" id="ID206">{{ slsReturn.DIVISION_CODE }}</td>
+              <td id="ID207">{{ slsReturn.STOCK_CODE }}</td>
+              <td id="ID208">{{ slsReturn.STOCK_DOCDESC }}</td>
+              <td style="text-align: center" id="ID209">
                 {{ slsReturn.GROSSWT | decimalFormat : "METAL" }}
               </td>
-              <td style="text-align: right">
+              <td style="text-align: right" id="ID210">
                 {{ slsReturn.TOTALWITHVATLC | decimalFormat : "AMOUNT" }}
               </td>
               <td style="text-align: center">
@@ -2276,17 +2276,17 @@
         </table>
       </div>
       <div class="col-md-12 text-right">
-        <div>
+        <div id="ID211">
           Total : {{ sales_returns_total_amt | decimalFormat : "AMOUNT" }}
         </div>
       </div>
 
       <div style="text-align: right; padding: 10px">
         <button mat-flat-button color="primary" class="btn-m-r-10" (click)="addItemtoSalesReturn()"
-          [disabled]="viewOnly">
+          [disabled]="viewOnly" id="ID173">
           SAVE
         </button>
-        <button mat-flat-button color="warn" (click)="modal.dismiss('Cross click')">
+        <button mat-flat-button color="warn" (click)="modal.dismiss('Cross click')" id="ID193">
           CANCEL
         </button>
         &nbsp;
@@ -2302,14 +2302,14 @@
         customerDataForm.value.fcn_customer_code !== null &&
         customerDataForm.value.fcn_customer_code !== undefined &&
         customerDataForm.value.fcn_customer_code !== ''
-      ">
+      " id="ID212">
       Customer Details ({{ customerDataForm.value.fcn_customer_code }})
     </h4>
     <h4 class="modal-title" id="modal-pos-metal" *ngIf="
         customerDataForm.value.fcn_customer_code === null ||
         customerDataForm.value.fcn_customer_code === undefined ||
         customerDataForm.value.fcn_customer_code === ''
-      ">
+      " id="ID213">
       Customer Details
     </h4>
 
@@ -2326,7 +2326,7 @@
             <div class="row form-group">
               <div class="col-md-3">
                 <div class="form-group bg-gray-card">
-                  <label class="col-form-label required" id="ID001">Code&nbsp;*</label>
+                  <label class="col-form-label required" id="ID106">Code&nbsp;*</label>
                   <mat-form-field appearance="outline" class="w-100">
                     <input type="text" matInput
                       onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))"
@@ -2336,7 +2336,7 @@
                         {{ option.MOBILECOUNTRYCODE }}
                       </mat-option>
                     </mat-autocomplete>
-                    <mat-error *ngIf="customerDetailForm.controls.fcn_mob_code.hasError('required')">
+                    <mat-error *ngIf="customerDetailForm.controls.fcn_mob_code.hasError('required')" id="ID107">
                       Code is <strong>required</strong>
                     </mat-error>
                   </mat-form-field>
@@ -2345,14 +2345,14 @@
           
               <div class="col-md-3">
                 <div class="form-group">
-                  <label class="col-form-label">Name</label>
+                  <label class="col-form-label" id="ID103">Name</label>
                   <mat-form-field appearance="outline" class="w-100">
                     <input type="text" matInput formControlName="fcn_customer_detail_name" id="fcn_customer_detail_name"
                       (change)="nameChange($event)" [readonly]="viewOnly" appNoEmptySpace />
-                    <mat-error *ngIf="customerDetailForm.controls.fcn_customer_detail_name.hasError('required')">
+                    <mat-error *ngIf="customerDetailForm.controls.fcn_customer_detail_name.hasError('required')" id="ID104">
                       Name is <strong>required</strong>
                     </mat-error>
-                    <mat-error *ngIf="customerDetailForm.controls.fcn_customer_detail_name.hasError('pattern')">
+                    <mat-error *ngIf="customerDetailForm.controls.fcn_customer_detail_name.hasError('pattern')" id="ID105">
                       Whitespace Not Allowed
                     </mat-error>
                   </mat-form-field>
@@ -2361,10 +2361,10 @@
           
               <div class="col-md-3">
                 <div class="form-group">
-                  <label class="col-form-label">First Name</label>
+                  <label class="col-form-label" id="ID214">First Name</label>
                   <mat-form-field appearance="outline" class="w-100">
                     <input type="text" matInput formControlName="fcn_customer_detail_fname" [readonly]="true" appNoEmptySpace />
-                    <mat-error *ngIf="customerDetailForm.controls.fcn_customer_detail_fname.hasError('required')">
+                    <mat-error *ngIf="customerDetailForm.controls.fcn_customer_detail_fname.hasError('required')" id="ID215">
                       First Name is <strong>required</strong>
                     </mat-error>
                   </mat-form-field>
@@ -2373,7 +2373,7 @@
           
               <div class="col-md-3">
                 <div class="form-group">
-                  <label class="col-form-label">Middle Name</label>
+                  <label class="col-form-label" id="ID216">Middle Name</label>
                   <mat-form-field appearance="outline" class="w-100">
                     <input type="text" matInput formControlName="fcn_customer_detail_mname" [readonly]="true" />
                   </mat-form-field>
@@ -2382,13 +2382,13 @@
 
               <div class="col-md-3">
                 <div class="form-group">
-                  <label class="col-form-label">Last Name</label>
+                  <label class="col-form-label" id="ID217">Last Name</label>
                   <mat-form-field appearance="outline" class="w-100">
                     <input type="text" matInput formControlName="fcn_customer_detail_lname" [readonly]="true" />
-                    <mat-error *ngIf="customerDetailForm.controls.fcn_customer_detail_lname.hasError('required')">
+                    <mat-error *ngIf="customerDetailForm.controls.fcn_customer_detail_lname.hasError('required')" id="ID218">
                       Last Name is <strong>required</strong>
                     </mat-error>
-                    <mat-error *ngIf="customerDetailForm.controls.fcn_customer_detail_lname.hasError('maxlength')">
+                    <mat-error *ngIf="customerDetailForm.controls.fcn_customer_detail_lname.hasError('maxlength')" id="ID219">
                       Last Name must not exceed 100 characters.
                     </mat-error>
                   </mat-form-field>
@@ -2397,13 +2397,13 @@
 
               <div class="col-md-3">
                 <div class="form-group">
-                  <label class="col-form-label required" id="ID001">Mobile 1&nbsp;*</label>
+                  <label class="col-form-label required" id="ID220">Mobile 1&nbsp;*</label>
                   <mat-form-field appearance="outline" class="w-100">
                     <input type="text" #mobile1 (change)="onCustomerNameFocus(mobile1.value)"
                       onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))"
                       matInput formControlName="fcn_cust_detail_phone" id="fcn_cust_detail_phone" [readonly]="viewOnly"
                       maxlength="20" />
-                    <mat-error *ngIf="customerDetailForm.controls.fcn_cust_detail_phone.hasError('required')">
+                    <mat-error *ngIf="customerDetailForm.controls.fcn_cust_detail_phone.hasError('required')" id="ID221">
                       Mobile Number is <strong>required</strong>
                     </mat-error>
                   </mat-form-field>
@@ -2412,7 +2412,7 @@
               
               <div class="col-md-3">
                 <div class="form-group">
-                  <label class="col-form-label">Mobile 2</label>
+                  <label class="col-form-label" id="ID222">Mobile 2</label>
                   <mat-form-field appearance="outline" class="w-100">
                     <input type="text"
                       onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))"
@@ -2423,10 +2423,10 @@
 
               <div class="col-md-3">
                 <div class="form-group">
-                  <label class="col-form-label">Email Address</label>
+                  <label class="col-form-label" id="ID223">Email Address</label>
                   <mat-form-field appearance="outline" class="w-100">
                     <input type="email" matInput formControlName="fcn_cust_detail_email" [readonly]="viewOnly" />
-                    <mat-error *ngIf="customerDetailForm.controls.fcn_cust_detail_email.hasError('email')">
+                    <mat-error *ngIf="customerDetailForm.controls.fcn_cust_detail_email.hasError('email')" id="ID224">
                       Please enter a valid email address
                     </mat-error>
                   </mat-form-field>
@@ -2435,12 +2435,12 @@
 
               <div class="col-md-3">
                 <div class="form-group">
-                  <label class="col-form-label">Gender</label>
+                  <label class="col-form-label" id="ID225">Gender</label>
                   <mat-form-field appearance="outline" class="w-100">
                     <mat-select formControlName="fcn_cust_detail_gender" [disabled]="viewOnly">
                       <mat-option *ngFor="let data of genderList" [value]="data.ENGLISH">{{ data.ENGLISH }}</mat-option>
                     </mat-select>
-                    <mat-error *ngIf="customerDetailForm.controls.fcn_cust_detail_gender.hasError('required')">
+                    <mat-error *ngIf="customerDetailForm.controls.fcn_cust_detail_gender.hasError('required')" id="ID226">
                       Gender is <strong>required</strong>
                     </mat-error>
                   </mat-form-field>
@@ -2449,12 +2449,12 @@
 
               <div class="col-md-3">
                 <div class="form-group">
-                  <label class="col-form-label">Marital Status</label>
+                  <label class="col-form-label" id="ID227">Marital Status</label>
                   <mat-form-field appearance="outline" class="w-100">
                     <mat-select formControlName="fcn_cust_detail_marital_status" [disabled]="viewOnly">
                       <mat-option *ngFor="let data of maritalStatusList" [value]="data.ENGLISH">
                         {{ data.ENGLISH}}</mat-option>
-                      <mat-option value="Unknown">Unknown</mat-option>
+                      <mat-option value="Unknown" id="ID228">Unknown</mat-option>
                     </mat-select>
                   </mat-form-field>
                 </div>
@@ -2462,13 +2462,13 @@
 
               <div class="col-md-3">
                 <div class="form-group">
-                  <label class="col-form-label">Date Of Birth</label>
+                  <label class="col-form-label" id="ID229">Date Of Birth</label>
                   <mat-form-field dateFormat3 appearance="outline" class="w-100">
                     <input matInput [matDatepicker]="dob" [max]="vocMaxDate" name="fcn_cust_detail_dob"
                       formControlName="fcn_cust_detail_dob" placeholder="DD/MM/YYYY" [readonly]="viewOnly" />
                     <mat-datepicker-toggle matSuffix [for]="dob"></mat-datepicker-toggle>
                     <mat-datepicker [startAt]="currentDate" #dob></mat-datepicker>
-                    <mat-error *ngIf="customerDetailForm.controls.fcn_cust_detail_dob.hasError('required')">
+                    <mat-error *ngIf="customerDetailForm.controls.fcn_cust_detail_dob.hasError('required')" id="ID230">
                       Date of Birth is <strong>required</strong>
                     </mat-error>
                   </mat-form-field>
@@ -2477,7 +2477,7 @@
 
               <div class="col-md-3">
                 <div class="form-group">
-                  <label class="col-form-label">Nationality</label>
+                  <label class="col-form-label" id="ID231">Nationality</label>
                   <mat-form-field appearance="outline" class="w-100">
                     <input type="text" matInput formControlName="fcn_cust_detail_nationality"
                       id="fcn_cust_detail_nationality" [matAutocomplete]="nationality" [readonly]="viewOnly" />
@@ -2486,10 +2486,10 @@
                         {{ option.CODE + " - " + option.DESCRIPTION }}
                       </mat-option>
                     </mat-autocomplete>
-                    <mat-error *ngIf="customerDetailForm.controls.fcn_cust_detail_nationality.hasError('required')">
+                    <mat-error *ngIf="customerDetailForm.controls.fcn_cust_detail_nationality.hasError('required')" id="ID232">
                       Nationality is <strong>required</strong>
                     </mat-error>
-                    <mat-error *ngIf="customerDetailForm.controls.fcn_cust_detail_nationality.hasError('notInOptions')">
+                    <mat-error *ngIf="customerDetailForm.controls.fcn_cust_detail_nationality.hasError('notInOptions')" id="ID233">
                       Invalid value
                     </mat-error>
                   </mat-form-field>
@@ -2498,7 +2498,7 @@
 
               <div class="col-md-3">
                 <div class="form-group">
-                  <label class="col-form-label">Country</label>
+                  <label class="col-form-label" id="ID234">Country</label>
                   <mat-form-field appearance="outline" class="w-100">
                     <input type="text" matInput formControlName="fcn_cust_detail_country" id="fcn_cust_detail_country"
                       [matAutocomplete]="country" [readonly]="viewOnly" />
@@ -2508,10 +2508,10 @@
                         {{ option.CODE + " - " + option.DESCRIPTION }}
                       </mat-option>
                     </mat-autocomplete>
-                    <mat-error *ngIf="customerDetailForm.controls.fcn_cust_detail_country.hasError('required')">
+                    <mat-error *ngIf="customerDetailForm.controls.fcn_cust_detail_country.hasError('required')" id="ID235">
                       Country is <strong>required</strong>
                     </mat-error>
-                    <mat-error *ngIf="customerDetailForm.controls.fcn_cust_detail_country.hasError('notInOptions')">
+                    <mat-error *ngIf="customerDetailForm.controls.fcn_cust_detail_country.hasError('notInOptions')" id="ID233">
                       Invalid value
                     </mat-error>
                   </mat-form-field>
@@ -2520,7 +2520,7 @@
 
               <div class="col-md-3">
                 <div class="form-group">
-                  <label class="col-form-label">State</label>
+                  <label class="col-form-label" id="ID236">State</label>
                   <mat-form-field appearance="outline" class="w-100">
                     <input type="text" matInput formControlName="fcn_cust_detail_state" id="fcn_cust_detail_state"
                       [matAutocomplete]="state" [readonly]="viewOnly" />
@@ -2530,7 +2530,7 @@
                         {{ option.CODE }}
                       </mat-option>
                     </mat-autocomplete>
-                    <mat-error *ngIf="customerDetailForm.controls.fcn_cust_detail_state.hasError('notInOptions')">
+                    <mat-error *ngIf="customerDetailForm.controls.fcn_cust_detail_state.hasError('notInOptions')" id="ID233">
                       Invalid value
                     </mat-error>
                   </mat-form-field>
@@ -2539,7 +2539,7 @@
 
               <div class="col-md-3">
                 <div class="form-group">
-                  <label class="col-form-label">City</label>
+                  <label class="col-form-label" id="ID237">City</label>
                   <mat-form-field appearance="outline" class="w-100">
                     <!-- <input type="text" matInput formControlName="fcn_cust_detail_city" [readonly]="viewOnly" /> -->
                     <input type="text" matInput formControlName="fcn_cust_detail_city" id="fcn_cust_detail_city"
@@ -2549,7 +2549,7 @@
                         {{ option.CODE }}
                       </mat-option>
                     </mat-autocomplete>
-                    <mat-error *ngIf="customerDetailForm.controls.fcn_cust_detail_city.hasError('notInOptions')">
+                    <mat-error *ngIf="customerDetailForm.controls.fcn_cust_detail_city.hasError('notInOptions')" id="ID233">
                       Invalid value
                     </mat-error>
                   </mat-form-field>
@@ -2558,11 +2558,11 @@
 
               <div class="col-md-3">
                 <div class="form-group">
-                  <label class="col-form-label">Address</label>
+                  <label class="col-form-label" id="ID238">Address</label>
                   <mat-form-field appearance="outline" class="w-100">
                     <input type="text" matInput formControlName="fcn_cust_detail_address" [readonly]="viewOnly"
                       appNoEmptySpace />
-                    <mat-error *ngIf="customerDetailForm.controls.fcn_cust_detail_address.hasError('required')">
+                    <mat-error *ngIf="customerDetailForm.controls.fcn_cust_detail_address.hasError('required')" id="ID239">
                       Address is <strong>required</strong>
                     </mat-error>
                   </mat-form-field>
@@ -2571,7 +2571,7 @@
 
               <div class="col-md-3">
                 <div class="form-group">
-                  <label class="col-form-label">ID Type</label>
+                  <label class="col-form-label" id="ID240">ID Type</label>
                   <mat-form-field appearance="outline" class="w-100">
                     <input type="text" matInput formControlName="fcn_cust_detail_idType" [matAutocomplete]="custIdType"
                       [readonly]="viewOnly" />
@@ -2581,10 +2581,10 @@
                         {{ option }}
                       </mat-option>
                     </mat-autocomplete>
-                    <mat-error *ngIf="customerDetailForm.controls.fcn_cust_detail_idType.hasError('required')">
+                    <mat-error *ngIf="customerDetailForm.controls.fcn_cust_detail_idType.hasError('required')" id="ID241">
                       ID Type is <strong>required</strong>
                     </mat-error>
-                    <mat-error *ngIf="customerDetailForm.controls.fcn_cust_detail_idType.hasError('notInOptions')">
+                    <mat-error *ngIf="customerDetailForm.controls.fcn_cust_detail_idType.hasError('notInOptions')" id="ID233">
                       Invalid value
                     </mat-error>
                   </mat-form-field>
@@ -2593,14 +2593,14 @@
 
               <div class="col-md-3">
                 <div class="form-group">
-                  <label class="col-form-label">ID Number</label>
+                  <label class="col-form-label" id="ID242">ID Number</label>
                   <mat-form-field appearance="outline" class="w-100">
                     <input type="text" matInput formControlName="fcn_cust_detail_idcard" [readonly]="viewOnly"
                       appNoEmptySpace />
-                    <mat-error *ngIf="customerDetailForm.controls.fcn_cust_detail_idcard.hasError('required')">
+                    <mat-error *ngIf="customerDetailForm.controls.fcn_cust_detail_idcard.hasError('required')" id="ID243">
                       ID Number is <strong>required</strong>
                     </mat-error>
-                    <mat-error *ngIf="customerDetailForm.controls.fcn_cust_detail_idcard.hasError('minlength')">
+                    <mat-error *ngIf="customerDetailForm.controls.fcn_cust_detail_idcard.hasError('minlength')" id="ID244">
                       <!-- ID Card must be 15 characters long. -->
                       ID Number be at least
                       {{
@@ -2610,7 +2610,7 @@
                       }}
                       characters long.
                     </mat-error>
-                    <mat-error *ngIf="customerDetailForm.controls.fcn_cust_detail_idcard.hasError('maxlength')">
+                    <mat-error *ngIf="customerDetailForm.controls.fcn_cust_detail_idcard.hasError('maxlength')" id="ID245">
                       ID Number must not exceed
                       {{
                       customerDetailForm
@@ -2625,11 +2625,11 @@
 
               <div class="col-md-3">
                 <div class="form-group">
-                  <label class="col-form-label">Designation</label>
+                  <label class="col-form-label" id="ID246">Designation</label>
                    <mat-form-field appearance="outline" class="w-100">
                       <input type="text" matInput formControlName="fcn_cust_detail_designation" [readonly]="viewOnly"
                         appNoEmptySpace />
-                      <mat-error *ngIf="customerDetailForm.controls.fcn_cust_detail_designation.hasError('required')">
+                      <mat-error *ngIf="customerDetailForm.controls.fcn_cust_detail_designation.hasError('required')" id="ID247">
                         Designation is <strong>required</strong>
                       </mat-error>
                     </mat-form-field>
@@ -2638,7 +2638,7 @@
               
               <div class="col-md-3">
                 <div class="form-group">
-                  <label class="col-form-label">Employer</label>
+                  <label class="col-form-label" id="ID248">Employer</label>
                   <mat-form-field appearance="outline" class="w-100">
                     <input type="text" matInput formControlName="fcn_cust_detail_company" [readonly]="viewOnly" />
                   </mat-form-field>
@@ -2647,7 +2647,7 @@
               
               <div class="col-md-3">
                 <div class="form-group">
-                  <label class="col-form-label">Expiry Date</label>
+                  <label class="col-form-label" id="ID249">Expiry Date</label>
                   <mat-form-field appearance="outline" class="w-100">
                     <input matInput [matDatepicker]="expDateCust" name="fcn_customer_exp_date"
                       formControlName="fcn_customer_exp_date" placeholder="DD/MM/YYYY" [min]="currentDate"
@@ -2655,13 +2655,24 @@
                     <mat-datepicker-toggle matSuffix [for]="expDateCust"></mat-datepicker-toggle>
                     <mat-datepicker [startAt]="currentDate" #expDateCust></mat-datepicker>
     
-                    <mat-error *ngIf="customerDetailForm.controls.fcn_customer_exp_date.hasError('required')">
+                    <mat-error *ngIf="customerDetailForm.controls.fcn_customer_exp_date.hasError('required')" id="ID250">
                       Expiry date is <strong>required</strong>
                     </mat-error>
                   </mat-form-field>
                 </div>
               </div>
 
+              <div class="col-md-9" style="margin-top: 2.4rem !important;">
+                <div class="d-flex justify-content-end">
+                  <button class="btn btn-primary btn-m-r-10" (click)="customerSave()" *ngIf="!viewOnly"
+                            [disabled]="isCustProcessing" id="ID173">
+                        SAVE
+                  </button>
+                  <button class="btn btn-danger" (click)="modal.dismiss('Cross click')" id="ID193">
+                        CANCEL
+                  </button>
+                </div>
+              </div>
            
             </div>
           </div>
@@ -2669,18 +2680,7 @@
         </form>
       </div>
 
-      <div class="col-md-12" style="padding-bottom: 20px">
-        <div style="text-align: right; padding: 10px">
-          <button class="btn btn-primary btn-m-r-10" (click)="customerSave()" *ngIf="!viewOnly"
-            [disabled]="isCustProcessing">
-            SAVE
-          </button>
-          <button class="btn btn-danger" (click)="modal.dismiss('Cross click')">
-            CANCEL
-          </button>
-          &nbsp;
-        </div>
-      </div>
+   
     </div>
   </div>
 </ng-template>
@@ -2710,12 +2710,12 @@
               <div class="form-group row">
                 <div class="container">
                   <div class="row">
-                    <div class="col-md-5">
+                    <div class="col-md-6">
                       <div class="bg-gray-card">
                         <div class="row">
                           <div class="col-md-6">
                             <div class="form-group row">
-                              <label class="col-form-label col-sm-5" id="ID001">Division&nbsp;*</label>
+                              <label class="col-form-label col-sm-4" id="ID175">Division&nbsp;*</label>
                               <div class="col-sm-7">
                                 <mat-form-field appearance="outline">
                                   <input type="text" matInput formControlName="fcn_li_division" id="fcn_li_division" readonly />
@@ -2728,7 +2728,7 @@
                           </div>
                           <div class="col-md-6">
                             <div class="form-group row">
-                              <label class="col-sm-4" id="ID001">Item Code&nbsp;*</label>
+                              <label class="col-sm-4" id="ID201">Item Code&nbsp;*</label>
                               <div class="col-sm-8">
                                 <mat-form-field appearance="outline">
                                   <input type="text" matInput autocomplete="off" formControlName="fcn_li_item_code"
@@ -2742,12 +2742,12 @@
                       </div>
                     </div>
 
-                    <div class="col-md-7">
+                    <div class="col-md-6">
                       <div class="bg-gray-card">
                         <div class="row">
                           <div class="col-md-6">
                             <div class="form-group row">
-                              <label class="col-sm-4" id="ID001">Item Description&nbsp;*</label>
+                              <label class="col-sm-4" id="ID251">Item Description&nbsp;*</label>
                               <div class="col-sm-8">
                                 <mat-form-field appearance="outline">
                                   <input type="text" matInput formControlName="fcn_li_item_desc" id="fcn_li_item_desc"
@@ -2758,7 +2758,7 @@
                           </div>
                           <div class="col-md-6">
                             <div class="form-group row">
-                              <label class="col-sm-4 mt-2" id="ID001">Location&nbsp;*</label>
+                              <label class="col-sm-4 mt-2" id="ID252">Location&nbsp;*</label>
                               <div class="col-sm-8">
                                 <mat-form-field appearance="outline">
                                   <input type="text" matInput formControlName="fcn_li_location" id="fcn_li_location"
@@ -2785,10 +2785,10 @@
             <div class="row">
               <div class="col-md-6">
                 <div class="form-group row">
-                  <div class="col-md-4">
+                  <div class="col-md-6">
                     <div class="form-group row">
-                      <label class="col-sm-3 mt-2" id="ID001">PCs&nbsp;*</label>
-                      <div class="col-sm-8">
+                      <label class="col-sm-4 mt-2" id="ID253">PCs&nbsp;*</label>
+                      <div class="col-sm-7">
                         <mat-form-field appearance="outline">
                           <input class="st_txt_right" type="number" [min]="0" autocomplete="off" [maxLength]="14"
                           (keyup)="this.comFunc.enforceMinMax($event.target)" matInput id="fcn_li_pcs"
@@ -2796,10 +2796,10 @@
                           <!-- <input class="st_txt_right" type="number" min="1" matInput formControlName="fcn_li_pcs"
                                   (keyup)="changePCS($event)" (mouseup)="changePCS($event)" (mouseleave)="changePCS($event)"
                                   value="{{li_pcs_val}}"> -->
-                          <mat-error *ngIf="lineItemForm.controls.fcn_li_pcs.hasError('required')">
+                          <mat-error *ngIf="lineItemForm.controls.fcn_li_pcs.hasError('required')" id="ID254">
                             PCS is <strong>required</strong>
                           </mat-error>
-                          <mat-error *ngIf="lineItemForm.controls.fcn_li_pcs.hasError('min')">
+                          <mat-error *ngIf="lineItemForm.controls.fcn_li_pcs.hasError('min')" id="ID255">
                             {{ "PCS should Not Be Zero" }}
                             <!-- {{ this.comFunc.getMsgByID('MSG1554') }} -->
                           </mat-error>
@@ -2808,11 +2808,11 @@
                     </div>
                   </div>
 
-                  <div class="col-md-4">
+                  <div class="col-md-6">
                     <div class="form-group row">
-                      <label class="col-sm-3" id="ID001">{{
+                      <label class="col-sm-4 mt-2" id="ID256">{{
                         newDictionary?.lblGrossWeight || "Gross Wt"}}&nbsp;*</label>
-                      <div class="col-sm-9">
+                      <div class="col-sm-8">
                         <mat-form-field appearance="outline">
                           <!-- <mat-label>{{newDictionary?.lblGrossWeight}}</mat-label> -->
                           <input class="st_txt_right" [maxLength]="14" type="text" [min]="0"
@@ -2820,21 +2820,23 @@
                             id="fcn_li_gross_wt" (focusout)="setGrossWtFocus()" (change)="changeGrossWt($event)"
                             [readonly]="viewOnly" MetalDecimalInput />
                           <mat-error *ngIf="
-                                  lineItemForm.controls.fcn_li_gross_wt.hasError('required')">
+                                  lineItemForm.controls.fcn_li_gross_wt.hasError('required')" id="ID257">
                             Gross Weight is <strong>required</strong>
                           </mat-error>
                           <mat-error *ngIf="
-                            lineItemForm.controls.fcn_li_gross_wt.hasError('min')">
+                            lineItemForm.controls.fcn_li_gross_wt.hasError('min')" id="ID258">
                             {{ this.comFunc.getMsgByID("MSG1306") }}
                           </mat-error>
                         </mat-form-field>
                       </div>
                     </div>
                   </div>
+                </div>
 
-                  <div class="col-md-4" *ngIf="this.divisionMS == 'S' ? false : true">
+                <div class="form-group row mt-3">
+                  <div class="col-md-6" *ngIf="this.divisionMS == 'S' ? false : true">
                     <div class="form-group row">
-                      <label class="col-sm-3" id="ID001">
+                      <label class="col-sm-4 mt-2" id="ID259" >
                         {{newDictionary?.lblStoneWeight || "Stone Wt"}}&nbsp;*</label>
                       <div class="col-sm-7">
                         <mat-form-field appearance="outline">
@@ -2847,11 +2849,11 @@
                     </div>
                   </div>
 
-                  <div class="col-md-4" *ngIf="this.divisionMS == 'S' ? false : true">
+                  <div class="col-md-6" *ngIf="this.divisionMS == 'S' ? false : true">
                     <div class="form-group row">
-                      <label class="col-sm-3" id="ID001">
+                      <label class="col-sm-4 mt-2" id="ID260">
                         Net Wt&nbsp;*</label>
-                      <div class="col-sm-7">
+                      <div class="col-sm-8">
                         <mat-form-field appearance="outline">
                           <input type="text" class="st_txt_right" [min]="0" [maxLength]="14"
                             (keyup)="this.comFunc.enforceMinMax($event.target)"
@@ -2863,6 +2865,8 @@
                     </div>
                   </div>
                 </div>
+                
+               
 
 
 
@@ -2872,7 +2876,7 @@
                 <div class="form-group row" *ngIf="this.divisionMS == 'M'">
                   <div class="col-md-6">
                     <div class="form-group row">
-                      <label class="col-sm-3" id="ID001">Purity&nbsp;*</label>
+                      <label class="col-sm-3" id="ID261">Purity&nbsp;*</label>
                       <div class="col-sm-7">
                         <mat-form-field appearance="outline">
                           <input type="number" [min]="0" [maxLength]="14"
@@ -2885,7 +2889,7 @@
 
                   <div class="col-md-6">
                     <div class="form-group row">
-                      <label class="col-sm-3" id="ID001">Pure Weight&nbsp;*</label>
+                      <label class="col-sm-3" id="ID262">Pure Weight&nbsp;*</label>
                       <div class="col-sm-7">
                         <mat-form-field appearance="outline">
                           <input class="st_txt_right" type="number" [min]="0" [maxLength]="14"
@@ -2902,10 +2906,10 @@
 
 
 
-                <div class="form-group row" *ngIf="this.divisionMS == 'S' ? false : true">
+                <div class="form-group row mt-3" *ngIf="this.divisionMS == 'S' ? false : true">
                   <div class="col-md-6">
                     <div class="form-group row">
-                      <label class="col-sm-3" id="ID001">Metal Rate&nbsp;*</label>
+                      <label class="col-sm-4" id="ID263">Metal Rate&nbsp;*</label>
                       <div class="col-sm-7">
                         <mat-form-field appearance="outline">
                           <input class="st_txt_right" type="text" [min]="0" [maxLength]="14"
@@ -2918,7 +2922,7 @@
 
                   <div class="col-md-6">
                     <div class="form-group row">
-                      <label class="col-sm-4" id="ID001">Metal Amount&nbsp;*</label>
+                      <label class="col-sm-4" id="ID264">Metal Amount&nbsp;*</label>
                       <div class="col-sm-8">
                         <mat-form-field appearance="outline">
                           <input class="st_txt_right" type="text" [min]="0" [maxLength]="14"
@@ -2933,7 +2937,7 @@
                 <div class="form-group row" *ngIf="this.divisionMS == 'S' ? false : true">
                   <div class="col-md-6">
                     <div class="form-group row">
-                      <label class="col-sm-3" id="ID001">Stone Rate&nbsp;*</label>
+                      <label class="col-sm-4" id="ID265">Stone Rate&nbsp;*</label>
                       <div class="col-sm-7">
                         <mat-form-field appearance="outline">
                           <input class="st_txt_right" type="text" [min]="0" [maxLength]="14"
@@ -2947,7 +2951,7 @@
 
                   <div class="col-md-6">
                     <div class="form-group row">
-                      <label class="col-sm-4" id="ID001">Stone Amount&nbsp;*</label>
+                      <label class="col-sm-4" id="ID266">Stone Amount&nbsp;*</label>
                       <div class="col-sm-8">
                         <mat-form-field appearance="outline">
                           <input class="st_txt_right" type="text" [min]="0" [maxLength]="14"
@@ -2976,7 +2980,7 @@
                 <div class="form-group row">
                   <div class="col-md-6">
                     <div class="form-group row">
-                      <label class="col-sm-3 mt-2" id="ID001">
+                      <label class="col-sm-4 mt-2" id="ID267">
                         {{divisionMS == "M" ? "Making Rate" : "Rate"}}&nbsp;*</label>
                       <div class="col-sm-7">
                         <mat-form-field appearance="outline">
@@ -2991,13 +2995,13 @@
                                   lineItemForm.controls.fcn_li_rate.hasError(
                                     'required'
                                   )
-                                ">
+                                " id="ID268">
                             {{ divisionMS == "M" ? "Making Rate" : "Rate" }}
                             is <strong>required</strong>
                           </mat-error>
                           <mat-error *ngIf="
                                   lineItemForm.controls.fcn_li_rate.hasError('min')
-                                ">
+                                " id="ID269">
                             <!-- {{ this.comFunc.getMsgByID('MSG1554') }} -->
                             {{ divisionMS == "M" ? "Making Rate" : "Rate" }}
                             should Not Be Zero
@@ -3010,7 +3014,7 @@
 
                   <div class="col-md-6">
                     <div class="form-group row">
-                      <label class="col-sm-4 mt-2" id="ID001">
+                      <label class="col-sm-4 mt-2" id="ID270">
                         {{divisionMS == "M" ? "Making Amount" : "Amount"}}&nbsp;*</label>
                       <div class="col-sm-8">
                         <mat-form-field appearance="outline">
@@ -3022,13 +3026,13 @@
                           <!-- readonly="{{
                                   viewOnly || divisionMS == 'S' ? true : false
                                 }}" -->
-                          <mat-error *ngIf="lineItemForm.controls.fcn_li_total_amount.hasError('required')">
+                          <mat-error *ngIf="lineItemForm.controls.fcn_li_total_amount.hasError('required')" id="ID271">
                             {{ divisionMS == "M" ? "Making Amount" : "Amount" }}
                             <!-- : "Total Amount" -->
                             is
                             <strong>required</strong>
                           </mat-error>
-                          <mat-error *ngIf="lineItemForm.controls.fcn_li_total_amount.hasError('min')">
+                          <mat-error *ngIf="lineItemForm.controls.fcn_li_total_amount.hasError('min')" id="ID272">
                             <!-- {{ this.comFunc.getMsgByID('MSG1554') }} -->
                             {{
                             divisionMS == "M"
@@ -3043,10 +3047,10 @@
                   </div>
                 </div>
 
-                <div class="form-group row mt-2" *ngIf="this.divisionMS == 'M' ? false : true">
+                <div class="form-group row mt-3" *ngIf="this.divisionMS == 'M' ? false : true">
                   <div class="col-md-6">
                     <div class="form-group row">
-                      <label class="col-sm-3" id="ID001">Discount %&nbsp;*</label>
+                      <label class="col-sm-4" id="ID273">Discount %&nbsp;*</label>
                       <div class="col-sm-7">
                         <mat-form-field appearance="outline">
                           <input class="st_txt_right" [min]="0" [max]="100"
@@ -3062,7 +3066,7 @@
 
                   <div class="col-md-6">
                     <div class="form-group row">
-                      <label class="col-sm-4" id="ID001">Discount Amount&nbsp;*</label>
+                      <label class="col-sm-4" id="ID274">Discount Amount&nbsp;*</label>
                       <div class="col-sm-8">
                         <mat-form-field appearance="outline">
                           <input class="st_txt_right" [min]="0" [maxLength]="14"
@@ -3104,12 +3108,12 @@
                 <div class="col-md-12 form-group row">
                   <div class="col-md-3">
                     <div class="form-group row">
-                      <label class="col-sm-4" id="ID001">Total Amount&nbsp;*
+                      <label class="col-sm-4" id="ID275">Total Amount&nbsp;*
                          <!-- {{
                             divisionMS == "M" ? "Total Amount" : "Net Amount"
                           }} -->
                       </label>
-                      <div class="col-sm-8">
+                      <div class="col-sm-7" style="width: 62% !important">
                         <mat-form-field appearance="outline">
                           <!-- <mat-label>Gross Amount</mat-label> -->
                           <input class="st_txt_right" [min]="0" [maxLength]="14"
@@ -3118,14 +3122,14 @@
                             (change)="changeGrossAmt($event)" (focus)="
                               setValToLocalStorage($event, 'fcn_li_gross_amount')
                             " AmountDecimalInput />
-                          <mat-error *ngIf="lineItemForm.controls.fcn_li_gross_amount.hasError('required')">
+                          <mat-error *ngIf="lineItemForm.controls.fcn_li_gross_amount.hasError('required')" id="ID276">
                             Total Amount
                             <!-- {{
                                 divisionMS == "M" ? "Total Amount" : "Net Amount"
                               }} -->
                             is <strong>required</strong>
                           </mat-error>
-                          <mat-error *ngIf="lineItemForm.controls.fcn_li_gross_amount.hasError('min')">
+                          <mat-error *ngIf="lineItemForm.controls.fcn_li_gross_amount.hasError('min')" id="ID277">
                             <!-- {{ this.comFunc.getMsgByID('MSG1554') }} -->
                             Total Amount
                             <!-- {{
@@ -3140,7 +3144,7 @@
 
                   <div class="col-md-3"  *ngIf="taxType == 1">
                     <div class="form-group row">
-                      <label class="col-sm-4 mt-2" id="ID001">Tax %&nbsp;*</label>
+                      <label class="col-sm-4 mt-2" id="ID278">Tax %&nbsp;*</label>
                       <div class="col-sm-8">
                         <mat-form-field appearance="outline">
                           <input class="st_txt_right" type="number" [min]="0" [maxLength]="14"
@@ -3153,7 +3157,7 @@
 
                   <div class="col-md-3"  *ngIf="taxType == 2">
                     <div class="form-group row">
-                      <label class="col-sm-4" id="ID001">CGST %&nbsp;*</label>
+                      <label class="col-sm-4" id="ID279">CGST %&nbsp;*</label>
                       <div class="col-sm-8">
                         <mat-form-field appearance="outline">
                           <input class="st_txt_right" type="number" [min]="0" [maxLength]="14"
@@ -3166,7 +3170,7 @@
 
                   <div class="col-md-3" *ngIf="taxType == 1">
                     <div class="form-group row">
-                      <label class="col-sm-4" id="ID001">Tax Amount&nbsp;*</label>
+                      <label class="col-sm-4" id="ID280">Tax Amount&nbsp;*</label>
                       <div class="col-sm-8">
                         <mat-form-field appearance="outline">
                           <input class="st_txt_right" [min]="0" [maxLength]="14"
@@ -3179,7 +3183,7 @@
                  
                   <div class="col-md-3" *ngIf="taxType == 2">
                     <div class="form-group row">
-                      <label class="col-sm-4" id="ID001">CGST Amount&nbsp;*</label>
+                      <label class="col-sm-4" id="ID281">CGST Amount&nbsp;*</label>
                       <div class="col-sm-8">
                         <mat-form-field appearance="outline">
                           <input class="st_txt_right" type="number" [min]="0" [maxLength]="14"
@@ -3192,7 +3196,7 @@
                 
                   <div class="col-md-3">
                     <div class="form-group row">
-                      <label class="col-sm-4" id="ID001">Net Amount&nbsp;*
+                      <label class="col-sm-4" id="ID282">Net Amount&nbsp;*
                         <!-- {{
                           divisionMS == "M" ? "Net Amount" : "Total+Tax"
                         }} -->
@@ -3204,12 +3208,12 @@
                           " [min]="0" [maxLength]="14" (keyup)="this.comFunc.enforceMinMax($event.target)" matInput
                             formControlName="fcn_li_net_amount" id="fcn_li_net_amount" (change)="changeNettAmt($event)"
                             [readonly]="viewOnly" AmountDecimalInput />
-                          <mat-error *ngIf="lineItemForm.controls.fcn_li_net_amount.hasError('required')">
+                          <mat-error *ngIf="lineItemForm.controls.fcn_li_net_amount.hasError('required')" id="ID283">
                             Net Amount
                             <!-- {{ divisionMS == "M" ? "Net Amount" : "Total+Tax" }} -->
                             is <strong>required</strong>
                           </mat-error>
-                          <mat-error *ngIf="lineItemForm.controls.fcn_li_net_amount.hasError('min')">
+                          <mat-error *ngIf="lineItemForm.controls.fcn_li_net_amount.hasError('min')" id="ID284">
                             <!-- {{ this.comFunc.getMsgByID('MSG1554') }} -->
                             Net Amount
                             <!-- {{ divisionMS == "M" ? "Net Amount" : "Total+Tax" }} -->
@@ -3237,20 +3241,20 @@
     <div style="padding-bottom: 0px">
       <div style="text-align: right; padding: 10px" *ngIf="!viewOnly">
         <button mat-flat-button color="accent" class="btn btn btn-dark" *ngIf="!lineItemModalForSalesReturn"
-          (click)="addItemtoList('newitem_btn')">
+          (click)="addItemtoList('newitem_btn')" id="ID285">
           Next Item</button>&nbsp;
         <button mat-flat-button color="primary" *ngIf="!lineItemModalForSalesReturn"
-          (click)="addItemtoList('finish_btn')">
+          (click)="addItemtoList('finish_btn')" id="ID286">
           {{ updateBtn ? "Update" : "Finish" }}</button>&nbsp;
 
         <button color="primary" mat-flat-button class="btn btn btn-primary" *ngIf="lineItemModalForSalesReturn"
-          (click)="updateRetailSalesReturnVal()">
+          (click)="updateRetailSalesReturnVal()" id="ID287">
           {{ updateBtn ? "Update" : "Finish" }}</button>&nbsp;
         <!-- <button class="btn btn btn-primary" *ngIf="updateBtn" (click)="addItemtoList('finish_btn')">
             Update
           </button>&nbsp; -->
 
-        <button mat-flat-button color="warn" (click)="modal.dismiss('Cross click')">
+        <button mat-flat-button color="warn" (click)="modal.dismiss('Cross click')" id="ID193">
           Cancel</button>&nbsp;
         <!-- <button class="btn btn btn-dark" (click)="addItemtoList('newitem_btn')">
             Next Item</button>&nbsp;
@@ -3264,7 +3268,7 @@
       </div>
       <div style="text-align: right; padding: 10px" *ngIf="viewOnly">
         <button class="btn btn btn-danger" mat-flat-btn class="btn btn btn-danger"
-          (click)="modal.dismiss('Cross click')">
+          (click)="modal.dismiss('Cross click')" id="ID174">
           Close</button>&nbsp;
       </div>
       <!-- <div style="text-align: right; padding: 10px">
