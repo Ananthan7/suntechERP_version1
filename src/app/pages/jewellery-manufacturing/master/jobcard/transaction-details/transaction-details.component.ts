@@ -103,8 +103,8 @@ export class TransactionDetailsComponent implements OnInit {
            this.tableDataProcessMetalReturn = result.dynamicData[2]
            this.tableDataProcessStoneIssue = result.dynamicData[3]
            this.tableDataProcessStoneReturn = result.dynamicData[4]
-           this.tableDataProcesstransaction = result.dynamicData[5]
-           this.tableDataproduction = result.dynamicData[0][6]
+           this.tableDataProcesstransaction = result.dynamicData[4]
+           this.tableDataproduction = result.dynamicData[5]
            console.log(result.dynamicData);
            console.log(this.tableDataProcess);
            console.log(this.tableDataProcessMetalReturn);

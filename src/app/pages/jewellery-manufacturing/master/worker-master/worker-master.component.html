@@ -22,18 +22,18 @@
                             <label class="col-sm-4 col-form-label" id="ID001">
                                 Worker Code & Name * :</label>
                             <mat-form-field appearance="outline">
-                                <input type="text" matInput placeholder="CODE"
+                                <input type="text" matInput placeholder="WORKER CODE"
                                     maxlength="6" id="WorkerCode"
                                     formControlName="WorkerCode" id="code"
                                     [readonly]="viewMode || editMode" #code
                                     UpperCaseDirective
                                     (focusout)="checkWorkerExists($event)"
-                                    (keyup)="codeEnabled()" autocomplete="off"/>
-                                <mat-error
+                                    (keyup)="codeEnabled()" autocomplete="off"/> 
+                                    <!-- <mat-error
                                     *ngIf="workerMasterForm.controls.WorkerCode.touched 
                                         && workerMasterForm.controls.WorkerCode.hasError('required')">
                                     Worker Code <strong>required</strong>
-                                </mat-error>
+                                </mat-error> -->
                             </mat-form-field>
                             <mat-form-field appearance="outline" class="mx-1" style="width: -webkit-fill-available;">
                                 <input type="text" matInput
@@ -44,6 +44,8 @@
                             </mat-form-field>
                         </div>
                     </div>
+               
+                    
                     <div class="row">
                         <span>
                             <label class="col-sm-4 col-form-label" id="ID002">
