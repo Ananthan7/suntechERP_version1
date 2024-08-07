@@ -1,9 +1,3 @@
-/*
-MODULE : JEWELLERY MANUFACTURING
-MENU_SCREEN_NAME : ALLOY MASTER
-DEVELOPER : AKHIL / BESKEY
-*/
-
 import { Component, ElementRef, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
@@ -346,40 +340,85 @@ export class AlloyMasterComponent implements OnInit {
     });
   }
 
-
-
   setupFormSubscription(): void {
+    const form = this.alloyMastereForm.value;
+  
     if (this.alloyMastereForm.get('price1Lc') && this.alloyMastereForm.get('price1Fc')) {
       this.alloyMastereForm.get('price1Lc')!.valueChanges.subscribe(value => {
         // Update value of price1Fc whenever price1Lc changes
-        this.alloyMastereForm.get('price1Fc')!.setValue(value);
+        this.alloyMastereForm.get('price1Fc')!.setValue(this.commonService.CCToFC(value, form.currencyRate));
+        // Update percentage calculation
+        this.alloyMastereForm.get('price1per')!.setValue(this.percentageCalculate(value));
       });
     }
-    if (this.alloyMastereForm.get('price2Lc') && this.alloyMastereForm.get('price1Fc')) {
+    if (this.alloyMastereForm.get('price2Lc') && this.alloyMastereForm.get('price2Fc')) {
       this.alloyMastereForm.get('price2Lc')!.valueChanges.subscribe(value => {
-        // Update value of price1Fc whenever price1Lc changes
-        this.alloyMastereForm.get('price2Fc')!.setValue(value);
+        // Update value of price2Fc whenever price2Lc changes
+        this.alloyMastereForm.get('price2Fc')!.setValue(this.commonService.CCToFC(value, form.currencyRate));
+        // Update percentage calculation
+        this.alloyMastereForm.get('price2per')!.setValue(this.percentageCalculate(value));
       });
     }
-    if (this.alloyMastereForm.get('price3Lc') && this.alloyMastereForm.get('price1Fc')) {
+    if (this.alloyMastereForm.get('price3Lc') && this.alloyMastereForm.get('price3Fc')) {
       this.alloyMastereForm.get('price3Lc')!.valueChanges.subscribe(value => {
-        // Update value of price1Fc whenever price1Lc changes
-        this.alloyMastereForm.get('price3Fc')!.setValue(value);
+        // Update value of price3Fc whenever price3Lc changes
+        this.alloyMastereForm.get('price3Fc')!.setValue(this.commonService.CCToFC(value, form.currencyRate));
+        // Update percentage calculation
+        this.alloyMastereForm.get('price3per')!.setValue(this.percentageCalculate(value));
       });
     }
-    if (this.alloyMastereForm.get('price4Lc') && this.alloyMastereForm.get('price1Fc')) {
+    if (this.alloyMastereForm.get('price4Lc') && this.alloyMastereForm.get('price4Fc')) {
       this.alloyMastereForm.get('price4Lc')!.valueChanges.subscribe(value => {
-        // Update value of price1Fc whenever price1Lc changes
-        this.alloyMastereForm.get('price4Fc')!.setValue(value);
+        // Update value of price4Fc whenever price4Lc changes
+        this.alloyMastereForm.get('price4Fc')!.setValue(this.commonService.CCToFC(value, form.currencyRate));
+        // Update percentage calculation
+        this.alloyMastereForm.get('price4per')!.setValue(this.percentageCalculate(value));
       });
     }
-    if (this.alloyMastereForm.get('price5Lc') && this.alloyMastereForm.get('price1Fc')) {
+    if (this.alloyMastereForm.get('price5Lc') && this.alloyMastereForm.get('price5Fc')) {
       this.alloyMastereForm.get('price5Lc')!.valueChanges.subscribe(value => {
-        // Update value of price1Fc whenever price1Lc changes
-        this.alloyMastereForm.get('price5Fc')!.setValue(value);
+        // Update value of price5Fc whenever price5Lc changes
+        this.alloyMastereForm.get('price5Fc')!.setValue(this.commonService.CCToFC(value, form.currencyRate));
+        // Update percentage calculation
+        this.alloyMastereForm.get('price5per')!.setValue(this.percentageCalculate(value));
       });
     }
   }
+  
+
+
+  // setupFormSubscription(): void {
+  //   if (this.alloyMastereForm.get('price1Lc') && this.alloyMastereForm.get('price1Fc')) {
+  //     this.alloyMastereForm.get('price1Lc')!.valueChanges.subscribe(value => {
+  //       // Update value of price1Fc whenever price1Lc changes
+  //       this.alloyMastereForm.get('price1Fc')!.setValue(value);
+  //     });
+  //   }
+  //   if (this.alloyMastereForm.get('price2Lc') && this.alloyMastereForm.get('price1Fc')) {
+  //     this.alloyMastereForm.get('price2Lc')!.valueChanges.subscribe(value => {
+  //       // Update value of price1Fc whenever price1Lc changes
+  //       this.alloyMastereForm.get('price2Fc')!.setValue(value);
+  //     });
+  //   }
+  //   if (this.alloyMastereForm.get('price3Lc') && this.alloyMastereForm.get('price1Fc')) {
+  //     this.alloyMastereForm.get('price3Lc')!.valueChanges.subscribe(value => {
+  //       // Update value of price1Fc whenever price1Lc changes
+  //       this.alloyMastereForm.get('price3Fc')!.setValue(value);
+  //     });
+  //   }
+  //   if (this.alloyMastereForm.get('price4Lc') && this.alloyMastereForm.get('price1Fc')) {
+  //     this.alloyMastereForm.get('price4Lc')!.valueChanges.subscribe(value => {
+  //       // Update value of price1Fc whenever price1Lc changes
+  //       this.alloyMastereForm.get('price4Fc')!.setValue(value);
+  //     });
+  //   }
+  //   if (this.alloyMastereForm.get('price5Lc') && this.alloyMastereForm.get('price1Fc')) {
+  //     this.alloyMastereForm.get('price5Lc')!.valueChanges.subscribe(value => {
+  //       // Update value of price1Fc whenever price1Lc changes
+  //       this.alloyMastereForm.get('price5Fc')!.setValue(value);
+  //     });
+  //   }
+  // }
 
   @ViewChild('codeInput')
   codeInput!: ElementRef;
@@ -393,7 +432,7 @@ export class AlloyMasterComponent implements OnInit {
     // 'DiamondStockMaster/GetDiamondStockMasterWithMid/2649104'
     this.alloyMastereForm.controls.code.setValue(this.content.STOCK_CODE)
     this.alloyMastereForm.controls.description.setValue(this.content.STOCK_DESCRIPTION)
-    this.alloyMastereForm.controls.description.setValue(this.content.STOCK_DESCRIPTION)//CHINNU - LINE REPEAT
+    this.alloyMastereForm.controls.description.setValue(this.content.STOCK_DESCRIPTION)
     this.alloyMastereForm.controls.brand.setValue(this.content.BRAND_CODE)
     this.alloyMastereForm.controls.category.setValue(this.content.CATEGORY_CODE)
     this.alloyMastereForm.controls.costCenter.setValue(this.content.COST_CODE)
@@ -553,11 +592,7 @@ export class AlloyMasterComponent implements OnInit {
           if (this.priceSchemeDetails?.length > 0) {
             this.fillPriceSchemeDetails()
           } else {
-<<<<<<< HEAD
-            this.commonService.toastErrorByMsgId('price sheme not found') // CHINNU HARD CODING OF MESSAGE
-=======
             this.commonService.toastErrorByMsgId('MSG1531')
->>>>>>> origin/ERP_Staging
           }
 
         }
@@ -810,12 +845,7 @@ export class AlloyMasterComponent implements OnInit {
       .subscribe((result) => {
         if (result.response) {
           if (result.status == "Success") {
-<<<<<<< HEAD
-            this.commonService.toastSuccessByText('Last number updated')//CHINNU - ANANTHA NEEDS TO CHECK THIS
-
-=======
           console.log('Last number updated')
->>>>>>> origin/ERP_Staging
           }
         } else {
           this.commonService.toastErrorByMsgId('MSG3577')
@@ -829,11 +859,7 @@ export class AlloyMasterComponent implements OnInit {
     //   return true;
     // }else{
     if (this.alloyMastereForm.value.code == '') {
-<<<<<<< HEAD
-      this.commonService.toastErrorByMsgId('Please enter the Prefix Code'); //CHINNU -  MESSAGE HARD CODED
-=======
       this.commonService.toastErrorByMsgId('MSG1628');
->>>>>>> origin/ERP_Staging
       return true
     }
     return false
@@ -841,11 +867,7 @@ export class AlloyMasterComponent implements OnInit {
   }
   checkCode() {
     if (this.alloyMastereForm.value.code == '') {
-<<<<<<< HEAD
-      this.commonService.toastErrorByMsgId('Please enter the Prefix Code');//CHINNU -  MESSAGE HARD CODED
-=======
       this.commonService.toastErrorByMsgId('MSG1628');
->>>>>>> origin/ERP_Staging
       return true;
     }
     return false;
@@ -893,11 +915,7 @@ export class AlloyMasterComponent implements OnInit {
   priceCodeone(e: any) {
     if (this.checkStockCode()) return
     if (this.alloyMastereForm.value.price2code === this.alloyMastereForm.value.price1code || this.alloyMastereForm.value.price3code === this.alloyMastereForm.value.PRICE1 || this.alloyMastereForm.value.price4code === this.alloyMastereForm.value.PRICE1 || this.alloyMastereForm.value.price5code === this.alloyMastereForm.value.PRICE1) {
-<<<<<<< HEAD
-      this.commonService.toastErrorByMsgId('cannot select the same Price code');//CHINNU -  MESSAGE HARD CODED
-=======
       this.commonService.toastErrorByMsgId('MSG1659');
->>>>>>> origin/ERP_Staging
       return;
     }
   }
@@ -905,11 +923,7 @@ export class AlloyMasterComponent implements OnInit {
   priceTwoCode(e: any) {
     if (this.checkStockCode()) return
     if (this.alloyMastereForm.value.price2code === this.alloyMastereForm.value.price1code || this.alloyMastereForm.value.price3code === this.alloyMastereForm.value.price2code || this.alloyMastereForm.value.price4code === this.alloyMastereForm.value.price2code || this.alloyMastereForm.value.price5code === this.alloyMastereForm.value.price2code) {
-<<<<<<< HEAD
-      this.commonService.toastErrorByMsgId('cannot select the same Price code');//CHINNU -  MESSAGE HARD CODED
-=======
       this.commonService.toastErrorByMsgId('MSG1659');
->>>>>>> origin/ERP_Staging
       return;
     }
   }
@@ -917,11 +931,7 @@ export class AlloyMasterComponent implements OnInit {
   priceThreeCode(e: any) {
     if (this.checkStockCode()) return
     if (this.alloyMastereForm.value.price3code === this.alloyMastereForm.value.price1code || this.alloyMastereForm.value.price3code === this.alloyMastereForm.value.price2code || this.alloyMastereForm.value.price4code === this.alloyMastereForm.value.price3code || this.alloyMastereForm.value.price5code === this.alloyMastereForm.value.price3code) {
-<<<<<<< HEAD
-      this.commonService.toastErrorByMsgId('cannot select the same Price code');//CHINNU -  MESSAGE HARD CODED
-=======
       this.commonService.toastErrorByMsgId('MSG1659');
->>>>>>> origin/ERP_Staging
       return;
     }
   }
@@ -930,11 +940,7 @@ export class AlloyMasterComponent implements OnInit {
   priceFourCode(e: any) {
     if (this.checkStockCode()) return
     if (this.alloyMastereForm.value.price4code === this.alloyMastereForm.value.price1code || this.alloyMastereForm.value.price4code === this.alloyMastereForm.value.price2code || this.alloyMastereForm.value.price4code === this.alloyMastereForm.value.price3code || this.alloyMastereForm.value.price5code === this.alloyMastereForm.value.price4code) {
-<<<<<<< HEAD
-      this.commonService.toastErrorByMsgId('cannot select the same Price code');//CHINNU -  MESSAGE HARD CODED
-=======
       this.commonService.toastErrorByMsgId('MSG1659');
->>>>>>> origin/ERP_Staging
       return;
     }
   }
@@ -942,22 +948,14 @@ export class AlloyMasterComponent implements OnInit {
   priceFiveCode(e: any) {
     if (this.checkStockCode()) return
     if (this.alloyMastereForm.value.price5code === this.alloyMastereForm.value.price1code || this.alloyMastereForm.value.price5code === this.alloyMastereForm.value.price2code || this.alloyMastereForm.value.price5code === this.alloyMastereForm.value.price3code || this.alloyMastereForm.value.price5code === this.alloyMastereForm.value.price4code) {
-<<<<<<< HEAD
-      this.commonService.toastErrorByMsgId('cannot select the same Price code');//CHINNU -  MESSAGE HARD CODED
-=======
       this.commonService.toastErrorByMsgId('MSG1659');
->>>>>>> origin/ERP_Staging
       return;
     }
   }
 
   priceOneCodeSelected(e: any) {
     if (this.isSamepriceCodeSelected(e.PRICE_CODE)) {
-<<<<<<< HEAD
-      this.commonService.toastErrorByMsgId('cannot select the same Price code');//CHINNU -  MESSAGE HARD CODED
-=======
       this.commonService.toastErrorByMsgId('MSG1659');
->>>>>>> origin/ERP_Staging
       return;
     }
     if (this.checkStockCode()) return
@@ -970,54 +968,50 @@ export class AlloyMasterComponent implements OnInit {
 
   priceTwoCodeSelected(e: any) {
     if (this.isSamepriceCodeSelected(e.PRICE_CODE)) {
-<<<<<<< HEAD
-      this.commonService.toastErrorByMsgId('cannot select the same Price code');//CHINNU -  MESSAGE HARD CODED
-=======
       this.commonService.toastErrorByMsgId('MSG1659');
->>>>>>> origin/ERP_Staging
       return;
     }
     if (this.checkStockCode()) return
     this.alloyMastereForm.controls.price2code.setValue(e.PRICE_CODE);
+    if (this.priceSchemeDetails?.length > 0) {
+      this.fillPriceSchemeDetails()
+    }
   }
 
   priceThreeCodeSelected(e: any) {
     if (this.isSamepriceCodeSelected(e.PRICE_CODE)) {
-<<<<<<< HEAD
-      this.commonService.toastErrorByMsgId('cannot select the same Price code');//CHINNU -  MESSAGE HARD CODED
-=======
       this.commonService.toastErrorByMsgId('MSG1659');
->>>>>>> origin/ERP_Staging
       return;
     }
     if (this.checkStockCode()) return
     this.alloyMastereForm.controls.price3code.setValue(e.PRICE_CODE);
+    if (this.priceSchemeDetails?.length > 0) {
+      this.fillPriceSchemeDetails()
+    }
   }
 
   priceFourCodeSelected(e: any) {
     if (this.isSamepriceCodeSelected(e.PRICE_CODE)) {
-<<<<<<< HEAD
-      this.commonService.toastErrorByMsgId('cannot select the same Price code');//CHINNU -  MESSAGE HARD CODED
-=======
       this.commonService.toastErrorByMsgId('MSG1659');
->>>>>>> origin/ERP_Staging
       return;
     }
     if (this.checkStockCode()) return
     this.alloyMastereForm.controls.price4code.setValue(e.PRICE_CODE);
+    if (this.priceSchemeDetails?.length > 0) {
+      this.fillPriceSchemeDetails()
+    }
 
   }
   priceFiveCodeSelected(e: any) {
     if (this.isSamepriceCodeSelected(e.PRICE_CODE)) {
-<<<<<<< HEAD
-      this.commonService.toastErrorByMsgId('cannot select the same Price code');//CHINNU -  MESSAGE HARD CODED
-=======
       this.commonService.toastErrorByMsgId('MSG1659');
->>>>>>> origin/ERP_Staging
       return;
     }
     if (this.checkStockCode()) return
     this.alloyMastereForm.controls.price5code.setValue(e.PRICE_CODE);
+    if (this.priceSchemeDetails?.length > 0) {
+      this.fillPriceSchemeDetails()
+    }
   }
 
   HSNCenterSelected(e: any) {
@@ -1288,7 +1282,7 @@ export class AlloyMasterComponent implements OnInit {
       MARKETCOSTFC: this.commonService.emptyToZero(this.alloyMastereForm.value.marketcost),
       MARKETCOSTLC: 0,
       RRR_PRICE_UPDATED: false,
-      RRR_PRICE_UPDDATE: "2023-11-27T07:30:26.960Z",//CHINNU -  WHY HARD CODED
+      RRR_PRICE_UPDDATE: "2023-11-27T07:30:26.960Z",
       SALESCODE: 0,
       RRR_PUR_CARAT: 0,
       RRR_PUR_PERCENT: 0,
@@ -1472,14 +1466,7 @@ export class AlloyMasterComponent implements OnInit {
       this.updateMeltingType()
       return
     }
-<<<<<<< HEAD
-    if (this.alloyMastereForm.invalid) {
-      this.toastr.error('select all required fields')//CHINNU -  ANANTHA TO CHECK THIS
-      return
-    }
-=======
     if (this.submitValidations(this.alloyMastereForm.value)) return;
->>>>>>> origin/ERP_Staging
     let API = "DiamondStockMaster/InsertDiamondStockMaster";
     let postData = this.setPostData()
 
@@ -1529,11 +1516,7 @@ export class AlloyMasterComponent implements OnInit {
   deleteAlloyMaster() {
     if (this.content && this.content.FLAG == 'VIEW') return
     if (!this.content?.STOCK_CODE) {
-<<<<<<< HEAD
-      this.showDeleteErrorDialog('Please Select data to delete!');//CHINNU -  MESSAGE HARD CODED
-=======
       this.commonService.toastErrorByMsgId('MSG2347');
->>>>>>> origin/ERP_Staging
       return;
     }
 
@@ -1552,11 +1535,7 @@ export class AlloyMasterComponent implements OnInit {
               this.commonService.toastErrorByMsgId('MSG1880');
             }
           }, err => {
-<<<<<<< HEAD
-            this.commonService.toastErrorByMsgId('network error')//CHINNU -  MESSAGE HARD CODED
-=======
             this.commonService.toastErrorByMsgId('MSG1531')
->>>>>>> origin/ERP_Staging
           });
         this.subscriptions.push(Sub);
       }

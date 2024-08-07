@@ -403,7 +403,7 @@
               </div> -->
         <div class="col-md-1 d-flex justify-content-center align-items-center">
           <div>
-            <button type="button" color="primary" mat-flat-button (click)="addNew()">
+            <button type="button" color="primary" mat-flat-button [disabled]="isNewButtonDisabled" (click)="addNew()">
               New
             </button>
           </div>
@@ -417,7 +417,7 @@
         <div class="col-md-1 m-t-10 pt-2">
           <mat-form-field>
             <mat-label>{{ vocno_lbl }}</mat-label>
-            <input type="text" matInput formControlName="fcn_voc_no" [readonly]="voucherDetails?.LOCKVOUCHERNO" class="st_txt_right" />
+            <input type="text" NumberOnly matInput formControlName="fcn_voc_no" [readonly]="voucherDetails?.LOCKVOUCHERNO||viewOnly" class="st_txt_right" />
           </mat-form-field>
         </div>
 
@@ -587,7 +587,7 @@
               <mat-form-field>
                 <mat-label>ID Type </mat-label>
                 <input type="text" matInput formControlName="fcn_customer_id_type" [matAutocomplete]="idtype"
-                  [readonly]="viewOnly" />
+                  readonly />
                 <mat-autocomplete #idtype="matAutocomplete" (optionSelected)="changeIdtype($event.option.value)"
                   autoActiveFirstOption>
                   <mat-option *ngFor="let option of idTypeFilteredOptions | async" [value]="option">
@@ -1151,84 +1151,104 @@
   <div class="col-xl-3">
     <div class="card" style="background-color: #ececec !important">
       <div class="card-body">
-        <div class="row">
-          <div class="col-xl-12 col-md-6" style="height: 140px; overflow-y: scroll">
-            <table class="tabletd_gray">
+        <div class="row" style="width: 100%;">
+          <div class="col-xl-12 col-md-6" style="height: 140px; overflow-y: scroll; width: 100%;">
+            <table class="tabletd_gray" style="width: 100%;">
               <tr>
                 <th style="width: 30%">Karat</th>
-                <!-- <th style="width: 50%">Karat </th> -->
-                <!-- <th>Selling Price</th>
-                <th>Buying Price</th> -->
                 <th style="width: 35%">Sale</th>
                 <th style="width: 35%">Purchase Rate</th>
               </tr>
               <tr *ngFor="let krd of karatRateDetails; let id = index">
                 <td>{{ krd.KARAT_CODE }}</td>
                 <td style="text-align: right; padding-right: 3px">
-                  <input type="number" (change)="changeKaratRate($event, id)" style="text-align: right"
-                    onwheel="this.blur()" [value]="krd.KARAT_RATE" class="karat_code" readonly />
+                  <input
+                    type="number"
+                    (change)="changeKaratRate($event, id)"
+                    style="text-align: right"
+                    onwheel="this.blur()"
+                    [value]="krd.KARAT_RATE"
+                    class="karat_code"
+                    readonly
+                  />
                 </td>
-                <!-- <td style="text-align: right; padding-right: 3px">
-                  <input type="number" (change)="changeKaratRate($event, id)" style="text-align: right"
-                    onwheel="this.blur()" [value]="krd.KARAT_RATE" class="karat_code" [readOnly]="
-                      viewOnly ||
-                      this.comFunc?.posKARATRATECHANGE.toString() == '0'
-                        ? true
-                        : false
-                    " />
-                </td> -->
                 <td style="text-align: right; padding-right: 3px">
                   {{ krd.POPKARAT_RATE }}
                 </td>
               </tr>
             </table>
           </div>
-
-          <div class="col-xl-12 col-md-6">
-            <table class="m-t-10 rhs-table-1">
+        
+          <div class="col-xl-12 col-md-6" style="width: 100%;">
+            <table class="m-t-10 rhs-table-1" style="width: 100%;">
               <tr>
-                <!-- <td class="td-w-40">Amount</td> -->
                 <td class="td-w-40">Item Total</td>
-                <!-- <td class="td-w-40">Total Amount</td> -->
                 <td>
-                  <input type="text" class="form-control textboxcorner" id value="{{
-                      prnt_inv_total_gross_amt | decimalFormat : 'AMOUNT'
-                    }}" aria-describedby [placeholder]="zeroAmtVal" readonly />
+                  <input
+                    type="text"
+                    class="form-control textboxcorner"
+                    id
+                    value="{{ prnt_inv_total_gross_amt | decimalFormat: 'AMOUNT' }}"
+                    aria-describedby
+                    [placeholder]="zeroAmtVal"
+                    readonly
+                  />
                 </td>
               </tr>
               <tr>
                 <td class="td-w-40">Tax Amount</td>
                 <td>
-                  <input type="text" class="form-control textboxcorner" id value="{{
-                      this.order_items_total_tax | decimalFormat : 'AMOUNT'
-                    }}" aria-describedby [placeholder]="zeroAmtVal" readonly />
+                  <input
+                    type="text"
+                    class="form-control textboxcorner"
+                    id
+                    value="{{ this.order_items_total_tax | decimalFormat: 'AMOUNT' }}"
+                    aria-describedby
+                    [placeholder]="zeroAmtVal"
+                    readonly
+                  />
                 </td>
               </tr>
               <tr>
-                <!-- <td class="td-w-40">Amount with tax</td> -->
                 <td class="td-w-40">Gross Total</td>
                 <td>
-                  <input type="text" class="form-control textboxcorner" id value="{{
-                      order_items_total_gross_amount | decimalFormat : 'AMOUNT'
-                    }}" aria-describedby [placeholder]="zeroAmtVal" readonly />
+                  <input
+                    type="text"
+                    class="form-control textboxcorner"
+                    id
+                    value="{{ order_items_total_gross_amount | decimalFormat: 'AMOUNT' }}"
+                    aria-describedby
+                    [placeholder]="zeroAmtVal"
+                    readonly
+                  />
                 </td>
               </tr>
               <tr>
-                <td class="td-w-40" style="background: #adacab">
-                  Sales Return
-                </td>
+                <td class="td-w-40" style="background: #adacab">Sales Return</td>
                 <td>
-                  <input type="text" class="form-control textboxcorner" id value="{{
-                      invReturnSalesTotalNetTotal | decimalFormat : 'AMOUNT'
-                    }}" aria-describedby [placeholder]="zeroAmtVal" readonly />
+                  <input
+                    type="text"
+                    class="form-control textboxcorner"
+                    id
+                    value="{{ invReturnSalesTotalNetTotal | decimalFormat: 'AMOUNT' }}"
+                    aria-describedby
+                    [placeholder]="zeroAmtVal"
+                    readonly
+                  />
                 </td>
               </tr>
               <tr>
                 <td class="td-w-40" style="background: #adacab">Exchange</td>
                 <td>
-                  <input type="text" class="form-control textboxcorner" id value="{{
-                      order_total_exchange | decimalFormat : 'AMOUNT'
-                    }}" aria-describedby [placeholder]="zeroAmtVal" readonly />
+                  <input
+                    type="text"
+                    class="form-control textboxcorner"
+                    id
+                    value="{{ order_total_exchange | decimalFormat: 'AMOUNT' }}"
+                    aria-describedby
+                    [placeholder]="zeroAmtVal"
+                    readonly
+                  />
                 </td>
               </tr>
               <tr>
@@ -1236,48 +1256,69 @@
                   <b>Roundoff Discount</b>
                 </td>
                 <td>
-                  <input type="text" class="form-control textboxcorner" id="discountInput"
-                    [(ngModel)]="order_items_total_discount_amount" (focus)="clearField()"
+                  <input
+                    type="text"
+                    class="form-control textboxcorner"
+                    id="discountInput"
+                    [(ngModel)]="order_items_total_discount_amount"
+                    (focus)="clearField()"
                     (blur)="order_items_total_discount_amount = formatValue(order_items_total_discount_amount)"
-                    (change)="changeFinalDiscount($event)" aria-describedby="helpId" [placeholder]="zeroAmtVal"
-                    [readonly]="viewOnly||isNoDiscountAllowed">
-
+                    (change)="changeFinalDiscount($event)"
+                    aria-describedby="helpId"
+                    [placeholder]="zeroAmtVal"
+                    [readonly]="viewOnly || isNoDiscountAllowed"
+                  />
                 </td>
-
               </tr>
               <tr>
                 <td class="td-w-40" style="background-color: #1a61a9; color: #fff">
                   <b>Net Amount</b>
                 </td>
                 <td>
-                  <input type="text" class="form-control textboxcorner" id value="{{
-                    netTotal | decimalFormat : 'AMOUNT'
-                    }}" aria-describedby [placeholder]="zeroAmtVal" readonly />
+                  <input
+                    type="text"
+                    class="form-control textboxcorner"
+                    id
+                    value="{{ netTotal | decimalFormat: 'AMOUNT' }}"
+                    aria-describedby
+                    [placeholder]="zeroAmtVal"
+                    readonly
+                  />
                 </td>
               </tr>
-
+        
               <tr>
                 <td class="td-w-40" style="background-color: #1a61a9; color: #fff">
                   <b>Receipt Total</b>
-                  <!-- <b>Received</b> -->
                 </td>
                 <td>
-                  <input type="text" class="form-control textboxcorner" id [(ngModel)]="receiptTotalNetAmt"
-                    aria-describedby [placeholder]="zeroAmtVal" readonly AmountDecimalInput />
-                  <!-- <input type="text" class="form-control textboxcorner" id="" [(ngModel)]="order_received_amount"
-                      value="{{ order_received_amount }}" aria-describedby="" [placeholder]="zeroAmtVal" readonly /> -->
+                  <input
+                    type="text"
+                    class="form-control textboxcorner"
+                    id
+                    [(ngModel)]="receiptTotalNetAmt"
+                    aria-describedby
+                    [placeholder]="zeroAmtVal"
+                    readonly
+                    AmountDecimalInput
+                  />
                 </td>
               </tr>
-
+        
               <tr>
                 <td class="td-w-40" style="background-color: #1a61a9; color: #fff">
                   <b>VAT Round Off</b>
                 </td>
                 <td>
-                  <input type="text" class="form-control textboxcorner" id="vatroundoff" [(ngModel)]="vatRoundOffAmt"
-                    aria-describedby [placeholder]="zeroAmtVal" readonly />
-                  <!-- <input type="text" class="form-control textboxcorner" id="" [(ngModel)]="order_received_amount"
-                      value="{{ order_received_amount }}" aria-describedby="" [placeholder]="zeroAmtVal" readonly /> -->
+                  <input
+                    type="text"
+                    class="form-control textboxcorner"
+                    id="vatroundoff"
+                    [(ngModel)]="vatRoundOffAmt"
+                    aria-describedby
+                    [placeholder]="zeroAmtVal"
+                    readonly
+                  />
                 </td>
               </tr>
             </table>
@@ -1671,6 +1712,10 @@
           </div>
         </form>
       </mat-tab>
+
+     
+      
+
       <mat-tab label="GIFT. VOC" [disabled]="!this.receiptModesList?.BTN_GIFT || viewOnly">
         <form [formGroup]="giftReceiptForm" novalidate>
           <div class="col-md-12" style="margin-top: 20px; margin-bottom: 20px">
@@ -1803,6 +1848,75 @@
           </div>
         </form>
       </mat-tab>
+
+      
+      <!-- <mat-tab label="CURR SCH RED" [disabled]="!this.receiptModesList?.BTN_SCHEME || viewOnly">
+        <form [formGroup]="schemeReceiptForm" novalidate>
+          <div class="col-md-12" style="margin-top: 20px; margin-bottom: 20px">
+            <div class="form-group row">
+              <div class="col-md-6 d-flex align-items-center">
+                <mat-form-field class="flex-grow-1" style="margin-right: 10px;">
+                  <mat-label>Scheme Code</mat-label>
+                  <input type="text" formControlName="scheme_code" matInput />
+                </mat-form-field>
+                <div>
+                  <master-search [MasterSearchData]="SchemeMasterFindData" (newRowClick)="schemeCodeSelected($event)"></master-search>
+                </div>
+              </div>
+            
+              <div class="col-md-6">
+                <mat-form-field style="width: 100%;">
+                  <mat-label>Scheme Name</mat-label>
+                  <input
+                    type="text"
+                    class="st_txt_right"
+                    matInput
+                    formControlName="scheme_name"
+                    id="scheme_name"
+                    readonly
+                  />
+                </mat-form-field>
+              </div>
+            </div>
+            
+
+              
+            </div>
+          <div class="col-md-12" style="margin-top: 20px; margin-bottom: 20px">
+          <div class="form-group row">
+            <div class="col-md-6">
+              <mat-form-field>
+                <mat-label>Scheme No.</mat-label>
+                <input type="text" matInput formControlName="schemeNo" id="schemeNo"
+                 readonly />
+                <mat-error *ngIf="
+                schemeReceiptForm.controls.schemeNo.hasError('required')
+                  ">
+                  Scheme No. is <strong>required</strong>
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-6">
+              <mat-form-field>
+                <mat-label>Amount</mat-label>
+                <input type="text" class="st_txt_right" matInput formControlName="schemeAmtFC" id="schemeAmtFC"
+                  [placeholder]="zeroAmtVal"  readonly AmountDecimalInput />
+                <mat-error *ngIf="
+                schemeReceiptForm.controls.schemeAmtFC.hasError('required')
+                  ">
+                  Amount is <strong>required</strong>
+                </mat-error>
+                <mat-error *ngIf="schemeReceiptForm.controls.schemeAmtFC.hasError('min')">
+                  Amount is should be Greater than Zero
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+        
+        </form>
+      </mat-tab> -->
+      
     </mat-tab-group>
 
     <div style="padding-bottom: 20px">
@@ -2507,7 +2621,7 @@
                 <mat-select formControlName="fcn_cust_detail_marital_status" [disabled]="viewOnly">
                   <mat-option *ngFor="let data of maritalStatusList" [value]="data.ENGLISH">{{ data.ENGLISH
                     }}</mat-option>
-                  <mat-option value="Unknown">Unknown</mat-option>
+                  <!-- <mat-option value="Unknown">Unknown</mat-option> -->
                 </mat-select>
               </mat-form-field>
             </div>
@@ -2811,15 +2925,15 @@
                       [readonly]="viewOnly || !allowDescription" />
                   </mat-form-field>
                 </div>
-                <div class="col-md-2" *ngIf="!!this.lineItemForm.value.fcn_li_location">
+                <div class="col-md-2" *ngIf="this.lineItemForm.value.fcn_li_location">
                   <mat-form-field>
                     <mat-label>Location </mat-label>
                     <input type="text" matInput formControlName="fcn_li_location" id="fcn_li_location"
-                      [readonly]="viewOnly" />
+                      readonly />
                     <!-- BUG_01711 - Should be able to enter location.-->
                   </mat-form-field>
                 </div>
-                <div class="col-md-2" *ngIf="isGiftTypeRequired">
+                <!-- <div class="col-md-2" *ngIf="isGiftTypeRequired">
                   <mat-form-field>
                     <mat-label>Gift Type</mat-label>
                     <mat-select formControlName="fcn_li_gift_type">
@@ -2827,7 +2941,7 @@
                         }}</mat-option>
                     </mat-select>
                   </mat-form-field>
-                </div>
+                </div> -->
               </div>
             </div>
           </div>
@@ -3485,7 +3599,7 @@
           <mat-form-field>
             <mat-label>Expiry Date</mat-label>
             <input matInput [matDatepicker]="expDateAttachment" name="expDate" formControlName="expDate"
-              placeholder="DD/MM/YYYY" [min]="currentDate" [readonly]="viewOnly" />
+              placeholder="DD/MM/YYYY" [min]="currentDate" [readonly]="viewOnly" DateValidation />
             <mat-datepicker-toggle matSuffix [for]="expDateAttachment"></mat-datepicker-toggle>
             <mat-datepicker [startAt]="currentDate" #expDateAttachment></mat-datepicker>
 
@@ -3533,9 +3647,9 @@
                 <a href="javascript:void(0)" (click)="openAttachment(data)">
                   <i class="fa fa-paperclip" style="color: #337ab7"></i>
                 </a>
-                <!-- <a href="javascript:void(0)" (click)="deleteAttachment(data)">
+                <a href="javascript:void(0)" (click)="deleteAttachment(data)">
                   <i class="fa fa-trash" style="color: red; margin-left: 10px;"></i>
-                </a> -->
+                </a>
               </ng-container>
             </div>
           </dx-data-grid>

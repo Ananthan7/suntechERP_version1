@@ -196,11 +196,29 @@ export class DiamondJobBoqReceiptComponent implements OnInit {
     this.diamondJobBoqReceipt.controls.baseCurrencyDesc.setValue(this.content.BASE_CURR_RATE)
   }
 
+  submitValidations(form: any) {
+    if (this.comService.nullToString(form.vocType) == '') {
+      this.comService.toastErrorByMsgId('MSG1939')// vocType code CANNOT BE EMPTY
+      return true
+    }
+    else if (this.comService.nullToString(form.vocNo) == '') {
+      this.comService.toastErrorByMsgId('MSG3661')//"vocNo cannot be empty"
+      return true
+    }
+    else if (this.comService.nullToString(form.location) == '') {
+      this.comService.toastErrorByMsgId('MSG1381')//"location cannot be empty"
+      return true
+    }
+    return false;
+  }
+
   formSubmit(){
     if (this.content && this.content.FLAG == 'EDIT') {
       this.update()
       return
     }
+
+   // if (this.submitValidations(this.diamondJobBoqReceipt.value)) return;
     if (this.diamondJobBoqReceipt.invalid) {
       this.toastr.error('select all required fields')
       return
@@ -598,7 +616,7 @@ export class DiamondJobBoqReceiptComponent implements OnInit {
                 });
               }
             } else {
-              this.toastr.error('Not deleted')
+              this.comService.toastErrorByMsgId('MSG1880');// Not Deleted
             }
           }, err => alert(err))
         this.subscriptions.push(Sub)
@@ -722,7 +740,7 @@ export class DiamondJobBoqReceiptComponent implements OnInit {
         }
   
       }, err => {
-        this.comService.toastErrorByMsgId('network issue found')
+        this.comService.toastErrorByMsgId('MSG2272')//Error occured, please try again
       })
     this.subscriptions.push(Sub)
   }

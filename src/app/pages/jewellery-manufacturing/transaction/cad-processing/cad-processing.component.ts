@@ -552,6 +552,25 @@ componentSet(){
 }
 
   
+submitValidations(form: any) {
+  if (this.comService.nullToString(form.design) == '') {
+    this.comService.toastErrorByMsgId('MSG7965')// design code CANNOT BE EMPTY
+    return true
+  }
+  else if (this.comService.nullToString(form.toWorker) == '') {
+    this.comService.toastErrorByMsgId('MSG1912')//"toWorker cannot be empty"
+    return true
+  }
+  else if (this.comService.nullToString(form.toProcess) == '') {
+    this.comService.toastErrorByMsgId('MSG1907')//"toProcess cannot be empty"
+    return true
+  }
+  else if (this.comService.nullToString(form.StockCode) == '') {
+    this.comService.toastErrorByMsgId('MSG7848')//"StockCode cannot be empty"
+    return true
+  }
+  return false;
+}
 
 
   formSubmit() {
@@ -559,11 +578,7 @@ componentSet(){
       this.updateMeltingType()
       return
     }
-
-    if (this.cadProcessingForm.invalid) {
-      this.toastr.error('select all required fields')
-      return
-    }
+    if (this.submitValidations(this.cadProcessingForm.value)) return;
 
     let API = 'JobCadProcessDJ/InsertJobCadProcessDJ'
     let postData ={
@@ -636,6 +651,7 @@ componentSet(){
 
   updateMeltingType() {
     console.log(this.branchCode,'working')
+    if (this.submitValidations(this.cadProcessingForm.value)) return;
     let API = `JobCadProcessDJ/UpdateJobCadProcessDJ/${this.branchCode}/${this.cadProcessingForm.value.voctype}/${this.cadProcessingForm.value.vocNo}/${this.comService.yearSelected}` ;
       let postData ={
           "MID": 0,
@@ -762,7 +778,7 @@ componentSet(){
                 });
               }
             } else {
-              this.toastr.error('Not deleted')
+              this.comService.toastErrorByMsgId('MSG1880');// Not Deleted
             }
           }, err => alert(err))
         this.subscriptions.push(Sub)
@@ -930,7 +946,7 @@ componentSet(){
         }
 
       }, err => {
-        this.comService.toastErrorByMsgId('network issue found')
+        this.comService.toastErrorByMsgId('MSG2272')//Error occured, please try again
       })
     this.subscriptions.push(Sub)
   }

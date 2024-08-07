@@ -524,7 +524,8 @@ export class MeltingProcessDetailsComponent implements OnInit {
           this.meltingprocessdetailsForm.controls[FORMNAME].setValue(data);
         }
       }, err => {
-        this.comService.toastErrorByMsgId('Error Something went wrong');
+        this.comService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+
       }
     );
   

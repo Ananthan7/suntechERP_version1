@@ -246,7 +246,7 @@ export class ProducationSubDetailsComponent implements OnInit {
               });
             }
           } else {
-            this.toastr.error("Not saved");
+            this.comService.toastErrorByMsgId('MSG2272')//Error occured, please try again
           }
         },
         (err) => alert(err)

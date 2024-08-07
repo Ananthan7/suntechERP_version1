@@ -28,9 +28,7 @@
                                 <mat-form-field style="width: 80%;" appearance="outline">
                                     <input type="text" matInput formControlName="codedes" UpperCaseDirective
                                         autocomplete="off"
-                                        (focusout)="validateLookupField($event,codeCodeData,'codedes')"
-                                        [readonly]="viewMode || editMode"
-                                        (keydown)="lookupKeyPress($event,'codedes')" />
+                                        [readonly]="viewMode || editMode" />
                                     <master-search [MasterSearchData]="codeCodeData" class="mstrScrch"
                                         (newRowClick)="codeCodeSelected($event)" #overlaycodedescSearch
                                         *ngIf="!editMode && !viewMode">
@@ -241,7 +239,11 @@
                                 (change)="onFileChangedimage($event)" multiple [readonly]="viewMode">
                         </div>
                     </div> -->
-                    <div class="col-md-2">
+
+
+
+                    
+                    <!-- <div class="col-md-2">
                         <div class="container">
                             <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel"
                                 data-bs-pause="hover" data-bs-interval="false">
@@ -273,8 +275,62 @@
                             <input type="file" class="uploadproduct" accept=".png, .jpg, .jpeg" #fileInput
                                 (change)="onFileChangedimage($event)" multiple [disabled]="viewMode">
                         </div>
-                    </div>
+                    </div> -->
 
+                    <!-- <div class="col-md-2">
+                        <div class="container">
+                          <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel" data-bs-pause="hover" data-bs-interval="false">
+                            <div class="box-wrap">
+                              <div class="carousel-inner">
+                                <div class="carousel-item" *ngFor="let img of images; let i = index" [class.active]="i === 0">
+                                  <div class="upload-btn-wrapper">
+                                    <button class="btn btnnew border-dark" [disabled]="viewMode">
+                                      <img [src]="img" style="width:126px;height:124px">
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <button class="carousel-control-prev" type="button" id="ID015" data-bs-target="#carouselExampleControls" data-bs-slide="prev" [disabled]="viewMode">
+                              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                              <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" id="ID016" data-bs-target="#carouselExampleControls" data-bs-slide="next" [disabled]="viewMode">
+                              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                              <span class="visually-hidden">Next</span>
+                            </button>
+                          </div>
+                          <input type="file" class="uploadproduct" accept=".png, .jpg, .jpeg" #fileInput (change)="onFileChangedimage($event)" multiple [disabled]="viewMode">
+                        </div>
+                      </div>
+                       -->
+                       <div class="col-md-2">
+                        <div class="container">
+                          <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel" data-bs-pause="hover" data-bs-interval="false">
+                            <div class="box-wrap">
+                              <div class="carousel-inner">
+                                <div class="carousel-item" *ngFor="let img of images; let i = index" [class.active]="i === 0">
+                                  <div class="upload-btn-wrapper">
+                                    <button class="btn btnnew border-dark" [disabled]="viewMode">
+                                      <img [src]="img" style="width:126px;height:124px">
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <button class="carousel-control-prev" type="button" id="ID015" data-bs-target="#carouselExampleControls" data-bs-slide="prev" [disabled]="viewMode">
+                              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                              <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" id="ID016" data-bs-target="#carouselExampleControls" data-bs-slide="next" [disabled]="viewMode">
+                              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                              <span class="visually-hidden">Next</span>
+                            </button>
+                          </div>
+                          <input type="file" class="uploadproduct" accept=".png, .jpg, .jpeg" #fileInput (change)="onFileChangedimage($event)" multiple [disabled]="viewMode">
+                        </div>
+                      </div>
+                      
 
 
                 </div>
@@ -311,7 +367,7 @@
                                     <dxi-column dataField="STOCK_CODE" caption="Stock Code"
                                         cellTemplate="stockCodetemp">
                                     </dxi-column>
-                                    <dxi-column dataField="CARAT" caption="Karat" cellTemplate="karattemp">
+                                    <dxi-column dataField="KARAT_CODE" caption="Karat" cellTemplate="karattemp">
                                     </dxi-column>
                                     <dxi-column dataField="STOCK_FCCOST" caption="Stone Type"
                                         cellTemplate="stockTypetemp">
@@ -452,7 +508,7 @@
                                         <!-- <input type="text" (change)="size($event,data)" [value]="data.value"
                                             style="width: 100%;" required [disabled]="isPCSDisabled" /> -->
                                             <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value"></a>
-                                            <master-search [MasterSearchData]="sizeCodeData" *ngIf="!isPCSDisabled"
+                                            <master-search [MasterSearchData]="sizegridCodeData" *ngIf="!isPCSDisabled"
                                                 (newRowClick)="sizegridCodeSelected($event,data,'sizetemp')">
                                             </master-search>
                                             
@@ -522,7 +578,7 @@
 
                             <mat-tab label="Main Design Details">
                                 <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
-                                    [allowColumnReordering]="true" [allowColumnResizing]="true"
+                                    [allowColumnReordering]="true" [allowColumnResizing]="true" [dataSource]="maindetails" 
                                     [columnAutoWidth]="true">
                                     <dxo-paging [enabled]="false"></dxo-paging>
                                     <dxo-editing mode="cell" [allowUpdating]="true">

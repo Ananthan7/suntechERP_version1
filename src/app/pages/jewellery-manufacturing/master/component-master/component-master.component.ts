@@ -1,9 +1,3 @@
-/*
-MODULE : JEWELLERY MANUFACTURING
-MENU_SCREEN_NAME : COMPONENT MASTER
-DEVELOPER : AKHIL / BESKEY
-*/
-
 import { Component, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -38,6 +32,7 @@ export class ComponentMasterComponent implements OnInit {
   isPCSDisabled: boolean = false;
   iskaratDisabled: boolean = false;
   tableData: any[] = [];
+  maindetails: any[] = [];
   selectedIndexes: any = [];
   columnhead: any[] = ['Srno', 'Div.', 'Stock Code', 'Karat', 'Stock Type', 'Pcs', 'Wt/Ct', 'Color', 'Clarity', 'Shape', 'Sieve Std.', 'Description', 'Size', 'Process Type', 'Remarks', 'Pointer Wt', 'Ext.Clarity', 'Sieve From', 'Description', 'Sieve To', 'Description']
   columnhead2: any[] = ['',]
@@ -189,10 +184,10 @@ export class ComponentMasterComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 3,
-    SEARCH_FIELD: 'TYPES',
+    SEARCH_FIELD: 'types',
     SEARCH_HEADING: 'Shape',
     SEARCH_VALUE: '',
-    WHERECONDITION: " TYPES='SHAPE MASTER'",
+    WHERECONDITION: "types='SHAPE MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -225,7 +220,7 @@ export class ComponentMasterComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 15,
-    SEARCH_FIELD: 'COST_CODE',
+    SEARCH_FIELD: 'TYPE',
     SEARCH_HEADING: 'Cost Code',
     SEARCH_VALUE: '',
     WHERECONDITION: "TYPE = 'PRECIOUS STONES'",
@@ -237,7 +232,7 @@ export class ComponentMasterComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 15,
-    SEARCH_FIELD: 'COST_CODE',
+    SEARCH_FIELD: 'TYPE',
     SEARCH_HEADING: 'Cost Code',
     SEARCH_VALUE: '',
     WHERECONDITION: "TYPE = 'PRECIOUS STONES'",
@@ -250,10 +245,10 @@ export class ComponentMasterComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 3,
-    SEARCH_FIELD: 'STOCK_CODE',
-    SEARCH_HEADING: 'Stock Type',
+    SEARCH_FIELD: 'types',
+    SEARCH_HEADING: 'stone Type',
     SEARCH_VALUE: '',
-    WHERECONDITION: "TYPES = 'STONE TYPE MASTER'",
+    WHERECONDITION: "types = 'STONE TYPE MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -264,7 +259,7 @@ export class ComponentMasterComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 3,
-    SEARCH_FIELD: 'btnColor',
+    SEARCH_FIELD: 'Types',
     SEARCH_HEADING: 'Color Code',
     SEARCH_VALUE: '',
     WHERECONDITION: "Types = 'COLOR MASTER'",
@@ -275,8 +270,8 @@ export class ComponentMasterComponent implements OnInit {
   clarityCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 37,
-    SEARCH_FIELD: 'CODE',
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'Types',
     SEARCH_HEADING: 'Code',
     SEARCH_VALUE: '',
     WHERECONDITION: "Types = 'CLARITY MASTER'",
@@ -287,11 +282,11 @@ export class ComponentMasterComponent implements OnInit {
   sieveCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 38,
-    SEARCH_FIELD: 'btnSieve',
-    SEARCH_HEADING: 'Cost Code',
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'types',
+    SEARCH_HEADING: 'SIEVE',
     SEARCH_VALUE: '',
-    WHERECONDITION: "TYPES='SIEVE MASTER'",
+    WHERECONDITION: "types = 'SIEVE MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -311,11 +306,11 @@ export class ComponentMasterComponent implements OnInit {
   processCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 20,
-    SEARCH_FIELD: 'process_code',
-    SEARCH_HEADING: 'Code',
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'TYPES',
+    SEARCH_HEADING: 'SETTING TYPE MASTER',
     SEARCH_VALUE: '',
-    WHERECONDITION: "process_code<>''",
+    WHERECONDITION: "TYPES='SETTING TYPE MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -336,10 +331,10 @@ export class ComponentMasterComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 3,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Code',
+    SEARCH_FIELD: 'Types',
+    SEARCH_HEADING: 'Color Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<>''",
+    WHERECONDITION: "Types = 'COLOR MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -348,10 +343,10 @@ export class ComponentMasterComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 3,
-    SEARCH_FIELD: 'CODE',
+    SEARCH_FIELD: 'Types',
     SEARCH_HEADING: 'Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<>''",
+    WHERECONDITION: "Types = 'CLARITY MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -359,11 +354,11 @@ export class ComponentMasterComponent implements OnInit {
   sieveFromCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 38,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Code',
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'types',
+    SEARCH_HEADING: 'SIEVE MASTER',
     SEARCH_VALUE: '',
-    WHERECONDITION: "TYPES='SIEVE MASTER'",
+    WHERECONDITION: "types = 'SIEVE MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -371,11 +366,11 @@ export class ComponentMasterComponent implements OnInit {
   sieveToCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 38,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Cost Code',
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'types',
+    SEARCH_HEADING: 'Sieve To',
     SEARCH_VALUE: '',
-    WHERECONDITION: "TYPES='SIEVE MASTER'",
+    WHERECONDITION: "types = 'SIEVE MASTER' AND CODE > ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -473,14 +468,41 @@ export class ComponentMasterComponent implements OnInit {
   }
 
 
+  // sizeCodeData: MasterSearchModel = {
+  //   PAGENO: 1,
+  //   RECORDS: 10,
+  //   LOOKUPID: 89,
+  //   SEARCH_FIELD: 'COMPSIZE_CODE',
+  //   SEARCH_HEADING: 'Size',
+  //   SEARCH_VALUE: '',
+  //   WHERECONDITION: `COMPSET_CODE='${this.componentmasterForm.value.sizeSet}'`,
+  //   VIEW_INPUT: true,
+  //   VIEW_TABLE: true,
+  //   LOAD_ONCLICK: true,
+  // }
+
+  sizegridCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'types',
+    SEARCH_HEADING: 'Size',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "types = 'SIZE MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
+
+
   sizeCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 89,
-    SEARCH_FIELD: 'COMPSIZE_CODE',
+    SEARCH_FIELD: 'types',
     SEARCH_HEADING: 'Size',
     SEARCH_VALUE: '',
-    WHERECONDITION: `COMPSET_CODE='${this.componentmasterForm.value.sizeSet}'`,
+    WHERECONDITION: "types = 'SIZE MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -488,11 +510,7 @@ export class ComponentMasterComponent implements OnInit {
 
   checkCode(): boolean {
     if (this.componentmasterForm.value.code == '') {
-<<<<<<< HEAD
-      this.commonService.toastErrorByMsgId('please enter code')//CHINNU -  MESSAGE HARD CODED
-=======
       this.commonService.toastErrorByMsgId('MSG1593')
->>>>>>> origin/ERP_Staging
       return true
     }
     return false
@@ -508,6 +526,8 @@ export class ComponentMasterComponent implements OnInit {
           this.prefixMasterDetail = result.response;
           this.prefixMasterDetail.LAST_NO = this.incrementAndPadNumber(this.prefixMasterDetail.LAST_NO, 1)
           this.componentmasterForm.controls.code.setValue(this.prefixMasterDetail.PREFIX_CODE + this.prefixMasterDetail.LAST_NO)
+          this.componentmasterForm.controls.codedes.setValue(result.response.DESCRIPTION)
+          
         } else {
           // this.alloyMastereForm.controls.code.setValue('')
           this.commonService.toastErrorByMsgId('MSG1531')
@@ -538,20 +558,12 @@ export class ComponentMasterComponent implements OnInit {
       .subscribe((result) => {
         if (result.response) {
           if (result.status == "Success") {
-<<<<<<< HEAD
-            this.commonService.toastSuccessByText('Last number updated')//CHINNU -  MESSAGE HARD CODED
-
-          }
-        } else {
-          this.toastr.error('Not saved')//CHINNU -  MESSAGE HARD CODED
-=======
            // this.commonService.toastSuccessByText('Last number updated')
            console.log('Last number updated');
 
           }
         } else {
           this.commonService.toastErrorByMsgId('MSG2272')
->>>>>>> origin/ERP_Staging
         }
       }, err => alert(err))
     this.subscriptions.push(Sub)
@@ -559,42 +571,44 @@ export class ComponentMasterComponent implements OnInit {
 
   sieveToCodeSelected(value: any, data: any, controlName: string) {
     if (this.checkCode()) return
-    this.tableData[data.data.SRNO - 1].CARAT = value.KARAT_CODE;
+    this.tableData[data.data.SRNO - 1].SIEVE_TO = value.CODE;
   }
 
   sieveFromCodeSelected(value: any, data: any, controlName: string) {
     if (this.checkCode()) return
-    this.tableData[data.data.SRNO - 1].CARAT = value.KARAT_CODE;
+    this.tableData[data.data.SRNO - 1].SIEVE_FROM = value.CODE;
+
+    this.sieveToCodeData.WHERECONDITION = `types = 'SIEVE MASTER' AND CODE > '${value.SIEVE_FROM}'`;
   }
 
   extClarityCodeSelected(value: any, data: any, controlName: string) {
     if (this.checkCode()) return
-    this.tableData[data.data.SRNO - 1].CARAT = value.KARAT_CODE;
+    this.tableData[data.data.SRNO - 1].EXT_CLARITY = value.CODE;
   }
 
   extColorCodeSelected(value: any, data: any, controlName: string) {
     if (this.checkCode()) return
-    this.tableData[data.data.SRNO - 1].CARAT = value.KARAT_CODE;
+    this.tableData[data.data.SRNO - 1].EXT_Color = value.CODE;
   }
 
   pointerWtCodeSelected(value: any, data: any, controlName: string) {
     if (this.checkCode()) return
-    this.tableData[data.data.SRNO - 1].CARAT = value.KARAT_CODE;
+    this.tableData[data.data.SRNO - 1].POINTER_WT = value.CODE;
   }
 
   processCodeSelected(value: any, data: any, controlName: string) {
     if (this.checkCode()) return
-    this.tableData[data.data.SRNO - 1].CARAT = value.KARAT_CODE;
+    this.tableData[data.data.SRNO - 1].PROCESS_TYPE = value.CODE;
   }
 
   descriptionCodeSelected(value: any, data: any, controlName: string) {
     if (this.checkCode()) return
-    this.tableData[data.data.SRNO - 1].CARAT = value.KARAT_CODE;
+    this.tableData[data.data.SRNO - 1].DESCRIPTION = value.DESCRIPTION;
   }
 
   sieveCodeSelected(value: any, data: any, controlName: string) {
     if (this.checkCode()) return
-    this.tableData[data.data.SRNO - 1].CARAT = value.KARAT_CODE;
+    this.tableData[data.data.SRNO - 1].SIEVE = value.CODE;
   }
 
   clarityCodeSelected(value: any, data: any, controlName: string) {
@@ -609,18 +623,23 @@ export class ComponentMasterComponent implements OnInit {
 
   shapegridCodeSelected(value: any, data: any, controlName: string) {
     if (this.checkCode()) return
-    this.tableData[data.data.SRNO - 1].CARAT = value.KARAT_CODE;
+    this.tableData[data.data.SRNO - 1].SHAPE = value.CODE;
   }
 
 
   sizegridCodeSelected(value: any, data: any, controlName: string) {
     if (this.checkCode()) return
-    this.tableData[data.data.SRNO - 1].CARAT = value.KARAT_CODE;
+    this.tableData[data.data.SRNO - 1].DSIZE = value.CODE;
   }
 
   stocktypeCodeSelected(value: any, data: any, controlName: string) {
     if (this.checkCode()) return
     this.tableData[data.data.SRNO - 1].STOCK_FCCOST = value.CODE;
+  }
+  karatCodeSelected(value: any, data: any, controlName: string) {
+    if (this.checkCode()) return
+    this.tableData[data.data.SRNO - 1].KARAT_CODE = value.KARAT_CODE;
+    //this.componentmasterForm.controls.karat.setValue(e.KARAT_CODE);
   }
 
   categoryCodeSelected(e: any) {
@@ -628,11 +647,7 @@ export class ComponentMasterComponent implements OnInit {
     console.log(e);
     this.componentmasterForm.controls.category.setValue(e.CODE);
   }
-  karatCodeSelected(value: any, data: any, controlName: string) {
-    if (this.checkCode()) return
-    this.tableData[data.data.SRNO - 1].CARAT = value.KARAT_CODE;
-    //this.componentmasterForm.controls.karat.setValue(e.KARAT_CODE);
-  }
+ 
   codeCodeSelected(e: any) {
     console.log(e);
     const prefixCode = e.PREFIX_CODE.toUpperCase();
@@ -765,12 +780,14 @@ export class ComponentMasterComponent implements OnInit {
 
     let srno = length + 1;
     let data = {
+
+      "UNIQUEID": 0,
       "SRNO": srno,
       "DIVCODE": "",
       "STOCK_CODE": "",
-      "CARAT": "",
+      "CARAT": 0,
       "STOCK_FCCOST": "",
-      "PCS": "",
+      "PCS": 0,
       "GROSS_WT": "",
       "COLOR": "",
       "CLARITY": "",
@@ -785,6 +802,34 @@ export class ComponentMasterComponent implements OnInit {
       "EXT_CLARITY": "",
       "SIEVE_FROM": "",
       "SIEVE_TO": "",
+      "METALSTONE": "",
+      "KARAT_CODE": "",
+      "RATE_TYPE": "",
+      "CURRENCY_CODE": "",
+      "KARAT":"",
+      "PRICEID":"",
+      "SIZE_FROM":"",
+      "SIZE_TO":"",
+      "PART_CODE":"",
+      "LABCHGCODE":"",
+      "PRICECODE":"",
+      "DLABCHGCODE":"",
+      "DPRICECODE":"",
+      "RATEFC": 0,
+      "DMMETALPERCENTAGE": 0,
+      "AMOUNTFC": 0,
+      "AMOUNTLC": 0,
+      "MAKINGRATE": 0,
+      "MAKINGAMOUNT": 0,
+      "METALPER": 0,
+      "METALRATE": 0,
+      "CURR_RATE": 0,
+      "LABOURCODE": "",
+      "DETLINEREMARKS": "",
+      "SIEVE_SET": "",
+      "STONE_TYPE": "",
+       "PURITY": 0,
+      "OTHER_ATTR": ""
 
     };
     this.tableData.push(data);
@@ -875,7 +920,7 @@ export class ComponentMasterComponent implements OnInit {
         this.commonService.allbranchMaster?.BMQTYDECIMALS,
         this.content.RADIUS));
 
-    this.PICTURE_NAME = this.content.PICTURE_NAME
+    this.images = this.content.PICTURE_NAME
 
   }
 
@@ -1377,14 +1422,7 @@ export class ComponentMasterComponent implements OnInit {
       this.update()
       return
     }
-<<<<<<< HEAD
-    if (this.componentmasterForm.invalid) {
-      this.toastr.error('select all required fields')//CHINNU -  MESSAGE HARD CODED
-      return
-    }
-=======
     if (this.submitValidations(this.componentmasterForm.value)) return;
->>>>>>> origin/ERP_Staging
     let postData = this.setPostData()
 
     let Sub: Subscription = this.dataService.postDynamicAPI('DesignMaster/InsertDesignMaster', postData)
@@ -1393,11 +1431,7 @@ export class ComponentMasterComponent implements OnInit {
           this.updatePrefixMaster()
           this.showSuccessDialog(this.commonService.getMsgByID('MSG2239') || 'Saved Successfully')
         } else if (result.status == "Failed") {
-<<<<<<< HEAD
-          this.showErrorDialog('Code Already Exists')//CHINNU -  MESSAGE HARD CODED
-=======
           this.commonService.toastErrorByMsgId('MSG1121')
->>>>>>> origin/ERP_Staging
         }
         else {
           this.commonService.toastErrorByMsgId('MSG3577')
@@ -1409,15 +1443,8 @@ export class ComponentMasterComponent implements OnInit {
   }
 
   update() {
-<<<<<<< HEAD
-    if (this.componentmasterForm.invalid) {
-      this.toastr.error('select all required fields')//CHINNU -  MESSAGE HARD CODED
-      return
-    }
-=======
 
     if (this.submitValidations(this.componentmasterForm.value)) return;
->>>>>>> origin/ERP_Staging
 
     let API = 'DesignMaster/UpdateDesignMaster/' + this.content.DESIGN_CODE
     let postData = this.setPostData()
@@ -1463,15 +1490,11 @@ export class ComponentMasterComponent implements OnInit {
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
       .subscribe((result) => {
         if (result.status == "Success") {
-          //this.jobnumber = result.dynamicData[0][0].JOB_NO || []
+          this.maindetails = result.dynamicData[0] || []
           // this.componentmasterForm.controls.jobno.setValue(result.dynamicData[0][0].JOB_NO)
         }
       }, err => {
-<<<<<<< HEAD
-        this.commonService.toastErrorByMsgId('Server Error')//CHINNU -  MESSAGE HARD CODED
-=======
         this.commonService.toastErrorByMsgId('MSG81451')
->>>>>>> origin/ERP_Staging
       })
     this.subscriptions.push(Sub)
   }
@@ -1480,11 +1503,7 @@ export class ComponentMasterComponent implements OnInit {
   deleteComponentMaster() {
     if (this.content && this.content.FLAG == 'VIEW') return
     if (!this.content.DESIGN_CODE) {
-<<<<<<< HEAD
-      this.showDeleteErrorDialog('Please Select data to delete!');//CHINNU -  MESSAGE HARD CODED
-=======
       this.commonService.toastErrorByMsgId('MSG1644');
->>>>>>> origin/ERP_Staging
       return;
     }
 
@@ -1496,22 +1515,15 @@ export class ComponentMasterComponent implements OnInit {
           .subscribe((result) => {
             if (result) {
               if (result.status == "Success") {
-                this.showSuccessDialog('Deleted Successfully');//CHINNU -  MESSAGE HARD CODED
+                this.showSuccessDialog('Deleted Successfully');
               } else {
-                this.showErrorDialog(result.message || 'Error please try again');//CHINNU -  MESSAGE HARD CODED
+                this.showErrorDialog(result.message || 'Error please try again');
               }
             } else {
-<<<<<<< HEAD
-              this.toastr.error('Not deleted');//CHINNU -  MESSAGE HARD CODED
-            }
-          }, err => {
-            this.commonService.toastErrorByMsgId('network error')//CHINNU -  MESSAGE HARD CODED
-=======
               this.commonService.toastErrorByMsgId('MSG1880');// Not Deleted
             }
           }, err => {
             this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
->>>>>>> origin/ERP_Staging
           });
         this.subscriptions.push(Sub);
       }
@@ -1598,124 +1610,116 @@ export class ComponentMasterComponent implements OnInit {
           LOOKUPDATA.SEARCH_VALUE = ''
           return
         }
-        //this.alloyMasterFormChecks(FORMNAME)// for validations
+        this.componentMasterFormChecks(FORMNAME)// for validations
       }, err => {
-<<<<<<< HEAD
-        this.commonService.toastErrorByMsgId('network issue found')//CHINNU -  MESSAGE HARD CODED
-=======
         this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
->>>>>>> origin/ERP_Staging
       })
     this.subscriptions.push(Sub)
   }
 
-  // validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
-  //   LOOKUPDATA.SEARCH_VALUE = event.target.value
-
-  //   if (this.editMode && FORMNAME === 'code') {
-  //     return;
-  //   }
-  //   if (this.editMode && FORMNAME === 'codedes') {
-  //     return;
-  //   }
-
-  //   if (event.target.value == '' || this.viewMode == true) return
-  //   let param = {
-  //     LOOKUPID: LOOKUPDATA.LOOKUPID,
-  //     WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
-  //   }
-  //   this.commonService.showSnackBarMsg('MSG81447');
-  //   let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
-  //   let Sub: Subscription = this.dataService.getDynamicAPI(API)
-  //     .subscribe((result) => {
-  //       let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
-  //       if (data.length == 0) {
-  //         this.commonService.toastErrorByMsgId('MSG1531')
-  //         this.componentmasterForm.controls[FORMNAME].setValue('')
-  //         LOOKUPDATA.SEARCH_VALUE = ''
-  //         return
-  //       }
-  //     }, err => {
-  //       this.commonService.toastErrorByMsgId('network issue found')
-  //     })
-  //   this.subscriptions.push(Sub)
-  // }
-
-  // validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
-  //   LOOKUPDATA.SEARCH_VALUE = event.target.value
-  //   if (event.target.value == '' || this.viewMode == true) return
-  //   let param = {
-  //     LOOKUPID: LOOKUPDATA.LOOKUPID,
-  //     WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
-  //   }
-  //   this.commonService.showSnackBarMsg('MSG81447');
-  //   let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
-  //   let Sub: Subscription = this.dataService.getDynamicAPI(API)
-  //     .subscribe((result) => {
-  //       this.commonService.closeSnackBarMsg()
-  //       this.isDisableSaveBtn = false;
-  //       let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
-  //       if (data.length == 0) {
-  //         this.commonService.toastErrorByMsgId('MSG1531')
-  //         this.stonePrizeMasterForm.controls[FORMNAME].setValue('')
-  //         LOOKUPDATA.SEARCH_VALUE = ''
-  //         return
-  //       }
-  //     }, err => {
-  //       this.commonService.toastErrorByMsgId('network issue found')
-  //     })
-  //   this.subscriptions.push(Sub)
-  // }
-
-  // onFileChangedimage(event: any) {
-
+  //PrefixMaster/GetPrefixMasterDetail/DPM1/DMCC
+  componentMasterFormChecks(FORMNAME: string) {
+    if (FORMNAME == 'code') {
+    this.prefixCodeValidate()
+    }
+  }
+  
+  // onFileChangedimage(event: any): void {
   //   this.images = [];
-
+  //   this.imageNames = [];
+  //   this.PICTURE_NAME = "";  // Clear PICTURE_NAME initially
+  
   //   if (event.target.files && event.target.files.length > 0) {
-
-  //     for (let i = 0; i < event.target.files.length; i++) {
-  //       let reader = new FileReader();
-
-  //       let file = event.target.files[i];
+  //     const files = event.target.files;
+  //     const totalFiles = files.length;
+  //     let loadedFiles = 0;
+  
+  //     for (let i = 0; i < totalFiles; i++) {
+  //       const reader = new FileReader();
+  //       const file = files[i];
+  
+  //       // Save file names or other metadata instead of the entire base64 data
+  //       this.imageNames.push(file.name);
+  
   //       reader.readAsDataURL(file);
-  //       reader.onload = () => {
+  //       reader.onload = (() => {
   //         this.images.push(reader.result as string);
-  //       };
+  //         loadedFiles++;
+  
+  //         // Update PICTURE_NAME after all files are loaded
+  //         if (loadedFiles === totalFiles) {
+  //           this.PICTURE_NAME = this.imageNames.join(',') || "";
+  //         }
+  //       }).bind(this);  // Ensure `this` context is maintained
   //     }
   //   }
-
   // }
+  
   onFileChangedimage(event: any): void {
+    // Clear the previous images and names
     this.images = [];
     this.imageNames = [];
-
+    this.PICTURE_NAME = "";
+  
     if (event.target.files && event.target.files.length > 0) {
       const files = event.target.files;
       const totalFiles = files.length;
       let loadedFiles = 0;
-
+  
       for (let i = 0; i < totalFiles; i++) {
         const reader = new FileReader();
         const file = files[i];
-
-        // Save file names or other metadata instead of the entire base64 data
+  
+        // Save file names or other metadata
         this.imageNames.push(file.name);
-
-        reader.readAsDataURL(file);
-        reader.onload = () => {
-          this.images.push(reader.result as string);
+  
+        reader.onload = ((event: ProgressEvent<FileReader>) => {
+          this.images.push(event.target?.result as string);
           loadedFiles++;
-
+  
           // Update PICTURE_NAME after all files are loaded
           if (loadedFiles === totalFiles) {
             this.PICTURE_NAME = this.imageNames.join(',') || "";
           }
-        };
+        });
+  
+        reader.readAsDataURL(file);
       }
-    } else {
-      this.PICTURE_NAME = "";  // Clear PICTURE_NAME if no files are selected
     }
   }
+  
+
+  // onFileChangedimage(event: any): void {
+  //   this.images = [];
+  //   this.imageNames = [];
+
+  //   if (event.target.files && event.target.files.length > 0) {
+  //     const files = event.target.files;
+  //     const totalFiles = files.length;
+  //     let loadedFiles = 0;
+
+  //     for (let i = 0; i < totalFiles; i++) {
+  //       const reader = new FileReader();
+  //       const file = files[i];
+
+  //       // Save file names or other metadata instead of the entire base64 data
+  //       this.imageNames.push(file.name);
+
+  //       reader.readAsDataURL(file);
+  //       reader.onload = () => {
+  //         this.images.push(reader.result as string);
+  //         loadedFiles++;
+
+  //         // Update PICTURE_NAME after all files are loaded
+  //         if (loadedFiles === totalFiles) {
+  //           this.PICTURE_NAME = this.imageNames.join(',') || "";
+  //         }
+  //       };
+  //     }
+  //   } else {
+  //     this.PICTURE_NAME = "";  // Clear PICTURE_NAME if no files are selected
+  //   }
+  // }
 
   stockType(data: any, value: any) {
     this.tableData[value.data.SRNO - 1].STOCK_FCCOST = data.target.value;
@@ -1765,6 +1769,10 @@ export class ComponentMasterComponent implements OnInit {
   extColor(data: any, value: any) {
     this.tableData[value.data.SRNO - 1].EXT_Color = data.target.value;
   }
+  // extColor(data: any, value: any) {
+  //   this.tableData[value.data.SRNO - 1].EXT_Color = data.target.value;
+  // }
+
   stockCodeValidate(event: any) {
     console.log(this.stockCodeData)
     let postData = {
@@ -1786,7 +1794,7 @@ export class ComponentMasterComponent implements OnInit {
         if (result.status == "Success" && result.dynamicData[0]) {
           let data = result.dynamicData[0];
           if (data) {
-            this.tableData[event.SRNO - 1].CARAT = data[0].KARAT_CODE
+            this.tableData[event.SRNO - 1].KARAT_CODE = data[0].KARAT_CODE
             this.tableData[event.SRNO - 1].DIVCODE = data[0].DIVISION
             this.tableData[event.SRNO - 1].DESCRIPTION = data[0].DESCRIPTION
             this.tableData[event.SRNO - 1].SIEVE = data[0].SIEVE
@@ -1849,11 +1857,10 @@ export class ComponentMasterComponent implements OnInit {
     switch (formControlName) {
       case 'code':
         this.overlaycodedescSearch.showOverlayPanel(event);
-       
         break;
-      case 'codedes':
-        this.overlaycodedescSearch.showOverlayPanel(event);
-        break;
+      // case 'codedes':
+      //   this.overlaycodedescSearch.showOverlayPanel(event);
+      //   break;
       case 'sizeSet':
         this.overlaysizeSetSearch.showOverlayPanel(event);
         break;
@@ -1915,3 +1922,6 @@ export class ComponentMasterComponent implements OnInit {
   //   }
   // }
 }
+
+
+ 

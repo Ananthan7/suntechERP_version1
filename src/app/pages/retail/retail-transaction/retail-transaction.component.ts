@@ -302,7 +302,7 @@ export class RetailTransactionComponent implements OnInit {
           size: "lg",
           backdrop: true,
           keyboard: true,
-          windowClass: "modal-full-width",
+          // windowClass: "modal-full-width",
         }
       );
 

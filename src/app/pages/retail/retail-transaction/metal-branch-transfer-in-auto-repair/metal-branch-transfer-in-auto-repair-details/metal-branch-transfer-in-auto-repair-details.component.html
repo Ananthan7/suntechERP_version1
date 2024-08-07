@@ -1,6 +1,6 @@
 <!-- header section starts -->
 <div class="card-content border-bottom d-flex justify-content-between p-2">
-    <h5 class="pos-modaltitle" id="modal-dia-metal">Diamond Branch Transfer in Auto Repair - Detail</h5>
+    <h5 class="pos-modaltitle" id="modal-dia-metal">Metal Branch Transfer in Auto Repair - Detail</h5>
     <button type="button" class="btn btn-close close-btn" (click)="close()">
         <i class="feather icon-x close-icon"></i>
     </button>
@@ -21,13 +21,14 @@
                                     Stock Code: </label>
                                 <div class="col-sm-4">
                                     <mat-form-field style="width: 70%;">
-                                        <input type="text" matInput formControlName="remarks" />
+                                        <input type="text" matInput formControlName="Stockcode" />
                                     </mat-form-field>
-                                    <master-search></master-search>
+                                    <master-search [MasterSearchData]="StockcodeData"
+                                        (newRowClick)="StockcodeSelected($event)"></master-search>
                                 </div>
                                 <div class="col-sm-4">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="remarks" />
+                                        <input type="text" matInput formControlName="StockcodeDes" />
                                     </mat-form-field>
 
                                 </div>
@@ -39,13 +40,14 @@
                                     To Stock Code : </label>
                                 <div class="col-sm-4">
                                     <mat-form-field style="width: 70%;">
-                                        <input type="text" matInput formControlName="remarks" />
+                                        <input type="text" matInput formControlName="to_stock_code" />
                                     </mat-form-field>
-                                    <master-search></master-search>
+                                    <master-search [MasterSearchData]="StockcodeData"
+                                        (newRowClick)="TobranchToCodeSelected($event)"></master-search>
                                 </div>
                                 <div class="col-sm-4">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="remarks" />
+                                        <input type="text" matInput formControlName="to_stock_codeDesc" />
                                     </mat-form-field>
 
                                 </div>
@@ -56,7 +58,7 @@
                                     Bar No : </label>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 70%;">
-                                        <input type="text" matInput formControlName="remarks" />
+                                        <input type="text" matInput formControlName="bar_no" />
                                     </mat-form-field>
                                     <master-search></master-search>
                                 </div>
@@ -64,7 +66,7 @@
                                     Ticket No : </label>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="remarks" />
+                                        <input type="text" matInput formControlName="ticket_no" />
                                     </mat-form-field>
 
                                 </div>
@@ -72,7 +74,7 @@
                                     Lot No : </label>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="remarks" />
+                                        <input type="text" matInput formControlName="lot_no" />
                                     </mat-form-field>
 
                                 </div>
@@ -83,7 +85,7 @@
                                     Bar No : </label>
                                 <div class="col-sm-6">
                                     <mat-form-field style="width: 60%;">
-                                        <input type="text" matInput formControlName="remarks" />
+                                        <input type="text" matInput formControlName="bar_code_pcs" />
                                     </mat-form-field>
                                     <master-search></master-search>
                                 </div>
@@ -104,13 +106,14 @@
                                     Supplier : </label>
                                 <div class="col-sm-4">
                                     <mat-form-field style="width: 70%;">
-                                        <input type="text" matInput formControlName="remarks" />
+                                        <input type="text" matInput formControlName="partyCode" />
                                     </mat-form-field>
-                                    <master-search></master-search>
+                                    <master-search [MasterSearchData]="partyCodeData"
+                                        (newRowClick)="partycodeselecteddata($event)"></master-search>
                                 </div>
                                 <div class="col-sm-4">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="remarks" />
+                                        <input type="text" matInput formControlName="partyName" />
                                     </mat-form-field>
 
                                 </div>
@@ -120,15 +123,16 @@
                                     Location from : </label>
                                 <div class="col-sm-3">
                                     <mat-form-field style="width: 70%;">
-                                        <input type="text" matInput formControlName="remarks" />
+                                        <input type="text" matInput formControlName="locationfrom" />
                                     </mat-form-field>
-                                    <master-search></master-search>
+                                    <master-search [MasterSearchData]="locationCodeData"
+                                        (newRowClick)="locationToCodeSelected($event)"></master-search>
                                 </div>
                                 <label for="inputPassword" class="col-sm-3 col-form-label ">
                                     Repair Item : </label>
                                 <div class="col-sm-3">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="remarks" />
+                                        <input type="text" matInput formControlName="repair_item" />
                                     </mat-form-field>
 
                                 </div>
@@ -138,7 +142,7 @@
                                     Bag No : </label>
                                 <div class="col-sm-9">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="remarks" />
+                                        <input type="text" matInput formControlName="bag_no" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -147,7 +151,7 @@
                                     GST CODE : </label>
                                 <div class="col-sm-9">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="remarks" />
+                                        <input type="text" matInput formControlName="gst_code" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -166,7 +170,7 @@
                                     Pieces : </label>
                                 <div class="col-sm-9">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="remarks" />
+                                        <input type="number" matInput formControlName="pcs" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -175,7 +179,7 @@
                                     Unit Weight : </label>
                                 <div class="col-sm-9">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="remarks" />
+                                        <input type="number" matInput formControlName="unit_weight" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -184,7 +188,7 @@
                                     Gross Weight : </label>
                                 <div class="col-sm-9">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="remarks" />
+                                        <input type="number" matInput formControlName="gross_weight" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -193,7 +197,7 @@
                                     Stone Weight : </label>
                                 <div class="col-sm-9">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="remarks" />
+                                        <input type="number" matInput formControlName="stone_weight" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -202,7 +206,7 @@
                                     Purity : </label>
                                 <div class="col-sm-9">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="remarks" />
+                                        <input type="text" matInput formControlName="purity" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -211,12 +215,12 @@
                                     Pure Weight (Gm/Oz) : </label>
                                 <div class="col-sm-4">
                                     <mat-form-field style="width: 70%;">
-                                        <input type="text" matInput formControlName="remarks" />
+                                        <input type="number" matInput formControlName="pure_weight" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-4">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="remarks" />
+                                        <input type="number" matInput formControlName="pure_weight_2">
                                     </mat-form-field>
 
                                 </div>
@@ -226,7 +230,7 @@
                                     Net Weight : </label>
                                 <div class="col-sm-9">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="remarks" />
+                                        <input type="number" matInput formControlName="net_weight" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -235,7 +239,7 @@
                                     Chargable Weight : </label>
                                 <div class="col-sm-9">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="remarks" />
+                                        <input type="number" matInput formControlName="Chargable_weight" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -244,12 +248,12 @@
                                     Kundan (Pcs/Cts/Wt) : </label>
                                 <div class="col-sm-4">
                                     <mat-form-field style="width: 70%;">
-                                        <input type="text" matInput formControlName="remarks" />
+                                        <input type="number" matInput formControlName="kundan_pcs_1" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-4">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="remarks" />
+                                        <input type="number" matInput formControlName="kundan_pcs_2" />
                                     </mat-form-field>
 
                                 </div>
@@ -259,7 +263,7 @@
                                     Carat : </label>
                                 <div class="col-sm-9">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="remarks" />
+                                        <input type="number" matInput formControlName="carat" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -306,17 +310,17 @@
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="remarks" />
+                                        <input type="number" matInput formControlName="making_charges_qty" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="remarks" />
+                                        <input type="number" matInput formControlName="making_charges_rate" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="remarks" />
+                                        <input type="number" matInput formControlName="making_charges_amt" />
                                     </mat-form-field>
                                 </div>
 
@@ -329,29 +333,29 @@
                                             Metal Value : </label>
                                         <div class="col-sm-6">
                                             <mat-form-field style="width: 100%;">
-                                                <input type="text" matInput formControlName="remarks" />
+                                                <input type="number" matInput formControlName="metal_value" />
                                             </mat-form-field>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-md-2">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="remarks" />
+                                        <input type="number" matInput formControlName="metal_value_unit" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-2">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="remarks" />
+                                        <input type="number" matInput formControlName="metal_value_qty" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-2">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="remarks" />
+                                        <input type="number" matInput formControlName="metal_value_rate" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-2">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="remarks" />
+                                        <input type="number" matInput formControlName="metal_value_amt" />
                                     </mat-form-field>
                                 </div>
 
@@ -369,17 +373,17 @@
                                 </div>
                                 <div class="col-md-2">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="remarks" />
+                                        <input type="number" matInput formControlName="stone_value_qty" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-2">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="remarks" />
+                                        <input type="number" matInput formControlName="stone_value_rate" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-2">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="remarks" />
+                                        <input type="number" matInput formControlName="stone_value_amt" />
                                     </mat-form-field>
                                 </div>
 
@@ -399,12 +403,12 @@
                                 </div>
                                 <div class="col-md-1">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="remarks" />
+                                        <input type="number" matInput formControlName="wastage_per_1" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-1">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="remarks" />
+                                        <input type="number" matInput formControlName="wastage_per_2" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-2 col-offset-2">
@@ -412,7 +416,7 @@
                                 </div>
                                 <div class="col-md-2">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="remarks" />
+                                        <input type="number" matInput formControlName="wastage_amt" />
                                     </mat-form-field>
                                 </div>
 
@@ -434,12 +438,12 @@
 
                                 <div class="col-md-2 ">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="remarks" />
+                                        <input type="number" matInput formControlName="stamp_charges_rate" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-2">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="remarks" />
+                                        <input type="number" matInput formControlName="stamp_charges_amt" />
                                     </mat-form-field>
                                 </div>
 
@@ -453,17 +457,17 @@
 
                                 <div class="col-md-2 ">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="remarks" />
+                                        <input type="number" matInput formControlName="kundan_value_unit" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-1">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="remarks" />
+                                        <input type="number" matInput formControlName="kundan_value_qty_fc" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-1">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="remarks" />
+                                        <input type="number" matInput formControlName="kundan_value_qty_cc" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-2">
@@ -471,7 +475,7 @@
                                 </div>
                                 <div class="col-md-2">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="remarks" />
+                                        <input type="number" matInput formControlName="kundan_value_amt" />
                                     </mat-form-field>
                                 </div>
 
@@ -487,7 +491,7 @@
 
                                 <div class="col-md-2">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="remarks" />
+                                        <input type="number" matInput formControlName="total_value" />
                                     </mat-form-field>
                                 </div>
 
@@ -512,12 +516,12 @@
                                 </div>
                                 <div class="col-md-1">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="remarks" />
+                                        <input type="number" matInput formControlName="total_tax_rate" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-2">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="remarks" />
+                                        <input type="number" matInput formControlName="total_tax_amt" />
                                     </mat-form-field>
                                 </div>
 
@@ -532,7 +536,7 @@
 
                                 <div class="col-md-2">
                                     <mat-form-field style="width: 100%;">
-                                        <input type="text" matInput formControlName="remarks" />
+                                        <input type="number" matInput formControlName="net_value" />
                                     </mat-form-field>
                                 </div>
 
@@ -545,7 +549,7 @@
                                             Purity Difference : </label>
                                         <div class="col-sm-6">
                                             <mat-form-field style="width: 100%;">
-                                                <input type="text" matInput formControlName="remarks" />
+                                                <input type="number" matInput formControlName="purity_diff" />
                                             </mat-form-field>
                                         </div>
                                     </div>
@@ -559,7 +563,7 @@
                                             Stone Difference : </label>
                                         <div class="col-sm-6">
                                             <mat-form-field style="width: 100%;">
-                                                <input type="text" matInput formControlName="remarks" />
+                                                <input type="number" matInput formControlName="stone_diff" />
                                             </mat-form-field>
                                         </div>
                                     </div>
@@ -614,7 +618,7 @@
                                     <label for="inputPassword" class="col-sm-4 col-form-label">Total Amount : </label>
                                     <div class="col-sm-6">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="salesMan" />
+                                            <input type="text" matInput formControlName="total_amount" />
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -633,7 +637,7 @@
                                     <label for="inputPassword" class="col-sm-2 col-form-label">CGST : </label>
                                     <div class="col-sm-3">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="remarks" />
+                                            <input type="number" matInput formControlName="cgst_per" />
                                         </mat-form-field>
                                     </div>
                                     <div class="col-sm-2">
@@ -643,7 +647,7 @@
                                     </div>
                                     <div class="col-sm-5">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="remarks" />
+                                            <input type="number" matInput formControlName="cgst_fc" />
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -652,7 +656,7 @@
                                     <label for="inputPassword" class="col-sm-2 col-form-label">SGST : </label>
                                     <div class="col-sm-3">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="remarks" />
+                                            <input type="number" matInput formControlName="sgst_per" />
                                         </mat-form-field>
                                     </div>
                                     <div class="col-sm-2">
@@ -662,7 +666,7 @@
                                     </div>
                                     <div class="col-sm-5">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="remarks" />
+                                            <input type="number" matInput formControlName="sgst_fc" />
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -671,7 +675,7 @@
                                     <label for="inputPassword" class="col-sm-2 col-form-label">IGST : </label>
                                     <div class="col-sm-3">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="remarks" />
+                                            <input type="number" matInput formControlName="igst_per" />
                                         </mat-form-field>
                                     </div>
                                     <div class="col-sm-2">
@@ -681,7 +685,7 @@
                                     </div>
                                     <div class="col-sm-5">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="remarks" />
+                                            <input type="number" matInput formControlName="igst_fc" />
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -691,7 +695,7 @@
 
                                     <div class="col-sm-5">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="remarks" />
+                                            <input type="number" matInput formControlName="round" />
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -700,7 +704,7 @@
                                     <label for="inputPassword" class="col-sm-2 col-form-label">Total >> </label>
                                     <div class="col-sm-3">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="remarks" />
+                                            <input type="number" matInput formControlName="total_fc" />
                                         </mat-form-field>
                                     </div>
                                     <div class="col-sm-2">
@@ -710,7 +714,7 @@
                                     </div>
                                     <div class="col-sm-5">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="remarks" />
+                                            <input type="number" matInput formControlName="total_cc" />
                                         </mat-form-field>
                                     </div>
                                 </div>

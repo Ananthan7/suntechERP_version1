@@ -22,7 +22,8 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="stockCode" />
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="stockCodeData" (newRowClick)="stockCodeSelected($event)"></master-search>
+                                <master-search [MasterSearchData]="stockCodeData"
+                                    (newRowClick)="stockCodeSelected($event)"></master-search>
                             </div>
                             <div class="col-sm-4">
                                 <mat-form-field style="width: 100%;">
@@ -40,7 +41,8 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="toStockCode" />
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="stockCodeData" (newRowClick)="toStockCodeSelected($event)"></master-search>
+                                <master-search [MasterSearchData]="stockCodeData"
+                                    (newRowClick)="toStockCodeSelected($event)"></master-search>
                             </div>
                             <div class="col-sm-4">
                                 <mat-form-field style="width: 100%;">
@@ -101,7 +103,8 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="supplier" />
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="SupplierData" (newRowClick)="supplierSelected($event)"></master-search>
+                                <master-search [MasterSearchData]="SupplierData"
+                                    (newRowClick)="supplierSelected($event)"></master-search>
                             </div>
                             <div class="col-sm-4">
                                 <mat-form-field style="width: 100%;">
@@ -117,7 +120,8 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="LoactionFrom" />
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="locationCodeData" (newRowClick)="locationCodeSelected($event)"></master-search>
+                                <master-search [MasterSearchData]="locationCodeData"
+                                    (newRowClick)="locationCodeSelected($event)"></master-search>
                             </div>
                             <label for="inputPassword" class="col-sm-3 col-form-label ">
                                 Repair Item : </label>
@@ -230,7 +234,8 @@
                                 Chargable Weight : </label>
                             <div class="col-sm-9">
                                 <mat-form-field style="width: 100%;">
-                                    <input class="text-right" type="number" matInput formControlName="chargableWeight" />
+                                    <input class="text-right" type="number" matInput
+                                        formControlName="chargableWeight" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -298,17 +303,20 @@
                             </div>
                             <div class="col-sm-2 offset-md-2">
                                 <mat-form-field style="width: 100%;">
-                                    <input class="text-right" type="number" matInput formControlName="makingChargesQuantity" />
+                                    <input class="text-right" type="number" matInput
+                                        formControlName="makingChargesQuantity" />
                                 </mat-form-field>
                             </div>
                             <div class="col-sm-2">
                                 <mat-form-field style="width: 100%;">
-                                    <input class="text-right" type="number" matInput formControlName="makingChargesRate" />
+                                    <input class="text-right" type="number" matInput
+                                        formControlName="makingChargesRate" />
                                 </mat-form-field>
                             </div>
                             <div class="col-sm-2">
                                 <mat-form-field style="width: 100%;">
-                                    <input class="text-right" type="number" matInput formControlName="makingChargesAmount" />
+                                    <input class="text-right" type="number" matInput
+                                        formControlName="makingChargesAmount" />
                                 </mat-form-field>
                             </div>
 
@@ -319,7 +327,8 @@
                                 Metal Value : </label>
                             <div class="col-sm-2">
                                 <mat-form-field style="width: 100%;">
-                                    <input class="text-right" type="number" matInput formControlName="metalValueValues" />
+                                    <input class="text-right" type="number" matInput
+                                        formControlName="metalValueValues" />
                                 </mat-form-field>
                             </div>
                             <div class="col-md-2">
@@ -329,7 +338,8 @@
                             </div>
                             <div class="col-md-2">
                                 <mat-form-field style="width: 100%;">
-                                    <input class="text-right" type="number" matInput formControlName="metalValueQuantity" />
+                                    <input class="text-right" type="number" matInput
+                                        formControlName="metalValueQuantity" />
                                 </mat-form-field>
                             </div>
                             <div class="col-md-2">
@@ -339,7 +349,8 @@
                             </div>
                             <div class="col-md-2">
                                 <mat-form-field style="width: 100%;">
-                                    <input class="text-right" type="number" matInput formControlName="metalValueAmount" />
+                                    <input class="text-right" type="number" matInput
+                                        formControlName="metalValueAmount" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -350,7 +361,8 @@
                                 Stone Value : </label>
                             <div class="col-md-2 offset-md-2">
                                 <mat-form-field style="width: 100%;">
-                                    <input class="text-right" type="number" matInput formControlName="stoneValueQuantity" />
+                                    <input class="text-right" type="number" matInput
+                                        formControlName="stoneValueQuantity" />
                                 </mat-form-field>
                             </div>
                             <div class="col-md-2">
@@ -360,7 +372,8 @@
                             </div>
                             <div class="col-md-2">
                                 <mat-form-field style="width: 100%;">
-                                    <input class="text-right" type="number" matInput formControlName="stoneValueAmount" />
+                                    <input class="text-right" type="number" matInput
+                                        formControlName="stoneValueAmount" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -379,12 +392,14 @@
                             </div>
                             <div class="col-md-1">
                                 <mat-form-field style="width: 100%;">
-                                    <input class="text-right" type="number" matInput formControlName="wastageQuantityone" />
+                                    <input class="text-right" type="number" matInput
+                                        formControlName="wastageQuantityone" />
                                 </mat-form-field>
                             </div>
                             <div class="col-md-1">
                                 <mat-form-field style="width: 100%;">
-                                    <input class="text-right" type="number" matInput formControlName="wastageQuantity" />
+                                    <input class="text-right" type="number" matInput
+                                        formControlName="wastageQuantity" />
                                 </mat-form-field>
                             </div>
                             <div class="col-md-2 offset-md-2">
@@ -404,12 +419,14 @@
 
                             <div class="col-md-2 offset-md-4">
                                 <mat-form-field style="width: 100%;">
-                                    <input class="text-right" type="number" matInput formControlName="stampChargesRate" />
+                                    <input class="text-right" type="number" matInput
+                                        formControlName="stampChargesRate" />
                                 </mat-form-field>
                             </div>
                             <div class="col-md-2">
                                 <mat-form-field style="width: 100%;">
-                                    <input class="text-right" type="number" matInput formControlName="stampChargesAmount" />
+                                    <input class="text-right" type="number" matInput
+                                        formControlName="stampChargesAmount" />
                                 </mat-form-field>
                             </div>
 
@@ -423,22 +440,26 @@
 
                             <div class="col-md-2 ">
                                 <mat-form-field style="width: 100%;">
-                                    <input class="text-right" type="number" matInput formControlName="kundanValueunit" />
+                                    <input class="text-right" type="number" matInput
+                                        formControlName="kundanValueunit" />
                                 </mat-form-field>
                             </div>
                             <div class="col-md-1">
                                 <mat-form-field style="width: 100%;">
-                                    <input class="text-right" type="number" matInput formControlName="kundanValueQuantityone" />
+                                    <input class="text-right" type="number" matInput
+                                        formControlName="kundanValueQuantityone" />
                                 </mat-form-field>
                             </div>
                             <div class="col-md-1">
                                 <mat-form-field style="width: 100%;">
-                                    <input class="text-right" type="number" matInput formControlName="kundanValueQuantity" />
+                                    <input class="text-right" type="number" matInput
+                                        formControlName="kundanValueQuantity" />
                                 </mat-form-field>
                             </div>
                             <div class="col-md-2">
                                 <mat-form-field style="width: 100%;">
-                                    <input class="text-right" type="number" matInput formControlName="kundanValueAmount" />
+                                    <input class="text-right" type="number" matInput
+                                        formControlName="kundanValueAmount" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -501,7 +522,8 @@
                                         Purity Difference : </label>
                                     <div class="col-sm-6">
                                         <mat-form-field style="width: 100%;">
-                                            <input class="text-right" type="number" matInput formControlName="purityDiff" />
+                                            <input class="text-right" type="number" matInput
+                                                formControlName="purityDiff" />
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -515,7 +537,8 @@
                                         Stone Difference : </label>
                                     <div class="col-sm-6">
                                         <mat-form-field style="width: 100%;">
-                                            <input class="text-right" type="number" matInput formControlName="stoneDiff" />
+                                            <input class="text-right" type="number" matInput
+                                                formControlName="stoneDiff" />
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -560,7 +583,8 @@
                                 <label for="inputPassword" class="col-sm-4 col-form-label">Total Amount : </label>
                                 <div class="col-sm-6">
                                     <mat-form-field style="width: 100%;">
-                                        <input class="text-right" type="number" matInput formControlName="totalAmount" />
+                                        <input class="text-right" type="number" matInput
+                                            formControlName="totalAmount" />
                                     </mat-form-field>
                                 </div>
                             </div>

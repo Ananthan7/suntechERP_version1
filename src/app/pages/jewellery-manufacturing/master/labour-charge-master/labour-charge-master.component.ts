@@ -1,9 +1,3 @@
-/*
-MODULE : JEWELLERY MANUFACTURING
-MENU_SCREEN_NAME : LABOUR CHARGE MASTER
-DEVELOPER : AKHIL / BESKEY
-*/
-
 import { Component, ElementRef, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
@@ -503,12 +497,7 @@ export class LabourChargeMasterComponent implements OnInit {
 
   checkCodeDia(): boolean {
     if (this.diamondlabourMasterForm.value.labour_code == '') {
-<<<<<<< HEAD
-      this.commonService.toastErrorByMsgId('Please Enter the Code')
-      //CHINNU -  MESSAGE HARD CODED
-=======
       this.commonService.toastErrorByMsgId('MSG1124')
->>>>>>> origin/ERP_Staging
       return true
     }
     return false
@@ -831,8 +820,7 @@ export class LabourChargeMasterComponent implements OnInit {
     // Check if Ct Wt From is greater than Ct Wt To
     if (size_from > size_to) {
       // Display an error message
-      this.commonService.toastErrorByMsgId('Size From should be lesser than Size To');
-      //CHINNU -  MESSAGE HARD CODED
+      this.commonService.toastErrorByMsgId('MSG81517');//Size From should be lesser than Size To
       // Clear the value of Ct Wt To input field
       this.diamondlabourMasterForm.controls.size_to.setValue('');
     }
@@ -909,12 +897,7 @@ export class LabourChargeMasterComponent implements OnInit {
           this.handleLookupError(FORMNAME, LOOKUPDATA);
         }
       }, err => {
-<<<<<<< HEAD
-        this.commonService.toastErrorByMsgId('network issue found')
-        //CHINNU -  MESSAGE HARD CODED
-=======
         this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
->>>>>>> origin/ERP_Staging
       })
     this.subscriptions.push(Sub)
   }
@@ -1002,12 +985,7 @@ export class LabourChargeMasterComponent implements OnInit {
           return;
         }
       }, err => {
-<<<<<<< HEAD
-        this.commonService.toastErrorByMsgId('network issue found');
-        //CHINNU -  MESSAGE HARD CODED
-=======
         this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
->>>>>>> origin/ERP_Staging
       });
 
     this.subscriptions.push(Sub);
@@ -1094,14 +1072,8 @@ export class LabourChargeMasterComponent implements OnInit {
       return true
     }
 
-<<<<<<< HEAD
-//CHINNU -  MESSAGES BELOW ARE  HARD CODED
-    if (this.diamondlabourMasterForm.invalid && this.metallabourMasterForm.invalid) {
-      this.toastr.error('Select all required fields')
-=======
     else if (this.commonService.nullToString(form.labourType) == '') {
       this.commonService.toastErrorByMsgId('MSG7820')//"labourType cannot be empty"
->>>>>>> origin/ERP_Staging
       return true
     }
 
@@ -1133,7 +1105,7 @@ export class LabourChargeMasterComponent implements OnInit {
 
     else if (this.diamondlabourMasterForm.value.size_from > this.diamondlabourMasterForm.value.size_to) {
      // this.commonService.toastErrorByMsgId('MSG2496') //"Size From should be lesser than Size To"
-      this.toastr.error('Size From should be lesser than Size To')
+     this.commonService.toastErrorByMsgId('MSG81517') //Size From should be lesser than Size To
       return true
     }
 
@@ -1233,22 +1205,8 @@ export class LabourChargeMasterComponent implements OnInit {
   }
 
   updatelabourChargeMaster() {
-<<<<<<< HEAD
-    //  if (this.submitValidation()) return
-    if (this.diamondlabourMasterForm.value.wtFrom > this.diamondlabourMasterForm.value.wtTo) {
-      this.toastr.error('Weight From should be lesser than Weight To')
-      //CHINNU -  MESSAGE HARD CODED
-      return
-    }
-    if (this.diamondlabourMasterForm.invalid) {
-      this.toastr.error('select all required fields')
-      //CHINNU -  MESSAGE HARD CODED
-      return
-    }
-=======
  
     if (this.submitValidation(this.diamondlabourMasterForm.value)) return;
->>>>>>> origin/ERP_Staging
 
     let API = 'LabourChargeMasterDj/UpdateLabourChargeMaster/' + this.content.CODE;
     let postData = this.setPostData()
@@ -1315,7 +1273,6 @@ export class LabourChargeMasterComponent implements OnInit {
               } else {
                 Swal.fire({
                   title: result.message || 'Error please try again',
-                  //CHINNU -  MESSAGE HARD CODED
                   text: '',
                   icon: 'error',
                   confirmButtonColor: '#336699',
@@ -1330,12 +1287,7 @@ export class LabourChargeMasterComponent implements OnInit {
                 });
               }
             } else {
-<<<<<<< HEAD
-              this.toastr.error('Not deleted')
-              //CHINNU -  MESSAGE HARD CODED
-=======
               this.commonService.toastErrorByMsgId('MSG1880');// Not Deleted
->>>>>>> origin/ERP_Staging
             }
           }, err => alert('delete ' + err))
         this.subscriptions.push(Sub)
@@ -1651,3 +1603,5 @@ export class LabourChargeMasterComponent implements OnInit {
   // }
 
 }
+
+

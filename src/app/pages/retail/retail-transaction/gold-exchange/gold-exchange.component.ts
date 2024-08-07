@@ -1,15 +1,3 @@
-/*
-MODULE : RETAIL(POS)
-MENU_SCREEN_NAME : Gold Exchange
-DEVELOPER : LINUS ELIAS JOSE
-*/
-
-
-
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { CommonServiceService } from 'src/app/services/common-service.service';
 import { Component, Input, OnInit, ViewChild } from "@angular/core";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import {
@@ -271,16 +259,6 @@ export class GoldExchangeComponent implements OnInit {
                   )
                 );
 
-              this.goldExchangeForm.controls.partyCurrency.setValue(data[0].CURRENCY_CODE);
-
-              this.goldExchangeForm.controls.partyCurrCodeDesc.setValue(this.comService.decimalQuantityFormat(
-                this.comService.emptyToZero(data[0].CONV_RATE), 'RATE'));//CHINNU - ARE WE USING CORRECT COLUMN
-
-
-              this.goldExchangeForm.controls.itemCurrCode.setValue(this.comService.decimalQuantityFormat(
-                this.comService.emptyToZero(data[0].CONV_RATE), 'RATE'));//CHINNU - ARE WE USING CORRECT COLUMN
-
-              this.partyCurrencyCodeData.WHERECONDITION = `@strBranch='${this.comService.branchCode}',@strPartyCode='${event.target.value}'`;
                 this.goldExchangeForm.controls.partyCurrCodeDesc.setValue(
                   this.comService.decimalQuantityFormat(
                     this.comService.emptyToZero(data[0].CONV_RATE),
@@ -307,11 +285,6 @@ export class GoldExchangeComponent implements OnInit {
               }
             );
           }
-
-        } else {
-          this.toastr.error('PartyCode not found', result.Message ? result.Message : '', {
-            timeOut: 3000,//CHINNU - MESSAGE IS HARD CODED?
-          })
         },
         (err) => {
           this.snackBar.dismiss();
@@ -457,8 +430,6 @@ export class GoldExchangeComponent implements OnInit {
         this.goldExchangeForm.controls.vocTypeNo.setValue(data.VOCNO);
 
         this.goldExchangeForm.controls.partyCode.setValue(data.PARTYCODE);
-        this.goldExchangeForm.controls.partyCurrCode.setValue(data.PARTY_CURRENCY);
-        this.goldExchangeForm.controls.partyCurrCodeDesc.setValue(data.PARTY_CURR_RATE);//CHINNU - CORRECT COLUMN?
         this.goldExchangeForm.controls.partyCurrCode.setValue(
           data.PARTY_CURRENCY
         );
@@ -469,7 +440,6 @@ export class GoldExchangeComponent implements OnInit {
         this.goldExchangeForm.controls.customer.setValue(data.MHCUSTIDNO);
         this.goldExchangeForm.controls.moblie.setValue(data.CUSTOMER_MOBILE);
         this.goldExchangeForm.controls.itemCurr.setValue(data.ITEM_CURRENCY);
-        this.goldExchangeForm.controls.itemCurrCode.setValue(data.ITEM_CURR_RATE);//CHINNU - CORRECT COLUMN?
         this.goldExchangeForm.controls.itemCurrCode.setValue(
           data.ITEM_CURR_RATE
         );
@@ -481,7 +451,7 @@ export class GoldExchangeComponent implements OnInit {
         this.goldExchangeForm.controls.supInvNo.setValue(data.SUPINVNO);
         this.goldExchangeForm.controls.custName.setValue(data.HTUSERNAME);
         this.goldExchangeForm.controls.narration.setValue(data.REMARKS);
-        this.goldExchangeForm.controls.custId.setValue(data.HLOCTYPE_CODE);//CHINNU - CORRECT COLUMN?
+        this.goldExchangeForm.controls.custId.setValue(data.HLOCTYPE_CODE);
 
         this.goldExchangeForm.controls.amount.setValue(
           this.comService.decimalQuantityFormat(
@@ -508,28 +478,6 @@ export class GoldExchangeComponent implements OnInit {
           )
         );
 
-        this.goldExchangeForm.controls.amount.setValue(this.comService.decimalQuantityFormat(
-          this.comService.emptyToZero(data.TOTSTAMP_AMTFC), 'AMOUNT'));
-        this.goldExchangeForm.controls.amountDes.setValue(this.comService.decimalQuantityFormat(
-          this.comService.emptyToZero(data.TOTSTAMP_AMTCC), 'AMOUNT'));//CHINNU - CORRECT COLUMN?
-        this.goldExchangeForm.controls.rndOfAmt.setValue(this.comService.decimalQuantityFormat(
-          this.comService.emptyToZero(data.ITEM_VALUE_FC), 'AMOUNT'));
-        this.goldExchangeForm.controls.rndOfAmtDes.setValue(this.comService.decimalQuantityFormat(
-          this.comService.emptyToZero(data.ITEM_VALUE_CC), 'AMOUNT'));//CHINNU - CORRECT COLUMN?
-
-
-        this.goldExchangeForm.controls.rndNetAmt.setValue(this.comService.decimalQuantityFormat(
-          this.comService.emptyToZero(data.NET_VALUE_FC), 'AMOUNT'));
-        this.goldExchangeForm.controls.rndNetAmtDes.setValue(this.comService.decimalQuantityFormat(
-          this.comService.emptyToZero(data.NET_VALUE_CC), 'AMOUNT'));//CHINNU - CORRECT COLUMN?
-        this.goldExchangeForm.controls.otherAmt.setValue(this.comService.decimalQuantityFormat(
-          this.comService.emptyToZero(data.ADDL_VALUE_FC), 'AMOUNT'));
-        this.goldExchangeForm.controls.otherAmtDes.setValue(this.comService.decimalQuantityFormat(
-          this.comService.emptyToZero(data.ADDL_VALUE_CC), 'AMOUNT'));//CHINNU - CORRECT COLUMN?
-        this.goldExchangeForm.controls.grossAmt.setValue(this.comService.decimalQuantityFormat(
-          this.comService.emptyToZero(data.GROSS_VALUE_FC), 'AMOUNT'));
-        this.goldExchangeForm.controls.grossAmtDes.setValue(this.comService.decimalQuantityFormat(
-          this.comService.emptyToZero(data.GROSS_VALUE_CC), 'AMOUNT'));//CHINNU - CORRECT COLUMN?
         this.goldExchangeForm.controls.rndNetAmt.setValue(
           this.comService.decimalQuantityFormat(
             this.comService.emptyToZero(data.NET_VALUE_FC),
@@ -613,7 +561,7 @@ export class GoldExchangeComponent implements OnInit {
   customerCodeSelected(e: any) {
     this.customerData = e;
     this.goldExchangeForm.controls.customer.setValue(e.CODE);
-    this.goldExchangeForm.controls.custId.setValue(e.CODE);//CHINNU - CORRECT COLUMN?
+    this.goldExchangeForm.controls.custId.setValue(e.CODE);
     this.goldExchangeForm.controls.custName.setValue(e.NAME);
     this.goldExchangeForm.controls.email.setValue(e.EMAIL);
     this.goldExchangeForm.controls.moblie.setValue(e.MOBILE);
@@ -675,19 +623,6 @@ export class GoldExchangeComponent implements OnInit {
     this.goldExchangeForm.controls.vocTypeNo.setValue(this.content.VOCNO);
     this.goldExchangeForm.controls.vocDate.setValue(this.content.VOCDATE);
     this.goldExchangeForm.controls.partyCode.setValue(this.content.PARTYCODE);
-    this.goldExchangeForm.controls.partyCurrCode.setValue(this.content.PARTY_CURRENCY);
-    this.goldExchangeForm.controls.partyCurrCodeDesc.setValue(this.content.PARTY_CURR_RATE);//CHINNU - CORRECT COLUMN?
-    this.goldExchangeForm.controls.itemCurr.setValue(this.content.ITEM_CURRENCY);
-    this.goldExchangeForm.controls.itemCurrCode.setValue(this.content.ITEM_CURR_RATE);
-    this.goldExchangeForm.controls.salesMan.setValue(this.content.SALESPERSON_CODE);
-    this.goldExchangeForm.controls.partyCurrency.setValue(this.content.PARTY_VALUE_FC);
-    this.goldExchangeForm.controls.partyCurrencyCode.setValue(this.content.PARTY_VALUE_CC);//CHINNU - CODE REPEAT
-    this.goldExchangeForm.controls.partyCurrencyCode.setValue(this.content.PARTY_VALUE_CC);
-    this.goldExchangeForm.controls.rndNetAmt.setValue(this.content.NET_VALUE_FC);
-
-    this.goldExchangeForm.controls['rndNetAmt'].setValue(
-      this.comService.decimalQuantityFormat(this.zeroAmtVal, 'AMOUNT')
-
     this.goldExchangeForm.controls.partyCurrCode.setValue(
       this.content.PARTY_CURRENCY
     );
@@ -778,249 +713,6 @@ export class GoldExchangeComponent implements OnInit {
 
     const saveApi = "OldGoldPurchase/InsertMetalPurchase";
     let postData = {
-      "MID": 0,
-      "BRANCH_CODE": this.branchCode,
-      "VOCTYPE": this.goldExchangeForm.value.vocType,
-      "VOCNO": this.goldExchangeForm.value.vocTypeNo,
-      "VOCDATE": this.goldExchangeForm.value.vocDate,
-      "YEARMONTH": this.yearMonth,
-      "PARTYCODE": this.goldExchangeForm.value.partyCode,
-      "PARTY_CURRENCY": this.goldExchangeForm.value.partyCurrCode,
-      "PARTY_CURR_RATE": this.goldExchangeForm.value.partyCurrCodeDesc,
-      "ITEM_CURRENCY": this.goldExchangeForm.value.itemCurr,
-      "ITEM_CURR_RATE": this.goldExchangeForm.value.itemCurrCode,
-      "VALUE_DATE": "2024-02-08T12:18:43.101Z",
-      "SALESPERSON_CODE": this.goldExchangeForm.value.salesMan,
-      "RATE_TYPE": "",
-      "METAL_RATE": 0,//CHINNU - WHY BELOW COLUMNS HAVE HARDED VALUES AS ZERO
-      "FIXED": 0,
-      "TOTAL_PCS": 0,
-      "TOTAL_GRWT": 0,
-      "TOTAL_PUWT": 0,
-      "TOTAL_MKGVALUE_FC": 0,
-      "TOTAL_MKGVALUE_CC": 0,
-      "TOTAL_METALVALUE_FC": 0,
-      "TOTAL_METALVALUE_CC": 0,
-      "TOTAL_STONEVALUE_FC": 0,
-      "TOTAL_STONEVALUE_CC": 0,
-      "TOTAL_PUDIFF": 0,
-      "TOTAL_STONEDIFF": 0,
-      "ITEM_VALUE_FC": this.comService.decimalQuantityFormat(this.goldExchangeForm.value.rndOfAmt, 'AMOUNT'),
-      "ITEM_VALUE_CC": this.comService.decimalQuantityFormat(this.goldExchangeForm.value.rndOfAmtDes, 'AMOUNT'),
-      "PARTY_VALUE_FC": 0,
-      "PARTY_VALUE_CC": 0,
-      "NET_VALUE_FC": this.comService.decimalQuantityFormat(this.goldExchangeForm.value.rndNetAmt, 'AMOUNT'),
-      "NET_VALUE_CC": this.comService.decimalQuantityFormat(this.goldExchangeForm.value.rndNetAmtDes, 'AMOUNT'),
-      "ADDL_VALUE_FC": this.comService.decimalQuantityFormat(this.goldExchangeForm.value.otherAmt, 'AMOUNT'),
-      "ADDL_VALUE_CC": this.comService.decimalQuantityFormat(this.goldExchangeForm.value.otherAmtDes, 'AMOUNT'),
-      "GROSS_VALUE_FC": this.comService.decimalQuantityFormat(this.goldExchangeForm.value.grossAmt, 'AMOUNT'),
-      "GROSS_VALUE_CC": this.comService.decimalQuantityFormat(this.goldExchangeForm.value.grossAmtDes, 'AMOUNT'),
-      "REMARKS": this.goldExchangeForm.value.narration,
-      "SYSTEM_DATE": "2024-02-08T12:18:43.101Z",//CHINNU - HARD CODED?
-      "FLAG_EDIT_ALLOW": "",
-      "TOTAL_OZWT": 0,
-      "ROUND_VALUE_CC": 0,
-      "NAVSEQNO": 0,
-      "SUPINVNO": this.goldExchangeForm.value.supInvNo,
-      "supInvDate": this.goldExchangeForm.value.supInvDate,
-      "FLAG_UPDATED": "",
-      "FLAG_INPROCESS": "",
-      "HHACCOUNT_HEAD": "",
-      "PURCHASEFIXINGAMTLC": 0,
-      "PURCHASEFIXINGAMTFC": 0,
-      "PURCHASEFIXINGMID": 0,
-      "PURCHASEFIXINGREF": "",
-      "PURCHASEFIXINGPUREWT": 0,
-      "PURCHASEFIXINGRATE": "",
-      "D2DTRANSFER": "s",
-      "OUSTATUS": true,
-      "OUSTATUSNEW": 0,
-      "CURRRECMID": 0,
-      "CURRRECVOCTYPE": "",
-      "CURRRECREF": "",
-      "CURRRECAMOUNTFC": 0,
-      "CURRRECAMOUNTCC": 0,
-      "TOTAL_DISCOUNTWT": 0,
-      "CUSTOMER_NAME": "",
-      "MACHINEID": "",
-      "SALESPERSON_NAME": "",
-      "TOTAL_WASTQTY": 0,
-      "TOTAL_AMT_FC": 0,
-      "PARTYADDRESS": this.goldExchangeForm.value.partyCode1,
-      "CREDITDAY": parseInt(this.goldExchangeForm.value.creditDaysCode),
-      "AUTOPOSTING": true,
-      "POSTDATE": "",
-      "AUTHORIZEDPOSTING": true,
-      "CANCELLEDPOSTING": true,
-      "PURITYQUALITYCHECK": true,
-      "TESTINGPARTY": "",
-      "TESTINGPARTYWT": 0,
-      "TESTINGPARTYREMARKS": "",
-      "TESTINGPARTYWTRECEIVED": 0,
-      "DOC_DISCMTLRATE": 0,
-      "REP_REF": "",
-      "REPAIR_REF": "",
-      "HLOCTYPE_CODE": this.goldExchangeForm.value.customer,
-      "HTUSERNAME": this.goldExchangeForm.value.custName,
-      "MHIDCATEGORY": "",
-      "MHCUSTIDNO": this.goldExchangeForm.value.custId,
-      "GENSEQNO": 0,
-      "BASE_CURRENCY": "",
-      "BASE_CURR_RATE": 0,
-      "BASE_CONV_RATE": 0,
-      "INCLUSIVE": 0,
-      "PRINT_COUNT": 0,
-      "DOC_REF": "",
-      "FIXED_QTY": 0,
-      "GST_REGISTERED": true,
-      "GST_STATE_CODE": "st",
-      "GST_NUMBER": "",
-      "GST_TYPE": "",
-      "GST_TOTALFC": 0,
-      "GST_TOTALCC": 0,
-      "CUSTOMER_MOBILE": this.goldExchangeForm.value.moblie,
-      "CUSTOMER_EMAIL": this.goldExchangeForm.value.email,
-      "POSCUSTIDNO": "",
-      "POPCUSTCODE": "",
-      "GST_GROUP": "s",
-      "FIXING_PROCESS": true,
-      "TOTAL_ADDL_TAXFC": 0,
-      "TOTAL_ADDL_TAXCC": 0,
-      "DIRECTFIXINGREF": "",
-      "INTERNALUNFIX": true,
-      "REF_JOBCREATED": true,
-      "EXCLUDEVAT": true,
-      "TEST_BRANCH_CODE": "",
-      "TEST_VOCTYPE": "",
-      "TEST_VOCNO": 0,
-      "TEST_YEARMONTH": "",
-      "TDS_CODE": "",
-      "TDS_APPLICABLE": true,
-      "TDS_TOTALFC": 0,
-      "TDS_TOTALCC": 0,
-      "H_DECLARATIONNO": "",
-      "H_ORIGINCOUNTRY": "",
-      "H_DECLARATIONDATE": "2024-02-08T12:18:43.101Z",//CHINNU - HARD CODED
-      "H_PACKETNO": 0,
-      "SHIPPER_CODE": "",
-      "SHIPPER_NAME": "",
-      "ORIGIN_COUNTRY": "",
-      "DESTINATION_STATE": "",
-      "DESTINATION_COUNTRY": "",
-      "MINING_COMP_CODE": "",
-      "MINING_COMP_NAME": "",
-      "AIRWAY_BILLNO": "",
-      "AIRWAY_BILLDATE": "2024-02-08T12:18:43.101Z",//CHINNU CHECK ALL DATE FIELD HARD CODINGS
-      "AIRWAY_WEIGHT": 0,
-      "ARIVAL_DATE": "2024-02-08T12:18:43.101Z",
-      "CLEARENCE_DATE": "2024-02-08T12:18:43.101Z",
-      "BOE_FILLINGDATE": "2024-02-08T12:18:43.101Z",
-      "BOE_NO": "",
-      "PO_IMP": 0,
-      "SILVER_RATE_TYPE": "",
-      "SILVER_RATE": 0,
-      "TOTAL_SILVERWT": 0,
-      "TOTAL_SILVERVALUE_FC": 0,
-      "TOTAL_SILVERVALUE_CC": 0,
-      "PO_REFNO": "",
-      "MINING_COMP_REFNO": "",
-      "PARTY_ROUNDOFF": 0,
-      "TRANSPORTER_CODE": "",
-      "VEHICLE_NO": "",
-      "LR_NO": "",
-      "AIR_BILL_NO": "",
-      "SHIPCODE": "",
-      "SHIPDESC": "",
-      "STAMPCHARGE": true,
-      "TOTSTAMP_AMTFC": this.comService.decimalQuantityFormat(this.goldExchangeForm.value.amount, 'AMOUNT'),
-      "TOTSTAMP_AMTCC": this.comService.decimalQuantityFormat(this.goldExchangeForm.value.amountDes, 'AMOUNT'),
-      "TOTSTAMP_PARTYAMTFC": 0,
-      "REFPURIMPORT": "",
-      "BOE_EXPIRY_DATE": "2024-02-08T12:18:43.101Z",
-      "H_BILLOFENTRYREF": "",
-      "SUB_LED_ACCODE": "",
-      "ACTIVITY_CODE": "",
-      "TCS_ACCODE": "",
-      "TCS_AMOUNT": 0,
-      "TCS_AMOUNTCC": 0,
-      "TCS_APPLICABLE": true,
-      "DISCOUNTPERCENTAGE": 0,
-      "CUSTOMER_ADDRESS": "",
-      "FROM_TOUCH": true,
-      "CUSTOMER_CODE": "",
-      "IMPORTINPURCHASE": true,
-      "SL_CODE": "",
-      "SL_DESCRIPTION": "",
-      "CNT_ORIGIN": "",
-      "OT_TRANSFER_TIME": "",
-      "FREIGHT_RATE": 0,
-      "TDS_PER": 0,
-      "TDS_TOPARTY": true,
-      "LONDONFIXING_TYPE": 0,
-      "LONDONFIXING_RATE": 0,
-      "PARTYROUNDOFF": 0,
-      "NOTIONAL_PARTY": true,
-      "METAL_CONV_CURR": "",
-      "METAL_CONV_RATE": 0,
-      "CHECK_HEDGINGBAL": true,
-      "IMPORTINSALES": true,
-      "AUTOGENMID": 0,
-      "AUTOGENVOCTYPE": "",
-      "AUTOGENREF": "",
-      "VATAMOUNTMakingONLYCC": 0,
-      "CALCULATEPARTYVATONMAKINGONLY": 0,
-      "PRINT_COUNT_ACCOPY": 0,
-      "PRINT_COUNT_CNTLCOPY": 0,
-      "IMPEXPDOC_TYPE": 0,
-      "TOTAL_WASTAGE_AMOUNTCC": 0,
-      "PARTYTRANSWISE_DESIGNATEDZONE": true,
-      "PARTY_STATE_CODE": "",
-      "SHIP_ACCODE": "",
-      "SHIP_STATE_CODE": "",
-      "DISPATCH_NAME": "",
-      "DISPATCH_ADDRESS": "",
-      "DISPATCH_STATE_CODE": "",
-      "TRANSPORTER_ID": "",
-      "TRANSPORTER_MODE": "",
-      "TRANSPORT_DISTANCE": 0,
-      "TRANSPORT_DATE": "2024-02-08T12:18:43.101Z",
-      "VEHICLE_TYPE": "",
-      "DISPATCH_CITY": "",
-      "DISPATCH_ZIPCODE": 0,
-      "EWAY_TRANS_TYPE": "",
-      "CREDIT_DAYSMTL": 0,
-      "VALUE_DATEMTL": "2024-02-08T12:18:43.101Z",
-      "PURITYQUALITYREMARKS": "",
-      "DISCOUNT_PERGRM": 0,
-      "EXCLUDE_VAT": true,
-      "H_AIRWAYBILL": "",
-      "H_BASIS": "",
-      "H_DESTINATION": "",
-      "H_MINER": "",
-      "H_SHIPMENTMODE": "",
-      "H_SHIPPER": "",
-      "HTOTALAMOUNTWITHVAT_CC": 0,
-      "HTOTALAMOUNTWITHVAT_FC": 0,
-      "HVAT_AMOUNT_CC": 0,
-      "HVAT_AMOUNT_FC": 0,
-      "INTERNALFIXEDQTY": 0,
-      "ITEMROUNDVALUEFC": 0,
-      "NEWMID": 0,
-      "PARTYROUNDVALUEFC": 0,
-      "PARTYTRANSWISE_METALVATONMAKING": true,
-      "PLACEOFSUPPLY": "",
-      "POSPRICESFIXED": true,
-      "QRCODEIMAGE": "",
-      "QRCODEVALUE": "",
-      "SHIPMENTCOMPANY": "",
-      "SHIPMENTPORT": "",
-      "TAX_APPLICABLE": true,
-      "TOTAL_WASTAGE_AMOUNTFC": 0,
-      "TRANSFER_BRANCH": "",
-      "VATAMOUNTFCROUND": this.comService.decimalQuantityFormat(this.goldExchangeForm.value.rndOfAmt, 'AMOUNT'),
-      "VATAMOUNTFCROUNDCC": this.comService.decimalQuantityFormat(this.goldExchangeForm.value.rndOfAmtDes, 'AMOUNT'),
-      "metalPurchaseDetails": this.goldExchangeDetailsData,
-    }
       MID: 0,
       BRANCH_CODE: this.branchCode,
       VOCTYPE: this.goldExchangeForm.value.vocType,
@@ -1597,23 +1289,6 @@ export class GoldExchangeComponent implements OnInit {
       metalPurchaseDetails: this.goldExchangeDetailsData,
     };
 
-    let Sub: Subscription = this.suntechApi.putDynamicAPI(updateApi, updateData)
-      .subscribe((result) => {
-        if (result.response) {
-          if (result.status == "Success") {
-            Swal.fire({
-              title: result.message || 'Success',
-              text: '',
-              icon: 'success',
-              confirmButtonColor: '#336699',//CHINNU - HEX CODE?
-              confirmButtonText: 'Ok'
-            }).then((result: any) => {
-              if (result.value) {
-                this.goldExchangeForm.reset()
-                this.tableData = []
-                this.close('reloadMainGrid')
-              }
-            });
     let Sub: Subscription = this.suntechApi
       .putDynamicAPI(updateApi, updateData)
       .subscribe(

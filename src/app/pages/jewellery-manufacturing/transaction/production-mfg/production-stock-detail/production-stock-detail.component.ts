@@ -177,7 +177,7 @@ export class ProductionStockDetailComponent implements OnInit {
   }
   priceOneCodeSelected(e: any) {
     if (this.isSamepriceCodeSelected(e.PRICE_CODE)) {
-      this.commonService.toastErrorByMsgId('cannot select the same Price code');
+      this.commonService.toastErrorByMsgId('MSG2052');//duplicate entries found
       return;
     }
     this.productionItemsDetailsFrom.controls.price1per.setValue(e.PRICE_CODE);
@@ -185,7 +185,7 @@ export class ProductionStockDetailComponent implements OnInit {
 
   pricetwoCodeSelected(e: any) {
     if (this.isSamepriceCodeSelected(e.PRICE_CODE)) {
-      this.commonService.toastErrorByMsgId('cannot select the same Price code');
+      this.commonService.toastErrorByMsgId('MSG2052');
       return;
     }
     this.productionItemsDetailsFrom.controls.price2per.setValue(e.PRICE_CODE);
@@ -193,7 +193,7 @@ export class ProductionStockDetailComponent implements OnInit {
 
   pricethreeCodeSelected(e: any) {
     if (this.isSamepriceCodeSelected(e.PRICE_CODE)) {
-      this.commonService.toastErrorByMsgId('cannot select the same Price code');
+      this.commonService.toastErrorByMsgId('MSG2052');
       return;
     }
     this.productionItemsDetailsFrom.controls.price3per.setValue(e.PRICE_CODE);
@@ -201,7 +201,7 @@ export class ProductionStockDetailComponent implements OnInit {
 
   pricefourCodeSelected(e: any) {
     if (this.isSamepriceCodeSelected(e.PRICE_CODE)) {
-      this.commonService.toastErrorByMsgId('cannot select the same Price code');
+      this.commonService.toastErrorByMsgId('MSG2052');
       return;
     }
     this.productionItemsDetailsFrom.controls.price4per.setValue(e.PRICE_CODE);
@@ -209,7 +209,7 @@ export class ProductionStockDetailComponent implements OnInit {
 
   pricefiveCodeSelected(e: any) {
     if (this.isSamepriceCodeSelected(e.PRICE_CODE)) {
-      this.commonService.toastErrorByMsgId('cannot select the same Price code');
+      this.commonService.toastErrorByMsgId('MSG2052');
       return;
     }
     this.productionItemsDetailsFrom.controls.price5per.setValue(e.PRICE_CODE);
@@ -546,7 +546,8 @@ export class ProductionStockDetailComponent implements OnInit {
             }
            
           }, err => {
-            this.commonService.toastErrorByMsgId('network issue found')
+            this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+
           })
         this.subscriptions.push(Sub)
       }

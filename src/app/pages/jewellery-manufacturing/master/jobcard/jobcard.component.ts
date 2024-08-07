@@ -1,9 +1,3 @@
-/*
-MODULE : JEWELLERY MANUFACTURING
-MENU_SCREEN_NAME : JOB CARD MASTER
-DEVELOPER : AKHIL / BESKEY
-*/
-
 import { Component, ElementRef, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -97,11 +91,11 @@ export class JobcardComponent implements OnInit {
   commentsCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 3,
+    LOOKUPID: 267,
     SEARCH_FIELD: '',
     SEARCH_HEADING: 'Comments ',
     SEARCH_VALUE: '',
-    WHERECONDITION: "TYPES ='COMMENTS MASTER'",
+    WHERECONDITION: "@strAcCode=''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -111,10 +105,10 @@ export class JobcardComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 10,
-    SEARCH_FIELD: '',
+    SEARCH_FIELD: 'DESCRIPTION',
     SEARCH_HEADING: 'Length Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "TYPES = 'LENGTH MASTER'",
+    WHERECONDITION: "DESCRIPTION<>''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -456,21 +450,35 @@ export class JobcardComponent implements OnInit {
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
   }
+  // sizeCodeData: MasterSearchModel = {
+  //   PAGENO: 1,
+  //   RECORDS: 10,
+  //   LOOKUPID: 74,
+  //   SEARCH_FIELD: '',
+  //   SEARCH_HEADING: 'Size ',
+  //   SEARCH_VALUE: '',
+  //   WHERECONDITION: `DESIGN_CODE='${this.jobCardFrom.value.designcode}'`,
+  //   // WHERECONDITION: `kARAT_CODE = '${this.jobCardFrom.value.karat}' and PURITY = '${this.jobCardFrom.value.purity}'`,
+  //   VIEW_INPUT: true,
+  //   VIEW_TABLE: true,
+  //   LOAD_ONCLICK: true,
+  // }
+
   sizeCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 74,
-    SEARCH_FIELD: '',
+    LOOKUPID: 89,
+    SEARCH_FIELD: 'COMPSIZE_CODE',
     SEARCH_HEADING: 'Size ',
     SEARCH_VALUE: '',
-    WHERECONDITION: `DESIGN_CODE='${this.jobCardFrom.value.designcode}'`,
+    WHERECONDITION: "COMPSIZE_CODE<>''",
     // WHERECONDITION: `kARAT_CODE = '${this.jobCardFrom.value.karat}' and PURITY = '${this.jobCardFrom.value.purity}'`,
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
   }
 
-
+  
   setCompanyCurrency() {
     let CURRENCY_CODE = this.commonService.compCurrency;
     this.jobCardFrom.controls.currency.setValue(CURRENCY_CODE);
@@ -620,12 +628,12 @@ export class JobcardComponent implements OnInit {
 
   commentsCodeSelected(e: any) {
     console.log(e);
-    this.jobCardFrom.controls.comments.setValue(e.DESCRIPTION);
+    this.jobCardFrom.controls.comments.setValue(e['Account Description']);
   }
 
   sizeCodeSelected(e: any) {
     console.log(e);
-    this.jobCardFrom.controls.size.setValue(e.ATTR_CODE);
+    this.jobCardFrom.controls.size.setValue(e.COMPSIZE_CODE);
   }
 
 
@@ -667,11 +675,7 @@ export class JobcardComponent implements OnInit {
         this.urls = result.response[0].imagepath;
         console.log(this.urls)
       }, err => {
-<<<<<<< HEAD
-        this.commonService.toastErrorByMsgId('Server Error')//CHINNU -  MESSAGE HARD CODED
-=======
         this.commonService.toastErrorByMsgId('MSG81451')//Server Error
->>>>>>> origin/ERP_Staging
       })
     this.subscriptions.push(Sub)
 
@@ -853,7 +857,7 @@ export class JobcardComponent implements OnInit {
               JOB_SO_NUMBER: 0,
               UNQ_JOB_ID: String(this.jobCardFrom.value.jobno),
               JOB_SO_MID: 0,
-              BRANCH_CODE: "DMCC",//CHINNU -  WHY HARD CODED
+              BRANCH_CODE: "DMCC",
               DESIGN_CODE: element.DESIGN_CODE,
               METALSTONE: element.METALSTONE,
               DIVCODE: element.DIVCODE,
@@ -901,11 +905,7 @@ export class JobcardComponent implements OnInit {
 
 
       }, err => {
-<<<<<<< HEAD
-        this.commonService.toastErrorByMsgId('Server Error');//CHINNU -  MESSAGE HARD CODED
-=======
         this.commonService.toastErrorByMsgId('MSG81451')//Server Error
->>>>>>> origin/ERP_Staging
       });
     this.subscriptions.push(Sub);
   }
@@ -1121,18 +1121,11 @@ export class JobcardComponent implements OnInit {
       this.update()
       return
     }
-<<<<<<< HEAD
-    if (this.jobCardFrom.invalid) {
-      this.toastr.error('select all required fields')//CHINNU -  MESSAGE HARD CODED
-      return
-    }
-=======
     if (this.submitValidations(this.jobCardFrom.value)) return;
     // if (this.jobCardFrom.invalid) {
     //   this.toastr.error('select all required fields')
     //   return
     // }
->>>>>>> origin/ERP_Staging
 
     let API = 'JobMasterDj/InsertJobMasterDJ'
     let postData = {
@@ -1368,17 +1361,10 @@ export class JobcardComponent implements OnInit {
 
 
   update() {
-<<<<<<< HEAD
-    if (this.jobCardFrom.invalid) {
-      this.toastr.error('select all required fields')//CHINNU -  MESSAGE HARD CODED
-      return
-    }
-=======
     // if (this.jobCardFrom.invalid) {
     //   this.toastr.error('select all required fields')
     //   return
     // }
->>>>>>> origin/ERP_Staging
 
     let API = `JobMasterDj/UpdateJobMasterDJ/${this.branchCode}/${this.jobCardFrom.value.jobno}`;
     let postData = {
@@ -1693,7 +1679,7 @@ export class JobcardComponent implements OnInit {
                 });
               } else {
                 Swal.fire({
-                  title: result.message || 'Error please try again',//CHINNU -  MESSAGE HARD CODED
+                  title: result.message || 'Error please try again',
                   text: '',
                   icon: 'error',
                   confirmButtonColor: '#336699',
@@ -1731,11 +1717,7 @@ export class JobcardComponent implements OnInit {
           this.jobCardFrom.controls.jobno.setValue(result.dynamicData[0][0].JOB_NO)
         }
       }, err => {
-<<<<<<< HEAD
-        this.commonService.toastErrorByMsgId('Server Error')//CHINNU -  MESSAGE HARD CODED
-=======
         this.commonService.toastErrorByMsgId('MSG81451')//Server Error
->>>>>>> origin/ERP_Staging
       })
     this.subscriptions.push(Sub)
   }
@@ -1869,11 +1851,7 @@ export class JobcardComponent implements OnInit {
           this.handleLookupError(FORMNAME, LOOKUPDATA);
         }
       }, err => {
-<<<<<<< HEAD
-        this.commonService.toastErrorByMsgId('network issue found')//CHINNU -  MESSAGE HARD CODED
-=======
         this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
->>>>>>> origin/ERP_Staging
       })
     this.subscriptions.push(Sub)
   }

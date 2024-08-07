@@ -1,9 +1,3 @@
-/*
-MODULE : JEWELLERY MANUFACTURING
-MENU_SCREEN_NAME : SEQUENCE MASTER
-DEVELOPER : AKHIL / BESKEY / ANANTHA
-*/
-
 import { Component, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
@@ -114,11 +108,7 @@ export class SequenceMasterComponent implements OnInit {
 
   checkCode(): boolean {
     if (this.sequenceMasterForm.value.sequenceCode == '') {
-<<<<<<< HEAD
-      this.commonService.toastErrorByMsgId('please enter code')//CHINNU -  MESSAGE HARD CODED
-=======
       this.commonService.toastErrorByMsgId('MSG1124') //"Code cannot be empty"
->>>>>>> origin/ERP_Staging
       return true
     }
     return false
@@ -195,11 +185,7 @@ export class SequenceMasterComponent implements OnInit {
             this.checkSequenceExists()
           }
         } else {
-<<<<<<< HEAD
-          this.toastr.error('No Data Found')//CHINNU -  MESSAGE HARD CODED
-=======
           this.commonService.toastInfoByMsgId('MSG1452')//No Data Found
->>>>>>> origin/ERP_Staging
         }
       }, err => alert(err))
     this.subscriptions.push(Sub)
@@ -333,16 +319,10 @@ export class SequenceMasterComponent implements OnInit {
     return daysTime + ":" + hoursTime + ':' + minutesTime;
   }
   submitValidation() {
-<<<<<<< HEAD
-    if (this.sequenceMasterForm.invalid && this.selectedSequence) {
-      this.toastr.error('Select all required fields & Process')//CHINNU -  MESSAGE HARD CODED
-      return true;
-=======
     if (this.selectedSequence) {
       this.commonService.toastErrorByMsgId('MSG1777') 
       //this.toastr.error('Select all required fields & Process')Select atleast one option
       return true;  
->>>>>>> origin/ERP_Staging
     }
     if (this.commonService.nullToString(this.sequenceMasterForm.value.sequenceCode) =='') {
       this.commonService.toastErrorByMsgId('MSG1124') //"Code cannot be empty"
@@ -358,11 +338,7 @@ export class SequenceMasterComponent implements OnInit {
     this.dataSource.forEach((item: any) => {
       if (item.isChecked == true && item.STD_LOSS > item.MAX_LOSS) {
         this.checkCondtion = true;
-<<<<<<< HEAD
-        this.toastr.error('Max loss must be Greater than the Standard Loss')//CHINNU -  MESSAGE HARD CODED
-=======
         this.commonService.toastErrorByMsgId('MSG1808')//Max Loss cannot be less than Std Loss
->>>>>>> origin/ERP_Staging
       }
       if (item.isChecked == true && item.STD_LOSS < item.MAX_LOSS) {
         this.checkCondtion = false
@@ -376,12 +352,8 @@ export class SequenceMasterComponent implements OnInit {
     this.dataSource.forEach((item: any) => {
       if (item.isChecked == true && item.STD_TIME > item.MAX_TIME) {
         this.checkTimeCondtion = true;
-<<<<<<< HEAD
-        this.toastr.error('Max Time must be Greater than the Standard Time')//CHINNU -  MESSAGE HARD CODED
-=======
         this.commonService.toastErrorByMsgId('MSG7901')//Max Time cannot be less than Std Time
         // this.toastr.error('Max Time must be Greater than the Standard Time')
->>>>>>> origin/ERP_Staging
       }
 
       if (item.isChecked == true && item.STD_TIME < item.MAX_TIME) {
@@ -496,11 +468,7 @@ export class SequenceMasterComponent implements OnInit {
             }
            
           }, err => {
-<<<<<<< HEAD
-            this.commonService.toastErrorByMsgId('network issue found')//CHINNU -  MESSAGE HARD CODED
-=======
             this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
->>>>>>> origin/ERP_Staging
           })
         this.subscriptions.push(Sub)
       }
@@ -733,11 +701,7 @@ export class SequenceMasterComponent implements OnInit {
     let max: number = parseFloat(data['MAX_LOSS'])
     let std: number = parseFloat(data['STD_LOSS'])
     if (max < std) {
-<<<<<<< HEAD
-      this.commonService.toastErrorByMsgId('Max Loss cannot be less than Std Loss')//CHINNU -  MESSAGE HARD CODED
-=======
       this.commonService.toastErrorByMsgId('MSG1808')//Max Loss cannot be less than Std Loss
->>>>>>> origin/ERP_Staging
       this.dataSource[data.SRNO].MAX_LOSS = 0
       return false;
     }
@@ -770,11 +734,7 @@ export class SequenceMasterComponent implements OnInit {
     let max: number = parseFloat(data['MAX_TIME'])
     let std: number = parseFloat(data['STD_TIME'])
     if (max < std) {
-<<<<<<< HEAD
-      this.commonService.toastErrorByMsgId('Max Time cannot be less than Std Time')//CHINNU -  MESSAGE HARD CODED
-=======
       this.commonService.toastErrorByMsgId('MSG7901')//Max Time cannot be less than Std Time
->>>>>>> origin/ERP_Staging
       this.dataSource[data.SRNO].MAX_TIME = 0
       return false;
     }
@@ -837,3 +797,5 @@ export class SequenceMasterComponent implements OnInit {
     }
   }
 }
+
+

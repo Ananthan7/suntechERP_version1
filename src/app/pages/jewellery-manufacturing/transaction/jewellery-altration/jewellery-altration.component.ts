@@ -223,9 +223,9 @@ export class JewelleryAltrationComponent implements OnInit {
 
 
   jewelleryaltrationFrom: FormGroup = this.formBuilder.group({
-    voctype: [''],
+    voctype: ['', [Validators.required]],
     vocno: [''],
-    vocdate: [''],
+    vocdate: ['', [Validators.required]],
     metalrate: [''],
     metalratetype: [''],
     costcode: [''],
@@ -504,11 +504,11 @@ export class JewelleryAltrationComponent implements OnInit {
   }
   submitValidations(form: any) {
     if (form.VOCTYPE == '') {
-      this.comService.toastErrorByMsgId('VOCTYPE is required')
+      this.comService.toastErrorByMsgId('MSG1939')//VOCTYPE is required
       return true
     }
     if (form.vocdate == '') {
-      this.comService.toastErrorByMsgId('vocdate is required')
+      this.comService.toastErrorByMsgId('MSG1331')//vocdate is required
       return true
     }
     return false
@@ -518,10 +518,8 @@ export class JewelleryAltrationComponent implements OnInit {
       this.update()
       return
     }
-    if (this.jewelleryaltrationFrom.invalid) {
-      this.toastr.error('select all required fields')
-      return
-    }
+    if (this.submitValidations(this.jewelleryaltrationFrom.value)) return;
+  
     let API = 'DiamondJewelAlteration/InsertDiamondJewelAlteration'
     let postData = this.setPostData()
     this.isloading = true;
@@ -548,13 +546,15 @@ export class JewelleryAltrationComponent implements OnInit {
         
       }, err => {
         this.isloading = false;
-        this.toastr.error('Not saved')
+        this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
       })
     this.subscriptions.push(Sub)
   }
 
 
   update() {
+    if (this.submitValidations(this.jewelleryaltrationFrom.value)) return;
+
     let form = this.jewelleryaltrationFrom.value
     let API = `DiamondJewelAlteration/UpdateDiamondJewelAlteration/${this.branchCode}/${form.voctype}/${form.vocno}/${this.yearMonth}`
     let postData = this.setPostData()
@@ -583,7 +583,7 @@ export class JewelleryAltrationComponent implements OnInit {
         
       }, err => {
         this.isloading = false;
-        this.comService.toastErrorByMsgId('Not saved')
+        this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
       })
     this.subscriptions.push(Sub)
   }
@@ -649,7 +649,7 @@ export class JewelleryAltrationComponent implements OnInit {
                 });
               }
             } else {
-              this.toastr.error('Not deleted')
+              this.commonService.toastErrorByMsgId('MSG1880');// Not Deleted
             }
           }, err => alert(err))
         this.subscriptions.push(Sub)
@@ -701,7 +701,7 @@ export class JewelleryAltrationComponent implements OnInit {
         }
 
       }, err => {
-        this.comService.toastErrorByMsgId('network issue found')
+        this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
       })
     this.subscriptions.push(Sub)
   }
