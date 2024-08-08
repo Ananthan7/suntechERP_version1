@@ -72,12 +72,12 @@
               <div class="col-md-3">
                 <mat-form-field appearance="outline" style="width: 100%;">
                   <input type="text" matInput formControlName="UNQ_JOB_ID"
-                    appNoEmptySpace readonly />
+                    UpperCaseDirective readonly />
                 </mat-form-field>
               </div>
               <div class="col-md-4">
                 <mat-form-field appearance="outline" style="width: 100%;">
-                  <input type="text" matInput readonly
+                  <input type="text" matInput readonly UpperCaseDirective
                     formControlName="SUB_JOB_DESCRIPTION" />
                 </mat-form-field>
               </div>
@@ -207,7 +207,7 @@
                             style="width: 110px;">
                             <input type="text" matInput [readonly]="viewMode"
                               UpperCaseDirective
-                               (keydown)="lookupKeyPress($event,'TO_WORKER_CODE')"
+                              (keydown)="lookupKeyPress($event,'TO_WORKER_CODE')"
                               (focusout)="toWorkercodeValidate($event)"
                               formControlName="TO_WORKER_CODE" />
                             <master-search class="masterSearch"
@@ -415,6 +415,7 @@
                             <mat-form-field appearance="outline"
                               style="width: 100px;">
                               <input type="text" matInput readonly
+                                NumberOnly
                                 class="text-right"
                                 formControlName="STD_LOSS" />
                             </mat-form-field>
@@ -479,6 +480,7 @@
                             <mat-form-field appearance="outline"
                               style="width: 100px;">
                               <input type="text" matInput readonly
+                                NumberOnly
                                 formControlName="lossQtyper"
                                 class="text-right" />
                             </mat-form-field>
