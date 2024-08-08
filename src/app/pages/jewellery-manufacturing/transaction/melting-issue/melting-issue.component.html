@@ -8,7 +8,7 @@
 <!-- modal header component -->
 <modal-header (saveClick)="formSubmit()" [isloading]="isloading"
     [isViewAuditTrail]="true" [disableAuditTrail]="!isSaved"
-    (cancelClick)="close()" (deleteClick)="deleteRecord()" 
+    (cancelClick)="close()" (deleteClick)="deleteRecord()"
     [isViewSave]="!viewMode" [isViewDelete]="editMode"
     [isViewPost]="true"></modal-header>
 <div class="row">
@@ -274,7 +274,7 @@
                                         dataField="STOCK_CODE"
                                         caption="Stock Code"
                                         alignment="left"></dxi-column>
-                                        <dxi-column [width]="100"
+                                    <dxi-column [width]="100"
                                         dataField="STOCK_DESCRIPTION"
                                         caption="Stock Description"
                                         alignment="left"></dxi-column>
@@ -431,9 +431,10 @@
                                                     class="col-sm-3 col-form-label">Required
                                                     Alloy Qty:</label>
                                                 <div class="col-md-6">
-                                                    <mat-form-field appearance="outline"
-                                                        style="width: 70%; margin-left: -225px;" >
-                                                        <input type="text"  
+                                                    <mat-form-field
+                                                        appearance="outline"
+                                                        style="width: 70%; margin-left: -225px;">
+                                                        <input type="text"
                                                             class="text-right"
                                                             matInput [max]="10"
                                                             formControlName="alloyQty"
