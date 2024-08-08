@@ -25,18 +25,18 @@ export class MeltingIssueComponent implements OnInit {
   @ViewChild('overlayworkercode') overlayworkercode!: MasterSearchComponent;
   dataToDetailScreen: any;
   modalReference!: NgbModalRef;
-  columnhead: any[] = ['SRNO', 'DIV', 'Job No', 'Stock Code', 'Main Stock', 'Process', 'Worker', 'Pcs', 'Gross Weight', 'Purity', 'Pure Weight', 'Rate', 'Amount']
-  columnheader: any[] = ['Sr#', 'SO No', 'Party Code', 'Party Name', 'Job Number', 'Job Description', 'Design Code', 'UNQ Design ID', 'Process', 'Worker', 'Metal Required', 'Metal Allocated', 'Allocated Pure', 'Job Pcs']
+  columnhead: any[] = ['SRNO', 'DIV', 'Job No', 'Stock Code','Stock Description', 'Main Stock', 'Process', 'Worker', 'Pcs', 'Gross Weight', 'Purity', 'Pure Weight', 'Rate', 'Amount']
+  columnheader: any[] = ['Sr#', 'SO No', 'Party Code', 'Party Name', 'Job Number', 'Job Description', 'Design Code', 'UNQ Design ID', 'Process', 'Worker', 'Metal Required', 'Metal Allocated', 'Allocated Pure Wt', 'Job Pcs']
   columnhead1: any[] = ['Sr#', 'Ingredients', 'Qty']
   db1: any[] = [
-    {title:'Sr#', field: 'SRNO',format:'',alignment: 'left' },
     { title: 'SRNO', field: 'SRNO', format: '', alignment: 'left' },
+    { title: 'DIVISION', field: 'DIVISION', format: '', alignment: 'left' },
     { title: 'Stock Code', field: 'STOCKCODE', format: '', alignment: 'left' },
     { title: 'Description', field: 'DESCRIPTION', format: '', alignment: 'left' },
-    { title: 'Alloy', field: 'ALLOY', format: '', alignment: 'right',useMetalDecimalInput: false },
-    { title: 'Alloy Qty', field: 'ALLOYQTY', format: '', alignment: 'right',useMetalDecimalInput: false },
-    { title: 'Rate', field: 'RATE', format: '', alignment: 'right' ,useAmountDecimalInput: false},
-    { title: 'Amount', field: 'AMOUNT', format: '', alignment: 'right',useAmountDecimalInput: false },
+    { title: 'Alloy', field: 'ALLOY', format: '', alignment: 'right' },
+    { title: 'Alloy Qty', field: 'ALLOYQTY', format: '', alignment: 'right' },
+    { title: 'Rate', field: 'RATE', format: '', alignment: 'right'},
+    { title: 'Amount', field: 'AMOUNT', format: '', alignment: 'right'},
   ]
   @Input() content!: any;
   tableData: any[] = [];
@@ -52,6 +52,7 @@ export class MeltingIssueComponent implements OnInit {
   private subscriptions: Subscription[] = [];
   viewMode: boolean = false;
   isSaved: boolean = false;
+  editMode: boolean = false;
   isloading: boolean = false;
   companyName = this.commonService.allbranchMaster['BRANCH_NAME'];
   gridAmountDecimalFormat: any = {
@@ -216,7 +217,8 @@ export class MeltingIssueComponent implements OnInit {
         this.viewMode = true;
         this.LOCKVOUCHERNO = true;
       }
-      if (this.content.FLAG == 'VIEW') {
+      if (this.content.FLAG == 'EDIT') {
+        this.editMode = true;
         this.LOCKVOUCHERNO = true;
       }
       this.isSaved = true;
@@ -326,6 +328,7 @@ export class MeltingIssueComponent implements OnInit {
           this.meltingIssueFrom.controls.color.setValue(data.COLOR)
           this.meltingIssueFrom.controls.meltingtype.setValue(data.MELTING_TYPE)
           this.meltingIssueFrom.controls.jobpurity.setValue(data.PURITY)
+          this.meltingIssueFrom.controls.StockDescription.setValue(data.STOCK_DESCRIPTION)
 
           this.meltingISsueDetailsData = data.Details
           this.reCalculateSRNO() //set to main grid
@@ -595,11 +598,19 @@ export class MeltingIssueComponent implements OnInit {
 
   openaddMeltingIssueDetails(dataToChild?: any) {
     console.log(this.openaddMeltingIssueDetails)
-    if (!this.meltingIssueFrom.get('meltingtype')?.value) {
-      // Show error toast or message
-      this.commonService.toastErrorByMsgId('MSG1431	');
-      return; // Stop further execution
-    }
+    // Check if meltingtype is empty
+  if (!this.meltingIssueFrom.get('meltingtype')?.value) {
+    // Show error toast or message
+    this.commonService.toastErrorByMsgId('MSG1431'); // Custom message ID for melting type empty error
+    return; // Stop further execution
+  }
+
+  // Check if jobno is empty
+  if (!this.meltingIssueFrom.get('jobno')?.value) {
+    // Show error toast or message
+    this.commonService.toastErrorByMsgId('MSG1358'); // Custom message ID for job number empty error
+    return; // Stop further execution
+  }
     if (dataToChild) {
       dataToChild.FLAG = this.content?.FLAG || 'EDIT'
       dataToChild.HEADERDETAILS = this.meltingIssueFrom.value;

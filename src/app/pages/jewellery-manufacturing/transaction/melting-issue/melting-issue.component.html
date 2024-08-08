@@ -8,8 +8,8 @@
 <!-- modal header component -->
 <modal-header (saveClick)="formSubmit()" [isloading]="isloading"
     [isViewAuditTrail]="true" [disableAuditTrail]="!isSaved"
-    (cancelClick)="close()" (deleteClick)="deleteRecord()"
-    [isViewSave]="!viewMode" [isViewDelete]="false"
+    (cancelClick)="close()" (deleteClick)="deleteRecord()" 
+    [isViewSave]="!viewMode" [isViewDelete]="editMode"
     [isViewPost]="true"></modal-header>
 <div class="row">
     <div class="col-md-12">
@@ -274,6 +274,10 @@
                                         dataField="STOCK_CODE"
                                         caption="Stock Code"
                                         alignment="left"></dxi-column>
+                                        <dxi-column [width]="100"
+                                        dataField="STOCK_DESCRIPTION"
+                                        caption="Stock Description"
+                                        alignment="left"></dxi-column>
                                     <dxi-column [width]="100"
                                         dataField="Main Stock"
                                         caption="Main Stock"
@@ -310,7 +314,6 @@
                                     <dxo-summary>
                                         <dxi-total-item column="Pcs"
                                             summaryType="sum"
-                                            [valueFormat]="gridAmountDecimalFormat"
                                             displayFormat="{0}">
                                         </dxi-total-item>
                                         <dxi-total-item column="Gross Weight"
@@ -359,19 +362,18 @@
                                 <button class="btn btn-primary add-btn"
                                     (click)="open(mymodal)">Add Alloy
                                 </button>
-
-                                <div class="col-md-8">
-                                    <ng-template #mymodal let-modal modal-sm>
-                                        <div class style="padding: 10px 20px">
+                                <div class="col-md-6">
+                                    <ng-template #mymodal let-modal>
+                                        <div style="padding: 10px 20px">
                                             <div
-                                                class="modal-header d-flex justify-content-end">
+                                                class="modal-header">
                                                 <h5 class="meltingissueheading"
                                                     id="modal-dia-metal"
-                                                    style="text-align:right;">Alloy
-                                                    Allocation
+                                                    style="text-align:left;">
+                                                    Alloy Allocation
                                                 </h5>
                                                 <button style="border: none"
-                                                    type="button" class="close "
+                                                    type="button" class="close"
                                                     aria-label="Close"
                                                     (click)="modal.dismiss('close1')">
                                                     <span
@@ -379,61 +381,72 @@
                                                 </button>
                                             </div>
                                             <br>
-                                            <div class="col-md-12">
-                                                <div class="modal-content">
-                                                    <dx-data-grid #dataGrid
-                                                        id="gridContainer"
-                                                        keyExpr="ID"
-                                                        [showBorders]="true"
-                                                        [allowColumnReordering]="true"
-                                                        [allowColumnResizing]="true"
-                                                        [columnAutoWidth]="true">
-                                                        <dxo-paging
-                                                            [enabled]="false"></dxo-paging>
-                                                        <dxo-editing mode="cell"
-                                                            [allowUpdating]="true"></dxo-editing>
-                                                        <dxo-selection
-                                                            mode="multiple"></dxo-selection>
-                                                        <dxo-scrolling
-                                                            mode="virtual"></dxo-scrolling>
-                                                        <dxi-column
-                                                            *ngFor="let data of db1"
-                                                            dataField="{{ data.field }}"
-                                                            caption="{{ data.title }}"
-                                                            [format]="data.format"
-                                                            [allowEditing]="true"
-                                                            [alignment]="data.alignment"
-                                                            backgroundcolor="#000">
 
-                                                        </dxi-column>
-                                                    </dx-data-grid>
-                                                    <div class="row my-2">
-                                                        <label
-                                                            for="inputPassword"
-                                                            class="col-sm-3 col-form-label">Required
-                                                            Alloy Qty:</label>
-                                                        <div class="col-md-6">
-                                                            <mat-form-field
-                                                                style="width: 70%;">
-                                                                <input
-                                                                    type="text"
-                                                                    class="text-right"
-                                                                    matInput
-                                                                    [max]="10"
-                                                                    formControlName="alloyQty"
-                                                                    MetalDecimalInput />
-                                                            </mat-form-field>
-                                                        </div>
-                                                    </div>
+                                            <dx-data-grid #dataGrid
+                                                id="gridContainer"
+                                                keyExpr="ID"
+                                                [dataSource]="tableData"
+                                                [showBorders]="true"
+                                                [allowColumnReordering]="true"
+                                                [allowColumnResizing]="true"
+                                                [columnAutoWidth]="true">
+                                                <dxo-paging
+                                                    [enabled]="false"></dxo-paging>
+                                                <dxo-editing mode="cell"
+                                                    [allowUpdating]="true"></dxo-editing>
+                                                <dxo-selection
+                                                    mode="multiple"></dxo-selection>
+                                                <dxo-scrolling
+                                                    mode="virtual"></dxo-scrolling>
 
-                                                    <div class="modal-footer">
-                                                        <button type="button"
-                                                            class="btn btn-primary">Apply</button>
-                                                        <button type="button"
-                                                            class="btn btn-primary"
-                                                            (click)="closeModal(modal)">Cancel</button>
-                                                    </div>
+                                                <dxi-column
+                                                    *ngFor="let data of db1"
+                                                    [dataField]="data.field"
+                                                    [caption]="data.title"
+                                                    [format]="data.format"
+                                                    [allowEditing]="true"
+                                                    [alignment]="data.alignment">
+                                                </dxi-column>
+
+                                                <dxo-summary>
+
+                                                    <dxi-total-item
+                                                        column="ALLOY"
+                                                        summaryType="sum"
+                                                        [valueFormat]="gridAmountDecimalFormat"
+                                                        displayFormat="{0}">
+                                                    </dxi-total-item>
+                                                    <dxi-total-item
+                                                        column="ALLOYQTY"
+                                                        summaryType="sum"
+                                                        [valueFormat]="gridAmountDecimalFormat"
+                                                        displayFormat="{0}">
+                                                    </dxi-total-item>
+
+                                                </dxo-summary>
+                                            </dx-data-grid>
+
+                                            <div class="row my-2">
+                                                <label for="inputPassword"
+                                                    class="col-sm-3 col-form-label">Required
+                                                    Alloy Qty:</label>
+                                                <div class="col-md-6">
+                                                    <mat-form-field appearance="outline"
+                                                        style="width: 70%; margin-left: -225px;" >
+                                                        <input type="text"  
+                                                            class="text-right"
+                                                            matInput [max]="10"
+                                                            formControlName="alloyQty"
+                                                            MetalDecimalInput />
+                                                    </mat-form-field>
                                                 </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button"
+                                                    class="btn btn-primary">Apply</button>
+                                                <button type="button"
+                                                    class="btn btn-primary"
+                                                    (click)="closeModal(modal)">Cancel</button>
                                             </div>
                                         </div>
                                     </ng-template>
@@ -474,6 +487,7 @@
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
                                         formControlName="issued"
+                                        class="text-right" maxlength="20"
                                         MetalDecimalInput
                                         [readonly]="viewMode" />
                                 </mat-form-field>
@@ -486,6 +500,7 @@
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
                                         formControlName="required"
+                                        class="text-right" maxlength="20"
                                         MetalDecimalInput
                                         [readonly]="viewMode" />
                                 </mat-form-field>
@@ -498,6 +513,7 @@
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
                                         formControlName="allocated"
+                                        class="text-right" maxlength="20"
                                         MetalDecimalInput
                                         [readonly]="viewMode" />
                                 </mat-form-field>
@@ -509,6 +525,7 @@
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
                                         formControlName="balance"
+                                        class="text-right" maxlength="20"
                                         MetalDecimalInput
                                         [readonly]="viewMode" />
                                 </mat-form-field>
@@ -529,7 +546,7 @@
                             <div class="col-md-9">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
-                                        formControlName="remarks"
+                                        formControlName="remarks" maxlength="40"
                                         [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>

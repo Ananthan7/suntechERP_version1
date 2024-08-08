@@ -27,7 +27,7 @@ export class AuditTrailComponent implements OnInit {
     this.gridAmountDecimalFormat = {
       type: 'fixedPoint',
       precision: this.commonService.allbranchMaster?.BAMTDECIMALS,
-      currency: 'AED'
+      currency: this.commonService.compCurrency
     };
   }
 
