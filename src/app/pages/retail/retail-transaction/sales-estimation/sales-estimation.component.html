@@ -2099,7 +2099,7 @@
           CONTINUE
         </button>
         &nbsp;
-        <button mat-flat-button color="primary" (click)="addItemtoExchange('saveBtn')" [disabled]="viewOnly" id="ID173">
+        <button mat-flat-button class="bgColourUpdate" (click)="addItemtoExchange('saveBtn')" [disabled]="viewOnly" id="ID173">
           SAVE
         </button>
         &nbsp;
@@ -2282,7 +2282,7 @@
       </div>
 
       <div style="text-align: right; padding: 10px">
-        <button mat-flat-button color="primary" class="btn-m-r-10" (click)="addItemtoSalesReturn()"
+        <button mat-flat-button class="btn-m-r-10 bgColourUpdate" (click)="addItemtoSalesReturn()"
           [disabled]="viewOnly" id="ID173">
           SAVE
         </button>
@@ -2664,7 +2664,7 @@
 
               <div class="col-md-9" style="margin-top: 2.4rem !important;">
                 <div class="d-flex justify-content-end">
-                  <button class="btn btn-primary btn-m-r-10" (click)="customerSave()" *ngIf="!viewOnly"
+                  <button class="btn btn-primary btn-m-r-10 bgColourUpdate" (click)="customerSave()" *ngIf="!viewOnly"
                             [disabled]="isCustProcessing" id="ID173">
                         SAVE
                   </button>
@@ -3243,11 +3243,11 @@
         <button mat-flat-button color="accent" class="btn btn btn-dark" *ngIf="!lineItemModalForSalesReturn"
           (click)="addItemtoList('newitem_btn')" id="ID285">
           Next Item</button>&nbsp;
-        <button mat-flat-button color="primary" *ngIf="!lineItemModalForSalesReturn"
+        <button mat-flat-button class="bgColourUpdate" *ngIf="!lineItemModalForSalesReturn"
           (click)="addItemtoList('finish_btn')" id="ID286">
           {{ updateBtn ? "Update" : "Finish" }}</button>&nbsp;
 
-        <button color="primary" mat-flat-button class="btn btn btn-primary" *ngIf="lineItemModalForSalesReturn"
+        <button mat-flat-button class="btn btn btn-primary bgColourUpdate" *ngIf="lineItemModalForSalesReturn"
           (click)="updateRetailSalesReturnVal()" id="ID287">
           {{ updateBtn ? "Update" : "Finish" }}</button>&nbsp;
         <!-- <button class="btn btn btn-primary" *ngIf="updateBtn" (click)="addItemtoList('finish_btn')">
