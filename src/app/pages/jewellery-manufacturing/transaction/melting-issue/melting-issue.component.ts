@@ -19,13 +19,13 @@ import { MasterSearchComponent } from 'src/app/shared/common/master-search/maste
 })
 export class MeltingIssueComponent implements OnInit {
   @ViewChild('meltingissueDetailScreen') public meltingissueDetailScreen!: NgbModal;
-  @ViewChild('overlayMeltingType') overlayMeltingType! : MasterSearchComponent;
+  @ViewChild('overlayMeltingType') overlayMeltingType!: MasterSearchComponent;
   @ViewChild('overlayjobNoSearch') overlayjobNoSearch!: MasterSearchComponent;
   @ViewChild('overlayprocesscode') overlayprocesscode!: MasterSearchComponent;
   @ViewChild('overlayworkercode') overlayworkercode!: MasterSearchComponent;
   dataToDetailScreen: any;
   modalReference!: NgbModalRef;
-  columnhead: any[] = ['SRNO', 'DIV', 'Job No', 'Stock Code','Stock Description', 'Main Stock', 'Process', 'Worker', 'Pcs', 'Gross Weight', 'Purity', 'Pure Weight', 'Rate', 'Amount']
+  columnhead: any[] = ['SRNO', 'DIV', 'Job No', 'Stock Code', 'Stock Description', 'Main Stock', 'Process', 'Worker', 'Pcs', 'Gross Weight', 'Purity', 'Pure Weight', 'Rate', 'Amount']
   columnheader: any[] = ['Sr#', 'SO No', 'Party Code', 'Party Name', 'Job Number', 'Job Description', 'Design Code', 'UNQ Design ID', 'Process', 'Worker', 'Metal Required', 'Metal Allocated', 'Allocated Pure Wt', 'Job Pcs']
   columnhead1: any[] = ['Sr#', 'Ingredients', 'Qty']
   db1: any[] = [
@@ -35,8 +35,8 @@ export class MeltingIssueComponent implements OnInit {
     { title: 'Description', field: 'DESCRIPTION', format: '', alignment: 'left' },
     { title: 'Alloy', field: 'ALLOY', format: '', alignment: 'right' },
     { title: 'Alloy Qty', field: 'ALLOYQTY', format: '', alignment: 'right' },
-    { title: 'Rate', field: 'RATE', format: '', alignment: 'right'},
-    { title: 'Amount', field: 'AMOUNT', format: '', alignment: 'right'},
+    { title: 'Rate', field: 'RATE', format: '', alignment: 'right' },
+    { title: 'Amount', field: 'AMOUNT', format: '', alignment: 'right' },
   ]
   @Input() content!: any;
   tableData: any[] = [];
@@ -54,6 +54,7 @@ export class MeltingIssueComponent implements OnInit {
   isSaved: boolean = false;
   editMode: boolean = false;
   isloading: boolean = false;
+  codeEnable: boolean = true;
   companyName = this.commonService.allbranchMaster['BRANCH_NAME'];
   gridAmountDecimalFormat: any = {
     type: 'fixedPoint',
@@ -87,10 +88,10 @@ export class MeltingIssueComponent implements OnInit {
   //   @StrFromProcess='',
   //   @StrFromWorker='',
   //   @StrBranchCode=${this.commonService.branchCode},
-	//   @blnProcessAuthroize=1`,
+  //   @blnProcessAuthroize=1`,
   //   VIEW_INPUT: true,
   //   VIEW_TABLE: true,
-  
+
   // }
   workerCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -135,14 +136,19 @@ export class MeltingIssueComponent implements OnInit {
   jobnoCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 46,
+    LOOKUPID: 268,
     SEARCH_FIELD: 'job_number',
     SEARCH_HEADING: 'Job Number',
     SEARCH_VALUE: '',
-    WHERECONDITION: `JOB_CLOSED_ON is null and  Branch_code = '${this.comService.branchCode}'`,
+    WHERECONDITION: `"@StrJob_Number='',
+    @StrMeltingTypeKarat='',
+    @StrColor ='', 
+    @StrBranch=${this.commonService.branchCode}`,
     VIEW_INPUT: true,
     VIEW_TABLE: true,
-  }
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true
+}
 
   timeCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -166,7 +172,7 @@ export class MeltingIssueComponent implements OnInit {
     worker: [''],
     workerdes: [''],
     subjobno: ['', [Validators.required]],
-    subjobnodes:[''],
+    subjobnodes: [''],
     color: [''],
     time: [''],  // Not in table
     remarks: [''],
@@ -186,6 +192,7 @@ export class MeltingIssueComponent implements OnInit {
     BRANCH_CODE: [''],
     VOCNO: [''],
     MID: [0],
+    Karat:[''],
     voctype: ['', [Validators.required]],
     vocdate: ['', [Validators.required]],
     MAIN_VOCTYPE: [''],
@@ -276,7 +283,7 @@ export class MeltingIssueComponent implements OnInit {
   }
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     LOOKUPDATA.SEARCH_VALUE = event.target.value
-  
+
     if (event.target.value == '' || this.viewMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
@@ -291,7 +298,7 @@ export class MeltingIssueComponent implements OnInit {
         if (data.length == 0) {
           this.commonService.toastErrorByMsgId('MSG1531')
           this.meltingIssueFrom.controls[FORMNAME].setValue('')
-         
+
           LOOKUPDATA.SEARCH_VALUE = ''
           if (FORMNAME === 'processcode') {
             this.showOverleyPanel(event, 'processcode');
@@ -355,7 +362,7 @@ export class MeltingIssueComponent implements OnInit {
     this.subscriptions.push(Sub)
 
   }
-  toWorkercodeValidate(event: any){
+  toWorkercodeValidate(event: any) {
     if (event.target.value == '') {
       this.overlayMeltingType.showOverlayPanel(event)
       return
@@ -363,7 +370,7 @@ export class MeltingIssueComponent implements OnInit {
   }
   showOverleyPanel(event: any, formControlName: string) {
     if (this.meltingIssueFrom.value[formControlName] != '') return;
-  
+
     switch (formControlName) {
       case 'meltingtype':
         this.overlayMeltingType.showOverlayPanel(event);
@@ -380,7 +387,7 @@ export class MeltingIssueComponent implements OnInit {
       default:
     }
   }
-  
+
   minDate: any;
   maxDate: any;
   LOCKVOUCHERNO: boolean = true;
@@ -473,7 +480,7 @@ export class MeltingIssueComponent implements OnInit {
   }
   MeltingCodeSelected(e: any) {
     console.log(e);
-    
+
     this.meltingIssueFrom.controls.meltingtype.setValue(e['Melting Type']);
     // this.meltingIssueFrom.controls.meltingtype.setValue(e.MELTING_TYPE);
     this.meltingTypeValidate()
@@ -488,8 +495,10 @@ export class MeltingIssueComponent implements OnInit {
     this.meltingIssueFrom.controls.worker.setValue(e.WORKER_CODE);
     this.meltingIssueFrom.controls.workerdes.setValue(e.DESCRIPTION);
   }
-  WorkerCodeValidate(event ?: any) {
-    this.showOverleyPanel(event, 'worker')
+  WorkerCodeValidate(event?: any) {
+    if(event&&event.target.value==''){
+      return
+    }
     let form = this.meltingIssueFrom.value;
     let postData = {
       "SPID": "103",
@@ -591,26 +600,30 @@ export class MeltingIssueComponent implements OnInit {
     this.modalService.dismissAll(data);
   }
   lookupKeyPress(event: any, form?: any) {
-    if(event.key == 'Tab' && event.target.value == ''){
-      this.showOverleyPanel(event,form)
+    if (event.key == 'Tab' && event.target.value == '') {
+      this.showOverleyPanel(event, form)
+    }
+    if (event.key === 'Enter') {
+      if (event.target.value == '') this.showOverleyPanel(event, form)
+      event.preventDefault();
     }
   }
 
   openaddMeltingIssueDetails(dataToChild?: any) {
     console.log(this.openaddMeltingIssueDetails)
     // Check if meltingtype is empty
-  if (!this.meltingIssueFrom.get('meltingtype')?.value) {
-    // Show error toast or message
-    this.commonService.toastErrorByMsgId('MSG1431'); // Custom message ID for melting type empty error
-    return; // Stop further execution
-  }
+    if (!this.meltingIssueFrom.get('meltingtype')?.value) {
+      // Show error toast or message
+      this.commonService.toastErrorByMsgId('MSG1431'); // Custom message ID for melting type empty error
+      return; // Stop further execution
+    }
 
-  // Check if jobno is empty
-  if (!this.meltingIssueFrom.get('jobno')?.value) {
-    // Show error toast or message
-    this.commonService.toastErrorByMsgId('MSG1358'); // Custom message ID for job number empty error
-    return; // Stop further execution
-  }
+    // Check if jobno is empty
+    if (!this.meltingIssueFrom.get('jobno')?.value) {
+      // Show error toast or message
+      this.commonService.toastErrorByMsgId('MSG1358'); // Custom message ID for job number empty error
+      return; // Stop further execution
+    }
     if (dataToChild) {
       dataToChild.FLAG = this.content?.FLAG || 'EDIT'
       dataToChild.HEADERDETAILS = this.meltingIssueFrom.value;
@@ -626,7 +639,7 @@ export class MeltingIssueComponent implements OnInit {
       windowClass: 'modal-full-width',
     });
   }
-  
+
   // onRowClickHandler(event: any) {
 
   //   this.selectRowIndex = (event.dataIndex)
@@ -666,7 +679,7 @@ export class MeltingIssueComponent implements OnInit {
   //     console.error('Invalid index');
   //   }
   // }
-  
+
   submitValidations(form: any) {
     if (this.commonService.nullToString(form.voctype) == '') {
       this.commonService.toastErrorByMsgId('MSG1939')
@@ -1009,6 +1022,13 @@ export class MeltingIssueComponent implements OnInit {
       this.commonService.setCommaSerperatedNumber(value, Decimal)
     )
   }
+  setJobNumberWhereCondition() {
+    let form = this.meltingIssueFrom.value;
+    this.jobnoCodeData.WHERECONDITION = `@StrJob_Number='${this.commonService.nullToString(form.UNQ_JOB_ID)}',`
+    this.jobnoCodeData.WHERECONDITION += `@StrMeltingTypeKarat='${this.commonService.nullToString(form.KARAT_CODE)}',`
+    this.jobnoCodeData.WHERECONDITION += `@StrBranch='${this.commonService.nullToString(form.branchCode)}',`
+    this.jobnoCodeData.WHERECONDITION += `@StrColor='${this.commonService.nullToString(form.COLOR)}'`
+  }
 
   subJobNumberValidate(event?: any) {
     let postData = {
@@ -1066,14 +1086,14 @@ export class MeltingIssueComponent implements OnInit {
 
 
   jobNumberValidate(event: any) {
-    this.showOverleyPanel(event,'jobno')
     if (event.target.value == '') return
     let postData = {
-      "SPID": "028",
+      "SPID": "108",
       "parameter": {
-        'strBranchCode': this.commonService.nullToString(this.branchCode),
-        'strJobNumber': this.commonService.nullToString(event.target.value),
-        'strCurrenctUser': this.commonService.nullToString(this.userName)
+        'StrJob_Number': this.commonService.nullToString(event.target.value),
+        'StrMeltingTypeKarat': this.meltingIssueFrom.value.KARAT_CODE,
+        'StrBranch': this.comService.branchCode,
+        'StrColor': this.meltingIssueFrom.value.color
       }
     }
 
@@ -1084,16 +1104,17 @@ export class MeltingIssueComponent implements OnInit {
         if (result.status == "Success" && result.dynamicData[0]) {
           let data = result.dynamicData[0]
           if (data[0] && data[0].UNQ_JOB_ID != '') {
-            this.jobNumberDetailData = data 
+            this.jobNumberDetailData = data
             console.log(data, 'data')
             this.meltingIssueFrom.controls.subjobno.setValue(data[0].UNQ_JOB_ID)
             this.meltingIssueFrom.controls.subJobDescription.setValue(data[0].JOB_DESCRIPTION)
 
             this.subJobNumberValidate()
+            this.setJobNumberWhereCondition()
           } else {
             this.commonService.toastErrorByMsgId('MSG1531')
             this.meltingIssueFrom.controls.jobno.setValue('')
-            this.showOverleyPanel(event,'jobno')
+            this.showOverleyPanel(event, 'jobno')
             return
           }
         } else {
@@ -1111,29 +1132,30 @@ export class MeltingIssueComponent implements OnInit {
   meltingTypeValidate(event?: any) {
     const meltingTypeValue = this.meltingIssueFrom.value.meltingtype;
     console.log('Melting Type:', meltingTypeValue);
-   this.showOverleyPanel(event,'meltingtype')
-  
+
     if (!meltingTypeValue) {
       // this.commonService.toastErrorByMsgId('MSG1531');
       return;
     }
 
     const API = `MeltingType/GetMeltingTypeList/${meltingTypeValue}`;
-    console.log('API URL:', API);
 
     const sub: Subscription = this.dataService.getDynamicAPI(API).subscribe(
       (result: any) => {
         this.commonService.closeSnackBarMsg();
         if (result.response) {
           const data = result.response;
-          console.log('API Response Data:', data);
+          console.log(data,'passing lookup details')
           this.meltingIssueFrom.controls.color.setValue(data.COLOR);
           this.meltingIssueFrom.controls.jobpurity.setValue(data.PURITY);
+          this.meltingIssueFrom.controls.Karat.setValue(data.KARAT_CODE)//KARAT_CODE
           this.setValueWithDecimal('jobpurity', data.PURITY, 'PURITY')
+          this.setValueWithDecimal('jobpurity', data.PURITY, 'PURITY')
+          this.setJobNumberWhereCondition()
         } else {
           this.commonService.toastErrorByMsgId('MSG1531');
           this.meltingIssueFrom.controls.meltingtype.setValue('')
-          this.showOverleyPanel(event,'meltingtype')
+          this.showOverleyPanel(event, 'meltingtype')
 
         }
       },
