@@ -441,11 +441,18 @@ export class AlloyMasterComponent implements OnInit {
     this.alloyMastereForm.controls.type.setValue(this.content.TYPE_CODE)
     this.alloyMastereForm.controls.subCategory.setValue(this.content.SUBCATEGORY_CODE)
     this.alloyMastereForm.controls.vendor.setValue(this.content.SALESCODE)
-    this.alloyMastereForm.controls.price1code.setValue(this.content.PRICE1PER)
-    this.alloyMastereForm.controls.price2code.setValue(this.content.PRICE2PER)
-    this.alloyMastereForm.controls.price3code.setValue(this.content.PRICE3PER)
-    this.alloyMastereForm.controls.price4code.setValue(this.content.PRICE4PER)
-    this.alloyMastereForm.controls.price5code.setValue(this.content.PRICE5PER)
+    // this.alloyMastereForm.controls.price1code.setValue(this.content.PRICE1PER)
+    // this.alloyMastereForm.controls.price2code.setValue(this.content.PRICE2PER)
+    // this.alloyMastereForm.controls.price3code.setValue(this.content.PRICE3PER)
+    // this.alloyMastereForm.controls.price4code.setValue(this.content.PRICE4PER)
+    // this.alloyMastereForm.controls.price5code.setValue(this.content.PRICE5PER)
+
+    this.alloyMastereForm.controls.price1per.setValue(this.content.PRICE1PER)
+    this.alloyMastereForm.controls.price2per.setValue(this.content.PRICE2PER)
+    this.alloyMastereForm.controls.price3per.setValue(this.content.PRICE3PER)
+    this.alloyMastereForm.controls.price4per.setValue(this.content.PRICE4PER)
+    this.alloyMastereForm.controls.price5per.setValue(this.content.PRICE5PER)
+
     this.alloyMastereForm.controls.price1Fc.setValue(this.content.PRICE1FC)
     this.alloyMastereForm.controls.price2Fc.setValue(this.content.PRICE2FC)
     this.alloyMastereForm.controls.price3Fc.setValue(this.content.PRICE3FC)
@@ -530,6 +537,9 @@ export class AlloyMasterComponent implements OnInit {
 
   /**use: validate all lookups to check data exists in db */
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+
+    LOOKUPDATA.SEARCH_VALUE = event.target.value
+
     if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,

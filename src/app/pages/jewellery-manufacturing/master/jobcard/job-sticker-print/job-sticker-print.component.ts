@@ -135,15 +135,15 @@ export class JobStickerPrintComponent implements OnInit {
     // };
     let postData = {
       "SPID": "107",
-      "Parameter ": {
-        "strBranchCode": "",
+      "parameter": {
+        "strBranchCode": this.commonService.branchCode,
         "strVocType": "",
-        "intVocNo": 0,
-        "intMid": 0,
+        "intVocNo": "0",
+        "intMid": "0",
         "YearMonth": "",
-        "FromJobNumber": this.jobstickerpointForm.value.jobrange,
-        "ToJobNumber": this.jobstickerpointForm.value.jobrangeDesc,
-        "chkSingleJob": true
+        "FromJobNumber": this.commonService.nullToString(this.jobstickerpointForm.value.jobrange),
+        "ToJobNumber": this.commonService.nullToString(this.jobstickerpointForm.value.jobrangeDesc),
+        "chkSingleJob": "1"
       }
     };
   
