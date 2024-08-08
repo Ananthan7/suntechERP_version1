@@ -300,12 +300,12 @@ export class AlloyMasterComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.setupFormSubscription();
+    this.setInitialValues();
+    this.setFormValues();
     this.alloyMastereForm.controls.createdBy.setValue(this.commonService.userName);
     this.setCompanyCurrency()
-
+    this.setupFormSubscription();
     if (this.content?.FLAG) {
-      this.setInitialValues()
       if (this.content.FLAG == 'EDIT') {
         this.isDisabled = !this.isDisabled;
         this.editMode = true;
@@ -342,7 +342,7 @@ export class AlloyMasterComponent implements OnInit {
 
   setupFormSubscription(): void {
     const form = this.alloyMastereForm.value;
-  
+
     if (this.alloyMastereForm.get('price1Lc') && this.alloyMastereForm.get('price1Fc')) {
       this.alloyMastereForm.get('price1Lc')!.valueChanges.subscribe(value => {
         // Update value of price1Fc whenever price1Lc changes
@@ -384,7 +384,7 @@ export class AlloyMasterComponent implements OnInit {
       });
     }
   }
-  
+
 
 
   // setupFormSubscription(): void {
@@ -427,7 +427,7 @@ export class AlloyMasterComponent implements OnInit {
   //   this.codeInput.nativeElement.focus();
   // }
 
-  setInitialValues() {
+  setFormValues() {
     console.log(this.content, 'content');
     // 'DiamondStockMaster/GetDiamondStockMasterWithMid/2649104'
     this.alloyMastereForm.controls.code.setValue(this.content.STOCK_CODE)
@@ -447,11 +447,16 @@ export class AlloyMasterComponent implements OnInit {
     // this.alloyMastereForm.controls.price4code.setValue(this.content.PRICE4PER)
     // this.alloyMastereForm.controls.price5code.setValue(this.content.PRICE5PER)
 
-    this.alloyMastereForm.controls.price1per.setValue(this.content.PRICE1PER)
-    this.alloyMastereForm.controls.price2per.setValue(this.content.PRICE2PER)
-    this.alloyMastereForm.controls.price3per.setValue(this.content.PRICE3PER)
-    this.alloyMastereForm.controls.price4per.setValue(this.content.PRICE4PER)
-    this.alloyMastereForm.controls.price5per.setValue(this.content.PRICE5PER)
+    this.alloyMastereForm.controls.price1per.setValue(this.content.PRICE1PER || '')
+    console.log('PRICE1PER set to:', this.alloyMastereForm.controls.price1per.value);
+    this.alloyMastereForm.controls.price2per.setValue(this.content.PRICE2PER || '')
+    console.log('PRICE2PER set to:', this.alloyMastereForm.controls.price2per.value);
+    this.alloyMastereForm.controls.price3per.setValue(this.content.PRICE3PER || '')
+    console.log('PRICE3PER set to:', this.alloyMastereForm.controls.price3per.value);
+    this.alloyMastereForm.controls.price4per.setValue(this.content.PRICE4PER || '')
+    console.log('PRICE4PER set to:', this.alloyMastereForm.controls.price4per.value);
+    this.alloyMastereForm.controls.price5per.setValue(this.content.PRICE5PER || '')
+    console.log('PRICE5PER set to:', this.alloyMastereForm.controls.price5per.value);
 
     this.alloyMastereForm.controls.price1Fc.setValue(this.content.PRICE1FC)
     this.alloyMastereForm.controls.price2Fc.setValue(this.content.PRICE2FC)
@@ -540,14 +545,14 @@ export class AlloyMasterComponent implements OnInit {
 
     LOOKUPDATA.SEARCH_VALUE = event.target.value
 
-    if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
+    if (event.target.value == '' || this.viewMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
       WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
     }
     this.commonService.toastInfoByMsgId('MSG81447');
     let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
-    let Sub: Subscription = this.dataService.postDynamicAPI(API,param)
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
       .subscribe((result) => {
         this.isDisableSaveBtn = false;
         let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
@@ -855,7 +860,7 @@ export class AlloyMasterComponent implements OnInit {
       .subscribe((result) => {
         if (result.response) {
           if (result.status == "Success") {
-          console.log('Last number updated')
+            console.log('Last number updated')
           }
         } else {
           this.commonService.toastErrorByMsgId('MSG3577')
@@ -882,6 +887,42 @@ export class AlloyMasterComponent implements OnInit {
     }
     return false;
   }
+
+  private setInitialValues() {
+
+    this.alloyMastereForm.controls.price1per.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
+    this.alloyMastereForm.controls.price2per.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
+    this.alloyMastereForm.controls.price3per.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
+    this.alloyMastereForm.controls.price4per.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
+    this.alloyMastereForm.controls.price5per.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
+    this.alloyMastereForm.controls.price1Fc.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
+    this.alloyMastereForm.controls.price2Fc.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
+    this.alloyMastereForm.controls.price3Fc.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
+    this.alloyMastereForm.controls.price4Fc.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
+    this.alloyMastereForm.controls.price5Fc.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
+    this.alloyMastereForm.controls.price1Lc.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
+    this.alloyMastereForm.controls.price2Lc.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
+    this.alloyMastereForm.controls.price3Lc.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
+    this.alloyMastereForm.controls.price4Lc.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
+    this.alloyMastereForm.controls.price5Lc.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
+
+    // this.metallabourMasterForm.controls.metalcost_rate.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
+    // this.metallabourMasterForm.controls.wtFrom.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
+    // this.metallabourMasterForm.controls.wtTo.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
+    // this.metallabourMasterForm.controls.metalselling_rate.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
+    // this.metallabourMasterForm.controls.metalSelling.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
+    // this.metallabourMasterForm.controls.metalcost_rate.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
+    // this.metallabourMasterForm.controls.wastage.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
+
+
+    // this.diamondlabourMasterForm.controls.BRANCH_CODE.setValue(this.commonService.branchCode)
+    // this.diamondlabourMasterForm.controls.cost_rate.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
+    // this.diamondlabourMasterForm.controls.selling_rate.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
+    // this.diamondlabourMasterForm.controls.selling.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
+    // this.diamondlabourMasterForm.controls.ctWtFrom.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
+    // this.diamondlabourMasterForm.controls.ctWtTo.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
+  }
+
 
 
   // priceSchemeValidate(e: any) {
@@ -1029,11 +1070,11 @@ export class AlloyMasterComponent implements OnInit {
     this.alloyMastereForm.controls.hsncode.setValue(e.CODE);
   }
 
-  setFormValues() {
-    if (!this.content) return
-    console.log(this.content);
+  // setFormValues() {
+  //   if (!this.content) return
+  //   console.log(this.content);
 
-  }
+  // }
   setPostData() {
     let postData = {
       ITEM: 'Y',

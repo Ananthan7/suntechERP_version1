@@ -206,8 +206,8 @@ export class StonePricingMasterComponent implements OnInit {
     carat_wt: [0, [Validators.required, this.notZeroValidator()]],
     sieve_from_desc: [''],
     sieve_to_desc: [''],
-    wt_from: [ 0, [Validators.required, this.notZeroValidator()]],
-    wt_to: [ 0, [Validators.required, this.notZeroValidator()]],
+    wt_from: [0, [Validators.required, this.notZeroValidator()]],
+    wt_to: [0, [Validators.required, this.notZeroValidator()]],
     size_to: [''],
     size_from: [''],
     issue_rate: [0, [Validators.required, this.notZeroValidator()]],
@@ -617,34 +617,34 @@ export class StonePricingMasterComponent implements OnInit {
     }
     if (this.submitValidation(this.stonePrizeMasterForm.value)) return;
 
-      let API = 'StonePriceMasterDJ/InsertStonePriceMaster'
-      let postData = this.setPostData()
+    let API = 'StonePriceMasterDJ/InsertStonePriceMaster'
+    let postData = this.setPostData()
 
-      let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
-        .subscribe((result) => {
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
+      .subscribe((result) => {
 
-          if (result && result.status == "Success") {
-            Swal.fire({
-              title: result.message || 'Success',
-              text: '',
-              icon: 'success',
-              confirmButtonColor: '#336699',
-              confirmButtonText: 'Ok'
-            }).then((result: any) => {
-              if (result.value) {
-                this.stonePrizeMasterForm.reset()
-                this.tableData = []
-                this.close('reloadMainGrid')
-              }
-            });
-          }
-          else {
-            this.commonService.toastErrorByMsgId('MSG3577')
-          }
-        }, err => {
+        if (result && result.status == "Success") {
+          Swal.fire({
+            title: result.message || 'Success',
+            text: '',
+            icon: 'success',
+            confirmButtonColor: '#336699',
+            confirmButtonText: 'Ok'
+          }).then((result: any) => {
+            if (result.value) {
+              this.stonePrizeMasterForm.reset()
+              this.tableData = []
+              this.close('reloadMainGrid')
+            }
+          });
+        }
+        else {
           this.commonService.toastErrorByMsgId('MSG3577')
-        })
-      this.subscriptions.push(Sub)
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG3577')
+      })
+    this.subscriptions.push(Sub)
   }
   checkCodeExists(event: any) {
     if (this.content && this.content.FLAG == 'EDIT') {
@@ -707,7 +707,7 @@ export class StonePricingMasterComponent implements OnInit {
               }
             });
           }
-        }else {
+        } else {
           this.commonService.toastErrorByMsgId('MSG3577')
         }
       }, err => {
@@ -797,41 +797,73 @@ export class StonePricingMasterComponent implements OnInit {
   }
 
 
+  // sieve_setDataSelected(data: any) {
+  //   console.log(data);
+
+  //   this.stonePrizeMasterForm.controls.sieve_set.setValue(data.CODE);
+
+  //   //StonePriceMasterDJ/GetSeivesetLookupDatafill/DMCC?SieveSet=%2B14
+  //   // Construct the API URL with the selected sieve_set value
+  //  // let API = 'StonePriceMasterDJ/GetSeivesetLookupDatafill/' + this.userbranch + '?SieveSet=' + this.stonePrizeMasterForm.value.sieve_set;
+  //   let API = 'StonePriceMasterDJ/GetSeivesetLookupDatafill?SieveSet=' + this.stonePrizeMasterForm.value.sieve_set+'&DBBranch=DMCC';
+
+
+  //   let Sub: Subscription = this.dataService.getDynamicAPICustom(API).subscribe((result) => {
+  //     if (result.response) {
+  //       console.log(result.response);
+  //       // Assign values to variables
+  //       // let sieve_form, sieve_to;
+
+  //       const responseData = result.response[0];
+  //       const finalsieve_form = this.commonService.dataSplitPop(responseData.SIEVE);
+  //       const finalsieve_to = this.commonService.dataSplitPop(responseData.SIEVE_TO);
+
+  //       this.stonePrizeMasterForm.controls.shape.setValue(responseData.SHAPE);
+  //       this.stonePrizeMasterForm.controls.size_from.setValue(responseData.SIZE_FROM);
+  //       this.stonePrizeMasterForm.controls.size_to.setValue(responseData.SIZE_TO);
+  //       this.stonePrizeMasterForm.controls.sieve_form.setValue(finalsieve_form);
+  //       this.stonePrizeMasterForm.controls.sieve_to.setValue(finalsieve_to);
+  //       // this.stonePrizeMasterForm.controls.sieve_form.setValue(responseData.SIEVE);
+  //       // this.stonePrizeMasterForm.controls.sieve_to.setValue(responseData.SIEVE_TO);
+  //       this.stonePrizeMasterForm.controls.sieve_from_desc.setValue(responseData.SIEVEFROM_DESC);
+  //       this.stonePrizeMasterForm.controls.sieve_to_desc.setValue(responseData.SIEVETO_DESC);
+  //     }
+  //   });
+
+  //   this.subscriptions.push(Sub);
+  // }
   sieve_setDataSelected(data: any) {
-    console.log(data);
-
     this.stonePrizeMasterForm.controls.sieve_set.setValue(data.CODE);
-
-    //StonePriceMasterDJ/GetSeivesetLookupDatafill/DMCC?SieveSet=%2B14
-    // Construct the API URL with the selected sieve_set value
-   // let API = 'StonePriceMasterDJ/GetSeivesetLookupDatafill/' + this.userbranch + '?SieveSet=' + this.stonePrizeMasterForm.value.sieve_set;
-    let API = 'StonePriceMasterDJ/GetSeivesetLookupDatafill?SieveSet=' + this.stonePrizeMasterForm.value.sieve_set;
-
-
-    let Sub: Subscription = this.dataService.getDynamicAPICustom(API).subscribe((result) => {
-      if (result.response) {
-        console.log(result.response);
-        // Assign values to variables
-        // let sieve_form, sieve_to;
-
-        const responseData = result.response[0];
-        const finalsieve_form = this.commonService.dataSplitPop(responseData.SIEVE);
-        const finalsieve_to = this.commonService.dataSplitPop(responseData.SIEVE_TO);
-
-        this.stonePrizeMasterForm.controls.shape.setValue(responseData.SHAPE);
-        this.stonePrizeMasterForm.controls.size_from.setValue(responseData.SIZE_FROM);
-        this.stonePrizeMasterForm.controls.size_to.setValue(responseData.SIZE_TO);
-        this.stonePrizeMasterForm.controls.sieve_form.setValue(finalsieve_form);
-        this.stonePrizeMasterForm.controls.sieve_to.setValue(finalsieve_to);
-        // this.stonePrizeMasterForm.controls.sieve_form.setValue(responseData.SIEVE);
-        // this.stonePrizeMasterForm.controls.sieve_to.setValue(responseData.SIEVE_TO);
-        this.stonePrizeMasterForm.controls.sieve_from_desc.setValue(responseData.SIEVEFROM_DESC);
-        this.stonePrizeMasterForm.controls.sieve_to_desc.setValue(responseData.SIEVETO_DESC);
+  
+    let postData = {
+      "SPID": "109",
+      "parameter": {
+        SIEVE_SET: this.stonePrizeMasterForm.value.sieve_set
       }
-    });
-
+    };
+  
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        if (result.status == "Success") {
+          const responseData = result.dynamicData[0][0];
+          // const finalsieve_form = this.commonService.dataSplitPop(responseData.SIEVE);
+          // const finalsieve_to = this.commonService.dataSplitPop(responseData.SIEVE_TO);
+  
+          this.stonePrizeMasterForm.controls.shape.setValue(responseData.SHAPE);
+          this.stonePrizeMasterForm.controls.size_from.setValue(responseData.SIZE_FROM);
+          this.stonePrizeMasterForm.controls.size_to.setValue(responseData.SIZE_TO);
+          this.stonePrizeMasterForm.controls.sieve_form.setValue(responseData.SIEVE);
+          this.stonePrizeMasterForm.controls.sieve_to.setValue(responseData.SIEVE_TO);
+          this.commonService.arrayEmptyObjectToString(this.stonePrizeMasterForm.controls.sieve_from_desc.setValue(responseData.SIEVEFROM_DESC));
+          this.commonService.arrayEmptyObjectToString(this.stonePrizeMasterForm.controls.sieve_to_desc.setValue(responseData.SIEVETO_DESC));
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG81451');
+      });
+    
     this.subscriptions.push(Sub);
   }
+  
 
   shapeDataSelected(data: any) {
     this.stonePrizeMasterForm.controls.shape.setValue(data.CODE)
@@ -839,14 +871,14 @@ export class StonePricingMasterComponent implements OnInit {
 
   sievefromDataSelected(data: any) {
     console.log(data);
-   // const finalsieve_form = this.commonService.dataSplitPop(data.CODE);
+    // const finalsieve_form = this.commonService.dataSplitPop(data.CODE);
 
     this.stonePrizeMasterForm.controls.sieve_form.setValue(data.CODE);
     this.stonePrizeMasterForm.controls.sieve_from_desc.setValue(data.DESCRIPTION);
   }
   sievetoDataSelected(data: any) {
     console.log(data);
-   // const finalsieve_to = this.commonService.dataSplitPop(data.CODE);
+    // const finalsieve_to = this.commonService.dataSplitPop(data.CODE);
 
     this.stonePrizeMasterForm.controls.sieve_to.setValue(data.CODE);
     this.stonePrizeMasterForm.controls.sieve_to_desc.setValue(data.DESCRIPTION)
@@ -886,32 +918,59 @@ export class StonePricingMasterComponent implements OnInit {
       this.subscriptions = []; // Clear the array
     }
   }
-    /**use: validate all lookups to check data exists in db */
-    validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
-      LOOKUPDATA.SEARCH_VALUE = event.target.value
-      if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
-      let param = {
-        LOOKUPID: LOOKUPDATA.LOOKUPID,
-        WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
-      }
-      this.commonService.toastInfoByMsgId('MSG81447');
-      let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
-      let Sub: Subscription = this.dataService.postDynamicAPI(API,param)
-        .subscribe((result) => {
-          this.isDisableSaveBtn = false;
-          let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
-          if (data.length == 0) {
-            this.commonService.toastErrorByMsgId('MSG1531')
-            this.stonePrizeMasterForm.controls[FORMNAME].setValue('')
-            LOOKUPDATA.SEARCH_VALUE = ''
-            return
-          }
-         
-        }, err => {
-          this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
-        })
-      this.subscriptions.push(Sub)
+  /**use: validate all lookups to check data exists in db */
+  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    const inputValue = event.target.value.toUpperCase();
+    LOOKUPDATA.SEARCH_VALUE = event.target.value
+    if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
+    let param = {
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
     }
+    this.commonService.toastInfoByMsgId('MSG81447');
+    let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
+      .subscribe((result) => {
+        this.isDisableSaveBtn = false;
+        let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+        if (data.length == 0) {
+          this.commonService.toastErrorByMsgId('MSG1531')
+          this.stonePrizeMasterForm.controls[FORMNAME].setValue('')
+          LOOKUPDATA.SEARCH_VALUE = ''
+          return
+        }
+
+
+        // const matchedItem2 = data.find((item: any) => item.SIEVE_SET.toUpperCase() === inputValue);
+        // if (matchedItem2) {
+        //   this.stonePrizeMasterForm.controls[FORMNAME].setValue(matchedItem2.SIEVE_SET);
+        //   if (FORMNAME === 'sieve_set') {
+        //     this.stonePrizeMasterForm.controls.shape.setValue(matchedItem2.SHAPE);
+        //     this.stonePrizeMasterForm.controls.size_from.setValue(matchedItem2.SIZE_FROM);
+        //     this.stonePrizeMasterForm.controls.size_to.setValue(matchedItem2.SIZE_TO);
+        //     this.stonePrizeMasterForm.controls.sieve_form.setValue(matchedItem2.SIEVE);
+        //     this.stonePrizeMasterForm.controls.sieve_to.setValue(matchedItem2.SIEVE_TO);
+        //     this.stonePrizeMasterForm.controls.sieve_from_desc.setValue(matchedItem2.SIEVEFROM_DESC);
+        //     this.stonePrizeMasterForm.controls.sieve_to_desc.setValue(matchedItem2.SIEVETO_DESC);
+        //   }
+        // } else {
+        //   this.handleLookupError(FORMNAME, LOOKUPDATA);
+        // }
+
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+      })
+    this.subscriptions.push(Sub)
+  }
+
+  handleLookupError(FORMNAME: string, LOOKUPDATA: MasterSearchModel) {
+    this.commonService.toastErrorByMsgId('MSG1531');
+    this.stonePrizeMasterForm.controls[FORMNAME].setValue('');
+    LOOKUPDATA.SEARCH_VALUE = '';
+    if (FORMNAME === 'sieve_set') {
+      this.stonePrizeMasterForm.controls.sieve_set.setValue('');
+    }
+  }
 
   // validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
   //   LOOKUPDATA.SEARCH_VALUE = event.target.value
@@ -987,8 +1046,8 @@ export class StonePricingMasterComponent implements OnInit {
       default:
     }
   }
-  
- 
+
+
   // showOverleyPanel(event: any, formControlName: string) {
 
   //   if (formControlName == 'sieve_set') {

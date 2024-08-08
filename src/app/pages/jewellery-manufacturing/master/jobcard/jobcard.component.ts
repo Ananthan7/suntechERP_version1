@@ -93,7 +93,7 @@ export class JobcardComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 267,
     SEARCH_FIELD: '',
-    SEARCH_HEADING: 'Comments ',
+    SEARCH_HEADING: 'Account Description',
     SEARCH_VALUE: '',
     WHERECONDITION: "@strAcCode=''",
     VIEW_INPUT: true,

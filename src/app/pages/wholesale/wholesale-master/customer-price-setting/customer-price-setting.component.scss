@@ -27,3 +27,19 @@
       z-index: 1070 !important;
     }
   }
+
+  
+  .custom-checkbox .dx-checkbox-icon-checked {
+    background-color: blue; /* The fill color when checked */
+    border-color: blue; /* The border color when checked */
+}
+
+.custom-checkbox .dx-checkbox-icon {
+    border-color: blue; /* The border color when unchecked */
+    border-width: 2px; /* Increase border width for better visibility */
+}
+
+.custom-checkbox .dx-checkbox-icon:hover {
+    background-color: lightblue; /* Lighter blue on hover */
+    border-color: blue;
+}

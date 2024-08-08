@@ -392,9 +392,9 @@
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%" appearance="outline">
                                         <input type="text" matInput
-                                            AmountDecimalInput [max]="3"
+                                            AmountDecimalInput 
                                             formControlName="price1per"
-                                            class="text-right" maxlength="14"
+                                            class="text-right" 
                                             [readonly]="viewMode" />
                                     </mat-form-field>
                                 </div>
@@ -404,7 +404,7 @@
                                             AmountDecimalInput
                                             formControlName="price1Fc"
                                             [max]="12" class="text-right"
-                                            [readonly]="!isWeightAvgCost"/>
+                                            [readonly]="!isWeightAvgCost || viewMode"/>
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
@@ -413,7 +413,7 @@
                                             AmountDecimalInput
                                             formControlName="price1Lc"
                                             class="text-right"
-                                            [readonly]="!isWeightAvgCost" />
+                                            [readonly]="!isWeightAvgCost || viewMode" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -438,10 +438,8 @@
                                         <input type="text" matInput
                                             formControlName="price2per"
                                             AmountDecimalInput
-                                            [max]="3" class="text-right"
-                                            style="text-align: right"
-                                            [readonly]="viewMode"
-                                            (keypress)="isNumeric($event)" />
+                                            class="text-right"
+                                            [readonly]="viewMode"  />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
@@ -450,7 +448,7 @@
                                             AmountDecimalInput
                                             formControlName="price2Fc"
                                             [max]="12" class="text-right"
-                                            [readonly]="!isWeightAvgCost" />
+                                            [readonly]="!isWeightAvgCost || viewMode" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
@@ -459,7 +457,7 @@
                                             AmountDecimalInput
                                             formControlName="price2Lc"
                                             class="text-right"
-                                            [readonly]="!isWeightAvgCost" />
+                                            [readonly]="!isWeightAvgCost || viewMode" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -484,9 +482,8 @@
                                         <input type="text" matInput
                                             formControlName="price3per"
                                             AmountDecimalInput
-                                            [max]="3" class="text-right"
-                                            [readonly]="viewMode"
-                                            (keypress)="isNumeric($event)" />
+                                             class="text-right"
+                                            [readonly]="viewMode" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
@@ -495,7 +492,7 @@
                                             formControlName="price3Fc"
                                             AmountDecimalInput
                                             [max]="12" class="text-right"
-                                            [readonly]="!isWeightAvgCost"/>
+                                            [readonly]="!isWeightAvgCost || viewMode"/>
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
@@ -504,7 +501,7 @@
                                             formControlName="price3Lc"
                                             AmountDecimalInput
                                             class="text-right"
-                                            [readonly]="!isWeightAvgCost" />
+                                            [readonly]="!isWeightAvgCost || viewMode" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -529,9 +526,8 @@
                                         <input type="text" matInput
                                             formControlName="price4per"
                                             AmountDecimalInput
-                                            [max]="3" class="text-right"
-                                            [readonly]="viewMode"
-                                            (keypress)="isNumeric($event)" />
+                                            class="text-right"
+                                            [readonly]="viewMode"/>
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
@@ -540,7 +536,7 @@
                                             formControlName="price4Fc"
                                             AmountDecimalInput
                                             [max]="12" class="text-right"
-                                            [readonly]="!isWeightAvgCost"/>
+                                            [readonly]="!isWeightAvgCost || viewMode"/>
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
@@ -549,7 +545,7 @@
                                             formControlName="price4Lc"
                                             AmountDecimalInput
                                             class="text-right"
-                                            [readonly]="!isWeightAvgCost"/>
+                                            [readonly]="!isWeightAvgCost || viewMode"/>
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -574,9 +570,8 @@
                                         <input type="text" matInput
                                             formControlName="price5per"
                                             AmountDecimalInput
-                                            [max]="3" class="text-right"
-                                            [readonly]="viewMode"
-                                            (keypress)="isNumeric($event)" />
+                                             class="text-right"
+                                            [readonly]="viewMode"/>
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
@@ -585,7 +580,7 @@
                                             formControlName="price5Fc"
                                             AmountDecimalInput
                                             [max]="12" class="text-right"
-                                            [readonly]="!isWeightAvgCost"/>
+                                            [readonly]="!isWeightAvgCost || viewMode"/>
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
@@ -594,7 +589,7 @@
                                             formControlName="price5Lc"
                                             AmountDecimalInput
                                             class="text-right"
-                                            [readonly]="!isWeightAvgCost" />
+                                            [readonly]="!isWeightAvgCost || viewMode" />
                                     </mat-form-field>
                                 </div>
                             </div>
