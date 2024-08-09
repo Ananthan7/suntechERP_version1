@@ -14,11 +14,10 @@
                 <div class="row mb-2">
                     <div class="col-md-3">
                         <div class="row mb-1 ">
-                            <label for="inputPassword" class="col-sm-6">Voucher
-                                * :</label>
+                            <label for="inputPassword" class="col-sm-6 mt-1" id="ID001">Voucher* :</label>
                             <div class="col-md-3">
                                 <div class="position-relative d-flex">
-                                    <mat-form-field style="width: 100%;">
+                                    <mat-form-field style="width: 100%;" appearance="outline">
                                         <input type="text" matInput
                                             formControlName="vocType" />
                                     </mat-form-field>
@@ -26,7 +25,7 @@
                             </div>
                             <div class="col-md-3">
                                 <div class="position-relative d-flex">
-                                    <mat-form-field style="width: 100%;">
+                                    <mat-form-field style="width: 100%;" appearance="outline">
                                         <input type="text" matInput
                                             formControlName="vocNo"
                                             (focusout)="ValidatingVocNo()"
@@ -37,11 +36,10 @@
                             </div>
 
                         </div>
-                        <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-6">Voucher
-                                Date:</label>
+                        <div class="row mb-2">
+                            <label for="inputPassword" class="col-sm-6 mt-1" id="ID002">Voucher Date:</label>
                             <div class="col-sm-6 ">
-                                <mat-form-field style="width: 72%;">
+                                <mat-form-field style="width: -webkit-fill-available;" appearance="outline">
                                     <input matInput [matDatepicker]="vocdate"
                                         formControlName="vocdate"
                                         placeholder="DD/MM/YYYY"
@@ -54,101 +52,94 @@
                                 </mat-form-field>
                             </div>
                         </div>
-                        <div class="row mb-2">
-                            <label for="inputPassword" class="col-sm-6">User
-                                Name : </label>
+                        <div class="row">
+                            <label for="inputPassword" class="col-sm-6 mt-1" id="ID003">User Name : </label>
                             <div class="col-sm-6 ">
-                                <mat-form-field style="width: 70%;">
+                                <mat-form-field style="width: -webkit-fill-available;" appearance="outline">
                                     <input type="text" matInput
                                         formControlName="user_name"
                                         (keydown)="lookupKeyPress($event,'user_name')"
                                         (focusout)="validateLookupField($event,UserCodeData,'user_name')" />
+                                        <master-search [MasterSearchData]="UserCodeData" class="masterSearch"
+                                        #overlayusernamecode
+                                        (newRowClick)="UserCodeSelected($event)"></master-search>
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="UserCodeData"
-                                    #overlayusernamecode
-                                    (newRowClick)="UserCodeSelected($event)"></master-search>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-2">
                         <div class="row mb-1 ">
-                            <label for="inputPassword" class="col-sm-6">Job As
-                                On :</label>
-                            <div class="col-sm-6 ">
-                                <mat-form-field style="width: 100%;">
+                            <label for="inputPassword" class="col-sm-5 mt-1" id="ID004">Job As On :</label>
+                            <div class="col-sm-7 ">
+                                <mat-form-field style="width: 100%;" appearance="outline">
                                     <input type="date" matInput />
                                 </mat-form-field>
                             </div>
                         </div>
                         <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-5">Party
-                                Code:</label>
+                            <label for="inputPassword" class="col-sm-5 mt-1" id="ID005">Party Code:</label>
                             <div class="col-sm-7">
-                                <mat-form-field style="width: 70%;">
+                                <mat-form-field style="width: -webkit-fill-available;" appearance="outline">
                                     <input type="text" matInput
                                         formControlName="party_code"
                                         (keydown)="lookupKeyPress($event,'party_code')"
                                         (focusout)="validateLookupField($event,partyCodeData,'party_code')" />
+                                        <master-search class="masterSearch"
+                                        [MasterSearchData]="partyCodeData"
+                                        #overlaypartycode
+                                        (newRowClick)="partyCodeSelected($event)"></master-search>
                                 </mat-form-field>
-                                <master-search
-                                    [MasterSearchData]="partyCodeData"
-                                    #overlaypartycode
-                                    (newRowClick)="partyCodeSelected($event)"></master-search>
                             </div>
                         </div>
                         <div class="row mb-2">
-                            <label for="inputPassword" class="col-sm-5">Job No:
-                            </label>
+                            <label for="inputPassword" class="col-sm-5 mt-1" id="ID006">Job No:</label>
                             <div class="col-sm-7">
-                                <mat-form-field style="width: 70%;">
+                                <mat-form-field style="width: -webkit-fill-available;" appearance="outline">
                                     <input type="text" matInput
                                         formControlName="job_no"
                                         (keydown)="lookupKeyPress($event,'job_no')"
                                         (focusout)="jobNumberValidate($event)" />
+                                        <master-search [MasterSearchData]="jobCodeData" class="masterSearch" #overlayjobnumbercode
+                                        (newRowClick)="jobCodeSelected($event)"></master-search>
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="jobCodeData"
-                                    #overlayjobnumbercode
-                                    (newRowClick)="jobCodeSelected($event)"></master-search>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-2">
                         <div class="row mb-1 ">
-                            <label for="inputPassword" class="col-sm-5">Worker
-                                :</label>
+                            <label for="inputPassword" class="col-sm-5" id="ID007">Worker:</label>
                             <div class="col-sm-7">
-                                <mat-form-field style="width: 70%;">
+                                <mat-form-field style="width: -webkit-fill-available;" appearance="outline">
                                     <input type="text" matInput
                                         formControlName="worker"
                                         (keydown)="lookupKeyPress($event,'worker')"
                                         (focusout)="validateLookupField($event,workerCodeData,'worker')" />
+                                        <master-search class="masterSearch"
+                                        [MasterSearchData]="workerCodeData"
+                                        #overlayworkercode
+                                        (newRowClick)="workerCodeSelected($event)"></master-search>
                                 </mat-form-field>
-                                <master-search
-                                    [MasterSearchData]="workerCodeData"
-                                    #overlayworkercode
-                                    (newRowClick)="workerCodeSelected($event)"></master-search>
                             </div>
                         </div>
                         <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-5">Reason :
-                            </label>
+                            <label for="inputPassword" class="col-sm-5" id="ID008">Reason :</label>
                             <div class="col-sm-7">
-                                <mat-form-field style="width: 70%;">
+                                <mat-form-field style="width: -webkit-fill-available;" appearance="outline">
                                     <input type="text" matInput
                                         formControlName="reason"
                                         (keydown)="lookupKeyPress($event,'reason')"
                                         (focusout)="validateLookupField($event,reasonCodeData,'reason')" />
+                                        <master-search class="masterSearch"
+                                        [MasterSearchData]="reasonCodeData"
+                                        #overlayreasoncode
+                                        (newRowClick)="reasonCodeSelected($event)"></master-search>
                                 </mat-form-field>
-                                <master-search
-                                    [MasterSearchData]="reasonCodeData"
-                                    #overlayreasoncode
-                                    (newRowClick)="reasonCodeSelected($event)"></master-search>
                             </div>
                         </div>
                         <div class="row mb-2 text-right">
                             <div class="col-md-12">
                                 <div class="p-1 bd-highlight">
-                                    <button type="button"
+                                    <button type="button" id="ID009"
                                         class="btn btn-outline-primary  add-btn">
                                         Get Data
                                     </button>
@@ -158,42 +149,39 @@
                     </div>
                     <div class="col-md-3">
                         <div class="row mb-1 ">
-                            <label for="inputPassword" class="col-sm-6">Metal
-                                Location * :</label>
-                            <div class="col-sm-6 ">
-                                <mat-form-field style="width: 70%;">
+                            <label for="inputPassword" class="col-sm-5" id="ID010">Metal Location * :</label>
+                            <div class="col-sm-7 ">
+                                <mat-form-field style="width: -webkit-fill-available;" appearance="outline">
                                     <input type="text" matInput
                                         formControlName="metal_loc"
                                         (keydown)="lookupKeyPress($event,'metal_loc')"
                                         (focusout)="metalLocationValidate($event)" />
+                                        <master-search class="masterSearch"
+                                        [MasterSearchData]="MetalLocCodeData"
+                                        #overlaymetallocationcode
+                                        (newRowClick)="MetalLocCodeSelected($event)"></master-search>
                                 </mat-form-field>
-                                <master-search
-                                    [MasterSearchData]="MetalLocCodeData"
-                                    #overlaymetallocationcode
-                                    (newRowClick)="MetalLocCodeSelected($event)"></master-search>
                             </div>
                         </div>
                         <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-6">Stone
-                                Location * : </label>
-                            <div class="col-sm-6 ">
-                                <mat-form-field style="width: 70%;">
+                            <label for="inputPassword" class="col-sm-5" id="ID011">Stone Location * : </label>
+                            <div class="col-sm-7 ">
+                                <mat-form-field style="width: -webkit-fill-available;" appearance="outline">
                                     <input type="text" matInput
                                         formControlName="stone_loc"
                                         (keydown)="lookupKeyPress($event,'stone_loc')"
                                         (focusout)="validateLookupField($event,StoneLocCodeData,'stone_loc')" />
+                                        <master-search class="masterSearch"
+                                        [MasterSearchData]="StoneLocCodeData"
+                                        #overlaystonelocationcode
+                                        (newRowClick)="StoneLocCodeSelected($event)"></master-search>
                                 </mat-form-field>
-                                <master-search
-                                    [MasterSearchData]="StoneLocCodeData"
-                                    #overlaystonelocationcode
-                                    (newRowClick)="StoneLocCodeSelected($event)"></master-search>
                             </div>
                         </div>
                         <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-6">Doc.Ref
-                                : </label>
-                            <div class="col-sm-6 ">
-                                <mat-form-field style="width: 100%;">
+                            <label for="inputPassword" class="col-sm-5" id="ID012">Doc.Ref : </label>
+                            <div class="col-sm-7 ">
+                                <mat-form-field style="width: 100%;" appearance="outline">
                                     <input type="text" matInput
                                         formControlName="doc_ref" />
                                 </mat-form-field>
@@ -209,19 +197,17 @@
                         <div class="d-flex">
                             <div class="form-check">
                                 <mat-radio-button value="1"
-                                    [checked]=true>All</mat-radio-button>
+                                    [checked]=true id="ID013">All</mat-radio-button>
                             </div>
                             <div class="form-check ">
                                 <mat-radio-button
-                                    value="1">WIP</mat-radio-button>
+                                    value="1" id="ID014">WIP</mat-radio-button>
                             </div>
                             <div class="form-check ">
-                                <mat-radio-button value="1">Non WIP
-                                </mat-radio-button>
+                                <mat-radio-button value="1" id="ID015">Non WIP</mat-radio-button>
                             </div>
                             <div class="form-check ">
-                                <mat-radio-button value="1">No Job Created
-                                </mat-radio-button>
+                                <mat-radio-button value="1" id="ID016">No Job Created</mat-radio-button>
                             </div>
                         </div>
                     </div>
@@ -276,9 +262,9 @@
                                     <div class="col-md-6">
                                         <div class="row my-2">
                                             <label for="inputPassword"
-                                                class="col-sm-4 col-form-label">Remarks:</label>
+                                                class="col-sm-4 col-form-label" id="ID017">Remarks:</label>
                                             <div class="col-md-8">
-                                                <mat-form-field
+                                                <mat-form-field appearance="outline"
                                                     style="width: 100%;">
                                                     <input type="text" matInput
                                                         formControlName="remarks" />
@@ -288,7 +274,7 @@
                                     </div>
                                     <div class="col-md-3">
                                         <div class="p-1 bd-highlight">
-                                            <button type="button"
+                                            <button type="button" id="ID018"
                                                 class="btn btn-outline-primary  add-btn">
                                                 Get Compontents
                                             </button>
