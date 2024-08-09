@@ -12463,11 +12463,18 @@ printReceiptDetailsWeb() {
 //SCHME_UPDATED
 
     if (this.receiptModesList?.['BTN_SCHEME'] == true && this.selectedTabIndex == 6) {
+      
       this.schemeReceiptForm.controls.scheme_code.setValue(
         '');
         
         this.schemeReceiptForm.controls.scheme_name.setValue(
          '');
+
+         this.schemeReceiptForm.controls.schemeNo.setValue(
+          '');
+          
+          this.schemeReceiptForm.controls.schemeAmtFC.setValue(
+           '');
      
 
       if (data != null && data != undefined) {
