@@ -220,9 +220,9 @@ export class MetalBranchTransferOutRepairComponent implements OnInit {
       // console.log(postData);      
       if (postData) {
         console.log('Data from modal:', postData);
-        if (postData.reopen = true) {
-          this.openAddDetail();
-        }
+        // if (postData.reopen = true) {
+        //   this.openAddDetail();
+        // }
         this.metalBranchTransferOutRepairDetailsData.push(postData);
 
       }
