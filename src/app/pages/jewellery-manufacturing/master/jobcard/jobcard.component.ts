@@ -93,13 +93,14 @@ export class JobcardComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 267,
     SEARCH_FIELD: '',
-    SEARCH_HEADING: 'Comments ',
+    SEARCH_HEADING: 'Account Description',
     SEARCH_VALUE: '',
     WHERECONDITION: "@strAcCode=''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
   }
+
 
   lengthCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -1824,14 +1825,30 @@ export class JobcardComponent implements OnInit {
           this.commonService.toastErrorByMsgId('MSG1531')
           this.jobCardFrom.controls[FORMNAME].setValue('')
           LOOKUPDATA.SEARCH_VALUE = ''
-          if (FORMNAME === 'customer') {
+       
             if (FORMNAME === 'customer') {
               console.log(FORMNAME)
               this.jobCardFrom.controls.customername.setValue('');
             }
-          }
+            if (FORMNAME === 'comments') {
+              console.log(FORMNAME)
+              this.jobCardFrom.controls.comments.setValue('');
+            }
           return
         }
+
+        if (data.length == 0) {
+          this.commonService.toastErrorByMsgId('MSG1531')
+          this.jobCardFrom.controls[FORMNAME].setValue('')
+          LOOKUPDATA.SEARCH_VALUE = ''
+            if (FORMNAME === 'comments') {
+              console.log(FORMNAME)
+              this.jobCardFrom.controls.comments.setValue('');
+            }
+          return
+        }
+
+
 
         const matchedItem2 = data.find((item: any) => item.DESIGN_CODE.toUpperCase() === inputValue);
         if (matchedItem2) {
@@ -1879,6 +1896,55 @@ export class JobcardComponent implements OnInit {
       if (event.target.value == '') this.showOverleyPanel(event, form)
       event.preventDefault();
     }
+  }
+
+  
+  SPvalidateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    LOOKUPDATA.SEARCH_VALUE = event.target.value
+    if (FORMNAME == 'comments') {
+      this.setFromProcessWhereCondition()
+    }
+
+    if (event.target.value == '' || this.viewMode == true) return
+    let param = {
+      "PAGENO": LOOKUPDATA.PAGENO,
+      "RECORDS": LOOKUPDATA.RECORDS,
+      "LOOKUPID": LOOKUPDATA.LOOKUPID,
+      "ORDER_TYPE": 0,
+      "WHERECONDITION": LOOKUPDATA.WHERECONDITION,
+      "searchField": LOOKUPDATA.SEARCH_FIELD,
+      "searchValue": LOOKUPDATA.SEARCH_VALUE
+    }
+    this.commonService.showSnackBarMsg('MSG81447');
+    let Sub: Subscription = this.dataService.postDynamicAPI('MasterLookUp', param)
+      .subscribe((result) => {
+        this.commonService.closeSnackBarMsg()
+        let data = result.dynamicData[0]
+        if (data && data.length > 0) {
+          if (LOOKUPDATA.FRONTENDFILTER && LOOKUPDATA.SEARCH_VALUE != '') {
+            let result = this.commonService.searchAllItemsInArray(data, LOOKUPDATA.SEARCH_VALUE)
+            if (result && result.length == 0) {
+              this.commonService.toastErrorByMsgId('MSG1460')
+              this.jobCardFrom.controls[FORMNAME].setValue('')
+              LOOKUPDATA.SEARCH_VALUE = ''
+            }
+            return
+          }
+        } else {
+          this.commonService.toastErrorByMsgId('MSG1460')
+          this.jobCardFrom.controls[FORMNAME].setValue('')
+          LOOKUPDATA.SEARCH_VALUE = ''
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
+  }
+
+  setFromProcessWhereCondition() {
+    //${this.commonService.nullToString(this.processTransferdetailsForm.value.FRM_PROCESS_CODE)}
+    this.commentsCodeData.WHERECONDITION = `@strAcCode='${this.commonService.nullToString(this.jobCardFrom.value.comments)}'`
+
   }
 
   showOverleyPanel(event: any, formControlName: string) {

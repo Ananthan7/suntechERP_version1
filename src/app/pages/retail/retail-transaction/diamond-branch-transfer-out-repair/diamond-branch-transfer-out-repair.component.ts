@@ -40,7 +40,30 @@ export class DiamondBranchTransferOutRepairComponent implements OnInit {
   ngOnInit(): void {
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
+    this.diamondbranchtransoutfrom.controls.voctype.setValue(this.comService.getqueryParamVocType());
+    this.generateVocNo();
   }
+
+  generateVocNo() {
+    let API = `GenerateNewVoucherNumber/GenerateNewVocNum/${this.comService.getqueryParamVocType()}/${this.branchCode
+      }/${this.yearMonth}/${this.convertDateToYMD(this.currentDate)}`;
+    let sub: Subscription = this.dataService
+      .getDynamicAPI(API)
+      .subscribe((res) => {
+        if (res.status == "Success") {
+          this.diamondbranchtransoutfrom.controls.vocNo.setValue(res.newvocno);
+
+        }
+      });
+  }
+
+  convertDateToYMD(str: any) {
+    var date = new Date(str),
+      mnth = ("0" + (date.getMonth() + 1)).slice(-2),
+      day = ("0" + date.getDate()).slice(-2);
+    return [date.getFullYear(), mnth, day].join("-");
+  }
+
 
   branchCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -170,6 +193,12 @@ export class DiamondBranchTransferOutRepairComponent implements OnInit {
       backdrop: true,//'static'
       keyboard: false,
       windowClass: 'modal-full-width',
+    });
+    modalRef.result.then((postData) => {
+      // console.log(postData);      
+      if (postData) {
+        console.log('Data from modal:', postData);
+      }
     });
   }
 

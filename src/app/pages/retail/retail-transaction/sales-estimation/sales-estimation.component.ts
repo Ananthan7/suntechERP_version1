@@ -3783,123 +3783,116 @@ export class SalesEstimationComponent implements OnInit {
 
                     if (resp.status == 'Success') {
                         // const result = resp[0];
-                        const result = resp.response;
-                        this.customerDataForm.controls['fcn_customer_name'].setValue(
-                            result.NAME
-                        );
-                        this.customerDataForm.controls['fcn_customer_id_type'].setValue(
-                            result.IDCATEGORY
-                            // result.CUST_TYPE
-                        );
-                        this.customerDataForm.controls['fcn_customer_id_number'].setValue(
-                            result.POSCUSTIDNO
-                        );
-                        this.inv_customer_name = result.NAME;
-                        this.inv_cust_mobile_no = _cust_mobile_no;
-
-                        this.customerDetailForm.controls['fcn_cust_detail_phone'].setValue(
-                            result.MOBILE
-                        );
-                        this.customerDetailForm.controls['fcn_cust_detail_idType'].setValue(
-                          result.IDCATEGORY
-                          // result.CUST_TYPE
-                        );
-                        this.customerDetailForm.controls['fcn_customer_id_type'].setValue(
-                            result.IDCATEGORY
-                            // result.CUST_TYPE
-                        );
-                        this.customerDetailForm.controls['fcn_cust_detail_email'].setValue(
-                            result.EMAIL
-                        );
-                        this.customerDetailForm.controls['fcn_cust_detail_address'].setValue(
-                            result.ADDRESS
-                        );
-                        this.customerDetailForm.controls['fcn_cust_detail_country'].setValue(
-                            result.COUNTRY_CODE
-                        );
-                        this.customerDetailForm.controls['fcn_cust_detail_city'].setValue(
-                            result.CITY
-                        );
-                        this.customerDetailForm.controls['fcn_cust_detail_idcard'].setValue(
-                            result.NATIONAL_IDENTIFICATION_NO
-                        );
-                        this.customerDetailForm.controls.fcn_customer_detail_name.setValue(
-                            result.NAME
-                        );
-                        this.customerDetailForm.controls.fcn_customer_detail_fname.setValue(
-                            result.FIRSTNAME
-                        );
-                        this.customerDetailForm.controls.fcn_customer_detail_mname.setValue(
-                            result.MIDDLENAME
-                        );
-                        this.customerDetailForm.controls.fcn_customer_detail_lname.setValue(
-                            result.LASTNAME
-                        );
-                        this.customerDetailForm.controls.fcn_cust_detail_phone2.setValue(
-                            result.TEL2
-                        );
-                        this.customerDetailForm.controls.fcn_cust_detail_gender.setValue(
-                            result.GENDER
-                        );
-                        this.customerDetailForm.controls.fcn_cust_detail_marital_status.setValue(
-                            result.MARITAL_ST
-                        );
-                        this.customerDetailForm.controls.fcn_cust_detail_marital_status.setValue(
-                            result.MARITAL_ST
-                        );
-                        console.log('=============datePipe=======================');
-                        console.log(this.dummyDateCheck(result.DATE_OF_BIRTH));
-
-
-                        console.log(this.datePipe.transform(this.dummyDateCheck(result.DATE_OF_BIRTH), 'dd/M/yyyy'));
-                        console.log('====================================');
-
-                        this.customerDetailForm.controls.fcn_cust_detail_dob.setValue(
-                            this.dummyDateCheck(result.DATE_OF_BIRTH)
-                            // this.datePipe.transform(this.dummyDateCheck(result.DATE_OF_BIRTH), 'dd/M/yyyy')
-
-                        );
-                        // this.customerDetailForm.controls.fcn_cust_detail_occupation.setValue(
-                        //     result.OCCUPATION
-                        // );
-                        this.customerDetailForm.controls.fcn_cust_detail_company.setValue(
-                            result.COMPANY
-                        );
-                        this.customerDetailForm.controls.fcn_cust_detail_nationality.setValue(
-                            result.NATIONALITY
-                        );
-
-                        this.customerDetailForm.controls.fcn_customer_id_type.setValue(
-                            result.CUST_TYPE
-                        );
-                        // this.customerDetailForm.controls.fcn_cust_desg.setValue(
-                        //     result.POSCUSTPREFIX
-                        // );
-                        this.customerDetailForm.controls.fcn_mob_code.setValue(
-                            result.MOBILECODE1
-                        );
-                        this.customerDataForm.controls.fcn_customer_code.setValue(
-                            result.CODE
-                        );
-
-                        this.customerDetailForm.controls.fcn_cust_detail_designation.setValue(
-                          result.DESIGNATION
-                        );
-
-                        // this.customerDetailForm.controls.fcn_source_of_fund.setValue(
-                        //     result.SOURCE
-                        // );
-
-                        this.customerDetails = result;
-
-                        if (this.amlNameValidation)
-                            if (!result.AMLNAMEVALIDATION && result.DIGISCREENED) {
-                                this.amlNameValidationData = false;
-                            } else {
-                                this.amlNameValidationData = false; //for testing
-                                // this.amlNameValidationData = true;
-                                // this.openDialog('Warning', 'Pending for approval', true);
-                            }
+          
+            const result = resp.response;
+            // if(advanceCustomerCode){
+            //  this.customerDataForm.controls['fcn_customer_mobile'].setValue(
+            //    result.MOBILE
+            //  );
+            // }
+             this.customerDataForm.controls['fcn_customer_name'].setValue(
+               result.NAME
+             );
+             this.customerDataForm.controls['fcn_customer_id_type'].setValue(
+               result.IDCATEGORY
+               // result.CUST_TYPE
+             );
+             this.customerDataForm.controls['fcn_customer_id_number'].setValue(
+               result.POSCUSTIDNO
+             );
+             this.inv_customer_name = result.NAME;
+             this.inv_cust_mobile_no = _cust_mobile_no;
+ 
+             this.customerDetailForm.controls.fcn_mob_code.setValue(
+               result.MOBILECODE1
+             );
+             this.customerDataForm.controls.fcn_customer_code.setValue(
+               result.CODE
+             );
+ 
+             this.customerDetailForm.controls['fcn_cust_detail_phone'].setValue(
+               result.MOBILE
+             );
+             this.customerDetailForm.controls['fcn_cust_detail_idType'].setValue(
+               result.IDCATEGORY
+               // result.CUST_TYPE
+             );
+             this.customerDetailForm.controls['fcn_cust_detail_email'].setValue(
+               result.EMAIL
+             );
+             this.customerDetailForm.controls['fcn_cust_detail_address'].setValue(
+               result.ADDRESS
+             );
+             this.customerDetailForm.controls['fcn_cust_detail_country'].setValue(
+               result.COUNTRY_CODE
+             );
+             this.customerDetailForm.controls['fcn_cust_detail_city'].setValue(
+               result.CITY
+             );
+             this.customerDetailForm.controls['fcn_cust_detail_idcard'].setValue(
+               result.NATIONAL_IDENTIFICATION_NO
+             );
+             this.customerDetailForm.controls.fcn_customer_detail_name.setValue(
+               result.NAME
+             );
+             this.customerDetailForm.controls.fcn_customer_detail_fname.setValue(
+               result.FIRSTNAME
+             );
+             this.customerDetailForm.controls.fcn_customer_detail_mname.setValue(
+               result.MIDDLENAME
+             );
+             this.customerDetailForm.controls.fcn_customer_detail_lname.setValue(
+               result.LASTNAME
+             );
+             this.customerDetailForm.controls.fcn_cust_detail_phone2.setValue(
+               result.MOBILE1
+             );
+             this.customerDetailForm.controls.fcn_cust_detail_gender.setValue(
+               result.GENDER
+             );
+             this.customerDetailForm.controls.fcn_cust_detail_marital_status.setValue(
+               result.MARITAL_ST
+             );
+             this.customerDetailForm.controls.fcn_cust_detail_marital_status.setValue(
+               result.MARITAL_ST
+             );
+             this.customerDetailForm.controls.fcn_cust_detail_dob.setValue(
+               this.dummyDateCheck(result.DATE_OF_BIRTH)
+             );
+             this.customerDetailForm.controls.fcn_cust_detail_designation.setValue(
+               result.DESIGNATION
+             );
+             this.customerDetailForm.controls.fcn_cust_detail_company.setValue(
+               result.COMPANY
+             );
+             this.customerDetailForm.controls.fcn_cust_detail_nationality.setValue(
+               result.NATIONALITY
+             );
+ 
+             this.customerDetailForm.controls.fcn_cust_detail_phone2.setValue(
+               result.MOBILE1
+             );
+ 
+             this.customerDetailForm.controls.fcn_customer_exp_date.setValue(
+               this.dummyDateCheck(result.POSCUSTIDEXP_DATE)
+             );
+             this.customerDataForm.controls.fcn_customer_exp_date.setValue(
+               this.dummyDateCheck(result.POSCUSTIDEXP_DATE)
+             );
+ 
+ 
+             this.customerDetails = result;
+ 
+             this.getUserAttachments();
+ 
+             if (this.amlNameValidation)
+               if (!result.AMLNAMEVALIDATION && result.DIGISCREENED) {
+                 this.amlNameValidationData = false;
+               } else {
+                 this.amlNameValidationData = true;
+                 // if(!this.viewOnly)
+                 this.openDialog('Warning', 'Customer already existing, Do you want to continue?', true);
+               }
                     } else {
                         if (value == null) {
                             this.openDialog('Warning', 'Need To Create Customer', true);

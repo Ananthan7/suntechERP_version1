@@ -103,7 +103,7 @@
                                             maxlength="6" UpperCaseDirective
                                             formControlName="WIPaccount"
                                             (focus)="showAlertIfCodeIsEmpty()"
-                                            (change)="checkAccodeSelected($event,'WIPaccount')"
+                                            (change)="checkAccodeSelected($event,WipACCODEData,'WIPaccount')"
                                             (focusout)="validateLookupField($event,WipACCODEData,'WIPaccount')"
                                             [readonly]="viewMode"
                                             tabindex="4"  (keydown)="lookupKeyPress($event,'WIPaccount')"/>
@@ -391,7 +391,7 @@
                                         <input type="text" matInput
                                             maxlength="6" UpperCaseDirective
                                             formControlName="LOSS_ACCODE"
-                                            (change)="checkAccodeSelected($event,'LOSS_ACCODE')"
+                                            (change)="checkAccodeSelected($event,LossACCODEData,'LOSS_ACCODE')"
                                             (focusout)="validateLookupField($event,LossACCODEData,'LOSS_ACCODE')"
                                             [readonly]="islossReadOnly"
                                             tabindex="15"  (keydown)="lookupKeyPress($event,'LOSS_ACCODE')"/>
@@ -406,7 +406,7 @@
                                     <mat-form-field style="width: 70%;" appearance="outline">
                                         <input type="text" matInput
                                             maxlength="6" UpperCaseDirective
-                                            (change)="checkAccodeSelected($event,'RECOV_ACCODE')"
+                                            (change)="checkAccodeSelected($event,RecovACCODEData,'RECOV_ACCODE')"
                                             (focusout)="validateLookupField($event,RecovACCODEData,'RECOV_ACCODE')"
                                             formControlName="RECOV_ACCODE"
                                             [readonly]="isRecovReadOnly || lossDisable"   
@@ -423,7 +423,7 @@
                                         <input type="text" matInput
                                             maxlength="6" UpperCaseDirective
                                             formControlName="GAIN_ACCODE"
-                                            (change)="checkAccodeSelected($event,'GAIN_ACCODE')"
+                                            (change)="checkAccodeSelected($event,WipACCODEData,'GAIN_ACCODE')"
                                             (focusout)="validateLookupField($event,WipACCODEData,'GAIN_ACCODE')"
                                             [readonly]="isAlloWGainReadOnly"
                                             tabindex="21"  (keydown)="lookupKeyPress($event,'GAIN_ACCODE')"/>

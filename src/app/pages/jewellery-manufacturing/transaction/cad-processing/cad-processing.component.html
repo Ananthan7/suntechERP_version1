@@ -16,28 +16,28 @@
                     <div class="col-md-6">
 
                     </div>
-                    <div class="col-md-6 px-5">
-                        <h5>Approval Pending</h5>
+                    <div class="col-md-6 px-5 text-right">
+                        <h5 id="ID001">Approval Pending</h5>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="row mb-1 ">
                             <label for="inputPassword"
-                                class="col-sm-6 col-form-label">Voucher Type * :
+                                class="col-sm-6 col-form-label" id="ID002">Voucher Type * :
                             </label>
-                            <div class="col-md-3">
+                            <div class="col-md-3 mt-2">
                                 <div class="position-relative d-flex">
-                                    <mat-form-field style="width: 100%;">
+                                    <mat-form-field style="width: 100%;" appearance="outline">
                                         <input type="text" matInput
                                             formControlName="voctype"
                                             [readonly]="viewMode" />
                                     </mat-form-field>
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-3 mt-2">
                                 <div class="position-relative d-flex">
-                                    <mat-form-field style="width: 100%;">
+                                    <mat-form-field style="width: 100%;" appearance="outline">
                                         <input class="text-right" type="number"
                                             matInput formControlName="vocNo"
                                             [readonly]="viewMode" />
@@ -47,10 +47,10 @@
                         </div>
                         <div class="row mb-1">
                             <label for="inputPassword"
-                                class="col-sm-6 col-form-label">Voucher Date :
+                                class="col-sm-6 col-form-label" id="ID003">Voucher Date :
                             </label>
-                            <div class="col-sm-6">
-                                <mat-form-field style="width: 72%;">
+                            <div class="col-sm-6 mt-2">
+                                <mat-form-field style="width: -webkit-fill-available;" appearance="outline">
                                     <input matInput [matDatepicker]="vocDate"
                                         formControlName="vocDate"
                                         placeholder="DD/MM/YYYY"
@@ -64,46 +64,46 @@
                         </div>
                         <div class="row mb-1">
                             <label for="inputPassword"
-                                class="col-sm-6 col-form-label">Process * :
+                                class="col-sm-6 col-form-label" id="ID004">Process * :
                             </label>
-                            <div class="col-sm-6">
-                                <mat-form-field style="width: 70%;">
+                            <div class="col-sm-6 mt-2">
+                                <mat-form-field style="width: -webkit-fill-available;" appearance="outline">
                                     <input type="text" matInput
                                         formControlName="process"
                                         [readonly]="viewMode"
                                         (keydown)="lookupKeyPress($event,'process')"   
                                         (focusout)="validateLookupField($event,processCodeData,'process')"/>
+                                        <master-search class="masterSearch"
+                                        [MasterSearchData]="processCodeData"
+                                        *ngIf="!viewMode" #overlayprocesscode
+                                        (newRowClick)="processSelected($event)"></master-search>
                                 </mat-form-field>
-                                <master-search
-                                    [MasterSearchData]="processCodeData"
-                                    *ngIf="!viewMode" #overlayprocesscode
-                                    (newRowClick)="processSelected($event)"></master-search>
                             </div>
                         </div>
                         <div class="row mb-1">
                             <label for="inputPassword"
-                                class="col-sm-6 col-form-label">Worker * :
+                                class="col-sm-6 col-form-label" id="ID005">Worker * :
                             </label>
-                            <div class="col-sm-6">
-                                <mat-form-field style="width: 70%;">
+                            <div class="col-sm-6 mt-2">
+                                <mat-form-field style="width: -webkit-fill-available;" appearance="outline">
                                     <input type="text" matInput
                                         formControlName="worker"
                                         [readonly]="viewMode"
                                         (keydown)="lookupKeyPress($event,'worker')"   
                                         (focusout)="validateLookupField($event,workerCodeData,'worker')"/>
+                                        <master-search class="masterSearch"
+                                        [MasterSearchData]="workerCodeData"
+                                        *ngIf="!viewMode" #overlayworkercode
+                                        (newRowClick)="workedSelected($event)"></master-search>
                                 </mat-form-field>
-                                <master-search
-                                    [MasterSearchData]="workerCodeData"
-                                    *ngIf="!viewMode" #overlayworkercode
-                                    (newRowClick)="workedSelected($event)"></master-search>
                             </div>
                         </div>
                         <div class="row mb-1">
                             <label for="inputPassword"
-                                class="col-sm-6 col-form-label">Narration :
+                                class="col-sm-6 col-form-label" id="ID006">Narration :
                             </label>
-                            <div class="col-sm-6">
-                                <mat-form-field style="width: 100%;">
+                            <div class="col-sm-6 mt-2">
+                                <mat-form-field style="width: 100%;" appearance="outline">
                                     <input type="text" matInput
                                         formControlName="narration"
                                         [readonly]="viewMode" />
@@ -113,11 +113,11 @@
                     </div>
                     <div class="col-md-3">
                         <div class="row mb-1">
-                            <label for="inputPassword"
+                            <label for="inputPassword" id="ID007"
                                 class="col-sm-5 col-form-label ">So Number :
                             </label>
-                            <div class="col-sm-6">
-                                <mat-form-field style="width: 100%;">
+                            <div class="col-sm-6 mt-2">
+                                <mat-form-field style="width: 100%;" appearance="outline">
                                     <input type="text" matInput
                                         formControlName="soNumber"
                                         [readonly]="viewMode" />
@@ -125,12 +125,12 @@
                             </div>
                         </div>
                         <div class="row mb-1">
-                            <label for="inputPassword"
+                            <label for="inputPassword" id="ID008"
                                 class="col-sm-5 col-form-label ">Design * :
                             </label>
 
-                            <div class="col-sm-6">
-                                <mat-form-field style="width: 100%;">
+                            <div class="col-sm-6 mt-2">
+                                <mat-form-field style="width: 100%;" appearance="outline">
                                     <input type="text" matInput
                                         formControlName="design"
                                         [readonly]="viewMode" />
@@ -139,10 +139,10 @@
                         </div>
                         <div class="row mb-1">
                             <label for="inputPassword"
-                                class="col-sm-5 col-form-label ">Completed :
+                                class="col-sm-5 col-form-label " id="ID009">Completed :
                             </label>
-                            <div class="col-sm-6">
-                                <mat-form-field style="width: 100%;">
+                            <div class="col-sm-6 mt-2">
+                                <mat-form-field style="width: 100%;" appearance="outline">
                                     <input matInput [matDatepicker]="completed"
                                         formControlName="completed"
                                         [readonly]="viewMode"
@@ -156,48 +156,48 @@
                             </div>
                         </div>
                         <div class="row mb-1">
-                            <label for="inputPassword"
+                            <label for="inputPassword" id="ID010"
                                 class="col-sm-5 col-form-label ">To Worker * :
                             </label>
-                            <div class="col-sm-7">
-                                <mat-form-field style="width: 70%;">
+                            <div class="col-sm-6 mt-2">
+                                <mat-form-field style="width: -webkit-fill-available;" appearance="outline">
                                     <input type="text" matInput
                                         formControlName="toWorker"
                                         [readonly]="viewMode"
                                         (keydown)="lookupKeyPress($event,'toWorker')"   
                                         (focusout)="validateLookupField($event,workerCodeData,'toWorker')"/>
+                                        <master-search class="masterSearch"
+                                        [MasterSearchData]="workerCodeData"
+                                        *ngIf="!viewMode" #overlaytoworkercode
+                                        (newRowClick)="toWorkedSelected($event)"></master-search>
                                 </mat-form-field>
-                                <master-search
-                                    [MasterSearchData]="workerCodeData"
-                                    *ngIf="!viewMode" #overlaytoworkercode
-                                    (newRowClick)="toWorkedSelected($event)"></master-search>
                             </div>
                         </div>
                         <div class="row mb-1">
-                            <label for="inputPassword"
+                            <label for="inputPassword" id="ID011"
                                 class="col-sm-5 col-form-label ">To Process * :
                             </label>
-                            <div class="col-sm-7">
-                                <mat-form-field style="width: 70%;">
+                            <div class="col-sm-6 mt-2">
+                                <mat-form-field style="width: -webkit-fill-available;" appearance="outline">
                                     <input type="text" matInput
                                         formControlName="toProcess"
                                         [readonly]="viewMode"
                                         (keydown)="lookupKeyPress($event,'toProcess')"  
                                         (focusout)="validateLookupField($event,toprocessCodeData,'toProcess')"/>
+                                        <master-search class="masterSearch"
+                                        [MasterSearchData]="toprocessCodeData"
+                                        *ngIf="!viewMode" #overlaytoProcesscode
+                                        (newRowClick)="toProcessSelected($event)"></master-search>
                                 </mat-form-field>
-                                <master-search
-                                    [MasterSearchData]="toprocessCodeData"
-                                    *ngIf="!viewMode" #overlaytoProcesscode
-                                    (newRowClick)="toProcessSelected($event)"></master-search>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-3">
                         <div class="row mb-1">
                             <label for="inputPassword"
-                                class="col-sm-7 col-form-label">Job : </label>
-                            <div class="col-sm-5">
-                                <mat-form-field style="width: 100%;">
+                                class="col-sm-6 col-form-label" id="ID012">Job : </label>
+                            <div class="col-sm-6">
+                                <mat-form-field style="width: 100%;" appearance="outline">
                                     <input type="text" matInput
                                         formControlName="job"
                                         [readonly]="viewMode" />
@@ -206,10 +206,10 @@
                         </div>
                         <div class="row mb-1">
                             <label for="inputPassword"
-                                class="col-sm-7 col-form-label">Sub Job Id :
+                                class="col-sm-6 col-form-label" id="ID013">Sub Job Id :
                             </label>
-                            <div class="col-sm-5">
-                                <mat-form-field style="width: 100%;">
+                            <div class="col-sm-6">
+                                <mat-form-field style="width: 100%;" appearance="outline">
                                     <input type="number" matInput
                                         formControlName="subJobId"
                                         style="text-align: right;" />
@@ -218,10 +218,10 @@
                         </div>
                         <div class="row mb-1">
                             <label for="inputPassword"
-                                class="col-sm-7 col-form-label">Time Taken :
+                                class="col-sm-6 col-form-label" id="ID014">Time Taken :
                             </label>
-                            <div class="col-sm-5">
-                                <mat-form-field style="width: 100%;">
+                            <div class="col-sm-6">
+                                <mat-form-field style="width: 100%;" appearance="outline">
                                     <input type="time" matInput
                                         formControlName="timeTaken"
                                         [readonly]="viewMode"
@@ -247,7 +247,7 @@
                         </div>
                         <div class="p-2 bd-highlight">
                             <div class="upload-btn-wrapper">
-                                <button class="btn btnnew"> Image</button>
+                                <button class="btn btnnew bgColourUpdate" id="ID015"> Image</button>
                                 <input type="file" name="uploadproduct"
                                     accept=".png, .jpg, .jpeg" #fileInput
                                     class="uploadproduct"
@@ -722,20 +722,18 @@
                                                     <div class="row">
                                                         <div
                                                             class="p-1 bd-highlight">
-                                                            <button
+                                                            <button id="ID016"
                                                                 type="button"
-                                                                class="btn btn-primary add-btn">
+                                                                class="btn btn-primary add-btn bgColourUpdate">
                                                                 Approved
                                                             </button>
                                                         </div>
                                                     </div>
                                                     <div class="row">
-                                                        <label
-                                                            for="inputPassword"
-                                                            class="col-sm-4 col-form-label ">User
-                                                            ID: </label>
-                                                        <div class="col-sm-8">
-                                                            <mat-form-field
+                                                        <label for="inputPassword" id="ID017"
+                                                            class="col-sm-4 col-form-label ">User ID: </label>
+                                                        <div class="col-sm-8 mt-2">
+                                                            <mat-form-field appearance="outline"
                                                                 style="width: 100%;">
                                                                 <input
                                                                     type="text"
@@ -745,12 +743,10 @@
                                                         </div>
                                                     </div>
                                                     <div class="row">
-                                                        <label
-                                                            for="inputPassword"
-                                                            class="col-sm-4 col-form-label ">Date
-                                                            : </label>
-                                                        <div class="col-sm-8">
-                                                            <mat-form-field
+                                                        <label for="inputPassword" id="ID018"
+                                                            class="col-sm-4 col-form-label ">Date: </label>
+                                                        <div class="col-sm-8 mt-2">
+                                                            <mat-form-field appearance="outline"
                                                                 style="width: 100%;">
                                                                 <input matInput
                                                                     [matDatepicker]="date"
@@ -767,12 +763,10 @@
                                                         </div>
                                                     </div>
                                                     <div class="row">
-                                                        <label
-                                                            for="inputPassword"
-                                                            class="col-sm-4 col-form-label ">Copy
-                                                            : </label>
-                                                        <div class="col-sm-8">
-                                                            <mat-form-field
+                                                        <label for="inputPassword" id="ID019"
+                                                            class="col-sm-4 col-form-label ">Copy: </label>
+                                                        <div class="col-sm-8 mt-2">
+                                                            <mat-form-field appearance="outline"
                                                                 style="width: 100%;">
                                                                 <input
                                                                     type="text"
@@ -782,12 +776,10 @@
                                                         </div>
                                                     </div>
                                                     <div class="row">
-                                                        <label
-                                                            for="inputPassword"
-                                                            class="col-sm-4 col-form-label ">Type
-                                                            : </label>
-                                                        <div class="col-sm-8">
-                                                            <mat-form-field
+                                                        <label for="inputPassword" id="ID020"
+                                                            class="col-sm-4 col-form-label ">Type: </label>
+                                                        <div class="col-sm-8 mt-2">
+                                                            <mat-form-field appearance="outline"
                                                                 style="width: 100%;">
                                                                 <input
                                                                     type="number"
@@ -798,24 +790,22 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-7">
+                                                <div class="col-md-8">
                                                     <div class="row">
                                                         <div
                                                             class="p-1 bd-highlight">
-                                                            <button
+                                                            <button id="ID021"
                                                                 type="button"
-                                                                class="btn btn-primary add-btn">
+                                                                class="btn btn-primary add-btn bgColourUpdate">
                                                                 Rejected
                                                             </button>
                                                         </div>
                                                     </div>
                                                     <div class="row">
-                                                        <label
-                                                            for="inputPassword"
-                                                            class="col-sm-4 col-form-label ">Reason
-                                                            : </label>
-                                                        <div class="col-sm-8">
-                                                            <mat-form-field
+                                                        <label id="ID022" for="inputPassword"
+                                                            class="col-sm-3 col-form-label ">Reason: </label>
+                                                        <div class="col-sm-9 mt-2">
+                                                            <mat-form-field appearance="outline"
                                                                 style="width: 100%;">
                                                                 <input
                                                                     type="text"
@@ -826,12 +816,10 @@
                                                         </div>
                                                     </div>
                                                     <div class="row">
-                                                        <label
-                                                            for="inputPassword"
-                                                            class="col-sm-4 col-form-label ">Remarks
-                                                            : </label>
-                                                        <div class="col-sm-8">
-                                                            <mat-form-field
+                                                        <label for="inputPassword" id="ID023"
+                                                            class="col-sm-3 col-form-label ">Remarks: </label>
+                                                        <div class="col-sm-9 mt-2">
+                                                            <mat-form-field appearance="outline"
                                                                 style="width: 100%;">
                                                                 <input
                                                                     type="text"
@@ -842,20 +830,18 @@
                                                     </div>
                                                     <div class="row">
                                                         <div
-                                                            class="col-sm-4 bd-highlight">
-                                                            <button
+                                                            class="col-sm-3 bd-highlight mt-2">
+                                                            <button id="ID024"
                                                                 type="button"
-                                                                class="btn btn-primary add-btn"
+                                                                class="btn btn-primary add-btn mt-1 bgColourUpdate"
                                                                 (click)="openFileExplorer()">
                                                                 Attachments
                                                             </button>
                                                         </div>
-                                                        <div class="col-sm-6">
-                                                            <mat-form-field
+                                                        <div class="col-sm-9 mt-2">
+                                                            <mat-form-field appearance="outline"
                                                                 style="width: 100%;">
-                                                                <input
-                                                                    type="text"
-                                                                    matInput
+                                                                <input type="text"  matInput
                                                                     formControlName="attachments" />
                                                             </mat-form-field>
                                                             <input type="file"
@@ -866,12 +852,10 @@
                                                         </div>
                                                     </div>
                                                     <div class="row">
-                                                        <label
-                                                            for="inputPassword"
-                                                            class="col-sm-4 col-form-label ">Delivery
-                                                            On : </label>
-                                                        <div class="col-sm-3">
-                                                            <mat-form-field
+                                                        <label for="inputPassword" id="ID025"
+                                                            class="col-sm-3 col-form-label ">Delivery On: </label>
+                                                        <div class="col-sm-3 mt-2">
+                                                            <mat-form-field appearance="outline"
                                                                 style="width: 100%;">
                                                                 <input
                                                                     type="text"
@@ -879,8 +863,8 @@
                                                                     formControlName="deliveryOn" />
                                                             </mat-form-field>
                                                         </div>
-                                                        <div class="col-sm-2">
-                                                            <mat-form-field
+                                                        <div class="col-sm-2 mt-2">
+                                                            <mat-form-field appearance="outline"
                                                                 style="width: 100%;">
                                                                 <input
                                                                     type="number"
@@ -889,8 +873,8 @@
                                                                     style="text-align: right;" />
                                                             </mat-form-field>
                                                         </div>
-                                                        <div class="col-sm-3">
-                                                            <mat-form-field
+                                                        <div class="col-sm-4 mt-2">
+                                                            <mat-form-field appearance="outline"
                                                                 style="width: 100%;">
                                                                 <input
                                                                     [disabled]="true"
