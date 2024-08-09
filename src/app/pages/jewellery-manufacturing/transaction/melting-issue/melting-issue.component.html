@@ -100,7 +100,7 @@
                                 </mat-form-field>
                                 <master-search class="masterSearch"
                                     [MasterSearchData]="jobnoCodeData"
-                                    *ngIf="!viewMode" #overlayjobNoSearch
+                                    *ngIf="isJobNumberSearchVisible && !viewMode" #overlayjobNoSearch
                                     (newRowClick)="jobnoCodeSelected($event)"></master-search>
                             </div>
                             <div class="col-md-4">
@@ -110,6 +110,7 @@
                                         readonly />
                                 </mat-form-field>
                             </div>
+                       
                         </div>
                         <div class="row">
                             <label for="inputPassword"
