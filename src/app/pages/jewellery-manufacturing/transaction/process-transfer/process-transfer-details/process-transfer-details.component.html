@@ -1176,7 +1176,7 @@
               [columnAutoWidth]="true"
               [allowColumnResizing]="true"
               [showRowLines]="true" (onRowUpdated)="onRowUpdateGrid($event)">
-              <dxo-paging [enabled]="false"></dxo-paging>
+              <dxo-paging [enabled]="true" [pageSize]="5"></dxo-paging>
               <dxo-editing mode="cell" [allowUpdating]="true">
               </dxo-editing>
               <dxo-selection mode="single"></dxo-selection>
