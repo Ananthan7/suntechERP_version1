@@ -1,6 +1,7 @@
 import { Component, ElementRef, Input, OnInit, Renderer2, ViewChild, } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { lookup } from 'dns';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { CommonServiceService } from 'src/app/services/common-service.service';
@@ -826,7 +827,7 @@ export class ProcessMasterComponent implements OnInit {
       return;
     }
     this.processMasterForm.controls.WIPaccount.setValue(e.ACCODE);
-    this.accodeValidateSP('WIPaccount', e.ACCODE)
+    this.accodeValidateSP(e.ACCODE,this.WipACCODEData,'WIPaccount')
   }
   LOSS_ACCODESelected(e: any) {
     if (this.isSameAccountCodeSelected(e.ACCODE, 'LOSS_ACCODE')) {
@@ -835,7 +836,7 @@ export class ProcessMasterComponent implements OnInit {
       return;
     }
     this.processMasterForm.controls.LOSS_ACCODE.setValue(e.ACCODE);
-    this.accodeValidateSP('LOSS_ACCODE', e.ACCODE)
+    this.accodeValidateSP( e.ACCODE,this.LossACCODEData,'LOSS_ACCODE')
   }
   RECOV_ACCODESelected(e: any) {
     if (this.isSameAccountCodeSelected(e.ACCODE, 'RECOV_ACCODE')) {
@@ -844,7 +845,7 @@ export class ProcessMasterComponent implements OnInit {
       return;
     }
     this.processMasterForm.controls.RECOV_ACCODE.setValue(e.ACCODE);
-    this.accodeValidateSP('RECOV_ACCODE', e.ACCODE)
+    this.accodeValidateSP( e.ACCODE,this.RecovACCODEData, 'RECOV_ACCODE')
   }
 
   GAIN_ACCODESelected(e: any) {
@@ -854,11 +855,12 @@ export class ProcessMasterComponent implements OnInit {
       return;
     }
     this.processMasterForm.controls.GAIN_ACCODE.setValue(e.ACCODE);
-    this.accodeValidateSP('GAIN_ACCODE', e.ACCODE)
+    this.accodeValidateSP( e.ACCODE,this.WipACCODEData, 'GAIN_ACCODE')
   }
 
   /**use: common accode change validation */
-  checkAccodeSelected(event: any, formname: string) {
+  checkAccodeSelected(event: any, LOOKUPDATA: MasterSearchModel, formname: string) {
+    LOOKUPDATA.SEARCH_VALUE = event.target.value
     if (event.target.value == '') {
       this.processMasterForm.controls[formname].setValue('');
       return
@@ -869,25 +871,26 @@ export class ProcessMasterComponent implements OnInit {
       //this.commonService.toastErrorByMsgId('Accode already selected');
       return;
     }
-    this.accodeValidateSP(formname, event.target.value)
+    this.accodeValidateSP(formname,LOOKUPDATA, event.target.value)
   }
 
   /**use: sp call to validate same accode to avoid same accode selection */
-  accodeValidateSP(formControlName: string, value: string) {
-    if (this.viewMode) return
+  accodeValidateSP(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    LOOKUPDATA.SEARCH_VALUE = event.target.value
+    if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
     let param = {
-      LOOKUPID: 20,
-      WHERECOND: `LOSS_ACCODE='${value}' OR RECOV_ACCODE='${value}' OR GAIN_ACCODE='${value}' OR WIP_ACCODE='${value}'`
-      // WHERECOND: this.getAccodeField(formControlName,value)
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
     }
-    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
-    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+    this.commonService.toastInfoByMsgId('MSG81447');
+    let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
+    let Sub: Subscription = this.dataService.postDynamicAPI(API,param)
       .subscribe((result) => {
         // this.isDisableSaveBtn = false;
         let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
         if (data.length > 0) {
           this.commonService.toastErrorByMsgId('MSG1121')//Accode already exists in other process
-          this.processMasterForm.controls[formControlName].setValue('')
+          this.processMasterForm.controls[FORMNAME].setValue('')
           return
         }
 

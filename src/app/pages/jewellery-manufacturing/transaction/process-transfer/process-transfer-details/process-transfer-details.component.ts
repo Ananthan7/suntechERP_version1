@@ -1606,7 +1606,6 @@ export class ProcessTransferDetailsComponent implements OnInit {
   // to Workercode Validate
   toWorkercodeValidate(event: any) {
     if (event.target.value == '') {
-      this.overlayToWorker.showOverlayPanel(event)
       return
     }
     let form = this.processTransferdetailsForm.value
@@ -2022,10 +2021,10 @@ export class ProcessTransferDetailsComponent implements OnInit {
       "RET_METAL_STOCK_CODE": "",
       "RET_STONE_DIVCODE": "",
       "RET_STONE_STOCK_CODE": "",
-      "RET_METAL_WT": 0,
+      "RET_METAL_WT": this.commonService.decimalQuantityFormat(0,'METAL'),
       "RET_PURITY": 0,
       "RET_PURE_WT": 0,
-      "RET_STONE_WT": 0,
+      "RET_STONE_WT": this.commonService.decimalQuantityFormat(0,'STONE'),
       "RET_METAL_RATEFC": 0,
       "RET_METAL_RATELC": 0,
       "RET_METAL_AMOUNTFC": 0,
@@ -2088,7 +2087,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       "EXCLUDE_TRANSFER_WT": form.EXCLUDE_TRANSFER_WT,
       "SCRAP_DIVCODE": this.commonService.nullToString(form.SCRAP_DIVCODE),
       "IRON_SCRAP_WT": this.calculateIronScrapWeight(form),
-      "GAIN_WT": this.emptyToZero(form.METAL_GainGrWt),
+      "GAIN_WT": this.commonService.decimalQuantityFormat(this.emptyToZero(form.METAL_GainGrWt),'METAL'),
       "GAIN_PURE_WT": this.emptyToZero(form.METAL_GainPureWt),
       "GAIN_ACCODE": seqDataFrom.length > 0 ? this.commonService.nullToString(seqDataFrom[0].GAIN_AC) : '',
       "IS_REJECT": false,
