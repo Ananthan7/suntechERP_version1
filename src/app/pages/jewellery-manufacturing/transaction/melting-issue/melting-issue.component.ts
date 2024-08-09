@@ -37,7 +37,7 @@ export class MeltingIssueComponent implements OnInit {
     { title: 'DIVISION', field: 'DIVISION', format: '', alignment: 'left' },
     { title: 'Stock Code', field: 'STOCKCODE', format: '', alignment: 'left' },
     { title: 'Description', field: 'DESCRIPTION', format: '', alignment: 'left' },
-    { title: 'Alloy', field: 'ALLOY', format: '', alignment: 'right' },
+    { title: 'Alloy %', field: 'ALLOY', format: '', alignment: 'right' },
     { title: 'Alloy Qty', field: 'ALLOYQTY', format: '', alignment: 'right' },
     { title: 'Rate', field: 'RATE', format: '', alignment: 'right' },
     { title: 'Amount', field: 'AMOUNT', format: '', alignment: 'right' },
@@ -59,14 +59,9 @@ export class MeltingIssueComponent implements OnInit {
   editMode: boolean = false;
   isloading: boolean = false;
   codeEnable: boolean = true;
+  gridAmountDecimalFormat: any;
   isJobNumberSearchVisible: boolean = false;
   companyName = this.commonService.allbranchMaster['BRANCH_NAME'];
-  gridAmountDecimalFormat: any = {
-    type: 'fixedPoint',
-    precision: this.commonService.allbranchMaster?.BAMTDECIMALS,
-    currency: this.commonService.compCurrency
-  };
-
   branchCode?: String;
   yearMonth?: String;
 
@@ -198,7 +193,11 @@ export class MeltingIssueComponent implements OnInit {
     private commonService: CommonServiceService,) { }
 
   ngOnInit(): void {
-
+    this.gridAmountDecimalFormat = {
+      type: 'fixedPoint',
+      precision: this.comService.allbranchMaster?.BAMTDECIMALS,
+      currency: this.comService.compCurrency
+    };
     // this.setNewFormValues()
     // this.voctype = this.commonService.getqueryParamMainVocType();
     this.meltingIssueFrom.controls.voctype.setValue(this.commonService.getqueryParamVocType());
@@ -455,8 +454,8 @@ export class MeltingIssueComponent implements OnInit {
 
   jobnoCodeSelected(e: any) {
     console.log(e);
-    this.meltingIssueFrom.controls.jobno.setValue(e.job_number);
-    this.meltingIssueFrom.controls.jobdes.setValue(e.job_description);
+    this.meltingIssueFrom.controls.jobno.setValue(e.JOB_NUMBER);
+    this.meltingIssueFrom.controls.jobdes.setValue(e.JOB_DESCRIPTION);
     this.jobNumberValidate({ target: { value: e.job_number } })
   }
   timeCodeSelected(e: any) {
@@ -1079,13 +1078,14 @@ export class MeltingIssueComponent implements OnInit {
 
   jobNumberValidate(event: any) {
     if (event.target.value == '') return
+    let form = this.meltingIssueFrom.value;
     let postData = {
       "SPID": "108",
       "parameter": {
-        'StrJob_Number': this.commonService.nullToString(event.target.value),
-        'StrMeltingTypeKarat': this.meltingIssueFrom.value.KARAT_CODE,
+        'StrJob_Number': this.commonService.nullToString(form.jobno),
+        'StrMeltingTypeKarat': this.commonService.nullToString(form.Karat),
         'StrBranch': this.comService.branchCode,
-        'StrColor': this.meltingIssueFrom.value.color
+        'StrColor': this.commonService.nullToString(form.color)
       }
     }
 
@@ -1102,7 +1102,6 @@ export class MeltingIssueComponent implements OnInit {
             this.meltingIssueFrom.controls.subJobDescription.setValue(data[0].JOB_DESCRIPTION)
 
             this.subJobNumberValidate()
-            this.setJobNumberWhereCondition()
           } else {
             this.commonService.toastErrorByMsgId('MSG1531')
             this.meltingIssueFrom.controls.jobno.setValue('')
