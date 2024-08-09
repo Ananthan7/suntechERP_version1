@@ -23,6 +23,10 @@ export class MeltingIssueComponent implements OnInit {
   @ViewChild('overlayjobNoSearch') overlayjobNoSearch!: MasterSearchComponent;
   @ViewChild('overlayprocesscode') overlayprocesscode!: MasterSearchComponent;
   @ViewChild('overlayworkercode') overlayworkercode!: MasterSearchComponent;
+  @ViewChild('codeInput1') codeInput1!: ElementRef;
+  router: any;
+  onClose: any;
+  modalRef: NgbModalRef | null = null
   dataToDetailScreen: any;
   modalReference!: NgbModalRef;
   columnhead: any[] = ['SRNO', 'DIV', 'Job No', 'Stock Code', 'Stock Description', 'Main Stock', 'Process', 'Worker', 'Pcs', 'Gross Weight', 'Purity', 'Pure Weight', 'Rate', 'Amount']
@@ -33,7 +37,7 @@ export class MeltingIssueComponent implements OnInit {
     { title: 'DIVISION', field: 'DIVISION', format: '', alignment: 'left' },
     { title: 'Stock Code', field: 'STOCKCODE', format: '', alignment: 'left' },
     { title: 'Description', field: 'DESCRIPTION', format: '', alignment: 'left' },
-    { title: 'Alloy', field: 'ALLOY', format: '', alignment: 'right' },
+    { title: 'Alloy %', field: 'ALLOY', format: '', alignment: 'right' },
     { title: 'Alloy Qty', field: 'ALLOYQTY', format: '', alignment: 'right' },
     { title: 'Rate', field: 'RATE', format: '', alignment: 'right' },
     { title: 'Amount', field: 'AMOUNT', format: '', alignment: 'right' },
@@ -55,13 +59,9 @@ export class MeltingIssueComponent implements OnInit {
   editMode: boolean = false;
   isloading: boolean = false;
   codeEnable: boolean = true;
+  gridAmountDecimalFormat: any;
+  isJobNumberSearchVisible: boolean = false;
   companyName = this.commonService.allbranchMaster['BRANCH_NAME'];
-  gridAmountDecimalFormat: any = {
-    type: 'fixedPoint',
-    precision: this.commonService.allbranchMaster?.BAMTDECIMALS,
-    currency: this.commonService.compCurrency
-  };
-
   branchCode?: String;
   yearMonth?: String;
 
@@ -77,22 +77,6 @@ export class MeltingIssueComponent implements OnInit {
     VIEW_TABLE: true,
   }
 
-  // WorkerCodeData: MasterSearchModel = {
-  //   PAGENO: 1,
-  //   RECORDS: 10,
-  //   LOOKUPID: 260,
-  //   SEARCH_FIELD: 'WORKER_CODE',
-  //   SEARCH_HEADING: 'Worker Master',
-  //   SEARCH_VALUE: '',
-  //   WHERECONDITION: `@StrSubJobNo='',
-  //   @StrFromProcess='',
-  //   @StrFromWorker='',
-  //   @StrBranchCode=${this.commonService.branchCode},
-  //   @blnProcessAuthroize=1`,
-  //   VIEW_INPUT: true,
-  //   VIEW_TABLE: true,
-
-  // }
   workerCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -196,13 +180,9 @@ export class MeltingIssueComponent implements OnInit {
     voctype: ['', [Validators.required]],
     vocdate: ['', [Validators.required]],
     MAIN_VOCTYPE: [''],
-
-
+    UNQ_JOB_ID: [''],
   });
-  @ViewChild('codeInput1') codeInput1!: ElementRef;
-  router: any;
-  onClose: any;
-  modalRef: NgbModalRef | null = null
+
 
   constructor(private activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -213,7 +193,11 @@ export class MeltingIssueComponent implements OnInit {
     private commonService: CommonServiceService,) { }
 
   ngOnInit(): void {
-
+    this.gridAmountDecimalFormat = {
+      type: 'fixedPoint',
+      precision: this.comService.allbranchMaster?.BAMTDECIMALS,
+      currency: this.comService.compCurrency
+    };
     // this.setNewFormValues()
     // this.voctype = this.commonService.getqueryParamMainVocType();
     this.meltingIssueFrom.controls.voctype.setValue(this.commonService.getqueryParamVocType());
@@ -470,8 +454,8 @@ export class MeltingIssueComponent implements OnInit {
 
   jobnoCodeSelected(e: any) {
     console.log(e);
-    this.meltingIssueFrom.controls.jobno.setValue(e.job_number);
-    this.meltingIssueFrom.controls.jobdes.setValue(e.job_description);
+    this.meltingIssueFrom.controls.jobno.setValue(e.JOB_NUMBER);
+    this.meltingIssueFrom.controls.jobdes.setValue(e.JOB_DESCRIPTION);
     this.jobNumberValidate({ target: { value: e.job_number } })
   }
   timeCodeSelected(e: any) {
@@ -483,6 +467,7 @@ export class MeltingIssueComponent implements OnInit {
 
     this.meltingIssueFrom.controls.meltingtype.setValue(e['Melting Type']);
     // this.meltingIssueFrom.controls.meltingtype.setValue(e.MELTING_TYPE);
+    this.meltingIssueFrom.controls.Karat.setValue(e.KARAT_CODE)
     this.meltingTypeValidate()
   }
   ProcessCodeSelected(e: any) {
@@ -1022,12 +1007,18 @@ export class MeltingIssueComponent implements OnInit {
       this.commonService.setCommaSerperatedNumber(value, Decimal)
     )
   }
+  updateJobNumberLookupFilter(karatCode: string) {
+    // Update the WHERECONDITION for job number lookup filter based on KaratCode
+    this.jobnoCodeData.WHERECONDITION = `@StrJob_Number='',@StrMeltingTypeKarat='${karatCode}',@StrBranchCode=${this.commonService.branchCode},@StrColor =''`;
+  
+  }
+  
   setJobNumberWhereCondition() {
     let form = this.meltingIssueFrom.value;
-    this.jobnoCodeData.WHERECONDITION = `@StrJob_Number='${this.commonService.nullToString(form.UNQ_JOB_ID)}',`
-    this.jobnoCodeData.WHERECONDITION += `@StrMeltingTypeKarat='${this.commonService.nullToString(form.KARAT_CODE)}',`
-    this.jobnoCodeData.WHERECONDITION += `@StrBranch='${this.commonService.nullToString(form.branchCode)}',`
-    this.jobnoCodeData.WHERECONDITION += `@StrColor='${this.commonService.nullToString(form.COLOR)}'`
+    this.jobnoCodeData.WHERECONDITION = `@StrJob_Number='${this.commonService.nullToString(form.jobno)}',`
+    this.jobnoCodeData.WHERECONDITION += `@StrMeltingTypeKarat='${this.commonService.nullToString(form.Karat)}',`
+    this.jobnoCodeData.WHERECONDITION += `@StrBranch='${this.commonService.nullToString(this.comService.branchCode)}',`
+    this.jobnoCodeData.WHERECONDITION += `@StrColor='${this.commonService.nullToString(form.color)}'`
   }
 
   subJobNumberValidate(event?: any) {
@@ -1087,13 +1078,14 @@ export class MeltingIssueComponent implements OnInit {
 
   jobNumberValidate(event: any) {
     if (event.target.value == '') return
+    let form = this.meltingIssueFrom.value;
     let postData = {
       "SPID": "108",
       "parameter": {
-        'StrJob_Number': this.commonService.nullToString(event.target.value),
-        'StrMeltingTypeKarat': this.meltingIssueFrom.value.KARAT_CODE,
+        'StrJob_Number': this.commonService.nullToString(form.jobno),
+        'StrMeltingTypeKarat': this.commonService.nullToString(form.Karat),
         'StrBranch': this.comService.branchCode,
-        'StrColor': this.meltingIssueFrom.value.color
+        'StrColor': this.commonService.nullToString(form.color)
       }
     }
 
@@ -1110,7 +1102,6 @@ export class MeltingIssueComponent implements OnInit {
             this.meltingIssueFrom.controls.subJobDescription.setValue(data[0].JOB_DESCRIPTION)
 
             this.subJobNumberValidate()
-            this.setJobNumberWhereCondition()
           } else {
             this.commonService.toastErrorByMsgId('MSG1531')
             this.meltingIssueFrom.controls.jobno.setValue('')
@@ -1145,14 +1136,14 @@ export class MeltingIssueComponent implements OnInit {
         this.commonService.closeSnackBarMsg();
         if (result.response) {
           const data = result.response;
-          console.log(data,'passing lookup details')
           this.meltingIssueFrom.controls.color.setValue(data.COLOR);
           this.meltingIssueFrom.controls.jobpurity.setValue(data.PURITY);
           this.meltingIssueFrom.controls.Karat.setValue(data.KARAT_CODE)//KARAT_CODE
           this.setValueWithDecimal('jobpurity', data.PURITY, 'PURITY')
-          this.setValueWithDecimal('jobpurity', data.PURITY, 'PURITY')
           this.setJobNumberWhereCondition()
+          this.isJobNumberSearchVisible = true;
         } else {
+          this.isJobNumberSearchVisible = false;
           this.commonService.toastErrorByMsgId('MSG1531');
           this.meltingIssueFrom.controls.meltingtype.setValue('')
           this.showOverleyPanel(event, 'meltingtype')
@@ -1161,6 +1152,7 @@ export class MeltingIssueComponent implements OnInit {
       },
       (err: any) => {
         console.error('API Call Error:', err);
+        this.isJobNumberSearchVisible = false;
         this.commonService.closeSnackBarMsg();
         this.commonService.toastErrorByMsgId('MSG1531');
       }

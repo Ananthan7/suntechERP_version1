@@ -100,7 +100,7 @@
                                 </mat-form-field>
                                 <master-search class="masterSearch"
                                     [MasterSearchData]="jobnoCodeData"
-                                    *ngIf="!viewMode" #overlayjobNoSearch
+                                    *ngIf="isJobNumberSearchVisible && !viewMode" #overlayjobNoSearch
                                     (newRowClick)="jobnoCodeSelected($event)"></master-search>
                             </div>
                             <div class="col-md-4">
@@ -110,6 +110,7 @@
                                         readonly />
                                 </mat-form-field>
                             </div>
+                       
                         </div>
                         <div class="row">
                             <label for="inputPassword"
@@ -295,8 +296,8 @@
                                         alignment="right"></dxi-column>
                                     <dxi-column [width]="100"
                                         dataField="GROSS_WT"
-                                        caption="Gross Weight" alignment="right"
-                                        MetalDecimalInput></dxi-column>
+                                        caption="Gross Weight" alignment="right" 
+                                        MetalDecimalInput ></dxi-column>
                                     <dxi-column [width]="100" dataField="PURITY"
                                         caption="Purity" alignment="right"
                                         PurityDecimal></dxi-column>
@@ -321,7 +322,7 @@
                                             [valueFormat]="gridAmountDecimalFormat"
                                             displayFormat="{0}">
                                         </dxi-total-item>
-                                        <dxi-total-item column="Pure Weight"
+                                        <dxi-total-item column="PUREWT"
                                             summaryType="sum"
                                             [valueFormat]="gridAmountDecimalFormat"
                                             displayFormat="{0}">
