@@ -225,6 +225,7 @@ editLineItem:boolean=false;
   karatRateDetails: any = [];
   orders: any[] = [];
   receiptDetailsList: any = [];
+  selectedSchemeIdCollection: any = [];
 
   receiptTotalNetAmt: any;
   balanceAmount: any;
@@ -956,6 +957,7 @@ editLineItem:boolean=false;
     });
 
      this.schemeReceiptForm = this.formBuilder.group({
+      scheme_rec_mode: ['', Validators.required],
       scheme_code: ['', Validators.required],
       scheme_name: ['', Validators.required],
       schemeNo: ['', Validators.required],
@@ -1163,11 +1165,11 @@ editLineItem:boolean=false;
   SchemeMasterFindData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 59,
-    SEARCH_FIELD: "SCHEME_CODE",
+    LOOKUPID: 72,
+    SEARCH_FIELD: "SCH_SCHEME_CODE",
     SEARCH_HEADING: "Scheme Master",
     SEARCH_VALUE: "",
-    WHERECONDITION: "SCHEME_CODE<>''",
+    WHERECONDITION: "SCH_SCHEME_CODE<>''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   };
@@ -2158,13 +2160,13 @@ editLineItem:boolean=false;
     else if (this.selectedTabIndex == 4) {
       return this.giftReceiptForm.invalid;
     } 
-    //SCHEME_UPDATE
-    // else if (this.selectedTabIndex == 5) {
-    //   return this.customerReceiptForm.invalid;
-    // } 
+
+    else if (this.selectedTabIndex == 5) {
+      return this.customerReceiptForm.invalid;
+    } 
     
     else {
-      return this.customerReceiptForm.invalid;
+      return this.schemeReceiptForm.invalid;
     }
   }
   saveReceipt(type?: any) {
@@ -2215,6 +2217,8 @@ editLineItem:boolean=false;
       let PAYMENT_MODE = '';
       let COMMISSION_RATE = 0;
       let IGST_AMOUNT = 0;
+      let SCHEME_ID = '';
+      let SCHEME_CODE= '';
 
       if (this.selectedTabIndex == 0) {
         RECEIPT_MODE = this.cashreceiptForm.value.paymentsCash.toString();
@@ -2329,26 +2333,28 @@ editLineItem:boolean=false;
       }
     
 //SCHEME_UPDATE
-    //   else if (this.selectedTabIndex == 6) {
-    //     RECEIPT_MODE = 'SADV';
-    //     ARECVOCNO = '';
-    //     this.isCCTransaction = false;
+      else if (this.selectedTabIndex == 6) {
+        RECEIPT_MODE = this.schemeReceiptForm.value.scheme_rec_mode.toString();
+        ARECVOCNO = this.schemeReceiptForm.value.schemeNo||"";
+        this.isCCTransaction = false;
 
-    //     AMOUNT_FC = this.comFunc.emptyToZero(this.schemeReceiptForm.value.schemeAmtFC);
-    //     AMOUNT_CC = this.comFunc.FCToCC(
-    //           this.vocDataForm.value.txtCurrency,
-    //           this.comFunc.emptyToZero(this.schemeReceiptForm.value.schemeAmtFC), this.vocDataForm.value.txtCurRate);
+        AMOUNT_FC = this.comFunc.emptyToZero(this.schemeReceiptForm.value.schemeAmtFC);
+        AMOUNT_CC = this.comFunc.FCToCC(
+              this.vocDataForm.value.txtCurrency,
+              this.comFunc.emptyToZero(this.schemeReceiptForm.value.schemeAmtFC), this.vocDataForm.value.txtCurRate);
     
-    //     IGST_PER = 0;
-    //     HSN_CODE = '0';
-    //     GST_CODE = '0';
-    //     IGST_ACCODE = "0";
-    //     IGST_AMOUNTFC = 0;
-    //     IGST_AMOUNTCC = 0;
-    //     CARD_NO = '0';
-    //     PAYMENT_MODE = 'SADV';
-    //     ARECMID = 0;
-    // }
+        IGST_PER = 0;
+        HSN_CODE = '0';
+        GST_CODE = '0';
+        IGST_ACCODE = "0";
+        IGST_AMOUNTFC = 0;
+        IGST_AMOUNTCC = 0;
+        CARD_NO = '0';
+        PAYMENT_MODE = 'SADV';
+        ARECMID = 0;
+        SCHEME_ID=this.schemeReceiptForm.value.scheme_name;
+        SCHEME_CODE=this.schemeReceiptForm.value.scheme_code;
+    }
 
       this.receiptDetailsList?.forEach((e: any, i: any) => {
         e.SRNO = i + 1;
@@ -2447,6 +2453,8 @@ editLineItem:boolean=false;
 
         // new fields added 27-12-2023
         "NEWUNIQUEID": 0,
+        "SCHEME_CODE":SCHEME_CODE,
+        "SCHEME_ID":SCHEME_ID
 
       };
 
@@ -2470,7 +2478,11 @@ editLineItem:boolean=false;
         this.receiptEditId = '';
       }
 
+      console.log(this.receiptDetailsList)
 
+      this.selectedSchemeIdCollection= this.receiptDetailsList
+      .map((detail:any) => detail.SCHEME_ID)
+      .filter((schemeId:any) => schemeId !== "");
       // this.sumReceiptItem();
       this.sumTotalValues();
 
@@ -2534,7 +2546,6 @@ editLineItem:boolean=false;
         const removedRecord = this.receiptDetailsList[index];
         const arecVocNo = removedRecord.ARECVOCNO;
   
-        // Remove ARECVOCNO from the advanceRecieptVoucherNumberList
         const vocNoIndex = this.advanceRecieptVoucherNumberList.indexOf(arecVocNo);
         if (vocNoIndex > -1) {
           this.advanceRecieptVoucherNumberList.splice(vocNoIndex, 1);
@@ -2544,6 +2555,13 @@ editLineItem:boolean=false;
         this.receiptDetailsList?.forEach((e: any, i: any) => {
           e.SRNO = i + 1;
         });
+
+        const schemeIdToRemove = removedRecord.SCHEME_ID;
+        const schemeIdIndex = this.selectedSchemeIdCollection.indexOf(schemeIdToRemove);
+        if (schemeIdIndex > -1) {
+          this.selectedSchemeIdCollection.splice(schemeIdIndex, 1);
+        }
+
         this.sumTotalValues();
       }
     });
@@ -4397,18 +4415,18 @@ editLineItem:boolean=false;
 
       recModeAdvance = _resp.filter(function (value: any) {
         return (
-          value.MODE == 3 &&
+          value.MODE == 2 &&
           (value.CC_BRANCHCODE == '' || value.CC_BRANCHCODE == userBranch)
         );
       });
 
 //SCHEME_UPDATE
-      // recModeSchemeAdvance = _resp.filter(function (value: any) {
-      //   return (
-      //     value.MODE == 3 &&
-      //     (value.CC_BRANCHCODE == '' || value.CC_BRANCHCODE == userBranch)
-      //   );
-      // });
+      recModeSchemeAdvance = _resp.filter(function (value: any) {
+        return (
+          value.MODE == 3 &&
+          (value.CC_BRANCHCODE == '' || value.CC_BRANCHCODE == userBranch)
+        );
+      });
       recModeGift = _resp.filter(function (value: any) {
         return (
           value.MODE == 4 &&
@@ -4448,9 +4466,9 @@ editLineItem:boolean=false;
       this.recModeAdvanceData = recModeAdvance.map((t: any) => t.CREDIT_CODE);
       this.advanceReceiptForm.controls.paymentsAdvance.setValue(this.recModeAdvanceData[0]);
 //SCHME_UPDATED
-      // this.schemeReceiptForm.controls.paymentsAdvance.setValue(
-      //   recModeSchemeAdvance.map((t: any) => t.CREDIT_CODE)[0]
-      // );
+      this.schemeReceiptForm.controls.scheme_rec_mode.setValue(
+        recModeSchemeAdvance.map((t: any) => t.CREDIT_CODE)[0]
+      );
       
 
       this.receiptModeAdvanceOthers =
@@ -8497,6 +8515,7 @@ editLineItem:boolean=false;
         retailSales: this.retailSalesDataPost,
 
         "additionalInfo": {
+        "strSchemeRedeem":this.selectedSchemeIdCollection.join(","),
           "giftInfo": [
             {
               "GIFT_TYPE": this.giftReceiptForm.value.paymentsCreditGIftVoc || '',
@@ -12193,7 +12212,7 @@ printReceiptDetailsWeb() {
       this.selectedTabIndex = 3;
     }
     else if (modeIndex == 3) {
-      this.selectedTabIndex = 2;
+      this.selectedTabIndex = 6;
     }
     else if (modeIndex == 4) {
       this.selectedTabIndex = 4;
@@ -12443,29 +12462,36 @@ printReceiptDetailsWeb() {
     }
 //SCHME_UPDATED
 
-    // if (this.receiptModesList?.['BTN_SCHEME'] == true && this.selectedTabIndex == 6) {
-    //   this.schemeReceiptForm.controls.scheme_code.setValue(
-    //     '');
+    if (this.receiptModesList?.['BTN_SCHEME'] == true && this.selectedTabIndex == 6) {
+      
+      this.schemeReceiptForm.controls.scheme_code.setValue(
+        '');
         
-    //     this.schemeReceiptForm.controls.scheme_name.setValue(
-    //      '');
+        this.schemeReceiptForm.controls.scheme_name.setValue(
+         '');
+
+         this.schemeReceiptForm.controls.schemeNo.setValue(
+          '');
+          
+          this.schemeReceiptForm.controls.schemeAmtFC.setValue(
+           '');
      
 
-    //   if (data != null && data != undefined) {
+      if (data != null && data != undefined) {
 
-    //     this.schemeReceiptForm.controls.paymentsCreditGIftVoc.setValue(
-    //      data?.RECEIPT_MODE);
+        this.schemeReceiptForm.controls.scheme_code.setValue(
+         data?.SCHEME_CODE); 
 
-    //     this.schemeReceiptForm.controls.giftBranch.setValue(
-    //       data['REC_BRANCHCODE']);
+         this.schemeReceiptForm.controls.scheme_name.setValue(
+          data?.SCHEME_ID); 
 
-    //     this.schemeReceiptForm.controls.giftVocNo.setValue(
-    //       data['ARECVOCNO']);
+        this.schemeReceiptForm.controls.schemeNo.setValue(
+          data['ARECVOCNO']);
 
-    //     this.schemeReceiptForm.controls.giftAmtFC.setValue(
-    //       this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(data['AMOUNT_FC']).toString()));
-    //   }
-    // }
+        this.schemeReceiptForm.controls.schemeAmtFC.setValue(
+          this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(data['AMOUNT_FC']).toString()));
+      }
+    }
 
 
     this.setReceiptItemCommaSeparation();
@@ -13710,12 +13736,18 @@ changeGiftVoucherAmount(data:any){
   schemeCodeSelected(e: any) {
     console.log(e);
 
-    this.schemeReceiptForm.controls.scheme_code.setValue(e.SCHEME_CODE);
-    this.schemeReceiptForm.controls.scheme_name.setValue(e.SCHEME_NAME);
+    if (this.selectedSchemeIdCollection.includes(e.SCH_CUSTOMER_ID)) {
+      this.snackBar.open('Scheme ID already exists', 'Close', { duration: 3000 });
+      this.resetSchemeFormControls();
+      return; 
+  }
+
+    this.schemeReceiptForm.controls.scheme_code.setValue(e.SCH_SCHEME_CODE );
+    this.schemeReceiptForm.controls.scheme_name.setValue(e.SCH_CUSTOMER_ID);
 
     let postData = {
-      "SCHEMECODE": e.SCHEME_CODE,
-      "POSCUSTCODE": 'BD0003',
+      "SCHEMECODE": e.SCH_SCHEME_CODE,
+      "POSCUSTCODE": this.customerDetails?.CODE,
       "BRANCH":this.comFunc.nullToString(this.strBranchcode),
       "VOCDATE":  this.convertDateWithTimeZero(
         new Date(this.vocDataForm.value.vocdate).toISOString()
@@ -13726,12 +13758,27 @@ changeGiftVoucherAmount(data:any){
     this.suntechApi.postDynamicAPI(`RetailSalesDataInDotnet/SchemeCodeValidation`, postData)
       .subscribe((result: any) => {
         console.log(result);
-        this.schemeList=result.response;
-        this.schemeReceiptForm.controls.schemeNo.setValue(this.schemeList[0].ARECVOCNO);
-        this.schemeReceiptForm.controls.schemeAmtFC.setValue(this.schemeList[0].AMOUNT_FC);
+        if(result.status=='Success'){
+          this.schemeList=result.response;
+          this.schemeReceiptForm.controls.schemeNo.setValue(this.schemeList[0].ARECVOCNO);
+          this.schemeReceiptForm.controls.schemeAmtFC.setValue(this.schemeList[0].AMOUNT_FC);
+        }
+        else{
+          this.snackBar.open(result.message);
+          this.resetSchemeFormControls();
+
+        }
+        
    
       });
   }
+
+  resetSchemeFormControls() {
+    this.schemeReceiptForm.controls.scheme_name.reset();
+    this.schemeReceiptForm.controls.scheme_code.reset();
+    this.schemeReceiptForm.controls.schemeNo.reset();
+    this.schemeReceiptForm.controls.schemeAmtFC.reset();
+}
 
   calculateNextSRNO(): number {
     const srnos = this.currentLineItems.map((item:any) => item.SRNO);
