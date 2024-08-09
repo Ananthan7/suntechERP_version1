@@ -1850,7 +1850,7 @@
       </mat-tab>
 
       
-      <!-- <mat-tab label="CURR SCH RED" [disabled]="!this.receiptModesList?.BTN_SCHEME || viewOnly">
+      <mat-tab label="CURR SCH RED" [disabled]="!this.receiptModesList?.BTN_SCHEME || viewOnly">
         <form [formGroup]="schemeReceiptForm" novalidate>
           <div class="col-md-12" style="margin-top: 20px; margin-bottom: 20px">
             <div class="form-group row">
@@ -1866,7 +1866,7 @@
             
               <div class="col-md-6">
                 <mat-form-field style="width: 100%;">
-                  <mat-label>Scheme Name</mat-label>
+                  <mat-label>Scheme ID  </mat-label>
                   <input
                     type="text"
                     class="st_txt_right"
@@ -1915,7 +1915,7 @@
         </div>
         
         </form>
-      </mat-tab> -->
+      </mat-tab>
       
     </mat-tab-group>
 
@@ -3071,13 +3071,13 @@
                         (change)="changeStoneAmt($event)" [readonly]="!isStoneIncluded" />
                     </mat-form-field>
                   </div>
-                  <div class="col-md-4">
+                  <!-- <div class="col-md-4">
                     <mat-form-field>
                       <mat-label>Rate Type</mat-label>
                       <input type="text" matInput formControlName="fcn_ad_rate_type" id="fcn_ad_rate_type"
                         [readonly]="viewOnly" />
                     </mat-form-field>
-                  </div>
+                  </div> -->
                 </div>
 
                 <div class="form-group row">
