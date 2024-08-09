@@ -2895,3 +2895,6 @@ onFileChangedimage(event: any) {
   //   }
   // }
 }
+
+
+ 

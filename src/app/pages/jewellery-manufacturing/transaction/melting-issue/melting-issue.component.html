@@ -8,7 +8,7 @@
 <!-- modal header component -->
 <modal-header (saveClick)="formSubmit()" [isloading]="isloading"
     [isViewAuditTrail]="true" [disableAuditTrail]="!isSaved"
-    (cancelClick)="close()" (deleteClick)="deleteRecord()" 
+    (cancelClick)="close()" (deleteClick)="deleteRecord()"
     [isViewSave]="!viewMode" [isViewDelete]="editMode"
     [isViewPost]="true"></modal-header>
 <div class="row">
@@ -100,7 +100,7 @@
                                 </mat-form-field>
                                 <master-search class="masterSearch"
                                     [MasterSearchData]="jobnoCodeData"
-                                    *ngIf="!viewMode" #overlayjobNoSearch
+                                    *ngIf="isJobNumberSearchVisible && !viewMode" #overlayjobNoSearch
                                     (newRowClick)="jobnoCodeSelected($event)"></master-search>
                             </div>
                             <div class="col-md-4">
@@ -110,6 +110,7 @@
                                         readonly />
                                 </mat-form-field>
                             </div>
+                       
                         </div>
                         <div class="row">
                             <label for="inputPassword"
@@ -274,7 +275,7 @@
                                         dataField="STOCK_CODE"
                                         caption="Stock Code"
                                         alignment="left"></dxi-column>
-                                        <dxi-column [width]="100"
+                                    <dxi-column [width]="100"
                                         dataField="STOCK_DESCRIPTION"
                                         caption="Stock Description"
                                         alignment="left"></dxi-column>
@@ -295,8 +296,8 @@
                                         alignment="right"></dxi-column>
                                     <dxi-column [width]="100"
                                         dataField="GROSS_WT"
-                                        caption="Gross Weight" alignment="right"
-                                        MetalDecimalInput></dxi-column>
+                                        caption="Gross Weight" alignment="right" 
+                                        MetalDecimalInput ></dxi-column>
                                     <dxi-column [width]="100" dataField="PURITY"
                                         caption="Purity" alignment="right"
                                         PurityDecimal></dxi-column>
@@ -321,7 +322,7 @@
                                             [valueFormat]="gridAmountDecimalFormat"
                                             displayFormat="{0}">
                                         </dxi-total-item>
-                                        <dxi-total-item column="Pure Weight"
+                                        <dxi-total-item column="PUREWT"
                                             summaryType="sum"
                                             [valueFormat]="gridAmountDecimalFormat"
                                             displayFormat="{0}">
@@ -431,9 +432,10 @@
                                                     class="col-sm-3 col-form-label">Required
                                                     Alloy Qty:</label>
                                                 <div class="col-md-6">
-                                                    <mat-form-field appearance="outline"
-                                                        style="width: 70%; margin-left: -225px;" >
-                                                        <input type="text"  
+                                                    <mat-form-field
+                                                        appearance="outline"
+                                                        style="width: 70%; margin-left: -225px;">
+                                                        <input type="text"
                                                             class="text-right"
                                                             matInput [max]="10"
                                                             formControlName="alloyQty"

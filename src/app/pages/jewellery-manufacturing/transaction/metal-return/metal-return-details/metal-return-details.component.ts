@@ -624,6 +624,8 @@ export class MetalReturnDetailsComponent implements OnInit {
           if (data[0] && data[0].UNQ_JOB_ID != '') {
             this.overlayjobNumberSearch.closeOverlayPanel()
             this.jobNumberDetailData = data
+            
+            this.metalReturnDetailsForm.controls.jobDes.setValue(data[0].DESCRIPTION)
             this.metalReturnDetailsForm.controls.subJobNo.setValue(data[0].UNQ_JOB_ID)
             this.metalReturnDetailsForm.controls.PART_CODE.setValue(data[0].PART_CODE)
             this.metalReturnDetailsForm.controls.KARAT_CODE.setValue(data[0].KARAT_CODE)

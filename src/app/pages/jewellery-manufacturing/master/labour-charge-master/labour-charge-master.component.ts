@@ -1603,3 +1603,5 @@ export class LabourChargeMasterComponent implements OnInit {
   // }
 
 }
+
+

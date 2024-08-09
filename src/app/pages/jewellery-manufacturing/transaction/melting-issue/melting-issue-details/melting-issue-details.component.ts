@@ -207,6 +207,7 @@ export class MeltingIssueDetailsComponent implements OnInit {
     this.setValueWithDecimal('topurity', this.content.PURE_WT, 'THREE')
     this.setValueWithDecimal('grossweight', this.content.GROSS_WT, 'METAL')
     this.setValueWithDecimal('purity', this.content.PURITY, 'PURITY')
+    this.setValueWithDecimal('pureweight', this.content.PURITY, 'METAL')
     this.setValueWithDecimal('netweight', this.content.NET_WT, 'METAL')
     this.setValueWithDecimal('waxweight', this.content.WAX_WT, 'THREE')
     this.setValueWithDecimal('stoneweight', this.content.STONE_WT, 'STONE')
@@ -597,6 +598,7 @@ export class MeltingIssueDetailsComponent implements OnInit {
           this.meltingIssuedetailsFrom.controls.mainstock.setValue(data[0].MAIN_STOCK_CODE)
           this.setValueWithDecimal('topurity', data[0].PURE_WT, 'THREE') // this is mistake
           this.setValueWithDecimal('grossweight', data[0].METAL, 'METAL')
+          this.setValueWithDecimal('pureweight', data[0].METAL, 'METAL')
           this.setValueWithDecimal('purity', data[0].PURITY, 'PURITY')
           this.setValueWithDecimal('waxweight', data[0].KARAT, 'THREE')
           this.setValueWithDecimal('StoneWeight', data[0].STONE, 'STONE')

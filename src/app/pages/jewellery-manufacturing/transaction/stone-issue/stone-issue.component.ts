@@ -1,3 +1,9 @@
+/*
+MODULE : JEWELLERY MANUFACTURING
+MENU_SCREEN_NAME : <ADD MENU NAME>
+DEVELOPER : ANANTHA
+*/
+
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -394,7 +400,7 @@ export class StoneIssueComponent implements OnInit {
     }
     if (DATA.FLAG == 'SAVE') this.closeDetailScreen();
     if (DATA.FLAG == 'CONTINUE') {
-      this.comService.showSnackBarMsg('Details added successfully')
+      this.comService.showSnackBarMsg('Details added successfully')//CHINNU -  MESSAGE HARD CODED
     };
   }
   closeDetailScreen() {
