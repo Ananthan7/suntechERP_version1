@@ -2,7 +2,7 @@
     <div>
         <!-- header section starts -->
         <div class="border-bottom d-flex justify-content-between ps-2 pe-2">
-            <h5>Diamond Sales Order</h5>
+            <h5 id="ID001">Diamond Sales Order</h5>
             <button type="button" class="btn btn-close close-btn"
                 (click)="close()">
                 <i class="feather icon-x close-icon"></i>
@@ -23,26 +23,27 @@
                         <div class="row">
                             <div class="col-sm-12 col-md-4 col-lg-4">
                                 <div class="row">
-                                    <label class="col-sm-4 col-form-label">
+                                    <label class="col-sm-4 col-form-label" id="ID002">
                                         Voucher Type*</label>
-                                    <span class="col-sm-8">
-                                        <mat-form-field style="width: 20%">
+                                    <span class="col-sm-8 mt-2">
+                                        <mat-form-field style="width: 35%;" class="mx-1" appearance="outline">
                                             <input type="text" matInput readonly
                                                 formControlName="voucherType" />
                                         </mat-form-field>
-                                        <mat-form-field
-                                            style="width: 40%; margin-left: 7px;">
+                                        <mat-form-field appearance="outline"
+                                            style="width: 49%;">
                                             <input type="number" readonly
                                                 matInput class="text-right"
                                                 formControlName="voucherNo" />
                                         </mat-form-field>
                                     </span>
                                 </div>
+
                                 <div class="row">
-                                    <label class="col-sm-4 col-form-label">
+                                    <label class="col-sm-4 col-form-label" id="ID003">
                                         Voucher Date*</label>
-                                    <span class="col-sm-8">
-                                        <mat-form-field style="width: 150px">
+                                    <span class="col-sm-8 mt-1">
+                                        <mat-form-field style="width: min-content;" appearance="outline">
                                             <!-- <mat-label>Date Of Birth</mat-label> -->
                                             <input matInput DateValidation
                                                 (dateChange)="formatDate($event)"
@@ -56,81 +57,85 @@
                                         </mat-form-field>
                                     </span>
                                 </div>
+                                
                                 <div class="row">
-                                    <label class="col-sm-4 col-form-label">Order
-                                        Type*</label>
-                                    <span class="col-sm-8">
-                                        <mat-form-field style="width: 150px">
+                                    <label class="col-sm-4 col-form-label" id="ID004">Order Type*</label>
+                                    <span class="col-sm-7 mt-1">
+                                        <mat-form-field style="width: -webkit-fill-available;" appearance="outline">
                                             <input type="text" matInput readonly
                                                 (change)="OrderTypeChange($event)"
                                                 (keydown)="lookupKeyPress($event,'orderType')"
                                                 formControlName="orderType"
                                                 (focusout)="validateLookupField($event,OrderTypeData,'orderType')" />
+                                                <master-search class="masterSearch"
+                                                    [MasterSearchData]="OrderTypeData"
+                                                    #overlayorderType
+                                                    (newRowClick)="OrderTypeSelected($event)">
+                                                </master-search>
                                         </mat-form-field>
-                                        <master-search
-                                            [MasterSearchData]="OrderTypeData"
-                                            #overlayorderType
-                                            (newRowClick)="OrderTypeSelected($event)">
-                                        </master-search>
                                     </span>
                                 </div>
+
                                 <div class="row">
-                                    <label class="col-sm-4 col-form-label">
+                                    <label class="col-sm-4 col-form-label" id="ID005">
                                         Party Code*</label>
-                                    <span class="col-sm-8">
-                                        <mat-form-field style="width: 150px">
+                                    <span class="col-sm-7 mt-1">
+                                        <mat-form-field style="width: -webkit-fill-available;" appearance="outline">
                                             <input type="text" matInput readonly
                                                 (change)="PartyCodeChange($event)"
                                                 (keydown)="lookupKeyPress($event,'PartyCode')"
                                                 formControlName="PartyCode"
                                                 (focusout)="validateLookupField($event,PartyCodeData,'PartyCode')" />
+                                                <master-search class="masterSearch"
+                                                    [MasterSearchData]="PartyCodeData"
+                                                    #overlayPartyCode
+                                                    (newRowClick)="PartyCodeSelected($event)">
+                                                </master-search>
                                         </mat-form-field>
-                                        <master-search
-                                            [MasterSearchData]="PartyCodeData"
-                                            #overlayPartyCode
-                                            (newRowClick)="PartyCodeSelected($event)">
-                                        </master-search>
                                     </span>
                                 </div>
+
                                 <div class="row">
-                                    <label class="col-sm-4 col-form-label">
+                                    <label class="col-sm-4 col-form-label" id="ID006">
                                         Salesman</label>
-                                    <span class="col-sm-8">
-                                        <mat-form-field style="width: 150px">
+                                    <span class="col-sm-7 mt-1">
+                                        <mat-form-field style="width: -webkit-fill-available;" appearance="outline">
                                             <input type="text" matInput
                                                 (change)="SalesmanChange($event)"
                                                 readonly
                                                 formControlName="SalesmanCode"
                                                 (keydown)="lookupKeyPress($event,'SalesmanCode')"
                                                 (focusout)="validateLookupField($event,SalesmanData,'SalesmanCode')" />
+                                                <master-search class="masterSearch"
+                                                    [MasterSearchData]="SalesmanData"
+                                                    #overlaySalesmanCode
+                                                    (newRowClick)="SalesmanSelected($event)">
+                                                </master-search>
                                         </mat-form-field>
-                                        <master-search
-                                            [MasterSearchData]="SalesmanData"
-                                            #overlaySalesmanCode
-                                            (newRowClick)="SalesmanSelected($event)">
-                                        </master-search>
                                     </span>
                                 </div>
+
                                 <div class="row" *ngIf="false">
-                                    <label class="col-sm-4 col-form-label">
+                                    <label class="col-sm-4 col-form-label" id="ID007">
                                         Prosp Origin</label>
-                                    <span class="col-sm-8">
-                                        <mat-form-field style="width: 150px">
+                                    <span class="col-sm-7 mt-1">
+                                        <mat-form-field style="width: -webkit-fill-available;" appearance="outline">
                                             <input type="text" matInput
                                                 (change)="SalesmanChange($event)"
                                                 readonly
                                                 formControlName="Salesman"
                                                 (keydown)="lookupKeyPress($event,'Salesman')"
                                                 (focusout)="validateLookupField($event,OrderTypeData,'Salesman')" />
+                                                <master-search class="masterSearch"
+                                                    [MasterSearchData]="OrderTypeData"
+                                                    #overlaySalesman
+                                                    (newRowClick)="SalesmanSelected($event)">
+                                                </master-search>
                                         </mat-form-field>
-                                        <master-search
-                                            [MasterSearchData]="OrderTypeData"
-                                            #overlaySalesman
-                                            (newRowClick)="SalesmanSelected($event)">
-                                        </master-search>
                                     </span>
                                 </div>
                             </div>
+
                             <div class="col-sm-12 col-md-4 col-lg-4">
                                 <div class="row">
                                     <section class="col-sm-4 example-section">
@@ -140,112 +145,112 @@
                                             class="col-sm-4">
                                             <label
                                                 style="font-size: 0.9em;padding-top: 8px;">
-                                                <b>Fixed Metal</b></label>
+                                                <b id="ID008">Fixed Metal</b></label>
                                         </mat-checkbox>
                                     </section>
-                                    <span class="col-sm-8">
-                                        <mat-form-field style="width: 20%">
+                                    <span class="col-sm-8 mt-1">
+                                        <mat-form-field style="width: 30%" appearance="outline" class="mx-1">
                                             <input type="text" matInput readonly
                                                 formControlName="rateType" />
                                         </mat-form-field>
-                                        <mat-form-field
-                                            style="width: 40%; margin-left: 7px;">
+                                        <mat-form-field appearance="outline"
+                                            style="width: 50%;">
                                             <input type="text" matInput
                                                 SixDecimalInput
                                                 class="text-right"
                                                 formControlName="wholeSaleRate"
                                                 (keydown)="lookupKeyPress($event,'wholeSaleRate')"
                                                 (focusout)="validateLookupField($event,rateTypeMasterData,'wholeSaleRate')" />
+                                                <master-search class="masterSearch"
+                                                    [MasterSearchData]="rateTypeMasterData"
+                                                    #overlaywholeSaleRate
+                                                    (newRowClick)="rateTypeSelected($event)">
+                                                </master-search>
                                         </mat-form-field>
-                                        <master-search
-                                            [MasterSearchData]="rateTypeMasterData"
-                                            #overlaywholeSaleRate
-                                            (newRowClick)="rateTypeSelected($event)">
-                                        </master-search>
                                     </span>
                                 </div>
+
                                 <div class="row">
-                                    <label class="col-sm-4 col-form-label">
+                                    <label class="col-sm-4 col-form-label" id="ID009">
                                         Party Currency*</label>
-                                    <span class="col-sm-8">
-                                        <mat-form-field style="width: 20%">
+                                    <span class="col-sm-8 mt-2">
+                                        <mat-form-field style="width: 30%" appearance="outline" class="mx-1">
                                             <input type="text" matInput readonly
                                                 formControlName="partyCurrencyType" />
                                         </mat-form-field>
-                                        <mat-form-field
-                                            style="width: 40%; margin-left: 7px;">
+                                        <mat-form-field appearance="outline"
+                                            style="width: 50%;">
                                             <input type="text" matInput readonly
                                                 class="text-right"
                                                 SixDecimalInput
                                                 (keydown)="lookupKeyPress($event,'partyCurrencyRate')"
                                                 (focusout)="partyCurrencyChange($event)"
                                                 formControlName="partyCurrencyRate" />
+                                                <master-search class="masterSearch"
+                                                    [MasterSearchData]="currencyMasterData"
+                                                    (newRowClick)="partyCurrencySelected($event)">
+                                                </master-search>
                                         </mat-form-field>
-                                        <master-search
-                                            [MasterSearchData]="currencyMasterData"
-                                            (newRowClick)="partyCurrencySelected($event)">
-                                        </master-search>
                                     </span>
                                 </div>
+
                                 <div class="row">
-                                    <label class="col-sm-4 col-form-label">
+                                    <label class="col-sm-4 col-form-label" id="ID010">
                                         Item Currency*</label>
-                                    <span class="col-sm-8">
-                                        <mat-form-field style="width: 20%">
+                                    <span class="col-sm-8 mt-2">
+                                        <mat-form-field style="width: 30%" appearance="outline" class="mx-1">
                                             <input type="text" matInput readonly
                                                 formControlName="ItemCurrency" />
                                         </mat-form-field>
-                                        <mat-form-field
-                                            style="width: 40%; margin-left: 7px;">
+                                        <mat-form-field appearance="outline"
+                                            style="width: 50%;">
                                             <input type="number" matInput
                                                 SixDecimalInput
                                                 (keydown)="lookupKeyPress($event,'ItemCurrencyRate')"
                                                 class="text-right"
                                                 formControlName="ItemCurrencyRate" />
+                                                <master-search class="masterSearch"
+                                                    [MasterSearchData]="currencyMasterData"
+                                                    (newRowClick)="itemCurrencySelected($event)">
+                                                </master-search>
                                         </mat-form-field>
-                                        <master-search
-                                            [MasterSearchData]="currencyMasterData"
-                                            (newRowClick)="itemCurrencySelected($event)">
-                                        </master-search>
                                     </span>
                                 </div>
+
                                 <div class="row">
-                                    <label class="col-sm-4 col-form-label">
+                                    <label class="col-sm-4 col-form-label" id="ID011">
                                         Delivery Type</label>
-                                    <span class="col-sm-8">
-                                        <mat-form-field style="width: 20%">
-                                            <input type="text" matInput
-                                                maxlength="6"
-                                                formControlName="DeliveryType"
-                                                NumberOnly />
+                                    <span class="col-sm-8 mt-2">
+                                        <mat-form-field style="width: 30%" appearance="outline" class="mx-1">
+                                            <input type="text" matInp maxlength="6"
+                                                formControlName="DeliveryType" NumberOnly />
                                         </mat-form-field>
-                                        <mat-form-field
-                                            style="width: 40%; margin-left: 7px;">
+                                        <mat-form-field appearance="outline"
+                                            style="width: 50%;">
                                             <input type="text" matInput
                                                 formControlName="DeliveryTypeDesc"
                                                 (keydown)="lookupKeyPress($event,'DeliveryTypeDesc')"
                                                 NumberOnly
                                                 (focusout)="validateLookupField($event,deliveryTypeMaster,'DeliveryTypeDesc')" />
+                                                <master-search class="masterSearch"
+                                                    [MasterSearchData]="deliveryTypeMaster"
+                                                    #overlayDeliveryTypeDesc
+                                                    (newRowClick)="deliveryTypeSelected($event)">
+                                                </master-search>
                                         </mat-form-field>
-                                        <master-search
-                                            [MasterSearchData]="deliveryTypeMaster"
-                                            #overlayDeliveryTypeDesc
-                                            (newRowClick)="deliveryTypeSelected($event)">
-                                        </master-search>
                                     </span>
                                 </div>
+
                                 <div class="row">
-                                    <label class="col-sm-4 col-form-label">
+                                    <label class="col-sm-4 col-form-label" id="ID012">
                                         Delivery On</label>
                                     <span class="col-sm-8">
-                                        <mat-form-field style="width: 20%">
-                                            <input type="text" matInput
-                                                maxlength="6" NumberOnly
-                                                (focusout)="addDays()"
-                                                formControlName="DeliveryOnDateType" />
+                                        <mat-form-field style="width: 30%" appearance="outline" class="mx-1">
+                                            <input type="text" matInput maxlength="6" NumberOnly
+                                                (focusout)="addDays()" formControlName="DeliveryOnDateType" />
                                         </mat-form-field>
-                                        <mat-form-field
-                                            style="width: 40%;margin-left: 7px;">
+                                        <mat-form-field appearance="outline"
+                                            style="width: 50%;">
                                             <input matInput DateValidation
                                                 [matDatepicker]="DeliveryOn"
                                                 formControlName="DeliveryOnDate"
@@ -258,11 +263,12 @@
                                         </mat-form-field>
                                     </span>
                                 </div>
+                                
                                 <div class="row" *ngIf="false">
-                                    <label class="col-sm-4 col-form-label">
+                                    <label class="col-sm-4 col-form-label" id="ID013">
                                         AMC %</label>
                                     <span class="col-sm-8">
-                                        <mat-form-field style="width: 20%">
+                                        <mat-form-field style="width: 20%" appearance="outline">
                                             <input type="text" matInput
                                                 maxlength="6"
                                                 formControlName="AMCPercentage" />
@@ -270,10 +276,10 @@
                                     </span>
                                 </div>
                                 <div class="row" *ngIf="false">
-                                    <label class="col-sm-4 col-form-label">
+                                    <label class="col-sm-4 col-form-label" id="ID014">
                                         AMC Start Date</label>
                                     <span class="col-sm-8">
-                                        <mat-form-field style="width: 20%">
+                                        <mat-form-field style="width: 20%" appearance="outline">
                                             <input type="text" matInput
                                                 maxlength="6"
                                                 formControlName="AMCSTARTDATE" />
@@ -289,7 +295,7 @@
                                             <mat-tab-group>
                                                 <mat-tab label="Bill To">
                                                     <div class="col-11">
-                                                        <mat-form-field
+                                                        <mat-form-field appearance="outline"
                                                             style="width: 100%; margin-left: 7px;">
                                                             <input type="text"
                                                                 matInput
@@ -305,12 +311,12 @@
                                                 <mat-tab label="U D F">
                                                     <div class="col-11">
                                                         <div class="row">
-                                                            <label
+                                                            <label id=""
                                                                 class="col-sm-4 col-form-label">
                                                                 Proposal</label>
                                                             <span
                                                                 class="col-sm-7">
-                                                                <mat-form-field>
+                                                                <mat-form-field appearance="outline">
                                                                     <input
                                                                         type="text"
                                                                         matInput
@@ -319,12 +325,12 @@
                                                             </span>
                                                         </div>
                                                         <div class="row">
-                                                            <label
+                                                            <label id="ID016"
                                                                 class="col-sm-4 col-form-label">
-                                                                BussinessType</label>
+                                                                Business Type</label>
                                                             <span
                                                                 class="col-sm-7">
-                                                                <mat-form-field>
+                                                                <mat-form-field appearance="outline">
                                                                     <input
                                                                         type="text"
                                                                         matInput
@@ -333,12 +339,12 @@
                                                             </span>
                                                         </div>
                                                         <div class="row">
-                                                            <label
+                                                            <label id="ID017"
                                                                 class="col-sm-4 col-form-label">
                                                                 Language</label>
                                                             <span
                                                                 class="col-sm-7">
-                                                                <mat-form-field>
+                                                                <mat-form-field appearance="outline">
                                                                     <input
                                                                         type="text"
                                                                         matInput
@@ -347,13 +353,12 @@
                                                             </span>
                                                         </div>
                                                         <div class="row">
-                                                            <label
+                                                            <label id="ID018"
                                                                 class="col-sm-4 col-form-label">
-                                                                Referred
-                                                                By</label>
+                                                                Referred By</label>
                                                             <span
                                                                 class="col-sm-7">
-                                                                <mat-form-field>
+                                                                <mat-form-field appearance="outline">
                                                                     <input
                                                                         type="text"
                                                                         matInput
@@ -366,7 +371,7 @@
                                                 <mat-tab
                                                     label="Terms & Condition">
                                                     <div class="row">
-                                                        <label
+                                                        <label id="ID019"
                                                             class="col-sm-4 col-form-label">
                                                             Notes</label>
                                                         <span
@@ -378,13 +383,12 @@
                                                         </span>
                                                     </div>
                                                     <div class="row">
-                                                        <label
+                                                        <label id="ID020"
                                                             class="col-sm-4 col-form-label">
-                                                            Payment
-                                                            Terms</label>
+                                                            Payment Terms</label>
                                                         <span
                                                             class="col-sm-7 p-1">
-                                                            <mat-form-field>
+                                                            <mat-form-field appearance="outline">
                                                                 <input
                                                                     type="text"
                                                                     matInput
@@ -396,11 +400,9 @@
                                                 <mat-tab label="Ship To">
                                                     <div class="col-11">
                                                         <div class="row p-1">
-                                                            <mat-form-field
+                                                            <mat-form-field appearance="outline"
                                                                 style="width: 100%; margin-left: 7px;">
-                                                                <input
-                                                                    type="text"
-                                                                    matInput
+                                                                <input type="text" matInput
                                                                     formControlName="ShipTo" />
                                                             </mat-form-field>
                                                         </div>
@@ -410,8 +412,7 @@
                                                         </textarea>
                                                     </div>
                                                 </mat-tab>
-                                                <mat-tab label="Status">
-                                                </mat-tab>
+                                                <mat-tab label="Status"></mat-tab>
                                             </mat-tab-group>
                                         </mat-card-content>
                                     </mat-card>
@@ -727,9 +728,9 @@
                 <div class="col-md-11 top">
                     <div class="d-flex flex-coloumn">
                         <div class="col-md-4">
-                            <label class="col-form-label rem">
+                            <label class="col-form-label rem" id="ID021">
                                 Narration</label>
-                            <mat-form-field class="col-sm-6">
+                            <mat-form-field class="col-sm-6" appearance="outline">
                                 <input type="text" matInput name="narration"
                                     ([ngModel])="Narration" />
                             </mat-form-field>
@@ -738,31 +739,31 @@
                             <div>
                                 <button type="button" mat-flat-button
                                     (click)="addNewDetail()">
-                                    <span>Price Recalc</span>
+                                    <span id="ID022">Price Recalc</span>
                                 </button>
                             </div>
                             <div class="ps-1">
                                 <button type="button" mat-flat-button>
-                                    <span>Quot</span>
+                                    <span id="ID023">Quot</span>
                                 </button>
                             </div>
                             <div class="ps-1">
                                 <button type="button" mat-flat-button>
-                                    <span>MRQ Print</span>
+                                    <span id="ID024">MRQ Print</span>
                                 </button>
                             </div>
                             <div class="ps-1">
                                 <button type="button" mat-flat-button>
-                                    <span>Sticker Print</span>
+                                    <span id="ID025">Sticker Print</span>
                                 </button>
                             </div>
                             <div class="ps-1">
                                 <button type="button" mat-flat-button>
-                                    <span>Export</span>
+                                    <span id="ID026">Export</span>
                                 </button>
                             </div>
                             <div class="ps-1">
-                                <div class="d-flex">
+                                <div class="d-flex" id="ID027">
                                     <input type="radio" /> Summary
                                 </div>
                             </div>
@@ -773,8 +774,7 @@
             <mat-tab label="Labour Details">
                 <div class="row">
                     <div class="col-md-3">
-                        <h6 class="let">Divisions for GrossWeight
-                            Calculations</h6>
+                        <h6 class="let" id="ID028">Divisions for GrossWeight Calculations</h6>
                         <div class="pt-2">
                             <!-- Divisions grid -->
                             <dx-data-grid id="gridContainer"
@@ -814,24 +814,24 @@
                     </div>
                     <div class="col-md-9">
                         <div class="d-flex">
-                            <h6 class="lets pt-3">Labour Calculate on
+                            <h6 class="lets pt-3" id="ID029">Labour Calculate on
                             </h6>
                             <div class="chbox pt-3">
                                 <mat-radio-group aria-label="Select an option">
                                     <mat-radio-button [(ngModel)]="grossChecked"
-                                        value="1" style="font-size: 13px;">
+                                        value="1" style="font-size: 13px;" id="ID030">
                                         Gross Weight</mat-radio-button>
                                     &nbsp;
                                     <mat-radio-button [(ngModel)]="NetWtChecked"
-                                        value="2" style="font-size: 13px;">
+                                        value="2" style="font-size: 13px;" id="ID031">
                                         Net Weight</mat-radio-button>
                                 </mat-radio-group>
                             </div>
                             <div class="d-flex ps-2">
-                                <label class="col-sm-4 col-form-label">
+                                <label class="col-sm-4 col-form-label" id="ID032">
                                     Margin %</label>
                                 <span class="col-sm-3">
-                                    <mat-form-field>
+                                    <mat-form-field appearance="outline">
                                         <input type="number" maxlength="6"
                                             matInput AmountDecimalInput
                                             class="text-right" />
