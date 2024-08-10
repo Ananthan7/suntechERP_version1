@@ -12,19 +12,18 @@
     <form [formGroup]="diamondJobBoqReceipt">
         <div class="row">
             <div class="col-md-12">
-                <h6>{{branchCode}} - {{companyName}}</h6>
+                <h6 id="ID001">{{branchCode}} - {{companyName}}</h6>
             </div>
         </div>
         <div class="row">
             <div class="col-md-8">
                 <div class="row">
                     <div class="col-md-6">
-                        <div class="row">
+                        <div class="row mb-1">
                             <label for="inputPassword"
-                                class="col-sm-4 col-form-label">Voucher
-                                Date</label>
+                                class="col-sm-4 col-form-label" id="ID002">Voucher Date</label>
                             <div class="col-md-8">
-                                <mat-form-field style="width: 72%;">
+                                <mat-form-field style="width: -webkit-fill-available;" appearance="outline">
                                     <input matInput [matDatepicker]="vocDate"
                                         formControlName="vocDate"
                                         placeholder="DD/MM/YYYY"
@@ -38,16 +37,15 @@
                         </div>
                         <div class="row">
                             <label for="inputPassword"
-                                class="col-sm-4 col-form-label">Voucher No *
-                            </label>
+                                class="col-sm-4 col-form-label" id="ID003">Voucher No *</label>
                             <div class="col-md-4">
-                                <mat-form-field style="width: 100%">
+                                <mat-form-field style="width: 100%" appearance="outline">
                                     <input type="text" matInput
                                         formControlName="voctype" />
                                 </mat-form-field>
                             </div>
                             <div class="col-md-4">
-                                <mat-form-field style="width: 70%">
+                                <mat-form-field style="width: -webkit-fill-available;" appearance="outline">
                                     <input type="text" matInput
                                         formControlName="vocno"
                                         style="text-align: right;" />
@@ -56,44 +54,43 @@
                         </div>
                         <div class="row">
                             <label for="inputPassword"
-                                class="col-sm-4 col-form-label">Entered
-                                By</label>
+                                class="col-sm-4 col-form-label" id="ID004">Entered By</label>
                             <div class="col-md-8">
-                                <mat-form-field style="width: 80%">
+                                <mat-form-field style="width: -webkit-fill-available;" appearance="outline">
                                     <input type="text" matInput
                                         formControlName="enteredBy"
                                         (keydown)="lookupKeyPress($event,'enteredBy')"
                                         (focusout)="validateLookupField($event,enteredByCodeData,'enteredBy')"/>
+                                        <master-search class="masterSearch"
+                                            [MasterSearchData]="enteredByCodeData"  #overlayenteredBy
+                                            (newRowClick)="enteredByDataSelected($event)">
+                                        </master-search>
                                 </mat-form-field>
-                                <master-search
-                                    [MasterSearchData]="enteredByCodeData"  #overlayenteredBy
-                                    (newRowClick)="enteredByDataSelected($event)">
-                                </master-search>
                             </div>
                         </div>
                     </div>
+
                     <div class="col-md-6">
-                        <div class="row">
+                        <div class="row mb-2">
                             <label for="inputPassword"
-                                class="col-sm-4 col-form-label">Time</label>
+                                class="col-sm-4 col-form-label" id="ID005">Time</label>
                             <div class="col-md-8">
-                                <mat-form-field style="width: 100%">
-                                    <input type="time" matInput
-                                        formControlName="time" />
+                                <mat-form-field style="width: 100%" appearance="outline">
+                                    <input type="time" matInput formControlName="time" />
                                 </mat-form-field>
                             </div>
                         </div>
                         <div class="row">
                             <label for="inputPassword"
-                                class="col-sm-4 col-form-label">Karigger</label>
+                                class="col-sm-4 col-form-label" id="ID006">Karigger</label>
                             <div class="col-md-4">
-                                <mat-form-field style="width: 100%">
+                                <mat-form-field style="width: 100%" appearance="outline">
                                     <input type="text" matInput
                                         formControlName="karigger" />
                                 </mat-form-field>
                             </div>
                             <div class="col-md-4">
-                                <mat-form-field style="width: 100%">
+                                <mat-form-field style="width: 100%" appearance="outline">
                                     <input type="text" matInput
                                         formControlName="kariggerDesc" />
                                 </mat-form-field>
@@ -101,20 +98,20 @@
                         </div>
                         <div class="row">
                             <label for="inputPassword"
-                                class="col-sm-4 col-form-label">Currency</label>
+                                class="col-sm-4 col-form-label" id="ID007">Currency</label>
                             <div class="col-md-4">
-                                <mat-form-field style="width: 80%">
+                                <mat-form-field style="width: -webkit-fill-available" appearance="outline">
                                     <input type="text" matInput
                                         formControlName="currency"
                                         (keydown)="lookupKeyPress($event,'currency')" />
+                                        <master-search class="masterSearch"
+                                            [MasterSearchData]="CurrencyCodeData"
+                                            (newRowClick)="currencyDataSelected($event)">
+                                        </master-search>
                                 </mat-form-field>
-                                <master-search
-                                    [MasterSearchData]="CurrencyCodeData"
-                                    (newRowClick)="currencyDataSelected($event)">
-                                </master-search>
                             </div>
                             <div class="col-md-4">
-                                <mat-form-field style="width: 100%">
+                                <mat-form-field style="width: 100%" appearance="outline">
                                     <input type="text" matInput
                                         formControlName="currencyDesc"
                                         SixDecimalInput class="text-right" />
@@ -123,21 +120,19 @@
                         </div>
                         <div class="row">
                             <label for="inputPassword"
-                                class="col-sm-4 col-form-label">Base
-                                Currency</label>
+                                class="col-sm-4 col-form-label" id="ID008">Base Currency</label>
                             <div class="col-md-4">
-                                <mat-form-field style="width: 80%">
+                                <mat-form-field style="width: -webkit-fill-available" appearance="outline">
                                     <input type="text" matInput
                                         formControlName="baseCurrency"
                                         (keydown)="lookupKeyPress($event,'baseCurrency')" />
+                                        <master-search class="masterSearch"
+                                        [MasterSearchData]="CurrencyCodeData"
+                                        (newRowClick)="baseCurrencyCodeSelected($event)"></master-search>
                                 </mat-form-field>
-                                <master-search
-                                    [MasterSearchData]="CurrencyCodeData"
-                                    (newRowClick)="baseCurrencyCodeSelected($event)"></master-search>
-
                             </div>
                             <div class="col-md-4">
-                                <mat-form-field style="width: 100%">
+                                <mat-form-field style="width: 100%" appearance="outline">
                                     <input type="text" matInput
                                         formControlName="baseCurrencyDesc"
                                         SixDecimalInput class="text-right" />
@@ -168,7 +163,7 @@
                     </div>
                     <div class="col-md-6 text-right mt-2">
                         <button type="button" mat-flat-button
-                            color="primary">Select
+                            color="primary" id="ID009">Select
                         </button>
                     </div>
                 </div>
@@ -180,8 +175,7 @@
                     <mat-tab label="Job Details">
                         <div class="row mt-2">
                             <div class="col-md-8">
-                                <h6 class="bg-light p-2 mb-0">Components
-                                    Details</h6>
+                                <h6 class="bg-light p-2 mb-0" id="ID010">Components Details</h6>
                                 <dx-data-grid #dataGrid id="gridContainer"
                                     keyExpr="ID" [allowColumnResizing]="true"
                                     [showBorders]="true">
@@ -205,17 +199,15 @@
 
                             <div class="col-md-4">
                                 <div class="border">
-                                    <h6 class="bg-light p-2 mb-0">Labour
-                                        Details</h6>
+                                    <h6 class="bg-light p-2 mb-0" id="ID011">Labour Details</h6>
                                     <div class="row p-1">
                                         <div class="col-md-7">
                                             <div class="row">
 
                                                 <label for="inputPassword"
-                                                    class="col-sm-6 col-form-label pt-4">Gross
-                                                    Wt</label>
+                                                    class="col-sm-6 col-form-label pt-4" id="ID012">Gross Wt</label>
                                                 <div class="col-md-6">
-                                                    <mat-form-field
+                                                    <mat-form-field appearance="outline"
                                                         style="width: 70%">
                                                         <input type="text"
                                                             matInput
@@ -228,10 +220,9 @@
                                             </div>
                                             <div class="row">
                                                 <label for="inputPassword"
-                                                    class="col-sm-6 col-form-label pt-4">Job
-                                                    Number</label>
+                                                    class="col-sm-6 col-form-label pt-4" id="ID013">Job Number</label>
                                                 <div class="col-md-6">
-                                                    <mat-form-field
+                                                    <mat-form-field appearance="outline"
                                                         style="width: 70%">
                                                         <input type="text"
                                                             matInput
@@ -240,109 +231,101 @@
                                                             NumberOnly
                                                             (keydown)="lookupKeyPress($event,'jobNumber')"
                                                             (focusout)="validateLookupField($event,jobNumberCodeData,'jobNumber')"/>
+                                                            <master-search  [MasterSearchData]="jobNumberCodeData"  class="masterSearch"
+                                                                *ngIf="!viewMode"
+                                                                (newRowClick)="jobNumberCodeSelected($event) "#overlayjobNumber>
+                                                            </master-search>
                                                     </mat-form-field>
-
-                                                    <master-search  [MasterSearchData]="jobNumberCodeData" 
-                                                    *ngIf="!viewMode"
-                                                    (newRowClick)="jobNumberCodeSelected($event) "#overlayjobNumber>
-                                                    </master-search>
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <label for="inputPassword"
-                                                    class="col-sm-6 col-form-label pt-4">Design
-                                                    Id</label>
+                                                    class="col-sm-6 col-form-label pt-4" id="ID014">Design Id</label>
                                                 <div class="col-md-6">
-                                                    <mat-form-field
+                                                    <mat-form-field appearance="outline"
                                                         style="width: 70%">
                                                         <input type="text"
                                                             matInput
                                                             formControlName="designId"
                                                             (keydown)="lookupKeyPress($event,'designId')"
                                                             (focusout)="validateLookupField($event,designCodeData,'designId')"/>
+                                                            <master-search [MasterSearchData]="designCodeData" (newRowClick)="designSelected($event)"
+                                                                #overlaydesignId class="masterSearch">
+                                                           </master-search>
                                                     </mat-form-field>
-
-                                                    <master-search [MasterSearchData]="designCodeData" (newRowClick)="designSelected($event)" #overlaydesignId>
-                                                    </master-search>
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <label for="inputPassword"
-                                                    class="col-sm-6 col-form-label pt-4">Process</label>
+                                                    class="col-sm-6 col-form-label pt-4" id="ID015">Process</label>
                                                 <div class="col-md-6">
-                                                    <mat-form-field
+                                                    <mat-form-field appearance="outline"
                                                         style="width: 70%">
                                                         <input type="text"
                                                             matInput
                                                             formControlName="process"
                                                             (keydown)="lookupKeyPress($event,'process')"
                                                             (focusout)="validateLookupField($event,ProcessCodeData,'process')"/>
+                                                            <master-search [MasterSearchData]="ProcessCodeData"
+                                                            (newRowClick)="ProcessCodeSelected($event)" #overlayprocess class="masterSearch" >
+                                                            </master-search>
                                                     </mat-form-field>
-
-                                                    <master-search [MasterSearchData]="ProcessCodeData"
-                                                    (newRowClick)="ProcessCodeSelected($event)" #overlayprocess >
-                                                    </master-search>
                                                 </div>
                                             </div>
                                             <div class="row">
-                                                <label for="inputPassword"
+                                                <label for="inputPassword" id="ID016"
                                                     class="col-sm-6 col-form-label pt-4">Worker</label>
                                                 <div class="col-md-6">
-                                                    <mat-form-field
+                                                    <mat-form-field appearance="outline"
                                                         style="width: 70%">
                                                         <input type="text"
                                                             matInput
                                                             formControlName="worker"
                                                             (keydown)="lookupKeyPress($event,'worker')"
                                                             (focusout)="validateLookupField($event,WorkerCodeData,'worker')"/>
+                                                            <master-search [MasterSearchData]="WorkerCodeData" class="masterSearch"
+                                                                (newRowClick)="WorkerCodeSelected($event)" #overlayworker>
+                                                            </master-search>
                                                     </mat-form-field>
-
-                                                    <master-search [MasterSearchData]="WorkerCodeData"
-                                                    (newRowClick)="WorkerCodeSelected($event)" #overlayworker>
-                                                    </master-search>
                                                 </div>
                                             </div>
                                             <div class="row">
-                                                <label for="inputPassword"
-                                                    class="col-sm-6 col-form-label pt-4">Labour
-                                                    Chrg</label>
+                                                <label for="inputPassword" id="ID017"
+                                                    class="col-sm-6 col-form-label pt-4">Labour Chrg</label>
                                                 <div class="col-md-6">
-                                                    <mat-form-field
+                                                    <mat-form-field appearance="outline"
                                                         style="width: 70%">
                                                         <input type="number"
                                                             matInput
                                                             formControlName="labourchrg"
                                                             [dir]="'rtl'"
                                                             style="text-align: right;"
-                                                            (keydown)="lookupKeyPress($event,'labourchrg')"
-                                                            >
+                                                            (keydown)="lookupKeyPress($event,'labourchrg')">
+                                                            <master-search #overlaylabourchrg class="masterSearch">
+                                                            </master-search>
                                                     </mat-form-field>
-                                                    <master-search #overlaylabourchrg>
-                                                    </master-search>
                                                 </div>
                                             </div>
                                             <div class="row">
-                                                <label for="inputPassword"
-                                                    class="col-sm-6 col-form-label pt-4">Labour
-                                                    A/c</label>
+                                                <label for="inputPassword" id="ID018"
+                                                    class="col-sm-6 col-form-label pt-4">Labour A/c</label>
                                                 <div class="col-md-6">
-                                                    <mat-form-field
+                                                    <mat-form-field appearance="outline"
                                                         style="width: 70%">
                                                         <input type="text"
                                                             matInput
                                                             formControlName="labourAC"
                                                             (keydown)="lookupKeyPress($event,'labourAC')" />
+                                                            <master-search #overlaylabourAC class="masterSearch">
+                                                            </master-search>
                                                     </mat-form-field>
-                                                    <master-search #overlaylabourAC>
-                                                    </master-search>
                                                 </div>
                                             </div>
                                             <div class="row">
-                                                <label for="inputPassword"
-                                                    class="col-sm-6 col-form-label pt-3">Wastage
-                                                    Wt</label>
+                                                <label for="inputPassword" id="ID019"
+                                                    class="col-sm-6 col-form-label pt-3">Wastage Wt</label>
                                                 <div class="col-md-6">
-                                                    <mat-form-field
+                                                    <mat-form-field appearance="outline"
                                                         style="width: 70%">
                                                         <input type="text"
                                                             matInput
@@ -350,13 +333,12 @@
                                                             AmountDecimalInput
                                                             class="text-right" />
                                                     </mat-form-field>
-
                                                 </div>
                                             </div>
                                             <div
                                                 class="row justify-content-end">
                                                 <div class="col-md-4">
-                                                    <button type="button"
+                                                    <button type="button" id="ID020"
                                                         class="btn add-btn btn-outline-primary">Apply</button>
                                                 </div>
                                             </div>
@@ -384,7 +366,7 @@
                     <mat-tab label="Summary">
                         <div class="row my-2">
                             <div class="col-md-8">
-                                <h6 class="bg-light p-2 mb-0">Stock Details</h6>
+                                <h6 class="bg-light p-2 mb-0" id="ID021">Stock Details</h6>
                                 <dx-data-grid #dataGrid id="gridContainer"
                                     keyExpr="ID" [allowColumnResizing]="true"
                                     [showBorders]="true"
@@ -409,7 +391,7 @@
                                 </dx-data-grid>
                             </div>
                             <div class="col-md-4">
-                                <h6 class="bg-light p-2 mb-0">Labour</h6>
+                                <h6 class="bg-light p-2 mb-0" id="ID022">Labour</h6>
                                 <dx-data-grid #dataGrid id="gridContainer"
                                     keyExpr="ID" [allowColumnResizing]="true"
                                     [showBorders]="true"
