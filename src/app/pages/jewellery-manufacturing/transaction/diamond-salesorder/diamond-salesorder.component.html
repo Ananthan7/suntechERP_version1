@@ -265,6 +265,7 @@
                                         </mat-form-field>
                                     </span>
                                 </div>
+
                                 <div class="row" *ngIf="false">
                                     <label class="col-sm-4 col-form-label" id="ID013">
                                         AMC %</label>
@@ -312,15 +313,13 @@
                                                 <mat-tab label="U D F">
                                                     <div class="col-11">
                                                         <div class="row">
-                                                            <label id=""
+                                                            <label id="ID015"
                                                                 class="col-sm-4 col-form-label">
                                                                 Proposal</label>
                                                             <span
-                                                                class="col-sm-7">
+                                                                class="col-sm-7 mt-2">
                                                                 <mat-form-field appearance="outline">
-                                                                    <input
-                                                                        type="text"
-                                                                        matInput
+                                                                    <input type="text" matInput
                                                                         formControlName="Proposal" />
                                                                 </mat-form-field>
                                                             </span>
@@ -330,7 +329,7 @@
                                                                 class="col-sm-4 col-form-label">
                                                                 Business Type</label>
                                                             <span
-                                                                class="col-sm-7">
+                                                                class="col-sm-7 mt-2">
                                                                 <mat-form-field appearance="outline">
                                                                     <input
                                                                         type="text"
@@ -344,7 +343,7 @@
                                                                 class="col-sm-4 col-form-label">
                                                                 Language</label>
                                                             <span
-                                                                class="col-sm-7">
+                                                                class="col-sm-7 mt-2">
                                                                 <mat-form-field appearance="outline">
                                                                     <input
                                                                         type="text"
@@ -358,7 +357,7 @@
                                                                 class="col-sm-4 col-form-label">
                                                                 Referred By</label>
                                                             <span
-                                                                class="col-sm-7">
+                                                                class="col-sm-7 mt-2">
                                                                 <mat-form-field appearance="outline">
                                                                     <input
                                                                         type="text"
@@ -729,14 +728,14 @@
                 <div class="col-md-11 top">
                     <div class="d-flex flex-coloumn">
                         <div class="col-md-4">
-                            <label class="col-form-label rem" id="ID021">
+                            <label class="col-sm-3 col-form-label rem" id="ID021">
                                 Narration</label>
                             <mat-form-field class="col-sm-6" appearance="outline">
                                 <input type="text" matInput name="narration"
                                     ([ngModel])="Narration" />
                             </mat-form-field>
                         </div>
-                        <div class="d-flex">
+                        <div class="d-flex mt-3">
                             <div>
                                 <button type="button" mat-flat-button
                                     (click)="addNewDetail()">
@@ -831,7 +830,7 @@
                             <div class="d-flex ps-2">
                                 <label class="col-sm-4 col-form-label" id="ID032">
                                     Margin %</label>
-                                <span class="col-sm-3">
+                                <span class="col-sm-3 mt-2">
                                     <mat-form-field appearance="outline">
                                         <input type="number" maxlength="6"
                                             matInput AmountDecimalInput
