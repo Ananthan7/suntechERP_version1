@@ -222,8 +222,8 @@
                                         Delivery Type</label>
                                     <span class="col-sm-8 mt-2">
                                         <mat-form-field style="width: 30%" appearance="outline" class="mx-1">
-                                            <input type="text" matInp maxlength="6"
-                                                formControlName="DeliveryType" NumberOnly />
+                                            <input type="text" matInput
+                                                maxlength="6" formControlName="DeliveryType"  NumberOnly />
                                         </mat-form-field>
                                         <mat-form-field appearance="outline"
                                             style="width: 50%;">
@@ -244,10 +244,12 @@
                                 <div class="row">
                                     <label class="col-sm-4 col-form-label" id="ID012">
                                         Delivery On</label>
-                                    <span class="col-sm-8">
+                                    <span class="col-sm-8 mt-2">
                                         <mat-form-field style="width: 30%" appearance="outline" class="mx-1">
-                                            <input type="text" matInput maxlength="6" NumberOnly
-                                                (focusout)="addDays()" formControlName="DeliveryOnDateType" />
+                                            <input type="text" matInput
+                                                maxlength="6" NumberOnly
+                                                (focusout)="addDays()"
+                                                formControlName="DeliveryOnDateType" />
                                         </mat-form-field>
                                         <mat-form-field appearance="outline"
                                             style="width: 50%;">
@@ -263,7 +265,6 @@
                                         </mat-form-field>
                                     </span>
                                 </div>
-                                
                                 <div class="row" *ngIf="false">
                                     <label class="col-sm-4 col-form-label" id="ID013">
                                         AMC %</label>
