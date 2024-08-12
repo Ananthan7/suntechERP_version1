@@ -1,7 +1,7 @@
 <div>
     <!-- header section starts -->
     <div class="border-bottom d-flex justify-content-between p-2">
-        <h5>Diamond Sales Order Detail</h5>
+        <h5 id="ID066">Diamond Sales Order Detail</h5>
         <button type="button" class="btn btn-close close-btn" (click)="close()">
             <i class="feather icon-x close-icon"></i>
         </button>
@@ -16,7 +16,7 @@
             <form [formGroup]="diamondSalesDetailForm">
                 <div class="row">
                     <div class="col-md-5">
-                        <div class="row mb-1">
+                        <div class="row mb-2">
                             <!-- TODO stockcode is selected disable designcode 
                                 and design code is selected disable stockcode -->
 
@@ -43,7 +43,7 @@
                                 </mat-form-field>
                             </div>
                             <div class="col-md-6">
-                                <mat-form-field style="width: 80%;" appearance="outline">
+                                <mat-form-field style="width: -webkit-fill-available;" appearance="outline">
                                     <input type="text" matInput readonly
                                     (keydown)="lookupKeyPress($event,'designDescription')"
                                         formControlName="designDescription" 
@@ -80,7 +80,7 @@
                                         [readonly]="codeSearchFlag == 'stock'" />
                                 </mat-form-field>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-2 px-0">
                                 <mat-form-field style="width: 100%;" appearance="outline">
                                     <input type="text" matInput
                                         formControlName="StockCode"
@@ -88,7 +88,7 @@
                                 </mat-form-field>
                             </div>
                             <div class="col-md-5">
-                                <mat-form-field style="width: 80%;" appearance="outline">
+                                <mat-form-field style="width: -webkit-fill-available;" appearance="outline">
                                     <input type="text" matInput readonly
                                     (keydown)="lookupKeyPress($event,'StockCodeDesc')"
                                         formControlName="StockCodeDesc" 
@@ -103,7 +103,7 @@
                         <div class="row mb-1">
                             <label for="inputPassword" id="ID003"
                                 class="col-sm-3 col-form-label">Delivery Type :</label>
-                            <div class="col-md-3">
+                            <div class="col-md-3 mt-2">
                                 <mat-form-field style="width: 50%;" appearance="outline">
                                     <input type="text" matInput
                                         formControlName="DeliveryType"
@@ -118,8 +118,8 @@
                             </div>
                             <label for="inputPassword"
                                 class="col-sm-3 col-form-label" id="ID004">Production Date :</label>
-                            <div class="col-md-3">
-                                <mat-form-field style="width: 80%;" appearance="outline">
+                            <div class="col-md-3 mt-2 px-0">
+                                <mat-form-field style="width: 100%;" appearance="outline">
                                     <input matInput DateValidation
                                         [matDatepicker]="ProductionOn"
                                         formControlName="ProductionDate" />
