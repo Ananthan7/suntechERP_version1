@@ -6,8 +6,8 @@
 </div>
 <!-- modal header component -->
 <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
-    [isViewDelete]="false" [isViewSave]="!viewMode" [isloading]="isloading"
-    [isViewAuditTrail]="true" [disableAuditTrail]="!isSaved"></modal-header>
+    [isViewDelete]="false" [isViewSave]="!viewMode" [isloading]="isloading" [isViewPost]="true"
+    [isViewAuditTrail]="true" [disableAuditTrail]="!isSaved"  [isViewDelete]="editMode"></modal-header>
 <!-- content section -->
 <div class="row">
     <div class="col-md-12">
@@ -213,13 +213,19 @@
                             <dxi-column dataField="GROSS_WT"
                                 caption="Carat"
                                 [format]="gridAmountDecimalFormat"></dxi-column>
-                            <dxo-summary>
-                                <dxi-total-item column="Amount"
-                                    summaryType="sum"
-                                    [valueFormat]="gridAmountDecimalFormat"
-                                    displayFormat="{0}">
-                                </dxi-total-item>
-                            </dxo-summary>
+                           
+                                <dxo-summary>
+                                    <dxi-total-item column="PCS">
+                                    </dxi-total-item>
+                                    <dxi-total-item column="GROSS_WEIGHT">
+                                    </dxi-total-item>
+                                    <dxi-total-item column="AMOUNTLC">
+                                    </dxi-total-item>
+                                    <dxi-total-item column="AMOUNTFC">
+                                    </dxi-total-item>
+            
+                                  </dxo-summary>
+
                         </dx-data-grid>
                     </div>
 
