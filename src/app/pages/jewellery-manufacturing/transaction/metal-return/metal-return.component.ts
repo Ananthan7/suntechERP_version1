@@ -25,7 +25,7 @@ export class MetalReturnComponent implements OnInit {
   @Input() content!: any;
   modalReference!: NgbModalRef;
   dataToDetailScreen: any;
-  
+  editMode: boolean = false;
   tableData: any = [];
   tableDataHead: any[] = ['PROCESS', 'WORKER', 'JOB_NUMBER', 'UNQ_JOB_ID', 'DESIGN_CODE', 'STOCK_CODE', 'METAL', 'NETWT', 'PURITY', 'PUREWT'];
   metalReturnDetailsData: any[] = [];
@@ -123,9 +123,11 @@ export class MetalReturnComponent implements OnInit {
       if (this.content.FLAG == 'VIEW' || this.content.FLAG == 'DELETE') {
         this.viewMode = true;
         this.LOCKVOUCHERNO = true;
+        this.editMode = true;
       }
       if (this.content.FLAG == 'EDIT') {
         this.LOCKVOUCHERNO = true;
+        this.editMode = true;
       }
       this.isSaved = true;
       if (this.content.FLAG == 'DELETE') {
@@ -298,10 +300,88 @@ this.setvoucherTypeMaster()
     this.openAddMetalReturnDetail(selectedData)
   }
 
+  // deleteTableData(): void {
+    
+  //   this.metalReturnDetailsData = this.metalReturnDetailsData.filter((element: any) => element.SRNO != this.selectRowIndex)
+  //   this.recalculateSRNO()
+  // }
+
+  // deleteTableData(): void {
+  //   if (this.selectRowIndex !== null) {
+  //     Swal.fire({
+  //       title: 'Are you sure?',
+  //       text: "You won't be able to revert this!",
+  //       icon: 'warning',
+  //       showCancelButton: true,
+  //       confirmButtonColor: '#3085d6',
+  //       cancelButtonColor: '#d33',
+  //       confirmButtonText: 'Yes, delete!'
+  //     }).then((result) => {
+  //       if (result.isConfirmed) {
+  //         this.metalReturnDetailsData = this.metalReturnDetailsData.filter((element: any) => element.SRNO != this.selectRowIndex);
+  //         this.recalculateSRNO();
+  //         Swal.fire(
+  //           'Deleted!',
+  //           'Your data has been deleted.',
+  //           'success'
+  //         );
+  //       }
+  //     });
+  //   } else {
+  //     Swal.fire(
+  //       'No selection!',
+  //       'Please select a record to delete.',
+  //       'warning'
+  //     );
+  //   }
+  // }
+
   deleteTableData(): void {
-    this.metalReturnDetailsData = this.metalReturnDetailsData.filter((element: any) => element.SRNO != this.selectRowIndex)
-    this.recalculateSRNO()
+    if (this.selectRowIndex !== null) {
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Debug log to ensure correct SRNO is selected
+          console.log('Selected SRNO:', this.selectRowIndex);
+  
+          // Perform deletion
+          const originalLength = this.metalReturnDetailsData.length;
+          this.metalReturnDetailsData = this.metalReturnDetailsData.filter((element: any) => element.SRNO !== this.selectRowIndex);
+          
+          // Check if data was actually removed
+          console.log('Original length:', originalLength, 'New length:', this.metalReturnDetailsData.length);
+  
+          if (originalLength !== this.metalReturnDetailsData.length) {
+            this.recalculateSRNO(); // Update SRNOs after deletion
+  
+            Swal.fire(
+              'Deleted!',
+              'Your data has been deleted.',
+              'success'
+            );
+          } else {
+            console.error('Data was not deleted. Check SRNO value and filter condition.');
+          }
+        }
+      });
+    } else {
+      Swal.fire(
+        'No selection!',
+        'Please select a record to delete.',
+        'warning'
+      );
+    }
   }
+  
+  
+
   recalculateSRNO(): void {
     this.metalReturnDetailsData.forEach((element: any, index: any) => {
       element.SRNO = index + 1
