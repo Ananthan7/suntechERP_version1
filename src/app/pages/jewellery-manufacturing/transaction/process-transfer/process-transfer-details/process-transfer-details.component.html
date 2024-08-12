@@ -49,7 +49,7 @@
                     formControlName="JOB_NUMBER" [readonly]="viewMode" />
                   <master-search class="masterSearch"
                     [MasterSearchData]="jobNoSearch"
-                    *ngIf="!viewMode"  #overlayjobNoSearch
+                    *ngIf="!viewMode" #overlayjobNoSearch
                     (newRowClick)="jobNumberSelected($event)">
                   </master-search>
                 </mat-form-field>
@@ -211,7 +211,7 @@
                               (focusout)="toWorkercodeValidate($event)"
                               formControlName="TO_WORKER_CODE" />
                             <master-search class="masterSearch"
-                              *ngIf="!viewMode"  #overlayToWorker
+                              *ngIf="!viewMode" #overlayToWorker
                               [MasterSearchData]="toWorkerMasterSearch"
                               (newRowClick)="workerCodeToSelected($event)">
                             </master-search>
@@ -280,7 +280,7 @@
                           style="width: 110px;">
                           <input type="text" matInput [readonly]="viewMode"
                             class="text-right"
-                          NumberOnly maxlength="10"
+                            NumberOnly maxlength="10"
                             (focusout)="checkFromToValues('FRM_PCS','TO_PCS')"
                             formControlName="TO_PCS" />
                         </mat-form-field>
@@ -403,7 +403,8 @@
                           <th colspan="3" class="text-center">Transfer to</th>
                           <th>Loss Qty</th>
                           <td><b>%</b></td>
-                          <th rowspan="2" style="text-align: center;">Balance</th>
+                          <th rowspan="2"
+                            style="text-align: center;">Balance</th>
                         </tr>
                         <tr>
                           <th>Stock Code</th>
@@ -427,15 +428,18 @@
                             <mat-form-field appearance="outline"
                               style="width: 100px;">
                               <input type="text" matInput maxlength="15"
-                                 (keydown)="lookupKeyPress($event,'stockCode')"
+                                (keydown)="lookupKeyPress($event,'stockCode')"
                                 (focusout)="stockCodeScrapValidate($event)"
-                                formControlName="stockCode" [readonly]="viewMode" />
-                              <master-search class="masterSearch" *ngIf="!viewMode"
-                                [MasterSearchData]="stockCodeSearch" #stockCodeOverlay
+                                formControlName="stockCode"
+                                [readonly]="viewMode" />
+                              <master-search class="masterSearch"
+                                *ngIf="!viewMode"
+                                [MasterSearchData]="stockCodeSearch"
+                                #stockCodeOverlay
                                 (newRowClick)="stockCodeSelected($event)">
                               </master-search>
                             </mat-form-field>
-    
+
                           </td>
                           <!-- quantity -->
                           <td>
@@ -455,7 +459,7 @@
                               style="width: 100px;">
                               <input type="text" matInput
                                 maxlength="15"
-                                 (keydown)="lookupKeyPress($event,'location')"
+                                (keydown)="lookupKeyPress($event,'location')"
                                 formControlName="location" readonly />
                               <master-search class="masterSearch"
                                 *ngIf="locationSearchFlag" #overleyLocation
@@ -510,7 +514,8 @@
                           <input type="date" matInput formControlName="startdate"
                             id="startdate" (focusout)="onStartDateChange()" />
                         </mat-form-field> -->
-                        <mat-form-field appearance="outline" style="width: 100%">
+                        <mat-form-field appearance="outline"
+                          style="width: 100%">
                           <input matInput DateValidation readonly
                             (dateChange)="onStartDateChange()"
                             [matDatepicker]="start" formControlName="startdate"
@@ -526,7 +531,8 @@
                       <label for="input" class="col-sm-4 col-form-label">End
                         Date</label>
                       <div class="col-sm-7">
-                        <mat-form-field appearance="outline" style="width: 100%">
+                        <mat-form-field appearance="outline"
+                          style="width: 100%">
                           <input matInput DateValidation readonly
                             [matDatepicker]="end" formControlName="enddate"
                             placeholder="DD/MM/YYYY" [min]="minEndDate" />
@@ -536,8 +542,10 @@
                           <mat-datepicker #end></mat-datepicker>
                         </mat-form-field>
                       </div>
-                      <div *ngIf="processTransferdetailsForm.hasError('dateError')">
-                        <p class="error-message">End date cannot be before the start
+                      <div
+                        *ngIf="processTransferdetailsForm.hasError('dateError')">
+                        <p class="error-message">End date cannot be before the
+                          start
                           date.</p>
                       </div>
                     </div>
@@ -547,7 +555,8 @@
                       <label for="input" class="col-sm-4 col-form-label">
                         Std Time</label>
                       <div class="col-sm-7">
-                        <mat-form-field appearance="outline" style="width: 70%;">
+                        <mat-form-field appearance="outline"
+                          style="width: 70%;">
                           <input type="text" matInput formControlName="STD_TIME"
                             readonly />
                         </mat-form-field>
@@ -561,8 +570,10 @@
                       <label for="input" class="col-sm-4 col-form-label">Time
                         Taken</label>
                       <div class="col-sm-7">
-                        <mat-form-field appearance="outline" style="width: 70%;">
-                          <input type="text" matInput formControlName="TIME_TAKEN_HRS"
+                        <mat-form-field appearance="outline"
+                          style="width: 70%;">
+                          <input type="text" matInput
+                            formControlName="TIME_TAKEN_HRS"
                             readonly />
                         </mat-form-field>
                         <!-- <datetime-picker [DateTimeModelData]="TimeTakenData"
@@ -577,7 +588,8 @@
                       <label for="input"
                         class="col-sm-4 col-form-label">Consumed</label>
                       <div class="col-sm-7">
-                        <mat-form-field appearance="outline" style="width: 70%;">
+                        <mat-form-field appearance="outline"
+                          style="width: 70%;">
                           <input type="text" matInput
                             formControlName="consumed" readonly />
                           <datetime-picker class="masterSearch"
@@ -590,17 +602,20 @@
                       </div>
                     </div>
                     <div class="row mb-3">
-                      <label for="input" class="col-sm-4 col-form-label">Variance
+                      <label for="input"
+                        class="col-sm-4 col-form-label">Variance
                         %</label>
                       <div class="col-sm-4">
-                        <mat-form-field appearance="outline" style="width: 100%;">
+                        <mat-form-field appearance="outline"
+                          style="width: 100%;">
                           <input type="text" matInput readonly
                             formControlName="variancePercentage"
                             class="text-right" AmountDecimalInput [max]="3" />
                         </mat-form-field>
                       </div>
                       <div class="col-sm-4">
-                        <mat-form-field appearance="outline" style="width: 100%;">
+                        <mat-form-field appearance="outline"
+                          style="width: 100%;">
                           <input type="text" matInput readonly
                             formControlName="variance"
                             class="text-right" />
@@ -612,9 +627,11 @@
                 <div class="row">
                   <div class="col-md-4">
                     <div class="row mb-2">
-                      <label for="input" class="col-sm-4 col-form-label">Tree No</label>
+                      <label for="input" class="col-sm-4 col-form-label">Tree
+                        No</label>
                       <div class="col-sm-7">
-                        <mat-form-field appearance="outline" style="width: 100%;">
+                        <mat-form-field appearance="outline"
+                          style="width: 100%;">
                           <input type="text" matInput formControlName="TREE_NO"
                             class="text-right" NumberOnly maxlength="10"
                             [readonly]="viewMode" />
@@ -624,7 +641,8 @@
                     <div class="row mb-2 justify-content-end">
                       <div class="col-md-7">
                         <div class="form-check">
-                          <label class="form-check-label" for="flexRadioDefault1">
+                          <label class="form-check-label"
+                            for="flexRadioDefault1">
                             Select All
                           </label>
                           <input class="form-check-input" type="checkbox"
@@ -697,11 +715,11 @@
                             style="width: 130px;">
                             <input type="text" matInput
                               (focusout)="SPvalidateLookupField($event,fromProcessMasterSearch,'METAL_FRM_PROCESS_CODE')"
-                                formControlName="METAL_FRM_PROCESS_CODE" 
-                               (keydown)="lookupKeyPress($event,'METAL_FRM_PROCESS_CODE')">
+                              formControlName="METAL_FRM_PROCESS_CODE"
+                              (keydown)="lookupKeyPress($event,'METAL_FRM_PROCESS_CODE')">
                             <master-search class="masterSearch"
                               *ngIf="!viewMode" #MetalfromProcessMasterOverlay
-                              [MasterSearchData]="fromProcessMasterSearch"  
+                              [MasterSearchData]="fromProcessMasterSearch"
                               (newRowClick)="metalprocessCodeFromSelected($event)">
                             </master-search>
                           </mat-form-field>
@@ -713,7 +731,7 @@
                           <mat-form-field appearance="outline"
                             style="width: 130px;">
                             <input type="text" matInput [readonly]="viewMode"
-                               (keydown)="lookupKeyPress($event,'METAL_TO_PROCESS_CODE')"
+                              (keydown)="lookupKeyPress($event,'METAL_TO_PROCESS_CODE')"
                               (focusout)="SPvalidateLookupField($event,toProcessMasterSearch,'METAL_TO_PROCESS_CODE')"
                               formControlName="METAL_TO_PROCESS_CODE" />
                             <master-search class="masterSearch"
@@ -731,7 +749,8 @@
                           <input type="text" matInput maxlength="10"
                             (focusout)="txtLossBooked_Validating()"
                             MetalDecimalInput
-                            formControlName="METAL_LossBooked" class="text-right"/>
+                            formControlName="METAL_LossBooked"
+                            class="text-right" />
                         </mat-form-field>
                       </td>
                     </tr>
@@ -742,7 +761,7 @@
                           <mat-form-field appearance="outline"
                             style="width: 130px;">
                             <input type="text" matInput
-                               (keydown)="lookupKeyPress($event,'METAL_FRM_WORKER_CODE')"
+                              (keydown)="lookupKeyPress($event,'METAL_FRM_WORKER_CODE')"
                               formControlName="METAL_FRM_WORKER_CODE" />
                             <master-search class="masterSearch"
                               *ngIf="!viewMode" #MetalfromWorkerMasterOverley
@@ -758,7 +777,7 @@
                           <mat-form-field appearance="outline"
                             style="width: 130px;">
                             <input type="text" matInput
-                               (keydown)="lookupKeyPress($event,'METAL_TO_WORKER_CODE')"
+                              (keydown)="lookupKeyPress($event,'METAL_TO_WORKER_CODE')"
                               formControlName="METAL_TO_WORKER_CODE" />
                             <master-search class="masterSearch"
                               *ngIf="!viewMode" #MetaloverlayToWorker
@@ -774,6 +793,11 @@
                           <input type="text" matInput class="text-right"
                             UpperCaseDirective
                             formControlName="METAL_ScrapLocCode" />
+                          <master-search class="masterSearch"
+                            #overleyLocation
+                            [MasterSearchData]="locationSearch"
+                            (newRowClick)="metallocationSelected($event)">
+                          </master-search>
                         </mat-form-field>
                       </td>
                       <th>Gain</th>
@@ -800,15 +824,15 @@
                         <mat-form-field appearance="outline"
                           style="width: 130px;">
                           <input type="text" matInput
-                            UpperCaseDirective 
-                             (keydown)="lookupKeyPress($event,'METAL_ToStockCode')"
+                            UpperCaseDirective
+                            (keydown)="lookupKeyPress($event,'METAL_ToStockCode')"
                             (focusout)="MToStockCode_Validating()"
                             formControlName="METAL_ToStockCode" />
-                            <master-search class="masterSearch"
-                              *ngIf="!viewMode"
-                              [MasterSearchData]="metalScrapStockCode"
-                              (newRowClick)="metalworkerCodeToSelected($event)">
-                            </master-search>
+                          <master-search class="masterSearch"
+                            *ngIf="!viewMode"
+                            [MasterSearchData]="metalScrapStockCode"
+                            (newRowClick)="metalworkerCodeToSelected($event)">
+                          </master-search>
                         </mat-form-field>
                       </td>
                       <td>
@@ -818,11 +842,11 @@
                             (focusout)="txtMScrapStockCode_Validating()"
                             (keydown)="lookupKeyPress($event,'METAL_ScrapStockCode')"
                             formControlName="METAL_ScrapStockCode" />
-                            <master-search class="masterSearch"
-                              *ngIf="!viewMode"
-                              [MasterSearchData]="metalScrapStockCode"
-                              (newRowClick)="metalworkerCodeToSelected($event)">
-                            </master-search>
+                          <master-search class="masterSearch"
+                            *ngIf="!viewMode"
+                            [MasterSearchData]="metalScrapStockCode"
+                            (newRowClick)="metalworkerCodeToSelected($event)">
+                          </master-search>
                         </mat-form-field>
                       </td>
                       <td colspan="2">Balance</td>
@@ -880,7 +904,8 @@
                         <mat-form-field appearance="outline"
                           style="width: 130px;">
                           <input type="text" matInput class="text-right"
-                            MetalDecimalInput (focusout)="MToGrossWt_Validating()"
+                            MetalDecimalInput
+                            (focusout)="MToGrossWt_Validating()"
                             formControlName="METAL_GrossWeightTo" />
                         </mat-form-field>
                       </td>
@@ -889,7 +914,8 @@
                           style="width: 130px;">
                           <input type="text" matInput MetalDecimalInput
                             (focusout)="txtMScrapGrWt_Validating()"
-                            formControlName="METAL_ScrapGrWt" class="text-right"/>
+                            formControlName="METAL_ScrapGrWt"
+                            class="text-right" />
                         </mat-form-field>
                       </td>
                       <td colspan="2">
@@ -926,7 +952,8 @@
                           style="width: 130px;">
                           <input type="text" matInput StoneDecimalInput
                             (focusout)="txtMScrapStoneWt_Validating()"
-                            formControlName="METAL_ScrapStoneWt" class="text-right"/>
+                            formControlName="METAL_ScrapStoneWt"
+                            class="text-right" />
                         </mat-form-field>
                       </td>
                       <!-- BalStoneWt -->
@@ -934,7 +961,8 @@
                         <mat-form-field appearance="outline"
                           style="width: 130px;">
                           <input type="text" matInput readonly
-                            formControlName="METAL_BalStoneWt" class="text-right"/>
+                            formControlName="METAL_BalStoneWt"
+                            class="text-right" />
                         </mat-form-field>
                       </td>
                     </tr>
@@ -945,7 +973,7 @@
                           style="width: 130px;">
                           <input type="text" matInput class="text-right"
                             formControlName="METAL_FromIronWeight"
-                            MetalDecimalInput readonly/>
+                            MetalDecimalInput readonly />
                         </mat-form-field>
                       </td>
                       <td>
@@ -953,8 +981,7 @@
                           style="width: 130px;">
                           <input type="text" matInput class="text-right"
                             formControlName="METAL_ToIronWt" MetalDecimalInput
-                            (focusout)="txtToIronWt_Validating()"
-                             />
+                            (focusout)="txtToIronWt_Validating()" />
                         </mat-form-field>
                       </td>
                       <!-- ToIronScrapWt -->
@@ -999,7 +1026,8 @@
                       <td>
                         <mat-form-field appearance="outline"
                           style="width: 130px;">
-                          <input type="text" matInput readonly class="text-right"
+                          <input type="text" matInput readonly
+                            class="text-right"
                             formControlName="METAL_ScrapNetWt" />
                         </mat-form-field>
                       </td>
@@ -1007,7 +1035,8 @@
                       <td colspan="2">
                         <mat-form-field appearance="outline"
                           style="width: 130px;">
-                          <input type="text" matInput readonly class="text-right"
+                          <input type="text" matInput readonly
+                            class="text-right"
                             formControlName="METAL_BalNetWt" />
                         </mat-form-field>
                       </td>
@@ -1034,7 +1063,8 @@
                       <td>
                         <mat-form-field appearance="outline"
                           style="width: 130px;">
-                          <input type="text" matInput readonly class="text-right"
+                          <input type="text" matInput readonly
+                            class="text-right"
                             formControlName="METAL_ScrapPureWt" />
                         </mat-form-field>
                       </td>
@@ -1042,7 +1072,8 @@
                         <mat-form-field appearance="outline"
                           style="width: 130px;">
                           <input type="text" matInput readonly
-                            formControlName="METAL_BalPureWt" class="text-right"/>
+                            formControlName="METAL_BalPureWt"
+                            class="text-right" />
                         </mat-form-field>
                       </td>
                     </tr>
@@ -1061,7 +1092,8 @@
                           <input type="date" matInput formControlName="startdate"
                             id="startdate" (focusout)="onStartDateChange()" />
                         </mat-form-field> -->
-                        <mat-form-field appearance="outline" style="width: 100%">
+                        <mat-form-field appearance="outline"
+                          style="width: 100%">
                           <input matInput DateValidation readonly
                             (dateChange)="onStartDateChange()"
                             [matDatepicker]="start" formControlName="startdate"
@@ -1077,7 +1109,8 @@
                       <label for="input" class="col-sm-4 col-form-label">End
                         Date</label>
                       <div class="col-sm-7">
-                        <mat-form-field appearance="outline" style="width: 100%">
+                        <mat-form-field appearance="outline"
+                          style="width: 100%">
                           <input matInput DateValidation readonly
                             [matDatepicker]="end" formControlName="enddate"
                             placeholder="DD/MM/YYYY" [min]="minEndDate" />
@@ -1087,8 +1120,10 @@
                           <mat-datepicker #end></mat-datepicker>
                         </mat-form-field>
                       </div>
-                      <div *ngIf="processTransferdetailsForm.hasError('dateError')">
-                        <p class="error-message">End date cannot be before the start
+                      <div
+                        *ngIf="processTransferdetailsForm.hasError('dateError')">
+                        <p class="error-message">End date cannot be before the
+                          start
                           date.</p>
                       </div>
                     </div>
@@ -1098,7 +1133,8 @@
                       <label for="input" class="col-sm-4 col-form-label">
                         Std Time</label>
                       <div class="col-sm-7">
-                        <mat-form-field appearance="outline" style="width: 70%;">
+                        <mat-form-field appearance="outline"
+                          style="width: 70%;">
                           <input type="text" matInput formControlName="STD_TIME"
                             readonly />
                         </mat-form-field>
@@ -1112,8 +1148,10 @@
                       <label for="input" class="col-sm-4 col-form-label">Time
                         Taken</label>
                       <div class="col-sm-7">
-                        <mat-form-field appearance="outline" style="width: 70%;">
-                          <input type="text" matInput formControlName="TIME_TAKEN_HRS"
+                        <mat-form-field appearance="outline"
+                          style="width: 70%;">
+                          <input type="text" matInput
+                            formControlName="TIME_TAKEN_HRS"
                             readonly />
                         </mat-form-field>
                         <!-- <datetime-picker [DateTimeModelData]="TimeTakenData"
@@ -1123,22 +1161,25 @@
                       </div>
                     </div>
                   </div>
-                  
+
                 </div>
                 <div class="row">
                   <div class="col-md-6">
                     <div class="row mb-3">
-                      <label for="input" class="col-sm-4 col-form-label">Variance
+                      <label for="input"
+                        class="col-sm-4 col-form-label">Variance
                         %</label>
                       <div class="col-sm-4">
-                        <mat-form-field appearance="outline" style="width: 100%;">
+                        <mat-form-field appearance="outline"
+                          style="width: 100%;">
                           <input type="text" matInput readonly
                             formControlName="variancePercentage"
                             class="text-right" AmountDecimalInput [max]="3" />
                         </mat-form-field>
                       </div>
                       <div class="col-sm-4">
-                        <mat-form-field appearance="outline" style="width: 100%;">
+                        <mat-form-field appearance="outline"
+                          style="width: 100%;">
                           <input type="text" matInput readonly
                             formControlName="variance"
                             class="text-right" />
@@ -1151,7 +1192,8 @@
                       <label for="input"
                         class="col-sm-4 col-form-label">Consumed</label>
                       <div class="col-sm-7">
-                        <mat-form-field appearance="outline" style="width: 70%;">
+                        <mat-form-field appearance="outline"
+                          style="width: 70%;">
                           <input type="text" matInput
                             formControlName="consumed" readonly />
                           <datetime-picker class="masterSearch"
@@ -1213,7 +1255,8 @@
                 cellTemplate="Setted">
                 <div *dxTemplate="let data1 of 'Setted'">
                   <input type="checkbox" [disabled]="viewMode"
-                    [checked]="data1.value" (focusout)="settedCheckbox(data1)" />
+                    [checked]="data1.value"
+                    (focusout)="settedCheckbox(data1)" />
                 </div>
               </dxi-column>
               <dxi-column dataField="GEN" caption="Setting Type"

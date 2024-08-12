@@ -107,7 +107,7 @@ export class MeltingIssueComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 94,
-    SEARCH_FIELD: 'MELTING_TYPE',
+    SEARCH_FIELD: 'MELTYPE_CODE',
     SEARCH_HEADING: 'Melting Type',
     SEARCH_VALUE: '',
     WHERECONDITION: "",
