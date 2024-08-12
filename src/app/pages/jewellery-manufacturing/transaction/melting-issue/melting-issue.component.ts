@@ -465,8 +465,8 @@ export class MeltingIssueComponent implements OnInit {
   MeltingCodeSelected(e: any) {
     console.log(e);
 
-    this.meltingIssueFrom.controls.meltingtype.setValue(e['Melting Type']);
-    // this.meltingIssueFrom.controls.meltingtype.setValue(e.MELTING_TYPE);
+    // this.meltingIssueFrom.controls.meltingtype.setValue(e['Melting Type']);
+    this.meltingIssueFrom.controls.meltingtype.setValue(e.MELTYPE_CODE);
     this.meltingIssueFrom.controls.Karat.setValue(e.KARAT_CODE)
     this.meltingTypeValidate()
   }
