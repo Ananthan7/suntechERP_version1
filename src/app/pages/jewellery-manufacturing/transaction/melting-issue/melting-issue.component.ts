@@ -107,7 +107,7 @@ export class MeltingIssueComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 94,
-    SEARCH_FIELD: 'MELTING_TYPE',
+    SEARCH_FIELD: 'MELTYPE_CODE',
     SEARCH_HEADING: 'Melting Type',
     SEARCH_VALUE: '',
     WHERECONDITION: "",
@@ -465,8 +465,8 @@ export class MeltingIssueComponent implements OnInit {
   MeltingCodeSelected(e: any) {
     console.log(e);
 
-    this.meltingIssueFrom.controls.meltingtype.setValue(e['Melting Type']);
-    // this.meltingIssueFrom.controls.meltingtype.setValue(e.MELTING_TYPE);
+    // this.meltingIssueFrom.controls.meltingtype.setValue(e['Melting Type']);
+    this.meltingIssueFrom.controls.meltingtype.setValue(e.MELTYPE_CODE);
     this.meltingIssueFrom.controls.Karat.setValue(e.KARAT_CODE)
     this.meltingTypeValidate()
   }

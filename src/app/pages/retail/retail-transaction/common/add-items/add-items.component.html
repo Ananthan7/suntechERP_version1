@@ -2,7 +2,7 @@
     <!-- header section ADD CUSTOMER -->
     <div
         class="pos-sales-modalheader border-bottom d-flex justify-content-between p-2">
-        <h5 class="pos-modaltitle" id="modal-dia-metal">Line Item</h5>
+        <h5 class="pos-modaltitle" id="modal-dia-metal">Sold Item</h5>
         <button type="button" class="btn btn-close close-btn p-2"
             (click)="close()">
             <i class="feather icon-x close-icon"></i>
@@ -28,7 +28,7 @@
                             </div>
                             <div class="col-md-3">
                                 <mat-form-field>
-                                    <mat-label>Item Code </mat-label>
+                                    <mat-label>Stock Code </mat-label>
                                     <input type="text" matInput
                                         formControlName="fcn_li_item_code.value"
                                         #fcn_li_item_code
@@ -39,7 +39,7 @@
                             </div>
                             <div class="col-md-3">
                                 <mat-form-field>
-                                    <mat-label>Item Description </mat-label>
+                                    <mat-label>Stock Description </mat-label>
                                     <input type="text" matInput
                                         formControlName="fcn_li_item_desc"
                                         id="fcn_li_item_desc"
@@ -58,7 +58,7 @@
                         <div class="row">
                             <div class="col-md-3">
                                 <mat-form-field aria-readonly="true">
-                                    <mat-label>PCs</mat-label>
+                                    <mat-label>Pcs</mat-label>
                                     <input class="st_txt_right"
                                         type="number" [min]="0"
                                         [maxLength]="14"
@@ -466,7 +466,7 @@
                                 *ngIf="this.divisionMS == 'M' ? false : true"
                                 hidden>
                                 <mat-form-field>
-                                    <mat-label>PCs</mat-label>
+                                    <mat-label>Pcs</mat-label>
                                     <input type="text" matInput
                                         formControlName="fcn_ad_pcs"
                                         id="fcn_ad_pcs" />
