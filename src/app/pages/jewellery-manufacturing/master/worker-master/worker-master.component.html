@@ -105,6 +105,27 @@
                         </span>
                     </div> -->
                     <div class="row">
+                        <span>
+                            <label class="col-sm-4 col-form-label" id="ID002">
+                               Default Process :</label>
+                            <mat-form-field appearance="outline">
+                                <input type="text" matInput
+                                    [readonly]="viewMode || codeEnable"
+                                    (input)="inputValidate($event)"
+                                    UpperCaseDirective
+                                    (focusout)="validateLookupField($event,defaultProcessData,'DefaultProcess')"
+                                    formControlName="DefaultProcess" 
+                                    autocomplete="off" (keydown)="lookupKeyPress($event,'DefaultProcess')"/>
+                                    <master-search class="masterSearch"
+                                        [MasterSearchData]="defaultProcessData"
+                                        *ngIf="viewMode == false"  #overlaydefaultprocessSearch
+                                        (newRowClick)="defaultProcessSelected($event)">
+                                    </master-search>
+                            </mat-form-field>
+                        </span>
+                    </div>
+
+                    <div class="row">
                         <span id="ID004" class="col-sm-4 col-form-label">Loss Allowed
                             :</span>
                         <div class="col-sm-3  p-1">

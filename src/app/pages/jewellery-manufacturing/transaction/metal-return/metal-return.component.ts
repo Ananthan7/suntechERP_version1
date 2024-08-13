@@ -42,6 +42,7 @@ export class MetalReturnComponent implements OnInit {
     precision: this.commonService.allbranchMaster?.BAMTDECIMALS,
     currency: this.commonService.compCurrency
   };
+  gridMetalDecimalFormat: any;
   private subscriptions: Subscription[] = [];
 
   SALESPERSON_CODEData: MasterSearchModel = {
@@ -119,6 +120,12 @@ export class MetalReturnComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.gridMetalDecimalFormat = {
+      type: 'fixedPoint',
+      precision: this.commonService.allbranchMaster?.BMQTYDECIMALS,
+      currency: this.commonService.compCurrency
+    };
+
     if (this.content?.FLAG) {
       if (this.content.FLAG == 'VIEW' || this.content.FLAG == 'DELETE') {
         this.viewMode = true;
