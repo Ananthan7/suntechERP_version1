@@ -49,7 +49,7 @@ export class ModulelistComponent implements OnInit {
         this.menuList.push({
           MID: 15,
           MODULE_NAME: 'Addons',
-          imageUrl: '../../assets/images/lp-icons/1.png'
+          imageUrl: '../../assets/images/lp-icons/newIcons/add_ons.png'
         });
 
         this.menuList.sort((a, b) => {
@@ -75,29 +75,41 @@ export class ModulelistComponent implements OnInit {
         // }
         this.menuList.forEach(data => {
           if (data.MODULE_NAME == 'Boiling') {
-            data.imageUrl = '../../assets/images/lp-icons/2.png'
+            // console.log('Module check 1',data)
+            data.imageUrl = '../../assets/images/lp-icons/newIcons/boiling.png'
           } else if (data.MID == 14) {
-            data.imageUrl = '../../assets/images/lp-icons/3.png'
+            // console.log('Module check 2',data)
+            data.imageUrl = '../../assets/images/lp-icons/newIcons/General.png'
           } else if (data.MID == 10) {
+            // console.log('Module check 3',data)
             data.imageUrl = '../../assets/images/lp-icons/4.png'
           } else if (data.MID == 13) {
-            data.imageUrl = '../../assets/images/lp-icons/5.png'
+            // console.log('Module check 4',data)
+            data.imageUrl = '../../assets/images/lp-icons/newIcons/fixed assets.png'
           } else if (data.MID == 5) {
-            data.imageUrl = '../../assets/images/lp-icons/6.png'
+            // console.log('Module check 5',data)
+            data.imageUrl = '../../assets/images/lp-icons/newIcons/Jewellery Manufacturing.png'
           } else if (data.MID == 6) {
+            // console.log('Module check 6',data)
             data.imageUrl = '../../assets/images/lp-icons/7.png'
           } else if (data.MID == 9) {
-            data.imageUrl = '../../assets/images/lp-icons/8.png'
+            // console.log('Module check 7',data)
+            data.imageUrl = '../../assets/images/lp-icons/newIcons/Payroll_HR.png'
           } else if (data.MID == 8) {
+            // console.log('Module check 8',data)
             data.imageUrl = '../../assets/images/lp-icons/9.png'
           } else if (data.MID == 11) {
-            data.imageUrl = '../../assets/images/lp-icons/10.png'
+            // console.log('Module check 9',data)
+            data.imageUrl = '../../assets/images/lp-icons/newIcons/Repairing.png'
           } else if (data.MID == 4) {
-            data.imageUrl = '../../assets/images/lp-icons/12.png'
+            // console.log('Module check 10',data)
+            data.imageUrl = '../../assets/images/lp-icons/newIcons/Refinery.png'
           } else if (data.MID == 1) {
-            data.imageUrl = '../../assets/images/lp-icons/11.png'
+            // console.log('Module check 11',data)
+            data.imageUrl = '../../assets/images/lp-icons/newIcons/Retail.png'
           } else if (data.MODULE_NAME == 'Wholesale') {
-            data.imageUrl = '../../assets/images/lp-icons/11.png'
+            // console.log('Module check 12',data)
+            data.imageUrl = '../../assets/images/lp-icons/newIcons/Wholesale.png'
           }
 
         });
