@@ -164,7 +164,7 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput
                                         formControlName="location"
-                                        readonly
+                                        [readonly]="viewMode"
                                         (keydown)="lookupKeyPress($event,'location')"
                                         (focusout)="validateLookupField($event,locationCodeData,'location')">
                                 </mat-form-field>
@@ -328,9 +328,9 @@
                                         for="col-form-label">
                                         Remarks:</label>
                                     <mat-form-field style="width: 70%;">
-                                        <input type="text" matInput
+                                        <input type="text" matInput 
                                             formControlName="remarks"
-                                            [readonly]="viewMode" />
+                                            [readonly]="viewMode"  maxlength="40" />
                                     </mat-form-field>
                                 </div>
                             </div>
