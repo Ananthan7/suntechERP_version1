@@ -7,8 +7,8 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class ImageSliderComponent implements OnInit {
   @Input() imageArray:any[] = []
-  @Input() width:any = '200px'
-  @Input() height:any = '200px'
+  @Input() width:any = '175px'
+  @Input() height:any = '175px'
   constructor() { }
 
   ngOnInit(): void {
