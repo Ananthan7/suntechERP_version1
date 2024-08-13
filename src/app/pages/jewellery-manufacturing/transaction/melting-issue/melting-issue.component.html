@@ -100,7 +100,8 @@
                                 </mat-form-field>
                                 <master-search class="masterSearch"
                                     [MasterSearchData]="jobnoCodeData"
-                                    *ngIf="isJobNumberSearchVisible && !viewMode" #overlayjobNoSearch
+                                    *ngIf="isJobNumberSearchVisible && !viewMode"
+                                    #overlayjobNoSearch
                                     (newRowClick)="jobnoCodeSelected($event)"></master-search>
                             </div>
                             <div class="col-md-4">
@@ -110,7 +111,7 @@
                                         readonly />
                                 </mat-form-field>
                             </div>
-                       
+
                         </div>
                         <div class="row">
                             <label for="inputPassword"
@@ -272,11 +273,11 @@
                                         caption="Job No"
                                         alignment="left"></dxi-column>
                                     <dxi-column [width]="100"
-                                        dataField="STOCK_CODE"
+                                        dataField="STOCK_DESCRIPTION"
                                         caption="Stock Code"
                                         alignment="left"></dxi-column>
                                     <dxi-column [width]="100"
-                                        dataField="STOCK_DESCRIPTION"
+                                        dataField="TOSTOCKCODE"
                                         caption="Stock Description"
                                         alignment="left"></dxi-column>
                                     <dxi-column [width]="100"
@@ -296,8 +297,8 @@
                                         alignment="right"></dxi-column>
                                     <dxi-column [width]="100"
                                         dataField="GROSS_WT"
-                                        caption="Gross Weight" alignment="right" 
-                                        MetalDecimalInput ></dxi-column>
+                                        caption="Gross Weight" alignment="right"
+                                        MetalDecimalInput></dxi-column>
                                     <dxi-column [width]="100" dataField="PURITY"
                                         caption="Purity" alignment="right"
                                         PurityDecimal></dxi-column>
@@ -322,7 +323,7 @@
                                             [valueFormat]="gridAmountDecimalFormat"
                                             displayFormat="{0}">
                                         </dxi-total-item>
-                                        <dxi-total-item column="PUREWT"
+                                        <dxi-total-item column="Pure Weight"
                                             summaryType="sum"
                                             [valueFormat]="gridAmountDecimalFormat"
                                             displayFormat="{0}">
@@ -361,7 +362,8 @@
                                     </dxi-column>
                                 </dx-data-grid>
                                 <button class="btn btn-primary add-btn"
-                                    (click)="open(mymodal)">Add Alloy
+                                    (click)="open(mymodal)">Add
+                                    Alloy
                                 </button>
                                 <div class="col-md-6">
                                     <ng-template #mymodal let-modal>
@@ -561,6 +563,6 @@
 </div>
 <ng-template #meltingissueDetailScreen>
     <app-melting-issue-details [content]="dataToDetailScreen"
-        (saveDetail)="setValuesToHeaderGrid($event)"
+        (saveDetail)="setValuesToHeaderGrid($event)" 
         (closeDetail)="closeDetailScreen()"></app-melting-issue-details>
 </ng-template>

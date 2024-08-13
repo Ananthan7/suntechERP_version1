@@ -988,7 +988,7 @@
                       >
                     </div>
                     <div class="col-md-5 pt-3">
-                      <mat-checkbox formControlName="notInterested" id="ID051"
+                      <mat-checkbox formControlName="notInterested" (change)="check()" id="ID051"
                         >NOT INTERESTED</mat-checkbox
                       >
                     </div>
@@ -1017,7 +1017,7 @@
                           >
                         </div>
                         <div class="col-md-5 pt-3">
-                          <mat-checkbox formControlName="socialMedia" id="ID056"
+                          <mat-checkbox formControlName="socialMedia" (change)="toggle()" id="ID056" 
                             >SOCIAL MEDIA</mat-checkbox
                           >
                         </div>
@@ -1039,6 +1039,43 @@
                           >
                         </div>
                       </div>
+                      <div class="col-md-12">
+                        <div [hidden]="ishidden">
+                          <div class="row">
+                            <div class="col-md-6">
+                              <label class="col-form-label">Facebook</label>
+                            </div>
+                            <div class="col-md-6">
+                              <mat-form-field style="width:100%" appearance="outline">
+                                <input matInput formControlName="facebook" placeholder="Facebook" />
+                              </mat-form-field>
+                            </div>
+                          </div>
+                      
+                          <div class="row">
+                            <div class="col-md-6">
+                              <label class="col-form-label">Twitter</label>
+                            </div>
+                            <div class="col-md-6">
+                              <mat-form-field style="width:100%" appearance="outline">
+                                <input matInput formControlName="twitter" placeholder="Twitter" />
+                              </mat-form-field>
+                            </div>
+                          </div>
+                      
+                          <div class="row">
+                            <div class="col-md-6">
+                              <label class="col-form-label">Instagram</label>
+                            </div>
+                            <div class="col-md-6">
+                              <mat-form-field style="width:100%" appearance="outline">
+                                <input matInput formControlName="instagram" placeholder="Instagram" />
+                              </mat-form-field>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      
                     </div>
                   </div>
                 </div>

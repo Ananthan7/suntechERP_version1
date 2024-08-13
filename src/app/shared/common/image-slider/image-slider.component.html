@@ -1,8 +1,8 @@
-<div style="border: 1px solid black; padding: 3px;" [ngStyle]="{ 'height': '100%', 'width': '100%' }">
-    <ngb-carousel *ngIf="imageArray.length>0">
+<div style="border: 1px solid  #bebebe; padding: 3px;" [ngStyle]="{ 'height': height, 'width': width }">
+    <ngb-carousel class="carousel-centered" style="margin-top: 24px;" *ngIf="imageArray.length > 0" [showNavigationArrows]="true" [showNavigationIndicators]="true">
         <ng-template ngbSlide *ngFor="let item of imageArray">
             <div class="picsum-img-wrapper">
-                <img [src]="item" alt="item" [ngStyle]="{ 'height': height, 'width': width }"/>
+                <img [src]="item" alt="item" [ngStyle]="{ 'height': '100%', 'width': '100%', 'object-fit': 'cover' }"/>
             </div>
         </ng-template>
     </ngb-carousel>

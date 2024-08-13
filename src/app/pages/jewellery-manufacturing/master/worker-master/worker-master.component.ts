@@ -19,6 +19,7 @@ import { MasterSearchComponent } from 'src/app/shared/common/master-search/maste
 export class WorkerMasterComponent implements OnInit {
   @ViewChild('overlayWorkerAcCodeSearch') overlayWorkerAcCodeSearch!: MasterSearchComponent;
   @ViewChild('overlayNameOfSupervisorSearch') overlayNameOfSupervisorSearch!: MasterSearchComponent;
+  @ViewChild('overlaydefaultprocessSearch') overlaydefaultprocessSearch!: MasterSearchComponent;
 
 
 
@@ -52,6 +53,17 @@ export class WorkerMasterComponent implements OnInit {
     SEARCH_HEADING: 'Worker A/c Code',
     SEARCH_VALUE: '',
     WHERECONDITION: "ACCODE <> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  defaultProcessData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 20,
+    SEARCH_FIELD: 'process_code',
+    SEARCH_HEADING: 'Process Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "process_code <> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -643,7 +655,7 @@ export class WorkerMasterComponent implements OnInit {
   }
 
   search() {
-    console.log("hitrttt");
+   
     if (this.searchTerm.trim() !== '') {
       // Filter data based on search term
       this.filteredData = this.tableData.filter(item =>
@@ -696,6 +708,9 @@ export class WorkerMasterComponent implements OnInit {
       case 'NameOfSupervisor':
         this.overlayNameOfSupervisorSearch.showOverlayPanel(event);
         break;
+        case 'DefaultProcess':
+          this.overlaydefaultprocessSearch.showOverlayPanel(event);
+          break;
       default:
     }
   }

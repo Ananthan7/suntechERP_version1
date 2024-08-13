@@ -9,7 +9,7 @@
 <modal-header (saveClick)="formSubmit('SAVE')" (cancelClick)="close()"
     (continueClick)="formSubmit('CONTINUE')" [isViewContinue]="true"
     [isViewDelete]="false" [isViewMore]="false"
-    [isViewStock]="true" (click)="stockClicked()"></modal-header>
+    [isViewStock]="true" (stockClick)="stockClicked()"></modal-header>
 <div class="row">
     <div class="col-md-12">
         <form [formGroup]="meltingIssuedetailsFrom">
@@ -337,7 +337,7 @@
                                 <div class="form-check">
                                     <input class="form-check-input"
                                         type="checkbox" value
-                                        id="flexCheckDefault">
+                                        id="flexCheckDefault" [disabled]="viewMode">
                                     <label class="form-check-label"
                                         for="flexCheckDefault">
                                         Avoid Alloy
