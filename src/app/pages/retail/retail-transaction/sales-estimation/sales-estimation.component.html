@@ -744,7 +744,7 @@
 
           <div class="col-md-12 m-t-10" style="padding: 0px">
             <mat-tab-group>
-              <mat-tab label="Line Item">
+              <mat-tab label="Sold Item">
                 <div class="table-responsive">
                   <div class="content">
                     <div class="left">
@@ -1224,7 +1224,7 @@
                   <!-- <th>Selling Price</th>
                   <th>Buying Price</th> -->
                   <th style="width: 35%" id="ID124">Sale</th>
-                  <th style="width: 35%" id="ID125">Purchase Rate</th>
+                  <th style="width: 35%" id="ID125">Purchase</th>
                 </tr>
                 <tr *ngFor="let krd of karatRateDetails; let id = index">
                   <td id="ID126">{{ krd.KARAT_CODE }}</td>
@@ -1922,7 +1922,7 @@
               </div>
               <div class="col-md-7">
                 <mat-form-field>
-                  <mat-label id="ID177">Item Description </mat-label>
+                  <mat-label id="ID177">Stock Description </mat-label>
                   <input type="text" matInput formControlName="fcn_exchange_item_desc" readonly />
                 </mat-form-field>
               </div>
@@ -2242,7 +2242,7 @@
           <tbody>
             <tr>
               <th style="text-align: center" id="ID175">Division</th>
-              <th id="ID201">Item Code</th>
+              <th id="ID201">Stock Code</th>
               <th id="ID202">Item Desc</th>
               <th id="ID203">Gross Weight</th>
               <th id="ID204">VAT Amount</th>
@@ -2688,7 +2688,7 @@
 <ng-template #mymodal let-modal>
   <div class="modal-header" style="padding: 10px 20px">
     <h4 class="modal-title" id="modal-dia-metal">
-      Item Details
+      Sales Details
     </h4>
     <button style="border: none" type="button" *ngIf="!updateBtn" class="close" aria-label="Close"
       (click)="closeItemModal()">
@@ -2747,7 +2747,7 @@
                         <div class="row">
                           <div class="col-md-6">
                             <div class="form-group row">
-                              <label class="col-sm-4" id="ID251">Item Description&nbsp;*</label>
+                              <label class="col-sm-4" id="ID251">Stock Description&nbsp;*</label>
                               <div class="col-sm-8">
                                 <mat-form-field appearance="outline">
                                   <input type="text" matInput formControlName="fcn_li_item_desc" id="fcn_li_item_desc"
@@ -2787,7 +2787,7 @@
                 <div class="form-group row">
                   <div class="col-md-6">
                     <div class="form-group row">
-                      <label class="col-sm-4 mt-2" id="ID253">PCs&nbsp;*</label>
+                      <label class="col-sm-4 mt-2" id="ID253">Pcs&nbsp;*</label>
                       <div class="col-sm-7">
                         <mat-form-field appearance="outline">
                           <input class="st_txt_right" type="number" [min]="0" autocomplete="off" [maxLength]="14"
