@@ -22,7 +22,6 @@ export class MeltingIssueDetailsComponent implements OnInit {
   @ViewChild('overlayprocess') overlayprocess!: MasterSearchComponent;
   @ViewChild('overlaystockcodeSearch') overlaystockcodeSearch!: MasterSearchComponent;
   @ViewChild('overlaylocationSearch') overlaylocationSearch!: MasterSearchComponent;
-
   @Input() content!: any;
   tableData: any[] = [];
   branchCode?: String;
@@ -37,6 +36,7 @@ export class MeltingIssueDetailsComponent implements OnInit {
   isViewStock: boolean = false;
   isDisableSaveBtn: boolean = false;
   tableDatastocklist = [];
+
 
   jobnoCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -282,34 +282,34 @@ export class MeltingIssueDetailsComponent implements OnInit {
       return true
     }
     if (this.comService.nullToString(form.waxweight) == '') {
-      this.comService.toastErrorByMsgId('MSG1816')//waxweight  is required
+      this.comService.toastErrorByMsgId('Waxweight cannot be empty')//waxweight  is required
       return true
     }
     if (this.comService.emptyToZero(form.lossweight) == 0) {
-      this.comService.toastErrorByMsgId('MSG1293')//lossweight  is required
+      this.comService.toastErrorByMsgId('LossWeight cannot be empty')//lossweight  is required
       return true
     }
     if (this.comService.emptyToZero(form.ticketno) == 0) {
-      this.comService.toastErrorByMsgId('MSG1293')//Ticket NUmber  is required
+      this.comService.toastErrorByMsgId('Ticket Number cannot be empty')//Ticket NUmber  is required
       return true
     }
     if (this.comService.emptyToZero(form.lotno) == 0) {
-      this.comService.toastErrorByMsgId('MSG1293')//Lot Number is required
+      this.comService.toastErrorByMsgId('Lot Number cannot be empty')//Lot Number is required
       return true
     }
     if (this.comService.emptyToZero(form.barno) == 0) {
-      this.comService.toastErrorByMsgId('MSG1293')//Bar Number is required
+      this.comService.toastErrorByMsgId('Bar Number cannot be empty')//Bar Number is required
       return true
     }
     if (this.comService.emptyToZero(form.silver) == 0) {
-      this.comService.toastErrorByMsgId('MSG1293')//Silver is required
+      this.comService.toastErrorByMsgId('Silver cannot be empty')//Silver is required
       return true
     }
     return false
   }
   /**use: to save data to grid*/
   formSubmit(flag: any) {
-    // if (this.submitValidations(this.meltingIssuedetailsFrom.value)) return;
+    if (this.submitValidations(this.meltingIssuedetailsFrom.value)) return;
     let dataToparent = {
       FLAG: flag,
       POSTDATA: this.setPostData()
@@ -327,7 +327,7 @@ export class MeltingIssueDetailsComponent implements OnInit {
       "UNIQUEID": 0,
       "SRNO": 0,
       "DT_BRANCH_CODE": this.branchCode,
-      "DT_VOCTYPE": "stri",
+      "DT_VOCTYPE": "",
       "DT_VOCNO": 0,
       "DT_VOCDATE": this.comService.formatDateTime(this.currentDate),
       "DT_YEARMONTH": this.comService.yearSelected,
@@ -340,7 +340,7 @@ export class MeltingIssueDetailsComponent implements OnInit {
       "STOCK_CODE": this.meltingIssuedetailsFrom.value.stockcode,
       "STOCK_DESCRIPTION": this.meltingIssuedetailsFrom.value.stockdes,
       "DIVCODE": "S",
-      "KARAT_CODE": "stri",
+      "KARAT_CODE": "",
       "PCS": this.meltingIssuedetailsFrom.value.pcs,
       "GROSS_WT": this.meltingIssuedetailsFrom.value.grossweight,
       "STONE_WT": this.comService.emptyToZero(this.meltingIssuedetailsFrom.value.stoneweight),
@@ -354,14 +354,14 @@ export class MeltingIssueDetailsComponent implements OnInit {
       "STONEDIFF": 0,
       "WAX_WT": this.meltingIssuedetailsFrom.value.waxweight,
       "TREE_NO": this.comService.nullToString(this.meltingIssuedetailsFrom.value.treeno),
-      "WIP_ACCODE": "string",
-      "CURRENCY_CODE": "stri",
+      "WIP_ACCODE": "",
+      "CURRENCY_CODE": "",
       "CURRENCY_RATE": 0,
       "MKG_RATEFC": 0,
       "MKG_RATECC": 0,
       "MKGVALUEFC": 0,
       "MKGVALUECC": 0,
-      "DLOC_CODE": "string",
+      "DLOC_CODE": "",
       "REMARKS": this.comService.nullToString(this.meltingIssuedetailsFrom.value.remarks),
       "LOCTYPE_CODE": this.comService.nullToString(this.meltingIssuedetailsFrom.value.location),
       "TOSTOCKCODE": this.comService.nullToString(this.meltingIssuedetailsFrom.value.tostock),
@@ -374,14 +374,14 @@ export class MeltingIssueDetailsComponent implements OnInit {
       "SILVER_PUREWT": 0,
       "TOPURITY": this.meltingIssuedetailsFrom.value.topurity,
       "PUR_PER": 0,
-      "MELTING_TYPE": "string",
+      "MELTING_TYPE": "",
       "ISALLOY": "s",
-      "UNQ_JOB_ID": "string",
-      "SUB_STOCK_CODE": "string",
+      "UNQ_JOB_ID": "",
+      "SUB_STOCK_CODE": "",
       "IS_REJECT": true,
-      "REASON": "string",
-      "REJ_REMARKS": "string",
-      "ATTACHMENT_FILE": "string"
+      "REASON": "",
+      "REJ_REMARKS": "",
+      "ATTACHMENT_FILE": ""
     }
   }
   emptyToZero(value: any) {
@@ -581,7 +581,7 @@ export class MeltingIssueDetailsComponent implements OnInit {
           this.meltingIssuedetailsFrom.controls.jobdes.setValue(data[0].DESCRIPTION)
           this.meltingIssuedetailsFrom.controls.process.setValue(data[0].PROCESS)
           this.meltingIssuedetailsFrom.controls.worker.setValue(data[0].WORKER)
-          this.meltingIssuedetailsFrom.controls.stockcode.setValue(data[0].DIVCODE)
+          this.meltingIssuedetailsFrom.controls.stockcode.setValue(data[0].STOCK_CODE)
           this.meltingIssuedetailsFrom.controls.pureweight.setValue(data[0].PUREWT)
           this.meltingIssuedetailsFrom.controls.pcs.setValue(data[0].PCS)
           this.meltingIssuedetailsFrom.controls.workerdes.setValue(data[0].WORKERDESC)
@@ -589,7 +589,7 @@ export class MeltingIssueDetailsComponent implements OnInit {
           this.meltingIssuedetailsFrom.controls.grossweight.setValue(data[0].NETWT)
           this.meltingIssuedetailsFrom.controls.purity.setValue(data[0].PURITY)
           this.meltingIssuedetailsFrom.controls.waxweight.setValue(data[0].WAX_WEIGHT)
-          this.meltingIssuedetailsFrom.controls.stockdes.setValue(data[0].STOCK_CODE)
+          this.meltingIssuedetailsFrom.controls.stockdes.setValue(data[0].DIVCODE)
           this.meltingIssuedetailsFrom.controls.tostock.setValue(data[0].STOCK_DESCRIPTION)
           this.meltingIssuedetailsFrom.controls.topurity.setValue(data[0].PURE_WT)
           this.meltingIssuedetailsFrom.controls.netweight.setValue(data[0].NETWT)

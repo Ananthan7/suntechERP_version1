@@ -64,6 +64,7 @@ export class MeltingIssueComponent implements OnInit {
   companyName = this.commonService.allbranchMaster['BRANCH_NAME'];
   branchCode?: String;
   yearMonth?: String;
+ 
 
   user: MasterSearchModel = {
     PAGENO: 1,
@@ -171,6 +172,7 @@ export class MeltingIssueComponent implements OnInit {
     currency: [''],
     currencyrate: [''],
     jobpurity: [''],
+    stockcode: [''],
     FLAG: [null],
     YEARMONTH: [''],
     BRANCH_CODE: [''],
