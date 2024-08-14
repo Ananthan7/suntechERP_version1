@@ -47,8 +47,7 @@ export class FavoriteMenusComponent implements OnInit {
       this.skeltonLoading = false;
       if (response.status == 'Success') {
         let menuData = response.response
-        this.favMenuList = menuData.filter((item:any) => item.VISIBLE_IN_WEB == true || item.VISIBLE_IN_CLIENT == true)
-        console.log(this.favMenuList);
+        this.favMenuList = menuData.filter((item:any) =>  item.MENU_MODULE == 'Jewellery Manufacturing' && item.MENU_SUB_MODULE=='Master')
         this.ChangeDetector.detectChanges()
         return
         

@@ -39,19 +39,18 @@ export class ModulelistComponent implements OnInit {
     });
   }
   imageUrlMap: any = {
-    1: '../../assets/images/lp-icons/newIcons/Retail.png',
-    2: '../../assets/images/lp-icons/newIcons/bullion.png',
-    4: '../../assets/images/lp-icons/newIcons/Refinery.png',
-    5: '../../assets/images/lp-icons/newIcons/Jewellery Manufacturing.png',
-    6: '../../assets/images/lp-icons/newIcons/componentwise.png',
-    7: '../../assets/images/lp-icons/newIcons/Wholesale.png',
-    9: '../../assets/images/lp-icons/newIcons/Payroll.png',
-    10: '../../assets/images/lp-icons/newIcons/boiling.png',
-    11: '../../assets/images/lp-icons/newIcons/Repairing.png',
-    12: '../../assets/images/lp-icons/newIcons/catalogue.png',
-    13: '../../assets/images/lp-icons/newIcons/fixed assets.png',
-    14: '../../assets/images/lp-icons/newIcons/General.png',
-    // 8: '../../assets/images/lp-icons/9.png',
+    1: '../../assets/images/lp-icons/newIcons/Retail.svg',
+    2: '../../assets/images/lp-icons/newIcons/bullion.svg',
+    4: '../../assets/images/lp-icons/newIcons/Refinery.svg',
+    5: '../../assets/images/lp-icons/newIcons/Jewellery Manufacturing.svg',
+    6: '../../assets/images/lp-icons/newIcons/componentwise.svg',
+    7: '../../assets/images/lp-icons/newIcons/Wholesale.svg',
+    9: '../../assets/images/lp-icons/newIcons/Payroll.svg',
+    10: '../../assets/images/lp-icons/newIcons/boiling.svg',
+    11: '../../assets/images/lp-icons/newIcons/Repairing.svg',
+    12: '../../assets/images/lp-icons/newIcons/catalogue.svg',
+    13: '../../assets/images/lp-icons/newIcons/fixed assets.svg',
+    14: '../../assets/images/lp-icons/newIcons/General.svg',
   };
   /**USE: get module list from API */
   getModuleList() {
@@ -64,7 +63,7 @@ export class ModulelistComponent implements OnInit {
         this.menuList.push({
           MID: 15,
           MODULE_NAME: 'Addons',
-          imageUrl: '../../assets/images/lp-icons/newIcons/add_ons.png'
+          imageUrl: '../../assets/images/lp-icons/newIcons/add_ons.svg'
         });
 
         this.menuList.sort((a, b) => {
