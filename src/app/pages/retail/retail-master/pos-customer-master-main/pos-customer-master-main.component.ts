@@ -30,6 +30,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
   currentDate = new Date();
   isCustProcessing: boolean = false;
   customerDetails: any = {};
+  ishidden = true;
 
   // Dialog box
   dialogBox: any;
@@ -126,7 +127,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Language Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "where types = 'LANGUAGE MASTER'",
+    WHERECONDITION: "TYPES = 'LANGUAGE MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -138,7 +139,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
     SEARCH_FIELD: "CODE",
     SEARCH_HEADING: "Fav Celebration CODE",
     SEARCH_VALUE: "",
-    WHERECONDITION: "CODE<> ''",
+    WHERECONDITION: "TYPES='FAVORITE CELEBRATION MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -151,7 +152,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
     SEARCH_FIELD: "CODE",
     SEARCH_HEADING: "Religion CODE",
     SEARCH_VALUE: "",
-    WHERECONDITION: "CODE<> ''",
+    WHERECONDITION: "TYPES='RELIGION MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -162,9 +163,9 @@ export class PosCustomerMasterMainComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 3,
     SEARCH_FIELD: "CODE",
-    SEARCH_HEADING: "Religion CODE",
+    SEARCH_HEADING: "Customer Status CODE",
     SEARCH_VALUE: "",
-    WHERECONDITION: "CODE<> ''",
+    WHERECONDITION: "TYPES='CUSTOMER STATUS MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -177,7 +178,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
     SEARCH_FIELD: "CODE",
     SEARCH_HEADING: "Category",
     SEARCH_VALUE: "",
-    WHERECONDITION: "CODE<> ''",
+    WHERECONDITION: "TYPES='CUSTOMER CATEGORY MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -338,9 +339,49 @@ export class PosCustomerMasterMainComponent implements OnInit {
     );
   }
 
+  check() {
+    const isNotInterestedChecked = this.posCustomerMasterMainForm.controls.notInterested.value;
+  
+    if (isNotInterestedChecked) {
+      this.posCustomerMasterMainForm.controls.whatsapp.setValue(false);
+      this.posCustomerMasterMainForm.controls.email.setValue(false);
+      this.posCustomerMasterMainForm.controls.phoneCall.setValue(false);
+      this.posCustomerMasterMainForm.controls.sms.setValue(false);
+      
+      this.posCustomerMasterMainForm.controls.whatsapp.disable();
+      this.posCustomerMasterMainForm.controls.email.disable();
+      this.posCustomerMasterMainForm.controls.phoneCall.disable();
+      this.posCustomerMasterMainForm.controls.sms.disable();
+    } else {
+      this.posCustomerMasterMainForm.controls.whatsapp.enable();
+      this.posCustomerMasterMainForm.controls.email.enable();
+      this.posCustomerMasterMainForm.controls.phoneCall.enable();
+      this.posCustomerMasterMainForm.controls.sms.enable();
+  
+      this.posCustomerMasterMainForm.controls.whatsapp.reset();
+      this.posCustomerMasterMainForm.controls.email.reset();
+      this.posCustomerMasterMainForm.controls.phoneCall.reset();
+      this.posCustomerMasterMainForm.controls.sms.reset();
+    }
+  }
+  // social_media(){
+  //   const isChecked = this.posCustomerMasterMainForm.controls.socialMedia.value;
+  //   if(isChecked){
+  //       var field = document.getElementById('social_fields');
+  //       field?.style.display = show
+  //       }else{
+
+  //   }
+  // }
+
+  toggle(){ 
+    this.ishidden =! this.ishidden;
+  }
+  
+
   stateSelected(e: any) {
     console.log(e);
-    this.posCustomerMasterMainForm.controls.state.setValue(e.STATE_CODE);
+    this.posCustomerMasterMainForm.controls.state.setValue(e.STATE_DESCRIPTION);
   }
 
   categorySelected(e: any) {

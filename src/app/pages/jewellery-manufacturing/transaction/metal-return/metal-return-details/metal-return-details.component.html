@@ -251,9 +251,10 @@
                                         :</label>
                                     <mat-form-field style="width: 50%;">
                                         <input type="text" matInput
+                                        [readonly]="viewMode"
                                             formControlName="NET_WT"
                                             class="text-right" [max]="13"
-                                            readonly MetalDecimalInput />
+                                             MetalDecimalInput />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -300,7 +301,7 @@
                                         <input type="text" matInput
                                             formControlName="PURE_WT"
                                             style="text-align: right;"
-                                            readonly
+                                            [readonly]="viewMode"
                                             MetalDecimalInput [max]="13" />
                                     </mat-form-field>
                                 </div>

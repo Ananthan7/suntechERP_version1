@@ -8,7 +8,7 @@
   padding: 20px 0px;
   .card_btn {
     cursor: pointer;
-    border: 1px solid #3599cc;
+    // border: 1px solid #3599cc;
     border-radius: 10px;
     text-align: center;
     /* padding: 10px; */
@@ -27,6 +27,17 @@
       color: #012c57;
     }
   }
+
+  .card_btn:hover img {
+    -webkit-transform: scale(1.2, 1.2);
+      transform: scale(1.2, 1.2);
+  }
+  
+  .card_btn img:hover:before {
+    -webkit-animation: none;
+      animation: none;
+  }
 }
+
 
 

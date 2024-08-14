@@ -109,14 +109,14 @@
                     <input type="number" matInput formControlName="creditdays" />
                   </mat-form-field>
                 </div>
-                <div class="col-sm-2">
-                    <mat-form-field style="width: 100%">
-                        <input matInput 
-                          placeholder="DD/MM/YYYY" DateValidation formControlName="voctype" />
-                        <mat-datepicker-toggle matSuffix ></mat-datepicker-toggle>
-                        <mat-datepicker [startAt]="currentDate" ></mat-datepicker>
-                      </mat-form-field>
-                  </div>
+                  <div class="col-sm-2">
+                      <mat-form-field style="width: 100%">
+                          <input matInput [matDatepicker]="credit_date" name="credit_date" formControlName="credit_date" placeholder="DD/MM/YYYY"
+                          DateValidation />
+                          <mat-datepicker-toggle matSuffix [for]="credit_date"></mat-datepicker-toggle>
+                          <mat-datepicker [startAt]="currentDate" #credit_date></mat-datepicker>
+                        </mat-form-field>
+                    </div>
               </div>
 
               <div class="row mb-1">

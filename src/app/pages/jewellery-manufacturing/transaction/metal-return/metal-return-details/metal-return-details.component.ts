@@ -88,11 +88,11 @@ export class MetalReturnDetailsComponent implements OnInit {
   stockCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 201,
+    LOOKUPID: 20,
     SEARCH_FIELD: 'STOCK_CODE',
     SEARCH_HEADING: 'Stock Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "",
+    WHERECONDITION: "STOCK_CODE <>''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -297,6 +297,38 @@ export class MetalReturnDetailsComponent implements OnInit {
     this.closeDetail.emit()
     // this.activeModal.close(data);
   }
+
+  
+isStockCodeDuplicate(stockCode: string): boolean {
+  // Get the current list of stock codes from the form array
+  const stockCodes = this.metalReturnDetailsForm.get('details')?.value.map((item: any) => item.stockCode) || [];
+
+  // Check if the provided stockCode already exists in the array
+  return stockCodes.includes(stockCode);
+}
+
+
+  performReset() {
+    const currentStockCode = this.metalReturnDetailsForm.value.stockCode;
+
+    if (this.isStockCodeDuplicate(currentStockCode)) {
+        Swal.fire({
+            title: 'Duplicate Stock Code',
+            text: 'This Stock Code entry is already available in detail. Do you wish to continue?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, continue',
+            cancelButtonText: 'No, cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                this.resetStockDetails(); // Proceed with clearing the stock details
+            }
+        });
+    } else {
+        this.resetStockDetails(); // Proceed if no duplicate
+    }
+}
+
 
   resetStockDetails() {
     this.metalReturnDetailsForm.controls.stockCode.setValue('')
