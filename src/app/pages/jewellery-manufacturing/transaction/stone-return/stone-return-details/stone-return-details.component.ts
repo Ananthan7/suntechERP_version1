@@ -187,15 +187,19 @@ export class StoneReturnDetailsComponent implements OnInit {
     this.stonereturndetailsFrom.controls.processname.setValue(this.content.PROCESS_NAME)
     this.stonereturndetailsFrom.controls.worker.setValue(this.content.WORKER_CODE)
     this.stonereturndetailsFrom.controls.workername.setValue(this.content.WORKER_NAME)
-    // this.stonereturndetailsFrom.controls.stock.setValue(this.content.STOCK_CODE)
-    // this.stonereturndetailsFrom.controls.stockdes.setValue(this.content.STOCK_DESCRIPTION)
+    this.stonereturndetailsFrom.controls.stockCode.setValue(this.content.STOCK_CODE)
+    this.stonereturndetailsFrom.controls.stockCodeDes.setValue(this.content.STOCK_DESCRIPTION)
     this.stonereturndetailsFrom.controls.sieveset.setValue(this.content.SIEVE_SET)
-    this.stonereturndetailsFrom.controls.broken.setValue(this.content.JOB_SO_NUMBER)
+    this.stonereturndetailsFrom.controls.broken.setValue(this.content.STOCK_CODE)
+    this.stonereturndetailsFrom.controls.brokenDescription.setValue(this.content.STOCK_DESCRIPTION)
     this.stonereturndetailsFrom.controls.pieces.setValue(this.content.PCS)
     this.stonereturndetailsFrom.controls.size.setValue(this.content.SIZE)
+    this.stonereturndetailsFrom.controls.shape.setValue(this.content.SHAPE)
     this.stonereturndetailsFrom.controls.sieve.setValue(this.content.SIEVE)
     this.stonereturndetailsFrom.controls.color.setValue(this.content.COLOR)
-    this.stonereturndetailsFrom.controls.clarity.setValue(this.content.CLARITY)
+    this.stonereturndetailsFrom.controls.unitrate.setValue(this.content.RATEFC)
+    this.stonereturndetailsFrom.controls.amount.setValue(this.content.AMOUNTFC)
+    this.stonereturndetailsFrom.controls.pointerwt.setValue(this.content.GROSS_WT)
 
   };
 
@@ -314,10 +318,10 @@ export class StoneReturnDetailsComponent implements OnInit {
       "GROSS_WT": 0,
       "CURRENCY_CODE": "",
       "CURRENCY_RATE": 0,
-      "RATEFC": 0,
-      "RATELC": 0,
-      "AMOUNTFC": 0,
-      "AMOUNTLC": 0,
+      "RATEFC":this.comService.nullToString(form.unitrate),
+      "RATELC":this.comService.nullToString(form.unitrate),
+      "AMOUNTFC":this.comService.nullToString(form.amount),
+      "AMOUNTLC":this.comService.nullToString(form.amount),
       "PROCESS_CODE": this.comService.nullToString(form.process),
       "PROCESS_NAME": this.comService.nullToString(form.processname),
       "WORKER_CODE": this.comService.nullToString(form.worker),
@@ -349,7 +353,7 @@ export class StoneReturnDetailsComponent implements OnInit {
       "PICTURE_NAME": "",
       "RET_TO": "",
       "ISMISSING": 0,
-      "SIEVE_SET": "",
+      "SIEVE_SET": this.comService.nullToString(form.sieveset),
       "SUB_STOCK_CODE": ""
     }
   }
@@ -458,6 +462,8 @@ export class StoneReturnDetailsComponent implements OnInit {
           let data = result.dynamicData[0]
           if (data[0] && data[0].UNQ_JOB_ID != '') {
             this.jobNumberDetailData = data
+            console.log(data,'data')
+            this.stonereturndetailsFrom.controls.jobDesc.setValue(data[0].DESCRIPTION)
             this.stonereturndetailsFrom.controls.subjobno.setValue(data[0].UNQ_JOB_ID)
             this.stonereturndetailsFrom.controls.subjobDesc.setValue(data[0].JOB_DESCRIPTION)
             this.stonereturndetailsFrom.controls.designcode.setValue(data[0].DESIGN_CODE)
