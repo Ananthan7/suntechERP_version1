@@ -140,8 +140,10 @@
                     <div class="col-md-12">
                         <dx-data-grid id="gridContainer" [dataSource]="metalReturnDetailsData" [showBorders]="true"
                             [showRowLines]="true" (onRowClick)="onRowClickHandler($event)"
-                            (onRowDblClick)="onRowDoubleClickHandler($event)" [allowColumnResizing]="true">
+                            (onRowDblClick)="onRowDoubleClickHandler($event)" [allowColumnResizing]="true"  height="150px">
                             <dxo-selection mode="single"></dxo-selection>
+                              <dxo-scrolling mode="virtual"></dxo-scrolling>
+
 
                             <dxi-column dataField="SRNO" caption="Sr #"></dxi-column>
                             <dxi-column dataField="STOCK_CODE" caption="Stock Code"></dxi-column>

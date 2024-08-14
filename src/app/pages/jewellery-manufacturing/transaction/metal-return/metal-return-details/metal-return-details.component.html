@@ -50,6 +50,7 @@
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput
+                                    readonly
                                         formControlName="subJobNo">
                                 </mat-form-field>
                             </div>
@@ -97,7 +98,7 @@
                                         formControlName="workerCode"
                                         [readonly]="viewMode"
                                         (keydown)="lookupKeyPress($event,'workerCode')"
-                                        (focusout)=WorkerCodeValidate($event)>
+                                        (focusout)="WorkerCodeValidate($event)">
                                 </mat-form-field>
                                 <master-search
                                     [MasterSearchData]="WorkerCodeData"
