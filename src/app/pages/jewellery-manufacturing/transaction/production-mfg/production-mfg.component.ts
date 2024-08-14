@@ -204,12 +204,9 @@ export class ProductionMfgComponent implements OnInit {
   }
   /**USE: to set currency on selected change*/
   currencyDataSelected(event: any) {
-    if (event.target?.value) {
-      this.productionFrom.controls.currency.setValue((event.target.value).toUpperCase())
-    } else {
-      this.productionFrom.controls.currency.setValue(event.CURRENCY_CODE)
-    }
-    this.setCurrencyRate()
+    this.productionFrom.controls.currency.setValue(event.CURRENCY_CODE)
+    this.setFormDecimal('CURRENCY_RATE',event.CONV_RATE,'RATE')
+    // this.setCurrencyRate()
   }
   setFormNullToString(formControlName: string, value: any) {
     this.productionFrom.controls[formControlName].setValue(
@@ -228,14 +225,14 @@ export class ProductionMfgComponent implements OnInit {
     this.productionFrom.controls.currency.setValue(CURRENCY_CODE);
     this.productionFrom.controls.basecurrency.setValue(CURRENCY_CODE);
     const CURRENCY_RATE: any[] = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == this.productionFrom.value.currency);
-    this.setFormDecimal('BASE_CURRENCY_RATE',CURRENCY_RATE[0].CONV_RATE,'RATE')
+    this.setFormDecimal('BASE_CURRENCY_RATE', CURRENCY_RATE[0].CONV_RATE, 'RATE')
     this.setCurrencyRate()
   }
   /**USE: to set currency from branch currency master */
   setCurrencyRate() {
     const CURRENCY_RATE: any[] = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == this.productionFrom.value.currency);
     if (CURRENCY_RATE.length > 0) {
-      this.setFormDecimal('CURRENCY_RATE',CURRENCY_RATE[0].CONV_RATE,'RATE')
+      this.setFormDecimal('CURRENCY_RATE', CURRENCY_RATE[0].CONV_RATE, 'RATE')
     } else {
       this.productionFrom.controls.currency.setValue('')
       this.productionFrom.controls.CURRENCY_RATE.setValue('')
@@ -700,7 +697,7 @@ export class ProductionMfgComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
-  setMetalRate(){
+  setMetalRate() {
   }
 
 

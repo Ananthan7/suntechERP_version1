@@ -6,35 +6,34 @@
   </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" [isViewDelete]="false"  [isViewContinue]="true" (continueClick)="continue()">
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
+  [isViewStock]="true" [isViewDelete]="false" (stockClick)="opennewdetails()"
+  [isViewContinue]="true" (continueClick)="continue()">
 </modal-header>
-
-<div class="container-fluid">
+<div class="p-3">
   <form [formGroup]="productiondetailsFrom">
     <div class="row">
       <div class="col-md-5">
-        <div class="row mb-2">
+        <div class="row ">
           <label for="input" class="col-sm-3 col-form-label">Job No :</label>
           <div class="col-sm-3">
-            <mat-form-field appearance="outline" style="width: 70%;">
-              <input type="text" matInput (focusout)="jobNumberValidate($event)" formControlName="jobno" UpperCaseDirective (focusout)="validateLookupField($event,jobnoCodeData,'jobno')"/>
+            <mat-form-field appearance="outline" style="width: 100%;">
+              <input type="text" matInput (focusout)="jobNumberValidate($event)"
+                formControlName="jobno" UpperCaseDirective
+                (focusout)="validateLookupField($event,jobnoCodeData,'jobno')" />
+              <master-search class="masterSearch"
+                [MasterSearchData]="jobnoCodeData"
+                (newRowClick)="jobnoCodeSelected($event)">
+              </master-search>
             </mat-form-field>
-            <master-search [MasterSearchData]="jobnoCodeData" (newRowClick)="jobnoCodeSelected($event)"></master-search>
           </div>
           <div class="col-sm-5">
             <mat-form-field appearance="outline" style="width: 100%;">
               <input type="text" matInput formControlName="jobnoDesc" />
             </mat-form-field>
-            <!-- <mat-form-field appearance="outline" style="width: 100%">
-              <input matInput [matDatepicker]="jobDate" name="jobDate" formControlName="jobDate"
-                placeholder="YYYY/MM/DD" DateValidation />
-              <mat-datepicker-toggle matSuffix [for]="jobDate"></mat-datepicker-toggle>
-              <mat-datepicker [startAt]="currentDate" #jobDate></mat-datepicker>
-            </mat-form-field> -->
           </div>
-
         </div>
-        <div class="row mb-2">
+        <div class="row">
           <label for="input" class="col-sm-3 col-form-label">Sub Job No
             :</label>
           <div class="col-sm-3">
@@ -48,14 +47,18 @@
             </mat-form-field>
           </div>
         </div>
-        <div class="row mb-2">
+        <div class="row">
           <label for="input" class="col-sm-3 col-form-label">Customer :</label>
           <div class="col-sm-3">
-            <mat-form-field appearance="outline" style="width: 70%;">
-              <input type="text" matInput formControlName="customer" UpperCaseDirective  (focusout)="validateLookupField($event,customerCodeData,'customer')"/>
+            <mat-form-field appearance="outline" style="width: 100%;">
+              <input type="text" matInput formControlName="customer"
+                UpperCaseDirective
+                (focusout)="validateLookupField($event,customerCodeData,'customer')" />
+              <master-search class="masterSearch"
+                [MasterSearchData]="customerCodeData"
+                (newRowClick)="customerCodeScpSelected($event)">
+              </master-search>
             </mat-form-field>
-            <master-search [MasterSearchData]="customerCodeData"
-              (newRowClick)="customerCodeScpSelected($event)"></master-search>
           </div>
           <div class="col-sm-5">
             <mat-form-field appearance="outline" style="width: 100%;">
@@ -65,7 +68,7 @@
         </div>
       </div>
       <div class="col-md-5">
-        <div class="row mb-2">
+        <div class="row">
           <label for="input" class="col-sm-3 col-form-label">Process :</label>
           <div class="col-sm-3">
             <mat-form-field appearance="outline" style="width: 100%;">
@@ -78,7 +81,7 @@
             </mat-form-field>
           </div>
         </div>
-        <div class="row mb-2">
+        <div class="row">
           <label for="input" class="col-sm-3 col-form-label">Worker :</label>
           <div class="col-sm-3">
             <mat-form-field appearance="outline" style="width: 100%;">
@@ -91,7 +94,7 @@
             </mat-form-field>
           </div>
         </div>
-        <div class="row mb-2">
+        <div class="row">
           <label for="input" class="col-sm-3 col-form-label">Parts :</label>
           <div class="col-sm-3">
             <mat-form-field appearance="outline" style="width: 100%;">
@@ -106,330 +109,377 @@
         </div>
       </div>
     </div>
-
-    <div class="p-2">
-      <mat-tab-group [selectedIndex]="this.divisionMS == 'ID' ? 0 : 1">
-        <mat-tab label="Diamond Jewellery">
-          <div class="row">
-            <div class="col-md-8">
-              <div class="row mb-2">
-                <label for="input" class="col-sm-2 col-form-label">Design
-                  :</label>
-                <div class="col-sm-2">
-                  <mat-form-field appearance="outline" style="width: 70%;">
-                    <input type="text" matInput formControlName="DESIGN_CODE" UpperCaseDirective   (focusout)="validateLookupField($event,designCodeData,'DESIGN_CODE')"/>
-                  </mat-form-field>
-                  <master-search [MasterSearchData]="designCodeData"
-                    (newRowClick)="designSelected($event)"></master-search>
-                </div>
-
-                <div class="col-sm-4">
-                  <mat-form-field appearance="outline" style="width: 100%;">
-                    <input type="text" matInput formControlName="DESIGN_DESCRIPTION" />
-                  </mat-form-field>
-                </div>
-                <label for="input" class="col-sm-2 col-form-label">Total PCS
-                  :</label>
-                <div class="col-sm-2">
-                  <mat-form-field appearance="outline" style="width: 100%;">
-                    <input type="text" matInput formControlName="totalpcs" NumberOnly class="text-right" />
-                  </mat-form-field>
-                </div>
-              </div>
-              <div class="row mb-2">
-                <label for="input" class="col-sm-2 col-form-label">No of Pcs
-                  :</label>
-                <div class="col-sm-2">
-                  <mat-form-field appearance="outline" style="width: 100%;">
-                    <input type="number" matInput class="text-right" formControlName="JOB_PCS" NumberOnly />
-                  </mat-form-field>
-                </div>
-                <label for="input" class="col-sm-2 col-form-label">Location
-                  :</label>
-                <div class="col-sm-2">
-                  <mat-form-field appearance="outline" style="width: 75%;">
-                    <input type="text" matInput formControlName="location" UpperCaseDirective   (focusout)="validateLookupField($event,locationCodeData,'location')"/>
-                  </mat-form-field>
-                  <master-search [MasterSearchData]="locationCodeData"
-                    (newRowClick)="locationCodeSelected($event)"></master-search>
-                </div>
-                <label for="input" class="col-sm-2 col-form-label">Loss Qty
-                  :</label>
-                <div class="col-sm-2">
-                  <mat-form-field appearance="outline" style="width: 100%;">
-                    <input type="text" matInput formControlName="LOSS_WT" [max]="13" SixDecimalInput
-                      class="text-right" />
-                  </mat-form-field>
-                </div>
-              </div>
-              <div class="row mb-2">
-                <label for="input" class="col-sm-2 col-form-label">Gross Weight
-                  :</label>
-                <div class="col-sm-2">
-                  <mat-form-field appearance="outline" style="width: 100%;">
-                    <input type="text" matInput MetalDecimalInput [max]="13" class="text-right"
-                      formControlName="GROSS_WT" />
-                  </mat-form-field>
-                </div>
-                <label for="input" class="col-sm-2 col-form-label">Stone Pcs
-                  :</label>
-                <div class="col-sm-2">
-                  <mat-form-field appearance="outline" style="width: 100%;">
-                    <input type="text" matInput maxlength="24" class="text-right" formControlName="STONE_PCS"
-                      NumberOnly />
-                  </mat-form-field>
-                </div>
-                <label for="input" class="col-sm-2 col-form-label">Time Taken
-                  :</label>
-                <div class="col-sm-2">
-                  <mat-form-field appearance="outline" style="width: 100%;">
-                    <input type="text" matInput formControlName="timetaken" />
-                  </mat-form-field>
-                </div>
-              </div>
-              <div class="row mb-2">
-                <label for="input" class="col-sm-2 col-form-label">Metal Weight
-                  :</label>
-                <div class="col-sm-2">
-                  <mat-form-field appearance="outline" style="width: 100%;">
-                    <input type="text" matInput [max]="13" class="text-right" formControlName="METAL_WT"
-                      MetalDecimalInput />
-                  </mat-form-field>
-                </div>
-                <label for="input" class="col-sm-2 col-form-label">Stone Weight
-                  :</label>
-                <div class="col-sm-2">
-                  <mat-form-field appearance="outline" style="width: 100%;">
-                    <input type="text" matInput class="text-right" formControlName="STONE_WT" [max]="13"
-                      SixDecimalInput />
-                  </mat-form-field>
-                </div>
-                <label for="input" class="col-sm-2 col-form-label">Price 1
-                  :</label>
-                <div class="col-sm-2">
-                  <mat-form-field appearance="outline" style="width: 75%;">
-                    <input type="text" matInput class="text-right" formControlName="price1" NumberOnly UpperCaseDirective   (focusout)="validateLookupField($event,price1CodeData,'price1')"/>
-                  </mat-form-field>
-                  <master-search [MasterSearchData]="price1CodeData" (newRowClick)="price1CodeSelected($event)">
+    <mat-tab-group [selectedIndex]="this.divisionMS == 'ID' ? 0 : 1">
+      <!-- diamond tab section starts -->
+      <mat-tab label="Diamond Jewellery">
+        <div class="row p-2">
+          <div class="col-md-8">
+            <div class="row">
+              <label for="input" class="col-sm-2 col-form-label">Design
+                :</label>
+              <div class="col-sm-2">
+                <mat-form-field appearance="outline" style="width: 100%;">
+                  <input type="text" matInput formControlName="DESIGN_CODE"
+                    UpperCaseDirective
+                    (focusout)="validateLookupField($event,designCodeData,'DESIGN_CODE')" />
+                  <master-search class="masterSearch"
+                    [MasterSearchData]="designCodeData"
+                    (newRowClick)="designSelected($event)">
                   </master-search>
-                </div>
+                </mat-form-field>
               </div>
-              <div class="row mb-2">
-                <label for="input" class="col-sm-2 col-form-label">Prefix
-                  :</label>
-                <div class="col-sm-2 d-flex">
-                  <mat-form-field appearance="outline" style="width: 75%;">
-                    <input type="text" matInput formControlName="PREFIX" UpperCaseDirective    (focusout)="validateLookupField($event,prefixCodeData,'PREFIX')"/>
-                  </mat-form-field>&nbsp;
-                  <master-search [MasterSearchData]="prefixCodeData"
-                    (newRowClick)="prefixCodeSelected($event)"></master-search>
-                  <!-- <mat-form-field appearance="outline" style="width: 20%;">
-                    <input type="number" matInput
-                      class="text-right" formControlName="prefixNo"
-                      NumberOnly />
-                  </mat-form-field> -->
-                </div>
-
-                <label for="input" class="col-sm-2 col-form-label">Other Stone
-                  :</label>
-                <div class="col-sm-2">
-                  <mat-form-field appearance="outline" style="width: 100%;">
-                    <input type="text" matInput formControlName="otherstone" />
-                  </mat-form-field>
-                </div>
-                <label for="input" class="col-sm-2 col-form-label">Price 2
-                  :</label>
-                <div class="col-sm-2">
-                  <mat-form-field appearance="outline" style="width: 75%;">
-                    <input type="text" matInput class="text-right" formControlName="price2" NumberOnly UpperCaseDirective   (focusout)="validateLookupField($event,price2CodeData,'price2')"/>
-                  </mat-form-field>
-                  <master-search [MasterSearchData]="price2CodeData" (newRowClick)="price2CodeSelected($event)">
-                  </master-search>
-                </div>
+              <div class="col-sm-4">
+                <mat-form-field appearance="outline" style="width: 100%;">
+                  <input type="text" matInput
+                    formControlName="DESIGN_DESCRIPTION" />
+                </mat-form-field>
               </div>
-              <div class="row mb-2">
-                <label for="input" class="col-sm-2 col-form-label">Cost Code
-                  :</label>
-                <div class="col-sm-2">
-                  <mat-form-field appearance="outline" style="width: 75%;">
-                    <input type="text" matInput formControlName="costcode" UpperCaseDirective   (focusout)="validateLookupField($event,costCodeData,'costcode')"/>
-                  </mat-form-field>
-                  <master-search [MasterSearchData]="costCodeData"
-                    (newRowClick)="costCodeSelected($event)"></master-search>
-                </div>
-                <label for="input" class="col-sm-2 col-form-label">Set Ref
-                  :</label>
-                <div class="col-sm-2">
-                  <mat-form-field appearance="outline" style="width: 100%;">
-                    <input type="text" matInput formControlName="SETREF" />
-                  </mat-form-field>
-                </div>
-                <label for="input" class="col-sm-2 col-form-label">Price 3
-                  :</label>
-                <div class="col-sm-2">
-                  <mat-form-field appearance="outline" style="width: 75%;">
-                    <input type="text" matInput class="text-right" formControlName="price3" NumberOnly UpperCaseDirective   (focusout)="validateLookupField($event,price3CodeData,'price3')"/>
-                  </mat-form-field>
-                  <master-search [MasterSearchData]="price3CodeData"
-                    (newRowClick)="price3CodeSelected($event)"></master-search>
-                </div>
+              <label for="input" class="col-sm-2 col-form-label">Total PCS
+                :</label>
+              <div class="col-sm-2">
+                <mat-form-field appearance="outline" style="width: 100%;">
+                  <input type="text" matInput formControlName="totalpcs"
+                    NumberOnly class="text-right" />
+                </mat-form-field>
               </div>
-              <div class="row mb-2">
-                <label for="input" class="col-sm-2 col-form-label">Karat
-                  :</label>
-                <div class="col-sm-2">
-                  <mat-form-field appearance="outline" style="width: 75%;">
-                    <input type="text" matInput formControlName="KARAT" UpperCaseDirective    (focusout)="validateLookupField($event,karatCodeData,'KARAT')"/>
-                  </mat-form-field>
-                  <master-search [MasterSearchData]="karatCodeData"
-                    (newRowClick)="karatCodeSelected($event)"></master-search>
-                </div>
-                <label for="input" class="col-sm-2 col-form-label">Vender Ref
-                  :</label>
-                <div class="col-sm-2">
-                  <mat-form-field appearance="outline" style="width: 100%;">
-                    <input type="text" matInput formControlName="VenderRef" />
-                  </mat-form-field>
-                </div>
-                <label for="input" class="col-sm-2 col-form-label">Price 4
-                  :</label>
-                <div class="col-sm-2">
-                  <mat-form-field appearance="outline" style="width: 75%;">
-                    <input type="text" matInput formControlName="price4" class="text-right" NumberOnly UpperCaseDirective     (focusout)="validateLookupField($event,price4CodeData,'price4')"/>
-                  </mat-form-field>
-                  <master-search [MasterSearchData]="price4CodeData"
-                    (newRowClick)="price4CodeSelected($event)"></master-search>
-                </div>
-              </div>
-              <div class="row mb-2">
-                <label for="input" class="col-sm-2 col-form-label">Purity
-                  :</label>
-                <div class="col-sm-2">
-                  <mat-form-field appearance="outline" style="width: 100%;">
-                    <input type="number" matInput formControlName="PURITY" [max]="13" class="text-right"
-                      SixDecimalInput />
-                  </mat-form-field>
-                </div>
-                <label for="input" class="col-sm-2 col-form-label">Job Purity
-                  :</label>
-                <div class="col-sm-2">
-                  <mat-form-field appearance="outline" style="width: 100%;">
-                    <input type="text" matInput SixDecimalInput [max]="13" class="text-right"
-                      formControlName="Job_Purity" />
-                  </mat-form-field>
-                </div>
-                <label for="input" class="col-sm-2 col-form-label">Price 5
-                  :</label>
-                <div class="col-sm-2">
-                  <mat-form-field appearance="outline" style="width: 75%;">
-                    <input type="text" matInput class="text-right" formControlName="price5" NumberOnly UpperCaseDirective   (focusout)="validateLookupField($event,price5CodeData,'price5')"/>
-                  </mat-form-field>
-                  <master-search [MasterSearchData]="price5CodeData"
-                    (newRowClick)="price5CodeSelected($event)"></master-search>
-                </div>
-              </div>
-              <div class="row mb-2">
-                <label for="input" class="col-sm-2 col-form-label">Pure Weight
-                  :</label>
-                <div class="col-sm-2">
-                  <mat-form-field appearance="outline" style="width: 100%;">
-                    <input type="text" matInput [max]="13" class="text-right" formControlName="PURE_WT"
-                      SixDecimalInput />
-                  </mat-form-field>
-                </div>
-                <label for="input" class="col-sm-2 col-form-label">Start Date
-                  :</label>
-                <div class="col-sm-2">
-                  <mat-form-field appearance="outline" style="width: 100%">
-                    <input matInput [matDatepicker]="startdate" name="startdate" formControlName="START_DATE"
-                      placeholder="DD/MM/YYYY" DateValidation />
-                    <mat-datepicker-toggle matSuffix [for]="startdate"></mat-datepicker-toggle>
-                    <mat-datepicker [startAt]="currentDate" #startdate></mat-datepicker>
-                  </mat-form-field>
-                </div>
-              </div>
-              <div class="row mb-2">
-                <label for="input" class="col-sm-2 col-form-label">Purity Diff
-                  :</label>
-                <div class="col-sm-2">
-                  <mat-form-field appearance="outline" style="width: 100%;">
-                    <input type="text" matInput [max]="13" class="text-right" formControlName="PurityDiff"
-                      SixDecimalInput />
-                  </mat-form-field>
-                </div>
-                <label for="input" class="col-sm-2 col-form-label">End Date
-                  :</label>
-                <div class="col-sm-2">
-                  <mat-form-field appearance="outline" style="width: 100%">
-                    <input matInput [matDatepicker]="endDate" name="endDate" formControlName="END_DATE"
-                      placeholder="DD/MM/YYYY" DateValidation />
-                    <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
-                    <mat-datepicker [startAt]="currentDate" #endDate></mat-datepicker>
-                  </mat-form-field>
-                </div>
-              </div>
-              <div class="row mb-2">
-                <label for="input" class="col-sm-2 col-form-label">Remarks
-                  :</label>
-                <div class="col-sm-8">
-                  <mat-form-field appearance="outline" style="width: 100%;">
-                    <input type="text" matInput formControlName="remarks" />
-                  </mat-form-field>
-                </div>
-                <div class="col-sm-2">
-                  <div class="p-2">
-                    <button type="button" class="btn btn-primary add-btn" (click)="opennewdetails()">
-                      Stock
-                    </button>
-                  </div>
-                </div>
-              </div>
-       
             </div>
-            <div class="col-md-4">
-              <div class="row mb-2">
-                <label for="input" class="col-sm-3 col-form-label">Prod Pcs
-                  :</label>
-                <div class="col-sm-3">
-                  <mat-form-field appearance="outline" style="width: 100%;">
-                    <input type="number" matInput formControlName="prodpcs" NumberOnly class="text-right" />
-                  </mat-form-field>
-                </div>
-                <label for="input" class="col-sm-3 col-form-label">Pnd Pcs
-                  :</label>
-                <div class="col-sm-3">
-                  <mat-form-field appearance="outline" style="width: 100%;">
-                    <input type="number" matInput formControlName="pndpcs" NumberOnly class="text-right" />
-                  </mat-form-field>
+            <div class="row">
+              <label for="input" class="col-sm-2 col-form-label">No of Pcs
+                :</label>
+              <div class="col-sm-2">
+                <mat-form-field appearance="outline" style="width: 100%;">
+                  <input type="number" matInput class="text-right"
+                    formControlName="JOB_PCS" NumberOnly />
+                </mat-form-field>
+              </div>
+              <label for="input" class="col-sm-2 col-form-label">Location
+                :</label>
+              <div class="col-sm-2">
+                <mat-form-field appearance="outline" style="width: 100%;">
+                  <input type="text" matInput formControlName="location"
+                    UpperCaseDirective
+                    (focusout)="validateLookupField($event,locationCodeData,'location')" />
+                  <master-search class="masterSearch"
+                    [MasterSearchData]="locationCodeData"
+                    (newRowClick)="locationCodeSelected($event)">
+                  </master-search>
+                </mat-form-field>
+              </div>
+              <label for="input" class="col-sm-2 col-form-label">Loss Qty
+                :</label>
+              <div class="col-sm-2">
+                <mat-form-field appearance="outline" style="width: 100%;">
+                  <input type="text" matInput formControlName="LOSS_WT"
+                    [max]="13" SixDecimalInput
+                    class="text-right" />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row">
+              <label for="input" class="col-sm-2 col-form-label">Gross Weight
+                :</label>
+              <div class="col-sm-2">
+                <mat-form-field appearance="outline" style="width: 100%;">
+                  <input type="text" matInput MetalDecimalInput [max]="13"
+                    class="text-right"
+                    formControlName="GROSS_WT" />
+                </mat-form-field>
+              </div>
+              <label for="input" class="col-sm-2 col-form-label">Stone Pcs
+                :</label>
+              <div class="col-sm-2">
+                <mat-form-field appearance="outline" style="width: 100%;">
+                  <input type="text" matInput maxlength="24"
+                    class="text-right" formControlName="STONE_PCS"
+                    NumberOnly />
+                </mat-form-field>
+              </div>
+              <label for="input" class="col-sm-2 col-form-label">Time Taken
+                :</label>
+              <div class="col-sm-2">
+                <mat-form-field appearance="outline" style="width: 100%;">
+                  <input type="text" matInput formControlName="timetaken" />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row">
+              <label for="input" class="col-sm-2 col-form-label">Metal Weight
+                :</label>
+              <div class="col-sm-2">
+                <mat-form-field appearance="outline" style="width: 100%;">
+                  <input type="text" matInput [max]="13" class="text-right"
+                    formControlName="METAL_WT"
+                    MetalDecimalInput />
+                </mat-form-field>
+              </div>
+              <label for="input" class="col-sm-2 col-form-label">Stone Weight
+                :</label>
+              <div class="col-sm-2">
+                <mat-form-field appearance="outline" style="width: 100%;">
+                  <input type="text" matInput class="text-right"
+                    formControlName="STONE_WT" [max]="13"
+                    SixDecimalInput />
+                </mat-form-field>
+              </div>
+              <label for="input" class="col-sm-2 col-form-label">Price 1
+                :</label>
+              <div class="col-sm-2">
+                <mat-form-field appearance="outline" style="width: 100%;">
+                  <input type="text" matInput class="text-right"
+                    formControlName="price1" NumberOnly UpperCaseDirective
+                    (focusout)="validateLookupField($event,price1CodeData,'price1')" />
+                  <master-search class="masterSearch"
+                    [MasterSearchData]="price1CodeData"
+                    (newRowClick)="price1CodeSelected($event)">
+                  </master-search>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row">
+              <label for="input" class="col-sm-2 col-form-label">Prefix
+                :</label>
+              <div class="col-sm-2 d-flex">
+                <mat-form-field appearance="outline" style="width: 100%;">
+                  <input type="text" matInput formControlName="PREFIX"
+                    UpperCaseDirective
+                    (focusout)="validateLookupField($event,prefixCodeData,'PREFIX')" />
+                  <master-search class="masterSearch"
+                    [MasterSearchData]="prefixCodeData"
+                    (newRowClick)="prefixCodeSelected($event)">
+                  </master-search>
+                </mat-form-field>
+              </div>
+
+              <label for="input" class="col-sm-2 col-form-label">Other Stone
+                :</label>
+              <div class="col-sm-2">
+                <mat-form-field appearance="outline" style="width: 100%;">
+                  <input type="text" matInput formControlName="otherstone" />
+                </mat-form-field>
+              </div>
+              <label for="input" class="col-sm-2 col-form-label">Price 2
+                :</label>
+              <div class="col-sm-2">
+                <mat-form-field appearance="outline" style="width: 100%;">
+                  <input type="text" matInput class="text-right"
+                    formControlName="price2" NumberOnly UpperCaseDirective
+                    (focusout)="validateLookupField($event,price2CodeData,'price2')" />
+                  <master-search class="masterSearch"
+                    [MasterSearchData]="price2CodeData"
+                    (newRowClick)="price2CodeSelected($event)">
+                  </master-search>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row">
+              <label for="input" class="col-sm-2 col-form-label">Cost Code
+                :</label>
+              <div class="col-sm-2">
+                <mat-form-field appearance="outline" style="width: 100%;">
+                  <input type="text" matInput formControlName="costcode"
+                    UpperCaseDirective
+                    (focusout)="validateLookupField($event,costCodeData,'costcode')" />
+                  <master-search class="masterSearch"
+                    [MasterSearchData]="costCodeData"
+                    (newRowClick)="costCodeSelected($event)">
+                  </master-search>
+                </mat-form-field>
+              </div>
+              <label for="input" class="col-sm-2 col-form-label">Set Ref
+                :</label>
+              <div class="col-sm-2">
+                <mat-form-field appearance="outline" style="width: 100%;">
+                  <input type="text" matInput formControlName="SETREF" />
+                </mat-form-field>
+              </div>
+              <label for="input" class="col-sm-2 col-form-label">Price 3
+                :</label>
+              <div class="col-sm-2">
+                <mat-form-field appearance="outline" style="width: 100%;">
+                  <input type="text" matInput class="text-right"
+                    formControlName="price3" NumberOnly UpperCaseDirective
+                    (focusout)="validateLookupField($event,price3CodeData,'price3')" />
+                  <master-search class="masterSearch"
+                    [MasterSearchData]="price3CodeData"
+                    (newRowClick)="price3CodeSelected($event)">
+                  </master-search>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row">
+              <label for="input" class="col-sm-2 col-form-label">Karat
+                :</label>
+              <div class="col-sm-2">
+                <mat-form-field appearance="outline" style="width: 100%;">
+                  <input type="text" matInput formControlName="KARAT"
+                    UpperCaseDirective
+                    (focusout)="validateLookupField($event,karatCodeData,'KARAT')" />
+                  <master-search class="masterSearch"
+                    [MasterSearchData]="karatCodeData"
+                    (newRowClick)="karatCodeSelected($event)">
+                  </master-search>
+                </mat-form-field>
+              </div>
+              <label for="input" class="col-sm-2 col-form-label">Vender Ref
+                :</label>
+              <div class="col-sm-2">
+                <mat-form-field appearance="outline" style="width: 100%;">
+                  <input type="text" matInput formControlName="VenderRef" />
+                </mat-form-field>
+              </div>
+              <label for="input" class="col-sm-2 col-form-label">Price 4
+                :</label>
+              <div class="col-sm-2">
+                <mat-form-field appearance="outline" style="width: 100%;">
+                  <input type="text" matInput formControlName="price4"
+                    class="text-right" NumberOnly UpperCaseDirective
+                    (focusout)="validateLookupField($event,price4CodeData,'price4')" />
+                    <master-search class="masterSearch"
+                      [MasterSearchData]="price4CodeData"
+                      (newRowClick)="price4CodeSelected($event)">
+                    </master-search>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row">
+              <label for="input" class="col-sm-2 col-form-label">Purity
+                :</label>
+              <div class="col-sm-2">
+                <mat-form-field appearance="outline" style="width: 100%;">
+                  <input type="number" matInput formControlName="PURITY"
+                    [max]="13" class="text-right"
+                    SixDecimalInput />
+                </mat-form-field>
+              </div>
+              <label for="input" class="col-sm-2 col-form-label">Job Purity
+                :</label>
+              <div class="col-sm-2">
+                <mat-form-field appearance="outline" style="width: 100%;">
+                  <input type="text" matInput SixDecimalInput [max]="13"
+                    class="text-right"
+                    formControlName="Job_Purity" />
+                </mat-form-field>
+              </div>
+              <label for="input" class="col-sm-2 col-form-label">Price 5
+                :</label>
+              <div class="col-sm-2">
+                <mat-form-field appearance="outline" style="width: 100%;">
+                  <input type="text" matInput class="text-right"
+                    formControlName="price5" NumberOnly UpperCaseDirective
+                    (focusout)="validateLookupField($event,price5CodeData,'price5')" />
+                    <master-search class="masterSearch"
+                      [MasterSearchData]="price5CodeData"
+                      (newRowClick)="price5CodeSelected($event)">
+                    </master-search>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row">
+              <label for="input" class="col-sm-2 col-form-label">Pure Weight
+                :</label>
+              <div class="col-sm-2">
+                <mat-form-field appearance="outline" style="width: 100%;">
+                  <input type="text" matInput [max]="13" class="text-right"
+                    formControlName="PURE_WT"
+                    SixDecimalInput />
+                </mat-form-field>
+              </div>
+              <label for="input" class="col-sm-2 col-form-label">Start Date
+                :</label>
+              <div class="col-sm-2">
+                <mat-form-field appearance="outline" style="width: 100%">
+                  <input matInput [matDatepicker]="startdate" name="startdate"
+                    formControlName="START_DATE"
+                    placeholder="DD/MM/YYYY" DateValidation />
+                  <mat-datepicker-toggle matSuffix
+                    [for]="startdate"></mat-datepicker-toggle>
+                  <mat-datepicker [startAt]="currentDate"
+                    #startdate></mat-datepicker>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row">
+              <label for="input" class="col-sm-2 col-form-label">Purity Diff
+                :</label>
+              <div class="col-sm-2">
+                <mat-form-field appearance="outline" style="width: 100%;">
+                  <input type="text" matInput [max]="13" class="text-right"
+                    formControlName="PurityDiff"
+                    SixDecimalInput />
+                </mat-form-field>
+              </div>
+              <label for="input" class="col-sm-2 col-form-label">End Date
+                :</label>
+              <div class="col-sm-2">
+                <mat-form-field appearance="outline" style="width: 100%">
+                  <input matInput [matDatepicker]="endDate" name="endDate"
+                    formControlName="END_DATE"
+                    placeholder="DD/MM/YYYY" DateValidation />
+                  <mat-datepicker-toggle matSuffix
+                    [for]="endDate"></mat-datepicker-toggle>
+                  <mat-datepicker [startAt]="currentDate"
+                    #endDate></mat-datepicker>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row">
+              <label for="input" class="col-sm-2 col-form-label">Remarks
+                :</label>
+              <div class="col-sm-8">
+                <mat-form-field appearance="outline" style="width: 100%;">
+                  <input type="text" matInput formControlName="remarks" />
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="row">
+              <label for="input" class="col-sm-3 col-form-label">Prod Pcs
+                :</label>
+              <div class="col-sm-3">
+                <mat-form-field appearance="outline" style="width: 100%;">
+                  <input type="number" matInput formControlName="prodpcs"
+                    NumberOnly class="text-right" />
+                </mat-form-field>
+              </div>
+              <label for="input" class="col-sm-3 col-form-label">Pnd Pcs
+                :</label>
+              <div class="col-sm-3">
+                <mat-form-field appearance="outline" style="width: 100%;">
+                  <input type="number" matInput formControlName="pndpcs"
+                    NumberOnly class="text-right" />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row justify-content-end">
+              <label for="input" class="col-sm-3 col-form-label">Loss %
+                :</label>
+              <div class="col-sm-4">
+                <mat-form-field appearance="outline" style="width: 100%;">
+                  <input type="text" matInput formControlName="lossone" />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row justify-content-end">
+              <div class="col-sm-4">
+                <mat-form-field appearance="outline" style="width: 100%;">
+                  <input type="text" matInput formControlName="LOSS_WT" />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-2">
+                <div class="d-flex">
+                  <a>PriceScheme</a>
+                  <master-search class="masterSearch"
+                    [MasterSearchData]="priceSchemeData"
+                    (newRowClick)="priceSchemeValidate($event)">
+                  </master-search>
+                  <a>{{productiondetailsFrom.value.pricescheme}}</a>
                 </div>
               </div>
-              <div class="row justify-content-end mb-2">
-                <label for="input" class="col-sm-3 col-form-label">Loss %
-                  :</label>
-                <div class="col-sm-4">
-                  <mat-form-field appearance="outline" style="width: 100%;">
-                    <input type="text" matInput formControlName="lossone" />
-                  </mat-form-field>
-                </div>
-              </div>
-              <div class="row justify-content-end mb-2">
-                <div class="col-sm-4">
-                  <mat-form-field appearance="outline" style="width: 100%;">
-                    <input type="text" matInput formControlName="LOSS_WT" />
-                  </mat-form-field>
-                </div>
-              </div>
-              <div class="row-sm-4">
-                <div class="col-md-2">
-                  <div class="price_box">
-                    <a>PriceScheme</a>
-                    <master-search [MasterSearchData]="priceSchemeData"
-                      (newRowClick)="priceSchemeValidate($event)"></master-search>
-                    <a>{{productiondetailsFrom.value.pricescheme}}</a>
-                  </div>
-                </div>
-              </div>
-              <!-- <div class="col-md-8">
+            </div>
+            <!-- <div class="col-md-8">
                   <div class="col-md-2">
                     <div class="upload-btn-wrapper">
                         <button class="btn btnnew" [disabled]="viewMode" style="margin-left: 187px;">
@@ -447,281 +497,318 @@
                     </div>
                 </div>    
                 </div> -->
-              <div class="col-md-8">
-                <div class="col-md-2">
-                  <div class="upload-btn-wrapper">
-                    <!-- <button class="btn btnnew"  style="margin-left: 187px;" >
-                      Item Image
-                    </button> -->
-                    <input type="file" name="uploadproduct" accept=".png, .jpg, .jpeg" #fileInput class="uploadproduct"
-                      [disabled]="viewMode" (change)="onFileChanged($event)" readonly />
-                  </div>
-                  <div class="image_box">
-                    <div class="img_box">
-                      <img src="{{ urls }}" style="width: 209px; height: 163px; margin-left: 160px;" />
-                    </div>
+            <div class="col-md-8">
+              <div class="col-md-2">
+                <!-- <div class="upload-btn-wrapper">
+                  <input type="file" name="uploadproduct"
+                    accept=".png, .jpg, .jpeg" #fileInput
+                    class="uploadproduct"
+                    [disabled]="viewMode" (change)="onFileChanged($event)"
+                    readonly />
+                </div> -->
+                <div class="image_box">
+                  <div class="img_box">
+                    <img src="{{ urls }}"
+                      style="width: 209px; height: 163px; margin-left: 160px;" />
                   </div>
                 </div>
               </div>
-             
+            </div>
+
+          </div>
+        </div>
+      </mat-tab>
+      <!-- Metal tab section starts -->
+      <mat-tab label="Metal Jewellery">
+        <div class="row">
+          <div class="col-md-8">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="row justify-content-end">
+                  <label for="input" class="col-sm-4 col-form-label">From
+                    Stock Code :</label>
+                  <div class="col-sm-3">
+                    <mat-form-field appearance="outline" style="width: 100%;">
+                      <input type="text" matInput
+                        formControlName="fromStockCode" />
+                    </mat-form-field>
+                  </div>
+                  <div class="col-sm-5">
+                    <mat-form-field appearance="outline" style="width: 100%;">
+                      <input type="text" matInput
+                        formControlName="fromStockCodeDesc" />
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="row justify-content-end">
+                  <label for="input" class="col-sm-4 col-form-label">To Stock
+                    Code :</label>
+                  <div class="col-sm-3">
+                    <mat-form-field appearance="outline" style="width: 100%;">
+                      <input type="text" matInput
+                        formControlName="toStockCode" />
+                    </mat-form-field>
+                  </div>
+                  <div class="col-sm-5">
+                    <mat-form-field appearance="outline" style="width: 100%;">
+                      <input type="text" matInput
+                        formControlName="toStockCodeDesc" />
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row justify-content-end mb-1">
+              <label for="input" class="col-sm-2 col-form-label">Pcs :</label>
+              <div class="col-sm-2">
+                <mat-form-field appearance="outline" style="width: 100%;">
+                  <input type="text" matInput formControlName="metalpcs"
+                    maxlength="10" NumberOnly
+                    class="text-right" />
+                </mat-form-field>
+              </div>
+              <label for="input" class="col-sm-2 col-form-label">Gross Wt
+                :</label>
+              <div class="col-sm-2">
+                <mat-form-field appearance="outline" style="width: 100%;">
+                  <input type="text" matInput formControlName="grossWt"
+                    [max]="13" MetalDecimalInput
+                    class="text-right" />
+                </mat-form-field>
+              </div>
+              <label for="input" class="col-sm-2 col-form-label">Stone Wt
+                :</label>
+              <div class="col-sm-2">
+                <mat-form-field appearance="outline" style="width: 100%;">
+                  <input type="text" matInput formControlName="stoneWt"
+                    StoneDecimalInput class="text-right"
+                    [max]="13" />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row justify-content-end mb-1">
+              <label for="input" class="col-sm-2 col-form-label">Purity
+                :</label>
+              <div class="col-sm-2">
+                <mat-form-field appearance="outline" style="width: 100%;">
+                  <input type="text" matInput formControlName="PURITY"
+                    [max]="13" SixDecimalInput
+                    class="text-right" />
+                </mat-form-field>
+              </div>
+              <label for="input" class="col-sm-2 col-form-label">Net Wt
+                :</label>
+              <div class="col-sm-2">
+                <mat-form-field appearance="outline" style="width: 100%;">
+                  <input type="text" matInput formControlName="netWt"
+                    [max]="13" MetalDecimalInput
+                    class="text-right" />
+                </mat-form-field>
+              </div>
+              <label for="input" class="col-sm-2 col-form-label">Chargable Wt
+                :</label>
+              <div class="col-sm-2">
+                <mat-form-field appearance="outline" style="width: 100%;">
+                  <input type="text" matInput formControlName="chargableWt"
+                    class="text-right" MetalDecimalInput />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row justify-content-end mb-1">
+              <label for="input" class="col-sm-2 col-form-label">Purity %
+                :</label>
+              <div class="col-sm-2">
+                <mat-form-field appearance="outline" style="width: 100%;">
+                  <input type="text" matInput formControlName="purityPer"
+                    [max]="13" SixDecimalInput
+                    class="text-right" NumberOnly />
+                </mat-form-field>
+              </div>
+              <label for="input" class="col-sm-2 col-form-label">Pure Wt
+                :</label>
+              <div class="col-sm-2">
+                <mat-form-field appearance="outline" style="width: 100%;">
+                  <input type="text" matInput formControlName="PUREWT"
+                    [max]="13" MetalDecimalInput
+                    class="text-right" />
+                </mat-form-field>
+              </div>
+              <label for="input" class="col-sm-2 col-form-label">Purity Diff
+                :</label>
+              <div class="col-sm-2">
+                <mat-form-field appearance="outline" style="width: 100%;">
+                  <input type="text" matInput formControlName="purityDiff"
+                    [max]="13" SixDecimalInput
+                    class="text-right" />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row justify-content-end mb-1">
+              <label for="input" class="col-sm-2 col-form-label">Stone Diff
+                :</label>
+              <div class="col-sm-2">
+                <mat-form-field appearance="outline" style="width: 100%;">
+                  <input type="text" matInput formControlName="stoneDiff"
+                    class="text-right" NumberOnly />
+                </mat-form-field>
+              </div>
+              <label for="input" class="col-sm-2 col-form-label">Loss
+                :</label>
+              <div class="col-sm-2">
+                <mat-form-field appearance="outline" style="width: 100%;">
+                  <input type="text" matInput formControlName="loss"
+                    class="text-right" NumberOnly />
+                </mat-form-field>
+              </div>
+              <label for="input" class="col-sm-2 col-form-label">Mkg Rate
+                :</label>
+              <div class="col-sm-2">
+                <mat-form-field appearance="outline" style="width: 100%;">
+                  <input type="text" matInput formControlName="mkgRate"
+                    [max]="13" class="text-right"
+                    SixDecimalInput />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row justify-content-end mb-1">
+              <label for="input" class="col-sm-2 col-form-label">Lot No
+                :</label>
+              <div class="col-sm-2">
+                <mat-form-field appearance="outline" style="width: 100%;">
+                  <input type="text" matInput formControlName="lotNo"
+                    class="text-right" NumberOnly />
+                </mat-form-field>
+              </div>
+              <label for="input" class="col-sm-2 col-form-label">Bal Wt
+                :</label>
+              <div class="col-sm-2">
+                <mat-form-field appearance="outline" style="width: 100%;">
+                  <input type="text" matInput formControlName="balwt"
+                    class="text-right" ThreeDecimalInput />
+                </mat-form-field>
+              </div>
+              <label for="input" class="col-sm-2 col-form-label">Mkg Value
+                :</label>
+              <div class="col-sm-2">
+                <mat-form-field appearance="outline" style="width: 100%;">
+                  <input type="text" matInput formControlName="mkgValue"
+                    class="text-right" ThreeDecimalInput />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row justify-content-end mb-1">
+              <label for="input" class="col-sm-2 col-form-label">Bar No
+                :</label>
+              <div class="col-sm-2">
+                <mat-form-field appearance="outline" style="width: 100%;">
+                  <input type="number" matInput formControlName="barNo"
+                    class="text-right" NumberOnly />
+                </mat-form-field>
+              </div>
+              <label for="input" class="col-sm-2 col-form-label">Ticket No
+                :</label>
+              <div class="col-sm-2">
+                <mat-form-field appearance="outline" style="width: 100%;">
+                  <input type="number" matInput formControlName="ticketNo"
+                    class="text-right" NumberOnly />
+                </mat-form-field>
+              </div>
+              <label for="input" class="col-sm-2 col-form-label">Prod %
+                :</label>
+              <div class="col-sm-2">
+                <mat-form-field appearance="outline" style="width: 100%;">
+                  <input type="text" matInput formControlName="prod"
+                    NumberOnly maxlength="26" class="text-right" />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row justify-content-end mb-1">
+              <label for="input" class="col-sm-2 col-form-label">Loaction
+                :</label>
+              <div class="col-sm-2">
+                <mat-form-field appearance="outline" style="width: 100%;">
+                  <input type="text" matInput formControlName="location"
+                    UpperCaseDirective
+                    (focusout)="validateLookupField($event,locationCodeData,'location')" />
+                    <master-search class="masterSearch"
+                      [MasterSearchData]="locationCodeData"
+                      (newRowClick)="locationCodeSelected($event)">
+                    </master-search>
+                </mat-form-field>
+              </div>
+              <label for="input" class="col-sm-2 col-form-label">Bal Pcs
+                :</label>
+              <div class="col-sm-2">
+                <mat-form-field appearance="outline" style="width: 100%;">
+                  <input type="text" matInput formControlName="balPcs"
+                    NumberOnly class="text-right" />
+                </mat-form-field>
+              </div>
+              <label for="input" class="col-sm-2 col-form-label">Job Purity
+                :</label>
+              <div class="col-sm-2">
+                <mat-form-field appearance="outline" style="width: 100%;">
+                  <input type="text" matInput formControlName="jobPurity"
+                    [max]="13" SixDecimalInput
+                    class="text-right" />
+                </mat-form-field>
+              </div>
             </div>
           </div>
-        </mat-tab>
-        <mat-tab label="Metal Jewellery">
+          <div class="col-md-4">
+            <div class="mt-2">
+              <dx-data-grid #dataGrid id="gridContainer"
+                [dataSource]="tableData" [showBorders]="true"
+                [allowColumnResizing]="true">
+                <dxo-selection mode="single"></dxo-selection>
+
+                <dxi-column dataField="SRNO" caption="SRNO"></dxi-column>
+                <dxi-column dataField="DIVCODE"
+                  caption="DIVCODE"></dxi-column>
+                <dxi-column dataField="STOCK_CODE"
+                  caption="STOCK_CODE"></dxi-column>
+                <dxi-column dataField="PCS" caption="PCS"></dxi-column>
+                <dxi-column dataField="GROSS_WT"
+                  caption="GROSS_WT"></dxi-column>
+                <dxi-column dataField="AMOUNTLC"
+                  caption="AMOUNTLC"></dxi-column>
+                <dxi-column dataField="SHAPE" caption="SHAPE"></dxi-column>
+                <dxi-column dataField="COLOR" caption="COLOR"></dxi-column>
+                <dxi-column dataField="SIZE" caption="SIZE"></dxi-column>
+
+                <dxo-summary>
+                  <dxi-total-item column="PCS">
+                  </dxi-total-item>
+                  <dxi-total-item column="GROSS_WT">
+                  </dxi-total-item>
+                  <dxi-total-item column="AMOUNTLC">
+                  </dxi-total-item>
+                </dxo-summary>
+              </dx-data-grid>
+            </div>
+          </div>
           <div class="row">
             <div class="col-md-8">
-              <div class="row mb-2">
-                <div class="col-md-6">
-                  <div class="row justify-content-end mb-2">
-                    <label for="input" class="col-sm-4 col-form-label">From
-                      Stock Code :</label>
-                    <div class="col-sm-3">
-                      <mat-form-field appearance="outline" style="width: 100%;">
-                        <input type="text" matInput formControlName="fromStockCode" />
-                      </mat-form-field>
-                    </div>
-                    <div class="col-sm-5">
-                      <mat-form-field appearance="outline" style="width: 100%;">
-                        <input type="text" matInput formControlName="fromStockCodeDesc" />
-                      </mat-form-field>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="row justify-content-end mb-2">
-                    <label for="input" class="col-sm-4 col-form-label">To Stock
-                      Code :</label>
-                    <div class="col-sm-3">
-                      <mat-form-field appearance="outline" style="width: 100%;">
-                        <input type="text" matInput formControlName="toStockCode" />
-                      </mat-form-field>
-                    </div>
-                    <div class="col-sm-5">
-                      <mat-form-field appearance="outline" style="width: 100%;">
-                        <input type="text" matInput formControlName="toStockCodeDesc" />
-                      </mat-form-field>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="row justify-content-end mb-1">
-                <label for="input" class="col-sm-2 col-form-label">Pcs :</label>
-                <div class="col-sm-2">
+              <div class="row mb-1">
+                <div class="col-sm-4">
                   <mat-form-field appearance="outline" style="width: 100%;">
-                    <input type="text" matInput formControlName="metalpcs" maxlength="10" NumberOnly
-                      class="text-right" />
+                    <input type="text" matInput class="text-right"
+                      MetalDecimalInput [max]="13" />
                   </mat-form-field>
                 </div>
-                <label for="input" class="col-sm-2 col-form-label">Gross Wt
-                  :</label>
-                <div class="col-sm-2">
+                <div class="col-sm-4">
                   <mat-form-field appearance="outline" style="width: 100%;">
-                    <input type="text" matInput formControlName="grossWt" [max]="13" MetalDecimalInput
-                      class="text-right" />
-                  </mat-form-field>
-                </div>
-                <label for="input" class="col-sm-2 col-form-label">Stone Wt
-                  :</label>
-                <div class="col-sm-2">
-                  <mat-form-field appearance="outline" style="width: 100%;">
-                    <input type="text" matInput formControlName="stoneWt" StoneDecimalInput class="text-right"
-                      [max]="13" />
-                  </mat-form-field>
-                </div>
-              </div>
-              <div class="row justify-content-end mb-1">
-                <label for="input" class="col-sm-2 col-form-label">Purity
-                  :</label>
-                <div class="col-sm-2">
-                  <mat-form-field appearance="outline" style="width: 100%;">
-                    <input type="text" matInput formControlName="PURITY" [max]="13" SixDecimalInput
-                      class="text-right" />
-                  </mat-form-field>
-                </div>
-                <label for="input" class="col-sm-2 col-form-label">Net Wt
-                  :</label>
-                <div class="col-sm-2">
-                  <mat-form-field appearance="outline" style="width: 100%;">
-                    <input type="text" matInput formControlName="netWt" [max]="13" MetalDecimalInput
-                      class="text-right" />
-                  </mat-form-field>
-                </div>
-                <label for="input" class="col-sm-2 col-form-label">Chargable Wt
-                  :</label>
-                <div class="col-sm-2">
-                  <mat-form-field appearance="outline" style="width: 100%;">
-                    <input type="text" matInput formControlName="chargableWt" class="text-right" MetalDecimalInput />
-                  </mat-form-field>
-                </div>
-              </div>
-              <div class="row justify-content-end mb-1">
-                <label for="input" class="col-sm-2 col-form-label">Purity %
-                  :</label>
-                <div class="col-sm-2">
-                  <mat-form-field appearance="outline" style="width: 100%;">
-                    <input type="text" matInput formControlName="purityPer" [max]="13" SixDecimalInput
-                      class="text-right" NumberOnly />
-                  </mat-form-field>
-                </div>
-                <label for="input" class="col-sm-2 col-form-label">Pure Wt
-                  :</label>
-                <div class="col-sm-2">
-                  <mat-form-field appearance="outline" style="width: 100%;">
-                    <input type="text" matInput formControlName="PUREWT" [max]="13" MetalDecimalInput
-                      class="text-right" />
-                  </mat-form-field>
-                </div>
-                <label for="input" class="col-sm-2 col-form-label">Purity Diff
-                  :</label>
-                <div class="col-sm-2">
-                  <mat-form-field appearance="outline" style="width: 100%;">
-                    <input type="text" matInput formControlName="purityDiff" [max]="13" SixDecimalInput
-                      class="text-right" />
-                  </mat-form-field>
-                </div>
-              </div>
-              <div class="row justify-content-end mb-1">
-                <label for="input" class="col-sm-2 col-form-label">Stone Diff
-                  :</label>
-                <div class="col-sm-2">
-                  <mat-form-field appearance="outline" style="width: 100%;">
-                    <input type="text" matInput formControlName="stoneDiff" class="text-right" NumberOnly />
-                  </mat-form-field>
-                </div>
-                <label for="input" class="col-sm-2 col-form-label">Loss
-                  :</label>
-                <div class="col-sm-2">
-                  <mat-form-field appearance="outline" style="width: 100%;">
-                    <input type="text" matInput formControlName="loss" class="text-right" NumberOnly />
-                  </mat-form-field>
-                </div>
-                <label for="input" class="col-sm-2 col-form-label">Mkg Rate
-                  :</label>
-                <div class="col-sm-2">
-                  <mat-form-field appearance="outline" style="width: 100%;">
-                    <input type="text" matInput formControlName="mkgRate" [max]="13" class="text-right"
-                      SixDecimalInput />
-                  </mat-form-field>
-                </div>
-              </div>
-              <div class="row justify-content-end mb-1">
-                <label for="input" class="col-sm-2 col-form-label">Lot No
-                  :</label>
-                <div class="col-sm-2">
-                  <mat-form-field appearance="outline" style="width: 100%;">
-                    <input type="text" matInput formControlName="lotNo" class="text-right" NumberOnly />
-                  </mat-form-field>
-                </div>
-                <label for="input" class="col-sm-2 col-form-label">Bal Wt
-                  :</label>
-                <div class="col-sm-2">
-                  <mat-form-field appearance="outline" style="width: 100%;">
-                    <input type="text" matInput formControlName="balwt" class="text-right" ThreeDecimalInput />
-                  </mat-form-field>
-                </div>
-                <label for="input" class="col-sm-2 col-form-label">Mkg Value
-                  :</label>
-                <div class="col-sm-2">
-                  <mat-form-field appearance="outline" style="width: 100%;">
-                    <input type="text" matInput formControlName="mkgValue" class="text-right" ThreeDecimalInput />
-                  </mat-form-field>
-                </div>
-              </div>
-              <div class="row justify-content-end mb-1">
-                <label for="input" class="col-sm-2 col-form-label">Bar No
-                  :</label>
-                <div class="col-sm-2">
-                  <mat-form-field appearance="outline" style="width: 100%;">
-                    <input type="number" matInput formControlName="barNo" class="text-right" NumberOnly />
-                  </mat-form-field>
-                </div>
-                <label for="input" class="col-sm-2 col-form-label">Ticket No
-                  :</label>
-                <div class="col-sm-2">
-                  <mat-form-field appearance="outline" style="width: 100%;">
-                    <input type="number" matInput formControlName="ticketNo" class="text-right" NumberOnly />
-                  </mat-form-field>
-                </div>
-                <label for="input" class="col-sm-2 col-form-label">Prod %
-                  :</label>
-                <div class="col-sm-2">
-                  <mat-form-field appearance="outline" style="width: 100%;">
-                    <input type="text" matInput formControlName="prod" NumberOnly maxlength="26" class="text-right" />
-                  </mat-form-field>
-                </div>
-              </div>
-              <div class="row justify-content-end mb-1">
-                <label for="input" class="col-sm-2 col-form-label">Loaction
-                  :</label>
-                <div class="col-sm-2">
-                  <mat-form-field appearance="outline" style="width: 70%;">
-                    <input type="text" matInput formControlName="location" UpperCaseDirective    (focusout)="validateLookupField($event,locationCodeData,'location')"/>
-                  </mat-form-field>
-                  <master-search [MasterSearchData]="locationCodeData"
-                    (newRowClick)="locationCodeSelected($event)"></master-search>
-                </div>
-                <label for="input" class="col-sm-2 col-form-label">Bal Pcs
-                  :</label>
-                <div class="col-sm-2">
-                  <mat-form-field appearance="outline" style="width: 100%;">
-                    <input type="text" matInput formControlName="balPcs" NumberOnly class="text-right" />
-                  </mat-form-field>
-                </div>
-                <label for="input" class="col-sm-2 col-form-label">Job Purity
-                  :</label>
-                <div class="col-sm-2">
-                  <mat-form-field appearance="outline" style="width: 100%;">
-                    <input type="text" matInput formControlName="jobPurity" [max]="13" SixDecimalInput
-                      class="text-right" />
+                    <input type="text" matInput class="text-right"
+                      MetalDecimalInput [max]="13" />
                   </mat-form-field>
                 </div>
               </div>
             </div>
             <div class="col-md-4">
-              <div class="mt-2">
-                <dx-data-grid #dataGrid id="gridContainer" [dataSource]="tableData" [showBorders]="true" [allowColumnResizing]="true">
-                  <dxo-selection mode="single"></dxo-selection>
-
-
-                  <dxi-column dataField="SRNO" caption="SRNO"></dxi-column>
-                  <dxi-column dataField="DIVCODE" caption="DIVCODE"></dxi-column>
-                  <dxi-column dataField="STOCK_CODE" caption="STOCK_CODE"></dxi-column>
-                  <dxi-column dataField="PCS" caption="PCS"></dxi-column>
-                  <dxi-column dataField="GROSS_WT" caption="GROSS_WT"></dxi-column>
-                  <dxi-column dataField="AMOUNTLC" caption="AMOUNTLC"></dxi-column>
-                  <dxi-column dataField="SHAPE" caption="SHAPE"></dxi-column>
-                  <dxi-column dataField="COLOR" caption="COLOR"></dxi-column>
-                  <dxi-column dataField="SIZE" caption="SIZE"></dxi-column>
-
-                  <dxo-summary>
-                    <dxi-total-item column="PCS">
-                    </dxi-total-item>
-                    <dxi-total-item column="GROSS_WT">
-                    </dxi-total-item>
-                    <dxi-total-item column="AMOUNTLC">
-                    </dxi-total-item>
-                  </dxo-summary>
-                </dx-data-grid>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-8">
-                <div class="row mb-1">
-                  <div class="col-sm-4">
-                    <mat-form-field appearance="outline" style="width: 100%;">
-                      <input type="text" matInput class="text-right" MetalDecimalInput [max]="13" />
-                    </mat-form-field>
-                  </div>
-                  <div class="col-sm-4">
-                    <mat-form-field appearance="outline" style="width: 100%;">
-                      <input type="text" matInput class="text-right" MetalDecimalInput [max]="13" />
-                    </mat-form-field>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-4">
-                <div class="d-flex align-items-center justify-content-between">
-                  <!-- <div class="form-check p-1">
+              <div class="d-flex align-items-center justify-content-between">
+                <!-- <div class="form-check p-1">
                     <input class="form-check-input" type="radio">
                     <label class="form-check-label">
                       Own
@@ -733,31 +820,31 @@
                       Vendor
                     </label>
                   </div> -->
-                  <div class="form-check p-1">
-                    <input class="form-check-input" type="radio" name="ownership" id="own" value="own">
-                    <label class="form-check-label" for="own">
-                      Own
-                    </label>
-                  </div>
-                  <div class="form-check p-1">
-                    <input class="form-check-input" type="radio" name="ownership" id="vendor" value="vendor">
-                    <label class="form-check-label" for="vendor">
-                      Vendor
-                    </label>
-                  </div>
-                  
-                  <div class="p-1">
-                    <button type="button" class="btn btn-primary add-btn">
-                      Attachment
-                    </button>
-                  </div>
+                <div class="form-check p-1">
+                  <input class="form-check-input" type="radio"
+                    name="ownership" id="own" value="own">
+                  <label class="form-check-label" for="own">
+                    Own
+                  </label>
+                </div>
+                <div class="form-check p-1">
+                  <input class="form-check-input" type="radio"
+                    name="ownership" id="vendor" value="vendor">
+                  <label class="form-check-label" for="vendor">
+                    Vendor
+                  </label>
+                </div>
+
+                <div class="p-1">
+                  <button type="button" class="btn btn-primary add-btn">
+                    Attachment
+                  </button>
                 </div>
               </div>
             </div>
           </div>
-        </mat-tab>
-      </mat-tab-group>
-
-    </div>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
   </form>
 </div>

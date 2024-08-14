@@ -25,7 +25,7 @@
           <div class="col-md-12">
             <div class="d-flex align-items-center">
               <label class="col-sm-4 col-form-label">
-                Voc Type<b>*</b></label>
+                Voucher Type<b>*</b></label>
               <mat-form-field appearance="outline" style="width: 50%;">
                 <input type="text" matInput formControlName="voctype"
                   readonly />
@@ -37,7 +37,7 @@
           <div class="col-md-12">
             <div class="d-flex align-items-center">
               <label class="col-sm-4 col-form-label">
-                Voc Date </label>
+                Voucher Date *</label>
               <div class="col-md-6">
                 <mat-form-field appearance="outline" style="width: 100%;">
                   <!-- <input type="date" matInput formControlName="vocdate" />
@@ -59,7 +59,7 @@
         <div class="row mb-2">
           <div class="col-md-12">
             <div class="d-flex align-items-center">
-              <label class="col-sm-4 col-form-label">Voc No * </label>
+              <label class="col-sm-4 col-form-label">Voucher Number * </label>
               <div class="col-md-6">
                 <mat-form-field appearance="outline" style="width: 100%;">
                   <input type="text" matInput formControlName="vocno"
@@ -97,7 +97,7 @@
               <div class="col-sm-2">
                 <mat-form-field appearance="outline" style="width: 90%;">
                   <input type="text" matInput UpperCaseDirective
-                    (focusout)="validateLookupField($event,currencyMasterData,'currency')"
+                    (focusout)="setCurrencyRate()"
                     formControlName="currency" />
                 </mat-form-field>
               </div>
@@ -105,7 +105,7 @@
                 <mat-form-field appearance="outline" style="width: 80%;">
                   <input type="text" matInput
                     RateDecimalInput class="text-right" readonly
-                    formControlName="currencyrate" />
+                    formControlName="CURRENCY_RATE" />
                   <master-search class="masterSearch"
                     [MasterSearchData]="currencyMasterData"
                     (newRowClick)="currencyDataSelected($event)">
@@ -197,7 +197,7 @@
                         <mat-form-field appearance="outline"
                           style="width: 100%;">
                           <input type="text" matInput UpperCaseDirective
-                            (focusout)="validateLookupField($event,CurrencyCodeData,'basecurrencyrate')" 
+                            (focusout)="validateLookupField($event,CurrencyCodeData,'BASE_CURRENCY_RATE')" 
                             formControlName="basecurrency" />
                         </mat-form-field>
                       </div> &nbsp;
@@ -205,7 +205,7 @@
                         <mat-form-field appearance="outline"
                           style="width: 80%;">
                           <input type="text" matInput readonly
-                            formControlName="basecurrencyrate"
+                            formControlName="BASE_CURRENCY_RATE"
                             class="text-right" 
                             />
                           <master-search class="masterSearch"
