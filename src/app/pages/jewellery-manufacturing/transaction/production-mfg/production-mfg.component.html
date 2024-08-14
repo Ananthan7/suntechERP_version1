@@ -33,7 +33,7 @@
                 <div class="d-flex align-items-center">
                   <label class="col-sm-4 col-form-label">
                     Voc Type<b>*</b></label>
-                  <mat-form-field style="width: 50%;">
+                  <mat-form-field appearance="outline" style="width: 50%;">
                     <input type="text" matInput formControlName="voctype" readonly/>
                   </mat-form-field>
                 </div>
@@ -45,7 +45,7 @@
                   <label class="col-sm-4 col-form-label">
                     Voc Date </label>
                   <div class="col-md-6">
-                    <mat-form-field style="width: 100%;">
+                    <mat-form-field appearance="outline" style="width: 100%;">
                       <!-- <input type="date" matInput formControlName="vocdate" />
                         </mat-form-field> -->
                       <input matInput [matDatepicker]="vocDate" name="vocDate" [max]="vocMaxDate"
@@ -63,7 +63,7 @@
                 <div class="d-flex align-items-center">
                   <label class="col-sm-4 col-form-label">Voc No * </label>
                   <div class="col-md-6">
-                    <mat-form-field style="width: 100%;">
+                    <mat-form-field appearance="outline" style="width: 100%;">
                       <input type="text" matInput formControlName="vocno" readonly class="text-right"/>
                     </mat-form-field>
                   </div>
@@ -76,7 +76,7 @@
                   <label class="col-sm-4 col-form-label">Entered
                     By</label>
                   <div class="col-md-6">
-                    <mat-form-field style="width: 80%;">
+                    <mat-form-field appearance="outline" style="width: 80%;">
                       <input type="text" matInput formControlName="enteredby" UpperCaseDirective  (focusout)="validateLookupField($event,enteredByCodeData,'enteredby')"/>
                     </mat-form-field>
                     <master-search [MasterSearchData]="enteredByCodeData" *ngIf="!viewMode"
@@ -91,14 +91,14 @@
                   <label for="input"
                     class="col-sm-4 pe-2 col-form-label">Currency *</label>
                   <div class="col-sm-2">
-                    <mat-form-field style="width: 70%;">
+                    <mat-form-field appearance="outline" style="width: 70%;">
                       <input type="text" matInput
                         (change)="currencyDataSelected($event)"
                         formControlName="currency" />
                     </mat-form-field>
                   </div>
                   <div class="col-sm-5">
-                    <mat-form-field style="width: 70%;">
+                    <mat-form-field appearance="outline" style="width: 70%;">
                       <input type="number" matInput
                         SixDecimalInput
                         class="text-right" readonly
@@ -117,7 +117,7 @@
                 <div class="d-flex align-items-center">
                   <label class="col-sm-4 col-form-label">Time</label>
                   <div class="col-md-6">
-                    <mat-form-field style="width: 100%;">
+                    <mat-form-field appearance="outline" style="width: 100%;">
                       <input type="text" readonly matInput
                         formControlName="time" />
                     </mat-form-field>
@@ -141,11 +141,11 @@
                       <label class="col-md-4 col-form-label">
                         Metal Rate</label>
                       <div class="col-sm-8">
-                        <mat-form-field style="width: 20%">
+                        <mat-form-field appearance="outline" style="width: 20%">
                           <input type="text" matInput readonly
                             formControlName="metalratetype" />
                         </mat-form-field>
-                        <mat-form-field
+                        <mat-form-field appearance="outline"
                           style="width: 40%; margin-left: 7px;">
                           <input type="text" matInput
                             SixDecimalInput
@@ -170,7 +170,7 @@
                       <label class="col-sm-3 col-form-label">
                         Branch To</label>
                       <div class="col-md-5">
-                        <mat-form-field style="width: 80%;">
+                        <mat-form-field appearance="outline" style="width: 80%;">
                           <input type="text" matInput
                             formControlName="branchto" UpperCaseDirective  (focusout)="validateLookupField($event,branchCodeData,'branchto')"/>
                         </mat-form-field>
@@ -186,13 +186,13 @@
                       <label class="col-sm-3 col-form-label">
                         Base Currency</label>
                       <div class="col-md-2">
-                        <mat-form-field style="width: 100%;">
+                        <mat-form-field appearance="outline" style="width: 100%;">
                           <input type="text" matInput
                             formControlName="basecurrency" />
                         </mat-form-field>
                       </div> &nbsp;
                       <div class="col-md-4">
-                        <mat-form-field style="width: 80%;">
+                        <mat-form-field appearance="outline" style="width: 80%;">
                           <input type="number" matInput
                             formControlName="basecurrencyrate" class="text-right" UpperCaseDirective  (focusout)="validateLookupField($event,CurrencyCodeData,'basecurrencyrate')"/>
                         </mat-form-field>
@@ -217,7 +217,7 @@
                 (deleteClick)="deleteTableData()">
               </menu-buttons>
               <div class="col-sm-2">
-                <mat-form-field style="width: 80%;">
+                <mat-form-field appearance="outline" style="width: 80%;">
                   <input type="text" matInput UpperCaseDirective/>
                 </mat-form-field>
                 <master-search>
@@ -369,7 +369,7 @@
                 <div class="row">
                   <label for="inputPassword" class="col-sm-1 col-form-label">Narration</label>
                   <div class="col-md-3">
-                    <mat-form-field style="width: 70%;">
+                    <mat-form-field appearance="outline" style="width: 70%;">
                       <input type="text" matInput formControlName="narration" />
                     </mat-form-field>
                   </div>
