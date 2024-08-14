@@ -389,7 +389,7 @@ export class ApprovalMasterComponent implements OnInit {
       return true
     }
     else if (this.checkFinalApproval()) {
-      this.commonService.toastErrorByMsgId('MSG_FINOPT1')//Final option should be selected
+      this.commonService.toastErrorByMsgId('MSG81520')//Final option should be selected
       return true
     }
     return false;
