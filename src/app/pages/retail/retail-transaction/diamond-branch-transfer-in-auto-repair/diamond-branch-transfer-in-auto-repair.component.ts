@@ -115,6 +115,10 @@ export class DiamondBranchTransferInAutoRepairComponent implements OnInit {
     zerothAmtFC: [''],
     Gross: [''],
     Gross1: [''],
+    totalCss: [''],
+    totalFc :[''],
+    fullChecked :[''],
+    
 
   });
 

@@ -32,12 +32,15 @@
                             <label for="inputPassword" class="col-sm-5 col-form-label">Voucher Date :
                             </label>
                             <div class="col-sm-7">
-                                <mat-form-field style="width: 100%;">
+
+
+                                <mat-form-field  style="width: 100%;">
                                     <input matInput [matDatepicker]="Voc_date" formControlName="Voc_date"
                                         placeholder="DD/MM/YYYY" DateValidation />
                                     <mat-datepicker-toggle matSuffix [for]="Voc_date"></mat-datepicker-toggle>
                                     <mat-datepicker [startAt]="currentDate" #Voc_date></mat-datepicker>
                                 </mat-form-field>
+
                             </div>
                         </div>
                         <div class="row">

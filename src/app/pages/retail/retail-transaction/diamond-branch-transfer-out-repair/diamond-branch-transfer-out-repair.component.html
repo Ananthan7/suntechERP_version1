@@ -6,7 +6,9 @@
     </button>
   </div>
   <!-- modal header component -->
-  <modal-header (saveClick)="formSubmit()"  (cancelClick)="close()"></modal-header>
+  <modal-header 
+  *ngIf="this.content?.FLAG != 'VIEW'"
+  (saveClick)="formSubmit()"  (cancelClick)="close()"></modal-header>
   
   <div class="container-fluid">
     <form [formGroup]="diamondbranchtransoutfrom">

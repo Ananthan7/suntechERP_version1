@@ -27,10 +27,11 @@ export class RepairMetalPurchaseComponent implements OnInit {
   tableData: any[] = []; 
   viewMode: boolean = false;
   @Input() content!: any; 
-  branchCode?: String;
-  yearMonth?: String; 
+  branchCode?: any = localStorage.getItem("userbranch");
+  yearMonth?: any = localStorage.getItem("YEAR") || "";
   repairmetalpurchasedetail : any[] = [];
   private subscriptions: Subscription[] = [];
+
   columnheadItemDetails:any[] = ['Sr#','Stock Code','Description','Pcs','Purity','Gross Wt','Stone Wt','Net Wt','Pure Wt','Making Value','Metal Value','Net Value'];
 
   constructor(
@@ -44,8 +45,31 @@ export class RepairMetalPurchaseComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.repairmetalpurchaseForm.controls.voc_type.setValue(
+      this.comService.getqueryParamVocType()
+    );
+    this.generateVocNo();
+
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
+  }
+  generateVocNo() {
+    let API = `GenerateNewVoucherNumber/GenerateNewVocNum/${this.comService.getqueryParamVocType()}/${
+      this.branchCode
+    }/${this.yearMonth}/${this.convertDateToYMD(this.currentDate)}`;
+    let sub: Subscription = this.dataService
+      .getDynamicAPI(API)
+      .subscribe((res) => {
+        if (res.status == "Success") {
+          this.repairmetalpurchaseForm.controls.voc_no.setValue(res.newvocno);
+        }
+      });
+  }
+  convertDateToYMD(str: any) {
+    var date = new Date(str),
+      mnth = ("0" + (date.getMonth() + 1)).slice(-2),
+      day = ("0" + date.getDate()).slice(-2);
+    return [date.getFullYear(), mnth, day].join("-");
   }
 
   partyCodeData: MasterSearchModel = {
@@ -61,7 +85,7 @@ export class RepairMetalPurchaseComponent implements OnInit {
   }
   partyCodeSelected(e: any) {
     console.log(e);
-    this.repairmetalpurchaseForm.controls.partyCode.setValue(e['ACCOUNT HEAD']);
+    this.repairmetalpurchaseForm.controls.partyCode.setValue(e['ACCODE']);
   }
 
   partycurCodeData: MasterSearchModel = {
@@ -221,6 +245,27 @@ export class RepairMetalPurchaseComponent implements OnInit {
     total_TCS :[''],
     gross_total_fc :[''],
     gross_total_cc :[''],
+    stampCharges : [''],
+    lcAmt : [''],
+    fcAmt : [''],
+    partyRound: [''],
+    otherAmt: [''],
+    otherAmtTax : [''],
+    roundToAmount:[''],
+    roundOffAmount: [''],
+    importType : [''],
+    drg: [''],
+    year:[''],
+    fixedPure: [''],
+    transType : [''],
+    partyAcc : [''],
+    tdsPercent :[''],
+    tdsType :[''],
+    vatMode: [''],
+    transportDetail :[''],
+    metalNo: [''],
+    subLedger:['']
+
   });
 
 
