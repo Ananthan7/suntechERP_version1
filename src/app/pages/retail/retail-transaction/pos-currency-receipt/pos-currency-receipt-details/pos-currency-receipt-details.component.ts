@@ -177,8 +177,12 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
     this.generateHsnCodeList(this.queryParams);
     this.getCreditCardMaster();
     this.branchCode = this.comService.branchCode;
-    this.paymentModeList = this.comService.getComboFilterByID("Payment Mode");
+    this.paymentModeList =  this.getUniqueValues(this.comService.getComboFilterByID("Payment Mode"), "ENGLISH")
+    console.log(this.paymentModeList);
+    
     console.log("paymentModeList :", this.paymentModeList);
+
+
 
     this.posCurrencyReceiptDetailsForm.controls.branch.setValue(
       this.branchCode
@@ -190,6 +194,14 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
     if (this.receiptData && Object.keys(this.receiptData).length > 0)
       this.setReceiptData();
     else this.getAccountHead();
+  }
+
+  getUniqueValues(List: any[], field: string) {
+    return List.filter(
+      (item, index, self) =>
+        index ===
+        self.findIndex((t) => t[field] === item[field] && t[field] !== "")
+    );
   }
 
   getCreditCardList() {

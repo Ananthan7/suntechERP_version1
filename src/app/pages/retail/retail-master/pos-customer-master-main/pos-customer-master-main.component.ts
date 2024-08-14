@@ -430,7 +430,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
   }
 
   getDropDownStatus() { 
-    this.maritalStatusList = this.genderList = this.getUniqueValues(
+    this.maritalStatusList =  this.getUniqueValues(
       this.comService.getComboFilterByID("Marital Status"),
       "ENGLISH"
     );
