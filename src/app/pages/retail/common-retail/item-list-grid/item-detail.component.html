@@ -1,6 +1,6 @@
 <div class="modal-header" style="padding: 10px 20px">
   <h4 class="modal-title" id="modal-dia-metal">
-    {{ lineItemModalForSalesReturn ? "Sales Return " : "Item Details" }}
+    {{ lineItemModalForSalesReturn ? "Sales Return " : "Sales Details" }}
   </h4>
   <button type="button" *ngIf="!updateBtn" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
     <span aria-hidden="true">×</span>
@@ -25,14 +25,14 @@
               </div>
               <div class="col-md-2">
                 <mat-form-field>
-                  <mat-label>Item Code </mat-label>
+                  <mat-label>Stock Code </mat-label>
                   <input type="text" matInput formControlName="fcn_li_item_code" id="fcn_li_item_code" autofocus
                     (change)="getStockDesc($event)"  autocomplete="off" [readonly]="viewOnly" />
                 </mat-form-field>
               </div>
               <div class="col-md-3">
                 <mat-form-field>
-                  <mat-label>Item Description </mat-label>
+                  <mat-label>Stock Description </mat-label>
                   <input type="text" matInput formControlName="fcn_li_item_desc" id="fcn_li_item_desc"
                     [readonly]="true" />
                 </mat-form-field>
@@ -54,7 +54,7 @@
               <div class="form-group row">
                 <div class="col-md-3">
                   <mat-form-field aria-readonly="true">
-                    <mat-label>PCs</mat-label>
+                    <mat-label>Pcs</mat-label>
                     <!-- <input class="st_txt_right" [min]="0" [maxLength]="14"
                     (keyup)="this.comFunc.enforceMinMax($event.target)" matInput id="fcn_li_pcs"
                     formControlName="fcn_li_pcs" (change)="changeRate($event)" readonly="{{ viewOnly }}"

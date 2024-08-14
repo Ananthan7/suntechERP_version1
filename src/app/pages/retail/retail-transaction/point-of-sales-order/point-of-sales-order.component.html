@@ -1206,7 +1206,7 @@
 
         <div class="col-md-12 m-t-10" style="padding: 0px">
           <mat-tab-group>
-            <mat-tab label="Line Item">
+            <mat-tab label="Sold Item">
               <div class="table-responsive">
                 <div class="content">
                   <div class="left">
@@ -1929,7 +1929,7 @@
                 <!-- <th>Selling Price</th>
                 <th>Buying Price</th> -->
                 <th style="width: 35%">Sale</th>
-                <th style="width: 35%">Purchase Rate</th>
+                <th style="width: 35%">Purchase</th>
               </tr>
               <tr *ngFor="let krd of karatRateDetails; let id = index">
                 <td>{{ krd.KARAT_CODE }}</td>
@@ -3065,7 +3065,7 @@
               </div>
               <div class="col-md-7">
                 <mat-form-field>
-                  <mat-label>Item Description </mat-label>
+                  <mat-label>Stock Description </mat-label>
                   <input
                     type="text"
                     matInput
@@ -3726,7 +3726,7 @@
           <tbody>
             <tr>
               <th style="text-align: center">Division</th>
-              <th>Item Code</th>
+              <th>Stock Code</th>
               <th>Item Desc</th>
               <th>Gross Weight</th>
               <th>Amount</th>
@@ -4448,7 +4448,7 @@
 <ng-template #mymodal let-modal modal-lg>
   <div class="modal-header" style="padding: 10px 20px">
     <h4 class="modal-title" id="modal-dia-metal">
-      Item Details
+      Sales Details
       <!-- {{ lineItemModalForSalesReturn ? "Sales Return " : "Line Item" }} -->
     </h4>
     <button
@@ -4493,7 +4493,7 @@
                 <div class="col-md-2">
                   <!-- <mat-form-field  style="width: 75%; display:inline-block !important;"> -->
                   <mat-form-field>
-                    <mat-label>Item Code </mat-label>
+                    <mat-label>Stock Code </mat-label>
                     <input
                       type="text"
                       matInput
@@ -4510,7 +4510,7 @@
                 </div>
                 <div class="col-md-3">
                   <mat-form-field>
-                    <mat-label>Item Description </mat-label>
+                    <mat-label>Stock Description </mat-label>
                     <input
                       type="text"
                       matInput
@@ -4558,7 +4558,7 @@
                 <div class="form-group row">
                   <div class="col-md-3">
                     <mat-form-field aria-readonly="true">
-                      <mat-label>PCs</mat-label>
+                      <mat-label>Pcs</mat-label>
                       <input
                         class="st_txt_right"
                         type="number"

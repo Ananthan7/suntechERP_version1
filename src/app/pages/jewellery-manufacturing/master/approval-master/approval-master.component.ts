@@ -159,6 +159,13 @@ export class ApprovalMasterComponent implements OnInit {
     return this.commonService.isNumeric(event);
   }
 
+  enforceMaxLength(event: any) {
+    if (event.target.value.length > 10) {
+        event.target.value = event.target.value.slice(0, 10);
+    }
+}
+
+
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);

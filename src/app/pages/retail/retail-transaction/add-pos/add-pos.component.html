@@ -716,7 +716,7 @@
 
         <div class="col-md-12 m-t-10" style="padding: 0px">
           <mat-tab-group>
-            <mat-tab label="Line Item">
+            <mat-tab label="Sold Item">
               <div class="table-responsive">
                 <div class="content">
                   <div class="left">
@@ -1157,7 +1157,7 @@
               <tr>
                 <th style="width: 30%">Karat</th>
                 <th style="width: 35%">Sale</th>
-                <th style="width: 35%">Purchase Rate</th>
+                <th style="width: 35%">Purchase</th>
               </tr>
               <tr *ngFor="let krd of karatRateDetails; let id = index">
                 <td>{{ krd.KARAT_CODE }}</td>
@@ -1927,10 +1927,10 @@
         </button>
         <button mat-flat-button  *ngIf="!viewOnly" class="btn-m-r-10 bgColourUpdate"
           [disabled]="viewOnly || this.receiptDetailView" (click)="saveReceipt()">
-          SAVE
+          Save
         </button>
         <button mat-flat-button color="warn" #closeModalButton (click)="modal.dismiss('Cross click')">
-          CLOSE
+          Cancel
         </button>
         &nbsp;
       </div>
@@ -1980,7 +1980,7 @@
               </div>
               <div class="col-md-7">
                 <mat-form-field>
-                  <mat-label>Item Description </mat-label>
+                  <mat-label>Stock Description </mat-label>
                   <input type="text" matInput formControlName="fcn_exchange_item_desc" readonly />
                 </mat-form-field>
               </div>
@@ -2012,7 +2012,7 @@
                 <input type="text" [min]="0" [maxLength]="10" (keyup)="this.comFunc.enforceMinMax($event.target)"
                   [max]="this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_gross_wt)" class="st_txt_right"
                   matInput formControlName="fcn_exchange_stone_wt" (change)="changeExchangeStoneWt($event)"
-                  id="fcn_exchange_stone_wt" readonly StoneDecimalInput />
+                  id="fcn_exchange_stone_wt"  StoneDecimalInput />
               </mat-form-field>
             </div>
             <div class="col-md-3">
@@ -2066,7 +2066,7 @@
               <mat-form-field>
                 <mat-label>Stone Rate</mat-label>
                 <input [min]="0" [maxLength]="14" (keyup)="this.comFunc.enforceMinMax($event.target)"
-                  class="st_txt_right" matInput readonly formControlName="fcn_exchange_stone_rate"
+                  class="st_txt_right" matInput  formControlName="fcn_exchange_stone_rate"
                   id="fcn_exchange_stone_rate" (change)="changeExchangeStoneRate($event)" AmountDecimalInput />
               </mat-form-field>
             </div>
@@ -2212,15 +2212,15 @@
     <div style="padding-bottom: 20px">
       <div style="text-align: right; padding: 10px">
         <button mat-flat-button color="accent" (click)="addItemtoExchange('continueBtn')" [disabled]="viewOnly">
-          CONTINUE
+          Continue 
         </button>
         &nbsp;
         <button mat-flat-button color="primary" (click)="addItemtoExchange('saveBtn')" [disabled]="viewOnly">
-          SAVE
+          Save
         </button>
         &nbsp;
         <button mat-flat-button color="warn" (click)="modal.dismiss('Cross click')">
-          CANCEL
+          Cancel
         </button>
         &nbsp;
       </div>
@@ -2399,7 +2399,7 @@
           <tbody>
             <tr>
               <th style="text-align: center">Division</th>
-              <th>Item Code</th>
+              <th>Stock Code</th>
               <th>Item Desc</th>
               <th>Gross Weight</th>
               <th>Amount</th>
@@ -2879,7 +2879,7 @@
 <ng-template #mymodal let-modal modal-lg>
   <div class="modal-header" style="padding: 10px 20px">
     <h4 class="modal-title" id="modal-dia-metal">
-      Item Details
+      Sales Details
       <!-- {{ lineItemModalForSalesReturn ? "Sales Return " : "Line Item" }} -->
     </h4>
     <button style="border: none" type="button" *ngIf="!updateBtn" class="close" aria-label="Close"
@@ -2912,7 +2912,7 @@
                 <div class="col-md-2">
                   <!-- <mat-form-field  style="width: 75%; display:inline-block !important;"> -->
                   <mat-form-field>
-                    <mat-label>Item Code </mat-label>
+                    <mat-label>Stock Code </mat-label>
                     <input type="text" matInput autocomplete="off" formControlName="fcn_li_item_code" #fcn_li_item_code
                       id="fcn_li_item_code" autofocus (change)="getStockDesc($event)" [readonly]="viewOnly" />
                   </mat-form-field>
@@ -2920,7 +2920,7 @@
                 </div>
                 <div class="col-md-3">
                   <mat-form-field>
-                    <mat-label>Item Description </mat-label>
+                    <mat-label>Stock Description </mat-label>
                     <input type="text" matInput formControlName="fcn_li_item_desc" id="fcn_li_item_desc"
                       [readonly]="viewOnly || !allowDescription" />
                   </mat-form-field>
@@ -2952,7 +2952,7 @@
                 <div class="form-group row">
                   <div class="col-md-3">
                     <mat-form-field aria-readonly="true">
-                      <mat-label>PCs</mat-label>
+                      <mat-label>Pcs</mat-label>
                       <input class="st_txt_right" type="text" [min]="0" autocomplete="off" [maxLength]="14"
                         (keyup)="this.comFunc.enforceMinMax($event.target)" matInput id="fcn_li_pcs"
                         formControlName="fcn_li_pcs"   (focus)="setValToLocalStorage($event, 'fcn_li_pcs')" (change)="changePCS($event)" [readonly]="viewOnly" NumberOnly />
@@ -3179,15 +3179,8 @@
               </div>
               <div class="col-md-6">
                 <div class="form-group">
-                  <div style="height: 150px; text-align: center" class="productImage">
+                  <div class="slider">
                     <image-slider [imageArray]="imageURL"></image-slider>
-                    <!-- <img class="card-img-top" [src]="this.curr_line_item_images"
-                      alt="Product image" loading="lazy"
-                      style="
-                        border: 1px solid #ccc;
-                        height: 150px;
-                        width: 150px;
-                      " /> -->
                   </div>
                 </div>
                 <div class="form-group d-flex align-items-center justify-content-center"
@@ -3484,21 +3477,25 @@
 
     <div style="padding-bottom: 0px">
       <div style="text-align: right; padding: 10px" *ngIf="!viewOnly">
-        <button mat-flat-button color="accent" *ngIf="!lineItemModalForSalesReturn"
-          (click)="addItemtoList('newitem_btn')" [disabled]="disableSaveBtn">
-          Next Item</button>&nbsp;
-        <button mat-flat-button class="bgColourUpdate" *ngIf="!lineItemModalForSalesReturn"
-          (click)="addItemtoList('finish_btn')" [disabled]="disableSaveBtn">
-          {{ updateBtn ? "Update" : "Finish" }}</button>&nbsp;
+        <button mat-flat-button class="next-item-button" *ngIf="!lineItemModalForSalesReturn"
+        (click)="addItemtoList('newitem_btn')" [disabled]="disableSaveBtn">
+        Continue
+      </button>&nbsp;
+      <button mat-flat-button class="update-finish-button" *ngIf="!lineItemModalForSalesReturn"
+      (click)="addItemtoList('finish_btn')" [disabled]="disableSaveBtn">
+      {{ updateBtn ? "Update" : "Save" }}
+      </button>&nbsp;
 
-        <button mat-flat-button class="btn btn btn-primary bgColourUpdate" *ngIf="lineItemModalForSalesReturn"
-          (click)="updateRetailSalesReturnVal()" [disabled]="disableSaveBtn">
-          {{ updateBtn ? "Update" : "Finish" }}</button>&nbsp;
+        <button mat-flat-button class="update-finish-button" *ngIf="lineItemModalForSalesReturn"
+        (click)="updateRetailSalesReturnVal()" [disabled]="disableSaveBtn">
+        {{ updateBtn ? "Update" : "Save" }}
+        </button>&nbsp;
         <!-- <button class="btn btn btn-primary" *ngIf="updateBtn" (click)="addItemtoList('finish_btn')">
             Update
           </button>&nbsp; -->
-        <button mat-flat-button color="warn" (click)=" closeItemModal()">
-          Cancel</button>&nbsp;
+          <button mat-flat-button class="cancel-button" (click)="closeItemModal()">
+            Cancel
+          </button>&nbsp;
         <!-- <button class="btn btn btn-dark" (click)="addItemtoList('newitem_btn')">
             Next Item</button>&nbsp;
           <button class="btn btn btn-primary" *ngIf="!updateBtn" (click)="addItemtoList('finish_btn')">
