@@ -43,6 +43,8 @@ export class DiamondBranchTransferOutRepairComponent implements OnInit {
     this.yearMonth = this.comService.yearSelected;
     this.diamondbranchtransoutfrom.controls.voctype.setValue(this.comService.getqueryParamVocType());
     this.generateVocNo();
+    if(this.content.FLAG === "EDIT" || this.content.FLAG === "VIEW"){
+    }
   }
 
   generateVocNo() {
@@ -52,7 +54,7 @@ export class DiamondBranchTransferOutRepairComponent implements OnInit {
       .getDynamicAPI(API)
       .subscribe((res) => {
         if (res.status == "Success") {
-          this.diamondbranchtransoutfrom.controls.vocNo.setValue(res.newvocno);
+          this.diamondbranchtransoutfrom.controls.vocno.setValue(res.newvocno);
 
         }
       });
@@ -225,8 +227,8 @@ export class DiamondBranchTransferOutRepairComponent implements OnInit {
   "VALUE_DATE": "2024-03-07T06:37:37.713Z",
   "YEARMONTH": this.yearMonth,
   "TRANSFERSTATUS": "s",
-  "FROM_BR": this.diamondbranchtransoutfrom.value.branchfrom,
-  "TO_BR": this.diamondbranchtransoutfrom.value.branchto,
+  "FROM_BR":"",// this.branchCode,
+  "TO_BR": this.diamondbranchtransoutfrom.value.branchfrom,
   "TO_LOC":this.diamondbranchtransoutfrom.value.locationto,
   "REMARKS": this.diamondbranchtransoutfrom.value.narration,
   "TOTAL_PCS":this.diamondbranchtransoutfrom.value.TotalPCS,
