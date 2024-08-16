@@ -21,14 +21,16 @@
             <div class="position-relative d-flex">
               <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="jobNumber"
-                  [readonly]="viewMode"  (keydown)="lookupKeyPress($event,'jobNumber')" 
-                  (focusout)="jobNumberValidate($event)" maxlength="12"/>
+                  [readonly]="viewMode"
+                  (keydown)="lookupKeyPress($event,'jobNumber')"
+                  (focusout)="jobNumberValidate($event)" maxlength="12" />
               </mat-form-field>
-              <master-search [MasterSearchData]="JobNoCodeData" #overlayjobNumberSearch
+              <master-search [MasterSearchData]="JobNoCodeData"
+                #overlayjobNumberSearch
                 (newRowClick)="JobNumberSelected($event)"></master-search>&nbsp;
               <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="jobDesc"
-                  [readonly]="viewMode" />
+                  readonly maxlength="40" />
               </mat-form-field>
             </div>
           </div>
@@ -39,17 +41,20 @@
           <div class="col-sm-8">
             <div class="position-relative d-flex">
               <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="subjobno" maxlength="20"
-                (keydown)="lookupKeyPress($event,'subjobno')" 
-                  [readonly]="viewMode" (focusout)="validateLookupField($event,subJobNoCodeData,'subjobno')"/>
+                <input type="text" matInput formControlName="subjobno"
+                  maxlength="20"
+                  (keydown)="lookupKeyPress($event,'subjobno')"
+                  [readonly]="viewMode"
+                  (focusout)="validateLookupField($event,subJobNoCodeData,'subjobno')" />
               </mat-form-field>
-              <master-search [MasterSearchData]="subJobNoCodeData" #overlaysubjobnoSearch
+              <master-search [MasterSearchData]="subJobNoCodeData"
+                #overlaysubjobnoSearch
                 (newRowClick)="subJobNoCodeSelected($event)"
                 *ngIf="!viewMode"></master-search>
               &nbsp;
               <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="subjobDesc"
-                  [readonly]="viewMode" />
+                  readonly maxlength="40" />
               </mat-form-field>
             </div>
           </div>
@@ -62,10 +67,12 @@
             <div class="position-relative d-flex">
               <mat-form-field style="width: 70%">
                 <input type="text" matInput formControlName="designcode"
-                (keydown)="lookupKeyPress($event,'designcode')" maxlength="20"
-                  [readonly]="viewMode" (focusout)="validateLookupField($event,subJobNoCodeData,'designcode')"/>
+                  (keydown)="lookupKeyPress($event,'designcode')" maxlength="20"
+                  readonly
+                  (focusout)="validateLookupField($event,subJobNoCodeData,'designcode')" />
               </mat-form-field>
-              <master-search [MasterSearchData]="subJobNoCodeData" #overlaydesigncodeSearch
+              <master-search [MasterSearchData]="subJobNoCodeData"
+                #overlaydesigncodeSearch
                 (newRowClick)="subJobNoCodeSelected($event)"
                 *ngIf="!viewMode"></master-search>
             </div>
@@ -76,7 +83,8 @@
           <div class="col-md-3">
             <div class="position-relative d-flex">
               <mat-form-field style="width: 70%">
-                <input type="text" matInput formControlName="salesorderno" maxlength="20"
+                <input type="text" matInput formControlName="salesorderno"
+                  maxlength="20"
                   [readonly]="viewMode" class="text-right" NumberOnly />
               </mat-form-field>
             </div>
@@ -84,10 +92,13 @@
         </div>
       </div>
       <div class="col-md-4 text-center">
-        <div class="upload-btn-wrapper">
+        <!-- <div class="upload-btn-wrapper">
           <button class="btn btnnew border-dark"></button>
           <input type="file" name="uploadproduct" class="uploadproduct"
             [readonly]="viewMode" />
+        </div> -->
+        <div class="square-box">
+          <image-slider [imageArray]="imagepath"></image-slider>
         </div>
       </div>
     </div>
@@ -101,15 +112,18 @@
             <div class="position-relative d-flex">
               <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="process"
-                (keydown)="lookupKeyPress($event,'process')" maxlength="6"
-                  [readonly]="viewMode" (focusout)="processCodeValidate($event)"/>
+                  (keydown)="lookupKeyPress($event,'process')" maxlength="6"
+                  [readonly]="viewMode"
+                  (focusout)="processCodeValidate($event)" />
               </mat-form-field>
-              <master-search [MasterSearchData]="processCodeData" #overlayprocessSearch
+              <master-search [MasterSearchData]="processCodeData"
+                #overlayprocessSearch
                 (newRowClick)="processCodeSelected($event)"
                 *ngIf="!viewMode"></master-search>&nbsp;
               <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="processname"
-                  [readonly]="viewMode" />
+                  maxlength="40"
+                  readonly />
               </mat-form-field>
             </div>
           </div>
@@ -121,15 +135,18 @@
             <div class="position-relative d-flex">
               <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="worker"
-                (keydown)="lookupKeyPress($event,'worker')" maxlength="6"
-                  [readonly]="viewMode" (focusout)="WorkerCodeValidate($event)"/>
+                  (keydown)="lookupKeyPress($event,'worker')" maxlength="6"
+                  [readonly]="viewMode"
+                  (focusout)="WorkerCodeValidate($event)" />
               </mat-form-field>
-              <master-search [MasterSearchData]="workerCodeData" #overlayworkerSearch
+              <master-search [MasterSearchData]="workerCodeData"
+                #overlayworkerSearch
                 (newRowClick)="workerCodeSelected($event)"
                 *ngIf="!viewMode"></master-search>&nbsp;
               <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="workername"
-                  [readonly]="viewMode" />
+                  maxlength="40"
+                  readonly />
               </mat-form-field>
             </div>
           </div>
@@ -141,16 +158,18 @@
             <div class="position-relative d-flex">
               <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="stockCode"
-                (keydown)="lookupKeyPress($event,'stockCode')" 
-                  [readonly]="viewMode"  maxlength="15"
+                  (keydown)="lookupKeyPress($event,'stockCode')"
+                  [readonly]="viewMode" maxlength="15"
                   (focusout)="stockCodeValidate($event)">
               </mat-form-field>
-              <master-search [MasterSearchData]="stockCodeData" #overlaywstockCodeSearch
+              <master-search [MasterSearchData]="stockCodeData"
+                #overlaywstockCodeSearch
                 (newRowClick)="stockCodeSelected($event)"
                 *ngIf="!viewMode"></master-search>&nbsp;
               <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="stockCodeDes"
-                  [readonly]="viewMode" />
+                  maxlength="40"
+                  readonly />
               </mat-form-field>
             </div>
           </div>
@@ -162,6 +181,7 @@
             <div class="position-relative d-flex">
               <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="batchid"
+                  maxlength="20"
                   [readonly]="viewMode" />
               </mat-form-field>
               <!-- <master-search [MasterSearchData]="subJobNoCodeData"
@@ -179,13 +199,15 @@
             <div class="col-sm-4">
               <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="broken"
+                  maxlength="20"
                   [readonly]="viewMode" />
               </mat-form-field>
             </div>
             <div class="col-sm-4">
               <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="brokenDescription"
-                  [readonly]="viewMode" />
+                  maxlength="40"
+                  readonly />
               </mat-form-field>
             </div>
           </div>
@@ -207,7 +229,8 @@
           <div class="col-md-7">
             <div class="position-relative d-flex">
               <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="location" maxlength="6"
+                <input type="text" matInput formControlName="location"
+                  maxlength="4"
                   [readonly]="viewMode" />
               </mat-form-field>
             </div>
@@ -225,7 +248,9 @@
             <div class="position-relative d-flex">
               <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="pieces"
-                  [readonly]="viewMode" class="text-right" NumberOnly />
+                  maxlength="15"
+                  [readonly]="viewMode" class="text-right" NumberOnly
+                  (focusout)="calculateCarat($event)" />
               </mat-form-field>
               <!-- <master-search [MasterSearchData]="subJobNoCodeData"
                 (newRowClick)="subJobNoCodeSelected($event)"
@@ -238,6 +263,7 @@
             <div class="position-relative d-flex">
               <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="size"
+                  maxlength="12"
                   [readonly]="viewMode" />
               </mat-form-field>
             </div>
@@ -248,6 +274,7 @@
             <div class="position-relative d-flex">
               <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="sieve"
+                  maxlength="12"
                   [readonly]="viewMode" />
               </mat-form-field>
             </div>
@@ -260,7 +287,8 @@
             <div class="position-relative d-flex">
               <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="carat"
-                  [readonly]="viewMode" StoneDecimalInput class="text-right" />
+                  maxlength="12"
+                  readonly StoneDecimalInput class="text-right" />
               </mat-form-field>
               <!-- <master-search [MasterSearchData]="subJobNoCodeData"
                 (newRowClick)="subJobNoCodeSelected($event)" *ngIf="!viewMode" ></master-search> -->
@@ -272,6 +300,7 @@
             <div class="position-relative d-flex">
               <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="color"
+                  maxlength="12"
                   [readonly]="viewMode" />
               </mat-form-field>
             </div>
@@ -282,6 +311,7 @@
             <div class="position-relative d-flex">
               <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="sieveset"
+                  maxlength="20"
                   [readonly]="viewMode" />
               </mat-form-field>
             </div>
@@ -294,6 +324,7 @@
             <div class="position-relative d-flex">
               <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="unitrate"
+                  maxlength="12"
                   [readonly]="viewMode" RateDecimalInput class="text-right" />
               </mat-form-field>
             </div>
@@ -304,6 +335,7 @@
             <div class="position-relative d-flex">
               <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="shape"
+                  maxlength="20"
                   [readonly]="viewMode" />
               </mat-form-field>
             </div>
@@ -314,6 +346,7 @@
             <div class="position-relative d-flex">
               <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="clarity"
+                  maxlength="20"
                   [readonly]="viewMode" />
               </mat-form-field>
             </div>
@@ -326,6 +359,7 @@
             <div class="position-relative d-flex">
               <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="amount"
+                  maxlength="12"
                   [readonly]="viewMode" AmountDecimalInput class="text-right" />
               </mat-form-field>
             </div>
@@ -337,7 +371,9 @@
             <div class="position-relative d-flex">
               <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="pointerwt"
-                  [readonly]="viewMode" class="text-right" FourDecimalInput />
+                  maxlength="12"
+                  [readonly]="viewMode" class="text-right" FourDecimalInput
+                  (focusout)="calculateCarat($event)" />
               </mat-form-field>
             </div>
           </div>

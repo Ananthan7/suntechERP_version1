@@ -31,6 +31,7 @@ export class StoneReturnDetailsComponent implements OnInit {
   jobDate = new Date();
   jobNumberDetailData: any[] = [];
   viewMode: boolean = false;
+  imagepath: any[] = []
   userName = localStorage.getItem('username');
 
   private subscriptions: Subscription[] = [];
@@ -144,6 +145,7 @@ export class StoneReturnDetailsComponent implements OnInit {
     CURRENCY_RATE: [''],
     DIVCODE: [''],
     SMAN: [''],
+    PICTURE_PATH: [''],
     FLAG: [null]
   });
   constructor(
@@ -350,13 +352,27 @@ export class StoneReturnDetailsComponent implements OnInit {
       "DT_VOCNO": this.comService.emptyToZero(form.VOCNO),
       "DT_YEARMONTH": this.comService.nullToString(form.YEARMONTH),
       "RET_TO_DESC": "",
-      "PICTURE_NAME": "",
+      "PICTURE_NAME": this.comService.nullToString(form.PICTURE_PATH),
       "RET_TO": "",
       "ISMISSING": 0,
       "SIEVE_SET": this.comService.nullToString(form.sieveset),
       "SUB_STOCK_CODE": ""
     }
   }
+  getImageData() {
+    let API = `Image/${this.stonereturndetailsFrom.value.jobNumber}`
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        if (result.response) {
+          let data = result.response
+          this.imagepath = data.map((item: any) => item.imagepath)
+        }
+      }, err => {
+        this.comService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
+  }
+
 
   submitValidations(form: any) {
     if (this.comService.nullToString(form.jobNumber) == '') {
@@ -421,6 +437,7 @@ export class StoneReturnDetailsComponent implements OnInit {
         this.comService.closeSnackBarMsg()
         if (result.dynamicData && result.dynamicData[0].length > 0) {
           let data = result.dynamicData[0]
+          console.log(data,'data')
           this.stonereturndetailsFrom.controls.process.setValue(data[0].PROCESS)
           this.stonereturndetailsFrom.controls.processname.setValue(data[0].PROCESSDESC)
           this.stonereturndetailsFrom.controls.worker.setValue(data[0].WORKER)
@@ -429,10 +446,12 @@ export class StoneReturnDetailsComponent implements OnInit {
           // this.stonereturndetailsFrom.controls.stockCodeDes.setValue(data[0].STOCK_DESCRIPTION)
           this.stonereturndetailsFrom.controls.designcode.setValue(data[0].DESIGN_CODE)
           this.stonereturndetailsFrom.controls.location.setValue(data[0].LOCTYPE_CODE)
+          this.stonereturndetailsFrom.controls.PICTURE_PATH.setValue(data[0].PICTURE_PATH)
 
           this.setProcessCodeWhereCondition()
           this.setWorkerCodeWhereCondition()
           this.setStockCodeWhereCondition()
+          this.getImageData()
         } else {
           this.comService.toastErrorByMsgId('MSG1747')
         }
@@ -667,5 +686,18 @@ export class StoneReturnDetailsComponent implements OnInit {
 
     this.subscriptions.push(Sub);
 }
+calculateCarat(event: any) {
+  const pieces = event.target.value || 0;
+  const pointerwt = this.stonereturndetailsFrom.get('pointerwt')?.value || 0;
+  // Calculate both carat values
+  const carat1 = pieces * pointerwt;
+  const carat2 = pointerwt * pieces;
 
+  // Log the results (they will be the same)
+  console.log('Carat1 (pieces * pointerwt):', carat1);
+  console.log('Carat2 (pointerwt * pieces):', carat2);
+
+  // Set the calculated carat value to the form control
+  this.stonereturndetailsFrom.get('carat')?.setValue(carat1.toFixed(3));
+}
 }
