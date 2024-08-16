@@ -850,10 +850,10 @@ export class ProcessTransferDetailsComponent implements OnInit {
   onRowUpdateGrid(event: any) {
     let data = event.data
     this.recalculateSrno()
-    this.Calc_Totals(0)
     this.checkSettedValue(data)
     this.formatMetalDetailDataGrid()
     if (this.rowUpdationValidate(data)) return
+    this.Calc_Totals(0)
     this.CalculateLoss();
   }
   recalculateSrno() {
@@ -865,7 +865,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     let form = this.processTransferdetailsForm.value
     if (data.GROSS_WT > this.emptyToZero(form.FRM_METAL_WT)) {
       this.metalDetailData[data.SRNO - 1].GROSS_WT = form.FRM_METAL_WT
-      this.commonService.toastErrorByMsgId(this.commonService.getMsgByID('MSG2037') + `${form.FRM_METAL_WT}`)
+      this.commonService.toastErrorByMsgId(this.commonService.getMsgByID('MSG2037') + ` ${form.FRM_METAL_WT}`)
       return true
     }
     return false;
