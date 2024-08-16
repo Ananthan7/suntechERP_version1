@@ -671,7 +671,7 @@
                 <mat-label>Expiry Date</mat-label>
                 <input matInput [matDatepicker]="expDate" name="fcn_customer_exp_date"
                   formControlName="fcn_customer_exp_date" placeholder="DD/MM/YYYY" [min]="currentDate"
-                  [readonly]="viewOnly" />
+                  [readonly]="viewOnly" DateValidation />
                 <mat-datepicker-toggle matSuffix [for]="expDate"></mat-datepicker-toggle>
                 <mat-datepicker [startAt]="currentDate" #expDate></mat-datepicker>
 
