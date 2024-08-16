@@ -304,7 +304,7 @@ export class StoneReturnComponent implements OnInit {
     }
     if (DATA.FLAG == 'SAVE') this.closeDetailScreen();
     if (DATA.FLAG == 'CONTINUE') {
-      this.commonService.showSnackBarMsg('Details added successfully')
+      this.commonService.showSnackBarMsg('MSG81512')
     };
   }
   closeDetailScreen() {

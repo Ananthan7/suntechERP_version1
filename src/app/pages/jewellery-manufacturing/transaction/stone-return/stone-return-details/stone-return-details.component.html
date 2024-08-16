@@ -28,7 +28,7 @@
                 (newRowClick)="JobNumberSelected($event)"></master-search>&nbsp;
               <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="jobDesc"
-                  [readonly]="viewMode" />
+                  [readonly]="viewMode" maxlength="40"/>
               </mat-form-field>
             </div>
           </div>
@@ -49,7 +49,7 @@
               &nbsp;
               <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="subjobDesc"
-                  [readonly]="viewMode" />
+                  [readonly]="viewMode" maxlength="40"/>
               </mat-form-field>
             </div>
           </div>
@@ -108,7 +108,7 @@
                 (newRowClick)="processCodeSelected($event)"
                 *ngIf="!viewMode"></master-search>&nbsp;
               <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="processname"
+                <input type="text" matInput formControlName="processname" maxlength="40"
                   [readonly]="viewMode" />
               </mat-form-field>
             </div>
@@ -128,7 +128,7 @@
                 (newRowClick)="workerCodeSelected($event)"
                 *ngIf="!viewMode"></master-search>&nbsp;
               <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="workername"
+                <input type="text" matInput formControlName="workername" maxlength="40"
                   [readonly]="viewMode" />
               </mat-form-field>
             </div>
@@ -149,7 +149,7 @@
                 (newRowClick)="stockCodeSelected($event)"
                 *ngIf="!viewMode"></master-search>&nbsp;
               <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="stockCodeDes"
+                <input type="text" matInput formControlName="stockCodeDes" maxlength="40"
                   [readonly]="viewMode" />
               </mat-form-field>
             </div>
@@ -161,7 +161,7 @@
           <div class="col-sm-5">
             <div class="position-relative d-flex">
               <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="batchid"
+                <input type="text" matInput formControlName="batchid" maxlength="20"
                   [readonly]="viewMode" />
               </mat-form-field>
               <!-- <master-search [MasterSearchData]="subJobNoCodeData"
@@ -178,13 +178,13 @@
             <div class="col-sm-1"></div>
             <div class="col-sm-4">
               <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="broken"
+                <input type="text" matInput formControlName="broken" maxlength="20"
                   [readonly]="viewMode" />
               </mat-form-field>
             </div>
             <div class="col-sm-4">
               <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="brokenDescription"
+                <input type="text" matInput formControlName="brokenDescription" maxlength="40"
                   [readonly]="viewMode" />
               </mat-form-field>
             </div>
@@ -207,7 +207,7 @@
           <div class="col-md-7">
             <div class="position-relative d-flex">
               <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="location" maxlength="6"
+                <input type="text" matInput formControlName="location" maxlength="4"
                   [readonly]="viewMode" />
               </mat-form-field>
             </div>
@@ -224,7 +224,7 @@
           <div class="col-md-2">
             <div class="position-relative d-flex">
               <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="pieces"
+                <input type="text" matInput formControlName="pieces" maxlength="15"
                   [readonly]="viewMode" class="text-right" NumberOnly />
               </mat-form-field>
               <!-- <master-search [MasterSearchData]="subJobNoCodeData"
@@ -237,7 +237,7 @@
           <div class="col-md-2">
             <div class="position-relative d-flex">
               <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="size"
+                <input type="text" matInput formControlName="size" maxlength="12"
                   [readonly]="viewMode" />
               </mat-form-field>
             </div>
@@ -247,7 +247,7 @@
           <div class="col-md-2">
             <div class="position-relative d-flex">
               <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="sieve"
+                <input type="text" matInput formControlName="sieve" maxlength="12"
                   [readonly]="viewMode" />
               </mat-form-field>
             </div>
@@ -259,7 +259,7 @@
           <div class="col-md-2">
             <div class="position-relative d-flex">
               <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="carat"
+                <input type="text" matInput formControlName="carat" maxlength="12"
                   [readonly]="viewMode" StoneDecimalInput class="text-right" />
               </mat-form-field>
               <!-- <master-search [MasterSearchData]="subJobNoCodeData"
@@ -271,7 +271,7 @@
           <div class="col-md-2">
             <div class="position-relative d-flex">
               <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="color"
+                <input type="text" matInput formControlName="color" maxlength="12"
                   [readonly]="viewMode" />
               </mat-form-field>
             </div>
@@ -281,7 +281,7 @@
           <div class="col-md-2">
             <div class="position-relative d-flex">
               <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="sieveset"
+                <input type="text" matInput formControlName="sieveset" maxlength="20"
                   [readonly]="viewMode" />
               </mat-form-field>
             </div>
@@ -293,7 +293,7 @@
           <div class="col-md-2">
             <div class="position-relative d-flex">
               <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="unitrate"
+                <input type="text" matInput formControlName="unitrate" maxlength="12"
                   [readonly]="viewMode" RateDecimalInput class="text-right" />
               </mat-form-field>
             </div>
@@ -303,7 +303,7 @@
           <div class="col-md-2">
             <div class="position-relative d-flex">
               <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="shape"
+                <input type="text" matInput formControlName="shape" maxlength="20"
                   [readonly]="viewMode" />
               </mat-form-field>
             </div>
@@ -313,7 +313,7 @@
           <div class="col-md-2">
             <div class="position-relative d-flex">
               <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="clarity"
+                <input type="text" matInput formControlName="clarity" maxlength="20"
                   [readonly]="viewMode" />
               </mat-form-field>
             </div>
@@ -325,7 +325,7 @@
           <div class="col-md-2">
             <div class="position-relative d-flex">
               <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="amount"
+                <input type="text" matInput formControlName="amount" maxlength="12"
                   [readonly]="viewMode" AmountDecimalInput class="text-right" />
               </mat-form-field>
             </div>
@@ -336,7 +336,7 @@
           <div class="col-md-2">
             <div class="position-relative d-flex">
               <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="pointerwt"
+                <input type="text" matInput formControlName="pointerwt" maxlength="12"
                   [readonly]="viewMode" class="text-right" FourDecimalInput />
               </mat-form-field>
             </div>
