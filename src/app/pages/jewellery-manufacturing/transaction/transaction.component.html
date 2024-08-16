@@ -6,19 +6,7 @@
 <div class="row d-flex justify-content-between" style="min-height: 100vh !important;">
     <div class="col-md-2 col-sm-12">
         <div class="card p-3">
-            <h5>Favorites</h5>
-            <ul>
-                <li><h6>Job card</h6></li>
-                <li><h6>Departement Master</h6></li>
-                <li><h6>Sales Master</h6></li>
-                <li><h6>Inventory Master</h6></li>
-                <li><h6>Departement Master</h6></li>
-                <li><h6>Inventory Master</h6></li>
-                <li><h6>Inventory Master</h6></li>
-                <li><h6>Job Master</h6></li>
-                <li><h6>Sales Master</h6></li>
-                <li><h6>Inventory Master</h6></li>
-            </ul>
+            <app-favorite-menus (subMenuChange)="getMasterGridData($event)"></app-favorite-menus>
         </div>
         <app-cardbox [header]="'Yield %'" [content]="'22'">3</app-cardbox>
         <app-cardbox [header]="'Through Out'" [content]="'44M'"></app-cardbox>

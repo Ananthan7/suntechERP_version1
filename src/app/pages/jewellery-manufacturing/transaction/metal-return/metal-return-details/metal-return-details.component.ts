@@ -44,7 +44,7 @@ export class MetalReturnDetailsComponent implements OnInit {
     SEARCH_FIELD: 'PROCESS_CODE',
     SEARCH_HEADING: 'Process Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "",
+    WHERECONDITION: "PROCESS_CODE<>''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -53,11 +53,11 @@ export class MetalReturnDetailsComponent implements OnInit {
   WorkerCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 201,
+    LOOKUPID: 19,
     SEARCH_FIELD: 'WORKER_CODE',
     SEARCH_HEADING: 'Worker Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "",
+    WHERECONDITION: "WORKER_CODE<>''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -182,12 +182,14 @@ export class MetalReturnDetailsComponent implements OnInit {
   setInitialValue() {
     console.log(this.content, 'content');
     if (!this.content) return;
+    let branchParam = this.comService.allbranchMaster
+    this.metalReturnDetailsForm.controls.location.setValue(branchParam.DMFGMLOC)
     this.branchCode = this.content.BRANCH_CODE || this.content.HEADERDETAILS.BRANCH_CODE;
     this.metalReturnDetailsForm.controls.VOCTYPE.setValue(this.content.VOCTYPE || this.content.HEADERDETAILS.VOCTYPE)
     this.metalReturnDetailsForm.controls.VOCNO.setValue(this.content.VOCNO || this.content.HEADERDETAILS.VOCNO)
     this.metalReturnDetailsForm.controls.VOCDATE.setValue(this.content.VOCDATE || this.content.HEADERDETAILS.vocDate)
     this.metalReturnDetailsForm.controls.BRANCH_CODE.setValue(this.content.BRANCH_CODE || this.content.HEADERDETAILS.BRANCH_CODE)
-    this.metalReturnDetailsForm.controls.location.setValue(this.content.LOCTYPE_CODE || this.content.HEADERDETAILS.BRANCH_CODE)
+   // this.metalReturnDetailsForm.controls.location.setValue(this.content.LOCTYPE_CODE)
     this.metalReturnDetailsForm.controls.YEARMONTH.setValue(this.content.YEARMONTH || this.content.HEADERDETAILS.YEARMONTH)
 
     this.metalReturnDetailsForm.controls.jobNumber.setValue(this.content.JOB_NUMBER)
@@ -205,19 +207,31 @@ export class MetalReturnDetailsComponent implements OnInit {
     this.metalReturnDetailsForm.controls.PART_CODE.setValue(this.content.PART_CODE)
     this.metalReturnDetailsForm.controls.KARAT_CODE.setValue(this.content.KARAT_CODE)
     this.metalReturnDetailsForm.controls.DIVCODE.setValue(this.content.DIVCODE)
+    //this.metalReturnDetailsForm.controls.PURE_WT.setValue(this.content.PURE_WT)
 
-    this.setValueWithDecimal('PURE_WT', this.content.PURE_WT, 'THREE')
+    this.setValueWithDecimal('PURE_WT', this.content.PUREWT, 'THREE')
     this.setValueWithDecimal('GROSS_WT', this.content.GROSS_WT, 'METAL')
     this.setValueWithDecimal('PURITY', this.content.PURITY, 'PURITY')
     this.setValueWithDecimal('NET_WT', this.content.NET_WT, 'THREE')
     this.setValueWithDecimal('KARAT', this.content.KARAT, 'THREE')
     this.setValueWithDecimal('STONE_WT', this.content.STONE_WT, 'STONE')
   };
+  // setValueWithDecimal(formControlName: string, value: any, Decimal: string) {
+  //   this.metalReturnDetailsForm.controls[formControlName].setValue(
+  //     this.comService.setCommaSerperatedNumber(value, Decimal)
+  //   )
+  // }
   setValueWithDecimal(formControlName: string, value: any, Decimal: string) {
+    if (isNaN(value) || value === null || value === undefined) {
+        console.error(`Invalid value for ${formControlName}:`, value);
+        value = 0; // Or handle appropriately, e.g., `return;` if you don't want to set a default
+    }
+
     this.metalReturnDetailsForm.controls[formControlName].setValue(
       this.comService.setCommaSerperatedNumber(value, Decimal)
-    )
-  }
+    );
+}
+
   setLookup201WhereCondition() {
     let form = this.metalReturnDetailsForm.value
     let where = `@strBranch_Code='${form.BRANCH_CODE}',`
@@ -407,17 +421,39 @@ isStockCodeDuplicate(stockCode: string): boolean {
     }
   }
 
-  submitValidations() {
-    let form = this.metalReturnDetailsForm.value
-    if (form.jobNumber == '') {
-      this.comService.toastErrorByMsgId('MSG1358')//Job Number required
-      return
+  // jobNumber: ['', [Validators.required]],
+  // processCode: ['', [Validators.required]],
+  // workerCode: ['', [Validators.required]],
+  // location: ['', [Validators.required]],
+  // stockCode: ['', [Validators.required]],
+
+  submitValidations(form: any) {
+    if (this.comService.nullToString(form.jobNumber) == '') {
+      this.comService.toastErrorByMsgId('MSG1358') //"jobNumber cannot be empty"
+      return true
+    }
+    else if (this.comService.nullToString(form.processCode) == '') {
+      this.comService.toastErrorByMsgId('MSG1680')//"processCode cannot be empty"
+      return true
+    }
+    else if (this.comService.nullToString(form.workerCode) == '') {
+      this.comService.toastErrorByMsgId('MSG1951')//"workerCode cannot be empty"
+      return true
+    }
+    else if (this.comService.nullToString(form.location) == '') {
+      this.comService.toastErrorByMsgId('MSG1381')//"location cannot be empty"
+      return true
+    }
+    else if (this.comService.nullToString(form.stockCode) == '') {
+      this.comService.toastErrorByMsgId('MSG1817')//"stockCode cannot be empty"
+      return true
     }
     return false;
   }
   /**use: to save data to grid*/
   formSubmit(flag: any) {
-    if (this.submitValidations()) return;
+    if (this.submitValidations(this.metalReturnDetailsForm.value)) return;
+    //if (this.submitValidations()) return;
     let dataToparent = {
       FLAG: flag,
       POSTDATA: this.setPostData()
@@ -610,13 +646,13 @@ isStockCodeDuplicate(stockCode: string): boolean {
           this.metalReturnDetailsForm.controls.pcs.setValue(data[0].PCS)
           this.metalReturnDetailsForm.controls.workerCodeDesc.setValue(data[0].WORKERDESC)
           this.metalReturnDetailsForm.controls.processCodeDesc.setValue(data[0].PROCESSDESC)
-          this.metalReturnDetailsForm.controls.location.setValue(data[0].LOCTYPE_CODE)
+         // this.metalReturnDetailsForm.controls.location.setValue(data[0].LOCTYPE_CODE)
           this.metalReturnDetailsForm.controls.designCode.setValue(data[0].DESIGN_CODE)
           this.metalReturnDetailsForm.controls.DIVCODE.setValue(data[0].DIVCODE)
           this.metalReturnDetailsForm.controls.JOB_PCS.setValue(data[0].PCS1)
           this.metalReturnDetailsForm.controls.METAL_STONE.setValue(data[0].METAL_STONE)
 
-          this.setValueWithDecimal('PURE_WT', data[0].PURE_WT, 'THREE')
+          this.setValueWithDecimal('PURE_WT', data[0].PUREWT, 'THREE')
           this.setValueWithDecimal('GROSS_WT', data[0].METAL, 'METAL')
           this.setValueWithDecimal('PURITY', data[0].PURITY, 'PURITY')
           this.setValueWithDecimal('KARAT', data[0].KARAT, 'THREE')

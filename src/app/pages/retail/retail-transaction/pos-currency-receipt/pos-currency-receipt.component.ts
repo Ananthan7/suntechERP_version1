@@ -114,7 +114,8 @@ export class PosCurrencyReceiptComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 2,
     SEARCH_FIELD: "CODE",
-    SEARCH_HEADING: "POS Customer Master",
+    SEARCH_HEADING:
+      "POS Customer Master (Type any details about the customer to search the master list) ",
     SEARCH_VALUE: "",
     WHERECONDITION: "CODE<> ''",
     VIEW_INPUT: true,
@@ -199,6 +200,8 @@ export class PosCurrencyReceiptComponent implements OnInit {
       console.log("Working+++++");
     }
   }
+
+
 
   private loadCompanyParams(): Promise<void> {
     return new Promise<void>((resolve, reject) => {

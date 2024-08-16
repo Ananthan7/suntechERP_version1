@@ -82,9 +82,14 @@ export class DiamonBranchTransferOutDetailsComponent implements OnInit {
     pieces : [""],
     gross_weight: [""],
     percentage : [""],
+    disc_amount : [""],
     amount : [""],
     rate : [""],
+    value_amount : [""],
+    amt : [""],
+    amount2 : [""],
     total : [""],
+    total_cc : [""],
     CGST : [""],
     CGST_per : [""],
     SGST : [""],
@@ -94,6 +99,7 @@ export class DiamonBranchTransferOutDetailsComponent implements OnInit {
     round : [""],
     HSNcode: [""],
     GSTcode: [""],
+    remarks:[""]
   });
 
 

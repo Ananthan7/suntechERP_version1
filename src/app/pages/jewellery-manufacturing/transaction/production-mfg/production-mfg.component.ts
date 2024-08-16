@@ -103,7 +103,7 @@ export class ProductionMfgComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   };
-  branchCodeData:MasterSearchModel = {
+  branchCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 5,
@@ -130,14 +130,14 @@ export class ProductionMfgComponent implements OnInit {
     console.log(value);
     this.productionFrom.controls.enteredby.setValue(value.UsersName);
   }
-  branchSelected(e:any){
-    console.log(e); 
+  branchSelected(e: any) {
+    console.log(e);
     this.productionFrom.controls.branchto.setValue(e.BRANCH_CODE);
   }
   baseCurrencyCodeSelected(e: any) {
     console.log(e);
     this.productionFrom.controls.basecurrency.setValue(e.CURRENCY_CODE);
-    this.productionFrom.controls.basecurrencyrate.setValue(e.CONV_RATE);
+    this.productionFrom.controls.BASE_CURRENCY_RATE.setValue(e.CONV_RATE);
   }
   // main form
   productionFrom: FormGroup = this.formBuilder.group({
@@ -146,9 +146,9 @@ export class ProductionMfgComponent implements OnInit {
     vocno: [1],
     enteredby: [""],
     currency: ["", [Validators.required]],
-    currencyrate: ["", [Validators.required]],
+    CURRENCY_RATE: ["", [Validators.required]],
     basecurrency: [""],
-    basecurrencyrate: [""],
+    BASE_CURRENCY_RATE: [""],
     baseConvRate: [""],
     time: [""],
     metalrate: [""],
@@ -204,12 +204,20 @@ export class ProductionMfgComponent implements OnInit {
   }
   /**USE: to set currency on selected change*/
   currencyDataSelected(event: any) {
-    if (event.target?.value) {
-      this.productionFrom.controls.currency.setValue((event.target.value).toUpperCase())
-    } else {
-      this.productionFrom.controls.currency.setValue(event.CURRENCY_CODE)
-    }
-    this.setCurrencyRate()
+    this.productionFrom.controls.currency.setValue(event.CURRENCY_CODE)
+    this.setFormDecimal('CURRENCY_RATE',event.CONV_RATE,'RATE')
+    // this.setCurrencyRate()
+  }
+  setFormNullToString(formControlName: string, value: any) {
+    this.productionFrom.controls[formControlName].setValue(
+      this.commonService.nullToString(value)
+    )
+    // this.FORM_VALIDATER[formControlName] = this.commonService.nullToString(value)
+  }
+  setFormDecimal(formControlName: string, value: any, Decimal: string) {
+    let val = this.commonService.setCommaSerperatedNumber(value, Decimal)
+    this.productionFrom.controls[formControlName].setValue(val)
+    // this.FORM_VALIDATER[formControlName] = val
   }
   /**USE: to set currency from company parameter */
   setCompanyCurrency() {
@@ -217,24 +225,20 @@ export class ProductionMfgComponent implements OnInit {
     this.productionFrom.controls.currency.setValue(CURRENCY_CODE);
     this.productionFrom.controls.basecurrency.setValue(CURRENCY_CODE);
     const CURRENCY_RATE: any[] = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == this.productionFrom.value.currency);
-    this.productionFrom.controls.basecurrencyrate.setValue(
-      this.commonService.decimalQuantityFormat(CURRENCY_RATE[0].CONV_RATE, 'RATE')
-    );
+    this.setFormDecimal('BASE_CURRENCY_RATE', CURRENCY_RATE[0].CONV_RATE, 'RATE')
     this.setCurrencyRate()
   }
   /**USE: to set currency from branch currency master */
   setCurrencyRate() {
     const CURRENCY_RATE: any[] = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == this.productionFrom.value.currency);
     if (CURRENCY_RATE.length > 0) {
-      this.productionFrom.controls.currencyrate.setValue(
-        this.commonService.decimalQuantityFormat(CURRENCY_RATE[0].CONV_RATE, 'RATE')
-      );
+      this.setFormDecimal('CURRENCY_RATE', CURRENCY_RATE[0].CONV_RATE, 'RATE')
     } else {
       this.productionFrom.controls.currency.setValue('')
-      this.productionFrom.controls.currencyrate.setValue('')
+      this.productionFrom.controls.CURRENCY_RATE.setValue('')
       this.commonService.toastErrorByMsgId('MSG1531')
     }
-    this.BaseCurrencyRateVisibility(this.productionFrom.value.currency, this.productionFrom.value.currencyrate)
+    this.BaseCurrencyRateVisibility(this.productionFrom.value.currency, this.productionFrom.value.CURRENCY_RATE)
   }
   BaseCurrencyRateVisibility(txtPCurr: any, txtPCurrRate: any) {
     let ConvRateArr: any = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == this.productionFrom.value.currency && item.CMBRANCH_CODE == this.branchCode)
@@ -267,138 +271,6 @@ export class ProductionMfgComponent implements OnInit {
       }
     });
   }
-  setStockScreenData() {
-    let data = {
-      /**data from stock details starts*/
-      // "UNIQUEID": 0,
-      // "SRNO": 0,
-      // "VOCNO": 0,
-      // "VOCTYPE": "",
-      // "VOCDATE": this.commonService.formatDateTime(this.currentDate),
-      // "BRANCH_CODE": this.commonService.nullToString(this.branchCode),
-      // "JOB_NUMBER": this.commonService.nullToString(element.jobno),
-      // "JOB_DATE": this.commonService.nullToString(element.jobDate),
-      // "JOB_SO_NUMBER": this.commonService.emptyToZero(element.subjobno),
-      // "UNQ_JOB_ID": this.commonService.nullToString(element.subjobno),
-      // "JOB_DESCRIPTION": this.commonService.nullToString(element.subjobnoDesc),
-      // "UNQ_DESIGN_ID": "",
-      // "DESIGN_CODE": this.commonService.nullToString(element.design),
-      // "DIVCODE": "",
-      // "PREFIX": this.commonService.nullToString(element.prefix),
-      // "STOCK_CODE": "",
-      // "STOCK_DESCRIPTION": "",
-      // "SET_REF": this.commonService.nullToString(element.setref),
-      // "KARAT_CODE": this.commonService.nullToString(element.karat),
-      // "MULTI_STOCK_CODE": true,
-      // "JOB_PCS": 0,
-      // "GROSS_WT": this.commonService.emptyToZero(element.grosswt),
-      // "METAL_PCS": this.commonService.emptyToZero(element.metalpcs),
-      // "METAL_WT": this.commonService.emptyToZero(element.metalwt),
-      // "STONE_PCS": this.commonService.emptyToZero(element.stonepcs),
-      // "STONE_WT": this.commonService.emptyToZero(element.stonewt),
-      // "LOSS_WT": this.commonService.emptyToZero(element.lossone),
-      // "NET_WT": 0,
-      // "PURITY": this.commonService.emptyToZero(element.purity),
-      // "PURE_WT": this.commonService.emptyToZero(element.pureWt),
-      // "RATE_TYPE": this.commonService.nullToString(element.mkgRate),
-      // "METAL_RATE": 0,
-      // "CURRENCY_CODE": "",
-      // "CURRENCY_RATE": 0,
-      // "METAL_GRM_RATEFC": 0,
-      // "METAL_GRM_RATELC": 0,
-      // "METAL_AMOUNTFC": 0,
-      // "METAL_AMOUNTLC": 0,
-      // "MAKING_RATEFC": 0,
-      // "MAKING_RATELC": 0,
-      // "MAKING_AMOUNTFC": 0,
-      // "MAKING_AMOUNTLC": 0,
-      // "STONE_RATEFC": 0,
-      // "STONE_RATELC": 0,
-      // "STONE_AMOUNTFC": 0,
-      // "STONE_AMOUNTLC": 0,
-      // "LAB_AMOUNTFC": 0,
-      // "LAB_AMOUNTLC": 0,
-      // "RATEFC": 0,
-      // "RATELC": 0,
-      // "AMOUNTFC": 0,
-      // "AMOUNTLC": 0,
-      // "PROCESS_CODE": this.commonService.nullToString(element.process),
-      // "PROCESS_NAME": this.commonService.nullToString(element.processname),
-      // "WORKER_CODE": this.commonService.nullToString(element.worker),
-      // "WORKER_NAME": this.commonService.nullToString(element.workername),
-      // "IN_DATE": this.commonService.nullToString(element.startdate),
-      // "OUT_DATE": this.commonService.nullToString(element.endDate),
-      // "TIME_TAKEN_HRS": this.commonService.emptyToZero(element.timetaken),
-      // "COST_CODE": this.commonService.nullToString(element.costcode),
-      // "WIP_ACCODE": "",
-      // "STK_ACCODE": "",
-      // "SOH_ACCODE": "",
-      // "PROD_PROC": this.commonService.nullToString(element.prodpcs),
-      // "METAL_DIVISION": "",
-      // "PRICE1PER": this.commonService.nullToString(element.price1),
-      // "PRICE2PER": this.commonService.nullToString(element.price2),
-      // "PRICE3PER": this.commonService.nullToString(element.price3),
-      // "PRICE4PER": this.commonService.nullToString(element.price4),
-      // "PRICE5PER": this.commonService.nullToString(element.price5),
-      // "LOCTYPE_CODE": this.commonService.nullToString(element.location),
-      // "WASTAGE_WT": 0,
-      // "WASTAGE_AMTFC": 0,
-      // "WASTAGE_AMTLC": 0,
-      // "PICTURE_NAME": "",
-      // "SELLINGRATE": 0,
-      // "CUSTOMER_CODE": this.commonService.nullToString(element.customer),
-      // "OUTSIDEJOB": true,
-      // "LAB_ACCODE": "",
-      // "METAL_LABAMTFC": 0,
-      // "METAL_LABAMTLC": 0,
-      // "METAL_LABACCODE": "",
-      // "SUPPLIER_REF": "",
-      // "TAGLINES": "",
-      // "SETTING_CHRG": 0,
-      // "POLISH_CHRG": 0,
-      // "RHODIUM_CHRG": 0,
-      // "LABOUR_CHRG": 0,
-      // "MISC_CHRG": 0,
-      // "SETTING_ACCODE": "",
-      // "POLISH_ACCODE": "",
-      // "RHODIUM_ACCODE": "",
-      // "LABOUR_ACCODE": "",
-      // "MISC_ACCODE": "",
-      // "WAST_ACCODE": "",
-      // "REPAIRJOB": 0,
-      // "PRICE1FC": 0,
-      // "PRICE2FC": 0,
-      // "PRICE3FC": 0,
-      // "PRICE4FC": 0,
-      // "PRICE5FC": 0,
-      // "DT_BRANCH_CODE": "",
-      // "DT_VOCTYPE": "",
-      // "DT_VOCNO": 0,
-      // "DT_YEARMONTH": "",
-      // "YEARMONTH": "",
-      // "BASE_CONV_RATE": 0,
-      // "OTH_STONE_WT": this.commonService.emptyToZero(element.otherstone),
-      // "OTH_STONE_AMT": 0,
-      // "HANDLING_ACCODE": "",
-      // "FROM_STOCK_CODE": this.commonService.nullToString(element.fromStockCode),
-      // "TO_STOCK_CODE": this.commonService.nullToString(element.toStockCode),
-      // "JOB_PURITY": this.commonService.emptyToZero(element.jobPurity),
-      // "LOSS_PUREWT": this.commonService.emptyToZero(element.loss),
-      // "PUDIFF": this.commonService.emptyToZero(element.purityDiff),
-      // "STONEDIFF": this.commonService.emptyToZero(element.stoneDiff),
-      // "CHARGABLEWT": this.commonService.emptyToZero(element.chargableWt),
-      // "BARNO": this.commonService.nullToString(element.barNo),
-      // "LOTNUMBER": this.commonService.nullToString(element.lotNo),
-      // "TICKETNO": this.commonService.nullToString(element.ticketNo),
-      // "PROD_PER": this.commonService.emptyToZero(element.prod),
-      // "PURITY_PER": this.commonService.emptyToZero(element.purityPer),
-      // "DESIGN_TYPE": this.commonService.nullToString(element.designCode),
-      // "D_REMARKS": this.commonService.nullToString(element.remarks),
-      // "BARCODEDQTY": 0,
-      // "BARCODEDPCS": 0
-    }
-  }
-
   /*USE: detail screen form data set to save */
   setDetailFormDataToSave(DETAIL_FORM_DATA: any) {
     console.log(DETAIL_FORM_DATA, 'DETAIL_FORM_DATA');
@@ -440,7 +312,7 @@ export class ProductionMfgComponent implements OnInit {
       "RATE_TYPE": this.commonService.nullToString(this.productionFrom.value.metalratetype),
       "METAL_RATE": this.commonService.emptyToZero(this.productionFrom.value.metalrate),
       "CURRENCY_CODE": this.commonService.nullToString(this.productionFrom.value.currency),
-      "CURRENCY_RATE": this.commonService.emptyToZero(this.productionFrom.value.currencyrate),
+      "CURRENCY_RATE": this.commonService.emptyToZero(this.productionFrom.value.CURRENCY_RATE),
       "METAL_GRM_RATEFC": 0,
       "METAL_GRM_RATELC": 0,
       "METAL_AMOUNTFC": 0,
@@ -600,8 +472,8 @@ export class ProductionMfgComponent implements OnInit {
       this.commonService.toastErrorByMsgId('MSG1172')// currency code CANNOT BE EMPTY
       return true
     }
-    if (this.commonService.nullToString(form.currencyrate) == '') {
-      this.commonService.toastErrorByMsgId('MSG1178')// currencyrate code CANNOT BE EMPTY
+    if (this.commonService.nullToString(form.CURRENCY_RATE) == '') {
+      this.commonService.toastErrorByMsgId('MSG1178')// CURRENCY_RATE code CANNOT BE EMPTY
       return true
     }
     return false;
@@ -636,7 +508,7 @@ export class ProductionMfgComponent implements OnInit {
       "YEARMONTH": this.commonService.nullToString(this.yearMonth),
       "DOCTIME": this.commonService.formatDateTime(this.currentDate),
       "CURRENCY_CODE": this.commonService.nullToString(this.productionFrom.value.currency),
-      "CURRENCY_RATE": this.commonService.emptyToZero(this.productionFrom.value.currencyrate),
+      "CURRENCY_RATE": this.commonService.emptyToZero(this.productionFrom.value.CURRENCY_RATE),
       "METAL_RATE_TYPE": this.commonService.nullToString(this.productionFrom.value.metalratetype),
       "METAL_RATE": this.commonService.emptyToZero(this.productionFrom.value.metalrate),
       "TOTAL_PCS": 0,
@@ -665,7 +537,7 @@ export class ProductionMfgComponent implements OnInit {
       "AUTOPOSTING": false,
       "POSTDATE": "",
       "BASE_CURRENCY": this.commonService.nullToString(this.productionFrom.value.basecurrency),
-      "BASE_CURR_RATE": this.commonService.emptyToZero(this.productionFrom.value.basecurrencyrate),
+      "BASE_CURR_RATE": this.commonService.emptyToZero(this.productionFrom.value.BASE_CURRENCY_RATE),
       "BASE_CONV_RATE": this.commonService.emptyToZero(this.productionFrom.value.baseConvRate),
       "PRINT_COUNT": 0,
       "INTER_BRANCH": "",
@@ -683,23 +555,23 @@ export class ProductionMfgComponent implements OnInit {
       .postDynamicAPI("JobProductionMaster/InsertJobProductionMaster", postData)
       .subscribe(
         (result) => {
-            if (result && result.status == "Success") {
-              Swal.fire({
-                title: result.message || "Success",
-                text: "",
-                icon: "success",
-                confirmButtonColor: "#336699",
-                confirmButtonText: "Ok",
-              }).then((result: any) => {
-                if (result.value) {
-                  this.productionFrom.reset();
-                  this.tableData = [];
-                  this.close("reloadMainGrid");
-                }
-              });
-            }else {
-              this.commonService.toastErrorByMsgId('MSG3577')
-            }
+          if (result && result.status == "Success") {
+            Swal.fire({
+              title: result.message || "Success",
+              text: "",
+              icon: "success",
+              confirmButtonColor: "#336699",
+              confirmButtonText: "Ok",
+            }).then((result: any) => {
+              if (result.value) {
+                this.productionFrom.reset();
+                this.tableData = [];
+                this.close("reloadMainGrid");
+              }
+            });
+          } else {
+            this.commonService.toastErrorByMsgId('MSG3577')
+          }
         },
         (err) => alert(err)
       );
@@ -723,23 +595,23 @@ export class ProductionMfgComponent implements OnInit {
       .putDynamicAPI(API, postData)
       .subscribe(
         (result) => {
-            if (result && result.status == "Success") {
-              Swal.fire({
-                title: result.message || "Success",
-                text: "",
-                icon: "success",
-                confirmButtonColor: "#336699",
-                confirmButtonText: "Ok",
-              }).then((result: any) => {
-                if (result.value) {
-                  this.productionFrom.reset();
-                  this.tableData = [];
-                  this.close("reloadMainGrid");
-                }
-              });
-            }else {
-              this.commonService.toastErrorByMsgId('MSG3577')
-            }
+          if (result && result.status == "Success") {
+            Swal.fire({
+              title: result.message || "Success",
+              text: "",
+              icon: "success",
+              confirmButtonColor: "#336699",
+              confirmButtonText: "Ok",
+            }).then((result: any) => {
+              if (result.value) {
+                this.productionFrom.reset();
+                this.tableData = [];
+                this.close("reloadMainGrid");
+              }
+            });
+          } else {
+            this.commonService.toastErrorByMsgId('MSG3577')
+          }
         },
         (err) => alert(err)
       );
@@ -800,33 +672,34 @@ export class ProductionMfgComponent implements OnInit {
     this.subscriptions.push(Sub);
   }
 
-      /**use: validate all lookups to check data exists in db */
-      validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
-        LOOKUPDATA.SEARCH_VALUE = event.target.value
-        if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
-        let param = {
-          LOOKUPID: LOOKUPDATA.LOOKUPID,
-          WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+  /**use: validate all lookups to check data exists in db */
+  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    LOOKUPDATA.SEARCH_VALUE = event.target.value
+    if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
+    let param = {
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+    }
+    this.commonService.toastInfoByMsgId('MSG81447');
+    let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
+      .subscribe((result) => {
+        let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+        if (data.length == 0) {
+          this.commonService.toastErrorByMsgId('MSG1531')
+          this.productionFrom.controls[FORMNAME].setValue('')
+          LOOKUPDATA.SEARCH_VALUE = ''
+          return
         }
-        this.commonService.toastInfoByMsgId('MSG81447');
-        let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
-        let Sub: Subscription = this.dataService.postDynamicAPI(API,param)
-          .subscribe((result) => {
-            let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
-            if (data.length == 0) {
-              this.commonService.toastErrorByMsgId('MSG1531')
-              this.productionFrom.controls[FORMNAME].setValue('')
-              LOOKUPDATA.SEARCH_VALUE = ''
-              return
-            }
-           
-          }, err => {
-            this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
-          })
-        this.subscriptions.push(Sub)
-      }
 
-      
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+      })
+    this.subscriptions.push(Sub)
+  }
+  setMetalRate() {
+  }
+
 
   close(data?: any) {
     //TODO reset forms and data before closing

@@ -14,6 +14,7 @@ import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { IndexedApiService } from 'src/app/services/indexed-api.service';
 import { IndexedDbService } from 'src/app/services/indexed-db.service';
 import { CommonServiceService } from 'src/app/services/common-service.service';
+import { environment } from 'src/environments/environment.prod';
 
 
 @Component({
@@ -377,7 +378,7 @@ export class LoginComponent implements OnInit {
           localStorage.setItem('username', this.user_name);
           localStorage.setItem('userbranch', branch);
           localStorage.setItem('YEAR', year);
-          console.log('fired2');
+          localStorage.setItem('VERSION', environment.app_version);
 
           // this.router.navigate(['/']);
           setTimeout(() => {
