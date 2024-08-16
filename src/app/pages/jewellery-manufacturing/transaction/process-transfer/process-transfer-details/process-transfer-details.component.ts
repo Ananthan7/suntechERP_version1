@@ -2611,6 +2611,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       if (this.emptyToZero(form.lossQty) >= this.emptyToZero(dblMaster_Metal)) {
         let msg = this.commonService.getMsgByID("MSG1397")
         this.commonService.toastErrorByMsgId(msg + " " + dblMaster_Metal);
+        this.resetOnLoadWeights('MSG7611')
       }
       form = this.processTransferdetailsForm.value;
       // if (this.emptyToZero(form.GrossWeightFrom) == this.emptyToZero(form.GrossWeightTo)) {

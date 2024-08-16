@@ -21,7 +21,7 @@ th {
 }
 .col-form-label {
   font-size: 1em !important;
-  padding-top: 4px !important;
+  padding-top: 1px !important;
 }
 ::ng-deep {
   // .mat-tab-group {
@@ -36,6 +36,7 @@ th {
     z-index: 1070 !important;
   }
   .mat-form-field {
+    padding-bottom: 0px !important;
     font-weight: 600 !important;
   }
   .mat-flat-button {
