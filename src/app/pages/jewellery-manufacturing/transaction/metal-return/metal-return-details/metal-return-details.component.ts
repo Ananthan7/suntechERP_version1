@@ -40,7 +40,7 @@ export class MetalReturnDetailsComponent implements OnInit {
   ProcessCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 201,
+    LOOKUPID: 20,
     SEARCH_FIELD: 'PROCESS_CODE',
     SEARCH_HEADING: 'Process Code',
     SEARCH_VALUE: '',
@@ -55,13 +55,11 @@ export class MetalReturnDetailsComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 19,
     SEARCH_FIELD: 'WORKER_CODE',
-    SEARCH_HEADING: 'Worker Code',
-    SEARCH_VALUE: '',
+    SEARCH_HEADING: 'WORKER CODE',
     WHERECONDITION: "WORKER_CODE<>''",
+    SEARCH_VALUE: '',
     VIEW_INPUT: true,
     VIEW_TABLE: true,
-    LOAD_ONCLICK: true,
-    FRONTENDFILTER: true
   }
   locationCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -88,7 +86,7 @@ export class MetalReturnDetailsComponent implements OnInit {
   stockCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 20,
+    LOOKUPID: 23,
     SEARCH_FIELD: 'STOCK_CODE',
     SEARCH_HEADING: 'Stock Code',
     SEARCH_VALUE: '',
@@ -189,7 +187,7 @@ export class MetalReturnDetailsComponent implements OnInit {
     this.metalReturnDetailsForm.controls.VOCNO.setValue(this.content.VOCNO || this.content.HEADERDETAILS.VOCNO)
     this.metalReturnDetailsForm.controls.VOCDATE.setValue(this.content.VOCDATE || this.content.HEADERDETAILS.vocDate)
     this.metalReturnDetailsForm.controls.BRANCH_CODE.setValue(this.content.BRANCH_CODE || this.content.HEADERDETAILS.BRANCH_CODE)
-   // this.metalReturnDetailsForm.controls.location.setValue(this.content.LOCTYPE_CODE)
+    // this.metalReturnDetailsForm.controls.location.setValue(this.content.LOCTYPE_CODE)
     this.metalReturnDetailsForm.controls.YEARMONTH.setValue(this.content.YEARMONTH || this.content.HEADERDETAILS.YEARMONTH)
 
     this.metalReturnDetailsForm.controls.jobNumber.setValue(this.content.JOB_NUMBER)
@@ -223,24 +221,24 @@ export class MetalReturnDetailsComponent implements OnInit {
   // }
   setValueWithDecimal(formControlName: string, value: any, Decimal: string) {
     if (isNaN(value) || value === null || value === undefined) {
-        console.error(`Invalid value for ${formControlName}:`, value);
-        value = 0; // Or handle appropriately, e.g., `return;` if you don't want to set a default
+      console.error(`Invalid value for ${formControlName}:`, value);
+      value = 0; // Or handle appropriately, e.g., `return;` if you don't want to set a default
     }
 
     this.metalReturnDetailsForm.controls[formControlName].setValue(
       this.comService.setCommaSerperatedNumber(value, Decimal)
     );
-}
+  }
 
   setLookup201WhereCondition() {
     let form = this.metalReturnDetailsForm.value
     let where = `@strBranch_Code='${form.BRANCH_CODE}',`
     where += `@strJob_Number='${form.jobNumber}',@strUnq_Job_Id='${form.subJobNo}',`
     where += `@strMetalStone='${form.METAL_STONE}',@strProcess_Code='${form.processCode}',`
-    where += `@strWorker_Code='${form.workerCode}',@strStock_Code='${form.stockCode}',@strUserName='${this.comService.userName}'`
-    this.stockCodeData.WHERECONDITION = where
-    this.ProcessCodeData.WHERECONDITION = where
-    this.WorkerCodeData.WHERECONDITION = where
+    //  where += `@strWorker_Code='${form.workerCode}',@strStock_Code='${form.stockCode}',@strUserName='${this.comService.userName}'`
+  //  this.stockCodeData.WHERECONDITION = where
+  //  this.ProcessCodeData.WHERECONDITION = where
+    // this.WorkerCodeData.WHERECONDITION = where
   }
   stoneValidate() {
     if (this.calculateNetWt()) {
@@ -267,13 +265,14 @@ export class MetalReturnDetailsComponent implements OnInit {
     return false;
   }
   WorkerCodeSelected(e: any) {
+    console.log("sdgf")
     this.metalReturnDetailsForm.controls.workerCode.setValue(e.WORKER_CODE);
     this.metalReturnDetailsForm.controls.workerCodeDesc.setValue(e.DESCRIPTION);
-    this.setLookup201WhereCondition()
+    // this.setLookup201WhereCondition()
   }
   locationCodeSelected(e: any) {
     this.metalReturnDetailsForm.controls.location.setValue(e.LOCATION_CODE);
-    // this.setLookup201WhereCondition()
+    this.setLookup201WhereCondition()
   }
   jobnoCodeSelected(e: any) {
     this.metalReturnDetailsForm.controls.jobNumber.setValue(e.job_number);
@@ -283,18 +282,18 @@ export class MetalReturnDetailsComponent implements OnInit {
   ProcessCodeSelected(e: any) {
     this.metalReturnDetailsForm.controls.processCode.setValue(e.Process_Code);
     this.metalReturnDetailsForm.controls.processCodeDesc.setValue(e.Description);
-    this.setLookup201WhereCondition()
+   // this.setLookup201WhereCondition()
   }
 
   stockCodeSelected(e: any) {
     this.metalReturnDetailsForm.controls.stockCode.setValue(e.STOCK_CODE);
     this.metalReturnDetailsForm.controls.stockCodeDesc.setValue(e.DESCRIPTION);
-    this.setLookup201WhereCondition()
+  // this.setLookup201WhereCondition()
   }
   ReturnTostockCodeSelected(e: any) {
     this.metalReturnDetailsForm.controls.ReturnToStockCode.setValue(e.STOCK_CODE);
     this.metalReturnDetailsForm.controls.ReturnToStockCodeDesc.setValue(e.DESCRIPTION);
-    this.setLookup201WhereCondition()
+   // this.setLookup201WhereCondition()
   }
   lookupKeyPress(event: any, form?: any) {
     if (event.key == 'Tab' && event.target.value == '') {
@@ -312,36 +311,36 @@ export class MetalReturnDetailsComponent implements OnInit {
     // this.activeModal.close(data);
   }
 
-  
-isStockCodeDuplicate(stockCode: string): boolean {
-  // Get the current list of stock codes from the form array
-  const stockCodes = this.metalReturnDetailsForm.get('details')?.value.map((item: any) => item.stockCode) || [];
 
-  // Check if the provided stockCode already exists in the array
-  return stockCodes.includes(stockCode);
-}
+  isStockCodeDuplicate(stockCode: string): boolean {
+    // Get the current list of stock codes from the form array
+    const stockCodes = this.metalReturnDetailsForm.get('details')?.value.map((item: any) => item.stockCode) || [];
+
+    // Check if the provided stockCode already exists in the array
+    return stockCodes.includes(stockCode);
+  }
 
 
   performReset() {
     const currentStockCode = this.metalReturnDetailsForm.value.stockCode;
 
     if (this.isStockCodeDuplicate(currentStockCode)) {
-        Swal.fire({
-            title: 'Duplicate Stock Code',
-            text: 'This Stock Code entry is already available in detail. Do you wish to continue?',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Yes, continue',
-            cancelButtonText: 'No, cancel'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                this.resetStockDetails(); // Proceed with clearing the stock details
-            }
-        });
+      Swal.fire({
+        title: 'Duplicate Stock Code',
+        text: 'This Stock Code entry is already available in detail. Do you wish to continue?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, continue',
+        cancelButtonText: 'No, cancel'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.resetStockDetails(); // Proceed with clearing the stock details
+        }
+      });
     } else {
-        this.resetStockDetails(); // Proceed if no duplicate
+      this.resetStockDetails(); // Proceed if no duplicate
     }
-}
+  }
 
 
   resetStockDetails() {
@@ -549,41 +548,41 @@ isStockCodeDuplicate(stockCode: string): boolean {
     console.log(e);
     this.metalReturnDetailsForm.controls.jobNumber.setValue(e.PREFIX_CODE);
   }
-    WorkerCodeValidate(event ?: any) {
-      // this.showOverleyPanel(event, 'workerCode')
-      let form = this.metalReturnDetailsForm.value;
-      let postData = {
-        "SPID": "103",
-        "parameter": {
-          strBranch_Code: this.comService.nullToString(form.BRANCH_CODE),
-          strJob_Number: '',
-          strUnq_Job_Id: '',
-          strMetalStone: '',
-          strProcess_Code: '',
-          strWorker_Code: '',
-          strStock_Code: '',
-          strUserName: '',
-        }
-      }
+  // WorkerCodeValidate(event ?: any) {
+  //   // this.showOverleyPanel(event, 'workerCode')
+  //   let form = this.metalReturnDetailsForm.value;
+  //   let postData = {
+  //     "SPID": "103",
+  //     "parameter": {
+  //       strBranch_Code: this.comService.nullToString(form.BRANCH_CODE),
+  //       strJob_Number: '',
+  //       strUnq_Job_Id: '',
+  //       strMetalStone: '',
+  //       strProcess_Code: '',
+  //       strWorker_Code: '',
+  //       strStock_Code: '',
+  //       strUserName: '',
+  //     }
+  //   }
 
-      this.comService.showSnackBarMsg('MSG81447')
-      let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
-        .subscribe((result) => {
-          this.comService.closeSnackBarMsg()
-          if (result.dynamicData && result.dynamicData[0].length > 0) {
-            this.overlayworkerCodeSearch.closeOverlayPanel()
-          } else {
-            this.metalReturnDetailsForm.controls.workerCode.setValue('')
-            this.showOverleyPanel(event, 'workerCode')
-            return
-          }
-        }, err => {
-          this.comService.closeSnackBarMsg()
-          this.comService.toastErrorByMsgId('MSG1747')
-        })
-      this.subscriptions.push(Sub)
-    }
-  
+  //   this.comService.showSnackBarMsg('MSG81447')
+  //   let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+  //     .subscribe((result) => {
+  //       this.comService.closeSnackBarMsg()
+  //       if (result.dynamicData && result.dynamicData[0].length > 0) {
+  //         this.overlayworkerCodeSearch.closeOverlayPanel()
+  //       } else {
+  //         this.metalReturnDetailsForm.controls.workerCode.setValue('')
+  //         this.showOverleyPanel(event, 'workerCode')
+  //         return
+  //       }
+  //     }, err => {
+  //       this.comService.closeSnackBarMsg()
+  //       this.comService.toastErrorByMsgId('MSG1747')
+  //     })
+  //   this.subscriptions.push(Sub)
+  // }
+
   processCodeValidate(event?: any) {
     // this.showOverleyPanel(event, 'processCode')// this
     let form = this.metalReturnDetailsForm.value;
@@ -605,7 +604,8 @@ isStockCodeDuplicate(stockCode: string): boolean {
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
       .subscribe((result) => {
         this.comService.closeSnackBarMsg()
-        if (result.dynamicData && result.dynamicData[0].length > 0) {``
+        if (result.dynamicData && result.dynamicData[0].length > 0) {
+          ``
           this.overlayprocessCodeSearch.closeOverlayPanel()
         } else {
           // this.comService.toastErrorByMsgId('MSG1531')
@@ -614,11 +614,11 @@ isStockCodeDuplicate(stockCode: string): boolean {
           return
         }
       }, err => {
-      this.comService.closeSnackBarMsg()
-      this.comService.toastErrorByMsgId('MSG1531')
-    })
-  this.subscriptions.push(Sub)
-}
+        this.comService.closeSnackBarMsg()
+        this.comService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
+  }
   subJobNumberValidate(event?: any) {
     let postData = {
       "SPID": "040",
@@ -646,7 +646,7 @@ isStockCodeDuplicate(stockCode: string): boolean {
           this.metalReturnDetailsForm.controls.pcs.setValue(data[0].PCS)
           this.metalReturnDetailsForm.controls.workerCodeDesc.setValue(data[0].WORKERDESC)
           this.metalReturnDetailsForm.controls.processCodeDesc.setValue(data[0].PROCESSDESC)
-         // this.metalReturnDetailsForm.controls.location.setValue(data[0].LOCTYPE_CODE)
+          // this.metalReturnDetailsForm.controls.location.setValue(data[0].LOCTYPE_CODE)
           this.metalReturnDetailsForm.controls.designCode.setValue(data[0].DESIGN_CODE)
           this.metalReturnDetailsForm.controls.DIVCODE.setValue(data[0].DIVCODE)
           this.metalReturnDetailsForm.controls.JOB_PCS.setValue(data[0].PCS1)
@@ -695,7 +695,7 @@ isStockCodeDuplicate(stockCode: string): boolean {
           if (data[0] && data[0].UNQ_JOB_ID != '') {
             this.overlayjobNumberSearch.closeOverlayPanel()
             this.jobNumberDetailData = data
-            
+
             this.metalReturnDetailsForm.controls.jobDes.setValue(data[0].DESCRIPTION)
             this.metalReturnDetailsForm.controls.subJobNo.setValue(data[0].UNQ_JOB_ID)
             this.metalReturnDetailsForm.controls.PART_CODE.setValue(data[0].PART_CODE)
@@ -709,7 +709,7 @@ isStockCodeDuplicate(stockCode: string): boolean {
             return
           }
         } else {
-          
+
           this.metalReturnDetailsForm.controls.jobNumber.setValue('')
           this.showOverleyPanel(event, 'jobNumber')
           this.comService.toastErrorByMsgId('MSG1747')
@@ -735,50 +735,50 @@ isStockCodeDuplicate(stockCode: string): boolean {
         strLocation: '',
         strPartyCode: '',
         strVocDate: this.comService.formatDateTime(this.comService.currentDate)
-    }
-};
+      }
+    };
 
     this.comService.showSnackBarMsg('MSG81447');
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
-        .subscribe((result) => {
-            this.comService.closeSnackBarMsg();
-            if (result.status === "Success" && result.dynamicData[0]) {
-                let data = result.dynamicData[0];
-                if (data) {
-                    console.log(data, 'data');
-                    if (data[0].VALID_STOCK) {
-                        // Handle the valid stock case
-                        // You can set other form values or perform other actions here if needed
-                        this.overlaystockCodeSearch.closeOverlayPanel();
-                    } else {
-                        this.comService.toastErrorByMsgId('MSG1531');
-                        this.metalReturnDetailsForm.controls.stockCode.setValue('');
-                        this.showOverleyPanel(event, 'stockCode');
-                    }
-                } else {
-                    this.comService.toastErrorByMsgId('MSG1531');
-                    this.metalReturnDetailsForm.controls.stockCode.setValue('');
-                    this.showOverleyPanel(event, 'stockCode');
-                }
+      .subscribe((result) => {
+        this.comService.closeSnackBarMsg();
+        if (result.status === "Success" && result.dynamicData[0]) {
+          let data = result.dynamicData[0];
+          if (data) {
+            console.log(data, 'data');
+            if (data[0].VALID_STOCK) {
+              // Handle the valid stock case
+              // You can set other form values or perform other actions here if needed
+              this.overlaystockCodeSearch.closeOverlayPanel();
             } else {
-                this.comService.toastErrorByMsgId('MSG1747');
-                this.metalReturnDetailsForm.controls.stockCode.setValue('');
-                this.overlaystockCodeSearch.closeOverlayPanel();
+              this.comService.toastErrorByMsgId('MSG1531');
+              this.metalReturnDetailsForm.controls.stockCode.setValue('');
+              this.showOverleyPanel(event, 'stockCode');
             }
-        }, err => {
-            this.comService.closeSnackBarMsg();
+          } else {
             this.comService.toastErrorByMsgId('MSG1531');
             this.metalReturnDetailsForm.controls.stockCode.setValue('');
             this.showOverleyPanel(event, 'stockCode');
-        });
+          }
+        } else {
+          this.comService.toastErrorByMsgId('MSG1747');
+          this.metalReturnDetailsForm.controls.stockCode.setValue('');
+          this.overlaystockCodeSearch.closeOverlayPanel();
+        }
+      }, err => {
+        this.comService.closeSnackBarMsg();
+        this.comService.toastErrorByMsgId('MSG1531');
+        this.metalReturnDetailsForm.controls.stockCode.setValue('');
+        this.showOverleyPanel(event, 'stockCode');
+      });
 
     this.subscriptions.push(Sub);
-}
-  
+  }
+
   showOverleyPanel(event: any, formControlName: string) {
-    let value= this.metalReturnDetailsForm.value[formControlName]
+    let value = this.metalReturnDetailsForm.value[formControlName]
     if (this.comService.nullToString(value) != '') return;
-  
+
     switch (formControlName) {
       case 'jobNumber':
         this.overlayjobNumberSearch.showOverlayPanel(event);
@@ -799,35 +799,64 @@ isStockCodeDuplicate(stockCode: string): boolean {
         this.overlayReturnToStockCodeSearch.showOverlayPanel(event);
         break;
       default:
-       
+
     }
   }
-  
+
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+
     LOOKUPDATA.SEARCH_VALUE = event.target.value
+
     if (event.target.value == '' || this.viewMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
       WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
     }
-    this.comService.showSnackBarMsg('MSG81447');
-    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
-    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+    this.comService.toastInfoByMsgId('MSG81447');
+    let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
       .subscribe((result) => {
-        this.comService.closeSnackBarMsg()
+        //this.isDisableSaveBtn = false;
         let data = this.comService.arrayEmptyObjectToString(result.dynamicData[0])
         if (data.length == 0) {
           this.comService.toastErrorByMsgId('MSG1531')
           this.metalReturnDetailsForm.controls[FORMNAME].setValue('')
           LOOKUPDATA.SEARCH_VALUE = ''
-          if ( FORMNAME === 'location' || FORMNAME === 'ReturnToStockCode') {
+          if (FORMNAME === 'location' || FORMNAME === 'ReturnToStockCode') {
             this.showOverleyPanel(event, FORMNAME);
           }
           return
         }
+        //this.alloyMasterFormChecks(FORMNAME)// for validations
       }, err => {
-        this.comService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+        this.comService.toastErrorByMsgId('MSG1531')
       })
     this.subscriptions.push(Sub)
+
+    // LOOKUPDATA.SEARCH_VALUE = event.target.value
+    // if (event.target.value == '' || this.viewMode == true) return
+    // let param = {
+    //   LOOKUPID: LOOKUPDATA.LOOKUPID,
+    //   WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+    // }
+    // this.comService.showSnackBarMsg('MSG81447');
+    // let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
+    // let Sub: Subscription = this.dataService.getDynamicAPI(API)
+    //   .subscribe((result) => {
+    //     this.comService.closeSnackBarMsg()
+    //     let data = this.comService.arrayEmptyObjectToString(result.dynamicData[0])
+    //     if (data.length == 0) {
+    //       this.comService.toastErrorByMsgId('MSG1531')
+    //       this.metalReturnDetailsForm.controls[FORMNAME].setValue('')
+    //       LOOKUPDATA.SEARCH_VALUE = ''
+    //       if ( FORMNAME === 'location' || FORMNAME === 'ReturnToStockCode') {
+    //         this.showOverleyPanel(event, FORMNAME);
+    //       }
+    //       return
+    //     }
+    //   }, err => {
+    //     this.comService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+    //   })
+    // this.subscriptions.push(Sub)
   }
 }

@@ -109,7 +109,7 @@
                     </div>
                     <div class="col-md-4">
                         <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true" [showRowLines]="true"
-                            [allowColumnReordering]="true" [allowColumnResizing]="true" [dataSource]="tableData"
+                            [allowColumnReordering]="true" [allowColumnResizing]="true" [dataSource]="metalReturnDetailsData" 
                             height="200" [columnAutoWidth]="true">
                             <dxo-paging [enabled]="false"></dxo-paging>
                             <dxo-editing mode="cell" [allowUpdating]="true">
@@ -117,9 +117,39 @@
                             <dxo-selection mode="multiple"></dxo-selection>
                             <dxo-scrolling mode="virtual"></dxo-scrolling>
 
-                            <dxi-column *ngFor="let data of tableDataHead" dataField="{{ data }}" caption="{{ data }}"
+                            <dxi-column dataField="PROCESS_CODE" caption="PROCESS"></dxi-column>
+                            <dxi-column dataField="WORKER_CODE" caption="WORKER"></dxi-column>
+                            <dxi-column dataField="JOB_NUMBER" caption="JOB_NUMBER"></dxi-column>
+                            <dxi-column dataField="UNQ_JOB_ID" caption="UNQ_JOB_ID"></dxi-column>
+                            <dxi-column dataField="DESIGN_CODE" caption="DESIGN_CODE"></dxi-column>
+                            <dxi-column dataField="STOCK_CODE" caption="STOCK_CODE"></dxi-column>
+                            <dxi-column dataField="METAL" caption="METAL"></dxi-column>
+                            <dxi-column dataField="NET_WT" caption="NETWT"></dxi-column>
+                            <dxi-column dataField="PURITY" caption="PURITY"></dxi-column>
+                            <dxi-column dataField="PURE_WT" caption="PUREWT"></dxi-column>
+
+
+
+                            
+
+
+
+<!--                          
+                            <dxi-column dataField="DESCRIPTION" caption="Description"></dxi-column>
+                            <dxi-column dataField="JOB_DESCRIPTION" caption="Job Description"></dxi-column>
+                            <dxi-column dataField="PCS" caption="Pcs"></dxi-column>
+                            <dxi-column dataField="DIVCODE" caption="Division"></dxi-column>
+                            <dxi-column dataField="GROSS_WT" caption="Gross Wt"></dxi-column>
+                            <dxi-column dataField="PURITY" caption="Purity"></dxi-column>
+                            <dxi-column dataField="STONE_WT" caption="Stone Wt"></dxi-column>
+                            <dxi-column dataField="PROCESS_CODE" caption="Process Code"></dxi-column>
+                            <dxi-column dataField="PROCESS_DESCRIPTION" caption="Process Desc"></dxi-column>
+                          
+                            <dxi-column dataField="WORKER_DESCRIPTION" caption="Worker Desc"></dxi-column> -->
+
+                            <!-- <dxi-column *ngFor="let data of tableDataHead" dataField="{{ data }}" caption="{{ data }}"
                                 [allowEditing]="true" alignment="center" backgroundcolor="#000">
-                            </dxi-column>
+                            </dxi-column> -->
                         </dx-data-grid>
                         <div class="p-2 bd-highlight">
                             <button type="button" class="btn btn-outline-primary del-btn">
@@ -140,7 +170,7 @@
                     <div class="col-md-12">
                         <dx-data-grid id="gridContainer" [dataSource]="metalReturnDetailsData" [showBorders]="true"
                             [showRowLines]="true" (onRowClick)="onRowClickHandler($event)"
-                            (onRowDblClick)="onRowDoubleClickHandler($event)" [allowColumnResizing]="true"  height="150px">
+                            (onRowDblClick)="onRowDoubleClickHandler($event)"   [allowColumnResizing]="true"  height="150px">
                             <dxo-selection mode="single"></dxo-selection>
                               <dxo-scrolling mode="virtual"></dxo-scrolling>
 
