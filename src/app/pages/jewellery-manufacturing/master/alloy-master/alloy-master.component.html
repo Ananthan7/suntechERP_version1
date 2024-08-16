@@ -413,7 +413,8 @@
                                             AmountDecimalInput
                                             formControlName="price1Lc"
                                             class="text-right"
-                                            [readonly]="viewMode" />
+                                            [readonly]="viewMode" 
+                                            (input)="setupFormSubscription()"/>
                                     </mat-form-field>
                                 </div>
                             </div>
