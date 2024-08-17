@@ -279,7 +279,7 @@ export class ProcessTransferComponent implements OnInit {
   setValuesToHeaderGrid(DATA: any) {
     let detailDataToParent = DATA.PROCESS_FORMDETAILS
     if (detailDataToParent.SRNO != 0) {
-      this.tableData[detailDataToParent.SRNO - 1] = detailDataToParent
+      this.tableData[detailDataToParent.SRNO - 1] =  DATA.JOB_PROCESS_TRN_DETAIL_DJ
       this.detailData[detailDataToParent.SRNO - 1] = { SRNO: detailDataToParent.SRNO, ...DATA }
     } else {
       if (this.addItemWithCheck(this.tableData, detailDataToParent)) return;
