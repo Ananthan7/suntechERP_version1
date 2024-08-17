@@ -68,13 +68,13 @@
               <mat-form-field style="width: 70%">
                 <input type="text" matInput formControlName="designcode"
                   (keydown)="lookupKeyPress($event,'designcode')" maxlength="20"
-                  readonly
-                  (focusout)="validateLookupField($event,subJobNoCodeData,'designcode')" />
+                  readonly />
+                  <!-- (focusout)="validateLookupField($event,subJobNoCodeData,'designcode')" -->
               </mat-form-field>
-              <master-search [MasterSearchData]="subJobNoCodeData"
+              <!-- <master-search [MasterSearchData]="subJobNoCodeData"
                 #overlaydesigncodeSearch
                 (newRowClick)="subJobNoCodeSelected($event)"
-                *ngIf="!viewMode"></master-search>
+                *ngIf="!viewMode"></master-search> -->
             </div>
           </div>
           <label for="inputPassword" class="col-sm-2 col-form-label">Salesorder
@@ -85,7 +85,7 @@
               <mat-form-field style="width: 70%">
                 <input type="text" matInput formControlName="salesorderno"
                   maxlength="20"
-                  [readonly]="viewMode" class="text-right" NumberOnly />
+                  readonly class="text-right" NumberOnly />
               </mat-form-field>
             </div>
           </div>
@@ -230,9 +230,13 @@
             <div class="position-relative d-flex">
               <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="location"
-                  maxlength="4"
-                  [readonly]="viewMode" />
+                  [readonly]="viewMode" 
+                  (keydown)="lookupKeyPress($event,'location')"
+                  (focusout)="validateLookupField($event,locationCodeData,'location')"/>
               </mat-form-field>
+               <master-search [MasterSearchData]="locationCodeData"
+                (newRowClick)="locationCodeSelected($event)" #overlaylocationSearch
+                *ngIf="!viewMode"></master-search>
             </div>
           </div>
         </div>
@@ -264,7 +268,7 @@
               <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="size"
                   maxlength="12"
-                  [readonly]="viewMode" />
+                 readonly/>
               </mat-form-field>
             </div>
           </div>
@@ -275,7 +279,7 @@
               <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="sieve"
                   maxlength="12"
-                  [readonly]="viewMode" />
+                  readonly/>
               </mat-form-field>
             </div>
           </div>
@@ -301,7 +305,7 @@
               <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="color"
                   maxlength="12"
-                  [readonly]="viewMode" />
+                  readonly />
               </mat-form-field>
             </div>
           </div>
@@ -312,7 +316,7 @@
               <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="sieveset"
                   maxlength="20"
-                  [readonly]="viewMode" />
+                  readonly />
               </mat-form-field>
             </div>
           </div>
@@ -325,7 +329,7 @@
               <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="unitrate"
                   maxlength="12"
-                  [readonly]="viewMode" RateDecimalInput class="text-right" />
+                  readonly RateDecimalInput class="text-right" />
               </mat-form-field>
             </div>
           </div>
@@ -336,7 +340,7 @@
               <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="shape"
                   maxlength="20"
-                  [readonly]="viewMode" />
+                  readonly />
               </mat-form-field>
             </div>
           </div>
@@ -347,7 +351,7 @@
               <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="clarity"
                   maxlength="20"
-                  [readonly]="viewMode" />
+                  readonly/>
               </mat-form-field>
             </div>
           </div>
@@ -360,7 +364,7 @@
               <mat-form-field style="width: 100%">
                 <input type="text" matInput formControlName="amount"
                   maxlength="12"
-                  [readonly]="viewMode" AmountDecimalInput class="text-right" />
+                  readonly AmountDecimalInput class="text-right" />
               </mat-form-field>
             </div>
           </div>
