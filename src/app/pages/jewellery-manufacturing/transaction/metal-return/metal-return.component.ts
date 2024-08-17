@@ -322,6 +322,65 @@ this.setvoucherTypeMaster()
       this.proceedWithModalOpening(dataToChild);
     }
   }
+
+  // async addItemWithCheck(existingArray: any[], newItem: any): Promise<boolean> {
+  //   const duplicate = existingArray.find((item: any) => item.STOCK_CODE === newItem.STOCK_CODE);
+  
+  //   if (duplicate) {
+  //     // Show a confirmation dialog for duplicate entries
+  //     const result = await Swal.fire({
+  //       title: 'Duplicate Stock Code',
+  //       text: 'This Stock Code entry is already available in detail. Do you wish to continue?',
+  //       icon: 'warning',
+  //       showCancelButton: true,
+  //       confirmButtonColor: '#3085d6',
+  //       cancelButtonColor: '#d33',
+  //       confirmButtonText: 'Yes, continue!',
+  //       cancelButtonText: 'No, cancel'
+  //     });
+  
+  //     if (result.isConfirmed) {
+  //       // User confirmed to continue
+  //       return false;
+  //     } else {
+  //       // User canceled
+  //       this.commonService.toastErrorByMsgId('MSG2052');
+  //       return true;
+  //     }
+  //   }
+  
+  //   // No duplicate found
+  //   return false;
+  // }
+
+  async addItemWithCheck(existingArray: any[], newItem: any) {
+    const duplicate = existingArray.find((item: any) => item.STOCK_CODE === newItem.STOCK_CODE);
+       if (duplicate) {
+      // Show a confirmation dialog for duplicate entries
+      const result = await Swal.fire({
+        title: 'Duplicate Stock Code',
+        text: 'This Stock Code entry is already available in detail. Do you wish to continue?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, continue!',
+        cancelButtonText: 'No, cancel'
+      });
+  
+      if (result.isConfirmed) {
+        // User confirmed to continue
+        return false;
+      } else {
+        // User canceled
+        this.commonService.toastErrorByMsgId('MSG2052');
+        return true;
+      }
+    }
+  
+    // No duplicate found
+    return false;
+  }
   
   proceedWithModalOpening(dataToChild: any) {
     if (dataToChild) {
@@ -340,29 +399,53 @@ this.setvoucherTypeMaster()
     });
   
     // Uncomment if you want to handle modal result
-    // this.modalReference.result.then((dataToParent) => {
-    //   if (dataToParent) {
-    //     this.setValuesToHeaderGrid(dataToParent);
-    //   }
-    // });
+    this.modalReference.result.then((dataToParent) => {
+      if (dataToParent) {
+        this.setValuesToHeaderGrid(dataToParent);
+      }
+    });
   }
   
-  
-
-  setValuesToHeaderGrid(DATA: any) {
+  async setValuesToHeaderGrid(DATA: any) {
     console.log(DATA, 'detailDataToParent');
-    let detailDataToParent = DATA.POSTDATA
-    if (detailDataToParent.SRNO != 0) {
-      this.metalReturnDetailsData[detailDataToParent.SRNO - 1] = detailDataToParent
+    let detailDataToParent = DATA.POSTDATA;
+
+    // Check if SRNO is not zero (update existing entry)
+    if (detailDataToParent.SRNO !== 0) {
+        // Update existing entry in metalReturnDetailsData
+        this.metalReturnDetailsData[detailDataToParent.SRNO - 1] = detailDataToParent;
     } else {
-      this.metalReturnDetailsData.push(detailDataToParent);
-      this.recalculateSRNO()
+        // Check for duplicates before adding a new entry
+        if (await this.addItemWithCheck(this.metalReturnDetailsData, detailDataToParent)) return;
+
+        // Add new entry to metalReturnDetailsData
+        this.metalReturnDetailsData.push(detailDataToParent);
+        this.recalculateSRNO(); // Recalculate SRNO for new entries
     }
-    if(DATA.FLAG == 'SAVE') this.closeDetailScreen();
-    if(DATA.FLAG == 'CONTINUE'){
-      this.commonService.showSnackBarMsg('Details added successfully')
-    };
-  }
+
+    // Handle flags for further actions
+    if (DATA.FLAG === 'SAVE') {
+        this.closeDetailScreen();
+    } else if (DATA.FLAG === 'CONTINUE') {
+        this.commonService.showSnackBarMsg('Details added successfully');
+    }
+}
+
+
+  // setValuesToHeaderGrid(DATA: any) {
+  //   console.log(DATA, 'detailDataToParent');
+  //   let detailDataToParent = DATA.POSTDATA
+  //   if (detailDataToParent.SRNO != 0) {
+  //     this.metalReturnDetailsData[detailDataToParent.SRNO - 1] = detailDataToParent
+  //   } else {
+  //     this.metalReturnDetailsData.push(detailDataToParent);
+  //     this.recalculateSRNO()
+  //   }
+  //   if(DATA.FLAG == 'SAVE') this.closeDetailScreen();
+  //   if(DATA.FLAG == 'CONTINUE'){
+  //     this.commonService.showSnackBarMsg('Details added successfully')
+  //   };
+  // }
   closeDetailScreen(){
     this.modalReference.close()
   }
