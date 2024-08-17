@@ -458,6 +458,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       this.setFormDecimal('PURITY', parentDetail.PURITY, 'PURITY')
       this.setFormDecimal('scrapWeight', parentDetail.SCRAP_WT, 'METAL')
       this.setFormDecimal('lossQty', parentDetail.LOSS_QTY, 'METAL')
+    
     }
 
     if (this.commonService.nullToString(parentDetail.APPROVED_USER) != '') {
@@ -526,8 +527,8 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.setFormNullToString('FRM_PROCESSNAME', parentDetail.FRM_PROCESSNAME)
     this.setFormNullToString('METAL_TO_PROCESS_CODE', parentDetail.TO_PROCESS_CODE)
     this.setFormNullToString('TO_PROCESSNAME', parentDetail.TO_PROCESSNAME)
-    this.setFormNullToString('METAL_FromStockCode', parentDetail.SCRAP_STOCK_CODE)
-    this.setFormNullToString('METAL_ToStockCode', parentDetail.SCRAP_STOCK_CODE)
+    this.setFormNullToString('METAL_FromStockCode', parentDetail.FROM_MSTOCKCODE)
+    this.setFormNullToString('METAL_ToStockCode', parentDetail.TO_MSTOCKCODE)
     this.setFormNullToString('METAL_ScrapStockCode', parentDetail.SCRAP_STOCK_CODE)
     this.setFormNullToString('METAL_FromPCS', parentDetail.FRM_METAL_PCS)
     this.setFormNullToString('METAL_ToPCS', parentDetail.TO_METAL_PCS)
@@ -2155,7 +2156,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       "AUTHORIZE_TIME": ""
     }
   }
-  setMetal_JOB_PROCESS_TRN_DETAIL_DJ() {
+  setMetal_JOB_PROCESS_TRN_DETAIL_DJ() { //for metal
     let form = this.processTransferdetailsForm.value;
     let LOSS_PURE_QTY = this.calculateLossPureQty(this.processTransferdetailsForm.value);
     let metalGridDataSum = this.calculateMetalStoneGridAmount();
@@ -2276,7 +2277,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       "ISSUE_REF": this.commonService.nullToString(form.barCodeNumber),
       "IS_AUTHORISE": false,
       "TIME_CONSUMED": this.emptyToZero(this.consumedTimeData.TIMEINMINUTES),
-      "SCRAP_STOCK_CODE": this.commonService.nullToString(form.stockCode),
+      "SCRAP_STOCK_CODE": this.commonService.nullToString(form.metalScrapStockCode),
       "SCRAP_SUB_STOCK_CODE": this.commonService.nullToString(form.MAIN_STOCK_CODE),
       "SCRAP_PURITY": this.emptyToZero(form.SCRAP_PURITY),
       "SCRAP_WT": this.emptyToZero(form.scrapWeight),
