@@ -303,7 +303,8 @@ export class AlloyMasterComponent implements OnInit {
     this.setInitialValues();
 
     this.alloyMastereForm.controls.createdBy.setValue(this.commonService.userName);
-
+   // this.setupFormSubscription();
+   
     if (this.content?.FLAG) {
       if (this.content.FLAG == 'EDIT') {
         this.setFormValues();
@@ -323,24 +324,24 @@ export class AlloyMasterComponent implements OnInit {
     } else {
       this.renderer.selectRootElement('#code')?.focus();
     }
-    this.setCompanyCurrency()
-    this.setupFormSubscription();
-    this.alloyMastereForm.get('currency')?.valueChanges.subscribe(value => {
-      this.isCurrencySelected = !!value;
-      if (this.isCurrencySelected) {
-        this.alloyMastereForm.get('price1Fc')?.enable();
-      } else {
-        this.alloyMastereForm.get('price1Fc')?.disable();
-      }
-    });
-    this.alloyMastereForm.get('weightAvgCostLC')?.valueChanges.subscribe(value => {
-      this.isWeightAvgCost = !!value;
-      if (this.isWeightAvgCost) {
-        this.alloyMastereForm.get('PRICE1')?.enable();
-      } else {
-        this.alloyMastereForm.get('PRICE1')?.disable();
-      }
-    });
+   
+    // this.alloyMastereForm.get('currency')?.valueChanges.subscribe(value => {
+    //   this.isCurrencySelected = !value;
+    //   if (this.isCurrencySelected) {
+    //     this.alloyMastereForm.get('price1Fc')?.enable();
+    //   } else {
+    //     this.alloyMastereForm.get('price1Fc')?.disable();
+    //   }
+    // });
+    // this.alloyMastereForm.get('weightAvgCostLC')?.valueChanges.subscribe(value => {
+    //   this.isWeightAvgCost = !!value;
+    //   if (this.isWeightAvgCost) {
+    //     this.alloyMastereForm.get('PRICE1')?.enable();
+    //   } else {
+    //     this.alloyMastereForm.get('PRICE1')?.disable();
+    //   }
+    // });
+    this.setCompanyCurrency();
   }
 
   setupFormSubscription(): void {
@@ -444,94 +445,94 @@ export class AlloyMasterComponent implements OnInit {
     this.alloyMastereForm.controls.type.setValue(this.content.TYPE_CODE)
     this.alloyMastereForm.controls.subCategory.setValue(this.content.SUBCATEGORY_CODE)
     this.alloyMastereForm.controls.vendor.setValue(this.content.SALESCODE)
-    // this.alloyMastereForm.controls.price1code.setValue(this.content.PRICE1PER)
-    // this.alloyMastereForm.controls.price2code.setValue(this.content.PRICE2PER)
-    // this.alloyMastereForm.controls.price3code.setValue(this.content.PRICE3PER)
-    // this.alloyMastereForm.controls.price4code.setValue(this.content.PRICE4PER)
-    // this.alloyMastereForm.controls.price5code.setValue(this.content.PRICE5PER)
+    this.alloyMastereForm.controls.price1code.setValue(this.content.UDF1_DESC)
+    this.alloyMastereForm.controls.price2code.setValue(this.content.UDF2_DESC)
+    this.alloyMastereForm.controls.price3code.setValue(this.content.UDF3_DESC)
+    this.alloyMastereForm.controls.price4code.setValue(this.content.UDF4_DESC)
+    this.alloyMastereForm.controls.price5code.setValue(this.content.UDF5_DESC)
 
 
 
     this.alloyMastereForm.controls.price1per.setValue(
       this.commonService.transformDecimalVB(
         this.commonService.allbranchMaster?.BAMTDECIMALS,
-        this.content.PRICE1PER || ''))
+        this.content.PRICE1PER))
     //console.log('PRICE1PER set to:', this.alloyMastereForm.controls.price1per.value);
 
     this.alloyMastereForm.controls.price2per.setValue(
       this.commonService.transformDecimalVB(
         this.commonService.allbranchMaster?.BAMTDECIMALS,
-        this.content.PRICE2PER || ''))
+        this.content.PRICE2PER))
     //console.log('PRICE2PER set to:', this.alloyMastereForm.controls.price2per.value);
 
     this.alloyMastereForm.controls.price3per.setValue(
       this.commonService.transformDecimalVB(
         this.commonService.allbranchMaster?.BAMTDECIMALS,
-        this.content.PRICE3PER || ''))
+        this.content.PRICE3PER))
     // console.log('PRICE3PER set to:', this.alloyMastereForm.controls.price3per.value);
 
     this.alloyMastereForm.controls.price4per.setValue(
       this.commonService.transformDecimalVB(
         this.commonService.allbranchMaster?.BAMTDECIMALS,
-        this.content.PRICE4PER || ''))
+        this.content.PRICE4PER))
     //console.log('PRICE4PER set to:', this.alloyMastereForm.controls.price4per.value);
 
     this.alloyMastereForm.controls.price5per.setValue(
       this.commonService.transformDecimalVB(
         this.commonService.allbranchMaster?.BAMTDECIMALS,
-        this.content.PRICE5PER || ''))
+        this.content.PRICE5PER))
     //  console.log('PRICE5PER set to:', this.alloyMastereForm.controls.price5per.value);
 
 
     this.alloyMastereForm.controls.price1Fc.setValue(
       this.commonService.transformDecimalVB(
         this.commonService.allbranchMaster?.BAMTDECIMALS,
-        this.content.PRICE1FC || ''))
+        this.content.PRICE1FC))
 
     this.alloyMastereForm.controls.price2Fc.setValue(
       this.commonService.transformDecimalVB(
         this.commonService.allbranchMaster?.BAMTDECIMALS,
-        this.content.PRICE2FC || ''))
+        this.content.PRICE2FC))
 
     this.alloyMastereForm.controls.price3Fc.setValue(
       this.commonService.transformDecimalVB(
         this.commonService.allbranchMaster?.BAMTDECIMALS,
-        this.content.PRICE3FC || ''))
+        this.content.PRICE3FC))
 
     this.alloyMastereForm.controls.price4Fc.setValue(
       this.commonService.transformDecimalVB(
         this.commonService.allbranchMaster?.BAMTDECIMALS,
-        this.content.PRICE4FC || ''))
+        this.content.PRICE4FC))
 
     this.alloyMastereForm.controls.price5Fc.setValue(
       this.commonService.transformDecimalVB(
         this.commonService.allbranchMaster?.BAMTDECIMALS,
-        this.content.PRICE5FC || ''))
+        this.content.PRICE5FC))
 
     this.alloyMastereForm.controls.price1Lc.setValue(
       this.commonService.transformDecimalVB(
         this.commonService.allbranchMaster?.BAMTDECIMALS,
-        this.content.PRICE1LC || ''))
+        this.content.PRICE1LC))
 
     this.alloyMastereForm.controls.price2Lc.setValue(
       this.commonService.transformDecimalVB(
         this.commonService.allbranchMaster?.BAMTDECIMALS,
-        this.content.PRICE2LC || ''))
+        this.content.PRICE2LC))
 
     this.alloyMastereForm.controls.price3Lc.setValue(
       this.commonService.transformDecimalVB(
         this.commonService.allbranchMaster?.BAMTDECIMALS,
-        this.content.PRICE3LC || ''))
+        this.content.PRICE3LC))
 
     this.alloyMastereForm.controls.price4Lc.setValue(
       this.commonService.transformDecimalVB(
         this.commonService.allbranchMaster?.BAMTDECIMALS,
-        this.content.PRICE4LC || ''))
+        this.content.PRICE4LC))
 
     this.alloyMastereForm.controls.price5Lc.setValue(
       this.commonService.transformDecimalVB(
         this.commonService.allbranchMaster?.BAMTDECIMALS,
-        this.content.PRICE5LC || ''))
+        this.content.PRICE5LC))
 
 
     // this.alloyMastereForm.controls.price1Fc.setValue(this.content.PRICE1FC)
@@ -550,17 +551,34 @@ export class AlloyMasterComponent implements OnInit {
     this.alloyMastereForm.controls.allowpcs.setValue(this.viewchangeYorN(this.content.ALLOW_ZEROPCS))
     this.alloyMastereForm.controls.excludeTransferWt.setValue(this.viewchangeYorN(this.content.EXCLUDE_TRANSFER_WT))
     this.alloyMastereForm.controls.silveralloy.setValue(this.viewchangeYorN(this.content.ALLOW_NEGATIVE))
-
   }
   /**USE: to set currency from company parameter */
+  // setCompanyCurrency() {
+  //   let CURRENCY_CODE = this.commonService.compCurrency;
+  //   this.alloyMastereForm.controls.currency.setValue(CURRENCY_CODE);
+  //   const CURRENCY_RATE: any[] = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == CURRENCY_CODE);
+  //   this.alloyMastereForm.controls.currencyRate.setValue(
+  //     this.commonService.decimalQuantityFormat(CURRENCY_RATE[0].CONV_RATE, 'RATE')
+  //   );
+  // }
   setCompanyCurrency() {
     let CURRENCY_CODE = this.commonService.compCurrency;
     this.alloyMastereForm.controls.currency.setValue(CURRENCY_CODE);
-    const CURRENCY_RATE: any[] = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == CURRENCY_CODE);
-    this.alloyMastereForm.controls.currencyRate.setValue(
-      this.commonService.decimalQuantityFormat(CURRENCY_RATE[0].CONV_RATE, 'RATE')
-    );
-  }
+
+    if (this.commonService.allBranchCurrency && this.commonService.allBranchCurrency.length > 0) {
+        const CURRENCY_RATE: any[] = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == CURRENCY_CODE);
+        if (CURRENCY_RATE.length > 0) {
+            this.alloyMastereForm.controls.currencyRate.setValue(
+                this.commonService.decimalQuantityFormat(CURRENCY_RATE[0].CONV_RATE, 'RATE')
+            );
+        } else {
+            console.error("No matching currency rate found for the given currency code.");
+        }
+    } else {
+        console.error("allBranchCurrency is not defined or empty.");
+    }
+}
+
   onFileChanged(event: any) {
     this.image = event.target.files[0].name
     console.log(this.url)
@@ -1462,11 +1480,11 @@ export class AlloyMasterComponent implements OnInit {
       WATCH_DIALCOLOR_DESC: "",
       WATCH_BAZEL_DESC: "",
       WATCH_MOVEMENT_DESC: "",
-      UDF1_DESC: "",
-      UDF2_DESC: "",
-      UDF3_DESC: "",
-      UDF4_DESC: "",
-      UDF5_DESC: "",
+      UDF1_DESC: this.commonService.nullToString(this.alloyMastereForm.value.price1code),
+      UDF2_DESC:  this.commonService.nullToString(this.alloyMastereForm.value.price2code),
+      UDF3_DESC:  this.commonService.nullToString(this.alloyMastereForm.value.price3code),
+      UDF4_DESC:  this.commonService.nullToString(this.alloyMastereForm.value.price4code),
+      UDF5_DESC:  this.commonService.nullToString(this.alloyMastereForm.value.price5code),
       UDF6_DESC: "",
       UDF7_DESC: "",
       UDF8_DESC: "",

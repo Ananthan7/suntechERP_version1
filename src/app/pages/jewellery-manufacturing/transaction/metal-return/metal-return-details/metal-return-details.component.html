@@ -72,7 +72,7 @@
                                         formControlName="processCode"
                                         [readonly]="viewMode"
                                         (keydown)="lookupKeyPress($event,'processCode')"
-                                        (focusout)="processCodeValidate($event)" />
+                                        (focusout)="validateLookupField($event,ProcessCodeData,'processCode')"/>
                                 </mat-form-field>
                                 <master-search
                                     [MasterSearchData]="ProcessCodeData"
@@ -98,7 +98,7 @@
                                         formControlName="workerCode"
                                         [readonly]="viewMode"
                                         (keydown)="lookupKeyPress($event,'workerCode')"
-                                        (focusout)="WorkerCodeValidate($event)">
+                                        (focusout)="validateLookupField($event,WorkerCodeData,'workerCode')">
                                 </mat-form-field>
                                 <master-search
                                     [MasterSearchData]="WorkerCodeData"
@@ -269,7 +269,7 @@
                                             formControlName="GROSS_WT"
                                             class="text-right"
                                             (focusout)="grossValidate()"
-                                            [readonly]="viewMode"
+                                            readonly
                                             MetalDecimalInput [max]="13" />
                                     </mat-form-field>
                                 </div>
@@ -288,7 +288,7 @@
                                             formControlName="STONE_WT"
                                             style="text-align: right;"
                                             (focusout)="stoneValidate()"
-                                            [readonly]="viewMode"
+                                            readonly
                                             StoneDecimalInput [max]="13" />
                                     </mat-form-field>
                                 </div>
