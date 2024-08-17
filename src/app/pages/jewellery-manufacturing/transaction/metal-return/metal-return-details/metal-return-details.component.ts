@@ -450,19 +450,50 @@ export class MetalReturnDetailsComponent implements OnInit {
     return false;
   }
   /**use: to save data to grid*/
+  // formSubmit(flag: any) {
+  //   if (this.submitValidations(this.metalReturnDetailsForm.value)) return;
+  //   //if (this.submitValidations()) return;
+  //   let dataToparent = {
+  //     FLAG: flag,
+  //     POSTDATA: this.setPostData()
+  //   }
+  //   // this.close(postData);
+  //   this.saveDetail.emit(dataToparent);
+  //   if (flag == 'CONTINUE') {
+  //     this.resetStockDetails()
+  //   }
+  // }
+  @Input() metalReturnDetailsData: any[] = [];
+ 
   formSubmit(flag: any) {
-    if (this.submitValidations(this.metalReturnDetailsForm.value)) return;
-    //if (this.submitValidations()) return;
+    const formData = this.metalReturnDetailsForm.value;
+    
+    // Check if stock code already exists in the grid
+    const stockCodeExists = this.metalReturnDetailsData.some(item => item.STOCK_CODE === formData.stockCode);
+
+    if (stockCodeExists) {
+        // Show confirmation message if stock code already exists
+        const userConfirmed = confirm("This stock code entry is already available in detail. Do you wish to continue?");
+        
+        if (!userConfirmed) {
+            return; // Stop further execution if user doesn't confirm
+        }
+    }
+
+    if (this.submitValidations(formData)) return;
+    
     let dataToparent = {
-      FLAG: flag,
-      POSTDATA: this.setPostData()
-    }
-    // this.close(postData);
+        FLAG: flag,
+        POSTDATA: this.setPostData()
+    };
+    
     this.saveDetail.emit(dataToparent);
+    
     if (flag == 'CONTINUE') {
-      this.resetStockDetails()
+        this.resetStockDetails();
     }
-  }
+}
+
 
   /**USE: delete Melting Type From Row */
   deleteMeltingType() {
