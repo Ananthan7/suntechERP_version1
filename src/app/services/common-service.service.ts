@@ -1123,8 +1123,17 @@ export class CommonServiceService {
   }
 
   cDateFormat(value: any) {
+    if (typeof value === 'string' && value.match(/^\d{2}-\d{2}-\d{4}$/)) {
+      const [day, month, year] = value.split('-').map(Number);
+      value = new Date(year, month - 1, day); 
+    }
     return this.datePipe.transform(value, 'yyyy-MM-ddTHH:mm:ss');
   }
+  
+  // cDateFormat(value: any) {
+  //   return this.datePipe.transform(value, 'yyyy-MM-ddTHH:mm:ss');
+  // }
+
   validateEmail(email: any) {
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
     return emailRegex.test(email);

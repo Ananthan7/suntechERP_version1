@@ -150,7 +150,6 @@ export class ProcessTransferComponent implements OnInit {
             })
             item.LOSS_QTY = this.commonService.decimalQuantityFormat(item.LOSS_QTY,'METAL')
           })
-          console.log(this.detailData);
           this.processTransferFrom.controls.BRANCH_CODE.setValue(data.BRANCH_CODE)
           this.processTransferFrom.controls.YEARMONTH.setValue(data.YEARMONTH)
           this.processTransferFrom.controls.VOCNO.setValue(data.VOCNO)
@@ -256,7 +255,7 @@ export class ProcessTransferComponent implements OnInit {
       this.processTransferFrom.controls.SRNO.setValue(0)
       dataToChild = [{ HEADERDETAILS: this.processTransferFrom.value }]
     }
-    console.log(dataToChild, 'openProcessTransferDetails to parent');
+    console.log(dataToChild, 'data to child');
 
     this.dataToDetailScreen = dataToChild
     this.modalReference = this.modalService.open(this.ProcessTransferDetailScreen, {
@@ -280,7 +279,7 @@ export class ProcessTransferComponent implements OnInit {
   setValuesToHeaderGrid(DATA: any) {
     let detailDataToParent = DATA.PROCESS_FORMDETAILS
     if (detailDataToParent.SRNO != 0) {
-      this.tableData[detailDataToParent.SRNO - 1] = detailDataToParent
+      this.tableData[detailDataToParent.SRNO - 1] =  DATA.JOB_PROCESS_TRN_DETAIL_DJ
       this.detailData[detailDataToParent.SRNO - 1] = { SRNO: detailDataToParent.SRNO, ...DATA }
     } else {
       if (this.addItemWithCheck(this.tableData, detailDataToParent)) return;
@@ -381,7 +380,6 @@ export class ProcessTransferComponent implements OnInit {
   }
   /**USE: to set currency from branch currency master */
   setCurrencyRate() {
-
     const CURRENCY_RATE: any[] = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == this.processTransferFrom.value.CURRENCY_CODE);
     if (CURRENCY_RATE.length > 0) {
       this.processTransferFrom.controls.CURRENCY_RATE.setValue(

@@ -20,6 +20,7 @@ export class StoneReturnDetailsComponent implements OnInit {
   @ViewChild('overlayprocessSearch') overlayprocessSearch!: MasterSearchComponent;
   @ViewChild('overlayworkerSearch') overlayworkerSearch!: MasterSearchComponent;
   @ViewChild('overlaywstockCodeSearch') overlaywstockCodeSearch!: MasterSearchComponent;
+  @ViewChild('overlaylocationSearch') overlaylocationSearch!: MasterSearchComponent;
   @Output() saveDetail = new EventEmitter<any>();
   @Output() closeDetail = new EventEmitter<any>();
   @Input() data!: any;
@@ -31,6 +32,9 @@ export class StoneReturnDetailsComponent implements OnInit {
   jobDate = new Date();
   jobNumberDetailData: any[] = [];
   viewMode: boolean = false;
+  imagepath: any[] = []
+  isDisableSaveBtn: boolean = false;
+  editMode: boolean = false;
   userName = localStorage.getItem('username');
 
   private subscriptions: Subscription[] = [];
@@ -107,6 +111,17 @@ export class StoneReturnDetailsComponent implements OnInit {
     LOAD_ONCLICK: true,
     FRONTENDFILTER: true
   }
+  locationCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 11,
+    SEARCH_FIELD: 'LOCATION_CODE',
+    SEARCH_HEADING: 'Location Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "LOCATION_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
   stonereturndetailsFrom: FormGroup = this.formBuilder.group({
     jobNumber: ['', [Validators.required]],
     jobDesc: ['', [Validators.required]],
@@ -144,6 +159,7 @@ export class StoneReturnDetailsComponent implements OnInit {
     CURRENCY_RATE: [''],
     DIVCODE: [''],
     SMAN: [''],
+    PICTURE_PATH: [''],
     FLAG: [null]
   });
   constructor(
@@ -234,6 +250,7 @@ export class StoneReturnDetailsComponent implements OnInit {
   }
 
   stockCodeSelected(e: any) {
+    console.log(e,'eee')
     this.stonereturndetailsFrom.controls.stockCode.setValue(e.STOCK_CODE);
     this.stonereturndetailsFrom.controls.stockCodeDes.setValue(e.Discription);
     this.stonereturndetailsFrom.controls.DIVCODE.setValue(e.DivCode);
@@ -280,6 +297,10 @@ export class StoneReturnDetailsComponent implements OnInit {
     WHERECONDITION += `@strBranchCode='${this.comService.branchCode}',`
     WHERECONDITION += `@strStockCode='${this.comService.nullToString(form.stockCode)}'`
     this.stockCodeData.WHERECONDITION = WHERECONDITION
+  }
+  locationCodeSelected(e: any) {
+    console.log(e);
+    this.stonereturndetailsFrom.controls.location.setValue(e.LOCATION_CODE);
   }
   close(data?: any) {
     //TODO reset forms and data before closing
@@ -350,13 +371,27 @@ export class StoneReturnDetailsComponent implements OnInit {
       "DT_VOCNO": this.comService.emptyToZero(form.VOCNO),
       "DT_YEARMONTH": this.comService.nullToString(form.YEARMONTH),
       "RET_TO_DESC": "",
-      "PICTURE_NAME": "",
+      "PICTURE_NAME": this.comService.nullToString(form.PICTURE_PATH),
       "RET_TO": "",
       "ISMISSING": 0,
       "SIEVE_SET": this.comService.nullToString(form.sieveset),
       "SUB_STOCK_CODE": ""
     }
   }
+  getImageData() {
+    let API = `Image/${this.stonereturndetailsFrom.value.jobNumber}`
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        if (result.response) {
+          let data = result.response
+          this.imagepath = data.map((item: any) => item.imagepath)
+        }
+      }, err => {
+        this.comService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
+  }
+
 
   submitValidations(form: any) {
     if (this.comService.nullToString(form.jobNumber) == '') {
@@ -421,6 +456,7 @@ export class StoneReturnDetailsComponent implements OnInit {
         this.comService.closeSnackBarMsg()
         if (result.dynamicData && result.dynamicData[0].length > 0) {
           let data = result.dynamicData[0]
+          console.log(data,'data')
           this.stonereturndetailsFrom.controls.process.setValue(data[0].PROCESS)
           this.stonereturndetailsFrom.controls.processname.setValue(data[0].PROCESSDESC)
           this.stonereturndetailsFrom.controls.worker.setValue(data[0].WORKER)
@@ -429,10 +465,12 @@ export class StoneReturnDetailsComponent implements OnInit {
           // this.stonereturndetailsFrom.controls.stockCodeDes.setValue(data[0].STOCK_DESCRIPTION)
           this.stonereturndetailsFrom.controls.designcode.setValue(data[0].DESIGN_CODE)
           this.stonereturndetailsFrom.controls.location.setValue(data[0].LOCTYPE_CODE)
+          this.stonereturndetailsFrom.controls.PICTURE_PATH.setValue(data[0].PICTURE_PATH)
 
           this.setProcessCodeWhereCondition()
           this.setWorkerCodeWhereCondition()
           this.setStockCodeWhereCondition()
+          this.getImageData()
         } else {
           this.comService.toastErrorByMsgId('MSG1747')
         }
@@ -577,6 +615,9 @@ export class StoneReturnDetailsComponent implements OnInit {
       case 'worker':
         this.overlayworkerSearch.showOverlayPanel(event);
         break;
+        case 'location':
+        this.overlaylocationSearch.showOverlayPanel(event);
+        break;
       case 'stockCode':
         this.overlaywstockCodeSearch.showOverlayPanel(event);
         break;
@@ -584,36 +625,32 @@ export class StoneReturnDetailsComponent implements OnInit {
     }
   }
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
-    LOOKUPDATA.SEARCH_VALUE = event.target.value;
-    if (event.target.value === '' || this.viewMode === true) return;
+    LOOKUPDATA.SEARCH_VALUE = event.target.value
+    if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
       WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
-    };
-
-    this.comService.showSnackBarMsg('MSG81447');
-    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${encodeURIComponent(param.WHERECOND)}`;
-    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+    }
+    this.comService.toastInfoByMsgId('MSG81447');
+    let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
       .subscribe((result) => {
-        this.comService.closeSnackBarMsg();
-        let data = this.comService.arrayEmptyObjectToString(result.dynamicData[0]);
-
-        if (data.length === 0) {
-          this.comService.toastErrorByMsgId('MSG1531');
-          this.stonereturndetailsFrom.controls[FORMNAME].setValue('');
-
+        this.isDisableSaveBtn = false;
+        let data = this.comService.arrayEmptyObjectToString(result.dynamicData[0])
+        if (data.length == 0) {
+          this.comService.toastErrorByMsgId('MSG1531')
+          this.stonereturndetailsFrom.controls[FORMNAME].setValue('')
           LOOKUPDATA.SEARCH_VALUE = '';
-          if (FORMNAME === 'subjobno' || FORMNAME === 'designcode') {
+          if (FORMNAME === 'subjobno'|| FORMNAME === 'location' ) {
             this.showOverleyPanel(event, FORMNAME);
           }
-          return;
+          return
         }
-      }, err => {
-        this.comService.closeSnackBarMsg();
-        this.comService.toastErrorByMsgId('MSG2272')//Error occured, please try again
-      });
 
-    this.subscriptions.push(Sub);
+      }, err => {
+        this.comService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+      })
+    this.subscriptions.push(Sub)
   }
   stockCodeValidate(event: any) {
     this.showOverleyPanel(event, 'stockCode')
@@ -667,5 +704,18 @@ export class StoneReturnDetailsComponent implements OnInit {
 
     this.subscriptions.push(Sub);
 }
+calculateCarat(event: any) {
+  const pieces = event.target.value || 0;
+  const pointerwt = this.stonereturndetailsFrom.get('pointerwt')?.value || 0;
+  // Calculate both carat values
+  const carat1 = pieces * pointerwt;
+  const carat2 = pointerwt * pieces;
 
+  // Log the results (they will be the same)
+  console.log('Carat1 (pieces * pointerwt):', carat1);
+  console.log('Carat2 (pointerwt * pieces):', carat2);
+
+  // Set the calculated carat value to the form control
+  this.stonereturndetailsFrom.get('carat')?.setValue(carat1.toFixed(3));
+}
 }

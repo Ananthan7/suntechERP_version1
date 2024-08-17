@@ -66,33 +66,22 @@
     height: 0;
   }
 
-  // .mat-form-field {
-  //   height: 26px !important;
-  //   margin-bottom: 7px !important;
-  //   font-weight: 600 !important;
-  //   font-size: 15px !important;
-  // }
-  // .mat-form-field {
-  //   font-size: inherit !important;
-  //   font-weight: 400 !important;
-  //   line-height: 1.125 !important;
-  //   margin-bottom: 0px !important;
-  //   font-family: Roboto, "Helvetica Neue", sans-serif;
-  //   letter-spacing: normal;
-  // }
-
+  .mat-form-field {
+    padding: 1px !important;
+    font-weight: 600 !important;
+  }
   .mat-form-field-appearance-outline .mat-form-field-outline {
     background-color: #fff !important;
     border-radius: 15px !important;
   }
 
   .mat-form-field-wrapper {
-    padding-bottom: 5px !important;
+    padding-bottom: 2px !important;
     margin: 0px !important;
   }
 
   .mat-form-field-appearance-outline .mat-form-field-infix {
-    padding: 10px;
+    padding: 9px;
   }
 
   .icon_1 {

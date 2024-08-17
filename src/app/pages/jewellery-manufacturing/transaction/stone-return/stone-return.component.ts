@@ -17,7 +17,7 @@ import { MasterSearchComponent } from 'src/app/shared/common/master-search/maste
 export class StoneReturnComponent implements OnInit {
   @ViewChild('stoneReturnDetailScreen') public stoneReturnDetailComponent!: NgbModal;
   @ViewChild('overlayenterdBySearch') overlayenterdBySearch! : MasterSearchComponent;
-  columnhead: any[] = ['SRNO', 'VOCNO', 'VOCTYPE', 'VOCDATE', 'JOB_NO', 'JOB_DATE', 'JOB_SO', 'UNQ_JOB', 'JOB_DE', 'BRANCH'];
+  columnhead: any[] = ['SRNO', 'VOCNO', 'VOCTYPE', 'VOCDATE', 'JOB NUMBER', 'JOB DATE', 'JOB SO', 'UNQ JOB ID', 'JOB DESCRIPTION', 'BRANCH'];
   @Input() content!: any;
   tableData: any[] = [];
   stoneReturnData: any[] = [];
@@ -32,21 +32,22 @@ export class StoneReturnComponent implements OnInit {
   selectedIndexes: any = [];
   viewMode: boolean = false;
   isloading: boolean = false;
+  isDisableSaveBtn: boolean = false;
+  editMode: boolean = false;
   dataToDetailScreen: any;
   modalReference!: NgbModalRef;
 
   private subscriptions: Subscription[] = [];
-  user: MasterSearchModel = {
+  userData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 73,
-    SEARCH_FIELD: 'UsersName',
+    LOOKUPID: 1,
+    SEARCH_FIELD: 'SALESPERSON_CODE',
     SEARCH_HEADING: 'User',
     SEARCH_VALUE: '',
-    WHERECONDITION: "UsersName<> ''",
+    WHERECONDITION: "SALESPERSON_CODE <> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
-    LOAD_ONCLICK: true,
   }
 
   CurrencyCodeData: MasterSearchModel = {
@@ -304,7 +305,7 @@ export class StoneReturnComponent implements OnInit {
     }
     if (DATA.FLAG == 'SAVE') this.closeDetailScreen();
     if (DATA.FLAG == 'CONTINUE') {
-      this.commonService.showSnackBarMsg('Details added successfully')
+      this.commonService.showSnackBarMsg('MSG81512')
     };
   }
   closeDetailScreen() {
@@ -384,11 +385,6 @@ export class StoneReturnComponent implements OnInit {
       this.stonereturnFrom.controls.basecurrency.setValue('')
       this.stonereturnFrom.controls.basecurrencyrate.setValue('')
       this.commonService.toastErrorByMsgId('MSG1531')
-    }
-  }
-  lookupKeyPress(event: any, form?: any) {
-    if(event.key == 'Tab' && event.target.value == ''){
-      this.showOverleyPanel(event,form)
     }
   }
 
@@ -578,40 +574,44 @@ export class StoneReturnComponent implements OnInit {
     });
   }
   showOverleyPanel(event: any, formControlName: string) {
-    if (this.stonereturnFrom.value[formControlName] != '') return;
-  
-    switch (formControlName) {
-      case 'enteredBy':
-        this.overlayenterdBySearch.showOverlayPanel(event);
-        break;
-      default:
-        console.warn(`Unexpected form control name: ${formControlName}`);
+    if(event.target.value != '') return
+    if (formControlName == 'enterdBy') {
+      this.overlayenterdBySearch.showOverlayPanel(event)
+    }
+  }
+  lookupKeyPress(event: any,form?:any) {
+    if(event.key == 'Tab' && event.target.value == ''){
+      this.showOverleyPanel(event,form)
+    }
+    if (event.key === 'Enter') {
+      if(event.target.value == '') this.showOverleyPanel(event,form)
+      event.preventDefault();
     }
   }
 
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     LOOKUPDATA.SEARCH_VALUE = event.target.value
-    if (event.target.value == '' || this.viewMode == true) return
+    if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
       WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
     }
-    this.commonService.showSnackBarMsg('MSG81447');
-    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
-    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+    this.commonService.toastInfoByMsgId('MSG81447');
+    let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
       .subscribe((result) => {
-        this.commonService.closeSnackBarMsg()
+        this.isDisableSaveBtn = false;
         let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
         if (data.length == 0) {
           this.commonService.toastErrorByMsgId('MSG1531')
           this.stonereturnFrom.controls[FORMNAME].setValue('')
-         
           LOOKUPDATA.SEARCH_VALUE = ''
-          if (FORMNAME === 'enterdBy') {
+      if (FORMNAME === 'enterdBy') {
             this.showOverleyPanel(event, FORMNAME);
           }
           return
         }
+
       }, err => {
         this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
       })

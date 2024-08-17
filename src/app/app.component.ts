@@ -23,18 +23,8 @@ export class AppComponent implements AfterViewInit {
   ngAfterViewInit() {
     //fetch datas and save into indexed db
     let branch = localStorage.getItem('userbranch');
-    let VERSION = localStorage.getItem('VERSION');
     if (branch) {
       this.indexedApiService.setInitailLoadSetUp()
     }
-    if(environment.app_version != VERSION){
-      this.logout()
-    }
-  }
-  logout() {
-    this.IndexedDbService.onDeleteIndexedDB()
-    localStorage.clear();
-    sessionStorage.clear();
-    this.router.navigate(['/account/login']);
   }
 }
