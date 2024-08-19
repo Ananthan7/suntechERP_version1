@@ -34,7 +34,7 @@
                             <div class="col-sm-7">
 
 
-                                <mat-form-field  style="width: 100%;">
+                                <mat-form-field style="width: 100%;">
                                     <input matInput [matDatepicker]="Voc_date" formControlName="Voc_date"
                                         placeholder="DD/MM/YYYY" DateValidation />
                                     <mat-datepicker-toggle matSuffix [for]="Voc_date"></mat-datepicker-toggle>
@@ -49,7 +49,8 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="partyCode" />
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="partyCodeData" (newRowClick)="partyCodeSelected($event)"></master-search>
+                                <master-search [MasterSearchData]="partyCodeData"
+                                    (newRowClick)="partyCodeSelected($event)"></master-search>
                             </div>
                         </div>
                         <div class="row ">
@@ -64,7 +65,8 @@
                                 <mat-form-field style="width: 70%;">
                                     <input class="text-right" type="number" matInput formControlName="partycurrate" />
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="partycurCodeData" (newRowClick)="partycurCodeSelected($event)"></master-search>
+                                <master-search [MasterSearchData]="partycurCodeData"
+                                    (newRowClick)="partycurCodeSelected($event)"></master-search>
                             </div>
 
                         </div>
@@ -74,16 +76,17 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="sub_ledger" />
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="subledgerCodeData" (newRowClick)="subledgerCodeSelected($event)"></master-search>
+                                <master-search [MasterSearchData]="subledgerCodeData"
+                                    (newRowClick)="subledgerCodeSelected($event)"></master-search>
                             </div>
                         </div>
                         <div class="row">
-                           
+
                             <div class="col-sm-12">
                                 <mat-form-field style="width: 100%;">
                                     <input type="text" matInput formControlName="subLedger" />
                                 </mat-form-field>
-                          
+
                             </div>
                         </div>
                         <div class="row">
@@ -120,9 +123,11 @@
                                     </div>
                                     <div class="col-sm-5">
                                         <mat-form-field style="width: 100%;">
-                                            <input matInput [matDatepicker]="credit_date_LC" formControlName="credit_date_LC"
-                                                placeholder="DD/MM/YYYY" DateValidation />
-                                            <mat-datepicker-toggle matSuffix [for]="credit_date_LC"></mat-datepicker-toggle>
+                                            <input matInput [matDatepicker]="credit_date_LC"
+                                                formControlName="credit_date_LC" placeholder="DD/MM/YYYY"
+                                                DateValidation />
+                                            <mat-datepicker-toggle matSuffix
+                                                [for]="credit_date_LC"></mat-datepicker-toggle>
                                             <mat-datepicker [startAt]="currentDate" #credit_date_LC></mat-datepicker>
                                         </mat-form-field>
                                     </div>
@@ -137,9 +142,11 @@
                                     </div>
                                     <div class="col-sm-5">
                                         <mat-form-field style="width: 100%;">
-                                            <input matInput [matDatepicker]="credit_date_Mtl" formControlName="credit_date_Mtl"
-                                                placeholder="DD/MM/YYYY" DateValidation />
-                                            <mat-datepicker-toggle matSuffix [for]="credit_date_Mtl"></mat-datepicker-toggle>
+                                            <input matInput [matDatepicker]="credit_date_Mtl"
+                                                formControlName="credit_date_Mtl" placeholder="DD/MM/YYYY"
+                                                DateValidation />
+                                            <mat-datepicker-toggle matSuffix
+                                                [for]="credit_date_Mtl"></mat-datepicker-toggle>
                                             <mat-datepicker [startAt]="currentDate" #credit_date_Mtl></mat-datepicker>
                                         </mat-form-field>
                                     </div>
@@ -174,7 +181,7 @@
                                     </div>
                                     <div class="col-md-4 mt-3">
                                         <mat-checkbox formControlName="stampCharges"><b>Internal
-                                              <br>  Unfix</b></mat-checkbox>
+                                                <br> Unfix</b></mat-checkbox>
                                     </div>
                                 </div>
                             </div>
@@ -192,7 +199,8 @@
                                         <mat-form-field style="width: 70%;">
                                             <input type="text" matInput formControlName="name" />
                                         </mat-form-field>
-                                        <master-search [MasterSearchData]="nameCodeData" (newRowClick)="nameCodeSelected($event)"></master-search>
+                                        <master-search [MasterSearchData]="nameCodeData"
+                                            (newRowClick)="nameCodeSelected($event)"></master-search>
                                     </div>
                                     <div class="col-md-4">
                                         <mat-form-field style="width: 100%;">
@@ -205,7 +213,8 @@
                                     </label>
                                     <div class="col-md-8">
                                         <textarea style="width: 100%;height: 100px;
-                                                                margin-left: 6px;margin-top: 7px;" formControlName="Address">
+                                                                margin-left: 6px;margin-top: 7px;"
+                                            formControlName="Address">
                                         </textarea>
                                     </div>
                                 </div>
@@ -295,8 +304,8 @@
                             </label>
                             <div class="col-md-8">
                                 <mat-form-field style="width: 100%;">
-                                    <input matInput [matDatepicker]="declaration_date" formControlName="declaration_date"
-                                        placeholder="DD/MM/YYYY" DateValidation />
+                                    <input matInput [matDatepicker]="declaration_date"
+                                        formControlName="declaration_date" placeholder="DD/MM/YYYY" DateValidation />
                                     <mat-datepicker-toggle matSuffix [for]="declaration_date"></mat-datepicker-toggle>
                                     <mat-datepicker [startAt]="currentDate" #declaration_date></mat-datepicker>
                                 </mat-form-field>
@@ -318,7 +327,8 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="country_origin" />
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="countryCodeData" (newRowClick)="countryCodeSelected($event)"></master-search>
+                                <master-search [MasterSearchData]="countryCodeData"
+                                    (newRowClick)="countryCodeSelected($event)"></master-search>
                             </div>
                             <div class="col-md-4">
                                 <mat-form-field style="width: 100%;">
@@ -369,7 +379,8 @@
                                                 <mat-form-field style="width: 70%;">
                                                     <input type="text" matInput formControlName="state_code" />
                                                 </mat-form-field>
-                                                <master-search [MasterSearchData]="stateCodeData" (newRowClick)="stateCodeSelected($event)"></master-search>
+                                                <master-search [MasterSearchData]="stateCodeData"
+                                                    (newRowClick)="stateCodeSelected($event)"></master-search>
 
                                             </div>
                                         </div>
@@ -482,7 +493,8 @@
                                 <mat-form-field style="width: 70%;">
                                     <input type="text" matInput formControlName="allocate_fixing" />
                                 </mat-form-field>
-                                <master-search [MasterSearchData]="allocatefixingCodeData" (newRowClick)="allocatefixingCodeSelected($event)"></master-search>
+                                <master-search [MasterSearchData]="allocatefixingCodeData"
+                                    (newRowClick)="allocatefixingCodeSelected($event)"></master-search>
                             </div>
                         </div>
                     </div>

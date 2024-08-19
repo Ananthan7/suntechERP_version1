@@ -323,10 +323,10 @@ export class RepairJewelleryReceiptComponent implements OnInit {
       REMARKS: this.repairjewelleryreceiptFrom.value.remark,
       TOTAL_PCS: 0,
       TOTAL_GRWT: 0,
-      SYSTEM_DATE: new Date().toISOString(),
+      SYSTEM_DATE: new Date(),
       NAVSEQNO: 0,
-      DELIVERYDATE: this.formatteddate,
-      // this.repairjewelleryreceiptFrom.value.customer_delivery_date,
+      DELIVERYDATE: //this.formatteddate,
+      this.repairjewelleryreceiptFrom.value.customer_delivery_date,
       SALESREFERENCE: this.repairjewelleryreceiptFrom.value.repair_narration,
       STATUS: 0,
       TRANSFERID: 0,
@@ -335,7 +335,7 @@ export class RepairJewelleryReceiptComponent implements OnInit {
       BASE_CURRENCY: this.repairjewelleryreceiptFrom.value.currency,
       BASE_CURR_RATE: this.repairjewelleryreceiptFrom.value.currency_rate,
       ISAUTHORIZED: true,
-      AUTHORIZEDDATE: new Date().toISOString(),
+      AUTHORIZEDDATE: new Date(),
       AUTOPOSTING: true,
       PRINT_COUNT: 0,
       TOT_EST_REPAIR_CHARGES: 0,
@@ -638,11 +638,12 @@ export class RepairJewelleryReceiptComponent implements OnInit {
     // this.repairjewelleryreceiptFrom.controls.repairAmt.setValue(this.repairDetailsData[0].AMOUNT);
     var add_value = 0;
     this.repairDetailsData.forEach(value => {
-      // console.log(value);
-      add_value += value.AMOUNT;
+      console.log(value.AMOUNT);
+      add_value = Number(add_value)+Number(value.AMOUNT)
     });
-    // console.log(add_value);
+    console.log(add_value);
     this.repairjewelleryreceiptFrom.controls.repairAmt.setValue(add_value);
+  
     this.updateFormValuesAndSRNO();
   }
 

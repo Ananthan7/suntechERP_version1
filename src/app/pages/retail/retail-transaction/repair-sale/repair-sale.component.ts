@@ -255,7 +255,6 @@ export class RepairSaleComponent implements OnInit {
     refundDue: [''],
     loyaltyPoints: [''],
     vatRoundOff: [''],
-
   });
 
   opensalesdiadetail() {
