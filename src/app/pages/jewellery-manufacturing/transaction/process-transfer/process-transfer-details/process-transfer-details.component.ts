@@ -982,6 +982,9 @@ export class ProcessTransferDetailsComponent implements OnInit {
       }
     } else {
       txtBalDiaGrWt = (this.emptyToZero(form.GrossWeightFrom) - (this.emptyToZero(form.GrossWeightTo) + this.emptyToZero(form.scrapWeight) + this.emptyToZero(form.lossQty)));
+      if(this.emptyToZero(form.GrossWeightFrom) == this.emptyToZero(form.GrossWeightTo)){
+        txtBalDiaGrWt = 0
+      }
     }
     this.setFormDecimal('Balance_WT', txtBalDiaGrWt, 'METAL')
 
