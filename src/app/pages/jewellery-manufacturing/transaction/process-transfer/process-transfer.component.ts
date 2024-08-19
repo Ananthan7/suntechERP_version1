@@ -266,9 +266,9 @@ export class ProcessTransferComponent implements OnInit {
     });
   }
   addItemWithCheck(existingArray: any, newItem: any) {
-    const duplicate = existingArray.find((item: any) => item.JOB_NUMBER === newItem.JOB_NUMBER &&
-      item.FRM_WORKER_CODE === newItem.FRM_WORKER_CODE &&
-      item.FRM_PROCESS_CODE === newItem.FRM_PROCESS_CODE);
+    const duplicate = existingArray.find((item: any) => item.JOB_NUMBER === newItem.JOB_NUMBER );
+    // && item.FRM_WORKER_CODE === newItem.FRM_WORKER_CODE &&
+    //   item.FRM_PROCESS_CODE === newItem.FRM_PROCESS_CODE);
     if (duplicate) {
       this.commonService.toastErrorByMsgId('MSG2052')
       return true

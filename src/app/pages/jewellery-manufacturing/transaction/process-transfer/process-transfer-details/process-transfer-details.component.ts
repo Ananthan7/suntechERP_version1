@@ -1824,7 +1824,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     if (event.STOCK_CODE) {
       this.locationSearchFlag = true;
     }
-    // this.stockCodeScrapValidate()
+    this.txtMScrapStockCode_Validating()
   }
   metalToStockCodeSelected(event: any) {
     this.processTransferdetailsForm.controls.METAL_ToStockCode.setValue(event.STOCK_CODE)
@@ -2282,7 +2282,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       "ISSUE_REF": this.commonService.nullToString(form.barCodeNumber),
       "IS_AUTHORISE": false,
       "TIME_CONSUMED": this.emptyToZero(this.consumedTimeData.TIMEINMINUTES),
-      "SCRAP_STOCK_CODE": this.commonService.nullToString(form.metalScrapStockCode),
+      "SCRAP_STOCK_CODE": this.commonService.nullToString(form.METAL_ScrapStockCode),
       "SCRAP_SUB_STOCK_CODE": this.commonService.nullToString(form.MAIN_STOCK_CODE),
       "SCRAP_PURITY": this.emptyToZero(form.SCRAP_PURITY),
       "SCRAP_WT": this.emptyToZero(form.scrapWeight),
