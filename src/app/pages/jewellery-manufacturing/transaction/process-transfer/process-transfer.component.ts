@@ -266,9 +266,14 @@ export class ProcessTransferComponent implements OnInit {
     });
   }
   addItemWithCheck(existingArray: any, newItem: any) {
-    const duplicate = existingArray.find((item: any) => item.JOB_NUMBER === newItem.JOB_NUMBER );
-    // && item.FRM_WORKER_CODE === newItem.FRM_WORKER_CODE &&
-    //   item.FRM_PROCESS_CODE === newItem.FRM_PROCESS_CODE);
+    let duplicate = false;
+    if(newItem.DESIGN_TYPE == 'METAL'){
+      duplicate = existingArray.find((item: any) => item.JOB_NUMBER === newItem.JOB_NUMBER
+      && item.FRM_WORKER_CODE === newItem.FRM_WORKER_CODE 
+      && item.FRM_PROCESS_CODE === newItem.FRM_PROCESS_CODE);
+    }else{
+      duplicate = existingArray.find((item: any) => item.JOB_NUMBER === newItem.JOB_NUMBER );
+    }
     if (duplicate) {
       this.commonService.toastErrorByMsgId('MSG2052')
       return true

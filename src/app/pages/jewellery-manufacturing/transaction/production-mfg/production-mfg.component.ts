@@ -40,7 +40,6 @@ export class ProductionMfgComponent implements OnInit {
     'BARCODEDQTY', 'BARCODEDPCS', 'LASTNO'
   ];
   @Input() content!: any;
-  tableData: any[] = [];
   DetailScreenDataToSave: any[] = [];
   STOCK_FORM_DETAILS: any[] = [];
   STOCK_COMPONENT_GRID: any[] = [];
@@ -245,13 +244,14 @@ export class ProductionMfgComponent implements OnInit {
     let baseConvRate = 1 / ConvRateArr[0].CONV_RATE
     this.productionFrom.controls.baseConvRate.setValue(baseConvRate)
   }
+  selectRowIndex: any;
   onRowClickHandler(event: any) {
-    // this.selectRowIndex = event.data.SRNO
+    this.selectRowIndex = event.data.SRNO
   }
   onRowDblClickHandler(event: any) {
     let selectedData = event.data
-    // let detailRow = this.detailData.filter((item: any) => item.SRNO == selectedData.SRNO)
-    // this.openProductionEntryDetails(detailRow)
+    let detailRow = this.detailData.filter((item: any) => item.SRNO == selectedData.SRNO)
+    this.openProductionEntryDetails(detailRow)
   }
   //use open modal of detail screen
   dataToDetailScreen: any;
@@ -285,151 +285,15 @@ export class ProductionMfgComponent implements OnInit {
     } else {
       // if (this.addItemWithCheck(this.DetailScreenDataToSave, detailDataToParent)) return;
       DATA.PRODUCTION_FORMDETAILS.SRNO = this.DetailScreenDataToSave.length + 1
-      DATA.JOB_PROCESS_TRN_DETAIL_DJ.SRNO = this.DetailScreenDataToSave.length + 1
+      // DATA.JOB_PROCESS_TRN_DETAIL_DJ.SRNO = this.DetailScreenDataToSave.length + 1
       this.detailData.push({ SRNO: this.DetailScreenDataToSave.length + 1, ...DATA })
       this.DetailScreenDataToSave.push(DATA.JOB_PROCESS_TRN_DETAIL_DJ);
     }
-    this.setDetailScreenDataToSave(detailDataToParent)
     // this.editFinalArray(DATA)
     if (detailDataToParent.FLAG == 'SAVE') this.closeDetailScreen();
     if (detailDataToParent.FLAG == 'CONTINUE') {
       this.commonService.showSnackBarMsg('Details added grid successfully')
     };
-  }
-  /*USE: detail screen form data set to save */
-  setDetailScreenDataToSave(DETAIL_FORM_DATA: any) {
-    console.log(DETAIL_FORM_DATA, 'DETAIL_FORM_DATA');
-
-    this.DetailScreenDataToSave.push({
-      "UNIQUEID": 0,
-      "SRNO": this.formDetailCount,
-      "DT_VOCNO": this.commonService.emptyToZero(this.productionFrom.value.VOCNO),
-      "DT_VOCTYPE": this.commonService.nullToString(this.productionFrom.value.VOCTYPE),
-      "DT_VOCDATE": this.commonService.formatDateTime(this.productionFrom.value.VOCDATE),
-      "DT_BRANCH_CODE": this.commonService.nullToString(this.branchCode),
-      "DT_NAVSEQNO": "",
-      "DT_YEARMONTH": this.commonService.nullToString(this.commonService.yearSelected),
-      "JOB_NUMBER": this.commonService.nullToString(DETAIL_FORM_DATA.jobno),
-      "JOB_DATE": this.commonService.formatDateTime(DETAIL_FORM_DATA.JOB_DATE),
-      "JOB_SO_NUMBER": this.commonService.emptyToZero(DETAIL_FORM_DATA.JOB_SO_NUMBER),
-      "UNQ_JOB_ID": this.commonService.nullToString(DETAIL_FORM_DATA.subjobno),
-      "JOB_DESCRIPTION": this.commonService.emptyToZero(DETAIL_FORM_DATA.jobnoDesc),
-      "UNQ_DESIGN_ID": this.commonService.emptyToZero(DETAIL_FORM_DATA.DESIGN_CODE),
-      "DESIGN_CODE": this.commonService.emptyToZero(DETAIL_FORM_DATA.DESIGN_CODE),
-      "PART_CODE": this.commonService.emptyToZero(DETAIL_FORM_DATA.PART_CODE),
-      "DIVCODE": this.commonService.emptyToZero(DETAIL_FORM_DATA.DIVCODE),
-      "PREFIX": this.commonService.nullToString(DETAIL_FORM_DATA.PREFIX),
-      "STOCK_CODE": this.commonService.nullToString(DETAIL_FORM_DATA.STOCK_CODE),
-      "STOCK_DESCRIPTION": this.commonService.nullToString(DETAIL_FORM_DATA.STOCK_DESCRIPTION),
-      "SET_REF": this.commonService.nullToString(DETAIL_FORM_DATA.SETREF),
-      "KARAT_CODE": this.commonService.nullToString(DETAIL_FORM_DATA.KARAT),
-      "MULTI_STOCK_CODE": true,
-      "JOB_PCS": this.commonService.emptyToZero(DETAIL_FORM_DATA.JOB_PCS),
-      "GROSS_WT": this.commonService.emptyToZero(DETAIL_FORM_DATA.GROSS_WT),
-      "METAL_PCS": 0,
-      "METAL_WT": this.commonService.emptyToZero(DETAIL_FORM_DATA.METAL_WT),
-      "STONE_PCS": this.commonService.emptyToZero(DETAIL_FORM_DATA.STONE_PCS),
-      "STONE_WT": this.commonService.emptyToZero(DETAIL_FORM_DATA.STONE_WT),
-      "LOSS_WT": this.commonService.emptyToZero(DETAIL_FORM_DATA.LOSS_WT),
-      "NET_WT": this.commonService.emptyToZero(DETAIL_FORM_DATA.GROSS_WT),
-      "PURITY": this.commonService.emptyToZero(DETAIL_FORM_DATA.PURITY),
-      "PURE_WT": this.commonService.emptyToZero(DETAIL_FORM_DATA.PURE_WT),
-      "RATE_TYPE": this.commonService.nullToString(this.productionFrom.value.METAL_RATE_TYPE),
-      "METAL_RATE": this.commonService.emptyToZero(this.productionFrom.value.METAL_RATE),
-      "CURRENCY_CODE": this.commonService.nullToString(this.productionFrom.value.CURRENCY),
-      "CURRENCY_RATE": this.commonService.emptyToZero(this.productionFrom.value.CURRENCY_RATE),
-      "METAL_GRM_RATEFC": 0,
-      "METAL_GRM_RATELC": 0,
-      "METAL_AMOUNTFC": 0,
-      "METAL_AMOUNTLC": 0,
-      "MAKING_RATEFC": 0,
-      "MAKING_RATELC": 0,
-      "MAKING_AMOUNTFC": 0,
-      "MAKING_AMOUNTLC": 0,
-      "STONE_RATEFC": 0,
-      "STONE_RATELC": 0,
-      "STONE_AMOUNTFC": 0,
-      "STONE_AMOUNTLC": 0,
-      "LAB_AMOUNTFC": 0,
-      "LAB_AMOUNTLC": 0,
-      "RATEFC": 0,
-      "RATELC": 0,
-      "AMOUNTFC": 0,
-      "AMOUNTLC": 0,
-      "PROCESS_CODE": this.commonService.emptyToZero(DETAIL_FORM_DATA.process),
-      "PROCESS_NAME": this.commonService.emptyToZero(DETAIL_FORM_DATA.processname),
-      "WORKER_CODE": this.commonService.emptyToZero(DETAIL_FORM_DATA.worker),
-      "WORKER_NAME": this.commonService.emptyToZero(DETAIL_FORM_DATA.workername),
-      "IN_DATE": this.commonService.formatDateTime(DETAIL_FORM_DATA.START_DATE),
-      "OUT_DATE": this.commonService.formatDateTime(DETAIL_FORM_DATA.END_DATE),
-      "TIME_TAKEN_HRS": 0,
-      "COST_CODE": "",
-      "WIP_ACCODE": "",
-      "STK_ACCODE": "",
-      "SOH_ACCODE": "",
-      "PROD_PROC": "",
-      "METAL_DIVISION": DETAIL_FORM_DATA.metalValue,
-      "PRICE1PER": DETAIL_FORM_DATA.price1per,
-      "PRICE2PER": DETAIL_FORM_DATA.price2per,
-      "PRICE3PER": DETAIL_FORM_DATA.price3per,
-      "PRICE4PER": DETAIL_FORM_DATA.price4per,
-      "PRICE5PER": DETAIL_FORM_DATA.price5per,
-      "LOCTYPE_CODE": "",
-      "WASTAGE_WT": DETAIL_FORM_DATA.wastage,
-      "WASTAGE_AMTFC": 0,
-      "WASTAGE_AMTLC": 0,
-      "PICTURE_NAME": "",
-      "SELLINGRATE": 0,
-      "LAB_ACCODE": "",
-      "CUSTOMER_CODE": "",
-      "OUTSIDEJOB": true,
-      "METAL_LABAMTFC": 0,
-      "METAL_LABAMTLC": 0,
-      "METAL_LABACCODE": "",
-      "SUPPLIER_REF": DETAIL_FORM_DATA.totalLabour,
-      "TAGLINES": "",
-      "SETTING_CHRG": DETAIL_FORM_DATA.settingChrg,
-      "POLISH_CHRG": DETAIL_FORM_DATA.polishChrg,
-      "RHODIUM_CHRG": DETAIL_FORM_DATA.rhodiumChrg,
-      "LABOUR_CHRG": DETAIL_FORM_DATA.labourChrg,
-      "MISC_CHRG": DETAIL_FORM_DATA.miscChrg,
-      "SETTING_ACCODE": DETAIL_FORM_DATA.settingChrgDesc,
-      "POLISH_ACCODE": DETAIL_FORM_DATA.polishChrgDesc,
-      "RHODIUM_ACCODE": DETAIL_FORM_DATA.rhodiumChrgDesc,
-      "LABOUR_ACCODE": DETAIL_FORM_DATA.labourChrgDesc,
-      "MISC_ACCODE": DETAIL_FORM_DATA.miscChrgDesc,
-      "WAST_ACCODE": DETAIL_FORM_DATA.wastage,
-      "REPAIRJOB": 0,
-      "PRICE1FC": DETAIL_FORM_DATA.price1fc,
-      "PRICE2FC": DETAIL_FORM_DATA.price2fc,
-      "PRICE3FC": DETAIL_FORM_DATA.price3fc,
-      "PRICE4FC": DETAIL_FORM_DATA.price4fc,
-      "PRICE5FC": DETAIL_FORM_DATA.price5fc,
-      "BASE_CONV_RATE": 0,
-      "FROM_STOCK_CODE": "",
-      "TO_STOCK_CODE": "",
-      "JOB_PURITY": 0,
-      "LOSS_PUREWT": 0,
-      "PUDIFF": 0,
-      "STONEDIFF": 0,
-      "CHARGABLEWT": 0,
-      "BARNO": "",
-      "LOTNUMBER": "",
-      "TICKETNO": "",
-      "PROD_PER": 0,
-      "PURITY_PER": 0,
-      "DESIGN_TYPE": "",
-      "BASE_CURR_RATE": 0
-    })
-    console.log(this.DetailScreenDataToSave, '111111111111111111111111111');
-  }
-
-  deleteTableData() {
-
-  }
-
-  removedata() {
-    this.tableData.pop();
   }
 
   /**USE: production metal rate data setup */
@@ -579,8 +443,6 @@ export class ProductionMfgComponent implements OnInit {
               confirmButtonText: "Ok",
             }).then((result: any) => {
               if (result.value) {
-                this.productionFrom.reset();
-                this.tableData = [];
                 this.close("reloadMainGrid");
               }
             });
@@ -619,8 +481,6 @@ export class ProductionMfgComponent implements OnInit {
               confirmButtonText: "Ok",
             }).then((result: any) => {
               if (result.value) {
-                this.productionFrom.reset();
-                this.tableData = [];
                 this.close("reloadMainGrid");
               }
             });
@@ -670,8 +530,6 @@ export class ProductionMfgComponent implements OnInit {
                 confirmButtonText: "Ok",
               }).then((result: any) => {
                 if (result.value) {
-                  this.productionFrom.reset();
-                  this.tableData = [];
                   this.close("reloadMainGrid");
                 }
               });
@@ -723,7 +581,35 @@ export class ProductionMfgComponent implements OnInit {
   closeDetailScreen() {
     this.modalReference.close()
   }
-
+  deleteTableData(): void {
+    if (this.selectRowIndex == undefined || this.selectRowIndex == null) {
+      this.commonService.toastErrorByMsgId('MSG1458') //No record is selected.
+      return
+    }
+    this.showConfirmationDialog().then((result) => {
+      if (result.isConfirmed) {
+        this.DetailScreenDataToSave = this.DetailScreenDataToSave.filter((item: any) => item.SRNO != this.selectRowIndex)
+        this.detailData = this.detailData.filter((item: any) => item.SRNO != this.selectRowIndex)
+        this.reCalculateSRNO()
+      }
+    }
+    )
+  }
+  reCalculateSRNO() {
+    this.DetailScreenDataToSave.forEach((item, index) => item.SRNO = index + 1)
+    this.detailData.forEach((item: any, index: any) => item.SRNO = index + 1)
+  }
+  showConfirmationDialog(): Promise<any> {
+    return Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete!'
+    });
+  }
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {
       this.subscriptions.forEach((subscription) => subscription.unsubscribe()); // unsubscribe all subscription
