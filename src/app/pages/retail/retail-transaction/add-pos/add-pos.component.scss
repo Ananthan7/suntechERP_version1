@@ -235,3 +235,15 @@ button:disabled {
   margin-right: auto;
   width: fit-content;
 }
+
+.netTotal {
+  background-color: #efefef;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: stretch; /* Ensures all children are stretched to the height of the row */
+}
+
+.newBtnCls{
+  position: relative;
+  top: 35px;
+}
