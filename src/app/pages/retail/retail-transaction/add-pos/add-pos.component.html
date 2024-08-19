@@ -708,10 +708,18 @@
             Import Sales Order
           </button> -->
 
-          <button type="button" mat-flat-button color="primary" [disabled]="viewOnly && transAttachmentList.length == 0"
-            (click)="openUserAttachmentModal()">
-            {{ !viewOnly ? 'Add Attachment' : 'View Attachment' }}
+          <button type="button" mat-flat-button color="primary" *ngIf="strUser=='SUNTECH'"
+          (click)="openParamterDetails()"
+          class="button-spacing">
+          Parameter Details 
           </button>
+  
+          <button type="button" mat-flat-button color="primary" [disabled]="viewOnly && transAttachmentList.length == 0"
+          (click)="openUserAttachmentModal()">
+          {{ !viewOnly ? 'Add Attachment' : 'View Attachment' }}
+          </button>
+  
+         
         </div>
 
         <div class="col-md-12 m-t-10" style="padding: 0px">
@@ -1403,6 +1411,43 @@
   </div>
 </div>
 
+
+
+<ng-template #paramGrid let-modal modal-lg>
+  <div class="modal-header" style="padding: 10px 20px">
+    <h4 class="modal-title" id="modal-pos-metal">Parameter Details</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <dx-data-grid
+    [dataSource]="parameterDetails"
+    [showBorders]="true"
+    [showColumnLines]="true"
+    [showRowLines]="true"
+    [columnAutoWidth]="true"
+    [allowColumnResizing]="true"
+    [wordWrapEnabled]="true">
+  
+    <dxo-grouping [autoExpandAll]="false"></dxo-grouping>
+    <!-- <dxo-group-panel [visible]="true"></dxo-group-panel> -->
+  
+    <dxi-column dataField="TABLENAME" caption="Table" [groupIndex]="0" width="120px"></dxi-column>
+    <dxi-column dataField="PARAMETER_NAME" caption="Parameter"></dxi-column>
+    <dxi-column dataField="VALUE" caption="Value"></dxi-column>
+    <dxi-column dataField="USEAGE" caption="Usage" width="200px"></dxi-column>
+  
+    <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+    <dxo-paging [pageSize]="5"></dxo-paging>
+  </dx-data-grid>
+  
+  
+  </div>
+</ng-template>
+
+
+
 <ng-template #sales_payment_modal let-modal modal-lg>
   <div class="modal-header" style="padding: 10px 20px">
     <h4 class="modal-title" id="modal-pos-metal">Payments</h4>
@@ -1937,6 +1982,25 @@
     </div>
   </div>
 </ng-template>
+
+<ng-template #paramGrid let-modal modal-lg>
+  <div class="modal-header" style="padding: 10px 20px">
+    <h4 class="modal-title" id="modal-pos-metal">Exchange</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <dx-data-grid>
+      <dxi-column dataField="slno" caption="Serial No"></dxi-column>
+      <dxi-column dataField="data" caption="Data"></dxi-column>
+      <dxi-column dataField="entry" caption="Entry"></dxi-column>
+      <dxi-column dataField="points" caption="Points"></dxi-column>
+    </dx-data-grid>
+  </div>
+</ng-template>
+
 
 <ng-template #oldgoldmodal let-modal modal-lg>
   <div class="modal-header" style="padding: 10px 20px">
@@ -3001,7 +3065,7 @@
                         }}</mat-label>
                       <input class="st_txt_right" type="text" [min]="0" [maxLength]="14"
                         (keyup)="this.comFunc.enforceMinMax($event.target)" matInput formControlName="fcn_li_stone_wt"
-                        id="fcn_li_stone_wt" (change)="changeStoneWt($event)" [readonly]="!isStoneIncluded"
+                        id="fcn_li_stone_wt" (change)="changeStoneWt($event)" [readonly]="viewOnly"
                         MetalDecimalInput />
                     </mat-form-field>
                   </div>
@@ -3059,7 +3123,7 @@
                       <input class="st_txt_right" type="text" [min]="0" [maxLength]="14"
                         (keyup)="this.comFunc.enforceMinMax($event.target)" matInput formControlName="fcn_ad_stone_rate"
                         id="fcn_ad_stone_rate" (change)="changeStoneRate($event)" value="{{ li_stone_rate_val }}"
-                        [readonly]="!isStoneIncluded" AmountDecimalInput />
+                        [readonly]="viewOnly" AmountDecimalInput />
                     </mat-form-field>
                   </div>
                   <div class="col-md-4">
@@ -3068,7 +3132,7 @@
                       <input class="st_txt_right" type="text" [min]="0" [maxLength]="14"
                         (keyup)="this.comFunc.enforceMinMax($event.target)" id="fcn_ad_stone_amount" matInput
                         formControlName="fcn_ad_stone_amount" value="{{ li_stone_amount_val }}"
-                        (change)="changeStoneAmt($event)" [readonly]="!isStoneIncluded" />
+                        (change)="changeStoneAmt($event)" [readonly]="viewOnly" />
                     </mat-form-field>
                   </div>
                   <!-- <div class="col-md-4">

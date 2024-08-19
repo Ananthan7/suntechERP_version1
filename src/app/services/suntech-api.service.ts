@@ -106,6 +106,16 @@ export class SuntechAPIService {
       })
     );
   }
+
+    // use: API for Paramter Details 
+    gettingParameterDetails(apiName: string, data: any): Observable<any> {
+      return this.configService.getConfig().pipe(
+        switchMap(config => {
+          const apiUrl = "http://5.195.165.122:108/api/";
+          return this.http.post(apiUrl+apiName, data);
+        })
+      );
+    }
  
   // use: dynamic function for put API data 
   putDynamicAPICustom(apiName: string, data: any): Observable<any> {
@@ -116,6 +126,8 @@ export class SuntechAPIService {
       })
     );
   }
+
+  
   // use: dynamic function for delete API data 
   deleteDynamicAPICustom(apiName: string, data?: any): Observable<any> {
     return this.configService.getConfig().pipe(

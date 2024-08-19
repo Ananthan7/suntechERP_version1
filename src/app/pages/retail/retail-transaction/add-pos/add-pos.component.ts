@@ -68,6 +68,9 @@ export class AddPosComponent implements OnInit {
   @ViewChild('userAuthModal')
   public userAuthModal!: NgbModal;
 
+  @ViewChild('paramGrid')
+  public paramGrid!: NgbModal;
+
   @ViewChild('userAttachmentModal')
   public userAttachmentModal!: NgbModal;
 
@@ -745,7 +748,7 @@ editLineItem:boolean=false;
   }
 
   attachmentFile: any;
-
+  parameterDetails: any[] = [];
 
   constructor(
     private modalService: NgbModal,
@@ -1801,6 +1804,7 @@ editLineItem:boolean=false;
   ngOnInit(): void {
     this.isNewButtonDisabled=true;
 
+    this.fetchPramterDetails();
     /* this.receiptDetailsList = [
       {
         mode: 'CASH',
@@ -2937,11 +2941,16 @@ editLineItem:boolean=false;
           this.newLineItem.PCS_TO_GMS = stockInfos.PCS_TO_GMS;
           this.newLineItem.GSTVATONMAKING = stockInfos.GSTVATONMAKING;
           this.newLineItem.TPROMOTIONALITEM=stockInfos.TPROMOTIONALITEM;
+          this.isStoneIncluded = stockInfos.STONE;
+          this.newLineItem.STONE=stockInfos.STONE;
           this.allowDescription = stockInfos.ALLOWEDITDESCRIPTION;
           this.disableSaveBtn = false;
           this.validatePCS = stockInfos.VALIDATE_PCS;
           this.enablePieces = stockInfos.ENABLE_PCS;
           this.lineItemPcs = stockInfos.BALANCE_PCS;
+
+          const stoneCondition = this.comFunc.stringToBoolean(this.newLineItem.STONE?.toString());
+          this.toggleStoneAndNetWtFields(stoneCondition);
 
           this.blockMinimumPrice = stockInfos.BLOCK_MINIMUMPRICE;
           this.blockMinimumPriceValue = this.comFunc.transformDecimalVB(
@@ -3251,7 +3260,7 @@ editLineItem:boolean=false;
       value.STOCK_CODE
     );
     // comment
-    // this.getStockforExchange();
+     this.getStockforExchange();
     // this.updateBtn = true;
 
     // alert(value.DT_VOCNO);
@@ -6130,6 +6139,8 @@ editLineItem:boolean=false;
         if (resp.status == "Success") {
           this.renderer.selectRootElement('#fcn_exchange_gross_wt').focus();
 
+          if(!this.editOnly && !this.viewOnly){
+
           _exchangeItem = resp.response.filter((i: any) => i.STOCK_CODE == _exchangeCode.toUpperCase());
 
           this._exchangeItemchange = _exchangeItem[0];
@@ -6171,50 +6182,54 @@ editLineItem:boolean=false;
             // _karatRateRec[0].KARAT_RATE
           );
           this.exchangeFormMetalRateType = _exchangeItem[0].METAL_RATE_TYPE;
+        }
 
-          if (_exchangeItem[0].INCLUDE_STONE == false) {
-            // this.exchangeForm.con
-            this.comFunc.formControlSetReadOnly('fcn_exchange_stone_rate', true);
-            this.comFunc.formControlSetReadOnly('fcn_exchange_stone_wt', true);
-            this.comFunc.formControlSetReadOnly(
-              'fcn_exchange_stone_amount',
-              true
-            );
-            this.comFunc.formControlSetReadOnly('fcn_exchange_net_wt', true);
-            this.comFunc.formControlSetReadOnly(
-              'fcn_exchange_chargeable_wt',
-              true
-            );
-            // this.exchangeForm.controls.fcn_exchange_stone_wt.disable();
-            // this.exchangeForm.controls.fcn_exchange_stone_wt.clearValidators();
-            this.removeValidationsForForms(this.exchangeForm, [
-              'fcn_exchange_stone_wt',
-              'fcn_exchange_stone_rate',
-              'fcn_exchange_stone_amount',
-              'fcn_exchange_net_wt',
-              'fcn_exchange_chargeable_wt',
-            ]);
-            // this.exchangeForm.controls.fcn_exchange_stone_wt.clearValidators();
-            // this.exchangeForm.controls.fcn_exchange_stone_wt.updateValueAndValidity();
+          this.toggleExchangeFormControls(_exchangeItem[0].INCLUDE_STONE);
 
-            // focus
-            // this.renderer.selectRootElement('#fcn_exchange_purity').focus();
-          } else {
-            this.comFunc.formControlSetReadOnly('fcn_exchange_net_wt', false);
-            this.comFunc.formControlSetReadOnly('fcn_exchange_stone_wt', false);
-            this.comFunc.formControlSetReadOnly('fcn_exchange_stone_rate', false);
-            this.comFunc.formControlSetReadOnly(
-              'fcn_exchange_stone_amount',
-              false
-            );
-            this.comFunc.formControlSetReadOnly(
-              'fcn_exchange_chargeable_wt',
-              false
-            );
 
-            // focus
-            // this.renderer.selectRootElement('#fcn_exchange_stone_wt').focus();
-          }
+          // if (_exchangeItem[0].INCLUDE_STONE == false) {
+          //   // this.exchangeForm.con
+          //   this.comFunc.formControlSetReadOnly('fcn_exchange_stone_rate', true);
+          //   this.comFunc.formControlSetReadOnly('fcn_exchange_stone_wt', true);
+          //   this.comFunc.formControlSetReadOnly(
+          //     'fcn_exchange_stone_amount',
+          //     true
+          //   );
+          //   this.comFunc.formControlSetReadOnly('fcn_exchange_net_wt', true);
+          //   this.comFunc.formControlSetReadOnly(
+          //     'fcn_exchange_chargeable_wt',
+          //     true
+          //   );
+          //   // this.exchangeForm.controls.fcn_exchange_stone_wt.disable();
+          //   // this.exchangeForm.controls.fcn_exchange_stone_wt.clearValidators();
+          //   this.removeValidationsForForms(this.exchangeForm, [
+          //     'fcn_exchange_stone_wt',
+          //     'fcn_exchange_stone_rate',
+          //     'fcn_exchange_stone_amount',
+          //     'fcn_exchange_net_wt',
+          //     'fcn_exchange_chargeable_wt',
+          //   ]);
+          //   // this.exchangeForm.controls.fcn_exchange_stone_wt.clearValidators();
+          //   // this.exchangeForm.controls.fcn_exchange_stone_wt.updateValueAndValidity();
+
+          //   // focus
+          //   // this.renderer.selectRootElement('#fcn_exchange_purity').focus();
+          // } else {
+          //   this.comFunc.formControlSetReadOnly('fcn_exchange_net_wt', false);
+          //   this.comFunc.formControlSetReadOnly('fcn_exchange_stone_wt', false);
+          //   this.comFunc.formControlSetReadOnly('fcn_exchange_stone_rate', false);
+          //   this.comFunc.formControlSetReadOnly(
+          //     'fcn_exchange_stone_amount',
+          //     false
+          //   );
+          //   this.comFunc.formControlSetReadOnly(
+          //     'fcn_exchange_chargeable_wt',
+          //     false
+          //   );
+
+          //   // focus
+          //   // this.renderer.selectRootElement('#fcn_exchange_stone_wt').focus();
+          // }
         }
         else {
           // this.viewOnly = true;
@@ -7602,22 +7617,26 @@ editLineItem:boolean=false;
                 else
                   this.setMakingValidation();
 
-                if (this.comFunc.stringToBoolean(this.newLineItem.STONE?.toString()) == false) {
+                  const stoneCondition = this.comFunc.stringToBoolean(this.newLineItem.STONE?.toString());
+                  this.toggleStoneAndNetWtFields(stoneCondition);
 
-                  this.comFunc.formControlSetReadOnly('fcn_li_stone_wt', true);
-                  this.comFunc.formControlSetReadOnly('fcn_li_net_wt', true);
-                  this.removeValidationsForForms(this.lineItemForm, ['fcn_li_stone_wt', 'fcn_li_net_wt']);
-                } else {
 
-                  this.comFunc.formControlSetReadOnly('fcn_li_stone_wt', false);
-                  this.comFunc.formControlSetReadOnly('fcn_li_net_wt', false);
-                  this.addValidationsForForms(this.lineItemForm, 'fcn_li_stone_wt', [
-                    Validators.required,
-                  ]);
-                  this.addValidationsForForms(this.lineItemForm, 'fcn_li_net_wt', [
-                    Validators.required,
-                  ]);
-                }
+                // if (this.comFunc.stringToBoolean(this.newLineItem.STONE?.toString()) == false) {
+
+                //   this.comFunc.formControlSetReadOnly('fcn_li_stone_wt', true);
+                //   this.comFunc.formControlSetReadOnly('fcn_li_net_wt', true);
+                //   this.removeValidationsForForms(this.lineItemForm, ['fcn_li_stone_wt', 'fcn_li_net_wt']);
+                // } else {
+
+                //   this.comFunc.formControlSetReadOnly('fcn_li_stone_wt', false);
+                //   this.comFunc.formControlSetReadOnly('fcn_li_net_wt', false);
+                //   this.addValidationsForForms(this.lineItemForm, 'fcn_li_stone_wt', [
+                //     Validators.required,
+                //   ]);
+                //   this.addValidationsForForms(this.lineItemForm, 'fcn_li_net_wt', [
+                //     Validators.required,
+                //   ]);
+                // }
 
               } else {
                 this.enableFormControls(false);
@@ -7676,6 +7695,43 @@ editLineItem:boolean=false;
 
     // this.lineItemForm.controls['fcn_li_pcs'].setValue(1);
   }
+
+  toggleStoneAndNetWtFields(stoneCondition: boolean): void {
+    console.log(this.isStoneIncluded);
+    console.log(stoneCondition)
+    if (!stoneCondition) {
+      this.comFunc.formControlSetReadOnly('fcn_li_stone_wt', true);
+      this.comFunc.formControlSetReadOnly('fcn_li_net_wt', true);
+      this.removeValidationsForForms(this.lineItemForm, ['fcn_li_stone_wt', 'fcn_li_net_wt']);
+    } else {
+      this.comFunc.formControlSetReadOnly('fcn_li_stone_wt', false);
+      this.comFunc.formControlSetReadOnly('fcn_li_net_wt', false);
+      this.addValidationsForForms(this.lineItemForm, 'fcn_li_stone_wt', [Validators.required]);
+      this.addValidationsForForms(this.lineItemForm, 'fcn_li_net_wt', [Validators.required]);
+    }
+  }
+
+  toggleExchangeFormControls(includeStone: boolean): void {
+    const controlsToToggle = [
+      'fcn_exchange_stone_wt',
+      'fcn_exchange_stone_rate',
+      'fcn_exchange_stone_amount',
+      'fcn_exchange_net_wt',
+      'fcn_exchange_chargeable_wt'
+    ];
+  
+    if (!includeStone) {
+      controlsToToggle.forEach(control => {
+        this.comFunc.formControlSetReadOnly(control, true);
+      });
+      this.removeValidationsForForms(this.exchangeForm, controlsToToggle);
+    } else {
+      controlsToToggle.forEach(control => {
+        this.comFunc.formControlSetReadOnly(control, false);
+      });
+    }
+  }
+  
 
   setMakingValidation() {
     this.addValidationsForForms(this.lineItemForm, 'fcn_li_rate', [
@@ -13003,6 +13059,57 @@ changeGiftVoucherAmount(data:any){
     } else {
       this.snackBar.open('Please fill all fields', 'OK', { duration: 1000 })
     }
+
+  }
+
+  fetchPramterDetails(){
+    this.snackBar.open('Loading...');
+    let API = 'ParamValueUsage';
+    const postData = {
+       "ANGULARCOMPONENTID": "add-pos.component"
+    };
+    this.suntechApi.gettingParameterDetails(API, postData).subscribe((resp: any) => {
+      this.snackBar.dismiss();
+      if (resp.Status == 'Success') {
+        console.log(resp);
+        this.parameterDetails=resp.dynamicData[0];
+        // this.modalReferenceUserAuth.close(true);
+        // this.authForm.reset();
+
+      } else {
+        this.snackBar.open(resp.message, 'OK', { duration: 2000 })
+      }
+    });
+  }
+
+  openParamterDetails() {
+    return new Promise((resolve) => {
+
+      this.modalReferenceUserAuth = this.modalService.open(
+        this.paramGrid,
+        {
+          size: 'lg',
+          ariaLabelledBy: 'modal-basic-title',
+          backdrop: false,
+        }
+      );
+
+      this.modalReferenceUserAuth.result.then((result) => {
+        if (result) {
+          console.log("Result :", result);
+          resolve(true);
+        } else {
+          resolve(false);
+        }
+      },
+        (reason) => {
+          console.log(`Dismissed ${reason}`);
+          resolve(false);
+
+        }
+      );
+    });
+
 
   }
 
