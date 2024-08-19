@@ -243,14 +243,15 @@
             <mat-tab label="Job Details">
               <div class="row mt-2">
                 <div class="col-md-12">
-                  <dx-data-grid #dataGrid id="gridContainer"
+                  <dx-data-grid id="gridContainer"
+                    [columnAutoWidth]="true"
+                    [allowColumnResizing]="true" [showBorders]="true"
                     [showRowLines]="true"
-                    [showBorders]="true"
                     (onRowClick)="onRowClickHandler($event)"
                     (onRowDblClick)="onRowDblClickHandler($event)"
-                    [allowColumnResizing]="true"
+                    [allowColumnReordering]="true" height="200"
                     [dataSource]="DetailScreenDataToSave">
-                    <dxo-paging [enabled]="false"></dxo-paging>
+                    <dxo-selection mode="single"></dxo-selection>
                     <dxi-column dataField="SRNO" width="auto" caption="No"
                       alignment="center">
                     </dxi-column>
@@ -348,7 +349,7 @@
                       caption="Loss Wt"
                       alignment="center">
                     </dxi-column>
-                  </dx-data-grid>
+                  </dx-data-grid> 
                 </div>
               </div>
             </mat-tab>
