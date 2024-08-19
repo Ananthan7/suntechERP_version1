@@ -976,8 +976,8 @@ export class ProcessTransferDetailsComponent implements OnInit {
         this.setFormDecimal('TO_METAL_WT', TO_METAL_WT, 'METAL')
         let GrossWeightTo = (this.emptyToZero(form.TO_METAL_WT) - this.emptyToZero(form.TO_STONE_WT) / 5);
         this.setFormDecimal('GrossWeightTo', GrossWeightTo, 'METAL')
-      }
-      else {
+        form = this.processTransferdetailsForm.value;
+      } else {
         txtBalDiaGrWt = (this.emptyToZero(form.FRM_METAL_WT) - this.emptyToZero(form.TO_METAL_WT) - this.emptyToZero(form.scrapWeight));
       }
     } else {
@@ -2596,7 +2596,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       return
     }
     this.CalculateLoss()
-    this.renderer.selectRootElement('#txtLossQty')?.focus();
+    // this.renderer.selectRootElement('#txtLossQty')?.focus();
   }
 
   CalculateLoss() {
