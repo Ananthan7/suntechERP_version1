@@ -36,7 +36,6 @@ export class StoneReturnDetailsComponent implements OnInit {
   isDisableSaveBtn: boolean = false;
   editMode: boolean = false;
   userName = localStorage.getItem('username');
-
   private subscriptions: Subscription[] = [];
   user: MasterSearchModel = {
     PAGENO: 1,
@@ -159,6 +158,7 @@ export class StoneReturnDetailsComponent implements OnInit {
     CURRENCY_RATE: [''],
     DIVCODE: [''],
     SMAN: [''],
+    JOB_DATE: [''],
     PICTURE_PATH: [''],
     FLAG: [null]
   });
@@ -319,9 +319,9 @@ export class StoneReturnDetailsComponent implements OnInit {
       "SRNO": this.comService.emptyToZero(this.content?.SRNO),
       "VOCNO": this.comService.emptyToZero(form.VOCNO),
       "VOCTYPE": this.comService.nullToString(form.VOCTYPE),
-      "VOCDATE": this.comService.formatDateTime(new Date(form.VOCDATE)),
+      "VOCDATE": this.comService.formatDDMMYY(new Date(form.VOCDATE)),
       "JOB_NUMBER": this.comService.nullToString(form.jobNumber),
-      "JOB_DATE": this.comService.formatDateTime(new Date(form.VOCDATE)),
+      "JOB_DATE": this.comService.formatDDMMYY(new Date(form.JOB_DATE)),
       "JOB_SO_NUMBER": this.comService.emptyToZero(form.subjobno),
       "UNQ_JOB_ID": this.comService.nullToString(form.jobNumber),
       "JOB_DESCRIPTION": form.jobDesc,
@@ -505,6 +505,7 @@ export class StoneReturnDetailsComponent implements OnInit {
             this.stonereturndetailsFrom.controls.subjobno.setValue(data[0].UNQ_JOB_ID)
             this.stonereturndetailsFrom.controls.subjobDesc.setValue(data[0].JOB_DESCRIPTION)
             this.stonereturndetailsFrom.controls.designcode.setValue(data[0].DESIGN_CODE)
+            this.stonereturndetailsFrom.controls.JOB_DATE.setValue(data[0].JOB_DATE)
 
             this.subJobNumberValidate()
           } else {

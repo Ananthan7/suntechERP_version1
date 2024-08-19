@@ -6,7 +6,8 @@
   </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
+(deleteClick)="deleteClicked()"></modal-header>
 
 <div class="row">
   <div class="col-md-12">
@@ -57,11 +58,12 @@
               <div class="col-md-8">
                 <mat-form-field style="width: 75%;">
                   <input type="text" matInput formControlName="enterdBy"
-                  (keydown)="lookupKeyPress($event,'enterdBy')" 
+                    (keydown)="lookupKeyPress($event,'enterdBy')"
                     (focusout)="validateLookupField($event,userData,'enterdBy')"
                     [readonly]="viewMode" />
                 </mat-form-field>
-                <master-search [MasterSearchData]="userData" #overlayenterdBySearch
+                <master-search [MasterSearchData]="userData"
+                  #overlayenterdBySearch
                   (newRowClick)="userDataSelected($event)" *ngIf="!viewMode">
                 </master-search>
               </div>
@@ -93,7 +95,7 @@
               <div class="col-sm-4">
                 <mat-form-field style="width: 70%;">
                   <input type="text" matInput formControlName="basecurrency"
-                  (keydown)="lookupKeyPress($event,'basecurrency')" 
+                    (keydown)="lookupKeyPress($event,'basecurrency')"
                     [readonly]="viewMode" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="baseCurrencyCodeData"
@@ -113,7 +115,7 @@
               <div class="col-sm-4">
                 <mat-form-field style="width: 70%;">
                   <input type="text" matInput formControlName="currency"
-                  (keydown)="lookupKeyPress($event,'currency')"
+                    (keydown)="lookupKeyPress($event,'currency')"
                     [readonly]="viewMode" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="CurrencyCodeData"
@@ -181,8 +183,11 @@
                   <dxo-scrolling mode="virtual"></dxo-scrolling>
 
                   <dxi-column *ngFor="let data of columnhead"
-                    dataField="{{ data }}" caption="{{ data }}"
-                    [allowEditing]="true" alignment="center"
+                    dataField="{{ data.field }}"
+                    caption="{{ data.title }}"
+                    [format]="data.format"
+                    [allowEditing]="true"
+                    [alignment]="data.alignment"
                     backgroundcolor="#000">
                   </dxi-column>
                 </dx-data-grid>
@@ -199,7 +204,8 @@
                   </label>
                   <div class="col-sm-4">
                     <mat-form-field style="width: 100%;">
-                      <input type="text" matInput formControlName="remark" maxlength="40"/>
+                      <input type="text" matInput formControlName="remark"
+                        maxlength="40" />
                     </mat-form-field>
                   </div>
                 </div>
