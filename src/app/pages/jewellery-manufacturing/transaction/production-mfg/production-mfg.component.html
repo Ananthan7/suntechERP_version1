@@ -27,7 +27,7 @@
               <label class="col-sm-4 col-form-label">
                 Voucher Type<b>*</b></label>
               <mat-form-field appearance="outline" style="width: 50%;">
-                <input type="text" matInput formControlName="voctype"
+                <input type="text" matInput formControlName="VOCTYPE"
                   readonly />
               </mat-form-field>
             </div>
@@ -44,7 +44,7 @@
                         </mat-form-field> -->
                   <input matInput [matDatepicker]="vocDate" name="vocDate"
                     [max]="vocMaxDate"
-                    formControlName="vocDate"
+                    formControlName="VOCDATE"
                     placeholder="DD/MM/YYYY" DateValidation
                     [readonly]="viewMode" />
                   <mat-datepicker-toggle matSuffix
@@ -62,7 +62,7 @@
               <label class="col-sm-4 col-form-label">Voucher Number * </label>
               <div class="col-md-6">
                 <mat-form-field appearance="outline" style="width: 100%;">
-                  <input type="text" matInput formControlName="vocno"
+                  <input type="text" matInput formControlName="VOCNO"
                     readonly class="text-right" />
                 </mat-form-field>
               </div>
@@ -76,9 +76,9 @@
                 By</label>
               <div class="col-md-6">
                 <mat-form-field appearance="outline" style="width: 100%;">
-                  <input type="text" matInput formControlName="enteredby"
+                  <input type="text" matInput formControlName="SMAN"
                     UpperCaseDirective
-                    (focusout)="validateLookupField($event,enteredByCodeData,'enteredby')" />
+                    (focusout)="validateLookupField($event,enteredByCodeData,'SMAN')" />
                   <master-search class="masterSearch"
                     [MasterSearchData]="enteredByCodeData"
                     *ngIf="!viewMode"
@@ -98,7 +98,7 @@
                 <mat-form-field appearance="outline" style="width: 90%;">
                   <input type="text" matInput UpperCaseDirective
                     (focusout)="setCurrencyRate()"
-                    formControlName="currency" />
+                    formControlName="CURRENCY" />
                 </mat-form-field>
               </div>
               <div class="col-sm-5">
@@ -122,7 +122,7 @@
               <div class="col-md-6">
                 <mat-form-field appearance="outline" style="width: 100%;">
                   <input type="text" readonly matInput
-                    formControlName="time" />
+                    formControlName="TIME" />
                 </mat-form-field>
               </div>
             </div>
@@ -146,15 +146,15 @@
                   <div class="col-sm-8">
                     <mat-form-field appearance="outline" style="width: 30%">
                       <input type="text" matInput UpperCaseDirective
-                        formControlName="metalratetype" 
-                        (focusout)="validateLookupField($event,rateTypeMasterData,'metalrate')" />
+                        formControlName="METAL_RATE_TYPE" 
+                        (focusout)="validateLookupField($event,rateTypeMasterData,'METAL_RATE')" />
                     </mat-form-field>
                     <mat-form-field appearance="outline"
                       style="width: 50%;">
                       <input type="text" matInput
                         SixDecimalInput readonly
                         class="text-right"
-                        formControlName="metalrate"
+                        formControlName="METAL_RATE"
                         />
                       <master-search class="masterSearch"
                         [MasterSearchData]="rateTypeMasterData"
@@ -198,7 +198,7 @@
                           style="width: 100%;">
                           <input type="text" matInput UpperCaseDirective
                             (focusout)="validateLookupField($event,CurrencyCodeData,'BASE_CURRENCY_RATE')" 
-                            formControlName="basecurrency" />
+                            formControlName="BASE_CURRENCY" />
                         </mat-form-field>
                       </div> &nbsp;
                       <div class="col-md-4">
@@ -398,3 +398,8 @@
     </div>
   </form>
 </div>
+<ng-template #productionDetailScreen>
+  <app-production-entry-details [content]="dataToDetailScreen"
+      (saveDetail)="setValuesToHeaderGrid($event)"
+      (closeDetail)="closeDetailScreen()"></app-production-entry-details>
+</ng-template>

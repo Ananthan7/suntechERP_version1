@@ -6,9 +6,9 @@
   </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
+<modal-header (saveClick)="formSubmit('SAVE')" (cancelClick)="close()"
   [isViewStock]="true" [isViewDelete]="false" (stockClick)="opennewdetails()"
-  [isViewContinue]="true" (continueClick)="continue()">
+  [isViewContinue]="true" (continueClick)="formSubmit('CONTINUE')">
 </modal-header>
 <div class="p-3">
   <form [formGroup]="productiondetailsFrom">
@@ -479,24 +479,6 @@
                 </div>
               </div>
             </div>
-            <!-- <div class="col-md-8">
-                  <div class="col-md-2">
-                    <div class="upload-btn-wrapper">
-                        <button class="btn btnnew" [disabled]="viewMode" style="margin-left: 187px;">
-                            Item Image
-                        </button>
-                        <input type="file" name="uploadproduct" accept=".png, .jpg, .jpeg" #fileInput
-                            class="uploadproduct" [disabled]="viewMode" (change)="onFileChanged($event)" />
-                    </div>
-
-                    <div class="image_box">
-                        <div class="img_box">
-                            <img src="{{ urls }}" style="width: 209px; height: 163px; margin-left: 160px;"
-                            />
-                        </div>
-                    </div>
-                </div>    
-                </div> -->
             <div class="col-md-8">
               <div class="col-md-2">
                 <!-- <div class="upload-btn-wrapper">

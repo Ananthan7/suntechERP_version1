@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { MasterSearchModel } from "src/app/shared/data/master-find-model";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { SuntechAPIService } from "src/app/services/suntech-api.service";
@@ -16,6 +16,8 @@ import { SavedataModel } from "../savedata-model";
   styleUrls: ["./production-entry-details.component.scss"],
 })
 export class ProductionEntryDetailsComponent implements OnInit {
+  @Output() saveDetail = new EventEmitter<any>();
+  @Output() closeDetail = new EventEmitter<any>();
   @Input() content!: any;
   divisionMS: any = "ID";
   columnheadTop: any[] = [""];
@@ -26,6 +28,13 @@ export class ProductionEntryDetailsComponent implements OnInit {
   url: any;
   HEADERDETAILS: any;
   editMode: boolean = false;
+  designType: string = 'DIAMOND';
+  userName = this.commonService.userName;
+  branchCode?: String;
+  vocMaxDate = new Date();
+  currentDate = new Date();
+  private subscriptions: Subscription[] = [];
+
   StockDetailData: SavedataModel = {
     DETAIL_FORM_DATA: {},
     DETAIL_METAL_DATA: [],
@@ -34,13 +43,6 @@ export class ProductionEntryDetailsComponent implements OnInit {
     STOCK_COMPONENT_GRID: [],
     STOCK_GROUPED_GRID: [],
   }
-  userName = localStorage.getItem("username");
-  branchCode?: String;
-  vocMaxDate = new Date();
-  currentDate = new Date();
-
-  private subscriptions: Subscription[] = [];
-
   jobnoCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -74,7 +76,6 @@ export class ProductionEntryDetailsComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-
   locationCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -119,7 +120,6 @@ export class ProductionEntryDetailsComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-
   price2CodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -131,7 +131,6 @@ export class ProductionEntryDetailsComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-
   price3CodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -143,7 +142,6 @@ export class ProductionEntryDetailsComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-
   price4CodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -155,7 +153,6 @@ export class ProductionEntryDetailsComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-
   price5CodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -190,22 +187,9 @@ export class ProductionEntryDetailsComponent implements OnInit {
     VIEW_TABLE: true,
   };
 
-
-
-  onFileChanged(event: any) {
-    this.url = event.target.files[0].name
-    console.log(this.url)
-    let reader = new FileReader();
-    if (event.target.files && event.target.files.length > 0) {
-      let file = event.target.files[0];
-      reader.readAsDataURL(file);
-      reader.onload = () => {
-        this.urls = reader.result;
-      };
-    }
-  }
   productiondetailsFrom: FormGroup = this.formBuilder.group({
     VOCNO: [0],
+    FLAG: [''],
     jobno: [''],
     jobnoDesc: [''],
     JOB_DATE: [''],
@@ -300,7 +284,6 @@ export class ProductionEntryDetailsComponent implements OnInit {
   }
 
   getDesignimagecode() {
-
     let API = 'ImageforJobCad/' + this.productiondetailsFrom.value.PART_CODE;
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
@@ -311,7 +294,6 @@ export class ProductionEntryDetailsComponent implements OnInit {
         this.commonService.toastErrorByMsgId('MSG81451')//Server Error
       })
     this.subscriptions.push(Sub)
-
   }
 
   setInitialLoadValue() {
@@ -320,61 +302,49 @@ export class ProductionEntryDetailsComponent implements OnInit {
     this.productiondetailsFrom.controls.VOCDATE.setValue(this.HEADERDETAILS.vocDate)
   }
   customerCodeScpSelected(e: any) {
-    console.log(e);
     this.productiondetailsFrom.controls.customer.setValue(e.ACCODE);
     this.productiondetailsFrom.controls.customerDesc.setValue(e.ACCOUNT_HEAD);
   }
   karatCodeSelected(e: any) {
-    console.log(e);
     this.productiondetailsFrom.controls.KARAT.setValue(e.KARAT_CODE);
   }
   costCodeSelected(e: any) {
-    console.log(e);
     this.productiondetailsFrom.controls.costcode.setValue(e.COST_CODE);
   }
   prefixCodeSelected(e: any) {
-    console.log(e);
     this.productiondetailsFrom.controls.PREFIX.setValue(e.PREFIX_CODE);
   }
   price1CodeSelected(e: any) {
-    console.log(e);
     this.productiondetailsFrom.controls.price1.setValue(e.PRICE_CODE);
   }
 
   price2CodeSelected(e: any) {
-    console.log(e);
     this.productiondetailsFrom.controls.price2.setValue(e.PRICE_CODE);
   }
 
   price3CodeSelected(e: any) {
-    console.log(e);
     this.productiondetailsFrom.controls.price3.setValue(e.PRICE_CODE);
   }
 
   price4CodeSelected(e: any) {
-    console.log(e);
     this.productiondetailsFrom.controls.price4.setValue(e.PRICE_CODE);
   }
 
   price5CodeSelected(e: any) {
-    console.log(e);
     this.productiondetailsFrom.controls.price5.setValue(e.PRICE_CODE);
   }
 
   designSelected(value: any) {
-    console.log(value);
     this.productiondetailsFrom.controls.DESIGN_CODE.setValue(value.DESIGN_CODE);
     this.productiondetailsFrom.controls.DESIGN_DESCRIPTION.setValue(value.DESIGN_DESCRIPTION);
   }
   priceSchemeValidate(e: any) {
-    console.log('yap')
     this.productiondetailsFrom.controls.pricescheme.setValue(e.PRICE_CODE)
     let API = 'PriceSchemeMaster/GetPriceSchemeMasterList/' + this.productiondetailsFrom.value.pricescheme
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
         this.commonService.closeSnackBarMsg()
         if (result.response) {
-
           let data = result.response;
           this.productiondetailsFrom.controls.price1.setValue(data.PRICE1)
           this.productiondetailsFrom.controls.price2.setValue(data.PRICE2)
@@ -452,7 +422,6 @@ export class ProductionEntryDetailsComponent implements OnInit {
         this.commonService.closeSnackBarMsg()
         if (result.dynamicData && result.dynamicData[0].length > 0) {
           let data = result.dynamicData[0]
-          console.log(data[0], 'data[0]');
 
           this.productiondetailsFrom.controls.process.setValue(data[0].PROCESS)
           this.productiondetailsFrom.controls.processname.setValue(data[0].PROCESSDESC)
@@ -488,7 +457,8 @@ export class ProductionEntryDetailsComponent implements OnInit {
 
   close(data?: any) {
     //TODO reset forms and data before closing
-    this.activeModal.close(data);
+    // this.activeModal.close(data);
+    this.closeDetail.emit()
   }
 
   opennewdetails() {
@@ -537,127 +507,39 @@ export class ProductionEntryDetailsComponent implements OnInit {
       this.productiondetailsFrom.controls.END_DATE.setValue(new Date(date));
     }
   }
-  formDetailCount: number = 0;
-  formSubmit() {
-    this.formDetailCount += 1
+  set_JOB_PRODUCTION_SUB_DJ(){}
+  set_JOB_PRODUCTION_DETAIL_DJ(){}
+  set_JOB_PRODUCTION_STNMTL_DJ(){}
+  set_JOB_PRODUCTION_LABCHRG_DJ(){}
+  set_JOB_PRODUCTION_METALRATE_DJ(){}
 
+  formSubmit(flag: any) {
+    // if (this.designType == 'METAL') {
+    //   if (this.submitValidateMetal(this.productiondetailsFrom.value)) return;
+    // } else {
+    //   if (this.submitValidations(this.productiondetailsFrom.value)) return;
+    // }
+    this.productiondetailsFrom.controls.FLAG.setValue(flag)
 
-    this.StockDetailData.DETAIL_FORM_DATA = this.productiondetailsFrom.value
-    this.close(this.StockDetailData);
-  }
-
-  update() {
-    if (this.productiondetailsFrom.invalid) {
-      this.toastr.error("select all required fields");
-      return;
+    let detailDataToParent: any = {
+      PRODUCTION_FORMDETAILS: this.productiondetailsFrom.value,
+      TRN_STNMTL_GRID: this.tableData,
+      JOB_PRODUCTION_SUB_DJ: this.set_JOB_PRODUCTION_SUB_DJ(),
+      JOB_PRODUCTION_DETAIL_DJ: this.set_JOB_PRODUCTION_DETAIL_DJ(),
+      JOB_PRODUCTION_STNMTL_DJ: this.set_JOB_PRODUCTION_STNMTL_DJ(),
+      JOB_PRODUCTION_LABCHRG_DJ: this.set_JOB_PRODUCTION_LABCHRG_DJ(),
+      JOB_PRODUCTION_METALRATE_DJ: this.set_JOB_PRODUCTION_METALRATE_DJ(),
     }
-
-    let API =
-      "JobProductionMaster/UpdateJobProductionMaster/";
-    let postData = {
-
+    console.log(detailDataToParent, 'detailDataToParent');
+    this.saveDetail.emit(detailDataToParent);
+    if (flag == 'CONTINUE') {
+      this.resetPTFDetails()
     }
-    let Sub: Subscription = this.dataService
-      .putDynamicAPI(API, postData)
-      .subscribe(
-        (result) => {
-          if (result.response) {
-            if (result.status == "Success") {
-              Swal.fire({
-                title: result.message || "Success",
-                text: "",
-                icon: "success",
-                confirmButtonColor: "#336699",
-                confirmButtonText: "Ok",
-              }).then((result: any) => {
-                if (result.value) {
-                  this.productiondetailsFrom.reset();
-                  this.close("reloadMainGrid");
-                }
-              });
-            }
-          } else {
-            this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
-          }
-        },
-        (err) => alert(err)
-      );
-    this.subscriptions.push(Sub);
   }
-
-  deleteRecord() {
-    if (!this.content.VOCTYPE) {
-      Swal.fire({
-        title: "",
-        text: "Please Select data to delete!",
-        icon: "error",
-        confirmButtonColor: "#336699",
-        confirmButtonText: "Ok",
-      }).then((result: any) => {
-        if (result.value) {
-        }
-      });
-      return;
-    }
-    Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete!",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        let API =
-          "JobProductionMaster/DeleteJobProductionMaster/" +
-          this.productiondetailsFrom.value.branchCode +
-          this.productiondetailsFrom.value.voctype +
-          this.productiondetailsFrom.value.vocno +
-          this.productiondetailsFrom.value.vocdate;
-        let Sub: Subscription = this.dataService
-          .deleteDynamicAPI(API)
-          .subscribe(
-            (result) => {
-              if (result) {
-                if (result.status == "Success") {
-                  Swal.fire({
-                    title: result.message || "Success",
-                    text: "",
-                    icon: "success",
-                    confirmButtonColor: "#336699",
-                    confirmButtonText: "Ok",
-                  }).then((result: any) => {
-                    if (result.value) {
-                      this.productiondetailsFrom.reset();
-                      this.close("reloadMainGrid");
-                    }
-                  });
-                } else {
-                  Swal.fire({
-                    title: result.message || "Error please try again",
-                    text: "",
-                    icon: "error",
-                    confirmButtonColor: "#336699",
-                    confirmButtonText: "Ok",
-                  }).then((result: any) => {
-                    if (result.value) {
-                      this.productiondetailsFrom.reset();
-                      this.close();
-                    }
-                  });
-                }
-              } else {
-                this.commonService.toastErrorByMsgId('MSG1880');// Not Deleted
-              }
-            },
-            (err) => alert(err)
-          );
-        this.subscriptions.push(Sub);
-      }
-    });
+  resetPTFDetails() {
+    this.productiondetailsFrom.reset()
+    this.tableData = []
   }
-
   /**use: validate all lookups to check data exists in db */
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     LOOKUPDATA.SEARCH_VALUE = event.target.value
@@ -683,7 +565,6 @@ export class ProductionEntryDetailsComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
 
-  continue() { }
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {
       this.subscriptions.forEach((subscription) => subscription.unsubscribe()); // unsubscribe all subscription
