@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { MasterSearchModel } from "src/app/shared/data/master-find-model";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { SuntechAPIService } from "src/app/services/suntech-api.service";
@@ -16,6 +16,8 @@ import { SavedataModel } from "../savedata-model";
   styleUrls: ["./production-entry-details.component.scss"],
 })
 export class ProductionEntryDetailsComponent implements OnInit {
+  @Output() saveDetail = new EventEmitter<any>();
+  @Output() closeDetail = new EventEmitter<any>();
   @Input() content!: any;
   divisionMS: any = "ID";
   columnheadTop: any[] = [""];
@@ -26,6 +28,13 @@ export class ProductionEntryDetailsComponent implements OnInit {
   url: any;
   HEADERDETAILS: any;
   editMode: boolean = false;
+  designType: string = 'DIAMOND';
+  userName = this.commonService.userName;
+  branchCode?: String;
+  vocMaxDate = new Date();
+  currentDate = new Date();
+  private subscriptions: Subscription[] = [];
+
   StockDetailData: SavedataModel = {
     DETAIL_FORM_DATA: {},
     DETAIL_METAL_DATA: [],
@@ -34,13 +43,6 @@ export class ProductionEntryDetailsComponent implements OnInit {
     STOCK_COMPONENT_GRID: [],
     STOCK_GROUPED_GRID: [],
   }
-  userName = localStorage.getItem("username");
-  branchCode?: String;
-  vocMaxDate = new Date();
-  currentDate = new Date();
-
-  private subscriptions: Subscription[] = [];
-
   jobnoCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -74,7 +76,6 @@ export class ProductionEntryDetailsComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-
   locationCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -119,7 +120,6 @@ export class ProductionEntryDetailsComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-
   price2CodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -131,7 +131,6 @@ export class ProductionEntryDetailsComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-
   price3CodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -143,7 +142,6 @@ export class ProductionEntryDetailsComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-
   price4CodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -155,7 +153,6 @@ export class ProductionEntryDetailsComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-
   price5CodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -190,29 +187,18 @@ export class ProductionEntryDetailsComponent implements OnInit {
     VIEW_TABLE: true,
   };
 
-
-
-  onFileChanged(event: any) {
-    this.url = event.target.files[0].name
-    console.log(this.url)
-    let reader = new FileReader();
-    if (event.target.files && event.target.files.length > 0) {
-      let file = event.target.files[0];
-      reader.readAsDataURL(file);
-      reader.onload = () => {
-        this.urls = reader.result;
-      };
-    }
-  }
   productiondetailsFrom: FormGroup = this.formBuilder.group({
     VOCNO: [0],
-    jobno: [''],
-    jobnoDesc: [''],
+    SRNO: [0],
+    FLAG: [''],
+    BRANCH_CODE: [''],
+    JOB_NUMBER: [''],
+    JOB_DESCRIPTION: [''],
     JOB_DATE: [''],
-    subjobno: [''],
-    subjobnoDesc: [''],
-    customer: [''],
-    customerDesc: [''],
+    UNQ_JOB_ID: [''],
+    SUB_JOB_DESCRIPTION: [''],
+    CUSTOMER_CODE: [''],
+    CUSTOMER_DESC: [''],
     process: [''],
     processname: [''],
     worker: [''],
@@ -300,7 +286,6 @@ export class ProductionEntryDetailsComponent implements OnInit {
   }
 
   getDesignimagecode() {
-
     let API = 'ImageforJobCad/' + this.productiondetailsFrom.value.PART_CODE;
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
@@ -311,70 +296,58 @@ export class ProductionEntryDetailsComponent implements OnInit {
         this.commonService.toastErrorByMsgId('MSG81451')//Server Error
       })
     this.subscriptions.push(Sub)
-
   }
 
   setInitialLoadValue() {
+    console.log(this.content,'content');
     this.branchCode = this.commonService.branchCode;
     this.HEADERDETAILS = this.content[0].HEADERDETAILS
     this.productiondetailsFrom.controls.VOCDATE.setValue(this.HEADERDETAILS.vocDate)
   }
   customerCodeScpSelected(e: any) {
-    console.log(e);
-    this.productiondetailsFrom.controls.customer.setValue(e.ACCODE);
-    this.productiondetailsFrom.controls.customerDesc.setValue(e.ACCOUNT_HEAD);
+    this.productiondetailsFrom.controls.CUSTOMER_CODE.setValue(e.ACCODE);
+    this.productiondetailsFrom.controls.CUSTOMER_CODE_DESC.setValue(e.ACCOUNT_HEAD);
   }
   karatCodeSelected(e: any) {
-    console.log(e);
     this.productiondetailsFrom.controls.KARAT.setValue(e.KARAT_CODE);
   }
   costCodeSelected(e: any) {
-    console.log(e);
     this.productiondetailsFrom.controls.costcode.setValue(e.COST_CODE);
   }
   prefixCodeSelected(e: any) {
-    console.log(e);
     this.productiondetailsFrom.controls.PREFIX.setValue(e.PREFIX_CODE);
   }
   price1CodeSelected(e: any) {
-    console.log(e);
     this.productiondetailsFrom.controls.price1.setValue(e.PRICE_CODE);
   }
 
   price2CodeSelected(e: any) {
-    console.log(e);
     this.productiondetailsFrom.controls.price2.setValue(e.PRICE_CODE);
   }
 
   price3CodeSelected(e: any) {
-    console.log(e);
     this.productiondetailsFrom.controls.price3.setValue(e.PRICE_CODE);
   }
 
   price4CodeSelected(e: any) {
-    console.log(e);
     this.productiondetailsFrom.controls.price4.setValue(e.PRICE_CODE);
   }
 
   price5CodeSelected(e: any) {
-    console.log(e);
     this.productiondetailsFrom.controls.price5.setValue(e.PRICE_CODE);
   }
 
   designSelected(value: any) {
-    console.log(value);
     this.productiondetailsFrom.controls.DESIGN_CODE.setValue(value.DESIGN_CODE);
     this.productiondetailsFrom.controls.DESIGN_DESCRIPTION.setValue(value.DESIGN_DESCRIPTION);
   }
   priceSchemeValidate(e: any) {
-    console.log('yap')
     this.productiondetailsFrom.controls.pricescheme.setValue(e.PRICE_CODE)
     let API = 'PriceSchemeMaster/GetPriceSchemeMasterList/' + this.productiondetailsFrom.value.pricescheme
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
         this.commonService.closeSnackBarMsg()
         if (result.response) {
-
           let data = result.response;
           this.productiondetailsFrom.controls.price1.setValue(data.PRICE1)
           this.productiondetailsFrom.controls.price2.setValue(data.PRICE2)
@@ -407,20 +380,24 @@ export class ProductionEntryDetailsComponent implements OnInit {
         if (result.status == "Success" && result.dynamicData[0]) {
           let data = result.dynamicData[0]
           if (data[0] && data[0].UNQ_JOB_ID != '') {
-            this.productiondetailsFrom.controls.subjobno.setValue(data[0].UNQ_JOB_ID)
-            this.productiondetailsFrom.controls.subjobnoDesc.setValue(data[0].JOB_DESCRIPTION)
-            this.productiondetailsFrom.controls.JOB_DATE.setValue(data[0].JOB_DATE)
-            this.productiondetailsFrom.controls.DESIGN_CODE.setValue(data[0].DESIGN_CODE)
-            this.productiondetailsFrom.controls.DESIGN_DESCRIPTION.setValue(data[0].DESCRIPTION)
-            this.productiondetailsFrom.controls.JOB_PCS.setValue(data[0].JOB_PCS_TOTAL)
-            this.productiondetailsFrom.controls.customer.setValue(data[0].CUSTOMER_CODE)
+            this.setFormNullToString('JOB_NUMBER', data[0].JOB_NUMBER)
+            this.setFormNullToString('UNQ_JOB_ID', data[0].UNQ_JOB_ID)
+            this.setFormNullToString('JOB_DESCRIPTION', data[0].JOB_DESCRIPTION)
+            this.setFormNullToString('SUB_JOB_DESCRIPTION', data[0].DESCRIPTION)
+            this.setFormNullToString('JOB_DATE', data[0].JOB_DATE)
+            this.setFormNullToString('JOB_PCS', data[0].JOB_PCS_TOTAL)
+            this.setFormNullToString('DESIGN_CODE', data[0].DESIGN_CODE)
+            this.setFormNullToString('CUSTOMER_CODE', data[0].CUSTOMER_CODE)
+            this.setFormNullToString('SEQ_CODE', data[0].SEQ_CODE)
+            this.setFormNullToString('METALLAB_TYPE', data[0].METALLAB_TYPE)
+            this.setFormNullToString('DESIGN_TYPE', data[0].DESIGN_TYPE?.toUpperCase())
+            this.setFormNullToString('METAL_STOCK_CODE', data[0].METAL_STOCK_CODE)
+            this.designType = this.commonService.nullToString(data[0].DESIGN_TYPE?.toUpperCase());
             this.productiondetailsFrom.controls.PREFIX.setValue(data[0].PREFIX)
             this.productiondetailsFrom.controls.PREFIXNO.setValue(data[0].PREFIX_NUMBER)
             this.productiondetailsFrom.controls.costcode.setValue(data[0].COST_CODE)
             this.productiondetailsFrom.controls.PART_CODE.setValue(data[0].DESIGN_CODE)
             this.productiondetailsFrom.controls.partsName.setValue(data[0].DESCRIPTION)
-            // this.productiondetailsFrom.controls.SEQ_CODE.setValue(data[0].SEQ_CODE)
-            // this.productiondetailsFrom.controls.METALLAB_TYPE.setValue(data[0].METALLAB_TYPE)
             this.subJobNumberValidate()
             this.getDesignimagecode()
           } else {
@@ -441,7 +418,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
     let postData = {
       "SPID": "040",
       "parameter": {
-        'strUNQ_JOB_ID': this.productiondetailsFrom.value.subjobno,
+        'strUNQ_JOB_ID': this.productiondetailsFrom.value.UNQ_JOB_ID,
         'strBranchCode': this.commonService.nullToString(this.branchCode),
         'strCurrenctUser': ''
       }
@@ -452,7 +429,6 @@ export class ProductionEntryDetailsComponent implements OnInit {
         this.commonService.closeSnackBarMsg()
         if (result.dynamicData && result.dynamicData[0].length > 0) {
           let data = result.dynamicData[0]
-          console.log(data[0], 'data[0]');
 
           this.productiondetailsFrom.controls.process.setValue(data[0].PROCESS)
           this.productiondetailsFrom.controls.processname.setValue(data[0].PROCESSDESC)
@@ -488,7 +464,8 @@ export class ProductionEntryDetailsComponent implements OnInit {
 
   close(data?: any) {
     //TODO reset forms and data before closing
-    this.activeModal.close(data);
+    // this.activeModal.close(data);
+    this.closeDetail.emit()
   }
 
   opennewdetails() {
@@ -515,11 +492,10 @@ export class ProductionEntryDetailsComponent implements OnInit {
   }
 
   jobnoCodeSelected(e: any) {
-    this.productiondetailsFrom.controls.jobno.setValue(e.job_number);
-    this.productiondetailsFrom.controls.jobnoDesc.setValue(e.job_description);
+    this.productiondetailsFrom.controls.JOB_NUMBER.setValue(e.job_number);
+    this.productiondetailsFrom.controls.JOB_DESCRIPTION.setValue(e.job_description);
     this.jobNumberValidate({ target: { value: e.job_number } })
   }
-
 
   locationCodeSelected(e: any) {
     this.productiondetailsFrom.controls.location.setValue(e.LOCATION_CODE);
@@ -537,127 +513,163 @@ export class ProductionEntryDetailsComponent implements OnInit {
       this.productiondetailsFrom.controls.END_DATE.setValue(new Date(date));
     }
   }
-  formDetailCount: number = 0;
-  formSubmit() {
-    this.formDetailCount += 1
-
-
-    this.StockDetailData.DETAIL_FORM_DATA = this.productiondetailsFrom.value
-    this.close(this.StockDetailData);
-  }
-
-  update() {
-    if (this.productiondetailsFrom.invalid) {
-      this.toastr.error("select all required fields");
-      return;
+  set_JOB_PRODUCTION_SUB_DJ(){}
+  set_JOB_PRODUCTION_DETAIL_DJ(){
+    let form = this.productiondetailsFrom.value
+    let parentForm = this.content[0].HEADERDETAILS
+    return {
+      "UNIQUEID": 0,
+      "SRNO": form.SRNO,
+      "DT_VOCNO": this.commonService.emptyToZero(parentForm.VOCNO),
+      "DT_VOCTYPE": this.commonService.nullToString(parentForm.VOCTYPE),
+      "DT_VOCDATE": this.commonService.formatDateTime(parentForm.VOCDATE),
+      "DT_BRANCH_CODE": this.commonService.nullToString(this.branchCode),
+      "DT_NAVSEQNO": "",
+      "DT_YEARMONTH": this.commonService.nullToString(this.commonService.yearSelected),
+      "JOB_NUMBER": this.commonService.nullToString(form.JOB_NUMBER),
+      "JOB_DATE": this.commonService.formatDateTime(form.JOB_DATE),
+      "JOB_SO_NUMBER": this.commonService.emptyToZero(form.JOB_SO_NUMBER),
+      "UNQ_JOB_ID": this.commonService.nullToString(form.UNQ_JOB_ID),
+      "JOB_DESCRIPTION": this.commonService.emptyToZero(form.JOB_DESCRIPTION),
+      "UNQ_DESIGN_ID": this.commonService.emptyToZero(form.DESIGN_CODE),
+      "DESIGN_CODE": this.commonService.emptyToZero(form.DESIGN_CODE),
+      "PART_CODE": this.commonService.emptyToZero(form.PART_CODE),
+      "DIVCODE": this.commonService.emptyToZero(form.DIVCODE),
+      "PREFIX": this.commonService.nullToString(form.PREFIX),
+      "STOCK_CODE": this.commonService.nullToString(form.STOCK_CODE),
+      "STOCK_DESCRIPTION": this.commonService.nullToString(form.STOCK_DESCRIPTION),
+      "SET_REF": this.commonService.nullToString(form.SETREF),
+      "KARAT_CODE": this.commonService.nullToString(form.KARAT),
+      "MULTI_STOCK_CODE": true,
+      "JOB_PCS": this.commonService.emptyToZero(form.JOB_PCS),
+      "GROSS_WT": this.commonService.emptyToZero(form.GROSS_WT),
+      "METAL_PCS": 0,
+      "METAL_WT": this.commonService.emptyToZero(form.METAL_WT),
+      "STONE_PCS": this.commonService.emptyToZero(form.STONE_PCS),
+      "STONE_WT": this.commonService.emptyToZero(form.STONE_WT),
+      "LOSS_WT": this.commonService.emptyToZero(form.LOSS_WT),
+      "NET_WT": this.commonService.emptyToZero(form.GROSS_WT),
+      "PURITY": this.commonService.emptyToZero(form.PURITY),
+      "PURE_WT": this.commonService.emptyToZero(form.PURE_WT),
+      "RATE_TYPE": this.commonService.nullToString(parentForm.METAL_RATE_TYPE),
+      "METAL_RATE": this.commonService.emptyToZero(parentForm.METAL_RATE),
+      "CURRENCY_CODE": this.commonService.nullToString(parentForm.CURRENCY),
+      "CURRENCY_RATE": this.commonService.emptyToZero(parentForm.CURRENCY_RATE),
+      "METAL_GRM_RATEFC": 0,
+      "METAL_GRM_RATELC": 0,
+      "METAL_AMOUNTFC": 0,
+      "METAL_AMOUNTLC": 0,
+      "MAKING_RATEFC": 0,
+      "MAKING_RATELC": 0,
+      "MAKING_AMOUNTFC": 0,
+      "MAKING_AMOUNTLC": 0,
+      "STONE_RATEFC": 0,
+      "STONE_RATELC": 0,
+      "STONE_AMOUNTFC": 0,
+      "STONE_AMOUNTLC": 0,
+      "LAB_AMOUNTFC": 0,
+      "LAB_AMOUNTLC": 0,
+      "RATEFC": 0,
+      "RATELC": 0,
+      "AMOUNTFC": 0,
+      "AMOUNTLC": 0,
+      "PROCESS_CODE": this.commonService.emptyToZero(form.process),
+      "PROCESS_NAME": this.commonService.emptyToZero(form.processname),
+      "WORKER_CODE": this.commonService.emptyToZero(form.worker),
+      "WORKER_NAME": this.commonService.emptyToZero(form.workername),
+      "IN_DATE": this.commonService.formatDateTime(form.START_DATE),
+      "OUT_DATE": this.commonService.formatDateTime(form.END_DATE),
+      "TIME_TAKEN_HRS": 0,
+      "COST_CODE": "",
+      "WIP_ACCODE": "",
+      "STK_ACCODE": "",
+      "SOH_ACCODE": "",
+      "PROD_PROC": "",
+      "METAL_DIVISION": form.metalValue,
+      "PRICE1PER": form.price1per,
+      "PRICE2PER": form.price2per,
+      "PRICE3PER": form.price3per,
+      "PRICE4PER": form.price4per,
+      "PRICE5PER": form.price5per,
+      "LOCTYPE_CODE": "",
+      "WASTAGE_WT": form.wastage,
+      "WASTAGE_AMTFC": 0,
+      "WASTAGE_AMTLC": 0,
+      "PICTURE_NAME": "",
+      "SELLINGRATE": 0,
+      "LAB_ACCODE": "",
+      "CUSTOMER_CODE": "",
+      "OUTSIDEJOB": true,
+      "METAL_LABAMTFC": 0,
+      "METAL_LABAMTLC": 0,
+      "METAL_LABACCODE": "",
+      "SUPPLIER_REF": form.totalLabour,
+      "TAGLINES": "",
+      "SETTING_CHRG": form.settingChrg,
+      "POLISH_CHRG": form.polishChrg,
+      "RHODIUM_CHRG": form.rhodiumChrg,
+      "LABOUR_CHRG": form.labourChrg,
+      "MISC_CHRG": form.miscChrg,
+      "SETTING_ACCODE": form.settingChrgDesc,
+      "POLISH_ACCODE": form.polishChrgDesc,
+      "RHODIUM_ACCODE": form.rhodiumChrgDesc,
+      "LABOUR_ACCODE": form.labourChrgDesc,
+      "MISC_ACCODE": form.miscChrgDesc,
+      "WAST_ACCODE": form.wastage,
+      "REPAIRJOB": 0,
+      "PRICE1FC": form.price1fc,
+      "PRICE2FC": form.price2fc,
+      "PRICE3FC": form.price3fc,
+      "PRICE4FC": form.price4fc,
+      "PRICE5FC": form.price5fc,
+      "BASE_CONV_RATE": 0,
+      "FROM_STOCK_CODE": "",
+      "TO_STOCK_CODE": "",
+      "JOB_PURITY": 0,
+      "LOSS_PUREWT": 0,
+      "PUDIFF": 0,
+      "STONEDIFF": 0,
+      "CHARGABLEWT": 0,
+      "BARNO": "",
+      "LOTNUMBER": "",
+      "TICKETNO": "",
+      "PROD_PER": 0,
+      "PURITY_PER": 0,
+      "DESIGN_TYPE": "",
+      "BASE_CURR_RATE": 0
     }
-
-    let API =
-      "JobProductionMaster/UpdateJobProductionMaster/";
-    let postData = {
-
-    }
-    let Sub: Subscription = this.dataService
-      .putDynamicAPI(API, postData)
-      .subscribe(
-        (result) => {
-          if (result.response) {
-            if (result.status == "Success") {
-              Swal.fire({
-                title: result.message || "Success",
-                text: "",
-                icon: "success",
-                confirmButtonColor: "#336699",
-                confirmButtonText: "Ok",
-              }).then((result: any) => {
-                if (result.value) {
-                  this.productiondetailsFrom.reset();
-                  this.close("reloadMainGrid");
-                }
-              });
-            }
-          } else {
-            this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
-          }
-        },
-        (err) => alert(err)
-      );
-    this.subscriptions.push(Sub);
   }
+  set_JOB_PRODUCTION_STNMTL_DJ(){}
+  set_JOB_PRODUCTION_LABCHRG_DJ(){}
+  set_JOB_PRODUCTION_METALRATE_DJ(){}
 
-  deleteRecord() {
-    if (!this.content.VOCTYPE) {
-      Swal.fire({
-        title: "",
-        text: "Please Select data to delete!",
-        icon: "error",
-        confirmButtonColor: "#336699",
-        confirmButtonText: "Ok",
-      }).then((result: any) => {
-        if (result.value) {
-        }
-      });
-      return;
+  formSubmit(flag: any) {
+    // if (this.designType == 'METAL') {
+    //   if (this.submitValidateMetal(this.productiondetailsFrom.value)) return;
+    // } else {
+    //   if (this.submitValidations(this.productiondetailsFrom.value)) return;
+    // }
+    this.productiondetailsFrom.controls.FLAG.setValue(flag)
+
+    let detailDataToParent: any = {
+      PRODUCTION_FORMDETAILS: this.productiondetailsFrom.value,
+      TRN_STNMTL_GRID: this.tableData,
+      JOB_PRODUCTION_SUB_DJ: this.set_JOB_PRODUCTION_SUB_DJ(),
+      JOB_PRODUCTION_DETAIL_DJ: this.set_JOB_PRODUCTION_DETAIL_DJ(),
+      JOB_PRODUCTION_STNMTL_DJ: this.set_JOB_PRODUCTION_STNMTL_DJ(),
+      JOB_PRODUCTION_LABCHRG_DJ: this.set_JOB_PRODUCTION_LABCHRG_DJ(),
+      JOB_PRODUCTION_METALRATE_DJ: this.set_JOB_PRODUCTION_METALRATE_DJ(),
     }
-    Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete!",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        let API =
-          "JobProductionMaster/DeleteJobProductionMaster/" +
-          this.productiondetailsFrom.value.branchCode +
-          this.productiondetailsFrom.value.voctype +
-          this.productiondetailsFrom.value.vocno +
-          this.productiondetailsFrom.value.vocdate;
-        let Sub: Subscription = this.dataService
-          .deleteDynamicAPI(API)
-          .subscribe(
-            (result) => {
-              if (result) {
-                if (result.status == "Success") {
-                  Swal.fire({
-                    title: result.message || "Success",
-                    text: "",
-                    icon: "success",
-                    confirmButtonColor: "#336699",
-                    confirmButtonText: "Ok",
-                  }).then((result: any) => {
-                    if (result.value) {
-                      this.productiondetailsFrom.reset();
-                      this.close("reloadMainGrid");
-                    }
-                  });
-                } else {
-                  Swal.fire({
-                    title: result.message || "Error please try again",
-                    text: "",
-                    icon: "error",
-                    confirmButtonColor: "#336699",
-                    confirmButtonText: "Ok",
-                  }).then((result: any) => {
-                    if (result.value) {
-                      this.productiondetailsFrom.reset();
-                      this.close();
-                    }
-                  });
-                }
-              } else {
-                this.commonService.toastErrorByMsgId('MSG1880');// Not Deleted
-              }
-            },
-            (err) => alert(err)
-          );
-        this.subscriptions.push(Sub);
-      }
-    });
+    console.log(detailDataToParent, 'detailDataToParent');
+    this.saveDetail.emit(detailDataToParent);
+    if (flag == 'CONTINUE') {
+      this.resetPTFDetails()
+    }
   }
-
+  resetPTFDetails() {
+    this.productiondetailsFrom.reset()
+    this.tableData = []
+  }
   /**use: validate all lookups to check data exists in db */
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     LOOKUPDATA.SEARCH_VALUE = event.target.value
@@ -682,8 +694,17 @@ export class ProductionEntryDetailsComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
-
-  continue() { }
+  setFormNullToString(formControlName: string, value: any) {
+    this.productiondetailsFrom.controls[formControlName]?.setValue(
+      this.commonService.nullToString(value)
+    )
+    // this.FORM_VALIDATER[formControlName] = this.commonService.nullToString(value)
+  }
+  setFormDecimal(formControlName: string, value: any, Decimal: string) {
+    let val = this.commonService.setCommaSerperatedNumber(value, Decimal)
+    this.productiondetailsFrom.controls[formControlName]?.setValue(val)
+    // this.FORM_VALIDATER[formControlName] = val
+  }
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {
       this.subscriptions.forEach((subscription) => subscription.unsubscribe()); // unsubscribe all subscription

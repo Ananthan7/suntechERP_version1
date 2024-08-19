@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Input, OnInit, ViewChild } from "@angular/core";
 import { MasterSearchModel } from "src/app/shared/data/master-find-model";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { SuntechAPIService } from "src/app/services/suntech-api.service";
@@ -40,7 +40,6 @@ export class ProductionMfgComponent implements OnInit {
     'BARCODEDQTY', 'BARCODEDPCS', 'LASTNO'
   ];
   @Input() content!: any;
-  tableData: any[] = [];
   DetailScreenDataToSave: any[] = [];
   STOCK_FORM_DETAILS: any[] = [];
   STOCK_COMPONENT_GRID: any[] = [];
@@ -56,6 +55,7 @@ export class ProductionMfgComponent implements OnInit {
   companyName = this.commonService.allbranchMaster['BRANCH_NAME']
   private subscriptions: Subscription[] = [];
   editMode: boolean = false;
+  modalReference!: NgbModalRef;
 
   user: MasterSearchModel = {
     PAGENO: 1,
@@ -126,33 +126,23 @@ export class ProductionMfgComponent implements OnInit {
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
   }
-  userDataSelected(value: any) {
-    console.log(value);
-    this.productionFrom.controls.enteredby.setValue(value.UsersName);
-  }
-  branchSelected(e: any) {
-    console.log(e);
-    this.productionFrom.controls.branchto.setValue(e.BRANCH_CODE);
-  }
-  baseCurrencyCodeSelected(e: any) {
-    console.log(e);
-    this.productionFrom.controls.basecurrency.setValue(e.CURRENCY_CODE);
-    this.productionFrom.controls.BASE_CURRENCY_RATE.setValue(e.CONV_RATE);
-  }
+
   // main form
   productionFrom: FormGroup = this.formBuilder.group({
-    voctype: ["", [Validators.required]],
-    vocDate: ["", [Validators.required]],
-    vocno: [1],
-    enteredby: [""],
-    currency: ["", [Validators.required]],
+    VOCTYPE: ["", [Validators.required]],
+    VOCDATE: ["", [Validators.required]],
+    VOCNO: [1],
+    FLAG: [""],
+    SRNO: [''],
+    SMAN: [""],
+    CURRENCY: ["", [Validators.required]],
     CURRENCY_RATE: ["", [Validators.required]],
-    basecurrency: [""],
+    BASE_CURRENCY: [""],
     BASE_CURRENCY_RATE: [""],
     baseConvRate: [""],
-    time: [""],
-    metalrate: [""],
-    metalratetype: [""],
+    TIME: [""],
+    METAL_RATE: [""],
+    METAL_RATE_TYPE: [""],
     branchto: [""],
     narration: [""],
     STONE_INCLUDE: [false],
@@ -164,7 +154,6 @@ export class ProductionMfgComponent implements OnInit {
     private modalService: NgbModal,
     private formBuilder: FormBuilder,
     private dataService: SuntechAPIService,
-    private toastr: ToastrService,
     private commonService: CommonServiceService
   ) { }
 
@@ -176,9 +165,19 @@ export class ProductionMfgComponent implements OnInit {
   setInitialDatas() {
     this.branchCode = this.commonService.branchCode;
     this.yearMonth = this.commonService.yearSelected;
-    this.productionFrom.controls.vocDate.setValue(this.commonService.currentDate)
-    this.productionFrom.controls.voctype.setValue(this.commonService.getqueryParamVocType())
-    this.productionFrom.controls.time.setValue(this.commonService.getTime())
+    this.productionFrom.controls.VOCDATE.setValue(this.commonService.currentDate)
+    this.productionFrom.controls.VOCTYPE.setValue(this.commonService.getqueryParamVocType())
+    this.productionFrom.controls.TIME.setValue(this.commonService.getTime())
+  }
+  userDataSelected(value: any) {
+    this.productionFrom.controls.SMAN.setValue(value.UsersName);
+  }
+  branchSelected(e: any) {
+    this.productionFrom.controls.branchto.setValue(e.BRANCH_CODE);
+  }
+  baseCurrencyCodeSelected(e: any) {
+    this.productionFrom.controls.BASE_CURRENCY.setValue(e.CURRENCY_CODE);
+    this.productionFrom.controls.BASE_CURRENCY_RATE.setValue(e.CONV_RATE);
   }
   /**USE: get rate type on load */
   getRateType() {
@@ -186,26 +185,26 @@ export class ProductionMfgComponent implements OnInit {
 
     if (data[0].WHOLESALE_RATE) {
       let WHOLESALE_RATE = this.commonService.decimalQuantityFormat(data[0].WHOLESALE_RATE, 'RATE')
-      this.productionFrom.controls.metalrate.setValue(WHOLESALE_RATE)
+      this.productionFrom.controls.METAL_RATE.setValue(WHOLESALE_RATE)
     }
-    this.productionFrom.controls.metalratetype.setValue(data[0].RATE_TYPE)
+    this.productionFrom.controls.METAL_RATE_TYPE.setValue(data[0].RATE_TYPE)
   }
   /**USE: Rate type selection */
   rateTypeSelected(event: any) {
-    this.productionFrom.controls.metalratetype.setValue(event.RATE_TYPE)
+    this.productionFrom.controls.METAL_RATE_TYPE.setValue(event.RATE_TYPE)
     let data = this.commonService.RateTypeMasterData.filter((item: any) => item.RATE_TYPE == event.RATE_TYPE)
 
     data.forEach((element: any) => {
       if (element.RATE_TYPE == event.RATE_TYPE) {
         let WHOLESALE_RATE = this.commonService.decimalQuantityFormat(data[0].WHOLESALE_RATE, 'RATE')
-        this.productionFrom.controls.metalrate.setValue(WHOLESALE_RATE)
+        this.productionFrom.controls.METAL_RATE.setValue(WHOLESALE_RATE)
       }
     });
   }
   /**USE: to set currency on selected change*/
   currencyDataSelected(event: any) {
-    this.productionFrom.controls.currency.setValue(event.CURRENCY_CODE)
-    this.setFormDecimal('CURRENCY_RATE',event.CONV_RATE,'RATE')
+    this.productionFrom.controls.CURRENCY.setValue(event.CURRENCY_CODE)
+    this.setFormDecimal('CURRENCY_RATE', event.CONV_RATE, 'RATE')
     // this.setCurrencyRate()
   }
   setFormNullToString(formControlName: string, value: any) {
@@ -222,189 +221,79 @@ export class ProductionMfgComponent implements OnInit {
   /**USE: to set currency from company parameter */
   setCompanyCurrency() {
     let CURRENCY_CODE = this.commonService.getCompanyParamValue('COMPANYCURRENCY')
-    this.productionFrom.controls.currency.setValue(CURRENCY_CODE);
-    this.productionFrom.controls.basecurrency.setValue(CURRENCY_CODE);
-    const CURRENCY_RATE: any[] = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == this.productionFrom.value.currency);
+    this.productionFrom.controls.CURRENCY.setValue(CURRENCY_CODE);
+    this.productionFrom.controls.BASE_CURRENCY.setValue(CURRENCY_CODE);
+    const CURRENCY_RATE: any[] = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == this.productionFrom.value.CURRENCY);
     this.setFormDecimal('BASE_CURRENCY_RATE', CURRENCY_RATE[0].CONV_RATE, 'RATE')
     this.setCurrencyRate()
   }
   /**USE: to set currency from branch currency master */
   setCurrencyRate() {
-    const CURRENCY_RATE: any[] = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == this.productionFrom.value.currency);
+    const CURRENCY_RATE: any[] = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == this.productionFrom.value.CURRENCY);
     if (CURRENCY_RATE.length > 0) {
       this.setFormDecimal('CURRENCY_RATE', CURRENCY_RATE[0].CONV_RATE, 'RATE')
     } else {
-      this.productionFrom.controls.currency.setValue('')
+      this.productionFrom.controls.CURRENCY.setValue('')
       this.productionFrom.controls.CURRENCY_RATE.setValue('')
       this.commonService.toastErrorByMsgId('MSG1531')
     }
-    this.BaseCurrencyRateVisibility(this.productionFrom.value.currency, this.productionFrom.value.CURRENCY_RATE)
+    this.BaseCurrencyRateVisibility(this.productionFrom.value.CURRENCY, this.productionFrom.value.CURRENCY_RATE)
   }
   BaseCurrencyRateVisibility(txtPCurr: any, txtPCurrRate: any) {
-    let ConvRateArr: any = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == this.productionFrom.value.currency && item.CMBRANCH_CODE == this.branchCode)
+    let ConvRateArr: any = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == this.productionFrom.value.CURRENCY && item.CMBRANCH_CODE == this.branchCode)
     let baseConvRate = 1 / ConvRateArr[0].CONV_RATE
     this.productionFrom.controls.baseConvRate.setValue(baseConvRate)
   }
-
-  openProductionEntryDetails(data?: any) {
-    if (data) {
-      data[0].HEADERDETAILS = this.productionFrom.value;
+  selectRowIndex: any;
+  onRowClickHandler(event: any) {
+    this.selectRowIndex = event.data.SRNO
+  }
+  onRowDblClickHandler(event: any) {
+    let selectedData = event.data
+    let detailRow = this.detailData.filter((item: any) => item.SRNO == selectedData.SRNO)
+    this.openProductionEntryDetails(detailRow)
+  }
+  //use open modal of detail screen
+  dataToDetailScreen: any;
+  @ViewChild('productionDetailScreen') public ProductionDetailScreen!: NgbModal;
+  openProductionEntryDetails(dataToChild?: any) {
+    if (dataToChild) {
+      this.productionFrom.controls.FLAG.setValue(this.content.FLAG || 'EDIT')
+      this.productionFrom.controls.SRNO.setValue(dataToChild.SRNO)
+      dataToChild[0].HEADERDETAILS = this.productionFrom.value;
     } else {
-      data = [{ HEADERDETAILS: this.productionFrom.value }]
+      this.productionFrom.controls.FLAG.setValue('ADD')
+      this.productionFrom.controls.SRNO.setValue(0)
+      dataToChild = [{ HEADERDETAILS: this.productionFrom.value }]
     }
-    const modalRef: NgbModalRef = this.modalService.open(
-      ProductionEntryDetailsComponent, {
-      size: "xl",
-      backdrop: true, //'static'
+    console.log(dataToChild, 'data to child');
+    this.dataToDetailScreen = dataToChild
+    this.modalReference = this.modalService.open(this.ProductionDetailScreen, {
+      size: 'xl',
+      backdrop: true,//'static'
       keyboard: false,
-      windowClass: "modal-full-width",
-    });
-    modalRef.componentInstance.content = data;
-
-    modalRef.result.then((responseDetail: SavedataModel) => {
-      if (responseDetail) {
-        console.log(responseDetail, 'data From Detail Screen');
-        //detail screen form data set to save
-        this.setDetailFormDataToSave(responseDetail.DETAIL_FORM_DATA); //headerscreen
-        this.STOCK_FORM_DETAILS = responseDetail.STOCK_FORM_DETAILS; //stockscreen
-        this.STOCK_COMPONENT_GRID = responseDetail.STOCK_COMPONENT_GRID; //stockscreen
-      }
+      windowClass: 'modal-full-width',
     });
   }
-  /*USE: detail screen form data set to save */
-  setDetailFormDataToSave(DETAIL_FORM_DATA: any) {
-    console.log(DETAIL_FORM_DATA, 'DETAIL_FORM_DATA');
-
-    this.DetailScreenDataToSave.push({
-      "UNIQUEID": 0,
-      "SRNO": this.formDetailCount,
-      "DT_VOCNO": this.commonService.emptyToZero(this.productionFrom.value.VOCNO),
-      "DT_VOCTYPE": this.commonService.nullToString(this.productionFrom.value.voctype),
-      "DT_VOCDATE": this.commonService.formatDateTime(this.productionFrom.value.vocDate),
-      "DT_BRANCH_CODE": this.commonService.nullToString(this.branchCode),
-      "DT_NAVSEQNO": "",
-      "DT_YEARMONTH": this.commonService.nullToString(this.commonService.yearSelected),
-      "JOB_NUMBER": this.commonService.nullToString(DETAIL_FORM_DATA.jobno),
-      "JOB_DATE": this.commonService.formatDateTime(DETAIL_FORM_DATA.JOB_DATE),
-      "JOB_SO_NUMBER": this.commonService.emptyToZero(DETAIL_FORM_DATA.JOB_SO_NUMBER),
-      "UNQ_JOB_ID": this.commonService.nullToString(DETAIL_FORM_DATA.subjobno),
-      "JOB_DESCRIPTION": this.commonService.emptyToZero(DETAIL_FORM_DATA.jobnoDesc),
-      "UNQ_DESIGN_ID": this.commonService.emptyToZero(DETAIL_FORM_DATA.DESIGN_CODE),
-      "DESIGN_CODE": this.commonService.emptyToZero(DETAIL_FORM_DATA.DESIGN_CODE),
-      "PART_CODE": this.commonService.emptyToZero(DETAIL_FORM_DATA.PART_CODE),
-      "DIVCODE": this.commonService.emptyToZero(DETAIL_FORM_DATA.DIVCODE),
-      "PREFIX": this.commonService.nullToString(DETAIL_FORM_DATA.PREFIX),
-      "STOCK_CODE": this.commonService.nullToString(DETAIL_FORM_DATA.STOCK_CODE),
-      "STOCK_DESCRIPTION": this.commonService.nullToString(DETAIL_FORM_DATA.STOCK_DESCRIPTION),
-      "SET_REF": this.commonService.nullToString(DETAIL_FORM_DATA.SETREF),
-      "KARAT_CODE": this.commonService.nullToString(DETAIL_FORM_DATA.KARAT),
-      "MULTI_STOCK_CODE": true,
-      "JOB_PCS": this.commonService.emptyToZero(DETAIL_FORM_DATA.JOB_PCS),
-      "GROSS_WT": this.commonService.emptyToZero(DETAIL_FORM_DATA.GROSS_WT),
-      "METAL_PCS": 0,
-      "METAL_WT": this.commonService.emptyToZero(DETAIL_FORM_DATA.METAL_WT),
-      "STONE_PCS": this.commonService.emptyToZero(DETAIL_FORM_DATA.STONE_PCS),
-      "STONE_WT": this.commonService.emptyToZero(DETAIL_FORM_DATA.STONE_WT),
-      "LOSS_WT": this.commonService.emptyToZero(DETAIL_FORM_DATA.LOSS_WT),
-      "NET_WT": this.commonService.emptyToZero(DETAIL_FORM_DATA.GROSS_WT),
-      "PURITY": this.commonService.emptyToZero(DETAIL_FORM_DATA.PURITY),
-      "PURE_WT": this.commonService.emptyToZero(DETAIL_FORM_DATA.PURE_WT),
-      "RATE_TYPE": this.commonService.nullToString(this.productionFrom.value.metalratetype),
-      "METAL_RATE": this.commonService.emptyToZero(this.productionFrom.value.metalrate),
-      "CURRENCY_CODE": this.commonService.nullToString(this.productionFrom.value.currency),
-      "CURRENCY_RATE": this.commonService.emptyToZero(this.productionFrom.value.CURRENCY_RATE),
-      "METAL_GRM_RATEFC": 0,
-      "METAL_GRM_RATELC": 0,
-      "METAL_AMOUNTFC": 0,
-      "METAL_AMOUNTLC": 0,
-      "MAKING_RATEFC": 0,
-      "MAKING_RATELC": 0,
-      "MAKING_AMOUNTFC": 0,
-      "MAKING_AMOUNTLC": 0,
-      "STONE_RATEFC": 0,
-      "STONE_RATELC": 0,
-      "STONE_AMOUNTFC": 0,
-      "STONE_AMOUNTLC": 0,
-      "LAB_AMOUNTFC": 0,
-      "LAB_AMOUNTLC": 0,
-      "RATEFC": 0,
-      "RATELC": 0,
-      "AMOUNTFC": 0,
-      "AMOUNTLC": 0,
-      "PROCESS_CODE": this.commonService.emptyToZero(DETAIL_FORM_DATA.process),
-      "PROCESS_NAME": this.commonService.emptyToZero(DETAIL_FORM_DATA.processname),
-      "WORKER_CODE": this.commonService.emptyToZero(DETAIL_FORM_DATA.worker),
-      "WORKER_NAME": this.commonService.emptyToZero(DETAIL_FORM_DATA.workername),
-      "IN_DATE": this.commonService.formatDateTime(DETAIL_FORM_DATA.START_DATE),
-      "OUT_DATE": this.commonService.formatDateTime(DETAIL_FORM_DATA.END_DATE),
-      "TIME_TAKEN_HRS": 0,
-      "COST_CODE": "",
-      "WIP_ACCODE": "",
-      "STK_ACCODE": "",
-      "SOH_ACCODE": "",
-      "PROD_PROC": "",
-      "METAL_DIVISION": DETAIL_FORM_DATA.metalValue,
-      "PRICE1PER": DETAIL_FORM_DATA.price1per,
-      "PRICE2PER": DETAIL_FORM_DATA.price2per,
-      "PRICE3PER": DETAIL_FORM_DATA.price3per,
-      "PRICE4PER": DETAIL_FORM_DATA.price4per,
-      "PRICE5PER": DETAIL_FORM_DATA.price5per,
-      "LOCTYPE_CODE": "",
-      "WASTAGE_WT": DETAIL_FORM_DATA.wastage,
-      "WASTAGE_AMTFC": 0,
-      "WASTAGE_AMTLC": 0,
-      "PICTURE_NAME": "",
-      "SELLINGRATE": 0,
-      "LAB_ACCODE": "",
-      "CUSTOMER_CODE": "",
-      "OUTSIDEJOB": true,
-      "METAL_LABAMTFC": 0,
-      "METAL_LABAMTLC": 0,
-      "METAL_LABACCODE": "",
-      "SUPPLIER_REF": DETAIL_FORM_DATA.totalLabour,
-      "TAGLINES": "",
-      "SETTING_CHRG": DETAIL_FORM_DATA.settingChrg,
-      "POLISH_CHRG": DETAIL_FORM_DATA.polishChrg,
-      "RHODIUM_CHRG": DETAIL_FORM_DATA.rhodiumChrg,
-      "LABOUR_CHRG": DETAIL_FORM_DATA.labourChrg,
-      "MISC_CHRG": DETAIL_FORM_DATA.miscChrg,
-      "SETTING_ACCODE": DETAIL_FORM_DATA.settingChrgDesc,
-      "POLISH_ACCODE": DETAIL_FORM_DATA.polishChrgDesc,
-      "RHODIUM_ACCODE": DETAIL_FORM_DATA.rhodiumChrgDesc,
-      "LABOUR_ACCODE": DETAIL_FORM_DATA.labourChrgDesc,
-      "MISC_ACCODE": DETAIL_FORM_DATA.miscChrgDesc,
-      "WAST_ACCODE": DETAIL_FORM_DATA.wastage,
-      "REPAIRJOB": 0,
-      "PRICE1FC": DETAIL_FORM_DATA.price1fc,
-      "PRICE2FC": DETAIL_FORM_DATA.price2fc,
-      "PRICE3FC": DETAIL_FORM_DATA.price3fc,
-      "PRICE4FC": DETAIL_FORM_DATA.price4fc,
-      "PRICE5FC": DETAIL_FORM_DATA.price5fc,
-      "BASE_CONV_RATE": 0,
-      "FROM_STOCK_CODE": "",
-      "TO_STOCK_CODE": "",
-      "JOB_PURITY": 0,
-      "LOSS_PUREWT": 0,
-      "PUDIFF": 0,
-      "STONEDIFF": 0,
-      "CHARGABLEWT": 0,
-      "BARNO": "",
-      "LOTNUMBER": "",
-      "TICKETNO": "",
-      "PROD_PER": 0,
-      "PURITY_PER": 0,
-      "DESIGN_TYPE": "",
-      "BASE_CURR_RATE": 0
-    })
-    console.log(this.DetailScreenDataToSave, '111111111111111111111111111');
-  }
-
-  deleteTableData() {
-
-  }
-
-  removedata() {
-    this.tableData.pop();
+  detailData: any[] = []
+  //use: to set the data from child component to post data
+  setValuesToHeaderGrid(DATA: any) {
+    let detailDataToParent = DATA.PRODUCTION_FORMDETAILS
+    if (detailDataToParent.SRNO != 0) {
+      this.DetailScreenDataToSave[detailDataToParent.SRNO - 1] =  DATA.JOB_PROCESS_TRN_DETAIL_DJ
+      this.detailData[detailDataToParent.SRNO - 1] = { SRNO: detailDataToParent.SRNO, ...DATA }
+    } else {
+      // if (this.addItemWithCheck(this.DetailScreenDataToSave, detailDataToParent)) return;
+      DATA.PRODUCTION_FORMDETAILS.SRNO = this.DetailScreenDataToSave.length + 1
+      // DATA.JOB_PROCESS_TRN_DETAIL_DJ.SRNO = this.DetailScreenDataToSave.length + 1
+      this.detailData.push({ SRNO: this.DetailScreenDataToSave.length + 1, ...DATA })
+      this.DetailScreenDataToSave.push(DATA.JOB_PROCESS_TRN_DETAIL_DJ);
+    }
+    // this.editFinalArray(DATA)
+    if (detailDataToParent.FLAG == 'SAVE') this.closeDetailScreen();
+    if (detailDataToParent.FLAG == 'CONTINUE') {
+      this.commonService.showSnackBarMsg('Details added grid successfully')
+    };
   }
 
   /**USE: production metal rate data setup */
@@ -456,19 +345,19 @@ export class ProductionMfgComponent implements OnInit {
   }
 
   submitValidations(form: any) {
-    if (this.commonService.nullToString(form.voctype) == '') {
-      this.commonService.toastErrorByMsgId('MSG1939')// voctype code CANNOT BE EMPTY
+    if (this.commonService.nullToString(form.VOCTYPE) == '') {
+      this.commonService.toastErrorByMsgId('MSG1939')// VOCTYPE code CANNOT BE EMPTY
       return true
     }
-    if (this.commonService.nullToString(form.vocDate) == '') {
-      this.commonService.toastErrorByMsgId('MSG1331')// vocDate code CANNOT BE EMPTY
+    if (this.commonService.nullToString(form.VOCDATE) == '') {
+      this.commonService.toastErrorByMsgId('MSG1331')// VOCDATE code CANNOT BE EMPTY
       return true
     }
-    if (this.commonService.nullToString(form.vocno) == '') {
-      this.commonService.toastErrorByMsgId('MSG3661')// vocno code CANNOT BE EMPTY
+    if (this.commonService.nullToString(form.VOCNO) == '') {
+      this.commonService.toastErrorByMsgId('MSG3661')// VOCNO code CANNOT BE EMPTY
       return true
     }
-    if (this.commonService.nullToString(form.currency) == '') {
+    if (this.commonService.nullToString(form.CURRENCY) == '') {
       this.commonService.toastErrorByMsgId('MSG1172')// currency code CANNOT BE EMPTY
       return true
     }
@@ -478,39 +367,20 @@ export class ProductionMfgComponent implements OnInit {
     }
     return false;
   }
-
-
-  formSubmit() {
-    console.log(this.DetailScreenDataToSave)
-    if (this.content && this.content.FLAG == "EDIT") {
-      this.update();
-      return;
-    }
-    if (this.submitValidations(this.productionFrom.value)) return;
-
-
-    // if (this.productionFrom.invalid) {
-    //   this.toastr.error("select all required fields");
-    //   return;
-    // }
-
-    // if(this.DetailScreenDataToSave.length == 0){
-    //   this.toastr.error("Enter the Production Entry Details");
-    //   return;
-    // }
-
-    let postData = {
+  setPostData(){
+    let form = this.productionFrom.value
+    return {
       "MID": 0,
-      "VOCTYPE": this.commonService.nullToString(this.productionFrom.value.voctype),
+      "VOCTYPE": this.commonService.nullToString(form.VOCTYPE),
       "BRANCH_CODE": this.commonService.nullToString(this.branchCode),
-      "VOCNO": this.commonService.nullToString(this.productionFrom.value.vocno),
-      "VOCDATE": this.commonService.formatDateTime(this.productionFrom.value.vocDate),
+      "VOCNO": this.commonService.nullToString(form.VOCNO),
+      "VOCDATE": this.commonService.formatDateTime(form.VOCDATE),
       "YEARMONTH": this.commonService.nullToString(this.yearMonth),
       "DOCTIME": this.commonService.formatDateTime(this.currentDate),
-      "CURRENCY_CODE": this.commonService.nullToString(this.productionFrom.value.currency),
-      "CURRENCY_RATE": this.commonService.emptyToZero(this.productionFrom.value.CURRENCY_RATE),
-      "METAL_RATE_TYPE": this.commonService.nullToString(this.productionFrom.value.metalratetype),
-      "METAL_RATE": this.commonService.emptyToZero(this.productionFrom.value.metalrate),
+      "CURRENCY_CODE": this.commonService.nullToString(form.CURRENCY),
+      "CURRENCY_RATE": this.commonService.emptyToZero(form.CURRENCY_RATE),
+      "METAL_RATE_TYPE": this.commonService.nullToString(form.METAL_RATE_TYPE),
+      "METAL_RATE": this.commonService.emptyToZero(form.METAL_RATE),
       "TOTAL_PCS": 0,
       "TOTAL_GROSS_WT": 0,
       "TOTAL_METAL_PCS": 0,
@@ -529,16 +399,16 @@ export class ProductionMfgComponent implements OnInit {
       "TOTAL_AMOUNTLC": 0,
       "TOTAL_WASTAGE_AMTLC": 0,
       "TOTAL_WASTAGE_AMTFC": 0,
-      "SMAN": this.commonService.nullToString(this.productionFrom.value.enteredby),
-      "REMARKS": this.commonService.nullToString(this.productionFrom.value.narration),
+      "SMAN": this.commonService.nullToString(form.SMAN),
+      "REMARKS": this.commonService.nullToString(form.narration),
       "NAVSEQNO": this.commonService.emptyToZero(this.yearMonth),
-      "FIX_UNFIX": this.productionFrom.value.UnfixTransaction,
-      "STONE_INCLUDE": this.productionFrom.value.STONE_INCLUDE,
+      "FIX_UNFIX": form.UnfixTransaction,
+      "STONE_INCLUDE": form.STONE_INCLUDE,
       "AUTOPOSTING": false,
       "POSTDATE": "",
-      "BASE_CURRENCY": this.commonService.nullToString(this.productionFrom.value.basecurrency),
-      "BASE_CURR_RATE": this.commonService.emptyToZero(this.productionFrom.value.BASE_CURRENCY_RATE),
-      "BASE_CONV_RATE": this.commonService.emptyToZero(this.productionFrom.value.baseConvRate),
+      "BASE_CURRENCY": this.commonService.nullToString(form.BASE_CURRENCY),
+      "BASE_CURR_RATE": this.commonService.emptyToZero(form.BASE_CURRENCY_RATE),
+      "BASE_CONV_RATE": this.commonService.emptyToZero(form.baseConvRate),
       "PRINT_COUNT": 0,
       "INTER_BRANCH": "",
       "PRINT_COUNT_ACCOPY": 0,
@@ -550,7 +420,16 @@ export class ProductionMfgComponent implements OnInit {
       "JOB_PRODUCTION_LABCHRG_DJ": this.labourChargeDetailToSave,
       "JOB_PRODUCTION_METALRATE_DJ": this.productionMetalRateToSave
     }
+  }
 
+  formSubmit() {
+    if (this.content && this.content.FLAG == "EDIT") {
+      this.update();
+      return;
+    }
+    if (this.submitValidations(this.productionFrom.value)) return;
+
+    let postData = this.setPostData()
     let Sub: Subscription = this.dataService
       .postDynamicAPI("JobProductionMaster/InsertJobProductionMaster", postData)
       .subscribe(
@@ -564,8 +443,6 @@ export class ProductionMfgComponent implements OnInit {
               confirmButtonText: "Ok",
             }).then((result: any) => {
               if (result.value) {
-                this.productionFrom.reset();
-                this.tableData = [];
                 this.close("reloadMainGrid");
               }
             });
@@ -588,7 +465,7 @@ export class ProductionMfgComponent implements OnInit {
     if (this.submitValidations(this.productionFrom.value)) return;
 
 
-    let API = "JobProductionMaster/UpdateJobProductionMaster/" + this.productionFrom.value.branchCode + this.productionFrom.value.voctype + this.productionFrom.value.vocno + this.productionFrom.value.vocdate;
+    let API = "JobProductionMaster/UpdateJobProductionMaster/" + this.productionFrom.value.branchCode + this.productionFrom.value.VOCTYPE + this.productionFrom.value.VOCNO + this.productionFrom.value.vocdate;
     let postData = {}
 
     let Sub: Subscription = this.dataService
@@ -604,8 +481,6 @@ export class ProductionMfgComponent implements OnInit {
               confirmButtonText: "Ok",
             }).then((result: any) => {
               if (result.value) {
-                this.productionFrom.reset();
-                this.tableData = [];
                 this.close("reloadMainGrid");
               }
             });
@@ -639,8 +514,8 @@ export class ProductionMfgComponent implements OnInit {
   }
   deleteConfirmAPi() {
     let API = "JobProductionMaster/DeleteJobProductionMaster/" +
-      this.productionFrom.value.branchCode + this.productionFrom.value.voctype +
-      this.productionFrom.value.vocno + this.productionFrom.value.vocdate;
+      this.productionFrom.value.branchCode + this.productionFrom.value.VOCTYPE +
+      this.productionFrom.value.VOCNO + this.productionFrom.value.vocdate;
     let Sub: Subscription = this.dataService
       .deleteDynamicAPI(API)
       .subscribe(
@@ -655,8 +530,6 @@ export class ProductionMfgComponent implements OnInit {
                 confirmButtonText: "Ok",
               }).then((result: any) => {
                 if (result.value) {
-                  this.productionFrom.reset();
-                  this.tableData = [];
                   this.close("reloadMainGrid");
                 }
               });
@@ -704,6 +577,38 @@ export class ProductionMfgComponent implements OnInit {
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
+  }
+  closeDetailScreen() {
+    this.modalReference.close()
+  }
+  deleteTableData(): void {
+    if (this.selectRowIndex == undefined || this.selectRowIndex == null) {
+      this.commonService.toastErrorByMsgId('MSG1458') //No record is selected.
+      return
+    }
+    this.showConfirmationDialog().then((result) => {
+      if (result.isConfirmed) {
+        this.DetailScreenDataToSave = this.DetailScreenDataToSave.filter((item: any) => item.SRNO != this.selectRowIndex)
+        this.detailData = this.detailData.filter((item: any) => item.SRNO != this.selectRowIndex)
+        this.reCalculateSRNO()
+      }
+    }
+    )
+  }
+  reCalculateSRNO() {
+    this.DetailScreenDataToSave.forEach((item, index) => item.SRNO = index + 1)
+    this.detailData.forEach((item: any, index: any) => item.SRNO = index + 1)
+  }
+  showConfirmationDialog(): Promise<any> {
+    return Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete!'
+    });
   }
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {
