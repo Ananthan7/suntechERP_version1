@@ -17,7 +17,63 @@ import { MasterSearchComponent } from 'src/app/shared/common/master-search/maste
 export class StoneReturnComponent implements OnInit {
   @ViewChild('stoneReturnDetailScreen') public stoneReturnDetailComponent!: NgbModal;
   @ViewChild('overlayenterdBySearch') overlayenterdBySearch! : MasterSearchComponent;
-  columnhead: any[] = ['SRNO', 'VOCNO', 'VOCTYPE', 'VOCDATE', 'JOB NUMBER', 'JOB DATE', 'JOB SO', 'UNQ JOB ID', 'JOB DESCRIPTION', 'BRANCH'];
+  columnhead: any[] = [
+    { title: 'SRNO', field: 'SRNO', format: '', alignment: 'center' },
+    { title: 'VOCNO', field: 'VOCNO', format: '', alignment: 'left' },
+    { title: 'VOCTYPE', field: 'VOCTYPE', format: '', alignment: 'left' },
+    { title: 'VOCDATE', field: 'VOCDATE', format: '', alignment: 'left' },
+    { title: 'JOB NUMBER', field: 'JOB_NUMBER', format: '', alignment: 'left' },
+    { title: 'JOB DATE', field: 'JOB_DATE', format: '', alignment: 'left' },
+    { title: 'JOB SO', field: 'JOB_SO_NUMBER', format: '', alignment: 'left' },
+    { title: 'UNQ JOB ID', field: 'UNQ_JOB_ID', format: '', alignment: 'left' },
+    { title: 'BRANCH', field: 'BRANCH_CODE', format: '', alignment: 'left' },
+    { title: 'DESIGN CODE', field: 'DESIGN_CODE', format: '', alignment: 'left' },
+    { title: 'DIV CODE', field: 'DIVCODE', format: '', alignment: 'left' },
+    { title: 'STOCK CODE', field: 'STOCK_CODE', format: '', alignment: 'left' },
+    { title: 'STOCK DESCRIPTION', field: 'STOCK_DESCRIPTION', format: '', alignment: 'left' },
+    { title: 'SIEVE', field: 'SIEVE', format: '', alignment: 'left' },
+    { title: 'SIEVE SET', field: 'SIEVE_SET', format: '', alignment: 'left' },
+    { title: 'SHAPE', field: 'SHAPE', format: '', alignment: 'left' },
+    { title: 'COLOR', field: 'COLOR', format: '', alignment: 'left' },
+    { title: 'CLARITY', field: 'CLARITY', format: '', alignment: 'left' },
+    { title: 'SIZE', field: 'SIZE', format: '', alignment: 'left' },
+    { title: 'GROSS WT', field: 'GROSS_WT', format: '', alignment: 'left' },
+    { title: 'CURRENY CODE', field: 'CURRENY_CODE', format: '', alignment: 'left' },
+    { title: 'CURRENY RATE', field: 'CURRENY_RATE', format: '', alignment: 'left' },
+    { title: 'RATEFC', field: 'RATEFC', format: '', alignment: 'left' },
+    { title: 'RATELC', field: 'RATELC', format: '', alignment: 'left' },
+    { title: 'AMOUNTFC', field: 'AMOUNTFC', format: '', alignment: 'left' },
+    { title: 'AMOUNTLC', field: 'AMOUNTLC', format: '', alignment: 'left' },
+    { title: 'PROESS CODE', field: 'PROESS_CODE', format: '', alignment: 'left' },
+    { title: 'PROESS NAME', field: 'PROESS_NAME', format: '', alignment: 'left' },
+    { title: 'WORKER CODE', field: 'WORKER_CODE', format: '', alignment: 'left' },
+    { title: 'WORKER NAME', field: 'WORKER_NAME', format: '', alignment: 'left' },
+    { title: 'WIP ACCOUNT', field: 'WIP_ACCOUNT', format: '', alignment: 'left' },
+    { title: 'LOCTYPE CODE', field: 'LOCTYPE_CODE', format: '', alignment: 'left' },
+    { title: 'STOCK CODE BRK', field: 'STOCK_CODE_BRK', format: '', alignment: 'left' },
+    { title: 'WASTAGE QTY', field: 'WASTAGE_QTY', format: '', alignment: 'left' },
+    { title: 'WASTAGE AMT', field: 'WASTAGE_AMT', format: '', alignment: 'left' },
+    { title: 'WASTAGE TOTAL', field: 'WASTAGE_TOTAL', format: '', alignment: 'left' },
+    { title: 'NAVSEQNO', field: 'NAVSEQNO', format: '', alignment: 'left' },
+    { title: 'YEARMONTH', field: 'YEARMONTH', format: '', alignment: 'left' },
+    { title: 'DOCTIME', field: 'DOCTIME', format: '', alignment: 'left' },
+    { title: 'SMAN', field: 'SMAN', format: '', alignment: 'left' },
+    { title: 'REMARK', field: 'REMARK', format: '', alignment: 'left' },
+    { title: 'TOTAL GROSS WT', field: 'TOTAL_GROSS_WT', format: '', alignment: 'left' },
+    { title: 'TOTAL AMOUNT FC', field: 'TOTAL_AMOUNT_FC', format: '', alignment: 'left' },
+    { title: 'TOTAL AMOUNT LC', field: 'TOTAL_AMOUNT_LC', format: '', alignment: 'left' },
+    { title: 'ISBROCKEN', field: 'ISBROCKEN', format: '', alignment: 'left' },
+    { title: 'BASE CONV RATE', field: 'BASE_CONV_RATE', format: '', alignment: 'left' },
+    { title: 'DT BRANCH CODE', field: 'DT_BRANCH_CODE', format: '', alignment: 'left' },
+    { title: 'DT VOCTYPE', field: 'DT_VOCTYPE', format: '', alignment: 'left' },
+    { title: 'DT VOCNO', field: 'DT_VOCNO', format: '', alignment: 'left' },
+    { title: 'DT YEARMONTH', field: 'DT_YEARMONTH,', format: '', alignment: 'left' },
+    { title: 'RET TO DESC', field: 'RET_TO_DESC', format: '', alignment: 'left' },
+    { title: 'RET TO', field: 'RET_TO', format: '', alignment: 'left' },
+    { title: 'ISMISSING', field: 'ISMISSING', format: '', alignment: 'left' },
+    { title: 'SUB STOCK CODE', field: 'SUB_STOCK_CODE', format: '', alignment: 'left' },
+
+  ];
   @Input() content!: any;
   tableData: any[] = [];
   stoneReturnData: any[] = [];
@@ -126,6 +182,9 @@ export class StoneReturnComponent implements OnInit {
       if (this.content.FLAG == 'EDIT') {
         this.viewMode = true;
         this.LOCKVOUCHERNO = true;
+      }
+      if (this.content.FLAG == 'DELETE') {
+        this.deleteClicked()
       }
       if (this.content?.FLAG) {
         this.stonereturnFrom.controls.FLAG.setValue(this.content.FLAG)
@@ -311,12 +370,12 @@ export class StoneReturnComponent implements OnInit {
   closeDetailScreen() {
     this.modalReference.close()
   }
-  deleteTableData(): void {
-    console.log(this.selectedKey, 'data')
-    this.selectedKey.forEach((element: any) => {
-      this.stoneReturnData.splice(element.SRNO - 1, 1)
-    })
-  }
+  // deleteTableData(): void {
+  //   console.log(this.selectedKey, 'data')
+  //   this.selectedKey.forEach((element: any) => {
+  //     this.stoneReturnData.splice(element.SRNO - 1, 1)
+  //   })
+  // }
   onSelectionChanged(event: any) {
     this.selectedKey = event.selectedRowKeys;
     console.log(this.selectedKey, 'srno')
@@ -508,21 +567,56 @@ export class StoneReturnComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
 
-  deleteRecord() {
-    if (!this.content.VOCTYPE) {
-      Swal.fire({
-        title: '',
-        text: 'Please Select data to delete!',
-        icon: 'error',
-        confirmButtonColor: '#336699',
-        confirmButtonText: 'Ok'
-      }).then((result: any) => {
-        if (result.value) {
-        }
-      });
+  deleteTableData(): void {
+    if (this.selectRowIndex == undefined || this.selectRowIndex == null) {
+      this.commonService.toastErrorByMsgId('MSG1458') //No record is selected.
       return
     }
-    Swal.fire({
+    this.showConfirmationDialog().then((result) => {
+      if (result.isConfirmed) {
+        this.tableData = this.tableData.filter((item: any) => item.SRNO != this.selectRowIndex)
+        this.detailData = this.detailData.filter((item: any) => item.SRNO != this.selectRowIndex)
+        this.reCalculateSRNO()
+      }
+    }
+    )
+  }
+  reCalculateSRNO() {
+    this.tableData.forEach((item, index) => item.SRNO = index + 1)
+    this.detailData.forEach((item: any, index: any) => item.SRNO = index + 1)
+  }
+
+  deleteClicked() {
+    if (!this.content.VOCTYPE) {
+      this.commonService.showSnackBarMsg('MSG1632')
+      return
+    }
+    this.showConfirmationDialog().then((result) => {
+      if (result.isConfirmed) {
+        let API = 'JobStoneReturnMasterDJ/DeleteJobStoneReturnMasterDJ/' +
+          this.content?.BRANCH_CODE + '/' +
+          this.content?.VOCTYPE + '/' +
+          this.content?.VOCNO + '/' +
+          this.content?.YEARMONTH
+        this.commonService.showSnackBarMsg('MSG81447')
+        let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
+          .subscribe((result) => {
+            this.commonService.closeSnackBarMsg()
+            if (result && result.status == "Success") {
+              this.showSuccessDialog(this.commonService.getMsgByID('MSG81450'))
+            } else {
+              this.commonService.showSnackBarMsg('MSG1531')
+            }
+          }, err => {
+            this.commonService.closeSnackBarMsg()
+            this.commonService.showSnackBarMsg('MSG1531')
+          })
+        this.subscriptions.push(Sub)
+      }
+    });
+  }
+  showConfirmationDialog(): Promise<any> {
+    return Swal.fire({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",
       icon: 'warning',
@@ -530,47 +624,17 @@ export class StoneReturnComponent implements OnInit {
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: 'Yes, delete!'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        let API = 'JobStoneReturnMasterDJ/DeleteJobStoneReturnMasterDJ/' + this.stonereturnFrom.value.branchCode + this.stonereturnFrom.value.VOCTYPE + this.stonereturnFrom.value.VOCNO + this.stonereturnFrom.value.YEARMONTH
-        let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
-          .subscribe((result) => {
-            if (result) {
-              if (result.status == "Success") {
-                Swal.fire({
-                  title: result.message || 'Success',
-                  text: '',
-                  icon: 'success',
-                  confirmButtonColor: '#336699',
-                  confirmButtonText: 'Ok'
-                }).then((result: any) => {
-                  if (result.value) {
-                    this.stonereturnFrom.reset()
-                    this.tableData = []
-                    this.close('reloadMainGrid')
-                  }
-                });
-              } else {
-                Swal.fire({
-                  title: result.message || 'Error please try again',
-                  text: '',
-                  icon: 'error',
-                  confirmButtonColor: '#336699',
-                  confirmButtonText: 'Ok'
-                }).then((result: any) => {
-                  if (result.value) {
-                    this.stonereturnFrom.reset()
-                    this.tableData = []
-                    this.close()
-                  }
-                });
-              }
-            } else {
-              this.commonService.toastErrorByMsgId('MSG1880');// Not Deleted
-            }
-          }, err => alert(err))
-        this.subscriptions.push(Sub)
-      }
+    });
+  }
+  showSuccessDialog(message: string) {
+    Swal.fire({
+      title: message,
+      text: '',
+      icon: 'success',
+      confirmButtonColor: '#336699',
+      confirmButtonText: 'Ok'
+    }).then((result: any) => {
+      this.close('reloadMainGrid')
     });
   }
   showOverleyPanel(event: any, formControlName: string) {
