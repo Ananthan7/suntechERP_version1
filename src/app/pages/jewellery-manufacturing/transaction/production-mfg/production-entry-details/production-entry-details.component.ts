@@ -189,14 +189,16 @@ export class ProductionEntryDetailsComponent implements OnInit {
 
   productiondetailsFrom: FormGroup = this.formBuilder.group({
     VOCNO: [0],
+    SRNO: [0],
     FLAG: [''],
-    jobno: [''],
-    jobnoDesc: [''],
+    BRANCH_CODE: [''],
+    JOB_NUMBER: [''],
+    JOB_DESCRIPTION: [''],
     JOB_DATE: [''],
-    subjobno: [''],
-    subjobnoDesc: [''],
-    customer: [''],
-    customerDesc: [''],
+    UNQ_JOB_ID: [''],
+    SUB_JOB_DESCRIPTION: [''],
+    CUSTOMER_CODE: [''],
+    CUSTOMER_DESC: [''],
     process: [''],
     processname: [''],
     worker: [''],
@@ -297,13 +299,14 @@ export class ProductionEntryDetailsComponent implements OnInit {
   }
 
   setInitialLoadValue() {
+    console.log(this.content,'content');
     this.branchCode = this.commonService.branchCode;
     this.HEADERDETAILS = this.content[0].HEADERDETAILS
     this.productiondetailsFrom.controls.VOCDATE.setValue(this.HEADERDETAILS.vocDate)
   }
   customerCodeScpSelected(e: any) {
-    this.productiondetailsFrom.controls.customer.setValue(e.ACCODE);
-    this.productiondetailsFrom.controls.customerDesc.setValue(e.ACCOUNT_HEAD);
+    this.productiondetailsFrom.controls.CUSTOMER_CODE.setValue(e.ACCODE);
+    this.productiondetailsFrom.controls.CUSTOMER_CODE_DESC.setValue(e.ACCOUNT_HEAD);
   }
   karatCodeSelected(e: any) {
     this.productiondetailsFrom.controls.KARAT.setValue(e.KARAT_CODE);
@@ -377,20 +380,24 @@ export class ProductionEntryDetailsComponent implements OnInit {
         if (result.status == "Success" && result.dynamicData[0]) {
           let data = result.dynamicData[0]
           if (data[0] && data[0].UNQ_JOB_ID != '') {
-            this.productiondetailsFrom.controls.subjobno.setValue(data[0].UNQ_JOB_ID)
-            this.productiondetailsFrom.controls.subjobnoDesc.setValue(data[0].JOB_DESCRIPTION)
-            this.productiondetailsFrom.controls.JOB_DATE.setValue(data[0].JOB_DATE)
-            this.productiondetailsFrom.controls.DESIGN_CODE.setValue(data[0].DESIGN_CODE)
-            this.productiondetailsFrom.controls.DESIGN_DESCRIPTION.setValue(data[0].DESCRIPTION)
-            this.productiondetailsFrom.controls.JOB_PCS.setValue(data[0].JOB_PCS_TOTAL)
-            this.productiondetailsFrom.controls.customer.setValue(data[0].CUSTOMER_CODE)
+            this.setFormNullToString('JOB_NUMBER', data[0].JOB_NUMBER)
+            this.setFormNullToString('UNQ_JOB_ID', data[0].UNQ_JOB_ID)
+            this.setFormNullToString('JOB_DESCRIPTION', data[0].JOB_DESCRIPTION)
+            this.setFormNullToString('SUB_JOB_DESCRIPTION', data[0].DESCRIPTION)
+            this.setFormNullToString('JOB_DATE', data[0].JOB_DATE)
+            this.setFormNullToString('JOB_PCS', data[0].JOB_PCS_TOTAL)
+            this.setFormNullToString('DESIGN_CODE', data[0].DESIGN_CODE)
+            this.setFormNullToString('CUSTOMER_CODE', data[0].CUSTOMER_CODE)
+            this.setFormNullToString('SEQ_CODE', data[0].SEQ_CODE)
+            this.setFormNullToString('METALLAB_TYPE', data[0].METALLAB_TYPE)
+            this.setFormNullToString('DESIGN_TYPE', data[0].DESIGN_TYPE?.toUpperCase())
+            this.setFormNullToString('METAL_STOCK_CODE', data[0].METAL_STOCK_CODE)
+            this.designType = this.commonService.nullToString(data[0].DESIGN_TYPE?.toUpperCase());
             this.productiondetailsFrom.controls.PREFIX.setValue(data[0].PREFIX)
             this.productiondetailsFrom.controls.PREFIXNO.setValue(data[0].PREFIX_NUMBER)
             this.productiondetailsFrom.controls.costcode.setValue(data[0].COST_CODE)
             this.productiondetailsFrom.controls.PART_CODE.setValue(data[0].DESIGN_CODE)
             this.productiondetailsFrom.controls.partsName.setValue(data[0].DESCRIPTION)
-            // this.productiondetailsFrom.controls.SEQ_CODE.setValue(data[0].SEQ_CODE)
-            // this.productiondetailsFrom.controls.METALLAB_TYPE.setValue(data[0].METALLAB_TYPE)
             this.subJobNumberValidate()
             this.getDesignimagecode()
           } else {
@@ -411,7 +418,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
     let postData = {
       "SPID": "040",
       "parameter": {
-        'strUNQ_JOB_ID': this.productiondetailsFrom.value.subjobno,
+        'strUNQ_JOB_ID': this.productiondetailsFrom.value.UNQ_JOB_ID,
         'strBranchCode': this.commonService.nullToString(this.branchCode),
         'strCurrenctUser': ''
       }
@@ -485,11 +492,10 @@ export class ProductionEntryDetailsComponent implements OnInit {
   }
 
   jobnoCodeSelected(e: any) {
-    this.productiondetailsFrom.controls.jobno.setValue(e.job_number);
-    this.productiondetailsFrom.controls.jobnoDesc.setValue(e.job_description);
+    this.productiondetailsFrom.controls.JOB_NUMBER.setValue(e.job_number);
+    this.productiondetailsFrom.controls.JOB_DESCRIPTION.setValue(e.job_description);
     this.jobNumberValidate({ target: { value: e.job_number } })
   }
-
 
   locationCodeSelected(e: any) {
     this.productiondetailsFrom.controls.location.setValue(e.LOCATION_CODE);
@@ -508,7 +514,131 @@ export class ProductionEntryDetailsComponent implements OnInit {
     }
   }
   set_JOB_PRODUCTION_SUB_DJ(){}
-  set_JOB_PRODUCTION_DETAIL_DJ(){}
+  set_JOB_PRODUCTION_DETAIL_DJ(){
+    let form = this.productiondetailsFrom.value
+    let parentForm = this.content[0].HEADERDETAILS
+    return {
+      "UNIQUEID": 0,
+      "SRNO": form.SRNO,
+      "DT_VOCNO": this.commonService.emptyToZero(parentForm.VOCNO),
+      "DT_VOCTYPE": this.commonService.nullToString(parentForm.VOCTYPE),
+      "DT_VOCDATE": this.commonService.formatDateTime(parentForm.VOCDATE),
+      "DT_BRANCH_CODE": this.commonService.nullToString(this.branchCode),
+      "DT_NAVSEQNO": "",
+      "DT_YEARMONTH": this.commonService.nullToString(this.commonService.yearSelected),
+      "JOB_NUMBER": this.commonService.nullToString(form.JOB_NUMBER),
+      "JOB_DATE": this.commonService.formatDateTime(form.JOB_DATE),
+      "JOB_SO_NUMBER": this.commonService.emptyToZero(form.JOB_SO_NUMBER),
+      "UNQ_JOB_ID": this.commonService.nullToString(form.UNQ_JOB_ID),
+      "JOB_DESCRIPTION": this.commonService.emptyToZero(form.JOB_DESCRIPTION),
+      "UNQ_DESIGN_ID": this.commonService.emptyToZero(form.DESIGN_CODE),
+      "DESIGN_CODE": this.commonService.emptyToZero(form.DESIGN_CODE),
+      "PART_CODE": this.commonService.emptyToZero(form.PART_CODE),
+      "DIVCODE": this.commonService.emptyToZero(form.DIVCODE),
+      "PREFIX": this.commonService.nullToString(form.PREFIX),
+      "STOCK_CODE": this.commonService.nullToString(form.STOCK_CODE),
+      "STOCK_DESCRIPTION": this.commonService.nullToString(form.STOCK_DESCRIPTION),
+      "SET_REF": this.commonService.nullToString(form.SETREF),
+      "KARAT_CODE": this.commonService.nullToString(form.KARAT),
+      "MULTI_STOCK_CODE": true,
+      "JOB_PCS": this.commonService.emptyToZero(form.JOB_PCS),
+      "GROSS_WT": this.commonService.emptyToZero(form.GROSS_WT),
+      "METAL_PCS": 0,
+      "METAL_WT": this.commonService.emptyToZero(form.METAL_WT),
+      "STONE_PCS": this.commonService.emptyToZero(form.STONE_PCS),
+      "STONE_WT": this.commonService.emptyToZero(form.STONE_WT),
+      "LOSS_WT": this.commonService.emptyToZero(form.LOSS_WT),
+      "NET_WT": this.commonService.emptyToZero(form.GROSS_WT),
+      "PURITY": this.commonService.emptyToZero(form.PURITY),
+      "PURE_WT": this.commonService.emptyToZero(form.PURE_WT),
+      "RATE_TYPE": this.commonService.nullToString(parentForm.METAL_RATE_TYPE),
+      "METAL_RATE": this.commonService.emptyToZero(parentForm.METAL_RATE),
+      "CURRENCY_CODE": this.commonService.nullToString(parentForm.CURRENCY),
+      "CURRENCY_RATE": this.commonService.emptyToZero(parentForm.CURRENCY_RATE),
+      "METAL_GRM_RATEFC": 0,
+      "METAL_GRM_RATELC": 0,
+      "METAL_AMOUNTFC": 0,
+      "METAL_AMOUNTLC": 0,
+      "MAKING_RATEFC": 0,
+      "MAKING_RATELC": 0,
+      "MAKING_AMOUNTFC": 0,
+      "MAKING_AMOUNTLC": 0,
+      "STONE_RATEFC": 0,
+      "STONE_RATELC": 0,
+      "STONE_AMOUNTFC": 0,
+      "STONE_AMOUNTLC": 0,
+      "LAB_AMOUNTFC": 0,
+      "LAB_AMOUNTLC": 0,
+      "RATEFC": 0,
+      "RATELC": 0,
+      "AMOUNTFC": 0,
+      "AMOUNTLC": 0,
+      "PROCESS_CODE": this.commonService.emptyToZero(form.process),
+      "PROCESS_NAME": this.commonService.emptyToZero(form.processname),
+      "WORKER_CODE": this.commonService.emptyToZero(form.worker),
+      "WORKER_NAME": this.commonService.emptyToZero(form.workername),
+      "IN_DATE": this.commonService.formatDateTime(form.START_DATE),
+      "OUT_DATE": this.commonService.formatDateTime(form.END_DATE),
+      "TIME_TAKEN_HRS": 0,
+      "COST_CODE": "",
+      "WIP_ACCODE": "",
+      "STK_ACCODE": "",
+      "SOH_ACCODE": "",
+      "PROD_PROC": "",
+      "METAL_DIVISION": form.metalValue,
+      "PRICE1PER": form.price1per,
+      "PRICE2PER": form.price2per,
+      "PRICE3PER": form.price3per,
+      "PRICE4PER": form.price4per,
+      "PRICE5PER": form.price5per,
+      "LOCTYPE_CODE": "",
+      "WASTAGE_WT": form.wastage,
+      "WASTAGE_AMTFC": 0,
+      "WASTAGE_AMTLC": 0,
+      "PICTURE_NAME": "",
+      "SELLINGRATE": 0,
+      "LAB_ACCODE": "",
+      "CUSTOMER_CODE": "",
+      "OUTSIDEJOB": true,
+      "METAL_LABAMTFC": 0,
+      "METAL_LABAMTLC": 0,
+      "METAL_LABACCODE": "",
+      "SUPPLIER_REF": form.totalLabour,
+      "TAGLINES": "",
+      "SETTING_CHRG": form.settingChrg,
+      "POLISH_CHRG": form.polishChrg,
+      "RHODIUM_CHRG": form.rhodiumChrg,
+      "LABOUR_CHRG": form.labourChrg,
+      "MISC_CHRG": form.miscChrg,
+      "SETTING_ACCODE": form.settingChrgDesc,
+      "POLISH_ACCODE": form.polishChrgDesc,
+      "RHODIUM_ACCODE": form.rhodiumChrgDesc,
+      "LABOUR_ACCODE": form.labourChrgDesc,
+      "MISC_ACCODE": form.miscChrgDesc,
+      "WAST_ACCODE": form.wastage,
+      "REPAIRJOB": 0,
+      "PRICE1FC": form.price1fc,
+      "PRICE2FC": form.price2fc,
+      "PRICE3FC": form.price3fc,
+      "PRICE4FC": form.price4fc,
+      "PRICE5FC": form.price5fc,
+      "BASE_CONV_RATE": 0,
+      "FROM_STOCK_CODE": "",
+      "TO_STOCK_CODE": "",
+      "JOB_PURITY": 0,
+      "LOSS_PUREWT": 0,
+      "PUDIFF": 0,
+      "STONEDIFF": 0,
+      "CHARGABLEWT": 0,
+      "BARNO": "",
+      "LOTNUMBER": "",
+      "TICKETNO": "",
+      "PROD_PER": 0,
+      "PURITY_PER": 0,
+      "DESIGN_TYPE": "",
+      "BASE_CURR_RATE": 0
+    }
+  }
   set_JOB_PRODUCTION_STNMTL_DJ(){}
   set_JOB_PRODUCTION_LABCHRG_DJ(){}
   set_JOB_PRODUCTION_METALRATE_DJ(){}
@@ -564,7 +694,17 @@ export class ProductionEntryDetailsComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
-
+  setFormNullToString(formControlName: string, value: any) {
+    this.productiondetailsFrom.controls[formControlName]?.setValue(
+      this.commonService.nullToString(value)
+    )
+    // this.FORM_VALIDATER[formControlName] = this.commonService.nullToString(value)
+  }
+  setFormDecimal(formControlName: string, value: any, Decimal: string) {
+    let val = this.commonService.setCommaSerperatedNumber(value, Decimal)
+    this.productiondetailsFrom.controls[formControlName]?.setValue(val)
+    // this.FORM_VALIDATER[formControlName] = val
+  }
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {
       this.subscriptions.forEach((subscription) => subscription.unsubscribe()); // unsubscribe all subscription

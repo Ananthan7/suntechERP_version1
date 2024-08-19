@@ -40,7 +40,6 @@ export class ProductionMfgComponent implements OnInit {
     'BARCODEDQTY', 'BARCODEDPCS', 'LASTNO'
   ];
   @Input() content!: any;
-  tableData: any[] = [];
   DetailScreenDataToSave: any[] = [];
   STOCK_FORM_DETAILS: any[] = [];
   STOCK_COMPONENT_GRID: any[] = [];
@@ -245,13 +244,14 @@ export class ProductionMfgComponent implements OnInit {
     let baseConvRate = 1 / ConvRateArr[0].CONV_RATE
     this.productionFrom.controls.baseConvRate.setValue(baseConvRate)
   }
+  selectRowIndex: any;
   onRowClickHandler(event: any) {
-    // this.selectRowIndex = event.data.SRNO
+    this.selectRowIndex = event.data.SRNO
   }
   onRowDblClickHandler(event: any) {
     let selectedData = event.data
-    // let detailRow = this.detailData.filter((item: any) => item.SRNO == selectedData.SRNO)
-    // this.openProductionEntryDetails(detailRow)
+    let detailRow = this.detailData.filter((item: any) => item.SRNO == selectedData.SRNO)
+    this.openProductionEntryDetails(detailRow)
   }
   //use open modal of detail screen
   dataToDetailScreen: any;
@@ -285,7 +285,7 @@ export class ProductionMfgComponent implements OnInit {
     } else {
       // if (this.addItemWithCheck(this.DetailScreenDataToSave, detailDataToParent)) return;
       DATA.PRODUCTION_FORMDETAILS.SRNO = this.DetailScreenDataToSave.length + 1
-      DATA.JOB_PROCESS_TRN_DETAIL_DJ.SRNO = this.DetailScreenDataToSave.length + 1
+      // DATA.JOB_PROCESS_TRN_DETAIL_DJ.SRNO = this.DetailScreenDataToSave.length + 1
       this.detailData.push({ SRNO: this.DetailScreenDataToSave.length + 1, ...DATA })
       this.DetailScreenDataToSave.push(DATA.JOB_PROCESS_TRN_DETAIL_DJ);
     }
@@ -312,7 +312,7 @@ export class ProductionMfgComponent implements OnInit {
       "JOB_NUMBER": this.commonService.nullToString(DETAIL_FORM_DATA.jobno),
       "JOB_DATE": this.commonService.formatDateTime(DETAIL_FORM_DATA.JOB_DATE),
       "JOB_SO_NUMBER": this.commonService.emptyToZero(DETAIL_FORM_DATA.JOB_SO_NUMBER),
-      "UNQ_JOB_ID": this.commonService.nullToString(DETAIL_FORM_DATA.subjobno),
+      "UNQ_JOB_ID": this.commonService.nullToString(DETAIL_FORM_DATA.UNQ_JOB_ID),
       "JOB_DESCRIPTION": this.commonService.emptyToZero(DETAIL_FORM_DATA.jobnoDesc),
       "UNQ_DESIGN_ID": this.commonService.emptyToZero(DETAIL_FORM_DATA.DESIGN_CODE),
       "DESIGN_CODE": this.commonService.emptyToZero(DETAIL_FORM_DATA.DESIGN_CODE),
@@ -422,14 +422,6 @@ export class ProductionMfgComponent implements OnInit {
       "BASE_CURR_RATE": 0
     })
     console.log(this.DetailScreenDataToSave, '111111111111111111111111111');
-  }
-
-  deleteTableData() {
-
-  }
-
-  removedata() {
-    this.tableData.pop();
   }
 
   /**USE: production metal rate data setup */
@@ -579,8 +571,6 @@ export class ProductionMfgComponent implements OnInit {
               confirmButtonText: "Ok",
             }).then((result: any) => {
               if (result.value) {
-                this.productionFrom.reset();
-                this.tableData = [];
                 this.close("reloadMainGrid");
               }
             });
@@ -619,8 +609,6 @@ export class ProductionMfgComponent implements OnInit {
               confirmButtonText: "Ok",
             }).then((result: any) => {
               if (result.value) {
-                this.productionFrom.reset();
-                this.tableData = [];
                 this.close("reloadMainGrid");
               }
             });
@@ -670,8 +658,6 @@ export class ProductionMfgComponent implements OnInit {
                 confirmButtonText: "Ok",
               }).then((result: any) => {
                 if (result.value) {
-                  this.productionFrom.reset();
-                  this.tableData = [];
                   this.close("reloadMainGrid");
                 }
               });
@@ -723,7 +709,35 @@ export class ProductionMfgComponent implements OnInit {
   closeDetailScreen() {
     this.modalReference.close()
   }
-
+  deleteTableData(): void {
+    if (this.selectRowIndex == undefined || this.selectRowIndex == null) {
+      this.commonService.toastErrorByMsgId('MSG1458') //No record is selected.
+      return
+    }
+    this.showConfirmationDialog().then((result) => {
+      if (result.isConfirmed) {
+        this.DetailScreenDataToSave = this.DetailScreenDataToSave.filter((item: any) => item.SRNO != this.selectRowIndex)
+        this.detailData = this.detailData.filter((item: any) => item.SRNO != this.selectRowIndex)
+        this.reCalculateSRNO()
+      }
+    }
+    )
+  }
+  reCalculateSRNO() {
+    this.DetailScreenDataToSave.forEach((item, index) => item.SRNO = index + 1)
+    this.detailData.forEach((item: any, index: any) => item.SRNO = index + 1)
+  }
+  showConfirmationDialog(): Promise<any> {
+    return Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete!'
+    });
+  }
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {
       this.subscriptions.forEach((subscription) => subscription.unsubscribe()); // unsubscribe all subscription
