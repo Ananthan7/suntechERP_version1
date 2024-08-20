@@ -22,6 +22,10 @@
                                         [readonly]="editableMode || viewMode" [disabled]="viewMode" #code
                                         (focusout)="validateLookupField($event,codeCodeData,'code')" UpperCaseDirective
                                         autocomplete="off" (keyup)="codeEnabled()"  (keydown)="lookupKeyPress($event,'code')" />
+                                        <master-search [MasterSearchData]="codeCodeData" class="mstrScrch"
+                                        (newRowClick)="codeCodeSelected($event)" #overlaycodedescSearch
+                                        *ngIf="!editMode && !viewMode">
+                                    </master-search>
                                 </mat-form-field>
                             </div>
                             <div class="col-sm-6">
