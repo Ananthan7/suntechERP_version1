@@ -40,11 +40,11 @@ export class ProductionMfgComponent implements OnInit {
     'BARCODEDQTY', 'BARCODEDPCS', 'LASTNO'
   ];
   @Input() content!: any;
-  DetailScreenDataToSave: any[] = [];
-  STOCK_FORM_DETAILS: any[] = [];
-  STOCK_COMPONENT_GRID: any[] = [];
-  labourChargeDetailToSave: any[] = [];
-  productionMetalRateToSave: any[] = [];
+  JOB_PRODUCTION_DETAIL_DJ: any[] = [];
+  JOB_PRODUCTION_SUB_DJ: any[] = [];
+  JOB_PRODUCTION_STNMTL_DJ: any[] = [];
+  JOB_PRODUCTION_LABCHRG_DJ: any[] = [];
+  JOB_PRODUCTION_METALRATE_DJ: any[] = [];
   formDetailCount: number = 0;
   viewMode: boolean = false;
   userName = this.commonService.userName;
@@ -131,7 +131,7 @@ export class ProductionMfgComponent implements OnInit {
   productionFrom: FormGroup = this.formBuilder.group({
     VOCTYPE: ["", [Validators.required]],
     VOCDATE: ["", [Validators.required]],
-    VOCNO: [1],
+    VOCNO: [0],
     FLAG: [""],
     SRNO: [''],
     SMAN: [""],
@@ -158,6 +158,7 @@ export class ProductionMfgComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.generateVocNo()
     this.setInitialDatas()
     this.setCompanyCurrency()
     this.getRateType()
@@ -280,14 +281,14 @@ export class ProductionMfgComponent implements OnInit {
   setValuesToHeaderGrid(DATA: any) {
     let detailDataToParent = DATA.PRODUCTION_FORMDETAILS
     if (detailDataToParent.SRNO != 0) {
-      this.DetailScreenDataToSave[detailDataToParent.SRNO - 1] =  DATA.JOB_PRODUCTION_DETAIL_DJ
+      this.JOB_PRODUCTION_DETAIL_DJ[detailDataToParent.SRNO - 1] =  DATA.JOB_PRODUCTION_DETAIL_DJ
       this.detailData[detailDataToParent.SRNO - 1] = { SRNO: detailDataToParent.SRNO, ...DATA }
     } else {
-      // if (this.addItemWithCheck(this.DetailScreenDataToSave, detailDataToParent)) return;
-      DATA.PRODUCTION_FORMDETAILS.SRNO = this.DetailScreenDataToSave.length + 1
-      DATA.JOB_PRODUCTION_DETAIL_DJ.SRNO = this.DetailScreenDataToSave.length + 1
-      this.detailData.push({ SRNO: this.DetailScreenDataToSave.length + 1, ...DATA })
-      this.DetailScreenDataToSave.push(DATA.JOB_PRODUCTION_DETAIL_DJ);
+      // if (this.addItemWithCheck(this.JOB_PRODUCTION_DETAIL_DJ, detailDataToParent)) return;
+      DATA.PRODUCTION_FORMDETAILS.SRNO = this.JOB_PRODUCTION_DETAIL_DJ.length + 1
+      DATA.JOB_PRODUCTION_DETAIL_DJ.SRNO = this.JOB_PRODUCTION_DETAIL_DJ.length + 1
+      this.detailData.push({ SRNO: this.JOB_PRODUCTION_DETAIL_DJ.length + 1, ...DATA })
+      this.JOB_PRODUCTION_DETAIL_DJ.push(DATA.JOB_PRODUCTION_DETAIL_DJ);
     }
     // this.editFinalArray(DATA)
     if (detailDataToParent.FLAG == 'SAVE') this.closeDetailScreen();
@@ -295,65 +296,25 @@ export class ProductionMfgComponent implements OnInit {
       this.commonService.showSnackBarMsg('Details added grid successfully')
     };
   }
-
-  /**USE: production metal rate data setup */
-  productionMetalRate() {
-    this.productionMetalRateToSave.push({
-      "REFMID": 0,
-      "SRNO": 0,
-      "RATE_TYPE": "",
-      "METAL_RATE": 0,
-      "DT_BRANCH_CODE": "",
-      "DT_VOCTYPE": "",
-      "DT_VOCNO": 0,
-      "DT_YEARMONTH": "",
-      "DIVISION_CODE": "",
-      "SYSTEM_DATE": "2023-10-17T12:41:20.127Z",
-      "CURRENCY_CODE": "",
-      "CURRENCY_RATE": 0,
-      "CONV_FACTOR": 0
-    })
+  generateVocNo() {
+    const API = `GenerateNewVoucherNumber/GenerateNewVocNum/${this.commonService.getqueryParamVocType()}/${this.commonService.branchCode}/${this.commonService.yearSelected}/${this.commonService.formatYYMMDD(this.currentDate)}`;
+    this.dataService.getDynamicAPI(API)
+      .subscribe((resp) => {
+        if (resp.status == "Success") {
+          this.productionFrom.controls.VOCNO.setValue(resp.newvocno);
+        }
+      });
   }
-  /**Labour charge detail data to save */
-  setLabourChargeDetailToSave() {
-    this.labourChargeDetailToSave.push({
-      "REFMID": 0,
-      "BRANCH_CODE": "",
-      "YEARMONTH": "",
-      "VOCTYPE": "",
-      "VOCNO": 0,
-      "SRNO": 0,
-      "JOB_NUMBER": "",
-      "STOCK_CODE": "",
-      "UNQ_JOB_ID": "",
-      "METALSTONE": "",
-      "DIVCODE": "",
-      "PCS": 0,
-      "GROSS_WT": 0,
-      "LABOUR_CODE": "",
-      "LAB_RATE": 0,
-      "LAB_ACCODE": "",
-      "LAB_AMTFC": 0,
-      "UNITCODE": "",
-      "DIVISION": "",
-      "WASTAGE_PER": 0,
-      "WASTAGE_QTY": 0,
-      "WASTAGE_AMT": 0,
-      "WASTAGE_RATE": 0,
-      "KARAT_CODE": ""
-    })
-  }
-
   submitValidations(form: any) {
     if (this.commonService.nullToString(form.VOCTYPE) == '') {
       this.commonService.toastErrorByMsgId('MSG1939')// VOCTYPE code CANNOT BE EMPTY
       return true
     }
-    if (this.commonService.nullToString(form.VOCDATE) == '') {
+    if (!this.commonService.formatDDMMYY(form.VOCDATE)) {
       this.commonService.toastErrorByMsgId('MSG1331')// VOCDATE code CANNOT BE EMPTY
       return true
     }
-    if (this.commonService.nullToString(form.VOCNO) == '') {
+    if (this.commonService.emptyToZero(form.VOCNO) == 0) {
       this.commonService.toastErrorByMsgId('MSG3661')// VOCNO code CANNOT BE EMPTY
       return true
     }
@@ -414,11 +375,11 @@ export class ProductionMfgComponent implements OnInit {
       "PRINT_COUNT_ACCOPY": 0,
       "PRINT_COUNT_CNTLCOPY": 0,
       "SYSTEM_DATE": this.commonService.formatDateTime(this.currentDate),
-      "JOB_PRODUCTION_SUB_DJ": this.STOCK_FORM_DETAILS,
-      "JOB_PRODUCTION_DETAIL_DJ": this.DetailScreenDataToSave,
-      "JOB_PRODUCTION_STNMTL_DJ": this.STOCK_COMPONENT_GRID, //component grid from stockscreen
-      "JOB_PRODUCTION_LABCHRG_DJ": this.labourChargeDetailToSave,
-      "JOB_PRODUCTION_METALRATE_DJ": this.productionMetalRateToSave
+      "JOB_PRODUCTION_SUB_DJ": this.JOB_PRODUCTION_SUB_DJ,
+      "JOB_PRODUCTION_DETAIL_DJ": this.JOB_PRODUCTION_DETAIL_DJ,
+      "JOB_PRODUCTION_STNMTL_DJ": this.JOB_PRODUCTION_STNMTL_DJ, //component grid from stockscreen
+      "JOB_PRODUCTION_LABCHRG_DJ": this.JOB_PRODUCTION_LABCHRG_DJ,
+      "JOB_PRODUCTION_METALRATE_DJ": this.JOB_PRODUCTION_METALRATE_DJ
     }
   }
 
@@ -588,7 +549,7 @@ export class ProductionMfgComponent implements OnInit {
     }
     this.showConfirmationDialog().then((result) => {
       if (result.isConfirmed) {
-        this.DetailScreenDataToSave = this.DetailScreenDataToSave.filter((item: any) => item.SRNO != this.selectRowIndex)
+        this.JOB_PRODUCTION_DETAIL_DJ = this.JOB_PRODUCTION_DETAIL_DJ.filter((item: any) => item.SRNO != this.selectRowIndex)
         this.detailData = this.detailData.filter((item: any) => item.SRNO != this.selectRowIndex)
         this.reCalculateSRNO()
       }
@@ -596,7 +557,7 @@ export class ProductionMfgComponent implements OnInit {
     )
   }
   reCalculateSRNO() {
-    this.DetailScreenDataToSave.forEach((item, index) => item.SRNO = index + 1)
+    this.JOB_PRODUCTION_DETAIL_DJ.forEach((item, index) => item.SRNO = index + 1)
     this.detailData.forEach((item: any, index: any) => item.SRNO = index + 1)
   }
   showConfirmationDialog(): Promise<any> {

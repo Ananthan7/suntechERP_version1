@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { Component, EventEmitter, Input, OnInit, Output, Renderer2 } from "@angular/core";
 import { MasterSearchModel } from "src/app/shared/data/master-find-model";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { SuntechAPIService } from "src/app/services/suntech-api.service";
@@ -199,13 +199,14 @@ export class ProductionEntryDetailsComponent implements OnInit {
     SUB_JOB_DESCRIPTION: [''],
     CUSTOMER_CODE: [''],
     CUSTOMER_DESC: [''],
-    process: [''],
-    processname: [''],
-    worker: [''],
-    workername: [''],
+    PROCESS_CODE: [''],
+    PROCESS_NAME: [''],
+    WORKER_CODE: [''],
+    WORKER_NAME: [''],
     partsName: [''],
     PART_CODE: [''],
     DESIGN_CODE: [''],
+    DESIGN_TYPE: [''],
     DESIGN_DESCRIPTION: [''],
     totalpcs: [''],
     JOB_PCS: [''],
@@ -222,7 +223,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
     PREFIXNO: [''],
     otherstone: [''],
     price2: [''],
-    costcode: [''],
+    COST_CODE: [''],
     SETREF: [''],
     price3: [''],
     KARAT: [''],
@@ -277,14 +278,60 @@ export class ProductionEntryDetailsComponent implements OnInit {
     private modalService: NgbModal,
     private formBuilder: FormBuilder,
     private dataService: SuntechAPIService,
-    private toastr: ToastrService,
+    private renderer: Renderer2,
     private commonService: CommonServiceService
   ) { }
 
   ngOnInit(): void {
+    this.setHeaderDetails()
     this.setInitialLoadValue()
   }
+  setHeaderDetails(){
+    this.branchCode = this.commonService.branchCode;
+    this.HEADERDETAILS = this.content[0].HEADERDETAILS
+    this.productiondetailsFrom.controls.VOCDATE.setValue(this.HEADERDETAILS.vocDate)
+  }
+  setInitialLoadValue() {
+    if (!this.content) return
+    let parentDetail: any;
+    let PRODUCTION_FORMDETAILS: any;
+    if (this.content[0]?.FLAG) {
+      this.productiondetailsFrom.controls.FLAG.setValue(this.content[0]?.FLAG)
+      parentDetail = this.content[0]?.JOB_PRODUCTION_DETAIL_DJ
+    } else {// condition to load without saving
+      this.renderer.selectRootElement('#jobNoSearch')?.focus();
+      parentDetail = this.content[0]?.JOB_PRODUCTION_DETAIL_DJ
+      PRODUCTION_FORMDETAILS = this.content[0]?.PRODUCTION_FORMDETAILS
+    }
+    if (!parentDetail) return;
+    this.productiondetailsFrom.controls.SRNO.setValue(this.content[0]?.SRNO)
+    this.designType = this.commonService.nullToString(parentDetail.DESIGN_TYPE?.toUpperCase())
+    this.setFormNullToString('DESIGN_TYPE', parentDetail.DESIGN_TYPE?.toUpperCase())
+    this.setFormNullToString('JOB_NUMBER', parentDetail.JOB_NUMBER)
+    this.setFormNullToString('JOB_DESCRIPTION', parentDetail.JOB_DESCRIPTION)
+    this.setFormNullToString('UNQ_JOB_ID', parentDetail.UNQ_JOB_ID)
+    this.setFormNullToString('SUB_JOB_DESCRIPTION', parentDetail.JOB_DESCRIPTION)
+    this.setFormNullToString('SEQ_CODE', parentDetail.SEQ_CODE)
+    this.setFormNullToString('remarks', parentDetail.remarks)
+    this.setFormNullToString('DIVCODE', parentDetail.DIVCODE)
+    this.setFormNullToString('METALSTONE', parentDetail.METALSTONE)
+    this.setFormNullToString('PRODLAB_ACCODE', parentDetail.PRODLAB_ACCODE)
+    this.setFormNullToString('SCRAP_DIVCODE', parentDetail.SCRAP_DIVCODE)
+    this.setFormNullToString('DESIGN_CODE', parentDetail.DESIGN_CODE)
+    this.setFormNullToString('DESIGN_DESCRIPTION', PRODUCTION_FORMDETAILS.DESIGN_DESCRIPTION)
+    this.setFormNullToString('TREE_NO', parentDetail.TREE_NO)
+    this.setFormNullToString('JOB_SO_NUMBER', parentDetail.JOB_SO_NUMBER)
+    if (this.designType == 'METAL') {
+      // this.onLoadMetalDetail(parentDetail)
+    } else {
+      this.setFormNullToString('WORKER_CODE', parentDetail.WORKER_CODE)
+      this.setFormNullToString('WORKER_NAME', parentDetail.WORKER_NAME)
+      this.setFormNullToString('PROCESS_CODE', parentDetail.PROCESS_CODE)
+      this.setFormNullToString('PROCESS_NAME', parentDetail.PROCESS_NAME)
+      this.setFormNullToString('STOCK_CODE', parentDetail.STOCK_CODE)
+    }
 
+  }
   getDesignimagecode() {
     let API = 'ImageforJobCad/' + this.productiondetailsFrom.value.PART_CODE;
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
@@ -297,13 +344,6 @@ export class ProductionEntryDetailsComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
-
-  setInitialLoadValue() {
-    console.log(this.content,'content');
-    this.branchCode = this.commonService.branchCode;
-    this.HEADERDETAILS = this.content[0].HEADERDETAILS
-    this.productiondetailsFrom.controls.VOCDATE.setValue(this.HEADERDETAILS.vocDate)
-  }
   customerCodeScpSelected(e: any) {
     this.productiondetailsFrom.controls.CUSTOMER_CODE.setValue(e.ACCODE);
     this.productiondetailsFrom.controls.CUSTOMER_CODE_DESC.setValue(e.ACCOUNT_HEAD);
@@ -312,7 +352,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
     this.productiondetailsFrom.controls.KARAT.setValue(e.KARAT_CODE);
   }
   costCodeSelected(e: any) {
-    this.productiondetailsFrom.controls.costcode.setValue(e.COST_CODE);
+    this.productiondetailsFrom.controls.COST_CODE.setValue(e.COST_CODE);
   }
   prefixCodeSelected(e: any) {
     this.productiondetailsFrom.controls.PREFIX.setValue(e.PREFIX_CODE);
@@ -396,11 +436,11 @@ export class ProductionEntryDetailsComponent implements OnInit {
             this.designType = this.commonService.nullToString(data[0].DESIGN_TYPE?.toUpperCase());
             this.productiondetailsFrom.controls.PREFIX.setValue(data[0].PREFIX)
             this.productiondetailsFrom.controls.PREFIXNO.setValue(data[0].PREFIX_NUMBER)
-            this.productiondetailsFrom.controls.costcode.setValue(data[0].COST_CODE)
+            this.productiondetailsFrom.controls.COST_CODE.setValue(data[0].COST_CODE)
             this.productiondetailsFrom.controls.PART_CODE.setValue(data[0].DESIGN_CODE)
             this.productiondetailsFrom.controls.partsName.setValue(data[0].DESCRIPTION)
             console.log(this.productiondetailsFrom.value);
-            
+
             this.subJobNumberValidate()
             this.getDesignimagecode()
           } else {
@@ -433,10 +473,10 @@ export class ProductionEntryDetailsComponent implements OnInit {
         if (result.dynamicData && result.dynamicData[0].length > 0) {
           let data = result.dynamicData[0]
 
-          this.productiondetailsFrom.controls.process.setValue(data[0].PROCESS)
-          this.productiondetailsFrom.controls.processname.setValue(data[0].PROCESSDESC)
-          this.productiondetailsFrom.controls.worker.setValue(data[0].WORKER)
-          this.productiondetailsFrom.controls.workername.setValue(data[0].WORKERDESC)
+          this.productiondetailsFrom.controls.PROCESS_CODE.setValue(data[0].PROCESS)
+          this.productiondetailsFrom.controls.PROCESS_NAME.setValue(data[0].PROCESSDESC)
+          this.productiondetailsFrom.controls.WORKER_CODE.setValue(data[0].WORKER)
+          this.productiondetailsFrom.controls.WORKER_NAME.setValue(data[0].WORKERDESC)
           this.productiondetailsFrom.controls.METAL_WT.setValue(
             this.commonService.decimalQuantityFormat(data[0].METAL, 'METAL'))
           this.productiondetailsFrom.controls.STONE_WT.setValue(
@@ -503,8 +543,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
   locationCodeSelected(e: any) {
     this.productiondetailsFrom.controls.location.setValue(e.LOCATION_CODE);
   }
-
-  formatDate(event: any) {
+  formatDate(event?: any) {
     const inputValue = event.target.value;
     let date = new Date(inputValue);
     let yr = date.getFullYear();
@@ -516,8 +555,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
       this.productiondetailsFrom.controls.END_DATE.setValue(new Date(date));
     }
   }
-  set_JOB_PRODUCTION_SUB_DJ(){}
-  set_JOB_PRODUCTION_DETAIL_DJ(){
+  set_JOB_PRODUCTION_DETAIL_DJ() {
     let form = this.productiondetailsFrom.value
     let parentForm = this.content[0].HEADERDETAILS
     return {
@@ -576,14 +614,14 @@ export class ProductionEntryDetailsComponent implements OnInit {
       "RATELC": 0,
       "AMOUNTFC": 0,
       "AMOUNTLC": 0,
-      "PROCESS_CODE": this.commonService.nullToString(form.process),
-      "PROCESS_NAME": this.commonService.nullToString(form.processname),
-      "WORKER_CODE": this.commonService.nullToString(form.worker),
-      "WORKER_NAME": this.commonService.nullToString(form.workername),
-      "IN_DATE": this.commonService.formatDateTime(form.START_DATE),
-      "OUT_DATE": this.commonService.formatDateTime(form.END_DATE),
+      "PROCESS_CODE": this.commonService.nullToString(form.PROCESS_CODE),
+      "PROCESS_NAME": this.commonService.nullToString(form.PROCESS_NAME),
+      "WORKER_CODE": this.commonService.nullToString(form.WORKER_CODE),
+      "WORKER_NAME": this.commonService.nullToString(form.WORKER_NAME),
+      "IN_DATE": this.commonService.formatDateTime(this.commonService.currentDate),
+      "OUT_DATE": this.commonService.formatDateTime(this.commonService.currentDate),
       "TIME_TAKEN_HRS": 0,
-      "COST_CODE": "",
+      "COST_CODE": this.commonService.nullToString(form.COST_CODE),
       "WIP_ACCODE": "",
       "STK_ACCODE": "",
       "SOH_ACCODE": "",
@@ -638,13 +676,62 @@ export class ProductionEntryDetailsComponent implements OnInit {
       "TICKETNO": "",
       "PROD_PER": 0,
       "PURITY_PER": 0,
-      "DESIGN_TYPE": "",
+      "DESIGN_TYPE": this.commonService.nullToString(form.DESIGN_TYPE),
       "BASE_CURR_RATE": 0
     }
   }
-  set_JOB_PRODUCTION_STNMTL_DJ(){}
-  set_JOB_PRODUCTION_LABCHRG_DJ(){}
-  set_JOB_PRODUCTION_METALRATE_DJ(){}
+  set_JOB_PRODUCTION_SUB_DJ() {
+    return []
+  }
+  set_JOB_PRODUCTION_STNMTL_DJ() {
+    return []
+  }
+  /**Labour charge detail data to save */
+  set_JOB_PRODUCTION_LABCHRG_DJ() {
+    return {
+      "REFMID": 0,
+      "BRANCH_CODE": "",
+      "YEARMONTH": "",
+      "VOCTYPE": "",
+      "VOCNO": 0,
+      "SRNO": 0,
+      "JOB_NUMBER": "",
+      "STOCK_CODE": "",
+      "UNQ_JOB_ID": "",
+      "METALSTONE": "",
+      "DIVCODE": "",
+      "PCS": 0,
+      "GROSS_WT": 0,
+      "LABOUR_CODE": "",
+      "LAB_RATE": 0,
+      "LAB_ACCODE": "",
+      "LAB_AMTFC": 0,
+      "UNITCODE": "",
+      "DIVISION": "",
+      "WASTAGE_PER": 0,
+      "WASTAGE_QTY": 0,
+      "WASTAGE_AMT": 0,
+      "WASTAGE_RATE": 0,
+      "KARAT_CODE": ""
+    }
+  }
+  set_JOB_PRODUCTION_METALRATE_DJ() { 
+    return {
+      "REFMID": 0,
+      "SRNO": 0,
+      "RATE_TYPE": "",
+      "METAL_RATE": 0,
+      "DT_BRANCH_CODE": "",
+      "DT_VOCTYPE": "",
+      "DT_VOCNO": 0,
+      "DT_YEARMONTH": "",
+      "DIVISION_CODE": "",
+      "SYSTEM_DATE": "2023-10-17T12:41:20.127Z",
+      "CURRENCY_CODE": "",
+      "CURRENCY_RATE": 0,
+      "CONV_FACTOR": 0
+    }
+  }
 
   formSubmit(flag: any) {
     // if (this.designType == 'METAL') {
