@@ -404,21 +404,15 @@
           </button>
         </div>
       
-        <div class="col-md-2 mt-3 px-0">
+        <div class="col-md-4 mt-3 px-0">
           <div class="form-group row">
             <label class="col-form-label col-sm-3" for="voc_type" id="ID002">Voucher</label>
-            <div class="col-sm-8">
+            <div class="col-sm-3 mx-1">
               <mat-form-field appearance="outline" style="width: 100%">
                 <input type="text" matInput id="voc_type" formControlName="voc_type" readonly />
               </mat-form-field>
             </div>
-          </div>
-        </div>
-
-        <div class="col-md-2 mt-3 px-0">
-          <div class="form-group row">
-            <label class="col-form-label col-sm-5" for="fcn_voc_no" id="ID003">{{ vocno_lbl }}</label>
-            <div class="col-sm-6">
+            <div class="col-sm-4">
               <mat-form-field appearance="outline" style="width: 100%">
                 <input type="text" NumberOnly matInput formControlName="fcn_voc_no" [readonly]="voucherDetails?.LOCKVOUCHERNO || viewOnly" class="st_txt_right" />
               </mat-form-field>
@@ -426,10 +420,10 @@
           </div>
         </div>
 
-        <div class="col-md-2 mt-3 px-0">
+        <div class="col-md-4 mt-3 px-0">
           <div class="form-group row">
-            <label class="col-form-label col-sm-4" for="txtCurrency" id="ID004">Currency</label>
-            <div class="col-sm-7">
+            <label class="col-form-label col-sm-3" for="voc_type" id="ID002">Currency</label>
+            <div class="col-sm-3">
               <mat-form-field appearance="outline" style="width: 100%">
                 <input type="text" matInput id="txtCurrency" formControlName="txtCurrency" readonly [matAutocomplete]="currencyList" />
                 <mat-autocomplete #currencyList="matAutocomplete" autoActiveFirstOption (optionSelected)="changeCurrency($event)">
@@ -439,71 +433,71 @@
                 </mat-autocomplete>
               </mat-form-field>
             </div>
-          </div>
-        </div>
-      
-        <div class="col-md-2 mt-3 px-0">
-          <div class="form-group row">
-            <label class="col-form-label col-sm-4" for="txtCurRate" id="ID005">Cur. Rate</label>
-            <div class="col-sm-7">
+            <div class="col-sm-4">
               <mat-form-field appearance="outline" style="width: 100%">
-                <input class="st_txt_right" type="text" matInput id="txtCurRate" SixDecimalInput formControlName="txtCurRate" [readonly]="viewOnly || this.vocDataForm.value.txtCurrency == this.comFunc.compCurrency" (change)="changeCurRate($event)" />
+                <input class="st_txt_right" type="text" matInput id="txtCurRate" SixDecimalInput formControlName="txtCurRate" 
+                [readonly]="viewOnly || this.vocDataForm.value.txtCurrency == this.comFunc.compCurrency" (change)="changeCurRate($event)" />
               </mat-form-field>
             </div>
           </div>
         </div>
-      
+
         <div class="col-md-3" style="background-color: #d6d8da; display: flex; flex: 1;
             height: 93%; position: absolute; right: 0;">
-          <div class="font-weight-bold mt-4" style="font-size: 20px; font-weight: 400; color: #0d4f9e; text-align: center;"
+          <div class="font-weight-bold mt-4 mx-2" style="font-size: 20px; font-weight: 400; color: #0d4f9e;"
           id="ID006">
             Net Total<br/>
-            <span style="font-weight: 800;" class="text-dark mx-1">
+            <span style="font-weight: 800;" class="text-dark">
               {{comFunc.compCurrency}} {{ order_items_total_net_amount | decimalFormat : "AMOUNT" }}
             </span>
           </div>
-        </div>   
-      
-        <div class="col-md-9 mt-3 mx-5">
-          <div class="form-group row">
-            <div class="col-md-5 mx-5">
-              <div class="form-group row">
-                <label class="col-form-label col-sm-3 mx-3" for="sales_person" id="ID007">{{ sales_person_lbl }}</label>
-                <div class="col-sm-8">
-                  <mat-form-field appearance="outline" style="width: 100%">
-                    <input type="text" matInput formControlName="sales_person" id="sales_person" [matAutocomplete]="salesperson" [readonly]="viewOnly" />
-                    <mat-autocomplete #salesperson="matAutocomplete" autoActiveFirstOption (optionSelected)="changeSalesPerson($event.option.value)">
-                      <mat-option *ngFor="let option of salesPersonFilteredOptions | async" [value]="option.SALESPERSON_CODE">
-                        {{ option.SALESPERSON_CODE + " - " + option.DESCRIPTION }}
-                      </mat-option>
-                    </mat-autocomplete>
-                    <mat-error *ngIf="vocDataForm.controls.sales_person.hasError('required')" id="ID008">
-                      Salesman Code cannot be Empty
-                    </mat-error>
-                    <mat-error *ngIf="vocDataForm.controls.sales_person.hasError('notInOptions')" id="ID009">
-                      Invalid value
-                    </mat-error>
-                  </mat-form-field>
+        </div> 
+        
+        
+
+        <div class="row">
+          <div class="col-md-9 mt-3 mx-5">
+            <div class="form-group row">
+              <div class="col-md-5 mx-5">
+                <div class="form-group row">
+                  <label class="col-form-label col-sm-3 mx-3" for="sales_person" id="ID007">{{ sales_person_lbl }}</label>
+                  <div class="col-sm-8">
+                    <mat-form-field appearance="outline" style="width: 100%">
+                      <input type="text" matInput formControlName="sales_person" id="sales_person" [matAutocomplete]="salesperson" [readonly]="viewOnly" />
+                      <mat-autocomplete #salesperson="matAutocomplete" autoActiveFirstOption (optionSelected)="changeSalesPerson($event.option.value)">
+                        <mat-option *ngFor="let option of salesPersonFilteredOptions | async" [value]="option.SALESPERSON_CODE">
+                          {{ option.SALESPERSON_CODE + " - " + option.DESCRIPTION }}
+                        </mat-option>
+                      </mat-autocomplete>
+                      <mat-error *ngIf="vocDataForm.controls.sales_person.hasError('required')" id="ID008">
+                        Salesman Code cannot be Empty
+                      </mat-error>
+                      <mat-error *ngIf="vocDataForm.controls.sales_person.hasError('notInOptions')" id="ID009">
+                        Invalid value
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
                 </div>
               </div>
-            </div>
-
-            <div class="col-md-5">
-              <div class="form-group row">
-                <label class="col-form-label col-sm-3 mx-3" for="vocdate" id="ID010">Date</label>
-                <div class="col-sm-8">
-                  <mat-form-field appearance="outline" style="width: 100%">
-                    <input matInput DateValidation (dateChange)="formatDate($event)" [matDatepicker]="dob" [readonly]="viewOnly" formControlName="vocdate" [min]="voucherDetails?.BLOCKBACKDATEDENTRIES ? this.comFunc.currentDate : null" [max]="voucherDetails?.BLOCKFUTUREDATE ? this.comFunc.currentDate : null" placeholder="DD/MM/YYYY" />
-                    <mat-datepicker-toggle matSuffix [for]="dob" [disabled]="viewOnly"></mat-datepicker-toggle>
-                    <mat-datepicker #dob></mat-datepicker>
-                  </mat-form-field>
+  
+              <div class="col-md-5">
+                <div class="form-group row">
+                  <label class="col-form-label col-sm-3 mx-2" for="vocdate" id="ID010">Date</label>
+                  <div class="col-sm-8">
+                    <mat-form-field appearance="outline" style="width: 100%">
+                      <input matInput DateValidation (dateChange)="formatDate($event)" [matDatepicker]="dob" [readonly]="viewOnly" formControlName="vocdate" [min]="voucherDetails?.BLOCKBACKDATEDENTRIES ? this.comFunc.currentDate : null" [max]="voucherDetails?.BLOCKFUTUREDATE ? this.comFunc.currentDate : null" placeholder="DD/MM/YYYY" />
+                      <mat-datepicker-toggle matSuffix [for]="dob" [disabled]="viewOnly"></mat-datepicker-toggle>
+                      <mat-datepicker #dob></mat-datepicker>
+                    </mat-form-field>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-
       </div>
+
+     
     </form>
   </div>
 </div>
@@ -514,13 +508,13 @@
     <div style="background-color: #ffffff">
       <div>
         <form [formGroup]="customerDataForm" style="width: 100%; max-width: none">
-          <div class="row">
-            <div class="col-md-3">
+          <div class="row mb-3">
+            <div class="col-md-4">
               <div class="form-group row">
-                <label class="col-form-label col-sm-3 mx-3" for="customer_mobile" id="ID011">Mobile Number</label>
-                <div class="col-sm-7 mt-2">
+                <label class="col-form-label col-sm-4 mx-3" for="customer_mobile" id="ID011">Mobile Number</label>
+                <div class="col-sm-6">
                   <mat-form-field appearance="outline" style="width: 100%">
-                    <input type="text"
+                    <input type="text" class="st_txt_right"
                       onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))"
                       matInput (focusout)="!viewOnly && onCustomerNameFocus()" formControlName="fcn_customer_mobile"
                       [readonly]="viewOnly" />
@@ -538,7 +532,7 @@
             <div class="col-md-3">
               <div class="form-group row">
                 <label class="col-form-label col-sm-3 mx-3" for="customer_mobile" id="ID013">Name</label>
-                <div class="col-sm-7 mt-2">
+                <div class="col-sm-7">
                   <mat-form-field appearance="outline" style="width: 100%">
                     <input type="text" matInput formControlName="fcn_customer_name" (change)="nameChange($event)"
                       [readonly]="viewOnly" appNoEmptySpace />
@@ -557,7 +551,7 @@
             <div class="col-md-3">
               <div class="form-group row">
                 <label class="col-form-label col-sm-3 mx-3" for="customer_mobile" id="ID016">Code</label>
-                <div class="col-sm-7 mt-2">
+                <div class="col-sm-7">
                   <mat-form-field appearance="outline" style="width: 100%">
                     <input type="text" matInput formControlName="fcn_customer_code" readonly />
                         <!-- [readonly]="
@@ -587,10 +581,10 @@
           </div>
 
           <div class="row">
-            <div class="col-md-3">
+            <div class="col-md-4">
               <div class="form-group row">
-                <label class="col-form-label col-sm-3 mx-3" for="customer_mobile" id="ID018">ID Type</label>
-                <div class="col-sm-7 mt-2">
+                <label class="col-form-label col-sm-4 mx-3" for="customer_mobile" id="ID018">ID Type</label>
+                <div class="col-sm-6">
                   <mat-form-field appearance="outline" style="width: 100%">
                     <input type="text" matInput formControlName="fcn_customer_id_type" [matAutocomplete]="idtype"
                     readonly />
@@ -615,10 +609,10 @@
             <div class="col-md-3">
               <div class="form-group row">
                 <label class="col-form-label col-sm-3 mx-3" for="customer_mobile" id="ID020">ID#</label>
-                <div class="col-sm-7 mt-2">
+                <div class="col-sm-7">
                   <mat-form-field appearance="outline" style="width: 100%">
                     <input type="text" matInput formControlName="fcn_customer_id_number" [readonly]="viewOnly"
-                    appNoEmptySpace />
+                    appNoEmptySpace class="st_txt_right" />
                     <mat-error *ngIf="customerDataForm.controls.fcn_customer_id_number.hasError('required')" id="ID021">
                       ID# is <strong>required</strong>
                     </mat-error>
@@ -637,10 +631,10 @@
               </div>
             </div>
           
-            <div class="col-md-4">
+            <div class="col-md-5">
               <div class="form-group row">
                 <label class="col-form-label col-sm-3 mx-3" for="customer_mobile" id="ID024">Expiry Date</label>
-                <div class="col-sm-7 mt-2">
+                <div class="col-sm-7" style="width: 55%;">
                   <mat-form-field appearance="outline" style="width: 100%">
                     <input matInput [matDatepicker]="expDate" name="fcn_customer_exp_date"
                     formControlName="fcn_customer_exp_date" placeholder="DD/MM/YYYY" [min]="currentDate"
@@ -648,11 +642,7 @@
                     <mat-datepicker-toggle matSuffix [for]="expDate"></mat-datepicker-toggle>
                     <mat-datepicker [startAt]="currentDate" #expDate></mat-datepicker>
     
-                    <mat-error *ngIf="
-                        customerDataForm.controls.fcn_customer_exp_date.hasError(
-                          'required'
-                        )
-                      " id="ID025">
+                    <mat-error *ngIf="customerDataForm.controls.fcn_customer_exp_date.hasError('required')" id="ID025">
                       Expiry date is <strong>required</strong>
                     </mat-error>
                   </mat-form-field>
@@ -675,7 +665,7 @@
             </div>  
 
             
-            <div class="col-md-5 text-right px-2 mt-1">
+            <div class="col-md-5 mt-1">
               <!-- <button type="button" mat-flat-button color="primary" (click)="importSalesEstimation()">
                 Import Sales Estimation
               </button>
@@ -2554,7 +2544,7 @@
                   <label class="col-form-label col-sm-4" for="fcn_mob_code" id="ID135">Code</label>
                   <div class="col-sm-8">
                     <mat-form-field appearance="outline" style="width: 100%">
-                      <input type="text" matInput
+                      <input type="text" matInput class="st_txt_right"
                         onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))"
                         formControlName="fcn_mob_code" id="fcn_mob_code" [matAutocomplete]="fcn_mob_code"
                         [readonly]="viewOnly" />
@@ -2571,12 +2561,12 @@
                 </div>
             </div>
             
-            <div class="col-md-4 mb-3">
+            <div class="col-md-4">
                 <div class="form-group row">
                   <label class="col-form-label col-sm-4" for="fcn_cust_detail_phone" id="ID137">Mobile 1</label>
                   <div class="col-sm-8">
                     <mat-form-field appearance="outline" style="width: 100%">
-                      <input type="text" #mobile1 (change)="onCustomerNameFocus(mobile1.value)"
+                      <input type="text" #mobile1 (change)="onCustomerNameFocus(mobile1.value)" class="st_txt_right"
                         onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))"
                         matInput formControlName="fcn_cust_detail_phone" id="fcn_cust_detail_phone" [readonly]="viewOnly"
                         maxlength="20" />
@@ -2588,7 +2578,7 @@
                 </div>
             </div>
             
-            <div class="col-md-4 mb-3">
+            <div class="col-md-4">
                 <div class="form-group row">
                   <label class="col-form-label col-sm-4" for="customer_detail_name" id="ID139">Name</label>
                   <div class="col-sm-8">
@@ -2679,7 +2669,7 @@
                 <label class="col-form-label col-sm-4" for="cust_detail_phone2" id=ID147>Mobile 2</label>
                 <div class="col-sm-8">
                   <mat-form-field appearance="outline" style="width: 100%">
-                    <input type="text"
+                    <input type="text" class="st_txt_right"
                       onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))"
                       matInput formControlName="fcn_cust_detail_phone2" [readonly]="viewOnly" />
                   </mat-form-field>
@@ -2937,7 +2927,7 @@
                 <div class="col-sm-8">
                   <mat-form-field appearance="outline" style="width: 100%">
                     <input type="text" matInput formControlName="fcn_cust_detail_idcard" [readonly]="viewOnly"
-                      appNoEmptySpace />
+                      appNoEmptySpace class="st_txt_right" />
                     <mat-error *ngIf="
                         customerDetailForm.controls.fcn_cust_detail_idcard.hasError(
                           'required'
@@ -2985,7 +2975,7 @@
                 <div class="col-sm-8">
                   <mat-form-field appearance="outline" style="width: 100%">
                     <input type="text" matInput formControlName="fcn_cust_detail_designation" [readonly]="viewOnly"
-                      appNoEmptySpace />
+                      appNoEmptySpace class="st_txt_right" />
                     <mat-error *ngIf="
                         customerDetailForm.controls.fcn_cust_detail_designation.hasError(
                           'required'
@@ -3003,7 +2993,8 @@
                 <label class="col-form-label col-sm-4" for="cust_detail_company" id="ID171">Employer</label>
                 <div class="col-sm-8">
                   <mat-form-field appearance="outline" style="width: 100%">
-                    <input type="text" matInput formControlName="fcn_cust_detail_company" [readonly]="viewOnly" />
+                    <input type="text" matInput formControlName="fcn_cust_detail_company" [readonly]="viewOnly" 
+                    class="st_txt_right" />
                   </mat-form-field>
                 </div>
               </div>
