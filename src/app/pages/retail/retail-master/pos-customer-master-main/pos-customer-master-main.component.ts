@@ -8,6 +8,7 @@ import { SuntechAPIService } from "src/app/services/suntech-api.service";
 import { DialogboxComponent } from "src/app/shared/common/dialogbox/dialogbox.component";
 import { MatDialog } from "@angular/material/dialog";
 import { Subscription } from "rxjs";
+import Swal from 'sweetalert2';
 
 @Component({
   selector: "app-pos-customer-master-main",
@@ -50,7 +51,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 26,
     SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Country type',
+    SEARCH_HEADING: 'Country Type',
     SEARCH_VALUE: '',
     WHERECONDITION: "TYPES='COUNTRY MASTER'",
     VIEW_INPUT: true,
@@ -100,7 +101,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 48,
     SEARCH_FIELD: "STATE_CODE",
-    SEARCH_HEADING: "STATE CODE",
+    SEARCH_HEADING: "State Code",
     SEARCH_VALUE: "",
     WHERECONDITION: "STATE_CODE<> ''",
     VIEW_INPUT: true,
@@ -137,7 +138,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 3,
     SEARCH_FIELD: "CODE",
-    SEARCH_HEADING: "Fav Celebration CODE",
+    SEARCH_HEADING: "Fav Celebration Code",
     SEARCH_VALUE: "",
     WHERECONDITION: "TYPES='FAVORITE CELEBRATION MASTER'",
     VIEW_INPUT: true,
@@ -150,7 +151,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 3,
     SEARCH_FIELD: "CODE",
-    SEARCH_HEADING: "Religion CODE",
+    SEARCH_HEADING: "Religion Code",
     SEARCH_VALUE: "",
     WHERECONDITION: "TYPES='RELIGION MASTER'",
     VIEW_INPUT: true,
@@ -163,7 +164,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 3,
     SEARCH_FIELD: "CODE",
-    SEARCH_HEADING: "Customer Status CODE",
+    SEARCH_HEADING: "Customer Status Code",
     SEARCH_VALUE: "",
     WHERECONDITION: "TYPES='CUSTOMER STATUS MASTER'",
     VIEW_INPUT: true,
@@ -462,6 +463,18 @@ export class PosCustomerMasterMainComponent implements OnInit {
   }
 
   customerSave() {
+    
+    if (this.posCustomerMasterMainForm.value.moblieNumber == "" && this.posCustomerMasterMainForm.value.telRNumber == "") {
+      Swal.fire({
+        title: "Warning",
+        text: "Atleast One of the Field is Manditory Mobile Number (OR) Telephone Number",
+        icon: "warning",
+        confirmButtonColor: "#336699",
+        confirmButtonText: "Ok",
+      });
+    return ;
+    }
+
     if (!this.isCustProcessing || this.isCustProcessing) {
       this.isCustProcessing = true;
 
