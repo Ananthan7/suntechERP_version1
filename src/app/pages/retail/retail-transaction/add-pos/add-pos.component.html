@@ -399,7 +399,8 @@
     <form [formGroup]="vocDataForm" style="width: 100%; max-width: none">
       <div class="row netTotal" style="background-color: #efefef; margin-bottom: 10px; display: flex;">
         <div class="col-md-1 d-flex justify-content-center align-items-center newBtnCls">
-          <button type="button" color="primary" mat-flat-button [disabled]="isNewButtonDisabled" (click)="addNew()" id="ID001">
+          <button type="button" color="primary" mat-flat-button [disabled]="isNewButtonDisabled" (click)="addNew()" id="ID001"
+          style="background: linear-gradient(0deg, #557cb1 42%, #3864b4 82%);">
             New
           </button>
         </div>
@@ -456,7 +457,7 @@
         
 
         <div class="row">
-          <div class="col-md-9 mt-3 mx-5">
+          <div class="col-md-9 mx-5">
             <div class="form-group row">
               <div class="col-md-5 mx-5">
                 <div class="form-group row">
@@ -568,7 +569,7 @@
             </div>
            
             <div class="col-md-2 justify-content-center">
-              <button type="button" style="font-size: 12px; padding: 0px 9px"
+              <button type="button" style="font-size: 12px; padding: 0px 9px; background: linear-gradient(0deg, #557cb1 42%, #3864b4 82%);"
                 (click)="open(more_customer_detail_modal, false, null, false,false,true)" mat-flat-button
                 color="primary" [disabled]="viewOnly">
                 {{
@@ -675,7 +676,7 @@
               </button> -->
 
               <button type="button" mat-flat-button color="primary" [disabled]="viewOnly && transAttachmentList.length == 0"
-                (click)="openUserAttachmentModal()">
+                (click)="openUserAttachmentModal()" style="background: linear-gradient(0deg, #557cb1 42%, #3864b4 82%);">
                 {{ !viewOnly ? 'Add Attachment' : 'View Attachment' }}
               </button>
             </div>
@@ -777,7 +778,7 @@
                             margin: 10px;
                             width: 20px !important;
                             padding: 3px 10px;
-                            padding-right: 21px;
+                            padding-right: 21px; background-color: #1E3C72;
                           ">
                           <i class="fa fa-plus"></i>
                         </button>
@@ -859,7 +860,7 @@
                               margin: 10px;
                               width: 20px !important;
                               padding: 3px 10px;
-                              padding-right: 21px;
+                              padding-right: 21px; background-color: #1E3C72;
                             ">
                             <i class="fa fa-plus"></i>
                           </button>
@@ -942,7 +943,7 @@
                               margin: 10px;
                               width: 20px !important;
                               padding: 3px 10px;
-                              padding-right: 21px;
+                              padding-right: 21px; background-color: #1E3C72;
                             ">
                             <i class="fa fa-plus"></i>
                           </button>
@@ -973,7 +974,7 @@
 
                 <span style="float: right">
                   <button type="submit" (click)="open(sales_payment_modal)" class="btn btnsml btn-secondary w-30"
-                    [disabled]="viewOnly" id="ID028">
+                    [disabled]="viewOnly" id="ID028" style="background-color: #1E3C72;">
                     Add
                   </button></span>
               </div>
@@ -1421,7 +1422,7 @@
 
               <div class="col-md-4">
                 <div class="form-group row">
-                  <label class="col-form-label col-sm-3 pt-0" for="paymentsCash" id="ID060">Receipt Mode</label>
+                  <label class="col-form-label col-sm-4" for="paymentsCash" id="ID060">Receipt Mode</label>
                   <div class="col-sm-8">
                     <mat-form-field appearance="outline" style="width: 100%">
                       <input type="text" matInput formControlName="paymentsCash" [matAutocomplete]="receiptmode"
@@ -1487,7 +1488,7 @@
 
               <div class="col-md-4">
                 <div class="form-group row">
-                  <label class="col-form-label col-sm-3 pt-0" for="paymentsCreditCard" id="ID060">Receipt Mode</label>
+                  <label class="col-form-label col-sm-4" for="paymentsCreditCard" id="ID060">Receipt Mode</label>
                   <div class="col-sm-8">
                     <mat-form-field appearance="outline" style="width: 100%">
                       <input type="text" matInput formControlName="paymentsCreditCard" [matAutocomplete]="receiptmodecc"
@@ -1550,7 +1551,7 @@
 
               <div class="col-md-4">
                 <div class="form-group row">
-                  <label class="col-form-label col-sm-3 pt-0" for="paymentsAdvance" id="ID060">Receipt Mode</label>
+                  <label class="col-form-label col-sm-4" for="paymentsAdvance" id="ID060">Receipt Mode</label>
                   <div class="col-sm-8">
                     <mat-form-field appearance="outline" style="width: 100%">
                       <input type="text" matInput formControlName="paymentsAdvance" id="paymentsAdvance"
@@ -1637,7 +1638,7 @@
 
               <div class="col-md-4">
                 <div class="form-group row">
-                  <label class="col-form-label col-sm-3 pt-0" for="advanceCustCode" id="ID077">Customer Code</label>
+                  <label class="col-form-label col-sm-4" for="advanceCustCode" id="ID077">Customer Code</label>
                   <div class="col-sm-8">
                     <mat-form-field appearance="outline" style="width: 100%">
                       <input type="text" matInput formControlName="advanceCustCode" value id="advanceCustCode"
@@ -1677,7 +1678,7 @@
 
               <div class="col-md-6">
                 <div class="form-group row">
-                  <label class="col-form-label col-sm-3 pt-0" for="advanceCustCode" id="ID079">Vat Amount Paid LC</label>
+                  <label class="col-form-label col-sm-4" for="advanceCustCode" id="ID079">Vat Amount Paid LC</label>
                   <div class="col-sm-8">
                     <mat-form-field appearance="outline" style="width: 100%">
                       <input type="text" class="st_txt_right" matInput formControlName="advanceVatAmountLC"
@@ -1689,7 +1690,7 @@
               
               <div class="col-md-6">
                 <div class="form-group row">
-                  <label class="col-form-label col-sm-3 pt-0" for="advanceVatAmountFC" id="ID080">Vat Amount Paid FC</label>
+                  <label class="col-form-label col-sm-4" for="advanceVatAmountFC" id="ID080">Vat Amount Paid FC</label>
                   <div class="col-sm-8">
                     <mat-form-field appearance="outline" style="width: 100%">
                       <input type="text" class="st_txt_right" matInput formControlName="advanceVatAmountFC"
@@ -1701,7 +1702,6 @@
 
             </div>
           </div>
-
         </form>
       </mat-tab>
 
@@ -1760,7 +1760,7 @@
 
               <div class="col-md-6">
                 <div class="form-group row">
-                  <label class="col-form-label col-sm-3 pt-0" for="paymentsCreditGIftVoc" id="ID060">Receipt Mode</label>
+                  <label class="col-form-label col-sm-3" for="paymentsCreditGIftVoc" id="ID060">Receipt Mode</label>
                   <div class="col-sm-8">
                     <mat-form-field appearance="outline" style="width: 100%">
                       <input type="text" matInput formControlName="paymentsCreditGIftVoc" id="paymentsCreditGIftVoc"
@@ -1844,7 +1844,7 @@
 
               <div class="col-md-4">
                 <div class="form-group row">
-                  <label class="col-form-label col-sm-3 pt-0" for="customAcCodeList" id="ID084">Select Accode</label>
+                  <label class="col-form-label col-sm-4" for="customAcCodeList" id="ID084">Select Accode</label>
                   <div class="col-sm-8">
                     <mat-form-field appearance="outline" style="width: 100%">
                       <input type="text" matInput formControlName="customAcCodeList" [matAutocomplete]="customAcCodeList"
@@ -1865,7 +1865,7 @@
 
               <div class="col-md-4">
                 <div class="form-group row">
-                  <label class="col-form-label col-sm-3 pt-0" for="customerAmtLC" id="ID062">Amount LC</label>
+                  <label class="col-form-label col-sm-3" for="customerAmtLC" id="ID062">Amount LC</label>
                   <div class="col-sm-8">
                     <mat-form-field appearance="outline" style="width: 100%">
                       <input type="text" class="st_txt_right" matInput formControlName="customerAmtLC" id="customerAmtLC"
@@ -1877,7 +1877,7 @@
               
               <div class="col-md-4">
                 <div class="form-group row">
-                  <label class="col-form-label col-sm-3 pt-0" for="customerAmtFC" id="ID063">Amount FC</label>
+                  <label class="col-form-label col-sm-3" for="customerAmtFC" id="ID063">Amount FC</label>
                   <div class="col-sm-8">
                     <mat-form-field appearance="outline" style="width: 100%">
                       <input type="text" class="st_txt_right" matInput formControlName="customerAmtFC" id="customerAmtFC"
@@ -2539,7 +2539,7 @@
       <div class="col-md-12">
         <form [formGroup]="customerDetailForm">
           <div class="form-group row">
-            <div class="col-md-3 mb-3">
+            <div class="col-md-4">
                 <div class="form-group row">
                   <label class="col-form-label col-sm-4" for="fcn_mob_code" id="ID135">Code</label>
                   <div class="col-sm-8">
@@ -2607,7 +2607,7 @@
           </div>
 
           <div class="form-group row">
-            <div class="col-md-3 mb-3">
+            <div class="col-md-4">
               <div class="form-group row">
                 <label class="col-form-label col-sm-4" for="customer_detail_fname" id="ID141">First Name</label>
                 <div class="col-sm-8">
@@ -2626,7 +2626,7 @@
               </div>
             </div>
           
-            <div class="col-md-4 mb-3">
+            <div class="col-md-4">
               <div class="form-group row">
                 <label class="col-form-label col-sm-4" for="fcn_cust_detail_Mname" id="ID143">Middle Name</label>
                 <div class="col-sm-8">
@@ -2637,7 +2637,7 @@
               </div>
             </div>
           
-            <div class="col-md-4 mb-3">
+            <div class="col-md-4">
               <div class="form-group row">
                 <label class="col-form-label col-sm-4" for="customer_detail_lname" id="ID144">Last Name</label>
                 <div class="col-sm-8">
@@ -2664,7 +2664,7 @@
           </div>
 
           <div class="form-group row">
-            <div class="col-md-3 mb-3">
+            <div class="col-md-4">
               <div class="form-group row">
                 <label class="col-form-label col-sm-4" for="cust_detail_phone2" id=ID147>Mobile 2</label>
                 <div class="col-sm-8">
@@ -2677,7 +2677,7 @@
               </div>
             </div>
           
-            <div class="col-md-4 mb-3">
+            <div class="col-md-4">
               <div class="form-group row">
                 <label class="col-form-label col-sm-4" for="cust_detail_email" id="ID148">Email Address</label>
                 <div class="col-sm-8">
@@ -2695,7 +2695,7 @@
               </div>
             </div>
           
-            <div class="col-md-4 mb-3">
+            <div class="col-md-4">
               <div class="form-group row">
                 <label class="col-form-label col-sm-4" for="cust_detail_gender" id="ID150">Gender</label>
                 <div class="col-sm-8">
@@ -2717,7 +2717,7 @@
           </div>
          
           <div class="form-group row">
-            <div class="col-md-3 mb-3">
+            <div class="col-md-4">
               <div class="form-group row">
                 <label class="col-form-label col-sm-4 pt-0" for="cust_detail_marital_status" id="ID152">Marital Status</label>
                 <div class="col-sm-8">
@@ -2732,7 +2732,7 @@
               </div>
             </div>
           
-            <div class="col-md-4 mb-3">
+            <div class="col-md-4">
               <div class="form-group row">
                 <label class="col-form-label col-sm-4" for="cust_detail_dob" id="ID153">Date Of Birth</label>
                 <div class="col-sm-8">
@@ -2753,7 +2753,7 @@
               </div>
             </div>
           
-            <div class="col-md-4 mb-3">
+            <div class="col-md-4">
               <div class="form-group row">
                 <label class="col-form-label col-sm-4" for="cust_detail_nationality" id="ID155">Nationality</label>
                 <div class="col-sm-8">
@@ -2786,7 +2786,7 @@
           </div>
 
           <div class="form-group row">
-            <div class="col-md-3 mb-3">
+            <div class="col-md-4">
               <div class="form-group row">
                 <label class="col-form-label col-sm-4" for="cust_detail_country" id="ID157">Country</label>
                 <div class="col-sm-8">
@@ -2818,7 +2818,7 @@
               </div>
             </div>
           
-            <div class="col-md-4 mb-3">
+            <div class="col-md-4">
               <div class="form-group row">
                 <label class="col-form-label col-sm-4" for="cust_detail_state" id="ID159">State</label>
                 <div class="col-sm-8">
@@ -2843,7 +2843,7 @@
               </div>
             </div>
           
-            <div class="col-md-4 mb-3">
+            <div class="col-md-4">
               <div class="form-group row">
                 <label class="col-form-label col-sm-4" for="cust_detail_city" id="ID160">City</label>
                 <div class="col-sm-8">
@@ -2870,7 +2870,7 @@
           </div>
 
           <div class="form-group row">
-            <div class="col-md-3 mb-3">
+            <div class="col-md-4">
               <div class="form-group row">
                 <label class="col-form-label col-sm-4" for="cust_detail_address" id="ID161">Address</label>
                 <div class="col-sm-8">
@@ -2889,7 +2889,7 @@
               </div>
             </div>
           
-            <div class="col-md-4 mb-3">
+            <div class="col-md-4">
               <div class="form-group row">
                 <label class="col-form-label col-sm-4" for="cust_detail_idType" id="ID163">ID Type</label>
                 <div class="col-sm-8">
@@ -2921,7 +2921,7 @@
               </div>
             </div>
           
-            <div class="col-md-4 mb-3">
+            <div class="col-md-4">
               <div class="form-group row">
                 <label class="col-form-label col-sm-4" for="cust_detail_idcard" id="ID165">ID Number</label>
                 <div class="col-sm-8">
@@ -2969,7 +2969,7 @@
           </div>
 
           <div class="form-group row">
-            <div class="col-md-3 mb-3">
+            <div class="col-md-4">
               <div class="form-group row">
                 <label class="col-form-label col-sm-4" for="cust_detail_designation" id="ID169">Designation</label>
                 <div class="col-sm-8">
@@ -2988,7 +2988,7 @@
               </div>
             </div>
           
-            <div class="col-md-4 mb-3">
+            <div class="col-md-4">
               <div class="form-group row">
                 <label class="col-form-label col-sm-4" for="cust_detail_company" id="ID171">Employer</label>
                 <div class="col-sm-8">
@@ -3000,7 +3000,7 @@
               </div>
             </div>
           
-            <div class="col-md-4 mb-3">
+            <div class="col-md-4">
               <div class="form-group row">
                 <label class="col-form-label col-sm-4" for="cust_detail_idcard" id="ID172">Expiry Date</label>
                 <div class="col-sm-8">
@@ -3028,14 +3028,15 @@
 
       <div class="col-md-12" style="padding-bottom: 20px">
         <div style="text-align: right; padding: 10px">
-          <button mat-flat-button class="bgColourUpdate" (click)="customerSave()" *ngIf="!viewOnly"
+          <button mat-flat-button class="bgColourUpdate save_Cancel_btns" (click)="customerSave()" *ngIf="!viewOnly"
             [disabled]="isCustProcessing" id="ID092">
             SAVE
           </button>
-          <button class="ms-1" mat-flat-button color="warn" (click)="closeAddCustomerModal()" id=ID093>
+          &nbsp;
+          <button class="ms-1" mat-flat-button color="warn" (click)="closeAddCustomerModal()" id="ID093"
+            style="background-color: #B9C3D3  !important;" class="save_Cancel_btns">
             CANCEL
           </button>
-          &nbsp;
         </div>
       </div>
     </div>
@@ -3066,7 +3067,7 @@
             <div class="bg-gray-card">
               <div class="form-group row">
 
-                <div class="col-md-2">
+                <div class="col-md-3">
                   <div class="form-group row">
                     <label class="col-form-label col-sm-4" for="fcn_li_division" id="ID123">Division</label>
                     <div class="col-sm-8">
@@ -3080,10 +3081,10 @@
                   </div>
                 </div>
 
-                <div class="col-md-2">
+                <div class="col-md-3">
                   <div class="form-group row">
-                    <label class="col-form-label col-sm-4 pt-0" for="li_item_code" id="ID124">Stock Code</label>
-                    <div class="col-sm-8">
+                    <label class="col-form-label col-sm-5" for="li_item_code" id="ID124">Stock Code</label>
+                    <div class="col-sm-7">
                       <mat-form-field appearance="outline" style="width: 100%">
                         <input type="text" matInput autocomplete="off" formControlName="fcn_li_item_code" #fcn_li_item_code
                          id="fcn_li_item_code" autofocus (change)="getStockDesc($event)" [readonly]="viewOnly" />
@@ -3093,10 +3094,10 @@
                   </div>
                 </div>
 
-                <div class="col-md-3 mb-3">
+                <div class="col-md-4">
                   <div class="form-group row">
-                    <label class="col-form-label col-sm-4 pt-0" for="li_item_desc" id="ID096">Stock Description</label>
-                    <div class="col-sm-8">
+                    <label class="col-form-label col-sm-5" for="li_item_desc" id="ID096">Stock Description</label>
+                    <div class="col-sm-7">
                       <mat-form-field appearance="outline" style="width: 100%">
                         <input type="text" matInput formControlName="fcn_li_item_desc" id="fcn_li_item_desc"
                           [readonly]="viewOnly || !allowDescription" />
@@ -3136,12 +3137,12 @@
           <div class="col-md-12">
             <div class="row">
               <div class="col-md-6">
-                <div class="form-group row">
 
-                  <div class="col-md-2 mb-3">
+                <div class="form-group row">
+                  <div class="col-md-6">
                     <div class="form-group row">
-                      <label class="col-form-label col-sm-4" for="li_pcs" id="ID175">Pcs</label>
-                      <div class="col-sm-8">
+                      <label class="col-form-label col-sm-5" for="li_pcs" id="ID175">Pcs</label>
+                      <div class="col-sm-6">
                         <mat-form-field appearance="outline" style="width: 100%">
                           <input class="st_txt_right" type="text" [min]="0" autocomplete="off" [maxLength]="14"
                           (keyup)="this.comFunc.enforceMinMax($event.target)" matInput id="fcn_li_pcs"
@@ -3162,12 +3163,12 @@
                       </div>
                     </div>
                   </div>
-               
-                  <div class="col-md-3 mb-3">
+
+                  <div class="col-md-6">
                     <div class="form-group row">
-                      <label class="col-form-label col-sm-4 pt-0" for="li_gross_wt" id=ID177>{{
+                      <label class="col-form-label col-sm-6" for="li_gross_wt" id=ID177>{{
                         newDictionary?.lblGrossWeight || "Gross Wt"}}</label>
-                      <div class="col-sm-8">
+                      <div class="col-sm-6">
                         <mat-form-field appearance="outline" style="width: 100%">
                           <input class="st_txt_right" [maxLength]="14" type="text" [min]="0"
                             (keyup)="this.comFunc.enforceMinMax($event.target)" matInput formControlName="fcn_li_gross_wt"
@@ -3189,12 +3190,14 @@
                       </div>
                     </div>
                   </div>
-                 
-                  <div class="col-md-3 mb-3" *ngIf="this.divisionMS == 'S' ? false : true">
+                </div>
+
+                <div class="form-group row">
+                  <div class="col-md-6" *ngIf="this.divisionMS == 'S' ? false : true">
                     <div class="form-group row">
-                      <label class="col-form-label col-sm-4 pt-0" for="li_stone_wt" id="ID180">{{
+                      <label class="col-form-label col-sm-5" for="li_stone_wt" id="ID180">{{
                         newDictionary?.lblStoneWeight || "Stone Wt"}}</label>
-                      <div class="col-sm-8">
+                      <div class="col-sm-6">
                         <mat-form-field appearance="outline" style="width: 100%">
                           <input class="st_txt_right" type="text" [min]="0" [maxLength]="14"
                           (keyup)="this.comFunc.enforceMinMax($event.target)" matInput formControlName="fcn_li_stone_wt"
@@ -3204,11 +3207,11 @@
                       </div>
                     </div>
                   </div>
-                  
-                  <div class="col-md-3 mb-3" *ngIf="this.divisionMS == 'S' ? false : true">
+
+                  <div class="col-md-6" *ngIf="this.divisionMS == 'S' ? false : true">
                     <div class="form-group row">
-                      <label class="col-form-label col-sm-4 pt-0" for="net_wt" id="ID181">Net Wt</label>
-                      <div class="col-sm-8">
+                      <label class="col-form-label col-sm-6" for="net_wt" id="ID181">Net Wt</label>
+                      <div class="col-sm-6">
                         <mat-form-field appearance="outline" style="width: 100%">
                           <input type="text" class="st_txt_right" [min]="0" [maxLength]="14"
                             (keyup)="this.comFunc.enforceMinMax($event.target)"
@@ -3221,11 +3224,11 @@
                   </div>
                 </div>
       
-                <div class="form-group row" *ngIf="this.divisionMS == 'M'">
+                <div class="form-group row" >
                   <div class="col-md-6">
                     <div class="form-group row">
-                      <label class="col-form-label col-sm-4 pt-0" for="li_purity" id="ID182">Purity</label>
-                      <div class="col-sm-8">
+                      <label class="col-form-label col-sm-5" for="li_purity" id="ID182">Purity</label>
+                      <div class="col-sm-6">
                         <mat-form-field appearance="outline" style="width: 100%">
                           <input type="number" [min]="0" [maxLength]="14"
                           (keyup)="this.comFunc.enforceMinMax($event.target)" class="st_txt_right" matInput
@@ -3237,8 +3240,8 @@
 
                   <div class="col-md-6">
                     <div class="form-group row">
-                      <label class="col-form-label col-sm-4 pt-0" for="pure_wt" id="ID183">Pure Weight</label>
-                      <div class="col-sm-8">
+                      <label class="col-form-label col-sm-6" for="pure_wt" id="ID183">Pure Weight</label>
+                      <div class="col-sm-6">
                         <mat-form-field appearance="outline" style="width: 100%">
                           <input class="st_txt_right" type="text" (keyup)="this.comFunc.enforceMinMax($event.target)"
                           matInput formControlName="fcn_li_pure_wt" id="fcn_li_pure_wt" readonly />
@@ -3251,8 +3254,8 @@
                 <div class="form-group row" *ngIf="this.divisionMS == 'S' ? false : true">
                   <div class="col-md-6">
                     <div class="form-group row">
-                      <label class="col-form-label col-sm-4 pt-0" for="metal_rate" id="ID184">Metal Rate</label>
-                      <div class="col-sm-8">
+                      <label class="col-form-label col-sm-5" for="metal_rate" id="ID184">Metal Rate</label>
+                      <div class="col-sm-6">
                         <mat-form-field appearance="outline" style="width: 100%">
                           <input class="st_txt_right" type="text" [min]="0" [maxLength]="14"
                           (keyup)="this.comFunc.enforceMinMax($event.target)" matInput formControlName="fcn_ad_metal_rate"
@@ -3264,8 +3267,8 @@
 
                   <div class="col-md-6">
                     <div class="form-group row">
-                      <label class="col-form-label col-sm-4 pt-0" for="metal_amount" id="ID185">Metal Amount</label>
-                      <div class="col-sm-8">
+                      <label class="col-form-label col-sm-6" for="metal_amount" id="ID185">Metal Amount</label>
+                      <div class="col-sm-6">
                         <mat-form-field appearance="outline" style="width: 100%">
                           <input class="st_txt_right" type="text" [min]="0" [maxLength]="14"
                             (keyup)="this.comFunc.enforceMinMax($event.target)" matInput
@@ -3279,8 +3282,8 @@
                 <div class="form-group row" *ngIf="this.divisionMS == 'S' ? false : true">
                   <div class="col-md-6">
                     <div class="form-group row">
-                      <label class="col-form-label col-sm-4 pt-0" for="stone_rate" id="ID186">Stone Rate</label>
-                      <div class="col-sm-8">
+                      <label class="col-form-label col-sm-5" for="stone_rate" id="ID186">Stone Rate</label>
+                      <div class="col-sm-6">
                         <mat-form-field appearance="outline" style="width: 100%">
                           <input class="st_txt_right" type="text" [min]="0" [maxLength]="14"
                             (keyup)="this.comFunc.enforceMinMax($event.target)" matInput formControlName="fcn_ad_stone_rate"
@@ -3293,8 +3296,8 @@
 
                   <div class="col-md-6">
                     <div class="form-group row">
-                      <label class="col-form-label col-sm-4 pt-0" for="stone_amount" id="ID187">Stone Amount</label>
-                      <div class="col-sm-8">
+                      <label class="col-form-label col-sm-6" for="stone_amount" id="ID187">Stone Amount</label>
+                      <div class="col-sm-6">
                         <mat-form-field appearance="outline" style="width: 100%">
                           <input class="st_txt_right" type="text" [min]="0" [maxLength]="14"
                             (keyup)="this.comFunc.enforceMinMax($event.target)" id="fcn_ad_stone_amount" matInput
@@ -3317,10 +3320,10 @@
                 <div class="form-group row">
                   <div class="col-md-6">
                     <div class="form-group row">
-                      <label class="col-form-label col-sm-4 pt-0" for="rate" id="ID188">
+                      <label class="col-form-label col-sm-5" for="rate" id="ID188">
                         {{divisionMS == "M" ? "Making Rate" : "Rate"}}
                       </label>
-                      <div class="col-sm-8">
+                      <div class="col-sm-6">
                         <mat-form-field appearance="outline" style="width: 100%">
                           <input class="st_txt_right" type="text" [min]="0" [maxLength]="14"
                             (keyup)="this.comFunc.enforceMinMax($event.target)" matInput id="fcn_li_rate"
@@ -3346,10 +3349,10 @@
 
                   <div class="col-md-6">
                     <div class="form-group row">
-                      <label class="col-form-label col-sm-4 pt-0" for="amount" id="ID191">
+                      <label class="col-form-label col-sm-6" for="amount" id="ID191">
                         {{ divisionMS == "M" ? "Making Amount" : "Amount" }}
                       </label>
-                      <div class="col-sm-8">
+                      <div class="col-sm-6">
                         <mat-form-field appearance="outline" style="width: 100%">
                           <input class="st_txt_right" type="text" [min]="0" [maxLength]="14"
                           (keyup)="this.comFunc.enforceMinMax($event.target)" id="fcn_li_total_amount" matInput
@@ -3378,8 +3381,8 @@
                 <div class="form-group row" *ngIf="this.divisionMS == 'M' ? false : true">
                   <div class="col-md-6">
                     <div class="form-group row">
-                      <label class="col-form-label col-sm-4 pt-0" for="discount_percentage" id="ID192">Discount %</label>
-                      <div class="col-sm-8">
+                      <label class="col-form-label col-sm-5" for="discount_percentage" id="ID192">Discount %</label>
+                      <div class="col-sm-6">
                         <mat-form-field appearance="outline" style="width: 100%">
                             <input class="st_txt_right" [min]="0" [max]="100"
                             (keyup)="this.comFunc.enforceMinMax($event.target)" matInput
@@ -3396,8 +3399,8 @@
 
                   <div class="col-md-6">
                     <div class="form-group row">
-                      <label class="col-form-label col-sm-4 pt-0" for="discount_amount" id="ID193">Discount Amount</label>
-                      <div class="col-sm-8">
+                      <label class="col-form-label col-sm-6" for="discount_amount" id="ID193">Discount Amount</label>
+                      <div class="col-sm-6">
                         <mat-form-field appearance="outline" style="width: 100%">
                           <input class="st_txt_right" [min]="0" [maxLength]="14"
                             (keyup)="this.comFunc.enforceMinMax($event.target)" matInput
@@ -3438,12 +3441,10 @@
 
 
               <div class="row mt-1">
-
-
-                <div class="col-md-2 mb-3">
+                <div class="col-md-3">
                   <div class="form-group row">
-                    <label class="col-form-label col-sm-4 pt-0" for="fcn_li_gross_amount" id="ID195">Total Amount</label>
-                    <div class="col-sm-8">
+                    <label class="col-form-label col-sm-5" for="fcn_li_gross_amount" id="ID195">Total Amount</label>
+                    <div class="col-sm-7">
                       <mat-form-field appearance="outline" style="width: 100%">
                         <input class="st_txt_right" [min]="0" [maxLength]="14"
                         (keyup)="this.comFunc.enforceMinMax($event.target)" matInput
@@ -3472,10 +3473,10 @@
                   </div>
                 </div>
 
-                <div class="col-md-3 mb-3" *ngIf="taxType == 1">
+                <div class="col-md-3" *ngIf="taxType == 1">
                   <div class="form-group row">
-                    <label class="col-form-label col-sm-4 pt-0" for="tax_percentage" id="ID198">Tax %</label>
-                    <div class="col-sm-8">
+                    <label class="col-form-label col-sm-4" for="tax_percentage" id="ID198">Tax %</label>
+                    <div class="col-sm-7">
                       <mat-form-field appearance="outline" style="width: 100%">
                         <input class="st_txt_right" type="number" [min]="0" [maxLength]="14"
                         (keyup)="this.comFunc.enforceMinMax($event.target)" matInput
@@ -3485,10 +3486,10 @@
                   </div>
                 </div>
 
-                <div class="col-md-3 mb-3" *ngIf="taxType == 2">
+                <div class="col-md-3" *ngIf="taxType == 2">
                   <div class="form-group row">
-                    <label class="col-form-label col-sm-4 pt-0" for="cgst_percentage" id="ID199">CGST %</label>
-                    <div class="col-sm-8">
+                    <label class="col-form-label col-sm-5" for="cgst_percentage" id="ID199">CGST %</label>
+                    <div class="col-sm-7">
                       <mat-form-field appearance="outline" style="width: 100%">
                         <input class="st_txt_right" type="number" [min]="0" [maxLength]="14"
                         (keyup)="this.comFunc.enforceMinMax($event.target)" matInput
@@ -3498,10 +3499,10 @@
                   </div>
                 </div>
 
-                <div class="col-md-3 mb-3"  *ngIf="taxType == 1">
+                <div class="col-md-3"  *ngIf="taxType == 1">
                   <div class="form-group row">
-                    <label class="col-form-label col-sm-4 pt-0" for="cgst_percentage" id="ID200">Tax Amount</label>
-                    <div class="col-sm-8">
+                    <label class="col-form-label col-sm-5" for="cgst_percentage" id="ID200">Tax Amount</label>
+                    <div class="col-sm-7">
                       <mat-form-field appearance="outline" style="width: 100%">
                         <input class="st_txt_right" [min]="0" [maxLength]="14"
                         (keyup)="this.comFunc.enforceMinMax($event.target)" matInput formControlName="fcn_li_tax_amount"
@@ -3511,10 +3512,10 @@
                   </div>
                 </div>
 
-                <div class="col-md-3 mb-3"  *ngIf="taxType == 2">
+                <div class="col-md-3"  *ngIf="taxType == 2">
                   <div class="form-group row">
-                    <label class="col-form-label col-sm-4 pt-0" for="cgst_percentage" id="ID201">CGST Amount</label>
-                    <div class="col-sm-8">
+                    <label class="col-form-label col-sm-6" for="cgst_percentage" id="ID201">CGST Amount</label>
+                    <div class="col-sm-6">
                       <mat-form-field appearance="outline" style="width: 100%">
                         <input class="st_txt_right" type="number" [min]="0" [maxLength]="14"
                         (keyup)="this.comFunc.enforceMinMax($event.target)" matInput
@@ -3524,10 +3525,10 @@
                   </div>
                 </div>
                 
-                <div class="col-md-3 mb-3">
+                <div class="col-md-3">
                   <div class="form-group row">
-                    <label class="col-form-label col-sm-4 pt-0" for="cgst_percentage" id="ID202">Net Amount</label>
-                    <div class="col-sm-8">
+                    <label class="col-form-label col-sm-5" for="cgst_percentage" id="ID202">Net Amount</label>
+                    <div class="col-sm-7">
                       <mat-form-field appearance="outline" style="width: 100%">
                         <input class="st_txt_right" (focus)="
                           setValToLocalStorage($event, 'fcn_li_net_amount')
@@ -3549,9 +3550,6 @@
                     </div>
                   </div>
                 </div>
-
-
-
         
               </div>
             </div>
@@ -3752,7 +3750,7 @@
             Cancel</button>&nbsp; -->
       </div>
       <div style="text-align: right; padding: 10px" *ngIf="viewOnly">
-        <button mat-flat-btn class="btn btn btn-danger" (click)="modal.dismiss('Cross click')" id="ID205">
+        <button mat-flat-btn class="btn btn btn-danger save_Cancel_btns" (click)="modal.dismiss('Cross click')" id="ID205">
           Close</button>&nbsp;
       </div>
       <!-- <div style="text-align: right; padding: 10px">

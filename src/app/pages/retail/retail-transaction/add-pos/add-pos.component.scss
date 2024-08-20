@@ -211,23 +211,32 @@ button:disabled {
 }
 
 .bgColourUpdate{
-  background-color: #1a61a9 !important;
+  background-color: #295094  !important;
   color: #fff !important;
 }
 
 .next-item-button {
-  background-color: #1a61a9;
+  // background-color: #1a61a9;
+  background-color: #295094 !important;
   color: white;
+  padding: 5px 10px;
+  line-height: 1.5;
 }
 
 .update-finish-button {
-  background-color: #1E3C72;
+  // background-color: #1E3C72;
+  background-color: #295094 !important;
   color: white;
+  padding: 5px 10px;
+  line-height: 1.5;
 }
 
 .cancel-button {
-  background-color: #428cc9;
+  // background-color: #428cc9;
+  background-color: #B9C3D3 !important;
   color: white;
+  padding: 5px 10px;
+  line-height: 1.5;
 }
 
 .slider{
@@ -249,4 +258,9 @@ button:disabled {
 }
 .button-spacing {
   margin-right: 16px;
+}
+
+.save_Cancel_btns{
+  padding: 5px 10px;
+  line-height: 1.5;
 }
