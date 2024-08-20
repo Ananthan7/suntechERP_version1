@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Input, OnInit, ViewChild } from "@angular/core";
 import { MasterSearchModel } from "src/app/shared/data/master-find-model";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { SuntechAPIService } from "src/app/services/suntech-api.service";
@@ -6,23 +6,35 @@ import { ToastrService } from "ngx-toastr";
 import { CommonServiceService } from "src/app/services/common-service.service";
 import { Subscription } from "rxjs";
 import Swal from "sweetalert2";
-import {  NgbActiveModal,  NgbModal,  NgbModalRef,} from "@ng-bootstrap/ng-bootstrap";
+import { NgbActiveModal, NgbModal, NgbModalRef, } from "@ng-bootstrap/ng-bootstrap";
+import { MasterSearchComponent } from "src/app/shared/common/master-search/master-search.component";
 @Component({
   selector: 'app-loss-recovery',
   templateUrl: './loss-recovery.component.html',
   styleUrls: ['./loss-recovery.component.scss']
 })
 export class LossRecoveryComponent implements OnInit {
+  @ViewChild('overlayReceicvedBy') overlayReceicvedBy!: MasterSearchComponent;
+  @ViewChild('overlayWorker') overlayWorker!: MasterSearchComponent;
+  @ViewChild('overlayProcess') overlayProcess!: MasterSearchComponent;
+  @ViewChild('overlayStockCode') overlayStockCode!: MasterSearchComponent;
+  @ViewChild('overlayLocationTo') overlayLocationTo!: MasterSearchComponent;
+  @ViewChild('overlayKaratCode') overlayKaratCode!: MasterSearchComponent;
+
+
   divisionMS: any = 'ID';
   branchCode?: string;
   yearMonth?: string;
+  editMode: boolean = false;
+  viewMode: boolean = false;
+  isDisableSaveBtn: boolean | undefined;
   vocMaxDate = new Date();
   currentDate = new Date();
   @Input() content!: any;
   private subscriptions: Subscription[] = [];
-  columnhead:any[] = ['',];
-  columnheader:any[] = ['Sn No','Type','Worker Code','Process Code','Loss Qty','Recovery','Reco.Pure','Net Loss','Location To','Job Number','Job SO No','Design Code','Scrap UNQ Job'];
- 
+  columnhead: any[] = ['',];
+  columnheader: any[] = ['Sn No', 'Type', 'Worker Code', 'Process Code', 'Loss Qty', 'Recovery', 'Reco.Pure', 'Net Loss', 'Location To', 'Job Number', 'Job SO No', 'Design Code', 'Scrap UNQ Job'];
+
   user: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -104,7 +116,7 @@ export class LossRecoveryComponent implements OnInit {
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
     private comService: CommonServiceService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.branchCode = this.comService.branchCode;
@@ -115,71 +127,71 @@ export class LossRecoveryComponent implements OnInit {
   close(data?: any) {
     this.activeModal.close(data);
   }
-  
+
   userDataSelected(value: any) {
     console.log(value);
-       this.lossRecoveryFrom.controls.receicvedBy.setValue(value.UsersName);
+    this.lossRecoveryFrom.controls.receicvedBy.setValue(value.UsersName);
   }
 
-  processCodeSelected(e:any){
+  processCodeSelected(e: any) {
     console.log(e);
     this.lossRecoveryFrom.controls.process.setValue(e.Process_Code);
   }
 
-  karatCodeSelected(e:any){
+  karatCodeSelected(e: any) {
     console.log(e);
-    this.lossRecoveryFrom.controls.karatCode.setValue(e['Karat Code']);
-    this.lossRecoveryFrom.controls.karatCodeDesc.setValue(e['Karat Description']);
+    this.lossRecoveryFrom.controls.karatCode.setValue(e.KARAT_CODE);
+    this.lossRecoveryFrom.controls.karatCodeDesc.setValue(e.Karat_desc);
   }
 
-  stockCodeSelected(e:any){
-    this.lossRecoveryFrom.controls.process.setValue(e.STOCK_CODE);
+  stockCodeSelected(e: any) {
+    this.lossRecoveryFrom.controls.stockCode.setValue(e.STOCK_CODE);
   }
 
-  workCodeSelected(e:any){
-    this.lossRecoveryFrom.controls.process.setValue(e.WORKER_CODE);
+  workCodeSelected(e: any) {
+    this.lossRecoveryFrom.controls.worker.setValue(e.WORKER_CODE);
   }
 
-  locationCodeSelected(e:any){
+  locationCodeSelected(e: any) {
     console.log(e);
     this.lossRecoveryFrom.controls.locationTo.setValue(e.LOCATION_CODE);
   }
 
 
   lossRecoveryFrom: FormGroup = this.formBuilder.group({
-    vocType : ['',[Validators.required]],
-    vocDate : [''],
-    VocNo : ['',[Validators.required]],
-    EnterBy : [''],
-    returnType : [''],   
-    receicvedBy : [''],   
-    fromDate : [''],
-    toDate : [''],
-    returnDate : [''],
-    remarks : [''],
-    jobNo : [''],
-    jobDesc : [''],
-    worker : [''],
-    process : [''],
-    stockCode :[''],
-    locationTo : [''],
-    karatCode : [''],
-    karatCodeDesc : [''],
-    scrapReturnWt : [''],
-    balanceWt : [''],
-    excessLoss : [''],
-    scrapPureWt : [''],
-    balancePureWt : [''],
-    remainBalPure : [''],
-    newJobNo :[''],
-    radioShowPendingJobsForScrap : true,
-    radioKaratWiseFilter : true,
-    radioGold : true,
-    radioDiamond : true,
-    radioRefinery : true,
-    radioAllowRecovery : true,
-    radioScrapReturn : true,
-    radioFinalLoss : true,
+    vocType: ['', [Validators.required]],
+    vocDate: [''],
+    VocNo: ['', [Validators.required]],
+    EnterBy: [''],
+    returnType: [''],
+    receicvedBy: [''],
+    fromDate: [''],
+    toDate: [''],
+    returnDate: [''],
+    remarks: [''],
+    jobNo: [''],
+    jobDesc: [''],
+    worker: [''],
+    process: [''],
+    stockCode: [''],
+    locationTo: [''],
+    karatCode: [''],
+    karatCodeDesc: [''],
+    scrapReturnWt: [''],
+    balanceWt: [''],
+    excessLoss: [''],
+    scrapPureWt: [''],
+    balancePureWt: [''],
+    remainBalPure: [''],
+    newJobNo: [''],
+    radioShowPendingJobsForScrap: true,
+    radioKaratWiseFilter: true,
+    radioGold: true,
+    radioDiamond: true,
+    radioRefinery: true,
+    radioAllowRecovery: true,
+    radioScrapReturn: true,
+    radioFinalLoss: true,
   });
 
   submitValidations(form: any) {
@@ -192,6 +204,78 @@ export class LossRecoveryComponent implements OnInit {
       return true
     }
     return false;
+  }
+
+
+
+
+  lookupKeyPress(event: any, form?: any) {
+    if (event.key == 'Tab' && event.target.value == '') {
+      this.showOverleyPanel(event, form)
+    }
+    if (event.key === 'Enter') {
+      if (event.target.value == '') this.showOverleyPanel(event, form)
+      event.preventDefault();
+    }
+  }
+
+
+
+  showOverleyPanel(event: any, formControlName: string) {
+    if (this.lossRecoveryFrom.value[formControlName] != '') return;
+
+    switch (formControlName) {
+      case 'receicvedBy':
+        this.overlayReceicvedBy.showOverlayPanel(event);
+        break;
+      case 'worker':
+        this.overlayWorker.showOverlayPanel(event);
+        break;
+      case 'process':
+        this.overlayProcess.showOverlayPanel(event);
+        break;
+      case 'stockCode':
+        this.overlayStockCode.showOverlayPanel(event);
+        break;
+      case 'locationTo':
+        this.overlayLocationTo.showOverlayPanel(event);
+        break;
+      case 'karatCode':
+        this.overlayKaratCode.showOverlayPanel(event);
+        break;
+      default:
+
+    }
+  }
+
+
+  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    LOOKUPDATA.SEARCH_VALUE = event.target.value
+    if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
+    let param = {
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+    }
+    this.comService.toastInfoByMsgId('MSG81447');
+    let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
+      .subscribe((result) => {
+        this.isDisableSaveBtn = false;
+        let data = this.comService.arrayEmptyObjectToString(result.dynamicData[0])
+        if (data.length == 0) {
+          this.comService.toastErrorByMsgId('MSG1531')
+          this.lossRecoveryFrom.controls[FORMNAME].setValue('')
+          LOOKUPDATA.SEARCH_VALUE = ''
+          if (FORMNAME === 'receicvedBy' || FORMNAME === 'worker' || FORMNAME === 'process' || FORMNAME === 'stockCode' || FORMNAME === 'locationTo' || FORMNAME === 'karatCode') {
+            this.showOverleyPanel(event, FORMNAME);
+          }
+          return
+        }
+
+      }, err => {
+        this.comService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+      })
+    this.subscriptions.push(Sub)
   }
 
   formSubmit() {
@@ -226,7 +310,7 @@ export class LossRecoveryComponent implements OnInit {
       "REC_TYPE": 0,
       "AUTOPOSTING": true,
       "POSTDATE": "",
-      "REMARKS":  this.lossRecoveryFrom.value.remarks,
+      "REMARKS": this.lossRecoveryFrom.value.remarks,
       "PRINT_COUNT": 0,
       "LOSS_FRMDATE": this.lossRecoveryFrom.value.fromDate,
       "LOSS_TODATE": this.lossRecoveryFrom.value.toDate,
@@ -359,9 +443,9 @@ export class LossRecoveryComponent implements OnInit {
       ]
     }
     let Sub: Subscription = this.dataService
-    .postDynamicAPI(API, postData)
-    .subscribe(
-      (result) => {
+      .postDynamicAPI(API, postData)
+      .subscribe(
+        (result) => {
           if (result && result.status == "Success") {
             Swal.fire({
               title: result.message || "Success",
@@ -375,13 +459,13 @@ export class LossRecoveryComponent implements OnInit {
                 this.close("reloadMainGrid");
               }
             });
-          }else {
+          } else {
             this.comService.toastErrorByMsgId('MSG3577')
           }
-      },
-      (err) => alert(err)
-    );
-  this.subscriptions.push(Sub);
+        },
+        (err) => alert(err)
+      );
+    this.subscriptions.push(Sub);
   }
   update() {
     // if (this.lossRecoveryFrom.invalid) {
@@ -391,34 +475,34 @@ export class LossRecoveryComponent implements OnInit {
     if (this.submitValidations(this.lossRecoveryFrom.value)) return;
 
 
-    let API ="ProdLossRecovery/UpdateProdLossRecovery/" + this.lossRecoveryFrom.value.mid;
-      let postData = {
+    let API = "ProdLossRecovery/UpdateProdLossRecovery/" + this.lossRecoveryFrom.value.mid;
+    let postData = {
 
-      }
-        let Sub: Subscription = this.dataService
-        .putDynamicAPI(API, postData)
-        .subscribe(
-          (result) => {
-              if (result && result.status == "Success") {
-                Swal.fire({
-                  title: result.message || "Success",
-                  text: "",
-                  icon: "success",
-                  confirmButtonColor: "#336699",
-                  confirmButtonText: "Ok",
-                }).then((result: any) => {
-                  if (result.value) {
-                    this.lossRecoveryFrom.reset();
-                    this.close("reloadMainGrid");
-                  }
-                });
-              }else {
-                this.comService.toastErrorByMsgId('MSG3577')
-              } 
-          },
-          (err) => alert(err)
-        );
-      this.subscriptions.push(Sub);
-     }
-        
+    }
+    let Sub: Subscription = this.dataService
+      .putDynamicAPI(API, postData)
+      .subscribe(
+        (result) => {
+          if (result && result.status == "Success") {
+            Swal.fire({
+              title: result.message || "Success",
+              text: "",
+              icon: "success",
+              confirmButtonColor: "#336699",
+              confirmButtonText: "Ok",
+            }).then((result: any) => {
+              if (result.value) {
+                this.lossRecoveryFrom.reset();
+                this.close("reloadMainGrid");
+              }
+            });
+          } else {
+            this.comService.toastErrorByMsgId('MSG3577')
+          }
+        },
+        (err) => alert(err)
+      );
+    this.subscriptions.push(Sub);
+  }
+
 }

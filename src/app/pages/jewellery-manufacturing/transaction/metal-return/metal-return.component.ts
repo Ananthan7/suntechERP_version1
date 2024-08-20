@@ -258,104 +258,75 @@ this.setvoucherTypeMaster()
   locationCodeSelected(e: any) {
     this.metalReturnForm.controls.location.setValue(e.LOCATION_CODE);
   }
-  // /**use: open detail screen */
-  // openAddMetalReturnDetail(dataToChild?: any) {
-  //   if (dataToChild) {
-  //     dataToChild.FLAG = this.content?.FLAG || ''
-  //     dataToChild.HEADERDETAILS = this.metalReturnForm.value;
-  //   } else {
-  //     dataToChild = { HEADERDETAILS: this.metalReturnForm.value }
-  //   }
-  //   this.dataToDetailScreen = dataToChild //input variable to pass data to child
-  //   this.modalReference = this.modalService.open(this.MetalReturnDetailScreen, {
-  //     size: 'xl',
-  //     backdrop: true,//'static'
-  //     keyboard: false,
-  //     windowClass: 'modal-full-width',
-  //   });
-  //   // this.modalReference.componentInstance.content = dataToChild
-  //   // this.modalReference.result.then((dataToParent) => {
-  //   //   if (dataToParent) {
-  //   //     this.setValuesToHeaderGrid(dataToParent);
-  //   //   }
-  //   // });
-  // }
-
+  /**use: open detail screen */
   openAddMetalReturnDetail(dataToChild?: any) {
-    // Extract the Stock Code from the dataToChild object (you may need to adjust this depending on your data structure)
-    const newStockCode = dataToChild?.STOCK_CODE;
-  
-    if (newStockCode) {
-      // Check if the Stock Code already exists in the grid data
-      const duplicateRow = this.metalReturnDetailsData.find((row: any) => row.STOCK_CODE === newStockCode);
-  
-      if (duplicateRow) {
-        // Show a confirmation dialog if a duplicate Stock Code is found
-        Swal.fire({
-          title: 'Duplicate Stock Code',
-          text: 'This Stock Code entry is already available in detail. Do you wish to continue?',
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          confirmButtonText: 'Yes, continue!',
-          cancelButtonText: 'No, cancel'
-        }).then((result) => {
-          if (result.isConfirmed) {
-            // Proceed with opening the modal if the user confirms
-            this.proceedWithModalOpening(dataToChild);
-          } else {
-            // Handle cancellation if needed (optional)
-            Swal.fire(
-              'Cancelled',
-              'The operation was cancelled.',
-              'info'
-            );
-          }
-        });
-      } else {
-        // No duplicate found, proceed with opening the modal
-        this.proceedWithModalOpening(dataToChild);
-      }
+    if (dataToChild) {
+      dataToChild.FLAG = this.content?.FLAG || ''
+      dataToChild.HEADERDETAILS = this.metalReturnForm.value;
     } else {
-      // If no Stock Code is present in the dataToChild, proceed with opening the modal
-      this.proceedWithModalOpening(dataToChild);
+      dataToChild = { HEADERDETAILS: this.metalReturnForm.value }
     }
+    this.dataToDetailScreen = dataToChild //input variable to pass data to child
+    this.modalReference = this.modalService.open(this.MetalReturnDetailScreen, {
+      size: 'xl',
+      backdrop: true,//'static'
+      keyboard: false,
+      windowClass: 'modal-full-width',
+    });
+    // this.modalReference.componentInstance.content = dataToChild
+    // this.modalReference.result.then((dataToParent) => {
+    //   if (dataToParent) {
+    //     this.setValuesToHeaderGrid(dataToParent);
+    //   }
+    // });
   }
 
-  // async addItemWithCheck(existingArray: any[], newItem: any): Promise<boolean> {
-  //   const duplicate = existingArray.find((item: any) => item.STOCK_CODE === newItem.STOCK_CODE);
+  // openAddMetalReturnDetail(dataToChild?: any) {
+  //   // Extract the Stock Code from the dataToChild object (you may need to adjust this depending on your data structure)
+  //   const newStockCode = dataToChild?.STOCK_CODE;
   
-  //   if (duplicate) {
-  //     // Show a confirmation dialog for duplicate entries
-  //     const result = await Swal.fire({
-  //       title: 'Duplicate Stock Code',
-  //       text: 'This Stock Code entry is already available in detail. Do you wish to continue?',
-  //       icon: 'warning',
-  //       showCancelButton: true,
-  //       confirmButtonColor: '#3085d6',
-  //       cancelButtonColor: '#d33',
-  //       confirmButtonText: 'Yes, continue!',
-  //       cancelButtonText: 'No, cancel'
-  //     });
+  //   if (newStockCode) {
+  //     // Check if the Stock Code already exists in the grid data
+  //     const duplicateRow = this.metalReturnDetailsData.find((row: any) => row.STOCK_CODE === newStockCode);
   
-  //     if (result.isConfirmed) {
-  //       // User confirmed to continue
-  //       return false;
+  //     if (duplicateRow) {
+  //       // Show a confirmation dialog if a duplicate Stock Code is found
+  //       Swal.fire({
+  //         title: 'Duplicate Stock Code',
+  //         text: 'This Stock Code entry is already available in detail. Do you wish to continue?',
+  //         icon: 'warning',
+  //         showCancelButton: true,
+  //         confirmButtonColor: '#3085d6',
+  //         cancelButtonColor: '#d33',
+  //         confirmButtonText: 'Yes, continue!',
+  //         cancelButtonText: 'No, cancel'
+  //       }).then((result) => {
+  //         if (result.isConfirmed) {
+  //           // Proceed with opening the modal if the user confirms
+  //           this.proceedWithModalOpening(dataToChild);
+  //         } else {
+  //           // Handle cancellation if needed (optional)
+  //           Swal.fire(
+  //             'Cancelled',
+  //             'The operation was cancelled.',
+  //             'info'
+  //           );
+  //         }
+  //       });
   //     } else {
-  //       // User canceled
-  //       this.commonService.toastErrorByMsgId('MSG2052');
-  //       return true;
+  //       // No duplicate found, proceed with opening the modal
+  //       this.proceedWithModalOpening(dataToChild);
   //     }
+  //   } else {
+  //     // If no Stock Code is present in the dataToChild, proceed with opening the modal
+  //     this.proceedWithModalOpening(dataToChild);
   //   }
-  
-  //   // No duplicate found
-  //   return false;
   // }
 
-  async addItemWithCheck(existingArray: any[], newItem: any) {
+  async addItemWithCheck(existingArray: any[], newItem: any): Promise<boolean> {
     const duplicate = existingArray.find((item: any) => item.STOCK_CODE === newItem.STOCK_CODE);
-       if (duplicate) {
+  
+    if (duplicate) {
       // Show a confirmation dialog for duplicate entries
       const result = await Swal.fire({
         title: 'Duplicate Stock Code',
@@ -381,6 +352,35 @@ this.setvoucherTypeMaster()
     // No duplicate found
     return false;
   }
+
+  // async addItemWithCheck(existingArray: any[], newItem: any) {
+  //   const duplicate = existingArray.find((item: any) => item.STOCK_CODE === newItem.STOCK_CODE);
+  //      if (duplicate) {
+  //     // Show a confirmation dialog for duplicate entries
+  //     const result = await Swal.fire({
+  //       title: 'Duplicate Stock Code',
+  //       text: 'This Stock Code entry is already available in detail. Do you wish to continue?',
+  //       icon: 'warning',
+  //       showCancelButton: true,
+  //       confirmButtonColor: '#3085d6',
+  //       cancelButtonColor: '#d33',
+  //       confirmButtonText: 'Yes, continue!',
+  //       cancelButtonText: 'No, cancel'
+  //     });
+  
+  //     if (result.isConfirmed) {
+  //       // User confirmed to continue
+  //       return false;
+  //     } else {
+  //       // User canceled
+  //       this.commonService.toastErrorByMsgId('MSG2052');
+  //       return true;
+  //     }
+  //   }
+  
+  //   // No duplicate found
+  //   return false;
+  // }
   
   proceedWithModalOpening(dataToChild: any) {
     if (dataToChild) {
@@ -798,12 +798,22 @@ this.setvoucherTypeMaster()
   processWorkerValidate() {
     let form = this.metalReturnForm.value
     let postData = {
-      "SPID": "063",
+      "SPID": "201",
       "parameter": {
-        strBranch_Code: this.commonService.nullToString(form.BRANCH_CODE),
+        strBranch_Code: this.commonService.nullToString(form.BRANCH_CODE),       
+        strJob_Number: this.commonService.nullToString(form.BRANCH_CODE),       
+        strUnq_Job_Id: this.commonService.nullToString(form.BRANCH_CODE),           
+        strMetalStone: this.commonService.nullToString(form.BRANCH_CODE),         
         strProcess_Code: this.commonService.nullToString(form.process),    
         strWorker_Code: this.commonService.nullToString(form.worker),
+        strStock_Code: this.commonService.nullToString(form.BRANCH_CODE),         
         strUserName: this.commonService.nullToString(this.commonService.userName),
+
+
+        // strBranch_Code: this.commonService.nullToString(form.BRANCH_CODE),
+        // strProcess_Code: this.commonService.nullToString(form.process),    
+        // strWorker_Code: this.commonService.nullToString(form.worker),
+        // strUserName: this.commonService.nullToString(this.commonService.userName),
       }
     }
 

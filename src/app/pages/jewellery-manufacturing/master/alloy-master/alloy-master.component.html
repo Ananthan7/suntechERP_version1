@@ -298,7 +298,7 @@
                                         class="stretch">
                                         <input type="text" matInput readonly
                                             formControlName="currency"
-                                            [readonly]="viewMode"  (keydown)="lookupKeyPress($event,'currency')"/>
+                                            [readonly]="viewMode"  (focusout)="validateLookupField($event,currencyCodeData,'currency')"  (keydown)="lookupKeyPress($event,'currency')"/>
                                             <master-search *ngIf="!viewMode" class="mstrScrch"
                                             [MasterSearchData]="currencyCodeData"  #overlaycurrencySearch
                                             (newRowClick)="currencyDataSelected($event)">
@@ -324,6 +324,7 @@
                                             formControlName="weightAvgCostFC"
                                             style="text-align: right"
                                             [readonly]="viewMode|| codeEnable"
+                                            AmountDecimalInput
                                             (focusout)="calculateWeightAvgCostFC($event)" />
                                     </mat-form-field>
                                 </div>
