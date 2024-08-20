@@ -23,27 +23,18 @@
               <label for="inputPassword" class="col-sm-4 col-form-label">Voc
                 Type * :</label>
               <div class="col-md-4">
-                <mat-form-field style="width: 100%;">
+                <mat-form-field appearance="outline" style="width: 100%;">
                   <input type="text" matInput [maxLength]="3" UpperCaseDirective
                     formControlName="voctype" readonly />
                 </mat-form-field>
               </div>
               <div class="col-md-4">
-                <!-- <mat-form-field style="width: 100%;">
-                  <input type="date" matInput formControlName="vocdate" />
-                </mat-form-field> -->
-                <!-- <mat-form-field style="width: 100%">
-                  <input matInput [matDatepicker]="vocdate" name="vocdate" formControlName="vocdate"
-                    placeholder="DD/MM/YYYY" DateValidation />
-                  <mat-datepicker-toggle matSuffix [for]="vocdate"></mat-datepicker-toggle>
-                  <mat-datepicker [startAt]="currentDate" #vocdate></mat-datepicker>
-                </mat-form-field> -->
-                <mat-form-field style="width: 100%">
+                <mat-form-field appearance="outline" style="width: 100%">
                   <input matInput [matDatepicker]="vocdate" name="vocdate"
                     formControlName="vocdate"
                     placeholder="DD/MM/YYYY" DateValidation [min]="minDate"
-                    [max]="maxDate"/>
-                  <mat-datepicker-toggle matSuffix 
+                    [max]="maxDate" />
+                  <mat-datepicker-toggle matSuffix
                     [for]="vocdate"></mat-datepicker-toggle>
                   <mat-datepicker [startAt]="currentDate"
                     #vocdate></mat-datepicker>
@@ -54,7 +45,7 @@
               <label for="inputPassword" class="col-sm-4 col-form-label">Voc
                 Number * :</label>
               <div class="col-md-8">
-                <mat-form-field style="width: 100%;">
+                <mat-form-field appearance="outline" style="width: 100%;">
                   <input type="text" matInput
                     maxlength="6" formControlName="vocno"
                     (focusout)="ValidatingVocNo()"
@@ -67,45 +58,49 @@
               <label for="inputPassword" class="col-sm-4 col-form-label">Process
                 * :</label>
               <div class="col-md-8">
-                <mat-form-field style="width: 70%;">
+                <mat-form-field appearance="outline" style="width: 70%;">
                   <input type="text" matInput formControlName="processcode"
                     (keydown)="lookupKeyPress($event,'processcode')"
                     (focusout)="validateLookupField($event,ProcessCodeData,'processcode')" />
+                  <master-search class="masterSearch"
+                    [MasterSearchData]="ProcessCodeData"
+                    #overlayprocessCodeSearch
+                    (newRowClick)="ProcessCodeSelected($event)">
+                  </master-search>
                 </mat-form-field>
-                <master-search [MasterSearchData]="ProcessCodeData"
-                  #overlayprocessCodeSearch
-                  (newRowClick)="ProcessCodeSelected($event)">
-                </master-search>
+
               </div>
             </div>
             <div class="row">
               <label for="inputPassword" class="col-sm-4 col-form-label">Worker
                 * :</label>
               <div class="col-md-8">
-                <mat-form-field style="width: 70%;">
+                <mat-form-field appearance="outline" style="width: 70%;">
                   <input type="text" matInput formControlName="workercode"
                     (focusout)="validateLookupField($event,WorkerCodeData,'workercode')"
                     (keydown)="lookupKeyPress($event,'workercode')" />
+                  <master-search class="masterSearch"
+                    [MasterSearchData]="WorkerCodeData"
+                    #overlayworkercodeSearch
+                    (newRowClick)="WorkerCodeSelected($event)">
+                  </master-search>
                 </mat-form-field>
-                <master-search [MasterSearchData]="WorkerCodeData"
-                  #overlayworkercodeSearch
-                  (newRowClick)="WorkerCodeSelected($event)">
-                </master-search>
               </div>
             </div>
             <div class="row">
               <label for="inputPassword" class="col-sm-4 col-form-label">Entered
                 By:</label>
               <div class="col-md-8">
-                <mat-form-field style="width: 70%;">
+                <mat-form-field appearance="outline" style="width: 70%;">
                   <input type="text" matInput formControlName="enteredBy"
                     (focusout)="validateLookupField($event,salesmanCodeData,'enteredBy')"
                     (keydown)="lookupKeyPress($event,'enteredBy')">
+                  <master-search class="masterSearch"
+                    [MasterSearchData]="salesmanCodeData"
+                    #overlayenteredBySearch
+                    (newRowClick)="userDataSelected($event)">
+                  </master-search>
                 </mat-form-field>
-                <master-search [MasterSearchData]="salesmanCodeData"
-                  #overlayenteredBySearch
-                  (newRowClick)="userDataSelected($event)">
-                </master-search>
               </div>
             </div>
           </div>
@@ -171,7 +166,8 @@
                   <div *dxTemplate="let data of 'jobNumbertemp'">
                     <a href="javascript:void(0)" class="mx-1"
                       [innerHTML]="data.value"></a>
-                    <master-search [MasterSearchData]="jobNumberCodeData"
+                    <master-search class="masterSearch"
+                      [MasterSearchData]="jobNumberCodeData"
                       (newRowClick)="jobNumberDataSelected($event,data)">
                     </master-search>
                   </div>
@@ -226,7 +222,7 @@
                   <label for="inputPassword"
                     class="col-sm-3 col-form-label">Remarks :</label>
                   <div class="col-md-9">
-                    <mat-form-field style="width: 100%;">
+                    <mat-form-field appearance="outline" style="width: 100%;">
                       <input type="text" matInput formControlName="remarks" />
                     </mat-form-field>
                   </div>
@@ -268,7 +264,7 @@
                 <div class="row my-2">
                   <label for="inputPassword" class="col-sm-3 col-form-label">Remarks * :</label>
                   <div class="col-md-9">
-                    <mat-form-field style="width: 100%;">
+                    <mat-form-field appearance="outline" style="width: 100%;">
                       <input type="text" matInput formControlName="remarks" />
                     </mat-form-field>
                   </div>
