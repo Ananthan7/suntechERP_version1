@@ -27,23 +27,19 @@
               <label for="inputPassword" class="col-sm-3 col-form-label">Voucher
                 Type * :</label>
               <div class="col-md-3">
-                <mat-form-field style="width: 100%;">
-                  <input type="text" matInput formControlName="voctype" />
+                <mat-form-field appearance="outline" appearance="outline" style="width: 100%;">
+                  <input type="text" matInput formControlName="voctype" UpperCaseDirective />
                 </mat-form-field>
               </div>
               <div class="col-md-3">
                 <!-- <mat-form-field style="width: 100%;">
                   <input type="date" matInput formControlName="vocDate" />
                 </mat-form-field> -->
-                <mat-form-field style="width: 100%">
-                  <input matInput [matDatepicker]="vocDate" name="vocDate"
-                    formControlName="vocDate"
-                    placeholder="DD/MM/YYYY" DateValidation [min]="minDate"
-                    [max]="maxDate"/>
-                  <mat-datepicker-toggle matSuffix
-                    [for]="vocDate"></mat-datepicker-toggle>
-                  <mat-datepicker [startAt]="currentDate"
-                    #vocDate></mat-datepicker>
+                <mat-form-field appearance="outline" style="width: 100%">
+                  <input matInput [matDatepicker]="vocDate" name="vocDate" formControlName="vocDate"
+                    placeholder="DD/MM/YYYY" DateValidation [min]="minDate" [max]="maxDate" />
+                  <mat-datepicker-toggle matSuffix [for]="vocDate"></mat-datepicker-toggle>
+                  <mat-datepicker [startAt]="currentDate" #vocDate></mat-datepicker>
                 </mat-form-field>
               </div>
             </div>
@@ -51,8 +47,8 @@
               <label for="inputPassword" class="col-sm-3 col-form-label">Voucher
                 No * :</label>
               <div class="col-md-3">
-                <mat-form-field style="width: 100%;">
-                  <input type="text" matInput formControlName="vocno"  style="text-align: right;"/>
+                <mat-form-field appearance="outline" style="width: 100%;">
+                  <input type="text" matInput formControlName="vocno" style="text-align: right;" />
                 </mat-form-field>
               </div>
             </div>
@@ -60,83 +56,78 @@
               <label for="inputPassword" class="col-sm-3 col-form-label">Process
                 * :</label>
               <div class="col-md-3">
-                <mat-form-field style="width: 70%;">
-                  <input type="text" matInput formControlName="process"
-                  (keydown)="lookupKeyPress($event,'process')"
+                <mat-form-field appearance="outline" style="width: 100%;">
+                  <input type="text" matInput formControlName="process" (keydown)="lookupKeyPress($event,'process')"
                     (focusout)="validateLookupField($event,ProcessCodeData,'process')" />
+                  <master-search [MasterSearchData]="ProcessCodeData" #overlayprocessCodeSearch class="masterSearch"
+                    (newRowClick)="ProcessCodeSelected($event)">
+                  </master-search>
                 </mat-form-field>
-                <master-search [MasterSearchData]="ProcessCodeData"
-                  #overlayprocessCodeSearch
-                  (newRowClick)="ProcessCodeSelected($event)">
-                </master-search>
+
               </div>
               <label for="inputPassword" class="col-sm-3 col-form-label">To
                 Process :</label>
               <div class="col-md-3">
-                <mat-form-field style="width: 70%;">
-                  <input type="text" matInput formControlName="toprocess"
-                  (keydown)="lookupKeyPress($event,'toprocess')"
+                <mat-form-field appearance="outline" style="width: 100%;">
+                  <input type="text" matInput formControlName="toprocess" (keydown)="lookupKeyPress($event,'toprocess')"
                     (focusout)="validateLookupField($event,ToProcessCodeData,'toprocess')" />
+                    <master-search [MasterSearchData]="ToProcessCodeData" #overlaytoprocessSearch  class="masterSearch"
+                    (newRowClick)="ToProcessCodeSelected($event)">
+                  </master-search>
                 </mat-form-field>
-                <master-search [MasterSearchData]="ToProcessCodeData"
-                  #overlaytoprocessSearch
-                  (newRowClick)="ToProcessCodeSelected($event)">
-                </master-search>
+               
               </div>
             </div>
             <div class="row mb-1">
               <label for="inputPassword" class="col-sm-3 col-form-label">Worker
                 * :</label>
               <div class="col-md-3">
-                <mat-form-field style="width: 70%;">
-                  <input type="text" matInput formControlName="worker"
-                  (keydown)="lookupKeyPress($event,'worker')"
+                <mat-form-field appearance="outline" style="width: 100%;">
+                  <input type="text" matInput formControlName="worker" (keydown)="lookupKeyPress($event,'worker')"
                     (focusout)="validateLookupField($event,WorkerCodeData,'worker')" />
-                </mat-form-field>
-                <master-search [MasterSearchData]="WorkerCodeData"
-                  #overlayworkerSearch
+                    <master-search [MasterSearchData]="WorkerCodeData" #overlayworkerSearch  class="masterSearch"
                   (newRowClick)="WorkerCodeSelected($event)">
                 </master-search>
+                </mat-form-field>
+                
               </div>
               <label for="inputPassword" class="col-sm-3 col-form-label">To
                 Worker :</label>
               <div class="col-md-3">
-                <mat-form-field style="width: 70%;">
-                  <input type="text" matInput formControlName="toworker"
-                  (keydown)="lookupKeyPress($event,'toworker')"
+                <mat-form-field appearance="outline" style="width: 100%;">
+                  <input type="text" matInput formControlName="toworker" (keydown)="lookupKeyPress($event,'toworker')"
                     (focusout)="validateLookupField($event,ToWorkerCodeData,'toworker')" />
-                </mat-form-field>
-                <master-search [MasterSearchData]="ToWorkerCodeData"
-                  #overlaytoworkerSearch
+                    <master-search [MasterSearchData]="ToWorkerCodeData" #overlaytoworkerSearch  class="masterSearch"
                   (newRowClick)="ToWorkerCodeSelected($event)">
                 </master-search>
+                </mat-form-field>
+                
               </div>
             </div>
             <div class="row mb-1">
               <label for="inputPassword" class="col-sm-3 col-form-label">Entered
                 By :</label>
               <div class="col-md-3">
-                <mat-form-field style="width: 70%;">
-                  <input type="text" matInput formControlName="enteredBy"
-                  (keydown)="lookupKeyPress($event,'enteredBy')"
+                <mat-form-field appearance="outline" style="width: 100%;">
+                  <input type="text" matInput formControlName="enteredBy" (keydown)="lookupKeyPress($event,'enteredBy')"
                     (focusout)="validateLookupField($event,user,'enteredBy')" />
+                    <master-search [MasterSearchData]="user" #overlayenteredBySearch  class="masterSearch"
+                    (newRowClick)="userDataSelected($event)">
+                  </master-search>
                 </mat-form-field>
-                <master-search [MasterSearchData]="user" #overlayenteredBySearch
-                  (newRowClick)="userDataSelected($event)">
-                </master-search>
+               
               </div>
               <label for="inputPassword" class="col-sm-3 col-form-label">Wax
                 Code :</label>
               <div class="col-md-3">
-                <mat-form-field style="width: 70%;">
-                  <input type="text" matInput formControlName="waxcode"
-                  (keydown)="lookupKeyPress($event,'waxcode')"
+                <mat-form-field appearance="outline" style="width: 100%;">
+                  <input type="text" matInput formControlName="waxcode" (keydown)="lookupKeyPress($event,'waxcode')"
                     (focusout)="validateLookupField($event,WaxCodeData,'waxcode')" />
+                    <master-search [MasterSearchData]="WaxCodeData" #overlaywaxcodeSearch  class="masterSearch"
+                    (newRowClick)="WaxCodeSelected($event)">
+                  </master-search>
                 </mat-form-field>
-                <master-search [MasterSearchData]="WaxCodeData"
-                  #overlaywaxcodeSearch
-                  (newRowClick)="WaxCodeSelected($event)">
-                </master-search>
+               
               </div>
 
             </div>
@@ -157,44 +148,26 @@
               </dxi-column>
             </dx-data-grid> -->
 
-            <dx-data-grid #dataGrid id="gridContainer"
-              [allowColumnResizing]="true" [showBorders]="true"
-              [showRowLines]="true"
-              [allowColumnReordering]="true" height="200"
-              [dataSource]="tableData">
+            <dx-data-grid #dataGrid id="gridContainer" [allowColumnResizing]="true" [showBorders]="true"
+              [showRowLines]="true" [allowColumnReordering]="true" height="200" [dataSource]="tableData">
               <dxo-paging [enabled]="false"></dxo-paging>
               <dxo-selection mode="multiple"></dxo-selection>
               <dxo-scrolling mode="virtual"></dxo-scrolling>
-              <dx-check-box [value]="true"
-                [elementAttr]="{ 'aria-label': 'Checked' }"></dx-check-box>
-              <dxi-column [width]="100" dataField="Sr No"
-                caption="Sr No"></dxi-column>
-              <dxi-column [width]="100" dataField="Job No"
-                caption="Job No"></dxi-column>
-              <dxi-column [width]="100" dataField="Design"
-                caption="Design"></dxi-column>
-              <dxi-column [width]="100" dataField="Party"
-                caption="Party"></dxi-column>
-              <dxi-column [width]="100" dataField="S.O"
-                caption="S.O"></dxi-column>
-              <dxi-column [width]="100" dataField="S.O Date"
-                caption="S.O Date"></dxi-column>
-              <dxi-column [width]="100" dataField="Del Date"
-                caption="Del Date"></dxi-column>
-              <dxi-column [width]="100" dataField="Gross Weight"
-                caption="Gross Weight"></dxi-column>
-              <dxi-column [width]="100" dataField="Metal Weight"
-                caption="Metal Weight"></dxi-column>
-              <dxi-column [width]="100" dataField="Stone Weight"
-                caption="Stone Weight"></dxi-column>
-              <dxi-column [width]="100" dataField="Wax Weight"
-                caption="Wax Weight"></dxi-column>
-              <dxi-column [width]="100" dataField="Issue Pcs"
-                caption="Issue Pcs"></dxi-column>
-              <dxi-column [width]="100" dataField="Return Pcs"
-                caption="Return Pcs"></dxi-column>
-              <dxi-column [width]="100" dataField="Karat"
-                caption="Karat"></dxi-column>
+              <dx-check-box [value]="true" [elementAttr]="{ 'aria-label': 'Checked' }"></dx-check-box>
+              <dxi-column [width]="100" dataField="Sr No" caption="Sr No"></dxi-column>
+              <dxi-column [width]="100" dataField="Job No" caption="Job No"></dxi-column>
+              <dxi-column [width]="100" dataField="Design" caption="Design"></dxi-column>
+              <dxi-column [width]="100" dataField="Party" caption="Party"></dxi-column>
+              <dxi-column [width]="100" dataField="S.O" caption="S.O"></dxi-column>
+              <dxi-column [width]="100" dataField="S.O Date" caption="S.O Date"></dxi-column>
+              <dxi-column [width]="100" dataField="Del Date" caption="Del Date"></dxi-column>
+              <dxi-column [width]="100" dataField="Gross Weight" caption="Gross Weight"></dxi-column>
+              <dxi-column [width]="100" dataField="Metal Weight" caption="Metal Weight"></dxi-column>
+              <dxi-column [width]="100" dataField="Stone Weight" caption="Stone Weight"></dxi-column>
+              <dxi-column [width]="100" dataField="Wax Weight" caption="Wax Weight"></dxi-column>
+              <dxi-column [width]="100" dataField="Issue Pcs" caption="Issue Pcs"></dxi-column>
+              <dxi-column [width]="100" dataField="Return Pcs" caption="Return Pcs"></dxi-column>
+              <dxi-column [width]="100" dataField="Karat" caption="Karat"></dxi-column>
 
               <dxo-summary>
                 <dxi-total-item column="Gross Weight">
@@ -216,7 +189,7 @@
               <label for="inputPassword" class="col-sm-2 col-form-label">Remarks
                 :</label>
               <div class="col-md-4">
-                <mat-form-field style="width: 100%;">
+                <mat-form-field appearance="outline" style="width: 100%;">
                   <input type="text" matInput formControlName="remark" />
                 </mat-form-field>
               </div>

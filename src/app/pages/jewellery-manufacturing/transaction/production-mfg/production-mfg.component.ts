@@ -280,14 +280,14 @@ export class ProductionMfgComponent implements OnInit {
   setValuesToHeaderGrid(DATA: any) {
     let detailDataToParent = DATA.PRODUCTION_FORMDETAILS
     if (detailDataToParent.SRNO != 0) {
-      this.DetailScreenDataToSave[detailDataToParent.SRNO - 1] =  DATA.JOB_PROCESS_TRN_DETAIL_DJ
+      this.DetailScreenDataToSave[detailDataToParent.SRNO - 1] =  DATA.JOB_PRODUCTION_DETAIL_DJ
       this.detailData[detailDataToParent.SRNO - 1] = { SRNO: detailDataToParent.SRNO, ...DATA }
     } else {
       // if (this.addItemWithCheck(this.DetailScreenDataToSave, detailDataToParent)) return;
       DATA.PRODUCTION_FORMDETAILS.SRNO = this.DetailScreenDataToSave.length + 1
-      // DATA.JOB_PROCESS_TRN_DETAIL_DJ.SRNO = this.DetailScreenDataToSave.length + 1
+      DATA.JOB_PRODUCTION_DETAIL_DJ.SRNO = this.DetailScreenDataToSave.length + 1
       this.detailData.push({ SRNO: this.DetailScreenDataToSave.length + 1, ...DATA })
-      this.DetailScreenDataToSave.push(DATA.JOB_PROCESS_TRN_DETAIL_DJ);
+      this.DetailScreenDataToSave.push(DATA.JOB_PRODUCTION_DETAIL_DJ);
     }
     // this.editFinalArray(DATA)
     if (detailDataToParent.FLAG == 'SAVE') this.closeDetailScreen();
