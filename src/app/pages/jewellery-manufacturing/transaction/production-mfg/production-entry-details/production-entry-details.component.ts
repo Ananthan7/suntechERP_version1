@@ -387,6 +387,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
             this.setFormNullToString('JOB_DATE', data[0].JOB_DATE)
             this.setFormNullToString('JOB_PCS', data[0].JOB_PCS_TOTAL)
             this.setFormNullToString('DESIGN_CODE', data[0].DESIGN_CODE)
+            this.setFormNullToString('DESIGN_DESCRIPTION', data[0].DESCRIPTION)
             this.setFormNullToString('CUSTOMER_CODE', data[0].CUSTOMER_CODE)
             this.setFormNullToString('SEQ_CODE', data[0].SEQ_CODE)
             this.setFormNullToString('METALLAB_TYPE', data[0].METALLAB_TYPE)
@@ -398,6 +399,8 @@ export class ProductionEntryDetailsComponent implements OnInit {
             this.productiondetailsFrom.controls.costcode.setValue(data[0].COST_CODE)
             this.productiondetailsFrom.controls.PART_CODE.setValue(data[0].DESIGN_CODE)
             this.productiondetailsFrom.controls.partsName.setValue(data[0].DESCRIPTION)
+            console.log(this.productiondetailsFrom.value);
+            
             this.subJobNumberValidate()
             this.getDesignimagecode()
           } else {
@@ -528,13 +531,13 @@ export class ProductionEntryDetailsComponent implements OnInit {
       "DT_YEARMONTH": this.commonService.nullToString(this.commonService.yearSelected),
       "JOB_NUMBER": this.commonService.nullToString(form.JOB_NUMBER),
       "JOB_DATE": this.commonService.formatDateTime(form.JOB_DATE),
-      "JOB_SO_NUMBER": this.commonService.emptyToZero(form.JOB_SO_NUMBER),
+      "JOB_SO_NUMBER": this.commonService.nullToString(form.JOB_SO_NUMBER),
       "UNQ_JOB_ID": this.commonService.nullToString(form.UNQ_JOB_ID),
-      "JOB_DESCRIPTION": this.commonService.emptyToZero(form.JOB_DESCRIPTION),
-      "UNQ_DESIGN_ID": this.commonService.emptyToZero(form.DESIGN_CODE),
-      "DESIGN_CODE": this.commonService.emptyToZero(form.DESIGN_CODE),
-      "PART_CODE": this.commonService.emptyToZero(form.PART_CODE),
-      "DIVCODE": this.commonService.emptyToZero(form.DIVCODE),
+      "JOB_DESCRIPTION": this.commonService.nullToString(form.JOB_DESCRIPTION),
+      "UNQ_DESIGN_ID": this.commonService.nullToString(form.UNQ_DESIGN_ID),
+      "DESIGN_CODE": this.commonService.nullToString(form.DESIGN_CODE),
+      "PART_CODE": this.commonService.nullToString(form.PART_CODE),
+      "DIVCODE": this.commonService.nullToString(form.DIVCODE),
       "PREFIX": this.commonService.nullToString(form.PREFIX),
       "STOCK_CODE": this.commonService.nullToString(form.STOCK_CODE),
       "STOCK_DESCRIPTION": this.commonService.nullToString(form.STOCK_DESCRIPTION),
@@ -573,10 +576,10 @@ export class ProductionEntryDetailsComponent implements OnInit {
       "RATELC": 0,
       "AMOUNTFC": 0,
       "AMOUNTLC": 0,
-      "PROCESS_CODE": this.commonService.emptyToZero(form.process),
-      "PROCESS_NAME": this.commonService.emptyToZero(form.processname),
-      "WORKER_CODE": this.commonService.emptyToZero(form.worker),
-      "WORKER_NAME": this.commonService.emptyToZero(form.workername),
+      "PROCESS_CODE": this.commonService.nullToString(form.process),
+      "PROCESS_NAME": this.commonService.nullToString(form.processname),
+      "WORKER_CODE": this.commonService.nullToString(form.worker),
+      "WORKER_NAME": this.commonService.nullToString(form.workername),
       "IN_DATE": this.commonService.formatDateTime(form.START_DATE),
       "OUT_DATE": this.commonService.formatDateTime(form.END_DATE),
       "TIME_TAKEN_HRS": 0,
@@ -653,7 +656,6 @@ export class ProductionEntryDetailsComponent implements OnInit {
 
     let detailDataToParent: any = {
       PRODUCTION_FORMDETAILS: this.productiondetailsFrom.value,
-      TRN_STNMTL_GRID: this.tableData,
       JOB_PRODUCTION_SUB_DJ: this.set_JOB_PRODUCTION_SUB_DJ(),
       JOB_PRODUCTION_DETAIL_DJ: this.set_JOB_PRODUCTION_DETAIL_DJ(),
       JOB_PRODUCTION_STNMTL_DJ: this.set_JOB_PRODUCTION_STNMTL_DJ(),
