@@ -44,8 +44,8 @@ export class StoneReturnComponent implements OnInit {
     { title: 'RATELC', field: 'RATELC', format: '', alignment: 'left' },
     { title: 'AMOUNTFC', field: 'AMOUNTFC', format: '', alignment: 'left' },
     { title: 'AMOUNTLC', field: 'AMOUNTLC', format: '', alignment: 'left' },
-    { title: 'PROESS CODE', field: 'PROESS_CODE', format: '', alignment: 'left' },
-    { title: 'PROESS NAME', field: 'PROESS_NAME', format: '', alignment: 'left' },
+    { title: 'PROCESS CODE', field: 'PROCESS_CODE', format: '', alignment: 'left' },
+    { title: 'PROCESS NAME', field: 'PROCESS_NAME', format: '', alignment: 'left' },
     { title: 'WORKER CODE', field: 'WORKER_CODE', format: '', alignment: 'left' },
     { title: 'WORKER NAME', field: 'WORKER_NAME', format: '', alignment: 'left' },
     { title: 'WIP ACCOUNT', field: 'WIP_ACCOUNT', format: '', alignment: 'left' },
@@ -175,12 +175,12 @@ export class StoneReturnComponent implements OnInit {
 
     if (this.content?.FLAG) {
       this.setAllInitialValues()
-      if (this.content.FLAG == 'VIEW') {
+      if (this.content.FLAG == 'VIEW'  || this.content.FLAG == 'DELETE') {
         this.viewMode = true;
         this.LOCKVOUCHERNO = true;
       }
       if (this.content.FLAG == 'EDIT') {
-        this.viewMode = true;
+        this.editMode = true;
         this.LOCKVOUCHERNO = true;
       }
       if (this.content.FLAG == 'DELETE') {
@@ -261,6 +261,7 @@ export class StoneReturnComponent implements OnInit {
         if (result.response) {
           let data = result.response
           this.detailData = data.Details
+          console.log(this.detailData,'data')
           if (this.detailData.length > 0) {
             this.detailData.forEach((element: any) => {
               element.FLAG = this.content ? this.content.FLAG : null
@@ -269,11 +270,56 @@ export class StoneReturnComponent implements OnInit {
                 VOCNO: element.VOCNO,
                 VOCTYPE: element.VOCTYPE,
                 VOCDATE: element.VOCDATE,
-                JOB_NO: element.JOB_SO_NUMBER,
+                JOB_NUMBER: element.JOB_NUMBER,
                 JOB_DATE: element.JOB_DATE,
-                UNQ_JOB: element.UNQ_JOB_ID,
-                JOB_DE: element.JOB_DESCRIPTION,
-                BRANCH: element.BRANCH_CODE,
+                JOB_SO_NUMBER: element.JOB_SO_NUMBER,
+                UNQ_JOB_ID: element.UNQ_JOB_ID,
+                BRANCH_CODE: element.BRANCH_CODE,
+                DESIGN_CODE: element.DESIGN_CODE,
+                DIVCODE: element.DIVCODE,
+                STOCK_CODE: element.STOCK_CODE,
+                STOCK_DESCRIPTION: element.STOCK_DESCRIPTION,
+                SIEVE: element.SIEVE,
+                SIEVE_SET: element.SIEVE_SET,
+                SHAPE: element.SHAPE,
+                COLOR: element.COLOR,
+                CLARITY: element.CLARITY,
+                SIZE: element.SIZE,
+                CURRENY_CODE: element.CURRENY_CODE,
+                CURRENY_RATE: element.CURRENY_RATE,
+                RATEFC: element.RATEFC,
+                RATELC: element.RATELC,
+                AMOUNTFC: element.AMOUNTFC,
+                AMOUNTLC: element.AMOUNTLC,
+                PROCESS_CODE: element.PROCESS_CODE,
+                PROCESS_NAME: element.PROCESS_NAME,
+                WORKER_CODE: element.WORKER_CODE,
+                WORKER_NAME: element.WORKER_NAME,
+                WIP_ACCOUNT: element.WIP_ACCOUNT,
+                LOCTYPE_CODE: element.LOCTYPE_CODE,
+                STOCK_CODE_BRK: element.STOCK_CODE_BRK,
+                WASTAGE_QTY: element.WASTAGE_QTY,
+                WASTAGE_AMT: element.WASTAGE_AMT,
+                WASTAGE_TOTAL: element.WASTAGE_TOTAL,
+                NAVSEQNO: element.NAVSEQNO,
+                YEARMONTH: element.YEARMONTH,
+                DOCTIME: element.DOCTIME,
+                SMAN: element.SMAN,
+                REMARK: element.REMARK,
+                TOTAL_GROSS_WT: element.TOTAL_GROSS_WT,
+                TOTAL_AMOUNT_FC: element.TOTAL_AMOUNT_FC,
+                TOTAL_AMOUNT_LC: element.TOTAL_AMOUNT_LC,
+                ISBROCKEN: element.ISBROCKEN,
+                BASE_CONV_RATE: element.BASE_CONV_RATE,
+                DT_BRANCH_CODE: element.DT_BRANCH_CODE,
+                DT_VOCTYPE: element.DT_VOCTYPE,
+                DT_VOCNO: element.DT_VOCNO,
+                DT_YEARMONTH: element.DT_YEARMONTH,
+                RET_TO_DESC: element.RET_TO_DESC,
+                RET_TO: element.RET_TO,
+                ISMISSING: element.ISMISSING,
+                SUB_STOCK_CODE: element.SUB_STOCK_CODE,
+
 
               })
             });
@@ -370,12 +416,12 @@ export class StoneReturnComponent implements OnInit {
   closeDetailScreen() {
     this.modalReference.close()
   }
-  // deleteTableData(): void {
-  //   console.log(this.selectedKey, 'data')
-  //   this.selectedKey.forEach((element: any) => {
-  //     this.stoneReturnData.splice(element.SRNO - 1, 1)
-  //   })
-  // }
+  deleteTableData(): void {
+    console.log(this.selectedKey, 'data')
+    this.selectedKey.forEach((element: any) => {
+      this.stoneReturnData.splice(element.SRNO - 1, 1)
+    })
+  }
   onSelectionChanged(event: any) {
     this.selectedKey = event.selectedRowKeys;
     console.log(this.selectedKey, 'srno')
@@ -567,20 +613,20 @@ export class StoneReturnComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
 
-  deleteTableData(): void {
-    if (this.selectRowIndex == undefined || this.selectRowIndex == null) {
-      this.commonService.toastErrorByMsgId('MSG1458') //No record is selected.
-      return
-    }
-    this.showConfirmationDialog().then((result) => {
-      if (result.isConfirmed) {
-        this.tableData = this.tableData.filter((item: any) => item.SRNO != this.selectRowIndex)
-        this.detailData = this.detailData.filter((item: any) => item.SRNO != this.selectRowIndex)
-        this.reCalculateSRNO()
-      }
-    }
-    )
-  }
+  // deleteTableData(): void {
+  //   if (this.selectRowIndex == undefined || this.selectRowIndex == null) {
+  //     this.commonService.toastErrorByMsgId('MSG1458') //No record is selected.
+  //     return
+  //   }
+  //   this.showConfirmationDialog().then((result) => {
+  //     if (result.isConfirmed) {
+  //       this.tableData = this.tableData.filter((item: any) => item.SRNO != this.selectRowIndex)
+  //       this.detailData = this.detailData.filter((item: any) => item.SRNO != this.selectRowIndex)
+  //       this.reCalculateSRNO()
+  //     }
+  //   }
+  //   )
+  // }
   reCalculateSRNO() {
     this.tableData.forEach((item, index) => item.SRNO = index + 1)
     this.detailData.forEach((item: any, index: any) => item.SRNO = index + 1)
