@@ -6,9 +6,7 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header 
-*ngIf="this.content?.FLAG != 'VIEW'"
-(saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
+<modal-header *ngIf="this.content?.FLAG != 'VIEW'" (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
 <div class="container-fluid ">
     <form [formGroup]="repairdiapurchaseForm">
         <mat-tab-group [(selectedIndex)]="selectedTabIndex">
@@ -118,9 +116,9 @@
                                     </label>
                                     <div class="col-md-2">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="number" matInput formControlName="credit_days_LC" 
-                                            (change)="credit_Date($event)" />
-                                            
+                                            <input type="number" matInput formControlName="credit_days_LC"
+                                                (change)="credit_Date($event)" />
+
                                         </mat-form-field>
                                     </div>
                                     <div class="col-sm-5">
@@ -138,7 +136,7 @@
                                     <div class="col-md-2">
                                         <mat-form-field style="width: 100%;">
                                             <input type="number" matInput formControlName="credit_days_Mtl"
-                                            (change)="credit_Date2($event)"/>
+                                                (change)="credit_Date2($event)" />
                                         </mat-form-field>
                                     </div>
                                     <div class="col-sm-5">
@@ -699,7 +697,7 @@
                             </label>
                             <div class="col-md-7">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="input_VAT" />
+                                    <input type="number" matInput formControlName="input_VAT" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -720,7 +718,7 @@
                             </label>
                             <div class="col-md-7">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="text" matInput formControlName="rcm_VAT" />
+                                    <input type="number" matInput formControlName="rcm_VAT" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -749,7 +747,7 @@
                                     </label>
                                     <div class="col-md-2">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="number" matInput formControlName="net_amount_fc" />
+                                            <input type="text" matInput formControlName="net_amount_fc" />
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-4">
@@ -763,7 +761,7 @@
                                     </label>
                                     <div class="col-md-2">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="number" matInput formControlName="total_tax_fc" />
+                                            <input type="text" matInput formControlName="total_tax_fc" />
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-4">
@@ -777,7 +775,7 @@
                                     </label>
                                     <div class="col-md-2">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="number" matInput formControlName="round_Off_with" />
+                                            <input type="text" matInput formControlName="round_Off_with" />
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-4">
@@ -791,7 +789,7 @@
                                     </label>
                                     <div class="col-md-2">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="number" matInput formControlName="round_to" />
+                                            <input type="text" matInput formControlName="round_to" />
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-4">
@@ -805,7 +803,7 @@
                                     </label>
                                     <div class="col-md-2">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="number" matInput formControlName="other_amount_tax" />
+                                            <input type="text" matInput formControlName="other_amount_tax" />
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-4">
@@ -819,7 +817,7 @@
                                     </label>
                                     <div class="col-md-2">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="number" matInput formControlName="other_amount" />
+                                            <input type="text" matInput formControlName="other_amount" />
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-4">
@@ -835,7 +833,7 @@
                                     </label>
                                     <div class="col-md-2">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="number" matInput formControlName="party_round_Off" />
+                                            <input type="text" matInput formControlName="party_round_Off" />
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-4">
@@ -849,7 +847,7 @@
                                     </label>
                                     <div class="col-md-2">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="number" matInput formControlName="party_amount_FC" />
+                                            <input type="text" matInput formControlName="party_amount_FC" />
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-4">
@@ -863,7 +861,7 @@
                                     </label>
                                     <div class="col-md-2">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="number" matInput formControlName="party_amount_LC" />
+                                            <input type="text" matInput formControlName="party_amount_LC" />
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-4">
@@ -877,7 +875,7 @@
                                     </label>
                                     <div class="col-md-2">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="number" matInput formControlName="total_TDS" />
+                                            <input type="text" matInput formControlName="total_TDS" />
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-4">
@@ -891,7 +889,7 @@
                                     </label>
                                     <div class="col-md-2">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="number" matInput formControlName="gross_total_fc" />
+                                            <input type="text" matInput formControlName="gross_total_fc" />
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-4">
