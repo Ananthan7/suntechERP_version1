@@ -123,7 +123,7 @@
                         <mat-form-field appearance="outline" style="width: 80%;">
                             <input type="number" matInput class="text-right" formControlName="settingChrgDesc" UpperCaseDirective  (focusout)="validateLookupField($event,settingChrgData,'settingChrgDesc')"/>
                         </mat-form-field>
-                        <master-search
+                        <master-search *ngIf="!viewMode"
                         [MasterSearchData]="settingChrgData" 
                         (newRowClick)="settingChrgSelected($event)"></master-search>
                     </div>
@@ -140,7 +140,7 @@
                         <mat-form-field appearance="outline" style="width: 80%;">
                             <input type="number" matInput class="text-right" formControlName="polishChrgDesc" UpperCaseDirective  (focusout)="validateLookupField($event,polishChrgData,'polishChrgDesc')"/>
                         </mat-form-field>
-                        <master-search
+                        <master-search *ngIf="!viewMode"
                         [MasterSearchData]="polishChrgData" 
                         (newRowClick)="polishChrgSelected($event)"></master-search>
                     </div>
@@ -158,7 +158,7 @@
                         <mat-form-field appearance="outline" style="width: 80%;">
                             <input type="number" matInput class="text-right" formControlName="rhodiumChrgDesc" UpperCaseDirective   (focusout)="validateLookupField($event,rhodiumChrgData,'rhodiumChrgDesc')"/>
                         </mat-form-field>
-                        <master-search
+                        <master-search *ngIf="!viewMode"
                     [MasterSearchData]="rhodiumChrgData" 
                     (newRowClick)="rhodiumChrgSelected($event)"></master-search>
                     </div>
@@ -175,7 +175,7 @@
                         <mat-form-field appearance="outline" style="width: 80%;">
                             <input type="number" matInput class="text-right" formControlName="labourChrgDesc" UpperCaseDirective   (focusout)="validateLookupField($event,labourChrgData,'labourChrgDesc')"/>
                         </mat-form-field>
-                        <master-search
+                        <master-search *ngIf="!viewMode"
                     [MasterSearchData]="labourChrgData" 
                     (newRowClick)="labourChrgSelected($event)"></master-search>
                     </div>
@@ -192,7 +192,7 @@
                         <mat-form-field appearance="outline" style="width: 80%;">
                             <input type="number" matInput class="text-right" formControlName="miscChrgDesc" UpperCaseDirective   (focusout)="validateLookupField($event,miscChrgData,'miscChrgDesc')"/>
                         </mat-form-field>
-                        <master-search
+                        <master-search *ngIf="!viewMode"
                     [MasterSearchData]="miscChrgData" 
                     (newRowClick)="miscChrgSelected($event)"></master-search>
                     </div>
@@ -252,7 +252,7 @@
                         <mat-form-field appearance="outline" style="width: 60%;">
                             <input type="text" matInput formControlName="price1per" UpperCaseDirective    (focusout)="validateLookupField($event,priceCodeData,'price1per')"/>
                         </mat-form-field>
-                        <master-search
+                        <master-search *ngIf="!viewMode"
                         [MasterSearchData]="priceCodeData" 
                         (newRowClick)="priceOneCodeSelected($event)"></master-search>
                     </div>
@@ -273,7 +273,7 @@
                         <mat-form-field appearance="outline" style="width: 60%;">
                             <input type="text"  matInput formControlName="price2per" UpperCaseDirective  (focusout)="validateLookupField($event,priceCodeData,'price2per')"/>
                         </mat-form-field>
-                        <master-search
+                        <master-search *ngIf="!viewMode"
                         [MasterSearchData]="priceCodeData" 
                         (newRowClick)="pricetwoCodeSelected($event)"></master-search>
                     </div>
@@ -294,7 +294,7 @@
                         <mat-form-field appearance="outline" style="width: 60%;">
                             <input type="text"  matInput formControlName="price3per" UpperCaseDirective  (focusout)="validateLookupField($event,priceCodeData,'price3per')"/>
                         </mat-form-field>
-                        <master-search
+                        <master-search *ngIf="!viewMode"
                         [MasterSearchData]="priceCodeData" 
                         (newRowClick)="pricethreeCodeSelected($event)"></master-search>
                     </div>
@@ -315,7 +315,7 @@
                         <mat-form-field appearance="outline" style="width: 60%;">
                             <input type="text" matInput formControlName="price4per"  (focusout)="validateLookupField($event,priceCodeData,'price4per')"/>
                         </mat-form-field>
-                        <master-search
+                        <master-search *ngIf="!viewMode"
                         [MasterSearchData]="priceCodeData" 
                         (newRowClick)="pricefourCodeSelected($event)"></master-search>
                     </div>
@@ -336,7 +336,7 @@
                         <mat-form-field appearance="outline" style="width: 60%;">
                             <input type="text" matInput formControlName="price5per"   (focusout)="validateLookupField($event,priceCodeData,'price5per')"/>
                         </mat-form-field>
-                        <master-search
+                        <master-search *ngIf="!viewMode"
                         [MasterSearchData]="priceCodeData" 
                         (newRowClick)="pricefiveCodeSelected($event)"></master-search>
                     </div>

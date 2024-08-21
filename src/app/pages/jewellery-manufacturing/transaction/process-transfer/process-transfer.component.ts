@@ -131,6 +131,7 @@ export class ProcessTransferComponent implements OnInit {
   }
   /**USE: get InitialLoadData */
   setInitialValues() {
+    if(!this.content?.MID) return
     this.commonService.showSnackBarMsg('MSG81447')
     let API = `JobProcessTrnMasterDJ/GetJobProcessTrnMasterDJDetailList/${this.content?.MID}`
     let Sub: Subscription = this.dataService.getDynamicAPI(API)

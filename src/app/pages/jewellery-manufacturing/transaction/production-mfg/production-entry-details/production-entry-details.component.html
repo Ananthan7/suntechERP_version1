@@ -22,7 +22,7 @@
               <input type="text" matInput
                 (focusout)="jobNumberValidate($event)" id="jobNoSearch"
                 formControlName="JOB_NUMBER" UpperCaseDirective />
-              <master-search class="masterSearch"
+              <master-search *ngIf="!viewMode" class="masterSearch"
                 [MasterSearchData]="jobnoCodeData"
                 (newRowClick)="jobnoCodeSelected($event)">
               </master-search>
@@ -56,7 +56,7 @@
               <input type="text" matInput formControlName="customer"
                 UpperCaseDirective
                 (focusout)="validateLookupField($event,customerCodeData,'customer')" />
-              <master-search class="masterSearch"
+              <master-search *ngIf="!viewMode" class="masterSearch"
                 [MasterSearchData]="customerCodeData"
                 (newRowClick)="customerCodeScpSelected($event)">
               </master-search>
@@ -124,7 +124,7 @@
                   <input type="text" matInput formControlName="DESIGN_CODE"
                     UpperCaseDirective
                     (focusout)="validateLookupField($event,designCodeData,'DESIGN_CODE')" />
-                  <master-search class="masterSearch"
+                  <master-search *ngIf="!viewMode" class="masterSearch"
                     [MasterSearchData]="designCodeData"
                     (newRowClick)="designSelected($event)">
                   </master-search>
@@ -161,7 +161,7 @@
                   <input type="text" matInput formControlName="location"
                     UpperCaseDirective
                     (focusout)="validateLookupField($event,locationCodeData,'location')" />
-                  <master-search class="masterSearch"
+                  <master-search *ngIf="!viewMode" class="masterSearch"
                     [MasterSearchData]="locationCodeData"
                     (newRowClick)="locationCodeSelected($event)">
                   </master-search>
@@ -230,7 +230,7 @@
                   <input type="text" matInput class="text-right"
                     formControlName="price1" NumberOnly UpperCaseDirective
                     (focusout)="validateLookupField($event,price1CodeData,'price1')" />
-                  <master-search class="masterSearch"
+                  <master-search *ngIf="!viewMode" class="masterSearch"
                     [MasterSearchData]="price1CodeData"
                     (newRowClick)="price1CodeSelected($event)">
                   </master-search>
@@ -245,7 +245,7 @@
                   <input type="text" matInput formControlName="PREFIX"
                     UpperCaseDirective
                     (focusout)="validateLookupField($event,prefixCodeData,'PREFIX')" />
-                  <master-search class="masterSearch"
+                  <master-search *ngIf="!viewMode" class="masterSearch"
                     [MasterSearchData]="prefixCodeData"
                     (newRowClick)="prefixCodeSelected($event)">
                   </master-search>
@@ -266,7 +266,7 @@
                   <input type="text" matInput class="text-right"
                     formControlName="price2" NumberOnly UpperCaseDirective
                     (focusout)="validateLookupField($event,price2CodeData,'price2')" />
-                  <master-search class="masterSearch"
+                  <master-search *ngIf="!viewMode" class="masterSearch"
                     [MasterSearchData]="price2CodeData"
                     (newRowClick)="price2CodeSelected($event)">
                   </master-search>
@@ -281,7 +281,7 @@
                   <input type="text" matInput formControlName="COST_CODE"
                     UpperCaseDirective
                     (focusout)="validateLookupField($event,costCodeData,'COST_CODE')" />
-                  <master-search class="masterSearch"
+                  <master-search *ngIf="!viewMode" class="masterSearch"
                     [MasterSearchData]="costCodeData"
                     (newRowClick)="costCodeSelected($event)">
                   </master-search>
@@ -301,7 +301,7 @@
                   <input type="text" matInput class="text-right"
                     formControlName="price3" NumberOnly UpperCaseDirective
                     (focusout)="validateLookupField($event,price3CodeData,'price3')" />
-                  <master-search class="masterSearch"
+                  <master-search *ngIf="!viewMode" class="masterSearch"
                     [MasterSearchData]="price3CodeData"
                     (newRowClick)="price3CodeSelected($event)">
                   </master-search>
@@ -316,7 +316,7 @@
                   <input type="text" matInput formControlName="KARAT"
                     UpperCaseDirective
                     (focusout)="validateLookupField($event,karatCodeData,'KARAT')" />
-                  <master-search class="masterSearch"
+                  <master-search *ngIf="!viewMode" class="masterSearch"
                     [MasterSearchData]="karatCodeData"
                     (newRowClick)="karatCodeSelected($event)">
                   </master-search>
@@ -336,7 +336,7 @@
                   <input type="text" matInput formControlName="price4"
                     class="text-right" NumberOnly UpperCaseDirective
                     (focusout)="validateLookupField($event,price4CodeData,'price4')" />
-                  <master-search class="masterSearch"
+                  <master-search *ngIf="!viewMode" class="masterSearch"
                     [MasterSearchData]="price4CodeData"
                     (newRowClick)="price4CodeSelected($event)">
                   </master-search>
@@ -369,7 +369,7 @@
                   <input type="text" matInput class="text-right"
                     formControlName="price5" NumberOnly UpperCaseDirective
                     (focusout)="validateLookupField($event,price5CodeData,'price5')" />
-                  <master-search class="masterSearch"
+                  <master-search *ngIf="!viewMode" class="masterSearch"
                     [MasterSearchData]="price5CodeData"
                     (newRowClick)="price5CodeSelected($event)">
                   </master-search>
@@ -475,7 +475,7 @@
                   <span class="pt-2">
                     <a>Price Scheme</a>
                   </span>
-                  <master-search class="masterSearch"
+                  <master-search *ngIf="!viewMode" class="masterSearch"
                     [MasterSearchData]="priceSchemeData"
                     (newRowClick)="priceSchemeValidate($event)">
                   </master-search>
@@ -719,7 +719,7 @@
                   <input type="text" matInput formControlName="location"
                     UpperCaseDirective
                     (focusout)="validateLookupField($event,locationCodeData,'location')" />
-                  <master-search class="masterSearch"
+                  <master-search *ngIf="!viewMode" class="masterSearch"
                     [MasterSearchData]="locationCodeData"
                     (newRowClick)="locationCodeSelected($event)">
                   </master-search>
