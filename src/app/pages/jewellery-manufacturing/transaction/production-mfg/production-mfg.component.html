@@ -102,7 +102,7 @@
               <div class="col-sm-2">
                 <mat-form-field appearance="outline" style="width: 90%;">
                   <input type="text" matInput UpperCaseDirective
-                    (focusout)="setCurrencyRate()" [readonly]="viewMode"
+                  (change)="currencyDataSelected($event)" [readonly]="viewMode"
                     formControlName="CURRENCY_CODE" />
                 </mat-form-field>
               </div>

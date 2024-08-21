@@ -190,8 +190,8 @@ export class ProductionMfgComponent implements OnInit {
     this.productionFrom.controls.YEARMONTH.setValue(this.commonService.yearSelected)
     this.branchCode = this.commonService.branchCode
   }
-  loadSavedData(){
-    if(!this.content?.MID) return
+  loadSavedData() {
+    if (!this.content?.MID) return
     this.commonService.showSnackBarMsg('MSG81447')
     let API = `JobProductionMaster/GetJobProductionMasterWithMID/${this.content?.MID}`
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
@@ -208,7 +208,7 @@ export class ProductionMfgComponent implements OnInit {
               // JOB_PROCESS_TRN_LABCHRG_DJ: data.JOB_PROCESS_TRN_LABCHRG_DJ?.filter((val: any) => item.UNIQUEID == val.REFMID),
               // JOB_PROCESS_TRN_COMP_DJ: data.JOB_PROCESS_TRN_COMP_DJ?.filter((val: any) => item.UNIQUEID == val.REFMID),
             })
-            item.LOSS_QTY = this.commonService.decimalQuantityFormat(item.LOSS_QTY,'METAL')
+            item.LOSS_QTY = this.commonService.decimalQuantityFormat(item.LOSS_QTY, 'METAL')
           })
           this.productionFrom.controls.BRANCH_CODE.setValue(data.BRANCH_CODE)
           this.productionFrom.controls.YEARMONTH.setValue(data.YEARMONTH)
@@ -264,9 +264,12 @@ export class ProductionMfgComponent implements OnInit {
   }
   /**USE: to set currency on selected change*/
   currencyDataSelected(event: any) {
-    this.productionFrom.controls.CURRENCY_CODE.setValue(event.CURRENCY_CODE)
-    this.setFormDecimal('CURRENCY_RATE', event.CONV_RATE, 'RATE')
-    // this.setCurrencyRate()
+    if (event.target?.value) {
+      this.productionFrom.controls.CURRENCY_CODE.setValue((event.target.value).toUpperCase())
+    } else {
+      this.productionFrom.controls.CURRENCY_CODE.setValue(event.CURRENCY_CODE)
+    }
+    this.setCurrencyRate()
   }
   setFormNullToString(formControlName: string, value: any) {
     this.productionFrom.controls[formControlName].setValue(
@@ -288,9 +291,20 @@ export class ProductionMfgComponent implements OnInit {
     this.setFormDecimal('BASE_CURRENCY_RATE', CURRENCY_RATE[0].CONV_RATE, 'RATE')
     this.setCurrencyRate()
   }
+  // setCurrencyRate() {
+  //   if(this.viewMode) return
+  //   const CURRENCY_RATE: any[] = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == this.productionFrom.value.CURRENCY_CODE);
+  //   if (CURRENCY_RATE.length > 0) {
+  //     this.setFormDecimal('CURRENCY_RATE', CURRENCY_RATE[0].CONV_RATE, 'RATE')
+  //   } else {
+  //     this.productionFrom.controls.CURRENCY_CODE.setValue('')
+  //     this.productionFrom.controls.CURRENCY_RATE.setValue('')
+  //     this.commonService.toastErrorByMsgId('MSG1531')
+  //   }
+  //   this.BaseCurrencyRateVisibility(this.productionFrom.value.CURRENCY_CODE, this.productionFrom.value.CURRENCY_RATE)
+  // }
   /**USE: to set currency from branch currency master */
   setCurrencyRate() {
-    if(this.viewMode) return
     const CURRENCY_RATE: any[] = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == this.productionFrom.value.CURRENCY_CODE);
     if (CURRENCY_RATE.length > 0) {
       this.setFormDecimal('CURRENCY_RATE', CURRENCY_RATE[0].CONV_RATE, 'RATE')
@@ -299,8 +313,8 @@ export class ProductionMfgComponent implements OnInit {
       this.productionFrom.controls.CURRENCY_RATE.setValue('')
       this.commonService.toastErrorByMsgId('MSG1531')
     }
-    this.BaseCurrencyRateVisibility(this.productionFrom.value.CURRENCY_CODE, this.productionFrom.value.CURRENCY_RATE)
   }
+
   BaseCurrencyRateVisibility(txtPCurr: any, txtPCurrRate: any) {
     let ConvRateArr: any = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == this.productionFrom.value.CURRENCY_CODE && item.CMBRANCH_CODE == this.productionFrom.value.BRANCH_CODE)
     let baseConvRate = 1 / ConvRateArr[0].CONV_RATE
@@ -387,6 +401,10 @@ export class ProductionMfgComponent implements OnInit {
       this.commonService.toastErrorByMsgId('MSG1178')// CURRENCY_RATE code CANNOT BE EMPTY
       return true
     }
+    if (this.JOB_PRODUCTION_DETAIL_DJ.length == 0) {
+      this.commonService.toastErrorByMsgId('MSG1039')// no line items
+      return true
+    }
     return false;
   }
   setPostData() {
@@ -456,13 +474,13 @@ export class ProductionMfgComponent implements OnInit {
     let Sub: Subscription = this.dataService
       .postDynamicAPI("JobProductionMaster/InsertJobProductionMaster", postData)
       .subscribe((result) => {
-          this.isloading = false;
-          if (result && result.status == "Success") {
-            this.showSuccessDialog(this.commonService.getMsgByID('MSG2443') || 'Success')
-          } else {
-            this.commonService.toastErrorByMsgId('MSG3577')
-          }
-        },
+        this.isloading = false;
+        if (result && result.status == "Success") {
+          this.showSuccessDialog(this.commonService.getMsgByID('MSG2443') || 'Success')
+        } else {
+          this.commonService.toastErrorByMsgId('MSG3577')
+        }
+      },
         (err) => {
           this.isloading = false;
           this.commonService.toastErrorByMsgId('MSG3577')
@@ -493,7 +511,7 @@ export class ProductionMfgComponent implements OnInit {
         (result) => {
           this.isloading = false;
           if (result && result.status == "Success") {
-           this.showSuccessDialog(this.commonService.getMsgByID('MSG2443') || 'Success')
+            this.showSuccessDialog(this.commonService.getMsgByID('MSG2443') || 'Success')
           } else {
             this.commonService.toastErrorByMsgId('MSG3577')
           }
@@ -514,8 +532,8 @@ export class ProductionMfgComponent implements OnInit {
     this.showConfirmationDialog().then((result) => {
       if (result.isConfirmed) {
         let form = this.productionFrom.value;
-        let API = "JobProductionMaster/DeleteJobProductionMaster/"+form.BRANCH_CODE+'/'
-        +form.VOCTYPE+'/'+this.content?.VOCNO+'/'+ this.content?.YEARMONTH;
+        let API = "JobProductionMaster/DeleteJobProductionMaster/" + form.BRANCH_CODE + '/'
+          + form.VOCTYPE + '/' + this.content?.VOCNO + '/' + this.content?.YEARMONTH;
         let Sub: Subscription = this.dataService
           .deleteDynamicAPI(API)
           .subscribe(

@@ -212,7 +212,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
     DESIGN_DESCRIPTION: [''],
     totalpcs: [''],
     JOB_PCS: [''],
-    location: [''],
+    LOCTYPE_CODE: [''],
     LOSS_WT: [''],
     GROSS_WT: [''],
     grossWt: [''],
@@ -293,6 +293,8 @@ export class ProductionEntryDetailsComponent implements OnInit {
     this.branchCode = this.commonService.branchCode;
     this.HEADERDETAILS = this.content[0].HEADERDETAILS
     this.productiondetailsFrom.controls.VOCDATE.setValue(this.HEADERDETAILS.vocDate)
+    let branchParam = this.commonService.allbranchMaster
+    this.productiondetailsFrom.controls.LOCTYPE_CODE.setValue(branchParam.DMFGMLOC)
   }
   setInitialLoadValue() {
     if (!this.content) return
@@ -556,7 +558,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
   }
 
   locationCodeSelected(e: any) {
-    this.productiondetailsFrom.controls.location.setValue(e.LOCATION_CODE);
+    this.productiondetailsFrom.controls.LOCTYPE_CODE.setValue(e.LOCATION_CODE);
   }
   formatDate(event?: any) {
     const inputValue = event.target.value;
@@ -570,13 +572,61 @@ export class ProductionEntryDetailsComponent implements OnInit {
       this.productiondetailsFrom.controls.END_DATE.setValue(new Date(date));
     }
   }
+  submitValidate(form:any) {
+    try {
+      if (this.commonService.nullToString(form.JOB_NUMBER) == '') {
+        this.commonService.toastErrorByMsgId("MSG1358");//"Job Number cannot be empty",
+        return true;
+      }
+      if (this.commonService.nullToString(form.UNQ_JOB_ID) == '') {
+        this.commonService.toastErrorByMsgId("MSG1358");// "Job Number cannot be empty"
+        return true;
+      }
+      if (this.commonService.nullToString(form.PROCESS_CODE) == '') {
+        this.commonService.toastErrorByMsgId("MSG1680");//"Process Code cannot be empty"
+        return true;
+      }
+      if (this.commonService.nullToString(form.WORKER_CODE) == '') {
+        this.commonService.toastErrorByMsgId("MSG1951");//"Worker Code cannot be empty"
+        return true;
+      }
+      if (this.designType != "METAL") {
+        if (this.emptyToZero(form.JOB_PCS) <= 0) {
+          this.commonService.toastErrorByMsgId("MSG1556");//"Pcs Cannot be -ve"
+          return true;
+        }
 
+        if (this.commonService.nullToString(form.LOCTYPE_CODE) == '' && this.commonService.getBranchParamValue("DMFGSLOC")?.toString() != '') {
+          this.commonService.toastErrorByMsgId("MSG1381");//Location Cannot be empty
+          return true;
+        }
+        // if (dtProdDetail.Rows.Count <= 0) {
+        //   this.commonService.toastErrorByMsgId("MSG1816");//Stock Code Cannot be Empty for diamond stock
+        //   return true;
+        // }
+
+        // if (dtProdStnmtl.Rows.Count <= 0) {
+        //   this.commonService.toastErrorByMsgId("MSG1199");//Detail Entry Cannot be empty for components 
+        //   btnStock.Focus();
+        //   return true;
+        // }
+        if (this.commonService.nullToString(form.PREFIX) == '') {
+          this.commonService.toastErrorByMsgId("MSG1657");
+          return true;
+        }
+      } else {
+        if (this.commonService.nullToString(form.LOCTYPE_CODE) == '') {
+          this.commonService.toastErrorByMsgId("MSG1381");//Location Cannot be empty
+          return true;
+        }
+      }
+      return false
+    } catch (err) {
+      return true
+    }
+  }
   formSubmit(flag: any) {
-    // if (this.designType == 'METAL') {
-    //   if (this.submitValidateMetal(this.productiondetailsFrom.value)) return;
-    // } else {
-    //   if (this.submitValidations(this.productiondetailsFrom.value)) return;
-    // }
+    if (this.submitValidate(this.productiondetailsFrom.value)) return;
     this.productiondetailsFrom.controls.FLAG.setValue(flag)
 
     let detailDataToParent: any = {
@@ -709,7 +759,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
       "PRICE3PER": form.price3per,
       "PRICE4PER": form.price4per,
       "PRICE5PER": form.price5per,
-      "LOCTYPE_CODE": "",
+      "LOCTYPE_CODE": form.LOCTYPE_CODE,
       "WASTAGE_WT": form.WASTAGE_WT,
       "WASTAGE_AMTFC": 0,
       "WASTAGE_AMTLC": 0,
@@ -832,7 +882,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
       "PRICE3PER": this.commonService.nullToString(form.price3per),
       "PRICE4PER": this.commonService.nullToString(form.price4per),
       "PRICE5PER": this.commonService.nullToString(form.price5per),
-      "LOCTYPE_CODE": "",
+      "LOCTYPE_CODE": this.commonService.nullToString(form.LOCTYPE_CODE),
       "WASTAGE_WT": this.emptyToZero(form.WASTAGE_WT),
       "WASTAGE_AMTFC": 0,
       "WASTAGE_AMTLC": 0,
