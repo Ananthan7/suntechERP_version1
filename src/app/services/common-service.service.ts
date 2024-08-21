@@ -340,6 +340,13 @@ export class CommonServiceService {
     if (value.toString() == '0') value = false;
     return value
   }
+  getBranchParamValue(parameter: string) {
+    let value = this.allbranchMaster ? this.allbranchMaster[parameter] : ''
+    if (value.toString().toUpperCase() == 'TRUE') value = true;
+    if (value.toString().toUpperCase() == 'FALSE') value = false;
+    if (value.toString() == '0') value = false;
+    return value
+  }
   setCommaSerperatedNumber(value: any, decimal: any) {
     return this.commaSeperation(
       this.decimalQuantityFormat(

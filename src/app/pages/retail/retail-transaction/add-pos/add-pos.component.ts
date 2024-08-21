@@ -700,7 +700,7 @@ editLineItem:boolean=false;
 
   pendingOrderList: any[] = [];
   pendingOrderColumnList: any[] = [
-    { title: 'Order No.', field: 'VOCNO', alignment: 'left' },
+    { title: 'Order No.', field: 'VOCNO', alignment: 'right' },
     { title: 'Order Date', field: 'VOCDATE', alignment: 'left' },
     { title: 'Delivery Date', field: 'DELIVERYDATE', alignment: 'left' },
     {
@@ -13259,10 +13259,9 @@ changeGiftVoucherAmount(data:any){
     this.modalRefePendingSalesOrder = this.modalService.open(
       this.pendingSalesOrderModal,
       {
-        size: "lg",
-        backdrop: true,
-        keyboard: false,
-        windowClass: "modal-full-width",
+        size: 'lg',
+        ariaLabelledBy: 'modal-basic-title',
+        backdrop: false,
       }
     );
 

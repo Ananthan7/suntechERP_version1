@@ -212,7 +212,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
     DESIGN_DESCRIPTION: [''],
     totalpcs: [''],
     JOB_PCS: [''],
-    location: [''],
+    LOCTYPE_CODE: [''],
     LOSS_WT: [''],
     GROSS_WT: [''],
     grossWt: [''],
@@ -273,6 +273,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
     STOCK_DESCRIPTION: [''],
     JOB_SO_NUMBER: [''],
     pricescheme: [''],
+    WASTAGE_WT: [''],
   });
 
   constructor(
@@ -288,10 +289,12 @@ export class ProductionEntryDetailsComponent implements OnInit {
     this.setHeaderDetails()
     this.setInitialLoadValue()
   }
-  setHeaderDetails(){
+  setHeaderDetails() {
     this.branchCode = this.commonService.branchCode;
     this.HEADERDETAILS = this.content[0].HEADERDETAILS
     this.productiondetailsFrom.controls.VOCDATE.setValue(this.HEADERDETAILS.vocDate)
+    let branchParam = this.commonService.allbranchMaster
+    this.productiondetailsFrom.controls.LOCTYPE_CODE.setValue(branchParam.DMFGMLOC)
   }
   setInitialLoadValue() {
     if (!this.content) return
@@ -555,7 +558,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
   }
 
   locationCodeSelected(e: any) {
-    this.productiondetailsFrom.controls.location.setValue(e.LOCATION_CODE);
+    this.productiondetailsFrom.controls.LOCTYPE_CODE.setValue(e.LOCATION_CODE);
   }
   formatDate(event?: any) {
     const inputValue = event.target.value;
@@ -569,190 +572,61 @@ export class ProductionEntryDetailsComponent implements OnInit {
       this.productiondetailsFrom.controls.END_DATE.setValue(new Date(date));
     }
   }
-  set_JOB_PRODUCTION_DETAIL_DJ() {
-    let form = this.productiondetailsFrom.value
-    let parentForm = this.content[0].HEADERDETAILS
-    return {
-      "UNIQUEID": 0,
-      "SRNO": form.SRNO,
-      "DT_VOCNO": this.commonService.emptyToZero(parentForm.VOCNO),
-      "DT_VOCTYPE": this.commonService.nullToString(parentForm.VOCTYPE),
-      "DT_VOCDATE": this.commonService.formatDateTime(parentForm.VOCDATE),
-      "DT_BRANCH_CODE": this.commonService.nullToString(this.branchCode),
-      "DT_NAVSEQNO": "",
-      "DT_YEARMONTH": this.commonService.nullToString(this.commonService.yearSelected),
-      "JOB_NUMBER": this.commonService.nullToString(form.JOB_NUMBER),
-      "JOB_DATE": this.commonService.formatDateTime(form.JOB_DATE),
-      "JOB_SO_NUMBER": this.commonService.nullToString(form.JOB_SO_NUMBER),
-      "UNQ_JOB_ID": this.commonService.nullToString(form.UNQ_JOB_ID),
-      "JOB_DESCRIPTION": this.commonService.nullToString(form.JOB_DESCRIPTION),
-      "UNQ_DESIGN_ID": this.commonService.nullToString(form.UNQ_DESIGN_ID),
-      "DESIGN_CODE": this.commonService.nullToString(form.DESIGN_CODE),
-      "PART_CODE": this.commonService.nullToString(form.PART_CODE),
-      "DIVCODE": this.commonService.nullToString(form.DIVCODE),
-      "PREFIX": this.commonService.nullToString(form.PREFIX),
-      "STOCK_CODE": this.commonService.nullToString(form.STOCK_CODE),
-      "STOCK_DESCRIPTION": this.commonService.nullToString(form.STOCK_DESCRIPTION),
-      "SET_REF": this.commonService.nullToString(form.SETREF),
-      "KARAT_CODE": this.commonService.nullToString(form.KARAT),
-      "MULTI_STOCK_CODE": true,
-      "JOB_PCS": this.commonService.emptyToZero(form.JOB_PCS),
-      "GROSS_WT": this.commonService.emptyToZero(form.GROSS_WT),
-      "METAL_PCS": 0,
-      "METAL_WT": this.commonService.emptyToZero(form.METAL_WT),
-      "STONE_PCS": this.commonService.emptyToZero(form.STONE_PCS),
-      "STONE_WT": this.commonService.emptyToZero(form.STONE_WT),
-      "LOSS_WT": this.commonService.emptyToZero(form.LOSS_WT),
-      "NET_WT": this.commonService.emptyToZero(form.GROSS_WT),
-      "PURITY": this.commonService.emptyToZero(form.PURITY),
-      "PURE_WT": this.commonService.emptyToZero(form.PURE_WT),
-      "RATE_TYPE": this.commonService.nullToString(parentForm.METAL_RATE_TYPE),
-      "METAL_RATE": this.commonService.emptyToZero(parentForm.METAL_RATE),
-      "CURRENCY_CODE": this.commonService.nullToString(parentForm.CURRENCY),
-      "CURRENCY_RATE": this.commonService.emptyToZero(parentForm.CURRENCY_RATE),
-      "METAL_GRM_RATEFC": 0,
-      "METAL_GRM_RATELC": 0,
-      "METAL_AMOUNTFC": 0,
-      "METAL_AMOUNTLC": 0,
-      "MAKING_RATEFC": 0,
-      "MAKING_RATELC": 0,
-      "MAKING_AMOUNTFC": 0,
-      "MAKING_AMOUNTLC": 0,
-      "STONE_RATEFC": 0,
-      "STONE_RATELC": 0,
-      "STONE_AMOUNTFC": 0,
-      "STONE_AMOUNTLC": 0,
-      "LAB_AMOUNTFC": 0,
-      "LAB_AMOUNTLC": 0,
-      "RATEFC": 0,
-      "RATELC": 0,
-      "AMOUNTFC": 0,
-      "AMOUNTLC": 0,
-      "PROCESS_CODE": this.commonService.nullToString(form.PROCESS_CODE),
-      "PROCESS_NAME": this.commonService.nullToString(form.PROCESS_NAME),
-      "WORKER_CODE": this.commonService.nullToString(form.WORKER_CODE),
-      "WORKER_NAME": this.commonService.nullToString(form.WORKER_NAME),
-      "IN_DATE": this.commonService.formatDateTime(this.commonService.currentDate),
-      "OUT_DATE": this.commonService.formatDateTime(this.commonService.currentDate),
-      "TIME_TAKEN_HRS": 0,
-      "COST_CODE": this.commonService.nullToString(form.COST_CODE),
-      "WIP_ACCODE": "",
-      "STK_ACCODE": "",
-      "SOH_ACCODE": "",
-      "PROD_PROC": "",
-      "METAL_DIVISION": form.metalValue,
-      "PRICE1PER": form.price1per,
-      "PRICE2PER": form.price2per,
-      "PRICE3PER": form.price3per,
-      "PRICE4PER": form.price4per,
-      "PRICE5PER": form.price5per,
-      "LOCTYPE_CODE": "",
-      "WASTAGE_WT": form.wastage,
-      "WASTAGE_AMTFC": 0,
-      "WASTAGE_AMTLC": 0,
-      "PICTURE_NAME": "",
-      "SELLINGRATE": 0,
-      "LAB_ACCODE": "",
-      "CUSTOMER_CODE": "",
-      "OUTSIDEJOB": true,
-      "METAL_LABAMTFC": 0,
-      "METAL_LABAMTLC": 0,
-      "METAL_LABACCODE": "",
-      "SUPPLIER_REF": form.totalLabour,
-      "TAGLINES": "",
-      "SETTING_CHRG": form.settingChrg,
-      "POLISH_CHRG": form.polishChrg,
-      "RHODIUM_CHRG": form.rhodiumChrg,
-      "LABOUR_CHRG": form.labourChrg,
-      "MISC_CHRG": form.miscChrg,
-      "SETTING_ACCODE": form.settingChrgDesc,
-      "POLISH_ACCODE": form.polishChrgDesc,
-      "RHODIUM_ACCODE": form.rhodiumChrgDesc,
-      "LABOUR_ACCODE": form.labourChrgDesc,
-      "MISC_ACCODE": form.miscChrgDesc,
-      "WAST_ACCODE": form.wastage,
-      "REPAIRJOB": 0,
-      "PRICE1FC": form.price1fc,
-      "PRICE2FC": form.price2fc,
-      "PRICE3FC": form.price3fc,
-      "PRICE4FC": form.price4fc,
-      "PRICE5FC": form.price5fc,
-      "BASE_CONV_RATE": 0,
-      "FROM_STOCK_CODE": "",
-      "TO_STOCK_CODE": "",
-      "JOB_PURITY": 0,
-      "LOSS_PUREWT": 0,
-      "PUDIFF": 0,
-      "STONEDIFF": 0,
-      "CHARGABLEWT": 0,
-      "BARNO": "",
-      "LOTNUMBER": "",
-      "TICKETNO": "",
-      "PROD_PER": 0,
-      "PURITY_PER": 0,
-      "DESIGN_TYPE": this.commonService.nullToString(form.DESIGN_TYPE),
-      "BASE_CURR_RATE": 0
-    }
-  }
-  set_JOB_PRODUCTION_SUB_DJ() {
-    return []
-  }
-  set_JOB_PRODUCTION_STNMTL_DJ() {
-    return []
-  }
-  /**Labour charge detail data to save */
-  set_JOB_PRODUCTION_LABCHRG_DJ() {
-    return {
-      "REFMID": 0,
-      "BRANCH_CODE": "",
-      "YEARMONTH": "",
-      "VOCTYPE": "",
-      "VOCNO": 0,
-      "SRNO": 0,
-      "JOB_NUMBER": "",
-      "STOCK_CODE": "",
-      "UNQ_JOB_ID": "",
-      "METALSTONE": "",
-      "DIVCODE": "",
-      "PCS": 0,
-      "GROSS_WT": 0,
-      "LABOUR_CODE": "",
-      "LAB_RATE": 0,
-      "LAB_ACCODE": "",
-      "LAB_AMTFC": 0,
-      "UNITCODE": "",
-      "DIVISION": "",
-      "WASTAGE_PER": 0,
-      "WASTAGE_QTY": 0,
-      "WASTAGE_AMT": 0,
-      "WASTAGE_RATE": 0,
-      "KARAT_CODE": ""
-    }
-  }
-  set_JOB_PRODUCTION_METALRATE_DJ() { 
-    return {
-      "REFMID": 0,
-      "SRNO": 0,
-      "RATE_TYPE": "",
-      "METAL_RATE": 0,
-      "DT_BRANCH_CODE": "",
-      "DT_VOCTYPE": "",
-      "DT_VOCNO": 0,
-      "DT_YEARMONTH": "",
-      "DIVISION_CODE": "",
-      "SYSTEM_DATE": "2023-10-17T12:41:20.127Z",
-      "CURRENCY_CODE": "",
-      "CURRENCY_RATE": 0,
-      "CONV_FACTOR": 0
-    }
-  }
+  submitValidate(form:any) {
+    try {
+      if (this.commonService.nullToString(form.JOB_NUMBER) == '') {
+        this.commonService.toastErrorByMsgId("MSG1358");//"Job Number cannot be empty",
+        return true;
+      }
+      if (this.commonService.nullToString(form.UNQ_JOB_ID) == '') {
+        this.commonService.toastErrorByMsgId("MSG1358");// "Job Number cannot be empty"
+        return true;
+      }
+      if (this.commonService.nullToString(form.PROCESS_CODE) == '') {
+        this.commonService.toastErrorByMsgId("MSG1680");//"Process Code cannot be empty"
+        return true;
+      }
+      if (this.commonService.nullToString(form.WORKER_CODE) == '') {
+        this.commonService.toastErrorByMsgId("MSG1951");//"Worker Code cannot be empty"
+        return true;
+      }
+      if (this.designType != "METAL") {
+        if (this.emptyToZero(form.JOB_PCS) <= 0) {
+          this.commonService.toastErrorByMsgId("MSG1556");//"Pcs Cannot be -ve"
+          return true;
+        }
 
+        if (this.commonService.nullToString(form.LOCTYPE_CODE) == '' && this.commonService.getBranchParamValue("DMFGSLOC")?.toString() != '') {
+          this.commonService.toastErrorByMsgId("MSG1381");//Location Cannot be empty
+          return true;
+        }
+        // if (dtProdDetail.Rows.Count <= 0) {
+        //   this.commonService.toastErrorByMsgId("MSG1816");//Stock Code Cannot be Empty for diamond stock
+        //   return true;
+        // }
+
+        // if (dtProdStnmtl.Rows.Count <= 0) {
+        //   this.commonService.toastErrorByMsgId("MSG1199");//Detail Entry Cannot be empty for components 
+        //   btnStock.Focus();
+        //   return true;
+        // }
+        if (this.commonService.nullToString(form.PREFIX) == '') {
+          this.commonService.toastErrorByMsgId("MSG1657");
+          return true;
+        }
+      } else {
+        if (this.commonService.nullToString(form.LOCTYPE_CODE) == '') {
+          this.commonService.toastErrorByMsgId("MSG1381");//Location Cannot be empty
+          return true;
+        }
+      }
+      return false
+    } catch (err) {
+      return true
+    }
+  }
   formSubmit(flag: any) {
-    // if (this.designType == 'METAL') {
-    //   if (this.submitValidateMetal(this.productiondetailsFrom.value)) return;
-    // } else {
-    //   if (this.submitValidations(this.productiondetailsFrom.value)) return;
-    // }
+    if (this.submitValidate(this.productiondetailsFrom.value)) return;
     this.productiondetailsFrom.controls.FLAG.setValue(flag)
 
     let detailDataToParent: any = {
@@ -807,6 +681,317 @@ export class ProductionEntryDetailsComponent implements OnInit {
     let val = this.commonService.setCommaSerperatedNumber(value, Decimal)
     this.productiondetailsFrom.controls[formControlName]?.setValue(val)
     // this.FORM_VALIDATER[formControlName] = val
+  }
+  set_JOB_PRODUCTION_SUB_DJ() {
+    let form = this.productiondetailsFrom.value
+    let parentForm = this.content[0].HEADERDETAILS
+    return {
+      "UNIQUEID": 0,
+      "SRNO": form.SRNO,
+      "DT_VOCNO": this.commonService.emptyToZero(parentForm?.VOCNO),
+      "DT_VOCTYPE": this.commonService.nullToString(parentForm?.VOCTYPE),
+      "DT_VOCDATE": this.commonService.formatDateTime(parentForm?.VOCDATE),
+      "DT_BRANCH_CODE": this.commonService.nullToString(this.branchCode),
+      "DT_NAVSEQNO": "",
+      "DT_YEARMONTH": this.commonService.nullToString(this.commonService.yearSelected),
+      "JOB_NUMBER": this.commonService.nullToString(form.JOB_NUMBER),
+      "JOB_DATE": this.commonService.formatDateTime(form.JOB_DATE),
+      "JOB_SO_NUMBER": this.commonService.nullToString(form.JOB_SO_NUMBER),
+      "UNQ_JOB_ID": this.commonService.nullToString(form.UNQ_JOB_ID),
+      "JOB_DESCRIPTION": this.commonService.nullToString(form.JOB_DESCRIPTION),
+      "UNQ_DESIGN_ID": this.commonService.nullToString(form.UNQ_DESIGN_ID),
+      "DESIGN_CODE": this.commonService.nullToString(form.DESIGN_CODE),
+      "PART_CODE": this.commonService.nullToString(form.PART_CODE),
+      "DIVCODE": this.commonService.nullToString(form.DIVCODE),
+      "PREFIX": this.commonService.nullToString(form.PREFIX),
+      "STOCK_CODE": this.commonService.nullToString(form.STOCK_CODE),
+      "STOCK_DESCRIPTION": this.commonService.nullToString(form.STOCK_DESCRIPTION),
+      "SET_REF": this.commonService.nullToString(form.SETREF),
+      "KARAT_CODE": this.commonService.nullToString(form.KARAT),
+      "MULTI_STOCK_CODE": true,
+      "JOB_PCS": this.commonService.emptyToZero(form.JOB_PCS),
+      "GROSS_WT": this.commonService.emptyToZero(form.GROSS_WT),
+      "METAL_PCS": 0,
+      "METAL_WT": this.commonService.emptyToZero(form.METAL_WT),
+      "STONE_PCS": this.commonService.emptyToZero(form.STONE_PCS),
+      "STONE_WT": this.commonService.emptyToZero(form.STONE_WT),
+      "LOSS_WT": this.commonService.emptyToZero(form.LOSS_WT),
+      "NET_WT": this.commonService.emptyToZero(form.GROSS_WT),
+      "PURITY": this.commonService.emptyToZero(form.PURITY),
+      "PURE_WT": this.commonService.emptyToZero(form.PURE_WT),
+      "RATE_TYPE": this.commonService.nullToString(parentForm?.METAL_RATE_TYPE),
+      "METAL_RATE": this.commonService.emptyToZero(parentForm?.METAL_RATE),
+      "CURRENCY_CODE": this.commonService.nullToString(parentForm?.CURRENCY_CODE),
+      "CURRENCY_RATE": this.commonService.emptyToZero(parentForm?.CURRENCY_RATE),
+      "METAL_GRM_RATEFC": 0,
+      "METAL_GRM_RATELC": 0,
+      "METAL_AMOUNTFC": 0,
+      "METAL_AMOUNTLC": 0,
+      "MAKING_RATEFC": 0,
+      "MAKING_RATELC": 0,
+      "MAKING_AMOUNTFC": 0,
+      "MAKING_AMOUNTLC": 0,
+      "STONE_RATEFC": 0,
+      "STONE_RATELC": 0,
+      "STONE_AMOUNTFC": 0,
+      "STONE_AMOUNTLC": 0,
+      "LAB_AMOUNTFC": 0,
+      "LAB_AMOUNTLC": 0,
+      "RATEFC": 0,
+      "RATELC": 0,
+      "AMOUNTFC": 0,
+      "AMOUNTLC": 0,
+      "PROCESS_CODE": this.commonService.nullToString(form.PROCESS_CODE),
+      "PROCESS_NAME": this.commonService.nullToString(form.PROCESS_NAME),
+      "WORKER_CODE": this.commonService.nullToString(form.WORKER_CODE),
+      "WORKER_NAME": this.commonService.nullToString(form.WORKER_NAME),
+      "IN_DATE": this.commonService.formatDateTime(this.commonService.currentDate),
+      "OUT_DATE": this.commonService.formatDateTime(this.commonService.currentDate),
+      "TIME_TAKEN_HRS": 0,
+      "COST_CODE": this.commonService.nullToString(form.COST_CODE),
+      "WIP_ACCODE": "",
+      "STK_ACCODE": "",
+      "SOH_ACCODE": "",
+      "PROD_PROC": "",
+      "METAL_DIVISION": form.metalValue,
+      "PRICE1PER": form.price1per,
+      "PRICE2PER": form.price2per,
+      "PRICE3PER": form.price3per,
+      "PRICE4PER": form.price4per,
+      "PRICE5PER": form.price5per,
+      "LOCTYPE_CODE": form.LOCTYPE_CODE,
+      "WASTAGE_WT": form.WASTAGE_WT,
+      "WASTAGE_AMTFC": 0,
+      "WASTAGE_AMTLC": 0,
+      "PICTURE_NAME": "",
+      "SELLINGRATE": 0,
+      "LAB_ACCODE": "",
+      "CUSTOMER_CODE": "",
+      "OUTSIDEJOB": true,
+      "METAL_LABAMTFC": 0,
+      "METAL_LABAMTLC": 0,
+      "METAL_LABACCODE": "",
+      "SUPPLIER_REF": form.totalLabour,
+      "TAGLINES": "",
+      "SETTING_CHRG": form.settingChrg,
+      "POLISH_CHRG": form.polishChrg,
+      "RHODIUM_CHRG": form.rhodiumChrg,
+      "LABOUR_CHRG": form.labourChrg,
+      "MISC_CHRG": form.miscChrg,
+      "SETTING_ACCODE": form.settingChrgDesc,
+      "POLISH_ACCODE": form.polishChrgDesc,
+      "RHODIUM_ACCODE": form.rhodiumChrgDesc,
+      "LABOUR_ACCODE": form.labourChrgDesc,
+      "MISC_ACCODE": form.miscChrgDesc,
+      "WAST_ACCODE": form.WASTAGE_WT,
+      "REPAIRJOB": 0,
+      "PRICE1FC": form.price1fc,
+      "PRICE2FC": form.price2fc,
+      "PRICE3FC": form.price3fc,
+      "PRICE4FC": form.price4fc,
+      "PRICE5FC": form.price5fc,
+      "BASE_CONV_RATE": 0,
+      "FROM_STOCK_CODE": "",
+      "TO_STOCK_CODE": "",
+      "JOB_PURITY": 0,
+      "LOSS_PUREWT": 0,
+      "PUDIFF": 0,
+      "STONEDIFF": 0,
+      "CHARGABLEWT": 0,
+      "BARNO": "",
+      "LOTNUMBER": "",
+      "TICKETNO": "",
+      "PROD_PER": 0,
+      "PURITY_PER": 0,
+      "DESIGN_TYPE": this.commonService.nullToString(form.DESIGN_TYPE),
+      "BASE_CURR_RATE": 0,
+      "STOCK_PUREWT": 0
+    }
+  }
+  set_JOB_PRODUCTION_DETAIL_DJ() {
+    let form = this.productiondetailsFrom.value;
+    let parentForm = this.content[0].HEADERDETAILS
+    return {
+      "UNIQUEID": 0,
+      "SRNO": this.emptyToZero(form.SRNO),
+      "VOCNO": this.emptyToZero(parentForm?.VOCNO),
+      "VOCTYPE": this.commonService.nullToString(parentForm?.VOCTYPE),
+      "VOCDATE": this.commonService.formatDateTime(parentForm?.VOCDATE),
+      "BRANCH_CODE": this.commonService.nullToString(form.BRANCH_CODE),
+      "JOB_NUMBER": this.commonService.nullToString(form.JOB_NUMBER),
+      "JOB_DATE": this.commonService.formatDateTime(form.JOB_DATE),
+      "JOB_SO_NUMBER": this.commonService.emptyToZero(form.JOB_SO_NUMBER),
+      "UNQ_JOB_ID": this.commonService.nullToString(form.UNQ_JOB_ID),
+      "JOB_DESCRIPTION": this.commonService.nullToString(form.JOB_DESCRIPTION),
+      "UNQ_DESIGN_ID": this.commonService.nullToString(form.UNQ_DESIGN_ID),
+      "DESIGN_CODE": this.commonService.nullToString(form.DESIGN_CODE),
+      "DIVCODE": this.commonService.nullToString(form.DIVCODE),
+      "PREFIX": this.commonService.nullToString(form.PREFIX),
+      "STOCK_CODE": this.commonService.nullToString(form.STOCK_CODE),
+      "STOCK_DESCRIPTION": this.commonService.nullToString(form.STOCK_DESCRIPTION),
+      "SET_REF": this.commonService.nullToString(form.SET_REF),
+      "KARAT_CODE": this.commonService.nullToString(form.KARAT_CODE),
+      "MULTI_STOCK_CODE": true,
+      "JOB_PCS": this.commonService.emptyToZero(form.JOB_PCS),
+      "GROSS_WT": this.commonService.emptyToZero(form.GROSS_WT),
+      "METAL_PCS": 0,
+      "METAL_WT": this.commonService.emptyToZero(form.METAL_WT),
+      "STONE_PCS": this.commonService.emptyToZero(form.STONE_PCS),
+      "STONE_WT": this.commonService.emptyToZero(form.STONE_WT),
+      "LOSS_WT": this.commonService.emptyToZero(form.LOSS_WT),
+      "NET_WT": this.commonService.emptyToZero(form.GROSS_WT),
+      "PURITY": this.commonService.emptyToZero(form.PURITY),
+      "PURE_WT": this.commonService.emptyToZero(form.PURE_WT),
+      "RATE_TYPE": this.commonService.nullToString(parentForm.METAL_RATE_TYPE),
+      "METAL_RATE": this.commonService.emptyToZero(parentForm.METAL_RATE),
+      "CURRENCY_CODE": this.commonService.nullToString(parentForm.CURRENCY_CODE),
+      "CURRENCY_RATE": this.commonService.emptyToZero(parentForm.CURRENCY_RATE),
+      "METAL_GRM_RATEFC": 0,
+      "METAL_GRM_RATELC": 0,
+      "METAL_AMOUNTFC": 0,
+      "METAL_AMOUNTLC": 0,
+      "MAKING_RATEFC": 0,
+      "MAKING_RATELC": 0,
+      "MAKING_AMOUNTFC": 0,
+      "MAKING_AMOUNTLC": 0,
+      "STONE_RATEFC": 0,
+      "STONE_RATELC": 0,
+      "STONE_AMOUNTFC": 0,
+      "STONE_AMOUNTLC": 0,
+      "LAB_AMOUNTFC": 0,
+      "LAB_AMOUNTLC": 0,
+      "RATEFC": 0,
+      "RATELC": 0,
+      "AMOUNTFC": 0,
+      "AMOUNTLC": 0,
+      "PROCESS_CODE": this.commonService.nullToString(form.PROCESS_CODE),
+      "PROCESS_NAME": this.commonService.nullToString(form.PROCESS_NAME),
+      "WORKER_CODE": this.commonService.nullToString(form.WORKER_CODE),
+      "WORKER_NAME": this.commonService.nullToString(form.WORKER_NAME),
+      "IN_DATE": this.commonService.formatDateTime(this.commonService.currentDate),
+      "OUT_DATE": this.commonService.formatDateTime(this.commonService.currentDate),
+      "TIME_TAKEN_HRS": 0,
+      "COST_CODE": this.commonService.nullToString(form.COST_CODE),
+      "WIP_ACCODE": "",
+      "STK_ACCODE": "",
+      "SOH_ACCODE": "",
+      "PROD_PROC": "",
+      "METAL_DIVISION": "",
+      "PRICE1PER": this.commonService.nullToString(form.price1per),
+      "PRICE2PER": this.commonService.nullToString(form.price2per),
+      "PRICE3PER": this.commonService.nullToString(form.price3per),
+      "PRICE4PER": this.commonService.nullToString(form.price4per),
+      "PRICE5PER": this.commonService.nullToString(form.price5per),
+      "LOCTYPE_CODE": this.commonService.nullToString(form.LOCTYPE_CODE),
+      "WASTAGE_WT": this.emptyToZero(form.WASTAGE_WT),
+      "WASTAGE_AMTFC": 0,
+      "WASTAGE_AMTLC": 0,
+      "PICTURE_NAME": "",
+      "SELLINGRATE": 0,
+      "CUSTOMER_CODE": "",
+      "OUTSIDEJOB": true,
+      "LAB_ACCODE": "",
+      "METAL_LABAMTFC": 0,
+      "METAL_LABAMTLC": 0,
+      "METAL_LABACCODE": "",
+      "SUPPLIER_REF": "",
+      "TAGLINES": "",
+      "SETTING_CHRG": this.emptyToZero(form.settingChrg),
+      "POLISH_CHRG": this.emptyToZero(form.polishChrg),
+      "RHODIUM_CHRG": this.emptyToZero(form.rhodiumChrg),
+      "LABOUR_CHRG": this.emptyToZero(form.labourChrg),
+      "MISC_CHRG": this.emptyToZero(form.miscChrg),
+      "SETTING_ACCODE": this.commonService.nullToString(form.settingChrgDesc),
+      "POLISH_ACCODE": this.commonService.nullToString(form.polishChrgDesc),
+      "RHODIUM_ACCODE": this.commonService.nullToString(form.rhodiumChrgDesc),
+      "LABOUR_ACCODE": this.commonService.nullToString(form.labourChrgDesc),
+      "MISC_ACCODE": this.commonService.nullToString(form.miscChrgDesc),
+      "WAST_ACCODE": this.commonService.nullToString(form.wastage),
+      "REPAIRJOB": 0,
+      "PRICE1FC": this.emptyToZero(form.price1fc),
+      "PRICE2FC": this.emptyToZero(form.price2fc),
+      "PRICE3FC": this.emptyToZero(form.price3fc),
+      "PRICE4FC": this.emptyToZero(form.price4fc),
+      "PRICE5FC": this.emptyToZero(form.price5fc),
+      "DT_BRANCH_CODE": "",
+      "DT_VOCTYPE": "",
+      "DT_VOCNO": 0,
+      "DT_YEARMONTH": "",
+      "YEARMONTH": "",
+      "BASE_CONV_RATE": 0,
+      "OTH_STONE_WT": 0,
+      "OTH_STONE_AMT": 0,
+      "HANDLING_ACCODE": "",
+      "FROM_STOCK_CODE": "",
+      "TO_STOCK_CODE": "",
+      "JOB_PURITY": 0,
+      "LOSS_PUREWT": 0,
+      "PUDIFF": 0,
+      "STONEDIFF": 0,
+      "CHARGABLEWT": 0,
+      "BARNO": "",
+      "LOTNUMBER": "",
+      "TICKETNO": "",
+      "PROD_PER": 0,
+      "PURITY_PER": 0,
+      "DESIGN_TYPE": this.commonService.nullToString(form.DESIGN_TYPE),
+      "D_REMARKS": "",
+      "BARCODEDQTY": 0,
+      "BARCODEDPCS": 0,
+      "STOCK_PUREWT": 0
+    }
+  }
+  set_JOB_PRODUCTION_STNMTL_DJ() {
+    return []
+  }
+  /**Labour charge detail data to save */
+  set_JOB_PRODUCTION_LABCHRG_DJ() {
+    return {
+      "REFMID": 0,
+      "BRANCH_CODE": "",
+      "YEARMONTH": "",
+      "VOCTYPE": "",
+      "VOCNO": 0,
+      "SRNO": 0,
+      "JOB_NUMBER": "",
+      "STOCK_CODE": "",
+      "UNQ_JOB_ID": "",
+      "METALSTONE": "",
+      "DIVCODE": "",
+      "PCS": 0,
+      "GROSS_WT": 0,
+      "LABOUR_CODE": "",
+      "LAB_RATE": 0,
+      "LAB_ACCODE": "",
+      "LAB_AMTFC": 0,
+      "UNITCODE": "",
+      "DIVISION": "",
+      "WASTAGE_PER": 0,
+      "WASTAGE_QTY": 0,
+      "WASTAGE_AMT": 0,
+      "WASTAGE_RATE": 0,
+      "KARAT_CODE": ""
+    }
+  }
+  set_JOB_PRODUCTION_METALRATE_DJ() {
+    return {
+      "REFMID": 0,
+      "SRNO": 0,
+      "RATE_TYPE": "",
+      "METAL_RATE": 0,
+      "DT_BRANCH_CODE": "",
+      "DT_VOCTYPE": "",
+      "DT_VOCNO": 0,
+      "DT_YEARMONTH": "",
+      "DIVISION_CODE": "",
+      "SYSTEM_DATE": "2023-10-17T12:41:20.127Z",
+      "CURRENCY_CODE": "",
+      "CURRENCY_RATE": 0,
+      "CONV_FACTOR": 0
+    }
+  }
+  emptyToZero(value: any) {
+    return this.commonService.emptyToZero(value)
   }
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {
