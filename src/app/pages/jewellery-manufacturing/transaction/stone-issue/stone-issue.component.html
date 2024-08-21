@@ -123,7 +123,7 @@
                       class="col-sm-3 col-form-label">Worker :</label>
                     <div class="col-md-4">
                       <mat-form-field style="width: 80%">
-                        <input type="text" matInput formControlName="worker"
+                        <input type="text" matInput formControlName="worker" maxlength="6"
                         (keydown)="lookupKeyPress($event,'worker')" 
                           [readonly]="viewMode" (focusout)="validateLookupField($event,WorkerCodeData,'worker')"/>
                       </mat-form-field>
@@ -134,7 +134,7 @@
                     </div>
                     <div class="col-md-4">
                       <mat-form-field style="width: 80%">
-                        <input type="text" matInput formControlName="workername"
+                        <input type="text" matInput formControlName="workername" maxlength="20"
                           [readonly]="viewMode" />
                       </mat-form-field>
                     </div>
@@ -248,7 +248,7 @@
                       class="col-sm-2 col-form-label">Narration :</label>
                     <div class="col-md-8">
                       <mat-form-field style="width: 70%">
-                        <input type="text" matInput
+                        <input type="text" matInput maxlength="40"
                           formControlName="narration" />
                       </mat-form-field>
                     </div>
