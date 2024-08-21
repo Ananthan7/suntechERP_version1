@@ -7,7 +7,7 @@
 </div>
 <!-- modal header component -->
 <modal-header (saveClick)="formSubmit('SAVE')" (cancelClick)="close()"
-  [isViewStock]="true" [isViewDelete]="false" (stockClick)="opennewdetails()"
+  [isViewStock]="designType != 'METAL'" [isViewDelete]="false" (stockClick)="opennewdetails()"
   [isViewContinue]="true" (continueClick)="formSubmit('CONTINUE')">
 </modal-header>
 <div class="p-3">
@@ -15,12 +15,13 @@
     <div class="row">
       <div class="col-md-5">
         <div class="row ">
-          <label for="input" class="col-sm-3 col-form-label">Job No :</label>
+          <label for="input" class="col-sm-3 col-form-label">Job Number
+            :</label>
           <div class="col-sm-3">
             <mat-form-field appearance="outline" style="width: 100%;">
-              <input type="text" matInput (focusout)="jobNumberValidate($event)"
-                formControlName="JOB_NUMBER" UpperCaseDirective
-                (focusout)="validateLookupField($event,jobnoCodeData,'JOB_NUMBER')" />
+              <input type="text" matInput
+                (focusout)="jobNumberValidate($event)" id="jobNoSearch"
+                formControlName="JOB_NUMBER" UpperCaseDirective />
               <master-search class="masterSearch"
                 [MasterSearchData]="jobnoCodeData"
                 (newRowClick)="jobnoCodeSelected($event)">
@@ -43,7 +44,8 @@
           </div>
           <div class="col-sm-5">
             <mat-form-field appearance="outline" style="width: 100%;">
-              <input type="text" matInput formControlName="SUB_JOB_DESCRIPTION" />
+              <input type="text" matInput
+                formControlName="SUB_JOB_DESCRIPTION" />
             </mat-form-field>
           </div>
         </div>
@@ -72,12 +74,12 @@
           <label for="input" class="col-sm-3 col-form-label">Process :</label>
           <div class="col-sm-3">
             <mat-form-field appearance="outline" style="width: 100%;">
-              <input type="text" matInput formControlName="process" />
+              <input type="text" matInput formControlName="PROCESS_CODE" />
             </mat-form-field>
           </div>
           <div class="col-sm-5">
             <mat-form-field appearance="outline" style="width: 100%;">
-              <input type="text" matInput formControlName="processname" />
+              <input type="text" matInput formControlName="PROCESS_NAME" />
             </mat-form-field>
           </div>
         </div>
@@ -85,12 +87,12 @@
           <label for="input" class="col-sm-3 col-form-label">Worker :</label>
           <div class="col-sm-3">
             <mat-form-field appearance="outline" style="width: 100%;">
-              <input type="text" matInput formControlName="worker" />
+              <input type="text" matInput formControlName="WORKER_CODE" />
             </mat-form-field>
           </div>
           <div class="col-sm-5">
             <mat-form-field appearance="outline" style="width: 100%;">
-              <input type="text" matInput formControlName="workername" />
+              <input type="text" matInput formControlName="WORKER_NAME" />
             </mat-form-field>
           </div>
         </div>
@@ -276,9 +278,9 @@
                 :</label>
               <div class="col-sm-2">
                 <mat-form-field appearance="outline" style="width: 100%;">
-                  <input type="text" matInput formControlName="costcode"
+                  <input type="text" matInput formControlName="COST_CODE"
                     UpperCaseDirective
-                    (focusout)="validateLookupField($event,costCodeData,'costcode')" />
+                    (focusout)="validateLookupField($event,costCodeData,'COST_CODE')" />
                   <master-search class="masterSearch"
                     [MasterSearchData]="costCodeData"
                     (newRowClick)="costCodeSelected($event)">
@@ -334,10 +336,10 @@
                   <input type="text" matInput formControlName="price4"
                     class="text-right" NumberOnly UpperCaseDirective
                     (focusout)="validateLookupField($event,price4CodeData,'price4')" />
-                    <master-search class="masterSearch"
-                      [MasterSearchData]="price4CodeData"
-                      (newRowClick)="price4CodeSelected($event)">
-                    </master-search>
+                  <master-search class="masterSearch"
+                    [MasterSearchData]="price4CodeData"
+                    (newRowClick)="price4CodeSelected($event)">
+                  </master-search>
                 </mat-form-field>
               </div>
             </div>
@@ -367,10 +369,10 @@
                   <input type="text" matInput class="text-right"
                     formControlName="price5" NumberOnly UpperCaseDirective
                     (focusout)="validateLookupField($event,price5CodeData,'price5')" />
-                    <master-search class="masterSearch"
-                      [MasterSearchData]="price5CodeData"
-                      (newRowClick)="price5CodeSelected($event)">
-                    </master-search>
+                  <master-search class="masterSearch"
+                    [MasterSearchData]="price5CodeData"
+                    (newRowClick)="price5CodeSelected($event)">
+                  </master-search>
                 </mat-form-field>
               </div>
             </div>
@@ -468,15 +470,17 @@
               </div>
             </div>
             <div class="row">
-              <div class="col-md-2">
-                <div class="d-flex">
-                  <a>PriceScheme</a>
+              <div class="col-md-4">
+                <p>
+                  <span class="pt-2">
+                    <a>Price Scheme</a>
+                  </span>
                   <master-search class="masterSearch"
                     [MasterSearchData]="priceSchemeData"
                     (newRowClick)="priceSchemeValidate($event)">
                   </master-search>
-                  <a>{{productiondetailsFrom.value.pricescheme}}</a>
-                </div>
+                </p>
+                <!-- <a>{{productiondetailsFrom.value.pricescheme}}</a> -->
               </div>
             </div>
             <div class="col-md-8">
@@ -490,8 +494,9 @@
                 </div> -->
                 <div class="image_box">
                   <div class="img_box">
-                    <img src="{{ urls }}"
-                      style="width: 209px; height: 163px; margin-left: 160px;" />
+                    <image-slider [imageArray]="imagepath"></image-slider>
+                    <!-- <img src="{{ urls }}"
+                      style="width: 209px; height: 163px; margin-left: 160px;" /> -->
                   </div>
                 </div>
               </div>
@@ -714,10 +719,10 @@
                   <input type="text" matInput formControlName="location"
                     UpperCaseDirective
                     (focusout)="validateLookupField($event,locationCodeData,'location')" />
-                    <master-search class="masterSearch"
-                      [MasterSearchData]="locationCodeData"
-                      (newRowClick)="locationCodeSelected($event)">
-                    </master-search>
+                  <master-search class="masterSearch"
+                    [MasterSearchData]="locationCodeData"
+                    (newRowClick)="locationCodeSelected($event)">
+                  </master-search>
                 </mat-form-field>
               </div>
               <label for="input" class="col-sm-2 col-form-label">Bal Pcs

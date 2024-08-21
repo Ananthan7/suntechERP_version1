@@ -6,7 +6,12 @@
   </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
+<modal-header (saveClick)="formSubmit()"
+  [isViewAuditTrail]="true" [isViewPost]="true"
+  [isloading]="isloading" [isViewDelete]="editMode"
+  (deleteClick)="deleteClicked()" [isViewSave]="!viewMode"
+  [disableAuditTrail]="editMode || viewMode"
+  (cancelClick)="close()"></modal-header>
 <div class="p-3">
   <form [formGroup]="productionFrom">
     <div class="row">
@@ -250,7 +255,7 @@
                     (onRowClick)="onRowClickHandler($event)"
                     (onRowDblClick)="onRowDblClickHandler($event)"
                     [allowColumnReordering]="true" height="200"
-                    [dataSource]="DetailScreenDataToSave">
+                    [dataSource]="JOB_PRODUCTION_DETAIL_DJ">
                     <dxo-selection mode="single"></dxo-selection>
                     <dxi-column dataField="SRNO" width="auto" caption="No"
                       alignment="center">
@@ -348,7 +353,7 @@
                       caption="Loss Wt"
                       alignment="center">
                     </dxi-column>
-                  </dx-data-grid> 
+                  </dx-data-grid>
                 </div>
               </div>
             </mat-tab>
@@ -357,7 +362,7 @@
                 <div class="col-md-12">
                   <dx-data-grid #dataGrid id="gridContainer"
                     [columnAutoWidth]="true"
-                    [dataSource]="STOCK_FORM_DETAILS"
+                    [dataSource]="JOB_PRODUCTION_SUB_DJ"
                     [allowColumnResizing]="true"
                     [showRowLines]="true"
                     [showBorders]="true">

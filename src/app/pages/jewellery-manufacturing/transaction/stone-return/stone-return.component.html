@@ -7,7 +7,7 @@
 </div>
 <!-- modal header component -->
 <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
-(deleteClick)="deleteClicked()"></modal-header>
+(deleteClick)="deleteClicked()" [isViewDelete]="editMode"></modal-header>
 
 <div class="row">
   <div class="col-md-12">
@@ -155,7 +155,7 @@
           <div class="row my-4">
             <div class="col-md-12">
               <div class="d-flex justify-content-start text-start">
-                <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true"
+                <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" *ngIf="!viewMode"
                   [viewImportBtn]="false"
                   (addClick)="openStoneReturnDetails()"
                   (deleteClick)="deleteTableData()">
