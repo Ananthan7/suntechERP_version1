@@ -55,6 +55,7 @@ export class ProductionMfgComponent implements OnInit {
   companyName = this.commonService.allbranchMaster['BRANCH_NAME']
   private subscriptions: Subscription[] = [];
   editMode: boolean = false;
+  isloading: boolean = false;
   modalReference!: NgbModalRef;
 
   user: MasterSearchModel = {
@@ -158,10 +159,26 @@ export class ProductionMfgComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.generateVocNo()
-    this.setInitialDatas()
-    this.setCompanyCurrency()
-    this.getRateType()
+    if (this.content?.FLAG) {
+      if (this.content.FLAG == 'VIEW' || this.content.FLAG == 'DELETE') {
+        this.viewMode = true;
+        // this.LOCKVOUCHERNO = true;
+      }
+      if (this.content.FLAG == 'EDIT') {
+        this.editMode = true;
+        // this.LOCKVOUCHERNO = true;
+      }
+      if (this.content.FLAG == 'DELETE') {
+        this.deleteClicked()
+      }
+      this.productionFrom.controls.FLAG.setValue(this.content.FLAG)
+      // this.setInitialValues()
+    } else {
+      this.generateVocNo()
+      this.setInitialDatas()
+      this.setCompanyCurrency()
+      this.getRateType()
+    }
   }
   setInitialDatas() {
     this.branchCode = this.commonService.branchCode;
@@ -281,7 +298,7 @@ export class ProductionMfgComponent implements OnInit {
   setValuesToHeaderGrid(DATA: any) {
     let detailDataToParent = DATA.PRODUCTION_FORMDETAILS
     if (detailDataToParent.SRNO != 0) {
-      this.JOB_PRODUCTION_DETAIL_DJ[detailDataToParent.SRNO - 1] =  DATA.JOB_PRODUCTION_DETAIL_DJ
+      this.JOB_PRODUCTION_DETAIL_DJ[detailDataToParent.SRNO - 1] = DATA.JOB_PRODUCTION_DETAIL_DJ
       this.detailData[detailDataToParent.SRNO - 1] = { SRNO: detailDataToParent.SRNO, ...DATA }
     } else {
       // if (this.addItemWithCheck(this.JOB_PRODUCTION_DETAIL_DJ, detailDataToParent)) return;
@@ -328,7 +345,7 @@ export class ProductionMfgComponent implements OnInit {
     }
     return false;
   }
-  setPostData(){
+  setPostData() {
     let form = this.productionFrom.value
     return {
       "MID": 0,
@@ -454,56 +471,46 @@ export class ProductionMfgComponent implements OnInit {
     this.subscriptions.push(Sub);
   }
 
-  deleteRecord() {
+  deleteClicked() {
     if (!this.content.VOCTYPE) {
       this.commonService.toastErrorByMsgId('MSG1531')
       return;
     }
-    Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete!",
-    }).then((result) => {
+    this.showConfirmationDialog().then((result) => {
       if (result.isConfirmed) {
-        this.deleteConfirmAPi()
-      }
-    });
-  }
-  deleteConfirmAPi() {
-    let API = "JobProductionMaster/DeleteJobProductionMaster/" +
-      this.productionFrom.value.branchCode + this.productionFrom.value.VOCTYPE +
-      this.productionFrom.value.VOCNO + this.productionFrom.value.vocdate;
-    let Sub: Subscription = this.dataService
-      .deleteDynamicAPI(API)
-      .subscribe(
-        (result) => {
-          if (result) {
-            if (result.status == "Success") {
-              Swal.fire({
-                title: result.message || "Success",
-                text: "",
-                icon: "success",
-                confirmButtonColor: "#336699",
-                confirmButtonText: "Ok",
-              }).then((result: any) => {
-                if (result.value) {
-                  this.close("reloadMainGrid");
+        let form = this.productionFrom.value;
+        let API = "JobProductionMaster/DeleteJobProductionMaster/" + form.branchCode + form.VOCTYPE +
+          form.VOCNO + form.vocdate;
+        let Sub: Subscription = this.dataService
+          .deleteDynamicAPI(API)
+          .subscribe(
+            (result) => {
+              if (result) {
+                if (result.status == "Success") {
+                  Swal.fire({
+                    title: result.message || "Success",
+                    text: "",
+                    icon: "success",
+                    confirmButtonColor: "#336699",
+                    confirmButtonText: "Ok",
+                  }).then((result: any) => {
+                    if (result.value) {
+                      this.close("reloadMainGrid");
+                    }
+                  });
+                } else {
+                  this.commonService.toastErrorByMsgId('MSG1531')
                 }
-              });
-            } else {
-              this.commonService.toastErrorByMsgId('MSG1531')
-            }
-          } else {
-            this.commonService.toastErrorByMsgId('MSG1531')
-          }
-        },
-        (err) => alert(err)
-      );
-    this.subscriptions.push(Sub);
+              } else {
+                this.commonService.toastErrorByMsgId('MSG1531')
+              }
+            },
+            (err) => alert(err)
+          );
+        this.subscriptions.push(Sub);
+      }
+    })
+
   }
 
   /**use: validate all lookups to check data exists in db */

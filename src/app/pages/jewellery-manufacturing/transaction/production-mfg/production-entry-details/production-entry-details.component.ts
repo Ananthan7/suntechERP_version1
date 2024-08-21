@@ -33,6 +33,8 @@ export class ProductionEntryDetailsComponent implements OnInit {
   branchCode?: String;
   vocMaxDate = new Date();
   currentDate = new Date();
+  imagepath: any[] = []
+
   private subscriptions: Subscription[] = [];
 
   StockDetailData: SavedataModel = {
@@ -332,15 +334,28 @@ export class ProductionEntryDetailsComponent implements OnInit {
     }
 
   }
+  // getDesignimagecode() {
+  //   let API = 'ImageforJobCad/' + this.productiondetailsFrom.value.PART_CODE;
+  //   let Sub: Subscription = this.dataService.getDynamicAPI(API)
+  //     .subscribe((result) => {
+
+  //       this.urls = result.response[0].imagepath;
+  //       console.log(this.urls)
+  //     }, err => {
+  //       this.commonService.toastErrorByMsgId('MSG81451')//Server Error
+  //     })
+  //   this.subscriptions.push(Sub)
+  // }
   getDesignimagecode() {
-    let API = 'ImageforJobCad/' + this.productiondetailsFrom.value.PART_CODE;
+    let API = `Image/${this.productiondetailsFrom.value.JOB_NUMBER}`
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
-
-        this.urls = result.response[0].imagepath;
-        console.log(this.urls)
+        if (result.response) {
+          let data = result.response
+          this.imagepath = data.map((item: any) => item.imagepath)
+        }
       }, err => {
-        this.commonService.toastErrorByMsgId('MSG81451')//Server Error
+        this.commonService.toastErrorByMsgId('MSG1531')
       })
     this.subscriptions.push(Sub)
   }
@@ -439,7 +454,6 @@ export class ProductionEntryDetailsComponent implements OnInit {
             this.productiondetailsFrom.controls.COST_CODE.setValue(data[0].COST_CODE)
             this.productiondetailsFrom.controls.PART_CODE.setValue(data[0].DESIGN_CODE)
             this.productiondetailsFrom.controls.partsName.setValue(data[0].DESCRIPTION)
-            console.log(this.productiondetailsFrom.value);
 
             this.subJobNumberValidate()
             this.getDesignimagecode()

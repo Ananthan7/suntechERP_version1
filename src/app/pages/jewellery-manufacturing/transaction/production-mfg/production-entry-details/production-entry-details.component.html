@@ -19,7 +19,7 @@
             :</label>
           <div class="col-sm-3">
             <mat-form-field appearance="outline" style="width: 100%;">
-              <input type="text" matInput 
+              <input type="text" matInput
                 (focusout)="jobNumberValidate($event)" id="jobNoSearch"
                 formControlName="JOB_NUMBER" UpperCaseDirective />
               <master-search class="masterSearch"
@@ -470,15 +470,17 @@
               </div>
             </div>
             <div class="row">
-              <div class="col-md-2">
-                <div class="d-flex">
-                  <a>PriceScheme</a>
+              <div class="col-md-4">
+                <p>
+                  <span class="pt-2">
+                    <a>Price Scheme</a>
+                  </span>
                   <master-search class="masterSearch"
                     [MasterSearchData]="priceSchemeData"
                     (newRowClick)="priceSchemeValidate($event)">
                   </master-search>
-                  <a>{{productiondetailsFrom.value.pricescheme}}</a>
-                </div>
+                </p>
+                <!-- <a>{{productiondetailsFrom.value.pricescheme}}</a> -->
               </div>
             </div>
             <div class="col-md-8">
@@ -492,8 +494,9 @@
                 </div> -->
                 <div class="image_box">
                   <div class="img_box">
-                    <img src="{{ urls }}"
-                      style="width: 209px; height: 163px; margin-left: 160px;" />
+                    <image-slider [imageArray]="imagepath"></image-slider>
+                    <!-- <img src="{{ urls }}"
+                      style="width: 209px; height: 163px; margin-left: 160px;" /> -->
                   </div>
                 </div>
               </div>
