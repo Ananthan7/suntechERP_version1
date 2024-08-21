@@ -191,9 +191,9 @@
       </div>
       <div class="col-md-4">
         <div class="upload-btn-wrapper mt-2">
-          <button class="btn btnnew border-dark">
-            <img src={{urls}} style="width:200px;height:185px">
-          </button>
+          <div class="square-box">
+            <image-slider [imageArray]="imagepath"></image-slider>
+          </div>
           <!-- <input type="file" name="uploadproduct" accept=".png, .jpg, .jpeg"
             #fileInput class="uploadproduct" (change)="onFileChanged($event)"> -->
         </div>
@@ -265,13 +265,13 @@
           </label>
           <div class="col-md-3">
             <mat-form-field style="width: 100%;">
-              <input type="text" matInput formControlName="sieve"
+              <input type="text" matInput formControlName="sieve" maxlength="12"
                 readonly />
             </mat-form-field>
           </div>
           <div class="col-md-4">
             <mat-form-field style="width: 100%;">
-              <input type="text" matInput formControlName="SIEVE_DESC"
+              <input type="text" matInput formControlName="SIEVE_DESC" maxlength="40"
                 readonly />
             </mat-form-field>
           </div>
@@ -282,21 +282,21 @@
           <div class="col-md-3">
             <mat-form-field style="width: 100%;">
               <input type="text" matInput formControlName="amount"
-                AmountDecimalInput readonly style="text-align: right;" />
+                AmountDecimalInput readonly style="text-align: right;" maxlength="12"/>
             </mat-form-field>
           </div>
           <label for="inputPassword" class="col-sm-1 col-form-label">Color:
           </label>
           <div class="col-md-3">
             <mat-form-field style="width: 100%;">
-              <input type="text" matInput formControlName="color" readonly />
+              <input type="text" matInput formControlName="color" readonly  maxlength="12"/>
             </mat-form-field>
           </div>
           <label for="inputPassword" class="col-sm-1 col-form-label">Stock Bal:
           </label>
           <div class="col-md-1">
             <mat-form-field style="width: 80%;">
-              <input type="text" matInput formControlName="stockbal"
+              <input type="text" matInput formControlName="stockbal" maxlength="12"
                 class="text-right" NumberOnly readonly />
             </mat-form-field>
           </div>
@@ -305,7 +305,7 @@
           <div class="col-md-1">
             <mat-form-field style="width: 100%;">
               <input type="text" matInput formControlName="pointerwt"
-                maxlength="15" MetalDecimalInput style="text-align: right;"
+                maxlength="12" MetalDecimalInput style="text-align: right;"
                 [readonly]="viewMode" />
             </mat-form-field>
           </div>
@@ -329,7 +329,7 @@
           <div class="col-md-10">
             <mat-form-field style="width: 100%;">
               <input type="text" matInput formControlName="remarks"
-                maxlength="499"
+                maxlength="40"
                 [readonly]="viewMode" />
             </mat-form-field>
           </div>
