@@ -5,7 +5,7 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" [isViewDelete]="false" [isViewSave]="!viewMode"
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" (deleteClick)="deleteMeltingType()" [isViewDelete]="false" [isViewSave]="!viewMode"
     [isloading]="isloading" [isViewPost]="true" [isViewAuditTrail]="true" [disableAuditTrail]="!isSaved"
     [isViewDelete]="editMode"></modal-header>
 <!-- content section -->
@@ -48,7 +48,7 @@
                             </div>
                             <div class="col-sm-4 ">
                                 <mat-form-field style="width: 100%;">
-                                    <input type="time-local" matInput formControlName="vocTime" class="text-right" />
+                                    <input type="time-local" matInput formControlName="vocTime" class="text-right"  [readonly]="viewMode"/>
                                 </mat-form-field>
                             </div>
                         </div>
@@ -114,19 +114,19 @@
                             <dxo-paging [enabled]="false"></dxo-paging>
                             <dxo-editing mode="cell" [allowUpdating]="true">
                             </dxo-editing>
-                            <dxo-selection mode="multiple"></dxo-selection>
+                            <dxo-selection [mode]="viewMode ? 'none' : 'multiple'"></dxo-selection>
                             <dxo-scrolling mode="virtual"></dxo-scrolling>
 
-                            <dxi-column dataField="PROCESS_CODE" caption="PROCESS"></dxi-column>
-                            <dxi-column dataField="WORKER_CODE" caption="WORKER"></dxi-column>
-                            <dxi-column dataField="JOB_NUMBER" caption="JOB_NUMBER"></dxi-column>
-                            <dxi-column dataField="UNQ_JOB_ID" caption="UNQ_JOB_ID"></dxi-column>
-                            <dxi-column dataField="DESIGN_CODE" caption="DESIGN_CODE"></dxi-column>
-                            <dxi-column dataField="STOCK_CODE" caption="STOCK_CODE"></dxi-column>
-                            <dxi-column dataField="METAL" caption="METAL"></dxi-column>
-                            <dxi-column dataField="NET_WT" caption="NETWT"></dxi-column>
-                            <dxi-column dataField="PURITY" caption="PURITY"></dxi-column>
-                            <dxi-column dataField="PURE_WT" caption="PUREWT"></dxi-column>
+                            <dxi-column dataField="PROCESS_CODE" caption="PROCESS" [allowEditing]="!viewMode"></dxi-column>
+                            <dxi-column dataField="WORKER_CODE" caption="WORKER" [allowEditing]="!viewMode"></dxi-column>
+                            <dxi-column dataField="JOB_NUMBER" caption="JOB_NUMBER" [allowEditing]="!viewMode"></dxi-column>
+                            <dxi-column dataField="UNQ_JOB_ID" caption="UNQ_JOB_ID" [allowEditing]="!viewMode"></dxi-column>
+                            <dxi-column dataField="DESIGN_CODE" caption="DESIGN_CODE" [allowEditing]="!viewMode"></dxi-column>
+                            <dxi-column dataField="STOCK_CODE" caption="STOCK_CODE" [allowEditing]="!viewMode"></dxi-column>
+                            <dxi-column dataField="METAL" caption="METAL" [allowEditing]="!viewMode"></dxi-column>
+                            <dxi-column dataField="NET_WT" caption="NETWT" [allowEditing]="!viewMode"></dxi-column>
+                            <dxi-column dataField="PURITY" caption="PURITY" [allowEditing]="!viewMode"></dxi-column>
+                            <dxi-column dataField="PURE_WT" caption="PUREWT" [allowEditing]="!viewMode"></dxi-column>
 
 
 
@@ -152,7 +152,7 @@
                             </dxi-column> -->
                         </dx-data-grid>
                         <div class="p-2 bd-highlight">
-                            <button type="button" class="btn btn-outline-primary del-btn">
+                            <button type="button"  mat-flat-button>
                                 Select
                             </button>
                         </div>
@@ -177,22 +177,22 @@
 
                             <dxi-column dataField="SRNO" caption="Sr #"></dxi-column>
                             <dxi-column dataField="STOCK_CODE" caption="Stock Code"></dxi-column>
-                            <dxi-column dataField="DESCRIPTION" caption="Description"></dxi-column>
+                            <dxi-column dataField="STOCK_DESCRIPTION" caption="Description"></dxi-column>
                             <dxi-column dataField="JOB_DESCRIPTION" caption="Job Description"></dxi-column>
                             <dxi-column dataField="PCS" caption="Pcs"></dxi-column>
                             <dxi-column dataField="DESIGN_CODE" caption="Design"></dxi-column>
                             <dxi-column dataField="DIVCODE" caption="Division"></dxi-column>
                             <dxi-column dataField="GROSS_WT" caption="Gross Wt"></dxi-column>
                             <dxi-column dataField="PURE_WT" caption="Pure Wt"></dxi-column>
-                            <dxi-column dataField="JOB_Number" caption="Job Number"></dxi-column>
+                            <dxi-column dataField="JOB_NUMBER" caption="Job Number"></dxi-column>
                             <dxi-column dataField="UNQ_JOB_ID" caption="Uniq job Id"></dxi-column>
                             <dxi-column dataField="PURITY" caption="Purity"></dxi-column>
                             <dxi-column dataField="STONE_WT" caption="Stone Wt"></dxi-column>
                             <dxi-column dataField="NET_WT" caption="Net Wt"></dxi-column>
                             <dxi-column dataField="PROCESS_CODE" caption="Process Code"></dxi-column>
-                            <dxi-column dataField="PROCESS_DESCRIPTION" caption="Process Desc"></dxi-column>
+                            <dxi-column dataField="PROCESS_NAME" caption="Process Desc"></dxi-column>
                             <dxi-column dataField="WORKER_CODE" caption="Worker"></dxi-column>
-                            <dxi-column dataField="WORKER_DESCRIPTION" caption="Worker Desc"></dxi-column>
+                            <dxi-column dataField="WORKER_NAME" caption="Worker Desc"></dxi-column>
 
                             <!-- <dxi-column dataField="GROSS_WT"
                                 caption="GROSS WT"
