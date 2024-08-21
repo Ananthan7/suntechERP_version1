@@ -535,6 +535,18 @@ export class AlloyMasterComponent implements OnInit {
         this.content.PRICE5LC))
 
 
+        this.alloyMastereForm.controls.weightAvgCostFC.setValue(
+          this.commonService.transformDecimalVB(
+            this.commonService.allbranchMaster?.BAMTDECIMALS,
+            this.content.STOCK_FCCOST))
+
+            this.alloyMastereForm.controls.weightAvgCostLC.setValue(
+              this.commonService.transformDecimalVB(
+                this.commonService.allbranchMaster?.BAMTDECIMALS,
+                this.content.STOCK_LCCOST))
+        
+
+
     // this.alloyMastereForm.controls.price1Fc.setValue(this.content.PRICE1FC)
     // this.alloyMastereForm.controls.price2Fc.setValue(this.content.PRICE2FC)
     // this.alloyMastereForm.controls.price3Fc.setValue(this.content.PRICE3FC)
@@ -545,8 +557,8 @@ export class AlloyMasterComponent implements OnInit {
     // this.alloyMastereForm.controls.price3Lc.setValue(this.content.PRICE3LC)
     // this.alloyMastereForm.controls.price4Lc.setValue(this.content.PRICE4LC)
     // this.alloyMastereForm.controls.price5Lc.setValue(this.content.PRICE5LC)
-    this.alloyMastereForm.controls.weightAvgCostFC.setValue(this.content.STOCK_FCCOST)
-    this.alloyMastereForm.controls.weightAvgCostLC.setValue(this.content.STOCK_LCCOST)
+    // this.alloyMastereForm.controls.weightAvgCostFC.setValue(this.content.STOCK_FCCOST)
+    // this.alloyMastereForm.controls.weightAvgCostLC.setValue(this.content.STOCK_LCCOST)
     this.alloyMastereForm.controls.hsncode.setValue(this.content.HSN_CODE)
     this.alloyMastereForm.controls.allowpcs.setValue(this.viewchangeYorN(this.content.ALLOW_ZEROPCS))
     this.alloyMastereForm.controls.excludeTransferWt.setValue(this.viewchangeYorN(this.content.EXCLUDE_TRANSFER_WT))
@@ -712,6 +724,10 @@ export class AlloyMasterComponent implements OnInit {
   }
 
   fillPriceSchemeDetails() {
+    if (this.viewMode) {
+   //   console.log('fillPriceSchemeDetails function is disabled in viewMode.');
+      return; // Exit the function early if in viewMode
+    }
     this.resetAllPriceDetails()
     let form = this.alloyMastereForm.value;
     this.priceSchemeDetails.forEach((item: any, i: any) => {
