@@ -13259,10 +13259,9 @@ changeGiftVoucherAmount(data:any){
     this.modalRefePendingSalesOrder = this.modalService.open(
       this.pendingSalesOrderModal,
       {
-        size: "lg",
-        backdrop: true,
-        keyboard: false,
-        windowClass: "modal-full-width",
+        size: 'lg',
+        ariaLabelledBy: 'modal-basic-title',
+        backdrop: false,
       }
     );
 
