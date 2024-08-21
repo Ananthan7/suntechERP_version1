@@ -7,7 +7,7 @@
 </div>
 <!-- modal header component -->
 <modal-header (saveClick)="formSubmit('SAVE')" (cancelClick)="close()"
-  [isViewStock]="true" [isViewDelete]="false" (stockClick)="opennewdetails()"
+  [isViewStock]="designType != 'METAL'" [isViewDelete]="false" (stockClick)="opennewdetails()"
   [isViewContinue]="true" (continueClick)="formSubmit('CONTINUE')">
 </modal-header>
 <div class="p-3">
