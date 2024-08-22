@@ -22,7 +22,7 @@
                   <label for="inputPassword" class="col-sm-5 col-form-label">Voc
                     Type:</label>
                   <div class="col-md-6">
-                    <mat-form-field style="width: 100%;">
+                    <mat-form-field appearance="outline" style="width: 100%;">
                       <input type="text" matInput formControlName="vocType" />
                     </mat-form-field>
                   </div>
@@ -31,20 +31,20 @@
                   <label for="inputPassword" class="col-sm-5 col-form-label">Voc
                     Date:</label>
                   <div class="col-md-6">
-                    <mat-form-field style="width: 100%;">
-                      <input matInput [matDatepicker]="vocDate" formControlName="vocDate"
-                      placeholder="DD/MM/YYYY" DateValidation />
-                  <mat-datepicker-toggle matSuffix [for]="vocDate"></mat-datepicker-toggle>
-                  <mat-datepicker  #vocDate></mat-datepicker>
-                   </mat-form-field>
+                    <mat-form-field appearance="outline" style="width: 100%;">
+                      <input matInput [matDatepicker]="vocDate" formControlName="vocDate" placeholder="DD/MM/YYYY"
+                        DateValidation />
+                      <mat-datepicker-toggle matSuffix [for]="vocDate"></mat-datepicker-toggle>
+                      <mat-datepicker #vocDate></mat-datepicker>
+                    </mat-form-field>
                   </div>
                 </div>
                 <div class=" row">
                   <label for="inputPassword" class="col-sm-5 col-form-label">Voc
                     No:</label>
                   <div class="col-md-6">
-                    <mat-form-field style="width: 100%;">
-                      <input type="TEXT" matInput formControlName="vocNo" class="text-right" NumberOnly/>
+                    <mat-form-field appearance="outline" style="width: 100%;">
+                      <input type="text" matInput formControlName="vocNo" class="text-right" NumberOnly />
                     </mat-form-field>
                   </div>
                 </div>
@@ -52,11 +52,15 @@
                   <label for="inputPassword" class="col-sm-5 col-form-label">User
                     Name:</label>
                   <div class="col-md-7">
-                    <mat-form-field style="width: 80%;">
-                      <input type="text" matInput formControlName="userName" />
+                    <mat-form-field appearance="outline" style="width: 100%;">
+                      <input type="text" matInput formControlName="userName"
+                        (keydown)="lookupKeyPress($event,'userName')"
+                        (focusout)="validateLookupField($event,user,'userName')" />
+                      <master-search class="masterSearch" [MasterSearchData]="user"  #overlayuserName  
+                        (newRowClick)="userDataSelected($event)">
+                      </master-search>
                     </mat-form-field>
-                    <master-search [MasterSearchData]="user" (newRowClick)="userDataSelected($event)">
-                    </master-search>
+
                   </div>
                 </div>
               </div>
@@ -64,7 +68,7 @@
                 <div class=" row ">
                   <label for="inputPassword" class="col-sm-5 col-form-label">Doc.Ref:</label>
                   <div class="col-md-6">
-                    <mat-form-field style="width: 100%;">
+                    <mat-form-field appearance="outline" style="width: 100%;">
                       <input type="text" matInput formControlName="docRef" />
                     </mat-form-field>
                   </div>
@@ -73,7 +77,7 @@
                   <label for="inputPassword" class="col-sm-5 col-form-label">Process
                     Code:</label>
                   <div class="col-md-7">
-                    <mat-form-field style="width: 80%;">
+                    <mat-form-field appearance="outline" style="width: 80%;">
                       <input type="text" matInput formControlName="processCode" />
                     </mat-form-field>
                     <master-search [MasterSearchData]="ProcessCodeData"
@@ -92,27 +96,27 @@
           <div class="col-md-12 mt-3">
             <mat-tab-group style="background-color: #f5f2ee;" [selectedIndex]="this.divisionMS == 'ID' ? 1 : 0">
               <mat-tab label="Pending Sales Order">
-                <dx-data-grid class="mt-3" #dataGrid id="gridContainer" [allowColumnResizing]="true" keyExpr="ID" [showBorders]="true"
-                [allowColumnReordering]="true"
-                [allowColumnResizing]="true"
-                [columnAutoWidth]="true">
+                <dx-data-grid class="mt-3" #dataGrid id="gridContainer" [allowColumnResizing]="true" keyExpr="ID"
+                  [showBorders]="true" [allowColumnReordering]="true" [allowColumnResizing]="true"
+                  [columnAutoWidth]="true">
                   <dxo-paging [enabled]="false"></dxo-paging>
                   <dxo-editing mode="cell" [allowUpdating]="true">
                   </dxo-editing>
                   <dxo-selection mode="multiple"></dxo-selection>
                   <dxo-scrolling mode="virtual"></dxo-scrolling>
-                 
+
                   <dxi-column *ngFor="let data of columnhead" dataField="{{ data }}" caption="{{ data }}"
                     [allowEditing]="false" alignment="center" backgroundcolor="#000">
                   </dxi-column>
-                    <dxi-column dataField="Extra Pcs" caption="Extra Pcs" [allowEditing]="true"> </dxi-column>
-                    <dxi-column dataField="Pcs/Bag" caption="Pcs/Bag" [allowEditing]="true"> </dxi-column>
-                    
-                 
+                  <dxi-column dataField="Extra Pcs" caption="Extra Pcs" [allowEditing]="true"> </dxi-column>
+                  <dxi-column dataField="Pcs/Bag" caption="Pcs/Bag" [allowEditing]="true"> </dxi-column>
+
+
                 </dx-data-grid>
               </mat-tab>
               <mat-tab label="Job">
-                <dx-data-grid class="mt-3" #dataGrid id="gridContainer" [allowColumnResizing]="true" keyExpr="ID" [showBorders]="true">
+                <dx-data-grid class="mt-3" #dataGrid id="gridContainer" [allowColumnResizing]="true" keyExpr="ID"
+                  [showBorders]="true">
                   <dxo-paging [enabled]="false"></dxo-paging>
                   <dxo-editing mode="cell" [allowUpdating]="true">
                   </dxo-editing>
@@ -130,8 +134,8 @@
                 <div class="row align-items-center">
                   <label for="inputPassword" class="col-sm-2 col-form-label">Remarks:</label>
                   <div class="col-md-2">
-                    <mat-form-field style="width: 100%;">
-                      <input type="text" matInput formControlName="narration" maxlength="40"/>
+                    <mat-form-field appearance="outline" style="width: 100%;">
+                      <input type="text" matInput formControlName="narration" maxlength="40" />
                     </mat-form-field>
                   </div>
                   <div class="col-md-2 bd-highlight pt-1 ml-2">
@@ -143,9 +147,9 @@
                 </div>
               </div>
             </div>
-            
-            
-                       
+
+
+
           </div>
         </div>
 

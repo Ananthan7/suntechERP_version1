@@ -319,7 +319,8 @@ export class SequenceMasterComponent implements OnInit {
     return daysTime + ":" + hoursTime + ':' + minutesTime;
   }
   submitValidation() {
-    if (this.selectedSequence) {
+    if (this.selectedSequence.length == 0) {
+      console.log(this.selectedSequence)
       this.commonService.toastErrorByMsgId('MSG1777') 
       //this.toastr.error('Select all required fields & Process')Select atleast one option
       return true;  
@@ -372,7 +373,7 @@ export class SequenceMasterComponent implements OnInit {
       "PRINT_COUNT": 0,
       "PREFIX_CODE": this.commonService.nullToString(form.sequencePrefixCode?.toUpperCase()),
       "MID": this.content?.MID || 0,
-      "sequenceDetails": this.setSelectedSequence() || []
+      "sequenceDetails": this.setSelectedSequence()
     }
   }
   /**USE:  final save API call*/
@@ -602,6 +603,10 @@ export class SequenceMasterComponent implements OnInit {
       }
     })
 
+    if (dataSelected.isChecked == true) {
+      this.selectedSequence.push(dataSelected)
+    }
+
     if (dataSelected.isChecked == false) {
       const index = this.selectedSequence.indexOf(dataSelected);
       this.selectedSequence.splice(index, 1); // Remove the item from its current position
@@ -617,21 +622,57 @@ export class SequenceMasterComponent implements OnInit {
     this.reCalculateSRNO()
   }
   /**USE: set Selected Sequence data */
-  setSelectedSequence() {
-    this.selectedSequence = []
+  // setSelectedSequence() {
 
-    this.dataSource.forEach((item: any) => {
-      if (item.isChecked == true) {
-        this.selectedSequence.push({
+  //   this.dataSource.forEach((item: any) => {
+  //     if (item.isChecked == true) {
+  //       this.selectedSequence.push({
+  //         "UNIQUEID": 0,
+  //         "SEQ_CODE": this.commonService.nullToString(item.PROCESS_CODE),
+  //         "SEQ_NO": this.commonService.emptyToZero(item.SRNO),
+  //         "PROCESS_CODE": this.commonService.nullToString(item.PROCESS_CODE),
+  //         "PROCESS_DESCRIPTION": this.commonService.nullToString(item.DESCRIPTION),
+  //         "PROCESS_TYPE": "",
+  //         "CURRENCY_CODE": "",
+  //         "UNIT_RATE": item.UNIT_RATE || 0,
+  //         "UNIT": "",
+  //         "NO_OF_UNITS": item.NO_OF_UNITS || 0,
+  //         "STD_TIME": item.STD_TIME,
+  //         "MAX_TIME": item.MAX_TIME,
+  //         "STD_LOSS": item.STD_LOSS || 0,
+  //         "MIN_LOSS": item.MIN_LOSS || 0,
+  //         "MAX_LOSS": item.MAX_LOSS || 0,
+  //         "LOSS_ACCODE": this.commonService.nullToString(item.LOSS_ACCODE),
+  //         "WIP_ACCODE": this.commonService.nullToString(item.WIP_ACCODE),
+  //         "LAB_ACCODE": this.commonService.nullToString(item.LAB_ACCODE),
+  //         "POINTS": item.POINTS || 0,
+  //         "GAIN_ACCODE": "",
+  //         "GAIN_AC": this.commonService.nullToString(item.GAIN_ACCODE),
+  //         "TRAY_WT": item.TRAY_WT || 0,
+  //         "PACKET_CODE": this.commonService.nullToString(item.PROCESS_CODE),
+  //         "LOSS_ON_GROSS": item.LOSS_ON_GROSS || false,
+  //         "TIMEON_PROCESS": item.TIMEON_PROCESS || false,
+  //         "LABCHRG_PERHOUR": item.LABCHRG_PERHOUR || 0
+  //       })
+  //     }
+  //   })
+  //   return this.selectedSequence
+  // }
+
+  setSelectedSequence() {
+    const selectedSequence = this.dataSource
+      .filter((item: any) => item.isChecked === true)
+      .map((item: any) => {
+        return {
           "UNIQUEID": 0,
-          "SEQ_CODE": this.sequenceMasterForm.value.sequenceCode,
+          "SEQ_CODE": this.commonService.nullToString(item.PROCESS_CODE),
           "SEQ_NO": this.commonService.emptyToZero(item.SRNO),
           "PROCESS_CODE": this.commonService.nullToString(item.PROCESS_CODE),
           "PROCESS_DESCRIPTION": this.commonService.nullToString(item.DESCRIPTION),
-          "PROCESS_TYPE": "",
-          "CURRENCY_CODE": "",
+          "PROCESS_TYPE": "", // Populate this field as needed
+          "CURRENCY_CODE": "", // Populate this field as needed
           "UNIT_RATE": item.UNIT_RATE || 0,
-          "UNIT": "",
+          "UNIT": "", // Populate this field as needed
           "NO_OF_UNITS": item.NO_OF_UNITS || 0,
           "STD_TIME": item.STD_TIME,
           "MAX_TIME": item.MAX_TIME,
@@ -642,18 +683,19 @@ export class SequenceMasterComponent implements OnInit {
           "WIP_ACCODE": this.commonService.nullToString(item.WIP_ACCODE),
           "LAB_ACCODE": this.commonService.nullToString(item.LAB_ACCODE),
           "POINTS": item.POINTS || 0,
-          "GAIN_ACCODE": "",
+          "GAIN_ACCODE": "", // Populate this field as needed
           "GAIN_AC": this.commonService.nullToString(item.GAIN_ACCODE),
           "TRAY_WT": item.TRAY_WT || 0,
-          "PACKET_CODE": "",
+          "PACKET_CODE": this.commonService.nullToString(item.PROCESS_CODE),
           "LOSS_ON_GROSS": item.LOSS_ON_GROSS || false,
           "TIMEON_PROCESS": item.TIMEON_PROCESS || false,
           "LABCHRG_PERHOUR": item.LABCHRG_PERHOUR || 0
-        })
-      }
-    })
-    return this.selectedSequence
+        };
+      });
+  
+    return selectedSequence;
   }
+  
   private handleDurationUpdate(value: any): number {
     if (value == '' || !value) return 0;
     let duration = value.split(':')
