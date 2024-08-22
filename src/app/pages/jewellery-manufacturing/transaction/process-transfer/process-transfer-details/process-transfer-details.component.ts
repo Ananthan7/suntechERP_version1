@@ -549,6 +549,13 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.setFormDecimal('METAL_FromIronWeight', parentDetail.FROM_IRONWT, 'METAL')
     this.setFormDecimal('METAL_ToIronWt', parentDetail.TO_IRONWT, 'METAL')
     this.setFormDecimal('METAL_ToIronScrapWt', parentDetail.IRON_SCRAP_WT, 'METAL')
+    this.setFormDecimal('METAL_FromPureWt', parentDetail.FRM_PURE_WT, 'METAL')
+    this.setFormDecimal('METAL_ScrapPureWt', parentDetail.TO_PURE_WT, 'METAL')
+    let METAL_BalPureWt = this.balanceCalculate(parentDetail.FRM_PURE_WT,parentDetail.TO_PURE_WT,parentDetail.SCRAP_PURE_WT)
+    this.setFormDecimal('METAL_BalPureWt', METAL_BalPureWt, 'METAL')
+  }
+  balanceCalculate(from:any,to:any,scrap:any){
+    return this.emptyToZero(from)- (this.emptyToZero(to)+this.emptyToZero(scrap))
   }
   getImageData() {
     let API = `Image/${this.processTransferdetailsForm.value.JOB_NUMBER}`
@@ -2199,7 +2206,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       "FRM_STONE_PCS": this.emptyToZero(0),
       "FRM_METAL_WT": this.emptyToZero(form.METAL_GrossWeightFrom),
       "FRM_METAL_PCS": this.emptyToZero(form.METAL_FromPCS),
-      "FRM_PURE_WT": this.multiplyWithAmtDecimal(form.METAL_GrossWeightFrom, form.PURITY),
+      "FRM_PURE_WT": this.emptyToZero(form.METAL_FromPureWt),
       "FRM_NET_WT": this.emptyToZero(form.METAL_GrossWeightFrom),
       "TO_PROCESS_CODE": this.commonService.nullToString(form.METAL_TO_PROCESS_CODE),
       "TO_PROCESSNAME": this.commonService.nullToString(form.METAL_TO_PROCESSNAME),
@@ -2210,7 +2217,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       "TO_STONE_WT": this.emptyToZero(form.METAL_TO_STONE_WT),
       "TO_STONE_PCS": this.emptyToZero(0),
       "TO_METAL_WT": this.emptyToZero(form.METAL_GrossWeightTo),
-      "TO_PURE_WT": this.multiplyWithAmtDecimal(form.METAL_GrossWeightTo, form.PURITY),
+      "TO_PURE_WT": this.emptyToZero(form.METAL_ToPureWt),
       "TO_NET_WT": this.emptyToZero(form.METAL_GrossWeightTo),
       "LOSS_QTY": this.emptyToZero(form.METAL_LossBooked),
       "LOSS_PURE_QTY": this.emptyToZero(LOSS_PURE_QTY),
@@ -2265,7 +2272,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       "STONE_PCS": this.emptyToZero(form.TO_STONE_PCS),
       "METAL_WT": this.emptyToZero(form.METAL_GrossWeightTo),
       "METAL_PCS": this.emptyToZero(form.TO_METAL_PCS),
-      "PURE_WT": this.multiplyWithAmtDecimal(form.METAL_GrossWeightTo, form.PURITY),
+      "PURE_WT": this.emptyToZero(form.METAL_ToPureWt),
       "GROSS_WT": this.emptyToZero(form.METAL_GrossWeightTo),
       "RET_METAL_PCS": 0,
       "RET_STONE_PCS": 0,
@@ -2289,7 +2296,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       "SCRAP_SUB_STOCK_CODE": this.commonService.nullToString(form.MAIN_STOCK_CODE),
       "SCRAP_PURITY": this.emptyToZero(form.SCRAP_PURITY),
       "SCRAP_WT": this.emptyToZero(form.scrapWeight),
-      "SCRAP_PURE_WT": scrapPureWt,
+      "SCRAP_PURE_WT": this.emptyToZero(form.METAL_ScrapPureWt),
       "SCRAP_PUDIFF": this.emptyToZero((Number(form.scrapWeight) - Number(form.PURITY)) * scrapPureWt),
       "SCRAP_ACCODE": seqDataFrom.length > 0 ? this.commonService.nullToString(seqDataFrom[0].GAIN_AC) : '',
       "APPROVED_DATE": this.commonService.formatDateTime(form.approveddate),
