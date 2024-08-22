@@ -160,6 +160,8 @@ export class GoldExchangeComponent implements OnInit {
     grossAmt: [''],
     grossAmtDes: [''],
     partyCode1: [''],
+    BRANCH_CODE: [''],
+    YEARMONTH: [''],
 
   });
 
@@ -279,8 +281,8 @@ export class GoldExchangeComponent implements OnInit {
   setVoucherFormValues() {
     this.goldExchangeForm.controls.BRANCH_CODE.setValue(this.comService.branchCode)
     this.goldExchangeForm.controls.YEARMONTH.setValue(this.comService.yearSelected)
-    this.goldExchangeForm.controls.VOCDATE.setValue(this.currentDate)
-    this.goldExchangeForm.controls.VOCTYPE.setValue(
+    this.goldExchangeForm.controls.vocdate.setValue(this.currentDate)
+    this.goldExchangeForm.controls.vocType.setValue(
       this.comService.getqueryParamVocType()
     )
     this.goldExchangeForm.controls.MAIN_VOCTYPE.setValue(
