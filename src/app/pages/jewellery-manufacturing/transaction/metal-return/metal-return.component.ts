@@ -23,6 +23,7 @@ export class MetalReturnComponent implements OnInit {
    @ViewChild('overlayprocess') overlayprocess! : MasterSearchComponent;
    @ViewChild('overlayworker') overlayworker! : MasterSearchComponent;
    @ViewChild('overlaylocation') overlaylocation! : MasterSearchComponent;
+   selectedRowData: any[] = [];
   @Input() content!: any;
   modalReference!: NgbModalRef;
   dataToDetailScreen: any;
@@ -490,27 +491,57 @@ this.setvoucherTypeMaster()
 //         this.commonService.toastErrorByMsgId('MSG_NO_ROW_SELECTED'); // Show an error if no row is selected
 //     }
 // }
-selectedRowData: any = null;
+
 onRowClickHandlerr(event: any) {
   console.log('Full Event Object:', event);
   console.log('Row Data:', event.data); // Check if event.data contains the correct row data
   this.selectedRowData = event.data;
 }
 
+// onRowClickHandlers(e: any) {
+//   const selectedRowData = e.data;
+
+//   // Optional: Check for duplicates before adding
+//   const isDuplicate = this.metalReturnDetailsData.some(item => item.STOCK_CODE === selectedRowData.STOCK_CODE);
+
+//   if (isDuplicate) {
+//       Swal.fire({
+//           title: 'Duplicate Entry',
+//           text: 'This Stock Code entry is already available in detail. Do you wish to continue?',
+//           icon: 'warning',
+//           showCancelButton: true,
+//           confirmButtonText: 'Yes, continue!',
+//           cancelButtonText: 'No, cancel'
+//       }).then((result) => {
+//           if (result.isConfirmed) {
+//               this.addRowToBottomGrid(selectedRowData);
+//           }
+//       });
+//   } else {
+//       this.addRowToBottomGrid(selectedRowData);
+//   }
+// }
+
+addRowToBottomGrid(rowData: any) {
+  this.metalReturnDetailsData = [...this.metalReturnDetailsData, rowData];
+}
+
+onRowClickHandlers(e: any) {
+  console.log(e)
+  this.selectedRowData.push(e.data); // Capture the selected row's data
+  console.log('Row Clicked:', this.selectedRowData);
+}
 
 onSelectRow() {
   console.log('Attempting to Select Row');
-  console.log('Current Selected Row Data:', this.selectedRowData);
   if (this.selectedRowData) {
       console.log('Pushing to metalReturnDetailsData:', this.selectedRowData);
-      this.metalReturnDetailsData.push(this.selectedRowData);
-      this.selectedRowData = null; // Optionally clear selection
+      this.metalReturnDetailsData =this.selectedRowData;
   } else {
       console.log('No Row Selected');
-      this.commonService.toastErrorByMsgId('MSG_NO_ROW_SELECTED');
+      this.commonService.toastErrorByMsgId('MSG_NO_ROW_SELECTED'); // Handle error
   }
 }
-
 
 // onSelectRow() {
 //   if (this.selectedRowData) {

@@ -95,7 +95,7 @@ export class JobcardComponent implements OnInit {
     SEARCH_FIELD: '',
     SEARCH_HEADING: 'Account Description',
     SEARCH_VALUE: '',
-    WHERECONDITION: "@strAcCode=''",
+    WHERECONDITION: "",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -479,7 +479,7 @@ export class JobcardComponent implements OnInit {
     LOAD_ONCLICK: true,
   }
 
-  
+
   setCompanyCurrency() {
     let CURRENCY_CODE = this.commonService.compCurrency;
     this.jobCardFrom.controls.currency.setValue(CURRENCY_CODE);
@@ -880,7 +880,7 @@ export class JobcardComponent implements OnInit {
               SHAPE: element.SHAPE,
               SIZE_FROM: element.SIZE_FROM,
               SIZE_TO: element.SIZE_TO,
-              UNQ_DESIGN_ID:result.NewUnqDesignId , // Assign as needed
+              UNQ_DESIGN_ID: result.NewUnqDesignId, // Assign as needed
               UNIQUEID: element.UNIQUEID,
               STOCK_CODE: element.STOCK_CODE,
               SIEVE_SET: element.SIEVE_SET,
@@ -890,13 +890,13 @@ export class JobcardComponent implements OnInit {
               stone_wt: stoneWt.toString(),
               part_code: result.response.DESIGN_CODE,
               Description: result.response.DESIGN_DESCRIPTION,
-              SIZE: result.response.SIZE || "", 
-              LENGTH: result.response.LENGTH || "", 
+              SIZE: result.response.SIZE || "",
+              LENGTH: result.response.LENGTH || "",
               CLOSE_TYPE: element.CLOSE_TYPE || "",
-              ORDER_TYPE: element.ORDER_TYPE || "", 
-              WAX_STATUS: element.WAX_STATUS || "", 
-              DESIGN_TYPE: element.DESIGN_TYPE || "", 
-              SCREW_FIELD: element.SCREW_FIELD || "", 
+              ORDER_TYPE: element.ORDER_TYPE || "",
+              WAX_STATUS: element.WAX_STATUS || "",
+              DESIGN_TYPE: element.DESIGN_TYPE || "",
+              SCREW_FIELD: element.SCREW_FIELD || "",
             };
 
             this.jobsalesorderdetailDJ.push(obj);
@@ -1795,10 +1795,15 @@ export class JobcardComponent implements OnInit {
   //   this.subscriptions.push(Sub)
   // }
 
-   /**use: validate all lookups to check data exists in db */
-   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+  /**use: validate all lookups to check data exists in db */
+  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     const inputValue = event.target.value.toUpperCase();
     LOOKUPDATA.SEARCH_VALUE = event.target.value
+
+    if (FORMNAME == 'comments') {
+      console.log(FORMNAME)
+      this.setFromProcessWhereCondition()
+    }
 
     if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
     let param = {
@@ -1807,7 +1812,7 @@ export class JobcardComponent implements OnInit {
     }
     this.commonService.toastInfoByMsgId('MSG81447');
     let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
-    let Sub: Subscription = this.dataService.postDynamicAPI(API,param)
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
       .subscribe((result) => {
         this.isDisableSaveBtn = false;
         let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
@@ -1825,15 +1830,15 @@ export class JobcardComponent implements OnInit {
           this.commonService.toastErrorByMsgId('MSG1531')
           this.jobCardFrom.controls[FORMNAME].setValue('')
           LOOKUPDATA.SEARCH_VALUE = ''
-       
-            if (FORMNAME === 'customer') {
-              console.log(FORMNAME)
-              this.jobCardFrom.controls.customername.setValue('');
-            }
-            if (FORMNAME === 'comments') {
-              console.log(FORMNAME)
-              this.jobCardFrom.controls.comments.setValue('');
-            }
+
+          if (FORMNAME === 'customer') {
+            console.log(FORMNAME)
+            this.jobCardFrom.controls.customername.setValue('');
+          }
+          if (FORMNAME === 'comments') {
+            console.log(FORMNAME)
+            this.jobCardFrom.controls.comments.setValue('');
+          }
           return
         }
 
@@ -1841,10 +1846,10 @@ export class JobcardComponent implements OnInit {
           this.commonService.toastErrorByMsgId('MSG1531')
           this.jobCardFrom.controls[FORMNAME].setValue('')
           LOOKUPDATA.SEARCH_VALUE = ''
-            if (FORMNAME === 'comments') {
-              console.log(FORMNAME)
-              this.jobCardFrom.controls.comments.setValue('');
-            }
+          if (FORMNAME === 'comments') {
+            console.log(FORMNAME)
+            this.jobCardFrom.controls.comments.setValue('');
+          }
           return
         }
 
@@ -1898,10 +1903,11 @@ export class JobcardComponent implements OnInit {
     }
   }
 
-  
+
   SPvalidateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     LOOKUPDATA.SEARCH_VALUE = event.target.value
     if (FORMNAME == 'comments') {
+      console.log(FORMNAME)
       this.setFromProcessWhereCondition()
     }
 
@@ -1944,7 +1950,7 @@ export class JobcardComponent implements OnInit {
   setFromProcessWhereCondition() {
     //${this.commonService.nullToString(this.processTransferdetailsForm.value.FRM_PROCESS_CODE)}
     this.commentsCodeData.WHERECONDITION = `@strAcCode='${this.commonService.nullToString(this.jobCardFrom.value.comments)}'`
-
+    
   }
 
   showOverleyPanel(event: any, formControlName: string) {

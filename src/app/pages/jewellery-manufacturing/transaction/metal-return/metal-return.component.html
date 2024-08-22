@@ -109,8 +109,8 @@
                     </div>
                     <div class="col-md-4">
                         <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true" [showRowLines]="true"
-                            [allowColumnReordering]="true" [allowColumnResizing]="true" [dataSource]="tableData" 
-                            height="200" [columnAutoWidth]="true">
+                            [allowColumnReordering]="true" (onCellClick)="onRowClickHandlers($event)" [allowColumnResizing]="true" [dataSource]="tableData" 
+                            height="200" [columnAutoWidth]="true" >
                             <dxo-paging [enabled]="false"></dxo-paging>
                             <dxo-editing mode="cell" [allowUpdating]="true">
                             </dxo-editing>
