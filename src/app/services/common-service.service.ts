@@ -440,6 +440,8 @@ export class CommonServiceService {
   //service for ADD POS starts
   stringToBoolean = (string: string) => string != undefined && string != null ? string.toString().toLowerCase() == 'false' ? false : true : false;
 
+  numberToBoolean = (num: number) => num != undefined && num != null ? num === 0 ? false : true : false;
+
   formControlSetReadOnly(id: any, isReadonly: boolean) {
     const ele: any = document.getElementById(id);
     console.log('ele ', ele);

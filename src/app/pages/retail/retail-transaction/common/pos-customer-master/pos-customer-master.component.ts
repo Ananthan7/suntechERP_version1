@@ -184,7 +184,7 @@ export class PosCustomerMasterComponent implements OnInit {
         fcn_cust_detail_phone: custMobile,
       });
       // }
-      this.apiService.getDynamicAPI('PosCustomerMaster/GetCustomerMaster/Mobile=' + _cust_mobile_no)
+      this.apiService.getDynamicAPI(`PosCustomerMaster/GetCustomerMaster/${_cust_mobile_no}`)
         .subscribe((resp) => {
           this.snackBar.dismiss();
           if (resp.status == 'Success') {
