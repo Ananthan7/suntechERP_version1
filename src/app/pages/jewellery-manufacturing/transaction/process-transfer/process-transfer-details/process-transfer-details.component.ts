@@ -14,6 +14,7 @@ import Swal from 'sweetalert2';
   styleUrls: ['./process-transfer-details.component.scss']
 })
 export class ProcessTransferDetailsComponent implements OnInit {
+  @ViewChild('METAL_ScrapStockCodeoverlay') METAL_ScrapStockCodeoverlay!: MasterSearchComponent;
   @ViewChild('MetaloverlayToWorker') MetaloverlayToWorker!: MasterSearchComponent;
   @ViewChild('MetaloverlayjobNoSearch') MetaloverlayjobNoSearch!: MasterSearchComponent;
   @ViewChild('MetalfromProcessMasterOverlay') MetalfromProcessMasterOverlay!: MasterSearchComponent;
@@ -553,7 +554,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.processTransferdetailsForm.controls.METAL_FromPCS.setValue(parentDetail.FRM_PCS)
     this.processTransferdetailsForm.controls.METAL_ToPCS.setValue(parentDetail.TO_PCS)
     this.processTransferdetailsForm.controls.METAL_ScrapPCS.setValue(parentDetail.SCRAP_PCS)
-    let METAL_BalPCS = this.balanceCalculate(parentDetail.FRM_PCS,parentDetail.TO_PCS,parentDetail.SCRAP_PCS)
+    let METAL_BalPCS = this.balanceCalculate(parentDetail.FRM_PCS, parentDetail.TO_PCS, parentDetail.SCRAP_PCS)
     this.processTransferdetailsForm.controls.METAL_BalPCS.setValue(METAL_BalPCS)
     this.calculateAllBalanceForMetalTab()
   }
@@ -863,7 +864,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.setFormNullToString('UNQ_DESIGN_ID', data[0].UNQ_DESIGN_ID)
     this.setFormNullToString('PICTURE_PATH', data[0].PICTURE_PATH)
     this.setFormNullToString('EXCLUDE_TRANSFER_WT', data[0].EXCLUDE_TRANSFER_WT)
-    if (data[0].EXCLUDE_TRANSFER_WT) {
+    if (this.commonService.Null2BitValue(data[0].EXCLUDE_TRANSFER_WT)) {
       this.blnScrapIronItem = true
     }
     this.setFormNullToString('METAL_FromStockCode', data[0].STOCK_CODE)
@@ -1998,6 +1999,20 @@ export class ProcessTransferDetailsComponent implements OnInit {
           return true;
         }
       }
+      if (this.emptyToZero(form.METAL_ScrapGrWt) != 0) {
+        if (this.commonService.nullToString(form.METAL_ScrapLocCode) == '' && this.locationSearchFlag == true) {
+          this.commonService.toastErrorByMsgId("MSG1381");//"Location can not be empty"
+          return true;
+        }
+        if (this.commonService.nullToString(form.METAL_ScrapStockCode) == "") {
+          this.commonService.toastErrorByMsgId("MSG1817"); //"Stock Code Cannot be Empty"
+          return true;
+        }
+      }
+      if (this.metalDetailData.length <= 0) {
+        this.commonService.toastErrorByMsgId("MSG3574"); //"No components details !..."
+        return true;
+      }
       return false;
     }
     catch (err) {
@@ -2176,7 +2191,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       "DESIGN_TYPE": this.commonService.nullToString(form.DESIGN_TYPE),
       "TO_IRONWT": this.emptyToZero(form.METAL_ToIronWt),
       "FRM_DIAGROSS_WT": this.emptyToZero(form.GrossWeightFrom),
-      "EXCLUDE_TRANSFER_WT": form.EXCLUDE_TRANSFER_WT,
+      "EXCLUDE_TRANSFER_WT": this.commonService.Null2BitValue(form.EXCLUDE_TRANSFER_WT),
       "SCRAP_DIVCODE": this.commonService.nullToString(form.SCRAP_DIVCODE),
       "IRON_SCRAP_WT": this.calculateIronScrapWeight(form),
       "GAIN_WT": this.commonService.decimalQuantityFormat(this.emptyToZero(form.METAL_GainGrWt), 'METAL'),
@@ -2328,9 +2343,9 @@ export class ProcessTransferDetailsComponent implements OnInit {
       "DESIGN_TYPE": this.commonService.nullToString(form.DESIGN_TYPE),
       "TO_IRONWT": this.emptyToZero(form.METAL_ToIronWt),
       "FRM_DIAGROSS_WT": this.emptyToZero(form.GrossWeightFrom),
-      "EXCLUDE_TRANSFER_WT": form.EXCLUDE_TRANSFER_WT,
+      "EXCLUDE_TRANSFER_WT": this.commonService.Null2BitValue(form.EXCLUDE_TRANSFER_WT),
       "SCRAP_DIVCODE": this.commonService.nullToString(form.SCRAP_DIVCODE),
-      "IRON_SCRAP_WT": this.commonService.nullToString(form.METAL_ToIronScrapWt),
+      "IRON_SCRAP_WT": this.emptyToZero(form.METAL_ToIronScrapWt),
       "GAIN_WT": this.commonService.decimalQuantityFormat(this.emptyToZero(form.METAL_GainGrWt), 'METAL'),
       "GAIN_PURE_WT": this.emptyToZero(form.METAL_GainPureWt),
       "GAIN_ACCODE": seqDataFrom.length > 0 ? this.commonService.nullToString(seqDataFrom[0].GAIN_AC) : '',
@@ -2492,7 +2507,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
         "FROM_STOCK_CODE": this.commonService.nullToString(element.FROM_STOCK_CODE),
         "FROM_SUB_STOCK_CODE": this.commonService.nullToString(element.FROM_SUB_STOCK_CODE),
         "LOSS_PURE_WT": element.METALSTONE == 'M' ? LOSS_PURE_WT : 0,
-        "EXCLUDE_TRANSFER_WT": form.EXCLUDE_TRANSFER_WT,
+        "EXCLUDE_TRANSFER_WT": this.commonService.Null2BitValue(form.EXCLUDE_TRANSFER_WT),
         "IRON_WT": flag == 2 ? this.emptyToZero(element.IRON_WT) * -1 : 0,
         "IRON_SCRAP_WT": flag == 2 ? this.emptyToZero(form.METAL_ToIronScrapWt) * -1 : 0,
         "GAIN_WT": element.METALSTONE == 'M' ? GAIN_WT : 0,
@@ -2966,9 +2981,12 @@ export class ProcessTransferDetailsComponent implements OnInit {
       case 'METAL_TO_WORKER_CODE':
         this.MetaloverlayToWorker.showOverlayPanel(event);
         break;
+      case 'METAL_ScrapStockCode':
+        this.METAL_ScrapStockCodeoverlay.showOverlayPanel(event);
+        break;
       default:
         // Optionally handle the default case if needed
-        break;
+        // break;
     }
   }
   lookupKeyPress(event: any, form?: any) {
@@ -2995,7 +3013,8 @@ export class ProcessTransferDetailsComponent implements OnInit {
 
   }
   /**USE: SCRAP STOCK CODE CHANGE VALIDATION */
-  txtMScrapStockCode_Validating() {
+  txtMScrapStockCode_Validating(event?:any) {
+    if (event && this.commonService.nullToString(event.target.value) == "") return
     try {
       let form = this.processTransferdetailsForm.value;
       if (this.commonService.nullToString(form.METAL_ScrapStockCode) == "") {
@@ -3004,7 +3023,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
         this.CalculateMetalBalance();
       }
       this.commonService.showSnackBarMsg('MSG81447');
-      let API = `MetalStockMaster/GetMetalStockMasterHeaderAndDetail/${form.METAL_ScrapStockCode}`
+      let API = `MetalStockMaster/GetMetalStockMasterHeaderAndDetail/${form.METAL_ScrapStockCode?.toUpperCase()}`
       let Sub: Subscription = this.dataService.getDynamicAPI(API)
         .subscribe((result) => {
           this.commonService.closeSnackBarMsg()
