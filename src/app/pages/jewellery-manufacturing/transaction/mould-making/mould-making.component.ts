@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
@@ -9,6 +9,7 @@ import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import themes from 'devextreme/ui/themes';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 
 @Component({
   selector: 'app-mould-making',
@@ -16,6 +17,14 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrls: ['./mould-making.component.scss']
 })
 export class MouldMakingComponent implements OnInit {
+  @ViewChild('overlayuserName') overlayuserName!: MasterSearchComponent;
+  @ViewChild('overlayProcessCode') overlayProcessCode!: MasterSearchComponent;
+  @ViewChild('overlayWorkercodeData') overlayWorkercodeData!: MasterSearchComponent;
+  @ViewChild('overlayJobNo') overlayJobNo!: MasterSearchComponent;
+  @ViewChild('overlayMouldType') overlayMouldType!: MasterSearchComponent;
+  @ViewChild('overlayToProcess') overlayToProcess!: MasterSearchComponent;
+  @ViewChild('overlayToWorker') overlayToWorker!: MasterSearchComponent;
+
 
   @Input() content!: any;
   tableData: any[] = [];
@@ -32,6 +41,8 @@ export class MouldMakingComponent implements OnInit {
   viewMode: boolean = false;
   isSaved: boolean = false;
   isloading: boolean = false;
+  editMode: boolean = false;
+  isDisableSaveBtn: boolean = false;
 
   private subscriptions: Subscription[] = [];
   user: MasterSearchModel = {
@@ -716,6 +727,71 @@ export class MouldMakingComponent implements OnInit {
       this.subscriptions.forEach(subscription => subscription.unsubscribe());// unsubscribe all subscription
       this.subscriptions = []; // Clear the array
     }
+  }
+
+  lookupKeyPress(event: any, form?: any) {
+    if (event.key == 'Tab' && event.target.value == '') {
+      this.showOverleyPanel(event, form)
+    }
+  }
+
+  showOverleyPanel(event: any, formControlName: string) {
+    if (this.mouldMakingForm.value[formControlName] != '') return;
+
+    switch (formControlName) {
+      case 'enteredBy':
+        this.overlayuserName.showOverlayPanel(event);
+        break;
+      case 'fromProcess':
+        this.overlayProcessCode.showOverlayPanel(event);
+        break;
+      case 'fromWorker':
+        this.overlayWorkercodeData.showOverlayPanel(event);
+        break;
+      case 'jobNo':
+        this.overlayJobNo.showOverlayPanel(event);
+        break;
+      case 'mouldType':
+        this.overlayMouldType.showOverlayPanel(event);
+        break;
+      case 'toProcess':
+        this.overlayToProcess.showOverlayPanel(event);
+        break;
+      case 'toWorker':
+        this.overlayToWorker.showOverlayPanel(event);
+        break;
+      default:
+    }
+  }
+
+
+  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    LOOKUPDATA.SEARCH_VALUE = event.target.value
+    if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
+    let param = {
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+    }
+    this.commonService.toastInfoByMsgId('MSG81447');
+    let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
+      .subscribe((result) => {
+        this.isDisableSaveBtn = false;
+        let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+        if (data.length == 0) {
+          this.commonService.toastErrorByMsgId('MSG1531')
+          this.mouldMakingForm.controls[FORMNAME].setValue('')
+          LOOKUPDATA.SEARCH_VALUE = ''
+          if (FORMNAME === 'enteredBy' || FORMNAME === 'fromProcess' || FORMNAME === 'fromWorker' || FORMNAME === 'jobNo' || FORMNAME === 'mouldType' || FORMNAME === 'toProcess' || FORMNAME === 'toWorker') {
+            this.showOverleyPanel(event, FORMNAME);
+          }
+          return
+        }
+
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+      })
+    this.subscriptions.push(Sub)
   }
 
 }
