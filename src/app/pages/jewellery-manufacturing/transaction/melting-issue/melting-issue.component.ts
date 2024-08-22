@@ -31,7 +31,9 @@ export class MeltingIssueComponent implements OnInit {
   modalReference!: NgbModalRef;
   columnhead: any[] = ['SRNO', 'DIV', 'Job No', 'Stock Code', 'Stock Description', 'Main Stock', 'Process', 'Worker', 'Pcs', 'Gross Weight', 'Purity', 'Pure Weight', 'Rate', 'Amount']
   columnheader: any[] = ['Sr#', 'SO No', 'Party Code', 'Party Name', 'Job Number', 'Job Description', 'Design Code', 'UNQ Design ID', 'Process', 'Worker', 'Metal Required', 'Metal Allocated', 'Allocated Pure Wt', 'Job Pcs']
-  columnhead1: any[] = ['Sr#', 'Ingredients', 'Qty']
+  columnhead1: any[] = [    { title: 'SRNO', field: 'SRNO', format: '', alignment: 'left' },
+    { title: 'Ingredients', field: 'Ingredients', format: '', alignment: 'left' },
+    { title: 'QTY', field: 'STOCKCODE', format: '', alignment: 'left' },]
   db1: any[] = [
     { title: 'SRNO', field: 'SRNO', format: '', alignment: 'left' },
     { title: 'DIVISION', field: 'DIVISION', format: '', alignment: 'left' },
@@ -324,6 +326,7 @@ export class MeltingIssueComponent implements OnInit {
           this.meltingIssueFrom.controls.StockDescription.setValue(data.STOCK_DESCRIPTION)
 
           this.meltingISsueDetailsData = data.Details
+          console.log(this.meltingISsueDetailsData,'data')
           this.reCalculateSRNO() //set to main grid
           this.meltingISsueDetailsData.forEach((element: any) => {
             this.tableData.push({

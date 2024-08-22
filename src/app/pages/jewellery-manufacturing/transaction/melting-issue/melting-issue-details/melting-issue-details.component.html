@@ -177,7 +177,7 @@
                                         UpperCaseDirective
                                         [readonly]="viewMode"
                                         (keydown)="lookupKeyPress($event,'stockcode')"
-                                        (focusout)="validateLookupField($event,stockCodeData,'stockcode')" />
+                                        (focusout)="stockCodeValidate($event)"/>
                                 </mat-form-field>
                                 <master-search
                                     [MasterSearchData]="stockCodeData"

@@ -247,15 +247,15 @@
                                 <label for="inputPassword"
                                     class="col-sm-12  col-form-label text-center border border-light bg-light text-dark">Pure
                                     / Alloy Ratio</label>
-                                <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
-                                    [allowColumnReordering]="true" [allowColumnResizing]="true"
+                                <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true"
+                                    [allowColumnReordering]="true" [allowColumnResizing]="true"  [dataSource]="meltingISsueDetailsData"
                                     [columnAutoWidth]="true">
                                     <dxo-paging [enabled]="false"></dxo-paging>
                                     <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
                                     <dxo-selection mode="multiple"></dxo-selection>
                                     <dxo-scrolling mode="virtual"></dxo-scrolling>
-                                    <dxi-column *ngFor="let data of columnhead1" dataField="{{ data }}"
-                                        caption="{{ data }}" [allowEditing]="true" alignment="left"
+                                    <dxi-column *ngFor="let data of columnhead1" [dataField]="data.field"
+                                        [caption]="data.title" [allowEditing]="true" alignment="left" [format]="data.format"
                                         backgroundcolor="#000">
 
                                     </dxi-column>
@@ -279,7 +279,7 @@
                                             <br>
 
                                             <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID"
-                                                [dataSource]="tableData" [showBorders]="true"
+                                            [dataSource]="meltingISsueDetailsData" [showBorders]="true"
                                                 [allowColumnReordering]="true" [allowColumnResizing]="true"
                                                 [columnAutoWidth]="true">
                                                 <dxo-paging [enabled]="false"></dxo-paging>
@@ -289,8 +289,9 @@
 
                                                 <dxi-column *ngFor="let data of db1" [dataField]="data.field"
                                                     [caption]="data.title" [format]="data.format" [allowEditing]="true"
-                                                    [alignment]="data.alignment">
+                                                    [alignment]="data.alignment"  >
                                                 </dxi-column>
+                                    
 
                                                 <dxo-summary>
 
