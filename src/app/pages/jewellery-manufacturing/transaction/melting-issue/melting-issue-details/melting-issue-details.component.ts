@@ -91,16 +91,25 @@ export class MeltingIssueDetailsComponent implements OnInit {
   stockCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 23,
+    LOOKUPID: 201,
     SEARCH_FIELD: 'STOCK_CODE',
     SEARCH_HEADING: 'Stock Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "STOCK_CODE<> ''",
+    WHERECONDITION:  "STOCK_CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
 
-
+  setLookup201WhereCondition() {
+    let form = this.meltingIssuedetailsFrom.value
+    let where = `@strBranch_Code='${form.BRANCH_CODE}',`
+    where += `@strJob_Number='${form.jobno}',@strUnq_Job_Id='${form.subJobNo}',`
+    where += `@strMetalStone='${form.METAL_STONE}',@strProcess_Code='${form.process}',`
+    where += `@strWorker_Code='${form.worker}',@strStock_Code='${form.stockcode}',@strUserName='${this.comService.userName}'`
+   this.stockCodeData.WHERECONDITION = where
+  //  this.ProcessCodeData.WHERECONDITION = where
+  //   this.WorkerCodeData.WHERECONDITION = where
+  }
 
   StockCodeSelected(e: any) {
     console.log(e);
@@ -108,6 +117,7 @@ export class MeltingIssueDetailsComponent implements OnInit {
     this.meltingIssuedetailsFrom.controls.tostock.setValue(e.DESCRIPTION);
     this.meltingIssuedetailsFrom.controls.stockcode.setValue(e.DIVISION_CODE); 
     this.meltingIssuedetailsFrom.controls.mainstock.setValue(e.STOCK_CODE);
+    this.setLookup201WhereCondition()
 
   }
 
@@ -554,6 +564,58 @@ export class MeltingIssueDetailsComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
+  stockCodeValidate(event: any) {
+    this.showOverleyPanel(event, 'stockcode')
+    if (event.target.value == '') return
+    let postData = {
+      "SPID": "046",
+      "parameter": {
+        strStockCode: event.target.value,
+        strBranchCode: this.comService.nullToString(this.branchCode),
+        strVocType: this.content.HEADERDETAILS.VOCTYPE,
+        strUserName: this.comService.nullToString(this.userName),
+        strLocation: '',
+        strPartyCode: '',
+        strVocDate: this.comService.formatDateTime(this.comService.currentDate)
+      }
+    };
+
+    this.comService.showSnackBarMsg('MSG81447');
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        this.comService.closeSnackBarMsg();
+        if (result.status === "Success" && result.dynamicData[0]) {
+          let data = result.dynamicData[0];
+          if (data) {
+            console.log(data, 'data');
+            if (data[0].VALID_STOCK) {
+              // Handle the valid stock case
+              // You can set other form values or perform other actions here if needed
+              this.overlaystockcodeSearch.closeOverlayPanel();
+            } else {
+              this.comService.toastErrorByMsgId('MSG1531');
+              this.meltingIssuedetailsFrom.controls.stockcode.setValue('');
+              this.showOverleyPanel(event, 'stockcode');
+            }
+          } else {
+            this.comService.toastErrorByMsgId('MSG1531');
+            this.meltingIssuedetailsFrom.controls.stockcode.setValue('');
+            this.showOverleyPanel(event, 'stockcode');
+          }
+        } else {
+          this.comService.toastErrorByMsgId('MSG1747');
+          this.meltingIssuedetailsFrom.controls.stockcode.setValue('');
+          this.overlaystockcodeSearch.closeOverlayPanel();
+        }
+      }, err => {
+        this.comService.closeSnackBarMsg();
+        this.comService.toastErrorByMsgId('MSG1531');
+        this.meltingIssuedetailsFrom.controls.stockcode.setValue('');
+        this.showOverleyPanel(event, 'stockcode');
+      });
+
+    this.subscriptions.push(Sub);
+  }
     
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {
@@ -651,7 +713,7 @@ export class MeltingIssueDetailsComponent implements OnInit {
             this.jobNumberDetailData = data
             this.meltingIssuedetailsFrom.controls.subjobno.setValue(data[0].UNQ_JOB_ID)
             this.meltingIssuedetailsFrom.controls.subJobDescription.setValue(data[0].JOB_DESCRIPTION)
-
+            this.setLookup201WhereCondition()
             this.subJobNumberValidate()
           } else {
             this.comService.toastErrorByMsgId('MSG1531')
