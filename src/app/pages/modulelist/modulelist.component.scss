@@ -16,11 +16,11 @@
     padding: 15px 10px 5px 10px;
     width: 70%;
     height: 100% !important;
+    transition: transform 0.3s ease-in-out;
 
     img {
       width: 45px;
       height: 45px;
-      transition: transform 0.3s ease-in-out;
     }
 
     h6 {
