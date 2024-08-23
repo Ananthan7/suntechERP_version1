@@ -530,10 +530,10 @@
               </div>
             </div>
 
-            <div class="col-md-3">
+            <div class="col-md-4">
               <div class="form-group row">
-                <label class="col-form-label col-sm-3 mx-3" for="customer_mobile" id="ID013">Name</label>
-                <div class="col-sm-7">
+                <label class="col-form-label col-sm-4" for="customer_mobile" id="ID013">Name</label>
+                <div class="col-sm-6">
                   <mat-form-field appearance="outline" style="width: 100%">
                     <input type="text" matInput formControlName="fcn_customer_name" (change)="nameChange($event)"
                       [readonly]="viewOnly" appNoEmptySpace />
@@ -549,10 +549,10 @@
               </div>
             </div>
       
-            <div class="col-md-3">
+            <div class="col-md-4" style="right: 37px">
               <div class="form-group row">
-                <label class="col-form-label col-sm-3 mx-3" for="customer_mobile" id="ID016">Code</label>
-                <div class="col-sm-7">
+                <label class="col-form-label col-sm-4" for="customer_mobile" id="ID016">Code</label>
+                <div class="col-sm-6">
                   <mat-form-field appearance="outline" style="width: 100%">
                     <input type="text" matInput formControlName="fcn_customer_code" readonly />
                         <!-- [readonly]="
@@ -568,8 +568,8 @@
               </div>
             </div>
            
-            <div class="col-md-2 justify-content-center">
-              <button type="button" style="font-size: 12px; padding: 0px 9px; background: linear-gradient(0deg, #557cb1 42%, #3864b4 82%);"
+            <div class="col-md-2 justify-content-center customerBTNDiv" >
+              <button type="button" style="font-size: 12px; padding: 0px 9px; background-color: #295094 !important; line-height: 2.5;"
                 (click)="open(more_customer_detail_modal, false, null, false,false,true)" mat-flat-button
                 color="primary" [disabled]="viewOnly">
                 {{
@@ -607,10 +607,10 @@
               </div>
             </div>
 
-            <div class="col-md-3">
+            <div class="col-md-4">
               <div class="form-group row">
-                <label class="col-form-label col-sm-3 mx-3" for="customer_mobile" id="ID020">ID#</label>
-                <div class="col-sm-7">
+                <label class="col-form-label col-sm-4" for="customer_mobile" id="ID020">ID#</label>
+                <div class="col-sm-6">
                   <mat-form-field appearance="outline" style="width: 100%">
                     <input type="text" matInput formControlName="fcn_customer_id_number" [readonly]="viewOnly"
                     appNoEmptySpace class="st_txt_right" />
@@ -632,10 +632,10 @@
               </div>
             </div>
           
-            <div class="col-md-5">
+            <div class="col-md-4" style="right: 37px">
               <div class="form-group row">
-                <label class="col-form-label col-sm-3 mx-3" for="customer_mobile" id="ID024">Expiry Date</label>
-                <div class="col-sm-7" style="width: 55%;">
+                <label class="col-form-label col-sm-4" for="customer_mobile" id="ID024">Expiry Date</label>
+                <div class="col-sm-6">
                   <mat-form-field appearance="outline" style="width: 100%">
                     <input matInput [matDatepicker]="expDate" name="fcn_customer_exp_date"
                     formControlName="fcn_customer_exp_date" placeholder="DD/MM/YYYY" [min]="currentDate"
@@ -675,10 +675,10 @@
                 Import Sales Order
               </button> -->
 
-              <button type="button" mat-flat-button color="primary" [disabled]="viewOnly && transAttachmentList.length == 0"
-                (click)="openUserAttachmentModal()" style="background: linear-gradient(0deg, #557cb1 42%, #3864b4 82%);">
+              <!-- <button type="button" mat-flat-button class="update-finish-button"  [disabled]="viewOnly && transAttachmentList.length == 0"
+                (click)="openUserAttachmentModal()" >
                 {{ !viewOnly ? 'Add Attachment' : 'View Attachment' }}
-              </button>
+              </button> -->
             </div>
           </div>
 
@@ -689,17 +689,17 @@
             Import Sales Estimation
           </button> -->
 
-          <button type="button" class="mx-2" mat-flat-button color="primary" (click)="importSalesOrder()">
+          <button type="button" mat-flat-button class="mx-2 update-finish-button" (click)="importSalesOrder()">
             Import Sales Order
           </button> 
 
-          <button type="button" mat-flat-button color="primary" *ngIf="strUser=='SUNTECH'"
+          <button type="button" mat-flat-button class="mx-2 update-finish-button" *ngIf="strUser=='SUNTECH'"
           (click)="openParamterDetails()"
           class="button-spacing">
           Parameter Details 
           </button>
   
-          <button type="button" mat-flat-button color="primary" [disabled]="viewOnly && transAttachmentList.length == 0"
+          <button type="button" mat-flat-button class="update-finish-button" [disabled]="viewOnly && transAttachmentList.length == 0"
           (click)="openUserAttachmentModal()">
           {{ !viewOnly ? 'Add Attachment' : 'View Attachment' }}
           </button>
@@ -1601,7 +1601,7 @@
 
               <div class="col-md-4">
                 <div class="form-group row">
-                  <label class="col-form-label col-sm-3" for="advanceBranch" id="ID071">Branch</label>
+                  <label class="col-form-label col-sm-4" for="advanceBranch" id="ID071">Branch</label>
                   <div class="col-sm-8">
                     <mat-form-field appearance="outline" style="width: 100%">
                       <input type="text" matInput formControlName="advanceBranch" [matAutocomplete]="advanceBranch"
@@ -1651,7 +1651,7 @@
 
               <div class="col-md-4">
                 <div class="form-group row">
-                  <label class="col-form-label col-sm-3" for="advanceRecNo" id="ID075">Rec No.</label>
+                  <label class="col-form-label col-sm-4" for="advanceRecNo" id="ID075">Rec No.</label>
                   <div class="col-sm-8">
                     <mat-form-field appearance="outline" style="width: 100%">
                       <input type="number" class="text-right" matInput formControlName="advanceRecNo" value
@@ -2005,15 +2005,15 @@
     <div style="padding-bottom: 20px">
       <div style="text-align: right; padding: 10px">
         <button mat-flat-button color="accent" *ngIf="!viewOnly" id="ID091"
-          [disabled]="viewOnly || this.receiptDetailView" (click)="saveReceipt('Continue')" class="btn-m-r-10 update-finish-button">
+          [disabled]="viewOnly || this.receiptDetailView" (click)="saveReceipt('Continue')" class="btn-m-r-10 update-finish-button btn-width">
           Continue
         </button>
-        <button mat-flat-button  *ngIf="!viewOnly" class="btn-m-r-10 update-finish-button" id="ID092"
+        <button mat-flat-button  *ngIf="!viewOnly" class="btn-m-r-10 update-finish-button btn-width" id="ID092"
           [disabled]="viewOnly || this.receiptDetailView" (click)="saveReceipt()">
           Save
         </button>
         <button mat-flat-button color="warn" #closeModalButton (click)="modal.dismiss('Cross click')" id="ID093"
-        class="cancel-button">
+        class="cancel-button btn-width">
           Cancel
         </button>
         &nbsp;
@@ -3851,25 +3851,25 @@
 
     <div style="padding-bottom: 0px">
       <div style="text-align: right; padding: 10px" *ngIf="!viewOnly">
-        <button mat-flat-button class="next-item-button" *ngIf="!lineItemModalForSalesReturn"
+        <button mat-flat-button class="next-item-button mx-1 btn-width" *ngIf="!lineItemModalForSalesReturn"
         (click)="addItemtoList('newitem_btn')" [disabled]="disableSaveBtn" id="ID091">
         Continue
-      </button>&nbsp;
-      <button mat-flat-button class="update-finish-button" *ngIf="!lineItemModalForSalesReturn"
+      </button>
+      <button mat-flat-button class="update-finish-button mx-1 btn-width" *ngIf="!lineItemModalForSalesReturn"
       (click)="addItemtoList('finish_btn')" [disabled]="disableSaveBtn">
       {{ updateBtn ? "Update" : "Save" }}
-      </button>&nbsp;
+      </button>
 
-        <button mat-flat-button class="update-finish-button" *ngIf="lineItemModalForSalesReturn"
+        <button mat-flat-button class="update-finish-button mx-1 btn-width" *ngIf="lineItemModalForSalesReturn"
         (click)="updateRetailSalesReturnVal()" [disabled]="disableSaveBtn">
         {{ updateBtn ? "Update" : "Save" }}
-        </button>&nbsp;
+        </button>
         <!-- <button class="btn btn btn-primary" *ngIf="updateBtn" (click)="addItemtoList('finish_btn')">
             Update
           </button>&nbsp; -->
-          <button mat-flat-button class="cancel-button" (click)="closeItemModal()" id="ID093"> 
+          <button mat-flat-button class="cancel-button mx-1 btn-width" (click)="closeItemModal()" id="ID093"> 
             Cancel
-          </button>&nbsp;
+          </button>
         <!-- <button class="btn btn btn-dark" (click)="addItemtoList('newitem_btn')">
             Next Item</button>&nbsp;
           <button class="btn btn btn-primary" *ngIf="!updateBtn" (click)="addItemtoList('finish_btn')">
@@ -3881,8 +3881,8 @@
             Cancel</button>&nbsp; -->
       </div>
       <div style="text-align: right; padding: 10px" *ngIf="viewOnly">
-        <button mat-flat-btn class="btn btn btn-danger save_Cancel_btns" (click)="modal.dismiss('Cross click')" id="ID205">
-          Close</button>&nbsp;
+        <button mat-flat-btn class="btn btn btn-danger save_Cancel_btns btn-width" (click)="modal.dismiss('Cross click')" id="ID205">
+          Close</button>
       </div>
       <!-- <div style="text-align: right; padding: 10px">
           <button class="btn btn btn-dark" (click)="addItemtoList('newitem_btn')">
@@ -4058,19 +4058,25 @@
   <div class="modal-body">
     <form [formGroup]="pendingSalesOrderForm">
       <div class="row">
-        <div class="col-md-5">
-          <mat-form-field style="width: 80%; display: inline-block !important" class="mat-form-field-pending-so">
-            <mat-label id="ID216">Branch To</mat-label>
 
-            <input type="text" matInput formControlName="branchTo" />
-            <mat-error *ngIf="
-                pendingSalesOrderForm.controls.branchTo.hasError('required')
-              " id="ID217"> 
-              Branch To is <strong>required</strong>
-            </mat-error>
-          </mat-form-field>
-          <master-search [MasterSearchData]="branchCodeData" (newRowClick)="branchSelected($event)"></master-search>
+        <div class="col-md-5">
+          <div class="form-group row">
+            <label class="col-form-label col-sm-4" for="branchTo" id="ID216">Branch To</label>
+            <div class="col-sm-8">
+              <mat-form-field appearance="outline" style="width: 100%" class="mat-form-field-pending-so">
+                <input type="text" matInput formControlName="branchTo" />
+                <master-search [MasterSearchData]="branchCodeData" (newRowClick)="branchSelected($event)"
+                class="masterSearch"></master-search>
+                <mat-error *ngIf="
+                    pendingSalesOrderForm.controls.branchTo.hasError('required')
+                  " id="ID217"> 
+                  Branch To is <strong>required</strong>
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
         </div>
+      
         <!-- <div class="col-md-3">
           <mat-form-field style="width: 100%">
             <mat-label>Branch To</mat-label>
@@ -4090,33 +4096,44 @@
             </mat-error>
           </mat-form-field>
         </div> -->
+
         <div class="col-md-5">
-          <mat-form-field style="width: 100%">
-            <mat-label id="ID218">Order No.</mat-label>
-            <input type="text" matInput formControlName="orderNo" [readonly]="viewOnly" appNoEmptySpace class="st_txt_right" appNoEmptySpace/>
-            <mat-error *ngIf="
-                pendingSalesOrderForm.controls.orderNo.hasError('required')
-              " id="ID219">
-              Order No. is <strong>required</strong>
-            </mat-error>
-          </mat-form-field>
+          <div class="form-group row">
+            <label class="col-form-label col-sm-4" for="orderNo"  id="ID218">Order No.</label>
+            <div class="col-sm-8">
+              <mat-form-field appearance="outline" style="width: 100%" class="mat-form-field-pending-so">
+                <input type="text" matInput formControlName="orderNo" [readonly]="viewOnly" appNoEmptySpace class="st_txt_right" appNoEmptySpace/>
+                <mat-error *ngIf="
+                    pendingSalesOrderForm.controls.orderNo.hasError('required')
+                  " id="ID219">
+                  Order No. is <strong>required</strong>
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
         </div>
+      
       </div>
       <div class="row">
         <div class="col-md-5">
-          <mat-form-field style="width: 80%; display: inline-block !important" class="mat-form-field-pending-so">
-            <mat-label id="ID220">Customer</mat-label>
-
-            <input type="text" matInput formControlName="customerCode" />
-
-            <mat-error *ngIf="
-                pendingSalesOrderForm.controls.customerCode.hasError('required')
-              " id="ID221">
-              Customer is <strong>required</strong>
-            </mat-error>
-          </mat-form-field>
-          <master-search [MasterSearchData]="customerCodeData"
-            (newRowClick)="customerCodeSelected($event)"></master-search>
+          <div class="form-group row">
+            <label class="col-form-label col-sm-4" for="branchTo"  id="ID220">Customer</label>
+            <div class="col-sm-8">
+              <mat-form-field appearance="outline" style="width: 100%" class="mat-form-field-pending-so">
+                <input type="text" matInput formControlName="customerCode" />
+                <master-search [MasterSearchData]="customerCodeData" class="masterSearch"
+                (newRowClick)="customerCodeSelected($event)"></master-search>
+                <mat-error *ngIf="
+                    pendingSalesOrderForm.controls.customerCode.hasError('required')" id="ID221">
+                  Customer is <strong>required</strong>
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-5">
+        
+       
           <!-- <mat-form-field style="width: 100%">
             <mat-label>Customer</mat-label>
             <input
@@ -4135,8 +4152,8 @@
             </mat-error>
           </mat-form-field> -->
         </div>
-        <div class="col-md-6 text-right">
-          <button type="button" mat-flat-button color="primary" id="ID222" (click)="pullSalesOrder()">Search</button>
+        <div class="col-md-2 text-right">
+          <button type="button" mat-flat-button class="update-finish-button" id="ID222" (click)="pullSalesOrder()">Search</button>
         </div>
       </div>
     </form>
@@ -4159,10 +4176,10 @@
     </div>
 
     <div class="text-right my-3">
-      <button class="mx-2" mat-flat-button color="primary" *ngIf="!viewOnly" id="ID223">
+      <button class="mx-2" mat-flat-button class="update-finish-button mx-1" *ngIf="!viewOnly" id="ID223">
         Apply
       </button>
-      <button mat-flat-button color="warn" (click)="modal.dismiss('Cross click')" id="ID224">
+      <button mat-flat-button class="update-finish-button" (click)="modal.dismiss('Cross click')" id="ID224">
         Close
       </button>
       &nbsp;

@@ -108,12 +108,12 @@ button[aria-label="Close"]:focus {
   border: none !important;
 }
 
-.mat-form-field {
-  display: inline !important;
-}
-.mat-form-field-pending-so {
-  display: inline-block  !important;
-}
+// .mat-form-field {
+//   display: inline !important;
+// }
+// .mat-form-field-pending-so {
+//   display: inline-block  !important;
+// }
 
 .rhs-table-1 .td-w-40 {
   width: 40% !important;
@@ -254,7 +254,7 @@ button:disabled {
 
 .newBtnCls{
   position: relative;
-  top: 35px;
+  top: 25px;
 }
 .button-spacing {
   margin-right: 16px;
@@ -263,4 +263,24 @@ button:disabled {
 .save_Cancel_btns{
   padding: 5px 10px;
   line-height: 1.5;
+}
+
+
+.customerBTNDiv{
+  position: absolute; 
+  right: -70px; 
+  top: 30px;
+}
+::ng-deep {
+  .mat-form-field {
+    font-weight: 600 !important;
+  }
+  .mat-input-element {
+      font-size: 12px !important;
+    }
+}
+
+.btn-width {
+  width: 120px; /* Set a fixed width */
+  text-align: center; /* Centers text */
 }
