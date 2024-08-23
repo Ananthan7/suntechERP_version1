@@ -2402,15 +2402,15 @@
     </div>
     <div style="padding-bottom: 20px">
       <div style="text-align: right; padding: 10px">
-        <button mat-flat-button class="update-finish-button" (click)="addItemtoExchange('continueBtn')" [disabled]="viewOnly" id="ID091">
+        <button mat-flat-button class="update-finish-button btn-width" (click)="addItemtoExchange('continueBtn')" [disabled]="viewOnly" id="ID091">
           Continue 
         </button>
         &nbsp;
-        <button mat-flat-button class="update-finish-button" (click)="addItemtoExchange('saveBtn')" [disabled]="viewOnly" id="ID092">
+        <button mat-flat-button class="update-finish-button btn-width" (click)="addItemtoExchange('saveBtn')" [disabled]="viewOnly" id="ID092">
           Save
         </button>
         &nbsp;
-        <button mat-flat-button class="cancel-button" (click)="modal.dismiss('Cross click')" id="ID093">
+        <button mat-flat-button class="cancel-button btn-width" (click)="modal.dismiss('Cross click')" id="ID093">
           Cancel
         </button>
         &nbsp;
@@ -2516,20 +2516,13 @@
                     <input type="text" matInput formControlName="fcn_returns_voc_no"
                       (change)="getRetailSReturn_EvnFn($event)" class="st_txt_right" 
                       [readonly]="viewOnly || this.sales_returns_items.length > 0"  NumberOnly/>
+                      <i class="fa fa-search sReturnVocNumsearch" (click)="searchVocNoSalRet()"></i>
                     <mat-error *ngIf="salesReturnForm.controls.fcn_returns_voc_no.hasError('required')" id="ID117">
                       VOC No. is <strong>required</strong>
                     </mat-error>
                   </mat-form-field>
                 </div>
 
-
-                <div class="col-md-1 text-right">
-                  <button (click)="searchVocNoSalRet()" class="btn btn-secondary btn-m-r-10" [disabled]="viewOnly"
-                  style="border: none; width: 20px !important; padding: 6px 5px;
-                    padding-right: 21px; background-color: #1E3C72;">
-                    <i class="fa fa-search"></i>
-                  </button>
-                </div>
               </div>
             </div>
           </div>
@@ -2644,12 +2637,12 @@
       </div>
       <div class="col-md-12" style="padding-bottom: 20px">
         <div style="text-align: right; padding: 10px">
-          <button mat-flat-button class="btn-m-r-10 update-finish-button" (click)="addItemtoSalesReturn()"
+          <button mat-flat-button class="btn-m-r-10 update-finish-button btn-width" (click)="addItemtoSalesReturn()"
             [disabled]="viewOnly" id="ID092">
             SAVE
           </button>
           <button mat-flat-button color="warn" (click)="modal.dismiss('Cross click')" id="ID093"
-            class="cancel-button">CANCEL
+            class="cancel-button btn-width">CANCEL
           </button>
           &nbsp;
         </div>
