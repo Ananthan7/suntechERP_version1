@@ -89,6 +89,7 @@ export class RepairPurchaseComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
+  
   subledgerCodeSelected(e: any) {
     console.log(e);
     this.repairpurchaseForm.controls.sub_ledger.setValue(e.SUBLEDGER_CODE);
