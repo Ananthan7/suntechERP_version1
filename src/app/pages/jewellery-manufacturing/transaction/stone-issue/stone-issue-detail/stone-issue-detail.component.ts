@@ -35,6 +35,7 @@ export class StoneIssueDetailComponent implements OnInit {
   yearMonth?: String;
   private subscriptions: Subscription[] = [];
   jobNumberDetailData: any[] = [];
+  imagepath: any[] = []
   viewMode: boolean = false;
   editMode: boolean = false;
   user: MasterSearchModel = {
@@ -103,13 +104,15 @@ export class StoneIssueDetailComponent implements OnInit {
   stockCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 41,
+    LOOKUPID: 257,
     SEARCH_FIELD: 'STOCK_CODE',
     SEARCH_HEADING: 'Stock Search',
     SEARCH_VALUE: '',
-    WHERECONDITION: "",
+    WHERECONDITION: `@strProcessCode='',@strWorkerCode='',@strSubJobNumber='',@strBranchCode='${this.comService.branchCode}',@strStockCode=''`,
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true
   }
 
   stoneIssueDetailsFrom: FormGroup = this.formBuilder.group({
@@ -138,6 +141,7 @@ export class StoneIssueDetailComponent implements OnInit {
     sieve: [''],
     SIEVE_DESC: [''],
     amount: [],
+    PICTURE_PATH: [''],
     color: [''],
     stockbal: [],
     pointerwt: [],
@@ -225,6 +229,8 @@ export class StoneIssueDetailComponent implements OnInit {
     this.stoneIssueDetailsFrom.controls.amount.setValue(this.content.AMOUNTLC)
     this.stoneIssueDetailsFrom.controls.carat.setValue(this.content.Carat)
     this.stoneIssueDetailsFrom.controls.DIVCODE.setValue(this.content.DIVCODE)
+    this.stoneIssueDetailsFrom.controls.pointerwt.setValue(this.content.WEIGHT)
+    this.stoneIssueDetailsFrom.controls.unitrate.setValue(this.content.AMOUNTFC)
   }
   setValueWithDecimal(formControlName: string, value: any, Decimal: string) {
     this.stoneIssueDetailsFrom.controls[formControlName].setValue(
@@ -275,10 +281,36 @@ export class StoneIssueDetailComponent implements OnInit {
   }
 
   stockCodeSelected(e: any) {
+    console.log(e,'eee')
     this.stoneIssueDetailsFrom.controls.stockCode.setValue(e.STOCK_CODE);
     this.stoneIssueDetailsFrom.controls.stockCodeDes.setValue(e.STOCK_DESCRIPTION);
     this.stoneIssueDetailsFrom.controls.DIVCODE.setValue(e.Item);
-    this.stockCodeValidate({ target: { value: e.STOCK_CODE } })
+    this.stoneIssueDetailsFrom.controls.stockCodeDes.setValue(e.Discription);
+    this.stoneIssueDetailsFrom.controls.DIVCODE.setValue(e.DivCode);
+
+    this.stoneIssueDetailsFrom.controls.pieces.setValue(e.Pcs)
+    this.stoneIssueDetailsFrom.controls.size.setValue(e.Size)
+    this.stoneIssueDetailsFrom.controls.sieve.setValue(e.sieve)
+    this.stoneIssueDetailsFrom.controls.SIEVE_SET.setValue(e.sieve_set)
+    this.stoneIssueDetailsFrom.controls.color.setValue(e.color)
+    this.stoneIssueDetailsFrom.controls.unitrate.setValue(
+      this.comService.emptyToZero(e.rate)
+    )
+    this.stoneIssueDetailsFrom.controls.shape.setValue(e.shape)
+    this.stoneIssueDetailsFrom.controls.amount.setValue(e.AmountLC)
+    this.stoneIssueDetailsFrom.controls.pointerwt.setValue(e.Weight)
+    this.stoneIssueDetailsFrom.controls.batchid.setValue(e.STOCK_CODE);
+    
+    this.setStockCodeWhereCondition()
+  }
+  setStockCodeWhereCondition() {
+    let form = this.stoneIssueDetailsFrom.value;
+    let WHERECONDITION = `@strProcessCode='${this.comService.nullToString(form.process)}',`
+    WHERECONDITION += `@strWorkerCode='${this.comService.nullToString(form.worker)}',`
+    WHERECONDITION += `@strSubJobNumber='${this.comService.nullToString(form.subjobnumber)}',`
+    WHERECONDITION += `@strBranchCode='${this.comService.branchCode}',`
+    WHERECONDITION += `@strStockCode='${this.comService.nullToString(form.stockCode)}'`
+    this.stockCodeData.WHERECONDITION = WHERECONDITION
   }
 
   close(data?: any) {
@@ -573,7 +605,19 @@ export class StoneIssueDetailComponent implements OnInit {
     this.subscriptions.push(Sub);
 }
 
-
+getImageData() {
+  let API = `Image/${this.stoneIssueDetailsFrom.value.jobNumber}`
+  let Sub: Subscription = this.dataService.getDynamicAPI(API)
+    .subscribe((result) => {
+      if (result.response) {
+        let data = result.response
+        this.imagepath = data.map((item: any) => item.imagepath)
+      }
+    }, err => {
+      this.comService.toastErrorByMsgId('MSG1531')
+    })
+  this.subscriptions.push(Sub)
+}
   
 
   subJobNumberValidate(event?: any) {
@@ -588,9 +632,9 @@ export class StoneIssueDetailComponent implements OnInit {
     let postData = {
       "SPID": "040",
       "parameter": {
-        'strUNQ_JOB_ID': this.stoneIssueDetailsFrom.value.subjobnumber,
-        'strBranchCode': this.stoneIssueDetailsFrom.value.BRANCH_CODE,
-        'strCurrenctUser': this.comService.nullToString(this.comService.userName),
+        'strUNQ_JOB_ID': this.comService.nullToString(this.stoneIssueDetailsFrom.value.subjobnumber),
+        'strBranchCode': this.comService.nullToString(this.branchCode),
+        'strCurrenctUser': ''
       }
     }
 
@@ -605,23 +649,11 @@ export class StoneIssueDetailComponent implements OnInit {
           this.stoneIssueDetailsFrom.controls.processname.setValue(data[0].PROCESSDESC)
           this.stoneIssueDetailsFrom.controls.worker.setValue(data[0].WORKER)
           this.stoneIssueDetailsFrom.controls.workername.setValue(data[0].WORKERDESC)
-          this.stoneIssueDetailsFrom.controls.stockCode.setValue(data[0].STOCK_CODE)
-          this.stoneIssueDetailsFrom.controls.stockCodeDes.setValue(data[0].STOCK_DESCRIPTION)
-          this.stoneIssueDetailsFrom.controls.DIVCODE.setValue(data[0].DIVCODE)
-          this.stoneIssueDetailsFrom.controls.carat.setValue(data[0].KARAT)
-
-          // this.stoneIssueDetailsFrom.controls.SIEVE_SET.setValue(this.tableData[0].SIEVE_SET)
-          // this.stoneIssueDetailsFrom.controls.size.setValue(this.tableData[0].SIZE)
-          // this.stoneIssueDetailsFrom.controls.sieve.setValue(this.tableData[0].SIEVE)
-          // this.stoneIssueDetailsFrom.controls.SIEVE_DESC.setValue(this.tableData[0].SIEVE_DESC)
-          // this.stoneIssueDetailsFrom.controls.pieces.setValue(this.tableData[0].PCS)
-          // this.stoneIssueDetailsFrom.controls.shape.setValue(this.tableData[0].SHAPE)
-          // this.stoneIssueDetailsFrom.controls.remarks.setValue(this.tableData[0].D_REMARKS)
-          // this.stoneIssueDetailsFrom.controls.LOCTYPE_CODE.setValue(this.tableData[0].LOCTYPE_CODE)
-          // this.stoneIssueDetailsFrom.controls.pieces.setValue(data[0].pieces)
-
-          this.tableData = result.dynamicData[1] || []
+          this.stoneIssueDetailsFrom.controls.PICTURE_PATH.setValue(data[0].PICTURE_PATH)
+          // this.tableData = result.dynamicData[1] || []
           // this.columnhead1 = Object.keys(this.tableData[0])
+          this.setStockCodeWhereCondition()
+          this.getImageData()
         } else {
           this.comService.toastErrorByMsgId('MSG1747')
         }
@@ -651,12 +683,14 @@ export class StoneIssueDetailComponent implements OnInit {
         if (result.status == "Success" && result.dynamicData[0]) {
           let data = result.dynamicData[0]
           if (data && data[0]?.UNQ_JOB_ID != '') {
+            console.log(data,'pick')
             this.overlayjobNumberSearch.closeOverlayPanel()
-            // this.stoneIssueDetailsFrom.controls.jobDes.setValue(data[0].JOB_DESCRIPTION)
-            // this.stoneIssueDetailsFrom.controls.subjobnumber.setValue(data[0].UNQ_JOB_ID)
-            // this.stoneIssueDetailsFrom.controls.subjobDes.setValue(data[0].DESCRIPTION)
-            // this.stoneIssueDetailsFrom.controls.DESIGN_CODE.setValue(data[0].DESIGN_CODE)
-            // this.stoneIssueDetailsFrom.controls.PART_CODE.setValue(data[0].PART_CODE)
+            this.stoneIssueDetailsFrom.controls.jobDes.setValue(data[0].JOB_DESCRIPTION)
+            this.stoneIssueDetailsFrom.controls.subjobnumber.setValue(data[0].UNQ_JOB_ID)
+            this.stoneIssueDetailsFrom.controls.subjobDes.setValue(data[0].DESCRIPTION)
+            this.stoneIssueDetailsFrom.controls.DESIGN_CODE.setValue(data[0].DESIGN_CODE)
+            this.stoneIssueDetailsFrom.controls.PART_CODE.setValue(data[0].PART_CODE)
+            this.stoneIssueDetailsFrom.controls.salesorderno.setValue(data[0].CUSTOMER_CODE)
             // if (data[0].DESIGN_TYPE && data[0].DESIGN_TYPE == "DIAMOND") {
             //   this.stoneIssueDetailsFrom.controls.DIVCODE.setValue("L");
             // } else {
@@ -668,13 +702,13 @@ export class StoneIssueDetailComponent implements OnInit {
             this.comService.toastErrorByMsgId('MSG1531')
             this.stoneIssueDetailsFrom.controls.jobNumber.setValue('')
             this.showOverleyPanel(event, 'jobNumber')
-            return
+
           }
         } else {
+          this.overlayjobNumberSearch.closeOverlayPanel()
           this.stoneIssueDetailsFrom.controls.jobNumber.setValue('')
-          this.showOverleyPanel(event, 'jobNumber')
           this.comService.toastErrorByMsgId('MSG1747')
-        }
+        } return
       }, err => {
         this.comService.closeSnackBarMsg()
         this.comService.toastErrorByMsgId('MSG1531')

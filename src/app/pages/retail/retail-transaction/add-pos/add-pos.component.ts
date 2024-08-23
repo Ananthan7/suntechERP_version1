@@ -320,8 +320,8 @@ editLineItem:boolean=false;
 
   pendingSalesOrderForm: FormGroup = this.formBuilder.group({
     branchTo: ['', Validators.required],
-    orderNo: ['', Validators.required],
-    customerCode: ['', Validators.required],
+    orderNo: [''],
+    customerCode: [''],
   });
 
   itemcodeData: MasterSearchModel = {
@@ -700,11 +700,19 @@ editLineItem:boolean=false;
 
   pendingOrderList: any[] = [];
   pendingOrderColumnList: any[] = [
-    { title: 'Order No.', field: 'orderno' },
-    { title: 'Order Date', field: 'orderdate' },
-    { title: 'Delivery Date', field: 'deliverydate' },
-    { title: 'Amount', field: 'amount' },
-    { title: 'Customer Code', field: 'custcode' },
+    { title: 'Order No.', field: 'VOCNO', alignment: 'right' },
+    { title: 'Order Date', field: 'VOCDATE', alignment: 'left' },
+    { title: 'Delivery Date', field: 'DELIVERYDATE', alignment: 'left' },
+    {
+      title: 'Amount',
+      field: 'NETVALUE_CC',
+      alignment: 'right',
+      format: {
+        type: 'fixedPoint',
+        precision: 2,
+      },
+    },
+    { title: 'Customer Code', field: 'POSCUSTCODE', alignment: 'left' },
   ];
 
   estimationList: any[] = [];
@@ -13061,6 +13069,9 @@ changeGiftVoucherAmount(data:any){
     }
 
   }
+  customGroupValue(rowData:any) {
+    return rowData.PARAMETER; 
+}
 
   fetchPramterDetails(){
     this.snackBar.open('Loading...');
@@ -13196,14 +13207,61 @@ changeGiftVoucherAmount(data:any){
       }
     );
   }
+
+  pullSalesOrder() {
+    const orderNo = this.pendingSalesOrderForm.value.orderNo;
+    const branchTo = this.pendingSalesOrderForm.value.branchTo;
+    const customerCode = this.pendingSalesOrderForm.value.customerCode;
+  
+    if (!orderNo && !customerCode) {
+      this.snackBar.open('Please fill either "Order No." or "Customer Code" before searching.', 'Close', {
+        duration: 3000,
+      });
+      return; 
+    }
+  
+    if (orderNo) {
+      this.snackBar.open('Loading...');
+
+      this.suntechApi.getDynamicAPI(`PendingSalesOrder/GetPendingSalesOrderWithBranchandOrderNo/${branchTo}/${orderNo}`)
+        .subscribe((resp) => {
+          if (resp.status === 'Success') {
+            this.pendingOrderList = resp.response;
+            this.snackBar.dismiss();
+
+          } else {
+            this.snackBar.open('No Data Found', 'Close', {
+              duration: 3000,
+            });
+            return; 
+          }
+        });
+    } else {
+      this.snackBar.open('Loading...');
+      this.suntechApi
+        .getDynamicAPI(`PendingSalesOrder/GetPendingSalesOrderWithBranchandCustomerCode/${branchTo}/${customerCode}`)
+        .subscribe((resp) => {
+          if (resp.status === 'Success') {
+            this.pendingOrderList = resp.response;
+            this.snackBar.dismiss();
+
+          } else {
+            this.snackBar.open('No Data Found', 'Close', {
+              duration: 3000,
+            });
+            return; 
+          }
+        });
+    }
+  }
+  
   importSalesOrder() {
     this.modalRefePendingSalesOrder = this.modalService.open(
       this.pendingSalesOrderModal,
       {
-        size: "lg",
-        backdrop: true,
-        keyboard: false,
-        windowClass: "modal-full-width",
+        size: 'lg',
+        ariaLabelledBy: 'modal-basic-title',
+        backdrop: false,
       }
     );
 

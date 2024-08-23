@@ -23,6 +23,7 @@ export class MetalReturnComponent implements OnInit {
    @ViewChild('overlayprocess') overlayprocess! : MasterSearchComponent;
    @ViewChild('overlayworker') overlayworker! : MasterSearchComponent;
    @ViewChild('overlaylocation') overlaylocation! : MasterSearchComponent;
+   selectedRowData: any[] = [];
   @Input() content!: any;
   modalReference!: NgbModalRef;
   dataToDetailScreen: any;
@@ -450,9 +451,9 @@ this.setvoucherTypeMaster()
     this.modalReference.close()
   }
 
-  onRowClickHandler(event: any) {
-    this.selectRowIndex = event.data.SRNO
-  }
+  // onRowClickHandler(event: any) {
+  //   this.selectRowIndex = event.data
+  // }
   onRowDoubleClickHandler(event: any) {
     this.selectRowIndex = event.data.SRNO
     let selectedData = event.data
@@ -464,6 +465,98 @@ this.setvoucherTypeMaster()
   //   this.metalReturnDetailsData = this.metalReturnDetailsData.filter((element: any) => element.SRNO != this.selectRowIndex)
   //   this.recalculateSRNO()
   // }
+
+//   onSelectRow() {
+//     if (this.selectedRowData) {
+//         // Check if the selected row already exists in the metalReturnDetailsData
+//         const exists = this.metalReturnDetailsData.some(item => item.UNQ_JOB_ID === this.selectedRowData.UNQ_JOB_ID);
+
+//         if (exists) {
+//             Swal.fire({
+//                 title: 'Duplicate Entry',
+//                 text: 'This Stock Code entry is already available in detail. Do you wish to continue?',
+//                 icon: 'warning',
+//                 showCancelButton: true,
+//                 confirmButtonText: 'Yes, continue!',
+//                 cancelButtonText: 'No, cancel'
+//             }).then((result) => {
+//                 if (result.isConfirmed) {
+//                     this.metalReturnDetailsData.push(this.selectedRowData);
+//                 }
+//             });
+//         } else {
+//             this.metalReturnDetailsData.push(this.selectedRowData);
+//         }
+//     } else {
+//         this.commonService.toastErrorByMsgId('MSG_NO_ROW_SELECTED'); // Show an error if no row is selected
+//     }
+// }
+
+onRowClickHandlerr(event: any) {
+  console.log('Full Event Object:', event);
+  console.log('Row Data:', event.data); // Check if event.data contains the correct row data
+  this.selectedRowData = event.data;
+}
+
+// onRowClickHandlers(e: any) {
+//   const selectedRowData = e.data;
+
+//   // Optional: Check for duplicates before adding
+//   const isDuplicate = this.metalReturnDetailsData.some(item => item.STOCK_CODE === selectedRowData.STOCK_CODE);
+
+//   if (isDuplicate) {
+//       Swal.fire({
+//           title: 'Duplicate Entry',
+//           text: 'This Stock Code entry is already available in detail. Do you wish to continue?',
+//           icon: 'warning',
+//           showCancelButton: true,
+//           confirmButtonText: 'Yes, continue!',
+//           cancelButtonText: 'No, cancel'
+//       }).then((result) => {
+//           if (result.isConfirmed) {
+//               this.addRowToBottomGrid(selectedRowData);
+//           }
+//       });
+//   } else {
+//       this.addRowToBottomGrid(selectedRowData);
+//   }
+// }
+
+addRowToBottomGrid(rowData: any) {
+  this.metalReturnDetailsData = [...this.metalReturnDetailsData, rowData];
+}
+
+onRowClickHandlers(e: any) {
+  console.log(e)
+  this.selectedRowData.push(e.data); // Capture the selected row's data
+  console.log('Row Clicked:', this.selectedRowData);
+}
+
+onSelectRow() {
+  console.log('Attempting to Select Row');
+  if (this.selectedRowData) {
+      console.log('Pushing to metalReturnDetailsData:', this.selectedRowData);
+      this.metalReturnDetailsData =this.selectedRowData;
+  } else {
+      console.log('No Row Selected');
+      this.commonService.toastErrorByMsgId('MSG_NO_ROW_SELECTED'); // Handle error
+  }
+}
+
+// onSelectRow() {
+//   if (this.selectedRowData) {
+//       // Directly push the selected row data to the metalReturnDetailsData array
+//       this.metalReturnDetailsData.push(this.selectedRowData);
+
+//       // Optionally, clear the selection after adding to avoid duplicates if needed
+//       this.selectedRowData = null;
+//   } else {
+//       // Show an error if no row is selected
+//       this.commonService.toastErrorByMsgId('MSG_NO_ROW_SELECTED');
+//   }
+// }
+
+
 
   deleteTableData(): void {
     // Check if there is data in the grid
@@ -794,26 +887,22 @@ this.setvoucherTypeMaster()
       }
     });
   }
+  onRowClickHandler(event: any) {
+    console.log('Row Clicked:', event.data);
+    this.selectedRowData = event.data;
+}
+
 
   processWorkerValidate() {
     let form = this.metalReturnForm.value
     let postData = {
-      "SPID": "201",
+      // "SPID": "201",
+      "SPID": "063",
       "parameter": {
-        strBranch_Code: this.commonService.nullToString(form.BRANCH_CODE),       
-        strJob_Number: this.commonService.nullToString(form.BRANCH_CODE),       
-        strUnq_Job_Id: this.commonService.nullToString(form.BRANCH_CODE),           
-        strMetalStone: this.commonService.nullToString(form.BRANCH_CODE),         
+        strBranch_Code: this.commonService.nullToString(form.BRANCH_CODE),
         strProcess_Code: this.commonService.nullToString(form.process),    
         strWorker_Code: this.commonService.nullToString(form.worker),
-        strStock_Code: this.commonService.nullToString(form.BRANCH_CODE),         
         strUserName: this.commonService.nullToString(this.commonService.userName),
-
-
-        // strBranch_Code: this.commonService.nullToString(form.BRANCH_CODE),
-        // strProcess_Code: this.commonService.nullToString(form.process),    
-        // strWorker_Code: this.commonService.nullToString(form.worker),
-        // strUserName: this.commonService.nullToString(this.commonService.userName),
       }
     }
 

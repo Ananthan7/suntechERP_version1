@@ -340,6 +340,13 @@ export class CommonServiceService {
     if (value.toString() == '0') value = false;
     return value
   }
+  getBranchParamValue(parameter: string) {
+    let value = this.allbranchMaster ? this.allbranchMaster[parameter] : ''
+    if (value.toString().toUpperCase() == 'TRUE') value = true;
+    if (value.toString().toUpperCase() == 'FALSE') value = false;
+    if (value.toString() == '0') value = false;
+    return value
+  }
   setCommaSerperatedNumber(value: any, decimal: any) {
     return this.commaSeperation(
       this.decimalQuantityFormat(
@@ -432,6 +439,8 @@ export class CommonServiceService {
   }
   //service for ADD POS starts
   stringToBoolean = (string: string) => string != undefined && string != null ? string.toString().toLowerCase() == 'false' ? false : true : false;
+
+  numberToBoolean = (num: number) => num != undefined && num != null ? num === 0 ? false : true : false;
 
   formControlSetReadOnly(id: any, isReadonly: boolean) {
     const ele: any = document.getElementById(id);

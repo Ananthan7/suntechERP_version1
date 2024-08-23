@@ -40,21 +40,21 @@ export class ProductionMfgComponent implements OnInit {
     'BARCODEDQTY', 'BARCODEDPCS', 'LASTNO'
   ];
   @Input() content!: any;
-  DetailScreenDataToSave: any[] = [];
-  STOCK_FORM_DETAILS: any[] = [];
-  STOCK_COMPONENT_GRID: any[] = [];
-  labourChargeDetailToSave: any[] = [];
-  productionMetalRateToSave: any[] = [];
+  JOB_PRODUCTION_DETAIL_DJ: any[] = [];
+  JOB_PRODUCTION_SUB_DJ: any[] = [];
+  JOB_PRODUCTION_STNMTL_DJ: any[] = [];
+  JOB_PRODUCTION_LABCHRG_DJ: any[] = [];
+  JOB_PRODUCTION_METALRATE_DJ: any[] = [];
   formDetailCount: number = 0;
   viewMode: boolean = false;
   userName = this.commonService.userName;
   branchCode: string = '';
-  yearMonth?: string;
   vocMaxDate = new Date();
   currentDate = new Date();
   companyName = this.commonService.allbranchMaster['BRANCH_NAME']
   private subscriptions: Subscription[] = [];
   editMode: boolean = false;
+  isloading: boolean = false;
   modalReference!: NgbModalRef;
 
   user: MasterSearchModel = {
@@ -131,11 +131,14 @@ export class ProductionMfgComponent implements OnInit {
   productionFrom: FormGroup = this.formBuilder.group({
     VOCTYPE: ["", [Validators.required]],
     VOCDATE: ["", [Validators.required]],
-    VOCNO: [1],
+    VOCNO: [0],
+    MID: [0],
+    BRANCH_CODE: [""],
+    YEARMONTH: [""],
     FLAG: [""],
     SRNO: [''],
     SMAN: [""],
-    CURRENCY: ["", [Validators.required]],
+    CURRENCY_CODE: ["", [Validators.required]],
     CURRENCY_RATE: ["", [Validators.required]],
     BASE_CURRENCY: [""],
     BASE_CURRENCY_RATE: [""],
@@ -143,8 +146,7 @@ export class ProductionMfgComponent implements OnInit {
     TIME: [""],
     METAL_RATE: [""],
     METAL_RATE_TYPE: [""],
-    branchto: [""],
-    narration: [""],
+    REMARKS: [""],
     STONE_INCLUDE: [false],
     UnfixTransaction: [false],
   });
@@ -158,22 +160,81 @@ export class ProductionMfgComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.setInitialDatas()
-    this.setCompanyCurrency()
-    this.getRateType()
+    if (this.content?.FLAG) {
+      if (this.content.FLAG == 'VIEW' || this.content.FLAG == 'DELETE') {
+        this.viewMode = true;
+        // this.LOCKVOUCHERNO = true;
+      }
+      if (this.content.FLAG == 'EDIT') {
+        this.editMode = true;
+        // this.LOCKVOUCHERNO = true;
+      }
+      if (this.content.FLAG == 'DELETE') {
+        this.viewMode = true;
+        this.deleteClicked()
+      }
+      this.productionFrom.controls.FLAG.setValue(this.content.FLAG)
+      this.loadSavedData()
+    } else {
+      this.generateVocNo()
+      this.setInitialValue()
+      this.setCompanyCurrency()
+      this.getRateType()
+    }
   }
-  setInitialDatas() {
-    this.branchCode = this.commonService.branchCode;
-    this.yearMonth = this.commonService.yearSelected;
+  setInitialValue() {
     this.productionFrom.controls.VOCDATE.setValue(this.commonService.currentDate)
     this.productionFrom.controls.VOCTYPE.setValue(this.commonService.getqueryParamVocType())
     this.productionFrom.controls.TIME.setValue(this.commonService.getTime())
+    this.productionFrom.controls.BRANCH_CODE.setValue(this.commonService.branchCode)
+    this.productionFrom.controls.YEARMONTH.setValue(this.commonService.yearSelected)
+    this.branchCode = this.commonService.branchCode
+  }
+  loadSavedData() {
+    if (!this.content?.MID) return
+    this.commonService.showSnackBarMsg('MSG81447')
+    let API = `JobProductionMaster/GetJobProductionMasterWithMID/${this.content?.MID}`
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        if (result.response) {
+          let data = result.response
+          this.detailData = data.JOB_PRODUCTION_DETAIL_DJ || []
+          this.JOB_PRODUCTION_DETAIL_DJ = data.JOB_PRODUCTION_DETAIL_DJ || []
+          this.detailData.forEach((item: any, index: number) => {
+            this.detailData.push({
+              SRNO: item.SRNO,
+              FLAG: this.commonService.nullToString(this.content.FLAG),
+              JOB_PRODUCTION_DETAIL_DJ: item,
+              // JOB_PROCESS_TRN_LABCHRG_DJ: data.JOB_PROCESS_TRN_LABCHRG_DJ?.filter((val: any) => item.UNIQUEID == val.REFMID),
+              // JOB_PROCESS_TRN_COMP_DJ: data.JOB_PROCESS_TRN_COMP_DJ?.filter((val: any) => item.UNIQUEID == val.REFMID),
+            })
+            item.LOSS_QTY = this.commonService.decimalQuantityFormat(item.LOSS_QTY, 'METAL')
+          })
+          this.productionFrom.controls.BRANCH_CODE.setValue(data.BRANCH_CODE)
+          this.productionFrom.controls.YEARMONTH.setValue(data.YEARMONTH)
+          this.productionFrom.controls.VOCNO.setValue(data.VOCNO)
+          this.productionFrom.controls.VOCDATE.setValue(data.VOCDATE)
+          this.productionFrom.controls.VOCTYPE.setValue(data.VOCTYPE)
+          this.productionFrom.controls.MID.setValue(data.MID)
+          this.productionFrom.controls.CURRENCY_CODE.setValue(data.CURRENCY_CODE)
+          this.productionFrom.controls.CURRENCY_RATE.setValue(
+            this.commonService.decimalQuantityFormat(data.CURRENCY_RATE, 'RATE')
+          )
+          this.productionFrom.controls.SMAN.setValue(data.SMAN)
+          this.productionFrom.controls.REMARKS.setValue(data.REMARKS)
+        } else {
+          this.commonService.toastErrorByMsgId('MSG1531')
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
   }
   userDataSelected(value: any) {
     this.productionFrom.controls.SMAN.setValue(value.UsersName);
   }
   branchSelected(e: any) {
-    this.productionFrom.controls.branchto.setValue(e.BRANCH_CODE);
+    this.productionFrom.controls.BRANCH_CODE.setValue(e.BRANCH_CODE);
   }
   baseCurrencyCodeSelected(e: any) {
     this.productionFrom.controls.BASE_CURRENCY.setValue(e.CURRENCY_CODE);
@@ -203,9 +264,12 @@ export class ProductionMfgComponent implements OnInit {
   }
   /**USE: to set currency on selected change*/
   currencyDataSelected(event: any) {
-    this.productionFrom.controls.CURRENCY.setValue(event.CURRENCY_CODE)
-    this.setFormDecimal('CURRENCY_RATE', event.CONV_RATE, 'RATE')
-    // this.setCurrencyRate()
+    if (event.target?.value) {
+      this.productionFrom.controls.CURRENCY_CODE.setValue((event.target.value).toUpperCase())
+    } else {
+      this.productionFrom.controls.CURRENCY_CODE.setValue(event.CURRENCY_CODE)
+    }
+    this.setCurrencyRate()
   }
   setFormNullToString(formControlName: string, value: any) {
     this.productionFrom.controls[formControlName].setValue(
@@ -221,26 +285,38 @@ export class ProductionMfgComponent implements OnInit {
   /**USE: to set currency from company parameter */
   setCompanyCurrency() {
     let CURRENCY_CODE = this.commonService.getCompanyParamValue('COMPANYCURRENCY')
-    this.productionFrom.controls.CURRENCY.setValue(CURRENCY_CODE);
+    this.productionFrom.controls.CURRENCY_CODE.setValue(CURRENCY_CODE);
     this.productionFrom.controls.BASE_CURRENCY.setValue(CURRENCY_CODE);
-    const CURRENCY_RATE: any[] = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == this.productionFrom.value.CURRENCY);
+    const CURRENCY_RATE: any[] = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == this.productionFrom.value.CURRENCY_CODE);
     this.setFormDecimal('BASE_CURRENCY_RATE', CURRENCY_RATE[0].CONV_RATE, 'RATE')
     this.setCurrencyRate()
   }
+  // setCurrencyRate() {
+  //   if(this.viewMode) return
+  //   const CURRENCY_RATE: any[] = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == this.productionFrom.value.CURRENCY_CODE);
+  //   if (CURRENCY_RATE.length > 0) {
+  //     this.setFormDecimal('CURRENCY_RATE', CURRENCY_RATE[0].CONV_RATE, 'RATE')
+  //   } else {
+  //     this.productionFrom.controls.CURRENCY_CODE.setValue('')
+  //     this.productionFrom.controls.CURRENCY_RATE.setValue('')
+  //     this.commonService.toastErrorByMsgId('MSG1531')
+  //   }
+  //   this.BaseCurrencyRateVisibility(this.productionFrom.value.CURRENCY_CODE, this.productionFrom.value.CURRENCY_RATE)
+  // }
   /**USE: to set currency from branch currency master */
   setCurrencyRate() {
-    const CURRENCY_RATE: any[] = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == this.productionFrom.value.CURRENCY);
+    const CURRENCY_RATE: any[] = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == this.productionFrom.value.CURRENCY_CODE);
     if (CURRENCY_RATE.length > 0) {
       this.setFormDecimal('CURRENCY_RATE', CURRENCY_RATE[0].CONV_RATE, 'RATE')
     } else {
-      this.productionFrom.controls.CURRENCY.setValue('')
+      this.productionFrom.controls.CURRENCY_CODE.setValue('')
       this.productionFrom.controls.CURRENCY_RATE.setValue('')
       this.commonService.toastErrorByMsgId('MSG1531')
     }
-    this.BaseCurrencyRateVisibility(this.productionFrom.value.CURRENCY, this.productionFrom.value.CURRENCY_RATE)
   }
+
   BaseCurrencyRateVisibility(txtPCurr: any, txtPCurrRate: any) {
-    let ConvRateArr: any = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == this.productionFrom.value.CURRENCY && item.CMBRANCH_CODE == this.branchCode)
+    let ConvRateArr: any = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == this.productionFrom.value.CURRENCY_CODE && item.CMBRANCH_CODE == this.productionFrom.value.BRANCH_CODE)
     let baseConvRate = 1 / ConvRateArr[0].CONV_RATE
     this.productionFrom.controls.baseConvRate.setValue(baseConvRate)
   }
@@ -280,14 +356,14 @@ export class ProductionMfgComponent implements OnInit {
   setValuesToHeaderGrid(DATA: any) {
     let detailDataToParent = DATA.PRODUCTION_FORMDETAILS
     if (detailDataToParent.SRNO != 0) {
-      this.DetailScreenDataToSave[detailDataToParent.SRNO - 1] =  DATA.JOB_PRODUCTION_DETAIL_DJ
+      this.JOB_PRODUCTION_DETAIL_DJ[detailDataToParent.SRNO - 1] = DATA.JOB_PRODUCTION_DETAIL_DJ
       this.detailData[detailDataToParent.SRNO - 1] = { SRNO: detailDataToParent.SRNO, ...DATA }
     } else {
-      // if (this.addItemWithCheck(this.DetailScreenDataToSave, detailDataToParent)) return;
-      DATA.PRODUCTION_FORMDETAILS.SRNO = this.DetailScreenDataToSave.length + 1
-      DATA.JOB_PRODUCTION_DETAIL_DJ.SRNO = this.DetailScreenDataToSave.length + 1
-      this.detailData.push({ SRNO: this.DetailScreenDataToSave.length + 1, ...DATA })
-      this.DetailScreenDataToSave.push(DATA.JOB_PRODUCTION_DETAIL_DJ);
+      // if (this.addItemWithCheck(this.JOB_PRODUCTION_DETAIL_DJ, detailDataToParent)) return;
+      DATA.PRODUCTION_FORMDETAILS.SRNO = this.JOB_PRODUCTION_DETAIL_DJ.length + 1
+      DATA.JOB_PRODUCTION_DETAIL_DJ.SRNO = this.JOB_PRODUCTION_DETAIL_DJ.length + 1
+      this.detailData.push({ SRNO: this.JOB_PRODUCTION_DETAIL_DJ.length + 1, ...DATA })
+      this.JOB_PRODUCTION_DETAIL_DJ.push(DATA.JOB_PRODUCTION_DETAIL_DJ);
     }
     // this.editFinalArray(DATA)
     if (detailDataToParent.FLAG == 'SAVE') this.closeDetailScreen();
@@ -295,69 +371,29 @@ export class ProductionMfgComponent implements OnInit {
       this.commonService.showSnackBarMsg('Details added grid successfully')
     };
   }
-
-  /**USE: production metal rate data setup */
-  productionMetalRate() {
-    this.productionMetalRateToSave.push({
-      "REFMID": 0,
-      "SRNO": 0,
-      "RATE_TYPE": "",
-      "METAL_RATE": 0,
-      "DT_BRANCH_CODE": "",
-      "DT_VOCTYPE": "",
-      "DT_VOCNO": 0,
-      "DT_YEARMONTH": "",
-      "DIVISION_CODE": "",
-      "SYSTEM_DATE": "2023-10-17T12:41:20.127Z",
-      "CURRENCY_CODE": "",
-      "CURRENCY_RATE": 0,
-      "CONV_FACTOR": 0
-    })
+  generateVocNo() {
+    const API = `GenerateNewVoucherNumber/GenerateNewVocNum/${this.commonService.getqueryParamVocType()}/${this.commonService.branchCode}/${this.commonService.yearSelected}/${this.commonService.formatYYMMDD(this.currentDate)}`;
+    this.dataService.getDynamicAPI(API)
+      .subscribe((resp) => {
+        if (resp.status == "Success") {
+          this.productionFrom.controls.VOCNO.setValue(resp.newvocno);
+        }
+      });
   }
-  /**Labour charge detail data to save */
-  setLabourChargeDetailToSave() {
-    this.labourChargeDetailToSave.push({
-      "REFMID": 0,
-      "BRANCH_CODE": "",
-      "YEARMONTH": "",
-      "VOCTYPE": "",
-      "VOCNO": 0,
-      "SRNO": 0,
-      "JOB_NUMBER": "",
-      "STOCK_CODE": "",
-      "UNQ_JOB_ID": "",
-      "METALSTONE": "",
-      "DIVCODE": "",
-      "PCS": 0,
-      "GROSS_WT": 0,
-      "LABOUR_CODE": "",
-      "LAB_RATE": 0,
-      "LAB_ACCODE": "",
-      "LAB_AMTFC": 0,
-      "UNITCODE": "",
-      "DIVISION": "",
-      "WASTAGE_PER": 0,
-      "WASTAGE_QTY": 0,
-      "WASTAGE_AMT": 0,
-      "WASTAGE_RATE": 0,
-      "KARAT_CODE": ""
-    })
-  }
-
   submitValidations(form: any) {
     if (this.commonService.nullToString(form.VOCTYPE) == '') {
       this.commonService.toastErrorByMsgId('MSG1939')// VOCTYPE code CANNOT BE EMPTY
       return true
     }
-    if (this.commonService.nullToString(form.VOCDATE) == '') {
+    if (!this.commonService.formatDDMMYY(form.VOCDATE)) {
       this.commonService.toastErrorByMsgId('MSG1331')// VOCDATE code CANNOT BE EMPTY
       return true
     }
-    if (this.commonService.nullToString(form.VOCNO) == '') {
+    if (this.commonService.emptyToZero(form.VOCNO) == 0) {
       this.commonService.toastErrorByMsgId('MSG3661')// VOCNO code CANNOT BE EMPTY
       return true
     }
-    if (this.commonService.nullToString(form.CURRENCY) == '') {
+    if (this.commonService.nullToString(form.CURRENCY_CODE) == '') {
       this.commonService.toastErrorByMsgId('MSG1172')// currency code CANNOT BE EMPTY
       return true
     }
@@ -365,19 +401,23 @@ export class ProductionMfgComponent implements OnInit {
       this.commonService.toastErrorByMsgId('MSG1178')// CURRENCY_RATE code CANNOT BE EMPTY
       return true
     }
+    if (this.JOB_PRODUCTION_DETAIL_DJ.length == 0) {
+      this.commonService.toastErrorByMsgId('MSG1039')// no line items
+      return true
+    }
     return false;
   }
-  setPostData(){
+  setPostData() {
     let form = this.productionFrom.value
     return {
       "MID": 0,
       "VOCTYPE": this.commonService.nullToString(form.VOCTYPE),
-      "BRANCH_CODE": this.commonService.nullToString(this.branchCode),
+      "BRANCH_CODE": this.commonService.nullToString(form.BRANCH_CODE),
       "VOCNO": this.commonService.nullToString(form.VOCNO),
       "VOCDATE": this.commonService.formatDateTime(form.VOCDATE),
-      "YEARMONTH": this.commonService.nullToString(this.yearMonth),
+      "YEARMONTH": this.commonService.nullToString(form.YEARMONTH),
       "DOCTIME": this.commonService.formatDateTime(this.currentDate),
-      "CURRENCY_CODE": this.commonService.nullToString(form.CURRENCY),
+      "CURRENCY_CODE": this.commonService.nullToString(form.CURRENCY_CODE),
       "CURRENCY_RATE": this.commonService.emptyToZero(form.CURRENCY_RATE),
       "METAL_RATE_TYPE": this.commonService.nullToString(form.METAL_RATE_TYPE),
       "METAL_RATE": this.commonService.emptyToZero(form.METAL_RATE),
@@ -400,8 +440,8 @@ export class ProductionMfgComponent implements OnInit {
       "TOTAL_WASTAGE_AMTLC": 0,
       "TOTAL_WASTAGE_AMTFC": 0,
       "SMAN": this.commonService.nullToString(form.SMAN),
-      "REMARKS": this.commonService.nullToString(form.narration),
-      "NAVSEQNO": this.commonService.emptyToZero(this.yearMonth),
+      "REMARKS": this.commonService.nullToString(form.REMARKS),
+      "NAVSEQNO": this.commonService.emptyToZero(form.YEARMONTH),
       "FIX_UNFIX": form.UnfixTransaction,
       "STONE_INCLUDE": form.STONE_INCLUDE,
       "AUTOPOSTING": false,
@@ -414,11 +454,11 @@ export class ProductionMfgComponent implements OnInit {
       "PRINT_COUNT_ACCOPY": 0,
       "PRINT_COUNT_CNTLCOPY": 0,
       "SYSTEM_DATE": this.commonService.formatDateTime(this.currentDate),
-      "JOB_PRODUCTION_SUB_DJ": this.STOCK_FORM_DETAILS,
-      "JOB_PRODUCTION_DETAIL_DJ": this.DetailScreenDataToSave,
-      "JOB_PRODUCTION_STNMTL_DJ": this.STOCK_COMPONENT_GRID, //component grid from stockscreen
-      "JOB_PRODUCTION_LABCHRG_DJ": this.labourChargeDetailToSave,
-      "JOB_PRODUCTION_METALRATE_DJ": this.productionMetalRateToSave
+      "JOB_PRODUCTION_SUB_DJ": this.JOB_PRODUCTION_SUB_DJ,
+      "JOB_PRODUCTION_DETAIL_DJ": this.JOB_PRODUCTION_DETAIL_DJ,
+      "JOB_PRODUCTION_STNMTL_DJ": this.JOB_PRODUCTION_STNMTL_DJ, //component grid from stockscreen
+      "JOB_PRODUCTION_LABCHRG_DJ": this.JOB_PRODUCTION_LABCHRG_DJ,
+      "JOB_PRODUCTION_METALRATE_DJ": this.JOB_PRODUCTION_METALRATE_DJ
     }
   }
 
@@ -430,119 +470,92 @@ export class ProductionMfgComponent implements OnInit {
     if (this.submitValidations(this.productionFrom.value)) return;
 
     let postData = this.setPostData()
+    this.isloading = true;
     let Sub: Subscription = this.dataService
       .postDynamicAPI("JobProductionMaster/InsertJobProductionMaster", postData)
-      .subscribe(
-        (result) => {
-          if (result && result.status == "Success") {
-            Swal.fire({
-              title: result.message || "Success",
-              text: "",
-              icon: "success",
-              confirmButtonColor: "#336699",
-              confirmButtonText: "Ok",
-            }).then((result: any) => {
-              if (result.value) {
-                this.close("reloadMainGrid");
-              }
-            });
-          } else {
-            this.commonService.toastErrorByMsgId('MSG3577')
-          }
-        },
-        (err) => alert(err)
+      .subscribe((result) => {
+        this.isloading = false;
+        if (result && result.status == "Success") {
+          this.showSuccessDialog(this.commonService.getMsgByID('MSG2443') || 'Success')
+        } else {
+          this.commonService.toastErrorByMsgId('MSG3577')
+        }
+      },
+        (err) => {
+          this.isloading = false;
+          this.commonService.toastErrorByMsgId('MSG3577')
+        }
       );
     this.subscriptions.push(Sub);
   }
 
-
+  showSuccessDialog(message: string) {
+    Swal.fire({
+      title: message,
+      text: '',
+      icon: 'success',
+      confirmButtonColor: '#336699',
+      confirmButtonText: 'Ok'
+    }).then((result: any) => {
+      this.close('reloadMainGrid')
+    });
+  }
   update() {
-    // if (this.productionFrom.invalid) {
-    //   this.toastr.error("select all required fields");
-    //   return;
-    // }
-
     if (this.submitValidations(this.productionFrom.value)) return;
-
-
-    let API = "JobProductionMaster/UpdateJobProductionMaster/" + this.productionFrom.value.branchCode + this.productionFrom.value.VOCTYPE + this.productionFrom.value.VOCNO + this.productionFrom.value.vocdate;
-    let postData = {}
-
+    let API = "JobProductionMaster/UpdateJobProductionMaster/" + this.productionFrom.value.BRANCH_CODE + this.productionFrom.value.VOCTYPE + this.productionFrom.value.VOCNO + this.productionFrom.value.vocdate;
+    let postData = this.setPostData()
+    this.isloading = true;
     let Sub: Subscription = this.dataService
       .putDynamicAPI(API, postData)
       .subscribe(
         (result) => {
+          this.isloading = false;
           if (result && result.status == "Success") {
-            Swal.fire({
-              title: result.message || "Success",
-              text: "",
-              icon: "success",
-              confirmButtonColor: "#336699",
-              confirmButtonText: "Ok",
-            }).then((result: any) => {
-              if (result.value) {
-                this.close("reloadMainGrid");
-              }
-            });
+            this.showSuccessDialog(this.commonService.getMsgByID('MSG2443') || 'Success')
           } else {
             this.commonService.toastErrorByMsgId('MSG3577')
           }
         },
-        (err) => alert(err)
+        (err) => {
+          this.commonService.toastErrorByMsgId('MSG3577')
+          this.isloading = false;
+        }
       );
     this.subscriptions.push(Sub);
   }
 
-  deleteRecord() {
-    if (!this.content.VOCTYPE) {
+  deleteClicked() {
+    if (!this.content.VOCNO) {
       this.commonService.toastErrorByMsgId('MSG1531')
       return;
     }
-    Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete!",
-    }).then((result) => {
+    this.showConfirmationDialog().then((result) => {
       if (result.isConfirmed) {
-        this.deleteConfirmAPi()
-      }
-    });
-  }
-  deleteConfirmAPi() {
-    let API = "JobProductionMaster/DeleteJobProductionMaster/" +
-      this.productionFrom.value.branchCode + this.productionFrom.value.VOCTYPE +
-      this.productionFrom.value.VOCNO + this.productionFrom.value.vocdate;
-    let Sub: Subscription = this.dataService
-      .deleteDynamicAPI(API)
-      .subscribe(
-        (result) => {
-          if (result) {
-            if (result.status == "Success") {
-              Swal.fire({
-                title: result.message || "Success",
-                text: "",
-                icon: "success",
-                confirmButtonColor: "#336699",
-                confirmButtonText: "Ok",
-              }).then((result: any) => {
-                if (result.value) {
-                  this.close("reloadMainGrid");
+        let form = this.productionFrom.value;
+        let API = "JobProductionMaster/DeleteJobProductionMaster/" + form.BRANCH_CODE + '/'
+          + form.VOCTYPE + '/' + this.content?.VOCNO + '/' + this.content?.YEARMONTH;
+        let Sub: Subscription = this.dataService
+          .deleteDynamicAPI(API)
+          .subscribe(
+            (result) => {
+              if (result) {
+                if (result.status == "Success") {
+                  this.showSuccessDialog(this.commonService.getMsgByID('MSG81450'))
+                } else {
+                  this.commonService.toastErrorByMsgId('MSG1531')
                 }
-              });
-            } else {
+              } else {
+                this.commonService.toastErrorByMsgId('MSG1531')
+              }
+            },
+            (err) => {
               this.commonService.toastErrorByMsgId('MSG1531')
             }
-          } else {
-            this.commonService.toastErrorByMsgId('MSG1531')
-          }
-        },
-        (err) => alert(err)
-      );
-    this.subscriptions.push(Sub);
+          );
+        this.subscriptions.push(Sub);
+      }
+    })
+
   }
 
   /**use: validate all lookups to check data exists in db */
@@ -588,7 +601,7 @@ export class ProductionMfgComponent implements OnInit {
     }
     this.showConfirmationDialog().then((result) => {
       if (result.isConfirmed) {
-        this.DetailScreenDataToSave = this.DetailScreenDataToSave.filter((item: any) => item.SRNO != this.selectRowIndex)
+        this.JOB_PRODUCTION_DETAIL_DJ = this.JOB_PRODUCTION_DETAIL_DJ.filter((item: any) => item.SRNO != this.selectRowIndex)
         this.detailData = this.detailData.filter((item: any) => item.SRNO != this.selectRowIndex)
         this.reCalculateSRNO()
       }
@@ -596,7 +609,7 @@ export class ProductionMfgComponent implements OnInit {
     )
   }
   reCalculateSRNO() {
-    this.DetailScreenDataToSave.forEach((item, index) => item.SRNO = index + 1)
+    this.JOB_PRODUCTION_DETAIL_DJ.forEach((item, index) => item.SRNO = index + 1)
     this.detailData.forEach((item: any, index: any) => item.SRNO = index + 1)
   }
   showConfirmationDialog(): Promise<any> {

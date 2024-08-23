@@ -87,7 +87,7 @@
                     for="inputPassword"
                     class="col-sm-4 col-form-label"
                     id="ID004"
-                    >Name</label
+                    >Name * </label
                   >
                   <div class="col-md-8">
                     <mat-form-field
@@ -117,7 +117,7 @@
               </div>
               <div class="col-md-6">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="nameDesc" />
+                  <input matInput="text" formControlName="nameDesc" required/>
                 </mat-form-field>
               </div>
             </div>
@@ -217,7 +217,7 @@
                     name="dob"
                     placeholder="DD/MM/YYYY"
                     DateValidation
-                    formControlName="dob"
+                    formControlName="dob" readonly
                   />
                   <mat-datepicker-toggle
                     matSuffix
@@ -246,6 +246,7 @@
                     placeholder="DD/MM/YYYY"
                     DateValidation
                     formControlName="weddate"
+                    readonly
                   />
                   <mat-datepicker-toggle
                     matSuffix
@@ -267,11 +268,11 @@
                 for="inputPassword"
                 class="col-sm-4 col-form-label"
                 id="ID012"
-                >Country(R)</label
+                >Country(R) * </label
               >
               <div class="col-md-2">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="country" />
+                  <input matInput="text" formControlName="country" required/>
                 </mat-form-field>
               </div>
               <div class="col-md-6">
@@ -303,7 +304,7 @@
               <div class="col-md-6">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
-                    matInput="text"
+                    matInput="number"
                     formControlName="moblieNumber"
                     class="text-right"
                   />
@@ -328,7 +329,7 @@
               </div>
               <div class="col-md-6">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="moblie1Number" />
+                  <input matInput="number" formControlName="moblie1Number" />
                 </mat-form-field>
               </div>
             </div>
@@ -341,7 +342,7 @@
               >
               <div class="col-md-8">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="emailId" />
+                  <input matInput="email" formControlName="emailId" />
                 </mat-form-field>
               </div>
             </div>
@@ -407,14 +408,14 @@
                 for="inputPassword"
                 class="col-sm-4 col-form-label"
                 id="ID019"
-                >Cust. Type</label
+                >Cust. Type * </label
               >
               <div class="col-md-8">
                 <mat-form-field
                   style="width: -webkit-fill-available"
                   appearance="outline"
                 >
-                  <input matInput="text" formControlName="custType" />
+                  <input matInput="text" formControlName="custType" required/>
                 </mat-form-field>
               </div>
             </div>
@@ -423,14 +424,14 @@
                 for="inputPassword"
                 class="col-sm-4 col-form-label"
                 id="ID020"
-                >Nationality</label
+                >Nationality * </label
               >
               <div class="col-md-8">
                 <mat-form-field
                   style="width: -webkit-fill-available"
                   appearance="outline"
                 >
-                  <input matInput="text" formControlName="nationality" />
+                  <input matInput="text" formControlName="nationality" required/>
                   <master-search
                     [MasterSearchData]="nationalityCode"
                     class="masterSearch"
@@ -1578,7 +1579,10 @@
                           appearance="outline"
                         >
                           <mat-select formControlName="reasonOfPurchase">
-                            <mat-option></mat-option>
+                            <mat-option value="Self Use">Self Use
+                            </mat-option>
+                            <mat-option value="Gift">Gift
+                            </mat-option>
                           </mat-select>
                         </mat-form-field>
                       </div>
@@ -1745,7 +1749,7 @@
         </div>
         <div class="row mb-1">
           <label for="inputPassword" class="col-sm-4 col-form-label" id="ID088"
-            >Opened On</label
+            >Opened On * </label
           >
           <div class="col-md-8">
             <mat-form-field style="width: 100%" appearance="outline">
@@ -1757,6 +1761,8 @@
                 placeholder="DD/MM/YYYY"
                 DateValidation
                 formControlName="openedOn"
+                required
+                readonly
               />
               <mat-datepicker-toggle
                 matSuffix
@@ -1808,6 +1814,7 @@
                         placeholder="DD/MM/YYYY"
                         DateValidation
                         formControlName="date"
+                        readonly
                       />
                       <mat-datepicker-toggle
                         matSuffix

@@ -7,54 +7,81 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" [isViewContinue]="true" (continueClick)="continue()"
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
+    [isViewContinue]="true" (continueClick)="continue()"
     [isViewDelete]="false" [isViewMore]="false"></modal-header>
 <div class="container-fluid">
     <form [formGroup]="productionItemsDetailsFrom">
         <div class="row mt-2">
             <div class="col-md-8">
-                <dx-data-grid #dataGrid id="gridContainer" [columnAutoWidth]="true" [dataSource]="stockCodeDataList"
-                    [allowColumnResizing]="true" [showRowLines]="true" [showBorders]="true">
+                <dx-data-grid #dataGrid id="gridContainer"
+                    [columnAutoWidth]="true" [dataSource]="stockCodeDataList"
+                    [allowColumnResizing]="true" [showRowLines]="true"
+                    [showBorders]="true">
                     <dxo-paging [enabled]="false"></dxo-paging>
-                    <dxo-editing mode="cell" [allowUpdating]="true">
-                    </dxo-editing>
+                    <!-- <dxo-editing mode="cell" [allowUpdating]="false">
+                    </dxo-editing> -->
                     <dxo-selection mode="single"></dxo-selection>
 
                     <!-- <dxi-column *ngFor="let data of columnheads"
                         dataField="{{ data }}" caption="{{ data }}"
                         [allowEditing]="true" alignment="center">
                     </dxi-column> -->
-                    <dxi-column dataField="SRNO" caption="S.No" alignment="center"></dxi-column>
-                    <dxi-column dataField="STOCK_CODE" caption="Stock Code" alignment="center"></dxi-column>
-                    <dxi-column dataField="DESIGN" caption="Design" alignment="center"></dxi-column>
-                    <dxi-column dataField="KARAT" caption="Karat" alignment="center"></dxi-column>
-                    <dxi-column dataField="grossWt" caption="Gross Wt" alignment="center"></dxi-column>
-                    <dxi-column dataField="MetalPCS" caption="Metal Pcs" alignment="center"></dxi-column>
-                    <dxi-column dataField="metalwt" caption="Metal Weight" alignment="center"></dxi-column>
-                    <dxi-column dataField="MetalValue" caption="Metal Value" alignment="center"></dxi-column>
-                    <dxi-column dataField="StonePcs" caption="Stone Pcs" alignment="center"></dxi-column>
-                    <dxi-column dataField="stonewt" caption="Stone Weight" alignment="center"></dxi-column>
-                    <dxi-column dataField="StoneValue" caption="Stone Value" alignment="center"></dxi-column>
-                    <dxi-column dataField="Labour" caption="Labour" alignment="center"></dxi-column>
-                    <dxi-column dataField="Wastage" caption="Wastage" alignment="center"></dxi-column>
-                    <dxi-column dataField="TotalCost" caption="Total Cost" alignment="center"></dxi-column>
-                    <dxi-column dataField="jobno" caption="Job Number" alignment="center"></dxi-column>
-                    <dxi-column dataField="subjobno" caption="Unq Job Id" alignment="center"></dxi-column>
-                    <dxi-column dataField="UNQ_JOB_ID" caption="Other Stone" alignment="center"></dxi-column>
-                    <dxi-column dataField="OtherStoneAmount" caption="Other Stone Amount"
+                    <dxi-column dataField="SRNO" caption="S.No"
                         alignment="center"></dxi-column>
-                    <dxi-column dataField="DIVCODE" caption="Metal Division" alignment="center"></dxi-column>
-                    <dxi-column dataField="PURE_WT" caption="Pure Weight" alignment="center"></dxi-column>
-                    <dxi-column dataField="jobPurity" caption="Job Purity" alignment="center"></dxi-column>
-                    <dxi-column dataField="JobPureWt" caption="Job Pure Weight" alignment="center"></dxi-column>
+                    <dxi-column dataField="STOCK_CODE" caption="Stock Code"
+                        alignment="center"></dxi-column>
+                    <dxi-column dataField="DESIGN" caption="Design"
+                        alignment="center"></dxi-column>
+                    <dxi-column dataField="KARAT" caption="Karat"
+                        alignment="center"></dxi-column>
+                    <dxi-column dataField="grossWt" caption="Gross Wt"
+                        alignment="center"></dxi-column>
+                    <dxi-column dataField="MetalPCS" caption="Metal Pcs"
+                        alignment="center"></dxi-column>
+                    <dxi-column dataField="metalwt" caption="Metal Weight"
+                        alignment="center"></dxi-column>
+                    <dxi-column dataField="MetalValue" caption="Metal Value"
+                        alignment="center"></dxi-column>
+                    <dxi-column dataField="StonePcs" caption="Stone Pcs"
+                        alignment="center"></dxi-column>
+                    <dxi-column dataField="stonewt" caption="Stone Weight"
+                        alignment="center"></dxi-column>
+                    <dxi-column dataField="StoneValue" caption="Stone Value"
+                        alignment="center"></dxi-column>
+                    <dxi-column dataField="Labour" caption="Labour"
+                        alignment="center"></dxi-column>
+                    <dxi-column dataField="Wastage" caption="Wastage"
+                        alignment="center"></dxi-column>
+                    <dxi-column dataField="TotalCost" caption="Total Cost"
+                        alignment="center"></dxi-column>
+                    <dxi-column dataField="jobno" caption="Job Number"
+                        alignment="center"></dxi-column>
+                    <dxi-column dataField="subjobno" caption="Unq Job Id"
+                        alignment="center"></dxi-column>
+                    <dxi-column dataField="UNQ_JOB_ID" caption="Other Stone"
+                        alignment="center"></dxi-column>
+                    <dxi-column dataField="OtherStoneAmount"
+                        caption="Other Stone Amount"
+                        alignment="center"></dxi-column>
+                    <dxi-column dataField="DIVCODE" caption="Metal Division"
+                        alignment="center"></dxi-column>
+                    <dxi-column dataField="PURE_WT" caption="Pure Weight"
+                        alignment="center"></dxi-column>
+                    <dxi-column dataField="jobPurity" caption="Job Purity"
+                        alignment="center"></dxi-column>
+                    <dxi-column dataField="JobPureWt" caption="Job Pure Weight"
+                        alignment="center"></dxi-column>
                 </dx-data-grid>
             </div>
             <div class="col-md-4">
-                <dx-data-grid #dataGrid id="gridContainer" [columnAutoWidth]="true" [showRowLines]="true"
-                    [allowColumnResizing]="true" [dataSource]="componentGroupedList" [showBorders]="true">
+                <dx-data-grid #dataGrid id="gridContainer"
+                    [columnAutoWidth]="true" [showRowLines]="true"
+                    [allowColumnResizing]="true"
+                    [dataSource]="componentGroupedList" [showBorders]="true">
                     <dxo-paging [enabled]="false"></dxo-paging>
-                    <dxo-editing mode="cell" [allowUpdating]="true">
-                    </dxo-editing>
+                    <!-- <dxo-editing mode="cell" [allowUpdating]="true">
+                    </dxo-editing> -->
                     <dxo-selection mode="single"></dxo-selection>
                     <!-- <dxo-scrolling mode="virtual"></dxo-scrolling> -->
 
@@ -63,19 +90,26 @@
                         [allowEditing]="true" alignment="center"
                         backgroundcolor="#000">
                     </dxi-column> -->
-                    <dxi-column dataField="DIVCODE" caption="Div" alignment="center"></dxi-column>
-                    <dxi-column dataField="PCS" caption="Pcs" alignment="center"></dxi-column>
-                    <dxi-column dataField="GROSS_WT" caption="Gross Wt" alignment="center"></dxi-column>
-                    <dxi-column dataField="AMOUNT_FC" caption="Amount" alignment="center"></dxi-column>
-                    <dxi-column dataField="HandCharge" caption="Hand Charge" alignment="center"></dxi-column>
-                    <dxi-column dataField="LabValue" caption="Lab Value" alignment="center"></dxi-column>
+                    <dxi-column dataField="DIVCODE" caption="Div"
+                        alignment="center"></dxi-column>
+                    <dxi-column dataField="PCS" caption="Pcs"
+                        alignment="center"></dxi-column>
+                    <dxi-column dataField="GROSS_WT" caption="Gross Wt"
+                        alignment="center"></dxi-column>
+                    <dxi-column dataField="AMOUNT_FC" caption="Amount"
+                        alignment="center"></dxi-column>
+                    <dxi-column dataField="HandCharge" caption="Hand Charge"
+                        alignment="center"></dxi-column>
+                    <dxi-column dataField="LabValue" caption="Lab Value"
+                        alignment="center"></dxi-column>
                 </dx-data-grid>
             </div>
         </div>
         <div class="row mt-2">
             <div class="col-md-12 mb-2">
                 <div class="row">
-                    <label for="input" class="col-sm-5 col-form-label">Components
+                    <label for="input"
+                        class="col-sm-5 col-form-label">Components
                         Details</label>
                 </div>
             </div>
@@ -84,8 +118,10 @@
                     <label for="input" class="col-sm-4 col-form-label">Stock
                         Code* :</label>
                     <div class="col-sm-8">
-                        <mat-form-field appearance="outline" style="width: 100%;">
-                            <input type="number" class="text-right" matInput formControlName="stockCode" />
+                        <mat-form-field appearance="outline"
+                            style="width: 100%;">
+                            <input type="text" UpperCaseDirective
+                                matInput formControlName="stockCode" />
                         </mat-form-field>
                     </div>
                 </div>
@@ -93,19 +129,24 @@
                     <label for="input" class="col-sm-4 col-form-label">Tag Lines
                         :</label>
                     <div class="col-sm-8">
-                        <mat-form-field appearance="outline" style="width: 100%;">
+                        <mat-form-field appearance="outline"
+                            style="width: 100%;">
                             <div class="text-area">
-                                <textarea type="number" class="text-right" rows="3" matInput formControlName="tagLines"></textarea>
+                                <textarea type="text" rows="3" matInput
+                                    formControlName="tagLines"></textarea>
                             </div>
                         </mat-form-field>
                     </div>
                 </div>
                 <div class="row align-items-center mb-1">
-                    <label for="input" class="col-sm-4 col-form-label">Gross Wt
-                        :</label>
+                    <label for="input" class="col-sm-4 col-form-label">
+                        Gross Wt:</label>
                     <div class="col-sm-8">
-                        <mat-form-field appearance="outline" style="width: 100%;">
-                            <input type="number" matInput class="text-right" formControlName="grossWt" />
+                        <mat-form-field appearance="outline"
+                            style="width: 100%;">
+                            <input type="text" matInput
+                                class="text-right" MetalDecimalInput
+                                formControlName="grossWt" />
                         </mat-form-field>
                     </div>
                 </div>
@@ -115,86 +156,128 @@
                     <label for="input" class="col-sm-4 col-form-label">Setting
                         Chrg :</label>
                     <div class="col-sm-4">
-                        <mat-form-field appearance="outline" style="width: 100%;">
-                            <input type="number" matInput class="text-right" formControlName="settingChrg" UpperCaseDirective/>
+                        <mat-form-field appearance="outline"
+                            style="width: 100%;">
+                            <input type="text" matInput class="text-right"
+                                formControlName="settingChrg"
+                                AmountDecimalInput />
                         </mat-form-field>
                     </div>
                     <div class="col-sm-4">
-                        <mat-form-field appearance="outline" style="width: 80%;">
-                            <input type="number" matInput class="text-right" formControlName="settingChrgDesc" UpperCaseDirective  (focusout)="validateLookupField($event,settingChrgData,'settingChrgDesc')"/>
+                        <mat-form-field appearance="outline"
+                            style="width: 80%;">
+                            <input type="text" matInput
+                                formControlName="settingChrgDesc"
+                                UpperCaseDirective
+                                (focusout)="validateLookupField($event,settingChrgData,'settingChrgDesc')" />
+                            <master-search class="masterSearch"
+                                *ngIf="!viewMode"
+                                [MasterSearchData]="settingChrgData"
+                                (newRowClick)="settingChrgSelected($event)">
+                            </master-search>
                         </mat-form-field>
-                        <master-search
-                        [MasterSearchData]="settingChrgData" 
-                        (newRowClick)="settingChrgSelected($event)"></master-search>
                     </div>
                 </div>
                 <div class="row mb-1">
                     <label for="input" class="col-sm-4 col-form-label">Polish
                         Chrg :</label>
                     <div class="col-sm-4">
-                        <mat-form-field appearance="outline" style="width: 100%;">
-                            <input type="number" matInput class="text-right" formControlName="polishChrg" UpperCaseDirective/>
+                        <mat-form-field appearance="outline"
+                            style="width: 100%;">
+                            <input type="text" matInput class="text-right"
+                                formControlName="polishChrg"
+                                AmountDecimalInput />
                         </mat-form-field>
                     </div>
                     <div class="col-sm-4">
-                        <mat-form-field appearance="outline" style="width: 80%;">
-                            <input type="number" matInput class="text-right" formControlName="polishChrgDesc" UpperCaseDirective  (focusout)="validateLookupField($event,polishChrgData,'polishChrgDesc')"/>
+                        <mat-form-field appearance="outline"
+                            style="width: 80%;">
+                            <input type="text" matInput
+                                formControlName="polishChrgDesc"
+                                UpperCaseDirective
+                                (focusout)="validateLookupField($event,polishChrgData,'polishChrgDesc')" />
+                            <master-search class="masterSearch"
+                                *ngIf="!viewMode"
+                                [MasterSearchData]="polishChrgData"
+                                (newRowClick)="polishChrgSelected($event)">
+                            </master-search>
                         </mat-form-field>
-                        <master-search
-                        [MasterSearchData]="polishChrgData" 
-                        (newRowClick)="polishChrgSelected($event)"></master-search>
                     </div>
-              
                 </div>
                 <div class="row mb-1">
                     <label for="input" class="col-sm-4 col-form-label">Rhodium
                         Chrg :</label>
                     <div class="col-sm-4">
-                        <mat-form-field appearance="outline" style="width: 100%;">
-                            <input type="number" matInput class="text-right" formControlName="rhodiumChrg" UpperCaseDirective/>
+                        <mat-form-field appearance="outline"
+                            style="width: 100%;">
+                            <input type="text" matInput class="text-right"
+                                formControlName="rhodiumChrg"
+                                AmountDecimalInput />
                         </mat-form-field>
                     </div>
                     <div class="col-sm-4">
-                        <mat-form-field appearance="outline" style="width: 80%;">
-                            <input type="number" matInput class="text-right" formControlName="rhodiumChrgDesc" UpperCaseDirective   (focusout)="validateLookupField($event,rhodiumChrgData,'rhodiumChrgDesc')"/>
+                        <mat-form-field appearance="outline"
+                            style="width: 80%;">
+                            <input type="text" matInput
+                                formControlName="rhodiumChrgDesc" UpperCaseDirective
+                                (focusout)="validateLookupField($event,rhodiumChrgData,'rhodiumChrgDesc')" />
+                            <master-search class="masterSearch"
+                                *ngIf="!viewMode"
+                                [MasterSearchData]="rhodiumChrgData"
+                                (newRowClick)="rhodiumChrgSelected($event)">
+                            </master-search>
                         </mat-form-field>
-                        <master-search
-                    [MasterSearchData]="rhodiumChrgData" 
-                    (newRowClick)="rhodiumChrgSelected($event)"></master-search>
                     </div>
                 </div>
                 <div class="row mb-1">
                     <label for="input" class="col-sm-4 col-form-label">Labour
                         Chrg :</label>
                     <div class="col-sm-4">
-                        <mat-form-field appearance="outline" style="width: 100%;">
-                            <input type="number" matInput class="text-right" formControlName="labourChrg" UpperCaseDirective/>
+                        <mat-form-field appearance="outline"
+                            style="width: 100%;">
+                            <input type="text" matInput class="text-right"
+                                formControlName="labourChrg"
+                                AmountDecimalInput />
                         </mat-form-field>
                     </div>
                     <div class="col-sm-4">
-                        <mat-form-field appearance="outline" style="width: 80%;">
-                            <input type="number" matInput class="text-right" formControlName="labourChrgDesc" UpperCaseDirective   (focusout)="validateLookupField($event,labourChrgData,'labourChrgDesc')"/>
+                        <mat-form-field appearance="outline"
+                            style="width: 80%;">
+                            <input type="text" matInput 
+                                formControlName="labourChrgDesc"
+                                UpperCaseDirective
+                                (focusout)="validateLookupField($event,labourChrgData,'labourChrgDesc')" />
+                            <master-search class="masterSearch"
+                                *ngIf="!viewMode"
+                                [MasterSearchData]="labourChrgData"
+                                (newRowClick)="labourChrgSelected($event)">
+                            </master-search>
                         </mat-form-field>
-                        <master-search
-                    [MasterSearchData]="labourChrgData" 
-                    (newRowClick)="labourChrgSelected($event)"></master-search>
                     </div>
                 </div>
                 <div class="row mb-1">
                     <label for="input" class="col-sm-4 col-form-label">Misc Chrg
                         :</label>
                     <div class="col-sm-4">
-                        <mat-form-field appearance="outline" style="width: 100%;">
-                            <input type="number" matInput class="text-right" formControlName="miscChrg" UpperCaseDirective/>
+                        <mat-form-field appearance="outline"
+                            style="width: 100%;">
+                            <input type="text" matInput class="text-right"
+                                formControlName="miscChrg" AmountDecimalInput />
                         </mat-form-field>
                     </div>
                     <div class="col-sm-4">
-                        <mat-form-field appearance="outline" style="width: 80%;">
-                            <input type="number" matInput class="text-right" formControlName="miscChrgDesc" UpperCaseDirective   (focusout)="validateLookupField($event,miscChrgData,'miscChrgDesc')"/>
+                        <mat-form-field appearance="outline"
+                            style="width: 80%;">
+                            <input type="text" matInput
+                                formControlName="miscChrgDesc"
+                                UpperCaseDirective
+                                (focusout)="validateLookupField($event,miscChrgData,'miscChrgDesc')" />
+                            <master-search class="masterSearch"
+                                *ngIf="!viewMode"
+                                [MasterSearchData]="miscChrgData"
+                                (newRowClick)="miscChrgSelected($event)">
+                            </master-search>
                         </mat-form-field>
-                        <master-search
-                    [MasterSearchData]="miscChrgData" 
-                    (newRowClick)="miscChrgSelected($event)"></master-search>
                     </div>
                 </div>
             </div>
@@ -203,18 +286,22 @@
                     <label for="input" class="col-sm-4 col-form-label">Metal
                         Value:</label>
                     <div class="col-sm-4">
-                        <mat-form-field appearance="outline" style="width: 100%;">
-                            <input type="number" class="text-right" matInput formControlName="metalValue" />
+                        <mat-form-field appearance="outline"
+                            style="width: 100%;">
+                            <input type="text" class="text-right" matInput
+                                formControlName="metalValue" AmountDecimalInput />
                         </mat-form-field>
                     </div>
-                    
+
                 </div>
                 <div class="row align-items-center mb-1">
-                    <label for="input" class="col-sm-4 col-form-label">Stock
+                    <label for="input" class="col-sm-4 col-form-label">Stone
                         Value:</label>
                     <div class="col-sm-4">
-                        <mat-form-field appearance="outline" style="width: 100%;">
-                            <input type="number" class="text-right" matInput formControlName="stockValue" />
+                        <mat-form-field appearance="outline"
+                            style="width: 100%;">
+                            <input type="text" class="text-right" matInput
+                                formControlName="stockValue" AmountDecimalInput/>
                         </mat-form-field>
                     </div>
                 </div>
@@ -222,16 +309,22 @@
                     <label class="col-sm-4">Total
                         Labour:</label>
                     <div class="col-sm-4">
-                        <mat-form-field appearance="outline" style="width: 100%;">
-                            <input type="number" class="text-right" matInput formControlName="totalLabour" />
+                        <mat-form-field appearance="outline"
+                            style="width: 100%;">
+                            <input type="text" class="text-right" matInput
+                                formControlName="totalLabour"
+                                AmountDecimalInput />
                         </mat-form-field>
                     </div>
                 </div>
                 <div class="row align-items-center mb-1">
-                    <label for="input" class="col-sm-4 col-form-label">Wastage:</label>
+                    <label for="input"
+                        class="col-sm-4 col-form-label">Wastage:</label>
                     <div class="col-sm-4">
-                        <mat-form-field appearance="outline" style="width: 100%;">
-                            <input type="number" class="text-right" matInput formControlName="wastage" />
+                        <mat-form-field appearance="outline"
+                            style="width: 100%;">
+                            <input type="text" class="text-right" matInput
+                                formControlName="wastage" AmountDecimalInput/>
                         </mat-form-field>
                     </div>
                 </div>
@@ -239,115 +332,168 @@
                     <label for="input" class="col-sm-4 col-form-label">Total
                         Cost:</label>
                     <div class="col-sm-4">
-                        <mat-form-field appearance="outline" style="width: 100%;">
-                            <input type="number" class="text-right" matInput formControlName="totalCoast" />
+                        <mat-form-field appearance="outline"
+                            style="width: 100%;">
+                            <input type="text" AmountDecimalInput
+                                class="text-right" matInput
+                                formControlName="totalCoast" />
                         </mat-form-field>
                     </div>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="row align-items-center mb-1">
-                    <label for="input" class="col-sm-3 col-form-label">Price 1 :</label>
+                    <label for="input" class="col-sm-3 col-form-label">Price 1
+                        :</label>
                     <div class="col-sm-3">
-                        <mat-form-field appearance="outline" style="width: 60%;">
-                            <input type="text" matInput formControlName="price1per" UpperCaseDirective    (focusout)="validateLookupField($event,priceCodeData,'price1per')"/>
-                        </mat-form-field>
-                        <master-search
-                        [MasterSearchData]="priceCodeData" 
-                        (newRowClick)="priceOneCodeSelected($event)"></master-search>
-                    </div>
-                    <div class="col-sm-3">
-                        <mat-form-field appearance="outline" style="width: 100%;">
-                            <input type="number" class="text-right" matInput formControlName="price1fc" UpperCaseDirective/>
-                        </mat-form-field>
-                    </div>
-                    <div class="col-sm-3">
-                        <mat-form-field appearance="outline" style="width: 100%;">
-                            <input type="number" class="text-right" matInput formControlName="price1no" UpperCaseDirective/>
-                        </mat-form-field>
-                    </div>
-                </div>
-                <div class="row align-items-center mb-1">
-                    <label for="input" class="col-sm-3 col-form-label">Price 2 :</label>
-                    <div class="col-sm-3">
-                        <mat-form-field appearance="outline" style="width: 60%;">
-                            <input type="text"  matInput formControlName="price2per" UpperCaseDirective  (focusout)="validateLookupField($event,priceCodeData,'price2per')"/>
-                        </mat-form-field>
-                        <master-search
-                        [MasterSearchData]="priceCodeData" 
-                        (newRowClick)="pricetwoCodeSelected($event)"></master-search>
-                    </div>
-                    <div class="col-sm-3">
-                        <mat-form-field appearance="outline" style="width: 100%;">
-                            <input type="number" class="text-right" matInput formControlName="price2fc" UpperCaseDirective/>
+                        <mat-form-field appearance="outline"
+                            style="width: 100%;">
+                            <input type="text" matInput
+                                formControlName="price1per" UpperCaseDirective
+                                (focusout)="validateLookupField($event,priceCodeData,'price1per')" />
+                            <master-search class="masterSearch"
+                                *ngIf="!viewMode"
+                                [MasterSearchData]="priceCodeData"
+                                (newRowClick)="priceOneCodeSelected($event)">
+                            </master-search>
                         </mat-form-field>
                     </div>
                     <div class="col-sm-3">
-                        <mat-form-field appearance="outline" style="width: 100%;">
-                            <input type="number" class="text-right" matInput formControlName="price2no" UpperCaseDirective/>
+                        <mat-form-field appearance="outline"
+                            style="width: 100%;">
+                            <input type="text" class="text-right" matInput
+                                formControlName="price1fc" AmountDecimalInput />
+                        </mat-form-field>
+                    </div>
+                    <div class="col-sm-3">
+                        <mat-form-field appearance="outline"
+                            style="width: 100%;">
+                            <input type="text" class="text-right" matInput
+                                formControlName="price1no" AmountDecimalInput />
                         </mat-form-field>
                     </div>
                 </div>
                 <div class="row align-items-center mb-1">
-                    <label for="input" class="col-sm-3 col-form-label">Price 3 :</label>
+                    <label for="input" class="col-sm-3 col-form-label">Price 2
+                        :</label>
                     <div class="col-sm-3">
-                        <mat-form-field appearance="outline" style="width: 60%;">
-                            <input type="text"  matInput formControlName="price3per" UpperCaseDirective  (focusout)="validateLookupField($event,priceCodeData,'price3per')"/>
-                        </mat-form-field>
-                        <master-search
-                        [MasterSearchData]="priceCodeData" 
-                        (newRowClick)="pricethreeCodeSelected($event)"></master-search>
-                    </div>
-                    <div class="col-sm-3">
-                        <mat-form-field appearance="outline" style="width: 100%;">
-                            <input type="number" class="text-right" matInput formControlName="price3fc" UpperCaseDirective />
-                        </mat-form-field>
-                    </div>
-                    <div class="col-sm-3">
-                        <mat-form-field appearance="outline" style="width: 100%;">
-                            <input type="number" class="text-right" matInput formControlName="price3no" UpperCaseDirective/>
-                        </mat-form-field>
-                    </div>
-                </div>
-                <div class="row align-items-center mb-1">
-                    <label for="input" class="col-sm-3 col-form-label">Price 4 :</label>
-                    <div class="col-sm-3">
-                        <mat-form-field appearance="outline" style="width: 60%;">
-                            <input type="text" matInput formControlName="price4per"  (focusout)="validateLookupField($event,priceCodeData,'price4per')"/>
-                        </mat-form-field>
-                        <master-search
-                        [MasterSearchData]="priceCodeData" 
-                        (newRowClick)="pricefourCodeSelected($event)"></master-search>
-                    </div>
-                    <div class="col-sm-3">
-                        <mat-form-field appearance="outline" style="width: 100%;">
-                            <input type="number" class="text-right" matInput formControlName="price4fc" UpperCaseDirective/>
+                        <mat-form-field appearance="outline"
+                            style="width: 100%;">
+                            <input type="text" matInput
+                                formControlName="price2per" UpperCaseDirective
+                                (focusout)="validateLookupField($event,priceCodeData,'price2per')" />
+                            <master-search class="masterSearch"
+                                *ngIf="!viewMode"
+                                [MasterSearchData]="priceCodeData"
+                                (newRowClick)="pricetwoCodeSelected($event)">
+                            </master-search>
                         </mat-form-field>
                     </div>
                     <div class="col-sm-3">
-                        <mat-form-field appearance="outline" style="width: 100%;">
-                            <input type="number" class="text-right" matInput formControlName="price4no" UpperCaseDirective/>
+                        <mat-form-field appearance="outline"
+                            style="width: 100%;">
+                            <input type="text" class="text-right" matInput
+                                formControlName="price2fc" AmountDecimalInput />
+                        </mat-form-field>
+                    </div>
+                    <div class="col-sm-3">
+                        <mat-form-field appearance="outline"
+                            style="width: 100%;">
+                            <input type="text" class="text-right" matInput
+                                formControlName="price2no" AmountDecimalInput />
                         </mat-form-field>
                     </div>
                 </div>
                 <div class="row align-items-center mb-1">
-                    <label for="input" class="col-sm-3 col-form-label">Price 5 :</label>
+                    <label for="input" class="col-sm-3 col-form-label">Price 3
+                        :</label>
                     <div class="col-sm-3">
-                        <mat-form-field appearance="outline" style="width: 60%;">
-                            <input type="text" matInput formControlName="price5per"   (focusout)="validateLookupField($event,priceCodeData,'price5per')"/>
+                        <mat-form-field appearance="outline"
+                            style="width: 100%;">
+                            <input type="text" matInput
+                                formControlName="price3per" UpperCaseDirective
+                                (focusout)="validateLookupField($event,priceCodeData,'price3per')" />
+                            <master-search class="masterSearch"
+                                *ngIf="!viewMode"
+                                [MasterSearchData]="priceCodeData"
+                                (newRowClick)="pricethreeCodeSelected($event)">
+                            </master-search>
                         </mat-form-field>
-                        <master-search
-                        [MasterSearchData]="priceCodeData" 
-                        (newRowClick)="pricefiveCodeSelected($event)"></master-search>
                     </div>
                     <div class="col-sm-3">
-                        <mat-form-field appearance="outline" style="width: 100%;">
-                            <input type="number" class="text-right" matInput formControlName="price5fc" UpperCaseDirective/>
+                        <mat-form-field appearance="outline"
+                            style="width: 100%;">
+                            <input type="text" class="text-right" matInput
+                                formControlName="price3fc" AmountDecimalInput />
                         </mat-form-field>
                     </div>
                     <div class="col-sm-3">
-                        <mat-form-field appearance="outline" style="width: 100%;">
-                            <input type="number" class="text-right" matInput formControlName="price5no" UpperCaseDirective/>
+                        <mat-form-field appearance="outline"
+                            style="width: 100%;">
+                            <input type="text" class="text-right" matInput
+                                formControlName="price3no" AmountDecimalInput />
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row align-items-center mb-1">
+                    <label for="input" class="col-sm-3 col-form-label">Price 4
+                        :</label>
+                    <div class="col-sm-3">
+                        <mat-form-field appearance="outline"
+                            style="width: 100%;">
+                            <input type="text" matInput
+                                formControlName="price4per"
+                                (focusout)="validateLookupField($event,priceCodeData,'price4per')" />
+                            <master-search class="masterSearch"
+                                *ngIf="!viewMode"
+                                [MasterSearchData]="priceCodeData"
+                                (newRowClick)="pricefourCodeSelected($event)">
+                            </master-search>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-sm-3">
+                        <mat-form-field appearance="outline"
+                            style="width: 100%;">
+                            <input type="text" class="text-right" matInput
+                                formControlName="price4fc" AmountDecimalInput />
+                        </mat-form-field>
+                    </div>
+                    <div class="col-sm-3">
+                        <mat-form-field appearance="outline"
+                            style="width: 100%;">
+                            <input type="text" class="text-right" matInput
+                                formControlName="price4no" AmountDecimalInput />
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row align-items-center mb-1">
+                    <label for="input" class="col-sm-3 col-form-label">Price 5
+                        :</label>
+                    <div class="col-sm-3">
+                        <mat-form-field appearance="outline"
+                            style="width: 100%;">
+                            <input type="text" matInput
+                                formControlName="price5per"
+                                (focusout)="validateLookupField($event,priceCodeData,'price5per')" />
+                            <master-search class="masterSearch"
+                                *ngIf="!viewMode"
+                                [MasterSearchData]="priceCodeData"
+                                (newRowClick)="pricefiveCodeSelected($event)">
+                            </master-search>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-sm-3">
+                        <mat-form-field appearance="outline"
+                            style="width: 100%;">
+                            <input type="text" class="text-right" matInput
+                                formControlName="price5fc" AmountDecimalInput />
+                        </mat-form-field>
+                    </div>
+                    <div class="col-sm-3">
+                        <mat-form-field appearance="outline"
+                            style="width: 100%;">
+                            <input type="text" class="text-right" matInput
+                                formControlName="price5no" AmountDecimalInput />
                         </mat-form-field>
                     </div>
                 </div>
@@ -355,66 +501,116 @@
         </div>
         <div class="row">
             <div class="col-md-12">
-                <mat-tab-group [selectedIndex]="this.divisionMS == 'ID' ? 0 : 1">
+                <mat-tab-group
+                    [selectedIndex]="this.divisionMS == 'ID' ? 0 : 1">
                     <mat-tab label="Components">
                         <div class="m-3">
-                            <dx-data-grid #dataGrid id="gridContainer" [dataSource]="componentDataList"
-                                [columnAutoWidth]="true" [allowColumnResizing]="true" [showRowLines]="true"
+                            <dx-data-grid #dataGrid id="gridContainer"
+                                [dataSource]="componentDataList"
+                                [columnAutoWidth]="true"
+                                [allowColumnResizing]="true"
+                                [showRowLines]="true"
                                 [showBorders]="true">
                                 <dxo-paging [enabled]="false"></dxo-paging>
-                                <dxo-editing mode="cell" [allowUpdating]="true">
-                                </dxo-editing>
+                                <!-- <dxo-editing mode="cell" [allowUpdating]="false">
+                                </dxo-editing> -->
                                 <dxo-selection mode="single"></dxo-selection>
 
                                 <!-- <dxi-column *ngFor="let data of componentsColumnhead" dataField="{{ data }}" caption="{{ data }}"
                                     [allowEditing]="true" alignment="center" backgroundcolor="#000">
                                 </dxi-column> -->
-                                <dxi-column dataField="SRNO" caption="Sr.No" alignment="center"></dxi-column>
-                                <dxi-column dataField="DIVCODE" caption="Div" alignment="center"></dxi-column>
-                                <dxi-column dataField="STOCK_CODE" caption="Stock Code" alignment="center"></dxi-column>
-                                <dxi-column dataField="COLOR" caption="Color" alignment="center"></dxi-column>
-                                <dxi-column dataField="CLARITY" caption="Clarity" alignment="center"></dxi-column>
-                                <dxi-column dataField="SHAPE" caption="Shape" alignment="center"></dxi-column>
-                                <dxi-column dataField="SIZE" caption="Size" alignment="center"></dxi-column>
-                                <dxi-column dataField="SIEVE" caption="Sieve" alignment="center"></dxi-column>
-                                <dxi-column dataField="NET_WT" caption="Gross Weight" alignment="center"></dxi-column>
-                                <dxi-column dataField="STONE" caption="Stone" alignment="center"></dxi-column>
-                                <dxi-column dataField="NET_WT" caption="Net Wt" alignment="center"></dxi-column>
-                                <dxi-column dataField="RATE" caption="Rate" alignment="center"></dxi-column>
-                                <dxi-column dataField="AMOUNTFC" caption="Amount" alignment="center"></dxi-column>
-                                <dxi-column dataField="Amt" caption="%" alignment="center"></dxi-column>
-                                <dxi-column dataField="Qty" caption="Qty" alignment="center"></dxi-column>
-                                <dxi-column dataField="Amt" caption="Amt" alignment="center"></dxi-column>
-                                <dxi-column dataField="Rate" caption="S.Rate" alignment="center"></dxi-column>
-                                <dxi-column dataField="Rate" caption="S.Value" alignment="center"></dxi-column>
-                                <dxi-column dataField="PUREWT" caption="Pure Weight" alignment="center"></dxi-column>
-                                <dxi-column dataField="Rate" caption="Main Stock" alignment="center"></dxi-column>
-                                <dxi-column dataField="PURITY" caption="Purity" alignment="center"></dxi-column>
-                                <dxi-column dataField="Lab" caption="Lab ID" alignment="center"></dxi-column>
-                                <dxi-column dataField="Lab" caption="Lab Rate" alignment="center"></dxi-column>
-                                <dxi-column dataField="Lab" caption="Lab Value" alignment="center"></dxi-column>
-                                <dxi-column dataField="SIEVE_SET" caption="Sieve Set" alignment="center"></dxi-column>
-                                <dxi-column dataField="PROCESS_TYPE" caption="Process Type"
+                                <dxi-column dataField="SRNO" caption="Sr.No"
                                     alignment="center"></dxi-column>
-                                <dxi-column dataField="SOH_ACCODE" caption="SOH ACCODE" alignment="center"></dxi-column>
-                                <dxi-column dataField="STK_ACCODE" caption="STK ACCODE" alignment="center"></dxi-column>
-                                <dxi-column dataField="Lab" caption="Other Attributes" alignment="center"></dxi-column>
-                                <dxi-column dataField="Lab" caption="Job Purity" alignment="center"></dxi-column>
-                                <dxi-column dataField="Lab" caption="Job Pure Wt" alignment="center"></dxi-column>
+                                <dxi-column dataField="DIVCODE" caption="Div"
+                                    alignment="center"></dxi-column>
+                                <dxi-column dataField="STOCK_CODE"
+                                    caption="Stock Code"
+                                    alignment="center"></dxi-column>
+                                <dxi-column dataField="COLOR" caption="Color"
+                                    alignment="center"></dxi-column>
+                                <dxi-column dataField="CLARITY"
+                                    caption="Clarity"
+                                    alignment="center"></dxi-column>
+                                <dxi-column dataField="SHAPE" caption="Shape"
+                                    alignment="center"></dxi-column>
+                                <dxi-column dataField="SIZE" caption="Size"
+                                    alignment="center"></dxi-column>
+                                <dxi-column dataField="SIEVE" caption="Sieve"
+                                    alignment="center"></dxi-column>
+                                <dxi-column dataField="NET_WT"
+                                    caption="Gross Weight"
+                                    alignment="center"></dxi-column>
+                                <dxi-column dataField="STONE" caption="Stone"
+                                    alignment="center"></dxi-column>
+                                <dxi-column dataField="NET_WT" caption="Net Wt"
+                                    alignment="center"></dxi-column>
+                                <dxi-column dataField="RATE" caption="Rate"
+                                    alignment="center"></dxi-column>
+                                <dxi-column dataField="AMOUNTFC"
+                                    caption="Amount"
+                                    alignment="center"></dxi-column>
+                                <dxi-column dataField="Amt" caption="%"
+                                    alignment="center"></dxi-column>
+                                <dxi-column dataField="Qty" caption="Qty"
+                                    alignment="center"></dxi-column>
+                                <dxi-column dataField="Amt" caption="Amt"
+                                    alignment="center"></dxi-column>
+                                <dxi-column dataField="Rate" caption="S.Rate"
+                                    alignment="center"></dxi-column>
+                                <dxi-column dataField="Rate" caption="S.Value"
+                                    alignment="center"></dxi-column>
+                                <dxi-column dataField="PUREWT"
+                                    caption="Pure Weight"
+                                    alignment="center"></dxi-column>
+                                <dxi-column dataField="Rate"
+                                    caption="Main Stock"
+                                    alignment="center"></dxi-column>
+                                <dxi-column dataField="PURITY" caption="Purity"
+                                    alignment="center"></dxi-column>
+                                <dxi-column dataField="Lab" caption="Lab ID"
+                                    alignment="center"></dxi-column>
+                                <dxi-column dataField="Lab" caption="Lab Rate"
+                                    alignment="center"></dxi-column>
+                                <dxi-column dataField="Lab" caption="Lab Value"
+                                    alignment="center"></dxi-column>
+                                <dxi-column dataField="SIEVE_SET"
+                                    caption="Sieve Set"
+                                    alignment="center"></dxi-column>
+                                <dxi-column dataField="PROCESS_TYPE"
+                                    caption="Process Type"
+                                    alignment="center"></dxi-column>
+                                <dxi-column dataField="SOH_ACCODE"
+                                    caption="SOH ACCODE"
+                                    alignment="center"></dxi-column>
+                                <dxi-column dataField="STK_ACCODE"
+                                    caption="STK ACCODE"
+                                    alignment="center"></dxi-column>
+                                <dxi-column dataField="Lab"
+                                    caption="Other Attributes"
+                                    alignment="center"></dxi-column>
+                                <dxi-column dataField="Lab" caption="Job Purity"
+                                    alignment="center"></dxi-column>
+                                <dxi-column dataField="Lab"
+                                    caption="Job Pure Wt"
+                                    alignment="center"></dxi-column>
                             </dx-data-grid>
                         </div>
                     </mat-tab>
                     <mat-tab label="Labour">
                         <div class="mt-2">
-                            <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                            <dx-data-grid #dataGrid id="gridContainer"
+                                keyExpr="ID" [showBorders]="true">
                                 <dxo-paging [enabled]="false"></dxo-paging>
-                                <dxo-editing mode="cell" [allowUpdating]="true">
-                                </dxo-editing>
+                                <!-- <dxo-editing mode="cell" [allowUpdating]="true">
+                                </dxo-editing> -->
                                 <dxo-selection mode="multiple"></dxo-selection>
                                 <dxo-scrolling mode="virtual"></dxo-scrolling>
 
-                                <dxi-column *ngFor="let data of labourColumnhead" dataField="{{ data }}"
-                                    caption="{{ data }}" [allowEditing]="true" alignment="center"
+                                <dxi-column
+                                    *ngFor="let data of labourColumnhead"
+                                    dataField="{{ data }}"
+                                    caption="{{ data }}" [allowEditing]="true"
+                                    alignment="center"
                                     backgroundcolor="#000">
                                 </dxi-column>
                             </dx-data-grid>

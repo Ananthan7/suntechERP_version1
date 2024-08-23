@@ -18,6 +18,7 @@ import { AlloyAllocationComponent } from 'src/app/pages/jewellery-manufacturing/
 export class RepairCustomerDeliveryComponent implements OnInit {
   @Input() content!: any;
   selectedIndex!: number | null;
+  fieldValue: number =0;
   tableData: any[] = [];  
   firstTableWidth : any;
   secondTableWidth : any;
@@ -115,11 +116,16 @@ export class RepairCustomerDeliveryComponent implements OnInit {
       this.setFormValues();
     }
 
-    
     // if (this.content?.MID != null){
     //   this.setFormValues();
     //   this.viewMode = false;
     // }
+  
+  }
+
+  roundoff(value: number): void {
+    // console.log('Rounded value:', Math.round(value));
+    this.repairCustomerDeliveryForm.controls.netTotal.setValue(Math.round(value));
   }
   
   // setFormValues() {

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Input, OnInit, ViewChild } from "@angular/core";
 import { MasterSearchModel } from "src/app/shared/data/master-find-model";
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { SuntechAPIService } from "src/app/services/suntech-api.service";
@@ -11,6 +11,7 @@ import {
   NgbModal,
   NgbModalRef,
 } from "@ng-bootstrap/ng-bootstrap";
+import { MasterSearchComponent } from "src/app/shared/common/master-search/master-search.component";
 
 @Component({
   selector: "app-job-creation",
@@ -18,6 +19,8 @@ import {
   styleUrls: ["./job-creation.component.scss"],
 })
 export class JobCreationComponent implements OnInit {
+  @ViewChild('overlayuserName') overlayuserName!: MasterSearchComponent;
+
   divisionMS: any;
   columnhead: any[] = ["SL No", "Date", "Stock Code", "Party", "Delivery Date", "Partyname", "Remarks", "Pending Days", "Design Code", "Description", "Pcs Order", "Balance Pcs", "No Bags", "Metal Wt", "Stone Wt", "Gross Wt", "Unq Design", "SRNO"];
   columnheader: any[] = ["SL No", "Orders", "Design Code", "Stock Code", "Job Number", "Job Description", "Karat", "Total Pcs", "Stone Wt", "Metal Wt", "Gross Wt", "Category", "Sub Category", "Brand Code", "Metal Color", "Type", "Seq.Code", "Actualpcs", "YEARMONTH", "PartyCode", "DSO_SRNO"];
@@ -25,6 +28,9 @@ export class JobCreationComponent implements OnInit {
   tableData: any[] = [];
   branchCode?: String;
   yearMonth?: String;
+  viewMode: boolean = false;
+  editMode: boolean = false;
+  isDisableSaveBtn: boolean = false;
   userName = localStorage.getItem("username");
   private subscriptions: Subscription[] = [];
   currentDate = new FormControl(new Date());
@@ -355,4 +361,54 @@ export class JobCreationComponent implements OnInit {
       }
     });
   }
+
+  lookupKeyPress(event: any, form?: any) {
+    if (event.key == 'Tab' && event.target.value == '') {
+      this.showOverleyPanel(event, form)
+    }
+  }
+
+  showOverleyPanel(event: any, formControlName: string) {
+    if (this.jobCreationFrom.value[formControlName] != '') return;
+
+    switch (formControlName) {
+      case 'userName':
+        this.overlayuserName.showOverlayPanel(event);
+        break;
+      default:
+    }
+  }
+
+  
+  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    LOOKUPDATA.SEARCH_VALUE = event.target.value
+    if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
+    let param = {
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+    }
+    this.commonService.toastInfoByMsgId('MSG81447');
+    let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
+      .subscribe((result) => {
+        this.isDisableSaveBtn = false;
+        let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+        if (data.length == 0) {
+          this.commonService.toastErrorByMsgId('MSG1531')
+          this.jobCreationFrom.controls[FORMNAME].setValue('')
+          LOOKUPDATA.SEARCH_VALUE = ''
+          if (FORMNAME === 'userName') {
+            this.showOverleyPanel(event, FORMNAME);
+          }
+          return
+        }
+
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+      })
+    this.subscriptions.push(Sub)
+  }
+
+
+
 }

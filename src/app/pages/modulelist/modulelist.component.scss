@@ -16,15 +16,15 @@
     padding: 15px 10px 5px 10px;
     width: 70%;
     height: 100% !important;
+    transition: transform 0.3s ease-in-out;
 
     img {
       width: 45px;
       height: 45px;
-      transition: transform 0.3s ease-in-out;
     }
 
     h6 {
-      font-size: 13px;
+      font-size: 14px;
       font-weight: 500;
       font-family: "Poppins", sans-serif;
       margin: 10px 0px;
@@ -32,9 +32,9 @@
     }
   }
 
-  .card_btn:hover img {
-    -webkit-transform: scale(1.5, 1.5);
-    transform: scale(1.5, 1.5);
+  .card_btn:hover {
+    -webkit-transform: scale(1.4, 1.4);
+    transform: scale(1.4, 1.4);
   }
 
   .card_btn img:hover:before {

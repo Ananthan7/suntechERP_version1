@@ -6,7 +6,12 @@
   </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
+<modal-header (saveClick)="formSubmit()"
+  [isViewAuditTrail]="true" [isViewPost]="true"
+  [isloading]="isloading" [isViewDelete]="editMode"
+  (deleteClick)="deleteClicked()" [isViewSave]="!viewMode"
+  [disableAuditTrail]="editMode || viewMode"
+  (cancelClick)="close()"></modal-header>
 <div class="p-3">
   <form [formGroup]="productionFrom">
     <div class="row">
@@ -14,7 +19,7 @@
         <h6>{{branchCode}} - {{companyName}}</h6>
       </div>
       <div class="col-md-2 text-right">
-        <button type="button" class="btn btn-primary add-btn">
+        <button type="button" class="btn btn-primary add-btn" *ngIf="!viewMode">
           Authorize/Post
         </button>
       </div>
@@ -77,7 +82,7 @@
               <div class="col-md-6">
                 <mat-form-field appearance="outline" style="width: 100%;">
                   <input type="text" matInput formControlName="SMAN"
-                    UpperCaseDirective
+                    UpperCaseDirective [readonly]="viewMode"
                     (focusout)="validateLookupField($event,enteredByCodeData,'SMAN')" />
                   <master-search class="masterSearch"
                     [MasterSearchData]="enteredByCodeData"
@@ -97,8 +102,8 @@
               <div class="col-sm-2">
                 <mat-form-field appearance="outline" style="width: 90%;">
                   <input type="text" matInput UpperCaseDirective
-                    (focusout)="setCurrencyRate()"
-                    formControlName="CURRENCY" />
+                  (change)="currencyDataSelected($event)" [readonly]="viewMode"
+                    formControlName="CURRENCY_CODE" />
                 </mat-form-field>
               </div>
               <div class="col-sm-5">
@@ -106,7 +111,7 @@
                   <input type="text" matInput
                     RateDecimalInput class="text-right" readonly
                     formControlName="CURRENCY_RATE" />
-                  <master-search class="masterSearch"
+                  <master-search class="masterSearch" *ngIf="!viewMode"
                     [MasterSearchData]="currencyMasterData"
                     (newRowClick)="currencyDataSelected($event)">
                   </master-search>
@@ -132,9 +137,9 @@
       <div class="col-md-5">
         <div class="row">
           <div class="col-md-5 pt-3">
-            <mat-checkbox formControlName="UnfixTransaction"><b>Unfix
+            <mat-checkbox formControlName="UnfixTransaction" [disabled]="viewMode"><b>Unfix
                 Transaction</b></mat-checkbox><br>
-            <mat-checkbox formControlName="STONE_INCLUDE"><b>Include Stone
+            <mat-checkbox formControlName="STONE_INCLUDE" [disabled]="viewMode"><b>Include Stone
                 Weight</b></mat-checkbox>
           </div>
           <div class="col-md-7">
@@ -146,7 +151,7 @@
                   <div class="col-sm-8">
                     <mat-form-field appearance="outline" style="width: 30%">
                       <input type="text" matInput UpperCaseDirective
-                        formControlName="METAL_RATE_TYPE"
+                        formControlName="METAL_RATE_TYPE" [readonly]="viewMode"
                         (focusout)="validateLookupField($event,rateTypeMasterData,'METAL_RATE')" />
                     </mat-form-field>
                     <mat-form-field appearance="outline"
@@ -155,7 +160,7 @@
                         SixDecimalInput readonly
                         class="text-right"
                         formControlName="METAL_RATE" />
-                      <master-search class="masterSearch"
+                      <master-search class="masterSearch" *ngIf="!viewMode"
                         [MasterSearchData]="rateTypeMasterData"
                         (newRowClick)="rateTypeSelected($event)">
                       </master-search>
@@ -176,10 +181,10 @@
                   <div class="col-md-5">
                     <mat-form-field appearance="outline"
                       style="width: 100%;">
-                      <input type="text" matInput
-                        formControlName="branchto" UpperCaseDirective
-                        (focusout)="validateLookupField($event,branchCodeData,'branchto')" />
-                      <master-search class="masterSearch"
+                      <input type="text" matInput [readonly]="viewMode"
+                        formControlName="BRANCH_CODE" UpperCaseDirective
+                        (focusout)="validateLookupField($event,branchCodeData,'BRANCH_CODE')" />
+                      <master-search class="masterSearch" *ngIf="!viewMode"
                         [MasterSearchData]="branchCodeData"
                         (newRowClick)="branchSelected($event)"></master-search>
                     </mat-form-field>
@@ -225,11 +230,11 @@
       <div class="row pt-3">
         <div class="col-md-12 d-flex">
           <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true"
-            [viewImportBtn]="false"
+            [viewImportBtn]="false" *ngIf="!viewMode"
             (addClick)="openProductionEntryDetails()"
             (deleteClick)="deleteTableData()">
           </menu-buttons>
-          <div class="col-sm-2">
+          <div class="col-sm-2" *ngIf="!viewMode">
             <mat-form-field appearance="outline" style="width: 80%;">
               <input type="text" matInput UpperCaseDirective />
               <master-search class="masterSearch">
@@ -250,7 +255,7 @@
                     (onRowClick)="onRowClickHandler($event)"
                     (onRowDblClick)="onRowDblClickHandler($event)"
                     [allowColumnReordering]="true" height="200"
-                    [dataSource]="DetailScreenDataToSave">
+                    [dataSource]="JOB_PRODUCTION_DETAIL_DJ">
                     <dxo-selection mode="single"></dxo-selection>
                     <dxi-column dataField="SRNO" width="auto" caption="No"
                       alignment="center">
@@ -348,7 +353,7 @@
                       caption="Loss Wt"
                       alignment="center">
                     </dxi-column>
-                  </dx-data-grid> 
+                  </dx-data-grid>
                 </div>
               </div>
             </mat-tab>
@@ -357,7 +362,7 @@
                 <div class="col-md-12">
                   <dx-data-grid #dataGrid id="gridContainer"
                     [columnAutoWidth]="true"
-                    [dataSource]="STOCK_FORM_DETAILS"
+                    [dataSource]="JOB_PRODUCTION_SUB_DJ"
                     [allowColumnResizing]="true"
                     [showRowLines]="true"
                     [showBorders]="true">
@@ -383,7 +388,7 @@
                 class="col-sm-1 col-form-label">Narration</label>
               <div class="col-md-3">
                 <mat-form-field appearance="outline" style="width: 70%;">
-                  <input type="text" matInput formControlName="narration" />
+                  <input type="text" matInput formControlName="REMARKS" />
                 </mat-form-field>
               </div>
             </div>

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
@@ -7,6 +7,7 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 
 @Component({
   selector: 'app-jewellery-dismantling',
@@ -14,10 +15,19 @@ import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstra
   styleUrls: ['./jewellery-dismantling.component.scss']
 })
 export class JewelleryDismantlingComponent implements OnInit {
+
+  @ViewChild('overlayuserName') overlayuserName!: MasterSearchComponent;
+  @ViewChild('overlayItemCurrencDesc') overlayItemCurrencDesc!: MasterSearchComponent;
+  @ViewChild('overlayMetalRateType') overlayMetalRateType!: MasterSearchComponent;
+  @ViewChild('overlayStock') overlayStock!: MasterSearchComponent;
+  @ViewChild('overlaylocation') overlaylocation!: MasterSearchComponent;
+
+  
+
   divisionMS: any = 'ID';
-  columnheads:any[] = ['SrNo','Stock Code','Description', 'Pcs','Metal/Value','Lab Amount','Total Amount','Loss','MFGRE','MFGDATE',' Settings','Remarks','Locations'];
-  columnhead :any[] = ['Col ID','Division','Cols','ColR','ColKt','Fes','Weight','Rate','Amount','Pcs','RecWeight','RecAmount','Re...','...']
- @Input() content!: any; 
+  columnheads: any[] = ['SrNo', 'Stock Code', 'Description', 'Pcs', 'Metal/Value', 'Lab Amount', 'Total Amount', 'Loss', 'MFGRE', 'MFGDATE', ' Settings', 'Remarks', 'Locations'];
+  columnhead: any[] = ['Col ID', 'Division', 'Cols', 'ColR', 'ColKt', 'Fes', 'Weight', 'Rate', 'Amount', 'Pcs', 'RecWeight', 'RecAmount', 'Re...', '...']
+  @Input() content!: any;
   tableData: any[] = [];
   userName = localStorage.getItem('username');
   branchCode?: String;
@@ -27,6 +37,8 @@ export class JewelleryDismantlingComponent implements OnInit {
   viewMode: boolean = false;
   isSaved: boolean = false;
   isloading: boolean = false;
+  editMode: boolean = false;
+  isDisableSaveBtn: boolean = false;
 
   private subscriptions: Subscription[] = [];
   user: MasterSearchModel = {
@@ -87,6 +99,7 @@ export class JewelleryDismantlingComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
+
   StockcodeSelected(value: any) {
     console.log(value);
     this.jewellerydismantlingFrom.controls.stock.setValue(value.STOCK_CODE);
@@ -133,10 +146,10 @@ export class JewelleryDismantlingComponent implements OnInit {
 
   userDataSelected(value: any) {
     console.log(value);
-       this.jewellerydismantlingFrom.controls.enteredby.setValue(value.UsersName);
+    this.jewellerydismantlingFrom.controls.enteredby.setValue(value.UsersName);
   }
 
-  locationCodeSelected(e:any){
+  locationCodeSelected(e: any) {
     console.log(e);
     this.jewellerydismantlingFrom.controls.location.setValue(e.LOCATION_CODE);
   }
@@ -169,48 +182,107 @@ export class JewelleryDismantlingComponent implements OnInit {
     }
   }
 
-  addTableData(){ 
-  
-  }
-  
-  deleteTableData(){
-   
-  }
-
-  addTableDatas(){ 
+  addTableData() {
 
   }
 
- jewellerydismantlingFrom: FormGroup = this.formBuilder.group({
-   voctype:['',[Validators.required]],
-   vocno:[''],
-   vocdate:[,[Validators.required]],
-   enteredby:[''],
-   lossaccount:[''],
-   itemcurrency:[''],
-   itemcurrencDesc:[''],
-   metalrate:[''],
-   metalratetype:[''],
-   base:[''],
-   baseDesc : [''],
-   narration:[''],
-   stock : [''],
-   description : [''],
-   pcs : [''],
-   totalValue : [''],
-   mfgDate : [''],
-   lossAccount : [''],
-   mfgfurRef : [''],
-   location : [''],
-   setting : [''],
-   labourCharge : [''],
-   polishing : [''],
-   miscCode : [''],
-   labTotal : [''],
-   MID: [0],
+  deleteTableData() {
+
+  }
+
+  addTableDatas() {
+
+  }
+
+  lookupKeyPress(event: any, form?: any) {
+    if (event.key == 'Tab' && event.target.value == '') {
+      this.showOverleyPanel(event, form)
+    }
+  }
+
+  showOverleyPanel(event: any, formControlName: string) {
+    if (this.jewellerydismantlingFrom.value[formControlName] != '') return;
+
+    switch (formControlName) {
+      case 'enteredby':
+        this.overlayuserName.showOverlayPanel(event);
+        break;
+      case 'itemcurrencDesc':
+        this.overlayItemCurrencDesc.showOverlayPanel(event);
+        break;
+      case 'metalratetype':
+        this.overlayMetalRateType.showOverlayPanel(event);
+        break;
+      case 'stock':
+        this.overlayStock.showOverlayPanel(event);
+        break;
+        case 'location':
+        this.overlaylocation.showOverlayPanel(event);
+        break;
+      default:
+    }
+  }
+
+
+  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    LOOKUPDATA.SEARCH_VALUE = event.target.value
+    if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
+    let param = {
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+    }
+    this.commonService.toastInfoByMsgId('MSG81447');
+    let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
+      .subscribe((result) => {
+        this.isDisableSaveBtn = false;
+        let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+        if (data.length == 0) {
+          this.commonService.toastErrorByMsgId('MSG1531')
+          this.jewellerydismantlingFrom.controls[FORMNAME].setValue('')
+          LOOKUPDATA.SEARCH_VALUE = ''
+          if (FORMNAME === 'enteredby' || FORMNAME === 'itemcurrencDesc' || FORMNAME === "metalratetype" || FORMNAME === "stock" || FORMNAME === "location") {
+            this.showOverleyPanel(event, FORMNAME);
+          }
+          return
+        }
+
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+      })
+    this.subscriptions.push(Sub)
+  }
+
+  jewellerydismantlingFrom: FormGroup = this.formBuilder.group({
+    voctype: ['', [Validators.required]],
+    vocno: [''],
+    vocdate: [, [Validators.required]],
+    enteredby: [''],
+    lossaccount: [''],
+    itemcurrency: [''],
+    itemcurrencDesc: [''],
+    metalrate: [''],
+    metalratetype: [''],
+    base: [''],
+    baseDesc: [''],
+    narration: [''],
+    stock: [''],
+    description: [''],
+    pcs: [''],
+    totalValue: [''],
+    mfgDate: [''],
+    lossAccount: [''],
+    mfgfurRef: [''],
+    location: [''],
+    setting: [''],
+    labourCharge: [''],
+    polishing: [''],
+    miscCode: [''],
+    labTotal: [''],
+    MID: [0],
   });
 
-  setvalues(){
+  setvalues() {
     console.log(this.comService);
     this.jewellerydismantlingFrom.controls.voctype.setValue(this.comService.getqueryParamVocType())
     this.jewellerydismantlingFrom.controls.vocdate.setValue(this.comService.currentDate)
@@ -223,7 +295,7 @@ export class JewelleryDismantlingComponent implements OnInit {
       .subscribe((result) => {
         if (result.response) {
           let data = result.response
-          console.log(data,'data')
+          console.log(data, 'data')
           this.jewellerydismantlingFrom.controls.MID.setValue(data.MID)
           this.jewellerydismantlingFrom.controls.voctype.setValue(data.VOCTYPE)
           this.jewellerydismantlingFrom.controls.vocno.setValue(data.VOCNO)
@@ -259,106 +331,106 @@ export class JewelleryDismantlingComponent implements OnInit {
     this.subscriptions.push(Sub)
 
   }
-  
-setPostData(){
-  let form = this.jewellerydismantlingFrom.value
-  console.log(form, 'form');
-  return {
-  "MID": 0,
-  "BRANCH_CODE": this.branchCode,
-  "VOCTYPE": this.jewellerydismantlingFrom.value.voctype,
-  "VOCNO": this.comService.emptyToZero(this.jewellerydismantlingFrom.value.VOCNO),
-  "VOCDATE": this.jewellerydismantlingFrom.value.vocdate,
-  "YEARMONTH": this.yearMonth,
-  "SMAN": "",
-  "LOSS_ACCODE": this.jewellerydismantlingFrom.value.lossaccount,
-  "CURRENCY_CODE": this.comService.nullToString(this.jewellerydismantlingFrom.value.itemcurrency),
-  "CC_RATE": this.comService.emptyToZero(this.jewellerydismantlingFrom.value.CC_RATE),
-  "MET_RATE_TYPE": this.comService.nullToString(this.jewellerydismantlingFrom.value.MET_RATE_TYPE),
-  "METAL_RATE": this.commonService.emptyToZero(this.jewellerydismantlingFrom.value.METAL_RATE),
-  "NAVSEQNO": 0,
-  "TOTALPCS": this.commonService.emptyToZero(this.jewellerydismantlingFrom.value.pcs),
-  "TOTMETALAMOUNTFC": 0,
-  "TOTMETALAMOUNTCC": 0,
-  "TOTSTONEAMOUNTFC": 0,
-  "TOTSTONEAMOUNTCC": 0,
-  "TOTLABOURAMOUNTFC": 0,
-  "TOTLABOURAMOUNTCC": 0,
-  "TOTLOSSAMOUNTFC": 0,
-  "TOTLOSSAMOUNTCC": 0,
-  "TOTAMOUNTFC": 0,
-  "TOTAMOUNTCC": 0,
-  "HREMARKS": this.jewellerydismantlingFrom.value.narration || "",
-  "GENSEQNO": 0,
-  "PRINT_COUNT": 0,
-  "AUTOPOSTING": true,
-  "POSTDATE": "",
-  "HTUSERNAME": this.jewellerydismantlingFrom.value.enteredby,
-  "PRINT_COUNT_ACCOPY": 0,
-  "PRINT_COUNT_CNTLCOPY": 0,
-  "Details": [
-    {
-      "UNIQUEID": 0,
-      "SRNO": 0,
-      "STOCK_CODE": "",
-      "DESCRIPTION": "",
-      "PCS": 0,
-      "METAL_AMOUNTFC": 0,
-      "METAL_AMOUNTCC": 0,
-      "STONE_AMOUNTFC": 0,
-      "STONE_AMOUNTCC": 0,
-      "LABOR_AMOUNTFC": 0,
-      "LABOR_AMOUNTCC": 0,
-      "LOSS_AMOUNTFC": 0,
-      "LOSS_AMOUNTCC": 0,
-      "SETTINGCHARGEFC": 0,
-      "SETTINGCHARGECC": 0,
-      "POLISHCHARGEFC": 0,
-      "POLISHCHARGECC": 0,
-      "RHODIUMCHARGEFC": 0,
-      "RHODIUMCHARGECC": 0,
-      "LABOURCHARGEFC": 0,
-      "LABOURCHARGECC": 0,
-      "MISCLCHARGEFC": 0,
-      "MISCLCHARGECC": 0,
-      "TOTALAMOUNTFC": 0,
-      "TOTALAMOUNTCC": 0,
-      "MFGVOC_REF": "",
-      "MFGVOC_DATE": "2023-10-19T09:20:05.269Z",
-      "LOSS_ACCODE": "",
-      "COST_CODE": "",
-      "DIFF_TOTAL": 0,
-      "RCVD_TOTAL": 0,
-      "DIFF_WGT": 0,
-      "DREMARKS": "",
-      "DLOCTYPE_CODE": "",
-      "DT_BRANCH_CODE": "",
-      "DT_VOCTYPE": "",
-      "DT_VOCNO": 0,
-      "DT_YEARMONTH": "",
-      "STKLOCTYPE_CODE": ""
+
+  setPostData() {
+    let form = this.jewellerydismantlingFrom.value
+    console.log(form, 'form');
+    return {
+      "MID": 0,
+      "BRANCH_CODE": this.branchCode,
+      "VOCTYPE": this.jewellerydismantlingFrom.value.voctype,
+      "VOCNO": this.comService.emptyToZero(this.jewellerydismantlingFrom.value.VOCNO),
+      "VOCDATE": this.jewellerydismantlingFrom.value.vocdate,
+      "YEARMONTH": this.yearMonth,
+      "SMAN": "",
+      "LOSS_ACCODE": this.jewellerydismantlingFrom.value.lossaccount,
+      "CURRENCY_CODE": this.comService.nullToString(this.jewellerydismantlingFrom.value.itemcurrency),
+      "CC_RATE": this.comService.emptyToZero(this.jewellerydismantlingFrom.value.CC_RATE),
+      "MET_RATE_TYPE": this.comService.nullToString(this.jewellerydismantlingFrom.value.MET_RATE_TYPE),
+      "METAL_RATE": this.commonService.emptyToZero(this.jewellerydismantlingFrom.value.METAL_RATE),
+      "NAVSEQNO": 0,
+      "TOTALPCS": this.commonService.emptyToZero(this.jewellerydismantlingFrom.value.pcs),
+      "TOTMETALAMOUNTFC": 0,
+      "TOTMETALAMOUNTCC": 0,
+      "TOTSTONEAMOUNTFC": 0,
+      "TOTSTONEAMOUNTCC": 0,
+      "TOTLABOURAMOUNTFC": 0,
+      "TOTLABOURAMOUNTCC": 0,
+      "TOTLOSSAMOUNTFC": 0,
+      "TOTLOSSAMOUNTCC": 0,
+      "TOTAMOUNTFC": 0,
+      "TOTAMOUNTCC": 0,
+      "HREMARKS": this.jewellerydismantlingFrom.value.narration || "",
+      "GENSEQNO": 0,
+      "PRINT_COUNT": 0,
+      "AUTOPOSTING": true,
+      "POSTDATE": "",
+      "HTUSERNAME": this.jewellerydismantlingFrom.value.enteredby,
+      "PRINT_COUNT_ACCOPY": 0,
+      "PRINT_COUNT_CNTLCOPY": 0,
+      "Details": [
+        {
+          "UNIQUEID": 0,
+          "SRNO": 0,
+          "STOCK_CODE": "",
+          "DESCRIPTION": "",
+          "PCS": 0,
+          "METAL_AMOUNTFC": 0,
+          "METAL_AMOUNTCC": 0,
+          "STONE_AMOUNTFC": 0,
+          "STONE_AMOUNTCC": 0,
+          "LABOR_AMOUNTFC": 0,
+          "LABOR_AMOUNTCC": 0,
+          "LOSS_AMOUNTFC": 0,
+          "LOSS_AMOUNTCC": 0,
+          "SETTINGCHARGEFC": 0,
+          "SETTINGCHARGECC": 0,
+          "POLISHCHARGEFC": 0,
+          "POLISHCHARGECC": 0,
+          "RHODIUMCHARGEFC": 0,
+          "RHODIUMCHARGECC": 0,
+          "LABOURCHARGEFC": 0,
+          "LABOURCHARGECC": 0,
+          "MISCLCHARGEFC": 0,
+          "MISCLCHARGECC": 0,
+          "TOTALAMOUNTFC": 0,
+          "TOTALAMOUNTCC": 0,
+          "MFGVOC_REF": "",
+          "MFGVOC_DATE": "2023-10-19T09:20:05.269Z",
+          "LOSS_ACCODE": "",
+          "COST_CODE": "",
+          "DIFF_TOTAL": 0,
+          "RCVD_TOTAL": 0,
+          "DIFF_WGT": 0,
+          "DREMARKS": "",
+          "DLOCTYPE_CODE": "",
+          "DT_BRANCH_CODE": "",
+          "DT_VOCTYPE": "",
+          "DT_VOCNO": 0,
+          "DT_YEARMONTH": "",
+          "STKLOCTYPE_CODE": ""
+        }
+      ]
     }
-  ] 
-}
-}
-
-submitValidations(form: any) {
-  if (this.commonService.nullToString(form.voctype) == '') {
-    this.commonService.toastErrorByMsgId('MSG1939')// voctype  CANNOT BE EMPTY
-    return true
-  }
-  else if (this.commonService.nullToString(form.vocdate) == '') {
-    this.commonService.toastErrorByMsgId('MSG1331')//"vocdate cannot be empty"
-    return true
   }
 
-  return false;
-}
+  submitValidations(form: any) {
+    if (this.commonService.nullToString(form.voctype) == '') {
+      this.commonService.toastErrorByMsgId('MSG1939')// voctype  CANNOT BE EMPTY
+      return true
+    }
+    else if (this.commonService.nullToString(form.vocdate) == '') {
+      this.commonService.toastErrorByMsgId('MSG1331')//"vocdate cannot be empty"
+      return true
+    }
+
+    return false;
+  }
 
 
-  formSubmit(){
+  formSubmit() {
 
-    if(this.content && this.content.FLAG == 'EDIT'){
+    if (this.content && this.content.FLAG == 'EDIT') {
       this.update()
       return
     }
@@ -367,32 +439,32 @@ submitValidations(form: any) {
     //   this.toastr.error('select all required fields')
     //   return
     // }
-  
+
     let API = 'DiamondDismantle/InsertDiamondDismantle'
     let postData = this.setPostData()
     this.isloading = true;
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
         this.isloading = false;
-          if (result && result.status.trim() == "Success") {
-            this.isSaved = true;
-            Swal.fire({
-              title: this.comService.getMsgByID('MSG2443') || 'Success',
-              text: '',
-              icon: 'success',
-              confirmButtonColor: '#336699',
-              confirmButtonText: 'Ok'
-            }).then((result: any) => {
-              if (result.value) {
-                this.jewellerydismantlingFrom.reset()
-                this.tableData = []
-                this.close('reloadMainGrid')
-              }
-            });
-          }
-          else {
-            this.comService.toastErrorByMsgId('MSG3577')
-          }
+        if (result && result.status.trim() == "Success") {
+          this.isSaved = true;
+          Swal.fire({
+            title: this.comService.getMsgByID('MSG2443') || 'Success',
+            text: '',
+            icon: 'success',
+            confirmButtonColor: '#336699',
+            confirmButtonText: 'Ok'
+          }).then((result: any) => {
+            if (result.value) {
+              this.jewellerydismantlingFrom.reset()
+              this.tableData = []
+              this.close('reloadMainGrid')
+            }
+          });
+        }
+        else {
+          this.comService.toastErrorByMsgId('MSG3577')
+        }
       }, err => {
         this.isloading = false;
         this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
@@ -402,7 +474,7 @@ submitValidations(form: any) {
   }
 
 
-  update(){
+  update() {
     let form = this.jewellerydismantlingFrom.value
     let API = `DiamondDismantle/UpdateDiamondDismantle/${form.branchCode}/${form.voctype}/${form.vocno}/${form.yearMonth}`
     let postData = this.setPostData()
@@ -410,32 +482,32 @@ submitValidations(form: any) {
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
         this.isloading = false;
-          if (result && result.status == "Success") {
-            this.isSaved = true;
-            Swal.fire({
-              title: this.comService.getMsgByID('MSG2443') || 'Success',
-              text: '',
-              icon: 'success',
-              confirmButtonColor: '#336699',
-              confirmButtonText: 'Ok'
-            }).then((result: any) => {
-              if (result.value) {
-                this.jewellerydismantlingFrom.reset()
-                this.tableData = []
-                this.close('reloadMainGrid')
-              }
-            });
-          }
-          else {
-            this.comService.toastErrorByMsgId('MSG3577')
-          }
+        if (result && result.status == "Success") {
+          this.isSaved = true;
+          Swal.fire({
+            title: this.comService.getMsgByID('MSG2443') || 'Success',
+            text: '',
+            icon: 'success',
+            confirmButtonColor: '#336699',
+            confirmButtonText: 'Ok'
+          }).then((result: any) => {
+            if (result.value) {
+              this.jewellerydismantlingFrom.reset()
+              this.tableData = []
+              this.close('reloadMainGrid')
+            }
+          });
+        }
+        else {
+          this.comService.toastErrorByMsgId('MSG3577')
+        }
       }, err => {
         this.isloading = false;
         this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
       })
     this.subscriptions.push(Sub)
   }
-  
+
   deleteRecord() {
     if (!this.content.VOCTYPE) {
       Swal.fire({
@@ -461,9 +533,9 @@ submitValidations(form: any) {
     }).then((result) => {
       if (result.isConfirmed) {
         let form = this.jewellerydismantlingFrom.value
-        let API = 'DiamondDismantle/DeleteDiamondDismantle/' + 
-        this.content.BRANCH_CODE +'/'+ this.content.VOCTYPE+'/'+ 
-        this.content.VOCNO+ '/' + this.content.YEARMONTH
+        let API = 'DiamondDismantle/DeleteDiamondDismantle/' +
+          this.content.BRANCH_CODE + '/' + this.content.VOCTYPE + '/' +
+          this.content.VOCNO + '/' + this.content.YEARMONTH
         let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
           .subscribe((result) => {
             if (result) {
@@ -505,6 +577,6 @@ submitValidations(form: any) {
       }
     });
   }
-  
- 
+
+
 }

@@ -839,11 +839,11 @@
                         <mat-form-field appearance="outline"
                           style="width: 130px;">
                           <input type="text" matInput class="text-right"
-                            (focusout)="txtMScrapStockCode_Validating()"
+                            formControlName="METAL_ScrapStockCode" UpperCaseDirective
                             (keydown)="lookupKeyPress($event,'METAL_ScrapStockCode')"
-                            formControlName="METAL_ScrapStockCode" UpperCaseDirective/>
-                          <master-search class="masterSearch"
-                            *ngIf="!viewMode"
+                            (focusout)="txtMScrapStockCode_Validating($event)" />
+                          <master-search #METAL_ScrapStockCodeoverlay class="masterSearch"
+                            *ngIf="!viewMode" 
                             [MasterSearchData]="metalScrapStockCode"
                             (newRowClick)="metalScrapStockCodeSelected($event)">
                           </master-search>

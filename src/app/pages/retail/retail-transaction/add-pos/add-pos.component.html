@@ -684,6 +684,28 @@
 
         </form>
 
+        <div class="text-right">
+          <!-- <button type="button" mat-flat-button color="primary" (click)="importSalesEstimation()">
+            Import Sales Estimation
+          </button> -->
+
+          <button type="button" class="mx-2" mat-flat-button color="primary" (click)="importSalesOrder()">
+            Import Sales Order
+          </button> 
+
+          <button type="button" mat-flat-button color="primary" *ngIf="strUser=='SUNTECH'"
+          (click)="openParamterDetails()"
+          class="button-spacing">
+          Parameter Details 
+          </button>
+  
+          <button type="button" mat-flat-button color="primary" [disabled]="viewOnly && transAttachmentList.length == 0"
+          (click)="openUserAttachmentModal()">
+          {{ !viewOnly ? 'Add Attachment' : 'View Attachment' }}
+          </button>
+  
+         
+        </div>
 
         <div class="col-md-12 m-t-10" style="padding: 0px">
           <mat-tab-group>
@@ -1391,10 +1413,17 @@
     <dxo-grouping [autoExpandAll]="false"></dxo-grouping>
     <!-- <dxo-group-panel [visible]="true"></dxo-group-panel> -->
   
-    <dxi-column dataField="TABLENAME" caption="Table" [groupIndex]="0" width="120px"></dxi-column>
-    <dxi-column dataField="PARAMETER_NAME" caption="Parameter"></dxi-column>
-    <dxi-column dataField="VALUE" caption="Value"></dxi-column>
-    <dxi-column dataField="USEAGE" caption="Usage" width="200px"></dxi-column>
+    <dxi-column 
+    dataField="PARAMETER" 
+    caption="Table" 
+    [groupIndex]="0" 
+    width="120px"
+    [calculateGroupValue]="customGroupValue">
+</dxi-column>
+<dxi-column dataField="PARAMETER_NAME" caption="Parameter"></dxi-column>
+<dxi-column dataField="VALUE" caption="Value"></dxi-column>
+<dxi-column dataField="USEAGE" caption="Usage" width="200px"></dxi-column>
+
   
     <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
     <dxo-paging [pageSize]="5"></dxo-paging>
@@ -4064,7 +4093,7 @@
         <div class="col-md-5">
           <mat-form-field style="width: 100%">
             <mat-label id="ID218">Order No.</mat-label>
-            <input type="text" matInput formControlName="orderNo" [readonly]="viewOnly" appNoEmptySpace />
+            <input type="text" matInput formControlName="orderNo" [readonly]="viewOnly" appNoEmptySpace class="st_txt_right" appNoEmptySpace/>
             <mat-error *ngIf="
                 pendingSalesOrderForm.controls.orderNo.hasError('required')
               " id="ID219">
@@ -4107,20 +4136,24 @@
           </mat-form-field> -->
         </div>
         <div class="col-md-6 text-right">
-          <button type="button" mat-flat-button color="primary" id="ID222">Search</button>
+          <button type="button" mat-flat-button color="primary" id="ID222" (click)="pullSalesOrder()">Search</button>
         </div>
       </div>
     </form>
 
     <div class="row mb-2">
       <div class="col-md-12">
-        <dx-data-grid #dataGrid id="pendingSalesOrdergrid" keyExpr="orderno" [dataSource]="pendingOrderList"
+        <dx-data-grid #dataGrid id="pendingSalesOrdergrid" keyExpr="VOCNO" [dataSource]="pendingOrderList"
           [showBorders]="true">
           <dxo-paging [enabled]="false"></dxo-paging>
           <dxo-editing mode="cell" [allowUpdating]="true"> </dxo-editing>
-          <dxi-column *ngFor="let data of pendingOrderColumnList" dataField="{{ data.field }}"
-            caption="{{ data.title }}" [allowEditing]="true" alignment="center" backgroundcolor="#000">
-          </dxi-column>
+          <dxi-column *ngFor="let data of pendingOrderColumnList"
+          [dataField]="data.field"
+          [caption]="data.title"
+          [alignment]="data.alignment"
+          [format]="data.format"
+          [allowEditing]="true">
+        </dxi-column>
         </dx-data-grid>
       </div>
     </div>

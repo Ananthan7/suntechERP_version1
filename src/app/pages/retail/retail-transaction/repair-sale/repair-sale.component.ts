@@ -133,12 +133,13 @@ export class RepairSaleComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 26,
     SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Country Code',
+    SEARCH_HEADING: 'Country Type',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
+    WHERECONDITION: "TYPES='COUNTRY MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
+
   countryCodeSelected(e: any) {
     console.log(e);
     this.repairSaleForm.controls.country.setValue(e.CODE);
