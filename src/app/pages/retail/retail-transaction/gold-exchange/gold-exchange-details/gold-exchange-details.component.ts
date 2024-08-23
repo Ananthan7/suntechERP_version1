@@ -547,7 +547,7 @@ export class GoldExchangeDetailsComponent implements OnInit {
     this.goldExchangeDetailsForm.controls.stoneAmount.setValue(
       this.comService.decimalQuantityFormat(
         this.comService.emptyToZero(
-          event.target.value * this.goldExchangeDetailsForm.value.grossWeight
+          event.target.value * this.goldExchangeDetailsForm.value.stoneWeight
         ),
         'AMOUNT'
       )
