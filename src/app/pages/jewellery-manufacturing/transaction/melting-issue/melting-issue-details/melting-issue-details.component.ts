@@ -102,10 +102,11 @@ export class MeltingIssueDetailsComponent implements OnInit {
 
   setLookup201WhereCondition() {
     let form = this.meltingIssuedetailsFrom.value
+    console.log(form,'form')
     let where = `@strBranch_Code='${form.BRANCH_CODE}',`
-    where += `@strJob_Number='${form.jobno}',@strUnq_Job_Id='${form.subJobNo}',`
+    where += `@strJob_Number='${form.jobno}',@strUnq_Job_Id='${form.subjobno}',`
     where += `@strMetalStone='${form.METAL_STONE}',@strProcess_Code='${form.process}',`
-    where += `@strWorker_Code='${form.worker}',@strStock_Code='${form.stockcode}',@strUserName='${this.comService.userName}'`
+    where += `@strWorker_Code='${form.worker}',@strStock_Code='${this.comService.nullToString(form.stockcode)}',@strUserName='${this.comService.userName}'`
    this.stockCodeData.WHERECONDITION = where
   //  this.ProcessCodeData.WHERECONDITION = where
   //   this.WorkerCodeData.WHERECONDITION = where
@@ -113,11 +114,11 @@ export class MeltingIssueDetailsComponent implements OnInit {
 
   StockCodeSelected(e: any) {
     console.log(e);
-    this.meltingIssuedetailsFrom.controls.stockdes.setValue(e.STOCK_CODE);
-    this.meltingIssuedetailsFrom.controls.tostock.setValue(e.DESCRIPTION);
-    this.meltingIssuedetailsFrom.controls.stockcode.setValue(e.DIVISION_CODE); 
+    this.meltingIssuedetailsFrom.controls.stockcode.setValue(e.STOCK_CODE);
+    this.meltingIssuedetailsFrom.controls.tostock.setValue(e.STOCK_DESCRIPTION);
+    this.meltingIssuedetailsFrom.controls.stockdes.setValue(e.DIVISION_CODE); 
     this.meltingIssuedetailsFrom.controls.mainstock.setValue(e.STOCK_CODE);
-    this.setLookup201WhereCondition()
+   this.setLookup201WhereCondition()
 
   }
 
@@ -167,6 +168,7 @@ export class MeltingIssueDetailsComponent implements OnInit {
       }
     }
    this.dataTochild()
+   this.setLookup201WhereCondition()
   }
   dataTochild(dataToChild?:any){
     console.log(this.content.HEADERDETAILS,'pick')
@@ -177,6 +179,8 @@ export class MeltingIssueDetailsComponent implements OnInit {
     this.meltingIssuedetailsFrom.controls.processdes.setValue(this.content.processdes || this.content.HEADERDETAILS.processdes);
     this.meltingIssuedetailsFrom.controls.worker.setValue(this.content.worker || this.content.HEADERDETAILS.worker);
     this.meltingIssuedetailsFrom.controls.workerdes.setValue(this.content.workerdes || this.content.HEADERDETAILS.workerdes);
+    this.meltingIssuedetailsFrom.controls.BRANCH_CODE.setValue(this.content.BRANCH_CODE || this.content.HEADERDETAILS.BRANCH_CODE)
+    this.meltingIssuedetailsFrom.controls.subjobno.setValue(this.content.subjobno || this.content.HEADERDETAILS.subjobno)
     // this.meltingIssuedetailsFrom.controls.jobdes.setValue(this.content.jobdes || this.content.HEADERDETAILS.subJobDescription);
     // this.meltingIssuedetailsFrom.controls.jobdes.setValue(this.content.jobdes || this.content.HEADERDETAILS.subJobDescription);  
     }
@@ -214,6 +218,8 @@ export class MeltingIssueDetailsComponent implements OnInit {
     this.meltingIssuedetailsFrom.controls.waxweight.setValue(this.content.WAX_WEIGHT)
     this.meltingIssuedetailsFrom.controls.topurity.setValue(this.content.PURE_WT)
     this.meltingIssuedetailsFrom.controls.lossweight.setValue(this.content.LOSSWT)
+    this.meltingIssuedetailsFrom.controls.subjobno.setValue(this.content.subjobno)
+
     this.setValueWithDecimal('topurity', this.content.PURE_WT, 'THREE')
     this.setValueWithDecimal('grossweight', this.content.GROSS_WT, 'METAL')
     this.setValueWithDecimal('purity', this.content.PURITY, 'METAL')
@@ -276,7 +282,11 @@ export class MeltingIssueDetailsComponent implements OnInit {
     netweight: [''],
     pureweight: ['', [Validators.required]],
     topurity: ['100.00', [Validators.required]],
-    FLAG: [null]
+    FLAG: [null],
+    VOCTYPE:[''],
+    METAL_STONE: [''],
+    UNQ_JOB_ID: [''],
+    BRANCH_CODE: [''],
   });
   submitValidations(form: any) {
     if (this.comService.nullToString(form.jobno) == '') {
@@ -553,7 +563,7 @@ export class MeltingIssueDetailsComponent implements OnInit {
           this.commonService.toastErrorByMsgId('MSG1531')
           this.meltingIssuedetailsFrom.controls[FORMNAME].setValue('')
           LOOKUPDATA.SEARCH_VALUE = ''
-      if (FORMNAME === 'process' || FORMNAME === 'worker' || FORMNAME === 'location' || FORMNAME === 'stockcode') {
+      if (FORMNAME === 'process' || FORMNAME === 'worker' || FORMNAME === 'location') {
             this.showOverleyPanel(event, FORMNAME);
           }
           return
@@ -657,12 +667,14 @@ export class MeltingIssueDetailsComponent implements OnInit {
           this.meltingIssuedetailsFrom.controls.netweight.setValue(data[0].NETWT)
           this.meltingIssuedetailsFrom.controls.stoneweight.setValue(data[0].STONE)
           this.meltingIssuedetailsFrom.controls.mainstock.setValue(data[0].MAIN_STOCK_CODE)
+          this.meltingIssuedetailsFrom.controls.METAL_STONE.setValue(data[0].METAL_STONE)
           this.setValueWithDecimal('topurity', data[0].PURE_WT, 'THREE') // this is mistake
           this.setValueWithDecimal('grossweight', data[0].METAL, 'METAL')
           this.setValueWithDecimal('purity', data[0].PURITY, 'PURITY')
           this.setValueWithDecimal('waxweight', data[0].KARAT, 'THREE')
           this.setValueWithDecimal('StoneWeight', data[0].STONE, 'STONE')
           this.setValueWithDecimal('netweight', data[0].METAL - data[0].STONE, 'THREE')
+          this.setLookup201WhereCondition()
           // this.meltingIssuedetailsFrom.controls.MetalWeightFrom.setValue(
           //   this.comService.decimalQuantityFormat(data[0].METAL, 'METAL'))
 
@@ -713,8 +725,8 @@ export class MeltingIssueDetailsComponent implements OnInit {
             this.jobNumberDetailData = data
             this.meltingIssuedetailsFrom.controls.subjobno.setValue(data[0].UNQ_JOB_ID)
             this.meltingIssuedetailsFrom.controls.subJobDescription.setValue(data[0].JOB_DESCRIPTION)
-            this.setLookup201WhereCondition()
             this.subJobNumberValidate()
+            this.setLookup201WhereCondition()
           } else {
             this.comService.toastErrorByMsgId('MSG1531')
             this.meltingIssuedetailsFrom.controls.jobno.setValue('')

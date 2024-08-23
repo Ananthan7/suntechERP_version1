@@ -53,12 +53,12 @@
                                         <mat-form-field style="width: 70%;">
                                             <input type="text" matInput
                                                 formControlName="price1"   
-                                                (input)="inputValidate($event)"
+                                                (input)="inputValidate($event)" (keydown)="lookupKeyPress($event,'price1')"
                                                 UpperCaseDirective
                                                 (focusout)="validateLookupField($event,priceCodeData,'price1')" appNoEmptySpace [readonly]="viewMode || codeEnable" (input)="enableNextField('price1', 'price2')"/>
                                         </mat-form-field>
                                         <master-search
-                                            [MasterSearchData]="priceCodeData"
+                                            [MasterSearchData]="priceCodeData" #overlayprice1
                                             (newRowClick)="priceCodeSelected($event, 'price1')"  *ngIf="viewMode == false">
                                         </master-search>
                                     </div>
@@ -69,11 +69,11 @@
                                         <mat-form-field style="width: 70%;">
                                             <input type="text" matInput
                                                 formControlName="price3"  (input)="inputValidate($event)"
-                                                UpperCaseDirective
+                                                UpperCaseDirective (keydown)="lookupKeyPress($event,'price3')"
                                                 (focusout)="validateLookupField($event,priceCodeData,'price3')" [readonly]="viewMode" [disabled]="priceSchemaMasterForm.get('price3')?.disabled ?? false" (input)="enableNextField('price3', 'price4')"/>
                                         </mat-form-field>
                                         <master-search
-                                            [MasterSearchData]="priceCodeData"
+                                            [MasterSearchData]="priceCodeData" #overlayprice3
                                             (newRowClick)="priceCodeSelected($event, 'price3')" *ngIf="price3SearchEnable == true">
                                         </master-search>
                                     </div>
@@ -84,11 +84,11 @@
                                         <mat-form-field style="width: 70%;">
                                             <input type="text" matInput
                                                 formControlName="price5"   (input)="inputValidate($event)"
-                                                UpperCaseDirective
+                                                UpperCaseDirective (keydown)="lookupKeyPress($event,'price5')"
                                                 (focusout)="validateLookupField($event,priceCodeData,'price5')" [readonly]="viewMode" [disabled]="priceSchemaMasterForm.get('price5')?.disabled ?? false"/>
                                         </mat-form-field>
                                         <master-search
-                                            [MasterSearchData]="priceCodeData"
+                                            [MasterSearchData]="priceCodeData" #overlayprice5
                                             (newRowClick)="priceCodeSelected($event, 'price5')" *ngIf="price5SearchEnable == true">
                                         </master-search>
                                     </div>
@@ -100,11 +100,11 @@
                                         <mat-form-field style="width: 70%;">
                                             <input type="text" matInput
                                                 formControlName="price2"   (input)="inputValidate($event)"
-                                                UpperCaseDirective
+                                                UpperCaseDirective (keydown)="lookupKeyPress($event,'price2')"
                                                 (focusout)="validateLookupField($event,priceCodeData,'price2')" [readonly]="viewMode" [disabled]="priceSchemaMasterForm.get('price2')?.disabled ?? false"  (input)="enableNextField('price2', 'price3')"/>
                                         </mat-form-field>
                                         <master-search
-                                            [MasterSearchData]="priceCodeData"
+                                            [MasterSearchData]="priceCodeData" #overlayprice2
                                             (newRowClick)="priceCodeSelected($event, 'price2')" *ngIf="price2SearchEnable == true">
                                         </master-search>
                                     </div>
@@ -115,11 +115,11 @@
                                         <mat-form-field style="width: 70%;">
                                             <input type="text" matInput
                                                 formControlName="price4"   (input)="inputValidate($event)"
-                                                UpperCaseDirective
+                                                UpperCaseDirective (keydown)="lookupKeyPress($event,'price4')"
                                                 (focusout)="validateLookupField($event,priceCodeData,'price4')" [readonly]="viewMode" [disabled]="priceSchemaMasterForm.get('price4')?.disabled ?? false" (input)="enableNextField('price4', 'price5')"/>
                                         </mat-form-field>
                                         <master-search
-                                            [MasterSearchData]="priceCodeData"
+                                            [MasterSearchData]="priceCodeData" #overlayprice4
                                             (newRowClick)="priceCodeSelected($event, 'price4')" *ngIf="price4SearchEnable == true">
                                         </master-search>
                                     </div>
