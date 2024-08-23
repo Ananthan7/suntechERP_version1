@@ -56,6 +56,22 @@ export class SalesDiaDetailGstComponent implements OnInit {
     this.salesdiadetailsgstForm.controls.stockdes.setValue(e.DESCRIPTION );
   }
 
+  countryCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Country Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "TYPES = 'COUNTRY MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  countryCodeSelected(e:any){
+    console.log(e);
+    this.salesdiadetailsgstForm.controls.country.setValue(e.CODE);
+  }
+
   locationCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -88,21 +104,21 @@ export class SalesDiaDetailGstComponent implements OnInit {
     this.salesdiadetailsgstForm.controls.salesman.setValue(e.SALESPERSON_CODE);
   }
 
-  countryCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 26,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Country Code',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-  countryCodeSelected(e: any) {
-    console.log(e);
-    this.salesdiadetailsgstForm.controls.country.setValue(e.DESCRIPTION);
-  }
+  // countryCodeData: MasterSearchModel = {
+  //   PAGENO: 1,
+  //   RECORDS: 10,
+  //   LOOKUPID: 26,
+  //   SEARCH_FIELD: 'CODE',
+  //   SEARCH_HEADING: 'Country Code',
+  //   SEARCH_VALUE: '',
+  //   WHERECONDITION: "CODE<> ''",
+  //   VIEW_INPUT: true,
+  //   VIEW_TABLE: true,
+  // }
+  // countryCodeSelected(e: any) {
+  //   console.log(e);
+  //   this.salesdiadetailsgstForm.controls.country.setValue(e.DESCRIPTION);
+  // }
 
   salesdiadetailsgstForm: FormGroup = this.formBuilder.group({
     Stockdiv: [''],

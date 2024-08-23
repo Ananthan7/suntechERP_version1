@@ -6,7 +6,9 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
+<modal-header
+*ngIf="this.content?.FLAG != 'VIEW'"
+(saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
 <!-- content section -->
 <div class="container-fluid ">
     <form [formGroup]="metalBranchTransferOutRepairForm">
@@ -87,7 +89,7 @@
                                     </label>
                                     <div class="col-md-8">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="text" matInput formControlName="transferStatus" />
+                                            <input type="text" matInput formControlName="transferStatus" maxlength="1"/>
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -178,7 +180,7 @@
                                     </label>
                                     <div class="col-sm-8">
                                         <mat-form-field style="width: 100%;">
-                                            <input type="number" class="text-center" matInput
+                                            <input type="text" class="text-center" matInput
                                                 formControlName="reference" />
                                         </mat-form-field>
                                     </div>
@@ -300,8 +302,11 @@
                                         <mat-form-field style="width: 70%;">
                                             <input type="text" matInput formControlName="stateCode" />
                                         </mat-form-field>
-                                        <master-search></master-search>
-                                    </div>
+                                        <master-search
+                                        [MasterSearchData]="stateCode"
+                                        class="masterSearch"
+                                        (newRowClick)="stateSelected($event)"
+                                      ></master-search>                                    </div>
                                 </div>
                                 <div class="row ">
                                     <label for="inputPassword" class="col-sm-4 col-form-label">State Desc
