@@ -23,7 +23,8 @@ export class MetalReturnComponent implements OnInit {
    @ViewChild('overlayprocess') overlayprocess! : MasterSearchComponent;
    @ViewChild('overlayworker') overlayworker! : MasterSearchComponent;
    @ViewChild('overlaylocation') overlaylocation! : MasterSearchComponent;
-   selectedRowData: any[] = [];
+   selectedRowData: any[]=[];
+   selectedRowData1: any;
   @Input() content!: any;
   modalReference!: NgbModalRef;
   dataToDetailScreen: any;
@@ -495,7 +496,7 @@ this.setvoucherTypeMaster()
 onRowClickHandlerr(event: any) {
   console.log('Full Event Object:', event);
   console.log('Row Data:', event.data); // Check if event.data contains the correct row data
-  this.selectedRowData = event.data;
+  this.selectedRowData1 = event.data;
 }
 
 // onRowClickHandlers(e: any) {
@@ -521,22 +522,41 @@ onRowClickHandlerr(event: any) {
 //       this.addRowToBottomGrid(selectedRowData);
 //   }
 // }
+getGrossWtField(): string {
+  // Assuming `dataSource` is your data array or object
+  if (this.metalReturnDetailsData && this.metalReturnDetailsData.length > 0) {
+    const sampleRecord = this.metalReturnDetailsData[0]; // Check the first record
+
+    // Return the correct field based on what's present in the data
+    if (sampleRecord.hasOwnProperty('PURE_WT')) {
+      return 'PURE_WT';
+    } else if (sampleRecord.hasOwnProperty('PUREWT')) {
+      return 'PUREWT';
+    }
+  }
+  
+  // Default to one of the fields if both are missing or dataSource is empty
+  return 'PURE_WT';
+}
+
 
 addRowToBottomGrid(rowData: any) {
   this.metalReturnDetailsData = [...this.metalReturnDetailsData, rowData];
 }
 
 onRowClickHandlers(e: any) {
-  console.log(e)
+  console.log(e);
   this.selectedRowData.push(e.data); // Capture the selected row's data
   console.log('Row Clicked:', this.selectedRowData);
 }
+
 
 onSelectRow() {
   console.log('Attempting to Select Row');
   if (this.selectedRowData) {
       console.log('Pushing to metalReturnDetailsData:', this.selectedRowData);
       this.metalReturnDetailsData =this.selectedRowData;
+      this.recalculateSRNO(); 
   } else {
       console.log('No Row Selected');
       this.commonService.toastErrorByMsgId('MSG_NO_ROW_SELECTED'); // Handle error
@@ -569,7 +589,7 @@ onSelectRow() {
       return; // Exit the function if there's no data
     }
   
-    if (this.selectRowIndex !== null) {
+    if (this.selectedRowData1 !== null) {
       Swal.fire({
         title: 'Are you sure?',
         text: "You won't be able to revert this!",
@@ -581,11 +601,11 @@ onSelectRow() {
       }).then((result) => {
         if (result.isConfirmed) {
           // Debug log to ensure correct SRNO is selected
-          console.log('Selected SRNO:', this.selectRowIndex);
+          console.log('Selected SRNO:', this.selectedRowData1);
   
           // Perform deletion
           const originalLength = this.metalReturnDetailsData.length;
-          this.metalReturnDetailsData = this.metalReturnDetailsData.filter((element: any) => element.SRNO !== this.selectRowIndex);
+          this.metalReturnDetailsData = this.metalReturnDetailsData.filter((element: any) => element.SRNO !== this.selectedRowData1.SRNO);
   
           // Check if data was actually removed
           console.log('Original length:', originalLength, 'New length:', this.metalReturnDetailsData.length);
