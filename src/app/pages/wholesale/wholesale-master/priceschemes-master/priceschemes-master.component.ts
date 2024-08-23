@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, Renderer2 } from '@angular/core';
+import { Component, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs/internal/Subscription';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
+import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -15,6 +16,11 @@ import Swal from 'sweetalert2';
 })
 export class PriceschemesMasterComponent implements OnInit {
   @Input() content!: any;
+  @ViewChild('overlayprice1') overlayprice1!: MasterSearchComponent;
+  @ViewChild('overlayprice3') overlayprice3!: MasterSearchComponent;
+  @ViewChild('overlayprice5') overlayprice5!: MasterSearchComponent;
+  @ViewChild('overlayprice2') overlayprice2!: MasterSearchComponent;
+  @ViewChild('overlayprice4') overlayprice4!: MasterSearchComponent;
   price3SearchEnable: boolean = false;
   price2SearchEnable: boolean = false;
   price4SearchEnable: boolean = false;
@@ -36,7 +42,7 @@ export class PriceschemesMasterComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  priceSchemaMasterForm: FormGroup  = this.formBuilder.group({
+  priceSchemaMasterForm: FormGroup = this.formBuilder.group({
     priceCode: ['', [Validators.required]],
     priceDescription: ['', [Validators.required]],
     price1: ['', [Validators.required]],
@@ -59,7 +65,7 @@ export class PriceschemesMasterComponent implements OnInit {
   ngOnInit(): void {
     this.renderer.selectRootElement('#code')?.focus();
 
-    if(this.content?.FLAG){
+    if (this.content?.FLAG) {
       this.setAllInitialValues();
       if (this.content.FLAG == 'VIEW') {
         this.viewMode = true;
@@ -76,13 +82,13 @@ export class PriceschemesMasterComponent implements OnInit {
         this.price2SearchEnable = true;
         this.price4SearchEnable = true;
         this.price5SearchEnable = true;
-  
+
         this.priceSchemaMasterForm.get('price1')?.enable();
         this.priceSchemaMasterForm.get('price2')?.enable();
         this.priceSchemaMasterForm.get('price3')?.enable();
         this.priceSchemaMasterForm.get('price4')?.enable();
         this.priceSchemaMasterForm.get('price5')?.enable();
-      }else if (this.content.FLAG == 'DELETE') {
+      } else if (this.content.FLAG == 'DELETE') {
         this.viewMode = true;
         this.deleteRecord()
       }
@@ -127,81 +133,81 @@ export class PriceschemesMasterComponent implements OnInit {
   //   }
   // }
 
-    // Method to handle enabling next field and showing lookup
-    enableNextField(currentField: string, nextField: string) {
-      const currentControl = this.priceSchemaMasterForm.get(currentField);
-      const nextControl = this.priceSchemaMasterForm.get(nextField);
-  
-      if (currentControl && nextControl) {
-        if (currentControl.value && currentControl.value !== nextControl.value) {
-          nextControl.enable();
-  
-          // Enable corresponding lookup
-          this.setLookupVisibility(nextField, true);
-        } else {
-          nextControl.disable();
-          nextControl.setValue('');
-          // Disable corresponding lookup
-          this.setLookupVisibility(nextField, false);
-  
-          // Clear and disable subsequent fields
-          this.disableNextFields(nextField);
-        }
+  // Method to handle enabling next field and showing lookup
+  enableNextField(currentField: string, nextField: string) {
+    const currentControl = this.priceSchemaMasterForm.get(currentField);
+    const nextControl = this.priceSchemaMasterForm.get(nextField);
+
+    if (currentControl && nextControl) {
+      if (currentControl.value && currentControl.value !== nextControl.value) {
+        nextControl.enable();
+
+        // Enable corresponding lookup
+        this.setLookupVisibility(nextField, true);
+      } else {
+        nextControl.disable();
+        nextControl.setValue('');
+        // Disable corresponding lookup
+        this.setLookupVisibility(nextField, false);
+
+        // Clear and disable subsequent fields
+        this.disableNextFields(nextField);
       }
     }
-  
-    // Method to set lookup visibility
-    private setLookupVisibility(field: string, visibility: boolean) {
-      switch (field) {
-        case 'price2':
-          this.price2SearchEnable = visibility;
-          break;
-        case 'price3':
-          this.price3SearchEnable = visibility;
-          break;
-        case 'price4':
-          this.price4SearchEnable = visibility;
-          break;
-        case 'price5':
-          this.price5SearchEnable = visibility;
-          break;
+  }
+
+  // Method to set lookup visibility
+  private setLookupVisibility(field: string, visibility: boolean) {
+    switch (field) {
+      case 'price2':
+        this.price2SearchEnable = visibility;
+        break;
+      case 'price3':
+        this.price3SearchEnable = visibility;
+        break;
+      case 'price4':
+        this.price4SearchEnable = visibility;
+        break;
+      case 'price5':
+        this.price5SearchEnable = visibility;
+        break;
+    }
+  }
+
+  // Method to disable all subsequent fields
+  private disableNextFields(currentField: string) {
+    const fields = ['price1', 'price2', 'price3', 'price4', 'price5'];
+    const currentIndex = fields.indexOf(currentField);
+
+    for (let i = currentIndex + 1; i < fields.length; i++) {
+      const control = this.priceSchemaMasterForm.get(fields[i]);
+      if (control) {
+        control.disable();
+        control.setValue('');
+        this.setLookupVisibility(fields[i], false);
       }
     }
-  
-    // Method to disable all subsequent fields
-    private disableNextFields(currentField: string) {
-      const fields = ['price1', 'price2', 'price3', 'price4', 'price5'];
-      const currentIndex = fields.indexOf(currentField);
-  
-      for (let i = currentIndex + 1; i < fields.length; i++) {
-        const control = this.priceSchemaMasterForm.get(fields[i]);
-        if (control) {
-          control.disable();
-          control.setValue('');
-          this.setLookupVisibility(fields[i], false);
-        }
-      }
-    }
+  }
 
 
   /** checking for same account code selection */
   private isSameAccountCodeSelected(accountCode: any, controlName: string): boolean {
     // Get all the price control names
     const priceControls = ['price1', 'price2', 'price3', 'price4', 'price5'];
-  
+
     // Get the form values
     const formValues = this.priceSchemaMasterForm.value;
-  
+
     // Convert the accountCode to upper case for case-insensitive comparison
     const upperAccountCode = this.commonService.nullToString(accountCode).toUpperCase();
-  
+
     // Iterate through the price controls and check for matching account codes
     for (const control of priceControls) {
       if (control !== controlName && this.commonService.nullToString(formValues[control]).toUpperCase() === upperAccountCode) {
         return true;
       }
     }
-  
+
     return false;
   }
 
@@ -220,7 +226,7 @@ export class PriceschemesMasterComponent implements OnInit {
       this.price5SearchEnable = true;
     }
 
-    if (this.isSameAccountCodeSelected(e.PRICE_CODE,controlName)) {
+    if (this.isSameAccountCodeSelected(e.PRICE_CODE, controlName)) {
       this.commonService.toastErrorByMsgId('Cannot select the same Account Code');
       this.priceSchemaMasterForm.controls[controlName].setValue('')
       return;
@@ -232,7 +238,7 @@ export class PriceschemesMasterComponent implements OnInit {
       if (nextFieldName !== '') {
         this.enableNextField(controlName, nextFieldName);
       }
-    
+
 
     } catch (error) {
       console.error('Error in Price Code Selected:', error);
@@ -378,7 +384,7 @@ export class PriceschemesMasterComponent implements OnInit {
       this.commonService.toastErrorByMsgId('MSG1531');
     }
   }
-  priceCodeValidate(event:any) {
+  priceCodeValidate(event: any) {
     if (this.content?.FLAG == 'EDIT' || this.content?.FLAG == 'VIEW') return
     try {
       let API = `PriceSchemeMaster/GetPriceSchemeMasterList/${event.target.value}`
@@ -398,7 +404,7 @@ export class PriceschemesMasterComponent implements OnInit {
     }
   }
 
-  createPostData(form:any) {
+  createPostData(form: any) {
     return {
       "PRICE_CODE": this.commonService.nullToString(form.priceCode?.toUpperCase()),
       "PRICE_DESCRIPTION": this.commonService.nullToString(form.priceDescription?.toUpperCase()),
@@ -531,37 +537,97 @@ export class PriceschemesMasterComponent implements OnInit {
 
   }
 
+  // validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+  //   LOOKUPDATA.SEARCH_VALUE = event.target.value
+  //   if (event.target.value == '' || this.viewMode == true) return
+  //   console.log(this.priceSchemaMasterForm.value);
+
+  //   if (this.isSameAccountCodeSelected(event.target.value,FORMNAME)) {
+  //     this.commonService.toastErrorByMsgId('MSG3657');
+  //     this.priceSchemaMasterForm.controls[FORMNAME].setValue('')
+  //     return;
+  //   }
+  //   let param = {
+  //     LOOKUPID: LOOKUPDATA.LOOKUPID,
+  //     WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION?`AND ${LOOKUPDATA.WHERECONDITION}`:''}`
+  //   }
+  //   this.commonService.showSnackBarMsg('MSG81447');
+  //   let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
+  //   let Sub: Subscription = this.dataService.getDynamicAPI(API)
+  //     .subscribe((result) => {
+  //       this.commonService.closeSnackBarMsg()
+  //       this.isDisableSaveBtn = false;
+  //       let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+
+  //       if (data.length == 0) {
+  //         this.commonService.toastErrorByMsgId('MSG1531')
+  //         this.priceSchemaMasterForm.controls[FORMNAME].setValue('')
+  //         LOOKUPDATA.SEARCH_VALUE = ''
+  //         return
+  //       }
+
+  //     }, err => {
+  //       this.commonService.toastErrorByMsgId('MSG1531')
+  //     })
+  //   this.subscriptions.push(Sub)
+  // }
+  lookupKeyPress(event: any, form?: any) {
+    if (event.key == 'Tab' && event.target.value == '') {
+      this.showOverleyPanel(event, form)
+    }
+    if (event.key === 'Enter') {
+      if (event.target.value == '') this.showOverleyPanel(event, form)
+      event.preventDefault();
+    }
+  }
+  showOverleyPanel(event: any, formControlName: string) {
+    let value = this.priceSchemaMasterForm.value[formControlName]
+    if (this.commonService.nullToString(value) != '') return;
+
+    switch (formControlName) {
+      case 'price1':
+        this.overlayprice1.showOverlayPanel(event);
+        break;
+      case 'price3':
+        this.overlayprice3.showOverlayPanel(event);
+        break;
+      case 'price5':
+        this.overlayprice5.showOverlayPanel(event);
+        break;
+      case 'price2':
+        this.overlayprice2.showOverlayPanel(event);
+        break;;
+      case 'price4':
+        this.overlayprice4.showOverlayPanel(event);
+        break;;
+      default:
+    }
+  }
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     LOOKUPDATA.SEARCH_VALUE = event.target.value
-    if (event.target.value == '' || this.viewMode == true) return
-    console.log(this.priceSchemaMasterForm.value);
-    
-    if (this.isSameAccountCodeSelected(event.target.value,FORMNAME)) {
-      this.commonService.toastErrorByMsgId('MSG3657');
-      this.priceSchemaMasterForm.controls[FORMNAME].setValue('')
-      return;
-    }
+    if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
-      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION?`AND ${LOOKUPDATA.WHERECONDITION}`:''}`
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
     }
-    this.commonService.showSnackBarMsg('MSG81447');
-    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
-    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+    this.commonService.toastInfoByMsgId('MSG81447');
+    let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
       .subscribe((result) => {
-        this.commonService.closeSnackBarMsg()
         this.isDisableSaveBtn = false;
         let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
-      
         if (data.length == 0) {
           this.commonService.toastErrorByMsgId('MSG1531')
           this.priceSchemaMasterForm.controls[FORMNAME].setValue('')
-          LOOKUPDATA.SEARCH_VALUE = ''
+          LOOKUPDATA.SEARCH_VALUE = '';
+          if (FORMNAME === 'price1' || FORMNAME === 'price3' || FORMNAME === 'price5' || FORMNAME === 'price4' || FORMNAME === 'price2') {
+            this.showOverleyPanel(event, FORMNAME);
+          }
           return
         }
-    
+
       }, err => {
-        this.commonService.toastErrorByMsgId('MSG1531')
+        this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
       })
     this.subscriptions.push(Sub)
   }
