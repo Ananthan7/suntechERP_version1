@@ -193,7 +193,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row mb-3 border">
+                <!-- <div class="row mb-3 border">
                     <div class="col-md-12 px-0">
                         <div class="bg_qty text-center">
                             Bag Details
@@ -207,7 +207,7 @@
                             </mat-form-field>
                         </div>
                     </div>
-                </div>
+                </div> -->
                 <!-- <div class="row mb-3 border">
                     <div class="col-md-12 px-0">
                         <div class="bg_qty text-center">
@@ -448,6 +448,22 @@
                                     [readonly]="viewOnly" formControlName="ozWeight" />
                             </mat-form-field>
 
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-3 border">
+                    <div class="col-md-12 px-0">
+                        <div class="bg_qty text-center">
+                            Bag Details
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label for="inputPassword" class="col-sm-6 col-form-label">Bag No:</label>
+                        <div class="col-md-6">
+                            <mat-form-field style="width: 100%;">
+                                <input type="text" [readonly]="viewOnly" matInput formControlName="bagNo" />
+                            </mat-form-field>
                         </div>
                     </div>
                 </div>
