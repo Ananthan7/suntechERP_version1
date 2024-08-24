@@ -154,6 +154,7 @@ export class MetalBranchTransferOutRepairComponent implements OnInit {
     ORDER_TYPE: 0,
     WHERECONDITION: "@Strbranch='" + this.userbranch + "',@strUsercode= '" + this.userName + "',@stravoidforsales= 0",
     SEARCH_FIELD: "Location",
+    SEARCH_HEADING: 'Location ',
     SEARCH_VALUE: "",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
@@ -178,6 +179,24 @@ export class MetalBranchTransferOutRepairComponent implements OnInit {
   returnlocationToCodeSelected(e: any) {
     console.log(e);
     this.metalBranchTransferOutRepairForm.controls.returnLocation.setValue(e.Location);
+  }
+  stateCode: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 48,
+    SEARCH_FIELD: "STATE_CODE",
+    SEARCH_HEADING: "State Code",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "STATE_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  };
+
+  stateSelected(e: any) {
+    console.log(e);
+    this.metalBranchTransferOutRepairForm.controls.stateCode.setValue(e.STATE_CODE);
+    this.metalBranchTransferOutRepairForm.controls.stateDesc.setValue(e.STATE_DESCRIPTION);
   }
 
 
@@ -270,14 +289,14 @@ export class MetalBranchTransferOutRepairComponent implements OnInit {
       this.toastr.error('select all required fields')
       return
     }
-    let API = 'RepairDelivery/InsertRepairDelivery'
+    let API = 'MetalBarcodeTransfer/InsertMetalBarcodeTransfer' //'RepairDelivery/InsertRepairDelivery'
     let postData = {
       "MID": 0,
       "BRANCH_CODE": this.branchCode,
       "VOCTYPE": this.metalBranchTransferOutRepairForm.value.vocType,
       "VOCNO": this.metalBranchTransferOutRepairForm.value.vocNo,
       "VOCDATE": this.metalBranchTransferOutRepairForm.value.vocDate,
-      "VALUE_DATE": "2024-03-08T09:59:42.749Z",
+      "VALUE_DATE": new Date(),//"2024-03-08T09:59:42.749Z",
       "YEARMONTH": this.yearMonth,
       "TRANSFERSTATUS": this.metalBranchTransferOutRepairForm.value.transferStatus,
       "FROM_BR": "string",

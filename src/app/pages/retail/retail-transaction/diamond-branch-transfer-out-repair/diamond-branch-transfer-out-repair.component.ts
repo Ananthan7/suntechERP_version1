@@ -224,7 +224,7 @@ export class DiamondBranchTransferOutRepairComponent implements OnInit {
   "VOCTYPE": this.diamondbranchtransoutfrom.value.voctype,
   "VOCNO": this.diamondbranchtransoutfrom.value.vocno,
   "VOCDATE": this.diamondbranchtransoutfrom.value.vocDate,
-  "VALUE_DATE": "2024-03-07T06:37:37.713Z",
+  "VALUE_DATE": new Date(),//"2024-03-07T06:37:37.713Z",
   "YEARMONTH": this.yearMonth,
   "TRANSFERSTATUS": "s",
   "FROM_BR":"",// this.branchCode,
