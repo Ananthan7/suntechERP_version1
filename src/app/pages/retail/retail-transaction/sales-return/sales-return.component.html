@@ -888,10 +888,7 @@
                           </dx-data-grid>
   
                           <div>
-                            <button type="submit" [disabled]="
-                                this.ordered_items.length > 0 && !this.viewOnly
-                                  ? false
-                                  : true
+                            <button type="submit" [disabled]="viewOnly
                               " (click)="open(adjust_sale_return_modal)" class="btn btn-secondary" style="
                                 border: none;
                                 margin: 10px;
@@ -2405,7 +2402,7 @@
               <div class="col-md-2">
                 <mat-form-field>
                   <mat-label>Voc No</mat-label>
-                  <input type="text" matInput formControlName="fcn_returns_voc_no"
+                  <input type="text" NumberOnly matInput class="st_txt_right" formControlName="fcn_returns_voc_no"
                     (change)="getRetailSReturn_EvnFn($event)"
                     [readonly]="viewOnly || this.sales_returns_items.length > 0" />
                   <mat-error *ngIf="
