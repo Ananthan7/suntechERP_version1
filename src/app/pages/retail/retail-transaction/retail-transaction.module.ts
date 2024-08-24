@@ -160,6 +160,7 @@ import { SalesReturnComponent } from './sales-return/sales-return.component';
     DiamondBranchTransferOutRepairComponent, 
     DiamondBranchTransferInAutoRepairComponent, 
     RepairSaleComponent, 
+    SalesReturnComponent,
     DiamondBranchTransferInAutoRepairDetailsComponent, 
     MetalBranchTransferOutRepairDetailComponent, 
     DiamonBranchTransferOutDetailsComponent, 

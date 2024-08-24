@@ -42,6 +42,7 @@ import { DiamondBranchTransferInAutoRepairComponent } from './diamond-branch-tra
 import { RepairSaleComponent } from './repair-sale/repair-sale.component';
 import { DialogboxComponent } from 'src/app/shared/common/dialogbox/dialogbox.component';
 import { MatDialog } from '@angular/material/dialog';
+import { SalesReturnComponent } from './sales-return/sales-return.component';
 
 @Component({
   selector: 'app-retail-transaction',
@@ -197,6 +198,7 @@ export class RetailTransactionComponent implements OnInit {
       'DiamondBranchTransferOutRepairComponent': DiamondBranchTransferOutRepairComponent,
       'DiamondBranchTransferInAutoRepairComponent': DiamondBranchTransferInAutoRepairComponent,
       'RepairSaleComponent': RepairSaleComponent,
+      'SalesReturnComponent': SalesReturnComponent,
 
 
 
