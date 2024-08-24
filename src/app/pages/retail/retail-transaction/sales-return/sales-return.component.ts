@@ -1284,8 +1284,8 @@ editLineItem:boolean=false;
       // this.setVoucherTypeMaster();
     }
 
-    if (!this.viewOnly && !this.editOnly)
-      this.open(this.mymodal);
+    // if (!this.viewOnly && !this.editOnly)
+    //   this.open(this.mymodal);
 
     // this.vocDataForm.get('vocdate')?.valueChanges.subscribe((val) => {
     //   this.getFinancialYear();
