@@ -77,7 +77,7 @@
                   <input type="text" matInput formControlName="processCode"
                     [readonly]="viewMode"  (keydown)="lookupKeyPress($event,'processCode')"  
                     (focusout)="validateLookupField($event,processCodeData,'processCode')"/>
-                    <master-search [MasterSearchData]="processCodeData"  #overlayProcesscode
+                  <master-search  class="masterSearch"  [MasterSearchData]="processCodeData"  #overlayProcesscode
                       (newRowClick)="processCodeSelected($event)" *ngIf="!viewMode" class="masterSearch">
                     </master-search>
                 </mat-form-field>
@@ -95,7 +95,7 @@
                   <input type="text" matInput formControlName="cylinder"
                     [readonly]="viewMode" (keydown)="lookupKeyPress($event,'cylinder')"   
                     (focusout)="validateLookupField($event,cylinderCodeData,'cylinder')"/>
-                    <master-search [MasterSearchData]="cylinderCodeData" #overlaycylinder
+                  <master-search  class="masterSearch"  [MasterSearchData]="cylinderCodeData" #overlaycylinder
                       *ngIf="!viewMode" class="masterSearch"
                       (newRowClick)="cylinderCodeSelected($event)">
                     </master-search>
@@ -159,7 +159,7 @@
                   <input type="text" matInput formControlName="worker"
                     [readonly]="viewMode" (keydown)="lookupKeyPress($event,'worker')"  
                     (focusout)="validateLookupField($event,WorkerCodeData,'worker')"/>
-                    <master-search [MasterSearchData]="WorkerCodeData" #overlayworker
+                  <master-search  class="masterSearch"  [MasterSearchData]="WorkerCodeData" #overlayworker
                       (newRowClick)="WorkerCodeSelected($event)" *ngIf="!viewMode" class="masterSearch">
                     </master-search>
                 </mat-form-field>
@@ -214,7 +214,7 @@
                 <mat-form-field style="width: 92%; margin-left:-33px; margin-top: -6px;">
                   <input type="text" matInput formControlName="toProcess" [readonly]="viewMode"/>
                 </mat-form-field>
-                <master-search [MasterSearchData]="processCodeData" (newRowClick)="processCodeSelected($event)" *ngIf="!viewMode">
+              <master-search  class="masterSearch"  [MasterSearchData]="processCodeData" (newRowClick)="processCodeSelected($event)" *ngIf="!viewMode">
                 </master-search>
               </div>
             </div>
@@ -230,7 +230,7 @@
                   <input type="text" matInput formControlName="enteredBy"
                     [readonly]="viewMode" (keydown)="lookupKeyPress($event,'enteredBy')" 
                     (focusout)="validateLookupField($event,salesmanCodeData,'enteredBy')"/>
-                    <master-search [MasterSearchData]="salesmanCodeData" #overlayenteredBy
+                  <master-search  class="masterSearch"  [MasterSearchData]="salesmanCodeData" #overlayenteredBy
                       *ngIf="!viewMode" class="masterSearch"
                       (newRowClick)="salesmanCodeSelected($event)">
                     </master-search>
@@ -248,7 +248,7 @@
                   <input type="text" matInput formControlName="karatCode"
                     [readonly]="viewMode" (keydown)="lookupKeyPress($event,'karatCode')" 
                     (focusout)="validateLookupField($event,karatCodeData,'karatCode')">
-                    <master-search [MasterSearchData]="karatCodeData" #overlaykaratCode
+                  <master-search  class="masterSearch"  [MasterSearchData]="karatCodeData" #overlaykaratCode
                       *ngIf="!viewMode" class="masterSearch"
                       (newRowClick)="karatCodeSelected($event)">
                     </master-search>
@@ -299,7 +299,7 @@
                 <mat-form-field style="width: 92%; margin-left:-33px; margin-top: -6px;">
                   <input type="text" matInput formControlName="toWorker" [readonly]="viewMode"/>
                 </mat-form-field>
-                <master-search [MasterSearchData]="WorkerCodeData" (newRowClick)="WorkerCodeSelected($event)" *ngIf="!viewMode">
+              <master-search  class="masterSearch"  [MasterSearchData]="WorkerCodeData" (newRowClick)="WorkerCodeSelected($event)" *ngIf="!viewMode">
                 </master-search>
               </div>
             </div>

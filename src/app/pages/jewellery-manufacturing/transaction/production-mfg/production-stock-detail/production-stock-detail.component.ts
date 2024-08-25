@@ -18,80 +18,166 @@ export class ProductionStockDetailComponent implements OnInit {
   Data: any[] = [];
   divisionMS: any = 'ID';
   subJobNumber: string = ''
-  columnheads : any[] = ["S.no","Stock Code","Design","Cost","Karat","Gross Wt","M.Pcs","St.Wt","St.value","Labour","Wastage","Total Cost"];
-  columnhead: any[] = ["Div","Pcs","Gross Wt"];
-  labourColumnhead: any[] = ["Code","Div","Pcs","Qty","Rate","Amount","Wastage %","Wastage Qty","Wastage Amt","Lab A/C","Unit","Lab Type"];
-  componentsColumnhead: any[] = ["Sr.No","Div","Stock Code","Color","Clarity","Shape","Size","Sieve","Pcs","Gross Wt","Stone","Net Wt","Rate","Amount","%","Qty","Amt","s.Rate","S.Value"];
+  columnheads: any[] = ["S.no", "Stock Code", "Design", "Cost", "Karat", "Gross Wt", "M.Pcs", "St.Wt", "St.value", "Labour", "Wastage", "Total Cost"];
+  columnhead: any[] = ["Div", "Pcs", "Gross Wt"];
+  labourColumnhead: any[] = ["Code", "Div", "Pcs", "Qty", "Rate", "Amount", "Wastage %", "Wastage Qty", "Wastage Amt", "Lab A/C", "Unit", "Lab Type"];
+  componentsColumnhead: any[] = ["Sr.No", "Div", "Stock Code", "Color", "Clarity", "Shape", "Size", "Sieve", "Pcs", "Gross Wt", "Stone", "Net Wt", "Rate", "Amount", "%", "Qty", "Amt", "s.Rate", "S.Value"];
 
-  componentDataList:any[] = [];
-  STRNMTLdataSetToSave:any[] = [];
-  componentGroupedList:any[] = [];
-  stockCodeDataList:any[] = [];
-  STOCK_FORM_DETAILS:any[] = [];
-  DETAILSCREEN_DATA:any;
+  componentDataList: any[] = [];
+  STRNMTLdataSetToSave: any[] = [];
+  componentGroupedList: any[] = [];
+  stockCodeDataList: any[] = [];
+  STOCK_FORM_DETAILS: any[] = [];
+  DETAILSCREEN_DATA: any;
   currentDate: any = new Date();
-  HEADERDETAILS:any;
+  HEADERDETAILS: any;
   viewMode: boolean = false;
   editMode: boolean = false;
+ 
+  priceCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 82,
+    SEARCH_FIELD: 'PRICE_CODE',
+    SEARCH_HEADING: 'Price Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "PRICE_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
+  settingChrgData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 152,
+    SEARCH_FIELD: 'ACCODE',
+    SEARCH_HEADING: 'Setting A/C Search',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "ACCODE <> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
+  settingChrgSelected(e: any) {
+    this.productionItemsDetailsFrom.controls.settingChrgDesc.setValue(e.ACCODE);
+  }
+  polishChrgData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 152,
+    SEARCH_FIELD: 'ACCODE',
+    SEARCH_HEADING: 'Polish A/C Search',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "ACCODE <> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
+  polishChrgSelected(e: any) {
+    this.productionItemsDetailsFrom.controls.polishChrgDesc.setValue(e.ACCODE);
+  }
+  rhodiumChrgData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 152,
+    SEARCH_FIELD: 'ACCODE',
+    SEARCH_HEADING: 'Rhodium A/C Search',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "ACCODE <> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
+  rhodiumChrgSelected(e: any) {
+    this.productionItemsDetailsFrom.controls.rhodiumChrgDesc.setValue(e.ACCODE);
+  }
+  labourChrgData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 152,
+    SEARCH_FIELD: 'ACCODE',
+    SEARCH_HEADING: 'Labour A/C Search',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "ACCODE <> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
+  labourChrgSelected(e: any) {
+    this.productionItemsDetailsFrom.controls.labourChrgDesc.setValue(e.ACCODE);
+  }
+  miscChrgData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 152,
+    SEARCH_FIELD: 'ACCODE',
+    SEARCH_HEADING: 'Misc A/C Search',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "ACCODE <> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
+  miscChrgSelected(e: any) {
+    this.productionItemsDetailsFrom.controls.miscChrgDesc.setValue(e.ACCODE);
+  }
   productionItemsDetailsFrom: FormGroup = this.formBuilder.group({
-    stockCode  : [''],
-    tagLines : [''],
-    grossWt : [''],
-    settingChrg : [''],
-    settingChrgDesc : [''],
-    polishChrg  :[''],
-    polishChrgDesc  :[''],
-    rhodiumChrg : [''],
-    rhodiumChrgDesc : [''],
-    labourChrg : [''],
-    labourChrgDesc : [''],
-    miscChrg : [''],
-    miscChrgDesc : [''],
-    metalValue : [''],
-    stockValue : [''],
-    totalLabour : [''],
-    wastage : [''],
-    wastageNo : [''],
-    totalCoast : [''],
-    price1per : [''],
-    price1fc : [''],
-    price1no : [''],
-    price2per : [''],
-    price2fc : [''],
-    price2no : [''],
-    price3per : [''],
-    price3fc : [''],
-    price3no : [''],
-    price4per : [''],
-    price4fc : [''],
-    price4no : [''],
-    price5per : [''],
-    price5fc : [''],
-    price5no : [''],
+    stockCode: [''],
+    tagLines: [''],
+    grossWt: [''],
+    settingChrg: [''],
+    settingChrgDesc: [''],
+    polishChrg: [''],
+    polishChrgDesc: [''],
+    rhodiumChrg: [''],
+    rhodiumChrgDesc: [''],
+    labourChrg: [''],
+    labourChrgDesc: [''],
+    miscChrg: [''],
+    miscChrgDesc: [''],
+    metalValue: [''],
+    stockValue: [''],
+    totalLabour: [''],
+    wastage: [''],
+    wastageNo: [''],
+    totalCoast: [''],
+    price1per: [''],
+    price1fc: [''],
+    price1no: [''],
+    price2per: [''],
+    price2fc: [''],
+    price2no: [''],
+    price3per: [''],
+    price3fc: [''],
+    price3no: [''],
+    price4per: [''],
+    price4fc: [''],
+    price4no: [''],
+    price5per: [''],
+    price5fc: [''],
+    price5no: [''],
   });
-
   constructor(
     private activeModal: NgbActiveModal,
-    private modalService: NgbModal,
     private formBuilder: FormBuilder,
     private dataService: SuntechAPIService,
-    private toastr: ToastrService,
     private commonService: CommonServiceService,
   ) { }
 
   ngOnInit(): void {
     this.setInitialValues()
   }
-  setInitialValues(){
-    console.log(this.content,'this.content');
+  setInitialValues() {
+    console.log(this.content, 'this.content');
     this.DETAILSCREEN_DATA = this.content[0].DETAILSCREEN_DATA
     this.HEADERDETAILS = this.content[0].HEADERDETAILS
+    this.subJobNumber = this.DETAILSCREEN_DATA.UNQ_JOB_ID
     this.setStockCodeGrid()
     this.getComponentDetails()
   }
-  setStockCodeGrid(){
+  setStockCodeGrid() {
     this.stockCodeDataList.push({
-      STOCK_CODE:`${this.DETAILSCREEN_DATA.PREFIX}${this.DETAILSCREEN_DATA.PREFIXNO}`,
+      STOCK_CODE: `${this.DETAILSCREEN_DATA.PREFIX}${this.DETAILSCREEN_DATA.PREFIXNO}`,
       DESIGN: this.DETAILSCREEN_DATA.design,
       KARAT: this.DETAILSCREEN_DATA.KARAT,
       grossWt: this.DETAILSCREEN_DATA.grossWt,
@@ -106,8 +192,8 @@ export class ProductionStockDetailComponent implements OnInit {
       PURE_WT: this.DETAILSCREEN_DATA.PURE_WT,
       jobPurity: this.DETAILSCREEN_DATA.jobPurity,
     })
-    this.stockCodeDataList.forEach((item:any,index:number)=> item.SRNO = index+1)
-    console.log(this.stockCodeDataList,'this.stockCodeDataList');
+    this.stockCodeDataList.forEach((item: any, index: number) => item.SRNO = index + 1)
+    this.productionItemsDetailsFrom.controls.stockCode.setValue(`${this.DETAILSCREEN_DATA.PREFIX}${this.DETAILSCREEN_DATA.PREFIXNO}`)
   }
   groupBomDetailsData() {
     let result: any[] = []
@@ -126,13 +212,13 @@ export class ProductionStockDetailComponent implements OnInit {
       res[value.DIVCODE].AMOUNT_FC += Number(value.AMOUNTFC);
       return res;
     }, {});
-    result.forEach((item:any)=>{
-      item.GROSS_WT = this.commonService.decimalQuantityFormat(item.GROSS_WT,'METAL')
-      item.AMOUNT_FC = this.commonService.decimalQuantityFormat(item.AMOUNT_FC,'AMOUNT')
+    result.forEach((item: any) => {
+      item.GROSS_WT = this.commonService.decimalQuantityFormat(item.GROSS_WT, 'METAL')
+      item.AMOUNT_FC = this.commonService.decimalQuantityFormat(item.AMOUNT_FC, 'AMOUNT')
     })
     this.componentGroupedList = result
   }
-  getComponentDetails(){
+  getComponentDetails() {
     let postData = {
       "SPID": "045",
       "parameter": {
@@ -149,8 +235,8 @@ export class ProductionStockDetailComponent implements OnInit {
         this.commonService.closeSnackBarMsg()
         if (result.status == "Success" && result.dynamicData[0]) {
           this.componentDataList = result.dynamicData[0]
-          this.componentDataList.forEach((item:any,index:number)=>{
-            item.SRNO = index+1
+          this.componentDataList.forEach((item: any, index: number) => {
+            item.SRNO = index + 1
           })
           this.groupBomDetailsData()
         } else {
@@ -161,19 +247,6 @@ export class ProductionStockDetailComponent implements OnInit {
         this.commonService.toastErrorByMsgId('MSG1531')
       })
     this.subscriptions.push(Sub)
-  }
-
-  priceCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 82,
-    SEARCH_FIELD: 'PRICE_CODE',
-    SEARCH_HEADING: 'Price Code',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "PRICE_CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-    LOAD_ONCLICK: true,
   }
   priceOneCodeSelected(e: any) {
     if (this.isSamepriceCodeSelected(e.PRICE_CODE)) {
@@ -224,103 +297,15 @@ export class ProductionStockDetailComponent implements OnInit {
       this.productionItemsDetailsFrom.value.price5per === PRICE_CODE
     );
   }
-
-  settingChrgData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 3,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Code',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-    LOAD_ONCLICK: true,
-  }
-  settingChrgSelected(e: any) {
-    this.productionItemsDetailsFrom.controls.settingChrg.setValue(e.PRICE_CODE);
-    this.productionItemsDetailsFrom.controls.settingChrgDesc.setValue(e.PRICE_CODE);
-  }
-
-  polishChrgData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 3,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Code',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-    LOAD_ONCLICK: true,
-  }
-  polishChrgSelected(e: any) {
-    this.productionItemsDetailsFrom.controls.polishChrg.setValue(e.PRICE_CODE);
-    this.productionItemsDetailsFrom.controls.polishChrgDesc.setValue(e.PRICE_CODE);
-  }
-
-  rhodiumChrgData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 3,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Code',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-    LOAD_ONCLICK: true,
-  }
-  rhodiumChrgSelected(e: any) {
-    this.productionItemsDetailsFrom.controls.rhodiumChrg.setValue(e.PRICE_CODE);
-    this.productionItemsDetailsFrom.controls.rhodiumChrgDesc.setValue(e.PRICE_CODE);
-  }
-
-  labourChrgData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 3,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Code',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-    LOAD_ONCLICK: true,
-  }
-  labourChrgSelected(e: any) {
-    this.productionItemsDetailsFrom.controls.labourChrg.setValue(e.PRICE_CODE);
-    this.productionItemsDetailsFrom.controls.labourChrgDesc.setValue(e.PRICE_CODE);
-  }
-
-  miscChrgData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 3,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Code',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-    LOAD_ONCLICK: true,
-  }
-  miscChrgSelected(e: any) {
-    this.productionItemsDetailsFrom.controls.miscChrg.setValue(e.PRICE_CODE);
-    this.productionItemsDetailsFrom.controls.miscChrgDesc.setValue(e.PRICE_CODE);
-  }
-
-
-
   close(data?: any) {
     this.activeModal.close(data);
   }
   formDetailCount: number = 0;
-  formSubmit(){
+  formSubmit() {
     // this.setSTRNMTLdataSet(); //TODO
     console.log(this.DETAILSCREEN_DATA);
-    
-    this.formDetailCount+=1
+
+    this.formDetailCount += 1
     this.STOCK_FORM_DETAILS.push({
       "UNIQUEID": 0,
       "SRNO": this.commonService.emptyToZero(this.formDetailCount),
@@ -442,18 +427,18 @@ export class ProductionStockDetailComponent implements OnInit {
       "DESIGN_TYPE": "",
       "BASE_CURR_RATE": 0
     })
-    let stockDetailToSave:any = {}
+    let stockDetailToSave: any = {}
     //STOCK_FORM_DETAILS is only saving to API
     stockDetailToSave.STOCK_FORM_DETAILS = this.STOCK_FORM_DETAILS;
     stockDetailToSave.STOCK_COMPONENT_GRID = this.STRNMTLdataSetToSave;
-    console.log(this.STOCK_FORM_DETAILS,'this.STOCK_FORM_DETAILS');
-    
+    console.log(this.STOCK_FORM_DETAILS, 'this.STOCK_FORM_DETAILS');
+
     this.close(stockDetailToSave);
   }
 
-   /**STRNMTL data set to save */
+  /**STRNMTL data set to save */
   setSTRNMTLdataSet() {
-    this.componentDataList.forEach((item:any)=>{
+    this.componentDataList.forEach((item: any) => {
       this.STRNMTLdataSetToSave.push({
         "VOCNO": 0,
         "VOCTYPE": this.commonService.nullToString(this.HEADERDETAILS.voctype),
@@ -525,34 +510,34 @@ export class ProductionStockDetailComponent implements OnInit {
       })
     })
   }
-      /**use: validate all lookups to check data exists in db */
-      validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
-        LOOKUPDATA.SEARCH_VALUE = event.target.value
-        if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
-        let param = {
-          LOOKUPID: LOOKUPDATA.LOOKUPID,
-          WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+  /**use: validate all lookups to check data exists in db */
+  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    LOOKUPDATA.SEARCH_VALUE = event.target.value
+    if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
+    let param = {
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+    }
+    this.commonService.toastInfoByMsgId('MSG81447');
+    let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
+      .subscribe((result) => {
+        let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+        if (data.length == 0) {
+          this.commonService.toastErrorByMsgId('MSG1531')
+          this.productionItemsDetailsFrom.controls[FORMNAME].setValue('')
+          LOOKUPDATA.SEARCH_VALUE = ''
+          return
         }
-        this.commonService.toastInfoByMsgId('MSG81447');
-        let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
-        let Sub: Subscription = this.dataService.postDynamicAPI(API,param)
-          .subscribe((result) => {
-            let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
-            if (data.length == 0) {
-              this.commonService.toastErrorByMsgId('MSG1531')
-              this.productionItemsDetailsFrom.controls[FORMNAME].setValue('')
-              LOOKUPDATA.SEARCH_VALUE = ''
-              return
-            }
-           
-          }, err => {
-            this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
 
-          })
-        this.subscriptions.push(Sub)
-      }
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
 
-  continue(){
+      })
+    this.subscriptions.push(Sub)
+  }
+
+  continue() {
 
   }
 

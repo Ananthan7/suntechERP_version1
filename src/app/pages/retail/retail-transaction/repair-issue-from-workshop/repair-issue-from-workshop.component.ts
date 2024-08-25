@@ -509,7 +509,7 @@ this.PendingRepairJobsData = Array.from(uniqueItems).map((identifier: any) => {
   partySelected(e: any) {
     console.log(e);
     this.repairReceiveForm.controls.partyCode.setValue(e.ACCODE);
-    //this.repairReceiveForm.controls.partyName.setValue(e.ACCOUNT_HEAD);
+    this.repairReceiveForm.controls.partyName.setValue(e.ACCOUNT_HEAD);
   }
   customerSelected(e: any) {
     console.log(e);

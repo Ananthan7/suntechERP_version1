@@ -32,10 +32,10 @@
           <div class="col-md-4">
             <mat-form-field style="width: 100%;">
               <input matInput [matDatepicker]="vocDate"  [min]="minDate"
-              [max]="maxDate" name="vocDate" formControlName="vocDate"
+              [max]="maxDate" name="vocDate" [readonly]="viewOnly" formControlName="vocDate"
                 placeholder="DD/MM/YYYY" 
                 [max]=this.comService.currentDate [readonly]="viewOnly" DateValidation />
-              <mat-datepicker-toggle matSuffix [for]="vocDate"></mat-datepicker-toggle>
+              <mat-datepicker-toggle  [disabled]="viewOnly" matSuffix [for]="vocDate"></mat-datepicker-toggle>
               <mat-datepicker [startAt]="currentDate" #vocDate></mat-datepicker>
              
             </mat-form-field>

@@ -257,8 +257,8 @@
           <div class="col-md-2"></div>
           <div class="col-md-4">
             <mat-checkbox [disabled]="viewOnly === true" class="example-margin" (change)="withStoneCheck($event)"
-              formControlName="withStone">
-              With Stone
+              formControlName="withStone" required>
+              With Stone * 
             </mat-checkbox>
           </div>
         </div>
@@ -270,8 +270,8 @@
 
               <label for="inputPassword" class="col-sm-2 col-form-label">Stone Type
               </label>
-
-              <label for="inputPassword" class="col-sm-2 col-form-label">No Of
+ 
+              <label for="inputPassword" class="col-sm-2 col-form-label">No Of  *
               </label>
 
               <label for="inputPassword" class="col-sm-2 col-form-label">Cut
@@ -300,7 +300,7 @@
               <div class="col-md-2">
                 <div class="position-relative d-flex">
                   <mat-form-field style="width: 100%">
-                    <input [readonly]="viewOnly === true" type="number" matInput formControlName="no_of" />
+                    <input [readonly]="viewOnly === true" type="number" matInput formControlName="no_of" required />
                   </mat-form-field>
                 </div>
               </div>

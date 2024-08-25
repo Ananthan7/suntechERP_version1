@@ -5,6 +5,7 @@ import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { ToastrService } from 'ngx-toastr';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { Subscription } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { SalesDiaDetailGstIndComponent } from './sales-dia-detail-gst-ind/sales-dia-detail-gst-ind.component';
@@ -28,7 +29,8 @@ export class RepairSaleComponent implements OnInit {
   yearMonth?: String;
   currentDate = new Date();
   tableData: any[] = [];
-  viewMode:boolean = false;
+  viewOnly: boolean = false;
+  viewMode: boolean = false;
   private subscriptions: Subscription[] = [];
   urls: string | ArrayBuffer | null | undefined;
   url: any;
@@ -60,15 +62,39 @@ export class RepairSaleComponent implements OnInit {
     LOAD_ONCLICK: true,
   }
 
-  columnhead:any[] = ['Karat','Sale Rate','Purchase Rate'];
-  columnheadSummary:any[] = ['Division','Code','Description','Pcs','Gross Weight','Mkg Rate','Making Value','Metal Value','Net Value','Discount Value'];
-  columnheadSummaryLabour:any[] = ['Mode','Curr','Amt FC','Amt LC']
-  columnheadJobDetails:any[] = ['SI.No','Job No','Design ID','Div','Stock Id','Pcs','Gross.Wt','Color','Clarity','Shape','size','Slieve','Karat','Broken Stone','Broken Stock']
-  columnheadSummaryLabourCharges:any[] = ['Select','SINo','Labour Code','Lab Accode','Division','Unit','Gross Wt','Pcs','Rate','GST Code','CGST %','CGST Amt','SGST %','SGST Amt','Total %','Total GST','Amount','Currency ']
+  customerCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 2,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'POS Customer Master',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
 
- 
+  customercodeSelected(e: any) {
+    console.log(e);
+    this.repairSaleForm.controls.customer.setValue(e.CODE);
+    this.repairSaleForm.controls.email.setValue(e.EMAIL);
+    this.repairSaleForm.controls.customerDesc.setValue(e.NAME);
+    this.repairSaleForm.controls.country.setValue(e.COUNTRY_CODE);
+
+
+  }
+
+
+  columnhead: any[] = ['Karat', 'Sale Rate', 'Purchase Rate'];
+  columnheadSummary: any[] = ['Division', 'Code', 'Description', 'Pcs', 'Gross Weight', 'Mkg Rate', 'Making Value', 'Metal Value', 'Net Value', 'Discount Value'];
+  columnheadSummaryLabour: any[] = ['Mode', 'Curr', 'Amt FC', 'Amt LC']
+  columnheadJobDetails: any[] = ['SI.No', 'Job No', 'Design ID', 'Div', 'Stock Id', 'Pcs', 'Gross.Wt', 'Color', 'Clarity', 'Shape', 'size', 'Slieve', 'Karat', 'Broken Stone', 'Broken Stock']
+  columnheadSummaryLabourCharges: any[] = ['Select', 'SINo', 'Labour Code', 'Lab Accode', 'Division', 'Unit', 'Gross Wt', 'Pcs', 'Rate', 'GST Code', 'CGST %', 'CGST Amt', 'SGST %', 'SGST Amt', 'Total %', 'Total GST', 'Amount', 'Currency ']
+
+
 
   constructor(
+    private route: ActivatedRoute,
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
     private formBuilder: FormBuilder,
@@ -76,127 +102,6 @@ export class RepairSaleComponent implements OnInit {
     private toastr: ToastrService,
     private comService: CommonServiceService,
   ) { }
-
-  ngOnInit(): void {
-  }
-
-  typeCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 3,
-    SEARCH_FIELD: 'Code',
-    SEARCH_HEADING: 'Type Code',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "Code<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-  typeCodeSelected(e: any) {
-    console.log(e);
-    this.repairSaleForm.controls.type.setValue(e.CODE);
-  } 
-
-  typeidCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 3,
-    SEARCH_FIELD: 'Code',
-    SEARCH_HEADING: 'Type Code',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "Code<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-  typeidCodeSelected(e: any) {
-    console.log(e);
-    this.repairSaleForm.controls.IDType.setValue(e.CODE);
-  } 
-
-  stateCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 48,
-    SEARCH_FIELD: 'STATE_CODE',
-    SEARCH_HEADING: 'State Code',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "STATE_CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-  stateCodeSelected(e: any) {
-    console.log(e);
-    this.repairSaleForm.controls.state.setValue(e.STATE_DESCRIPTION);
-  }
-
-  countryCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 26,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Country Type',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "TYPES='COUNTRY MASTER'",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-
-  countryCodeSelected(e: any) {
-    console.log(e);
-    this.repairSaleForm.controls.country.setValue(e.CODE);
-  }
-
-  nationalityCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 3,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Nationality Code',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "TYPES='NATIONALITY MASTER'",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-  nationalityCodeSelected(e: any) {
-    console.log(e);
-    this.repairSaleForm.controls.nationality.setValue(e.CODE);
-  }
-
-  cityCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 3,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'City Code',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "TYPES='REGION MASTER'",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-  cityCodeSelected(e: any) {
-    console.log(e);
-    this.repairSaleForm.controls.city.setValue(e.CODE);
-  }
-
- languageCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 45,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Language Code',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "where types = 'LANGUAGE MASTER'",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-  languageCodeSelected(e: any) {
-    console.log(e);
-    this.repairSaleForm.controls.language.setValue(e.CODE);
-  }
-
-  close(data?: any) {
-    //TODO reset forms and data before closing
-    this.activeModal.close(data);
-  }
 
   repairSaleForm: FormGroup = this.formBuilder.group({
     voucherType: [''],
@@ -258,6 +163,169 @@ export class RepairSaleComponent implements OnInit {
     vatRoundOff: [''],
   });
 
+  ngOnInit(): void {
+
+    //console.log(this.content);
+    this.branchCode = this.comService.branchCode;
+    this.yearMonth = this.comService.yearSelected;
+    const voucherTypeValue = this.comService.getqueryParamVocType();
+    console.log(voucherTypeValue);
+    let data = this.repairSaleForm.controls.voucherType.setValue(
+      this.comService.getqueryParamVocType()
+    );
+    this.generateVocNo();
+
+  }
+
+  generateVocNo() {
+    let API = `GenerateNewVoucherNumber/GenerateNewVocNum/${this.comService.getqueryParamVocType()}/${this.branchCode
+      }/${this.yearMonth}/${this.convertDateToYMD(this.currentDate)}`;
+    let sub: Subscription = this.dataService
+      .getDynamicAPI(API)
+      .subscribe((res) => {
+        if (res.status == "Success") {
+          this.repairSaleForm.controls.voucherNo.setValue(res.newvocno);
+        }
+      });
+  }
+  convertDateToYMD(str: any) {
+    var date = new Date(str),
+      mnth = ("0" + (date.getMonth() + 1)).slice(-2),
+      day = ("0" + date.getDate()).slice(-2);
+    return [date.getFullYear(), mnth, day].join("-");
+  }
+
+  getqueryParamVocType() {
+    let queryParamAPI
+    this.route.queryParams.subscribe((data: any) => {
+      queryParamAPI = data.VocType;
+    });
+    return queryParamAPI
+  }
+
+  typeCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'Code',
+    SEARCH_HEADING: 'Type Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "Code<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  typeCodeSelected(e: any) {
+    console.log(e);
+    this.repairSaleForm.controls.type.setValue(e.CODE);
+  }
+
+  typeidCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'Code',
+    SEARCH_HEADING: 'Type Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "Code<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  typeidCodeSelected(e: any) {
+    console.log(e);
+    this.repairSaleForm.controls.IDType.setValue(e.CODE);
+  }
+
+  stateCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 48,
+    SEARCH_FIELD: 'STATE_CODE',
+    SEARCH_HEADING: 'State Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "STATE_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  stateCodeSelected(e: any) {
+    console.log(e);
+    this.repairSaleForm.controls.state.setValue(e.STATE_CODE);
+  }
+  stateCode_Selected(e: any) {
+    console.log(e);
+    this.repairSaleForm.controls.stateCode.setValue(e.STATE_CODE);
+  }
+  countryCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 26,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Country Type',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "TYPES='COUNTRY MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  countryCodeSelected(e: any) {
+    console.log(e);
+    this.repairSaleForm.controls.country.setValue(e.CODE);
+  }
+
+  nationalityCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Nationality Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "TYPES='NATIONALITY MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  nationalityCodeSelected(e: any) {
+    console.log(e);
+    this.repairSaleForm.controls.nationality.setValue(e.CODE);
+  }
+
+  cityCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'City Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "TYPES='REGION MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  cityCodeSelected(e: any) {
+    console.log(e);
+    this.repairSaleForm.controls.city.setValue(e.CODE);
+  }
+
+  languageCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 45,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Language Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "TYPES = 'LANGUAGE MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  languageCodeSelected(e: any) {
+    console.log(e);
+    this.repairSaleForm.controls.language.setValue(e.CODE);
+  }
+
+  close(data?: any) {
+    //TODO reset forms and data before closing
+    this.activeModal.close(data);
+  }
+
+
+
   opensalesdiadetail() {
     const modalRef: NgbModalRef = this.modalService.open(SalesDiaDetailGstComponent, {
       size: 'xl',
@@ -285,7 +353,7 @@ export class RepairSaleComponent implements OnInit {
     });
   }
 
-  
+
   opensalesdetails() {
     const modalRef: NgbModalRef = this.modalService.open(PosCreditSaleReciptDetailsComponent, {
       size: 'xl',
@@ -304,7 +372,7 @@ export class RepairSaleComponent implements OnInit {
     });
   }
 
-  
+
   openvoucherredeem() {
     const modalRef: NgbModalRef = this.modalService.open(VoucherRedeemComponent, {
       size: 'xl',
@@ -315,7 +383,7 @@ export class RepairSaleComponent implements OnInit {
   }
 
 
-  formSubmit(){
+  formSubmit() {
 
     if (this.content && this.content.FLAG == 'EDIT') {
       this.update()
@@ -339,7 +407,7 @@ export class RepairSaleComponent implements OnInit {
         "CITY": this.repairSaleForm.value.city,
         "ZIPCODE": "string",
         "COUNTRY_CODE": this.repairSaleForm.value.country,
-        "EMAIL":  this.repairSaleForm.value.email,
+        "EMAIL": this.repairSaleForm.value.email,
         "TEL1": this.repairSaleForm.value.phone,
         "TEL2": "string",
         "MOBILE": this.repairSaleForm.value.Mobile,
@@ -354,7 +422,7 @@ export class RepairSaleComponent implements OnInit {
         "REGION": "string",
         "NATIONALITY": this.repairSaleForm.value.nationality,
         "RELIGION": "string",
-        "TYPE":  this.repairSaleForm.value.type,
+        "TYPE": this.repairSaleForm.value.type,
         "CATEGORY": "string",
         "INCOME": 0,
         "CUST_STATUS": "string",
@@ -510,7 +578,7 @@ export class RepairSaleComponent implements OnInit {
         "GOOD_QUALITY_A_K_A": "string",
         "LOW_QUALITY_A_K_A": "string",
         "PREFERRED_COLOR": "string",
-        "PREFERRED_ITEM":this.repairSaleForm.value.itemTotal,
+        "PREFERRED_ITEM": this.repairSaleForm.value.itemTotal,
         "WRIST_SIZE": "string",
         "POSKNOWNABOUT": 0
       },
@@ -518,7 +586,7 @@ export class RepairSaleComponent implements OnInit {
         {
           "REFMID": 0,
           "VOCTYPE": "str",
-          "RECEIPT_MODE":  this.repairSaleForm.value. receiptTotal,
+          "RECEIPT_MODE": this.repairSaleForm.value.receiptTotal,
           "CURRENCY_CODE": this.repairSaleForm.value.currencyType,
           "CURRENCY_RATE": this.repairSaleForm.value.currency,
           "AMOUNT_FC": 0,
@@ -614,7 +682,7 @@ export class RepairSaleComponent implements OnInit {
         "NET_VALUE_CC": 0,
         "ADDL_VALUE_FC": 0,
         "ADDL_VALUE_CC": 0,
-        "GROSS_VALUE_FC":  this.repairSaleForm.value.grossTotal,
+        "GROSS_VALUE_FC": this.repairSaleForm.value.grossTotal,
         "GROSS_VALUE_CC": 0,
         "REMARKS": "string",
         "SYSTEM_DATE": "2024-03-12T07:25:06.720Z",
@@ -675,7 +743,7 @@ export class RepairSaleComponent implements OnInit {
         "FIXED_QTY": 0,
         "GST_REGISTERED": true,
         "GST_STATE_CODE": "st",
-        "GST_NUMBER":"stri",
+        "GST_NUMBER": "stri",
         "GST_TYPE": "stri",
         "GST_TOTALFC": this.repairSaleForm.value.gstTotal,
         "GST_TOTALCC": 0,
@@ -1010,7 +1078,7 @@ export class RepairSaleComponent implements OnInit {
             "MUD_WT": 0,
             "JAWAHARAYN": 0,
             "RESALERECYCLE": 0,
-            "CASHEXCHANGE":  this.repairSaleForm.value.Exchange,
+            "CASHEXCHANGE": this.repairSaleForm.value.Exchange,
             "VATAMOUNTMETALONLYCC": 0,
             "VATAMOUNTMETALONLY": 0,
             "GST_CODE": "string",
@@ -1499,8 +1567,8 @@ export class RepairSaleComponent implements OnInit {
         "ADJUST_ADVANCE": 0,
         "DISCOUNT": 0,
         "SUBTOTAL": 0,
-        "ROUNDOFF":  this.repairSaleForm.value.roundOfAmount,
-        "NETTOTAL":  this.repairSaleForm.value.netTotal,
+        "ROUNDOFF": this.repairSaleForm.value.roundOfAmount,
+        "NETTOTAL": this.repairSaleForm.value.netTotal,
         "RECEIPT_TOTAL": 0,
         "REFUND": 0,
         "FLAG_EDIT_ALLOW": "string",
@@ -1890,7 +1958,7 @@ export class RepairSaleComponent implements OnInit {
 
 
 
-  update(){
+  update() {
     let API = 'RetailSalesDataInDotnet/UpdateRetailSalesData'
     let postData = {
       "customer": {
@@ -1903,7 +1971,7 @@ export class RepairSaleComponent implements OnInit {
         "CITY": this.repairSaleForm.value.city,
         "ZIPCODE": "string",
         "COUNTRY_CODE": this.repairSaleForm.value.country,
-        "EMAIL":  this.repairSaleForm.value.email,
+        "EMAIL": this.repairSaleForm.value.email,
         "TEL1": this.repairSaleForm.value.phone,
         "TEL2": "string",
         "MOBILE": this.repairSaleForm.value.Mobile,
@@ -1918,7 +1986,7 @@ export class RepairSaleComponent implements OnInit {
         "REGION": "string",
         "NATIONALITY": this.repairSaleForm.value.nationality,
         "RELIGION": "string",
-        "TYPE":  this.repairSaleForm.value.type,
+        "TYPE": this.repairSaleForm.value.type,
         "CATEGORY": "string",
         "INCOME": 0,
         "CUST_STATUS": "string",
@@ -2074,7 +2142,7 @@ export class RepairSaleComponent implements OnInit {
         "GOOD_QUALITY_A_K_A": "string",
         "LOW_QUALITY_A_K_A": "string",
         "PREFERRED_COLOR": "string",
-        "PREFERRED_ITEM":this.repairSaleForm.value.itemTotal,
+        "PREFERRED_ITEM": this.repairSaleForm.value.itemTotal,
         "WRIST_SIZE": "string",
         "POSKNOWNABOUT": 0
       },
@@ -2082,7 +2150,7 @@ export class RepairSaleComponent implements OnInit {
         {
           "REFMID": 0,
           "VOCTYPE": "str",
-          "RECEIPT_MODE":  this.repairSaleForm.value. receiptTotal,
+          "RECEIPT_MODE": this.repairSaleForm.value.receiptTotal,
           "CURRENCY_CODE": this.repairSaleForm.value.currencyType,
           "CURRENCY_RATE": this.repairSaleForm.value.currency,
           "AMOUNT_FC": 0,
@@ -2178,7 +2246,7 @@ export class RepairSaleComponent implements OnInit {
         "NET_VALUE_CC": 0,
         "ADDL_VALUE_FC": 0,
         "ADDL_VALUE_CC": 0,
-        "GROSS_VALUE_FC":  this.repairSaleForm.value.grossTotal,
+        "GROSS_VALUE_FC": this.repairSaleForm.value.grossTotal,
         "GROSS_VALUE_CC": 0,
         "REMARKS": "string",
         "SYSTEM_DATE": "2024-03-12T07:25:06.720Z",
@@ -2239,7 +2307,7 @@ export class RepairSaleComponent implements OnInit {
         "FIXED_QTY": 0,
         "GST_REGISTERED": true,
         "GST_STATE_CODE": "st",
-        "GST_NUMBER":"stri",
+        "GST_NUMBER": "stri",
         "GST_TYPE": "stri",
         "GST_TOTALFC": this.repairSaleForm.value.gstTotal,
         "GST_TOTALCC": 0,
@@ -2574,7 +2642,7 @@ export class RepairSaleComponent implements OnInit {
             "MUD_WT": 0,
             "JAWAHARAYN": 0,
             "RESALERECYCLE": 0,
-            "CASHEXCHANGE":  this.repairSaleForm.value.Exchange,
+            "CASHEXCHANGE": this.repairSaleForm.value.Exchange,
             "VATAMOUNTMETALONLYCC": 0,
             "VATAMOUNTMETALONLY": 0,
             "GST_CODE": "string",
@@ -3063,8 +3131,8 @@ export class RepairSaleComponent implements OnInit {
         "ADJUST_ADVANCE": 0,
         "DISCOUNT": 0,
         "SUBTOTAL": 0,
-        "ROUNDOFF":  this.repairSaleForm.value.roundOfAmount,
-        "NETTOTAL":  this.repairSaleForm.value.netTotal,
+        "ROUNDOFF": this.repairSaleForm.value.roundOfAmount,
+        "NETTOTAL": this.repairSaleForm.value.netTotal,
         "RECEIPT_TOTAL": 0,
         "REFUND": 0,
         "FLAG_EDIT_ALLOW": "string",
@@ -3427,29 +3495,29 @@ export class RepairSaleComponent implements OnInit {
       ]
     }
 
-  
-      let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
-        .subscribe((result) => {
-          if (result.response) {
-            if (result.status == "Success") {
-              Swal.fire({
-                title: result.message || 'Success',
-                text: '',
-                icon: 'success',
-                confirmButtonColor: '#336699',
-                confirmButtonText: 'Ok'
-              }).then((result: any) => {
-                if (result.value) {
-                  this.repairSaleForm.reset()
-                  this.tableData = []
-                  this.close('reloadMainGrid')
-                }
-              });
-            }
-          } else {
-            this.toastr.error('Not saved')
+
+    let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
+      .subscribe((result) => {
+        if (result.response) {
+          if (result.status == "Success") {
+            Swal.fire({
+              title: result.message || 'Success',
+              text: '',
+              icon: 'success',
+              confirmButtonColor: '#336699',
+              confirmButtonText: 'Ok'
+            }).then((result: any) => {
+              if (result.value) {
+                this.repairSaleForm.reset()
+                this.tableData = []
+                this.close('reloadMainGrid')
+              }
+            });
           }
-        }, err => alert(err))
-      this.subscriptions.push(Sub)
-    }
+        } else {
+          this.toastr.error('Not saved')
+        }
+      }, err => alert(err))
+    this.subscriptions.push(Sub)
+  }
 }
