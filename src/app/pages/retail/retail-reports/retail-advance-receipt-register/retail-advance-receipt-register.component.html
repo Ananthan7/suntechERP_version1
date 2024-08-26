@@ -1,7 +1,6 @@
 <!-- header section starts -->
 <div class="card-content border-bottom d-flex justify-content-between p-2">
-    <h5 class="pos-modaltitle" id="modal-dia-metal"> Retail Advance Receipt Register
-    </h5>
+    <h5 class="pos-modaltitle" id="modal-dia-metal"> Retail Advance Receipt Register </h5>
     <button type="button" class="btn btn-close close-btn" (click)="close()">
         <i class="feather icon-x close-icon"></i>
     </button>
@@ -14,37 +13,18 @@
     <form [formGroup]="retailAdvanceReceiptRegisterForm">
         <div class="row">
             <div class="col-md-12">
-                <div class="row mb-1 ">
-                    <label for="inputPassword" class="col-sm-2 col-form-label">Branch</label>
-                    <div class="col-md-2">
-                        <mat-form-field>
-                            <mat-select formControlName="branch" [(ngModel)]="modeselect"
-                                placeholder="{{ branchCode }}">
-                                <mat-option *ngFor="let branchCode of branchOptions" [value]="branchCode.BRANCH_CODE">{{
-                                    branchCode.BRANCH_CODE }}</mat-option>
-                            </mat-select>
-                            <!-- <mat-select  [(value)]="selectedBranchCode" formControlName="branch" >
-                                <mat-option *ngFor="let branchCode of branchOptions" [value]="branchCode.BRANCH_CODE">{{
-                                    branchCode.BRANCH_CODE }}</mat-option>
-                            </mat-select> -->
+                <div class="row">
+                    <label for="inputPassword" class="col-sm-2 col-form-label" id="ID001">Branch</label>
+                    <div class="col-md-3">
+                        <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
+                            <input matInput="text" name="branch" formControlName="branch" />
+                            <app-branch-division (newRowClick)="selectedData($event)" class="branchDivisionelectr"></app-branch-division>
                         </mat-form-field>
                     </div>
-                </div>
-                <div class="row mb-1 ">
-                    <label for="inputPassword" class="col-sm-2 col-form-label">Filter</label>
-                    <label for="inputPassword" class="col-sm-2 col-form-label">From</label>
-                    <label for="inputPassword" class="col-sm-2 col-form-label">To</label>
-                    <label for="inputPassword" class="col-sm-2 col-form-label">Show</label>
-                    <div class="col-md-2">
-                        <!-- <mat-form-field>
-                            <mat-select formControlName="show" [(value)]="selected">
-                                <mat-option value="all">ALL</mat-option>
-                                <mat-option value="pending">Pending</mat-option>
-                                <mat-option value="finished">Finished</mat-option>
-                                <mat-option value="cancelled">Cancelled</mat-option>
-                            </mat-select>
-                        </mat-form-field> -->
-                        <mat-form-field>
+
+                    <label for="inputPassword" class="col-sm-2 col-form-label" id="ID002">Show</label>
+                    <div class="col-md-3">
+                        <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
                             <mat-select [(value)]="selected" formControlName="show">
                                 <mat-option value="all">ALL</mat-option>
                                 <mat-option value="pending">Pending</mat-option>
@@ -54,18 +34,28 @@
                         </mat-form-field>
                     </div>
                 </div>
-                <div class="row mb-1">
-                    <label for="inputPassword" class="col-sm-2 col-form-label">Date</label>
-                    <div class="col-md-2">
-                        <mat-form-field style="width: 70%;">
+
+                <!-- <div class="row mb-1 ">
+                    <label for="inputPassword" class="col-sm-2 col-form-label">Filter</label>
+                    <label for="inputPassword" class="col-sm-2 col-form-label">From</label>
+                    <label for="inputPassword" class="col-sm-2 col-form-label">To</label>
+                    
+                </div> -->
+                
+                <div class="row">
+                    <label for="inputPassword" class="col-sm-2 col-form-label" id="ID003">Date</label>
+                    <div class="col-md-3">
+                        <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
                             <input matInput [matDatepicker]="fromDate" name="fromDate" [max]="currentDate"
                                 placeholder="DD/MM/YYYY" DateValidation formControlName="fromDate" />
                             <mat-datepicker-toggle matSuffix [for]="fromDate"></mat-datepicker-toggle>
                             <mat-datepicker [startAt]="currentDate" #fromDate></mat-datepicker>
                         </mat-form-field>
                     </div>
-                    <div class="col-md-2">
-                        <mat-form-field style="width: 70%;">
+
+                    <label for="inputPassword" class="col-sm-2 col-form-label" id="ID004">To</label>
+                    <div class="col-md-3">
+                        <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
                             <input matInput [matDatepicker]="toDate" [min]="retailAdvanceReceiptRegisterForm.value.fromDate"  name="toDate"
                                 placeholder="DD/MM/YYYY" DateValidation formControlName="toDate" (dateChange)="toDateValitation()" />
                             <mat-datepicker-toggle matSuffix [for]="toDate"></mat-datepicker-toggle>
@@ -73,34 +63,41 @@
                         </mat-form-field>
                     </div>
                 </div>
-                <div class="row mb-1">
-                    <label for="inputPassword" class="col-sm-2 col-form-label">Salesman :</label>
-                    <div class="col-md-2">
-                        <mat-form-field style="width: 70%;">
+               
+                <div class="row mt-1 ">
+                    <label for="inputPassword" class="col-sm-2 col-form-label" id="ID005">Salesman</label>
+                    <div class="col-md-3">
+                        <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
                             <input matInput="text" formControlName="salesman" />
-                        </mat-form-field>
-                        <master-search [MasterSearchData]="salesmanCodeData"
+                            <master-search [MasterSearchData]="salesmanCodeData" class="masterSearch"
                             (newRowClick)="salesmanSelected($event)"></master-search>
+                        </mat-form-field>
                     </div>
-                    <div class="col-md-2">
-                        <mat-form-field style="width: 70%;">
+
+                    <div class="col-md-5">
+                        <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
                             <input matInput="text" formControlName="salesmanCode" />
                         </mat-form-field>
                     </div>
-                    <label for="inputPassword" class="col-sm-2 col-form-label">Report To</label>
-                    <div class="col-md-2">
-                        <mat-form-field>
+                </div>
+
+                <div class="row">
+                    <label for="inputPassword" class="col-sm-2 col-form-label" id="ID006">Report To</label>
+                    <div class="col-md-8">
+                        <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
                             <mat-select [(value)]="selectedReport" formControlName="reportTo">
-                                <mat-option value="preview">PREVIEW</mat-option>
-                                <mat-option value="print">PRINT</mat-option>
-                                <mat-option value="catalogue">CATALOGUE</mat-option>
-                                <mat-option value="excel">EXCEL</mat-option>
-                                <mat-option value="pdf">PDF</mat-option>
-                                <mat-option value="email">EMAIL</mat-option>
+                                <mat-option value="preview" id="ID007">PREVIEW</mat-option>
+                                <mat-option value="print" id="ID008">PRINT</mat-option>
+                                <mat-option value="catalogue" id="ID009">CATALOGUE</mat-option>
+                                <mat-option value="excel" id="ID010">EXCEL</mat-option>
+                                <mat-option value="pdf" id="ID011">PDF</mat-option>
+                                <mat-option value="email" id="ID012">EMAIL</mat-option>
                             </mat-select>
                         </mat-form-field>
                     </div>
                 </div>
+
+
             </div>
 
         </div>

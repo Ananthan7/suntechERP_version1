@@ -52,8 +52,6 @@ export class RetailAdvanceReceiptRegisterComponent implements OnInit {
     this.retailAdvanceReceiptRegisterForm.controls.salesmanCode.setValue(e.DESCRIPTION);
   }
 
-  
-
   private cssFilePath = '/assets/scss/scheme_register_pdf.scss';
   // private cssFilePath = 'assets/scheme_register_pdf.scss';
 
@@ -156,4 +154,10 @@ export class RetailAdvanceReceiptRegisterComponent implements OnInit {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
+
+  selectedData(data: any){
+    this.retailAdvanceReceiptRegisterForm.controls.branch.setValue(data.BRANCH_CODE);
+  }
+
+
 }
