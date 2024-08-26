@@ -2609,8 +2609,9 @@ editLineItem:boolean=false;
   }
   closeAddCustomerModal() {
     // this.resetCustomerData()
-    // this.modal.dismiss('Cross click')
-    this.modalReference.dismiss();
+    this.customerDetailForm.reset()
+    this.modalReference.close();
+    // this.modalReference.dismiss();
     this.isNewCustomer = false;
   }
 
