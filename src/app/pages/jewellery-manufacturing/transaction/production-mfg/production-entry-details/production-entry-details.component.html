@@ -30,7 +30,7 @@
           </div>
           <div class="col-sm-5">
             <mat-form-field appearance="outline" style="width: 100%;">
-              <input type="text" matInput formControlName="JOB_DESCRIPTION" />
+              <input type="text" matInput readonly formControlName="JOB_DESCRIPTION" />
             </mat-form-field>
           </div>
         </div>
@@ -39,12 +39,12 @@
             :</label>
           <div class="col-sm-3">
             <mat-form-field appearance="outline" style="width: 100%;">
-              <input type="text" matInput formControlName="UNQ_JOB_ID" />
+              <input type="text" readonly matInput formControlName="UNQ_JOB_ID" />
             </mat-form-field>
           </div>
           <div class="col-sm-5">
             <mat-form-field appearance="outline" style="width: 100%;">
-              <input type="text" matInput
+              <input type="text" matInput readonly
                 formControlName="SUB_JOB_DESCRIPTION" />
             </mat-form-field>
           </div>
@@ -53,9 +53,9 @@
           <label for="input" class="col-sm-3 col-form-label">Customer :</label>
           <div class="col-sm-3">
             <mat-form-field appearance="outline" style="width: 100%;">
-              <input type="text" matInput formControlName="customer"
+              <input type="text" matInput formControlName="CUSTOMER_CODE"
                 UpperCaseDirective
-                (focusout)="validateLookupField($event,customerCodeData,'customer')" />
+                (focusout)="validateLookupField($event,customerCodeData,'CUSTOMER_CODE')" />
               <master-search *ngIf="!viewMode" class="masterSearch"
                 [MasterSearchData]="customerCodeData"
                 (newRowClick)="customerCodeScpSelected($event)">
@@ -64,7 +64,7 @@
           </div>
           <div class="col-sm-5">
             <mat-form-field appearance="outline" style="width: 100%;">
-              <input type="text" matInput formControlName="CUSTOMER_DESC" />
+              <input type="text" matInput readonly formControlName="CUSTOMER_DESC" />
             </mat-form-field>
           </div>
         </div>
@@ -74,12 +74,12 @@
           <label for="input" class="col-sm-3 col-form-label">Process :</label>
           <div class="col-sm-3">
             <mat-form-field appearance="outline" style="width: 100%;">
-              <input type="text" matInput formControlName="PROCESS_CODE" />
+              <input type="text" readonly matInput formControlName="PROCESS_CODE" />
             </mat-form-field>
           </div>
           <div class="col-sm-5">
             <mat-form-field appearance="outline" style="width: 100%;">
-              <input type="text" matInput formControlName="PROCESS_NAME" />
+              <input type="text" matInput readonly formControlName="PROCESS_NAME" />
             </mat-form-field>
           </div>
         </div>
@@ -87,12 +87,12 @@
           <label for="input" class="col-sm-3 col-form-label">Worker :</label>
           <div class="col-sm-3">
             <mat-form-field appearance="outline" style="width: 100%;">
-              <input type="text" matInput formControlName="WORKER_CODE" />
+              <input type="text" matInput readonly formControlName="WORKER_CODE" />
             </mat-form-field>
           </div>
           <div class="col-sm-5">
             <mat-form-field appearance="outline" style="width: 100%;">
-              <input type="text" matInput formControlName="WORKER_NAME" />
+              <input type="text" matInput readonly formControlName="WORKER_NAME" />
             </mat-form-field>
           </div>
         </div>
@@ -100,12 +100,12 @@
           <label for="input" class="col-sm-3 col-form-label">Parts :</label>
           <div class="col-sm-3">
             <mat-form-field appearance="outline" style="width: 100%;">
-              <input type="text" matInput formControlName="PART_CODE" />
+              <input type="text" matInput readonly formControlName="PART_CODE" />
             </mat-form-field>
           </div>
           <div class="col-sm-5">
             <mat-form-field appearance="outline" style="width: 100%;">
-              <input type="text" matInput formControlName="partsName" />
+              <input type="text" readonly matInput formControlName="partsName" />
             </mat-form-field>
           </div>
         </div>
@@ -141,7 +141,7 @@
               <div class="col-sm-2">
                 <mat-form-field appearance="outline" style="width: 100%;">
                   <input type="text" matInput formControlName="totalpcs"
-                    NumberOnly class="text-right" />
+                  readonly class="text-right" />
                 </mat-form-field>
               </div>
             </div>
@@ -172,7 +172,7 @@
               <div class="col-sm-2">
                 <mat-form-field appearance="outline" style="width: 100%;">
                   <input type="text" matInput formControlName="LOSS_WT"
-                    [max]="13" SixDecimalInput
+                    [max]="13" readonly
                     class="text-right" />
                 </mat-form-field>
               </div>
@@ -200,7 +200,7 @@
                 :</label>
               <div class="col-sm-2">
                 <mat-form-field appearance="outline" style="width: 100%;">
-                  <input type="text" matInput formControlName="timetaken" />
+                  <input type="text" matInput formControlName="timetaken" readonly />
                 </mat-form-field>
               </div>
             </div>
@@ -227,8 +227,8 @@
                 :</label>
               <div class="col-sm-2">
                 <mat-form-field appearance="outline" style="width: 100%;">
-                  <input type="text" matInput class="text-right"
-                    formControlName="price1" NumberOnly UpperCaseDirective
+                  <input type="text" matInput
+                    formControlName="price1" UpperCaseDirective
                     (focusout)="validateLookupField($event,price1CodeData,'price1')" />
                   <master-search *ngIf="!viewMode" class="masterSearch"
                     [MasterSearchData]="price1CodeData"
@@ -263,8 +263,8 @@
                 :</label>
               <div class="col-sm-2">
                 <mat-form-field appearance="outline" style="width: 100%;">
-                  <input type="text" matInput class="text-right"
-                    formControlName="price2" NumberOnly UpperCaseDirective
+                  <input type="text" matInput
+                    formControlName="price2" UpperCaseDirective
                     (focusout)="validateLookupField($event,price2CodeData,'price2')" />
                   <master-search *ngIf="!viewMode" class="masterSearch"
                     [MasterSearchData]="price2CodeData"
@@ -298,8 +298,8 @@
                 :</label>
               <div class="col-sm-2">
                 <mat-form-field appearance="outline" style="width: 100%;">
-                  <input type="text" matInput class="text-right"
-                    formControlName="price3" NumberOnly UpperCaseDirective
+                  <input type="text" matInput
+                    formControlName="price3" UpperCaseDirective
                     (focusout)="validateLookupField($event,price3CodeData,'price3')" />
                   <master-search *ngIf="!viewMode" class="masterSearch"
                     [MasterSearchData]="price3CodeData"
@@ -334,7 +334,7 @@
               <div class="col-sm-2">
                 <mat-form-field appearance="outline" style="width: 100%;">
                   <input type="text" matInput formControlName="price4"
-                    class="text-right" NumberOnly UpperCaseDirective
+                    UpperCaseDirective
                     (focusout)="validateLookupField($event,price4CodeData,'price4')" />
                   <master-search *ngIf="!viewMode" class="masterSearch"
                     [MasterSearchData]="price4CodeData"
@@ -366,8 +366,8 @@
                 :</label>
               <div class="col-sm-2">
                 <mat-form-field appearance="outline" style="width: 100%;">
-                  <input type="text" matInput class="text-right"
-                    formControlName="price5" NumberOnly UpperCaseDirective
+                  <input type="text" matInput
+                    formControlName="price5" UpperCaseDirective
                     (focusout)="validateLookupField($event,price5CodeData,'price5')" />
                   <master-search *ngIf="!viewMode" class="masterSearch"
                     [MasterSearchData]="price5CodeData"
@@ -391,9 +391,9 @@
               <div class="col-sm-2">
                 <mat-form-field appearance="outline" style="width: 100%">
                   <input matInput [matDatepicker]="startdate" name="startdate"
-                    formControlName="START_DATE"
+                    formControlName="START_DATE" readonly
                     placeholder="DD/MM/YYYY" DateValidation />
-                  <mat-datepicker-toggle matSuffix
+                  <mat-datepicker-toggle matSuffix disabled
                     [for]="startdate"></mat-datepicker-toggle>
                   <mat-datepicker [startAt]="currentDate"
                     #startdate></mat-datepicker>
@@ -415,9 +415,9 @@
               <div class="col-sm-2">
                 <mat-form-field appearance="outline" style="width: 100%">
                   <input matInput [matDatepicker]="endDate" name="endDate"
-                    formControlName="END_DATE"
+                    formControlName="END_DATE" readonly
                     placeholder="DD/MM/YYYY" DateValidation />
-                  <mat-datepicker-toggle matSuffix
+                  <mat-datepicker-toggle matSuffix disabled
                     [for]="endDate"></mat-datepicker-toggle>
                   <mat-datepicker [startAt]="currentDate"
                     #endDate></mat-datepicker>
@@ -441,14 +441,14 @@
               <div class="col-sm-3">
                 <mat-form-field appearance="outline" style="width: 100%;">
                   <input type="number" matInput formControlName="prodpcs"
-                    NumberOnly class="text-right" />
+                    NumberOnly class="text-right" readonly/>
                 </mat-form-field>
               </div>
               <label for="input" class="col-sm-3 col-form-label">Pnd Pcs
                 :</label>
               <div class="col-sm-3">
                 <mat-form-field appearance="outline" style="width: 100%;">
-                  <input type="number" matInput formControlName="pndpcs"
+                  <input type="number" matInput formControlName="pndpcs" readonly
                     NumberOnly class="text-right" />
                 </mat-form-field>
               </div>
@@ -458,14 +458,14 @@
                 :</label>
               <div class="col-sm-4">
                 <mat-form-field appearance="outline" style="width: 100%;">
-                  <input type="text" matInput formControlName="lossone" />
+                  <input type="text" matInput formControlName="lossone" readonly/>
                 </mat-form-field>
               </div>
             </div>
             <div class="row justify-content-end">
               <div class="col-sm-4">
                 <mat-form-field appearance="outline" style="width: 100%;">
-                  <input type="text" matInput formControlName="LOSS_WT" />
+                  <input type="text" matInput formControlName="LOSS_WT" readonly/>
                 </mat-form-field>
               </div>
             </div>

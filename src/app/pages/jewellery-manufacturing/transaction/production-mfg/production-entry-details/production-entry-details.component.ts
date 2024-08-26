@@ -364,7 +364,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
   }
   customerCodeScpSelected(e: any) {
     this.productiondetailsFrom.controls.CUSTOMER_CODE.setValue(e.ACCODE);
-    this.productiondetailsFrom.controls.CUSTOMER_CODE_DESC.setValue(e.ACCOUNT_HEAD);
+    this.productiondetailsFrom.controls.CUSTOMER_DESC.setValue(e.ACCOUNT_HEAD);
   }
   karatCodeSelected(e: any) {
     this.productiondetailsFrom.controls.KARAT.setValue(e.KARAT_CODE);
