@@ -447,6 +447,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
             this.setFormNullToString('DESIGN_CODE', data[0].DESIGN_CODE)
             this.setFormNullToString('DESIGN_DESCRIPTION', data[0].DESCRIPTION)
             this.setFormNullToString('CUSTOMER_CODE', data[0].CUSTOMER_CODE)
+            this.setFormNullToString('CUSTOMER_DESC', data[0].ACCOUNT_HEAD)
             this.setFormNullToString('SEQ_CODE', data[0].SEQ_CODE)
             this.setFormNullToString('METALLAB_TYPE', data[0].METALLAB_TYPE)
             this.setFormNullToString('DESIGN_TYPE', data[0].DESIGN_TYPE?.toUpperCase())
