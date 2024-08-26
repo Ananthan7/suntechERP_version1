@@ -1,7 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
-import { ToastrService } from 'ngx-toastr';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { Subscription } from 'rxjs';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
@@ -13,6 +12,8 @@ import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
   styleUrls: ['./production-stock-detail.component.scss']
 })
 export class ProductionStockDetailComponent implements OnInit {
+  @Output() saveDetail = new EventEmitter<any>();
+  @Output() closeDetail = new EventEmitter<any>();
   @Input() content!: any;
   private subscriptions: Subscription[] = [];
   Data: any[] = [];
@@ -298,7 +299,9 @@ export class ProductionStockDetailComponent implements OnInit {
     );
   }
   close(data?: any) {
-    this.activeModal.close(data);
+    //TODO reset forms and data before closing
+    // this.activeModal.close(data);
+    this.closeDetail.emit()
   }
   formDetailCount: number = 0;
   formSubmit() {
