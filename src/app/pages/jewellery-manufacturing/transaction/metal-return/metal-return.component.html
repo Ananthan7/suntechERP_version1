@@ -57,7 +57,7 @@
                                 By:</label>
                             <div class="col-sm-6">
                                 <mat-form-field style="width: 85%;">
-                                    <input type="text" matInput formControlName="enteredBy" [readonly]="viewMode"
+                                    <input type="text" matInput formControlName="enteredBy" UpperCaseDirective [readonly]="viewMode"
                                         (keydown)="lookupKeyPress($event,'enteredBy')"
                                         (focusout)="validateLookupField($event,SALESPERSON_CODEData,'enteredBy')" />
                                 </mat-form-field>
@@ -72,7 +72,7 @@
                             <label for="input" class="col-sm-4 col-form-label">Process:</label>
                             <div class="col-sm-7">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="process" [readonly]="viewMode"
+                                    <input type="text" matInput formControlName="process" UpperCaseDirective [readonly]="viewMode"
                                         (keydown)="lookupKeyPress($event,'process')"
                                         (focusout)="validateLookupField($event,ProcessCodeData,'process')" />
                                 </mat-form-field>
@@ -85,7 +85,7 @@
                             <label for="input" class="col-sm-4 col-form-label">Worker:</label>
                             <div class="col-sm-7">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput formControlName="worker" [readonly]="viewMode"
+                                    <input type="text" matInput formControlName="worker" UpperCaseDirective [readonly]="viewMode"
                                         (keydown)="lookupKeyPress($event,'worker')"
                                         (focusout)="validateLookupField($event,WorkerCodeData,'worker')" />
                                 </mat-form-field>
@@ -98,7 +98,7 @@
                             <label for="input" class="col-sm-4 col-form-label">Location:</label>
                             <div class="col-sm-7">
                                 <mat-form-field style="width: 70%">
-                                    <input type="text" matInput formControlName="location" [readonly]="viewMode"
+                                    <input type="text" matInput formControlName="location" UpperCaseDirective [readonly]="viewMode"
                                         (keydown)="lookupKeyPress($event,'location')"
                                         (focusout)="validateLookupField($event,locationCodeData,'location')" />
                                 </mat-form-field>
@@ -160,8 +160,8 @@
                             <dxi-column dataField="PCS" caption="Pcs"></dxi-column>
                             <dxi-column dataField="DESIGN_CODE" caption="Design"></dxi-column>
                             <dxi-column dataField="DIVCODE" caption="Division"></dxi-column>
-                            <dxi-column dataField="GROSS_WT" caption="Gross Wt"></dxi-column>
-                            <dxi-column dataField="PURE_WT" caption="Pure Wt"></dxi-column>
+                            <dxi-column dataField="GROSSWT" caption="Gross Wt"></dxi-column>
+                            <dxi-column dataField="PUREWT" caption="Pure Wt"></dxi-column>
                             <dxi-column dataField="JOB_NUMBER" caption="Job Number"></dxi-column>
                             <dxi-column dataField="UNQ_JOB_ID" caption="Uniq job Id"></dxi-column>
                             <dxi-column dataField="PURITY" caption="Purity"></dxi-column>
@@ -185,7 +185,7 @@
                                 <dxi-total-item column="GROSS_WT" summaryType="sum"
                                 [valueFormat]="gridMetalDecimalFormat" displayFormat="{0}">
                                 </dxi-total-item>
-                                <dxi-total-item column="PURE_WT" summaryType="sum"
+                                <dxi-total-item column="PUREWT" summaryType="sum"
                                     [valueFormat]="gridMetalDecimalFormat" displayFormat="{0}">
                                 </dxi-total-item>
                                 <dxi-total-item column="STONE_WT" summaryType="sum"

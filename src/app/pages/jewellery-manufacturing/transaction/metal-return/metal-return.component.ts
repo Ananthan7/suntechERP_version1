@@ -551,17 +551,161 @@ onRowClickHandlers(e: any) {
 }
 
 
+// onSelectRow() {
+
+//   console.log('Attempting to Select Row');
+//   if (this.selectedRowData) {
+//       console.log('Pushing to metalReturnDetailsData:', this.selectedRowData);
+//      // this.metalReturnDetailsData =this.selectedRowData;
+
+//       this.selectedRowData.forEach((e:any)=>{
+//         console.log(e)
+//         this.metalReturnDetailsData.push(
+//           {
+//              // "SRNO": this.commonService.emptyToZero(this.metalReturnDetailsData.length+1),
+//               "VOCNO": this.commonService.emptyToZero(e.VOCNO),
+//               "VOCTYPE": this.commonService.nullToString(e.VOCTYPE),
+//               "JOB_NUMBER": this.commonService.nullToString(e.JOB_NUMBER),
+//               "JOB_SO_NUMBER": this.commonService.emptyToZero(e.subJobNo),
+//               "UNQ_JOB_ID": this.commonService.nullToString(e.UNQ_JOB_ID),
+//               "JOB_DESCRIPTION": this.commonService.nullToString( e.JOB_DESCRIPTION),
+//               "BRANCH_CODE": this.commonService.nullToString(e.BRANCH_CODE),
+//               "DESIGN_CODE":  this.commonService.nullToString(e.DESIGN_CODE),
+//               "DIVCODE": this.commonService.nullToString(e.DIVCODE),
+//               "STOCK_CODE": this.commonService.nullToString(e.STOCK_CODE),
+//               "STOCK_DESCRIPTION": this.commonService.nullToString(e.STOCK_DESCRIPTION),
+//               "SUB_STOCK_CODE": "0",
+//               "KARAT_CODE": this.commonService.nullToString(e.KARAT_CODE),
+//               "PCS": this.commonService.emptyToZero(e.PCS),
+//               "GROSSWT":this.commonService.emptyToZero( e.GROSS_WT),
+//               "PURITY": this.commonService.emptyToZero(e.PURITY),
+//               "PUREWT": this.commonService.emptyToZero(e.PUREWT),
+//               "RATE_TYPE": "",
+//               "METAL_RATE": 0,
+//               "CURRENCY_CODE": "",
+//               "CURRENCY_RATE": 0,
+//               "METAL_GRM_RATEFC": this.commonService.emptyToZero(e.metalGramRateFc),
+//               "METAL_GRM_RATELC": this.commonService.emptyToZero(e.metalGramRateLc),
+//               "METAL_AMOUNTFC": this.commonService.emptyToZero(e.metalAmountFc),
+//               "METAL_AMOUNTLC": this.commonService.emptyToZero(e.metalAmountLc),
+//               "MAKING_RATEFC": this.commonService.emptyToZero(e.makingRateFc),
+//               "MAKING_RATELC": this.commonService.emptyToZero(e.makingRateLc),
+//               "MAKING_AMOUNTFC": this.commonService.emptyToZero(e.makingAmountFC),
+//               "MAKING_AMOUNTLC": this.commonService.emptyToZero(e.makingAmountFC),
+//               "TOTAL_RATEFC": this.commonService.emptyToZero(e.totalRateFc),
+//               "TOTAL_RATELC": this.commonService.emptyToZero(e.totalRateLc),
+//               "TOTAL_AMOUNTFC": 0,
+//               "TOTAL_AMOUNTLC": 0,
+//               "PROCESS_CODE": this.commonService.nullToString(e.PROCESS),
+//               "PROCESS_NAME": this.commonService.nullToString(e.PROCESSDESC),
+//               "WORKER_CODE": this.commonService.nullToString(e.WORKER),
+//               "WORKER_NAME": this.commonService.nullToString(e.WORKERDESC),
+//               "UNQ_DESIGN_ID": "",
+//               "WIP_ACCODE": "",
+//               "UNIQUEID": 0,
+//               "LOCTYPE_CODE": this.commonService.nullToString(e.location),
+//               "RETURN_STOCK": "",
+//               "SUB_RETURN_STOCK": "",
+//               "STONE_WT": this.commonService.emptyToZero(e.STONEWT),
+//               "NET_WT": this.commonService.emptyToZero(e.NETWT),
+//               "PART_CODE": this.commonService.nullToString(e.PART_CODE),
+//               "DT_BRANCH_CODE": this.commonService.nullToString(this.commonService.branchCode),
+//               "DT_VOCTYPE": this.commonService.nullToString(this.metalReturnForm.value.VOCTYPE),
+//               "DT_VOCNO": this.commonService.emptyToZero(e.VOCNO),
+//               "DT_YEARMONTH": this.commonService.nullToString(this.commonService.yearSelected),
+//               "PUDIFF": 0,
+//               "JOB_PURITY": 0
+//           }
+//         )
+//       })
+//       this.recalculateSRNO(); 
+//   } else {
+//       console.log('No Row Selected');
+//       this.commonService.toastErrorByMsgId('MSG_NO_ROW_SELECTED'); // Handle error
+//   }
+// }
+
 onSelectRow() {
   console.log('Attempting to Select Row');
   if (this.selectedRowData) {
       console.log('Pushing to metalReturnDetailsData:', this.selectedRowData);
-      this.metalReturnDetailsData =this.selectedRowData;
+
+      this.selectedRowData.forEach((e: any) => {
+          // Check if the item already exists in metalReturnDetailsData
+          const exists = this.metalReturnDetailsData.some((item: any) => 
+              item.VOCNO === e.VOCNO && 
+              item.JOB_NUMBER === e.JOB_NUMBER && 
+              item.STOCK_CODE === e.STOCK_CODE
+          );
+
+          if (!exists) {
+              this.metalReturnDetailsData.push({
+                  "VOCNO": this.commonService.emptyToZero(e.VOCNO),
+                  "VOCTYPE": this.commonService.nullToString(e.VOCTYPE),
+                  "JOB_NUMBER": this.commonService.nullToString(e.JOB_NUMBER),
+                  "JOB_SO_NUMBER": this.commonService.emptyToZero(e.subJobNo),
+                  "UNQ_JOB_ID": this.commonService.nullToString(e.UNQ_JOB_ID),
+                  "JOB_DESCRIPTION": this.commonService.nullToString(e.JOB_DESCRIPTION),
+                  "BRANCH_CODE": this.commonService.nullToString(e.BRANCH_CODE),
+                  "DESIGN_CODE": this.commonService.nullToString(e.DESIGN_CODE),
+                  "DIVCODE": this.commonService.nullToString(e.DIVCODE),
+                  "STOCK_CODE": this.commonService.nullToString(e.STOCK_CODE),
+                  "STOCK_DESCRIPTION": this.commonService.nullToString(e.STOCK_DESCRIPTION),
+                  "SUB_STOCK_CODE": "0",
+                  "KARAT_CODE": this.commonService.nullToString(e.KARAT_CODE),
+                  "PCS": this.commonService.emptyToZero(e.PCS),
+                  "GROSSWT": this.commonService.emptyToZero(e.GROSS_WT),
+                  "PURITY": this.commonService.emptyToZero(e.PURITY),
+                  "PUREWT": this.commonService.emptyToZero(e.PUREWT),
+                  "RATE_TYPE": "",
+                  "METAL_RATE": 0,
+                  "CURRENCY_CODE": "",
+                  "CURRENCY_RATE": 0,
+                  "METAL_GRM_RATEFC": this.commonService.emptyToZero(e.metalGramRateFc),
+                  "METAL_GRM_RATELC": this.commonService.emptyToZero(e.metalGramRateLc),
+                  "METAL_AMOUNTFC": this.commonService.emptyToZero(e.metalAmountFc),
+                  "METAL_AMOUNTLC": this.commonService.emptyToZero(e.metalAmountLc),
+                  "MAKING_RATEFC": this.commonService.emptyToZero(e.makingRateFc),
+                  "MAKING_RATELC": this.commonService.emptyToZero(e.makingRateLc),
+                  "MAKING_AMOUNTFC": this.commonService.emptyToZero(e.makingAmountFC),
+                  "MAKING_AMOUNTLC": this.commonService.emptyToZero(e.makingAmountFC),
+                  "TOTAL_RATEFC": this.commonService.emptyToZero(e.totalRateFc),
+                  "TOTAL_RATELC": this.commonService.emptyToZero(e.totalRateLc),
+                  "TOTAL_AMOUNTFC": 0,
+                  "TOTAL_AMOUNTLC": 0,
+                  "PROCESS_CODE": this.commonService.nullToString(e.PROCESS),
+                  "PROCESS_NAME": this.commonService.nullToString(e.PROCESSDESC),
+                  "WORKER_CODE": this.commonService.nullToString(e.WORKER),
+                  "WORKER_NAME": this.commonService.nullToString(e.WORKERDESC),
+                  "UNQ_DESIGN_ID": "",
+                  "WIP_ACCODE": "",
+                  "UNIQUEID": 0,
+                  "LOCTYPE_CODE": this.commonService.nullToString(e.location),
+                  "RETURN_STOCK": "",
+                  "SUB_RETURN_STOCK": "",
+                  "STONE_WT": this.commonService.emptyToZero(e.STONEWT),
+                  "NET_WT": this.commonService.emptyToZero(e.NETWT),
+                  "PART_CODE": this.commonService.nullToString(e.PART_CODE),
+                  "DT_BRANCH_CODE": this.commonService.nullToString(this.commonService.branchCode),
+                  "DT_VOCTYPE": this.commonService.nullToString(this.metalReturnForm.value.VOCTYPE),
+                  "DT_VOCNO": this.commonService.emptyToZero(e.VOCNO),
+                  "DT_YEARMONTH": this.commonService.nullToString(this.commonService.yearSelected),
+                  "PUDIFF": 0,
+                  "JOB_PURITY": 0
+              });
+          } else {
+              console.log(`Row with VOCNO: ${e.VOCNO}, JOB_NUMBER: ${e.JOB_NUMBER}, STOCK_CODE: ${e.STOCK_CODE} is already in metalReturnDetailsData.`);
+          }
+      });
+
       this.recalculateSRNO(); 
   } else {
       console.log('No Row Selected');
       this.commonService.toastErrorByMsgId('MSG_NO_ROW_SELECTED'); // Handle error
   }
 }
+
+
 
 // onSelectRow() {
 //   if (this.selectedRowData) {
@@ -947,6 +1091,45 @@ onSelectRow() {
       })
     this.subscriptions.push(Sub)
   }
+
+        /**use: validate all lookups to check data exists in db */
+        validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+          LOOKUPDATA.SEARCH_VALUE = event.target.value
+          const inputValue = event.target.value.toUpperCase();
+          if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
+          let param = {
+            LOOKUPID: LOOKUPDATA.LOOKUPID,
+            WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+          }
+          this.commonService.toastInfoByMsgId('MSG81447');
+          let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
+          let Sub: Subscription = this.dataService.postDynamicAPI(API,param)
+            .subscribe((result) => {
+             // this.isDisableSaveBtn = false;
+              let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+              if (data.length == 0) {
+                this.commonService.toastErrorByMsgId('MSG1531')
+                this.metalReturnForm.controls[FORMNAME].setValue('')
+                LOOKUPDATA.SEARCH_VALUE = ''
+                return
+              }
+
+              // const matchedItem = data.find((item: any) => item.CODE.toUpperCase() === inputValue);
+              // if (matchedItem) {
+              //   this.diamondlabourMasterForm.controls[FORMNAME].setValue(matchedItem.CODE);
+                if (FORMNAME === 'process') {
+                  this.processWorkerValidate()
+                }
+              // } else {
+              //   this.handleLookupError(FORMNAME, LOOKUPDATA);
+              // }
+             
+            }, err => {
+              this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+            })
+          this.subscriptions.push(Sub)
+        }
+
   showOverleyPanel(event: any, formControlName: string) {
     if(this.metalReturnForm.value[formControlName] != '') return;
 
@@ -966,42 +1149,44 @@ onSelectRow() {
       default:
     }
   }
-  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
-    LOOKUPDATA.SEARCH_VALUE = event.target.value;
+  // validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+  //   LOOKUPDATA.SEARCH_VALUE = event.target.value;
   
-    if (event.target.value == '' || this.viewMode) return;
+  //   if (event.target.value == '' || this.viewMode) return;
   
-    let param = {
-      LOOKUPID: LOOKUPDATA.LOOKUPID,
-      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
-    };
+  //   let param = {
+  //     LOOKUPID: LOOKUPDATA.LOOKUPID,
+  //     WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+  //   };
   
-    this.commonService.showSnackBarMsg('MSG81447');
+  //   this.commonService.showSnackBarMsg('MSG81447');
   
-    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`;
-    let Sub: Subscription = this.dataService.getDynamicAPI(API)
-      .subscribe((result) => {
-        this.commonService.closeSnackBarMsg();
-        let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0]);
+  //   let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`;
+  //   let Sub: Subscription = this.dataService.getDynamicAPI(API)
+  //     .subscribe((result) => {
+  //       this.commonService.closeSnackBarMsg();
+  //       let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0]);
   
-        if (data.length == 0) {
-          this.commonService.toastErrorByMsgId('MSG1531');
-          this.metalReturnForm.controls[FORMNAME].setValue('');
-          LOOKUPDATA.SEARCH_VALUE = '';
+  //       if (data.length == 0) {
+  //         this.commonService.toastErrorByMsgId('MSG1531');
+  //         this.metalReturnForm.controls[FORMNAME].setValue('');
+  //         LOOKUPDATA.SEARCH_VALUE = '';
   
-          // Conditionally call showOverleyPanel based on FORMNAME
-          if (FORMNAME === 'enteredBy' ||  FORMNAME === 'process' || FORMNAME === 'worker'  || FORMNAME === 'location') {
-            this.showOverleyPanel(event, FORMNAME);
-          }
+  //         // Conditionally call showOverleyPanel based on FORMNAME
+  //         if (FORMNAME === 'enteredBy' ||  FORMNAME === 'process' || FORMNAME === 'worker'  || FORMNAME === 'location') {
+  //           this.showOverleyPanel(event, FORMNAME);
+  //         }
   
-          return;
-        }
-      }, err => {
-        this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
-      });
+  //         return;
+  //       }
+  //     }, err => {
+  //       this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+  //     });
   
-    this.subscriptions.push(Sub);
-  }
+  //   this.subscriptions.push(Sub);
+  // }
+
+  
 
  
 }
