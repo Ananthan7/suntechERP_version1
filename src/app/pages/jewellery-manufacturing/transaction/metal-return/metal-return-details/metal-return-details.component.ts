@@ -25,6 +25,7 @@ export class MetalReturnDetailsComponent implements OnInit {
   @Input() content!: any;
   private subscriptions: Subscription[] = [];
   currentFilter: any;
+  editMode: boolean = false;
   divisionMS: any = 'ID';
   tableData: any[] = [];
   columnhead: any[] = [''];
@@ -805,6 +806,44 @@ export class MetalReturnDetailsComponent implements OnInit {
     this.subscriptions.push(Sub);
   }
 
+          /**use: validate all lookups to check data exists in db */
+          validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+            LOOKUPDATA.SEARCH_VALUE = event.target.value
+            const inputValue = event.target.value.toUpperCase();
+            if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
+            let param = {
+              LOOKUPID: LOOKUPDATA.LOOKUPID,
+              WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+            }
+            this.comService.toastInfoByMsgId('MSG81447');
+            let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
+            let Sub: Subscription = this.dataService.postDynamicAPI(API,param)
+              .subscribe((result) => {
+               // this.isDisableSaveBtn = false;
+                let data = this.comService.arrayEmptyObjectToString(result.dynamicData[0])
+                if (data.length == 0) {
+                  this.comService.toastErrorByMsgId('MSG1531')
+                  this.metalReturnDetailsForm.controls[FORMNAME].setValue('')
+                  LOOKUPDATA.SEARCH_VALUE = ''
+                  return
+                }
+  
+                // const matchedItem = data.find((item: any) => item.CODE.toUpperCase() === inputValue);
+                // if (matchedItem) {
+                //   this.diamondlabourMasterForm.controls[FORMNAME].setValue(matchedItem.CODE);
+                  // if (FORMNAME === 'process') {
+                  //   this.processWorkerValidate()
+                  // }
+                // } else {
+                //   this.handleLookupError(FORMNAME, LOOKUPDATA);
+                // }
+               
+              }, err => {
+                this.comService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+              })
+            this.subscriptions.push(Sub)
+          }
+
   showOverleyPanel(event: any, formControlName: string) {
     let value = this.metalReturnDetailsForm.value[formControlName]
     if (this.comService.nullToString(value) != '') return;
@@ -833,60 +872,60 @@ export class MetalReturnDetailsComponent implements OnInit {
     }
   }
 
-  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+  // validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
 
-    LOOKUPDATA.SEARCH_VALUE = event.target.value
+  //   LOOKUPDATA.SEARCH_VALUE = event.target.value
 
-    if (event.target.value == '' || this.viewMode == true) return
-    let param = {
-      LOOKUPID: LOOKUPDATA.LOOKUPID,
-      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
-    }
-    this.comService.toastInfoByMsgId('MSG81447');
-    let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
-    let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
-      .subscribe((result) => {
-        //this.isDisableSaveBtn = false;
-        let data = this.comService.arrayEmptyObjectToString(result.dynamicData[0])
-        if (data.length == 0) {
-          this.comService.toastErrorByMsgId('MSG1531')
-          this.metalReturnDetailsForm.controls[FORMNAME].setValue('')
-          LOOKUPDATA.SEARCH_VALUE = ''
-          if (FORMNAME === 'location' || FORMNAME === 'ReturnToStockCode') {
-            this.showOverleyPanel(event, FORMNAME);
-          }
-          return
-        }
-        //this.alloyMasterFormChecks(FORMNAME)// for validations
-      }, err => {
-        this.comService.toastErrorByMsgId('MSG1531')
-      })
-    this.subscriptions.push(Sub)
+  //   if (event.target.value == '' || this.viewMode == true) return
+  //   let param = {
+  //     LOOKUPID: LOOKUPDATA.LOOKUPID,
+  //     WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+  //   }
+  //   this.comService.toastInfoByMsgId('MSG81447');
+  //   let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
+  //   let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
+  //     .subscribe((result) => {
+  //       //this.isDisableSaveBtn = false;
+  //       let data = this.comService.arrayEmptyObjectToString(result.dynamicData[0])
+  //       if (data.length == 0) {
+  //         this.comService.toastErrorByMsgId('MSG1531')
+  //         this.metalReturnDetailsForm.controls[FORMNAME].setValue('')
+  //         LOOKUPDATA.SEARCH_VALUE = ''
+  //         if (FORMNAME === 'location' || FORMNAME === 'ReturnToStockCode') {
+  //           this.showOverleyPanel(event, FORMNAME);
+  //         }
+  //         return
+  //       }
+  //       //this.alloyMasterFormChecks(FORMNAME)// for validations
+  //     }, err => {
+  //       this.comService.toastErrorByMsgId('MSG1531')
+  //     })
+  //   this.subscriptions.push(Sub)
 
-    // LOOKUPDATA.SEARCH_VALUE = event.target.value
-    // if (event.target.value == '' || this.viewMode == true) return
-    // let param = {
-    //   LOOKUPID: LOOKUPDATA.LOOKUPID,
-    //   WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
-    // }
-    // this.comService.showSnackBarMsg('MSG81447');
-    // let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
-    // let Sub: Subscription = this.dataService.getDynamicAPI(API)
-    //   .subscribe((result) => {
-    //     this.comService.closeSnackBarMsg()
-    //     let data = this.comService.arrayEmptyObjectToString(result.dynamicData[0])
-    //     if (data.length == 0) {
-    //       this.comService.toastErrorByMsgId('MSG1531')
-    //       this.metalReturnDetailsForm.controls[FORMNAME].setValue('')
-    //       LOOKUPDATA.SEARCH_VALUE = ''
-    //       if ( FORMNAME === 'location' || FORMNAME === 'ReturnToStockCode') {
-    //         this.showOverleyPanel(event, FORMNAME);
-    //       }
-    //       return
-    //     }
-    //   }, err => {
-    //     this.comService.toastErrorByMsgId('MSG2272')//Error occured, please try again
-    //   })
-    // this.subscriptions.push(Sub)
-  }
+  //   // LOOKUPDATA.SEARCH_VALUE = event.target.value
+  //   // if (event.target.value == '' || this.viewMode == true) return
+  //   // let param = {
+  //   //   LOOKUPID: LOOKUPDATA.LOOKUPID,
+  //   //   WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+  //   // }
+  //   // this.comService.showSnackBarMsg('MSG81447');
+  //   // let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
+  //   // let Sub: Subscription = this.dataService.getDynamicAPI(API)
+  //   //   .subscribe((result) => {
+  //   //     this.comService.closeSnackBarMsg()
+  //   //     let data = this.comService.arrayEmptyObjectToString(result.dynamicData[0])
+  //   //     if (data.length == 0) {
+  //   //       this.comService.toastErrorByMsgId('MSG1531')
+  //   //       this.metalReturnDetailsForm.controls[FORMNAME].setValue('')
+  //   //       LOOKUPDATA.SEARCH_VALUE = ''
+  //   //       if ( FORMNAME === 'location' || FORMNAME === 'ReturnToStockCode') {
+  //   //         this.showOverleyPanel(event, FORMNAME);
+  //   //       }
+  //   //       return
+  //   //     }
+  //   //   }, err => {
+  //   //     this.comService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+  //   //   })
+  //   // this.subscriptions.push(Sub)
+  // }
 }
