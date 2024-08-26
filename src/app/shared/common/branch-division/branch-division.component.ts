@@ -118,9 +118,8 @@ export class BranchDivisionComponent implements OnInit {
       strDivisionMS: 'S',
       strLoginBranch: 'MOE'
     };
-    let dbBranch = 'MOE';
     this.isLoading = true;
-    this.dataService.BranchDivisionPostDynamicAPI(payload).subscribe((response) => {
+    this.dataService.postDynamicAPI('BranchDivisonSelector',payload).subscribe((response) => {
       this.isLoading = false;
       console.log('branch division API call data', response)
       if (response.dynamicData[0]) {

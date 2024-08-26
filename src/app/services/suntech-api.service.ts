@@ -149,17 +149,4 @@ export class SuntechAPIService {
       })
     );
   }
-  
-  BranchDivisionPostDynamicAPI(data: any): Observable<any> {
-    return this.configService.getConfig().pipe(
-      switchMap(config => {
-        // console.log(config.baseUrl,'config.baseUrl');
-        // const apiUrl = config.branchDivisionAPI;
-        // return this.http.post(apiUrl , { DBBranch: dbBranch });
-        const apiUrl = config.branchDivisionAPI;
-        return this.http.post<any>(apiUrl, data);
-      })
-    );
-   
-  }
 }
