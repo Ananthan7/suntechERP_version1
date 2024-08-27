@@ -172,6 +172,8 @@ export class RepairDiamondPurchaseComponent implements OnInit {
     SEARCH_HEADING: "'Party Currency Code'"
   }
   partycurCodeSelected(e: any) {
+    console.log("clicked");
+    
     console.log(e);
     this.repairdiapurchaseForm.controls.partycur.setValue(e['CURRENCY_CODE']);
     this.repairdiapurchaseForm.controls.partycurrate.setValue(e['CONV_RATE']);
@@ -182,14 +184,17 @@ export class RepairDiamondPurchaseComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 180,
-    WHERECONDITION: "@SLACCODE = '' ",
+    WHERECONDITION: "SUBLEDGER_CODE<> '' ",
     SEARCH_FIELD: "SUBLEDGER_CODE",
     SEARCH_VALUE: "",
     SEARCH_HEADING: "Sub Ledger Code"
   }
+
   subledgerCodeSelected(e: any) {
+    console.log("Clicked");
+    
     console.log(e);
-    this.repairdiapurchaseForm.controls.sub_ledger.setValue(e.SUBLEDGER_CODE);
+    this.repairdiapurchaseForm.controls['sub_ledger'].setValue(e.SUBLEDGER_CODE);
   }
 
   allocatefixingCodeData: MasterSearchModel = {
