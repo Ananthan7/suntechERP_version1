@@ -19,7 +19,8 @@ export class ProducationLossRecoveryComponent implements OnInit {
   currentDate = new Date();
   columnhead:any= ['Srno','Type','Worker Code','Process Code','Scrap Gross Wt','Scrap Pure Wt','Location To','Job Number','Job So Number','Design Code','Scrap UNQ Job'];
   columHederMain:any = ['Srno','Worker code','Process Code','Job Number','Balance','Bal.pure','Remaining','Trans','Vocno','JobNumber','Job S','Design','Pcs','Loss Bo'];
-
+  selectedReturnType: string = 'Gold';
+  viewMode: boolean = false;
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -32,11 +33,13 @@ export class ProducationLossRecoveryComponent implements OnInit {
 
 
   ngOnInit(): void {
+
   }
 
   productionlossrecoveryForm: FormGroup = this.formBuilder.group({
     worker: [""],
     process: [""],
+    Metalsoption: ["D"],
 
   });
 

@@ -37,11 +37,23 @@
                             <mat-datepicker [startAt]="currentDate" #vocDate></mat-datepicker>
                         </mat-form-field>
                     </div>
-                    <div class="col-md-6">
+                    <!-- <div class="col-md-6">
                         <mat-radio-button class="me-1">Gold</mat-radio-button>
                         <mat-radio-button class="me-1">Diamond</mat-radio-button>
                         <mat-radio-button class="me-1">Refinery</mat-radio-button>
+                    </div> -->
+                    <div class="col-md-6">
+                        <div>
+                            <mat-radio-group aria-label="Select an option" [disabled]="viewMode"
+                                formControlName="Metalsoption">
+                                <mat-radio-button value="D"  class="mx-2">Gold</mat-radio-button>
+                                <mat-radio-button value="M"  class="mx-2">Diamond</mat-radio-button>
+                                <mat-radio-button value="Y"  class="mx-2">Refinery</mat-radio-button>
+                            </mat-radio-group>
+                        </div>
+
                     </div>
+
                 </div>
                 <div class="row">
                     <label for="inputPassword" class="col-sm-3">Voc No :</label>
@@ -129,7 +141,7 @@
                                     <input type="text" matInput formControlName="process" />
                                 </mat-form-field>
                                 <master-search [MasterSearchData]="processCodeData"
-                                (newRowClick)="processCodeSelected($event)"></master-search>
+                                    (newRowClick)="processCodeSelected($event)"></master-search>
                             </div>
                         </div>
                         <div class="row">
