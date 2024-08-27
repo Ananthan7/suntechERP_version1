@@ -18,14 +18,15 @@
                                 <div class="row align-items-center mb-1">
                                     <label for="inputPassword" class="col-sm-2 col-form-label">Branch * :</label>
                                     <div class="col-md-3">
-                                      <mat-form-field style="width: 80%;">
+                                      <mat-form-field appearance="outline"  style="width: 100%;">
                                         <input type="text" matInput formControlName="branch"   (keydown)="lookupKeyPress($event,'orderType')"/>
+                                        <master-search [MasterSearchData]="branchCodeData"   #overlaybranchSearch
+                                        (newRowClick)="branchSelected($event)" class="masterSearch"></master-search>
                                       </mat-form-field>
-                                      <master-search [MasterSearchData]="branchCodeData"   #overlaybranchSearch
-                                         (newRowClick)="branchSelected($event)"></master-search>
+                                    
                                     </div>
                                     <div class="col-md-4">
-                                        <mat-form-field style="width: 100%;">
+                                        <mat-form-field appearance="outline"  style="width: 100%;">
                                           <input type="text" matInput formControlName="branchdesc" />
                                         </mat-form-field>
                                       </div>

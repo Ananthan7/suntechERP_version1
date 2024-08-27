@@ -194,31 +194,31 @@ export class MeltingTypeComponent implements OnInit {
   }
 
   /**use: validate all lookups to check data exists in db */
-  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
-    LOOKUPDATA.SEARCH_VALUE = event.target.value
-    if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
-    let param = {
-      LOOKUPID: LOOKUPDATA.LOOKUPID,
-      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
-    }
-    this.commonService.toastInfoByMsgId('MSG81447');
-    let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
-    let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
-      .subscribe((result) => {
-        this.isDisableSaveBtn = false;
-        let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
-        if (data.length == 0) {
-          this.commonService.toastErrorByMsgId('MSG1531')
-          this.meltingTypeForm.controls[FORMNAME].setValue('')
-          LOOKUPDATA.SEARCH_VALUE = ''
-          return
-        }
+  // validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+  //   LOOKUPDATA.SEARCH_VALUE = event.target.value
+  //   if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
+  //   let param = {
+  //     LOOKUPID: LOOKUPDATA.LOOKUPID,
+  //     WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+  //   }
+  //   this.commonService.toastInfoByMsgId('MSG81447');
+  //   let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
+  //   let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
+  //     .subscribe((result) => {
+  //       this.isDisableSaveBtn = false;
+  //       let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+  //       if (data.length == 0) {
+  //         this.commonService.toastErrorByMsgId('MSG1531')
+  //         this.meltingTypeForm.controls[FORMNAME].setValue('')
+  //         LOOKUPDATA.SEARCH_VALUE = ''
+  //         return
+  //       }
 
-      }, err => {
-        this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
-      })
-    this.subscriptions.push(Sub)
-  }
+  //     }, err => {
+  //       this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+  //     })
+  //   this.subscriptions.push(Sub)
+  // }
 
   // validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
   //   LOOKUPDATA.SEARCH_VALUE = event.target.value
@@ -245,8 +245,61 @@ export class MeltingTypeComponent implements OnInit {
   //     })
   //   this.subscriptions.push(Sub)
   // }
+  handleLookupError(FORMNAME: string, LOOKUPDATA: MasterSearchModel) {
+    this.commonService.toastErrorByMsgId('MSG1531');
+    this.meltingTypeForm.controls[FORMNAME].setValue('');
+    LOOKUPDATA.SEARCH_VALUE = '';
+    if (FORMNAME === 'karat') {
+      this.meltingTypeForm.controls.purity.setValue('');
+      this.meltingTypeForm.controls.alloy.setValue('');
+      this.meltingTypeForm.controls.metal.setValue('');
+    }
+  }
 
+  /**use: validate all lookups to check data exists in db */
+  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    LOOKUPDATA.SEARCH_VALUE = event.target.value;
 
+    if (event.target.value === '' || this.viewMode === true || this.editMode === true) {
+        return;
+    }
+
+    let param = {
+        LOOKUPID: LOOKUPDATA.LOOKUPID,
+        WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+    };
+
+    this.commonService.toastInfoByMsgId('MSG81447');
+
+    let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch';
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, param).subscribe((result) => {
+        this.isDisableSaveBtn = false;
+        let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0]);
+
+        if (data.length === 0) {
+            this.handleLookupError(FORMNAME, LOOKUPDATA); // Call handleLookupError if no data is found
+            return;
+        }
+
+        const matchedItem = data.find((item: any) => item.KARAT_CODE.toUpperCase() === event.target.value.toUpperCase());
+
+        if (matchedItem) {
+            // Set the form control value with the matched item code
+            this.meltingTypeForm.controls[FORMNAME].setValue(matchedItem.KARAT_CODE);
+
+            // Call the karatcodeSelected function with the matched item
+            this.karatcodeSelected(matchedItem);
+        } else {
+            // If no match found, reset the form control and SEARCH_VALUE
+            this.handleLookupError(FORMNAME, LOOKUPDATA); // Call handleLookupError if no match is found
+        }
+
+    }, err => {
+        this.commonService.toastErrorByMsgId('MSG2272');
+    });
+
+    this.subscriptions.push(Sub);
+}
 
   codeEnabled() {
     if (this.meltingTypeForm.value.code == '') {
@@ -335,12 +388,12 @@ export class MeltingTypeComponent implements OnInit {
 
     if (defaultAlloyPer) {
       this.commonService.toastErrorByMsgId('MSG7954')
-     // this.toastr.error("Alloy %  cannot be Zero's ");
+      // this.toastr.error("Alloy %  cannot be Zero's ");
       return true;
     }
     if (defaultAlloyEmpty) {
       this.commonService.toastErrorByMsgId('MSG1817')
-     // this.toastr.error('Default Alloy cannot be empty');
+      // this.toastr.error('Default Alloy cannot be empty');
       return true;
     }
 
