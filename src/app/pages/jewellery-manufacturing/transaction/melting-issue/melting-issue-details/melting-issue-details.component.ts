@@ -106,7 +106,7 @@ export class MeltingIssueDetailsComponent implements OnInit {
     let where = `@strBranch_Code='${form.BRANCH_CODE}',`
     where += `@strJob_Number='${form.jobno}',@strUnq_Job_Id='${form.subjobno}',`
     where += `@strMetalStone='${form.METAL_STONE}',@strProcess_Code='${form.process}',`
-    where += `@strWorker_Code='${form.worker}',@strStock_Code='${this.comService.nullToString(form.stockcode)}',@strUserName='${this.comService.userName}'`
+    where += `@strWorker_Code='${form.worker}',@strStock_Code='${form.stockcode}',@strUserName='${this.comService.userName}'`
    this.stockCodeData.WHERECONDITION = where
   //  this.ProcessCodeData.WHERECONDITION = where
   //   this.WorkerCodeData.WHERECONDITION = where
@@ -222,6 +222,7 @@ export class MeltingIssueDetailsComponent implements OnInit {
 
     this.setValueWithDecimal('topurity', this.content.PURE_WT, 'THREE')
     this.setValueWithDecimal('grossweight', this.content.GROSS_WT, 'METAL')
+    this.setValueWithDecimal('pureweight', this.content.PUREWT, 'METAL')
     this.setValueWithDecimal('purity', this.content.PURITY, 'METAL')
     this.setValueWithDecimal('netweight', this.content.NET_WT, 'METAL')
     this.setValueWithDecimal('waxweight', this.content.WAX_WT, 'THREE')

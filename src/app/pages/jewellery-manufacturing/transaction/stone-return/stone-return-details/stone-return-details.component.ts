@@ -34,6 +34,7 @@ export class StoneReturnDetailsComponent implements OnInit {
   viewMode: boolean = false;
   imagepath: any[] = []
   isDisableSaveBtn: boolean = false;
+  selectedOption: string | null = null;
   editMode: boolean = false;
   userName = localStorage.getItem('username');
   private subscriptions: Subscription[] = [];
@@ -392,6 +393,15 @@ export class StoneReturnDetailsComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
 
+  selectOption(option: string): void {
+    if (this.selectedOption === option) {
+      // If the user selects the already selected option, unselect it.
+      this.selectedOption = null;
+    } else {
+      // Otherwise, select the new option.
+      this.selectedOption = option;
+    }
+  }
 
   submitValidations(form: any) {
     if (this.comService.nullToString(form.jobNumber) == '') {
@@ -532,11 +542,11 @@ export class StoneReturnDetailsComponent implements OnInit {
       "SPID": "103",
       "parameter": {
         strBranch_Code: this.comService.nullToString(form.BRANCH_CODE),
-        strJob_Number: '',
-        strUnq_Job_Id: '',
-        strMetalStone: '',
-        strProcess_Code: '',
-        strWorker_Code: '',
+        strJob_Number: this.comService.nullToString(form.JOB_NUMBER),
+        strUnq_Job_Id: this.comService.nullToString(form.UNQ_JOB_ID),
+        strMetalStone: this.comService.nullToString(form.METAL_STONE),
+        strProcess_Code: this.comService.nullToString(form.PROCESS_CODE),
+        strWorker_Code: this.comService.nullToString(form.WORKER_CODE),
         strStock_Code: '',
         strUserName: '',
       }
@@ -567,11 +577,11 @@ export class StoneReturnDetailsComponent implements OnInit {
       "SPID": "103",
       "parameter": {
         strBranch_Code: this.comService.nullToString(form.BRANCH_CODE),
-        strJob_Number: '',
-        strUnq_Job_Id: '',
+        strJob_Number: this.comService.nullToString(form.JOB_NUMBER),
+        strUnq_Job_Id: this.comService.nullToString(form.UNQ_JOB_ID),
         strMetalStone: '',
-        strProcess_Code: '',
-        strWorker_Code: '',
+        strProcess_Code: this.comService.nullToString(form.PROCESS_CODE),
+        strWorker_Code: this.comService.nullToString(form.WORKER_CODE),
         strStock_Code: '',
         strUserName: '',
       }

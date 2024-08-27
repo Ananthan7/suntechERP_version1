@@ -130,7 +130,7 @@
 
                         </dx-data-grid>
                         <div class="p-2 bd-highlight">
-                            <button type="button"  mat-flat-button (click)="onSelectRow()">
+                            <button type="button"  mat-flat-button (click)="onSelectRow()"  *ngIf="!viewMode">
                                 Select
                             </button>
                         </div>

@@ -20,14 +20,14 @@
               <div class="col-md-3">
                 <div class="position-relative d-flex">
                   <mat-form-field style="width: 100%">
-                    <input [readonly]="viewOnly === true" type="text" matInput formControlName="descriptionCode" />
+                    <input [readonly]="true" type="text" matInput formControlName="descriptionCode" />
                   </mat-form-field>
                 </div>
               </div>
               <div class="col-md-3">
                 <div class="position-relative d-flex">
                   <mat-form-field style="width: 90%">
-                    <input [readonly]="viewOnly === true" class="text-right" type="text" formControlName="description"
+                    <input [readonly]="true" class="text-right" type="text" formControlName="description"
                       matInput />
                   </mat-form-field>
                   <master-search *ngIf="viewOnly === false" [MasterSearchData]="DescCodeData"
@@ -68,7 +68,7 @@
               </label>
               <div class="col-sm-2">
                 <mat-form-field style="width: 100%">
-                  <input [readonly]="viewOnly === true" matInput [matDatepicker]="delivery_date"
+                  <input [min]="currentDate" [readonly]="viewOnly === true" matInput [matDatepicker]="delivery_date"
                     formControlName="delivery_date" placeholder="DD/MM/YYYY" DateValidation />
                   <mat-datepicker-toggle *ngIf="viewOnly === false" matSuffix
                     [for]="delivery_date"></mat-datepicker-toggle>
@@ -229,7 +229,7 @@
               <div class="col-md-6">
                 <div class="position-relative d-flex">
                   <mat-form-field style="width: 100%">
-                    <input [readonly]="viewOnly === true" type="text" matInput formControlName="repair_bags" />
+                    <input [readonly]="viewOnly === true" type="number" matInput formControlName="repair_bags" />
                   </mat-form-field>
                 </div>
               </div>
