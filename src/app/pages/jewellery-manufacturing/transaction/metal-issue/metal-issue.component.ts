@@ -424,7 +424,7 @@ export class MetalIssueComponent implements OnInit {
       "NAVSEQNO": 0,
       "FIX_UNFIX": false,
       "AUTOPOSTING": true,
-      "POSTDATE": this.comService.formatDateTime(form.vocdate),
+      "POSTDATE": this.comService.formatDateTime(form.currentDate),
       "SYSTEM_DATE": this.comService.formatDateTime(form.vocdate),
       "PRINT_COUNT": 0,
       "PRINT_COUNT_ACCOPY": 0,
