@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup } from "@angular/forms";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import {
   NgbActiveModal,
   NgbModal,
@@ -123,8 +123,8 @@ export class RepairJewelleryReceiptComponent implements OnInit {
     remark: [""],
     currency: [""],
     currency_rate: [""],
-    email: [""],
-    address: [""],
+    email: ["", [Validators.required, Validators.email]],
+    address: ["", Validators.required],
     repair_narration: [""],
     customer_delivery_date: [null],
     repairAmt: [""],
