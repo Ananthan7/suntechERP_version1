@@ -23,7 +23,7 @@
                                 :</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput
+                                    <input type="text" matInput UpperCaseDirective
                                         formControlName="jobNumber"
                                         (focusout)="jobNumberValidate($event)"
                                         [readonly]="viewMode"
@@ -68,7 +68,7 @@
                                 :</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput
+                                    <input type="text" matInput UpperCaseDirective
                                         formControlName="processCode"
                                         [readonly]="viewMode"
                                         (keydown)="lookupKeyPress($event,'processCode')"
@@ -94,7 +94,7 @@
                                 :</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput
+                                    <input type="text" matInput UpperCaseDirective
                                         formControlName="workerCode"
                                         [readonly]="viewMode"
                                         (keydown)="lookupKeyPress($event,'workerCode')"
@@ -163,7 +163,7 @@
                                 :</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput
+                                    <input type="text" matInput UpperCaseDirective
                                         formControlName="location"
                                         [readonly]="viewMode"
                                         (keydown)="lookupKeyPress($event,'location')"
@@ -182,8 +182,8 @@
                                 class="col-sm-3 col-form-label">Stock Code *
                                 :</label>
                             <div class="col-sm-3">
-                                <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput
+                                <mat-form-field style="width: 70%;"> 
+                                    <input type="text" matInput UpperCaseDirective
                                         formControlName="stockCode"
                                         (focusout)="stockCodeValidate($event)"
                                         [readonly]="viewMode"
@@ -209,7 +209,7 @@
                                 :</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 70%;">
-                                    <input type="text" matInput
+                                    <input type="text" matInput UpperCaseDirective
                                         formControlName="ReturnToStockCode"
                                         [readonly]="viewMode"
                                         (keydown)="lookupKeyPress($event,'ReturnToStockCode')"
