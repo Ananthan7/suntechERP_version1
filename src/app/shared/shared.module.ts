@@ -92,6 +92,7 @@ import { PurityDecimalDirective } from './directives/format-purity-decimal.direc
 import { FormatRateDecimalDirective } from './directives/format-rate-decimal.directive';
 import { AlphabetsOnlyDirective } from './directives/alphabets-only.directive';
 import { NextInputDirective } from './directives/next-input.directive';
+import { BranchDivisionComponent } from './common/branch-division/branch-division.component';
 
 
 @NgModule({
@@ -136,7 +137,8 @@ import { NextInputDirective } from './directives/next-input.directive';
     GridSearchComponent,
     ImageSliderComponent,
     FavoriteMenusComponent,
-    DatetimePickerComponent
+    DatetimePickerComponent,
+    BranchDivisionComponent
   ],
   imports: [
     CommonModule,
@@ -183,7 +185,7 @@ import { NextInputDirective } from './directives/next-input.directive';
     MatCheckboxModule, MatProgressSpinnerModule,
     OverlayPanelModule, DragDropModule,
     MatTableModule, NgbCarouselModule,
-    MatRadioModule, MatCardModule, ZXingScannerModule, NgxBarcodeScannerModule,BarcodeScannerLivestreamModule
+    MatRadioModule, MatCardModule, ZXingScannerModule, NgxBarcodeScannerModule,BarcodeScannerLivestreamModule,
   ],
   exports: [
     //component exports
@@ -271,7 +273,8 @@ import { NextInputDirective } from './directives/next-input.directive';
     MatCheckboxModule, MatProgressSpinnerModule,
     MatRadioModule, MatCardModule,
     OverlayPanelModule, DragDropModule,
-    MatTableModule, CalendarModule 
+    MatTableModule, CalendarModule,
+    BranchDivisionComponent
   ],
   providers: [NgbActiveModal, { provide: DateAdapter, useClass: DateFormat }]
 })
