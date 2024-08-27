@@ -11,6 +11,7 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 import themes from 'devextreme/ui/themes';
 import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 import { MatDialog } from '@angular/material/dialog';
+import { DxDataGridComponent } from 'devextreme-angular';
 
 @Component({
   selector: 'app-metal-return',
@@ -18,6 +19,7 @@ import { MatDialog } from '@angular/material/dialog';
   styleUrls: ['./metal-return.component.scss']
 })
 export class MetalReturnComponent implements OnInit {
+  @ViewChild('dataGrid', { static: false }) dataGrid!: DxDataGridComponent;
   @ViewChild('metalReturnDetailScreen') public MetalReturnDetailScreen!: NgbModal;
   @ViewChild('overlayenteredBy') overlayenteredBy! : MasterSearchComponent;
    @ViewChild('overlayprocess') overlayprocess! : MasterSearchComponent;
@@ -550,160 +552,187 @@ onRowClickHandlers(e: any) {
   console.log('Row Clicked:', this.selectedRowData);
 }
 
-
 // onSelectRow() {
-
 //   console.log('Attempting to Select Row');
-//   if (this.selectedRowData) {
-//       console.log('Pushing to metalReturnDetailsData:', this.selectedRowData);
-//      // this.metalReturnDetailsData =this.selectedRowData;
 
-//       this.selectedRowData.forEach((e:any)=>{
-//         console.log(e)
-//         this.metalReturnDetailsData.push(
-//           {
-//              // "SRNO": this.commonService.emptyToZero(this.metalReturnDetailsData.length+1),
-//               "VOCNO": this.commonService.emptyToZero(e.VOCNO),
-//               "VOCTYPE": this.commonService.nullToString(e.VOCTYPE),
-//               "JOB_NUMBER": this.commonService.nullToString(e.JOB_NUMBER),
-//               "JOB_SO_NUMBER": this.commonService.emptyToZero(e.subJobNo),
-//               "UNQ_JOB_ID": this.commonService.nullToString(e.UNQ_JOB_ID),
-//               "JOB_DESCRIPTION": this.commonService.nullToString( e.JOB_DESCRIPTION),
-//               "BRANCH_CODE": this.commonService.nullToString(e.BRANCH_CODE),
-//               "DESIGN_CODE":  this.commonService.nullToString(e.DESIGN_CODE),
-//               "DIVCODE": this.commonService.nullToString(e.DIVCODE),
-//               "STOCK_CODE": this.commonService.nullToString(e.STOCK_CODE),
-//               "STOCK_DESCRIPTION": this.commonService.nullToString(e.STOCK_DESCRIPTION),
-//               "SUB_STOCK_CODE": "0",
-//               "KARAT_CODE": this.commonService.nullToString(e.KARAT_CODE),
-//               "PCS": this.commonService.emptyToZero(e.PCS),
-//               "GROSSWT":this.commonService.emptyToZero( e.GROSS_WT),
-//               "PURITY": this.commonService.emptyToZero(e.PURITY),
-//               "PUREWT": this.commonService.emptyToZero(e.PUREWT),
-//               "RATE_TYPE": "",
-//               "METAL_RATE": 0,
-//               "CURRENCY_CODE": "",
-//               "CURRENCY_RATE": 0,
-//               "METAL_GRM_RATEFC": this.commonService.emptyToZero(e.metalGramRateFc),
-//               "METAL_GRM_RATELC": this.commonService.emptyToZero(e.metalGramRateLc),
-//               "METAL_AMOUNTFC": this.commonService.emptyToZero(e.metalAmountFc),
-//               "METAL_AMOUNTLC": this.commonService.emptyToZero(e.metalAmountLc),
-//               "MAKING_RATEFC": this.commonService.emptyToZero(e.makingRateFc),
-//               "MAKING_RATELC": this.commonService.emptyToZero(e.makingRateLc),
-//               "MAKING_AMOUNTFC": this.commonService.emptyToZero(e.makingAmountFC),
-//               "MAKING_AMOUNTLC": this.commonService.emptyToZero(e.makingAmountFC),
-//               "TOTAL_RATEFC": this.commonService.emptyToZero(e.totalRateFc),
-//               "TOTAL_RATELC": this.commonService.emptyToZero(e.totalRateLc),
-//               "TOTAL_AMOUNTFC": 0,
-//               "TOTAL_AMOUNTLC": 0,
-//               "PROCESS_CODE": this.commonService.nullToString(e.PROCESS),
-//               "PROCESS_NAME": this.commonService.nullToString(e.PROCESSDESC),
-//               "WORKER_CODE": this.commonService.nullToString(e.WORKER),
-//               "WORKER_NAME": this.commonService.nullToString(e.WORKERDESC),
-//               "UNQ_DESIGN_ID": "",
-//               "WIP_ACCODE": "",
-//               "UNIQUEID": 0,
-//               "LOCTYPE_CODE": this.commonService.nullToString(e.location),
-//               "RETURN_STOCK": "",
-//               "SUB_RETURN_STOCK": "",
-//               "STONE_WT": this.commonService.emptyToZero(e.STONEWT),
-//               "NET_WT": this.commonService.emptyToZero(e.NETWT),
-//               "PART_CODE": this.commonService.nullToString(e.PART_CODE),
-//               "DT_BRANCH_CODE": this.commonService.nullToString(this.commonService.branchCode),
-//               "DT_VOCTYPE": this.commonService.nullToString(this.metalReturnForm.value.VOCTYPE),
-//               "DT_VOCNO": this.commonService.emptyToZero(e.VOCNO),
-//               "DT_YEARMONTH": this.commonService.nullToString(this.commonService.yearSelected),
-//               "PUDIFF": 0,
-//               "JOB_PURITY": 0
+//   // Clear previously selected rows
+//   this.selectedRowData = [];
+
+//   // Get the selected rows data from the grid
+//   const selectedRows = this.dataGrid.instance.getSelectedRowsData();
+
+//   if (selectedRows.length > 0) {
+//       // Push all selected rows into selectedRowData array
+//       this.selectedRowData = [...selectedRows];
+
+//       console.log('Pushing to metalReturnDetailsData:', this.selectedRowData);
+
+//       this.selectedRowData.forEach((e: any) => {
+//           // Check if the item already exists in metalReturnDetailsData
+//           const exists = this.metalReturnDetailsData.some((item: any) =>
+//               item.VOCNO === e.VOCNO &&
+//               item.JOB_NUMBER === e.JOB_NUMBER &&
+//               item.STOCK_CODE === e.STOCK_CODE
+//           );
+
+//           if (!exists) {
+//               this.metalReturnDetailsData.push({
+//                   "VOCNO": this.commonService.emptyToZero(e.VOCNO),
+//                   "VOCTYPE": this.commonService.nullToString(e.VOCTYPE),
+//                   "JOB_NUMBER": this.commonService.nullToString(e.JOB_NUMBER),
+//                   "JOB_SO_NUMBER": this.commonService.emptyToZero(e.subJobNo),
+//                   "UNQ_JOB_ID": this.commonService.nullToString(e.UNQ_JOB_ID),
+//                   "JOB_DESCRIPTION": this.commonService.nullToString(e.JOB_DESCRIPTION),
+//                   "BRANCH_CODE": this.commonService.nullToString(e.BRANCH_CODE),
+//                   "DESIGN_CODE": this.commonService.nullToString(e.DESIGN_CODE),
+//                   "DIVCODE": this.commonService.nullToString(e.DIVCODE),
+//                   "STOCK_CODE": this.commonService.nullToString(e.STOCK_CODE),
+//                   "STOCK_DESCRIPTION": this.commonService.nullToString(e.STOCK_DESCRIPTION),
+//                   "SUB_STOCK_CODE": "0",
+//                   "KARAT_CODE": this.commonService.nullToString(e.KARAT_CODE),
+//                   "PCS": this.commonService.emptyToZero(e.PCS),
+//                   "GROSSWT": this.commonService.emptyToZero(e.GROSS_WT),
+//                   "PURITY": this.commonService.emptyToZero(e.PURITY),
+//                   "PUREWT": this.commonService.emptyToZero(e.PUREWT),
+//                   "RATE_TYPE": "",
+//                   "METAL_RATE": 0,
+//                   "CURRENCY_CODE": "",
+//                   "CURRENCY_RATE": 0,
+//                   "METAL_GRM_RATEFC": this.commonService.emptyToZero(e.metalGramRateFc),
+//                   "METAL_GRM_RATELC": this.commonService.emptyToZero(e.metalGramRateLc),
+//                   "METAL_AMOUNTFC": this.commonService.emptyToZero(e.metalAmountFc),
+//                   "METAL_AMOUNTLC": this.commonService.emptyToZero(e.metalAmountLc),
+//                   "MAKING_RATEFC": this.commonService.emptyToZero(e.makingRateFc),
+//                   "MAKING_RATELC": this.commonService.emptyToZero(e.makingRateLc),
+//                   "MAKING_AMOUNTFC": this.commonService.emptyToZero(e.makingAmountFC),
+//                   "MAKING_AMOUNTLC": this.commonService.emptyToZero(e.makingAmountFC),
+//                   "TOTAL_RATEFC": this.commonService.emptyToZero(e.totalRateFc),
+//                   "TOTAL_RATELC": this.commonService.emptyToZero(e.totalRateLc),
+//                   "TOTAL_AMOUNTFC": 0,
+//                   "TOTAL_AMOUNTLC": 0,
+//                   "PROCESS_CODE": this.commonService.nullToString(e.PROCESS),
+//                   "PROCESS_NAME": this.commonService.nullToString(e.PROCESSDESC),
+//                   "WORKER_CODE": this.commonService.nullToString(e.WORKER),
+//                   "WORKER_NAME": this.commonService.nullToString(e.WORKERDESC),
+//                   "UNQ_DESIGN_ID": "",
+//                   "WIP_ACCODE": "",
+//                   "UNIQUEID": 0,
+//                   "LOCTYPE_CODE": this.commonService.nullToString(e.location),
+//                   "RETURN_STOCK": "",
+//                   "SUB_RETURN_STOCK": "",
+//                   "STONE_WT": this.commonService.emptyToZero(e.STONEWT),
+//                   "NET_WT": this.commonService.emptyToZero(e.NETWT),
+//                   "PART_CODE": this.commonService.nullToString(e.PART_CODE),
+//                   "DT_BRANCH_CODE": this.commonService.nullToString(this.commonService.branchCode),
+//                   "DT_VOCTYPE": this.commonService.nullToString(this.metalReturnForm.value.VOCTYPE),
+//                   "DT_VOCNO": this.commonService.emptyToZero(e.VOCNO),
+//                   "DT_YEARMONTH": this.commonService.nullToString(this.commonService.yearSelected),
+//                   "PUDIFF": 0,
+//                   "JOB_PURITY": 0
+//               });
+//           } else {
+//               console.log(`Row with VOCNO: ${e.VOCNO}, JOB_NUMBER: ${e.JOB_NUMBER}, STOCK_CODE: ${e.STOCK_CODE} is already in metalReturnDetailsData.`);
 //           }
-//         )
-//       })
-//       this.recalculateSRNO(); 
+//       });
+
+//       this.recalculateSRNO();
 //   } else {
 //       console.log('No Row Selected');
-//       this.commonService.toastErrorByMsgId('MSG_NO_ROW_SELECTED'); // Handle error
+//       this.commonService.toastErrorByMsgId('MSG_NO_ROW_SELECTED');
 //   }
+
+//   // Clear selection in the grid after pushing the rows
+//   this.dataGrid.instance.clearSelection();
 // }
 
 onSelectRow() {
-  console.log('Attempting to Select Row');
-  if (this.selectedRowData) {
-      console.log('Pushing to metalReturnDetailsData:', this.selectedRowData);
+  console.log('Attempting to Select/Unselect Rows');
 
-      this.selectedRowData.forEach((e: any) => {
-          // Check if the item already exists in metalReturnDetailsData
-          const exists = this.metalReturnDetailsData.some((item: any) => 
-              item.VOCNO === e.VOCNO && 
-              item.JOB_NUMBER === e.JOB_NUMBER && 
-              item.STOCK_CODE === e.STOCK_CODE
-          );
+  // Get the currently selected rows from the grid
+  const selectedRows = this.dataGrid.instance.getSelectedRowsData();
 
-          if (!exists) {
-              this.metalReturnDetailsData.push({
-                  "VOCNO": this.commonService.emptyToZero(e.VOCNO),
-                  "VOCTYPE": this.commonService.nullToString(e.VOCTYPE),
-                  "JOB_NUMBER": this.commonService.nullToString(e.JOB_NUMBER),
-                  "JOB_SO_NUMBER": this.commonService.emptyToZero(e.subJobNo),
-                  "UNQ_JOB_ID": this.commonService.nullToString(e.UNQ_JOB_ID),
-                  "JOB_DESCRIPTION": this.commonService.nullToString(e.JOB_DESCRIPTION),
-                  "BRANCH_CODE": this.commonService.nullToString(e.BRANCH_CODE),
-                  "DESIGN_CODE": this.commonService.nullToString(e.DESIGN_CODE),
-                  "DIVCODE": this.commonService.nullToString(e.DIVCODE),
-                  "STOCK_CODE": this.commonService.nullToString(e.STOCK_CODE),
-                  "STOCK_DESCRIPTION": this.commonService.nullToString(e.STOCK_DESCRIPTION),
-                  "SUB_STOCK_CODE": "0",
-                  "KARAT_CODE": this.commonService.nullToString(e.KARAT_CODE),
-                  "PCS": this.commonService.emptyToZero(e.PCS),
-                  "GROSSWT": this.commonService.emptyToZero(e.GROSS_WT),
-                  "PURITY": this.commonService.emptyToZero(e.PURITY),
-                  "PUREWT": this.commonService.emptyToZero(e.PUREWT),
-                  "RATE_TYPE": "",
-                  "METAL_RATE": 0,
-                  "CURRENCY_CODE": "",
-                  "CURRENCY_RATE": 0,
-                  "METAL_GRM_RATEFC": this.commonService.emptyToZero(e.metalGramRateFc),
-                  "METAL_GRM_RATELC": this.commonService.emptyToZero(e.metalGramRateLc),
-                  "METAL_AMOUNTFC": this.commonService.emptyToZero(e.metalAmountFc),
-                  "METAL_AMOUNTLC": this.commonService.emptyToZero(e.metalAmountLc),
-                  "MAKING_RATEFC": this.commonService.emptyToZero(e.makingRateFc),
-                  "MAKING_RATELC": this.commonService.emptyToZero(e.makingRateLc),
-                  "MAKING_AMOUNTFC": this.commonService.emptyToZero(e.makingAmountFC),
-                  "MAKING_AMOUNTLC": this.commonService.emptyToZero(e.makingAmountFC),
-                  "TOTAL_RATEFC": this.commonService.emptyToZero(e.totalRateFc),
-                  "TOTAL_RATELC": this.commonService.emptyToZero(e.totalRateLc),
-                  "TOTAL_AMOUNTFC": 0,
-                  "TOTAL_AMOUNTLC": 0,
-                  "PROCESS_CODE": this.commonService.nullToString(e.PROCESS),
-                  "PROCESS_NAME": this.commonService.nullToString(e.PROCESSDESC),
-                  "WORKER_CODE": this.commonService.nullToString(e.WORKER),
-                  "WORKER_NAME": this.commonService.nullToString(e.WORKERDESC),
-                  "UNQ_DESIGN_ID": "",
-                  "WIP_ACCODE": "",
-                  "UNIQUEID": 0,
-                  "LOCTYPE_CODE": this.commonService.nullToString(e.location),
-                  "RETURN_STOCK": "",
-                  "SUB_RETURN_STOCK": "",
-                  "STONE_WT": this.commonService.emptyToZero(e.STONEWT),
-                  "NET_WT": this.commonService.emptyToZero(e.NETWT),
-                  "PART_CODE": this.commonService.nullToString(e.PART_CODE),
-                  "DT_BRANCH_CODE": this.commonService.nullToString(this.commonService.branchCode),
-                  "DT_VOCTYPE": this.commonService.nullToString(this.metalReturnForm.value.VOCTYPE),
-                  "DT_VOCNO": this.commonService.emptyToZero(e.VOCNO),
-                  "DT_YEARMONTH": this.commonService.nullToString(this.commonService.yearSelected),
-                  "PUDIFF": 0,
-                  "JOB_PURITY": 0
-              });
-          } else {
-              console.log(`Row with VOCNO: ${e.VOCNO}, JOB_NUMBER: ${e.JOB_NUMBER}, STOCK_CODE: ${e.STOCK_CODE} is already in metalReturnDetailsData.`);
-          }
-      });
+  // Iterate through the current `metalReturnDetailsData`
+  this.metalReturnDetailsData = this.metalReturnDetailsData.filter((existingItem: any) => {
+      // Check if the existing item is still in the selected rows
+      const isStillSelected = selectedRows.some((selectedItem: any) =>
+          selectedItem.VOCNO === existingItem.VOCNO &&
+          selectedItem.JOB_NUMBER === existingItem.JOB_NUMBER &&
+          selectedItem.STOCK_CODE === existingItem.STOCK_CODE
+      );
 
-      this.recalculateSRNO(); 
-  } else {
-      console.log('No Row Selected');
-      this.commonService.toastErrorByMsgId('MSG_NO_ROW_SELECTED'); // Handle error
-  }
+      // If it's still selected, keep it; if not, remove it
+      return isStillSelected;
+  });
+
+  // Add any newly selected rows to `metalReturnDetailsData`
+  selectedRows.forEach((selectedItem: any) => {
+      const exists = this.metalReturnDetailsData.some((existingItem: any) =>
+          existingItem.VOCNO === selectedItem.VOCNO &&
+          existingItem.JOB_NUMBER === selectedItem.JOB_NUMBER &&
+          existingItem.STOCK_CODE === selectedItem.STOCK_CODE
+      );
+
+      if (!exists) {
+          this.metalReturnDetailsData.push({
+              "VOCNO": this.commonService.emptyToZero(selectedItem.VOCNO),
+              "VOCTYPE": this.commonService.nullToString(selectedItem.VOCTYPE),
+              "JOB_NUMBER": this.commonService.nullToString(selectedItem.JOB_NUMBER),
+              "JOB_SO_NUMBER": this.commonService.emptyToZero(selectedItem.subJobNo),
+              "UNQ_JOB_ID": this.commonService.nullToString(selectedItem.UNQ_JOB_ID),
+              "JOB_DESCRIPTION": this.commonService.nullToString(selectedItem.JOB_DESCRIPTION),
+              "BRANCH_CODE": this.commonService.nullToString(selectedItem.BRANCH_CODE),
+              "DESIGN_CODE": this.commonService.nullToString(selectedItem.DESIGN_CODE),
+              "DIVCODE": this.commonService.nullToString(selectedItem.DIVCODE),
+              "STOCK_CODE": this.commonService.nullToString(selectedItem.STOCK_CODE),
+              "STOCK_DESCRIPTION": this.commonService.nullToString(selectedItem.STOCK_DESCRIPTION),
+              "SUB_STOCK_CODE": "0",
+              "KARAT_CODE": this.commonService.nullToString(selectedItem.KARAT_CODE),
+              "PCS": this.commonService.emptyToZero(selectedItem.PCS),
+              "GROSSWT": this.commonService.emptyToZero(selectedItem.GROSS_WT),
+              "PURITY": this.commonService.emptyToZero(selectedItem.PURITY),
+              "PUREWT": this.commonService.emptyToZero(selectedItem.PUREWT),
+              "RATE_TYPE": "",
+              "METAL_RATE": 0,
+              "CURRENCY_CODE": "",
+              "CURRENCY_RATE": 0,
+              "METAL_GRM_RATEFC": this.commonService.emptyToZero(selectedItem.metalGramRateFc),
+              "METAL_GRM_RATELC": this.commonService.emptyToZero(selectedItem.metalGramRateLc),
+              "METAL_AMOUNTFC": this.commonService.emptyToZero(selectedItem.metalAmountFc),
+              "METAL_AMOUNTLC": this.commonService.emptyToZero(selectedItem.metalAmountLc),
+              "MAKING_RATEFC": this.commonService.emptyToZero(selectedItem.makingRateFc),
+              "MAKING_RATELC": this.commonService.emptyToZero(selectedItem.makingRateLc),
+              "MAKING_AMOUNTFC": this.commonService.emptyToZero(selectedItem.makingAmountFC),
+              "MAKING_AMOUNTLC": this.commonService.emptyToZero(selectedItem.makingAmountFC),
+              "TOTAL_RATEFC": this.commonService.emptyToZero(selectedItem.totalRateFc),
+              "TOTAL_RATELC": this.commonService.emptyToZero(selectedItem.totalRateLc),
+              "TOTAL_AMOUNTFC": 0,
+              "TOTAL_AMOUNTLC": 0,
+              "PROCESS_CODE": this.commonService.nullToString(selectedItem.PROCESS),
+              "PROCESS_NAME": this.commonService.nullToString(selectedItem.PROCESSDESC),
+              "WORKER_CODE": this.commonService.nullToString(selectedItem.WORKER),
+              "WORKER_NAME": this.commonService.nullToString(selectedItem.WORKERDESC),
+              "UNQ_DESIGN_ID": "",
+              "WIP_ACCODE": "",
+              "UNIQUEID": 0,
+              "LOCTYPE_CODE": this.commonService.nullToString(selectedItem.location),
+              "RETURN_STOCK": "",
+              "SUB_RETURN_STOCK": "",
+              "STONE_WT": this.commonService.emptyToZero(selectedItem.STONEWT),
+              "NET_WT": this.commonService.emptyToZero(selectedItem.NETWT),
+              "PART_CODE": this.commonService.nullToString(selectedItem.PART_CODE),
+              "DT_BRANCH_CODE": this.commonService.nullToString(this.commonService.branchCode),
+              "DT_VOCTYPE": this.commonService.nullToString(this.metalReturnForm.value.VOCTYPE),
+              "DT_VOCNO": this.commonService.emptyToZero(selectedItem.VOCNO),
+              "DT_YEARMONTH": this.commonService.nullToString(this.commonService.yearSelected),
+              "PUDIFF": 0,
+              "JOB_PURITY": 0
+          });
+      }
+  });
+
+  this.recalculateSRNO(); // Recalculate serial numbers after updates
 }
+
 
 
 
@@ -868,7 +897,7 @@ onSelectRow() {
     
     return {
       "MID": this.commonService.emptyToZero(this.content?.MID),
-      "VOCTYPE": form.VOCTYPE,
+      "VOCTYPE":  this.commonService.nullToString(form.VOCTYPE),
       "BRANCH_CODE": form.BRANCH_CODE,
       "VOCNO": this.commonService.emptyToZero(form.VOCNO),
       "VOCDATE": this.commonService.formatDateTime(form.vocDate),
@@ -901,12 +930,18 @@ onSelectRow() {
     }
   }
   submitValidations(form: any) {
-    if (this.commonService.nullToString(form.VOCTYPE) == '') {
-      this.commonService.toastErrorByMsgId('MSG1939')// VOCTYPE  CANNOT BE EMPTY
-      return true
+    if (this.commonService.nullToString(form.VOCTYPE) === '') {
+        this.commonService.toastErrorByMsgId('MSG1939'); // VOCTYPE CANNOT BE EMPTY
+        return true;
     }
+
+    if (this.metalReturnDetailsData.length <= 0) {
+        this.commonService.toastErrorByMsgId('MSG1262'); // Minimum one row should be entered in grid
+        return true;
+    }
+
     return false;
-  }
+}
 
   formSubmit() {
     // if (this.metalReturnForm.invalid || this.metalReturnDetailsData.length == 0) {
