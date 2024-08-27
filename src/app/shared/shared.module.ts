@@ -92,6 +92,7 @@ import { PurityDecimalDirective } from './directives/format-purity-decimal.direc
 import { FormatRateDecimalDirective } from './directives/format-rate-decimal.directive';
 import { AlphabetsOnlyDirective } from './directives/alphabets-only.directive';
 import { NextInputDirective } from './directives/next-input.directive';
+import { NegativeAmountDecimalDirective } from './directives/format-negative-amount-decimal.directive';
 
 
 @NgModule({
@@ -119,6 +120,7 @@ import { NextInputDirective } from './directives/next-input.directive';
     MenuButtonsComponent,
     AllowLeadingZeroDirective,
     AmountDecimalDirective,
+    NegativeAmountDecimalDirective,
     NextInputDirective,
     MetalDecimalDirective,
     StoneDecimalDirective,
@@ -217,6 +219,7 @@ import { NextInputDirective } from './directives/next-input.directive';
     NoEmptySpaceDirective,
     AllowLeadingZeroDirective,
     AmountDecimalDirective,
+    NegativeAmountDecimalDirective,
     NextInputDirective,
     MetalDecimalDirective,
     StoneDecimalDirective,
