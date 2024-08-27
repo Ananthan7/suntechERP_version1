@@ -250,6 +250,7 @@ export class MetalIssueDetailsComponent implements OnInit {
     this.jobNumberValidate({ target: { value: e.job_number } })
   }
   stockCodeSelected(e: any) {
+    console.log(e,'e')
     this.metalIssueDetailsForm.controls.stockCode.setValue(e.STOCK_CODE);
     this.metalIssueDetailsForm.controls.stockCodeDes.setValue(e.DESCRIPTION);
     this.metalIssueDetailsForm.controls.DIVCODE.setValue(e.DIVISION_CODE);
@@ -558,33 +559,33 @@ export class MetalIssueDetailsComponent implements OnInit {
           this.processCodeData.WHERECONDITION = `@strWorker='${data[0].WORKER}',@strCurrentUser='${this.comService.userName}'`
           this.workerCodeData.WHERECONDITION = `@strProcess='${data[0].PROCESS}',@blnActive=1`
           this.metalIssueDetailsForm.controls.DIVCODE.setValue(data[0].DIVCODE)
-          this.metalIssueDetailsForm.controls.stockCode.setValue(data[0].STOCK_CODE)
-          this.metalIssueDetailsForm.controls.stockCodeDes.setValue(data[0].STOCK_DESCRIPTION)
-          this.metalIssueDetailsForm.controls.toStockCode.setValue(data[0].STOCK_CODE);
-          this.metalIssueDetailsForm.controls.toStockCodeDes.setValue(data[0].STOCK_DESCRIPTION);
-          this.metalIssueDetailsForm.controls.toDIVCODE.setValue(data[0].DIVCODE);
-          this.metalIssueDetailsForm.controls.masterMetal.setValue(false);
+          // this.metalIssueDetailsForm.controls.stockCode.setValue(data[0].STOCK_CODE)
+          // this.metalIssueDetailsForm.controls.stockCodeDes.setValue(data[0].STOCK_DESCRIPTION)
+          // this.metalIssueDetailsForm.controls.toStockCode.setValue(data[0].STOCK_CODE);
+          // this.metalIssueDetailsForm.controls.toStockCodeDes.setValue(data[0].STOCK_DESCRIPTION);
+          // this.metalIssueDetailsForm.controls.toDIVCODE.setValue(data[0].DIVCODE);
+          // this.metalIssueDetailsForm.controls.masterMetal.setValue(false);
           this.comService.formControlSetReadOnly('toDIVCODE', true)
           this.comService.formControlSetReadOnly('toStockCode', true)
           this.comService.formControlSetReadOnly('toStockCodeDes', true)
           this.metalIssueDetailsForm.controls.workerCodeDes.setValue(data[0].WORKERDESC)
           this.metalIssueDetailsForm.controls.processCodeDesc.setValue(data[0].PROCESSDESC)
-          this.metalIssueDetailsForm.controls.DESIGN_CODE.setValue(data[0].DESIGN_CODE)
-          this.metalIssueDetailsForm.controls.EXCLUDE_TRANSFER_WT.setValue(data[0].EXCLUDE_TRANSFER_WT)
-          this.metalIssueDetailsForm.controls.JOB_PCS.setValue(data[0].PCS1)
-          this.metalIssueDetailsForm.controls.UNQ_DESIGN_ID.setValue(data[0].UNQ_DESIGN_ID)
+          // this.metalIssueDetailsForm.controls.DESIGN_CODE.setValue(data[0].DESIGN_CODE)
+          // this.metalIssueDetailsForm.controls.EXCLUDE_TRANSFER_WT.setValue(data[0].EXCLUDE_TRANSFER_WT)
+          // this.metalIssueDetailsForm.controls.JOB_PCS.setValue(data[0].PCS1)
+          // this.metalIssueDetailsForm.controls.UNQ_DESIGN_ID.setValue(data[0].UNQ_DESIGN_ID)
 
-          this.metalIssueDetailsForm.controls.pcs.setValue(data[0].PCS)
-          this.setValueWithDecimal('PURE_WT', data[0].PURE_WT.toFixed(3), 'THREE')
-          this.setValueWithDecimal('GROSS_WT', data[0].METAL, 'METAL')
-          this.setValueWithDecimal('PURITY', data[0].PURITY, 'PURITY')
-          this.setValueWithDecimal('KARAT', data[0].KARAT, 'THREE')
-          this.setValueWithDecimal('STONE_WT', data[0].STONE, 'STONE')
-          this.setValueWithDecimal('NET_WT', data[0].METAL - data[0].STONE, 'THREE')
-          let purityFlag = this.comService.getCompanyParamValue('ALLOWPURITYCHANGEINMETALISSUE')
-          if (!purityFlag && data[0].PURITY != '') {
-            this.stockCodeData.WHERECONDITION = this.stockCodeData.WHERECONDITION + `AND PURITY='${data[0].PURITY}'`
-          }
+          // this.metalIssueDetailsForm.controls.pcs.setValue(data[0].PCS)
+          // this.setValueWithDecimal('PURE_WT', data[0].PURE_WT.toFixed(3), 'THREE')
+          // this.setValueWithDecimal('GROSS_WT', data[0].METAL, 'METAL')
+          // this.setValueWithDecimal('PURITY', data[0].PURITY, 'PURITY')
+          // this.setValueWithDecimal('KARAT', data[0].KARAT, 'THREE')
+          // this.setValueWithDecimal('STONE_WT', data[0].STONE, 'STONE')
+          // this.setValueWithDecimal('NET_WT', data[0].METAL - data[0].STONE, 'THREE')
+          // let purityFlag = this.comService.getCompanyParamValue('ALLOWPURITYCHANGEINMETALISSUE')
+          // if (!purityFlag && data[0].PURITY != '') {
+          //   this.stockCodeData.WHERECONDITION = this.stockCodeData.WHERECONDITION + `AND PURITY='${data[0].PURITY}'`
+          // }
           this.FillMtlRequiredDetail()
           // this.setStockCodeCondition()
           // this.meltingIssuedetailsFrom.controls.MetalWeightFrom.setValue(
