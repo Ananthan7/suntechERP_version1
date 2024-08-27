@@ -1,11 +1,9 @@
-import { Component, EventEmitter, Input, OnInit, Output, Renderer2 } from "@angular/core";
+import { Component, EventEmitter, Input, OnInit, Output, Renderer2, ViewChild } from "@angular/core";
 import { MasterSearchModel } from "src/app/shared/data/master-find-model";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { SuntechAPIService } from "src/app/services/suntech-api.service";
-import { ToastrService } from "ngx-toastr";
 import { CommonServiceService } from "src/app/services/common-service.service";
 import { Subscription } from "rxjs";
-import Swal from "sweetalert2";
 import { NgbActiveModal, NgbModal, NgbModalRef, } from "@ng-bootstrap/ng-bootstrap";
 import { ProductionStockDetailComponent } from "../production-stock-detail/production-stock-detail.component";
 import { SavedataModel } from "../savedata-model";
@@ -34,6 +32,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
   vocMaxDate = new Date();
   currentDate = new Date();
   imagepath: any[] = []
+  modalReference!: NgbModalRef;
 
   private subscriptions: Subscription[] = [];
 
@@ -277,7 +276,6 @@ export class ProductionEntryDetailsComponent implements OnInit {
   });
 
   constructor(
-    private activeModal: NgbActiveModal,
     private modalService: NgbModal,
     private formBuilder: FormBuilder,
     private dataService: SuntechAPIService,
@@ -364,7 +362,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
   }
   customerCodeScpSelected(e: any) {
     this.productiondetailsFrom.controls.CUSTOMER_CODE.setValue(e.ACCODE);
-    this.productiondetailsFrom.controls.CUSTOMER_CODE_DESC.setValue(e.ACCOUNT_HEAD);
+    this.productiondetailsFrom.controls.CUSTOMER_DESC.setValue(e.ACCOUNT_HEAD);
   }
   karatCodeSelected(e: any) {
     this.productiondetailsFrom.controls.KARAT.setValue(e.KARAT_CODE);
@@ -447,6 +445,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
             this.setFormNullToString('DESIGN_CODE', data[0].DESIGN_CODE)
             this.setFormNullToString('DESIGN_DESCRIPTION', data[0].DESCRIPTION)
             this.setFormNullToString('CUSTOMER_CODE', data[0].CUSTOMER_CODE)
+            this.setFormNullToString('CUSTOMER_DESC', data[0].ACCOUNT_HEAD)
             this.setFormNullToString('SEQ_CODE', data[0].SEQ_CODE)
             this.setFormNullToString('METALLAB_TYPE', data[0].METALLAB_TYPE)
             this.setFormNullToString('DESIGN_TYPE', data[0].DESIGN_TYPE?.toUpperCase())
@@ -528,29 +527,53 @@ export class ProductionEntryDetailsComponent implements OnInit {
     this.closeDetail.emit()
   }
 
-  opennewdetails() {
-    const modalRef: NgbModalRef = this.modalService.open(
-      ProductionStockDetailComponent,
-      {
-        size: "xl",
-        backdrop: true, //'static'
-        keyboard: false,
-        windowClass: "modal-full-width",
-      }
-    );
-    this.content[0].DETAILSCREEN_DATA = this.productiondetailsFrom.value
-    modalRef.componentInstance.content = this.content;
+  // opennewdetails() {
+  //   const modalRef: NgbModalRef = this.modalService.open(
+  //     ProductionStockDetailComponent,
+  //     {
+  //       size: "xl",
+  //       backdrop: true, //'static'
+  //       keyboard: false,
+  //       windowClass: "modal-full-width",
+  //     }
+  //   );
+  //   this.content[0].DETAILSCREEN_DATA = this.productiondetailsFrom.value
+  //   modalRef.componentInstance.content = this.content;
 
-    modalRef.result.then((dataFromStockScreen) => {
-      if (dataFromStockScreen) {
-        console.log(dataFromStockScreen, 'data comming from stock detail screen');
+  //   modalRef.result.then((dataFromStockScreen) => {
+  //     if (dataFromStockScreen) {
+  //       console.log(dataFromStockScreen, 'data comming from stock detail screen');
 
-        this.StockDetailData.STOCK_FORM_DETAILS = dataFromStockScreen.STOCK_FORM_DETAILS;
-        this.StockDetailData.STOCK_COMPONENT_GRID = dataFromStockScreen.STOCK_COMPONENT_GRID;
-      }
+  //       this.StockDetailData.STOCK_FORM_DETAILS = dataFromStockScreen.STOCK_FORM_DETAILS;
+  //       this.StockDetailData.STOCK_COMPONENT_GRID = dataFromStockScreen.STOCK_COMPONENT_GRID;
+  //     }
+  //   });
+  // }
+  dataToDetailScreen: any;
+  @ViewChild('productionStockDetailScreen') public ProductionStockDetailScreen!: NgbModal;
+  opennewdetails(dataToChild?: any) {
+    if (dataToChild) {
+    } else {
+    }
+    console.log(dataToChild, 'data to child');
+    this.dataToDetailScreen = dataToChild
+    this.modalReference = this.modalService.open(this.ProductionStockDetailScreen, {
+      size: 'xl',
+      backdrop: true,//'static'
+      keyboard: false,
+      windowClass: 'modal-full-width',
     });
   }
-
+  detailData: any[] = []
+  //use: to set the data from child component to post data
+  setValuesToHeaderGrid(DATA: any) {
+    let detailDataToParent = DATA.PRODUCTION_FORMDETAILS
+    // this.editFinalArray(DATA)
+    if (detailDataToParent.FLAG == 'SAVE') this.closeDetailScreen();
+    if (detailDataToParent.FLAG == 'CONTINUE') {
+      this.commonService.showSnackBarMsg('Details added grid successfully')
+    };
+  }
   jobnoCodeSelected(e: any) {
     this.productiondetailsFrom.controls.JOB_NUMBER.setValue(e.job_number);
     this.productiondetailsFrom.controls.JOB_DESCRIPTION.setValue(e.job_description);
@@ -992,6 +1015,9 @@ export class ProductionEntryDetailsComponent implements OnInit {
   }
   emptyToZero(value: any) {
     return this.commonService.emptyToZero(value)
+  }
+  closeDetailScreen() {
+    this.modalReference.close()
   }
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {
