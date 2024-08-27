@@ -19,18 +19,23 @@ export class BranchDivisionComponent implements OnInit {
   subscriptions$!: Subscription;
   isLoading: boolean = false;
   BranchDataSource: any[] = [];
+  divisionDataSource: any[] = [];
+  areaDataSource: any[]= [];
+  businessCategDataSource: any[] = [];
   dataSourceHead: any[] = [];
   showFilterRow: boolean = true;
   currentFilter: any;
-
-
+  viewMode: boolean = false;
+  checkedItems: any[] = [];
 
   //PAGINATION
   totalItems: number = 1000; // Total number of items
   pageSize: number = 10; // Number of items per page
   pageIndex: number = 1; // Current page index
 
-  
+  @Input() existingData: any; 
+
+
   constructor( private toastr: ToastrService,  private commonService: CommonServiceService,
     private dataService: SuntechAPIService, private modalService: NgbModal,) { }
 
@@ -40,11 +45,34 @@ export class BranchDivisionComponent implements OnInit {
 
   openMasterSearch() {
     this.selectedModal = this.modalService.open(this.master_search, {
-      size: 'lg',
+      size: 'xl',
       backdrop: true,
       keyboard: false,
       //  windowClass: 'modal-full-width'
     });
+    this.existingData.forEach((item: any)=>{
+      this.BranchDataSource.forEach((data : any, index: any) => {
+        if(data.BRANCH_CODE == item.BRANCH_CODE ){
+          data.checked= true
+          // console.log('BranchDataSource match:', data, index);
+        }
+      });
+      this.divisionDataSource.forEach((data : any, index: any) => {
+        if(data.DIVISION_CODE == item.DIVISION_CODE){
+          data.checked= true
+        }
+      })
+      this.areaDataSource.forEach((data : any, index: any) => {
+        if(item.AREA_CODE == data.AREA_CODE){
+          data.checked= true
+        }
+      })
+      this.businessCategDataSource.forEach((data : any, index: any) => {
+        if(item.CATEGORY_CODE == data.CATEGORY_CODE){
+          data.checked= true
+        }
+      })
+    })
   }
 
   nextPage() {
@@ -61,13 +89,35 @@ export class BranchDivisionComponent implements OnInit {
       }
     }
   }
-  handleRowClick(event: any) {
-    this.newRowClick.emit(event.data)
-    this.close()
+  // handleRowClick(event: any) {
+  //   this.newRowClick.emit(event.data)
+  //   // this.close()
+  // }
+  onCheckboxChange(event: any, data: any){
+    data.data.checked= event.checked
+    let checkedItems: any[] = [];
+    let checkedDivisionItems: any[] = [];
+    checkedItems = this.BranchDataSource.filter(item => item.checked)
+    checkedDivisionItems = this.divisionDataSource.filter(item => item.checked)
+
+    let checkedAreaItems: any[] = [];
+    let checkedB_categoryItems: any[] = [];
+    checkedAreaItems = this.areaDataSource.filter(item => item.checked)
+    checkedB_categoryItems = this.businessCategDataSource.filter(item => item.checked)
+    const uniqueArray = Array.from(new Set([
+        ...checkedItems,
+        ...checkedDivisionItems,
+        ...checkedAreaItems,
+        ...checkedB_categoryItems
+    ]));
+    // console.log(uniqueArray)
+    this.newRowClick.emit(uniqueArray)
   }
-  onCheckboxChange(data: any){
-    console.log(data)
+
+  selectAllData(){
+    
   }
+
 
 
 
@@ -91,8 +141,12 @@ export class BranchDivisionComponent implements OnInit {
       if (result.dynamicData[0]) {
         // if (this.MasterFindData.DB_FIELD_VALUE == 'ACCODE') {
         this.BranchDataSource = result.dynamicData[0]
-        
         this.dataSourceHead = Object.keys(this.BranchDataSource[0]);
+        this.dataSourceHead.unshift(this.dataSourceHead.pop())
+
+        this.divisionDataSource = result.dynamicData[1]
+        this.dataSourceHead = []
+        this.dataSourceHead = Object.keys(this.divisionDataSource[0]);
         this.dataSourceHead.unshift(this.dataSourceHead.pop())
       } else {
         this.toastr.error('Data Not Available')
@@ -124,7 +178,6 @@ export class BranchDivisionComponent implements OnInit {
       console.log('branch division API call data', response)
       if (response.dynamicData[0]) {
         this.BranchDataSource = response.dynamicData[0]
-
         if (this.BranchDataSource.length > 0) {
           this.BranchDataSource = [...this.BranchDataSource, ...response.dynamicData[0]];
         } else {
@@ -133,6 +186,10 @@ export class BranchDivisionComponent implements OnInit {
         }
         this.dataSourceHead = Object.keys(this.BranchDataSource[0]);
         this.dataSourceHead.unshift(this.dataSourceHead.pop())
+
+        this.divisionDataSource = response.dynamicData[1]
+        this.areaDataSource = response.dynamicData[2]
+        this.businessCategDataSource = response.dynamicData[3]
       } else {
         this.toastr.error('Data Not Available')
       }
