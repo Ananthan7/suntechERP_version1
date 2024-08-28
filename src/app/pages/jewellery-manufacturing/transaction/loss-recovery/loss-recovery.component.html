@@ -1,6 +1,6 @@
 <!-- header section starts -->
 <div class="card-content border-bottom d-flex justify-content-between p-2">
-    <h5 class="pos-modaltitle" id="modal-dia-metal">Loss Recovery </h5>
+    <h5 class="pos-modaltitle" id="modal-dia-metal">Production Loss Recovery </h5>
     <button type="button" class="btn btn-close close-btn" (click)="close()">
         <i class="feather icon-x close-icon"></i>
     </button>
@@ -30,7 +30,7 @@
                                 </mat-form-field> -->
                                 <mat-form-field appearance="outline" style="width: 100%;">
                                     <input matInput [matDatepicker]="vocDate" name="vocDate" formControlName="vocDate"
-                                        placeholder="YYYY/MM/DD" DateValidation />
+                                        placeholder="DD/MM/YYYY" DateValidation />
                                     <mat-datepicker-toggle matSuffix [for]="vocDate"></mat-datepicker-toggle>
                                     <mat-datepicker [startAt]="currentDate" #vocDate></mat-datepicker>
                                 </mat-form-field>
@@ -40,7 +40,7 @@
                             <label for="inputPassword" class="col-sm-5 col-form-label">Voc Number * :</label>
                             <div class="col-sm-7">
                                 <mat-form-field appearance="outline" style="width: 100%;">
-                                    <input type="text" matInput formControlName="VocNo" />
+                                    <input type="text" matInput formControlName="VocNo" (change)="ValidatingVocNo()" class="text-right"/>
                                 </mat-form-field>
                             </div>
                         </div>
@@ -55,15 +55,28 @@
                     </div>
                     <div class="col-md-3">
                         <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-5 col-form-label">Return Type :</label>
-                            <div class="col-sm-7">
-                                <mat-form-field appearance="outline" style="width: 100%;">
-                                    <input type="text" matInput formControlName="returnType" />
-                                </mat-form-field>
+                            
+                            <div class="col-sm-5">
+                                    <mat-form-field appearance="outline">
+                                    <mat-select formControlName="returnType" [disabled]="viewMode">
+                                      <mat-option *ngFor="let option of TypeList" [value]="option.value">
+                                        {{ option.name }}
+                                      </mat-option>
+                                    </mat-select>
+                                  </mat-form-field>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-12">
+                                <mat-radio-group aria-label="Select an option" [disabled]="viewMode"
+                                    formControlName="Metalsoption">
+                                    <mat-radio-button value="D" class="mx-2">Gold</mat-radio-button>
+                                    <mat-radio-button value="M" class="mx-2">Diamond</mat-radio-button>
+                                    <mat-radio-button value="Y" class="mx-2" >Refinery</mat-radio-button>
+                                </mat-radio-group>
+                            </div>
+
+                            <!--<div class="col-md-12">
                                 <div class="d-flex justify-content-between">
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" formControlName="radioGold">
@@ -84,23 +97,24 @@
                                         </label>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
+
                         <div class="row mb-1">
                             <label for="inputPassword" class="col-sm-5 col-form-label">Received By :</label>
                             <div class="col-sm-7">
                                 <mat-form-field appearance="outline" style="width: 100%;">
                                     <input type="text" matInput formControlName="receicvedBy"
                                         (keydown)="lookupKeyPress($event,'receicvedBy')"
-                                        (focusout)="validateLookupField($event,user,'receicvedBy')" />
-                                    <master-search class="masterSearch" [MasterSearchData]="user" #overlayReceicvedBy
+                                        (focusout)="validateLookupField($event,WorkerCodeData,'receicvedBy')" />
+                                    <master-search class="masterSearch" [MasterSearchData]="WorkerCodeData" #overlayReceicvedBy
                                         (newRowClick)="userDataSelected($event)">
                                     </master-search>
                                 </mat-form-field>
 
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row" *ngIf="isrecovSelected()">
                             <div class="col-md-12">
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" formControlName="radioAllowRecovery">
@@ -112,7 +126,7 @@
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <div class="row mb-1">
+                        <div class="row mb-1" *ngIf="istypeSelected()">
                             <label for="inputPassword" class="col-sm-4 col-form-label">From :</label>
                             <div class="col-sm-8">
                                 <!-- <mat-form-field style="width: 100%;">
@@ -120,7 +134,7 @@
                                 </mat-form-field> -->
                                 <mat-form-field appearance="outline" style="width: 100%;">
                                     <input matInput [matDatepicker]="fromDate" name="fromDate"
-                                        formControlName="fromDate" placeholder="YYYY/MM/DD" DateValidation />
+                                        formControlName="fromDate" placeholder="DD/MM/YYYY" DateValidation />
                                     <mat-datepicker-toggle matSuffix [for]="fromDate"></mat-datepicker-toggle>
                                     <mat-datepicker [startAt]="currentDate" #fromDate></mat-datepicker>
                                 </mat-form-field>
@@ -134,44 +148,15 @@
                                 </mat-form-field> -->
                                 <mat-form-field appearance="outline" style="width: 100%;">
                                     <input matInput [matDatepicker]="toDate" name="toDate" formControlName="toDate"
-                                        placeholder="YYYY/MM/DD" DateValidation />
+                                        placeholder="DD/MM/YYYY" DateValidation />
                                     <mat-datepicker-toggle matSuffix [for]="toDate"></mat-datepicker-toggle>
                                     <mat-datepicker [startAt]="currentDate" #toDate></mat-datepicker>
                                 </mat-form-field>
                             </div>
-                            <div class="col-md-4">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" formControlName="radioScrapReturn">
-                                    <label class="form-check-label" for="radioScrapReturn">
-                                        Scrap Return
-                                    </label>
-                                </div>
-                            </div>
                         </div>
-                        <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-4 col-form-label">Retaurn Date :</label>
-                            <div class="col-sm-4">
-                                <!-- <mat-form-field style="width: 100%;">
-                                    <input type="date" matInput formControlName="returnDate" />
-                                </mat-form-field> -->
-                                <mat-form-field appearance="outline" style="width: 100%;">
-                                    <input matInput [matDatepicker]="returnDate" name="returnDate"
-                                        formControlName="returnDate" placeholder="YYYY/MM/DD" DateValidation />
-                                    <mat-datepicker-toggle matSuffix [for]="returnDate"></mat-datepicker-toggle>
-                                    <mat-datepicker [startAt]="currentDate" #returnDate></mat-datepicker>
-                                </mat-form-field>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" formControlName="radioFinalLoss">
-                                    <label class="form-check-label" for="radioFinalLoss">
-                                        Final Loss
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
+                    
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-2" *ngIf="isrecovSelected()">
                         <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
                             [allowColumnReordering]="true" [allowColumnResizing]="true" [columnAutoWidth]="true">
                             <dxo-paging [enabled]="false"></dxo-paging>
@@ -251,23 +236,25 @@
                                             <div class="col-sm-3">
                                                 <mat-form-field appearance="outline" style="width: 100%;">
                                                     <input type="text" matInput formControlName="worker"
-                                                    (keydown)="lookupKeyPress($event,'worker')"
-                                                    (focusout)="validateLookupField($event,workerCodeData,'worker')" />
+                                                        (keydown)="lookupKeyPress($event,'worker')"
+                                                        (focusout)="validateLookupField($event,workerCodeData,'worker')" />
 
-                                                    <master-search [MasterSearchData]="workerCodeData" #overlayWorker  class="masterSearch"
+                                                    <master-search [MasterSearchData]="workerCodeData" #overlayWorker
+                                                        class="masterSearch"
                                                         (newRowClick)="workCodeSelected($event)"></master-search>
                                                 </mat-form-field>
                                             </div>
                                             <label for="inputPassword" class="col-sm-3 col-form-label">Process :</label>
                                             <div class="col-sm-3">
                                                 <mat-form-field appearance="outline" style="width: 100%;">
-                                                    <input type="text" matInput formControlName="process" 
-                                                    (keydown)="lookupKeyPress($event,'process')"
-                                                    (focusout)="validateLookupField($event,ProcessCodeData,'process')"/>
-                                                    <master-search [MasterSearchData]="ProcessCodeData" #overlayProcess  class="masterSearch"
-                                                    (newRowClick)="processCodeSelected($event)"></master-search>
+                                                    <input type="text" matInput formControlName="process"
+                                                        (keydown)="lookupKeyPress($event,'process')"
+                                                        (focusout)="validateLookupField($event,ProcessCodeData,'process')" />
+                                                    <master-search [MasterSearchData]="ProcessCodeData" #overlayProcess
+                                                        class="masterSearch"
+                                                        (newRowClick)="processCodeSelected($event)"></master-search>
                                                 </mat-form-field>
-                                              
+
                                             </div>
                                         </div>
                                         <div class="row mb-1">
@@ -275,26 +262,28 @@
                                                 :</label>
                                             <div class="col-sm-3">
                                                 <mat-form-field appearance="outline" style="width: 100%;">
-                                                    <input type="text" matInput formControlName="stockCode" 
-                                                    (keydown)="lookupKeyPress($event,'stockCode')"
-                                                    (focusout)="validateLookupField($event,StockCodeData,'stockCode')"/>
-                                                    <master-search [MasterSearchData]="StockCodeData" #overlayStockCode  class="masterSearch"
-                                                    (newRowClick)="stockCodeSelected($event)"></master-search>
+                                                    <input type="text" matInput formControlName="stockCode"
+                                                        (keydown)="lookupKeyPress($event,'stockCode')"
+                                                        (focusout)="validateLookupField($event,StockCodeData,'stockCode')" />
+                                                    <master-search [MasterSearchData]="StockCodeData" #overlayStockCode
+                                                        class="masterSearch"
+                                                        (newRowClick)="stockCodeSelected($event)"></master-search>
                                                 </mat-form-field>
-                                                
+
                                             </div>
                                             <label for="inputPassword" class="col-sm-3 col-form-label">Loaction To
                                                 :</label>
                                             <div class="col-sm-3">
                                                 <mat-form-field appearance="outline" style="width: 100%;">
                                                     <input type="text" matInput formControlName="locationTo"
-                                                    (keydown)="lookupKeyPress($event,'locationTo')"
-                                                    (focusout)="validateLookupField($event,locationCodeData,'locationTo')" />
-                                                    <master-search [MasterSearchData]="locationCodeData" #overlayLocationTo  class="masterSearch"
-                                                    (newRowClick)="locationCodeSelected($event)">
-                                                </master-search>
+                                                        (keydown)="lookupKeyPress($event,'locationTo')"
+                                                        (focusout)="validateLookupField($event,locationCodeData,'locationTo')" />
+                                                    <master-search [MasterSearchData]="locationCodeData"
+                                                        #overlayLocationTo class="masterSearch"
+                                                        (newRowClick)="locationCodeSelected($event)">
+                                                    </master-search>
                                                 </mat-form-field>
-                                                
+
                                             </div>
                                         </div>
                                         <div class="row mb-1">
@@ -303,12 +292,13 @@
                                             <div class="col-sm-3">
                                                 <mat-form-field appearance="outline" style="width: 100%;">
                                                     <input type="text" matInput formControlName="karatCode"
-                                                    (keydown)="lookupKeyPress($event,'karatCode')"
-                                                    (focusout)="validateLookupField($event,KaratCodeData,'karatCode')" />
-                                                    <master-search [MasterSearchData]="KaratCodeData" #overlayKaratCode   class="masterSearch"
-                                                    (newRowClick)="karatCodeSelected($event)"></master-search>
+                                                        (keydown)="lookupKeyPress($event,'karatCode')"
+                                                        (focusout)="validateLookupField($event,KaratCodeData,'karatCode')" />
+                                                    <master-search [MasterSearchData]="KaratCodeData" #overlayKaratCode
+                                                        class="masterSearch"
+                                                        (newRowClick)="karatCodeSelected($event)"></master-search>
                                                 </mat-form-field>
-                                              
+
                                             </div>
                                             <div class="col-sm-3">
                                                 <mat-form-field appearance="outline" style="width: 100%;">

@@ -93,6 +93,7 @@ import { FormatRateDecimalDirective } from './directives/format-rate-decimal.dir
 import { AlphabetsOnlyDirective } from './directives/alphabets-only.directive';
 import { NextInputDirective } from './directives/next-input.directive';
 import { BranchDivisionComponent } from './common/branch-division/branch-division.component';
+import { NegativeAmountDecimalDirective } from './directives/format-negative-amount-decimal.directive';
 
 
 @NgModule({
@@ -120,6 +121,7 @@ import { BranchDivisionComponent } from './common/branch-division/branch-divisio
     MenuButtonsComponent,
     AllowLeadingZeroDirective,
     AmountDecimalDirective,
+    NegativeAmountDecimalDirective,
     NextInputDirective,
     MetalDecimalDirective,
     StoneDecimalDirective,
@@ -219,6 +221,7 @@ import { BranchDivisionComponent } from './common/branch-division/branch-divisio
     NoEmptySpaceDirective,
     AllowLeadingZeroDirective,
     AmountDecimalDirective,
+    NegativeAmountDecimalDirective,
     NextInputDirective,
     MetalDecimalDirective,
     StoneDecimalDirective,

@@ -21,7 +21,7 @@ export class LossRecoveryComponent implements OnInit {
   @ViewChild('overlayLocationTo') overlayLocationTo!: MasterSearchComponent;
   @ViewChild('overlayKaratCode') overlayKaratCode!: MasterSearchComponent;
 
-
+  isloading: boolean = false;
   divisionMS: any = 'ID';
   branchCode?: string;
   yearMonth?: string;
@@ -35,18 +35,33 @@ export class LossRecoveryComponent implements OnInit {
   columnhead: any[] = ['',];
   columnheader: any[] = ['Sn No', 'Type', 'Worker Code', 'Process Code', 'Loss Qty', 'Recovery', 'Reco.Pure', 'Net Loss', 'Location To', 'Job Number', 'Job SO No', 'Design Code', 'Scrap UNQ Job'];
 
-  user: MasterSearchModel = {
+  TypeList = [
+    {
+      name: 'Initial',
+      value: 'Initial'
+    },
+    {
+      name: 'Intermediate',
+      value: 'Intermediate'
+    },
+    {
+      name: 'Final',
+      value: 'Final'
+    },
+  ];
+
+
+  WorkerCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 73,
-    SEARCH_FIELD: "UsersName",
-    SEARCH_HEADING: "User",
-    SEARCH_VALUE: "",
-    WHERECONDITION: "UsersName<> ''",
+    LOOKUPID: 19,
+    SEARCH_FIELD: 'WORKER_CODE',
+    SEARCH_HEADING: 'Worker Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "WORKER_CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
-    LOAD_ONCLICK: true,
-  };
+  }
 
   ProcessCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -121,6 +136,8 @@ export class LossRecoveryComponent implements OnInit {
   ngOnInit(): void {
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
+
+    this.generateVocNo()
   }
 
 
@@ -128,10 +145,16 @@ export class LossRecoveryComponent implements OnInit {
     this.activeModal.close(data);
   }
 
-  userDataSelected(value: any) {
-    console.log(value);
-    this.lossRecoveryFrom.controls.receicvedBy.setValue(value.UsersName);
+  userDataSelected(e: any) {
+    console.log(e);
+    this.lossRecoveryFrom.controls.receicvedBy.setValue(e.WORKER_CODE);
+    // this.lossRecoveryFrom.controls.receicvedBy.setValue(value.UsersName);
   }
+
+  // WorkerCodeSelected(e: any) {
+  //   this.metalReturnForm.controls.worker.setValue(e.WORKER_CODE);
+  //   this.processWorkerValidate()
+  // }
 
   processCodeSelected(e: any) {
     console.log(e);
@@ -159,7 +182,7 @@ export class LossRecoveryComponent implements OnInit {
 
 
   lossRecoveryFrom: FormGroup = this.formBuilder.group({
-    vocType: ['', [Validators.required]],
+    vocType: ['PLR', [Validators.required]],
     vocDate: [''],
     VocNo: ['', [Validators.required]],
     EnterBy: [''],
@@ -192,6 +215,7 @@ export class LossRecoveryComponent implements OnInit {
     radioAllowRecovery: true,
     radioScrapReturn: true,
     radioFinalLoss: true,
+    Metalsoption:[""]
   });
 
   submitValidations(form: any) {
@@ -206,7 +230,14 @@ export class LossRecoveryComponent implements OnInit {
     return false;
   }
 
+  istypeSelected(): boolean {
+    return this.lossRecoveryFrom.get('returnType')?.value === 'Intermediate';
+  }
 
+
+  isrecovSelected(): boolean {
+    return this.lossRecoveryFrom.get('Metalsoption')?.value === 'Y';
+  }
 
 
   lookupKeyPress(event: any, form?: any) {
@@ -218,8 +249,40 @@ export class LossRecoveryComponent implements OnInit {
       event.preventDefault();
     }
   }
+  generateVocNo() {
+    const API = `GenerateNewVoucherNumber/GenerateNewVocNum/${this.comService.getqueryParamVocType()}/${this.comService.branchCode}/${this.comService.yearSelected}/${this.comService.formatYYMMDD(this.currentDate)}`;
+    this.dataService.getDynamicAPI(API)
+      .subscribe((resp) => {
+        if (resp.status == "Success") {
+          this.lossRecoveryFrom.controls.VocNo.setValue(resp.newvocno);
+        }
+      });
+  }
 
-
+  ValidatingVocNo() {
+    if(this.content?.FLAG == 'VIEW') return
+    this.comService.showSnackBarMsg('MSG81447');
+    let API = `ValidatingVocNo/${this.comService.getqueryParamMainVocType()}/${this.lossRecoveryFrom.value.VocNo}`
+    API += `/${this.comService.branchCode}/${this.comService.getqueryParamVocType()}`
+    API += `/${this.comService.yearSelected}`
+    this.isloading = true;
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        this.isloading = false;
+        this.comService.closeSnackBarMsg()
+        let data = this.comService.arrayEmptyObjectToString(result.dynamicData[0])
+        if (data && data[0]?.RESULT == 0) {
+          this.comService.toastErrorByMsgId('MSG2007')
+          this.generateVocNo()
+          return
+        }
+      }, err => {
+        this.isloading = false;
+        this.generateVocNo()
+        this.comService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
+  }
 
   showOverleyPanel(event: any, formControlName: string) {
     if (this.lossRecoveryFrom.value[formControlName] != '') return;
