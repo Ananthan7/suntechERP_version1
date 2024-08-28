@@ -8,6 +8,9 @@ import { NgbModal, ModalDismissReasons, NgbModalRef, NgbActiveModal } from '@ng-
 // import { environment } from '../../../environments/environment';
 // import { SuntechapiService } from '../../suntechapi.service';
 import { from, noop, Observable, Subscription } from 'rxjs';
+import { ToastrService } from "ngx-toastr";
+import Swal from "sweetalert2";
+
 import { map, pairwise, startWith } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 // import { NgxBarcodeScannerService } from '@eisberg-labs/ngx-barcode-scanner';
@@ -74,7 +77,6 @@ export class SalesReturnComponent implements OnInit {
 
   @ViewChild('userAttachmentModal')
   public userAttachmentModal!: NgbModal;
-
   @ViewChild('pendingSalesOrderModal')
   public pendingSalesOrderModal!: NgbModal;
   @ViewChild('salesEstimationModal')
@@ -110,10 +112,11 @@ editLineItem:boolean=false;
   value: any;
   barcode!: string;
   isSaved: boolean = false;
-
   selectedTabIndex = 0;
   receiptDetailView: boolean = false;
-
+  yearMonth?: any = localStorage.getItem("YEAR") || "";
+  branchCode?: any = localStorage.getItem("userbranch");
+  postDetail:any[]= [];
   showBoarding: boolean = false;
 
   private onChangeCallback: (_: any) => void = noop;
@@ -170,7 +173,7 @@ editLineItem:boolean=false;
   filteredSalesReturnBranchOptions!: Observable<any[]>;
   filteredAdvanceBranchOptions!: Observable<any[]>;
   filteredGiftModeBranchOptions!: Observable<any[]>;
-
+  slsrtndetails :any[] =[];
   blockNegativeStock: any="";
   blockNegativeStockValue: any;
   blockMinimumPrice: any;
@@ -576,6 +579,7 @@ editLineItem:boolean=false;
   // Type 1 = Vat, 2 = GST, 3 = No Tax
   public taxType = 1;
   public newDictionary: any;
+  private subscriptions: Subscription[] = [];
 
   strBranchcode: any = '';
   strUser: any = '';
@@ -760,6 +764,7 @@ editLineItem:boolean=false;
   parameterDetails: any[] = [];
 
   constructor(
+    private activeModal: NgbActiveModal,
     private modalService: NgbModal,
     private suntechApi: SuntechAPIService,
     private planetService: PlanetService,
@@ -770,6 +775,8 @@ editLineItem:boolean=false;
     private renderer: Renderer2,
     public comFunc: CommonServiceService,
     private document: ElementRef,
+    private dataService: SuntechAPIService,
+    private toastr: ToastrService,
     // public service: NgxBarcodeScannerService,
     private acRoute: ActivatedRoute,
     private indexedDb: IndexedDbService,
@@ -1141,6 +1148,789 @@ editLineItem:boolean=false;
       this.comFunc.allbranchMaster?.BSQTYDECIMALS,
       0
     );
+  }
+
+  savenew(){
+    console.log(this.content);
+
+    if(this.content && this.content?.FLAG == "EDIT"){
+      this.updatenew();
+      return;
+    }
+  
+    let API = "RetailSaleReturn/InsertRetailSReturn";
+    let postData = {
+      "MID": 0,
+      "BRANCH_CODE": this.strBranchcode,
+      "VOCTYPE": this.vocDataForm.controls.voc_type.value,
+      "VOCNO": this.vocDataForm.controls.fcn_voc_no.value,
+      "VOCDATE": this.vocDataForm.controls.vocdate.value,
+      "YEARMONTH": this.baseYear,
+      "PARTYNAME": this.vocDataForm.controls.fcn_customer_name.value,
+      "TEL1": "",
+      "TEL2": "",
+      "SALESPERSON_CODE": this.vocDataForm.controls.sales_person.value,
+      "RATE_TYPE": "",
+      "METAL_RATE": 0,
+      "SALES_ORDER": 0,
+      "TOTAL_PCS": 0,
+      "TOTAL_GRWT": 0,
+      "TOTAL_PUWT": 0,
+      "TOTAL_MKGVALUE_FC": 0,
+      "TOTAL_MKGVALUE_CC": 0,
+      "TOTAL_METALVALUE_FC": 0,
+      "TOTAL_METALVALUE_CC": 0,
+      "TOTAL_STONEVALUE_FC": 0,
+      "TOTAL_STONEVALUE_CC": 0,
+      "TOTAL_PUDIFF": 0,
+      "TOTAL_STONEDIFF": 0,
+      "TOTAL_DISCVALUE_FC": 0,
+      "TOTAL_DISCVALUE_CC": 0,
+      "NETVALUE_FC": 0,
+      "NETVALUE_CC": 0,
+      "REMARKS": "",
+      "SYSTEM_DATE": new Date(),
+      "RETURNMID": 0,
+      "RETURNVOCNO": 0,
+      "RETURNVOCTYPE": "",
+      "RETURN_VALUE_FC": 0,
+      "RETURN_VALUE_CC": 0,
+      "PURCHASEMID": 0,
+      "PURCHASEVOCNO": 0,
+      "PURCHASEVOCTYPE": "",
+      "PURCHASE_VALUE_FC": 0,
+      "PURCHASE_VALUE_CC": 0,
+      "ADJUST_ADVANCE": 0,
+      "DISCOUNT": 0,
+      "SUBTOTAL": 0,
+      "ROUNDOFF": 0,
+      "NETTOTAL": 0,
+      "RECEIPT_TOTAL": 0,
+      "REFUND": 0,
+      "FLAG_EDIT_ALLOW": "",
+      "NAVSEQNO": 0,
+      "MOBILE": this.vocDataForm.controls.fcn_customer_mobile.value,
+      "POBOX": "",
+      "EMAIL": "",
+      "POSCUSTCODE": this.vocDataForm.controls.fcn_customer_code.value,
+      "ITEM_CURRENCY": "i",
+      "ITEM_CURR_RATE": this.vocDataForm.controls.txtCurRate.value,
+      "ADJUST_ADVANCECC": 0,
+      "DISCOUNTCC": 0,
+      "SUBTOTALCC": 0,
+      "NETTOTALCC": 0,
+      "RECEIPT_TOTALCC": 0,
+      "REFUNDCC": 0,
+      "FLAG_UPDATED": "",
+      "FLAG_INPROCESS": "",
+      "NATIONALITY": "",
+      "TYPE": "",
+      "D2DTRANSFER": "",
+      "SALESREFERENCE": "",
+      "RSCUSTIDNO": "",
+      "TRANS_CODES": "",
+      "CONSIGNMENTPARTY": "",
+      "TOTALVAT_AMOUNTFC": 0,
+      "TOTALVAT_AMOUNTLC": 0,
+      "RSSTATE": "",
+      "GSTVATAMOUNTFC": 0,
+      "GSTVATAMOUNTCC": 0,
+      "CCPOSTINGDONE": 0,
+      "LOCALREMARKSNEW": "",
+      "MACHINEID": "",
+      "CITY": "",
+      "STATE": "",
+      "ADDRESS": "",
+      "AUTOPOSTING": true,
+      "POSTDATE": "",
+      "INVREF": 0,
+      "HTUSERNAME": "",
+      "REMARKSNEW": "",
+      "CUST_LANGUAGE": "",
+      "PRINT_COUNT": 0,
+      "COUNTRY_CODE": "",
+      "GST_TOTALFC": 0,
+      "GST_TOTALCC": 0,
+      "PANNO": "",
+      "GST_STATE_CODE": "",
+      "GST_NUMBER": "",
+      "EXCLUDEGSTVAT": 0,
+      "TRAYN": true,
+      "TRANO": "",
+      "TRA_ID_TYPE": this.vocDataForm.controls.fcn_customer_id_type.value,
+      "POSCUSTIDNO": this.vocDataForm.controls.fcn_customer_id_number.value,
+      "TOTALCESS_AMOUNTCC": 0,
+      "TOTALCESS_AMOUNTFC": 0,
+      "FORM_60": true,
+      "COMP_WISE_INVOICE": true,
+      "FROM_TOUCH": true,
+      "CALCULATE_LOYALTY": true,
+      "SERVICE_INVOICE": true,
+      "OT_TRANSFER_TIME": "",
+      "REFBY_CUSTCODE": "",
+      "QRCODEIMAGE": "",
+      "QRCODEVALUE": "",
+      "PLANETQRURL": "",
+      "VATAMOUNTFCROUND": 0,
+      "PRINT_COUNT_ACCOPY": 0,
+      "PRINT_COUNT_CNTLCOPY": 0,
+      "PLANETRESPONEFLG": true,
+      "SCHEMESALESFIXINGPUREWT": 0,
+      "INCLUDEVAT": true,
+      "WAYBILLNO": "",
+      "WAYBILLDATE": "2024-08-27T07:03:15.290Z",
+      "REC_MODE": "",
+      "GENSEQNO": 0,
+      "BOARDINGPASS": "",
+      "FLIGHTNO": "",
+      "BOARDINGFROM": "in",
+      "BOARDINGDATE": "2024-08-27T07:03:15.290Z",
+      "WITHOUTVAT": true,
+      "AGENT_COMMISSION": true,
+      "AGENTCOMMISSION_PER": 0,
+      "BOOKVOCNO": "",
+      "EMIRATESSKYWARDSMILE": true,
+      "NEWMID": 0,
+      "ONLINERATE": true,
+      "PLANETRESPONSEFLG": true,
+      "POSORDERADVVATAMTFC": 0,
+      "POSORDERADVVATAMTLC": 0,
+      "POSREFERENCEREPAIRINVOICE": "",
+      "RSLOGINMID": 0,
+      "DISCOUNTUSERNAME": "",
+      "EINVOICEQRIMAGE": "",
+      "EINVOICERESPONSE": "",
+      "EINVOICEFLG": true,
+      "POSCUSTIDEXP_DATE": this.vocDataForm.controls.fcn_customer_exp_date.value,
+      "retailSReturnDetails" : [
+        this.postDetail
+      ]
+      // "retailSReturnDetails": [
+      //   // {
+      //   //   "UNIQUEID": 0,
+      //   //   "SRNO": 0,
+      //   //   "DIVISION_CODE": "",
+      //   //   "STOCK_CODE": "",
+      //   //   "PCS": 0,
+      //   //   "GROSSWT": 0,
+      //   //   "STONEWT": 0,
+      //   //   "NETWT": 0,
+      //   //   "PURITY": 0,
+      //   //   "PUREWT": 0,
+      //   //   "CHARGABLEWT": 0,
+      //   //   "MKG_RATEFC": 0,
+      //   //   "MKG_RATECC": 0,
+      //   //   "MKGVALUEFC": 0,
+      //   //   "MKGVALUECC": 0,
+      //   //   "RATE_TYPE": "",
+      //   //   "METAL_RATE": 0,
+      //   //   "METAL_RATE_GMSFC": 0,
+      //   //   "METAL_RATE_GMSCC": 0,
+      //   //   "METALVALUEFC": 0,
+      //   //   "METALVALUECC": 0,
+      //   //   "STONE_RATEFC": 0,
+      //   //   "STONE_RATECC": 0,
+      //   //   "STONEVALUEFC": 0,
+      //   //   "STONEVALUECC": 0,
+      //   //   "DISCOUNT": 0,
+      //   //   "DISCOUNTVALUEFC": 0,
+      //   //   "DISCOUNTVALUECC": 0,
+      //   //   "NETVALUEFC": 0,
+      //   //   "NETVALUECC": 0,
+      //   //   "PUDIFF": 0,
+      //   //   "STONEDIFF": 0,
+      //   //   "PONO": 0,
+      //   //   "LOCTYPE_CODE": "",
+      //   //   "SUPPLIER": "",
+      //   //   "STOCK_DOCDESC": "",
+      //   //   "LOCKED": true,
+      //   //   "MCLENGTH": 0,
+      //   //   "MCUNIT": 0,
+      //   //   "POSSALESSR": "",
+      //   //   "PHYSICALSTOCK": "",
+      //   //   "METALAMT": "",
+      //   //   "MAKINGAMT": "",
+      //   //   "STDIFFAC": "",
+      //   //   "STAMTAC": "",
+      //   //   "STKTRANMKGCOST": 0,
+      //   //   "MAINSTOCKCODE": "",
+      //   //   "MKGMTLNETRATE": 0,
+      //   //   "RSO_FIXED": true,
+      //   //   "RSORDERGROSSWT": 0,
+      //   //   "RUBY_WT": 0,
+      //   //   "RUBY_RATE": 0,
+      //   //   "RUBY_AMOUNTFC": 0,
+      //   //   "RUBY_AMOUNTCC": 0,
+      //   //   "EMERALD_WT": 0,
+      //   //   "EMERALD_RATE": 0,
+      //   //   "EMERALD_AMOUNTFC": 0,
+      //   //   "EMERALD_AMOUNTCC": 0,
+      //   //   "SAPPHIRE_WT": 0,
+      //   //   "SAPPHIRE_RATE": 0,
+      //   //   "SAPPHIRE_AMOUNTFC": 0,
+      //   //   "SAPPHIRE_AMOUNTCC": 0,
+      //   //   "ZIRCON_WT": 0,
+      //   //   "ZIRCON_RATE": 0,
+      //   //   "ZIRCON_AMOUNTFC": 0,
+      //   //   "ZIRCON_AMOUNTCC": 0,
+      //   //   "COLOR_STONE_WT": 0,
+      //   //   "COLOR_STONE_RATE": 0,
+      //   //   "COLOR_STONE_AMOUNTFC": 0,
+      //   //   "COLOR_STONE_AMOUNTCC": 0,
+      //   //   "SJEW_TAGLINES": "",
+      //   //   "MTL_SIZE": "",
+      //   //   "MTL_COLOR": "",
+      //   //   "MTL_DESIGN": "",
+      //   //   "DTSALESPERSON_CODE": "",
+      //   //   "VAT_ACCODE": "",
+      //   //   "VAT_PER": 0,
+      //   //   "TOTALWITHVATFC": 0,
+      //   //   "TOTALWITHVATLC": 0,
+      //   //   "VAT_AMOUNTLC": 0,
+      //   //   "VAT_AMOUNTFC": 0,
+      //   //   "LOYALTY_ITEM": true,
+      //   //   "WASTE_PER": 0,
+      //   //   "STKTRN_LANDINGCOST": 0,
+      //   //   "STKTRN_WASTAGERATE": 0,
+      //   //   "DT_BRANCH_CODE": "",
+      //   //   "DT_VOCTYPE": "",
+      //   //   "DT_VOCNO": 0,
+      //   //   "DT_YEARMONTH": "",
+      //   //   "SALESPERSON_CODE": "",
+      //   //   "CGST_PER": 0,
+      //   //   "CGST_AMOUNTFC": 0,
+      //   //   "CGST_AMOUNTCC": 0,
+      //   //   "SGST_PER": 0,
+      //   //   "SGST_AMOUNTFC": 0,
+      //   //   "SGST_AMOUNTCC": 0,
+      //   //   "IGST_PER": 0,
+      //   //   "IGST_AMOUNTFC": 0,
+      //   //   "IGST_AMOUNTCC": 0,
+      //   //   "CGST_ACCODE": "",
+      //   //   "SGST_ACCODE": "",
+      //   //   "IGST_ACCODE": "",
+      //   //   "TOTAL_AMOUNTFC": 0,
+      //   //   "TOTAL_AMOUNTCC": 0,
+      //   //   "CGST_CTRLACCODE": "",
+      //   //   "SGST_CTRLACCODE": "",
+      //   //   "IGST_CTRLACCODE": "",
+      //   //   "GST_GROUP": "",
+      //   //   "GST_CODE": "",
+      //   //   "HSN_CODE": "",
+      //   //   "SERVICE_ACCODE": "",
+      //   //   "WASTAGEPER": 0,
+      //   //   "WASTAGEQTY": 0,
+      //   //   "WASTAGEPUREWT": 0,
+      //   //   "WASTAGEAMOUNTFC": 0,
+      //   //   "WASTAGEAMOUNTCC": 0,
+      //   //   "DIVISIONMS": "",
+      //   //   "INCLUSIVE": true,
+      //   //   "OLDRATE": 0,
+      //   //   "OLDAMOUNT": 0,
+      //   //   "DISC_USER_NAME": "",
+      //   //   "DISC_AMOUNT": 0,
+      //   //   "DISC_PERCENTAGE": 0,
+      //   //   "KUNDAN_UNIT": 0,
+      //   //   "KUNDAN_PCS": 0,
+      //   //   "KUNDAN_CARAT": 0,
+      //   //   "KUNDAN_WEIGHT": 0,
+      //   //   "KUNDAN_RATEFC": 0,
+      //   //   "KUNDAN_RATECC": 0,
+      //   //   "KUNDANVALUEFC": 0,
+      //   //   "KUNDANVALUECC": 0,
+      //   //   "CESS_PER": 0,
+      //   //   "CESS_AMOUNTFC": 0,
+      //   //   "CESS_AMOUNTCC": 0,
+      //   //   "ROS_FIXED": 0,
+      //   //   "BATCHID": 0,
+      //   //   "STAMP_RATE": 0,
+      //   //   "STAMP_AMOUNT": 0,
+      //   //   "STAMP_AMOUNTCC": 0,
+      //   //   "LOYALTY_POINTS": 0,
+      //   //   "SALES_TAGLINES": "",
+      //   //   "OT_TRANSFER_TIME": "",
+      //   //   "COUNTRY_CODE": "",
+      //   //   "EXTRA_STOCK_CODE": "",
+      //   //   "FLAGESTK": 0,
+      //   //   "COMPONENT_PRICE_TYPE": "",
+      //   //   "DUFIX_METALGROSSWT": 0,
+      //   //   "DUFIX_DIAPCS": 0,
+      //   //   "DUFIX_DIACARAT": 0,
+      //   //   "DUFIX_STONEPCS": 0,
+      //   //   "DUFIX_STONECARAT": 0,
+      //   //   "DUFIX_METAL_WT": 0,
+      //   //   "DUFIX_FINEGOLD": 0,
+      //   //   "DUFIX_MASTERFINEGOLD": 0,
+      //   //   "DUFIX_DIACTRATEFC": 0,
+      //   //   "DUFIX_DIACTRATECC": 0,
+      //   //   "DUFIX_DIAVALUEFC": 0,
+      //   //   "DUFIX_DIAVALUECC": 0,
+      //   //   "DUFIX_CLRSTNRATEFC": 0,
+      //   //   "DUFIX_CLRSTNRATECC": 0,
+      //   //   "DUFIX_CLRSTNVALUEFC": 0,
+      //   //   "DUFIX_CLRSTNVALUECC": 0,
+      //   //   "DUFIX_METALVALUEFC": 0,
+      //   //   "DUFIX_METALVALUECC": 0,
+      //   //   "DUFIX_LABOURFC": 0,
+      //   //   "DUFIX_LABOURCC": 0,
+      //   //   "DUFIX_HMCHARGEFC": 0,
+      //   //   "DUFIX_HMCHARGECC": 0,
+      //   //   "DUFIX_CERTCHARGEFC": 0,
+      //   //   "DUFIX_CERTCHARGECC": 0,
+      //   //   "DUFIX_DWASTAGE": 0,
+      //   //   "DUFIX_PURITY": 0,
+      //   //   "DUFIX_PUDIFF": 0,
+      //   //   "DUFIX_DKARAT_CODE": "",
+      //   //   "DUFIX_METLA_WT": 0,
+      //   //   "DUFIX_DWASTAGEPER": 0,
+      //   //   "DUFIX_DWASTAGEAMOUNTFC": 0,
+      //   //   "DUFIX_DWASTAGEAMOUNTCC": 0,
+      //   //   "DUFIX_PEARL_PCS": 0,
+      //   //   "DUFIX_PEARL_WT": 0,
+      //   //   "DUFIX_PEARL_AMTFC": 0,
+      //   //   "DUFIX_PEARL_AMTCC": 0,
+      //   //   "DUFIX_DLABUNIT": 0,
+      //   //   "DUFIX_DLABRATEFC": 0,
+      //   //   "DUFIX_DLABRATECC": 0,
+      //   //   "DUFIX_DCHARGABLEWEIGHT": 0,
+      //   //   "GIFT_ITEM": true,
+      //   //   "GSTMETALPER": 0,
+      //   //   "GSTMAKINGPER": 0,
+      //   //   "GSTOTHERPER": 0,
+      //   //   "GSTMETALAMT_CC": 0,
+      //   //   "GSTMAKINGAMT_CC": 0,
+      //   //   "GSTOTHERAMT_CC": 0,
+      //   //   "GSTMETALAMT_FC": 0,
+      //   //   "GSTMAKINGAMT_FC": 0,
+      //   //   "GSTOTHERAMT_FC": 0,
+      //   //   "HSNCODE": "",
+      //   //   "LESSTHANCOST_USER": "",
+      //   //   "NEWUNIQUEID": 0,
+      //   //   "STOCKCHECKOTHERBRANCH": true,
+      //   //   "TOTALWITHGST_CC": 0,
+      //   //   "TOTALWITHGST_FC": 0,
+      //   //   "VATCODE": ""
+      //   // }
+      // ]
+    }
+    console.log(postData);
+``
+
+    let Sub: Subscription = this.dataService
+    .postDynamicAPI(API, postData)
+    .subscribe(
+      (result) => {
+        if (result.response) {
+          if (result.status.trim() == "Success") {
+            Swal.fire({
+              title: result.message || "Success",
+              text: "",
+              icon: "success",
+              confirmButtonColor: "#336699",
+              confirmButtonText: "Ok",
+            }).then((result: any) => {
+              if (result.value) {
+                this.vocDataForm.reset();
+                // this.tableData = [];
+                this.close("reloadMainGrid");
+              }
+            });
+          }
+        } else {
+          this.toastr.error("Not saved");
+        }
+      },
+      (err) => alert(err)
+    );
+    this.subscriptions.push(Sub);
+
+  }
+
+  updatenew(){
+
+    let API = `RetailSaleReturn/UpdateRetailSReturn/${this.branchCode}/${this.vocDataForm.value.vocType}/${this.vocDataForm.value.vocno}/${this.yearMonth}`;
+
+    let postData = {
+      "MID": 0,
+      "BRANCH_CODE": this.strBranchcode,
+      "VOCTYPE": this.vocDataForm.controls.voc_type.value,
+      "VOCNO": this.vocDataForm.controls.fcn_voc_no.value,
+      "VOCDATE": this.vocDataForm.controls.vocdate.value,
+      "YEARMONTH": this.baseYear,
+      "PARTYNAME": this.vocDataForm.controls.fcn_customer_name.value,
+      "TEL1": "",
+      "TEL2": "",
+      "SALESPERSON_CODE": this.vocDataForm.controls.sales_person.value,
+      "RATE_TYPE": "",
+      "METAL_RATE": 0,
+      "SALES_ORDER": 0,
+      "TOTAL_PCS": 0,
+      "TOTAL_GRWT": 0,
+      "TOTAL_PUWT": 0,
+      "TOTAL_MKGVALUE_FC": 0,
+      "TOTAL_MKGVALUE_CC": 0,
+      "TOTAL_METALVALUE_FC": 0,
+      "TOTAL_METALVALUE_CC": 0,
+      "TOTAL_STONEVALUE_FC": 0,
+      "TOTAL_STONEVALUE_CC": 0,
+      "TOTAL_PUDIFF": 0,
+      "TOTAL_STONEDIFF": 0,
+      "TOTAL_DISCVALUE_FC": 0,
+      "TOTAL_DISCVALUE_CC": 0,
+      "NETVALUE_FC": 0,
+      "NETVALUE_CC": 0,
+      "REMARKS": "",
+      "SYSTEM_DATE": new Date(),
+      "RETURNMID": 0,
+      "RETURNVOCNO": 0,
+      "RETURNVOCTYPE": "",
+      "RETURN_VALUE_FC": 0,
+      "RETURN_VALUE_CC": 0,
+      "PURCHASEMID": 0,
+      "PURCHASEVOCNO": 0,
+      "PURCHASEVOCTYPE": "",
+      "PURCHASE_VALUE_FC": 0,
+      "PURCHASE_VALUE_CC": 0,
+      "ADJUST_ADVANCE": 0,
+      "DISCOUNT": 0,
+      "SUBTOTAL": 0,
+      "ROUNDOFF": 0,
+      "NETTOTAL": 0,
+      "RECEIPT_TOTAL": 0,
+      "REFUND": 0,
+      "FLAG_EDIT_ALLOW": "",
+      "NAVSEQNO": 0,
+      "MOBILE": this.vocDataForm.controls.fcn_customer_mobile.value,
+      "POBOX": "",
+      "EMAIL": "",
+      "POSCUSTCODE": this.vocDataForm.controls.fcn_customer_code.value,
+      "ITEM_CURRENCY": "i",
+      "ITEM_CURR_RATE": this.vocDataForm.controls.txtCurRate.value,
+      "ADJUST_ADVANCECC": 0,
+      "DISCOUNTCC": 0,
+      "SUBTOTALCC": 0,
+      "NETTOTALCC": 0,
+      "RECEIPT_TOTALCC": 0,
+      "REFUNDCC": 0,
+      "FLAG_UPDATED": "",
+      "FLAG_INPROCESS": "",
+      "NATIONALITY": "",
+      "TYPE": "",
+      "D2DTRANSFER": "",
+      "SALESREFERENCE": "",
+      "RSCUSTIDNO": "",
+      "TRANS_CODES": "",
+      "CONSIGNMENTPARTY": "",
+      "TOTALVAT_AMOUNTFC": 0,
+      "TOTALVAT_AMOUNTLC": 0,
+      "RSSTATE": "",
+      "GSTVATAMOUNTFC": 0,
+      "GSTVATAMOUNTCC": 0,
+      "CCPOSTINGDONE": 0,
+      "LOCALREMARKSNEW": "",
+      "MACHINEID": "",
+      "CITY": "",
+      "STATE": "",
+      "ADDRESS": "",
+      "AUTOPOSTING": true,
+      "POSTDATE": "",
+      "INVREF": 0,
+      "HTUSERNAME": "",
+      "REMARKSNEW": "",
+      "CUST_LANGUAGE": "",
+      "PRINT_COUNT": 0,
+      "COUNTRY_CODE": "",
+      "GST_TOTALFC": 0,
+      "GST_TOTALCC": 0,
+      "PANNO": "",
+      "GST_STATE_CODE": "",
+      "GST_NUMBER": "",
+      "EXCLUDEGSTVAT": 0,
+      "TRAYN": true,
+      "TRANO": "",
+      "TRA_ID_TYPE": this.vocDataForm.controls.fcn_customer_id_type.value,
+      "POSCUSTIDNO": this.vocDataForm.controls.fcn_customer_id_number.value,
+      "TOTALCESS_AMOUNTCC": 0,
+      "TOTALCESS_AMOUNTFC": 0,
+      "FORM_60": true,
+      "COMP_WISE_INVOICE": true,
+      "FROM_TOUCH": true,
+      "CALCULATE_LOYALTY": true,
+      "SERVICE_INVOICE": true,
+      "OT_TRANSFER_TIME": "",
+      "REFBY_CUSTCODE": "",
+      "QRCODEIMAGE": "",
+      "QRCODEVALUE": "",
+      "PLANETQRURL": "",
+      "VATAMOUNTFCROUND": 0,
+      "PRINT_COUNT_ACCOPY": 0,
+      "PRINT_COUNT_CNTLCOPY": 0,
+      "PLANETRESPONEFLG": true,
+      "SCHEMESALESFIXINGPUREWT": 0,
+      "INCLUDEVAT": true,
+      "WAYBILLNO": "",
+      "WAYBILLDATE": "2024-08-27T07:03:15.290Z",
+      "REC_MODE": "",
+      "GENSEQNO": 0,
+      "BOARDINGPASS": "",
+      "FLIGHTNO": "",
+      "BOARDINGFROM": "in",
+      "BOARDINGDATE": "2024-08-27T07:03:15.290Z",
+      "WITHOUTVAT": true,
+      "AGENT_COMMISSION": true,
+      "AGENTCOMMISSION_PER": 0,
+      "BOOKVOCNO": "",
+      "EMIRATESSKYWARDSMILE": true,
+      "NEWMID": 0,
+      "ONLINERATE": true,
+      "PLANETRESPONSEFLG": true,
+      "POSORDERADVVATAMTFC": 0,
+      "POSORDERADVVATAMTLC": 0,
+      "POSREFERENCEREPAIRINVOICE": "",
+      "RSLOGINMID": 0,
+      "DISCOUNTUSERNAME": "",
+      "EINVOICEQRIMAGE": "",
+      "EINVOICERESPONSE": "",
+      "EINVOICEFLG": true,
+      "POSCUSTIDEXP_DATE": this.vocDataForm.controls.fcn_customer_exp_date.value,
+      "retailSReturnDetails": [
+        // {
+        //   "UNIQUEID": 0,
+        //   "SRNO": 0,
+        //   "DIVISION_CODE": "",
+        //   "STOCK_CODE": "",
+        //   "PCS": 0,
+        //   "GROSSWT": 0,
+        //   "STONEWT": 0,
+        //   "NETWT": 0,
+        //   "PURITY": 0,
+        //   "PUREWT": 0,
+        //   "CHARGABLEWT": 0,
+        //   "MKG_RATEFC": 0,
+        //   "MKG_RATECC": 0,
+        //   "MKGVALUEFC": 0,
+        //   "MKGVALUECC": 0,
+        //   "RATE_TYPE": "",
+        //   "METAL_RATE": 0,
+        //   "METAL_RATE_GMSFC": 0,
+        //   "METAL_RATE_GMSCC": 0,
+        //   "METALVALUEFC": 0,
+        //   "METALVALUECC": 0,
+        //   "STONE_RATEFC": 0,
+        //   "STONE_RATECC": 0,
+        //   "STONEVALUEFC": 0,
+        //   "STONEVALUECC": 0,
+        //   "DISCOUNT": 0,
+        //   "DISCOUNTVALUEFC": 0,
+        //   "DISCOUNTVALUECC": 0,
+        //   "NETVALUEFC": 0,
+        //   "NETVALUECC": 0,
+        //   "PUDIFF": 0,
+        //   "STONEDIFF": 0,
+        //   "PONO": 0,
+        //   "LOCTYPE_CODE": "",
+        //   "SUPPLIER": "",
+        //   "STOCK_DOCDESC": "",
+        //   "LOCKED": true,
+        //   "MCLENGTH": 0,
+        //   "MCUNIT": 0,
+        //   "POSSALESSR": "",
+        //   "PHYSICALSTOCK": "",
+        //   "METALAMT": "",
+        //   "MAKINGAMT": "",
+        //   "STDIFFAC": "",
+        //   "STAMTAC": "",
+        //   "STKTRANMKGCOST": 0,
+        //   "MAINSTOCKCODE": "",
+        //   "MKGMTLNETRATE": 0,
+        //   "RSO_FIXED": true,
+        //   "RSORDERGROSSWT": 0,
+        //   "RUBY_WT": 0,
+        //   "RUBY_RATE": 0,
+        //   "RUBY_AMOUNTFC": 0,
+        //   "RUBY_AMOUNTCC": 0,
+        //   "EMERALD_WT": 0,
+        //   "EMERALD_RATE": 0,
+        //   "EMERALD_AMOUNTFC": 0,
+        //   "EMERALD_AMOUNTCC": 0,
+        //   "SAPPHIRE_WT": 0,
+        //   "SAPPHIRE_RATE": 0,
+        //   "SAPPHIRE_AMOUNTFC": 0,
+        //   "SAPPHIRE_AMOUNTCC": 0,
+        //   "ZIRCON_WT": 0,
+        //   "ZIRCON_RATE": 0,
+        //   "ZIRCON_AMOUNTFC": 0,
+        //   "ZIRCON_AMOUNTCC": 0,
+        //   "COLOR_STONE_WT": 0,
+        //   "COLOR_STONE_RATE": 0,
+        //   "COLOR_STONE_AMOUNTFC": 0,
+        //   "COLOR_STONE_AMOUNTCC": 0,
+        //   "SJEW_TAGLINES": "",
+        //   "MTL_SIZE": "",
+        //   "MTL_COLOR": "",
+        //   "MTL_DESIGN": "",
+        //   "DTSALESPERSON_CODE": "",
+        //   "VAT_ACCODE": "",
+        //   "VAT_PER": 0,
+        //   "TOTALWITHVATFC": 0,
+        //   "TOTALWITHVATLC": 0,
+        //   "VAT_AMOUNTLC": 0,
+        //   "VAT_AMOUNTFC": 0,
+        //   "LOYALTY_ITEM": true,
+        //   "WASTE_PER": 0,
+        //   "STKTRN_LANDINGCOST": 0,
+        //   "STKTRN_WASTAGERATE": 0,
+        //   "DT_BRANCH_CODE": "",
+        //   "DT_VOCTYPE": "",
+        //   "DT_VOCNO": 0,
+        //   "DT_YEARMONTH": "",
+        //   "SALESPERSON_CODE": "",
+        //   "CGST_PER": 0,
+        //   "CGST_AMOUNTFC": 0,
+        //   "CGST_AMOUNTCC": 0,
+        //   "SGST_PER": 0,
+        //   "SGST_AMOUNTFC": 0,
+        //   "SGST_AMOUNTCC": 0,
+        //   "IGST_PER": 0,
+        //   "IGST_AMOUNTFC": 0,
+        //   "IGST_AMOUNTCC": 0,
+        //   "CGST_ACCODE": "",
+        //   "SGST_ACCODE": "",
+        //   "IGST_ACCODE": "",
+        //   "TOTAL_AMOUNTFC": 0,
+        //   "TOTAL_AMOUNTCC": 0,
+        //   "CGST_CTRLACCODE": "",
+        //   "SGST_CTRLACCODE": "",
+        //   "IGST_CTRLACCODE": "",
+        //   "GST_GROUP": "",
+        //   "GST_CODE": "",
+        //   "HSN_CODE": "",
+        //   "SERVICE_ACCODE": "",
+        //   "WASTAGEPER": 0,
+        //   "WASTAGEQTY": 0,
+        //   "WASTAGEPUREWT": 0,
+        //   "WASTAGEAMOUNTFC": 0,
+        //   "WASTAGEAMOUNTCC": 0,
+        //   "DIVISIONMS": "",
+        //   "INCLUSIVE": true,
+        //   "OLDRATE": 0,
+        //   "OLDAMOUNT": 0,
+        //   "DISC_USER_NAME": "",
+        //   "DISC_AMOUNT": 0,
+        //   "DISC_PERCENTAGE": 0,
+        //   "KUNDAN_UNIT": 0,
+        //   "KUNDAN_PCS": 0,
+        //   "KUNDAN_CARAT": 0,
+        //   "KUNDAN_WEIGHT": 0,
+        //   "KUNDAN_RATEFC": 0,
+        //   "KUNDAN_RATECC": 0,
+        //   "KUNDANVALUEFC": 0,
+        //   "KUNDANVALUECC": 0,
+        //   "CESS_PER": 0,
+        //   "CESS_AMOUNTFC": 0,
+        //   "CESS_AMOUNTCC": 0,
+        //   "ROS_FIXED": 0,
+        //   "BATCHID": 0,
+        //   "STAMP_RATE": 0,
+        //   "STAMP_AMOUNT": 0,
+        //   "STAMP_AMOUNTCC": 0,
+        //   "LOYALTY_POINTS": 0,
+        //   "SALES_TAGLINES": "",
+        //   "OT_TRANSFER_TIME": "",
+        //   "COUNTRY_CODE": "",
+        //   "EXTRA_STOCK_CODE": "",
+        //   "FLAGESTK": 0,
+        //   "COMPONENT_PRICE_TYPE": "",
+        //   "DUFIX_METALGROSSWT": 0,
+        //   "DUFIX_DIAPCS": 0,
+        //   "DUFIX_DIACARAT": 0,
+        //   "DUFIX_STONEPCS": 0,
+        //   "DUFIX_STONECARAT": 0,
+        //   "DUFIX_METAL_WT": 0,
+        //   "DUFIX_FINEGOLD": 0,
+        //   "DUFIX_MASTERFINEGOLD": 0,
+        //   "DUFIX_DIACTRATEFC": 0,
+        //   "DUFIX_DIACTRATECC": 0,
+        //   "DUFIX_DIAVALUEFC": 0,
+        //   "DUFIX_DIAVALUECC": 0,
+        //   "DUFIX_CLRSTNRATEFC": 0,
+        //   "DUFIX_CLRSTNRATECC": 0,
+        //   "DUFIX_CLRSTNVALUEFC": 0,
+        //   "DUFIX_CLRSTNVALUECC": 0,
+        //   "DUFIX_METALVALUEFC": 0,
+        //   "DUFIX_METALVALUECC": 0,
+        //   "DUFIX_LABOURFC": 0,
+        //   "DUFIX_LABOURCC": 0,
+        //   "DUFIX_HMCHARGEFC": 0,
+        //   "DUFIX_HMCHARGECC": 0,
+        //   "DUFIX_CERTCHARGEFC": 0,
+        //   "DUFIX_CERTCHARGECC": 0,
+        //   "DUFIX_DWASTAGE": 0,
+        //   "DUFIX_PURITY": 0,
+        //   "DUFIX_PUDIFF": 0,
+        //   "DUFIX_DKARAT_CODE": "",
+        //   "DUFIX_METLA_WT": 0,
+        //   "DUFIX_DWASTAGEPER": 0,
+        //   "DUFIX_DWASTAGEAMOUNTFC": 0,
+        //   "DUFIX_DWASTAGEAMOUNTCC": 0,
+        //   "DUFIX_PEARL_PCS": 0,
+        //   "DUFIX_PEARL_WT": 0,
+        //   "DUFIX_PEARL_AMTFC": 0,
+        //   "DUFIX_PEARL_AMTCC": 0,
+        //   "DUFIX_DLABUNIT": 0,
+        //   "DUFIX_DLABRATEFC": 0,
+        //   "DUFIX_DLABRATECC": 0,
+        //   "DUFIX_DCHARGABLEWEIGHT": 0,
+        //   "GIFT_ITEM": true,
+        //   "GSTMETALPER": 0,
+        //   "GSTMAKINGPER": 0,
+        //   "GSTOTHERPER": 0,
+        //   "GSTMETALAMT_CC": 0,
+        //   "GSTMAKINGAMT_CC": 0,
+        //   "GSTOTHERAMT_CC": 0,
+        //   "GSTMETALAMT_FC": 0,
+        //   "GSTMAKINGAMT_FC": 0,
+        //   "GSTOTHERAMT_FC": 0,
+        //   "HSNCODE": "",
+        //   "LESSTHANCOST_USER": "",
+        //   "NEWUNIQUEID": 0,
+        //   "STOCKCHECKOTHERBRANCH": true,
+        //   "TOTALWITHGST_CC": 0,
+        //   "TOTALWITHGST_FC": 0,
+        //   "VATCODE": ""
+        // }
+      ]
+    }
+
+    let Sub: Subscription = this.dataService
+    .putDynamicAPI(API, postData)
+    .subscribe(
+      (result) => {
+        if (result.response) {
+          if (result.status == "Success") {
+            Swal.fire({
+              title: result.message || "Success",
+              text: "",
+              icon: "success",
+              confirmButtonColor: "#336699",
+              confirmButtonText: "Ok",
+            }).then((result: any) => {
+              if (result.value) {
+                this.vocDataForm.reset();
+                // this.tableData = [];
+                this.close("reloadMainGrid");
+              }
+            });
+          }
+        } else {
+          this.toastr.error("Not saved");
+        }
+      },
+      (err) => alert(err)
+    );
+    this.subscriptions.push(Sub);
+
+
   }
 
 
@@ -1793,6 +2583,7 @@ editLineItem:boolean=false;
     //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
     //Add 'implements AfterViewInit' to the class.
     if (this.viewOnly) this.setReadOnlyForViewMode();
+    this.open(this.adjust_sale_return_modal);
 
     // console.log('viewonly',this.viewOnly , this.editOnly);
 
@@ -1810,7 +2601,15 @@ editLineItem:boolean=false;
       }
     });
   }
+
+  openmod() {
+    const modalRef = this.open(this.adjust_sale_return_modal);
+  }
+
+  
+
   ngOnInit(): void {
+    // this.open(this.adjust_sale_return_modal);
     this.isNewButtonDisabled=true;
 
     this.fetchPramterDetails();
@@ -1858,8 +2657,6 @@ editLineItem:boolean=false;
 
 
     */
-
-
     // this.strBranchcode = this.content.BRANCH_CODE;
     this.autoPosting = this.comFunc.getAutopostingFlag();
     this.isAutoPosting = this.comFunc.stringToBoolean(this.autoPosting);
@@ -1942,6 +2739,7 @@ editLineItem:boolean=false;
 
 
     this.getSalesReturnVocTypes();
+    // this.openmod();
 
     // this.metalDecimalFormat = {
     //   type: 'fixedPoint',
@@ -2118,6 +2916,8 @@ editLineItem:boolean=false;
 
   //   console.log(this.receiptDetailsList);
   // }
+
+
   addReceiptFormValidation() {
 
     this.addValidationsForForms(this.cashreceiptForm, 'cashAmtFC', [
@@ -5414,6 +6214,220 @@ editLineItem:boolean=false;
       });
     }
   }
+
+  
+  salesreturndetails(){
+    this. postDetail = [
+    {
+      "UNIQUEID": 0,
+      "SRNO": 0,
+      "DIVISION_CODE": "string",
+      "STOCK_CODE": "string",
+      "PCS": 0,
+      "GROSSWT": 0,
+      "STONEWT": 0,
+      "NETWT": 0,
+      "PURITY": 0,
+      "PUREWT": 0,
+      "CHARGABLEWT": 0,
+      "MKG_RATEFC": 0,
+      "MKG_RATECC": 0,
+      "MKGVALUEFC": 0,
+      "MKGVALUECC": 0,
+      "RATE_TYPE": "string",
+      "METAL_RATE": 0,
+      "METAL_RATE_GMSFC": 0,
+      "METAL_RATE_GMSCC": 0,
+      "METALVALUEFC": 0,
+      "METALVALUECC": 0,
+      "STONE_RATEFC": 0,
+      "STONE_RATECC": 0,
+      "STONEVALUEFC": 0,
+      "STONEVALUECC": 0,
+      "DISCOUNT": 0,
+      "DISCOUNTVALUEFC": 0,
+      "DISCOUNTVALUECC": 0,
+      "NETVALUEFC": 0,
+      "NETVALUECC": 0,
+      "PUDIFF": 0,
+      "STONEDIFF": 0,
+      "PONO": 0,
+      "LOCTYPE_CODE": "string",
+      "SUPPLIER": "string",
+      "STOCK_DOCDESC": "string",
+      "LOCKED": true,
+      "MCLENGTH": 0,
+      "MCUNIT": 0,
+      "POSSALESSR": "string",
+      "PHYSICALSTOCK": "string",
+      "METALAMT": "string",
+      "MAKINGAMT": "string",
+      "STDIFFAC": "string",
+      "STAMTAC": "string",
+      "STKTRANMKGCOST": 0,
+      "MAINSTOCKCODE": "string",
+      "MKGMTLNETRATE": 0,
+      "RSO_FIXED": true,
+      "RSORDERGROSSWT": 0,
+      "RUBY_WT": 0,
+      "RUBY_RATE": 0,
+      "RUBY_AMOUNTFC": 0,
+      "RUBY_AMOUNTCC": 0,
+      "EMERALD_WT": 0,
+      "EMERALD_RATE": 0,
+      "EMERALD_AMOUNTFC": 0,
+      "EMERALD_AMOUNTCC": 0,
+      "SAPPHIRE_WT": 0,
+      "SAPPHIRE_RATE": 0,
+      "SAPPHIRE_AMOUNTFC": 0,
+      "SAPPHIRE_AMOUNTCC": 0,
+      "ZIRCON_WT": 0,
+      "ZIRCON_RATE": 0,
+      "ZIRCON_AMOUNTFC": 0,
+      "ZIRCON_AMOUNTCC": 0,
+      "COLOR_STONE_WT": 0,
+      "COLOR_STONE_RATE": 0,
+      "COLOR_STONE_AMOUNTFC": 0,
+      "COLOR_STONE_AMOUNTCC": 0,
+      "SJEW_TAGLINES": "string",
+      "MTL_SIZE": "string",
+      "MTL_COLOR": "string",
+      "MTL_DESIGN": "string",
+      "DTSALESPERSON_CODE": "string",
+      "VAT_ACCODE": "string",
+      "VAT_PER": 0,
+      "TOTALWITHVATFC": 0,
+      "TOTALWITHVATLC": 0,
+      "VAT_AMOUNTLC": 0,
+      "VAT_AMOUNTFC": 0,
+      "LOYALTY_ITEM": true,
+      "WASTE_PER": 0,
+      "STKTRN_LANDINGCOST": 0,
+      "STKTRN_WASTAGERATE": 0,
+      "DT_BRANCH_CODE": this.salesReturnForm.controls.fcn_returns_branch.value,
+      "DT_VOCTYPE": this.salesReturnForm.controls.fcn_returns_voc_type.value,
+      "DT_VOCNO": this.salesReturnForm.controls.fcn_returns_voc_no.value,
+      "DT_YEARMONTH": this.salesReturnForm.controls.fcn_returns_fin_year.value,
+      "SALESPERSON_CODE": this.salesReturnForm.controls.fcn_returns_sales_man.value,
+      "CGST_PER": 0,
+      "CGST_AMOUNTFC": 0,
+      "CGST_AMOUNTCC": 0,
+      "SGST_PER": 0,
+      "SGST_AMOUNTFC": 0,
+      "SGST_AMOUNTCC": 0,
+      "IGST_PER": 0,
+      "IGST_AMOUNTFC": 0,
+      "IGST_AMOUNTCC": 0,
+      "CGST_ACCODE": "string",
+      "SGST_ACCODE": "string",
+      "IGST_ACCODE": "string",
+      "TOTAL_AMOUNTFC": 0,
+      "TOTAL_AMOUNTCC": 0,
+      "CGST_CTRLACCODE": "string",
+      "SGST_CTRLACCODE": "string",
+      "IGST_CTRLACCODE": "string",
+      "GST_GROUP": "s",
+      "GST_CODE": "string",
+      "HSN_CODE": "string",
+      "SERVICE_ACCODE": "string",
+      "WASTAGEPER": 0,
+      "WASTAGEQTY": 0,
+      "WASTAGEPUREWT": 0,
+      "WASTAGEAMOUNTFC": 0,
+      "WASTAGEAMOUNTCC": 0,
+      "DIVISIONMS": "s",
+      "INCLUSIVE": true,
+      "OLDRATE": 0,
+      "OLDAMOUNT": 0,
+      "DISC_USER_NAME": this.salesReturnForm.controls.fcn_returns_cust_name.value,
+      "DISC_AMOUNT": 0,
+      "DISC_PERCENTAGE": 0,
+      "KUNDAN_UNIT": 0,
+      "KUNDAN_PCS": 0,
+      "KUNDAN_CARAT": 0,
+      "KUNDAN_WEIGHT": 0,
+      "KUNDAN_RATEFC": 0,
+      "KUNDAN_RATECC": 0,
+      "KUNDANVALUEFC": 0,
+      "KUNDANVALUECC": 0,
+      "CESS_PER": 0,
+      "CESS_AMOUNTFC": 0,
+      "CESS_AMOUNTCC": 0,
+      "ROS_FIXED": 0,
+      "BATCHID": 0,
+      "STAMP_RATE": 0,
+      "STAMP_AMOUNT": 0,
+      "STAMP_AMOUNTCC": 0,
+      "LOYALTY_POINTS": 0,
+      "SALES_TAGLINES": "string",
+      "OT_TRANSFER_TIME": "string",
+      "COUNTRY_CODE": "string",
+      "EXTRA_STOCK_CODE": "string",
+      "FLAGESTK": 0,
+      "COMPONENT_PRICE_TYPE": "string",
+      "DUFIX_METALGROSSWT": 0,
+      "DUFIX_DIAPCS": 0,
+      "DUFIX_DIACARAT": 0,
+      "DUFIX_STONEPCS": 0,
+      "DUFIX_STONECARAT": 0,
+      "DUFIX_METAL_WT": 0,
+      "DUFIX_FINEGOLD": 0,
+      "DUFIX_MASTERFINEGOLD": 0,
+      "DUFIX_DIACTRATEFC": 0,
+      "DUFIX_DIACTRATECC": 0,
+      "DUFIX_DIAVALUEFC": 0,
+      "DUFIX_DIAVALUECC": 0,
+      "DUFIX_CLRSTNRATEFC": 0,
+      "DUFIX_CLRSTNRATECC": 0,
+      "DUFIX_CLRSTNVALUEFC": 0,
+      "DUFIX_CLRSTNVALUECC": 0,
+      "DUFIX_METALVALUEFC": 0,
+      "DUFIX_METALVALUECC": 0,
+      "DUFIX_LABOURFC": 0,
+      "DUFIX_LABOURCC": 0,
+      "DUFIX_HMCHARGEFC": 0,
+      "DUFIX_HMCHARGECC": 0,
+      "DUFIX_CERTCHARGEFC": 0,
+      "DUFIX_CERTCHARGECC": 0,
+      "DUFIX_DWASTAGE": 0,
+      "DUFIX_PURITY": 0,
+      "DUFIX_PUDIFF": 0,
+      "DUFIX_DKARAT_CODE": "string",
+      "DUFIX_METLA_WT": 0,
+      "DUFIX_DWASTAGEPER": 0,
+      "DUFIX_DWASTAGEAMOUNTFC": 0,
+      "DUFIX_DWASTAGEAMOUNTCC": 0,
+      "DUFIX_PEARL_PCS": 0,
+      "DUFIX_PEARL_WT": 0,
+      "DUFIX_PEARL_AMTFC": 0,
+      "DUFIX_PEARL_AMTCC": 0,
+      "DUFIX_DLABUNIT": 0,
+      "DUFIX_DLABRATEFC": 0,
+      "DUFIX_DLABRATECC": 0,
+      "DUFIX_DCHARGABLEWEIGHT": 0,
+      "GIFT_ITEM": true,
+      "GSTMETALPER": 0,
+      "GSTMAKINGPER": 0,
+      "GSTOTHERPER": 0,
+      "GSTMETALAMT_CC": 0,
+      "GSTMAKINGAMT_CC": 0,
+      "GSTOTHERAMT_CC": 0,
+      "GSTMETALAMT_FC": 0,
+      "GSTMAKINGAMT_FC": 0,
+      "GSTOTHERAMT_FC": 0,
+      "HSNCODE": "string",
+      "LESSTHANCOST_USER": "string",
+      "NEWUNIQUEID": 0,
+      "STOCKCHECKOTHERBRANCH": true,
+      "TOTALWITHGST_CC": 0,
+      "TOTALWITHGST_FC": 0,
+      "VATCODE": "string"
+    }
+  ];
+  console.log("postdetailsData" ,this.postDetail);
+
+  }
+
   // addItemtoSalesReturn() {
   //   // alert('test');
   //   console.table(this.sales_returns_pre_items);
@@ -8128,10 +9142,13 @@ editLineItem:boolean=false;
       this.invReturnSalesTotalNetTotal
     );
     console.log(this.receiptTotalNetAmt);
+    console.log(parseFloat(this.order_items_total_net_amount));
+    console.log(this.comFunc.emptyToZero(this.receiptTotalNetAmt));
+
 
     if (this.order_items_total_net_amount.toString() != '0.00') {
       // if (parseFloat(this.order_items_total_net_amount) > 0) {
-      if (parseFloat(this.order_items_total_net_amount) != this.comFunc.emptyToZero(this.receiptTotalNetAmt)) {
+      if (parseFloat(this.order_items_total_net_amount) == this.comFunc.emptyToZero(this.receiptTotalNetAmt)) {
         _status[0] = false;
         _status[1] = 'Invalid Received Amount';
       } else {
@@ -8151,6 +9168,9 @@ editLineItem:boolean=false;
   }
 
   saveOrder(type?: any) {
+    console.log("Function In");
+    
+    
     Object.values(this.vocDataForm.controls).forEach(control => {
       control.markAsTouched();
     });
@@ -8162,6 +9182,8 @@ editLineItem:boolean=false;
     /*********** Need to enable this validation ****** */
     let _validate: any = this.validateBeforePrint();
     if (_validate[0]) {
+    console.log("Function In if block");
+
       // this.rs_WithReturnExchangeReceipt._retailSales = this.pos_main_data;
       // this.rs_WithReturnExchangeReceipt._retailReceipt = this.receiptDetailsList;
       // this.rs_WithReturnExchangeReceipt._retailsReturn = this.retailsReturnMain;
@@ -8171,6 +9193,7 @@ editLineItem:boolean=false;
       this.postRetailSalesMaster(type);
       // this.snackBar.open('Bill Saved', 'OK');
     } else {
+    console.log("Function In else block");
       // alert(_validate[1]);
       this.snackBar.open(_validate[1], 'OK');
     }
@@ -8231,10 +9254,13 @@ editLineItem:boolean=false;
     console.log('====================this.karatRateDetails================');
     console.log(this.karatRateDetails);
     console.log('====================================');
-    if (this.amlNameValidation)
-      if (!this.customerDetails.AMLNAMEVALIDATION && this.customerDetails.DIGISCREENED) {
-        this.amlNameValidationData = false;
-      }
+    console.log(this.amlNameValidation);
+    
+    // if (this.amlNameValidation)
+    //   if (!this.customerDetails.AMLNAMEVALIDATION && this.customerDetails.DIGISCREENED) {
+    //     this.amlNameValidationData = false;
+    //   }
+      console.log(22);
     // else {
     //   this.amlNameValidationData = true;
     //   this.openDialog('Warning', 'Customer Pending for approval', true);
@@ -8243,7 +9269,9 @@ editLineItem:boolean=false;
 
     this.setRetailSalesDataPost();
     this.setDetailsData();
+
     if (!this.viewOnly && !this.editOnly) this.setKaratList();
+
     // this.setSalesReturnDetailsPostData();
     // this.setMetalPurchaseDataPost();
 
@@ -8268,6 +9296,7 @@ editLineItem:boolean=false;
       return;
     }
 
+
     if (
       !this.vocDataForm.invalid &&
       !this.customerDataForm.invalid &&
@@ -8276,6 +9305,7 @@ editLineItem:boolean=false;
       this.vocDataForm.value.sales_person != '' &&
       this.currentLineItems.length > 0
     ) {
+
       // alert('this.currentsalesReturnItems.length ' + this.currentsalesReturnItems.length);
       // alert('this.currentExchangeMetalPurchase.length ' + this.currentExchangeMetalPurchase.length);
       // alert(this.currentsalesReturnItems.length)
@@ -8664,10 +9694,8 @@ editLineItem:boolean=false;
 
       // this.submitAttachment(); // added here for testing purpose
       // this.posPlanetFileInsert(); // added here for testing purpose
-
-
       if (this.editOnly) {
-        let API = `RetailSalesDataInDotnet/UpdateRetailSalesData/${this.content.BRANCH_CODE}/${this.content.VOCTYPE}/${this.content.YEARMONTH}/${this.content.VOCNO}`
+        let API = `RetailSaleReturn/UpdateRetailSReturn/${this.content.BRANCH_CODE}/${this.content.VOCTYPE}/${this.content.YEARMONTH}/${this.content.VOCNO}`
         this.suntechApi.putDynamicAPI(API, postData)
           .subscribe(
             (res) => {
@@ -8711,7 +9739,7 @@ editLineItem:boolean=false;
             }
           );
       } else {
-        this.suntechApi.postDynamicAPI(`RetailSalesDataInDotnet/InsertRetailSalesData`,postData).subscribe(
+        this.suntechApi.postDynamicAPI(`RetailSaleReturn/InsertRetailSReturn`,postData).subscribe(
           (res) => {
             this.snackBar.dismiss();
             // try {
@@ -8783,20 +9811,22 @@ editLineItem:boolean=false;
       // this.retailsReturnMain.VOCTYPE = this.vocType;
       // const postData =  this.retailsReturnMain;
     } else {
+
       //  alert('data '+ JSON.stringify(this.vocDataForm.controls.vocdate.errors))
-      if (this.vocDataForm.controls.vocdate.errors != null)
+      if (this.vocDataForm.controls.vocdate.errors != null){
         this.openDialog('Warning', 'You cannot Enter the Future Date', true);
-      else if (this.vocDataForm.value.sales_person == '') {
+      }else if (this.vocDataForm.value.sales_person == '') {
         this.openDialog('Warning', this.comFunc.getMsgByID('MSG1767'), true);
         this.dialogBox.afterClosed().subscribe((data: any) => {
           if (data == 'OK') {
             this.renderer.selectRootElement('#sales_person').focus();
           }
         });
-      } else {
+      } else if(this.customerDataForm.value.fcn_customer_mobile == '') {
         this.openDialog('Warning', 'Please fill customer details', true);
       }
     }
+
   }
 
   AccountPosting(mid: any) {
@@ -13574,7 +14604,7 @@ changeGiftVoucherAmount(data:any){
     const API = `UspGetSubVouchers`;
     const postData = {
       "strBranchCode": this.strBranchcode,
-      "strMainVocType": this.mainVocType
+      "strMainVocType": "POS"//this.mainVocType
     };
 
     this.suntechApi.postDynamicAPI(API, postData)
