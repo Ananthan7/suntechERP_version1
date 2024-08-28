@@ -417,7 +417,7 @@
           <div class="col-md-1 m-t-10 pt-2">
             <mat-form-field>
               <mat-label>{{ vocno_lbl }}</mat-label>
-              <input type="text" NumberOnly matInput formControlName="fcn_voc_no" [readonly]="voucherDetails?.LOCKVOUCHERNO||viewOnly" class="st_txt_right" />
+              <input type="number" NumberOnly matInput formControlName="fcn_voc_no" [readonly]="voucherDetails?.LOCKVOUCHERNO||viewOnly" class="st_txt_right" />
             </mat-form-field>
           </div>
   
@@ -478,7 +478,7 @@
   
           <div class="col-md-2 m-t-10 pt-2">
             <mat-form-field>
-              <mat-label>{{ sales_person_lbl }}</mat-label>
+              <mat-label>{{ sales_person_lbl }} </mat-label>
               <input type="text" matInput formControlName="sales_person" id="sales_person" [matAutocomplete]="salesperson"
                 [readonly]="viewOnly" />
               <!-- <input type="text" matInput formControlName="sales_person"  [matAutocomplete]="auto" [matAutocomplete]="salesperson" (keyup.enter)="chooseFirstOption($event)"> -->
@@ -888,8 +888,7 @@
                           </dx-data-grid>
   
                           <div>
-                            <button type="submit" [disabled]="viewOnly
-                              " (click)="open(adjust_sale_return_modal)" class="btn btn-secondary" style="
+                            <button type="submit" (click)="open(adjust_sale_return_modal)" class="btn btn-secondary" style="
                                 border: none;
                                 margin: 10px;
                                 width: 20px !important;
@@ -1341,7 +1340,7 @@
   
             <!-- matTooltip="You have already saved"
             [matTooltipDisabled]="isSaved" -->
-            <div class="col-md-6 col-xl-6" (click)="viewOnly || isSaved ? '' : saveOrder()" *ngIf="!viewOnly">
+            <div class="col-md-6 col-xl-6" (click)="viewOnly || isSaved ? '' : savenew()" *ngIf="!viewOnly">
               <div class="touch-big-button touch-big-button-black">
                 <div class="touch-big-button-inner">
                   <i class="fa fa-save"></i> <span> Save Bill</span>
@@ -2402,7 +2401,7 @@
               <div class="col-md-2">
                 <mat-form-field>
                   <mat-label>Voc No</mat-label>
-                  <input type="text" NumberOnly matInput class="st_txt_right" formControlName="fcn_returns_voc_no"
+                  <input type="text" matInput class="st_txt_right" formControlName="fcn_returns_voc_no"
                     (change)="getRetailSReturn_EvnFn($event)"
                     [readonly]="viewOnly || this.sales_returns_items.length > 0" />
                   <mat-error *ngIf="
@@ -2508,7 +2507,7 @@
         </div>
         <div class="col-md-12" style="padding-bottom: 20px">
           <div style="text-align: right; padding: 10px">
-            <button mat-flat-button color="primary" class="btn-m-r-10" (click)="addItemtoSalesReturn()"
+            <button mat-flat-button color="primary" class="btn-m-r-10" (click)="salesreturndetails()"
               [disabled]="viewOnly">
               SAVE
             </button>
