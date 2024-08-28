@@ -118,7 +118,7 @@ editLineItem:boolean=false;
   branchCode?: any = localStorage.getItem("userbranch");
   postDetail:any[]= [];
   showBoarding: boolean = false;
-
+  valuedatas:any;
   private onChangeCallback: (_: any) => void = noop;
 
   viewOnly: boolean = false;
@@ -764,7 +764,7 @@ editLineItem:boolean=false;
   parameterDetails: any[] = [];
 
   constructor(
-    private activeModal: NgbActiveModal,
+    // private activeModal: NgbActiveModal,
     private modalService: NgbModal,
     private suntechApi: SuntechAPIService,
     private planetService: PlanetService,
@@ -5865,6 +5865,70 @@ editLineItem:boolean=false;
       }, 100);
     }
   }
+
+  changeRetailSalesReturnValMod(value: any) {
+    // this.salesReturnsItems_forVoc[index].TOTALWITHVATFC = parseFloat(value);
+    // this.salesReturnsItems_forVoc[index].TOTALWITHVATLC = parseFloat(value);
+    this.lineItemModalForSalesReturn = true;
+    this.salesReturnRowDataSRNO = value.SRNO;
+    this.modalReferenceSalesReturn = this.modalService.open(this.mymodal, {
+      size: 'lg',
+      ariaLabelledBy: 'modal-basic-title',
+      backdrop: false,
+    });
+    console.log('changeRetailSalesReturnVal ', value);
+    if(value){
+     this.valuedatas = value.data;
+    }
+    
+    if (this.modalService.hasOpenModals()) {
+      setTimeout(() => {
+        this.renderer.selectRootElement('#fcn_li_item_code')?.focus();
+        this.newLineItem = value;
+        this.divisionMS = value.DIVISIONMS;
+        // this.lineItemForm.controls.fcn_li_item_code.setValue(value.STOCK_CODE);
+        // this.lineItemForm.controls.fcn_li_item_desc.setValue(value.STOCK_DOCDESC);
+        // this.lineItemForm.controls.fcn_li_division.setValue(value.DIVISION_CODE);
+        // this.lineItemForm.controls.fcn_li_location.setValue(value.LOCTYPE_CODE);
+        // this.lineItemForm.controls.fcn_li_pcs.setValue(value.PCS);
+         let dynvalues = value.data;
+         const taxAmount = dynvalues?.tax_amount || 0.00; 
+         const formattedTaxAmount = taxAmount.toFixed(2); 
+
+this.lineItemForm.controls.fcn_li_tax_amount.setValue(formattedTaxAmount);
+
+        console.log(dynvalues?.slsReturn.STOCK_CODE);
+        this.lineItemForm.controls.fcn_li_item_code.setValue(dynvalues?.slsReturn.STOCK_CODE);
+        this.lineItemForm.controls.fcn_li_division.setValue(dynvalues?.slsReturn.DIVISION_CODE);
+        this.lineItemForm.controls.fcn_li_item_desc.setValue(dynvalues?.slsReturn.STOCK_DOCDESC);
+        this.lineItemForm.controls.fcn_li_pcs.setValue(dynvalues?.slsReturn.PCS);
+        this.lineItemForm.controls.fcn_li_gross_wt.setValue(dynvalues?.slsReturn.GROSSWT);
+        this.lineItemForm.controls.fcn_li_stone_wt.setValue(dynvalues?.slsReturn.STONEWT);
+        this.lineItemForm.controls.fcn_li_net_wt.setValue(dynvalues?.slsReturn.NETWT);
+        // this.lineItemForm.controls.fcn_li_purityfcn_li_purity.setValue(dynvalues?.slsReturn.PURITY);
+        this.lineItemForm.controls.fcn_ad_metal_rate.setValue(dynvalues?.slsReturn.METAL_RATE);
+        this.lineItemForm.controls.fcn_ad_metal_amount.setValue(dynvalues?.metal_amt);
+        this.lineItemForm.controls.fcn_ad_stone_rate.setValue(dynvalues?.slsReturn.STONE_RATEFC);
+        this.lineItemForm.controls.fcn_ad_stone_amount.setValue(dynvalues?.stone_amt);
+        this.lineItemForm.controls.fcn_li_rate.setValue(dynvalues?.making_amt);
+        this.lineItemForm.controls.fcn_li_total_amount.setValue(dynvalues?.mkg_amount);
+        this.lineItemForm.controls.fcn_li_discount_percentage.setValue(dynvalues?.slsReturn.DISCOUNT);
+        this.lineItemForm.controls.fcn_li_discount_amount.setValue(dynvalues?.slsReturn.DISCOUNTVALUEFC);
+        this.lineItemForm.controls.fcn_li_gross_amount.setValue(dynvalues?.slsReturn.TOTALWITHVATFC);
+        // this.lineItemForm.controls.fcn_li_tax_percentage.setValue(dynvalues?.slsReturn.CGST_PER);
+        this.lineItemForm.controls.fcn_li_tax_amount.setValue(formattedTaxAmount);
+
+        this.lineItemForm.controls.fcn_li_net_amount.setValue(dynvalues?.net_amount);
+
+        this.validatePCS = false;
+        this.enablePieces = false;
+        this.managePcsGrossWt();
+      }, 100);
+    }
+  }
+
+  
+
   addSalesReturnOnSelect(event: any, slsReturn: any, index: any) {
     // console.table(event);
     // console.table(slsReturn);
@@ -6425,6 +6489,7 @@ editLineItem:boolean=false;
     }
   ];
   console.log("postdetailsData" ,this.postDetail);
+  this.modalReference.close();
 
   }
 
@@ -8364,6 +8429,7 @@ editLineItem:boolean=false;
         //       ))
         //   }
         // });
+
       }
     } else {
       console.log('====================================');
@@ -8372,7 +8438,7 @@ editLineItem:boolean=false;
       this.snackBar.open('Please Fill Required Fields', '', {
         duration: 2000 // time in milliseconds
       });
-    }
+    }   
   }
 
   updateRetailSalesReturnVal() {
@@ -9101,7 +9167,7 @@ editLineItem:boolean=false;
       ]);
 
       const validDivisionCodes = ['M', 'D', 'W'];
-      const filteredValidationCodes = validDivisionCodes.filter((code) => code === this.newLineItem.DIVISION.toUpperCase())
+      const filteredValidationCodes = validDivisionCodes.filter((code) => code === this.newLineItem.DIVISION);
 
       if (filteredValidationCodes.length > 0) {
         this.comFunc.formControlSetReadOnly('fcn_li_gross_wt', true);
