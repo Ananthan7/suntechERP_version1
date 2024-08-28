@@ -189,7 +189,6 @@ export class MetalReturnDetailsComponent implements OnInit {
     this.metalReturnDetailsForm.controls.BRANCH_CODE.setValue(this.content.BRANCH_CODE || this.content.HEADERDETAILS.BRANCH_CODE)
     // this.metalReturnDetailsForm.controls.location.setValue(this.content.LOCTYPE_CODE)
     this.metalReturnDetailsForm.controls.YEARMONTH.setValue(this.content.YEARMONTH || this.content.HEADERDETAILS.YEARMONTH)
-
     this.metalReturnDetailsForm.controls.jobNumber.setValue(this.content.JOB_NUMBER)
     this.metalReturnDetailsForm.controls.jobDes.setValue(this.content.JOB_DESCRIPTION)
     this.metalReturnDetailsForm.controls.subJobNo.setValue(this.content.UNQ_JOB_ID)
@@ -205,7 +204,11 @@ export class MetalReturnDetailsComponent implements OnInit {
     this.metalReturnDetailsForm.controls.PART_CODE.setValue(this.content.PART_CODE)
     this.metalReturnDetailsForm.controls.KARAT_CODE.setValue(this.content.KARAT_CODE)
     this.metalReturnDetailsForm.controls.DIVCODE.setValue(this.content.DIVCODE)
-    //this.metalReturnDetailsForm.controls.PURE_WT.setValue(this.content.PURE_WT)
+    this.metalReturnDetailsForm.controls.remarks.setValue(this.content.WIP_ACCODE)
+    this.metalReturnDetailsForm.controls.JOB_PCS.setValue(this.content.CURRENCY_RATE)
+    this.metalReturnDetailsForm.controls.ReturnToStockCode.setValue(this.content.RETURN_STOCK)
+    this.metalReturnDetailsForm.controls.ReturnToStockCodeDesc.setValue(this.content.SUB_RETURN_STOCK)
+
 
     this.setValueWithDecimal('PURE_WT', this.content.PUREWT, 'THREE')
     this.setValueWithDecimal('GROSS_WT', this.content.GROSS_WT, 'METAL')
@@ -253,17 +256,41 @@ export class MetalReturnDetailsComponent implements OnInit {
     }
   }
   /**use: for stone wt and gross wt calculation */
-  private calculateNetWt(): boolean {
-    let form = this.metalReturnDetailsForm.value
-    let GROSS_WT = this.comService.emptyToZero(form.GROSS_WT)
-    let STONE_WT = this.comService.emptyToZero(form.STONE_WT)
-    if (STONE_WT > GROSS_WT) {
-      this.comService.toastErrorByMsgId('MSG1844')//Stone weight cannot be greater than gross weight
-      return true
-    }
-    this.setValueWithDecimal('NET_WT', GROSS_WT - STONE_WT, 'THREE')
-    return false;
+  // private calculateNetWt(): boolean {
+  //   let form = this.metalReturnDetailsForm.value
+  //   let GROSS_WT = this.comService.emptyToZero(form.GROSS_WT)
+  //   let STONE_WT = this.comService.emptyToZero(form.STONE_WT)
+  //   if (STONE_WT > GROSS_WT) {
+  //     this.comService.toastErrorByMsgId('MSG1844')//Stone weight cannot be greater than gross weight
+  //     return true
+  //   }
+  //   this.setValueWithDecimal('NET_WT', GROSS_WT - STONE_WT, 'THREE')
+  //   return false;
+  // }
+
+  /**use: for stone wt, gross wt, and pure wt calculation */
+private calculateNetWt(): boolean {
+  let form = this.metalReturnDetailsForm.value;
+  let GROSS_WT = this.comService.emptyToZero(form.GROSS_WT);
+  let STONE_WT = this.comService.emptyToZero(form.STONE_WT);
+  let PURITY = this.comService.emptyToZero(form.PURITY);
+
+  if (STONE_WT > GROSS_WT) {
+    this.comService.toastErrorByMsgId('MSG1844'); // Stone weight cannot be greater than gross weight
+    return true;
   }
+
+  // Calculate NET_WT
+  let NET_WT = GROSS_WT - STONE_WT;
+  this.setValueWithDecimal('NET_WT', NET_WT, 'THREE');
+
+  // Calculate PURE_WT as NET_WT * PURITY
+  let PURE_WT = NET_WT * PURITY;
+  this.setValueWithDecimal('PURE_WT', PURE_WT, 'THREE');
+
+  return false;
+}
+
   WorkerCodeSelected(e: any) {
     console.log("sdgf")
     this.metalReturnDetailsForm.controls.workerCode.setValue(e.WORKER);
@@ -384,8 +411,8 @@ export class MetalReturnDetailsComponent implements OnInit {
       "PURE_WT": form.PURE_WT,
       "RATE_TYPE": "",
       "METAL_RATE": 0,
-      "CURRENCY_CODE": "",
-      "CURRENCY_RATE": 0,
+      "CURRENCY_CODE":"",
+      "CURRENCY_RATE": this.comService.emptyToZero(form.JOB_PCS),
       "METAL_GRM_RATEFC": this.comService.emptyToZero(form.metalGramRateFc),
       "METAL_GRM_RATELC": this.comService.emptyToZero(form.metalGramRateLc),
       "METAL_AMOUNTFC": this.comService.emptyToZero(form.metalAmountFc),
@@ -403,11 +430,11 @@ export class MetalReturnDetailsComponent implements OnInit {
       "WORKER_CODE": this.comService.nullToString(form.workerCode),
       "WORKER_NAME": this.comService.nullToString(form.workerCodeDesc),
       "UNQ_DESIGN_ID": "",
-      "WIP_ACCODE": "",
+      "WIP_ACCODE":this.comService.nullToString(form.remarks),
       "UNIQUEID": 0,
       "LOCTYPE_CODE": this.comService.nullToString(form.location),
-      "RETURN_STOCK": "",
-      "SUB_RETURN_STOCK": "",
+      "RETURN_STOCK": this.comService.nullToString(form.ReturnToStockCode),
+      "SUB_RETURN_STOCK": this.comService.nullToString(form.ReturnToStockCodeDesc),
       "STONE_WT": this.comService.emptyToZero(form.STONE_WT),
       "NET_WT": this.comService.emptyToZero(form.NET_WT),
       "PART_CODE": this.comService.nullToString(form.PART_CODE),
@@ -682,6 +709,7 @@ export class MetalReturnDetailsComponent implements OnInit {
           this.metalReturnDetailsForm.controls.DIVCODE.setValue(data[0].DIVCODE)
           this.metalReturnDetailsForm.controls.JOB_PCS.setValue(data[0].PCS1)
           this.metalReturnDetailsForm.controls.METAL_STONE.setValue(data[0].METAL_STONE)
+          this.metalReturnDetailsForm.controls.PURITY.setValue(data[0].PURITY)
 
           this.setValueWithDecimal('PURE_WT', data[0].PUREWT, 'THREE')
           this.setValueWithDecimal('GROSS_WT', data[0].METAL, 'METAL')

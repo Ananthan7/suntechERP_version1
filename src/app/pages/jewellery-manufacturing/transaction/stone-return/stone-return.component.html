@@ -58,7 +58,7 @@
               <div class="col-md-8">
                 <mat-form-field style="width: 75%;">
                   <input type="text" matInput formControlName="enterdBy"
-                    (keydown)="lookupKeyPress($event,'enterdBy')"
+                    (keydown)="lookupKeyPress($event,'enterdBy')" UpperCaseDirective
                     (focusout)="validateLookupField($event,userData,'enterdBy')"
                     [readonly]="viewMode" />
                 </mat-form-field>
@@ -95,7 +95,7 @@
               <div class="col-sm-4">
                 <mat-form-field style="width: 70%;">
                   <input type="text" matInput formControlName="basecurrency"
-                    (keydown)="lookupKeyPress($event,'basecurrency')"
+                    (keydown)="lookupKeyPress($event,'basecurrency')" UpperCaseDirective
                     [readonly]="viewMode" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="baseCurrencyCodeData"
@@ -115,7 +115,7 @@
               <div class="col-sm-4">
                 <mat-form-field style="width: 70%;">
                   <input type="text" matInput formControlName="currency"
-                    (keydown)="lookupKeyPress($event,'currency')"
+                    (keydown)="lookupKeyPress($event,'currency')" UpperCaseDirective
                     [readonly]="viewMode" />
                 </mat-form-field>
                 <master-search [MasterSearchData]="CurrencyCodeData"

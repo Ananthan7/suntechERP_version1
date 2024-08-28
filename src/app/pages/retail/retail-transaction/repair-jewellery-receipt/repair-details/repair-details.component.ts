@@ -368,7 +368,7 @@ export class RepairDetailsComponent implements OnInit {
 
     let API = "Repair/InsertRepair";
     let postData = {
-      UNIQUEID: 0,
+      UNIQUEID: this.receiptData?.SRNO || 0,
       SRNO: this.receiptData?.SRNO || 0,
       DIVISION_CODE: "3",
       STOCK_CODE: "",

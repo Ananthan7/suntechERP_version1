@@ -17,16 +17,18 @@
                 <label for="inputPassword" class="col-sm-12 col-form-label">Stock Code</label>
             </div>
             <div class="col-md-1">
-                <mat-form-field style="width: 100%;">
+                <mat-form-field style="width: 70%;">
                     <input type="text" readonly matInput formControlName="stockCode" />
                 </mat-form-field>
+                <master-search *ngIf="!viewOnly" [MasterSearchData]="stockCodeData"
+                (newRowClick)="stockCodeSelected($event)"></master-search>
             </div>
             <div class="col-md-2">
-                <mat-form-field style="width: 70%;">
+                <mat-form-field style="width: 100%;">
                     <input type="text" [readonly]="viewOnly" matInput formControlName="stockType" />
                 </mat-form-field>
-                <master-search *ngIf="!viewOnly" [MasterSearchData]="stockCodeData"
-                    (newRowClick)="stockCodeSelected($event)"></master-search>
+                <!-- <master-search *ngIf="!viewOnly" [MasterSearchData]="stockCodeData"
+                    (newRowClick)="stockCodeSelected($event)"></master-search> -->
             </div>
             <div class="col-md-2">
                 <mat-checkbox class="example-margin" formControlName="fixMetalRate">
@@ -110,7 +112,7 @@
                         <label for="inputPassword" class="col-sm-6 col-form-label">Purity</label>
                         <div class="col-md-6">
                             <mat-form-field style="width: 100%;">
-                                <input type="number" (change)="changeStandardPurity($event)" readonly class="st_txt_right" matInput
+                                <input type="number" (change)="changeStandardPurity($event)" [readonly]="viewOnly" class="st_txt_right" matInput
                                 PurityDecimal formControlName="purity" />
                             </mat-form-field>
 
@@ -130,8 +132,10 @@
                         <label for="inputPassword" class="col-sm-6 col-form-label">Mud Weight</label>
                         <div class="col-md-6">
                             <mat-form-field style="width: 100%;">
-                                <input type="number" class="st_txt_right" (change)="changeMudWeight($event)" [readonly]="viewOnly" matInput
-                                    ThreeDecimalInput formControlName="mudWeight" />
+                                <input type="number" id="mudWeight" (change)="changeMudWeight($event)" [readonly]="viewOnly" class="st_txt_right" matInput
+                                ThreeDecimalInput formControlName="mudWeight" />
+                                <!-- <input type="number" class="st_txt_right" (change)="changeMudWeight($event)" [readonly]="viewOnly" matInput
+                                    ThreeDecimalInput formControlName="mudWeight" /> -->
                             </mat-form-field>
 
                         </div>
@@ -193,58 +197,7 @@
                         </div>
                     </div>
                 </div>
-                <!-- <div class="row mb-3 border">
-                    <div class="col-md-12 px-0">
-                        <div class="bg_qty text-center">
-                            Bag Details
-                        </div>
-                    </div>
-                    <div class="row">
-                        <label for="inputPassword" class="col-sm-6 col-form-label">Bag No:</label>
-                        <div class="col-md-6">
-                            <mat-form-field style="width: 100%;">
-                                <input type="text" [readonly]="viewOnly" matInput formControlName="bagNo" />
-                            </mat-form-field>
-                        </div>
-                    </div>
-                </div> -->
-                <!-- <div class="row mb-3 border">
-                    <div class="col-md-12 px-0">
-                        <div class="bg_qty text-center">
-                            Stone & Purity Difference
-                        </div>
-                    </div>
-                    <div class="row">
-                        <label for="inputPassword" class="col-sm-6 col-form-label">Purity Difference</label>
-                        <div class="col-md-6">
-                            <mat-form-field style="width: 70%;">
-                                <input type="number" class="st_txt_right" matInput ThreeDecimalInput
-                                readonly formControlName="purityDiffer" />
-                            </mat-form-field>
-
-                        </div>
-                    </div>
-                    <div class="row">
-                        <label for="inputPassword" class="col-sm-6 col-form-label">Stone Difference</label>
-                        <div class="col-md-6">
-                            <mat-form-field style="width: 70%;">
-                                <input type="number" class="st_txt_right" matInput ThreeDecimalInput
-                                    readonly formControlName="stoneDiffer" />
-                            </mat-form-field>
-
-                        </div>
-                    </div>
-                    <div class="row">
-                        <label for="inputPassword" class="col-sm-6 col-form-label">Oz Wt</label>
-                        <div class="col-md-6">
-                            <mat-form-field style="width: 100%;">
-                                <input type="number" class="st_txt_right" matInput ThreeDecimalInput
-                                    [readonly]="viewOnly" formControlName="ozWeight" />
-                            </mat-form-field>
-
-                        </div>
-                    </div>
-                </div> -->
+         
             </div>
             <div class="col-md-3 mx-2">
                 <div class="row mb-3 border">
@@ -339,7 +292,7 @@
                         <div class="col-md-6">
                             <mat-form-field style="width: 100%;">
                                 <input type="number" (change)="changeMetalAmount($event)" class="st_txt_right" matInput AmountDecimalInput
-                                    [readonly]="viewOnly" formControlName="metalAmount" />
+                                   readonly formControlName="metalAmount" />
                             </mat-form-field>
                         </div>
                     </div>
@@ -361,57 +314,7 @@
                         </div>
                     </div>
                 </div>
-                <!-- <div class="row mb-3 border">
-                    <div class="col-md-12 px-0">
-                        <div class="bg_qty text-center">
-                            Wastage
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <label for="inputPassword" class="col-md-4 col-form-label text-center">%</label>
-                        <label for="inputPassword" class="col-md-4 col-form-label  text-center">Quantity</label>
-                        <label for="inputPassword" class="col-md-4 col-form-label  text-center">Amount</label>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4">
-                            <mat-form-field style="width: 100%;">
-                                <input type="number" class="st_txt_right" matInput [readonly]="viewOnly"
-                                    formControlName="wastagePercent" />
-                            </mat-form-field>
-
-                        </div>
-                        <div class="col-md-4">
-                            <mat-form-field style="width: 100%;">
-                                <input type="number" class="st_txt_right" matInput ThreeDecimalInput
-                                    [readonly]="viewOnly" formControlName="wastageQuantity" />
-                            </mat-form-field>
-
-                        </div>
-                        <div class="col-md-4">
-                            <mat-form-field style="width: 100%;">
-                                <input type="number" class="st_txt_right" AmountDecimalInput matInput
-                                    [readonly]="viewOnly" formControlName="wastageAmount" />
-                            </mat-form-field>
-
-                        </div>
-                    </div>
-                </div>
-                <div class="row mb-3 border">
-                    <div class="col-md-12 px-0">
-                        <div class="bg_qty text-center">
-                            Bag Details
-                        </div>
-                    </div>
-                    <div class="row">
-                        <label for="inputPassword" class="col-sm-6 col-form-label">Bag No:</label>
-                        <div class="col-md-6">
-                            <mat-form-field style="width: 100%;">
-                                <input type="text" [readonly]="viewOnly" matInput formControlName="bagNo" />
-                            </mat-form-field>
-                        </div>
-                    </div>
-                </div> -->
+              
             </div>
             <div class="col-md-3 mx-2">
  <div class="row mb-3 border">
@@ -445,7 +348,7 @@
                         <div class="col-md-6">
                             <mat-form-field style="width: 100%;">
                                 <input type="number" class="st_txt_right" matInput ThreeDecimalInput
-                                    [readonly]="viewOnly" formControlName="ozWeight" />
+                                    readonly formControlName="ozWeight" />
                             </mat-form-field>
 
                         </div>
@@ -462,7 +365,7 @@
                         <label for="inputPassword" class="col-sm-6 col-form-label">Bag No:</label>
                         <div class="col-md-6">
                             <mat-form-field style="width: 100%;">
-                                <input type="text" [readonly]="viewOnly" matInput formControlName="bagNo" />
+                                <input type="text"readonly matInput formControlName="bagNo" />
                             </mat-form-field>
                         </div>
                     </div>
