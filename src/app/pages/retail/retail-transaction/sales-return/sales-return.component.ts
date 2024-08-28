@@ -13574,7 +13574,7 @@ changeGiftVoucherAmount(data:any){
     const API = `UspGetSubVouchers`;
     const postData = {
       "strBranchCode": this.strBranchcode,
-      "strMainVocType": this.mainVocType
+      "strMainVocType": "POS"
     };
 
     this.suntechApi.postDynamicAPI(API, postData)
