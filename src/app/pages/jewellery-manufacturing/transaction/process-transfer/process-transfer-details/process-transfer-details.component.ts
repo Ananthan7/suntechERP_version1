@@ -411,6 +411,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       parentDetail = this.content[0]?.JOB_PROCESS_TRN_DETAIL_DJ
       PROCESS_FORMDETAILS = this.content[0]?.PROCESS_FORMDETAILS
       this.metalDetailData = this.content[0]?.TRN_STNMTL_GRID
+      this.metalGridSelectFlag()
     }
     if (!parentDetail) return;
     this.processTransferdetailsForm.controls.SRNO.setValue(this.content[0]?.SRNO)
@@ -937,7 +938,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.recalculateSrno()
     this.checkSettedValue(data)
     this.formatMetalDetailDataGrid()
-    if (this.rowUpdationValidate(data)) return
+    // if (this.rowUpdationValidate(data)) return
     this.Calc_Totals(0)
     // this.calculateStoneDetail();
     this.CalculateLoss();
@@ -1439,6 +1440,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
           let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
           if (data) {
             this.metalDetailData = data
+            this.metalGridSelectFlag()
             if (this.processTransferdetailsForm.value.METALSTONE == 'M') {
               this.metal_Calc_Totals(1)
             } else {
@@ -1458,6 +1460,15 @@ export class ProcessTransferDetailsComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
+  metalGridSelectFlag(){
+    this.metalDetailData.forEach((item:any)=>{
+      item.SELECTED = true
+    })
+  }
+  changeSelectCheckbox(data:any){
+    console.log(data);
+    
+  }
   // use: calculate total values from grid
   // for flag 0 to values only assigned
   Calc_Totals(flag: any) {
@@ -1476,7 +1487,6 @@ export class ProcessTransferDetailsComponent implements OnInit {
           } else {
             nMPcs += this.emptyToZero(item["PCS"]);
             nMWeight += this.emptyToZero(item["GROSS_WT"]);
-
           }
         })
       }
@@ -2124,10 +2134,10 @@ export class ProcessTransferDetailsComponent implements OnInit {
       "FRM_METAL_PCS": this.emptyToZero(form.FRM_METAL_PCS),
       "FRM_PURE_WT": this.multiplyWithAmtDecimal(form.FRM_METAL_WT, form.PURITY),
       "FRM_NET_WT": this.emptyToZero(form.FRM_METAL_WT),
-      "TO_PROCESS_CODE": this.commonService.nullToString(form.TO_PROCESS_CODE),
-      "TO_PROCESSNAME": this.commonService.nullToString(form.TO_PROCESSNAME),
-      "TO_WORKER_CODE": this.commonService.nullToString(form.TO_WORKER_CODE),
-      "TO_WORKERNAME": this.commonService.nullToString(form.TO_WORKERNAME),
+      "TO_PROCESS_CODE": this.commonService.nullToString(form.TO_PROCESS_CODE?.toUpperCase()),
+      "TO_PROCESSNAME": this.commonService.nullToString(form.TO_PROCESSNAME?.toUpperCase()),
+      "TO_WORKER_CODE": this.commonService.nullToString(form.TO_WORKER_CODE?.toUpperCase()),
+      "TO_WORKERNAME": this.commonService.nullToString(form.TO_WORKERNAME?.toUpperCase()),
       "TO_PCS": this.emptyToZero(form.TO_PCS),
       "TO_METAL_PCS": this.emptyToZero(form.TO_METAL_PCS),
       "TO_STONE_WT": this.emptyToZero(form.TO_STONE_WT),
@@ -2276,10 +2286,10 @@ export class ProcessTransferDetailsComponent implements OnInit {
       "FRM_METAL_PCS": this.emptyToZero(form.METAL_FromPCS),
       "FRM_PURE_WT": this.emptyToZero(form.METAL_FromPureWt),
       "FRM_NET_WT": this.emptyToZero(form.METAL_FromNetWeight),
-      "TO_PROCESS_CODE": this.commonService.nullToString(form.METAL_TO_PROCESS_CODE),
-      "TO_PROCESSNAME": this.commonService.nullToString(form.METAL_TO_PROCESSNAME),
-      "TO_WORKER_CODE": this.commonService.nullToString(form.METAL_TO_WORKER_CODE),
-      "TO_WORKERNAME": this.commonService.nullToString(form.METAL_TO_WORKERNAME),
+      "TO_PROCESS_CODE": this.commonService.nullToString(form.METAL_TO_PROCESS_CODE?.toUpperCase()),
+      "TO_PROCESSNAME": this.commonService.nullToString(form.METAL_TO_PROCESSNAME?.toUpperCase()),
+      "TO_WORKER_CODE": this.commonService.nullToString(form.METAL_TO_WORKER_CODE?.toUpperCase()),
+      "TO_WORKERNAME": this.commonService.nullToString(form.METAL_TO_WORKERNAME?.toUpperCase()),
       "TO_PCS": this.emptyToZero(form.METAL_ToPCS),
       "TO_METAL_PCS": this.emptyToZero(form.METAL_ToPCS),
       "TO_STONE_WT": this.emptyToZero(form.METAL_TO_STONE_WT),
@@ -2346,7 +2356,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       "RET_STONE_PCS": 0,
       "RET_LOC_MET": "",
       "RET_LOC_STN": "",
-      "MAIN_WORKER": this.commonService.nullToString(form.FRM_WORKER_CODE),
+      "MAIN_WORKER": this.commonService.nullToString(form.FRM_WORKER_CODE?.toUpperCase()),
       "MKG_LABACCODE": "",
       "REMARKS": this.commonService.nullToString(form.remarks),
       "TREE_NO": this.commonService.nullToString(form.TREE_NO),
