@@ -87,11 +87,11 @@
                         </div>
                     </div>
                     <div class="row">
-                        <label for="inputPassword" class="col-sm-6 col-form-label">Pieces</label>
+                        <label for="inputPassword" class="col-sm-6 col-form-label">Pcs</label>
                         <div class="col-md-6">
                             <mat-form-field style="width: 100%;">
-                                <input type="number" class="text-right" [min]="0" id="pieces" [readonly]="viewOnly"
-                                    matInput formControlName="pieces" />
+                                <input type="number" (change)="changePieces($event)" class="text-right" [min]="0" id="pieces" [readonly]="viewOnly"
+                                    matInput  formControlName="pieces" />
                             </mat-form-field>
 
                         </div>
@@ -203,7 +203,7 @@
                         <div class="col-md-4">
                             <mat-form-field style="width: 100%;">
                                 <input type="number" class="st_txt_right" AmountDecimalInput matInput
-                                    [readonly]="viewOnly" formControlName="wastageAmount" />
+                                   readonly formControlName="wastageAmount" />
                             </mat-form-field>
 
                         </div>
@@ -222,9 +222,11 @@
                         <label for="inputPassword" class="col-sm-4 col-form-label">Unit</label>
                         <div class="col-md-4">
                             <mat-form-field style="width: 100%;">
-                                <mat-select formControlName="unitCode">
+                                <input type="text"  id="unitCode" readonly matInput
+                                    formControlName="unitCode" />
+                                <!-- <mat-select formControlName="unitCode">
                                     <mat-option value="gms">GMS</mat-option>
-                                </mat-select>
+                                </mat-select> -->
                             </mat-form-field>
                         </div>
                         <div class="col-md-4">
@@ -297,7 +299,7 @@
                         <div class="col-md-6">
                             <mat-form-field style="width: 100%;">
                                 <input type="text" [min]="0" [maxLength]="14" (change)="changeMetalRate($event)"
-                                    class="st_txt_right" matInput [readonly]="viewOnly" formControlName="metalRate" />
+                                    class="st_txt_right" matInput readonly formControlName="metalRate" />
                             </mat-form-field>
                         </div>
                     </div>
@@ -363,7 +365,7 @@
                         <label for="inputPassword" class="col-sm-6 col-form-label">Oz Wt</label>
                         <div class="col-md-6">
                             <mat-form-field style="width: 100%;">
-                                <input type="number" class="st_txt_right" matInput MetalDecimalInput readonly
+                                <input type="number" (change)="triggerOunceWeightChange($event)" class="st_txt_right" matInput MetalDecimalInput [readonly]="viewOnly"
                                     formControlName="ozWeight" />
                             </mat-form-field>
 
