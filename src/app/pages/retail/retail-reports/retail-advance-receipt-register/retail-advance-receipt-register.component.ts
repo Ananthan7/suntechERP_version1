@@ -158,34 +158,34 @@ export class RetailAdvanceReceiptRegisterComponent implements OnInit {
 
   selectedData(data: any) {
     console.log(data)
-    let content= ``, content2 =``,  content3 =``, content4 =``
-    // let content = `Current Selected Branches:  \n`
-    // let content2 = `Current Selected Divisions:  \n`
-    // let content3 = `Current Selected Area:  \n`
-    // let content4 = `Current Selected B category:  \n`
+    // let content= ``, content2 =``,  content3 =``, content4 =``
+    let content = `Current Selected Branches:  \n`
+    let content2 = `Current Selected Divisions:  \n`
+    let content3 = `Current Selected Area:  \n`
+    let content4 = `Current Selected B category:  \n`
     if(data.BranchData){
-      content = `Current Selected Branches:  \n`
+      // content = `Current Selected Branches:  \n`
       data.BranchData.forEach((Bdata: any)=>{
         content += Bdata.BRANCH_CODE ? `${Bdata.BRANCH_CODE}, ` : ''
       }) 
     }
 
     if(data.DivisionData){
-      content2 = `Current Selected Divisions:  \n`
+      // content2 = `Current Selected Divisions:  \n`
       data.DivisionData.forEach((Ddata: any)=>{
         content2 += Ddata.DIVISION_CODE ? `${Ddata.DIVISION_CODE}, ` : ''
       }) 
     }
 
     if(data.AreaData){
-      content3 = `Current Selected Area:  \n`
+      // content3 = `Current Selected Area:  \n`
       data.AreaData.forEach((Adata: any)=>{
         content3 += Adata.AREA_CODE ? `${Adata.AREA_CODE}, ` : ''
       }) 
     }
 
     if(data.BusinessCategData){
-      content4 = `Current Selected B category:  \n`
+      // content4 = `Current Selected B category:  \n`
       data.BusinessCategData.forEach((BCdata: any)=>{
         content4 += BCdata.CATEGORY_CODE ? `${BCdata.CATEGORY_CODE}, ` : ''
       }) 

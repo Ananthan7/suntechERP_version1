@@ -1,0 +1,16 @@
+.col-md-6 label {
+    font-weight: bolder;
+}
+
+.gridLabel{
+    background-color: rgb(161 167 173) !important;
+}
+
+::ng-deep .mat-tab-label {
+    font-weight: 900;
+    color: #0024f3;
+    border: 2px solid #3f51b5; 
+    border-radius: 4px; 
+    padding: 4px 8px; 
+  }
+  
