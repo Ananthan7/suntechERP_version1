@@ -20,7 +20,7 @@ export class BranchDivisionComponent implements OnInit {
   isLoading: boolean = false;
   BranchDataSource: any[] = [];
   divisionDataSource: any[] = [];
-  areaDataSource: any[]= [];
+  areaDataSource: any[] = [];
   businessCategDataSource: any[] = [];
   dataSourceHead: any[] = [];
   showFilterRow: boolean = true;
@@ -33,13 +33,15 @@ export class BranchDivisionComponent implements OnInit {
   pageSize: number = 10; // Number of items per page
   pageIndex: number = 1; // Current page index
 
-  @Input() existingData: any; 
+  @Input() existingData: any;
 
 
-  constructor( private toastr: ToastrService,  private commonService: CommonServiceService,
+  constructor(private toastr: ToastrService, private commonService: CommonServiceService,
     private dataService: SuntechAPIService, private modalService: NgbModal,) { }
+  selectedRowKeys: number[] = [];
 
-  ngOnInit(){
+  ngOnInit() {
+
     this.getAPIData()
   }
 
@@ -50,26 +52,31 @@ export class BranchDivisionComponent implements OnInit {
       keyboard: false,
       //  windowClass: 'modal-full-width'
     });
-    this.existingData.forEach((item: any)=>{
-      this.BranchDataSource.forEach((data : any, index: any) => {
-        if(data.BRANCH_CODE == item.BRANCH_CODE ){
-          data.checked= true
+
+    this.existingData.forEach((item: any) => {
+      this.BranchDataSource.forEach((data: any, index: any) => {
+        if (data.BRANCH_CODE == item.BRANCH_CODE) {
+          data.checked = true
           // console.log('BranchDataSource match:', data, index);
         }
       });
-      this.divisionDataSource.forEach((data : any, index: any) => {
-        if(data.DIVISION_CODE == item.DIVISION_CODE){
-          data.checked= true
+
+      this.selectedRowKeys = this.BranchDataSource
+        .filter(item => item.checked)
+        .map(item => item.SRNO);
+      this.divisionDataSource.forEach((data: any, index: any) => {
+        if (data.DIVISION_CODE == item.DIVISION_CODE) {
+          data.checked = true
         }
       })
-      this.areaDataSource.forEach((data : any, index: any) => {
-        if(item.AREA_CODE == data.AREA_CODE){
-          data.checked= true
+      this.areaDataSource.forEach((data: any, index: any) => {
+        if (item.AREA_CODE == data.AREA_CODE) {
+          data.checked = true
         }
       })
-      this.businessCategDataSource.forEach((data : any, index: any) => {
-        if(item.CATEGORY_CODE == data.CATEGORY_CODE){
-          data.checked= true
+      this.businessCategDataSource.forEach((data: any, index: any) => {
+        if (item.CATEGORY_CODE == data.CATEGORY_CODE) {
+          data.checked = true
         }
       })
     })
@@ -93,8 +100,8 @@ export class BranchDivisionComponent implements OnInit {
   //   this.newRowClick.emit(event.data)
   //   // this.close()
   // }
-  onCheckboxChange(event: any, data: any){
-    data.data.checked= event.checked
+  onCheckboxChange(event: any, data: any) {
+    data.data.checked = event.checked
     let checkedItems: any[] = [];
     let checkedDivisionItems: any[] = [];
     checkedItems = this.BranchDataSource.filter(item => item.checked)
@@ -105,17 +112,33 @@ export class BranchDivisionComponent implements OnInit {
     checkedAreaItems = this.areaDataSource.filter(item => item.checked)
     checkedB_categoryItems = this.businessCategDataSource.filter(item => item.checked)
     const uniqueArray = Array.from(new Set([
-        ...checkedItems,
-        ...checkedDivisionItems,
-        ...checkedAreaItems,
-        ...checkedB_categoryItems
+      ...checkedItems,
+      ...checkedDivisionItems,
+      ...checkedAreaItems,
+      ...checkedB_categoryItems
     ]));
     // console.log(uniqueArray)
     this.newRowClick.emit(uniqueArray)
   }
 
-  selectAllData(){
-    
+  selectedIndexes: any = [];
+  onSelectionChanged(event: any) {
+    console.log('select event', event)
+    const selectedRowsData = event.selectedRowsData;
+
+    this.newRowClick.emit(event.selectedRowsData)
+    // const values = event.selectedRowKeys;
+    // // console.log(values);
+    // let indexes: Number[] = [];
+    // this.BranchDataSource.reduce((acc, value, index) => {
+    //   if (values.includes(parseFloat(value.SRNO))) {
+    //     acc.push(index);
+
+    //   }
+    //   return acc;
+    // }, indexes);
+    // this.selectedIndexes = indexes;
+    // console.log(this.selectedIndexes);
   }
 
 
@@ -153,7 +176,7 @@ export class BranchDivisionComponent implements OnInit {
       }
     })
   }
-  
+
   ngOnDestroy(): void {
     this.subscriptions$ && this.subscriptions$.unsubscribe()
   }
@@ -165,39 +188,38 @@ export class BranchDivisionComponent implements OnInit {
   //   "strDivisionMS": "M",
   //   "strLoginBranch": "MOE"
   // }
-  getAPIData(pageIndex?: number) {
 
+  getAPIData(pageIndex?: number) {
     const payload = {
       strUserName: 'VASANT',
       strDivisionMS: 'S',
       strLoginBranch: 'MOE'
     };
-    this.isLoading = true;
-    this.dataService.postDynamicAPI('BranchDivisonSelector',payload).subscribe((response) => {
-      this.isLoading = false;
-      console.log('branch division API call data', response)
-      if (response.dynamicData[0]) {
-        this.BranchDataSource = response.dynamicData[0]
-        if (this.BranchDataSource.length > 0) {
-          this.BranchDataSource = [...this.BranchDataSource, ...response.dynamicData[0]];
-        } else {
-          this.BranchDataSource = response.dynamicData[0];
-          this.nextPage()
-        }
-        this.dataSourceHead = Object.keys(this.BranchDataSource[0]);
-        this.dataSourceHead.unshift(this.dataSourceHead.pop())
 
-        this.divisionDataSource = response.dynamicData[1]
-        this.areaDataSource = response.dynamicData[2]
-        this.businessCategDataSource = response.dynamicData[3]
+    this.isLoading = true;
+
+    this.dataService.postDynamicAPI('BranchDivisonSelector', payload).subscribe((response) => {
+      this.isLoading = false;
+      console.log('branch division API call data', response);
+
+      this.BranchDataSource = response.dynamicData[0] || [];
+
+      this.divisionDataSource = response.dynamicData[1] || [];
+      this.areaDataSource = response.dynamicData[2] || [];
+      this.businessCategDataSource = response.dynamicData[3] || [];
+
+      if (this.BranchDataSource.length > 0) {
+        this.dataSourceHead = Object.keys(this.BranchDataSource[0]);
+        this.dataSourceHead.unshift(this.dataSourceHead.pop());
       } else {
-        this.toastr.error('Data Not Available')
+        this.toastr.error('Data Not Available');
       }
     },
-    error => {
-      console.error('Error occurred:', error);
-    })
+      error => {
+        console.error('Error occurred:', error);
+      });
   }
+
 
 
 
