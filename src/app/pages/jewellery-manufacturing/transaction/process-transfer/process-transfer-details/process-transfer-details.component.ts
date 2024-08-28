@@ -927,6 +927,11 @@ export class ProcessTransferDetailsComponent implements OnInit {
     }
     this.modalReference.close()
   }
+  onEditingStart(e: any) {
+    if (e.data.METALSTONE == 'M' && e.column.dataField === 'GROSS_WT') {
+      e.cancel = true; // Prevent editing for this cell
+    }
+  }
   onRowUpdateGrid(event: any) {
     let data = event.data
     this.recalculateSrno()
@@ -934,7 +939,37 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.formatMetalDetailDataGrid()
     if (this.rowUpdationValidate(data)) return
     this.Calc_Totals(0)
+    // this.calculateStoneDetail();
     this.CalculateLoss();
+  }
+  calculateStoneDetail(){
+    if (this.metalDetailData.length > 0) {
+      let nPcs = 0
+      let nStWeight = 0
+      let nMPcs = 0
+      this.metalDetailData.forEach((item: any, index: any) => {
+        item.SRNO = index + 1
+        if (item.METALSTONE.toUpperCase() == 'S') {
+          nPcs += this.emptyToZero(item.PCS)
+          nStWeight += this.emptyToZero(item["GROSS_WT"]);
+        } else {
+          nMPcs += this.emptyToZero(item["PCS"]);
+        }
+      })
+      this.setFormDecimal('TO_STONE_WT', nStWeight, 'STONE')
+      this.setFormNullToString('FRM_STONE_PCS', nPcs)
+      this.setFormNullToString('TO_STONE_PCS', nPcs)
+      if (nMPcs == 0) {
+        this.processTransferdetailsForm.controls.FRM_METAL_PCS.setValue(0)
+        this.processTransferdetailsForm.controls.TO_METAL_PCS.setValue(0)
+      } else {
+        this.setFormNullToString('FRM_METAL_PCS', nMPcs)
+        this.setFormNullToString('TO_METAL_PCS', nMPcs)
+      }
+      let form = this.processTransferdetailsForm.value
+      this.setFormDecimal('GrossWeightTo', this.commonService.grossWtCalculate(form.TO_METAL_WT, nStWeight), 'METAL')
+
+    }
   }
   recalculateSrno() {
     this.metalDetailData.forEach((item: any, index: any) => {
