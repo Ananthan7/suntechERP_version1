@@ -431,7 +431,7 @@
                                 (keydown)="lookupKeyPress($event,'stockCode')"
                                 (focusout)="stockCodeScrapValidate($event)"
                                 formControlName="stockCode"
-                                [readonly]="viewMode" />
+                                [readonly]="viewMode" UpperCaseDirective/>
                               <master-search class="masterSearch"
                                 *ngIf="!viewMode"
                                 [MasterSearchData]="stockCodeSearch"
@@ -610,7 +610,7 @@
                           style="width: 100%;">
                           <input type="text" matInput readonly
                             formControlName="variancePercentage"
-                            class="text-right" AmountDecimalInput [max]="3" />
+                            class="text-right"/>
                         </mat-form-field>
                       </div>
                       <div class="col-sm-4">
