@@ -110,6 +110,7 @@ editLineItem:boolean=false;
   value: any;
   barcode!: string;
   isSaved: boolean = false;
+  returnProductItems:any;
 
   selectedTabIndex = 0;
   receiptDetailView: boolean = false;
@@ -1811,6 +1812,7 @@ editLineItem:boolean=false;
     });
   }
   ngOnInit(): void {
+    this.getSalesReturnVocTypes();
     this.isNewButtonDisabled=true;
 
     this.fetchPramterDetails();
@@ -1941,7 +1943,7 @@ editLineItem:boolean=false;
     // this.findCurDataByCode(this.comFunc.compCurrency, true);
 
 
-    this.getSalesReturnVocTypes();
+  
 
     // this.metalDecimalFormat = {
     //   type: 'fixedPoint',
@@ -5066,6 +5068,8 @@ editLineItem:boolean=false;
     }
   }
   addSalesReturnOnSelect(event: any, slsReturn: any, index: any) {
+    console.log("came");
+    
     // console.table(event);
     // console.table(slsReturn);
     let checked = event.target.checked;
@@ -5135,7 +5139,10 @@ editLineItem:boolean=false;
       values.DISCOUNT = slsReturn.DISCOUNT;
       values.VAT_AMOUNTFC = slsReturn.VAT_AMOUNTFC;
       values.UNIQUEID = slsReturn.UNIQUEID;
-      this.sales_returns_pre_items.push(values);
+      this.returnProductItems = values
+      console.log(this.returnProductItems);
+      
+      // this.sales_returns_pre_items.push(values);
       // enable
       // this.setSalesReturnItems(
       //   itemsLength,
@@ -5331,9 +5338,37 @@ editLineItem:boolean=false;
 
   //   console.log(this.sales_returns_items);
   // }
+  // addItemtoSalesReturn() {
+  //   Object.values(this.salesReturnForm.controls).forEach(control => {
+  //     control.markAsTouched();
+  //   });
+  
+  //   if (!this.salesReturnForm.invalid) {
+  //     this.sales_returns_pre_items.push(this.returnProductItems);
+  //     this.sales_returns_items = [...this.sales_returns_pre_items];
+  
+  //     this.sales_returns_items.forEach((item: { ID: any; slsReturn: any; }, index: any) => {
+  //       this.setSalesReturnItems(item.ID, item.slsReturn);
+  //     });
+  
+  //     this.sumTotalValues();
+      
+  //     // Close the modal after processing
+  //     if (this.modalReference) {
+  //       this.modalReference.close();
+  //       // modal.dismiss('Cross click')
+  //     }
+  //   } else {
+  //     this.snackBar.open('Please Fill Required Fields', '', {
+  //       duration: 2000 // time in milliseconds
+  //     });
+  //   }
+  //   this.modalReference.close();
+
+  // }
+  
 
   addItemtoSalesReturn() {
-    // alert('test');
 
     Object.values(this.salesReturnForm.controls).forEach(control => {
       control.markAsTouched();
@@ -5342,72 +5377,20 @@ editLineItem:boolean=false;
     if (!this.salesReturnForm.invalid) {
 
       console.table(this.sales_returns_pre_items);
+      this.sales_returns_pre_items.push(this.returnProductItems);
       const values = this.sales_returns_pre_items;
       this.sales_returns_items = values;
-      console.log('******************');
-      console.log(this.sales_returns_items);
-      console.log(this.sales_returns_items[0]);
-      // this.sales_returns_items.forEach((data, index) => {
-      //   console.log('===============this.sales_returns_items.forEach=====================');
-      //   console.log(data);
-      //   data.ID = index + 1;
-      //   data.sn_no = index + 1;
-
-      //   console.log('====================================');
-      //   // this.sales_returns_items[index].ID = index + 1;
-      //   this.setSalesReturnItems(
-      //     index + 1,
-      //     data.slsReturn,
-      //   )
-      // });
-      // this.currentsalesReturnItems.forEach((data, index) => {
-      //   data.ID = index + 1;
-      //   data.SRNO = index + 1;
-      // });
+      
+     
       for (let i = 0; i < this.sales_returns_items.length; i++) {
-        // this.sales_returns_items[i].ID = i + 1;
-        // this.sales_returns_items[i].rid = this.comFunc.generateNumber();
-
-        console.log('******************');
-        console.log(this.sales_returns_items[i]);
-        console.log(this.sales_returns_items[i].slsReturn);
-        console.log('******************');
+     
         this.setSalesReturnItems(
           this.sales_returns_items[i].ID,
           this.sales_returns_items[i].slsReturn
         );
       }
-
-      console.log('=============sales_returns_items=======================');
-      console.log(this.sales_returns_items);
-      console.log(this.currentsalesReturnItems);
-      console.log('====================================');
-      // this.sumTotalValues();
-
-      // console.log(this.sales_returns_items);
-      // console.log(this.sales_returns_items_slno_length);
-
-      // var items_length = this.sales_returns_items.length;
-      // if (items_length == 0) this.sales_returns_items_slno_length = 1;
-      // else
-      //   this.sales_returns_items_slno_length =
-      //     this.sales_returns_items_slno_length + 1;
-
-      // var values = {
-      //   ID: this.sales_returns_items_slno_length,
-      //   sn_no: this.sales_returns_items_slno_length,
-      //   stock_code: '',
-      //   mkg_amount: '',
-      //   total_amount: '',
-      //   pcs: '',
-      //   weight: '',
-      //   description: '',
-      //   tax_amount: '',
-      //   net_amount: '',
-      // };
       this.sumTotalValues();
       this.modalReference.close();
-      // this.modalReference.dismiss();
     } else {
       this.snackBar.open('Please Fill Required Fields', '', {
         duration: 2000 // time in milliseconds
@@ -13571,6 +13554,9 @@ changeGiftVoucherAmount(data:any){
     // {
 
     // }
+
+    console.log('Funtion In '+ this.mainVocType );  
+    
     const API = `UspGetSubVouchers`;
     const postData = {
       "strBranchCode": this.strBranchcode,
