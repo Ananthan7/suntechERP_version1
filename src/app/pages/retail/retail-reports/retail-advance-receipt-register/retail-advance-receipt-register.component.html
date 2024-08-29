@@ -19,7 +19,7 @@
                         <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
                             <input matInput="text" name="branch" formControlName="branch" />
                             <app-branch-division (newRowClick)="selectedData($event)" class="branchDivisionelectr"
-                            [matTooltip]="branchDivisionControls"  [existingData]="dataToPass" 
+                            [matTooltip]="branchDivisionControls"  matTooltipClass="custom-tooltip"  [existingData]="dataToPass" 
                             matTooltipPosition="above"></app-branch-division>
                         </mat-form-field>
                     </div>
@@ -83,7 +83,7 @@
                     </div>
                 </div>
 
-                <div class="row">
+                <div class="row mb-4">
                     <label for="inputPassword" class="col-sm-2 col-form-label" id="ID006">Report To</label>
                     <div class="col-md-8">
                         <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
