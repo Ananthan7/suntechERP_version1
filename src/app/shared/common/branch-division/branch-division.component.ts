@@ -43,7 +43,7 @@ export class BranchDivisionComponent implements OnInit {
   selectedDivisionData: any;
   selectedAreaData: any;
   selectedBcategData: any;
-  
+
   constructor(private toastr: ToastrService, private commonService: CommonServiceService,
     private dataService: SuntechAPIService, private modalService: NgbModal,) { }
 
@@ -59,8 +59,8 @@ export class BranchDivisionComponent implements OnInit {
       //  windowClass: 'modal-full-width'
     });
 
-    console.log('Branch selectedRowKeys', this.selectedRowKeys)
-    console.log('selected divison keys', this.selectedDivisionKeys)
+    // console.log('Branch selectedRowKeys', this.selectedRowKeys)
+    // console.log('selected divison keys', this.selectedDivisionKeys)
   }
 
   nextPage() {
@@ -77,38 +77,35 @@ export class BranchDivisionComponent implements OnInit {
       }
     }
   }
-  // handleRowClick(event: any) {
-  //   this.newRowClick.emit(event.data)
-  //   // this.close()
-  // }
-  onCheckboxChange(event: any, data: any) {
-    data.data.checked = event.checked
-    let checkedItems: any[] = [];
-    let checkedDivisionItems: any[] = [];
-    checkedItems = this.BranchDataSource.filter(item => item.checked)
-    checkedDivisionItems = this.divisionDataSource.filter(item => item.checked)
 
-    let checkedAreaItems: any[] = [];
-    let checkedB_categoryItems: any[] = [];
-    checkedAreaItems = this.areaDataSource.filter(item => item.checked)
-    checkedB_categoryItems = this.businessCategDataSource.filter(item => item.checked)
-    const uniqueArray = Array.from(new Set([
-      ...this.BranchDataSource,
-      ...this.divisionDataSource,
-      ...this.areaDataSource,
-      ...this.businessCategDataSource
-    ]));
-    // console.log(uniqueArray)
-    this.newRowClick.emit(uniqueArray)
+  invokeselections(data: string){  
+    if (data == 'businessCategory'){
+      const BcategKeys = new Set(this.selectedBcategKeys.map(item => item.CATEGORY_CODE));
+      const filteredArray = this.businessCategDataSource.filter(item => !BcategKeys.has(item.CATEGORY_CODE));
+      this.selectedBcategKeys = filteredArray;
+    }
+    else if(data == 'Area'){
+      const BcategKeys = new Set(this.selectedAreaKeys.map(item => item.AREA_CODE));
+      const filteredArray = this.areaDataSource.filter(item => !BcategKeys.has(item.AREA_CODE));
+      this.selectedAreaKeys = filteredArray;
+    }
+    else if(data == 'Division'){
+      const BcategKeys = new Set(this.selectedDivisionKeys.map((item: any) => item.DIVISION_CODE));
+      const filteredArray = this.divisionDataSource.filter(item => !BcategKeys.has(item.DIVISION_CODE));
+      this.selectedDivisionKeys = filteredArray;
+    }
+    else if(data == 'Branch'){
+      const BcategKeys = new Set(this.selectedRowKeys.map((item: any) => item.BRANCH_CODE));
+      const filteredArray = this.BranchDataSource.filter(item => !BcategKeys.has(item.BRANCH_CODE));
+      this.selectedRowKeys = filteredArray;
+    }
   }
-
 
   onSelectionChanged(event: any) {
     this.selectedRowKeys= event.selectedRowKeys;
     this.selectedBranchData = event.selectedRowsData;
     // console.log('branch event',  this.selectedRowKeys)
     this.emitData()
-    // this.newRowClick.emit(event.selectedRowsData)
   }
 
   onDivisionSelection(event: any){
@@ -128,7 +125,7 @@ export class BranchDivisionComponent implements OnInit {
   onBcategSelection(event: any){
     this.selectedBcategKeys = event.selectedRowKeys;
     this.selectedBcategData = event.selectedRowsData;
-     console.log('B categ event', event.selectedRowKeys)
+    //  console.log('B categ event', event.selectedRowKeys)
      this.emitData()
   }
 
@@ -146,56 +143,24 @@ export class BranchDivisionComponent implements OnInit {
     });
   }
 
-
   close() {
     this.selectedModal?.dismiss()
   }
-  searchValueChange(event: any) {
-    if (event.target.value == '') return
-    let param = {
-      "PAGENO": this.MasterSearch.PAGENO,
-      "RECORDS": this.MasterSearch.RECORDS,
-      "LOOKUPID": this.MasterSearch.LOOKUPID,
-      "searchField": this.MasterSearch.SEARCH_FIELD || "",
-      "searchValue": event.target.value || ""
-    }
-    let APIS = 'MasterLookUp'
-    this.isLoading = true;
-    this.subscriptions$ = this.dataService.postDynamicAPI(APIS, param).subscribe((result) => {
-      this.isLoading = false;
-      if (result.dynamicData[0]) {
-        // if (this.MasterFindData.DB_FIELD_VALUE == 'ACCODE') {
-        this.BranchDataSource = result.dynamicData[0]
-        this.dataSourceHead = Object.keys(this.BranchDataSource[0]);
-        this.dataSourceHead.unshift(this.dataSourceHead.pop())
 
-        this.divisionDataSource = result.dynamicData[1]
-        this.dataSourceHead = []
-        this.dataSourceHead = Object.keys(this.divisionDataSource[0]);
-        this.dataSourceHead.unshift(this.dataSourceHead.pop())
-      } else {
-        this.toastr.error('Data Not Available')
-      }
-    })
+  apply(){
+    this.selectedModal?.dismiss()
+    this.commonService.toastSuccessByMsgId('Success!', 'selections applied successfully');
   }
-
   ngOnDestroy(): void {
     this.subscriptions$ && this.subscriptions$.unsubscribe()
   }
 
-  // Its a POST API 
-  // http://94.200.156.234:85/api/BranchDivisonSelector?DBBranch=MOE
-  // {
-  //   "strUserName": "VASANT",
-  //   "strDivisionMS": "M",
-  //   "strLoginBranch": "MOE"
-  // }
-
   getAPIData(pageIndex?: number) {
+    
     const payload = {
-      strUserName: 'VASANT',
+      strUserName: localStorage.getItem('username'),
       strDivisionMS: 'S',
-      strLoginBranch: 'MOE'
+      strLoginBranch: localStorage.getItem('userbranch')
     };
 
     this.isLoading = true;
@@ -219,7 +184,7 @@ export class BranchDivisionComponent implements OnInit {
     },
       error => {
         console.error('Error occurred:', error);
-      });
+    });
   }
 
 

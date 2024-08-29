@@ -54,7 +54,7 @@ export class RetailAdvanceReceiptRegisterComponent implements OnInit {
   dataToPass:any;
   private cssFilePath = '/assets/scss/scheme_register_pdf.scss';
   // private cssFilePath = 'assets/scheme_register_pdf.scss';
-  branchDivisionControls: any = '';
+  branchDivisionControls: any;
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -196,7 +196,7 @@ export class RetailAdvanceReceiptRegisterComponent implements OnInit {
     content3 = content3.replace(/, $/, '');
     content4 = content4.replace(/, $/, '');
     this.branchDivisionControls = content +'\n'+content2 +'\n'+ content3 +'\n'+ content4
-    console.log(this.branchDivisionControls);
+    // console.log(this.branchDivisionControls);
   }
   
 
