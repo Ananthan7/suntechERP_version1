@@ -8,7 +8,7 @@
 </div>
 <!-- modal header component -->
 <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
-    [isViewContinue]="true" (continueClick)="continue()"
+    [isViewContinue]="true" (continueClick)="formSubmit()"
     [isViewDelete]="false" [isViewMore]="false"></modal-header>
 <div class="p-2">
     <form [formGroup]="productionItemsDetailsFrom">
@@ -33,21 +33,23 @@
                         alignment="center"></dxi-column>
                     <dxi-column dataField="STOCK_CODE" caption="Stock Code"
                         alignment="center"></dxi-column>
-                    <dxi-column dataField="DESIGN" caption="Design"
+                    <dxi-column dataField="DESIGN_CODE" caption="Design"
                         alignment="center"></dxi-column>
-                    <dxi-column dataField="KARAT" caption="Karat"
+                    <dxi-column dataField="COST_CODE" caption="Cost Code"
                         alignment="center"></dxi-column>
-                    <dxi-column dataField="grossWt" caption="Gross Wt"
+                    <dxi-column dataField="KARAT_CODE" caption="Karat"
                         alignment="center"></dxi-column>
-                    <dxi-column dataField="MetalPCS" caption="Metal Pcs"
+                    <dxi-column dataField="GROSS_WT" caption="Gross Wt"
                         alignment="center"></dxi-column>
-                    <dxi-column dataField="metalwt" caption="Metal Weight"
+                    <dxi-column dataField="METAL_PCS" caption="Metal Pcs"
+                        alignment="center"></dxi-column>
+                    <dxi-column dataField="METAL_WT" caption="Metal Weight"
                         alignment="center"></dxi-column>
                     <dxi-column dataField="MetalValue" caption="Metal Value"
                         alignment="center"></dxi-column>
-                    <dxi-column dataField="StonePcs" caption="Stone Pcs"
+                    <dxi-column dataField="STONE_PCS" caption="Stone Pcs"
                         alignment="center"></dxi-column>
-                    <dxi-column dataField="stonewt" caption="Stone Weight"
+                    <dxi-column dataField="STONE_WT" caption="Stone Weight"
                         alignment="center"></dxi-column>
                     <dxi-column dataField="StoneValue" caption="Stone Value"
                         alignment="center"></dxi-column>
@@ -57,9 +59,9 @@
                         alignment="center"></dxi-column>
                     <dxi-column dataField="TotalCost" caption="Total Cost"
                         alignment="center"></dxi-column>
-                    <dxi-column dataField="jobno" caption="Job Number"
+                    <dxi-column dataField="JOB_NUMBER" caption="Job Number"
                         alignment="center"></dxi-column>
-                    <dxi-column dataField="subjobno" caption="Unq Job Id"
+                    <dxi-column dataField="UNQ_JOB_ID" caption="Unq Job Id"
                         alignment="center"></dxi-column>
                     <dxi-column dataField="UNQ_JOB_ID" caption="Other Stone"
                         alignment="center"></dxi-column>
@@ -70,7 +72,7 @@
                         alignment="center"></dxi-column>
                     <dxi-column dataField="PURE_WT" caption="Pure Weight"
                         alignment="center"></dxi-column>
-                    <dxi-column dataField="jobPurity" caption="Job Purity"
+                    <dxi-column dataField="PURITY" caption="Job Purity"
                         alignment="center"></dxi-column>
                     <dxi-column dataField="JobPureWt" caption="Job Pure Weight"
                         alignment="center"></dxi-column>
@@ -141,7 +143,7 @@
                         </mat-form-field>
                     </div>
                 </div>
-                <div class="row align-items-center mb-1">
+                <div class="row align-items-center">
                     <label for="input" class="col-sm-4 col-form-label">
                         Gross Wt:</label>
                     <div class="col-sm-8">
@@ -162,7 +164,7 @@
                         <mat-form-field appearance="outline"
                             style="width: 100%;">
                             <input type="text" matInput class="text-right"
-                                formControlName="settingChrg"
+                                formControlName="SETTING_CHRG"
                                 AmountDecimalInput />
                         </mat-form-field>
                     </div>
@@ -170,9 +172,9 @@
                         <mat-form-field appearance="outline"
                             style="width: 80%;">
                             <input type="text" matInput
-                                formControlName="settingChrgDesc"
+                                formControlName="SETTING_ACCODE"
                                 UpperCaseDirective
-                                (focusout)="validateLookupField($event,settingChrgData,'settingChrgDesc')" />
+                                (focusout)="validateLookupField($event,settingChrgData,'SETTING_ACCODE')" />
                             <master-search class="masterSearch"
                                 *ngIf="!viewMode"
                                 [MasterSearchData]="settingChrgData"
@@ -188,7 +190,7 @@
                         <mat-form-field appearance="outline"
                             style="width: 100%;">
                             <input type="text" matInput class="text-right"
-                                formControlName="polishChrg"
+                                formControlName="POLISH_CHRG"
                                 AmountDecimalInput />
                         </mat-form-field>
                     </div>
@@ -196,9 +198,9 @@
                         <mat-form-field appearance="outline"
                             style="width: 80%;">
                             <input type="text" matInput
-                                formControlName="polishChrgDesc"
+                                formControlName="POLISH_ACCODE"
                                 UpperCaseDirective
-                                (focusout)="validateLookupField($event,polishChrgData,'polishChrgDesc')" />
+                                (focusout)="validateLookupField($event,polishChrgData,'POLISH_ACCODE')" />
                             <master-search class="masterSearch"
                                 *ngIf="!viewMode"
                                 [MasterSearchData]="polishChrgData"
@@ -214,7 +216,7 @@
                         <mat-form-field appearance="outline"
                             style="width: 100%;">
                             <input type="text" matInput class="text-right"
-                                formControlName="rhodiumChrg"
+                                formControlName="RHODIUM_CHRG"
                                 AmountDecimalInput />
                         </mat-form-field>
                     </div>
@@ -222,8 +224,8 @@
                         <mat-form-field appearance="outline"
                             style="width: 80%;">
                             <input type="text" matInput
-                                formControlName="rhodiumChrgDesc" UpperCaseDirective
-                                (focusout)="validateLookupField($event,rhodiumChrgData,'rhodiumChrgDesc')" />
+                                formControlName="RHODIUM_ACCODE" UpperCaseDirective
+                                (focusout)="validateLookupField($event,rhodiumChrgData,'RHODIUM_ACCODE')" />
                             <master-search class="masterSearch"
                                 *ngIf="!viewMode"
                                 [MasterSearchData]="rhodiumChrgData"
@@ -239,7 +241,7 @@
                         <mat-form-field appearance="outline"
                             style="width: 100%;">
                             <input type="text" matInput class="text-right"
-                                formControlName="labourChrg"
+                                formControlName="LABOUR_CHRG"
                                 AmountDecimalInput />
                         </mat-form-field>
                     </div>
@@ -247,9 +249,9 @@
                         <mat-form-field appearance="outline"
                             style="width: 80%;">
                             <input type="text" matInput 
-                                formControlName="labourChrgDesc"
+                                formControlName="LABOUR_ACCODE"
                                 UpperCaseDirective
-                                (focusout)="validateLookupField($event,labourChrgData,'labourChrgDesc')" />
+                                (focusout)="validateLookupField($event,labourChrgData,'LABOUR_ACCODE')" />
                             <master-search class="masterSearch"
                                 *ngIf="!viewMode"
                                 [MasterSearchData]="labourChrgData"
@@ -265,16 +267,16 @@
                         <mat-form-field appearance="outline"
                             style="width: 100%;">
                             <input type="text" matInput class="text-right"
-                                formControlName="miscChrg" AmountDecimalInput />
+                                formControlName="MISC_CHRG" AmountDecimalInput />
                         </mat-form-field>
                     </div>
                     <div class="col-sm-4">
                         <mat-form-field appearance="outline"
                             style="width: 80%;">
                             <input type="text" matInput
-                                formControlName="miscChrgDesc"
+                                formControlName="MISC_ACCODE"
                                 UpperCaseDirective
-                                (focusout)="validateLookupField($event,miscChrgData,'miscChrgDesc')" />
+                                (focusout)="validateLookupField($event,miscChrgData,'MISC_ACCODE')" />
                             <master-search class="masterSearch"
                                 *ngIf="!viewMode"
                                 [MasterSearchData]="miscChrgData"
@@ -519,7 +521,7 @@
                                     [pageSize]="5"></dxo-paging>
                                 <dxo-editing mode="cell" [allowUpdating]="true">
                                 </dxo-editing>
-                                <dxo-selection mode="single"></dxo-selection>
+                                <!-- <dxo-selection mode="single"></dxo-selection> -->
 
                                 <!-- <dxi-column *ngFor="let data of componentsColumnhead" dataField="{{ data }}" caption="{{ data }}"
                                     [allowEditing]="true" alignment="center" backgroundcolor="#000">
@@ -558,7 +560,7 @@
                                     alignment="center"></dxi-column>
                                 <dxi-column [allowEditing]="false" dataField="Qty" caption="Qty"
                                     alignment="center"></dxi-column>
-                                <dxi-column [allowEditing]="false" dataField="Amt" caption="Amt"
+                                <dxi-column [allowEditing]="false" dataField="AMOUNTFC" caption="Amt"
                                     alignment="center"></dxi-column>
                                 <dxi-column [allowEditing]="false" dataField="Rate" caption="S.Rate"
                                     alignment="center"></dxi-column>
@@ -567,16 +569,16 @@
                                 <dxi-column [allowEditing]="false" dataField="PUREWT"
                                     caption="Pure Weight"
                                     alignment="center"></dxi-column>
-                                <dxi-column [allowEditing]="false" dataField="Rate"
+                                <dxi-column [allowEditing]="false" dataField="SUB_STOCK_CODE"
                                     caption="Main Stock"
                                     alignment="center"></dxi-column>
                                 <dxi-column [allowEditing]="false" dataField="PURITY" caption="Purity"
                                     alignment="center"></dxi-column>
-                                <dxi-column [allowEditing]="false" dataField="Lab" caption="Lab ID"
+                                <dxi-column [allowEditing]="false" dataField="LabID" caption="Lab ID"
                                     alignment="center"></dxi-column>
-                                <dxi-column [allowEditing]="true" dataField="Lab" caption="Lab Rate"
+                                <dxi-column [allowEditing]="true" dataField="LAB_RATE" caption="Lab Rate"
                                     alignment="center"></dxi-column>
-                                <dxi-column [allowEditing]="true" dataField="Lab" caption="Lab Value"
+                                <dxi-column [allowEditing]="true" dataField="LAB_AMTFC" caption="Lab Value"
                                     alignment="center"></dxi-column>
                                 <dxi-column [allowEditing]="false" dataField="SIEVE_SET"
                                     caption="Sieve Set"
@@ -590,12 +592,12 @@
                                 <dxi-column [allowEditing]="false" dataField="STK_ACCODE"
                                     caption="STK ACCODE"
                                     alignment="center"></dxi-column>
-                                <dxi-column [allowEditing]="false" dataField="Lab"
+                                <dxi-column [allowEditing]="false" dataField="Attributes"
                                     caption="Other Attributes"
                                     alignment="center"></dxi-column>
-                                <dxi-column [allowEditing]="false" dataField="Lab" caption="Job Purity"
+                                <dxi-column [allowEditing]="false" dataField="PURITY" caption="Job Purity"
                                     alignment="center"></dxi-column>
-                                <dxi-column [allowEditing]="false" dataField="Lab"
+                                <dxi-column [allowEditing]="false" dataField="PUREWT"
                                     caption="Job Pure Wt"
                                     alignment="center"></dxi-column>
                             </dx-data-grid>

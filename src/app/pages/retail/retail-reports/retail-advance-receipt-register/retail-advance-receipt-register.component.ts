@@ -52,10 +52,10 @@ export class RetailAdvanceReceiptRegisterComponent implements OnInit {
     this.retailAdvanceReceiptRegisterForm.controls.salesmanCode.setValue(e.DESCRIPTION);
   }
 
-  
-
   private cssFilePath = '/assets/scss/scheme_register_pdf.scss';
   // private cssFilePath = 'assets/scheme_register_pdf.scss';
+  branchDivisionControls: any = '';
+  accumulatedData: Set<string> = new Set(); 
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -156,4 +156,21 @@ export class RetailAdvanceReceiptRegisterComponent implements OnInit {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
+  dataToPass:any;
+  selectedData(data: any) {
+    this.dataToPass = data
+    let content = `Current Selected Branches: `+`\n`
+    data.forEach((element: any) => {
+      content += element.BRANCH_CODE ? `${element.BRANCH_CODE}, ` :
+                 element.DIVISION_CODE ? `${element.DIVISION_CODE}, ` :
+                 element.AREA_CODE ? `${element.AREA_CODE}, ` :
+                 element.CATEGORY_CODE ? `${element.CATEGORY_CODE}, ` : '';
+    });
+    content = content.replace(/, $/, '');
+    console.log(content);
+    this.branchDivisionControls = content;
+  }
+  
+
+
 }

@@ -155,7 +155,7 @@
                                     <input type="text" matInput
                                         formControlName="treeNumber"
                                         [readonly]="viewMode" 
-                                        maxlength="25"/>
+                                        maxlength="20"/>
                                 </mat-form-field>
                             </div>
                             <label for="inputPassword"
@@ -241,6 +241,15 @@
                                         [readonly]="viewMode" NumberOnly />
                                 </mat-form-field>
                             </div>
+                            <label for="inputPassword"
+                                class="col-sm-3 col-form-label">Purity :</label>
+                            <div class="col-sm-3">
+                                <mat-form-field style="width: 100%;">
+                                    <input type="text" matInput
+                                        formControlName="PURITY"
+                                        readonly />
+                                </mat-form-field>
+                            </div>
                         </div>
                     </div>
                     <div class="col-md-12">
@@ -252,12 +261,14 @@
                                         :</label>
                                     <mat-form-field style="width: 50%;">
                                         <input type="text" matInput
-                                        [readonly]="viewMode"
-                                            formControlName="NET_WT"
-                                            class="text-right" [max]="13"
-                                             MetalDecimalInput />
+                                            formControlName="GROSS_WT"
+                                            class="text-right"
+                                            (focusout)="grossValidate()"
+                                            [readonly]="viewMode"
+                                            MetalDecimalInput [max]="13" />
                                     </mat-form-field>
                                 </div>
+                               
                             </div>
                             <div class="col-sm-3">
                                 <div>
@@ -266,11 +277,10 @@
                                         :</label>
                                     <mat-form-field style="width: 50%;">
                                         <input type="text" matInput
-                                            formControlName="GROSS_WT"
-                                            class="text-right"
-                                            (focusout)="grossValidate()"
-                                            readonly
-                                            MetalDecimalInput [max]="13" />
+                                        readonly
+                                            formControlName="NET_WT"
+                                            class="text-right" [max]="13"
+                                             MetalDecimalInput />
                                     </mat-form-field>
                                 </div>
                             </div>

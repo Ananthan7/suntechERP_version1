@@ -37,6 +37,8 @@ export class RetailReportsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // for opening Report- Modal's
+    this.openModalView()
   }
 
   viewRowDetails(e: any) {
@@ -76,10 +78,10 @@ export class RetailReportsComponent implements OnInit {
     }
 
     const modalRef: NgbModalRef = this.modalService.open(this.componentSelected, {
-      size: 'xl',
+      size: 'lg',
       backdrop: 'static',
       keyboard: false,
-      windowClass: 'modal-full-width',
+      // windowClass: 'modal-full-width',
     });
     modalRef.result.then((result:any) => {
       if (result === 'reloadMainGrid') {

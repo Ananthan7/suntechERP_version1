@@ -349,8 +349,9 @@
               <div class="col-sm-2">
                 <mat-form-field appearance="outline" style="width: 100%;">
                   <input type="number" matInput formControlName="PURITY"
+                    (focusout)="validatePurity()"
                     [max]="13" class="text-right"
-                    SixDecimalInput />
+                    PurityDecimal />
                 </mat-form-field>
               </div>
               <label for="input" class="col-sm-2 col-form-label">Job Purity
@@ -560,7 +561,7 @@
                 :</label>
               <div class="col-sm-2">
                 <mat-form-field appearance="outline" style="width: 100%;">
-                  <input type="text" matInput formControlName="grossWt"
+                  <input type="text" matInput formControlName="GROSS_WT"
                     [max]="13" MetalDecimalInput
                     class="text-right" />
                 </mat-form-field>

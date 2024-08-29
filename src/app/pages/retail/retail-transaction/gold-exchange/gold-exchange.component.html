@@ -31,13 +31,12 @@
           <label for="inputPassword" class="col-sm-4 col-form-label">Voucher Date</label>
           <div class="col-md-4">
             <mat-form-field style="width: 100%;">
-              <input matInput [matDatepicker]="vocDate"  [min]="minDate"
-              [max]="maxDate" name="vocDate" [readonly]="viewOnly" formControlName="vocDate"
-                placeholder="DD/MM/YYYY" 
+              <input matInput [matDatepicker]="vocDate" [min]="minDate" [max]="maxDate" name="vocDate"
+                [readonly]="viewOnly" formControlName="vocDate" placeholder="DD/MM/YYYY"
                 [max]=this.comService.currentDate [readonly]="viewOnly" DateValidation />
-              <mat-datepicker-toggle  [disabled]="viewOnly" matSuffix [for]="vocDate"></mat-datepicker-toggle>
+              <mat-datepicker-toggle [disabled]="viewOnly" matSuffix [for]="vocDate"></mat-datepicker-toggle>
               <mat-datepicker [startAt]="currentDate" #vocDate></mat-datepicker>
-             
+
             </mat-form-field>
           </div>
         </div>
@@ -139,14 +138,14 @@
           </div>
           <div class="col-md-4">
             <mat-form-field style="width: 100%;">
-              <input matInput [matDatepicker]="creditDays" [readonly]="viewOnly"
-                formControlName="creditDays" [min]="currentDate" placeholder="DD/MM/YYYY" />
+              <input matInput [matDatepicker]="creditDays" [readonly]="viewOnly" formControlName="creditDays"
+                [min]="currentDate" placeholder="DD/MM/YYYY" />
               <mat-datepicker-toggle matSuffix [for]="creditDays"></mat-datepicker-toggle>
               <mat-datepicker #creditDays></mat-datepicker>
             </mat-form-field>
           </div>
         </div>
-        
+
         <div class="row">
           <label for="inputPassword" class="col-sm-4 col-form-label">Sales Man</label>
           <div class="col-md-6">
@@ -255,10 +254,35 @@
               <dxo-texts alignment="right" [editRow]="viewOnly ? 'View' : 'Edit'" deleteRow="Remove">
               </dxo-texts>
             </dxo-editing>
-            <!-- <dxo-selection mode="single"></dxo-selection> -->
 
-            <dxi-column *ngFor="let data of columnsList" dataField="{{ data.field }}" caption="{{ data.title }}"
-              [allowEditing]="true" alignment="center" backgroundcolor="#000">
+            <dxi-column dataField="SRNO" [width]="80" caption="SL No." [allowEditing]="false" alignment="center">
+            </dxi-column>
+            <dxi-column dataField="STOCK_CODE" [width]="100" [allowEditing]="false">
+            </dxi-column>
+            <dxi-column dataField="description" [width]="150" [allowEditing]="false" alignment="center">
+            </dxi-column>
+
+            <dxi-column dataField="PCS" caption="Pcs" [width]="100" [allowEditing]="false"></dxi-column>
+            <dxi-column dataField="GROSSWT" caption="Weight" [width]="100" [format]="weightDecimalFormat"
+              [allowEditing]="false">
+            </dxi-column>
+            <dxi-column dataField="PUREWT" caption="Pure Weight" [width]="100" [allowEditing]="false"
+              [format]="amountDecimalFormat"></dxi-column>
+
+            <dxi-column dataField="MKGVALUEFC" caption="Mkg.RATE" alignment="right" [allowEditing]="false"
+              [format]="amountDecimalFormat" [width]="150"></dxi-column>
+            <dxi-column dataField="MKGVALUECC" caption="Mkg.Amount" alignment="right" format="currency"
+              [format]="amountDecimalFormat" [allowEditing]="false" [width]="150">
+            </dxi-column>
+
+            <dxi-column dataField="METALVALUECC" caption="Metal Amt" alignment="right" [allowEditing]="false"
+              [format]="amountDecimalFormat" [width]="150"></dxi-column>
+            <dxi-column dataField="STONEVALUECC" caption="St.Amt" alignment="right" format="currency"
+              [format]="amountDecimalFormat" [allowEditing]="false" [width]="150">
+            </dxi-column>
+
+            <dxi-column dataField="NETVALUECC" caption="Total" alignment="right" format="currency"
+              [format]="amountDecimalFormat" [allowEditing]="false" [width]="150">
             </dxi-column>
 
 
@@ -290,7 +314,7 @@
           </div>
           <div class="col-md-5">
             <mat-form-field style="width: 100%;">
-              <input type="number" class="text-end" [readonly]="viewOnly" matInput AmountDecimalInput
+              <input type="text" class="text-end" [readonly]="viewOnly" matInput AmountDecimalInput
                 formControlName="partyCurrencyCode" />
             </mat-form-field>
           </div>
@@ -304,7 +328,7 @@
           </div>
           <div class="col-md-5">
             <mat-form-field style="width: 100%;">
-              <input type="number" class="text-end" [readonly]="viewOnly" AmountDecimalInput matInput
+              <input type="text" class="text-end" readonly AmountDecimalInput matInput
                 formControlName="amountDes" />
             </mat-form-field>
           </div>
@@ -313,12 +337,13 @@
           <label for="inputPassword" class="col-sm-4 col-form-label">Rnd Of Amt</label>
           <div class="col-md-3">
             <mat-form-field style="width: 100%;">
-              <input type="text" class="text-end" readonly matInput formControlName="rndOfAmt" />
+              <input type="text" class="text-end"  readonly matInput formControlName="rndOfAmt" />
             </mat-form-field>
           </div>
           <div class="col-md-5">
             <mat-form-field style="width: 100%;">
-              <input type="number" class="text-end" [readonly]="viewOnly" AmountDecimalInput matInput
+              <input type="text" class="text-end" (change)="changeRoundOffAmount($event)"
+               [readonly]="viewOnly" NegativeAmountDecimal matInput
                 formControlName="rndOfAmtDes" />
             </mat-form-field>
           </div>
@@ -332,7 +357,7 @@
           </div>
           <div class="col-md-5">
             <mat-form-field style="width: 100%;">
-              <input type="number" class="text-end" [readonly]="viewOnly" AmountDecimalInput matInput
+              <input type="text" class="text-end" readonly AmountDecimalInput matInput
                 formControlName="rndNetAmtDes" />
             </mat-form-field>
           </div>
@@ -346,7 +371,7 @@
           </div>
           <div class="col-md-5">
             <mat-form-field style="width: 100%;">
-              <input type="number" AmountDecimalInput class="text-end" [readonly]="viewOnly" matInput
+              <input type="text" AmountDecimalInput class="text-end" readonly matInput
                 formControlName="otherAmtDes" />
             </mat-form-field>
           </div>
@@ -360,7 +385,7 @@
           </div>
           <div class="col-md-5">
             <mat-form-field style="width: 100%;">
-              <input type="number" class="text-end" [readonly]="viewOnly" AmountDecimalInput matInput
+              <input type="text" class="text-end" readonly AmountDecimalInput matInput
                 formControlName="grossAmtDes" />
             </mat-form-field>
           </div>

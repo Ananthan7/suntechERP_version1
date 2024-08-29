@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Renderer2 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { MasterSearchModel } from "src/app/shared/data/master-find-model";
@@ -10,6 +10,9 @@ import { GoldExchangeDetailsComponent } from './gold-exchange-details/gold-excha
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { PosCustomerMasterComponent } from '../common/pos-customer-master/pos-customer-master.component';
 import { CommonServiceService } from 'src/app/services/common-service.service';
+import { DialogboxComponent } from 'src/app/shared/common/dialogbox/dialogbox.component';
+import { MatDialog } from '@angular/material/dialog';
+import { timeStamp } from 'console';
 
 @Component({
   selector: 'app-gold-exchange',
@@ -36,22 +39,23 @@ export class GoldExchangeComponent implements OnInit {
     { title: 'Sr #', field: 'SRNO' },
     { title: 'Stock Code', field: 'STOCK_CODE' },
     { title: 'Pcs', field: 'PCS' },
-    { title: 'Gr.Wt', field: 'GROSSWT' },
-    { title: 'Purity', field: 'PURITY' },
-    { title: 'Pure Wt', field: 'PUREWT' },
-    { title: 'Mkg.RATE', field: 'MKG_RATECC' },
-    { title: 'Mkg.Amount', field: 'MKGVALUECC' },
-    { title: 'Metal Amt', field: 'METALVALUECC' },
-    { title: 'St.Amt', field: 'STONEVALUECC' },
-    { title: 'Wastage', field: 'WASTAGEAMOUNTCC' },
-    { title: 'Total', field: 'TOTAL_AMOUNTCC' },
+    { title: 'Gr.Wt', field: 'GROSSWT', format: { type: 'fixedPoint', precision: 3 } },
+    { title: 'Purity', field: 'PURITY', format: { type: 'fixedPoint', precision: 2 } },
+    { title: 'Pure Wt', field: 'PUREWT', format: { type: 'fixedPoint', precision: 3 } },
+    { title: 'Mkg.RATE', field: 'MKG_RATECC', format: { type: 'fixedPoint', precision: 2 } },
+    { title: 'Mkg.Amount', field: 'MKGVALUECC', format: { type: 'fixedPoint', precision: 2 } },
+    { title: 'Metal Amt', field: 'METALVALUECC', format: { type: 'fixedPoint', precision: 2 } },
+    { title: 'St.Amt', field: 'STONEVALUECC', format: { type: 'fixedPoint', precision: 2 } },
+    { title: 'Total', field: 'NETVALUECC', format: { type: 'fixedPoint', precision: 2 } },
   ];
+
 
   currentDate = new Date();
   tableData: any[] = [];
   strBranchcode: any = '';
   goldExchangeDetailsData: any[] = [];
   mainVocType: any = '';
+  netTotalSum: string = "";
 
   selectedIndexes: any = [];
   columnhead: any[] = ['Karat', 'Sale Rate', 'Purchase Rate'];
@@ -173,6 +177,8 @@ export class GoldExchangeComponent implements OnInit {
     private suntechApi: SuntechAPIService,
     private toastr: ToastrService,
     private snackBar: MatSnackBar,
+    public dialog: MatDialog,
+    private renderer: Renderer2,
 
   ) {
     this.strBranchcode = localStorage.getItem('userbranch');
@@ -183,7 +189,19 @@ export class GoldExchangeComponent implements OnInit {
     );
   }
 
+  amountDecimalFormat: any;
+
+  weightDecimalFormat: any;
+
   ngOnInit(): void {
+    this.amountDecimalFormat = {
+      type: 'fixedPoint',
+      precision: this.comService.allbranchMaster?.BAMTDECIMALS,
+    };
+    this.weightDecimalFormat = {
+      type: 'fixedPoint',
+      precision: this.comService.allbranchMaster?.BMQTYDECIMALS,
+    };
     this.initializeFormValues();
     this.setupCreditDaysListeners();
 
@@ -409,9 +427,13 @@ export class GoldExchangeComponent implements OnInit {
       keyboard: false,
       windowClass: 'modal-full-width',
     });
-    modalRef.componentInstance.exchangeDetails = { ...data };
-    modalRef.componentInstance.queryParams = { isViewOnly: this.viewOnly, isEditOnly: this.editOnly };
 
+    // Pass the current max SRNO to the child
+    const maxSrno = this.goldExchangeDetailsData.length > 0
+      ? Math.max(...this.goldExchangeDetailsData.map(item => item.SRNO))
+      : 0;
+    modalRef.componentInstance.exchangeDetails = { ...data, maxSrno };
+    modalRef.componentInstance.queryParams = { isViewOnly: this.viewOnly, isEditOnly: this.editOnly, partyCurrency: this.goldExchangeForm.value.partyCurrCode };
 
     modalRef.result.then((postData) => {
       if (postData) {
@@ -421,27 +443,56 @@ export class GoldExchangeComponent implements OnInit {
     });
   }
 
+
+  // openAddPosARdetails(data: any = null) {
+  //   const modalRef: NgbModalRef = this.modalService.open(GoldExchangeDetailsComponent, {
+  //     size: 'xl',
+  //     backdrop: true,
+  //     keyboard: false,
+  //     windowClass: 'modal-full-width',
+  //   });
+  //   modalRef.componentInstance.exchangeDetails = { ...data };
+  //   modalRef.componentInstance.queryParams = { isViewOnly: this.viewOnly, isEditOnly: this.editOnly, partyCurrency: this.goldExchangeForm.value.partyCurrCode };
+
+
+  //   modalRef.result.then((postData) => {
+  //     if (postData) {
+  //       console.log('Data from modal:', postData);
+  //       this.handlePostData(postData);
+  //     }
+  //   });
+  // }
+
   handlePostData(postData: any) {
+    // Find the index of the existing item with the same SRNO
     const preItemIndex = this.goldExchangeDetailsData.findIndex((data: any) =>
-      data.SRNO.toString() == postData.SRNO.toString()
+      data.SRNO.toString() === postData.SRNO.toString()
     );
 
     if (postData?.isUpdate && preItemIndex !== -1) {
+      // Update the existing entry based on SRNO, without changing its SRNO
       this.goldExchangeDetailsData[preItemIndex] = postData;
     } else {
+      // If SRNO is 0, or if it's a new entry, assign the correct SRNO
+      if (postData.SRNO === 0 || preItemIndex === -1) {
+        postData.SRNO = this.goldExchangeDetailsData.length + 1;
+      }
       this.goldExchangeDetailsData.push(postData);
     }
 
     console.log('Updated goldExchangeDetailsData', this.goldExchangeDetailsData);
     this.updateFormValuesAndSRNO();
+    this.updateTotalValues();
   }
 
   updateFormValuesAndSRNO() {
-
+    // This ensures that all items maintain a sequential SRNO
     this.goldExchangeDetailsData.forEach((data, index) => {
       data.SRNO = index + 1;
     });
   }
+
+
 
   removeLineItemsGrid(e: any) {
     console.log(e.data)
@@ -455,6 +506,8 @@ export class GoldExchangeComponent implements OnInit {
       return acc;
     }, indexes);
     this.selectedIndexes = indexes;
+
+    this.updateTotalValues();
     this.updateFormValuesAndSRNO();
 
   }
@@ -594,15 +647,123 @@ export class GoldExchangeComponent implements OnInit {
       windowClass: 'modal-full-width',
     });
 
-    modalRef.componentInstance.partyCurrencyParam = { partyCurrency: this.goldExchangeForm.value.partyCurrCode };
+    // Calculate the next available SRNO
+    const nextSrno = this.goldExchangeDetailsData.length > 0
+      ? Math.max(...this.goldExchangeDetailsData.map(item => item.SRNO)) + 1
+      : 1;
+
+    modalRef.componentInstance.partyCurrencyParam = {
+      partyCurrency: this.goldExchangeForm.value.partyCurrCode,
+      nextSrno: nextSrno // Pass the next available SRNO to the child
+    };
 
     modalRef.result.then((postData) => {
       if (postData) {
         console.log('Data from modal:', postData);
         this.goldExchangeDetailsData.push(postData);
+        this.updateFormValuesAndSRNO();
+        this.updateTotalValues();
       }
     });
   }
+
+  updateTotalValues() {
+    let sumOfnetWt = this.goldExchangeDetailsData.reduce((sum, item) => {
+      return sum + parseFloat(item.NETVALUECC);
+    }, 0);
+
+    this.goldExchangeForm.controls['rndOfAmtDes'].reset();
+
+    this.netTotalSum = this.comService.decimalQuantityFormat(sumOfnetWt, 'AMOUNT');
+
+    this.goldExchangeForm.controls.partyCurrencyCode.setValue(this.netTotalSum);
+    this.goldExchangeForm.controls.amountDes.setValue(this.netTotalSum);
+    this.goldExchangeForm.controls.rndNetAmtDes.setValue(this.netTotalSum);
+    this.goldExchangeForm.controls.grossAmtDes.setValue(this.netTotalSum);
+
+
+  }
+
+  changeRoundOffAmount(event: any) {
+    let roundOffValue = event.target.value;
+    let branchParams: any = localStorage.getItem('BRANCH_PARAMETER');
+    const roundOffRange = JSON.parse(branchParams).POSROUNDOFFRANGE;
+
+    const roundOffValueNum = parseFloat(roundOffValue);
+
+    if (isNaN(roundOffValueNum) || this.comService.emptyToZero(roundOffRange) == 0) {
+
+      this.showErrorMessage('There is no Limit Settings in branch master');
+      return;
+    }
+
+    if (roundOffValueNum < -roundOffRange || roundOffValueNum > roundOffRange) {
+
+      this.showErrorMessage(`Value must be between -${roundOffRange} and ${roundOffRange}.`);
+    } else {
+
+      this.roundOffCalculation(roundOffValue);
+    }
+  }
+
+  showErrorMessage(message: string) {
+
+    this.openDialog('Warning', message, true);
+
+
+
+
+    this.dialogBox.afterClosed().subscribe((data: any) => {
+      if (data == 'OK') {
+
+        this.goldExchangeForm.controls['rndOfAmtDes'].reset();
+        // this.renderer.selectRootElement('#rndOfAmtDes').focus();
+
+      }
+
+    });
+    console.error(message);
+  }
+
+  roundOffCalculation(roundOffValue: any) {
+
+    const roundOffSum = this.comService.decimalQuantityFormat((this.comService.emptyToZero(this.netTotalSum) + this.comService.emptyToZero(roundOffValue)), 'AMOUNT');
+
+    this.goldExchangeForm.controls.partyCurrencyCode.setValue(roundOffSum);
+    this.goldExchangeForm.controls.rndNetAmtDes.setValue(roundOffSum);
+    this.goldExchangeForm.controls.grossAmtDes.setValue(roundOffSum);
+
+  }
+
+  dialogBox: any;
+
+  openDialog(title: any, msg: any, okBtn: any, swapColor: any = false) {
+    this.dialogBox = this.dialog.open(
+      DialogboxComponent, {
+      width: '40%',
+      disableClose: true,
+      data: { title, msg, okBtn, swapColor },
+    });
+  }
+
+
+  // opengoldposdirectdetail() {
+  //   const modalRef: NgbModalRef = this.modalService.open(GoldExchangeDetailsComponent, {
+  //     size: 'xl',
+  //     backdrop: true,
+  //     keyboard: false,
+  //     windowClass: 'modal-full-width',
+  //   });
+
+  //   modalRef.componentInstance.partyCurrencyParam = { partyCurrency: this.goldExchangeForm.value.partyCurrCode };
+
+  //   modalRef.result.then((postData) => {
+  //     if (postData) {
+  //       console.log('Data from modal:', postData);
+  //       this.goldExchangeDetailsData.push(postData);
+  //     }
+  //   });
+  // }
 
 
   close(data?: any) {
