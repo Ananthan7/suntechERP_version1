@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, Renderer2, ViewChild } from "@angular/core";
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, Renderer2, ViewChild } from "@angular/core";
 import { MasterSearchModel } from "src/app/shared/data/master-find-model";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { SuntechAPIService } from "src/app/services/suntech-api.service";
@@ -29,7 +29,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
   vocMaxDate = new Date();
   currentDate = new Date();
   modalReference!: NgbModalRef;
-  FORM_VALIDATER:any;
+  FORM_VALIDATER: any;
   columnheadTop: any[] = [""];
   columnheadBottom: any[] = [""];
   tableData: any[] = [];
@@ -51,12 +51,13 @@ export class ProductionEntryDetailsComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 46,
     SEARCH_FIELD: 'job_number',
-    SEARCH_HEADING: 'Job Number',
+    SEARCH_HEADING: 'Job search',
     SEARCH_VALUE: '',
-    WHERECONDITION: "job_number<> ''",
+    WHERECONDITION: `JOB_CLOSED_ON is null and  Branch_code = '${this.commonService.branchCode}'`,
     VIEW_INPUT: true,
     VIEW_TABLE: true,
-  };
+    LOAD_ONCLICK: true,
+  }
   customerCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -403,12 +404,12 @@ export class ProductionEntryDetailsComponent implements OnInit {
   validatePurity() {
     if (this.emptyToZero(this.productiondetailsFrom.value.PURITY) <= 0) {
       this.commonService.toastErrorByMsgId("MSG1703");//"purity cannot be zero/negative"
-      this.setFormDecimal('PURITY',this.FORM_VALIDATER.PURITY,'PURITY')
-      return 
+      this.setFormDecimal('PURITY', this.FORM_VALIDATER.PURITY, 'PURITY')
+      return
     }
     else if (this.emptyToZero(this.productiondetailsFrom.value.PURITY) >= 1.01) {
       this.commonService.toastErrorByMsgId("MSG1701");//"Purity cannot be Morethan 1.01000"
-      this.setFormDecimal('PURITY',this.FORM_VALIDATER.PURITY,'PURITY')
+      this.setFormDecimal('PURITY', this.FORM_VALIDATER.PURITY, 'PURITY')
       return
     }
     return
@@ -544,28 +545,6 @@ export class ProductionEntryDetailsComponent implements OnInit {
     this.closeDetail.emit()
   }
 
-  // opennewdetails() {
-  //   const modalRef: NgbModalRef = this.modalService.open(
-  //     ProductionStockDetailComponent,
-  //     {
-  //       size: "xl",
-  //       backdrop: true, //'static'
-  //       keyboard: false,
-  //       windowClass: "modal-full-width",
-  //     }
-  //   );
-  //   this.content[0].DETAILSCREEN_DATA = this.productiondetailsFrom.value
-  //   modalRef.componentInstance.content = this.content;
-
-  //   modalRef.result.then((dataFromStockScreen) => {
-  //     if (dataFromStockScreen) {
-  //       console.log(dataFromStockScreen, 'data comming from stock detail screen');
-
-  //       this.StockDetailData.STOCK_FORM_DETAILS = dataFromStockScreen.STOCK_FORM_DETAILS;
-  //       this.StockDetailData.STOCK_COMPONENT_GRID = dataFromStockScreen.STOCK_COMPONENT_GRID;
-  //     }
-  //   });
-  // }
   dataToDetailScreen: any;
   @ViewChild('productionStockDetailScreen') public ProductionStockDetailScreen!: NgbModal;
   opennewdetails() {
@@ -1027,6 +1006,17 @@ export class ProductionEntryDetailsComponent implements OnInit {
       "CONV_FACTOR": 0
     }
   }
+  // txtLossQty_Validating() {
+  //   if (this.emptyToZero(txtLossQty.Text.ToString()) > 0) {
+  //     txtLossPer.Text = ((this.emptyToZero(txtLossQty.Text.ToString()) / this.emptyToZero(txtMetal_Wt.Text.ToString())) * 100).ToString();
+  //   }
+  // }
+
+  // txtMetal_Wt_Validating() {
+  //   if (this.emptyToZero(txtLossQty.Text.ToString()) > 0) {
+  //     txtLossPer.Text = ((this.emptyToZero(txtLossQty.Text.ToString()) / this.emptyToZero(txtMetal_Wt.Text.ToString())) * 100).ToString();
+  //   }
+  // }
   emptyToZero(value: any) {
     return this.commonService.emptyToZero(value)
   }

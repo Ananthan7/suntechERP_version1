@@ -1226,14 +1226,14 @@
               <dxo-editing mode="cell" [allowUpdating]="true">
               </dxo-editing>
               <dxo-selection mode="single"></dxo-selection>
-              <dxi-column width="auto" dataField="SELECTED" caption
+              <!-- <dxi-column width="auto" dataField="SELECTED" caption
                 cellTemplate="SELECTEDTemplate"
                 alignment="right"></dxi-column>
               <div *dxTemplate="let data of 'SELECTEDTemplate'">
                 <mat-checkbox [checked]="data.value"
                   [disabled]="true"
                   (change)="changeSelectCheckbox(data)"></mat-checkbox>
-              </div>
+              </div> -->
               <dxi-column dataField="DIVCODE" caption="Div"
                 [allowEditing]="false" alignment="left"></dxi-column>
               <dxi-column dataField="STOCK_CODE" caption="Stock Code"
@@ -1253,7 +1253,6 @@
                 dataType="number"
                 alignment="right" [allowEditing]="!viewMode"></dxi-column>
               <dxi-column dataField="GROSS_WT" caption="Weight"
-                dataType="number"
                 alignment="right" [allowEditing]="!viewMode"></dxi-column>
               <dxi-column dataField="LOSS_QTY" caption="Loss"
                 dataType="number"
