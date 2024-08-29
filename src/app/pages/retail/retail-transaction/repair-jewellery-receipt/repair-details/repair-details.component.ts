@@ -401,7 +401,7 @@ export class RepairDetailsComponent implements OnInit {
       DIAMONDAMOUNT: 0,
       LABOURCHARGE: 0,
       METALCODE: "",
-      REPAIRBAGNO: this.repairjewelleryreceiptdetailsFrom.value.repair_bags,
+      REPAIRBAGNO: String(this.repairjewelleryreceiptdetailsFrom.value.repair_bags) ,
       MATERIAL_TYPE: this.repairjewelleryreceiptdetailsFrom.value.material,
       STONE_TYPE: this.repairjewelleryreceiptdetailsFrom.value.stone_type,
       NO_OF_STONES: this.repairjewelleryreceiptdetailsFrom.value.no_of,

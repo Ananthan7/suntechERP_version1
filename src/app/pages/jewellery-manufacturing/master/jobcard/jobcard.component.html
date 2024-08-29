@@ -260,7 +260,7 @@
                             <div class="col-sm-9">
                                 <mat-form-field style="width: 100%;" appearance="outline">
                                     <input type="text" matInput formControlName="comments" maxlength="20"
-                                        [readonly]="viewMode" oninput="this.value = this.value.toUpperCase()"
+                                        [readonly]="viewMode" 
                                         (focusout)="validateLookupField($event,commentsCodeData,'comments')"
                                         (input)="inputValidate($event)"
                                         (keydown)="lookupKeyPress($event,'comments')"/>

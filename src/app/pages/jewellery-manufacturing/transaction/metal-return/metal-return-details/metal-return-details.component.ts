@@ -207,7 +207,7 @@ export class MetalReturnDetailsComponent implements OnInit {
     this.metalReturnDetailsForm.controls.remarks.setValue(this.content.WIP_ACCODE)
     this.metalReturnDetailsForm.controls.JOB_PCS.setValue(this.content.CURRENCY_RATE)
     this.metalReturnDetailsForm.controls.ReturnToStockCode.setValue(this.content.RETURN_STOCK)
-    this.metalReturnDetailsForm.controls.ReturnToStockCodeDesc.setValue(this.content.SUB_RETURN_STOCK)
+    this.metalReturnDetailsForm.controls.ReturnToStockCodeDesc.setValue(this.content.UNQ_DESIGN_ID)
 
 
     this.setValueWithDecimal('PURE_WT', this.content.PUREWT, 'THREE')
@@ -387,7 +387,6 @@ private calculateNetWt(): boolean {
   }
   setPostData() {
     let form = this.metalReturnDetailsForm.value
-    let currRate = this.comService.getCurrecnyRate(this.comService.compCurrency)
     return {
       "SRNO": this.comService.emptyToZero(this.content.SRNO),
       "VOCNO": this.comService.emptyToZero(form.VOCNO),
@@ -429,12 +428,12 @@ private calculateNetWt(): boolean {
       "PROCESS_NAME": this.comService.nullToString(form.processCodeDesc),
       "WORKER_CODE": this.comService.nullToString(form.workerCode),
       "WORKER_NAME": this.comService.nullToString(form.workerCodeDesc),
-      "UNQ_DESIGN_ID": "",
+      "UNQ_DESIGN_ID": this.comService.nullToString(form.ReturnToStockCodeDesc),
       "WIP_ACCODE":this.comService.nullToString(form.remarks),
       "UNIQUEID": 0,
       "LOCTYPE_CODE": this.comService.nullToString(form.location),
       "RETURN_STOCK": this.comService.nullToString(form.ReturnToStockCode),
-      "SUB_RETURN_STOCK": this.comService.nullToString(form.ReturnToStockCodeDesc),
+      "SUB_RETURN_STOCK": "",
       "STONE_WT": this.comService.emptyToZero(form.STONE_WT),
       "NET_WT": this.comService.emptyToZero(form.NET_WT),
       "PART_CODE": this.comService.nullToString(form.PART_CODE),
