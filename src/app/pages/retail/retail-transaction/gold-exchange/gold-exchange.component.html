@@ -99,10 +99,10 @@
           </div>
         </div>
         <div class="row">
-          <label for="inputPassword" class="col-sm-4 col-form-label">Moblie</label>
+          <label for="inputPassword" class="col-sm-4 col-form-label">Mobile</label>
           <div class="col-md-8">
             <mat-form-field style="width: 100%;">
-              <input type="number" class="text-left" [readonly]="viewOnly" matInput formControlName="moblie" />
+              <input type="text" class="text-left" [readonly]="viewOnly" matInput formControlName="moblie" />
             </mat-form-field>
           </div>
         </div>
@@ -266,7 +266,7 @@
             <dxi-column dataField="GROSSWT" caption="Weight" [width]="100" [format]="weightDecimalFormat"
               [allowEditing]="false">
             </dxi-column>
-            <dxi-column dataField="PUREWT" caption="Pure Weight" [width]="100" [allowEditing]="false"
+            <dxi-column dataField="PUREWT" caption="Pure Weight" alignment="right"  [width]="100" [allowEditing]="false"
               [format]="amountDecimalFormat"></dxi-column>
 
             <dxi-column dataField="MKGVALUEFC" caption="Mkg.RATE" alignment="right" [allowEditing]="false"
@@ -293,54 +293,55 @@
         </div>
       </div>
     </div>
-    <div class="row mt-2 justify-content-between">
-      <div class="col-md-7">
+    <div class="row mt-2">
+      <div class="col-md-4">
         <div class="row align-items-center">
-          <label for="inputPassword" class="col-sm-2 col-form-label">Narration</label>
-          <div class="col-md-10">
+          <label for="inputPassword" class="col-sm-3 col-form-label">Narration</label>
+          <div class="col-sm-9">
             <mat-form-field style="width: 100%;">
               <textarea matInput rows="5" [readonly]="viewOnly" formControlName="narration"></textarea>
             </mat-form-field>
           </div>
         </div>
       </div>
+    
       <div class="col-md-4">
         <div class="row">
           <label for="inputPassword" class="col-sm-4 col-form-label">Party Currency</label>
-          <div class="col-md-3">
+          <div class="col-md-4">
             <mat-form-field style="width: 100%;">
               <input type="text" class="text-end" readonly matInput formControlName="partyCurrency" />
             </mat-form-field>
           </div>
-          <div class="col-md-5">
+          <div class="col-md-4">
             <mat-form-field style="width: 100%;">
               <input type="text" class="text-end" [readonly]="viewOnly" matInput AmountDecimalInput
                 formControlName="partyCurrencyCode" />
             </mat-form-field>
           </div>
         </div>
-        <div class="row">
+        <div class="row mt-2">
           <label for="inputPassword" class="col-sm-4 col-form-label">Amount</label>
-          <div class="col-md-3">
+          <div class="col-md-4">
             <mat-form-field style="width: 100%;">
               <input type="text" class="text-end" readonly matInput formControlName="amount" />
             </mat-form-field>
           </div>
-          <div class="col-md-5">
+          <div class="col-md-4">
             <mat-form-field style="width: 100%;">
               <input type="text" class="text-end" readonly AmountDecimalInput matInput
                 formControlName="amountDes" />
             </mat-form-field>
           </div>
         </div>
-        <div class="row">
+        <div class="row mt-2">
           <label for="inputPassword" class="col-sm-4 col-form-label">Rnd Of Amt</label>
-          <div class="col-md-3">
+          <div class="col-md-4">
             <mat-form-field style="width: 100%;">
-              <input type="text" class="text-end"  readonly matInput formControlName="rndOfAmt" />
+              <input type="text" class="text-end" readonly matInput formControlName="rndOfAmt" />
             </mat-form-field>
           </div>
-          <div class="col-md-5">
+          <div class="col-md-4">
             <mat-form-field style="width: 100%;">
               <input type="text" class="text-end" (change)="changeRoundOffAmount($event)"
                [readonly]="viewOnly" NegativeAmountDecimal matInput
@@ -348,42 +349,45 @@
             </mat-form-field>
           </div>
         </div>
+      </div>
+    
+      <div class="col-md-4">
         <div class="row">
           <label for="inputPassword" class="col-sm-4 col-form-label">Rnd Net Amt</label>
-          <div class="col-md-3">
+          <div class="col-md-4">
             <mat-form-field style="width: 100%;">
               <input type="text" class="text-end" readonly matInput formControlName="rndNetAmt" />
             </mat-form-field>
           </div>
-          <div class="col-md-5">
+          <div class="col-md-4">
             <mat-form-field style="width: 100%;">
               <input type="text" class="text-end" readonly AmountDecimalInput matInput
                 formControlName="rndNetAmtDes" />
             </mat-form-field>
           </div>
         </div>
-        <div class="row">
+        <div class="row mt-2">
           <label for="inputPassword" class="col-sm-4 col-form-label">Other Amt</label>
-          <div class="col-md-3">
+          <div class="col-md-4">
             <mat-form-field style="width: 100%;">
               <input type="text" class="text-end" readonly matInput formControlName="otherAmt" />
             </mat-form-field>
           </div>
-          <div class="col-md-5">
+          <div class="col-md-4">
             <mat-form-field style="width: 100%;">
               <input type="text" AmountDecimalInput class="text-end" readonly matInput
                 formControlName="otherAmtDes" />
             </mat-form-field>
           </div>
         </div>
-        <div class="row">
+        <div class="row mt-2">
           <label for="inputPassword" class="col-sm-4 col-form-label">Gross Amt</label>
-          <div class="col-md-3">
+          <div class="col-md-4">
             <mat-form-field style="width: 100%;">
               <input type="text" class="text-end" readonly matInput formControlName="grossAmt" />
             </mat-form-field>
           </div>
-          <div class="col-md-5">
+          <div class="col-md-4">
             <mat-form-field style="width: 100%;">
               <input type="text" class="text-end" readonly AmountDecimalInput matInput
                 formControlName="grossAmtDes" />
@@ -392,5 +396,6 @@
         </div>
       </div>
     </div>
+    
   </form>
 </div>
