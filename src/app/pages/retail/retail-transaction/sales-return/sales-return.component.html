@@ -417,7 +417,7 @@
           <div class="col-md-1 m-t-10 pt-2">
             <mat-form-field>
               <mat-label>{{ vocno_lbl }}</mat-label>
-              <input type="text" NumberOnly matInput formControlName="fcn_voc_no" [readonly]="voucherDetails?.LOCKVOUCHERNO||viewOnly" class="st_txt_right" />
+              <input type="number" NumberOnly matInput formControlName="fcn_voc_no" [readonly]="voucherDetails?.LOCKVOUCHERNO||viewOnly" class="st_txt_right" />
             </mat-form-field>
           </div>
   
@@ -478,7 +478,7 @@
   
           <div class="col-md-2 m-t-10 pt-2">
             <mat-form-field>
-              <mat-label>{{ sales_person_lbl }}</mat-label>
+              <mat-label>{{ sales_person_lbl }} </mat-label>
               <input type="text" matInput formControlName="sales_person" id="sales_person" [matAutocomplete]="salesperson"
                 [readonly]="viewOnly" />
               <!-- <input type="text" matInput formControlName="sales_person"  [matAutocomplete]="auto" [matAutocomplete]="salesperson" (keyup.enter)="chooseFirstOption($event)"> -->
@@ -699,7 +699,7 @@
             </div>
           </form>
   
-          <div class="text-right">
+          <div class="text-right d-none">
             <!-- <button type="button" mat-flat-button color="primary" (click)="importSalesEstimation()">
               Import Sales Estimation
             </button> -->
@@ -831,8 +831,8 @@
                     <div class="left">
                       <div class="wrapper">
                         <div class="container">
-                          <dx-data-grid id="sales_return_grid" [dataSource]="sales_returns_items" keyExpr="ID"
-                            (onRowRemoved)="removeSalesReturnGrid($event)" (onEditingStart)="editTableSalesReturn($event)"
+                          <dx-data-grid id="sales_return_grid" [dataSource]="sales_returns_items" keyExpr="ID" 
+                            (onRowRemoved)="removeSalesReturnGrid($event)" (onEditingStart)="changeRetailSalesReturnValMod($event)"
                             [showBorders]="true" [allowColumnResizing]="true" [columnAutoWidth]="true">
                             <dxo-editing [allowUpdating]="true" [allowDeleting]="!viewOnly">
                               <dxo-texts [editRow]="viewOnly ? 'View' : 'Edit'" deleteRow="Remove">
@@ -888,8 +888,7 @@
                           </dx-data-grid>
   
                           <div>
-                            <button type="submit" [disabled]="viewOnly
-                              " (click)="open(adjust_sale_return_modal)" class="btn btn-secondary" style="
+                            <button type="submit" (click)="open(adjust_sale_return_modal)" class="btn btn-secondary" style="
                                 border: none;
                                 margin: 10px;
                                 width: 20px !important;
@@ -1341,7 +1340,7 @@
   
             <!-- matTooltip="You have already saved"
             [matTooltipDisabled]="isSaved" -->
-            <div class="col-md-6 col-xl-6" (click)="viewOnly || isSaved ? '' : saveOrder()" *ngIf="!viewOnly">
+            <div class="col-md-6 col-xl-6" (click)="viewOnly || isSaved ? '' : savenew()" *ngIf="!viewOnly">
               <div class="touch-big-button touch-big-button-black">
                 <div class="touch-big-button-inner">
                   <i class="fa fa-save"></i> <span> Save Bill</span>
@@ -2402,7 +2401,7 @@
               <div class="col-md-2">
                 <mat-form-field>
                   <mat-label>Voc No</mat-label>
-                  <input type="text" NumberOnly matInput class="st_txt_right" formControlName="fcn_returns_voc_no"
+                  <input type="text" matInput class="st_txt_right" formControlName="fcn_returns_voc_no"
                     (change)="getRetailSReturn_EvnFn($event)"
                     [readonly]="viewOnly || this.sales_returns_items.length > 0" />
                   <mat-error *ngIf="
@@ -2487,13 +2486,8 @@
                 </td>
                 <td style="text-align: center">
                   <input [disabled]="viewOnly" type="checkbox" value="{{ slsReturn.STOCK_CODE }}" [readonly]="viewOnly"
-                    [checked]="
-                      checkSelectedVal(
-                        slsReturn.STOCK_CODE,
-                        slsReturn.TOTALWITHVATLC,
-                        slsReturn.SRNO
-                      )
-                    " (change)="addSalesReturnOnSelect($event, slsReturn, id)" />
+                    [checked]="true"
+                    (change)="addSalesReturnOnSelect($event, slsReturn, id)" />
                 </td>
               </tr>
             </tbody>
@@ -2508,7 +2502,7 @@
         </div>
         <div class="col-md-12" style="padding-bottom: 20px">
           <div style="text-align: right; padding: 10px">
-            <button mat-flat-button color="primary" class="btn-m-r-10" (click)="addItemtoSalesReturn()"
+            <button mat-flat-button color="primary" class="btn-m-r-10" (click)="salesreturndetails()"
               [disabled]="viewOnly">
               SAVE
             </button>
@@ -2951,7 +2945,8 @@
         <!-- {{ lineItemModalForSalesReturn ? "Sales Return " : "Line Item" }} -->
       </h4>
       <button style="border: none" type="button" *ngIf="!updateBtn" class="close" aria-label="Close"
-        (click)="closeItemModal()">
+        (click)="modal.dismiss('Cross click')"
+        >
         <span aria-hidden="true">x</span>
       </button>
     </div>
@@ -3556,12 +3551,13 @@
   
           <button mat-flat-button class="update-finish-button" *ngIf="lineItemModalForSalesReturn"
           (click)="updateRetailSalesReturnVal()" [disabled]="disableSaveBtn">
-          {{ updateBtn ? "Update" : "Save" }}
+          {{ updateBtn ? "Update" : "Save" }} 
           </button>&nbsp;
           <!-- <button class="btn btn btn-primary" *ngIf="updateBtn" (click)="addItemtoList('finish_btn')">
               Update
             </button>&nbsp; -->
-            <button mat-flat-button class="cancel-button" (click)="closeItemModal()">
+            <button mat-flat-button class="cancel-button"  (click)="modal.dismiss('Cross click')"
+            >
               Cancel
             </button>&nbsp;
           <!-- <button class="btn btn btn-dark" (click)="addItemtoList('newitem_btn')">
