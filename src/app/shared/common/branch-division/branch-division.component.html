@@ -3,112 +3,134 @@
 <ng-template #master_search let-modal>
   <div>
     <div class="text-right p-2">
-      <!-- <h6>{{MasterSearch.SEARCH_HEADING}}</h6> -->
-      <button type="button" class="btn btn-close close-btn p-2" (click)="close()">
+      <!-- <button type="button" class="btn btn-close close-btn p-2" (click)="close()">
         <i class="feather icon-x close-icon"></i>
-      </button>
+      </button> -->
     </div>
 
     <div class="row p-2">
-      <div class="row p-2">
-        <mat-tab-group>
-          <mat-tab label="Branch/ Division Selection">
-            <div class="row">
-              <div class="col-md-6">
-                <div class="col-md-12 text-center mt-2 gridLabel">
-                  <label for="branch" class="mt-2">Branches</label>
-                </div>
-                <dx-data-grid width="100%" height="400px" #gridContainer id="gridContainer"
-                  [allowColumnReordering]="true" [dataSource]="BranchDataSource" [showColumnLines]="true"
-                  [showRowLines]="true" [showBorders]="true" [columnAutoWidth]="true" keyExpr="SRNO"
-                  [selectedRowKeys]="selectedRowKeys" (onSelectionChanged)="onSelectionChanged($event)">
-
-                  <dxo-filter-row [visible]="showFilterRow" [applyFilter]="currentFilter"></dxo-filter-row>
-                  <dxo-paging [enabled]="false"></dxo-paging>
-                  <dxo-selection mode="multiple"></dxo-selection>
-
-                  
-                  <dxi-column dataField="BRANCH_CODE" width="auto" caption="Code" alignment="left"></dxi-column>
-                  <dxi-column dataField="DESCRIPTION" width="auto" caption="Description" alignment="left"></dxi-column>
-                </dx-data-grid>
+      <mat-tab-group>
+        <mat-tab label="Branch/ Division Selection">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="col-md-12 text-center mt-2 gridLabel">
+                <label for="branch" class="mt-2">Branches</label>
               </div>
+              <dx-data-grid width="100%" height="400px" #gridContainer id="gridContainer"
+                [allowColumnReordering]="true" [dataSource]="BranchDataSource" [showColumnLines]="true"
+                [showRowLines]="true" [showBorders]="true" [columnAutoWidth]="true"
+                [selectedRowKeys]="selectedRowKeys" (onSelectionChanged)="onSelectionChanged($event)">
 
-              
-              <div class="col-md-6">
-                <div class="col-md-12 text-center mt-2 gridLabel">
-                  <label for="divisions" class="mt-2">Divisions</label>
-                </div>
+                <dxo-filter-row [visible]="showFilterRow" [applyFilter]="currentFilter"></dxo-filter-row>
+                <dxo-paging [enabled]="false"></dxo-paging>
+                <dxo-selection mode="multiple"></dxo-selection>
 
-                <dx-data-grid width="100%" height="400px" #gridContainer id="gridContainer"
-                  [allowColumnReordering]="true" [dataSource]="divisionDataSource" [showColumnLines]="true"
-                  [showRowLines]="true" [showBorders]="true" [columnAutoWidth]="true" keyExpr="SRNO"
-                  [selectedRowKeys]="selectedDivisionKeys" (onSelectionChanged)="onDivisionSelection($event)">
+                
+                <dxi-column dataField="BRANCH_CODE" width="auto" caption="Code" alignment="left"></dxi-column>
+                <dxi-column dataField="DESCRIPTION" width="auto" caption="Description" alignment="left"></dxi-column>
+              </dx-data-grid> 
 
-                  <dxo-filter-row [visible]="showFilterRow" [applyFilter]="currentFilter"></dxo-filter-row>
-                  <dxo-paging [enabled]="false"></dxo-paging>
-                  <dxo-selection mode="multiple"></dxo-selection>
-
-
-                  <dxi-column dataField="DIVISION_CODE" width="auto" caption="Code" alignment="left"></dxi-column>
-                  <dxi-column dataField="DESCRIPTION" width="auto" caption="Description" alignment="left"></dxi-column>
-                </dx-data-grid>
+              <div class="text-let p-3">
+                <button mat-flat-button color="primary" (click)="invokeselections('Branch')">
+                  Invert
+                </button>
               </div>
             </div>
-          </mat-tab>
 
-
-          <mat-tab label="Additional Filter">
-            <div class="row">
-              <div class="col-md-6">
-                <div class="col-md-12 text-center mt-2 gridLabel">
-                  <label for="area" class="mt-2">Area</label>
-                </div>
-                <dx-data-grid width="100%" #gridContainer id="gridContainer" [allowColumnReordering]="true"
-                  [dataSource]="areaDataSource" [showColumnLines]="true" [showRowLines]="true" [showBorders]="true"
-                  [columnAutoWidth]="true" (onSelectionChanged)="onAreaSelection($event)"
-                  [selectedRowKeys]="selectedAreaKeys" >
-
-                  <dxo-filter-row [visible]="showFilterRow" [applyFilter]="currentFilter"></dxo-filter-row>
-                  <dxo-paging [enabled]="false"></dxo-paging>
-                  <dxo-selection mode="multiple"></dxo-selection>
-
-
-                  <dxi-column dataField="AREA_CODE" width="auto" caption="Code" alignment="left"></dxi-column>
-                  <dxi-column dataField="DESCRIPTION" width="auto" caption="Description" alignment="left"></dxi-column>
-                </dx-data-grid>
+            
+            <div class="col-md-6">
+              <div class="col-md-12 text-center mt-2 gridLabel">
+                <label for="divisions" class="mt-2">Divisions</label>
               </div>
 
-              <div class="col-md-6">
-                <div class="col-md-12 text-center mt-2 gridLabel">
-                  <label for="Bcatgory" class="mt-2">Business Category</label>
-                </div>
+              <dx-data-grid width="100%" height="400px" #gridContainer id="gridContainer"
+                [allowColumnReordering]="true" [dataSource]="divisionDataSource" [showColumnLines]="true"
+                [showRowLines]="true" [showBorders]="true" [columnAutoWidth]="true"
+                [selectedRowKeys]="selectedDivisionKeys" (onSelectionChanged)="onDivisionSelection($event)">
 
-                <dx-data-grid width="100%" #gridContainer id="gridContainer" [allowColumnReordering]="true"
-                  [dataSource]="businessCategDataSource" [showColumnLines]="true" [showRowLines]="true"
-                  [showBorders]="true" [columnAutoWidth]="true" (onSelectionChanged)="onBcategSelection($event)"
-                  [selectedRowKeys]="selectedBcategKeys">
+                <dxo-filter-row [visible]="showFilterRow" [applyFilter]="currentFilter"></dxo-filter-row>
+                <dxo-paging [enabled]="false"></dxo-paging>
+                <dxo-selection mode="multiple"></dxo-selection>
 
-                  <dxo-filter-row [visible]="showFilterRow" [applyFilter]="currentFilter"></dxo-filter-row>
-                  <dxo-paging [enabled]="false"></dxo-paging>
-                  <dxo-selection mode="multiple"></dxo-selection>
- 
 
-                  <dxi-column dataField="CATEGORY_CODE" width="auto" caption="Code" alignment="left"></dxi-column>
-                  <dxi-column dataField="DESCRIPTION" width="auto" caption="Description" alignment="left"></dxi-column>
-                </dx-data-grid>
+                <dxi-column dataField="DIVISION_CODE" width="auto" caption="Code" alignment="left"></dxi-column>
+                <dxi-column dataField="DESCRIPTION" width="auto" caption="Description" alignment="left"></dxi-column>
+              </dx-data-grid>
+
+              <div class="text-let p-3">
+                <button mat-flat-button color="primary" (click)="invokeselections('Division')">
+                  Invert
+                </button>
               </div>
             </div>
-          </mat-tab>
-        </mat-tab-group>
-      </div>
-    </div>
+          </div>
+        </mat-tab>
 
-    <div class="row">
+
+        <mat-tab label="Additional Filter">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="col-md-12 text-center mt-2 gridLabel">
+                <label for="area" class="mt-2">Area</label>
+              </div>
+              <dx-data-grid width="100%" height="400px"  #gridContainer id="gridContainer" [allowColumnReordering]="true"
+                [dataSource]="areaDataSource" [showColumnLines]="true" [showRowLines]="true" [showBorders]="true"
+                [columnAutoWidth]="true" (onSelectionChanged)="onAreaSelection($event)"
+                [selectedRowKeys]="selectedAreaKeys" >
+
+                <dxo-filter-row [visible]="showFilterRow" [applyFilter]="currentFilter"></dxo-filter-row>
+                <dxo-paging [enabled]="false"></dxo-paging>
+                <dxo-selection mode="multiple"></dxo-selection>
+
+
+                <dxi-column dataField="AREA_CODE" width="auto" caption="Code" alignment="left"></dxi-column>
+                <dxi-column dataField="DESCRIPTION" width="auto" caption="Description" alignment="left"></dxi-column>
+              </dx-data-grid>
+
+              <div class="text-let p-3">
+                <button mat-flat-button color="primary" (click)="invokeselections('Area')">
+                  Invert
+                </button>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="col-md-12 text-center mt-2 gridLabel">
+                <label for="Bcatgory" class="mt-2">Business Category</label>
+              </div>
+
+              <dx-data-grid width="100%" height="400px"  #gridContainer id="gridContainer" [allowColumnReordering]="true"
+                [dataSource]="businessCategDataSource" [showColumnLines]="true" [showRowLines]="true"
+                [showBorders]="true" [columnAutoWidth]="true" (onSelectionChanged)="onBcategSelection($event)"
+                [selectedRowKeys]="selectedBcategKeys">
+
+                <dxo-filter-row [visible]="showFilterRow" [applyFilter]="currentFilter"></dxo-filter-row>
+                <dxo-paging [enabled]="false"></dxo-paging>
+                <dxo-selection mode="multiple"></dxo-selection>
+
+
+                <dxi-column dataField="CATEGORY_CODE" width="auto" caption="Code" alignment="left"></dxi-column>
+                <dxi-column dataField="DESCRIPTION" width="auto" caption="Description" alignment="left"></dxi-column>
+              </dx-data-grid>
+
+              <div class="text-let p-3">
+                <button mat-flat-button color="primary" (click)="invokeselections('businessCategory')">
+                  Invert
+                </button>
+              </div>
+            </div>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+
       <div class="col-md-12 text-right p-3">
-          <button mat-flat-button color="primary" (click)="close()">
-            Close
-          </button>
-      </div>
+        <button mat-flat-button color="primary" class="mx-1" (click)="apply()"> Apply </button>
+        <button mat-flat-button color="primary" (click)="close()">
+          Close
+        </button>
+      </div>  
     </div>
+      
+   
   </div>
 </ng-template>
