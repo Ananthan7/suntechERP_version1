@@ -272,6 +272,10 @@ export class RepairJewelleryReceiptComponent implements OnInit {
             this.snackBar.dismiss();
 
             this.repairDetailsData = result.response.Details;
+            console.log("fjsnjsdnlsdn" );
+            
+            console.log(this.repairDetailsData);
+            
 
             const calculateTotalAmount = (data: any[]): number =>  {
               return data.reduce((total, item) => {
@@ -662,46 +666,47 @@ export class RepairJewelleryReceiptComponent implements OnInit {
     });
   }
 
-  AmountUpdating(e: any, method: string) {
-    const srnoToProcess = e.data.SRNO;
-    const indexToProcess = this.repairDetailsData.findIndex(
-      (item: any) => item.SRNO.toString() === srnoToProcess.toString()
-    );
+  // AmountUpdating(e: any, method: string) {
+    
+  //   const srnoToProcess = e.data.SRNO;
+  //   const indexToProcess = this.repairDetailsData.findIndex((item: any) => item.SRNO === srnoToProcess);    
   
-    switch (method) {
-      case 'add':
-        if (indexToProcess !== -1) {
-          const amountToAdd = this.repairDetailsData[indexToProcess].AMOUNT;
-          const currentAmt = this.repairjewelleryreceiptFrom.controls.repairAmt.value || 0;
-          const newAmt = Number(currentAmt) + Number(amountToAdd);
-          console.log("Added amount:", newAmt);
+  //   switch (method) {
+  //     case 'add':
+  //       if (indexToProcess) {
+  //         const amountToAdd = this.repairDetailsData[indexToProcess].AMOUNT;
+  //         const currentAmt = this.repairjewelleryreceiptFrom.controls.repairAmt.value || 0;
+  //         const newAmt = Number(currentAmt) + Number(amountToAdd);
+  //         console.log("Added amount:", newAmt);
   
-          this.repairjewelleryreceiptFrom.controls.repairAmt.setValue(newAmt);
-        }
-        break;
+  //         this.repairjewelleryreceiptFrom.controls['repairAmt'].setValue(newAmt);
+  //       }
+  //       break;
   
-      case 'sub':
-        if (indexToProcess !== -1) {
-          const amountToSubtract = this.repairDetailsData[indexToProcess].AMOUNT;
-          const currentAmt = this.repairjewelleryreceiptFrom.controls.repairAmt.value || 0;
-          const newAmt = Number(currentAmt) - Number(amountToSubtract);
-          console.log("Subtracted amount:", newAmt);
+  //     case 'sub':
+  //       if (indexToProcess) {
+  //         console.log('in ');
+          
+  //         const amountToSubtract = this.repairDetailsData[indexToProcess].AMOUNT;          
+  //         const currentAmt = this.repairjewelleryreceiptFrom.controls['repairAmt'].value || 0;
+  //         const newAmt = Number(currentAmt) - Number(amountToSubtract);
+  //         console.log("Subtracted amount:", newAmt);
   
-          this.repairjewelleryreceiptFrom.controls.repairAmt.setValue(newAmt);
+  //         this.repairjewelleryreceiptFrom.controls['repairAmt'].setValue(newAmt);
   
-          this.repairDetailsData.splice(indexToProcess, 1);
-        }
-        break;
+  //         this.repairDetailsData.splice(indexToProcess, 1);
+  //       }
+  //       break;
   
-      default:
-        break;
-    }
-  }
+  //     default:
+  //       break;
+  //   }
+  // }
 
   removeLineItemsGrid(e: any) { 
 
-    this.AmountUpdating(e, 'sub')
-    this.updateFormValuesAndSRNO();
+    // this.AmountUpdating(e, 'sub');
+    // this.updateFormValuesAndSRNO();
 
 
     console.log(e.data);
@@ -714,6 +719,15 @@ export class RepairJewelleryReceiptComponent implements OnInit {
       }
       return acc;
     }, indexes);
+
+    const totalAmount = this.repairDetailsData.reduce((sum: number, item: any) => {
+      return sum + Number(item.AMOUNT);
+    }, 0);
+    
+    console.log(totalAmount);
+    
+
+    this.repairjewelleryreceiptFrom.controls['repairAmt'].setValue(totalAmount);
     this.selectedIndexes = indexes;
     this.updateFormValuesAndSRNO();
   }
