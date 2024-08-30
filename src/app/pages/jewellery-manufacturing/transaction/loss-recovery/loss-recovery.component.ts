@@ -136,6 +136,7 @@ export class LossRecoveryComponent implements OnInit {
   ngOnInit(): void {
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
+    this.lossRecoveryFrom.controls.vocDate.setValue(this.currentDate)
 
     this.generateVocNo()
   }
@@ -186,7 +187,7 @@ export class LossRecoveryComponent implements OnInit {
     vocDate: [''],
     VocNo: ['', [Validators.required]],
     EnterBy: [''],
-    returnType: [''],
+    returnType: ['Initial'],
     receicvedBy: [''],
     fromDate: [''],
     toDate: [''],
@@ -212,10 +213,12 @@ export class LossRecoveryComponent implements OnInit {
     radioGold: true,
     radioDiamond: true,
     radioRefinery: true,
-    radioAllowRecovery: true,
+    // radioAllowRecovery: true,
+    AlloyRecovery: true,
     radioScrapReturn: true,
     radioFinalLoss: true,
-    Metalsoption:[""]
+    Metalsoption:["M"],
+
   });
 
   submitValidations(form: any) {
