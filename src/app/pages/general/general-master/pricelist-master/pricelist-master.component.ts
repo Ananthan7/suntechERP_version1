@@ -96,11 +96,11 @@ export class PricelistMasterComponent implements OnInit {
       } else if (this.content.FLAG == 'EDIT') {
         this.editMode = true;
         this.codeEnable = false;
-        this.priceListMasterForm.controls.priceSign.disable();
-        this.priceListMasterForm.controls.finalPriceSign.disable();
-        this.priceListMasterForm.controls.finalPriceValue.disable();
-        this.priceListMasterForm.controls.addlValueSign.disable();
-        this.priceListMasterForm.controls.addlValue.disable();
+        // this.priceListMasterForm.controls.priceSign.disable();
+        // this.priceListMasterForm.controls.finalPriceSign.disable();
+        // this.priceListMasterForm.controls.finalPriceValue.disable();
+        // this.priceListMasterForm.controls.addlValueSign.disable();
+        // this.priceListMasterForm.controls.addlValue.disable();
         this.roundoffDis()
       } else if (this.content.FLAG == 'DELETE') {
         this.viewMode = true;
