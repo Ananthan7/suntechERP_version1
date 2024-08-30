@@ -225,6 +225,7 @@
                 <mat-form-field appearance="outline" style="width: 100%;">
                   <input type="text" matInput [max]="13" class="text-right"
                     formControlName="METAL_WT" readonly
+                    (focusout)="txtMetal_Wt_Validating()"
                     MetalDecimalInput />
                 </mat-form-field>
               </div>
@@ -475,7 +476,7 @@
                 :</label>
               <div class="col-sm-4">
                 <mat-form-field appearance="outline" style="width: 100%;">
-                  <input type="text" matInput formControlName="lossone"
+                  <input type="text" matInput formControlName="LOSS_PER"
                     readonly />
                 </mat-form-field>
               </div>
@@ -484,6 +485,7 @@
               <div class="col-sm-4">
                 <mat-form-field appearance="outline" style="width: 100%;">
                   <input type="text" matInput formControlName="LOSS_WT"
+                    (focusout)="txtLossQty_Validating()"
                     readonly />
                 </mat-form-field>
               </div>
