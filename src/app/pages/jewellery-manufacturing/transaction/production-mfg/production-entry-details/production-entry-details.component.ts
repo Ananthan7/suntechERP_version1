@@ -215,6 +215,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
     totalpcs: [''],
     JOB_PCS: [''],
     LOCTYPE_CODE: [''],
+    UNQ_DESIGN_ID: [''],
     LOSS_WT: [''],
     GROSS_WT: [''],
     STONE_PCS: [''],
@@ -239,7 +240,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
     remarks: [''],
     prodpcs: [''],
     pndpcs: [''],
-    lossone: [''],
+    LOSS_PER: [''],
     fromStockCode: [''],
     fromStockCodeDesc: [''],
     toStockCode: [''],
@@ -473,7 +474,6 @@ export class ProductionEntryDetailsComponent implements OnInit {
             this.productiondetailsFrom.controls.COST_CODE.setValue(data[0].COST_CODE)
             this.productiondetailsFrom.controls.PART_CODE.setValue(data[0].DESIGN_CODE)
             this.productiondetailsFrom.controls.partsName.setValue(data[0].DESCRIPTION)
-
             this.subJobNumberValidate()
             this.getDesignimagecode()
           } else {
@@ -510,6 +510,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
           this.productiondetailsFrom.controls.PROCESS_NAME.setValue(data[0].PROCESSDESC)
           this.productiondetailsFrom.controls.WORKER_CODE.setValue(data[0].WORKER)
           this.productiondetailsFrom.controls.WORKER_NAME.setValue(data[0].WORKERDESC)
+          this.productiondetailsFrom.controls.UNQ_DESIGN_ID.setValue(data[0].UNQ_DESIGN_ID)
           this.productiondetailsFrom.controls.METAL_WT.setValue(
             this.commonService.decimalQuantityFormat(data[0].METAL, 'METAL'))
           this.productiondetailsFrom.controls.STONE_WT.setValue(
@@ -528,6 +529,40 @@ export class ProductionEntryDetailsComponent implements OnInit {
           this.productiondetailsFrom.controls.PURE_WT.setValue(data[0].PURE_WT)
           this.productiondetailsFrom.controls.KARAT_CODE.setValue(data[0].KARAT)
           this.productiondetailsFrom.controls.totalpcs.setValue(data[0].PCS)
+          this.FORM_VALIDATER = this.productiondetailsFrom.value
+          this.pendingProcessValidate()
+        } else {
+          this.commonService.toastErrorByMsgId('MSG1747');
+        }
+      }, err => {
+        this.commonService.closeSnackBarMsg();
+        this.commonService.toastErrorByMsgId('MSG1531');
+      })
+    this.subscriptions.push(Sub)
+  }
+  /**USE: subjobnumber validate API call*/
+  pendingProcessValidate(event?: any) {
+    let postData = {
+      "SPID": "111",
+      "parameter": {
+        'SubJobNo': this.commonService.nullToString(this.productiondetailsFrom.value.UNQ_JOB_ID),
+        'UNQ_DESIGN_ID': this.commonService.nullToString(this.productiondetailsFrom.value.UNQ_DESIGN_ID),
+        'BRANCHCODE': this.commonService.nullToString(this.branchCode),
+        'VOCDATE': this.commonService.nullToString(this.productiondetailsFrom.value.VOCDATE),
+      }
+    }
+    this.commonService.showSnackBarMsg('MSG81447')//loading msg
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        this.commonService.closeSnackBarMsg()
+        if (result.dynamicData && result.dynamicData[0].length > 0) {
+          let data = result.dynamicData[0] || []
+          let strMsg: string = "";
+          for (let i = 0; i < data.length; i++) {
+            strMsg += data[i]["PCS"].ToString() + " PCS , " + data[i]["GRWT"].ToString() + " Weight in ";
+            strMsg += data[i]["WORKER_CODE"].ToString() + " Worker  On " + data[i]["PROCESS_CODE"].ToString() + " Process " + "\n";
+          }
+          this.commonService.toastInfoByMsgId(strMsg)
           this.FORM_VALIDATER = this.productiondetailsFrom.value
         } else {
           this.commonService.toastErrorByMsgId('MSG1747');
@@ -1006,17 +1041,19 @@ export class ProductionEntryDetailsComponent implements OnInit {
       "CONV_FACTOR": 0
     }
   }
-  // txtLossQty_Validating() {
-  //   if (this.emptyToZero(txtLossQty.Text.ToString()) > 0) {
-  //     txtLossPer.Text = ((this.emptyToZero(txtLossQty.Text.ToString()) / this.emptyToZero(txtMetal_Wt.Text.ToString())) * 100).ToString();
-  //   }
-  // }
-
-  // txtMetal_Wt_Validating() {
-  //   if (this.emptyToZero(txtLossQty.Text.ToString()) > 0) {
-  //     txtLossPer.Text = ((this.emptyToZero(txtLossQty.Text.ToString()) / this.emptyToZero(txtMetal_Wt.Text.ToString())) * 100).ToString();
-  //   }
-  // }
+  txtLossQty_Validating() {
+    this.calcualteLossPercentage()
+  }
+  calcualteLossPercentage() {
+    let form = this.productiondetailsFrom.value;
+    if (this.emptyToZero(form.LOSS_WT) > 0) {
+      let txtLossPer = this.commonService.lossPercentageCalculate(form.LOSS_WT, form.METAL_WT);
+      this.setFormDecimal('LOSS_PER', txtLossPer, 'AMOUNT')
+    }
+  }
+  txtMetal_Wt_Validating() {
+    this.calcualteLossPercentage()
+  }
   emptyToZero(value: any) {
     return this.commonService.emptyToZero(value)
   }

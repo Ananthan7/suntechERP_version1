@@ -158,6 +158,7 @@ export class MeltingIssueDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.branchCode = this.comService.branchCode;
+
     console.log(this.content)
     if (this.content && this.content.FLAG) {
       this.setInitialValue()
@@ -172,8 +173,9 @@ export class MeltingIssueDetailsComponent implements OnInit {
   }
   dataTochild(dataToChild?:any){
     console.log(this.content.HEADERDETAILS,'pick')
+    this.meltingIssuedetailsFrom.controls.voctype.setValue(this.content.voctype || this.content.HEADERDETAILS.voctype)
     this.meltingIssuedetailsFrom.controls.jobno.setValue(this.content.jobno || this.content.HEADERDETAILS.jobno);
-    this.meltingIssuedetailsFrom.controls.jobdes.setValue(this.content.jobdes || this.content.HEADERDETAILS.subJobDescription);
+    this.meltingIssuedetailsFrom.controls.jobdes.setValue(this.content.jobdes || this.content.HEADERDETAILS.jobdes);
     this.meltingIssuedetailsFrom.controls.jobpurity.setValue(this.content.jobpurity || this.content.HEADERDETAILS.jobpurity);
     this.meltingIssuedetailsFrom.controls.process.setValue(this.content.process || this.content.HEADERDETAILS.processcode);
     this.meltingIssuedetailsFrom.controls.processdes.setValue(this.content.processdes || this.content.HEADERDETAILS.processdes);
@@ -348,7 +350,7 @@ export class MeltingIssueDetailsComponent implements OnInit {
       "UNIQUEID": 0,
       "SRNO": 0,
       "DT_BRANCH_CODE": this.branchCode,
-      "DT_VOCTYPE": "",
+      "DT_VOCTYPE": this.comService.nullToString(form.voctype),
       "DT_VOCNO": 0,
       "DT_VOCDATE": this.comService.formatDateTime(this.currentDate),
       "DT_YEARMONTH": this.comService.yearSelected,
@@ -393,7 +395,7 @@ export class MeltingIssueDetailsComponent implements OnInit {
       "TICKET_NO": this.meltingIssuedetailsFrom.value.ticketno,
       "SILVER_PURITY": 0,
       "SILVER_PUREWT": 0,
-      "TOPURITY": this.meltingIssuedetailsFrom.value.topurity,
+      "TOPURITY": this.comService.nullToString(this.meltingIssuedetailsFrom.value.topurity),
       "PUR_PER": 0,
       "MELTING_TYPE": "",
       "ISALLOY": "s",
@@ -583,7 +585,7 @@ export class MeltingIssueDetailsComponent implements OnInit {
       "parameter": {
         strStockCode: event.target.value,
         strBranchCode: this.comService.nullToString(this.branchCode),
-        strVocType: this.content.HEADERDETAILS.VOCTYPE,
+        strVocType: this.content.HEADERDETAILS.voctype,
         strUserName: this.comService.nullToString(this.userName),
         strLocation: '',
         strPartyCode: '',
