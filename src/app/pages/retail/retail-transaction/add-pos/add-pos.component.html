@@ -417,7 +417,8 @@
         <div class="col-md-1 m-t-10 pt-2">
           <mat-form-field>
             <mat-label>{{ vocno_lbl }}</mat-label>
-            <input type="text" NumberOnly matInput formControlName="fcn_voc_no" [readonly]="voucherDetails?.LOCKVOUCHERNO||viewOnly" class="st_txt_right" />
+            <input type="text" NumberOnly matInput formControlName="fcn_voc_no"
+              [readonly]="voucherDetails?.LOCKVOUCHERNO||viewOnly" class="st_txt_right" />
           </mat-form-field>
         </div>
 
@@ -437,7 +438,8 @@
         <div class="col-md-1 m-t-10 pt-2">
           <mat-form-field>
             <mat-label>Cur. Rate</mat-label>
-            <input class="st_txt_right" type="text" matInput id="txtCurRate" SixDecimalInput formControlName="txtCurRate" [readonly]="
+            <input class="st_txt_right" type="text" matInput id="txtCurRate" SixDecimalInput
+              formControlName="txtCurRate" [readonly]="
                 viewOnly ||
                 this.vocDataForm.value.txtCurrency == this.comFunc.compCurrency
               " (change)="changeCurRate($event)" />
@@ -446,20 +448,13 @@
 
         <div class="col-md-2 m-t-10 pt-2">
 
-          <mat-form-field 
-          style="width: 100%">
-          <input matInput DateValidation
-              (dateChange)="formatDate($event)"
-              [matDatepicker]="dob"
-              [readonly]="viewOnly"
-              formControlName="vocdate"
-              [min]="voucherDetails?.BLOCKBACKDATEDENTRIES ? this.comFunc.currentDate : null"
-              [max]="voucherDetails?.BLOCKFUTUREDATE ? this.comFunc.currentDate : null"
-              placeholder="DD/MM/YYYY" />
-          <mat-datepicker-toggle matSuffix [for]="dob"
-              [disabled]="viewOnly"></mat-datepicker-toggle>
-          <mat-datepicker #dob></mat-datepicker>
-      </mat-form-field>
+          <mat-form-field style="width: 100%">
+            <input matInput DateValidation (dateChange)="formatDate($event)" [matDatepicker]="dob" [readonly]="viewOnly"
+              formControlName="vocdate" [min]="voucherDetails?.BLOCKBACKDATEDENTRIES ? this.comFunc.currentDate : null"
+              [max]="voucherDetails?.BLOCKFUTUREDATE ? this.comFunc.currentDate : null" placeholder="DD/MM/YYYY" />
+            <mat-datepicker-toggle matSuffix [for]="dob" [disabled]="viewOnly"></mat-datepicker-toggle>
+            <mat-datepicker #dob></mat-datepicker>
+          </mat-form-field>
 
 
           <!-- <mat-form-field>
@@ -700,26 +695,25 @@
         </form>
 
         <div class="text-right">
-          <!-- <button type="button" mat-flat-button color="primary" (click)="importSalesEstimation()">
+          <button type="button" mat-flat-button color="primary" (click)="importSalesEstimation()">
             Import Sales Estimation
-          </button> -->
+          </button>
 
           <button type="button" class="mx-2" mat-flat-button color="primary" (click)="importSalesOrder()">
             Import Sales Order
-          </button> 
+          </button>
 
           <button type="button" mat-flat-button color="primary" *ngIf="strUser=='SUNTECH'"
-          (click)="openParamterDetails()"
-          class="button-spacing">
-          Parameter Details 
+            (click)="openParamterDetails()" class="button-spacing">
+            Parameter Details
           </button>
-  
+
           <button type="button" mat-flat-button color="primary" [disabled]="viewOnly && transAttachmentList.length == 0"
-          (click)="openUserAttachmentModal()">
-          {{ !viewOnly ? 'Add Attachment' : 'View Attachment' }}
+            (click)="openUserAttachmentModal()">
+            {{ !viewOnly ? 'Add Attachment' : 'View Attachment' }}
           </button>
-  
-         
+
+
         </div>
 
         <div class="col-md-12 m-t-10" style="padding: 0px">
@@ -1170,15 +1164,8 @@
               <tr *ngFor="let krd of karatRateDetails; let id = index">
                 <td>{{ krd.KARAT_CODE }}</td>
                 <td style="text-align: right; padding-right: 3px">
-                  <input
-                    type="number"
-                    (change)="changeKaratRate($event, id)"
-                    style="text-align: right"
-                    onwheel="this.blur()"
-                    [value]="krd.KARAT_RATE"
-                    class="karat_code"
-                    readonly
-                  />
+                  <input type="number" (change)="changeKaratRate($event, id)" style="text-align: right"
+                    onwheel="this.blur()" [value]="krd.KARAT_RATE" class="karat_code" readonly />
                 </td>
                 <td style="text-align: right; padding-right: 3px">
                   {{ krd.POPKARAT_RATE }}
@@ -1186,77 +1173,47 @@
               </tr>
             </table>
           </div>
-        
+
           <div class="col-xl-12 col-md-6" style="width: 100%;">
             <table class="m-t-10 rhs-table-1" style="width: 100%;">
               <tr>
                 <td class="td-w-40">Item Total</td>
                 <td>
-                  <input
-                    type="text"
-                    class="form-control textboxcorner"
-                    id
-                    value="{{ prnt_inv_total_gross_amt | decimalFormat: 'AMOUNT' }}"
-                    aria-describedby
-                    [placeholder]="zeroAmtVal"
-                    readonly
-                  />
+                  <input type="text" class="form-control textboxcorner" id
+                    value="{{ prnt_inv_total_gross_amt | decimalFormat: 'AMOUNT' }}" aria-describedby
+                    [placeholder]="zeroAmtVal" readonly />
                 </td>
               </tr>
               <tr>
                 <td class="td-w-40">Tax Amount</td>
                 <td>
-                  <input
-                    type="text"
-                    class="form-control textboxcorner"
-                    id
-                    value="{{ this.order_items_total_tax | decimalFormat: 'AMOUNT' }}"
-                    aria-describedby
-                    [placeholder]="zeroAmtVal"
-                    readonly
-                  />
+                  <input type="text" class="form-control textboxcorner" id
+                    value="{{ this.order_items_total_tax | decimalFormat: 'AMOUNT' }}" aria-describedby
+                    [placeholder]="zeroAmtVal" readonly />
                 </td>
               </tr>
               <tr>
                 <td class="td-w-40">Gross Total</td>
                 <td>
-                  <input
-                    type="text"
-                    class="form-control textboxcorner"
-                    id
-                    value="{{ order_items_total_gross_amount | decimalFormat: 'AMOUNT' }}"
-                    aria-describedby
-                    [placeholder]="zeroAmtVal"
-                    readonly
-                  />
+                  <input type="text" class="form-control textboxcorner" id
+                    value="{{ order_items_total_gross_amount | decimalFormat: 'AMOUNT' }}" aria-describedby
+                    [placeholder]="zeroAmtVal" readonly />
                 </td>
               </tr>
               <tr>
                 <td class="td-w-40" style="background: #adacab">Sales Return</td>
                 <td>
-                  <input
-                    type="text"
-                    class="form-control textboxcorner"
-                    id
-                    value="{{ invReturnSalesTotalNetTotal | decimalFormat: 'AMOUNT' }}"
-                    aria-describedby
-                    [placeholder]="zeroAmtVal"
-                    readonly
-                  />
+                  <input type="text" class="form-control textboxcorner" id
+                    value="{{ invReturnSalesTotalNetTotal | decimalFormat: 'AMOUNT' }}" aria-describedby
+                    [placeholder]="zeroAmtVal" readonly />
                 </td>
               </tr>
               <tr>
                 <td class="td-w-40" style="background: #adacab">Exchange</td>
                 <td>
-                  <input
-                    type="text"
-                    class="form-control textboxcorner"
-                    id
-                    value="{{ order_total_exchange | decimalFormat: 'AMOUNT' }}"
-                    aria-describedby
-                    [placeholder]="zeroAmtVal"
-                    readonly
-                  />
+                  <input type="text" class="form-control textboxcorner" id
+                    value="{{ order_total_exchange | decimalFormat: 'AMOUNT' }}" aria-describedby
+                    [placeholder]="zeroAmtVal" readonly />
                 </td>
               </tr>
               <tr>
@@ -1264,18 +1221,11 @@
                   <b>Roundoff Discount</b>
                 </td>
                 <td>
-                  <input
-                    type="text"
-                    class="form-control textboxcorner"
-                    id="discountInput"
-                    [(ngModel)]="order_items_total_discount_amount"
-                    (focus)="clearField()"
+                  <input type="text" class="form-control textboxcorner" id="discountInput"
+                    [(ngModel)]="order_items_total_discount_amount" (focus)="clearField()"
                     (blur)="order_items_total_discount_amount = formatValue(order_items_total_discount_amount)"
-                    (change)="changeFinalDiscount($event)"
-                    aria-describedby="helpId"
-                    [placeholder]="zeroAmtVal"
-                    [readonly]="viewOnly || isNoDiscountAllowed"
-                  />
+                    (change)="changeFinalDiscount($event)" aria-describedby="helpId" [placeholder]="zeroAmtVal"
+                    [readonly]="viewOnly || isNoDiscountAllowed" />
                 </td>
               </tr>
               <tr>
@@ -1283,50 +1233,29 @@
                   <b>Net Amount</b>
                 </td>
                 <td>
-                  <input
-                    type="text"
-                    class="form-control textboxcorner"
-                    id
-                    value="{{ netTotal | decimalFormat: 'AMOUNT' }}"
-                    aria-describedby
-                    [placeholder]="zeroAmtVal"
-                    readonly
-                  />
+                  <input type="text" class="form-control textboxcorner" id
+                    value="{{ netTotal | decimalFormat: 'AMOUNT' }}" aria-describedby [placeholder]="zeroAmtVal"
+                    readonly />
                 </td>
               </tr>
-        
+
               <tr>
                 <td class="td-w-40" style="background-color: #1a61a9; color: #fff">
                   <b>Receipt Total</b>
                 </td>
                 <td>
-                  <input
-                    type="text"
-                    class="form-control textboxcorner"
-                    id
-                    [(ngModel)]="receiptTotalNetAmt"
-                    aria-describedby
-                    [placeholder]="zeroAmtVal"
-                    readonly
-                    AmountDecimalInput
-                  />
+                  <input type="text" class="form-control textboxcorner" id [(ngModel)]="receiptTotalNetAmt"
+                    aria-describedby [placeholder]="zeroAmtVal" readonly AmountDecimalInput />
                 </td>
               </tr>
-        
+
               <tr>
                 <td class="td-w-40" style="background-color: #1a61a9; color: #fff">
                   <b>VAT Round Off</b>
                 </td>
                 <td>
-                  <input
-                    type="text"
-                    class="form-control textboxcorner"
-                    id="vatroundoff"
-                    [(ngModel)]="vatRoundOffAmt"
-                    aria-describedby
-                    [placeholder]="zeroAmtVal"
-                    readonly
-                  />
+                  <input type="text" class="form-control textboxcorner" id="vatroundoff" [(ngModel)]="vatRoundOffAmt"
+                    aria-describedby [placeholder]="zeroAmtVal" readonly />
                 </td>
               </tr>
             </table>
@@ -1421,35 +1350,25 @@
     </button>
   </div>
   <div class="modal-body">
-    <dx-data-grid
-    [dataSource]="parameterDetails"
-    [showBorders]="true"
-    [showColumnLines]="true"
-    [showRowLines]="true"
-    [columnAutoWidth]="true"
-    [allowColumnResizing]="true"
-    [wordWrapEnabled]="true">
-  
-    <dxo-grouping [autoExpandAll]="false"></dxo-grouping>
-    <!-- <dxo-group-panel [visible]="true"></dxo-group-panel> -->
-  
-    <dxi-column 
-    dataField="PARAMETER" 
-    caption="Table" 
-    [groupIndex]="0" 
-    width="120px"
-    [calculateGroupValue]="customGroupValue">
-</dxi-column>
-<dxi-column dataField="PARAMETER_NAME" caption="Parameter"></dxi-column>
-<dxi-column dataField="VALUE" caption="Value"></dxi-column>
-<dxi-column dataField="USEAGE" caption="Usage" width="200px"></dxi-column>
+    <dx-data-grid [dataSource]="parameterDetails" [showBorders]="true" [showColumnLines]="true" [showRowLines]="true"
+      [columnAutoWidth]="true" [allowColumnResizing]="true" [wordWrapEnabled]="true">
 
-  
-    <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
-    <dxo-paging [pageSize]="5"></dxo-paging>
-  </dx-data-grid>
-  
-  
+      <dxo-grouping [autoExpandAll]="false"></dxo-grouping>
+      <!-- <dxo-group-panel [visible]="true"></dxo-group-panel> -->
+
+      <dxi-column dataField="PARAMETER" caption="Table" [groupIndex]="0" width="120px"
+        [calculateGroupValue]="customGroupValue">
+      </dxi-column>
+      <dxi-column dataField="PARAMETER_NAME" caption="Parameter"></dxi-column>
+      <dxi-column dataField="VALUE" caption="Value"></dxi-column>
+      <dxi-column dataField="USEAGE" caption="Usage" width="200px"></dxi-column>
+
+
+      <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+      <dxo-paging [pageSize]="5"></dxo-paging>
+    </dx-data-grid>
+
+
   </div>
 </ng-template>
 
@@ -1679,8 +1598,8 @@
               <div class="col-md-4">
                 <mat-form-field>
                   <mat-label>Amount</mat-label>
-                  <input type="text" class="st_txt_right" (change)="changeAdvanceAmount($event)" matInput formControlName="advanceAmount" id="advanceAmount"
-                    [readonly]="viewOnly" AmountDecimalInput />
+                  <input type="text" class="st_txt_right" (change)="changeAdvanceAmount($event)" matInput
+                    formControlName="advanceAmount" id="advanceAmount" [readonly]="viewOnly" AmountDecimalInput />
                   <mat-error *ngIf="
                       advanceReceiptForm.controls.advanceAmount.hasError(
                         'required'
@@ -1765,8 +1684,8 @@
         </form>
       </mat-tab>
 
-     
-      
+
+
 
       <mat-tab label="GIFT. VOC" [disabled]="!this.receiptModesList?.BTN_GIFT || viewOnly">
         <form [formGroup]="giftReceiptForm" novalidate>
@@ -1823,7 +1742,8 @@
                 <mat-form-field>
                   <mat-label>Amount</mat-label>
                   <input type="text" class="st_txt_right" matInput formControlName="giftAmtFC" id="giftAmtFC"
-                    [placeholder]="zeroAmtVal" (change)="changeGiftVoucherAmount($event)" [readonly]="viewOnly" AmountDecimalInput />
+                    [placeholder]="zeroAmtVal" (change)="changeGiftVoucherAmount($event)" [readonly]="viewOnly"
+                    AmountDecimalInput />
                   <mat-error *ngIf="
                       giftReceiptForm.controls.giftAmtFC.hasError('required')
                     ">
@@ -1901,7 +1821,7 @@
         </form>
       </mat-tab>
 
-      
+
       <mat-tab label="CURR SCH RED" [disabled]="!this.receiptModesList?.BTN_SCHEME || viewOnly">
         <form [formGroup]="schemeReceiptForm" novalidate>
           <div class="col-md-12" style="margin-top: 20px; margin-bottom: 20px">
@@ -1912,63 +1832,57 @@
                   <input type="text" formControlName="scheme_code" matInput />
                 </mat-form-field>
                 <div>
-                  <master-search [MasterSearchData]="SchemeMasterFindData" (newRowClick)="schemeCodeSelected($event)"></master-search>
+                  <master-search [MasterSearchData]="SchemeMasterFindData"
+                    (newRowClick)="schemeCodeSelected($event)"></master-search>
                 </div>
               </div>
-            
+
               <div class="col-md-6">
                 <mat-form-field style="width: 100%;">
-                  <mat-label>Scheme ID  </mat-label>
-                  <input
-                    type="text"
-                    class="st_txt_right"
-                    matInput
-                    formControlName="scheme_name"
-                    id="scheme_name"
-                    readonly
-                  />
+                  <mat-label>Scheme ID </mat-label>
+                  <input type="text" class="st_txt_right" matInput formControlName="scheme_name" id="scheme_name"
+                    readonly />
                 </mat-form-field>
               </div>
             </div>
-            
 
-              
-            </div>
+
+
+          </div>
           <div class="col-md-12" style="margin-top: 20px; margin-bottom: 20px">
-          <div class="form-group row">
-            <div class="col-md-6">
-              <mat-form-field>
-                <mat-label>Scheme No.</mat-label>
-                <input type="text" matInput formControlName="schemeNo" id="schemeNo"
-                 readonly />
-                <mat-error *ngIf="
+            <div class="form-group row">
+              <div class="col-md-6">
+                <mat-form-field>
+                  <mat-label>Scheme No.</mat-label>
+                  <input type="text" matInput formControlName="schemeNo" id="schemeNo" readonly />
+                  <mat-error *ngIf="
                 schemeReceiptForm.controls.schemeNo.hasError('required')
                   ">
-                  Scheme No. is <strong>required</strong>
-                </mat-error>
-              </mat-form-field>
-            </div>
-            <div class="col-md-6">
-              <mat-form-field>
-                <mat-label>Amount</mat-label>
-                <input type="text" class="st_txt_right" matInput formControlName="schemeAmtFC" id="schemeAmtFC"
-                  [placeholder]="zeroAmtVal"  readonly AmountDecimalInput />
-                <mat-error *ngIf="
+                    Scheme No. is <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-md-6">
+                <mat-form-field>
+                  <mat-label>Amount</mat-label>
+                  <input type="text" class="st_txt_right" matInput formControlName="schemeAmtFC" id="schemeAmtFC"
+                    [placeholder]="zeroAmtVal" readonly AmountDecimalInput />
+                  <mat-error *ngIf="
                 schemeReceiptForm.controls.schemeAmtFC.hasError('required')
                   ">
-                  Amount is <strong>required</strong>
-                </mat-error>
-                <mat-error *ngIf="schemeReceiptForm.controls.schemeAmtFC.hasError('min')">
-                  Amount is should be Greater than Zero
-                </mat-error>
-              </mat-form-field>
+                    Amount is <strong>required</strong>
+                  </mat-error>
+                  <mat-error *ngIf="schemeReceiptForm.controls.schemeAmtFC.hasError('min')">
+                    Amount is should be Greater than Zero
+                  </mat-error>
+                </mat-form-field>
+              </div>
             </div>
           </div>
-        </div>
-        
+
         </form>
       </mat-tab>
-      
+
     </mat-tab-group>
 
     <div style="padding-bottom: 20px">
@@ -1977,7 +1891,7 @@
           [disabled]="viewOnly || this.receiptDetailView" (click)="saveReceipt('Continue')">
           Continue
         </button>
-        <button mat-flat-button  *ngIf="!viewOnly" class="btn-m-r-10 bgColourUpdate"
+        <button mat-flat-button *ngIf="!viewOnly" class="btn-m-r-10 bgColourUpdate"
           [disabled]="viewOnly || this.receiptDetailView" (click)="saveReceipt()">
           Save
         </button>
@@ -2083,7 +1997,7 @@
                 <input type="text" [min]="0" [maxLength]="10" (keyup)="this.comFunc.enforceMinMax($event.target)"
                   [max]="this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_gross_wt)" class="st_txt_right"
                   matInput formControlName="fcn_exchange_stone_wt" (change)="changeExchangeStoneWt($event)"
-                  id="fcn_exchange_stone_wt"  StoneDecimalInput />
+                  id="fcn_exchange_stone_wt" StoneDecimalInput />
               </mat-form-field>
             </div>
             <div class="col-md-3">
@@ -2137,8 +2051,8 @@
               <mat-form-field>
                 <mat-label>Stone Rate</mat-label>
                 <input [min]="0" [maxLength]="14" (keyup)="this.comFunc.enforceMinMax($event.target)"
-                  class="st_txt_right" matInput  formControlName="fcn_exchange_stone_rate"
-                  id="fcn_exchange_stone_rate" (change)="changeExchangeStoneRate($event)" AmountDecimalInput />
+                  class="st_txt_right" matInput formControlName="fcn_exchange_stone_rate" id="fcn_exchange_stone_rate"
+                  (change)="changeExchangeStoneRate($event)" AmountDecimalInput />
               </mat-form-field>
             </div>
             <div class="col-md-3">
@@ -2183,9 +2097,9 @@
             <div class="col-md-3">
               <mat-form-field>
                 <mat-label>Net Amount</mat-label>
-                <input  type="text" AmountDecimalInput [max]="14" (keyup)="this.comFunc.enforceMinMax($event.target)"
+                <input type="text" AmountDecimalInput [max]="14" (keyup)="this.comFunc.enforceMinMax($event.target)"
                   class="st_txt_right" matInput formControlName="fcn_exchange_net_amount" [readonly]="true"
-                  (change)="changeExNetAmt($event)"  />
+                  (change)="changeExNetAmt($event)" />
               </mat-form-field>
             </div>
             <!-- <div class="row" *ngIf="enableJawahara">
@@ -2283,7 +2197,7 @@
     <div style="padding-bottom: 20px">
       <div style="text-align: right; padding: 10px">
         <button mat-flat-button color="accent" (click)="addItemtoExchange('continueBtn')" [disabled]="viewOnly">
-          Continue 
+          Continue
         </button>
         &nbsp;
         <button mat-flat-button color="primary" (click)="addItemtoExchange('saveBtn')" [disabled]="viewOnly">
@@ -2700,7 +2614,7 @@
               <mat-form-field dateFormat3>
                 <mat-label>Date Of Birth</mat-label>
                 <input matInput [matDatepicker]="dob" [max]="vocMaxDate" name="fcn_cust_detail_dob"
-                  formControlName="fcn_cust_detail_dob" placeholder="DD/MM/YYYY" [readonly]="viewOnly"  DateValidation/>
+                  formControlName="fcn_cust_detail_dob" placeholder="DD/MM/YYYY" [readonly]="viewOnly" DateValidation />
                 <mat-datepicker-toggle matSuffix [for]="dob"></mat-datepicker-toggle>
                 <mat-datepicker [startAt]="currentDate" #dob></mat-datepicker>
 
@@ -2914,7 +2828,7 @@
                 <mat-label>Expiry Date</mat-label>
                 <input matInput [matDatepicker]="expDateCust" name="fcn_customer_exp_date"
                   formControlName="fcn_customer_exp_date" placeholder="DD/MM/YYYY" [min]="currentDate"
-                  [readonly]="viewOnly" DateValidation/>
+                  [readonly]="viewOnly" DateValidation />
                 <mat-datepicker-toggle matSuffix [for]="expDateCust"></mat-datepicker-toggle>
                 <mat-datepicker [startAt]="currentDate" #expDateCust></mat-datepicker>
 
@@ -2974,7 +2888,7 @@
                   <!-- <mat-form-field style="width: 100%; display:inline-block !important;"> -->
                   <mat-form-field>
                     <mat-label>Division </mat-label>
-                    <input type="text" matInput formControlName="fcn_li_division" id="fcn_li_division"  />
+                    <input type="text" matInput formControlName="fcn_li_division" id="fcn_li_division" />
                   </mat-form-field>
                   <!-- <master-search [MasterSearchData]="divisionCodeData"
                         (newRowClick)="divisionCodeSelected($event)">>
@@ -2999,8 +2913,7 @@
                 <div class="col-md-2" *ngIf="this.lineItemForm.value.fcn_li_location">
                   <mat-form-field>
                     <mat-label>Location </mat-label>
-                    <input type="text" matInput formControlName="fcn_li_location" id="fcn_li_location"
-                      readonly />
+                    <input type="text" matInput formControlName="fcn_li_location" id="fcn_li_location" readonly />
                     <!-- BUG_01711 - Should be able to enter location.-->
                   </mat-form-field>
                 </div>
@@ -3026,7 +2939,8 @@
                       <mat-label>Pcs</mat-label>
                       <input class="st_txt_right" type="text" [min]="0" autocomplete="off" [maxLength]="14"
                         (keyup)="this.comFunc.enforceMinMax($event.target)" matInput id="fcn_li_pcs"
-                        formControlName="fcn_li_pcs"   (focus)="setValToLocalStorage($event, 'fcn_li_pcs')" (change)="changePCS($event)" [readonly]="viewOnly" NumberOnly />
+                        formControlName="fcn_li_pcs" (focus)="setValToLocalStorage($event, 'fcn_li_pcs')"
+                        (change)="changePCS($event)" [readonly]="viewOnly" NumberOnly />
                       <!-- <input class="st_txt_right" type="number" min="1" matInput formControlName="fcn_li_pcs"
                               (keyup)="changePCS($event)" (mouseup)="changePCS($event)" (mouseleave)="changePCS($event)"
                               value="{{li_pcs_val}}"> -->
@@ -3049,7 +2963,8 @@
                       <!-- <mat-label>{{newDictionary?.lblGrossWeight}}</mat-label> -->
                       <input class="st_txt_right" [maxLength]="14" type="text" [min]="0"
                         (keyup)="this.comFunc.enforceMinMax($event.target)" matInput formControlName="fcn_li_gross_wt"
-                        id="fcn_li_gross_wt" (focusout)="setGrossWtFocus()" (focus)="setValToLocalStorage($event, 'fcn_li_gwt')" (change)="changeGrossWt($event)"
+                        id="fcn_li_gross_wt" (focusout)="setGrossWtFocus()"
+                        (focus)="setValToLocalStorage($event, 'fcn_li_gwt')" (change)="changeGrossWt($event)"
                         [readonly]="viewOnly" MetalDecimalInput />
                       <mat-error *ngIf="
                           lineItemForm.controls.fcn_li_gross_wt.hasError(
@@ -3072,8 +2987,7 @@
                         }}</mat-label>
                       <input class="st_txt_right" type="text" [min]="0" [maxLength]="14"
                         (keyup)="this.comFunc.enforceMinMax($event.target)" matInput formControlName="fcn_li_stone_wt"
-                        id="fcn_li_stone_wt" (change)="changeStoneWt($event)" [readonly]="viewOnly"
-                        MetalDecimalInput />
+                        id="fcn_li_stone_wt" (change)="changeStoneWt($event)" [readonly]="viewOnly" MetalDecimalInput />
                     </mat-form-field>
                   </div>
                   <div class="col-md-3" *ngIf="this.divisionMS == 'S' ? false : true">
@@ -3549,24 +3463,24 @@
     <div style="padding-bottom: 0px">
       <div style="text-align: right; padding: 10px" *ngIf="!viewOnly">
         <button mat-flat-button class="next-item-button" *ngIf="!lineItemModalForSalesReturn"
-        (click)="addItemtoList('newitem_btn')" [disabled]="disableSaveBtn">
-        Continue
-      </button>&nbsp;
-      <button mat-flat-button class="update-finish-button" *ngIf="!lineItemModalForSalesReturn"
-      (click)="addItemtoList('finish_btn')" [disabled]="disableSaveBtn">
-      {{ updateBtn ? "Update" : "Save" }}
-      </button>&nbsp;
+          (click)="addItemtoList('newitem_btn')" [disabled]="disableSaveBtn">
+          Continue
+        </button>&nbsp;
+        <button mat-flat-button class="update-finish-button" *ngIf="!lineItemModalForSalesReturn"
+          (click)="addItemtoList('finish_btn')" [disabled]="disableSaveBtn">
+          {{ updateBtn ? "Update" : "Save" }}
+        </button>&nbsp;
 
         <button mat-flat-button class="update-finish-button" *ngIf="lineItemModalForSalesReturn"
-        (click)="updateRetailSalesReturnVal()" [disabled]="disableSaveBtn">
-        {{ updateBtn ? "Update" : "Save" }}
+          (click)="updateRetailSalesReturnVal()" [disabled]="disableSaveBtn">
+          {{ updateBtn ? "Update" : "Save" }}
         </button>&nbsp;
         <!-- <button class="btn btn btn-primary" *ngIf="updateBtn" (click)="addItemtoList('finish_btn')">
             Update
           </button>&nbsp; -->
-          <button mat-flat-button class="cancel-button" (click)="closeItemModal()">
-            Cancel
-          </button>&nbsp;
+        <button mat-flat-button class="cancel-button" (click)="closeItemModal()">
+          Cancel
+        </button>&nbsp;
         <!-- <button class="btn btn btn-dark" (click)="addItemtoList('newitem_btn')">
             Next Item</button>&nbsp;
           <button class="btn btn btn-primary" *ngIf="!updateBtn" (click)="addItemtoList('finish_btn')">
@@ -3751,29 +3665,12 @@
           </mat-form-field>
           <master-search [MasterSearchData]="branchCodeData" (newRowClick)="branchSelected($event)"></master-search>
         </div>
-        <!-- <div class="col-md-3">
-          <mat-form-field style="width: 100%">
-            <mat-label>Branch To</mat-label>
-            <input
-              type="text"
-              matInput
-              formControlName="branchTo"
-              [readonly]="viewOnly"
-              appNoEmptySpace
-            />
-            <mat-error
-              *ngIf="
-                pendingSalesOrderForm.controls.branchTo.hasError('required')
-              "
-            >
-              Branch To is <strong>required</strong>
-            </mat-error>
-          </mat-form-field>
-        </div> -->
+
         <div class="col-md-5">
           <mat-form-field style="width: 100%">
             <mat-label>Order No.</mat-label>
-            <input type="text" matInput formControlName="orderNo" [readonly]="viewOnly" class="st_txt_right" appNoEmptySpace />
+            <input type="text" matInput formControlName="orderNo" [readonly]="viewOnly" class="st_txt_right"
+              appNoEmptySpace />
             <mat-error *ngIf="
                 pendingSalesOrderForm.controls.orderNo.hasError('required')
               ">
@@ -3823,23 +3720,28 @@
 
     <div class="row mb-2">
       <div class="col-md-12">
-        <dx-data-grid #dataGrid id="pendingSalesOrdergrid" keyExpr="VOCNO" [dataSource]="pendingOrderList"
-          [showBorders]="true">
-          <dxo-paging [enabled]="false"></dxo-paging>
-          <dxo-editing mode="cell" [allowUpdating]="true"> </dxo-editing>
-          <dxi-column *ngFor="let data of pendingOrderColumnList"
-          [dataField]="data.field"
-          [caption]="data.title"
-          [alignment]="data.alignment"
-          [format]="data.format"
-          [allowEditing]="true">
-        </dxi-column>
+        <dx-data-grid id="gridContainer" [dataSource]="pendingOrderList" keyExpr="VOCNO" [showBorders]="true"
+          (onSelectionChanged)="onSelectionChanged($event)">
+
+          <dxo-selection mode="single"></dxo-selection>
+          <dxi-column dataField="VOCNO" [width]="80" caption="Order No" [allowEditing]="false" alignment="right">
+          </dxi-column>
+          <dxi-column dataField="VOCDATE" alignment="left" caption="Order Date" [allowEditing]="false">
+          </dxi-column>
+          <dxi-column dataField="DELIVERYDATE" alignment="left" caption="Delivery Date" [allowEditing]="false">
+          </dxi-column>
+          <dxi-column dataField="NETVALUE_CC" [format]="amountDecimalFormat" alignment="right" caption="Amount"
+            [allowEditing]="false">
+          </dxi-column>
+          <dxi-column dataField="POSCUSTCODE" alignment="right" caption="Customer Code" [allowEditing]="false">
+          </dxi-column>
         </dx-data-grid>
       </div>
     </div>
 
     <div class="text-right my-3">
-      <button class="mx-2" mat-flat-button color="primary" *ngIf="!viewOnly">
+      <button class="mx-2" mat-flat-button color="primary" (click)="onApply()"
+        [disabled]="!isRowSelected && pendingOrderList.length">
         Apply
       </button>
       <button mat-flat-button color="warn" (click)="modal.dismiss('Cross click')">
