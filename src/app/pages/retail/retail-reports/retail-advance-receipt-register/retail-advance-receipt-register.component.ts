@@ -51,11 +51,10 @@ export class RetailAdvanceReceiptRegisterComponent implements OnInit {
     this.retailAdvanceReceiptRegisterForm.controls.salesman.setValue(e.SALESPERSON_CODE);
     this.retailAdvanceReceiptRegisterForm.controls.salesmanCode.setValue(e.DESCRIPTION);
   }
-
+  dataToPass:any;
   private cssFilePath = '/assets/scss/scheme_register_pdf.scss';
   // private cssFilePath = 'assets/scheme_register_pdf.scss';
-  branchDivisionControls: any = '';
-  accumulatedData: Set<string> = new Set(); 
+  branchDivisionControls: any;
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -156,19 +155,48 @@ export class RetailAdvanceReceiptRegisterComponent implements OnInit {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
-  dataToPass:any;
+
   selectedData(data: any) {
-    this.dataToPass = data
-    let content = `Current Selected Branches: `+`\n`
-    data.forEach((element: any) => {
-      content += element.BRANCH_CODE ? `${element.BRANCH_CODE}, ` :
-                 element.DIVISION_CODE ? `${element.DIVISION_CODE}, ` :
-                 element.AREA_CODE ? `${element.AREA_CODE}, ` :
-                 element.CATEGORY_CODE ? `${element.CATEGORY_CODE}, ` : '';
-    });
+    console.log(data)
+    // let content= ``, content2 =``,  content3 =``, content4 =``
+    let content = `Current Selected Branches:  \n`
+    let content2 = `Current Selected Divisions:  \n`
+    let content3 = `Current Selected Area:  \n`
+    let content4 = `Current Selected B category:  \n`
+    if(data.BranchData){
+      // content = `Current Selected Branches:  \n`
+      data.BranchData.forEach((Bdata: any)=>{
+        content += Bdata.BRANCH_CODE ? `${Bdata.BRANCH_CODE}, ` : ''
+      }) 
+    }
+
+    if(data.DivisionData){
+      // content2 = `Current Selected Divisions:  \n`
+      data.DivisionData.forEach((Ddata: any)=>{
+        content2 += Ddata.DIVISION_CODE ? `${Ddata.DIVISION_CODE}, ` : ''
+      }) 
+    }
+
+    if(data.AreaData){
+      // content3 = `Current Selected Area:  \n`
+      data.AreaData.forEach((Adata: any)=>{
+        content3 += Adata.AREA_CODE ? `${Adata.AREA_CODE}, ` : ''
+      }) 
+    }
+
+    if(data.BusinessCategData){
+      // content4 = `Current Selected B category:  \n`
+      data.BusinessCategData.forEach((BCdata: any)=>{
+        content4 += BCdata.CATEGORY_CODE ? `${BCdata.CATEGORY_CODE}, ` : ''
+      }) 
+    }
+
     content = content.replace(/, $/, '');
-    console.log(content);
-    this.branchDivisionControls = content;
+    content2 = content2.replace(/, $/, '');
+    content3 = content3.replace(/, $/, '');
+    content4 = content4.replace(/, $/, '');
+    this.branchDivisionControls = content +'\n'+content2 +'\n'+ content3 +'\n'+ content4
+    // console.log(this.branchDivisionControls);
   }
   
 

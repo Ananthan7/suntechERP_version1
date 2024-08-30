@@ -147,7 +147,7 @@ export class ProcessTransferComponent implements OnInit {
               FLAG: this.commonService.nullToString(this.content.FLAG),
               JOB_PROCESS_TRN_DETAIL_DJ: item,
               // JOB_PROCESS_TRN_LABCHRG_DJ: data.JOB_PROCESS_TRN_LABCHRG_DJ?.filter((val: any) => item.UNIQUEID == val.REFMID),
-              JOB_PROCESS_TRN_COMP_DJ: data.JOB_PROCESS_TRN_COMP_DJ?.filter((val: any) => item.UNIQUEID == val.REFMID),
+              JOB_PROCESS_TRN_COMP_DJ: this.JOB_PROCESS_TRN_COMP_DJ?.filter((val: any) => item.JOB_NUMBER == val.JOB_NUMBER),
             })
             item.LOSS_QTY = this.commonService.decimalQuantityFormat(item.LOSS_QTY,'METAL')
           })
@@ -239,6 +239,7 @@ export class ProcessTransferComponent implements OnInit {
   onRowDblClickHandler(event: any) {
     let selectedData = event.data
     let detailRow = this.detailData.filter((item: any) => item.SRNO == selectedData.SRNO)
+    console.log(this.detailData, 'detailRow');
     console.log(detailRow, 'detailRow');
 
     this.openProcessTransferDetails(detailRow)

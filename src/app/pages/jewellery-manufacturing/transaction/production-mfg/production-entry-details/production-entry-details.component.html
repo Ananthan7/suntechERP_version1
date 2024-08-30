@@ -1,13 +1,16 @@
+
 <!-- header section starts -->
 <div class="card-content border-bottom d-flex justify-content-between p-2">
-  <h5 class="pos-modaltitle" id="modal-dia-metal">Production Entry Details</h5>
+  <h5 class="pos-modaltitle" id="modal-dia-metal">Production Entry
+    Details</h5>
   <button type="button" class="btn btn-close close-btn" (click)="close()">
     <i class="feather icon-x close-icon"></i>
   </button>
 </div>
 <!-- modal header component -->
 <modal-header (saveClick)="formSubmit('SAVE')" (cancelClick)="close()"
-  [isViewStock]="designType != 'METAL'" [isViewDelete]="false" (stockClick)="opennewdetails()"
+  [isViewStock]="designType != 'METAL'" [isViewDelete]="false"
+  (stockClick)="opennewdetails()"
   [isViewContinue]="true" (continueClick)="formSubmit('CONTINUE')">
 </modal-header>
 <div class="p-3">
@@ -30,7 +33,8 @@
           </div>
           <div class="col-sm-5">
             <mat-form-field appearance="outline" style="width: 100%;">
-              <input type="text" matInput readonly formControlName="JOB_DESCRIPTION" />
+              <input type="text" matInput readonly
+                formControlName="JOB_DESCRIPTION" />
             </mat-form-field>
           </div>
         </div>
@@ -39,7 +43,8 @@
             :</label>
           <div class="col-sm-3">
             <mat-form-field appearance="outline" style="width: 100%;">
-              <input type="text" readonly matInput formControlName="UNQ_JOB_ID" />
+              <input type="text" readonly matInput
+                formControlName="UNQ_JOB_ID" />
             </mat-form-field>
           </div>
           <div class="col-sm-5">
@@ -50,7 +55,8 @@
           </div>
         </div>
         <div class="row">
-          <label for="input" class="col-sm-3 col-form-label">Customer :</label>
+          <label for="input" class="col-sm-3 col-form-label">Customer
+            :</label>
           <div class="col-sm-3">
             <mat-form-field appearance="outline" style="width: 100%;">
               <input type="text" matInput formControlName="CUSTOMER_CODE"
@@ -64,7 +70,8 @@
           </div>
           <div class="col-sm-5">
             <mat-form-field appearance="outline" style="width: 100%;">
-              <input type="text" matInput readonly formControlName="CUSTOMER_DESC" />
+              <input type="text" matInput readonly
+                formControlName="CUSTOMER_DESC" />
             </mat-form-field>
           </div>
         </div>
@@ -74,12 +81,14 @@
           <label for="input" class="col-sm-3 col-form-label">Process :</label>
           <div class="col-sm-3">
             <mat-form-field appearance="outline" style="width: 100%;">
-              <input type="text" readonly matInput formControlName="PROCESS_CODE" />
+              <input type="text" readonly matInput
+                formControlName="PROCESS_CODE" />
             </mat-form-field>
           </div>
           <div class="col-sm-5">
             <mat-form-field appearance="outline" style="width: 100%;">
-              <input type="text" matInput readonly formControlName="PROCESS_NAME" />
+              <input type="text" matInput readonly
+                formControlName="PROCESS_NAME" />
             </mat-form-field>
           </div>
         </div>
@@ -87,12 +96,14 @@
           <label for="input" class="col-sm-3 col-form-label">Worker :</label>
           <div class="col-sm-3">
             <mat-form-field appearance="outline" style="width: 100%;">
-              <input type="text" matInput readonly formControlName="WORKER_CODE" />
+              <input type="text" matInput readonly
+                formControlName="WORKER_CODE" />
             </mat-form-field>
           </div>
           <div class="col-sm-5">
             <mat-form-field appearance="outline" style="width: 100%;">
-              <input type="text" matInput readonly formControlName="WORKER_NAME" />
+              <input type="text" matInput readonly
+                formControlName="WORKER_NAME" />
             </mat-form-field>
           </div>
         </div>
@@ -100,12 +111,14 @@
           <label for="input" class="col-sm-3 col-form-label">Parts :</label>
           <div class="col-sm-3">
             <mat-form-field appearance="outline" style="width: 100%;">
-              <input type="text" matInput readonly formControlName="PART_CODE" />
+              <input type="text" matInput readonly
+                formControlName="PART_CODE" />
             </mat-form-field>
           </div>
           <div class="col-sm-5">
             <mat-form-field appearance="outline" style="width: 100%;">
-              <input type="text" readonly matInput formControlName="partsName" />
+              <input type="text" readonly matInput
+                formControlName="partsName" />
             </mat-form-field>
           </div>
         </div>
@@ -141,7 +154,7 @@
               <div class="col-sm-2">
                 <mat-form-field appearance="outline" style="width: 100%;">
                   <input type="text" matInput formControlName="totalpcs"
-                  readonly class="text-right" />
+                    readonly class="text-right" />
                 </mat-form-field>
               </div>
             </div>
@@ -183,7 +196,7 @@
               <div class="col-sm-2">
                 <mat-form-field appearance="outline" style="width: 100%;">
                   <input type="text" matInput MetalDecimalInput [max]="13"
-                    class="text-right"
+                    class="text-right" readonly
                     formControlName="GROSS_WT" />
                 </mat-form-field>
               </div>
@@ -193,14 +206,15 @@
                 <mat-form-field appearance="outline" style="width: 100%;">
                   <input type="text" matInput maxlength="24"
                     class="text-right" formControlName="STONE_PCS"
-                    NumberOnly />
+                    readonly />
                 </mat-form-field>
               </div>
               <label for="input" class="col-sm-2 col-form-label">Time Taken
                 :</label>
               <div class="col-sm-2">
                 <mat-form-field appearance="outline" style="width: 100%;">
-                  <input type="text" matInput formControlName="timetaken" readonly />
+                  <input type="text" matInput formControlName="timetaken"
+                    readonly />
                 </mat-form-field>
               </div>
             </div>
@@ -210,7 +224,7 @@
               <div class="col-sm-2">
                 <mat-form-field appearance="outline" style="width: 100%;">
                   <input type="text" matInput [max]="13" class="text-right"
-                    formControlName="METAL_WT"
+                    formControlName="METAL_WT" readonly
                     MetalDecimalInput />
                 </mat-form-field>
               </div>
@@ -220,7 +234,7 @@
                 <mat-form-field appearance="outline" style="width: 100%;">
                   <input type="text" matInput class="text-right"
                     formControlName="STONE_WT" [max]="13"
-                    SixDecimalInput />
+                    readonly />
                 </mat-form-field>
               </div>
               <label for="input" class="col-sm-2 col-form-label">Price 1
@@ -256,7 +270,8 @@
                 :</label>
               <div class="col-sm-2">
                 <mat-form-field appearance="outline" style="width: 100%;">
-                  <input type="text" matInput formControlName="otherstone" />
+                  <input type="text" matInput formControlName="otherstone"
+                    readonly />
                 </mat-form-field>
               </div>
               <label for="input" class="col-sm-2 col-form-label">Price 2
@@ -359,7 +374,7 @@
               <div class="col-sm-2">
                 <mat-form-field appearance="outline" style="width: 100%;">
                   <input type="text" matInput SixDecimalInput [max]="13"
-                    class="text-right"
+                    class="text-right" readonly
                     formControlName="Job_Purity" />
                 </mat-form-field>
               </div>
@@ -384,7 +399,7 @@
                 <mat-form-field appearance="outline" style="width: 100%;">
                   <input type="text" matInput [max]="13" class="text-right"
                     formControlName="PURE_WT"
-                    SixDecimalInput />
+                    readonly />
                 </mat-form-field>
               </div>
               <label for="input" class="col-sm-2 col-form-label">Start Date
@@ -408,7 +423,7 @@
                 <mat-form-field appearance="outline" style="width: 100%;">
                   <input type="text" matInput [max]="13" class="text-right"
                     formControlName="PurityDiff"
-                    SixDecimalInput />
+                    readonly />
                 </mat-form-field>
               </div>
               <label for="input" class="col-sm-2 col-form-label">End Date
@@ -442,14 +457,15 @@
               <div class="col-sm-3">
                 <mat-form-field appearance="outline" style="width: 100%;">
                   <input type="number" matInput formControlName="prodpcs"
-                    NumberOnly class="text-right" readonly/>
+                    NumberOnly class="text-right" readonly />
                 </mat-form-field>
               </div>
               <label for="input" class="col-sm-3 col-form-label">Pnd Pcs
                 :</label>
               <div class="col-sm-3">
                 <mat-form-field appearance="outline" style="width: 100%;">
-                  <input type="number" matInput formControlName="pndpcs" readonly
+                  <input type="number" matInput formControlName="pndpcs"
+                    readonly
                     NumberOnly class="text-right" />
                 </mat-form-field>
               </div>
@@ -459,14 +475,16 @@
                 :</label>
               <div class="col-sm-4">
                 <mat-form-field appearance="outline" style="width: 100%;">
-                  <input type="text" matInput formControlName="lossone" readonly/>
+                  <input type="text" matInput formControlName="lossone"
+                    readonly />
                 </mat-form-field>
               </div>
             </div>
             <div class="row justify-content-end">
               <div class="col-sm-4">
                 <mat-form-field appearance="outline" style="width: 100%;">
-                  <input type="text" matInput formControlName="LOSS_WT" readonly/>
+                  <input type="text" matInput formControlName="LOSS_WT"
+                    readonly />
                 </mat-form-field>
               </div>
             </div>

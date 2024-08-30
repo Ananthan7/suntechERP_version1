@@ -41,6 +41,8 @@ export class StoneCostUpdationComponent implements OnInit {
   @Input() content!: any;
   isSaved: boolean = false;
   isloading: boolean = false;
+  viewMode: boolean = false;
+  editMode: boolean = false;
 
   private subscriptions: Subscription[] = [];
 
@@ -62,7 +64,20 @@ export class StoneCostUpdationComponent implements OnInit {
     this.stonecostupdationFrom.controls.voctype.setValue(this.commonService.getqueryParamVocType())
     //  this.setCompanyCurrency()
     //   this.basesetCompanyCurrency()
-    this.setvalues()
+    if (this.content?.FLAG) {
+      this.setvalues();
+      this.setAllInitialValues()
+      if (this.content.FLAG == 'EDIT') {
+        this.editMode = true
+       
+      } else if (this.content.FLAG == 'VIEW') {
+        this.viewMode = true;
+        this.isSaved = true;
+      } else if (this.content.FLAG == 'DELETE') {
+        this.viewMode = true;
+        this.deleteRecord()
+      }
+    }
   }
 
 
@@ -92,21 +107,21 @@ export class StoneCostUpdationComponent implements OnInit {
     vocno: ['', [Validators.required]],
     stockcodediv: [''],
     stockcode: [''],
-    stockcodedes: [''],
-    itemcurrency: [''],
-    itemcurrency_rate: [''],
-    basecurrency: [''],
-    basecurrency_rate: [''],
+    stockcodedes: ['', [Validators.required]],
+    itemcurrency: ['', [Validators.required]],
+    itemcurrency_rate: ['', [Validators.required]],
+    basecurrency: ['', [Validators.required]],
+    basecurrency_rate: ['', [Validators.required]],
     currentrate_FC: [''],
     currentrate_LC: [''],
     newrate_FC: [''],
     newrate_LC: [''],
-    shape: [''],
+    shape: ['', [Validators.required]],
     size: [''],
-    sieve: [''],
+    sieve: ['', [Validators.required]],
     color: [''],
     clarity: [''],
-    sieve_set: [''],
+    sieve_set: ['', [Validators.required]],
     remarks: [''],
     valueTarget: [''],
     text: [false],
@@ -404,6 +419,14 @@ export class StoneCostUpdationComponent implements OnInit {
       this.commonService.toastErrorByMsgId('MSG1937')//"vocno cannot be empty"
       return true
     }
+    else if (this.commonService.nullToString(form.shape) == '') {
+      this.commonService.toastErrorByMsgId('MSG1796')//"vocno cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.clarity) == '') {
+      this.commonService.toastErrorByMsgId('MSG1118')//"vocno cannot be empty"
+      return true
+    }
 
     return false;
   }
@@ -496,8 +519,7 @@ export class StoneCostUpdationComponent implements OnInit {
   }
 
   deleteRecord() {
-    if (this.content && this.content.FLAG == 'VIEW') return
-    if (!this.content.VOCTYPE) {
+    if (!this.content.VOCNO) {
       Swal.fire({
         title: '',
         text: 'Please Select data to delete!',
@@ -520,7 +542,9 @@ export class StoneCostUpdationComponent implements OnInit {
       confirmButtonText: 'Yes, delete!'
     }).then((result) => {
       if (result.isConfirmed) {
-        let API = 'JobStoneRecostDJ/DeleteJobStoneRecostDJ/' + this.branchCode + this.stonecostupdationFrom.value.voctype + this.stonecostupdationFrom.value.vocno + this.yearMonth;
+        let API = 'JobStoneRecostDJ/DeleteJobStoneRecostDJ/' +
+          this.content.BRANCH_CODE + '/' + this.content.VOCTYPE + '/' +
+          this.content.VOCNO + '/' + this.content.YEARMONTH;
         let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
           .subscribe((result) => {
             if (result) {
@@ -534,7 +558,6 @@ export class StoneCostUpdationComponent implements OnInit {
                 }).then((result: any) => {
                   if (result.value) {
                     this.stonecostupdationFrom.reset()
-                    this.tableData = []
                     this.close('reloadMainGrid')
                   }
                 });
@@ -548,7 +571,6 @@ export class StoneCostUpdationComponent implements OnInit {
                 }).then((result: any) => {
                   if (result.value) {
                     this.stonecostupdationFrom.reset()
-                    this.tableData = []
                     this.close()
                   }
                 });
@@ -561,7 +583,63 @@ export class StoneCostUpdationComponent implements OnInit {
       }
     });
   }
+  setAllInitialValues() {
+    console.log(this.content)
+    if (!this.content) return
+    let form = this.stonecostupdationFrom
+    let API = 'JobStoneRecostDJ/GetJobStoneRecostDJDetailList/' + this.content.BRANCH_CODE + '/' + this.content.VOCTYPE + '/' +
+      this.content.VOCNO + '/' + this.content.YEARMONTH;
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        if (result.response) {
+          let data = result.response
+          // this.metalReturnDetailsData = data.Details
+          // data.Details.forEach((element: any) => {
+          //   this.tableData.push({
+          //     SRNO: element.SRNO,
+          //     Job_id: element.JOB_NUMBER,
+          //     Unq_job_id: element.UNQ_JOB_ID,
+          //     Process: element.PROCESS_CODE,
+          //     Design: element.DESIGN_CODE,
+          //     Stock_Code: element.STOCK_CODE,
+          //     Worker: element.WORKER_CODE,
+          //     Description: element.JOB_DESCRIPTION,
+          //     Carat: element.KARAT_CODE,
+          //     Rate: element.RATE_TYPE,
+          //     Division: element.DIVCODE,
+          //     Amount: element.NET_WT,
+          //   })
+          // });
+          this.stonecostupdationFrom.controls.voctype.setValue(data.VOCTYPE)
+          this.stonecostupdationFrom.controls.vocno.setValue(data.VOCNO)
+          this.stonecostupdationFrom.controls.vocdate.setValue(data.VOCDATE)
+          this.stonecostupdationFrom.controls.stockcodediv.setValue(data.REMARKS)
+          this.stonecostupdationFrom.controls.stockcode.setValue(data.STOCK_CODE)
+          this.stonecostupdationFrom.controls.stockcodedes.setValue(data.STOCK_CODE)
+          this.stonecostupdationFrom.controls.itemcurrency.setValue(data.CURRENCY_CODE)
+          this.stonecostupdationFrom.controls.itemcurrency_rate.setValue(data.CURRENCY_RATE)
+          this.stonecostupdationFrom.controls.basecurrency.setValue(data.BASE_CURRENCY)
+          this.stonecostupdationFrom.controls.basecurrency_rate.setValue(data.BASE_CURR_RATE)
+          this.stonecostupdationFrom.controls.currentrate_FC.setValue(data.RATEFC)
+          this.stonecostupdationFrom.controls.currentrate_LC.setValue(data.RATELC)
+          this.stonecostupdationFrom.controls.newrate_FC.setValue(data.NEW_RATEFC)
+          this.stonecostupdationFrom.controls.newrate_LC.setValue(data.NEW_RATELC)
+          this.stonecostupdationFrom.controls.shape.setValue(data.SHAPE)
+          this.stonecostupdationFrom.controls.size.setValue(data.SIZE)
+          this.stonecostupdationFrom.controls.sieve.setValue(data.SIEVE)
+          this.stonecostupdationFrom.controls.color.setValue(data.COLOR)
+          this.stonecostupdationFrom.controls.clarity.setValue(data.CLARITY)
+          this.stonecostupdationFrom.controls.sieve_set.setValue(data.SIEVE_SET)
 
+        } else {
+          this.commonService.toastErrorByMsgId('MSG1531')
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
+
+  }
   // lookupKeyPress(event: KeyboardEvent) {
   //   if (event.key === 'Enter') {
   //     event.preventDefault();

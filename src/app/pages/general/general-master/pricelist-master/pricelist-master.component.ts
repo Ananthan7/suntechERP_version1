@@ -319,12 +319,19 @@ export class PricelistMasterComponent implements OnInit {
     };
   }
   validateForm() {
-    if (this.priceListMasterForm.invalid) {
+    const pricecodeControl = this.priceListMasterForm.controls.priceCode;
+    const descriptionControl = this.priceListMasterForm.controls.description;
+    const pricetypeControl = this.priceListMasterForm.controls.priceMethod;
+    const priceValueControl = this.priceListMasterForm.controls.priceValue;
+  
+    if (pricecodeControl.invalid || descriptionControl.invalid || pricetypeControl.invalid || priceValueControl.invalid) {
       this.toastr.error('Select all required fields');
       return false;
     }
+    
     return true;
   }
+  
 
   handleApiResponse(result: any) {
     if (result.response) {

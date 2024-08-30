@@ -1,10 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { Subscription } from 'rxjs';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
+import { ProductionEntryDetailsComponent } from '../production-entry-details/production-entry-details.component';
 
 @Component({
   selector: 'app-production-stock-detail',
@@ -182,7 +183,8 @@ export class ProductionStockDetailComponent implements OnInit {
     return this.commonService.getCompanyParamValue(param) || ''
   }
   weightPcsCalculate(weight:any,pcs:any){
-    return this.emptyToZero(weight)>0 ? this.emptyToZero(weight) / pcs : 0
+    let wt = this.emptyToZero(weight)>0 ? this.emptyToZero(weight) / pcs : 0
+    return this.commonService.setCommaSerperatedNumber(wt,'METAL')
   }
   setStockCodeGrid() {
     let nTotPcs = this.emptyToZero(this.DETAILSCREEN_DATA.JOB_PCS)
@@ -557,6 +559,10 @@ export class ProductionStockDetailComponent implements OnInit {
 
       })
     this.subscriptions.push(Sub)
+  }
+
+  onDragStarted() {
+    this.close()
   }
 
   ngOnDestroy() {
