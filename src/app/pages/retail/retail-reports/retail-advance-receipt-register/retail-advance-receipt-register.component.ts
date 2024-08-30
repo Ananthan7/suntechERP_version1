@@ -22,7 +22,7 @@ export class RetailAdvanceReceiptRegisterComponent implements OnInit {
   // selected = 'all';
   selectedBranchCode = this.branchCode
   selected: string = 'all'; 
-  selectedReport:string ='preview'
+ 
   public modeselect = this.branchCode;
   retailAdvanceReceiptRegisterForm: FormGroup = this.formBuilder.group({
     branch : [''],
