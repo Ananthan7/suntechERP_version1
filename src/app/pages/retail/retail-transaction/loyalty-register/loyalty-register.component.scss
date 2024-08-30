@@ -3,3 +3,21 @@
     padding: 3px 20px !important;
     border-radius: 5px !important;
   }
+
+.branchDivisionelectr{
+  position: absolute;
+    // top: 0px;
+    // margin-left: -0.3rem !important;
+}
+
+::ng-deep .mat-tooltip.custom-tooltip {
+  background-color: #151414;
+  color: #fff;
+  font-size: 14px;
+  border-radius: 4px;
+  // padding: 8px;
+  font-family: Arial, sans-serif;
+  white-space: pre-wrap;
+  word-break: break-all;
+  line-height: 1.5;
+}

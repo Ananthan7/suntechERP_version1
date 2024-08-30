@@ -78,7 +78,7 @@ export class RetailReportsComponent implements OnInit {
     }
 
     const modalRef: NgbModalRef = this.modalService.open(this.componentSelected, {
-      size: 'lg',
+      size: 'xl',
       backdrop: 'static',
       keyboard: false,
       // windowClass: 'modal-full-width',

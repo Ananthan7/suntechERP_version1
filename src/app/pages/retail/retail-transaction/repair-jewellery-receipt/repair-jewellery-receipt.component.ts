@@ -64,6 +64,9 @@ export class RepairJewelleryReceiptComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+
+    
+    
     if (this.content?.MID != null) this.getArgsData();
     else this.generateVocNo();
 
@@ -269,9 +272,16 @@ export class RepairJewelleryReceiptComponent implements OnInit {
             this.snackBar.dismiss();
 
             this.repairDetailsData = result.response.Details;
-            this.repairjewelleryreceiptFrom.controls["repairAmt"].setValue(
-              this.repairDetailsData[0].AMOUNT
-            );
+
+            const calculateTotalAmount = (data: any[]): number =>  {
+              return data.reduce((total, item) => {
+                return total + Number(item.AMOUNT);
+              }, 0);
+            }
+
+            let amount  = calculateTotalAmount(this.repairDetailsData)
+            
+            this.repairjewelleryreceiptFrom.controls["repairAmt"].setValue(amount);
           });
       });
   }
@@ -635,8 +645,7 @@ export class RepairJewelleryReceiptComponent implements OnInit {
     }
 
     console.log("Updated repairDetailsData", this.repairDetailsData);
-    // this.repairjewelleryreceiptFrom.controls.repairAmt.setValue(this.repairDetailsData[0].AMOUNT);
-    var add_value = 0;
+    let add_value = 0;
     this.repairDetailsData.forEach(value => {
       console.log(value.AMOUNT);
       add_value = Number(add_value)+Number(value.AMOUNT)
@@ -653,7 +662,48 @@ export class RepairJewelleryReceiptComponent implements OnInit {
     });
   }
 
-  removeLineItemsGrid(e: any) {
+  AmountUpdating(e: any, method: string) {
+    const srnoToProcess = e.data.SRNO;
+    const indexToProcess = this.repairDetailsData.findIndex(
+      (item: any) => item.SRNO.toString() === srnoToProcess.toString()
+    );
+  
+    switch (method) {
+      case 'add':
+        if (indexToProcess !== -1) {
+          const amountToAdd = this.repairDetailsData[indexToProcess].AMOUNT;
+          const currentAmt = this.repairjewelleryreceiptFrom.controls.repairAmt.value || 0;
+          const newAmt = Number(currentAmt) + Number(amountToAdd);
+          console.log("Added amount:", newAmt);
+  
+          this.repairjewelleryreceiptFrom.controls.repairAmt.setValue(newAmt);
+        }
+        break;
+  
+      case 'sub':
+        if (indexToProcess !== -1) {
+          const amountToSubtract = this.repairDetailsData[indexToProcess].AMOUNT;
+          const currentAmt = this.repairjewelleryreceiptFrom.controls.repairAmt.value || 0;
+          const newAmt = Number(currentAmt) - Number(amountToSubtract);
+          console.log("Subtracted amount:", newAmt);
+  
+          this.repairjewelleryreceiptFrom.controls.repairAmt.setValue(newAmt);
+  
+          this.repairDetailsData.splice(indexToProcess, 1);
+        }
+        break;
+  
+      default:
+        break;
+    }
+  }
+
+  removeLineItemsGrid(e: any) { 
+
+    this.AmountUpdating(e, 'sub')
+    this.updateFormValuesAndSRNO();
+
+
     console.log(e.data);
     const values: any = [];
     values.push(e.data.SRNO);

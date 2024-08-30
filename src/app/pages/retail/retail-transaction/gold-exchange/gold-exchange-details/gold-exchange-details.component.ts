@@ -196,6 +196,7 @@ export class GoldExchangeDetailsComponent implements OnInit {
         this.standardPurity = resp.response[0].PURITY;
         this.minPurity = resp.response[0].PURITY_FROM;
         this.maxPurity = resp.response[0].PURITY_TO;
+        this.ounceWeightFactor = resp.response[0].CONV_FACTOR_OZ
       })
   }
 
@@ -1319,14 +1320,18 @@ export class GoldExchangeDetailsComponent implements OnInit {
       return
     }
 
-    if (
-      this.enableUnitFields &&
-      (!this.goldExchangeDetailsForm.value.unitValue || this.comService.emptyToZero(this.goldExchangeDetailsForm.value.unitValue) === 0) ||
-      (!this.goldExchangeDetailsForm.value.pieces || this.comService.emptyToZero(this.goldExchangeDetailsForm.value.pieces) === 0)
-    ) {
-      this.toastr.error('Select all required fields');
-      return;
+    if (this.enableUnitFields) {
+      if (
+        !this.goldExchangeDetailsForm.value.unitValue || 
+        this.comService.emptyToZero(this.goldExchangeDetailsForm.value.unitValue) === 0 ||
+        !this.goldExchangeDetailsForm.value.pieces || 
+        this.comService.emptyToZero(this.goldExchangeDetailsForm.value.pieces) === 0
+      ) {
+        this.toastr.error('Select all required fields');
+        return;
+      }
     }
+    
 
 
     const nextSrno = this.exchangeDetails?.maxSrno ? this.exchangeDetails.maxSrno + 1 : 1;
