@@ -9,6 +9,7 @@ export class ReportToControlComponent implements OnInit {
   selectedReport:string ='preview'
   reportTo: any;
   @Output() selectedvalue = new EventEmitter();
+
   constructor() { }
 
   ngOnInit(): void {
@@ -17,4 +18,5 @@ export class ReportToControlComponent implements OnInit {
   onSelectionChange(event: any){
     this.selectedvalue.emit(event)
   }
+  
 }

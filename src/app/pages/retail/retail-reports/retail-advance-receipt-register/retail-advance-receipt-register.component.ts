@@ -79,20 +79,6 @@ export class RetailAdvanceReceiptRegisterComponent implements OnInit {
       });
   }
 
-  setValueFromCommon(event: any){
-    this.retailAdvanceReceiptRegisterForm.controls.reportTo.setValue(event.value);
-    console.log(this.retailAdvanceReceiptRegisterForm.controls.reportTo.value)
-  }
-  setDateValue(event: any){
-    if(event.FromDate){
-      console.log(event.FromDate.value)
-    }
-    else if(event.ToDate){
-      console.log(event.ToDate.value)
-      this.toDateValitation()
-    }
-  }
-
   toDateValitation(){
     if (this.retailAdvanceReceiptRegisterForm.value.fromDate > this.retailAdvanceReceiptRegisterForm.value.toDate) {
       alert('To Date cannot be less than From Date');
@@ -211,8 +197,23 @@ export class RetailAdvanceReceiptRegisterComponent implements OnInit {
     content4 = content4.replace(/, $/, '');
     this.branchDivisionControls = content +'\n'+content2 +'\n'+ content3 +'\n'+ content4
     // console.log(this.branchDivisionControls);
+    this.retailAdvanceReceiptRegisterForm.controls.branch.setValue(this.branchDivisionControls);
   }
-  
+  setValueFromCommon(event: any){
+    this.retailAdvanceReceiptRegisterForm.controls.reportTo.setValue(event.value);
+    console.log(this.retailAdvanceReceiptRegisterForm.controls.reportTo.value)
+  }
+  setDateValue(event: any){
+    if(event.FromDate){
+      this.retailAdvanceReceiptRegisterForm.controls.fromDate.setValue(event.FromDate);
+      console.log(event.FromDate)
+    }
+    else if(event.ToDate){
+      this.retailAdvanceReceiptRegisterForm.controls.toDate.setValue(event.ToDate);
+      console.log(this.retailAdvanceReceiptRegisterForm)
+      this.toDateValitation()
+    }
+  }
 
 
 }

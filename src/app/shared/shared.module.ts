@@ -96,6 +96,7 @@ import { BranchDivisionComponent } from './common/branch-division/branch-divisio
 import { NegativeAmountDecimalDirective } from './directives/format-negative-amount-decimal.directive';
 import { ReportToControlComponent } from './common/report-to-control/report-to-control.component';
 import { DateComponent } from './common/date/date.component';
+import { AsOnDateComponent } from './common/as-on-date/as-on-date.component';
 
 
 @NgModule({
@@ -144,7 +145,8 @@ import { DateComponent } from './common/date/date.component';
     DatetimePickerComponent,
     BranchDivisionComponent,
     ReportToControlComponent,
-    DateComponent
+    DateComponent,
+    AsOnDateComponent
   ],
   imports: [
     CommonModule,
@@ -281,7 +283,7 @@ import { DateComponent } from './common/date/date.component';
     MatRadioModule, MatCardModule,
     OverlayPanelModule, DragDropModule,
     MatTableModule, CalendarModule,
-    BranchDivisionComponent, ReportToControlComponent,DateComponent
+    BranchDivisionComponent, ReportToControlComponent,DateComponent, AsOnDateComponent
   ],
   providers: [NgbActiveModal, { provide: DateAdapter, useClass: DateFormat }]
 })

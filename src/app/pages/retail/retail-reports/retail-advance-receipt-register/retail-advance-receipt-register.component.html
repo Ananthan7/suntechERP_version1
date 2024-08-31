@@ -15,9 +15,9 @@
             <div class="col-md-12">
                 <div class="row">
                     <label for="inputPassword" class="col-sm-2 col-form-label" id="ID001">Branch</label>
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
-                            <input matInput="text" name="branch" formControlName="branch"  autocomplete="off"/>
+                            <input matInput="text" name="branch"   autocomplete="off"/>
                             <app-branch-division (newRowClick)="selectedData($event)" class="branchDivisionelectr"
                             [matTooltip]="branchDivisionControls"  matTooltipClass="custom-tooltip"  [existingData]="dataToPass" 
                             matTooltipPosition="above"></app-branch-division>
@@ -25,7 +25,7 @@
                     </div>
 
                     <label for="inputPassword" class="col-sm-2 col-form-label" id="ID002">Show</label>
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
                             <mat-select [(value)]="selected" formControlName="show">
                                 <mat-option value="all">ALL</mat-option>
@@ -46,7 +46,7 @@
                 
                 <div class="row">
                     <app-date (selectedDate)="setDateValue($event)"></app-date>
-                    <label for="inputPassword" class="col-sm-2 col-form-label" id="ID003">Date</label>
+                    <!-- <label for="inputPassword" class="col-sm-2 col-form-label" id="ID003">Date</label>
                     <div class="col-md-3">
                         <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
                             <input matInput [matDatepicker]="fromDate" name="fromDate" [max]="currentDate"
@@ -64,12 +64,12 @@
                             <mat-datepicker-toggle matSuffix [for]="toDate"></mat-datepicker-toggle>
                             <mat-datepicker [startAt]="currentDate" #toDate></mat-datepicker>
                         </mat-form-field>
-                    </div>
+                    </div> -->
                 </div>
                
                 <div class="row mt-1 ">
                     <label for="inputPassword" class="col-sm-2 col-form-label" id="ID005">Salesman</label>
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
                             <input matInput="text" formControlName="salesman" />
                             <master-search [MasterSearchData]="salesmanCodeData" class="masterSearch"
@@ -77,7 +77,7 @@
                         </mat-form-field>
                     </div>
 
-                    <div class="col-md-5">
+                    <div class="col-md-4">
                         <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
                             <input matInput="text" formControlName="salesmanCode" />
                         </mat-form-field>
