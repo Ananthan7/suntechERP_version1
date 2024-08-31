@@ -338,11 +338,11 @@
                   </master-search>
                 </mat-form-field>
               </div>
-              <label for="input" class="col-sm-2 col-form-label">Vender Ref
+              <label for="input" class="col-sm-2 col-form-label">Vendor Ref
                 :</label>
               <div class="col-sm-2">
                 <mat-form-field appearance="outline" style="width: 100%;">
-                  <input type="text" matInput formControlName="VenderRef" />
+                  <input type="text" matInput formControlName="VendorRef" />
                 </mat-form-field>
               </div>
               <label for="input" class="col-sm-2 col-form-label">Price 4
@@ -856,6 +856,26 @@
     </mat-tab-group>
   </form>
 </div>
+<ng-template #pendingProcessModal let-modal modal-lg>
+  <div class="card-content border-bottom d-flex justify-content-between p-2">
+    <h5>Process Details</h5>
+    <button type="button" class="btn btn-close close-btn"
+      (click)="modal.dismiss('Cross click')">
+      <i class="feather icon-x close-icon"></i>
+    </button>
+  </div>
+  <div class="row p-2">
+    <dx-data-grid id="gridContainer" [columnAutoWidth]="true"
+      [allowColumnResizing]="true" [showBorders]="true"
+      [showRowLines]="true"
+      [dataSource]="pendingProcess">
+      <dxo-filter-row [visible]="true"></dxo-filter-row>
+      <dxo-selection mode="single"></dxo-selection>
+      <dxi-column width="auto" caption="Multiple Process Pending" dataField="PROCESS">
+      </dxi-column>
+    </dx-data-grid>
+  </div>
+</ng-template>
 <ng-template #productionStockDetailScreen>
   <app-production-stock-detail [content]="dataToDetailScreen"
     (saveDetail)="setValuesToHeaderGrid($event)"

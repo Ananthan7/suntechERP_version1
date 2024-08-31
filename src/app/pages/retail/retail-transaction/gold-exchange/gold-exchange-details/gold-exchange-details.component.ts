@@ -35,6 +35,7 @@ export class GoldExchangeDetailsComponent implements OnInit {
   viewOnly: boolean = false;
   standardPureWeight: any;
   ounceWeightFactor: any;
+  unitValueCode = 0;
   minPurity = 0;
   maxPurity = 0;
   enableUnitFields: boolean = false;
@@ -148,8 +149,6 @@ export class GoldExchangeDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.clearLocalStorageValues();
-    console.log(this.comService.getComboFilterByID('MC Unit'));
-    const a = this.comService.getComboFilterByID('MC Unit');
 
     this.partyCurrency = this.partyCurrencyParam?.partyCurrency ?? this.queryParams.partyCurrency;
 
@@ -245,7 +244,7 @@ export class GoldExchangeDetailsComponent implements OnInit {
         this.minPurity = _data.PURITY_FROM;
         this.maxPurity = _data.PURITY_TO;
         this.ounceWeightFactor = _data.CONV_FACTOR_OZ
-
+        this.unitValueCode = _data.UNIT_CODE;
         this.setUnitCode(_data.UNIT_CODE);
 
         const stoneCondition = this.comService.stringToBoolean(_data.INCLUDE_STONE);
@@ -1264,9 +1263,9 @@ export class GoldExchangeDetailsComponent implements OnInit {
       this.goldExchangeDetailsForm.controls.ozWeight.setValue(this.comService.decimalQuantityFormat(
         this.comService.emptyToZero(this.exchangeDetails.OZWT), 'AMOUNT'));
 
-
-      this.goldExchangeDetailsForm.controls.unitValue.setValue(this.comService.decimalQuantityFormat(
-        this.comService.emptyToZero(this.exchangeDetails.MKG_RATEFC), 'AMOUNT'));
+      // this.goldExchangeDetailsForm.controls.unitCode.setValue(this.exchangeDetails.MCUNIT);
+      this.setUnitCode(this.exchangeDetails.MCUNIT);
+      this.goldExchangeDetailsForm.controls.unitValue.setValue(this.comService.emptyToZero(this.exchangeDetails.MCLENGTH));
       this.goldExchangeDetailsForm.controls.unitRate.setValue(this.comService.decimalQuantityFormat(
         this.comService.emptyToZero(this.exchangeDetails.MKGVALUEFC), 'AMOUNT'));
       this.goldExchangeDetailsForm.controls.unitAmount.setValue(this.comService.decimalQuantityFormat(
@@ -1322,16 +1321,16 @@ export class GoldExchangeDetailsComponent implements OnInit {
 
     if (this.enableUnitFields) {
       if (
-        !this.goldExchangeDetailsForm.value.unitValue || 
+        !this.goldExchangeDetailsForm.value.unitValue ||
         this.comService.emptyToZero(this.goldExchangeDetailsForm.value.unitValue) === 0 ||
-        !this.goldExchangeDetailsForm.value.pieces || 
+        !this.goldExchangeDetailsForm.value.pieces ||
         this.comService.emptyToZero(this.goldExchangeDetailsForm.value.pieces) === 0
       ) {
         this.toastr.error('Select all required fields');
         return;
       }
     }
-    
+
 
 
     const nextSrno = this.exchangeDetails?.maxSrno ? this.exchangeDetails.maxSrno + 1 : 1;
@@ -1381,8 +1380,8 @@ export class GoldExchangeDetailsComponent implements OnInit {
       "WASTAGEAMOUNTFC": this.goldExchangeDetailsForm.value.wastageAmount,
       "WASTAGEAMOUNTCC": 0,
       "MKGMTLNETRATE": 0,
-      "MCLENGTH": 0,
-      "MCUNIT": 0,
+      "MCLENGTH": this.goldExchangeDetailsForm.value.unitValue,
+      "MCUNIT": this.unitValueCode,
       "SORDER_REF": "",
       "BARCODEDQTY": 0,
       "RUBY_WT": 0,
@@ -1639,8 +1638,8 @@ export class GoldExchangeDetailsComponent implements OnInit {
       "WASTAGEAMOUNTFC": this.goldExchangeDetailsForm.value.wastageAmount,
       "WASTAGEAMOUNTCC": 0,
       "MKGMTLNETRATE": 0,
-      "MCLENGTH": 0,
-      "MCUNIT": 0,
+      "MCLENGTH": this.goldExchangeDetailsForm.value.unitValue,
+      "MCUNIT": this.unitValueCode,
       "SORDER_REF": "",
       "BARCODEDQTY": 0,
       "RUBY_WT": 0,

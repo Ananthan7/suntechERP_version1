@@ -79,6 +79,11 @@ export class RetailAdvanceReceiptRegisterComponent implements OnInit {
       });
   }
 
+  setValueFromCommon(event: any){
+    this.retailAdvanceReceiptRegisterForm.controls.reportTo.setValue(event.value);
+    console.log(this.retailAdvanceReceiptRegisterForm.controls.reportTo.value)
+  }
+
   toDateValitation(){
     if (this.retailAdvanceReceiptRegisterForm.value.fromDate > this.retailAdvanceReceiptRegisterForm.value.toDate) {
       alert('To Date cannot be less than From Date');

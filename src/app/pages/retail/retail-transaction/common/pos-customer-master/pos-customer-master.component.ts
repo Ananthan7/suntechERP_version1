@@ -345,9 +345,17 @@ export class PosCustomerMasterComponent implements OnInit {
   }
 
   getDropDownData() {
-    this.maritalStatusList = this.comService.getComboFilterByID('Marital Status');
-    this.genderList = this.comService.getComboFilterByID('gender');
-    console.log(this.genderList);
+
+    this.maritalStatusList = this.comService.getComboFilterByID('Marital Status').filter((value: any, index: any, self: any) =>
+      index === self.findIndex((t: any) => t.ENGLISH === value.ENGLISH)
+    );
+    this.genderList = this.comService.getComboFilterByID('gender').filter((value: any, index: any, self: any) =>
+      index === self.findIndex((t: any) => t.ENGLISH === value.ENGLISH)
+    );
+
+    // this.maritalStatusList = this.comService.getComboFilterByID('Marital Status');
+    // this.genderList = this.comService.getComboFilterByID('gender');
+    // console.log(this.genderList);
 
   }
 
@@ -485,7 +493,7 @@ export class PosCustomerMasterComponent implements OnInit {
           MARITAL_ST:
             this.customerDetailForm.value.fcn_cust_detail_marital_status ||
             // this.customerDetails?.MARITAL_ST ||
-            'Unknown',
+            '',
           WED_DATE: this.customerDetails?.WED_DATE || this.dummyDate,
           SPOUSE_NAME: this.customerDetails?.SPOUSE_NAME || '',
           REMARKS: this.customerDetails?.REMARKS || '',
@@ -1121,18 +1129,40 @@ export class PosCustomerMasterComponent implements OnInit {
   }
 
   private _filterMasters(
-    arrName: any,
+    arrName: any[],
     value: string,
     optVal1: any,
     optVal2: any = null
   ): any[] {
     const filterValue = (value || '').toLowerCase();
-    return arrName.filter(
-      (option: any) =>
+    const uniqueCodes = new Set(); 
+  
+    return arrName.filter((option: any) => {
+      const matches =
         option[optVal1].toLowerCase().includes(filterValue) ||
-        option[optVal2].toLowerCase().includes(filterValue)
-    );
+        (optVal2 && option[optVal2].toLowerCase().includes(filterValue));
+  
+      if (matches && !uniqueCodes.has(option[optVal1])) {
+        uniqueCodes.add(option[optVal1]); 
+        return true; 
+      }
+      return false;
+    });
   }
+
+  // private _filterMasters(
+  //   arrName: any,
+  //   value: string,
+  //   optVal1: any,
+  //   optVal2: any = null
+  // ): any[] {
+  //   const filterValue = (value || '').toLowerCase();
+  //   return arrName.filter(
+  //     (option: any) =>
+  //       option[optVal1].toLowerCase().includes(filterValue) ||
+  //       option[optVal2].toLowerCase().includes(filterValue)
+  //   );
+  // }
 
 
   addValidationsForForms(form: FormGroup, ctrlName: any, validations: any) {
