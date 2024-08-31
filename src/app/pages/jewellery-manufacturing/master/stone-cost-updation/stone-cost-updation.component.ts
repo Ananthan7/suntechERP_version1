@@ -61,25 +61,41 @@ export class StoneCostUpdationComponent implements OnInit {
   ngOnInit(): void {
     this.branchCode = this.commonService.branchCode;
     this.yearMonth = this.commonService.yearSelected;
-    this.stonecostupdationFrom.controls.voctype.setValue(this.commonService.getqueryParamVocType())
-    //  this.setCompanyCurrency()
-    //   this.basesetCompanyCurrency()
+    // this.stonecostupdationFrom.controls.voctype.setValue(this.commonService.getqueryParamVocType())
+     this.setCompanyCurrency()
+      this.basesetCompanyCurrency()
     if (this.content?.FLAG) {
-      this.setvalues();
-      this.setAllInitialValues()
-      if (this.content.FLAG == 'EDIT') {
-        this.editMode = true
-       
-      } else if (this.content.FLAG == 'VIEW') {
+      if (this.content.FLAG == 'VIEW' || this.content.FLAG == 'DELETE') {
         this.viewMode = true;
+        this.LOCKVOUCHERNO = true;
         this.isSaved = true;
-      } else if (this.content.FLAG == 'DELETE') {
-        this.viewMode = true;
+      }
+      if (this.content.FLAG == 'EDIT') {
+        this.LOCKVOUCHERNO = true;
+        this.editMode = true
+      }
+      this.isSaved = true;
+      if (this.content.FLAG == 'DELETE') {
         this.deleteRecord()
       }
+      this.stonecostupdationFrom.controls.FLAG.setValue(this.content.FLAG)
+      this.setAllInitialValues()
+    } else {
+      this.generateVocNo()
+      this.setNewFormValues()
+      this.setvoucherTypeMaster()
     }
   }
-
+  minDate: any;
+  maxDate: any;
+  LOCKVOUCHERNO: boolean = true;
+  setvoucherTypeMaster() {
+    let frm = this.stonecostupdationFrom.value
+    const vocTypeMaster = this.comService.getVoctypeMasterByVocTypeMain(frm.BRANCH_CODE, frm.VOCTYPE, frm.MAIN_VOCTYPE)
+    this.LOCKVOUCHERNO = vocTypeMaster.LOCKVOUCHERNO
+    this.minDate = vocTypeMaster.BLOCKBACKDATEDENTRIES ? new Date() : null;
+    this.maxDate = vocTypeMaster.BLOCKFUTUREDATE ? new Date() : null;
+  }
 
   setInitialValues() {
     this.branchCode = this.commonService.branchCode;
@@ -125,17 +141,32 @@ export class StoneCostUpdationComponent implements OnInit {
     remarks: [''],
     valueTarget: [''],
     text: [false],
+    YEARMONTH: [''],
+    BRANCH_CODE: [''],
+    MAIN_VOCTYPE: [''],
+    FLAG:['']
+
   });
 
-  setvalues() {
-    this.stonecostupdationFrom.controls.voctype.setValue(this.commonService.getqueryParamVocType())
-    this.stonecostupdationFrom.controls.vocno.setValue(this.commonService.popMetalValueOnNet)
-    this.stonecostupdationFrom.controls.vocdate.setValue(this.commonService.currentDate)
-    this.stonecostupdationFrom.controls.itemcurrency.setValue(this.commonService.compCurrency)
-    // this.stonecostupdationFrom.controls.itemcurrency_rate.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
-    this.stonecostupdationFrom.controls.basecurrency.setValue(this.commonService.compCurrency)
-    // this.stonecostupdationFrom.controls.basecurrency_rate.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
+  // setvalues() {
+  //   this.stonecostupdationFrom.controls.voctype.setValue(this.commonService.getqueryParamVocType())
+  //   this.stonecostupdationFrom.controls.vocno.setValue(this.commonService.popMetalValueOnNet)
+  //   this.stonecostupdationFrom.controls.vocdate.setValue(this.commonService.currentDate)
+  //   this.stonecostupdationFrom.controls.itemcurrency.setValue(this.commonService.compCurrency)
+  //   // this.stonecostupdationFrom.controls.itemcurrency_rate.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
+  //   this.stonecostupdationFrom.controls.basecurrency.setValue(this.commonService.compCurrency)
+  //   // this.stonecostupdationFrom.controls.basecurrency_rate.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
 
+  // }
+  setNewFormValues() {
+    this.stonecostupdationFrom.controls.voctype.setValue(this.comService.getqueryParamVocType())
+    this.stonecostupdationFrom.controls.vocdate.setValue(this.comService.currentDate)
+    this.stonecostupdationFrom.controls.YEARMONTH.setValue(this.comService.yearSelected)
+    this.stonecostupdationFrom.controls.BRANCH_CODE.setValue(this.comService.branchCode)
+    this.stonecostupdationFrom.controls.MAIN_VOCTYPE.setValue(
+      this.comService.getqueryParamMainVocType()
+    )
+    this.setvoucherTypeMaster()
   }
 
   stockCodeData: MasterSearchModel = {
@@ -728,6 +759,41 @@ export class StoneCostUpdationComponent implements OnInit {
       this.subscriptions.forEach(subscription => subscription.unsubscribe());// unsubscribe all subscription
       this.subscriptions = []; // Clear the array
     }
+  }
+  ValidatingVocNo() {
+    if (this.content?.FLAG == 'VIEW') return
+    this.comService.showSnackBarMsg('MSG81447');
+    let API = `ValidatingVocNo/${this.comService.getqueryParamMainVocType()}/${this.stonecostupdationFrom.value.vocno}`
+    API += `/${this.comService.branchCode}/${this.comService.getqueryParamVocType()}`
+    API += `/${this.comService.yearSelected}`
+    this.isloading = true;
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        this.isloading = false;
+        this.comService.closeSnackBarMsg()
+        let data = this.comService.arrayEmptyObjectToString(result.dynamicData[0])
+        if (data && data[0]?.RESULT == 0) {
+          this.comService.toastErrorByMsgId('MSG2284')//Voucher Number Already Exists
+
+          this.generateVocNo()
+          return
+        }
+      }, err => {
+        this.isloading = false;
+        this.generateVocNo()
+        this.comService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+
+      })
+    this.subscriptions.push(Sub)
+  }
+  generateVocNo() {
+    const API = `GenerateNewVoucherNumber/GenerateNewVocNum/${this.comService.getqueryParamVocType()}/${this.comService.branchCode}/${this.comService.yearSelected}/${this.comService.formatYYMMDD(this.currentDate)}`;
+    this.dataService.getDynamicAPI(API)
+      .subscribe((resp) => {
+        if (resp.status == "Success") {
+          this.stonecostupdationFrom.controls.vocno.setValue(resp.newvocno);
+        }
+      });
   }
 
 }

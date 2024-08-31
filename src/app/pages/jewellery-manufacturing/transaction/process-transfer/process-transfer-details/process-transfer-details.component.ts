@@ -87,11 +87,11 @@ export class ProcessTransferDetailsComponent implements OnInit {
     SEARCH_FIELD: '',
     SEARCH_HEADING: 'Stock code search',
     SEARCH_VALUE: '',
-    WHERECONDITION: `@JobNumber='',@BranchCode='${this.commonService.branchCode}',
-    @StockCodeScrap=''`,
+    WHERECONDITION: `@JobNumber='',@BranchCode='${this.commonService.branchCode}',@StockCodeScrap=''`,
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
+    FRONTENDFILTER: true
   }
   metalScrapStockCode: MasterSearchModel = {
     PAGENO: 1,
@@ -453,6 +453,9 @@ export class ProcessTransferDetailsComponent implements OnInit {
       this.setFormNullToString('TO_PCS', parentDetail.TO_PCS)
       this.setFormNullToString('FRM_STONE_PCS', parentDetail.FRM_STONE_PCS)
       this.setFormNullToString('TO_STONE_PCS', parentDetail.TO_STONE_PCS)
+      this.setFormNullToString('variance', PROCESS_FORMDETAILS.variance)
+      this.setFormNullToString('variancePercentage', PROCESS_FORMDETAILS.variancePercentage)
+    
       this.setFormDecimal('FRM_METAL_WT', parentDetail.FRM_METAL_WT, 'METAL')
       this.setFormDecimal('TO_METAL_WT', parentDetail.TO_METAL_WT, 'METAL')
       this.setFormDecimal('GrossWeightFrom', parentDetail.FRM_DIAGROSS_WT, 'METAL') //dbt
@@ -496,7 +499,8 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.processTransferdetailsForm.controls.enddate.setValue(
       this.commonService.formatDateTime(parentDetail.OUT_DATE)
     )
-
+   
+    this.Calc_TimeDiff()
     this.stockCodeScrapValidate()
     this.onloadCalculations()// for calculating loss details
     this.getImageData()
@@ -661,8 +665,8 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.metalScrapStockCode.WHERECONDITION += `PURITY = '${this.processTransferdetailsForm.value.PURITY}'`
   }
   stockCodeSearchWhereCondition() {
-    this.stockCodeSearch.WHERECONDITION = `@JobNumber='${this.processTransferdetailsForm.value.JOB_NUMBER}',
-    @BranchCode='${this.commonService.branchCode}',@StockCodeScrap='${this.processTransferdetailsForm.value.stockCode}'`
+    this.stockCodeSearch.WHERECONDITION = `@JobNumber='${this.processTransferdetailsForm.value.JOB_NUMBER}',`
+    this.stockCodeSearch.WHERECONDITION += `@BranchCode='${this.commonService.branchCode}',@StockCodeScrap='${this.processTransferdetailsForm.value.stockCode}'`
   }
   metalScrapStockWhereCondition() {
     let strCondition = ''
@@ -1150,6 +1154,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
         'StockCodeScrap': this.commonService.nullToString(form.stockCode)
       }
     }
+    this.commonService.showSnackBarMsg('MSG81447')
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
       .subscribe((result) => {
         this.commonService.closeSnackBarMsg()

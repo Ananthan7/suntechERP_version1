@@ -12,6 +12,8 @@ import { FestivalSalesComparisonComponent } from './festival-sales-comparison/fe
 import { PosTargetDashboardComponent } from './pos-target-dashboard/pos-target-dashboard.component';
 import { RepairEnquiryComponent } from './repair-enquiry/repair-enquiry.component';
 import { RepairRegisterComponent } from './repair-register/repair-register.component';
+import { LoyaltyRegisterComponent } from './loyalty-register/loyalty-register.component';
+import { PosSalesmanCommissionComponent } from './pos-salesman-commission/pos-salesman-commission.component';
 @Component({
   selector: 'app-retail-reports',
   templateUrl: './retail-reports.component.html',
@@ -63,8 +65,11 @@ export class RetailReportsComponent implements OnInit {
       'FestivalSalesComparisonComponent': FestivalSalesComparisonComponent,
       'PosTargetDashboardComponent': PosTargetDashboardComponent, 
       'RepairEnquiryComponent': RepairEnquiryComponent, 
-      'RepairRegisterComponent': RepairRegisterComponent, 
+      'RepairRegisterComponent': RepairRegisterComponent,
 
+
+      'LoyaltyRegisterComponent': LoyaltyRegisterComponent,
+      'PosSalesmanCommissionComponent': PosSalesmanCommissionComponent
       
       
       
@@ -78,7 +83,7 @@ export class RetailReportsComponent implements OnInit {
     }
 
     const modalRef: NgbModalRef = this.modalService.open(this.componentSelected, {
-      size: 'lg',
+      size: 'xl',
       backdrop: 'static',
       keyboard: false,
       // windowClass: 'modal-full-width',

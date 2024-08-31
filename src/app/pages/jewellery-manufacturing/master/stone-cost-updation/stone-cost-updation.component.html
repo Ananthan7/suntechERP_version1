@@ -24,7 +24,8 @@
                                 <div class="position-relative d-flex">
                                     <mat-form-field appearance="outline">
                                         <input type="text" matInput
-                                            formControlName="voctype" [readonly]="viewMode" />
+                                            formControlName="voctype"
+                                            [readonly]="viewMode" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -40,10 +41,13 @@
                                         [max]="vocdate"
                                         formControlName="vocdate"
                                         placeholder="DD/MM/YYYY"
-                                        DateValidation  [readonly]="viewMode"/>
+                                        [min]="minDate"
+                                        [max]="maxDate"
+                                        DateValidation [readonly]="viewMode" />
                                     <mat-datepicker-toggle matSuffix
                                         [for]="vocdate"></mat-datepicker-toggle>
-                                    <mat-datepicker [startAt]="currentDate" [disabled]="isSaved"
+                                    <mat-datepicker [startAt]="currentDate"
+                                        [disabled]="isSaved"
                                         #vocdate></mat-datepicker>
                                 </mat-form-field>
                             </div>
@@ -57,7 +61,9 @@
                                     appearance="outline">
                                     <input type="number" matInput
                                         formControlName="vocno"
-                                        style="text-align: right;" [readonly]="viewMode"/>
+                                        (focusout)="ValidatingVocNo()"
+                                        [readonly]="LOCKVOUCHERNO"
+                                        style="text-align: right;" />
                                 </mat-form-field>
                             </div>
                         </div>

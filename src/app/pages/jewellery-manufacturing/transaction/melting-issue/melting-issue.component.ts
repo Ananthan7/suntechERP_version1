@@ -182,7 +182,7 @@ export class MeltingIssueComponent implements OnInit {
     MID: [0],
     Karat:[''],
     voctype: ['', [Validators.required]],
-    vocdate: ['', [Validators.required]],
+    vocdate: [''],
     MAIN_VOCTYPE: [''],
     UNQ_JOB_ID: [''],
   });
@@ -323,7 +323,7 @@ export class MeltingIssueComponent implements OnInit {
           this.meltingIssueFrom.controls.color.setValue(data.COLOR)
           this.meltingIssueFrom.controls.meltingtype.setValue(data.MELTING_TYPE)
           this.meltingIssueFrom.controls.jobpurity.setValue(data.PURITY)
-          this.meltingIssueFrom.controls.StockDescription.setValue(data.STOCK_DESCRIPTION)
+          // this.meltingIssueFrom.controls.StockDescription.setValue(data.STOCK_DESCRIPTION)
 
           this.meltingISsueDetailsData = data.Details
           console.log(this.meltingISsueDetailsData,'data')
@@ -470,8 +470,8 @@ export class MeltingIssueComponent implements OnInit {
   MeltingCodeSelected(e: any) {
     console.log(e);
 
-    // this.meltingIssueFrom.controls.meltingtype.setValue(e['Melting Type']);
-    this.meltingIssueFrom.controls.meltingtype.setValue(e.MELTYPE_CODE);
+    this.meltingIssueFrom.controls.meltingtype.setValue(e['Melting Type']);
+    // this.meltingIssueFrom.controls.meltingtype.setValue(e.MELTYPE_CODE);
     this.meltingIssueFrom.controls.Karat.setValue(e.KARAT_CODE)
     this.meltingTypeValidate()
   }
@@ -675,10 +675,6 @@ export class MeltingIssueComponent implements OnInit {
       this.commonService.toastErrorByMsgId('MSG1939')
       return true;
     }
-    if (this.commonService.nullToString(form.vocdate) == '') {
-      this.commonService.toastErrorByMsgId('VocDate is Required')
-      return true;
-    }
     if (this.commonService.nullToString(form.jobno) == '') {
       this.commonService.toastErrorByMsgId("MSG3783")
       return true;
@@ -766,7 +762,7 @@ export class MeltingIssueComponent implements OnInit {
       "BRANCH_CODE": this.commonService.nullToString(this.meltingIssueFrom.value.BRANCH_CODE),
       "VOCTYPE": this.commonService.nullToString(this.meltingIssueFrom.value.voctype),
       "VOCNO": this.comService.emptyToZero(form.VOCNO),
-      "VOCDATE": this.meltingIssueFrom.value.vocdate,
+      "VOCDATE":this.comService.formatDateTime(form.vocdate),
       "YEARMONTH": this.commonService.nullToString(this.meltingIssueFrom.value.YEARMONTH),
       "NAVSEQNO": 0,
       "WORKER_CODE": this.meltingIssueFrom.value.worker,
@@ -1020,6 +1016,7 @@ export class MeltingIssueComponent implements OnInit {
   
   setJobNumberWhereCondition() {
     let form = this.meltingIssueFrom.value;
+    console.log(form.Karat,'jobnumber')
     this.jobnoCodeData.WHERECONDITION = `@StrJob_Number='${this.commonService.nullToString(form.jobno)}',`
     this.jobnoCodeData.WHERECONDITION += `@StrMeltingTypeKarat='${this.commonService.nullToString(form.Karat)}',`
     this.jobnoCodeData.WHERECONDITION += `@StrBranch='${this.commonService.nullToString(this.comService.branchCode)}',`
@@ -1141,6 +1138,7 @@ export class MeltingIssueComponent implements OnInit {
         this.commonService.closeSnackBarMsg();
         if (result.response) {
           const data = result.response;
+          console.log(data,'data')
           this.meltingIssueFrom.controls.color.setValue(data.COLOR);
           this.meltingIssueFrom.controls.jobpurity.setValue(data.PURITY);
           this.meltingIssueFrom.controls.Karat.setValue(data.KARAT_CODE)//KARAT_CODE

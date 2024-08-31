@@ -22,7 +22,7 @@ export class RetailAdvanceReceiptRegisterComponent implements OnInit {
   // selected = 'all';
   selectedBranchCode = this.branchCode
   selected: string = 'all'; 
-  selectedReport:string ='preview'
+ 
   public modeselect = this.branchCode;
   retailAdvanceReceiptRegisterForm: FormGroup = this.formBuilder.group({
     branch : [''],
@@ -77,6 +77,11 @@ export class RetailAdvanceReceiptRegisterComponent implements OnInit {
         }
        
       });
+  }
+
+  setValueFromCommon(event: any){
+    this.retailAdvanceReceiptRegisterForm.controls.reportTo.setValue(event.value);
+    console.log(this.retailAdvanceReceiptRegisterForm.controls.reportTo.value)
   }
 
   toDateValitation(){
