@@ -1,20 +1,20 @@
 <div class="row">
-     <label for="inputPassword" class="col-sm-2 col-form-label" id="ID003">Date</label>
-     <div class="col-md-3">
-        <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
-            <input matInput [matDatepicker]="fromDate" name="fromDate" [max]="currentDate"
-                placeholder="DD/MM/YYYY" DateValidation formControlName="fromDate" (dateChange)="fromDateChange($event)" />
-            <mat-datepicker-toggle matSuffix [for]="fromDate"></mat-datepicker-toggle>
-            <mat-datepicker [startAt]="currentDate" #fromDate></mat-datepicker>
-        </mat-form-field>
-    </div>
-   <label for="inputPassword" class="col-sm-2 col-form-label" id="ID004">To</label>
+    <label for="inputPassword" class="col-sm-2 col-form-label" id="ID003">Date</label>
     <div class="col-md-3">
         <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
-            <input matInput [matDatepicker]="toDate" [min]="fromDate"  name="toDate"
-                placeholder="DD/MM/YYYY" DateValidation formControlName="toDate" />
-            <mat-datepicker-toggle matSuffix [for]="toDate"></mat-datepicker-toggle>
-            <mat-datepicker [startAt]="currentDate" #toDate></mat-datepicker>
+            <input matInput [matDatepicker]="fromDatePicker" name="fromDate" [max]="currentDate"
+                placeholder="DD/MM/YYYY" DateValidation formControlName="fromDate" (dateChange)="fromDateChange($event)" />
+            <mat-datepicker-toggle matSuffix [for]="fromDatePicker"></mat-datepicker-toggle>
+            <mat-datepicker [startAt]="currentDate" #fromDatePicker></mat-datepicker>
+        </mat-form-field>
+    </div>
+    <label for="inputPassword" class="col-sm-2 col-form-label" id="ID004">To</label>
+    <div class="col-md-3">
+        <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
+            <input matInput [matDatepicker]="toDatePicker" [min]="minToDate" name="toDate"
+                placeholder="DD/MM/YYYY" DateValidation formControlName="toDate" (dateChange)="ToDateChange($event)"/>
+            <mat-datepicker-toggle matSuffix [for]="toDatePicker"></mat-datepicker-toggle>
+            <mat-datepicker [startAt]="currentDate" #toDatePicker></mat-datepicker>
         </mat-form-field>
     </div>
 </div>

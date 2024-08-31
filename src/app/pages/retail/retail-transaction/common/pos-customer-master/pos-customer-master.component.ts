@@ -1100,13 +1100,30 @@ export class PosCustomerMasterComponent implements OnInit {
       );
 
   }
+
   private _filterIdType(value: string): string[] {
-    value = value != null ? value.toString().toLowerCase() : '';
-    const filterValue = value;
-    return this.idTypeOptions.filter((option) =>
-      option.toLowerCase().includes(filterValue)
-    );
+    const filterValue = value != null ? value.toString().toLowerCase() : '';
+    const uniqueOptions = new Set<string>();
+
+    return this.idTypeOptions.filter((option) => {
+      const lowerCaseOption = option.toLowerCase();
+      const matches = lowerCaseOption.includes(filterValue);
+
+      if (matches && !uniqueOptions.has(lowerCaseOption)) {
+        uniqueOptions.add(lowerCaseOption);
+        return true;
+      }
+      return false;
+    });
   }
+  
+  // private _filterIdType(value: string): string[] {
+  //   value = value != null ? value.toString().toLowerCase() : '';
+  //   const filterValue = value;
+  //   return this.idTypeOptions.filter((option) =>
+  //     option.toLowerCase().includes(filterValue)
+  //   );
+  // }
 
   autoCompleteValidator(optionsProvider: any, field: any = null) {
     return (control: AbstractControl) => {

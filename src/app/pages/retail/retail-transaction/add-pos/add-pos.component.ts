@@ -699,7 +699,7 @@ export class AddPosComponent implements OnInit {
     // { title: 'Document Number', field: 'DOCUMENT_NO' },
     // { title: 'From KYC', field: 'FROM_KYC' },
   ];
-
+  estimationList: any[] = [];
   pendingOrderList: any[] = [];
   pendingOrderColumnList: any[] = [
     { title: 'Order No.', field: 'VOCNO', alignment: 'right' },
@@ -717,7 +717,6 @@ export class AddPosComponent implements OnInit {
     { title: 'Customer Code', field: 'POSCUSTCODE', alignment: 'left' },
   ];
 
-  estimationList: any[] = [];
   estimationColumnList: any[] = [
     { title: 'Estimation Date', field: 'orderdate' },
     { title: 'Estimation No.', field: 'orderno' },
@@ -1806,7 +1805,7 @@ export class AddPosComponent implements OnInit {
       }
     });
   }
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.isNewButtonDisabled = true;
 
     this.fetchPramterDetails();
@@ -13139,29 +13138,9 @@ export class AddPosComponent implements OnInit {
   }
 
   importSalesEstimation() {
-    this.modalRefePendingSalesEstimation = this.modalService.open(
-      this.salesEstimationModal,
-      {
-        size: 'lg',
-        ariaLabelledBy: 'modal-basic-title',
-        backdrop: false,
-        // size: "lg",
-        // backdrop: true,
-        // keyboard: false,
-        // windowClass: "modal-full-width",
-      }
-    );
+    this.estimationList = [];
+    this.importEstimationList();
 
-    this.modalRefePendingSalesEstimation.result.then((result) => {
-      if (result) {
-        console.log("Result :", result);
-      } else {
-      }
-    },
-      (reason) => {
-        console.log(`Dismissed ${reason}`);
-      }
-    );
   }
 
   pullSalesOrder() {
@@ -13491,18 +13470,14 @@ export class AddPosComponent implements OnInit {
       });
   }
 
-  async getFinancialYear() {
-    console.log(' this.vocDataForm.value.vocdate ', this.vocDataForm.value.vocdate);
 
-    const API = `BaseFinanceYear/GetBaseFinancialYear/${this.comFunc.cDateFormat(this.vocDataForm.value.vocdate)}`;
-    const res = await this.suntechApi.getDynamicAPI(API).toPromise()
-    // .subscribe((resp) => {
+  async getFinancialYear() {
+    const API = `BaseFinanceYear/GetBaseFinancialYear/${this.convertDateToYMD(this.vocDataForm.value.vocdate)}`;
+    const res = await this.suntechApi.getDynamicAPI(API).toPromise();
     console.log(res);
     if (res.status == "Success") {
       this.baseYear = res.BaseFinancialyear;
     }
-    // });
-
   }
 
   // call after edit save
@@ -13945,6 +13920,73 @@ export class AddPosComponent implements OnInit {
           return;
         }
       });
+  }
+
+  importEstimationList() {
+    if (!this.customerDataForm.value.fcn_customer_code) {
+      let message = "Please add customer details"
+      this.openDialog('Warning', message, true);
+
+      this.dialogBox.afterClosed().subscribe((action: any) => {
+
+      });
+    }
+    else {
+      const postData = {
+        "strBranchCode": this.strBranchcode,
+        "strYearMonth": this.baseYear,
+        "strVocDate": this.convertDateToYMD(this.vocDataForm.value.vocdate),
+        "strCustCode": this.customerDataForm.value.fcn_customer_code,
+        "strEstMid": [
+          0
+        ]
+      };
+
+      this.suntechApi.postDynamicAPI('/RetailEstimationNet/EstimationListLoad', postData).subscribe((result) => {
+        console.log(result);
+        if (result.status == 'Success' && result.response != null) {
+          this.estimationList = result.dynamicData[0];
+          this.openEstimationModal();
+        }
+        else {
+          this.estimationList = [];
+          this.openDialog('Warning', this.comFunc.getMsgByID(result.message.match(/MSG\d+/)[0]), true);
+
+          this.dialogBox.afterClosed().subscribe((action: any) => {
+
+          });
+        }
+      });
+
+    }
+  }
+
+
+  openEstimationModal() {
+    this.modalRefePendingSalesEstimation = this.modalService.open(
+      this.salesEstimationModal,
+      {
+        size: 'lg',
+        ariaLabelledBy: 'modal-basic-title',
+        backdrop: false,
+
+      }
+    );
+
+    this.modalRefePendingSalesEstimation.result.then((result) => {
+      if (result) {
+        console.log("Result :", result);
+      } else {
+      }
+    },
+      (reason) => {
+        console.log(`Dismissed ${reason}`);
+      }
+    );
+  }
+
+  onEstimationEntryChange(event: any) {
+
   }
 
 }
