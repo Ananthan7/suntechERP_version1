@@ -83,6 +83,15 @@ export class RetailAdvanceReceiptRegisterComponent implements OnInit {
     this.retailAdvanceReceiptRegisterForm.controls.reportTo.setValue(event.value);
     console.log(this.retailAdvanceReceiptRegisterForm.controls.reportTo.value)
   }
+  setDateValue(event: any){
+    if(event.FromDate){
+      console.log(event.FromDate.value)
+    }
+    else if(event.ToDate){
+      console.log(event.ToDate.value)
+      this.toDateValitation()
+    }
+  }
 
   toDateValitation(){
     if (this.retailAdvanceReceiptRegisterForm.value.fromDate > this.retailAdvanceReceiptRegisterForm.value.toDate) {
