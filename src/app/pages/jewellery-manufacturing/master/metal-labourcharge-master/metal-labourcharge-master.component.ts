@@ -1116,6 +1116,41 @@ export class MetalLabourchargeMasterComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
+  // checkCodeExists(event: any) {
+  //   if (this.content && this.content.FLAG == 'EDIT') {
+  //     return; // Exit the function if in edit mode
+  //   }
+
+  //   if (event.target.value === '' || this.viewMode) {
+  //     return; // Exit the function if the input is empty or in view mode
+  //   }
+
+  //   const API = 'LabourChargeMasterDj/GetlabourChargeMasterList/' + event.target.value;
+  //   const sub = this.dataService.getDynamicAPI(API)
+  //     .subscribe((result) => {
+  //       if (result.checkifExists) {
+  //         Swal.fire({
+  //           title: '',
+  //           text: result.message || 'Approval Already Exists!',
+  //           icon: 'warning',
+  //           confirmButtonColor: '#336699',
+  //           confirmButtonText: 'Ok'
+  //         }).then(() => {
+  //           // Clear the input value
+  //           this.metallabourMasterForm.controls.metallabour_code.setValue('');
+
+  //           // setTimeout(() => {
+  //           //   this.renderer.selectRootElement('#metallabour_code').focus();
+  //           // }, 500);
+
+  //         });
+  //       }
+  //     }, err => {
+  //       this.metallabourMasterForm.reset();
+  //     });
+
+  //   this.subscriptions.push(sub);
+  // }
 
   /**USE: delete Melting Type From Row */
   deleteMeltingType() {
