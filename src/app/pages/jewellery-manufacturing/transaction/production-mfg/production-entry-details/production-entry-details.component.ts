@@ -7,6 +7,7 @@ import { Subscription } from "rxjs";
 import { NgbActiveModal, NgbModal, NgbModalRef, } from "@ng-bootstrap/ng-bootstrap";
 import { ProductionStockDetailComponent } from "../production-stock-detail/production-stock-detail.component";
 import { SavedataModel } from "../savedata-model";
+import Swal from "sweetalert2";
 
 @Component({
   selector: "app-production-entry-details",
@@ -231,7 +232,6 @@ export class ProductionEntryDetailsComponent implements OnInit {
     SETREF: [''],
     price3: [''],
     KARAT_CODE: [''],
-    venderref: [''],
     price4: [''],
     START_DATE: [''],
     END_DATE: [''],
@@ -267,7 +267,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
     PURE_WT: [''],
     PurityDiff: [''],
     Job_Purity: [''],
-    VenderRef: [''],
+    VendorRef: [''],
     VOCDATE: [''],
     METALSTONE: [''],
     DIVCODE: [''],
@@ -541,6 +541,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
   /**USE: subjobnumber validate API call*/
+  pendingProcess: any[] = []
   pendingProcessValidate(event?: any) {
     let postData = {
       "SPID": "111",
@@ -557,13 +558,15 @@ export class ProductionEntryDetailsComponent implements OnInit {
         this.commonService.closeSnackBarMsg()
         if (result.dynamicData && result.dynamicData[0].length > 0) {
           let data = result.dynamicData[0] || []
-          let strMsg: string = "";
+          let processMsg = "";
+          this.pendingProcess = [];
           for (let i = 0; i < data.length; i++) {
-            strMsg += data[i]["PCS"].ToString() + " PCS , " + data[i]["GRWT"].ToString() + " Weight in ";
-            strMsg += data[i]["WORKER_CODE"].ToString() + " Worker  On " + data[i]["PROCESS_CODE"].ToString() + " Process " + "\n";
+            processMsg += data[i]["PCS"] + " PCS , " + data[i]["GRWT"] + " Weight in ";
+            processMsg += data[i]["WORKER_CODE"] + " Worker  On " + data[i]["PROCESS_CODE"] + " Process " ;
+            this.pendingProcess.push({PROCESS: processMsg})
+            processMsg = ""
           }
-          this.commonService.toastInfoByMsgId(strMsg)
-          this.FORM_VALIDATER = this.productiondetailsFrom.value
+          this.openPendingProcessModal()
         } else {
           this.commonService.toastErrorByMsgId('MSG1747');
         }
@@ -573,7 +576,26 @@ export class ProductionEntryDetailsComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
-
+  @ViewChild('pendingProcessModal') public pendingProcessModal!: NgbModal;
+  openPendingProcessModal() {
+    this.modalReference = this.modalService.open(this.pendingProcessModal, {
+      size: 'lg',
+      ariaLabelledBy: 'modal-basic-title',
+      backdrop: false,
+    });
+  }
+  showConfirmationDialog(msg: string): Promise<any> {
+    return Swal.fire({
+      title: '',
+      text: msg,
+      icon: 'warning',
+      showCancelButton: false,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      cancelButtonText: 'No',
+      confirmButtonText: 'Ok'
+    });
+  }
   close(data?: any) {
     //TODO reset forms and data before closing
     // this.activeModal.close(data);
