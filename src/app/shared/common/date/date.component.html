@@ -12,7 +12,7 @@
     <div class="col-md-3">
         <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
             <input matInput [matDatepicker]="toDate" [min]="fromDate"  name="toDate"
-                placeholder="DD/MM/YYYY" DateValidation formControlName="toDate" />
+                placeholder="DD/MM/YYYY" DateValidation formControlName="toDate" (dateChange)="ToDateChange($event)"/>
             <mat-datepicker-toggle matSuffix [for]="toDate"></mat-datepicker-toggle>
             <mat-datepicker [startAt]="currentDate" #toDate></mat-datepicker>
         </mat-form-field>

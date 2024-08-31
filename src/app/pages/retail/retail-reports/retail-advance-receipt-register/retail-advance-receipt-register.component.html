@@ -45,7 +45,7 @@
                 </div> -->
                 
                 <div class="row">
-                    <!-- <app-date></app-date> -->
+                    <app-date (selectedDate)="setDateValue($event)"></app-date>
                     <label for="inputPassword" class="col-sm-2 col-form-label" id="ID003">Date</label>
                     <div class="col-md-3">
                         <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
