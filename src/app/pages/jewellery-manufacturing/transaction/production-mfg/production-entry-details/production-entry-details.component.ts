@@ -37,6 +37,8 @@ export class ProductionEntryDetailsComponent implements OnInit {
   imagepath: any[] = []
   JOB_PRODUCTION_SUB_DJ: any[] = []
   JOB_PRODUCTION_STNMTL_DJ: any[] = []
+  metalDetailData: any[] = []
+  pendingProcess: any[] = []
   private subscriptions: Subscription[] = [];
 
   StockDetailData: SavedataModel = {
@@ -239,7 +241,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
     price5: [''],
     remarks: [''],
     prodpcs: [''],
-    pndpcs: [''],
+    PENDING_PCS: [''],
     LOSS_PER: [''],
     fromStockCode: [''],
     fromStockCodeDesc: [''],
@@ -267,7 +269,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
     PURE_WT: [''],
     PurityDiff: [''],
     Job_Purity: [''],
-    VendorRef: [''],
+    SUPPLIER_REF: [''],
     VOCDATE: [''],
     METALSTONE: [''],
     DIVCODE: [''],
@@ -468,6 +470,8 @@ export class ProductionEntryDetailsComponent implements OnInit {
             this.setFormNullToString('METALLAB_TYPE', data[0].METALLAB_TYPE)
             this.setFormNullToString('DESIGN_TYPE', data[0].DESIGN_TYPE?.toUpperCase())
             this.setFormNullToString('METAL_STOCK_CODE', data[0].METAL_STOCK_CODE)
+            this.setFormNullToString('SUPPLIER_REF', data[0].DESIGN_CODE+data[0].METAL_COLOR)
+            this.setFormNullToString('PENDING_PCS', data[0].JOB_PCS_TOTAL)
             this.designType = this.commonService.nullToString(data[0].DESIGN_TYPE?.toUpperCase());
             this.productiondetailsFrom.controls.PREFIX.setValue(data[0].PREFIX)
             this.productiondetailsFrom.controls.PREFIXNO.setValue(data[0].PREFIX_NUMBER)
@@ -531,6 +535,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
           this.productiondetailsFrom.controls.totalpcs.setValue(data[0].PCS)
           this.FORM_VALIDATER = this.productiondetailsFrom.value
           this.pendingProcessValidate()
+          this.fillStoneDetails()
         } else {
           this.commonService.toastErrorByMsgId('MSG1747');
         }
@@ -541,7 +546,6 @@ export class ProductionEntryDetailsComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
   /**USE: subjobnumber validate API call*/
-  pendingProcess: any[] = []
   pendingProcessValidate(event?: any) {
     let postData = {
       "SPID": "111",
@@ -573,6 +577,41 @@ export class ProductionEntryDetailsComponent implements OnInit {
       }, err => {
         this.commonService.closeSnackBarMsg();
         this.commonService.toastErrorByMsgId('MSG1531');
+      })
+    this.subscriptions.push(Sub)
+  }
+  /**USE: fillStoneDetails grid data */
+  private fillStoneDetails(): void {
+    let form = this.productiondetailsFrom.value
+    let postData = {
+      "SPID": "042",
+      "parameter": {
+        strJobNumber: this.commonService.nullToString(form.JOB_NUMBER),
+        strUnq_Job_Id: this.commonService.nullToString(form.UNQ_JOB_ID),
+        strProcess_Code: this.commonService.nullToString(form.PROCESS_CODE),
+        strWorker_Code: this.commonService.nullToString(form.WORKER_CODE),
+        strBranch_Code: this.commonService.nullToString(this.branchCode)
+      }
+    }
+    this.commonService.showSnackBarMsg('MSG81447')
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        this.commonService.closeSnackBarMsg()
+        if (result.status == "Success" && result.dynamicData[0]) {
+          let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+          if (data) {
+            this.metalDetailData = data
+          
+          } else {
+            this.commonService.toastErrorByMsgId('MSG1531')
+            return
+          }
+        } else {
+          this.commonService.toastErrorByMsgId('MSG1747')
+        }
+      }, err => {
+        this.commonService.closeSnackBarMsg()
+        this.commonService.toastErrorByMsgId('MSG1531')
       })
     this.subscriptions.push(Sub)
   }
@@ -967,7 +1006,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
       "METAL_LABAMTFC": 0,
       "METAL_LABAMTLC": 0,
       "METAL_LABACCODE": "",
-      "SUPPLIER_REF": "",
+      "SUPPLIER_REF": this.emptyToZero(form.SUPPLIER_REF),
       "TAGLINES": "",
       "SETTING_CHRG": this.emptyToZero(form.settingChrg),
       "POLISH_CHRG": this.emptyToZero(form.polishChrg),
