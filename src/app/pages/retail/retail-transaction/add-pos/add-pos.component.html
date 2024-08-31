@@ -730,7 +730,7 @@
                             <dxo-texts alignment="right" [editRow]="viewOnly ? 'View' : 'Edit'" deleteRow="Remove">
                             </dxo-texts>
                           </dxo-editing>
-                    
+
                           <!-- <dxo-selection mode="single"></dxo-selection> -->
                           <dxi-column dataField="sn_no" [width]="80" caption="SL No." [allowEditing]="false"
                             alignment="center">
@@ -3762,14 +3762,30 @@
   <div class="modal-body">
     <div class="row mb-2">
       <div class="col-md-12">
-        <dx-data-grid #dataGrid id="estimationgrid" keyExpr="orderno" [dataSource]="estimationList"
-          [showBorders]="true">
+        <dx-data-grid #dataGrid id="estimationgrid" keyExpr="orderno" [dataSource]="estimationList" [showBorders]="true"
+          (onSelectionChanged)="onEstimationEntryChange($event)">
           <dxo-paging [enabled]="false"></dxo-paging>
-          <dxo-editing mode="cell" [allowUpdating]="true"> </dxo-editing>
-          <!-- <dxo-selection mode="multiple"></dxo-selection> -->
-          <dxi-column *ngFor="let data of estimationColumnList" dataField="{{ data.field }}" caption="{{ data.title }}"
-            [allowEditing]="true" alignment="center" backgroundcolor="#000">
+          <dxo-selection mode="single"></dxo-selection>
+          <dxi-column dataField="VOCNO" width="auto" caption="Estimation No" [allowEditing]="false" alignment="right">
           </dxi-column>
+          <dxi-column dataField="VOCDATE" width="auto" alignment="left" caption="Estimation Date"
+            [allowEditing]="false">
+          </dxi-column>
+          <dxi-column dataField="SALESPERSON_CODE" width="auto" alignment="left" caption="Salesman Code"
+            [allowEditing]="false">
+          </dxi-column>
+          <dxi-column dataField="POSCUSTCODE" width="auto" alignment="left" caption="Customer Code"
+            [allowEditing]="false">
+          </dxi-column>
+          <dxi-column dataField="MOBILE" width="auto" alignment="left" caption="Customer Mobile" [allowEditing]="false">
+          </dxi-column>
+          <dxi-column dataField="PARTYNAME" width="auto" alignment="left" caption="Customer Name"
+            [allowEditing]="false">
+          </dxi-column>
+          <dxi-column dataField="NETVALUE_CC" width="auto" [format]="amountDecimalFormat" alignment="right"
+            caption="Amount" [allowEditing]="false">
+          </dxi-column>
+
         </dx-data-grid>
       </div>
     </div>
