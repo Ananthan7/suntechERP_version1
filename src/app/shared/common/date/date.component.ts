@@ -1,4 +1,5 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 
 @Component({
@@ -7,23 +8,31 @@ import { MatDatepickerInputEvent } from '@angular/material/datepicker';
   styleUrls: ['./date.component.scss']
 })
 export class DateComponent implements OnInit {
-  currentDate = new Date();
-  fromDate= new Date();
-  toDate = new Date();
+  dateForm!: FormGroup;
+  currentDate: Date = new Date();
   @Output() selectedDate = new EventEmitter();
-  constructor() { }
+  
+  constructor(private fb: FormBuilder) { }
 
   ngOnInit(): void {
+    this.dateForm = this.fb.group({
+      fromDate: [null],
+      toDate: [null]
+    });
   }
 
   fromDateChange(event: MatDatepickerInputEvent<Date>): void {
-    this.selectedDate.emit({'FromDate': event})
-    // console.log('From Date changed:', event.value);
+    const fromDate = event.value;
+    this.dateForm.get('fromDate')?.setValue(fromDate, { emitEvent: false });
+    this.selectedDate.emit({'FromDate': fromDate})
+    console.log('From Date changed:', fromDate);
   }
 
-  ToDateChange(event: MatDatepickerInputEvent<Date>): void {
-    this.selectedDate.emit({'ToDate': event})
-    // console.log('To Date changed:', event.value);
+  toDateChange(event: MatDatepickerInputEvent<Date>): void {
+    const toDate = event.value;
+    this.dateForm.get('toDate')?.setValue(toDate, { emitEvent: false });
+    this.selectedDate.emit({'ToDate': toDate})
+    console.log('To Date changed:', toDate);
   }
 
 }

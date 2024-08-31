@@ -1,20 +1,24 @@
-<div class="row">
-     <label for="inputPassword" class="col-sm-2 col-form-label" id="ID003">Date</label>
-     <div class="col-md-3">
+<form [formGroup]="dateForm">
+    <div class="row">
+        <label for="inputPassword" class="col-sm-2 col-form-label" id="ID003">From</label>
+        <div class="col-md-2">
         <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
-            <input matInput [matDatepicker]="fromDate" name="fromDate" [max]="currentDate"
-                placeholder="DD/MM/YYYY" DateValidation formControlName="fromDate" (dateChange)="fromDateChange($event)" />
+            <input matInput [matDatepicker]="fromDate" formControlName="fromDate" [max]="currentDate"
+            placeholder="DD/MM/YYYY" (dateChange)="fromDateChange($event)" />
             <mat-datepicker-toggle matSuffix [for]="fromDate"></mat-datepicker-toggle>
-            <mat-datepicker [startAt]="currentDate" #fromDate></mat-datepicker>
+            <mat-datepicker #fromDate></mat-datepicker>
         </mat-form-field>
-    </div>
-   <label for="inputPassword" class="col-sm-2 col-form-label" id="ID004">To</label>
-    <div class="col-md-3">
+        </div>
+  
+        <label for="inputPassword" class="col-sm-2 col-form-label" id="ID004">To</label>
+        <div class="col-md-2">
         <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
-            <input matInput [matDatepicker]="toDate" [min]="fromDate"  name="toDate"
-                placeholder="DD/MM/YYYY" DateValidation formControlName="toDate" (dateChange)="ToDateChange($event)"/>
+            <input matInput [matDatepicker]="toDate" [min]="dateForm.get('fromDate')?.value" formControlName="toDate"
+            placeholder="DD/MM/YYYY" (dateChange)="toDateChange($event)" />
             <mat-datepicker-toggle matSuffix [for]="toDate"></mat-datepicker-toggle>
-            <mat-datepicker [startAt]="currentDate" #toDate></mat-datepicker>
+            <mat-datepicker #toDate></mat-datepicker>
         </mat-form-field>
+        </div>
     </div>
-</div>
+</form>
+  
