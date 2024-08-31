@@ -8,22 +8,23 @@ import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 })
 export class DateComponent implements OnInit {
   currentDate = new Date();
-  fromDate= new Date();
   toDate = new Date();
+  fromDate: Date | null = new Date();
+  minToDate: Date | null = null;
+  
   @Output() selectedDate = new EventEmitter();
+
   constructor() { }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   fromDateChange(event: MatDatepickerInputEvent<Date>): void {
-    this.selectedDate.emit({'FromDate': event})
-    // console.log('From Date changed:', event.value);
+    this.fromDate = event.value;
+    this.minToDate = this.fromDate;
+    this.selectedDate.emit({'FromDate': event.value});
   }
 
   ToDateChange(event: MatDatepickerInputEvent<Date>): void {
-    this.selectedDate.emit({'ToDate': event})
-    // console.log('To Date changed:', event.value);
+    this.selectedDate.emit({'ToDate': event.value});
   }
-
 }
