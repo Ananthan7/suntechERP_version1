@@ -648,9 +648,9 @@
               </mat-form-field>
             </div>
             <div class="col-md-2 justify-content-center">
-              <button type="button" style="font-size: 12px; padding: 0px 9px"
+              <button type="button" style="font-size: 12px;"
                 (click)="open(more_customer_detail_modal, false, null, false,false,true)" mat-flat-button
-                color="primary" [disabled]="viewOnly">
+                class="update-finish-button" [disabled]="viewOnly">
                 {{
                 this.customerDetails.MOBILE == null || undefined
                 ? "Add Customer"
@@ -695,21 +695,21 @@
         </form>
 
         <div class="text-right">
-          <button type="button" mat-flat-button color="primary" (click)="importSalesEstimation()">
+          <button type="button" mat-flat-button  (click)="importSalesEstimation()" class="update-finish-button">
             Import Sales Estimation
           </button>
 
-          <button type="button" class="mx-2" mat-flat-button color="primary" (click)="importSalesOrder()">
+          <button type="button" class="mx-2 update-finish-button" mat-flat-button (click)="importSalesOrder()">
             Import Sales Order
           </button>
 
-          <button type="button" mat-flat-button color="primary" *ngIf="strUser=='SUNTECH'"
-            (click)="openParamterDetails()" class="button-spacing">
+          <button type="button" mat-flat-button *ngIf="strUser=='SUNTECH'"
+            (click)="openParamterDetails()" class="button-spacing update-finish-button">
             Parameter Details
           </button>
 
-          <button type="button" mat-flat-button color="primary" [disabled]="viewOnly && transAttachmentList.length == 0"
-            (click)="openUserAttachmentModal()">
+          <button type="button" mat-flat-button [disabled]="viewOnly && transAttachmentList.length == 0"
+            (click)="openUserAttachmentModal()" class="update-finish-button">
             {{ !viewOnly ? 'Add Attachment' : 'View Attachment' }}
           </button>
 
@@ -809,7 +809,7 @@
                             margin: 10px;
                             width: 20px !important;
                             padding: 3px 10px;
-                            padding-right: 21px;
+                            padding-right: 21px; background-color: #1E3C72;
                           ">
                           <i class="fa fa-plus"></i>
                         </button>
@@ -1007,7 +1007,7 @@
 
                 <span style="float: right">
                   <button type="submit" (click)="open(sales_payment_modal)" class="btn btnsml btn-secondary w-30"
-                    [disabled]="viewOnly">
+                    [disabled]="viewOnly" style="background-color: #1E3C72;">
                     Add
                   </button></span>
               </div>
@@ -3227,7 +3227,7 @@
                       </div>
                   </div>
 
-                  <div class="col-md-3 mx-3">
+                  <div class="col-md-3 mx-4">
                     <label class=" col-sm-9" for="li_gross_wt" id=ID177>{{
                       newDictionary?.lblGrossWeight || "Gross Wt"}}</label>
                     <div class="form-group row">
