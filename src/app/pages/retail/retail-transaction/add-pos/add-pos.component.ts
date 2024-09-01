@@ -2649,7 +2649,7 @@ export class AddPosComponent implements OnInit {
     }
 
     this.modalReference = this.modalService.open(content, {
-      size: 'lg',
+      size: 'xl',
       ariaLabelledBy: 'modal-basic-title',
       backdrop: false,
     });
