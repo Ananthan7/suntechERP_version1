@@ -3884,36 +3884,51 @@
   <div class="modal-body">
     <form [formGroup]="attachmentForm">
       <div class="row">
-        <div class="col-md-4">
-          <mat-form-field>
-            <mat-label>Remarks</mat-label>
-            <input type="text" matInput formControlName="remarks" [readonly]="viewOnly" appNoEmptySpace />
-            <mat-error *ngIf="attachmentForm.controls.remarks.hasError('required')">
-              Remarks is <strong>required</strong>
-            </mat-error>
-          </mat-form-field>
+
+        <div class="col-md-4 mb-3">
+          <div class="form-group row">
+            <label class="col-form-label col-sm-4" for="remarks" id="ID211">Remarks</label>
+            <div class="col-sm-8">
+              <mat-form-field appearance="outline" style="width: 100%">
+                <input type="text" matInput formControlName="remarks" [readonly]="viewOnly" appNoEmptySpace />
+                <mat-error *ngIf="attachmentForm.controls.remarks.hasError('required')" id="ID212">
+                  Remarks is <strong>required</strong>
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
         </div>
 
-        <div class="col-md-4 d-flex align-content-center">
-          <mat-form-field style="width: 80%">
-            <input type="text" matInput formControlName="docType" />
-          </mat-form-field>
-          <master-search [MasterSearchData]="docTypeData" (newRowClick)="docTypeSelected($event)"></master-search>
-          <!-- (newRowClick)="StyleCodeSelected($event)" -->
+        <div class="col-md-4 mb-3">
+          <div class="form-group row">
+            <div class="col-sm-8">
+              <mat-form-field appearance="outline" style="width: 100%">
+                <input type="text" matInput formControlName="docType" />
+                <master-search [MasterSearchData]="docTypeData" (newRowClick)="docTypeSelected($event)"
+                class="masterSearch"></master-search>
+                  <!-- (newRowClick)="StyleCodeSelected($event)" -->
+              </mat-form-field>
+            </div>
+          </div>
         </div>
+   
+        
+        <div class="col-md-4 mb-3">
+          <div class="form-group row">
+            <label class="col-form-label col-sm-4" for="expDate" id="ID213">Expiry Date</label>
+            <div class="col-sm-8">
+              <mat-form-field appearance="outline" style="width: 100%">
+                <input matInput [matDatepicker]="expDateAttachment" name="expDate" formControlName="expDate"
+                  placeholder="DD/MM/YYYY" [min]="currentDate" [readonly]="viewOnly" DateValidation />
+                <mat-datepicker-toggle matSuffix [for]="expDateAttachment"></mat-datepicker-toggle>
+                <mat-datepicker [startAt]="currentDate" #expDateAttachment></mat-datepicker>
 
-        <div class="col-md-4">
-          <mat-form-field>
-            <mat-label>Expiry Date</mat-label>
-            <input matInput [matDatepicker]="expDateAttachment" name="expDate" formControlName="expDate"
-              placeholder="DD/MM/YYYY" [min]="currentDate" [readonly]="viewOnly" DateValidation />
-            <mat-datepicker-toggle matSuffix [for]="expDateAttachment"></mat-datepicker-toggle>
-            <mat-datepicker [startAt]="currentDate" #expDateAttachment></mat-datepicker>
-
-            <mat-error *ngIf="attachmentForm.controls.expDate.hasError('required')">
-              Expiry date is <strong>required</strong>
-            </mat-error>
-          </mat-form-field>
+                <mat-error *ngIf="attachmentForm.controls.expDate.hasError('required')" id="ID214">
+                  Expiry date is <strong>required</strong>
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -3923,14 +3938,14 @@
           <input  type="file" (change)="onFileSelected($event)">
         </mat-form-field> -->
         <div class="col-md-6">
-          <label for="attachmentFile" class="form-label">Attachment</label>
+          <label for="attachmentFile" class="form-label" id="ID215">Attachment</label>
           <input class="form-control" type="file" formControlName="attachmentFile" id="attachmentFile"
             (change)="onFileSelected($event)" multiple />
         </div>
       </div>
       <div class="text-right">
-        <button type="submit" mat-flat-button color="primary" class="btn-m-r-10 mb-2" [disabled]="viewOnly"
-          (click)="saveAttachment()">
+        <button type="submit" class="btn-m-r-10 mb-2 update-finish-button mat-flat-button" [disabled]="viewOnly"
+          (click)="saveAttachment()" id="ID092">
           Save
         </button>
       </div>
@@ -3977,48 +3992,82 @@
   <div class="modal-body">
     <form [formGroup]="pendingSalesOrderForm">
       <div class="row">
-        <div class="col-md-5">
-          <mat-form-field style="width: 80%; display: inline-block !important" class="mat-form-field-pending-so">
-            <mat-label>Branch To</mat-label>
 
-            <input type="text" matInput formControlName="branchTo" />
-            <mat-error *ngIf="
+        <div class="col-md-5">
+          <div class="form-group row">
+            <label class="col-form-label col-sm-4" for="branchTo" id="ID216">Branch To</label>
+            <div class="col-sm-8">
+              <mat-form-field appearance="outline" style="width: 100%" class="mat-form-field-pending-so">
+                <input type="text" matInput formControlName="branchTo" />
+                <master-search [MasterSearchData]="branchCodeData" (newRowClick)="branchSelected($event)"
+                class="masterSearch"></master-search>
+                <mat-error *ngIf="
+                    pendingSalesOrderForm.controls.branchTo.hasError('required')
+                  " id="ID217"> 
+                  Branch To is <strong>required</strong>
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      
+        <!-- <div class="col-md-3">
+          <mat-form-field style="width: 100%">
+            <mat-label>Branch To</mat-label>
+            <input
+              type="text"
+              matInput
+              formControlName="branchTo"
+              [readonly]="viewOnly"
+              appNoEmptySpace
+            />
+            <mat-error
+              *ngIf="
                 pendingSalesOrderForm.controls.branchTo.hasError('required')
-              ">
+              "
+            >
               Branch To is <strong>required</strong>
             </mat-error>
           </mat-form-field>
-          <master-search [MasterSearchData]="branchCodeData" (newRowClick)="branchSelected($event)"></master-search>
-        </div>
+        </div> -->
 
         <div class="col-md-5">
-          <mat-form-field style="width: 100%">
-            <mat-label>Order No.</mat-label>
-            <input type="text" matInput formControlName="orderNo" [readonly]="viewOnly" class="st_txt_right"
-              appNoEmptySpace />
-            <mat-error *ngIf="
-                pendingSalesOrderForm.controls.orderNo.hasError('required')
-              ">
-              Order No. is <strong>required</strong>
-            </mat-error>
-          </mat-form-field>
+          <div class="form-group row">
+            <label class="col-form-label col-sm-4" for="orderNo"  id="ID218">Order No.</label>
+            <div class="col-sm-8">
+              <mat-form-field appearance="outline" style="width: 100%" class="mat-form-field-pending-so">
+                <input type="text" matInput formControlName="orderNo" [readonly]="viewOnly" appNoEmptySpace class="st_txt_right" appNoEmptySpace/>
+                <mat-error *ngIf="
+                    pendingSalesOrderForm.controls.orderNo.hasError('required')
+                  " id="ID219">
+                  Order No. is <strong>required</strong>
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
         </div>
+      
       </div>
       <div class="row">
         <div class="col-md-5">
-          <mat-form-field style="width: 80%; display: inline-block !important" class="mat-form-field-pending-so">
-            <mat-label>Customer</mat-label>
-
-            <input type="text" matInput formControlName="customerCode" />
-
-            <mat-error *ngIf="
-                pendingSalesOrderForm.controls.customerCode.hasError('required')
-              ">
-              Customer is <strong>required</strong>
-            </mat-error>
-          </mat-form-field>
-          <master-search [MasterSearchData]="customerCodeData"
-            (newRowClick)="customerCodeSelected($event)"></master-search>
+          <div class="form-group row">
+            <label class="col-form-label col-sm-4" for="branchTo"  id="ID220">Customer</label>
+            <div class="col-sm-8">
+              <mat-form-field appearance="outline" style="width: 100%" class="mat-form-field-pending-so">
+                <input type="text" matInput formControlName="customerCode" />
+                <master-search [MasterSearchData]="customerCodeData" class="masterSearch"
+                (newRowClick)="customerCodeSelected($event)"></master-search>
+                <mat-error *ngIf="
+                    pendingSalesOrderForm.controls.customerCode.hasError('required')" id="ID221">
+                  Customer is <strong>required</strong>
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-5">
+        
+       
           <!-- <mat-form-field style="width: 100%">
             <mat-label>Customer</mat-label>
             <input
@@ -4037,8 +4086,8 @@
             </mat-error>
           </mat-form-field> -->
         </div>
-        <div class="col-md-6 text-right">
-          <button type="button" (click)="pullSalesOrder()" mat-flat-button color="primary">Search</button>
+        <div class="col-md-2 text-right">
+          <button type="button" mat-flat-button class="update-finish-button" id="ID222" (click)="pullSalesOrder()">Search</button>
         </div>
       </div>
     </form>
@@ -4065,11 +4114,11 @@
     </div>
 
     <div class="text-right my-3">
-      <button class="mx-2" mat-flat-button color="primary" (click)="onApply()"
-        [disabled]="!isRowSelected && pendingOrderList.length">
+      <button mat-flat-button class="update-finish-button mx-1"  id="ID223" (click)="onApply()"
+      [disabled]="!isRowSelected && pendingOrderList.length">
         Apply
       </button>
-      <button mat-flat-button color="warn" (click)="modal.dismiss('Cross click')">
+      <button mat-flat-button class="update-finish-button" (click)="modal.dismiss('Cross click')" id="ID224">
         Close
       </button>
       &nbsp;
