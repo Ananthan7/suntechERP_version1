@@ -527,6 +527,10 @@
                 </mat-error>
               </mat-form-field>
             </div>
+<<<<<<< HEAD
+=======
+
+>>>>>>> 7fb0ba10ed31f4a582426d804fa041c69d2632b6
             <div class="col-md-2">
               <label for="fcn_customer_code">Code</label>
               <mat-form-field appearance="outline" style="width: 100%">
@@ -536,6 +540,7 @@
    
               </mat-form-field>
             </div>
+<<<<<<< HEAD
        
 
             <!-- <div class="col-md-2">
@@ -554,6 +559,8 @@
 
             <!-- </div> --> 
 
+=======
+>>>>>>> 7fb0ba10ed31f4a582426d804fa041c69d2632b6
 
             <div class="col-md-2">
               <label for="fcn_customer_id_type">ID Type</label>
@@ -2568,6 +2575,7 @@
           <div class="form-group row">
             <div class="col-md-4">
               <div class="form-group row">
+<<<<<<< HEAD
                 <label class="col-form-label col-sm-4" for="fcn_mob_code" id="ID135">
                   Code <span class="text-danger">&ast;</span>
                 </label>
@@ -2600,10 +2608,31 @@
                       Gender is <strong>required</strong>
                     </mat-error>
                   </mat-form-field> -->
+=======
+                <label class="col-form-label col-sm-4" for="fcn_mob_code" id="ID135">Code <span
+                    class="text-danger">&ast;</span></label>
+                <div class="col-sm-8">
+                  <mat-form-field appearance="outline" style="width: 100%">
+                    <input type="text" matInput class="st_txt_right"
+                      onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))"
+                      formControlName="fcn_mob_code" id="fcn_mob_code" [matAutocomplete]="fcn_mob_code"
+                      [readonly]="viewOnly" />
+                    <mat-autocomplete #fcn_mob_code="matAutocomplete" autoActiveFirstOption>
+                      <mat-option *ngFor="let option of mobileCountryMasterOptions | async"
+                        [value]="option.MOBILECOUNTRYCODE">
+                        {{ option.MOBILECOUNTRYCODE }}
+                      </mat-option>
+                    </mat-autocomplete>
+                    <mat-error *ngIf="customerDetailForm.controls.fcn_mob_code.hasError('required')" id="ID136">
+                      Code is <strong>required</strong>
+                    </mat-error>
+                  </mat-form-field>
+>>>>>>> 7fb0ba10ed31f4a582426d804fa041c69d2632b6
                 </div>
               </div>
             </div>
 
+<<<<<<< HEAD
 
             <div class="col-md-4">
               <div class="form-group row">
@@ -2649,10 +2678,28 @@
                       Invalid value
                     </mat-error>
                   </mat-form-field> -->
+=======
+            <div class="col-md-4">
+              <div class="form-group row">
+                <label class="col-form-label col-sm-4" for="fcn_cust_detail_phone" id="ID137">Mobile 1 <span
+                    class="text-danger">&ast;</span></label>
+                <div class="col-sm-8">
+                  <mat-form-field appearance="outline" style="width: 100%">
+                    <input type="text" #mobile1 (change)="onCustomerNameFocus(mobile1.value)"
+                      onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))"
+                      matInput formControlName="fcn_cust_detail_phone" id="fcn_cust_detail_phone" [readonly]="viewOnly"
+                      maxlength="20" />
+                    <mat-error *ngIf="customerDetailForm.controls.fcn_cust_detail_phone.hasError('required')"
+                      id="ID138">
+                      Mobile Number is <strong>required</strong>
+                    </mat-error>
+                  </mat-form-field>
+>>>>>>> 7fb0ba10ed31f4a582426d804fa041c69d2632b6
                 </div>
               </div>
             </div>
 
+<<<<<<< HEAD
 
 
             <div class="col-md-4">
@@ -2680,6 +2727,10 @@
           <div class="form-group row">
             <div class="col-md-4">
               <div class="form-group row">
+=======
+            <div class="col-md-4">
+              <div class="form-group row">
+>>>>>>> 7fb0ba10ed31f4a582426d804fa041c69d2632b6
                 <label class="col-form-label col-sm-4" for="customer_detail_name" id="ID139">Name <span
                     class="text-danger">&ast;</span></label>
                 <div class="col-sm-8">
@@ -2736,10 +2787,13 @@
               </div>
             </div>
 
+<<<<<<< HEAD
 
           </div>
 
           <div class="form-group row">
+=======
+>>>>>>> 7fb0ba10ed31f4a582426d804fa041c69d2632b6
             <div class="col-md-4">
               <div class="form-group row">
                 <label class="col-form-label col-sm-4" for="customer_detail_lname" id="ID144">Last Name</label>
@@ -2797,11 +2851,14 @@
               </div>
             </div>
 
+<<<<<<< HEAD
 
           </div>
 
           <div class="form-group row">
 
+=======
+>>>>>>> 7fb0ba10ed31f4a582426d804fa041c69d2632b6
             <div class="col-md-4">
               <div class="form-group row">
                 <label class="col-form-label col-sm-4" for="cust_detail_gender" id="ID150">Gender <span
@@ -2822,6 +2879,12 @@
                 </div>
               </div>
             </div>
+<<<<<<< HEAD
+=======
+          </div>
+
+          <div class="form-group row">
+>>>>>>> 7fb0ba10ed31f4a582426d804fa041c69d2632b6
             <div class="col-md-4">
               <div class="form-group row">
                 <label class="col-form-label col-sm-4 pt-0" for="cust_detail_marital_status" id="ID152">Marital
@@ -2861,10 +2924,13 @@
               </div>
             </div>
 
+<<<<<<< HEAD
           </div>
 
           <div class="form-group row">
 
+=======
+>>>>>>> 7fb0ba10ed31f4a582426d804fa041c69d2632b6
             <div class="col-md-4">
               <div class="form-group row">
                 <label class="col-form-label col-sm-4" for="cust_detail_nationality" id="ID155">Nationality <span
@@ -2921,7 +2987,11 @@
 <!-- 
             <div class="col-md-4">
               <div class="form-group row">
+<<<<<<< HEAD
                 <label class="col-form-label col-sm-4" for="cust_detail_nationality" id="ID155">Nationality <span
+=======
+                <label class="col-form-label col-sm-4" for="cust_detail_country" id="ID157">Country <span
+>>>>>>> 7fb0ba10ed31f4a582426d804fa041c69d2632b6
                     class="text-danger">&ast;</span></label>
                 <div class="col-sm-8">
                   <mat-form-field appearance="outline" style="width: 100%">
@@ -2951,7 +3021,11 @@
                   </mat-form-field>
                 </div>
               </div>
+<<<<<<< HEAD
             </div> -->
+=======
+            </div>
+>>>>>>> 7fb0ba10ed31f4a582426d804fa041c69d2632b6
 
             <div class="col-md-4">
               <div class="form-group row">
@@ -3555,6 +3629,7 @@
 
 
 
+<<<<<<< HEAD
 
 
 
@@ -3584,6 +3659,9 @@
 
 
             <!-- <div class="col-md-5">
+=======
+            <div class="col-md-5">
+>>>>>>> 7fb0ba10ed31f4a582426d804fa041c69d2632b6
               <div class="form-group">
                 <div class="slider">
                   <image-slider [imageArray]="imageURL"></image-slider>
@@ -3599,7 +3677,12 @@
                 </div>
               </div>
 
+<<<<<<< HEAD
             </div> -->
+=======
+              <!-- <div class="form-group row" style="padding-top: 162px"> -->
+            </div>
+>>>>>>> 7fb0ba10ed31f4a582426d804fa041c69d2632b6
 
 
 

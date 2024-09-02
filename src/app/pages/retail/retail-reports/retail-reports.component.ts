@@ -14,6 +14,7 @@ import { RepairEnquiryComponent } from './repair-enquiry/repair-enquiry.componen
 import { RepairRegisterComponent } from './repair-register/repair-register.component';
 import { LoyaltyRegisterComponent } from './loyalty-register/loyalty-register.component';
 import { PosSalesmanCommissionComponent } from './pos-salesman-commission/pos-salesman-commission.component';
+import { RetailSalesCollectionComponent } from './retail-sales-collection/retail-sales-collection.component';
 @Component({
   selector: 'app-retail-reports',
   templateUrl: './retail-reports.component.html',
@@ -69,8 +70,8 @@ export class RetailReportsComponent implements OnInit {
 
 
       'LoyaltyRegisterComponent': LoyaltyRegisterComponent,
-      'PosSalesmanCommissionComponent': PosSalesmanCommissionComponent
-      
+      'PosSalesmanCommissionComponent': PosSalesmanCommissionComponent,
+      'RetailSalesCollectionComponent': RetailSalesCollectionComponent
       
       
   

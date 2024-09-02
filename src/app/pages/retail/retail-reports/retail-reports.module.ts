@@ -18,6 +18,7 @@ import { RepairEnquiryComponent } from './repair-enquiry/repair-enquiry.componen
 import { RepairRegisterComponent } from './repair-register/repair-register.component';
 import { LoyaltyRegisterComponent } from './loyalty-register/loyalty-register.component';
 import { PosSalesmanCommissionComponent } from './pos-salesman-commission/pos-salesman-commission.component';
+import { RetailSalesCollectionComponent } from './retail-sales-collection/retail-sales-collection.component';
 
 
 @NgModule({
@@ -36,7 +37,8 @@ import { PosSalesmanCommissionComponent } from './pos-salesman-commission/pos-sa
     RepairEnquiryComponent,
     RepairRegisterComponent,
     LoyaltyRegisterComponent,
-    PosSalesmanCommissionComponent
+    PosSalesmanCommissionComponent,
+    RetailSalesCollectionComponent
   ],
   imports: [
     CommonModule,
