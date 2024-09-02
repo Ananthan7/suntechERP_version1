@@ -200,7 +200,7 @@ export class StonePricingMasterComponent implements OnInit {
     sieve_form: [''],
     sieve_to: [''],
     color: [''],
-    clarity: ['', [Validators.required]],
+    clarity: [''],
     sieve_from: [''],
     currency: ['', [Validators.required]],
     carat_wt: [0, [Validators.required, this.notZeroValidator()]],
@@ -244,6 +244,9 @@ export class StonePricingMasterComponent implements OnInit {
         this.editPrice = true;
         this.editMode = true;
         this.setFormValues();
+      } else if (this.content.FLAG == 'DELETE') {
+        this.viewMode = true;
+        this.deleteStonepriceMaster()
       }
     }
   }
@@ -528,7 +531,7 @@ export class StonePricingMasterComponent implements OnInit {
       "WEIGHT_FROM": this.stonePrizeMasterForm.value.wt_from || 0,
       "WEIGHT_TO": this.stonePrizeMasterForm.value.wt_to || 0,
       "SIEVE_TO": this.stonePrizeMasterForm.value.sieve_to || "",
-      "SIEVEFROM_DESC": this.stonePrizeMasterForm.value.sieve_from_desc || "",
+      "SIEVEFROM_DESC": this.commonService.nullToString(this.stonePrizeMasterForm.value.sieve_from_desc),
       "SIEVETO_DESC": this.stonePrizeMasterForm.value.sieve_to_desc || "",
       "LAST_UPDATE": new Date().toISOString()
     }
@@ -723,8 +726,8 @@ export class StonePricingMasterComponent implements OnInit {
 
   /**USE: delete worker master from row */
   deleteStonepriceMaster() {
-    if (this.content && this.content.FLAG == 'VIEW' && this.content.FLAG == 'EDIT') return
-    if (!this.stonePrizeMasterForm.value.price_code) {
+    if (this.content && this.content.FLAG == 'VIEW' ) return
+    if (!this.content.code) {
       Swal.fire({
         title: '',
         text: 'Please Select data to delete!',
@@ -747,7 +750,7 @@ export class StonePricingMasterComponent implements OnInit {
       confirmButtonText: 'Yes, delete!'
     }).then((result) => {
       if (result.isConfirmed) {
-        let API = 'StonePriceMasterDJ/DeleteStonePriceMaster/' + this.stonePrizeMasterForm.value.price_code
+        let API = 'StonePriceMasterDJ/DeleteStonePriceMaster/' + this.content.code
         let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
           .subscribe((result) => {
             if (result) {
@@ -789,7 +792,70 @@ export class StonePricingMasterComponent implements OnInit {
     });
   }
 
+  // deleteStonepriceMaster() {
+  //   if (this.content && this.content.FLAG == 'VIEW') return;
+  
+  //   if (!this.stonePrizeMasterForm.value.price_code) {
+  //     this.commonService.toastErrorByMsgId('MSG2347'); // 'Please Select data to delete!' message
+  //     return;
+  //   }
+  
+  //   this.showConfirmationDialog().then((result) => {
+  //     if (result.isConfirmed) {
+  //       let API = 'StonePriceMasterDJ/DeleteStonePriceMaster/' + this.stonePrizeMasterForm.value.price_code;
+  //       let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
+  //         .subscribe((result) => {
+  //           if (result) {
+  //             if (result.status == "Success") {
+  //               this.showSuccessDialog(this.stonePrizeMasterForm.value.price_code + ' Deleted successfully');
+  //               this.stonePrizeMasterForm.reset();
+  //               this.tableData = [];
+  //               this.close('reloadMainGrid');
+  //             } else {
+  //               this.commonService.toastErrorByMsgId('MSG2272'); // 'Error please try again' message
+  //             }
+  //           } else {
+  //             this.commonService.toastErrorByMsgId('MSG1880'); // 'Not Deleted' message
+  //           }
+  //         }, err => {
+  //           this.commonService.toastErrorByMsgId('MSG1531'); // Handle error
+  //         });
+  //       this.subscriptions.push(Sub);
+  //     }
+  //   });
+  // }
 
+  showConfirmationDialog(): Promise<any> {
+    return Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete!'
+    });
+  }
+
+  showSuccessDialog(message: string): void {
+    Swal.fire({
+      title: message,
+      text: '',
+      icon: 'success',
+      confirmButtonColor: '#336699',
+      confirmButtonText: 'Ok'
+    }).then((result: any) => {
+      this.afterSave(result.value)
+    });
+  }
+
+  afterSave(value: any) {
+    if (value) {
+      this.stonePrizeMasterForm.reset()
+      this.tableData = []
+      this.close('reloadMainGrid')
+    }
+  }
 
   priceCodeSelected(data: any) {
     // console.log(data);
@@ -854,8 +920,8 @@ export class StonePricingMasterComponent implements OnInit {
           this.stonePrizeMasterForm.controls.size_to.setValue(responseData.SIZE_TO);
           this.stonePrizeMasterForm.controls.sieve_form.setValue(responseData.SIEVE);
           this.stonePrizeMasterForm.controls.sieve_to.setValue(responseData.SIEVE_TO);
-          this.commonService.arrayEmptyObjectToString(this.stonePrizeMasterForm.controls.sieve_from_desc.setValue(responseData.SIEVEFROM_DESC));
-          this.commonService.arrayEmptyObjectToString(this.stonePrizeMasterForm.controls.sieve_to_desc.setValue(responseData.SIEVETO_DESC));
+          this.stonePrizeMasterForm.controls.sieve_from_desc.setValue(responseData.SIEVEFROM_DESC);
+          this.stonePrizeMasterForm.controls.sieve_to_desc.setValue(responseData.SIEVETO_DESC);
         }
       }, err => {
         this.commonService.toastErrorByMsgId('MSG81451');
