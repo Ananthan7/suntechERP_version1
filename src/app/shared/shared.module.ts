@@ -97,6 +97,7 @@ import { NegativeAmountDecimalDirective } from './directives/format-negative-amo
 import { ReportToControlComponent } from './common/report-to-control/report-to-control.component';
 import { DateComponent } from './common/date/date.component';
 import { AsOnDateComponent } from './common/as-on-date/as-on-date.component';
+import { CommonButtonsComponent } from './common/common-buttons/common-buttons.component';
 
 
 @NgModule({
@@ -146,7 +147,8 @@ import { AsOnDateComponent } from './common/as-on-date/as-on-date.component';
     BranchDivisionComponent,
     ReportToControlComponent,
     DateComponent,
-    AsOnDateComponent
+    AsOnDateComponent,
+    CommonButtonsComponent
   ],
   imports: [
     CommonModule,
@@ -283,7 +285,7 @@ import { AsOnDateComponent } from './common/as-on-date/as-on-date.component';
     MatRadioModule, MatCardModule,
     OverlayPanelModule, DragDropModule,
     MatTableModule, CalendarModule,
-    BranchDivisionComponent, ReportToControlComponent,DateComponent, AsOnDateComponent
+    BranchDivisionComponent, ReportToControlComponent,DateComponent, AsOnDateComponent, CommonButtonsComponent
   ],
   providers: [NgbActiveModal, { provide: DateAdapter, useClass: DateFormat }]
 })
