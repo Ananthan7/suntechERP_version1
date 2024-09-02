@@ -66,6 +66,7 @@ export class MeltingIssueComponent implements OnInit {
   companyName = this.commonService.allbranchMaster['BRANCH_NAME'];
   branchCode?: String;
   yearMonth?: String;
+  gridMetalDecimalFormat: any;
  
 
   user: MasterSearchModel = {
@@ -197,7 +198,7 @@ export class MeltingIssueComponent implements OnInit {
     private commonService: CommonServiceService,) { }
 
   ngOnInit(): void {
-    this.gridAmountDecimalFormat = {
+    this.gridMetalDecimalFormat = {
       type: 'fixedPoint',
       precision: this.comService.allbranchMaster?.BAMTDECIMALS,
       currency: this.comService.compCurrency
@@ -327,7 +328,7 @@ export class MeltingIssueComponent implements OnInit {
 
           this.meltingISsueDetailsData = data.Details
           console.log(this.meltingISsueDetailsData,'data')
-          this.reCalculateSRNO() //set to main grid
+          this.recalculateSRNO() //set to main grid
           this.meltingISsueDetailsData.forEach((element: any) => {
             this.tableData.push({
               jobno: element.JOB_NUMBER,
@@ -697,7 +698,7 @@ export class MeltingIssueComponent implements OnInit {
       this.meltingISsueDetailsData[detailDataToParent.SRNO - 1] = detailDataToParent
     } else {
       this.meltingISsueDetailsData.push(detailDataToParent);
-      this.reCalculateSRNO()
+      this.recalculateSRNO()
     }
     if (DATA.FLAG == 'SAVE') this.closeDetailScreen();
     if (DATA.FLAG == 'CONTINUE') {
@@ -742,12 +743,12 @@ export class MeltingIssueComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         this.meltingISsueDetailsData = this.meltingISsueDetailsData.filter((item: any, index: any) => item.SRNO != this.selectRowIndex)
-        this.reCalculateSRNO()
+        this.recalculateSRNO()
       }
     }
     )
   }
-  reCalculateSRNO(): void {
+  recalculateSRNO(): void {
     this.meltingISsueDetailsData.forEach((element: any, index: any) => {
       element.SRNO = index + 1
       element.GROSS_WT = this.commonService.setCommaSerperatedNumber(element.GROSS_WT, 'METAL')
