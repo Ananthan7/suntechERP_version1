@@ -19,7 +19,7 @@ export class MetalIssueDetailsComponent implements OnInit {
   @ViewChild('overlaylocation') overlaylocation!: MasterSearchComponent;
   @ViewChild('overlaystockcode') overlaystockcode!: MasterSearchComponent;
   @ViewChild('overlayworkerCodeDes') overlayworkerCodeDes!: MasterSearchComponent;
-  @ViewChild('overlayprocessCodeDesc') overlayprocessCodeDesc!: MasterSearchComponent;
+  @ViewChild('overlayprocessCode') overlayprocessCode!: MasterSearchComponent;
   @Output() saveDetail = new EventEmitter<any>();
   @Output() closeDetail = new EventEmitter<any>();
   @Input() data!: any;
@@ -263,8 +263,8 @@ export class MetalIssueDetailsComponent implements OnInit {
 
 
   processCodeSelected(e: any) {
-    this.metalIssueDetailsForm.controls.processCode.setValue(e.process_code);
-    this.metalIssueDetailsForm.controls.processCodeDesc.setValue(e.description);
+    this.metalIssueDetailsForm.controls.processCode.setValue(e.PROCESS_CODE);
+    this.metalIssueDetailsForm.controls.processCodeDesc.setValue(e.DESCRIPTION);
     this.workerCodeData.WHERECONDITION = `@strProcess='${e.Process_Code}',@blnActive='true'`
   }
 
@@ -740,8 +740,8 @@ export class MetalIssueDetailsComponent implements OnInit {
       case 'workerCodeDes':
         this.overlayworkerCodeDes.showOverlayPanel(event);
         break;
-      case 'processCodeDesc':
-        this.overlayprocessCodeDesc.showOverlayPanel(event);
+      case 'processCode':
+        this.overlayprocessCode.showOverlayPanel(event);
         break;
       default:
         // Handle default case if necessary
@@ -772,7 +772,7 @@ export class MetalIssueDetailsComponent implements OnInit {
           LOOKUPDATA.SEARCH_VALUE = '';
   
           // Conditionally call showOverleyPanel based on FORMNAME
-          if (FORMNAME === 'location' ||  FORMNAME === 'workerCodeDes' || FORMNAME === 'processCodeDesc') {
+          if (FORMNAME === 'location'|| FORMNAME === 'processCode') {
             this.showOverleyPanel(event, FORMNAME);
           }
   
@@ -783,6 +783,49 @@ export class MetalIssueDetailsComponent implements OnInit {
 
       });
   
+    this.subscriptions.push(Sub);
+  }
+  SPvalidateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    LOOKUPDATA.SEARCH_VALUE = event.target.value;
+    if (event.target.value == '' || this.viewMode == true) return;
+
+    let param = {
+      "PAGENO": LOOKUPDATA.PAGENO,
+      "RECORDS": LOOKUPDATA.RECORDS,
+      "LOOKUPID": LOOKUPDATA.LOOKUPID,
+      "ORDER_TYPE": LOOKUPDATA.SEARCH_VALUE ? 1 : 0,
+      "WHERECONDITION": LOOKUPDATA.WHERECONDITION,
+      "searchField": LOOKUPDATA.SEARCH_FIELD,
+      "searchValue": LOOKUPDATA.SEARCH_VALUE
+    };
+
+    this.comService.showSnackBarMsg('MSG81447');
+    let Sub: Subscription = this.dataService.postDynamicAPI('MasterLookUp', param)
+      .subscribe((result) => {
+        this.comService.closeSnackBarMsg();
+        let data = result.dynamicData[0];
+        if (data && data.length > 0) {
+          if (LOOKUPDATA.FRONTENDFILTER && LOOKUPDATA.SEARCH_VALUE != '') {
+            let searchResult = this.comService.searchAllItemsInArray(data, LOOKUPDATA.SEARCH_VALUE);
+            console.log(searchResult, 'result');
+            if (searchResult && searchResult.length == 0) {
+              this.comService.toastErrorByMsgId('No data found');
+              this.metalIssueDetailsForm.controls[FORMNAME].setValue('');
+              LOOKUPDATA.SEARCH_VALUE = '';
+              switch (FORMNAME) {
+                case 'processCode':
+                  this.showOverleyPanel(event, 'processCode');
+                  break;
+                default:
+
+              }
+              return;
+            }
+          }
+        }
+      }, err => {
+        this.comService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+      });
     this.subscriptions.push(Sub);
   }
   

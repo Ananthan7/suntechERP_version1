@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, Renderer2 } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { MasterSearchModel } from "src/app/shared/data/master-find-model";
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
@@ -148,7 +148,7 @@ export class GoldExchangeComponent implements OnInit {
     supInvNo: [''],
     supInvDate: [new Date()],
     custName: [''],
-    email: ['', Validators.email],
+    email: ['', [Validators.required, Validators.email, customEmailValidator()]],
     custId: [''],
     narration: [''],
     partyCurrency: [''],
@@ -1415,3 +1415,10 @@ export class GoldExchangeComponent implements OnInit {
 
 }
 
+export function customEmailValidator(): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(com|in|net|org|gov|edu|mil)$/;
+    const valid = emailRegex.test(control.value);
+    return valid ? null : { invalidEmail: true };
+  };
+}

@@ -82,7 +82,9 @@
                                             <input type="text" matInput
                                                 UpperCaseDirective
                                                 formControlName="processCode"
-                                                [readonly]="viewMode" />
+                                                [readonly]="viewMode" 
+                                                (keydown)="lookupKeyPress($event,'processCode')" 
+                                                (focusout)="SPvalidateLookupField($event,processCodeData,'processCode')"/>
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-5">
@@ -90,12 +92,10 @@
                                             style="width: 80%;">
                                             <input type="text" matInput
                                                 formControlName="processCodeDesc"
-                                                (keydown)="lookupKeyPress($event,'processCodeDesc')" 
-                                                (focusout)="validateLookupField($event,processCodeData,'processCodeDesc')"
                                                 readonly>
                                         </mat-form-field>
                                         <master-search
-                                            [MasterSearchData]="processCodeData" #overlayprocessCodeDesc
+                                            [MasterSearchData]="processCodeData" #overlayprocessCode
                                             (newRowClick)="processCodeSelected($event)"
                                             *ngIf="!viewMode">
                                         </master-search>

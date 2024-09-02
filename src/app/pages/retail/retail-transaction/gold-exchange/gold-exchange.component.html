@@ -188,10 +188,9 @@
               <input type="text" matInput [readonly]="viewOnly" formControlName="email" />
             </mat-form-field>
             <mat-error *ngIf="
-                      goldExchangeForm.controls.email.hasError(
-                      'email'
-                    )
-                  ">
+            goldExchangeForm.controls.email.hasError('email') && 
+            (goldExchangeForm.controls.email.touched || goldExchangeForm.controls.email.dirty)
+          ">
               Please enter a valid email address
             </mat-error>
           </div>
@@ -266,7 +265,7 @@
             <dxi-column dataField="GROSSWT" caption="Weight" [width]="100" [format]="weightDecimalFormat"
               [allowEditing]="false">
             </dxi-column>
-            <dxi-column dataField="PUREWT" caption="Pure Weight" alignment="right"  [width]="100" [allowEditing]="false"
+            <dxi-column dataField="PUREWT" caption="Pure Weight" alignment="right" [width]="100" [allowEditing]="false"
               [format]="amountDecimalFormat"></dxi-column>
 
             <dxi-column dataField="MKGVALUEFC" caption="Mkg.RATE" alignment="right" [allowEditing]="false"
@@ -304,7 +303,7 @@
           </div>
         </div>
       </div>
-    
+
       <div class="col-md-4">
         <div class="row">
           <label for="inputPassword" class="col-sm-4 col-form-label">Party Currency</label>
@@ -329,8 +328,7 @@
           </div>
           <div class="col-md-4">
             <mat-form-field style="width: 100%;">
-              <input type="text" class="text-end" readonly AmountDecimalInput matInput
-                formControlName="amountDes" />
+              <input type="text" class="text-end" readonly AmountDecimalInput matInput formControlName="amountDes" />
             </mat-form-field>
           </div>
         </div>
@@ -343,14 +341,13 @@
           </div>
           <div class="col-md-4">
             <mat-form-field style="width: 100%;">
-              <input type="text" class="text-end" (change)="changeRoundOffAmount($event)"
-               [readonly]="viewOnly" NegativeAmountDecimal matInput
-                formControlName="rndOfAmtDes" />
+              <input type="text" class="text-end" (change)="changeRoundOffAmount($event)" [readonly]="viewOnly"
+                NegativeAmountDecimal matInput formControlName="rndOfAmtDes" />
             </mat-form-field>
           </div>
         </div>
       </div>
-    
+
       <div class="col-md-4">
         <div class="row">
           <label for="inputPassword" class="col-sm-4 col-form-label">Rnd Net Amt</label>
@@ -361,8 +358,7 @@
           </div>
           <div class="col-md-4">
             <mat-form-field style="width: 100%;">
-              <input type="text" class="text-end" readonly AmountDecimalInput matInput
-                formControlName="rndNetAmtDes" />
+              <input type="text" class="text-end" readonly AmountDecimalInput matInput formControlName="rndNetAmtDes" />
             </mat-form-field>
           </div>
         </div>
@@ -375,8 +371,7 @@
           </div>
           <div class="col-md-4">
             <mat-form-field style="width: 100%;">
-              <input type="text" AmountDecimalInput class="text-end" readonly matInput
-                formControlName="otherAmtDes" />
+              <input type="text" AmountDecimalInput class="text-end" readonly matInput formControlName="otherAmtDes" />
             </mat-form-field>
           </div>
         </div>
@@ -389,13 +384,12 @@
           </div>
           <div class="col-md-4">
             <mat-form-field style="width: 100%;">
-              <input type="text" class="text-end" readonly AmountDecimalInput matInput
-                formControlName="grossAmtDes" />
+              <input type="text" class="text-end" readonly AmountDecimalInput matInput formControlName="grossAmtDes" />
             </mat-form-field>
           </div>
         </div>
       </div>
     </div>
-    
+
   </form>
 </div>

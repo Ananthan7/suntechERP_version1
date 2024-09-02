@@ -94,6 +94,9 @@ import { AlphabetsOnlyDirective } from './directives/alphabets-only.directive';
 import { NextInputDirective } from './directives/next-input.directive';
 import { BranchDivisionComponent } from './common/branch-division/branch-division.component';
 import { NegativeAmountDecimalDirective } from './directives/format-negative-amount-decimal.directive';
+import { ReportToControlComponent } from './common/report-to-control/report-to-control.component';
+import { DateComponent } from './common/date/date.component';
+import { AsOnDateComponent } from './common/as-on-date/as-on-date.component';
 
 
 @NgModule({
@@ -140,7 +143,10 @@ import { NegativeAmountDecimalDirective } from './directives/format-negative-amo
     ImageSliderComponent,
     FavoriteMenusComponent,
     DatetimePickerComponent,
-    BranchDivisionComponent
+    BranchDivisionComponent,
+    ReportToControlComponent,
+    DateComponent,
+    AsOnDateComponent
   ],
   imports: [
     CommonModule,
@@ -277,7 +283,7 @@ import { NegativeAmountDecimalDirective } from './directives/format-negative-amo
     MatRadioModule, MatCardModule,
     OverlayPanelModule, DragDropModule,
     MatTableModule, CalendarModule,
-    BranchDivisionComponent
+    BranchDivisionComponent, ReportToControlComponent,DateComponent, AsOnDateComponent
   ],
   providers: [NgbActiveModal, { provide: DateAdapter, useClass: DateFormat }]
 })

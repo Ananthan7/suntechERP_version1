@@ -22,7 +22,7 @@ export class RetailAdvanceReceiptRegisterComponent implements OnInit {
   // selected = 'all';
   selectedBranchCode = this.branchCode
   selected: string = 'all'; 
-  selectedReport:string ='preview'
+ 
   public modeselect = this.branchCode;
   retailAdvanceReceiptRegisterForm: FormGroup = this.formBuilder.group({
     branch : [''],
@@ -197,8 +197,23 @@ export class RetailAdvanceReceiptRegisterComponent implements OnInit {
     content4 = content4.replace(/, $/, '');
     this.branchDivisionControls = content +'\n'+content2 +'\n'+ content3 +'\n'+ content4
     // console.log(this.branchDivisionControls);
+    this.retailAdvanceReceiptRegisterForm.controls.branch.setValue(this.branchDivisionControls);
   }
-  
+  setValueFromCommon(event: any){
+    this.retailAdvanceReceiptRegisterForm.controls.reportTo.setValue(event.value);
+    console.log(this.retailAdvanceReceiptRegisterForm.controls.reportTo.value)
+  }
+  setDateValue(event: any){
+    if(event.FromDate){
+      this.retailAdvanceReceiptRegisterForm.controls.fromDate.setValue(event.FromDate);
+      console.log(event.FromDate)
+    }
+    else if(event.ToDate){
+      this.retailAdvanceReceiptRegisterForm.controls.toDate.setValue(event.ToDate);
+      console.log(this.retailAdvanceReceiptRegisterForm)
+      this.toDateValitation()
+    }
+  }
 
 
 }

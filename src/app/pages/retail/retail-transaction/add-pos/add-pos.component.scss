@@ -216,18 +216,38 @@ button:disabled {
 }
 
 .next-item-button {
-  background-color: #1a61a9;
+  // background-color: #1a61a9;
+  background-color: #295094 !important;
   color: white;
+  padding: 5px 10px;
+  line-height: 1.5;
 }
 
 .update-finish-button {
-  background-color: #1E3C72;
+  // background-color: #1E3C72;
+  background-color: #295094 !important;
   color: white;
+  padding: 5px 10px;
+  line-height: 1.5;
 }
 
 .cancel-button {
-  background-color: #428cc9;
+  // background-color: #428cc9;
+  background-color: #B9C3D3 !important;
   color: white;
+  padding: 5px 10px;
+  line-height: 1.5;
+}
+
+.sReturnVocNumsearch{
+  position: absolute;
+  top: 1px;
+  margin-left: -0.3rem !important;
+}
+
+.btn-width {
+  width: 120px; /* Set a fixed width */
+  text-align: center; /* Centers text */
 }
 
 .slider{
@@ -238,4 +258,8 @@ button:disabled {
 
 .button-spacing {
   margin-right: 16px;
+}
+
+.checkBoxCustom{
+  margin-top: 28px;
 }

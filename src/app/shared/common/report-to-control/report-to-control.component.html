@@ -1,0 +1,15 @@
+<div class="row">
+    <label for="inputPassword" class="col-sm-2 col-form-label">Report To</label>
+    <div class="col-md-2">
+        <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
+            <mat-select [(value)]="selectedReport" formControlName="reportTo" (selectionChange)="onSelectionChange($event)">
+                <mat-option value="preview" id="ID007">PREVIEW</mat-option>
+                <mat-option value="print" id="ID008">PRINT</mat-option>
+                <mat-option value="catalogue" id="ID009">CATALOGUE</mat-option>
+                <mat-option value="excel" id="ID010">EXCEL</mat-option>
+                <mat-option value="pdf" id="ID011">PDF</mat-option>
+                <mat-option value="email" id="ID012">EMAIL</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+</div>

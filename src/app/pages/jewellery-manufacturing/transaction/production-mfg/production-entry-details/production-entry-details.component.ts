@@ -7,6 +7,7 @@ import { Subscription } from "rxjs";
 import { NgbActiveModal, NgbModal, NgbModalRef, } from "@ng-bootstrap/ng-bootstrap";
 import { ProductionStockDetailComponent } from "../production-stock-detail/production-stock-detail.component";
 import { SavedataModel } from "../savedata-model";
+import Swal from "sweetalert2";
 
 @Component({
   selector: "app-production-entry-details",
@@ -36,6 +37,8 @@ export class ProductionEntryDetailsComponent implements OnInit {
   imagepath: any[] = []
   JOB_PRODUCTION_SUB_DJ: any[] = []
   JOB_PRODUCTION_STNMTL_DJ: any[] = []
+  metalDetailData: any[] = []
+  pendingProcess: any[] = []
   private subscriptions: Subscription[] = [];
 
   StockDetailData: SavedataModel = {
@@ -231,7 +234,6 @@ export class ProductionEntryDetailsComponent implements OnInit {
     SETREF: [''],
     price3: [''],
     KARAT_CODE: [''],
-    venderref: [''],
     price4: [''],
     START_DATE: [''],
     END_DATE: [''],
@@ -239,7 +241,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
     price5: [''],
     remarks: [''],
     prodpcs: [''],
-    pndpcs: [''],
+    PENDING_PCS: [''],
     LOSS_PER: [''],
     fromStockCode: [''],
     fromStockCodeDesc: [''],
@@ -267,7 +269,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
     PURE_WT: [''],
     PurityDiff: [''],
     Job_Purity: [''],
-    VenderRef: [''],
+    SUPPLIER_REF: [''],
     VOCDATE: [''],
     METALSTONE: [''],
     DIVCODE: [''],
@@ -468,6 +470,8 @@ export class ProductionEntryDetailsComponent implements OnInit {
             this.setFormNullToString('METALLAB_TYPE', data[0].METALLAB_TYPE)
             this.setFormNullToString('DESIGN_TYPE', data[0].DESIGN_TYPE?.toUpperCase())
             this.setFormNullToString('METAL_STOCK_CODE', data[0].METAL_STOCK_CODE)
+            this.setFormNullToString('SUPPLIER_REF', data[0].DESIGN_CODE+data[0].METAL_COLOR)
+            this.setFormNullToString('PENDING_PCS', data[0].JOB_PCS_TOTAL)
             this.designType = this.commonService.nullToString(data[0].DESIGN_TYPE?.toUpperCase());
             this.productiondetailsFrom.controls.PREFIX.setValue(data[0].PREFIX)
             this.productiondetailsFrom.controls.PREFIXNO.setValue(data[0].PREFIX_NUMBER)
@@ -531,6 +535,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
           this.productiondetailsFrom.controls.totalpcs.setValue(data[0].PCS)
           this.FORM_VALIDATER = this.productiondetailsFrom.value
           this.pendingProcessValidate()
+          this.fillStoneDetails()
         } else {
           this.commonService.toastErrorByMsgId('MSG1747');
         }
@@ -557,13 +562,15 @@ export class ProductionEntryDetailsComponent implements OnInit {
         this.commonService.closeSnackBarMsg()
         if (result.dynamicData && result.dynamicData[0].length > 0) {
           let data = result.dynamicData[0] || []
-          let strMsg: string = "";
+          let processMsg = "";
+          this.pendingProcess = [];
           for (let i = 0; i < data.length; i++) {
-            strMsg += data[i]["PCS"].ToString() + " PCS , " + data[i]["GRWT"].ToString() + " Weight in ";
-            strMsg += data[i]["WORKER_CODE"].ToString() + " Worker  On " + data[i]["PROCESS_CODE"].ToString() + " Process " + "\n";
+            processMsg += data[i]["PCS"] + " PCS , " + data[i]["GRWT"] + " Weight in ";
+            processMsg += data[i]["WORKER_CODE"] + " Worker  On " + data[i]["PROCESS_CODE"] + " Process " ;
+            this.pendingProcess.push({PROCESS: processMsg})
+            processMsg = ""
           }
-          this.commonService.toastInfoByMsgId(strMsg)
-          this.FORM_VALIDATER = this.productiondetailsFrom.value
+          this.openPendingProcessModal()
         } else {
           this.commonService.toastErrorByMsgId('MSG1747');
         }
@@ -573,7 +580,61 @@ export class ProductionEntryDetailsComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
-
+  /**USE: fillStoneDetails grid data */
+  private fillStoneDetails(): void {
+    let form = this.productiondetailsFrom.value
+    let postData = {
+      "SPID": "042",
+      "parameter": {
+        strJobNumber: this.commonService.nullToString(form.JOB_NUMBER),
+        strUnq_Job_Id: this.commonService.nullToString(form.UNQ_JOB_ID),
+        strProcess_Code: this.commonService.nullToString(form.PROCESS_CODE),
+        strWorker_Code: this.commonService.nullToString(form.WORKER_CODE),
+        strBranch_Code: this.commonService.nullToString(this.branchCode)
+      }
+    }
+    this.commonService.showSnackBarMsg('MSG81447')
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        this.commonService.closeSnackBarMsg()
+        if (result.status == "Success" && result.dynamicData[0]) {
+          let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+          if (data) {
+            this.metalDetailData = data
+          
+          } else {
+            this.commonService.toastErrorByMsgId('MSG1531')
+            return
+          }
+        } else {
+          this.commonService.toastErrorByMsgId('MSG1747')
+        }
+      }, err => {
+        this.commonService.closeSnackBarMsg()
+        this.commonService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
+  }
+  @ViewChild('pendingProcessModal') public pendingProcessModal!: NgbModal;
+  openPendingProcessModal() {
+    this.modalReference = this.modalService.open(this.pendingProcessModal, {
+      size: 'lg',
+      ariaLabelledBy: 'modal-basic-title',
+      backdrop: false,
+    });
+  }
+  showConfirmationDialog(msg: string): Promise<any> {
+    return Swal.fire({
+      title: '',
+      text: msg,
+      icon: 'warning',
+      showCancelButton: false,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      cancelButtonText: 'No',
+      confirmButtonText: 'Ok'
+    });
+  }
   close(data?: any) {
     //TODO reset forms and data before closing
     // this.activeModal.close(data);
@@ -945,7 +1006,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
       "METAL_LABAMTFC": 0,
       "METAL_LABAMTLC": 0,
       "METAL_LABACCODE": "",
-      "SUPPLIER_REF": "",
+      "SUPPLIER_REF": this.emptyToZero(form.SUPPLIER_REF),
       "TAGLINES": "",
       "SETTING_CHRG": this.emptyToZero(form.settingChrg),
       "POLISH_CHRG": this.emptyToZero(form.polishChrg),

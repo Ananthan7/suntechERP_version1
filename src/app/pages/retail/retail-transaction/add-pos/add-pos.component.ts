@@ -699,7 +699,7 @@ export class AddPosComponent implements OnInit {
     // { title: 'Document Number', field: 'DOCUMENT_NO' },
     // { title: 'From KYC', field: 'FROM_KYC' },
   ];
-
+  estimationList: any[] = [];
   pendingOrderList: any[] = [];
   pendingOrderColumnList: any[] = [
     { title: 'Order No.', field: 'VOCNO', alignment: 'right' },
@@ -717,7 +717,6 @@ export class AddPosComponent implements OnInit {
     { title: 'Customer Code', field: 'POSCUSTCODE', alignment: 'left' },
   ];
 
-  estimationList: any[] = [];
   estimationColumnList: any[] = [
     { title: 'Estimation Date', field: 'orderdate' },
     { title: 'Estimation No.', field: 'orderno' },
@@ -1557,7 +1556,7 @@ export class AddPosComponent implements OnInit {
               stone_amt: this.comFunc.emptyToZero(this.lineItemForm.value.fcn_ad_stone_amount) || 0,
             };
 
-            // this.newLineItem.pcs = data.PCS;
+            this.newLineItem.PCS = data.PCS;
             // this.newLineItem.pure_wt = data.PURITY;
             // this.newLineItem.STONEWT = data.STONE_WT;
             // this.newLineItem.total_amount = data.MKGVALUEFC;
@@ -1574,12 +1573,7 @@ export class AddPosComponent implements OnInit {
               values.gross_amt = data.MKGVALUEFC - data.DISCOUNTVALUECC;
               this.currentLineItems[index].GROSS_AMT = data.MKGVALUEFC - data.DISCOUNTVALUECC;
             }
-            console.log(
-              '==============currentLineItems val======================'
-            );
-            console.log(this.currentLineItems);
-            console.log(this.currentLineItems[index]);
-            console.log('====================================');
+
           });
 
           this.order_items_total_discount_amount = retailSaleData.DISCOUNT;
@@ -1811,7 +1805,7 @@ export class AddPosComponent implements OnInit {
       }
     });
   }
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.isNewButtonDisabled = true;
 
     this.fetchPramterDetails();
@@ -2655,7 +2649,7 @@ export class AddPosComponent implements OnInit {
     }
 
     this.modalReference = this.modalService.open(content, {
-      size: 'lg',
+      size: 'xl',
       ariaLabelledBy: 'modal-basic-title',
       backdrop: false,
     });
@@ -2782,39 +2776,31 @@ export class AddPosComponent implements OnInit {
     // this.exchange_items.splice(event.data.sn_no, 1);
     this.sumTotalValues();
   }
-  
-  // removeLineItemsGrid(event: any) {
-  //   const removedIndex = event.rowIndex;
-  
-  //   this.ordered_items.splice(removedIndex, 1);
-  
-  //   this.ordered_items.forEach((item, index) => {
-  //     item.sn_no = index + 1;
-  //   });
-  
-    
-  // }
-  
+
+
+
+  deletedItemBackup: any = null;
 
   removeLineItemsGrid(event: any) {
-    console.log('remove row');
-    console.log('====================================');
-    console.log(event);
-    console.log('====================================');
+    this.deletedItemBackup = {
+      item: event.data,
+      index: this.ordered_items.findIndex(item => item.ID === event.data.ID)
+    };
 
-    const itemIndex = this.ordered_items.findIndex(item => item.sn_no === event.data.sn_no);
-    if (itemIndex > -1) {
-      this.ordered_items.splice(itemIndex, 1);
-    }
 
+
+
+    this.ordered_items = this.ordered_items.filter(item => item.sn_no !== event.data.sn_no);
     this.currentLineItems = this.currentLineItems.filter((item: any) => item.SRNO !== event.data.sn_no);
 
     this.ordered_items.forEach((item, index) => {
       item.sn_no = index + 1;
+      item.ID = index + 1;
     });
 
     this.currentLineItems.forEach((item: any, index: any) => {
       item.SRNO = index + 1;
+      item.ID = index + 1;
     });
 
     if (this.comFunc.posKARATRATECHANGE.toString() == '0') {
@@ -2829,7 +2815,9 @@ export class AddPosComponent implements OnInit {
 
     this.setRetailSalesDataPost();
     console.log(this.currentLineItems)
+
   }
+
 
   removeSalesReturnGrid(event: any) {
     // this.currentsalesReturnItems.splice(event.data.sn_no, 1);
@@ -6298,16 +6286,24 @@ export class AddPosComponent implements OnInit {
     let fcn_ad_metal_rate = isPulled ? this.comFunc.decimalQuantityFormat(data.METAL_RATE, 'METAL_RATE') : this.lineItemForm.value.fcn_ad_metal_rate;
 
     fcn_ad_metal_rate = (fcn_ad_metal_rate === null || fcn_ad_metal_rate === 0 || fcn_ad_metal_rate === '') ? 0 : parseFloat(fcn_ad_metal_rate.replace(/,/g, ''));
+
+    let newSRNO = isPulled ? data.SRNO : sno;
+
+    while (this.currentLineItems.some((item: any) => item.SRNO === newSRNO)) {
+      newSRNO++;
+    }
+
+
     let temp_pos_item_data: any = {
       // new values
       // "UNIQUEID": 0,
 
       DIVISIONMS: data.DIVISIONMS,
-      SRNO: isPulled ? data.SRNO : sno,
+      SRNO: newSRNO,
       DIVISION_CODE: isPulled ? data.DIVISION_CODE : data.DIVISION,
       STOCK_CODE: data.STOCK_CODE, // m
       GROSS_AMT: isPulled ? data.NETVALUECC : this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_amount) || 0,
-      PCS: isPulled ? data.PCS : data.pcs, //m
+      PCS: data.PCS,
       GROSSWT: isPulled ? data.GROSSWT : this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt),
       STONEWT: isPulled ? data.STONEWT : data.STONE_WT, // m
       NETWT: isPulled
@@ -7211,8 +7207,14 @@ export class AddPosComponent implements OnInit {
         let lastSRNO: number = 0; // To keep track of the last SRNO
 
         itemsToAdd.forEach((item: any) => {
-          let newSRNO = this.calculateNextSRNO(); // Calculate SRNO for each item
-          lastSRNO = newSRNO; // Update lastSRNO after each iteration
+          let newSRNO = this.orderedItemEditId ? this.orderedItemEditId : this.calculateNextSRNO(); // Use existing SRNO for editing
+
+          if (!this.orderedItemEditId) {
+            while (this.ordered_items.some(orderedItem => orderedItem.sn_no === newSRNO)) {
+              newSRNO++;
+            }
+            lastSRNO = newSRNO;
+          }
 
           if (this.newLineItem.STOCK_CODE == '' || (!apiData && !this.lineItemForm.value.fcn_li_item_code)) {
             this.openDialog('Failed', this.comFunc.getMsgByID('MSG1816'), true);
@@ -7222,8 +7224,7 @@ export class AddPosComponent implements OnInit {
                 this.renderer.selectRootElement('#fcn_li_item_code').focus();
               }
             });
-          }
-          else {
+          } else {
             let itemsLengths = this.ordered_items[this.ordered_items.length - 1];
 
             if (
@@ -7259,7 +7260,7 @@ export class AddPosComponent implements OnInit {
               rate: this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_rate) || 0,
               taxPer: this.lineItemForm.value.fcn_li_tax_percentage || 0,
             };
-
+            this.newLineItem.PCS = values.pcs
             if (
               this.orderedItemEditId == '' ||
               this.orderedItemEditId == undefined ||
@@ -7288,7 +7289,8 @@ export class AddPosComponent implements OnInit {
         } else {
           // Handle the case where isPulled is false or there are no details
           this.setPosItemData(lastSRNO, this.newLineItem, false);
-        } this.newLineItem.STOCK_CODE = '';
+        }
+        this.newLineItem.STOCK_CODE = '';
 
         this.lineItemForm.reset();
         this.isNetAmountChange = false;
@@ -13136,29 +13138,9 @@ export class AddPosComponent implements OnInit {
   }
 
   importSalesEstimation() {
-    this.modalRefePendingSalesEstimation = this.modalService.open(
-      this.salesEstimationModal,
-      {
-        size: 'lg',
-        ariaLabelledBy: 'modal-basic-title',
-        backdrop: false,
-        // size: "lg",
-        // backdrop: true,
-        // keyboard: false,
-        // windowClass: "modal-full-width",
-      }
-    );
+    this.estimationList = [];
+    this.importEstimationList();
 
-    this.modalRefePendingSalesEstimation.result.then((result) => {
-      if (result) {
-        console.log("Result :", result);
-      } else {
-      }
-    },
-      (reason) => {
-        console.log(`Dismissed ${reason}`);
-      }
-    );
   }
 
   pullSalesOrder() {
@@ -13488,18 +13470,14 @@ export class AddPosComponent implements OnInit {
       });
   }
 
-  async getFinancialYear() {
-    console.log(' this.vocDataForm.value.vocdate ', this.vocDataForm.value.vocdate);
 
-    const API = `BaseFinanceYear/GetBaseFinancialYear/${this.comFunc.cDateFormat(this.vocDataForm.value.vocdate)}`;
-    const res = await this.suntechApi.getDynamicAPI(API).toPromise()
-    // .subscribe((resp) => {
+  async getFinancialYear() {
+    const API = `BaseFinanceYear/GetBaseFinancialYear/${this.convertDateToYMD(this.vocDataForm.value.vocdate)}`;
+    const res = await this.suntechApi.getDynamicAPI(API).toPromise();
     console.log(res);
     if (res.status == "Success") {
       this.baseYear = res.BaseFinancialyear;
     }
-    // });
-
   }
 
   // call after edit save
@@ -13906,7 +13884,6 @@ export class AddPosComponent implements OnInit {
     const maxSRNO = srnos.length > 0 ? Math.max(...srnos) : 0;
     return maxSRNO + 1;
   }
-  
 
   onSelectionChanged(event: any) {
     this.selectedRowData = event.selectedRowsData[0];
@@ -13943,6 +13920,73 @@ export class AddPosComponent implements OnInit {
           return;
         }
       });
+  }
+
+  importEstimationList() {
+    if (!this.customerDataForm.value.fcn_customer_code) {
+      let message = "Please add customer details"
+      this.openDialog('Warning', message, true);
+
+      this.dialogBox.afterClosed().subscribe((action: any) => {
+
+      });
+    }
+    else {
+      const postData = {
+        "strBranchCode": this.strBranchcode,
+        "strYearMonth": this.baseYear,
+        "strVocDate": this.convertDateToYMD(this.vocDataForm.value.vocdate),
+        "strCustCode": this.customerDataForm.value.fcn_customer_code,
+        "strEstMid": [
+          0
+        ]
+      };
+
+      this.suntechApi.postDynamicAPI('/RetailEstimationNet/EstimationListLoad', postData).subscribe((result) => {
+        console.log(result);
+        if (result.status == 'Success' && result.response != null) {
+          this.estimationList = result.dynamicData[0];
+          this.openEstimationModal();
+        }
+        else {
+          this.estimationList = [];
+          this.openDialog('Warning', this.comFunc.getMsgByID(result.message.match(/MSG\d+/)[0]), true);
+
+          this.dialogBox.afterClosed().subscribe((action: any) => {
+
+          });
+        }
+      });
+
+    }
+  }
+
+
+  openEstimationModal() {
+    this.modalRefePendingSalesEstimation = this.modalService.open(
+      this.salesEstimationModal,
+      {
+        size: 'lg',
+        ariaLabelledBy: 'modal-basic-title',
+        backdrop: false,
+
+      }
+    );
+
+    this.modalRefePendingSalesEstimation.result.then((result) => {
+      if (result) {
+        console.log("Result :", result);
+      } else {
+      }
+    },
+      (reason) => {
+        console.log(`Dismissed ${reason}`);
+      }
+    );
+  }
+
+  onEstimationEntryChange(event: any) {
+
   }
 
 }
