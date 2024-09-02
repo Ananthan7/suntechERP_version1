@@ -605,7 +605,7 @@
               </mat-checkbox>
             </div>
           
-            <div class="col-md-2" *ngIf="customerDataForm.value.tourVatRefuncYN">
+            <div class="col-md-3" *ngIf="customerDataForm.value.tourVatRefuncYN">
               <label for="tourVatRefundNo">Tourist VAT Refund Ref #</label>
               <mat-form-field appearance="outline" style="width: 100%">
                 <input type="text" matInput formControlName="tourVatRefundNo" />
@@ -616,7 +616,7 @@
           
         </form>
 
-        <div class="text-right">
+        <div class="text-right mt-2">
           <button type="button" mat-flat-button  (click)="importSalesEstimation()" class="update-finish-button">
             Import Sales Estimation
           </button>
@@ -2529,7 +2529,7 @@
           <div class="form-group row">
             <div class="col-md-4">
                 <div class="form-group row">
-                  <label class="col-form-label col-sm-4" for="fcn_mob_code" id="ID135">Code</label>
+                  <label class="col-form-label col-sm-4" for="fcn_mob_code" id="ID135">Code <span class="text-danger">&ast;</span></label>
                   <div class="col-sm-8">
                     <mat-form-field appearance="outline" style="width: 100%">
                       <input type="text" matInput class="st_txt_right"
@@ -2551,10 +2551,10 @@
             
             <div class="col-md-4">
                 <div class="form-group row">
-                  <label class="col-form-label col-sm-4" for="fcn_cust_detail_phone" id="ID137">Mobile 1</label>
+                  <label class="col-form-label col-sm-4" for="fcn_cust_detail_phone" id="ID137">Mobile 1 <span class="text-danger">&ast;</span></label>
                   <div class="col-sm-8">
                     <mat-form-field appearance="outline" style="width: 100%">
-                      <input type="text" #mobile1 (change)="onCustomerNameFocus(mobile1.value)" class="st_txt_right"
+                      <input type="text" #mobile1 (change)="onCustomerNameFocus(mobile1.value)"
                         onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))"
                         matInput formControlName="fcn_cust_detail_phone" id="fcn_cust_detail_phone" [readonly]="viewOnly"
                         maxlength="20" />
@@ -2568,7 +2568,7 @@
             
             <div class="col-md-4">
                 <div class="form-group row">
-                  <label class="col-form-label col-sm-4" for="customer_detail_name" id="ID139">Name</label>
+                  <label class="col-form-label col-sm-4" for="customer_detail_name" id="ID139">Name <span class="text-danger">&ast;</span></label>
                   <div class="col-sm-8">
                     <mat-form-field appearance="outline" style="width: 100%">
                       <input type="text" matInput formControlName="fcn_customer_detail_name" id="fcn_customer_detail_name"
@@ -2602,13 +2602,13 @@
                   <mat-form-field appearance="outline" style="width: 100%">
                     <input type="text" matInput formControlName="fcn_customer_detail_fname" [readonly]="true"
                     appNoEmptySpace />
-                    <mat-error *ngIf="
+                    <!-- <mat-error *ngIf="
                         customerDetailForm.controls.fcn_customer_detail_fname.hasError(
                           'required'
                         )
                       " id="ID142">
                       First Name is <strong>required</strong>
-                    </mat-error>
+                    </mat-error> -->
                   </mat-form-field>
                 </div>
               </div>
@@ -2631,13 +2631,13 @@
                 <div class="col-sm-8">
                   <mat-form-field appearance="outline" style="width: 100%">
                     <input type="text" matInput formControlName="fcn_customer_detail_lname" [readonly]="true" />
-                    <mat-error *ngIf="
+                    <!-- <mat-error *ngIf="
                         customerDetailForm.controls.fcn_customer_detail_lname.hasError(
                           'required'
                         )
                       " id="ID145">
                       Last Name is <strong>required</strong>
-                    </mat-error>
+                    </mat-error> -->
                     <mat-error *ngIf="
                         customerDetailForm.controls.fcn_customer_detail_lname.hasError(
                           'maxlength'
@@ -2657,7 +2657,7 @@
                 <label class="col-form-label col-sm-4" for="cust_detail_phone2" id=ID147>Mobile 2</label>
                 <div class="col-sm-8">
                   <mat-form-field appearance="outline" style="width: 100%">
-                    <input type="text" class="st_txt_right"
+                    <input type="text"
                       onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))"
                       matInput formControlName="fcn_cust_detail_phone2" [readonly]="viewOnly" />
                   </mat-form-field>
@@ -2667,7 +2667,7 @@
           
             <div class="col-md-4">
               <div class="form-group row">
-                <label class="col-form-label col-sm-4" for="cust_detail_email" id="ID148">Email Address</label>
+                <label class="col-form-label col-sm-4" for="cust_detail_email" id="ID148">Email Address <span class="text-danger">&ast;</span></label>
                 <div class="col-sm-8">
                   <mat-form-field appearance="outline" style="width: 100%">
                     <input type="email" matInput formControlName="fcn_cust_detail_email" [readonly]="viewOnly" />
@@ -2685,7 +2685,7 @@
           
             <div class="col-md-4">
               <div class="form-group row">
-                <label class="col-form-label col-sm-4" for="cust_detail_gender" id="ID150">Gender</label>
+                <label class="col-form-label col-sm-4" for="cust_detail_gender" id="ID150">Gender <span class="text-danger">&ast;</span></label>
                 <div class="col-sm-8">
                   <mat-form-field appearance="outline" style="width: 100%">
                     <mat-select formControlName="fcn_cust_detail_gender" [disabled]="viewOnly">
@@ -2722,7 +2722,7 @@
           
             <div class="col-md-4">
               <div class="form-group row">
-                <label class="col-form-label col-sm-4" for="cust_detail_dob" id="ID153">Date Of Birth</label>
+                <label class="col-form-label col-sm-4" for="cust_detail_dob" id="ID153">Date Of Birth <span class="text-danger">&ast;</span></label>
                 <div class="col-sm-8">
                   <mat-form-field appearance="outline" style="width: 100%">
                     <input matInput [matDatepicker]="dob" [max]="vocMaxDate" name="fcn_cust_detail_dob"
@@ -2743,7 +2743,7 @@
           
             <div class="col-md-4">
               <div class="form-group row">
-                <label class="col-form-label col-sm-4" for="cust_detail_nationality" id="ID155">Nationality</label>
+                <label class="col-form-label col-sm-4" for="cust_detail_nationality" id="ID155">Nationality <span class="text-danger">&ast;</span></label>
                 <div class="col-sm-8">
                   <mat-form-field appearance="outline" style="width: 100%">
                     <input type="text" matInput formControlName="fcn_cust_detail_nationality"
@@ -2776,7 +2776,7 @@
           <div class="form-group row">
             <div class="col-md-4">
               <div class="form-group row">
-                <label class="col-form-label col-sm-4" for="cust_detail_country" id="ID157">Country</label>
+                <label class="col-form-label col-sm-4" for="cust_detail_country" id="ID157">Country <span class="text-danger">&ast;</span></label>
                 <div class="col-sm-8">
                   <mat-form-field appearance="outline" style="width: 100%">
                     <input type="text" matInput formControlName="fcn_cust_detail_country" id="fcn_cust_detail_country"
@@ -2860,7 +2860,7 @@
           <div class="form-group row">
             <div class="col-md-4">
               <div class="form-group row">
-                <label class="col-form-label col-sm-4" for="cust_detail_address" id="ID161">Address</label>
+                <label class="col-form-label col-sm-4" for="cust_detail_address" id="ID161">Address <span class="text-danger">&ast;</span></label>
                 <div class="col-sm-8">
                   <mat-form-field appearance="outline" style="width: 100%">
                     <input type="text" matInput formControlName="fcn_cust_detail_address" [readonly]="viewOnly"
@@ -2879,7 +2879,7 @@
           
             <div class="col-md-4">
               <div class="form-group row">
-                <label class="col-form-label col-sm-4" for="cust_detail_idType" id="ID163">ID Type</label>
+                <label class="col-form-label col-sm-4" for="cust_detail_idType" id="ID163">ID Type <span class="text-danger">&ast;</span></label>
                 <div class="col-sm-8">
                   <mat-form-field appearance="outline" style="width: 100%">
                     <input type="text" matInput formControlName="fcn_cust_detail_idType" [matAutocomplete]="custIdType"
@@ -2911,7 +2911,7 @@
           
             <div class="col-md-4">
               <div class="form-group row">
-                <label class="col-form-label col-sm-4" for="cust_detail_idcard" id="ID165">ID Number</label>
+                <label class="col-form-label col-sm-4" for="cust_detail_idcard" id="ID165">ID Number <span class="text-danger">&ast;</span></label>
                 <div class="col-sm-8">
                   <mat-form-field appearance="outline" style="width: 100%">
                     <input type="text" matInput formControlName="fcn_cust_detail_idcard" [readonly]="viewOnly"
@@ -2959,11 +2959,11 @@
           <div class="form-group row">
             <div class="col-md-4">
               <div class="form-group row">
-                <label class="col-form-label col-sm-4" for="cust_detail_designation" id="ID169">Designation</label>
+                <label class="col-form-label col-sm-4" for="cust_detail_designation" id="ID169">Designation <span class="text-danger">&ast;</span></label>
                 <div class="col-sm-8">
                   <mat-form-field appearance="outline" style="width: 100%">
                     <input type="text" matInput formControlName="fcn_cust_detail_designation" [readonly]="viewOnly"
-                      appNoEmptySpace class="st_txt_right" />
+                      appNoEmptySpace />
                     <mat-error *ngIf="
                         customerDetailForm.controls.fcn_cust_detail_designation.hasError(
                           'required'
@@ -2981,8 +2981,7 @@
                 <label class="col-form-label col-sm-4" for="cust_detail_company" id="ID171">Employer</label>
                 <div class="col-sm-8">
                   <mat-form-field appearance="outline" style="width: 100%">
-                    <input type="text" matInput formControlName="fcn_cust_detail_company" [readonly]="viewOnly" 
-                    class="st_txt_right" />
+                    <input type="text" matInput formControlName="fcn_cust_detail_company" [readonly]="viewOnly"/>
                   </mat-form-field>
                 </div>
               </div>
@@ -2990,7 +2989,7 @@
           
             <div class="col-md-4">
               <div class="form-group row">
-                <label class="col-form-label col-sm-4" for="cust_detail_idcard" id="ID172">Expiry Date</label>
+                <label class="col-form-label col-sm-4" for="cust_detail_idcard" id="ID172">Expiry Date <span class="text-danger">&ast;</span></label>
                 <div class="col-sm-8">
                   <mat-form-field appearance="outline" style="width: 100%">
                     <input matInput [matDatepicker]="expDateCust" name="fcn_customer_exp_date"
@@ -3430,7 +3429,7 @@
                     <div class="col-md-3">
                       <label class=" col-sm-6" for="fcn_li_gross_amount" id="ID195">Total Amount</label>
                       <div class="form-group row">
-                        <div class="col-sm-11">
+                        <div class="col-sm-12">
                           <mat-form-field appearance="outline" style="width: 100%">
                             <input class="st_txt_right" [min]="0" [maxLength]="14"
                             (keyup)="this.comFunc.enforceMinMax($event.target)" matInput
@@ -3712,22 +3711,22 @@
         <button mat-flat-button class="next-item-button btn-width" *ngIf="!lineItemModalForSalesReturn"
           (click)="addItemtoList('newitem_btn')" [disabled]="disableSaveBtn">
           Continue
-        </button>&nbsp;
-        <button mat-flat-button class="update-finish-button btn-width" *ngIf="!lineItemModalForSalesReturn"
+        </button>
+        <button mat-flat-button class="update-finish-button btn-width mx-1" *ngIf="!lineItemModalForSalesReturn"
           (click)="addItemtoList('finish_btn')" [disabled]="disableSaveBtn">
           {{ updateBtn ? "Update" : "Save" }}
-        </button>&nbsp;
+        </button>
 
-        <button mat-flat-button class="update-finish-button btn-width" *ngIf="lineItemModalForSalesReturn"
+        <button mat-flat-button class="update-finish-button btn-width mx-1" *ngIf="lineItemModalForSalesReturn"
           (click)="updateRetailSalesReturnVal()" [disabled]="disableSaveBtn">
           {{ updateBtn ? "Update" : "Save" }}
-        </button>&nbsp;
+        </button>
         <!-- <button class="btn btn btn-primary" *ngIf="updateBtn" (click)="addItemtoList('finish_btn')">
             Update
           </button>&nbsp; -->
         <button mat-flat-button class="cancel-button btn-width" (click)="closeItemModal()">
           Cancel
-        </button>&nbsp;
+        </button>
         <!-- <button class="btn btn btn-dark" (click)="addItemtoList('newitem_btn')">
             Next Item</button>&nbsp;
           <button class="btn btn btn-primary" *ngIf="!updateBtn" (click)="addItemtoList('finish_btn')">
