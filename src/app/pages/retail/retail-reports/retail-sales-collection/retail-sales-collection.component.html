@@ -103,11 +103,11 @@
 
 
         <div class="row align-items-center mt-1">
-            <div class="col-md-3 d-flex align-items-center">
+            <div class="col-md-4" style="margin-left: 474px;">
                 <app-report-to-control (selectedvalue)="setValueFromCommon($event)"></app-report-to-control>
             </div>    
 
-            <div class="col-md-9 text-right p-2">
+            <div class="col-md-3 text-right p-2">
                 <app-common-buttons (saveClick)="savePdf()"  (cancelClick)="close()"></app-common-buttons>
             </div>  
         </div>
@@ -115,38 +115,32 @@
        
         <div class="row align-items-center mt-1 justify-content-end"> 
 
-          <button mat-flat-button class="btn-m-r-10 demo-button btn-width"
-          style="background-color: #295094 !important;">
+          <button mat-flat-button class="btn-m-r-10 demo-button btn-width">
                 <i class="fa fa-eye"></i>
                 PREVIEW
           </button>
 
-          <button mat-flat-button class="btn-m-r-10 demo-button btn-width mx-1"
-          style="background-color: #7ba3ea !important;">
+          <button mat-flat-button class="btn-m-r-10 demo-button btn-width mx-1">
             <i class="fa fa-print"></i>
                 PRINT
           </button>
 
-          <button mat-flat-button class="btn-m-r-10 demo-button btn-width"
-          style="background-color: #686869 !important;">
+          <button mat-flat-button class="btn-m-r-10 demo-button btn-width">
             <i class="fa fa-book"></i>
             CATALOGUE
             </button>
 
-            <button mat-flat-button class="btn-m-r-10 demo-button btn-width mx-1"
-            style="background-color: #0aa13d !important;">
+            <button mat-flat-button class="btn-m-r-10 demo-button btn-width mx-1">
                 <i class="fa fa-file-excel" ></i>
                 EXCEL
             </button>
 
-            <button mat-flat-button class="btn-m-r-10 demo-button btn-width"
-            style="background-color: #d74915 !important;">
+            <button mat-flat-button class="btn-m-r-10 demo-button btn-width">
                 <i class="fa fa-file-export"></i>
                 PDF
             </button>
 
-            <button mat-flat-button class="btn-m-r-10 demo-button btn-width mx-1"
-            style="background-color: #8eafe8 !important;">
+            <button mat-flat-button class="btn-m-r-10 demo-button btn-width mx-1">
                 <i class="uil uil-envelope-alt"></i>
                 EMAIL
             </button>
