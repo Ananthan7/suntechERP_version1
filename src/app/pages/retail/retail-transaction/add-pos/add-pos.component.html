@@ -2915,7 +2915,7 @@
                 <div class="col-sm-8">
                   <mat-form-field appearance="outline" style="width: 100%">
                     <input type="text" matInput formControlName="fcn_cust_detail_idcard" [readonly]="viewOnly"
-                      appNoEmptySpace class="st_txt_right" />
+                      appNoEmptySpace  />
                     <mat-error *ngIf="
                         customerDetailForm.controls.fcn_cust_detail_idcard.hasError(
                           'required'
@@ -4039,7 +4039,7 @@
       [disabled]="!isRowSelected && pendingOrderList.length">
         Apply
       </button>
-      <button mat-flat-button class="update-finish-button" (click)="modal.dismiss('Cross click')" id="ID224">
+      <button mat-flat-button class="cancel-button" (click)="modal.dismiss('Cross click')" id="ID224">
         Close
       </button>
       &nbsp;

@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output, Renderer2 } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
@@ -75,7 +75,7 @@ export class PosCustomerMasterComponent implements OnInit {
     fcn_cust_detail_idType: ['', [Validators.required, this.autoCompleteValidator(() => this.idTypeOptions)]],
     fcn_cust_detail_phone: ['', Validators.required],
     fcn_cust_detail_phone2: [''],
-    fcn_cust_detail_email: ['', [Validators.email]],
+    fcn_cust_detail_email:  ['', [Validators.required, Validators.email, customEmailValidator()]],
     fcn_cust_detail_address: ['', Validators.required],
     fcn_cust_detail_country: ['', [Validators.required, this.autoCompleteValidator(() => this.countryMaster, 'CODE')]],
     fcn_cust_detail_city: ['', [this.autoCompleteValidator(() => this.cityMaster, 'CODE')]],
@@ -1217,4 +1217,13 @@ export class PosCustomerMasterComponent implements OnInit {
     this.activeModal.close(returnData);
   }
 
+}
+
+
+export function customEmailValidator(): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(com|in|net|org|gov|edu|mil)$/;
+    const valid = emailRegex.test(control.value);
+    return valid ? null : { invalidEmail: true };
+  };
 }
