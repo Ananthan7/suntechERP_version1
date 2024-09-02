@@ -36,6 +36,7 @@ import { AuditTrailModel } from 'src/app/shared/data/audit-trial-model';
 import { ItemDetailService } from 'src/app/services/modal-service.service';
 import { PlanetService } from 'src/app/services/planet-integration.service';
 import { DxDataGridComponent } from 'devextreme-angular';
+import { MatSelectChange } from '@angular/material/select';
 
 const baseUrl = environment.baseUrl;
 const baseImgUrl = environment.baseImageUrl;
@@ -208,6 +209,18 @@ export class AddPosComponent implements OnInit {
     _metalPurchase: {},
   };
 
+  customerCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 2,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "Customer",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "CODE <>''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  };
+
   vocTypesinSalesReturn: any = [
     // { value: 'POS', viewValue: 'POS' },
     // { value: 'POS', viewValue: 'POS' },
@@ -285,7 +298,7 @@ export class AddPosComponent implements OnInit {
   currentStockCode: any;
 
   stoneWtPreVal = 0;
-
+  isCustomerFindsOnCode: boolean = false;
   isCCTransaction: boolean = false;
   customerDetails: any = {};
 
@@ -611,6 +624,7 @@ export class AddPosComponent implements OnInit {
   currencyMaster: any = [];
   currencyMasterOptions!: Observable<any[]>;
   selectedCurrencyData: any;
+  sortedCountryList: any;
 
   mobileCountryMaster: any = [];
   mobileCountryMasterOptions!: Observable<any[]>;
@@ -740,17 +754,7 @@ export class AddPosComponent implements OnInit {
   }
 
 
-  customerCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 2,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'POS Customer Master',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
+
 
   get vocDateVal(): Date {
     return this.vocDataForm.controls.vocdate.value;
@@ -909,8 +913,8 @@ export class AddPosComponent implements OnInit {
       fcn_customer_detail_name: ['', Validators.required],
       fcn_customer_detail_fname: ['', Validators.required],
       fcn_customer_detail_mname: [''],
-      fcn_customer_detail_lname: ['', [Validators.required, Validators.maxLength(100)]],
-      fcn_cust_detail_gender: ['', Validators.required],
+      fcn_customer_detail_lname: [''],
+      fcn_cust_detail_gender: [''],
       fcn_cust_detail_marital_status: [''],
       fcn_cust_detail_dob: ['',
         [Validators.required]
@@ -919,9 +923,9 @@ export class AddPosComponent implements OnInit {
       fcn_cust_detail_phone: ['', Validators.required],
       fcn_cust_detail_phone2: [''],
       fcn_cust_detail_email: ['', [Validators.email]],
-      fcn_cust_detail_address: ['', Validators.required],
+      fcn_cust_detail_address: [''],
       // fcn_cust_detail_address: [''],
-      fcn_cust_detail_country: ['', [Validators.required, this.autoCompleteValidator(() => this.countryMaster, 'CODE')]],
+      fcn_cust_detail_country: ['', [Validators.required]],
       fcn_cust_detail_city: ['', [this.autoCompleteValidator(() => this.cityMaster, 'CODE')]],
       fcn_cust_detail_nationality: ['', [Validators.required, this.autoCompleteValidator(() => this.nationalityMaster, 'CODE')]],
       fcn_cust_detail_idcard: ['', Validators.required],
@@ -3961,15 +3965,22 @@ export class AddPosComponent implements OnInit {
   onCustomerNameFocus(value: any = null, advanceCustomerCode: boolean = false) {
     console.log(value);
     let _cust_mobile_no = value == null ? this.customerDataForm.value.fcn_customer_mobile : value;
-    if (value != null) {
+    if (value != null && !this.isCustomerFindsOnCode) {
       this.customerDataForm.controls['fcn_customer_mobile'].setValue(
         value
       );
     }
 
+    if (value != null && this.isCustomerFindsOnCode) {
+      this.customerDataForm.controls.fcn_customer_code.setValue(
+        value
+      );
+
+    }
+
 
     console.log('_cust_mobile_no ', _cust_mobile_no);
-    if (_cust_mobile_no != '' && _cust_mobile_no != null || advanceCustomerCode) {
+    if (_cust_mobile_no != '' && _cust_mobile_no != null || advanceCustomerCode || this.isCustomerFindsOnCode) {
 
       let custMobile = `${this.customerDataForm.value.fcn_customer_mobile}`;
 
@@ -3978,12 +3989,20 @@ export class AddPosComponent implements OnInit {
       this.customerDetailForm.reset();
       this.customerDataForm.reset({
         fcn_customer_mobile: custMobile,
+        fcn_customer_code: value,
       });
       this.customerDetailForm.reset({
         fcn_cust_detail_phone: custMobile,
       });
       // }
-      let API = !advanceCustomerCode ? `PosCustomerMaster/GetCustomerMaster/${_cust_mobile_no}` : `PosCustomerMaster/GetCustomerByCode/${this.advanceReceiptForm.value.advanceCustCode}`;
+      let API = this.isCustomerFindsOnCode
+        ? `PosCustomerMaster/GetCustomerByCode/${this.customerDataForm.value.fcn_customer_code}`
+        : (!advanceCustomerCode
+          ? `PosCustomerMaster/GetCustomerMaster/${_cust_mobile_no}`
+          : `PosCustomerMaster/GetCustomerByCode/${this.advanceReceiptForm.value.advanceCustCode}`);
+
+
+      // let API = !advanceCustomerCode ? `PosCustomerMaster/GetCustomerMaster/${_cust_mobile_no}` : `PosCustomerMaster/GetCustomerByCode/${this.advanceReceiptForm.value.advanceCustCode}`;
       this.suntechApi.getDynamicAPI(API)
         .subscribe((resp) => {
           if (resp.status == 'Success') {
@@ -4098,8 +4117,9 @@ export class AddPosComponent implements OnInit {
                 // if(!this.viewOnly)
                 this.openDialog('Warning', 'Customer already existing, Do you want to continue?', true);
               }
+            this.isCustomerFindsOnCode = false;
           } else {
-            if (value == null && !this.isNewCustomer) {
+            if ((value == null && !this.isNewCustomer) || this.isCustomerFindsOnCode) {
               this.openDialog('Warning', 'Need To Create Customer', true);
               this.dialogBox.afterClosed().subscribe((data: any) => {
                 if (data == 'OK') {
@@ -4107,8 +4127,11 @@ export class AddPosComponent implements OnInit {
                   this.isNewCustomer = false;
                   if (advanceCustomerCode)
                     this.advanceReceiptForm.controls.advanceCustCode.setValue('');
+                  if (this.isCustomerFindsOnCode)
+                    this.customerDataForm.controls.fcn_customer_code.setValue(value);
                 }
               });
+              this.isCustomerFindsOnCode = false;
             } else {
               this.renderer.selectRootElement('#fcn_customer_detail_name')?.focus();
             }
@@ -4246,10 +4269,16 @@ export class AddPosComponent implements OnInit {
   }
 
   async getMasters() {
-
-    const country = `GeneralMaster/GetGeneralMasterList/${encodeURIComponent('COUNTRY MASTER')}`;
-
     this.countryMaster = this.comFunc.countryMaster;
+    console.log(JSON.stringify(this.countryMaster))
+    this.sortedCountryList = this.countryMaster.map((item: any) => ({
+      CODE: item.CODE,
+      DESCRIPTION: item.DESCRIPTION,
+      MOBILECOUNTRYCODE: item.MOBILECOUNTRYCODE,
+      CODE_DESC: `${item.CODE}-${item.DESCRIPTION}`
+    }));
+
+
     this.countryMasterOptions =
       this.customerDetailForm.controls.fcn_cust_detail_country.valueChanges.pipe(
         startWith(''),
@@ -4267,28 +4296,52 @@ export class AddPosComponent implements OnInit {
         )
       );
 
-    const city = `GeneralMaster/GetGeneralMasterList/${encodeURIComponent('CITY MASTER')}`;
-    //this.cityMaster = city;
-
-    // this.cityMaster = this.comFunc.nationalityMaster;
-    // this.cityMasterOptions =
-    //   this.customerDetailForm.controls.fcn_cust_detail_city.valueChanges.pipe(
-    //     startWith(''),
-    //     map((value) =>
-    //       this._filterMasters(this.cityMaster, value, 'CODE', 'DESCRIPTION')
-    //     )
-    //   );
-
-    const nationality = `GeneralMaster/GetGeneralMasterList/${encodeURIComponent('NATIONALITY MASTER')}`;
-    this.nationalityMaster = this.comFunc.nationalityMaster;
-    this.nationalityMasterOptions =
+      this.nationalityMasterOptions =
       this.customerDetailForm.controls.fcn_cust_detail_nationality.valueChanges.pipe(
         startWith(''),
         map((value) =>
           this._filterMasters(this.nationalityMaster, value, 'CODE', 'DESCRIPTION')
         )
       );
+
+    this.customerDetailForm.controls.fcn_cust_detail_country.valueChanges.subscribe(
+      (selectedCountryCode) => {
+        this.updateMobileCountryCode(selectedCountryCode);
+      }
+    );
+
+    this.customerDetailForm.controls.fcn_mob_code.valueChanges.subscribe(
+      (selectedMobileCountryCode) => {
+        this.updateCountryCode(selectedMobileCountryCode);
+      }
+    );
   }
+
+  updateMobileCountryCode(selectedCountryCode: string): void {
+    const selectedCountry = this.countryMaster.find(
+      (option: any) => option.CODE === selectedCountryCode
+    );
+
+    if (selectedCountry) {
+      this.customerDetailForm.controls.fcn_mob_code.setValue(selectedCountry.MOBILECOUNTRYCODE);
+    } else {
+      this.customerDetailForm.controls.fcn_mob_code.setValue(''); // Clear the code if no country is selected
+    }
+  }
+
+  updateCountryCode(selectedMobileCountryCode: string): void {
+    const selectedMobileCountry = this.mobileCountryMaster.find(
+      (option: any) => option.MOBILECOUNTRYCODE === selectedMobileCountryCode
+    );
+
+    if (selectedMobileCountry) {
+      this.customerDetailForm.controls.fcn_cust_detail_country.setValue(selectedMobileCountry.CODE);
+    } else {
+      this.customerDetailForm.controls.fcn_cust_detail_country.setValue(''); // Clear the country if no mobile code is selected
+    }
+  }
+
+
   async getIdMaster() {
     // const resp = this.comFunc.getMasterByID('ID MASTER');
     const resp = await this.comFunc.idMaster;
@@ -9565,6 +9618,16 @@ export class AddPosComponent implements OnInit {
     }
   }
 
+  storeDiscount(){
+    if(this.lineItemForm.value.fcn_li_discount_percentage||this.lineItemForm.value.fcn_li_discount_amount){
+      localStorage.setItem('discountPercentage', this.lineItemForm.value.fcn_li_discount_percentage);
+      localStorage.setItem('discountAmount', this.lineItemForm.value.fcn_li_discount_amount);
+    }
+    
+  }
+
+ 
+
   changeRate(event: any) {
     console.log(this.comFunc.emptyToZero(event.target.value))
     this.isNetAmountChange = false;
@@ -9581,9 +9644,10 @@ export class AddPosComponent implements OnInit {
 
     const preVal = this.comFunc.emptyToZero(localStorage.getItem('fcn_li_rate'));
     const value = event.target.value;
-    if (preVal != this.comFunc.emptyToZero(event.target.value)) {
-      this.clearDiscount();
-    }
+    this.storeDiscount();
+    // if (preVal != this.comFunc.emptyToZero(event.target.value)) {
+    //   this.clearDiscount();
+    // }
     if (event.target.value != '') {
 
       if (this.divisionMS == 'M') {
@@ -9593,7 +9657,7 @@ export class AddPosComponent implements OnInit {
         let karatCode = this.newLineItem.KARAT_CODE;
 
 
-        if (this.lineItemModalForSalesReturn || this.comFunc.emptyToZero(value) >= this.comFunc.emptyToZero(this.newLineItem.STOCK_COST)) {
+        if (this.lineItemModalForSalesReturn || this.comFunc.emptyToZero(value) >= this.comFunc.emptyToZero(this.blockMinimumPriceValue)) {
 
           this.rateFunc(value);
         }
@@ -9607,6 +9671,21 @@ export class AddPosComponent implements OnInit {
                 preVal
 
               );
+              let lastDiscountPercentage= this.comFunc.emptyToZero(localStorage.getItem('discountPercentage'));
+              let lastDiscountamount=this.comFunc.emptyToZero(localStorage.getItem('discountAmount'));
+              this.lineItemForm.controls.fcn_li_discount_percentage.setValue(
+                this.comFunc.transformDecimalVB(
+                  this.comFunc.allbranchMaster?.BAMTDECIMALS, lastDiscountPercentage) 
+              );
+
+              this.lineItemForm.controls.fcn_li_discount_amount.setValue(
+                this.comFunc.transformDecimalVB(
+                  this.comFunc.allbranchMaster?.BAMTDECIMALS, lastDiscountamount) 
+                
+              );
+
+            this.manageCalculations();
+
               this.renderer.selectRootElement('#fcn_li_rate').focus();
             }
           });
@@ -9635,6 +9714,20 @@ export class AddPosComponent implements OnInit {
                   preVal
                 )
               );
+
+              let lastDiscountPercentage= this.comFunc.emptyToZero(localStorage.getItem('discountPercentage'));
+              let lastDiscountamount=this.comFunc.emptyToZero(localStorage.getItem('discountAmount'));
+              this.lineItemForm.controls.fcn_li_discount_percentage.setValue(
+                this.comFunc.transformDecimalVB(
+                  this.comFunc.allbranchMaster?.BAMTDECIMALS, lastDiscountPercentage) 
+              );
+
+              this.lineItemForm.controls.fcn_li_discount_amount.setValue(
+                this.comFunc.transformDecimalVB(
+                  this.comFunc.allbranchMaster?.BAMTDECIMALS, lastDiscountamount) 
+                
+              );
+
               this.manageCalculations();
 
               // this.lineItemForm.controls.fcn_li_net_amount.setValue(
@@ -13989,5 +14082,35 @@ export class AddPosComponent implements OnInit {
 
   }
 
+  onCountryCodeSelection(event: MatSelectChange,isCountrySelection:Boolean) {
+    if(isCountrySelection){
+      const selectedOption = this.sortedCountryList.find((item: any) => item.CODE === event.value);
+      if (selectedOption) {
+  
+        this.customerDetailForm.controls['fcn_mob_code'].setValue(selectedOption.MOBILECOUNTRYCODE);
+      }
+    }
+    else{
+      const selectedOption = this.sortedCountryList.find((item: any) => item.MOBILECOUNTRYCODE === event.value);
+      if (selectedOption) {
+  
+        this.customerDetailForm.controls['fcn_cust_detail_country'].setValue(selectedOption.CODE);
+      }
+    }
+  
+  }
+
+
+  triggerCustomerEntry(data: any) {
+    this.isCustomerFindsOnCode = true;
+    this.onCustomerNameFocus(data.target.value, true);
+  }
+
+
+  triggerCustomerMasterSearch(e: any) {
+    this.isCustomerFindsOnCode = true;
+    this.onCustomerNameFocus(e.CODE, true);
+
+  }
 }
 
