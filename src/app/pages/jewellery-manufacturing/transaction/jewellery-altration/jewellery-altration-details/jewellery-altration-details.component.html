@@ -471,24 +471,24 @@
                     <div class="col-sm-3">
                         <mat-form-field style="width: 70%;" appearance="outline">
                             <input type="text" matInput
-                                formControlName="currencycode" />
+                                formControlName="currencycode"  [readonly]="viewMode"/>
                         </mat-form-field>
                     </div>
                     <div class="col-sm-2">
                         <mat-form-field appearance="outline"
                             style="width: 77px; margin-left: -23px; text-align: right;">
                             <input type="text" matInput
-                                formControlName="currencyrate" />
+                                formControlName="currencyrate"  [readonly]="viewMode"/>
                         </mat-form-field>
                     </div>
                     <div class="col-sm-2">
                         <mat-form-field style="width: 100%;" appearance="outline">
-                            <input type="text" matInput />
+                            <input type="text" matInput  [readonly]="viewMode"/>
                         </mat-form-field>
                     </div>
                     <div class="col-sm-2">
                         <mat-form-field style="width: 100%;" appearance="outline">
-                            <input type="text" matInput />
+                            <input type="text" matInput  [readonly]="viewMode"/>
                         </mat-form-field>
                     </div>
                 </div>
