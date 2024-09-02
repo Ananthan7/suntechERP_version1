@@ -4,9 +4,10 @@
 </div>
 <div mat-dialog-actions class="text-right mt-3">
 
-  <button mat-button mat-dialog-close (click)="submit('No')" class="mr-3 {{swapColor ?  'btn-primary' : 'btn-danger'}}"
+  <button mat-button mat-dialog-close (click)="submit('No')" class="mr-3 btn-width cancel-button"
     [hidden]="okBtn">No</button>
-  <button mat-button cdkFocusInitial (click)="submit('Yes')" class="mr-3 {{swapColor ?  'btn-danger' : 'btn-primary'}}" [hidden]="okBtn">Yes</button>
-  <button  mat-flat-button color="primary" cdkFocusInitial (click)="submit('OK')" class="mr-3" [hidden]="!okBtn">OK</button>
+  <button mat-button cdkFocusInitial (click)="submit('Yes')" class="mr-3 btn-width update-finish-button" [hidden]="okBtn">Yes</button>
+  <button  mat-flat-button color="primary" cdkFocusInitial (click)="submit('OK')" class="mr-3 btn-width update-finish-button" 
+  [hidden]="!okBtn">OK</button>
   <!-- <button mat-button  cdkFocusInitial (click)="submit(btnTitle)" class="mr-3 btn-primary" >{{btnTitle}}</button> -->
 </div>
