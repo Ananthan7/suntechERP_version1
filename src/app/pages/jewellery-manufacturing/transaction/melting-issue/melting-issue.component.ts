@@ -66,6 +66,7 @@ export class MeltingIssueComponent implements OnInit {
   companyName = this.commonService.allbranchMaster['BRANCH_NAME'];
   branchCode?: String;
   yearMonth?: String;
+  gridMetalDecimalFormat: any;
  
 
   user: MasterSearchModel = {
@@ -182,7 +183,7 @@ export class MeltingIssueComponent implements OnInit {
     MID: [0],
     Karat:[''],
     voctype: ['', [Validators.required]],
-    vocdate: ['', [Validators.required]],
+    vocdate: [''],
     MAIN_VOCTYPE: [''],
     UNQ_JOB_ID: [''],
   });
@@ -197,7 +198,7 @@ export class MeltingIssueComponent implements OnInit {
     private commonService: CommonServiceService,) { }
 
   ngOnInit(): void {
-    this.gridAmountDecimalFormat = {
+    this.gridMetalDecimalFormat = {
       type: 'fixedPoint',
       precision: this.comService.allbranchMaster?.BAMTDECIMALS,
       currency: this.comService.compCurrency
@@ -323,11 +324,11 @@ export class MeltingIssueComponent implements OnInit {
           this.meltingIssueFrom.controls.color.setValue(data.COLOR)
           this.meltingIssueFrom.controls.meltingtype.setValue(data.MELTING_TYPE)
           this.meltingIssueFrom.controls.jobpurity.setValue(data.PURITY)
-          this.meltingIssueFrom.controls.StockDescription.setValue(data.STOCK_DESCRIPTION)
+          // this.meltingIssueFrom.controls.StockDescription.setValue(data.STOCK_DESCRIPTION)
 
           this.meltingISsueDetailsData = data.Details
           console.log(this.meltingISsueDetailsData,'data')
-          this.reCalculateSRNO() //set to main grid
+          this.recalculateSRNO() //set to main grid
           this.meltingISsueDetailsData.forEach((element: any) => {
             this.tableData.push({
               jobno: element.JOB_NUMBER,
@@ -675,10 +676,6 @@ export class MeltingIssueComponent implements OnInit {
       this.commonService.toastErrorByMsgId('MSG1939')
       return true;
     }
-    if (this.commonService.nullToString(form.vocdate) == '') {
-      this.commonService.toastErrorByMsgId('VocDate is Required')
-      return true;
-    }
     if (this.commonService.nullToString(form.jobno) == '') {
       this.commonService.toastErrorByMsgId("MSG3783")
       return true;
@@ -701,7 +698,7 @@ export class MeltingIssueComponent implements OnInit {
       this.meltingISsueDetailsData[detailDataToParent.SRNO - 1] = detailDataToParent
     } else {
       this.meltingISsueDetailsData.push(detailDataToParent);
-      this.reCalculateSRNO()
+      this.recalculateSRNO()
     }
     if (DATA.FLAG == 'SAVE') this.closeDetailScreen();
     if (DATA.FLAG == 'CONTINUE') {
@@ -746,12 +743,12 @@ export class MeltingIssueComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         this.meltingISsueDetailsData = this.meltingISsueDetailsData.filter((item: any, index: any) => item.SRNO != this.selectRowIndex)
-        this.reCalculateSRNO()
+        this.recalculateSRNO()
       }
     }
     )
   }
-  reCalculateSRNO(): void {
+  recalculateSRNO(): void {
     this.meltingISsueDetailsData.forEach((element: any, index: any) => {
       element.SRNO = index + 1
       element.GROSS_WT = this.commonService.setCommaSerperatedNumber(element.GROSS_WT, 'METAL')
@@ -766,7 +763,7 @@ export class MeltingIssueComponent implements OnInit {
       "BRANCH_CODE": this.commonService.nullToString(this.meltingIssueFrom.value.BRANCH_CODE),
       "VOCTYPE": this.commonService.nullToString(this.meltingIssueFrom.value.voctype),
       "VOCNO": this.comService.emptyToZero(form.VOCNO),
-      "VOCDATE": this.meltingIssueFrom.value.vocdate,
+      "VOCDATE":this.comService.formatDateTime(form.vocdate),
       "YEARMONTH": this.commonService.nullToString(this.meltingIssueFrom.value.YEARMONTH),
       "NAVSEQNO": 0,
       "WORKER_CODE": this.meltingIssueFrom.value.worker,

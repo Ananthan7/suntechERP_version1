@@ -18,7 +18,7 @@
                             <label for="inputPassword" class="col-sm-5 col-form-label">Voucher Type * :</label>
                             <div class="col-sm-7">
                                 <mat-form-field appearance="outline" style="width: 100%;">
-                                    <input type="text" matInput formControlName="vocType" />
+                                    <input type="text" matInput formControlName="vocType" readonly/>
                                 </mat-form-field>
                             </div>
                         </div>
@@ -117,18 +117,26 @@
                         <div class="row" *ngIf="isrecovSelected()">
                             <div class="col-md-12">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" formControlName="radioAllowRecovery">
-                                    <label class="form-check-label" for="radioAllowRecovery">
-                                        Allow Recovery
-                                    </label>
+                                    <!-- <input class="form-check-input" type="radio" formControlName="radioAllowRecovery"> -->
+                                    <mat-checkbox class="example-margin"
+                                    formControlName=" AlloyRecovery"
+                                  id="ID011">Alloy Recovery</mat-checkbox>
+                                    <!-- <label class="form-check-label">
+                                        Alloy Recovery
+                                    </label> -->
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-4">
+                        <div class="row mb-1">
+                            <div class="col-sm-12">
+                                <label class="form-label" style="font-weight: bold; color: rgb(71, 71, 71);">Loss Recover Period</label>
+                            </div>
+                        </div>
                         <div class="row mb-1" *ngIf="istypeSelected()">
-                            <label for="inputPassword" class="col-sm-4 col-form-label">From :</label>
-                            <div class="col-sm-8">
+                            <label for="inputPassword" class="col-sm-2 col-form-label">From :</label>
+                            <div class="col-sm-6">
                                 <!-- <mat-form-field style="width: 100%;">
                                     <input type="date" matInput  formControlName="fromDate"/>
                                 </mat-form-field> -->
@@ -141,8 +149,8 @@
                             </div>
                         </div>
                         <div class="row mb-1">
-                            <label for="inputPassword" class="col-sm-4 col-form-label">To :</label>
-                            <div class="col-sm-4">
+                            <label for="inputPassword" class="col-sm-2 col-form-label">To :</label>
+                            <div class="col-sm-6">
                                 <!-- <mat-form-field style="width: 100%;">
                                     <input type="date" matInput formControlName="toDate" />
                                 </mat-form-field> -->
@@ -208,7 +216,7 @@
                                     <div class="col-md-3">
                                         <div class="p-1 bd-highlight">
                                             <button type="button" class="btn btn-outline-primary  add-btn">
-                                                Get Compontents
+                                                Get Components
                                             </button>
                                         </div>
                                     </div>
@@ -271,7 +279,7 @@
                                                 </mat-form-field>
 
                                             </div>
-                                            <label for="inputPassword" class="col-sm-3 col-form-label">Loaction To
+                                            <label for="inputPassword" class="col-sm-3 col-form-label">Location To
                                                 :</label>
                                             <div class="col-sm-3">
                                                 <mat-form-field appearance="outline" style="width: 100%;">
@@ -406,7 +414,7 @@
                                     <div class="col-md-3">
                                         <div class="p-1 bd-highlight">
                                             <button type="button" class="btn btn-outline-primary  add-btn">
-                                                Collaction Details
+                                                Collect Details
                                             </button>
                                         </div>
                                     </div>

@@ -26,8 +26,6 @@ import { GoldExchangeComponent } from './gold-exchange/gold-exchange.component';
 import { PosReturnComponent } from './pos-return/pos-return.component';
 import { RepairMetalPurchaseComponent } from './repair-metal-purchase/repair-metal-purchase.component';
 import { RepairDiamondPurchaseComponent } from './repair-diamond-purchase/repair-diamond-purchase.component';
-import { LoyaltyRegisterComponent } from './loyalty-register/loyalty-register.component';
-import { PosSalesmanCommissionComponent } from './pos-salesman-commission/pos-salesman-commission.component';
 import { PosCreditSaleReciptComponent } from './pos-credit-sale-recipt/pos-credit-sale-recipt.component';
 import { RepairJewelleryReceiptComponent } from './repair-jewellery-receipt/repair-jewellery-receipt.component';
 import { BranchTransferRepairOutComponent } from './branch-transfer-repair-out/branch-transfer-repair-out.component';
@@ -187,8 +185,6 @@ export class RetailTransactionComponent implements OnInit {
       'RepairIssueToWorkshopComponent': RepairIssueToWorkshopComponent,
       'RepairIssueFromWorkshopComponent': RepairIssueFromWorkshopComponent,
       'RepairCustomerDeliveryComponent': RepairCustomerDeliveryComponent,
-      'LoyaltyRegisterComponent': LoyaltyRegisterComponent,
-      'PosSalesmanCommissionComponent': PosSalesmanCommissionComponent,
       'PosCreditSaleReciptComponent': PosCreditSaleReciptComponent,
       'BranchTransferRepairOutComponent': BranchTransferRepairOutComponent,
       'BranchTransferRepairRtnComponent': BranchTransferRepairRtnComponent,

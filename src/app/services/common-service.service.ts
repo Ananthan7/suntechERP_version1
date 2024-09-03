@@ -98,6 +98,10 @@ export class CommonServiceService {
     txtLossQty = this.decimalQuantityFormat(txtLossQty, 'METAL')
     return this.emptyToZero(txtLossQty)
   }
+  lossPercentageCalculate(LOSS_QTY: any, METAL_WT: any) {
+    let LossPer = ((this.emptyToZero(LOSS_QTY) / this.emptyToZero(METAL_WT)) * 100);
+    return this.emptyToZero(LossPer)
+  }
   lossPureWtCalculate(lossQty: any, jobPurity: any) {
     let lossPureWt = (this.emptyToZero(lossQty) * this.emptyToZero(jobPurity));
     lossPureWt = this.decimalQuantityFormat(lossPureWt, 'METAL')

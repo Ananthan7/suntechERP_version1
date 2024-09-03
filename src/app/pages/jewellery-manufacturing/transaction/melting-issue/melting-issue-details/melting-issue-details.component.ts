@@ -91,11 +91,11 @@ export class MeltingIssueDetailsComponent implements OnInit {
   stockCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 201,
+    LOOKUPID: 51,
     SEARCH_FIELD: 'STOCK_CODE',
     SEARCH_HEADING: 'Stock Code',
     SEARCH_VALUE: '',
-    WHERECONDITION:  "STOCK_CODE<> ''",
+    WHERECONDITION: "",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -103,10 +103,10 @@ export class MeltingIssueDetailsComponent implements OnInit {
   setLookup201WhereCondition() {
     let form = this.meltingIssuedetailsFrom.value
     console.log(form,'form')
-    let where = `@strBranch_Code='${form.BRANCH_CODE}',`
-    where += `@strJob_Number='${form.jobno}',@strUnq_Job_Id='${form.subjobno}',`
-    where += `@strMetalStone='${form.METAL_STONE}',@strProcess_Code='${form.process}',`
-    where += `@strWorker_Code='${form.worker}',@strStock_Code='${form.stockcode}',@strUserName='${this.comService.userName}'`
+    let where = `Branch_Code='${form.BRANCH_CODE}',`
+    where += `JobNo='${form.jobno}',`
+    where += `MetalStone='${form.METAL_STONE}',Process_Code='${form.process}',`
+    where += `Worker_Code='${form.worker}',Stock_Code='${form.stockcode}',LocCode='${form.location}'`
    this.stockCodeData.WHERECONDITION = where
   //  this.ProcessCodeData.WHERECONDITION = where
   //   this.WorkerCodeData.WHERECONDITION = where
@@ -158,6 +158,7 @@ export class MeltingIssueDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.branchCode = this.comService.branchCode;
+
     console.log(this.content)
     if (this.content && this.content.FLAG) {
       this.setInitialValue()
@@ -172,8 +173,9 @@ export class MeltingIssueDetailsComponent implements OnInit {
   }
   dataTochild(dataToChild?:any){
     console.log(this.content.HEADERDETAILS,'pick')
+    this.meltingIssuedetailsFrom.controls.voctype.setValue(this.content.voctype || this.content.HEADERDETAILS.voctype)
     this.meltingIssuedetailsFrom.controls.jobno.setValue(this.content.jobno || this.content.HEADERDETAILS.jobno);
-    this.meltingIssuedetailsFrom.controls.jobdes.setValue(this.content.jobdes || this.content.HEADERDETAILS.subJobDescription);
+    this.meltingIssuedetailsFrom.controls.jobdes.setValue(this.content.jobdes || this.content.HEADERDETAILS.jobdes);
     this.meltingIssuedetailsFrom.controls.jobpurity.setValue(this.content.jobpurity || this.content.HEADERDETAILS.jobpurity);
     this.meltingIssuedetailsFrom.controls.process.setValue(this.content.process || this.content.HEADERDETAILS.processcode);
     this.meltingIssuedetailsFrom.controls.processdes.setValue(this.content.processdes || this.content.HEADERDETAILS.processdes);
@@ -348,7 +350,7 @@ export class MeltingIssueDetailsComponent implements OnInit {
       "UNIQUEID": 0,
       "SRNO": 0,
       "DT_BRANCH_CODE": this.branchCode,
-      "DT_VOCTYPE": "",
+      "DT_VOCTYPE": this.comService.nullToString(form.voctype),
       "DT_VOCNO": 0,
       "DT_VOCDATE": this.comService.formatDateTime(this.currentDate),
       "DT_YEARMONTH": this.comService.yearSelected,
@@ -393,7 +395,7 @@ export class MeltingIssueDetailsComponent implements OnInit {
       "TICKET_NO": this.meltingIssuedetailsFrom.value.ticketno,
       "SILVER_PURITY": 0,
       "SILVER_PUREWT": 0,
-      "TOPURITY": this.meltingIssuedetailsFrom.value.topurity,
+      "TOPURITY": this.comService.nullToString(this.meltingIssuedetailsFrom.value.topurity),
       "PUR_PER": 0,
       "MELTING_TYPE": "",
       "ISALLOY": "s",
@@ -579,15 +581,14 @@ export class MeltingIssueDetailsComponent implements OnInit {
     this.showOverleyPanel(event, 'stockcode')
     if (event.target.value == '') return
     let postData = {
-      "SPID": "046",
+      "SPID": "112",
       "parameter": {
-        strStockCode: event.target.value,
-        strBranchCode: this.comService.nullToString(this.branchCode),
-        strVocType: this.content.HEADERDETAILS.VOCTYPE,
-        strUserName: this.comService.nullToString(this.userName),
-        strLocation: '',
-        strPartyCode: '',
-        strVocDate: this.comService.formatDateTime(this.comService.currentDate)
+        Process_Code: this.meltingIssuedetailsFrom.value.process,
+        JobNo :this.meltingIssuedetailsFrom.value.jobno,
+        Branch_Code: this.comService.nullToString(this.branchCode),
+        Worker_Code : this.meltingIssuedetailsFrom.value.worker,
+        Stock_Code: this.meltingIssuedetailsFrom.value.stockcode,
+        LocCode :  this.meltingIssuedetailsFrom.value.location,
       }
     };
 

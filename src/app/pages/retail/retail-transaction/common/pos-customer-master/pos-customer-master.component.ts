@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output, Renderer2 } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
@@ -75,7 +75,7 @@ export class PosCustomerMasterComponent implements OnInit {
     fcn_cust_detail_idType: ['', [Validators.required, this.autoCompleteValidator(() => this.idTypeOptions)]],
     fcn_cust_detail_phone: ['', Validators.required],
     fcn_cust_detail_phone2: [''],
-    fcn_cust_detail_email: ['', [Validators.email]],
+    fcn_cust_detail_email:  ['', [Validators.required, Validators.email, customEmailValidator()]],
     fcn_cust_detail_address: ['', Validators.required],
     fcn_cust_detail_country: ['', [Validators.required, this.autoCompleteValidator(() => this.countryMaster, 'CODE')]],
     fcn_cust_detail_city: ['', [this.autoCompleteValidator(() => this.cityMaster, 'CODE')]],
@@ -345,9 +345,17 @@ export class PosCustomerMasterComponent implements OnInit {
   }
 
   getDropDownData() {
-    this.maritalStatusList = this.comService.getComboFilterByID('Marital Status');
-    this.genderList = this.comService.getComboFilterByID('gender');
-    console.log(this.genderList);
+
+    this.maritalStatusList = this.comService.getComboFilterByID('Marital Status').filter((value: any, index: any, self: any) =>
+      index === self.findIndex((t: any) => t.ENGLISH === value.ENGLISH)
+    );
+    this.genderList = this.comService.getComboFilterByID('gender').filter((value: any, index: any, self: any) =>
+      index === self.findIndex((t: any) => t.ENGLISH === value.ENGLISH)
+    );
+
+    // this.maritalStatusList = this.comService.getComboFilterByID('Marital Status');
+    // this.genderList = this.comService.getComboFilterByID('gender');
+    // console.log(this.genderList);
 
   }
 
@@ -485,7 +493,7 @@ export class PosCustomerMasterComponent implements OnInit {
           MARITAL_ST:
             this.customerDetailForm.value.fcn_cust_detail_marital_status ||
             // this.customerDetails?.MARITAL_ST ||
-            'Unknown',
+            '',
           WED_DATE: this.customerDetails?.WED_DATE || this.dummyDate,
           SPOUSE_NAME: this.customerDetails?.SPOUSE_NAME || '',
           REMARKS: this.customerDetails?.REMARKS || '',
@@ -1092,13 +1100,30 @@ export class PosCustomerMasterComponent implements OnInit {
       );
 
   }
+
   private _filterIdType(value: string): string[] {
-    value = value != null ? value.toString().toLowerCase() : '';
-    const filterValue = value;
-    return this.idTypeOptions.filter((option) =>
-      option.toLowerCase().includes(filterValue)
-    );
+    const filterValue = value != null ? value.toString().toLowerCase() : '';
+    const uniqueOptions = new Set<string>();
+
+    return this.idTypeOptions.filter((option) => {
+      const lowerCaseOption = option.toLowerCase();
+      const matches = lowerCaseOption.includes(filterValue);
+
+      if (matches && !uniqueOptions.has(lowerCaseOption)) {
+        uniqueOptions.add(lowerCaseOption);
+        return true;
+      }
+      return false;
+    });
   }
+  
+  // private _filterIdType(value: string): string[] {
+  //   value = value != null ? value.toString().toLowerCase() : '';
+  //   const filterValue = value;
+  //   return this.idTypeOptions.filter((option) =>
+  //     option.toLowerCase().includes(filterValue)
+  //   );
+  // }
 
   autoCompleteValidator(optionsProvider: any, field: any = null) {
     return (control: AbstractControl) => {
@@ -1121,18 +1146,40 @@ export class PosCustomerMasterComponent implements OnInit {
   }
 
   private _filterMasters(
-    arrName: any,
+    arrName: any[],
     value: string,
     optVal1: any,
     optVal2: any = null
   ): any[] {
     const filterValue = (value || '').toLowerCase();
-    return arrName.filter(
-      (option: any) =>
+    const uniqueCodes = new Set(); 
+  
+    return arrName.filter((option: any) => {
+      const matches =
         option[optVal1].toLowerCase().includes(filterValue) ||
-        option[optVal2].toLowerCase().includes(filterValue)
-    );
+        (optVal2 && option[optVal2].toLowerCase().includes(filterValue));
+  
+      if (matches && !uniqueCodes.has(option[optVal1])) {
+        uniqueCodes.add(option[optVal1]); 
+        return true; 
+      }
+      return false;
+    });
   }
+
+  // private _filterMasters(
+  //   arrName: any,
+  //   value: string,
+  //   optVal1: any,
+  //   optVal2: any = null
+  // ): any[] {
+  //   const filterValue = (value || '').toLowerCase();
+  //   return arrName.filter(
+  //     (option: any) =>
+  //       option[optVal1].toLowerCase().includes(filterValue) ||
+  //       option[optVal2].toLowerCase().includes(filterValue)
+  //   );
+  // }
 
 
   addValidationsForForms(form: FormGroup, ctrlName: any, validations: any) {
@@ -1170,4 +1217,13 @@ export class PosCustomerMasterComponent implements OnInit {
     this.activeModal.close(returnData);
   }
 
+}
+
+
+export function customEmailValidator(): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(com|in|net|org|gov|edu|mil)$/;
+    const valid = emailRegex.test(control.value);
+    return valid ? null : { invalidEmail: true };
+  };
 }

@@ -878,15 +878,15 @@ export class ComponentMasterComponent implements OnInit {
   setFormValues() {
     if (!this.content) return
 
-    this.componentmasterForm.controls.code.setValue(this.content.DESIGN_CODE)
-    this.componentmasterForm.controls.codedes.setValue(this.content.DESIGN_DESCRIPTION)
+    this.componentmasterForm.controls.code.setValue(this.content.DESIGN_DESCRIPTION)
+    this.componentmasterForm.controls.codedes.setValue(this.content.DESIGN_CODE)
     this.componentmasterForm.controls.sizeSet.setValue(this.content.COMPSET_CODE)
     this.componentmasterForm.controls.size.setValue(this.content.COMPSIZE_CODE)
     // this.componentmasterForm.controls.sieve_to.setValue(this.content.SIEVE)
     this.componentmasterForm.controls.type.setValue(this.content.TYPE_CODE)
     this.componentmasterForm.controls.category.setValue(this.content.CATEGORY_CODE)
     this.componentmasterForm.controls.shape.setValue(this.content.SHAPE)
-    this.componentmasterForm.controls.settingType.setValue(this.content.SET_REF)
+    this.componentmasterForm.controls.settingType.setValue(this.content.PROCESS_TYPE)
     this.componentmasterForm.controls.remarks.setValue(this.content.D_REMARKS)
     // this.componentmasterForm.controls.height.setValue(this.content.HEIGHT)
     // this.componentmasterForm.controls.length.setValue(this.content.LENGTH)
@@ -936,10 +936,10 @@ export class ComponentMasterComponent implements OnInit {
   setPostData() {
     let form = this.componentmasterForm.value
     let postData = {
-      "DESIGN_CODE": form.code || "",
-      "DESIGN_DESCRIPTION": form.codedes || "",
+      "DESIGN_CODE": form.codedes || "",
+      "DESIGN_DESCRIPTION": form.code || "",
       "CURRENCY_CODE": form.currencyCode,
-      "CC_RATE": this.commonService.emptyToZero(form.currencyRate),
+      "CC_RATE": "0",
       "COST_CODE": form.costCenter || "",
       "TYPE_CODE": form.type,
       "CATEGORY_CODE": form.category || "",
@@ -948,7 +948,7 @@ export class ComponentMasterComponent implements OnInit {
       "COUNTRY_CODE": "",
       "SUPPLIER_CODE": "",
       "SUPPLIER_REF": "",
-      "SET_REF": form.settingType,
+      "SET_REF": "",
       "PICTURE_NAME": this.PICTURE_NAME || "",
       "PICTURE_NAME1": "",
       "STOCK_FCCOST": 0,

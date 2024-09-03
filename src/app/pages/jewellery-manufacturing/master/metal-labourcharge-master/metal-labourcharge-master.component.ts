@@ -1116,6 +1116,41 @@ export class MetalLabourchargeMasterComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
+  // checkCodeExists(event: any) {
+  //   if (this.content && this.content.FLAG == 'EDIT') {
+  //     return; // Exit the function if in edit mode
+  //   }
+
+  //   if (event.target.value === '' || this.viewMode) {
+  //     return; // Exit the function if the input is empty or in view mode
+  //   }
+
+  //   const API = 'LabourChargeMasterDj/GetlabourChargeMasterList/' + event.target.value;
+  //   const sub = this.dataService.getDynamicAPI(API)
+  //     .subscribe((result) => {
+  //       if (result.checkifExists) {
+  //         Swal.fire({
+  //           title: '',
+  //           text: result.message || 'Approval Already Exists!',
+  //           icon: 'warning',
+  //           confirmButtonColor: '#336699',
+  //           confirmButtonText: 'Ok'
+  //         }).then(() => {
+  //           // Clear the input value
+  //           this.metallabourMasterForm.controls.metallabour_code.setValue('');
+
+  //           // setTimeout(() => {
+  //           //   this.renderer.selectRootElement('#metallabour_code').focus();
+  //           // }, 500);
+
+  //         });
+  //       }
+  //     }, err => {
+  //       this.metallabourMasterForm.reset();
+  //     });
+
+  //   this.subscriptions.push(sub);
+  // }
 
   /**USE: delete Melting Type From Row */
   deleteMeltingType() {
@@ -1176,6 +1211,13 @@ export class MetalLabourchargeMasterComponent implements OnInit {
   }
 
   onforDesignOnlyChange(event: any) {
+    const isChecked = event.checked;
+
+    // If the checkbox is checked, set the Labour Type to "GENERAL"
+    if (isChecked) {
+        this.metallabourMasterForm.get('metallabourType')?.setValue('GENERAL');
+    }
+
     console.log(event);
     if (event.checked === true) {
       this.stockcodeDisable = true;
@@ -1187,7 +1229,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
       this.metallabourMasterForm.controls['color'].disable();
       this.metallabourMasterForm.controls['color'].setValue('');
       this.metallabourMasterForm.controls['metallabourType'].disable();
-      this.metallabourMasterForm.controls['metallabourType'].setValue('');
+    //  this.metallabourMasterForm.controls['metallabourType'].setValue('');
       this.metallabourMasterForm.controls['metalunitList'].disable();
       this.metallabourMasterForm.controls['metalunitList'].setValue('');
       this.metallabourMasterForm.controls['typecode'].disable();
