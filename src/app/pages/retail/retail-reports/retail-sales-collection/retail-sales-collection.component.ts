@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 
 @Component({
@@ -13,6 +14,13 @@ export class RetailSalesCollectionComponent implements OnInit {
   branchDivisionControls: any;
   tableData: any = [];
   isLoading: boolean = false;
+  APIData: any[] = [];
+  selectedKeys: any[] = [];
+  selectedRowKeys: number[] = [];
+  selectedDatas: any[]= [];
+  currentFilter: any;
+  showFilterRow: boolean = true;
+
 
   retailSalesCollection: FormGroup = this.formBuilder.group({
     branch : [''],
@@ -33,7 +41,7 @@ export class RetailSalesCollectionComponent implements OnInit {
 
   })
   constructor(  private activeModal: NgbActiveModal,
-    private formBuilder: FormBuilder, private dataService: SuntechAPIService,
+    private formBuilder: FormBuilder, private dataService: SuntechAPIService,  private comService: CommonServiceService,
   ) { }
 
   ngOnInit(): void {
@@ -181,7 +189,12 @@ export class RetailSalesCollectionComponent implements OnInit {
   getAPIData() {
     
     const payload = {
-      strLoginBranch: localStorage.getItem('userbranch')
+      // strLoginBranch: localStorage.getItem('userbranch')
+      "strReportName": "POS_COLLECTION_A",
+      "strMainVouchers": "" , // this.comService.getqueryParamMainVocType(),
+      "strExcludeVouchers": "",
+      "strWhereCond": "",
+      "strLoginBranch": "", //this.comService.branchCode
     };
 
     this.isLoading = true;
@@ -189,22 +202,16 @@ export class RetailSalesCollectionComponent implements OnInit {
     this.dataService.postDynamicAPI('GetReportVouchers', payload).subscribe((response) => {
       this.isLoading = false;
       console.log('Rsales API call data', response);
-
-      // this.BranchDataSource = response.dynamicData[0] || [];
-
-      // this.divisionDataSource = response.dynamicData[1] || [];
-      // this.areaDataSource = response.dynamicData[2] || [];
-      // this.businessCategDataSource = response.dynamicData[3] || [];
-
-      // if (this.BranchDataSource.length > 0) {
-      //   this.dataSourceHead = Object.keys(this.BranchDataSource[0]);
-      //   this.dataSourceHead.unshift(this.dataSourceHead.pop());
-      // } else {
-      //   this.toastr.error('Data Not Available');
-      // }
+      this.APIData = response.dynamicData[0] || [];
     },(error: any) => {
         console.error('Error occurred:', error);
     });
+  }
+
+  onGridSelection(event: any) {
+    this.selectedRowKeys= event.selectedRowKeys;
+    this.selectedDatas = event.selectedRowsData;
+    console.log(this.selectedDatas)
   }
 
   saveTemplate(){
