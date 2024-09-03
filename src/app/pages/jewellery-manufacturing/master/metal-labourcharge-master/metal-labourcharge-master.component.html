@@ -50,11 +50,11 @@
                                 oninput="this.value = this.value.toUpperCase()"
                                 (input)="inputValidate($event)"
                                 formControlName="stock_code" appNoEmptySpace
-                                (keydown)="lookupKeyPress($event,'stock_code')" />
+                                (keydown)="lookupKeyPress($event,'stock_code')"  />
                             <master-search [MasterSearchData]="stockCodeData"
                                 (newRowClick)="stockCodeSelected($event)"
                                 #overlaystockcodeSearch
-                                *ngIf="viewDisable  == false "
+                                *ngIf="viewDisable == false "
                                 class="masterSearch"></master-search>
                         </mat-form-field>
                     </div>
@@ -70,6 +70,7 @@
                                 maxlength="15"
                                 [readonly]="editMode || viewMode"
                                 formControlName="metallabour_code"
+                                (focusout)="diamondLabourCodeValidate()"
                                 (keyup)="codeEnabledMetal()"
                                 oninput="this.value = this.value.toUpperCase()"
                                 appNoEmptySpace />
@@ -146,7 +147,7 @@
                             <master-search [MasterSearchData]="karatCodeData"
                                 (newRowClick)="karatCodeSelected($event)"
                                 #overlaykaratSearch
-                                *ngIf="viewDisable == false"
+                                *ngIf="viewDisable || codedisable  == false"
                                 class="masterSearch"></master-search>
                         </mat-form-field>
                     </div>
@@ -187,7 +188,7 @@
                             <master-search [MasterSearchData]="colorData"
                                 (newRowClick)="colorDataSelected($event)"
                                 #overlaycolorSearch
-                                *ngIf=" viewDisable == false"
+                                *ngIf=" viewDisable || codedisable  == false"
                                 class="masterSearch"></master-search>
                         </mat-form-field>
                     </div>
@@ -223,7 +224,7 @@
                             <master-search [MasterSearchData]="typeCodeData"
                                 (newRowClick)="typeCodeSelected($event)"
                                 #overlaytypeSearch
-                                *ngIf=" viewDisable == false"
+                                *ngIf=" viewDisable || codedisable  == false"
                                 class="masterSearch"></master-search>
                         </mat-form-field>
                     </div>
@@ -260,7 +261,7 @@
                             <master-search [MasterSearchData]="categoryCodeData"
                                 (newRowClick)="categorySelected($event)"
                                 #overlaycategorySearch
-                                *ngIf=" viewDisable == false"
+                                *ngIf=" viewDisable || codedisable  == false"
                                 class="masterSearch"></master-search>
                         </mat-form-field>
                     </div>
@@ -298,7 +299,7 @@
                                 [MasterSearchData]="subcategoryCodeData"
                                 class="masterSearch" #overlaysubCategorySearch
                                 (newRowClick)="subcategorySelected($event)"
-                                *ngIf=" viewDisable == false"></master-search>
+                                *ngIf=" viewDisable || codedisable  == false"></master-search>
                         </mat-form-field>
                     </div>
                     <label for="input" id="ID016"
@@ -309,7 +310,7 @@
                         <mat-form-field style="width: 90%" appearance="outline">
                             <input matInput type="text"
                                 [readonly]="viewMode || codeEnableMetal"
-                                maxlength="12"
+                                maxlength="13"
                                 formControlName="wastage" class="text-right"
                                 AmountDecimalInput />
                         </mat-form-field>
@@ -332,7 +333,7 @@
                             <master-search [MasterSearchData]="brandCodeData"
                                 (newRowClick)="brandSelected($event)"
                                 #overlaybrandSearch
-                                *ngIf=" viewDisable == false"
+                                *ngIf=" viewDisable || codedisable  == false"
                                 class="masterSearch"></master-search>
                         </mat-form-field>
                     </div>
@@ -364,7 +365,7 @@
                             <input matInput type="text"
                                 [readonly]="viewMode || codeEnableMetal"
                                 formControlName="purity" class="text-right"
-                                SixDecimalInput maxlength="15"
+                                SixDecimalInput maxlength="13"
                                 oninput="this.value = this.value.toUpperCase()" />
                         </mat-form-field>
                     </div>
@@ -419,20 +420,20 @@
                       </mat-radio-group> -->
                     </div>
                 </div>
-                <div class="row mb-2">
+                <!-- <div class="row mb-2">
                     <label for="input" id="ID024"
                         class="col-sm-2 col-form-label">Variance %
                         :</label>
                     <div class="col-sm-3">
                         <mat-form-field style="width: 100%"
                             appearance="outline">
-                            <input matInput type="text"
+                            <input matInput type="number"
                                 [readonly]="viewMode  || codeEnableMetal"
-                                matInput
+                                matInput NumberOnly
                                 formControlName="variance" class="text-right" />
                         </mat-form-field>
                     </div>
-                </div>
+                </div> -->
             </form>
         </div>
     </div>
