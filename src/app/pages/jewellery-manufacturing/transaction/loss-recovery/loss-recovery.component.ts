@@ -34,7 +34,8 @@ export class LossRecoveryComponent implements OnInit {
   private subscriptions: Subscription[] = [];
   columnhead: any[] = ['',];
   columnheader: any[] = ['Sn No', 'Type', 'Worker Code', 'Process Code', 'Loss Qty', 'Recovery', 'Reco.Pure', 'Net Loss', 'Location To', 'Job Number', 'Job SO No', 'Design Code', 'Scrap UNQ Job'];
-
+  tab1Label: string = 'Scrap Summary';
+  tab2Label: string = 'Scrap Details';
   TypeList = [
     {
       name: 'Initial',
@@ -344,6 +345,20 @@ export class LossRecoveryComponent implements OnInit {
         this.comService.toastErrorByMsgId('MSG2272')//Error occured, please try again
       })
     this.subscriptions.push(Sub)
+  }
+
+  returnType(e:any){
+   
+    const selectedType = e;
+
+    if (selectedType === 'Initial') {
+        this.tab1Label = 'Scrap Summary';
+        this.tab2Label = 'Scrap Details';
+    } else {
+        this.tab1Label = 'Return Summary';
+        this.tab2Label = 'Stock Details';
+    }
+
   }
 
   formSubmit() {

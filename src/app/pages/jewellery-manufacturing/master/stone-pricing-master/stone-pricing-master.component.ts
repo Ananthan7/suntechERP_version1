@@ -727,7 +727,7 @@ export class StonePricingMasterComponent implements OnInit {
   /**USE: delete worker master from row */
   deleteStonepriceMaster() {
     if (this.content && this.content.FLAG == 'VIEW' ) return
-    if (!this.content.code) {
+    if (!this.content.CODE) {
       Swal.fire({
         title: '',
         text: 'Please Select data to delete!',
@@ -750,7 +750,7 @@ export class StonePricingMasterComponent implements OnInit {
       confirmButtonText: 'Yes, delete!'
     }).then((result) => {
       if (result.isConfirmed) {
-        let API = 'StonePriceMasterDJ/DeleteStonePriceMaster/' + this.content.code
+        let API = 'StonePriceMasterDJ/DeleteStonePriceMaster/' + this.content.CODE
         let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
           .subscribe((result) => {
             if (result) {

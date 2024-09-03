@@ -58,7 +58,7 @@
                             
                             <div class="col-sm-5">
                                     <mat-form-field appearance="outline">
-                                    <mat-select formControlName="returnType" [disabled]="viewMode">
+                                    <mat-select formControlName="returnType" [disabled]="viewMode"  (valueChange)="returnType($event)">
                                       <mat-option *ngFor="let option of TypeList" [value]="option.value">
                                         {{ option.name }}
                                       </mat-option>
@@ -182,7 +182,7 @@
                 <div class="row mt-3">
                     <div class="col-md-12">
                         <mat-tab-group [selectedIndex]="this.divisionMS == 'ID' ? 0 : 1">
-                            <mat-tab label="Return Summary">
+                            <mat-tab [label]="tab1Label">
                                 <div class="row pt-2">
                                     <div class="col-md-12">
                                         <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
@@ -222,7 +222,7 @@
                                     </div>
                                 </div>
                             </mat-tab>
-                            <mat-tab label="Stock Details">
+                            <mat-tab [label]="tab2Label">
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="row mb-1">
