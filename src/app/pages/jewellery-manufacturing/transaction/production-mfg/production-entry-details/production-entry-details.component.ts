@@ -291,7 +291,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.setHeaderDetails()
-    this.setInitialLoadValue()
+    this.setInitialValues()
   }
   setHeaderDetails() {
     this.branchCode = this.commonService.branchCode;
@@ -302,11 +302,12 @@ export class ProductionEntryDetailsComponent implements OnInit {
     this.productiondetailsFrom.controls.LOCTYPE_CODE.setValue(branchParam.DMFGMLOC)
     this.FORM_VALIDATER = this.productiondetailsFrom.value
   }
-  setInitialLoadValue() {
+  setInitialValues() {
     if (!this.content) return
     let parentDetail: any;
     let PRODUCTION_FORMDETAILS: any;
     if (this.content[0]?.FLAG) {
+      this.setFlagMode(this.content[0]?.FLAG)
       this.productiondetailsFrom.controls.FLAG.setValue(this.content[0]?.FLAG)
       parentDetail = this.content[0]?.JOB_PRODUCTION_DETAIL_DJ
     } else {// condition to load without saving
@@ -372,7 +373,20 @@ export class ProductionEntryDetailsComponent implements OnInit {
     }
     this.FORM_VALIDATER = this.productiondetailsFrom.value
   }
-
+  setFlagMode(FLAG: any) {
+    switch (FLAG) {
+      case 'VIEW':
+        this.viewMode = true;
+        break;
+      case 'EDIT':
+        this.editMode = true;
+        break;
+      default:
+        this.viewMode = false;
+        this.editMode = false;
+        break;
+    }
+  }
   getDesignimagecode() {
     let API = `Image/${this.productiondetailsFrom.value.JOB_NUMBER}`
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
@@ -657,7 +671,9 @@ export class ProductionEntryDetailsComponent implements OnInit {
   dataToDetailScreen: any;
   @ViewChild('productionStockDetailScreen') public ProductionStockDetailScreen!: NgbModal;
   opennewdetails() {
-    this.content[0].DETAILSCREEN_DATA = this.productiondetailsFrom.value
+    this.content[0].FLAG = this.productiondetailsFrom.value.FLAG;
+    this.content[0].DETAILSCREEN_DATA = this.productiondetailsFrom.value;
+    this.content[0].HEADERDETAILS = this.content[0].HEADERDETAILS;
     this.dataToDetailScreen = this.content
     this.modalReference = this.modalService.open(this.ProductionStockDetailScreen, {
       size: 'xl',

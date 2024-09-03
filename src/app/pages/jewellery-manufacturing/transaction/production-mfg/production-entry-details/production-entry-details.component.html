@@ -11,7 +11,7 @@
 <modal-header (saveClick)="formSubmit('SAVE')" (cancelClick)="close()"
   [isViewStock]="designType != 'METAL'" [isViewDelete]="false"
   (stockClick)="opennewdetails()" [isViewSave]="!viewMode"
-  [isViewContinue]="true" (continueClick)="formSubmit('CONTINUE')">
+  [isViewContinue]="!viewMode" (continueClick)="formSubmit('CONTINUE')">
 </modal-header>
 <div class="p-3">
   <form [formGroup]="productiondetailsFrom">
@@ -22,7 +22,7 @@
             :</label>
           <div class="col-sm-3">
             <mat-form-field appearance="outline" style="width: 100%;">
-              <input type="text" matInput
+              <input type="text" matInput [readonly]="viewMode"
                 (focusout)="jobNumberValidate($event)" id="jobNoSearch"
                 formControlName="JOB_NUMBER" UpperCaseDirective />
               <master-search *ngIf="!viewMode" class="masterSearch"
@@ -60,7 +60,7 @@
           <div class="col-sm-3">
             <mat-form-field appearance="outline" style="width: 100%;">
               <input type="text" matInput formControlName="CUSTOMER_CODE"
-                UpperCaseDirective
+                UpperCaseDirective [readonly]="viewMode"
                 (focusout)="validateLookupField($event,customerCodeData,'CUSTOMER_CODE')" />
               <master-search *ngIf="!viewMode" class="masterSearch"
                 [MasterSearchData]="customerCodeData"
@@ -135,7 +135,7 @@
               <div class="col-sm-2">
                 <mat-form-field appearance="outline" style="width: 100%;">
                   <input type="text" matInput formControlName="DESIGN_CODE"
-                    UpperCaseDirective
+                    UpperCaseDirective [readonly]="viewMode"
                     (focusout)="validateLookupField($event,designCodeData,'DESIGN_CODE')" />
                   <master-search *ngIf="!viewMode" class="masterSearch"
                     [MasterSearchData]="designCodeData"
@@ -164,7 +164,7 @@
               <div class="col-sm-2">
                 <mat-form-field appearance="outline" style="width: 100%;">
                   <input type="number" matInput class="text-right"
-                    formControlName="JOB_PCS" NumberOnly />
+                    formControlName="JOB_PCS" NumberOnly [readonly]="viewMode"/>
                 </mat-form-field>
               </div>
               <label for="input" class="col-sm-2 col-form-label">Location
@@ -172,7 +172,7 @@
               <div class="col-sm-2">
                 <mat-form-field appearance="outline" style="width: 100%;">
                   <input type="text" matInput formControlName="LOCTYPE_CODE"
-                    UpperCaseDirective
+                    UpperCaseDirective [readonly]="viewMode"
                     (focusout)="validateLookupField($event,locationCodeData,'location')" />
                   <master-search *ngIf="!viewMode" class="masterSearch"
                     [MasterSearchData]="locationCodeData"
@@ -242,7 +242,7 @@
                 :</label>
               <div class="col-sm-2">
                 <mat-form-field appearance="outline" style="width: 100%;">
-                  <input type="text" matInput
+                  <input type="text" matInput [readonly]="viewMode"
                     formControlName="price1" UpperCaseDirective
                     (focusout)="validateLookupField($event,price1CodeData,'price1')" />
                   <master-search *ngIf="!viewMode" class="masterSearch"
@@ -258,7 +258,7 @@
               <div class="col-sm-2 d-flex">
                 <mat-form-field appearance="outline" style="width: 100%;">
                   <input type="text" matInput formControlName="PREFIX"
-                    UpperCaseDirective
+                    UpperCaseDirective [readonly]="viewMode"
                     (focusout)="validateLookupField($event,prefixCodeData,'PREFIX')" />
                   <master-search *ngIf="!viewMode" class="masterSearch"
                     [MasterSearchData]="prefixCodeData"
@@ -295,7 +295,7 @@
               <div class="col-sm-2">
                 <mat-form-field appearance="outline" style="width: 100%;">
                   <input type="text" matInput formControlName="COST_CODE"
-                    UpperCaseDirective
+                    UpperCaseDirective [readonly]="viewMode"
                     (focusout)="validateLookupField($event,costCodeData,'COST_CODE')" />
                   <master-search *ngIf="!viewMode" class="masterSearch"
                     [MasterSearchData]="costCodeData"
@@ -307,14 +307,14 @@
                 :</label>
               <div class="col-sm-2">
                 <mat-form-field appearance="outline" style="width: 100%;">
-                  <input type="text" matInput formControlName="SETREF" />
+                  <input type="text" matInput formControlName="SETREF" [readonly]="viewMode"/>
                 </mat-form-field>
               </div>
               <label for="input" class="col-sm-2 col-form-label">Price 3
                 :</label>
               <div class="col-sm-2">
                 <mat-form-field appearance="outline" style="width: 100%;">
-                  <input type="text" matInput
+                  <input type="text" matInput [readonly]="viewMode"
                     formControlName="price3" UpperCaseDirective
                     (focusout)="validateLookupField($event,price3CodeData,'price3')" />
                   <master-search *ngIf="!viewMode" class="masterSearch"
@@ -329,9 +329,9 @@
                 :</label>
               <div class="col-sm-2">
                 <mat-form-field appearance="outline" style="width: 100%;">
-                  <input type="text" matInput formControlName="KARAT"
-                    UpperCaseDirective
-                    (focusout)="validateLookupField($event,karatCodeData,'KARAT')" />
+                  <input type="text" matInput formControlName="KARAT_CODE"
+                    UpperCaseDirective [readonly]="viewMode"
+                    (focusout)="validateLookupField($event,karatCodeData,'KARAT_CODE')" />
                   <master-search *ngIf="!viewMode" class="masterSearch"
                     [MasterSearchData]="karatCodeData"
                     (newRowClick)="karatCodeSelected($event)">
@@ -342,7 +342,7 @@
                 :</label>
               <div class="col-sm-2">
                 <mat-form-field appearance="outline" style="width: 100%;">
-                  <input type="text" matInput formControlName="SUPPLIER_REF" />
+                  <input type="text" matInput formControlName="SUPPLIER_REF" [readonly]="viewMode"/>
                 </mat-form-field>
               </div>
               <label for="input" class="col-sm-2 col-form-label">Price 4
@@ -350,7 +350,7 @@
               <div class="col-sm-2">
                 <mat-form-field appearance="outline" style="width: 100%;">
                   <input type="text" matInput formControlName="price4"
-                    UpperCaseDirective
+                    UpperCaseDirective [readonly]="viewMode"
                     (focusout)="validateLookupField($event,price4CodeData,'price4')" />
                   <master-search *ngIf="!viewMode" class="masterSearch"
                     [MasterSearchData]="price4CodeData"
@@ -365,7 +365,7 @@
               <div class="col-sm-2">
                 <mat-form-field appearance="outline" style="width: 100%;">
                   <input type="number" matInput formControlName="PURITY"
-                    (focusout)="validatePurity()"
+                    (focusout)="validatePurity()" [readonly]="viewMode"
                     [max]="13" class="text-right"
                     PurityDecimal />
                 </mat-form-field>
@@ -383,7 +383,7 @@
                 :</label>
               <div class="col-sm-2">
                 <mat-form-field appearance="outline" style="width: 100%;">
-                  <input type="text" matInput
+                  <input type="text" matInput [readonly]="viewMode"
                     formControlName="price5" UpperCaseDirective
                     (focusout)="validateLookupField($event,price5CodeData,'price5')" />
                   <master-search *ngIf="!viewMode" class="masterSearch"
@@ -446,7 +446,7 @@
                 :</label>
               <div class="col-sm-8">
                 <mat-form-field appearance="outline" style="width: 100%;">
-                  <input type="text" matInput formControlName="remarks" />
+                  <input type="text" matInput formControlName="remarks" [readonly]="viewMode"/>
                 </mat-form-field>
               </div>
             </div>
@@ -537,13 +537,13 @@
                     Stock Code :</label>
                   <div class="col-sm-3">
                     <mat-form-field appearance="outline" style="width: 100%;">
-                      <input type="text" matInput
+                      <input type="text" matInput [readonly]="viewMode"
                         formControlName="fromStockCode" />
                     </mat-form-field>
                   </div>
                   <div class="col-sm-5">
                     <mat-form-field appearance="outline" style="width: 100%;">
-                      <input type="text" matInput
+                      <input type="text" matInput [readonly]="viewMode"
                         formControlName="fromStockCodeDesc" />
                     </mat-form-field>
                   </div>
@@ -555,13 +555,13 @@
                     Code :</label>
                   <div class="col-sm-3">
                     <mat-form-field appearance="outline" style="width: 100%;">
-                      <input type="text" matInput
+                      <input type="text" matInput [readonly]="viewMode"
                         formControlName="toStockCode" />
                     </mat-form-field>
                   </div>
                   <div class="col-sm-5">
                     <mat-form-field appearance="outline" style="width: 100%;">
-                      <input type="text" matInput
+                      <input type="text" matInput [readonly]="viewMode"
                         formControlName="toStockCodeDesc" />
                     </mat-form-field>
                   </div>
@@ -573,7 +573,7 @@
               <div class="col-sm-2">
                 <mat-form-field appearance="outline" style="width: 100%;">
                   <input type="text" matInput formControlName="metalpcs"
-                    maxlength="10" NumberOnly
+                    maxlength="10" NumberOnly [readonly]="viewMode"
                     class="text-right" />
                 </mat-form-field>
               </div>
@@ -582,7 +582,7 @@
               <div class="col-sm-2">
                 <mat-form-field appearance="outline" style="width: 100%;">
                   <input type="text" matInput formControlName="GROSS_WT"
-                    [max]="13" MetalDecimalInput
+                    [max]="13" MetalDecimalInput [readonly]="viewMode"
                     class="text-right" />
                 </mat-form-field>
               </div>
@@ -591,7 +591,7 @@
               <div class="col-sm-2">
                 <mat-form-field appearance="outline" style="width: 100%;">
                   <input type="text" matInput formControlName="stoneWt"
-                    StoneDecimalInput class="text-right"
+                    StoneDecimalInput class="text-right" [readonly]="viewMode"
                     [max]="13" />
                 </mat-form-field>
               </div>
@@ -603,7 +603,7 @@
                 <mat-form-field appearance="outline" style="width: 100%;">
                   <input type="text" matInput formControlName="PURITY"
                     [max]="13" SixDecimalInput
-                    class="text-right" />
+                    class="text-right" [readonly]="viewMode"/>
                 </mat-form-field>
               </div>
               <label for="input" class="col-sm-2 col-form-label">Net Wt
@@ -612,7 +612,7 @@
                 <mat-form-field appearance="outline" style="width: 100%;">
                   <input type="text" matInput formControlName="netWt"
                     [max]="13" MetalDecimalInput
-                    class="text-right" />
+                    class="text-right" [readonly]="viewMode"/>
                 </mat-form-field>
               </div>
               <label for="input" class="col-sm-2 col-form-label">Chargable Wt
@@ -620,7 +620,8 @@
               <div class="col-sm-2">
                 <mat-form-field appearance="outline" style="width: 100%;">
                   <input type="text" matInput formControlName="chargableWt"
-                    class="text-right" MetalDecimalInput />
+                    class="text-right" MetalDecimalInput 
+                    [readonly]="viewMode"/>
                 </mat-form-field>
               </div>
             </div>
@@ -631,7 +632,8 @@
                 <mat-form-field appearance="outline" style="width: 100%;">
                   <input type="text" matInput formControlName="purityPer"
                     [max]="13" SixDecimalInput
-                    class="text-right" NumberOnly />
+                    class="text-right" NumberOnly 
+                    [readonly]="viewMode"/>
                 </mat-form-field>
               </div>
               <label for="input" class="col-sm-2 col-form-label">Pure Wt
@@ -640,7 +642,7 @@
                 <mat-form-field appearance="outline" style="width: 100%;">
                   <input type="text" matInput formControlName="PUREWT"
                     [max]="13" MetalDecimalInput
-                    class="text-right" />
+                    class="text-right" [readonly]="viewMode"/>
                 </mat-form-field>
               </div>
               <label for="input" class="col-sm-2 col-form-label">Purity Diff
@@ -649,7 +651,7 @@
                 <mat-form-field appearance="outline" style="width: 100%;">
                   <input type="text" matInput formControlName="purityDiff"
                     [max]="13" SixDecimalInput
-                    class="text-right" />
+                    class="text-right" [readonly]="viewMode"/>
                 </mat-form-field>
               </div>
             </div>
@@ -659,7 +661,7 @@
               <div class="col-sm-2">
                 <mat-form-field appearance="outline" style="width: 100%;">
                   <input type="text" matInput formControlName="stoneDiff"
-                    class="text-right" NumberOnly />
+                    class="text-right" NumberOnly [readonly]="viewMode"/>
                 </mat-form-field>
               </div>
               <label for="input" class="col-sm-2 col-form-label">Loss
@@ -667,7 +669,7 @@
               <div class="col-sm-2">
                 <mat-form-field appearance="outline" style="width: 100%;">
                   <input type="text" matInput formControlName="loss"
-                    class="text-right" NumberOnly />
+                    class="text-right" NumberOnly [readonly]="viewMode"/>
                 </mat-form-field>
               </div>
               <label for="input" class="col-sm-2 col-form-label">Mkg Rate
@@ -676,7 +678,7 @@
                 <mat-form-field appearance="outline" style="width: 100%;">
                   <input type="text" matInput formControlName="mkgRate"
                     [max]="13" class="text-right"
-                    SixDecimalInput />
+                    SixDecimalInput [readonly]="viewMode"/>
                 </mat-form-field>
               </div>
             </div>
@@ -686,7 +688,7 @@
               <div class="col-sm-2">
                 <mat-form-field appearance="outline" style="width: 100%;">
                   <input type="text" matInput formControlName="lotNo"
-                    class="text-right" NumberOnly />
+                    class="text-right" NumberOnly [readonly]="viewMode"/>
                 </mat-form-field>
               </div>
               <label for="input" class="col-sm-2 col-form-label">Bal Wt
@@ -694,7 +696,7 @@
               <div class="col-sm-2">
                 <mat-form-field appearance="outline" style="width: 100%;">
                   <input type="text" matInput formControlName="balwt"
-                    class="text-right" ThreeDecimalInput />
+                    class="text-right" ThreeDecimalInput [readonly]="viewMode"/>
                 </mat-form-field>
               </div>
               <label for="input" class="col-sm-2 col-form-label">Mkg Value
@@ -702,7 +704,7 @@
               <div class="col-sm-2">
                 <mat-form-field appearance="outline" style="width: 100%;">
                   <input type="text" matInput formControlName="mkgValue"
-                    class="text-right" ThreeDecimalInput />
+                    class="text-right" ThreeDecimalInput [readonly]="viewMode"/>
                 </mat-form-field>
               </div>
             </div>
@@ -712,7 +714,7 @@
               <div class="col-sm-2">
                 <mat-form-field appearance="outline" style="width: 100%;">
                   <input type="number" matInput formControlName="barNo"
-                    class="text-right" NumberOnly />
+                    class="text-right" NumberOnly [readonly]="viewMode"/>
                 </mat-form-field>
               </div>
               <label for="input" class="col-sm-2 col-form-label">Ticket No
@@ -720,7 +722,7 @@
               <div class="col-sm-2">
                 <mat-form-field appearance="outline" style="width: 100%;">
                   <input type="number" matInput formControlName="ticketNo"
-                    class="text-right" NumberOnly />
+                    class="text-right" NumberOnly [readonly]="viewMode"/>
                 </mat-form-field>
               </div>
               <label for="input" class="col-sm-2 col-form-label">Prod %
@@ -728,7 +730,8 @@
               <div class="col-sm-2">
                 <mat-form-field appearance="outline" style="width: 100%;">
                   <input type="text" matInput formControlName="prod"
-                    NumberOnly maxlength="26" class="text-right" />
+                    NumberOnly maxlength="26" class="text-right"
+                    [readonly]="viewMode" />
                 </mat-form-field>
               </div>
             </div>
@@ -738,7 +741,7 @@
               <div class="col-sm-2">
                 <mat-form-field appearance="outline" style="width: 100%;">
                   <input type="text" matInput formControlName="location"
-                    UpperCaseDirective
+                    UpperCaseDirective [readonly]="viewMode"
                     (focusout)="validateLookupField($event,locationCodeData,'location')" />
                   <master-search *ngIf="!viewMode" class="masterSearch"
                     [MasterSearchData]="locationCodeData"
@@ -751,7 +754,7 @@
               <div class="col-sm-2">
                 <mat-form-field appearance="outline" style="width: 100%;">
                   <input type="text" matInput formControlName="balPcs"
-                    NumberOnly class="text-right" />
+                    NumberOnly class="text-right" [readonly]="viewMode"/>
                 </mat-form-field>
               </div>
               <label for="input" class="col-sm-2 col-form-label">Job Purity
@@ -760,7 +763,7 @@
                 <mat-form-field appearance="outline" style="width: 100%;">
                   <input type="text" matInput formControlName="jobPurity"
                     [max]="13" SixDecimalInput
-                    class="text-right" />
+                    class="text-right" [readonly]="viewMode"/>
                 </mat-form-field>
               </div>
             </div>
@@ -803,13 +806,14 @@
                 <div class="col-sm-4">
                   <mat-form-field appearance="outline" style="width: 100%;">
                     <input type="text" matInput class="text-right"
-                      MetalDecimalInput [max]="13" />
+                      MetalDecimalInput [max]="13" 
+                      [readonly]="viewMode"/>
                   </mat-form-field>
                 </div>
                 <div class="col-sm-4">
                   <mat-form-field appearance="outline" style="width: 100%;">
                     <input type="text" matInput class="text-right"
-                      MetalDecimalInput [max]="13" />
+                      MetalDecimalInput [max]="13" [readonly]="viewMode"/>
                   </mat-form-field>
                 </div>
               </div>

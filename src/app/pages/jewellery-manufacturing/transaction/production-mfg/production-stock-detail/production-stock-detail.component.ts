@@ -19,7 +19,7 @@ export class ProductionStockDetailComponent implements OnInit {
   private subscriptions: Subscription[] = [];
   Data: any[] = [];
   divisionMS: any = 'ID';
-  subJobNumber: string = ''
+  subJobNumber: any;
   columnheads: any[] = ["S.no", "Stock Code", "Design", "Cost", "Karat", "Gross Wt", "M.Pcs", "St.Wt", "St.value", "Labour", "Wastage", "Total Cost"];
   columnhead: any[] = ["Div", "Pcs", "Gross Wt"];
   labourColumnhead: any[] = ["Code", "Div", "Pcs", "Qty", "Rate", "Amount", "Wastage %", "Wastage Qty", "Wastage Amt", "Lab A/C", "Unit", "Lab Type"];
@@ -124,6 +124,7 @@ export class ProductionStockDetailComponent implements OnInit {
     this.productionItemsDetailsFrom.controls.MISC_ACCODE.setValue(e.ACCODE);
   }
   productionItemsDetailsFrom: FormGroup = this.formBuilder.group({
+    FLAG: [''],
     stockCode: [''],
     tagLines: [''],
     grossWt: [''],
@@ -172,12 +173,36 @@ export class ProductionStockDetailComponent implements OnInit {
     this.setInitialValues()
   }
   setInitialValues() {
-    console.log(this.content, 'this.content');
-    this.DETAILSCREEN_DATA = this.content[0].DETAILSCREEN_DATA
-    this.HEADERDETAILS = this.content[0].HEADERDETAILS
+    if (!this.content) return
+    let JOB_PRODUCTION_SUB_DJ: any;
+    let PRODUCTION_FORMDETAILS: any;
+    if (this.content[0]?.FLAG) {
+      this.setFlagMode(this.content[0]?.FLAG)
+      this.productionItemsDetailsFrom.controls.FLAG.setValue(this.content[0]?.FLAG)
+      JOB_PRODUCTION_SUB_DJ = this.content[0]?.JOB_PRODUCTION_SUB_DJ
+    } else {// condition to load without saving
+      JOB_PRODUCTION_SUB_DJ = this.content[0]?.JOB_PRODUCTION_SUB_DJ
+      this.DETAILSCREEN_DATA = this.content[0]?.DETAILSCREEN_DATA
+      this.HEADERDETAILS = this.content[0]?.HEADERDETAILS
+    }
+    if (!this.DETAILSCREEN_DATA) return;
     this.subJobNumber = this.DETAILSCREEN_DATA.UNQ_JOB_ID
     this.setStockCodeGrid()
     this.getComponentDetails()
+  }
+  setFlagMode(FLAG: any) {
+    switch (FLAG) {
+      case 'VIEW':
+        this.viewMode = true;
+        break;
+      case 'EDIT':
+        this.editMode = true;
+        break;
+      default:
+        this.viewMode = false;
+        this.editMode = false;
+        break;
+    }
   }
   setChargeAccode(param: string){
     return this.commonService.getCompanyParamValue(param) || ''
