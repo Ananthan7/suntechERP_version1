@@ -8,17 +8,15 @@
         </button>
     </div>
     <!-- modal header component -->
-    <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
+    <modal-header (cancelClick)="close()"
         (deleteClick)="deleteMeltingType()"
-        [isViewDelete]="editMode" [isViewSave]="!viewMode"
-        [isViewCancel]="!viewMode"
-        [isViewMore]="!viewMode"></modal-header>
+        [isViewSave]="!viewMode" (saveClick)="formSubmit()"  [isViewCancel]="!viewMode" [isViewMore]="!viewMode" [isViewDelete]="editMode"  ></modal-header>
     <!-- content section -->
     <div class="card m-2 row">
         <!-- <mat-tab-group [selectedIndex]="this.divisionMS == 'ID'? 1 : 0"> -->
         <div class="container-fluid">
             <!-- <div class="card metal-sales-card">
-              <div class="card-body sales-card-body p-2"> -->
+              <div class="card-body sales-card-body p-2"> --> 
             <form [formGroup]="metallabourMasterForm">
                 <div class="row mb-2">
                     <label for="input" id="ID001"
