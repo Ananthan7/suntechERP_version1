@@ -35,6 +35,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
   private subscriptions: Subscription[] = [];
   stockcodeDisable: boolean = true;
   brandDisable: boolean = false;
+  codedisable: boolean = false;
 
   currencyList: any[] = [];
   divisionMS: any = 'ID';
@@ -430,7 +431,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
- this.setInitialValues();
+    this.setInitialValues();
     console.log(this.content)
     if (this.content.FLAG == 'VIEW') {
       this.viewMode = true;
@@ -450,7 +451,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
     this.setFormValues();
     this.grossWt = true;
     this.codeEnable1 = true;
-   
+
 
 
     this.metallabourMasterForm.controls['stock_code'].enable();
@@ -762,7 +763,30 @@ export class MetalLabourchargeMasterComponent implements OnInit {
     this.metallabourMasterForm.controls.purity.setValue(e.STD_PURITY);
     this.stockCodeData.WHERECONDITION = `DIVISION_CODE = '${this.metallabourMasterForm.value.metalDivision}' and SUBCODE = '0'`;
     this.getKaratcode()
+     this.codeDisable()
+   
 
+  }
+
+  codeDisable() {
+    this.codedisable = true;
+
+    if (this.metallabourMasterForm.value.stock_code == '') {
+      this.metallabourMasterForm.controls.karat.enable();
+      this.metallabourMasterForm.controls.color.enable();
+      this.metallabourMasterForm.controls.typecode.enable();
+      this.metallabourMasterForm.controls.category.enable();
+      this.metallabourMasterForm.controls.subCategory.enable();
+      this.metallabourMasterForm.controls.brand.enable();
+    }
+    else {
+      this.metallabourMasterForm.controls.karat.disable();
+      this.metallabourMasterForm.controls.color.disable();
+      this.metallabourMasterForm.controls.typecode.disable();
+      this.metallabourMasterForm.controls.category.disable();
+      this.metallabourMasterForm.controls.subCategory.disable();
+      this.metallabourMasterForm.controls.brand.disable();
+    }
   }
 
   currencyCodeSelected(e: any) {
@@ -848,52 +872,52 @@ export class MetalLabourchargeMasterComponent implements OnInit {
   // USE: get diamondLabourCodeValidate
   diamondLabourCodeValidate(): void {
     if (this.viewMode || this.editMode) return;
-    if (this.diamondlabourMasterForm.value.labour_code == '') {
+    if (this.metallabourMasterForm.value.metallabour_code == '') {
       this.codeEnableDiamond = true;
       return
     }
     this.codeEnableDiamond = false;
-    let API = 'LabourChargeMasterDj/GetLabourChargeMasterDjWithCode/' + this.diamondlabourMasterForm.value.labour_code;
+    let API = 'LabourChargeMasterDj/GetLabourChargeMasterDjWithCode/' + this.metallabourMasterForm.value.metallabour_code;
     this.commonService.showSnackBarMsg('MSG81447');
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
         this.commonService.closeSnackBarMsg()
         if (result.status == "Success") {
           this.commonService.toastErrorByMsgId('MSG1121')//Code Already Exists
-          this.diamondlabourMasterForm.controls.labour_code.setValue('')
+          this.metallabourMasterForm.controls.metallabour_code.setValue('')
         }
       });
     this.subscriptions.push(Sub)
   }
-      /**use: validate all lookups to check data exists in db */
-      validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
-        this.stockCodeData.WHERECONDITION = `DIVISION_CODE = '${this.metallabourMasterForm.value.metalDivision}' and SUBCODE = '0'`;
-        LOOKUPDATA.SEARCH_VALUE = event.target.value
-        this.stockcodeDisable = false;
-        if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
-        let param = {
-          LOOKUPID: LOOKUPDATA.LOOKUPID,
-          WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+  /**use: validate all lookups to check data exists in db */
+  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    this.stockCodeData.WHERECONDITION = `DIVISION_CODE = '${this.metallabourMasterForm.value.metalDivision}' and SUBCODE = '0'`;
+    LOOKUPDATA.SEARCH_VALUE = event.target.value
+    this.stockcodeDisable = false;
+    if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
+    let param = {
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+    }
+    this.commonService.toastInfoByMsgId('MSG81447');
+    let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
+      .subscribe((result) => {
+        this.isDisableSaveBtn = false;
+        let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+        if (data.length == 0) {
+          this.commonService.toastErrorByMsgId('MSG1531')
+          this.metallabourMasterForm.controls[FORMNAME].setValue('')
+          this.renderer.selectRootElement(FORMNAME).focus();
+          LOOKUPDATA.SEARCH_VALUE = ''
+          return
         }
-        this.commonService.toastInfoByMsgId('MSG81447');
-        let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
-        let Sub: Subscription = this.dataService.postDynamicAPI(API,param)
-          .subscribe((result) => {
-            this.isDisableSaveBtn = false;
-            let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
-            if (data.length == 0) {
-              this.commonService.toastErrorByMsgId('MSG1531')
-              this.metallabourMasterForm.controls[FORMNAME].setValue('')
-              this.renderer.selectRootElement(FORMNAME).focus();
-              LOOKUPDATA.SEARCH_VALUE = ''
-              return
-            }
-           
-          }, err => {
-            this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
-          })
-        this.subscriptions.push(Sub)
-      }
+
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+      })
+    this.subscriptions.push(Sub)
+  }
 
   // validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
 
@@ -940,7 +964,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
         this.metallabourMasterForm.controls['purity'].setValue(result.response.PURITY);
 
       }, err => {
-      this.commonService.toastErrorByMsgId('MSG81451')//Server Error occured, please try again
+        this.commonService.toastErrorByMsgId('MSG81451')//Server Error occured, please try again
       })
     this.subscriptions.push(Sub)
 
@@ -953,10 +977,10 @@ export class MetalLabourchargeMasterComponent implements OnInit {
   // metalcurrency: ['', [Validators.required]],
   // metalunitList: ['', [Validators.required]],
 
-  submitValidation(form:any){
+  submitValidation(form: any) {
 
 
-    
+
     if (this.commonService.nullToString(form.metalDivision) == '') {
       this.commonService.toastErrorByMsgId('MSG1207') //"metalDivision cannot be empty"
       return true
@@ -1202,7 +1226,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
                 });
               }
             } else {
-                 this.commonService.toastErrorByMsgId('MSG1880');// Not Deleted
+              this.commonService.toastErrorByMsgId('MSG1880');// Not Deleted
             }
           }, err => alert('delete ' + err))
         this.subscriptions.push(Sub)
@@ -1215,7 +1239,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
 
     // If the checkbox is checked, set the Labour Type to "GENERAL"
     if (isChecked) {
-        this.metallabourMasterForm.get('metallabourType')?.setValue('GENERAL');
+      this.metallabourMasterForm.get('metallabourType')?.setValue('GENERAL');
     }
 
     console.log(event);
@@ -1229,7 +1253,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
       this.metallabourMasterForm.controls['color'].disable();
       this.metallabourMasterForm.controls['color'].setValue('');
       this.metallabourMasterForm.controls['metallabourType'].disable();
-    //  this.metallabourMasterForm.controls['metallabourType'].setValue('');
+      //  this.metallabourMasterForm.controls['metallabourType'].setValue('');
       this.metallabourMasterForm.controls['metalunitList'].disable();
       this.metallabourMasterForm.controls['metalunitList'].setValue('');
       this.metallabourMasterForm.controls['typecode'].disable();

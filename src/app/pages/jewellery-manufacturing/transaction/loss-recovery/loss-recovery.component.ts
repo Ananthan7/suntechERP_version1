@@ -124,6 +124,21 @@ export class LossRecoveryComponent implements OnInit {
     VIEW_TABLE: true,
   };
 
+  jobNumberCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 46,
+    SEARCH_FIELD: 'job_number',
+    SEARCH_HEADING: 'Job Search',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "job_number<>''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  jobNumberCodeSelected(e: any) {
+    this.lossRecoveryFrom.controls.jobNo.setValue(e.job_number);
+    this.lossRecoveryFrom.controls.jobDesc.setValue(e.job_description);
+  }
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -243,6 +258,10 @@ export class LossRecoveryComponent implements OnInit {
 
   isrecovSelected(): boolean {
     return this.lossRecoveryFrom.get('Metalsoption')?.value === 'Y';
+  }
+
+  isgoldSelected(): boolean {
+    return this.lossRecoveryFrom.get('Metalsoption')?.value === 'D';
   }
 
 
