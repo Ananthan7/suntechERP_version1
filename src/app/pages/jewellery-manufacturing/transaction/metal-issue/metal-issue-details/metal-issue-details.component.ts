@@ -661,7 +661,7 @@ export class MetalIssueDetailsComponent implements OnInit {
             strUserName: this.comService.nullToString(this.userName),
             strLocation: '',
             strPartyCode: '',
-            strVocDate: this.comService.formatDateTime(this.comService.currentDate)
+            strVocDate: this.comService.formatDate(this.comService.currentDate)
         }
     };
 
