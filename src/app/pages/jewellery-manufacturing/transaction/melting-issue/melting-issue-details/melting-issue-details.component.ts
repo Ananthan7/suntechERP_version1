@@ -91,11 +91,11 @@ export class MeltingIssueDetailsComponent implements OnInit {
   stockCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 270,
+    LOOKUPID: 51,
     SEARCH_FIELD: 'STOCK_CODE',
     SEARCH_HEADING: 'Stock Code',
     SEARCH_VALUE: '',
-    WHERECONDITION:" STOCK_CODE = '' AND JobNo = ''",
+    WHERECONDITION: "",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -104,9 +104,9 @@ export class MeltingIssueDetailsComponent implements OnInit {
     let form = this.meltingIssuedetailsFrom.value
     console.log(form,'form')
     let where = `Branch_Code='${form.BRANCH_CODE}',`
-    where += `Job_Number='${form.jobno}',Unq_Job_Id='${form.subjobno}',`
+    where += `JobNo='${form.jobno}',`
     where += `MetalStone='${form.METAL_STONE}',Process_Code='${form.process}',`
-    where += `Worker_Code='${form.worker}',Stock_Code='${form.stockcode}',UserName='${this.comService.userName}'`
+    where += `Worker_Code='${form.worker}',Stock_Code='${form.stockcode}',LocCode='${form.location}'`
    this.stockCodeData.WHERECONDITION = where
   //  this.ProcessCodeData.WHERECONDITION = where
   //   this.WorkerCodeData.WHERECONDITION = where

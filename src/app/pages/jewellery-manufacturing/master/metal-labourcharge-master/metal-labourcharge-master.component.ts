@@ -1211,6 +1211,13 @@ export class MetalLabourchargeMasterComponent implements OnInit {
   }
 
   onforDesignOnlyChange(event: any) {
+    const isChecked = event.checked;
+
+    // If the checkbox is checked, set the Labour Type to "GENERAL"
+    if (isChecked) {
+        this.metallabourMasterForm.get('metallabourType')?.setValue('GENERAL');
+    }
+
     console.log(event);
     if (event.checked === true) {
       this.stockcodeDisable = true;
@@ -1222,7 +1229,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
       this.metallabourMasterForm.controls['color'].disable();
       this.metallabourMasterForm.controls['color'].setValue('');
       this.metallabourMasterForm.controls['metallabourType'].disable();
-      this.metallabourMasterForm.controls['metallabourType'].setValue('');
+    //  this.metallabourMasterForm.controls['metallabourType'].setValue('');
       this.metallabourMasterForm.controls['metalunitList'].disable();
       this.metallabourMasterForm.controls['metalunitList'].setValue('');
       this.metallabourMasterForm.controls['typecode'].disable();

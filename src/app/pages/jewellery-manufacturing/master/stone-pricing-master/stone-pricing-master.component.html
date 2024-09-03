@@ -7,8 +7,8 @@
         </button>
     </div>
     <!-- modal header component -->
-    <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
-    (deleteClick)="deleteStonepriceMaster()" [isViewDelete]="!viewMode"></modal-header>
+    <modal-header [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode"  (saveClick)="formSubmit()" (cancelClick)="close()"
+    (deleteClick)="deleteStonepriceMaster()"[isViewDelete]="editMode"></modal-header>
     <!-- content section -->
     <div class="row">
         <div class="p-4 ">
@@ -137,8 +137,7 @@
                                 </div>
                                 <div class="row mb-1">
                                     <label for="inputPassword" id="ID007"
-                                        class="col-sm-4 col-form-label">Clarity
-                                        * : </label>
+                                        class="col-sm-4 col-form-label">Clarity : </label>
                                     <div class="col-sm-8">
                                         <mat-form-field style="width: 90%" appearance="outline">
                                             <input type="text"

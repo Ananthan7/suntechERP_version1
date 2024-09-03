@@ -445,12 +445,11 @@ export class AlloyMasterComponent implements OnInit {
     this.alloyMastereForm.controls.type.setValue(this.content.TYPE_CODE)
     this.alloyMastereForm.controls.subCategory.setValue(this.content.SUBCATEGORY_CODE)
     this.alloyMastereForm.controls.vendor.setValue(this.content.SALESCODE)
-    this.alloyMastereForm.controls.price1per.setValue(this.content.UDF1_DESC)
-    this.alloyMastereForm.controls.price2per.setValue(this.content.UDF2_DESC)
-    this.alloyMastereForm.controls.price3per.setValue(this.content.UDF3_DESC)
-    this.alloyMastereForm.controls.price4per.setValue(this.content.UDF4_DESC)
-    this.alloyMastereForm.controls.price5per.setValue(this.content.UDF5_DESC)
-
+    this.alloyMastereForm.controls.price1per.setValue(this.content.UDF1)
+    this.alloyMastereForm.controls.price2per.setValue(this.content.UDF2)
+    this.alloyMastereForm.controls.price3per.setValue(this.content.UDF3)
+    this.alloyMastereForm.controls.price4per.setValue(this.content.UDF4)
+    this.alloyMastereForm.controls.price5per.setValue(this.content.UDF5)
 
 
     this.alloyMastereForm.controls.price1code.setValue(
@@ -1341,11 +1340,11 @@ export class AlloyMasterComponent implements OnInit {
       CUT: "",
       POLISH: "",
       SYMMETRY: "",
-      UDF1: this.commonService.nullToString(this.alloyMastereForm.value.userdefined_1),
-      UDF2: this.commonService.nullToString(this.alloyMastereForm.value.userdefined_2),
-      UDF3: this.commonService.nullToString(this.alloyMastereForm.value.userdefined_3),
-      UDF4: this.commonService.nullToString(this.alloyMastereForm.value.userdefined_4),
-      UDF5: this.commonService.nullToString(this.alloyMastereForm.value.userdefined_5),
+      UDF1: this.commonService.nullToString(this.alloyMastereForm.value.price1per),
+      UDF2: this.commonService.nullToString(this.alloyMastereForm.value.price2per),
+      UDF3: this.commonService.nullToString(this.alloyMastereForm.value.price3per),
+      UDF4: this.commonService.nullToString(this.alloyMastereForm.value.price4per),
+      UDF5: this.commonService.nullToString(this.alloyMastereForm.value.price5per),
       UDF6: this.commonService.nullToString(this.alloyMastereForm.value.userdefined_6),
       UDF7: this.commonService.nullToString(this.alloyMastereForm.value.userdefined_7),
       UDF8: this.commonService.nullToString(this.alloyMastereForm.value.userdefined_8),
@@ -1500,11 +1499,11 @@ export class AlloyMasterComponent implements OnInit {
       WATCH_DIALCOLOR_DESC: "",
       WATCH_BAZEL_DESC: "",
       WATCH_MOVEMENT_DESC: "",
-      UDF1_DESC: this.commonService.nullToString(this.alloyMastereForm.value.price1per),
-      UDF2_DESC: this.commonService.nullToString(this.alloyMastereForm.value.price2per),
-      UDF3_DESC: this.commonService.nullToString(this.alloyMastereForm.value.price3per),
-      UDF4_DESC: this.commonService.nullToString(this.alloyMastereForm.value.price4per),
-      UDF5_DESC: this.commonService.nullToString(this.alloyMastereForm.value.price5per),
+      UDF1_DESC: "",
+      UDF2_DESC: "",
+      UDF3_DESC: "",
+      UDF4_DESC: "",
+      UDF5_DESC: "",
       UDF6_DESC: "",
       UDF7_DESC: "",
       UDF8_DESC: "",

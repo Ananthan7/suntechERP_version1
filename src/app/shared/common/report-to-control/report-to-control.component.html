@@ -1,7 +1,7 @@
 <div class="row">
-    <label for="inputPassword" class="col-sm-2 col-form-label">Report To</label>
-    <div class="col-md-2">
-        <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
+    <label for="inputPassword" class="col-md-4 col-form-label">Report To</label>
+    <div class="col-md-8">
+        <mat-form-field appearance="outline" style="width: 100%;">
             <mat-select [(value)]="selectedReport" formControlName="reportTo" (selectionChange)="onSelectionChange($event)">
                 <mat-option value="preview" id="ID007">PREVIEW</mat-option>
                 <mat-option value="print" id="ID008">PRINT</mat-option>

@@ -239,7 +239,7 @@
                             </div>
                         </div>
 
-                        <div class="col-md-4">
+                        <div class="col-md-5">
                             <div class="row mb-1">
                                 <label for="input" id="ID018" class="col-sm-4 col-form-label">Currency *
                                     :</label>
@@ -512,7 +512,7 @@
                             </div>
                         </div>
 
-                        <div class="col-md-2">
+                        <!-- <div class="col-md-1">
                             <div class="upload-btn-wrapper">
                                 <button class="btn btnnew" id="ID032" [disabled]="viewMode">
                                     Item Image
@@ -527,7 +527,24 @@
                                     <img src="{{ image }}" style="width: 209px; height: 163px" />
                                 </div>
                             </div>
+                        </div> -->
+                        <div class="col-md-1">
+                            <div class="upload-btn-wrapper">
+                                <button  class="btn btnnew" id="ID032" style="width:125px" [disabled]="viewMode">
+                                    Item Image
+                                </button>
+                                <input type="file" name="uploadproduct" formControlName="picture_name"
+                                    accept=".png, .jpg, .jpeg" #fileInput class="uploadproduct" [disabled]="viewMode"
+                                    (change)="onFileChanged($event)" />
+                            </div>
+                        
+                            <div class="image_box">
+                                <div class="img_box">
+                                    <img *ngIf="image" src="{{ image }}" style="width: 209px; height: 163px" />
+                                </div>
+                            </div>
                         </div>
+                        
                     </div>
                 </div>
             </div>

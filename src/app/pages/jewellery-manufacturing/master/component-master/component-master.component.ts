@@ -939,7 +939,7 @@ export class ComponentMasterComponent implements OnInit {
       "DESIGN_CODE": form.codedes || "",
       "DESIGN_DESCRIPTION": form.code || "",
       "CURRENCY_CODE": form.currencyCode,
-      "CC_RATE": this.commonService.emptyToZero(form.currencyRate),
+      "CC_RATE": "0",
       "COST_CODE": form.costCenter || "",
       "TYPE_CODE": form.type,
       "CATEGORY_CODE": form.category || "",
