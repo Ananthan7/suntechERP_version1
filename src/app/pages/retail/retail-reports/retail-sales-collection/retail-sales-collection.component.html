@@ -6,8 +6,8 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header [isViewDelete]="false" [isViewMore]="false" [editSaveBtnText]="'Go'" (saveClick)="savePdf()"
-    (cancelClick)="close()"></modal-header>
+<modal-header [isViewDelete]="false" [isViewMore]="false" [isViewSave]="false" [editSaveBtnText]="'Go'" (saveClick)="savePdf()"
+    (cancelClick)="close()" [isloading]="isLoading" [isViewCancel]="false"></modal-header>
 <!-- content section -->
 <div class="container-fluid pt-3 mb-5">
     <form [formGroup]="retailSalesCollection">
@@ -34,10 +34,10 @@
 
                 <div class="col-md-1 checkboxAlign">
                     <div class="row">
-                        <mat-checkbox >Show Date</mat-checkbox>
+                        <mat-checkbox formControlName="showDateCheckbox" >Show Date</mat-checkbox>
                     </div>
                     <div class="row">
-                        <mat-checkbox>Show Invoice</mat-checkbox>
+                        <mat-checkbox formControlName="showInvoiceCheckbox">Show Invoice</mat-checkbox>
                     </div>
                 </div>
             </div> 
@@ -47,31 +47,31 @@
       <div class="row">
         <div class="col-md-4 checkBoxDiv">
             <div class="row">
-                <mat-checkbox>Show Sales</mat-checkbox>
+                <mat-checkbox formControlName="showSalesCheckbox">Show Sales</mat-checkbox>
             </div>
             <div class="row">
-                <mat-checkbox>Show Sales Return</mat-checkbox>
+                <mat-checkbox formControlName="showSalesReturnCheckbox">Show Sales Return</mat-checkbox>
             </div>
             <div class="row">
-                <mat-checkbox>Show Exb. Sales</mat-checkbox>
+                <mat-checkbox formControlName="showExbSalesCheckbox">Show Exb. Sales</mat-checkbox>
             </div>
             <div class="row">
-                <mat-checkbox>Show Exb. Sales Return</mat-checkbox>
+                <mat-checkbox formControlName="showExbSalesReturnCheckbox">Show Exb. Sales Return</mat-checkbox>
             </div>
             <div class="row">
-                <mat-checkbox>Show Advance Receipt</mat-checkbox>
+                <mat-checkbox formControlName="showAdvanceReceiptCheckbox">Show Advance Receipt</mat-checkbox>
             </div>
             <div class="row">
-                <mat-checkbox>Show Sales Register</mat-checkbox> 
+                <mat-checkbox formControlName="showSalesRegisterCheckbox">Show Sales Register</mat-checkbox> 
             </div>
             <div class="row">
-                <mat-checkbox>Show Only Summary</mat-checkbox>
+                <mat-checkbox formControlName="showOnlySummaryCheckbox">Show Only Summary</mat-checkbox>
             </div>
             <div class="row">
-                <mat-checkbox>Landscape Format</mat-checkbox>
+                <mat-checkbox formControlName="landscapeFormat">Landscape Format</mat-checkbox>
             </div>
             <div class="row">
-                <mat-checkbox>Output in Grid View</mat-checkbox>
+                <mat-checkbox formControlName="OutpuGridView">Output in Grid View</mat-checkbox>
             </div>
         </div>
 

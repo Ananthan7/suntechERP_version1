@@ -2,12 +2,11 @@
     <div class="col-md-10">
         <div class="d-flex justify-content-start text-start">
             <div class="p-1" *ngIf="isViewSave">
-                 <!-- commented as per guidance of Hillary -->
-                <!-- <button type="button" class="btn btn-primary text-center"
+                <button type="button" class="btn btn-primary text-center"
                     *ngIf="!isloading; else elseBlock"
                     (click)="saveClicked()">
                     {{editSaveBtnText}}
-                </button> -->
+                </button>
                 <ng-template #elseBlock>
                     <button type="button" class="btn btn-primary text-center"
                         [disabled]="disableSaveBtn">
@@ -15,13 +14,12 @@
                     </button>
                 </ng-template>
             </div>
-            <!-- commented as per guidance of Hillary -->
-            <!-- <div class="p-1">
+            <div class="p-1">
                 <button type="button" class="btn btn-primary text-center" *ngIf="isViewCancel"
                     (click)="cancelClicked()">
                     Cancel
                 </button>
-            </div> -->
+            </div>
             <div class="p-1" *ngIf="isViewDelete">
                 <button type="button" class="btn btn-primary text-center"
                     [disabled]="disableDeleteBtn"
