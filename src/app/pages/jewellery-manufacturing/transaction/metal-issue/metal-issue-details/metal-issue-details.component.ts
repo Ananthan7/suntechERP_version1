@@ -361,7 +361,7 @@ export class MetalIssueDetailsComponent implements OnInit {
       "STOCK_DESCRIPTION": this.comService.nullToString(form.stockCodeDes),
       "SUB_STOCK_CODE": this.comService.nullToString(form.stockCode),
       "KARAT_CODE": this.comService.nullToString(form.KARAT_CODE),
-      "JOB_PCS": form.JOB_PCS,
+      "JOB_PCS": this.comService.emptyToZero(form.JOB_PCS),
       "PCS": form.pcs,
       "GROSS_WT": form.GROSS_WT,
       "PURITY": form.PURITY,
