@@ -17,6 +17,7 @@ import { MatDialog } from '@angular/material/dialog';
 // import { round } from 'lodash';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+
 //@ts-ignore
 import html2pdf from 'html2pdf.js';
 
@@ -119,6 +120,19 @@ editLineItem:boolean=false;
   yearMonth?: any = localStorage.getItem("YEAR") || "";
   branchCode?: any = localStorage.getItem("userbranch");
   postDetail:any[]= [];
+  making_amount = 0;
+  pure_weight =0;
+  metal_value = 0;
+  stone_value = 0;
+  purity_difference = 0;
+  stone_difference = 0;
+  total_disc_cc = 0;
+  total_disc_fc = 0;
+  total_net_value_fc=0;
+  total_net_value_cc=0;
+  total_vat_lc = 0;
+  total_vat_fc = 0 ;
+  Receipt_total=0;
   showBoarding: boolean = false;
   valuedatas:any;
   private onChangeCallback: (_: any) => void = noop;
@@ -767,6 +781,8 @@ editLineItem:boolean=false;
 
   constructor(
     // private activeModal: NgbActiveModal,
+
+    private commonService: CommonServiceService,
     private modalService: NgbModal,
     private suntechApi: SuntechAPIService,
     private planetService: PlanetService,
@@ -789,7 +805,7 @@ editLineItem:boolean=false;
   ) {
     this.strBranchcode = localStorage.getItem('userbranch');
     this.strUser = localStorage.getItem('username');
-    // this.baseYear = localStorage.getItem('YEAR');
+    this.baseYear = localStorage.getItem('YEAR');
     let branchParams: any = localStorage.getItem('BRANCH_PARAMETER')
     this.comFunc.allbranchMaster = JSON.parse(branchParams);
     this.isGiftTypeRequired = this.comFunc.allbranchMaster.BRNCHSHOW_GIFTMODULE ? this.comFunc.allbranchMaster.BRNCHSHOW_GIFTMODULE : false;
@@ -853,8 +869,10 @@ editLineItem:boolean=false;
       fcn_li_tax_percentage: [0, Validators.required],
       fcn_li_tax_amount: [0, Validators.required],
       fcn_li_net_amount: [0, [Validators.required, Validators.min(1)]],
-      fcn_li_purity: [{ value: 0 }, Validators.required],
-      fcn_li_pure_wt: [{ value: 0 }, Validators.required],
+      fcn_li_purity: [{ value: 0 }, ],
+      fcn_li_pure_wt: [{ value: 0 },],
+      // fcn_li_purity: [{ value: 0 }, Validators.required],
+      // fcn_li_pure_wt: [{ value: 0 }, Validators.required],
       // additional details
       fcn_ad_pcs: [0],
       fcn_ad_cts: [''],
@@ -1168,28 +1186,28 @@ editLineItem:boolean=false;
       "VOCNO": this.vocDataForm.controls.fcn_voc_no.value,
       "VOCDATE": this.vocDataForm.controls.vocdate.value,
       "YEARMONTH": this.baseYear,
-      "PARTYNAME": this.vocDataForm.controls.fcn_customer_name.value,
+      "PARTYNAME": this.customerDataForm.controls.fcn_customer_name.value,
       "TEL1": "",
       "TEL2": "",
       "SALESPERSON_CODE": this.vocDataForm.controls.sales_person.value,
       "RATE_TYPE": "",
       "METAL_RATE": 0,
       "SALES_ORDER": 0,
-      "TOTAL_PCS": 0,
-      "TOTAL_GRWT": 0,
-      "TOTAL_PUWT": 0,
-      "TOTAL_MKGVALUE_FC": 0,
+      "TOTAL_PCS": this.prnt_inv_total_pcs,
+      "TOTAL_GRWT": this.prnt_inv_total_weight,//0,
+      "TOTAL_PUWT": this.pure_weight,
+      "TOTAL_MKGVALUE_FC": this.making_amount,
       "TOTAL_MKGVALUE_CC": 0,
-      "TOTAL_METALVALUE_FC": 0,
+      "TOTAL_METALVALUE_FC": this.metal_value,//0,
       "TOTAL_METALVALUE_CC": 0,
-      "TOTAL_STONEVALUE_FC": 0,
+      "TOTAL_STONEVALUE_FC": this.stone_value,
       "TOTAL_STONEVALUE_CC": 0,
-      "TOTAL_PUDIFF": 0,
-      "TOTAL_STONEDIFF": 0,
-      "TOTAL_DISCVALUE_FC": 0,
-      "TOTAL_DISCVALUE_CC": 0,
-      "NETVALUE_FC": 0,
-      "NETVALUE_CC": 0,
+      "TOTAL_PUDIFF": this.purity_difference,
+      "TOTAL_STONEDIFF": this.stone_difference,
+      "TOTAL_DISCVALUE_FC": this.total_disc_fc,
+      "TOTAL_DISCVALUE_CC": this.total_disc_cc,
+      "NETVALUE_FC": this.total_net_value_fc,
+      "NETVALUE_CC": this.total_net_value_cc,
       "REMARKS": "",
       "SYSTEM_DATE": new Date(),
       "RETURNMID": 0,
@@ -1206,15 +1224,15 @@ editLineItem:boolean=false;
       "DISCOUNT": 0,
       "SUBTOTAL": 0,
       "ROUNDOFF": 0,
-      "NETTOTAL": 0,
+      "NETTOTAL": this.netTotal || 0,
       "RECEIPT_TOTAL": 0,
       "REFUND": 0,
       "FLAG_EDIT_ALLOW": "",
       "NAVSEQNO": 0,
-      "MOBILE": this.vocDataForm.controls.fcn_customer_mobile.value,
+      "MOBILE": this.customerDataForm.controls.fcn_customer_mobile.value,
       "POBOX": "",
       "EMAIL": "",
-      "POSCUSTCODE": this.vocDataForm.controls.fcn_customer_code.value,
+      "POSCUSTCODE": this.customerDataForm.controls.fcn_customer_code.value,
       "ITEM_CURRENCY": "i",
       "ITEM_CURR_RATE": this.vocDataForm.controls.txtCurRate.value,
       "ADJUST_ADVANCECC": 0,
@@ -1232,8 +1250,8 @@ editLineItem:boolean=false;
       "RSCUSTIDNO": "",
       "TRANS_CODES": "",
       "CONSIGNMENTPARTY": "",
-      "TOTALVAT_AMOUNTFC": 0,
-      "TOTALVAT_AMOUNTLC": 0,
+      "TOTALVAT_AMOUNTFC": this.total_vat_fc,
+      "TOTALVAT_AMOUNTLC": this.total_vat_lc,
       "RSSTATE": "",
       "GSTVATAMOUNTFC": 0,
       "GSTVATAMOUNTCC": 0,
@@ -1259,8 +1277,8 @@ editLineItem:boolean=false;
       "EXCLUDEGSTVAT": 0,
       "TRAYN": true,
       "TRANO": "",
-      "TRA_ID_TYPE": this.vocDataForm.controls.fcn_customer_id_type.value,
-      "POSCUSTIDNO": this.vocDataForm.controls.fcn_customer_id_number.value,
+      "TRA_ID_TYPE": this.customerDataForm.controls.fcn_customer_id_type.value,
+      "POSCUSTIDNO": this.customerDataForm.controls.fcn_customer_id_number.value,
       "TOTALCESS_AMOUNTCC": 0,
       "TOTALCESS_AMOUNTFC": 0,
       "FORM_60": true,
@@ -1303,220 +1321,12 @@ editLineItem:boolean=false;
       "EINVOICEQRIMAGE": "",
       "EINVOICERESPONSE": "",
       "EINVOICEFLG": true,
-      "POSCUSTIDEXP_DATE": this.vocDataForm.controls.fcn_customer_exp_date.value,
-      "retailSReturnDetails" : [
+      "POSCUSTIDEXP_DATE": this.customerDataForm.controls.fcn_customer_exp_date.value,
+      "retailSReturnDetails" : 
         this.postDetail
-      ]
-      // "retailSReturnDetails": [
-      //   // {
-      //   //   "UNIQUEID": 0,
-      //   //   "SRNO": 0,
-      //   //   "DIVISION_CODE": "",
-      //   //   "STOCK_CODE": "",
-      //   //   "PCS": 0,
-      //   //   "GROSSWT": 0,
-      //   //   "STONEWT": 0,
-      //   //   "NETWT": 0,
-      //   //   "PURITY": 0,
-      //   //   "PUREWT": 0,
-      //   //   "CHARGABLEWT": 0,
-      //   //   "MKG_RATEFC": 0,
-      //   //   "MKG_RATECC": 0,
-      //   //   "MKGVALUEFC": 0,
-      //   //   "MKGVALUECC": 0,
-      //   //   "RATE_TYPE": "",
-      //   //   "METAL_RATE": 0,
-      //   //   "METAL_RATE_GMSFC": 0,
-      //   //   "METAL_RATE_GMSCC": 0,
-      //   //   "METALVALUEFC": 0,
-      //   //   "METALVALUECC": 0,
-      //   //   "STONE_RATEFC": 0,
-      //   //   "STONE_RATECC": 0,
-      //   //   "STONEVALUEFC": 0,
-      //   //   "STONEVALUECC": 0,
-      //   //   "DISCOUNT": 0,
-      //   //   "DISCOUNTVALUEFC": 0,
-      //   //   "DISCOUNTVALUECC": 0,
-      //   //   "NETVALUEFC": 0,
-      //   //   "NETVALUECC": 0,
-      //   //   "PUDIFF": 0,
-      //   //   "STONEDIFF": 0,
-      //   //   "PONO": 0,
-      //   //   "LOCTYPE_CODE": "",
-      //   //   "SUPPLIER": "",
-      //   //   "STOCK_DOCDESC": "",
-      //   //   "LOCKED": true,
-      //   //   "MCLENGTH": 0,
-      //   //   "MCUNIT": 0,
-      //   //   "POSSALESSR": "",
-      //   //   "PHYSICALSTOCK": "",
-      //   //   "METALAMT": "",
-      //   //   "MAKINGAMT": "",
-      //   //   "STDIFFAC": "",
-      //   //   "STAMTAC": "",
-      //   //   "STKTRANMKGCOST": 0,
-      //   //   "MAINSTOCKCODE": "",
-      //   //   "MKGMTLNETRATE": 0,
-      //   //   "RSO_FIXED": true,
-      //   //   "RSORDERGROSSWT": 0,
-      //   //   "RUBY_WT": 0,
-      //   //   "RUBY_RATE": 0,
-      //   //   "RUBY_AMOUNTFC": 0,
-      //   //   "RUBY_AMOUNTCC": 0,
-      //   //   "EMERALD_WT": 0,
-      //   //   "EMERALD_RATE": 0,
-      //   //   "EMERALD_AMOUNTFC": 0,
-      //   //   "EMERALD_AMOUNTCC": 0,
-      //   //   "SAPPHIRE_WT": 0,
-      //   //   "SAPPHIRE_RATE": 0,
-      //   //   "SAPPHIRE_AMOUNTFC": 0,
-      //   //   "SAPPHIRE_AMOUNTCC": 0,
-      //   //   "ZIRCON_WT": 0,
-      //   //   "ZIRCON_RATE": 0,
-      //   //   "ZIRCON_AMOUNTFC": 0,
-      //   //   "ZIRCON_AMOUNTCC": 0,
-      //   //   "COLOR_STONE_WT": 0,
-      //   //   "COLOR_STONE_RATE": 0,
-      //   //   "COLOR_STONE_AMOUNTFC": 0,
-      //   //   "COLOR_STONE_AMOUNTCC": 0,
-      //   //   "SJEW_TAGLINES": "",
-      //   //   "MTL_SIZE": "",
-      //   //   "MTL_COLOR": "",
-      //   //   "MTL_DESIGN": "",
-      //   //   "DTSALESPERSON_CODE": "",
-      //   //   "VAT_ACCODE": "",
-      //   //   "VAT_PER": 0,
-      //   //   "TOTALWITHVATFC": 0,
-      //   //   "TOTALWITHVATLC": 0,
-      //   //   "VAT_AMOUNTLC": 0,
-      //   //   "VAT_AMOUNTFC": 0,
-      //   //   "LOYALTY_ITEM": true,
-      //   //   "WASTE_PER": 0,
-      //   //   "STKTRN_LANDINGCOST": 0,
-      //   //   "STKTRN_WASTAGERATE": 0,
-      //   //   "DT_BRANCH_CODE": "",
-      //   //   "DT_VOCTYPE": "",
-      //   //   "DT_VOCNO": 0,
-      //   //   "DT_YEARMONTH": "",
-      //   //   "SALESPERSON_CODE": "",
-      //   //   "CGST_PER": 0,
-      //   //   "CGST_AMOUNTFC": 0,
-      //   //   "CGST_AMOUNTCC": 0,
-      //   //   "SGST_PER": 0,
-      //   //   "SGST_AMOUNTFC": 0,
-      //   //   "SGST_AMOUNTCC": 0,
-      //   //   "IGST_PER": 0,
-      //   //   "IGST_AMOUNTFC": 0,
-      //   //   "IGST_AMOUNTCC": 0,
-      //   //   "CGST_ACCODE": "",
-      //   //   "SGST_ACCODE": "",
-      //   //   "IGST_ACCODE": "",
-      //   //   "TOTAL_AMOUNTFC": 0,
-      //   //   "TOTAL_AMOUNTCC": 0,
-      //   //   "CGST_CTRLACCODE": "",
-      //   //   "SGST_CTRLACCODE": "",
-      //   //   "IGST_CTRLACCODE": "",
-      //   //   "GST_GROUP": "",
-      //   //   "GST_CODE": "",
-      //   //   "HSN_CODE": "",
-      //   //   "SERVICE_ACCODE": "",
-      //   //   "WASTAGEPER": 0,
-      //   //   "WASTAGEQTY": 0,
-      //   //   "WASTAGEPUREWT": 0,
-      //   //   "WASTAGEAMOUNTFC": 0,
-      //   //   "WASTAGEAMOUNTCC": 0,
-      //   //   "DIVISIONMS": "",
-      //   //   "INCLUSIVE": true,
-      //   //   "OLDRATE": 0,
-      //   //   "OLDAMOUNT": 0,
-      //   //   "DISC_USER_NAME": "",
-      //   //   "DISC_AMOUNT": 0,
-      //   //   "DISC_PERCENTAGE": 0,
-      //   //   "KUNDAN_UNIT": 0,
-      //   //   "KUNDAN_PCS": 0,
-      //   //   "KUNDAN_CARAT": 0,
-      //   //   "KUNDAN_WEIGHT": 0,
-      //   //   "KUNDAN_RATEFC": 0,
-      //   //   "KUNDAN_RATECC": 0,
-      //   //   "KUNDANVALUEFC": 0,
-      //   //   "KUNDANVALUECC": 0,
-      //   //   "CESS_PER": 0,
-      //   //   "CESS_AMOUNTFC": 0,
-      //   //   "CESS_AMOUNTCC": 0,
-      //   //   "ROS_FIXED": 0,
-      //   //   "BATCHID": 0,
-      //   //   "STAMP_RATE": 0,
-      //   //   "STAMP_AMOUNT": 0,
-      //   //   "STAMP_AMOUNTCC": 0,
-      //   //   "LOYALTY_POINTS": 0,
-      //   //   "SALES_TAGLINES": "",
-      //   //   "OT_TRANSFER_TIME": "",
-      //   //   "COUNTRY_CODE": "",
-      //   //   "EXTRA_STOCK_CODE": "",
-      //   //   "FLAGESTK": 0,
-      //   //   "COMPONENT_PRICE_TYPE": "",
-      //   //   "DUFIX_METALGROSSWT": 0,
-      //   //   "DUFIX_DIAPCS": 0,
-      //   //   "DUFIX_DIACARAT": 0,
-      //   //   "DUFIX_STONEPCS": 0,
-      //   //   "DUFIX_STONECARAT": 0,
-      //   //   "DUFIX_METAL_WT": 0,
-      //   //   "DUFIX_FINEGOLD": 0,
-      //   //   "DUFIX_MASTERFINEGOLD": 0,
-      //   //   "DUFIX_DIACTRATEFC": 0,
-      //   //   "DUFIX_DIACTRATECC": 0,
-      //   //   "DUFIX_DIAVALUEFC": 0,
-      //   //   "DUFIX_DIAVALUECC": 0,
-      //   //   "DUFIX_CLRSTNRATEFC": 0,
-      //   //   "DUFIX_CLRSTNRATECC": 0,
-      //   //   "DUFIX_CLRSTNVALUEFC": 0,
-      //   //   "DUFIX_CLRSTNVALUECC": 0,
-      //   //   "DUFIX_METALVALUEFC": 0,
-      //   //   "DUFIX_METALVALUECC": 0,
-      //   //   "DUFIX_LABOURFC": 0,
-      //   //   "DUFIX_LABOURCC": 0,
-      //   //   "DUFIX_HMCHARGEFC": 0,
-      //   //   "DUFIX_HMCHARGECC": 0,
-      //   //   "DUFIX_CERTCHARGEFC": 0,
-      //   //   "DUFIX_CERTCHARGECC": 0,
-      //   //   "DUFIX_DWASTAGE": 0,
-      //   //   "DUFIX_PURITY": 0,
-      //   //   "DUFIX_PUDIFF": 0,
-      //   //   "DUFIX_DKARAT_CODE": "",
-      //   //   "DUFIX_METLA_WT": 0,
-      //   //   "DUFIX_DWASTAGEPER": 0,
-      //   //   "DUFIX_DWASTAGEAMOUNTFC": 0,
-      //   //   "DUFIX_DWASTAGEAMOUNTCC": 0,
-      //   //   "DUFIX_PEARL_PCS": 0,
-      //   //   "DUFIX_PEARL_WT": 0,
-      //   //   "DUFIX_PEARL_AMTFC": 0,
-      //   //   "DUFIX_PEARL_AMTCC": 0,
-      //   //   "DUFIX_DLABUNIT": 0,
-      //   //   "DUFIX_DLABRATEFC": 0,
-      //   //   "DUFIX_DLABRATECC": 0,
-      //   //   "DUFIX_DCHARGABLEWEIGHT": 0,
-      //   //   "GIFT_ITEM": true,
-      //   //   "GSTMETALPER": 0,
-      //   //   "GSTMAKINGPER": 0,
-      //   //   "GSTOTHERPER": 0,
-      //   //   "GSTMETALAMT_CC": 0,
-      //   //   "GSTMAKINGAMT_CC": 0,
-      //   //   "GSTOTHERAMT_CC": 0,
-      //   //   "GSTMETALAMT_FC": 0,
-      //   //   "GSTMAKINGAMT_FC": 0,
-      //   //   "GSTOTHERAMT_FC": 0,
-      //   //   "HSNCODE": "",
-      //   //   "LESSTHANCOST_USER": "",
-      //   //   "NEWUNIQUEID": 0,
-      //   //   "STOCKCHECKOTHERBRANCH": true,
-      //   //   "TOTALWITHGST_CC": 0,
-      //   //   "TOTALWITHGST_FC": 0,
-      //   //   "VATCODE": ""
-      //   // }
-      // ]
+      ,
     }
     console.log(postData);
-``
 
     let Sub: Subscription = this.dataService
     .postDynamicAPI(API, postData)
@@ -1551,7 +1361,6 @@ editLineItem:boolean=false;
   updatenew(){
 
     let API = `RetailSaleReturn/UpdateRetailSReturn/${this.branchCode}/${this.vocDataForm.value.vocType}/${this.vocDataForm.value.vocno}/${this.yearMonth}`;
-
     let postData = {
       "MID": 0,
       "BRANCH_CODE": this.strBranchcode,
@@ -1559,28 +1368,28 @@ editLineItem:boolean=false;
       "VOCNO": this.vocDataForm.controls.fcn_voc_no.value,
       "VOCDATE": this.vocDataForm.controls.vocdate.value,
       "YEARMONTH": this.baseYear,
-      "PARTYNAME": this.vocDataForm.controls.fcn_customer_name.value,
+      "PARTYNAME": this.customerDataForm.controls.fcn_customer_name.value,
       "TEL1": "",
       "TEL2": "",
       "SALESPERSON_CODE": this.vocDataForm.controls.sales_person.value,
       "RATE_TYPE": "",
       "METAL_RATE": 0,
       "SALES_ORDER": 0,
-      "TOTAL_PCS": 0,
-      "TOTAL_GRWT": 0,
-      "TOTAL_PUWT": 0,
-      "TOTAL_MKGVALUE_FC": 0,
+      "TOTAL_PCS": this.prnt_inv_total_pcs,
+      "TOTAL_GRWT": this.prnt_inv_total_weight,//0,
+      "TOTAL_PUWT": this.pure_weight,
+      "TOTAL_MKGVALUE_FC": this.making_amount,
       "TOTAL_MKGVALUE_CC": 0,
-      "TOTAL_METALVALUE_FC": 0,
+      "TOTAL_METALVALUE_FC": this.metal_value,//0,
       "TOTAL_METALVALUE_CC": 0,
-      "TOTAL_STONEVALUE_FC": 0,
+      "TOTAL_STONEVALUE_FC": this.stone_value,
       "TOTAL_STONEVALUE_CC": 0,
-      "TOTAL_PUDIFF": 0,
-      "TOTAL_STONEDIFF": 0,
-      "TOTAL_DISCVALUE_FC": 0,
-      "TOTAL_DISCVALUE_CC": 0,
-      "NETVALUE_FC": 0,
-      "NETVALUE_CC": 0,
+      "TOTAL_PUDIFF": this.purity_difference,
+      "TOTAL_STONEDIFF": this.stone_difference,
+      "TOTAL_DISCVALUE_FC": this.total_disc_fc,
+      "TOTAL_DISCVALUE_CC": this.total_disc_cc,
+      "NETVALUE_FC": this.total_net_value_fc,
+      "NETVALUE_CC": this.total_net_value_cc,
       "REMARKS": "",
       "SYSTEM_DATE": new Date(),
       "RETURNMID": 0,
@@ -1597,15 +1406,15 @@ editLineItem:boolean=false;
       "DISCOUNT": 0,
       "SUBTOTAL": 0,
       "ROUNDOFF": 0,
-      "NETTOTAL": 0,
+      "NETTOTAL": this.netTotal || 0,
       "RECEIPT_TOTAL": 0,
       "REFUND": 0,
       "FLAG_EDIT_ALLOW": "",
       "NAVSEQNO": 0,
-      "MOBILE": this.vocDataForm.controls.fcn_customer_mobile.value,
+      "MOBILE": this.customerDataForm.controls.fcn_customer_mobile.value,
       "POBOX": "",
       "EMAIL": "",
-      "POSCUSTCODE": this.vocDataForm.controls.fcn_customer_code.value,
+      "POSCUSTCODE": this.customerDataForm.controls.fcn_customer_code.value,
       "ITEM_CURRENCY": "i",
       "ITEM_CURR_RATE": this.vocDataForm.controls.txtCurRate.value,
       "ADJUST_ADVANCECC": 0,
@@ -1623,8 +1432,8 @@ editLineItem:boolean=false;
       "RSCUSTIDNO": "",
       "TRANS_CODES": "",
       "CONSIGNMENTPARTY": "",
-      "TOTALVAT_AMOUNTFC": 0,
-      "TOTALVAT_AMOUNTLC": 0,
+      "TOTALVAT_AMOUNTFC": this.total_vat_fc,
+      "TOTALVAT_AMOUNTLC": this.total_vat_lc,
       "RSSTATE": "",
       "GSTVATAMOUNTFC": 0,
       "GSTVATAMOUNTCC": 0,
@@ -1650,8 +1459,8 @@ editLineItem:boolean=false;
       "EXCLUDEGSTVAT": 0,
       "TRAYN": true,
       "TRANO": "",
-      "TRA_ID_TYPE": this.vocDataForm.controls.fcn_customer_id_type.value,
-      "POSCUSTIDNO": this.vocDataForm.controls.fcn_customer_id_number.value,
+      "TRA_ID_TYPE": this.customerDataForm.controls.fcn_customer_id_type.value,
+      "POSCUSTIDNO": this.customerDataForm.controls.fcn_customer_id_number.value,
       "TOTALCESS_AMOUNTCC": 0,
       "TOTALCESS_AMOUNTFC": 0,
       "FORM_60": true,
@@ -1694,215 +1503,362 @@ editLineItem:boolean=false;
       "EINVOICEQRIMAGE": "",
       "EINVOICERESPONSE": "",
       "EINVOICEFLG": true,
-      "POSCUSTIDEXP_DATE": this.vocDataForm.controls.fcn_customer_exp_date.value,
-      "retailSReturnDetails": [
-        // {
-        //   "UNIQUEID": 0,
-        //   "SRNO": 0,
-        //   "DIVISION_CODE": "",
-        //   "STOCK_CODE": "",
-        //   "PCS": 0,
-        //   "GROSSWT": 0,
-        //   "STONEWT": 0,
-        //   "NETWT": 0,
-        //   "PURITY": 0,
-        //   "PUREWT": 0,
-        //   "CHARGABLEWT": 0,
-        //   "MKG_RATEFC": 0,
-        //   "MKG_RATECC": 0,
-        //   "MKGVALUEFC": 0,
-        //   "MKGVALUECC": 0,
-        //   "RATE_TYPE": "",
-        //   "METAL_RATE": 0,
-        //   "METAL_RATE_GMSFC": 0,
-        //   "METAL_RATE_GMSCC": 0,
-        //   "METALVALUEFC": 0,
-        //   "METALVALUECC": 0,
-        //   "STONE_RATEFC": 0,
-        //   "STONE_RATECC": 0,
-        //   "STONEVALUEFC": 0,
-        //   "STONEVALUECC": 0,
-        //   "DISCOUNT": 0,
-        //   "DISCOUNTVALUEFC": 0,
-        //   "DISCOUNTVALUECC": 0,
-        //   "NETVALUEFC": 0,
-        //   "NETVALUECC": 0,
-        //   "PUDIFF": 0,
-        //   "STONEDIFF": 0,
-        //   "PONO": 0,
-        //   "LOCTYPE_CODE": "",
-        //   "SUPPLIER": "",
-        //   "STOCK_DOCDESC": "",
-        //   "LOCKED": true,
-        //   "MCLENGTH": 0,
-        //   "MCUNIT": 0,
-        //   "POSSALESSR": "",
-        //   "PHYSICALSTOCK": "",
-        //   "METALAMT": "",
-        //   "MAKINGAMT": "",
-        //   "STDIFFAC": "",
-        //   "STAMTAC": "",
-        //   "STKTRANMKGCOST": 0,
-        //   "MAINSTOCKCODE": "",
-        //   "MKGMTLNETRATE": 0,
-        //   "RSO_FIXED": true,
-        //   "RSORDERGROSSWT": 0,
-        //   "RUBY_WT": 0,
-        //   "RUBY_RATE": 0,
-        //   "RUBY_AMOUNTFC": 0,
-        //   "RUBY_AMOUNTCC": 0,
-        //   "EMERALD_WT": 0,
-        //   "EMERALD_RATE": 0,
-        //   "EMERALD_AMOUNTFC": 0,
-        //   "EMERALD_AMOUNTCC": 0,
-        //   "SAPPHIRE_WT": 0,
-        //   "SAPPHIRE_RATE": 0,
-        //   "SAPPHIRE_AMOUNTFC": 0,
-        //   "SAPPHIRE_AMOUNTCC": 0,
-        //   "ZIRCON_WT": 0,
-        //   "ZIRCON_RATE": 0,
-        //   "ZIRCON_AMOUNTFC": 0,
-        //   "ZIRCON_AMOUNTCC": 0,
-        //   "COLOR_STONE_WT": 0,
-        //   "COLOR_STONE_RATE": 0,
-        //   "COLOR_STONE_AMOUNTFC": 0,
-        //   "COLOR_STONE_AMOUNTCC": 0,
-        //   "SJEW_TAGLINES": "",
-        //   "MTL_SIZE": "",
-        //   "MTL_COLOR": "",
-        //   "MTL_DESIGN": "",
-        //   "DTSALESPERSON_CODE": "",
-        //   "VAT_ACCODE": "",
-        //   "VAT_PER": 0,
-        //   "TOTALWITHVATFC": 0,
-        //   "TOTALWITHVATLC": 0,
-        //   "VAT_AMOUNTLC": 0,
-        //   "VAT_AMOUNTFC": 0,
-        //   "LOYALTY_ITEM": true,
-        //   "WASTE_PER": 0,
-        //   "STKTRN_LANDINGCOST": 0,
-        //   "STKTRN_WASTAGERATE": 0,
-        //   "DT_BRANCH_CODE": "",
-        //   "DT_VOCTYPE": "",
-        //   "DT_VOCNO": 0,
-        //   "DT_YEARMONTH": "",
-        //   "SALESPERSON_CODE": "",
-        //   "CGST_PER": 0,
-        //   "CGST_AMOUNTFC": 0,
-        //   "CGST_AMOUNTCC": 0,
-        //   "SGST_PER": 0,
-        //   "SGST_AMOUNTFC": 0,
-        //   "SGST_AMOUNTCC": 0,
-        //   "IGST_PER": 0,
-        //   "IGST_AMOUNTFC": 0,
-        //   "IGST_AMOUNTCC": 0,
-        //   "CGST_ACCODE": "",
-        //   "SGST_ACCODE": "",
-        //   "IGST_ACCODE": "",
-        //   "TOTAL_AMOUNTFC": 0,
-        //   "TOTAL_AMOUNTCC": 0,
-        //   "CGST_CTRLACCODE": "",
-        //   "SGST_CTRLACCODE": "",
-        //   "IGST_CTRLACCODE": "",
-        //   "GST_GROUP": "",
-        //   "GST_CODE": "",
-        //   "HSN_CODE": "",
-        //   "SERVICE_ACCODE": "",
-        //   "WASTAGEPER": 0,
-        //   "WASTAGEQTY": 0,
-        //   "WASTAGEPUREWT": 0,
-        //   "WASTAGEAMOUNTFC": 0,
-        //   "WASTAGEAMOUNTCC": 0,
-        //   "DIVISIONMS": "",
-        //   "INCLUSIVE": true,
-        //   "OLDRATE": 0,
-        //   "OLDAMOUNT": 0,
-        //   "DISC_USER_NAME": "",
-        //   "DISC_AMOUNT": 0,
-        //   "DISC_PERCENTAGE": 0,
-        //   "KUNDAN_UNIT": 0,
-        //   "KUNDAN_PCS": 0,
-        //   "KUNDAN_CARAT": 0,
-        //   "KUNDAN_WEIGHT": 0,
-        //   "KUNDAN_RATEFC": 0,
-        //   "KUNDAN_RATECC": 0,
-        //   "KUNDANVALUEFC": 0,
-        //   "KUNDANVALUECC": 0,
-        //   "CESS_PER": 0,
-        //   "CESS_AMOUNTFC": 0,
-        //   "CESS_AMOUNTCC": 0,
-        //   "ROS_FIXED": 0,
-        //   "BATCHID": 0,
-        //   "STAMP_RATE": 0,
-        //   "STAMP_AMOUNT": 0,
-        //   "STAMP_AMOUNTCC": 0,
-        //   "LOYALTY_POINTS": 0,
-        //   "SALES_TAGLINES": "",
-        //   "OT_TRANSFER_TIME": "",
-        //   "COUNTRY_CODE": "",
-        //   "EXTRA_STOCK_CODE": "",
-        //   "FLAGESTK": 0,
-        //   "COMPONENT_PRICE_TYPE": "",
-        //   "DUFIX_METALGROSSWT": 0,
-        //   "DUFIX_DIAPCS": 0,
-        //   "DUFIX_DIACARAT": 0,
-        //   "DUFIX_STONEPCS": 0,
-        //   "DUFIX_STONECARAT": 0,
-        //   "DUFIX_METAL_WT": 0,
-        //   "DUFIX_FINEGOLD": 0,
-        //   "DUFIX_MASTERFINEGOLD": 0,
-        //   "DUFIX_DIACTRATEFC": 0,
-        //   "DUFIX_DIACTRATECC": 0,
-        //   "DUFIX_DIAVALUEFC": 0,
-        //   "DUFIX_DIAVALUECC": 0,
-        //   "DUFIX_CLRSTNRATEFC": 0,
-        //   "DUFIX_CLRSTNRATECC": 0,
-        //   "DUFIX_CLRSTNVALUEFC": 0,
-        //   "DUFIX_CLRSTNVALUECC": 0,
-        //   "DUFIX_METALVALUEFC": 0,
-        //   "DUFIX_METALVALUECC": 0,
-        //   "DUFIX_LABOURFC": 0,
-        //   "DUFIX_LABOURCC": 0,
-        //   "DUFIX_HMCHARGEFC": 0,
-        //   "DUFIX_HMCHARGECC": 0,
-        //   "DUFIX_CERTCHARGEFC": 0,
-        //   "DUFIX_CERTCHARGECC": 0,
-        //   "DUFIX_DWASTAGE": 0,
-        //   "DUFIX_PURITY": 0,
-        //   "DUFIX_PUDIFF": 0,
-        //   "DUFIX_DKARAT_CODE": "",
-        //   "DUFIX_METLA_WT": 0,
-        //   "DUFIX_DWASTAGEPER": 0,
-        //   "DUFIX_DWASTAGEAMOUNTFC": 0,
-        //   "DUFIX_DWASTAGEAMOUNTCC": 0,
-        //   "DUFIX_PEARL_PCS": 0,
-        //   "DUFIX_PEARL_WT": 0,
-        //   "DUFIX_PEARL_AMTFC": 0,
-        //   "DUFIX_PEARL_AMTCC": 0,
-        //   "DUFIX_DLABUNIT": 0,
-        //   "DUFIX_DLABRATEFC": 0,
-        //   "DUFIX_DLABRATECC": 0,
-        //   "DUFIX_DCHARGABLEWEIGHT": 0,
-        //   "GIFT_ITEM": true,
-        //   "GSTMETALPER": 0,
-        //   "GSTMAKINGPER": 0,
-        //   "GSTOTHERPER": 0,
-        //   "GSTMETALAMT_CC": 0,
-        //   "GSTMAKINGAMT_CC": 0,
-        //   "GSTOTHERAMT_CC": 0,
-        //   "GSTMETALAMT_FC": 0,
-        //   "GSTMAKINGAMT_FC": 0,
-        //   "GSTOTHERAMT_FC": 0,
-        //   "HSNCODE": "",
-        //   "LESSTHANCOST_USER": "",
-        //   "NEWUNIQUEID": 0,
-        //   "STOCKCHECKOTHERBRANCH": true,
-        //   "TOTALWITHGST_CC": 0,
-        //   "TOTALWITHGST_FC": 0,
-        //   "VATCODE": ""
-        // }
-      ]
+      "POSCUSTIDEXP_DATE": this.customerDataForm.controls.fcn_customer_exp_date.value,
+      "retailSReturnDetails" : 
+        this.postDetail
+      ,
     }
+    // let postData = {
+    //   "MID": 0,
+    //   "BRANCH_CODE": this.strBranchcode,
+    //   "VOCTYPE": this.vocDataForm.controls.voc_type.value,
+    //   "VOCNO": this.vocDataForm.controls.fcn_voc_no.value,
+    //   "VOCDATE": this.vocDataForm.controls.vocdate.value,
+    //   "YEARMONTH": this.baseYear,
+    //   "PARTYNAME": this.vocDataForm.controls.fcn_customer_name.value,
+    //   "TEL1": "",
+    //   "TEL2": "",
+    //   "SALESPERSON_CODE": this.vocDataForm.controls.sales_person.value,
+    //   "RATE_TYPE": "",
+    //   "METAL_RATE": 0,
+    //   "SALES_ORDER": 0,
+    //   "TOTAL_PCS": 0,
+    //   "TOTAL_GRWT": 0,
+    //   "TOTAL_PUWT": 0,
+    //   "TOTAL_MKGVALUE_FC": 0,
+    //   "TOTAL_MKGVALUE_CC": 0,
+    //   "TOTAL_METALVALUE_FC": 0,
+    //   "TOTAL_METALVALUE_CC": 0,
+    //   "TOTAL_STONEVALUE_FC": 0,
+    //   "TOTAL_STONEVALUE_CC": 0,
+    //   "TOTAL_PUDIFF": 0,
+    //   "TOTAL_STONEDIFF": 0,
+    //   "TOTAL_DISCVALUE_FC": 0,
+    //   "TOTAL_DISCVALUE_CC": 0,
+    //   "NETVALUE_FC": 0,
+    //   "NETVALUE_CC": 0,
+    //   "REMARKS": "",
+    //   "SYSTEM_DATE": new Date(),
+    //   "RETURNMID": 0,
+    //   "RETURNVOCNO": 0,
+    //   "RETURNVOCTYPE": "",
+    //   "RETURN_VALUE_FC": 0,
+    //   "RETURN_VALUE_CC": 0,
+    //   "PURCHASEMID": 0,
+    //   "PURCHASEVOCNO": 0,
+    //   "PURCHASEVOCTYPE": "",
+    //   "PURCHASE_VALUE_FC": 0,
+    //   "PURCHASE_VALUE_CC": 0,
+    //   "ADJUST_ADVANCE": 0,
+    //   "DISCOUNT": 0,
+    //   "SUBTOTAL": 0,
+    //   "ROUNDOFF": 0,
+    //   "NETTOTAL": 0,
+    //   "RECEIPT_TOTAL": 0,
+    //   "REFUND": 0,
+    //   "FLAG_EDIT_ALLOW": "",
+    //   "NAVSEQNO": 0,
+    //   "MOBILE": this.vocDataForm.controls.fcn_customer_mobile.value,
+    //   "POBOX": "",
+    //   "EMAIL": "",
+    //   "POSCUSTCODE": this.vocDataForm.controls.fcn_customer_code.value,
+    //   "ITEM_CURRENCY": "i",
+    //   "ITEM_CURR_RATE": this.vocDataForm.controls.txtCurRate.value,
+    //   "ADJUST_ADVANCECC": 0,
+    //   "DISCOUNTCC": 0,
+    //   "SUBTOTALCC": 0,
+    //   "NETTOTALCC": 0,
+    //   "RECEIPT_TOTALCC": 0,
+    //   "REFUNDCC": 0,
+    //   "FLAG_UPDATED": "",
+    //   "FLAG_INPROCESS": "",
+    //   "NATIONALITY": "",
+    //   "TYPE": "",
+    //   "D2DTRANSFER": "",
+    //   "SALESREFERENCE": "",
+    //   "RSCUSTIDNO": "",
+    //   "TRANS_CODES": "",
+    //   "CONSIGNMENTPARTY": "",
+    //   "TOTALVAT_AMOUNTFC": 0,
+    //   "TOTALVAT_AMOUNTLC": 0,
+    //   "RSSTATE": "",
+    //   "GSTVATAMOUNTFC": 0,
+    //   "GSTVATAMOUNTCC": 0,
+    //   "CCPOSTINGDONE": 0,
+    //   "LOCALREMARKSNEW": "",
+    //   "MACHINEID": "",
+    //   "CITY": "",
+    //   "STATE": "",
+    //   "ADDRESS": "",
+    //   "AUTOPOSTING": true,
+    //   "POSTDATE": "",
+    //   "INVREF": 0,
+    //   "HTUSERNAME": "",
+    //   "REMARKSNEW": "",
+    //   "CUST_LANGUAGE": "",
+    //   "PRINT_COUNT": 0,
+    //   "COUNTRY_CODE": "",
+    //   "GST_TOTALFC": 0,
+    //   "GST_TOTALCC": 0,
+    //   "PANNO": "",
+    //   "GST_STATE_CODE": "",
+    //   "GST_NUMBER": "",
+    //   "EXCLUDEGSTVAT": 0,
+    //   "TRAYN": true,
+    //   "TRANO": "",
+    //   "TRA_ID_TYPE": this.vocDataForm.controls.fcn_customer_id_type.value,
+    //   "POSCUSTIDNO": this.vocDataForm.controls.fcn_customer_id_number.value,
+    //   "TOTALCESS_AMOUNTCC": 0,
+    //   "TOTALCESS_AMOUNTFC": 0,
+    //   "FORM_60": true,
+    //   "COMP_WISE_INVOICE": true,
+    //   "FROM_TOUCH": true,
+    //   "CALCULATE_LOYALTY": true,
+    //   "SERVICE_INVOICE": true,
+    //   "OT_TRANSFER_TIME": "",
+    //   "REFBY_CUSTCODE": "",
+    //   "QRCODEIMAGE": "",
+    //   "QRCODEVALUE": "",
+    //   "PLANETQRURL": "",
+    //   "VATAMOUNTFCROUND": 0,
+    //   "PRINT_COUNT_ACCOPY": 0,
+    //   "PRINT_COUNT_CNTLCOPY": 0,
+    //   "PLANETRESPONEFLG": true,
+    //   "SCHEMESALESFIXINGPUREWT": 0,
+    //   "INCLUDEVAT": true,
+    //   "WAYBILLNO": "",
+    //   "WAYBILLDATE": "2024-08-27T07:03:15.290Z",
+    //   "REC_MODE": "",
+    //   "GENSEQNO": 0,
+    //   "BOARDINGPASS": "",
+    //   "FLIGHTNO": "",
+    //   "BOARDINGFROM": "in",
+    //   "BOARDINGDATE": "2024-08-27T07:03:15.290Z",
+    //   "WITHOUTVAT": true,
+    //   "AGENT_COMMISSION": true,
+    //   "AGENTCOMMISSION_PER": 0,
+    //   "BOOKVOCNO": "",
+    //   "EMIRATESSKYWARDSMILE": true,
+    //   "NEWMID": 0,
+    //   "ONLINERATE": true,
+    //   "PLANETRESPONSEFLG": true,
+    //   "POSORDERADVVATAMTFC": 0,
+    //   "POSORDERADVVATAMTLC": 0,
+    //   "POSREFERENCEREPAIRINVOICE": "",
+    //   "RSLOGINMID": 0,
+    //   "DISCOUNTUSERNAME": "",
+    //   "EINVOICEQRIMAGE": "",
+    //   "EINVOICERESPONSE": "",
+    //   "EINVOICEFLG": true,
+    //   "POSCUSTIDEXP_DATE": this.vocDataForm.controls.fcn_customer_exp_date.value,
+    //   "retailSReturnDetails": [
+    //     // {
+    //     //   "UNIQUEID": 0,
+    //     //   "SRNO": 0,
+    //     //   "DIVISION_CODE": "",
+    //     //   "STOCK_CODE": "",
+    //     //   "PCS": 0,
+    //     //   "GROSSWT": 0,
+    //     //   "STONEWT": 0,
+    //     //   "NETWT": 0,
+    //     //   "PURITY": 0,
+    //     //   "PUREWT": 0,
+    //     //   "CHARGABLEWT": 0,
+    //     //   "MKG_RATEFC": 0,
+    //     //   "MKG_RATECC": 0,
+    //     //   "MKGVALUEFC": 0,
+    //     //   "MKGVALUECC": 0,
+    //     //   "RATE_TYPE": "",
+    //     //   "METAL_RATE": 0,
+    //     //   "METAL_RATE_GMSFC": 0,
+    //     //   "METAL_RATE_GMSCC": 0,
+    //     //   "METALVALUEFC": 0,
+    //     //   "METALVALUECC": 0,
+    //     //   "STONE_RATEFC": 0,
+    //     //   "STONE_RATECC": 0,
+    //     //   "STONEVALUEFC": 0,
+    //     //   "STONEVALUECC": 0,
+    //     //   "DISCOUNT": 0,
+    //     //   "DISCOUNTVALUEFC": 0,
+    //     //   "DISCOUNTVALUECC": 0,
+    //     //   "NETVALUEFC": 0,
+    //     //   "NETVALUECC": 0,
+    //     //   "PUDIFF": 0,
+    //     //   "STONEDIFF": 0,
+    //     //   "PONO": 0,
+    //     //   "LOCTYPE_CODE": "",
+    //     //   "SUPPLIER": "",
+    //     //   "STOCK_DOCDESC": "",
+    //     //   "LOCKED": true,
+    //     //   "MCLENGTH": 0,
+    //     //   "MCUNIT": 0,
+    //     //   "POSSALESSR": "",
+    //     //   "PHYSICALSTOCK": "",
+    //     //   "METALAMT": "",
+    //     //   "MAKINGAMT": "",
+    //     //   "STDIFFAC": "",
+    //     //   "STAMTAC": "",
+    //     //   "STKTRANMKGCOST": 0,
+    //     //   "MAINSTOCKCODE": "",
+    //     //   "MKGMTLNETRATE": 0,
+    //     //   "RSO_FIXED": true,
+    //     //   "RSORDERGROSSWT": 0,
+    //     //   "RUBY_WT": 0,
+    //     //   "RUBY_RATE": 0,
+    //     //   "RUBY_AMOUNTFC": 0,
+    //     //   "RUBY_AMOUNTCC": 0,
+    //     //   "EMERALD_WT": 0,
+    //     //   "EMERALD_RATE": 0,
+    //     //   "EMERALD_AMOUNTFC": 0,
+    //     //   "EMERALD_AMOUNTCC": 0,
+    //     //   "SAPPHIRE_WT": 0,
+    //     //   "SAPPHIRE_RATE": 0,
+    //     //   "SAPPHIRE_AMOUNTFC": 0,
+    //     //   "SAPPHIRE_AMOUNTCC": 0,
+    //     //   "ZIRCON_WT": 0,
+    //     //   "ZIRCON_RATE": 0,
+    //     //   "ZIRCON_AMOUNTFC": 0,
+    //     //   "ZIRCON_AMOUNTCC": 0,
+    //     //   "COLOR_STONE_WT": 0,
+    //     //   "COLOR_STONE_RATE": 0,
+    //     //   "COLOR_STONE_AMOUNTFC": 0,
+    //     //   "COLOR_STONE_AMOUNTCC": 0,
+    //     //   "SJEW_TAGLINES": "",
+    //     //   "MTL_SIZE": "",
+    //     //   "MTL_COLOR": "",
+    //     //   "MTL_DESIGN": "",
+    //     //   "DTSALESPERSON_CODE": "",
+    //     //   "VAT_ACCODE": "",
+    //     //   "VAT_PER": 0,
+    //     //   "TOTALWITHVATFC": 0,
+    //     //   "TOTALWITHVATLC": 0,
+    //     //   "VAT_AMOUNTLC": 0,
+    //     //   "VAT_AMOUNTFC": 0,
+    //     //   "LOYALTY_ITEM": true,
+    //     //   "WASTE_PER": 0,
+    //     //   "STKTRN_LANDINGCOST": 0,
+    //     //   "STKTRN_WASTAGERATE": 0,
+    //     //   "DT_BRANCH_CODE": "",
+    //     //   "DT_VOCTYPE": "",
+    //     //   "DT_VOCNO": 0,
+    //     //   "DT_YEARMONTH": "",
+    //     //   "SALESPERSON_CODE": "",
+    //     //   "CGST_PER": 0,
+    //     //   "CGST_AMOUNTFC": 0,
+    //     //   "CGST_AMOUNTCC": 0,
+    //     //   "SGST_PER": 0,
+    //     //   "SGST_AMOUNTFC": 0,
+    //     //   "SGST_AMOUNTCC": 0,
+    //     //   "IGST_PER": 0,
+    //     //   "IGST_AMOUNTFC": 0,
+    //     //   "IGST_AMOUNTCC": 0,
+    //     //   "CGST_ACCODE": "",
+    //     //   "SGST_ACCODE": "",
+    //     //   "IGST_ACCODE": "",
+    //     //   "TOTAL_AMOUNTFC": 0,
+    //     //   "TOTAL_AMOUNTCC": 0,
+    //     //   "CGST_CTRLACCODE": "",
+    //     //   "SGST_CTRLACCODE": "",
+    //     //   "IGST_CTRLACCODE": "",
+    //     //   "GST_GROUP": "",
+    //     //   "GST_CODE": "",
+    //     //   "HSN_CODE": "",
+    //     //   "SERVICE_ACCODE": "",
+    //     //   "WASTAGEPER": 0,
+    //     //   "WASTAGEQTY": 0,
+    //     //   "WASTAGEPUREWT": 0,
+    //     //   "WASTAGEAMOUNTFC": 0,
+    //     //   "WASTAGEAMOUNTCC": 0,
+    //     //   "DIVISIONMS": "",
+    //     //   "INCLUSIVE": true,
+    //     //   "OLDRATE": 0,
+    //     //   "OLDAMOUNT": 0,
+    //     //   "DISC_USER_NAME": "",
+    //     //   "DISC_AMOUNT": 0,
+    //     //   "DISC_PERCENTAGE": 0,
+    //     //   "KUNDAN_UNIT": 0,
+    //     //   "KUNDAN_PCS": 0,
+    //     //   "KUNDAN_CARAT": 0,
+    //     //   "KUNDAN_WEIGHT": 0,
+    //     //   "KUNDAN_RATEFC": 0,
+    //     //   "KUNDAN_RATECC": 0,
+    //     //   "KUNDANVALUEFC": 0,
+    //     //   "KUNDANVALUECC": 0,
+    //     //   "CESS_PER": 0,
+    //     //   "CESS_AMOUNTFC": 0,
+    //     //   "CESS_AMOUNTCC": 0,
+    //     //   "ROS_FIXED": 0,
+    //     //   "BATCHID": 0,
+    //     //   "STAMP_RATE": 0,
+    //     //   "STAMP_AMOUNT": 0,
+    //     //   "STAMP_AMOUNTCC": 0,
+    //     //   "LOYALTY_POINTS": 0,
+    //     //   "SALES_TAGLINES": "",
+    //     //   "OT_TRANSFER_TIME": "",
+    //     //   "COUNTRY_CODE": "",
+    //     //   "EXTRA_STOCK_CODE": "",
+    //     //   "FLAGESTK": 0,
+    //     //   "COMPONENT_PRICE_TYPE": "",
+    //     //   "DUFIX_METALGROSSWT": 0,
+    //     //   "DUFIX_DIAPCS": 0,
+    //     //   "DUFIX_DIACARAT": 0,
+    //     //   "DUFIX_STONEPCS": 0,
+    //     //   "DUFIX_STONECARAT": 0,
+    //     //   "DUFIX_METAL_WT": 0,
+    //     //   "DUFIX_FINEGOLD": 0,
+    //     //   "DUFIX_MASTERFINEGOLD": 0,
+    //     //   "DUFIX_DIACTRATEFC": 0,
+    //     //   "DUFIX_DIACTRATECC": 0,
+    //     //   "DUFIX_DIAVALUEFC": 0,
+    //     //   "DUFIX_DIAVALUECC": 0,
+    //     //   "DUFIX_CLRSTNRATEFC": 0,
+    //     //   "DUFIX_CLRSTNRATECC": 0,
+    //     //   "DUFIX_CLRSTNVALUEFC": 0,
+    //     //   "DUFIX_CLRSTNVALUECC": 0,
+    //     //   "DUFIX_METALVALUEFC": 0,
+    //     //   "DUFIX_METALVALUECC": 0,
+    //     //   "DUFIX_LABOURFC": 0,
+    //     //   "DUFIX_LABOURCC": 0,
+    //     //   "DUFIX_HMCHARGEFC": 0,
+    //     //   "DUFIX_HMCHARGECC": 0,
+    //     //   "DUFIX_CERTCHARGEFC": 0,
+    //     //   "DUFIX_CERTCHARGECC": 0,
+    //     //   "DUFIX_DWASTAGE": 0,
+    //     //   "DUFIX_PURITY": 0,
+    //     //   "DUFIX_PUDIFF": 0,
+    //     //   "DUFIX_DKARAT_CODE": "",
+    //     //   "DUFIX_METLA_WT": 0,
+    //     //   "DUFIX_DWASTAGEPER": 0,
+    //     //   "DUFIX_DWASTAGEAMOUNTFC": 0,
+    //     //   "DUFIX_DWASTAGEAMOUNTCC": 0,
+    //     //   "DUFIX_PEARL_PCS": 0,
+    //     //   "DUFIX_PEARL_WT": 0,
+    //     //   "DUFIX_PEARL_AMTFC": 0,
+    //     //   "DUFIX_PEARL_AMTCC": 0,
+    //     //   "DUFIX_DLABUNIT": 0,
+    //     //   "DUFIX_DLABRATEFC": 0,
+    //     //   "DUFIX_DLABRATECC": 0,
+    //     //   "DUFIX_DCHARGABLEWEIGHT": 0,
+    //     //   "GIFT_ITEM": true,
+    //     //   "GSTMETALPER": 0,
+    //     //   "GSTMAKINGPER": 0,
+    //     //   "GSTOTHERPER": 0,
+    //     //   "GSTMETALAMT_CC": 0,
+    //     //   "GSTMAKINGAMT_CC": 0,
+    //     //   "GSTOTHERAMT_CC": 0,
+    //     //   "GSTMETALAMT_FC": 0,
+    //     //   "GSTMAKINGAMT_FC": 0,
+    //     //   "GSTOTHERAMT_FC": 0,
+    //     //   "HSNCODE": "",
+    //     //   "LESSTHANCOST_USER": "",
+    //     //   "NEWUNIQUEID": 0,
+    //     //   "STOCKCHECKOTHERBRANCH": true,
+    //     //   "TOTALWITHGST_CC": 0,
+    //     //   "TOTALWITHGST_FC": 0,
+    //     //   "VATCODE": ""
+    //     // }
+    //   ]
+    // }
 
     let Sub: Subscription = this.dataService
     .putDynamicAPI(API, postData)
@@ -2128,7 +2084,7 @@ editLineItem:boolean=false;
     // }
     // let sub: Subscription = this.suntechApi.getDynamicAPIwithParams('RetailSalesDataInDotnet/GetRetailSalesData',param)
 
-    let API = `RetailSalesDataInDotnet/GetRetailSalesData/${data.BRANCH_CODE}/${data.VOCTYPE}/${data.YEARMONTH}/${data.VOCNO}/${data.MID}`
+    let API = `RetailSaleReturn/GetRetailSReturnHeaderAndDetail/${data.BRANCH_CODE}/${data.VOCTYPE}/${data.YEARMONTH}/${data.VOCNO}`
     console.log('getRetailSalesMaster vocno', data.VOCNO);
     this.suntechApi.getDynamicAPI(API)
       .subscribe((res) => {
@@ -2139,10 +2095,69 @@ editLineItem:boolean=false;
         const retailSReturnData = res.response.retailsReturn;
         const metalPurchaseData = res.response.metalPurchase;
         this.receiptDetailsList = res.response.retailReceipt;
-        this.sumTotalValues();
-
-        // const values = res.response;
+        // this.sumTotalValues();
         if (res.status == 'Success') {
+
+          
+          this.prnt_inv_total_gross_amt = res.response.TOTAL_MKGVALUE_FC;
+          this.prnt_inv_total_weight = res.response.TOTAL_GRWT;
+          this.pure_weight = res.response.TOTAL_PUWT;
+          this.prnt_inv_total_pcs =  res.response.TOTAL_PCS;
+          this.order_items_total_gross_amount = res.response.NETVALUE_FC;
+          this.Receipt_total = res.response.NETVALUE_FC;
+          this.netTotal = res.response.NETVALUE_FC;
+
+          this.vocDataForm.controls['vocdate'].setValue(res.response.VOCDATE);
+          this.vocDataForm.controls['sales_person'].setValue(res.response.SALESPERSON_CODE);
+          this.customerDataForm.controls['fcn_customer_mobile'].setValue(res.response.MOBILE);
+          this.customerDataForm.controls['fcn_customer_name'].setValue(res.response.PARTYNAME);
+          this.customerDataForm.controls['fcn_customer_code'].setValue(res.response.POSCUSTCODE);
+          this.customerDataForm.controls['fcn_customer_id_type'].setValue(res.response.TRA_ID_TYPE);
+          this.customerDataForm.controls['fcn_customer_id_number'].setValue(res.response.POSCUSTIDNO);
+          this.customerDataForm.controls['fcn_customer_exp_date'].setValue(res.response.POSCUSTIDEXP_DATE);
+          // this.vocDataForm.controls.vocDataForm.setValue(res.response.VOCDATE);
+
+          let res_datas= res.response.retailSReturnDetails;
+          console.log(res_datas.length);
+          // this.sales_returns_items = res_datas;
+          for (let i = 0; i < res_datas.length; i++) {
+            console.log(i);
+            const values: any = {
+              ID: res_datas[i].UNIQUEID,
+              sn_no: res_datas[i].SRNO,
+              stock_code: res_datas[i].STOCK_CODE,
+              mkg_amount: res_datas[i].MKG_RATEFC,
+              total_amount: res_datas[i].TOTALWITHVATFC,
+              pcs: res_datas[i].PCS,
+              weight: res_datas[i].GROSSWT,
+              description: res_datas[i].STOCK_DOCDESC,
+              net_amount: res_datas[i].NETVALUEFC,
+              slsReturn: res_datas[i],
+              // new values
+              making_amt: res_datas[i].MKGVALUEFC,
+              metal_amt: res_datas[i].METALVALUEFC,
+              pure_wt: res_datas[i].PUREWT,
+              stone_amt: res_datas[i].STONEVALUEFC,
+            };
+            values.PUDIFF = res_datas[i].PUDIFF;
+            values.STONEDIFF = res_datas[i].STONEDIFF;
+            values.DISCOUNTVALUEFC = res_datas[i].DISCOUNTVALUEFC;
+            values.DISCOUNT = res_datas[i].DISCOUNT;
+            values.VAT_AMOUNTFC = res_datas[i].VAT_AMOUNTFC;
+            values.UNIQUEID = res_datas[i].UNIQUEID;
+            this.sales_returns_items.push(values);
+            // console.log(res_datas[i].UNIQUEID);
+            // console.log(res_datas[i]);
+            // this.setSalesReturnItems(
+            //   res_datas[i].SRNO,
+            //   res_datas[i]
+            //   );
+          }
+
+        //   res_datas.retailSReturnDetails.forEach((element: any) => {
+        //    this.sales_returns_items = element
+        // });
+        
           /**start set customer data */
           this.vocDataForm.controls['vocdate'].setValue(retailSaleData.VOCDATE);
           // this.vocDataForm.controls.vocdate.setHours(0,0,0);
@@ -2585,7 +2600,9 @@ editLineItem:boolean=false;
     //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
     //Add 'implements AfterViewInit' to the class.
     if (this.viewOnly) this.setReadOnlyForViewMode();
-    this.open(this.adjust_sale_return_modal);
+    if (!this.content) {
+      this.open(this.adjust_sale_return_modal);
+    }
 
     // console.log('viewonly',this.viewOnly , this.editOnly);
 
@@ -5871,10 +5888,13 @@ editLineItem:boolean=false;
   }
 
   changeRetailSalesReturnValMod(value: any) {
+
+    value.cancel = true;
+
     // this.salesReturnsItems_forVoc[index].TOTALWITHVATFC = parseFloat(value);
     // this.salesReturnsItems_forVoc[index].TOTALWITHVATLC = parseFloat(value);
     this.lineItemModalForSalesReturn = true;
-    this.salesReturnRowDataSRNO = value.SRNO;
+    this.salesReturnRowDataSRNO = value.data.SRNO;
     this.modalReferenceSalesReturn = this.modalService.open(this.mymodal, {
       size: 'lg',
       ariaLabelledBy: 'modal-basic-title',
@@ -5896,37 +5916,76 @@ editLineItem:boolean=false;
         // this.lineItemForm.controls.fcn_li_location.setValue(value.LOCTYPE_CODE);
         // this.lineItemForm.controls.fcn_li_pcs.setValue(value.PCS);
          let dynvalues = value.data;
-         const taxAmount = dynvalues?.tax_amount || 0.00; 
-         const formattedTaxAmount = taxAmount.toFixed(2); 
+         console.log(dynvalues);
+         if(dynvalues?.slsReturn){
 
-this.lineItemForm.controls.fcn_li_tax_amount.setValue(formattedTaxAmount);
+          function formatToFixed(value: any, range: number): string | null {
+            if (value == null) {
+                return null;
+            }
+            const numberValue = parseFloat(value);
+            if (isNaN(numberValue)) {
+                return null; 
+            }
+            return numberValue.toFixed(range);
+        }   
+          this.lineItemForm.controls.fcn_li_item_code.setValue(dynvalues?.slsReturn.STOCK_CODE);
+          this.lineItemForm.controls.fcn_li_division.setValue(dynvalues?.slsReturn.DIVISION_CODE);
+          this.lineItemForm.controls.fcn_li_item_desc.setValue(dynvalues?.slsReturn.STOCK_DOCDESC);
+          this.lineItemForm.controls.fcn_li_pcs.setValue(dynvalues?.slsReturn.PCS);
+          this.lineItemForm.controls.fcn_li_gross_wt.setValue(formatToFixed(dynvalues?.slsReturn.GROSSWT,3));
+          this.lineItemForm.controls.fcn_li_stone_wt.setValue(formatToFixed(dynvalues?.slsReturn.STONEWT,3));
+          this.lineItemForm.controls.fcn_li_net_wt.setValue(formatToFixed(dynvalues?.slsReturn.NETWT,3));
+          // this.lineItemForm.controls.fcn_li_purityfcn_li_purity.setValue(dynvalues?.slsReturn.PURITY);
+          this.lineItemForm.controls.fcn_ad_metal_rate.setValue(formatToFixed(dynvalues?.slsReturn.METAL_RATE,6));
+          this.lineItemForm.controls.fcn_ad_metal_amount.setValue(formatToFixed(dynvalues?.metal_amt,3));
+          this.lineItemForm.controls.fcn_ad_stone_rate.setValue(formatToFixed(dynvalues?.slsReturn.STONE_RATEFC,3));
+          this.lineItemForm.controls.fcn_ad_stone_amount.setValue(formatToFixed(dynvalues?.stone_amt,3));
+          this.lineItemForm.controls.fcn_li_rate.setValue(formatToFixed(dynvalues?.making_amt,3));
+          this.lineItemForm.controls.fcn_li_total_amount.setValue(formatToFixed(dynvalues?.mkg_amount,3));
+          this.lineItemForm.controls.fcn_li_discount_percentage.setValue(formatToFixed(dynvalues?.slsReturn.DISCOUNT,3));
+          this.lineItemForm.controls.fcn_li_discount_amount.setValue(formatToFixed(dynvalues?.slsReturn.DISCOUNTVALUEFC,3));
+          this.lineItemForm.controls.fcn_li_gross_amount.setValue(formatToFixed(dynvalues?.slsReturn.TOTALWITHVATFC,3));
+          // this.lineItemForm.controls.fcn_li_tax_percentage.setValue(dynvalues?.IGST_PER);
+          this.lineItemForm.controls.fcn_li_net_amount.setValue(formatToFixed(dynvalues?.net_amount,3));
+          this.lineItemForm.controls.fcn_li_tax_amount.setValue(formatToFixed(dynvalues?.slsReturn.IGST_AMOUNTCC,3));
+          const taxper = this.commonService.emptyToZero(dynvalues?.slsReturn.IGST_PER) ; 
+          const formattedTaxper = taxper.toFixed(2); 
+          this.lineItemForm.controls.fcn_li_tax_percentage.setValue(formattedTaxper);
 
-        console.log(dynvalues?.slsReturn.STOCK_CODE);
-        this.lineItemForm.controls.fcn_li_item_code.setValue(dynvalues?.slsReturn.STOCK_CODE);
-        this.lineItemForm.controls.fcn_li_division.setValue(dynvalues?.slsReturn.DIVISION_CODE);
-        this.lineItemForm.controls.fcn_li_item_desc.setValue(dynvalues?.slsReturn.STOCK_DOCDESC);
-        this.lineItemForm.controls.fcn_li_pcs.setValue(dynvalues?.slsReturn.PCS);
-        this.lineItemForm.controls.fcn_li_gross_wt.setValue(dynvalues?.slsReturn.GROSSWT);
-        this.lineItemForm.controls.fcn_li_stone_wt.setValue(dynvalues?.slsReturn.STONEWT);
-        this.lineItemForm.controls.fcn_li_net_wt.setValue(dynvalues?.slsReturn.NETWT);
+          this.validatePCS = false;
+          this.enablePieces = false;
+          this.managePcsGrossWt();
+
+         }else{
+        // console.log(dynvalues?.slsReturn.STOCK_CODE);
+        this.lineItemForm.controls.fcn_li_item_code.setValue(dynvalues?.STOCK_CODE);
+        this.lineItemForm.controls.fcn_li_division.setValue(dynvalues?.DIVISION_CODE);
+        this.lineItemForm.controls.fcn_li_item_desc.setValue(dynvalues?.STOCK_DOCDESC);
+        this.lineItemForm.controls.fcn_li_pcs.setValue(dynvalues?.PCS);
+        this.lineItemForm.controls.fcn_li_gross_wt.setValue(dynvalues?.GROSSWT);
+        this.lineItemForm.controls.fcn_li_stone_wt.setValue(dynvalues?.STONEWT);
+        this.lineItemForm.controls.fcn_li_net_wt.setValue(dynvalues?.NETWT);
         // this.lineItemForm.controls.fcn_li_purityfcn_li_purity.setValue(dynvalues?.slsReturn.PURITY);
-        this.lineItemForm.controls.fcn_ad_metal_rate.setValue(dynvalues?.slsReturn.METAL_RATE);
+        this.lineItemForm.controls.fcn_ad_metal_rate.setValue(dynvalues?.METAL_RATE);
         this.lineItemForm.controls.fcn_ad_metal_amount.setValue(dynvalues?.metal_amt);
-        this.lineItemForm.controls.fcn_ad_stone_rate.setValue(dynvalues?.slsReturn.STONE_RATEFC);
+        this.lineItemForm.controls.fcn_ad_stone_rate.setValue(dynvalues?.STONE_RATEFC);
         this.lineItemForm.controls.fcn_ad_stone_amount.setValue(dynvalues?.stone_amt);
         this.lineItemForm.controls.fcn_li_rate.setValue(dynvalues?.making_amt);
         this.lineItemForm.controls.fcn_li_total_amount.setValue(dynvalues?.mkg_amount);
-        this.lineItemForm.controls.fcn_li_discount_percentage.setValue(dynvalues?.slsReturn.DISCOUNT);
-        this.lineItemForm.controls.fcn_li_discount_amount.setValue(dynvalues?.slsReturn.DISCOUNTVALUEFC);
-        this.lineItemForm.controls.fcn_li_gross_amount.setValue(dynvalues?.slsReturn.TOTALWITHVATFC);
-        // this.lineItemForm.controls.fcn_li_tax_percentage.setValue(dynvalues?.slsReturn.CGST_PER);
-        this.lineItemForm.controls.fcn_li_tax_amount.setValue(formattedTaxAmount);
-
+        this.lineItemForm.controls.fcn_li_discount_percentage.setValue(dynvalues?.DISCOUNT);
+        this.lineItemForm.controls.fcn_li_discount_amount.setValue(dynvalues?.DISCOUNTVALUEFC);
+        this.lineItemForm.controls.fcn_li_gross_amount.setValue(dynvalues?.TOTALWITHVATFC);
+        // this.lineItemForm.controls.fcn_li_tax_percentage.setValue(dynvalues?.IGST_PER);
         this.lineItemForm.controls.fcn_li_net_amount.setValue(dynvalues?.net_amount);
-
+        this.lineItemForm.controls.fcn_li_tax_amount.setValue(dynvalues?.IGST_AMOUNTCC);
+        const taxper = this.commonService.emptyToZero(dynvalues?.IGST_PER) ; 
+        const formattedTaxper = taxper.toFixed(2); 
+        this.lineItemForm.controls.fcn_li_tax_percentage.setValue(formattedTaxper);
         this.validatePCS = false;
         this.enablePieces = false;
         this.managePcsGrossWt();
+         }
       }, 100);
     }
   }
@@ -6266,214 +6325,389 @@ this.lineItemForm.controls.fcn_li_tax_amount.setValue(formattedTaxAmount);
 
   
   salesreturndetails(){
-    this. postDetail = [
-    {
-      "UNIQUEID": 0,
-      "SRNO": 0,
-      "DIVISION_CODE": "string",
-      "STOCK_CODE": "string",
-      "PCS": 0,
-      "GROSSWT": 0,
-      "STONEWT": 0,
-      "NETWT": 0,
-      "PURITY": 0,
-      "PUREWT": 0,
-      "CHARGABLEWT": 0,
-      "MKG_RATEFC": 0,
-      "MKG_RATECC": 0,
-      "MKGVALUEFC": 0,
-      "MKGVALUECC": 0,
-      "RATE_TYPE": "string",
-      "METAL_RATE": 0,
-      "METAL_RATE_GMSFC": 0,
-      "METAL_RATE_GMSCC": 0,
-      "METALVALUEFC": 0,
-      "METALVALUECC": 0,
-      "STONE_RATEFC": 0,
-      "STONE_RATECC": 0,
-      "STONEVALUEFC": 0,
-      "STONEVALUECC": 0,
-      "DISCOUNT": 0,
-      "DISCOUNTVALUEFC": 0,
-      "DISCOUNTVALUECC": 0,
-      "NETVALUEFC": 0,
-      "NETVALUECC": 0,
-      "PUDIFF": 0,
-      "STONEDIFF": 0,
-      "PONO": 0,
-      "LOCTYPE_CODE": "string",
-      "SUPPLIER": "string",
-      "STOCK_DOCDESC": "string",
-      "LOCKED": true,
-      "MCLENGTH": 0,
-      "MCUNIT": 0,
-      "POSSALESSR": "string",
-      "PHYSICALSTOCK": "string",
-      "METALAMT": "string",
-      "MAKINGAMT": "string",
-      "STDIFFAC": "string",
-      "STAMTAC": "string",
-      "STKTRANMKGCOST": 0,
-      "MAINSTOCKCODE": "string",
-      "MKGMTLNETRATE": 0,
-      "RSO_FIXED": true,
-      "RSORDERGROSSWT": 0,
-      "RUBY_WT": 0,
-      "RUBY_RATE": 0,
-      "RUBY_AMOUNTFC": 0,
-      "RUBY_AMOUNTCC": 0,
-      "EMERALD_WT": 0,
-      "EMERALD_RATE": 0,
-      "EMERALD_AMOUNTFC": 0,
-      "EMERALD_AMOUNTCC": 0,
-      "SAPPHIRE_WT": 0,
-      "SAPPHIRE_RATE": 0,
-      "SAPPHIRE_AMOUNTFC": 0,
-      "SAPPHIRE_AMOUNTCC": 0,
-      "ZIRCON_WT": 0,
-      "ZIRCON_RATE": 0,
-      "ZIRCON_AMOUNTFC": 0,
-      "ZIRCON_AMOUNTCC": 0,
-      "COLOR_STONE_WT": 0,
-      "COLOR_STONE_RATE": 0,
-      "COLOR_STONE_AMOUNTFC": 0,
-      "COLOR_STONE_AMOUNTCC": 0,
-      "SJEW_TAGLINES": "string",
-      "MTL_SIZE": "string",
-      "MTL_COLOR": "string",
-      "MTL_DESIGN": "string",
-      "DTSALESPERSON_CODE": "string",
-      "VAT_ACCODE": "string",
-      "VAT_PER": 0,
-      "TOTALWITHVATFC": 0,
-      "TOTALWITHVATLC": 0,
-      "VAT_AMOUNTLC": 0,
-      "VAT_AMOUNTFC": 0,
-      "LOYALTY_ITEM": true,
-      "WASTE_PER": 0,
-      "STKTRN_LANDINGCOST": 0,
-      "STKTRN_WASTAGERATE": 0,
-      "DT_BRANCH_CODE": this.salesReturnForm.controls.fcn_returns_branch.value,
-      "DT_VOCTYPE": this.salesReturnForm.controls.fcn_returns_voc_type.value,
-      "DT_VOCNO": this.salesReturnForm.controls.fcn_returns_voc_no.value,
-      "DT_YEARMONTH": this.salesReturnForm.controls.fcn_returns_fin_year.value,
-      "SALESPERSON_CODE": this.salesReturnForm.controls.fcn_returns_sales_man.value,
-      "CGST_PER": 0,
-      "CGST_AMOUNTFC": 0,
-      "CGST_AMOUNTCC": 0,
-      "SGST_PER": 0,
-      "SGST_AMOUNTFC": 0,
-      "SGST_AMOUNTCC": 0,
-      "IGST_PER": 0,
-      "IGST_AMOUNTFC": 0,
-      "IGST_AMOUNTCC": 0,
-      "CGST_ACCODE": "string",
-      "SGST_ACCODE": "string",
-      "IGST_ACCODE": "string",
-      "TOTAL_AMOUNTFC": 0,
-      "TOTAL_AMOUNTCC": 0,
-      "CGST_CTRLACCODE": "string",
-      "SGST_CTRLACCODE": "string",
-      "IGST_CTRLACCODE": "string",
-      "GST_GROUP": "s",
-      "GST_CODE": "string",
-      "HSN_CODE": "string",
-      "SERVICE_ACCODE": "string",
-      "WASTAGEPER": 0,
-      "WASTAGEQTY": 0,
-      "WASTAGEPUREWT": 0,
-      "WASTAGEAMOUNTFC": 0,
-      "WASTAGEAMOUNTCC": 0,
-      "DIVISIONMS": "s",
-      "INCLUSIVE": true,
-      "OLDRATE": 0,
-      "OLDAMOUNT": 0,
-      "DISC_USER_NAME": this.salesReturnForm.controls.fcn_returns_cust_name.value,
-      "DISC_AMOUNT": 0,
-      "DISC_PERCENTAGE": 0,
-      "KUNDAN_UNIT": 0,
-      "KUNDAN_PCS": 0,
-      "KUNDAN_CARAT": 0,
-      "KUNDAN_WEIGHT": 0,
-      "KUNDAN_RATEFC": 0,
-      "KUNDAN_RATECC": 0,
-      "KUNDANVALUEFC": 0,
-      "KUNDANVALUECC": 0,
-      "CESS_PER": 0,
-      "CESS_AMOUNTFC": 0,
-      "CESS_AMOUNTCC": 0,
-      "ROS_FIXED": 0,
-      "BATCHID": 0,
-      "STAMP_RATE": 0,
-      "STAMP_AMOUNT": 0,
-      "STAMP_AMOUNTCC": 0,
-      "LOYALTY_POINTS": 0,
-      "SALES_TAGLINES": "string",
-      "OT_TRANSFER_TIME": "string",
-      "COUNTRY_CODE": "string",
-      "EXTRA_STOCK_CODE": "string",
-      "FLAGESTK": 0,
-      "COMPONENT_PRICE_TYPE": "string",
-      "DUFIX_METALGROSSWT": 0,
-      "DUFIX_DIAPCS": 0,
-      "DUFIX_DIACARAT": 0,
-      "DUFIX_STONEPCS": 0,
-      "DUFIX_STONECARAT": 0,
-      "DUFIX_METAL_WT": 0,
-      "DUFIX_FINEGOLD": 0,
-      "DUFIX_MASTERFINEGOLD": 0,
-      "DUFIX_DIACTRATEFC": 0,
-      "DUFIX_DIACTRATECC": 0,
-      "DUFIX_DIAVALUEFC": 0,
-      "DUFIX_DIAVALUECC": 0,
-      "DUFIX_CLRSTNRATEFC": 0,
-      "DUFIX_CLRSTNRATECC": 0,
-      "DUFIX_CLRSTNVALUEFC": 0,
-      "DUFIX_CLRSTNVALUECC": 0,
-      "DUFIX_METALVALUEFC": 0,
-      "DUFIX_METALVALUECC": 0,
-      "DUFIX_LABOURFC": 0,
-      "DUFIX_LABOURCC": 0,
-      "DUFIX_HMCHARGEFC": 0,
-      "DUFIX_HMCHARGECC": 0,
-      "DUFIX_CERTCHARGEFC": 0,
-      "DUFIX_CERTCHARGECC": 0,
-      "DUFIX_DWASTAGE": 0,
-      "DUFIX_PURITY": 0,
-      "DUFIX_PUDIFF": 0,
-      "DUFIX_DKARAT_CODE": "string",
-      "DUFIX_METLA_WT": 0,
-      "DUFIX_DWASTAGEPER": 0,
-      "DUFIX_DWASTAGEAMOUNTFC": 0,
-      "DUFIX_DWASTAGEAMOUNTCC": 0,
-      "DUFIX_PEARL_PCS": 0,
-      "DUFIX_PEARL_WT": 0,
-      "DUFIX_PEARL_AMTFC": 0,
-      "DUFIX_PEARL_AMTCC": 0,
-      "DUFIX_DLABUNIT": 0,
-      "DUFIX_DLABRATEFC": 0,
-      "DUFIX_DLABRATECC": 0,
-      "DUFIX_DCHARGABLEWEIGHT": 0,
-      "GIFT_ITEM": true,
-      "GSTMETALPER": 0,
-      "GSTMAKINGPER": 0,
-      "GSTOTHERPER": 0,
-      "GSTMETALAMT_CC": 0,
-      "GSTMAKINGAMT_CC": 0,
-      "GSTOTHERAMT_CC": 0,
-      "GSTMETALAMT_FC": 0,
-      "GSTMAKINGAMT_FC": 0,
-      "GSTOTHERAMT_FC": 0,
-      "HSNCODE": "string",
-      "LESSTHANCOST_USER": "string",
-      "NEWUNIQUEID": 0,
-      "STOCKCHECKOTHERBRANCH": true,
-      "TOTALWITHGST_CC": 0,
-      "TOTALWITHGST_FC": 0,
-      "VATCODE": "string"
-    }
-  ];
+    this.prnt_inv_total_gross_amt=0;
+    // var values: any = {
+    //   // ID: itemsLength,
+    //   // sn_no: itemsLength,
+    //   ID: itemsLengths,
+    //   sn_no: itemsLengths,
+    //   stock_code: '',
+    //   mkg_amount: '',
+    //   total_amount: slsReturn.TOTAL_AMOUNTFC,
+    //   pcs: '',
+    //   weight: '',
+    //   description: '',
+    //   tax_amount: '',
+    //   net_amount: '',
+    //   slsReturn: {},
+    //   // new values
+    //   making_amt: slsReturn.MKGVALUEFC,
+    //   metal_amt: slsReturn.METALVALUEFC,
+    //   pure_wt: slsReturn.PUREWT,
+    //   stone_amt: slsReturn.STONEVALUEFC,
+    // };
+
+    // for (var i = 0; i < this.salesReturnsItems_forVoc.length; i++) {
+    //   var obj = this.salesReturnsItems_forVoc[i];
+    //   if (i == index) {
+    // if (obj.STOCK_CODE == stockCode && obj.NETVALUEFC == slsReturn.NETVALUEFC) {
+    // this.sales_returns_total_amt =
+    //   parseFloat(this.sales_returns_total_amt) +
+    //   parseFloat(this.comFunc.transformDecimalVB(
+    //     this.comFunc.allbranchMaster?.BAMTDECIMALS,
+    //     parseFloat(slsReturn.TOTALWITHVATFC)
+    //   ));
+    console.log('====================================');
+    // this.sales_returns_total_amt =
+    //   parseFloat(this.sales_returns_total_amt) +
+    //   parseFloat(
+    //     this.comFunc.transformDecimalVB(
+    //       this.comFunc.allbranchMaster?.BAMTDECIMALS,
+    //       parseFloat(slsReturn.TOTALWITHVATFC)
+    //     )
+    //   );
+    // values.stock_code = slsReturn.STOCK_CODE;
+    // values.mkg_amount = slsReturn.MKG_RATEFC;
+    // values.total_amount = slsReturn.TOTAL_AMOUNTFC;
+    // values.pcs = slsReturn.PCS;
+    // values.weight = slsReturn.GROSSWT;
+    // values.description = slsReturn.STOCK_DOCDESC;
+    // values.tax_amount = '0';
+    // values.net_amount = slsReturn.NETVALUEFC;
+    // values.slsReturn = slsReturn;
+    // // new values();
+    // values.PUDIFF = slsReturn.PUDIFF;
+    // values.STONEDIFF = slsReturn.STONEDIFF;
+    // values.DISCOUNTVALUEFC = slsReturn.DISCOUNTVALUEFC;
+    // values.DISCOUNT = slsReturn.DISCOUNT;
+    // values.VAT_AMOUNTFC = slsReturn.VAT_AMOUNTFC;
+    // values.UNIQUEID = slsReturn.UNIQUEID;
+    let _total_amt=0;
+    let _tax_amt=0;
+    let _gross_total=0;
+    let _net_total=0;
+    let _sales_return=0;
+    let _total_pcs = 0;
+    let _total_weight = 0;
+    let _mkg_amount=0;
+    let _pure_wt = 0;
+    let _metal_amt = 0;
+    let _stone_amt = 0;
+    let _purity_diff = 0;
+    let _stone_diff = 0;
+    let _disc_value_fc = 0;
+    let _disc_value_cc = 0;
+    let _net_val_cc = 0 ,_net_val_fc = 0 ;
+    let _vat_lc = 0 ,_vat_fc = 0 ;
+    let _igst_cc = 0;
+
+
+    this.salesReturnsItems_forVoc.forEach((element: any) => {
+      console.log(element);
+      // Update the properties of each element
+      element.ID = element.SRNO;
+      element.sn_no = element.SRNO;
+      element.pcs = element.PCS;
+      element.stock_code = element.STOCK_CODE;
+      element.description = element.STOCK_DOCDESC;
+      element.weight = element.GROSSWT;
+      element.net_amount = element.NETVALUEFC;
+      element.slsReturn = element.slsReturn;  // This seems to be redundant; might be updated further
+      element.PUDIFF = element.PUDIFF;
+      element.STONEDIFF = element.STONEDIFF;
+      element.DISCOUNT = element.DISCOUNT;
+      element.DISCOUNTVALUEFC = element.DISCOUNTVALUEFC;
+      element.mkg_amount = element.MKG_RATEFC;
+      element.UNIQUEID = element.UNIQUEID;
+      element.total_amount = element.TOTAL_AMOUNTFC;
+      element.tax_amount = '0';  // Consider removing this if it's not used
+      element.metal_amt = element.METALVALUEFC;
+      element.making_amt = element.MKGVALUEFC;
+      element.pure_wt = element.PUREWT;
+      element.stone_amt = element.STONEVALUEFC;
+      element.VAT_AMOUNTFC = element.VAT_AMOUNTFC;
+  
+      // Push updated element to pre-items list
+      this.sales_returns_pre_items.push(element);
+  
+      // Perform calculations
+      _mkg_amount += Number(element.MKG_RATEFC);
+      _total_amt += Number(element.NETVALUEFC);
+      _tax_amt += Number(element.tax_amount);
+      _gross_total = Number(_total_amt + _tax_amt);
+      _sales_return += Number(element.slsReturn);
+      _net_total = _gross_total - _sales_return;
+      _total_pcs += Number(element.pcs);
+      _total_weight += Number(element.weight);
+      _pure_wt += Number(element.pure_wt);
+      _metal_amt += Number (element.metal_amt);
+      _stone_amt += Number(element.stone_amt);
+      _purity_diff += Number(element.PUDIFF);
+      _stone_diff += Number(element.STONEDIFF);
+      _disc_value_fc += Number(element.DISCOUNTVALUEFC);
+      _disc_value_cc += Number(element.DISCOUNTVALUECC);
+      _net_val_fc += Number(element.NETVALUEFC);
+      _net_val_cc += Number(element.NETVALUECC);
+      _vat_lc += Number(element.VAT_AMOUNTLC);
+      _vat_fc += Number(element.VAT_AMOUNTFC);
+      _igst_cc += Number(element.IGST_AMOUNTCC)
+
+
+      // Prepare post detail object
+      const postDetailItem = {
+          UNIQUEID: 0,
+          SRNO: element.SRNO,
+          DIVISION_CODE: element.DIVISION_CODE,
+          STOCK_CODE: element.STOCK_CODE,
+          PCS: element.PCS,
+          GROSSWT: element.GROSSWT,
+          STONEWT: element.STONEWT,
+          NETWT: element.NETWT,
+          PURITY: element.PURITY,
+          PUREWT: element.PUREWT,
+          CHARGABLEWT: element.CHARGABLEWT,
+          MKG_RATEFC: element.MKG_RATEFC,
+          MKG_RATECC: element.MKG_RATECC,
+          MKGVALUEFC: element.MKGVALUEFC,
+          MKGVALUECC: element.MKGVALUECC,
+          RATE_TYPE: element.RATE_TYPE,
+          METAL_RATE: element.METAL_RATE,
+          METAL_RATE_GMSFC: element.METAL_RATE_GMSFC,
+          METAL_RATE_GMSCC: element.METAL_RATE_GMSCC,
+          METALVALUEFC: element.METALVALUEFC,
+          METALVALUECC: element.METALVALUECC,
+          STONE_RATEFC: element.STONE_RATEFC,
+          STONE_RATECC: element.STONE_RATECC,
+          STONEVALUEFC: element.STONEVALUEFC,
+          STONEVALUECC: element.STONEVALUECC,
+          DISCOUNT: element.DISCOUNT,
+          DISCOUNTVALUEFC: element.DISCOUNTVALUEFC,
+          DISCOUNTVALUECC: element.DISCOUNTVALUECC,
+          NETVALUEFC: element.NETVALUEFC,
+          NETVALUECC: element.NETVALUECC,
+          PUDIFF: element.PUDIFF,
+          STONEDIFF: element.STONEDIFF,
+          PONO: element.PONO,
+          LOCTYPE_CODE: element.LOCTYPE_CODE,
+          SUPPLIER: element.SUPPLIER,
+          STOCK_DOCDESC: element.STOCK_DOCDESC ,
+          LOCKED: Boolean(element.LOCKED),
+          MCLENGTH: element.MCLENGTH,
+          MCUNIT: element.MCUNIT,
+          POSSALESSR: element.POSSALESSR,
+          PHYSICALSTOCK: element.PHYSICALSTOCK,
+          METALAMT: element.METALAMT,
+          MAKINGAMT: element.MAKINGAMT,
+          STDIFFAC: element.STDIFFAC,
+          STAMTAC: element.STAMTAC ,
+          STKTRANMKGCOST: element.STKTRANMKGCOST,
+          MAINSTOCKCODE: element.MAINSTOCKCODE,
+          MKGMTLNETRATE: element.MKGMTLNETRATE,
+          RSO_FIXED: Boolean(element.RSO_FIXED),
+          RSORDERGROSSWT: element.RSORDERGROSSWT,
+          RUBY_WT: element.RUBY_WT,
+          RUBY_RATE: element.RUBY_RATE,
+          RUBY_AMOUNTFC: element.RUBY_AMOUNTFC,
+          RUBY_AMOUNTCC: element.RUBY_AMOUNTCC,
+          EMERALD_WT: element.EMERALD_WT,
+          EMERALD_RATE: element.EMERALD_RATE,
+          EMERALD_AMOUNTFC: element.EMERALD_AMOUNTFC,
+          EMERALD_AMOUNTCC: element.EMERALD_AMOUNTCC,
+          SAPPHIRE_WT: element.SAPPHIRE_WT,
+          SAPPHIRE_RATE: element.SAPPHIRE_RATE,
+          SAPPHIRE_AMOUNTFC: element.SAPPHIRE_AMOUNTFC,
+          SAPPHIRE_AMOUNTCC: element.SAPPHIRE_AMOUNTCC,
+          ZIRCON_WT: element.ZIRCON_WT,
+          ZIRCON_RATE: element.ZIRCON_RATE,
+          ZIRCON_AMOUNTFC: element.ZIRCON_AMOUNTFC,
+          ZIRCON_AMOUNTCC: element.ZIRCON_AMOUNTCC,
+          COLOR_STONE_WT: element.COLOR_STONE_WT,
+          COLOR_STONE_RATE: element.COLOR_STONE_RATE,
+          COLOR_STONE_AMOUNTFC: element.COLOR_STONE_AMOUNTFC,
+          COLOR_STONE_AMOUNTCC: element.COLOR_STONE_AMOUNTCC,
+          SJEW_TAGLINES: element.SJEW_TAGLINES || "",
+          MTL_SIZE: element.MTL_SIZE,
+          MTL_COLOR: element.MTL_COLOR,
+          MTL_DESIGN: element.MTL_DESIGN,
+          DTSALESPERSON_CODE: this.vocDataForm.controls.sales_person.value,//"string",
+          VAT_ACCODE: element.VAT_ACCODE,
+          VAT_PER: element.VAT_PER,
+          TOTALWITHVATFC: element.TOTALWITHVATFC,
+          TOTALWITHVATLC: element.TOTALWITHVATLC,
+          VAT_AMOUNTLC: element.VAT_AMOUNTLC,
+          VAT_AMOUNTFC: element.VAT_AMOUNTFC,
+          LOYALTY_ITEM: Boolean(element.LOYALTY_ITEM),
+          WASTE_PER: element.WASTE_PER,
+          STKTRN_LANDINGCOST: element.STKTRN_LANDINGCOST,
+          STKTRN_WASTAGERATE: element.STKTRN_WASTAGERATE,
+          DT_BRANCH_CODE: this.salesReturnForm.controls.fcn_returns_branch.value,
+          DT_VOCTYPE: this.salesReturnForm.controls.fcn_returns_voc_type.value,
+          DT_VOCNO: this.salesReturnForm.controls.fcn_returns_voc_no.value,
+          DT_YEARMONTH: this.salesReturnForm.controls.fcn_returns_fin_year.value,
+          SALESPERSON_CODE: this.salesReturnForm.controls.fcn_returns_sales_man.value,
+          CGST_PER: element.CGST_PER,
+          CGST_AMOUNTFC: element.CGST_AMOUNTFC,
+          CGST_AMOUNTCC: element.CGST_AMOUNTCC,
+          SGST_PER: element.SGST_PER,
+          SGST_AMOUNTFC: element.SGST_AMOUNTFC,
+          SGST_AMOUNTCC: element.SGST_AMOUNTCC,
+          IGST_PER: element.IGST_PER,
+          IGST_AMOUNTFC: element.IGST_AMOUNTFC,
+          IGST_AMOUNTCC: element.IGST_AMOUNTCC,
+          CGST_ACCODE: element.CGST_ACCODE,
+          SGST_ACCODE: element.SGST_ACCODE,
+          IGST_ACCODE: element.IGST_ACCODE,
+          TOTAL_AMOUNTFC: element.TOTAL_AMOUNTFC,
+          TOTAL_AMOUNTCC: element.TOTAL_AMOUNTCC,
+          CGST_CTRLACCODE: element.CGST_CTRLACCODE,
+          SGST_CTRLACCODE: element.SGST_CTRLACCODE,
+          IGST_CTRLACCODE: element.IGST_CTRLACCODE,
+          GST_GROUP: element.GST_GROUP,
+          GST_CODE: element.GST_CODE,
+          HSN_CODE: element.HSN_CODE,
+          SERVICE_ACCODE: element.SERVICE_ACCODE,
+          WASTAGEPER: element.WASTAGEPER,
+          WASTAGEQTY: element.WASTAGEQTY,
+          WASTAGEPUREWT: element.WASTAGEPUREWT,
+          WASTAGEAMOUNTFC: element.WASTAGEAMOUNTFC,
+          WASTAGEAMOUNTCC: element.WASTAGEAMOUNTCC,
+          DIVISIONMS: element.DIVISIONMS,
+          INCLUSIVE: Boolean(element.INCLUSIVE),
+          OLDRATE: element.OLDRATE,
+          OLDAMOUNT: element.OLDAMOUNT,
+          DISC_USER_NAME: element.DISC_USER_NAME,//this.salesReturnForm.controls.fcn_returns_cust_name.value,
+          DISC_AMOUNT: element.DISC_AMOUNT,
+          DISC_PERCENTAGE: element.DISC_PERCENTAGE,
+          KUNDAN_UNIT: element.KUNDAN_UNIT,
+          KUNDAN_PCS: element.KUNDAN_PCS,
+          KUNDAN_CARAT: element.KUNDAN_CARAT ,
+          KUNDAN_WEIGHT: element.KUNDAN_WEIGHT,
+          KUNDAN_RATEFC: element.KUNDAN_RATEFC,
+          KUNDAN_RATECC: element.KUNDAN_RATECC,
+          KUNDANVALUEFC: element.KUNDANVALUEFC,
+          KUNDANVALUECC: element.KUNDANVALUECC,
+          CESS_PER: element.CESS_PER,
+          CESS_AMOUNTFC: element.CESS_AMOUNTFC,
+          CESS_AMOUNTCC: element.CESS_AMOUNTCC,
+          ROS_FIXED: element.ROS_FIXED,
+          BATCHID: element.BATCHID,
+          STAMP_RATE: element.STAMP_RATE,
+          STAMP_AMOUNT: element.STAMP_AMOUNT,
+          STAMP_AMOUNTCC: element.STAMP_AMOUNTCC,
+          LOYALTY_POINTS: element.LOYALTY_POINTS,
+          SALES_TAGLINES: element.SALES_TAGLINES,
+          OT_TRANSFER_TIME: element.OT_TRANSFER_TIME,
+          COUNTRY_CODE: element.COUNTRY_CODE,
+          EXTRA_STOCK_CODE: element.EXTRA_STOCK_CODE,
+          FLAGESTK: element.FLAGESTK,
+          COMPONENT_PRICE_TYPE: "",
+          DUFIX_METALGROSSWT: 0,
+          DUFIX_DIAPCS: 0,
+          DUFIX_DIACARAT: 0,
+          DUFIX_STONEPCS: 0,
+          DUFIX_STONECARAT: 0,
+          DUFIX_METAL_WT: 0,
+          DUFIX_FINEGOLD: 0,
+          DUFIX_MASTERFINEGOLD: 0,
+          DUFIX_DIACTRATEFC: 0,
+          DUFIX_DIACTRATECC: 0,
+          DUFIX_DIAVALUEFC: 0,
+          DUFIX_DIAVALUECC: 0,
+          DUFIX_CLRSTNRATEFC: 0,
+          DUFIX_CLRSTNRATECC: 0,
+          DUFIX_CLRSTNVALUEFC: 0,
+          DUFIX_CLRSTNVALUECC: 0,
+          DUFIX_METALVALUEFC: 0,
+          DUFIX_METALVALUECC: 0,
+          DUFIX_LABOURFC: 0,
+          DUFIX_LABOURCC: 0,
+          DUFIX_HMCHARGEFC: 0,
+          DUFIX_HMCHARGECC: 0,
+          DUFIX_CERTCHARGEFC: 0,
+          DUFIX_CERTCHARGECC: 0,
+          DUFIX_DWASTAGE: 0,
+          DUFIX_PURITY: 0,
+          DUFIX_PUDIFF: 0,
+          DUFIX_DKARAT_CODE: "",
+          DUFIX_METLA_WT: 0,
+          DUFIX_DWASTAGEPER: 0,
+          DUFIX_DWASTAGEAMOUNTFC: 0,
+          DUFIX_DWASTAGEAMOUNTCC: 0,
+          DUFIX_PEARL_PCS: 0,
+          DUFIX_PEARL_WT: 0,
+          DUFIX_PEARL_AMTFC: 0,
+          DUFIX_PEARL_AMTCC: 0,
+          DUFIX_DLABUNIT: 0,
+          DUFIX_DLABRATEFC: 0,
+          DUFIX_DLABRATECC: 0,
+          DUFIX_DCHARGABLEWEIGHT: 0,
+          GIFT_ITEM: true,
+          GSTMETALPER: 0,
+          GSTMAKINGPER: 0,
+          GSTOTHERPER: 0,
+          GSTMETALAMT_CC: 0,
+          GSTMAKINGAMT_CC: 0,
+          GSTOTHERAMT_CC: 0,
+          GSTMETALAMT_FC: 0,
+          GSTMAKINGAMT_FC: 0,
+          GSTOTHERAMT_FC: 0,
+          HSNCODE: "",
+          LESSTHANCOST_USER: "",
+          NEWUNIQUEID: 0,
+          STOCKCHECKOTHERBRANCH: true,
+          TOTALWITHGST_CC: 0,
+          TOTALWITHGST_FC: 0,
+          VATCODE: ""
+      };
+  
+      // Add the post detail item to the postDetail array
+      this.postDetail.push(postDetailItem);
+  });
+
+    console.log("total_pcs",_total_pcs);
+    console.log("total_weight",_total_weight);
+    console.log("total_amt",_total_amt);
+    console.log("tax amount",_tax_amt);
+    console.log("gross total",_gross_total);
+    console.log("sales return",_sales_return);
+    console.log("net_total",_net_total);
+    console.log("making amount",_mkg_amount);
+    console.log("pure_wt",_pure_wt);
+    console.log("metal_amt",_metal_amt);
+    console.log("stone_amt",_stone_amt);
+    console.log("purity difference",_purity_diff);
+    console.log("stone difference",_stone_diff);
+    console.log("discount value cc",_disc_value_cc);
+    console.log("discount value fc",_disc_value_fc);
+    console.log("Net value cc",_net_val_cc);
+    console.log("Net value fc",_net_val_fc);
+    console.log("IGST CC",_igst_cc);
+
+    this.prnt_inv_total_pcs =_total_pcs;
+    this.prnt_inv_total_weight = _total_weight;
+    this.prnt_inv_total_gross_amt= _mkg_amount + _metal_amt + _stone_amt ;//_total_amt;
+    this.order_items_total_tax= _tax_amt;
+    this.order_items_total_gross_amount =_total_amt;
+    this.invReturnSalesTotalNetTotal =_sales_return;
+    this.netTotal = _net_total;
+    this.making_amount = _mkg_amount;
+    this.pure_weight = _pure_wt;
+    this.metal_value = _metal_amt;
+    this.stone_value = _stone_amt;
+    this.purity_difference = _purity_diff;
+    this.stone_difference = _stone_diff;
+    this.total_disc_fc = _disc_value_fc;
+    this.total_disc_cc = _disc_value_cc;
+    this.total_net_value_fc = _net_val_fc;
+    this.total_net_value_cc = _net_val_cc;
+    this.total_vat_fc = _vat_fc;
+    this.total_vat_lc = _vat_lc;
+    this.order_items_total_tax = _igst_cc;
+    this.netTotal = _total_amt;
+    this.Receipt_total = _total_amt;
+    
   console.log("postdetailsData" ,this.postDetail);
+
   this.modalReference.close();
 
   }
@@ -7932,7 +8166,9 @@ this.lineItemForm.controls.fcn_li_tax_amount.setValue(formattedTaxAmount);
         ) || 0,
     };
     // this.salesReturnRowData = temp_pos_item_data;
-    const preitemIndex = this.salesReturnsItems_forVoc.findIndex((data: any) => data.SRNO.toString() == this.salesReturnRowDataSRNO.toString());
+    const preitemIndex = this.salesReturnsItems_forVoc.findIndex((data: any) => data.SRNO == this.salesReturnRowDataSRNO.toString());
+
+    // const preitemIndex = this.salesReturnsItems_forVoc.findIndex((data: any) => data.SRNO.toString() == this.salesReturnRowDataSRNO.toString());
     if (preitemIndex != -1) {
       console.log('=================this.salesReturnsItems_forVoc[preitemIndex]===================');
       console.log(this.salesReturnsItems_forVoc[preitemIndex], temp_pos_item_data);
@@ -8098,6 +8334,7 @@ this.lineItemForm.controls.fcn_li_tax_amount.setValue(formattedTaxAmount);
       total_dis_amt = total_dis_amt + parseFloat(item.dis_amt);
       total_gross_amt = total_gross_amt + parseFloat(item.gross_amt);
     });
+    this.sales_returns_items.pcs = this.lineItemForm.controls.fcn_li_pcs.value;
 
     this.prnt_inv_total_pcs = total_pcs;
     this.prnt_inv_total_weight = total_weight;
@@ -8426,7 +8663,52 @@ this.lineItemForm.controls.fcn_li_tax_amount.setValue(formattedTaxAmount);
     }   
   }
 
+  // updateRetailSalesReturnVal() {
+  //   Object.values(this.lineItemForm.controls).forEach(control => {
+  //     control.markAsTouched();
+  //   });
+  //   if (!this.lineItemForm.invalid) {
+  //     this.setRetailSalesRowData(this.order_items_slno_length, this.newLineItem);
+  //     this.modalReferenceSalesReturn.close();
+  //   } else {
+  //     this.snackBar.open('Please Fill Required Fields', '', {
+  //       duration: 2000 
+  //     });
+  //   }
+  // }
+
   updateRetailSalesReturnVal() {
+   
+    this.sales_returns_items.forEach((ele:any)  => {
+      if (this.salesReturnRowDataSRNO === ele.SRNO) {
+        ele.DIVISION_CODE = this.lineItemForm.controls.fcn_li_division.value;
+        ele.description = this.lineItemForm.controls.fcn_li_item_desc.value;
+        ele.stock_code = this.lineItemForm.controls.fcn_li_item_code.value;
+        ele.pcs = this.lineItemForm.controls.fcn_li_pcs.value;
+        ele.weight = this.lineItemForm.controls.fcn_li_gross_wt.value;
+        ele.STONEWT = this.lineItemForm.controls.fcn_li_stone_wt.value;
+        ele.NETWT = this.lineItemForm.controls.fcn_li_net_wt.value;
+        ele.METAL_RATE = this.lineItemForm.controls.fcn_ad_metal_rate.value;
+        ele.mkg_amount = this.lineItemForm.controls.fcn_ad_metal_amount.value;
+        ele.STONE_RATEFC = this.lineItemForm.controls.fcn_ad_stone_rate.value;
+        ele.stone_amt = this.lineItemForm.controls.fcn_ad_stone_amount.value;
+        ele.making_amt = this.lineItemForm.controls.fcn_li_rate.value;
+        ele.mkg_amount = this.lineItemForm.controls.fcn_li_total_amount.value;
+        ele.DISCOUNT = this.lineItemForm.controls.fcn_li_discount_percentage.value;
+        ele.DISCOUNTVALUEFC = this.lineItemForm.controls.fcn_li_discount_amount.value;
+        ele.TOTALWITHVATFC = this.lineItemForm.controls.fcn_li_gross_amount.value;
+        ele.net_amount = this.lineItemForm.controls.fcn_li_net_amount.value;
+        ele.IGST_AMOUNTCC = this.lineItemForm.controls.fcn_li_tax_amount.value;
+        ele.IGST_PER = this.lineItemForm.controls.fcn_li_tax_percentage.value;
+      
+      }
+
+  });
+
+
+
+
+
     Object.values(this.lineItemForm.controls).forEach(control => {
       control.markAsTouched();
     });
@@ -8435,10 +8717,11 @@ this.lineItemForm.controls.fcn_li_tax_amount.setValue(formattedTaxAmount);
       this.modalReferenceSalesReturn.close();
     } else {
       this.snackBar.open('Please Fill Required Fields', '', {
-        duration: 2000 // time in milliseconds
+        duration: 2000 
       });
     }
   }
+
   imageURL: any[] = []
   getStockImage() {
     let API = `RetailSalesItemImage/${this.lineItemForm.value.fcn_li_item_code}`
