@@ -10,7 +10,7 @@
 <!-- modal header component -->
 <modal-header (saveClick)="formSubmit('SAVE')" (cancelClick)="close()"
   [isViewStock]="designType != 'METAL'" [isViewDelete]="false"
-  (stockClick)="opennewdetails()"
+  (stockClick)="opennewdetails()" [isViewSave]="!viewMode"
   [isViewContinue]="true" (continueClick)="formSubmit('CONTINUE')">
 </modal-header>
 <div class="p-3">
@@ -118,7 +118,7 @@
           <div class="col-sm-5">
             <mat-form-field appearance="outline" style="width: 100%;">
               <input type="text" readonly matInput
-                formControlName="partsName" />
+                formControlName="PART_NAME" />
             </mat-form-field>
           </div>
         </div>
@@ -871,7 +871,8 @@
       [dataSource]="pendingProcess">
       <dxo-filter-row [visible]="true"></dxo-filter-row>
       <dxo-selection mode="single"></dxo-selection>
-      <dxi-column width="auto" caption="Multiple Process Pending" dataField="PROCESS">
+      <dxi-column width="auto" caption="Multiple Process Pending"
+        dataField="PROCESS">
       </dxi-column>
     </dx-data-grid>
   </div>

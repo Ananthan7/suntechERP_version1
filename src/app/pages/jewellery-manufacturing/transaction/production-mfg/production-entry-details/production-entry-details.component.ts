@@ -206,11 +206,12 @@ export class ProductionEntryDetailsComponent implements OnInit {
     SUB_JOB_DESCRIPTION: [''],
     CUSTOMER_CODE: [''],
     CUSTOMER_DESC: [''],
+    METALLAB_TYPE: [''],
     PROCESS_CODE: [''],
     PROCESS_NAME: [''],
     WORKER_CODE: [''],
     WORKER_NAME: [''],
-    partsName: [''],
+    PART_NAME: [''],
     PART_CODE: [''],
     DESIGN_CODE: [''],
     DESIGN_TYPE: [''],
@@ -331,29 +332,47 @@ export class ProductionEntryDetailsComponent implements OnInit {
     this.setFormNullToString('DESIGN_DESCRIPTION', PRODUCTION_FORMDETAILS.DESIGN_DESCRIPTION)
     this.setFormNullToString('TREE_NO', parentDetail.TREE_NO)
     this.setFormNullToString('JOB_SO_NUMBER', parentDetail.JOB_SO_NUMBER)
+    this.setFormNullToString('JOB_DATE', PRODUCTION_FORMDETAILS.JOB_DATE)
+    this.setFormNullToString('JOB_PCS', PRODUCTION_FORMDETAILS.JOB_PCS)
+    this.setFormNullToString('CUSTOMER_CODE', parentDetail.CUSTOMER_CODE)
+    this.setFormNullToString('CUSTOMER_DESC', PRODUCTION_FORMDETAILS.CUSTOMER_DESC)
+    this.setFormNullToString('METALLAB_TYPE', PRODUCTION_FORMDETAILS.METALLAB_TYPE)
+    this.setFormNullToString('METAL_STOCK_CODE', PRODUCTION_FORMDETAILS.METAL_STOCK_CODE)
+    this.setFormNullToString('SUPPLIER_REF', parentDetail.SUPPLIER_REF)
+    this.setFormNullToString('PREFIX', parentDetail.PREFIX)
+    this.setFormNullToString('PREFIXNO', PRODUCTION_FORMDETAILS.PREFIXNO)
+    this.setFormNullToString('COST_CODE', parentDetail.COST_CODE)
+    this.setFormNullToString('PART_CODE', PRODUCTION_FORMDETAILS.PART_CODE)
+    this.setFormNullToString('PART_NAME', PRODUCTION_FORMDETAILS.PART_NAME)
+    this.setFormNullToString('WORKER_CODE', parentDetail.WORKER_CODE)
+    this.setFormNullToString('WORKER_NAME', parentDetail.WORKER_NAME)
+    this.setFormNullToString('PROCESS_CODE', parentDetail.PROCESS_CODE)
+    this.setFormNullToString('PROCESS_NAME', parentDetail.PROCESS_NAME)
+    this.setFormNullToString('STOCK_CODE', parentDetail.STOCK_CODE)
+    //setInitialLoadValue
+    this.setFormNullToString('UNQ_DESIGN_ID', parentDetail.UNQ_DESIGN_ID)
+    this.setFormNullToString('JOB_SO_NUMBER', parentDetail.JOB_SO_NUMBER)
+    this.setFormNullToString('STOCK_CODE', parentDetail.STOCK_CODE)
+    this.setFormNullToString('DIVCODE', parentDetail.DIVCODE)
+    this.setFormNullToString('METALSTONE', parentDetail.METALSTONE)
+    this.setFormNullToString('PURE_WT', parentDetail.PURE_WT)
+    this.setFormNullToString('KARAT_CODE', parentDetail.KARAT_CODE)
+    this.setFormNullToString('totalpcs', parentDetail.PCS)
+    this.setFormDecimal('METAL_WT',parentDetail.METAL_WT, 'METAL')
+    this.setFormDecimal('STONE_WT',parentDetail.STONE_WT, 'STONE')
+    this.setFormDecimal('GROSS_WT',parentDetail.GROSS_WT, 'METAL')
+    this.setFormDecimal('PUREWT',parentDetail.PUREWT, 'METAL')
+    this.setFormDecimal('PURITY',parentDetail.PURITY, 'PURITY')
+    this.setFormDecimal('Job_Purity',parentDetail.PURITY, 'PURITY')
+
     if (this.designType == 'METAL') {
       // this.onLoadMetalDetail(parentDetail)
     } else {
-      this.setFormNullToString('WORKER_CODE', parentDetail.WORKER_CODE)
-      this.setFormNullToString('WORKER_NAME', parentDetail.WORKER_NAME)
-      this.setFormNullToString('PROCESS_CODE', parentDetail.PROCESS_CODE)
-      this.setFormNullToString('PROCESS_NAME', parentDetail.PROCESS_NAME)
-      this.setFormNullToString('STOCK_CODE', parentDetail.STOCK_CODE)
+
     }
     this.FORM_VALIDATER = this.productiondetailsFrom.value
   }
-  // getDesignimagecode() {
-  //   let API = 'ImageforJobCad/' + this.productiondetailsFrom.value.PART_CODE;
-  //   let Sub: Subscription = this.dataService.getDynamicAPI(API)
-  //     .subscribe((result) => {
 
-  //       this.urls = result.response[0].imagepath;
-  //       console.log(this.urls)
-  //     }, err => {
-  //       this.commonService.toastErrorByMsgId('MSG81451')//Server Error
-  //     })
-  //   this.subscriptions.push(Sub)
-  // }
   getDesignimagecode() {
     let API = `Image/${this.productiondetailsFrom.value.JOB_NUMBER}`
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
@@ -470,14 +489,13 @@ export class ProductionEntryDetailsComponent implements OnInit {
             this.setFormNullToString('METALLAB_TYPE', data[0].METALLAB_TYPE)
             this.setFormNullToString('DESIGN_TYPE', data[0].DESIGN_TYPE?.toUpperCase())
             this.setFormNullToString('METAL_STOCK_CODE', data[0].METAL_STOCK_CODE)
-            this.setFormNullToString('SUPPLIER_REF', data[0].DESIGN_CODE+data[0].METAL_COLOR)
-            this.setFormNullToString('PENDING_PCS', data[0].JOB_PCS_TOTAL)
+            this.setFormNullToString('SUPPLIER_REF', data[0].DESIGN_CODE + data[0].METAL_COLOR)
+            this.setFormNullToString('PREFIX', data[0].PREFIX)
+            this.setFormNullToString('PREFIXNO', data[0].PREFIX_NUMBER)
+            this.setFormNullToString('COST_CODE', data[0].COST_CODE)
+            this.setFormNullToString('PART_CODE', data[0].DESIGN_CODE)
+            this.setFormNullToString('PART_NAME', data[0].DESCRIPTION)
             this.designType = this.commonService.nullToString(data[0].DESIGN_TYPE?.toUpperCase());
-            this.productiondetailsFrom.controls.PREFIX.setValue(data[0].PREFIX)
-            this.productiondetailsFrom.controls.PREFIXNO.setValue(data[0].PREFIX_NUMBER)
-            this.productiondetailsFrom.controls.COST_CODE.setValue(data[0].COST_CODE)
-            this.productiondetailsFrom.controls.PART_CODE.setValue(data[0].DESIGN_CODE)
-            this.productiondetailsFrom.controls.partsName.setValue(data[0].DESCRIPTION)
             this.subJobNumberValidate()
             this.getDesignimagecode()
           } else {
@@ -509,30 +527,25 @@ export class ProductionEntryDetailsComponent implements OnInit {
         this.commonService.closeSnackBarMsg()
         if (result.dynamicData && result.dynamicData[0].length > 0) {
           let data = result.dynamicData[0]
-
-          this.productiondetailsFrom.controls.PROCESS_CODE.setValue(data[0].PROCESS)
-          this.productiondetailsFrom.controls.PROCESS_NAME.setValue(data[0].PROCESSDESC)
-          this.productiondetailsFrom.controls.WORKER_CODE.setValue(data[0].WORKER)
-          this.productiondetailsFrom.controls.WORKER_NAME.setValue(data[0].WORKERDESC)
-          this.productiondetailsFrom.controls.UNQ_DESIGN_ID.setValue(data[0].UNQ_DESIGN_ID)
-          this.productiondetailsFrom.controls.METAL_WT.setValue(
-            this.commonService.decimalQuantityFormat(data[0].METAL, 'METAL'))
-          this.productiondetailsFrom.controls.STONE_WT.setValue(
-            this.commonService.decimalQuantityFormat(data[0].STONE, 'STONE'))
-          this.productiondetailsFrom.controls.GROSS_WT.setValue(
-            this.commonService.decimalQuantityFormat(Number(data[0].NETWT), 'METAL'))
-          this.productiondetailsFrom.controls.PUREWT.setValue(data[0].PUREWT)
-          this.productiondetailsFrom.controls.PURITY.setValue(
-            this.commonService.decimalQuantityFormat(data[0].PURITY, 'PURITY'))
-          this.productiondetailsFrom.controls.Job_Purity.setValue(
-            this.commonService.decimalQuantityFormat(data[0].PURITY, 'PURITY'))
-          this.productiondetailsFrom.controls.JOB_SO_NUMBER.setValue(data[0].JOB_SO_NUMBER)
-          this.productiondetailsFrom.controls.STOCK_CODE.setValue(data[0].STOCK_CODE)
-          this.productiondetailsFrom.controls.DIVCODE.setValue(data[0].DIVCODE)
-          this.productiondetailsFrom.controls.METALSTONE.setValue(data[0].METALSTONE)
-          this.productiondetailsFrom.controls.PURE_WT.setValue(data[0].PURE_WT)
-          this.productiondetailsFrom.controls.KARAT_CODE.setValue(data[0].KARAT)
-          this.productiondetailsFrom.controls.totalpcs.setValue(data[0].PCS)
+          this.setFormNullToString('PROCESS_CODE', data[0].PROCESS)
+          this.setFormNullToString('PROCESS_NAME', data[0].PROCESSDESC)
+          this.setFormNullToString('WORKER_CODE', data[0].WORKER)
+          this.setFormNullToString('WORKER_NAME', data[0].WORKERDESC)
+          this.setFormNullToString('UNQ_DESIGN_ID', data[0].UNQ_DESIGN_ID)
+          this.setFormNullToString('JOB_SO_NUMBER', data[0].JOB_SO_NUMBER)
+          this.setFormNullToString('STOCK_CODE', data[0].STOCK_CODE)
+          this.setFormNullToString('DIVCODE', data[0].DIVCODE)
+          this.setFormNullToString('METALSTONE', data[0].METALSTONE)
+          this.setFormNullToString('PURE_WT', data[0].PURE_WT)
+          this.setFormNullToString('KARAT_CODE', data[0].KARAT)
+          this.setFormNullToString('totalpcs', data[0].PCS)
+          this.setFormDecimal('METAL_WT',data[0].METAL, 'METAL')
+          this.setFormDecimal('STONE_WT',data[0].STONE, 'STONE')
+          this.setFormDecimal('GROSS_WT',data[0].METAL, 'METAL')
+          this.setFormDecimal('PUREWT',data[0].PUREWT, 'METAL')
+          this.setFormDecimal('PURITY',data[0].PURITY, 'PURITY')
+          this.setFormDecimal('Job_Purity',data[0].PURITY, 'PURITY')
+          
           this.FORM_VALIDATER = this.productiondetailsFrom.value
           this.pendingProcessValidate()
           this.fillStoneDetails()
@@ -566,8 +579,8 @@ export class ProductionEntryDetailsComponent implements OnInit {
           this.pendingProcess = [];
           for (let i = 0; i < data.length; i++) {
             processMsg += data[i]["PCS"] + " PCS , " + data[i]["GRWT"] + " Weight in ";
-            processMsg += data[i]["WORKER_CODE"] + " Worker  On " + data[i]["PROCESS_CODE"] + " Process " ;
-            this.pendingProcess.push({PROCESS: processMsg})
+            processMsg += data[i]["WORKER_CODE"] + " Worker  On " + data[i]["PROCESS_CODE"] + " Process ";
+            this.pendingProcess.push({ PROCESS: processMsg })
             processMsg = ""
           }
           this.openPendingProcessModal()
@@ -601,7 +614,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
           let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
           if (data) {
             this.metalDetailData = data
-          
+
           } else {
             this.commonService.toastErrorByMsgId('MSG1531')
             return
@@ -875,7 +888,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
       "WASTAGE_AMTLC": 0,
       "PICTURE_NAME": "",
       "SELLINGRATE": 0,
-      "CUSTOMER_CODE": "",
+      "CUSTOMER_CODE": this.commonService.nullToString(form.CUSTOMER_CODE),
       "OUTSIDEJOB": true,
       "LAB_ACCODE": "",
       "METAL_LABAMTFC": 0,
