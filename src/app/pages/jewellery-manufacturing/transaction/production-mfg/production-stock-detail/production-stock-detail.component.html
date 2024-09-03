@@ -10,8 +10,9 @@
 </div>
 <!-- modal header component -->
 <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
-    [isViewContinue]="true" (continueClick)="formSubmit()"
-    [isViewDelete]="false" [isViewMore]="false"></modal-header>
+    [isViewContinue]="!viewMode" (continueClick)="formSubmit()"
+    [isViewDelete]="false" [isViewMore]="false"
+    [isViewSave]="!viewMode"></modal-header>
 <div class="p-2">
     <form [formGroup]="productionItemsDetailsFrom">
         <div class="row mt-2">

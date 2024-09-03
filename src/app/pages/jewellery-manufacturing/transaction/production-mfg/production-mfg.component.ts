@@ -51,7 +51,7 @@ export class ProductionMfgComponent implements OnInit {
   branchCode: string = '';
   vocMaxDate = new Date();
   currentDate = new Date();
-  companyName = this.commonService.allbranchMaster['BRANCH_NAME']
+  companyName: string = this.commonService.allbranchMaster['BRANCH_NAME'] || ''
   private subscriptions: Subscription[] = [];
   editMode: boolean = false;
   isloading: boolean = false;
@@ -198,15 +198,16 @@ export class ProductionMfgComponent implements OnInit {
       .subscribe((result) => {
         if (result.response) {
           let data = result.response
-          this.detailData = data.JOB_PRODUCTION_DETAIL_DJ || []
           this.JOB_PRODUCTION_DETAIL_DJ = data.JOB_PRODUCTION_DETAIL_DJ || []
-          this.detailData.forEach((item: any, index: number) => {
+          this.JOB_PRODUCTION_DETAIL_DJ.forEach((item: any, index: number) => {
             this.detailData.push({
               SRNO: item.SRNO,
               FLAG: this.commonService.nullToString(this.content.FLAG),
               JOB_PRODUCTION_DETAIL_DJ: item,
-              // JOB_PROCESS_TRN_LABCHRG_DJ: data.JOB_PROCESS_TRN_LABCHRG_DJ?.filter((val: any) => item.UNIQUEID == val.REFMID),
-              // JOB_PROCESS_TRN_COMP_DJ: data.JOB_PROCESS_TRN_COMP_DJ?.filter((val: any) => item.UNIQUEID == val.REFMID),
+              JOB_PRODUCTION_STNMTL_DJ: data.JOB_PRODUCTION_STNMTL_DJ?.filter((val: any) => item.JOB_NUMBER == val.JOB_NUMBER),
+              JOB_PRODUCTION_SUB_DJ: data.JOB_PRODUCTION_SUB_DJ?.filter((val: any) => item.JOB_NUMBER == val.JOB_NUMBER),
+              JOB_PRODUCTION_LABCHRG_DJ: data.JOB_PRODUCTION_LABCHRG_DJ?.filter((val: any) => item.JOB_NUMBER == val.JOB_NUMBER),
+              JOB_PRODUCTION_METALRATE_DJ: data.JOB_PRODUCTION_METALRATE_DJ?.filter((val: any) => item.UNIQUEID == val.REFMID),
             })
             item.LOSS_QTY = this.commonService.decimalQuantityFormat(item.LOSS_QTY, 'METAL')
           })
