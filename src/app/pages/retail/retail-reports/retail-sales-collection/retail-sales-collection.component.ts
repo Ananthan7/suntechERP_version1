@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 
 @Component({
   selector: 'app-retail-sales-collection',
@@ -11,17 +12,28 @@ export class RetailSalesCollectionComponent implements OnInit {
   private cssFilePath = '/assets/scss/scheme_register_pdf.scss';
   branchDivisionControls: any;
   tableData: any = [];
+  isLoading: boolean = false;
+
   retailSalesCollection: FormGroup = this.formBuilder.group({
     branch : [''],
-    show : ['all'],
     fromDate : [new Date()],
     toDate : [new Date()],
-    salesman : [''],
-    salesmanCode : [''],
-    reportTo : ['preview']
+    reportTo : ['preview'],
+    showDateCheckbox: [false],
+    showInvoiceCheckbox: [false],
+    showSalesCheckbox: [false],
+    showSalesReturnCheckbox: [false],
+    showExbSalesCheckbox: [false],
+    showExbSalesReturnCheckbox: [false],
+    showAdvanceReceiptCheckbox: [false],
+    showSalesRegisterCheckbox: [false],
+    showOnlySummaryCheckbox: [false],
+    landscapeFormat: [false],
+    OutpuGridView: [false],
+
   })
   constructor(  private activeModal: NgbActiveModal,
-    private formBuilder: FormBuilder,
+    private formBuilder: FormBuilder, private dataService: SuntechAPIService,
   ) { }
 
   ngOnInit(): void {
@@ -95,6 +107,8 @@ export class RetailSalesCollectionComponent implements OnInit {
   }
 
   savePdf() {
+    console.log(this.retailSalesCollection)
+
     const printContent: any = document.getElementById('pdf_container');
     var WindowPrt: any = window.open(
       '',
@@ -161,6 +175,37 @@ export class RetailSalesCollectionComponent implements OnInit {
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
+  }
+
+  getAPIData(pageIndex?: number) {
+    
+    const payload = {
+      strUserName: localStorage.getItem('username'),
+      strDivisionMS: 'S',
+      strLoginBranch: localStorage.getItem('userbranch')
+    };
+
+    this.isLoading = true;
+
+    this.dataService.postDynamicAPI('GetReportVouchers', payload).subscribe((response) => {
+      this.isLoading = false;
+      // console.log('branch division API call data', response);
+
+      // this.BranchDataSource = response.dynamicData[0] || [];
+
+      // this.divisionDataSource = response.dynamicData[1] || [];
+      // this.areaDataSource = response.dynamicData[2] || [];
+      // this.businessCategDataSource = response.dynamicData[3] || [];
+
+      // if (this.BranchDataSource.length > 0) {
+      //   this.dataSourceHead = Object.keys(this.BranchDataSource[0]);
+      //   this.dataSourceHead.unshift(this.dataSourceHead.pop());
+      // } else {
+      //   this.toastr.error('Data Not Available');
+      // }
+    },(error: any) => {
+        console.error('Error occurred:', error);
+    });
   }
 
 }
