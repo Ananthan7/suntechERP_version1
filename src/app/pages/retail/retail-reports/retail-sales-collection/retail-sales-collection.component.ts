@@ -37,6 +37,7 @@ export class RetailSalesCollectionComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.getAPIData()
   }
 
   selectedData(data: any) {
@@ -177,11 +178,9 @@ export class RetailSalesCollectionComponent implements OnInit {
     this.activeModal.close(data);
   }
 
-  getAPIData(pageIndex?: number) {
+  getAPIData() {
     
     const payload = {
-      strUserName: localStorage.getItem('username'),
-      strDivisionMS: 'S',
       strLoginBranch: localStorage.getItem('userbranch')
     };
 
@@ -189,7 +188,7 @@ export class RetailSalesCollectionComponent implements OnInit {
 
     this.dataService.postDynamicAPI('GetReportVouchers', payload).subscribe((response) => {
       this.isLoading = false;
-      // console.log('branch division API call data', response);
+      console.log('Rsales API call data', response);
 
       // this.BranchDataSource = response.dynamicData[0] || [];
 
@@ -207,5 +206,10 @@ export class RetailSalesCollectionComponent implements OnInit {
         console.error('Error occurred:', error);
     });
   }
+
+  saveTemplate(){
+
+  }
+
 
 }

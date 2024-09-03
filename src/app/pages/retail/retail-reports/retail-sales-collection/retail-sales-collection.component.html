@@ -108,6 +108,10 @@
             </div>    
 
             <div class="col-md-3 text-right p-2">
+                <button mat-flat-button color="primary" class="cancel-button btn-width" (click)="saveTemplate()">Save as Template </button>
+            </div>    
+
+            <div class="col-md-3 text-right p-2">
                 <app-common-buttons (saveClick)="savePdf()"  (cancelClick)="close()"></app-common-buttons>
             </div>  
         </div>
