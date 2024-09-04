@@ -21,8 +21,9 @@
                                     <input type="text" matInput formControlName="code" id="code"
                                         [readonly]="editableMode || viewMode" [disabled]="viewMode" #code
                                         (focusout)="validateLookupField($event,codeCodeData,'code')" UpperCaseDirective
-                                        autocomplete="off" (keyup)="codeEnabled()"  (keydown)="lookupKeyPress($event,'code')" />
-                                        <master-search [MasterSearchData]="codeCodeData" class="mstrScrch"
+                                        autocomplete="off" (keyup)="codeEnabled()"
+                                        (keydown)="lookupKeyPress($event,'code')" />
+                                    <master-search [MasterSearchData]="codeCodeData" class="mstrScrch"
                                         (newRowClick)="codeCodeSelected($event)" #overlaycodedescSearch
                                         *ngIf="!editMode && !viewMode">
                                     </master-search>
@@ -31,12 +32,11 @@
                             <div class="col-sm-6">
                                 <mat-form-field style="width: 80%;" appearance="outline">
                                     <input type="text" matInput formControlName="codedes" UpperCaseDirective
-                                        autocomplete="off"
-                                        [readonly]="viewMode || editMode" />
-                                    <master-search [MasterSearchData]="codeCodeData" class="mstrScrch"
+                                        autocomplete="off" readonly />
+                                    <!-- <master-search [MasterSearchData]="codeCodeData" class="mstrScrch"
                                         (newRowClick)="codeCodeSelected($event)" #overlaycodedescSearch
                                         *ngIf="!editMode && !viewMode">
-                                    </master-search>
+                                    </master-search> -->
                                 </mat-form-field>
                             </div>
                         </div>
@@ -46,7 +46,8 @@
                                 :</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;" appearance="outline">
-                                    <input type="text" matInput UpperCaseDirective formControlName="sizeSet" [readonly]="viewMode"
+                                    <input type="text" matInput UpperCaseDirective formControlName="sizeSet"
+                                        [readonly]="viewMode"
                                         (focusout)="validateLookupField($event,sizeSetCodeData,'sizeSet')"
                                         (keydown)="lookupKeyPress($event,'sizeSet')" />
                                     <master-search class="mstrScrch" [MasterSearchData]="sizeSetCodeData"
@@ -58,7 +59,8 @@
                             <label for="input" id="ID003" class="col-sm-2 col-form-label">Type :</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 95%;" appearance="outline">
-                                    <input type="text" matInput UpperCaseDirective formControlName="type" [readonly]="viewMode"
+                                    <input type="text" matInput UpperCaseDirective formControlName="type"
+                                        [readonly]="viewMode"
                                         (focusout)="validateLookupField($event,typeCodeData,'type')"
                                         (keydown)="lookupKeyPress($event,'type')" />
                                     <master-search [MasterSearchData]="typeCodeData" *ngIf="viewMode == false"
@@ -73,9 +75,8 @@
                             <label for="input" id="ID004" class="col-sm-2 col-form-label">Size :</label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;" appearance="outline">
-                                    <input type="text" matInput formControlName="size"
-                                        [readonly]="viewMode" UpperCaseDirective
-                                        (focusout)="validateLookupField($event,sizeCodeData,'size')"
+                                    <input type="text" matInput formControlName="size" [readonly]="viewMode"
+                                        UpperCaseDirective (focusout)="validateLookupField($event,sizeCodeData,'size')"
                                         (keydown)="lookupKeyPress($event,'size')" />
                                     <master-search [MasterSearchData]="sizeCodeData" class="mstrScrch"
                                         *ngIf="viewMode == false" #overlaysizeSearch
@@ -88,7 +89,8 @@
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 95%;" appearance="outline">
                                     <input type="text" matInput formControlName="category" [readonly]="viewMode"
-                                    UpperCaseDirective (focusout)="validateLookupField($event,categoryCodeData,'category')"
+                                        UpperCaseDirective
+                                        (focusout)="validateLookupField($event,categoryCodeData,'category')"
                                         (keydown)="lookupKeyPress($event,'category')" />
                                     <master-search class="mstrScrch" [MasterSearchData]="categoryCodeData"
                                         *ngIf="!viewMode" #overlaycategorySearch
@@ -102,7 +104,8 @@
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;" appearance="outline">
                                     <input type="text" matInput formControlName="shape" [readonly]="viewMode"
-                                    UpperCaseDirective  (focusout)="validateLookupField($event,shapeCodeData,'shape')"
+                                        UpperCaseDirective
+                                        (focusout)="validateLookupField($event,shapeCodeData,'shape')"
                                         (keydown)="lookupKeyPress($event,'shape')" />
                                     <master-search class="mstrScrch" [MasterSearchData]="shapeCodeData"
                                         *ngIf="!viewMode" #overlayshapeSearch (newRowClick)="shapeCodeSelected($event)">
@@ -114,7 +117,8 @@
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 95%;" appearance="outline">
                                     <input type="text" matInput formControlName="settingType" [readonly]="viewMode"
-                                    UpperCaseDirective  (focusout)="validateLookupField($event,settingTypeCodeData,'settingType')"
+                                        UpperCaseDirective
+                                        (focusout)="validateLookupField($event,settingTypeCodeData,'settingType')"
                                         (keydown)="lookupKeyPress($event,'settingType')" />
                                     <master-search class="mstrScrch" [MasterSearchData]="settingTypeCodeData"
                                         *ngIf="!viewMode" #overlaysettingTypeSearch
@@ -128,7 +132,8 @@
                             <label for="input" id="ID008" class="col-sm-2 col-form-label">Remarks:</label>
                             <div class="col-sm-8">
                                 <mat-form-field style="width: 99%;" appearance="outline">
-                                    <input type="text" matInput maxlength="100" formControlName="remarks" [readonly]="viewMode" />
+                                    <input type="text" matInput maxlength="100" formControlName="remarks"
+                                        [readonly]="viewMode" />
                                 </mat-form-field>
 
                             </div>
@@ -142,7 +147,7 @@
                             <label for="input" id="ID009" class="col-sm-2 col-form-label">Height :</label>
                             <div class="col-sm-4">
                                 <mat-form-field style="width: 100%;" appearance="outline">
-                                    <input type="text" class="text-right" AmountDecimalInput matInput NumberOnly
+                                    <input type="text" class="text-right" MetalDecimalInput matInput NumberOnly
                                         formControlName="height" [readonly]="viewMode" />
                                 </mat-form-field>
 
@@ -150,7 +155,7 @@
                             <label for="input" id="ID010" class="col-sm-2 col-form-label">Length :</label>
                             <div class="col-sm-4">
                                 <mat-form-field style="width: 100%;" appearance="outline">
-                                    <input type="text" class="text-right" AmountDecimalInput matInput NumberOnly
+                                    <input type="text" class="text-right" MetalDecimalInput matInput NumberOnly
                                         formControlName="length" [readonly]="viewMode" />
                                 </mat-form-field>
 
@@ -161,7 +166,7 @@
                             <label for="input" id="ID011" class="col-sm-2 col-form-label">Width :</label>
                             <div class="col-sm-4">
                                 <mat-form-field style="width: 100%;" appearance="outline">
-                                    <input type="text" class="text-right" AmountDecimalInput matInput NumberOnly
+                                    <input type="text" class="text-right" MetalDecimalInput matInput NumberOnly
                                         formControlName="width" [readonly]="viewMode" />
                                 </mat-form-field>
 
@@ -169,7 +174,7 @@
                             <label for="input" id="ID012" class="col-sm-2 col-form-label">Radius :</label>
                             <div class="col-sm-4">
                                 <mat-form-field style="width: 100%;" appearance="outline">
-                                    <input type="text" class="text-right" AmountDecimalInput matInput NumberOnly
+                                    <input type="text" class="text-right" MetalDecimalInput matInput NumberOnly
                                         formControlName="radius" [readonly]="viewMode" />
                                 </mat-form-field>
 
@@ -181,7 +186,8 @@
                                 :</label>
                             <div class="col-sm-7">
                                 <mat-form-field style="width: 115%;" appearance="outline">
-                                    <input type="text" matInput UpperCaseDirective formControlName="processSeq" [readonly]="viewMode"
+                                    <input type="text" matInput UpperCaseDirective formControlName="processSeq"
+                                        [readonly]="viewMode"
                                         (focusout)="validateLookupField($event,processSeqCodeData,'processSeq')"
                                         (keydown)="lookupKeyPress($event,'processSeq')" />
                                     <master-search class="mstrScrch" [MasterSearchData]="processSeqCodeData"
@@ -197,7 +203,8 @@
                                 :</label>
                             <div class="col-sm-7">
                                 <mat-form-field style="width: 115%;" appearance="outline">
-                                    <input type="text" matInput UpperCaseDirective formControlName="costCenter" [readonly]="viewMode"
+                                    <input type="text" matInput UpperCaseDirective formControlName="costCenter"
+                                        [readonly]="viewMode"
                                         (focusout)="validateLookupField($event,costCenterCodeData,'costCenter')"
                                         (keydown)="lookupKeyPress($event,'costCenter')" />
                                     <master-search class="mstrScrch" [MasterSearchData]="costCenterCodeData"
@@ -246,7 +253,7 @@
 
 
 
-                    
+
                     <!-- <div class="col-md-2">
                         <div class="container">
                             <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel"
@@ -308,33 +315,40 @@
                         </div>
                       </div>
                        -->
-                       <div class="col-md-2">
+                    <div class="col-md-2">
                         <div class="container">
-                          <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel" data-bs-pause="hover" data-bs-interval="false">
-                            <div class="box-wrap">
-                              <div class="carousel-inner">
-                                <div class="carousel-item" *ngFor="let img of images; let i = index" [class.active]="i === 0">
-                                  <div class="upload-btn-wrapper">
-                                    <button class="btn btnnew border-dark" [disabled]="viewMode">
-                                      <img [src]="img" style="width:126px;height:124px">
-                                    </button>
-                                  </div>
+                            <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel"
+                                data-bs-pause="hover" data-bs-interval="false">
+                                <div class="box-wrap">
+                                    <div class="carousel-inner">
+                                        <div class="carousel-item" *ngFor="let img of images; let i = index"
+                                            [class.active]="i === 0">
+                                            <div class="upload-btn-wrapper">
+                                                <button class="btn btnnew border-dark" [disabled]="viewMode">
+                                                    <img [src]="img" style="width:126px;height:124px">
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                              </div>
+                                <button class="carousel-control-prev" type="button" id="ID015"
+                                    data-bs-target="#carouselExampleControls" data-bs-slide="prev"
+                                    [disabled]="viewMode">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Previous</span>
+                                </button>
+                                <button class="carousel-control-next" type="button" id="ID016"
+                                    data-bs-target="#carouselExampleControls" data-bs-slide="next"
+                                    [disabled]="viewMode">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Next</span>
+                                </button>
                             </div>
-                            <button class="carousel-control-prev" type="button" id="ID015" data-bs-target="#carouselExampleControls" data-bs-slide="prev" [disabled]="viewMode">
-                              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                              <span class="visually-hidden">Previous</span>
-                            </button>
-                            <button class="carousel-control-next" type="button" id="ID016" data-bs-target="#carouselExampleControls" data-bs-slide="next" [disabled]="viewMode">
-                              <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                              <span class="visually-hidden">Next</span>
-                            </button>
-                          </div>
-                          <input type="file" class="uploadproduct" accept=".png, .jpg, .jpeg" #fileInput (change)="onFileChangedimage($event)" multiple [disabled]="viewMode">
+                            <input type="file" class="uploadproduct" accept=".png, .jpg, .jpeg" #fileInput
+                                (change)="onFileChangedimage($event)" multiple [disabled]="viewMode">
                         </div>
-                      </div>
-                      
+                    </div>
+
 
 
                 </div>
@@ -398,7 +412,7 @@
                                     </dxi-column>
                                     <dxi-column dataField="D_REMARKS" caption="Remarks" cellTemplate="remarktemp">
                                     </dxi-column>
-                                    <dxi-column dataField="POINTER_WT" caption="pointer Wt"
+                                    <dxi-column dataField="POINTER_WT" caption="POINTER WT"
                                         cellTemplate="pointerWttemp">
                                     </dxi-column>
                                     <dxi-column dataField="EXT_Color" caption="Ext.Color" cellTemplate="extColortemp">
@@ -414,14 +428,15 @@
 
                                     <div *dxTemplate="let data of 'divisiontemp'">
                                         <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value"></a>
-                                        <master-search [MasterSearchData]="divisionCode" 
+                                        <master-search [MasterSearchData]="divisionCode"
                                             (newRowClick)="divisionCodeSelected($event,data,'divisiontemp')">
                                         </master-search>
                                     </div>
 
                                     <div *dxTemplate="let data of 'stockCodetemp'">
                                         <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value"></a>
-                                        <master-search [MasterSearchData]="stockCodeData" *ngIf="!iskaratDisabled || !isPCSDisabled"
+                                        <master-search [MasterSearchData]="stockCodeData"
+                                            *ngIf="!iskaratDisabled || !isPCSDisabled"
                                             (newRowClick)="stockCodeDataSelected($event,data,'stockCodetemp')">
                                         </master-search>
                                     </div>
@@ -435,7 +450,8 @@
 
                                     <div *dxTemplate="let data of 'stockTypetemp'">
                                         <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value"></a>
-                                        <master-search (change)="stockType($event,data)" *ngIf="!isPCSDisabled" [MasterSearchData]="stocktypeCodeData"
+                                        <master-search (change)="stockType($event,data)" *ngIf="!isPCSDisabled"
+                                            [MasterSearchData]="stocktypeCodeData"
                                             (newRowClick)="stocktypeCodeSelected($event,data,'stockTypetemp')">
                                         </master-search>
                                         <!-- <input type="text" (change)="stockType($event,data)" [value]="data.value"
@@ -443,8 +459,8 @@
                                     </div>
 
                                     <div *dxTemplate="let data of 'pcstemp'">
-                                        <input type="text" (change)="pcstemp($event,data)" class="text-right" [value]="data.value"
-                                            style="width: 100%;" required />
+                                        <input type="text" (change)="pcstemp($event,data)" class="text-right"
+                                            [value]="data.value" style="width: 100%;" required />
                                     </div>
 
                                     <!-- <div
@@ -459,122 +475,123 @@
                                 </div> -->
 
                                     <div *dxTemplate="let data of 'wtCttemp'">
-                                        <input type="text" (change)="wtCtt($event,data)" class="text-right" [value]="data.value"
-                                            style="width: 100%;" required />
+                                        <input type="text" (change)="wtCtt($event,data)" class="text-right"
+                                            [value]="data.value" style="width: 100%;" required />
                                     </div>
 
                                     <div *dxTemplate="let data of 'colortemp'">
                                         <!-- <input type="text" (change)="color($event,data)" [value]="data.value"
                                             style="width: 100%;" required /> -->
-                                            <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value"></a>
-                                            <master-search  [MasterSearchData]="colorCodeData" *ngIf="!isPCSDisabled"
-                                                (newRowClick)="colorCodeSelected($event,data,'colortemp')">
-                                            </master-search>
+                                        <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value"></a>
+                                        <master-search [MasterSearchData]="colorCodeData" *ngIf="!isPCSDisabled"
+                                            (newRowClick)="colorCodeSelected($event,data,'colortemp')">
+                                        </master-search>
                                     </div>
 
                                     <div *dxTemplate="let data of 'claritytemp'">
                                         <!-- <input type="text" (change)="clarity($event,data)" [value]="data.value"
                                             style="width: 100%;" required [disabled]="isPCSDisabled" /> -->
-                                            <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value"></a>
-                                            <master-search [MasterSearchData]="clarityCodeData" *ngIf="!isPCSDisabled"
-                                                (newRowClick)="clarityCodeSelected($event,data,'claritytemp')">
-                                            </master-search>
+                                        <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value"></a>
+                                        <master-search [MasterSearchData]="clarityCodeData" *ngIf="!isPCSDisabled"
+                                            (newRowClick)="clarityCodeSelected($event,data,'claritytemp')">
+                                        </master-search>
                                     </div>
 
                                     <div *dxTemplate="let data of 'shapetemp'">
                                         <!-- <input type="text" (change)="shape($event,data)" [value]="data.value"
                                             style="width: 100%;" required [disabled]="isPCSDisabled" /> -->
-                                            <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value"></a>
-                                            <master-search [MasterSearchData]="shapeCodeData" *ngIf="!isPCSDisabled"
-                                                (newRowClick)="shapegridCodeSelected($event,data,'shapetemp')">
-                                            </master-search>
+                                        <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value"></a>
+                                        <master-search [MasterSearchData]="shapeCodeData" *ngIf="!isPCSDisabled"
+                                            (newRowClick)="shapegridCodeSelected($event,data,'shapetemp')">
+                                        </master-search>
                                     </div>
 
                                     <div *dxTemplate="let data of 'sievetemp'">
                                         <!-- <input type="text" (change)="sieve($event,data)" [value]="data.value"
                                             style="width: 100%;" required [disabled]="isPCSDisabled" /> -->
-                                            <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value"></a>
-                                            <master-search [MasterSearchData]="sieveCodeData" *ngIf="!isPCSDisabled"
-                                                (newRowClick)="sieveCodeSelected($event,data,'sievetemp')">
-                                            </master-search>
+                                        <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value"></a>
+                                        <master-search [MasterSearchData]="sieveCodeData" *ngIf="!isPCSDisabled"
+                                            (newRowClick)="sieveCodeSelected($event,data,'sievetemp')">
+                                        </master-search>
                                     </div>
 
                                     <div *dxTemplate="let data of 'descriptiontemp'">
                                         <!-- <input type="text" (change)="description($event,data)" [value]="data.value"
                                             style="width: 100%;" required [disabled]="isPCSDisabled" /> -->
-                                            <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value"></a>
-                                            <master-search [MasterSearchData]="descriptionCodeData" *ngIf="!isPCSDisabled"
-                                                (newRowClick)="descriptionCodeSelected($event,data,'descriptiontemp')">
-                                            </master-search>
+                                        <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value"></a>
+                                        <master-search [MasterSearchData]="descriptionCodeData" *ngIf="!isPCSDisabled"
+                                            (newRowClick)="descriptionCodeSelected($event,data,'descriptiontemp')">
+                                        </master-search>
                                     </div>
 
                                     <div *dxTemplate="let data of 'sizetemp'">
                                         <!-- <input type="text" (change)="size($event,data)" [value]="data.value"
                                             style="width: 100%;" required [disabled]="isPCSDisabled" /> -->
-                                            <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value"></a>
-                                            <master-search [MasterSearchData]="sizegridCodeData" *ngIf="!isPCSDisabled"
-                                                (newRowClick)="sizegridCodeSelected($event,data,'sizetemp')">
-                                            </master-search>
-                                            
+                                        <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value"></a>
+                                        <master-search [MasterSearchData]="sizegridCodeData" *ngIf="!isPCSDisabled"
+                                            (newRowClick)="sizegridCodeSelected($event,data,'sizetemp')">
+                                        </master-search>
+
                                     </div>
 
                                     <div *dxTemplate="let data of 'processTypetemp'">
                                         <!-- <input type="text" (change)="processType($event,data)" [value]="data.value"
                                             style="width: 100%;" required /> -->
-                                            <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value"></a>
-                                            <master-search [MasterSearchData]="processCodeData" *ngIf="!iskaratDisabled || !isPCSDisabled"
-                                                (newRowClick)="processCodeSelected($event,data,'processTypetemp')">
-                                            </master-search>
+                                        <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value"></a>
+                                        <master-search [MasterSearchData]="processCodeData"
+                                            *ngIf="!iskaratDisabled || !isPCSDisabled"
+                                            (newRowClick)="processCodeSelected($event,data,'processTypetemp')">
+                                        </master-search>
                                     </div>
 
                                     <div *dxTemplate="let data of 'remarktemp'">
-                                        <input type="text" (change)="remark($event,data)" class="text-right" [value]="data.value"
+                                        <input type="text" (change)="remark($event,data)" [value]="data.value"
                                             style="width: 100%;" required />
                                     </div>
 
                                     <div *dxTemplate="let data of 'pointerWttemp'">
                                         <!-- <input type="text" (change)="pointerWt($event,data)" [value]="data.value"
                                             style="width: 100%;" required /> -->
-                                            <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value"></a>
-                                            <master-search [MasterSearchData]="pointerWtCodeData" *ngIf="!isPCSDisabled"
-                                                (newRowClick)="pointerWtCodeSelected($event,data,'pointerWttemp')">
-                                            </master-search>
+                                        <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value"></a>
+                                        <master-search [MasterSearchData]="pointerWtCodeData" *ngIf="!isPCSDisabled"
+                                            (newRowClick)="pointerWtCodeSelected($event,data,'pointerWttemp')">
+                                        </master-search>
                                     </div>
 
                                     <div *dxTemplate="let data of 'extColortemp'">
                                         <!-- <input type="text" (change)="extColor($event,data)" [value]="data.value"
                                             style="width: 100%;" required /> -->
-                                            <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value"></a>
-                                            <master-search [MasterSearchData]="extColorCodeData" *ngIf="!isPCSDisabled"
-                                                (newRowClick)="extColorCodeSelected($event,data,'extColortemp')">
-                                            </master-search>
+                                        <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value"></a>
+                                        <master-search [MasterSearchData]="extColorCodeData" *ngIf="!isPCSDisabled"
+                                            (newRowClick)="extColorCodeSelected($event,data,'extColortemp')">
+                                        </master-search>
                                     </div>
 
                                     <div *dxTemplate="let data of 'extClaritytemp'">
                                         <!-- <input type="text" (change)="extClarity($event,data)" [value]="data.value"
                                             style="width: 100%;" required /> -->
-                                            <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value"></a>
-                                            <master-search [MasterSearchData]="extClarityCodeData" *ngIf="!isPCSDisabled"
-                                                (newRowClick)="extClarityCodeSelected($event,data,'extClaritytemp')">
-                                            </master-search>
+                                        <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value"></a>
+                                        <master-search [MasterSearchData]="extClarityCodeData" *ngIf="!isPCSDisabled"
+                                            (newRowClick)="extClarityCodeSelected($event,data,'extClaritytemp')">
+                                        </master-search>
                                     </div>
 
                                     <div *dxTemplate="let data of 'sieveFromtemp'">
                                         <!-- <input type="email" (change)="sieveFrom($event,data)" [value]="data.value"
                                             style="width: 100%;" required /> -->
-                                            <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value"></a>
-                                            <master-search [MasterSearchData]="sieveFromCodeData" *ngIf="!isPCSDisabled"
-                                                (newRowClick)="sieveFromCodeSelected($event,data,'sieveFromtemp')">
-                                            </master-search>
+                                        <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value"></a>
+                                        <master-search [MasterSearchData]="sieveFromCodeData" *ngIf="!isPCSDisabled"
+                                            (newRowClick)="sieveFromCodeSelected($event,data,'sieveFromtemp')">
+                                        </master-search>
                                     </div>
 
                                     <div *dxTemplate="let data of 'sieveTotemp'">
                                         <!-- <input type="email" (change)="sieveTo($event,data)" [value]="data.value"
                                             style="width: 100%;" required /> -->
-                                            <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value"></a>
-                                            <master-search [MasterSearchData]="sieveToCodeData" *ngIf="!isPCSDisabled"
-                                                (newRowClick)="sieveToCodeSelected($event,data,'sieveTotemp')">
-                                            </master-search>
+                                        <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value"></a>
+                                        <master-search [MasterSearchData]="sieveToCodeData" *ngIf="!isPCSDisabled"
+                                            (newRowClick)="sieveToCodeSelected($event,data,'sieveTotemp')">
+                                        </master-search>
                                     </div>
 
                                 </dx-data-grid>
@@ -582,8 +599,8 @@
 
                             <mat-tab label="Main Design Details">
                                 <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
-                                    [allowColumnReordering]="true" [allowColumnResizing]="true" [dataSource]="maindetails" 
-                                    [columnAutoWidth]="true">
+                                    [allowColumnReordering]="true" [allowColumnResizing]="true"
+                                    [dataSource]="maindetails" [columnAutoWidth]="true">
                                     <dxo-paging [enabled]="false"></dxo-paging>
                                     <dxo-editing mode="cell" [allowUpdating]="true">
                                     </dxo-editing>
@@ -605,16 +622,18 @@
         <div class="col-md-12">
             <div class="row mb-2">
                 <div class="col-md-5 offset-sm-11">
-                    <div class="row">
-
-                        <button type="button" id="ID017" [disabled]="viewMode"
-                            class="btn btn-outline-primary metal-issue-del-btn w-auto mx-2">
+                        <button type="button" class="btn btn-outline-primary  add-btn">
                             Image
                             <input type="file" class="uploadproduct" accept=".png, .jpg, .jpeg" #fileInput
                                 (change)="onFileChangedimage($event)" multiple [readonly]="viewMode" />
                         </button>
 
-                    </div>
+                        <!-- <button type="button" id="ID017" [disabled]="viewMode"
+                            class="btn btn-outline-primary metal-issue-del-btn w-auto mx-2">
+                            Image
+                            <input type="file" class="uploadproduct" accept=".png, .jpg, .jpeg" #fileInput
+                                (change)="onFileChangedimage($event)" multiple [readonly]="viewMode" />
+                        </button> -->
                 </div>
             </div>
         </div>

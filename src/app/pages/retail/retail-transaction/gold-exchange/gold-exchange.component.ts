@@ -148,7 +148,7 @@ export class GoldExchangeComponent implements OnInit {
     supInvNo: [''],
     supInvDate: [new Date()],
     custName: [''],
-    email: ['', [Validators.required, Validators.email, customEmailValidator()]],
+    email: ['', [Validators.required, Validators.email]],
     custId: [''],
     narration: [''],
     partyCurrency: [''],
@@ -1415,10 +1415,10 @@ export class GoldExchangeComponent implements OnInit {
 
 }
 
-export function customEmailValidator(): ValidatorFn {
-  return (control: AbstractControl): ValidationErrors | null => {
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(com|in|net|org|gov|edu|mil)$/;
-    const valid = emailRegex.test(control.value);
-    return valid ? null : { invalidEmail: true };
-  };
-}
+// export function customEmailValidator(): ValidatorFn {
+//   return (control: AbstractControl): ValidationErrors | null => {
+//     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(com|in|net|org|gov|edu|mil)$/;
+//     const valid = emailRegex.test(control.value);
+//     return valid ? null : { invalidEmail: true };
+//   };
+// }
