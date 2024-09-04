@@ -397,6 +397,13 @@
 <div class="row p-2" style="margin: 6px 6px 0px 6px">
   <div class="col-xl-12">
     <form [formGroup]="vocDataForm" style="width: 100%; max-width: none">
+      <div class="row" style="margin-bottom: 10px">
+        <div class="col-md-12 d-flex justify-content-between align-items-center">
+          <div class="customheader">Voucher Details</div>
+          <h4 class="customheader">Retail Sales # {{voucherNumber}}</h4>
+        </div>
+      </div>
+    
       <div class="row" style="background-color: #efefef; margin-bottom: 10px">
         <div class="col-md-1 d-flex justify-content-center align-items-center">
           <div>
@@ -405,22 +412,19 @@
             </button>
           </div>
         </div>
-
         <div class="col-md-1">
           <label for="voc_type">Voucher</label>
           <mat-form-field appearance="outline" style="width: 100%">
             <input type="text" matInput id="voc_type" formControlName="voc_type" readonly />
           </mat-form-field>
         </div>
-
         <div class="col-md-1">
           <label for="fcn_voc_no">{{ vocno_lbl }}</label>
           <mat-form-field appearance="outline" style="width: 100%">
             <input type="text" NumberOnly matInput formControlName="fcn_voc_no"
-              [readonly]="voucherDetails?.LOCKVOUCHERNO||viewOnly" class="st_txt_right" />
+              [readonly]="voucherDetails?.LOCKVOUCHERNO || viewOnly" class="st_txt_right" />
           </mat-form-field>
         </div>
-
         <div class="col-md-1">
           <label for="txtCurrency">Currency</label>
           <mat-form-field appearance="outline" style="width: 100%">
@@ -431,7 +435,7 @@
             </mat-autocomplete>
           </mat-form-field>
         </div>
-
+    
         <div class="col-md-1">
           <label for="txtCurRate">Cur. Rate</label>
           <mat-form-field appearance="outline" style="width: 100%">
@@ -441,7 +445,7 @@
               (change)="changeCurRate($event)" />
           </mat-form-field>
         </div>
-
+    
         <div class="col-md-2">
           <label for="vocdate">Date</label>
           <mat-form-field appearance="outline" style="width: 100%">
@@ -452,7 +456,7 @@
             <mat-datepicker #dob></mat-datepicker>
           </mat-form-field>
         </div>
-
+    
         <div class="col-md-2">
           <label for="sales_person">{{ sales_person_lbl }}</label>
           <mat-form-field appearance="outline" style="width: 100%">
@@ -464,7 +468,7 @@
                 {{ option.SALESPERSON_CODE + " - " + option.DESCRIPTION }}
               </mat-option>
             </mat-autocomplete>
-
+    
             <mat-error *ngIf="vocDataForm.controls.sales_person.hasError('required')">
               Salesman Code cannot be Empty
             </mat-error>
@@ -473,7 +477,7 @@
             </mat-error>
           </mat-form-field>
         </div>
-
+    
         <div class="col-md-3" style="background-color: #d6d8da">
           <div class="form-group">
             <div class="font-weight-bold" style="font-size: 20px; font-weight: 400; color: #0d4f9e">
@@ -485,20 +489,16 @@
           </div>
         </div>
       </div>
-
-
-      <!-- <div class="row">
-        <div class="col-md-6 row mb-1">
-         
-        </div>
-      </div> -->
     </form>
+    
   </div>
 </div>
 <div class="row" style="padding: 0px 15px 15px 15px">
+  
   <div class="col-xl-9">
     <div style="background-color: #ffffff">
       <div>
+        <div class="customheader" style="margin-bottom: 12px;">Customer Details</div>
         <form [formGroup]="customerDataForm" style="width: 100%; max-width: none">
           <div class="row">
             <div class="col-md-2">
@@ -643,28 +643,29 @@
         </form>
 
         <div class="text-right mt-2">
+          <span class="customheader mr-2" style="margin-right: 24px;">Related Details:</span>
+        
           <button type="button" mat-flat-button (click)="importSalesEstimation()" class="update-finish-button">
             Import Sales Estimation
           </button>
-
+        
           <button type="button" class="mx-2 update-finish-button" mat-flat-button (click)="importSalesOrder()">
             Import Sales Order
           </button>
-
+        
           <button type="button" mat-flat-button *ngIf="strUser=='SUNTECH'" (click)="openParamterDetails()"
             class="button-spacing update-finish-button">
             Parameter Details
           </button>
-
+        
           <button type="button" mat-flat-button [disabled]="viewOnly && transAttachmentList.length == 0"
             (click)="openUserAttachmentModal()" class="update-finish-button">
             {{ !viewOnly ? 'Add Attachment' : 'View Attachment' }}
           </button>
-
-
         </div>
 
         <div class="col-md-12 m-t-10" style="padding: 0px">
+          <div class="customheader">Line Items</div>
           <mat-tab-group>
             <mat-tab label="Sold Item">
               <div class="table-responsive">
@@ -1227,6 +1228,15 @@
 
         </div>
 
+        <div class="col-xl-12 col-md-6" style="height: 140px; width: 100%;margin-top: 20px;">
+          <label>Remarks</label>
+
+          <mat-form-field appearance="outline" style="width: 100%;">
+            <textarea matInput [readonly]="viewOnly" rows="4" cols="50" class="form-control"></textarea>
+          </mat-form-field>
+
+        </div>
+
         <div class="row m-t-10 m-b-10">
           <!-- <div class="col-md-6 col-xl-6" (click)="backToList()" *ngIf="viewOnly">
             <div class="touch-big-button touch-big-button-black">
@@ -1301,14 +1311,14 @@
           </div>
         </div>
 
-        <div class="col-xl-12 col-md-6" style="height: 140px; width: 100%;margin-top: 20px;">
+        <!-- <div class="col-xl-12 col-md-6" style="height: 140px; width: 100%;margin-top: 20px;">
           <label>Remarks</label>
 
           <mat-form-field appearance="outline" style="width: 100%;">
             <textarea matInput [readonly]="viewOnly" rows="4" cols="50" class="form-control"></textarea>
           </mat-form-field>
 
-        </div>
+        </div> -->
 
 
 
@@ -4250,7 +4260,7 @@
       <div class="col-md-12">
         <dx-data-grid id="gridContainer" [dataSource]="pendingOrderList" keyExpr="VOCNO" [showBorders]="true"
           (onSelectionChanged)="onSelectionChanged($event)">
-
+          <dxo-paging [enabled]="true" [pageSize]="10"></dxo-paging>
           <dxo-selection mode="single"></dxo-selection>
           <dxi-column dataField="VOCNO" [width]="80" caption="Order No" [allowEditing]="false" alignment="right">
           </dxi-column>
@@ -4290,11 +4300,11 @@
   <div class="modal-body">
     <div class="row mb-2">
       <div class="col-md-12">
-        <dx-data-grid #dataGrid id="estimationgrid" keyExpr="orderno" [dataSource]="estimationList" [showBorders]="true"
+        <dx-data-grid #dataGrid id="estimationgrid" keyExpr="VOCNO" [dataSource]="estimationList" [showBorders]="true"
           (onSelectionChanged)="onEstimationEntryChange($event)">
-          <dxo-paging [enabled]="false"></dxo-paging>
+          <dxo-paging [enabled]="true" [pageSize]="10"></dxo-paging>
           <dxo-selection mode="single"></dxo-selection>
-          <dxi-column dataField="VOCNO" width="auto" caption="Estimation No" [allowEditing]="false" alignment="right">
+          <dxi-column dataField="VOCNO" width="auto" caption="Estimation No" [allowEditing]="false" alignment="left">
           </dxi-column>
           <dxi-column dataField="VOCDATE" width="auto" alignment="left" caption="Estimation Date"
             [allowEditing]="false">
