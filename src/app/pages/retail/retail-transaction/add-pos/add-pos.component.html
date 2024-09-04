@@ -530,13 +530,14 @@
             <div class="col-md-2">
               <label for="fcn_customer_code">Code</label>
               <mat-form-field appearance="outline" style="width: 100%">
-                <input type="text" matInput  (change)="triggerCustomerEntry($event)" formControlName="fcn_customer_code" />
+                <input type="text" matInput (change)="triggerCustomerEntry($event)"
+                  formControlName="fcn_customer_code" />
                 <master-search [MasterSearchData]="customerCodeData" (newRowClick)="triggerCustomerMasterSearch($event)"
                   class="masterSearch"></master-search>
-   
+
               </mat-form-field>
             </div>
-       
+
 
             <!-- <div class="col-md-2">
               <label for="fcn_customer_code">Code</label>
@@ -547,12 +548,12 @@
               <mat-error *ngIf="advanceReceiptForm.controls.fcn_customer_code.hasError('required')" id="ID079">
                   Code is <strong>required</strong>
                 </mat-error> -->
-              <!-- </mat-form-field>
+            <!-- </mat-form-field>
 
               <master-search *ngIf="!viewOnly" [MasterSearchData]="customerCodeData"
               (newRowClick)="triggerCustomerMasterSearch($event)"></master-search> -->
 
-            <!-- </div> --> 
+            <!-- </div> -->
 
 
             <div class="col-md-2">
@@ -633,6 +634,9 @@
                 <input type="text" matInput formControlName="tourVatRefundNo" />
               </mat-form-field>
             </div>
+
+
+
           </div>
 
 
@@ -999,8 +1003,18 @@
             </div>
           </div>
 
+          <!-- <div class="col-md-2">
+            <label>Remarks</label>
+            <div class="col-md-10">
+              <mat-form-field appearance="outline" style="width: 100%;">
+                <textarea matInput [readonly]="viewOnly" rows="4" cols="50" class="form-control"></textarea>
+              </mat-form-field>
+            </div>
+
+          </div> -->
+
           <!-- <div class="col-md-6" *ngIf="enableJawahara"> -->
-          <div class="col-md-6">
+          <div class="col-md-4">
             <div *ngIf="this.comFunc.compAcCode == 'JHO001'">
               <form [formGroup]="invoiceWiseForm" novalidate>
                 <div class="row">
@@ -1204,6 +1218,22 @@
               </tr>
             </table>
           </div>
+
+
+
+
+
+
+
+        </div>
+
+        <div class="col-xl-12 col-md-6" style="height: 140px; width: 100%;margin-top: 20px;">
+          <label>Remarks</label>
+
+          <mat-form-field appearance="outline" style="width: 100%;">
+            <textarea matInput [readonly]="viewOnly" rows="4" cols="50" class="form-control"></textarea>
+          </mat-form-field>
+
         </div>
 
         <div class="row m-t-10 m-b-10">
@@ -1279,6 +1309,18 @@
             </div>
           </div>
         </div>
+
+        <!-- <div class="col-xl-12 col-md-6" style="height: 140px; width: 100%;margin-top: 20px;">
+          <label>Remarks</label>
+
+          <mat-form-field appearance="outline" style="width: 100%;">
+            <textarea matInput [readonly]="viewOnly" rows="4" cols="50" class="form-control"></textarea>
+          </mat-form-field>
+
+        </div> -->
+
+
+
       </div>
     </div>
   </div>
@@ -2339,7 +2381,25 @@
               <label class="col-sm-4" for="returns_fin_year" id="ID112">Fin Year</label>
               <div class="form-group row">
                 <div class="col-sm-12">
-                  <mat-form-field appearance="outline">
+
+                  <mat-form-field appearance="outline" style="width: 100%">
+                    <mat-select formControlName="fcn_returns_fin_year" [disabled]="viewOnly">
+                      <mat-option *ngFor="let data of yearCollection" [value]="data.YEAR">
+                        {{ data.YEAR }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="
+                    salesReturnForm.controls.fcn_returns_fin_year.hasError(
+                          'required'
+                        )
+                      " id="fcn_returns_fin_year">
+                      Year is <strong>required</strong>
+                    </mat-error>
+
+
+                  </mat-form-field>
+
+                  <!-- <mat-form-field appearance="outline">
                     <input matInput type="text" id="fcn_returns_fin_year" formControlName="fcn_returns_fin_year"
                       [matAutocomplete]="year" />
                     <mat-autocomplete #year="matAutocomplete" autoActiveFirstOption>
@@ -2354,7 +2414,7 @@
                       id="ID009">
                       Invalid value
                     </mat-error>
-                  </mat-form-field>
+                  </mat-form-field> -->
                 </div>
               </div>
             </div>
@@ -2417,8 +2477,8 @@
               <div class="form-group row">
                 <div class="col-sm-11">
                   <mat-form-field appearance="outline">
-                    <input type="text" matInput formControlName="fcn_returns_voc_no"
-                      (change)="getRetailSReturn_EvnFn($event)" class="st_txt_right"
+                    <input type="text" matInput id="fcn_returns_voc_no" formControlName="fcn_returns_voc_no"
+                      (change)="getRetailSReturn_EvnFn($event)"
                       [readonly]="viewOnly || this.sales_returns_items.length > 0" NumberOnly />
                     <i class="fa fa-search sReturnVocNumsearch" (click)="searchVocNoSalRet()"></i>
                     <mat-error *ngIf="salesReturnForm.controls.fcn_returns_voc_no.hasError('required')" id="ID117">
@@ -2613,8 +2673,8 @@
                 <div class="col-sm-8">
 
                   <mat-form-field appearance="outline" style="width: 100%">
-                    <mat-select (selectionChange)="onCountryCodeSelection($event,true)" formControlName="fcn_cust_detail_country"
-                      [disabled]="viewOnly">
+                    <mat-select (selectionChange)="onCountryCodeSelection($event,true)"
+                      formControlName="fcn_cust_detail_country" [disabled]="viewOnly">
                       <mat-option *ngFor="let data of sortedCountryList" [value]="data.CODE">
                         {{ data.CODE }}-{{ data.DESCRIPTION }}
                       </mat-option>
@@ -2873,8 +2933,7 @@
 
 
                   <mat-form-field appearance="outline" style="width: 100%">
-                    <mat-select formControlName="fcn_cust_detail_nationality"
-                      [disabled]="viewOnly">
+                    <mat-select formControlName="fcn_cust_detail_nationality" [disabled]="viewOnly">
                       <mat-option *ngFor="let data of sortedCountryList" [value]="data.CODE">
                         {{ data.DESCRIPTION }}
                       </mat-option>
@@ -2918,7 +2977,7 @@
                 </div>
               </div>
             </div>
-<!-- 
+            <!-- 
             <div class="col-md-4">
               <div class="form-group row">
                 <label class="col-form-label col-sm-4" for="cust_detail_nationality" id="ID155">Nationality <span
@@ -3310,9 +3369,8 @@
                       <mat-form-field appearance="outline" style="width: 100%">
                         <input class="st_txt_right" [maxLength]="14" type="text" [min]="0"
                           (keyup)="this.comFunc.enforceMinMax($event.target)" matInput formControlName="fcn_li_gross_wt"
-                          id="fcn_li_gross_wt" (focusout)="setGrossWtFocus()"
-                          (focus)="setValToLocalStorage($event, 'fcn_li_gwt')" (change)="changeGrossWt($event)"
-                          [readonly]="viewOnly" MetalDecimalInput />
+                          id="fcn_li_gross_wt" (focus)="setValToLocalStorage($event, 'fcn_li_gwt')"
+                          (change)="changeGrossWt($event)" [readonly]="viewOnly" MetalDecimalInput />
                         <mat-error *ngIf="
                             lineItemForm.controls.fcn_li_gross_wt.hasError(
                               'required'
@@ -3700,7 +3758,7 @@
                               setValToLocalStorage($event, 'fcn_li_net_amount')
                             " [min]="0" [maxLength]="14" (keyup)="this.comFunc.enforceMinMax($event.target)" matInput
                             formControlName="fcn_li_net_amount" id="fcn_li_net_amount" (change)="changeNettAmt($event)"
-                            [readonly]="viewOnly" AmountDecimalInput />
+                            [readonly]="viewOnly||isRevCalculationBlock" AmountDecimalInput />
                           <mat-error *ngIf="lineItemForm.controls.fcn_li_net_amount.hasError('required')" id="ID203">
                             Net Amount
                             <!-- {{ divisionMS == "M" ? "Net Amount" : "Total+Tax" }} -->
@@ -4201,7 +4259,7 @@
       <div class="col-md-12">
         <dx-data-grid id="gridContainer" [dataSource]="pendingOrderList" keyExpr="VOCNO" [showBorders]="true"
           (onSelectionChanged)="onSelectionChanged($event)">
-
+          <dxo-paging [enabled]="true" [pageSize]="10"></dxo-paging>
           <dxo-selection mode="single"></dxo-selection>
           <dxi-column dataField="VOCNO" [width]="80" caption="Order No" [allowEditing]="false" alignment="right">
           </dxi-column>
@@ -4241,11 +4299,11 @@
   <div class="modal-body">
     <div class="row mb-2">
       <div class="col-md-12">
-        <dx-data-grid #dataGrid id="estimationgrid" keyExpr="orderno" [dataSource]="estimationList" [showBorders]="true"
+        <dx-data-grid #dataGrid id="estimationgrid" keyExpr="VOCNO" [dataSource]="estimationList" [showBorders]="true"
           (onSelectionChanged)="onEstimationEntryChange($event)">
-          <dxo-paging [enabled]="false"></dxo-paging>
+          <dxo-paging [enabled]="true" [pageSize]="10"></dxo-paging>
           <dxo-selection mode="single"></dxo-selection>
-          <dxi-column dataField="VOCNO" width="auto" caption="Estimation No" [allowEditing]="false" alignment="right">
+          <dxi-column dataField="VOCNO" width="auto" caption="Estimation No" [allowEditing]="false" alignment="left">
           </dxi-column>
           <dxi-column dataField="VOCDATE" width="auto" alignment="left" caption="Estimation Date"
             [allowEditing]="false">

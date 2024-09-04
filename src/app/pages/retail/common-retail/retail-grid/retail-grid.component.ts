@@ -32,9 +32,13 @@ export class RetailGridComponent implements OnInit {
 
   nextCall: any = 0
   visibleFields = [];
-
   //subscription variable
   subscriptions$: Subscription[] = [];
+
+
+  @Input() templateViewForReports: boolean = false;
+
+
   constructor(
     private CommonService: CommonServiceService,
     private dataService: SuntechAPIService,
@@ -46,7 +50,6 @@ export class RetailGridComponent implements OnInit {
     this.onClickAuditTrail = this.onClickAuditTrail.bind(this);
     this.tableName = this.CommonService.getqueryParamTable()
   }
-
   ngOnInit(): void {
     this.vocType = this.CommonService.getqueryParamVocType()
     this.getGridVisibleSettings();
