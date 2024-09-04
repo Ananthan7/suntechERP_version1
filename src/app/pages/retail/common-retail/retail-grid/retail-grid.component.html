@@ -6,13 +6,13 @@
     <div class="table_header">
         <div class="d-flex">
             <button class="btn btn-white add-btn" (click)="addButtonClick()">
-                <i class="fa fa-plus"></i> Add
+                <i class="fa fa-plus"></i> New
             </button>
             <div class="icons_wrap">
-                <a class="pe-2">
+                <!-- <a class="pe-2">
                     <img src="../../../assets/images/menu/xls.png" 
                         alt="excel" width="24px" height="23px" />
-                </a>
+                </a> -->
                 <div (click)="getMasterGridData({refresh: true})">
                     <i-feather class="icon-sm" name="refresh-ccw"></i-feather>
                 </div>
@@ -22,7 +22,7 @@
     </div>
     <!-- common data grid -->
     <dx-data-grid width="100%" #gridContainer id="gridContainer" 
-        [allowColumnReordering]="true"
+        [allowColumnReordering]="true" *ngIf="!templateViewForReports"
         [dataSource]="orderedItems" [showColumnLines]="true" 
         [remoteOperations]="true" [showRowLines]="true"
         [showBorders]="true" [columnAutoWidth]="true" 
@@ -47,4 +47,60 @@
             dataField="{{data}}" caption="{{data}}">
         </dxi-column> -->
     </dx-data-grid>
+
+   <div class="row">
+        <div class="col-md-12 mx-2" *ngIf="templateViewForReports">
+            <div class="table-responsive">          
+                <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                    <th >Template ID</th>
+                    <th>Template Name</th>
+                    <th>Template values</th>
+                    <th>Template actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td> T-101 </td>
+                        <td> Template 1 </td>
+                        <td> Template values for BR01, 2014 </td>
+                        <td class="icon-handling">
+                            <i class="fa fa-eye mx-1 text-primary" aria-hidden="true"></i>
+                            <i class="fa fa-edit mx-1 text-primary" aria-hidden="true"></i>
+                            <i class="fa fa-trash text-primary" aria-hidden="true"></i>
+                        </td>
+                        <!-- <td style="border: 1px solid #ddd; padding: 8px;">
+                            <select style="width: 100%;">
+                                <option value="edit">Edit Template</option>
+                                <option value="delete">Delete Template</option>
+                                <option value="view">View Template</option>
+                            </select>
+                        </td> -->
+                    </tr>
+                    <tr>
+                        <td> T-102 </td>
+                        <td> Template 2 </td>
+                        <td> Template values for BR02, 2015</td>
+                        <td class="icon-handling">
+                            <i class="fa fa-eye mx-1 text-primary" aria-hidden="true"></i>
+                            <i class="fa fa-edit mx-1 text-primary" aria-hidden="true"></i>
+                            <i class="fa fa-trash text-primary" aria-hidden="true"></i>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td> T-103 </td>
+                        <td> Template 3 </td>
+                        <td> Template values for BR03, 2016 </td>
+                        <td class="icon-handling">
+                            <i class="fa fa-eye mx-1 text-primary" aria-hidden="true"></i>
+                            <i class="fa fa-edit mx-1 text-primary" aria-hidden="true"></i>
+                            <i class="fa fa-trash text-primary" aria-hidden="true"></i>
+                        </td>
+                    </tr>
+                </tbody>
+                </table>
+            </div>
+        </div>
+   </div>
 </ng-container>
