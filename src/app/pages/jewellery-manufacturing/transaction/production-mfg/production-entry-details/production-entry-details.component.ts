@@ -29,6 +29,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
   branchCode?: String;
   vocMaxDate = new Date();
   currentDate = new Date();
+  modalStock!: NgbModalRef;
   modalReference!: NgbModalRef;
   FORM_VALIDATER: any;
   columnheadTop: any[] = [""];
@@ -228,8 +229,9 @@ export class ProductionEntryDetailsComponent implements OnInit {
     STONE_WT: [''],
     price1: [''],
     PREFIX: [''],
+    PREFIX_DESC: [''],
     PREFIXNO: [''],
-    otherstone: [''],
+    OTHER_STONE: [''],
     price2: [''],
     COST_CODE: [''],
     SETREF: [''],
@@ -255,7 +257,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
     chargableWt: [''],
     purityPer: [''],
     PUREWT: [''],
-    purityDiff: [''],
+    PURITY_DIFF: [''],
     stoneDiff: [''],
     loss: [''],
     mkgRate: [''],
@@ -268,7 +270,6 @@ export class ProductionEntryDetailsComponent implements OnInit {
     balPcs: [''],
     jobPurity: [''],
     PURE_WT: [''],
-    PurityDiff: [''],
     Job_Purity: [''],
     SUPPLIER_REF: [''],
     VOCDATE: [''],
@@ -412,6 +413,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
   }
   prefixCodeSelected(e: any) {
     this.productiondetailsFrom.controls.PREFIX.setValue(e.PREFIX_CODE);
+    this.productiondetailsFrom.controls.PREFIX_DESC.setValue(e.DESCRIPTION);
   }
   price1CodeSelected(e: any) {
     this.productiondetailsFrom.controls.price1.setValue(e.PRICE_CODE);
@@ -559,6 +561,9 @@ export class ProductionEntryDetailsComponent implements OnInit {
           this.setFormDecimal('PUREWT',data[0].PUREWT, 'METAL')
           this.setFormDecimal('PURITY',data[0].PURITY, 'PURITY')
           this.setFormDecimal('Job_Purity',data[0].PURITY, 'PURITY')
+          this.setFormDecimal('STONE_PCS', 0, '')
+          this.setFormDecimal('OTHER_STONE', 0, 'STONE')
+          this.setFormDecimal('PURITY_DIFF', 0, 'METAL')
           
           this.FORM_VALIDATER = this.productiondetailsFrom.value
           this.pendingProcessValidate()
@@ -675,7 +680,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
     this.content[0].DETAILSCREEN_DATA = this.productiondetailsFrom.value;
     this.content[0].HEADERDETAILS = this.content[0].HEADERDETAILS;
     this.dataToDetailScreen = this.content
-    this.modalReference = this.modalService.open(this.ProductionStockDetailScreen, {
+    this.modalStock = this.modalService.open(this.ProductionStockDetailScreen, {
       size: 'xl',
       backdrop: true,//'static'
       keyboard: false,
@@ -819,9 +824,9 @@ export class ProductionEntryDetailsComponent implements OnInit {
     this.FORM_VALIDATER[formControlName] = this.commonService.nullToString(value)
   }
   setFormDecimal(formControlName: string, value: any, Decimal: string) {
-    let val = this.commonService.setCommaSerperatedNumber(value, Decimal)
-    this.productiondetailsFrom.controls[formControlName]?.setValue(val)
-    this.FORM_VALIDATER[formControlName] = val
+    let result = Decimal ? this.commonService.setCommaSerperatedNumber(value, Decimal) : value
+    this.productiondetailsFrom.controls[formControlName]?.setValue(result)
+    this.FORM_VALIDATER[formControlName] = result
   }
 
   set_JOB_PRODUCTION_DETAIL_DJ() {
@@ -1023,7 +1028,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
     return this.commonService.emptyToZero(value)
   }
   closeDetailScreen() {
-    this.modalReference.close()
+    this.modalStock.close()
   }
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {
