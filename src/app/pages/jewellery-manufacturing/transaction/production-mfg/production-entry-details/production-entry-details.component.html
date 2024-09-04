@@ -256,7 +256,7 @@
               <label for="input" class="col-sm-2 col-form-label">Prefix
                 :</label>
               <div class="col-sm-2 d-flex">
-                <mat-form-field appearance="outline" style="width: 100%;">
+                <mat-form-field appearance="outline" style="width: 50%;">
                   <input type="text" matInput formControlName="PREFIX"
                     UpperCaseDirective [readonly]="viewMode"
                     (focusout)="validateLookupField($event,prefixCodeData,'PREFIX')" />
@@ -265,14 +265,18 @@
                     (newRowClick)="prefixCodeSelected($event)">
                   </master-search>
                 </mat-form-field>
+                <mat-form-field appearance="outline" style="width: 50%;">
+                  <input type="text" matInput formControlName="PREFIX_DESC"
+                     readonly />
+                </mat-form-field>
               </div>
 
               <label for="input" class="col-sm-2 col-form-label">Other Stone
                 :</label>
               <div class="col-sm-2">
                 <mat-form-field appearance="outline" style="width: 100%;">
-                  <input type="text" matInput formControlName="otherstone"
-                    readonly />
+                  <input type="text" matInput formControlName="OTHER_STONE"
+                    readonly  class="text-right"/>
                 </mat-form-field>
               </div>
               <label for="input" class="col-sm-2 col-form-label">Price 2
@@ -423,7 +427,7 @@
               <div class="col-sm-2">
                 <mat-form-field appearance="outline" style="width: 100%;">
                   <input type="text" matInput [max]="13" class="text-right"
-                    formControlName="PurityDiff"
+                    formControlName="PURITY_DIFF"
                     readonly />
                 </mat-form-field>
               </div>
@@ -649,7 +653,7 @@
                 :</label>
               <div class="col-sm-2">
                 <mat-form-field appearance="outline" style="width: 100%;">
-                  <input type="text" matInput formControlName="purityDiff"
+                  <input type="text" matInput formControlName="PURITY_DIFF"
                     [max]="13" SixDecimalInput
                     class="text-right" [readonly]="viewMode"/>
                 </mat-form-field>

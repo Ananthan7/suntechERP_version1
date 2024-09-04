@@ -35,7 +35,7 @@ export class ProductionStockDetailComponent implements OnInit {
   HEADERDETAILS: any;
   viewMode: boolean = false;
   editMode: boolean = false;
-
+  FORM_VALIDATER:any;
   priceCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -61,7 +61,7 @@ export class ProductionStockDetailComponent implements OnInit {
     LOAD_ONCLICK: true,
   }
   settingChrgSelected(e: any) {
-    this.productionItemsDetailsFrom.controls.SETTING_ACCODE.setValue(e.ACCODE);
+    this.productionStockFrom.controls.SETTING_ACCODE.setValue(e.ACCODE);
   }
   polishChrgData: MasterSearchModel = {
     PAGENO: 1,
@@ -76,7 +76,7 @@ export class ProductionStockDetailComponent implements OnInit {
     LOAD_ONCLICK: true,
   }
   polishChrgSelected(e: any) {
-    this.productionItemsDetailsFrom.controls.POLISH_ACCODE.setValue(e.ACCODE);
+    this.productionStockFrom.controls.POLISH_ACCODE.setValue(e.ACCODE);
   }
   rhodiumChrgData: MasterSearchModel = {
     PAGENO: 1,
@@ -91,7 +91,7 @@ export class ProductionStockDetailComponent implements OnInit {
     LOAD_ONCLICK: true,
   }
   rhodiumChrgSelected(e: any) {
-    this.productionItemsDetailsFrom.controls.RHODIUM_ACCODE.setValue(e.ACCODE);
+    this.productionStockFrom.controls.RHODIUM_ACCODE.setValue(e.ACCODE);
   }
   labourChrgData: MasterSearchModel = {
     PAGENO: 1,
@@ -106,7 +106,7 @@ export class ProductionStockDetailComponent implements OnInit {
     LOAD_ONCLICK: true,
   }
   labourChrgSelected(e: any) {
-    this.productionItemsDetailsFrom.controls.LABOUR_ACCODE.setValue(e.ACCODE);
+    this.productionStockFrom.controls.LABOUR_ACCODE.setValue(e.ACCODE);
   }
   miscChrgData: MasterSearchModel = {
     PAGENO: 1,
@@ -121,9 +121,9 @@ export class ProductionStockDetailComponent implements OnInit {
     LOAD_ONCLICK: true,
   }
   miscChrgSelected(e: any) {
-    this.productionItemsDetailsFrom.controls.MISC_ACCODE.setValue(e.ACCODE);
+    this.productionStockFrom.controls.MISC_ACCODE.setValue(e.ACCODE);
   }
-  productionItemsDetailsFrom: FormGroup = this.formBuilder.group({
+  productionStockFrom: FormGroup = this.formBuilder.group({
     FLAG: [''],
     stockCode: [''],
     tagLines: [''],
@@ -168,6 +168,7 @@ export class ProductionStockDetailComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.FORM_VALIDATER = this.productionStockFrom.value
   }
   ngAfterViewInit() {
     this.setInitialValues()
@@ -178,7 +179,7 @@ export class ProductionStockDetailComponent implements OnInit {
     let PRODUCTION_FORMDETAILS: any;
     if (this.content[0]?.FLAG) {
       this.setFlagMode(this.content[0]?.FLAG)
-      this.productionItemsDetailsFrom.controls.FLAG.setValue(this.content[0]?.FLAG)
+      this.productionStockFrom.controls.FLAG.setValue(this.content[0]?.FLAG)
       JOB_PRODUCTION_SUB_DJ = this.content[0]?.JOB_PRODUCTION_SUB_DJ
     } else {// condition to load without saving
       JOB_PRODUCTION_SUB_DJ = this.content[0]?.JOB_PRODUCTION_SUB_DJ
@@ -233,12 +234,12 @@ export class ProductionStockDetailComponent implements OnInit {
       })
     }
     this.stockCodeDataList.forEach((item: any, index: number) => item.SRNO = index + 1)
-    this.productionItemsDetailsFrom.controls.stockCode.setValue(`${this.DETAILSCREEN_DATA.PREFIX}${this.DETAILSCREEN_DATA.PREFIXNO}`)
-    this.productionItemsDetailsFrom.controls.SETTING_ACCODE.setValue(this.setChargeAccode('SETTINGCHGAC'))
-    this.productionItemsDetailsFrom.controls.POLISH_ACCODE.setValue(this.setChargeAccode('POLISHINGCHGAC'))
-    this.productionItemsDetailsFrom.controls.RHODIUM_ACCODE.setValue(this.setChargeAccode('RODIUMCHGAC'))
-    this.productionItemsDetailsFrom.controls.LABOUR_ACCODE.setValue(this.setChargeAccode('LABOURCHGAC'))
-    this.productionItemsDetailsFrom.controls.MISC_ACCODE.setValue(this.setChargeAccode('MISCCHGAC'))
+    this.productionStockFrom.controls.stockCode.setValue(`${this.DETAILSCREEN_DATA.PREFIX}${this.DETAILSCREEN_DATA.PREFIXNO}`)
+    this.productionStockFrom.controls.SETTING_ACCODE.setValue(this.setChargeAccode('SETTINGCHGAC'))
+    this.productionStockFrom.controls.POLISH_ACCODE.setValue(this.setChargeAccode('POLISHINGCHGAC'))
+    this.productionStockFrom.controls.RHODIUM_ACCODE.setValue(this.setChargeAccode('RODIUMCHGAC'))
+    this.productionStockFrom.controls.LABOUR_ACCODE.setValue(this.setChargeAccode('LABOURCHGAC'))
+    this.productionStockFrom.controls.MISC_ACCODE.setValue(this.setChargeAccode('MISCCHGAC'))
   }
   getComponentDetails() {
     let postData = {
@@ -261,6 +262,16 @@ export class ProductionStockDetailComponent implements OnInit {
             item.SRNO = index + 1
           })
           this.groupBomDetailsData()
+          this.setFormDecimal('SETTING_CHRG', 0, 'AMOUNT')
+          this.setFormDecimal('POLISH_CHRG', 0, 'AMOUNT')
+          this.setFormDecimal('RHODIUM_CHRG', 0, 'AMOUNT')
+          this.setFormDecimal('LABOUR_CHRG', 0, 'AMOUNT')
+          this.setFormDecimal('MISC_CHRG', 0, 'AMOUNT')
+          this.setFormDecimal('price1fc', 0, 'AMOUNT')
+          this.setFormDecimal('price2fc', 0, 'AMOUNT')
+          this.setFormDecimal('price3fc', 0, 'AMOUNT')
+          this.setFormDecimal('price4fc', 0, 'AMOUNT')
+          this.setFormDecimal('price5fc', 0, 'AMOUNT')
         } else {
           this.commonService.toastErrorByMsgId('MSG1747')
         }
@@ -301,7 +312,7 @@ export class ProductionStockDetailComponent implements OnInit {
       this.commonService.toastErrorByMsgId('MSG2052');//duplicate entries found
       return;
     }
-    this.productionItemsDetailsFrom.controls.price1per.setValue(e.PRICE_CODE);
+    this.productionStockFrom.controls.price1per.setValue(e.PRICE_CODE);
   }
 
   pricetwoCodeSelected(e: any) {
@@ -309,7 +320,7 @@ export class ProductionStockDetailComponent implements OnInit {
       this.commonService.toastErrorByMsgId('MSG2052');
       return;
     }
-    this.productionItemsDetailsFrom.controls.price2per.setValue(e.PRICE_CODE);
+    this.productionStockFrom.controls.price2per.setValue(e.PRICE_CODE);
   }
 
   pricethreeCodeSelected(e: any) {
@@ -317,7 +328,7 @@ export class ProductionStockDetailComponent implements OnInit {
       this.commonService.toastErrorByMsgId('MSG2052');
       return;
     }
-    this.productionItemsDetailsFrom.controls.price3per.setValue(e.PRICE_CODE);
+    this.productionStockFrom.controls.price3per.setValue(e.PRICE_CODE);
   }
 
   pricefourCodeSelected(e: any) {
@@ -325,7 +336,7 @@ export class ProductionStockDetailComponent implements OnInit {
       this.commonService.toastErrorByMsgId('MSG2052');
       return;
     }
-    this.productionItemsDetailsFrom.controls.price4per.setValue(e.PRICE_CODE);
+    this.productionStockFrom.controls.price4per.setValue(e.PRICE_CODE);
   }
 
   pricefiveCodeSelected(e: any) {
@@ -333,16 +344,16 @@ export class ProductionStockDetailComponent implements OnInit {
       this.commonService.toastErrorByMsgId('MSG2052');
       return;
     }
-    this.productionItemsDetailsFrom.controls.price5per.setValue(e.PRICE_CODE);
+    this.productionStockFrom.controls.price5per.setValue(e.PRICE_CODE);
   }
 
   private isSamepriceCodeSelected(PRICE_CODE: any): boolean {
     return (
-      this.productionItemsDetailsFrom.value.price1per === PRICE_CODE ||
-      this.productionItemsDetailsFrom.value.price2per === PRICE_CODE ||
-      this.productionItemsDetailsFrom.value.price3per === PRICE_CODE ||
-      this.productionItemsDetailsFrom.value.price4per === PRICE_CODE ||
-      this.productionItemsDetailsFrom.value.price5per === PRICE_CODE
+      this.productionStockFrom.value.price1per === PRICE_CODE ||
+      this.productionStockFrom.value.price2per === PRICE_CODE ||
+      this.productionStockFrom.value.price3per === PRICE_CODE ||
+      this.productionStockFrom.value.price4per === PRICE_CODE ||
+      this.productionStockFrom.value.price5per === PRICE_CODE
     );
   }
   close(data?: any) {
@@ -374,13 +385,13 @@ export class ProductionStockDetailComponent implements OnInit {
       "PART_CODE": "",
       "DIVCODE": "",
       "PREFIX": "",
-      "STOCK_CODE": this.productionItemsDetailsFrom.value.stockCode,
+      "STOCK_CODE": this.productionStockFrom.value.stockCode,
       "STOCK_DESCRIPTION": "",
       "SET_REF": "",
       "KARAT_CODE": "",
       "MULTI_STOCK_CODE": true,
       "JOB_PCS": 0,
-      "GROSS_WT": this.commonService.emptyToZero(this.productionItemsDetailsFrom.value.grossWt),
+      "GROSS_WT": this.commonService.emptyToZero(this.productionStockFrom.value.grossWt),
       "METAL_PCS": 0,
       "METAL_WT": 0,
       "STONE_PCS": 0,
@@ -423,14 +434,14 @@ export class ProductionStockDetailComponent implements OnInit {
       "STK_ACCODE": "",
       "SOH_ACCODE": "",
       "PROD_PROC": "",
-      "METAL_DIVISION": this.commonService.nullToString(this.productionItemsDetailsFrom.value.metalValue),
-      "PRICE1PER": this.commonService.emptyToZero(this.productionItemsDetailsFrom.value.price1per),
-      "PRICE2PER": this.commonService.emptyToZero(this.productionItemsDetailsFrom.value.price2per),
-      "PRICE3PER": this.commonService.emptyToZero(this.productionItemsDetailsFrom.value.price3per),
-      "PRICE4PER": this.commonService.emptyToZero(this.productionItemsDetailsFrom.value.price4per),
-      "PRICE5PER": this.commonService.emptyToZero(this.productionItemsDetailsFrom.value.price5per),
+      "METAL_DIVISION": this.commonService.nullToString(this.productionStockFrom.value.metalValue),
+      "PRICE1PER": this.commonService.emptyToZero(this.productionStockFrom.value.price1per),
+      "PRICE2PER": this.commonService.emptyToZero(this.productionStockFrom.value.price2per),
+      "PRICE3PER": this.commonService.emptyToZero(this.productionStockFrom.value.price3per),
+      "PRICE4PER": this.commonService.emptyToZero(this.productionStockFrom.value.price4per),
+      "PRICE5PER": this.commonService.emptyToZero(this.productionStockFrom.value.price5per),
       "LOCTYPE_CODE": "",
-      "WASTAGE_WT": this.commonService.emptyToZero(this.productionItemsDetailsFrom.value.wastage),
+      "WASTAGE_WT": this.commonService.emptyToZero(this.productionStockFrom.value.wastage),
       "WASTAGE_AMTFC": 0,
       "WASTAGE_AMTLC": 0,
       "PICTURE_NAME": "",
@@ -441,25 +452,25 @@ export class ProductionStockDetailComponent implements OnInit {
       "METAL_LABAMTFC": 0,
       "METAL_LABAMTLC": 0,
       "METAL_LABACCODE": "",
-      "SUPPLIER_REF": this.commonService.nullToString(this.productionItemsDetailsFrom.value.totalLabour),
+      "SUPPLIER_REF": this.commonService.nullToString(this.productionStockFrom.value.totalLabour),
       "TAGLINES": "",
-      "SETTING_CHRG": this.commonService.emptyToZero(this.productionItemsDetailsFrom.value.SETTING_CHRG),
-      "POLISH_CHRG": this.commonService.emptyToZero(this.productionItemsDetailsFrom.value.POLISH_CHRG),
-      "RHODIUM_CHRG": this.commonService.emptyToZero(this.productionItemsDetailsFrom.value.RHODIUM_CHRG),
-      "LABOUR_CHRG": this.commonService.emptyToZero(this.productionItemsDetailsFrom.value.LABOUR_CHRG),
-      "MISC_CHRG": this.commonService.emptyToZero(this.productionItemsDetailsFrom.value.MISC_CHRG),
-      "SETTING_ACCODE": this.commonService.nullToString(this.productionItemsDetailsFrom.value.SETTING_ACCODE),
-      "POLISH_ACCODE": this.commonService.nullToString(this.productionItemsDetailsFrom.value.POLISH_ACCODE),
-      "RHODIUM_ACCODE": this.commonService.nullToString(this.productionItemsDetailsFrom.value.RHODIUM_ACCODE),
-      "LABOUR_ACCODE": this.commonService.nullToString(this.productionItemsDetailsFrom.value.LABOUR_ACCODE),
-      "MISC_ACCODE": this.commonService.nullToString(this.productionItemsDetailsFrom.value.MISC_ACCODE),
-      "WAST_ACCODE": this.commonService.nullToString(this.productionItemsDetailsFrom.value.wastage),
+      "SETTING_CHRG": this.commonService.emptyToZero(this.productionStockFrom.value.SETTING_CHRG),
+      "POLISH_CHRG": this.commonService.emptyToZero(this.productionStockFrom.value.POLISH_CHRG),
+      "RHODIUM_CHRG": this.commonService.emptyToZero(this.productionStockFrom.value.RHODIUM_CHRG),
+      "LABOUR_CHRG": this.commonService.emptyToZero(this.productionStockFrom.value.LABOUR_CHRG),
+      "MISC_CHRG": this.commonService.emptyToZero(this.productionStockFrom.value.MISC_CHRG),
+      "SETTING_ACCODE": this.commonService.nullToString(this.productionStockFrom.value.SETTING_ACCODE),
+      "POLISH_ACCODE": this.commonService.nullToString(this.productionStockFrom.value.POLISH_ACCODE),
+      "RHODIUM_ACCODE": this.commonService.nullToString(this.productionStockFrom.value.RHODIUM_ACCODE),
+      "LABOUR_ACCODE": this.commonService.nullToString(this.productionStockFrom.value.LABOUR_ACCODE),
+      "MISC_ACCODE": this.commonService.nullToString(this.productionStockFrom.value.MISC_ACCODE),
+      "WAST_ACCODE": this.commonService.nullToString(this.productionStockFrom.value.wastage),
       "REPAIRJOB": 0,
-      "PRICE1FC": this.commonService.emptyToZero(this.productionItemsDetailsFrom.value.price1fc),
-      "PRICE2FC": this.commonService.emptyToZero(this.productionItemsDetailsFrom.value.price2fc),
-      "PRICE3FC": this.commonService.emptyToZero(this.productionItemsDetailsFrom.value.price3fc),
-      "PRICE4FC": this.commonService.emptyToZero(this.productionItemsDetailsFrom.value.price4fc),
-      "PRICE5FC": this.commonService.emptyToZero(this.productionItemsDetailsFrom.value.price5fc),
+      "PRICE1FC": this.commonService.emptyToZero(this.productionStockFrom.value.price1fc),
+      "PRICE2FC": this.commonService.emptyToZero(this.productionStockFrom.value.price2fc),
+      "PRICE3FC": this.commonService.emptyToZero(this.productionStockFrom.value.price3fc),
+      "PRICE4FC": this.commonService.emptyToZero(this.productionStockFrom.value.price4fc),
+      "PRICE5FC": this.commonService.emptyToZero(this.productionStockFrom.value.price5fc),
       "BASE_CONV_RATE": 0,
       "FROM_STOCK_CODE": "",
       "TO_STOCK_CODE": "",
@@ -574,7 +585,7 @@ export class ProductionStockDetailComponent implements OnInit {
         let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
         if (data.length == 0) {
           this.commonService.toastErrorByMsgId('MSG1531')
-          this.productionItemsDetailsFrom.controls[FORMNAME].setValue('')
+          this.productionStockFrom.controls[FORMNAME].setValue('')
           LOOKUPDATA.SEARCH_VALUE = ''
           return
         }
@@ -589,7 +600,17 @@ export class ProductionStockDetailComponent implements OnInit {
   onDragStarted() {
     this.close()
   }
-
+  setFormNullToString(formControlName: string, value: any) {
+    this.productionStockFrom.controls[formControlName]?.setValue(
+      this.commonService.nullToString(value)
+    )
+    this.FORM_VALIDATER[formControlName] = this.commonService.nullToString(value)
+  }
+  setFormDecimal(formControlName: string, value: any, Decimal: string) {
+    let result = Decimal ? this.commonService.setCommaSerperatedNumber(value, Decimal) : value
+    this.productionStockFrom.controls[formControlName]?.setValue(result)
+    this.FORM_VALIDATER[formControlName] = result
+  }
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {
       this.subscriptions.forEach((subscription) => subscription.unsubscribe()); // unsubscribe all subscription

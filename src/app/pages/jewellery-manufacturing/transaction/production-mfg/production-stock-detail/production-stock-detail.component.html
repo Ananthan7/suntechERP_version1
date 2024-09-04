@@ -14,7 +14,7 @@
     [isViewDelete]="false" [isViewMore]="false"
     [isViewSave]="!viewMode"></modal-header>
 <div class="p-2">
-    <form [formGroup]="productionItemsDetailsFrom">
+    <form [formGroup]="productionStockFrom">
         <div class="row mt-2">
             <div class="col-md-8">
                 <dx-data-grid #dataGrid id="gridContainer"
@@ -385,7 +385,7 @@
                         <mat-form-field appearance="outline"
                             style="width: 100%;">
                             <input type="text" class="text-right" matInput
-                                formControlName="price1fc"
+                                formControlName="price1no"
                                 AmountDecimalInput />
                         </mat-form-field>
                     </div>
@@ -393,15 +393,14 @@
                         <mat-form-field appearance="outline"
                             style="width: 100%;">
                             <input type="text" class="text-right" matInput
-                                formControlName="price1no"
+                                formControlName="price1fc"
                                 AmountDecimalInput />
                         </mat-form-field>
                     </div>
                 </div>
                 <div class="row align-items-center mb-1">
-                    <label for="input" class="col-sm-3 col-form-label">Price
-                        2
-                        :</label>
+                    <label for="input" class="col-sm-3 col-form-label">
+                        Price 2 :</label>
                     <div class="col-sm-3">
                         <mat-form-field appearance="outline"
                             style="width: 100%;">
@@ -420,7 +419,7 @@
                         <mat-form-field appearance="outline"
                             style="width: 100%;">
                             <input type="text" class="text-right" matInput
-                                formControlName="price2fc"
+                                formControlName="price2no"
                                 AmountDecimalInput />
                         </mat-form-field>
                     </div>
@@ -428,15 +427,14 @@
                         <mat-form-field appearance="outline"
                             style="width: 100%;">
                             <input type="text" class="text-right" matInput
-                                formControlName="price2no"
+                                formControlName="price2fc"
                                 AmountDecimalInput />
                         </mat-form-field>
                     </div>
                 </div>
                 <div class="row align-items-center mb-1">
-                    <label for="input" class="col-sm-3 col-form-label">Price
-                        3
-                        :</label>
+                    <label for="input" class="col-sm-3 col-form-label">
+                        Price 3 :</label>
                     <div class="col-sm-3">
                         <mat-form-field appearance="outline"
                             style="width: 100%;">
@@ -455,7 +453,7 @@
                         <mat-form-field appearance="outline"
                             style="width: 100%;">
                             <input type="text" class="text-right" matInput
-                                formControlName="price3fc"
+                                formControlName="price3no"
                                 AmountDecimalInput />
                         </mat-form-field>
                     </div>
@@ -463,15 +461,14 @@
                         <mat-form-field appearance="outline"
                             style="width: 100%;">
                             <input type="text" class="text-right" matInput
-                                formControlName="price3no"
+                                formControlName="price3fc"
                                 AmountDecimalInput />
                         </mat-form-field>
                     </div>
                 </div>
                 <div class="row align-items-center mb-1">
-                    <label for="input" class="col-sm-3 col-form-label">Price
-                        4
-                        :</label>
+                    <label for="input" class="col-sm-3 col-form-label">
+                        Price 4 :</label>
                     <div class="col-sm-3">
                         <mat-form-field appearance="outline"
                             style="width: 100%;">
@@ -489,7 +486,7 @@
                         <mat-form-field appearance="outline"
                             style="width: 100%;">
                             <input type="text" class="text-right" matInput
-                                formControlName="price4fc"
+                                formControlName="price4no"
                                 AmountDecimalInput />
                         </mat-form-field>
                     </div>
@@ -497,15 +494,14 @@
                         <mat-form-field appearance="outline"
                             style="width: 100%;">
                             <input type="text" class="text-right" matInput
-                                formControlName="price4no"
+                                formControlName="price4fc"
                                 AmountDecimalInput />
                         </mat-form-field>
                     </div>
                 </div>
                 <div class="row align-items-center mb-1">
-                    <label for="input" class="col-sm-3 col-form-label">Price
-                        5
-                        :</label>
+                    <label for="input" class="col-sm-3 col-form-label">
+                        Price 5 :</label>
                     <div class="col-sm-3">
                         <mat-form-field appearance="outline"
                             style="width: 100%;">
@@ -523,7 +519,7 @@
                         <mat-form-field appearance="outline"
                             style="width: 100%;">
                             <input type="text" class="text-right" matInput
-                                formControlName="price5fc"
+                                formControlName="price5no"
                                 AmountDecimalInput />
                         </mat-form-field>
                     </div>
@@ -531,7 +527,7 @@
                         <mat-form-field appearance="outline"
                             style="width: 100%;">
                             <input type="text" class="text-right" matInput
-                                formControlName="price5no"
+                                formControlName="price5fc"
                                 AmountDecimalInput />
                         </mat-form-field>
                     </div>
