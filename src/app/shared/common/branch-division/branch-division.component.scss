@@ -23,11 +23,12 @@
     box-shadow: 0px 4px 8px 4px rgba(32, 19, 224, 0.419); 
 }
 
-
 ::ng-deep .mat-tab-body-content{
     transform: none;
     overflow-x: hidden !important;
 }
 
-
+::ng-deep .dx-checkbox-container{
+    border: solid 1px;
+}
   
