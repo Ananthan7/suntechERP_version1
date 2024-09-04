@@ -42,12 +42,13 @@ export class MenuUpdationComponent implements OnInit {
       return
     }
     let postData = {
-      "SPID": "029",
+      "SPID": "0113",
       "parameter": {
         "strMenuID": saveData.MENU_ID || '',
         "strPathName": saveData.ANG_WEB_PATH_NAME || '',
         "strComponentName": saveData.ANG_WEB_COMPONENT_NAME || '',
-        "strFormComponentName": saveData.ANG_WEB_FORM_NAME || ''
+        "strFormComponentName": saveData.ANG_WEB_FORM_NAME || '',
+        "strFormName": saveData.MENU_CAPTION_ENG  || ''
       }
     }
     this.commonService.showSnackBarMsg('Loading')

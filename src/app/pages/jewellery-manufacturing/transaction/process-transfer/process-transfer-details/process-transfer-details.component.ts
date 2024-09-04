@@ -649,9 +649,9 @@ export class ProcessTransferDetailsComponent implements OnInit {
   setToWorkerWhereCondition() {
     let form = this.processTransferdetailsForm.value
     if (this.designType == 'METAL') {
-      this.toWorkerMasterSearch.WHERECONDITION = `@StrToProcess='${this.commonService.nullToString(form.TO_PROCESS_CODE)}',`
-    } else {
       this.toWorkerMasterSearch.WHERECONDITION = `@StrToProcess='${this.commonService.nullToString(form.METAL_TO_PROCESS_CODE)}',`
+    } else {
+      this.toWorkerMasterSearch.WHERECONDITION = `@StrToProcess='${this.commonService.nullToString(form.TO_PROCESS_CODE)}',`
     }
     this.toWorkerMasterSearch.WHERECONDITION += `@StrToWorker='',`
     if (this.commonService.nullToString(form.TO_PROCESS_CODE) == '') {

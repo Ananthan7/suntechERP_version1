@@ -409,21 +409,27 @@
             </div>
           </div>
           <div class="col-md-1 m-t-10 pt-2">
-            <mat-form-field>
-              <mat-label>Voucher</mat-label>
+          <label for="voc_type">Voucher</label>
+
+            <mat-form-field appearance="outline">
+              <!-- <mat-label>Voucher</mat-label> -->
               <input type="text" matInput id="voc_type" formControlName="voc_type" readonly />
             </mat-form-field>
           </div>
           <div class="col-md-1 m-t-10 pt-2">
-            <mat-form-field>
-              <mat-label>{{ vocno_lbl }}</mat-label>
+          <label for="fcn_voc_no">{{ vocno_lbl }}</label>
+
+            <mat-form-field appearance="outline">
+              <!-- <mat-label>{{ vocno_lbl }}</mat-label> -->
               <input type="number" NumberOnly matInput formControlName="fcn_voc_no" [readonly]="voucherDetails?.LOCKVOUCHERNO||viewOnly" class="st_txt_right" />
             </mat-form-field>
           </div>
   
           <div class="col-md-1 m-t-10 pt-2">
-            <mat-form-field>
-              <mat-label>Currency</mat-label>
+          <label for="txtCurrency">Currency</label>
+
+            <mat-form-field appearance="outline">
+              <!-- <mat-label>Currency</mat-label> -->
               <input type="text" matInput id="txtCurrency" formControlName="txtCurrency" readonly
                 [matAutocomplete]="currencyList" />
               <mat-autocomplete #currencyList="matAutocomplete" autoActiveFirstOption
@@ -435,8 +441,9 @@
             </mat-form-field>
           </div>
           <div class="col-md-1 m-t-10 pt-2">
-            <mat-form-field>
-              <mat-label>Cur. Rate</mat-label>
+          <label for="txtCurRate">Cur. Rate</label>
+            <mat-form-field appearance="outline">
+              <!-- <mat-label>Cur. Rate</mat-label> -->
               <input class="st_txt_right" type="text" matInput id="txtCurRate" SixDecimalInput formControlName="txtCurRate" [readonly]="
                   viewOnly ||
                   this.vocDataForm.value.txtCurrency == this.comFunc.compCurrency
@@ -445,8 +452,9 @@
           </div>
   
           <div class="col-md-2 m-t-10 pt-2">
+            <label for="vocdate">Date</label>
   
-            <mat-form-field 
+            <mat-form-field appearance="outline" 
             style="width: 100%">
             <input matInput DateValidation
                 (dateChange)="formatDate($event)"
@@ -462,7 +470,7 @@
         </mat-form-field>
   
   
-            <!-- <mat-form-field>
+            <!-- <mat-form-field appearance="outline">
               <mat-label>{{ date_lbl }}</mat-label>
               <input matInput type="text" name="vocdate" [matDatepicker]="vocDate" formControlName="vocdate"
                 value="{{ currentDate }}" placeholder="DD/MM/YYYY" [max]="currentDate"
@@ -477,8 +485,10 @@
           </div>
   
           <div class="col-md-2 m-t-10 pt-2">
-            <mat-form-field>
-              <mat-label>{{ sales_person_lbl }} </mat-label>
+          <label for="sales_person">{{ sales_person_lbl }}</label>
+
+            <mat-form-field appearance="outline">
+              <!-- <mat-label>{{ sales_person_lbl }} </mat-label> -->
               <input type="text" matInput formControlName="sales_person" id="sales_person" [matAutocomplete]="salesperson"
                 [readonly]="viewOnly" />
               <!-- <input type="text" matInput formControlName="sales_person"  [matAutocomplete]="auto" [matAutocomplete]="salesperson" (keyup.enter)="chooseFirstOption($event)"> -->
@@ -527,8 +537,10 @@
           <form [formGroup]="customerDataForm" style="width: 100%; max-width: none">
             <div class="row">
               <div class="col-md-2">
-                <mat-form-field>
-                  <mat-label>Mobile Number</mat-label>
+              <label for="fcn_customer_mobile">Mobile Number</label>
+
+                <mat-form-field appearance="outline">
+                  <!-- <mat-label>Mobile Number</mat-label> -->
                   <input type="text"
                     onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))"
                     matInput (focusout)="!viewOnly && onCustomerNameFocus()" formControlName="fcn_customer_mobile"
@@ -545,8 +557,9 @@
                 </mat-form-field>
               </div>
               <div class="col-md-2">
-                <mat-form-field>
-                  <mat-label>Name</mat-label>
+              <label for="fcn_customer_name">Name</label>
+                <mat-form-field appearance="outline">
+                  <!-- <mat-label>Name</mat-label> -->
                   <input type="text" matInput formControlName="fcn_customer_name" (change)="nameChange($event)"
                     [readonly]="viewOnly" appNoEmptySpace />
                   <!-- <input type="text" matInput [pattern]="noWhiteSpacePattern" formControlName="fcn_customer_name" (change)="nameChange($event)"  [readonly]="viewOnly" /> -->
@@ -567,8 +580,9 @@
                 </mat-form-field>
               </div>
               <div class="col-md-2">
-                <mat-form-field>
-                  <mat-label>Code</mat-label>
+              <label for="fcn_customer_code">Code</label>
+                <mat-form-field appearance="outline">
+                  <!-- <mat-label>Code</mat-label> -->
                   <input type="text" matInput formControlName="fcn_customer_code" readonly />
                   <!-- [readonly]="
                   viewOnly ||
@@ -584,8 +598,9 @@
                 </mat-form-field>
               </div>
               <div class="col-md-2">
-                <mat-form-field>
-                  <mat-label>ID Type </mat-label>
+              <label for="fcn_customer_id_type">ID Type</label>
+                <mat-form-field appearance="outline">
+                  <!-- <mat-label>ID Type </mat-label> -->
                   <input type="text" matInput formControlName="fcn_customer_id_type" [matAutocomplete]="idtype"
                     readonly />
                   <mat-autocomplete #idtype="matAutocomplete" (optionSelected)="changeIdtype($event.option.value)"
@@ -612,8 +627,9 @@
                 </mat-form-field>
               </div>
               <div class="col-md-2">
-                <mat-form-field>
-                  <mat-label>ID#</mat-label>
+              <label for="fcn_customer_id_number">ID#</label>
+                <mat-form-field appearance="outline">
+                  <!-- <mat-label>ID#</mat-label> -->
                   <input type="text" matInput formControlName="fcn_customer_id_number" [readonly]="viewOnly"
                     appNoEmptySpace />
   
@@ -652,7 +668,7 @@
                   </mat-error>
                 </mat-form-field>
               </div>
-              <div class="col-md-2 justify-content-center">
+              <div class="col-md-2 justify-content-center mt-3">
                 <button type="button" style="font-size: 12px; padding: 0px 9px"
                   (click)="open(more_customer_detail_modal, false, null, false,false,true)" mat-flat-button
                   color="primary" [disabled]="viewOnly">
@@ -665,10 +681,12 @@
               </div>
             </div>
   
-            <div class="row">
+            <div class="row mt-3">
               <div class="col-md-2">
-                <mat-form-field>
-                  <mat-label>Expiry Date</mat-label>
+              <label for="fcn_customer_exp_date">Expiry  Date</label>
+
+                <mat-form-field appearance="outline">
+                  <!-- <mat-label>Expiry Date</mat-label> -->
                   <input matInput [matDatepicker]="expDate" name="fcn_customer_exp_date"
                     formControlName="fcn_customer_exp_date" placeholder="DD/MM/YYYY" [min]="currentDate"
                     [readonly]="viewOnly" DateValidation />
@@ -691,7 +709,7 @@
               </div>
   
               <div class="col-md-2" *ngIf="customerDataForm.value.tourVatRefuncYN">
-                <mat-form-field>
+                <mat-form-field appearance="outline">
                   <mat-label>Tourist VAT Refund Ref #</mat-label>
                   <input type="text" matInput formControlName="tourVatRefundNo" />
                 </mat-form-field>
@@ -880,7 +898,7 @@
                               <dxi-total-item column="mkg_amount" summaryType="sum"
                                 [valueFormat]="gridAmountDecimalFormat" displayFormat="AED {0}">
                               </dxi-total-item>
-                              <dxi-total-item column="net_amount" summaryType="sum"
+                              <dxi-total-item column="net_amount" summaryType="sum" 
                                 [valueFormat]="gridAmountDecimalFormat" displayFormat="AED {0}">
                                 <!-- [valueFormat]="{ currency: 'EUR' }" -->
                               </dxi-total-item>
@@ -1089,23 +1107,23 @@
                     <form [formGroup]="boardingPassForm" novalidate>
                       <div class="row" style="margin-top: 0px">
                         <div class="col-md-6">
-                          <mat-form-field>
+                          <mat-form-field appearance="outline">
                             <mat-label>Pass Details</mat-label>
                             <input type="text" matInput formControlName="passDetails" id="passDetails"
                               [readonly]="viewOnly" />
                           </mat-form-field>
-                          <mat-form-field>
+                          <mat-form-field appearance="outline">
                             <mat-label>Flight No.</mat-label>
                             <input type="text" matInput formControlName="flightNo" id="flightNo" [readonly]="viewOnly" />
                           </mat-form-field>
                         </div>
                         <div class="col-md-6">
-                          <mat-form-field>
+                          <mat-form-field appearance="outline">
                             <mat-label>Boarding To</mat-label>
                             <input type="text" matInput formControlName="boardingTo" id="boardingTo"
                               [readonly]="viewOnly" />
                           </mat-form-field>
-                          <mat-form-field>
+                          <mat-form-field appearance="outline">
                             <mat-label>Boarding Date</mat-label>
                             <input matInput [matDatepicker]="boardingDate" name="boardingDate"
                               formControlName="boardingDate" placeholder="DD/MM/YYYY" [readonly]="viewOnly" />
@@ -1300,6 +1318,7 @@
                       type="text"
                       class="form-control textboxcorner"
                       id
+                      value="{{ Receipt_total | decimalFormat: 'AMOUNT' }}"
                       [(ngModel)]="receiptTotalNetAmt"
                       aria-describedby
                       [placeholder]="zeroAmtVal"
@@ -1464,9 +1483,11 @@
           <form [formGroup]="cashreceiptForm" novalidate>
             <div class="col-md-12" style="margin-top: 20px; margin-bottom: 20px">
               <div class="form-group row">
+
                 <div class="col-md-4">
-                  <mat-form-field>
-                    <mat-label>Receipt Mode </mat-label>
+                  <label class="col-form-label" for="paymentsCash" >Receipt Mode</label>
+                  <mat-form-field appearance="outline">
+                    <!-- <mat-label>Receipt Mode </mat-label> -->
                     <input type="text" matInput formControlName="paymentsCash" [matAutocomplete]="receiptmode"
                       [readonly]="viewOnly" />
                     <mat-autocomplete #receiptmode="matAutocomplete" autoActiveFirstOption>
@@ -1481,16 +1502,20 @@
                     </mat-error>
                   </mat-form-field>
                 </div>
+
                 <div class="col-md-4">
-                  <mat-form-field>
-                    <mat-label>Amount LC</mat-label>
+                  <label class="col-form-label" for="cashAmtLC">Amount LC</label>
+                  <mat-form-field appearance="outline">
+                    <!-- <mat-label>Amount LC</mat-label> -->
                     <input type="text" class="st_txt_right" matInput formControlName="cashAmtLC" id="cashAmtLC"
                       [placeholder]="zeroAmtVal" readonly AmountDecimalInput />
                   </mat-form-field>
                 </div>
+
                 <div class="col-md-4">
-                  <mat-form-field>
-                    <mat-label>Amount FC</mat-label>
+                  <label class="col-form-label"  for="cashAmtFC">Amount FC</label>
+                  <mat-form-field appearance="outline">
+                    <!-- <mat-label>Amount FC</mat-label> -->
                     <input type="text" class="st_txt_right" matInput formControlName="cashAmtFC" id="cashAmtFC"
                       (focusout)="
                         changeReceiptAmtFC($event, 'cashreceiptForm', 'cashAmtLC')
@@ -1505,6 +1530,7 @@
                     </mat-error>
                   </mat-form-field>
                 </div>
+
               </div>
             </div>
   
@@ -1515,9 +1541,11 @@
           <form [formGroup]="creditCardReceiptForm" novalidate>
             <div class="col-md-12" style="margin-top: 20px; margin-bottom: 20px">
               <div class="form-group row">
+
                 <div class="col-md-4">
-                  <mat-form-field>
-                    <mat-label>Receipt Mode </mat-label>
+                  <label class="col-form-label" for="paymentsCreditCard" >Receipt Mode</label>
+                  <mat-form-field appearance="outline">
+                    <!-- <mat-label>Receipt Mode </mat-label> -->
                     <input type="text" matInput formControlName="paymentsCreditCard" [matAutocomplete]="receiptmodecc"
                       [readonly]="viewOnly" />
                     <mat-autocomplete #receiptmodecc="matAutocomplete" autoActiveFirstOption>
@@ -1534,9 +1562,11 @@
                     </mat-error>
                   </mat-form-field>
                 </div>
+
                 <div class="col-md-4">
-                  <mat-form-field>
-                    <mat-label>CC No.</mat-label>
+                  <label class="col-form-label " for="cardCCNo" >CC No.</label>
+                  <mat-form-field appearance="outline">
+                    <!-- <mat-label>CC No.</mat-label> -->
                     <input type="number" matInput formControlName="cardCCNo" id="cardCCNo" maxlength="19"
                       [readonly]="viewOnly" />
                     <mat-error *ngIf="
@@ -1548,9 +1578,11 @@
                     </mat-error>
                   </mat-form-field>
                 </div>
+
                 <div class="col-md-4">
-                  <mat-form-field>
-                    <mat-label>Amount </mat-label>
+                  <label class="col-form-label" for="cardAmtFC" >Amount</label>
+                  <mat-form-field appearance="outline">
+                    <!-- <mat-label>Amount </mat-label> -->
                     <input type="text" class="st_txt_right" matInput formControlName="cardAmtFC" id="cardAmtFC"
                       [placeholder]="zeroAmtVal" [readonly]="viewOnly" AmountDecimalInput />
                     <mat-error *ngIf="
@@ -1567,6 +1599,7 @@
                     </mat-error>
                   </mat-form-field>
                 </div>
+
               </div>
             </div>
           </form>
@@ -1576,9 +1609,11 @@
           <form [formGroup]="advanceReceiptForm" novalidate>
             <div class="col-md-12" style="margin-top: 20px; margin-bottom: 20px">
               <div class="form-group row">
+
                 <div class="col-md-4">
-                  <mat-form-field>
-                    <mat-label>Receipt Mode </mat-label>
+                  <label class="col-form-label" for="paymentsAdvance" >Receipt Mode</label>
+                  <mat-form-field appearance="outline">
+                    <!-- <mat-label>Receipt Mode </mat-label> -->
                     <input type="text" matInput formControlName="paymentsAdvance" id="paymentsAdvance"
                       [matAutocomplete]="paymentsAdvance" [readonly]="viewOnly" />
                     <mat-autocomplete #paymentsAdvance="matAutocomplete" autoActiveFirstOption
@@ -1596,9 +1631,12 @@
                     </mat-error>
                   </mat-form-field>
                 </div>
+
                 <div class="col-md-4">
-                  <mat-form-field class="example-full-width">
-                    <mat-label>Branch</mat-label>
+                  <label class="col-form-label " for="advanceBranch">Branch</label>
+
+                  <mat-form-field appearance="outline" class="example-full-width">
+                    <!-- <mat-label>Branch</mat-label> -->
                     <input type="text" matInput formControlName="advanceBranch" [matAutocomplete]="advanceBranch"
                       id="advanceBranch" (focusout)="changeBranch($event)" [readonly]="viewOnly" />
                     <mat-autocomplete #advanceBranch="matAutocomplete" autoActiveFirstOption
@@ -1618,9 +1656,11 @@
                     </mat-error>
                   </mat-form-field>
                 </div>
+
                 <div class="col-md-4">
-                  <mat-form-field>
-                    <mat-label>Year</mat-label>
+                  <label class="col-form-label" for="advanceYear" >Year</label>
+                  <mat-form-field appearance="outline">
+                    <!-- <mat-label>Year</mat-label> -->
                     <input matInput type="text" id="advanceYear" formControlName="advanceYear" id="advanceYear"
                       [matAutocomplete]="advanceYear" [readonly]="viewOnly" />
                     <mat-autocomplete #advanceYear="matAutocomplete" autoActiveFirstOption
@@ -1638,13 +1678,16 @@
                     </mat-error>
                   </mat-form-field>
                 </div>
+
               </div>
             </div>
             <div class="col-md-12" style="margin-top: 20px; margin-bottom: 20px">
               <div class="form-group row">
+
                 <div class="col-md-4">
-                  <mat-form-field>
-                    <mat-label>Rec No.</mat-label>
+                  <label class="col-form-label " for="advanceRecNo">Rec No.</label>
+                  <mat-form-field appearance="outline">
+                    <!-- <mat-label>Rec No.</mat-label> -->
                     <input type="number" class="text-right" matInput formControlName="advanceRecNo" value
                       id="advanceRecNo" (change)="changeAdvanceVocNo($event)" [readonly]="viewOnly" />
   
@@ -1657,9 +1700,11 @@
                     </mat-error>
                   </mat-form-field>
                 </div>
+
                 <div class="col-md-4">
-                  <mat-form-field>
-                    <mat-label>Customer Code</mat-label>
+                  <label class="col-form-label" for="advanceCustCode">Customer Code</label>
+                  <mat-form-field appearance="outline">
+                    <!-- <mat-label>Customer Code</mat-label> -->
                     <input type="text" matInput formControlName="advanceCustCode" value id="advanceCustCode"
                       (change)="changeCustomerCode($event)" [readonly]="viewOnly" />
   
@@ -1672,9 +1717,11 @@
                     </mat-error>
                   </mat-form-field>
                 </div>
+
                 <div class="col-md-4">
-                  <mat-form-field>
-                    <mat-label>Amount</mat-label>
+                  <label class="col-form-label" for="advanceAmount" >Amount</label>
+                  <mat-form-field appearance="outline">
+                    <!-- <mat-label>Amount</mat-label> -->
                     <input type="text" class="st_txt_right" (change)="changeAdvanceAmount($event)" matInput formControlName="advanceAmount" id="advanceAmount"
                       [readonly]="viewOnly" AmountDecimalInput />
                     <mat-error *ngIf="
@@ -1695,20 +1742,25 @@
             </div>
             <div class="col-md-12" style="margin-top: 20px; margin-bottom: 20px">
               <div class="form-group row">
+                
                 <div class="col-md-6">
-                  <mat-form-field>
-                    <mat-label>Vat Amount Paid LC</mat-label>
+                  <label class="col-form-label " for="advanceVatAmountLC" >Vat Amount Paid LC</label>
+                  <mat-form-field appearance="outline">
+                    <!-- <mat-label>Vat Amount Paid LC</mat-label> -->
                     <input type="text" class="st_txt_right" matInput formControlName="advanceVatAmountLC"
                       id="advanceVatAmountLC" [placeholder]="zeroAmtVal" readonly AmountDecimalInput />
                   </mat-form-field>
                 </div>
+
                 <div class="col-md-6">
-                  <mat-form-field>
-                    <mat-label>Vat Amount Paid FC</mat-label>
+                  <label class="col-form-label " for="advanceVatAmountFC" >Vat Amount Paid FC</label>
+                  <mat-form-field appearance="outline">
+                    <!-- <mat-label>Vat Amount Paid FC</mat-label> -->
                     <input type="text" class="st_txt_right" matInput formControlName="advanceVatAmountFC"
                       id="advanceVatAmountFC" AmountDecimalInput [placeholder]="zeroAmtVal" readonly />
                   </mat-form-field>
                 </div>
+
               </div>
             </div>
           </form>
@@ -1718,9 +1770,11 @@
           <form [formGroup]="othersReceiptForm" novalidate>
             <div class="col-md-12" style="margin-top: 20px; margin-bottom: 20px">
               <div class="form-group row">
+
                 <div class="col-md-6">
-                  <mat-form-field>
-                    <mat-label>Receipt Mode </mat-label>
+                  <label class="col-form-label" for="paymentsOthers" >Receipt Mode</label>
+                  <mat-form-field appearance="outline">
+                    <!-- <mat-label>Receipt Mode </mat-label> -->
                     <input type="text" matInput formControlName="paymentsOthers" id="paymentsOthers"
                       [matAutocomplete]="receiptmodeOthers" [readonly]="viewOnly" />
                     <mat-autocomplete #receiptmodeOthers="matAutocomplete" autoActiveFirstOption>
@@ -1737,9 +1791,11 @@
                     </mat-error>
                   </mat-form-field>
                 </div>
+
                 <div class="col-md-6">
-                  <mat-form-field>
-                    <mat-label>Amount</mat-label>
+                  <label class="col-form-label " for="othersAmtFC">Amount</label>
+                  <mat-form-field appearance="outline">
+                    <!-- <mat-label>Amount</mat-label> -->
                     <input type="text" class="st_txt_right" matInput formControlName="othersAmtFC" id="othersAmtFC"
                       [placeholder]="zeroAmtVal" [readonly]="viewOnly" AmountDecimalInput />
                     <mat-error *ngIf="
@@ -1768,9 +1824,11 @@
           <form [formGroup]="giftReceiptForm" novalidate>
             <div class="col-md-12" style="margin-top: 20px; margin-bottom: 20px">
               <div class="form-group row">
+
                 <div class="col-md-6">
-                  <mat-form-field>
-                    <mat-label>Receipt Mode </mat-label>
+                  <label class="col-form-label" for="paymentsCreditGIftVoc" >Receipt Mode</label>
+                  <mat-form-field appearance="outline">
+                    <!-- <mat-label>Receipt Mode </mat-label> -->
                     <input type="text" matInput formControlName="paymentsCreditGIftVoc" id="paymentsCreditGIftVoc"
                       [matAutocomplete]="paymentsCreditGIftVoc" [readonly]="viewOnly" />
                     <mat-autocomplete #paymentsCreditGIftVoc="matAutocomplete" autoActiveFirstOption>
@@ -1787,9 +1845,11 @@
                     </mat-error>
                   </mat-form-field>
                 </div>
+
                 <div class="col-md-6">
-                  <mat-form-field class="example-full-width">
-                    <mat-label>Branch</mat-label>
+                  <label class="col-form-label" for="giftBranch" >Branch</label>
+                  <mat-form-field appearance="outline" class="example-full-width">
+                    <!-- <mat-label>Branch</mat-label> -->
                     <input type="text" matInput formControlName="giftBranch" id="giftBranch"
                       (focusout)="changeBranch($event)" readonly />
                     <mat-error *ngIf="
@@ -1799,13 +1859,16 @@
                     </mat-error>
                   </mat-form-field>
                 </div>
+
               </div>
             </div>
             <div class="col-md-12" style="margin-top: 20px; margin-bottom: 20px">
               <div class="form-group row">
+
                 <div class="col-md-6">
-                  <mat-form-field>
-                    <mat-label>Gift No.</mat-label>
+                  <label class="col-form-label" for="giftVocNo" >Gift No.</label>
+                  <mat-form-field appearance="outline">
+                    <!-- <mat-label>Gift No.</mat-label> -->
                     <input type="text" matInput formControlName="giftVocNo" id="giftVocNo"
                       (change)="changeGiftVocNo($event)" [readonly]="viewOnly" />
                     <mat-error *ngIf="
@@ -1815,9 +1878,11 @@
                     </mat-error>
                   </mat-form-field>
                 </div>
+
                 <div class="col-md-6">
-                  <mat-form-field>
-                    <mat-label>Amount</mat-label>
+                  <label class="col-form-label" for="giftAmtFC" >Amount</label>
+                  <mat-form-field appearance="outline">
+                    <!-- <mat-label>Amount</mat-label> -->
                     <input type="text" class="st_txt_right" matInput formControlName="giftAmtFC" id="giftAmtFC"
                       [placeholder]="zeroAmtVal" (change)="changeGiftVoucherAmount($event)" [readonly]="viewOnly" AmountDecimalInput />
                     <mat-error *ngIf="
@@ -1830,17 +1895,21 @@
                     </mat-error>
                   </mat-form-field>
                 </div>
+
               </div>
             </div>
           </form>
         </mat-tab>
+
         <mat-tab label="CUSTOMERS" [disabled]="!this.receiptModesList?.BTN_CUSTOMER || viewOnly">
           <form [formGroup]="customerReceiptForm" novalidate>
             <div class="col-md-12" style="margin-top: 20px; margin-bottom: 20px">
               <div class="form-group row">
+
                 <div class="col-md-4">
-                  <mat-form-field>
-                    <mat-label>Select Accode</mat-label>
+                  <label class="col-form-label" for="customAcCodeList">Select Accode</label>
+                  <mat-form-field appearance="outline">
+                    <!-- <mat-label>Select Accode</mat-label> -->
                     <input type="text" matInput formControlName="customAcCodeList" [matAutocomplete]="customAcCodeList"
                       id="customAcCodeList" [readonly]="viewOnly" />
                     <mat-autocomplete panelWidth="50%" #customAcCodeList="matAutocomplete" autoActiveFirstOption
@@ -1858,16 +1927,20 @@
                     </mat-error>
                   </mat-form-field>
                 </div>
+
                 <div class="col-md-4">
-                  <mat-form-field>
-                    <mat-label>Amount LC</mat-label>
+                  <label class="col-form-label " for="customerAmtLC">Amount LC</label>
+                  <mat-form-field appearance="outline">
+                    <!-- <mat-label>Amount LC</mat-label> -->
                     <input type="text" class="st_txt_right" matInput formControlName="customerAmtLC" id="customerAmtLC"
                       [placeholder]="zeroAmtVal" readonly AmountDecimalInput />
                   </mat-form-field>
                 </div>
+
                 <div class="col-md-4">
-                  <mat-form-field>
-                    <mat-label>Amount FC</mat-label>
+                  <label class="col-form-label" for="customerAmtFC">Amount FC</label>
+                  <mat-form-field appearance="outline">
+                    <!-- <mat-label>Amount FC</mat-label> -->
                     <input type="text" class="st_txt_right" matInput formControlName="customerAmtFC" id="customerAmtFC"
                       (focusout)="
                         changeReceiptAmtFC(
@@ -1900,21 +1973,23 @@
         
         <mat-tab label="CURR SCH RED" [disabled]="!this.receiptModesList?.BTN_SCHEME || viewOnly">
           <form [formGroup]="schemeReceiptForm" novalidate>
-            <div class="col-md-12" style="margin-top: 20px; margin-bottom: 20px">
+            <div class="col-md-12" >
               <div class="form-group row">
-                <div class="col-md-6 d-flex align-items-center">
-                  <mat-form-field class="flex-grow-1" style="margin-right: 10px;">
-                    <mat-label>Scheme Code</mat-label>
-                    <input type="text" formControlName="scheme_code" matInput />
+
+                <div class="col-md-6 ">
+                  <label class="col-form-label" for="scheme_code">Scheme Code</label>
+                  <mat-form-field appearance="outline" class="flex-grow-1" style="margin-right: 10px;">
+                    <!-- <mat-label>Scheme Code</mat-label> -->
+                    <input type="text" id="scheme_code" formControlName="scheme_code" matInput />
+                    <master-search   class="masterSearch" [MasterSearchData]="SchemeMasterFindData" (newRowClick)="schemeCodeSelected($event)"></master-search>
                   </mat-form-field>
-                  <div>
-                    <master-search [MasterSearchData]="SchemeMasterFindData" (newRowClick)="schemeCodeSelected($event)"></master-search>
-                  </div>
+                 
                 </div>
               
                 <div class="col-md-6">
-                  <mat-form-field style="width: 100%;">
-                    <mat-label>Scheme ID  </mat-label>
+                  <label class="col-form-label" for="scheme_name" >Scheme ID</label>
+                  <mat-form-field appearance="outline" style="width: 100%;">
+                    <!-- <mat-label>Scheme ID  </mat-label> -->
                     <input
                       type="text"
                       class="st_txt_right"
@@ -1925,16 +2000,19 @@
                     />
                   </mat-form-field>
                 </div>
+
               </div>
               
   
                 
               </div>
-            <div class="col-md-12" style="margin-top: 20px; margin-bottom: 20px">
+            <div class="col-md-12" >
             <div class="form-group row">
+
               <div class="col-md-6">
-                <mat-form-field>
-                  <mat-label>Scheme No.</mat-label>
+                <label class="col-form-label" for="schemeNo">Scheme No.</label>
+                <mat-form-field appearance="outline">
+                  <!-- <mat-label>Scheme No.</mat-label> -->
                   <input type="text" matInput formControlName="schemeNo" id="schemeNo"
                    readonly />
                   <mat-error *ngIf="
@@ -1944,9 +2022,11 @@
                   </mat-error>
                 </mat-form-field>
               </div>
+
               <div class="col-md-6">
-                <mat-form-field>
-                  <mat-label>Amount</mat-label>
+                <label class="col-form-label " for="schemeAmtFC" >Amount</label>
+                <mat-form-field appearance="outline">
+                  <!-- <mat-label>Amount</mat-label> -->
                   <input type="text" class="st_txt_right" matInput formControlName="schemeAmtFC" id="schemeAmtFC"
                     [placeholder]="zeroAmtVal"  readonly AmountDecimalInput />
                   <mat-error *ngIf="
@@ -1959,6 +2039,7 @@
                   </mat-error>
                 </mat-form-field>
               </div>
+
             </div>
           </div>
           
@@ -2019,13 +2100,13 @@
             <div class="bg-gray-card">
               <div class="form-group row">
                 <div class="col-md-2">
-                  <mat-form-field>
+                  <mat-form-field appearance="outline">
                     <mat-label>Division</mat-label>
                     <input type="text" matInput formControlName="fcn_exchange_division" readonly />
                   </mat-form-field>
                 </div>
                 <div class="col-md-3">
-                  <mat-form-field>
+                  <mat-form-field appearance="outline">
                     <mat-label>Stock Code</mat-label>
                     <input type="text" matInput formControlName="fcn_exchange_item_code" id="fcn_exchange_item_code"
                       [matAutocomplete]="stockId" [readonly]="viewOnly" (change)="exchangeStockCode($event)" />
@@ -2046,7 +2127,7 @@
                   </mat-form-field>
                 </div>
                 <div class="col-md-7">
-                  <mat-form-field>
+                  <mat-form-field appearance="outline">
                     <mat-label>Stock Description </mat-label>
                     <input type="text" matInput formControlName="fcn_exchange_item_desc" readonly />
                   </mat-form-field>
@@ -2058,7 +2139,7 @@
           <div class="col-md-12">
             <div class="form-group row">
               <div class="col-md-3">
-                <mat-form-field>
+                <mat-form-field appearance="outline">
                   <mat-label>Pcs </mat-label>
                   <input type="number" class="text-right" [min]="0" [maxLength]="8"
                     (keyup)="this.comFunc.enforceMinMax($event.target)" matInput formControlName="fcn_exchange_pcs"
@@ -2066,7 +2147,7 @@
                 </mat-form-field>
               </div>
               <div class="col-md-3">
-                <mat-form-field>
+                <mat-form-field appearance="outline">
                   <mat-label>Gross Wt</mat-label>
                   <input type="number" [min]="0" [maxLength]="10" (keyup)="this.comFunc.enforceMinMax($event.target)"
                     class="st_txt_right" id="fcn_exchange_gross_wt" matInput formControlName="fcn_exchange_gross_wt"
@@ -2074,7 +2155,7 @@
                 </mat-form-field>
               </div>
               <div class="col-md-3">
-                <mat-form-field>
+                <mat-form-field appearance="outline">
                   <mat-label>Stone Wt</mat-label>
                   <input type="text" [min]="0" [maxLength]="10" (keyup)="this.comFunc.enforceMinMax($event.target)"
                     [max]="this.comFunc.emptyToZero(this.exchangeForm.value.fcn_exchange_gross_wt)" class="st_txt_right"
@@ -2083,7 +2164,7 @@
                 </mat-form-field>
               </div>
               <div class="col-md-3">
-                <mat-form-field>
+                <mat-form-field appearance="outline">
                   <mat-label>Net Wt </mat-label>
                   <input type="text" [min]="0" [maxLength]="10" (keyup)="this.comFunc.enforceMinMax($event.target)"
                     class="st_txt_right" matInput formControlName="fcn_exchange_net_wt" readonly id="fcn_exchange_net_wt"
@@ -2097,7 +2178,7 @@
           <div class="col-md-12">
             <div class="form-group row">
               <div class="col-md-3">
-                <mat-form-field>
+                <mat-form-field appearance="outline">
                   <mat-label>Chargeable wt </mat-label>
                   <input type="text" [min]="0" [maxLength]="14" (keyup)="this.comFunc.enforceMinMax($event.target)"
                     class="st_txt_right" matInput formControlName="fcn_exchange_chargeable_wt" readonly
@@ -2106,7 +2187,7 @@
                 </mat-form-field>
               </div>
               <div class="col-md-3">
-                <mat-form-field>
+                <mat-form-field appearance="outline">
                   <mat-label>Purity </mat-label>
                   <input type="number" [min]="this._exchangeItemchange?.PURITY_FROM || 0"
                     [max]="this._exchangeItemchange?.PURITY_TO" [step]="0.01" [maxLength]="14"
@@ -2115,7 +2196,7 @@
                 </mat-form-field>
               </div>
               <div class="col-md-3">
-                <mat-form-field>
+                <mat-form-field appearance="outline">
                   <mat-label>Pure Weight</mat-label>
                   <input class="st_txt_right" type="text" [min]="0" [maxLength]="14"
                     (change)="this.comFunc.enforceMinMax($event.target)" matInput
@@ -2123,14 +2204,14 @@
                 </mat-form-field>
               </div>
               <div class="col-md-3">
-                <mat-form-field>
+                <mat-form-field appearance="outline">
                   <mat-label>Purity Difference</mat-label>
                   <input type="text" [min]="0" [maxLength]="14" (keyup)="this.comFunc.enforceMinMax($event.target)"
                     class="st_txt_right" matInput formControlName="fcn_exchange_purity_diff" readonly MetalDecimalInput />
                 </mat-form-field>
               </div>
               <div class="col-md-3">
-                <mat-form-field>
+                <mat-form-field appearance="outline">
                   <mat-label>Stone Rate</mat-label>
                   <input [min]="0" [maxLength]="14" (keyup)="this.comFunc.enforceMinMax($event.target)"
                     class="st_txt_right" matInput  formControlName="fcn_exchange_stone_rate"
@@ -2138,7 +2219,7 @@
                 </mat-form-field>
               </div>
               <div class="col-md-3">
-                <mat-form-field>
+                <mat-form-field appearance="outline">
                   <mat-label>Stone Amount</mat-label>
                   <input [min]="0" [maxLength]="14" (keyup)="this.comFunc.enforceMinMax($event.target)" [min]="0"
                     class="st_txt_right" matInput formControlName="fcn_exchange_stone_amount"
@@ -2146,7 +2227,7 @@
                 </mat-form-field>
               </div>
               <div class="col-md-3">
-                <mat-form-field>
+                <mat-form-field appearance="outline">
                   <mat-label>Metal Rate </mat-label>
                   <input type="text" [min]="0" [maxLength]="14" (change)="metalRateChange()"
                     (keyup)="this.comFunc.enforceMinMax($event.target)" class="st_txt_right" matInput
@@ -2154,7 +2235,7 @@
                 </mat-form-field>
               </div>
               <div class="col-md-3">
-                <mat-form-field>
+                <mat-form-field appearance="outline">
                   <mat-label>Making Rate </mat-label>
                   <input [min]="0" [maxLength]="14" (keyup)="this.comFunc.enforceMinMax($event.target)"
                     class="st_txt_right" matInput formControlName="fcn_exchange_making_rate" readonly
@@ -2162,14 +2243,14 @@
                 </mat-form-field>
               </div>
               <div class="col-md-3">
-                <mat-form-field>
+                <mat-form-field appearance="outline">
                   <mat-label>Making Amount </mat-label>
                   <input [min]="0" [maxLength]="14" (keyup)="this.comFunc.enforceMinMax($event.target)"
                     class="st_txt_right" matInput formControlName="fcn_exchange_making_amt" readonly AmountDecimalInput />
                 </mat-form-field>
               </div>
               <div class="col-md-3">
-                <mat-form-field>
+                <mat-form-field appearance="outline">
                   <mat-label>Metal Amount</mat-label>
                   <input type="text" AmountDecimalInput [max]="14" class="st_txt_right" matInput
                     formControlName="fcn_exchange_metal_amount" (change)="changeExchangeMetalAmt($event)"
@@ -2177,7 +2258,7 @@
                 </mat-form-field>
               </div>
               <div class="col-md-3">
-                <mat-form-field>
+                <mat-form-field appearance="outline">
                   <mat-label>Net Amount</mat-label>
                   <input  type="text" AmountDecimalInput [max]="14" (keyup)="this.comFunc.enforceMinMax($event.target)"
                     class="st_txt_right" matInput formControlName="fcn_exchange_net_amount" [readonly]="true"
@@ -2188,17 +2269,17 @@
                 <div class="col-md-6">
                   <fieldset>
                     <legend>Scrap</legend>
-                    <mat-form-field>
+                    <mat-form-field appearance="outline">
                       <mat-label>Bag No</mat-label>
                       <input type="number" class="st_txt_right" matInput
                         formControlName="fcn_exchange_scrap_bag_no" />
                     </mat-form-field>
-                    <mat-form-field>
+                    <mat-form-field appearance="outline">
                       <mat-label>Bag Description</mat-label>
                       <input type="text" matInput
                         formControlName="fcn_exchange_scrap_bag_desc" />
                     </mat-form-field>
-                    <mat-form-field>
+                    <mat-form-field appearance="outline">
                       <mat-label>Location</mat-label>
                       <input type="text" matInput
                         formControlName="fcn_exchange_location" />
@@ -2215,7 +2296,7 @@
                       <label for="inputPassword"
                         class="col-sm-4 col-form-label">Jawahara Y/N</label>
                       <div class="col-md-8">
-                        <mat-form-field>
+                        <mat-form-field appearance="outline">
                           <mat-select formControlName="fcn_exchange_jawahara">
                             <mat-option value="0">Jawahara</mat-option>
                             <mat-option value="1">Non Jawahara</mat-option>
@@ -2227,7 +2308,7 @@
                       <label for="inputPassword"
                         class="col-sm-4 col-form-label">Resale/ Recycle</label>
                       <div class="col-md-8">
-                        <mat-form-field>
+                        <mat-form-field appearance="outline">
                           <mat-select
                             formControlName="fcn_exchange_resale_recycle">
                             <mat-option value="0">Resale</mat-option>
@@ -2240,7 +2321,7 @@
                       <label for="inputPassword"
                         class="col-sm-4 col-form-label">Cash/ Exchange</label>
                       <div class="col-md-8">
-                        <mat-form-field>
+                        <mat-form-field appearance="outline">
                           <mat-select
                             formControlName="fcn_exchange_cash_exchange">
                             <mat-option value="0">Cash</mat-option>
@@ -2308,13 +2389,15 @@
           <form [formGroup]="salesReturnForm">
             <div class="form-group row">
               <div class="col-md-3">
-                <!-- <mat-form-field>
+                <!-- <mat-form-field appearance="outline">
                     <mat-label>Fin Year</mat-label>
                     <input type="text" matInput formControlName="fcn_returns_fin_year" id="fcn_returns_fin_year"
                       value="{{ fcn_returns_fin_year_val }}" [readonly]="viewOnly" />
                   </mat-form-field> -->
-                <mat-form-field>
-                  <mat-label>Fin Year</mat-label>
+                  <label class="col-sm-4" for="fcn_returns_fin_year" id="ID112">Fin Year</label>
+
+                <mat-form-field appearance="outline">
+                  <!-- <mat-label>Fin Year</mat-label> -->
                   <input matInput type="text" id="fcn_returns_fin_year" formControlName="fcn_returns_fin_year"
                     [matAutocomplete]="year" />
                   <mat-autocomplete #year="matAutocomplete" autoActiveFirstOption>
@@ -2339,13 +2422,15 @@
                 </mat-form-field>
               </div>
               <div class="col-md-3">
-                <!-- <mat-form-field>
+                <!-- <mat-form-field appearance="outline">
                     <mat-label>Branch </mat-label>
                     <input type="text" matInput formControlName="fcn_returns_branch" value="{{ fcn_returns_branch_val }}" />
                   </mat-form-field> -->
-                <mat-form-field class="example-full-width">
-                  <mat-label>Branch</mat-label>
-                  <input type="text" matInput formControlName="fcn_returns_branch" [matAutocomplete]="branch"
+                  <label class="col-sm-4" for="fcn_returns_branch" id="ID071">Branch</label>
+
+                <mat-form-field appearance="outline" class="example-full-width">
+                  <!-- <mat-label>Branch</mat-label> -->
+                  <input type="text" matInput id="fcn_returns_branch" formControlName="fcn_returns_branch" [matAutocomplete]="branch"
                     (focusout)="changeBranch($event)" [readonly]="viewOnly" />
                   <mat-autocomplete #branch="matAutocomplete" autoActiveFirstOption>
                     <mat-option *ngFor="
@@ -2371,8 +2456,10 @@
                 </mat-form-field>
               </div>
               <div class="col-md-3">
-                <mat-form-field>
-                  <mat-label>Voc Type</mat-label>
+                <label class="col-sm-5" for="returns_branch" id="ID114">Voc Type</label>
+
+                <mat-form-field appearance="outline">
+                  <!-- <mat-label>Voc Type</mat-label> -->
                   <mat-select formControlName="fcn_returns_voc_type" [disabled]="viewOnly">
                     <mat-option *ngFor="let voctype of vocTypesinSalesReturn" [value]="voctype.VOCTYPE">
                       {{ voctype.VOCTYPE }}
@@ -2393,14 +2480,16 @@
                                     </mat-autocomplete>-->
                 </mat-form-field>
   
-                <!--<mat-form-field>
+                <!--<mat-form-field appearance="outline">
                                     <mat-label>Voc Type</mat-label>
                                     <input type="text" matInput formControlName="fcn_returns_voc_type" value="{{fcn_returns_voc_type_val}}">
                                 </mat-form-field>-->
               </div>
+
               <div class="col-md-2">
-                <mat-form-field>
-                  <mat-label>Voc No</mat-label>
+                <label  for="returns_branch">Voc No</label>
+                <mat-form-field appearance="outline">
+                  <!-- <mat-label>Voc No</mat-label> -->
                   <input type="text" matInput class="st_txt_right" formControlName="fcn_returns_voc_no"
                     (change)="getRetailSReturn_EvnFn($event)"
                     [readonly]="viewOnly || this.sales_returns_items.length > 0" />
@@ -2413,6 +2502,7 @@
                   </mat-error>
                 </mat-form-field>
               </div>
+
               <div class="col-md-1 text-right" style="margin-top: 7px">
                 <button (click)="searchVocNoSalRet()" class="btn btn-secondary btn-m-r-10" [disabled]="viewOnly">
                   <i class="fa fa-search"></i>
@@ -2420,40 +2510,45 @@
               </div>
             </div>
   
-            <div class="form-group row">
+            <div class="form-group row mt-2">
               <div class="col-md-3">
-                <mat-form-field>
-                  <mat-label>Voc Date</mat-label>
+                <label  for="returns_voc_date" >Voc Date</label>
+                <mat-form-field appearance="outline">
+                  <!-- <mat-label>Voc Date</mat-label> -->
                   <input type="text" matInput formControlName="fcn_returns_voc_date" readonly />
                 </mat-form-field>
               </div>
               <div class="col-md-3">
-                <mat-form-field>
-                  <mat-label>Salesman</mat-label>
+                <label class=" col-sm-4" for="returns_sales_man" >Salesman</label>
+                <mat-form-field appearance="outline">
+                  <!-- <mat-label>Salesman</mat-label> -->
                   <input type="text" matInput formControlName="fcn_returns_sales_man"
                     value="{{ fcn_returns_sales_man_val }}" readonly />
                 </mat-form-field>
               </div>
               <div class="col-md-3">
-                <mat-form-field>
-                  <mat-label>Cust Code</mat-label>
+                <label class="col-sm-5" for="returns_cust_code">Cust Code</label>
+                <mat-form-field appearance="outline">
+                  <!-- <mat-label>Cust Code</mat-label> -->
                   <input type="text" matInput formControlName="fcn_returns_cust_code"
                     value="{{ fcn_returns_cust_code_val }}" readonly />
                 </mat-form-field>
               </div>
               <div class="col-md-3">
-                <mat-form-field>
-                  <mat-label>Cust Mobile</mat-label>
+                <label class="col-sm-6" for="returns_cust_mobile" >Cust Mobile</label>
+                <mat-form-field appearance="outline">
+                  <!-- <mat-label>Cust Mobile</mat-label> -->
                   <input type="number" oninput="validity.valid||(value='');" matInput
                     formControlName="fcn_returns_cust_mobile" value="{{ fcn_returns_cust_mobile_val }}" readonly />
                 </mat-form-field>
               </div>
             </div>
   
-            <div class="form-group row">
+            <div class="form-group row mb-4">
               <div class="col-md-3">
-                <mat-form-field>
-                  <mat-label>Cust Name</mat-label>
+                <label class="col-sm-6" for="returns_cust_name" >Cust Name</label>
+                <mat-form-field appearance="outline">
+                  <!-- <mat-label>Cust Name</mat-label> -->
                   <input type="text" matInput formControlName="fcn_returns_cust_name" readonly />
                 </mat-form-field>
               </div>
@@ -2485,7 +2580,7 @@
                   {{ slsReturn.TOTALWITHVATLC | decimalFormat : "AMOUNT" }}
                 </td>
                 <td style="text-align: center">
-                  <input [disabled]="viewOnly" type="checkbox" value="{{ slsReturn.STOCK_CODE }}" [readonly]="viewOnly"
+                  <input [disabled]="true" type="checkbox" value="{{ slsReturn.STOCK_CODE }}" [readonly]="viewOnly"
                     [checked]="true"
                     (change)="addSalesReturnOnSelect($event, slsReturn, id)" />
                 </td>
@@ -2531,7 +2626,7 @@
               <div class="col-md-3">
                 <div class="form-group row">
                   <div class="col-md-4">
-                    <mat-form-field>
+                    <mat-form-field appearance="outline">
                       <mat-label>Code</mat-label>
                       <input type="text" matInput
                         onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))"
@@ -2555,7 +2650,7 @@
                   </div>
   
                   <div class="col-md-8">
-                    <mat-form-field>
+                    <mat-form-field appearance="outline">
                       <mat-label>Mobile 1</mat-label>
                       <input type="text" #mobile1 (change)="onCustomerNameFocus(mobile1.value)"
                         onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))"
@@ -2573,7 +2668,7 @@
                 </div>
               </div>
               <div class="col-md-3">
-                <mat-form-field>
+                <mat-form-field appearance="outline">
                   <mat-label>Name</mat-label>
                   <input type="text" matInput formControlName="fcn_customer_detail_name" id="fcn_customer_detail_name"
                     (change)="nameChange($event)" [readonly]="viewOnly" appAlphabetsOnly appNoEmptySpace />
@@ -2596,7 +2691,7 @@
                 </mat-form-field>
               </div>
               <div class="col-md-3">
-                <mat-form-field>
+                <mat-form-field appearance="outline">
                   <mat-label>First Name</mat-label>
                   <input type="text" matInput formControlName="fcn_customer_detail_fname" [readonly]="true"
                     appNoEmptySpace />
@@ -2610,7 +2705,7 @@
                 </mat-form-field>
               </div>
               <div class="col-md-3">
-                <mat-form-field>
+                <mat-form-field appearance="outline">
                   <mat-label>Middle Name</mat-label>
                   <input type="text" matInput formControlName="fcn_customer_detail_mname" [readonly]="true" />
                 </mat-form-field>
@@ -2619,7 +2714,7 @@
   
             <div class="form-group row">
               <div class="col-md-3">
-                <mat-form-field>
+                <mat-form-field appearance="outline">
                   <mat-label>Last Name</mat-label>
                   <input type="text" matInput formControlName="fcn_customer_detail_lname" [readonly]="true" />
                   <mat-error *ngIf="
@@ -2639,7 +2734,7 @@
                 </mat-form-field>
               </div>
               <div class="col-md-3">
-                <mat-form-field>
+                <mat-form-field appearance="outline">
                   <mat-label>Mobile 2</mat-label>
                   <input type="text"
                     onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))"
@@ -2647,7 +2742,7 @@
                 </mat-form-field>
               </div>
               <div class="col-md-3">
-                <mat-form-field>
+                <mat-form-field appearance="outline">
                   <mat-label>Email Address</mat-label>
                   <input type="email" matInput formControlName="fcn_cust_detail_email" [readonly]="viewOnly" />
                   <mat-error *ngIf="
@@ -2660,7 +2755,7 @@
                 </mat-form-field>
               </div>
               <div class="col-md-3">
-                <mat-form-field>
+                <mat-form-field appearance="outline">
                   <mat-label>Gender</mat-label>
                   <mat-select formControlName="fcn_cust_detail_gender" [disabled]="viewOnly">
                     <mat-option *ngFor="let data of genderList" [value]="data.ENGLISH">{{ data.ENGLISH }}</mat-option>
@@ -2678,7 +2773,7 @@
   
             <div class="form-group row">
               <div class="col-md-3">
-                <mat-form-field>
+                <mat-form-field appearance="outline">
                   <mat-label>Marital Status</mat-label>
                   <mat-select formControlName="fcn_cust_detail_marital_status" [disabled]="viewOnly">
                     <mat-option *ngFor="let data of maritalStatusList" [value]="data.ENGLISH">{{ data.ENGLISH
@@ -2688,7 +2783,7 @@
                 </mat-form-field>
               </div>
               <div class="col-md-3">
-                <mat-form-field dateFormat3>
+                <mat-form-field appearance="outline" dateFormat3>
                   <mat-label>Date Of Birth</mat-label>
                   <input matInput [matDatepicker]="dob" [max]="vocMaxDate" name="fcn_cust_detail_dob"
                     formControlName="fcn_cust_detail_dob" placeholder="DD/MM/YYYY" [readonly]="viewOnly"  DateValidation/>
@@ -2705,7 +2800,7 @@
                 </mat-form-field>
               </div>
               <div class="col-md-3">
-                <mat-form-field>
+                <mat-form-field appearance="outline">
                   <mat-label>Nationality</mat-label>
                   <input type="text" matInput formControlName="fcn_cust_detail_nationality"
                     id="fcn_cust_detail_nationality" [matAutocomplete]="nationality" [readonly]="viewOnly" />
@@ -2731,7 +2826,7 @@
                 </mat-form-field>
               </div>
               <div class="col-md-3">
-                <mat-form-field>
+                <mat-form-field appearance="outline">
                   <mat-label>Country</mat-label>
                   <input type="text" matInput formControlName="fcn_cust_detail_country" id="fcn_cust_detail_country"
                     [matAutocomplete]="country" [readonly]="viewOnly" />
@@ -2758,7 +2853,7 @@
                 </mat-form-field>
               </div>
               <div class="col-md-3">
-                <mat-form-field>
+                <mat-form-field appearance="outline">
                   <mat-label>State</mat-label>
                   <input type="text" matInput formControlName="fcn_cust_detail_state" id="fcn_cust_detail_state"
                     [matAutocomplete]="state" [readonly]="viewOnly" />
@@ -2778,7 +2873,7 @@
                 </mat-form-field>
               </div>
               <div class="col-md-3">
-                <mat-form-field>
+                <mat-form-field appearance="outline">
                   <mat-label>City</mat-label>
                   <!-- <input type="text" matInput formControlName="fcn_cust_detail_city" [readonly]="viewOnly" /> -->
                   <input type="text" matInput formControlName="fcn_cust_detail_city" id="fcn_cust_detail_city"
@@ -2798,7 +2893,7 @@
                 </mat-form-field>
               </div>
               <div class="col-md-3">
-                <mat-form-field>
+                <mat-form-field appearance="outline">
                   <mat-label>Address</mat-label>
                   <input type="text" matInput formControlName="fcn_cust_detail_address" [readonly]="viewOnly"
                     appNoEmptySpace />
@@ -2812,7 +2907,7 @@
                 </mat-form-field>
               </div>
               <div class="col-md-3">
-                <mat-form-field>
+                <mat-form-field appearance="outline">
                   <mat-label>ID Type </mat-label>
                   <input type="text" matInput formControlName="fcn_cust_detail_idType" [matAutocomplete]="custIdType"
                     [readonly]="viewOnly" />
@@ -2839,7 +2934,7 @@
                 </mat-form-field>
               </div>
               <div class="col-md-3">
-                <mat-form-field>
+                <mat-form-field appearance="outline">
                   <mat-label>ID Number</mat-label>
                   <input type="text" matInput formControlName="fcn_cust_detail_idcard" [readonly]="viewOnly"
                     appNoEmptySpace />
@@ -2880,7 +2975,7 @@
                 </mat-form-field>
               </div>
               <div class="col-md-3">
-                <mat-form-field>
+                <mat-form-field appearance="outline">
                   <!-- <mat-label>Occupation</mat-label> -->
                   <mat-label>Designation</mat-label>
                   <input type="text" matInput formControlName="fcn_cust_detail_designation" [readonly]="viewOnly"
@@ -2895,13 +2990,14 @@
                 </mat-form-field>
               </div>
               <div class="col-md-2">
-                <mat-form-field>
+                <mat-form-field appearance="outline">
                   <mat-label>Employer</mat-label>
                   <input type="text" matInput formControlName="fcn_cust_detail_company" [readonly]="viewOnly" />
                 </mat-form-field>
               </div>
+
               <div class="col-md-3">
-                <mat-form-field>
+                <mat-form-field appearance="outline">
                   <mat-label>Expiry Date</mat-label>
                   <input matInput [matDatepicker]="expDateCust" name="fcn_customer_exp_date"
                     formControlName="fcn_customer_exp_date" placeholder="DD/MM/YYYY" [min]="currentDate"
@@ -2918,6 +3014,7 @@
                   </mat-error>
                 </mat-form-field>
               </div>
+
             </div>
           </form>
         </div>
@@ -2959,45 +3056,54 @@
             <!-- {{ pos_div_modelerrmsg }} -->
           </div>
           <span>
-            <div class="col-md-12">
+            <div class="col-md-12 mb-2">
               <div class="bg-gray-card">
-                <div class="form-group row">
-                  <div class="col-md-2">
-                    <!-- <mat-form-field style="width: 100%; display:inline-block !important;"> -->
-                    <mat-form-field>
-                      <mat-label>Division </mat-label>
+                <div class="form-group row mb-2">
+
+                  <div class="col-md-2 mb-2">
+                    <label for="fcn_li_division" >Division</label>
+                    <!-- <mat-form-field appearance="outline" style="width: 100%; display:inline-block !important;"> -->
+                    <mat-form-field appearance="outline">
+                      <!-- <mat-label>Division </mat-label> -->
                       <input type="text" matInput formControlName="fcn_li_division" id="fcn_li_division"  />
                     </mat-form-field>
                     <!-- <master-search [MasterSearchData]="divisionCodeData"
                           (newRowClick)="divisionCodeSelected($event)">>
                           </master-search> -->
                   </div>
-                  <div class="col-md-2">
-                    <!-- <mat-form-field  style="width: 75%; display:inline-block !important;"> -->
-                    <mat-form-field>
-                      <mat-label>Stock Code </mat-label>
+
+                  <div class="col-md-2 mb-2">
+                    <label  for="fcn_li_item_code" >Stock Code</label>
+                    <!-- <mat-form-field appearance="outline"  style="width: 75%; display:inline-block !important;"> -->
+                    <mat-form-field appearance="outline">
+                      <!-- <mat-label>Stock Code </mat-label> -->
                       <input type="text" matInput autocomplete="off" formControlName="fcn_li_item_code" #fcn_li_item_code
                         id="fcn_li_item_code" autofocus (change)="getStockDesc($event)" [readonly]="viewOnly" />
                     </mat-form-field>
                     <!-- <master-search [MasterSearchData]="itemcodeData" (newRowClick)="itemcodeSelected($event)"></master-search> -->
                   </div>
-                  <div class="col-md-3">
-                    <mat-form-field>
-                      <mat-label>Stock Description </mat-label>
+
+                  <div class="col-md-3 mb-2">
+                    <label for="fcn_li_item_desc" >Stock Description</label>
+                    <mat-form-field appearance="outline">
+                      <!-- <mat-label>Stock Description </mat-label> -->
                       <input type="text" matInput formControlName="fcn_li_item_desc" id="fcn_li_item_desc"
                         [readonly]="viewOnly || !allowDescription" />
                     </mat-form-field>
                   </div>
-                  <div class="col-md-2" *ngIf="this.lineItemForm.value.fcn_li_location">
-                    <mat-form-field>
-                      <mat-label>Location </mat-label>
+
+                  <div class="col-md-2 mb-2" *ngIf="this.lineItemForm.value.fcn_li_location">
+                    <label for="fcn_li_location">Location</label>
+                    <mat-form-field appearance="outline">
+                      <!-- <mat-label>Location </mat-label> -->
                       <input type="text" matInput formControlName="fcn_li_location" id="fcn_li_location"
                         readonly />
                       <!-- BUG_01711 - Should be able to enter location.-->
                     </mat-form-field>
                   </div>
+                  
                   <!-- <div class="col-md-2" *ngIf="isGiftTypeRequired">
-                    <mat-form-field>
+                    <mat-form-field appearance="outline">
                       <mat-label>Gift Type</mat-label>
                       <mat-select formControlName="fcn_li_gift_type">
                         <mat-option *ngFor="let option of giftTypeOptions" [value]="option.value">{{ option.label
@@ -3012,10 +3118,12 @@
             <div class="col-md-12">
               <div class="row">
                 <div class="col-md-6">
-                  <div class="form-group row">
-                    <div class="col-md-3">
-                      <mat-form-field aria-readonly="true">
-                        <mat-label>Pcs</mat-label>
+                  <div class="form-group row ">
+
+                    <div class="col-md-3 mb-2">
+                      <label  for="fcn_li_pcs">Pcs</label>
+                      <mat-form-field appearance="outline" aria-readonly="true">
+                        <!-- <mat-label>Pcs</mat-label> -->
                         <input class="st_txt_right" type="text" [min]="0" autocomplete="off" [maxLength]="14"
                           (keyup)="this.comFunc.enforceMinMax($event.target)" matInput id="fcn_li_pcs"
                           formControlName="fcn_li_pcs"   (focus)="setValToLocalStorage($event, 'fcn_li_pcs')" (change)="changePCS($event)" [readonly]="viewOnly" NumberOnly />
@@ -3033,11 +3141,15 @@
                         </mat-error>
                       </mat-form-field>
                     </div>
-                    <div class="col-md-3">
-                      <mat-form-field>
-                        <mat-label>{{
+                    
+                    <div class="col-md-3 mb-2">
+                      <label  for="fcn_li_gross_wt">{{
+                      newDictionary?.lblGrossWeight || "Gross Wt"}}</label>
+
+                      <mat-form-field appearance="outline">
+                        <!-- <mat-label>{{
                           newDictionary?.lblGrossWeight || "Gross Wt"
-                          }}</mat-label>
+                          }}</mat-label> -->
                         <!-- <mat-label>{{newDictionary?.lblGrossWeight}}</mat-label> -->
                         <input class="st_txt_right" [maxLength]="14" type="text" [min]="0"
                           (keyup)="this.comFunc.enforceMinMax($event.target)" matInput formControlName="fcn_li_gross_wt"
@@ -3057,20 +3169,26 @@
                         </mat-error>
                       </mat-form-field>
                     </div>
-                    <div class="col-md-3" *ngIf="this.divisionMS == 'S' ? false : true">
-                      <mat-form-field>
-                        <mat-label>{{
+
+
+                    <div class="col-md-3 mb-2" *ngIf="this.divisionMS == 'S' ? false : true">
+                      <label for="fcn_li_stone_wt">{{
+                      newDictionary?.lblStoneWeight || "Stone Wt"}}</label>
+                      <mat-form-field appearance="outline">
+                        <!-- <mat-label>{{
                           newDictionary?.lblStoneWeight || "Stone Wt"
-                          }}</mat-label>
+                          }}</mat-label> -->
                         <input class="st_txt_right" type="text" [min]="0" [maxLength]="14"
                           (keyup)="this.comFunc.enforceMinMax($event.target)" matInput formControlName="fcn_li_stone_wt"
                           id="fcn_li_stone_wt" (change)="changeStoneWt($event)" [readonly]="viewOnly"
                           MetalDecimalInput />
                       </mat-form-field>
                     </div>
-                    <div class="col-md-3" *ngIf="this.divisionMS == 'S' ? false : true">
-                      <mat-form-field>
-                        <mat-label>Net Wt </mat-label>
+
+                    <div class="col-md-3 mb-2" *ngIf="this.divisionMS == 'S' ? false : true">
+                      <label  for="fcn_li_net_wt" >Net&nbsp;Wt</label>
+                      <mat-form-field appearance="outline">
+                        <!-- <mat-label>Net Wt </mat-label> -->
                         <input type="text" class="st_txt_right" [min]="0" [maxLength]="14"
                           (keyup)="this.comFunc.enforceMinMax($event.target)"
                           max="{{ this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt) }}" matInput
@@ -3078,64 +3196,82 @@
                           MetalDecimalInput />
                       </mat-form-field>
                     </div>
+
                   </div>
   
                   <div class="form-group row" *ngIf="this.divisionMS == 'M'">
-                    <div class="col-md-6">
-                      <mat-form-field>
-                        <mat-label>Purity </mat-label>
+                    <div class="col-md-6 mb-2">
+                      <label for="fcn_li_purity" >Purity</label>
+                      <mat-form-field appearance="outline">
+                        <!-- <mat-label>Purity </mat-label> -->
                         <input type="number" [min]="0" [maxLength]="14"
                           (keyup)="this.comFunc.enforceMinMax($event.target)" class="st_txt_right" matInput
                           formControlName="fcn_li_purity" id="fcn_li_purity" readonly />
                       </mat-form-field>
                     </div>
-                    <div class="col-md-6">
-                      <mat-form-field>
-                        <mat-label>Pure Weight</mat-label>
+
+                    <div class="col-md-6 mb-2">
+                      <label class=" col-sm-6" for="fcn_li_pure_wt" id="ID183">Pure Weight</label>
+                      <mat-form-field appearance="outline">
+                        <!-- <mat-label>Pure Weight</mat-label> -->
                         <input class="st_txt_right" type="text" (keyup)="this.comFunc.enforceMinMax($event.target)"
                           matInput formControlName="fcn_li_pure_wt" id="fcn_li_pure_wt" readonly />
                       </mat-form-field>
                     </div>
+
                   </div>
+
                   <div class="form-group row" *ngIf="this.divisionMS == 'S' ? false : true">
-                    <div class="col-md-6">
-                      <mat-form-field>
-                        <mat-label>Metal Rate</mat-label>
+                    
+                    <div class="col-md-6 mb-2">
+                      <label for="fcn_ad_metal_rate">Metal Rate</label>
+                      <mat-form-field appearance="outline">
+                        <!-- <mat-label>Metal Rate</mat-label> -->
                         <input class="st_txt_right" type="text" [min]="0" [maxLength]="14"
                           (keyup)="this.comFunc.enforceMinMax($event.target)" matInput formControlName="fcn_ad_metal_rate"
                           id="fcn_ad_metal_rate" readonly />
                       </mat-form-field>
                     </div>
-                    <div class="col-md-6">
-                      <mat-form-field>
-                        <mat-label>Metal Amount</mat-label>
+
+                    <div class="col-md-6 mb-2">
+                      <label for="fcn_ad_metal_amount">Metal Amount</label>
+                      <mat-form-field appearance="outline">
+                        <!-- <mat-label>Metal Amount</mat-label> -->
                         <input class="st_txt_right" type="text" [min]="0" [maxLength]="14"
                           (keyup)="this.comFunc.enforceMinMax($event.target)" matInput
                           formControlName="fcn_ad_metal_amount" id="fcn_ad_metal_amount" AmountDecimalInput readonly />
                       </mat-form-field>
                     </div>
+
                   </div>
+
+
                   <div class="form-group row" *ngIf="this.divisionMS == 'S' ? false : true">
-                    <div class="col-md-4">
-                      <mat-form-field>
-                        <mat-label>Stone Rate</mat-label>
+                    
+                    <div class="col-md-4 mb-2">
+                      <label  for="fcn_ad_stone_rate">Stone Rate</label>
+                      <mat-form-field appearance="outline">
+                        <!-- <mat-label>Stone Rate</mat-label> -->
                         <input class="st_txt_right" type="text" [min]="0" [maxLength]="14"
                           (keyup)="this.comFunc.enforceMinMax($event.target)" matInput formControlName="fcn_ad_stone_rate"
                           id="fcn_ad_stone_rate" (change)="changeStoneRate($event)" value="{{ li_stone_rate_val }}"
                           [readonly]="viewOnly" AmountDecimalInput />
                       </mat-form-field>
                     </div>
-                    <div class="col-md-4">
-                      <mat-form-field>
-                        <mat-label>Stone Amount</mat-label>
+
+                    <div class="col-md-4 mb-2">
+                      <label  for="fcn_ad_stone_amount">Stone Amount</label>
+                      <mat-form-field appearance="outline">
+                        <!-- <mat-label>Stone Amount</mat-label> -->
                         <input class="st_txt_right" type="text" [min]="0" [maxLength]="14"
                           (keyup)="this.comFunc.enforceMinMax($event.target)" id="fcn_ad_stone_amount" matInput
                           formControlName="fcn_ad_stone_amount" value="{{ li_stone_amount_val }}"
                           (change)="changeStoneAmt($event)" [readonly]="viewOnly" />
                       </mat-form-field>
                     </div>
+
                     <!-- <div class="col-md-4">
-                      <mat-form-field>
+                      <mat-form-field appearance="outline">
                         <mat-label>Rate Type</mat-label>
                         <input type="text" matInput formControlName="fcn_ad_rate_type" id="fcn_ad_rate_type"
                           [readonly]="viewOnly" />
@@ -3144,11 +3280,15 @@
                   </div>
   
                   <div class="form-group row">
-                    <div class="col-md-6">
-                      <mat-form-field>
-                        <mat-label>{{
+
+                    <div class="col-md-6 mb-2">
+                      <label  for="fcn_li_rate">
+                        {{divisionMS == "M" ? "Making Rate" : "Rate"}}
+                      </label>
+                      <mat-form-field appearance="outline">
+                        <!-- <mat-label>{{
                           divisionMS == "M" ? "Making Rate" : "Rate"
-                          }}</mat-label>
+                          }}</mat-label> -->
                         <input class="st_txt_right" type="text" [min]="0" [maxLength]="14"
                           (keyup)="this.comFunc.enforceMinMax($event.target)" matInput id="fcn_li_rate"
                           formControlName="fcn_li_rate" (change)="changeRate($event)" readonly="{{ viewOnly }}"
@@ -3172,12 +3312,16 @@
                         <!-- formControlName="fcn_li_rate" value="{{li_rate_val}}" (keyup)="changeRate()" (mouseup)="changeRate()" > -->
                       </mat-form-field>
                     </div>
-                    <div class="col-md-6">
-                      <mat-form-field>
-                        <mat-label>
+
+                    <div class="col-md-6 mb-2">
+                      <label for="fcn_li_total_amount" >
+                        {{ divisionMS == "M" ? "Making Amount" : "Amount" }}
+                      </label>
+                      <mat-form-field appearance="outline">
+                        <!-- <mat-label>
                           {{
                           divisionMS == "M" ? "Making Amount" : "Amount"
-                          }}</mat-label>
+                          }}</mat-label> -->
                         <!-- : "Total Amount" -->
                         <input class="st_txt_right" type="text" [min]="0" [maxLength]="14"
                           (keyup)="this.comFunc.enforceMinMax($event.target)" id="fcn_li_total_amount" matInput
@@ -3209,11 +3353,15 @@
                         </mat-error>
                       </mat-form-field>
                     </div>
+
                   </div>
+
                   <div class="form-group row" *ngIf="this.divisionMS == 'M' ? false : true">
-                    <div class="col-md-6">
-                      <mat-form-field>
-                        <mat-label>Discount %</mat-label>
+                    
+                    <div class="col-md-6 mb-2">
+                      <label for="fcn_li_discount_percentage">Discount %</label>
+                      <mat-form-field appearance="outline">
+                        <!-- <mat-label>Discount %</mat-label> -->
                         <input class="st_txt_right" [min]="0" [max]="100"
                           (keyup)="this.comFunc.enforceMinMax($event.target)" matInput
                           formControlName="fcn_li_discount_percentage" (change)="changeDisPer($event)"
@@ -3225,9 +3373,11 @@
                           " [readonly]="viewOnly" AmountDecimalInput />
                       </mat-form-field>
                     </div>
-                    <div class="col-md-6">
-                      <mat-form-field>
-                        <mat-label>Discount Amount</mat-label>
+
+                    <div class="col-md-6 mb-2">
+                      <label  for="fcn_li_discount_amount">Discount Amount</label>
+                      <mat-form-field appearance="outline">
+                        <!-- <mat-label>Discount Amount</mat-label> -->
                         <input class="st_txt_right" [min]="0" [maxLength]="14"
                           (keyup)="this.comFunc.enforceMinMax($event.target)" matInput
                           formControlName="fcn_li_discount_amount" id="fcn_li_discount_amount"
@@ -3236,10 +3386,12 @@
                           " AmountDecimalInput />
                       </mat-form-field>
                     </div>
+
                   </div>
                   <!--- Division, Item Code, Item Desc, Location, PCs, (Gross Wt, Stone Wt, Net Wt), Making Rate - Making Amount,
                                       Stone Rate - Stone Amount, Metal Rate - Metal Amount, Rate - Total Amount, Disc Rate - Disc Amount,Gross Amount, Tax % - Tax Amount, Net Amount ) -->
                 </div>
+                
                 <div class="col-md-6">
                   <div class="form-group">
                     <div class="slider">
@@ -3249,8 +3401,8 @@
                   <div class="form-group d-flex align-items-center justify-content-center"
                     *ngIf="this.divisionMS == 'S' ? false : true">
                     <div class="col-md-6 text-center">
-                      <label class="font-weight-bold col-form-label">Tag
-                        Details</label>
+                      <label class="font-weight-bold col-form-label" >Tag Details</label>
+
                       <textarea class="form-control" style="
                           height: 140px;
                           border: 2px solid #bebebe !important;
@@ -3262,14 +3414,16 @@
                 </div>
                 <div class="row mt-1">
                   <div class="col-md-12 form-group row">
+
                     <div class="col-md-3">
-                      <mat-form-field>
-                        <mat-label>
-                          Total Amount
+                      <label  for="fcn_li_gross_amount" >Total Amount</label>
+                      <mat-form-field appearance="outline">
+                        <!-- <mat-label>
+                          Total Amount -->
                           <!-- {{
                               divisionMS == "M" ? "Total Amount" : "Net Amount"
                             }} -->
-                        </mat-label>
+                        <!-- </mat-label> -->
                         <!-- <mat-label>Gross Amount</mat-label> -->
                         <input class="st_txt_right" [min]="0" [maxLength]="14"
                           (keyup)="this.comFunc.enforceMinMax($event.target)" matInput
@@ -3302,47 +3456,58 @@
                         </mat-error>
                       </mat-form-field>
                     </div>
+
                     <div class="col-md-3" *ngIf="taxType == 1">
-                      <mat-form-field>
-                        <mat-label>Tax %</mat-label>
+                      <label  for="fcn_li_tax_percentage" >Tax %</label>
+                      <mat-form-field appearance="outline">
+                        <!-- <mat-label>Tax %</mat-label> -->
                         <input class="st_txt_right" type="number" [min]="0" [maxLength]="14"
                           (keyup)="this.comFunc.enforceMinMax($event.target)" matInput
-                          formControlName="fcn_li_tax_percentage" id="fcn_li_tax_percentage" readonly />
+                          formControlName="fcn_li_tax_percentage" id="fcn_li_tax_percentage"  />
                       </mat-form-field>
                     </div>
+
                     <div class="col-md-3" *ngIf="taxType == 2">
-                      <mat-form-field>
-                        <mat-label>CGST %</mat-label>
+                      <label  for="fcn_li_cgst_percentage" >CGST %</label>
+                      <mat-form-field appearance="outline">
+                        <!-- <mat-label>CGST %</mat-label> -->
                         <input class="st_txt_right" type="number" [min]="0" [maxLength]="14"
                           (keyup)="this.comFunc.enforceMinMax($event.target)" matInput
-                          formControlName="fcn_li_cgst_percentage" id="fcn_li_cgst_percentage" readonly />
+                          formControlName="fcn_li_cgst_percentage" id="fcn_li_cgst_percentage"  />
                       </mat-form-field>
                     </div>
+
                     <!-- <div class="form-group row" style="padding-top: 98px"> -->
                     <div class="col-md-3" *ngIf="taxType == 1">
-                      <mat-form-field>
-                        <mat-label>Tax Amount</mat-label>
+                      <label for="fcn_li_tax_amount">Tax Amount</label>
+                      <mat-form-field appearance="outline">
+                        <!-- <mat-label>Tax Amount</mat-label> -->
                         <input class="st_txt_right" [min]="0" [maxLength]="14"
                           (keyup)="this.comFunc.enforceMinMax($event.target)" matInput formControlName="fcn_li_tax_amount"
                           id="fcn_li_tax_amount" AmountDecimalInput readonly />
                       </mat-form-field>
                     </div>
+
                     <div class="col-md-3" *ngIf="taxType == 2">
-                      <mat-form-field>
-                        <mat-label>CGST Amount</mat-label>
-                        <input class="st_txt_right" type="number" [min]="0" [maxLength]="14"
+                      <label  for="fcn_li_cgst_amount">CGST Amount</label>
+                      <mat-form-field appearance="outline">
+                        <!-- <mat-label>CGST Amount</mat-label> -->
+                        <input class="st_txt_right" type="number" [min]="0"
                           (keyup)="this.comFunc.enforceMinMax($event.target)" matInput
                           formControlName="fcn_li_cgst_amount" id="fcn_li_cgst_amount" readonly />
                       </mat-form-field>
                     </div>
+
                     <div class="col-md-3">
-                      <mat-form-field>
+                      <label  for="fcn_li_net_amount" >Net Amount</label>
+
+                      <mat-form-field appearance="outline">
                         <!-- <mat-label>
                             {{
                             divisionMS == "M" ? "Net Amount" : "Total+Tax"
                           }}
                         </mat-label> -->
-                        <mat-label>Net Amount</mat-label>
+                        <!-- <mat-label>Net Amount</mat-label> -->
                         <input class="st_txt_right" (focus)="
                             setValToLocalStorage($event, 'fcn_li_net_amount')
                           " [min]="0" [maxLength]="14" (keyup)="this.comFunc.enforceMinMax($event.target)" matInput
@@ -3369,6 +3534,7 @@
                         </mat-error>
                       </mat-form-field>
                     </div>
+
                     <!-- </div> -->
                   </div>
                 </div>
@@ -3386,7 +3552,7 @@
             <div class="col-md-12" style="margin-top: 20px; margin-bottom: 20px">
               <div class="form-group row">
                 <div class="col-md-4">
-                  <mat-form-field>
+                  <mat-form-field appearance="outline">
                     <mat-label>Stone Rate</mat-label>
                     <input
                       class="st_txt_right"
@@ -3405,7 +3571,7 @@
                   </mat-form-field>
                 </div>
                 <div class="col-md-4">
-                  <mat-form-field>
+                  <mat-form-field appearance="outline">
                     <mat-label>Stone Amount</mat-label>
                     <input
                       class="st_txt_right"
@@ -3425,7 +3591,7 @@
                 </div>
   
                 <div class="col-md-4" hidden>
-                  <mat-form-field>
+                  <mat-form-field appearance="outline">
                     <mat-label>Making Rate</mat-label>
                     <input
                       class="st_txt_right"
@@ -3441,7 +3607,7 @@
                   </mat-form-field>
                 </div>
                 <div class="col-md-4" hidden>
-                  <mat-form-field>
+                  <mat-form-field appearance="outline">
                     <mat-label>Making Amount</mat-label>
                     <input
                       class="st_txt_right"
@@ -3462,7 +3628,7 @@
                   *ngIf="this.divisionMS == 'M' ? false : true"
                   hidden
                 >
-                  <mat-form-field>
+                  <mat-form-field appearance="outline">
                     <mat-label>PCs</mat-label>
                     <input
                       type="text"
@@ -3477,7 +3643,7 @@
                   *ngIf="this.divisionMS == 'M' ? false : true"
                   hidden
                 >
-                  <mat-form-field>
+                  <mat-form-field appearance="outline">
                     <mat-label>Cts</mat-label>
                     <input
                       type="number"
@@ -3488,7 +3654,7 @@
                   </mat-form-field>
                 </div>
                 <div class="col-md-4" hidden>
-                  <mat-form-field>
+                  <mat-form-field appearance="outline">
                     <mat-label>GMS</mat-label>
                     <input
                       type="text"
@@ -3501,7 +3667,7 @@
                 </div>
   
                 <div class="col-md-4" hidden>
-                  <mat-form-field>
+                  <mat-form-field appearance="outline">
                     <mat-label>Rate</mat-label>
                     <input
                       type="number"
@@ -3516,7 +3682,7 @@
                   </mat-form-field>
                 </div>
                 <div class="col-md-4" hidden>
-                  <mat-form-field>
+                  <mat-form-field appearance="outline">
                     <mat-label>Amount</mat-label>
                     <input
                       type="number"
@@ -3600,7 +3766,7 @@
       <form [formGroup]="authForm">
         <div class="row">
           <div class="col-md-6">
-            <mat-form-field>
+            <mat-form-field appearance="outline">
               <mat-label>Username</mat-label>
               <input type="text" matInput formControlName="username" [readonly]="viewOnly" appNoEmptySpace />
               <mat-error *ngIf="authForm.controls.username.hasError('required')">
@@ -3609,7 +3775,7 @@
             </mat-form-field>
           </div>
           <div class="col-md-6">
-            <mat-form-field>
+            <mat-form-field appearance="outline">
               <mat-label>Password</mat-label>
               <input type="password" matInput formControlName="password" [readonly]="viewOnly" appNoEmptySpace />
               <mat-error *ngIf="authForm.controls.password.hasError('required')">
@@ -3639,7 +3805,7 @@
       <form [formGroup]="attachmentForm">
         <div class="row">
           <div class="col-md-4">
-            <mat-form-field>
+            <mat-form-field appearance="outline">
               <mat-label>Remarks</mat-label>
               <input type="text" matInput formControlName="remarks" [readonly]="viewOnly" appNoEmptySpace />
               <mat-error *ngIf="attachmentForm.controls.remarks.hasError('required')">
@@ -3649,7 +3815,7 @@
           </div>
   
           <div class="col-md-4 d-flex align-content-center">
-            <mat-form-field style="width: 80%">
+            <mat-form-field appearance="outline" style="width: 80%">
               <input type="text" matInput formControlName="docType" />
             </mat-form-field>
             <master-search [MasterSearchData]="docTypeData" (newRowClick)="docTypeSelected($event)"></master-search>
@@ -3657,7 +3823,7 @@
           </div>
   
           <div class="col-md-4">
-            <mat-form-field>
+            <mat-form-field appearance="outline">
               <mat-label>Expiry Date</mat-label>
               <input matInput [matDatepicker]="expDateAttachment" name="expDate" formControlName="expDate"
                 placeholder="DD/MM/YYYY" [min]="currentDate" [readonly]="viewOnly" DateValidation />
@@ -3672,7 +3838,7 @@
         </div>
   
         <div class="row">
-          <!-- <mat-form-field>
+          <!-- <mat-form-field appearance="outline">
             <mat-label>Attachment</mat-label>
             <input  type="file" (change)="onFileSelected($event)">
           </mat-form-field> -->
@@ -3732,7 +3898,7 @@
       <form [formGroup]="pendingSalesOrderForm">
         <div class="row">
           <div class="col-md-5">
-            <mat-form-field style="width: 80%; display: inline-block !important" class="mat-form-field-pending-so">
+            <mat-form-field appearance="outline" style="width: 80%; display: inline-block !important" class="mat-form-field-pending-so">
               <mat-label>Branch To</mat-label>
   
               <input type="text" matInput formControlName="branchTo" />
@@ -3745,7 +3911,7 @@
             <master-search [MasterSearchData]="branchCodeData" (newRowClick)="branchSelected($event)"></master-search>
           </div>
           <!-- <div class="col-md-3">
-            <mat-form-field style="width: 100%">
+            <mat-form-field appearance="outline" style="width: 100%">
               <mat-label>Branch To</mat-label>
               <input
                 type="text"
@@ -3764,7 +3930,7 @@
             </mat-form-field>
           </div> -->
           <div class="col-md-5">
-            <mat-form-field style="width: 100%">
+            <mat-form-field appearance="outline" style="width: 100%">
               <mat-label>Order No.</mat-label>
               <input type="text" matInput formControlName="orderNo" [readonly]="viewOnly" class="st_txt_right" appNoEmptySpace />
               <mat-error *ngIf="
@@ -3777,7 +3943,7 @@
         </div>
         <div class="row">
           <div class="col-md-5">
-            <mat-form-field style="width: 80%; display: inline-block !important" class="mat-form-field-pending-so">
+            <mat-form-field appearance="outline" style="width: 80%; display: inline-block !important" class="mat-form-field-pending-so">
               <mat-label>Customer</mat-label>
   
               <input type="text" matInput formControlName="customerCode" />
@@ -3790,7 +3956,7 @@
             </mat-form-field>
             <master-search [MasterSearchData]="customerCodeData"
               (newRowClick)="customerCodeSelected($event)"></master-search>
-            <!-- <mat-form-field style="width: 100%">
+            <!-- <mat-form-field appearance="outline" style="width: 100%">
               <mat-label>Customer</mat-label>
               <input
                 type="text"
