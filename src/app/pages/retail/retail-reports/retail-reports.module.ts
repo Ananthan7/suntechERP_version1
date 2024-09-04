@@ -19,6 +19,8 @@ import { RepairRegisterComponent } from './repair-register/repair-register.compo
 import { LoyaltyRegisterComponent } from './loyalty-register/loyalty-register.component';
 import { PosSalesmanCommissionComponent } from './pos-salesman-commission/pos-salesman-commission.component';
 import { RetailSalesCollectionComponent } from './retail-sales-collection/retail-sales-collection.component';
+import { RetailGridComponent } from '../common-retail/retail-grid/retail-grid.component';
+import { CommonRetailModule } from '../common-retail/common-retail.module';
 
 
 @NgModule({
@@ -43,7 +45,8 @@ import { RetailSalesCollectionComponent } from './retail-sales-collection/retail
   imports: [
     CommonModule,
     RetailReportsRoutingModule,
-    SharedModule
+    SharedModule,
+    CommonRetailModule
   ]
 })
 export class RetailReportsModule { }
