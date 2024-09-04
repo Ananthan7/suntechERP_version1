@@ -126,7 +126,7 @@ export class ProductionStockDetailComponent implements OnInit {
   productionStockFrom: FormGroup = this.formBuilder.group({
     FLAG: [''],
     stockCode: [''],
-    tagLines: [''],
+    TAGLINES: [''],
     grossWt: [''],
     SETTING_CHRG: [''],
     SETTING_ACCODE: [''],
@@ -217,7 +217,7 @@ export class ProductionStockDetailComponent implements OnInit {
     for (let i = 0; i < nTotPcs; i++) {
       this.stockCodeDataList.push({
         SRNO: i + 1,
-        STOCK_CODE: `${this.DETAILSCREEN_DATA.PREFIX}${this.DETAILSCREEN_DATA.PREFIXNO}`,
+        STOCK_CODE: `${this.DETAILSCREEN_DATA.PREFIX}${this.emptyToZero(this.DETAILSCREEN_DATA.PREFIX_LASTNO)+i}`,
         DESIGN_CODE: this.DETAILSCREEN_DATA.DESIGN_CODE,
         COST_CODE: this.DETAILSCREEN_DATA.COST_CODE,
         KARAT_CODE: this.DETAILSCREEN_DATA.KARAT_CODE,
@@ -234,7 +234,7 @@ export class ProductionStockDetailComponent implements OnInit {
       })
     }
     this.stockCodeDataList.forEach((item: any, index: number) => item.SRNO = index + 1)
-    this.productionStockFrom.controls.stockCode.setValue(`${this.DETAILSCREEN_DATA.PREFIX}${this.DETAILSCREEN_DATA.PREFIXNO}`)
+    this.productionStockFrom.controls.stockCode.setValue(`${this.DETAILSCREEN_DATA.PREFIX}${this.DETAILSCREEN_DATA.PREFIX_LASTNO}`)
     this.productionStockFrom.controls.SETTING_ACCODE.setValue(this.setChargeAccode('SETTINGCHGAC'))
     this.productionStockFrom.controls.POLISH_ACCODE.setValue(this.setChargeAccode('POLISHINGCHGAC'))
     this.productionStockFrom.controls.RHODIUM_ACCODE.setValue(this.setChargeAccode('RODIUMCHGAC'))
@@ -250,16 +250,24 @@ export class ProductionStockDetailComponent implements OnInit {
         'strWorker_Code': this.commonService.nullToString(this.DETAILSCREEN_DATA.WORKER_CODE),
         'strBranch_Code': this.commonService.nullToString(this.DETAILSCREEN_DATA.BRANCH_CODE),
         'strVocdate': this.commonService.formatDate(this.DETAILSCREEN_DATA.VOCDATE),
+        'strJobNumber': this.commonService.nullToString(this.DETAILSCREEN_DATA.JOB_NUMBER),
+        'strUNQ_DESIGN_ID': this.commonService.nullToString(this.DETAILSCREEN_DATA.UNQ_DESIGN_ID)
       }
     }
     this.commonService.showSnackBarMsg('MSG81447')
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
       .subscribe((result) => {
         this.commonService.closeSnackBarMsg()
+        let strBrilliantTagLines:string = ''
         if (result.status == "Success" && result.dynamicData[0]) {
           this.componentDataList = result.dynamicData[0]
+          let dblMetal:number = 0
           this.componentDataList.forEach((item: any, index: number) => {
             item.SRNO = index + 1
+            if(item.METALSTONE = 'M'){
+              dblMetal += item.GROSS_WT
+              strBrilliantTagLines = this.DETAILSCREEN_DATA.KARAT_CODE+"K"+this.DETAILSCREEN_DATA.METAL_COLOR+ "-" +dblMetal+" GMS";
+            }
           })
           this.groupBomDetailsData()
           this.setFormDecimal('SETTING_CHRG', 0, 'AMOUNT')
@@ -275,6 +283,16 @@ export class ProductionStockDetailComponent implements OnInit {
         } else {
           this.commonService.toastErrorByMsgId('MSG1747')
         }
+        if (result.status == "Success" && result.dynamicData[1]) {
+          let stonedata:any[] = result.dynamicData[1] || []
+          let size = ''
+          stonedata.forEach((item: any, index: number) => {
+              strBrilliantTagLines += item.SHAPE.toString() 
+              size = item.SIZE.toString();
+          })
+          if(size != '') strBrilliantTagLines+= "SIZE " +size
+          this.setFormNullToString('TAGLINES',strBrilliantTagLines)
+        } 
       }, err => {
         this.commonService.closeSnackBarMsg()
         this.commonService.toastErrorByMsgId('MSG1531')
@@ -453,7 +471,7 @@ export class ProductionStockDetailComponent implements OnInit {
       "METAL_LABAMTLC": 0,
       "METAL_LABACCODE": "",
       "SUPPLIER_REF": this.commonService.nullToString(this.productionStockFrom.value.totalLabour),
-      "TAGLINES": "",
+      "TAGLINES": this.commonService.nullToString(this.productionStockFrom.value.TAGLINES),
       "SETTING_CHRG": this.commonService.emptyToZero(this.productionStockFrom.value.SETTING_CHRG),
       "POLISH_CHRG": this.commonService.emptyToZero(this.productionStockFrom.value.POLISH_CHRG),
       "RHODIUM_CHRG": this.commonService.emptyToZero(this.productionStockFrom.value.RHODIUM_CHRG),

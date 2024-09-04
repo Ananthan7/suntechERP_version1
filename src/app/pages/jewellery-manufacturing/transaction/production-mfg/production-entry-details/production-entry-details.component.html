@@ -153,7 +153,7 @@
                 :</label>
               <div class="col-sm-2">
                 <mat-form-field appearance="outline" style="width: 100%;">
-                  <input type="text" matInput formControlName="totalpcs"
+                  <input type="text" matInput formControlName="TOTAL_PCS"
                     readonly class="text-right" />
                 </mat-form-field>
               </div>
@@ -266,8 +266,8 @@
                   </master-search>
                 </mat-form-field>
                 <mat-form-field appearance="outline" style="width: 50%;">
-                  <input type="text" matInput formControlName="PREFIX_DESC"
-                     readonly />
+                  <input type="text" matInput formControlName="PREFIX_LASTNO"
+                  NumberOnly [readonly]="viewMode" class="text-right"/>
                 </mat-form-field>
               </div>
 
