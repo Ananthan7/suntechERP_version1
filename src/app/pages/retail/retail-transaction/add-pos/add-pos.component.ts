@@ -292,7 +292,7 @@ export class AddPosComponent implements OnInit {
   recModeGiftData: string[] = [''];
 
   customAcCodeListOptions!: Observable<any[]>;
-
+  voucherNumber:string="";
   currentDate = new Date(new Date());
   isPrintingEnabled: boolean = false;
   currentStockCode: any;
@@ -1260,6 +1260,7 @@ export class AddPosComponent implements OnInit {
       this.LOCKVOUCHERNO = true;
       this.vocDataForm.controls.fcn_voc_no.setValue(this.content.VOCNO);
       this.vocDataForm.controls.vocdate.setValue(this.content.VOCDATE);
+      this.voucherNumber=this.content.VOCNO??"";
       await this.getFinancialYear();
 
       this.strBranchcode = this.content.BRANCH_CODE;
@@ -7406,7 +7407,7 @@ export class AddPosComponent implements OnInit {
       this.comFunc.emptyToZero(stockInfos.BALANCE_PCS) < 1 &&
       stockInfos.ENABLE_PCS &&
       this.newLineItem.DIVISION !== 'X' &&
-      this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt) !== 0 &&
+      this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt) === 0 &&
       excludeQtyValidations.some(v => this.newLineItem.DIVISION.toUpperCase().includes(v))) {
       this.renderer.selectRootElement('#fcn_li_pcs').focus();
     } else {
@@ -13108,6 +13109,7 @@ export class AddPosComponent implements OnInit {
       .subscribe((resp) => {
         if (resp.status == "Success") {
           this.vocDataForm.controls['fcn_voc_no'].setValue(resp.newvocno);
+          this.voucherNumber=resp.newvocno;
         }
       });
   }
