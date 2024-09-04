@@ -97,3 +97,26 @@
 //     // background: rgba(255, 255, 255, 0.7); /* Optional: semi-transparent background */
 //     // z-index: 1000; /* Ensure the loader is above other content */
 //   }
+
+
+
+
+
+
+
+
+
+
+.icon-label-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: auto;
+}
+
+.label {
+    font-size: 14px; /* Adjust font size for label as needed */
+    color: #000; /* Adjust color if needed */
+}
