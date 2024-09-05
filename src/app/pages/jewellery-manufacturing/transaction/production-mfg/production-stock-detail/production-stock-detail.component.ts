@@ -250,8 +250,6 @@ export class ProductionStockDetailComponent implements OnInit {
         'strWorker_Code': this.commonService.nullToString(this.DETAILSCREEN_DATA.WORKER_CODE),
         'strBranch_Code': this.commonService.nullToString(this.DETAILSCREEN_DATA.BRANCH_CODE),
         'strVocdate': this.commonService.formatDate(this.DETAILSCREEN_DATA.VOCDATE),
-        'strJobNumber': this.commonService.nullToString(this.DETAILSCREEN_DATA.JOB_NUMBER),
-        'strUNQ_DESIGN_ID': this.commonService.nullToString(this.DETAILSCREEN_DATA.UNQ_DESIGN_ID)
       }
     }
     this.commonService.showSnackBarMsg('MSG81447')
@@ -260,12 +258,32 @@ export class ProductionStockDetailComponent implements OnInit {
         this.commonService.closeSnackBarMsg()
         if (result.status == "Success" && result.dynamicData[0]) {
           this.componentDataList = result.dynamicData[0]
-          this.setTagLine(result) //tagline creation
-          this.groupBomDetailsData()
-          this.setFormDecimal('SETTING_CHRG', 0, 'AMOUNT')
+          let metalValue: number = 0
+          let stoneValue: number = 0
+          let wastage: number = 0
+          let toatalLabour: number = 0
+          let labourCharge: number = 0
+          let settingCharge: number = 0
+          this.componentDataList.forEach((item: any, index: number) => {
+            item.SRNO = index + 1
+            labourCharge += item.LAB_RATE
+            toatalLabour += item.LAB_RATE
+            if (item.METALSTONE = 'M') {
+              metalValue += item.GROSS_WT
+            }else{
+              stoneValue += item.GROSS_WT
+              settingCharge += item.LAB_RATE
+            }
+          })
+          this.groupComponentDetails()
+          this.generateTagline() 
+          this.setFormDecimal('metalValue', metalValue, 'AMOUNT')
+          this.setFormDecimal('stockValue', stoneValue, 'AMOUNT')
+          this.setFormDecimal('toatalLabour', toatalLabour, 'AMOUNT')
+          this.setFormDecimal('SETTING_CHRG', settingCharge, 'AMOUNT')
+          this.setFormDecimal('LABOUR_CHRG', labourCharge, 'AMOUNT')
           this.setFormDecimal('POLISH_CHRG', 0, 'AMOUNT')
           this.setFormDecimal('RHODIUM_CHRG', 0, 'AMOUNT')
-          this.setFormDecimal('LABOUR_CHRG', 0, 'AMOUNT')
           this.setFormDecimal('MISC_CHRG', 0, 'AMOUNT')
           this.setFormDecimal('price1fc', 0, 'AMOUNT')
           this.setFormDecimal('price2fc', 0, 'AMOUNT')
@@ -281,31 +299,54 @@ export class ProductionStockDetailComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
-  setTagLine(result: any) {
-    let strBrilliantTagLines: string = ''
-    let dblMetal: number = 0
-    let metalColor: string = ''
-    this.componentDataList.forEach((item: any, index: number) => {
-      item.SRNO = index + 1
-      if (item.METALSTONE = 'M') {
-        dblMetal += item.GROSS_WT.toFixed(this.commonService.mQtyDecimals)
-        metalColor = this.commonService.nullToString(this.DETAILSCREEN_DATA.METAL_COLOR)
-        strBrilliantTagLines = this.DETAILSCREEN_DATA.KARAT_CODE + "K" + metalColor + "-" + dblMetal + " GMS";
+  generateTagline() {
+    let postData = {
+      "SPID": "116",
+      "parameter": {
+        'strUnq_Job_Id': this.commonService.nullToString(this.DETAILSCREEN_DATA.UNQ_JOB_ID),
+        'strProcess_Code': this.commonService.nullToString(this.DETAILSCREEN_DATA.PROCESS_CODE),
+        'strWorker_Code': this.commonService.nullToString(this.DETAILSCREEN_DATA.WORKER_CODE),
       }
-    })
-    // stone detail 
-    if (result.status == "Success" && result.dynamicData[1]) {
-      let stonedata: any[] = result.dynamicData[1] || []
-      let size = ''
-      stonedata.forEach((item: any, index: number) => {
-        strBrilliantTagLines += item.SHAPE.toString()
-        size = item.SIZE.toString();
-      })
-      if (size != '') strBrilliantTagLines += "SIZE " + size
-      this.setFormNullToString('TAGLINES', strBrilliantTagLines)
     }
+    this.commonService.showSnackBarMsg('MSG81447')
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        this.commonService.closeSnackBarMsg()
+        if (result.status == "Success" && result.dynamicData[0]) {
+          let strBrilliantTagLines: string = ''
+          let dblMetal: number = 0
+          let metalColor: string = ''
+          this.componentDataList.forEach((item: any, index: number) => {
+            item.SRNO = index + 1
+            if (item.METALSTONE = 'M') {
+              dblMetal += item.GROSS_WT.toFixed(this.commonService.mQtyDecimals)
+              metalColor = this.commonService.nullToString(this.DETAILSCREEN_DATA.METAL_COLOR)
+              strBrilliantTagLines = this.DETAILSCREEN_DATA.KARAT_CODE + "K" + metalColor + "-" + dblMetal + " GMS";
+            }
+          })
+          // stone detail 
+          if (result.status == "Success" && result.dynamicData[1]) {
+            let stonedata: any[] = result.dynamicData[1] || []
+            let size = ''
+            stonedata.forEach((item: any, index: number) => {
+              strBrilliantTagLines += item.SHAPE.toString()
+              size = item.SIZE.toString();
+            })
+            if (size != '') strBrilliantTagLines += "SIZE " + size
+            this.setFormNullToString('TAGLINES', strBrilliantTagLines)
+          }
+        
+        } else {
+          this.commonService.toastErrorByMsgId('MSG1747')
+        }
+      }, err => {
+        this.commonService.closeSnackBarMsg()
+        this.commonService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
+   
   }
-  groupBomDetailsData() {
+  groupComponentDetails() {
     let result: any[] = []
     this.componentDataList.reduce((res: any, value: any) => {
       if (!res[value.DIVCODE]) {

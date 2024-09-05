@@ -263,13 +263,13 @@ export class MasterSearchComponent implements OnInit {
 
   }
   f2Flag = false;
-  SearchPlaceholder: string = 'Search StartsWith';
+  SearchPlaceholder: string = 'Search Starts With';
   @HostListener('document:keydown', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
     // Check if the pressed key is Enter
     if (event.key != 'F2') return
     this.f2Flag = !this.f2Flag
-    this.SearchPlaceholder = this.f2Flag ? 'Search AnyWhere' : 'Search StartsWith'
+    this.SearchPlaceholder = this.f2Flag ? 'Search Anywhere' : 'Search Starts With'
   }
   //unsubscriptions of streams
   ngOnDestroy(): void {
