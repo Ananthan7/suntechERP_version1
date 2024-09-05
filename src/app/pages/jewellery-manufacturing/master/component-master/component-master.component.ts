@@ -316,7 +316,7 @@ export class ComponentMasterComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 3,
     SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Code',
+    SEARCH_HEADING: 'Pointer Wt',
     SEARCH_VALUE: '',
     WHERECONDITION: "CODE<>''",
     VIEW_INPUT: true,
