@@ -35,7 +35,7 @@ export class ProductionStockDetailComponent implements OnInit {
   HEADERDETAILS: any;
   viewMode: boolean = false;
   editMode: boolean = false;
-  FORM_VALIDATER:any;
+  FORM_VALIDATER: any;
   priceCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -205,27 +205,27 @@ export class ProductionStockDetailComponent implements OnInit {
         break;
     }
   }
-  setChargeAccode(param: string){
+  setChargeAccode(param: string) {
     return this.commonService.getCompanyParamValue(param) || ''
   }
-  weightPcsCalculate(weight:any,pcs:any){
-    let wt = this.emptyToZero(weight)>0 ? this.emptyToZero(weight) / pcs : 0
-    return this.commonService.setCommaSerperatedNumber(wt,'METAL')
+  weightPcsCalculate(weight: any, pcs: any) {
+    let wt = this.emptyToZero(weight) > 0 ? this.emptyToZero(weight) / pcs : 0
+    return this.commonService.setCommaSerperatedNumber(wt, 'METAL')
   }
   setStockCodeGrid() {
     let nTotPcs = this.emptyToZero(this.DETAILSCREEN_DATA.JOB_PCS)
     for (let i = 0; i < nTotPcs; i++) {
       this.stockCodeDataList.push({
         SRNO: i + 1,
-        STOCK_CODE: `${this.DETAILSCREEN_DATA.PREFIX}${this.emptyToZero(this.DETAILSCREEN_DATA.PREFIX_LASTNO)+i}`,
+        STOCK_CODE: `${this.DETAILSCREEN_DATA.PREFIX}${this.emptyToZero(this.DETAILSCREEN_DATA.PREFIX_LASTNO) + i}`,
         DESIGN_CODE: this.DETAILSCREEN_DATA.DESIGN_CODE,
         COST_CODE: this.DETAILSCREEN_DATA.COST_CODE,
         KARAT_CODE: this.DETAILSCREEN_DATA.KARAT_CODE,
-        GROSS_WT: this.weightPcsCalculate(this.DETAILSCREEN_DATA.GROSS_WT,nTotPcs),
+        GROSS_WT: this.weightPcsCalculate(this.DETAILSCREEN_DATA.GROSS_WT, nTotPcs),
         METAL_PCS: 1,
-        METAL_WT: this.weightPcsCalculate(this.DETAILSCREEN_DATA.METAL_WT,nTotPcs),
-        STONE_PCS: this.weightPcsCalculate(this.DETAILSCREEN_DATA.STONE_PCS,nTotPcs),
-        STONE_WT: this.weightPcsCalculate(this.DETAILSCREEN_DATA.STONE_WT,nTotPcs),
+        METAL_WT: this.weightPcsCalculate(this.DETAILSCREEN_DATA.METAL_WT, nTotPcs),
+        STONE_PCS: this.weightPcsCalculate(this.DETAILSCREEN_DATA.STONE_PCS, nTotPcs),
+        STONE_WT: this.weightPcsCalculate(this.DETAILSCREEN_DATA.STONE_WT, nTotPcs),
         JOB_NUMBER: this.DETAILSCREEN_DATA.JOB_NUMBER,
         UNQ_JOB_ID: this.DETAILSCREEN_DATA.UNQ_JOB_ID,
         DIVCODE: this.DETAILSCREEN_DATA.DIVCODE,
@@ -258,17 +258,9 @@ export class ProductionStockDetailComponent implements OnInit {
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
       .subscribe((result) => {
         this.commonService.closeSnackBarMsg()
-        let strBrilliantTagLines:string = ''
         if (result.status == "Success" && result.dynamicData[0]) {
           this.componentDataList = result.dynamicData[0]
-          let dblMetal:number = 0
-          this.componentDataList.forEach((item: any, index: number) => {
-            item.SRNO = index + 1
-            if(item.METALSTONE = 'M'){
-              dblMetal += item.GROSS_WT
-              strBrilliantTagLines = this.DETAILSCREEN_DATA.KARAT_CODE+"K"+this.DETAILSCREEN_DATA.METAL_COLOR+ "-" +dblMetal+" GMS";
-            }
-          })
+          this.setTagLine(result) //tagline creation
           this.groupBomDetailsData()
           this.setFormDecimal('SETTING_CHRG', 0, 'AMOUNT')
           this.setFormDecimal('POLISH_CHRG', 0, 'AMOUNT')
@@ -283,21 +275,35 @@ export class ProductionStockDetailComponent implements OnInit {
         } else {
           this.commonService.toastErrorByMsgId('MSG1747')
         }
-        if (result.status == "Success" && result.dynamicData[1]) {
-          let stonedata:any[] = result.dynamicData[1] || []
-          let size = ''
-          stonedata.forEach((item: any, index: number) => {
-              strBrilliantTagLines += item.SHAPE.toString() 
-              size = item.SIZE.toString();
-          })
-          if(size != '') strBrilliantTagLines+= "SIZE " +size
-          this.setFormNullToString('TAGLINES',strBrilliantTagLines)
-        } 
       }, err => {
         this.commonService.closeSnackBarMsg()
         this.commonService.toastErrorByMsgId('MSG1531')
       })
     this.subscriptions.push(Sub)
+  }
+  setTagLine(result: any) {
+    let strBrilliantTagLines: string = ''
+    let dblMetal: number = 0
+    let metalColor: string = ''
+    this.componentDataList.forEach((item: any, index: number) => {
+      item.SRNO = index + 1
+      if (item.METALSTONE = 'M') {
+        dblMetal += item.GROSS_WT.toFixed(this.commonService.mQtyDecimals)
+        metalColor = this.commonService.nullToString(this.DETAILSCREEN_DATA.METAL_COLOR)
+        strBrilliantTagLines = this.DETAILSCREEN_DATA.KARAT_CODE + "K" + metalColor + "-" + dblMetal + " GMS";
+      }
+    })
+    // stone detail 
+    if (result.status == "Success" && result.dynamicData[1]) {
+      let stonedata: any[] = result.dynamicData[1] || []
+      let size = ''
+      stonedata.forEach((item: any, index: number) => {
+        strBrilliantTagLines += item.SHAPE.toString()
+        size = item.SIZE.toString();
+      })
+      if (size != '') strBrilliantTagLines += "SIZE " + size
+      this.setFormNullToString('TAGLINES', strBrilliantTagLines)
+    }
   }
   groupBomDetailsData() {
     let result: any[] = []
@@ -322,7 +328,7 @@ export class ProductionStockDetailComponent implements OnInit {
     })
     this.componentGroupedList = result
   }
-  emptyToZero(value: any){
+  emptyToZero(value: any) {
     return this.commonService.emptyToZero(value)
   }
   priceOneCodeSelected(e: any) {
@@ -510,7 +516,7 @@ export class ProductionStockDetailComponent implements OnInit {
     //STOCK_FORM_DETAILS is only saving to API
     stockDetailToSave.STOCK_FORM_DETAILS = this.STOCK_FORM_DETAILS;
     stockDetailToSave.STOCK_COMPONENT_GRID = this.STRNMTLdataSetToSave;
-    
+
     this.saveDetail.emit(stockDetailToSave);
   }
 
