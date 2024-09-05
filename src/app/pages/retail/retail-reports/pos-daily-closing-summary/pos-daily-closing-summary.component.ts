@@ -325,4 +325,8 @@ export class PosDailyClosingSummaryComponent implements OnInit {
     this.branchDivisionControls = content +'\n'+content2 +'\n'+ content3 +'\n'+ content4
     // console.log(this.branchDivisionControls);
   }
+
+  setDateValue(data?: any){
+    console.log(data)
+  }
 }

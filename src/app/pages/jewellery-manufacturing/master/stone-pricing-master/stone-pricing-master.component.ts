@@ -47,7 +47,7 @@ export class StonePricingMasterComponent implements OnInit {
   isDisableSaveBtn: boolean = false;
   isCurrencySelected: boolean = false;
   currencyDt: any;
-
+  FORM_VALIDATER: any
   viewselling: boolean = false;
   viewsellingrate: boolean = false;
 
@@ -726,7 +726,7 @@ export class StonePricingMasterComponent implements OnInit {
 
   /**USE: delete worker master from row */
   deleteStonepriceMaster() {
-    if (this.content && this.content.FLAG == 'VIEW' ) return
+    if (this.content && this.content.FLAG == 'VIEW') return
     if (!this.content.CODE) {
       Swal.fire({
         title: '',
@@ -794,12 +794,12 @@ export class StonePricingMasterComponent implements OnInit {
 
   // deleteStonepriceMaster() {
   //   if (this.content && this.content.FLAG == 'VIEW') return;
-  
+
   //   if (!this.stonePrizeMasterForm.value.price_code) {
   //     this.commonService.toastErrorByMsgId('MSG2347'); // 'Please Select data to delete!' message
   //     return;
   //   }
-  
+
   //   this.showConfirmationDialog().then((result) => {
   //     if (result.isConfirmed) {
   //       let API = 'StonePriceMasterDJ/DeleteStonePriceMaster/' + this.stonePrizeMasterForm.value.price_code;
@@ -898,38 +898,60 @@ export class StonePricingMasterComponent implements OnInit {
 
   //   this.subscriptions.push(Sub);
   // }
+  setFormNullToString(formControlName: string, value: any) {
+    this.stonePrizeMasterForm.controls[formControlName].setValue(
+      this.commonService.nullToString(value)
+    )
+    this.FORM_VALIDATER[formControlName] = this.commonService.nullToString(value)
+  }
+
   sieve_setDataSelected(data: any) {
     this.stonePrizeMasterForm.controls.sieve_set.setValue(data.CODE);
-  
+
     let postData = {
       "SPID": "109",
       "parameter": {
         SIEVE_SET: this.stonePrizeMasterForm.value.sieve_set
       }
     };
-  
+
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
       .subscribe((result) => {
         if (result.status == "Success") {
           const responseData = result.dynamicData[0][0];
           // const finalsieve_form = this.commonService.dataSplitPop(responseData.SIEVE);
           // const finalsieve_to = this.commonService.dataSplitPop(responseData.SIEVE_TO);
-  
+
           this.stonePrizeMasterForm.controls.shape.setValue(responseData.SHAPE);
           this.stonePrizeMasterForm.controls.size_from.setValue(responseData.SIZE_FROM);
           this.stonePrizeMasterForm.controls.size_to.setValue(responseData.SIZE_TO);
           this.stonePrizeMasterForm.controls.sieve_form.setValue(responseData.SIEVE);
           this.stonePrizeMasterForm.controls.sieve_to.setValue(responseData.SIEVE_TO);
-          this.stonePrizeMasterForm.controls.sieve_from_desc.setValue(responseData.SIEVEFROM_DESC);
-          this.stonePrizeMasterForm.controls.sieve_to_desc.setValue(responseData.SIEVETO_DESC);
+          // this.setFormNullToString('sieve_from_desc',responseData.SIEVEFROM_DESC);
+          // this.setFormNullToString('sieve_to_desc',responseData.SIEVETO_DESC);
+
+          console.log('Form controls:', this.stonePrizeMasterForm.controls);
+
+          if (this.stonePrizeMasterForm.get('sieve_from_desc')) {
+            this.setFormNullToString('sieve_from_desc', responseData.SIEVEFROM_DESC);
+          } else {
+            console.error('Form control sieve_from_desc does not exist.');
+          }
+
+          if (this.stonePrizeMasterForm.get('sieve_to_desc')) {
+            this.setFormNullToString('sieve_to_desc', responseData.SIEVETO_DESC);
+          } else {
+            console.error('Form control sieve_to_desc does not exist.');
+          }
+
         }
       }, err => {
         this.commonService.toastErrorByMsgId('MSG81451');
       });
-    
+
     this.subscriptions.push(Sub);
   }
-  
+
 
   shapeDataSelected(data: any) {
     this.stonePrizeMasterForm.controls.shape.setValue(data.CODE)

@@ -1227,6 +1227,15 @@
 
         </div>
 
+        <div class="col-xl-12 col-md-6" style="height: 140px; width: 100%;margin-top: 20px;">
+          <label>Remarks</label>
+
+          <mat-form-field appearance="outline" style="width: 100%;">
+            <textarea matInput [readonly]="viewOnly" rows="4" cols="50" class="form-control"></textarea>
+          </mat-form-field>
+
+        </div>
+
         <div class="row m-t-10 m-b-10">
           <!-- <div class="col-md-6 col-xl-6" (click)="backToList()" *ngIf="viewOnly">
             <div class="touch-big-button touch-big-button-black">
@@ -1301,14 +1310,14 @@
           </div>
         </div>
 
-        <div class="col-xl-12 col-md-6" style="height: 140px; width: 100%;margin-top: 20px;">
+        <!-- <div class="col-xl-12 col-md-6" style="height: 140px; width: 100%;margin-top: 20px;">
           <label>Remarks</label>
 
           <mat-form-field appearance="outline" style="width: 100%;">
             <textarea matInput [readonly]="viewOnly" rows="4" cols="50" class="form-control"></textarea>
           </mat-form-field>
 
-        </div>
+        </div> -->
 
 
 
@@ -4250,7 +4259,7 @@
       <div class="col-md-12">
         <dx-data-grid id="gridContainer" [dataSource]="pendingOrderList" keyExpr="VOCNO" [showBorders]="true"
           (onSelectionChanged)="onSelectionChanged($event)">
-
+          <dxo-paging [enabled]="true" [pageSize]="10"></dxo-paging>
           <dxo-selection mode="single"></dxo-selection>
           <dxi-column dataField="VOCNO" [width]="80" caption="Order No" [allowEditing]="false" alignment="right">
           </dxi-column>
@@ -4290,11 +4299,11 @@
   <div class="modal-body">
     <div class="row mb-2">
       <div class="col-md-12">
-        <dx-data-grid #dataGrid id="estimationgrid" keyExpr="orderno" [dataSource]="estimationList" [showBorders]="true"
+        <dx-data-grid #dataGrid id="estimationgrid" keyExpr="VOCNO" [dataSource]="estimationList" [showBorders]="true"
           (onSelectionChanged)="onEstimationEntryChange($event)">
-          <dxo-paging [enabled]="false"></dxo-paging>
+          <dxo-paging [enabled]="true" [pageSize]="10"></dxo-paging>
           <dxo-selection mode="single"></dxo-selection>
-          <dxi-column dataField="VOCNO" width="auto" caption="Estimation No" [allowEditing]="false" alignment="right">
+          <dxi-column dataField="VOCNO" width="auto" caption="Estimation No" [allowEditing]="false" alignment="left">
           </dxi-column>
           <dxi-column dataField="VOCDATE" width="auto" alignment="left" caption="Estimation Date"
             [allowEditing]="false">
