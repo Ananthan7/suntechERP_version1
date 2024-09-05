@@ -1,4 +1,4 @@
-import { Component, EventEmitter, HostListener, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, OnInit, Output, Renderer2, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { MasterSearchModel } from '../../data/master-find-model';
 import { ToastrService } from 'ngx-toastr';

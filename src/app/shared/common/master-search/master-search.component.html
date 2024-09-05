@@ -15,10 +15,10 @@
                     <div class="col-md-6 p-2">
                         <mat-form-field style="width: 100%">
                             <mat-label>{{SearchPlaceholder}}</mat-label>
-                            <input type="text" matInput
+                            <input type="text" matInput autofocus
                                 [(ngModel)]="MasterSearchData.SEARCH_VALUE"
                                 (keyup.enter)="searchValueChange($event)"
-                                (focusout)="searchValueChange($event)" />
+                                (change)="searchValueChange($event)" />
                             <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
                         </mat-form-field>
                         
