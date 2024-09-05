@@ -32,7 +32,7 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
   branchCode?: String;
   yearMonth?: String;
   selectedIndexes: any = [];
-  summaryDetailData:any;
+  summaryDetailData: any;
   viewMode: boolean = false;
   isSaved: boolean = false;
   isloading: boolean = false;
@@ -40,7 +40,7 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
   selectRowIndex: any;
   imageurl: any;
   isDisableSaveBtn: boolean = false;
-  image: string | ArrayBuffer | null | undefined;
+  imagepath: any[] = []
   currentDate = new Date();
   urls: string | ArrayBuffer | null | undefined;
   url: any;
@@ -151,7 +151,7 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
     WHERECONDITION: "LOCATION_CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
-  } 
+  }
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -162,7 +162,7 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
     private toastr: ToastrService,
     private comService: CommonServiceService,
     private commonService: CommonServiceService,
-  ) { 
+  ) {
     this.setInitialValues()
   }
 
@@ -177,16 +177,16 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
       if (this.content.FLAG == 'VIEW') {
         this.viewMode = true;
         this.isSaved = true;
-      
+
       }
-    
+
     }
 
   }
   setAllInitialValues() {
-    console.log(this.content,'looo')
+    console.log(this.content, 'looo')
     if (!this.content) return;
-  
+
     this.jewelleryaltrationdetailsFrom.controls.stockcode.setValue(this.content.STOCK_CODE)
     this.jewelleryaltrationdetailsFrom.controls.description.setValue(this.content.DESCRIPTION)
     this.jewelleryaltrationdetailsFrom.controls.pcs.setValue(this.content.PCS)
@@ -258,27 +258,43 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
   setInitialValues() {
     this.jewelleryaltrationdetailsFrom.controls.metalWT.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
   }
-    close(data?: any) {
-      //TODO reset forms and data before closing
-      this.closeDetail.emit()
+  close(data?: any) {
+    //TODO reset forms and data before closing
+    this.closeDetail.emit()
   }
   //number validation
   isNumeric(event: any) {
     return this.comService.isNumeric(event);
   }
-  onFileChanged(event:any) {
+  onFileChanged(event: any) {
     this.url = event.target.files[0].name
     console.log(this.url)
     let reader = new FileReader();
-    if(event.target.files && event.target.files.length > 0) {
+    if (event.target.files && event.target.files.length > 0) {
       let file = event.target.files[0];
       reader.readAsDataURL(file);
       reader.onload = () => {
-        this.urls = reader.result; 
+        this.urls = reader.result;
       };
     }
   }
-  codeSelected(e:any): void {
+  getImageData() {
+    let API = `Image/${this.jewelleryaltrationdetailsFrom.value.stockcode}`
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe(([result]) => {
+        if (result.response) {
+          let data = result.response
+          console.log(data,'picture')
+          this.imagepath = data.map((item: any) => item.imagepath)
+        }
+      }, err => {
+        this.comService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
+  }
+   
+  
+  codeSelected(e: any): void {
     // this.jewelleryaltrationdetailsFrom.controls.stockcode.setValue(e.STOCK_CODE)
     // this.jewelleryaltrationdetailsFrom.controls.description.setValue(e.DESCRIPTION)
     if (e.Stock_Code) {
@@ -289,7 +305,7 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
       this.commonService.toastErrorByMsgId('MSG1531');
     }
   }
-  
+
   stockCodeSelected(e: any) {
     console.log(e);
     this.jewelleryaltrationdetailsFrom.controls.stockcode.setValue(e.STOCK_CODE);
@@ -323,7 +339,7 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
     this.jewelleryaltrationdetailsFrom.controls.price5PER.setValue(e.PRICE_CODE);
   }
 
- 
+
   addTableData() {
     const length = this.tableData.length;
     const srno = length + 1;
@@ -401,7 +417,7 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
 
 
   jewelleryaltrationdetailsFrom: FormGroup = this.formBuilder.group({
-    stockcode: ['',[Validators.required]],
+    stockcode: ['', [Validators.required]],
     description: [''],
     pcs: [''],
     refvoc: ['', [Validators.required]],
@@ -468,15 +484,15 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
     totalAMTFC: [''],
     totalAMTCC: [''],
     remarks: [''],
-    price1percentage:[''],
-    price2percentage:[''],
-    price3percentage:[''],
-    price4percentage:[''],
-    price5percentage:[''],
-    tagdetails:[''],
-    image:[''],
-    currencycode:[''],
-    currencyrate:[''],
+    price1percentage: [''],
+    price2percentage: [''],
+    price3percentage: [''],
+    price4percentage: [''],
+    price5percentage: [''],
+    tagdetails: [''],
+    PICTURE: [''],
+    currencycode: [''],
+    currencyrate: [''],
     FLAG: [null]
   });
 
@@ -484,7 +500,7 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
   removedata() {
     this.tableData.pop();
   }
-  submitValidations(form:any) {
+  submitValidations(form: any) {
 
     if (form.stockcode == '') {
       this.comService.toastErrorByMsgId('MSG1816')//stockcode is required
@@ -503,11 +519,11 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
       return true
     }
     return false
-  
+
   }
   // formSubmit(flag: any) {
   //   if (this.submitValidations()) return;
-  
+
   //   let dataToparent = {
   //     FLAG: flag,
   //     POSTDATA: this.setPostData()
@@ -527,14 +543,15 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
 
     const dataToParent = {
       FLAG: flag,
-      POSTDATA: this.setPostData()
+      POSTDATA: this.setPostData(),
+      COMPONENTDETAILS: this.DetailsComponentData(),
     };
     this.saveDetail.emit(dataToParent);
     if (flag === 'CONTINUE') {
       this.resetStockDetails();
     }
   }
-  
+
   resetStockDetails() {
     this.jewelleryaltrationdetailsFrom.controls.stockcode.setValue('')
     this.jewelleryaltrationdetailsFrom.controls.description.setValue('')
@@ -591,16 +608,16 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
     this.jewelleryaltrationdetailsFrom.controls.totalAMTCC.setValue('')
     this.jewelleryaltrationdetailsFrom.controls.currencycode.setValue('')
     this.jewelleryaltrationdetailsFrom.controls.currencyrate.setValue('')
-  
+
   }
   changeJobClicked() {
     this.formSubmit('CONTINUE')
     this.jewelleryaltrationdetailsFrom.reset()
   }
-  setPostData(){
+  setPostData() {
     let form = this.jewelleryaltrationdetailsFrom.value
     let currRate = this.comService.getCurrecnyRate(this.comService.compCurrency)
-      return  {
+    return {
       "UNIQUEID": 0,
       "SRNO": this.comService.emptyToZero(this.content.SRNO),
       "STOCK_CODE": this.jewelleryaltrationdetailsFrom.value.stockcode,
@@ -618,7 +635,7 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
       "METAL_AMTCC": this.comService.emptyToZero(this.jewelleryaltrationdetailsFrom.value.metalAMTCC),
       "STONE_AMTFC": 0,
       "STONE_AMTCC": 0,
-      "METALWT_NEW":this.comService.emptyToZero(this.jewelleryaltrationdetailsFrom.value.metalWTNEW),
+      "METALWT_NEW": this.comService.emptyToZero(this.jewelleryaltrationdetailsFrom.value.metalWTNEW),
       "PUREWT_NEW": 0,
       "STONEWT_NEW": 0,
       "GROSSWT_NEW": this.jewelleryaltrationdetailsFrom.value.grossWTNEW,
@@ -626,12 +643,12 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
       "METAL_AMTCCNEW": 0,
       "STONE_AMTFCNEW": 0,
       "STONE_AMTCCNEW": 0,
-      "SET_ACCODE":  this.comService.nullToString(this.jewelleryaltrationdetailsFrom.value.settings),
+      "SET_ACCODE": this.comService.nullToString(this.jewelleryaltrationdetailsFrom.value.settings),
       "SET_AMTFC": this.comService.emptyToZero(this.jewelleryaltrationdetailsFrom.value.settingsAMTFC),
       "SET_AMTCC": this.comService.emptyToZero(this.jewelleryaltrationdetailsFrom.value.settingsAMTFC),
       "SET_AMTFCNEW": this.comService.emptyToZero(this.jewelleryaltrationdetailsFrom.value.settingsAMTFC),
       "SET_AMTCCNEW": this.comService.emptyToZero(this.jewelleryaltrationdetailsFrom.value.settingsAMTFC),
-      "POL_ACCODE":  this.comService.nullToString(this.jewelleryaltrationdetailsFrom.value.polishing),
+      "POL_ACCODE": this.comService.nullToString(this.jewelleryaltrationdetailsFrom.value.polishing),
       "POL_AMTFC": this.comService.emptyToZero(this.jewelleryaltrationdetailsFrom.value.polishingAMTFC),
       "POL_AMTCC": this.comService.emptyToZero(this.jewelleryaltrationdetailsFrom.value.polishingAMTCC),
       "POL_AMTFCNEW": 0,
@@ -677,8 +694,8 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
       "PRICE4LC": this.comService.emptyToZero(this.jewelleryaltrationdetailsFrom.value.price4LC),
       "PRICE5FC": this.comService.emptyToZero(this.jewelleryaltrationdetailsFrom.value.price5FC),
       "PRICE5LC": this.comService.emptyToZero(this.jewelleryaltrationdetailsFrom.value.price5LC),
-      "CURRENCY_CODE": this.jewelleryaltrationdetailsFrom.value.currencycode ,
-      "CC_RATE": this.jewelleryaltrationdetailsFrom.value.currencyrate ,
+      "CURRENCY_CODE": this.jewelleryaltrationdetailsFrom.value.currencycode,
+      "CC_RATE": this.jewelleryaltrationdetailsFrom.value.currencyrate,
       "DT_BRANCH_CODE": '',
       "DT_VOCTYPE": "",
       "DT_VOCNO": 0,
@@ -700,12 +717,13 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
       "LANDEDCOSTOLD": 0,
       "SIEVE": "",
       "SIZE": "",
-      "STONE_TYPE": ""
+      "STONE_TYPE": "",
+      "DetailComponents": this.DetailsComponentData()
     }
   }
 
   setFormValues() {
-    console.log(this.content,'fixing')
+    console.log(this.content, 'fixing')
     if (!this.content) return
 
 
@@ -840,243 +858,281 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
-//   stockCodeValidate(event: any, flag?: string): void {
- 
-//     // 'GetDesignStnmtlDetailNet'
-//     if (event.target.value == 'stockcode') return
-//     //this.snackBar.open('Loading...')
-   
-//     let postData = {
-//       "SPID": "089",
-//       "parameter": {
-//         "StockCode": this.jewelleryaltrationdetailsFrom.value.stockcode,
-//         "BranchCode": this.jewelleryaltrationdetailsFrom.value.branchCode,
-//         "CurrencyCode": '',
-//         "ParentCurrencyRate": '',
-     
-//       }
-//     }
-//     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
-//       .subscribe((result) => {
-//         if (result.dynamicData || result.status == 'Success') {
-         
-//           let data: any = []
-//           // 1st result set Summary details data
-//           if (result.dynamicData[0] && result.dynamicData[0].length > 0) {
-//             data = result.dynamicData[0]
-//             data = this.commonService.arrayEmptyObjectToString(data)
-//             this.summaryDetailData = data[0]
-//           } else {
-//             this.commonService.toastErrorByMsgId('MSG1531');
-//           }
-//           // 2nd and 3rd result Parts / Components details data
-//           if ((result.dynamicData[1]?.length > 0) ||
-//             (result.dynamicData[2]?.length > 0)) {
-//             // this.gridComponents = result.dynamicData[1]
-//             // this.gridParts = result.dynamicData[2]
-//           } 
-//           //4th result is BOM Details data
-          
-          
-//           // this.BOMDetailsArrayHead = Object.keys(this.BOMDetailsArray[0]);
+  //   stockCodeValidate(event: any, flag?: string): void {
 
-          
+  //     // 'GetDesignStnmtlDetailNet'
+  //     if (event.target.value == 'stockcode') return
+  //     //this.snackBar.open('Loading...')
 
-//           // this.jewelleryaltrationdetailsFrom.controls.stockcode.setValue(this.summaryDetailData.STOCK_CODE)
-//           // this.jewelleryaltrationdetailsFrom.controls.description.setValue(this.summaryDetailData.DESCRIPTION)
+  //     let postData = {
+  //       "SPID": "089",
+  //       "parameter": {
+  //         "StockCode": this.jewelleryaltrationdetailsFrom.value.stockcode,
+  //         "BranchCode": this.jewelleryaltrationdetailsFrom.value.branchCode,
+  //         "CurrencyCode": '',
+  //         "ParentCurrencyRate": '',
 
-//           // this.jewelleryaltrationdetailsFrom.controls.karat.setValue(data.KARAT_CODE)
-//           // this.jewelleryaltrationdetailsFrom.controls.costcode.setValue(this.summaryDetailData.METALWT)
-//           // this.jewelleryaltrationdetailsFrom.controls.metalcolor.setValue(this.summaryDetailData.STOCK_CODE)
-//           // this.jewelleryaltrationdetailsFrom.controls.Remarks.setValue(this.summaryDetailData.KARAT_CODE + ':' + this.summaryDetailData.COLOR + ':' + this.summaryDetailData.DESIGN_DESCRIPTION)
+  //       }
+  //     }
+  //     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+  //       .subscribe((result) => {
+  //         if (result.dynamicData || result.status == 'Success') {
 
-//           // this.jewelleryaltrationdetailsFrom.controls.metalAMTFC.setValue(this.summaryDetailData.CATEGORY_CODE)
-//           // this.jewelleryaltrationdetailsFrom.controls.metalWT.setValue(this.summaryDetailData.SUBCATEGORY_CODE)
-//           // this.jewelleryaltrationdetailsFrom.controls.metalAMTCC.setValue(this.summaryDetailData.COLOR)
-//           // this.jewelleryaltrationdetailsFrom.controls.metalWTNEW.setValue(this.summaryDetailData.KARAT_CODE)
-//           // this.jewelleryaltrationdetailsFrom.controls.diamonds.setValue(this.commonService.decimalQuantityFormat(this.summaryDetailData.PURITY, 'PURITY'))
-//           // this.jewelleryaltrationdetailsFrom.controls.gross.setValue(this.summaryDetailData.SUPPLIER_CODE)
-//           // this.jewelleryaltrationdetailsFrom.controls.grossWTNEW.setValue(this.summaryDetailData.SEQ_CODE)
-//           // this.jewelleryaltrationdetailsFrom.controls.costFC.setValue(this.summaryDetailData.BRAND_CODE)
-//           // this.jewelleryaltrationdetailsFrom.controls.costCC.setValue(this.summaryDetailData.TYPE_CODE)
-//           // this.jewelleryaltrationdetailsFrom.controls.costFCNEW.setValue(this.summaryDetailData.SIZE)
-//           // this.jewelleryaltrationdetailsFrom.controls.costCCNEW.setValue(this.summaryDetailData.SURFACEPROPERTY)
-//           // this.jewelleryaltrationdetailsFrom.controls.pricescheme.setValue(this.summaryDetailData.WIDTH)
-//           // this.jewelleryaltrationdetailsFrom.controls.price1.setValue(this.summaryDetailData.THICKNESS)
-//           // this.jewelleryaltrationdetailsFrom.controls.price1PER.setValue(this.summaryDetailData.ENGRAVING_TEXT)
-//           // this.jewelleryaltrationdetailsFrom.controls.price1FC .setValue(this.summaryDetailData.ENGRAVING_FONT)
+  //           let data: any = []
+  //           // 1st result set Summary details data
+  //           if (result.dynamicData[0] && result.dynamicData[0].length > 0) {
+  //             data = result.dynamicData[0]
+  //             data = this.commonService.arrayEmptyObjectToString(data)
+  //             this.summaryDetailData = data[0]
+  //           } else {
+  //             this.commonService.toastErrorByMsgId('MSG1531');
+  //           }
+  //           // 2nd and 3rd result Parts / Components details data
+  //           if ((result.dynamicData[1]?.length > 0) ||
+  //             (result.dynamicData[2]?.length > 0)) {
+  //             // this.gridComponents = result.dynamicData[1]
+  //             // this.gridParts = result.dynamicData[2]
+  //           } 
+  //           //4th result is BOM Details data
 
-          
-//         } else {
-//           this.commonService.toastErrorByMsgId('MSG1531');
-//         }
-//       }, err => {
-        
-//         this.commonService.toastErrorByMsgId('MSG1531');
-//       })
-//     this.subscriptions.push(Sub)
-//   }
-// }
-lookupKeyPress(event: any, form?: any) {
-  if(event.key == 'Tab' && event.target.value == ''){
-    this.showOverleyPanel(event,form)
-  }
-}
-onFileChangedimage(event: any) {
-  this.imageurl = event.target.files[0]
-  console.log(this.imageurl)
-  let reader = new FileReader();
-  if (event.target.files && event.target.files.length > 0) {
-    let file = event.target.files[0];
-    reader.readAsDataURL(file);
-    reader.onload = () => {
-      this.image = reader.result;
-    };
-  }
-}
-stockCodeValidate() {
-  console.log(this.stockCodeData)
-  let postData = {
-    "SPID": "089",
-    "parameter": {
-      StockCode: this.jewelleryaltrationdetailsFrom.value.stockcode,
-      BranchCode: this.comService.nullToString(this.branchCode),
-      CurrencyCode: '',
-      ParentCurrencyRate: '0'
+
+  //           // this.BOMDetailsArrayHead = Object.keys(this.BOMDetailsArray[0]);
+
+
+
+  //           // this.jewelleryaltrationdetailsFrom.controls.stockcode.setValue(this.summaryDetailData.STOCK_CODE)
+  //           // this.jewelleryaltrationdetailsFrom.controls.description.setValue(this.summaryDetailData.DESCRIPTION)
+
+  //           // this.jewelleryaltrationdetailsFrom.controls.karat.setValue(data.KARAT_CODE)
+  //           // this.jewelleryaltrationdetailsFrom.controls.costcode.setValue(this.summaryDetailData.METALWT)
+  //           // this.jewelleryaltrationdetailsFrom.controls.metalcolor.setValue(this.summaryDetailData.STOCK_CODE)
+  //           // this.jewelleryaltrationdetailsFrom.controls.Remarks.setValue(this.summaryDetailData.KARAT_CODE + ':' + this.summaryDetailData.COLOR + ':' + this.summaryDetailData.DESIGN_DESCRIPTION)
+
+  //           // this.jewelleryaltrationdetailsFrom.controls.metalAMTFC.setValue(this.summaryDetailData.CATEGORY_CODE)
+  //           // this.jewelleryaltrationdetailsFrom.controls.metalWT.setValue(this.summaryDetailData.SUBCATEGORY_CODE)
+  //           // this.jewelleryaltrationdetailsFrom.controls.metalAMTCC.setValue(this.summaryDetailData.COLOR)
+  //           // this.jewelleryaltrationdetailsFrom.controls.metalWTNEW.setValue(this.summaryDetailData.KARAT_CODE)
+  //           // this.jewelleryaltrationdetailsFrom.controls.diamonds.setValue(this.commonService.decimalQuantityFormat(this.summaryDetailData.PURITY, 'PURITY'))
+  //           // this.jewelleryaltrationdetailsFrom.controls.gross.setValue(this.summaryDetailData.SUPPLIER_CODE)
+  //           // this.jewelleryaltrationdetailsFrom.controls.grossWTNEW.setValue(this.summaryDetailData.SEQ_CODE)
+  //           // this.jewelleryaltrationdetailsFrom.controls.costFC.setValue(this.summaryDetailData.BRAND_CODE)
+  //           // this.jewelleryaltrationdetailsFrom.controls.costCC.setValue(this.summaryDetailData.TYPE_CODE)
+  //           // this.jewelleryaltrationdetailsFrom.controls.costFCNEW.setValue(this.summaryDetailData.SIZE)
+  //           // this.jewelleryaltrationdetailsFrom.controls.costCCNEW.setValue(this.summaryDetailData.SURFACEPROPERTY)
+  //           // this.jewelleryaltrationdetailsFrom.controls.pricescheme.setValue(this.summaryDetailData.WIDTH)
+  //           // this.jewelleryaltrationdetailsFrom.controls.price1.setValue(this.summaryDetailData.THICKNESS)
+  //           // this.jewelleryaltrationdetailsFrom.controls.price1PER.setValue(this.summaryDetailData.ENGRAVING_TEXT)
+  //           // this.jewelleryaltrationdetailsFrom.controls.price1FC .setValue(this.summaryDetailData.ENGRAVING_FONT)
+
+
+  //         } else {
+  //           this.commonService.toastErrorByMsgId('MSG1531');
+  //         }
+  //       }, err => {
+
+  //         this.commonService.toastErrorByMsgId('MSG1531');
+  //       })
+  //     this.subscriptions.push(Sub)
+  //   }
+  // }
+  lookupKeyPress(event: any, form?: any) {
+    if (event.key == 'Tab' && event.target.value == '') {
+      this.showOverleyPanel(event, form)
     }
   }
-  console.log('Post data:', postData);
-
-  this.comService.showSnackBarMsg('MSG81447')
-  let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
-    .subscribe((result) => {
-      this.comService.closeSnackBarMsg()
-      console.log('API response:', result);
-      if (result.status == "Success" && result.dynamicData[0]) {
-        let data = result.dynamicData[0]
-        if (data) {
-          console.log(data, 'data');
-          this.jewelleryaltrationdetailsFrom .controls.costcode.setValue(data[0].COST_CODE)
-          this.jewelleryaltrationdetailsFrom.controls.metalcolor.setValue(data[0].COLOR)
-          this.jewelleryaltrationdetailsFrom.controls.refvoc.setValue(data[0].PURVOCTYPE_NO)
-          this.jewelleryaltrationdetailsFrom.controls.dated.setValue(data[0].OPENED_ON)
-          this.jewelleryaltrationdetailsFrom.controls.metalWT.setValue(
-            this.commonService.decimalQuantityFormat(data[0].METAL_TOTALGROSSWT, 'METAL'))
-          this.jewelleryaltrationdetailsFrom.controls.metalAMTFC.setValue(this.commonService.decimalQuantityFormat(data[0].METAL_TOTALAMOUNT,'METAL'))
-          this.jewelleryaltrationdetailsFrom.controls.metalWTNEW.setValue(this.commonService.decimalQuantityFormat(data[0].METAL_TOTALGROSSWT,'METAL'))
-          this.jewelleryaltrationdetailsFrom.controls.metalAMTCC.setValue(this.commonService.decimalQuantityFormat(data[0].METAL_TOTALAMOUNT,'METAL'))
-          this.jewelleryaltrationdetailsFrom.controls.diamondsWT.setValue(this.commonService.decimalQuantityFormat(data[0].LOOSE_TOTALWT,'METAL'))
-          this.jewelleryaltrationdetailsFrom.controls.diamondsFC.setValue(this.commonService.decimalQuantityFormat(data[0].LOOSE_TOTALAMOUNT,'METAL'))
-          this.jewelleryaltrationdetailsFrom.controls.diamondsNEW.setValue(this.commonService.decimalQuantityFormat(data[0].LOOSE_TOTALWT,'METAL'))
-          this.jewelleryaltrationdetailsFrom.controls.diamondsCC.setValue(this.commonService.decimalQuantityFormat(data[0].LOOSE_TOTALAMOUNT,'METAL'))
-          this.jewelleryaltrationdetailsFrom.controls.gross.setValue(this.commonService.decimalQuantityFormat(data[0].POSGROSSWT,'METAL'))
-          this.jewelleryaltrationdetailsFrom.controls.grossWTNEW.setValue(this.commonService.decimalQuantityFormat(data[0].POSGROSSWT,'METAL'))
-          this.jewelleryaltrationdetailsFrom.controls.costFC.setValue(data[0].STOCK_LCCOST)
-          this.jewelleryaltrationdetailsFrom.controls.costCCNEW.setValue(data[0].STOCK_LCCOST)
-          this.jewelleryaltrationdetailsFrom.controls.price1PER.setValue(data[0].PRICE1PER)
-          this.jewelleryaltrationdetailsFrom.controls.price2PER.setValue(data[0].PRICE2PER)
-          this.jewelleryaltrationdetailsFrom.controls.price3PER.setValue(data[0].PRICE3PER)
-          this.jewelleryaltrationdetailsFrom.controls.price4PER.setValue(data[0].PRICE4PER)
-          this.jewelleryaltrationdetailsFrom.controls.price5PER.setValue(data[0].PRICE5PER)
-          this.jewelleryaltrationdetailsFrom.controls.price1FC.setValue(data[0].PRICE1FC)
-          this.jewelleryaltrationdetailsFrom.controls.price1LC.setValue(data[0].PRICE1LC)
-          this.jewelleryaltrationdetailsFrom.controls.price2FC.setValue(data[0].PRICE2FC)
-          this.jewelleryaltrationdetailsFrom.controls.price2LC.setValue(data[0].PRICE2LC)
-          this.jewelleryaltrationdetailsFrom.controls.price3FC.setValue(data[0].PRICE3FC)
-          this.jewelleryaltrationdetailsFrom.controls.price3LC.setValue(data[0].PRICE3LC)
-          this.jewelleryaltrationdetailsFrom.controls.price4FC.setValue(data[0].PRICE4FC)
-          this.jewelleryaltrationdetailsFrom.controls.price4LC.setValue(data[0].PRICE4LC)
-          this.jewelleryaltrationdetailsFrom.controls.price5FC.setValue(data[0].PRICE5FC)
-          this.jewelleryaltrationdetailsFrom.controls.price5LC.setValue(data[0].PRICE5LC)
-          this.jewelleryaltrationdetailsFrom.controls.settings.setValue(data[0].CHARGE1FC)
-          this.jewelleryaltrationdetailsFrom.controls.settingsAMTFC.setValue(data[0].CHARGE1LC)
-          this.jewelleryaltrationdetailsFrom.controls.polishing.setValue(data[0].CHARGE3FC)
-          this.jewelleryaltrationdetailsFrom.controls.polishingAMTFC.setValue(data[0].CHARGE3LC)
-          this.jewelleryaltrationdetailsFrom.controls.rhodium.setValue(data[0].CHARGE3FC)
-          this.jewelleryaltrationdetailsFrom.controls.rhodiumAMTFC.setValue(data[0].CHARGE3LC)
-          this.jewelleryaltrationdetailsFrom.controls.making.setValue(data[0].CHARGE4FC)
-          this.jewelleryaltrationdetailsFrom.controls.makingAMTFC.setValue(data[0].CHARGE4LC)
-          this.jewelleryaltrationdetailsFrom.controls.platecharges.setValue(data[0].CHARGE3FC)
-          this.jewelleryaltrationdetailsFrom.controls.platechargesFC.setValue(data[0].CHARGE3LC)
-          this.jewelleryaltrationdetailsFrom.controls.certcharges.setValue(data[0].CHARGE3FC)
-          this.jewelleryaltrationdetailsFrom.controls.certchargesFC.setValue(data[0].CHARGE3LC)
-          this.jewelleryaltrationdetailsFrom.controls.misccharges.setValue(data[0].CHARGE5FC)
-          this.jewelleryaltrationdetailsFrom.controls.miscchargesAMTFC.setValue(data[0].CHARGE5LC)
-          this.jewelleryaltrationdetailsFrom.controls.totalAMTFC.setValue(data[0].METAL_TOTALAMOUNT)
-          this.jewelleryaltrationdetailsFrom.controls.totalAMTCC.setValue(data[0].METAL_TOTALAMOUNT)
-          this.jewelleryaltrationdetailsFrom.controls.tagdetails.setValue(data[0].TAG_LINESWOENTER)
-          this.jewelleryaltrationdetailsFrom.controls.image.setValue(data[0].PICTURE_NAME)
-          this.jewelleryaltrationdetailsFrom.controls.currencycode.setValue(data[0].CURRENCY_CODE)
-          this.jewelleryaltrationdetailsFrom.controls.currencyrate.setValue(this.commonService.decimalQuantityFormat(data[0].CC_RATE,'RATE'))
-
-          
-        } else {
-          this.jewelleryaltrationdetailsFrom.controls.stockcode.setValue('')
-          this.comService.toastErrorByMsgId('MSG1531')
-          return
-        }
-      } else {
-        this.comService.toastErrorByMsgId('MSG1747')
+  // onFileChangedimage(event: any) {
+  //   this.imageurl = event.target.files[0]
+  //   console.log(this.imageurl)
+  //   let reader = new FileReader();
+  //   if (event.target.files && event.target.files.length > 0) {
+  //     let file = event.target.files[0];
+  //     reader.readAsDataURL(file);
+  //     reader.onload = () => {
+  //       this.image = reader.result;
+  //     };
+  //   }
+  // }
+  stockCodeValidate() {
+    console.log(this.stockCodeData)
+    let postData = {
+      "SPID": "089",
+      "parameter": {
+        StockCode: this.jewelleryaltrationdetailsFrom.value.stockcode,
+        BranchCode: this.comService.nullToString(this.branchCode),
+        CurrencyCode: '',
+        ParentCurrencyRate: '0'
       }
-    }, err => {
-      this.comService.closeSnackBarMsg()
-      this.comService.toastErrorByMsgId('MSG1531')
-    })
-  this.subscriptions.push(Sub)
-}
-showOverleyPanel(event: any, formControlName: string) {
-  if (this.jewelleryaltrationdetailsFrom.value[formControlName] != '') return;
+    }
+    console.log('Post data:', postData);
 
-  switch (formControlName) {
-    case 'stockcode':
-      this.overlaystockcode.showOverlayPanel(event);
-      break;
+    this.comService.showSnackBarMsg('MSG81447')
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        this.comService.closeSnackBarMsg()
+        console.log('API response:', result);
+        if (result.status == "Success" && result.dynamicData[0]) {
+          let data = result.dynamicData[0]
+          if (data) {
+            console.log(data, 'data');
+            this.jewelleryaltrationdetailsFrom.controls.costcode.setValue(data[0].COST_CODE)
+            this.jewelleryaltrationdetailsFrom.controls.metalcolor.setValue(data[0].COLOR)
+            this.jewelleryaltrationdetailsFrom.controls.refvoc.setValue(data[0].PURVOCTYPE_NO)
+            this.jewelleryaltrationdetailsFrom.controls.dated.setValue(data[0].OPENED_ON)
+            this.jewelleryaltrationdetailsFrom.controls.metalWT.setValue(
+              this.commonService.decimalQuantityFormat(data[0].METAL_TOTALGROSSWT, 'METAL'))
+            this.jewelleryaltrationdetailsFrom.controls.metalAMTFC.setValue(this.commonService.decimalQuantityFormat(data[0].METAL_TOTALAMOUNT, 'METAL'))
+            this.jewelleryaltrationdetailsFrom.controls.metalWTNEW.setValue(this.commonService.decimalQuantityFormat(data[0].METAL_TOTALGROSSWT, 'METAL'))
+            this.jewelleryaltrationdetailsFrom.controls.metalAMTCC.setValue(this.commonService.decimalQuantityFormat(data[0].METAL_TOTALAMOUNT, 'METAL'))
+            this.jewelleryaltrationdetailsFrom.controls.diamondsWT.setValue(this.commonService.decimalQuantityFormat(data[0].LOOSE_TOTALWT, 'METAL'))
+            this.jewelleryaltrationdetailsFrom.controls.diamondsFC.setValue(this.commonService.decimalQuantityFormat(data[0].LOOSE_TOTALAMOUNT, 'METAL'))
+            this.jewelleryaltrationdetailsFrom.controls.diamondsNEW.setValue(this.commonService.decimalQuantityFormat(data[0].LOOSE_TOTALWT, 'METAL'))
+            this.jewelleryaltrationdetailsFrom.controls.diamondsCC.setValue(this.commonService.decimalQuantityFormat(data[0].LOOSE_TOTALAMOUNT, 'METAL'))
+            this.jewelleryaltrationdetailsFrom.controls.gross.setValue(this.commonService.decimalQuantityFormat(data[0].POSGROSSWT, 'METAL'))
+            this.jewelleryaltrationdetailsFrom.controls.grossWTNEW.setValue(this.commonService.decimalQuantityFormat(data[0].POSGROSSWT, 'METAL'))
+            this.jewelleryaltrationdetailsFrom.controls.costFC.setValue(data[0].STOCK_LCCOST)
+            this.jewelleryaltrationdetailsFrom.controls.costCCNEW.setValue(data[0].STOCK_LCCOST)
+            this.jewelleryaltrationdetailsFrom.controls.price1PER.setValue(data[0].PRICE1PER)
+            this.jewelleryaltrationdetailsFrom.controls.price2PER.setValue(data[0].PRICE2PER)
+            this.jewelleryaltrationdetailsFrom.controls.price3PER.setValue(data[0].PRICE3PER)
+            this.jewelleryaltrationdetailsFrom.controls.price4PER.setValue(data[0].PRICE4PER)
+            this.jewelleryaltrationdetailsFrom.controls.price5PER.setValue(data[0].PRICE5PER)
+            this.jewelleryaltrationdetailsFrom.controls.price1FC.setValue(data[0].PRICE1FC)
+            this.jewelleryaltrationdetailsFrom.controls.price1LC.setValue(data[0].PRICE1LC)
+            this.jewelleryaltrationdetailsFrom.controls.price2FC.setValue(data[0].PRICE2FC)
+            this.jewelleryaltrationdetailsFrom.controls.price2LC.setValue(data[0].PRICE2LC)
+            this.jewelleryaltrationdetailsFrom.controls.price3FC.setValue(data[0].PRICE3FC)
+            this.jewelleryaltrationdetailsFrom.controls.price3LC.setValue(data[0].PRICE3LC)
+            this.jewelleryaltrationdetailsFrom.controls.price4FC.setValue(data[0].PRICE4FC)
+            this.jewelleryaltrationdetailsFrom.controls.price4LC.setValue(data[0].PRICE4LC)
+            this.jewelleryaltrationdetailsFrom.controls.price5FC.setValue(data[0].PRICE5FC)
+            this.jewelleryaltrationdetailsFrom.controls.price5LC.setValue(data[0].PRICE5LC)
+            this.jewelleryaltrationdetailsFrom.controls.settings.setValue(data[0].CHARGE1FC)
+            this.jewelleryaltrationdetailsFrom.controls.settingsAMTFC.setValue(data[0].CHARGE1LC)
+            this.jewelleryaltrationdetailsFrom.controls.polishing.setValue(data[0].CHARGE3FC)
+            this.jewelleryaltrationdetailsFrom.controls.polishingAMTFC.setValue(data[0].CHARGE3LC)
+            this.jewelleryaltrationdetailsFrom.controls.rhodium.setValue(data[0].CHARGE3FC)
+            this.jewelleryaltrationdetailsFrom.controls.rhodiumAMTFC.setValue(data[0].CHARGE3LC)
+            this.jewelleryaltrationdetailsFrom.controls.making.setValue(data[0].CHARGE4FC)
+            this.jewelleryaltrationdetailsFrom.controls.makingAMTFC.setValue(data[0].CHARGE4LC)
+            this.jewelleryaltrationdetailsFrom.controls.platecharges.setValue(data[0].CHARGE3FC)
+            this.jewelleryaltrationdetailsFrom.controls.platechargesFC.setValue(data[0].CHARGE3LC)
+            this.jewelleryaltrationdetailsFrom.controls.certcharges.setValue(data[0].CHARGE3FC)
+            this.jewelleryaltrationdetailsFrom.controls.certchargesFC.setValue(data[0].CHARGE3LC)
+            this.jewelleryaltrationdetailsFrom.controls.misccharges.setValue(data[0].CHARGE5FC)
+            this.jewelleryaltrationdetailsFrom.controls.miscchargesAMTFC.setValue(data[0].CHARGE5LC)
+            this.jewelleryaltrationdetailsFrom.controls.totalAMTFC.setValue(data[0].METAL_TOTALAMOUNT)
+            this.jewelleryaltrationdetailsFrom.controls.totalAMTCC.setValue(data[0].METAL_TOTALAMOUNT)
+            this.jewelleryaltrationdetailsFrom.controls.tagdetails.setValue(data[0].TAG_LINESWOENTER)
+            this.jewelleryaltrationdetailsFrom.controls.PICTURE.setValue(data[0].PICTURE_NAME)
+            this.jewelleryaltrationdetailsFrom.controls.currencycode.setValue(data[0].CURRENCY_CODE)
+            this.jewelleryaltrationdetailsFrom.controls.currencyrate.setValue(this.commonService.decimalQuantityFormat(data[0].CC_RATE, 'RATE'))
+            this.getImageData()
+
+          } else {
+            this.jewelleryaltrationdetailsFrom.controls.stockcode.setValue('')
+            this.comService.toastErrorByMsgId('MSG1531')
+            return
+          }
+        } else {
+          this.comService.toastErrorByMsgId('MSG1747')
+        }
+      }, err => {
+        this.comService.closeSnackBarMsg()
+        this.comService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
+  }
+  showOverleyPanel(event: any, formControlName: string) {
+    if (this.jewelleryaltrationdetailsFrom.value[formControlName] != '') return;
+
+    switch (formControlName) {
+      case 'stockcode':
+        this.overlaystockcode.showOverlayPanel(event);
+        break;
       case 'price1PER':
-      this.overlayprice1per.showOverlayPanel(event);
-      break;
+        this.overlayprice1per.showOverlayPanel(event);
+        break;
       case 'price2PER':
-      this.overlayprice2per.showOverlayPanel(event);
-      break;
+        this.overlayprice2per.showOverlayPanel(event);
+        break;
       case 'price3PER':
-      this.overlayprice3per.showOverlayPanel(event);
-      break;
+        this.overlayprice3per.showOverlayPanel(event);
+        break;
       case 'price4PER':
         this.overlayprice4per.showOverlayPanel(event);
         break;
-        case 'price5PER':
-          this.overlayprice5per.showOverlayPanel(event);
-          break;
-    default:
+      case 'price5PER':
+        this.overlayprice5per.showOverlayPanel(event);
+        break;
+      default:
+    }
   }
-}
 
-validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
-  LOOKUPDATA.SEARCH_VALUE = event.target.value
-  if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
-  let param = {
-    LOOKUPID: LOOKUPDATA.LOOKUPID,
-    WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
-  }
-  this.comService.toastInfoByMsgId('MSG81447');
-  let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
-  let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
-    .subscribe((result) => {
-      this.isDisableSaveBtn = false;
-      let data = this.comService.arrayEmptyObjectToString(result.dynamicData[0])
-      if (data.length == 0) {
-        this.comService.toastErrorByMsgId('MSG1531')
-        this.jewelleryaltrationdetailsFrom.controls[FORMNAME].setValue('')
-        LOOKUPDATA.SEARCH_VALUE = ''
-        if (FORMNAME === 'stockcode' || FORMNAME === 'price1PER' || FORMNAME === 'price2PER' || FORMNAME === 'price3PER'|| FORMNAME === 'price4PER'|| FORMNAME === 'price5PER') {
-          this.showOverleyPanel(event, FORMNAME);
+  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    LOOKUPDATA.SEARCH_VALUE = event.target.value
+    if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
+    let param = {
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+    }
+    this.comService.toastInfoByMsgId('MSG81447');
+    let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
+      .subscribe((result) => {
+        this.isDisableSaveBtn = false;
+        let data = this.comService.arrayEmptyObjectToString(result.dynamicData[0])
+        if (data.length == 0) {
+          this.comService.toastErrorByMsgId('MSG1531')
+          this.jewelleryaltrationdetailsFrom.controls[FORMNAME].setValue('')
+          LOOKUPDATA.SEARCH_VALUE = ''
+          if (FORMNAME === 'stockcode' || FORMNAME === 'price1PER' || FORMNAME === 'price2PER' || FORMNAME === 'price3PER' || FORMNAME === 'price4PER' || FORMNAME === 'price5PER') {
+            this.showOverleyPanel(event, FORMNAME);
+          }
+          return
         }
-        return
-      }
 
-    }, err => {
-      this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
 
-    })
-  this.subscriptions.push(Sub)
+      })
+    this.subscriptions.push(Sub)
   }
-}
+  DetailsComponentData() {
+    let data: any[] = []
+    this.tableData.forEach((element: any) => {
+      data.push({
+      
+          "REFMID": 0,
+          "MAINCODE": "string",
+          "SLNO": 0,
+          "METALSTONE": "s",
+          "DIVISION": "s",
+          "DET_STOCK_CODE": "string",
+          "RET_STOCK_CODE": "string",
+          "KARAT_CODE": "stri",
+          "PURITY": 0,
+          "PCS": 0,
+          "WEIGHT": 0,
+          "PUREWT": 0,
+          "RATEFC": 0,
+          "RATECC": 0,
+          "AMOUNTFC": 0,
+          "AMOUNTCC": 0,
+          "REMOVED": 0,
+          "NEWENTRY": 0,
+          "LOC_TYPE": "string",
+          "COLOR": "string",
+          "SHAPE": "string",
+          "SIEVE": "string",
+          "STONE_TYPE": "string",
+          "CLARITY": "string",
+          "SIZE": "string",
+          "SIEVE_SET": "string"
+        })
+      });
+      console.log(data, 'data');
+  
+      return data
+    }
+
+  }
