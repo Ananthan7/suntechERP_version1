@@ -239,6 +239,24 @@ export class LossRecoveryComponent implements OnInit {
 
   });
 
+  enteredCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 73,
+    SEARCH_FIELD: 'UsersName',
+    SEARCH_HEADING: 'Entered By Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "UsersName<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  enteredCodeSelected(e: any) {
+    console.log(e);
+    this.lossRecoveryFrom.controls.EnterBy.setValue(e.UsersName);
+    
+  }
+
+
   submitValidations(form: any) {
     if (this.comService.nullToString(form.vocType) == '') {
       this.comService.toastErrorByMsgId('MSG1939')// vocType  CANNOT BE EMPTY

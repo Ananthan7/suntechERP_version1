@@ -143,7 +143,7 @@ export class JobStickerPrintComponent implements OnInit {
         "YearMonth": "",
         "FromJobNumber": this.commonService.nullToString(this.jobstickerpointForm.value.jobrange),
         "ToJobNumber": this.commonService.nullToString(this.jobstickerpointForm.value.jobrangeDesc),
-        "chkSingleJob": "1"
+        "chkSingleJob": "0"
       }
     };
   
