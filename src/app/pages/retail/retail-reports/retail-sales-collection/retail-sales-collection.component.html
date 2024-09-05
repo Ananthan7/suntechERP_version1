@@ -21,7 +21,7 @@
                     <app-branch-division
                     (newRowClick)="selectedData($event)"
                     class="branchDivisionelectr"
-                    [matTooltip]="branchDivisionControls"
+                    [matTooltip]="branchDivisionControlsTooltip"
                     matTooltipClass="custom-tooltip"
                     matTooltipPosition="above"
                     ></app-branch-division>
@@ -80,11 +80,11 @@
                 <dx-data-grid width="100%" height="310px"  #gridContainer id="gridContainer" [allowColumnReordering]="true"
                     [dataSource]="APIData" [showColumnLines]="true" [showRowLines]="true"
                     [showBorders]="true" [columnAutoWidth]="true" (onSelectionChanged)="onGridSelection($event)"
-                    [selectedRowKeys]="selectedKeys">
+                    [selectedRowKeys]="selectedRowKeys">
 
                     <dxo-filter-row [visible]="showFilterRow" [applyFilter]="currentFilter"></dxo-filter-row>
                     <dxo-paging [enabled]="false"></dxo-paging>
-                    <dxo-selection mode="multiple"></dxo-selection>
+                    <dxo-selection mode="multiple" showCheckBoxesMode="always"></dxo-selection>
 
 
                     <dxi-column alignment="center"  dataField="VOCTYPE"></dxi-column>
@@ -147,37 +147,62 @@
         </div>
       
        
-        <div class="row align-items-center mt-1 justify-content-end"> 
+        <div class="row mt-1 justify-content-end mx-2"> 
 
-          <button mat-flat-button class="btn-m-r-10 demo-button btn-width">
+          <!-- <button mat-flat-button class="btn-m-r-10 demo-button btn-width">
                 <i class="fa fa-eye"></i>
                 PREVIEW
-          </button>
+          </button> -->
+          <div class="icon-label-container">
+            <i class="fa fa-eye fa-2x" style="color: #5497b2;"></i>
+            <span class="label">Preview</span>
+          </div>
 
-          <button mat-flat-button class="btn-m-r-10 demo-button btn-width mx-1">
+          <!-- <button mat-flat-button class="btn-m-r-10 demo-button btn-width mx-1">
             <i class="fa fa-print"></i>
                 PRINT
-          </button>
+          </button> -->
+          <div class="icon-label-container">
+            <i class="fa fa-print fa-2x" style="color: #031082;"></i>
+            <span class="label">Print</span>
+          </div>
 
-          <button mat-flat-button class="btn-m-r-10 demo-button btn-width">
+
+          <!-- <button mat-flat-button class="btn-m-r-10 demo-button btn-width">
             <i class="fa fa-book"></i>
             CATALOGUE
-            </button>
+            </button> -->
+            <div class="icon-label-container">
+                <i class="fa fa-book fa-2x" style="color: indianred;"></i>
+                <span class="label">Catalogue</span>
+            </div>
 
-            <button mat-flat-button class="btn-m-r-10 demo-button btn-width mx-1">
+            <!-- <button mat-flat-button class="btn-m-r-10 demo-button btn-width mx-1">
                 <i class="fa fa-file-excel" ></i>
                 EXCEL
-            </button>
+            </button> -->
+            <div class="icon-label-container">
+                <i class="fa fa-file-excel fa-2x" style="color: green;"></i>
+                <span class="label">Excel</span>
+            </div>
 
-            <button mat-flat-button class="btn-m-r-10 demo-button btn-width">
+            <!-- <button mat-flat-button class="btn-m-r-10 demo-button btn-width">
                 <i class="fa fa-file-export"></i>
                 PDF
-            </button>
-
-            <button mat-flat-button class="btn-m-r-10 demo-button btn-width mx-1">
+            </button> -->
+            <div class="icon-label-container">
+                <i class="fa fa-file-pdf fa-2x" style="color: orangered;"></i>
+                <span class="label">PDF</span>
+            </div>
+            
+            <!-- <button mat-flat-button class="btn-m-r-10 demo-button btn-width mx-1">
                 <i class="uil uil-envelope-alt"></i>
                 EMAIL
-            </button>
+            </button> -->
+            <div class="icon-label-container">
+                <i class="fa fa-envelope fa-2x" style="color: deepskyblue;"></i>
+                <span class="label">EMAIL</span>
+            </div>
         </div>
 
     </form>

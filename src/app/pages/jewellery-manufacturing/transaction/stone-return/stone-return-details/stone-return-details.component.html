@@ -6,9 +6,8 @@
   </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit('SAVE')" (cancelClick)="close()"
-  (changeJobClick)="changeJobClicked()" (continueClick)="formSubmit('CONTINUE')"
-  [isViewContinue]="true" [isViewChangeJob]="true" [isViewDelete]="false"
+<modal-header (saveClick)="formSubmit('SAVE')" (cancelClick)="close()" (changeJobClick)="changeJobClicked()"
+  (continueClick)="formSubmit('CONTINUE')" [isViewContinue]="true" [isViewChangeJob]="true" [isViewDelete]="false"
   [isViewMore]="false"></modal-header>
 <div class="container-fluid pt-3">
   <form [formGroup]="stonereturndetailsFrom">
@@ -17,49 +16,38 @@
         <div class="row">
           <label for="inputPassword" class="col-sm-2 col-form-label">
             Job Number * :</label>
-          <div class="col-sm-8">
-            <div class="position-relative d-flex">
-              <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="jobNumber"
-                  [readonly]="viewMode" UpperCaseDirective
-                  (keydown)="lookupKeyPress($event,'jobNumber')"
-                  (focusout)="jobNumberValidate($event)" maxlength="12" />
-              </mat-form-field>
-              <master-search [MasterSearchData]="JobNoCodeData"
-                *ngIf="!viewMode"
-                #overlayjobNumberSearch
-                (newRowClick)="JobNumberSelected($event)"></master-search>&nbsp;
-              <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="jobDesc"
-                  UpperCaseDirective
-                  readonly maxlength="40" />
-              </mat-form-field>
-            </div>
+          <div class="col-sm-4">
+            <mat-form-field appearance="outline" style="width: 100%">
+              <input type="text" matInput formControlName="jobNumber" [readonly]="viewMode" UpperCaseDirective
+                (keydown)="lookupKeyPress($event,'jobNumber')" (focusout)="jobNumberValidate($event)" maxlength="12" />
+              <master-search class="masterSearch" [MasterSearchData]="JobNoCodeData" *ngIf="!viewMode"
+                #overlayjobNumberSearch (newRowClick)="JobNumberSelected($event)"></master-search>
+            </mat-form-field>
+          </div>
+          <div class="col-sm-4">
+
+            <mat-form-field appearance="outline" style="width: 100%">
+              <input type="text" matInput formControlName="jobDesc" UpperCaseDirective readonly maxlength="40" />
+            </mat-form-field>
           </div>
         </div>
         <div class="row">
           <label for="inputPassword" class="col-sm-2 col-form-label">Sub Job No
             * :</label>
-          <div class="col-sm-8">
-            <div class="position-relative d-flex">
-              <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="subjobno"
-                  maxlength="20" UpperCaseDirective
-                  (keydown)="lookupKeyPress($event,'subjobno')"
-                  [readonly]="viewMode"
-                  (focusout)="validateLookupField($event,subJobNoCodeData,'subjobno')" />
-              </mat-form-field>
-              <master-search [MasterSearchData]="subJobNoCodeData"
-                #overlaysubjobnoSearch
-                (newRowClick)="subJobNoCodeSelected($event)"
-                *ngIf="!viewMode"></master-search>
-              &nbsp;
-              <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="subjobDesc"
-                  UpperCaseDirective
-                  readonly maxlength="40" />
-              </mat-form-field>
-            </div>
+          <div class="col-sm-4">
+            <mat-form-field appearance="outline" style="width: 100%">
+              <input type="text" matInput formControlName="subjobno" maxlength="20" UpperCaseDirective
+                (keydown)="lookupKeyPress($event,'subjobno')" [readonly]="viewMode"
+                (focusout)="validateLookupField($event,subJobNoCodeData,'subjobno')" />
+              <master-search class="masterSearch" [MasterSearchData]="subJobNoCodeData" #overlaysubjobnoSearch
+                (newRowClick)="subJobNoCodeSelected($event)" *ngIf="!viewMode"></master-search>
+            </mat-form-field>
+
+          </div>
+          <div class="col-sm-4">
+            <mat-form-field appearance="outline" style="width: 100%">
+              <input type="text" matInput formControlName="subjobDesc" UpperCaseDirective readonly maxlength="40" />
+            </mat-form-field>
           </div>
         </div>
         <div class="row mb-1">
@@ -68,13 +56,12 @@
           </label>
           <div class="col-md-3">
             <div class="position-relative d-flex">
-              <mat-form-field style="width: 70%">
-                <input type="text" matInput formControlName="designcode"
-                  (keydown)="lookupKeyPress($event,'designcode')" maxlength="20"
-                  readonly />
+              <mat-form-field appearance="outline" style="width: 70%">
+                <input type="text" matInput formControlName="designcode" (keydown)="lookupKeyPress($event,'designcode')"
+                  maxlength="20" readonly />
                 <!-- (focusout)="validateLookupField($event,subJobNoCodeData,'designcode')" -->
               </mat-form-field>
-              <!-- <master-search [MasterSearchData]="subJobNoCodeData"
+              <!-- <master-search class="masterSearch"  [MasterSearchData]="subJobNoCodeData"
                 #overlaydesigncodeSearch
                 (newRowClick)="subJobNoCodeSelected($event)"
                 *ngIf="!viewMode"></master-search> -->
@@ -85,10 +72,9 @@
           </label>
           <div class="col-md-3">
             <div class="position-relative d-flex">
-              <mat-form-field style="width: 70%">
-                <input type="text" matInput formControlName="salesorderno"
-                  maxlength="20"
-                  readonly class="text-right" NumberOnly />
+              <mat-form-field appearance="outline" style="width: 70%">
+                <input type="text" matInput formControlName="salesorderno" maxlength="20" readonly class="text-right"
+                  NumberOnly />
               </mat-form-field>
             </div>
           </div>
@@ -111,73 +97,54 @@
         <div class="row">
           <label for="inputPassword" class="col-sm-3 col-form-label">Process *
             :</label>
-          <div class="col-sm-7">
-            <div class="position-relative d-flex">
-              <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="process"
-                  (keydown)="lookupKeyPress($event,'process')" maxlength="6"
-                  [readonly]="viewMode" UpperCaseDirective
-                  (focusout)="processCodeValidate($event)" />
-              </mat-form-field>
-              <master-search [MasterSearchData]="processCodeData"
-                #overlayprocessSearch
-                (newRowClick)="processCodeSelected($event)"
-                *ngIf="!viewMode"></master-search>&nbsp;
-              <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="processname"
-                  UpperCaseDirective
-                  maxlength="40"
-                  readonly />
-              </mat-form-field>
-            </div>
+          <div class="col-sm-4">
+            <mat-form-field appearance="outline" style="width: 100%">
+              <input type="text" matInput formControlName="process" (keydown)="lookupKeyPress($event,'process')"
+                maxlength="6" [readonly]="viewMode" UpperCaseDirective (focusout)="processCodeValidate($event)" />
+              <master-search class="masterSearch" [MasterSearchData]="processCodeData" #overlayprocessSearch
+                (newRowClick)="processCodeSelected($event)" *ngIf="!viewMode"></master-search>
+            </mat-form-field>
+          </div>
+
+          <div class="col-sm-4">
+            <mat-form-field appearance="outline" style="width: 100%">
+              <input type="text" matInput formControlName="processname" UpperCaseDirective maxlength="40" readonly />
+            </mat-form-field>
           </div>
         </div>
         <div class="row">
           <label for="inputPassword" class="col-sm-3 col-form-label">
             Worker * :</label>
-          <div class="col-sm-7">
-            <div class="position-relative d-flex">
-              <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="worker"
-                  (keydown)="lookupKeyPress($event,'worker')" maxlength="6"
-                  [readonly]="viewMode" UpperCaseDirective
-                  (focusout)="WorkerCodeValidate($event)" />
-              </mat-form-field>
-              <master-search [MasterSearchData]="workerCodeData"
-                #overlayworkerSearch
-                (newRowClick)="workerCodeSelected($event)"
-                *ngIf="!viewMode"></master-search>&nbsp;
-              <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="workername"
-                  UpperCaseDirective
-                  maxlength="40"
-                  readonly />
-              </mat-form-field>
-            </div>
+          <div class="col-sm-4">
+            <mat-form-field appearance="outline" style="width: 100%">
+              <input type="text" matInput formControlName="worker" (keydown)="lookupKeyPress($event,'worker')"
+                maxlength="6" [readonly]="viewMode" UpperCaseDirective (focusout)="WorkerCodeValidate($event)" />
+              <master-search class="masterSearch" [MasterSearchData]="workerCodeData" #overlayworkerSearch
+                (newRowClick)="workerCodeSelected($event)" *ngIf="!viewMode"></master-search>
+            </mat-form-field>
+          </div>
+          <div class="col-sm-4">
+
+            <mat-form-field appearance="outline" style="width: 100%">
+              <input type="text" matInput formControlName="workername" UpperCaseDirective maxlength="40" readonly />
+            </mat-form-field>
           </div>
         </div>
         <div class="row">
           <label for="inputPassword" class="col-sm-3 col-form-label">
             Stock * :</label>
-          <div class="col-sm-7">
-            <div class="position-relative d-flex">
-              <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="stockCode"
-                  (keydown)="lookupKeyPress($event,'stockCode')"
-                  UpperCaseDirective
-                  [readonly]="viewMode" maxlength="15"
-                  (focusout)="stockCodeValidate($event)">
-              </mat-form-field>
-              <master-search [MasterSearchData]="stockCodeData"
-                #overlaywstockCodeSearch
-                (newRowClick)="stockCodeSelected($event)"
-                *ngIf="!viewMode"></master-search>&nbsp;
-              <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="stockCodeDes"
-                  maxlength="40"
-                  readonly />
-              </mat-form-field>
-            </div>
+          <div class="col-sm-4">
+            <mat-form-field appearance="outline" style="width: 100%">
+              <input type="text" matInput formControlName="stockCode" (keydown)="lookupKeyPress($event,'stockCode')"
+                UpperCaseDirective [readonly]="viewMode" maxlength="15" (focusout)="stockCodeValidate($event)">
+              <master-search class="masterSearch" [MasterSearchData]="stockCodeData" #overlaywstockCodeSearch
+                (newRowClick)="stockCodeSelected($event)" *ngIf="!viewMode"></master-search>
+            </mat-form-field>
+          </div>
+          <div class="col-sm-4">
+            <mat-form-field appearance="outline" style="width: 100%">
+              <input type="text" matInput formControlName="stockCodeDes" maxlength="40" readonly />
+            </mat-form-field>
           </div>
         </div>
         <div class="row">
@@ -185,12 +152,10 @@
             :</label>
           <div class="col-sm-5">
             <div class="position-relative d-flex">
-              <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="batchid"
-                  maxlength="20"
-                  [readonly]="viewMode" />
+              <mat-form-field appearance="outline" style="width: 100%">
+                <input type="text" matInput formControlName="batchid" maxlength="20" [readonly]="viewMode" />
               </mat-form-field>
-              <!-- <master-search [MasterSearchData]="subJobNoCodeData"
+              <!-- <master-search class="masterSearch"  [MasterSearchData]="subJobNoCodeData"
                 (newRowClick)="subJobNoCodeSelected($event)"
                 *ngIf="!viewMode"></master-search> -->
             </div>
@@ -199,29 +164,20 @@
         <div class="row">
           <div class="row mb-1 ml-1">
             <div class="col-sm-2">
-              <input class="form-check-input"
-                type="checkbox" value="missing"
-                id="flexCheckMissing"  [disabled]="viewMode"
-                [checked]="selectedOption === 'broken'"
-                (change)="selectOption('broken')">
-              <label class="form-check-label" style="margin-left: 10px;"
-                for="flexCheckMissing">
+              <input class="form-check-input" type="checkbox" value="missing" id="flexCheckMissing"
+                [disabled]="viewMode" [checked]="selectedOption === 'broken'" (change)="selectOption('broken')">
+              <label class="form-check-label" style="margin-left: 10px;" for="flexCheckMissing">
                 Broken
               </label>
             </div>
-            <div class="col-sm-1"></div>
-            <div class="col-sm-4">
-              <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="broken"
-                  maxlength="20"
-                  [readonly]="viewMode" />
+            <div class="col-sm-4 offset-sm-1">
+              <mat-form-field appearance="outline" style="width: 100%">
+                <input type="text" matInput formControlName="broken" maxlength="20" [readonly]="viewMode" />
               </mat-form-field>
             </div>
             <div class="col-sm-4">
-              <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="brokenDescription"
-                  maxlength="40"
-                  readonly />
+              <mat-form-field appearance="outline" style="width: 100%">
+                <input type="text" matInput formControlName="brokenDescription" maxlength="40" readonly />
               </mat-form-field>
             </div>
           </div>
@@ -230,13 +186,9 @@
         <div class="row">
           <div class="row mb-1 ml-1">
             <div class="col-sm-2">
-              <input class="form-check-input"
-                type="checkbox" value="missing"
-                id="flexCheckMissing" [disabled]="viewMode"
-                [checked]="selectedOption === 'missing'"
-                (change)="selectOption('missing')">
-              <label class="form-check-label" style="margin-left: 10px;"
-                for="flexCheckMissing">
+              <input class="form-check-input" type="checkbox" value="missing" id="flexCheckMissing"
+                [disabled]="viewMode" [checked]="selectedOption === 'missing'" (change)="selectOption('missing')">
+              <label class="form-check-label" style="margin-left: 10px;" for="flexCheckMissing">
                 Missing
               </label>
             </div>
@@ -250,16 +202,14 @@
             :</label>
           <div class="col-md-7">
             <div class="position-relative d-flex">
-              <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="location"
-                  [readonly]="viewMode" UpperCaseDirective
+              <mat-form-field appearance="outline" style="width: 100%">
+                <input type="text" matInput formControlName="location" [readonly]="viewMode" UpperCaseDirective
                   (keydown)="lookupKeyPress($event,'location')"
                   (focusout)="validateLookupField($event,locationCodeData,'location')" />
+                <master-search class="masterSearch" [MasterSearchData]="locationCodeData"
+                  (newRowClick)="locationCodeSelected($event)" #overlaylocationSearch *ngIf="!viewMode"></master-search>
               </mat-form-field>
-              <master-search [MasterSearchData]="locationCodeData"
-                (newRowClick)="locationCodeSelected($event)"
-                #overlaylocationSearch
-                *ngIf="!viewMode"></master-search>
+
             </div>
           </div>
         </div>
@@ -273,13 +223,11 @@
           </label>
           <div class="col-md-2">
             <div class="position-relative d-flex">
-              <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="pieces"
-                  maxlength="15"
-                  [readonly]="viewMode" class="text-right" NumberOnly
-                  (focusout)="calculateCarat($event)" />
+              <mat-form-field appearance="outline" style="width: 100%">
+                <input type="text" matInput formControlName="pieces" maxlength="15" [readonly]="viewMode"
+                  class="text-right" NumberOnly (focusout)="calculateCarat($event)" />
               </mat-form-field>
-              <!-- <master-search [MasterSearchData]="subJobNoCodeData"
+              <!-- <master-search class="masterSearch"  [MasterSearchData]="subJobNoCodeData"
                 (newRowClick)="subJobNoCodeSelected($event)"
                 *ngIf="!viewMode"></master-search> -->
             </div>
@@ -288,10 +236,8 @@
           </label>
           <div class="col-md-2">
             <div class="position-relative d-flex">
-              <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="size"
-                  maxlength="12"
-                  readonly />
+              <mat-form-field appearance="outline" style="width: 100%">
+                <input type="text" matInput formControlName="size" maxlength="12" readonly />
               </mat-form-field>
             </div>
           </div>
@@ -299,10 +245,8 @@
           </label>
           <div class="col-md-2">
             <div class="position-relative d-flex">
-              <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="sieve"
-                  maxlength="12"
-                  readonly />
+              <mat-form-field appearance="outline" style="width: 100%">
+                <input type="text" matInput formControlName="sieve" maxlength="12" readonly />
               </mat-form-field>
             </div>
           </div>
@@ -312,12 +256,11 @@
           </label>
           <div class="col-md-2">
             <div class="position-relative d-flex">
-              <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="carat"
-                  maxlength="12"
-                  readonly StoneDecimalInput class="text-right" />
+              <mat-form-field appearance="outline" style="width: 100%">
+                <input type="text" matInput formControlName="carat" maxlength="12" readonly StoneDecimalInput
+                  class="text-right" />
               </mat-form-field>
-              <!-- <master-search [MasterSearchData]="subJobNoCodeData"
+              <!-- <master-search class="masterSearch"  [MasterSearchData]="subJobNoCodeData"
                 (newRowClick)="subJobNoCodeSelected($event)" *ngIf="!viewMode" ></master-search> -->
             </div>
           </div>
@@ -325,10 +268,8 @@
           </label>
           <div class="col-md-2">
             <div class="position-relative d-flex">
-              <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="color"
-                  maxlength="12"
-                  readonly />
+              <mat-form-field appearance="outline" style="width: 100%">
+                <input type="text" matInput formControlName="color" maxlength="12" readonly />
               </mat-form-field>
             </div>
           </div>
@@ -336,10 +277,8 @@
           </label>
           <div class="col-md-2">
             <div class="position-relative d-flex">
-              <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="sieveset"
-                  maxlength="20"
-                  readonly />
+              <mat-form-field appearance="outline" style="width: 100%">
+                <input type="text" matInput formControlName="sieveset" maxlength="20" readonly />
               </mat-form-field>
             </div>
           </div>
@@ -349,10 +288,9 @@
           </label>
           <div class="col-md-2">
             <div class="position-relative d-flex">
-              <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="unitrate"
-                  maxlength="12"
-                  readonly RateDecimalInput class="text-right" />
+              <mat-form-field appearance="outline" style="width: 100%">
+                <input type="text" matInput formControlName="unitrate" maxlength="12" readonly RateDecimalInput
+                  class="text-right" />
               </mat-form-field>
             </div>
           </div>
@@ -360,10 +298,8 @@
           </label>
           <div class="col-md-2">
             <div class="position-relative d-flex">
-              <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="shape"
-                  maxlength="20"
-                  readonly />
+              <mat-form-field appearance="outline" style="width: 100%">
+                <input type="text" matInput formControlName="shape" maxlength="20" readonly />
               </mat-form-field>
             </div>
           </div>
@@ -371,10 +307,8 @@
           </label>
           <div class="col-md-2">
             <div class="position-relative d-flex">
-              <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="clarity"
-                  maxlength="20"
-                  readonly />
+              <mat-form-field appearance="outline" style="width: 100%">
+                <input type="text" matInput formControlName="clarity" maxlength="20" readonly />
               </mat-form-field>
             </div>
           </div>
@@ -384,23 +318,19 @@
           </label>
           <div class="col-md-2">
             <div class="position-relative d-flex">
-              <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="amount"
-                  maxlength="12"
-                  readonly AmountDecimalInput class="text-right" />
+              <mat-form-field appearance="outline" style="width: 100%">
+                <input type="text" matInput formControlName="amount" maxlength="12" readonly AmountDecimalInput
+                  class="text-right" />
               </mat-form-field>
             </div>
           </div>
-          <label for="inputPassword"
-            class="col-sm-2 col-form-label offset-sm-4">Pointer Wt :
+          <label for="inputPassword" class="col-sm-2 col-form-label offset-sm-4">Pointer Wt :
           </label>
           <div class="col-md-2">
             <div class="position-relative d-flex">
-              <mat-form-field style="width: 100%">
-                <input type="text" matInput formControlName="pointerwt"
-                  maxlength="12"
-                  [readonly]="viewMode" class="text-right" FourDecimalInput
-                  (focusout)="calculateCarat($event)" />
+              <mat-form-field appearance="outline" style="width: 100%">
+                <input type="text" matInput formControlName="pointerwt" maxlength="12" [readonly]="viewMode"
+                  class="text-right" FourDecimalInput (focusout)="calculateCarat($event)" />
               </mat-form-field>
             </div>
           </div>

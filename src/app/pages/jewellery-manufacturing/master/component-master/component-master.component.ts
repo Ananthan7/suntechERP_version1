@@ -59,13 +59,12 @@ export class ComponentMasterComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 51,
     SEARCH_FIELD: 'STOCK_CODE',
-    SEARCH_HEADING: 'Stock Type',
+    SEARCH_HEADING: 'Stock Master',
     SEARCH_VALUE: '',
-    //WHERECONDITION: `DIVISION_CODE = '${this.componentmasterForm.value.metalDivision}' and SUBCODE = '0'`,
-    // WHERECONDITION: "STOCK_CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
+    FRONTENDFILTER:true,
   }
   // divisionCode: MasterSearchModel = {
   //   PAGENO: 1,
@@ -134,13 +133,10 @@ export class ComponentMasterComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 14,
-    SEARCH_FIELD: 'COMP_PREFIX',
+    SEARCH_FIELD: 'PREFIX_CODE',
     SEARCH_HEADING: 'Prefix master',
-    SEARCH_VALUE: '',
     WHERECONDITION: "COMP_PREFIX='1'",
-    VIEW_INPUT: true,
     VIEW_TABLE: true,
-    LOAD_ONCLICK: true,
   }
   typeCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -246,7 +242,7 @@ export class ComponentMasterComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 3,
     SEARCH_FIELD: 'types',
-    SEARCH_HEADING: 'stone Type',
+    SEARCH_HEADING: 'Stone Type',
     SEARCH_VALUE: '',
     WHERECONDITION: "types = 'STONE TYPE MASTER'",
     VIEW_INPUT: true,
@@ -435,10 +431,14 @@ export class ComponentMasterComponent implements OnInit {
 
 
   divisionCodeSelected(value: any, data: any, controlName: string) {
+    console.log(value);
+    console.log(data);
+
     this.tableData[data.data.SRNO - 1].DIVCODE = value.DIVISION_CODE;
     this.stockCodeData.WHERECONDITION = `DIVISION = '${value.DIVISION_CODE}'`;
 
     console.log(value.DIVISION)
+    console.log(value.DIVISION_CODE)
     if (value.DIVISION === 'M') {
       this.isPCSDisabled = true;
     } else {
@@ -449,12 +449,16 @@ export class ComponentMasterComponent implements OnInit {
     } else {
       this.iskaratDisabled = false;
     }
+
   }
+
+
 
   stockCodeDataSelected(value: any, data: any, controlName: string,) {
     this.tableData[data.data.SRNO - 1].STOCK_CODE = value.STOCK_CODE;
     this.tableData[data.data.SRNO - 1].DESCRIPTION = value.DESCRIPTION;
     this.stockCodeValidate(this.tableData[data.data.SRNO - 1]);
+
     //  this.stockCodeData.WHERECONDITION = `DIVCODE = '${this.componentmasterForm.value.metalDivision}' and SUBCODE = '0'`;
   }
 
@@ -722,10 +726,10 @@ export class ComponentMasterComponent implements OnInit {
 
 
     this.componentmasterForm.controls.size.setValue(e.COMPSIZE_CODE);
-    this.componentmasterForm.controls.height.setValue(finalHeight);
-    this.componentmasterForm.controls.length.setValue(finalWidth);
-    this.componentmasterForm.controls.width.setValue(finalLength);
-    this.componentmasterForm.controls.radius.setValue(finalRadius);
+    this.componentmasterForm.controls.height.setValue(this.commonService.transformDecimalVB(this.commonService.allbranchMaster?.BMQTYDECIMALS,finalHeight));
+    this.componentmasterForm.controls.length.setValue(this.commonService.transformDecimalVB(this.commonService.allbranchMaster?.BMQTYDECIMALS,finalWidth));
+    this.componentmasterForm.controls.width.setValue(this.commonService.transformDecimalVB(this.commonService.allbranchMaster?.BMQTYDECIMALS,finalLength));
+    this.componentmasterForm.controls.radius.setValue(this.commonService.transformDecimalVB(this.commonService.allbranchMaster?.BMQTYDECIMALS,finalRadius));
   }
 
   // dataSplitPop(data:any){
@@ -1610,6 +1614,12 @@ export class ComponentMasterComponent implements OnInit {
           LOOKUPDATA.SEARCH_VALUE = ''
           return
         }
+
+        if (FORMNAME === 'code') {
+          console.log("dsffds")
+          this.prefixCodeValidate();
+        }
+
         this.componentMasterFormChecks(FORMNAME)// for validations
       }, err => {
         this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again

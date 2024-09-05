@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { Subscription } from 'rxjs';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 
@@ -11,16 +12,18 @@ import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 })
 export class RetailSalesCollectionComponent implements OnInit {
   private cssFilePath = '/assets/scss/scheme_register_pdf.scss';
-  branchDivisionControls: any;
+  branchDivisionControlsTooltip: any;
   tableData: any = [];
   isLoading: boolean = false;
   APIData: any[] = [];
-  selectedKeys: any[] = [];
   selectedRowKeys: number[] = [];
   selectedDatas: any[]= [];
   currentFilter: any;
   showFilterRow: boolean = true;
-
+  popupVisible: boolean = false;
+  branchDivisionData: any[] = [];
+  formattedBranchDivisionData: any;
+  VocTypeParam: any = [];
 
   retailSalesCollection: FormGroup = this.formBuilder.group({
     branch : [''],
@@ -42,6 +45,7 @@ export class RetailSalesCollectionComponent implements OnInit {
   })
   constructor(  private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder, private dataService: SuntechAPIService,  private comService: CommonServiceService,
+    private commonService: CommonServiceService,
   ) { }
 
   ngOnInit(): void {
@@ -58,6 +62,7 @@ export class RetailSalesCollectionComponent implements OnInit {
     if(data.BranchData){
       // content = `Current Selected Branches:  \n`
       data.BranchData.forEach((Bdata: any)=>{
+        this.branchDivisionData.push(Bdata.BRANCH_CODE+'#')
         content += Bdata.BRANCH_CODE ? `${Bdata.BRANCH_CODE}, ` : ''
       }) 
     }
@@ -65,6 +70,7 @@ export class RetailSalesCollectionComponent implements OnInit {
     if(data.DivisionData){
       // content2 = `Current Selected Divisions:  \n`
       data.DivisionData.forEach((Ddata: any)=>{
+        this.branchDivisionData.push(Ddata.DIVISION_CODE+'#')
         content2 += Ddata.DIVISION_CODE ? `${Ddata.DIVISION_CODE}, ` : ''
       }) 
     }
@@ -72,6 +78,7 @@ export class RetailSalesCollectionComponent implements OnInit {
     if(data.AreaData){
       // content3 = `Current Selected Area:  \n`
       data.AreaData.forEach((Adata: any)=>{
+        this.branchDivisionData.push(Adata.AREA_CODE+'#')
         content3 += Adata.AREA_CODE ? `${Adata.AREA_CODE}, ` : ''
       }) 
     }
@@ -79,6 +86,7 @@ export class RetailSalesCollectionComponent implements OnInit {
     if(data.BusinessCategData){
       // content4 = `Current Selected B category:  \n`
       data.BusinessCategData.forEach((BCdata: any)=>{
+        this.branchDivisionData.push(BCdata.CATEGORY_CODE+'#')
         content4 += BCdata.CATEGORY_CODE ? `${BCdata.CATEGORY_CODE}, ` : ''
       }) 
     }
@@ -87,9 +95,13 @@ export class RetailSalesCollectionComponent implements OnInit {
     content2 = content2.replace(/, $/, '');
     content3 = content3.replace(/, $/, '');
     content4 = content4.replace(/, $/, '');
-    this.branchDivisionControls = content +'\n'+content2 +'\n'+ content3 +'\n'+ content4
-    // console.log(this.branchDivisionControls);
-    this.retailSalesCollection.controls.branch.setValue(this.branchDivisionControls);
+    this.branchDivisionControlsTooltip = content +'\n'+content2 +'\n'+ content3 +'\n'+ content4
+    this.retailSalesCollection.controls.branch.setValue(this.branchDivisionControlsTooltip);
+
+    const uniqueArray = [...new Set(this.branchDivisionData)];
+    const plainText = uniqueArray.join('');
+    this.formattedBranchDivisionData = plainText
+ 
   }
 
   setDateValue(event: any){
@@ -115,52 +127,64 @@ export class RetailSalesCollectionComponent implements OnInit {
     console.log(this.retailSalesCollection.controls.reportTo.value)
   }
 
+  formatDateToYYYYMMDD(dateString: any) {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
   okClick() {
-    console.log(this.retailSalesCollection.value.fromDate)
-    return
-      let postData = {
-        "STRBRANCHCODES": 'DHFC' , //this.retailSalesCollection.value.branch,
-        "STRVOCTYPES": 'PS1',
-        "FROMVOCDATE": '2024-01-01' , //this.retailSalesCollection.value.fromDate,
-        "TOVOCDATE": '2024-01-31', //this.retailSalesCollection.value.toDate,
-      };
-      this.dataService.postDynamicAPI('USP_RPTRETAILSALESCOLLECTION', postData)
-      .subscribe((result: any) => {
-        console.log(result);
-        let data = result.dynamicData;
-        var WindowPrt = window.open(' ', ' ', 'width=900px, height=800px');
-        if (WindowPrt === null) {
-          console.error('Failed to open the print window. Possibly blocked by a popup blocker.');
-          return;
+    let postData = {
+      "SPID": "0114",
+      "parameter": {
+          "STRBRANCHCODES": this.formattedBranchDivisionData,
+          "STRVOCTYPES": this.VocTypeParam, //this.commonService.getqueryParamVocType(),
+          "FROMVOCDATE": this.formatDateToYYYYMMDD(this.retailSalesCollection.value.fromDate),
+          "TOVOCDATE": this.formatDateToYYYYMMDD(this.retailSalesCollection.value.toDate),
+          "flag": '',
+          "USERBRANCH": localStorage.getItem('userbranch'),
+          "USERNAME": localStorage.getItem('username')
+      }
+    }
+    console.log(postData)  
+    this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+    .subscribe((result: any) => {
+      console.log(result);
+      let data = result.dynamicData;
+      var WindowPrt = window.open(' ', ' ', 'width=900px, height=800px');
+      if (WindowPrt === null) {
+        console.error('Failed to open the print window. Possibly blocked by a popup blocker.');
+        return;
+      }
+      let printContent = data[0][0].HTMLINPUT;
+      WindowPrt.document.write(printContent);
+      WindowPrt.document.close();
+      WindowPrt.focus();  
+      WindowPrt.onload = function () {
+        if (WindowPrt && WindowPrt.document.head) {
+          let styleElement = WindowPrt.document.createElement('style');
+          styleElement.textContent = `
+                      @page {
+                          size: A5 landscape;
+                      }
+                      body {
+                          margin: 0mm;
+                      }
+                  `;
+          WindowPrt.document.head.appendChild(styleElement);
+
+          setTimeout(() => {
+            if (WindowPrt) {
+              WindowPrt.print();
+            } else {
+              console.error('Print window was closed before printing could occur.');
+            }
+          }, 800);
         }
-        let printContent = data[0][0].HTMLOUT;
-        WindowPrt.document.write(printContent);
-        WindowPrt.document.close();
-        WindowPrt.focus();
-
-        WindowPrt.onload = function () {
-          if (WindowPrt && WindowPrt.document.head) {
-            let styleElement = WindowPrt.document.createElement('style');
-            styleElement.textContent = `
-                        @page {
-                            size: A5 landscape;
-                        }
-                        body {
-                            margin: 0mm;
-                        }
-                    `;
-            WindowPrt.document.head.appendChild(styleElement);
-
-            setTimeout(() => {
-              if (WindowPrt) {
-                WindowPrt.print();
-              } else {
-                console.error('Print window was closed before printing could occur.');
-              }
-            }, 800);
-          }
-        };
-      });  
+      };
+    });      
   }
 
   close(data?: any) {
@@ -195,9 +219,15 @@ export class RetailSalesCollectionComponent implements OnInit {
   onGridSelection(event: any) {
     this.selectedRowKeys= event.selectedRowKeys;
     this.selectedDatas = event.selectedRowsData;
-    console.log(this.selectedDatas)
+    let vocTypeArr: any= []
+    this.selectedDatas.forEach((item: any)=>{
+      vocTypeArr.push(item.VOCTYPE+'#') 
+    })
+    const uniqueArray = [...new Set( vocTypeArr )];
+    const plainText = uniqueArray.join('');
+    this.VocTypeParam = plainText
   }
-  popupVisible: boolean = false;
+
   saveTemplate(){
     this.popupVisible = true;
   }
