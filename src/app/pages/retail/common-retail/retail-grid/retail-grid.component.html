@@ -6,7 +6,7 @@
     <div class="table_header">
         <div class="d-flex">
             <button class="btn btn-white add-btn" (click)="addButtonClick()">
-                <i class="fa fa-plus"></i> Create New Template
+                <i class="fa fa-plus"></i> {{ templateViewForReports ? 'Create New Template' : 'Add' }}
             </button>
             <div class="icons_wrap">
                 <!-- <a class="pe-2">
@@ -49,139 +49,64 @@
     </dx-data-grid>
 
    <div class="row">
-        <div class="col-md-12 mx-2" *ngIf="templateViewForReports">
-            <div class="table-responsive">          
-                <table class="table table-striped table-hover">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>values</th>
-                            <th>Date</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td> T-101 </td>
-                            <td> Template 1 </td>
-                            <td> Template values for BR01, 2014 </td>
-                            <td>
-                               <!-- <div class="row">
-                                    <app-date ></app-date>
-                               </div> -->
-                            </td>
-                            <td class="icon-handling">
-                                <i class="fa fa-eye mx-1 text-primary" aria-hidden="true"></i>
-                                <i class="fa fa-edit mx-1 text-primary" aria-hidden="true"></i>
-                                <i class="fa fa-trash text-primary" aria-hidden="true"></i>
-                                <div class="row mt-1 mx-1" style="margin-right: 1rem !important;"> 
-                                    <div class="icon-label-container">
-                                    <i class="fa fa-eye" style="color: #5497b2;"></i>
-                                    </div>
-
-                                    <div class="icon-label-container">
-                                    <i class="fa fa-print" style="color: #031082;"></i>
-                                    </div>
-
-                                    <div class="icon-label-container">
-                                        <i class="fa fa-book" style="color: indianred;"></i>
-                                    </div>  
-
-                                    <div class="icon-label-container">
-                                        <i class="fa fa-file-excel" style="color: green;"></i>
-                                    </div>  
-                        
-                                    <div class="icon-label-container">
-                                        <i class="fa fa-file-pdf" style="color: orangered;"></i>
-                                    </div> 
-
-                                    <div class="icon-label-container">
-                                        <i class="fa fa-envelope" style="color: deepskyblue;"></i>
-                                    </div> 
-                                </div>
-                            </td>
-                            <!-- <td style="border: 1px solid #ddd; padding: 8px;">
-                                <select style="width: 100%;">
-                                    <option value="edit">Edit Template</option>
-                                    <option value="delete">Delete Template</option>
-                                    <option value="view">View Template</option>
-                                </select>
-                            </td> -->
-                        </tr>
-                        <tr>
-                            <td> T-102 </td>
-                            <td> Template 2 </td>
-                            <td> Template values for BR02, 2015</td>
-                            <td class="icon-handling">
-                                <i class="fa fa-eye mx-1 text-primary" aria-hidden="true"></i>
-                                <i class="fa fa-edit mx-1 text-primary" aria-hidden="true"></i>
-                                <i class="fa fa-trash text-primary" aria-hidden="true"></i>
-                                <div class="row mt-1 mx-1" style="margin-right: 1rem !important;"> 
-                                    <div class="icon-label-container">
-                                    <i class="fa fa-eye" style="color: #5497b2;"></i>
-                                    </div>
-
-                                    <div class="icon-label-container">
-                                    <i class="fa fa-print" style="color: #031082;"></i>
-                                    </div>
-
-                                    <div class="icon-label-container">
-                                        <i class="fa fa-book" style="color: indianred;"></i>
-                                    </div>  
-
-                                    <div class="icon-label-container">
-                                        <i class="fa fa-file-excel" style="color: green;"></i>
-                                    </div>  
-                        
-                                    <div class="icon-label-container">
-                                        <i class="fa fa-file-pdf" style="color: orangered;"></i>
-                                    </div> 
-
-                                    <div class="icon-label-container">
-                                        <i class="fa fa-envelope" style="color: deepskyblue;"></i>
-                                    </div> 
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td> T-103 </td>
-                            <td> Template 3 </td>
-                            <td> Template values for BR03, 2016 </td>
-                            <td class="icon-handling">
-                                <i class="fa fa-eye mx-1 text-primary" aria-hidden="true"></i>
-                                <i class="fa fa-edit mx-1 text-primary" aria-hidden="true"></i>
-                                <i class="fa fa-trash text-primary" aria-hidden="true"></i>
-                                <div class="row mt-1 mx-1" style="margin-right: 1rem !important;"> 
-                                    <div class="icon-label-container">
-                                    <i class="fa fa-eye" style="color: #5497b2;"></i>
-                                    </div>
-
-                                    <div class="icon-label-container">
-                                    <i class="fa fa-print" style="color: #031082;"></i>
-                                    </div>
-
-                                    <div class="icon-label-container">
-                                        <i class="fa fa-book" style="color: indianred;"></i>
-                                    </div>  
-
-                                    <div class="icon-label-container">
-                                        <i class="fa fa-file-excel" style="color: green;"></i>
-                                    </div>  
-                        
-                                    <div class="icon-label-container">
-                                        <i class="fa fa-file-pdf" style="color: orangered;"></i>
-                                    </div> 
-
-                                    <div class="icon-label-container">
-                                        <i class="fa fa-envelope" style="color: deepskyblue;"></i>
-                                    </div> 
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+        <div class="col-md-12" *ngIf="templateViewForReports">
+            
+          <dx-data-grid 
+          [dataSource]="dataSource"
+          [showBorders]="true"
+          [allowColumnResizing]="true"
+          [columnAutoWidth]="true"
+          [filterRow]="{ visible: true }"
+          [paging]="{ pageSize: 10 }"
+          [pager]="{ showPageSizeSelector: true, allowedPageSizes: [5, 10, 20] }">
+        
+          <!-- <dxo-editing mode="row" [allowUpdating]="true" [allowDeleting]="true" [allowAdding]="true"></dxo-editing> -->
+          <dxo-filter-row></dxo-filter-row>
+          <dxo-header-filter></dxo-header-filter>
+        
+          <dxi-column dataField="ID" caption="ID"></dxi-column>
+          <dxi-column dataField="Name" caption="Name"></dxi-column>
+          <dxi-column dataField="Values" caption="Values"></dxi-column>
+          <dxi-column dataField="Date" caption="From Date" dataType="date"></dxi-column>
+          <dxi-column dataField="Date" caption="To Date" dataType="date"></dxi-column>
+        
+          <dxi-column caption="Report Type" cellTemplate="cellTemplate"></dxi-column>
+          <div *dxTemplate="let data of 'cellTemplate'">  
+            <div class="row mt-1 mx-1" style="margin-right: 1rem !important;">
+              <div class="icon-label-container">
+                <i class="fa fa-print" style="color: #031082;"></i>
+              </div>
+              <div class="icon-label-container">
+                <i class="fa fa-book" style="color: indianred;"></i>
+              </div>
+              <div class="icon-label-container">
+                <i class="fa fa-file-excel" style="color: green;"></i>
+              </div>
+              <div class="icon-label-container">
+                <i class="fa fa-file-pdf" style="color: orangered;"></i>
+              </div>
+              <div class="icon-label-container">
+                <i class="fa fa-envelope" style="color: deepskyblue;"></i>
+              </div>
             </div>
+          </div>
+
+          <dxi-column caption="Actions" cellTemplate="cellTemplate2"></dxi-column>
+          <div *dxTemplate="let data of 'cellTemplate2'">  
+            <div class="row mt-1 mx-1" style="margin-right: 1rem !important;">
+              <div class="icon-label-container">
+                <i class="fa fa-eye" style="color: #5497b2;"></i>
+              </div>
+              <div class="icon-label-container">
+                <i class="fa fa-pen" style="color: #6c8ae5;"></i>
+              </div>
+              <div class="icon-label-container">
+                <i class="fa fa-trash" style="color: #031082;"></i>
+              </div>
+            </div>
+          </div>
+        </dx-data-grid>
+        
         </div>
    </div>
 </ng-container>

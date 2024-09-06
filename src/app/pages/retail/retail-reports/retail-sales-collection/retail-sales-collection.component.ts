@@ -96,12 +96,12 @@ export class RetailSalesCollectionComponent implements OnInit {
     content3 = content3.replace(/, $/, '');
     content4 = content4.replace(/, $/, '');
     this.branchDivisionControlsTooltip = content +'\n'+content2 +'\n'+ content3 +'\n'+ content4
-    this.retailSalesCollection.controls.branch.setValue(this.branchDivisionControlsTooltip);
+
 
     const uniqueArray = [...new Set(this.branchDivisionData)];
     const plainText = uniqueArray.join('');
     this.formattedBranchDivisionData = plainText
- 
+    this.retailSalesCollection.controls.branch.setValue(this.formattedBranchDivisionData);
   }
 
   setDateValue(event: any){

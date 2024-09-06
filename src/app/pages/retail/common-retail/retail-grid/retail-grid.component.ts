@@ -39,6 +39,24 @@ export class RetailGridComponent implements OnInit {
   @Input() templateViewForReports: boolean = false;
 
 
+  dataSource = [
+    { ID: 'T-101', Name: 'Template 1', Values: 'Template values for BR01, 2014', Date: new Date() },
+    { ID: 'T-102', Name: 'Template 2', Values: 'Template values for BR02, 2015', Date: new Date() },
+    { ID: 'T-103', Name: 'Template 3', Values: 'Template values for BR03, 2016', Date: new Date() }
+  ];
+
+  columns = [
+    { dataField: 'ID', caption: 'ID' },
+    { dataField: 'Name', caption: 'Name' },
+    { dataField: 'Values', caption: 'Values' },
+    { dataField: 'Date', caption: 'From Date', dataType: 'date' as 'date' },
+    { dataField: 'Date', caption: 'To Date', dataType: 'date' as 'date' },
+    { dataField: 'ReportType', caption: 'Report Type', cellTemplate: 'cellTemplate'},
+    { dataField: 'Actions', caption: 'Actions', cellTemplate: 'cellTemplate2'}
+  ];
+
+
+
   constructor(
     private CommonService: CommonServiceService,
     private dataService: SuntechAPIService,
