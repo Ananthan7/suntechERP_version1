@@ -111,3 +111,7 @@
     font-size: 14px; /* Adjust font size for label as needed */
     color: #000; /* Adjust color if needed */
 }
+
+::ng-deep .mat-checkbox-inner-container {
+    color: #007bff !important;
+}

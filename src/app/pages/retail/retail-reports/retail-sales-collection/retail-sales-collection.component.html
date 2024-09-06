@@ -17,7 +17,7 @@
             </div>
             <div class="col-md-2 d-flex align-items-center">
                 <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
-                    <input matInput="text" name="branch" autocomplete="off"/>
+                    <input matInput="text" name="branch" autocomplete="off" formControlName="branch"/>
                     <app-branch-division
                     (newRowClick)="selectedData($event)"
                     class="branchDivisionelectr"
@@ -47,25 +47,25 @@
        <div class="row">
             <div class="col-md-4 checkBoxDiv">
                 <div class="row">
-                    <mat-checkbox formControlName="showSalesCheckbox">Show Sales</mat-checkbox>
+                    <mat-checkbox formControlName="showSalesCheckbox">Sales</mat-checkbox>
                 </div>
                 <div class="row">
-                    <mat-checkbox formControlName="showSalesReturnCheckbox">Show Sales Return</mat-checkbox>
+                    <mat-checkbox formControlName="showSalesReturnCheckbox">Sales Return</mat-checkbox>
                 </div>
                 <div class="row">
-                    <mat-checkbox formControlName="showExbSalesCheckbox">Show Exb. Sales</mat-checkbox>
+                    <mat-checkbox formControlName="showExbSalesCheckbox">Exb. Sales</mat-checkbox>
                 </div>
                 <div class="row">
-                    <mat-checkbox formControlName="showExbSalesReturnCheckbox">Show Exb. Sales Return</mat-checkbox>
+                    <mat-checkbox formControlName="showExbSalesReturnCheckbox">Exb. Sales Return</mat-checkbox>
                 </div>
                 <div class="row">
-                    <mat-checkbox formControlName="showAdvanceReceiptCheckbox">Show Advance Receipt</mat-checkbox>
+                    <mat-checkbox formControlName="showAdvanceReceiptCheckbox">Advance Receipt</mat-checkbox>
                 </div>
                 <div class="row">
-                    <mat-checkbox formControlName="showSalesRegisterCheckbox">Show Sales Register</mat-checkbox> 
+                    <mat-checkbox formControlName="showSalesRegisterCheckbox">Sales Register</mat-checkbox> 
                 </div>
                 <div class="row">
-                    <mat-checkbox formControlName="showOnlySummaryCheckbox">Show Only Summary</mat-checkbox>
+                    <mat-checkbox formControlName="showOnlySummaryCheckbox">Only Summary</mat-checkbox>
                 </div>
                 <div class="row">
                     <mat-checkbox formControlName="landscapeFormat">Landscape Format</mat-checkbox>
@@ -77,19 +77,20 @@
             
             <div class="col-md-6">
                 <app-loader [isLoading]="isLoading" class="loader-overlay" ></app-loader>
-                <dx-data-grid width="100%" height="310px"  #gridContainer id="gridContainer" [allowColumnReordering]="true"
+                <dx-data-grid width="100%" height="310px" #gridContainer id="gridContainer" [allowColumnReordering]="true"
                     [dataSource]="APIData" [showColumnLines]="true" [showRowLines]="true"
                     [showBorders]="true" [columnAutoWidth]="true" (onSelectionChanged)="onGridSelection($event)"
                     [selectedRowKeys]="selectedRowKeys">
 
                     <dxo-filter-row [visible]="showFilterRow" [applyFilter]="currentFilter"></dxo-filter-row>
                     <dxo-paging [enabled]="false"></dxo-paging>
-                    <dxo-selection mode="multiple" showCheckBoxesMode="always"></dxo-selection>
+                    <dxo-editing mode="cell" [allowUpdating]="true">
+                    </dxo-editing>
+                    <dxo-selection mode="multiple" showCheckBoxesMode="always" [selectAllMode]="'allPages'"></dxo-selection>
 
-
-                    <dxi-column alignment="center"  dataField="VOCTYPE"></dxi-column>
-                    <dxi-column alignment="left"  dataField="DESCRIPTION"></dxi-column>
-              </dx-data-grid>
+                    <dxi-column alignment="center" dataField="VOCTYPE"></dxi-column>
+                    <dxi-column alignment="left" dataField="DESCRIPTION"></dxi-column>
+                </dx-data-grid>
             </div>
         </div>
 
