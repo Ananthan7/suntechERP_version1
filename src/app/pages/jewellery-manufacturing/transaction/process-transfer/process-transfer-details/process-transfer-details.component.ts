@@ -1456,6 +1456,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
           let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
           if (data) {
             this.metalDetailData = data
+            this.recalculateSrno()
             if (this.processTransferdetailsForm.value.METALSTONE == 'M') {
               this.metal_Calc_Totals(1)
             } else {
@@ -1476,9 +1477,8 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
 
-  changeSelectCheckbox(data: any) {
-    console.log(data);
-
+  changeSelectCheckbox(event: any) {
+    this.metalDetailData[event.data.SRNO - 1].SELECT1 = !event.data.SELECT1;
   }
   // use: calculate total values from grid
   // for flag 0 to values only assigned
@@ -1582,8 +1582,12 @@ export class ProcessTransferDetailsComponent implements OnInit {
       this.commonService.toastErrorByMsgId("MSG2100")
     }
   }
+  compSelectFlag: boolean = false;
   formatMetalDetailDataGrid() {
+    let compSelectFlag = this.commonService.getCompanyParamValue('PROCESSTRANSFERSELECTION')
+    this.compSelectFlag = this.commonService.Null2BitValue(compSelectFlag)
     this.metalDetailData.forEach((element: any) => {
+      element.SELECTED = true
       element.GEN = 'GEN'
       element.FROM_STOCK_CODE = element.STOCK_CODE,
         element.FROM_SUB_STOCK_CODE = element.SUB_STOCK_CODE,

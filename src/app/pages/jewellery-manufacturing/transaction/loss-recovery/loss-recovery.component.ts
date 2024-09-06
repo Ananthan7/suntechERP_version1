@@ -15,11 +15,7 @@ import { MasterSearchComponent } from "src/app/shared/common/master-search/maste
 })
 export class LossRecoveryComponent implements OnInit {
   @ViewChild('overlayReceicvedBy') overlayReceicvedBy!: MasterSearchComponent;
-  @ViewChild('overlayWorker') overlayWorker!: MasterSearchComponent;
-  @ViewChild('overlayProcess') overlayProcess!: MasterSearchComponent;
-  @ViewChild('overlayStockCode') overlayStockCode!: MasterSearchComponent;
-  @ViewChild('overlayLocationTo') overlayLocationTo!: MasterSearchComponent;
-  @ViewChild('overlayKaratCode') overlayKaratCode!: MasterSearchComponent;
+  @ViewChild('overlayEnterBy') overlayEnterBy!: MasterSearchComponent;
 
   isloading: boolean = false;
   divisionMS: any = 'ID';
@@ -298,6 +294,7 @@ export class LossRecoveryComponent implements OnInit {
       event.preventDefault();
     }
   }
+
   generateVocNo() {
     const API = `GenerateNewVoucherNumber/GenerateNewVocNum/${this.comService.getqueryParamVocType()}/${this.comService.branchCode}/${this.comService.yearSelected}/${this.comService.formatYYMMDD(this.currentDate)}`;
     this.dataService.getDynamicAPI(API)
@@ -340,22 +337,9 @@ export class LossRecoveryComponent implements OnInit {
       case 'receicvedBy':
         this.overlayReceicvedBy.showOverlayPanel(event);
         break;
-      case 'worker':
-        this.overlayWorker.showOverlayPanel(event);
+      case 'EnterBy':
+        this.overlayEnterBy.showOverlayPanel(event);
         break;
-      case 'process':
-        this.overlayProcess.showOverlayPanel(event);
-        break;
-      case 'stockCode':
-        this.overlayStockCode.showOverlayPanel(event);
-        break;
-      case 'locationTo':
-        this.overlayLocationTo.showOverlayPanel(event);
-        break;
-      case 'karatCode':
-        this.overlayKaratCode.showOverlayPanel(event);
-        break;
-      default:
 
     }
   }
@@ -378,7 +362,7 @@ export class LossRecoveryComponent implements OnInit {
           this.comService.toastErrorByMsgId('MSG1531')
           this.lossRecoveryFrom.controls[FORMNAME].setValue('')
           LOOKUPDATA.SEARCH_VALUE = ''
-          if (FORMNAME === 'receicvedBy' || FORMNAME === 'worker' || FORMNAME === 'process' || FORMNAME === 'stockCode' || FORMNAME === 'locationTo' || FORMNAME === 'karatCode') {
+          if (FORMNAME === 'receicvedBy' || FORMNAME === 'EnterBy') {
             this.showOverleyPanel(event, FORMNAME);
           }
           return

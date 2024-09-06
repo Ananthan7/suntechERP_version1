@@ -17,7 +17,7 @@
             </div>
             <div class="col-md-2 d-flex align-items-center">
                 <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
-                    <input matInput="text" name="branch" autocomplete="off"/>
+                    <input matInput="text" name="branch" autocomplete="off" formControlName="branch"/>
                     <app-branch-division
                     (newRowClick)="selectedData($event)"
                     class="branchDivisionelectr"
@@ -47,25 +47,25 @@
        <div class="row">
             <div class="col-md-4 checkBoxDiv">
                 <div class="row">
-                    <mat-checkbox formControlName="showSalesCheckbox">Show Sales</mat-checkbox>
+                    <mat-checkbox formControlName="showSalesCheckbox">Sales</mat-checkbox>
                 </div>
                 <div class="row">
-                    <mat-checkbox formControlName="showSalesReturnCheckbox">Show Sales Return</mat-checkbox>
+                    <mat-checkbox formControlName="showSalesReturnCheckbox">Sales Return</mat-checkbox>
                 </div>
                 <div class="row">
-                    <mat-checkbox formControlName="showExbSalesCheckbox">Show Exb. Sales</mat-checkbox>
+                    <mat-checkbox formControlName="showExbSalesCheckbox">Exb. Sales</mat-checkbox>
                 </div>
                 <div class="row">
-                    <mat-checkbox formControlName="showExbSalesReturnCheckbox">Show Exb. Sales Return</mat-checkbox>
+                    <mat-checkbox formControlName="showExbSalesReturnCheckbox">Exb. Sales Return</mat-checkbox>
                 </div>
                 <div class="row">
-                    <mat-checkbox formControlName="showAdvanceReceiptCheckbox">Show Advance Receipt</mat-checkbox>
+                    <mat-checkbox formControlName="showAdvanceReceiptCheckbox">Advance Receipt</mat-checkbox>
                 </div>
                 <div class="row">
-                    <mat-checkbox formControlName="showSalesRegisterCheckbox">Show Sales Register</mat-checkbox> 
+                    <mat-checkbox formControlName="showSalesRegisterCheckbox">Sales Register</mat-checkbox> 
                 </div>
                 <div class="row">
-                    <mat-checkbox formControlName="showOnlySummaryCheckbox">Show Only Summary</mat-checkbox>
+                    <mat-checkbox formControlName="showOnlySummaryCheckbox">Only Summary</mat-checkbox>
                 </div>
                 <div class="row">
                     <mat-checkbox formControlName="landscapeFormat">Landscape Format</mat-checkbox>
@@ -77,65 +77,57 @@
             
             <div class="col-md-6">
                 <app-loader [isLoading]="isLoading" class="loader-overlay" ></app-loader>
-                <dx-data-grid width="100%" height="310px"  #gridContainer id="gridContainer" [allowColumnReordering]="true"
+                <dx-data-grid width="100%" height="310px" #gridContainer id="gridContainer" [allowColumnReordering]="true"
                     [dataSource]="APIData" [showColumnLines]="true" [showRowLines]="true"
                     [showBorders]="true" [columnAutoWidth]="true" (onSelectionChanged)="onGridSelection($event)"
                     [selectedRowKeys]="selectedRowKeys">
 
                     <dxo-filter-row [visible]="showFilterRow" [applyFilter]="currentFilter"></dxo-filter-row>
                     <dxo-paging [enabled]="false"></dxo-paging>
-                    <dxo-selection mode="multiple" showCheckBoxesMode="always"></dxo-selection>
+                    <dxo-editing mode="cell" [allowUpdating]="true">
+                    </dxo-editing>
+                    <dxo-selection mode="multiple" showCheckBoxesMode="always" [selectAllMode]="'allPages'"></dxo-selection>
 
-
-                    <dxi-column alignment="center"  dataField="VOCTYPE"></dxi-column>
-                    <dxi-column alignment="left"  dataField="DESCRIPTION"></dxi-column>
-              </dx-data-grid>
+                    <dxi-column alignment="center" dataField="VOCTYPE"></dxi-column>
+                    <dxi-column alignment="left" dataField="DESCRIPTION"></dxi-column>
+                </dx-data-grid>
             </div>
         </div>
 
-       <dx-popup  [width]="300" [height]="280" [showTitle]="true" container=".dx-viewport" title="Template Data" 
+       <dx-popup  [width]="300" [height]="180" [showTitle]="true" container=".dx-viewport" title="Template Data" 
             [dragEnabled]="false" [hideOnOutsideClick]="true" [showCloseButton]="false"
             (onHidden)="popupClosed()" [visible]="popupVisible">
-
             <div class="popup-content">
-                <div class="form-group">
-                  <label for="T_id">ID:</label>
-                  <input type="text" id="T_id" class="form-control" />
-                </div>
                 <div class="form-group">
                   <label for="T_Name">Name:</label>
                   <input type="text" id="T_Name" class="form-control" />
                 </div>
-                <div class="form-group">
-                  <label for="T_value">Value:</label>
-                  <input type="text" id="T_value" class="form-control" />
-                </div>
               </div>
         </dx-popup>
 
-
-        <div class="row align-items-center mt-1">
+       <!--  <div class="row align-items-center mt-1">
             <div class="col-md-4 pt-2" style="margin-left: 284px;">
-                <app-report-to-control (selectedvalue)="setValueFromCommon($event)"></app-report-to-control>
+                 <app-report-to-control (selectedvalue)="setValueFromCommon($event)"></app-report-to-control> 
             </div>      
 
             <div class="col-md-5 d-flex text-right p-2">
-                <button mat-flat-button color="primary" class="demo-button btn-width" (click)="saveTemplate()"
-                style="width: 190px; text-align: center;"> Save as Template </button>
+               
 
-
-                <app-common-buttons (saveClick)="okClick()"  (cancelClick)="close()"></app-common-buttons>
+                 <app-common-buttons (saveClick)="okClick()"  (cancelClick)="close()"></app-common-buttons> 
             </div>  
-        </div>
-      
+        </div> -->  
        
         <div class="row mt-1 justify-content-end mx-2"> 
+            <div class="icon-label-container" (click)="saveTemplate()" matTooltip="Save the selections as a new template">
+                <i class="fa fa-bookmark fa-2x" style="color: #5497b2;"></i>
+                <span class="label">Save as Template</span>
+            </div>
 
           <!-- <button mat-flat-button class="btn-m-r-10 demo-button btn-width">
                 <i class="fa fa-eye"></i>
                 PREVIEW
           </button> -->
-          <div class="icon-label-container">
+          <div class="icon-label-container" (click)="okClick()" matTooltip="Preview the content">
             <i class="fa fa-eye fa-2x" style="color: #5497b2;"></i>
             <span class="label">Preview</span>
           </div>
@@ -144,7 +136,7 @@
             <i class="fa fa-print"></i>
                 PRINT
           </button> -->
-          <div class="icon-label-container">
+          <div class="icon-label-container" matTooltip="Take a print">
             <i class="fa fa-print fa-2x" style="color: #031082;"></i>
             <span class="label">Print</span>
           </div>
@@ -154,7 +146,7 @@
             <i class="fa fa-book"></i>
             CATALOGUE
             </button> -->
-            <div class="icon-label-container">
+            <div class="icon-label-container" matTooltip="Catalogue selection">
                 <i class="fa fa-book fa-2x" style="color: indianred;"></i>
                 <span class="label">Catalogue</span>
             </div>
@@ -163,7 +155,7 @@
                 <i class="fa fa-file-excel" ></i>
                 EXCEL
             </button> -->
-            <div class="icon-label-container">
+            <div class="icon-label-container" matTooltip="Generate Excel Report">
                 <i class="fa fa-file-excel fa-2x" style="color: green;"></i>
                 <span class="label">Excel</span>
             </div>
@@ -172,7 +164,7 @@
                 <i class="fa fa-file-export"></i>
                 PDF
             </button> -->
-            <div class="icon-label-container">
+            <div class="icon-label-container" matTooltip="Generate PDF Report">
                 <i class="fa fa-file-pdf fa-2x" style="color: orangered;"></i>
                 <span class="label">PDF</span>
             </div>
@@ -181,7 +173,7 @@
                 <i class="uil uil-envelope-alt"></i>
                 EMAIL
             </button> -->
-            <div class="icon-label-container">
+            <div class="icon-label-container" matTooltip="Sent an Email">
                 <i class="fa fa-envelope fa-2x" style="color: deepskyblue;"></i>
                 <span class="label">EMAIL</span>
             </div>

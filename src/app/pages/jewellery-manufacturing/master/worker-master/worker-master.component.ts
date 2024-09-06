@@ -11,7 +11,7 @@ import { ChangeDetectorRef } from '@angular/core';
 import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 
 @Component({
-  selector: 'app-worker-master',
+  selector: 'app-worker-mastchangedCheckboxr',
   templateUrl: './worker-master.component.html',
   styleUrls: ['./worker-master.component.scss'],
   // changeDetection: ChangeDetectionStrategy.OnPush

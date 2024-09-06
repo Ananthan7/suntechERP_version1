@@ -7,7 +7,7 @@ import { Component, OnInit, ViewChild, Renderer2, AfterViewInit, ElementRef, Inp
 import { NgbModal, ModalDismissReasons, NgbModalRef, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 // import { environment } from '../../../environments/environment';
 // import { SuntechapiService } from '../../suntechapi.service';
-import { from, noop, Observable, Subscription } from 'rxjs';
+import { empty, from, noop, Observable, Subscription } from 'rxjs';
 import { map, pairwise, startWith } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 // import { NgxBarcodeScannerService } from '@eisberg-labs/ngx-barcode-scanner';
@@ -7318,6 +7318,9 @@ export class AddPosComponent implements OnInit {
               rate: this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_rate) || 0,
               taxPer: this.lineItemForm.value.fcn_li_tax_percentage || 0,
             };
+            values.total_amount =this.newLineItem.DIVISION=='D'?
+            this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_amount):this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount);
+           
             this.newLineItem.PCS = values.pcs
             if (
               this.orderedItemEditId == '' ||
@@ -9140,6 +9143,7 @@ export class AddPosComponent implements OnInit {
     this.isNetAmountChange = false;
     const value = this.comFunc.emptyToZero(event.target.value);
     if (event.target.value != '' && this.validatePCS == true || this.enablePieces) {
+      
       // if(!this.comFunc.emptyToZero(event.target.value))
       this.clearDiscountValues();
       this.manageCalculations();
@@ -9183,6 +9187,10 @@ export class AddPosComponent implements OnInit {
                 this.lineItemForm.controls['fcn_li_pcs'].setValue(
                   preVal
                 );
+                if(this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_pcs) == 0 && 
+                this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt) ==0 )
+
+                this.renderer.selectRootElement('#fcn_li_pcs').focus();
 
                 this.manageCalculations();
 
@@ -10563,12 +10571,39 @@ export class AddPosComponent implements OnInit {
   }
 
   async changeNettAmt(event: any) {
+    const preVal = this.comFunc.emptyToZero(localStorage.getItem('fcn_li_net_amount'));
+    const netAmtVal = this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_net_amount);
 
+
+   const permittedNetAmount= netAmtVal - (this.lineItemForm.value.fcn_li_tax_percentage / 100) * netAmtVal;
+
+    if(this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_amount)<=permittedNetAmount){
+
+
+      this.openDialog('Warning', this.comFunc.getMsgByID('MSG1443'), true);
+      this.dialogBox.afterClosed().subscribe((data: any) => {
+        if (data == 'OK') {
+          this.lineItemForm.controls.fcn_li_net_amount.setValue(
+            this.comFunc.commaSeperation(
+              this.comFunc.transformDecimalVB(
+                this.comFunc.allbranchMaster?.BAMTDECIMALS,
+                preVal
+              )
+            )
+          );
+          this.manageCalculations();
+        }
+      });
+    }
+
+else{
 
     if (!this.isRevCalculationBlock) {
       this.isNetAmountChange = true;
-      const preVal = this.comFunc.emptyToZero(localStorage.getItem('fcn_li_net_amount'));
-      const netAmtVal = this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_net_amount)
+    
+
+
+
       if (event.target.value != '') {
         let checkStockCostVal =
           netAmtVal /
@@ -10628,6 +10663,7 @@ export class AddPosComponent implements OnInit {
         this.manageCalculations();
       }
     }
+  }
   }
 
   changeDisAmount(event: any, nettAmt: any = null) {

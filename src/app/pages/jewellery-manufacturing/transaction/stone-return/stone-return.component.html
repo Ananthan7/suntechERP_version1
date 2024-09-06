@@ -87,8 +87,9 @@
               <div class="col-sm-4">
                  <mat-form-field appearance="outline"  style="width: 100%;">
                   <input type="text" matInput formControlName="basecurrency"
-                    (keydown)="lookupKeyPress($event,'basecurrency')" UpperCaseDirective [readonly]="viewMode" />
-                    <master-search class="masterSearch" [MasterSearchData]="baseCurrencyCodeData"
+                    (keydown)="lookupKeyPress($event,'basecurrency')" UpperCaseDirective [readonly]="viewMode" 
+                    (focusout)="validateLookupField($event,baseCurrencyCodeData,'basecurrency')"/>
+                    <master-search class="masterSearch" [MasterSearchData]="baseCurrencyCodeData" #overlayBaseCurrencyCode
                   (newRowClick)="baseCurrencyCodeSelected($event)" *ngIf="!viewMode"></master-search>
                 </mat-form-field>
                 
@@ -106,9 +107,10 @@
               <div class="col-sm-4">
                  <mat-form-field appearance="outline"  style="width: 100%;">
                   <input type="text" matInput formControlName="currency" (keydown)="lookupKeyPress($event,'currency')"
+                  (focusout)="validateLookupField($event,CurrencyCodeData,'currency')"
                     UpperCaseDirective [readonly]="viewMode" />
                     <master-search class="masterSearch" [MasterSearchData]="CurrencyCodeData" (newRowClick)="currencyCodeSelected($event)"
-                  *ngIf="!viewMode"></master-search>
+                    #overlayCurrencyCode *ngIf="!viewMode"></master-search>
                 </mat-form-field>
                 
               </div>

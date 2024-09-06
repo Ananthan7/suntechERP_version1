@@ -24,8 +24,9 @@ import { MasterSearchComponent } from 'src/app/shared/common/master-search/maste
 })
 export class StoneIssueComponent implements OnInit {
   @ViewChild('stoneIssueDetailScreen') public stoneIssueDetailComponent!: NgbModal;
-  @ViewChild('overlayenteredBySearch') overlayenteredBySearch! : MasterSearchComponent;
+  @ViewChild('overlayenteredBySearch') overlayenteredBySearch!: MasterSearchComponent;
   @ViewChild('overlayworkerSearch') overlayworkerSearch!: MasterSearchComponent;
+  @ViewChild('overlayCurrencyCode') overlayCurrencyCode!: MasterSearchComponent;
   modalReference!: NgbModalRef;
 
   currentFilter: any;
@@ -410,8 +411,8 @@ export class StoneIssueComponent implements OnInit {
     this.tableData.pop();
   }
   lookupKeyPress(event: any, form?: any) {
-    if(event.key == 'Tab' && event.target.value == ''){
-      this.showOverleyPanel(event,form)
+    if (event.key == 'Tab' && event.target.value == '') {
+      this.showOverleyPanel(event, form)
     }
   }
   setPostData(form: any) {
@@ -499,12 +500,12 @@ export class StoneIssueComponent implements OnInit {
     let postData = this.setPostData(this.stoneissueFrom.value)
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
-          if (result && result.status == "Success") {
-            this.showSuccessDialog(this.comService.getMsgByID('MSG2443') || 'Saved successfully');
-          }else {
-            this.comService.toastErrorByMsgId('MSG3577')
-          }
-       
+        if (result && result.status == "Success") {
+          this.showSuccessDialog(this.comService.getMsgByID('MSG2443') || 'Saved successfully');
+        } else {
+          this.comService.toastErrorByMsgId('MSG3577')
+        }
+
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
@@ -593,8 +594,8 @@ export class StoneIssueComponent implements OnInit {
     });
   }
   showOverleyPanel(event: any, formControlName: string) {
-    if (this.stoneissueFrom.value[formControlName] != '') return;
-  
+    if (this.stoneissueFrom.value[formControlName] != '') return; 
+
     switch (formControlName) {
       case 'worker':
         this.overlayworkerSearch.showOverlayPanel(event);
@@ -602,8 +603,11 @@ export class StoneIssueComponent implements OnInit {
       case 'enteredBy':
         this.overlayenteredBySearch.showOverlayPanel(event);
         break;
+        case 'currencyrate':
+          this.overlayCurrencyCode.showOverlayPanel(event);
+          break;
       default:
-       
+
     }
   }
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
@@ -623,9 +627,9 @@ export class StoneIssueComponent implements OnInit {
         if (data.length == 0) {
           this.comService.toastErrorByMsgId('MSG1531')
           this.stoneissueFrom.controls[FORMNAME].setValue('')
-         
+
           LOOKUPDATA.SEARCH_VALUE = ''
-          if (FORMNAME === 'worker' || FORMNAME === 'enteredBy') {
+          if (FORMNAME === 'worker' || FORMNAME === 'enteredBy' || FORMNAME === 'currencyrate') {
             this.showOverleyPanel(event, FORMNAME);
           }
           return
