@@ -2,88 +2,78 @@
 <app-menubar *ngIf="menuTitle != ''" [menuTitle]="menuTitle"
     (subMenuChange)="menuClicked($event)"></app-menubar>
 <!-- content section starts -->
-<div class="row d-flex justify-content-between"
-    style="min-height: 100vh !important;">
-    <div class="col-md-3 col-sm-12">
-        <div class="card p-3">
-            <h5>Favorites</h5>
-            <ul>
+ 
+<div class="row">
+    <div class="col-md-2 col-sm-12 menucards" >
+        <div class="menuname p-2">Sales Performance</div>
+        <div class="numeric-value">23</div>
+    </div>
+    <div class="col-md-2 col-sm-12 menucards" >
+        <div class="menuname p-2">Sales Performance</div>
+        <div class="numeric-value">24</div>
+    </div>
+    <div class="col-md-2 col-sm-12 menucards" >
+        <div class="menuname p-2">Sales Performance</div>
+        <div class="numeric-value">25</div>
+    </div>
+    <div class="col-md-2 col-sm-12 menucards" >
+        <div class="menuname p-2">Customer Metrics</div>
+        <div class="numeric-value">26</div>
+    </div>
+  
+    <div class="col-md-2 col-sm-12 menucards" >
+        <div class="menuname p-2">Customer Metrics</div>
+        <div class="numeric-value">27</div>
+    </div>
+    <div class="col-md-2 col-sm-12 menucards">
+        <div class="menuname p-2">Customer Metrics</div>
+        <div class="numeric-value">28</div>
+    </div>
+    <div class="col-md-2 col-sm-12 menucards" >
+        <div class="menuname p-2">Inventory Management</div>
+        <div class="numeric-value">29</div>
+    </div>
+    <div class="col-md-2 col-sm-12 menucards" >
+        <div class="menuname p-2">Inventory Management</div>
+        <div class="numeric-value">30</div>
+    </div>
 
-                <li><h6 class="favItems"><a routerLink="/retail/retail-transaction/Precious-stone-purchaseComponent">Precious Stone Purchase</a></h6></li>
-                <li><h6 class="favItems"><a routerLink="/retail/retail-transaction/Repair-Purchase-Component">Repair Purchase</a></h6></li>
-                <li><h6 class="favItems"><a routerLink="/retail/retail-transaction/Repair-sale">Repair Sale</a></h6></li>
-                <li><h6 class="favItems"><a routerLink="/retail/retail-transaction/retail-repair-menu">Retail Repair Menu</a></h6></li>
-                 <!-- <li><h6 class="favItems"><a routerLink="/retail/retail-transaction/Pos-Return-Component">Pos Return Component</a></h6></li> -->
-                <li><h6 class="favItems">Job card</h6></li>
-                <li><h6 class="favItems">Departement Master</h6></li>
-                <li><h6 class="favItems">Sales Master</h6></li>
-                <li><h6 class="favItems">Inventory Master</h6></li>
-                <li><h6 class="favItems">Departement Master</h6></li>
-                <li><h6 class="favItems">Inventory Master</h6></li>
-                <li><h6 class="favItems">Inventory Master</h6></li>
-                <li><h6 class="favItems">Job Master</h6></li>
-                <li><h6 class="favItems">Sales Master</h6></li>
-                <li><h6 class="favItems">Inventory Master</h6></li>
-            </ul>
-        </div>
-        <div class="card p-3">
-            <div class="card_wrap h-100">
-                <h5>Defect Analysis</h5>
-                <img
-                  src="../../assets/images/chats/chat-7.png"
-                  alt="chat"
-                  width="100%"
-                />
-              </div>
-        </div>
+    <div class="col-md-2 col-sm-12 menucards">
+        <div class="menuname p-2">Inventory Management</div>
+        <div class="numeric-value">31</div>
     </div>
-    <div class="col-md-6 col-sm-12">
-        <div class="card p-3">
-            <div class="col-md-12">
-                <div class="card_wrap">
-                    <h5 class="favItems">{{menuTitle}}</h5>
-                    <img
-                        src="../../assets/images/chats/chat-8.png"
-                        alt="detalis"
-                        width="100%"
-                        height="365px" />
-                </div>
-            </div>
-        </div>
-        <div class="card p-3">
-            <div class="col-md-6">
-                <div class="card_wrap">
-                    <h5>Avg Working Hours</h5>
-                    <img
-                        src="../../assets/images/chats/chat-5.png"
-                        alt="chat"
-                        width="100%"
-                        height=" 165px" />
-                </div>
-            </div>
-        </div>
+    <div class="col-md-2 col-sm-12 menucards">
+        <div class="menuname p-2">Inventory Management</div>
+        <div class="numeric-value">32</div>
     </div>
-    <div class="col-md-3 col-sm-12">
-        <div class="card p-3">
-            <div class="card_wrap">
-                <h5>Reminders</h5>
-                <h3>32</h3>
-            </div>
-        </div>
-        <div class="card p-3">
-            <div class="card_wrap">
-                <h5>Overall</h5>
-                <img
-                    src="../../assets/images/chats/chat-2.png"
-                    alt="chat"
-                    width="100%" />
-            </div>
-        </div>
-        <div class="card p-3">
-            <div class="card_wrap">
-                <h5>Quantity Produced</h5>
-                <h3>32</h3>
-            </div>
-        </div>
+    <div class="col-md-2 col-sm-12 menucards" >
+        <div class="menuname p-2">Profitability</div>
+        <div class="numeric-value">33</div>
+    </div>
+    <div class="col-md-2 col-sm-12 menucards" >
+        <div class="menuname p-2">Profitability</div>
+        <div class="numeric-value">34</div>
+    </div>
+    <div class="col-md-2 col-sm-12 menucards" >
+        <div class="menuname p-2">Profitability</div>
+        <div class="numeric-value">35</div>
+    </div>
+    <div class="col-md-2 col-sm-12 menucards" >
+        <div class="menuname p-2">Profitability</div>
+        <div class="numeric-value">36</div>
+    </div>
+
+    <div class="col-md-2 col-sm-12 menucards" >
+        <div class="menuname p-2">Employee Performance</div>
+        <div class="numeric-value">37</div>
+    </div>
+    <div class="col-md-2 col-sm-12 menucards" >
+        <div class="menuname p-2">Customer Satisfaction</div>
+        <div class="numeric-value">38</div>
+    </div>
+    <div class="col-md-2 col-sm-12 menucards" >
+        <div class="menuname p-2">Supplier Performance</div>
+        <div class="numeric-value">39</div>
     </div>
 </div>
+
