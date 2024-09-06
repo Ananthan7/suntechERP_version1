@@ -51,11 +51,8 @@ export class RetailGridComponent implements OnInit {
     { dataField: 'Values', caption: 'Values' },
     { dataField: 'Date', caption: 'From Date', dataType: 'date' as 'date' },
     { dataField: 'Date', caption: 'To Date', dataType: 'date' as 'date' },
-    {
-      dataField: 'Actions',
-      caption: 'Actions',
-      cellTemplate: 'cellTemplate', // Reference to the template in HTML
-    }
+    { dataField: 'ReportType', caption: 'Report Type', cellTemplate: 'cellTemplate'},
+    { dataField: 'Actions', caption: 'Actions', cellTemplate: 'cellTemplate2'}
   ];
 
 
