@@ -75,7 +75,7 @@
                             <div class="col-sm-7">
                                 <mat-form-field appearance="outline" style="width: 100%;">
                                     <input type="text" matInput formControlName="process" UpperCaseDirective
-                                        [readonly]="viewMode" (keydown)="lookupKeyPress($event,'process')"
+                                       id="code" [readonly]="viewMode" (keydown)="lookupKeyPress($event,'process')"
                                         (focusout)="validateLookupField($event,ProcessCodeData,'process')" />
                                    <master-search class="masterSearch"[MasterSearchData]="ProcessCodeData" #overlayprocess
                                         (newRowClick)="ProcessCodeSelected($event)" *ngIf="!viewMode">

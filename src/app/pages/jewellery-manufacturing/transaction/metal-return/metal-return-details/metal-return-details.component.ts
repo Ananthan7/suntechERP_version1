@@ -45,7 +45,7 @@ export class MetalReturnDetailsComponent implements OnInit {
     SEARCH_FIELD: 'PROCESS_CODE',
     SEARCH_HEADING: 'Process Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "PROCESS_CODE<>''",
+     WHERECONDITION: "PROCESS_CODE<>''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -91,10 +91,10 @@ export class MetalReturnDetailsComponent implements OnInit {
     SEARCH_FIELD: 'STOCK_CODE',
     SEARCH_HEADING: 'Stock Code',
     SEARCH_VALUE: '',
-    WHERECONDITION:  "STOCK_CODE<> ''",
+    WHERECONDITION: "STOCK_CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
-  
+
   }
   // stockCodeData: MasterSearchModel = {
   //   PAGENO: 1,
@@ -233,16 +233,34 @@ export class MetalReturnDetailsComponent implements OnInit {
     );
   }
 
+  // setLookup201WhereCondition() {
+  //   let form = this.metalReturnDetailsForm.value
+  //   let where = `@strBranch_Code='${form.BRANCH_CODE}',`
+  //   where += `@strJob_Number='${form.jobNumber}',@strUnq_Job_Id='${form.subJobNo}'`
+  //   where += `@strMetalStone='${form.METAL_STONE}',@strStock_Code='${form.stockCode}',@strUserName='${this.comService.userName}'`
+  //   this.stockCodeData.WHERECONDITION = where
+  //   this.ProcessCodeData.WHERECONDITION = where
+  //   this.WorkerCodeData.WHERECONDITION = where
+  // }
+
   setLookup201WhereCondition() {
-    let form = this.metalReturnDetailsForm.value
-    let where = `@strBranch_Code='${form.BRANCH_CODE}',`
-    where += `@strJob_Number='${form.jobNumber}',@strUnq_Job_Id='${form.subJobNo}',`
-    where += `@strMetalStone='${form.METAL_STONE}',@strProcess_Code='${form.processCode}',`
-    where += `@strWorker_Code='${form.workerCode}',@strStock_Code='${form.stockCode}',@strUserName='${this.comService.userName}'`
-   this.stockCodeData.WHERECONDITION = where
-   this.ProcessCodeData.WHERECONDITION = where
-    this.WorkerCodeData.WHERECONDITION = where
-  }
+    let form = this.metalReturnDetailsForm.value;
+    
+    // Construct the WHERE condition without '@' symbols
+    let where = `strBranch_Code='${form.BRANCH_CODE}' AND `;
+    where += `strJob_Number='${form.jobNumber}' AND `;
+    where += `strUnq_Job_Id='${form.subJobNo}' AND `;
+    where += `strMetalStone='${form.METAL_STONE}' AND `;
+    where += `strStock_Code='${form.stockCode}' AND `;
+    where += `strUserName='${this.comService.userName}'`;
+
+    // Assign to the stock code data
+    this.stockCodeData.WHERECONDITION = where;
+    this.ProcessCodeData.WHERECONDITION = where;
+    this.WorkerCodeData.WHERECONDITION = where;
+}
+
+
   stoneValidate() {
     if (this.calculateNetWt()) {
       this.setValueWithDecimal('GROSS_WT', this.subJoBDetailData[0].METAL, 'METAL')
@@ -269,33 +287,33 @@ export class MetalReturnDetailsComponent implements OnInit {
   // }
 
   /**use: for stone wt, gross wt, and pure wt calculation */
-private calculateNetWt(): boolean {
-  let form = this.metalReturnDetailsForm.value;
-  let GROSS_WT = this.comService.emptyToZero(form.GROSS_WT);
-  let STONE_WT = this.comService.emptyToZero(form.STONE_WT);
-  let PURITY = this.comService.emptyToZero(form.PURITY);
+  private calculateNetWt(): boolean {
+    let form = this.metalReturnDetailsForm.value;
+    let GROSS_WT = this.comService.emptyToZero(form.GROSS_WT);
+    let STONE_WT = this.comService.emptyToZero(form.STONE_WT);
+    let PURITY = this.comService.emptyToZero(form.PURITY);
 
-  if (STONE_WT > GROSS_WT) {
-    this.comService.toastErrorByMsgId('MSG1844'); // Stone weight cannot be greater than gross weight
-    return true;
+    if (STONE_WT > GROSS_WT) {
+      this.comService.toastErrorByMsgId('MSG1844'); // Stone weight cannot be greater than gross weight
+      return true;
+    }
+
+    // Calculate NET_WT
+    let NET_WT = GROSS_WT - STONE_WT;
+    this.setValueWithDecimal('NET_WT', NET_WT, 'THREE');
+
+    // Calculate PURE_WT as NET_WT * PURITY
+    let PURE_WT = NET_WT * PURITY;
+    this.setValueWithDecimal('PURE_WT', PURE_WT, 'THREE');
+
+    return false;
   }
-
-  // Calculate NET_WT
-  let NET_WT = GROSS_WT - STONE_WT;
-  this.setValueWithDecimal('NET_WT', NET_WT, 'THREE');
-
-  // Calculate PURE_WT as NET_WT * PURITY
-  let PURE_WT = NET_WT * PURITY;
-  this.setValueWithDecimal('PURE_WT', PURE_WT, 'THREE');
-
-  return false;
-}
 
   WorkerCodeSelected(e: any) {
     console.log("sdgf")
     this.metalReturnDetailsForm.controls.workerCode.setValue(e.WORKER);
     this.metalReturnDetailsForm.controls.workerCodeDesc.setValue(e.WORKERDESC);
-     this.setLookup201WhereCondition()
+    this.setLookup201WhereCondition()
   }
   locationCodeSelected(e: any) {
     this.metalReturnDetailsForm.controls.location.setValue(e.LOCATION_CODE);
@@ -315,7 +333,7 @@ private calculateNetWt(): boolean {
   stockCodeSelected(e: any) {
     this.metalReturnDetailsForm.controls.stockCode.setValue(e.STOCK_CODE);
     this.metalReturnDetailsForm.controls.stockCodeDesc.setValue(e.STOCKDESC);
-   this.setLookup201WhereCondition()
+    this.setLookup201WhereCondition()
   }
   ReturnTostockCodeSelected(e: any) {
     this.metalReturnDetailsForm.controls.ReturnToStockCode.setValue(e.STOCK_CODE);
@@ -410,7 +428,7 @@ private calculateNetWt(): boolean {
       "PURE_WT": form.PURE_WT,
       "RATE_TYPE": "",
       "METAL_RATE": 0,
-      "CURRENCY_CODE":"",
+      "CURRENCY_CODE": "",
       "CURRENCY_RATE": this.comService.emptyToZero(form.JOB_PCS),
       "METAL_GRM_RATEFC": this.comService.emptyToZero(form.metalGramRateFc),
       "METAL_GRM_RATELC": this.comService.emptyToZero(form.metalGramRateLc),
@@ -429,7 +447,7 @@ private calculateNetWt(): boolean {
       "WORKER_CODE": this.comService.nullToString(form.workerCode),
       "WORKER_NAME": this.comService.nullToString(form.workerCodeDesc),
       "UNQ_DESIGN_ID": this.comService.nullToString(form.ReturnToStockCodeDesc),
-      "WIP_ACCODE":this.comService.nullToString(form.remarks),
+      "WIP_ACCODE": this.comService.nullToString(form.remarks),
       "UNIQUEID": 0,
       "LOCTYPE_CODE": this.comService.nullToString(form.location),
       "RETURN_STOCK": this.comService.nullToString(form.ReturnToStockCode),
@@ -490,35 +508,35 @@ private calculateNetWt(): boolean {
   //   }
   // }
   @Input() metalReturnDetailsData: any[] = [];
- 
+
   formSubmit(flag: any) {
     const formData = this.metalReturnDetailsForm.value;
-    
+
     // Check if stock code already exists in the grid
     const stockCodeExists = this.metalReturnDetailsData.some(item => item.STOCK_CODE === formData.stockCode);
 
     if (stockCodeExists) {
-        // Show confirmation message if stock code already exists
-        const userConfirmed = confirm("This stock code entry is already available in detail. Do you wish to continue?");
-        
-        if (!userConfirmed) {
-            return; // Stop further execution if user doesn't confirm
-        }
+      // Show confirmation message if stock code already exists
+      const userConfirmed = confirm("This stock code entry is already available in detail. Do you wish to continue?");
+
+      if (!userConfirmed) {
+        return; // Stop further execution if user doesn't confirm
+      }
     }
 
     if (this.submitValidations(formData)) return;
-    
+
     let dataToparent = {
-        FLAG: flag,
-        POSTDATA: this.setPostData()
+      FLAG: flag,
+      POSTDATA: this.setPostData()
     };
-    
+
     this.saveDetail.emit(dataToparent);
-    
+
     if (flag == 'CONTINUE') {
-        this.resetStockDetails();
+      this.resetStockDetails();
     }
-}
+  }
 
 
   /**USE: delete Melting Type From Row */
@@ -694,15 +712,15 @@ private calculateNetWt(): boolean {
           let data = result.dynamicData[0]
           this.subJoBDetailData = data
           this.metalReturnDetailsForm.controls.subJobNoDes.setValue(data[0].DESCRIPTION)
-          this.metalReturnDetailsForm.controls.processCode.setValue(data[0].PROCESS)
-          this.metalReturnDetailsForm.controls.workerCode.setValue(data[0].WORKER)
+          // this.metalReturnDetailsForm.controls.processCode.setValue(data[0].PROCESS)
+          // this.metalReturnDetailsForm.controls.workerCode.setValue(data[0].WORKER)
           this.metalReturnDetailsForm.controls.stockCode.setValue(data[0].STOCK_CODE)
           this.metalReturnDetailsForm.controls.stockCodeDesc.setValue(data[0].STOCK_DESCRIPTION)
           this.metalReturnDetailsForm.controls.ReturnToStockCode.setValue(data[0].STOCK_CODE)
           this.metalReturnDetailsForm.controls.ReturnToStockCodeDesc.setValue(data[0].STOCK_DESCRIPTION)
           this.metalReturnDetailsForm.controls.pcs.setValue(data[0].PCS)
-          this.metalReturnDetailsForm.controls.workerCodeDesc.setValue(data[0].WORKERDESC)
-          this.metalReturnDetailsForm.controls.processCodeDesc.setValue(data[0].PROCESSDESC)
+          // this.metalReturnDetailsForm.controls.workerCodeDesc.setValue(data[0].WORKERDESC)
+          // this.metalReturnDetailsForm.controls.processCodeDesc.setValue(data[0].PROCESSDESC)
           // this.metalReturnDetailsForm.controls.location.setValue(data[0].LOCTYPE_CODE)
           this.metalReturnDetailsForm.controls.designCode.setValue(data[0].DESIGN_CODE)
           this.metalReturnDetailsForm.controls.DIVCODE.setValue(data[0].DIVCODE)
@@ -716,7 +734,7 @@ private calculateNetWt(): boolean {
           this.setValueWithDecimal('KARAT', data[0].KARAT, 'THREE')
           this.setValueWithDecimal('STONE_WT', data[0].STONE, 'STONE')
           this.setValueWithDecimal('NET_WT', data[0].METAL - data[0].STONE, 'THREE')
-           this.setLookup201WhereCondition()
+          this.setLookup201WhereCondition()
         } else {
           this.comService.toastErrorByMsgId('MSG1747')
         }
@@ -758,7 +776,7 @@ private calculateNetWt(): boolean {
             this.metalReturnDetailsForm.controls.subJobNo.setValue(data[0].UNQ_JOB_ID)
             this.metalReturnDetailsForm.controls.PART_CODE.setValue(data[0].PART_CODE)
             this.metalReturnDetailsForm.controls.KARAT_CODE.setValue(data[0].KARAT_CODE)
-             this.setLookup201WhereCondition()
+            this.setLookup201WhereCondition()
             this.subJobNumberValidate()
           } else {
             this.comService.toastErrorByMsgId('MSG1531')
@@ -833,43 +851,43 @@ private calculateNetWt(): boolean {
     this.subscriptions.push(Sub);
   }
 
-          /**use: validate all lookups to check data exists in db */
-          validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
-            LOOKUPDATA.SEARCH_VALUE = event.target.value
-            const inputValue = event.target.value.toUpperCase();
-            if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
-            let param = {
-              LOOKUPID: LOOKUPDATA.LOOKUPID,
-              WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
-            }
-            this.comService.toastInfoByMsgId('MSG81447');
-            let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
-            let Sub: Subscription = this.dataService.postDynamicAPI(API,param)
-              .subscribe((result) => {
-               // this.isDisableSaveBtn = false;
-                let data = this.comService.arrayEmptyObjectToString(result.dynamicData[0])
-                if (data.length == 0) {
-                  this.comService.toastErrorByMsgId('MSG1531')
-                  this.metalReturnDetailsForm.controls[FORMNAME].setValue('')
-                  LOOKUPDATA.SEARCH_VALUE = ''
-                  return
-                }
-  
-                // const matchedItem = data.find((item: any) => item.CODE.toUpperCase() === inputValue);
-                // if (matchedItem) {
-                //   this.diamondlabourMasterForm.controls[FORMNAME].setValue(matchedItem.CODE);
-                  // if (FORMNAME === 'process') {
-                  //   this.processWorkerValidate()
-                  // }
-                // } else {
-                //   this.handleLookupError(FORMNAME, LOOKUPDATA);
-                // }
-               
-              }, err => {
-                this.comService.toastErrorByMsgId('MSG2272')//Error occured, please try again
-              })
-            this.subscriptions.push(Sub)
-          }
+  /**use: validate all lookups to check data exists in db */
+  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    LOOKUPDATA.SEARCH_VALUE = event.target.value
+    const inputValue = event.target.value.toUpperCase();
+    if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
+    let param = {
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+    }
+    this.comService.toastInfoByMsgId('MSG81447');
+    let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
+      .subscribe((result) => {
+        // this.isDisableSaveBtn = false;
+        let data = this.comService.arrayEmptyObjectToString(result.dynamicData[0])
+        if (data.length == 0) {
+          this.comService.toastErrorByMsgId('MSG1531')
+          this.metalReturnDetailsForm.controls[FORMNAME].setValue('')
+          LOOKUPDATA.SEARCH_VALUE = ''
+          return
+        }
+
+        // const matchedItem = data.find((item: any) => item.CODE.toUpperCase() === inputValue);
+        // if (matchedItem) {
+        //   this.diamondlabourMasterForm.controls[FORMNAME].setValue(matchedItem.CODE);
+        // if (FORMNAME === 'process') {
+        //   this.processWorkerValidate()
+        // }
+        // } else {
+        //   this.handleLookupError(FORMNAME, LOOKUPDATA);
+        // }
+
+      }, err => {
+        this.comService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+      })
+    this.subscriptions.push(Sub)
+  }
 
   showOverleyPanel(event: any, formControlName: string) {
     let value = this.metalReturnDetailsForm.value[formControlName]
