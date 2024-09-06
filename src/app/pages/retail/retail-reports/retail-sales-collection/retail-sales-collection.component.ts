@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-retail-sales-collection',
@@ -24,7 +26,7 @@ export class RetailSalesCollectionComponent implements OnInit {
   branchDivisionData: any[] = [];
   formattedBranchDivisionData: any;
   VocTypeParam: any = [];
-
+   
   retailSalesCollection: FormGroup = this.formBuilder.group({
     branch : [''],
     fromDate : [new Date()],
@@ -41,11 +43,11 @@ export class RetailSalesCollectionComponent implements OnInit {
     showOnlySummaryCheckbox: [false],
     landscapeFormat: [false],
     OutpuGridView: [false],
-
+    templateName: ['']
   })
   constructor(  private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder, private dataService: SuntechAPIService,  private comService: CommonServiceService,
-    private commonService: CommonServiceService,
+    private commonService: CommonServiceService,   private toastr: ToastrService,
   ) { }
 
   ngOnInit(): void {
@@ -139,13 +141,13 @@ export class RetailSalesCollectionComponent implements OnInit {
     let postData = {
       "SPID": "0114",
       "parameter": {
-          "STRBRANCHCODES": this.formattedBranchDivisionData,
-          "STRVOCTYPES": this.VocTypeParam, //this.commonService.getqueryParamVocType(),
-          "FROMVOCDATE": this.formatDateToYYYYMMDD(this.retailSalesCollection.value.fromDate),
-          "TOVOCDATE": this.formatDateToYYYYMMDD(this.retailSalesCollection.value.toDate),
-          "flag": '',
-          "USERBRANCH": localStorage.getItem('userbranch'),
-          "USERNAME": localStorage.getItem('username')
+        "STRBRANCHCODES": this.formattedBranchDivisionData,
+        "STRVOCTYPES": this.VocTypeParam, //this.commonService.getqueryParamVocType(),
+        "FROMVOCDATE": this.formatDateToYYYYMMDD(this.retailSalesCollection.value.fromDate),
+        "TOVOCDATE": this.formatDateToYYYYMMDD(this.retailSalesCollection.value.toDate),
+        "flag": '',
+        "USERBRANCH": localStorage.getItem('userbranch'),
+        "USERNAME": localStorage.getItem('username')
       }
     }
     console.log(postData)  
@@ -230,7 +232,58 @@ export class RetailSalesCollectionComponent implements OnInit {
 
   saveTemplate(){
     this.popupVisible = true;
+    console.log(this.retailSalesCollection.controls.templateName.value)
   }
+  print(){
+    const payload = {
+      "SPID": "0114",
+      "FLAG": 'INSERT',
+      "CONTROLS": JSON.stringify({
+          "CONTROL_HEADER": {
+            "USERNAME": localStorage.getItem('username'),
+            "TEMPLATEID": "STATEMENT OF ACCOUNTS",
+            "TEMPLATENAME": this.retailSalesCollection.controls.templateName.value,
+            "FORM_NAME": this.comService.getModuleName(),
+            "ISDEFAULT": 1
+          },
+          "CONTROL_DETAIL": {
+            "STRBRANCHCODES": this.formattedBranchDivisionData,
+            "STRVOCTYPES": this.VocTypeParam,
+            "FROMVOCDATE": this.formatDateToYYYYMMDD(this.retailSalesCollection.value.fromDate),
+            "TOVOCDATE": this.formatDateToYYYYMMDD(this.retailSalesCollection.value.toDate),
+            "USERBRANCH": localStorage.getItem('userbranch'),
+            "USERNAME": localStorage.getItem('username'),
+            "SHOWDATE": this.retailSalesCollection.value.showDateCheckbox ? 0 : 1,
+            "SHOWINVOICE": this.retailSalesCollection.value.showInvoiceCheckbox ? 0 : 1
+          }
+       })
+    };
+    this.dataService.postDynamicAPI('ExecueteSPInterface', payload)
+    .subscribe((result: any) => {
+      console.log(result);
+      let data = result.dynamicData;
+      
+      if (result.response) {
+        if (result.status == "Success") {
+          Swal.fire({
+            title: result.message || 'Success',
+            text: '',
+            icon: 'success',
+            confirmButtonColor: '#336699',
+            confirmButtonText: 'Ok'
+          }).then((result: any) => {
+            if (result.value) {
+              this.tableData = []
+              this.close('reloadMainGrid')
+            }
+          });
+        }
+      } else {
+        this.toastr.error('Not saved')
+      }
+    }); 
+  }
+
   popupClosed(){
     this.popupVisible = false;
   }
