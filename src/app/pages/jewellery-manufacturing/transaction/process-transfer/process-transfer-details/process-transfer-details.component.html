@@ -1226,14 +1226,14 @@
               <dxo-editing mode="cell" [allowUpdating]="true">
               </dxo-editing>
               <dxo-selection mode="single"></dxo-selection>
-              <!-- <dxi-column width="auto" dataField="SELECTED" caption
+              <dxi-column width="auto" dataField="SELECTED" caption
                 cellTemplate="SELECTEDTemplate"
                 alignment="right"></dxi-column>
               <div *dxTemplate="let data of 'SELECTEDTemplate'">
                 <mat-checkbox [checked]="data.value"
-                  [disabled]="true"
+                  [disabled]="compSelectFlag"
                   (change)="changeSelectCheckbox(data)"></mat-checkbox>
-              </div> -->
+              </div>
               <dxi-column dataField="DIVCODE" caption="Div"
                 [allowEditing]="false" alignment="left"></dxi-column>
               <dxi-column dataField="STOCK_CODE" caption="Stock Code"

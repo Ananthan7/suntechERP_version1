@@ -92,10 +92,10 @@ export class JobcardComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 267,
-    SEARCH_FIELD: '',
+    SEARCH_FIELD: 'Account Description',
     SEARCH_HEADING: 'Account Description',
+    // WHERECONDITION:`@strAcCode=''`,
     SEARCH_VALUE: '',
-    WHERECONDITION: "",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -1949,7 +1949,7 @@ export class JobcardComponent implements OnInit {
 
   setFromProcessWhereCondition() {
     //${this.commonService.nullToString(this.processTransferdetailsForm.value.FRM_PROCESS_CODE)}
-    this.commentsCodeData.WHERECONDITION = `@strAcCode='${this.commonService.nullToString(this.jobCardFrom.value.comments)}'`
+    this.commentsCodeData.WHERECONDITION =`@strAcCode='${this.commonService.nullToString(this.jobCardFrom.value.comments)}'`
     
   }
 

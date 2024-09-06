@@ -53,6 +53,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
   locationSearchFlag: any = false
   DIAMANFBARCODE: any = false
   blnScrapIronItem: any = false
+  compSelectFlag: boolean = false;
   FORM_VALIDATER: any
 
   private subscriptions: Subscription[] = [];
@@ -220,7 +221,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     enddate: [''],
     STD_TIME: [''],
     TIME_TAKEN_HRS: [''],
-    consumed: [''],
+    TIME_CONSUMED: [''],
     variance: [''],
     variancePercentage: [''],
     TREE_NO: [''],
@@ -453,8 +454,6 @@ export class ProcessTransferDetailsComponent implements OnInit {
       this.setFormNullToString('TO_PCS', parentDetail.TO_PCS)
       this.setFormNullToString('FRM_STONE_PCS', parentDetail.FRM_STONE_PCS)
       this.setFormNullToString('TO_STONE_PCS', parentDetail.TO_STONE_PCS)
-      this.setFormNullToString('variance', PROCESS_FORMDETAILS.variance)
-      this.setFormNullToString('variancePercentage', PROCESS_FORMDETAILS.variancePercentage)
     
       this.setFormDecimal('FRM_METAL_WT', parentDetail.FRM_METAL_WT, 'METAL')
       this.setFormDecimal('TO_METAL_WT', parentDetail.TO_METAL_WT, 'METAL')
@@ -482,14 +481,14 @@ export class ProcessTransferDetailsComponent implements OnInit {
 
     this.TimeTakenData.TIMEINMINUTES = parentDetail.TIME_TAKEN_HRS
     this.consumedTimeData.TIMEINMINUTES = parentDetail.TIME_CONSUMED
-    this.STDDateTimeData.TIMEINMINUTES = parentDetail.TIME_CONSUMED
+    this.STDDateTimeData.TIMEINMINUTES = parentDetail.STD_TIME
     this.processTransferdetailsForm.controls.STD_TIME.setValue(
       this.commonService.convertTimeMinutesToDHM(parentDetail.STD_TIME)
     )
     this.processTransferdetailsForm.controls.TIME_TAKEN_HRS.setValue(
       this.commonService.convertTimeMinutesToDHM(parentDetail.TIME_TAKEN_HRS)
     )
-    this.processTransferdetailsForm.controls.consumed.setValue(
+    this.processTransferdetailsForm.controls.TIME_CONSUMED.setValue(
       this.commonService.convertTimeMinutesToDHM(parentDetail.TIME_CONSUMED)
     )
     this.processTransferdetailsForm.controls.JOB_DATE.setValue(parentDetail.JOB_DATE)
@@ -499,7 +498,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.processTransferdetailsForm.controls.enddate.setValue(
       this.commonService.formatDateTime(parentDetail.OUT_DATE)
     )
-   
+
     this.Calc_TimeDiff()
     this.stockCodeScrapValidate()
     this.onloadCalculations()// for calculating loss details
@@ -685,7 +684,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.processTransferdetailsForm.controls.TIME_TAKEN_HRS.setValue(event)
   }
   consumedChange(event: any) {
-    this.processTransferdetailsForm.controls.consumed.setValue(event)
+    this.processTransferdetailsForm.controls.TIME_CONSUMED.setValue(event)
   }
   StdTimeInMinutes(event: any) {
     this.processTransferdetailsForm.controls.StdTimeInMinutes.setValue(event)
@@ -1198,7 +1197,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.processTransferdetailsForm.controls.TIME_TAKEN_HRS.setValue(
       this.commonService.convertTimeMinutesToDHM(differenceInMinutes)
     )
-    this.processTransferdetailsForm.controls.consumed.setValue(
+    this.processTransferdetailsForm.controls.TIME_CONSUMED.setValue(
       this.commonService.convertTimeMinutesToDHM(differenceInMinutes)
     )
     if (data[0].IN_DATE && data[0].IN_DATE != '') {
@@ -1266,7 +1265,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.processTransferdetailsForm.controls.TIME_TAKEN_HRS.setValue(
       this.commonService.convertTimeMinutesToDHM(differenceInMinutes)
     )
-    this.processTransferdetailsForm.controls.consumed.setValue(
+    this.processTransferdetailsForm.controls.TIME_CONSUMED.setValue(
       this.commonService.convertTimeMinutesToDHM(differenceInMinutes)
     )
     if (data[0].IN_DATE && data[0].IN_DATE != '') {
@@ -1456,6 +1455,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
           let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
           if (data) {
             this.metalDetailData = data
+            this.recalculateSrno()
             if (this.processTransferdetailsForm.value.METALSTONE == 'M') {
               this.metal_Calc_Totals(1)
             } else {
@@ -1476,9 +1476,8 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
 
-  changeSelectCheckbox(data: any) {
-    console.log(data);
-
+  changeSelectCheckbox(event: any) {
+    this.metalDetailData[event.data.SRNO - 1].SELECTED = !event.data.SELECTED;
   }
   // use: calculate total values from grid
   // for flag 0 to values only assigned
@@ -1583,11 +1582,14 @@ export class ProcessTransferDetailsComponent implements OnInit {
     }
   }
   formatMetalDetailDataGrid() {
+    let compSelectFlag = this.commonService.getCompanyParamValue('PROCESSTRANSFERSELECTION')
+    this.compSelectFlag = !this.commonService.Null2BitValue(compSelectFlag) ? true :false
     this.metalDetailData.forEach((element: any) => {
+      element.SELECTED = true
       element.GEN = 'GEN'
       element.FROM_STOCK_CODE = element.STOCK_CODE,
-        element.FROM_SUB_STOCK_CODE = element.SUB_STOCK_CODE,
-        element.GROSS_WT = this.commonService.setCommaSerperatedNumber(element.GROSS_WT, 'METAL')
+      element.FROM_SUB_STOCK_CODE = element.SUB_STOCK_CODE,
+      element.GROSS_WT = this.commonService.setCommaSerperatedNumber(element.GROSS_WT, 'METAL')
       element.STONE_WT = this.commonService.setCommaSerperatedNumber(element.STONE_WT, 'STONE')
       element.PURITY = this.commonService.setCommaSerperatedNumber(element.PURITY, 'PURITY')
       element.LOSS_QTY = this.commonService.setCommaSerperatedNumber(element.LOSS_QTY, 'THREE')
@@ -2102,10 +2104,11 @@ export class ProcessTransferDetailsComponent implements OnInit {
   resetPTFDetails() {
     this.processTransferdetailsForm.reset()
     this.metalDetailData = []
+    this.imagepath = []
   }
-  multiplyWithAmtDecimal(a: any, b: any) {
-    let val = this.emptyToZero(a) * this.emptyToZero(b)
-    return this.emptyToZero(val.toFixed(3))
+  multiplyWithAmtDecimal(netwt: any, purity: any) {
+    let val = this.commonService.pureWeightCalculate(netwt,purity)
+    return this.emptyToZero(val.toFixed(this.commonService.mQtyDecimals))
   }
   gridSRNO: number = 0
   setJOB_PROCESS_TRN_DETAIL_DJ() {
@@ -2467,7 +2470,8 @@ export class ProcessTransferDetailsComponent implements OnInit {
     let ADJUST_PUREWT = 0
 
     let data: any[] = []
-    this.metalDetailData.forEach((element: any) => {
+    let componentDetails = this.metalDetailData.filter((item:any)=> item.SELECTED == true)
+    componentDetails.forEach((element: any) => {
       data.push({
         "VOCNO": this.emptyToZero(form.VOCNO),
         "VOCTYPE": this.commonService.nullToString(form.VOCTYPE),

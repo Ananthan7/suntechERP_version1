@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -119,6 +119,7 @@ export class MetalReturnComponent implements OnInit {
     private toastr: ToastrService,
     private dataService: SuntechAPIService,
     private commonService: CommonServiceService,
+    private renderer: Renderer2,
   ) {
     // this.checkBoxesMode = themes.current().startsWith('material') ? 'always' : 'onClick';
   }
@@ -129,7 +130,7 @@ export class MetalReturnComponent implements OnInit {
       precision: this.commonService.allbranchMaster?.BMQTYDECIMALS,
       currency: this.commonService.compCurrency
     };
-
+    this.renderer.selectRootElement('#code')?.focus();
     if (this.content?.FLAG) {
       if (this.content.FLAG == 'VIEW' || this.content.FLAG == 'DELETE') {
         this.viewMode = true;

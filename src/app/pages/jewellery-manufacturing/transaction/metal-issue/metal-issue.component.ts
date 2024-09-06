@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
@@ -126,6 +126,7 @@ export class MetalIssueComponent implements OnInit {
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
     private comService: CommonServiceService,
+    private renderer: Renderer2,
   ) { }
 
 
@@ -136,6 +137,7 @@ export class MetalIssueComponent implements OnInit {
       currency: this.comService.compCurrency
     };
     //this.content provide the data and flag from main grid to the form
+    this.renderer.selectRootElement('#code')?.focus();
     if (this.content?.FLAG) {
       if (this.content.FLAG == 'VIEW' || this.content.FLAG == 'DELETE') {
         this.viewMode = true;

@@ -16,7 +16,11 @@ import { MasterSearchComponent } from 'src/app/shared/common/master-search/maste
 })
 export class StoneReturnComponent implements OnInit {
   @ViewChild('stoneReturnDetailScreen') public stoneReturnDetailComponent!: NgbModal;
-  @ViewChild('overlayenterdBySearch') overlayenterdBySearch! : MasterSearchComponent;
+  @ViewChild('overlayenterdBySearch') overlayenterdBySearch!: MasterSearchComponent;
+  @ViewChild('overlayBaseCurrencyCode') overlayBaseCurrencyCode!: MasterSearchComponent;
+  @ViewChild('overlayCurrencyCode') overlayCurrencyCode!: MasterSearchComponent;
+
+
   columnhead: any[] = [
     { title: 'SRNO', field: 'SRNO', format: '', alignment: 'center' },
     { title: 'VOCNO', field: 'VOCNO', format: '', alignment: 'left' },
@@ -174,7 +178,7 @@ export class StoneReturnComponent implements OnInit {
     process: [''],
     jobDesc: [''],
     FLAG: [null],
-    MAIN_VOCTYPE:['']
+    MAIN_VOCTYPE: ['']
   });
   constructor(
     private activeModal: NgbActiveModal,
@@ -191,7 +195,7 @@ export class StoneReturnComponent implements OnInit {
 
     if (this.content?.FLAG) {
       this.setAllInitialValues()
-      if (this.content.FLAG == 'VIEW'  || this.content.FLAG == 'DELETE') {
+      if (this.content.FLAG == 'VIEW' || this.content.FLAG == 'DELETE') {
         this.viewMode = true;
         this.LOCKVOUCHERNO = true;
       }
@@ -277,7 +281,7 @@ export class StoneReturnComponent implements OnInit {
         if (result.response) {
           let data = result.response
           this.detailData = data.Details
-          console.log(this.detailData,'data')
+          console.log(this.detailData, 'data')
           if (this.detailData.length > 0) {
             this.detailData.forEach((element: any) => {
               element.FLAG = this.content ? this.content.FLAG : null
@@ -573,23 +577,23 @@ export class StoneReturnComponent implements OnInit {
 
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
-          if (result && result.status == "Success") {
-            Swal.fire({
-              title: result.message || 'Success',
-              text: '',
-              icon: 'success',
-              confirmButtonColor: '#336699',
-              confirmButtonText: 'Ok'
-            }).then((result: any) => {
-              if (result.value) {
-                this.stonereturnFrom.reset()
-                this.tableData = []
-                this.close('reloadMainGrid')
-              }
-            });
-          }else {
-            this.commonService.toastErrorByMsgId('MSG3577')
-          }
+        if (result && result.status == "Success") {
+          Swal.fire({
+            title: result.message || 'Success',
+            text: '',
+            icon: 'success',
+            confirmButtonColor: '#336699',
+            confirmButtonText: 'Ok'
+          }).then((result: any) => {
+            if (result.value) {
+              this.stonereturnFrom.reset()
+              this.tableData = []
+              this.close('reloadMainGrid')
+            }
+          });
+        } else {
+          this.commonService.toastErrorByMsgId('MSG3577')
+        }
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
@@ -608,23 +612,23 @@ export class StoneReturnComponent implements OnInit {
 
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
-          if (result && result.status == "Success") {
-            Swal.fire({
-              title: result.message || 'Success',
-              text: '',
-              icon: 'success',
-              confirmButtonColor: '#336699',
-              confirmButtonText: 'Ok'
-            }).then((result: any) => {
-              if (result.value) {
-                this.stonereturnFrom.reset()
-                this.tableData = []
-                this.close('reloadMainGrid')
-              }
-            });
-          }else {
-            this.commonService.toastErrorByMsgId('MSG3577')
-          }
+        if (result && result.status == "Success") {
+          Swal.fire({
+            title: result.message || 'Success',
+            text: '',
+            icon: 'success',
+            confirmButtonColor: '#336699',
+            confirmButtonText: 'Ok'
+          }).then((result: any) => {
+            if (result.value) {
+              this.stonereturnFrom.reset()
+              this.tableData = []
+              this.close('reloadMainGrid')
+            }
+          });
+        } else {
+          this.commonService.toastErrorByMsgId('MSG3577')
+        }
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
@@ -700,17 +704,27 @@ export class StoneReturnComponent implements OnInit {
     });
   }
   showOverleyPanel(event: any, formControlName: string) {
-    if(event.target.value != '') return
-    if (formControlName == 'enterdBy') {
-      this.overlayenterdBySearch.showOverlayPanel(event)
+    if (event.target.value != '') return
+    switch (formControlName) {
+      case 'enterdBy':
+        this.overlayenterdBySearch.showOverlayPanel(event);
+        break;
+      case 'basecurrency':
+        this.overlayBaseCurrencyCode.showOverlayPanel(event);
+        break;
+      case 'currency':
+        this.overlayCurrencyCode.showOverlayPanel(event);
+        break;
+      default:
+
     }
   }
-  lookupKeyPress(event: any,form?:any) {
-    if(event.key == 'Tab' && event.target.value == ''){
-      this.showOverleyPanel(event,form)
+  lookupKeyPress(event: any, form?: any) {
+    if (event.key == 'Tab' && event.target.value == '') {
+      this.showOverleyPanel(event, form)
     }
     if (event.key === 'Enter') {
-      if(event.target.value == '') this.showOverleyPanel(event,form)
+      if (event.target.value == '') this.showOverleyPanel(event, form)
       event.preventDefault();
     }
   }
@@ -732,7 +746,7 @@ export class StoneReturnComponent implements OnInit {
           this.commonService.toastErrorByMsgId('MSG1531')
           this.stonereturnFrom.controls[FORMNAME].setValue('')
           LOOKUPDATA.SEARCH_VALUE = ''
-      if (FORMNAME === 'enterdBy') {
+          if (FORMNAME === 'enterdBy' || FORMNAME === 'basecurrency' || FORMNAME === "currency") {
             this.showOverleyPanel(event, FORMNAME);
           }
           return

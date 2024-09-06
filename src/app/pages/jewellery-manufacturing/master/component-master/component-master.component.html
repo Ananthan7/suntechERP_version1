@@ -459,7 +459,7 @@
                                     </div>
 
                                     <div *dxTemplate="let data of 'pcstemp'">
-                                        <input type="number" (change)="pcstemp($event,data)" class="text-right"
+                                        <input type="number" (change)="pcstemp($event,data)" NumberOnly class="text-right"
                                             [value]="data.value" style="width: 100%;" required />
                                     </div>
 
@@ -475,7 +475,7 @@
                                 </div> -->
 
                                     <div *dxTemplate="let data of 'wtCttemp'">
-                                        <input type="number" (change)="wtCtt($event,data)" class="text-right"
+                                        <input type="number" (change)="wtCtt($event,data)" NumberOnly class="text-right"
                                             [value]="data.value" style="width: 100%;" required />
                                     </div>
 
