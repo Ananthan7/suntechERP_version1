@@ -13,6 +13,8 @@ import Swal from "sweetalert2";
 
 import { map, pairwise, startWith } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSelectChange } from '@angular/material/select';
+
 // import { NgxBarcodeScannerService } from '@eisberg-labs/ngx-barcode-scanner';
 // import { round } from 'lodash';
 import jsPDF from 'jspdf';
@@ -87,6 +89,7 @@ export class SalesReturnComponent implements OnInit {
   // @ViewChild('scanner', { static: false }) scanner: BarcodeScannerLivestreamOverlayComponent;
   // @ViewChild(BarcodeScannerLivestreamComponent) scanner: BarcodeScannerLivestreamComponent;
   LOCKVOUCHERNO: boolean = true;
+  sortedCountryList: any;
   voucherDetails:any;
   minDate:any;
   maxDate: any;
@@ -821,7 +824,6 @@ editLineItem:boolean=false;
     this.orders = [];
     this.order_items_total_net_amount = 0.0;
     this.order_items_total_net_amount_org = 0.0;
-
 
     this.customerDataForm = this.formBuilder.group({
       fcn_customer_mobile: ['', Validators.required],
@@ -2602,6 +2604,11 @@ editLineItem:boolean=false;
     if (this.viewOnly) this.setReadOnlyForViewMode();
     if (!this.content) {
       this.open(this.adjust_sale_return_modal);
+      this.salesReturnForm.controls.fcn_returns_fin_year.setValue(this.baseYear);
+      // this.salesReturnForm.controls.fcn_returns_voc_type.setValue(this.baseYear);
+      setTimeout(() => {
+      this.renderer.selectRootElement('#fcn_returns_voc_no')?.focus();
+      }, 200);
     }
 
     // console.log('viewonly',this.viewOnly , this.editOnly);
@@ -3318,7 +3325,9 @@ editLineItem:boolean=false;
       .map((detail:any) => detail.SCHEME_ID)
       .filter((schemeId:any) => schemeId !== "");
       // this.sumReceiptItem();
+      console.log(this.prnt_inv_total_gross_amt);
       this.sumTotalValues();
+      console.log(this.prnt_inv_total_gross_amt);
 
       if (type == 'Continue') {
         this.setTabByIndex(this.selectedTabIndex, null);
@@ -3475,7 +3484,7 @@ editLineItem:boolean=false;
     }
 
     this.modalReference = this.modalService.open(content, {
-      size: 'lg',
+      size: 'xl',
       ariaLabelledBy: 'modal-basic-title',
       backdrop: false,
     });
@@ -5089,6 +5098,12 @@ editLineItem:boolean=false;
     const country = `GeneralMaster/GetGeneralMasterList/${encodeURIComponent('COUNTRY MASTER')}`;
 
     this.countryMaster = this.comFunc.countryMaster;
+    this.sortedCountryList = this.countryMaster.map((item: any) => ({
+      CODE: item.CODE,
+      DESCRIPTION: item.DESCRIPTION,
+      MOBILECOUNTRYCODE: item.MOBILECOUNTRYCODE,
+      CODE_DESC: `${item.CODE}-${item.DESCRIPTION}`
+    }));
     this.countryMasterOptions =
       this.customerDetailForm.controls.fcn_cust_detail_country.valueChanges.pipe(
         startWith(''),
@@ -5128,6 +5143,25 @@ editLineItem:boolean=false;
         )
       );
   }
+
+  onCountryCodeSelection(event: MatSelectChange, isCountrySelection: Boolean) {
+    if (isCountrySelection) {
+      const selectedOption = this.sortedCountryList.find((item: any) => item.CODE === event.value);
+      if (selectedOption) {
+
+        this.customerDetailForm.controls['fcn_mob_code'].setValue(selectedOption.MOBILECOUNTRYCODE);
+      }
+    }
+    else {
+      const selectedOption = this.sortedCountryList.find((item: any) => item.MOBILECOUNTRYCODE === event.value);
+      if (selectedOption) {
+
+        this.customerDetailForm.controls['fcn_cust_detail_country'].setValue(selectedOption.CODE);
+      }
+    }
+
+  }
+
   async getIdMaster() {
     // const resp = this.comFunc.getMasterByID('ID MASTER');
     const resp = await this.comFunc.idMaster;
@@ -5766,7 +5800,7 @@ editLineItem:boolean=false;
     this.lineItemModalForSalesReturn = true;
     this.salesReturnRowDataSRNO = value.SRNO;
     this.modalReferenceSalesReturn = this.modalService.open(this.mymodal, {
-      size: 'lg',
+      size: 'xl',
       ariaLabelledBy: 'modal-basic-title',
       backdrop: false,
     });
@@ -5896,7 +5930,7 @@ editLineItem:boolean=false;
     this.lineItemModalForSalesReturn = true;
     this.salesReturnRowDataSRNO = value.data.SRNO;
     this.modalReferenceSalesReturn = this.modalService.open(this.mymodal, {
-      size: 'lg',
+      size: 'xl',
       ariaLabelledBy: 'modal-basic-title',
       backdrop: false,
     });
@@ -5904,7 +5938,6 @@ editLineItem:boolean=false;
     if(value){
      this.valuedatas = value.data;
     }
-    
     if (this.modalService.hasOpenModals()) {
       setTimeout(() => {
         this.renderer.selectRootElement('#fcn_li_item_code')?.focus();
@@ -5916,6 +5949,7 @@ editLineItem:boolean=false;
         // this.lineItemForm.controls.fcn_li_location.setValue(value.LOCTYPE_CODE);
         // this.lineItemForm.controls.fcn_li_pcs.setValue(value.PCS);
          let dynvalues = value.data;
+         this.divisionMS = dynvalues.DIVISIONMS;
          console.log(dynvalues);
          if(dynvalues?.slsReturn){
 
@@ -5932,7 +5966,7 @@ editLineItem:boolean=false;
           this.lineItemForm.controls.fcn_li_item_code.setValue(dynvalues?.slsReturn.STOCK_CODE);
           this.lineItemForm.controls.fcn_li_division.setValue(dynvalues?.slsReturn.DIVISION_CODE);
           this.lineItemForm.controls.fcn_li_item_desc.setValue(dynvalues?.slsReturn.STOCK_DOCDESC);
-          this.lineItemForm.controls.fcn_li_pcs.setValue(dynvalues?.slsReturn.PCS);
+          this.lineItemForm.controls.fcn_li_pcs.setValue(dynvalues?.slsReturn.pcs);
           this.lineItemForm.controls.fcn_li_gross_wt.setValue(formatToFixed(dynvalues?.slsReturn.GROSSWT,3));
           this.lineItemForm.controls.fcn_li_stone_wt.setValue(formatToFixed(dynvalues?.slsReturn.STONEWT,3));
           this.lineItemForm.controls.fcn_li_net_wt.setValue(formatToFixed(dynvalues?.slsReturn.NETWT,3));
@@ -5962,7 +5996,7 @@ editLineItem:boolean=false;
         this.lineItemForm.controls.fcn_li_item_code.setValue(dynvalues?.STOCK_CODE);
         this.lineItemForm.controls.fcn_li_division.setValue(dynvalues?.DIVISION_CODE);
         this.lineItemForm.controls.fcn_li_item_desc.setValue(dynvalues?.STOCK_DOCDESC);
-        this.lineItemForm.controls.fcn_li_pcs.setValue(dynvalues?.PCS);
+        this.lineItemForm.controls.fcn_li_pcs.setValue(dynvalues?.pcs);
         this.lineItemForm.controls.fcn_li_gross_wt.setValue(dynvalues?.GROSSWT);
         this.lineItemForm.controls.fcn_li_stone_wt.setValue(dynvalues?.STONEWT);
         this.lineItemForm.controls.fcn_li_net_wt.setValue(dynvalues?.NETWT);
@@ -5987,6 +6021,8 @@ editLineItem:boolean=false;
         this.managePcsGrossWt();
          }
       }, 100);
+      this.divisionMS
+      console.log(this.divisionMS);
     }
   }
 
@@ -6400,6 +6436,16 @@ editLineItem:boolean=false;
     let _net_val_cc = 0 ,_net_val_fc = 0 ;
     let _vat_lc = 0 ,_vat_fc = 0 ;
     let _igst_cc = 0;
+    let sales_person_code ="";
+    let mobile_num ="";
+    let party_name =  "";
+    let cust_code = 0;
+    let party_type = "";
+    let posmid =0;
+
+
+
+
 
 
     this.salesReturnsItems_forVoc.forEach((element: any) => {
@@ -6417,7 +6463,7 @@ editLineItem:boolean=false;
       element.STONEDIFF = element.STONEDIFF;
       element.DISCOUNT = element.DISCOUNT;
       element.DISCOUNTVALUEFC = element.DISCOUNTVALUEFC;
-      element.mkg_amount = element.MKG_RATEFC;
+      element.mkg_amount = element.MKGVALUEFC;
       element.UNIQUEID = element.UNIQUEID;
       element.total_amount = element.TOTAL_AMOUNTFC;
       element.tax_amount = '0';  // Consider removing this if it's not used
@@ -6426,12 +6472,19 @@ editLineItem:boolean=false;
       element.pure_wt = element.PUREWT;
       element.stone_amt = element.STONEVALUEFC;
       element.VAT_AMOUNTFC = element.VAT_AMOUNTFC;
-  
+      
+       sales_person_code =element.SALESPERSON_CODE;
+       mobile_num =element.MOBILE ;
+       party_name =  element.PARTYNAME;
+       cust_code = element.POSCUSTCODE;
+       party_type = element.POS_VOCTYPE;
+       posmid = element.POSMID;
+      
       // Push updated element to pre-items list
       this.sales_returns_pre_items.push(element);
   
       // Perform calculations
-      _mkg_amount += Number(element.MKG_RATEFC);
+      _mkg_amount += Number(element.MKGVALUEFC);
       _total_amt += Number(element.NETVALUEFC);
       _tax_amt += Number(element.tax_amount);
       _gross_total = Number(_total_amt + _tax_amt);
@@ -6659,9 +6712,23 @@ editLineItem:boolean=false;
           TOTALWITHGST_FC: 0,
           VATCODE: ""
       };
-  
+      
+      // sales_person_code =element.SALESPERSON_CODE;
+      // mobile_num =element.MOBILE ;
+      // party_name =  element.PARTYNAME;
+      // cust_code:Number = element.POSCUSTCODE;
+      // party_type = element.POS_VOCTYPE;
+      // id:Number = element.POSMID;
       // Add the post detail item to the postDetail array
       this.postDetail.push(postDetailItem);
+
+      this.vocDataForm.controls.sales_person.setValue(sales_person_code);
+      this.customerDataForm.controls.fcn_customer_mobile.setValue(mobile_num);
+      this.customerDataForm.controls.fcn_customer_name.setValue(party_name);
+      this.customerDataForm.controls.fcn_customer_code.setValue(cust_code);
+      this.customerDataForm.controls.fcn_customer_id_type.setValue(party_type);
+      this.customerDataForm.controls.fcn_customer_id_number.setValue(posmid);
+
   });
 
     console.log("total_pcs",_total_pcs);
@@ -6688,6 +6755,7 @@ editLineItem:boolean=false;
     this.prnt_inv_total_gross_amt= _mkg_amount + _metal_amt + _stone_amt ;//_total_amt;
     this.order_items_total_tax= _tax_amt;
     this.order_items_total_gross_amount =_total_amt;
+    this.order_items_total_net_amount = _total_amt; 
     this.invReturnSalesTotalNetTotal =_sales_return;
     this.netTotal = _net_total;
     this.making_amount = _mkg_amount;
@@ -6704,7 +6772,7 @@ editLineItem:boolean=false;
     this.total_vat_lc = _vat_lc;
     this.order_items_total_tax = _igst_cc;
     this.netTotal = _total_amt;
-    this.Receipt_total = _total_amt;
+    // this.Receipt_total = _total_amt;
     
   console.log("postdetailsData" ,this.postDetail);
 
@@ -8315,11 +8383,37 @@ editLineItem:boolean=false;
     let net_sum = 0;
     /* line items end */
 
+    let _total_amt=0;
+    let _tax_amt=0;
+    let _gross_total=0;
+    let _net_total=0;
+    let _sales_return=0;
+    let _total_pcs = 0;
+    let _total_weight = 0;
+    let _mkg_amount=0;
+    let _pure_wt = 0;
+    let _metal_amt = 0;
+    let _stone_amt = 0;
+    let _purity_diff = 0;
+    let _stone_diff = 0;
+    let _disc_value_fc = 0;
+    let _disc_value_cc = 0;
+    let _net_val_cc = 0 ,_net_val_fc = 0 ;
+    let _vat_lc = 0 ,_vat_fc = 0 ;
+    let _igst_cc = 0;
+    let sales_person_code ="";
+    let mobile_num ="";
+    let party_name =  "";
+    let cust_code = 0;
+    let party_type = "";
+    let posmid =0;
+    
+
     let total_sales_return_sum = 0;
     let total_exchange = 0;
     let total_received_amount = 0;
 
-    this.ordered_items.forEach(function (item) {
+    this.sales_returns_pre_items.forEach(function (item:any) {
       console.log('item---------------------', item);
 
       total_sum = total_sum + parseFloat(item.total_amount);
@@ -8333,8 +8427,32 @@ editLineItem:boolean=false;
       total_stone_amt = total_stone_amt + parseFloat(item.stone_amt);
       total_dis_amt = total_dis_amt + parseFloat(item.dis_amt);
       total_gross_amt = total_gross_amt + parseFloat(item.gross_amt);
+
+      
+      _mkg_amount += Number(item.MKGVALUEFC);
+      _total_amt += Number(item.NETVALUEFC);
+      _tax_amt += Number(item.tax_amount);
+      _gross_total = Number(_total_amt + _tax_amt);
+      _sales_return += Number(item.slsReturn);
+      _net_total = _gross_total - _sales_return;
+      _total_pcs += Number(item.pcs);
+      _total_weight += Number(item.weight);
+      _pure_wt += Number(item.pure_wt);
+      _metal_amt += Number (item.metal_amt);
+      _stone_amt += Number(item.stone_amt);
+      _purity_diff += Number(item.PUDIFF);
+      _stone_diff += Number(item.STONEDIFF);
+      _disc_value_fc += Number(item.DISCOUNTVALUEFC);
+      _disc_value_cc += Number(item.DISCOUNTVALUECC);
+      _net_val_fc += Number(item.NETVALUEFC);
+      _net_val_cc += Number(item.NETVALUECC);
+      _vat_lc += Number(item.VAT_AMOUNTLC);
+      _vat_fc += Number(item.VAT_AMOUNTFC);
+      _igst_cc += Number(item.IGST_AMOUNTCC)
+
     });
     this.sales_returns_items.pcs = this.lineItemForm.controls.fcn_li_pcs.value;
+    console.log(this.prnt_inv_total_gross_amt);
 
     this.prnt_inv_total_pcs = total_pcs;
     this.prnt_inv_total_weight = total_weight;
@@ -8346,6 +8464,7 @@ editLineItem:boolean=false;
     // this.prnt_inv_total_gross_amt = total_sum-total_dis_amt;
     this.prnt_inv_total_gross_amt = total_sum + total_metal_amt + total_stone_amt;
     //  this.prnt_inv_total_gross_amt = net_sum-this.order_items_total_tax;
+    console.log(this.prnt_inv_total_gross_amt);
 
     this.prnt_inv_net_total_without_tax = total_sum;
     this.order_items_total_amount = total_sum;
@@ -8392,18 +8511,23 @@ editLineItem:boolean=false;
       total_exchange
     );
     console.log('====================================');
-    this.order_items_total_net_amount = this.comFunc.transformDecimalVB(
-      this.comFunc.allbranchMaster?.BAMTDECIMALS,
-      this.order_items_total_gross_amount -
-      // total_sales_return_sum -
-      this.invReturnSalesTotalNetTotal -
-      total_exchange
-    );
+    console.log("order_items_gross_amount",this.order_items_total_gross_amount);
+    console.log("inv return sales",this.invReturnSalesTotalNetTotal);
+    // console.log("total_exchange",total_exchange);
+    // this.order_items_total_net_amount = this.comFunc.transformDecimalVB(
+    //   this.comFunc.allbranchMaster?.BAMTDECIMALS,
+    //   this.order_items_total_gross_amount -
+    //   // total_sales_return_sum -
+    //   this.invReturnSalesTotalNetTotal -
+    //   total_exchange
+    // );
+    console.log("changes");
     this.netTotal = this.order_items_total_discount_amount ? this.order_items_total_gross_amount - Number(this.order_items_total_discount_amount) : this.order_items_total_gross_amount;
-
+    console.log(this.netTotal);
     this.order_items_total_net_amount_org = this.order_items_total_net_amount;
 
     this.netTotal = this.order_items_total_net_amount;
+    console.log(this.netTotal);
 
 
     let IgstVatData: any = this.ordered_items.filter((data) => data.taxPer != 0 && data.taxPer != '');
@@ -8487,9 +8611,33 @@ editLineItem:boolean=false;
     // this.prnt_received_amount_words = this.numToWord(this.prnt_received_amount);
     // console.log(this.prnt_received_amount_words);
 
+    this.prnt_inv_total_pcs =_total_pcs;
+    this.prnt_inv_total_weight = _total_weight;
+    this.prnt_inv_total_gross_amt= _mkg_amount + _metal_amt + _stone_amt ;//_total_amt;
+    this.order_items_total_tax= _tax_amt;
+    this.order_items_total_gross_amount =_total_amt;
+    this.order_items_total_net_amount = _total_amt; 
+    this.invReturnSalesTotalNetTotal =_sales_return;
+    this.netTotal = _net_total;
+    this.making_amount = _mkg_amount;
+    this.pure_weight = _pure_wt;
+    this.metal_value = _metal_amt;
+    this.stone_value = _stone_amt;
+    this.purity_difference = _purity_diff;
+    this.stone_difference = _stone_diff;
+    this.total_disc_fc = _disc_value_fc;
+    this.total_disc_cc = _disc_value_cc;
+    this.total_net_value_fc = _net_val_fc;
+    this.total_net_value_cc = _net_val_cc;
+    this.total_vat_fc = _vat_fc;
+    this.total_vat_lc = _vat_lc;
+    this.order_items_total_tax = _igst_cc;
+    this.netTotal = _total_amt; 
 
 
   }
+
+  
 
   addItemtoList(btn: any) {
     Object.values(this.lineItemForm.controls).forEach(control => {
@@ -8678,6 +8826,26 @@ editLineItem:boolean=false;
   // }
 
   updateRetailSalesReturnVal() {
+    let _total_amt=0;
+    let _tax_amt=0;
+    let _gross_total=0;
+    let _net_total=0;
+    let _sales_return=0;
+    let _total_pcs = 0;
+    let _total_weight = 0;
+    let _mkg_amount=0;
+    let _pure_wt = 0;
+    let _metal_amt = 0;
+    let _stone_amt = 0;
+    let _purity_diff = 0;
+    let _stone_diff = 0;
+    let _disc_value_fc = 0;
+    let _disc_value_cc = 0;
+    let _net_val_cc = 0 ,_net_val_fc = 0 ;
+    let _vat_lc = 0 ,_vat_fc = 0 ;
+    let _igst_cc = 0;
+
+
    
     this.sales_returns_items.forEach((ele:any)  => {
       if (this.salesReturnRowDataSRNO === ele.SRNO) {
@@ -8700,14 +8868,137 @@ editLineItem:boolean=false;
         ele.net_amount = this.lineItemForm.controls.fcn_li_net_amount.value;
         ele.IGST_AMOUNTCC = this.lineItemForm.controls.fcn_li_tax_amount.value;
         ele.IGST_PER = this.lineItemForm.controls.fcn_li_tax_percentage.value;
-      
+
+        _mkg_amount += Number(ele.MKG_RATEFC);
+        _total_amt += Number(ele.NETVALUEFC);
+        _tax_amt += Number(ele.tax_amount);
+        _gross_total = Number(_total_amt + _tax_amt);
+        _sales_return += Number(ele.slsReturn);
+        _net_total = _gross_total - _sales_return;
+        _total_pcs += Number(ele.pcs);
+        _total_weight += Number(ele.weight);
+        _pure_wt += Number(ele.pure_wt);
+        _metal_amt += Number (ele.metal_amt);
+        _stone_amt += Number(ele.stone_amt);
+        _purity_diff += Number(ele.PUDIFF);
+        _stone_diff += Number(ele.STONEDIFF);
+        _disc_value_fc += Number(ele.DISCOUNTVALUEFC);
+        _disc_value_cc += Number(ele.DISCOUNTVALUECC);
+        _net_val_fc += Number(ele.NETVALUEFC);
+        _net_val_cc += Number(ele.NETVALUECC);
+        _vat_lc += Number(ele.VAT_AMOUNTLC);
+        _vat_fc += Number(ele.VAT_AMOUNTFC);
+        _igst_cc += Number(ele.IGST_AMOUNTCC);
+
+        let data = this.sales_returns_items.findIndex((x: any) => x.SRNO == ele.SRNO);
+        console.log(data);
+        this.sales_returns_items[data] = ele;
+
+
+        
+        // let findedvalue=this.sales_returns_items.find((item:any)=>item.SRNO === ele.SRNO)
+        // findedvalue.DIVISION_CODE = this.lineItemForm.controls.fcn_li_division.value;
+        // findedvalue.description = this.lineItemForm.controls.fcn_li_item_desc.value;
+        // findedvalue.stock_code = this.lineItemForm.controls.fcn_li_item_code.value;
+        // findedvalue.pcs = this.lineItemForm.controls.fcn_li_pcs.value;
+        // findedvalue.weight = this.lineItemForm.controls.fcn_li_gross_wt.value;
+        // findedvalue.STONEWT = this.lineItemForm.controls.fcn_li_stone_wt.value;
+        // findedvalue.NETWT = this.lineItemForm.controls.fcn_li_net_wt.value;
+        // findedvalue.METAL_RATE = this.lineItemForm.controls.fcn_ad_metal_rate.value;
+        // findedvalue.mkg_amount = this.lineItemForm.controls.fcn_ad_metal_amount.value;
+        // findedvalue.STONE_RATEFC = this.lineItemForm.controls.fcn_ad_stone_rate.value;
+        // findedvalue.stone_amt = this.lineItemForm.controls.fcn_ad_stone_amount.value;
+        // findedvalue.making_amt = this.lineItemForm.controls.fcn_li_rate.value;
+        // findedvalue.mkg_amount = this.lineItemForm.controls.fcn_li_total_amount.value;
+        // findedvalue.DISCOUNT = this.lineItemForm.controls.fcn_li_discount_percentage.value;
+        // findedvalue.DISCOUNTVALUEFC = this.lineItemForm.controls.fcn_li_discount_amount.value;
+        // findedvalue.TOTALWITHVATFC = this.lineItemForm.controls.fcn_li_gross_amount.value;
+        // findedvalue.net_amount = this.lineItemForm.controls.fcn_li_net_amount.value;
+        // findedvalue.IGST_AMOUNTCC = this.lineItemForm.controls.fcn_li_tax_amount.value;
+        // findedvalue.IGST_PER = this.lineItemForm.controls.fcn_li_tax_percentage.value;
+
+        // let data = this.sales_returns_items.findIndex((x: any) => x.SRNO == ele.SRNO);
+        // console.log(data);
+        // this.sales_returns_items[data] =findedvalue;
+
+      }else{
+        _total_amt += Number(ele.NETVALUEFC);
+        _tax_amt += Number(ele.tax_amount);
+        _gross_total = Number(_total_amt + _tax_amt);
+        _sales_return += Number(ele.slsReturn);
+        _net_total = _gross_total - _sales_return;
+        _total_pcs += Number(ele.pcs);
+        _total_weight += Number(ele.weight);
+        _pure_wt += Number(ele.pure_wt);
+        _metal_amt += Number (ele.metal_amt);
+        _stone_amt += Number(ele.stone_amt);
+        _purity_diff += Number(ele.PUDIFF);
+        _stone_diff += Number(ele.STONEDIFF);
+        _disc_value_fc += Number(ele.DISCOUNTVALUEFC);
+        _disc_value_cc += Number(ele.DISCOUNTVALUECC);
+        _net_val_fc += Number(ele.NETVALUEFC);
+        _net_val_cc += Number(ele.NETVALUECC);
+        _vat_lc += Number(ele.VAT_AMOUNTLC);
+        _vat_fc += Number(ele.VAT_AMOUNTFC);
+        _igst_cc += Number(ele.IGST_AMOUNTCC);
+
+        // let findedvalue=this.postDetail.find(item=>item.SRNO === ele.SRNO)
+        // findedvalue.DIVISION_CODE = this.lineItemForm.controls.fcn_li_division.value;
+        // findedvalue.description = this.lineItemForm.controls.fcn_li_item_desc.value;
+        // findedvalue.stock_code = this.lineItemForm.controls.fcn_li_item_code.value;
+        // findedvalue.pcs = this.lineItemForm.controls.fcn_li_pcs.value;
+        // findedvalue.weight = this.lineItemForm.controls.fcn_li_gross_wt.value;
+        // findedvalue.STONEWT = this.lineItemForm.controls.fcn_li_stone_wt.value;
+        // findedvalue.NETWT = this.lineItemForm.controls.fcn_li_net_wt.value;
+        // findedvalue.METAL_RATE = this.lineItemForm.controls.fcn_ad_metal_rate.value;
+        // findedvalue.mkg_amount = this.lineItemForm.controls.fcn_ad_metal_amount.value;
+        // findedvalue.STONE_RATEFC = this.lineItemForm.controls.fcn_ad_stone_rate.value;
+        // findedvalue.stone_amt = this.lineItemForm.controls.fcn_ad_stone_amount.value;
+        // findedvalue.making_amt = this.lineItemForm.controls.fcn_li_rate.value;
+        // findedvalue.mkg_amount = this.lineItemForm.controls.fcn_li_total_amount.value;
+        // findedvalue.DISCOUNT = this.lineItemForm.controls.fcn_li_discount_percentage.value;
+        // findedvalue.DISCOUNTVALUEFC = this.lineItemForm.controls.fcn_li_discount_amount.value;
+        // findedvalue.TOTALWITHVATFC = this.lineItemForm.controls.fcn_li_gross_amount.value;
+        // findedvalue.net_amount = this.lineItemForm.controls.fcn_li_net_amount.value;
+        // findedvalue.IGST_AMOUNTCC = this.lineItemForm.controls.fcn_li_tax_amount.value;
+        // findedvalue.IGST_PER = this.lineItemForm.controls.fcn_li_tax_percentage.value;
+
+        // let data = this.sales_returns_items.findIndex((x: any) => x.SRNO == ele.SRNO);
+        // console.log(data);
+        // this.sales_returns_items[data] =findedvalue;
+        
       }
+      this.prnt_inv_total_pcs =_total_pcs;
+      this.prnt_inv_total_weight = _total_weight;
+      this.prnt_inv_total_gross_amt= _mkg_amount + _metal_amt + _stone_amt ;//_total_amt;
+      this.order_items_total_tax= _tax_amt;
+      this.order_items_total_net_amount = _total_amt;
+      this.order_items_total_gross_amount =_total_amt;
+      this.order_items_total_net_amount = _total_amt;
+      this.invReturnSalesTotalNetTotal =_sales_return;
+      this.netTotal = _net_total;
+      this.making_amount = _mkg_amount;
+      this.pure_weight = _pure_wt;
+      this.metal_value = _metal_amt;
+      this.stone_value = _stone_amt;
+      this.purity_difference = _purity_diff;
+      this.stone_difference = _stone_diff;
+      this.total_disc_fc = _disc_value_fc;
+      this.total_disc_cc = _disc_value_cc;
+      this.total_net_value_fc = _net_val_fc;
+      this.total_net_value_cc = _net_val_cc;
+      this.total_vat_fc = _vat_fc;
+      this.total_vat_lc = _vat_lc;
+      this.order_items_total_tax = _igst_cc;
+      this.netTotal = _total_amt;
+      // this.Receipt_total = _total_amt;
+
+      
+
 
   });
-
-
-
-
+  console.log("postdetailsData" ,this.postDetail);
+  console.log("sales return",this.sales_returns_items)
 
     Object.values(this.lineItemForm.controls).forEach(control => {
       control.markAsTouched();
@@ -14464,7 +14755,7 @@ changeGiftVoucherAmount(data:any){
       this.modalReferenceUserAuth = this.modalService.open(
         this.paramGrid,
         {
-          size: 'lg',
+          size: 'xl',
           ariaLabelledBy: 'modal-basic-title',
           backdrop: false,
         }
@@ -14496,7 +14787,7 @@ changeGiftVoucherAmount(data:any){
       this.modalReferenceUserAuth = this.modalService.open(
         this.userAuthModal,
         {
-          size: "lg",
+          size: "xl",
           backdrop: false,
           keyboard: false,
           windowClass: "modal-full-width",
@@ -14554,7 +14845,7 @@ changeGiftVoucherAmount(data:any){
     this.modalRefePendingSalesEstimation = this.modalService.open(
       this.salesEstimationModal,
       {
-        size: "lg",
+        size: "xl",
         backdrop: true,
         keyboard: false,
         windowClass: "modal-full-width",
@@ -14624,7 +14915,7 @@ changeGiftVoucherAmount(data:any){
     this.modalRefePendingSalesOrder = this.modalService.open(
       this.pendingSalesOrderModal,
       {
-        size: 'lg',
+        size: 'xl',
         ariaLabelledBy: 'modal-basic-title',
         backdrop: false,
       }
@@ -14647,7 +14938,7 @@ changeGiftVoucherAmount(data:any){
     this.modalReferenceUserAttachment = this.modalService.open(
       this.userAttachmentModal,
       {
-        size: "lg",
+        size: "xl",
         backdrop: true,
         keyboard: false,
         windowClass: "modal-full-width",
