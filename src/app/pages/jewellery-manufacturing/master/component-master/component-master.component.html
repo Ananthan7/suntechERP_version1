@@ -412,7 +412,7 @@
                                     </dxi-column>
                                     <dxi-column dataField="D_REMARKS" caption="Remarks" cellTemplate="remarktemp">
                                     </dxi-column>
-                                    <dxi-column dataField="POINTER_WT" caption="POINTER WT"
+                                    <dxi-column dataField="POINTER_WT" caption="Pointer Wt"
                                         cellTemplate="pointerWttemp">
                                     </dxi-column>
                                     <dxi-column dataField="EXT_Color" caption="Ext.Color" cellTemplate="extColortemp">
@@ -459,7 +459,7 @@
                                     </div>
 
                                     <div *dxTemplate="let data of 'pcstemp'">
-                                        <input type="text" (change)="pcstemp($event,data)" class="text-right"
+                                        <input type="number" (change)="pcstemp($event,data)" class="text-right"
                                             [value]="data.value" style="width: 100%;" required />
                                     </div>
 
@@ -475,7 +475,7 @@
                                 </div> -->
 
                                     <div *dxTemplate="let data of 'wtCttemp'">
-                                        <input type="text" (change)="wtCtt($event,data)" class="text-right"
+                                        <input type="number" (change)="wtCtt($event,data)" class="text-right"
                                             [value]="data.value" style="width: 100%;" required />
                                     </div>
 
