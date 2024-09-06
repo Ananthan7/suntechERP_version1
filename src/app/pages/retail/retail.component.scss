@@ -1,0 +1,32 @@
+.menucards {
+    height: 150px;
+    background: transparent;
+    border: 1px solid #3599CC;
+    border-radius: 10px;
+    text-align: center;
+    color: #369;
+    font-family: Mulish, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin: 10px;
+    cursor: pointer;
+    transition: .5s ease-in-out;
+}
+
+.menucards:hover {
+    transform: scale(1.05);
+}
+
+.menuname {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.numeric-value {
+    font-size: 36px;
+    font-weight: bold; 
+    color: #369;
+    margin-top: 5px; 
+}
