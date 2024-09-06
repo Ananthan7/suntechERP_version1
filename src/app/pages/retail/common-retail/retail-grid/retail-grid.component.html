@@ -6,7 +6,7 @@
     <div class="table_header">
         <div class="d-flex">
             <button class="btn btn-white add-btn" (click)="addButtonClick()">
-                <i class="fa fa-plus"></i> Create New Template
+                <i class="fa fa-plus"></i> {{ templateViewForReports ? 'Create New Template' : 'Add' }}
             </button>
             <div class="icons_wrap">
                 <!-- <a class="pe-2">

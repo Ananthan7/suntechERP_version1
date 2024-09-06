@@ -35,7 +35,7 @@ export class ProductionStockDetailComponent implements OnInit {
   HEADERDETAILS: any;
   viewMode: boolean = false;
   editMode: boolean = false;
-  FORM_VALIDATER:any;
+  FORM_VALIDATER: any;
   priceCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -126,7 +126,7 @@ export class ProductionStockDetailComponent implements OnInit {
   productionStockFrom: FormGroup = this.formBuilder.group({
     FLAG: [''],
     stockCode: [''],
-    tagLines: [''],
+    TAGLINES: [''],
     grossWt: [''],
     SETTING_CHRG: [''],
     SETTING_ACCODE: [''],
@@ -205,27 +205,27 @@ export class ProductionStockDetailComponent implements OnInit {
         break;
     }
   }
-  setChargeAccode(param: string){
+  setChargeAccode(param: string) {
     return this.commonService.getCompanyParamValue(param) || ''
   }
-  weightPcsCalculate(weight:any,pcs:any){
-    let wt = this.emptyToZero(weight)>0 ? this.emptyToZero(weight) / pcs : 0
-    return this.commonService.setCommaSerperatedNumber(wt,'METAL')
+  weightPcsCalculate(weight: any, pcs: any) {
+    let wt = this.emptyToZero(weight) > 0 ? this.emptyToZero(weight) / pcs : 0
+    return this.commonService.setCommaSerperatedNumber(wt, 'METAL')
   }
   setStockCodeGrid() {
     let nTotPcs = this.emptyToZero(this.DETAILSCREEN_DATA.JOB_PCS)
     for (let i = 0; i < nTotPcs; i++) {
       this.stockCodeDataList.push({
         SRNO: i + 1,
-        STOCK_CODE: `${this.DETAILSCREEN_DATA.PREFIX}${this.DETAILSCREEN_DATA.PREFIXNO}`,
+        STOCK_CODE: `${this.DETAILSCREEN_DATA.PREFIX}${this.emptyToZero(this.DETAILSCREEN_DATA.PREFIX_LASTNO) + i}`,
         DESIGN_CODE: this.DETAILSCREEN_DATA.DESIGN_CODE,
         COST_CODE: this.DETAILSCREEN_DATA.COST_CODE,
         KARAT_CODE: this.DETAILSCREEN_DATA.KARAT_CODE,
-        GROSS_WT: this.weightPcsCalculate(this.DETAILSCREEN_DATA.GROSS_WT,nTotPcs),
+        GROSS_WT: this.weightPcsCalculate(this.DETAILSCREEN_DATA.GROSS_WT, nTotPcs),
         METAL_PCS: 1,
-        METAL_WT: this.weightPcsCalculate(this.DETAILSCREEN_DATA.METAL_WT,nTotPcs),
-        STONE_PCS: this.weightPcsCalculate(this.DETAILSCREEN_DATA.STONE_PCS,nTotPcs),
-        STONE_WT: this.weightPcsCalculate(this.DETAILSCREEN_DATA.STONE_WT,nTotPcs),
+        METAL_WT: this.weightPcsCalculate(this.DETAILSCREEN_DATA.METAL_WT, nTotPcs),
+        STONE_PCS: this.weightPcsCalculate(this.DETAILSCREEN_DATA.STONE_PCS, nTotPcs),
+        STONE_WT: this.weightPcsCalculate(this.DETAILSCREEN_DATA.STONE_WT, nTotPcs),
         JOB_NUMBER: this.DETAILSCREEN_DATA.JOB_NUMBER,
         UNQ_JOB_ID: this.DETAILSCREEN_DATA.UNQ_JOB_ID,
         DIVCODE: this.DETAILSCREEN_DATA.DIVCODE,
@@ -234,7 +234,7 @@ export class ProductionStockDetailComponent implements OnInit {
       })
     }
     this.stockCodeDataList.forEach((item: any, index: number) => item.SRNO = index + 1)
-    this.productionStockFrom.controls.stockCode.setValue(`${this.DETAILSCREEN_DATA.PREFIX}${this.DETAILSCREEN_DATA.PREFIXNO}`)
+    this.productionStockFrom.controls.stockCode.setValue(`${this.DETAILSCREEN_DATA.PREFIX}${this.DETAILSCREEN_DATA.PREFIX_LASTNO}`)
     this.productionStockFrom.controls.SETTING_ACCODE.setValue(this.setChargeAccode('SETTINGCHGAC'))
     this.productionStockFrom.controls.POLISH_ACCODE.setValue(this.setChargeAccode('POLISHINGCHGAC'))
     this.productionStockFrom.controls.RHODIUM_ACCODE.setValue(this.setChargeAccode('RODIUMCHGAC'))
@@ -258,14 +258,32 @@ export class ProductionStockDetailComponent implements OnInit {
         this.commonService.closeSnackBarMsg()
         if (result.status == "Success" && result.dynamicData[0]) {
           this.componentDataList = result.dynamicData[0]
+          let metalValue: number = 0
+          let stoneValue: number = 0
+          let wastage: number = 0
+          let toatalLabour: number = 0
+          let labourCharge: number = 0
+          let settingCharge: number = 0
           this.componentDataList.forEach((item: any, index: number) => {
             item.SRNO = index + 1
+            labourCharge += item.LAB_RATE
+            toatalLabour += item.LAB_RATE
+            if (item.METALSTONE = 'M') {
+              metalValue += item.GROSS_WT
+            }else{
+              stoneValue += item.GROSS_WT
+              settingCharge += item.LAB_RATE
+            }
           })
-          this.groupBomDetailsData()
-          this.setFormDecimal('SETTING_CHRG', 0, 'AMOUNT')
+          this.groupComponentDetails()
+          this.generateTagline() 
+          this.setFormDecimal('metalValue', metalValue, 'AMOUNT')
+          this.setFormDecimal('stockValue', stoneValue, 'AMOUNT')
+          this.setFormDecimal('toatalLabour', toatalLabour, 'AMOUNT')
+          this.setFormDecimal('SETTING_CHRG', settingCharge, 'AMOUNT')
+          this.setFormDecimal('LABOUR_CHRG', labourCharge, 'AMOUNT')
           this.setFormDecimal('POLISH_CHRG', 0, 'AMOUNT')
           this.setFormDecimal('RHODIUM_CHRG', 0, 'AMOUNT')
-          this.setFormDecimal('LABOUR_CHRG', 0, 'AMOUNT')
           this.setFormDecimal('MISC_CHRG', 0, 'AMOUNT')
           this.setFormDecimal('price1fc', 0, 'AMOUNT')
           this.setFormDecimal('price2fc', 0, 'AMOUNT')
@@ -281,7 +299,54 @@ export class ProductionStockDetailComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
-  groupBomDetailsData() {
+  generateTagline() {
+    let postData = {
+      "SPID": "116",
+      "parameter": {
+        'strUnq_Job_Id': this.commonService.nullToString(this.DETAILSCREEN_DATA.UNQ_JOB_ID),
+        'strProcess_Code': this.commonService.nullToString(this.DETAILSCREEN_DATA.PROCESS_CODE),
+        'strWorker_Code': this.commonService.nullToString(this.DETAILSCREEN_DATA.WORKER_CODE),
+      }
+    }
+    this.commonService.showSnackBarMsg('MSG81447')
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        this.commonService.closeSnackBarMsg()
+        if (result.status == "Success" && result.dynamicData[0]) {
+          let strBrilliantTagLines: string = ''
+          let dblMetal: number = 0
+          let metalColor: string = ''
+          this.componentDataList.forEach((item: any, index: number) => {
+            item.SRNO = index + 1
+            if (item.METALSTONE = 'M') {
+              dblMetal += item.GROSS_WT.toFixed(this.commonService.mQtyDecimals)
+              metalColor = this.commonService.nullToString(this.DETAILSCREEN_DATA.METAL_COLOR)
+              strBrilliantTagLines = this.DETAILSCREEN_DATA.KARAT_CODE + "K" + metalColor + "-" + dblMetal + " GMS";
+            }
+          })
+          // stone detail 
+          if (result.status == "Success" && result.dynamicData[1]) {
+            let stonedata: any[] = result.dynamicData[1] || []
+            let size = ''
+            stonedata.forEach((item: any, index: number) => {
+              strBrilliantTagLines += item.SHAPE.toString()
+              size = item.SIZE.toString();
+            })
+            if (size != '') strBrilliantTagLines += "SIZE " + size
+            this.setFormNullToString('TAGLINES', strBrilliantTagLines)
+          }
+        
+        } else {
+          this.commonService.toastErrorByMsgId('MSG1747')
+        }
+      }, err => {
+        this.commonService.closeSnackBarMsg()
+        this.commonService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
+   
+  }
+  groupComponentDetails() {
     let result: any[] = []
     this.componentDataList.reduce((res: any, value: any) => {
       if (!res[value.DIVCODE]) {
@@ -304,7 +369,7 @@ export class ProductionStockDetailComponent implements OnInit {
     })
     this.componentGroupedList = result
   }
-  emptyToZero(value: any){
+  emptyToZero(value: any) {
     return this.commonService.emptyToZero(value)
   }
   priceOneCodeSelected(e: any) {
@@ -453,7 +518,7 @@ export class ProductionStockDetailComponent implements OnInit {
       "METAL_LABAMTLC": 0,
       "METAL_LABACCODE": "",
       "SUPPLIER_REF": this.commonService.nullToString(this.productionStockFrom.value.totalLabour),
-      "TAGLINES": "",
+      "TAGLINES": this.commonService.nullToString(this.productionStockFrom.value.TAGLINES),
       "SETTING_CHRG": this.commonService.emptyToZero(this.productionStockFrom.value.SETTING_CHRG),
       "POLISH_CHRG": this.commonService.emptyToZero(this.productionStockFrom.value.POLISH_CHRG),
       "RHODIUM_CHRG": this.commonService.emptyToZero(this.productionStockFrom.value.RHODIUM_CHRG),
@@ -492,7 +557,7 @@ export class ProductionStockDetailComponent implements OnInit {
     //STOCK_FORM_DETAILS is only saving to API
     stockDetailToSave.STOCK_FORM_DETAILS = this.STOCK_FORM_DETAILS;
     stockDetailToSave.STOCK_COMPONENT_GRID = this.STRNMTLdataSetToSave;
-    
+
     this.saveDetail.emit(stockDetailToSave);
   }
 

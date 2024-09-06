@@ -217,7 +217,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
     DESIGN_CODE: [''],
     DESIGN_TYPE: [''],
     DESIGN_DESCRIPTION: [''],
-    totalpcs: [''],
+    TOTAL_PCS: [''],
     JOB_PCS: [''],
     LOCTYPE_CODE: [''],
     UNQ_DESIGN_ID: [''],
@@ -229,7 +229,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
     STONE_WT: [''],
     price1: [''],
     PREFIX: [''],
-    PREFIX_DESC: [''],
+    PREFIX_LASTNO: [''],
     PREFIXNO: [''],
     OTHER_STONE: [''],
     price2: [''],
@@ -351,6 +351,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
     this.setFormNullToString('PROCESS_CODE', parentDetail.PROCESS_CODE)
     this.setFormNullToString('PROCESS_NAME', parentDetail.PROCESS_NAME)
     this.setFormNullToString('STOCK_CODE', parentDetail.STOCK_CODE)
+    this.setFormNullToString('PREFIX_LASTNO', PRODUCTION_FORMDETAILS.PREFIX_LASTNO)
     //setInitialLoadValue
     this.setFormNullToString('UNQ_DESIGN_ID', parentDetail.UNQ_DESIGN_ID)
     this.setFormNullToString('JOB_SO_NUMBER', parentDetail.JOB_SO_NUMBER)
@@ -359,13 +360,13 @@ export class ProductionEntryDetailsComponent implements OnInit {
     this.setFormNullToString('METALSTONE', parentDetail.METALSTONE)
     this.setFormNullToString('PURE_WT', parentDetail.PURE_WT)
     this.setFormNullToString('KARAT_CODE', parentDetail.KARAT_CODE)
-    this.setFormNullToString('totalpcs', parentDetail.PCS)
-    this.setFormDecimal('METAL_WT',parentDetail.METAL_WT, 'METAL')
-    this.setFormDecimal('STONE_WT',parentDetail.STONE_WT, 'STONE')
-    this.setFormDecimal('GROSS_WT',parentDetail.GROSS_WT, 'METAL')
-    this.setFormDecimal('PUREWT',parentDetail.PUREWT, 'METAL')
-    this.setFormDecimal('PURITY',parentDetail.PURITY, 'PURITY')
-    this.setFormDecimal('Job_Purity',parentDetail.PURITY, 'PURITY')
+    this.setFormNullToString('TOTAL_PCS', parentDetail.PCS)
+    this.setFormDecimal('METAL_WT', parentDetail.METAL_WT, 'METAL')
+    this.setFormDecimal('STONE_WT', parentDetail.STONE_WT, 'STONE')
+    this.setFormDecimal('GROSS_WT', parentDetail.GROSS_WT, 'METAL')
+    this.setFormDecimal('PUREWT', parentDetail.PUREWT, 'METAL')
+    this.setFormDecimal('PURITY', parentDetail.PURITY, 'PURITY')
+    this.setFormDecimal('Job_Purity', parentDetail.PURITY, 'PURITY')
 
     if (this.designType == 'METAL') {
       // this.onLoadMetalDetail(parentDetail)
@@ -413,7 +414,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
   }
   prefixCodeSelected(e: any) {
     this.productiondetailsFrom.controls.PREFIX.setValue(e.PREFIX_CODE);
-    this.productiondetailsFrom.controls.PREFIX_DESC.setValue(e.DESCRIPTION);
+    this.prefixCodeValidate()
   }
   price1CodeSelected(e: any) {
     this.productiondetailsFrom.controls.price1.setValue(e.PRICE_CODE);
@@ -472,6 +473,21 @@ export class ProductionEntryDetailsComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
+  prefixCodeValidate() {
+    let API = 'PrefixMaster/GetPrefixMasterDetail/' + this.productiondetailsFrom.value.PREFIX
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        this.commonService.closeSnackBarMsg()
+        if (result.response) {
+          let data = result.response;
+          this.productiondetailsFrom.controls.PREFIX_LASTNO.setValue(data.LAST_NO)
+        }
+      }, err => {
+        this.commonService.closeSnackBarMsg()
+        this.commonService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
+  }
 
   /**USE: jobnumber validate API call */
   jobNumberValidate(event: any) {
@@ -505,8 +521,9 @@ export class ProductionEntryDetailsComponent implements OnInit {
             this.setFormNullToString('METALLAB_TYPE', data[0].METALLAB_TYPE)
             this.setFormNullToString('DESIGN_TYPE', data[0].DESIGN_TYPE?.toUpperCase())
             this.setFormNullToString('METAL_STOCK_CODE', data[0].METAL_STOCK_CODE)
-            this.setFormNullToString('SUPPLIER_REF', data[0].DESIGN_CODE + data[0].METAL_COLOR)
+            this.setFormNullToString('SUPPLIER_REF', data[0].DESIGN_CODE + "-" + data[0].METAL_COLOR)
             this.setFormNullToString('PREFIX', data[0].PREFIX)
+            this.setFormNullToString('PREFIX_LASTNO', data[0].LAST_NO)
             this.setFormNullToString('PREFIXNO', data[0].PREFIX_NUMBER)
             this.setFormNullToString('COST_CODE', data[0].COST_CODE)
             this.setFormNullToString('PART_CODE', data[0].DESIGN_CODE)
@@ -554,28 +571,41 @@ export class ProductionEntryDetailsComponent implements OnInit {
           this.setFormNullToString('METALSTONE', data[0].METALSTONE)
           this.setFormNullToString('PURE_WT', data[0].PURE_WT)
           this.setFormNullToString('KARAT_CODE', data[0].KARAT)
-          this.setFormNullToString('totalpcs', data[0].PCS)
-          this.setFormDecimal('METAL_WT',data[0].METAL, 'METAL')
-          this.setFormDecimal('STONE_WT',data[0].STONE, 'STONE')
-          this.setFormDecimal('GROSS_WT',data[0].METAL, 'METAL')
-          this.setFormDecimal('PUREWT',data[0].PUREWT, 'METAL')
-          this.setFormDecimal('PURITY',data[0].PURITY, 'PURITY')
-          this.setFormDecimal('Job_Purity',data[0].PURITY, 'PURITY')
+          this.setFormNullToString('TOTAL_PCS', data[0].PCS)
+          this.setFormDecimal('METAL_WT', data[0].METAL, 'METAL')
+          this.setFormDecimal('STONE_WT', data[0].STONE, 'STONE')
+          this.setFormDecimal('GROSS_WT', data[0].METAL, 'METAL')
+          this.setFormDecimal('PUREWT', data[0].PUREWT, 'METAL')
+          this.setFormDecimal('PURITY', data[0].PURITY, 'PURITY')
+          this.setFormDecimal('Job_Purity', data[0].PURITY, 'PURITY')
           this.setFormDecimal('STONE_PCS', 0, '')
           this.setFormDecimal('OTHER_STONE', 0, 'STONE')
           this.setFormDecimal('PURITY_DIFF', 0, 'METAL')
-          
+
           this.FORM_VALIDATER = this.productiondetailsFrom.value
-          this.pendingProcessValidate()
-          this.fillStoneDetails()
+          if(data[0].PROCESS?.toUpperCase() != 'FINAL') this.pendingProcessValidate()
+          // this.fillStoneDetails()
         } else {
           this.commonService.toastErrorByMsgId('MSG1747');
         }
+        this.setPendingPcs(result)
       }, err => {
         this.commonService.closeSnackBarMsg();
         this.commonService.toastErrorByMsgId('MSG1531');
       })
     this.subscriptions.push(Sub)
+  }
+  setPendingPcs(result:any){
+    if (result.dynamicData && result.dynamicData[1].length > 0) {
+      let PCSdata = result.dynamicData[1] || []
+      let TxtPendingPcs = 0
+      if (this.emptyToZero(PCSdata.PENDING_PCS) > 0) {
+        TxtPendingPcs = this.emptyToZero(this.productiondetailsFrom.value.TOTAL_PCS) - this.emptyToZero(PCSdata.PENDING_PCS);
+      } else {
+        TxtPendingPcs = this.emptyToZero(this.productiondetailsFrom.value.TOTAL_PCS);
+      }
+      this.setFormDecimal('PENDING_PCS', TxtPendingPcs, '')
+    }
   }
   /**USE: subjobnumber validate API call*/
   pendingProcessValidate(event?: any) {
@@ -586,6 +616,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
         'UNQ_DESIGN_ID': this.commonService.nullToString(this.productiondetailsFrom.value.UNQ_DESIGN_ID),
         'BRANCHCODE': this.commonService.nullToString(this.branchCode),
         'VOCDATE': this.commonService.nullToString(this.productiondetailsFrom.value.VOCDATE),
+        'JobNo': this.commonService.nullToString(this.productiondetailsFrom.value.JOB_NUMBER),
       }
     }
     this.commonService.showSnackBarMsg('MSG81447')//loading msg
@@ -606,11 +637,27 @@ export class ProductionEntryDetailsComponent implements OnInit {
         } else {
           this.commonService.toastErrorByMsgId('MSG1747');
         }
+        this.setVendorRef(result) //supplier ref 
       }, err => {
         this.commonService.closeSnackBarMsg();
         this.commonService.toastErrorByMsgId('MSG1531');
       })
     this.subscriptions.push(Sub)
+  }
+  setVendorRef(result:any){
+    if (result.dynamicData && result.dynamicData[1].length > 0) {
+      let dtSubCategory: any[] = result.dynamicData[1] || []
+      if (dtSubCategory?.length > 0) {
+        let strSupplierRef = this.productiondetailsFrom.value.SUPPLIER_REF
+        for (let i = 0; i < dtSubCategory.length; i++) {
+          strSupplierRef = strSupplierRef + dtSubCategory[i]["SUBCATEGORY_CODE"];
+        }
+        if (strSupplierRef.toString().trim().length > 50) {
+          strSupplierRef = strSupplierRef.toString().trim().substring(0, 50);
+        }
+        this.productiondetailsFrom.controls.SUPPLIER_REF.setValue(strSupplierRef)
+      }
+    }
   }
   /**USE: fillStoneDetails grid data */
   private fillStoneDetails(): void {
@@ -794,7 +841,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
     this.tableData = []
   }
   /**use: validate all lookups to check data exists in db */
-  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, formControlName: string) {
     LOOKUPDATA.SEARCH_VALUE = event.target.value
     if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
     let param = {
@@ -808,10 +855,11 @@ export class ProductionEntryDetailsComponent implements OnInit {
         let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
         if (data.length == 0) {
           this.commonService.toastErrorByMsgId('MSG1531')
-          this.productiondetailsFrom.controls[FORMNAME].setValue('')
+          this.productiondetailsFrom.controls[formControlName].setValue('')
           LOOKUPDATA.SEARCH_VALUE = ''
           return
         }
+        if(formControlName == 'PREFIX') this.prefixCodeValidate()
       }, err => {
         this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
       })

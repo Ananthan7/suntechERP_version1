@@ -20,7 +20,7 @@
             </div>
             <div class="row mb-2">
                 <div class="col-md-12">
-                    <dx-data-grid #dataGrid id="gridContainer" keyExpr="VOCNO" [showBorders]="true"
+                    <dx-data-grid #dataGrid id="gridContainer" keyExpr="id"  [showBorders]="true"
                         [dataSource]="pcrSelectionData" (onSelectionChanged)="onSelectionChanged($event)">
                         <dxo-paging [enabled]="false"></dxo-paging>
                         <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
