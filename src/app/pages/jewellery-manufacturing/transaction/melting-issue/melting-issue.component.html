@@ -74,7 +74,7 @@
                             <div class="col-md-4">
                                 <mat-form-field appearance="outline" style="width: 100%;">
                                     <input type="text" matInput formControlName="jobno" maxlength="12"
-                                        [readonly]="viewMode" class="text-right"
+                                        [readonly]="viewMode" class="left"
                                         (keydown)="lookupKeyPress($event,'jobno')"
                                         (focusout)="jobNumberValidate($event)" />
                                     <master-search class="masterSearch" [MasterSearchData]="jobnoCodeData"

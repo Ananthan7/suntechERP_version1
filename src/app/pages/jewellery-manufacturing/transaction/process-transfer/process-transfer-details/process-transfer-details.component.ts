@@ -761,16 +761,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
   setSubJobSpPostData(form: any) {
-    if (this.designType.toUpperCase() == 'DIAMOND') {
-      let diamondPostData = {
-        "SPID": "088",
-        "parameter": {
-          'StrSubJobNo': this.commonService.nullToString(form.UNQ_JOB_ID),
-          'StrBranchCode': this.commonService.nullToString(this.branchCode),
-        }
-      }
-      return diamondPostData
-    } else {
+    if (this.designType.toUpperCase() == 'METAL') {
       let metalSubjobData = {
         "SPID": "040",
         "parameter": {
@@ -780,6 +771,15 @@ export class ProcessTransferDetailsComponent implements OnInit {
         }
       }
       return metalSubjobData
+    } else {
+      let diamondPostData = {
+        "SPID": "088",
+        "parameter": {
+          'StrSubJobNo': this.commonService.nullToString(form.UNQ_JOB_ID),
+          'StrBranchCode': this.commonService.nullToString(this.branchCode),
+        }
+      }
+      return diamondPostData
     }
   }
   subJobDetailData: any[] = []

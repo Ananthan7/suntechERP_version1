@@ -795,20 +795,32 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
     }
   }
 
-  formatDateToISO(date: string | Date): string {
-    let parsedDate: Date;
-
-    if (typeof date === "string") {
-      parsedDate = new Date(date + "Z");
+  formatDateToISO(date: string | Date | any): string {
+    let parsedDate: Date | any;
+  
+    if (date._isAMomentObject) {
+      if (!date.isValid()) {
+        throw new Error("Invalid date (moment object)");
+      }
+      parsedDate = date;  
+    } else if (typeof date === "string") {
+      parsedDate = new Date(date);
+      if (isNaN(parsedDate.getTime())) {
+        throw new Error("Invalid date format (string)");
+      }
     } else {
       parsedDate = date;
     }
-
-    if (isNaN(parsedDate.getTime())) {
-      throw new Error("Invalid date");
+  
+    if (parsedDate instanceof Date && isNaN(parsedDate.getTime())) {
+      throw new Error("Invalid date (JS Date object)");
     }
-
-    return parsedDate.toISOString();
+  
+    if (parsedDate.toISOString && parsedDate.toISOString() === "1900-01-01T00:00:00.000Z") {
+      return "";
+    }
+  
+    return date._isAMomentObject ? date.toISOString() : parsedDate.toISOString();
   }
 
   formSubmit() {
