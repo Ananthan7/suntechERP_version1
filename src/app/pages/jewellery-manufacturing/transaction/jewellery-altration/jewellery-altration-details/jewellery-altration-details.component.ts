@@ -279,9 +279,9 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
     }
   }
   getImageData() {
-    let API = `Image/${this.jewelleryaltrationdetailsFrom.value.stockcode}`
+    let API = `RetailSalesItemImage/${this.jewelleryaltrationdetailsFrom.value.stockcode}`
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
-      .subscribe(([result]) => {
+      .subscribe((result) => {
         if (result.response) {
           let data = result.response
           console.log(data,'picture')
