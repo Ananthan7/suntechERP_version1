@@ -86,7 +86,7 @@
                     <dxo-paging [enabled]="false"></dxo-paging>
                     <dxo-editing mode="cell" [allowUpdating]="true">
                     </dxo-editing>
-                    <dxo-selection mode="multiple" showCheckBoxesMode="always" [selectAllMode]="'allPages'"></dxo-selection>
+                    <dxo-selection mode="multiple" showCheckBoxesMode="always"></dxo-selection>
 
                     <dxi-column alignment="center" dataField="VOCTYPE"></dxi-column>
                     <dxi-column alignment="left" dataField="DESCRIPTION"></dxi-column>
@@ -100,7 +100,7 @@
             <div class="popup-content">
                 <div class="form-group">
                   <label for="T_Name">Name:</label>
-                  <input type="text" id="T_Name" class="form-control" />
+                  <input type="text" id="T_Name" class="form-control" formControlName="templateName"/>
                 </div>
               </div>
         </dx-popup>
@@ -136,7 +136,7 @@
             <i class="fa fa-print"></i>
                 PRINT
           </button> -->
-          <div class="icon-label-container" matTooltip="Take a print">
+          <div class="icon-label-container" matTooltip="Take a print" (click)="print()">
             <i class="fa fa-print fa-2x" style="color: #031082;"></i>
             <span class="label">Print</span>
           </div>
