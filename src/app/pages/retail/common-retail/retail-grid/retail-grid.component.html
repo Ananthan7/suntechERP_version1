@@ -51,45 +51,51 @@
    <div class="row">
         <div class="col-md-12 mx-2" *ngIf="templateViewForReports">
             
-            <dx-data-grid 
-                [dataSource]="dataSource"
-                [columns]="columns"
-                [showBorders]="true"
-                [allowColumnResizing]="true"
-                [columnAutoWidth]="true"
-                [filterRow]="{ visible: true }"
-                [paging]="{ pageSize: 10 }"
-                [pager]="{ showPageSizeSelector: true, allowedPageSizes: [5, 10, 20] }">
-
-                <dxo-editing mode="row" [allowUpdating]="true" [allowDeleting]="true" [allowAdding]="true"> </dxo-editing>
-                <dxo-filter-row></dxo-filter-row>
-                <dxo-header-filter></dxo-header-filter>
-                
-               <!-- <dxi-column dataField="Actions" caption="Actions" cellTemplate="cellTemplate">  
-                    <div *dxTemplate="let data of 'cellTemplate'">  
-                        <div class="row mt-1 mx-1" style="margin-right: 1rem !important;">
-                            <div class="icon-label-container">
-                              <i class="fa fa-eye" style="color: #5497b2;"></i>
-                            </div>
-                            <div class="icon-label-container">
-                              <i class="fa fa-print" style="color: #031082;"></i>
-                            </div>
-                            <div class="icon-label-container">
-                              <i class="fa fa-book" style="color: indianred;"></i>
-                            </div>
-                            <div class="icon-label-container">
-                              <i class="fa fa-file-excel" style="color: green;"></i>
-                            </div>
-                            <div class="icon-label-container">
-                              <i class="fa fa-file-pdf" style="color: orangered;"></i>
-                            </div>
-                            <div class="icon-label-container">
-                              <i class="fa fa-envelope" style="color: deepskyblue;"></i>
-                            </div>
-                          </div>
-                    </div>  
-                </dxi-column>   -->
-            </dx-data-grid> 
+          <dx-data-grid 
+          [dataSource]="dataSource"
+          [showBorders]="true"
+          [allowColumnResizing]="true"
+          [columnAutoWidth]="true"
+          [filterRow]="{ visible: true }"
+          [paging]="{ pageSize: 10 }"
+          [pager]="{ showPageSizeSelector: true, allowedPageSizes: [5, 10, 20] }">
+        
+          <dxo-editing mode="row" [allowUpdating]="true" [allowDeleting]="true" [allowAdding]="true"></dxo-editing>
+          <dxo-filter-row></dxo-filter-row>
+          <dxo-header-filter></dxo-header-filter>
+        
+          <dxi-column dataField="ID" caption="ID"></dxi-column>
+          <dxi-column dataField="Name" caption="Name"></dxi-column>
+          <dxi-column dataField="Values" caption="Values"></dxi-column>
+          <dxi-column dataField="Date" caption="From Date" dataType="date"></dxi-column>
+          <dxi-column dataField="Date" caption="To Date" dataType="date"></dxi-column>
+        
+          <dxi-column caption="Actions" cellTemplate="cellTemplate"></dxi-column>
+        
+          <div *dxTemplate="let data of 'cellTemplate'">  
+            <div class="row mt-1 mx-1" style="margin-right: 1rem !important;">
+              <div class="icon-label-container">
+                <i class="fa fa-eye" style="color: #5497b2;"></i>
+              </div>
+              <div class="icon-label-container">
+                <i class="fa fa-print" style="color: #031082;"></i>
+              </div>
+              <div class="icon-label-container">
+                <i class="fa fa-book" style="color: indianred;"></i>
+              </div>
+              <div class="icon-label-container">
+                <i class="fa fa-file-excel" style="color: green;"></i>
+              </div>
+              <div class="icon-label-container">
+                <i class="fa fa-file-pdf" style="color: orangered;"></i>
+              </div>
+              <div class="icon-label-container">
+                <i class="fa fa-envelope" style="color: deepskyblue;"></i>
+              </div>
+            </div>
+          </div>
+        </dx-data-grid>
+        
         </div>
    </div>
 </ng-container>
