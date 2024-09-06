@@ -237,26 +237,28 @@ export class RetailSalesCollectionComponent implements OnInit {
   print(){
     const payload = {
       "SPID": "0114",
-      "FLAG": 'INSERT',
-      "CONTROLS": JSON.stringify({
-          "CONTROL_HEADER": {
-            "USERNAME": localStorage.getItem('username'),
-            "TEMPLATEID": "STATEMENT OF ACCOUNTS",
-            "TEMPLATENAME": this.retailSalesCollection.controls.templateName.value,
-            "FORM_NAME": this.comService.getModuleName(),
-            "ISDEFAULT": 1
-          },
-          "CONTROL_DETAIL": {
-            "STRBRANCHCODES": this.formattedBranchDivisionData,
-            "STRVOCTYPES": this.VocTypeParam,
-            "FROMVOCDATE": this.formatDateToYYYYMMDD(this.retailSalesCollection.value.fromDate),
-            "TOVOCDATE": this.formatDateToYYYYMMDD(this.retailSalesCollection.value.toDate),
-            "USERBRANCH": localStorage.getItem('userbranch'),
-            "USERNAME": localStorage.getItem('username'),
-            "SHOWDATE": this.retailSalesCollection.value.showDateCheckbox ? 0 : 1,
-            "SHOWINVOICE": this.retailSalesCollection.value.showInvoiceCheckbox ? 0 : 1
-          }
-       })
+      "parameter": {
+        "FLAG": 'INSERT',
+        "CONTROLS": JSON.stringify({
+            "CONTROL_HEADER": {
+              "USERNAME": localStorage.getItem('username'),
+              "TEMPLATEID": "STATEMENT OF ACCOUNTS",
+              "TEMPLATENAME": this.retailSalesCollection.controls.templateName.value,
+              "FORM_NAME": this.comService.getModuleName(),
+              "ISDEFAULT": 1
+            },
+            "CONTROL_DETAIL": {
+              "STRBRANCHCODES": this.formattedBranchDivisionData,
+              "STRVOCTYPES": this.VocTypeParam,
+              "FROMVOCDATE": this.formatDateToYYYYMMDD(this.retailSalesCollection.value.fromDate),
+              "TOVOCDATE": this.formatDateToYYYYMMDD(this.retailSalesCollection.value.toDate),
+              "USERBRANCH": localStorage.getItem('userbranch'),
+              "USERNAME": localStorage.getItem('username'),
+              "SHOWDATE": this.retailSalesCollection.value.showDateCheckbox ? 0 : 1,
+              "SHOWINVOICE": this.retailSalesCollection.value.showInvoiceCheckbox ? 0 : 1
+            }
+         })
+      }
     };
     this.dataService.postDynamicAPI('ExecueteSPInterface', payload)
     .subscribe((result: any) => {
