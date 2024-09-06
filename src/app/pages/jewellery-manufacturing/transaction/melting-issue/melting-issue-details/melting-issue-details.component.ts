@@ -304,30 +304,6 @@ export class MeltingIssueDetailsComponent implements OnInit {
       this.comService.toastErrorByMsgId('MSG1680')//Process code is required
       return true
     }
-    if (this.comService.nullToString(form.waxweight) == '') {
-      this.comService.toastErrorByMsgId('Waxweight cannot be empty')//waxweight  is required
-      return true
-    }
-    if (this.comService.emptyToZero(form.lossweight) == 0) {
-      this.comService.toastErrorByMsgId('LossWeight cannot be empty')//lossweight  is required
-      return true
-    }
-    if (this.comService.emptyToZero(form.ticketno) == 0) {
-      this.comService.toastErrorByMsgId('Ticket Number cannot be empty')//Ticket NUmber  is required
-      return true
-    }
-    if (this.comService.emptyToZero(form.lotno) == 0) {
-      this.comService.toastErrorByMsgId('Lot Number cannot be empty')//Lot Number is required
-      return true
-    }
-    if (this.comService.emptyToZero(form.barno) == 0) {
-      this.comService.toastErrorByMsgId('Bar Number cannot be empty')//Bar Number is required
-      return true
-    }
-    if (this.comService.emptyToZero(form.silver) == 0) {
-      this.comService.toastErrorByMsgId('Silver cannot be empty')//Silver is required
-      return true
-    }
     return false
   }
   /**use: to save data to grid*/

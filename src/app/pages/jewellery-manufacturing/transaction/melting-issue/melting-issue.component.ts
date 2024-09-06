@@ -1099,14 +1099,15 @@ export class MeltingIssueComponent implements OnInit {
         if (result.status == "Success" && result.dynamicData[0]) {
           let data = result.dynamicData[0]
           if (data[0] && data[0].UNQ_JOB_ID != '') {
+            // this.overlayjobNoSearch.closeOverlayPanel()
             this.jobNumberDetailData = data
             console.log(data, 'data')
             this.meltingIssueFrom.controls.subjobno.setValue(data[0].UNQ_JOB_ID)
             this.meltingIssueFrom.controls.subJobDescription.setValue(data[0].JOB_DESCRIPTION)
-
+            this.overlayjobNoSearch.closeOverlayPanel()
             this.subJobNumberValidate()
           } else {
-            this.commonService.toastErrorByMsgId('MSG1531')
+            this.comService.toastErrorByMsgId('MSG1531')
             this.meltingIssueFrom.controls.jobno.setValue('')
             this.showOverleyPanel(event, 'jobno')
             return
@@ -1114,14 +1115,15 @@ export class MeltingIssueComponent implements OnInit {
         } else {
           this.overlayjobNoSearch.closeOverlayPanel()
           this.meltingIssueFrom.controls.jobno.setValue('')
-          this.commonService.toastErrorByMsgId('MSG1747')
+          this.comService.toastErrorByMsgId('MSG1747')
         }
       }, err => {
-        this.commonService.closeSnackBarMsg()
-        this.commonService.toastErrorByMsgId('MSG1531')
+        this.comService.closeSnackBarMsg()
+        this.comService.toastErrorByMsgId('MSG1531')
       })
     this.subscriptions.push(Sub)
   }
+
 
   meltingTypeValidate(event?: any) {
     const meltingTypeValue = this.meltingIssueFrom.value.meltingtype;

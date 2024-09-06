@@ -41,7 +41,7 @@ export class RetailReportsComponent implements OnInit {
 
   ngOnInit(): void {
     // for opening Report- Modal's
-    this.openModalView()
+    // this.openModalView()
   }
 
   viewRowDetails(e: any) {

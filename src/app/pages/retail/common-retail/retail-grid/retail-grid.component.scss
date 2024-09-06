@@ -36,11 +36,11 @@
     height: 100% !important;
   }
 
-  //Retail Reports
-  // .icon-handling{
-  //   // border: 1px solid #ddd; 
-  //   // padding: 8px; 
-  //   // display: flex; 
-  //   // justify-content: center; 
-  //   // align-items: center;
-  // }
+.icon-label-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 5px;  
+}

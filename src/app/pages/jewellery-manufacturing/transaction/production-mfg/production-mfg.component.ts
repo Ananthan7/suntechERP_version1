@@ -533,8 +533,8 @@ export class ProductionMfgComponent implements OnInit {
     this.showConfirmationDialog().then((result) => {
       if (result.isConfirmed) {
         let form = this.productionFrom.value;
-        let API = "JobProductionMaster/DeleteJobProductionMaster/" + form.BRANCH_CODE + '/'
-          + form.VOCTYPE + '/' + this.content?.VOCNO + '/' + this.content?.YEARMONTH;
+        let API = "JobProductionMaster/DeleteJobProductionMaster/" + this.content?.BRANCH_CODE + '/'
+          + this.content?.VOCTYPE + '/' + this.content?.VOCNO + '/' + this.content?.YEARMONTH;
         let Sub: Subscription = this.dataService
           .deleteDynamicAPI(API)
           .subscribe(
