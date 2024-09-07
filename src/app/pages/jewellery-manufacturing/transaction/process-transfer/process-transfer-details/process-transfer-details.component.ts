@@ -890,7 +890,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
 
     this.setFormNullToString('METAL_FromPCS', data[0].PCS)
     this.setFormDecimal('METAL_FromNetWeight', data[0].METAL, 'METAL')
-    this.setFormDecimal('METAL_FromPureWt', data[0].PUREWT, 'AMOUNT')
+    this.setFormDecimal('METAL_FromPureWt', data[0].PUREWT, 'METAL')
     this.setFormDecimal('PURITY', data[0].PURITY, 'PURITY')
 
     let txtMFromStoneWt = data[0].STONE
