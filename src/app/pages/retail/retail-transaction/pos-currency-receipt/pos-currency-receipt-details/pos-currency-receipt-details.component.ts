@@ -158,7 +158,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
     private toastr: ToastrService,
     private dataService: SuntechAPIService,
     private snackBar: MatSnackBar,
-    private comService: CommonServiceService,
+    public comService: CommonServiceService,
     private indexedDb: IndexedDbService
   ) {
     this.indexedDb.getAllData("compparams").subscribe((data) => {
@@ -177,9 +177,9 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
     this.generateHsnCodeList(this.queryParams);
     this.getCreditCardMaster();
     this.branchCode = this.comService.branchCode;
-    this.paymentModeList =  this.getUniqueValues(this.comService.getComboFilterByID("Payment Mode"), "ENGLISH")
+    this.paymentModeList = this.getUniqueValues(this.comService.getComboFilterByID("Payment Mode"), "ENGLISH")
     console.log(this.paymentModeList);
-    
+
     console.log("paymentModeList :", this.paymentModeList);
 
 
@@ -239,26 +239,50 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
   }
 
   getQueryParams(gstDetails?: any) {
-    this.igstAccode = gstDetails.igstAccode;
+
+    this.igstAccode = gstDetails?.igstAccode || "";
     this.posCurrencyReceiptDetailsForm.controls.hsnCode.setValue(
-      gstDetails.hsnCode
+      gstDetails?.hsnCode || ""
     );
-    this.posCurrencyReceiptDetailsForm.controls.hsnCode.setValue(
-      gstDetails.hsnCode
-    );
+
     this.posCurrencyReceiptDetailsForm.controls.currencyCode.setValue(
-      gstDetails.currecyCode
+      gstDetails?.currecyCode || ""
     );
+
+    const currencyConvRate = gstDetails?.currencyConvRate;
     this.posCurrencyReceiptDetailsForm.controls.currencyRate.setValue(
-      this.comService.decimalQuantityFormat(gstDetails.currencyConvRate, "RATE")
+      this.comService.decimalQuantityFormat(
+        currencyConvRate && !isNaN(currencyConvRate) ? currencyConvRate : 0,
+        "RATE"
+      )
     );
 
     this.posCurrencyReceiptDetailsForm.controls.vat.setValue(
       this.comService.decimalQuantityFormat(
-        this.comService.emptyToZero(gstDetails.vatPercentage),
+        gstDetails.vatPercentage && !isNaN(gstDetails.vatPercentage) ? gstDetails.vatPercentage : 0,
         "AMOUNT"
       )
     );
+    // this.igstAccode = gstDetails.igstAccode;
+    // this.posCurrencyReceiptDetailsForm.controls.hsnCode.setValue(
+    //   gstDetails.hsnCode
+    // );
+    // this.posCurrencyReceiptDetailsForm.controls.hsnCode.setValue(
+    //   gstDetails.hsnCode
+    // );
+    // this.posCurrencyReceiptDetailsForm.controls.currencyCode.setValue(
+    //   gstDetails.currecyCode
+    // );
+    // this.posCurrencyReceiptDetailsForm.controls.currencyRate.setValue(
+    //   this.comService.decimalQuantityFormat(gstDetails.currencyConvRate, "RATE")
+    // );
+
+    // this.posCurrencyReceiptDetailsForm.controls.vat.setValue(
+    //   this.comService.decimalQuantityFormat(
+    //     this.comService.emptyToZero(gstDetails.vatPercentage),
+    //     "AMOUNT"
+    //   )
+    // );
 
     this.viewOnly = gstDetails.isViewOnly;
     if (gstDetails.currecyCode == this.compCurrency)
@@ -797,12 +821,12 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
 
   formatDateToISO(date: string | Date | any): string {
     let parsedDate: Date | any;
-  
+
     if (date._isAMomentObject) {
       if (!date.isValid()) {
         throw new Error("Invalid date (moment object)");
       }
-      parsedDate = date;  
+      parsedDate = date;
     } else if (typeof date === "string") {
       parsedDate = new Date(date);
       if (isNaN(parsedDate.getTime())) {
@@ -811,15 +835,15 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
     } else {
       parsedDate = date;
     }
-  
+
     if (parsedDate instanceof Date && isNaN(parsedDate.getTime())) {
       throw new Error("Invalid date (JS Date object)");
     }
-  
+
     if (parsedDate.toISOString && parsedDate.toISOString() === "1900-01-01T00:00:00.000Z") {
       return "";
     }
-  
+
     return date._isAMomentObject ? date.toISOString() : parsedDate.toISOString();
   }
 
@@ -877,7 +901,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
         REMARKS: this.posCurrencyReceiptDetailsForm.value.remarks,
         BANKCODE:
           this.posCurrencyReceiptDetailsForm.value.chequeDepositBank || "",
-        PDCYN: "Y",
+        PDCYN: "N",
         HDACCOUNT_HEAD:
           this.posCurrencyReceiptDetailsForm.value.debitAmountDesc,
         MODEDESC: this.posCurrencyReceiptDetailsForm.value.modeDesc,
@@ -887,8 +911,8 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
         CARD_HOLDER: this.posCurrencyReceiptDetailsForm.value.creditCardName,
         CARD_EXPIRY: this.posCurrencyReceiptDetailsForm.value.creditCardDate
           ? this.formatDateToISO(
-              this.posCurrencyReceiptDetailsForm.value.creditCardDate
-            )
+            this.posCurrencyReceiptDetailsForm.value.creditCardDate
+          )
           : this.formatDateToISO(this.dummyDate),
         PCRMID: 0,
         BASE_CONV_RATE: 0,
@@ -912,15 +936,14 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
         CGST_ACCODE: "",
         SGST_ACCODE: "",
         IGST_ACCODE: this.igstAccode,
-        GST_HEADER_AMOUNT:
-          this.posCurrencyReceiptDetailsForm.value.headerVatAmt || 0,
+        GST_HEADER_AMOUNT:0,
         GST_NUMBER: "",
         INVOICE_NUMBER: this.posCurrencyReceiptDetailsForm.value.invoiceNo,
         INVOICE_DATE: this.formatDateToISO(
           this.posCurrencyReceiptDetailsForm.value.invoiceDate
         ),
         DT_GST_STATE_CODE: "",
-        DT_GST_TYPE: "IGST",
+        DT_GST_TYPE: "",
         DT_GST_CODE: "VAT",
         DT_GST_GROUP: "R",
         CGST_CTRLACCODE: "",
