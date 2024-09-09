@@ -933,7 +933,7 @@ export class AlloyMasterComponent implements OnInit {
           this.prefixMasterDetail = result.response;
           this.prefixMasterDetail.PREFIX_CODE = this.prefixMasterDetail.PREFIX_CODE.toUpperCase();
           this.prefixMasterDetail.DESCRIPTION = this.prefixMasterDetail.DESCRIPTION.toUpperCase();
-          // this.alloyMastereForm.controls.costCenter.setValue(data.COST_CODE)
+          this.alloyMastereForm.controls.costCenter.setValue(this.prefixMasterDetail.COST_CODE)
           this.alloyMastereForm.controls.type.setValue(this.prefixMasterDetail.TYPE_CODE)
           this.alloyMastereForm.controls.category.setValue(this.prefixMasterDetail.CATEGORY_CODE)
           this.alloyMastereForm.controls.subCategory.setValue(this.prefixMasterDetail.SUBCATEGORY_CODE)

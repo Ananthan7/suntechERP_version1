@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild,ElementRef } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
@@ -179,6 +179,13 @@ export class StoneReturnDetailsComponent implements OnInit {
         this.viewMode = true;
       }
       this.setFormValues()
+    }
+  }
+  @ViewChild('jobNumberInput') jobNumberInput!: ElementRef;
+
+  ngAfterViewInit() {
+    if (!this.viewMode) {
+      this.jobNumberInput.nativeElement.focus();
     }
   }
 

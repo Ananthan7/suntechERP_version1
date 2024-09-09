@@ -63,10 +63,10 @@
                                     :</label>
                                 <div class="col-sm-3 mt-2">
                                     <mat-form-field appearance="outline" style="width: 85%;" class="mx-1">
-                                        <mat-select tabindex="3"
+                                        <mat-select tabindex="3" 
                                             formControlName="processType"
                                             (focus)="showAlertIfCodeIsEmpty()"
-                                            [disabled]="viewMode">
+                                            [disabled]="viewMode" >
                                             <mat-option
                                                 *ngFor="let option of processTypeList"
                                                 [value]="option.SRNO">

@@ -18,7 +18,7 @@
             Job Number * :</label>
           <div class="col-sm-4">
             <mat-form-field appearance="outline" style="width: 100%">
-              <input type="text" matInput formControlName="jobNumber" [readonly]="viewMode" UpperCaseDirective
+              <input type="text" matInput formControlName="jobNumber" [readonly]="viewMode" UpperCaseDirective #jobNumberInput
                 (keydown)="lookupKeyPress($event,'jobNumber')" (focusout)="jobNumberValidate($event)" maxlength="12" />
               <master-search class="masterSearch" [MasterSearchData]="JobNoCodeData" *ngIf="!viewMode"
                 #overlayjobNumberSearch (newRowClick)="JobNumberSelected($event)"></master-search>
