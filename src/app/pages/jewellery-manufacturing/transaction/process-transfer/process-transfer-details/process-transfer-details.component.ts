@@ -790,10 +790,11 @@ export class ProcessTransferDetailsComponent implements OnInit {
       .subscribe((result) => {
         this.commonService.closeSnackBarMsg()
         try {
-          let job_salesorder = result.dynamicData[1] || []
-          if (job_salesorder.length > 0) {
-            this.setDataFromSalesOrderDj(job_salesorder)
-          }
+          //TODO
+          // let job_salesorder = result.dynamicData[1] || []
+          // if (job_salesorder.length > 0) {
+          //   this.setDataFromSalesOrderDj(job_salesorder)
+          // }
           this.subJobDetailData = result.dynamicData[0] || []
           if (this.subJobDetailData.length > 0) {
             this.subJobDetailData.forEach((item: any, index: any) => {
