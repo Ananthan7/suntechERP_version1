@@ -109,9 +109,13 @@ export class CommonServiceService {
   }
   // FORM FEILD CALCULATIONS ENDS
 
-  getCurrecnyRate(currencyCode: string) {
+  getCurrencyRate(currencyCode: string) {
     let currdata = this.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == currencyCode)
     return this.setCommaSerperatedNumber(currdata[0].CONV_RATE, 'RATE')
+  }
+  getCurrencyCode() {
+    let CURRENCY_CODE = this.getCompanyParamValue('COMPANYCURRENCY')
+    return this.nullToString(CURRENCY_CODE)
   }
   searchStartsWithItemsInArray(array: any, searchValue: any) {
     // Convert the search value to lowercase for a case-insensitive search

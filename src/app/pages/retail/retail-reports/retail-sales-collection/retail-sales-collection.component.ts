@@ -137,7 +137,7 @@ export class RetailSalesCollectionComponent implements OnInit {
     return `${year}-${month}-${day}`;
   }
 
-  okClick() {
+  previewClick() {
     let postData = {
       "SPID": "0114",
       "parameter": {
@@ -151,10 +151,12 @@ export class RetailSalesCollectionComponent implements OnInit {
       }
     }
     console.log(postData)  
+    this.commonService.showSnackBarMsg('MSG81447');
     this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
     .subscribe((result: any) => {
       console.log(result);
       let data = result.dynamicData;
+      this.commonService.closeSnackBarMsg()
       var WindowPrt = window.open(' ', ' ', 'width=900px, height=800px');
       if (WindowPrt === null) {
         console.error('Failed to open the print window. Possibly blocked by a popup blocker.');
@@ -207,7 +209,7 @@ export class RetailSalesCollectionComponent implements OnInit {
     this.isLoading = true;
 
     this.dataService.postDynamicAPI('GetReportVouchers', payload).subscribe((response) => {
-      console.log('Rsales API call data', response);
+      console.log('Retailsales API call data', response);
       this.APIData = response.dynamicData[0] || [];
       setTimeout(() => {
         this.isLoading = false;
@@ -234,15 +236,15 @@ export class RetailSalesCollectionComponent implements OnInit {
     this.popupVisible = true;
     console.log(this.retailSalesCollection.controls.templateName.value)
   }
-  print(){
+  saveTemplate_DB(){
     const payload = {
-      "SPID": "0114",
+      "SPID": "0115",
       "parameter": {
         "FLAG": 'INSERT',
         "CONTROLS": JSON.stringify({
             "CONTROL_HEADER": {
               "USERNAME": localStorage.getItem('username'),
-              "TEMPLATEID": "STATEMENT OF ACCOUNTS",
+              "TEMPLATEID": this.comService.getModuleName(),
               "TEMPLATENAME": this.retailSalesCollection.controls.templateName.value,
               "FORM_NAME": this.comService.getModuleName(),
               "ISDEFAULT": 1
@@ -263,30 +265,27 @@ export class RetailSalesCollectionComponent implements OnInit {
     this.dataService.postDynamicAPI('ExecueteSPInterface', payload)
     .subscribe((result: any) => {
       console.log(result);
-      let data = result.dynamicData;
-      
-      if (result.response) {
-        if (result.status == "Success") {
-          Swal.fire({
-            title: result.message || 'Success',
-            text: '',
-            icon: 'success',
-            confirmButtonColor: '#336699',
-            confirmButtonText: 'Ok'
-          }).then((result: any) => {
-            if (result.value) {
-              this.tableData = []
-              this.close('reloadMainGrid')
-            }
-          });
-        }
-      } else {
-        this.toastr.error('Not saved')
+      let data = result.dynamicData.map((item: any) => item[0].ERRORMESSAGE);
+      let Notifdata = result.dynamicData.map((item: any) => item[0].ERRORCODE);
+      if (Notifdata == 1) {
+        Swal.fire({
+          title: data || 'Success',
+          text: '',
+          icon: 'success',
+          confirmButtonColor: '#336699',
+          confirmButtonText: 'Ok'
+        })
+        this.popupVisible = false;
+        this.activeModal.close(data);
+      }
+      else {
+        this.toastr.error(Notifdata)
       }
     }); 
   }
 
   popupClosed(){
+    this.retailSalesCollection.controls.templateName.setValue(null);
     this.popupVisible = false;
   }
 

@@ -349,6 +349,9 @@ export class DesignMasterComponent implements OnInit {
           this.commonService.toastErrorByMsgId('MSG1531')
           this.designmasterForm.controls[FORMNAME].setValue('')
           LOOKUPDATA.SEARCH_VALUE = ''
+          if (FORMNAME === 'collection' || FORMNAME === 'subCollection' || FORMNAME === "stoneType" || FORMNAME === 'setting' || FORMNAME === 'shape' || FORMNAME === 'incCat' || FORMNAME === 'orderRef') {
+            this.showOverleyPanel(event, FORMNAME);
+          }
           return
         }
       }, err => {
@@ -724,7 +727,7 @@ removedatas(){
     RECORDS: 10,
     LOOKUPID: 3,
     SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Range Code',
+    SEARCH_HEADING: 'collection Code',
     SEARCH_VALUE: '',
     WHERECONDITION: "CODE<> ''",
     VIEW_INPUT: true,
@@ -732,7 +735,7 @@ removedatas(){
   }
   collectionCodeSelected(e:any){
     console.log(e);
-    this.designmasterForm.controls.range.setValue(e.CODE);
+    this.designmasterForm.controls.collection.setValue(e.CODE);
   }
 
   subCollectionCodeData: MasterSearchModel = {
@@ -740,7 +743,7 @@ removedatas(){
     RECORDS: 10,
     LOOKUPID: 3,
     SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Range Code',
+    SEARCH_HEADING: 'Sub Collection Code',
     SEARCH_VALUE: '',
     WHERECONDITION: "CODE<> ''",
     VIEW_INPUT: true,
@@ -748,7 +751,7 @@ removedatas(){
   }
   subCollectionCodeSelected(e:any){
     console.log(e);
-    this.designmasterForm.controls.range.setValue(e.CODE);
+    this.designmasterForm.controls.subCollection.setValue(e.CODE);
   }
 
   stoneTypeCodeData: MasterSearchModel = {
@@ -756,15 +759,16 @@ removedatas(){
     RECORDS: 10,
     LOOKUPID: 3,
     SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Range Code',
+    SEARCH_HEADING: 'Stone Type Code',
     SEARCH_VALUE: '',
     WHERECONDITION: "CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
+
   stoneTypeCodeSelected(e:any){
     console.log(e);
-    this.designmasterForm.controls.range.setValue(e.CODE);
+    this.designmasterForm.controls.stoneType.setValue(e.CODE);
   }
 
   settingCodeData: MasterSearchModel = {
@@ -778,6 +782,7 @@ removedatas(){
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
+
   settingCodeSelected(e:any){
     console.log(e);
     this.designmasterForm.controls.setting.setValue(e.CODE);
@@ -822,7 +827,7 @@ removedatas(){
     RECORDS: 10,
     LOOKUPID: 3,
     SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Range Code',
+    SEARCH_HEADING: 'Inc Cat Code',
     SEARCH_VALUE: '',
     WHERECONDITION: "CODE<> ''",
     VIEW_INPUT: true,
@@ -830,7 +835,7 @@ removedatas(){
   }
   incCatCodeSelected(e:any){
     console.log(e);
-    this.designmasterForm.controls.range.setValue(e.CODE);
+    this.designmasterForm.controls.incCat.setValue(e.CODE);
   }
 
   orderRefCodeData: MasterSearchModel = {
@@ -846,7 +851,7 @@ removedatas(){
   }
   orderRefCodeSelected(e:any){
     console.log(e);
-    this.designmasterForm.controls.range.setValue(e.CODE);
+    this.designmasterForm.controls.orderRef.setValue(e.CODE);
   }
 
   currencyCodeSelected(e:any){

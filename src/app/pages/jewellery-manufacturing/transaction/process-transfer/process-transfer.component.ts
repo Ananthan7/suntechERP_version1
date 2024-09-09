@@ -394,20 +394,15 @@ export class ProcessTransferComponent implements OnInit {
   }
   /**USE: to set currency from company parameter */
   setCompanyCurrency() {
-    console.log(this.commonService.allCompanyParameters);
-
-    let CURRENCY_CODE = this.commonService.getCompanyParamValue('COMPANYCURRENCY')
-    console.log(CURRENCY_CODE, 'CURRENCY_CODE');
+    let CURRENCY_CODE = this.commonService.getCurrencyCode()
     this.processTransferFrom.controls.CURRENCY_CODE.setValue(CURRENCY_CODE);
     this.setCurrencyRate()
   }
   /**USE: to set currency from branch currency master */
   setCurrencyRate() {
-    const CURRENCY_RATE: any[] = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == this.processTransferFrom.value.CURRENCY_CODE);
+    let CURRENCY_RATE: any =  this.commonService.getCurrencyRate(this.processTransferFrom.value.CURRENCY_CODE);
     if (CURRENCY_RATE.length > 0) {
-      this.processTransferFrom.controls.CURRENCY_RATE.setValue(
-        this.commonService.decimalQuantityFormat(CURRENCY_RATE[0].CONV_RATE, 'RATE')
-      );
+      this.processTransferFrom.controls.CURRENCY_RATE.setValue(CURRENCY_RATE);
     } else {
       this.processTransferFrom.controls.CURRENCY_CODE.setValue('')
       this.processTransferFrom.controls.CURRENCY_RATE.setValue('')

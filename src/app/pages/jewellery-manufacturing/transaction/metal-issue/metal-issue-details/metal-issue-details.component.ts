@@ -343,7 +343,7 @@ export class MetalIssueDetailsComponent implements OnInit {
 
   setPostData() {
     let form = this.metalIssueDetailsForm.value
-    let currRate = this.comService.getCurrecnyRate(this.comService.compCurrency)
+    let currRate = this.comService.getCurrencyRate(this.comService.compCurrency)
 
     return {
       "SRNO": this.comService.emptyToZero(this.content.SRNO),
