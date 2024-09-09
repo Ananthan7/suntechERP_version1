@@ -129,7 +129,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
     amountFc: [""],
     amountCc: [""],
     creditCardNumber: [""],
-    creditCardName: [""],
+    creditCardName: ["",  [Validators.required, Validators.pattern(/^[a-zA-Z ]*$/)]],
     creditCardDate: [""],
     ttNumber: [""],
     ttDate: [""],

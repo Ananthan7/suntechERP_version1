@@ -98,6 +98,7 @@ import { ReportToControlComponent } from './common/report-to-control/report-to-c
 import { DateComponent } from './common/date/date.component';
 import { AsOnDateComponent } from './common/as-on-date/as-on-date.component';
 import { CommonButtonsComponent } from './common/common-buttons/common-buttons.component';
+import { AlphabetOnlyDirective } from './directives/appAlphabetOnly.directive';
 
 
 @NgModule({
@@ -116,6 +117,7 @@ import { CommonButtonsComponent } from './common/common-buttons/common-buttons.c
     MasterFindIconComponent,
     MasterSearchComponent,
     AuditTrailComponent,
+    AlphabetOnlyDirective,
     NumericInputDirective,
     DecimalInputDirective,
     DateValidationDirective,
@@ -242,6 +244,7 @@ import { CommonButtonsComponent } from './common/common-buttons/common-buttons.c
     UppercaseDirective,
     AlphabetsOnlyDirective,
     DecimalInputDirective,
+    AlphabetOnlyDirective,
     //Modules exports
     FormsModule,
     ReactiveFormsModule,
