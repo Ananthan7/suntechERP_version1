@@ -171,7 +171,7 @@ export class MetalReturnComponent implements OnInit {
     this.metalReturnForm.controls.VOCTYPE.setValue(this.commonService.getqueryParamVocType())
     this.metalReturnForm.controls.BRANCH_CODE.setValue(this.commonService.branchCode)
     this.metalReturnForm.controls.CURRENCY_CODE.setValue(this.commonService.compCurrency)
-    let currRate = this.commonService.getCurrecnyRate(this.commonService.compCurrency)
+    let currRate = this.commonService.getCurrencyRate(this.commonService.compCurrency)
     this.metalReturnForm.controls.CURRENCY_RATE.setValue(currRate)
     this.metalReturnForm.controls.MAIN_VOCTYPE.setValue(
       this.commonService.getqueryParamMainVocType()

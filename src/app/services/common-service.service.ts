@@ -109,7 +109,7 @@ export class CommonServiceService {
   }
   // FORM FEILD CALCULATIONS ENDS
 
-  getCurrecnyRate(currencyCode: string) {
+  getCurrencyRate(currencyCode: string) {
     let currdata = this.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == currencyCode)
     return this.setCommaSerperatedNumber(currdata[0].CONV_RATE, 'RATE')
   }

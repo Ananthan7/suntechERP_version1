@@ -321,7 +321,7 @@ export class MeltingIssueDetailsComponent implements OnInit {
   }
   setPostData() {
     let form = this.meltingIssuedetailsFrom.value
-    let currRate = this.comService.getCurrecnyRate(this.comService.compCurrency)
+    let currRate = this.comService.getCurrencyRate(this.comService.compCurrency)
     return {
       "UNIQUEID": 0,
       "SRNO": 0,
