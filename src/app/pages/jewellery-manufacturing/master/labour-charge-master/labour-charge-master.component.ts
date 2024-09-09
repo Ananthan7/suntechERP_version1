@@ -1556,13 +1556,13 @@ export class LabourChargeMasterComponent implements OnInit {
       case 'process':
         this.overlayprocessSearch.showOverlayPanel(event);
         break;
-      case 'sizefrom':
+      case 'size_from':
         this.overlaysizefromSearch.showOverlayPanel(event);
         break;
-      case 'labourac':
+      case 'labour_ac':
         this.overlaylabouracSearch.showOverlayPanel(event);
         break;
-      case 'sizeto':
+      case 'size_to':
         this.overlaysizetoSearch.showOverlayPanel(event);
         break;
       case 'sieve':

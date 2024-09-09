@@ -82,7 +82,7 @@ export class SequenceMasterComponent implements OnInit {
         this.editMode = true
       } else if (this.content.FLAG == 'VIEW') {
         this.viewMode = true;
-        
+
       } else if (this.content.FLAG == 'DELETE') {
         this.viewMode = true;
         this.deleteSequenceMaster()
@@ -141,22 +141,22 @@ export class SequenceMasterComponent implements OnInit {
   //   this.dataSource = this.dataSource.filter(results =>
   //     results.DESCRIPTION.toLowerCase().startsWith(event.target.value.toLowerCase())
   //   );
- 
+
   // }
   searchFromGrid(event: any) {
     const searchValue = event.target.value.toLowerCase();
-    
+
     if (searchValue === '') {
       this.dataSource = this.tableData;
       return;
     }
-  
+
     this.dataSource = this.tableData.filter(obj =>
       obj.PROCESS_CODE.toLowerCase().startsWith(searchValue) ||
       obj.DESCRIPTION.toLowerCase().startsWith(searchValue)
     );
   }
-  
+
   /**USE: get table data on initial load */
   private getTableData(): void {
     let API = 'ProcessMasterDj/GetProcessMasterDJList'
@@ -174,9 +174,9 @@ export class SequenceMasterComponent implements OnInit {
             item.MAX_LOSS = this.commonService.decimalQuantityFormat(item.MAX_LOSS, 'METAL')
             item.isChecked = false
             item.orderId = this.dataSource.length
-            if(Number(item.MAX_TIME) > 0 || Number(item.MAX_TIME) > 0){
+            if (Number(item.MAX_TIME) > 0 || Number(item.MAX_TIME) > 0) {
               item.TIMEON_PROCESS = true
-            }else{
+            } else {
               item.TIMEON_PROCESS = false
             }
           })
@@ -191,13 +191,12 @@ export class SequenceMasterComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
 
-  calculateProcessChange(event:any){
+  calculateProcessChange(event: any) {
     console.log(event)
-    if(event.target.checked == true ){
+    if (event.target.checked == true) {
       this.calculateProcessDisable = false;
     }
-    else
-    {
+    else {
       this.calculateProcessDisable = true;
     }
   }
@@ -321,11 +320,11 @@ export class SequenceMasterComponent implements OnInit {
   submitValidation() {
     if (this.selectedSequence.length == 0) {
       console.log(this.selectedSequence)
-      this.commonService.toastErrorByMsgId('MSG1777') 
+      this.commonService.toastErrorByMsgId('MSG1777')
       //this.toastr.error('Select all required fields & Process')Select atleast one option
-      return true;  
+      return true;
     }
-    if (this.commonService.nullToString(this.sequenceMasterForm.value.sequenceCode) =='') {
+    if (this.commonService.nullToString(this.sequenceMasterForm.value.sequenceCode) == '') {
       this.commonService.toastErrorByMsgId('MSG1124') //"Code cannot be empty"
       return true
     }
@@ -393,22 +392,22 @@ export class SequenceMasterComponent implements OnInit {
 
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
-       
-          if (result.status == "Success") {
-            Swal.fire({
-              title: this.commonService.getMsgByID('MSG2443') || 'Success',
-              text: '',
-              icon: 'success',
-              confirmButtonColor: '#336699',
-              confirmButtonText: 'Ok'
-            }).then((result: any) => {
-              if (result.value) {
-                this.sequenceMasterForm.reset()
-                this.close('reloadMainGrid')
-              }
-            });
-          }
-          else {
+
+        if (result.status == "Success") {
+          Swal.fire({
+            title: this.commonService.getMsgByID('MSG2443') || 'Success',
+            text: '',
+            icon: 'success',
+            confirmButtonColor: '#336699',
+            confirmButtonText: 'Ok'
+          }).then((result: any) => {
+            if (result.value) {
+              this.sequenceMasterForm.reset()
+              this.close('reloadMainGrid')
+            }
+          });
+        }
+        else {
           this.commonService.toastErrorByMsgId('MSG3577')
         }
       }, err => {
@@ -419,28 +418,28 @@ export class SequenceMasterComponent implements OnInit {
 
 
   updateWorkerMaster() {
-   // if (this.submitValidation()) return;
+    // if (this.submitValidation()) return;
     let API = 'SequenceMasterDJ/UpdateSequenceMasterDJ/' + this.sequenceMasterForm.value.sequenceCode
     let postData = this.setPostData(this.sequenceMasterForm.value)
 
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
-       
-          if (result.status == "Success") {
-            Swal.fire({
-              title: this.commonService.getMsgByID('MSG2443') || result.message,
-              text: '',
-              icon: 'success',
-              confirmButtonColor: '#336699',
-              confirmButtonText: 'Ok'
-            }).then((result: any) => {
-              if (result.value) {
-                this.sequenceMasterForm.reset()
-                this.close('reloadMainGrid')
-              }
-            });
-          }
-         else {
+
+        if (result.status == "Success") {
+          Swal.fire({
+            title: this.commonService.getMsgByID('MSG2443') || result.message,
+            text: '',
+            icon: 'success',
+            confirmButtonColor: '#336699',
+            confirmButtonText: 'Ok'
+          }).then((result: any) => {
+            if (result.value) {
+              this.sequenceMasterForm.reset()
+              this.close('reloadMainGrid')
+            }
+          });
+        }
+        else {
           this.commonService.toastErrorByMsgId('MSG3577')
         }
       }, err => {
@@ -448,31 +447,34 @@ export class SequenceMasterComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
-      /**use: validate all lookups to check data exists in db */
-      validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
-        LOOKUPDATA.SEARCH_VALUE = event.target.value
-        if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
-        let param = {
-          LOOKUPID: LOOKUPDATA.LOOKUPID,
-          WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+  /**use: validate all lookups to check data exists in db */
+  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    LOOKUPDATA.SEARCH_VALUE = event.target.value
+    if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
+    let param = {
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+    }
+    this.commonService.toastInfoByMsgId('MSG81447');
+    let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
+      .subscribe((result) => {
+        let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+        if (data.length == 0) {
+          this.commonService.toastErrorByMsgId('MSG1531')
+          this.sequenceMasterForm.controls[FORMNAME].setValue('')
+          LOOKUPDATA.SEARCH_VALUE = ''
+          if (FORMNAME === 'sequencePrefixCode') {
+            this.showOverleyPanel(event, FORMNAME);
+          }
+          return
         }
-        this.commonService.toastInfoByMsgId('MSG81447');
-        let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
-        let Sub: Subscription = this.dataService.postDynamicAPI(API,param)
-          .subscribe((result) => {
-            let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
-            if (data.length == 0) {
-              this.commonService.toastErrorByMsgId('MSG1531')
-              this.sequenceMasterForm.controls[FORMNAME].setValue('')
-              LOOKUPDATA.SEARCH_VALUE = ''
-              return
-            }
-           
-          }, err => {
-            this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
-          })
-        this.subscriptions.push(Sub)
-      }
+
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+      })
+    this.subscriptions.push(Sub)
+  }
 
   // validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
   //   LOOKUPDATA.SEARCH_VALUE = event.target.value
@@ -692,10 +694,10 @@ export class SequenceMasterComponent implements OnInit {
           "LABCHRG_PERHOUR": item.LABCHRG_PERHOUR || 0
         };
       });
-  
+
     return selectedSequence;
   }
-  
+
   private handleDurationUpdate(value: any): number {
     if (value == '' || !value) return 0;
     let duration = value.split(':')
@@ -834,7 +836,7 @@ export class SequenceMasterComponent implements OnInit {
 
   showOverleyPanel(event: any, formControlName: string) {
 
-    if (formControlName == 'sequencePrefix') {
+    if (formControlName == 'sequencePrefixCode') {
       this.overlaysequencePrefixCodeSearch.showOverlayPanel(event)
     }
   }
