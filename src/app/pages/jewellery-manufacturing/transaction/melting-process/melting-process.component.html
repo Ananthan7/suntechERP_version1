@@ -69,8 +69,8 @@
               <div class="col-sm-8">
                 <mat-form-field appearance="outline" style="width: 100%;">
                   <input type="text" matInput formControlName="meltingType" [readonly]="viewMode"
-                    (keydown)="lookupKeyPress($event,'meltingType')"
-                    (focusout)="validateLookupField($event,MeltingCodeData,'meltingType')" />
+                    (focusout)="validateLookupField($event,MeltingCodeData,'meltingType')"
+                    (keydown)="lookupKeyPress($event,'meltingType')" />
                   <master-search class="masterSearch" [MasterSearchData]="MeltingCodeData" #overlaymeltingTypecode
                     *ngIf="!viewMode" (newRowClick)="MeltingCodeSelected($event)"></master-search>
                 </mat-form-field>

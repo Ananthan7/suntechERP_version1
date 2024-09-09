@@ -6,10 +6,8 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit('SAVE')" (cancelClick)="close()"
-    (changeJobClick)="changeJobClicked()"
-    (continueClick)="formSubmit('CONTINUE')"
-    [isViewContinue]="true" [isViewChangeJob]="true" [isViewDelete]="false"
+<modal-header (saveClick)="formSubmit('SAVE')" (cancelClick)="close()" (changeJobClick)="changeJobClicked()"
+    (continueClick)="formSubmit('CONTINUE')" [isViewContinue]="true" [isViewChangeJob]="true" [isViewDelete]="false"
     [isViewMore]="false"></modal-header>
 <div class="row">
     <div class="col-md-12">
@@ -20,133 +18,96 @@
                         <div class="row border-bottom">
                             <div class="col-md-5">
                                 <div class="row mb-1">
-                                    <label for="inputPassword"
-                                        class="col-sm-4 col-form-label pt-1">
+                                    <label for="inputPassword" class="col-sm-4 col-form-label pt-1">
                                         Job Number * :
                                     </label>
                                     <div class="col-md-3">
-                                        <mat-form-field appearance="outline"
-                                            style="width: 90%;">
-                                            <input type="text" matInput
-                                                formControlName="jobNumber"
-                                                (focusout)="jobNumberValidate($event)"
-                                                [readonly]="viewMode" />
+                                        <mat-form-field appearance="outline" style="width: 90%;">
+                                            <input type="text" matInput formControlName="jobNumber"
+                                                (focusout)="jobNumberValidate($event)" [readonly]="viewMode" />
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-5">
-                                        <mat-form-field appearance="outline"
-                                            style="width: 80%;">
-                                            <input type="text" matInput
-                                                formControlName="jobNumDes"
-                                                (keydown)="lookupKeyPress($event,'jobNumber')" 
-                                                readonly  />
+                                        <mat-form-field appearance="outline" style="width: 80%;">
+                                            <input type="text" matInput formControlName="jobNumDes"
+                                                (keydown)="lookupKeyPress($event,'jobNumber')" readonly />
+                                            <master-search  class="masterSearch" [MasterSearchData]="jobNumberCodeData" #overlayjobNumDes
+                                                (newRowClick)="jobNumberCodeSelected($event)" *ngIf="!viewMode">
+                                            </master-search>
                                         </mat-form-field>
-                                        <master-search
-                                            [MasterSearchData]="jobNumberCodeData" #overlayjobNumDes
-                                            (newRowClick)="jobNumberCodeSelected($event)"
-                                            *ngIf="!viewMode">
-                                        </master-search>
+
                                     </div>
                                 </div>
                                 <div class="row mb-1">
-                                    <label for="inputPassword"
-                                        class="col-sm-4 col-form-label">Sub Job
+                                    <label for="inputPassword" class="col-sm-4 col-form-label">Sub Job
                                         No : </label>
                                     <div class="col-md-3">
-                                        <mat-form-field appearance="outline"
-                                            style="width: 90%;">
-                                            <input type="text" matInput
-                                                formControlName="subJobNo"
-                                                (focusout)="subJobNumberValidate($event)"
-                                                [readonly]="viewMode" />
+                                        <mat-form-field appearance="outline" style="width: 90%;">
+                                            <input type="text" matInput formControlName="subJobNo"
+                                                (focusout)="subJobNumberValidate($event)" [readonly]="viewMode" />
                                         </mat-form-field>
-                                        <!-- <master-search [MasterSearchData]="subJobNoCodeData"
+                                        <!-- <master-search  class="masterSearch" [MasterSearchData]="subJobNoCodeData"
                                             (newRowClick)="subJobNoCodeSelected($event)"></master-search> -->
                                     </div>
                                     <div class="col-md-5">
-                                        <mat-form-field appearance="outline"
-                                            style="width: 80%;">
-                                            <input type="text" matInput
-                                                formControlName="subJobNoDes"
-                                                readonly />
+                                        <mat-form-field appearance="outline" style="width: 80%;">
+                                            <input type="text" matInput formControlName="subJobNoDes" readonly />
                                         </mat-form-field>
                                     </div>
                                 </div>
                                 <div class="row mb-1">
-                                    <label for="inputPassword"
-                                        class="col-sm-4 col-form-label">Process
+                                    <label for="inputPassword" class="col-sm-4 col-form-label">Process
                                         Code * :</label>
                                     <div class="col-md-3">
-                                        <mat-form-field appearance="outline"
-                                            style="width: 90%;">
-                                            <input type="text" matInput
-                                                UpperCaseDirective
-                                                formControlName="processCode"
-                                                [readonly]="viewMode" 
-                                                (keydown)="lookupKeyPress($event,'processCode')" 
-                                                (focusout)="SPvalidateLookupField($event,processCodeData,'processCode')"/>
+                                        <mat-form-field appearance="outline" style="width: 90%;">
+                                            <input type="text" matInput UpperCaseDirective formControlName="processCode"
+                                                [readonly]="viewMode" (keydown)="lookupKeyPress($event,'processCode')"
+                                                (focusout)="SPvalidateLookupField($event,processCodeData,'processCode')" />
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-5">
-                                        <mat-form-field appearance="outline"
-                                            style="width: 80%;">
-                                            <input type="text" matInput
-                                                formControlName="processCodeDesc"
-                                                readonly>
+                                        <mat-form-field appearance="outline" style="width: 80%;">
+                                            <input type="text" matInput formControlName="processCodeDesc" readonly>
+                                            <master-search  class="masterSearch" [MasterSearchData]="processCodeData" #overlayprocessCode
+                                                (newRowClick)="processCodeSelected($event)" *ngIf="!viewMode">
+                                            </master-search>
                                         </mat-form-field>
-                                        <master-search
-                                            [MasterSearchData]="processCodeData" #overlayprocessCode
-                                            (newRowClick)="processCodeSelected($event)"
-                                            *ngIf="!viewMode">
-                                        </master-search>
+
                                     </div>
                                 </div>
                                 <div class="row mb-1">
-                                    <label for="inputPassword"
-                                        class="col-sm-4 col-form-label">
+                                    <label for="inputPassword" class="col-sm-4 col-form-label">
                                         Worker Code * : </label>
                                     <div class="col-md-3">
-                                        <mat-form-field appearance="outline"
-                                            style="width: 90%;">
-                                            <input type="text" matInput
-                                                formControlName="workerCode"
-                                                readonly />
+                                        <mat-form-field appearance="outline" style="width: 90%;">
+                                            <input type="text" matInput formControlName="workerCode" readonly />
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-5">
-                                        <mat-form-field appearance="outline"
-                                            style="width: 80%;">
-                                            <input type="text" matInput
-                                                formControlName="workerCodeDes"
-                                                (keydown)="lookupKeyPress($event,'workerCodeDes')" 
-                                                [readonly]="viewMode" 
-                                                (focusout)="WorkerCodeValidate($event)"/>
+                                        <mat-form-field appearance="outline" style="width: 80%;">
+                                            <input type="text" matInput formControlName="workerCodeDes"
+                                                (keydown)="lookupKeyPress($event,'workerCodeDes')" [readonly]="viewMode"
+                                                (focusout)="WorkerCodeValidate($event)" />
+                                            <master-search  class="masterSearch" [MasterSearchData]="workerCodeData" #overlayworkerCodeDes
+                                                (newRowClick)="workerCodeSelected($event)"
+                                                *ngIf="!viewMode"></master-search>
                                         </mat-form-field>
-                                        <master-search
-                                            [MasterSearchData]="workerCodeData" #overlayworkerCodeDes
-                                            (newRowClick)="workerCodeSelected($event)"
-                                            *ngIf="!viewMode"></master-search>
+
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="row mb-1">
-                                    <label
-                                        class="col-sm-12 col-form-label ms-4">
+                                    <label class="col-sm-12 col-form-label ms-4">
                                         Design</label>
                                     <div class="col-md-6">
                                         <div class="upload-btn-wrapper">
-                                            <button
-                                                class="btn btnnew border-dark">
-                                                <img src={{image}}
-                                                    style="width:126px;height:124px">
+                                            <button class="btn btnnew border-dark">
+                                                <img src={{image}} style="width:126px;height:124px">
 
                                             </button>
-                                            <input type="file"
-                                                class="uploadproduct"
-                                                accept=".png, .jpg, .jpeg"
-                                                #fileInput
-                                                (change)="onFileChangedimage($event)">
+                                            <input type="file" class="uploadproduct" accept=".png, .jpg, .jpeg"
+                                                #fileInput (change)="onFileChangedimage($event)">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -172,41 +133,29 @@
                                 </div>
                                 <div class="row mb-1">
                                     <div class="col-md-12">
-                                        <mat-form-field appearance="outline"
-                                            style="width: 80%;">
-                                            <input type="text" matInput
-                                                formControlName="DESIGN_CODE"
-                                                readonly />
+                                        <mat-form-field appearance="outline" style="width: 80%;">
+                                            <input type="text" matInput formControlName="DESIGN_CODE" readonly />
                                         </mat-form-field>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="row mb-1">
-                                    <label for="inputPassword"
-                                        class="col-sm-4 col-form-label my-2">Part
+                                    <label for="inputPassword" class="col-sm-4 col-form-label my-2">Part
                                         ID</label>
                                     <div class="col-md-12">
                                         <div class="upload-btn-wrapper">
-                                            <button
-                                                class="btn btnnew border-dark">
-                                                <img src={{urls}}
-                                                    style="width:126px;height:124px">
+                                            <button class="btn btnnew border-dark">
+                                                <img src={{urls}} style="width:126px;height:124px">
 
                                             </button>
-                                            <input type="file"
-                                                class="uploadproduct"
-                                                accept=".png, .jpg, .jpeg"
-                                                #fileInput
-                                                (change)="onFileChanged($event)">
+                                            <input type="file" class="uploadproduct" accept=".png, .jpg, .jpeg"
+                                                #fileInput (change)="onFileChanged($event)">
                                         </div>
                                     </div>
                                     <div class="col-md-12">
-                                        <mat-form-field appearance="outline"
-                                            style="width: 80%;">
-                                            <input type="text" matInput
-                                                formControlName="PART_CODE"
-                                                readonly />
+                                        <mat-form-field appearance="outline" style="width: 80%;">
+                                            <input type="text" matInput formControlName="PART_CODE" readonly />
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -216,180 +165,126 @@
                         <div class="row my-2">
                             <div class="col-md-6">
                                 <div class="row mb-1">
-                                    <label for="inputPassword"
-                                        class="col-sm-3 col-form-label">Tree
+                                    <label for="inputPassword" class="col-sm-3 col-form-label">Tree
                                         Number :</label>
                                     <div class="col-md-3">
-                                        <mat-form-field appearance="outline"
-                                            style="width: 100%;">
-                                            <input type="text" matInput
-                                                formControlName="treeNumber"
-                                                [readonly]="viewMode"
-                                                maxlength="8" class="text-right"
+                                        <mat-form-field appearance="outline" style="width: 100%;">
+                                            <input type="text" matInput formControlName="treeNumber"
+                                                [readonly]="viewMode" maxlength="8" class="text-right"
                                                 class="text-right" NumberOnly />
                                         </mat-form-field>
                                     </div>
-                                    <label for="inputPassword"
-                                        class="col-sm-3 col-form-label">Job
+                                    <label for="inputPassword" class="col-sm-3 col-form-label">Job
                                         Purity :</label>
                                     <div class="col-md-3">
-                                        <mat-form-field appearance="outline"
-                                            style="width: 100%;">
-                                            <input type="text" matInput
-                                                formControlName="jobPurity"
-                                                class="text-right"
+                                        <mat-form-field appearance="outline" style="width: 100%;">
+                                            <input type="text" matInput formControlName="jobPurity" class="text-right"
                                                 readonly />
                                         </mat-form-field>
                                     </div>
                                 </div>
                                 <div class="row mb-1">
-                                    <label for="inputPassword"
-                                        class="col-sm-3 col-form-label">
+                                    <label for="inputPassword" class="col-sm-3 col-form-label">
                                         Stock Code * :</label>
                                     <div class="col-md-3">
-                                        <mat-form-field appearance="outline"
-                                            style="width: 60%;">
-                                            <input type="text" matInput
-                                                formControlName="DIVCODE"
-                                                placeholder="divcode"
+                                        <mat-form-field appearance="outline" style="width: 60%;">
+                                            <input type="text" matInput formControlName="DIVCODE" placeholder="divcode"
                                                 readonly />
                                         </mat-form-field>
-                                        <!-- <master-search
+                                        <!-- <master-search  class="masterSearch"
                                                 [MasterSearchData]="divCodeData"
                                                 (newRowClick)="stockCodeSelected($event)"
                                                 *ngIf="!masterMetalChecked">
                                             </master-search> -->
                                     </div>
                                     <div class="col-md-6">
-                                        <mat-form-field appearance="outline"
-                                            style="width: 70%;">
-                                            <input type="text" matInput
-                                                formControlName="stockCode"
-                                                placeholder="stockCode"
-                                                (focusout)="stockCodeValidate($event)"
+                                        <mat-form-field appearance="outline" style="width: 100%;">
+                                            <input type="text" matInput formControlName="stockCode"
+                                                placeholder="stockCode" (focusout)="stockCodeValidate($event)"
                                                 [readonly]="viewMode || masterMetalChecked"
-                                                (keydown)="lookupKeyPress($event,'stockCode')" 
-                                               />
+                                                (keydown)="lookupKeyPress($event,'stockCode')" />
+                                            <master-search  class="masterSearch" [MasterSearchData]="stockCodeData" #overlaystockcode
+                                                (newRowClick)="stockCodeSelected($event)"
+                                                *ngIf="!masterMetalChecked"></master-search>
                                         </mat-form-field>
-                                        <master-search
-                                            [MasterSearchData]="stockCodeData" #overlaystockcode
-                                            (newRowClick)="stockCodeSelected($event)"
-                                            *ngIf="!masterMetalChecked"></master-search>
+
                                     </div>
                                 </div>
                                 <div class="row mb-1">
-                                    <label for="inputPassword"
-                                        class="col-sm-3 col-form-label">Pcs
+                                    <label for="inputPassword" class="col-sm-3 col-form-label">Pcs
                                         :</label>
                                     <div class="col-md-3">
-                                        <mat-form-field appearance="outline"
-                                            style="width: 100%;">
-                                            <input type="text" matInput
-                                                formControlName="pcs"
-                                                [readonly]="viewMode"
-                                                maxlength="8"
-                                                style="text-align: right;"
-                                                NumberOnly />
+                                        <mat-form-field appearance="outline" style="width: 100%;">
+                                            <input type="text" matInput formControlName="pcs" [readonly]="viewMode"
+                                                maxlength="8" style="text-align: right;" NumberOnly />
                                         </mat-form-field>
                                     </div>
-                                    <label for="inputPassword"
-                                        class="col-sm-3 col-form-label">Purity :
+                                    <label for="inputPassword" class="col-sm-3 col-form-label">Purity :
                                     </label>
                                     <div class="col-md-3">
-                                        <mat-form-field appearance="outline"
-                                            style="width: 100%;">
-                                            <input type="number" matInput
-                                                formControlName="PURITY"
-                                                readonly class="text-right"
-                                                PurityDecimal />
+                                        <mat-form-field appearance="outline" style="width: 100%;">
+                                            <input type="number" matInput formControlName="PURITY" readonly
+                                                class="text-right" PurityDecimal />
                                         </mat-form-field>
                                     </div>
                                 </div>
                                 <div class="row mb-1">
-                                    <label for="inputPassword"
-                                        class="col-sm-3 col-form-label">Gross
+                                    <label for="inputPassword" class="col-sm-3 col-form-label">Gross
                                         Weight :</label>
                                     <div class="col-md-3">
-                                        <mat-form-field appearance="outline"
-                                            style="width: 100%;">
-                                            <input type="text" matInput
-                                                formControlName="GROSS_WT"
-                                                [readonly]="viewMode"
-                                                (focusout)="grossValidate()"
-                                                MetalDecimalInput [max]="6"
+                                        <mat-form-field appearance="outline" style="width: 100%;">
+                                            <input type="text" matInput formControlName="GROSS_WT" [readonly]="viewMode"
+                                                (focusout)="grossValidate()" MetalDecimalInput [max]="6"
                                                 class="text-right" />
                                         </mat-form-field>
                                     </div>
-                                    <label for="inputPassword"
-                                        class="col-sm-3 col-form-label">Net
+                                    <label for="inputPassword" class="col-sm-3 col-form-label">Net
                                         Weight : </label>
                                     <div class="col-md-3">
-                                        <mat-form-field appearance="outline"
-                                            style="width: 100%;">
-                                            <input type="text" matInput
-                                                formControlName="NET_WT"
-                                                readonly class="text-right"
-                                                MetalDecimalInput [max]="13" />
+                                        <mat-form-field appearance="outline" style="width: 100%;">
+                                            <input type="text" matInput formControlName="NET_WT" readonly
+                                                class="text-right" MetalDecimalInput [max]="13" />
                                         </mat-form-field>
                                     </div>
                                 </div>
                                 <div class="row mb-1">
-                                    <label for="inputPassword"
-                                        class="col-sm-3 col-form-label">Stone
+                                    <label for="inputPassword" class="col-sm-3 col-form-label">Stone
                                         Weight : </label>
                                     <div class="col-md-3">
-                                        <mat-form-field appearance="outline"
-                                            style="width: 100%;">
-                                            <input type="text" matInput
-                                                formControlName="STONE_WT"
-                                                [readonly]="viewMode"
-                                                class="text-right"
-                                                (focusout)="stoneValidate()"
-                                                StoneDecimalInput [max]="13" />
+                                        <mat-form-field appearance="outline" style="width: 100%;">
+                                            <input type="text" matInput formControlName="STONE_WT" [readonly]="viewMode"
+                                                class="text-right" (focusout)="stoneValidate()" StoneDecimalInput
+                                                [max]="13" />
                                         </mat-form-field>
                                     </div>
-                                    <label for="inputPassword"
-                                        class="col-sm-3 col-form-label">Pure
+                                    <label for="inputPassword" class="col-sm-3 col-form-label">Pure
                                         Weight : </label>
                                     <div class="col-md-3">
-                                        <mat-form-field appearance="outline"
-                                            style="width: 100%;">
-                                            <input type="text" matInput
-                                                formControlName="PURE_WT"
-                                                readonly class="text-right"
-                                                MetalDecimalInput [max]="13" />
+                                        <mat-form-field appearance="outline" style="width: 100%;">
+                                            <input type="text" matInput formControlName="PURE_WT" readonly
+                                                class="text-right" MetalDecimalInput [max]="13" />
                                         </mat-form-field>
                                     </div>
                                 </div>
                                 <div class="row mb-1">
-                                    <label for="inputPassword"
-                                        class="col-sm-3 col-form-label">To Stock
+                                    <label for="inputPassword" class="col-sm-3 col-form-label">To Stock
                                         Code : </label>
                                     <div class="col-md-3">
-                                        <mat-form-field appearance="outline"
-                                            style="width: 100%;">
-                                            <input type="text" matInput
-                                                formControlName="toDIVCODE"
-                                                placeholder="divcode"
-                                                readonly />
+                                        <mat-form-field appearance="outline" style="width: 100%;">
+                                            <input type="text" matInput formControlName="toDIVCODE"
+                                                placeholder="divcode" readonly />
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-3">
-                                        <mat-form-field appearance="outline"
-                                            style="width: 100%;">
-                                            <input type="text" matInput
-                                                formControlName="toStockCode"
-                                                placeholder="stockcode"
-                                                readonly />
+                                        <mat-form-field appearance="outline" style="width: 100%;">
+                                            <input type="text" matInput formControlName="toStockCode"
+                                                placeholder="stockcode" readonly />
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-3">
-                                        <mat-form-field appearance="outline"
-                                            style="width: 100%;">
-                                            <input type="text" matInput
-                                                formControlName="toStockCodeDes"
-                                                placeholder="description"
-                                                readonly />
+                                        <mat-form-field appearance="outline" style="width: 100%;">
+                                            <input type="text" matInput formControlName="toStockCodeDes"
+                                                placeholder="description" readonly />
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -397,60 +292,45 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="row mb-1">
-                                    <label for="inputPassword"
-                                        class="col-sm-3 col-form-label">Location
+                                    <label for="inputPassword" class="col-sm-3 col-form-label">Location
                                         * : </label>
                                     <div class="col-md-3">
-                                        <mat-form-field appearance="outline"
-                                            style="width: 70%;">
-                                            <input type="text" matInput
-                                                formControlName="location"
-                                                [readonly]="viewMode"
+                                        <mat-form-field appearance="outline" style="width: 70%;">
+                                            <input type="text" matInput formControlName="location" [readonly]="viewMode"
                                                 (keydown)="lookupKeyPress($event,'location')"
-                                                (focusout)="validateLookupField($event,locationCodeData,'location')"/>
+                                                (focusout)="validateLookupField($event,locationCodeData,'location')" />
+                                            <master-search  class="masterSearch" [MasterSearchData]="locationCodeData" #overlaylocation
+                                                (newRowClick)="locationCodeSelected($event)"
+                                                *ngIf="!viewMode"></master-search>
                                         </mat-form-field>
-                                        <master-search
-                                            [MasterSearchData]="locationCodeData" #overlaylocation
-                                            (newRowClick)="locationCodeSelected($event)"
-                                            *ngIf="!viewMode"></master-search>
+
                                     </div>
                                 </div>
                                 <div class="row mb-1">
                                     <div class="col-md-6">
-                                        <mat-form-field appearance="outline"
-                                            style="width: 100%;">
-                                            <input type="text" matInput
-                                                formControlName="stockCodeDes"
-                                                placeholder="description"
-                                                readonly />
+                                        <mat-form-field appearance="outline" style="width: 100%;">
+                                            <input type="text" matInput formControlName="stockCodeDes"
+                                                placeholder="description" readonly />
                                         </mat-form-field>
                                     </div>
                                 </div>
                                 <div class="row mb-1">
-                                    <label for="inputPassword"
-                                        class="col-sm-3 col-form-label">Purity
+                                    <label for="inputPassword" class="col-sm-3 col-form-label">Purity
                                         Diff : </label>
                                     <div class="col-md-3">
-                                        <mat-form-field appearance="outline"
-                                            style="width: 100%;">
-                                            <input type="number" matInput
-                                                formControlName="purityDiff"
-                                                readonly class="text-right"
-                                                MetalDecimalInput />
+                                        <mat-form-field appearance="outline" style="width: 100%;">
+                                            <input type="number" matInput formControlName="purityDiff" readonly
+                                                class="text-right" MetalDecimalInput />
                                         </mat-form-field>
                                     </div>
                                 </div>
                                 <div class="row mb-1">
-                                    <label for="inputPassword"
-                                        class="col-sm-3 col-form-label">Job Pcs
+                                    <label for="inputPassword" class="col-sm-3 col-form-label">Job Pcs
                                         : </label>
                                     <div class="col-md-3">
-                                        <mat-form-field appearance="outline"
-                                            style="width: 100%;">
-                                            <input type="text" matInput
-                                                formControlName="JOB_PCS"
-                                                readonly class="text-right"
-                                                NumberOnly />
+                                        <mat-form-field appearance="outline" style="width: 100%;">
+                                            <input type="text" matInput formControlName="JOB_PCS" readonly
+                                                class="text-right" NumberOnly />
                                         </mat-form-field>
                                     </div>
                                     <!-- <div class="col-md-3 offset-3">
@@ -466,13 +346,9 @@
                                 <div class="row mb-1">
                                     <div class="col-md-6">
                                         <div class="form-check">
-                                            <input class="form-check-input"
-                                                type="checkbox"
-                                                [readonly]="viewMode"
-                                                (change)="masterMetalChange($event)"
-                                                formControlName="masterMetal">
-                                            <label class="form-check-label"
-                                                for="DesighCode">
+                                            <input class="form-check-input" type="checkbox" [readonly]="viewMode"
+                                                (change)="masterMetalChange($event)" formControlName="masterMetal">
+                                            <label class="form-check-label" for="DesighCode">
                                                 Master Metal
                                             </label>
                                         </div>
@@ -481,8 +357,7 @@
                                     <div class="row mb-1">
 
                                         <div class="col-md-3">
-                                            <mat-form-field appearance="outline"
-                                                style="width: 100%;">
+                                            <mat-form-field appearance="outline" style="width: 100%;">
                                                 <input type="text" matInput />
                                             </mat-form-field>
                                         </div>
@@ -495,21 +370,16 @@
 
                 <div class="row my-2">
                     <div class="col-md-12">
-                        <dx-data-grid #dataGrid id="gridContainer"
-                            [showBorders]="true" [dataSource]="tableData"
-                            [allowColumnReordering]="true"
-                            [allowColumnResizing]="true"
-                            [columnAutoWidth]="true">
+                        <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true" [dataSource]="tableData"
+                            [allowColumnReordering]="true" [allowColumnResizing]="true" [columnAutoWidth]="true">
                             <dxo-paging [enabled]="false"></dxo-paging>
                             <dxo-editing mode="cell" [allowUpdating]="true">
                             </dxo-editing>
                             <dxo-selection mode="single"></dxo-selection>
                             <dxo-scrolling mode="virtual"></dxo-scrolling>
 
-                            <dxi-column *ngFor="let data of columnhead"
-                                dataField="{{ data }}" caption="{{ data }}"
-                                [allowEditing]="true" alignment="center"
-                                backgroundcolor="#000">
+                            <dxi-column *ngFor="let data of columnhead" dataField="{{ data }}" caption="{{ data }}"
+                                [allowEditing]="true" alignment="center" backgroundcolor="#000">
                             </dxi-column>
                         </dx-data-grid>
                     </div>

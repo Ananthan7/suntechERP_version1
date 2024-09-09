@@ -239,7 +239,7 @@ export class MeltingProcessComponent implements OnInit {
 
   MeltingCodeSelected(e: any) {
     console.log(e);
-    this.meltingProcessFrom.controls.meltingType.setValue(e.MELTYPE_CODE);
+    this.meltingProcessFrom.controls.meltingType.setValue(e['Melting Type']);
   }
 
 
