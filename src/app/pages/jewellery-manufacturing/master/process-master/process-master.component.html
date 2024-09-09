@@ -8,10 +8,9 @@
     </div>
     <!-- modal header component -->
     <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
-        (deleteClick)="deleteProcessMaster()"
+        (deleteClick)="deleteProcessMaster()" [isloading]="isloading"
         [isViewDelete]="!viewMode" [isViewSave]="!viewMode"
-        [isViewCancel]="!viewMode" [isViewMore]="!viewMode"
-        [isViewDelete]="!dele"></modal-header>
+        [isViewMore]="!viewMode" [isViewDelete]="!dele"></modal-header>
     <!-- content section -->
     <div class="card pt-1">
         <form [formGroup]="processMasterForm">
@@ -70,7 +69,7 @@
                                             [disabled]="viewMode">
                                             <mat-option
                                                 *ngFor="let option of processTypeList"
-                                                [value]="option.ENGLISH">
+                                                [value]="option.SRNO">
                                                 {{ option.ENGLISH }}
                                             </mat-option>
                                         </mat-select>
