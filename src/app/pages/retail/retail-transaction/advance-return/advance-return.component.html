@@ -49,7 +49,7 @@
               <input
                 matInput
                 [matDatepicker]="vocDate"
-                [max]="vocDate"
+                [max]="currentDate"
                 formControlName="vocDate"
                 placeholder="DD/MM/YYYY"
                 DateValidation
@@ -114,7 +114,7 @@
           <label for="inputPassword" class="col-sm-4 col-form-label" id="ID006">Entered By</label>
           <div class="col-md-4">
             <mat-form-field style="width: -webkit-fill-available;" appearance="outline">
-              <input type="text" [readonly]="viewOnly" matInput
+              <input type="text" [readonly]="true" matInput
                 formControlName="enteredByCode" />
                 <master-search class="masterSearch"
                 (focusout)="openTab($event, 'enteredByCode')" #overlayEnteredCode
@@ -124,7 +124,7 @@
           </div>
           <div class="col-md-4">
             <mat-form-field style="width: 100%" appearance="outline">
-              <input type="text" [readonly]="viewOnly" matInput
+              <input type="text" [readonly]="true" matInput
                 formControlName="enteredBy" />
             </mat-form-field>
           </div>
@@ -142,13 +142,13 @@
           <label for="inputPassword" class="col-sm-2 col-form-label" id="ID008">Date</label>
           <div class="col-md-2">
             <mat-form-field style="width: 100%" appearance="outline">
-              <input matInput [matDatepicker]="date" [max]="date"
-                formControlName="date" placeholder="DD/MM/YYYY" DateValidation />
-              <mat-datepicker-toggle
+              <input matInput 
+                formControlName="date" placeholder="DD/MM/YYYY" DateValidation [readonly]="true" />
+              <!-- <mat-datepicker-toggle
                 matSuffix
                 [for]="date"
-              ></mat-datepicker-toggle>
-              <mat-datepicker [startAt]="currentDate" #date></mat-datepicker>
+              ></mat-datepicker-toggle> -->
+              <!-- <mat-datepicker [startAt]="currentDate" #date></mat-datepicker> -->
             </mat-form-field>
           </div>
           <label for="inputPassword" class="col-sm-2 col-form-label" id="ID009">Base Currency</label>
@@ -168,7 +168,7 @@
           <label for="inputPassword" class="col-sm-2 col-form-label" id="ID010">Customer Code</label>
           <div class="col-md-4">
             <mat-form-field style="width: -webkit-fill-available;" appearance="outline">
-              <input type="text" [readonly]="viewOnly"
+              <input type="text" [readonly]="true"
                 matInput formControlName="customerCode" />
                 <master-search class="masterSearch"
                 (focusout)="openTab($event, 'customerCode')"
@@ -179,7 +179,7 @@
           </div>
           <div class="col-md-6">
             <mat-form-field style="width: 100%" appearance="outline">
-              <input type="text" [readonly]="viewOnly"
+              <input type="text" [readonly]="true "
                 matInput formControlName="customerName" />
             </mat-form-field>
           </div>
@@ -221,14 +221,14 @@
           <label for="inputPassword" class="col-sm-4 col-form-label" id="ID013">Party Amount</label >
           <div class="col-md-4">
             <mat-form-field style="width: 100%" appearance="outline">
-              <input type="text" [readonly]="viewOnly"
+              <input type="text" [readonly]="true"
                 matInput formControlName="partyCurrency" />
             </mat-form-field>
           </div>
           <div class="col-md-4">
             <mat-form-field style="width: 100%" appearance="outline">
-              <input type="number" [readonly]="viewOnly"
-                matInput formControlName="partyAmount" />
+              <input type="number" [readonly]="true"
+                matInput formControlName="partyAmount" class="text-end" />
             </mat-form-field>
           </div>
         </div>
@@ -241,7 +241,17 @@
           [showBorders]="true"
         >
           <dxo-paging [enabled]="false"></dxo-paging>
-          <dxo-editing mode="cell" [allowUpdating]="true"> </dxo-editing>
+          <dxo-editing
+                      
+                      [allowDeleting]="true"
+                    >
+                      <dxo-texts
+                        
+                        deleteRow="Remove"
+                      >
+                      </dxo-texts>
+                    </dxo-editing>
+          <!-- <dxo-editing mode="cell" [allowUpdating]="true"> </dxo-editing> -->
           <dxo-selection mode="multiple"></dxo-selection>
           <dxo-scrolling mode="virtual"></dxo-scrolling>
 
@@ -251,7 +261,7 @@
             caption="{{ data.title }}"
             [allowEditing]="true"
             width="auto"
-            alignment="center"
+            
             backgroundcolor="#000"
           >
           </dxi-column>
@@ -305,14 +315,14 @@
           <div class="col-md-4">
             <mat-form-field style="width: -webkit-fill-available;" appearance="outline">
               <input type="number" [readonly]="viewOnly"
-                matInput formControlName="totalVat"/>
+                matInput formControlName="totalVat" class="text-end" />
             </mat-form-field>
           </div>
           <label for="inputPassword" class="col-sm-2 col-form-label" id="ID016" >Total</label>
           <div class="col-md-4">
             <mat-form-field style="width: -webkit-fill-available;" appearance="outline">
               <input type="number" [readonly]="viewOnly"
-                matInput formControlName="total" />
+                matInput formControlName="total" class="text-end" />
             </mat-form-field>
           </div>
         </div>
