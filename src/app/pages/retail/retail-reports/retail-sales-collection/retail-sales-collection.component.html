@@ -78,19 +78,22 @@
             <div class="col-md-6">
                 <app-loader [isLoading]="isLoading" class="loader-overlay" ></app-loader>
                 <dx-data-grid width="100%" height="310px" #gridContainer id="gridContainer" [allowColumnReordering]="true"
-                    [dataSource]="APIData" [showColumnLines]="true" [showRowLines]="true"
-                    [showBorders]="true" [columnAutoWidth]="true" (onSelectionChanged)="onGridSelection($event)"
-                    [selectedRowKeys]="selectedRowKeys">
-
-                    <dxo-filter-row [visible]="showFilterRow" [applyFilter]="currentFilter"></dxo-filter-row>
-                    <dxo-paging [enabled]="false"></dxo-paging>
-                    <dxo-editing mode="cell" [allowUpdating]="true">
-                    </dxo-editing>
-                    <dxo-selection mode="multiple" showCheckBoxesMode="always" [selectAllMode]="'allPages'"></dxo-selection>
-
-                    <dxi-column alignment="center" dataField="VOCTYPE"></dxi-column>
-                    <dxi-column alignment="left" dataField="DESCRIPTION"></dxi-column>
-                </dx-data-grid>
+                [dataSource]="APIData" [showColumnLines]="true" [showRowLines]="true"
+                [showBorders]="true" [columnAutoWidth]="true" (onSelectionChanged)="onGridSelection($event)"
+                [selectedRowKeys]="selectedRowKeys">
+  
+      <dxo-filter-row [visible]="showFilterRow" [applyFilter]="currentFilter"></dxo-filter-row>
+      <dxo-paging [enabled]="false"></dxo-paging>
+      <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
+  
+      <dxo-selection mode="multiple" showCheckBoxesMode="always" [selectAllMode]="'allPages'"></dxo-selection>
+  
+      <dxi-column type="selection" [width]="50" [alignment]="'center'"></dxi-column>
+  
+      <dxi-column alignment="center" dataField="VOCTYPE"></dxi-column>
+      <dxi-column alignment="left" dataField="DESCRIPTION"></dxi-column>
+  </dx-data-grid>
+  
             </div>
         </div>
 

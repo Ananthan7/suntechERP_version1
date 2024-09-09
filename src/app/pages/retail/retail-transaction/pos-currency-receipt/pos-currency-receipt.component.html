@@ -160,9 +160,9 @@
               <div class="col-md-5">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
-                    type="number"
+                    type="text"
                     [readonly]="viewOnly || isCurrencyUpdate"
-                    matInput
+                    matInput RateDecimalInput
                     formControlName="partyCurrencyRate"
                     readonly
                   />
@@ -439,7 +439,6 @@
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
                         type="text"
-                        class="st_txt_right"
                         [readonly]="viewOnly"
                         matInput
                         formControlName="partyCurr"
@@ -453,6 +452,7 @@
                         type="text"
                         [readonly]="viewOnly"
                         matInput
+                        class="st_txt_right"
                         formControlName="partyAmountFC"
                       />
                     </mat-form-field>

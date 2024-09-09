@@ -257,7 +257,7 @@
             >
             <div class="col-md-3">
               <mat-form-field style="width: 100%" appearance="outline">
-                <input
+                <input appAlphabetsOnly
                   type="text"
                   [readonly]="viewOnly"
                   matInput
@@ -347,6 +347,7 @@
                   [readonly]="viewOnly"
                   [matDatepicker]="ttDate"
                   name="ttDate"
+                  [min]="this.comService.currentDate"
                   placeholder="DD/MM/YYYY"
                   DateValidation
                   formControlName="ttDate"
