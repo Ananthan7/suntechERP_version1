@@ -198,9 +198,13 @@
                                             </master-search> -->
                                     </div>
                                     <div class="col-md-6">
-                                        <mat-form-field appearance="outline" style="width: 100%;">
-                                            <input type="text" matInput formControlName="stockCode"
-                                                placeholder="stockCode" (focusout)="stockCodeValidate($event)"
+
+                                        <mat-form-field appearance="outline"
+                                            style="width: 100%;">
+                                            <input type="text" matInput
+                                                formControlName="stockCode" UpperCaseDirective
+                                                placeholder="stockCode"
+                                                (focusout)="stockCodeValidate($event)"
                                                 [readonly]="viewMode || masterMetalChecked"
                                                 (keydown)="lookupKeyPress($event,'stockCode')" />
                                             <master-search  class="masterSearch" [MasterSearchData]="stockCodeData" #overlaystockcode

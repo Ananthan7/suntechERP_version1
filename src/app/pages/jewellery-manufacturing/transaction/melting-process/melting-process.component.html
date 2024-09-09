@@ -464,10 +464,10 @@
           </div>
         </div>
      
-      <div class="col-md-12 mt-2">
+      <!-- <div class="col-md-12 mt-2">
         <div class="row">
-          <label for="inputPassword" class="col-sm-1 col-form-label">Total>></label>
-          <label for="inputPassword" class="col-sm-1 col-form-label">Issued:</label>
+          <label for="inputPassword" class="col-sm-1">Total>></label>
+          <label for="inputPassword" class="col-md-1 col-form-label">Issued:</label>
           <div class="col-md-2">
             <mat-form-field appearance="outline" style="width: 100%;">
               <input type="text" matInput formControlName="issued" [readonly]="viewMode" />
@@ -480,19 +480,54 @@
             </mat-form-field>
           </div>
           <label for="inputPassword" class="col-sm-1 col-form-label">Allocated:</label>
-          <div class="col-md-1">
+          <div class="col-md-2">
             <mat-form-field appearance="outline" style="width: 100%;">
               <input type="text" matInput formControlName="allocated" [readonly]="viewMode" />
             </mat-form-field>
           </div>
           <label for="inputPassword" class="col-sm-1 col-form-label">Balance:</label>
-          <div class="col-md-1">
+          <div class="col-md-2">
+            <mat-form-field appearance="outline" style="width: 100%;">
+              <input type="text" matInput formControlName="balance" [readonly]="viewMode" />
+            </mat-form-field>
+          </div>
+        </div>
+      </div> -->
+      <div class="col-md-12 mt-2">
+        <div class="row align-items-center d-flex flex-nowrap">
+          <label for="inputPassword" class="col-md-1 col-form-label">Total>></label>
+          
+          <label for="inputPassword" class="col-md-1 col-form-label">Issued:</label>
+          <div class="col-md-2">
+            <mat-form-field appearance="outline" style="width: 100%;">
+              <input type="text" matInput formControlName="issued" [readonly]="viewMode" />
+            </mat-form-field>
+          </div>
+      
+          <label for="inputPassword" class="col-md-1 col-form-label">Required:</label>
+          <div class="col-md-2">
+            <mat-form-field appearance="outline" style="width: 100%;">
+              <input type="text" matInput formControlName="required" [readonly]="viewMode" />
+            </mat-form-field>
+          </div>
+      
+          <label for="inputPassword" class="col-md-1 col-form-label">Allocated:</label>
+          <div class="col-md-2">
+            <mat-form-field appearance="outline" style="width: 100%;">
+              <input type="text" matInput formControlName="allocated" [readonly]="viewMode" />
+            </mat-form-field>
+          </div>
+      
+          <label for="inputPassword" class="col-md-1 col-form-label">Balance:</label>
+          <div class="col-md-2">
             <mat-form-field appearance="outline" style="width: 100%;">
               <input type="text" matInput formControlName="balance" [readonly]="viewMode" />
             </mat-form-field>
           </div>
         </div>
       </div>
+      
+      
     </div>
       <div class="container">
         <div class="row">

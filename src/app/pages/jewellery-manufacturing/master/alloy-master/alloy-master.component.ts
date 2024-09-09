@@ -273,7 +273,8 @@ export class AlloyMasterComponent implements OnInit {
     allowpcs: [''],
     excludeTransferWt: [''],
     silveralloy: [''],
-    picture_name: ['']
+    picture_name: [''],
+    FLAG:['']
   });
   mode!: string;
 
@@ -306,6 +307,7 @@ export class AlloyMasterComponent implements OnInit {
     // this.setupFormSubscription();
 
     if (this.content?.FLAG) {
+     this.setAllInitialValues()
       if (this.content.FLAG == 'EDIT') {
         this.setFormValues();
         this.isDisabled = !this.isDisabled;
@@ -1622,6 +1624,34 @@ export class AlloyMasterComponent implements OnInit {
       return true
     }
     return false;
+  }
+  setAllInitialValues() {
+    if (!this.content?.FLAG) return
+    this.commonService.showSnackBarMsg('MSG81447');
+    let API = `DiamondStockMaster/GetDiamondStockMasterWithMid/${this.content.MID}`
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        if (result.response) {
+          let data = result.response
+          console.log(data,'alloy mater')
+          this.alloyMastereForm.controls.price1code.setValue(data.PRICE1PER)
+          this.alloyMastereForm.controls.price2code.setValue(data.PRICE2PER)
+          this.alloyMastereForm.controls.price3code.setValue(data.PRICE3PER)
+          this.alloyMastereForm.controls.price4code.setValue(data.PRICE4PER)
+          this.alloyMastereForm.controls.price5code.setValue(data.PRICE5PER)
+          this.alloyMastereForm.controls.currency.setValue(data.CURRENCY_CODE)
+          this.alloyMastereForm.controls.currencyRate.setValue(data.CC_RATE)
+
+ //set to main grid
+
+
+        } else {
+          this.commonService.toastErrorByMsgId('MSG1531')
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
   }
 
   formSubmit() {
