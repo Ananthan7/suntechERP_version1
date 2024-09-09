@@ -49,36 +49,27 @@
     </dx-data-grid>
 
    <div class="row">
-        <div class="col-md-12" *ngIf="templateViewForReports">
-            
-          <dx-data-grid 
-          [dataSource]="dataSource"
-          [showBorders]="true"
-          [allowColumnResizing]="true"
-          [columnAutoWidth]="true"
-          [filterRow]="{ visible: true }"
-          [paging]="{ pageSize: 10 }"
-          [pager]="{ showPageSizeSelector: true, allowedPageSizes: [5, 10, 20] }">
+        <div class="col-md-12" *ngIf="templateViewForReports">  
+          <dx-data-grid [dataSource]="dataSource" [showBorders]="true" [allowColumnResizing]="true"
+          [columnAutoWidth]="true" [filterRow]="{ visible: true }" [paging]="{ pageSize: 10 }" >
         
           <!-- <dxo-editing mode="row" [allowUpdating]="true" [allowDeleting]="true" [allowAdding]="true"></dxo-editing> -->
           <dxo-filter-row></dxo-filter-row>
           <dxo-header-filter></dxo-header-filter>
         
-          <dxi-column dataField="ID" caption="ID"></dxi-column>
-          <dxi-column dataField="Name" caption="Name"></dxi-column>
-          <dxi-column dataField="Values" caption="Values"></dxi-column>
-          <dxi-column dataField="Date" caption="From Date" dataType="date"></dxi-column>
-          <dxi-column dataField="Date" caption="To Date" dataType="date"></dxi-column>
+          <dxi-column dataField="MID" caption="MID"></dxi-column>
+          <dxi-column dataField="FORM_NAME" caption="Report Name"></dxi-column>
+          <dxi-column dataField="TEMPLATE_NAME" caption="Report Template Name"></dxi-column>
         
           <dxi-column caption="Report Type" cellTemplate="cellTemplate"></dxi-column>
           <div *dxTemplate="let data of 'cellTemplate'">  
             <div class="row mt-1 mx-1" style="margin-right: 1rem !important;">
               <div class="icon-label-container">
-                <i class="fa fa-print" style="color: #031082;"></i>
+                <i class="fa fa-print" style="color: #031082;" (click)="printGridData(data)"></i>
               </div>
-              <div class="icon-label-container">
+              <!-- <div class="icon-label-container">
                 <i class="fa fa-book" style="color: indianred;"></i>
-              </div>
+              </div> -->
               <div class="icon-label-container">
                 <i class="fa fa-file-excel" style="color: green;"></i>
               </div>
