@@ -546,6 +546,14 @@ export class ProductionEntryDetailsComponent implements OnInit {
   }
   /**USE: subjobnumber validate API call*/
   subJobNumberValidate(event?: any) {
+    // let postData = {
+    //   "SPID": "117",
+    //   "parameter": {
+    //     'Job_Number': this.productiondetailsFrom.value.JOB_NUMBER,
+    //     'DesignType': this.commonService.nullToString(this.designType),
+    //     'BranchCode': this.commonService.nullToString(this.branchCode)
+    //   }
+    // }
     let postData = {
       "SPID": "040",
       "parameter": {
@@ -560,6 +568,9 @@ export class ProductionEntryDetailsComponent implements OnInit {
         this.commonService.closeSnackBarMsg()
         if (result.dynamicData && result.dynamicData[0].length > 0) {
           let data = result.dynamicData[0]
+          // let result3 = result.dynamicData[2]
+          // this.setVendorRef(result) //supplier ref 
+
           this.setFormNullToString('PROCESS_CODE', data[0].PROCESS)
           this.setFormNullToString('PROCESS_NAME', data[0].PROCESSDESC)
           this.setFormNullToString('WORKER_CODE', data[0].WORKER)
@@ -572,7 +583,6 @@ export class ProductionEntryDetailsComponent implements OnInit {
           this.setFormNullToString('PURE_WT', data[0].PURE_WT)
           this.setFormNullToString('KARAT_CODE', data[0].KARAT)
           this.setFormNullToString('TOTAL_PCS', data[0].PCS)
-          this.setFormDecimal('METAL_WT', data[0].METAL, 'METAL')
           this.setFormDecimal('STONE_WT', data[0].STONE, 'STONE')
           this.setFormDecimal('GROSS_WT', data[0].METAL, 'METAL')
           this.setFormDecimal('PUREWT', data[0].PUREWT, 'METAL')
@@ -582,6 +592,13 @@ export class ProductionEntryDetailsComponent implements OnInit {
           this.setFormDecimal('OTHER_STONE', 0, 'STONE')
           this.setFormDecimal('PURITY_DIFF', 0, 'METAL')
 
+          if(data.length>0){
+            let metalWt = 0
+            data.forEach((element:any) => {
+              metalWt += element.METAL
+            });
+            this.setFormDecimal('METAL_WT', metalWt, 'METAL')
+          }
           this.FORM_VALIDATER = this.productiondetailsFrom.value
           if(data[0].PROCESS?.toUpperCase() != 'FINAL') this.pendingProcessValidate()
           // this.fillStoneDetails()
@@ -637,7 +654,6 @@ export class ProductionEntryDetailsComponent implements OnInit {
         } else {
           this.commonService.toastErrorByMsgId('MSG1747');
         }
-        this.setVendorRef(result) //supplier ref 
       }, err => {
         this.commonService.closeSnackBarMsg();
         this.commonService.toastErrorByMsgId('MSG1531');
