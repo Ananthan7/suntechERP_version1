@@ -121,4 +121,8 @@ export class RetailReportsComponent implements OnInit {
     this.masterGridComponent?.getMasterGridData(data)
   }
 
+  handleActionViewClick(data: any) {
+    this.openModalView(data.data)
+  }
+
 }

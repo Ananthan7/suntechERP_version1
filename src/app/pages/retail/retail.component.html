@@ -1,79 +1,201 @@
 <!-- title menu section -->
-<app-menubar *ngIf="menuTitle != ''" [menuTitle]="menuTitle"
-    (subMenuChange)="menuClicked($event)"></app-menubar>
+<app-menubar *ngIf="menuTitle != ''" [menuTitle]="menuTitle" (subMenuChange)="menuClicked($event)"></app-menubar>
 <!-- content section starts -->
  
-<div class="row">
-    <div class="col-md-2 col-sm-12 menucards" >
-        <div class="menuname p-2">Sales Performance</div>
-        <div class="numeric-value">23</div>
-    </div>
-    <div class="col-md-2 col-sm-12 menucards" >
-        <div class="menuname p-2">Sales Performance</div>
-        <div class="numeric-value">24</div>
-    </div>
-    <div class="col-md-2 col-sm-12 menucards" >
-        <div class="menuname p-2">Sales Performance</div>
-        <div class="numeric-value">25</div>
-    </div>
-    <div class="col-md-2 col-sm-12 menucards" >
-        <div class="menuname p-2">Customer Metrics</div>
-        <div class="numeric-value">26</div>
-    </div>
-  
-    <div class="col-md-2 col-sm-12 menucards" >
-        <div class="menuname p-2">Customer Metrics</div>
-        <div class="numeric-value">27</div>
-    </div>
-    <div class="col-md-2 col-sm-12 menucards">
-        <div class="menuname p-2">Customer Metrics</div>
-        <div class="numeric-value">28</div>
-    </div>
-    <div class="col-md-2 col-sm-12 menucards" >
-        <div class="menuname p-2">Inventory Management</div>
-        <div class="numeric-value">29</div>
-    </div>
-    <div class="col-md-2 col-sm-12 menucards" >
-        <div class="menuname p-2">Inventory Management</div>
-        <div class="numeric-value">30</div>
-    </div>
+<section class="sales-dashboard">
+    <header class="dashboard-header">
+        <h1 class="dashboard-title">Sales Performance</h1>
+    </header>
+    <main class="dashboard-content">
+        <article class="metric-card total-revenue">
+            <h2 class="metric-title">Total Sales Revenue</h2>
+            <div class="metric-value-container">
+                <img src="assets/images/salesRevnue.png" alt="Total revenue chart" class="metric-chart" />
+                <p class="metric-value">25.5K</p>
+            </div>
+        </article>
+        <article class="metric-card atv">
+            <header class="metric-header">
+                <h2 class="metric-title">ATV</h2>
+                <img src="assets/images/Icons/cardHeaderIcon.png" alt="Total revenue chart" class="info-icon" />
+            </header>
+            <div class="metric-value-container">
+                <img src="assets/images/ATV.png" alt="Total revenue chart" class="metric-chart" />
 
-    <div class="col-md-2 col-sm-12 menucards">
-        <div class="menuname p-2">Inventory Management</div>
-        <div class="numeric-value">31</div>
-    </div>
-    <div class="col-md-2 col-sm-12 menucards">
-        <div class="menuname p-2">Inventory Management</div>
-        <div class="numeric-value">32</div>
-    </div>
-    <div class="col-md-2 col-sm-12 menucards" >
-        <div class="menuname p-2">Profitability</div>
-        <div class="numeric-value">33</div>
-    </div>
-    <div class="col-md-2 col-sm-12 menucards" >
-        <div class="menuname p-2">Profitability</div>
-        <div class="numeric-value">34</div>
-    </div>
-    <div class="col-md-2 col-sm-12 menucards" >
-        <div class="menuname p-2">Profitability</div>
-        <div class="numeric-value">35</div>
-    </div>
-    <div class="col-md-2 col-sm-12 menucards" >
-        <div class="menuname p-2">Profitability</div>
-        <div class="numeric-value">36</div>
-    </div>
+                <p class="metric-value">1.4K</p>
+            </div>
+        </article>
+        <article class="metric-card product-category">
+            <h2 class="metric-title">Sales By Product Category</h2>
+            <div class="metric-value-container">
+                <img src="assets/images/SalesProduct.png" alt="Total revenue chart" class="metric-chart" />
 
-    <div class="col-md-2 col-sm-12 menucards" >
-        <div class="menuname p-2">Employee Performance</div>
-        <div class="numeric-value">37</div>
-    </div>
-    <div class="col-md-2 col-sm-12 menucards" >
-        <div class="menuname p-2">Customer Satisfaction</div>
-        <div class="numeric-value">38</div>
-    </div>
-    <div class="col-md-2 col-sm-12 menucards" >
-        <div class="menuname p-2">Supplier Performance</div>
-        <div class="numeric-value">39</div>
-    </div>
-</div>
+                <p class="metric-value">24.5K</p>
+            </div>
+        </article>
+    </main>
+</section>
 
+<section class="sales-dashboard">
+    <header class="dashboard-header">
+        <h1 class="dashboard-title">Customer Metrics</h1>
+    </header>
+    <main class="dashboard-content">
+        <article class="metric-card total-revenue">
+            <h2 class="metric-title">Customer Footfall</h2>
+            <div class="metric-value-container">
+                <img src="assets/images/CustomerFootfall.png" alt="Total revenue chart" class="metric-chart" />
+
+                <p class="metric-value">66.5K</p>
+            </div>
+        </article>
+        <article class="metric-card atv">
+            <header class="metric-header">
+                <h2 class="metric-title">CLTV</h2>
+
+            </header>
+            <div class="metric-value-container">
+                <img src="assets/images/CLTV.png" alt="Total revenue chart" class="metric-chart" />
+
+                <p class="metric-value">4.5K</p>
+            </div>
+        </article>
+        <article class="metric-card product-category">
+            <h2 class="metric-title">Repeat Purchase Rate</h2>
+            <div class="metric-value-container">
+                <img src="assets/images/RepeatPurchaseRate.png" alt="Total revenue chart" class="metric-chart" />
+
+                <p class="metric-value">3.5K</p>
+            </div>
+        </article>
+    </main>
+</section>
+
+<section class="sales-dashboard">
+    <header class="dashboard-header">
+        <h1 class="dashboard-title">Inventory Management</h1>
+    </header>
+    <main class="dashboard-content">
+        <article class="metric-card total-revenue">
+            <h2 class="metric-title">Inventory Turnover</h2>
+            <div class="metric-value-container">
+                <img src="assets/images/InventoryTurnover.png" alt="Total revenue chart" class="metric-chart" />
+
+                <p class="metric-value">12.5K</p>
+            </div>
+        </article>
+        <article class="metric-card atv">
+            <header class="metric-header">
+                <h2 class="metric-title">DSI</h2>
+
+            </header>
+            <div class="metric-value-container">
+                <img src="assets/images/DSI.png" alt="Total revenue chart" class="metric-chart" />
+
+                <p class="metric-value">22.5K</p>
+            </div>
+        </article>
+        <article class="metric-card product-category">
+            <h2 class="metric-title">Stock Levels by Product Category</h2>
+            <div class="metric-value-container">
+                <img src="assets/images/ProductCategory.png" alt="Total revenue chart" class="metric-chart" />
+
+                <p class="metric-value">9.5K</p>
+            </div>
+        </article>
+        <article class="metric-card product-category">
+            <h2 class="metric-title">Out-of-Stock Rate</h2>
+            <div class="metric-value-container">
+                <img src="assets/images/PercentageProducts.png" alt="Total revenue chart" class="metric-chart" />
+
+                <p class="metric-value">8.5K</p>
+            </div>
+        </article>
+    </main>
+</section>
+
+<section class="sales-dashboard">
+    <header class="dashboard-header">
+        <h1 class="dashboard-title">Profitability</h1>
+    </header>
+    <main class="dashboard-content">
+        <article class="metric-card total-revenue">
+            <h2 class="metric-title">Gross Profit Margin</h2>
+            <div class="metric-value-container">
+                <img src="assets/images/GrossProfit.png" alt="Total revenue chart" class="metric-chart" />
+
+                <p class="metric-value">66.5K</p>
+            </div>
+        </article>
+        <article class="metric-card atv">
+            <header class="metric-header">
+                <h2 class="metric-title">Net Profit Margin</h2>
+
+            </header>
+            <div class="metric-value-container">
+                <img src="assets/images/NetProfit.png" alt="Total revenue chart" class="metric-chart" />
+
+                <p class="metric-value">6.5K</p>
+            </div>
+        </article>
+        <article class="metric-card product-category">
+            <h2 class="metric-title">Cost of Goods Sold (COGS)</h2>
+            <div class="metric-value-container">
+                <img src="assets/images/COGS.png" alt="Total revenue chart" class="metric-chart" />
+
+                <p class="metric-value">4.5K</p>
+            </div>
+        </article>
+        <article class="metric-card product-category">
+            <h2 class="metric-title">Discounts and Markdowns</h2>
+            <div class="metric-value-container">
+                <img src="assets/images/Discounts.png" alt="Total revenue chart" class="metric-chart" />
+
+                <p class="metric-value">2.5K</p>
+            </div>
+        </article>
+    </main>
+</section>
+
+<section class="sales-dashboard">
+    <header class="dashboard-header">
+        <h1 class="dashboard-title">Employee Performance</h1>
+    </header>
+    <main class="dashboard-content">
+        <article class="metric-card total-revenue">
+            <h2 class="metric-title">Sales per Employee</h2>
+            <div class="metric-value-container">
+                <img src="assets/images/SalesEmployee.png" alt="Total revenue chart" class="metric-chart" />
+                <p class="metric-value">78.5K</p>
+            </div>
+        </article>
+    </main>
+</section>
+<section class="sales-dashboard">
+    <header class="dashboard-header">
+        <h1 class="dashboard-title">Customer Satisfaction</h1>
+    </header>
+    <main class="dashboard-content">
+        <article class="metric-card total-revenue">
+            <h2 class="metric-title">Return Rate</h2>
+            <div class="metric-value-container">
+                <img src="assets/images/ReturnRate.png" alt="Total revenue chart" class="metric-chart" />
+                <p class="metric-value">32.5K</p>
+            </div>
+        </article>
+    </main>
+</section>
+<section class="sales-dashboard">
+    <header class="dashboard-header">
+        <h1 class="dashboard-title">Supplier Performance</h1>
+    </header>
+    <main class="dashboard-content">
+        <article class="metric-card total-revenue">
+            <h2 class="metric-title">Lead Time</h2>
+            <div class="metric-value-container">
+                <img src="assets/images/LeadTime.png" alt="Total revenue chart" class="metric-chart" />
+                <p class="metric-value">44.5K</p>
+            </div>
+        </article>
+    </main>
+</section>

@@ -533,7 +533,7 @@ export class StoneIssueComponent implements OnInit {
           .subscribe((result) => {
             if (result) {
               if (result.status == "Success") {
-                this.showSuccessDialog(this.content?.VOCNO + ' Deleted successfully');
+                this.showSuccessDialog(' Deleted successfully');
               } else {
                 this.showErrorDialog(result.message || 'Error please try again');
               }

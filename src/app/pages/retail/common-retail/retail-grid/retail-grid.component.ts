@@ -38,6 +38,8 @@ export class RetailGridComponent implements OnInit {
 
   @Input() templateViewForReports: boolean = false;
   dataSource = [];
+  @Output() actionViewClick = new EventEmitter<any>();
+  
   
   constructor(
     private CommonService: CommonServiceService,
@@ -409,5 +411,8 @@ export class RetailGridComponent implements OnInit {
     }); 
   }
 
+  viewClick(event: any){
+    this.actionViewClick.emit(event)
+  }
 
 }

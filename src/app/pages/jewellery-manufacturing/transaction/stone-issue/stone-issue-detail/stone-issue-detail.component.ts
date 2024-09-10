@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild,ElementRef } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
@@ -254,6 +254,14 @@ export class StoneIssueDetailComponent implements OnInit {
   locationCodeSelected(e: any) {
     console.log(e);
     this.stoneIssueDetailsFrom.controls.LOCTYPE_CODE.setValue(e.LOCATION_CODE);
+  }
+
+  @ViewChild('jobNumberInput') jobNumberInput!: ElementRef;
+
+  ngAfterViewInit() {
+    if (!this.viewMode) {
+      this.jobNumberInput.nativeElement.focus();
+    }
   }
 
   jobNumberCodeSelected(e: any) {

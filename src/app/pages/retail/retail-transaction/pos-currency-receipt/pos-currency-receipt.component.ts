@@ -477,9 +477,11 @@ export class PosCurrencyReceiptComponent implements OnInit {
                 this.posCurrencyReceiptForm.controls.partyCurrency.setValue(
                   data[0].CURRENCY_CODE
                 );
+
                 this.posCurrencyReceiptForm.controls.partyCurrencyRate.setValue(
-                  data[0].CONV_RATE
+                  this.comService.decimalQuantityFormat(data[0].CONV_RATE, 'RATE')
                 );
+                
                 this.posCurrencyReceiptForm.controls.partyCurr.setValue(
                   data[0].CURRENCY_CODE
                 );
@@ -605,7 +607,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
       OUSTATUSNEW: 1,
       POSCUSTOMERCODE: this.posCurrencyReceiptForm.value.customerCode || "",
       D2DTRANSFER: "F",
-      DRAFT_FLAG: "0",
+      DRAFT_FLAG: "",
       POSSCHEMEID: "",
       FLAG_EDIT_ALLOW: "",
       PARTY_ADDRESS: this.posCurrencyReceiptForm.value.partyAddress,
@@ -1016,7 +1018,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
           let data = result.response;
           this.vatPercentage = data.VAT_PER ? data.VAT_PER : "0";
           this.hsnCode = data.HSN_SAC_CODE ? data.HSN_SAC_CODE : "";
-          this.igst_accode = data.IGST_ACCODE ? data.HSN_SAC_CODE : "";
+          this.igst_accode = data.IGST_ACCODE ? data.POS_TAX_CRACCODE : "";
         }
       });
   }

@@ -86,7 +86,7 @@
           <div *dxTemplate="let data of 'cellTemplate2'">  
             <div class="row mt-1 mx-1" style="margin-right: 1rem !important;">
               <div class="icon-label-container">
-                <i class="fa fa-eye" style="color: #5497b2;"></i>
+                <i class="fa fa-eye" style="color: #5497b2;" (click)="viewClick(data)"></i>
               </div>
               <div class="icon-label-container">
                 <i class="fa fa-pen" style="color: #6c8ae5;"></i>

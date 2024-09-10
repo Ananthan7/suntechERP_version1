@@ -54,6 +54,7 @@ export class AdvanceReturnComponent implements OnInit {
   strBranchcode: any = localStorage.getItem("userbranch");
   baseYear: any = localStorage.getItem("YEAR") || "";
   midForInvoce: any = 0;
+  grossAmount: any = 0;
 
   columnhead: any[] = [
     { title: "Sr #", field: "SRNO" },
@@ -192,11 +193,13 @@ export class AdvanceReturnComponent implements OnInit {
   findGridCalculations() {
     let sumCGST_AMOUNTCC = 0;
     let sumAMOUNTCC = 0;
+    this.grossAmount=0;
 
     this.pcrSelectionData.forEach((data, index) => {
       data.SRNO = index + 1;
       sumCGST_AMOUNTCC += parseFloat(data.CGST_AMOUNTCC);
       sumAMOUNTCC += parseFloat(data.AMOUNTCC);
+      this.grossAmount=parseFloat(data.TOTAL_AMOUNTCC);
     });
 
     this.advanceReturnForm.controls.totalVat.setValue(
@@ -632,56 +635,56 @@ export class AdvanceReturnComponent implements OnInit {
       PARTYCODE: this.advanceReturnForm.value.partyCode || "",
       PARTY_CURRENCY: this.advanceReturnForm.value.partyCurrency || "",
       PARTY_CURR_RATE: this.advanceReturnForm.value.partyCurrencyRate || "0",
-      TOTAL_AMOUNTFC: this.advanceReturnForm.value.partyAmount || 0,
-      TOTAL_AMOUNTCC: this.advanceReturnForm.value.partyAmount || 0,
+      TOTAL_AMOUNTFC: this.grossAmount || 0,
+      TOTAL_AMOUNTCC: this.grossAmount || 0,
       REMARKS: this.advanceReturnForm.value.narration || "",
       SYSTEM_DATE: "2023-10-10T11:05:50.756Z",
       NAVSEQNO: 0,
       HAWALACOMMCODE: "",
       HAWALACOMMPER: 0,
-      FLAG_UPDATED: "0",
-      FLAG_INPROCESS: "0",
+      FLAG_UPDATED: "N",
+      FLAG_INPROCESS: "N",
       SUPINVNO: this.advanceReturnForm.value.partyRefNo || "",
       SUPINVDATE: this.advanceReturnForm.value.date,
       HHACCOUNT_HEAD: this.advanceReturnForm.value.advanceFromCustomers || "",
       SALESPERSON_CODE: this.advanceReturnForm.value.enteredByCode,
       SALESPERSON_NAME: this.advanceReturnForm.value.enteredBy,
-      BALANCE_FC: this.advanceReturnForm.value.partyAmount || 0,
-      BALANCE_CC: this.advanceReturnForm.value.partyAmount || 0,
-      AUTHORIZEDPOSTING: true,
+      BALANCE_FC: this.grossAmount || 0,
+      BALANCE_CC: this.grossAmount || 0,
+      AUTHORIZEDPOSTING: false,
       AUTOGENREF: "",
       AUTOGENMID: 0,
       AUTOGENVOCTYPE: "",
       OUSTATUS: true,
-      OUSTATUSNEW: 0,
+      OUSTATUSNEW: 1,
       POSCUSTOMERCODE: this.advanceReturnForm.value.customerCode || "",
-      D2DTRANSFER: "",
-      DRAFT_FLAG: "0",
+      D2DTRANSFER: "F",
+      DRAFT_FLAG: "",
       POSSCHEMEID: "",
       FLAG_EDIT_ALLOW: "",
       PARTY_ADDRESS: this.advanceReturnForm.value.partyAddress,
       AUTOPOSTING: true,
       POSTDATE: this.advanceReturnForm.value.vocDate,
-      ADVRETURN: true,
+      ADVRETURN: false,
       HTUSERNAME: this.comService.userName,
       GENSEQNO: 0,
       BASE_CURRENCY: this.advanceReturnForm.value.partyCurrency || "",
       BASE_CURR_RATE: this.advanceReturnForm.value.partyCurrencyRate || "0",
       BASE_CONV_RATE: this.advanceReturnForm.value.partyCurrencyRate || "0",
       PRINT_COUNT: 0,
-      GST_REGISTERED: true,
+      GST_REGISTERED: false,
       GST_STATE_CODE: "",
       GST_NUMBER: "",
       GST_TYPE: "",
       GST_TOTALFC: 0,
       GST_TOTALCC: 0,
       DOC_REF: "",
-      REC_STATUS: "",
+      REC_STATUS: "C",
       CUSTOMER_NAME: this.advanceReturnForm.value.customerName || "",
       CUSTOMER_MOBILE: this.advanceReturnForm.value.mobile || "",
       CUSTOMER_EMAIL: this.advanceReturnForm.value.email || "",
       TDS_CODE: "",
-      TDS_APPLICABLE: true,
+      TDS_APPLICABLE: false,
       TDS_TOTALFC: 0,
       TDS_TOTALCC: 0,
       ADRRETURNREF: "",
@@ -689,7 +692,7 @@ export class AdvanceReturnComponent implements OnInit {
       SCH_CUSTOMER_ID: this.advanceReturnForm.value.schemaId || "",
       REFDOCNO: "",
       GIFT_CARDNO: "",
-      FROM_TOUCH: true,
+      FROM_TOUCH: false,
       SL_CODE: "",
       SL_DESCRIPTION: "",
       OT_TRANSFER_TIME: "2023-10-10T12:05:50.756Z",
