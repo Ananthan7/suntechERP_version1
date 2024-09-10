@@ -7103,7 +7103,8 @@ export class AddPosComponent implements OnInit {
     this.prnt_inv_total_stone_amt = total_stone_amt;
     this.prnt_inv_total_dis_amt = total_dis_amt;
     // this.prnt_inv_total_gross_amt = total_sum-total_dis_amt;
-    this.prnt_inv_total_gross_amt = total_sum + total_metal_amt + total_stone_amt;
+    this.prnt_inv_total_gross_amt = total_gross_amt;
+    // total_sum + total_metal_amt + total_stone_amt;
     //  this.prnt_inv_total_gross_amt = net_sum-this.order_items_total_tax;
 
     this.prnt_inv_net_total_without_tax = total_sum;
