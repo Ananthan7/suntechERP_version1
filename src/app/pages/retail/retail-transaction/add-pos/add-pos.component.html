@@ -3397,7 +3397,7 @@
                       <mat-form-field appearance="outline" style="width: 100%">
                         <input class="st_txt_right" type="text" [min]="0" [maxLength]="14"
                           (keyup)="this.comFunc.enforceMinMax($event.target)" matInput formControlName="fcn_li_stone_wt"
-                          id="fcn_li_stone_wt" (change)="changeStoneWt($event)" [readonly]="viewOnly"
+                          id="fcn_li_stone_wt" (change)="changeStoneWt($event)" [readonly]="viewOnly||!isStoneIncluded"
                           MetalDecimalInput />
                       </mat-form-field>
                     </div>
