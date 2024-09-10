@@ -219,7 +219,9 @@ export class RetailSalesCollectionComponent implements OnInit {
     });
   }
   prefillScreenValues(){ 
-   if (this.content && Object.keys(this.content).length > 0) {
+   if ( Object.keys(this.content).length > 0) {
+      this.isLoading = false;
+      console.log('data fetched from main grid',this.content )
       let ParcedPreFetchData = JSON.parse(this.content?.CONTROL_LIST_JSON) //data from retailREPORT Component- modalRef instance
       this.retailSalesCollection.controls.showDateCheckbox?.setValue(
         ParcedPreFetchData?.CONTROL_DETAIL.SHOWDATE === 1 ? true :  false
@@ -239,11 +241,10 @@ export class RetailSalesCollectionComponent implements OnInit {
         fromDate:  ParcedPreFetchData?.CONTROL_DETAIL.FROMVOCDATE,
         toDate: ParcedPreFetchData?.CONTROL_DETAIL.TOVOCDATE
       };
-      // console.log(this.dateToPass)
+      // console.log('data fetched from main grid',ParcedPreFetchData )
 
       this.retailSalesCollection.controls.branch.setValue(ParcedPreFetchData?.CONTROL_DETAIL.STRBRANCHCODES);
       this.fetchedBranchData= ParcedPreFetchData?.CONTROL_DETAIL.STRBRANCHCODES.split("#")
-      console.log('data fetched from main grid',ParcedPreFetchData )
     }
   }
   
