@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 
@@ -11,7 +11,9 @@ export class DateComponent implements OnInit {
   dateForm!: FormGroup;
   currentDate: Date = new Date();
   @Output() selectedDate = new EventEmitter();
-  
+  @Input() dateValue?: { fromDate: string; toDate: string };
+
+
   constructor(private fb: FormBuilder) { }
 
   ngOnInit(): void {
@@ -20,6 +22,14 @@ export class DateComponent implements OnInit {
       toDate: [null]
     });
   }
+  
+  async ngAfterViewInit() {
+    await new Promise(resolve => setTimeout(resolve, 2000)); // 2000 milliseconds (2 seconds)
+    console.log('fetched date', this.dateValue)
+    this.dateForm.get('fromDate')?.setValue(this.dateValue?.fromDate, { emitEvent: false });
+    this.dateForm.get('toDate')?.setValue(this.dateValue?.toDate, { emitEvent: false });
+  }
+  
 
   fromDateChange(event: MatDatepickerInputEvent<Date>): void {
     const fromDate = event.value;

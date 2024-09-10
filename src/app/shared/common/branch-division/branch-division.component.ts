@@ -44,11 +44,28 @@ export class BranchDivisionComponent implements OnInit {
   selectedAreaData: any;
   selectedBcategData: any;
 
+  @Input() fetchData: any;
   constructor(private toastr: ToastrService, private commonService: CommonServiceService,
     private dataService: SuntechAPIService, private modalService: NgbModal,) { }
 
   ngOnInit() {
     this.getAPIData()
+  }
+
+  async ngAfterViewInit() {
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    console.log('fetched branch data', this.fetchData)
+    const selectedBranchKeys = this.BranchDataSource.filter(item => this.fetchData.includes(item.BRANCH_CODE)).map(item => item);
+    this.selectedRowKeys = selectedBranchKeys;
+
+    const selectedDivisionKeys = this.divisionDataSource.filter(item => this.fetchData.includes(item.DIVISION_CODE)).map(item => item);
+    this.selectedDivisionKeys = selectedDivisionKeys;
+    
+    const selectedAreaKeys = this.areaDataSource.filter(item => this.fetchData.includes(item.AREA_CODE)).map(item => item);
+    this.selectedAreaKeys = selectedAreaKeys;
+
+    const selectedBusinessCategoryKeys = this.businessCategDataSource.filter(item => this.fetchData.includes(item.CATEGORY_CODE)).map(item => item);
+    this.selectedBcategKeys = selectedBusinessCategoryKeys;
   }
 
   openMasterSearch() {
