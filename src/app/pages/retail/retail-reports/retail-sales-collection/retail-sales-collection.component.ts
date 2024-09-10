@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -46,7 +46,10 @@ export class RetailSalesCollectionComponent implements OnInit {
     templateName: ['']
   })
 
-  @Input() content: any = {}; 
+  @Input() content: any = {}; //get data from retailREPORT Component- modalRef instance
+  dateToPass: { fromDate: string; toDate: string } = { fromDate: '', toDate: '' };
+  fetchedBranchData: any[] =[];
+
   constructor(  private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder, private dataService: SuntechAPIService,  private comService: CommonServiceService,
     private commonService: CommonServiceService,   private toastr: ToastrService,
@@ -54,14 +57,6 @@ export class RetailSalesCollectionComponent implements OnInit {
 
   ngOnInit(): void {
     this.getAPIData()
-
-    let ParcedPreFetchData = JSON.parse(this.content?.CONTROL_LIST_JSON)
-    console.log(ParcedPreFetchData.CONTROL_DETAIL.SHOWDATE)
-    this.retailSalesCollection.controls.showDateCheckbox.setValue(
-      ParcedPreFetchData.CONTROL_DETAIL.SHOWDATE === 0 ? true : 
-      false
-    );
-  
   }
 
   selectedData(data: any) {
@@ -115,7 +110,7 @@ export class RetailSalesCollectionComponent implements OnInit {
     this.formattedBranchDivisionData = plainText
     this.retailSalesCollection.controls.branch.setValue(this.formattedBranchDivisionData);
   }
-
+  
   setDateValue(event: any){
     if(event.FromDate){
       this.retailSalesCollection.controls.fromDate.setValue(event.FromDate);
@@ -201,11 +196,6 @@ export class RetailSalesCollectionComponent implements OnInit {
     });      
   }
 
-  close(data?: any) {
-    //TODO reset forms and data before closing
-    this.activeModal.close(data);
-  }
-
   getAPIData() {
     const payload = {
       // strLoginBranch: localStorage.getItem('userbranch')
@@ -215,12 +205,11 @@ export class RetailSalesCollectionComponent implements OnInit {
       "strWhereCond": "",
       "strLoginBranch": "", //this.comService.branchCode
     };
-
     this.isLoading = true;
-
     this.dataService.postDynamicAPI('GetReportVouchers', payload).subscribe((response) => {
       console.log('Retailsales API call data', response);
       this.APIData = response.dynamicData[0] || [];
+      this.prefillScreenValues()
       setTimeout(() => {
         this.isLoading = false;
       }, 1000);
@@ -229,6 +218,35 @@ export class RetailSalesCollectionComponent implements OnInit {
       this.isLoading = false;
     });
   }
+  prefillScreenValues(){ 
+   if (this.content && Object.keys(this.content).length > 0) {
+      let ParcedPreFetchData = JSON.parse(this.content?.CONTROL_LIST_JSON) //data from retailREPORT Component- modalRef instance
+      this.retailSalesCollection.controls.showDateCheckbox?.setValue(
+        ParcedPreFetchData?.CONTROL_DETAIL.SHOWDATE === 1 ? true :  false
+      );
+
+      this.retailSalesCollection.controls.showInvoiceCheckbox?.setValue(
+        ParcedPreFetchData?.CONTROL_DETAIL.SHOWINVOICE === 1 ? true :  false
+      );
+
+      this.retailSalesCollection.controls.templateName.setValue(ParcedPreFetchData.CONTROL_HEADER.TEMPLATENAME)
+
+      let splittedText= ParcedPreFetchData?.CONTROL_DETAIL.STRVOCTYPES.split("#")
+      const selectedKeys = this.APIData.filter(item => splittedText?.includes(item.VOCTYPE)).map(item => item);
+      this.selectedRowKeys = selectedKeys;
+
+      this.dateToPass = {
+        fromDate:  ParcedPreFetchData?.CONTROL_DETAIL.FROMVOCDATE,
+        toDate: ParcedPreFetchData?.CONTROL_DETAIL.TOVOCDATE
+      };
+      // console.log(this.dateToPass)
+
+      this.retailSalesCollection.controls.branch.setValue(ParcedPreFetchData?.CONTROL_DETAIL.STRBRANCHCODES);
+      this.fetchedBranchData= ParcedPreFetchData?.CONTROL_DETAIL.STRBRANCHCODES.split("#")
+      console.log('data fetched from main grid',ParcedPreFetchData )
+    }
+  }
+  
 
   onGridSelection(event: any) {
     this.selectedRowKeys= event.selectedRowKeys;
@@ -293,10 +311,31 @@ export class RetailSalesCollectionComponent implements OnInit {
       }
     }); 
   }
+  afterSave(value: any) {
+    if (value) {
+      this.retailSalesCollection.reset();
+      this.tableData = [];
+      this.close('reloadMainGrid');
+    }
+  }
+
+  close(data?: any) {
+    //TODO reset forms and data before closing
+    this.activeModal.close(data);
+  }
 
   popupClosed(){
-    this.retailSalesCollection.controls.templateName.setValue(null);
-    this.popupVisible = false;
+    if (this.content && Object.keys(this.content).length > 0) {
+      console.log(this.content)
+      let ParcedPreFetchData = JSON.parse(this.content?.CONTROL_LIST_JSON)
+      this.retailSalesCollection.controls.templateName.setValue(ParcedPreFetchData.CONTROL_HEADER.TEMPLATENAME)
+      this.popupVisible = false;
+    }
+    else{
+      this.popupVisible = false;
+      this.retailSalesCollection.controls.templateName.setValue(null)
+    }
+   
   }
 
 }

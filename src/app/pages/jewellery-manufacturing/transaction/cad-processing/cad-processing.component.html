@@ -6,7 +6,7 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" (auditTrailClick)="auditTrailClick()" [isViewAuditTrail]="true" [isViewPost]="true"></modal-header>
 <!-- content section -->
 <div class="row">
     <div>
@@ -227,6 +227,12 @@
                                         [readonly]="viewMode"
                                         step="2" />
                                 </mat-form-field>
+                                <!-- <app-duration-picker [content]="maxContent"
+                                        [durationToSplit]="maxTime"
+                                        [viewMode]="viewMode"
+                                        (updateDuration)="updateMaximumTime($event)"
+                                        formControlName="timeTaken"
+                                        [disabled]="viewMode || codeEnable"></app-duration-picker> -->
                             </div>
                         </div>
                     </div>

@@ -49,7 +49,18 @@ export class CADProcessingComponent implements OnInit {
   isDisableSaveBtn: boolean = false;
   maxTime: any;
   standTime: any;
+  formattedMaxTime: number = 0;
+  codeEnable: boolean = true;
   // setAllInitialValues: any;
+
+  maxContent = {
+    maximumTime: {
+      totalDays: 0,
+      totalHours: 0,
+      totalMinutes: 0,
+    }
+  }
+
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -132,7 +143,10 @@ export class CADProcessingComponent implements OnInit {
     this.cadProcessingForm.controls.deliveryOnDate.setValue(this.comService.currentDate)
   }
 
-  
+  updateMaximumTime(duration: any) {
+     this.formattedMaxTime = duration;
+    console.log(this.formattedMaxTime);
+  }
   
   setAllInitialValues() {
     if (!this.content) return
@@ -205,6 +219,11 @@ export class CADProcessingComponent implements OnInit {
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
+  }
+
+
+  auditTrailClick(){
+
   }
 
   openFileExplorer() {

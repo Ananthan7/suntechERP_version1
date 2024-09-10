@@ -131,8 +131,8 @@ export class PosCurrencyReceiptComponent implements OnInit {
     partyCodeDesc: [""], // No
     partyCurrency: [""],
     partyCurrencyRate: [""],
-    enteredby: [""], // No
-    enteredbyuser: [""], // No
+    enteredby: ["", Validators.required], // No
+    enteredbyuser: ["", Validators.required], // No
     dueDaysdesc: [""],
     dueDays: [new Date()], // no
     customerCode: [""],
@@ -527,6 +527,10 @@ export class PosCurrencyReceiptComponent implements OnInit {
       e.CURRENCY_CODE
     );
   }
+  
+  isCustomerDataAvailable(): boolean {
+    return this.customerData != null && Object.keys(this.customerData).length > 0;
+  }
 
   customerCodeSelected(e: any) {
     console.log(e);
@@ -535,6 +539,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
     this.posCurrencyReceiptForm.controls.customerName.setValue(e.NAME);
     this.posCurrencyReceiptForm.controls.mobile.setValue(e.MOBILE);
     this.posCurrencyReceiptForm.controls.email.setValue(e.EMAIL);
+    this.posCurrencyReceiptForm.controls.partyAddress.setValue(e.ADDRESS);
   }
 
   deleteDetailRecord() {

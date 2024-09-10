@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, Renderer2, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
@@ -58,7 +58,7 @@ export class MetalIssueDetailsComponent implements OnInit {
     SEARCH_FIELD: 'job_number',
     SEARCH_HEADING: 'Job Search',
     SEARCH_VALUE: '',
-    WHERECONDITION: "job_number<>''",
+    WHERECONDITION: `JOB_CLOSED_ON is null and  Branch_code = '${this.comService.branchCode}'`,
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -75,6 +75,7 @@ export class MetalIssueDetailsComponent implements OnInit {
     LOAD_ONCLICK: true,
     FRONTENDFILTER: true
   }
+
   workerCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -88,6 +89,7 @@ export class MetalIssueDetailsComponent implements OnInit {
     LOAD_ONCLICK: true,
     FRONTENDFILTER: true
   }
+
   stockCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -100,6 +102,7 @@ export class MetalIssueDetailsComponent implements OnInit {
     VIEW_TABLE: true,
     LOAD_ONCLICK: true
   }
+
   divCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -111,6 +114,11 @@ export class MetalIssueDetailsComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
+
+  subJobNoCodeData:MasterSearchModel ={
+
+  }
+
   metalIssueDetailsForm: FormGroup = this.formBuilder.group({
     VOCNO: [''],
     VOCDATE: [''],
@@ -165,9 +173,13 @@ export class MetalIssueDetailsComponent implements OnInit {
     private formBuilder: FormBuilder,
     private dataService: SuntechAPIService,
     private comService: CommonServiceService,
+    private renderer: Renderer2,
+
   ) { }
 
   ngOnInit(): void {
+    this.renderer.selectRootElement('#jobNumbercode')?.focus();
+
     this.branchCode = this.comService.branchCode;
     if (this.content && this.content.FLAG) {
       this.setInitialValues()
@@ -179,7 +191,11 @@ export class MetalIssueDetailsComponent implements OnInit {
     }else{
       this.setNewFormValue()
     }
+    
   }
+
+
+
   setNewFormValue() {
     if(this.content?.HEADERDETAILS){
       this.metalIssueDetailsForm.controls.VOCTYPE.setValue(this.content.HEADERDETAILS.VOCTYPE)
@@ -196,6 +212,9 @@ export class MetalIssueDetailsComponent implements OnInit {
   }
   setInitialValues() {
     if (!this.content) return;
+    let branchParam = this.comService.allbranchMaster
+    this.metalIssueDetailsForm.controls.location.setValue(branchParam.DMFGMLOC)
+    
     this.metalIssueDetailsForm.controls.VOCTYPE.setValue(this.content.VOCTYPE || this.content.HEADERDETAILS.VOCTYPE)
     this.metalIssueDetailsForm.controls.VOCNO.setValue(this.content.VOCNO || this.content.HEADERDETAILS.VOCNO)
     this.metalIssueDetailsForm.controls.VOCDATE.setValue(new Date(this.content.VOCDATE) || this.content.HEADERDETAILS.vocdate)
@@ -269,7 +288,8 @@ export class MetalIssueDetailsComponent implements OnInit {
     this.workerCodeData.WHERECONDITION = `@strProcess='${e.Process_Code}',@blnActive='true'`
   }
 
-
+  subJobNoCodeSelected(e: any) {
+  }
 
   workerCodeSelected(e: any) {
     this.metalIssueDetailsForm.controls.workerCode.setValue(e.WORKER_CODE);
@@ -505,8 +525,9 @@ export class MetalIssueDetailsComponent implements OnInit {
     this.comService.showSnackBarMsg('MSG81447')
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
       .subscribe((result) => {
-        this.comService.closeSnackBarMsg()
+        this.comService.closeSnackBarMsg();
         if (result.status == "Success" && result.dynamicData[0]) {
+
           let data = result.dynamicData[0]
           if (data[0] && data[0].UNQ_JOB_ID != '') {
             this.jobNumberDetailData = data
