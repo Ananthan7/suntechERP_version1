@@ -129,7 +129,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
     amountFc: [""],
     amountCc: [""],
     creditCardNumber: [""],
-    creditCardName: ["",  [Validators.required, Validators.pattern(/^[a-zA-Z ]*$/)]],
+    creditCardName: ["", [Validators.pattern(/^[a-zA-Z ]*$/)]],
     creditCardDate: [""],
     ttNumber: [""],
     ttDate: [""],
@@ -177,6 +177,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
     this.generateHsnCodeList(this.queryParams);
     this.getCreditCardMaster();
     this.branchCode = this.comService.branchCode;
+
     this.paymentModeList = this.getUniqueValues(this.comService.getComboFilterByID("Payment Mode"), "ENGLISH")
     console.log(this.paymentModeList);
 
@@ -577,9 +578,9 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
     if (this.posCurrencyReceiptDetailsForm.value.modeOfSelect == "Cheque") {
       localStorage.setItem("CH_ACCODE", e.ACCODE);
       localStorage.setItem("CH_ACHEAD", e["ACCOUNT_HEAD"]);
-      this.posCurrencyReceiptDetailsForm.controls.chequeDepositBank.setValue(
-        e["BANK_CODE"]
-      );
+      // this.posCurrencyReceiptDetailsForm.controls.chequeDepositBank.setValue(
+      //   e["BANK_CODE"]
+      // );
     }
 
     this.DebitamountChange({ target: { value: e.ACCODE } }, e.ACCODE);
@@ -698,10 +699,11 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
 
     this.posCurrencyReceiptDetailsForm.controls.currencyRate.setValue(
       this.comService.decimalQuantityFormat(
-        this.queryParams.currencyConvRate,
+        this.queryParams.currencyConvRate ? this.queryParams.currencyConvRate : 0,
         "RATE"
       )
     );
+
   }
 
   onDateChange(event: MatDatepickerInputEvent<Date>) {
@@ -847,13 +849,74 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
     return date._isAMomentObject ? date.toISOString() : parsedDate.toISOString();
   }
 
+  validateModeOfSelect(): boolean {
+    const modeOfSelect = this.posCurrencyReceiptDetailsForm.value.modeOfSelect;
+
+    switch (modeOfSelect) {
+      case 'Credit Card': {
+        const { creditCardNumber, creditCardName, creditCardDate } = this.posCurrencyReceiptDetailsForm.value;
+        if (!creditCardNumber || !creditCardName || !creditCardDate) {
+          this.toastr.error("Credit Card details are incomplete. Please fill all required fields.");
+          return false;
+        }
+        break;
+      }
+      case 'Cheque': {
+        const { chequeNumber, chequeDate, chequeDrawnBank, chequeDepositBank } = this.posCurrencyReceiptDetailsForm.value;
+        if (!chequeNumber || !chequeDate || !chequeDrawnBank || !chequeDepositBank) {
+          this.toastr.error("Cheque details are incomplete. Please fill all required fields.");
+          return false;
+        }
+        break;
+      }
+      case 'TT': {
+        const { ttNumber, ttDate, ttDrawnBank, ttDepositBank } = this.posCurrencyReceiptDetailsForm.value;
+        if (!ttNumber || !ttDate || !ttDrawnBank || !ttDepositBank) {
+          this.toastr.error("TT details are incomplete. Please fill all required fields.");
+          return false;
+        }
+        break;
+      }
+      default: {
+        return true;
+      }
+    }
+
+    return true;
+  }
+
+
   formSubmit() {
     if (this.content && this.content.FLAG == "EDIT") {
       // this.update()
       return;
     }
+
+    Object.keys(this.posCurrencyReceiptDetailsForm.controls).forEach(key => {
+      const controlErrors = this.posCurrencyReceiptDetailsForm.get(key)?.errors;
+      if (controlErrors != null) {
+        console.log('Key control: ' + key + ', error: ' + JSON.stringify(controlErrors));
+
+        // Set the invalid control to an empty string
+        this.posCurrencyReceiptDetailsForm.get(key)?.setValue("");
+
+        // Optionally log or display a message
+        console.log(key + ' is invalid, setting to an empty string.');
+      }
+    });
+
+    // Trigger revalidation of the form
+    this.posCurrencyReceiptDetailsForm.updateValueAndValidity();
+
+
     if (this.posCurrencyReceiptDetailsForm.invalid) {
       this.toastr.error("select all required fields");
+      return;
+    }
+
+    const isModeValid = this.validateModeOfSelect();
+    if (!isModeValid) {
+      // Stop further execution if mode validation fails
       return;
     }
 
@@ -909,11 +972,14 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
         D_POSSCHEMEUNITS: 1,
         CARD_NO: this.posCurrencyReceiptDetailsForm.value.creditCardNumber,
         CARD_HOLDER: this.posCurrencyReceiptDetailsForm.value.creditCardName,
-        CARD_EXPIRY: this.posCurrencyReceiptDetailsForm.value.creditCardDate
-          ? this.formatDateToISO(
-            this.posCurrencyReceiptDetailsForm.value.creditCardDate
-          )
+        CARD_EXPIRY: moment(this.posCurrencyReceiptDetailsForm.value.creditCardDate, 'MM/YYYY', true).isValid()
+          ? this.formatDateToISO(this.posCurrencyReceiptDetailsForm.value.creditCardDate)
           : this.formatDateToISO(this.dummyDate),
+        //  this.posCurrencyReceiptDetailsForm.value.creditCardDate
+        //   ? this.formatDateToISO(
+        //     this.posCurrencyReceiptDetailsForm.value.creditCardDate
+        //   )
+        //   : this.formatDateToISO(this.dummyDate),
         PCRMID: 0,
         BASE_CONV_RATE: 0,
         SUBLEDJER_CODE: "",
@@ -936,12 +1002,12 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
         CGST_ACCODE: "",
         SGST_ACCODE: "",
         IGST_ACCODE: this.igstAccode,
-        GST_HEADER_AMOUNT:0,
+        GST_HEADER_AMOUNT: 0,
         GST_NUMBER: "",
         INVOICE_NUMBER: this.posCurrencyReceiptDetailsForm.value.invoiceNo,
-        INVOICE_DATE: this.formatDateToISO(
+        INVOICE_DATE: this.posCurrencyReceiptDetailsForm.value.invoiceDate ? this.formatDateToISO(
           this.posCurrencyReceiptDetailsForm.value.invoiceDate
-        ),
+        ) : this.formatDateToISO(this.dummyDate),
         DT_GST_STATE_CODE: "",
         DT_GST_TYPE: "",
         DT_GST_CODE: "VAT",
