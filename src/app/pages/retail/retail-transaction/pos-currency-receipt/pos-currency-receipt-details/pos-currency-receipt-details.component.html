@@ -578,7 +578,7 @@
                       <!-- <input type="date" matInput formControlName="invoiceDate" /> -->
                       <input
                         [readonly]="viewOnly"
-                        matInput
+                        matInput   [max]="currentDate"
                         [matDatepicker]="invoiceDate"
                         name="invoiceDate"
                         placeholder="DD/MM/YYYY"
