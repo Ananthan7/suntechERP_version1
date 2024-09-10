@@ -6,9 +6,8 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" [isloading]="isloading"
-    [isViewAuditTrail]="true" [disableAuditTrail]="!isSaved"
-    (cancelClick)="close()" [isViewDelete]="false"
+<modal-header (saveClick)="formSubmit()" [isloading]="isloading" [isViewAuditTrail]="true"
+    [disableAuditTrail]="!isSaved" (cancelClick)="close()" [isViewDelete]="false"
     [isViewSave]="!viewMode"></modal-header>
 <div class="row">
     <div class="col-md-12">
@@ -23,33 +22,25 @@
                                         {{companyName}}</h6>
                                 </div>
                                 <div class=" row">
-                                    <label for="inputPassword"
-                                        class="col-sm-4 col-form-label">Voucher
+                                    <label for="inputPassword" class="col-sm-4 col-form-label">Voucher
                                         Type * :</label>
                                     <div class="col-md-7">
-                                        <mat-form-field appearance="outline"
-                                            style="width: 100%;">
-                                            <input type="text" matInput
-                                                formControlName="VOCTYPE"
-                                                readonly />
+                                        <mat-form-field appearance="outline" style="width: 100%;">
+                                            <input type="text" matInput formControlName="VOCTYPE" readonly />
                                         </mat-form-field>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-5">
                                 <div class=" row">
-                                    <label for="inputPassword"
-                                        class="col-sm-3 col-form-label ">Posted</label>
+                                    <label for="inputPassword" class="col-sm-3 col-form-label ">Posted</label>
                                 </div>
                                 <div class=" row">
-                                    <label for="inputPassword"
-                                        class="col-sm-4 col-form-label">Time:</label>
+                                    <label for="inputPassword" class="col-sm-4 col-form-label">Time:</label>
                                     <div class="col-md-7">
-                                        <mat-form-field appearance="outline"
-                                            style="width: 100%">
+                                        <mat-form-field appearance="outline" style="width: 100%">
                                             <!-- <input  type="datetime" matInput  formControlName="time"> -->
-                                            <input type="datetime" matInput
-                                                formControlName="time" readonly
+                                            <input type="datetime" matInput formControlName="time" readonly
                                                 class="text-right" />
                                         </mat-form-field>
                                     </div>
@@ -59,27 +50,18 @@
                         <div class="row m-2">
                             <div class="col-md-5">
                                 <div class=" row">
-                                    <label for="inputPassword"
-                                        class="col-sm-4 col-form-label">Voucher
+                                    <label for="inputPassword" class="col-sm-4 col-form-label">Voucher
                                         Date :</label>
                                     <div class="col-md-7">
                                         <!-- <mat-form-field appearance="outline" style="width: 100%;">
                                             <input type="date" matInput  formControlName="vocdate"/>
                                         </mat-form-field> -->
-                                        <mat-form-field appearance="outline"
-                                            style="width: 100%;">
-                                            <input matInput
-                                                [matDatepicker]="vocdate"
-                                                formControlName="vocdate"
-                                                [readonly]="isSaved"
-                                                placeholder="DD/MM/YYYY"
-                                                DateValidation
-                                                [min]="minDate"
-                                                [max]="maxDate" />
-                                            <mat-datepicker-toggle matSuffix
-                                                [for]="vocdate"></mat-datepicker-toggle>
-                                            <mat-datepicker [disabled]="isSaved"
-                                                [startAt]="currentDate"
+                                        <mat-form-field appearance="outline" style="width: 100%;">
+                                            <input matInput [matDatepicker]="vocdate" formControlName="vocdate"
+                                                [readonly]="isSaved" placeholder="DD/MM/YYYY" DateValidation
+                                                [min]="minDate" [max]="maxDate" />
+                                            <mat-datepicker-toggle matSuffix [for]="vocdate"></mat-datepicker-toggle>
+                                            <mat-datepicker [disabled]="isSaved" [startAt]="currentDate"
                                                 #vocdate></mat-datepicker>
                                         </mat-form-field>
                                     </div>
@@ -87,24 +69,21 @@
                             </div>
                             <div class="col-md-5">
                                 <div class=" row">
-                                    <label for="inputPassword"
-                                        class="col-sm-4 col-form-label">Entered
+                                    <label for="inputPassword" class="col-sm-4 col-form-label">Entered
                                         By:</label>
                                     <div class="col-md-7">
                                         <span>
-                                            <mat-form-field appearance="outline"
-                                                style="width: 80%;">
-                                                <input type="text" matInput
-                                                    formControlName="SALESPERSON_CODE"
+                                            <mat-form-field appearance="outline" style="width: 80%;">
+                                                <input type="text" matInput formControlName="SALESPERSON_CODE"
                                                     [readonly]="viewMode"
                                                     (keydown)="lookupKeyPress($event,'SALESPERSON_CODE')"
-                                                    (focusout)="validateLookupField($event,SALESPERSON_CODEData,'SALESPERSON_CODE')"/>
+                                                    (focusout)="validateLookupField($event,SALESPERSON_CODEData,'SALESPERSON_CODE')" />
+                                                <master-search [MasterSearchData]="SALESPERSON_CODEData"  class="masterSearch"
+                                                    #overlaysalesperson (newRowClick)="SALESPERSON_CODESelected($event)"
+                                                    *ngIf="!viewMode">
+                                                </master-search>
                                             </mat-form-field>
-                                            <master-search
-                                                [MasterSearchData]="SALESPERSON_CODEData" #overlaysalesperson
-                                                (newRowClick)="SALESPERSON_CODESelected($event)"
-                                                *ngIf="!viewMode">
-                                            </master-search>
+
                                         </span>
                                     </div>
                                 </div>
@@ -113,48 +92,37 @@
                         <div class="row m-2">
                             <div class="col-md-5">
                                 <div class=" row">
-                                    <label for="inputPassword"
-                                        class="col-sm-4 col-form-label">Voucher
+                                    <label for="inputPassword" class="col-sm-4 col-form-label">Voucher
                                         No * :</label>
                                     <div class="col-md-7">
-                                        <mat-form-field appearance="outline"
-                                            style="width: 100%;">
-                                            <input type="number" matInput
-                                                class="text-right"
-                                                formControlName="VOCNO"
-                                                (focusout)="ValidatingVocNo()"
-                                                [readonly]="LOCKVOUCHERNO" />
+                                        <mat-form-field appearance="outline" style="width: 100%;">
+                                            <input type="number" matInput class="text-right" formControlName="VOCNO"
+                                                (focusout)="ValidatingVocNo()" [readonly]="LOCKVOUCHERNO" />
                                         </mat-form-field>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-5">
                                 <div class="row">
-                                    <label for="inputPassword"
-                                        class="col-sm-4 col-form-label">Worker
+                                    <label for="inputPassword" class="col-sm-4 col-form-label">Worker
                                         :</label>
-                                    <div class="col-md-7 d-flex">
-                                        <span>
-                                            <mat-form-field appearance="outline"
-                                                style="width: 20%;">
-                                                <input type="text" matInput
-                                                    formControlName="worker"
-                                                    [readonly]="viewMode" />
-                                            </mat-form-field>
-                                            <mat-form-field appearance="outline"
-                                                style="width: 60%;margin-left: 4px;">
-                                                <input type="text" matInput id="code"
-                                                    formControlName="workerDes"
-                                                    [readonly]="viewMode"
-                                                    (keydown)="lookupKeyPress($event,'workerDes')"
-                                                    (focusout)="validateLookupField($event,workerCodeData,'workerDes')"/>
-                                            </mat-form-field>
-                                            <master-search
-                                                [MasterSearchData]="workerCodeData" #overlayworkerDes
-                                                (newRowClick)="workerCodeSelected($event)"
-                                                *ngIf="!viewMode">
+                                    <div class="col-md-3">
+                                        <mat-form-field appearance="outline" style="width: 100%;">
+                                            <input type="text" matInput formControlName="worker"
+                                                [readonly]="viewMode" />
+                                        </mat-form-field>
+                                    </div>
+
+                                    <div class="col-md-5">
+                                        <mat-form-field appearance="outline" style="width: 100%;">
+                                            <input type="text" matInput id="code" formControlName="workerDes"
+                                                [readonly]="viewMode" (keydown)="lookupKeyPress($event,'workerDes')"
+                                                (focusout)="validateLookupField($event,workerCodeData,'workerDes')" />
+                                            <master-search [MasterSearchData]="workerCodeData" #overlayworkerDes class="masterSearch"
+                                                (newRowClick)="workerCodeSelected($event)" *ngIf="!viewMode">
                                             </master-search>
-                                        </span>
+                                        </mat-form-field>
+
                                     </div>
                                 </div>
                             </div>
@@ -165,54 +133,39 @@
                     <div class="col-md-12">
                         <div class="row">
                             <div class="col-sm-3 d-flex">
-                                <menu-buttons *ngIf="!viewMode"
-                                    [viewAddBtn]="true"
-                                    [viewDeleteBtn]="true"
-                                    [viewImportBtn]="false"
-                                    (addClick)="openAddMetalIssue()"
+                                <menu-buttons *ngIf="!viewMode" [viewAddBtn]="true" [viewDeleteBtn]="true"
+                                    [viewImportBtn]="false" (addClick)="openAddMetalIssue()"
                                     (deleteClick)="deleteRowClicked()">
                                 </menu-buttons>
-                                <div>
-                                    <mat-form-field appearance="outline"
-                                        style="width: 70%;">
+                                <!-- <div>
+                                    <mat-form-field appearance="outline" style="width: 70%;">
                                         <input type="text" matInput (keypress)="lookupKeyPress($event)" />
+                                        <master-search class="masterSearch"></master-search>
                                     </mat-form-field>
-                                    <master-search></master-search>
-                                </div>
+                                   
+                                </div> -->
                             </div>
                         </div>
                         <!--  (onSelectionChanged)="onSelectionChanged($event)"-->
                         <div class="row mb-2">
                             <div class="col-md-12">
-                                <dx-data-grid #dataGrid id="gridContainer"
-                                    keyExpr="SRNO"
-                                    [dataSource]="metalIssueDetailsData"
-                                    [showBorders]="true" [showRowLines]="true"
-                                    [allowColumnResizing]="true"
-                                    (onRowClick)="onRowClickHandler($event)"
+                                <dx-data-grid #dataGrid id="gridContainer" keyExpr="SRNO"
+                                    [dataSource]="metalIssueDetailsData" [showBorders]="true" [showRowLines]="true"
+                                    [allowColumnResizing]="true" (onRowClick)="onRowClickHandler($event)"
                                     (onRowDblClick)="onRowDblClickHandler($event)">
                                     <dxo-paging [enabled]="false"></dxo-paging>
-                                    <dxo-selection
-                                        mode="single"></dxo-selection>
+                                    <dxo-selection mode="single"></dxo-selection>
 
-                                    <dxi-column *ngFor="let data of columnhead"
-                                        dataField="{{ data.field }}"
-                                        caption="{{ data.title }}"
-                                        [format]="data.format"
-                                        [allowEditing]="true"
-                                        [alignment]="data.alignment"
-                                        backgroundcolor="#000">
+                                    <dxi-column *ngFor="let data of columnhead" dataField="{{ data.field }}"
+                                        caption="{{ data.title }}" [format]="data.format" [allowEditing]="true"
+                                        [alignment]="data.alignment" backgroundcolor="#000">
                                     </dxi-column>
                                     <dxo-summary>
-                                        <dxi-total-item column="GROSS_WT"
-                                            summaryType="sum"
-                                            [valueFormat]="gridAmountDecimalFormat"
-                                            displayFormat="{0}">
+                                        <dxi-total-item column="GROSS_WT" summaryType="sum"
+                                            [valueFormat]="gridAmountDecimalFormat" displayFormat="{0}">
                                         </dxi-total-item>
-                                        <dxi-total-item column="TOTAL_AMOUNTFC"
-                                            summaryType="sum"
-                                            [valueFormat]="gridAmountDecimalFormat"
-                                            displayFormat="{0}">
+                                        <dxi-total-item column="TOTAL_AMOUNTFC" summaryType="sum"
+                                            [valueFormat]="gridAmountDecimalFormat" displayFormat="{0}">
                                         </dxi-total-item>
                                     </dxo-summary>
                                 </dx-data-grid>
@@ -220,14 +173,11 @@
                             <div class="col-md-4">
                                 <div class="row my-2">
                                     <span>
-                                        <label for="inputPassword"
-                                            class="col-sm-3 col-form-label">Remarks
+                                        <label for="inputPassword" class="col-sm-3 col-form-label">Remarks
                                             :</label>
                                         <div class="col-md-9">
-                                            <mat-form-field appearance="outline"
-                                                style="width: 100%;">
-                                                <input type="text" matInput
-                                                    formControlName="REMARKS" />
+                                            <mat-form-field appearance="outline" style="width: 100%;">
+                                                <input type="text" matInput formControlName="REMARKS" />
                                             </mat-form-field>
                                         </div>
                                     </span>
@@ -242,7 +192,6 @@
 </div>
 
 <ng-template #metalIssueDetailScreen>
-    <app-metal-issue-details [content]="dataToDetailScreen"
-        (saveDetail)="setValuesToHeaderGrid($event)"
+    <app-metal-issue-details [content]="dataToDetailScreen" (saveDetail)="setValuesToHeaderGrid($event)"
         (closeDetail)="closeDetailScreen()"></app-metal-issue-details>
 </ng-template>

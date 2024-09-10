@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, Renderer2, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
@@ -164,9 +164,12 @@ export class MetalReturnDetailsComponent implements OnInit {
     private toastr: ToastrService,
     private dataService: SuntechAPIService,
     private comService: CommonServiceService,
+    private renderer: Renderer2,
+
   ) { }
 
   ngOnInit(): void {
+    this.renderer.selectRootElement('#jobNumberCode')?.focus();
     if (this.content) {
       this.metalReturnDetailsForm.controls.FLAG.setValue(this.content.FLAG)
       if (this.content.FLAG == 'VIEW') {
@@ -251,7 +254,7 @@ export class MetalReturnDetailsComponent implements OnInit {
     where += `strJob_Number='${form.jobNumber}' AND `;
     where += `strUnq_Job_Id='${form.subJobNo}' AND `;
     where += `strMetalStone='${form.METAL_STONE}' AND `;
-    where += `strStock_Code='${form.stockCode}' AND `;
+    where += `strStock_Code='${form.stockCode}' AND ` || '';
     where += `strUserName='${this.comService.userName}'`;
 
     // Assign to the stock code data
