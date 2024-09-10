@@ -158,6 +158,7 @@ export class LossRecoveryComponent implements OnInit {
 
   private setInitialValues() {
     let branchParam = this.comService.allbranchMaster
+    console.log('This location code' + branchParam);
     this.lossRecoveryFrom.controls.locationTo.setValue(branchParam.DMFGMLOC)
   }
 
@@ -184,8 +185,8 @@ export class LossRecoveryComponent implements OnInit {
 
   karatCodeSelected(e: any) {
     console.log(e);
-    this.lossRecoveryFrom.controls.karatCode.setValue(e.KARAT_CODE);
-    this.lossRecoveryFrom.controls.karatCodeDesc.setValue(e.Karat_desc);
+    this.lossRecoveryFrom.controls.karatCode.setValue(e['Karat Code']);
+    this.lossRecoveryFrom.controls.karatCodeDesc.setValue(e['Karat Description']);
   }
 
   stockCodeSelected(e: any) {
@@ -237,7 +238,7 @@ export class LossRecoveryComponent implements OnInit {
     AlloyRecovery: true,
     radioScrapReturn: true,
     radioFinalLoss: true,
-    Metalsoption:["M"],
+    Metalsoption: ["M"],
 
   });
 
@@ -255,7 +256,7 @@ export class LossRecoveryComponent implements OnInit {
   enteredCodeSelected(e: any) {
     console.log(e);
     this.lossRecoveryFrom.controls.EnterBy.setValue(e.UsersName);
-    
+
   }
 
 
@@ -306,7 +307,7 @@ export class LossRecoveryComponent implements OnInit {
   }
 
   ValidatingVocNo() {
-    if(this.content?.FLAG == 'VIEW') return
+    if (this.content?.FLAG == 'VIEW') return
     this.comService.showSnackBarMsg('MSG81447');
     let API = `ValidatingVocNo/${this.comService.getqueryParamMainVocType()}/${this.lossRecoveryFrom.value.VocNo}`
     API += `/${this.comService.branchCode}/${this.comService.getqueryParamVocType()}`
@@ -374,16 +375,16 @@ export class LossRecoveryComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
 
-  returnType(e:any){
-   
+  returnType(e: any) {
+
     const selectedType = e;
 
     if (selectedType === 'Initial') {
-        this.tab1Label = 'Scrap Summary';
-        this.tab2Label = 'Scrap Details';
+      this.tab1Label = 'Scrap Summary';
+      this.tab2Label = 'Scrap Details';
     } else {
-        this.tab1Label = 'Return Summary';
-        this.tab2Label = 'Stock Details';
+      this.tab1Label = 'Return Summary';
+      this.tab2Label = 'Stock Details';
     }
 
   }
@@ -404,12 +405,12 @@ export class LossRecoveryComponent implements OnInit {
     let API = "ProdLossRecovery/InsertProdLossRecovery";
     let postData = {
       "MID": 0,
-      "VOCNO":  this.comService.emptyToZero(this.lossRecoveryFrom.value.VocNo),
-      "VOCTYPE":  this.comService.nullToString(this.lossRecoveryFrom.value.vocType),
+      "VOCNO": this.comService.emptyToZero(this.lossRecoveryFrom.value.VocNo),
+      "VOCTYPE": this.comService.nullToString(this.lossRecoveryFrom.value.vocType),
       "VOCDATE": this.comService.formatDateTime(this.lossRecoveryFrom.value.vocDate),
       "YEARMONTH": this.yearMonth,
       "BRANCH_CODE": this.branchCode,
-      "SMAN":"" ,
+      "SMAN": this.comService.nullToString(this.lossRecoveryFrom.value.EnterBy),
       "METAL_RATE_TYPE": "",
       "LOSS_UPTODATE": "2023-10-19T10:46:17.071Z",
       "TOTAL_LOSS": 0,
@@ -422,16 +423,18 @@ export class LossRecoveryComponent implements OnInit {
       "POSTDATE": "",
       "REMARKS": this.comService.nullToString(this.lossRecoveryFrom.value.remarks),
       "PRINT_COUNT": 0,
-      "LOSS_FRMDATE":this.comService.formatDateTime(this.lossRecoveryFrom.value.fromDate),
-      "LOSS_TODATE":  this.comService.formatDateTime(this.lossRecoveryFrom.value.toDate),
+      "LOSS_FRMDATE": this.comService.formatDateTime(this.lossRecoveryFrom.value.fromDate),
+      "LOSS_TODATE": this.comService.formatDateTime(this.lossRecoveryFrom.value.toDate),
       "RECOVERY_TYPE": 0,
       "SCRAP_RETURN": true,
       "TOTAL_SCRAP": 0,
-      "WORKER_CODE": this.comService.nullToString(this.lossRecoveryFrom.value.EnterBy),
+      "WORKER_CODE": this.comService.nullToString(this.lossRecoveryFrom.value.worker),
       "PRINT_COUNT_ACCOPY": 0,
       "PRINT_COUNT_CNTLCOPY": 0,
       "ALLOY_RECOVERY": true,
       "HTUSERNAME": this.comService.nullToString(this.lossRecoveryFrom.value.receicvedBy),
+      "LOCTYPE_CODE": this.comService.nullToString(this.lossRecoveryFrom.value.locationTo),
+
       "PROD_LOSS_RECOVERY_DETAIL": [
         {
           "UNIQUEID": 0,
@@ -453,7 +456,7 @@ export class LossRecoveryComponent implements OnInit {
           "ADJ_PUREWT": 0,
           "ADJ_ACCODE": "",
           "PHY_STOCK_ACCODE": "",
-          "LOCTYPE_CODE": this.comService.nullToString(this.lossRecoveryFrom.value.locationTo),
+          "LOCTYPE_CODE": "",
           "DT_YEARMONTH": "",
           "DT_VOCNO": 0,
           "DT_VOCTYPE": "",
@@ -512,7 +515,9 @@ export class LossRecoveryComponent implements OnInit {
           "PCS": 0,
           "LOSS_BOOK": "",
           "STOCK_DESC": "",
-          "TRANS_VOCTYPE": ""
+          "TRANS_VOCTYPE": "",
+          "VOCDATE": "2024-09-10T10:17:49.739Z",
+          "REC_TYPE": 0
         }
       ],
       "PROD_LOSS_RECOVERY_SUBJOB_DETAIL": [

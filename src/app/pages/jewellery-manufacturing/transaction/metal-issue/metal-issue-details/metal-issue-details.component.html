@@ -23,7 +23,7 @@
                                     </label>
                                     <div class="col-md-3">
                                         <mat-form-field appearance="outline" style="width: 90%;">
-                                            <input type="text" matInput formControlName="jobNumber"
+                                            <input type="text" matInput formControlName="jobNumber"  id="jobNumbercode"
                                                 (focusout)="jobNumberValidate($event)" [readonly]="viewMode" />
                                         </mat-form-field>
                                     </div>
@@ -31,8 +31,9 @@
                                         <mat-form-field appearance="outline" style="width: 80%;">
                                             <input type="text" matInput formControlName="jobNumDes"
                                                 (keydown)="lookupKeyPress($event,'jobNumber')" readonly />
-                                            <master-search  class="masterSearch" [MasterSearchData]="jobNumberCodeData" #overlayjobNumDes
-                                                (newRowClick)="jobNumberCodeSelected($event)" *ngIf="!viewMode">
+                                            <master-search class="masterSearch" [MasterSearchData]="jobNumberCodeData"
+                                                #overlayjobNumDes (newRowClick)="jobNumberCodeSelected($event)"
+                                                *ngIf="!viewMode">
                                             </master-search>
                                         </mat-form-field>
 
@@ -45,9 +46,10 @@
                                         <mat-form-field appearance="outline" style="width: 90%;">
                                             <input type="text" matInput formControlName="subJobNo"
                                                 (focusout)="subJobNumberValidate($event)" [readonly]="viewMode" />
+                                            <master-search class="masterSearch" [MasterSearchData]="subJobNoCodeData"
+                                                (newRowClick)="subJobNoCodeSelected($event)"></master-search>
                                         </mat-form-field>
-                                        <!-- <master-search  class="masterSearch" [MasterSearchData]="subJobNoCodeData"
-                                            (newRowClick)="subJobNoCodeSelected($event)"></master-search> -->
+
                                     </div>
                                     <div class="col-md-5">
                                         <mat-form-field appearance="outline" style="width: 80%;">
@@ -68,8 +70,9 @@
                                     <div class="col-md-5">
                                         <mat-form-field appearance="outline" style="width: 80%;">
                                             <input type="text" matInput formControlName="processCodeDesc" readonly>
-                                            <master-search  class="masterSearch" [MasterSearchData]="processCodeData" #overlayprocessCode
-                                                (newRowClick)="processCodeSelected($event)" *ngIf="!viewMode">
+                                            <master-search class="masterSearch" [MasterSearchData]="processCodeData"
+                                                #overlayprocessCode (newRowClick)="processCodeSelected($event)"
+                                                *ngIf="!viewMode">
                                             </master-search>
                                         </mat-form-field>
 
@@ -88,30 +91,35 @@
                                             <input type="text" matInput formControlName="workerCodeDes"
                                                 (keydown)="lookupKeyPress($event,'workerCodeDes')" [readonly]="viewMode"
                                                 (focusout)="WorkerCodeValidate($event)" />
-                                            <master-search  class="masterSearch" [MasterSearchData]="workerCodeData" #overlayworkerCodeDes
-                                                (newRowClick)="workerCodeSelected($event)"
+                                            <master-search class="masterSearch" [MasterSearchData]="workerCodeData"
+                                                #overlayworkerCodeDes (newRowClick)="workerCodeSelected($event)"
                                                 *ngIf="!viewMode"></master-search>
                                         </mat-form-field>
 
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <div class="row mb-1">
-                                    <label class="col-sm-12 col-form-label ms-4">
+                                    <label class="col-sm-12 col-form-label">
                                         Design</label>
-                                    <div class="col-md-6">
+                                    <div class="col-md-12  mb-1">
                                         <div class="upload-btn-wrapper">
                                             <button class="btn btnnew border-dark">
-                                                <img src={{image}} style="width:126px;height:124px">
+                                                <img src={{image}} style="width:100%;height:124px">
 
                                             </button>
                                             <input type="file" class="uploadproduct" accept=".png, .jpg, .jpeg"
                                                 #fileInput (change)="onFileChangedimage($event)">
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
-                                        <!-- <div class="row">
+                                    <div class="col-md-12">
+                                        <mat-form-field appearance="outline" style="width: 80%;">
+                                            <input type="text" matInput formControlName="DESIGN_CODE" readonly />
+                                        </mat-form-field>
+                                    </div>
+                                    <!--<div class="col-md-6">
+                                        <div class="row">
                                             <div class="col-md-12">
                                                 <mat-form-field appearance="outline"
                                                     style="width: 100%;">
@@ -128,25 +136,18 @@
                                                         [readonly]="viewMode" />
                                                 </mat-form-field>
                                             </div>
-                                        </div> -->
-                                    </div>
-                                </div>
-                                <div class="row mb-1">
-                                    <div class="col-md-12">
-                                        <mat-form-field appearance="outline" style="width: 80%;">
-                                            <input type="text" matInput formControlName="DESIGN_CODE" readonly />
-                                        </mat-form-field>
-                                    </div>
+                                        </div> 
+                                    </div>-->
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="row mb-1">
-                                    <label for="inputPassword" class="col-sm-4 col-form-label my-2">Part
+                                    <label for="inputPassword" class="col-sm-4 col-form-label">Part
                                         ID</label>
-                                    <div class="col-md-12">
+                                    <div class="col-md-12 mb-1">
                                         <div class="upload-btn-wrapper">
                                             <button class="btn btnnew border-dark">
-                                                <img src={{urls}} style="width:126px;height:124px">
+                                                <img src={{urls}} style="width:100%;height:124px">
 
                                             </button>
                                             <input type="file" class="uploadproduct" accept=".png, .jpg, .jpeg"
@@ -199,16 +200,13 @@
                                     </div>
                                     <div class="col-md-6">
 
-                                        <mat-form-field appearance="outline"
-                                            style="width: 100%;">
-                                            <input type="text" matInput
-                                                formControlName="stockCode" UpperCaseDirective
-                                                placeholder="stockCode"
-                                                (focusout)="stockCodeValidate($event)"
+                                        <mat-form-field appearance="outline" style="width: 100%;">
+                                            <input type="text" matInput formControlName="stockCode" UpperCaseDirective
+                                                placeholder="stockCode" (focusout)="stockCodeValidate($event)"
                                                 [readonly]="viewMode || masterMetalChecked"
                                                 (keydown)="lookupKeyPress($event,'stockCode')" />
-                                            <master-search  class="masterSearch" [MasterSearchData]="stockCodeData" #overlaystockcode
-                                                (newRowClick)="stockCodeSelected($event)"
+                                            <master-search class="masterSearch" [MasterSearchData]="stockCodeData"
+                                                #overlaystockcode (newRowClick)="stockCodeSelected($event)"
                                                 *ngIf="!masterMetalChecked"></master-search>
                                         </mat-form-field>
 
@@ -277,6 +275,9 @@
                                         <mat-form-field appearance="outline" style="width: 100%;">
                                             <input type="text" matInput formControlName="toDIVCODE"
                                                 placeholder="divcode" readonly />
+                                            <master-search class="masterSearch" [MasterSearchData]="stockCodeData"
+                                                #overlaystockcode (newRowClick)="stockCodeSelected($event)"
+                                                *ngIf="!masterMetalChecked"></master-search>
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-3">
@@ -303,8 +304,8 @@
                                             <input type="text" matInput formControlName="location" [readonly]="viewMode"
                                                 (keydown)="lookupKeyPress($event,'location')"
                                                 (focusout)="validateLookupField($event,locationCodeData,'location')" />
-                                            <master-search  class="masterSearch" [MasterSearchData]="locationCodeData" #overlaylocation
-                                                (newRowClick)="locationCodeSelected($event)"
+                                            <master-search class="masterSearch" [MasterSearchData]="locationCodeData"
+                                                #overlaylocation (newRowClick)="locationCodeSelected($event)"
                                                 *ngIf="!viewMode"></master-search>
                                         </mat-form-field>
 

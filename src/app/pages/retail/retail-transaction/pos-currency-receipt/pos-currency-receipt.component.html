@@ -104,8 +104,7 @@
                 >
                   <input
                     type="text"
-                    [readonly]="viewOnly"
-                    matInput
+                    matInput readonly
                     formControlName="partyCode"
                     (change)="partyCodeChange($event)"
                   />
@@ -174,7 +173,8 @@
                 for="inputPassword"
                 class="col-sm-3 col-form-label"
                 id="ID005"
-                >Entered By :</label
+                >Entered By :<span
+                class="text-danger">&ast;</span></label
               >
               <div class="col-md-4">
                 <mat-form-field
@@ -302,11 +302,9 @@
                     class="btn btn-primary metal-issue-add-btn"
                     (click)="openCustMaster()"
                   >
-                    {{
-                      this.customerData != null
-                        ? "Edit Customer"
-                        : "New Customer"
-                    }}
+                  {{ isCustomerDataAvailable() ? "Edit Customer" : "New Customer" }}
+
+                
                   </button>
                 </div>
               </div>
@@ -439,7 +437,7 @@
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
                         type="text"
-                        [readonly]="viewOnly"
+                        readonly
                         matInput
                         formControlName="partyCurr"
                         readonly
@@ -450,7 +448,7 @@
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
                         type="text"
-                        [readonly]="viewOnly"
+                        readonly
                         matInput
                         class="st_txt_right"
                         formControlName="partyAmountFC"
@@ -567,7 +565,7 @@
                   <div class="col-md-6">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
-                        [readonly]="true"
+                        readonly
                         class="st_txt_right"
                         type="number"
                         matInput
@@ -587,7 +585,7 @@
                   <div class="col-md-6">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
-                        [readonly]="true"
+                      readonly
                         class="st_txt_right"
                         type="number"
                         matInput

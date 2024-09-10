@@ -20,8 +20,8 @@
                                 :</label>
                             <div class="col-sm-3">
                                 <mat-form-field appearance="outline"  style="width: 100%;">
-                                    <input type="text" matInput UpperCaseDirective formControlName="jobNumber"
-                                        (focusout)="jobNumberValidate($event)" [readonly]="viewMode"
+                                    <input type="text" id="jobNumberCode"  matInput UpperCaseDirective formControlName="jobNumber"
+                                        (focusout)="jobNumberValidate($event)" [readonly]="viewMode"  
                                         (keydown)="lookupKeyPress($event,'jobNumber')" />
                                    <master-search class="masterSearch" [MasterSearchData]="jobnoCodeData" #overlayjobNumberSearch
                                         (newRowClick)="jobnoCodeSelected($event)" *ngIf="!viewMode"></master-search>
