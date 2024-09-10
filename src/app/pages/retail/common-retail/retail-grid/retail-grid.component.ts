@@ -37,26 +37,8 @@ export class RetailGridComponent implements OnInit {
 
 
   @Input() templateViewForReports: boolean = false;
-
-
-  dataSource = [
-    { ID: 'T-101', Name: 'Template 1', Values: 'Template values for BR01, 2014', Date: new Date() },
-    { ID: 'T-102', Name: 'Template 2', Values: 'Template values for BR02, 2015', Date: new Date() },
-    { ID: 'T-103', Name: 'Template 3', Values: 'Template values for BR03, 2016', Date: new Date() }
-  ];
-
-  columns = [
-    { dataField: 'ID', caption: 'ID' },
-    { dataField: 'Name', caption: 'Name' },
-    { dataField: 'Values', caption: 'Values' },
-    { dataField: 'Date', caption: 'From Date', dataType: 'date' as 'date' },
-    { dataField: 'Date', caption: 'To Date', dataType: 'date' as 'date' },
-    { dataField: 'ReportType', caption: 'Report Type', cellTemplate: 'cellTemplate'},
-    { dataField: 'Actions', caption: 'Actions', cellTemplate: 'cellTemplate2'}
-  ];
-
-
-
+  dataSource = [];
+  
   constructor(
     private CommonService: CommonServiceService,
     private dataService: SuntechAPIService,
@@ -71,6 +53,7 @@ export class RetailGridComponent implements OnInit {
   ngOnInit(): void {
     this.vocType = this.CommonService.getqueryParamVocType()
     this.getGridVisibleSettings();
+    this.templateGridDataFetch()
   }
 
   addButtonClick() {
@@ -333,5 +316,98 @@ export class RetailGridComponent implements OnInit {
       this.subscriptions$ = []; // Clear the array
     }
   }
+
+  templateGridDataFetch(){
+    const payload = {
+      "SPID": "0115",
+      "parameter": {
+        "FLAG": 'FETCH',
+        "CONTROLS": JSON.stringify({
+            "CONTROL_HEADER": {
+              "USERNAME": localStorage.getItem('username'),
+              "TEMPLATEID": "",
+              "TEMPLATENAME": '',
+              "FORM_NAME": this.CommonService.getModuleName(),
+              "ISDEFAULT": 1
+            },
+            "CONTROL_DETAIL": {
+              "STRBRANCHCODES": '',
+              "STRVOCTYPES": '',
+              "FROMVOCDATE": '',
+              "TOVOCDATE": '',
+              "USERBRANCH": '',
+              "USERNAME": '',
+              "SHOWDATE": '',
+              "SHOWINVOICE": ''
+            }
+         })
+      }
+    };
+    this.dataService.postDynamicAPI('ExecueteSPInterface', payload)
+    .subscribe((result: any) => {
+      console.log('data Refetch for template',result.dynamicData[0]);
+      this.dataSource = result.dynamicData[0]
+    }); 
+  }
+  
+  printGridData(data: any) {
+    let gridData= JSON.parse(data.data['CONTROL_LIST_JSON'])
+    let postData = {
+      "SPID": "0114",
+      "parameter": {
+        "STRBRANCHCODES": gridData.CONTROL_DETAIL.STRBRANCHCODES,
+        "STRVOCTYPES": gridData.CONTROL_DETAIL.STRVOCTYPES,
+        "FROMVOCDATE": gridData.CONTROL_DETAIL.FROMVOCDATE,
+        "TOVOCDATE": gridData.CONTROL_DETAIL.TOVOCDATE,
+        "flag": '',
+        "USERBRANCH": localStorage.getItem('userbranch'),
+        "USERNAME": localStorage.getItem('username')
+      }
+    }
+    console.log(postData)  
+    this.CommonService.showSnackBarMsg('MSG81447');
+    this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+    .subscribe((result: any) => {
+      this.CommonService.closeSnackBarMsg()
+      console.log(result);
+      let data = result.dynamicData;
+      // var WindowPrt = window.open(' ', ' ', 'width=900px, height=800px');
+      const screenWidth = window.screen.availWidth;
+      const screenHeight = window.screen.availHeight;
+      const WindowPrt = window.open('','',
+        `width=${screenWidth},height=${screenHeight}`);
+      if (WindowPrt === null) {
+        console.error('Failed to open the print window. Possibly blocked by a popup blocker.');
+        return;
+      }
+      let printContent = data[0][0].HTMLINPUT;
+      WindowPrt.document.write(printContent);
+      WindowPrt.document.close();
+      WindowPrt.focus();  
+      WindowPrt.onload = function () {
+        if (WindowPrt && WindowPrt.document.head) {
+          let styleElement = WindowPrt.document.createElement('style');
+          styleElement.textContent = `
+                      @page {
+                          size: A5 landscape;
+                      }
+                      body {
+                          margin: 0mm;
+                      }
+                  `;
+          WindowPrt.document.head.appendChild(styleElement);
+
+          setTimeout(() => {
+            if (WindowPrt) {
+              WindowPrt.print();
+            } else {
+              console.error('Print window was closed before printing could occur.');
+            }
+          }, 800);
+        }
+      };
+    }); 
+  }
+
 
 }

@@ -30,6 +30,7 @@ export class WaxProcessComponent implements OnInit {
   vocMaxDate = new Date();
   viewMode: boolean = false;
   currentDate = new Date();
+  jobNumberDetailData: any[] = [];
   isloading: boolean = false;
   isSaved: boolean = false;
   editMode: boolean = false;
@@ -164,24 +165,40 @@ export class WaxProcessComponent implements OnInit {
   }
 
   jobNumberDataSelected(data: any, value: any) {
-    let jobNumberData = [];
-    jobNumberData = this.tableDataJob.filter((item: any) => item.JOB_NUMBER == data.job_number)
+    // Check if the selected job number already exists in the table
+    const jobNumberData = this.tableDataJob.filter((item: any) => item.JOB_NUMBER === data.job_number);
+    
+    // If job number already exists, show an error message
     if (jobNumberData.length > 0) {
-      this.toastr.error('MSG2052')
+      this.toastr.error('MSG2052'); // Error: Job number already exists
+      return; // Exit the function early if validation fails
     }
-    else {
-      // console.log(value);
-      console.log(data);
-      this.tableDataJob[value.data.SRNO - 1].JOB_NUMBER = data.job_number;
-      // this.tableData[value.data.SRNO - 1].design = data.job_description;
-      this.suntechApi.getDynamicAPI(`GetWaxIssueJobs/GetWaxIssueJobs?strBranch_Code=${this.strBranchcode}&strJobNumber=${data.job_number}`).subscribe((result) => {
-        console.log(result.dynamicData);
-        console.log(result.dynamicData[0]);
-        let index = this.tableDataJob.length - 1;
-        this.tableDataJob[index] = result.dynamicData[0][0];
-      });
-    }
+  
+    // Update the JOB_NUMBER for the corresponding row in tableDataJob
+    const rowIndex = value.data.SRNO - 1; // Get row index using SRNO (assuming it's 1-based index)
+    this.tableDataJob[rowIndex].JOB_NUMBER = data.job_number;
+  
+    // Call API to fetch additional job details based on job number
+    let API = `GetWaxIssueJobs/GetWaxIssueJobs/${this.strBranchcode}/${data.job_number}`;
+    this.suntechApi.getDynamicAPI(API).subscribe((result) => {
+      if (result && result.dynamicData && result.dynamicData.length > 0 && result.dynamicData[0].length > 0) {
+        // Successfully received data from API
+        console.log('API Result:', result.dynamicData[0]);
+  
+        // Update the corresponding row with the data received from the API
+        this.tableDataJob[rowIndex] = result.dynamicData[0][0];
+      } else {
+        // Handle API response with no data
+        console.error('No data returned from API');
+        this.toastr.error('No job data found for the selected job number.');
+      }
+    }, (error) => {
+      // Handle API error
+      console.error('API Error:', error);
+      this.toastr.error('Error fetching job data.');
+    });
   }
+  
   minDate: any;
   maxDate: any;
   LOCKVOUCHERNO: boolean = true;
@@ -297,7 +314,7 @@ export class WaxProcessComponent implements OnInit {
     this.srno = length + 1;
     let data = {
       "UNIQUEID": 0,
-      "DT_VOCTYPE": "str",
+      "DT_VOCTYPE": "",
       "DT_BRANCH_CODE": this.branchCode,
       "DT_VOCNO": 0,
       "DT_YEARMONTH": this.yearMonth,
@@ -385,7 +402,7 @@ export class WaxProcessComponent implements OnInit {
       "POSTDATE": "",
       "PRINT_COUNT": 0,
       "SYSTEM_DATE": "2023-10-20T10:24:24.037Z",
-      "Details": this.tableDataJob,
+      "Details": this.setDetaills()
       // [
       //   {
       //     "UNIQUEID": 0,
@@ -430,6 +447,36 @@ export class WaxProcessComponent implements OnInit {
         }
       }, err => alert(err))
     this.subscriptions.push(Sub)
+  }
+  setDetaills() {
+    let Details: any = []
+    this.tableDataJob.forEach((Element: any) => {
+      Details.push(
+        {
+          "UNIQUEID": 0,
+          "DT_VOCTYPE": this.waxprocessFrom.value.voctype,
+          "DT_BRANCH_CODE": this.branchCode,
+          "DT_VOCNO": Element.vocno,
+          "DT_YEARMONTH": this.yearMonth,
+          "SRNO": Element.SRNO,
+          "JOB_NUMBER":Element.JOB_NUMBER,
+          "UNQ_JOB_ID": "",
+          "PROCESS_CODE": "",
+          "WORKER_CODE": "",
+          "DESIGN_CODE": "",
+          "PARTYCODE": "",
+          "ISSUE_PCS": 0,
+          "TOTAL_PCS": 0,
+          "UNQ_DESIGN_ID": "",
+          "GROSS_WT": 0,
+          "METAL_WT": 0,
+          "STONE_WT": 0
+        }
+      )
+
+    }
+    )
+    return Details
   }
 
   update() {
@@ -603,6 +650,86 @@ export class WaxProcessComponent implements OnInit {
       this.subscriptions.forEach(subscription => subscription.unsubscribe());// unsubscribe all subscription
       this.subscriptions = []; // Clear the array
     }
+  }
+  subJobNumberValidate(event?: any) {
+    let postData = {
+      "SPID": "040",
+      "parameter": {
+        'strUNQ_JOB_ID': this.waxprocessFrom.value.JOB_SO_NUMBER,
+        'strBranchCode': this.commonService.nullToString(this.branchCode),
+        'strCurrenctUser': ''
+      }
+    }
+
+    this.commonService.showSnackBarMsg('MSG81447')
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        this.commonService.closeSnackBarMsg()
+        if (result.dynamicData && result.dynamicData[0].length > 0) {
+          let data = result.dynamicData[0]
+          console.log(data,'data')
+          this.waxprocessFrom.controls.process.setValue(data[0].PROCESS)
+          this.waxprocessFrom.controls.processname.setValue(data[0].PROCESSDESC)
+          this.waxprocessFrom.controls.worker.setValue(data[0].WORKER)
+          this.waxprocessFrom.controls.workername.setValue(data[0].WORKERDESC)
+          // this.stonereturndetailsFrom.controls.stockCode.setValue(data[0].STOCK_CODE)
+          // this.stonereturndetailsFrom.controls.stockCodeDes.setValue(data[0].STOCK_DESCRIPTION)
+          this.waxprocessFrom.controls.designcode.setValue(data[0].DESIGN_CODE)
+          this.waxprocessFrom.controls.location.setValue(data[0].LOCTYPE_CODE)
+          this.waxprocessFrom.controls.PICTURE_PATH.setValue(data[0].PICTURE_PATH)
+
+        
+        } else {
+          this.commonService.toastErrorByMsgId('MSG1747')
+        }
+      }, err => {
+        this.commonService.closeSnackBarMsg()
+        this.commonService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
+  }
+  jobNumberValidate(event: any) {
+    if (event.target.value == '') return
+    let postData = {
+      "SPID": "028",
+      "parameter": {
+        'strBranchCode': this.commonService.nullToString(this.branchCode),
+        'strJobNumber': this.commonService.nullToString(event.target.value),
+        'strCurrenctUser': this.commonService.nullToString(this.commonService.userName)
+      }
+    }
+
+    this.commonService.showSnackBarMsg('MSG81447')
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        this.commonService.closeSnackBarMsg()
+        if (result.status == "Success" && result.dynamicData[0]) {
+          let data = result.dynamicData[0]
+          if (data[0] && data[0].UNQ_JOB_ID != '') {
+            this.jobNumberDetailData = data
+            console.log(data,'data')
+            this.waxprocessFrom.controls.jobDesc.setValue(data[0].DESCRIPTION)
+            this.waxprocessFrom.controls.subjobno.setValue(data[0].UNQ_JOB_ID)
+            this.waxprocessFrom.controls.subjobDesc.setValue(data[0].JOB_DESCRIPTION)
+            this.waxprocessFrom.controls.designcode.setValue(data[0].DESIGN_CODE)
+            this.waxprocessFrom.controls.JOB_DATE.setValue(data[0].JOB_DATE)
+
+            this.subJobNumberValidate()
+          } else {
+            this.commonService.toastErrorByMsgId('MSG1531')
+            this.waxprocessFrom.controls.jobNumber.setValue('')
+            this.showOverleyPanel(event, 'jobNumber')
+
+          }
+        } else {
+          this.waxprocessFrom.controls.jobNumber.setValue('')
+          this.commonService.toastErrorByMsgId('MSG1747')
+        } return
+      }, err => {
+        this.commonService.closeSnackBarMsg()
+        this.commonService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
   }
 
 }

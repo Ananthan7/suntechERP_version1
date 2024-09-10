@@ -230,6 +230,7 @@ export class MetalIssueDetailsComponent implements OnInit {
     this.setValueWithDecimal('KARAT', this.content.KARAT, 'THREE')
     this.setValueWithDecimal('STONE_WT', this.content.STONE_WT, 'STONE')
     this.setValueWithDecimal('jobPurity', this.content.JOB_PURITY, 'PURITY')
+    this.setValueWithDecimal('PURITY', this.content.TO_PURITY, 'PURITY')
 
     this.tableData = [{
       DIVCODE: this.content.DIVCODE,
@@ -342,7 +343,7 @@ export class MetalIssueDetailsComponent implements OnInit {
 
   setPostData() {
     let form = this.metalIssueDetailsForm.value
-    let currRate = this.comService.getCurrecnyRate(this.comService.compCurrency)
+    let currRate = this.comService.getCurrencyRate(this.comService.compCurrency)
 
     return {
       "SRNO": this.comService.emptyToZero(this.content.SRNO),
@@ -676,7 +677,23 @@ export class MetalIssueDetailsComponent implements OnInit {
                     if (data[0].VALID_STOCK) {
                         // Handle the valid stock case
                         // You can set other form values or perform other actions here if needed
+
+                        let stockData = result.dynamicData[1][0]; // Assuming result.dynamicData[1] contains stock details
+                        let purity = stockData.PURITY || 0; // Default to 0 if PURITY is not found
+                        let division = stockData.DIVISION || 0;
+                        let pcs = stockData.BALANCE_PCS || 0;
+                        let description = stockData.DESCRIPTION|| 0;
+                        // Set the purity value in the form
+                        this.metalIssueDetailsForm.controls.PURITY.setValue(purity);
+                        this.metalIssueDetailsForm.controls.DIVCODE.setValue(division);
+                        this.metalIssueDetailsForm.controls.pcs.setValue(pcs);
+                        this.metalIssueDetailsForm.controls.stockCodeDes.setValue(description);
+
+
+
+
                         this.overlaystockcode.closeOverlayPanel();
+                       
                     } else {
                         this.comService.toastErrorByMsgId('MSG1531');
                         this.metalIssueDetailsForm.controls.stockCode.setValue('');

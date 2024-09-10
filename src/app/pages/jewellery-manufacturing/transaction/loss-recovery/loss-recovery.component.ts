@@ -15,11 +15,7 @@ import { MasterSearchComponent } from "src/app/shared/common/master-search/maste
 })
 export class LossRecoveryComponent implements OnInit {
   @ViewChild('overlayReceicvedBy') overlayReceicvedBy!: MasterSearchComponent;
-  @ViewChild('overlayWorker') overlayWorker!: MasterSearchComponent;
-  @ViewChild('overlayProcess') overlayProcess!: MasterSearchComponent;
-  @ViewChild('overlayStockCode') overlayStockCode!: MasterSearchComponent;
-  @ViewChild('overlayLocationTo') overlayLocationTo!: MasterSearchComponent;
-  @ViewChild('overlayKaratCode') overlayKaratCode!: MasterSearchComponent;
+  @ViewChild('overlayEnterBy') overlayEnterBy!: MasterSearchComponent;
 
   isloading: boolean = false;
   divisionMS: any = 'ID';
@@ -157,6 +153,12 @@ export class LossRecoveryComponent implements OnInit {
     this.lossRecoveryFrom.controls.toDate.setValue(this.currentDate)
 
     this.generateVocNo()
+    this.setInitialValues()
+  }
+
+  private setInitialValues() {
+    let branchParam = this.comService.allbranchMaster
+    this.lossRecoveryFrom.controls.locationTo.setValue(branchParam.DMFGMLOC)
   }
 
 
@@ -292,6 +294,7 @@ export class LossRecoveryComponent implements OnInit {
       event.preventDefault();
     }
   }
+
   generateVocNo() {
     const API = `GenerateNewVoucherNumber/GenerateNewVocNum/${this.comService.getqueryParamVocType()}/${this.comService.branchCode}/${this.comService.yearSelected}/${this.comService.formatYYMMDD(this.currentDate)}`;
     this.dataService.getDynamicAPI(API)
@@ -334,22 +337,9 @@ export class LossRecoveryComponent implements OnInit {
       case 'receicvedBy':
         this.overlayReceicvedBy.showOverlayPanel(event);
         break;
-      case 'worker':
-        this.overlayWorker.showOverlayPanel(event);
+      case 'EnterBy':
+        this.overlayEnterBy.showOverlayPanel(event);
         break;
-      case 'process':
-        this.overlayProcess.showOverlayPanel(event);
-        break;
-      case 'stockCode':
-        this.overlayStockCode.showOverlayPanel(event);
-        break;
-      case 'locationTo':
-        this.overlayLocationTo.showOverlayPanel(event);
-        break;
-      case 'karatCode':
-        this.overlayKaratCode.showOverlayPanel(event);
-        break;
-      default:
 
     }
   }
@@ -372,7 +362,7 @@ export class LossRecoveryComponent implements OnInit {
           this.comService.toastErrorByMsgId('MSG1531')
           this.lossRecoveryFrom.controls[FORMNAME].setValue('')
           LOOKUPDATA.SEARCH_VALUE = ''
-          if (FORMNAME === 'receicvedBy' || FORMNAME === 'worker' || FORMNAME === 'process' || FORMNAME === 'stockCode' || FORMNAME === 'locationTo' || FORMNAME === 'karatCode') {
+          if (FORMNAME === 'receicvedBy' || FORMNAME === 'EnterBy') {
             this.showOverleyPanel(event, FORMNAME);
           }
           return
@@ -419,7 +409,7 @@ export class LossRecoveryComponent implements OnInit {
       "VOCDATE": this.comService.formatDateTime(this.lossRecoveryFrom.value.vocDate),
       "YEARMONTH": this.yearMonth,
       "BRANCH_CODE": this.branchCode,
-      "SMAN": this.lossRecoveryFrom.value.EnterBy,
+      "SMAN":"" ,
       "METAL_RATE_TYPE": "",
       "LOSS_UPTODATE": "2023-10-19T10:46:17.071Z",
       "TOTAL_LOSS": 0,
@@ -430,18 +420,18 @@ export class LossRecoveryComponent implements OnInit {
       "REC_TYPE": 0,
       "AUTOPOSTING": true,
       "POSTDATE": "",
-      "REMARKS": this.lossRecoveryFrom.value.remarks,
+      "REMARKS": this.comService.nullToString(this.lossRecoveryFrom.value.remarks),
       "PRINT_COUNT": 0,
       "LOSS_FRMDATE":this.comService.formatDateTime(this.lossRecoveryFrom.value.fromDate),
       "LOSS_TODATE":  this.comService.formatDateTime(this.lossRecoveryFrom.value.toDate),
       "RECOVERY_TYPE": 0,
       "SCRAP_RETURN": true,
       "TOTAL_SCRAP": 0,
-      "WORKER_CODE": "",
+      "WORKER_CODE": this.comService.nullToString(this.lossRecoveryFrom.value.EnterBy),
       "PRINT_COUNT_ACCOPY": 0,
       "PRINT_COUNT_CNTLCOPY": 0,
       "ALLOY_RECOVERY": true,
-      "HTUSERNAME": this.lossRecoveryFrom.value.receicvedBy,
+      "HTUSERNAME": this.comService.nullToString(this.lossRecoveryFrom.value.receicvedBy),
       "PROD_LOSS_RECOVERY_DETAIL": [
         {
           "UNIQUEID": 0,
@@ -463,7 +453,7 @@ export class LossRecoveryComponent implements OnInit {
           "ADJ_PUREWT": 0,
           "ADJ_ACCODE": "",
           "PHY_STOCK_ACCODE": "",
-          "LOCTYPE_CODE": "",
+          "LOCTYPE_CODE": this.comService.nullToString(this.lossRecoveryFrom.value.locationTo),
           "DT_YEARMONTH": "",
           "DT_VOCNO": 0,
           "DT_VOCTYPE": "",

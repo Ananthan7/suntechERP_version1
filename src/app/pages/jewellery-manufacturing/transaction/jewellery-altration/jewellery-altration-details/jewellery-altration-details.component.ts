@@ -279,9 +279,9 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
     }
   }
   getImageData() {
-    let API = `Image/${this.jewelleryaltrationdetailsFrom.value.stockcode}`
+    let API = `RetailSalesItemImage/${this.jewelleryaltrationdetailsFrom.value.stockcode}`
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
-      .subscribe(([result]) => {
+      .subscribe((result) => {
         if (result.response) {
           let data = result.response
           console.log(data,'picture')
@@ -616,7 +616,7 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
   }
   setPostData() {
     let form = this.jewelleryaltrationdetailsFrom.value
-    let currRate = this.comService.getCurrecnyRate(this.comService.compCurrency)
+    let currRate = this.comService.getCurrencyRate(this.comService.compCurrency)
     return {
       "UNIQUEID": 0,
       "SRNO": this.comService.emptyToZero(this.content.SRNO),

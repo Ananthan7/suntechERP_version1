@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-retail-sales-collection',
@@ -24,7 +26,7 @@ export class RetailSalesCollectionComponent implements OnInit {
   branchDivisionData: any[] = [];
   formattedBranchDivisionData: any;
   VocTypeParam: any = [];
-
+   
   retailSalesCollection: FormGroup = this.formBuilder.group({
     branch : [''],
     fromDate : [new Date()],
@@ -41,11 +43,11 @@ export class RetailSalesCollectionComponent implements OnInit {
     showOnlySummaryCheckbox: [false],
     landscapeFormat: [false],
     OutpuGridView: [false],
-
+    templateName: ['']
   })
   constructor(  private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder, private dataService: SuntechAPIService,  private comService: CommonServiceService,
-    private commonService: CommonServiceService,
+    private commonService: CommonServiceService,   private toastr: ToastrService,
   ) { }
 
   ngOnInit(): void {
@@ -135,24 +137,26 @@ export class RetailSalesCollectionComponent implements OnInit {
     return `${year}-${month}-${day}`;
   }
 
-  okClick() {
+  previewClick() {
     let postData = {
       "SPID": "0114",
       "parameter": {
-          "STRBRANCHCODES": this.formattedBranchDivisionData,
-          "STRVOCTYPES": this.VocTypeParam, //this.commonService.getqueryParamVocType(),
-          "FROMVOCDATE": this.formatDateToYYYYMMDD(this.retailSalesCollection.value.fromDate),
-          "TOVOCDATE": this.formatDateToYYYYMMDD(this.retailSalesCollection.value.toDate),
-          "flag": '',
-          "USERBRANCH": localStorage.getItem('userbranch'),
-          "USERNAME": localStorage.getItem('username')
+        "STRBRANCHCODES": this.formattedBranchDivisionData,
+        "STRVOCTYPES": this.VocTypeParam, //this.commonService.getqueryParamVocType(),
+        "FROMVOCDATE": this.formatDateToYYYYMMDD(this.retailSalesCollection.value.fromDate),
+        "TOVOCDATE": this.formatDateToYYYYMMDD(this.retailSalesCollection.value.toDate),
+        "flag": '',
+        "USERBRANCH": localStorage.getItem('userbranch'),
+        "USERNAME": localStorage.getItem('username')
       }
     }
     console.log(postData)  
+    this.commonService.showSnackBarMsg('MSG81447');
     this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
     .subscribe((result: any) => {
       console.log(result);
       let data = result.dynamicData;
+      this.commonService.closeSnackBarMsg()
       var WindowPrt = window.open(' ', ' ', 'width=900px, height=800px');
       if (WindowPrt === null) {
         console.error('Failed to open the print window. Possibly blocked by a popup blocker.');
@@ -205,7 +209,7 @@ export class RetailSalesCollectionComponent implements OnInit {
     this.isLoading = true;
 
     this.dataService.postDynamicAPI('GetReportVouchers', payload).subscribe((response) => {
-      console.log('Rsales API call data', response);
+      console.log('Retailsales API call data', response);
       this.APIData = response.dynamicData[0] || [];
       setTimeout(() => {
         this.isLoading = false;
@@ -230,8 +234,58 @@ export class RetailSalesCollectionComponent implements OnInit {
 
   saveTemplate(){
     this.popupVisible = true;
+    console.log(this.retailSalesCollection.controls.templateName.value)
   }
+  saveTemplate_DB(){
+    const payload = {
+      "SPID": "0115",
+      "parameter": {
+        "FLAG": 'INSERT',
+        "CONTROLS": JSON.stringify({
+            "CONTROL_HEADER": {
+              "USERNAME": localStorage.getItem('username'),
+              "TEMPLATEID": this.comService.getModuleName(),
+              "TEMPLATENAME": this.retailSalesCollection.controls.templateName.value,
+              "FORM_NAME": this.comService.getModuleName(),
+              "ISDEFAULT": 1
+            },
+            "CONTROL_DETAIL": {
+              "STRBRANCHCODES": this.formattedBranchDivisionData,
+              "STRVOCTYPES": this.VocTypeParam,
+              "FROMVOCDATE": this.formatDateToYYYYMMDD(this.retailSalesCollection.value.fromDate),
+              "TOVOCDATE": this.formatDateToYYYYMMDD(this.retailSalesCollection.value.toDate),
+              "USERBRANCH": localStorage.getItem('userbranch'),
+              "USERNAME": localStorage.getItem('username'),
+              "SHOWDATE": this.retailSalesCollection.value.showDateCheckbox ? 0 : 1,
+              "SHOWINVOICE": this.retailSalesCollection.value.showInvoiceCheckbox ? 0 : 1
+            }
+         })
+      }
+    };
+    this.dataService.postDynamicAPI('ExecueteSPInterface', payload)
+    .subscribe((result: any) => {
+      console.log(result);
+      let data = result.dynamicData.map((item: any) => item[0].ERRORMESSAGE);
+      let Notifdata = result.dynamicData.map((item: any) => item[0].ERRORCODE);
+      if (Notifdata == 1) {
+        Swal.fire({
+          title: data || 'Success',
+          text: '',
+          icon: 'success',
+          confirmButtonColor: '#336699',
+          confirmButtonText: 'Ok'
+        })
+        this.popupVisible = false;
+        this.activeModal.close(data);
+      }
+      else {
+        this.toastr.error(Notifdata)
+      }
+    }); 
+  }
+
   popupClosed(){
+    this.retailSalesCollection.controls.templateName.setValue(null);
     this.popupVisible = false;
   }
 

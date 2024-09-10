@@ -16,6 +16,7 @@ import { MasterSearchComponent } from 'src/app/shared/common/master-search/maste
 })
 export class ProcessTransferComponent implements OnInit {
   @ViewChild('salesmanOverlay') salesmanOverlay!: MasterSearchComponent;
+  @ViewChild('OverlayCurrencyRate') OverlayCurrencyRate!: MasterSearchComponent;
   @Input() content!: any;
   tableData: any[] = [];
   detailData: any[] = [];
@@ -122,7 +123,7 @@ export class ProcessTransferComponent implements OnInit {
     }
     this.gridSettings()
   }
-  gridSettings(){
+  gridSettings() {
     this.gridAmountDecimalFormat = {
       type: 'fixedPoint',
       precision: this.commonService.allbranchMaster?.BAMTDECIMALS,
@@ -131,7 +132,7 @@ export class ProcessTransferComponent implements OnInit {
   }
   /**USE: get InitialLoadData */
   setInitialValues() {
-    if(!this.content?.MID) return
+    if (!this.content?.MID) return
     this.commonService.showSnackBarMsg('MSG81447')
     let API = `JobProcessTrnMasterDJ/GetJobProcessTrnMasterDJDetailList/${this.content?.MID}`
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
@@ -149,7 +150,7 @@ export class ProcessTransferComponent implements OnInit {
               // JOB_PROCESS_TRN_LABCHRG_DJ: data.JOB_PROCESS_TRN_LABCHRG_DJ?.filter((val: any) => item.UNIQUEID == val.REFMID),
               JOB_PROCESS_TRN_COMP_DJ: this.JOB_PROCESS_TRN_COMP_DJ?.filter((val: any) => item.JOB_NUMBER == val.JOB_NUMBER),
             })
-            item.LOSS_QTY = this.commonService.decimalQuantityFormat(item.LOSS_QTY,'METAL')
+            item.LOSS_QTY = this.commonService.decimalQuantityFormat(item.LOSS_QTY, 'METAL')
           })
           this.processTransferFrom.controls.BRANCH_CODE.setValue(data.BRANCH_CODE)
           this.processTransferFrom.controls.YEARMONTH.setValue(data.YEARMONTH)
@@ -184,12 +185,12 @@ export class ProcessTransferComponent implements OnInit {
     )
     this.setVocTypeMaster()
   }
-  minDate:any;
+  minDate: any;
   maxDate: any;
-  setVocTypeMaster(){
+  setVocTypeMaster() {
     let frm = this.processTransferFrom.value
     console.log(this.commonService.VocTypeMasterData);
-    const vocTypeMaster:any = this.commonService.getVoctypeMasterByVocTypeMain(frm.BRANCH_CODE, frm.VOCTYPE, frm.MAIN_VOCTYPE)
+    const vocTypeMaster: any = this.commonService.getVoctypeMasterByVocTypeMain(frm.BRANCH_CODE, frm.VOCTYPE, frm.MAIN_VOCTYPE)
     this.LOCKVOUCHERNO = vocTypeMaster.LOCKVOUCHERNO
     this.minDate = vocTypeMaster.BLOCKBACKDATEDENTRIES ? new Date() : null;
     this.maxDate = vocTypeMaster.BLOCKFUTUREDATE ? new Date() : null;
@@ -205,17 +206,26 @@ export class ProcessTransferComponent implements OnInit {
       });
   }
   showOverleyPanel(event: any, formControlName: string) {
-    if(event.target.value != '') return
-    if (formControlName == 'salesman') {
-      this.salesmanOverlay.showOverlayPanel(event)
+    if (event.target.value != '') return
+    switch (formControlName) {
+      case 'salesman':
+        this.salesmanOverlay.showOverlayPanel(event);
+        break;
+      case 'CURRENCY_RATE':
+        this.OverlayCurrencyRate.showOverlayPanel(event);
+        break;
+      default:
     }
   }
-  lookupKeyPress(event: any,form?:any) {
-    if(event.key == 'Tab' && event.target.value == ''){
-      this.showOverleyPanel(event,form)
+
+  lookupKeyPress(event: any, form?: any) {
+    console.log(event);
+    
+    if (event.key == 'Tab' && event.target.value == '') {
+      this.showOverleyPanel(event, form)
     }
     if (event.key === 'Enter') {
-      if(event.target.value == '') this.showOverleyPanel(event,form)
+      if (event.target.value == '') this.showOverleyPanel(event, form)
       event.preventDefault();
     }
   }
@@ -269,12 +279,12 @@ export class ProcessTransferComponent implements OnInit {
   }
   addItemWithCheck(existingArray: any, newItem: any) {
     let duplicate = false;
-    if(newItem.DESIGN_TYPE == 'METAL'){
+    if (newItem.DESIGN_TYPE == 'METAL') {
       duplicate = existingArray.find((item: any) => item.JOB_NUMBER === newItem.JOB_NUMBER
-      && item.FRM_WORKER_CODE === newItem.FRM_WORKER_CODE 
-      && item.FRM_PROCESS_CODE === newItem.FRM_PROCESS_CODE);
-    }else{
-      duplicate = existingArray.find((item: any) => item.JOB_NUMBER === newItem.JOB_NUMBER );
+        && item.FRM_WORKER_CODE === newItem.FRM_WORKER_CODE
+        && item.FRM_PROCESS_CODE === newItem.FRM_PROCESS_CODE);
+    } else {
+      duplicate = existingArray.find((item: any) => item.JOB_NUMBER === newItem.JOB_NUMBER);
     }
     if (duplicate) {
       this.commonService.toastErrorByMsgId('MSG2052')
@@ -286,7 +296,7 @@ export class ProcessTransferComponent implements OnInit {
   setValuesToHeaderGrid(DATA: any) {
     let detailDataToParent = DATA.PROCESS_FORMDETAILS
     if (detailDataToParent.SRNO != 0) {
-      this.tableData[detailDataToParent.SRNO - 1] =  DATA.JOB_PROCESS_TRN_DETAIL_DJ
+      this.tableData[detailDataToParent.SRNO - 1] = DATA.JOB_PROCESS_TRN_DETAIL_DJ
       this.detailData[detailDataToParent.SRNO - 1] = { SRNO: detailDataToParent.SRNO, ...DATA }
     } else {
       if (this.addItemWithCheck(this.tableData, detailDataToParent)) return;
@@ -296,7 +306,7 @@ export class ProcessTransferComponent implements OnInit {
       this.detailData.push({ SRNO: this.tableData.length + 1, ...DATA })
       this.tableData.push(DATA.JOB_PROCESS_TRN_DETAIL_DJ);
     }
-    
+
     this.editFinalArray(DATA)
     if (detailDataToParent.FLAG == 'SAVE') this.closeDetailScreen();
     if (detailDataToParent.FLAG == 'CONTINUE') {
@@ -311,7 +321,10 @@ export class ProcessTransferComponent implements OnInit {
       WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
     }
     this.commonService.showSnackBarMsg('MSG81447');
-    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
+    // let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
+      let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
+    console.log(API);
+    
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
         this.commonService.closeSnackBarMsg()
@@ -320,6 +333,9 @@ export class ProcessTransferComponent implements OnInit {
           this.commonService.toastErrorByMsgId('MSG1531')
           this.processTransferFrom.controls[FORMNAME].setValue('')
           LOOKUPDATA.SEARCH_VALUE = ''
+          if (FORMNAME === 'salesman' || FORMNAME === 'CURRENCY_RATE') {
+            this.showOverleyPanel(event, FORMNAME);
+          }
           return
         }
       }, err => {
@@ -328,7 +344,7 @@ export class ProcessTransferComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
   ValidatingVocNo() {
-    if(this.content?.FLAG == 'VIEW') return
+    if (this.content?.FLAG == 'VIEW') return
     this.commonService.showSnackBarMsg('MSG81447');
     let API = `ValidatingVocNo/${this.commonService.getqueryParamMainVocType()}/${this.processTransferFrom.value.VOCNO}`
     API += `/${this.commonService.branchCode}/${this.commonService.getqueryParamVocType()}`
@@ -378,20 +394,15 @@ export class ProcessTransferComponent implements OnInit {
   }
   /**USE: to set currency from company parameter */
   setCompanyCurrency() {
-    console.log(this.commonService.allCompanyParameters);
-
-    let CURRENCY_CODE = this.commonService.getCompanyParamValue('COMPANYCURRENCY')
-    console.log(CURRENCY_CODE, 'CURRENCY_CODE');
+    let CURRENCY_CODE = this.commonService.getCurrencyCode()
     this.processTransferFrom.controls.CURRENCY_CODE.setValue(CURRENCY_CODE);
     this.setCurrencyRate()
   }
   /**USE: to set currency from branch currency master */
   setCurrencyRate() {
-    const CURRENCY_RATE: any[] = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == this.processTransferFrom.value.CURRENCY_CODE);
+    let CURRENCY_RATE: any =  this.commonService.getCurrencyRate(this.processTransferFrom.value.CURRENCY_CODE);
     if (CURRENCY_RATE.length > 0) {
-      this.processTransferFrom.controls.CURRENCY_RATE.setValue(
-        this.commonService.decimalQuantityFormat(CURRENCY_RATE[0].CONV_RATE, 'RATE')
-      );
+      this.processTransferFrom.controls.CURRENCY_RATE.setValue(CURRENCY_RATE);
     } else {
       this.processTransferFrom.controls.CURRENCY_CODE.setValue('')
       this.processTransferFrom.controls.CURRENCY_RATE.setValue('')

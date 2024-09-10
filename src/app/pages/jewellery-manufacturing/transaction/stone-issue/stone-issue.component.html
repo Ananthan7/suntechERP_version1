@@ -76,9 +76,10 @@
                   <div class="col-md-4">
                     <mat-form-field appearance="outline" style="width: 80%">
                       <input type="text" matInput formControlName="currencyrate" style="text-align: right;" readonly
-                        SixDecimalInput [readonly]="viewMode" (keydown)="lookupKeyPress($event,'currencyrate')" />
-                      <master-search class="masterSearch" [MasterSearchData]="CurrencyCodeData" (newRowClick)="CurrencyCodeSelected($event)"
-                        *ngIf="!viewMode">
+                        SixDecimalInput [readonly]="viewMode" (keydown)="lookupKeyPress($event,'currencyrate')" 
+                        (focusout)="validateLookupField($event,CurrencyCodeData,'currencyrate')" />
+                      <master-search class="masterSearch" [MasterSearchData]="CurrencyCodeData" #overlayCurrencyCode
+                        (newRowClick)="CurrencyCodeSelected($event)" *ngIf="!viewMode">
                       </master-search>
                     </mat-form-field>
 
@@ -94,11 +95,11 @@
                         <input type="text" matInput formControlName="enteredBy"
                           (keydown)="lookupKeyPress($event,'enteredBy')" [readonly]="viewMode"
                           (focusout)="validateLookupField($event,SALESPERSON_CODEData,'enteredBy')" />
-                          <master-search class="masterSearch" [MasterSearchData]="SALESPERSON_CODEData" #overlayenteredBySearch
-                          (newRowClick)="userDataSelected($event)" *ngIf="!viewMode">
+                        <master-search class="masterSearch" [MasterSearchData]="SALESPERSON_CODEData"
+                          #overlayenteredBySearch (newRowClick)="userDataSelected($event)" *ngIf="!viewMode">
                         </master-search>
                       </mat-form-field>
-                    
+
                     </div>
                   </div>
                 </div>
@@ -110,11 +111,11 @@
                         <input type="text" matInput formControlName="worker" maxlength="6"
                           (keydown)="lookupKeyPress($event,'worker')" [readonly]="viewMode"
                           (focusout)="validateLookupField($event,WorkerCodeData,'worker')" />
-                          <master-search class="masterSearch" [MasterSearchData]="WorkerCodeData" #overlayworkerSearch
+                        <master-search class="masterSearch" [MasterSearchData]="WorkerCodeData" #overlayworkerSearch
                           (newRowClick)="WorkerCodeSelected($event)" *ngIf="!viewMode">
                         </master-search>
                       </mat-form-field>
-                     
+
                     </div>
                     <div class="col-md-4">
                       <mat-form-field appearance="outline" style="width: 80%">

@@ -144,10 +144,14 @@
 
                   <div *dxTemplate="let data of 'jobNumbertemp'">
                     <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value"></a>
-                    <master-search class="masterSearch" [MasterSearchData]="jobNumberCodeData"
-                      (newRowClick)="jobNumberDataSelected($event,data)">
+                    <master-search 
+                      class="masterSearch" 
+                      [MasterSearchData]="jobNumberCodeData"
+                      (newRowClick)="jobNumberDataSelected($event, data)"
+                      (focusout)="jobNumberValidate($event)"> <!-- Add focusout event here -->
                     </master-search>
                   </div>
+                  
                   <!-- <div *dxTemplate="let data of 'designtemp'">
                     <input type="text" [value]="data.value" (change)="designtextevent($event,data)"
                       [attr.readonly]="isReadOnly" />

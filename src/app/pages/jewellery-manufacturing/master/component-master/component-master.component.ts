@@ -137,6 +137,7 @@ export class ComponentMasterComponent implements OnInit {
     SEARCH_HEADING: 'Prefix master',
     WHERECONDITION: "COMP_PREFIX='1'",
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
   }
   typeCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -940,8 +941,8 @@ export class ComponentMasterComponent implements OnInit {
   setPostData() {
     let form = this.componentmasterForm.value
     let postData = {
-      "DESIGN_CODE": form.codedes || "",
-      "DESIGN_DESCRIPTION": form.code || "",
+      "DESIGN_CODE": form.code || "",
+      "DESIGN_DESCRIPTION": form.codedes  || "",
       "CURRENCY_CODE": form.currencyCode,
       "CC_RATE": "0",
       "COST_CODE": form.costCenter || "",

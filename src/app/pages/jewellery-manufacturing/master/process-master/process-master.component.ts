@@ -75,6 +75,7 @@ export class ProcessMasterComponent implements OnInit {
   disabled = false;
   value: any;
   searchlookup: boolean = false;
+  isloading: boolean = false;
 
   @ViewChild('codeInput1') codeInput1!: ElementRef;
   @ViewChild('approvalProcessInput') approvalProcessInput!: ElementRef;
@@ -330,8 +331,6 @@ export class ProcessMasterComponent implements OnInit {
     this.processMasterForm.controls.ADJUST_ACCODE.setValue(this.content.ADJUST_ACCODE);
     // this.processMasterForm.controls.ApplySetting.setValue(this.onchangeCheckBoxNum(this.content.APPLY_SETTING));
     this.processMasterForm.controls.WIPaccount.setValue(this.content.WIP_ACCODE);
-    this.processMasterForm.controls.processType.setValue(this.content.PROCESS_TYPE);
-    console.log(this.processMasterForm.value.processType, 'processType');
 
     this.processMasterForm.controls.Position.setValue(this.content.POSITION);
     this.processMasterForm.controls.recStockCode.setValue(this.content.RECOV_STOCK_CODE);
@@ -450,7 +449,7 @@ export class ProcessMasterComponent implements OnInit {
     if (this.commonService.emptyToZero(form.loss_standard) < this.commonService.emptyToZero(form.loss_min)) {
       this.lossData = true;
       this.commonService.toastErrorByMsgId('MSG1438');
-     // this.toastr.error('Standard % should be Greater than Minimum %');
+      // this.toastr.error('Standard % should be Greater than Minimum %');
     }
     if (this.commonService.emptyToZero(form.loss_standard) > this.commonService.emptyToZero(form.loss_max)) {
       this.lossData = true;
@@ -459,7 +458,7 @@ export class ProcessMasterComponent implements OnInit {
     if (this.commonService.emptyToZero(form.loss_min) > this.commonService.emptyToZero(form.loss_max)) {
       this.lossData = true;
       this.commonService.toastErrorByMsgId('MSG1810');
-      
+
       //this.toastr.error('Minimum % should be Lesser than Maximum %');
     }
     return this.lossData
@@ -477,7 +476,7 @@ export class ProcessMasterComponent implements OnInit {
     if (this.commonService.emptyToZero(recLoss) < this.commonService.emptyToZero(minRec)) {
       this.recoveryData = true;
       this.commonService.toastErrorByMsgId('MSG1438');
-     // this.toastr.error('Standard % should be Greater than Minimum %');
+      // this.toastr.error('Standard % should be Greater than Minimum %');
 
     }
     return this.recoveryData
@@ -493,6 +492,10 @@ export class ProcessMasterComponent implements OnInit {
         this.processTypeList.forEach((item: any, index: number) => {
           item.SRNO = index
         })
+        if (this.content?.FLAG == 'VIEW' || this.content?.FLAG == 'EDIT') {
+          let type = this.processTypeList.filter((item: any) => item.SRNO == this.content.PROCESS_TYPE)
+          if (type.length > 0) this.processMasterForm.controls.processType.setValue(type[0].SRNO);
+        }
       }
     });
     this.subscriptions.push(Sub)
@@ -527,7 +530,7 @@ export class ProcessMasterComponent implements OnInit {
       return false;
     }
   }
-  
+
   submitValidations(form: any) {
     if (form.loss == true && this.validateLossRange()) {
       return true;
@@ -548,7 +551,7 @@ export class ProcessMasterComponent implements OnInit {
     }
 
     if (this.formattedTime > this.formattedMaxTime) {
-       this.commonService.toastErrorByMsgId('MSG7901');//Standard Time  should not be Greater than Maximum Time
+      this.commonService.toastErrorByMsgId('MSG7901');//Standard Time  should not be Greater than Maximum Time
       return true;
     }
     if (form.loss == true) {
@@ -593,12 +596,12 @@ export class ProcessMasterComponent implements OnInit {
     }
 
     if (form.RecoveryProcess == true && form.recovery == false) {
-       this.commonService.toastErrorByMsgId('MSG81365');//Recovery details Must be Filled
+      this.commonService.toastErrorByMsgId('MSG81365');//Recovery details Must be Filled
       return true
     }
 
     if (!form.processCode) {
-       this.commonService.toastErrorByMsgId('MSG1680');//Process Code cannot be empty
+      this.commonService.toastErrorByMsgId('MSG1680');//Process Code cannot be empty
       return true;
     }
     if (!form.processDesc) {
@@ -628,7 +631,7 @@ export class ProcessMasterComponent implements OnInit {
       "LOSS_ACCODE": form.LOSS_ACCODE,
       "WIP_ACCODE": form.WIPaccount,
       "CURRENCY_CODE": "",
-      "PROCESS_TYPE":this.commonService.nullToString(form.processType),
+      "PROCESS_TYPE": this.commonService.nullToString(form.processType),
       "UNIT": "",
       "NO_OF_UNITS": 0,
       "UNIT_RATE": 0,
@@ -694,8 +697,10 @@ export class ProcessMasterComponent implements OnInit {
     let API = 'ProcessMasterDj/InsertProcessMasterDJ'
     let postData = this.setPostData()
     this.commonService.showSnackBarMsg('Loading')
+    this.isloading = true;
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
+        this.isloading = false;
         this.commonService.closeSnackBarMsg()
         if (result) {
           if (result.status === "Success") {
@@ -703,10 +708,11 @@ export class ProcessMasterComponent implements OnInit {
           } else {
             this.showErrorDialog(result.message || 'Error please try again');
           }
-        }  else {
+        } else {
           this.commonService.toastErrorByMsgId('MSG3577')
         }
       }, err => {
+        this.isloading = false;
         this.commonService.toastErrorByMsgId('MSG3577')
       })
     this.subscriptions.push(Sub);
@@ -718,19 +724,22 @@ export class ProcessMasterComponent implements OnInit {
     let API = 'ProcessMasterDj/UpdateProcessMasterDJ/' + form.processCode
     let postData = this.setPostData()
     this.commonService.showSnackBarMsg('Loading')
+    this.isloading = true;
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
+        this.isloading = false;
         this.commonService.closeSnackBarMsg()
         if (result) {
           if (result.status === "Success") {
-         this.showSuccessDialog(this.commonService.getMsgByID('MSG2443') || 'Success');
+            this.showSuccessDialog(this.commonService.getMsgByID('MSG2443') || 'Success');
           } else {
             this.showErrorDialog(result.message || 'Error please try again');
           }
-        }else {
+        } else {
           this.commonService.toastErrorByMsgId('MSG3577')
         }
       }, err => {
+        this.isloading = false;
         this.commonService.toastErrorByMsgId('MSG3577')
       })
     this.subscriptions.push(Sub)
@@ -827,7 +836,7 @@ export class ProcessMasterComponent implements OnInit {
       return;
     }
     this.processMasterForm.controls.WIPaccount.setValue(e.ACCODE);
-    this.accodeValidateSP(e.ACCODE,this.WipACCODEData,'WIPaccount')
+    this.accodeValidateSP(e.ACCODE, this.WipACCODEData, 'WIPaccount')
   }
   LOSS_ACCODESelected(e: any) {
     if (this.isSameAccountCodeSelected(e.ACCODE, 'LOSS_ACCODE')) {
@@ -836,7 +845,7 @@ export class ProcessMasterComponent implements OnInit {
       return;
     }
     this.processMasterForm.controls.LOSS_ACCODE.setValue(e.ACCODE);
-    this.accodeValidateSP( e.ACCODE,this.LossACCODEData,'LOSS_ACCODE')
+    this.accodeValidateSP(e.ACCODE, this.LossACCODEData, 'LOSS_ACCODE')
   }
   RECOV_ACCODESelected(e: any) {
     if (this.isSameAccountCodeSelected(e.ACCODE, 'RECOV_ACCODE')) {
@@ -845,7 +854,7 @@ export class ProcessMasterComponent implements OnInit {
       return;
     }
     this.processMasterForm.controls.RECOV_ACCODE.setValue(e.ACCODE);
-    this.accodeValidateSP( e.ACCODE,this.RecovACCODEData, 'RECOV_ACCODE')
+    this.accodeValidateSP(e.ACCODE, this.RecovACCODEData, 'RECOV_ACCODE')
   }
 
   GAIN_ACCODESelected(e: any) {
@@ -855,7 +864,7 @@ export class ProcessMasterComponent implements OnInit {
       return;
     }
     this.processMasterForm.controls.GAIN_ACCODE.setValue(e.ACCODE);
-    this.accodeValidateSP( e.ACCODE,this.WipACCODEData, 'GAIN_ACCODE')
+    this.accodeValidateSP(e.ACCODE, this.WipACCODEData, 'GAIN_ACCODE')
   }
 
   /**use: common accode change validation */
@@ -871,7 +880,7 @@ export class ProcessMasterComponent implements OnInit {
       //this.commonService.toastErrorByMsgId('Accode already selected');
       return;
     }
-    this.accodeValidateSP(formname,LOOKUPDATA, event.target.value)
+    this.accodeValidateSP(formname, LOOKUPDATA, event.target.value)
   }
 
   /**use: sp call to validate same accode to avoid same accode selection */
@@ -884,7 +893,7 @@ export class ProcessMasterComponent implements OnInit {
     }
     this.commonService.toastInfoByMsgId('MSG81447');
     let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
-    let Sub: Subscription = this.dataService.postDynamicAPI(API,param)
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
       .subscribe((result) => {
         // this.isDisableSaveBtn = false;
         let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
@@ -900,31 +909,31 @@ export class ProcessMasterComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
 
-      /**use: validate all lookups to check data exists in db */
-      validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
-        LOOKUPDATA.SEARCH_VALUE = event.target.value
-        if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
-        let param = {
-          LOOKUPID: LOOKUPDATA.LOOKUPID,
-          WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+  /**use: validate all lookups to check data exists in db */
+  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    LOOKUPDATA.SEARCH_VALUE = event.target.value
+    if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
+    let param = {
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+    }
+    this.commonService.toastInfoByMsgId('MSG81447');
+    let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
+      .subscribe((result) => {
+        let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+        if (data.length == 0) {
+          this.commonService.toastErrorByMsgId('MSG1531')
+          this.processMasterForm.controls[FORMNAME].setValue('')
+          LOOKUPDATA.SEARCH_VALUE = ''
+          return
         }
-        this.commonService.toastInfoByMsgId('MSG81447');
-        let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
-        let Sub: Subscription = this.dataService.postDynamicAPI(API,param)
-          .subscribe((result) => {
-            let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
-            if (data.length == 0) {
-              this.commonService.toastErrorByMsgId('MSG1531')
-              this.processMasterForm.controls[FORMNAME].setValue('')
-              LOOKUPDATA.SEARCH_VALUE = ''
-              return
-            }
-           
-          }, err => {
-            this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
-          })
-        this.subscriptions.push(Sub)
-      }
+
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+      })
+    this.subscriptions.push(Sub)
+  }
 
   // /**use: focusout fn for input valate */
   // validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, formControlName: string) {
@@ -954,7 +963,7 @@ export class ProcessMasterComponent implements OnInit {
   //     })
   //   this.subscriptions.push(Sub)
   // }
-  getAccodeField(formControlName: string,value:string) {
+  getAccodeField(formControlName: string, value: string) {
     let form = this.processMasterForm.value
     switch (formControlName) {
       case 'LOSS_ACCODE':
@@ -1171,7 +1180,7 @@ export class ProcessMasterComponent implements OnInit {
   //   }
   // }
 
-  
+
   lookupKeyPress(event: any, form?: any) {
     if (event.key == 'Tab' && event.target.value == '') {
       this.showOverleyPanel(event, form)
@@ -1213,8 +1222,8 @@ export class ProcessMasterComponent implements OnInit {
         console.warn(`No overlay found for form control: ${formControlName}`);
     }
   }
-  
- 
+
+
   // showOverleyPanel(event: any, formControlName: string) {
 
   //   if (formControlName == 'WIPaccount') {

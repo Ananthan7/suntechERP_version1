@@ -9,6 +9,7 @@ import Swal from "sweetalert2";
 import { NgbActiveModal, NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
 import { ProductionEntryDetailsComponent } from "./production-entry-details/production-entry-details.component";
 import { SavedataModel } from "./savedata-model";
+import { MasterSearchComponent } from "src/app/shared/common/master-search/master-search.component";
 
 @Component({
   selector: "app-production-mfg",
@@ -16,6 +17,8 @@ import { SavedataModel } from "./savedata-model";
   styleUrls: ["./production-mfg.component.scss"],
 })
 export class ProductionMfgComponent implements OnInit {
+  @ViewChild('overlayuserName') overlayuserName!: MasterSearchComponent;
+  @ViewChild('OverlayCurrencyRate') OverlayCurrencyRate!: MasterSearchComponent;
   columnheads: any[] = [
     "JOB_NUMBER", "UNQ_JOB_ID", "DESIGN_CODE",
     "DIVCODE", 'PREFIX', 'STOCK_CODE', 'STOCK_DESCRIPTION', 'SET_REF',
@@ -316,6 +319,7 @@ export class ProductionMfgComponent implements OnInit {
     }
   }
 
+
   BaseCurrencyRateVisibility(txtPCurr: any, txtPCurrRate: any) {
     let ConvRateArr: any = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == this.productionFrom.value.CURRENCY_CODE && item.CMBRANCH_CODE == this.productionFrom.value.BRANCH_CODE)
     let baseConvRate = 1 / ConvRateArr[0].CONV_RATE
@@ -408,6 +412,8 @@ export class ProductionMfgComponent implements OnInit {
     }
     return false;
   }
+
+
   setPostData() {
     let form = this.productionFrom.value
     return {
@@ -559,6 +565,27 @@ export class ProductionMfgComponent implements OnInit {
 
   }
 
+  lookupKeyPress(event: any, form?: any) {
+    if (event.key == 'Tab' && event.target.value == '') {
+      this.showOverleyPanel(event, form)
+    }
+  }
+
+
+  showOverleyPanel(event: any, formControlName: string) {
+    if (this.productionFrom.value[formControlName] != '') return;
+
+    switch (formControlName) {
+      case 'SMAN':
+        this.overlayuserName.showOverlayPanel(event);
+        break;
+      case 'CURRENCY_RATE':
+        this.OverlayCurrencyRate.showOverlayPanel(event);
+        break;
+      default:
+    }
+  }
+
   /**use: validate all lookups to check data exists in db */
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     LOOKUPDATA.SEARCH_VALUE = event.target.value
@@ -576,6 +603,9 @@ export class ProductionMfgComponent implements OnInit {
           this.commonService.toastErrorByMsgId('MSG1531')
           this.productionFrom.controls[FORMNAME].setValue('')
           LOOKUPDATA.SEARCH_VALUE = ''
+          if (FORMNAME === 'SMAN'|| FORMNAME === 'CURRENCY_RATE') {
+            this.showOverleyPanel(event, FORMNAME);
+          }
           return
         }
 

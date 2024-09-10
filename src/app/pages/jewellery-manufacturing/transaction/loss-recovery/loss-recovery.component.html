@@ -52,8 +52,8 @@
                                     <input type="text" matInput formControlName="EnterBy"
                                         (keydown)="lookupKeyPress($event,'EnterBy')"
                                         (focusout)="validateLookupField($event,WorkerCodeData,'EnterBy')" />
-                                        <master-search class="masterSearch" [MasterSearchData]="enteredCodeData"
-                                        #overlayReceicvedBy  (newRowClick)="enteredCodeSelected($event)"></master-search>
+                                    <master-search class="masterSearch" [MasterSearchData]="enteredCodeData"
+                                        #overlayEnterBy (newRowClick)="enteredCodeSelected($event)"></master-search>
                                 </mat-form-field>
                             </div>
                         </div>
@@ -237,7 +237,7 @@
                                                 <mat-form-field appearance="outline" style="width: 100%;">
                                                     <input type="text" matInput formControlName="jobNo"
                                                         (keydown)="lookupKeyPress($event,'jobNo')"
-                                                        (focusout)="validateLookupField($event,jobNumberCodeData,'jobNo')"/>
+                                                        (focusout)="validateLookupField($event,jobNumberCodeData,'jobNo')" />
                                                     <master-search [MasterSearchData]="jobNumberCodeData"
                                                         class="masterSearch" *ngIf="!viewMode"
                                                         (newRowClick)="jobNumberCodeSelected($event) "

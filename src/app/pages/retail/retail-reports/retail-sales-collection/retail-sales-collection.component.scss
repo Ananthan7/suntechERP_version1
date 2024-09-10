@@ -112,6 +112,7 @@
     color: #000; /* Adjust color if needed */
 }
 
-::ng-deep .mat-checkbox-inner-container {
-    color: #007bff !important;
-}
+// ::ng-deep .mat-checkbox-checked {
+//      background-color:  #009688 !important;
+// }
+
