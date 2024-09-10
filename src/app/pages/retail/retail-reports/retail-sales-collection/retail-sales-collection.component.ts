@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -45,6 +45,8 @@ export class RetailSalesCollectionComponent implements OnInit {
     OutpuGridView: [false],
     templateName: ['']
   })
+
+  @Input() content: any = {}; 
   constructor(  private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder, private dataService: SuntechAPIService,  private comService: CommonServiceService,
     private commonService: CommonServiceService,   private toastr: ToastrService,
@@ -52,6 +54,14 @@ export class RetailSalesCollectionComponent implements OnInit {
 
   ngOnInit(): void {
     this.getAPIData()
+
+    let ParcedPreFetchData = JSON.parse(this.content?.CONTROL_LIST_JSON)
+    console.log(ParcedPreFetchData.CONTROL_DETAIL.SHOWDATE)
+    this.retailSalesCollection.controls.showDateCheckbox.setValue(
+      ParcedPreFetchData.CONTROL_DETAIL.SHOWDATE === 0 ? true : 
+      false
+    );
+  
   }
 
   selectedData(data: any) {

@@ -37,7 +37,7 @@
                         (viewRowClick)="viewRowDetails($event)" [isViewCancel]=" true">
                     </master-grid> -->
                     <app-retail-grid (AddBtnClick)="openModalView()" (editRowClick)="editRowDetails($event)"
-                        (viewRowClick)="viewRowDetails($event)" [templateViewForReports]="true">
+                        (viewRowClick)="viewRowDetails($event)" [templateViewForReports]="true" (actionViewClick)="handleActionViewClick($event)">
                     </app-retail-grid>
                 </div>
             </div>
