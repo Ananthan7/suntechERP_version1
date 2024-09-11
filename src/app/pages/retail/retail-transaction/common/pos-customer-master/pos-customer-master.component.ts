@@ -773,7 +773,7 @@ export class PosCustomerMasterComponent implements OnInit {
 
           if (data.status == 'Success') {
             this.customerDetails = await data.response;
-
+           
 
             this.customerDetailForm.controls['fcn_cust_detail_phone'].setValue(
               this.customerDetails.MOBILE
@@ -826,6 +826,8 @@ export class PosCustomerMasterComponent implements OnInit {
             this.snackBar.open('Customer details saved successfully', '', {
               duration: 1000 // time in milliseconds
             });
+            
+            this.closeModal();
 
             // ${data.AMLDIGICOMPANYNAME}/${data.AMLDIGIUSERNAME}/${data.AMLDIGIPASSWORD}/${data.CODE}/${data.FIRSTNAME}/${data.MIDDLENAME}/${data.LASTNAME}/%27%27/${data.POSCustIDNo}/${data.NATIONALITY}/${data.DATE_OF_BIRTH}/${data.CUST_Type}/${data.AMLUSERID}/${data.AMLDIGITHRESHOLD}/${data.AMLDIGICOMPANYNAME}/1/${data.DIGIIPPATH}`);
             if (this.amlNameValidation && !this.customerDetails.DIGISCREENED) {
@@ -940,7 +942,7 @@ export class PosCustomerMasterComponent implements OnInit {
 
                   this.apiService
                     .putDynamicAPI(
-                      `PosCustomerMaster/UpdateDigiScreened/code=${this.customerDetails.CODE}/DigiScreened=true`,
+                      `PosCustomerMaster/UpdateDigiScreened/${this.customerDetails.CODE}/true`,
                       ''
                     )
                     .subscribe((resp) => {
@@ -1033,7 +1035,7 @@ export class PosCustomerMasterComponent implements OnInit {
             this.closeModal();
           }
         });
-        this.closeModal();
+        // this.closeModal();
 
       } else {
         this.isCustProcessing = false;

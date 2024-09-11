@@ -235,9 +235,8 @@ export class PosCurrencyReceiptComponent implements OnInit {
   }
 
   generateVocNo() {
-    const API = `GenerateNewVoucherNumber/GenerateNewVocNum/${this.comService.getqueryParamVocType()}/${
-      this.strBranchcode
-    }/${this.baseYear}/${this.convertDateToYMD(this.currentDate)}`;
+    const API = `GenerateNewVoucherNumber/GenerateNewVocNum/${this.comService.getqueryParamVocType()}/${this.strBranchcode
+      }/${this.baseYear}/${this.convertDateToYMD(this.currentDate)}`;
     this.dataService.getDynamicAPI(API).subscribe((resp) => {
       if (resp.status == "Success") {
         this.posCurrencyReceiptForm.controls.vocNo.setValue(resp.newvocno);
@@ -259,6 +258,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
       }
     });
   }
+
   updateDueDays(event: any) {
     let value = event.target.value;
     if (value != "") {
@@ -271,12 +271,16 @@ export class PosCurrencyReceiptComponent implements OnInit {
     }
   }
 
-  changeDueDate(event: any) {
-    // const inputValue = event.target.value;
+  changeDueDate(event: any,isDateChanged:boolean=false) {
     const inputValue = this.posCurrencyReceiptForm.value.dueDays;
     const vocDate = new Date(this.posCurrencyReceiptForm.value.vocDate);
 
-    if (inputValue !== "") {
+    if (event&&!isDateChanged) {
+      vocDate.setDate(vocDate.getDate() + event);
+      this.posCurrencyReceiptForm
+        .get("dueDays")
+        ?.setValue(this.formatDate(vocDate));
+    } else if (inputValue !== ""||isDateChanged) {
       const selectedDate = new Date(inputValue);
       selectedDate.setHours(0, 0, 0, 0);
 
@@ -291,6 +295,11 @@ export class PosCurrencyReceiptComponent implements OnInit {
       }
     }
   }
+
+  formatDate(date: Date): string {
+    return date.toISOString();
+  }
+
 
   calculateDateDifference(dateA: Date, dateB: Date): number {
     const timeDifference = dateA.getTime() - dateB.getTime();
@@ -410,6 +419,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
               "AMOUNT"
             )
           );
+          this.changeDueDate(data.DUEDAYS);
         }
       });
   }
@@ -481,7 +491,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
                 this.posCurrencyReceiptForm.controls.partyCurrencyRate.setValue(
                   this.comService.decimalQuantityFormat(data[0].CONV_RATE, 'RATE')
                 );
-                
+
                 this.posCurrencyReceiptForm.controls.partyCurr.setValue(
                   data[0].CURRENCY_CODE
                 );
@@ -527,7 +537,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
       e.CURRENCY_CODE
     );
   }
-  
+
   isCustomerDataAvailable(): boolean {
     return this.customerData != null && Object.keys(this.customerData).length > 0;
   }
@@ -640,7 +650,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
       TDS_APPLICABLE: false,
       TDS_TOTALFC: 0,
       TDS_TOTALCC: 0,
-      ADRRETURNREF:"",
+      ADRRETURNREF: "",
       //  `${this.branchCode}-${this.posCurrencyReceiptForm.value.vocType}-${this.posCurrencyReceiptForm.value.vocNo}`,
       SCH_SCHEME_CODE: this.posCurrencyReceiptForm.value.schemaCode || "",
       SCH_CUSTOMER_ID: this.posCurrencyReceiptForm.value.schemaId || "",
@@ -828,10 +838,9 @@ export class PosCurrencyReceiptComponent implements OnInit {
     const modalRef: NgbModalRef = this.modalService.open(
       PosCustomerMasterComponent,
       {
-        size: "lg",
+        size: 'xl',
+        ariaLabelledBy: 'modal-basic-title',
         backdrop: true,
-        keyboard: false,
-        windowClass: "modal-full-width",
       }
     );
     modalRef.componentInstance.customerData = this.customerData;
@@ -1013,9 +1022,8 @@ export class PosCurrencyReceiptComponent implements OnInit {
 
     const API = `TaxDetails/${acCode}/${this.comService.formatDate(
       new Date()
-    )}/${
-      this.comService.branchCode
-    }/${this.comService.getqueryParamMainVocType()}/${this.comService.getqueryParamVocType()}`;
+    )}/${this.comService.branchCode
+      }/${this.comService.getqueryParamMainVocType()}/${this.comService.getqueryParamVocType()}`;
 
     let Sub: Subscription = this.dataService
       .getDynamicAPI(API)
