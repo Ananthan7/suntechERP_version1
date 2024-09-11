@@ -143,7 +143,6 @@ export class MasterSearchComponent implements OnInit {
       //   this.toastr.error('Data Not Available')
       // }
     })
-
   }
   dataSourceAlteration() {
     switch (this.MasterSearchData.LOOKUPID) {
@@ -158,6 +157,7 @@ export class MasterSearchComponent implements OnInit {
         break;
     }
   }
+
   setCurrencyRateConv() {
     this.dataSource.forEach((item: any) => {
       item.CONV_RATE = this.commonService.decimalQuantityFormat(item.CONV_RATE, 'RATE')
@@ -251,8 +251,15 @@ export class MasterSearchComponent implements OnInit {
     }
   }
   isNumber(value: string): boolean {
-    let bol = /^\d+(\.\d+)?$/.test(value);
-    return bol;
+    // let bol = /^\d+(\.\d+)?$/.test(value);
+    // return bol;
+    let hasNumericValue = false
+    if (value == 'CONV_RATE') hasNumericValue = true
+    if (value == 'STD_PURITY') hasNumericValue = true
+    if (value == 'PURITY') hasNumericValue = true
+    if (value == 'WHOLESALE_RATE') hasNumericValue = true
+    if (value == 'RATE') hasNumericValue = true
+    return hasNumericValue
   }
   //number validation
   isNumeric(event: any) {
