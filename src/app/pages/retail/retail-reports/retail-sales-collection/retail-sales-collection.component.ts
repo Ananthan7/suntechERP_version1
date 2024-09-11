@@ -68,10 +68,11 @@ export class RetailSalesCollectionComponent implements OnInit {
     let content2 = `Current Selected Divisions:  \n`
     let content3 = `Current Selected Area:  \n`
     let content4 = `Current Selected B category:  \n`
+    let branchDivisionData = '';
     if(data.BranchData){
       // content = `Current Selected Branches:  \n`
       data.BranchData.forEach((Bdata: any)=>{
-        this.branchDivisionData.push(Bdata.BRANCH_CODE+'#')
+        branchDivisionData += Bdata.BRANCH_CODE+'#'
         content += Bdata.BRANCH_CODE ? `${Bdata.BRANCH_CODE}, ` : ''
       }) 
     }
@@ -79,7 +80,7 @@ export class RetailSalesCollectionComponent implements OnInit {
     if(data.DivisionData){
       // content2 = `Current Selected Divisions:  \n`
       data.DivisionData.forEach((Ddata: any)=>{
-        this.branchDivisionData.push(Ddata.DIVISION_CODE+'#')
+        branchDivisionData += Ddata.DIVISION_CODE+'#'
         content2 += Ddata.DIVISION_CODE ? `${Ddata.DIVISION_CODE}, ` : ''
       }) 
     }
@@ -87,7 +88,7 @@ export class RetailSalesCollectionComponent implements OnInit {
     if(data.AreaData){
       // content3 = `Current Selected Area:  \n`
       data.AreaData.forEach((Adata: any)=>{
-        this.branchDivisionData.push(Adata.AREA_CODE+'#')
+        branchDivisionData += Adata.AREA_CODE+'#'
         content3 += Adata.AREA_CODE ? `${Adata.AREA_CODE}, ` : ''
       }) 
     }
@@ -95,7 +96,7 @@ export class RetailSalesCollectionComponent implements OnInit {
     if(data.BusinessCategData){
       // content4 = `Current Selected B category:  \n`
       data.BusinessCategData.forEach((BCdata: any)=>{
-        this.branchDivisionData.push(BCdata.CATEGORY_CODE+'#')
+        branchDivisionData += BCdata.CATEGORY_CODE+'#'
         content4 += BCdata.CATEGORY_CODE ? `${BCdata.CATEGORY_CODE}, ` : ''
       }) 
     }
@@ -107,9 +108,9 @@ export class RetailSalesCollectionComponent implements OnInit {
     this.branchDivisionControlsTooltip = content +'\n'+content2 +'\n'+ content3 +'\n'+ content4
 
 
-    const uniqueArray = [...new Set(this.branchDivisionData)];
-    const plainText = uniqueArray.join('');
-    this.formattedBranchDivisionData = plainText
+    // const uniqueArray = [...new Set(this.branchDivisionData)];
+    // const plainText = uniqueArray.join('');
+    this.formattedBranchDivisionData = branchDivisionData
     this.retailSalesCollection.controls.branch.setValue(this.formattedBranchDivisionData);
   }
   
@@ -150,8 +151,8 @@ export class RetailSalesCollectionComponent implements OnInit {
       "parameter": {
         "STRBRANCHCODES": this.formattedBranchDivisionData || this.fetchedBranchDataParam,
         "STRVOCTYPES": this.VocTypeParam, //this.commonService.getqueryParamVocType(),
-        "FROMVOCDATE": this.formatDateToYYYYMMDD(this.retailSalesCollection.value.fromDate),
-        "TOVOCDATE": this.formatDateToYYYYMMDD(this.retailSalesCollection.value.toDate),
+        "FROMVOCDATE": this.dateToPass.fromDate? this.dateToPass.fromDate :  this.retailSalesCollection.value.fromDate,
+        "TOVOCDATE": this.dateToPass.toDate? this.dateToPass.toDate : this.retailSalesCollection.value.toDate ,
         "flag": '',
         "USERBRANCH": localStorage.getItem('userbranch'),
         "USERNAME": localStorage.getItem('username')
@@ -164,7 +165,10 @@ export class RetailSalesCollectionComponent implements OnInit {
       console.log(result);
       let data = result.dynamicData;
       this.commonService.closeSnackBarMsg()
-      var WindowPrt = window.open(' ', ' ', 'width=900px, height=800px');
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      const windowFeatures = `width=${width},height=${height},fullscreen=yes`;
+      var WindowPrt = window.open(' ', ' ', windowFeatures);
       if (WindowPrt === null) {
         console.error('Failed to open the print window. Possibly blocked by a popup blocker.');
         return;
