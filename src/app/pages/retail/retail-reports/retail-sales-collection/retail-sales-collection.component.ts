@@ -18,7 +18,7 @@ export class RetailSalesCollectionComponent implements OnInit {
   tableData: any = [];
   isLoading: boolean = false;
   APIData: any[] = [];
-  selectedRowKeys: number[] = [];
+  selectedRowKeys: any[] = [];
   selectedDatas: any[]= [];
   currentFilter: any;
   showFilterRow: boolean = true;
@@ -49,6 +49,8 @@ export class RetailSalesCollectionComponent implements OnInit {
   @Input() content: any = {}; //get data from retailREPORT Component- modalRef instance
   dateToPass: { fromDate: string; toDate: string } = { fromDate: '', toDate: '' };
   fetchedBranchData: any[] =[];
+  fetchedBranchDataParam: any[]= [];
+
 
   constructor(  private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder, private dataService: SuntechAPIService,  private comService: CommonServiceService,
@@ -146,7 +148,7 @@ export class RetailSalesCollectionComponent implements OnInit {
     let postData = {
       "SPID": "0114",
       "parameter": {
-        "STRBRANCHCODES": this.formattedBranchDivisionData,
+        "STRBRANCHCODES": this.formattedBranchDivisionData || this.fetchedBranchDataParam,
         "STRVOCTYPES": this.VocTypeParam, //this.commonService.getqueryParamVocType(),
         "FROMVOCDATE": this.formatDateToYYYYMMDD(this.retailSalesCollection.value.fromDate),
         "TOVOCDATE": this.formatDateToYYYYMMDD(this.retailSalesCollection.value.toDate),
@@ -236,14 +238,14 @@ export class RetailSalesCollectionComponent implements OnInit {
       let splittedText= ParcedPreFetchData?.CONTROL_DETAIL.STRVOCTYPES.split("#")
       const selectedKeys = this.APIData.filter(item => splittedText?.includes(item.VOCTYPE)).map(item => item);
       this.selectedRowKeys = selectedKeys;
-      console.log('data fetched from main grid', this.selectedRowKeys )
-      console.log(this.APIData)
-
-    
 
 
-
-
+      const selectedSet = new Set(this.selectedRowKeys.map(item => item.SRNO));
+      this.APIData.sort((a, b) => {
+        const aIsSelected = selectedSet.has(a.SRNO) ? 1 : 0;
+        const bIsSelected = selectedSet.has(b.SRNO) ? 1 : 0;
+        return bIsSelected - aIsSelected;
+      });
 
 
       this.dateToPass = {
@@ -254,6 +256,7 @@ export class RetailSalesCollectionComponent implements OnInit {
 
       this.retailSalesCollection.controls.branch.setValue(ParcedPreFetchData?.CONTROL_DETAIL.STRBRANCHCODES);
       this.fetchedBranchData= ParcedPreFetchData?.CONTROL_DETAIL.STRBRANCHCODES.split("#")
+      this.fetchedBranchDataParam = ParcedPreFetchData?.CONTROL_DETAIL.STRBRANCHCODES
     }
   }
   
