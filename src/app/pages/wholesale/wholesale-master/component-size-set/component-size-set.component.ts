@@ -319,17 +319,26 @@ export class ComponentSizeSetComponent implements OnInit {
   }
 
 
-
   formSubmit() {
     console.log(this.componentSizeType);
     console.log(this.content);
+  
+    // If the form is in edit mode, handle the update
     if (this.content && this.content.FLAG == 'EDIT') {
-      this.update()
-      return
+      this.update();
+      return;
     }
+  
+    // Check if the form is valid
     if (this.componentsizesetmasterForm.invalid) {
-      this.toastr.error('select all required fields')
-      return
+      this.toastr.error('Select all required fields');
+      return;
+    }
+  
+    // Check if the tableData is empty
+    if (this.tableData.length == 0) {
+      this.commonService.toastErrorByMsgId('MSG1453');  // 'Details not added' error
+      return;
     }
 
     let data: any = false;
@@ -339,6 +348,7 @@ export class ComponentSizeSetComponent implements OnInit {
         data = true
         this.toastr.error('Grid Values Cannot be Empty');
       }
+      
     })
 
     if (data == true) {

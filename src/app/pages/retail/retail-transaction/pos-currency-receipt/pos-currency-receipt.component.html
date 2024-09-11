@@ -122,7 +122,7 @@
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
                     type="text"
-                    [readonly]="viewOnly"
+                    readonly
                     matInput
                     formControlName="partyCodeDesc"
                   />
@@ -242,7 +242,7 @@
                     formControlName="dueDays"
                     placeholder="DD/MM/YYYY"
                     DateValidation
-                    (dateChange)="changeDueDate($event)"
+                    (dateChange)="changeDueDate($event,true)"
                   />
                   <mat-datepicker-toggle
                     matSuffix

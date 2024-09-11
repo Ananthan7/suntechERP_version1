@@ -62,7 +62,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
   private subscriptions: Subscription[] = [];
   branchCode?: String;
   paymentModeList: any[] = [];
-  dummyDate = "1900-01-01T00:00:00";
+  dummyDate = "1900-01-01T00:00:00";  
   compCurrency: any;
   typeCodeArray: any[] = [];
   selectedTabIndex = 0;
@@ -127,7 +127,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
     currencyCode: [""],
     currencyRate: [""],
     amountFc: [""],
-    amountCc: [""],
+    amountCc: ["",Validators.required],
     creditCardNumber: [""],
     creditCardName: ["", [Validators.pattern(/^[a-zA-Z ]*$/)]],
     creditCardDate: [""],
@@ -452,6 +452,8 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
       this.posCurrencyReceiptDetailsForm.controls.remarks.setValue(
         this.receiptData.REMARKS
       );
+   
+
       this.hsnCodeList = [
         { code: this.receiptData.HSN_CODE, value: this.receiptData },
       ];
@@ -474,7 +476,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
       );
 
       this.posCurrencyReceiptDetailsForm.controls.vatNo.setValue(
-        this.receiptData.VAT_EXPENSE_CODE
+        this.receiptData.GST_NUMBER
       );
       this.vatAmountCC = this.receiptData.IGST_AMOUNTCC;
 
@@ -897,19 +899,17 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
       if (controlErrors != null) {
         console.log('Key control: ' + key + ', error: ' + JSON.stringify(controlErrors));
 
-        // Set the invalid control to an empty string
         this.posCurrencyReceiptDetailsForm.get(key)?.setValue("");
 
-        // Optionally log or display a message
         console.log(key + ' is invalid, setting to an empty string.');
       }
     });
 
-    // Trigger revalidation of the form
     this.posCurrencyReceiptDetailsForm.updateValueAndValidity();
 
 
     if (this.posCurrencyReceiptDetailsForm.invalid) {
+      this.posCurrencyReceiptDetailsForm.markAllAsTouched();
       this.toastr.error("select all required fields");
       return;
     }
@@ -958,7 +958,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
         CHEQUE_NO: CHEQUE_NO || "",
         CHEQUE_DATE: CHEQUE_DATE
           ? this.formatDateToISO(CHEQUE_DATE)
-          : this.formatDateToISO(this.dummyDate),
+          : this.dummyDate,
         CHEQUE_BANK: CHEQUE_BANK || "",
         CHEQUE_DEPOSIT_BANK: CHEQUE_DEPOSIT_BANK || "",
         REMARKS: this.posCurrencyReceiptDetailsForm.value.remarks,
@@ -974,7 +974,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
         CARD_HOLDER: this.posCurrencyReceiptDetailsForm.value.creditCardName,
         CARD_EXPIRY: moment(this.posCurrencyReceiptDetailsForm.value.creditCardDate, 'MM/YYYY', true).isValid()
           ? this.formatDateToISO(this.posCurrencyReceiptDetailsForm.value.creditCardDate)
-          : this.formatDateToISO(this.dummyDate),
+          : this.dummyDate,
         //  this.posCurrencyReceiptDetailsForm.value.creditCardDate
         //   ? this.formatDateToISO(
         //     this.posCurrencyReceiptDetailsForm.value.creditCardDate
@@ -1003,11 +1003,11 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
         SGST_ACCODE: "",
         IGST_ACCODE: this.igstAccode,
         GST_HEADER_AMOUNT: 0,
-        GST_NUMBER: "",
+        GST_NUMBER: this.posCurrencyReceiptDetailsForm.value.vatNo,
         INVOICE_NUMBER: this.posCurrencyReceiptDetailsForm.value.invoiceNo,
         INVOICE_DATE: this.posCurrencyReceiptDetailsForm.value.invoiceDate ? this.formatDateToISO(
           this.posCurrencyReceiptDetailsForm.value.invoiceDate
-        ) : this.formatDateToISO(this.dummyDate),
+        ) :this.dummyDate,
         DT_GST_STATE_CODE: "",
         DT_GST_TYPE: "",
         DT_GST_CODE: "VAT",
@@ -1042,7 +1042,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
         SL_CODE: "",
         SL_DESCRIPTION: "",
         OT_TRANSFER_TIME: "",
-        VAT_EXPENSE_CODE: this.posCurrencyReceiptDetailsForm.value.vatNo,
+        VAT_EXPENSE_CODE: "",
         VAT_EXPENSE_CODE_DESC: "",
         AMLVALIDID: "",
         AMLSOURCEOFFUNDS: "",

@@ -47,6 +47,7 @@ export class StoneIssueComponent implements OnInit {
   selectRowIndex: any;
   selectedKey: number[] = [];
   selectedIndexes: any = [];
+  gridAmountDecimalFormat: any;
   viewMode: boolean = false;
   editMode: boolean = false;
   isloading: boolean = false;

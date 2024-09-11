@@ -171,13 +171,15 @@ export class MetalReturnDetailsComponent implements OnInit {
   ngOnInit(): void {
     this.renderer.selectRootElement('#jobNumberCode')?.focus();
     if (this.content) {
+    this.setInitialValue()
+
       this.metalReturnDetailsForm.controls.FLAG.setValue(this.content.FLAG)
       if (this.content.FLAG == 'VIEW') {
         this.viewMode = true;
       }
     }
-    this.setInitialValue()
-    this.setLookup201WhereCondition()
+    this.setLookup201WhereCondition();
+    this.setLookupStockCodeWhereCondition();
   }
 
   setInitialValue() {
@@ -250,17 +252,32 @@ export class MetalReturnDetailsComponent implements OnInit {
     let form = this.metalReturnDetailsForm.value;
     
     // Construct the WHERE condition without '@' symbols
-    let where = `strBranch_Code='${form.BRANCH_CODE}' AND `;
-    where += `strJob_Number='${form.jobNumber}' AND `;
-    where += `strUnq_Job_Id='${form.subJobNo}' AND `;
-    where += `strMetalStone='${form.METAL_STONE}' AND `;
-    where += `strStock_Code='${form.stockCode}' AND ` || '';
-    where += `strUserName='${this.comService.userName}'`;
+    let where = `@strBranch_Code='${form.BRANCH_CODE}', `;
+    where += `@strJob_Number='${form.jobNumber}',`;
+    where += `@strUnq_Job_Id='${form.subJobNo}',`;
+    where += `@strMetalStone='${form.METAL_STONE}', `;
+    where += `@strStock_Code='${form.stockCode}', `;
+    where += `@strUserName='${this.comService.userName}'`;
 
     // Assign to the stock code data
     this.stockCodeData.WHERECONDITION = where;
     this.ProcessCodeData.WHERECONDITION = where;
     this.WorkerCodeData.WHERECONDITION = where;
+}
+
+setLookupStockCodeWhereCondition() {
+  let form = this.metalReturnDetailsForm.value;
+    
+  // Construct the WHERE condition without '@' symbols
+  let where = `@strBranch_Code='${form.BRANCH_CODE}', `;
+  where += `@strJob_Number='${form.jobNumber}',`;
+  where += `@strUnq_Job_Id='${form.subJobNo}',`;
+  where += `@strMetalStone='${form.METAL_STONE}', `;
+  where += `@strStock_Code='${form.stockCode}', `;
+  where += `@strUserName='${this.comService.userName}'`;
+
+  // Assign to the stock code data
+  this.stockCodeData.WHERECONDITION = where;
 }
 
 
@@ -331,17 +348,21 @@ export class MetalReturnDetailsComponent implements OnInit {
     this.metalReturnDetailsForm.controls.processCode.setValue(e.PROCESS);
     this.metalReturnDetailsForm.controls.processCodeDesc.setValue(e.PROCESSDESC);
     this.setLookup201WhereCondition()
+    // this.setLookupProcessCodeWhereCondition();
+    // this.ProcessCodeData.WHERECONDITION = `@strBranch_Code='${this.comService.userName}'',@strJob_Number='${this.jobNumberData}'`
   }
 
   stockCodeSelected(e: any) {
     this.metalReturnDetailsForm.controls.stockCode.setValue(e.STOCK_CODE);
     this.metalReturnDetailsForm.controls.stockCodeDesc.setValue(e.STOCKDESC);
     this.setLookup201WhereCondition()
+    // this.setLookupStockCodeWhereCondition();
   }
   ReturnTostockCodeSelected(e: any) {
     this.metalReturnDetailsForm.controls.ReturnToStockCode.setValue(e.STOCK_CODE);
     this.metalReturnDetailsForm.controls.ReturnToStockCodeDesc.setValue(e.STOCKDESC);
-    this.setLookup201WhereCondition()
+    // this.setLookup201WhereCondition()
+    this.setLookupStockCodeWhereCondition();
   }
   lookupKeyPress(event: any, form?: any) {
     if (event.key == 'Tab' && event.target.value == '') {
@@ -615,7 +636,7 @@ export class MetalReturnDetailsComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 14,
     SEARCH_FIELD: 'PREFIX_CODE',
-    SEARCH_HEADING: 'Location',
+    SEARCH_HEADING: 'Job Number',
     SEARCH_VALUE: '',
     WHERECONDITION: "PREFIX_CODE<> ''",
     VIEW_INPUT: true,
@@ -738,6 +759,7 @@ export class MetalReturnDetailsComponent implements OnInit {
           this.setValueWithDecimal('STONE_WT', data[0].STONE, 'STONE')
           this.setValueWithDecimal('NET_WT', data[0].METAL - data[0].STONE, 'THREE')
           this.setLookup201WhereCondition()
+          this.setLookupStockCodeWhereCondition();
         } else {
           this.comService.toastErrorByMsgId('MSG1747')
         }
@@ -780,6 +802,7 @@ export class MetalReturnDetailsComponent implements OnInit {
             this.metalReturnDetailsForm.controls.PART_CODE.setValue(data[0].PART_CODE)
             this.metalReturnDetailsForm.controls.KARAT_CODE.setValue(data[0].KARAT_CODE)
             this.setLookup201WhereCondition()
+            this.setLookupStockCodeWhereCondition()
             this.subJobNumberValidate()
           } else {
             this.comService.toastErrorByMsgId('MSG1531')

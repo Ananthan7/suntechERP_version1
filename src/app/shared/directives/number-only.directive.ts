@@ -21,7 +21,7 @@ export class NumericInputDirective {
     if (value !== sanitizedValue) {
       num = sanitizedValue; 
     }
-    const formattedNum = this.commonService.commaSeperation(num);
+    const formattedNum =this.commonService.commaSeperation(num);;
     if (input.value !== formattedNum) {
       input.value = formattedNum;
       input.dispatchEvent(new Event('input')); 
