@@ -660,6 +660,7 @@ export class JobcardComponent implements OnInit {
         "gross_wt": "",
       };
       this.tableData.push(data);
+      console.log(this.tableData,'tabledate')
     };
 
     this.getDesigncode();
@@ -669,18 +670,19 @@ export class JobcardComponent implements OnInit {
 
   getDesignimagecode() {
 
-    let API = 'ImageforJobCad/' + this.jobCardFrom.value.designcode;
+    let API = `ImageforJobCad/${ this.jobCardFrom.value.designcode}`;
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
-      .subscribe((result) => {
-
-        this.urls = result.response[0].imagepath;
-        console.log(this.urls)
-      }, err => {
-        this.commonService.toastErrorByMsgId('MSG81451')//Server Error
-      })
-    this.subscriptions.push(Sub)
-
-  }
+    .subscribe((result) => {
+      if (result.response) {
+        let data = result.response
+        console.log(data,'pic')
+        this.urls = data.map((item: any) => item.imagepath)
+      }
+    }, err => {
+      this.commonService.toastErrorByMsgId('MSG1531')
+    })
+  this.subscriptions.push(Sub)
+}
 
 
   // getDesigncode() {
@@ -725,6 +727,7 @@ export class JobcardComponent implements OnInit {
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
         let formattedPurity = parseFloat(result.response.PURITY).toFixed(6);
+        console.log(result.response,'data')
         this.jobCardFrom.controls['purity'].setValue(formattedPurity);
         this.jobCardFrom.controls['color'].setValue(result.response.COLOR);
         this.jobCardFrom.controls['karat'].setValue(result.response.KARAT_CODE);
@@ -735,6 +738,9 @@ export class JobcardComponent implements OnInit {
         this.jobCardFrom.controls['type'].setValue(result.response.TYPE_CODE);
         this.jobCardFrom.controls['costcode'].setValue(result.response.COST_CODE);
         this.jobCardFrom.controls['seqcode'].setValue(result.response.SEQ_CODE);
+        console.log(result.response.PICTURE_NAME,'picyure')
+        this.jobCardFrom.controls['picture_name'].setValue(result.response.PICTURE_NAME);
+     
 
         this.mainmetalCodeData.WHERECONDITION = `kARAT_CODE = '${this.jobCardFrom.value.karat}' and PURITY = '${this.jobCardFrom.value.purity}'`;
 
@@ -1856,6 +1862,7 @@ export class JobcardComponent implements OnInit {
 
 
         const matchedItem2 = data.find((item: any) => item.DESIGN_CODE.toUpperCase() === inputValue);
+        console.log(data,'data')
         if (matchedItem2) {
           this.jobCardFrom.controls[FORMNAME].setValue(matchedItem2.DESIGN_CODE);
           if (FORMNAME === 'designcode') {

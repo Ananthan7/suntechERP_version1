@@ -61,7 +61,7 @@
                     [readonly]="viewMode"
                     (keydown)="lookupKeyPress($event,'enteredby')" 
                     (focusout)="validateLookupField($event,rateTypeMasterData,'enteredby')"/>
-                    <master-search [MasterSearchData]="user" *ngIf="!viewMode"
+                    <master-search [MasterSearchData]="SALESPERSON_CODEData" *ngIf="!viewMode"
                       #overlayenteredby class="masterSearch"
                       (newRowClick)="userDataSelected($event)">
                     </master-search>
@@ -185,14 +185,14 @@
             (addClick)="openjewelleryaltrationdetails()"
             (deleteClick)="deleteTableData()">
           </menu-buttons>
-          <div class="col-sm-3">
+          <!-- <div class="col-sm-3">
             <mat-form-field style="width: 80%;" appearance="outline">
               <input type="text" matInput [readonly]="viewMode"
                 (keypress)="lookupKeyPress($event)" />
                 <master-search *ngIf="!viewMode" #overlaycostcodelist class="masterSearch">
                 </master-search>
             </mat-form-field>
-          </div>
+          </div> -->
         </div>
       </div>
 
