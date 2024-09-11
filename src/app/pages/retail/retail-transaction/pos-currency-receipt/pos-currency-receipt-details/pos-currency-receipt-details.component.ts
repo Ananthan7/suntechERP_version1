@@ -127,7 +127,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
     currencyCode: [""],
     currencyRate: [""],
     amountFc: [""],
-    amountCc: [""],
+    amountCc: ["",Validators.required],
     creditCardNumber: [""],
     creditCardName: ["", [Validators.pattern(/^[a-zA-Z ]*$/)]],
     creditCardDate: [""],
@@ -897,19 +897,17 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
       if (controlErrors != null) {
         console.log('Key control: ' + key + ', error: ' + JSON.stringify(controlErrors));
 
-        // Set the invalid control to an empty string
         this.posCurrencyReceiptDetailsForm.get(key)?.setValue("");
 
-        // Optionally log or display a message
         console.log(key + ' is invalid, setting to an empty string.');
       }
     });
 
-    // Trigger revalidation of the form
     this.posCurrencyReceiptDetailsForm.updateValueAndValidity();
 
 
     if (this.posCurrencyReceiptDetailsForm.invalid) {
+      this.posCurrencyReceiptDetailsForm.markAllAsTouched();
       this.toastr.error("select all required fields");
       return;
     }
