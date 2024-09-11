@@ -576,7 +576,8 @@ export class MeltingIssueDetailsComponent implements OnInit {
           let data = result.dynamicData[0];
           if (data) {
             console.log(data, 'data');
-            if (data[0].VALID_STOCK) {
+            if (data[0]
+              .VALID_STOCK) {
               // Handle the valid stock case
               // You can set other form values or perform other actions here if needed
               this.overlaystockcodeSearch.closeOverlayPanel();
