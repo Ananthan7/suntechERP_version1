@@ -141,15 +141,25 @@
           </div>
           <label for="inputPassword" class="col-sm-2 col-form-label" id="ID008">Date</label>
           <div class="col-md-2">
-            <mat-form-field style="width: 100%" appearance="outline">
+            <mat-form-field appearance="outline" style="width: 100%">
+              <input matInput [matDatepicker]="expDate" name="date"
+                formControlName="date" placeholder="DD/MM/YYYY" [max]="currentDate"
+                [readonly]="viewOnly" DateValidation />
+              <mat-datepicker-toggle matSuffix [for]="expDate"></mat-datepicker-toggle>
+              <mat-datepicker [startAt]="currentDate" #expDate></mat-datepicker>
+             
+            </mat-form-field>
+
+
+            <!-- <mat-form-field style="width: 100%" appearance="outline">
               <input matInput 
-                formControlName="date" placeholder="DD/MM/YYYY" DateValidation [readonly]="true" />
+                formControlName="date" placeholder="DD/MM/YYYY" DateValidation [readonly]="true" /> -->
               <!-- <mat-datepicker-toggle
                 matSuffix
                 [for]="date"
               ></mat-datepicker-toggle> -->
               <!-- <mat-datepicker [startAt]="currentDate" #date></mat-datepicker> -->
-            </mat-form-field>
+            <!-- </mat-form-field> -->
           </div>
           <label for="inputPassword" class="col-sm-2 col-form-label" id="ID009">Base Currency</label>
           <div class="col-md-1">
