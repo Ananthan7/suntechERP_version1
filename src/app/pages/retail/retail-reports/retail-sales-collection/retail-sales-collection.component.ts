@@ -224,11 +224,11 @@ export class RetailSalesCollectionComponent implements OnInit {
       console.log('data fetched from main grid',this.content )
       let ParcedPreFetchData = JSON.parse(this.content?.CONTROL_LIST_JSON) //data from retailREPORT Component- modalRef instance
       this.retailSalesCollection.controls.showDateCheckbox?.setValue(
-        ParcedPreFetchData?.CONTROL_DETAIL.SHOWDATE === 1 ? true :  false
+        ParcedPreFetchData?.CONTROL_DETAIL.SHOWDATE === 0 ? true :  false
       );
 
       this.retailSalesCollection.controls.showInvoiceCheckbox?.setValue(
-        ParcedPreFetchData?.CONTROL_DETAIL.SHOWINVOICE === 1 ? true :  false
+        ParcedPreFetchData?.CONTROL_DETAIL.SHOWINVOICE === 0 ? true :  false
       );
 
       this.retailSalesCollection.controls.templateName.setValue(ParcedPreFetchData.CONTROL_HEADER.TEMPLATENAME)
@@ -236,6 +236,15 @@ export class RetailSalesCollectionComponent implements OnInit {
       let splittedText= ParcedPreFetchData?.CONTROL_DETAIL.STRVOCTYPES.split("#")
       const selectedKeys = this.APIData.filter(item => splittedText?.includes(item.VOCTYPE)).map(item => item);
       this.selectedRowKeys = selectedKeys;
+      console.log('data fetched from main grid', this.selectedRowKeys )
+      console.log(this.APIData)
+
+    
+
+
+
+
+
 
       this.dateToPass = {
         fromDate:  ParcedPreFetchData?.CONTROL_DETAIL.FROMVOCDATE,
