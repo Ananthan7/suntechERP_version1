@@ -128,10 +128,10 @@ export class DiamondSalesorderComponent implements OnInit {
   }
   /**USE: main form party details */
   PartyDetailsOrderForm: FormGroup = this.formBuilder.group({
-    voucherType: ['', [Validators.required]],
-    voucherNo: [''],
-    voucherDESC: [''],
-    voucherDate: ['', [Validators.required]],
+    VOCTYPE: ['', [Validators.required]],
+    VOCNO: [''],
+    VOCDATE: ['', [Validators.required]],
+    FLAG: [''],
     orderType: ['', [Validators.required]],
     PartyCode: ['', [Validators.required]],
     SalesmanCode: ['', [Validators.required]],
@@ -173,12 +173,53 @@ export class DiamondSalesorderComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.PartyDetailsOrderForm.controls.voucherDate.setValue(this.currentDate)
-    this.PartyDetailsOrderForm.controls.DeliveryOnDate.setValue(this.currentDate)
-    this.PartyDetailsOrderForm.controls.voucherType.setValue(this.commonService.getqueryParamVocType())
-    this.PartyDetailsOrderForm.controls.AMCSTARTDATE.setValue(this.currentDate)
+    if (this.content?.FLAG) {
+      if (this.content.FLAG == 'VIEW' || this.content.FLAG == 'DELETE') {
+        this.viewMode = true;
+        this.LOCKVOUCHERNO = true;
+      }
+      if (this.content.FLAG == 'EDIT') {
+        this.editMode = true;
+        this.LOCKVOUCHERNO = true;
+      }
+      if (this.content.FLAG == 'DELETE') {
+        this.deleteClicked()
+      }
+      this.PartyDetailsOrderForm.controls.FLAG.setValue(this.content.FLAG)
+      this.setInitialValues()
+    } else {
+      this.setNewFormValues()
+      this.getLabourChargeGridDetails()
+    }
+  }
+  setNewFormValues(){
+    this.generateVocNo()
     this.getRateType()
-    this.getLabourChargeGridDetails()
+    this.setVocTypeMaster()
+    this.PartyDetailsOrderForm.controls.VOCDATE.setValue(this.currentDate)
+    this.PartyDetailsOrderForm.controls.DeliveryOnDate.setValue(this.currentDate)
+    this.PartyDetailsOrderForm.controls.VOCTYPE.setValue(this.commonService.getqueryParamVocType())
+    this.PartyDetailsOrderForm.controls.AMCSTARTDATE.setValue(this.currentDate)
+  }
+  setInitialValues(){
+
+  }
+  LOCKVOUCHERNO: boolean = true;
+  minDate: any;
+  maxDate: any;
+  setVocTypeMaster() {
+    this.LOCKVOUCHERNO = this.commonService.getVoctypeMasterLockVoucher()
+    this.minDate = this.commonService.getVoctypeMasteMinDate();
+    this.maxDate = this.commonService.getVoctypeMasterMaxDate();
+  }
+  generateVocNo() {
+    const API = `GenerateNewVoucherNumber/GenerateNewVocNum/${this.commonService.getqueryParamVocType()}/${this.commonService.branchCode}/${this.commonService.yearSelected}/${this.commonService.formatYYMMDD(this.currentDate)}`;
+    this.dataService.getDynamicAPI(API)
+      .subscribe((resp) => {
+        if (resp.status == "Success") {
+          this.PartyDetailsOrderForm.controls.VOCNO.setValue(resp.newvocno);
+        }
+      });
   }
   /**USE: to get metal gram rate from db */
   getMetalGramRate() {
@@ -217,7 +258,7 @@ export class DiamondSalesorderComponent implements OnInit {
     let postData = {
       "SPID": "022",
       "parameter": {
-        "strMainVocType": this.PartyDetailsOrderForm.value.voucherType || "",
+        "strMainVocType": this.PartyDetailsOrderForm.value.VOCTYPE || "",
         "intMid": "",
       }
     }
@@ -228,6 +269,7 @@ export class DiamondSalesorderComponent implements OnInit {
         if (result.status == "Success") {
           this.labourDetailGrid = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
           this.divisionDetailGrid = this.commonService.arrayEmptyObjectToString(result.dynamicData[1])
+          this.resetGridSRNO()
         } else {
           this.commonService.toastErrorByMsgId('MSG1531')
         }
@@ -239,7 +281,6 @@ export class DiamondSalesorderComponent implements OnInit {
   }
   getRateType() {
     let data = this.commonService.RateTypeMasterData.filter((item: any) => item.DIVISION_CODE == 'G' && item.DEFAULT_RTYPE == 1)
-
     if (data[0].WHOLESALE_RATE) {
       let WHOLESALE_RATE = this.commonService.decimalQuantityFormat(data[0].WHOLESALE_RATE, 'RATE')
       this.PartyDetailsOrderForm.controls.wholeSaleRate.setValue(WHOLESALE_RATE)
@@ -323,12 +364,40 @@ export class DiamondSalesorderComponent implements OnInit {
       // this.setLabourTypeDetails()
     }
   }
+  resetGridSRNO(){
+    this.divisionDetailGrid.forEach((item:any,index: number)=>{
+      item.IS_SELECTED = false
+      item.SELECTALL = false
+      item.SRNO = index+1
+    })
+    this.labourDetailGrid.forEach((item:any,index: number)=>{
+      item.IS_SELECTED = false
+      item.SELECTALL = false
+      item.SRNO = index+1
+    })
+  }
+  selectAllboxDivision(event:any){
+    this.divisionDetailGrid.forEach((item:any)=>{
+      item.SELECTALL = !item.SELECTALL
+      item.IS_SELECTED = item.SELECTALL
+    })
+  }
+  selectAllboxLabour(event:any){
+    console.log(this.labourDetailGrid);
+    this.labourDetailGrid.forEach((item:any)=>{
+      item.SELECTALL = !item.SELECTALL
+      item.IS_SELECTED = item.SELECTALL
+    })
+    console.log(this.labourDetailGrid);
+  }
   /* USE: division grid selection from header to save*/
-  selectDivisionGridData(event: any, { data }: any) {
+  selectDivisionGridData(event: any) {
+    const data = event.selectedRowKeys;
+    // this.divisionDetailGrid[event.data.SRNO - 1].IS_SELECTED = !event.data.IS_SELECTED;
     let division = {
       "UNIQUEID": 0,
       "BRANCH_CODE": this.commonService.nullToString(this.commonService.branchCode),
-      "VOCTYPE": this.commonService.nullToString(this.PartyDetailsOrderForm.value.voucherType),
+      "VOCTYPE": this.commonService.nullToString(this.PartyDetailsOrderForm.value.VOCTYPE),
       "VOCNO": 0,
       "YEARMONTH": this.commonService.nullToString(this.commonService.yearSelected),
       "SRNO": this.commonService.emptyToZero(data.Id),
@@ -339,16 +408,18 @@ export class DiamondSalesorderComponent implements OnInit {
       this.headerDivisionListToSave.push(division)
     } else {
       if (this.headerDivisionListToSave.length > 0) {
-        this.headerDivisionListToSave = this.headerDivisionListToSave.filter((item: any) => item.SRNO != data.Id)
+        this.headerDivisionListToSave = this.headerDivisionListToSave.filter((item: any) => item.SRNO != data.SRNO)
       }
     }
   }
   /* USE: Labour grid selection from header to save*/
-  selectLabourGridData(event: any, { data }: any) {
+  selectLabourGridData(event: any) {
+    const data = event.selectedRowKeys;
+    // this.labourDetailGrid[event.data.SRNO - 1].IS_SELECTED = !event.data.IS_SELECTED;
     let headerDetails = {
       "UNIQUEID": 0,
       "BRANCH_CODE": this.commonService.nullToString(this.commonService.branchCode),
-      "VOCTYPE": this.commonService.nullToString(this.PartyDetailsOrderForm.value.voucherType),
+      "VOCTYPE": this.commonService.nullToString(this.PartyDetailsOrderForm.value.VOCTYPE),
       "VOCNO": 0,
       "YEARMONTH": this.commonService.nullToString(this.commonService.yearSelected),
       "SRNO": this.commonService.nullToString(data.Id),
@@ -373,7 +444,7 @@ export class DiamondSalesorderComponent implements OnInit {
       this.headerLaboursListToSave.push(headerDetails)
     } else {
       if (this.headerLaboursListToSave.length > 0) {
-        this.headerLaboursListToSave = this.headerLaboursListToSave.filter((item: any) => item.SRNO != data.Id)
+        this.headerLaboursListToSave = this.headerLaboursListToSave.filter((item: any) => item.SRNO != data.SRNO)
       }
     }
   }
@@ -495,8 +566,8 @@ export class DiamondSalesorderComponent implements OnInit {
         "METALPERCENTAGE": this.commonService.emptyToZero(item.METALPERCENTAGE),
         "CURRENCY_RATE": this.commonService.emptyToZero(this.PartyDetailsOrderForm.value.ItemCurrencyRate),
         "STOCK_CODE": this.commonService.nullToString(item.STOCK_CODE),
-        "VOCTYPE": this.commonService.nullToString(this.PartyDetailsOrderForm.value.voucherType),
-        "VOCNO": this.commonService.emptyToZero(this.PartyDetailsOrderForm.value.voucherNo),
+        "VOCTYPE": this.commonService.nullToString(this.PartyDetailsOrderForm.value.VOCTYPE),
+        "VOCNO": this.commonService.emptyToZero(this.PartyDetailsOrderForm.value.VOCNO),
         "YEARMONTH": this.commonService.nullToString(this.commonService.yearSelected),
         "COMPSLNO": 0,
         "TREE_BRANCH_CODE": "",
@@ -529,13 +600,13 @@ export class DiamondSalesorderComponent implements OnInit {
       //UNQ_DESIGN_ID
       if (item.designCode != "") {
         UNQ_DESIGN_ID = (this.commonService.branchCode +
-          this.PartyDetailsOrderForm.value.voucherType + "-"
-          + this.PartyDetailsOrderForm.value.voucherNo + "-" +
+          this.PartyDetailsOrderForm.value.VOCTYPE + "-"
+          + this.PartyDetailsOrderForm.value.VOCNO + "-" +
           this.commonService.nullToString(item.designCode) + "-" +
           this.commonService.nullToString(item.SRNO) + "-" + this.commonService.yearSelected);
       } else {
-        UNQ_DESIGN_ID = (this.commonService.branchCode + this.PartyDetailsOrderForm.value.voucherType + "-" +
-          this.PartyDetailsOrderForm.value.voucherNo + "-" + this.commonService.nullToString(item.STOCK_CODE) + "-" +
+        UNQ_DESIGN_ID = (this.commonService.branchCode + this.PartyDetailsOrderForm.value.VOCTYPE + "-" +
+          this.PartyDetailsOrderForm.value.VOCNO + "-" + this.commonService.nullToString(item.STOCK_CODE) + "-" +
           this.commonService.nullToString(item.SRNO) + "-" + this.commonService.yearSelected);
       }
       if (item.CURRENCY_CODE == this.PartyDetailsOrderForm.value.ItemCurrency) {
@@ -622,11 +693,11 @@ export class DiamondSalesorderComponent implements OnInit {
         "GOLD_LOSS_AMTFC": this.commonService.emptyToZero(item.Wastage),
         "GOLD_LOSS_AMTLC": this.commonService.FCToCC(this.commonService.compCurrency, item.Wastage),
         "COSTFC": this.commonService.emptyToZero(COSTFC) || 0,
-        "DT_VOCDATE": this.commonService.formatDateTime(this.PartyDetailsOrderForm.value.voucherDate),
+        "DT_VOCDATE": this.commonService.formatDateTime(this.PartyDetailsOrderForm.value.VOCDATE),
         "KARIGAR_CODE": "",
         "DT_BRANCH_CODE": this.commonService.branchCode,
-        "DT_VOCTYPE": this.PartyDetailsOrderForm.value.voucherType,
-        "DT_VOCNO": this.commonService.emptyToZero(this.PartyDetailsOrderForm.value.voucherNo),
+        "DT_VOCTYPE": this.PartyDetailsOrderForm.value.VOCTYPE,
+        "DT_VOCNO": this.commonService.emptyToZero(this.PartyDetailsOrderForm.value.VOCNO),
         "DT_YEARMONTH": this.commonService.yearSelected,
         "TOTAL_LABOUR": this.commonService.emptyToZero(item.Total_Labour),
         "CATEGORY_CODE": this.commonService.nullToString(item.CATEGORY_CODE),
@@ -666,9 +737,9 @@ export class DiamondSalesorderComponent implements OnInit {
     let postData = {
       "MID": 0,
       "BRANCH_CODE": this.commonService.branchCode || '',
-      "VOCTYPE": this.PartyDetailsOrderForm.value.voucherType,
-      "VOCNO": this.commonService.emptyToZero(this.PartyDetailsOrderForm.value.voucherNo),
-      "VOCDATE": this.commonService.formatDateTime(this.PartyDetailsOrderForm.value.voucherDate).toString(),
+      "VOCTYPE": this.PartyDetailsOrderForm.value.VOCTYPE,
+      "VOCNO": this.commonService.emptyToZero(this.PartyDetailsOrderForm.value.VOCNO),
+      "VOCDATE": this.commonService.formatDateTime(this.PartyDetailsOrderForm.value.VOCDATE).toString(),
       "EXP_PROD_START_DATE": this.commonService.formatDateTime(this.currentDate) || "2023-09-14T14:56:43.961Z",
       "DELIVERY_DATE": this.commonService.formatDateTime(this.PartyDetailsOrderForm.value.DeliveryOnDate).toString(),
       "YEARMONTH": this.commonService.nullToString(this.commonService.yearSelected),
@@ -677,7 +748,7 @@ export class DiamondSalesorderComponent implements OnInit {
       "PARTY_CURR_RATE": this.commonService.nullToString(this.PartyDetailsOrderForm.value.partyCurrencyRate),
       "ITEM_CURRENCY": this.PartyDetailsOrderForm.value.ItemCurrency.toString(),
       "ITEM_CURR_RATE": this.commonService.nullToString(this.PartyDetailsOrderForm.value.ItemCurrencyRate),
-      "VALUE_DATE": this.commonService.formatDateTime(this.PartyDetailsOrderForm.value.voucherDate).toString(),
+      "VALUE_DATE": this.commonService.formatDateTime(this.PartyDetailsOrderForm.value.VOCDATE).toString(),
       "SALESPERSON_CODE": this.PartyDetailsOrderForm.value.SalesmanCode.toString(),
       "METAL_RATE_TYPE": this.commonService.nullToString(this.PartyDetailsOrderForm.value.rateType),
       "METAL_RATE": this.commonService.emptyToZero(this.PartyDetailsOrderForm.value.wholeSaleRate),
@@ -744,8 +815,8 @@ export class DiamondSalesorderComponent implements OnInit {
 
 
   submitValidations(form: any) {
-    if (this.commonService.nullToString(form.voucherType) == '') {
-      this.commonService.toastErrorByMsgId('MSG1939')// voucherType  CANNOT BE EMPTY
+    if (this.commonService.nullToString(form.VOCTYPE) == '') {
+      this.commonService.toastErrorByMsgId('MSG1939')// VOCTYPE  CANNOT BE EMPTY
       return true
     }
     else if (this.commonService.nullToString(form.orderType) == '') {
@@ -964,7 +1035,7 @@ export class DiamondSalesorderComponent implements OnInit {
 
   private HeaderValidate(): boolean {
     const formValue = this.PartyDetailsOrderForm.value;
-    if (!this.commonService.validateNotEmpty(formValue.voucherType, 'MSG1942')) return false;
+    if (!this.commonService.validateNotEmpty(formValue.VOCTYPE, 'MSG1942')) return false;
     if (!this.commonService.validateNotEmpty(formValue.partyCurrencyRate, 'MSG1552')) return false;
     if (!this.commonService.validateNotEmpty(formValue.ItemCurrencyRate, 'MSG1353')) return false;
     if (!this.commonService.validateNotEmpty(formValue.ItemCurrency, 'MSG1352')) return false;

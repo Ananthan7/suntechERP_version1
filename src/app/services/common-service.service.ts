@@ -1164,6 +1164,36 @@ export class CommonServiceService {
     }
     return null;
   }
+  getVoctypeMasteMinDate() {
+    const res = this.VocTypeMasterData.filter((data: any) =>
+      data.BRANCH_CODE == this.branchCode && data.VOCTYPE == this.getqueryParamVocType()
+     && data.MAIN_VOCTYPE == this.getqueryParamMainVocType()
+    );
+    if (res.length > 0) {
+      return res[0].BLOCKBACKDATEDENTRIES ? new Date() : null;
+    }
+    return null;
+  }
+  getVoctypeMasterMaxDate() {
+    const res = this.VocTypeMasterData.filter((data: any) =>
+      data.BRANCH_CODE == this.branchCode && data.VOCTYPE == this.getqueryParamVocType()
+     && data.MAIN_VOCTYPE == this.getqueryParamMainVocType()
+    );
+    if (res.length > 0) {
+      return res[0].BLOCKFUTUREDATE ? new Date() : null;
+    }
+    return null;
+  }
+  getVoctypeMasterLockVoucher(): boolean {
+    const res = this.VocTypeMasterData.filter((data: any) =>
+      data.BRANCH_CODE == this.branchCode && data.VOCTYPE == this.getqueryParamVocType()
+     && data.MAIN_VOCTYPE == this.getqueryParamMainVocType()
+    );
+    if (res.length > 0) {
+      return this.Null2BitValue(res[0].LOCKVOUCHERNO);
+    }
+    return true;
+  }
   dataSplitPop(data: any) {
     // const result = data.split('');
     // result.shift();

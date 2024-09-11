@@ -35,7 +35,6 @@ export class ProcessTransferComponent implements OnInit {
   viewMode: boolean = false;
   editMode: boolean = false;
   isSaved: boolean = false;
-  LOCKVOUCHERNO: boolean = true;
 
   user: MasterSearchModel = {
     PAGENO: 1,
@@ -185,15 +184,13 @@ export class ProcessTransferComponent implements OnInit {
     )
     this.setVocTypeMaster()
   }
+  LOCKVOUCHERNO: boolean = true;
   minDate: any;
   maxDate: any;
   setVocTypeMaster() {
-    let frm = this.processTransferFrom.value
-    console.log(this.commonService.VocTypeMasterData);
-    const vocTypeMaster: any = this.commonService.getVoctypeMasterByVocTypeMain(frm.BRANCH_CODE, frm.VOCTYPE, frm.MAIN_VOCTYPE)
-    this.LOCKVOUCHERNO = vocTypeMaster.LOCKVOUCHERNO
-    this.minDate = vocTypeMaster.BLOCKBACKDATEDENTRIES ? new Date() : null;
-    this.maxDate = vocTypeMaster.BLOCKFUTUREDATE ? new Date() : null;
+    this.LOCKVOUCHERNO = this.commonService.getVoctypeMasterLockVoucher()
+    this.minDate = this.commonService.getVoctypeMasteMinDate();
+    this.maxDate = this.commonService.getVoctypeMasterMaxDate();
   }
 
   generateVocNo() {
