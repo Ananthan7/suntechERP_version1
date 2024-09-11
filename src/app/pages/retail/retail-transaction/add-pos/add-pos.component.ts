@@ -2952,9 +2952,12 @@ export class AddPosComponent implements OnInit {
           this.toggleStoneAndNetWtFields(stoneCondition);
 
           this.blockMinimumPrice = stockInfos.BLOCK_MINIMUMPRICE;
-          this.blockMinimumPriceValue = this.comFunc.transformDecimalVB(
+          this.blockMinimumPriceValue =this.comFunc.emptyToZero(resp.priceInfo.MIN_SAL_PRICE)!=0? this.comFunc.transformDecimalVB(
             this.comFunc.allbranchMaster?.BAMTDECIMALS,
             resp.priceInfo.MIN_SAL_PRICE
+          ):this.comFunc.transformDecimalVB(
+            this.comFunc.allbranchMaster?.BAMTDECIMALS,
+            resp.priceInfo.STOCK_COST
           );
 
 
@@ -7567,10 +7570,17 @@ export class AddPosComponent implements OnInit {
                 this.blockNegativeStock = stockInfos.BLOCK_NEGATIVESTOCK;
                 this.blockNegativeStockValue = stockInfos.BALANCE_QTY;
                 this.blockMinimumPrice = stockInfos.BLOCK_MINIMUMPRICE;
-                this.blockMinimumPriceValue = this.comFunc.transformDecimalVB(
+                this.blockMinimumPriceValue =this.comFunc.emptyToZero(resp.priceInfo.MIN_SAL_PRICE)!=0? this.comFunc.transformDecimalVB(
                   this.comFunc.allbranchMaster?.BAMTDECIMALS,
-                  stockInfoPrice.MIN_SAL_PRICE
+                  resp.priceInfo.MIN_SAL_PRICE
+                ):this.comFunc.transformDecimalVB(
+                  this.comFunc.allbranchMaster?.BAMTDECIMALS,
+                  resp.priceInfo.STOCK_COST
                 );
+                // this.blockMinimumPriceValue = this.comFunc.transformDecimalVB(
+                //   this.comFunc.allbranchMaster?.BAMTDECIMALS,
+                //   stockInfoPrice.MIN_SAL_PRICE
+                // );
                 this.validatePCS = stockInfos.VALIDATE_PCS;
                 this.enablePieces = stockInfos.ENABLE_PCS;
                 this.managePcsGrossWt();
