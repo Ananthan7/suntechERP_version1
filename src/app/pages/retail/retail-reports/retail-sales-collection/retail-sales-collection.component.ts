@@ -50,7 +50,7 @@ export class RetailSalesCollectionComponent implements OnInit {
   dateToPass: { fromDate: string; toDate: string } = { fromDate: '', toDate: '' };
   fetchedBranchData: any[] =[];
   fetchedBranchDataParam: any[]= [];
-
+  templateNameHasValue: boolean= false;
 
   constructor(  private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder, private dataService: SuntechAPIService,  private comService: CommonServiceService,
@@ -113,18 +113,6 @@ export class RetailSalesCollectionComponent implements OnInit {
     this.formattedBranchDivisionData = branchDivisionData
     this.retailSalesCollection.controls.branch.setValue(this.formattedBranchDivisionData);
   }
-  
-  setDateValue(event: any){
-    if(event.FromDate){
-      this.retailSalesCollection.controls.fromDate.setValue(event.FromDate);
-      console.log(event.FromDate)
-    }
-    else if(event.ToDate){
-      this.retailSalesCollection.controls.toDate.setValue(event.ToDate);
-      console.log(this.retailSalesCollection)
-      this.toDateValitation()
-    }
-  }
 
   toDateValitation(){
     if (this.retailSalesCollection.value.fromDate > this.retailSalesCollection.value.toDate) {
@@ -135,6 +123,179 @@ export class RetailSalesCollectionComponent implements OnInit {
   setValueFromCommon(event: any){
     this.retailSalesCollection.controls.reportTo.setValue(event.value);
     console.log(this.retailSalesCollection.controls.reportTo.value)
+  }
+
+  getAPIData() {
+    const payload = {
+      // strLoginBranch: localStorage.getItem('userbranch')
+      "strReportName": "POS_COLLECTION_A",
+      "strMainVouchers": "" , // this.comService.getqueryParamMainVocType(),
+      "strExcludeVouchers": "",
+      "strWhereCond": "",
+      "strLoginBranch": "", //this.comService.branchCode
+    };
+    this.isLoading = true;
+    this.dataService.postDynamicAPI('GetReportVouchers', payload).subscribe((response) => {
+      console.log('Retailsales API call data', response);
+      this.APIData = response.dynamicData[0] || [];
+      this.prefillScreenValues()
+      setTimeout(() => {
+        this.isLoading = false;
+      }, 1000);
+    },(error: any) => {
+      console.error('Error occurred:', error);
+      this.isLoading = false;
+    });
+  }
+
+  onGridSelection(event: any) {
+    this.selectedRowKeys= event.selectedRowKeys;
+    this.selectedDatas = event.selectedRowsData;
+    let vocTypeArr: any= []
+    this.selectedDatas.forEach((item: any)=>{
+      vocTypeArr.push(item.VOCTYPE+'#') 
+    })
+    const uniqueArray = [...new Set( vocTypeArr )];
+    const plainText = uniqueArray.join('');
+    this.VocTypeParam = plainText
+  }
+
+  afterSave(value: any) {
+    if (value) {
+      this.retailSalesCollection.reset();
+      this.tableData = [];
+      this.close('reloadMainGrid');
+    }
+  }
+
+  close(data?: any) {
+    //TODO reset forms and data before closing
+    this.activeModal.close(data);
+  }
+
+  popupClosed(){
+    if (this.content && Object.keys(this.content).length > 0) {
+      console.log(this.content)
+      let ParcedPreFetchData = JSON.parse(this.content?.CONTROL_LIST_JSON)
+      this.retailSalesCollection.controls.templateName.setValue(ParcedPreFetchData.CONTROL_HEADER.TEMPLATENAME)
+      this.popupVisible = false;
+    }
+    else{
+      this.popupVisible = false;
+      this.retailSalesCollection.controls.templateName.setValue(null)
+    }
+  }
+
+
+
+
+  prefillScreenValues(){ 
+    if ( Object.keys(this.content).length > 0) {
+       this.isLoading = false;
+       console.log('data fetched from main grid',this.content )
+       let ParcedPreFetchData = JSON.parse(this.content?.CONTROL_LIST_JSON) //data from retailREPORT Component- modalRef instance
+       this.retailSalesCollection.controls.showDateCheckbox?.setValue(
+         ParcedPreFetchData?.CONTROL_DETAIL.SHOWDATE === 0 ? true :  false
+       );
+ 
+       this.retailSalesCollection.controls.showInvoiceCheckbox?.setValue(
+         ParcedPreFetchData?.CONTROL_DETAIL.SHOWINVOICE === 0 ? true :  false
+       );
+ 
+       this.templateNameHasValue = !!ParcedPreFetchData.CONTROL_HEADER.TEMPLATENAME;
+       this.retailSalesCollection.controls.templateName.setValue(ParcedPreFetchData.CONTROL_HEADER.TEMPLATENAME)
+ 
+       let splittedText= ParcedPreFetchData?.CONTROL_DETAIL.STRVOCTYPES.split("#")
+       const selectedKeys = this.APIData.filter(item => splittedText?.includes(item.VOCTYPE)).map(item => item);
+       this.selectedRowKeys = selectedKeys;
+ 
+ 
+       const selectedSet = new Set(this.selectedRowKeys.map(item => item.SRNO));
+       this.APIData.sort((a, b) => {
+         const aIsSelected = selectedSet.has(a.SRNO) ? 1 : 0;
+         const bIsSelected = selectedSet.has(b.SRNO) ? 1 : 0;
+         return bIsSelected - aIsSelected;
+       });
+ 
+ 
+       this.dateToPass = {
+         fromDate:  ParcedPreFetchData?.CONTROL_DETAIL.FROMVOCDATE,
+         toDate: ParcedPreFetchData?.CONTROL_DETAIL.TOVOCDATE
+       };
+       this.dateToPass.fromDate? this.retailSalesCollection.controls.fromDate.setValue(this.dateToPass.fromDate) : null
+       this.dateToPass.toDate? this.retailSalesCollection.controls.toDate.setValue(this.dateToPass.toDate) : null
+
+
+       this.retailSalesCollection.controls.branch.setValue(ParcedPreFetchData?.CONTROL_DETAIL.STRBRANCHCODES);
+       this.fetchedBranchData= ParcedPreFetchData?.CONTROL_DETAIL.STRBRANCHCODES.split("#")
+       this.fetchedBranchDataParam = ParcedPreFetchData?.CONTROL_DETAIL.STRBRANCHCODES
+     }
+   }
+
+  saveTemplate(){
+    this.popupVisible = true;
+    console.log(this.retailSalesCollection.controls.templateName.value)
+  }
+  saveTemplate_DB(){
+    const payload = {
+      "SPID": "0115",
+      "parameter": {
+        "FLAG": 'INSERT',
+        "CONTROLS": JSON.stringify({
+            "CONTROL_HEADER": {
+              "USERNAME": localStorage.getItem('username'),
+              "TEMPLATEID": this.comService.getModuleName(),
+              "TEMPLATENAME": this.retailSalesCollection.controls.templateName.value,
+              "FORM_NAME": this.comService.getModuleName(),
+              "ISDEFAULT": 1
+            },
+            "CONTROL_DETAIL": {
+              "STRBRANCHCODES": this.formattedBranchDivisionData,
+              "STRVOCTYPES": this.VocTypeParam,
+              "FROMVOCDATE": this.formatDateToYYYYMMDD(this.retailSalesCollection.value.fromDate),
+              "TOVOCDATE": this.formatDateToYYYYMMDD(this.retailSalesCollection.value.toDate),
+              "USERBRANCH": localStorage.getItem('userbranch'),
+              "USERNAME": localStorage.getItem('username'),
+              "SHOWDATE": this.retailSalesCollection.value.showDateCheckbox ? 0 : 1,
+              "SHOWINVOICE": this.retailSalesCollection.value.showInvoiceCheckbox ? 0 : 1
+            }
+         })
+      }
+    };
+    this.commonService.showSnackBarMsg('MSG81447');
+    this.dataService.postDynamicAPI('ExecueteSPInterface', payload)
+    .subscribe((result: any) => {
+      console.log(result);
+      let data = result.dynamicData.map((item: any) => item[0].ERRORMESSAGE);
+      let Notifdata = result.dynamicData.map((item: any) => item[0].ERRORCODE);
+      if (Notifdata == 1) {
+        this.commonService.closeSnackBarMsg()
+        Swal.fire({
+          title: data || 'Success',
+          text: '',
+          icon: 'success',
+          confirmButtonColor: '#336699',
+          confirmButtonText: 'Ok'
+        })
+        this.popupVisible = false;
+        this.activeModal.close(data);
+      }
+      else {
+        this.toastr.error(Notifdata)
+      }
+    }); 
+  }
+
+  setDateValue(event: any){
+    if(event.FromDate){
+      this.retailSalesCollection.controls.fromDate.setValue(event.FromDate);
+      console.log(event.FromDate)
+    }
+    else if(event.ToDate){
+      this.retailSalesCollection.controls.toDate.setValue(event.ToDate);
+      console.log(this.retailSalesCollection)
+      this.toDateValitation()
+    }
   }
 
   formatDateToYYYYMMDD(dateString: any) {
@@ -151,8 +312,8 @@ export class RetailSalesCollectionComponent implements OnInit {
       "parameter": {
         "STRBRANCHCODES": this.formattedBranchDivisionData || this.fetchedBranchDataParam,
         "STRVOCTYPES": this.VocTypeParam, //this.commonService.getqueryParamVocType(),
-        "FROMVOCDATE": this.dateToPass.fromDate? this.dateToPass.fromDate :  this.retailSalesCollection.value.fromDate,
-        "TOVOCDATE": this.dateToPass.toDate? this.dateToPass.toDate : this.retailSalesCollection.value.toDate ,
+        "FROMVOCDATE": this.formatDateToYYYYMMDD(this.retailSalesCollection.value.fromDate),
+        "TOVOCDATE": this.formatDateToYYYYMMDD(this.retailSalesCollection.value.toDate) ,
         "flag": '',
         "USERBRANCH": localStorage.getItem('userbranch'),
         "USERNAME": localStorage.getItem('username')
@@ -164,7 +325,6 @@ export class RetailSalesCollectionComponent implements OnInit {
     .subscribe((result: any) => {
       console.log(result);
       let data = result.dynamicData;
-      this.commonService.closeSnackBarMsg()
       const width = window.innerWidth;
       const height = window.innerHeight;
       const windowFeatures = `width=${width},height=${height},fullscreen=yes`;
@@ -199,160 +359,9 @@ export class RetailSalesCollectionComponent implements OnInit {
           }, 800);
         }
       };
+      this.commonService.closeSnackBarMsg()
     });      
   }
-
-  getAPIData() {
-    const payload = {
-      // strLoginBranch: localStorage.getItem('userbranch')
-      "strReportName": "POS_COLLECTION_A",
-      "strMainVouchers": "" , // this.comService.getqueryParamMainVocType(),
-      "strExcludeVouchers": "",
-      "strWhereCond": "",
-      "strLoginBranch": "", //this.comService.branchCode
-    };
-    this.isLoading = true;
-    this.dataService.postDynamicAPI('GetReportVouchers', payload).subscribe((response) => {
-      console.log('Retailsales API call data', response);
-      this.APIData = response.dynamicData[0] || [];
-      this.prefillScreenValues()
-      setTimeout(() => {
-        this.isLoading = false;
-      }, 1000);
-    },(error: any) => {
-      console.error('Error occurred:', error);
-      this.isLoading = false;
-    });
-  }
-  prefillScreenValues(){ 
-   if ( Object.keys(this.content).length > 0) {
-      this.isLoading = false;
-      console.log('data fetched from main grid',this.content )
-      let ParcedPreFetchData = JSON.parse(this.content?.CONTROL_LIST_JSON) //data from retailREPORT Component- modalRef instance
-      this.retailSalesCollection.controls.showDateCheckbox?.setValue(
-        ParcedPreFetchData?.CONTROL_DETAIL.SHOWDATE === 0 ? true :  false
-      );
-
-      this.retailSalesCollection.controls.showInvoiceCheckbox?.setValue(
-        ParcedPreFetchData?.CONTROL_DETAIL.SHOWINVOICE === 0 ? true :  false
-      );
-
-      this.retailSalesCollection.controls.templateName.setValue(ParcedPreFetchData.CONTROL_HEADER.TEMPLATENAME)
-
-      let splittedText= ParcedPreFetchData?.CONTROL_DETAIL.STRVOCTYPES.split("#")
-      const selectedKeys = this.APIData.filter(item => splittedText?.includes(item.VOCTYPE)).map(item => item);
-      this.selectedRowKeys = selectedKeys;
-
-
-      const selectedSet = new Set(this.selectedRowKeys.map(item => item.SRNO));
-      this.APIData.sort((a, b) => {
-        const aIsSelected = selectedSet.has(a.SRNO) ? 1 : 0;
-        const bIsSelected = selectedSet.has(b.SRNO) ? 1 : 0;
-        return bIsSelected - aIsSelected;
-      });
-
-
-      this.dateToPass = {
-        fromDate:  ParcedPreFetchData?.CONTROL_DETAIL.FROMVOCDATE,
-        toDate: ParcedPreFetchData?.CONTROL_DETAIL.TOVOCDATE
-      };
-      // console.log('data fetched from main grid',ParcedPreFetchData )
-
-      this.retailSalesCollection.controls.branch.setValue(ParcedPreFetchData?.CONTROL_DETAIL.STRBRANCHCODES);
-      this.fetchedBranchData= ParcedPreFetchData?.CONTROL_DETAIL.STRBRANCHCODES.split("#")
-      this.fetchedBranchDataParam = ParcedPreFetchData?.CONTROL_DETAIL.STRBRANCHCODES
-    }
-  }
   
-
-  onGridSelection(event: any) {
-    this.selectedRowKeys= event.selectedRowKeys;
-    this.selectedDatas = event.selectedRowsData;
-    let vocTypeArr: any= []
-    this.selectedDatas.forEach((item: any)=>{
-      vocTypeArr.push(item.VOCTYPE+'#') 
-    })
-    const uniqueArray = [...new Set( vocTypeArr )];
-    const plainText = uniqueArray.join('');
-    this.VocTypeParam = plainText
-  }
-
-  saveTemplate(){
-    this.popupVisible = true;
-    console.log(this.retailSalesCollection.controls.templateName.value)
-  }
-  saveTemplate_DB(){
-    const payload = {
-      "SPID": "0115",
-      "parameter": {
-        "FLAG": 'INSERT',
-        "CONTROLS": JSON.stringify({
-            "CONTROL_HEADER": {
-              "USERNAME": localStorage.getItem('username'),
-              "TEMPLATEID": this.comService.getModuleName(),
-              "TEMPLATENAME": this.retailSalesCollection.controls.templateName.value,
-              "FORM_NAME": this.comService.getModuleName(),
-              "ISDEFAULT": 1
-            },
-            "CONTROL_DETAIL": {
-              "STRBRANCHCODES": this.formattedBranchDivisionData,
-              "STRVOCTYPES": this.VocTypeParam,
-              "FROMVOCDATE": this.formatDateToYYYYMMDD(this.retailSalesCollection.value.fromDate),
-              "TOVOCDATE": this.formatDateToYYYYMMDD(this.retailSalesCollection.value.toDate),
-              "USERBRANCH": localStorage.getItem('userbranch'),
-              "USERNAME": localStorage.getItem('username'),
-              "SHOWDATE": this.retailSalesCollection.value.showDateCheckbox ? 0 : 1,
-              "SHOWINVOICE": this.retailSalesCollection.value.showInvoiceCheckbox ? 0 : 1
-            }
-         })
-      }
-    };
-    this.dataService.postDynamicAPI('ExecueteSPInterface', payload)
-    .subscribe((result: any) => {
-      console.log(result);
-      let data = result.dynamicData.map((item: any) => item[0].ERRORMESSAGE);
-      let Notifdata = result.dynamicData.map((item: any) => item[0].ERRORCODE);
-      if (Notifdata == 1) {
-        Swal.fire({
-          title: data || 'Success',
-          text: '',
-          icon: 'success',
-          confirmButtonColor: '#336699',
-          confirmButtonText: 'Ok'
-        })
-        this.popupVisible = false;
-        this.activeModal.close(data);
-      }
-      else {
-        this.toastr.error(Notifdata)
-      }
-    }); 
-  }
-  afterSave(value: any) {
-    if (value) {
-      this.retailSalesCollection.reset();
-      this.tableData = [];
-      this.close('reloadMainGrid');
-    }
-  }
-
-  close(data?: any) {
-    //TODO reset forms and data before closing
-    this.activeModal.close(data);
-  }
-
-  popupClosed(){
-    if (this.content && Object.keys(this.content).length > 0) {
-      console.log(this.content)
-      let ParcedPreFetchData = JSON.parse(this.content?.CONTROL_LIST_JSON)
-      this.retailSalesCollection.controls.templateName.setValue(ParcedPreFetchData.CONTROL_HEADER.TEMPLATENAME)
-      this.popupVisible = false;
-    }
-    else{
-      this.popupVisible = false;
-      this.retailSalesCollection.controls.templateName.setValue(null)
-    }
-   
-  }
 
 }

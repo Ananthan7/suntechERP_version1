@@ -108,11 +108,16 @@
 }
 
 .label {
-    font-size: 14px; /* Adjust font size for label as needed */
-    color: #000; /* Adjust color if needed */
+    font-size: 14px;
+    color: #000;
+}
+
+.SaveNew_template {
+    min-width: 125px;
+    white-space: normal;
+    padding-bottom: 0px;
 }
 
 // ::ng-deep .mat-checkbox-checked {
 //      background-color:  #009688 !important;
 // }
-
