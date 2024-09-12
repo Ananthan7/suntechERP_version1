@@ -103,9 +103,15 @@
                   <input type="text" id="T_Name" class="form-control" formControlName="templateName"/>
                 </div>
                 <div class="button-group d-flex">
-                    <button mat-flat-button class="btn-m-r-10 demo-button btn-width mx-1" (click)="saveTemplate_DB()">Save</button>
+                    <button mat-flat-button [ngClass]="{'SaveNew_template': templateNameHasValue, 'btn-m-r-10': true, 'demo-button': true,
+                    'btn-width': true,'mx-1': true }" (click)="saveTemplate_DB()">
+                        {{ templateNameHasValue ? 'Save as New Template' : 'Save' }}
+                    </button>
                     <button mat-flat-button class="btn-m-r-10 btn-width mx-1 cancelBTN" (click)="popupClosed()">Cancel</button>
                 </div>
+                <br>
+                <br>
+                <br>
             </div>
         </dx-popup>
 
