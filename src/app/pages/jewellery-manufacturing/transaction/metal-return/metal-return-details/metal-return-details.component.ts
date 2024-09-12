@@ -537,16 +537,16 @@ setLookupStockCodeWhereCondition() {
     const formData = this.metalReturnDetailsForm.value;
 
     // Check if stock code already exists in the grid
-    const stockCodeExists = this.metalReturnDetailsData.some(item => item.STOCK_CODE === formData.stockCode);
+    // const stockCodeExists = this.metalReturnDetailsData.some(item => item.JOB_NUMBER === formData.jobNumber);
 
-    if (stockCodeExists) {
-      // Show confirmation message if stock code already exists
-      const userConfirmed = confirm("This stock code entry is already available in detail. Do you wish to continue?");
+    // if (stockCodeExists) {
+    //   // Show confirmation message if stock code already exists
+    //   const userConfirmed = confirm("This stock code entry is already available in detail. Do you wish to continue?");
 
-      if (!userConfirmed) {
-        return; // Stop further execution if user doesn't confirm
-      }
-    }
+    //   if (!userConfirmed) {
+    //     return; // Stop further execution if user doesn't confirm
+    //   }
+    // }
 
     if (this.submitValidations(formData)) return;
 
@@ -910,6 +910,8 @@ setLookupStockCodeWhereCondition() {
         // }
 
       }, err => {
+ 
+        
         this.comService.toastErrorByMsgId('MSG2272')//Error occured, please try again
       })
     this.subscriptions.push(Sub)

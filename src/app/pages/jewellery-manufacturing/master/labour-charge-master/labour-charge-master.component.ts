@@ -64,7 +64,7 @@ export class LabourChargeMasterComponent implements OnInit {
   viewsellingrateMetal: boolean = false;
   viewsellingMetal: boolean = false;
 
-  viewModeSetting: boolean = false;
+  viewModeSetting: boolean = true;
   ViewModemethod: boolean = false;
   codeEnable1: boolean = true;
   codeEnable2: boolean = true;
@@ -527,6 +527,7 @@ export class LabourChargeMasterComponent implements OnInit {
       }
     });
   }
+  
   setMode(mode: 'view' | 'edit') {
     this.viewMode = (mode === 'view');
     this.viewModeSetting = (mode === 'edit');

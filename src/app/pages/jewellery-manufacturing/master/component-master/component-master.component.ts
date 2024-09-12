@@ -64,7 +64,7 @@ export class ComponentMasterComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
-    FRONTENDFILTER:true,
+    FRONTENDFILTER: true,
   }
   // divisionCode: MasterSearchModel = {
   //   PAGENO: 1,
@@ -436,6 +436,9 @@ export class ComponentMasterComponent implements OnInit {
     console.log(data);
 
     this.tableData[data.data.SRNO - 1].DIVCODE = value.DIVISION_CODE;
+
+    console.log(this.tableData);
+
     this.stockCodeData.WHERECONDITION = `DIVISION = '${value.DIVISION_CODE}'`;
 
     console.log(value.DIVISION)
@@ -456,8 +459,14 @@ export class ComponentMasterComponent implements OnInit {
 
 
   stockCodeDataSelected(value: any, data: any, controlName: string,) {
+
+    console.log(this.tableData);
+
     this.tableData[data.data.SRNO - 1].STOCK_CODE = value.STOCK_CODE;
     this.tableData[data.data.SRNO - 1].DESCRIPTION = value.DESCRIPTION;
+
+    console.log(this.tableData);
+
     this.stockCodeValidate(this.tableData[data.data.SRNO - 1]);
 
     //  this.stockCodeData.WHERECONDITION = `DIVCODE = '${this.componentmasterForm.value.metalDivision}' and SUBCODE = '0'`;
@@ -532,7 +541,7 @@ export class ComponentMasterComponent implements OnInit {
           this.prefixMasterDetail.LAST_NO = this.incrementAndPadNumber(this.prefixMasterDetail.LAST_NO, 1)
           this.componentmasterForm.controls.code.setValue(this.prefixMasterDetail.PREFIX_CODE + this.prefixMasterDetail.LAST_NO)
           this.componentmasterForm.controls.codedes.setValue(result.response.DESCRIPTION)
-          
+
         } else {
           // this.alloyMastereForm.controls.code.setValue('')
           this.commonService.toastErrorByMsgId('MSG1531')
@@ -563,8 +572,8 @@ export class ComponentMasterComponent implements OnInit {
       .subscribe((result) => {
         if (result.response) {
           if (result.status == "Success") {
-           // this.commonService.toastSuccessByText('Last number updated')
-           console.log('Last number updated');
+            // this.commonService.toastSuccessByText('Last number updated')
+            console.log('Last number updated');
 
           }
         } else {
@@ -577,11 +586,14 @@ export class ComponentMasterComponent implements OnInit {
   sieveToCodeSelected(value: any, data: any, controlName: string) {
     if (this.checkCode()) return
     this.tableData[data.data.SRNO - 1].SIEVE_TO = value.CODE;
+    console.log(this.tableData);
   }
 
   sieveFromCodeSelected(value: any, data: any, controlName: string) {
     if (this.checkCode()) return
     this.tableData[data.data.SRNO - 1].SIEVE_FROM = value.CODE;
+
+
 
     this.sieveToCodeData.WHERECONDITION = `types = 'SIEVE MASTER' AND CODE > '${value.SIEVE_FROM}'`;
   }
@@ -652,7 +664,7 @@ export class ComponentMasterComponent implements OnInit {
     console.log(e);
     this.componentmasterForm.controls.category.setValue(e.CODE);
   }
- 
+
   codeCodeSelected(e: any) {
     console.log(e);
     const prefixCode = e.PREFIX_CODE.toUpperCase();
@@ -727,10 +739,10 @@ export class ComponentMasterComponent implements OnInit {
 
 
     this.componentmasterForm.controls.size.setValue(e.COMPSIZE_CODE);
-    this.componentmasterForm.controls.height.setValue(this.commonService.transformDecimalVB(this.commonService.allbranchMaster?.BMQTYDECIMALS,finalHeight));
-    this.componentmasterForm.controls.length.setValue(this.commonService.transformDecimalVB(this.commonService.allbranchMaster?.BMQTYDECIMALS,finalWidth));
-    this.componentmasterForm.controls.width.setValue(this.commonService.transformDecimalVB(this.commonService.allbranchMaster?.BMQTYDECIMALS,finalLength));
-    this.componentmasterForm.controls.radius.setValue(this.commonService.transformDecimalVB(this.commonService.allbranchMaster?.BMQTYDECIMALS,finalRadius));
+    this.componentmasterForm.controls.height.setValue(this.commonService.transformDecimalVB(this.commonService.allbranchMaster?.BMQTYDECIMALS, finalHeight));
+    this.componentmasterForm.controls.length.setValue(this.commonService.transformDecimalVB(this.commonService.allbranchMaster?.BMQTYDECIMALS, finalWidth));
+    this.componentmasterForm.controls.width.setValue(this.commonService.transformDecimalVB(this.commonService.allbranchMaster?.BMQTYDECIMALS, finalLength));
+    this.componentmasterForm.controls.radius.setValue(this.commonService.transformDecimalVB(this.commonService.allbranchMaster?.BMQTYDECIMALS, finalRadius));
   }
 
   // dataSplitPop(data:any){
@@ -811,15 +823,15 @@ export class ComponentMasterComponent implements OnInit {
       "KARAT_CODE": "",
       "RATE_TYPE": "",
       "CURRENCY_CODE": "",
-      "KARAT":"",
-      "PRICEID":"",
-      "SIZE_FROM":"",
-      "SIZE_TO":"",
-      "PART_CODE":"",
-      "LABCHGCODE":"",
-      "PRICECODE":"",
-      "DLABCHGCODE":"",
-      "DPRICECODE":"",
+      "KARAT": "",
+      "PRICEID": "",
+      "SIZE_FROM": "",
+      "SIZE_TO": "",
+      "PART_CODE": "",
+      "LABCHGCODE": "",
+      "PRICECODE": "",
+      "DLABCHGCODE": "",
+      "DPRICECODE": "",
       "RATEFC": 0,
       "DMMETALPERCENTAGE": 0,
       "AMOUNTFC": 0,
@@ -833,7 +845,7 @@ export class ComponentMasterComponent implements OnInit {
       "DETLINEREMARKS": "",
       "SIEVE_SET": "",
       "STONE_TYPE": "",
-       "PURITY": 0,
+      "PURITY": 0,
       "OTHER_ATTR": ""
 
     };
@@ -926,7 +938,7 @@ export class ComponentMasterComponent implements OnInit {
         this.content.RADIUS));
 
     this.images = this.content.PICTURE_NAME
-
+    this.tableData = this.content.DESIGN_STNMTL_DETAIL
   }
 
 
@@ -939,10 +951,13 @@ export class ComponentMasterComponent implements OnInit {
   }
 
   setPostData() {
+
+    console.log(this.tableData);
+
     let form = this.componentmasterForm.value
     let postData = {
       "DESIGN_CODE": form.code || "",
-      "DESIGN_DESCRIPTION": form.codedes  || "",
+      "DESIGN_DESCRIPTION": form.codedes || "",
       "CURRENCY_CODE": form.currencyCode,
       "CC_RATE": "0",
       "COST_CODE": form.costCenter || "",
@@ -1403,7 +1418,7 @@ export class ComponentMasterComponent implements OnInit {
 
 
   submitValidations(form: any) {
-    if (this.commonService.nullToString(form.code) =='') {
+    if (this.commonService.nullToString(form.code) == '') {
       this.commonService.toastErrorByMsgId('MSG1124') //"Code cannot be empty"
       return true
     }
@@ -1496,6 +1511,8 @@ export class ComponentMasterComponent implements OnInit {
       .subscribe((result) => {
         if (result.status == "Success") {
           this.maindetails = result.dynamicData[0] || []
+          console.log(this.maindetails);
+          
           // this.componentmasterForm.controls.jobno.setValue(result.dynamicData[0][0].JOB_NO)
         }
       }, err => {
@@ -1631,32 +1648,32 @@ export class ComponentMasterComponent implements OnInit {
   //PrefixMaster/GetPrefixMasterDetail/DPM1/DMCC
   componentMasterFormChecks(FORMNAME: string) {
     if (FORMNAME == 'code') {
-    this.prefixCodeValidate()
+      this.prefixCodeValidate()
     }
   }
-  
+
   // onFileChangedimage(event: any): void {
   //   this.images = [];
   //   this.imageNames = [];
   //   this.PICTURE_NAME = "";  // Clear PICTURE_NAME initially
-  
+
   //   if (event.target.files && event.target.files.length > 0) {
   //     const files = event.target.files;
   //     const totalFiles = files.length;
   //     let loadedFiles = 0;
-  
+
   //     for (let i = 0; i < totalFiles; i++) {
   //       const reader = new FileReader();
   //       const file = files[i];
-  
+
   //       // Save file names or other metadata instead of the entire base64 data
   //       this.imageNames.push(file.name);
-  
+
   //       reader.readAsDataURL(file);
   //       reader.onload = (() => {
   //         this.images.push(reader.result as string);
   //         loadedFiles++;
-  
+
   //         // Update PICTURE_NAME after all files are loaded
   //         if (loadedFiles === totalFiles) {
   //           this.PICTURE_NAME = this.imageNames.join(',') || "";
@@ -1665,40 +1682,40 @@ export class ComponentMasterComponent implements OnInit {
   //     }
   //   }
   // }
-  
+
   onFileChangedimage(event: any): void {
     // Clear the previous images and names
     this.images = [];
     this.imageNames = [];
     this.PICTURE_NAME = "";
-  
+
     if (event.target.files && event.target.files.length > 0) {
       const files = event.target.files;
       const totalFiles = files.length;
       let loadedFiles = 0;
-  
+
       for (let i = 0; i < totalFiles; i++) {
         const reader = new FileReader();
         const file = files[i];
-  
+
         // Save file names or other metadata
         this.imageNames.push(file.name);
-  
+
         reader.onload = ((event: ProgressEvent<FileReader>) => {
           this.images.push(event.target?.result as string);
           loadedFiles++;
-  
+
           // Update PICTURE_NAME after all files are loaded
           if (loadedFiles === totalFiles) {
             this.PICTURE_NAME = this.imageNames.join(',') || "";
           }
         });
-  
+
         reader.readAsDataURL(file);
       }
     }
   }
-  
+
 
   // onFileChangedimage(event: any): void {
   //   this.images = [];
@@ -1935,4 +1952,3 @@ export class ComponentMasterComponent implements OnInit {
 }
 
 
- 

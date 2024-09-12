@@ -550,12 +550,12 @@
                                     </div>
 
                                     <div *dxTemplate="let data of 'pointerWttemp'">
-                                        <!-- <input type="text" (change)="pointerWt($event,data)" [value]="data.value"
-                                            style="width: 100%;" required /> -->
-                                        <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value"></a>
+                                        <input type="number" (change)="pointerWt($event,data)" [value]="data.value"
+                                            style="width: 100%;" required />
+                                        <!-- <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value"></a>
                                         <master-search [MasterSearchData]="pointerWtCodeData" *ngIf="!isPCSDisabled"
                                             (newRowClick)="pointerWtCodeSelected($event,data,'pointerWttemp')">
-                                        </master-search>
+                                        </master-search> -->
                                     </div>
 
                                     <div *dxTemplate="let data of 'extColortemp'">

@@ -328,35 +328,35 @@ export class MetalReturnComponent implements OnInit {
   //   }
   // }
 
-  async addItemWithCheck(existingArray: any[], newItem: any): Promise<boolean> {
-    const duplicate = existingArray.find((item: any) => item.STOCK_CODE === newItem.STOCK_CODE);
+  // async addItemWithCheck(existingArray: any[], newItem: any): Promise<boolean> {
+  //   const duplicate = existingArray.find((item: any) => item.STOCK_CODE === newItem.STOCK_CODE);
 
-    if (duplicate) {
-      // Show a confirmation dialog for duplicate entries
-      const result = await Swal.fire({
-        title: 'Duplicate Stock Code',
-        text: 'This Stock Code entry is already available in detail. Do you wish to continue?',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, continue!',
-        cancelButtonText: 'No, cancel'
-      });
+  //   if (duplicate) {
+  //     // Show a confirmation dialog for duplicate entries
+  //     const result = await Swal.fire({
+  //       title: 'Duplicate Stock Code',
+  //       text: 'This Stock Code entry is already available in detail. Do you wish to continue?',
+  //       icon: 'warning',
+  //       showCancelButton: true,
+  //       confirmButtonColor: '#3085d6',
+  //       cancelButtonColor: '#d33',
+  //       confirmButtonText: 'Yes, continue!',
+  //       cancelButtonText: 'No, cancel'
+  //     });
 
-      if (result.isConfirmed) {
-        // User confirmed to continue
-        return false;
-      } else {
-        // User canceled
-        this.commonService.toastErrorByMsgId('MSG2052');
-        return true;
-      }
-    }
+  //     if (result.isConfirmed) {
+  //       // User confirmed to continue
+  //       return false;
+  //     } else {
+  //       // User canceled
+  //       this.commonService.toastErrorByMsgId('MSG2052');
+  //       return true;
+  //     }
+  //   }
 
-    // No duplicate found
-    return false;
-  }
+  //   // No duplicate found
+  //   return false;
+  // }
 
   // async addItemWithCheck(existingArray: any[], newItem: any) {
   //   const duplicate = existingArray.find((item: any) => item.STOCK_CODE === newItem.STOCK_CODE);
@@ -421,7 +421,7 @@ export class MetalReturnComponent implements OnInit {
       this.metalReturnDetailsData[detailDataToParent.SRNO - 1] = detailDataToParent;
     } else {
       // Check for duplicates before adding a new entry
-      if (await this.addItemWithCheck(this.metalReturnDetailsData, detailDataToParent)) return;
+      // if (await this.addItemWithCheck(this.metalReturnDetailsData, detailDataToParent)) return;
 
       // Add new entry to metalReturnDetailsData
       this.metalReturnDetailsData.push(detailDataToParent);
