@@ -468,7 +468,8 @@
                 {{ option.SALESPERSON_CODE + " - " + option.DESCRIPTION }}
               </mat-option>
             </mat-autocomplete>
-    
+            <i class="fas fa-chevron-down"
+            style="position: absolute; right: 10px; top: 40%; transform: translateY(-40%);"></i>
             <mat-error *ngIf="vocDataForm.controls.sales_person.hasError('required')">
               Salesman Code cannot be Empty
             </mat-error>
@@ -2634,33 +2635,31 @@
                 </label>
                 <div class="col-sm-8">
                   <mat-form-field appearance="outline" style="width: 100%">
-                    <mat-select (selectionChange)="onCountryCodeSelection($event,false)" formControlName="fcn_mob_code"
-                      [disabled]="viewOnly">
-                      <mat-option *ngFor="let data of sortedCountryList" [value]="data.MOBILECOUNTRYCODE">
+                    <input
+                      type="text"
+                      matInput
+                      formControlName="fcn_mob_code"
+                      [matAutocomplete]="auto"
+                      [disabled]="viewOnly"
+                    />
+                    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onCountryCodeSelection($event, false)" autoActiveFirstOption>
+                      <mat-option *ngFor="let data of filteredOptionsMobCode | async" [value]="data.MOBILECOUNTRYCODE">
                         {{ data.MOBILECOUNTRYCODE }}
                       </mat-option>
-                    </mat-select>
-                    <mat-error *ngIf="
-                        customerDetailForm.controls.fcn_mob_code.hasError(
-                          'required'
-                        )
-                      " id="fcn_mob_code">
+                
+                      <!-- <mat-option *ngFor="let data of filteredCountryList" [value]="data.MOBILECOUNTRYCODE">
+                        {{ data.MOBILECOUNTRYCODE }}
+                      </mat-option> -->
+                    </mat-autocomplete>
+                    <i class="fas fa-chevron-down"
+                    style="position: absolute; right: 10px; top: 40%; transform: translateY(-50%);"></i>
+                    <mat-error *ngIf="customerDetailForm.controls.fcn_mob_code.hasError('required')">
                       Country is <strong>required</strong>
                     </mat-error>
-
-
                   </mat-form-field>
-                  <!-- <mat-form-field appearance="outline" style="width: 100%">
-                    <mat-select formControlName="fcn_mob_code" [disabled]="viewOnly">
-                    </mat-select>
-                    <mat-error *ngIf="
-                        customerDetailForm.controls.fcn_mob_code.hasError(
-                          'required'
-                        )
-                      " id="fcn_mob_code">
-                      Gender is <strong>required</strong>
-                    </mat-error>
-                  </mat-form-field> -->
+                  
+                  
+                
                 </div>
               </div>
             </div>
@@ -2674,42 +2673,25 @@
                 <div class="col-sm-8">
 
                   <mat-form-field appearance="outline" style="width: 100%">
-                    <mat-select (selectionChange)="onCountryCodeSelection($event,true)"
-                      formControlName="fcn_cust_detail_country" [disabled]="viewOnly">
-                      <mat-option *ngFor="let data of sortedCountryList" [value]="data.CODE">
-                        {{ data.CODE }}-{{ data.DESCRIPTION }}
-                      </mat-option>
-                    </mat-select>
-                    <mat-error *ngIf="
-                        customerDetailForm.controls.fcn_cust_detail_country.hasError(
-                          'required'
-                        )
-                      " id="fcn_mob_code">
-                      Country is <strong>required</strong>
-                    </mat-error>
-
-
-                  </mat-form-field>
-                  <!-- <mat-form-field appearance="outline" style="width: 100%;">
-                    <input type="text" matInput formControlName="fcn_cust_detail_country" id="fcn_cust_detail_country"
-                      [matAutocomplete]="country" [readonly]="viewOnly" />
-                    <mat-autocomplete #country="matAutocomplete" autoActiveFirstOption
-                      (optionSelected)="changeCountry($event.option.value)">
-                      <mat-option *ngFor="let option of countryMasterOptions | async" [value]="option.CODE">
-                        {{ option.CODE + " - " + option.DESCRIPTION }}
+                    <input
+                      type="text"
+                      matInput
+                      formControlName="fcn_cust_detail_country"
+                      [matAutocomplete]="auto2"
+                      [disabled]="viewOnly"
+                    />
+                    <mat-autocomplete #auto2="matAutocomplete" autoActiveFirstOption (optionSelected)="onCountryCodeSelection($event.option.value, true)">
+                      <mat-option *ngFor="let data of filteredOptionsCountry | async" [value]="data.CODE_DESC">
+                        {{ data.CODE_DESC }}
                       </mat-option>
                     </mat-autocomplete>
                     <i class="fas fa-chevron-down"
-                      style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%);"></i>
-                    <mat-error *ngIf="customerDetailForm.controls.fcn_cust_detail_country.hasError('required')"
-                      id="ID158">
+                      style="position: absolute; right: 10px; top: 40%; transform: translateY(-50%);"></i>
+                    <mat-error *ngIf="customerDetailForm.controls.fcn_cust_detail_country.hasError('required')">
                       Country is <strong>required</strong>
                     </mat-error>
-                    <mat-error *ngIf="customerDetailForm.controls.fcn_cust_detail_country.hasError('notInOptions')"
-                      id="ID009">
-                      Invalid value
-                    </mat-error>
-                  </mat-form-field> -->
+                  </mat-form-field>
+                  
                 </div>
               </div>
             </div>
@@ -3100,7 +3082,7 @@
                       </mat-option>
                     </mat-autocomplete>
                     <i class="fas fa-chevron-down"
-                      style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%);"></i>
+                      style="position: absolute; right: 10px; top: 40%; transform: translateY(-50%);"></i>
                     <mat-error *ngIf="
                         customerDetailForm.controls.fcn_cust_detail_idType.hasError(
                           'required'
