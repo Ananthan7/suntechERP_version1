@@ -314,7 +314,7 @@ export class MetalIssueDetailsComponent implements OnInit {
   processCodeSelected(e: any) {
     this.metalIssueDetailsForm.controls.processCode.setValue(e.PROCESS_CODE);
     this.metalIssueDetailsForm.controls.processCodeDesc.setValue(e.DESCRIPTION);
-    this.workerCodeData.WHERECONDITION = `@strProcess='${e.Process_Code}',@blnActive='true'`
+    this.processCodeData.WHERECONDITION = `@strProcess='${e.Process_Code}',@blnActive='true'`
   }
 
   subJobNoCodeSelected(e: any) {
@@ -323,7 +323,8 @@ export class MetalIssueDetailsComponent implements OnInit {
   workerCodeSelected(e: any) {
     this.metalIssueDetailsForm.controls.workerCode.setValue(e.WORKER_CODE);
     this.metalIssueDetailsForm.controls.workerCodeDes.setValue(e.DESCRIPTION);
-    this.processCodeData.WHERECONDITION = `@strWorker='${e.WORKER_CODE}',@strCurrentUser='${this.comService.userName}'`
+    this.workerCodeData.WHERECONDITION = `@strWorker='${e.WORKER_CODE}',@strCurrentUser='${this.comService.userName}'`
+    // workerCodeData  processCodeData
   }
 
 
@@ -844,20 +845,19 @@ export class MetalIssueDetailsComponent implements OnInit {
       .subscribe((result) => {
         this.comService.closeSnackBarMsg();
         let data = this.comService.arrayEmptyObjectToString(result.dynamicData[0]);
-
         if (data.length == 0) {
           this.comService.toastErrorByMsgId('MSG1531');
           this.metalIssueDetailsForm.controls[FORMNAME].setValue('');
           LOOKUPDATA.SEARCH_VALUE = '';
-
           // Conditionally call showOverleyPanel based on FORMNAME
           if (FORMNAME === 'location' || FORMNAME === 'processCode') {
             this.showOverleyPanel(event, FORMNAME);
           }
-
           return;
         }
       }, err => {
+        console.log(err);
+        
         this.comService.toastErrorByMsgId('MSG2272')//Error occured, please try again
 
       });
