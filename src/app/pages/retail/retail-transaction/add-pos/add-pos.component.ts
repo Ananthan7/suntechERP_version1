@@ -262,7 +262,8 @@ export class AddPosComponent implements OnInit {
   options_year: string[] = [];
   filteredOptions_year!: Observable<any[]>;
   filteredadvanceYear!: Observable<any[]>;
-
+  filteredOptionsMobCode!: Observable<any[]>;
+  filteredOptionsCountry!: Observable<any[]>;
   salesPersonFilteredOptions!: Observable<any[]>;
   salesPersonOptions: any[] = [];
   schemeList: any[] = [];
@@ -1917,6 +1918,8 @@ export class AddPosComponent implements OnInit {
     // });
     this.getYearList();
     this.getKaratDetails();
+    this.getMobCodeMaster();
+    this.getCountryMaster();
     this.getSalesPersonMaster();
     this.getMasters();
     this.getBranchCurrencyList();
@@ -3371,6 +3374,37 @@ export class AddPosComponent implements OnInit {
     this.setExchangeCommaSep();
 
   }
+
+  private _filterMobCodes(value: string): any[] {
+    const filterValue = value.toLowerCase();
+    return this.sortedCountryList.filter((option:any) =>
+      option.MOBILECOUNTRYCODE.toLowerCase().includes(filterValue)
+    );
+  }
+
+  private _filterCountry(value: string): any[] {
+    const filterValue = value.toLowerCase();
+    return this.sortedCountryList.filter((option:any) =>
+      option.CODE_DESC.toLowerCase().includes(filterValue)
+    );
+  }
+
+  getCountryMaster() {
+
+    this.filteredOptionsCountry = this.customerDetailForm.controls.fcn_cust_detail_country.valueChanges.pipe(
+      startWith(''),
+      map(value => this._filterCountry(value || ''))
+    );
+  }
+
+  getMobCodeMaster() {
+
+    this.filteredOptionsMobCode = this.customerDetailForm.controls.fcn_mob_code.valueChanges.pipe(
+      startWith(''),
+      map(value => this._filterMobCodes(value || ''))
+    );
+  }
+
   getSalesPersonMaster() {
 
 
@@ -4056,7 +4090,8 @@ export class AddPosComponent implements OnInit {
               result.ADDRESS
             );
             this.customerDetailForm.controls['fcn_cust_detail_country'].setValue(
-              result.COUNTRY_CODE
+              `${result.COUNTRY_CODE}-${result.COUNTRY_DESC}`
+              // result.COUNTRY_CODE
             );
             this.customerDetailForm.controls['fcn_cust_detail_city'].setValue(
               result.CITY
@@ -4123,7 +4158,7 @@ export class AddPosComponent implements OnInit {
               } else {
                 this.amlNameValidationData = true;
                 // if(!this.viewOnly)
-                this.openDialog('Warning', 'Customer already existing, Do you want to continue?', true);
+                // this.openDialog('Warning', 'Customer already existing, Do you want to continue?', true);
               }
             this.isCustomerFindsOnCode = false;
           } else {
@@ -4279,12 +4314,20 @@ export class AddPosComponent implements OnInit {
   async getMasters() {
     this.countryMaster = this.comFunc.countryMaster;
     console.log(JSON.stringify(this.countryMaster))
-    this.sortedCountryList = this.countryMaster.map((item: any) => ({
-      CODE: item.CODE,
-      DESCRIPTION: item.DESCRIPTION,
-      MOBILECOUNTRYCODE: item.MOBILECOUNTRYCODE,
-      CODE_DESC: `${item.CODE}-${item.DESCRIPTION}`
-    }));
+    this.sortedCountryList = Array.from(
+      new Map(
+        this.countryMaster.map((item: any) => [
+          item.MOBILECOUNTRYCODE, 
+          {
+            CODE: item.CODE,
+            DESCRIPTION: item.DESCRIPTION,
+            MOBILECOUNTRYCODE: item.MOBILECOUNTRYCODE,
+            CODE_DESC: `${item.CODE}-${item.DESCRIPTION}`
+          }
+        ])
+      ).values()
+    );
+    
 
 
     this.countryMasterOptions =
@@ -14229,19 +14272,19 @@ else{
 
   }
 
-  onCountryCodeSelection(event: MatSelectChange, isCountrySelection: Boolean) {
+  onCountryCodeSelection(event: any, isCountrySelection: Boolean) {
     if (isCountrySelection) {
-      const selectedOption = this.sortedCountryList.find((item: any) => item.CODE === event.value);
+      const selectedOption = this.sortedCountryList.find((item: any) => item.CODE_DESC === event);
       if (selectedOption) {
 
         this.customerDetailForm.controls['fcn_mob_code'].setValue(selectedOption.MOBILECOUNTRYCODE);
       }
     }
     else {
-      const selectedOption = this.sortedCountryList.find((item: any) => item.MOBILECOUNTRYCODE === event.value);
+      const selectedOption = this.sortedCountryList.find((item: any) => item.MOBILECOUNTRYCODE === event.option.value);
       if (selectedOption) {
 
-        this.customerDetailForm.controls['fcn_cust_detail_country'].setValue(selectedOption.CODE);
+        this.customerDetailForm.controls['fcn_cust_detail_country'].setValue(selectedOption.CODE_DESC);
       }
     }
 
@@ -14259,5 +14302,6 @@ else{
     this.onCustomerNameFocus(e.CODE, true);
 
   }
+
 }
 
