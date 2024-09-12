@@ -308,15 +308,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
     });
   }
 
-  onInput(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    if (input.value.length > 16) {
-      input.value = input.value.slice(0, 16);
-      this.posCurrencyReceiptDetailsForm
-        .get("creditCardNumber")
-        ?.setValue(input.value);
-    }
-  }
+ 
 
   // getGSTDetails(acCode: any) {
 
@@ -1335,4 +1327,13 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
         console.warn(`Unknown form control name: ${formControlName}`);
     }
   }
+
+
+  limitDigits(event: any): void {
+    const input = event.target;
+    if (input.value.length > 16) {
+      input.value = input.value.slice(0, 16);  
+    }
+  }
+  
 }

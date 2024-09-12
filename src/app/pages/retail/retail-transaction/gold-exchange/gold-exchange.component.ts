@@ -423,9 +423,10 @@ export class GoldExchangeComponent implements OnInit {
   openAddPosARdetails(data: any = null) {
     const modalRef: NgbModalRef = this.modalService.open(GoldExchangeDetailsComponent, {
       size: 'xl',
-      backdrop: true,
-      keyboard: false,
-      windowClass: 'modal-full-width',
+      ariaLabelledBy: 'modal-basic-title',
+      backdrop: false,
+      // keyboard: false,
+      // windowClass: 'modal-full-width',
     });
 
     // Pass the current max SRNO to the child
@@ -1383,10 +1384,13 @@ export class GoldExchangeComponent implements OnInit {
 
   openCustMaster() {
     const modalRef: NgbModalRef = this.modalService.open(PosCustomerMasterComponent, {
-      size: 'lg',
+      size: 'xl',
+      ariaLabelledBy: 'modal-basic-title',
       backdrop: true,
-      keyboard: false,
-      windowClass: 'modal-full-width',
+      // size: 'lg',
+      // backdrop: true,
+      // keyboard: false,
+      // windowClass: 'modal-full-width',
     });
     modalRef.componentInstance.customerData = this.customerData;
     modalRef.componentInstance.amlNameValidation = this.amlNameValidation;
