@@ -60,7 +60,7 @@
                   <input type="text" matInput formControlName="enteredby"
                     [readonly]="viewMode"
                     (keydown)="lookupKeyPress($event,'enteredby')" 
-                    (focusout)="validateLookupField($event,rateTypeMasterData,'enteredby')"/>
+                    (focusout)="validateLookupField($event,SALESPERSON_CODEData,'enteredby')"/>
                     <master-search [MasterSearchData]="SALESPERSON_CODEData" *ngIf="!viewMode"
                       #overlayenteredby class="masterSearch"
                       (newRowClick)="userDataSelected($event)">
@@ -116,8 +116,8 @@
                   <input type="text" matInput formControlName="metalrate"
                     [readonly]="viewMode" placeholder="Rate type"
                     (keydown)="lookupKeyPress($event,'metalrate')" 
-                    (focusout)="validateLookupField($event,rateTypeMasterData,'metalrate')" />
-                    <master-search [MasterSearchData]="rateTypeMasterData"
+                    (focusout)="validateLookupField($event,rateTypecodeData,'metalrate')" />
+                    <master-search [MasterSearchData]="rateTypecodeData"
                     #overlaymetalrate class="masterSearch" *ngIf="!viewMode"
                     (newRowClick)="rateTypeSelected($event)"> </master-search>
                 </mat-form-field>

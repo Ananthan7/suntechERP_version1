@@ -94,14 +94,25 @@ export class JewelleryAltrationComponent implements OnInit {
     this.jewelleryaltrationFrom.controls.itemcurrency.setValue(e.CURRENCY_CODE);
     this.jewelleryaltrationFrom.controls.itemcurrencycc.setValue(e.CONV_RATE);
   }
-  rateTypeMasterData: MasterSearchModel = {
+  // rateTypeMasterData: MasterSearchModel = {
+  //   PAGENO: 1,
+  //   RECORDS: 10,
+  //   LOOKUPID: 22,
+  //   SEARCH_FIELD: 'RATE_TYPE',
+  //   SEARCH_HEADING: 'RATE TYPE MASTER',
+  //   SEARCH_VALUE: '',
+  //   WHERECONDITION: "RATE_TYPE <> ''",
+  //   VIEW_INPUT: true,
+  //   VIEW_TABLE: true,
+  // }
+  rateTypecodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 22,
     SEARCH_FIELD: 'RATE_TYPE',
-    SEARCH_HEADING: 'RATE TYPE MASTER',
+    SEARCH_HEADING: 'Rate Type Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "RATE_TYPE <> ''",
+    WHERECONDITION: "RATE_TYPE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -410,21 +421,52 @@ export class JewelleryAltrationComponent implements OnInit {
     )
   }
 
-  setValuesToHeaderGrid(DATA: any) {
+  // setValuesToHeaderGrid(DATA: any) {
+  //   console.log(DATA, 'detailDataToParent');
+  //   let detailDataToParent = DATA.POSTDATA
+  //   if (detailDataToParent.SRNO != 0) {
+  //     this.jewelleryaltrationdetail[detailDataToParent.SRNO - 1] = detailDataToParent
+  //   } else {
+  //     detailDataToParent.SRNO = this.jewelleryaltrationdetail.length + 1
+  //     this.jewelleryaltrationdetail.push(detailDataToParent);
+  //   }
+  //   this.tableData.push(detailDataToParent)
+  //   if (DATA.FLAG == 'SAVE') this.closeDetailScreen();
+  //   if (DATA.FLAG == 'CONTINUE') {
+  //     this.comService.showSnackBarMsg('Details added successfully')
+  //   };
+  // }
+  async setValuesToHeaderGrid(DATA: any) {
     console.log(DATA, 'detailDataToParent');
-    let detailDataToParent = DATA.POSTDATA
+    
+    let detailDataToParent = DATA.POSTDATA;
+  
+    // Call the addItemWithCheck method and check the result
+    if (await this.addItemWithCheck(this.jewelleryaltrationdetail, detailDataToParent)) {
+      return; // If addItemWithCheck returns true, stop execution
+    }
+  
+    // Update SRNO or assign a new one
     if (detailDataToParent.SRNO != 0) {
-      this.jewelleryaltrationdetail[detailDataToParent.SRNO - 1] = detailDataToParent
+      this.jewelleryaltrationdetail[detailDataToParent.SRNO - 1] = detailDataToParent;
     } else {
-      detailDataToParent.SRNO = this.jewelleryaltrationdetail.length + 1
+      detailDataToParent.SRNO = this.jewelleryaltrationdetail.length + 1;
       this.jewelleryaltrationdetail.push(detailDataToParent);
     }
-    this.tableData.push(detailDataToParent)
-    if (DATA.FLAG == 'SAVE') this.closeDetailScreen();
+  
+    // Add the detail data to tableData
+    this.tableData.push(detailDataToParent);
+  
+    // Handle the save or continue actions
+    if (DATA.FLAG == 'SAVE') {
+      this.closeDetailScreen();
+    }
+  
     if (DATA.FLAG == 'CONTINUE') {
-      this.comService.showSnackBarMsg('Details added successfully')
-    };
+      this.comService.showSnackBarMsg('Details added successfully');
+    }
   }
+  
 
   closeDetailScreen() {
     this.modalReference.close()
