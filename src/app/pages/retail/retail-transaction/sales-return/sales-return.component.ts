@@ -8967,7 +8967,8 @@ export class SalesReturnComponent implements OnInit {
         ele.STONEWT = this.lineItemForm.controls.fcn_li_stone_wt.value;
         ele.NETWT = this.lineItemForm.controls.fcn_li_net_wt.value;
         ele.METAL_RATE = this.lineItemForm.controls.fcn_ad_metal_rate.value;
-        ele.mkg_amount = this.lineItemForm.controls.fcn_ad_metal_amount.value;
+        ele.metal_amt = this.lineItemForm.controls.fcn_ad_metal_amount.value;
+        // ele.mkg_amount = this.lineItemForm.controls.fcn_ad_metal_amount.value;
         ele.STONE_RATEFC = this.lineItemForm.controls.fcn_ad_stone_rate.value;
         ele.stone_amt = this.lineItemForm.controls.fcn_ad_stone_amount.value;
         ele.making_amt = this.lineItemForm.controls.fcn_li_rate.value;
@@ -8984,7 +8985,10 @@ export class SalesReturnComponent implements OnInit {
         _total_amt += Number(ele.NETVALUEFC);
         // _tax_amt += Number(ele.tax_amount);
         console.log(ele.IGST_AMOUNTCC);
+        console.log(ele.metal_amt);
         _tax_amt = _tax_amt + parseFloat(ele.IGST_AMOUNTCC);
+        _metal_amt = _metal_amt + parseFloat(ele.metal_amt);
+
         // _tax_amt += ele.IGST_AMOUNTCC;
         // if(ele.IGST_AMOUNTCC != undefined){
         //   _tax_amt+= parseFloat(ele.IGST_AMOUNTCC) ;
@@ -9063,8 +9067,9 @@ export class SalesReturnComponent implements OnInit {
 
         // }
         console.log(ele.IGST_AMOUNTCC)
+        console.log(ele.metal_amt)
         _tax_amt = _tax_amt + parseFloat(ele.IGST_AMOUNTCC);
-
+        _metal_amt = _metal_amt + parseFloat(ele.metal_amt);
           console.log(_tax_amt);
 
         
@@ -9077,7 +9082,7 @@ export class SalesReturnComponent implements OnInit {
         _total_pcs += Number(ele.pcs);
         _total_weight += Number(ele.weight);
         _pure_wt += Number(ele.pure_wt);
-        _metal_amt += Number(ele.metal_amt);
+        // _metal_amt += Number(ele.metal_amt);
         _stone_amt += Number(ele.stone_amt);
         _purity_diff += Number(ele.PUDIFF);
         _stone_diff += Number(ele.STONEDIFF);
@@ -9116,47 +9121,47 @@ export class SalesReturnComponent implements OnInit {
         // this.sales_returns_items[data] =findedvalue;
 
       }
-      console.log("making amount" ,_mkg_amount)
-      console.log(" _metal_amt" ,_metal_amt)
-      console.log("_stone_amt" , _stone_amt)
-      console.log("_tax_amt" , _tax_amt)
-      console.log("_total_amt" , _total_amt)
-      console.log("_net_total" , _net_total)
-
-      this.prnt_inv_total_pcs = _total_pcs;
-      this.prnt_inv_total_weight = _total_weight;
-      this.prnt_inv_total_gross_amt = _mkg_amount + _metal_amt + _stone_amt;//_total_amt;
-      this.order_items_total_tax = _tax_amt;
-      this.order_items_total_net_amount = _total_amt;
-      this.order_items_total_gross_amount = _total_amt;
-      this.invReturnSalesTotalNetTotal = _sales_return ||0;
-      this.netTotal = _net_total;
-      this.making_amount = _mkg_amount;
-      this.pure_weight = _pure_wt;
-      this.metal_value = _metal_amt;
-      this.stone_value = _stone_amt;
-      this.purity_difference = _purity_diff;
-      this.stone_difference = _stone_diff;
-      this.total_disc_fc = _disc_value_fc;
-      this.total_disc_cc = _disc_value_cc;
-      this.total_net_value_fc = _net_val_fc;
-      this.total_net_value_cc = _net_val_cc;
-      this.total_vat_fc = _vat_fc;
-      this.total_vat_lc = _vat_lc;
-      // this.order_items_total_tax = _igst_cc;
-      this.netTotal = _total_amt;
-      this.order_total_exchange = this.order_total_exchange || 0;
-      // this.Receipt_total = _total_amt;
-      console.log('order_items_total_gross_amount',this.order_items_total_gross_amount)
-      console.log('invReturnSalesTotalNetTotal',this.invReturnSalesTotalNetTotal)
-      console.log('order_total_exchange',this.order_total_exchange)
+     
       // this.order_items_total_gross_amount = this.prnt_inv_total_gross_amt + this.order_items_total_tax;
       // this.netTotal = this.order_items_total_gross_amount - this.invReturnSalesTotalNetTotal - this.order_total_exchange;
       // this.netTotal = _net_amt;//this.order_items_total_gross_amount - this.invReturnSalesTotalNetTotal - this.order_total_exchange;
-
-
-
     });
+    console.log("_gross_total" ,_gross_total)
+
+    console.log("making amount" ,_mkg_amount)
+    console.log(" _metal_amt" ,_metal_amt)
+    console.log("_stone_amt" , _stone_amt)
+    console.log("_tax_amt" , _tax_amt)
+    console.log("_total_amt" , _total_amt)
+    console.log("_net_total" , _net_total)
+    this.prnt_inv_total_pcs = _total_pcs;
+    this.prnt_inv_total_weight = _total_weight;
+    this.prnt_inv_total_gross_amt = _mkg_amount + _metal_amt + _stone_amt;//_total_amt;
+    this.order_items_total_tax = _tax_amt;
+    _total_amt = this.prnt_inv_total_gross_amt + this.order_items_total_tax;
+    this.order_items_total_net_amount = _total_amt;
+    this.order_items_total_gross_amount = _total_amt;
+    this.invReturnSalesTotalNetTotal = _sales_return ||0;
+    this.netTotal = _net_total;
+    this.making_amount = _mkg_amount;
+    this.pure_weight = _pure_wt;
+    this.metal_value = _metal_amt;
+    this.stone_value = _stone_amt;
+    this.purity_difference = _purity_diff;
+    this.stone_difference = _stone_diff;
+    this.total_disc_fc = _disc_value_fc;
+    this.total_disc_cc = _disc_value_cc;
+    this.total_net_value_fc = _net_val_fc;
+    this.total_net_value_cc = _net_val_cc;
+    this.total_vat_fc = _vat_fc;
+    this.total_vat_lc = _vat_lc;
+    // this.order_items_total_tax = _igst_cc;
+    this.netTotal = _total_amt;
+    this.order_total_exchange = this.order_total_exchange || 0;
+    // this.Receipt_total = _total_amt;
+    console.log('order_items_total_gross_amount',this.order_items_total_gross_amount)
+    console.log('invReturnSalesTotalNetTotal',this.invReturnSalesTotalNetTotal)
+    console.log('order_total_exchange',this.order_total_exchange)
     console.log("postdetailsData", this.postDetail);
     console.log("sales return", this.sales_returns_items)
 
