@@ -122,7 +122,8 @@
             <div class="col-sm-8">
               <mat-form-field style="width: 40%">
                 <input
-                  [readonly]="viewOnly !== false"
+                  [readonly]="viewOnly !== false || code_edit"
+                  [readonly]="code_edit"
                   type="text"
                   matInput
                   formControlName="customer"
@@ -135,8 +136,8 @@
               ></master-search>
               <mat-form-field style="width: 40%">
                 <input
-                  [readonly]="viewOnly !== false"
-                  type="text"
+                [readonly]="viewOnly !== false || name_edit"
+                type="text"
                   matInput
                   formControlName="customerDesc"
                 />
@@ -151,8 +152,8 @@
             <div class="col-sm-4">
               <mat-form-field style="width: 100%">
                 <input
-                  [readonly]="viewOnly !== false"
-                  type="number"
+                [readonly]="viewOnly !== false || mobile_edit"
+                type="number"
                   matInput
                   formControlName="mobile"
                 />
@@ -165,8 +166,8 @@
             <div class="col-sm-3">
               <mat-form-field style="width: 100%">
                 <input
-                  [readonly]="viewOnly !== false"
-                  type="number"
+                [readonly]="viewOnly !== false || tel_edit"
+                type="number"
                   matInput
                   formControlName="tel"
                 />
@@ -181,8 +182,9 @@
             <div class="col-sm-3">
               <mat-form-field style="width: 100%">
                 <input
-                  [readonly]="viewOnly !== false"
-                  type="text"
+                appAlphabetsOnly
+                [readonly]="viewOnly !== false || country_edit"
+                type="text"
                   matInput
                   formControlName="nationality"
                 />
@@ -195,6 +197,7 @@
             <div class="col-sm-3">
               <mat-form-field style="width: 100%">
                 <input
+                  appAlphabetOnly
                   [readonly]="viewOnly !== false"
                   type="text"
                   matInput
@@ -227,10 +230,13 @@
             >
             <div class="col-md-4">
               <mat-form-field style="width: 70%">
+                <!-- condition inside the input field before -->
+
+                <!-- [readonly]="isCurrencyUpdate || viewOnly" -->
+
                 <input
                   [readonly]="true"
                   type="text"
-                  [readonly]="isCurrencyUpdate || viewOnly"
                   matInput
                   formControlName="currency"
                 />
@@ -246,13 +252,16 @@
             </div>
             <div class="col-md-3">
               <mat-form-field style="width: 100%">
+                <!-- both conditions inside the input field before -->
+                <!-- [readonly]="viewOnly !== false" -->
+                <!-- [readonly]="isCurrencyUpdate || viewOnly" -->
+
                 <input
-                  [readonly]="viewOnly !== false"
-                  type="text"
+                  type="number"
                   class="st_txt_right"
-                  [readonly]="isCurrencyUpdate || viewOnly"
                   matInput
                   formControlName="currency_rate"
+                  readonly
                 />
               </mat-form-field>
             </div>
@@ -267,7 +276,7 @@
               </mat-form-field> -->
               <mat-form-field style="width: 100%">
                 <input
-                  [readonly]="viewOnly !== false"
+                [readonly]="viewOnly !== false || email_edit"
                   type="email"
                   matInput
                   formControlName="email"
@@ -295,11 +304,12 @@
             <div class="col-sm-8">
               <mat-form-field style="width: 100%">
                 <!-- <input type="text" matInput formControlName="address"  /> -->
-                <textarea
-                  [readonly]="viewOnly !== false"
+                  <textarea
+                  [readonly]="viewOnly !== false || address_edit"
                   matInput
-                  formControlName="address"
-                ></textarea>
+                    formControlName="address"
+                    style="resize: none;"  
+                  ></textarea>
               </mat-form-field>
             </div>
           </div>
@@ -316,6 +326,7 @@
                   [readonly]="viewOnly !== false"
                   matInput
                   formControlName="repair_narration"
+                  style="resize: none;"
                 ></textarea>
               </mat-form-field>
             </div>

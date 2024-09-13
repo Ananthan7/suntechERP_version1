@@ -52,6 +52,15 @@ export class RepairJewelleryReceiptComponent implements OnInit {
   hideCurrecnySearch: boolean = false;
   voucherNo: any;
   formatteddate: any;
+  customer_edit :boolean =false;
+  code_edit :boolean = false;
+  name_edit :boolean = false;
+  mobile_edit :boolean = false;
+  email_edit :boolean = false;
+  tel_edit :boolean = false;
+  country_edit :boolean = false;
+  address_edit :boolean = false;
+
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -163,10 +172,36 @@ export class RepairJewelleryReceiptComponent implements OnInit {
   };
   customerCodeSelected(e: any) {
     this.repairjewelleryreceiptFrom.controls.customer.setValue(e.CODE);
+ 
+    if(e.CODE != ""){
+      this.code_edit = true;
+    }
     this.repairjewelleryreceiptFrom.controls.customerDesc.setValue(e.NAME);
+    if(e.NAME != ""){
+      this.name_edit = true;
+    }
     this.repairjewelleryreceiptFrom.controls.email.setValue(e.EMAIL);
+    if(e.EMAIL != ""){
+      this.email_edit = true;
+    }
     this.repairjewelleryreceiptFrom.controls.tel.setValue(e.TEL1);
+    if(e.TEL1 != ""){
+      this.tel_edit = true;
+    }
     this.repairjewelleryreceiptFrom.controls.mobile.setValue(e.MOBILE);
+    if(e.MOBILE != ""){
+      this.mobile_edit = true;
+    }
+    this.repairjewelleryreceiptFrom.controls.nationality.setValue(e.COUNTRY_CODE);
+    if(e.COUNTRY_CODE != ""){
+      this.country_edit = true;
+    }
+    this.repairjewelleryreceiptFrom.controls.address.setValue(e.ADDRESS);
+    if(e.ADDRESS != ""){
+      this.address_edit = true;
+    }
+    // this.customer_edit = true;
+
   }
 
   currencyData: MasterSearchModel = {
@@ -617,6 +652,11 @@ export class RepairJewelleryReceiptComponent implements OnInit {
   }
 
   openRepairdetails(data: any = null) {
+
+    let date =  this.repairjewelleryreceiptFrom.controls.customer_delivery_date.value;
+    if(date){
+    console.log(date._d);
+    }// data.delivery_date = this.repairjewelleryreceiptFrom.controls.customer_delivery_date.value;
     const modalRef: NgbModalRef = this.modalService.open(
       RepairDetailsComponent,
       {
@@ -628,6 +668,9 @@ export class RepairJewelleryReceiptComponent implements OnInit {
     );
     modalRef.componentInstance.receiptData = { ...data };
     modalRef.componentInstance.queryParams = { isViewOnly: this.viewOnly };
+    if(date){
+    modalRef.componentInstance.delivery_date = date._d;
+    }
 
     modalRef.result.then((postData) => {
       if (postData) {

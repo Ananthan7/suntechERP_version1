@@ -17,6 +17,7 @@ export class RepairDetailsComponent implements OnInit {
   @Input() content!: any;
   @Input() receiptData!: any;
   @Input() queryParams!: any;
+  @Input() delivery_date!: any;
   viewOnly: boolean = false;
   stoneCheck: any = false;
   tableData: any[] = [];
@@ -51,9 +52,12 @@ export class RepairDetailsComponent implements OnInit {
     this.getQueryParams(this.queryParams);
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
-
+    // console.log(this.delivery_date);
+    if(this.delivery_date){
+      this.repairjewelleryreceiptdetailsFrom.controls.delivery_date.setValue(this.delivery_date);
+    }
     if (this.receiptData && Object.keys(this.receiptData).length > 0)
-      this.setReceiptData();
+      this.setReceiptData();  
   }
 
   getQueryParams(params?: any) {
@@ -584,5 +588,9 @@ export class RepairDetailsComponent implements OnInit {
     this.repairjewelleryreceiptdetailsFrom.controls.total_amount.setValue(this.comService.decimalQuantityFormat(event.target.value, 'AMOUNT'));
     console.log(this.comService.decimalQuantityFormat(event.target.value, 'AMOUNT'));
 
+  }
+  repair_charge_change(event:any){
+    this.repairjewelleryreceiptdetailsFrom.controls.Est_repair_charge.setValue(this.comService.decimalQuantityFormat(event.target.value, 'AMOUNT'));
+    console.log(this.comService.decimalQuantityFormat(event.target.value, 'AMOUNT'));
   }
 }

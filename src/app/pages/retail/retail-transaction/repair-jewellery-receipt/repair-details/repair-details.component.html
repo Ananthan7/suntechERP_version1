@@ -66,6 +66,7 @@
                 <div class="position-relative d-flex">
                   <mat-form-field style="width: 100%">
                     <input
+                      min="0"
                       [readonly]="viewOnly === true"
                       type="number"
                       matInput
@@ -252,6 +253,8 @@
                       type="number"
                       matInput
                       formControlName="Est_repair_charge"
+                      (change)="repair_charge_change($event)"
+
                     />
                   </mat-form-field>
                   <!-- <master-search [MasterSearchData]="EstRepairChargeCodeData"
