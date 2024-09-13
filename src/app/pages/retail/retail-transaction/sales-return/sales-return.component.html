@@ -3243,7 +3243,7 @@
                       <input class="st_txt_right" type="text" [min]="0" autocomplete="off" [maxLength]="14"
                         (keyup)="this.comFunc.enforceMinMax($event.target)" matInput id="fcn_li_pcs"
                         formControlName="fcn_li_pcs" (focus)="setValToLocalStorage($event, 'fcn_li_pcs')"
-                        (change)="changePCS($event)" [readonly]="viewOnly" NumberOnly />
+                        (change)="changePCS($event)" [readonly]="viewOnly" NumberOnly  />
                       <!-- <input class="st_txt_right" type="number" min="1" matInput formControlName="fcn_li_pcs"
                                 (keyup)="changePCS($event)" (mouseup)="changePCS($event)" (mouseleave)="changePCS($event)"
                                 value="{{li_pcs_val}}"> -->
@@ -3413,10 +3413,10 @@
                       <!-- readonly="{{
                                 viewOnly || divisionMS == 'S' ? true : false
                               }}" -->
-                              <mat-error *ngIf="lineItemForm.controls.fcn_li_rate.hasError('required')" id="ID189">
-                                {{ divisionMS == "M" ? "Making Rate" : "Rate" }}
-                                is <strong>required</strong>
-                              </mat-error>
+                      <mat-error *ngIf="lineItemForm.controls.fcn_li_rate.hasError('required')" id="ID189">
+                        {{ divisionMS == "M" ? "Making Rate" : "Rate" }}
+                        is <strong>required</strong>
+                      </mat-error>
                       <!-- <mat-error *ngIf="
                             lineItemForm.controls.fcn_li_rate.hasError('required')
                           ">
@@ -3457,8 +3457,8 @@
                             )
                           ">
                         {{ divisionMS == "M" ? "Making Amount" : "Amount" }} -->
-                        <!-- : "Total Amount" -->
-                        <!-- is
+                      <!-- : "Total Amount" -->
+                      <!-- is
                         <strong>required</strong>
                       </mat-error> -->
                       <!-- <mat-error *ngIf="
@@ -3466,8 +3466,8 @@
                               'min'
                             )
                           "> -->
-                        <!-- {{ this.comFunc.getMsgByID('MSG1554') }} -->
-                        <!-- {{
+                      <!-- {{ this.comFunc.getMsgByID('MSG1554') }} -->
+                      <!-- {{
                         divisionMS == "M" ? "Making Amount" : "Total Amount"
                         }}
                         should Not Be Zero
