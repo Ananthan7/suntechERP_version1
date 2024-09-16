@@ -53,11 +53,11 @@ export class RepairDetailsComponent implements OnInit {
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
     // console.log(this.delivery_date);
-    if(this.delivery_date){
+    if (this.delivery_date) {
       this.repairjewelleryreceiptdetailsFrom.controls.delivery_date.setValue(this.delivery_date);
     }
     if (this.receiptData && Object.keys(this.receiptData).length > 0)
-      this.setReceiptData();  
+      this.setReceiptData();
   }
 
   getQueryParams(params?: any) {
@@ -405,7 +405,7 @@ export class RepairDetailsComponent implements OnInit {
       DIAMONDAMOUNT: 0,
       LABOURCHARGE: 0,
       METALCODE: "",
-      REPAIRBAGNO: String(this.repairjewelleryreceiptdetailsFrom.value.repair_bags) ,
+      REPAIRBAGNO: String(this.repairjewelleryreceiptdetailsFrom.value.repair_bags),
       MATERIAL_TYPE: this.repairjewelleryreceiptdetailsFrom.value.material,
       STONE_TYPE: this.repairjewelleryreceiptdetailsFrom.value.stone_type,
       NO_OF_STONES: this.repairjewelleryreceiptdetailsFrom.value.no_of,
@@ -589,7 +589,7 @@ export class RepairDetailsComponent implements OnInit {
     console.log(this.comService.decimalQuantityFormat(event.target.value, 'AMOUNT'));
 
   }
-  repair_charge_change(event:any){
+  repair_charge_change(event: any) {
     this.repairjewelleryreceiptdetailsFrom.controls.Est_repair_charge.setValue(this.comService.decimalQuantityFormat(event.target.value, 'AMOUNT'));
     console.log(this.comService.decimalQuantityFormat(event.target.value, 'AMOUNT'));
   }

@@ -52,14 +52,14 @@ export class RepairJewelleryReceiptComponent implements OnInit {
   hideCurrecnySearch: boolean = false;
   voucherNo: any;
   formatteddate: any;
-  customer_edit :boolean =false;
-  code_edit :boolean = false;
-  name_edit :boolean = false;
-  mobile_edit :boolean = false;
-  email_edit :boolean = false;
-  tel_edit :boolean = false;
-  country_edit :boolean = false;
-  address_edit :boolean = false;
+  customer_edit: boolean = false;
+  code_edit: boolean = false;
+  name_edit: boolean = false;
+  mobile_edit: boolean = false;
+  email_edit: boolean = false;
+  tel_edit: boolean = false;
+  country_edit: boolean = false;
+  address_edit: boolean = false;
 
 
   constructor(
@@ -74,8 +74,8 @@ export class RepairJewelleryReceiptComponent implements OnInit {
 
   ngOnInit(): void {
 
-    
-    
+
+
     if (this.content?.MID != null) this.getArgsData();
     else this.generateVocNo();
 
@@ -172,32 +172,32 @@ export class RepairJewelleryReceiptComponent implements OnInit {
   };
   customerCodeSelected(e: any) {
     this.repairjewelleryreceiptFrom.controls.customer.setValue(e.CODE);
- 
-    if(e.CODE != ""){
+
+    if (e.CODE != "") {
       this.code_edit = true;
     }
     this.repairjewelleryreceiptFrom.controls.customerDesc.setValue(e.NAME);
-    if(e.NAME != ""){
+    if (e.NAME != "") {
       this.name_edit = true;
     }
     this.repairjewelleryreceiptFrom.controls.email.setValue(e.EMAIL);
-    if(e.EMAIL != ""){
+    if (e.EMAIL != "") {
       this.email_edit = true;
     }
     this.repairjewelleryreceiptFrom.controls.tel.setValue(e.TEL1);
-    if(e.TEL1 != ""){
+    if (e.TEL1 != "") {
       this.tel_edit = true;
     }
     this.repairjewelleryreceiptFrom.controls.mobile.setValue(e.MOBILE);
-    if(e.MOBILE != ""){
+    if (e.MOBILE != "") {
       this.mobile_edit = true;
     }
     this.repairjewelleryreceiptFrom.controls.nationality.setValue(e.COUNTRY_CODE);
-    if(e.COUNTRY_CODE != ""){
+    if (e.COUNTRY_CODE != "") {
       this.country_edit = true;
     }
     this.repairjewelleryreceiptFrom.controls.address.setValue(e.ADDRESS);
-    if(e.ADDRESS != ""){
+    if (e.ADDRESS != "") {
       this.address_edit = true;
     }
     // this.customer_edit = true;
@@ -307,19 +307,19 @@ export class RepairJewelleryReceiptComponent implements OnInit {
             this.snackBar.dismiss();
 
             this.repairDetailsData = result.response.Details;
-            console.log("fjsnjsdnlsdn" );
-            
-            console.log(this.repairDetailsData);
-            
+            console.log("fjsnjsdnlsdn");
 
-            const calculateTotalAmount = (data: any[]): number =>  {
+            console.log(this.repairDetailsData);
+
+
+            const calculateTotalAmount = (data: any[]): number => {
               return data.reduce((total, item) => {
                 return total + Number(item.AMOUNT);
               }, 0);
             }
 
-            let amount  = calculateTotalAmount(this.repairDetailsData)
-            
+            let amount = calculateTotalAmount(this.repairDetailsData)
+
             this.repairjewelleryreceiptFrom.controls["repairAmt"].setValue(amount);
           });
       });
@@ -375,7 +375,7 @@ export class RepairJewelleryReceiptComponent implements OnInit {
       SYSTEM_DATE: new Date(),
       NAVSEQNO: 0,
       DELIVERYDATE: //this.formatteddate,
-      this.repairjewelleryreceiptFrom.value.customer_delivery_date,
+        this.repairjewelleryreceiptFrom.value.customer_delivery_date,
       SALESREFERENCE: this.repairjewelleryreceiptFrom.value.repair_narration,
       STATUS: 0,
       TRANSFERID: 0,
@@ -653,9 +653,9 @@ export class RepairJewelleryReceiptComponent implements OnInit {
 
   openRepairdetails(data: any = null) {
 
-    let date =  this.repairjewelleryreceiptFrom.controls.customer_delivery_date.value;
-    if(date){
-    console.log(date._d);
+    let date = this.repairjewelleryreceiptFrom.controls.customer_delivery_date.value;
+    if (date) {
+      console.log(date._d);
     }// data.delivery_date = this.repairjewelleryreceiptFrom.controls.customer_delivery_date.value;
     const modalRef: NgbModalRef = this.modalService.open(
       RepairDetailsComponent,
@@ -668,8 +668,8 @@ export class RepairJewelleryReceiptComponent implements OnInit {
     );
     modalRef.componentInstance.receiptData = { ...data };
     modalRef.componentInstance.queryParams = { isViewOnly: this.viewOnly };
-    if(date){
-    modalRef.componentInstance.delivery_date = date._d;
+    if (date) {
+      modalRef.componentInstance.delivery_date = date._d;
     }
 
     modalRef.result.then((postData) => {
@@ -695,11 +695,11 @@ export class RepairJewelleryReceiptComponent implements OnInit {
     let add_value = 0;
     this.repairDetailsData.forEach(value => {
       console.log(value.AMOUNT);
-      add_value = Number(add_value)+Number(value.AMOUNT)
+      add_value = Number(add_value) + Number(value.AMOUNT)
     });
     console.log(add_value);
     this.repairjewelleryreceiptFrom.controls.repairAmt.setValue(add_value);
-  
+
     this.updateFormValuesAndSRNO();
   }
 
@@ -710,10 +710,10 @@ export class RepairJewelleryReceiptComponent implements OnInit {
   }
 
   // AmountUpdating(e: any, method: string) {
-    
+
   //   const srnoToProcess = e.data.SRNO;
   //   const indexToProcess = this.repairDetailsData.findIndex((item: any) => item.SRNO === srnoToProcess);    
-  
+
   //   switch (method) {
   //     case 'add':
   //       if (indexToProcess) {
@@ -721,32 +721,32 @@ export class RepairJewelleryReceiptComponent implements OnInit {
   //         const currentAmt = this.repairjewelleryreceiptFrom.controls.repairAmt.value || 0;
   //         const newAmt = Number(currentAmt) + Number(amountToAdd);
   //         console.log("Added amount:", newAmt);
-  
+
   //         this.repairjewelleryreceiptFrom.controls['repairAmt'].setValue(newAmt);
   //       }
   //       break;
-  
+
   //     case 'sub':
   //       if (indexToProcess) {
   //         console.log('in ');
-          
+
   //         const amountToSubtract = this.repairDetailsData[indexToProcess].AMOUNT;          
   //         const currentAmt = this.repairjewelleryreceiptFrom.controls['repairAmt'].value || 0;
   //         const newAmt = Number(currentAmt) - Number(amountToSubtract);
   //         console.log("Subtracted amount:", newAmt);
-  
+
   //         this.repairjewelleryreceiptFrom.controls['repairAmt'].setValue(newAmt);
-  
+
   //         this.repairDetailsData.splice(indexToProcess, 1);
   //       }
   //       break;
-  
+
   //     default:
   //       break;
   //   }
   // }
 
-  removeLineItemsGrid(e: any) { 
+  removeLineItemsGrid(e: any) {
 
     // this.AmountUpdating(e, 'sub');
     // this.updateFormValuesAndSRNO();
@@ -766,9 +766,9 @@ export class RepairJewelleryReceiptComponent implements OnInit {
     const totalAmount = this.repairDetailsData.reduce((sum: number, item: any) => {
       return sum + Number(item.AMOUNT);
     }, 0);
-    
+
     console.log(totalAmount);
-    
+
 
     this.repairjewelleryreceiptFrom.controls['repairAmt'].setValue(totalAmount);
     this.selectedIndexes = indexes;
