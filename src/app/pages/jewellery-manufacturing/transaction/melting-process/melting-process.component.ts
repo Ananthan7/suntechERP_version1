@@ -25,6 +25,7 @@ export class MeltingProcessComponent implements OnInit {
   @ViewChild('overlaylocationRet') overlaylocationRet!: MasterSearchComponent;
   @ViewChild('overlaystockcodeRet') overlaystockcodeRet!: MasterSearchComponent;
   @ViewChild('overlayprocesscode') overlayprocesscode!: MasterSearchComponent;
+  @ViewChild('overlaywokercode') overlaywokercode!: MasterSearchComponent;
   @ViewChild('overlaymeltingTypecode') overlaymeltingTypecode!: MasterSearchComponent;
   @Input() content!: any;
   tableData: any[] = [];
@@ -113,7 +114,19 @@ export class MeltingProcessComponent implements OnInit {
     VIEW_TABLE: true,
   }
 
-
+  workerCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 254,
+    SEARCH_FIELD: 'WORKER_CODE',
+    SEARCH_HEADING: 'Worker Search',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "@strProcess='',@blnActive=1",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true
+  }
 
 
   constructor(
@@ -256,6 +269,11 @@ export class MeltingProcessComponent implements OnInit {
   timeCodeSelected(e: any) {
     console.log(e);
     this.meltingProcessFrom.controls.time.setValue(e.CODE);
+  }
+
+  workerCodeSelected(e: any) {
+    this.meltingProcessFrom.controls.worker.setValue(e.WORKER_CODE);
+    this.meltingProcessFrom.controls.workerDesc.setValue(e.DESCRIPTION);
   }
   // setCompanyCurrency() {
   //   let CURRENCY_CODE = this.commonService.getCompanyParamValue('COMPANYCURRENCY')
@@ -442,8 +460,8 @@ export class MeltingProcessComponent implements OnInit {
     }
   }
   lookupKeyPress(event: any, form?: any) {
-    if(event.key == 'Tab' && event.target.value == ''){
-      this.showOverleyPanel(event,form)
+    if (event.key == 'Tab' && event.target.value == '') {
+      this.showOverleyPanel(event, form)
     }
   }
   showOverleyPanel(event: any, formControlName: string) {
@@ -467,10 +485,13 @@ export class MeltingProcessComponent implements OnInit {
       case 'locationScp':
         this.overlayllocationScp.showOverlayPanel(event);
         break;
+      case 'worker':
+        this.overlaywokercode.showOverlayPanel(event);
+        break;
       default:
     }
   }
-  
+
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     LOOKUPDATA.SEARCH_VALUE = event.target.value;
     if (event.target.value == '' || this.viewMode) return;
@@ -493,7 +514,7 @@ export class MeltingProcessComponent implements OnInit {
           this.meltingProcessFrom.controls[FORMNAME].setValue('');
           LOOKUPDATA.SEARCH_VALUE = '';
 
-          if ( FORMNAME === 'meltingType' || FORMNAME === 'process' || FORMNAME === 'stockcodeRet' || FORMNAME === 'locationRet' || FORMNAME === 'stockCodeScp' || FORMNAME === 'locationScp') {
+          if (FORMNAME === 'meltingType' || FORMNAME === 'process' || FORMNAME === 'stockcodeRet' || FORMNAME === 'locationRet' || FORMNAME === 'stockCodeScp' || FORMNAME === 'locationScp') {
             this.showOverleyPanel(event, FORMNAME);
           }
 
@@ -689,7 +710,7 @@ export class MeltingProcessComponent implements OnInit {
   update() {
     if (this.submitValidations(this.meltingProcessFrom.value)) return;
 
-    
+
     let form = this.meltingProcessFrom.value
     let API = `JobMeltingProcessDJ/UpdateJobMeltingProcessDJ/${this.branchCode}/${this.meltingProcessFrom.value.vocType}/${this.meltingProcessFrom.value.vocNo}/${this.commonService.yearSelected}`
     let postData = this.setPostData()

@@ -306,6 +306,7 @@ export class MetalIssueDetailsComponent implements OnInit {
   }
 
   toStockCodeSelected(e: any) {
+    console.log(e, 'e')
     this.metalIssueDetailsForm.controls.toStockCode.setValue(e.STOCK_CODE);
     this.metalIssueDetailsForm.controls.toStockCodeDes.setValue(e.DESCRIPTION);
     this.metalIssueDetailsForm.controls.toDIVCODE.setValue(e.DIVISION_CODE);
@@ -367,7 +368,7 @@ export class MetalIssueDetailsComponent implements OnInit {
     }
   }
   changeJobClicked() {
-    this.formSubmit('CONTINUE')
+    // this.formSubmit('CONTINUE')
     this.metalIssueDetailsForm.reset()
   }
   resetStockDetails() {
@@ -393,8 +394,9 @@ export class MetalIssueDetailsComponent implements OnInit {
 
   setPostData() {
     let form = this.metalIssueDetailsForm.value
+    // console.log(this.comService.getCurrencyRate(this.comService.compCurrency));    
     let currRate = this.comService.getCurrencyRate(this.comService.compCurrency)
-
+    
     return {
       "SRNO": this.comService.emptyToZero(this.content.SRNO),
       "VOCNO": this.comService.emptyToZero(form.VOCNO),
@@ -520,18 +522,29 @@ export class MetalIssueDetailsComponent implements OnInit {
       this.setValueWithDecimal('STONE_WT', this.tableData[0].STONE, 'STONE')
     }
   }
+
+  
   /**use: for stone wt and gross wt calculation */
   private calculateNetWt(): boolean {
     let form = this.metalIssueDetailsForm.value
     let GROSS_WT = this.comService.emptyToZero(form.GROSS_WT)
     let STONE_WT = this.comService.emptyToZero(form.STONE_WT)
+    let PURITY = this.comService.emptyToZero(form.PURITY);
     if (STONE_WT > GROSS_WT) {
       this.comService.toastErrorByMsgId('MSG1840')//	Stone weight cannot be greater than gross weight
       return true
     }
-    this.setValueWithDecimal('NET_WT', GROSS_WT - STONE_WT, 'THREE')
+    // this.setValueWithDecimal('NET_WT', GROSS_WT - STONE_WT, 'THREE')
+
+    let NET_WT = GROSS_WT - STONE_WT;
+    this.setValueWithDecimal('NET_WT', NET_WT, 'THREE');
+
+    // Calculate PURE_WT as NET_WT * PURITY
+    let PURE_WT = NET_WT * PURITY;
+    this.setValueWithDecimal('PURE_WT', PURE_WT, 'THREE');
     return false;
   }
+
   jobNumberValidate(event: any) {
     this.showOverleyPanel(event, 'jobNumber')
     if (event.target.value == '') return
@@ -798,7 +811,10 @@ export class MetalIssueDetailsComponent implements OnInit {
         this.comService.closeSnackBarMsg()
         if (result.dynamicData && result.dynamicData[0].length > 0) {
           this.tableData = result.dynamicData[0]
-          this.columnhead = Object.keys(this.tableData[0])
+          console.log(this.tableData);
+          // console.log(Object.keys(this.tableData[0]));
+          
+          // this.columnhead = Object.keys(this.tableData[0])
         }
       }
       )
