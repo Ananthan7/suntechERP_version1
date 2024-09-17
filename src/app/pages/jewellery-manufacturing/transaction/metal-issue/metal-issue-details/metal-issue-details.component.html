@@ -24,17 +24,18 @@
                                     <div class="col-md-3">
                                         <mat-form-field appearance="outline" style="width: 90%;">
                                             <input type="text" matInput formControlName="jobNumber" id="jobNumbercode"
-                                                (focusout)="jobNumberValidate($event)" [readonly]="viewMode" />
-                                        </mat-form-field>
-                                    </div>
-                                    <div class="col-md-5">
-                                        <mat-form-field appearance="outline" style="width: 80%;">
-                                            <input type="text" matInput formControlName="jobNumDes"
-                                                (keydown)="lookupKeyPress($event,'jobNumber')" readonly />
+                                                (focusout)="jobNumberValidate($event)" [readonly]="viewMode"
+                                                (keydown)="lookupKeyPress($event,'jobNumber')" />
                                             <master-search class="masterSearch" [MasterSearchData]="jobNumberCodeData"
                                                 #overlayjobNumDes (newRowClick)="jobNumberCodeSelected($event)"
                                                 *ngIf="!viewMode">
                                             </master-search>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <mat-form-field appearance="outline" style="width: 80%;">
+                                            <input type="text" matInput formControlName="jobNumDes" readonly />
+
                                         </mat-form-field>
 
                                     </div>
@@ -65,15 +66,16 @@
                                             <input type="text" matInput UpperCaseDirective formControlName="processCode"
                                                 [readonly]="viewMode" (keydown)="lookupKeyPress($event,'processCode')"
                                                 (focusout)="SPvalidateLookupField($event,processCodeData,'processCode')" />
+                                            <master-search class="masterSearch" [MasterSearchData]="processCodeData"
+                                                #overlayprocessCode (newRowClick)="processCodeSelected($event)"
+                                                *ngIf="!viewMode">
+                                            </master-search>
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-5">
                                         <mat-form-field appearance="outline" style="width: 80%;">
                                             <input type="text" matInput formControlName="processCodeDesc" readonly>
-                                            <master-search class="masterSearch" [MasterSearchData]="processCodeData"
-                                                #overlayprocessCode (newRowClick)="processCodeSelected($event)"
-                                                *ngIf="!viewMode">
-                                            </master-search>
+
                                         </mat-form-field>
 
                                     </div>
@@ -83,17 +85,18 @@
                                         Worker Code * : </label>
                                     <div class="col-md-3">
                                         <mat-form-field appearance="outline" style="width: 90%;">
-                                            <input type="text" matInput formControlName="workerCode" readonly />
-                                        </mat-form-field>
-                                    </div>
-                                    <div class="col-md-5">
-                                        <mat-form-field appearance="outline" style="width: 80%;">
-                                            <input type="text" matInput formControlName="workerCodeDes"
+                                            <input type="text" matInput formControlName="workerCode" readonly
                                                 (keydown)="lookupKeyPress($event,'workerCodeDes')" [readonly]="viewMode"
                                                 (focusout)="WorkerCodeValidate($event)" />
                                             <master-search class="masterSearch" [MasterSearchData]="workerCodeData"
                                                 #overlayworkerCodeDes (newRowClick)="workerCodeSelected($event)"
                                                 *ngIf="!viewMode"></master-search>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <mat-form-field appearance="outline" style="width: 80%;">
+                                            <input type="text" matInput formControlName="workerCodeDes" />
+
                                         </mat-form-field>
 
                                     </div>
