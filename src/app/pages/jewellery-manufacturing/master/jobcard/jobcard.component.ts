@@ -1802,6 +1802,24 @@ export class JobcardComponent implements OnInit {
   // }
 
   /**use: validate all lookups to check data exists in db */
+
+
+
+
+  ErrorMessageFounder(alertMsg : any) {
+    if (alertMsg == null) {
+      Swal.fire({
+        title: "Not Found",
+        text: '',
+        icon: 'warning',
+        confirmButtonColor: '#336699',
+        confirmButtonText: 'Ok'
+      });  
+    } else {
+    return alertMsg
+    }
+    
+  }
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     const inputValue = event.target.value.toUpperCase();
     LOOKUPDATA.SEARCH_VALUE = event.target.value
@@ -1823,13 +1841,19 @@ export class JobcardComponent implements OnInit {
         this.isDisableSaveBtn = false;
         let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
         if (data.length == 0) {
-          this.commonService.toastErrorByMsgId('MSG1531');
+         let alertMsg = this.commonService.toastErrorByMsgId('MSG1531');
+          console.log( this.commonService.toastErrorByMsgId('MSG1531'));
           this.jobCardFrom.controls[FORMNAME].setValue('');
           this.jobCardFrom.controls.customername.setValue('');
           this.jobCardFrom.controls.designtype.setValue('');
-          this.renderer.selectRootElement(FORMNAME).focus();
-          LOOKUPDATA.SEARCH_VALUE = ''
-          return
+          // this.renderer.selectRootElement(FORMNAME).focus();
+          LOOKUPDATA.SEARCH_VALUE = '';
+          // if (alertMsg == null || alertMsg == undefined ) {
+          //   return "NOT FOUND";
+          // }
+          return this.ErrorMessageFounder(alertMsg) && console.log("data and error message fetched succesdsfully");
+          
+          
         }
 
         if (data == '') {
