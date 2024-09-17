@@ -1220,5 +1220,14 @@ export class PosCustomerMasterComponent implements OnInit {
     this.activeModal.close(returnData);
   }
 
+  preventNonNumeric(event: KeyboardEvent) {
+    const allowedKeys = ['Backspace', 'ArrowLeft', 'ArrowRight', 'Tab', '/'];
+    const keyCode = event.key;
+  
+    if (!allowedKeys.includes(keyCode) && (keyCode < '0' || keyCode > '9')) {
+      event.preventDefault();
+    }
+  }
+
 }
 

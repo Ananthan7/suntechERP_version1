@@ -300,12 +300,14 @@
               <div class="col-md-8">
                 <mat-form-field class="w-100" appearance="outline">
                   <input
+                    
                     matInput
                     [matDatepicker]="dob"
                     [max]="vocMaxDate"
                     name="fcn_cust_detail_dob"
                     formControlName="fcn_cust_detail_dob"
                     placeholder="DD/MM/YYYY"
+                    (keydown)="preventNonNumeric($event)"
                   />
                   <mat-datepicker-toggle
                     matSuffix
