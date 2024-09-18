@@ -274,7 +274,7 @@ export class AlloyMasterComponent implements OnInit {
     excludeTransferWt: [''],
     silveralloy: [''],
     picture_name: [''],
-    FLAG:['']
+    FLAG: ['']
   });
   mode!: string;
 
@@ -307,7 +307,7 @@ export class AlloyMasterComponent implements OnInit {
     // this.setupFormSubscription();
 
     if (this.content?.FLAG) {
-     this.setAllInitialValues()
+      this.setAllInitialValues()
       if (this.content.FLAG == 'EDIT') {
         this.setFormValues();
         this.isDisabled = !this.isDisabled;
@@ -326,6 +326,9 @@ export class AlloyMasterComponent implements OnInit {
     } else {
       this.renderer.selectRootElement('#code')?.focus();
     }
+
+
+
 
     // this.alloyMastereForm.get('currency')?.valueChanges.subscribe(value => {
     //   this.isCurrencySelected = !value;
@@ -574,6 +577,7 @@ export class AlloyMasterComponent implements OnInit {
   //     this.commonService.decimalQuantityFormat(CURRENCY_RATE[0].CONV_RATE, 'RATE')
   //   );
   // }
+  
   setCompanyCurrency() {
     let CURRENCY_CODE = this.commonService.compCurrency;
     this.alloyMastereForm.controls.currency.setValue(CURRENCY_CODE);
@@ -1633,7 +1637,7 @@ export class AlloyMasterComponent implements OnInit {
       .subscribe((result) => {
         if (result.response) {
           let data = result.response
-          console.log(data,'alloy mater')
+          console.log(data, 'alloy mater')
           this.alloyMastereForm.controls.price1code.setValue(data.PRICE1PER)
           this.alloyMastereForm.controls.price2code.setValue(data.PRICE2PER)
           this.alloyMastereForm.controls.price3code.setValue(data.PRICE3PER)
@@ -1642,7 +1646,7 @@ export class AlloyMasterComponent implements OnInit {
           this.alloyMastereForm.controls.currency.setValue(data.CURRENCY_CODE)
           this.alloyMastereForm.controls.currencyRate.setValue(data.CC_RATE)
 
- //set to main grid
+          //set to main grid
 
 
         } else {
