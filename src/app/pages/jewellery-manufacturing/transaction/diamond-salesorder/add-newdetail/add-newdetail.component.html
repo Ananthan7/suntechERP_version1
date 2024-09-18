@@ -116,14 +116,19 @@
                                 class="col-sm-3 col-form-label">Delivery Type
                                 :</label>
                             <div class="col-md-3 mt-2">
-                                <mat-form-field style="width: 50%;"
+                                <mat-form-field style="width: 60%;"
                                     appearance="outline">
                                     <input type="text" matInput
                                         formControlName="DeliveryType"
                                         NumberOnly class="text-right" />
+                                    <master-search
+                                        *ngIf="!viewMode" class="masterSearch"
+                                        [MasterSearchData]="deliveryTypeData"
+                                        (newRowClick)="DeliveryTypeSelected($event)">
+                                    </master-search>
                                 </mat-form-field>
                                 <mat-form-field appearance="outline"
-                                    style="width: 40%;margin-left: 3px;">
+                                    style="width: 30%;margin-left: 3px;">
                                     <input type="text" matInput
                                         formControlName="DeliveryType2"
                                         NumberOnly class="text-right" />
@@ -349,7 +354,7 @@
                                 <dx-resizable id="gridContainer"
                                     [width]="firstTableWidth" [height]="300"
                                     [keepAspectRatio]="false"
-                                    handles="right" >
+                                    handles="right">
                                     <dx-data-grid #dataGrid
                                         id="gridContainer"
                                         [allowColumnResizing]="true"
@@ -900,7 +905,7 @@
                                             appearance="outline">
                                             <input type="text" matInput
                                                 (keydown)="lookupKeyPress($event,'COLOR')"
-                                                ormControlName="COLOR"
+                                                formControlName="COLOR"
                                                 (focusout)="validateLookupField($event,colorCodeData,'COLOR')" />
                                             <master-search
                                                 class="masterSearch"
