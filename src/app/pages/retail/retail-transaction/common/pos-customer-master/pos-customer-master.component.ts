@@ -10,6 +10,7 @@ import { IndexedDbService } from 'src/app/services/indexed-db.service';
 import { map, startWith } from 'rxjs/operators';
 import { DialogboxComponent } from 'src/app/shared/common/dialogbox/dialogbox.component';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSelectChange } from '@angular/material/select';
 
 @Component({
   selector: 'app-pos-customer-master',
@@ -37,6 +38,7 @@ export class PosCustomerMasterComponent implements OnInit {
   idTypeOptionList: any;
 
   maritalStatusList: any = [];
+  sortedCountryList: any;
   countryMaster: any = [];
   countryMasterOptions!: Observable<any[]>;
   stateMaster: any = [];
@@ -66,18 +68,21 @@ export class PosCustomerMasterComponent implements OnInit {
   //formgroups
   customerDetailForm: FormGroup = this.formBuilder.group({
     fcn_customer_detail_name: ['', Validators.required],
-    fcn_customer_detail_fname: ['', Validators.required],
+    fcn_customer_detail_fname: [''],
     fcn_customer_detail_mname: [''],
-    fcn_customer_detail_lname: ['', Validators.required],
-    fcn_cust_detail_gender: ['', Validators.required],
+    fcn_customer_detail_lname: [''],
+    fcn_cust_detail_gender: [''],
     fcn_cust_detail_marital_status: [''],
-    fcn_cust_detail_dob: ['', [Validators.required]],
+    fcn_cust_detail_dob: ['',
+      [Validators.required]
+    ],
     fcn_cust_detail_idType: ['', [Validators.required, this.autoCompleteValidator(() => this.idTypeOptions)]],
     fcn_cust_detail_phone: ['', Validators.required],
     fcn_cust_detail_phone2: [''],
-    fcn_cust_detail_email:  ['', [Validators.required, Validators.email]],
-    fcn_cust_detail_address: ['', Validators.required],
-    fcn_cust_detail_country: ['', [Validators.required, this.autoCompleteValidator(() => this.countryMaster, 'CODE')]],
+    fcn_cust_detail_email: ['', [Validators.email]],
+    fcn_cust_detail_address: [''],
+    // fcn_cust_detail_address: [''],
+    fcn_cust_detail_country: ['', [Validators.required]],
     fcn_cust_detail_city: ['', [this.autoCompleteValidator(() => this.cityMaster, 'CODE')]],
     fcn_cust_detail_nationality: ['', [Validators.required, this.autoCompleteValidator(() => this.nationalityMaster, 'CODE')]],
     fcn_cust_detail_idcard: ['', Validators.required],
@@ -86,6 +91,7 @@ export class PosCustomerMasterComponent implements OnInit {
     fcn_cust_detail_state: ['', [this.autoCompleteValidator(() => this.stateMaster, 'CODE')]],
 
     fcn_mob_code: ['', [Validators.required]],
+    fcn_customer_exp_date: ['', [Validators.required]],
   });
 
   constructor(
@@ -360,19 +366,48 @@ export class PosCustomerMasterComponent implements OnInit {
 
   }
 
+  onCountryCodeSelection(event: MatSelectChange, isCountrySelection: Boolean) {
+    if (isCountrySelection) {
+      const selectedOption = this.sortedCountryList.find((item: any) => item.CODE === event.value);
+      if (selectedOption) {
+
+        this.customerDetailForm.controls['fcn_mob_code'].setValue(selectedOption.MOBILECOUNTRYCODE);
+      }
+    }
+    else {
+      const selectedOption = this.sortedCountryList.find((item: any) => item.MOBILECOUNTRYCODE === event.value);
+      if (selectedOption) {
+
+        this.customerDetailForm.controls['fcn_cust_detail_country'].setValue(selectedOption.CODE);
+      }
+    }
+
+  }
+
 
   async getMasters() {
 
     const country = `GeneralMaster/GetGeneralMasterList/${encodeURIComponent('COUNTRY MASTER')}`;
 
     this.countryMaster = this.comService.countryMaster;
-    this.countryMasterOptions =
-      this.customerDetailForm.controls.fcn_cust_detail_country.valueChanges.pipe(
-        startWith(''),
-        map((value) =>
-          this._filterMasters(this.countryMaster, value, 'CODE', 'DESCRIPTION')
-        )
-      );
+    console.log(JSON.stringify(this.countryMaster))
+    this.sortedCountryList = this.countryMaster.map((item: any) => ({
+      CODE: item.CODE,
+      DESCRIPTION: item.DESCRIPTION,
+      MOBILECOUNTRYCODE: item.MOBILECOUNTRYCODE,
+      CODE_DESC: `${item.CODE}-${item.DESCRIPTION}`
+    }));
+
+    console.log(this.sortedCountryList)
+
+    // this.countryMaster = this.comService.countryMaster;
+    // this.countryMasterOptions =
+    //   this.customerDetailForm.controls.fcn_cust_detail_country.valueChanges.pipe(
+    //     startWith(''),
+    //     map((value) =>
+    //       this._filterMasters(this.countryMaster, value, 'CODE', 'DESCRIPTION')
+    //     )
+    //   );
 
     this.mobileCountryMaster = this.countryMaster.filter((data: any) => data.MOBILECOUNTRYCODE != '');
     this.mobileCountryMasterOptions =
@@ -773,7 +808,7 @@ export class PosCustomerMasterComponent implements OnInit {
 
           if (data.status == 'Success') {
             this.customerDetails = await data.response;
-           
+
 
             this.customerDetailForm.controls['fcn_cust_detail_phone'].setValue(
               this.customerDetails.MOBILE
@@ -826,9 +861,7 @@ export class PosCustomerMasterComponent implements OnInit {
             this.snackBar.open('Customer details saved successfully', '', {
               duration: 1000 // time in milliseconds
             });
-            
             this.closeModal();
-
             // ${data.AMLDIGICOMPANYNAME}/${data.AMLDIGIUSERNAME}/${data.AMLDIGIPASSWORD}/${data.CODE}/${data.FIRSTNAME}/${data.MIDDLENAME}/${data.LASTNAME}/%27%27/${data.POSCustIDNo}/${data.NATIONALITY}/${data.DATE_OF_BIRTH}/${data.CUST_Type}/${data.AMLUSERID}/${data.AMLDIGITHRESHOLD}/${data.AMLDIGICOMPANYNAME}/1/${data.DIGIIPPATH}`);
             if (this.amlNameValidation && !this.customerDetails.DIGISCREENED) {
               this.isCustProcessing = true;
@@ -941,10 +974,10 @@ export class PosCustomerMasterComponent implements OnInit {
                   this.snackBar.open('Loading...');
 
                   this.apiService
-                    .putDynamicAPI(
-                      `PosCustomerMaster/UpdateDigiScreened/${this.customerDetails.CODE}/true`,
-                      ''
-                    )
+                  .putDynamicAPI(
+                    `PosCustomerMaster/UpdateDigiScreened/${this.customerDetails.CODE}/true`,
+                    ''
+                  )
                     .subscribe((resp) => {
                       this.snackBar.dismiss();
                       if (resp.status == "Success") {

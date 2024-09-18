@@ -58,10 +58,28 @@
           <dxo-header-filter></dxo-header-filter>
         
           <dxi-column dataField="MID" caption="MID"></dxi-column>
-          <dxi-column dataField="FORM_NAME" caption="Report Name"></dxi-column>
-          <dxi-column dataField="TEMPLATE_NAME" caption="Report Template Name"></dxi-column>
+          <!-- <dxi-column dataField="FORM_NAME" caption="Report Name"></dxi-column> -->
+          <dxi-column dataField="TEMPLATE_NAME" caption="Report Template Name" width="150"></dxi-column>
         
-          <dxi-column caption="Report Type" cellTemplate="cellTemplate"></dxi-column>
+          <dxi-column dataField="name" caption="Date Range" cellTemplate="dropdownCellTemplate"  width="150"></dxi-column>
+          <div *dxTemplate="let data of 'dropdownCellTemplate'">
+            <dx-select-box
+              [dataSource]="dropdownDataSource"  [value]="dropdownDataSource[0]"
+              valueField="PeriodType" displayField="PeriodType"
+              (onValueChanged)="onSelectBoxValueChanged($event)" ></dx-select-box>
+          </div>
+          
+          <dxi-column dataField="FROMVOCDATE" caption="From Date" width="120" cellTemplate="FROMVOCDATECell"></dxi-column>
+          <div *dxTemplate="let cellData of 'FROMVOCDATECell'">
+            <input type="text" [value]="cellData.value" style="width: -webkit-fill-available;">
+          </div>
+
+          <dxi-column dataField="TOVOCDATE" caption="To Date"  width="120" cellTemplate="TOVOCDATECell"></dxi-column>
+          <div *dxTemplate="let cellData of 'TOVOCDATECell'">
+            <input type="text" [value]="cellData.value" style="width: -webkit-fill-available;">
+          </div>
+
+          <dxi-column caption="Report Type" cellTemplate="cellTemplate"  width="140"></dxi-column>
           <div *dxTemplate="let data of 'cellTemplate'">  
             <div class="row mt-1 mx-1" style="margin-right: 1rem !important;">
               <div class="icon-label-container">
@@ -85,7 +103,7 @@
             </div>
           </div>
 
-          <dxi-column caption="Actions" cellTemplate="cellTemplate2"></dxi-column>
+          <dxi-column caption="Actions" cellTemplate="cellTemplate2" width="100"></dxi-column>
           <div *dxTemplate="let data of 'cellTemplate2'">  
             <div class="row mt-1 mx-1" style="margin-right: 1rem !important;">
               <div class="icon-label-container">

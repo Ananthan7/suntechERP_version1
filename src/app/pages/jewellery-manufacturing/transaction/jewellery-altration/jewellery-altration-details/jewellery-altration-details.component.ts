@@ -493,6 +493,8 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
     PICTURE: [''],
     currencycode: [''],
     currencyrate: [''],
+    STOCK_FCCOST: [''],
+    STOCK_LCCOST:[''],
     FLAG: [null]
   });
 
@@ -1024,6 +1026,8 @@ export class JewelleryAltrationDetailsComponent implements OnInit {
             this.jewelleryaltrationdetailsFrom.controls.totalAMTCC.setValue(data[0].METAL_TOTALAMOUNT)
             this.jewelleryaltrationdetailsFrom.controls.tagdetails.setValue(data[0].TAG_LINESWOENTER)
             this.jewelleryaltrationdetailsFrom.controls.PICTURE.setValue(data[0].PICTURE_NAME)
+            this.jewelleryaltrationdetailsFrom.controls.STOCK_FCCOST.setValue(data[0].STOCK_FCCOST)
+            this.jewelleryaltrationdetailsFrom.controls.STOCK_LCCOST.setValue(data[0].STOCK_LCCOST)
             this.jewelleryaltrationdetailsFrom.controls.currencycode.setValue(data[0].CURRENCY_CODE)
             this.jewelleryaltrationdetailsFrom.controls.currencyrate.setValue(this.commonService.decimalQuantityFormat(data[0].CC_RATE, 'RATE'))
             this.getImageData()

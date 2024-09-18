@@ -6,7 +6,7 @@
   </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" [isViewContinue]="true"
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" [isViewDelete]="false"
   (deleteClick)="deleteTableData()"></modal-header>
 <div class="row">
   <div class="row mb-2 text-right">
@@ -101,7 +101,11 @@
               <label for="inputPassword" class="col-sm-4">Worker * :</label>
               <div class="col-sm-4">
                 <mat-form-field appearance="outline" style="width: 100%;">
-                  <input type="text" matInput formControlName="worker" [readonly]="viewMode" />
+                  <input type="text" matInput formControlName="worker" [readonly]="viewMode"
+                    (keydown)="lookupKeyPress($event,'worker')"
+                    (focusout)="validateLookupField($event,workerCodeData,'worker')" />
+                  <master-search class="masterSearch" [MasterSearchData]="workerCodeData" *ngIf="!viewMode"
+                    #overlaywokercode (newRowClick)="workerCodeSelected($event)"></master-search>
                 </mat-form-field>
               </div>
               <div class="col-sm-4">
