@@ -78,9 +78,9 @@
                                                     [readonly]="viewMode"
                                                     (keydown)="lookupKeyPress($event,'SALESPERSON_CODE')"
                                                     (focusout)="validateLookupField($event,SALESPERSON_CODEData,'SALESPERSON_CODE')" />
-                                                <master-search [MasterSearchData]="SALESPERSON_CODEData"  class="masterSearch"
-                                                    #overlaysalesperson (newRowClick)="SALESPERSON_CODESelected($event)"
-                                                    *ngIf="!viewMode">
+                                                <master-search [MasterSearchData]="SALESPERSON_CODEData"
+                                                    class="masterSearch" #overlaysalesperson
+                                                    (newRowClick)="SALESPERSON_CODESelected($event)" *ngIf="!viewMode">
                                                 </master-search>
                                             </mat-form-field>
 
@@ -108,20 +108,20 @@
                                         :</label>
                                     <div class="col-md-3">
                                         <mat-form-field appearance="outline" style="width: 100%;">
-                                            <input type="text" matInput formControlName="worker"
-                                                [readonly]="viewMode" />
+                                            <input type="text" matInput formControlName="worker" [readonly]="viewMode"
+                                                (keydown)="lookupKeyPress($event,'workerDes')" id="code"
+                                                (focusout)="validateLookupField($event,workerCodeData,'workerDes')" />
+                                            <master-search [MasterSearchData]="workerCodeData" #overlayworkerDes
+                                                class="masterSearch" (newRowClick)="workerCodeSelected($event)"
+                                                *ngIf="!viewMode">
+                                            </master-search>
                                         </mat-form-field>
                                     </div>
 
                                     <div class="col-md-5">
                                         <mat-form-field appearance="outline" style="width: 100%;">
-                                            <input type="text" matInput id="code" formControlName="workerDes"
-                                                [readonly]="viewMode" (keydown)="lookupKeyPress($event,'workerDes')"
-                                                (focusout)="validateLookupField($event,workerCodeData,'workerDes')" />
-                                            <master-search [MasterSearchData]="workerCodeData" #overlayworkerDes class="masterSearch"
-                                                (newRowClick)="workerCodeSelected($event)" *ngIf="!viewMode">
-                                            </master-search>
-                                        </mat-form-field>
+                                            <input type="text" matInput  formControlName="workerDes"
+                                                [readonly]="viewMode" /> </mat-form-field>
 
                                     </div>
                                 </div>
@@ -177,7 +177,8 @@
                                             :</label>
                                         <div class="col-md-9">
                                             <mat-form-field appearance="outline" style="width: 100%;">
-                                                <input type="text" matInput formControlName="REMARKS" [readonly]="viewMode"/>
+                                                <input type="text" matInput formControlName="REMARKS"
+                                                    [readonly]="viewMode" />
                                             </mat-form-field>
                                         </div>
                                     </span>

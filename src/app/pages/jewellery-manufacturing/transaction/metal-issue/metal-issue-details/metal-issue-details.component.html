@@ -24,17 +24,18 @@
                                     <div class="col-md-3">
                                         <mat-form-field appearance="outline" style="width: 90%;">
                                             <input type="text" matInput formControlName="jobNumber" id="jobNumbercode"
-                                                (focusout)="jobNumberValidate($event)" [readonly]="viewMode" />
-                                        </mat-form-field>
-                                    </div>
-                                    <div class="col-md-5">
-                                        <mat-form-field appearance="outline" style="width: 80%;">
-                                            <input type="text" matInput formControlName="jobNumDes"
-                                                (keydown)="lookupKeyPress($event,'jobNumber')" readonly />
+                                                (focusout)="jobNumberValidate($event)" [readonly]="viewMode"
+                                                (keydown)="lookupKeyPress($event,'jobNumber')" />
                                             <master-search class="masterSearch" [MasterSearchData]="jobNumberCodeData"
                                                 #overlayjobNumDes (newRowClick)="jobNumberCodeSelected($event)"
                                                 *ngIf="!viewMode">
                                             </master-search>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <mat-form-field appearance="outline" style="width: 80%;">
+                                            <input type="text" matInput formControlName="jobNumDes" readonly />
+
                                         </mat-form-field>
 
                                     </div>
@@ -65,15 +66,16 @@
                                             <input type="text" matInput UpperCaseDirective formControlName="processCode"
                                                 [readonly]="viewMode" (keydown)="lookupKeyPress($event,'processCode')"
                                                 (focusout)="SPvalidateLookupField($event,processCodeData,'processCode')" />
+                                            <master-search class="masterSearch" [MasterSearchData]="processCodeData"
+                                                #overlayprocessCode (newRowClick)="processCodeSelected($event)"
+                                                *ngIf="!viewMode">
+                                            </master-search>
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-5">
                                         <mat-form-field appearance="outline" style="width: 80%;">
                                             <input type="text" matInput formControlName="processCodeDesc" readonly>
-                                            <master-search class="masterSearch" [MasterSearchData]="processCodeData"
-                                                #overlayprocessCode (newRowClick)="processCodeSelected($event)"
-                                                *ngIf="!viewMode">
-                                            </master-search>
+
                                         </mat-form-field>
 
                                     </div>
@@ -83,17 +85,18 @@
                                         Worker Code * : </label>
                                     <div class="col-md-3">
                                         <mat-form-field appearance="outline" style="width: 90%;">
-                                            <input type="text" matInput formControlName="workerCode" readonly />
-                                        </mat-form-field>
-                                    </div>
-                                    <div class="col-md-5">
-                                        <mat-form-field appearance="outline" style="width: 80%;">
-                                            <input type="text" matInput formControlName="workerCodeDes"
+                                            <input type="text" matInput formControlName="workerCode" readonly
                                                 (keydown)="lookupKeyPress($event,'workerCodeDes')" [readonly]="viewMode"
                                                 (focusout)="WorkerCodeValidate($event)" />
                                             <master-search class="masterSearch" [MasterSearchData]="workerCodeData"
                                                 #overlayworkerCodeDes (newRowClick)="workerCodeSelected($event)"
                                                 *ngIf="!viewMode"></master-search>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <mat-form-field appearance="outline" style="width: 80%;">
+                                            <input type="text" matInput formControlName="workerCodeDes" />
+
                                         </mat-form-field>
 
                                     </div>
@@ -189,7 +192,7 @@
                                         Stock Code * :</label>
                                     <div class="col-md-3">
                                         <mat-form-field appearance="outline" style="width: 60%;">
-                                            <input type="text" matInput formControlName="DIVCODE" placeholder="divcode"
+                                            <input type="text" matInput formControlName="DIVCODE" placeholder="Div Code"
                                                 readonly />
                                         </mat-form-field>
                                         <!-- <master-search  class="masterSearch"
@@ -202,7 +205,7 @@
 
                                         <mat-form-field appearance="outline" style="width: 100%;">
                                             <input type="text" matInput formControlName="stockCode" UpperCaseDirective
-                                                placeholder="stockCode" (focusout)="stockCodeValidate($event)"
+                                                placeholder="Stock Code" (focusout)="stockCodeValidate($event)"
                                                 [readonly]="viewMode || masterMetalChecked"
                                                 (keydown)="lookupKeyPress($event,'stockCode')" />
                                             <master-search class="masterSearch" [MasterSearchData]="stockCodeData"
@@ -274,14 +277,14 @@
                                     <div class="col-md-3">
                                         <mat-form-field appearance="outline" style="width: 100%;">
                                             <input type="text" matInput formControlName="toDIVCODE"
-                                                placeholder="divcode" readonly />
+                                                placeholder="Div Code" readonly />
 
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-3">
                                         <mat-form-field appearance="outline" style="width: 100%;">
                                             <input type="text" matInput formControlName="toStockCode"
-                                                placeholder="stockcode" readonly />
+                                                placeholder="Stock Code" readonly />
                                             <master-search class="masterSearch" [MasterSearchData]="toStockCodeData"
                                                 #overlaystockcode (newRowClick)="toStockCodeSelected($event)"
                                                 *ngIf="!masterMetalChecked"></master-search>
@@ -290,7 +293,7 @@
                                     <div class="col-md-3">
                                         <mat-form-field appearance="outline" style="width: 100%;">
                                             <input type="text" matInput formControlName="toStockCodeDes"
-                                                placeholder="description" readonly />
+                                                placeholder="Description" readonly />
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -316,7 +319,7 @@
                                     <div class="col-md-6">
                                         <mat-form-field appearance="outline" style="width: 100%;">
                                             <input type="text" matInput formControlName="stockCodeDes"
-                                                placeholder="description" readonly />
+                                                placeholder="Description" readonly />
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -383,9 +386,19 @@
                             <dxo-selection mode="single"></dxo-selection>
                             <dxo-scrolling mode="virtual"></dxo-scrolling>
 
-                            <dxi-column *ngFor="let data of columnhead" dataField="{{ data }}" caption="{{ data }}"
+                            <!-- <dxi-column *ngFor="let data of columnhead" dataField="{{ data }}" caption="{{ data }}"
                                 [allowEditing]="true" alignment="center" backgroundcolor="#000">
-                            </dxi-column>
+                            </dxi-column> -->
+                            <dxi-column  [allowEditing]="false" dataField="DIVCODE" caption="DIVCODE"></dxi-column>
+                            <dxi-column  [allowEditing]="false" dataField="STOCK_CODE" caption="STOCK_CODE"></dxi-column>
+                            <dxi-column  [allowEditing]="false" dataField="KARAT_CODE" caption="KARAT"></dxi-column>
+                            <dxi-column  [allowEditing]="false" dataField="COLOR" caption="COLOR"></dxi-column>
+                            <dxi-column  [allowEditing]="false" dataField="MTL_PCS" caption="MTL_PCS"></dxi-column>
+                            <dxi-column  [allowEditing]="false" dataField="MTL_WT" caption="MTL_WT"></dxi-column>
+                            <dxi-column  [allowEditing]="false" dataField="ISS_MTL_PCS" caption="ISS_MTL_PCS"></dxi-column>
+                            <dxi-column  [allowEditing]="false" dataField="ISS_MTL_WT" caption="ISS_MTL_WT"></dxi-column>
+                            <dxi-column  dataField="BAL_MTL_PCS" caption="BAL_MTL_PCS"></dxi-column>
+                            <dxi-column  dataField="BAL_MTL_WT" caption="BAL_MTL_WT"></dxi-column>
                         </dx-data-grid>
                     </div>
                 </div>

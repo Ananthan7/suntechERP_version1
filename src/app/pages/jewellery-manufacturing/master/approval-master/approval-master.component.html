@@ -42,6 +42,7 @@
                                     <input type="text" matInput
                                         formControlName="description"
                                          autocomplete="off"
+                                         maxlength="100"
                                          oninput="this.value = this.value.toUpperCase()"
                                         [readonly]="viewMode"
                                         [disabled]="viewMode" appNoEmptySpace />
