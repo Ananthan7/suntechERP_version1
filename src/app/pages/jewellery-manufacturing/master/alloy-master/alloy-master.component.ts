@@ -615,7 +615,7 @@ export class AlloyMasterComponent implements OnInit {
   }
   calculateWeightAvgCostFC(event: any) {
     let form = this.alloyMastereForm.value;
-    let weightAvgCostLC = this.commonService.FCToCC(form.currency, event.target.value);
+    let weightAvgCostLC = this.commonService.FCToCC(form.currencyRate, event.target.value);
     this.setValueWithDecimal('weightAvgCostFC', weightAvgCostLC, 'AMOUNT')
   }
   calculateWeightAvgCostLC(event: any) {
