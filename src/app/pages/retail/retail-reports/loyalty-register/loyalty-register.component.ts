@@ -23,7 +23,18 @@ export class LoyaltyRegisterComponent implements OnInit {
   vocMaxDate = new Date();
   companyName = this.commonService.allbranchMaster['BRANCH_NAME'];
   branchDivisionControls: any;
+  VocTypeParam: any = [];
+  formattedBranchDivisionData: any;
+  fetchedBranchDataParam: any[]= [];
+  popupVisible: boolean = false;
+  templateNameHasValue: boolean= false;
+  isLoading: boolean = false;
+  branchDivisionControlsTooltip: any;
+  fetchedBranchData: any[] =[];
+  dateToPass: { fromDate: string; toDate: string } = { fromDate: '', toDate: '' };
  
+
+
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -161,19 +172,6 @@ export class LoyaltyRegisterComponent implements OnInit {
     this.loyaltyregisterFrom.controls.branch.setValue(this.formattedBranchDivisionData);
   }
 
-
-
-  VocTypeParam: any = [];
-  formattedBranchDivisionData: any;
-  fetchedBranchDataParam: any[]= [];
-  popupVisible: boolean = false;
-  templateNameHasValue: boolean= false;
-  isLoading: boolean = false;
-  branchDivisionControlsTooltip: any;
-  fetchedBranchData: any[] =[];
-  dateToPass: { fromDate: string; toDate: string } = { fromDate: '', toDate: '' };
-  screenName: any;
-
   formatDateToYYYYMMDD(dateString: any) {
     const date = new Date(dateString);
     const year = date.getFullYear();
@@ -256,52 +254,52 @@ export class LoyaltyRegisterComponent implements OnInit {
     console.log(this.loyaltyregisterFrom.controls.templateName.value)
   }
   saveTemplate_DB(){
-      const payload = {
-        "SPID": "0115",
-        "parameter": {
-          "FLAG": 'INSERT',
-          "CONTROLS": JSON.stringify({
-              "CONTROL_HEADER": {
-                "USERNAME": localStorage.getItem('username'),
-                "TEMPLATEID": this.commonService.getModuleName(),
-                "TEMPLATENAME": this.loyaltyregisterFrom.controls.templateName.value,
-                "FORM_NAME": this.commonService.getModuleName(),
-                "ISDEFAULT": 1
-              },
-              "CONTROL_DETAIL": {
-                "STRFROMDATE": this.formatDateToYYYYMMDD(this.loyaltyregisterFrom.value.fromdate),
-                "STRTODATE": this.formatDateToYYYYMMDD(this.loyaltyregisterFrom.value.todate),
-                "STRCUSTCODEFROM": this.loyaltyregisterFrom.value.customerfrom,
-                "STRCUSTCODETO": this.loyaltyregisterFrom.value.customerto,
-                "STRPOINTSFROM": JSON.stringify(this.loyaltyregisterFrom.value.pointsfrom),
-                "STRPOINTSTO":  JSON.stringify(this.loyaltyregisterFrom.value.pointsto),
-                "STRBRANCHES": this.formattedBranchDivisionData || this.fetchedBranchDataParam
-              }
-          })
-        }
-      };
-      this.commonService.showSnackBarMsg('MSG81447');
-      this.dataService.postDynamicAPI('ExecueteSPInterface', payload)
-      .subscribe((result: any) => {
-        console.log(result);
-        let data = result.dynamicData.map((item: any) => item[0].ERRORMESSAGE);
-        let Notifdata = result.dynamicData.map((item: any) => item[0].ERRORCODE);
-        if (Notifdata == 1) {
-          this.commonService.closeSnackBarMsg()
-          Swal.fire({
-            title: data || 'Success',
-            text: '',
-            icon: 'success',
-            confirmButtonColor: '#336699',
-            confirmButtonText: 'Ok'
-          })
-          this.popupVisible = false;
-          this.activeModal.close(data);
-        }
-        else {
-          this.toastr.error(Notifdata)
-        }
-      }); 
+    const payload = {
+      "SPID": "0115",
+      "parameter": {
+        "FLAG": 'INSERT',
+        "CONTROLS": JSON.stringify({
+            "CONTROL_HEADER": {
+              "USERNAME": localStorage.getItem('username'),
+              "TEMPLATEID": this.commonService.getModuleName(),
+              "TEMPLATENAME": this.loyaltyregisterFrom.controls.templateName.value,
+              "FORM_NAME": this.commonService.getModuleName(),
+              "ISDEFAULT": 1
+            },
+            "CONTROL_DETAIL": {
+              "STRFROMDATE": this.formatDateToYYYYMMDD(this.loyaltyregisterFrom.value.fromdate),
+              "STRTODATE": this.formatDateToYYYYMMDD(this.loyaltyregisterFrom.value.todate),
+              "STRCUSTCODEFROM": this.loyaltyregisterFrom.value.customerfrom,
+              "STRCUSTCODETO": this.loyaltyregisterFrom.value.customerto,
+              "STRPOINTSFROM": JSON.stringify(this.loyaltyregisterFrom.value.pointsfrom),
+              "STRPOINTSTO":  JSON.stringify(this.loyaltyregisterFrom.value.pointsto),
+              "STRBRANCHES": this.formattedBranchDivisionData || this.fetchedBranchDataParam
+            }
+        })
+      }
+    };
+    this.commonService.showSnackBarMsg('MSG81447');
+    this.dataService.postDynamicAPI('ExecueteSPInterface', payload)
+    .subscribe((result: any) => {
+      console.log(result);
+      let data = result.dynamicData.map((item: any) => item[0].ERRORMESSAGE);
+      let Notifdata = result.dynamicData.map((item: any) => item[0].ERRORCODE);
+      if (Notifdata == 1) {
+        this.commonService.closeSnackBarMsg()
+        Swal.fire({
+          title: data || 'Success',
+          text: '',
+          icon: 'success',
+          confirmButtonColor: '#336699',
+          confirmButtonText: 'Ok'
+        })
+        this.popupVisible = false;
+        this.activeModal.close(data);
+      }
+      else {
+        this.toastr.error(Notifdata)
+      }
+    });   
   }
 
   setDateValue(event: any){
@@ -343,22 +341,7 @@ export class LoyaltyRegisterComponent implements OnInit {
     }
   }
 
-  ngAfterViewInit(){
-    this.screenName = this.commonService.getModuleName();
-    const retrievedData = localStorage.getItem('menuPermissions');
-    if (retrievedData) {
-      const menuPermissions = JSON.parse(retrievedData);
-      
-      const filteredData = menuPermissions.filter((item: any) => item.MENU_CAPTION_ENG === this.screenName)
-      .map((item: any) => ({
-        MENU_ID: item.MENU_ID,
-        MENU_CAPTION_ENG: item.MENU_CAPTION_ENG,
-        PERMISSION: item.PERMISSION
-      }));
 
-      console.log('Permission data for Loyalty ',filteredData[0].PERMISSION)
-    }
-  }
 
 
   
