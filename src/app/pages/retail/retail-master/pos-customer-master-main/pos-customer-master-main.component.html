@@ -26,7 +26,11 @@
               >
               <div class="col-md-8">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="code" />
+                  <input
+                    readonly="true"
+                    matInput="text"
+                    formControlName="code"
+                  />
                 </mat-form-field>
               </div>
             </div>
@@ -44,7 +48,11 @@
                   style="width: -webkit-fill-available"
                   appearance="outline"
                 >
-                  <input matInput="text" formControlName="parentPosCode" />
+                  <input
+                    readonly="true"
+                    matInput="text"
+                    formControlName="parentPosCode"
+                  />
                   <master-search
                     [MasterSearchData]="parentPosCode"
                     class="masterSearch"
@@ -67,7 +75,11 @@
                   style="width: -webkit-fill-available"
                   appearance="outline"
                 >
-                  <input matInput="text" formControlName="refBy" />
+                  <input
+                    readonly="true"
+                    matInput="text"
+                    formControlName="refBy"
+                  />
                   <master-search
                     [MasterSearchData]="refByCode"
                     class="masterSearch"
@@ -87,8 +99,8 @@
                     for="inputPassword"
                     class="col-sm-4 col-form-label"
                     id="ID004"
-                    >Name * </label
-                  >
+                    >Name *
+                  </label>
                   <div class="col-md-8">
                     <mat-form-field
                       appearance="outline"
@@ -117,7 +129,7 @@
               </div>
               <div class="col-md-6">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="nameDesc" required/>
+                  <input matInput="text" formControlName="nameDesc" required />
                 </mat-form-field>
               </div>
             </div>
@@ -131,7 +143,12 @@
               </div>
               <div class="col-md-6">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="number" formControlName="creditCardLimit" />
+                  <input
+                    matInput
+                    type="number"
+                    formControlName="creditCardLimit"
+                    style="text-align: end"
+                  />
                 </mat-form-field>
               </div>
             </div>
@@ -217,7 +234,8 @@
                     name="dob"
                     placeholder="DD/MM/YYYY"
                     DateValidation
-                    formControlName="dob" readonly
+                    formControlName="dob"
+                    readonly
                   />
                   <mat-datepicker-toggle
                     matSuffix
@@ -268,11 +286,16 @@
                 for="inputPassword"
                 class="col-sm-3 col-form-label"
                 id="ID012"
-                >Country(R)*</label
+                >Country<sup>(R)</sup>*</label
               >
               <div class="col-md-3">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="country" required/>
+                  <input
+                    readonly="true"
+                    matInput="text"
+                    formControlName="country"
+                    required
+                  />
                 </mat-form-field>
               </div>
               <div class="col-md-6">
@@ -280,7 +303,11 @@
                   style="width: -webkit-fill-available"
                   appearance="outline"
                 >
-                  <input matInput="text" formControlName="countryCode" />
+                  <input
+                    readonly="true"
+                    matInput="text"
+                    formControlName="countryCode"
+                  />
                   <master-search
                     [MasterSearchData]="countryCodeData"
                     class="masterSearch"
@@ -298,13 +325,19 @@
               >
               <div class="col-md-3">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="moblieCountry" />
+                  <input
+                    readonly="true"
+                    matInput="text"
+                    style="text-align: end"
+                    formControlName="moblieCountry"
+                  />
                 </mat-form-field>
               </div>
               <div class="col-md-6">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
-                    matInput="number"
+                    matInput
+                    type="number"
                     formControlName="moblieNumber"
                     class="text-right"
                   />
@@ -321,6 +354,7 @@
               <div class="col-md-3">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
+                    readonly="true"
                     matInput="text"
                     formControlName="moblie1Country"
                     class="text-right"
@@ -329,23 +363,16 @@
               </div>
               <div class="col-md-6">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="number" formControlName="moblie1Number" />
+                  <input
+                    matInput
+                    type="number"
+                    formControlName="moblie1Number"
+                    class="text-right"
+                  />
                 </mat-form-field>
               </div>
             </div>
-            <div class="row mb-1">
-              <label
-                for="inputPassword"
-                class="col-sm-4 col-form-label"
-                id="ID015"
-                >Email ID</label
-              >
-              <div class="col-md-8">
-                <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="email" formControlName="emailId" />
-                </mat-form-field>
-              </div>
-            </div>
+
             <div class="row mb-1">
               <label
                 for="inputPassword"
@@ -356,6 +383,7 @@
               <div class="col-md-3">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
+                    readonly="true"
                     matInput="text"
                     formControlName="telRCountry"
                     class="text-right"
@@ -364,7 +392,12 @@
               </div>
               <div class="col-md-6">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="telRNumber" />
+                  <input
+                    matInput
+                    type="number"
+                    formControlName="telRNumber"
+                    class="text-right"
+                  />
                 </mat-form-field>
               </div>
             </div>
@@ -378,6 +411,7 @@
               <div class="col-md-3">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
+                    readonly="true"
                     matInput="text"
                     formControlName="tel0Country"
                     class="text-right"
@@ -386,7 +420,52 @@
               </div>
               <div class="col-md-6">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="tel0number" />
+                  <input
+                    matInput
+                    type="number"
+                    formControlName="tel0number"
+                    class="text-right"
+                  />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row mb-1">
+              <label
+                for="inputPassword"
+                class="col-sm-4 col-form-label"
+                id="ID015"
+                >Email ID</label
+              >
+              <!-- <div class="col-md-8">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <input type="email" matInput formControlName="emailId" />
+                </mat-form-field>
+              </div> -->
+              <div *ngIf="posCustomerMasterMainForm" class="col-md-8">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <input
+                    type="email"
+                    matInput
+                    formControlName="emailId"
+                    required
+                  />
+                  <!-- <mat-error *ngIf="posCustomerMasterMainForm.get('emailId')?.hasError('required')">Email is required.</mat-error> -->
+                  <mat-error
+                    *ngIf="
+                      posCustomerMasterMainForm
+                        .get('emailId')
+                        ?.hasError('email')
+                    "
+                    >Invalid email format.</mat-error
+                  >
+                  <mat-error
+                    *ngIf="
+                      posCustomerMasterMainForm
+                        .get('emailId')
+                        ?.hasError('domainInvalid')
+                    "
+                    >Email must end with a valid domain (e.g., .com).</mat-error
+                  >
                 </mat-form-field>
               </div>
             </div>
@@ -399,7 +478,12 @@
               >
               <div class="col-md-8">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="faxNo" />
+                  <input
+                    class="text-right"
+                    matInput
+                    type="number"
+                    formControlName="faxNo"
+                  />
                 </mat-form-field>
               </div>
             </div>
@@ -408,14 +492,19 @@
                 for="inputPassword"
                 class="col-sm-4 col-form-label"
                 id="ID019"
-                >Cust. Type * </label
-              >
+                >Cust. Type *
+              </label>
               <div class="col-md-8">
                 <mat-form-field
                   style="width: -webkit-fill-available"
                   appearance="outline"
                 >
-                  <input matInput="text" formControlName="custType" required/>
+                  <input
+                    matInput="text"
+                    maxlength="6"
+                    formControlName="custType"
+                    required
+                  />
                 </mat-form-field>
               </div>
             </div>
@@ -424,14 +513,19 @@
                 for="inputPassword"
                 class="col-sm-4 col-form-label"
                 id="ID020"
-                >Nationality * </label
-              >
+                >Nationality *
+              </label>
               <div class="col-md-8">
                 <mat-form-field
                   style="width: -webkit-fill-available"
                   appearance="outline"
                 >
-                  <input matInput="text" formControlName="nationality" required/>
+                  <input
+                    readonly="true"
+                    matInput="text"
+                    formControlName="nationality"
+                    required
+                  />
                   <master-search
                     [MasterSearchData]="nationalityCode"
                     class="masterSearch"
@@ -453,9 +547,9 @@
                   appearance="outline"
                 >
                   <input
+                    readonly="true"
                     matInput="text"
                     formControlName="state"
-                    class="text-right"
                   />
                   <master-search
                     [MasterSearchData]="stateCode"
@@ -477,7 +571,11 @@
                   style="width: -webkit-fill-available"
                   appearance="outline"
                 >
-                  <input matInput="text" formControlName="city" />
+                  <input
+                    readonly="true"
+                    matInput="text"
+                    formControlName="city"
+                  />
                   <master-search
                     [MasterSearchData]="cityCodeData"
                     class="masterSearch"
@@ -498,7 +596,11 @@
                   style="width: -webkit-fill-available"
                   appearance="outline"
                 >
-                  <input matInput="text" formControlName="language" />
+                  <input
+                    matInput="text"
+                    readonly="true"
+                    formControlName="language"
+                  />
                   <master-search
                     [MasterSearchData]="languageCodeData"
                     class="masterSearch"
@@ -519,7 +621,11 @@
                   style="width: -webkit-fill-available"
                   appearance="outline"
                 >
-                  <input matInput="text" formControlName="favCelebration" />
+                  <input
+                    matInput="text"
+                    readonly="true"
+                    formControlName="favCelebration"
+                  />
                   <master-search
                     [MasterSearchData]="favCelebrationCode"
                     class="masterSearch"
@@ -541,7 +647,11 @@
                 >
                 <div class="col-md-7">
                   <mat-form-field style="width: 100%" appearance="outline">
-                    <input matInput="text" formControlName="vat" />
+                    <input
+                      maxlength="15"
+                      matInput="text"
+                      formControlName="vat"
+                    />
                   </mat-form-field>
                 </div>
               </div>
@@ -554,7 +664,29 @@
                 >
                 <div class="col-md-7">
                   <mat-form-field style="width: 100%" appearance="outline">
-                    <input matInput="text" formControlName="panNo" />
+                    <input
+                      maxlength="10"
+                      (input)="onPanNoInput($event)"
+                      matInput="text"
+                      formControlName="panNo"
+                    />
+
+                    <mat-error
+                      *ngIf="
+                        posCustomerMasterMainForm
+                          .get('panNo')
+                          ?.hasError('required')
+                      "
+                      >PAN No is required.</mat-error
+                    >
+                    <mat-error
+                      *ngIf="
+                        posCustomerMasterMainForm
+                          .get('panNo')
+                          ?.hasError('invalidPan')
+                      "
+                      >PAN No is not valid.</mat-error
+                    >
                   </mat-form-field>
                 </div>
               </div>
@@ -566,15 +698,16 @@
                 id="ID028"
                 >Whatsapp</label
               >
-              <div class="col-md-2">
+              <div class="col-md-3">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
+                    readonly="true"
                     matInput="text"
                     formControlName="whatsappCountryCode"
                   />
                 </mat-form-field>
               </div>
-              <div class="col-md-7">
+              <div class="col-md-6">
                 <mat-form-field style="width: 96%" appearance="outline">
                   <input
                     matInput="text"
@@ -604,7 +737,11 @@
                               style="width: 100%"
                               appearance="outline"
                             >
-                              <input matInput="text" formControlName="spouse" />
+                              <input
+                                appAlphabetsOnly
+                                matInput="text"
+                                formControlName="spouse"
+                              />
                             </mat-form-field>
                           </div>
                         </div>
@@ -659,7 +796,8 @@
                               appearance="outline"
                             >
                               <input
-                                matInput="text"
+                                type="number"
+                                matInput
                                 formControlName="noOfChildren"
                                 class="text-right"
                               />
@@ -679,6 +817,7 @@
                               appearance="outline"
                             >
                               <input
+                                readonly="true"
                                 matInput="text"
                                 formControlName="religion"
                               />
@@ -703,6 +842,7 @@
                               appearance="outline"
                             >
                               <input
+                                readonly="true"
                                 matInput="text"
                                 formControlName="category"
                               />
@@ -727,6 +867,7 @@
                               appearance="outline"
                             >
                               <input
+                                readonly="true"
                                 matInput="text"
                                 formControlName="custStatus"
                               />
@@ -751,7 +892,8 @@
                               appearance="outline"
                             >
                               <input
-                                matInput="text"
+                                type="number"
+                                matInput
                                 formControlName="income"
                                 class="text-right"
                               />
@@ -803,9 +945,16 @@
                               appearance="outline"
                             >
                               <input
+                                readonly="true"
                                 matInput="text"
                                 formControlName="custIdType"
                               />
+
+                              <master-search
+                                [MasterSearchData]="typeidCodeData"
+                                class="masterSearch"
+                                (newRowClick)="typeidCodeSelected($event)"
+                              ></master-search>
                             </mat-form-field>
                           </div>
                         </div>
@@ -839,6 +988,7 @@
                             >
                               <input
                                 matInput
+                                readonly="true"
                                 [matDatepicker]="custDate"
                                 [max]="vocMaxDate"
                                 name="custDate"
@@ -869,7 +1019,11 @@
                               style="width: -webkit-fill-available"
                               appearance="outline"
                             >
-                              <input matInput="text" formControlName="POBox" />
+                              <input
+                                matInput="text"
+                                maxlength="6"
+                                formControlName="POBox"
+                              />
                             </mat-form-field>
                           </div>
                         </div>
@@ -957,9 +1111,6 @@
                           </div>
                         </div>
                       </div>
-                      
-                      
-                      
                     </div>
                   </div>
                 </div>
@@ -993,7 +1144,10 @@
                       >
                     </div>
                     <div class="col-md-5 pt-3">
-                      <mat-checkbox formControlName="notInterested" (change)="check()" id="ID051"
+                      <mat-checkbox
+                        formControlName="notInterested"
+                        (change)="check()"
+                        id="ID051"
                         >NOT INTERESTED</mat-checkbox
                       >
                     </div>
@@ -1022,7 +1176,10 @@
                           >
                         </div>
                         <div class="col-md-5 pt-3">
-                          <mat-checkbox formControlName="socialMedia" (change)="toggle()" id="ID056" 
+                          <mat-checkbox
+                            formControlName="socialMedia"
+                            (change)="toggle()"
+                            id="ID056"
                             >SOCIAL MEDIA</mat-checkbox
                           >
                         </div>
@@ -1051,36 +1208,56 @@
                               <label class="col-form-label">Facebook</label>
                             </div>
                             <div class="col-md-6">
-                              <mat-form-field style="width:100%" appearance="outline">
-                                <input matInput formControlName="facebook" placeholder="Facebook" />
+                              <mat-form-field
+                                style="width: 100%"
+                                appearance="outline"
+                              >
+                                <input
+                                  matInput
+                                  formControlName="facebook"
+                                  placeholder="Facebook"
+                                />
                               </mat-form-field>
                             </div>
                           </div>
-                      
+
                           <div class="row">
                             <div class="col-md-6">
                               <label class="col-form-label">Twitter</label>
                             </div>
                             <div class="col-md-6">
-                              <mat-form-field style="width:100%" appearance="outline">
-                                <input matInput formControlName="twitter" placeholder="Twitter" />
+                              <mat-form-field
+                                style="width: 100%"
+                                appearance="outline"
+                              >
+                                <input
+                                  matInput
+                                  formControlName="twitter"
+                                  placeholder="Twitter"
+                                />
                               </mat-form-field>
                             </div>
                           </div>
-                      
+
                           <div class="row">
                             <div class="col-md-6">
                               <label class="col-form-label">Instagram</label>
                             </div>
                             <div class="col-md-6">
-                              <mat-form-field style="width:100%" appearance="outline">
-                                <input matInput formControlName="instagram" placeholder="Instagram" />
+                              <mat-form-field
+                                style="width: 100%"
+                                appearance="outline"
+                              >
+                                <input
+                                  matInput
+                                  formControlName="instagram"
+                                  placeholder="Instagram"
+                                />
                               </mat-form-field>
                             </div>
                           </div>
                         </div>
                       </div>
-                      
                     </div>
                   </div>
                 </div>
@@ -1583,10 +1760,8 @@
                           appearance="outline"
                         >
                           <mat-select formControlName="reasonOfPurchase">
-                            <mat-option value="Self Use">Self Use
-                            </mat-option>
-                            <mat-option value="Gift">Gift
-                            </mat-option>
+                            <mat-option value="Self Use">Self Use </mat-option>
+                            <mat-option value="Gift">Gift </mat-option>
                           </mat-select>
                         </mat-form-field>
                       </div>
@@ -1753,8 +1928,8 @@
         </div>
         <div class="row mb-1">
           <label for="inputPassword" class="col-sm-4 col-form-label" id="ID088"
-            >Opened On * </label
-          >
+            >Opened On *
+          </label>
           <div class="col-md-8">
             <mat-form-field style="width: 100%" appearance="outline">
               <input
