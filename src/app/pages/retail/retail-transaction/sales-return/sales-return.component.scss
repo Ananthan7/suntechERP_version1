@@ -1,258 +1,262 @@
 body {
-    background: #cccccc !important;
+  background: #cccccc !important;
+}
+
+.card {
+  background-color: #ffffff;
+}
+
+.pcoded-main-container {
+  background-color: #cccccc !important;
+}
+
+.form-group {
+  margin-bottom: 0.4rem;
+}
+
+label {
+  margin-bottom: 0.1rem;
+}
+
+.textboxcorner {
+  border-radius: 2px;
+  height: 30px;
+  text-align: right;
+}
+
+.card-header {
+  padding: 10px;
+  background-color: #f0f0f0;
+}
+
+.card-body {
+  padding: 10px 10px;
+  margin-top: 10px;
+}
+
+.table thead th {
+  background-color: #f0f0f0;
+  padding: 5px;
+  text-transform: capitalize;
+}
+
+.table td {
+  padding: 5px;
+  vertical-align: middle;
+}
+
+.notification-card {
+  cursor: pointer;
+}
+
+.badge {
+  font-size: 113%;
+  padding: 1em 0.6em;
+  font-weight: 600;
+  width: 50px;
+  height: 50px;
+}
+
+// touch-big-button styles
+.touch-big-button-black {
+  background-color: #666666 !important;
+}
+
+.touch-big-button {
+  min-width: 130px;
+  background-color: #0861a9;
+  text-align: center;
+  color: #ffffff;
+  cursor: pointer;
+  padding: 0px 4px 4px 4px;
+  text-align: center !important;
+}
+
+.touch-big-button i {
+  padding-right: 7px;
+  padding-top: 13px;
+  font-size: 15px;
+}
+
+
+button[aria-label="Close"]:focus {
+  outline: none;
+}
+
+.tabletd_gray {
+  width: 100%;
+  margin-bottom: 10px;
+  background: #fff;
+}
+
+.tabletd_gray tr td,
+.tabletd_gray tr th {
+  text-align: center;
+  border: 1px solid #ccc;
+}
+
+.rhs-table-1 {
+  border-collapse: separate;
+  border-spacing: 0 0.5em;
+}
+
+.rhs-table-1 td {
+  border: 1px solid #a4a4a4;
+}
+
+.rhs-table-1 tr td input {
+  border: none !important;
+}
+
+.mat-form-field {
+  display: inline !important;
+}
+.mat-form-field-pending-so {
+  display: inline-block  !important;
+}
+
+.rhs-table-1 .td-w-40 {
+  width: 40% !important;
+  border-right: none !important;
+  padding-left: 5px;
+  background-color: #dedede;
+}
+
+.btnsml {
+  padding: 2px 5px !important;
+  font-size: 12px !important;
+}
+
+.btn-m-r-10 {
+  margin-right: 10px;
+}
+
+.st_txt_right {
+  text-align: right;
+}
+
+.dx-column-indicators {
+  float: unset !important;
+}
+
+.dx-datagrid-action.dx-cell-focus-disabled {
+  text-align: center !important;
+  vertical-align: middle !important;
+}
+
+::ng-deep .mat-tab-body-content {
+  overflow: hidden !important;
+}
+
+::ng-deep {
+  .cdk-overlay-container {
+    position: fixed;
+    z-index: 1070 !important;
   }
-  
-  .card {
-    background-color: #ffffff;
+  .modal-content {
+    box-shadow: 0 11px 15px -7px rgba(0, 0, 0, 0.2), 0 24px 38px 3px rgba(0, 0, 0, 0.14), 0 9px 46px 8px rgba(0, 0, 0, 0.12);
   }
-  
-  .pcoded-main-container {
-    background-color: #cccccc !important;
-  }
-  
-  .form-group {
-    margin-bottom: 0.4rem;
-  }
-  
-  label {
-    margin-bottom: 0.1rem;
-  }
-  
-  .textboxcorner {
-    border-radius: 2px;
-    height: 30px;
-    text-align: right;
-  }
-  
-  .card-header {
-    padding: 10px;
-    background-color: #f0f0f0;
-  }
-  
-  .card-body {
-    padding: 10px 10px;
-    margin-top: 10px;
-  }
-  
-  .table thead th {
-    background-color: #f0f0f0;
-    padding: 5px;
-    text-transform: capitalize;
-  }
-  
-  .table td {
-    padding: 5px;
-    vertical-align: middle;
-  }
-  
-  .notification-card {
-    cursor: pointer;
-  }
-  
-  .badge {
-    font-size: 113%;
-    padding: 1em 0.6em;
-    font-weight: 600;
-    width: 50px;
-    height: 50px;
-  }
-  
-  // touch-big-button styles
-  .touch-big-button-black {
-    background-color: #666666 !important;
-  }
-  
-  .touch-big-button {
-    min-width: 130px;
-    background-color: #0861a9;
-    text-align: center;
-    color: #ffffff;
-    cursor: pointer;
-    padding: 0px 4px 4px 4px;
-    text-align: center !important;
-  }
-  
-  .touch-big-button i {
-    padding-right: 7px;
-    padding-top: 13px;
-    font-size: 15px;
-  }
-  
-  
-  button[aria-label="Close"]:focus {
-    outline: none;
-  }
-  
-  .tabletd_gray {
-    width: 100%;
-    margin-bottom: 10px;
+}
+
+
+.mat-flat-button.mat-primary {
+  background-color: #428cc9 !important;
+  color: #fff;
+}
+
+.mat-flat-button.mat-primary:disabled {
+  color: #fff;
+  background-color: #7e8790 !important;
+  border-color: #7e8790 !important;
+  cursor: not-allowed !important;
+}
+
+fieldset {
+  padding: 10px;
+  border: solid 1px #949494;
+  position: relative;
+  margin-top: 25px;
+
+  legend {
+    color: #333334;
+    position: absolute;
+    top: -13px;
     background: #fff;
-  }
-  
-  .tabletd_gray tr td,
-  .tabletd_gray tr th {
+    width: 80px;
     text-align: center;
-    border: 1px solid #ccc;
-  }
-  
-  .rhs-table-1 {
-    border-collapse: separate;
-    border-spacing: 0 0.5em;
-  }
-  
-  .rhs-table-1 td {
-    border: 1px solid #a4a4a4;
-  }
-  
-  .rhs-table-1 tr td input {
-    border: none !important;
-  }
-  
-  .mat-form-field {
-    display: inline !important;
-  }
-  .mat-form-field-pending-so {
-    display: inline-block  !important;
-  }
-  
-  .rhs-table-1 .td-w-40 {
-    width: 40% !important;
-    border-right: none !important;
-    padding-left: 5px;
-    background-color: #dedede;
-  }
-  
-  .btnsml {
-    padding: 2px 5px !important;
-    font-size: 12px !important;
-  }
-  
-  .btn-m-r-10 {
-    margin-right: 10px;
-  }
-  
-  .st_txt_right {
-    text-align: right;
-  }
-  
-  .dx-column-indicators {
-    float: unset !important;
-  }
-  
-  .dx-datagrid-action.dx-cell-focus-disabled {
-    text-align: center !important;
-    vertical-align: middle !important;
-  }
-  
-  ::ng-deep .mat-tab-body-content {
-    overflow: hidden !important;
-  }
-  
-  ::ng-deep {
-    .cdk-overlay-container {
-      position: fixed;
-      z-index: 1070 !important;
-    }
-    .modal-content {
-      box-shadow: 0 11px 15px -7px rgba(0, 0, 0, 0.2), 0 24px 38px 3px rgba(0, 0, 0, 0.14), 0 9px 46px 8px rgba(0, 0, 0, 0.12);
-    }
-  }
-  
-  
-  .mat-flat-button.mat-primary {
-    background-color: #428cc9 !important;
-    color: #fff;
-  }
-  
-  .mat-flat-button.mat-primary:disabled {
-    color: #fff;
-    background-color: #7e8790 !important;
-    border-color: #7e8790 !important;
-    cursor: not-allowed !important;
-  }
-  
-  fieldset {
-    padding: 10px;
-    border: solid 1px #949494;
-    position: relative;
-    margin-top: 25px;
-  
-    legend {
-      color: #333334;
-      position: absolute;
-      top: -13px;
-      background: #fff;
-      width: 80px;
-      text-align: center;
-      font-size: 16px;
-      font-weight: 600;
-    }
-  
-  
-  }
-  
-  .karat_code{
-    width: 100%;
-  }
-  button:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-  
-  @media print {
-    @page {
-      size: A5;
-      margin: 0;
-    }
-    body {
-      width: 148mm;
-      height: 210mm;
-    }
-  }
-  
-  .bgColourUpdate{
-    background-color: #1a61a9 !important;
-    color: #fff !important;
-  }
-  
-  .next-item-button {
-    background-color: #1a61a9;
-    color: white;
-  }
-  
-  .update-finish-button {
-    background-color: #1E3C72;
-    color: white;
-  }
-  
-  .cancel-button {
-    background-color: #428cc9;
-    color: white;
-  }
-  
-  .slider{
-    margin-left: auto;
-    margin-right: auto;
-    width: fit-content;
-  }
-  
-  .button-spacing {
-    margin-right: 16px;
+    font-size: 16px;
+    font-weight: 600;
   }
 
-  ::ng-deep {
 
-    // form field starts
-    .mat-form-field-outline-start {
-      border-radius: 0px 0 0 0px !important;
-      min-width: 24px !important;
-      background-color: #f7f8fb;
-    }
-  
-    .mat-form-field-outline-end {
-      border-radius: 0 0px 0px 0 !important;
-      min-width: 24px !important;
-      background-color: #f7f8fb;
-    }
+}
+
+.karat_code{
+  width: 100%;
+}
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media print {
+  @page {
+    size: A5;
+    margin: 0;
   }
-  
+  body {
+    width: 148mm;
+    height: 210mm;
+  }
+}
+
+.bgColourUpdate{
+  background-color: #1a61a9 !important;
+  color: #fff !important;
+}
+
+.next-item-button {
+  background-color: #1a61a9;
+  color: white;
+}
+
+.update-finish-button {
+  background-color: #1E3C72;
+  color: white;
+}
+
+.cancel-button {
+  background-color: #428cc9;
+  color: white;
+}
+
+.slider{
+  margin-left: auto;
+  margin-right: auto;
+  width: fit-content;
+}
+
+.button-spacing {
+  margin-right: 16px;
+}
+
+::ng-deep {
+
+  // form field starts
+  .mat-form-field-outline-start {
+    border-radius: 0px 0 0 0px !important;
+    min-width: 24px !important;
+    background-color: #f7f8fb;
+  }
+
+  .mat-form-field-outline-end {
+    border-radius: 0 0px 0px 0 !important;
+    min-width: 24px !important;
+    background-color: #f7f8fb;
+  }
+  .customheader{
+    font-size: 18px;
+    font-weight: 500;
+    color: black;
+  }
+}
