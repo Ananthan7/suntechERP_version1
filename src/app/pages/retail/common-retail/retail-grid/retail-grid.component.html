@@ -5,7 +5,7 @@
     <!-- table Header -->
     <div class="table_header">
         <div class="d-flex">
-            <button class="btn btn-white add-btn" (click)="addButtonClick()">
+            <button class="btn btn-white add-btn" (click)="addButtonClick()" [disabled]="!printPreviewFlag">
                 <i class="fa fa-plus"></i> {{ templateViewForReports ? 'Create New Template' : 'Add' }}
             </button>
             <div class="icons_wrap">
@@ -51,7 +51,7 @@
    <div class="row">
         <div class="col-md-12" *ngIf="templateViewForReports">  
           <dx-data-grid [dataSource]="dataSource" [showBorders]="true" [allowColumnResizing]="true"
-          [columnAutoWidth]="true" [filterRow]="{ visible: true }" [paging]="{ pageSize: 10 }" >
+          [columnAutoWidth]="true" [filterRow]="{ visible: true }" [paging]="{ pageSize: 10 }"  [disabled]="!printPreviewFlag">
         
           <!-- <dxo-editing mode="row" [allowUpdating]="true" [allowDeleting]="true" [allowAdding]="true"></dxo-editing> -->
           <dxo-filter-row></dxo-filter-row>
