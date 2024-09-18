@@ -34,8 +34,8 @@ export class BranchDivisionComponent implements OnInit {
   pageIndex: number = 1; // Current page index
 
   @Input() existingData: any;
-  selectedRowKeys: number[] = [];
-  selectedDivisionKeys: number[]= [];
+  selectedRowKeys: any[] = [];
+  selectedDivisionKeys: any[]= [];
   selectedAreaKeys: any[]= [];
   selectedBcategKeys: any[] = [];
 
@@ -66,6 +66,32 @@ export class BranchDivisionComponent implements OnInit {
 
     const selectedBusinessCategoryKeys = this.businessCategDataSource.filter(item => this.fetchData?.includes(item.CATEGORY_CODE)).map(item => item);
     this.selectedBcategKeys = selectedBusinessCategoryKeys;
+
+    //to bring the selected entries to top of the grid
+    const selectedSet = new Set(this.selectedRowKeys.map(item => item.SRNO));
+    this.BranchDataSource.sort((a, b) => {
+      const aIsSelected = selectedSet.has(a.SRNO) ? 1 : 0;
+      const bIsSelected = selectedSet.has(b.SRNO) ? 1 : 0;
+      return bIsSelected - aIsSelected;
+    });
+    const selectedDivisionSet = new Set(this.selectedDivisionKeys.map(item => item.SRNO));
+    this.divisionDataSource.sort((a, b) => {
+      const aIsSelected = selectedDivisionSet.has(a.SRNO) ? 1 : 0;
+      const bIsSelected = selectedDivisionSet.has(b.SRNO) ? 1 : 0;
+      return bIsSelected - aIsSelected;
+    });
+    const selectedAreaSet = new Set(this.selectedAreaKeys.map(item => item.SRNO));
+    this.areaDataSource.sort((a, b) => {
+      const aIsSelected = selectedAreaSet.has(a.SRNO) ? 1 : 0;
+      const bIsSelected = selectedAreaSet.has(b.SRNO) ? 1 : 0;
+      return bIsSelected - aIsSelected;
+    });
+    const selectedBcategSet = new Set(this.selectedBcategKeys.map(item => item.SRNO));
+    this.businessCategDataSource.sort((a, b) => {
+      const aIsSelected = selectedBcategSet.has(a.SRNO) ? 1 : 0;
+      const bIsSelected = selectedBcategSet.has(b.SRNO) ? 1 : 0;
+      return bIsSelected - aIsSelected;
+    });
   }
 
   openMasterSearch() {

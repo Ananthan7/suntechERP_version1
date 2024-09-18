@@ -1,97 +1,171 @@
 <div class="card-content border-bottom d-flex justify-content-between p-2">
-    <h5 class="pos-modaltitle" id="modal-dia-metal">Loyalty Register (POS) </h5>
-    <button type="button" class="btn btn-close close-btn" (click)="close()">
-      <i class="feather icon-x close-icon"></i>
-    </button>
+  <h5 class="pos-modaltitle" id="modal-dia-metal">Loyalty Register (POS)</h5>
+  <button type="button" class="btn btn-close close-btn" (click)="close()">
+    <i class="feather icon-x close-icon"></i>
+  </button>
+</div>
+<!-- modal header component -->
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
+<div class="row">
+  <div class="col-md-12">
+    <form [formGroup]="loyaltyregisterFrom">
+      <div class="container-fluid pt-3">
+        <div class="row justify-content-between mb-5">
+          <div class="col-md-9">
+            <div class="row align-items-center mb-2">
+              <label for="inputPassword"  class="col-sm-1 col-form-label"
+                id="ID001"> Branch</label>
+              <div class="col-md-4">
+                <mat-form-field appearance="outline" style="width: -webkit-fill-available">
+                  <input matInput="text" name="branch" autocomplete="off"
+                    formControlName="branch"/>
+                  <app-branch-division [fetchData]="fetchedBranchData" (newRowClick)="selectedData($event)"
+                  class="branchDivisionelectr" [matTooltip]="branchDivisionControlsTooltip"
+                  matTooltipClass="custom-tooltip"  matTooltipPosition="above"></app-branch-division>
+                </mat-form-field>
+              </div>
+
+              <!-- <label for="inputPassword" class="col-sm-2 col-form-label" id="ID007">Report To</label> -->
+              <div class="col-md-5">
+                <!-- <app-report-to-control (selectedvalue)="setValueFromCommon($event)"></app-report-to-control> -->
+                <!-- <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
+                              <mat-select formControlName="reportto">
+                                <mat-option value="1"></mat-option>
+                              </mat-select>
+                            </mat-form-field> -->
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-9">
+            <div class="row align-items-center">
+              <app-date (selectedDate)="setDateValue($event)" [dateValue]="dateToPass"></app-date>
+              <!-- <label for="inputPassword" class="col-sm-2 col-form-label" id="ID011">Date</label>
+                            <div class="col-md-4">
+                              <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
+                                  <input matInput [matDatepicker]="fromdate" name="fromdate"  placeholder="DD/MM/YYYY" DateValidation />
+                                  <mat-datepicker-toggle matSuffix [for]="fromdate"></mat-datepicker-toggle>
+                                  <mat-datepicker [startAt]="currentDate" #fromdate></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+                            <label for="inputPassword" class="col-sm-2 col-form-label" id="ID005">To</label>
+                            <div class="col-md-4">
+                              <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
+                                  <input matInput [matDatepicker]="todate" name="todate" placeholder="DD/MM/YYYY" DateValidation />
+                                  <mat-datepicker-toggle matSuffix [for]="todate"></mat-datepicker-toggle>
+                                  <mat-datepicker [startAt]="currentDate" #todate></mat-datepicker>
+                                </mat-form-field>
+                            </div>  -->
+            </div>
+          </div>
+
+          <div class="col-md-9">
+            <div class="row align-items-center mb-1">
+              <label for="inputPassword" class="col-sm-1 col-form-label"
+                id="ID006">Customer</label>
+              <div class="col-md-4">
+                <mat-form-field appearance="outline"
+                  style="width: -webkit-fill-available">
+                  <input type="text" matInput formControlName="customerfrom" />
+                </mat-form-field>
+              </div>
+              <div class="col-md-5">
+                <mat-form-field appearance="outline"
+                  style="width: -webkit-fill-available">
+                  <input type="text" matInput formControlName="customerto" />
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-9">
+            <div class="row align-items-center">
+              <label for="inputPassword"
+                class="col-sm-1 col-form-label" id="ID008">Points :</label>
+              <div class="col-md-4">
+                <mat-form-field appearance="outline"
+                  style="width: -webkit-fill-available">
+                  <input type="number" matInput
+                    formControlName="pointsfrom" style="text-align: right"/>
+                </mat-form-field>
+              </div>
+              <div class="col-md-5">
+                <mat-form-field appearance="outline"
+                  style="width: -webkit-fill-available">
+                  <input type="number" matInput
+                    formControlName="pointsto" style="text-align: right"/>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+
+          <dx-popup [width]="300" [height]="180" [showTitle]="true" container=".dx-viewport"
+            title="Template Data" [dragEnabled]="false" [showCloseButton]="false" (onHidden)="popupClosed()"
+            [visible]="popupVisible">
+            <div class="popup-content">
+              <div class="form-group">
+                <label for="T_Name">Name:</label>
+                <input type="text" id="T_Name" formControlName="templateName" 
+                style="border-top: solid 1.5px black;"/>
+              </div>
+              <div class="button-group d-flex">
+                <button mat-flat-button [ngClass]="{SaveNew_template: templateNameHasValue,
+                    'btn-m-r-10': true, 'demo-button': true, 'btn-width': true, 'mx-1': true}"
+                  (click)="saveTemplate_DB()">
+                  {{ templateNameHasValue ? "Save as New Template" : "Save" }}
+                </button>
+                <button  mat-flat-button class="btn-m-r-10 btn-width mx-1 cancelBTN"
+                  (click)="popupClosed()">
+                  Cancel</button>
+              </div>
+              <br />
+              <br />
+              <br />
+            </div>
+          </dx-popup>
+
+          <!-- <div class="col-md-12 text-right p-3">
+                  <button mat-flat-button color="primary" class="mx-2 cancelBTN" > Cancel </button>
+                  <button mat-flat-button color="primary" style="width: 100px;"> Go </button>
+                </div>   -->
+          <div class="row mt-2 justify-content-end mx-2">
+            <div class="icon-label-container" (click)="saveTemplate()" matTooltip="Save the selections as a new template">
+              <i class="fa fa-bookmark fa-2x" style="color: #5497b2"></i>
+              <span class="label">Save as Template</span>
+            </div>
+
+            <div class="icon-label-container" (click)="previewClick()" matTooltip="Preview the content">
+              <i class="fa fa-eye fa-2x" style="color: #5497b2"></i>
+              <span class="label">Preview</span>
+            </div>
+
+            <div class="icon-label-container" matTooltip="Take a print">
+              <i class="fa fa-print fa-2x" style="color: #031082"></i>
+              <span class="label">Print</span>
+            </div>
+
+            <div class="icon-label-container"  matTooltip="Generate Excel Report">
+              <i class="fa fa-file-excel fa-2x" style="color: green"></i>
+              <span class="label">Excel</span>
+            </div>
+
+            <div class="icon-label-container" matTooltip="Generate PDF Report">
+              <i class="fa fa-file-pdf fa-2x" style="color: orangered"></i>
+              <span class="label">PDF</span>
+            </div>
+
+            <div class="icon-label-container" matTooltip="Sent through mail">
+              <i class="fa fa-envelope fa-2x" style="color: deepskyblue"></i>
+              <span class="label">Email</span>
+            </div>
+
+            <div class="icon-label-container" matTooltip="Sent through whatsapp">
+              <i class="fab fa-whatsapp fa-2x" style="color: #29cf26"></i>
+              <span class="label">Whatsapp</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
   </div>
-  <!-- modal header component -->
-  <modal-header (saveClick)="formSubmit()"  (cancelClick)="close()"></modal-header>
-  <div class="row">
-      <div class="col-md-12">
-          <form [formGroup]="loyaltyregisterFrom">
-              <div class="container-fluid pt-3">
-                  <div class="row justify-content-between mb-5">
-                      <div class="col-md-8">
-                        <div class="row align-items-center mb-1">
-                          <label for="inputPassword" class="col-sm-2 col-form-label" id="ID001">Branch</label>
-                          <div class="col-md-4">
-                            <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
-                                <input matInput="text" name="branch"  autocomplete="off"/>
-                                <app-branch-division (newRowClick)="selectedData($event)" class="branchDivisionelectr"
-                                [matTooltip]="branchDivisionControls"  matTooltipClass="custom-tooltip"  
-                                matTooltipPosition="above"></app-branch-division>
-                            </mat-form-field>
-                          </div>
-
-                          <label for="inputPassword" class="col-sm-2 col-form-label" id="ID007">Report To</label>
-                          <div class="col-md-4">
-                            <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
-                                <mat-select formControlName="reportto">
-                                  <mat-option value="1"></mat-option>
-                                </mat-select>
-                              </mat-form-field>
-                          </div>
-                        </div>
-                        <!-- <div class="row align-items-center mb-1">
-                          <label for="inputPassword" class="col-sm-2 col-form-label" id="ID002">Filter </label>
-                          <div class="col-md-4">
-                            <label for="inputPassword" class="col-sm-5 col-form-label" id="ID003">From </label>
-                          </div>
-                          <div class="col-md-4">
-                            <label for="inputPassword" class="col-sm-5 col-form-label" id="ID004">To</label>
-                          </div>
-                        </div> -->
-
-                        <div class="row align-items-center mb-1">
-                          <label for="inputPassword" class="col-sm-2 col-form-label" id="ID011">Date</label>
-                          <div class="col-md-4">
-                            <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
-                                <input matInput [matDatepicker]="fromdate" name="fromdate"  placeholder="DD/MM/YYYY" DateValidation />
-                                <mat-datepicker-toggle matSuffix [for]="fromdate"></mat-datepicker-toggle>
-                                <mat-datepicker [startAt]="currentDate" #fromdate></mat-datepicker>
-                              </mat-form-field>
-                          </div>
-                          <label for="inputPassword" class="col-sm-2 col-form-label" id="ID005">To</label>
-                          <div class="col-md-4">
-                            <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
-                                <input matInput [matDatepicker]="todate" name="todate" placeholder="DD/MM/YYYY" DateValidation />
-                                <mat-datepicker-toggle matSuffix [for]="todate"></mat-datepicker-toggle>
-                                <mat-datepicker [startAt]="currentDate" #todate></mat-datepicker>
-                              </mat-form-field>
-                          </div> 
-                        </div>
-
-                        <div class="row align-items-center mb-1">
-                          <label for="inputPassword" class="col-sm-2 col-form-label" id="ID006">Customer</label>
-                          <div class="col-md-4">
-                            <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
-                              <input type="text" matInput formControlName="customerfrom" />
-                            </mat-form-field>
-                          </div>
-                          <div class="col-md-4">
-                            <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
-                              <input type="text" matInput formControlName="customerto" />
-                            </mat-form-field>
-                          </div>
-                        </div>
-
-                        <div class="row align-items-center">
-                          <label for="inputPassword" class="col-sm-2 col-form-label" id="ID008">Points :</label>
-                          <div class="col-md-4">
-                            <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
-                              <input type="number" matInput formControlName="pointsfrom" style="text-align: right;" />
-                            </mat-form-field>
-                          </div>
-                          <div class="col-md-4">
-                            <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
-                              <input type="number" matInput formControlName="pointsto" style="text-align: right;" />
-                            </mat-form-field>
-                          </div>  
-                        </div>
-                      </div>
-                      <div class="col-md-12 text-right p-3">
-                        <button mat-flat-button color="primary" class="mx-2 cancelBTN" > Cancel </button>
-                        <button mat-flat-button color="primary" style="width: 100px;"> Go </button>
-                      </div>  
-                    </div>
-  
+</div>
