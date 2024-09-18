@@ -73,11 +73,13 @@
                   <!-- <mat-label></mat-label> -->
                   <input
                     matInput
+                    [max]=" currentDate"
                     [matDatepicker]="vocDate"
                     name="vocDate"
                     formControlName="vocDate"
                     placeholder="DD/MM/YYYY"
                     DateValidation
+                    [readonly]="true"
                   />
                   <mat-datepicker-toggle
                     matSuffix

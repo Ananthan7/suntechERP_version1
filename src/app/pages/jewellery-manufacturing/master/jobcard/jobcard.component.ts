@@ -738,12 +738,13 @@ export class JobcardComponent implements OnInit {
         this.jobCardFrom.controls['type'].setValue(result.response.TYPE_CODE);
         this.jobCardFrom.controls['costcode'].setValue(result.response.COST_CODE);
         this.jobCardFrom.controls['seqcode'].setValue(result.response.SEQ_CODE);
+        this.jobCardFrom.controls['category'].setValue(result.response.CATEGORY_CODE);
+        this.jobCardFrom.controls['setref'].setValue(result.response.SET_REF);
         console.log(result.response.PICTURE_NAME,'picyure')
         this.jobCardFrom.controls['picture_name'].setValue(result.response.PICTURE_NAME);
      
 
         this.mainmetalCodeData.WHERECONDITION = `kARAT_CODE = '${this.jobCardFrom.value.karat}' and PURITY = '${this.jobCardFrom.value.purity}'`;
-
         this.tableData[0].Pcs = result.response.PCS;
         this.tableData[0].metal_color = result.response.COLOR;
         this.tableData[0].metal_wt = result.response.METAL_WT;
@@ -1802,6 +1803,24 @@ export class JobcardComponent implements OnInit {
   // }
 
   /**use: validate all lookups to check data exists in db */
+
+
+
+
+  ErrorMessageFounder(alertMsg : any) {
+    if (alertMsg == null) {
+      Swal.fire({
+        title: "Not Found",
+        text: '',
+        icon: 'warning',
+        confirmButtonColor: '#336699',
+        confirmButtonText: 'Ok'
+      });  
+    } else {
+    return alertMsg
+    }
+    
+  }
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     const inputValue = event.target.value.toUpperCase();
     LOOKUPDATA.SEARCH_VALUE = event.target.value
@@ -1823,13 +1842,19 @@ export class JobcardComponent implements OnInit {
         this.isDisableSaveBtn = false;
         let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
         if (data.length == 0) {
-          this.commonService.toastErrorByMsgId('MSG1531');
+         let alertMsg = this.commonService.toastErrorByMsgId('MSG1531');
+          console.log( this.commonService.toastErrorByMsgId('MSG1531'));
           this.jobCardFrom.controls[FORMNAME].setValue('');
           this.jobCardFrom.controls.customername.setValue('');
           this.jobCardFrom.controls.designtype.setValue('');
-          this.renderer.selectRootElement(FORMNAME).focus();
-          LOOKUPDATA.SEARCH_VALUE = ''
-          return
+          // this.renderer.selectRootElement(FORMNAME).focus();
+          LOOKUPDATA.SEARCH_VALUE = '';
+          // if (alertMsg == null || alertMsg == undefined ) {
+          //   return "NOT FOUND";
+          // }
+          return this.ErrorMessageFounder(alertMsg) && console.log("data and error message fetched succesdsfully");
+          
+          
         }
 
         if (data == '') {
@@ -1862,7 +1887,7 @@ export class JobcardComponent implements OnInit {
 
 
         const matchedItem2 = data.find((item: any) => item.DESIGN_CODE.toUpperCase() === inputValue);
-        console.log(data,'data')
+        console.log(matchedItem2,'data')
         if (matchedItem2) {
           this.jobCardFrom.controls[FORMNAME].setValue(matchedItem2.DESIGN_CODE);
           if (FORMNAME === 'designcode') {
@@ -1875,6 +1900,7 @@ export class JobcardComponent implements OnInit {
             this.jobCardFrom.controls.jobtype.setValue(matchedItem2.DESIGN_TYPE);
             this.jobCardFrom.controls.type.setValue(matchedItem2.TYPE_CODE);
             this.jobCardFrom.controls.purity.setValue(matchedItem2.PURITY);
+           this.getDesigncode()
           }
         } else {
           this.handleLookupError(FORMNAME, LOOKUPDATA);

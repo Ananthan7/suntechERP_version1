@@ -34,8 +34,8 @@ export class BranchDivisionComponent implements OnInit {
   pageIndex: number = 1; // Current page index
 
   @Input() existingData: any;
-  selectedRowKeys: number[] = [];
-  selectedDivisionKeys: number[]= [];
+  selectedRowKeys: any[] = [];
+  selectedDivisionKeys: any[]= [];
   selectedAreaKeys: any[]= [];
   selectedBcategKeys: any[] = [];
 
@@ -55,17 +55,43 @@ export class BranchDivisionComponent implements OnInit {
   async ngAfterViewInit() {
     await new Promise(resolve => setTimeout(resolve, 2000));
     console.log('fetched branch data', this.fetchData)
-    const selectedBranchKeys = this.BranchDataSource.filter(item => this.fetchData.includes(item.BRANCH_CODE)).map(item => item);
+    const selectedBranchKeys = this.BranchDataSource.filter(item => this.fetchData?.includes(item.BRANCH_CODE)).map(item => item);
     this.selectedRowKeys = selectedBranchKeys;
 
-    const selectedDivisionKeys = this.divisionDataSource.filter(item => this.fetchData.includes(item.DIVISION_CODE)).map(item => item);
+    const selectedDivisionKeys = this.divisionDataSource.filter(item => this.fetchData?.includes(item.DIVISION_CODE)).map(item => item);
     this.selectedDivisionKeys = selectedDivisionKeys;
     
-    const selectedAreaKeys = this.areaDataSource.filter(item => this.fetchData.includes(item.AREA_CODE)).map(item => item);
+    const selectedAreaKeys = this.areaDataSource.filter(item => this.fetchData?.includes(item.AREA_CODE)).map(item => item);
     this.selectedAreaKeys = selectedAreaKeys;
 
-    const selectedBusinessCategoryKeys = this.businessCategDataSource.filter(item => this.fetchData.includes(item.CATEGORY_CODE)).map(item => item);
+    const selectedBusinessCategoryKeys = this.businessCategDataSource.filter(item => this.fetchData?.includes(item.CATEGORY_CODE)).map(item => item);
     this.selectedBcategKeys = selectedBusinessCategoryKeys;
+
+    //to bring the selected entries to top of the grid
+    const selectedSet = new Set(this.selectedRowKeys.map(item => item.SRNO));
+    this.BranchDataSource.sort((a, b) => {
+      const aIsSelected = selectedSet.has(a.SRNO) ? 1 : 0;
+      const bIsSelected = selectedSet.has(b.SRNO) ? 1 : 0;
+      return bIsSelected - aIsSelected;
+    });
+    const selectedDivisionSet = new Set(this.selectedDivisionKeys.map(item => item.SRNO));
+    this.divisionDataSource.sort((a, b) => {
+      const aIsSelected = selectedDivisionSet.has(a.SRNO) ? 1 : 0;
+      const bIsSelected = selectedDivisionSet.has(b.SRNO) ? 1 : 0;
+      return bIsSelected - aIsSelected;
+    });
+    const selectedAreaSet = new Set(this.selectedAreaKeys.map(item => item.SRNO));
+    this.areaDataSource.sort((a, b) => {
+      const aIsSelected = selectedAreaSet.has(a.SRNO) ? 1 : 0;
+      const bIsSelected = selectedAreaSet.has(b.SRNO) ? 1 : 0;
+      return bIsSelected - aIsSelected;
+    });
+    const selectedBcategSet = new Set(this.selectedBcategKeys.map(item => item.SRNO));
+    this.businessCategDataSource.sort((a, b) => {
+      const aIsSelected = selectedBcategSet.has(a.SRNO) ? 1 : 0;
+      const bIsSelected = selectedBcategSet.has(b.SRNO) ? 1 : 0;
+      return bIsSelected - aIsSelected;
+    });
   }
 
   openMasterSearch() {

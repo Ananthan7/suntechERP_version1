@@ -37,8 +37,9 @@ export class RetailGridComponent implements OnInit {
 
 
   @Input() templateViewForReports: boolean = false;
-  dataSource = [];
+  dataSource: any = [];
   @Output() actionViewClick = new EventEmitter<any>();
+  dropdownDataSource: any[] = [];
   
   
   constructor(
@@ -347,11 +348,33 @@ export class RetailGridComponent implements OnInit {
     };
     this.dataService.postDynamicAPI('ExecueteSPInterface', payload)
     .subscribe((result: any) => {
-      console.log('data Refetch for template',result.dynamicData[0]);
+      console.log('data Refetch for template',result.dynamicData);
       this.dataSource = result.dynamicData[0]
+
+      this.dataSource.forEach((item: any) => {
+        let parsedData;
+        try {
+          parsedData = JSON.parse(item['CONTROL_LIST_JSON']);
+        } catch (e) {
+          return;
+        }
+        const fromVocDate = parsedData.CONTROL_DETAIL?.FROMVOCDATE || parsedData.CONTROL_DETAIL?.STRFROMDATE;
+        const toVocDate = parsedData.CONTROL_DETAIL?.TOVOCDATE || parsedData.CONTROL_DETAIL?.STRTODATE;
+      
+        item.FROMVOCDATE = fromVocDate;
+        item.TOVOCDATE = toVocDate;
+      });
+
+      result.dynamicData[1].forEach((item: any)=>{ 
+       this.dropdownDataSource.push(item.PeriodType) 
+      })
     }); 
   }
-  
+  onSelectBoxValueChanged(e: any) {
+    console.log('Selected Grid value:', e.value);
+    // Add your custom logic here
+  }
+
   printGridData(data: any) {
     let gridData= JSON.parse(data.data['CONTROL_LIST_JSON'])
     let postData = {

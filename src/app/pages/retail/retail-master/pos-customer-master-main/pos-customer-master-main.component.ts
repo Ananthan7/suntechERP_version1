@@ -1,5 +1,11 @@
 import { Component, Input, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  ValidationErrors,
+  Validators,
+} from "@angular/forms";
 import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
 import { MasterSearchModel } from "src/app/shared/data/master-find-model";
 import { CommonServiceService } from "src/app/services/common-service.service";
@@ -8,7 +14,7 @@ import { SuntechAPIService } from "src/app/services/suntech-api.service";
 import { DialogboxComponent } from "src/app/shared/common/dialogbox/dialogbox.component";
 import { MatDialog } from "@angular/material/dialog";
 import { Subscription } from "rxjs";
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
 
 @Component({
   selector: "app-pos-customer-master-main",
@@ -45,18 +51,29 @@ export class PosCustomerMasterMainComponent implements OnInit {
     "1754-01-01T00:00:00Z",
     "1754-01-01T00:00:00",
   ];
+  typeidCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 29,
+    SEARCH_FIELD: "Code",
+    SEARCH_HEADING: "Type Code",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "TYPES = 'ID MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  };
 
   countryCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 26,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Country Type',
-    SEARCH_VALUE: '',
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "Country Type",
+    SEARCH_VALUE: "",
     WHERECONDITION: "TYPES='COUNTRY MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
-  }
+  };
 
   parentPosCode: MasterSearchModel = {
     PAGENO: 1,
@@ -113,25 +130,25 @@ export class PosCustomerMasterMainComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 3,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'City Code',
-    SEARCH_VALUE: '',
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "City Code",
+    SEARCH_VALUE: "",
     WHERECONDITION: "TYPES='REGION MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
-  }
+  };
 
   languageCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 45,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Language Code',
-    SEARCH_VALUE: '',
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "Language Code",
+    SEARCH_VALUE: "",
     WHERECONDITION: "TYPES = 'LANGUAGE MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
-  }
+  };
 
   favCelebrationCode: MasterSearchModel = {
     PAGENO: 1,
@@ -203,20 +220,26 @@ export class PosCustomerMasterMainComponent implements OnInit {
     moblieNumber: [""],
     moblie1Country: [""],
     moblie1Number: [""],
-    emailId: [""],
+    emailId: [
+      "",
+      [Validators.required, Validators.email, this.domainValidator],
+    ],
     telRCountry: [""],
     telRNumber: [""],
     tel0Country: [""],
     tel0number: [""],
     faxNo: [""],
-    custType: [""],
+    custType: ["", [Validators.required, Validators.maxLength(6)]],
     nationality: [""],
     state: [""],
     city: [""],
     language: [""],
     favCelebration: [""],
-    vat: [""],
-    panNo: [""],
+    vat: ["", [Validators.required, Validators.maxLength(15)]],
+    panNo: [
+      "",
+      [Validators.required, Validators.maxLength(10), this.panValidator],
+    ],
     whatsappCountryCode: [""],
     whatsappNumber: [""],
     spouse: [""],
@@ -231,7 +254,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
     custIdType: [""],
     custID: [""],
     custDate: [""],
-    POBox: [""],
+    POBox: ["", [Validators.required, Validators.maxLength(6)]],
     address: [""],
     officialAddress: [""],
     deliveryAddress: [""],
@@ -301,6 +324,28 @@ export class PosCustomerMasterMainComponent implements OnInit {
     this.posCustomerMasterMainForm.controls["createdBranch"].disable();
   }
 
+  onPanNoInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    input.value = input.value.toUpperCase();
+    this.posCustomerMasterMainForm.get("panNo")?.setValue(input.value);
+  }
+
+  panValidator(control: AbstractControl): ValidationErrors | null {
+    const panPattern = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
+    if (control.value && !panPattern.test(control.value)) {
+      return { invalidPan: true };
+    }
+    return null;
+  }
+
+  domainValidator(control: AbstractControl): ValidationErrors | null {
+    const emailValue = control.value;
+    if (emailValue && !/^[\w-\.]+@([\w-]+\.)+[a-zA-Z]{2,}$/.test(emailValue)) {
+      return { domainInvalid: true };
+    }
+    return null;
+  }
+
   getUniqueValues(List: any[], field: string) {
     return List.filter(
       (item, index, self) =>
@@ -338,17 +383,21 @@ export class PosCustomerMasterMainComponent implements OnInit {
     this.posCustomerMasterMainForm.controls.tel0Country.setValue(
       e.MobileCountryCode
     );
+    this.posCustomerMasterMainForm.controls.whatsappCountryCode.setValue(
+      e.MobileCountryCode
+    );
   }
 
   check() {
-    const isNotInterestedChecked = this.posCustomerMasterMainForm.controls.notInterested.value;
-  
+    const isNotInterestedChecked =
+      this.posCustomerMasterMainForm.controls.notInterested.value;
+
     if (isNotInterestedChecked) {
       this.posCustomerMasterMainForm.controls.whatsapp.setValue(false);
       this.posCustomerMasterMainForm.controls.email.setValue(false);
       this.posCustomerMasterMainForm.controls.phoneCall.setValue(false);
       this.posCustomerMasterMainForm.controls.sms.setValue(false);
-      
+
       this.posCustomerMasterMainForm.controls.whatsapp.disable();
       this.posCustomerMasterMainForm.controls.email.disable();
       this.posCustomerMasterMainForm.controls.phoneCall.disable();
@@ -358,7 +407,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
       this.posCustomerMasterMainForm.controls.email.enable();
       this.posCustomerMasterMainForm.controls.phoneCall.enable();
       this.posCustomerMasterMainForm.controls.sms.enable();
-  
+
       this.posCustomerMasterMainForm.controls.whatsapp.reset();
       this.posCustomerMasterMainForm.controls.email.reset();
       this.posCustomerMasterMainForm.controls.phoneCall.reset();
@@ -375,10 +424,14 @@ export class PosCustomerMasterMainComponent implements OnInit {
   //   }
   // }
 
-  toggle(){ 
-    this.ishidden =! this.ishidden;
+  toggle() {
+    this.ishidden = !this.ishidden;
   }
-  
+
+  typeidCodeSelected(e: any) {
+    console.log(e);
+    this.posCustomerMasterMainForm.controls.custIdType.setValue(e.CODE);
+  }
 
   stateSelected(e: any) {
     console.log(e);
@@ -387,7 +440,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
 
   categorySelected(e: any) {
     console.log(e);
-    this.posCustomerMasterMainForm.controls.category.setValue(e.CODE);
+    this.posCustomerMasterMainForm.controls.category.setValue(e.DESCRIPTION);
   }
 
   parentPosSelected(e: any) {
@@ -407,7 +460,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
 
   citySelected(e: any) {
     console.log(e);
-    this.posCustomerMasterMainForm.controls.city.setValue(e.CODE);
+    this.posCustomerMasterMainForm.controls.city.setValue(e.DESCRIPTION);
   }
 
   languageSelected(e: any) {
@@ -422,16 +475,16 @@ export class PosCustomerMasterMainComponent implements OnInit {
 
   religionSelected(e: any) {
     console.log(e);
-    this.posCustomerMasterMainForm.controls.religion.setValue(e.CODE);
+    this.posCustomerMasterMainForm.controls.religion.setValue(e.DESCRIPTION);
   }
 
   custStatusSelected(e: any) {
     console.log(e);
-    this.posCustomerMasterMainForm.controls.custStatus.setValue(e.CODE);
+    this.posCustomerMasterMainForm.controls.custStatus.setValue(e.DESCRIPTION);
   }
 
-  getDropDownStatus() { 
-    this.maritalStatusList =  this.getUniqueValues(
+  getDropDownStatus() {
+    this.maritalStatusList = this.getUniqueValues(
       this.comService.getComboFilterByID("Marital Status"),
       "ENGLISH"
     );
@@ -463,17 +516,19 @@ export class PosCustomerMasterMainComponent implements OnInit {
   }
 
   customerSave() {
-    
-    if (this.posCustomerMasterMainForm.value.moblieNumber == "" && this.posCustomerMasterMainForm.value.telRNumber == "") {
+    if (
+      this.posCustomerMasterMainForm.value.moblieNumber == "" &&
+      this.posCustomerMasterMainForm.value.telRNumber == ""
+    ) {
       Swal.fire({
         title: "Warning",
         text: "Atleast One of the Field is Manditory Mobile Number (OR) Telephone Number",
         icon: "warning",
         confirmButtonColor: "#336699",
         confirmButtonText: "Ok",
-      });
-    return ;
-    }
+      });
+      return;
+    }
 
     if (!this.isCustProcessing || this.isCustProcessing) {
       this.isCustProcessing = true;
@@ -530,11 +585,14 @@ export class PosCustomerMasterMainComponent implements OnInit {
           CITY: this.posCustomerMasterMainForm.value.city || "",
           ZIPCODE: "",
           COUNTRY_CODE: this.posCustomerMasterMainForm.value.country || "",
-          EMAIL: this.posCustomerMasterMainForm.value.email || "",
-          TEL1: this.posCustomerMasterMainForm.value.telRNumber || "",
-          TEL2: this.posCustomerMasterMainForm.value.tel0number || "",
-          MOBILE: `${this.posCustomerMasterMainForm.value.moblieNumber}` || "",
-          FAX: this.posCustomerMasterMainForm.value.faxNo || "",
+          EMAIL: this.posCustomerMasterMainForm.value.emailId || "",
+          TEL1:
+            this.posCustomerMasterMainForm.value.telRNumber.toString() || "",
+          TEL2:
+            this.posCustomerMasterMainForm.value.tel0number.toString() || "",
+          MOBILE:
+            this.posCustomerMasterMainForm.value.moblieNumber.toString() || "",
+          FAX: this.posCustomerMasterMainForm.value.faxNo.toString() || "",
           MARITAL_ST:
             this.posCustomerMasterMainForm.value.maritalSt || "Unknown",
           WED_DATE:
@@ -566,7 +624,8 @@ export class PosCustomerMasterMainComponent implements OnInit {
           POSCUSTIDNO: this.posCustomerMasterMainForm.value.custID || "",
           POSSMAN: "",
           POSCustPrefix: "0",
-          MOBILE1: this.posCustomerMasterMainForm.value.moblie1Number || "",
+          MOBILE1:
+            this.posCustomerMasterMainForm.value.moblie1Number.toString() || "",
           CUST_Language: this.posCustomerMasterMainForm.value.language || "",
           CUST_TYPE: this.posCustomerMasterMainForm.value.custType || "",
           FAVORITE_CELEB:

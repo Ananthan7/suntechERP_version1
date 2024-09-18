@@ -45,6 +45,16 @@ export class MenubarComponent implements OnInit {
     this.subscriptions$ = this.dataService.getDynamicAPICustom(API).subscribe((response: any) => {
       this.skeltonLoading = false;
       if (response.status == 'Success') {
+        const specificData = response.response.map((item: any) => ({
+          MENU_SRNO: item.MENU_SRNO,
+          MENU_CAPTION_ENG: item.MENU_CAPTION_ENG,
+          PERMISSION: item.PERMISSION,
+          FORM_NAME: item.ANG_WEB_FORM_NAME,
+          PATH_NAME: item.ANG_WEB_PATH_NAME
+        }));
+        localStorage.setItem('menuPermissions', JSON.stringify(specificData));
+
+
         let menuData = response.response
         menuData = menuData.filter((item:any) => item.VISIBLE_IN_WEB == true || item.VISIBLE_IN_CLIENT == true)
 

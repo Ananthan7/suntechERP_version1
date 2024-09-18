@@ -69,7 +69,7 @@ export class AddNewdetailComponent implements OnInit {
     'SIEVE_DESC', 'SIEVE', 'SIZE_FORM', 'COLOR', 'CLARITY', 'STOCK_CODE', 'PROCESS_TYPE',
     'PROD_VARIANCE', 'PURITY']
 
-  columnheaders: any[] = ['Code', 'Div', 'Pcs', 'Qty', 'Rate', 'Amount', 'Wst %', 'Wst Amt', 'Lab Type'];
+  columnheaders: any[] = ['Code', 'Div', 'Pcs', 'Qty', 'Rate', 'Amount', 'Wst %', 'Wst Amt', 'Lab Type','Lab A/c','Unit'];
   columnheadmain: any[] = ['Stock Code', 'Stone Size', 'Stone Pcs', 'Stone Weight'];
   private subscriptions: Subscription[] = [];
   /**USE: generalMaster Code lookup model*/
@@ -81,6 +81,18 @@ export class AddNewdetailComponent implements OnInit {
     SEARCH_HEADING: 'GENERAL MASTER',
     SEARCH_VALUE: '',
     WHERECONDITION: "",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
+  deliveryTypeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Delivery type',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "TYPES='DELIVERY TYPE MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -166,7 +178,7 @@ export class AddNewdetailComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 74,
     SEARCH_FIELD: 'KARAT_CODE',
-    SEARCH_HEADING: 'Karat Master',
+    SEARCH_HEADING: 'Size',
     SEARCH_VALUE: '',
     WHERECONDITION: "",
     VIEW_INPUT: true,
@@ -577,6 +589,13 @@ export class AddNewdetailComponent implements OnInit {
   metalColorCodeSelected(data: any): void {
     if (data.CODE) {
       this.summaryDetailForm.controls.COLOR.setValue(data.CODE)
+    } else {
+      this.commonService.toastErrorByMsgId('MSG1531');
+    }
+  }
+  DeliveryTypeSelected(data: any): void {
+    if (data.CODE) {
+      this.diamondSalesDetailForm.controls.DeliveryType.setValue(data.CODE)
     } else {
       this.commonService.toastErrorByMsgId('MSG1531');
     }
