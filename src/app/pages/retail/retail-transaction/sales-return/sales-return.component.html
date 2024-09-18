@@ -3243,7 +3243,8 @@
                       <input class="st_txt_right" type="text" min="0" autocomplete="off" [maxLength]="14"
                         (keyup)="this.comFunc.enforceMinMax($event.target)" matInput id="fcn_li_pcs"
                         formControlName="fcn_li_pcs" (focus)="setValToLocalStorage($event, 'fcn_li_pcs')"
-                        (change)="changePCS($event)" [readonly]="viewOnly" NumberOnly />
+                        (keypress)="pcsvalidators()" (keydown)="pcsvalidators()" (change)="changePCS($event)"
+                        (focusout)="setpcswtfocus()" [readonly]="viewOnly" NumberOnly />
                       <!-- <input class="st_txt_right" type="number" min="1" matInput formControlName="fcn_li_pcs"
                                 (keyup)="changePCS($event)" (mouseup)="changePCS($event)" (mouseleave)="changePCS($event)"
                                 value="{{li_pcs_val}}"> -->
@@ -3252,10 +3253,10 @@
                           " id="ID176">
                         PCS is <strong>required</strong>
                       </mat-error>
-                      <!-- <mat-error *ngIf="lineItemForm.controls.fcn_li_pcs.hasError('min')"> -->
-                        <!-- {{ "PCS should Not Be Zero" }} -->
-                        <!-- {{ this.comFunc.getMsgByID('MSG1554') }} -->
-                      <!-- </mat-error> -->
+                      <mat-error *ngIf="lineItemForm.controls.fcn_li_pcs.hasError('min')">
+                        {{ "PCS should Not Be Zero" }}
+                        {{ this.comFunc.getMsgByID('MSG1554') }}
+                      </mat-error>
                     </mat-form-field>
                   </div>
 

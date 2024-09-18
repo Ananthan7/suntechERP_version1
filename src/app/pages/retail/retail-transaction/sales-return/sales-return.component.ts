@@ -860,7 +860,7 @@ export class SalesReturnComponent implements OnInit {
       fcn_li_location: [''],
       fcn_li_gift_type: [''],
       // fcn_li_location: ['', Validators.required],
-      fcn_li_pcs: [0, [Validators.required,Validators.min(0)]],
+      fcn_li_pcs: [0, [Validators.required, Validators.min(0)]],
       fcn_li_gross_wt: ['', [Validators.required, Validators.min(0)]],
       // fcn_li_gross_wt: [{ value: 0, disabled: true }, Validators.required],
       fcn_li_stone_wt: [0, Validators.required],
@@ -9037,8 +9037,6 @@ export class SalesReturnComponent implements OnInit {
         console.log(ele);
         this.sales_returns_items[data] = ele;
 
-
-
         // let findedvalue=this.sales_returns_items.find((item:any)=>item.SRNO === ele.SRNO)
         // findedvalue.DIVISION_CODE = this.lineItemForm.controls.fcn_li_division.value;
         // findedvalue.description = this.lineItemForm.controls.fcn_li_item_desc.value;
@@ -10915,10 +10913,16 @@ export class SalesReturnComponent implements OnInit {
   }
 
   changePCS(event: any, divisionBasedAutoUpdation: boolean = false) {
+    let curr_pcs = this.lineItemForm.controls.fcn_li_pcs.value;
     const preVal = this.comFunc.emptyToZero(localStorage.getItem('fcn_li_pcs'));
+    // console.log(preVal);
+    // console.log(curr_pcs);
+
     this.isNetAmountChange = false;
     const value = this.comFunc.emptyToZero(event.target.value);
     if (event.target.value != '' && this.validatePCS == true || this.enablePieces) {
+
+
       // if(!this.comFunc.emptyToZero(event.target.value))
       this.clearDiscountValues();
       this.manageCalculations();
@@ -10940,6 +10944,10 @@ export class SalesReturnComponent implements OnInit {
 
 
               this.manageCalculations();
+              this['lineItemForm'].controls['fcn_li_pcs'].setValidators([
+                Validators.required,
+                Validators.min(1),
+              ]);
             }
 
           });
@@ -10960,9 +10968,17 @@ export class SalesReturnComponent implements OnInit {
               if (data == 'No') {
                 // this.checkDivisionForPcs(value)
                 this.lineItemForm.controls['fcn_li_pcs'].setValue(
-                  preVal
+                  curr_pcs
                 );
-
+                if (curr_pcs == 0) {
+                  console.log(this.lineItemForm.controls['fcn_li_pcs'].setValue(
+                    curr_pcs
+                  ))
+                  this['lineItemForm'].controls['fcn_li_pcs'].setValidators([
+                    Validators.required,
+                    Validators.min(1),
+                  ]);
+                }
                 this.manageCalculations();
 
               } else {
@@ -10990,13 +11006,31 @@ export class SalesReturnComponent implements OnInit {
         this.manageCalculations();
       }
     } else {
+      if (this.lineItemForm.controls.fcn_li_pcs.value === 0) {
+        return;
+      }
+      console.log(this.zeroMQtyVal);
       if (this.validatePCS == true || this.enablePieces)
         this.lineItemForm.controls['fcn_li_gross_wt'].setValue(this.zeroMQtyVal);
       this.changeGrossWt({ target: { value: this.zeroMQtyVal } });
 
 
       this.manageCalculations();
+      console.log(this.lineItemForm.controls.fcn_li_pcs.value);
+      this['lineItemForm'].controls['fcn_li_pcs'].setValidators([
+        Validators.required,
+        Validators.min(1),
+      ]);
     }
+  }
+
+  pcsvalidators() {
+    this['lineItemForm'].controls['fcn_li_pcs'].setValidators([
+      Validators.required,
+      Validators.min(1),
+    ]);
+
+    return (this.comFunc.getMsgByID('MSG1554'))
   }
 
 
@@ -12589,6 +12623,11 @@ export class SalesReturnComponent implements OnInit {
     }
     this.lineItemCommaSeparation();
 
+    // console.log(this.current_division_code);
+    if (this.current_division_code === 'M' || this.current_division_code === 'D' || this.current_division_code == 'W') {
+
+      this.lineItemForm.controls.fcn_li_gross_wt.setValue(this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_pcs).toFixed(3))
+    }
   }
   lineItemCommaSeparation() {
     this.isNetAmountChange ? this.lineItemForm.controls['fcn_li_rate'].setValue(
@@ -15608,6 +15647,15 @@ export class SalesReturnComponent implements OnInit {
     }
     else {
       this.checkItemCode();
+    }
+  }
+
+  setpcswtfocus() {
+    if (this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_pcs) == 0 && !this.validatePCS && this.lineItemForm.value.fcn_li_item_code) {
+      this.renderer.selectRootElement('#fcn_li_pcs').focus();
+      this.snackBar.open('PCS should not 0', 'OK', {
+        duration: 2000
+      });
     }
   }
 
