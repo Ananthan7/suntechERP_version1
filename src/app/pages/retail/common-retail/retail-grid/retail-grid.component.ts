@@ -356,21 +356,18 @@ export class RetailGridComponent implements OnInit {
         try {
           parsedData = JSON.parse(item['CONTROL_LIST_JSON']);
         } catch (e) {
-          console.error('Error parsing CONTROL_LIST_JSON:', e);
           return;
         }
-        const fromVocDate = parsedData.CONTROL_DETAIL?.FROMVOCDATE;
-        const toVocDate = parsedData.CONTROL_DETAIL?.TOVOCDATE;
+        const fromVocDate = parsedData.CONTROL_DETAIL?.FROMVOCDATE || parsedData.CONTROL_DETAIL?.STRFROMDATE;
+        const toVocDate = parsedData.CONTROL_DETAIL?.TOVOCDATE || parsedData.CONTROL_DETAIL?.STRTODATE;
       
         item.FROMVOCDATE = fromVocDate;
         item.TOVOCDATE = toVocDate;
-
       });
 
       result.dynamicData[1].forEach((item: any)=>{ 
        this.dropdownDataSource.push(item.PeriodType) 
       })
-      console.log(this.dropdownDataSource)
     }); 
   }
   onSelectBoxValueChanged(e: any) {
