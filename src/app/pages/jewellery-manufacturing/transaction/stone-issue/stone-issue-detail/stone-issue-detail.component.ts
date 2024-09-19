@@ -640,7 +640,7 @@ getImageData() {
     let postData = {
       "SPID": "040",
       "parameter": {
-        'strUNQ_JOB_ID': this.comService.nullToString(this.stoneIssueDetailsFrom.value.subjobnumber),
+        'strUNQ_JOB_ID': this.stoneIssueDetailsFrom.value.subjobnumber,
         'strBranchCode': this.comService.nullToString(this.branchCode),
         'strCurrenctUser': ''
       }
@@ -673,7 +673,7 @@ getImageData() {
   }
 
   jobNumberValidate(event: any) {
-    // this.showOverleyPanel(event, 'jobNumber')
+    this.showOverleyPanel(event, 'jobNumber')
     if (event.target.value == '') return
     let postData = {
       "SPID": "028",
@@ -691,20 +691,20 @@ getImageData() {
         if (result.status == "Success" && result.dynamicData[0]) {
           let data = result.dynamicData[0]
           if (data && data[0]?.UNQ_JOB_ID != '') {
-            console.log(data,'pick')
-            this.overlayjobNumberSearch.closeOverlayPanel()
-            this.stoneIssueDetailsFrom.controls.jobDes.setValue(data[0].JOB_DESCRIPTION)
-            this.stoneIssueDetailsFrom.controls.subjobnumber.setValue(data[0].UNQ_JOB_ID)
-            this.stoneIssueDetailsFrom.controls.subjobDes.setValue(data[0].DESCRIPTION)
-            this.stoneIssueDetailsFrom.controls.DESIGN_CODE.setValue(data[0].DESIGN_CODE)
-            this.stoneIssueDetailsFrom.controls.PART_CODE.setValue(data[0].PART_CODE)
-            this.stoneIssueDetailsFrom.controls.salesorderno.setValue(data[0].CUSTOMER_CODE)
+            console.log(data[0],'pick')
+            this.jobNumberDetailData = data
+            this.stoneIssueDetailsFrom.controls.jobDes.setValue(data.JOB_DESCRIPTION)
+            this.stoneIssueDetailsFrom.controls.subjobnumber.setValue(data.UNQ_JOB_ID)
+            this.stoneIssueDetailsFrom.controls.subjobDes.setValue(data.DESCRIPTION)
+            this.stoneIssueDetailsFrom.controls.DESIGN_CODE.setValue(data.DESIGN_CODE)
+            this.stoneIssueDetailsFrom.controls.PART_CODE.setValue(data.PART_CODE)
+            this.stoneIssueDetailsFrom.controls.salesorderno.setValue(data.CUSTOMER_CODE)
             // if (data[0].DESIGN_TYPE && data[0].DESIGN_TYPE == "DIAMOND") {
             //   this.stoneIssueDetailsFrom.controls.DIVCODE.setValue("L");
             // } else {
             //   this.stoneIssueDetailsFrom.controls.DIVCODE.setValue("Z");
             // }
-
+            this.overlayjobNumberSearch.closeOverlayPanel()
             this.subJobNumberValidate()
           } else {
             this.comService.toastErrorByMsgId('MSG1531')
