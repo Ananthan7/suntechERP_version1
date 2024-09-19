@@ -39,6 +39,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
   metalDetailData: any[] = [];
   metalDetailData_2: any[] = [];
   sequenceDetails: any[] = [];
+  processMasterDetails: any[] = [];
   jobNumberDetailData: any[] = [];
   ProcessTypeList: any[] = [{ type: 'GEN' }];
   userName = this.commonService.userName;
@@ -454,7 +455,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       this.setFormNullToString('TO_PCS', parentDetail.TO_PCS)
       this.setFormNullToString('FRM_STONE_PCS', parentDetail.FRM_STONE_PCS)
       this.setFormNullToString('TO_STONE_PCS', parentDetail.TO_STONE_PCS)
-    
+
       this.setFormDecimal('FRM_METAL_WT', parentDetail.FRM_METAL_WT, 'METAL')
       this.setFormDecimal('TO_METAL_WT', parentDetail.TO_METAL_WT, 'METAL')
       this.setFormDecimal('GrossWeightFrom', parentDetail.FRM_DIAGROSS_WT, 'METAL') //dbt
@@ -504,6 +505,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.onloadCalculations()// for calculating loss details
     this.getImageData()
     this.getSequenceDetailData()
+    this.getProcessMasterDetails()
     //set where conditions
     this.stockCodeSearchWhereCondition()
     this.setFromProcessWhereCondition()
@@ -604,6 +606,20 @@ export class ProcessTransferDetailsComponent implements OnInit {
         if (result.response) {
           let data = result.response
           this.sequenceDetails = data.sequenceDetails
+        } else {
+          this.commonService.toastErrorByMsgId('MSG1531')
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
+  }
+  getProcessMasterDetails() {
+    let API = `ProcessMasterDj/GetProcessMasterDjWithProcessCode/${this.processTransferdetailsForm.value.FRM_PROCESS_CODE}`
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        if (result.response) {
+          this.processMasterDetails = result.response ? [result.response] : []
         } else {
           this.commonService.toastErrorByMsgId('MSG1531')
         }
@@ -858,6 +874,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
 
     this.getImageData()
     // this.stockCodeScrapValidate()
+    this.getProcessMasterDetails()
     this.fillStoneDetails()
     this.getTimeAndLossDetails()
     //set where conditions
@@ -1016,6 +1033,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
   lossQtyChange(event: any) {
     let form = this.processTransferdetailsForm.value;
     let msg = this.commonService.getMsgByID('MSG1397')
+    if(this.emptyToZero(form.lossQty) == this.emptyToZero(this.FORM_VALIDATER.lossQty)) return;
     if (this.emptyToZero(form.lossQty) > this.emptyToZero(form.FRM_METAL_WT)) {
       this.commonService.toastErrorByMsgId(msg + " " + form.FRM_METAL_WT)
       this.setFormDecimal('lossQty', 0, 'METAL')
@@ -1024,6 +1042,16 @@ export class ProcessTransferDetailsComponent implements OnInit {
     if (this.emptyToZero(form.lossQty) > 0) {
       if (this.sequenceDetails.length > 0) {
         let processData = this.sequenceDetails.filter((item: any) => item.PROCESS_CODE == form.FRM_PROCESS_CODE)
+        if(processData?.length == 0){
+          processData = this.processMasterDetails;
+        }
+        if (this.emptyToZero(processData[0]?.MAX_LOSS) == 0 && this.emptyToZero(processData[0]?.STD_LOSS) == 0
+          && this.emptyToZero(processData[0]?.MIN_LOSS) == 0) {
+          let msg = this.commonService.getMsgByID("MSG1397") + " 0.00"
+          this.commonService.toastErrorByMsgId(msg)
+          this.setFormDecimal('lossQty', 0, 'METAL')
+          return;
+        }
         if (processData[0]?.STD_LOSS > 0) {
           let nMax_Loss = (this.emptyToZero(form.FRM_METAL_WT) * this.emptyToZero(processData[0]["MAX_LOSS"])) / 100;
           if (this.emptyToZero(form.lossQty) > nMax_Loss) {
@@ -1276,6 +1304,8 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.Calc_TimeDiff()
     //to calculate saved data in stnmtl table
     this.calculateSTNMTLdata(result)
+    console.log('fired');
+
   }
   /**USE: calculate STNMTLdata  call */
   calculateSTNMTLdata_Metal(result: any) {
@@ -1447,7 +1477,17 @@ export class ProcessTransferDetailsComponent implements OnInit {
 
   /**USE: fillStoneDetails grid data */
   private fillStoneDetails(): void {
-    let postData = this.setFillStoneDetailsPostData(this.processTransferdetailsForm.value)
+    let form = this.processTransferdetailsForm.value;
+    let postData = {
+      "SPID": "042",
+      "parameter": {
+        strJobNumber: form.JOB_NUMBER,
+        strUnq_Job_Id: form.UNQ_JOB_ID,
+        strProcess_Code: this.designType == 'METAL' ? form.METAL_FRM_PROCESS_CODE : form.FRM_PROCESS_CODE,
+        strWorker_Code: this.designType == 'METAL' ? form.METAL_FRM_WORKER_CODE : form.FRM_WORKER_CODE,
+        strBranch_Code: this.branchCode
+      }
+    }
     this.commonService.showSnackBarMsg('MSG81447')
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
       .subscribe((result) => {
@@ -1584,13 +1624,13 @@ export class ProcessTransferDetailsComponent implements OnInit {
   }
   formatMetalDetailDataGrid() {
     let compSelectFlag = this.commonService.getCompanyParamValue('PROCESSTRANSFERSELECTION')
-    this.compSelectFlag = !this.commonService.Null2BitValue(compSelectFlag) ? true :false
+    this.compSelectFlag = !this.commonService.Null2BitValue(compSelectFlag) ? true : false
     this.metalDetailData.forEach((element: any) => {
       element.SELECTED = true
       element.GEN = 'GEN'
       element.FROM_STOCK_CODE = element.STOCK_CODE,
-      element.FROM_SUB_STOCK_CODE = element.SUB_STOCK_CODE,
-      element.GROSS_WT = this.commonService.setCommaSerperatedNumber(element.GROSS_WT, 'METAL')
+        element.FROM_SUB_STOCK_CODE = element.SUB_STOCK_CODE,
+        element.GROSS_WT = this.commonService.setCommaSerperatedNumber(element.GROSS_WT, 'METAL')
       element.STONE_WT = this.commonService.setCommaSerperatedNumber(element.STONE_WT, 'STONE')
       element.PURITY = this.commonService.setCommaSerperatedNumber(element.PURITY, 'PURITY')
       element.LOSS_QTY = this.commonService.setCommaSerperatedNumber(element.LOSS_QTY, 'THREE')
@@ -2108,7 +2148,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.imagepath = []
   }
   multiplyWithAmtDecimal(netwt: any, purity: any) {
-    let val = this.commonService.pureWeightCalculate(netwt,purity)
+    let val = this.commonService.pureWeightCalculate(netwt, purity)
     return this.emptyToZero(val.toFixed(this.commonService.mQtyDecimals))
   }
   gridSRNO: number = 0
@@ -2471,7 +2511,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     let ADJUST_PUREWT = 0
 
     let data: any[] = []
-    let componentDetails = this.metalDetailData.filter((item:any)=> item.SELECTED == true)
+    let componentDetails = this.metalDetailData.filter((item: any) => item.SELECTED == true)
     componentDetails.forEach((element: any) => {
       data.push({
         "VOCNO": this.emptyToZero(form.VOCNO),
@@ -2647,6 +2687,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     });
   }
   scrapWeightChange(event: any) {
+    if (this.viewMode) return
     let form = this.processTransferdetailsForm.value;
     if (this.emptyToZero(form.scrapWeight) > this.emptyToZero(form.lossQty)) {
       let msg = this.commonService.getMsgByID('MSG7921') //msg - scrap wt greater than loss wt, proceed?

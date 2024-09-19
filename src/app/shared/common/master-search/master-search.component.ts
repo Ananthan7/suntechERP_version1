@@ -156,6 +156,9 @@ export class MasterSearchComponent implements OnInit {
       case 17:
         this.setSTDPURITY()
         break;
+      case 269:
+        this.setPURITY()
+        break;
       //continue adding with conditions
       default:
         break;
@@ -169,7 +172,12 @@ export class MasterSearchComponent implements OnInit {
   }
   setSTDPURITY() {
     this.dataSource.forEach((item: any) => {
-      item.STD_PURITY = this.commonService.decimalQuantityFormat(item.STD_PURITY, 'RATE')
+      item.STD_PURITY = this.commonService.decimalQuantityFormat(item.STD_PURITY, 'PURITY')
+    })
+  }
+  setPURITY() {
+    this.dataSource.forEach((item: any) => {
+      item.PURITY = this.commonService.decimalQuantityFormat(item.PURITY, 'PURITY')
     })
   }
   showOverlayPanel(event?: Event) {
