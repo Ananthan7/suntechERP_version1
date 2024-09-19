@@ -23,7 +23,7 @@
                                     <mat-form-field style="width: 100%" appearance="outline">
                                         <input type="text" id="code" matInput
                                             (focusout)="validateLookupField($event,codeData,'code')"
-                                            formControlName="code" [readonly]="editableMode || viewMode"
+                                            formControlName="code" [readonly]="viewMode" [disabled]="viewMode"
                                             UpperCaseDirective autocomplete="off"
                                             (keydown)="lookupKeyPress($event,'code')" />
                                         <master-search class="mstrScrch" *ngIf="!editMode && !viewMode"
@@ -38,7 +38,7 @@
                                     * :</label>
                                 <div class="col-sm-7">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="costCenter" [readonly]=" viewMode"
+                                        <input type="text" matInput formControlName="costCenter" [readonly]="viewMode"
                                             UpperCaseDirective
                                             (focusout)="validateLookupField($event,costCenterData,'costCenter')"
                                             (keydown)="lookupKeyPress($event,'costCenter')" />

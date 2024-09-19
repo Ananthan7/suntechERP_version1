@@ -50,10 +50,10 @@
     margin: 19px;
 }
 
-//To hide grid header
-::ng-deep #gridContainer .dx-header-row {
-    display: none;
-}
+// //To hide grid header
+// ::ng-deep #gridContainer .dx-header-row {
+//     display: none;
+// }
 
 
 //buttond for Demo
@@ -104,7 +104,7 @@
     align-items: center;
     justify-content: center;
     text-align: center;
-    width: auto;
+    width: 75px;
 }
 
 .label {

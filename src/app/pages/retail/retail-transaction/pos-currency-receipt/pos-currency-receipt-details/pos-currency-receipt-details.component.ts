@@ -995,7 +995,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
         SGST_ACCODE: "",
         IGST_ACCODE: this.igstAccode,
         GST_HEADER_AMOUNT: 0,
-        GST_NUMBER: this.posCurrencyReceiptDetailsForm.value.vatNo,
+        GST_NUMBER: this.posCurrencyReceiptDetailsForm.value.vatNo.toString()??"",
         INVOICE_NUMBER: this.posCurrencyReceiptDetailsForm.value.invoiceNo,
         INVOICE_DATE: this.posCurrencyReceiptDetailsForm.value.invoiceDate ? this.formatDateToISO(
           this.posCurrencyReceiptDetailsForm.value.invoiceDate

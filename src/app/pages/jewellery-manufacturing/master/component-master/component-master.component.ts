@@ -35,7 +35,7 @@ export class ComponentMasterComponent implements OnInit {
   maindetails: any[] = [];
   selectedIndexes: any = [];
   columnhead: any[] = ['Srno', 'Div.', 'Stock Code', 'Karat', 'Stock Type', 'Pcs', 'Wt/Ct', 'Color', 'Clarity', 'Shape', 'Sieve Std.', 'Description', 'Size', 'Process Type', 'Remarks', 'Pointer Wt', 'Ext.Clarity', 'Sieve From', 'Description', 'Sieve To', 'Description']
-  columnhead2: any[] = ['',]
+  columnhead2: any[] = ['Design','Description','Pcs','Type','Sub Category','Brand']
   selectedTabIndex = 0;
   urls: string | ArrayBuffer | null | undefined;
   url: any;
@@ -698,7 +698,6 @@ export class ComponentMasterComponent implements OnInit {
     // Set the sizeSet form control value
     this.componentmasterForm.controls.sizeSet.setValue(e.COMPSET_CODE);
     console.log(this.componentmasterForm.value.sizeSet);
-
     // Set the WHERECONDITION with the correct syntax and value
     this.sizeCodeData.WHERECONDITION = `COMPSIZE_CODE IN (SELECT COMPSIZE_CODE FROM COMPONENTSIZESET_DETAIL WHERE COMPSET_CODE = '${this.componentmasterForm.value.sizeSet}')`;
   }
@@ -822,7 +821,7 @@ export class ComponentMasterComponent implements OnInit {
       "METALSTONE": "",
       "KARAT_CODE": "",
       "RATE_TYPE": "",
-      "CURRENCY_CODE": "",
+      "CURRENCY_CODE": "AED",
       "KARAT": "",
       "PRICEID": "",
       "SIZE_FROM": "",
@@ -870,25 +869,55 @@ export class ComponentMasterComponent implements OnInit {
     console.log(this.selectedIndexes);
   }
 
+  // deleteTableData() {
+  //   console.log('Selected indexes:', this.selectedIndexes);
+  //   if (this.selectedIndexes.length > 0) {
+  //     this.selectedIndexes.sort((a: number, b: number) => b - a);
+
+  //     console.log('Before deletion - tableData:', this.tableData);
+
+  //     this.selectedIndexes.forEach((indexToRemove: number) => {
+  //       console.log('Deleting index:', indexToRemove);
+  //       this.tableData.splice(indexToRemove, 2);
+  //     });
+
+  //     console.log('After deletion - tableData:', this.tableData);
+
+  //     this.selectedIndexes = [];
+  //   } else {
+  //     this.snackBar.open('Please select a record', 'OK', { duration: 2000 });
+  //   }
+  // }
+
   deleteTableData() {
     console.log('Selected indexes:', this.selectedIndexes);
     if (this.selectedIndexes.length > 0) {
-      this.selectedIndexes.sort((a: number, b: number) => b - a);
 
-      console.log('Before deletion - tableData:', this.tableData);
+      // Show the confirmation dialog before deleting
+      this.showConfirmationDialog().then((result) => {
+        if (result.isConfirmed) {
+          // Proceed with deletion if the user confirms
+          this.selectedIndexes.sort((a: number, b: number) => b - a);
 
-      this.selectedIndexes.forEach((indexToRemove: number) => {
-        console.log('Deleting index:', indexToRemove);
-        this.tableData.splice(indexToRemove, 2);
+          console.log('Before deletion - tableData:', this.tableData);
+
+          this.selectedIndexes.forEach((indexToRemove: number) => {
+            console.log('Deleting index:', indexToRemove);
+            this.tableData.splice(indexToRemove, 2);
+          });
+
+          console.log('After deletion - tableData:', this.tableData);
+
+          this.selectedIndexes = [];
+          this.snackBar.open('Records deleted successfully', 'OK', { duration: 2000 });
+        }
       });
 
-      console.log('After deletion - tableData:', this.tableData);
-
-      this.selectedIndexes = [];
     } else {
       this.snackBar.open('Please select a record', 'OK', { duration: 2000 });
     }
-  }
+}
+
 
 
 
@@ -1634,7 +1663,7 @@ export class ComponentMasterComponent implements OnInit {
         }
 
         if (FORMNAME === 'code') {
-          console.log("dsffds")
+          // console.log("dsffds")
           this.prefixCodeValidate();
         }
 
