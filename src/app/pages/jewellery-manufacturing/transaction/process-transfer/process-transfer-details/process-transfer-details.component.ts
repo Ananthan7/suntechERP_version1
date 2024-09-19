@@ -2649,7 +2649,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
   scrapWeightChange(event: any) {
     let form = this.processTransferdetailsForm.value;
     if (this.emptyToZero(form.scrapWeight) > this.emptyToZero(form.lossQty)) {
-      let msg = this.commonService.getMsgByID('MSG7921')
+      let msg = this.commonService.getMsgByID('MSG7921') //msg - scrap wt greater than loss wt, proceed?
       this.showConfirmationDialog(msg).then((result) => {
         if (result.isConfirmed) {
           this.checkfromMetalScrapWeight(this.processTransferdetailsForm.value)
