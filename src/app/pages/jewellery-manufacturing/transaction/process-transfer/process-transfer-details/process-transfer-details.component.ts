@@ -476,7 +476,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
         new Date(parentDetail.APPROVED_DATE)
       )
     }
-    if (parentDetail.SCRAP_STOCK_CODE && this.processTransferdetailsForm.value.FLAG == 'EDIT') {
+    if (parentDetail.SCRAP_STOCK_CODE && this.content[0]?.FLAG == 'EDIT') {
       this.locationSearchFlag = true;
     }
 
@@ -499,7 +499,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.processTransferdetailsForm.controls.enddate.setValue(
       this.commonService.formatDateTime(parentDetail.OUT_DATE)
     )
-
+    this.getMetalLabStockCode()
     this.Calc_TimeDiff()
     this.stockCodeScrapValidate()
     this.onloadCalculations()// for calculating loss details
@@ -514,6 +514,34 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.setToWorkerWhereCondition()
 
     this.FORM_VALIDATER = this.processTransferdetailsForm.value;
+  }
+  getMetalLabStockCode() {
+    let postData = {
+      "SPID": "028",
+      "parameter": {
+        'strBranchCode': this.commonService.nullToString(this.branchCode),
+        'strJobNumber': this.commonService.nullToString(this.processTransferdetailsForm.value.JOB_NUMBER),
+        'strCurrenctUser': this.commonService.nullToString(this.userName)
+      }
+    }
+    this.commonService.showSnackBarMsg('MSG81447')
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        this.commonService.closeSnackBarMsg()
+        if (result.status == "Success" && result.dynamicData[0]) {
+          let data = result.dynamicData[0]
+          if (data[0] && data[0].UNQ_JOB_ID != '') {
+            this.overlayjobNoSearch.closeOverlayPanel()
+            this.jobNumberDetailData = data
+            this.setFormNullToString('JOB_DATE', data[0].JOB_DATE)
+            this.setFormNullToString('DESIGN_CODE', data[0].DESIGN_CODE)
+            this.setFormNullToString('SEQ_CODE', data[0].SEQ_CODE)
+            this.setFormNullToString('METALLAB_TYPE', data[0].METALLAB_TYPE)
+            this.setFormNullToString('METAL_STOCK_CODE', data[0].METAL_STOCK_CODE)
+          }
+        }
+      })
+    this.subscriptions.push(Sub)
   }
   onloadCalculations() {
     let lossQtyper = 0
@@ -1033,7 +1061,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
   lossQtyChange(event: any) {
     let form = this.processTransferdetailsForm.value;
     let msg = this.commonService.getMsgByID('MSG1397')
-    if(this.emptyToZero(form.lossQty) == this.emptyToZero(this.FORM_VALIDATER.lossQty)) return;
+    if (this.emptyToZero(form.lossQty) == this.emptyToZero(this.FORM_VALIDATER.lossQty)) return;
     if (this.emptyToZero(form.lossQty) > this.emptyToZero(form.FRM_METAL_WT)) {
       this.commonService.toastErrorByMsgId(msg + " " + form.FRM_METAL_WT)
       this.setFormDecimal('lossQty', 0, 'METAL')
@@ -1042,7 +1070,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     if (this.emptyToZero(form.lossQty) > 0) {
       if (this.sequenceDetails.length > 0) {
         let processData = this.sequenceDetails.filter((item: any) => item.PROCESS_CODE == form.FRM_PROCESS_CODE)
-        if(processData?.length == 0){
+        if (processData?.length == 0) {
           processData = this.processMasterDetails;
         }
         if (this.emptyToZero(processData[0]?.MAX_LOSS) == 0 && this.emptyToZero(processData[0]?.STD_LOSS) == 0
@@ -1187,7 +1215,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       .subscribe((result) => {
         this.commonService.closeSnackBarMsg()
         if (result.dynamicData && result.dynamicData[0]?.length > 0) {
-          this.locationSearchFlag = true
+          this.locationSearchFlag = this.processTransferdetailsForm.value.FLAG != 'VIEW' ? true : false
           let data = result.dynamicData[0]
           this.setFormNullToString('MAIN_STOCK_CODE', data[0].MAIN_STOCK_CODE)
           this.setFormNullToString('SCRAP_PURITY', data[0].PURITY)
