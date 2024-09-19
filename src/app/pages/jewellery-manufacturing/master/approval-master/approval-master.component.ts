@@ -161,9 +161,9 @@ export class ApprovalMasterComponent implements OnInit {
 
   enforceMaxLength(event: any) {
     if (event.target.value.length > 10) {
-        event.target.value = event.target.value.slice(0, 10);
+      event.target.value = event.target.value.slice(0, 10);
     }
-}
+  }
 
 
   close(data?: any) {
@@ -378,7 +378,7 @@ export class ApprovalMasterComponent implements OnInit {
 
 
   }
-  
+
   submitValidations(form: any) {
     if (this.commonService.nullToString(form.code) == '' && this.approvalMasterForm.invalid) {
       this.commonService.toastErrorByMsgId('MSG1124') //"Code cannot be empty"
@@ -389,7 +389,16 @@ export class ApprovalMasterComponent implements OnInit {
       return true
     }
     else if (this.checkFinalApproval()) {
-      this.commonService.toastErrorByMsgId('MSG81520')//Final option should be selected
+      // this.commonService.toastErrorByMsgId('MSG81520')//Final option should be selected
+      // return true
+
+      Swal.fire({
+        title: '',
+        text: 'User Name Connot be empty',
+        icon: 'error',
+        confirmButtonColor: '#336699',
+        confirmButtonText: 'Ok'
+      })
       return true
     }
     return false;
@@ -439,7 +448,7 @@ export class ApprovalMasterComponent implements OnInit {
         if (!emailId.trim()) {
           this.commonService.toastErrorByMsgId('MSG81478');
           conditionMet = true;
-          return; 
+          return;
         }
       }
     });
@@ -476,24 +485,24 @@ export class ApprovalMasterComponent implements OnInit {
 
       let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
         .subscribe((result) => {
-            if (result.status == "Success") {
-              Swal.fire({
-                title: result.message || 'Success',
-                text: '',
-                icon: 'success',
-                confirmButtonColor: '#336699',
-                confirmButtonText: 'Ok'
-              }).then((result: any) => {
-                if (result.value) {
-                  this.approvalMasterForm.reset()
-                  this.tableData = []
-                  this.close('reloadMainGrid')
-                }
-              });
-            }
-            else {
-              this.commonService.toastErrorByMsgId('MSG3577')
-            }
+          if (result.status == "Success") {
+            Swal.fire({
+              title: result.message || 'Success',
+              text: '',
+              icon: 'success',
+              confirmButtonColor: '#336699',
+              confirmButtonText: 'Ok'
+            }).then((result: any) => {
+              if (result.value) {
+                this.approvalMasterForm.reset()
+                this.tableData = []
+                this.close('reloadMainGrid')
+              }
+            });
+          }
+          else {
+            this.commonService.toastErrorByMsgId('MSG3577')
+          }
         }, err => {
           this.commonService.toastErrorByMsgId('MSG3577')
         })
@@ -512,7 +521,7 @@ export class ApprovalMasterComponent implements OnInit {
     });
   }
 
-  afterSave(value:any){
+  afterSave(value: any) {
     if (value) {
       this.approvalMasterForm.reset()
       this.tableData = []
@@ -621,7 +630,7 @@ export class ApprovalMasterComponent implements OnInit {
         if (!emailId.trim()) {
           this.commonService.toastErrorByMsgId('MSG81478');
           conditionMet = true;
-          return; 
+          return;
         }
       }
     });

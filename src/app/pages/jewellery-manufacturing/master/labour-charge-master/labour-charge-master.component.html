@@ -262,6 +262,16 @@
               formControlName="accessories">Accessories</mat-checkbox>
           </div>
         </div>
+        <div class="row mb-2">
+          <label for="input" id="ID024" class="col-sm-2 col-form-label">Variance %
+              :</label>
+          <div class="col-sm-3">
+              <mat-form-field  appearance="outline">
+                  <input matInput type="number" [readonly]="viewMode  || codeEnableMetal" matInput NumberOnly
+                  MetalDecimalInput  formControlName="variance" class="text-right" />
+              </mat-form-field>
+          </div>
+      </div>
       </form>
       <!-- </div>
           </div> -->
