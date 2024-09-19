@@ -794,7 +794,7 @@ export class PosCustomerMasterComponent implements OnInit {
           posCustomer.CODE !== '' &&
           posCustomer.CODE.toString() !== '0'
         ) {
-          apiCtrl = `PosCustomerMaster/UpdateCustomerMaster/Code=${posCustomer.CODE}`;
+          apiCtrl = `PosCustomerMaster/UpdateCustomerMaster/${posCustomer.CODE}`;
           custResponse = this.apiService.putDynamicAPI(apiCtrl, posCustomer)
         } else {
           apiCtrl = 'PosCustomerMaster/InsertCustomerMaster';
