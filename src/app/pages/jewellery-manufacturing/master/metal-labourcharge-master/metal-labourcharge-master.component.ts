@@ -1076,6 +1076,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
       return
     }
 
+    this.metallabourMasterForm.controls['metallabourType'].enable();
     if (this.submitValidation(this.metallabourMasterForm.value)) return
 
     let API = 'LabourChargeMasterDj/InsertLabourChargeMaster'
@@ -1244,7 +1245,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
 
     console.log(event);
     if (event.checked === true) {
-      this.stockcodeDisable = true;
+      // this.stockcodeDisable = true;
       this.viewDisable1 = true;
       this.metallabourMasterForm.controls['stock_code'].disable();
       this.metallabourMasterForm.controls['stock_code'].setValue('');
@@ -1254,8 +1255,8 @@ export class MetalLabourchargeMasterComponent implements OnInit {
       this.metallabourMasterForm.controls['color'].setValue('');
       this.metallabourMasterForm.controls['metallabourType'].disable();
       //  this.metallabourMasterForm.controls['metallabourType'].setValue('');
-      this.metallabourMasterForm.controls['metalunitList'].disable();
-      this.metallabourMasterForm.controls['metalunitList'].setValue('');
+      // this.metallabourMasterForm.controls['metalunitList'].disable();
+      // this.metallabourMasterForm.controls['metalunitList'].setValue('');
       this.metallabourMasterForm.controls['typecode'].disable();
       this.metallabourMasterForm.controls['typecode'].setValue('');
       this.metallabourMasterForm.controls['category'].disable();
@@ -1269,7 +1270,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
       this.metallabourMasterForm.controls['stock_code'].enable();
       this.metallabourMasterForm.controls['color'].enable();
       this.metallabourMasterForm.controls['metallabourType'].enable();
-      this.metallabourMasterForm.controls['metalunitList'].enable();
+      // this.metallabourMasterForm.controls['metalunitList'].enable();
       this.metallabourMasterForm.controls['typecode'].enable();
       this.metallabourMasterForm.controls['karat'].enable();
       this.metallabourMasterForm.controls['subCategory'].enable();
@@ -1459,17 +1460,27 @@ export class MetalLabourchargeMasterComponent implements OnInit {
     if (data == 'metalSelling') {
       this.viewsellingrateMetal = true;
       this.viewsellingMetal = false;
-      this.metallabourMasterForm.controls.metalselling_rate.setValue('');
+      this.metallabourMasterForm.controls.metalselling_rate.setValue(0.00);
     } else if (data == 'metalselling_rate') {
       this.viewsellingMetal = true;
       this.viewsellingrateMetal = false;
-      this.metallabourMasterForm.controls.metalSelling.setValue('');
+      this.metallabourMasterForm.controls.metalSelling.setValue(0.00);
     } else {
       this.viewsellingMetal = false;
       this.viewsellingrateMetal = false;
     }
 
   }
+
+  // salesChange(data: any) {
+  //   if (data === 'metalSelling') {
+  //     this.diamondlabourMasterForm.controls.metalselling_rate.setValue('0.00');
+  //     this.diamondlabourMasterForm.controls.metalselling_rate.updateValueAndValidity();
+  //   } else if (data === 'metalselling_rate') {
+  //     this.diamondlabourMasterForm.controls.metalSelling.setValue('0.00');
+  //     this.diamondlabourMasterForm.controls.metalSelling.updateValueAndValidity();
+  //   }
+  // }
 
   salesChangesDia(data: any) {
     console.log(data);
