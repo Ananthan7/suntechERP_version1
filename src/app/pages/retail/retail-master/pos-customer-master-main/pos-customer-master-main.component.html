@@ -54,6 +54,8 @@
                     formControlName="parentPosCode"
                   />
                   <master-search
+                    (focusout)="openTab($event, 'parentPosCode')"
+                    #overlayParentPosCode
                     [MasterSearchData]="parentPosCode"
                     class="masterSearch"
                     (newRowClick)="parentPosSelected($event)"
@@ -81,6 +83,8 @@
                     formControlName="refBy"
                   />
                   <master-search
+                    (focusout)="openTab($event, 'refBy')"
+                    #overlayRefBy
                     [MasterSearchData]="refByCode"
                     class="masterSearch"
                     (newRowClick)="refBySelected($event)"
@@ -309,6 +313,8 @@
                     formControlName="countryCode"
                   />
                   <master-search
+                    (focusout)="openTab($event, 'countryCode')"
+                    #overlayCountryCode
                     [MasterSearchData]="countryCodeData"
                     class="masterSearch"
                     (newRowClick)="countrySelected($event)"
@@ -513,10 +519,32 @@
                 for="inputPassword"
                 class="col-sm-4 col-form-label"
                 id="ID020"
-                >Nationality *
+              >
+                Nationality *
               </label>
               <div class="col-md-8">
-                <mat-form-field
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <mat-select (selectionChange)="onCountrySelect($event.value)">
+                    <mat-option
+                      *ngFor="let data of countryListData"
+                      [value]="data.COUNTRY_CODE_ISO2"
+                    >
+                      {{ data.COUNTRY_NAME }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error
+                    *ngIf="
+                      posCustomerMasterMainForm.controls.name.hasError(
+                        'required'
+                      )
+                    "
+                    id="ID005"
+                  >
+                    Country is <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+
+                <!-- <mat-form-field
                   style="width: -webkit-fill-available"
                   appearance="outline"
                 >
@@ -527,11 +555,13 @@
                     required
                   />
                   <master-search
+                    (focusout)="openTab($event, 'nationality')"
+                    #overlayNationality
                     [MasterSearchData]="nationalityCode"
                     class="masterSearch"
                     (newRowClick)="nationalitySelected($event)"
                   ></master-search>
-                </mat-form-field>
+                </mat-form-field> -->
               </div>
             </div>
             <div class="row mb-1">
@@ -542,7 +572,31 @@
                 >State</label
               >
               <div class="col-md-8">
-                <mat-form-field
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <mat-select
+                    (selectionChange)="onCitySelect($event.value)"
+                    formControlName="state"
+                  >
+                    <mat-option
+                      *ngFor="let state of stateListData"
+                      [value]="state.CODE"
+                    >
+                      {{ state.NAME || "State Not available" }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error
+                    *ngIf="
+                      posCustomerMasterMainForm.controls.state.hasError(
+                        'required'
+                      )
+                    "
+                    id="ID005"
+                  >
+                    State is <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+
+                <!-- <mat-form-field
                   style="width: -webkit-fill-available"
                   appearance="outline"
                 >
@@ -552,11 +606,13 @@
                     formControlName="state"
                   />
                   <master-search
+                    (focusout)="openTab($event, 'state')"
+                    #overlayState
                     [MasterSearchData]="stateCode"
                     class="masterSearch"
                     (newRowClick)="stateSelected($event)"
                   ></master-search>
-                </mat-form-field>
+                </mat-form-field> -->
               </div>
             </div>
             <div class="row mb-1">
@@ -567,7 +623,27 @@
                 >City</label
               >
               <div class="col-md-8">
-                <mat-form-field
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <mat-select formControlName="city">
+                    <mat-option
+                      *ngFor="let state of cityListData"
+                      [value]="state.NAME"
+                    >
+                      {{ state.NAME || "State Not available" }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error
+                    *ngIf="
+                      posCustomerMasterMainForm.controls.city.hasError(
+                        'required'
+                      )
+                    "
+                    id="ID005"
+                  >
+                    State is <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+                <!-- <mat-form-field
                   style="width: -webkit-fill-available"
                   appearance="outline"
                 >
@@ -577,11 +653,13 @@
                     formControlName="city"
                   />
                   <master-search
+                    (focusout)="openTab($event, 'city')"
+                    #overlayCity
                     [MasterSearchData]="cityCodeData"
                     class="masterSearch"
                     (newRowClick)="citySelected($event)"
                   ></master-search>
-                </mat-form-field>
+                </mat-form-field> -->
               </div>
             </div>
             <div class="row mb-1">
@@ -602,6 +680,8 @@
                     formControlName="language"
                   />
                   <master-search
+                    (focusout)="openTab($event, 'language')"
+                    #overlayLanguage
                     [MasterSearchData]="languageCodeData"
                     class="masterSearch"
                     (newRowClick)="languageSelected($event)"
@@ -627,6 +707,8 @@
                     formControlName="favCelebration"
                   />
                   <master-search
+                    (focusout)="openTab($event, 'favCelebration')"
+                    #overlayFavCelebration
                     [MasterSearchData]="favCelebrationCode"
                     class="masterSearch"
                     (newRowClick)="favCelebrationSelected($event)"
@@ -822,6 +904,8 @@
                                 formControlName="religion"
                               />
                               <master-search
+                                (focusout)="openTab($event, 'religion')"
+                                #overlayReligion
                                 [MasterSearchData]="religionCode"
                                 class="masterSearch"
                                 (newRowClick)="religionSelected($event)"
@@ -847,6 +931,8 @@
                                 formControlName="category"
                               />
                               <master-search
+                                (focusout)="openTab($event, 'category')"
+                                #overlayCategory
                                 [MasterSearchData]="categoryCode"
                                 class="masterSearch"
                                 (newRowClick)="categorySelected($event)"
@@ -872,6 +958,8 @@
                                 formControlName="custStatus"
                               />
                               <master-search
+                                (focusout)="openTab($event, 'custStatus')"
+                                #overlayCustStatus
                                 [MasterSearchData]="custStatusCode"
                                 class="masterSearch"
                                 (newRowClick)="custStatusSelected($event)"
@@ -951,6 +1039,8 @@
                               />
 
                               <master-search
+                                (focusout)="openTab($event, 'custIdType')"
+                                #overlayCustIdType
                                 [MasterSearchData]="typeidCodeData"
                                 class="masterSearch"
                                 (newRowClick)="typeidCodeSelected($event)"
@@ -1738,6 +1828,530 @@
                   </div>
                 </div>
               </mat-tab>
+
+              <mat-tab label="AML Detail">
+                <div class="row mt-2">
+                  <div class="col-md-12">
+                    <div class="row mb-1">
+                      <div class="col-md-6">
+                        <div class="row mb-2 border border-2 w-50 align-items-center">
+                          <label class="col-md-3">Type</label>
+
+                          <mat-checkbox
+                            class="col-md-5 pt-2 align-items-center"
+                            formControlName="amltype"
+                            id="ID062"
+                            >Individual</mat-checkbox
+                          >
+                        </div>
+
+                        <div class="row mb-1">
+                          <label
+                            for="inputPassword"
+                            class="col-md-1 col-form-label"
+                            id="ID029"
+                            >Title</label
+                          >
+                          <div class="col-md-4">
+                            <mat-form-field
+                            appearance="outline"
+                            style="width: -webkit-fill-available"
+                          >
+                            <mat-select formControlName="name">
+                              <mat-option
+                                *ngFor="let data of nameList"
+                                [value]="data.ENGLISH"
+                                >{{ data.ENGLISH }}</mat-option
+                              >
+                            </mat-select>
+                          </mat-form-field>
+                          </div>
+
+                          <label
+                            for="inputPassword"
+                            class="col-md-3 col-form-label"
+                            id="ID029"
+                            >UN Number</label
+                          >
+                          <div class="col-md-4">
+                            <mat-form-field
+                              style="width: 100%"
+                              appearance="outline"
+                            >
+                              <input
+                              type="text"
+                                matInput
+                                formControlName="unNumber"
+                              />
+                            </mat-form-field>
+                          </div>
+                        </div>
+                        <div class="row mb-1">
+                          <label
+                            for="inputPassword"
+                            class="col-sm-5 col-form-label"
+                            id="ID030"
+                            >Name1</label
+                          >
+                          <div class="col-md-7">
+                            <mat-form-field
+                              style="width: 100%"
+                              appearance="outline"
+                            >
+                              <input
+                                matInput
+                                type="text"
+                                formControlName="name1"
+                              />
+                            </mat-form-field>
+                          </div>
+                        </div>
+                        <div class="row mb-1">
+                          <label
+                            for="inputPassword"
+                            class="col-sm-5 col-form-label"
+                            id="ID030"
+                            >Name2</label
+                          >
+                          <div class="col-md-7">
+                            <mat-form-field
+                              style="width: 100%"
+                              appearance="outline"
+                            >
+                              <input
+                                matInput
+                                type="text"
+                                formControlName="name2"
+                              />
+                            </mat-form-field>
+                          </div>
+                        </div>
+                        <div class="row mb-1">
+                          <label
+                            for="inputPassword"
+                            class="col-sm-5 col-form-label"
+                            id="ID030"
+                            >Name3</label
+                          >
+                          <div class="col-md-7">
+                            <mat-form-field
+                              style="width: 100%"
+                              appearance="outline"
+                            >
+                              <input
+                                matInput
+                                type="text"
+                                formControlName="name3"
+                              />
+                            </mat-form-field>
+                          </div>
+                        </div>
+                        <div class="row mb-1">
+                          <label
+                            for="inputPassword"
+                            class="col-sm-5 col-form-label"
+                            id="ID030"
+                            >Name4</label
+                          >
+                          <div class="col-md-7">
+                            <mat-form-field
+                              style="width: 100%"
+                              appearance="outline"
+                            >
+                              <input
+                                matInput
+                                type="text"
+                                formControlName="name4"
+                              />
+                            </mat-form-field>
+                          </div>
+                        </div>
+                        <div class="row mb-1">
+                          <label
+                            for="inputPassword"
+                            class="col-sm-5 col-form-label"
+                            id="ID030"
+                            >Name5</label
+                          >
+                          <div class="col-md-7">
+                            <mat-form-field
+                              style="width: 100%"
+                              appearance="outline"
+                            >
+                              <input
+                                matInput
+                                type="text"
+                                formControlName="name5"
+                              />
+                            </mat-form-field>
+                          </div>
+                        </div>
+                        <div class="row mb-1">
+                          <label
+                            for="inputPassword"
+                            class="col-sm-5 col-form-label"
+                            id="ID031"
+                            >Designation</label
+                          >
+                          <div class="col-md-7">
+                            <mat-form-field
+                              style="width: 100%"
+                              appearance="outline"
+                            >
+                              <input
+                                matInput
+                                type="text"
+                                formControlName="designation"
+                              />
+                            </mat-form-field>
+                          </div>
+                        </div>
+                        <div class="row mb-1">
+                          <label
+                            for="inputPassword"
+                            class="col-sm-6 col-form-label"
+                            id="ID010"
+                            >Date of Birth</label
+                          >
+                          <div class="col-md-6">
+                            <mat-form-field style="width: 100%" appearance="outline">
+                              <input
+                                matInput
+                                [matDatepicker]="dob"
+                                [max]="vocMaxDate"
+                                name="dob"
+                                placeholder="DD/MM/YYYY"
+                                DateValidation
+                                formControlName="dob"
+                                readonly
+                              />
+                              <mat-datepicker-toggle
+                                matSuffix
+                                [for]="dob"
+                              ></mat-datepicker-toggle>
+                              <mat-datepicker [startAt]="currentDate" #dob></mat-datepicker>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                        <div class="row mb-1">
+                          <label
+                            for="inputPassword"
+                            class="col-sm-5 col-form-label"
+                            id="ID033"
+                            >Religion</label
+                          >
+                          <div class="col-md-7">
+                            <mat-form-field
+                              style="width: -webkit-fill-available"
+                              appearance="outline"
+                            >
+                              <input
+                                readonly="true"
+                                matInput="text"
+                                formControlName="religion"
+                              />
+                              <master-search
+                                (focusout)="openTab($event, 'religion')"
+                                #overlayReligion
+                                [MasterSearchData]="religionCode"
+                                class="masterSearch"
+                                (newRowClick)="religionSelected($event)"
+                              ></master-search>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                        <div class="row mb-1">
+                          <label
+                            for="inputPassword"
+                            class="col-sm-5 col-form-label"
+                            id="ID034"
+                            >Category</label
+                          >
+                          <div class="col-md-7">
+                            <mat-form-field
+                              style="width: -webkit-fill-available"
+                              appearance="outline"
+                            >
+                              <input
+                                readonly="true"
+                                matInput="text"
+                                formControlName="category"
+                              />
+                              <master-search
+                                (focusout)="openTab($event, 'category')"
+                                #overlayCategory
+                                [MasterSearchData]="categoryCode"
+                                class="masterSearch"
+                                (newRowClick)="categorySelected($event)"
+                              ></master-search>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                        <div class="row mb-1">
+                          <label
+                            for="inputPassword"
+                            class="col-sm-5 col-form-label"
+                            id="ID035"
+                            >Cust Status</label
+                          >
+                          <div class="col-md-7">
+                            <mat-form-field
+                              style="width: -webkit-fill-available"
+                              appearance="outline"
+                            >
+                              <input
+                                readonly="true"
+                                matInput="text"
+                                formControlName="custStatus"
+                              />
+                              <master-search
+                                (focusout)="openTab($event, 'custStatus')"
+                                #overlayCustStatus
+                                [MasterSearchData]="custStatusCode"
+                                class="masterSearch"
+                                (newRowClick)="custStatusSelected($event)"
+                              ></master-search>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                        <div class="row mb-1">
+                          <label
+                            for="inputPassword"
+                            class="col-sm-5 col-form-label"
+                            id="ID036"
+                            >Income</label
+                          >
+                          <div class="col-md-7">
+                            <mat-form-field
+                              style="width: -webkit-fill-available"
+                              appearance="outline"
+                            >
+                              <input
+                                type="number"
+                                matInput
+                                formControlName="income"
+                                class="text-right"
+                              />
+                            </mat-form-field>
+                          </div>
+                        </div>
+                        <div class="row mb-1">
+                          <label
+                            for="inputPassword"
+                            class="col-sm-5 col-form-label"
+                            id="ID037"
+                            >Blood Group</label
+                          >
+                          <div class="col-md-7">
+                            <mat-form-field
+                              style="width: -webkit-fill-available"
+                              appearance="outline"
+                            >
+                              <mat-select formControlName="bloodGroup">
+                                <mat-option
+                                  *ngFor="let data of bloodGroupList"
+                                  [value]="data.ENGLISH"
+                                  >{{ data.ENGLISH }}</mat-option
+                                >
+                              </mat-select>
+                              <mat-error
+                                *ngIf="
+                                  posCustomerMasterMainForm.controls.name.hasError(
+                                    'required'
+                                  )
+                                "
+                                id="ID005"
+                              >
+                                Name is <strong>required</strong>
+                              </mat-error>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                        <div class="row mb-1">
+                          <label
+                            for="inputPassword"
+                            class="col-sm-5 col-form-label"
+                            id="ID038"
+                            >Cust. ID Type</label
+                          >
+                          <div class="col-md-7">
+                            <mat-form-field
+                              style="width: -webkit-fill-available"
+                              appearance="outline"
+                            >
+                              <input
+                                readonly="true"
+                                matInput="text"
+                                formControlName="custIdType"
+                              />
+
+                              <master-search
+                                (focusout)="openTab($event, 'custIdType')"
+                                #overlayCustIdType
+                                [MasterSearchData]="typeidCodeData"
+                                class="masterSearch"
+                                (newRowClick)="typeidCodeSelected($event)"
+                              ></master-search>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                        <div class="row mb-1">
+                          <label
+                            for="inputPassword"
+                            class="col-sm-5 col-form-label"
+                            id="ID039"
+                            >Cust. ID</label
+                          >
+                          <div class="col-md-7">
+                            <mat-form-field
+                              style="width: -webkit-fill-available"
+                              appearance="outline"
+                            >
+                              <input matInput="text" formControlName="custID" />
+                            </mat-form-field>
+                          </div>
+                        </div>
+                        <div class="row mb-1">
+                          <label
+                            for="inputPassword"
+                            class="col-sm-5 col-form-label"
+                            id="ID040"
+                            >Cust ID Exp Date</label
+                          >
+                          <div class="col-md-7">
+                            <mat-form-field
+                              appearance="outline"
+                              style="width: -webkit-fill-available"
+                            >
+                              <input
+                                matInput
+                                readonly="true"
+                                [matDatepicker]="custDate"
+                                [max]="vocMaxDate"
+                                name="custDate"
+                                placeholder="DD/MM/YYYY"
+                                DateValidation
+                                formControlName="custDate"
+                              />
+                              <mat-datepicker-toggle
+                                matSuffix
+                                [for]="custDate"
+                              ></mat-datepicker-toggle>
+                              <mat-datepicker
+                                [startAt]="currentDate"
+                                #custDate
+                              ></mat-datepicker>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                        <div class="row mb-1">
+                          <label
+                            for="inputPassword"
+                            class="col-sm-5 col-form-label"
+                            id="ID041"
+                            >P.O.Box</label
+                          >
+                          <div class="col-md-7">
+                            <mat-form-field
+                              style="width: -webkit-fill-available"
+                              appearance="outline"
+                            >
+                              <input
+                                matInput="text"
+                                maxlength="6"
+                                formControlName="POBox"
+                              />
+                            </mat-form-field>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="row mb-5">
+                          <label
+                            for="inputPassword"
+                            class="col-form-label col-sm-12"
+                            id="ID042"
+                            >Address(Personal)</label
+                          >
+                          <div class="col-sm-12">
+                            <mat-form-field
+                              style="width: 100%"
+                              appearance="outline"
+                            >
+                              <textarea
+                                matInput
+                                rows="3"
+                                formControlName="address"
+                                class=""
+                              ></textarea>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                        <div class="row mb-5">
+                          <label
+                            for="inputPassword"
+                            class="col-form-label col-sm-12"
+                            id="ID043"
+                            >Official Address</label
+                          >
+                          <div class="col-md-12">
+                            <mat-form-field
+                              style="width: 100%"
+                              appearance="outline"
+                            >
+                              <textarea
+                                matInput
+                                rows="3"
+                                formControlName="officialAddress"
+                              ></textarea>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                        <div class="row mb-5">
+                          <label
+                            for="inputPassword"
+                            class="col-form-label col-sm-12"
+                            id="ID044"
+                            >Delivery Address</label
+                          >
+                          <div class="col-sm-12">
+                            <mat-form-field
+                              style="width: 100%"
+                              appearance="outline"
+                            >
+                              <textarea
+                                matInput
+                                rows="3"
+                                formControlName="deliveryAddress"
+                              ></textarea>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                        <div class="row mb-5">
+                          <label
+                            for="inputPassword"
+                            class="col-form-label col-sm-12"
+                            id="ID045"
+                            >Remarks</label
+                          >
+                          <div class="col-sm-12">
+                            <mat-form-field
+                              style="width: 100%"
+                              appearance="outline"
+                            >
+                              <textarea
+                                matInput
+                                rows="3"
+                                formControlName="remarks"
+                              ></textarea>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </mat-tab>
               <mat-tab label="Other Details">
                 <div class="row">
                   <div class="col-md-10">
@@ -1779,10 +2393,18 @@
                           appearance="outline"
                         >
                           <input
-                            matInput="text"
+                            readonly="true"
+                            matInput
+                            type="text"
                             formControlName="gifrPurchased"
                           />
-                          <master-search class="masterSearch"></master-search>
+                          <master-search
+                            (focusout)="openTab($event, 'gifrPurchased')"
+                            #overlayGifrPurchased
+                            [MasterSearchData]="giftPurchasedCode"
+                            class="masterSearch"
+                            (newRowClick)="giftPurchasedSelected($event)"
+                          ></master-search>
                         </mat-form-field>
                       </div>
                     </div>
@@ -1799,10 +2421,18 @@
                           appearance="outline"
                         >
                           <input
-                            matInput="text"
+                            readonly="true"
+                            matInput
+                            type="text"
                             formControlName="occasionOfPurchase"
                           />
-                          <master-search class="masterSearch"></master-search>
+                          <master-search
+                            (focusout)="openTab($event, 'occasionOfPurchase')"
+                            #overlayOccasionOfPurchase
+                            [MasterSearchData]="occasionOfPurchaseCode"
+                            class="masterSearch"
+                            (newRowClick)="occasionOfPurchaseSelected($event)"
+                          ></master-search>
                         </mat-form-field>
                       </div>
                     </div>
@@ -1818,8 +2448,20 @@
                           style="width: -webkit-fill-available"
                           appearance="outline"
                         >
-                          <input matInput="text" formControlName="ageGroup" />
-                          <master-search class="masterSearch"></master-search>
+                          <input
+                            matInput
+                            type="text"
+                            readonly="true"
+                            formControlName="ageGroup"
+                          />
+
+                          <master-search
+                            (focusout)="openTab($event, 'ageGroup')"
+                            #overlayAgeGroup
+                            [MasterSearchData]="ageGroupCode"
+                            class="masterSearch"
+                            (newRowClick)="ageGroupSelected($event)"
+                          ></master-search>
                         </mat-form-field>
                       </div>
                     </div>
@@ -1837,9 +2479,23 @@
                           style="width: 100%"
                           appearance="outline"
                         >
-                          <mat-select formControlName="lookingFor">
-                            <mat-option></mat-option>
+                          <mat-select formControlName="staffCourtesy">
+                            <mat-option
+                              *ngFor="let data of ratingList"
+                              [value]="data.ENGLISH"
+                              >{{ data.ENGLISH }}</mat-option
+                            >
                           </mat-select>
+                          <mat-error
+                            *ngIf="
+                              posCustomerMasterMainForm.controls.name.hasError(
+                                'required'
+                              )
+                            "
+                            id="ID005"
+                          >
+                            Name is <strong>required</strong>
+                          </mat-error>
                         </mat-form-field>
                       </div>
                     </div>
@@ -1857,8 +2513,19 @@
                           style="width: -webkit-fill-available"
                           appearance="outline"
                         >
-                          <input matInput="text" formControlName="nextVisit" />
-                          <master-search class="masterSearch"></master-search>
+                          <input
+                            type="text"
+                            readonly="true"
+                            matInput="text"
+                            formControlName="nextVisit"
+                          />
+                          <master-search
+                            (focusout)="openTab($event, 'nextVisit')"
+                            #overlayNextVisit
+                            [MasterSearchData]="nextVisitCode"
+                            class="masterSearch"
+                            (newRowClick)="nextVisitSelected($event)"
+                          ></master-search>
                         </mat-form-field>
                       </div>
                     </div>
@@ -1875,7 +2542,13 @@
                           appearance="outline"
                         >
                           <input matInput="text" formControlName="occupation" />
-                          <master-search class="masterSearch"></master-search>
+                          <master-search
+                            (focusout)="openTab($event, 'occupation')"
+                            #overlayOccupation
+                            [MasterSearchData]="occupationMasterCode"
+                            class="masterSearch"
+                            (newRowClick)="occupationMasterSelected($event)"
+                          ></master-search>
                         </mat-form-field>
                       </div>
                     </div>

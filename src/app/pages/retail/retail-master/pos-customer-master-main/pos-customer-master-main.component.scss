@@ -308,3 +308,17 @@
       background-color: #f7f8fb;
     }
   }
+
+  .type-container {
+    display: flex;
+    align-items: center; /* Aligns items vertically in the center */
+    padding: 8px;
+  }
+  
+  .type-label {
+    margin-right: 10px; /* Adds spacing between the label and radio button */
+    font-size: 14px; /* Adjust size as needed */
+  }
+
+
+  
