@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Input, OnInit, ViewChild } from "@angular/core";
 import {
   AbstractControl,
   FormBuilder,
@@ -15,6 +15,7 @@ import { DialogboxComponent } from "src/app/shared/common/dialogbox/dialogbox.co
 import { MatDialog } from "@angular/material/dialog";
 import { Subscription } from "rxjs";
 import Swal from "sweetalert2";
+import { MasterSearchComponent } from "src/app/shared/common/master-search/master-search.component";
 
 @Component({
   selector: "app-pos-customer-master-main",
@@ -22,6 +23,28 @@ import Swal from "sweetalert2";
   styleUrls: ["./pos-customer-master-main.component.scss"],
 })
 export class PosCustomerMasterMainComponent implements OnInit {
+  @ViewChild("overlayParentPosCode")
+  overlayParentPosCode!: MasterSearchComponent;
+  @ViewChild("overlayRefBy") overlayRefBy!: MasterSearchComponent;
+  @ViewChild("overlayCountryCode") overlayCountryCode!: MasterSearchComponent;
+  @ViewChild("overlayNationality") overlayNationality!: MasterSearchComponent;
+  @ViewChild("overlayState") overlayState!: MasterSearchComponent;
+  @ViewChild("overlayCity") overlayCity!: MasterSearchComponent;
+  @ViewChild("overlayLanguage") overlayLanguage!: MasterSearchComponent;
+  @ViewChild("overlayFavCelebration")
+  overlayFavCelebration!: MasterSearchComponent;
+  @ViewChild("overlayReligion") overlayReligion!: MasterSearchComponent;
+  @ViewChild("overlayCategory") overlayCategory!: MasterSearchComponent;
+  @ViewChild("overlayCustStatus") overlayCustStatus!: MasterSearchComponent;
+  @ViewChild("overlayCustIdType") overlayCustIdType!: MasterSearchComponent;
+  @ViewChild("overlayGifrPurchased")
+  overlayGifrPurchased!: MasterSearchComponent;
+  @ViewChild("overlayOccasionOfPurchase")
+  overlayOccasionOfPurchase!: MasterSearchComponent;
+  @ViewChild("overlayAgeGroup") overlayAgeGroup!: MasterSearchComponent;
+  @ViewChild("overlayNextVisit") overlayNextVisit!: MasterSearchComponent;
+  @ViewChild("overlayOccupation") overlayOccupation!: MasterSearchComponent;
+
   private subscriptions: Subscription[] = [];
   @Input() content!: any;
   @Input() amlNameValidation?: boolean;
@@ -38,6 +61,11 @@ export class PosCustomerMasterMainComponent implements OnInit {
   isCustProcessing: boolean = false;
   customerDetails: any = {};
   ishidden = true;
+  selectedCountryISO2: any;
+  countryListData: any;
+  stateListData: any;
+  selectedstateISO2:any
+  cityListData:any
 
   // Dialog box
   dialogBox: any;
@@ -202,6 +230,71 @@ export class PosCustomerMasterMainComponent implements OnInit {
     LOAD_ONCLICK: true,
   };
 
+  giftPurchasedCode: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "Gift Purchased For",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "TYPES='GIFT PURCHASE MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  };
+
+  occasionOfPurchaseCode: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "Occasion Of Purchase",
+    SEARCH_VALUE: "",
+    WHERECONDITION: " TYPES='PURCHASE OCCASION MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  };
+
+  ageGroupCode: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "Age Group",
+    SEARCH_VALUE: "",
+    WHERECONDITION: " TYPES='AGEGROUP MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  };
+
+  nextVisitCode: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "Next Visit",
+    SEARCH_VALUE: "",
+    WHERECONDITION: " TYPES='NEXT VISIT MASTER'  ",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  };
+
+  occupationMasterCode: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "Occupation ",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "TYPES='OCCUPATION MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  };
+
   posCustomerMasterMainForm: FormGroup = this.formBuilder.group({
     code: [""],
     parentPosCode: [""],
@@ -317,11 +410,43 @@ export class PosCustomerMasterMainComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    console.log(this.comService.allbranchMaster);
+
+    this.countryList();
     this.generateCutomerCode();
     this.getDropDownStatus();
 
     this.branchCode = this.comService.branchCode;
     this.posCustomerMasterMainForm.controls["createdBranch"].disable();
+  }
+
+  countryList() {
+    let API = `CountryMaster/GetCountryMasterHeaderList`;
+    this.apiService.getDynamicAPI(API).subscribe((res) => {
+      this.countryListData = res.response.map((country: any) => country);
+    });
+  }
+
+  onCountrySelect(iso2Code: string) {
+    this.selectedCountryISO2 = iso2Code;
+    console.log("Selected Country ISO2: ", this.selectedCountryISO2);
+  
+    let API = `CountryMaster/GetStateList/${this.selectedCountryISO2}`;
+    this.apiService.getDynamicAPI(API).subscribe((res) => {
+      this.stateListData = res.response;
+      console.log(this.stateListData);  
+    });
+  }
+
+  onCitySelect(iso2Code: string) {
+    this.selectedstateISO2 = iso2Code;
+    console.log("Selected Country ISO2: ", this.selectedstateISO2);
+  
+    let API = `CountryMaster/GetCityList/${this.selectedCountryISO2}/${this.selectedstateISO2}/`;
+    this.apiService.getDynamicAPI(API).subscribe((res) => {
+      this.cityListData = res.response;
+      console.log(this.cityListData);  
+    });
   }
 
   onPanNoInput(event: Event): void {
@@ -481,6 +606,31 @@ export class PosCustomerMasterMainComponent implements OnInit {
   custStatusSelected(e: any) {
     console.log(e);
     this.posCustomerMasterMainForm.controls.custStatus.setValue(e.DESCRIPTION);
+  }
+
+  giftPurchasedSelected(e: any) {
+    console.log(e);
+    this.posCustomerMasterMainForm.controls.gifrPurchased.setValue(e.CODE);
+  }
+
+  occasionOfPurchaseSelected(e: any) {
+    console.log(e);
+    this.posCustomerMasterMainForm.controls.occasionOfPurchase.setValue(e.CODE);
+  }
+
+  ageGroupSelected(e: any) {
+    console.log(e);
+    this.posCustomerMasterMainForm.controls.ageGroup.setValue(e.CODE);
+  }
+
+  nextVisitSelected(e: any) {
+    console.log(e);
+    this.posCustomerMasterMainForm.controls.nextVisit.setValue(e.CODE);
+  }
+
+  occupationMasterSelected(e: any) {
+    console.log(e);
+    this.posCustomerMasterMainForm.controls.occupation.setValue(e.CODE);
   }
 
   getDropDownStatus() {
@@ -1138,5 +1288,78 @@ export class PosCustomerMasterMainComponent implements OnInit {
   dummyDateCheck(date: any) {
     if (this.dummyDateArr.includes(date)) return "";
     else return date;
+  }
+
+  openTab(event: any, formControlName: string) {
+    console.log(event);
+
+    if (event.target.value === "") {
+      this.openPanel(event, formControlName);
+    }
+  }
+
+  openPanel(event: any, formControlName: string) {
+    switch (formControlName) {
+      case "parentPosCode":
+        this.overlayParentPosCode.showOverlayPanel(event);
+        break;
+      case "refBy":
+        this.overlayRefBy.showOverlayPanel(event);
+        break;
+      case "countryCode":
+        this.overlayCountryCode.showOverlayPanel(event);
+        break;
+      case "nationality":
+        this.overlayNationality.showOverlayPanel(event);
+        break;
+      case "state":
+        this.overlayState.showOverlayPanel(event);
+        break;
+      case "city":
+        this.overlayCity.showOverlayPanel(event);
+        break;
+
+      case "language":
+        this.overlayLanguage.showOverlayPanel(event);
+        break;
+
+      case "favCelebration":
+        this.overlayFavCelebration.showOverlayPanel(event);
+        break;
+      case "religion":
+        this.overlayReligion.showOverlayPanel(event);
+        break;
+
+      case "category":
+        this.overlayCategory.showOverlayPanel(event);
+        break;
+
+      case "custStatus":
+        this.overlayCustStatus.showOverlayPanel(event);
+        break;
+
+      case "custIdType":
+        this.overlayCustIdType.showOverlayPanel(event);
+        break;
+      case "gifrPurchased":
+        this.overlayGifrPurchased.showOverlayPanel(event);
+        break;
+      case "occasionOfPurchase":
+        this.overlayOccasionOfPurchase.showOverlayPanel(event);
+        break;
+
+      case "ageGroup":
+        this.overlayAgeGroup.showOverlayPanel(event);
+        break;
+      case "nextVisit":
+        this.overlayNextVisit.showOverlayPanel(event);
+        break;
+
+      case "occupation":
+        this.overlayOccupation.showOverlayPanel(event);
+        break;
+      default:
+        console.warn(`Unknown form control name: ${formControlName}`);
+    }
   }
 }
