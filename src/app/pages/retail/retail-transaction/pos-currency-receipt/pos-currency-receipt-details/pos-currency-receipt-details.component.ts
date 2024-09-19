@@ -1331,8 +1331,8 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
 
   limitDigits(event: any): void {
     const input = event.target;
-    if (input.value.length > 16) {
-      input.value = input.value.slice(0, 16);  
+    if (input.value.length > 15) {
+      input.value = input.value.slice(0, 15);  
     }
   }
   

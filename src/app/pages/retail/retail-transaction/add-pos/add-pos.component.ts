@@ -14195,7 +14195,7 @@ else{
         if (resp.status === 'Success') {
           this.newLineItem = resp.response.salesOrder.Details[0];
           this.addItemtoList('save_btn', resp.response.salesOrder.Details);
-          this.onCustomerNameFocus(resp.response.customer.MOBILE, false)
+          this.onCustomerNameFocus(resp.response.customer.MOBILE, false);
           this.modalRefePendingSalesOrder.dismiss('Dismissed by user');
           // this.pendingOrderList = resp.response;
           this.snackBar.dismiss();
