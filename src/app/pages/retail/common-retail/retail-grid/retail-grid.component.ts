@@ -41,6 +41,9 @@ export class RetailGridComponent implements OnInit {
   @Output() actionViewClick = new EventEmitter<any>();
   dropdownDataSource: any[] = [];
   
+  printPreviewFlag: boolean = false;
+  screenName: any;
+  PermissionArray: any[] = [];
   
   constructor(
     private CommonService: CommonServiceService,
@@ -438,15 +441,12 @@ export class RetailGridComponent implements OnInit {
     this.actionViewClick.emit(event)
   }
 
-  printPreviewFlag: boolean = false;
-  screenName: any;
-  PermissionArray: any[] = [];
   ngAfterViewInit(){
     this.screenName = this.CommonService.getModuleName();
     const retrievedData = localStorage.getItem('menuPermissions');
     if (retrievedData) {
       const menuPermissions = JSON.parse(retrievedData);
-      
+      console.log('retrievedData in retail grid',menuPermissions)
       const filteredData = menuPermissions.filter((item: any) => item.MENU_CAPTION_ENG === this.screenName)
       .map((item: any) => ({
         MENU_ID: item.MENU_ID,
