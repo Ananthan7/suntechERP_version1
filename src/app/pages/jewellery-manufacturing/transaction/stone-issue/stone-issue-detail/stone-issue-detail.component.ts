@@ -208,7 +208,7 @@ export class StoneIssueDetailComponent implements OnInit {
 
     this.stoneIssueDetailsFrom.controls.jobNumber.setValue(this.content.JOB_NUMBER)
     this.stoneIssueDetailsFrom.controls.jobDes.setValue(this.content.JOB_DESCRIPTION)
-    this.stoneIssueDetailsFrom.controls.subjobnumber.setValue(this.content.JOB_SO_NUMBER)
+    this.stoneIssueDetailsFrom.controls.subjobnumber.setValue(this.content.UNQ_JOB_ID)
     this.stoneIssueDetailsFrom.controls.subjobDes.setValue(this.content.JOB_DESCRIPTION)
     this.stoneIssueDetailsFrom.controls.DESIGN_CODE.setValue(this.content.DESIGN_CODE)
     this.stoneIssueDetailsFrom.controls.stockCodeDes.setValue(this.content.STOCK_DESCRIPTION)
@@ -640,7 +640,7 @@ getImageData() {
     let postData = {
       "SPID": "040",
       "parameter": {
-        'strUNQ_JOB_ID': this.comService.nullToString(this.stoneIssueDetailsFrom.value.subjobnumber),
+        'strUNQ_JOB_ID': this.stoneIssueDetailsFrom.value.subjobnumber,
         'strBranchCode': this.comService.nullToString(this.branchCode),
         'strCurrenctUser': ''
       }
@@ -673,7 +673,7 @@ getImageData() {
   }
 
   jobNumberValidate(event: any) {
-    // this.showOverleyPanel(event, 'jobNumber')
+    this.showOverleyPanel(event, 'jobNumber')
     if (event.target.value == '') return
     let postData = {
       "SPID": "028",
@@ -691,8 +691,8 @@ getImageData() {
         if (result.status == "Success" && result.dynamicData[0]) {
           let data = result.dynamicData[0]
           if (data && data[0]?.UNQ_JOB_ID != '') {
-            console.log(data,'pick')
-            this.overlayjobNumberSearch.closeOverlayPanel()
+            console.log(data[0],'pick')
+            this.jobNumberDetailData = data
             this.stoneIssueDetailsFrom.controls.jobDes.setValue(data[0].JOB_DESCRIPTION)
             this.stoneIssueDetailsFrom.controls.subjobnumber.setValue(data[0].UNQ_JOB_ID)
             this.stoneIssueDetailsFrom.controls.subjobDes.setValue(data[0].DESCRIPTION)
@@ -704,7 +704,7 @@ getImageData() {
             // } else {
             //   this.stoneIssueDetailsFrom.controls.DIVCODE.setValue("Z");
             // }
-
+            this.overlayjobNumberSearch.closeOverlayPanel()
             this.subJobNumberValidate()
           } else {
             this.comService.toastErrorByMsgId('MSG1531')

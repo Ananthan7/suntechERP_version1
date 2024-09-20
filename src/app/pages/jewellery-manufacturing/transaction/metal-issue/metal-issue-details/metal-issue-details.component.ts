@@ -562,7 +562,7 @@ export class MetalIssueDetailsComponent implements OnInit {
       "parameter": {
         'BRANCHCODE': this.comService.nullToString(this.branchCode),
         'JOBNO': this.comService.nullToString(event.target.value),
-        'STRSHOWPROCESS': ''
+        'STRSHOWPROCESS': 'Y'
       }
     }
     this.comService.showSnackBarMsg('MSG81447')
@@ -580,6 +580,7 @@ export class MetalIssueDetailsComponent implements OnInit {
             this.jobNumberDetailData = data
             this.metalIssueDetailsForm.controls.subJobNo.setValue(data[0].UNQ_JOB_ID)
             this.metalIssueDetailsForm.controls.jobNumDes.setValue(data[0].JOB_DESCRIPTION)
+            this.metalIssueDetailsForm.controls.subJobNoDes.setValue(data[0].SUB_JOB_DESCRIPTION)
             this.subJobNumberValidate()
             this.metalIssueDetailsForm.controls.DIVCODE.setValue("G");
             this.metalIssueDetailsForm.controls.JOB_DATE.setValue(data[0].JOB_DATE)
@@ -666,10 +667,11 @@ export class MetalIssueDetailsComponent implements OnInit {
             this.comService.allbranchMaster.DMFGMLOC
           )
           // this.meltingIssuedetailsFrom.controls.PICTURE_PATH.setValue(data[0].PICTURE_PATH)
-        } else {
-          this.metalIssueDetailsForm.controls.subJobNo.setValue('')
-          this.comService.toastErrorByMsgId('MSG1747')
-        }
+        } 
+        // else {
+        //   this.metalIssueDetailsForm.controls.subJobNo.setValue('')
+        //   this.comService.toastErrorByMsgId('MSG1747')
+        // }
       }, err => {
         this.comService.closeSnackBarMsg()
         this.comService.toastErrorByMsgId('MSG1531')

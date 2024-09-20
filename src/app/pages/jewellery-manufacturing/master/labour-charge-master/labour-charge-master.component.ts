@@ -411,6 +411,7 @@ export class LabourChargeMasterComponent implements OnInit {
     wtTo: [''],
     onGrossWt: [false, [Validators.required]],
     forDesignOnly: [false, [Validators.required]],
+    variance: [''],
   });
 
   stockCodeData: MasterSearchModel = {
@@ -604,6 +605,8 @@ export class LabourChargeMasterComponent implements OnInit {
     this.diamondlabourMasterForm.controls.accessories.setValue(this.content.ACCESSORIES);
     this.diamondlabourMasterForm.controls.labour_ac.setValue(this.content.CRACCODE);
     this.diamondlabourMasterForm.controls.settingType.setValue(this.content.PROCESS_TYPE);
+    this.diamondlabourMasterForm.controls.variance.setValue(this.content.METALSTONE);
+
 
 
     this.diamondlabourMasterForm.controls.selling.setValue(
@@ -1154,9 +1157,9 @@ export class LabourChargeMasterComponent implements OnInit {
       "CATEGORY_CODE": this.commonService.nullToString(metalForm.category),
       "SUB_CATEGORY_CODE": this.commonService.nullToString(metalForm.subCategory),
       "BRAND_CODE": this.commonService.nullToString(metalForm.brand),
-      "PROCESS_TYPE": this.commonService.nullToString(diamondForm.process),
+      "PROCESS_TYPE": this.commonService.nullToString(diamondForm.settingType),
       "KARAT_CODE": this.commonService.nullToString(metalForm.karat),
-      "METALSTONE": "S",
+      "METALSTONE":  this.commonService.nullToString(diamondForm.variance),
       "STOCK_CODE": this.commonService.nullToString(metalForm.stock_code),
       "PURITY": this.commonService.emptyToZero(this.metallabourMasterForm.value.purity),
       "COLOR": this.commonService.nullToString(metalForm.color),
@@ -1165,6 +1168,7 @@ export class LabourChargeMasterComponent implements OnInit {
       "ON_GROSSWT": true,
     }
   }
+
   formSubmit() {
     if (this.content && this.content.FLAG == 'VIEW') return
     if (this.content && this.content.FLAG == 'EDIT') {
@@ -1497,37 +1501,53 @@ export class LabourChargeMasterComponent implements OnInit {
 
   }
 
-  salesChange(data: any) {
-    if (data == 'metalSelling') {
-      this.viewsellingrateMetal = true;
-      this.viewsellingMetal = false;
-      this.metallabourMasterForm.controls.metalselling_rate.setValue('');
-    } else if (data == 'metalselling_rate') {
-      this.viewsellingMetal = true;
-      this.viewsellingrateMetal = false;
-      this.metallabourMasterForm.controls.metalSelling.setValue('');
-    } else {
-      this.viewsellingMetal = false;
-      this.viewsellingrateMetal = false;
-    }
+  // salesChange(data: any) {
+  //   if (data == 'metalSelling') {
+  //     this.viewsellingrateMetal = true;
+  //     this.viewsellingMetal = false;
+  //     this.metallabourMasterForm.controls.metalselling_rate.setValue('');
+  //   } else if (data == 'metalselling_rate') {
+  //     this.viewsellingMetal = true;
+  //     this.viewsellingrateMetal = false;
+  //     this.metallabourMasterForm.controls.metalSelling.setValue('');
+  //   } else {
+  //     this.viewsellingMetal = false;
+  //     this.viewsellingrateMetal = false;
+  //   }
 
-  }
+  // }
+
+  // salesChangesDia(data: any) {
+  //   if (data == 'selling') {
+  //     this.viewsellingrate = true;
+  //     this.viewselling = false;
+  //     this.diamondlabourMasterForm.controls.selling_rate.setValue('');
+  //   } else if (data == 'selling_rate') {
+  //     this.viewselling = true;
+  //     this.viewsellingrate = false;
+  //     this.diamondlabourMasterForm.controls.selling.setValue('');
+  //   } else {
+  //     this.viewselling = false;
+  //     this.viewsellingrate = false;
+  //   }
+
+  // }
+
 
   salesChangesDia(data: any) {
-    if (data == 'selling') {
-      this.viewsellingrate = true;
-      this.viewselling = false;
-      this.diamondlabourMasterForm.controls.selling_rate.setValue('');
-    } else if (data == 'selling_rate') {
-      this.viewselling = true;
-      this.viewsellingrate = false;
-      this.diamondlabourMasterForm.controls.selling.setValue('');
-    } else {
-      this.viewselling = false;
-      this.viewsellingrate = false;
+    if (data === 'selling') {
+      // When "Selling %" is filled, set the "Selling Rate" field to 0.
+      console.log("Setting selling_rate to 0 because selling % is updated");
+      this.diamondlabourMasterForm.controls.selling_rate.setValue('0.00');
+      this.diamondlabourMasterForm.controls.selling_rate.updateValueAndValidity();
+    } else if (data === 'selling_rate') {
+      // When "Selling Rate" is filled, set the "Selling %" field to 0.
+      console.log("Setting selling % to 0 because selling_rate is updated");
+      this.diamondlabourMasterForm.controls.selling.setValue('0.00');
+      this.diamondlabourMasterForm.controls.selling.updateValueAndValidity();
     }
-
   }
+
   lookupKeyPress(event: any, form?: any) {
     if (event.key == 'Tab' && event.target.value == '') {
       this.showOverleyPanel(event, form)

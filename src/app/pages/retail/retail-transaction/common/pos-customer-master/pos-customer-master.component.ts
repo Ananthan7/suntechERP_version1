@@ -253,6 +253,9 @@ export class PosCustomerMasterComponent implements OnInit {
             this.customerDetailForm.controls.fcn_cust_detail_dob.setValue(
               this.dummyDateCheck(result.DATE_OF_BIRTH)
             );
+            this.customerDetailForm.controls.fcn_customer_exp_date.setValue(
+              this.dummyDateCheck(result.POSCUSTIDEXP_DATE)
+            );
             this.customerDetailForm.controls.fcn_cust_detail_designation.setValue(
               result.DESIGNATION
             );
@@ -794,7 +797,7 @@ export class PosCustomerMasterComponent implements OnInit {
           posCustomer.CODE !== '' &&
           posCustomer.CODE.toString() !== '0'
         ) {
-          apiCtrl = `PosCustomerMaster/UpdateCustomerMaster/Code=${posCustomer.CODE}`;
+          apiCtrl = `PosCustomerMaster/UpdateCustomerMaster/${posCustomer.CODE}`;
           custResponse = this.apiService.putDynamicAPI(apiCtrl, posCustomer)
         } else {
           apiCtrl = 'PosCustomerMaster/InsertCustomerMaster';
@@ -855,6 +858,9 @@ export class PosCustomerMasterComponent implements OnInit {
             );
             this.customerDetailForm.controls.fcn_cust_detail_dob.setValue(
               this.dummyDateCheck(this.customerDetails.DATE_OF_BIRTH)
+            );
+            this.customerDetailForm.controls.fcn_customer_exp_date.setValue(
+              this.dummyDateCheck(this.customerDetails.POSCUSTIDEXP_DATE)
             );
             // this.snackBar.open('Customer details saved successfully');
             // this.snackBar.dismiss();

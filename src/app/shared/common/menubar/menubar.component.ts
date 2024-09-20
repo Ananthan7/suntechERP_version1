@@ -47,6 +47,7 @@ export class MenubarComponent implements OnInit {
       if (response.status == 'Success') {
         const specificData = response.response.map((item: any) => ({
           MENU_SRNO: item.MENU_SRNO,
+          SUB_MODULE_GROUP : item.MENU_SUB_MODULE_GROUP,          
           MENU_CAPTION_ENG: item.MENU_CAPTION_ENG,
           PERMISSION: item.PERMISSION,
           FORM_NAME: item.ANG_WEB_FORM_NAME,
