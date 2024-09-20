@@ -106,34 +106,24 @@
                     >Name *
                   </label>
                   <div class="col-md-8">
-                    <mat-form-field
-                      appearance="outline"
-                      style="width: -webkit-fill-available"
-                    >
-                      <mat-select formControlName="name">
-                        <mat-option
-                          *ngFor="let data of nameList"
-                          [value]="data.ENGLISH"
-                          >{{ data.ENGLISH }}</mat-option
-                        >
+                    <mat-form-field style="width: 100%" appearance="outline">
+                      <mat-select (selectionChange)="genderChanger($event.value)" formControlName="name">
+                        <mat-option *ngFor="let data of nameList" [value]="data.ENGLISH">
+                          {{ data.ENGLISH }}
+                        </mat-option>
                       </mat-select>
-                      <mat-error
-                        id="ID005"
-                        *ngIf="
-                          posCustomerMasterMainForm.controls.name.hasError(
-                            'required'
-                          )
-                        "
-                      >
-                        Name is <strong>required</strong>
-                      </mat-error>
                     </mat-form-field>
                   </div>
                 </div>
               </div>
               <div class="col-md-6">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="nameDesc" required />
+                  <input
+                    appAlphabetsOnly
+                    matInput="text"
+                    formControlName="nameDesc"
+                    required
+                  />
                 </mat-form-field>
               </div>
             </div>
@@ -152,6 +142,10 @@
                     type="number"
                     formControlName="creditCardLimit"
                     style="text-align: end"
+                    [disabled]="
+                      !posCustomerMasterMainForm.get('creditCardLimitCheck')
+                        ?.value
+                    "
                   />
                 </mat-form-field>
               </div>
@@ -170,20 +164,11 @@
               <div class="col-md-8">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <mat-select formControlName="gender">
-                    <mat-option
-                      *ngFor="let data of genderList"
-                      [value]="data.ENGLISH"
-                      >{{ data.ENGLISH }}</mat-option
-                    >
+                    <mat-option *ngFor="let data of genderList" [value]="data.ENGLISH">
+                      {{ data.ENGLISH }}
+                    </mat-option>
                   </mat-select>
-                  <mat-error
-                    *ngIf="
-                      posCustomerMasterMainForm.controls.gender.hasError(
-                        'required'
-                      )
-                    "
-                    id="ID008"
-                  >
+                  <mat-error *ngIf="posCustomerMasterMainForm.controls.gender.hasError('required')" id="ID008">
                     Gender is <strong>required</strong>
                   </mat-error>
                 </mat-form-field>
@@ -200,22 +185,26 @@
               >
               <div class="col-md-8">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <mat-select formControlName="maritalSt">
+                  <mat-select
+                    (selectionChange)="onWeddingIsIt($event.value)"
+                    formControlName="maritalSt"
+                  >
                     <mat-option
                       *ngFor="let data of maritalStatusList"
                       [value]="data.ENGLISH"
-                      >{{ data.ENGLISH }}</mat-option
                     >
+                      {{ data.ENGLISH }}
+                    </mat-option>
                   </mat-select>
                   <mat-error
                     *ngIf="
-                      posCustomerMasterMainForm.controls.name.hasError(
+                      posCustomerMasterMainForm.controls.maritalSt.hasError(
                         'required'
                       )
                     "
                     id="ID005"
                   >
-                    Name is <strong>required</strong>
+                    Marital status is <strong>required</strong>
                   </mat-error>
                 </mat-form-field>
               </div>
@@ -511,6 +500,13 @@
                     formControlName="custType"
                     required
                   />
+                  <master-search
+                    (focusout)="openTab($event, 'custType')"
+                    #overlayCustomerType
+                    [MasterSearchData]="customerTypeCodeData"
+                    class="masterSearch"
+                    (newRowClick)="customerTypeSelected($event)"
+                  ></master-search>
                 </mat-form-field>
               </div>
             </div>
@@ -731,7 +727,8 @@
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
                       maxlength="15"
-                      matInput="text"
+                      matInput
+                      type="number"
                       formControlName="vat"
                     />
                   </mat-form-field>
@@ -784,7 +781,8 @@
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
                     readonly="true"
-                    matInput="text"
+                    matInput
+                    type="number"
                     formControlName="whatsappCountryCode"
                   />
                 </mat-form-field>
@@ -792,7 +790,8 @@
               <div class="col-md-6">
                 <mat-form-field style="width: 96%" appearance="outline">
                   <input
-                    matInput="text"
+                    matInput
+                    type="number"
                     formControlName="whatsappNumber"
                     class="text-right"
                   />
@@ -980,6 +979,7 @@
                               appearance="outline"
                             >
                               <input
+                              AmountDecimalInput
                                 type="number"
                                 matInput
                                 formControlName="income"
@@ -1080,7 +1080,7 @@
                                 matInput
                                 readonly="true"
                                 [matDatepicker]="custDate"
-                                [max]="vocMaxDate"
+                                [min]="vocMaxDate"
                                 name="custDate"
                                 placeholder="DD/MM/YYYY"
                                 DateValidation
@@ -1136,6 +1136,8 @@
                                 rows="3"
                                 formControlName="address"
                                 class=""
+                                style="resize: none;"
+                                
                               ></textarea>
                             </mat-form-field>
                           </div>
@@ -1156,6 +1158,7 @@
                                 matInput
                                 rows="3"
                                 formControlName="officialAddress"
+                                style="resize: none;"
                               ></textarea>
                             </mat-form-field>
                           </div>
@@ -1176,6 +1179,7 @@
                                 matInput
                                 rows="3"
                                 formControlName="deliveryAddress"
+                                style="resize: none;"
                               ></textarea>
                             </mat-form-field>
                           </div>
@@ -1196,6 +1200,7 @@
                                 matInput
                                 rows="3"
                                 formControlName="remarks"
+                                style="resize: none;"
                               ></textarea>
                             </mat-form-field>
                           </div>
@@ -1462,7 +1467,7 @@
                         for="inputPassword"
                         class="col-sm-5 col-form-label"
                         id="ID068"
-                        >Making Changes</label
+                        >Making Charges</label
                       >
                       <div class="col-md-7">
                         <mat-form-field
@@ -1834,7 +1839,9 @@
                   <div class="col-md-12">
                     <div class="row mb-1">
                       <div class="col-md-6">
-                        <div class="row mb-2 border border-2 w-50 align-items-center">
+                        <div
+                          class="row mb-2 border border-2 w-50 align-items-center"
+                        >
                           <label class="col-md-3">Type</label>
 
                           <mat-checkbox
@@ -1854,17 +1861,17 @@
                           >
                           <div class="col-md-4">
                             <mat-form-field
-                            appearance="outline"
-                            style="width: -webkit-fill-available"
-                          >
-                            <mat-select formControlName="name">
-                              <mat-option
-                                *ngFor="let data of nameList"
-                                [value]="data.ENGLISH"
-                                >{{ data.ENGLISH }}</mat-option
-                              >
-                            </mat-select>
-                          </mat-form-field>
+                              appearance="outline"
+                              style="width: -webkit-fill-available"
+                            >
+                              <mat-select formControlName="name">
+                                <mat-option
+                                  *ngFor="let data of nameList"
+                                  [value]="data.ENGLISH"
+                                  >{{ data.ENGLISH }}</mat-option
+                                >
+                              </mat-select>
+                            </mat-form-field>
                           </div>
 
                           <label
@@ -1879,7 +1886,7 @@
                               appearance="outline"
                             >
                               <input
-                              type="text"
+                                type="text"
                                 matInput
                                 formControlName="unNumber"
                               />
@@ -2014,7 +2021,10 @@
                             >Date of Birth</label
                           >
                           <div class="col-md-6">
-                            <mat-form-field style="width: 100%" appearance="outline">
+                            <mat-form-field
+                              style="width: 100%"
+                              appearance="outline"
+                            >
                               <input
                                 matInput
                                 [matDatepicker]="dob"
@@ -2029,7 +2039,10 @@
                                 matSuffix
                                 [for]="dob"
                               ></mat-datepicker-toggle>
-                              <mat-datepicker [startAt]="currentDate" #dob></mat-datepicker>
+                              <mat-datepicker
+                                [startAt]="currentDate"
+                                #dob
+                              ></mat-datepicker>
                             </mat-form-field>
                           </div>
                         </div>
@@ -2702,7 +2715,9 @@
                   <div class="col-md-8 mt-2">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
-                        matInput="number"
+                        AmountDecimalInput
+                        matInput
+                        type="number"
                         formControlName="amount"
                         class="text-right"
                       />
@@ -2719,7 +2734,9 @@
                   <div class="col-md-8 mt-3">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
-                        matInput="number"
+                        AmountDecimalInput
+                        matInput
+                        type="number"
                         formControlName="totalSale"
                         class="text-right"
                       />
