@@ -4856,7 +4856,7 @@ export class SalesReturnComponent implements OnInit {
       OT_TRANSFER_TIME: items?.OT_TRANSFER_TIME || '',
       // IssueGiftVoucher:
       //   this.comFunc.stringToBoolean(items?.ISSUEGIFTVOUCHER) || false,
-
+    
       "CGST_PER": this.comFunc.emptyToZero(items['CGST_PER']),
       "CGST_AMOUNTFC": this.comFunc.emptyToZero(items['CGST_AMOUNTFC']),
       "CGST_AMOUNTCC": this.comFunc.emptyToZero(items['CGST_AMOUNTCC']),
@@ -8834,7 +8834,14 @@ export class SalesReturnComponent implements OnInit {
         // retailsReturn: this.retailSReturnDataPost,
         retailsReturn: this.retailSalesDataPost,
 
-      
+        userName: this.comFunc.userName,
+        editReason:
+          this.content?.FLAG == "EDIT" ? this.comFunc.EditDetail.REASON : "",
+        editDesc:
+          this.content?.FLAG == "EDIT"
+            ? this.comFunc.EditDetail.DESCRIPTION
+            : "",
+
 
       };
       this.isSaved = true;
@@ -11582,6 +11589,8 @@ export class SalesReturnComponent implements OnInit {
       TYPE: this.customerDetails?.TYPE || '',
       // ORDEREXEDATE: this.dummyDate, //need
       FLAG_EDIT_ALLOW: 'Y',
+      RETURNVOCTYPE: '',
+      RSCUSTIDNO: this.customerDetails?.CODE || '',
       D2DTRANSFER: 'F',
       // RSCUSTIDNO: this.customerDetails?.CODE || '',
       POSKnownAbout: this.customerDetails?.POSKnownAbout || 0,
@@ -11719,13 +11728,35 @@ export class SalesReturnComponent implements OnInit {
       "GROUPREF": "",
       "NEWMID": 0,
 
-      retailSReturnDetails: this.currentLineItems,
+      retailSReturnDetails: this.processCurrentLineItems(this.currentLineItems),
     };
     console.log('====================================');
     console.log(this.retailSalesDataPost);
     console.log('====================================');
     // alert(this.retailSalesDataPost.POSCUSTCODE);
   }
+
+  processCurrentLineItems(lineItems: any[]): any[] {
+    return lineItems.map(item => {
+      for (const key in item) {
+        if (item[key] === "False") {
+          item[key] = false;
+        } else if (item[key] === "True") {
+          item[key] = true;
+        }
+      }
+  
+      item.COMPONENT_PRICE_TYPE = "";
+      item.DUFIX_DKARAT_CODE = "";
+      item.HSNCODE = "";
+      item.LESSTHANCOST_USER = "";
+      item.VATCODE = '';
+  
+      return item;
+    });
+  }
+  
+  
   setMetalPurchaseDataPost() {
     this.metalPurchaseDataPost = {
       'POPCUSTCODE': this.customerDetails['CODE'] || '',
