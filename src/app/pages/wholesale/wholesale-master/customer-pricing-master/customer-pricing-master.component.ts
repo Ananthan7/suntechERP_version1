@@ -47,10 +47,10 @@ export class CustomerPricingMasterComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    console.log(this.content.FLAG);
+    console.log(this.content);
     this.setCompanyCurrency();
     if (this.content.FLAG == 'VIEW') {
-
+      this.setFormValues();
     }
     else (this.content.FLAG == 'EDIT')
     {
@@ -226,6 +226,11 @@ export class CustomerPricingMasterComponent implements OnInit {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
+
+  setFormValues() {
+    console.log(this.content, 'content');
+  }
+
   formSubmit() {
 
     if (this.content && this.content.FLAG == 'EDIT') {

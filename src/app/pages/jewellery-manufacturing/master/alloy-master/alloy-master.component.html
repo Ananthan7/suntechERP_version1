@@ -23,9 +23,10 @@
                                     <mat-form-field style="width: 100%" appearance="outline">
                                         <input type="text" id="code" matInput
                                             (focusout)="validateLookupField($event,codeData,'code')"
-                                            formControlName="code" [readonly]="viewMode" [disabled]="viewMode"
+                                            formControlName="code" [readonly]="viewMode || editMode" [disabled]="viewMode"
                                             UpperCaseDirective autocomplete="off"
-                                            (keydown)="lookupKeyPress($event,'code')" />
+                                            (keydown)="lookupKeyPress($event,'code')"
+                                             />
                                         <master-search class="mstrScrch" *ngIf="!editMode && !viewMode"
                                             [MasterSearchData]="codeData" #overlaycodeSearch
                                             (newRowClick)="codeSelected($event)"></master-search>
@@ -176,7 +177,7 @@
                                     :</label>
                                 <div class="col-sm-7">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="vendorRef" [readonly]="viewMode" />
+                                        <input type="text" matInput formControlName="vendorRef" [readonly]="viewMode" maxlength="50"/>
                                     </mat-form-field>
                                 </div>
                             </div>

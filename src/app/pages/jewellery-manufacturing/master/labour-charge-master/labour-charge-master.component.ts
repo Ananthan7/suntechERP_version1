@@ -43,7 +43,7 @@ export class LabourChargeMasterComponent implements OnInit {
   salesRatePercentageMetal: any;
   editMode: boolean = false;
   grossWt: boolean = false;
-  codeEnableMetal: boolean = true;
+  codeEnableMetal: boolean = false;
   codeEnableDiamond: boolean = true;
   isDisableSaveBtn: boolean = false;
 
@@ -382,7 +382,7 @@ export class LabourChargeMasterComponent implements OnInit {
     method: [''],
     currency: ['', [Validators.required]],
     accessories: [''],
-    BRANCH_CODE: [''],
+    BRANCH_CODE: [0.00],
   });
 
 
@@ -605,9 +605,12 @@ export class LabourChargeMasterComponent implements OnInit {
     this.diamondlabourMasterForm.controls.accessories.setValue(this.content.ACCESSORIES);
     this.diamondlabourMasterForm.controls.labour_ac.setValue(this.content.CRACCODE);
     this.diamondlabourMasterForm.controls.settingType.setValue(this.content.PROCESS_TYPE);
-    this.diamondlabourMasterForm.controls.variance.setValue(this.content.METALSTONE);
+    // this.diamondlabourMasterForm.controls.variance.setValue(this.content.METALSTONE);
 
-
+    // this.diamondlabourMasterForm.controls.variance.setValue(
+    //   this.commonService.transformDecimalVB(
+    //     this.commonService.allbranchMaster?.BAMTDECIMALS,
+    //     this.content.METALSTONE));
 
     this.diamondlabourMasterForm.controls.selling.setValue(
       this.commonService.transformDecimalVB(
@@ -1159,7 +1162,7 @@ export class LabourChargeMasterComponent implements OnInit {
       "BRAND_CODE": this.commonService.nullToString(metalForm.brand),
       "PROCESS_TYPE": this.commonService.nullToString(diamondForm.settingType),
       "KARAT_CODE": this.commonService.nullToString(metalForm.karat),
-      "METALSTONE":  this.commonService.nullToString(diamondForm.variance),
+      "METALSTONE": 's',
       "STOCK_CODE": this.commonService.nullToString(metalForm.stock_code),
       "PURITY": this.commonService.emptyToZero(this.metallabourMasterForm.value.purity),
       "COLOR": this.commonService.nullToString(metalForm.color),
