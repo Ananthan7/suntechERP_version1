@@ -44,6 +44,8 @@ export class PosCustomerMasterMainComponent implements OnInit {
   @ViewChild("overlayAgeGroup") overlayAgeGroup!: MasterSearchComponent;
   @ViewChild("overlayNextVisit") overlayNextVisit!: MasterSearchComponent;
   @ViewChild("overlayOccupation") overlayOccupation!: MasterSearchComponent;
+  @ViewChild("overlayCustomerType") overlayCustomerType!: MasterSearchComponent;
+
 
   private subscriptions: Subscription[] = [];
   @Input() content!: any;
@@ -64,8 +66,8 @@ export class PosCustomerMasterMainComponent implements OnInit {
   selectedCountryISO2: any;
   countryListData: any;
   stateListData: any;
-  selectedstateISO2:any
-  cityListData:any
+  selectedstateISO2: any;
+  cityListData: any;
 
   // Dialog box
   dialogBox: any;
@@ -295,6 +297,18 @@ export class PosCustomerMasterMainComponent implements OnInit {
     LOAD_ONCLICK: true,
   };
 
+  customerTypeCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "Customer Type",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "TYPES='CUSTOMER TYPE MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  };
+
   posCustomerMasterMainForm: FormGroup = this.formBuilder.group({
     code: [""],
     parentPosCode: [""],
@@ -302,7 +316,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
     name: [""],
     nameDesc: [""],
     creditCardLimitCheck: [false],
-    creditCardLimit: [""],
+    creditCardLimit: [{ value: "", disabled: true }],
     gender: [""],
     maritalSt: [""],
     dob: [""],
@@ -410,14 +424,40 @@ export class PosCustomerMasterMainComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.posCustomerMasterMainForm
+      .get("creditCardLimitCheck")
+      ?.valueChanges.subscribe((isChecked) => {
+        if (isChecked) {
+          this.posCustomerMasterMainForm.get("creditCardLimit")?.enable();
+        } else {
+          this.posCustomerMasterMainForm.get("creditCardLimit")?.disable();
+        }
+      });
     console.log(this.comService.allbranchMaster);
-
+    this.posCustomerMasterMainForm.controls.weddate.disable();
     this.countryList();
     this.generateCutomerCode();
     this.getDropDownStatus();
 
     this.branchCode = this.comService.branchCode;
     this.posCustomerMasterMainForm.controls["createdBranch"].disable();
+  }
+
+  genderChanger(event: any) {
+    const selectedName = event;
+    
+    // Map name to gender
+    switch (selectedName) {
+      case 'Mr.':
+        this.posCustomerMasterMainForm.controls.gender.setValue('Male');        
+        break;
+      case 'Ms.':
+      case 'Mrs.':
+        this.posCustomerMasterMainForm.controls.gender.setValue('Female');
+        break;
+      default:
+        this.posCustomerMasterMainForm.controls.gender.reset();
+    }
   }
 
   countryList() {
@@ -430,22 +470,29 @@ export class PosCustomerMasterMainComponent implements OnInit {
   onCountrySelect(iso2Code: string) {
     this.selectedCountryISO2 = iso2Code;
     console.log("Selected Country ISO2: ", this.selectedCountryISO2);
-  
+
     let API = `CountryMaster/GetStateList/${this.selectedCountryISO2}`;
     this.apiService.getDynamicAPI(API).subscribe((res) => {
       this.stateListData = res.response;
-      console.log(this.stateListData);  
+      console.log(this.stateListData);
     });
+  }
+
+  onWeddingIsIt(value: any) {
+    console.log(value);
+    if (value === "Married") {
+      this.posCustomerMasterMainForm.controls.weddate.enable();
+    }
   }
 
   onCitySelect(iso2Code: string) {
     this.selectedstateISO2 = iso2Code;
     console.log("Selected Country ISO2: ", this.selectedstateISO2);
-  
+
     let API = `CountryMaster/GetCityList/${this.selectedCountryISO2}/${this.selectedstateISO2}/`;
     this.apiService.getDynamicAPI(API).subscribe((res) => {
       this.cityListData = res.response;
-      console.log(this.cityListData);  
+      console.log(this.cityListData);
     });
   }
 
@@ -631,6 +678,11 @@ export class PosCustomerMasterMainComponent implements OnInit {
   occupationMasterSelected(e: any) {
     console.log(e);
     this.posCustomerMasterMainForm.controls.occupation.setValue(e.CODE);
+  }
+
+  customerTypeSelected(e: any) {
+    console.log(e);
+    this.posCustomerMasterMainForm.controls.custType.setValue(e.DESCRIPTION);
   }
 
   getDropDownStatus() {
@@ -1357,6 +1409,9 @@ export class PosCustomerMasterMainComponent implements OnInit {
 
       case "occupation":
         this.overlayOccupation.showOverlayPanel(event);
+        break;
+        case "custType":
+        this.overlayCustomerType.showOverlayPanel(event);
         break;
       default:
         console.warn(`Unknown form control name: ${formControlName}`);
