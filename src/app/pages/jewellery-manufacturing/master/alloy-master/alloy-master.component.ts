@@ -59,7 +59,6 @@ export class AlloyMasterComponent implements OnInit {
   editableMode: boolean = false;
   editMode: boolean = false;
   codeEnable: boolean = true;
-  isEditable: boolean = false;
   prefixMasterDetail: any;
   // master search data starts
   codeData: MasterSearchModel = {
@@ -449,7 +448,8 @@ export class AlloyMasterComponent implements OnInit {
     this.alloyMastereForm.controls.color.setValue(this.content.COLOR)
     this.alloyMastereForm.controls.type.setValue(this.content.TYPE_CODE)
     this.alloyMastereForm.controls.subCategory.setValue(this.content.SUBCATEGORY_CODE)
-    this.alloyMastereForm.controls.vendor.setValue(this.content.SALESCODE)
+    this.alloyMastereForm.controls.vendor.setValue(this.content.SUPPLIER_CODE)
+    this.alloyMastereForm.controls.vendorRef.setValue(this.content.SUPPLIER_REF)
     this.alloyMastereForm.controls.price1per.setValue(this.content.UDF1)
     this.alloyMastereForm.controls.price2per.setValue(this.content.UDF2)
     this.alloyMastereForm.controls.price3per.setValue(this.content.UDF3)
@@ -457,10 +457,10 @@ export class AlloyMasterComponent implements OnInit {
     this.alloyMastereForm.controls.price5per.setValue(this.content.UDF5)
 
 
-    this.alloyMastereForm.controls.price1code.setValue(
-      this.commonService.transformDecimalVB(
-        this.commonService.allbranchMaster?.BAMTDECIMALS,
-        this.content.PRICE1PER))
+    // this.alloyMastereForm.controls.price1code.setValue(
+    //   this.commonService.transformDecimalVB(
+    //     this.commonService.allbranchMaster?.BAMTDECIMALS,
+    //     this.content.PRICE1PER))
     //console.log('PRICE1PER set to:', this.alloyMastereForm.controls.price1per.value);
 
     this.alloyMastereForm.controls.price2code.setValue(
@@ -551,7 +551,7 @@ export class AlloyMasterComponent implements OnInit {
 
 
 
-    // this.alloyMastereForm.controls.price1Fc.setValue(this.content.PRICE1FC)
+    this.alloyMastereForm.controls.price1Fc.setValue(this.content.PRICE1FC)
     // this.alloyMastereForm.controls.price2Fc.setValue(this.content.PRICE2FC)
     // this.alloyMastereForm.controls.price3Fc.setValue(this.content.PRICE3FC)
     // this.alloyMastereForm.controls.price4Fc.setValue(this.content.PRICE4FC)
@@ -656,7 +656,7 @@ export class AlloyMasterComponent implements OnInit {
 
     LOOKUPDATA.SEARCH_VALUE = event.target.value
 
-    if (event.target.value == '' || this.viewMode == true) return
+    if (event.target.value == '' || this.viewMode == true || this.editMode == true ) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
       WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
@@ -905,8 +905,8 @@ export class AlloyMasterComponent implements OnInit {
   vendorCodeSelected(e: any) {
     console.log(e);
     if (this.checkStockCode()) return
-    this.alloyMastereForm.controls.vendor.setValue(e.ACCOUNT_HEAD);
-    this.alloyMastereForm.controls.vendorRef.setValue(e.ACCODE);
+    this.alloyMastereForm.controls.vendor.setValue(e.ACCODE);
+    this.alloyMastereForm.controls.vendorRef.setValue(e.ACCOUNT_HEAD);
   }
 
   typeCodeSelected(e: any) {
@@ -1203,7 +1203,7 @@ export class AlloyMasterComponent implements OnInit {
       SUBCATEGORY_CODE: this.commonService.nullToString(this.alloyMastereForm.value.subCategory),
       BRAND_CODE: this.commonService.nullToString(this.alloyMastereForm.value.brand),
       COUNTRY_CODE: this.commonService.nullToString(this.alloyMastereForm.value.country),
-      SUPPLIER_CODE: "",
+      SUPPLIER_CODE: this.commonService.nullToString(this.alloyMastereForm.value.vendor),
       SUPPLIER_REF: this.commonService.nullToString(this.alloyMastereForm.value.vendorRef),
       DESIGN_CODE: this.commonService.nullToString(this.alloyMastereForm.value.design),
       SET_REF: this.commonService.nullToString(this.alloyMastereForm.value.design),

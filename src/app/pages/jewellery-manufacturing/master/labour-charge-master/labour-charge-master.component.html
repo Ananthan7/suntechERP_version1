@@ -27,7 +27,7 @@
                 (focusout)="validateLookupField($event,diaDivisionCodeData,'divisions')" (input)="inputValidate($event)"
                 appNoEmptySpace (keydown)="lookupKeyPress($event,'divisions')" />
               <master-search [MasterSearchData]="diaDivisionCodeData" (newRowClick)="divisionCodeSelected($event)"
-                #overlaydivisionsSearch *ngIf=" viewDisable == false && editMode == false "
+                #overlaydivisionsSearch *ngIf="viewDisable == false && editMode == false "
                 class="masterSearch"></master-search>
             </mat-form-field>
           </div>
@@ -267,8 +267,8 @@
               :</label>
           <div class="col-sm-3">
               <mat-form-field  appearance="outline">
-                  <input matInput type="number" [readonly]="viewMode  || codeEnableMetal" matInput NumberOnly
-                  MetalDecimalInput  formControlName="variance" class="text-right" />
+                  <input matInput type="number" [readonly]="viewMode" matInput NumberOnly
+                  AmountDecimalInput  formControlName="variance" class="text-right" />
               </mat-form-field>
           </div>
       </div>

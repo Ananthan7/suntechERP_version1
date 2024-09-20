@@ -208,7 +208,7 @@ export class StoneIssueDetailComponent implements OnInit {
 
     this.stoneIssueDetailsFrom.controls.jobNumber.setValue(this.content.JOB_NUMBER)
     this.stoneIssueDetailsFrom.controls.jobDes.setValue(this.content.JOB_DESCRIPTION)
-    this.stoneIssueDetailsFrom.controls.subjobnumber.setValue(this.content.JOB_SO_NUMBER)
+    this.stoneIssueDetailsFrom.controls.subjobnumber.setValue(this.content.UNQ_JOB_ID)
     this.stoneIssueDetailsFrom.controls.subjobDes.setValue(this.content.JOB_DESCRIPTION)
     this.stoneIssueDetailsFrom.controls.DESIGN_CODE.setValue(this.content.DESIGN_CODE)
     this.stoneIssueDetailsFrom.controls.stockCodeDes.setValue(this.content.STOCK_DESCRIPTION)
@@ -693,12 +693,12 @@ getImageData() {
           if (data && data[0]?.UNQ_JOB_ID != '') {
             console.log(data[0],'pick')
             this.jobNumberDetailData = data
-            this.stoneIssueDetailsFrom.controls.jobDes.setValue(data.JOB_DESCRIPTION)
-            this.stoneIssueDetailsFrom.controls.subjobnumber.setValue(data.UNQ_JOB_ID)
-            this.stoneIssueDetailsFrom.controls.subjobDes.setValue(data.DESCRIPTION)
-            this.stoneIssueDetailsFrom.controls.DESIGN_CODE.setValue(data.DESIGN_CODE)
-            this.stoneIssueDetailsFrom.controls.PART_CODE.setValue(data.PART_CODE)
-            this.stoneIssueDetailsFrom.controls.salesorderno.setValue(data.CUSTOMER_CODE)
+            this.stoneIssueDetailsFrom.controls.jobDes.setValue(data[0].JOB_DESCRIPTION)
+            this.stoneIssueDetailsFrom.controls.subjobnumber.setValue(data[0].UNQ_JOB_ID)
+            this.stoneIssueDetailsFrom.controls.subjobDes.setValue(data[0].DESCRIPTION)
+            this.stoneIssueDetailsFrom.controls.DESIGN_CODE.setValue(data[0].DESIGN_CODE)
+            this.stoneIssueDetailsFrom.controls.PART_CODE.setValue(data[0].PART_CODE)
+            this.stoneIssueDetailsFrom.controls.salesorderno.setValue(data[0].CUSTOMER_CODE)
             // if (data[0].DESIGN_TYPE && data[0].DESIGN_TYPE == "DIAMOND") {
             //   this.stoneIssueDetailsFrom.controls.DIVCODE.setValue("L");
             // } else {
