@@ -179,18 +179,23 @@
                                         (keydown)="lookupKeyPress($event,'stockcode')"
                                         (focusout)="stockCodeValidate($event)"/>
                                 </mat-form-field>
-                                <master-search
+                                <!-- <master-search
                                     [MasterSearchData]="stockCodeData"
                                     #overlaystockcodeSearch
                                     *ngIf="!viewMode"
-                                    (newRowClick)="StockCodeSelected($event)"></master-search>
+                                    (newRowClick)="StockCodeSelected($event)"></master-search> -->
                             </div>
                             <div class="col-md-2">
-                                <mat-form-field style="width: 100%;">
+                                <mat-form-field style="width: 100%; margin-left: -37px;">
                                     <input type="text" matInput
                                         formControlName="stockdes"
                                         [readonly]="viewMode" />
                                 </mat-form-field>
+                                  <master-search
+                                    [MasterSearchData]="stockCodeData"
+                                    #overlaystockcodeSearch
+                                    *ngIf="!viewMode"
+                                    (newRowClick)="StockCodeSelected($event)"></master-search>
                             </div>
                             <div class="col-md-2">
                                 <mat-form-field style="width: 100%;">

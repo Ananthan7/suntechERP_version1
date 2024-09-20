@@ -162,6 +162,7 @@ export class DiamondSalesorderComponent implements OnInit {
     PROSP_ORIGIN: [''],
     AMCPercentage: [''],
     AMCSTARTDATE: [''],
+    summaryBtn: [false],
   })
   constructor(
     private activeModal: NgbActiveModal,

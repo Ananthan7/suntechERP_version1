@@ -107,7 +107,7 @@ export class AddPosComponent implements OnInit {
   maskVocDate: any = new Date();
   amlNameValidation;
   amlNameValidationData = false;
-  isPiecesChanged = false;
+  detectDiscountChange = false;
   isGiftTypeRequired: boolean = false;
   value: any;
   barcode!: string;
@@ -1794,7 +1794,7 @@ export class AddPosComponent implements OnInit {
   ngAfterViewInit(): void {
     //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
     //Add 'implements AfterViewInit' to the class.
-    if (this.viewOnly) this.setReadOnlyForViewMode();
+    // if (this.viewOnly) this.setReadOnlyForViewMode();
 
     // console.log('viewonly',this.viewOnly , this.editOnly);
 
@@ -2938,6 +2938,7 @@ export class AddPosComponent implements OnInit {
         if (resp.resultStatus.RESULT_TYPE == 'Success') {
           let stockInfos = resp.stockInfo;
           console.log(stockInfos);
+          
           this.newLineItem.IS_BARCODED_ITEM = stockInfos.IS_BARCODED_ITEM;
           this.newLineItem.DONT_SHOW_STOCKBAL = stockInfos.DONT_SHOW_STOCKBAL;
           this.newLineItem.PCS_TO_GMS = stockInfos.PCS_TO_GMS;
@@ -3102,7 +3103,8 @@ export class AddPosComponent implements OnInit {
     localStorage.setItem('fcn_li_rate', this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_rate).toString());
     localStorage.setItem('fcn_li_total_amount', this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount).toString());
     localStorage.setItem('fcn_li_net_amount', this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_net_amount).toString());
-
+    this.imageURL = [];
+    this.getStockImage();
     this.setGiftType();
     // this.manageCalculations();
     // this.sumTotalValues();
@@ -7479,7 +7481,7 @@ export class AddPosComponent implements OnInit {
 
   async getStockDesc(event: any) {
     this.imageURL = [];
-    this.getStockImage()
+    this.getStockImage();
     // this.enableFormControls(false);
     this.li_tax_amount_val = 0.0;
     var gross_amount_val = 0.0;
@@ -9211,7 +9213,7 @@ export class AddPosComponent implements OnInit {
           );
           this.dialogBox.afterClosed().subscribe((data: any) => {
             if (data == 'OK') {
-              this.isPiecesChanged = true;
+              this.detectDiscountChange = true;
               this.lineItemForm.controls['fcn_li_pcs'].setValue(
                 this.lineItemPcs
               );
@@ -9249,7 +9251,7 @@ export class AddPosComponent implements OnInit {
                 this.manageCalculations();
 
               } else {
-                this.isPiecesChanged = true;
+                this.detectDiscountChange = true;
                 this.checkDivisionForPcs(value)
                 this.manageCalculations();
 
@@ -9386,7 +9388,7 @@ export class AddPosComponent implements OnInit {
     const nonMetalPreTotalVal = localStorage.getItem('fcn_li_total_amount');
     if (value != '') {
 
-      if (this.lineItemModalForSalesReturn || parseFloat(value) >= parseFloat(this.blockMinimumPriceValue)) {
+      if (this.lineItemModalForSalesReturn || this.comFunc.emptyToZero(value) >= this.comFunc.emptyToZero(this.blockMinimumPriceValue)) {
 
       // if (this.lineItemModalForSalesReturn || parseFloat(value) >= parseFloat(this.newLineItem.STOCK_COST)) {
 
@@ -9444,7 +9446,8 @@ export class AddPosComponent implements OnInit {
           this.lineItemForm.controls.fcn_li_rate.setValue(value);
           this.manageCalculations({ totalAmt: totalAmt, nettAmt });
         }
-
+        this.detectDiscountChange=true;
+        this.updateDiscountAmount();
       } else {
         // Rate Cannot be Less Than Cost
         this.openDialog('Warning', this.comFunc.getMsgByID('MSG1721'), true);
@@ -10616,7 +10619,7 @@ export class AddPosComponent implements OnInit {
   }
 
   controlNetAmountReverseCalc() {
-    if (this.enablePieces && this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt) == 0 && this.comFunc.emptyToZero(this.lineItemForm.value.pcs) == 0) {
+    if (this.enablePieces && this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt) == 0 && this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_pcs) == 0) {
       this.isRevCalculationBlock = true;
     }
     else {
@@ -10631,7 +10634,8 @@ export class AddPosComponent implements OnInit {
 
    const permittedNetAmount= netAmtVal - (this.lineItemForm.value.fcn_li_tax_percentage / 100) * netAmtVal;
 
-    if(this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_amount)<=permittedNetAmount){
+   if(this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_amount)<=permittedNetAmount && this.divisionMS=='S'){
+
 
 
       this.openDialog('Warning', this.comFunc.getMsgByID('MSG1443'), true);
@@ -11032,7 +11036,7 @@ else{
   }
 
   updateDiscountAmount(): void {
-    if (this.isPiecesChanged) {
+    if (this.detectDiscountChange) {
       const totalAmountString = this.lineItemForm.value.fcn_li_total_amount.replace(/,/g, '');
       const discountPercentageString = this.lineItemForm.value.fcn_li_discount_percentage.toString();
 
@@ -11043,7 +11047,7 @@ else{
       this.lineItemForm.controls['fcn_li_discount_amount'].setValue(
         this.comFunc.commaSeperation(discountAmount) || this.zeroAmtVal
       );
-      this.isPiecesChanged = false;
+      this.detectDiscountChange = false;
     } else {
       this.lineItemForm.controls['fcn_li_discount_amount'].setValue(
         this.comFunc.commaSeperation(this.lineItemForm.value.fcn_li_discount_amount) || this.zeroAmtVal
@@ -14191,7 +14195,7 @@ else{
         if (resp.status === 'Success') {
           this.newLineItem = resp.response.salesOrder.Details[0];
           this.addItemtoList('save_btn', resp.response.salesOrder.Details);
-          this.onCustomerNameFocus(resp.response.customer.MOBILE, false)
+          this.onCustomerNameFocus(resp.response.customer.MOBILE, false);
           this.modalRefePendingSalesOrder.dismiss('Dismissed by user');
           // this.pendingOrderList = resp.response;
           this.snackBar.dismiss();

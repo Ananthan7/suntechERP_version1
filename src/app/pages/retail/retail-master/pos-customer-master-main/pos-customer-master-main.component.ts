@@ -1,5 +1,11 @@
-import { Component, Input, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { Component, Input, OnInit, ViewChild } from "@angular/core";
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  ValidationErrors,
+  Validators,
+} from "@angular/forms";
 import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
 import { MasterSearchModel } from "src/app/shared/data/master-find-model";
 import { CommonServiceService } from "src/app/services/common-service.service";
@@ -8,7 +14,8 @@ import { SuntechAPIService } from "src/app/services/suntech-api.service";
 import { DialogboxComponent } from "src/app/shared/common/dialogbox/dialogbox.component";
 import { MatDialog } from "@angular/material/dialog";
 import { Subscription } from "rxjs";
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
+import { MasterSearchComponent } from "src/app/shared/common/master-search/master-search.component";
 
 @Component({
   selector: "app-pos-customer-master-main",
@@ -16,6 +23,28 @@ import Swal from 'sweetalert2';
   styleUrls: ["./pos-customer-master-main.component.scss"],
 })
 export class PosCustomerMasterMainComponent implements OnInit {
+  @ViewChild("overlayParentPosCode")
+  overlayParentPosCode!: MasterSearchComponent;
+  @ViewChild("overlayRefBy") overlayRefBy!: MasterSearchComponent;
+  @ViewChild("overlayCountryCode") overlayCountryCode!: MasterSearchComponent;
+  @ViewChild("overlayNationality") overlayNationality!: MasterSearchComponent;
+  @ViewChild("overlayState") overlayState!: MasterSearchComponent;
+  @ViewChild("overlayCity") overlayCity!: MasterSearchComponent;
+  @ViewChild("overlayLanguage") overlayLanguage!: MasterSearchComponent;
+  @ViewChild("overlayFavCelebration")
+  overlayFavCelebration!: MasterSearchComponent;
+  @ViewChild("overlayReligion") overlayReligion!: MasterSearchComponent;
+  @ViewChild("overlayCategory") overlayCategory!: MasterSearchComponent;
+  @ViewChild("overlayCustStatus") overlayCustStatus!: MasterSearchComponent;
+  @ViewChild("overlayCustIdType") overlayCustIdType!: MasterSearchComponent;
+  @ViewChild("overlayGifrPurchased")
+  overlayGifrPurchased!: MasterSearchComponent;
+  @ViewChild("overlayOccasionOfPurchase")
+  overlayOccasionOfPurchase!: MasterSearchComponent;
+  @ViewChild("overlayAgeGroup") overlayAgeGroup!: MasterSearchComponent;
+  @ViewChild("overlayNextVisit") overlayNextVisit!: MasterSearchComponent;
+  @ViewChild("overlayOccupation") overlayOccupation!: MasterSearchComponent;
+
   private subscriptions: Subscription[] = [];
   @Input() content!: any;
   @Input() amlNameValidation?: boolean;
@@ -32,6 +61,11 @@ export class PosCustomerMasterMainComponent implements OnInit {
   isCustProcessing: boolean = false;
   customerDetails: any = {};
   ishidden = true;
+  selectedCountryISO2: any;
+  countryListData: any;
+  stateListData: any;
+  selectedstateISO2:any
+  cityListData:any
 
   // Dialog box
   dialogBox: any;
@@ -45,18 +79,29 @@ export class PosCustomerMasterMainComponent implements OnInit {
     "1754-01-01T00:00:00Z",
     "1754-01-01T00:00:00",
   ];
+  typeidCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 29,
+    SEARCH_FIELD: "Code",
+    SEARCH_HEADING: "Type Code",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "TYPES = 'ID MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  };
 
   countryCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 26,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Country Type',
-    SEARCH_VALUE: '',
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "Country Type",
+    SEARCH_VALUE: "",
     WHERECONDITION: "TYPES='COUNTRY MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
-  }
+  };
 
   parentPosCode: MasterSearchModel = {
     PAGENO: 1,
@@ -113,25 +158,25 @@ export class PosCustomerMasterMainComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 3,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'City Code',
-    SEARCH_VALUE: '',
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "City Code",
+    SEARCH_VALUE: "",
     WHERECONDITION: "TYPES='REGION MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
-  }
+  };
 
   languageCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 45,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Language Code',
-    SEARCH_VALUE: '',
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "Language Code",
+    SEARCH_VALUE: "",
     WHERECONDITION: "TYPES = 'LANGUAGE MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
-  }
+  };
 
   favCelebrationCode: MasterSearchModel = {
     PAGENO: 1,
@@ -185,6 +230,71 @@ export class PosCustomerMasterMainComponent implements OnInit {
     LOAD_ONCLICK: true,
   };
 
+  giftPurchasedCode: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "Gift Purchased For",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "TYPES='GIFT PURCHASE MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  };
+
+  occasionOfPurchaseCode: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "Occasion Of Purchase",
+    SEARCH_VALUE: "",
+    WHERECONDITION: " TYPES='PURCHASE OCCASION MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  };
+
+  ageGroupCode: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "Age Group",
+    SEARCH_VALUE: "",
+    WHERECONDITION: " TYPES='AGEGROUP MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  };
+
+  nextVisitCode: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "Next Visit",
+    SEARCH_VALUE: "",
+    WHERECONDITION: " TYPES='NEXT VISIT MASTER'  ",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  };
+
+  occupationMasterCode: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "Occupation ",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "TYPES='OCCUPATION MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  };
+
   posCustomerMasterMainForm: FormGroup = this.formBuilder.group({
     code: [""],
     parentPosCode: [""],
@@ -203,20 +313,26 @@ export class PosCustomerMasterMainComponent implements OnInit {
     moblieNumber: [""],
     moblie1Country: [""],
     moblie1Number: [""],
-    emailId: [""],
+    emailId: [
+      "",
+      [Validators.required, Validators.email, this.domainValidator],
+    ],
     telRCountry: [""],
     telRNumber: [""],
     tel0Country: [""],
     tel0number: [""],
     faxNo: [""],
-    custType: [""],
+    custType: ["", [Validators.required, Validators.maxLength(6)]],
     nationality: [""],
     state: [""],
     city: [""],
     language: [""],
     favCelebration: [""],
-    vat: [""],
-    panNo: [""],
+    vat: ["", [Validators.required, Validators.maxLength(15)]],
+    panNo: [
+      "",
+      [Validators.required, Validators.maxLength(10), this.panValidator],
+    ],
     whatsappCountryCode: [""],
     whatsappNumber: [""],
     spouse: [""],
@@ -231,7 +347,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
     custIdType: [""],
     custID: [""],
     custDate: [""],
-    POBox: [""],
+    POBox: ["", [Validators.required, Validators.maxLength(6)]],
     address: [""],
     officialAddress: [""],
     deliveryAddress: [""],
@@ -294,11 +410,65 @@ export class PosCustomerMasterMainComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    console.log(this.comService.allbranchMaster);
+
+    this.countryList();
     this.generateCutomerCode();
     this.getDropDownStatus();
 
     this.branchCode = this.comService.branchCode;
     this.posCustomerMasterMainForm.controls["createdBranch"].disable();
+  }
+
+  countryList() {
+    let API = `CountryMaster/GetCountryMasterHeaderList`;
+    this.apiService.getDynamicAPI(API).subscribe((res) => {
+      this.countryListData = res.response.map((country: any) => country);
+    });
+  }
+
+  onCountrySelect(iso2Code: string) {
+    this.selectedCountryISO2 = iso2Code;
+    console.log("Selected Country ISO2: ", this.selectedCountryISO2);
+  
+    let API = `CountryMaster/GetStateList/${this.selectedCountryISO2}`;
+    this.apiService.getDynamicAPI(API).subscribe((res) => {
+      this.stateListData = res.response;
+      console.log(this.stateListData);  
+    });
+  }
+
+  onCitySelect(iso2Code: string) {
+    this.selectedstateISO2 = iso2Code;
+    console.log("Selected Country ISO2: ", this.selectedstateISO2);
+  
+    let API = `CountryMaster/GetCityList/${this.selectedCountryISO2}/${this.selectedstateISO2}/`;
+    this.apiService.getDynamicAPI(API).subscribe((res) => {
+      this.cityListData = res.response;
+      console.log(this.cityListData);  
+    });
+  }
+
+  onPanNoInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    input.value = input.value.toUpperCase();
+    this.posCustomerMasterMainForm.get("panNo")?.setValue(input.value);
+  }
+
+  panValidator(control: AbstractControl): ValidationErrors | null {
+    const panPattern = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
+    if (control.value && !panPattern.test(control.value)) {
+      return { invalidPan: true };
+    }
+    return null;
+  }
+
+  domainValidator(control: AbstractControl): ValidationErrors | null {
+    const emailValue = control.value;
+    if (emailValue && !/^[\w-\.]+@([\w-]+\.)+[a-zA-Z]{2,}$/.test(emailValue)) {
+      return { domainInvalid: true };
+    }
+    return null;
   }
 
   getUniqueValues(List: any[], field: string) {
@@ -338,17 +508,21 @@ export class PosCustomerMasterMainComponent implements OnInit {
     this.posCustomerMasterMainForm.controls.tel0Country.setValue(
       e.MobileCountryCode
     );
+    this.posCustomerMasterMainForm.controls.whatsappCountryCode.setValue(
+      e.MobileCountryCode
+    );
   }
 
   check() {
-    const isNotInterestedChecked = this.posCustomerMasterMainForm.controls.notInterested.value;
-  
+    const isNotInterestedChecked =
+      this.posCustomerMasterMainForm.controls.notInterested.value;
+
     if (isNotInterestedChecked) {
       this.posCustomerMasterMainForm.controls.whatsapp.setValue(false);
       this.posCustomerMasterMainForm.controls.email.setValue(false);
       this.posCustomerMasterMainForm.controls.phoneCall.setValue(false);
       this.posCustomerMasterMainForm.controls.sms.setValue(false);
-      
+
       this.posCustomerMasterMainForm.controls.whatsapp.disable();
       this.posCustomerMasterMainForm.controls.email.disable();
       this.posCustomerMasterMainForm.controls.phoneCall.disable();
@@ -358,7 +532,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
       this.posCustomerMasterMainForm.controls.email.enable();
       this.posCustomerMasterMainForm.controls.phoneCall.enable();
       this.posCustomerMasterMainForm.controls.sms.enable();
-  
+
       this.posCustomerMasterMainForm.controls.whatsapp.reset();
       this.posCustomerMasterMainForm.controls.email.reset();
       this.posCustomerMasterMainForm.controls.phoneCall.reset();
@@ -375,10 +549,14 @@ export class PosCustomerMasterMainComponent implements OnInit {
   //   }
   // }
 
-  toggle(){ 
-    this.ishidden =! this.ishidden;
+  toggle() {
+    this.ishidden = !this.ishidden;
   }
-  
+
+  typeidCodeSelected(e: any) {
+    console.log(e);
+    this.posCustomerMasterMainForm.controls.custIdType.setValue(e.CODE);
+  }
 
   stateSelected(e: any) {
     console.log(e);
@@ -387,7 +565,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
 
   categorySelected(e: any) {
     console.log(e);
-    this.posCustomerMasterMainForm.controls.category.setValue(e.CODE);
+    this.posCustomerMasterMainForm.controls.category.setValue(e.DESCRIPTION);
   }
 
   parentPosSelected(e: any) {
@@ -407,7 +585,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
 
   citySelected(e: any) {
     console.log(e);
-    this.posCustomerMasterMainForm.controls.city.setValue(e.CODE);
+    this.posCustomerMasterMainForm.controls.city.setValue(e.DESCRIPTION);
   }
 
   languageSelected(e: any) {
@@ -422,16 +600,41 @@ export class PosCustomerMasterMainComponent implements OnInit {
 
   religionSelected(e: any) {
     console.log(e);
-    this.posCustomerMasterMainForm.controls.religion.setValue(e.CODE);
+    this.posCustomerMasterMainForm.controls.religion.setValue(e.DESCRIPTION);
   }
 
   custStatusSelected(e: any) {
     console.log(e);
-    this.posCustomerMasterMainForm.controls.custStatus.setValue(e.CODE);
+    this.posCustomerMasterMainForm.controls.custStatus.setValue(e.DESCRIPTION);
   }
 
-  getDropDownStatus() { 
-    this.maritalStatusList =  this.getUniqueValues(
+  giftPurchasedSelected(e: any) {
+    console.log(e);
+    this.posCustomerMasterMainForm.controls.gifrPurchased.setValue(e.CODE);
+  }
+
+  occasionOfPurchaseSelected(e: any) {
+    console.log(e);
+    this.posCustomerMasterMainForm.controls.occasionOfPurchase.setValue(e.CODE);
+  }
+
+  ageGroupSelected(e: any) {
+    console.log(e);
+    this.posCustomerMasterMainForm.controls.ageGroup.setValue(e.CODE);
+  }
+
+  nextVisitSelected(e: any) {
+    console.log(e);
+    this.posCustomerMasterMainForm.controls.nextVisit.setValue(e.CODE);
+  }
+
+  occupationMasterSelected(e: any) {
+    console.log(e);
+    this.posCustomerMasterMainForm.controls.occupation.setValue(e.CODE);
+  }
+
+  getDropDownStatus() {
+    this.maritalStatusList = this.getUniqueValues(
       this.comService.getComboFilterByID("Marital Status"),
       "ENGLISH"
     );
@@ -463,17 +666,19 @@ export class PosCustomerMasterMainComponent implements OnInit {
   }
 
   customerSave() {
-    
-    if (this.posCustomerMasterMainForm.value.moblieNumber == "" && this.posCustomerMasterMainForm.value.telRNumber == "") {
+    if (
+      this.posCustomerMasterMainForm.value.moblieNumber == "" &&
+      this.posCustomerMasterMainForm.value.telRNumber == ""
+    ) {
       Swal.fire({
         title: "Warning",
         text: "Atleast One of the Field is Manditory Mobile Number (OR) Telephone Number",
         icon: "warning",
         confirmButtonColor: "#336699",
         confirmButtonText: "Ok",
-      });
-    return ;
-    }
+      });
+      return;
+    }
 
     if (!this.isCustProcessing || this.isCustProcessing) {
       this.isCustProcessing = true;
@@ -530,11 +735,14 @@ export class PosCustomerMasterMainComponent implements OnInit {
           CITY: this.posCustomerMasterMainForm.value.city || "",
           ZIPCODE: "",
           COUNTRY_CODE: this.posCustomerMasterMainForm.value.country || "",
-          EMAIL: this.posCustomerMasterMainForm.value.email || "",
-          TEL1: this.posCustomerMasterMainForm.value.telRNumber || "",
-          TEL2: this.posCustomerMasterMainForm.value.tel0number || "",
-          MOBILE: `${this.posCustomerMasterMainForm.value.moblieNumber}` || "",
-          FAX: this.posCustomerMasterMainForm.value.faxNo || "",
+          EMAIL: this.posCustomerMasterMainForm.value.emailId || "",
+          TEL1:
+            this.posCustomerMasterMainForm.value.telRNumber.toString() || "",
+          TEL2:
+            this.posCustomerMasterMainForm.value.tel0number.toString() || "",
+          MOBILE:
+            this.posCustomerMasterMainForm.value.moblieNumber.toString() || "",
+          FAX: this.posCustomerMasterMainForm.value.faxNo.toString() || "",
           MARITAL_ST:
             this.posCustomerMasterMainForm.value.maritalSt || "Unknown",
           WED_DATE:
@@ -566,7 +774,8 @@ export class PosCustomerMasterMainComponent implements OnInit {
           POSCUSTIDNO: this.posCustomerMasterMainForm.value.custID || "",
           POSSMAN: "",
           POSCustPrefix: "0",
-          MOBILE1: this.posCustomerMasterMainForm.value.moblie1Number || "",
+          MOBILE1:
+            this.posCustomerMasterMainForm.value.moblie1Number.toString() || "",
           CUST_Language: this.posCustomerMasterMainForm.value.language || "",
           CUST_TYPE: this.posCustomerMasterMainForm.value.custType || "",
           FAVORITE_CELEB:
@@ -1079,5 +1288,78 @@ export class PosCustomerMasterMainComponent implements OnInit {
   dummyDateCheck(date: any) {
     if (this.dummyDateArr.includes(date)) return "";
     else return date;
+  }
+
+  openTab(event: any, formControlName: string) {
+    console.log(event);
+
+    if (event.target.value === "") {
+      this.openPanel(event, formControlName);
+    }
+  }
+
+  openPanel(event: any, formControlName: string) {
+    switch (formControlName) {
+      case "parentPosCode":
+        this.overlayParentPosCode.showOverlayPanel(event);
+        break;
+      case "refBy":
+        this.overlayRefBy.showOverlayPanel(event);
+        break;
+      case "countryCode":
+        this.overlayCountryCode.showOverlayPanel(event);
+        break;
+      case "nationality":
+        this.overlayNationality.showOverlayPanel(event);
+        break;
+      case "state":
+        this.overlayState.showOverlayPanel(event);
+        break;
+      case "city":
+        this.overlayCity.showOverlayPanel(event);
+        break;
+
+      case "language":
+        this.overlayLanguage.showOverlayPanel(event);
+        break;
+
+      case "favCelebration":
+        this.overlayFavCelebration.showOverlayPanel(event);
+        break;
+      case "religion":
+        this.overlayReligion.showOverlayPanel(event);
+        break;
+
+      case "category":
+        this.overlayCategory.showOverlayPanel(event);
+        break;
+
+      case "custStatus":
+        this.overlayCustStatus.showOverlayPanel(event);
+        break;
+
+      case "custIdType":
+        this.overlayCustIdType.showOverlayPanel(event);
+        break;
+      case "gifrPurchased":
+        this.overlayGifrPurchased.showOverlayPanel(event);
+        break;
+      case "occasionOfPurchase":
+        this.overlayOccasionOfPurchase.showOverlayPanel(event);
+        break;
+
+      case "ageGroup":
+        this.overlayAgeGroup.showOverlayPanel(event);
+        break;
+      case "nextVisit":
+        this.overlayNextVisit.showOverlayPanel(event);
+        break;
+
+      case "occupation":
+        this.overlayOccupation.showOverlayPanel(event);
+        break;
+      default:
+        console.warn(`Unknown form control name: ${formControlName}`);
+    }
   }
 }

@@ -48,6 +48,7 @@ export class StoneIssueComponent implements OnInit {
   selectedKey: number[] = [];
   selectedIndexes: any = [];
   gridAmountDecimalFormat: any;
+  isDisableSaveBtn: boolean = false;
   viewMode: boolean = false;
   editMode: boolean = false;
   isloading: boolean = false;
@@ -300,9 +301,17 @@ export class StoneIssueComponent implements OnInit {
     this.stoneissueFrom.controls.worker.setValue(e.WORKER_CODE);
     this.stoneissueFrom.controls.workername.setValue(e.DESCRIPTION);
   }
+  selectedRows: any[] = [];
+
+  onSelectionChanged(event: any): void {
+    // Get all the selected row keys (SRNOs)
+    this.selectedRows = event.selectedRowKeys;
+    console.log('Selected Rows:', this.selectedRows);
+  }
 
   deleteTableData(): void {
     if (!this.selectRowIndex) {
+      console.log(this.selectRowIndex, 'delete')
       Swal.fire({
         title: '',
         text: 'Please select row to remove from grid!',
@@ -595,7 +604,7 @@ export class StoneIssueComponent implements OnInit {
     });
   }
   showOverleyPanel(event: any, formControlName: string) {
-    if (this.stoneissueFrom.value[formControlName] != '') return; 
+    if (this.stoneissueFrom.value[formControlName] != '') return;
 
     switch (formControlName) {
       case 'worker':
@@ -604,40 +613,40 @@ export class StoneIssueComponent implements OnInit {
       case 'enteredBy':
         this.overlayenteredBySearch.showOverlayPanel(event);
         break;
-        case 'currencyrate':
-          this.overlayCurrencyCode.showOverlayPanel(event);
-          break;
+      case 'currencyrate':
+        this.overlayCurrencyCode.showOverlayPanel(event);
+        break;
       default:
 
     }
   }
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     LOOKUPDATA.SEARCH_VALUE = event.target.value
-
-    if (event.target.value == '' || this.viewMode == true) return
+    if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
       WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
     }
-    this.comService.showSnackBarMsg('MSG81447');
-    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
-    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+    this.comService.toastInfoByMsgId('MSG81447');
+    let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
       .subscribe((result) => {
-        this.comService.closeSnackBarMsg()
+        this.isDisableSaveBtn = false;
         let data = this.comService.arrayEmptyObjectToString(result.dynamicData[0])
         if (data.length == 0) {
           this.comService.toastErrorByMsgId('MSG1531')
           this.stoneissueFrom.controls[FORMNAME].setValue('')
-
           LOOKUPDATA.SEARCH_VALUE = ''
           if (FORMNAME === 'worker' || FORMNAME === 'enteredBy' || FORMNAME === 'currencyrate') {
+            this.showOverleyPanel(event, FORMNAME);
+          } {
             this.showOverleyPanel(event, FORMNAME);
           }
           return
         }
+
       }, err => {
         this.comService.toastErrorByMsgId('MSG2272')//Error occured, please try again
-
       })
     this.subscriptions.push(Sub)
   }

@@ -914,6 +914,8 @@ export class StonePricingMasterComponent implements OnInit {
       .subscribe((result) => {
         if (result.status == "Success") {
           const responseData = result.dynamicData[0][0];
+          console.log(responseData);
+
           // const finalsieve_form = this.commonService.dataSplitPop(responseData.SIEVE);
           // const finalsieve_to = this.commonService.dataSplitPop(responseData.SIEVE_TO);
 
@@ -922,8 +924,8 @@ export class StonePricingMasterComponent implements OnInit {
           this.stonePrizeMasterForm.controls.size_to.setValue(responseData.SIZE_TO);
           this.stonePrizeMasterForm.controls.sieve_form.setValue(responseData.SIEVE);
           this.stonePrizeMasterForm.controls.sieve_to.setValue(responseData.SIEVE_TO);
-          this.setFormNullToString('sieve_from_desc',responseData.SIEVEFROM_DESC);
-          this.setFormNullToString('sieve_to_desc',responseData.SIEVETO_DESC);
+          this.setFormNullToString('sieve_from_desc', responseData.SIEVEFROM_DESC);
+          this.setFormNullToString('sieve_to_desc', responseData.SIEVETO_DESC);
 
           // console.log('Form controls:', this.stonePrizeMasterForm.controls);
 
@@ -1016,15 +1018,37 @@ export class StonePricingMasterComponent implements OnInit {
       .subscribe((result) => {
         this.isDisableSaveBtn = false;
         let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+        console.log(data);
         if (data.length == 0) {
           this.commonService.toastErrorByMsgId('MSG1531')
           this.stonePrizeMasterForm.controls[FORMNAME].setValue('')
           LOOKUPDATA.SEARCH_VALUE = ''
           return
         }
+       
+        if (FORMNAME === 'sieve_set') {
+          this.sieve_setDataSelected(data[0]); // Assuming the first data element is used
+        } else {
+          // Handle other form names
+          const matchedItem = data.find((item: any) => item.SIEVE_SET === inputValue);
+          if (matchedItem) {
+            this.stonePrizeMasterForm.controls[FORMNAME].setValue(matchedItem.SIEVE_SET);
+            // Set additional form fields if needed
+            this.stonePrizeMasterForm.controls.shape.setValue(matchedItem.SHAPE);
+            this.stonePrizeMasterForm.controls.size_from.setValue(matchedItem.SIZE_FROM);
+            this.stonePrizeMasterForm.controls.size_to.setValue(matchedItem.SIZE_TO);
+            this.stonePrizeMasterForm.controls.sieve_form.setValue(matchedItem.SIEVE);
+            this.stonePrizeMasterForm.controls.sieve_to.setValue(matchedItem.SIEVE_TO);
+            this.stonePrizeMasterForm.controls.sieve_from_desc.setValue(matchedItem.SIEVEFROM_DESC);
+            this.stonePrizeMasterForm.controls.sieve_to_desc.setValue(matchedItem.SIEVETO_DESC);
+          } else {
+            this.handleLookupError(FORMNAME, LOOKUPDATA);
+          }
+        }
 
 
-        // const matchedItem2 = data.find((item: any) => item.SIEVE_SET.toUpperCase() === inputValue);
+
+        // const matchedItem2 = data.find((item: any) => item.SIEVE_SET === inputValue);
         // if (matchedItem2) {
         //   this.stonePrizeMasterForm.controls[FORMNAME].setValue(matchedItem2.SIEVE_SET);
         //   if (FORMNAME === 'sieve_set') {

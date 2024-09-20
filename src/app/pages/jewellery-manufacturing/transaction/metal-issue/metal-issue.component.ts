@@ -28,12 +28,11 @@ export class MetalIssueComponent implements OnInit {
   tableData: any[] = [];
   columnhead: any[] = [
     { title: 'SRNO', field: 'SRNO', format: '', alignment: 'center' },
-    { title: 'Job Id', field: 'JOB_NUMBER', format: '', alignment: 'left' },
-    { title: 'Uniq job Id', field: 'UNQ_JOB_ID', format: '', alignment: 'left' },
-    { title: 'Design', field: 'DESIGN_CODE', format: '', alignment: 'left' },
-    { title: 'Stock Code', field: 'STOCK_CODE', format: '', alignment: 'left' },
-    { title: 'Division', field: 'DIVCODE', format: '', alignment: 'left' },
+    { title: 'Job Number', field: 'JOB_NUMBER', format: '', alignment: 'left' },
+    { title: 'Sub job Id', field: 'UNQ_JOB_ID', format: '', alignment: 'left' },
+    // { title: 'Design', field: 'DESIGN_CODE', format: '', alignment: 'left' },
     { title: 'Description', field: 'STOCK_DESCRIPTION', format: '', alignment: 'left' },
+    { title: 'Stock Code', field: 'STOCK_CODE', format: '', alignment: 'left' },
     {
       title: 'Gross WT', field: 'GROSS_WT', format: {
         type: 'fixedPoint',
@@ -41,8 +40,15 @@ export class MetalIssueComponent implements OnInit {
         currency: this.comService.compCurrency
       }, alignment: 'right'
     },
-    { title: 'Process', field: 'PROCESS_CODE', format: '', alignment: 'left' },
-    { title: 'Worker', field: 'WORKER_CODE', format: '', alignment: 'left' },
+    { title: 'Net Wt', field: 'NET_WT', format: '', alignment: 'right' },
+    { title: 'Purity', field: 'PURITY', format: '', alignment: 'right' },
+    { title: 'Pure Wt', field: 'PURE_WT', format: '', alignment: 'right' },
+    { title: 'Karat', field: 'KARAT_CODE', format: '', alignment: 'right' },
+    { title: 'Loaction', field: 'LOCTYPE_CODE', format: '', alignment: 'left' },
+    // { title: 'Division', field: 'DIVCODE', format: '', alignment: 'left' },
+  
+    // { title: 'Process', field: 'PROCESS_CODE', format: '', alignment: 'left' },
+    // { title: 'Worker', field: 'WORKER_CODE', format: '', alignment: 'left' },
     {
       title: 'Amount.', field: 'TOTAL_AMOUNTFC', format: {
         type: 'fixedPoint',
@@ -237,6 +243,8 @@ export class MetalIssueComponent implements OnInit {
           this.metalIssueForm.controls.time.setValue(part[1])
 
           this.metalIssueDetailsData = data.Details
+          console.log(this.metalIssueDetailsData);
+          
           this.reCalculateSRNO() //set to main grid
 
           this.metalIssueDetailsData.forEach((element: any) => {

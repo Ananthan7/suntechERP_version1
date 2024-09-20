@@ -128,6 +128,7 @@ export class MasterSearchComponent implements OnInit {
   loadMoreData(currentPage?: number) {
     if (this.MasterSearchData.FRONTENDFILTER) return;
     if (this.totalItems >= this.dataSource.length + 1 && this.currentPage != currentPage) return
+    this.currentPage++;
     let param = this.setPostdata()
     let APIS = 'MasterLookUp'
     this.isLoading = true;
@@ -152,6 +153,12 @@ export class MasterSearchComponent implements OnInit {
       case 176:
         this.setCurrencyRateConv()
         break;
+      case 17:
+        this.setSTDPURITY()
+        break;
+      case 269:
+        this.setPURITY()
+        break;
       //continue adding with conditions
       default:
         break;
@@ -162,9 +169,16 @@ export class MasterSearchComponent implements OnInit {
     this.dataSource.forEach((item: any) => {
       item.CONV_RATE = this.commonService.decimalQuantityFormat(item.CONV_RATE, 'RATE')
     })
-    console.log(this.dataSource);
-    console.log('this.dataSource');
-
+  }
+  setSTDPURITY() {
+    this.dataSource.forEach((item: any) => {
+      item.STD_PURITY = this.commonService.decimalQuantityFormat(item.STD_PURITY, 'PURITY')
+    })
+  }
+  setPURITY() {
+    this.dataSource.forEach((item: any) => {
+      item.PURITY = this.commonService.decimalQuantityFormat(item.PURITY, 'PURITY')
+    })
   }
   showOverlayPanel(event?: Event) {
     // if (this.MasterSearchData?.LOAD_ONCLICK) {
@@ -232,6 +246,8 @@ export class MasterSearchComponent implements OnInit {
       let data = result.dynamicData[0]
       if (data && data.length > 0) {
         this.dataSource = result.dynamicData[0]
+        let dataCount = result.dynamicData[1];
+        if (dataCount) this.totalItems = this.commonService.emptyToZero(dataCount[0]?.COUNT)
         this.setGridHeaders()
         if (this.MasterSearchData.FRONTENDFILTER && this.MasterSearchData.SEARCH_VALUE != '') {
           this.dataSource = this.commonService.searchStartsWithItemsInArray(this.dataSource, this.MasterSearchData.SEARCH_VALUE)

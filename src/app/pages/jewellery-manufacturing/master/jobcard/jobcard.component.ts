@@ -738,12 +738,13 @@ export class JobcardComponent implements OnInit {
         this.jobCardFrom.controls['type'].setValue(result.response.TYPE_CODE);
         this.jobCardFrom.controls['costcode'].setValue(result.response.COST_CODE);
         this.jobCardFrom.controls['seqcode'].setValue(result.response.SEQ_CODE);
+        this.jobCardFrom.controls['category'].setValue(result.response.CATEGORY_CODE);
+        this.jobCardFrom.controls['setref'].setValue(result.response.SET_REF);
         console.log(result.response.PICTURE_NAME,'picyure')
         this.jobCardFrom.controls['picture_name'].setValue(result.response.PICTURE_NAME);
      
 
         this.mainmetalCodeData.WHERECONDITION = `kARAT_CODE = '${this.jobCardFrom.value.karat}' and PURITY = '${this.jobCardFrom.value.purity}'`;
-
         this.tableData[0].Pcs = result.response.PCS;
         this.tableData[0].metal_color = result.response.COLOR;
         this.tableData[0].metal_wt = result.response.METAL_WT;
@@ -1886,7 +1887,7 @@ export class JobcardComponent implements OnInit {
 
 
         const matchedItem2 = data.find((item: any) => item.DESIGN_CODE.toUpperCase() === inputValue);
-        console.log(data,'data')
+        console.log(matchedItem2,'data')
         if (matchedItem2) {
           this.jobCardFrom.controls[FORMNAME].setValue(matchedItem2.DESIGN_CODE);
           if (FORMNAME === 'designcode') {
@@ -1899,6 +1900,7 @@ export class JobcardComponent implements OnInit {
             this.jobCardFrom.controls.jobtype.setValue(matchedItem2.DESIGN_TYPE);
             this.jobCardFrom.controls.type.setValue(matchedItem2.TYPE_CODE);
             this.jobCardFrom.controls.purity.setValue(matchedItem2.PURITY);
+           this.getDesigncode()
           }
         } else {
           this.handleLookupError(FORMNAME, LOOKUPDATA);

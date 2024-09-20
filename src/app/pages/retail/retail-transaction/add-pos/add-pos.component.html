@@ -3353,7 +3353,7 @@
                         <input class="st_txt_right" [maxLength]="14" type="text" [min]="0"
                           (keyup)="this.comFunc.enforceMinMax($event.target)" matInput formControlName="fcn_li_gross_wt"
                           id="fcn_li_gross_wt" (focus)="setValToLocalStorage($event, 'fcn_li_gwt')"
-                          (change)="changeGrossWt($event)" [readonly]="viewOnly" MetalDecimalInput />
+                          (change)="changeGrossWt($event)" readonly MetalDecimalInput />
                         <mat-error *ngIf="
                             lineItemForm.controls.fcn_li_gross_wt.hasError(
                               'required'
