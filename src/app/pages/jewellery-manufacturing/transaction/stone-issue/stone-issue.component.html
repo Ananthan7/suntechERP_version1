@@ -89,7 +89,7 @@
                   <div class="col-md-4">
                     <mat-form-field appearance="outline" style="width: 80%">
                       <input type="text" matInput formControlName="currencyrate"
-                        style="text-align: right;" readonly
+                        style="text-align: left;" readonly
                         SixDecimalInput 
                         (keydown)="lookupKeyPress($event,'currencyrate')"
                         (focusout)="validateLookupField($event,CurrencyCodeData,'currencyrate')" />
@@ -111,7 +111,7 @@
                       class="col-sm-3 col-form-label">Entered By:</label>
                     <div class="col-md-8">
                       <mat-form-field appearance="outline" style="width: 70%">
-                        <input type="text" matInput formControlName="enteredBy"
+                        <input type="text" matInput formControlName="enteredBy" UpperCaseDirective
                           (keydown)="lookupKeyPress($event,'enteredBy')"
                           [readonly]="viewMode"
                           (focusout)="validateLookupField($event,SALESPERSON_CODEData,'enteredBy')" />
@@ -133,7 +133,7 @@
                     <div class="col-md-4">
                       <mat-form-field appearance="outline" style="width: 80%">
                         <input type="text" matInput formControlName="worker"
-                          maxlength="6"
+                          maxlength="6" UpperCaseDirective
                           (keydown)="lookupKeyPress($event,'worker')"
                           [readonly]="viewMode"
                           (focusout)="validateLookupField($event,WorkerCodeData,'worker')" />
