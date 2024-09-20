@@ -6,7 +6,8 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
+[isViewDelete]="false" [isViewMore]="false" [isViewSave]="false" [isViewCancel]="false"></modal-header>
 <!-- content section -->
 <div class="container-fluid pt-3">
     <form [formGroup]="posDailyClosingSummaryForm">
@@ -478,6 +479,6 @@
               <span style="font-size: inherit;">Whatsapp</span>
             </div>
         </div>
-        
+
     </form>
 </div>
