@@ -864,9 +864,10 @@ export class PosCustomerMasterMainComponent implements OnInit {
           DATE_OF_BIRTH:
             this.posCustomerMasterMainForm.value.dob || this.dummyDate,
           OPENING_ON:
+
             this.posCustomerMasterMainForm.value.openedOn ??
             "1900-01-01T00:00:00",
-          GENDER: this.posCustomerMasterMainForm.value.gender || "",
+          GENDER: this.posCustomerMasterMainForm.value.gender || "", 
           REGION: "",
           NATIONALITY: this.posCustomerMasterMainForm.value.nationality || "",
           RELIGION: this.posCustomerMasterMainForm.value.religion || "",
@@ -921,7 +922,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
             this.posCustomerMasterMainForm.value.moblieCountry.toString() || "",
           MOBILECODE2:
             this.posCustomerMasterMainForm.value.moblie1Country || "",
-          IDCATEGORY: "",
+          IDCATEGORY: this.posCustomerMasterMainForm.value.custIdType || "",
           ADDRESS_OFFICIAL:
             this.posCustomerMasterMainForm.value.officialAddress || "",
           ADDRESS_DELIVARY:
@@ -1477,5 +1478,25 @@ export class PosCustomerMasterMainComponent implements OnInit {
       default:
         console.warn(`Unknown form control name: ${formControlName}`);
     }
+  }
+
+  transactionDetails(event: any) {
+    console.log(event);
+    console.log("Got Clicked");
+  }
+
+  printPrivilegeCard(event: any) {
+    console.log(event);
+    console.log("Got Clicked");
+  }
+
+  printCustomerLog(event: any) {
+    console.log(event);
+    console.log("Got Clicked");
+  }
+
+  getCustomerDetails(event: any) {
+    console.log(event);
+    console.log("Got Clicked");
   }
 }

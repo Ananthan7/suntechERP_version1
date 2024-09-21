@@ -1861,6 +1861,7 @@
                           <label class="col-md-3">Type</label>
 
                           <mat-checkbox
+                            [checked]="true"
                             class="col-md-5 pt-2 align-items-center"
                             formControlName="amltype"
                             id="ID062"
@@ -3106,6 +3107,36 @@
                       />
                     </mat-form-field>
                   </div>
+                </div>
+                <div class="button-container">
+                  <button
+                    type="button"
+                    class="btn btn-primary text-center m-2"
+                    (click)="transactionDetails($event)"
+                  >
+                    Show Trans. Details
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-primary text-center m-2"
+                    (click)="printPrivilegeCard($event)"
+                  >
+                    Print Privilege Card
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-primary text-center m-2"
+                    (click)="printCustomerLog($event)"
+                  >
+                    Print Customer Log
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-primary text-center m-2"
+                    (click)="getCustomerDetails($event)"
+                  >
+                    Get Customer Details
+                  </button>
                 </div>
               </div>
             </div>
