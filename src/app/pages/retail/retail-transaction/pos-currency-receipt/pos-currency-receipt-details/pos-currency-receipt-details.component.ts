@@ -947,7 +947,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
         // "AMOUNTFC": this.posCurrencyReceiptDetailsForm.value.amountFc,
         AMOUNTCC: this.posCurrencyReceiptDetailsForm.value.amountCc,
         HEADER_AMOUNT: this.posCurrencyReceiptDetailsForm.value.amountCc,
-        CHEQUE_NO: CHEQUE_NO || "",
+        CHEQUE_NO: CHEQUE_NO.toString() || "",
         CHEQUE_DATE: CHEQUE_DATE
           ? this.formatDateToISO(CHEQUE_DATE)
           : this.dummyDate,

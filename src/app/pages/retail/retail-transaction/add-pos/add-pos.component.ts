@@ -9201,7 +9201,7 @@ export class AddPosComponent implements OnInit {
     if (event.target.value != '' && this.validatePCS == true || this.enablePieces) {
       
       // if(!this.comFunc.emptyToZero(event.target.value))
-      this.clearDiscountValues();
+      // this.clearDiscountValues();
       this.manageCalculations();
 
       if (this.blockNegativeStock == 'B') {
@@ -9270,7 +9270,14 @@ export class AddPosComponent implements OnInit {
           this.checkDivisionForPcs(value)
           this.manageCalculations();
         }
-      } else {
+      }
+      else if (this.blockNegativeStock == 'A') {
+        this.detectDiscountChange = true;
+                this.checkDivisionForPcs(value)
+                this.manageCalculations();
+      }
+      
+      else {
 
         this.manageCalculations();
       }

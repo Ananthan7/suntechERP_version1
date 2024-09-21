@@ -176,8 +176,9 @@ export class SalesReturnComponent implements OnInit {
   blockMinimumPriceValue: any;
   isGrossWtEditable: boolean = true;
   validatePCS: any;
+  isAllowWithoutRate: boolean = false;
+  isPromotionalItem: boolean = false;
   enablePieces: boolean = false;
-
   receiptModesTypes: any;
   receiptModesList: any;
   metalPurchaseDataPost: any = null;
@@ -2922,7 +2923,9 @@ export class SalesReturnComponent implements OnInit {
     console.log(value);
     console.log('====================================');
     event.component.refresh();
-
+    this.isAllowWithoutRate=value.ALLOW_WITHOUT_RATE;
+    this.isPromotionalItem=value.TPROMOTIONALITEM;
+    this.blockNegativeStock= value.BLOCK_NEGATIVESTOCK;
     // console.log(this.ordered_items);
     // console.log(this.newLineItem);
     // let alldata = [];
@@ -4856,7 +4859,7 @@ export class SalesReturnComponent implements OnInit {
       OT_TRANSFER_TIME: items?.OT_TRANSFER_TIME || '',
       // IssueGiftVoucher:
       //   this.comFunc.stringToBoolean(items?.ISSUEGIFTVOUCHER) || false,
-    
+
       "CGST_PER": this.comFunc.emptyToZero(items['CGST_PER']),
       "CGST_AMOUNTFC": this.comFunc.emptyToZero(items['CGST_AMOUNTFC']),
       "CGST_AMOUNTCC": this.comFunc.emptyToZero(items['CGST_AMOUNTCC']),
@@ -7453,7 +7456,7 @@ export class SalesReturnComponent implements OnInit {
   focusAndSetReadOnly(stockInfos: any): void {
     this.isGrossWtEditable = true;
     const isDivisionX = this.newLineItem.DIVISION === 'X';
-    const excludeQtyValidations = ['M', 'D', 'W'];
+    const excludeQtyValidations = ['M', 'D', 'W', 'N'];
     if (
       (excludeQtyValidations.some(v => this.newLineItem.DIVISION.toUpperCase().includes(v)))) {
       this.isGrossWtEditable = false;
@@ -8341,7 +8344,7 @@ export class SalesReturnComponent implements OnInit {
         Validators.min(1),
       ]);
 
-      const validDivisionCodes = ['M', 'D', 'W'];
+      const validDivisionCodes = ['M', 'D', 'W', 'N'];
       const filteredValidationCodes = validDivisionCodes.filter((code) => code === this.newLineItem.DIVISION.toUpperCase())
 
       if (filteredValidationCodes.length > 0) {
@@ -9268,10 +9271,29 @@ export class SalesReturnComponent implements OnInit {
     const preVal = this.comFunc.emptyToZero(localStorage.getItem('fcn_li_pcs'));
     this.isNetAmountChange = false;
     const value = this.comFunc.emptyToZero(event.target.value);
-    if (event.target.value != '' && this.validatePCS == true || this.enablePieces) {
+    if (this.comFunc.emptyToZero(event.target.value) == 0) {
+
+
+      this.openDialog('Warning', this.comFunc.getMsgByID('MSG1560'), true);
+      this.dialogBox.afterClosed().subscribe((data: any) => {
+        if (data == 'OK') {
+          this.lineItemForm.controls['fcn_li_pcs'].setValue(
+            preVal
+          );
+          this.renderer.selectRootElement('#fcn_li_pcs').focus();
+          // this.detectDiscountChange = true;
+          // this.checkDivisionForPcs(value)
+          // this.manageCalculations();
+          // this.renderer.selectRootElement('#sales_person').focus();
+        }
+      });
+
+    }
+
+    else if (event.target.value != '' && this.validatePCS == true || this.enablePieces && this.comFunc.emptyToZero(event.target.value) != 0) {
 
       // if(!this.comFunc.emptyToZero(event.target.value))
-      this.clearDiscountValues();
+      // this.clearDiscountValues();
       this.manageCalculations();
 
       if (this.blockNegativeStock == 'B') {
@@ -9340,7 +9362,13 @@ export class SalesReturnComponent implements OnInit {
           this.checkDivisionForPcs(value)
           this.manageCalculations();
         }
-      } else {
+      }
+      else if (this.blockNegativeStock == 'A') {
+        this.detectDiscountChange = true;
+        this.checkDivisionForPcs(value)
+        this.manageCalculations();
+      }
+      else {
 
         this.manageCalculations();
       }
@@ -9356,7 +9384,7 @@ export class SalesReturnComponent implements OnInit {
 
 
   checkDivisionForPcs(pcs: any) {
-    const validDivisionCodes = ['M', 'D', 'W'];
+    const validDivisionCodes = ['M', 'D', 'W', 'N'];
     const filteredValidationCodes = validDivisionCodes.filter((code) => code === this.newLineItem.DIVISION.toUpperCase())
 
     if (filteredValidationCodes.length > 0) {
@@ -9392,7 +9420,25 @@ export class SalesReturnComponent implements OnInit {
     this.checkItemCode();
     this.setGrossWtFocus();
     if (event.target.value != '' && this.lineItemForm.value.fcn_li_item_code) {
-      if (this.blockNegativeStock == 'B') {
+      if(this.comFunc.emptyToZero(event.target.value)==0){
+
+        this.openDialog('Warning', this.comFunc.getMsgByID('MSG1308'), true);
+        this.dialogBox.afterClosed().subscribe((data: any) => {
+          if (data == 'OK') {
+
+            this.lineItemForm.controls.fcn_li_gross_wt.setValue(
+              this.comFunc.transformDecimalVB(
+                this.comFunc.allbranchMaster?.BMQTYDECIMALS,
+                preVal
+              )
+            );
+
+          }
+        });
+
+      }
+
+      else if (this.blockNegativeStock == 'B') {
         if (this.comFunc.emptyToZero(this.lineItemGrossWt) < value) {
           this.openDialog(
             'Warning',
@@ -9439,6 +9485,9 @@ export class SalesReturnComponent implements OnInit {
       } else {
         // blockNegativeStock = 'A'
         // this.setNettWeight();
+        //   this.addValidationsForForms(this.lineItemForm, 'fcn_li_stone_wt', [
+                //     Validators.required,
+                //   ]);
         this.manageCalculations();
       }
     } else {
@@ -9458,7 +9507,7 @@ export class SalesReturnComponent implements OnInit {
     const nonMetalPreTotalVal = localStorage.getItem('fcn_li_total_amount');
     if (value != '') {
 
-      if (this.lineItemModalForSalesReturn || this.comFunc.emptyToZero(value) >= this.comFunc.emptyToZero(this.blockMinimumPriceValue)) {
+      if (this.lineItemModalForSalesReturn || this.comFunc.emptyToZero(value) != 0 || this.comFunc.emptyToZero(value) >= this.comFunc.emptyToZero(this.blockMinimumPriceValue)) {
 
         // if (this.lineItemModalForSalesReturn || parseFloat(value) >= parseFloat(this.newLineItem.STOCK_COST)) {
 
@@ -9521,61 +9570,82 @@ export class SalesReturnComponent implements OnInit {
 
       } else {
         // Rate Cannot be Less Than Cost
-        this.openDialog('Warning', this.comFunc.getMsgByID('MSG1721'), true);
-        this.dialogBox.afterClosed().subscribe((data: any) => {
-          if (data == 'OK') {
+        if (this.divisionMS != "M") {
+          this.openDialog('Warning', this.comFunc.getMsgByID('MSG1917'), true);
+          this.dialogBox.afterClosed().subscribe((data: any) => {
+            if (data == 'OK') {
 
 
 
-            let lastDiscountPercentage = this.comFunc.emptyToZero(localStorage.getItem('discountPercentage'));
-            let lastDiscountamount = this.comFunc.emptyToZero(localStorage.getItem('discountAmount'));
-            this.lineItemForm.controls.fcn_li_discount_percentage.setValue(
-              this.comFunc.transformDecimalVB(
-                this.comFunc.allbranchMaster?.BAMTDECIMALS, lastDiscountPercentage)
-            );
-
-            this.lineItemForm.controls.fcn_li_discount_amount.setValue(
-              this.comFunc.transformDecimalVB(
-                this.comFunc.allbranchMaster?.BAMTDECIMALS, lastDiscountamount)
-
-            );
 
 
-
-            if (this.divisionMS == 'M') {
-
-              this.lineItemForm.controls.fcn_li_rate.setValue(
-                preRateVal
-              );
-              this.lineItemForm.controls.fcn_li_total_amount.setValue(
-                this.comFunc.emptyToZero(preTotalVal)
-              );
-              this.lineItemForm.controls.fcn_li_net_amount.setValue(
+              let lastDiscountPercentage = this.comFunc.emptyToZero(localStorage.getItem('discountPercentage'));
+              let lastDiscountamount = this.comFunc.emptyToZero(localStorage.getItem('discountAmount'));
+              this.lineItemForm.controls.fcn_li_discount_percentage.setValue(
                 this.comFunc.transformDecimalVB(
-                  this.comFunc.allbranchMaster?.BAMTDECIMALS,
-                  preNetAmtVal
-                )
+                  this.comFunc.allbranchMaster?.BAMTDECIMALS, lastDiscountPercentage)
               );
 
-              this.manageCalculations({ totalAmt: preTotalVal });
-              // this.manageCalculations();
-              this.renderer.selectRootElement('#fcn_li_net_amount').focus();
+              this.lineItemForm.controls.fcn_li_discount_amount.setValue(
+                this.comFunc.transformDecimalVB(
+                  this.comFunc.allbranchMaster?.BAMTDECIMALS, lastDiscountamount)
+
+              );
+
+
+
+              // if (this.divisionMS == 'M') {
+
+              //   this.lineItemForm.controls.fcn_li_rate.setValue(
+              //     preRateVal
+              //   );
+              //   this.lineItemForm.controls.fcn_li_total_amount.setValue(
+              //     this.comFunc.emptyToZero(preTotalVal)
+              //   );
+              //   this.lineItemForm.controls.fcn_li_net_amount.setValue(
+              //     this.comFunc.transformDecimalVB(
+              //       this.comFunc.allbranchMaster?.BAMTDECIMALS,
+              //       preNetAmtVal
+              //     )
+              //   );
+
+              //   this.manageCalculations({ totalAmt: preTotalVal });
+              //   // this.manageCalculations();
+              //   this.renderer.selectRootElement('#fcn_li_net_amount').focus();
+              // }
+              if (this.divisionMS == 'S') {
+
+                this.lineItemForm.controls.fcn_li_rate.setValue(
+
+                  this.comFunc.transformDecimalVB(
+                    this.comFunc.allbranchMaster?.BAMTDECIMALS,
+                    nonMetalPreRateVal
+                  )
+
+                );
+
+                this.lineItemForm.controls.fcn_li_total_amount.setValue(
+
+                  this.comFunc.transformDecimalVB(
+                    this.comFunc.allbranchMaster?.BAMTDECIMALS,
+                    nonMetalPreTotalVal
+                  )
+
+                );
+
+              }
             }
-            else if (this.divisionMS == 'S') {
 
-              this.lineItemForm.controls.fcn_li_rate.setValue(
-                this.comFunc.commaSeperation(nonMetalPreRateVal)
+          });
+        }
+        else {
 
-              );
-
-              this.lineItemForm.controls.fcn_li_total_amount.setValue(
-                this.comFunc.commaSeperation(nonMetalPreTotalVal)
-
-              );
-            }
-          }
-
-        });
+          this.lineItemForm.controls.fcn_li_rate.setValue(
+            this.zeroAmtVal
+          );
+          this.manageCalculations({ totalAmt: value });
+          this.removeValidationsForForms(this.lineItemForm, ['fcn_li_total_amount', 'fcn_li_rate']);
+        }
       }
     } else {
       this.lineItemForm.controls.fcn_li_rate.setValue(0);
@@ -9658,7 +9728,7 @@ export class SalesReturnComponent implements OnInit {
       }
       else {
         // Rate Cannot be Less Than Cost
-        this.openDialog('Warning', this.comFunc.getMsgByID('MSG1721'), true);
+        this.openDialog('Warning', this.comFunc.getMsgByID('MSG1203'), true);
         this.dialogBox.afterClosed().subscribe((data: any) => {
           if (data == 'OK') {
             this.lineItemForm.controls.fcn_li_discount_percentage.setValue(
@@ -9841,6 +9911,7 @@ export class SalesReturnComponent implements OnInit {
   changeRate(event: any) {
     console.log(this.comFunc.emptyToZero(event.target.value))
     this.isNetAmountChange = false;
+    this.detectDiscountChange = false;
     // this.lineItemForm.controls.fcn_li_discount_percentage.setValue(
     //   this.zeroAmtVal
 
@@ -9859,6 +9930,17 @@ export class SalesReturnComponent implements OnInit {
     //   this.clearDiscount();
     // }
     if (event.target.value != '') {
+      if (this.comFunc.emptyToZero(event.target.value) == 0) {
+        this.lineItemForm.controls['fcn_li_discount_amount'].setValue(
+          this.comFunc.commaSeperation(this.zeroAmtVal)
+        );
+        this.lineItemForm.controls['fcn_li_discount_percentage'].setValue(
+          this.comFunc.commaSeperation(this.zeroAmtVal)
+        );
+
+      }
+      if (this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_discount_percentage) != 0)
+        this.detectDiscountChange = true;
 
       if (this.divisionMS == 'M') {
 
@@ -9868,9 +9950,7 @@ export class SalesReturnComponent implements OnInit {
 
 
         // if (this.lineItemModalForSalesReturn || this.comFunc.emptyToZero(value) >= this.comFunc.emptyToZero(this.blockMinimumPriceValue)) {
-        this.removeValidationsForForms(this.lineItemForm, ['fcn_li_rate']);
-        this.removeValidationsForForms(this.lineItemForm, ['fcn_li_total_amount']);
-        this.removeValidationsForForms(this.lineItemForm, ['fcn_li_gross_amount']);
+
         this.rateFunc(value);
         // }
         // else {
@@ -9910,13 +9990,12 @@ export class SalesReturnComponent implements OnInit {
       //Changes as per Jebraj's Input on 17/07/2024
 
       if (this.divisionMS == 'S') {
-        if (this.comFunc.emptyToZero(this.lineItemModalForSalesReturn) || (this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_rate)) >= this.comFunc.emptyToZero(this.newLineItem.STOCK_COST)) {
-
+        if (this.isPromotionalItem && this.isAllowWithoutRate && this.comFunc.emptyToZero(value) >= 0) {
           this.rateFunc(value);
         }
         else {
           // Rate Cannot be Less Than Cost
-          this.openDialog('Warning', this.comFunc.getMsgByID('MSG1721'), true);
+          this.openDialog('Warning', this.comFunc.getMsgByID('MSG1723'), true);
           this.dialogBox.afterClosed().subscribe((data: any) => {
             if (data == 'OK') {
 
@@ -9952,7 +10031,10 @@ export class SalesReturnComponent implements OnInit {
           });
         }
       }
-
+      this.removeValidationsForForms(this.lineItemForm, ['fcn_li_rate']);
+      this.removeValidationsForForms(this.lineItemForm, ['fcn_li_total_amount']);
+      this.removeValidationsForForms(this.lineItemForm, ['fcn_li_gross_amount']);
+      // this.removeValidationsForForms(this.lineItemForm, ['fcn_li_net_amount']);
 
 
     } else {
@@ -10743,8 +10825,8 @@ export class SalesReturnComponent implements OnInit {
 
             if (
 
-              netAmtVal >
-              this.comFunc.emptyToZero(this.lineItemForm.value.fcn_ad_metal_amount)
+              netAmtVal > (this.comFunc.emptyToZero(this.lineItemForm.value.fcn_ad_metal_amount) + this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_tax_amount))
+
             ) {
               this.netAmtFunc(event);
             } else {
@@ -10973,7 +11055,7 @@ export class SalesReturnComponent implements OnInit {
 
 
 
-
+    // this.updateDiscountAmount()
 
     /**  set Gross amt */
     if (argsData.nettAmt == null) {
@@ -10987,15 +11069,15 @@ export class SalesReturnComponent implements OnInit {
         );
       } else {
 
-        // this.lineItemForm.controls['fcn_li_gross_amount'].setValue(
+        this.lineItemForm.controls['fcn_li_gross_amount'].setValue(
 
-        //   this.comFunc.transformDecimalVB(
-        //     this.comFunc.allbranchMaster?.BAMTDECIMALS,
-        //     this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount) -
-        //     this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_discount_amount)
-        //   )
+          this.comFunc.transformDecimalVB(
+            this.comFunc.allbranchMaster?.BAMTDECIMALS,
+            this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount) -
+            this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_discount_amount)
+          )
 
-        // );
+        );
       }
     }
 
@@ -11038,6 +11120,18 @@ export class SalesReturnComponent implements OnInit {
       // taxAmount = this.lineItemForm.value.fcn_li_tax_amount;
     }
     this.lineItemCommaSeparation();
+    if (this.divisionMS != 'M') {
+
+      this.lineItemForm.controls['fcn_li_gross_amount'].setValue(
+
+        this.comFunc.transformDecimalVB(
+          this.comFunc.allbranchMaster?.BAMTDECIMALS,
+          this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount) -
+          this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_discount_amount)
+        )
+
+      );
+    }
 
   }
   lineItemCommaSeparation() {
@@ -11096,7 +11190,7 @@ export class SalesReturnComponent implements OnInit {
       this.comFunc.commaSeperation(this.lineItemForm.value.fcn_li_discount_percentage || this.zeroAmtVal)
     );
 
-    this.updateDiscountAmount();
+    //  this.updateDiscountAmount();
 
     this.lineItemForm.controls['fcn_li_tax_amount'].setValue(
       this.comFunc.commaSeperation(this.lineItemForm.value.fcn_li_tax_amount)
@@ -11104,11 +11198,19 @@ export class SalesReturnComponent implements OnInit {
     this.lineItemForm.controls['fcn_li_net_amount'].setValue(
       this.comFunc.commaSeperation(this.lineItemForm.value.fcn_li_net_amount)
     );
+    // if(this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_rate)==0){
+    //   this.lineItemForm.controls['fcn_li_tax_amount'].setValue(
+    //     this.comFunc.commaSeperation (this.zeroAmtVal)
+    //   );
+    //   this.lineItemForm.controls['fcn_li_net_amount'].setValue(
+    //     this.comFunc.commaSeperation (this.zeroAmtVal)
+    //   );
+    // }
 
   }
 
   updateDiscountAmount(): void {
-    if (this.detectDiscountChange) {
+    if (this.detectDiscountChange || this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_discount_percentage) > 0) {
       const totalAmountString = this.lineItemForm.value.fcn_li_total_amount.replace(/,/g, '');
       const discountPercentageString = this.lineItemForm.value.fcn_li_discount_percentage.toString();
 
@@ -11120,15 +11222,15 @@ export class SalesReturnComponent implements OnInit {
         this.comFunc.commaSeperation(discountAmount) || this.zeroAmtVal
       );
 
-      this.lineItemForm.controls['fcn_li_gross_amount'].setValue(
+      // this.lineItemForm.controls['fcn_li_gross_amount'].setValue(
 
-        this.comFunc.transformDecimalVB(
-          this.comFunc.allbranchMaster?.BAMTDECIMALS,
-          this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount) -
-          this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_discount_amount)
-        )
+      //   this.comFunc.transformDecimalVB(
+      //     this.comFunc.allbranchMaster?.BAMTDECIMALS,
+      //     this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount) -
+      //     this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_discount_amount)
+      //   )
 
-      );
+      // );
 
 
       this.detectDiscountChange = false;
@@ -11137,15 +11239,15 @@ export class SalesReturnComponent implements OnInit {
         this.comFunc.commaSeperation(this.lineItemForm.value.fcn_li_discount_amount) || this.zeroAmtVal
       );
 
-      this.lineItemForm.controls['fcn_li_gross_amount'].setValue(
+      // this.lineItemForm.controls['fcn_li_gross_amount'].setValue(
 
-        this.comFunc.transformDecimalVB(
-          this.comFunc.allbranchMaster?.BAMTDECIMALS,
-          this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount) -
-          this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_discount_amount)
-        )
+      //   this.comFunc.transformDecimalVB(
+      //     this.comFunc.allbranchMaster?.BAMTDECIMALS,
+      //     this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount) -
+      //     this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_discount_amount)
+      //   )
 
-      );
+      // );
     }
   }
 
@@ -11745,18 +11847,18 @@ export class SalesReturnComponent implements OnInit {
           item[key] = true;
         }
       }
-  
+
       item.COMPONENT_PRICE_TYPE = "";
       item.DUFIX_DKARAT_CODE = "";
       item.HSNCODE = "";
       item.LESSTHANCOST_USER = "";
       item.VATCODE = '';
-  
+
       return item;
     });
   }
-  
-  
+
+
   setMetalPurchaseDataPost() {
     this.metalPurchaseDataPost = {
       'POPCUSTCODE': this.customerDetails['CODE'] || '',

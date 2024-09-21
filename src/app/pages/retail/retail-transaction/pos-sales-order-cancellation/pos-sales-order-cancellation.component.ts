@@ -164,7 +164,7 @@ export class PosSalesOrderCancellationComponent implements OnInit {
   };
 
   orderCodeSelected(e: any) {
-    this.salesOrderCancellationForm.controls["order"].setValue(e.NAME);
+    this.salesOrderCancellationForm.controls["order"].setValue(e.OrderCancellation);
   }
 
   orderCancelCode: MasterSearchModel = {
@@ -199,7 +199,7 @@ export class PosSalesOrderCancellationComponent implements OnInit {
   acCodeSelected(e: any) {
     this.salesOrderCancellationForm.controls["ac"].setValue(e.ACCOUNT_MODE);
     this.salesOrderCancellationForm.controls["acCode"].setValue(
-      e["ACCOUNT HEAD"]
+      e.ACCOUNT_HEAD
     );
   }
 
