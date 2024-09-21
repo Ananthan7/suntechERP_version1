@@ -7,9 +7,10 @@
 </div>
 <!-- modal header component -->
 <modal-header (saveClick)="formSubmit('SAVE')" (cancelClick)="close()"
-  (changeJobClick)="changeJobClicked()"
-  (continueClick)="formSubmit('CONTINUE')" [isViewContinue]="true"
-  [isViewChangeJob]="true" [isViewDelete]="false"
+  (changeJobClick)="changeJobClicked()" [isViewChangeJob]="!viewMode"
+  [isViewSave]="!viewMode" [isViewContinue]="!viewMode"
+  (continueClick)="formSubmit('CONTINUE')"
+  [isViewDelete]="false" [isViewSaveGridData]="!viewMode"
   [isViewMore]="false"></modal-header>
 
 <div class="container-fluid pt-3">
@@ -136,7 +137,7 @@
           <div class="col-md-1">
             <mat-form-field appearance="outline" style="width: 145%;">
               <input type="text" matInput formControlName="DIVCODE"
-                placeholder="Div Code" readonly
+                placeholder="Div Code" [readonly]="viewMode"
                 UpperCaseDirective />
             </mat-form-field>
           </div>
