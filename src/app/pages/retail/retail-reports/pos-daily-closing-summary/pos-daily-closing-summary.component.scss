@@ -60,3 +60,23 @@ fieldset {
   word-break: break-all;
   line-height: 1.5;
 }
+
+.icon-label-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 75px;
+}
+
+.label {
+  font-size: 14px;
+  color: #000;
+}
+
+.SaveNew_template {
+  min-width: 125px;
+  white-space: normal;
+  padding-bottom: 0px;
+}

@@ -6,16 +6,16 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header [isViewDelete]="false" [isViewMore]="false" [editSaveBtnText]="'Go'" (saveClick)="savePdf()"
-    (cancelClick)="close()"></modal-header>
+<modal-header [isViewDelete]="false" [isViewMore]="false"  (saveClick)="savePdf()"
+    (cancelClick)="close()" [isViewCancel]="false" [isViewSave]="false" ></modal-header>
 <!-- content section -->
 <div class="container-fluid pt-3">
     <form [formGroup]="retailAdvanceReceiptRegisterForm">
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-9">
                 <div class="row">
-                    <label for="inputPassword" class="col-sm-2 col-form-label" id="ID001">Branch</label>
-                    <div class="col-md-2">
+                    <label for="inputPassword" class="col-sm-1 col-form-label" id="ID001">Branch</label>
+                    <div class="col-md-4">
                         <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
                             <input matInput="text" name="branch"   autocomplete="off"/>
                             <app-branch-division (newRowClick)="selectedData($event)" class="branchDivisionelectr"
@@ -24,8 +24,8 @@
                         </mat-form-field>
                     </div>
 
-                    <label for="inputPassword" class="col-sm-2 col-form-label" id="ID002">Show</label>
-                    <div class="col-md-2">
+                    <label for="inputPassword" class="col-sm-1 col-form-label" id="ID002">Show</label>
+                    <div class="col-md-4">
                         <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
                             <mat-select [(value)]="selected" formControlName="show">
                                 <mat-option value="all">ALL</mat-option>
@@ -45,7 +45,9 @@
                 </div> -->
                 
                 <div class="row">
-                    <app-date (selectedDate)="setDateValue($event)"></app-date>
+                   <div class="col-md-12">
+                        <app-date (selectedDate)="setDateValue($event)"></app-date>
+                    </div> 
                     <!-- <label for="inputPassword" class="col-sm-2 col-form-label" id="ID003">Date</label>
                     <div class="col-md-3">
                         <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
@@ -68,8 +70,8 @@
                 </div>
                
                 <div class="row mt-1 ">
-                    <label for="inputPassword" class="col-sm-2 col-form-label" id="ID005">Salesman</label>
-                    <div class="col-md-2">
+                    <label for="inputPassword" class="col-sm-1 col-form-label" id="ID005">Salesman</label>
+                    <div class="col-md-4">
                         <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
                             <input matInput="text" formControlName="salesman" />
                             <master-search [MasterSearchData]="salesmanCodeData" class="masterSearch"
@@ -84,16 +86,48 @@
                     </div>
                 </div>
 
-                <div class="row mb-4">
+                <!-- <div class="row mb-4">
                     <app-report-to-control (selectedvalue)="setValueFromCommon($event)"></app-report-to-control>
-                </div>
-
+                </div> -->
 
             </div>
-            <div class="col-md-12 text-right p-3">
-                <button mat-flat-button color="primary" class="mx-2 cancelBTN" > Cancel </button>
-                <button mat-flat-button color="primary" style="width: 100px;"> Go </button>
-            </div>  
+           
+            <div class="row mt-2 justify-content-end mx-2">
+                <div class="icon-label-container" (click)="saveTemplate()" matTooltip="Save the selections as a new template">
+                  <i class="fa fa-bookmark fa-2x mt-3" style="color: #5497b2"></i>
+                  <span style="font-size: inherit;">Save as Template</span>
+                </div>
+    
+                <div class="icon-label-container" (click)="previewClick()" matTooltip="Preview the content">
+                  <i class="fa fa-eye fa-2x" style="color: #5497b2"></i>
+                  <span class="label">Preview</span>
+                </div>
+    
+                <div class="icon-label-container" matTooltip="Take a print">
+                  <i class="fa fa-print fa-2x" style="color: #031082"></i>
+                  <span class="label">Print</span>
+                </div>
+    
+                <div class="icon-label-container"  matTooltip="Generate Excel Report">
+                  <i class="fa fa-file-excel fa-2x" style="color: green"></i>
+                  <span class="label">Excel</span>
+                </div>
+    
+                <div class="icon-label-container" matTooltip="Generate PDF Report">
+                  <i class="fa fa-file-pdf fa-2x" style="color: orangered"></i>
+                  <span class="label">PDF</span>
+                </div>
+    
+                <div class="icon-label-container" matTooltip="Sent through mail">
+                  <i class="fa fa-envelope fa-2x" style="color: deepskyblue"></i>
+                  <span class="label">Email</span>
+                </div>
+    
+                <div class="icon-label-container" matTooltip="Sent through whatsapp">
+                  <i class="fab fa-whatsapp fa-2x" style="color: #29cf26"></i>
+                  <span style="font-size: inherit;">Whatsapp</span>
+                </div>
+              </div>
             
         </div>
     </form>
