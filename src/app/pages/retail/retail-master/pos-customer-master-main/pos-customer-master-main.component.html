@@ -1134,6 +1134,34 @@
                             </mat-form-field>
                           </div>
                         </div>
+
+                        <div class="row mb-1">
+                          <label
+                            for="inputPassword"
+                            class="col-sm-5 col-form-label"
+                            id="ID035"
+                            >Occupation</label
+                          >
+                          <div class="col-md-7">
+                            <mat-form-field
+                              style="width: -webkit-fill-available"
+                              appearance="outline"
+                            >
+                              <input
+                                readonly="true"
+                                matInput="text"
+                                formControlName="occupation1"
+                              />
+                              <master-search
+                            (focusout)="openTab($event, 'occupation1')"
+                            #overlayOccupation1
+                            [MasterSearchData]="occupationMasterCode"
+                            class="masterSearch"
+                            (newRowClick)="occupation1MasterSelected($event)"
+                          ></master-search>
+                            </mat-form-field>
+                          </div>
+                        </div>
                       </div>
                       <div class="col-md-6">
                         <div class="row mb-5">
@@ -1221,6 +1249,36 @@
                             </mat-form-field>
                           </div>
                         </div>
+
+                        <div class="row mb-1">
+                          <label
+                            for="inputPassword"
+                            class="col-sm-5 col-form-label"
+                            id="ID035"
+                            >Source of found</label
+                          >
+                          <div class="col-md-7">
+                            <mat-form-field
+                              style="width: -webkit-fill-available"
+                              appearance="outline"
+                            >
+                              <input
+                                readonly="true"
+                                matInput
+                                type="text"
+                                formControlName="sourceOfFund"
+                              />
+                              <master-search
+                            (focusout)="openTab($event, 'sourceOfFund')"
+                            #overlaySourceOfFund
+                            [MasterSearchData]="sourceOfFundMasterCode"
+                            class="masterSearch"
+                            (newRowClick)="sourceOfFundMasterSelected($event)"
+                          ></master-search>
+                            </mat-form-field>
+                          </div>
+                        </div>
+
                       </div>
                     </div>
                   </div>
