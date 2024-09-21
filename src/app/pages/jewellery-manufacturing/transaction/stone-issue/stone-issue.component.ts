@@ -303,42 +303,80 @@ export class StoneIssueComponent implements OnInit {
   }
   selectedRows: any[] = [];
 
-  onSelectionChanged(event: any): void {
-    // Get all the selected row keys (SRNOs)
-    this.selectedRows = event.selectedRowKeys;
-    console.log('Selected Rows:', this.selectedRows);
-  }
-
   deleteTableData(): void {
-    if (!this.selectRowIndex) {
-      console.log(this.selectRowIndex, 'delete')
+    // Check if there are selected keys (rows) to delete
+    if (!this.selectedKey || this.selectedKey.length === 0) {
       Swal.fire({
-        title: '',
-        text: 'Please select row to remove from grid!',
+        title: 'Error',
+        text: 'Please select at least one row to delete!',
         icon: 'error',
         confirmButtonColor: '#336699',
-        confirmButtonText: 'Ok'
-      }).then((result: any) => {
-        if (result.value) {
-        }
+        confirmButtonText: 'OK'
       });
-      return
+      return;
     }
+  
+    // Show confirmation dialog
     Swal.fire({
       title: 'Are you sure?',
-      text: "You won't be able to revert this!",
+      text: 'You won\'t be able to revert this!',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete!'
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'Cancel',
+      focusCancel: true, // Focus on the cancel button by default
+      allowOutsideClick: false // Prevent closing the alert by clicking outside
     }).then((result) => {
       if (result.isConfirmed) {
-        this.stoneIssueData = this.stoneIssueData.filter((item: any, index: any) => item.SRNO != this.selectRowIndex)
-        this.reCalculateSRNO()
+        // Proceed with deletion if user confirms
+        this.selectedKey.forEach((element: any) => {
+          const index = this.stoneIssueData.findIndex(item => item.SRNO === element.SRNO);
+          if (index !== -1) {
+            this.stoneIssueData.splice(index, 1);
+          }
+        });
+  
+        // Recalculate SRNO after deletion
+        this.reCalculateSRNO();
+  
+        // Show success message
+        Swal.fire({
+          title: 'Deleted!',
+          text: 'Selected rows have been deleted.',
+          icon: 'success',
+          confirmButtonColor: '#336699',
+          confirmButtonText: 'OK'
+        });
+  
+        // Clear the selected keys after deletion
+        this.selectedKey = [];
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        // Optional: Handle cancellation
+        Swal.fire({
+          title: 'Cancelled',
+          text: 'Deletion process cancelled.',
+          icon: 'info',
+          confirmButtonColor: '#336699',
+          confirmButtonText: 'OK'
+        });
       }
-    }
-    )
+    });
+  }
+  
+  onSelectionChanged(event: any) {
+    this.selectedKey = event.selectedRowKeys;
+    console.log(this.selectedKey, 'srno')
+    let indexes: Number[] = [];
+    this.stoneIssueData.reduce((acc, value, index) => {
+      if (this.selectedKey.includes(parseFloat(value.SRNO))) {
+        acc.push(index);
+      }
+      return acc;
+    }, indexes);
+    this.selectedIndexes = indexes;
+    this.reCalculateSRNO()
   }
   reCalculateSRNO() {
     this.stoneIssueData.forEach((item: any, index: any) => {
