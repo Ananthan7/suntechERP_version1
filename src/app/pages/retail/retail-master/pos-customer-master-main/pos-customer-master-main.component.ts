@@ -45,6 +45,11 @@ export class PosCustomerMasterMainComponent implements OnInit {
   @ViewChild("overlayAgeGroup") overlayAgeGroup!: MasterSearchComponent;
   @ViewChild("overlayNextVisit") overlayNextVisit!: MasterSearchComponent;
   @ViewChild("overlayOccupation") overlayOccupation!: MasterSearchComponent;
+
+  @ViewChild("overlayOccupation1") overlayOccupation1!: MasterSearchComponent;
+  @ViewChild("overlaySourceOfFund")
+  overlaySourceOfFund!: MasterSearchComponent;
+
   @ViewChild("overlayCustomerType") overlayCustomerType!: MasterSearchComponent;
 
   private subscriptions: Subscription[] = [];
@@ -309,6 +314,18 @@ export class PosCustomerMasterMainComponent implements OnInit {
     VIEW_TABLE: true,
   };
 
+  sourceOfFundMasterCode: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "Source of Fund and Wealth",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "TYPES='SOURCE OF WEALTH AND FUNDS MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  };
+
   posCustomerMasterMainForm: FormGroup = this.formBuilder.group({
     code: [""],
     parentPosCode: [""],
@@ -358,6 +375,8 @@ export class PosCustomerMasterMainComponent implements OnInit {
     zodiacSign: [""],
     noOfChildren: [""],
     religion: [""],
+    occupation1: [""],
+    sourceOfFund: [""],
     category: [""],
     custStatus: [""],
     income: [""],
@@ -740,9 +759,19 @@ export class PosCustomerMasterMainComponent implements OnInit {
     this.posCustomerMasterMainForm.controls.occupation.setValue(e.CODE);
   }
 
+  occupation1MasterSelected(e: any) {
+    console.log(e);
+    this.posCustomerMasterMainForm.controls.occupation1.setValue(e.CODE);
+  }
+
   customerTypeSelected(e: any) {
     console.log(e);
     this.posCustomerMasterMainForm.controls.custType.setValue(e.CODE);
+  }
+
+  sourceOfFundMasterSelected(e: any) {
+    console.log(e);
+    this.posCustomerMasterMainForm.controls.sourceOfFund.setValue(e.CODE);
   }
 
   getDropDownStatus() {
@@ -921,7 +950,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
             this.posCustomerMasterMainForm.value.moblieCountry.toString() || "",
           MOBILECODE2:
             this.posCustomerMasterMainForm.value.moblie1Country || "",
-          IDCATEGORY: "",
+          IDCATEGORY: this.posCustomerMasterMainForm.value.custIdType || "",
           ADDRESS_OFFICIAL:
             this.posCustomerMasterMainForm.value.officialAddress || "",
           ADDRESS_DELIVARY:
@@ -1474,8 +1503,34 @@ export class PosCustomerMasterMainComponent implements OnInit {
       case "custType":
         this.overlayCustomerType.showOverlayPanel(event);
         break;
+      case "occupation1":
+        this.overlayOccupation1.showOverlayPanel(event);
+        break;
+      case "sourceOfFound":
+        this.overlaySourceOfFund.showOverlayPanel(event);
+        break;
       default:
         console.warn(`Unknown form control name: ${formControlName}`);
     }
+  }
+
+  transactionDetails(event: any) {
+    console.log(event);
+    console.log("Got Clicked");
+  }
+
+  printPrivilegeCard(event: any) {
+    console.log(event);
+    console.log("Got Clicked");
+  }
+
+  printCustomerLog(event: any) {
+    console.log(event);
+    console.log("Got Clicked");
+  }
+
+  getCustomerDetails(event: any) {
+    console.log(event);
+    console.log("Got Clicked");
   }
 }
