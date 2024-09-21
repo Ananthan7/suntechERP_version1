@@ -39,9 +39,7 @@ export class PosCrmDashboardComponent implements OnInit {
   diamondsection: ['',[Validators.required]],
   });
 
-  ngOnInit(
-    
-  ): void {
+  ngOnInit(): void {
   }
 
 
@@ -101,6 +99,15 @@ export class PosCrmDashboardComponent implements OnInit {
     }
   }
 
-
+  setDateValue(event: any){
+    if(event.FromDate){
+      // this.retailAdvanceReceiptRegisterForm.controls.fromDate.setValue(event.FromDate);
+      console.log(event.FromDate)
+    }
+    else if(event.ToDate){
+      // this.retailAdvanceReceiptRegisterForm.controls.toDate.setValue(event.ToDate);
+      // console.log(this.retailAdvanceReceiptRegisterForm)
+    }
+  }
 
 }
