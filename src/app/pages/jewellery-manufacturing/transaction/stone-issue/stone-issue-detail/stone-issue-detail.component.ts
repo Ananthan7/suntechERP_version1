@@ -198,6 +198,7 @@ export class StoneIssueDetailComponent implements OnInit {
   }
   setFormValues() {
     if (!this.content) return
+    console.log(this.content,'view&edit')
     this.branchCode = this.content.BRANCH_CODE || this.content.HEADERDETAILS.BRANCH_CODE;
     this.stoneIssueDetailsFrom.controls.VOCTYPE.setValue(this.content.VOCTYPE || this.content.HEADERDETAILS.VOCTYPE)
     this.stoneIssueDetailsFrom.controls.VOCNO.setValue(this.content.VOCNO || this.content.HEADERDETAILS.VOCNO)
@@ -232,6 +233,8 @@ export class StoneIssueDetailComponent implements OnInit {
     this.stoneIssueDetailsFrom.controls.DIVCODE.setValue(this.content.DIVCODE)
     this.stoneIssueDetailsFrom.controls.pointerwt.setValue(this.content.WEIGHT)
     this.stoneIssueDetailsFrom.controls.unitrate.setValue(this.content.AMOUNTFC)
+    this.stoneIssueDetailsFrom.controls.PART_CODE.setValue(this.content.PART_CODE)
+    this.stoneIssueDetailsFrom.controls.batchid.setValue(this.content.SUB_STOCK_CODE)
   }
   setValueWithDecimal(formControlName: string, value: any, Decimal: string) {
     this.stoneIssueDetailsFrom.controls[formControlName].setValue(
@@ -536,9 +539,26 @@ export class StoneIssueDetailComponent implements OnInit {
     }
   }
   changeJobClicked() {
-    this.formSubmit('CONTINUE')
-    this.stoneIssueDetailsFrom.reset()
+    // Check if stock code is filled
+    const stockCode = this.stoneIssueDetailsFrom.controls.stockCode.value; // Assuming stockCode is the control name
+    
+    if (!stockCode || stockCode.trim() === '') {
+      // Show an error alert if stock code is not filled
+      Swal.fire({
+        title: 'Error',
+        text: 'Please fill the Stock Code before changing the Job Number!',
+        icon: 'error',
+        confirmButtonColor: '#336699',
+        confirmButtonText: 'OK'
+      });
+      return; // Prevent further action
+    }
+  
+    // If stock code is filled, proceed with the form submission
+    this.formSubmit('CONTINUE');
+    this.stoneIssueDetailsFrom.reset();
   }
+  
   resetStockDetails() {
     this.stoneIssueDetailsFrom.controls.stockCode.setValue('')
     this.stoneIssueDetailsFrom.controls.stockCodeDes.setValue('')
