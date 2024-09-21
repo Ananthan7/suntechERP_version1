@@ -11,42 +11,49 @@
         <div class="col-md-12">
             <div class="row">
                 <div class="row mb-1">
-                    <div class="col-sm-2">
-                        <button type="button" class="btn btn-primary metal-issue-add-btn" id="ID001">
-                            Branch
-                        </button>
-                    </div>
-
-                    <label for="input" class="col-sm-1 col-form-label" id="ID002">Festival</label>
-                    <div class="col-sm-2">
-                        <div class="datepick">
-                            <mat-form-field appearance="outline" style="width: 100%;">
-                                <mat-select formControlName="reportto">
-                                  <mat-option value="1"></mat-option>
-                                </mat-select>
-                              </mat-form-field>
-                        </div>
-                    </div>
-
-                    <div class="col-sm-3">
-                        <section class="example-section">
-                            <mat-checkbox class="example-margin" id="ID003">Show Buying Pattern Summary By
-                            </mat-checkbox>
-                        </section>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <mat-form-field appearance="outline" style="width: 100%;">
-                            <input type="text" matInput formControlName="jobno" />
+                    <label for="inputPassword"  class="col-sm-1 col-form-label" id="ID001"> Branch</label>
+                    <div class="col-md-4">
+                        <mat-form-field appearance="outline" style="width: -webkit-fill-available">
+                        <input matInput="text" name="branch" autocomplete="off"
+                            formControlName="branch"/>
+                            <app-branch-division [fetchData]="fetchedBranchData" (newRowClick)="selectedData($event)"
+                            class="branchDivisionelectr" [matTooltip]="branchDivisionControlsTooltip"
+                            matTooltipClass="custom-tooltip"  matTooltipPosition="above"></app-branch-division>
                         </mat-form-field>
                     </div>
+
+                    <div class="col-md-6">
+                        <app-date (selectedDate)="setDateValue($event)"></app-date>
+                    </div> 
                 </div>
             </div>
             
             <div class="row mb-1">
-                <div class="col-md-6">
-                    <app-date (selectedDate)="setDateValue($event)"></app-date>
-                </div> 
+                <label for="input" class="col-sm-1 col-form-label" id="ID002">Festival</label>
+                <div class="col-sm-2">
+                    <div class="datepick">
+                        <mat-form-field appearance="outline" style="width: 100%;">
+                            <mat-select formControlName="festival">
+                                <mat-option *ngFor="let festival of festivalArr" [value]="festival">
+                                  {{ festival.Festival }}, {{ festival.Year }}, {{festival.Fromdate}}, {{festival.todate}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <div class="col-sm-3">
+                    <section class="example-section">
+                        <mat-checkbox class="example-margin" id="ID003">Show Buying Pattern Summary By
+                        </mat-checkbox>
+                    </section>
+                </div>
+
+                <div class="col-sm-4">
+                    <mat-form-field appearance="outline" style="width: 100%;">
+                        <input type="text" matInput formControlName="jobno" />
+                    </mat-form-field>
+                </div>
                 <!-- <label for="input" class="col-sm-1 col-form-label" id="ID004">Date Range</label>
                 <div class="col-sm-2">
                     <div class="datepick">
@@ -67,52 +74,85 @@
                             <mat-datepicker #jobdate></mat-datepicker>
                         </mat-form-field>
                     </div>
-                </div> -->
-                <div class="col-md-6">
-                  <div class="row">
-                    <label for="input" class="col-sm-3 col-form-label" id="ID005">Diamond Section</label>
-                    <div class="col-sm-5">
-                        <mat-form-field appearance="outline" style="width: 92%;">
-                            <mat-select formControlName="reportto">
-                            <mat-option value="1"></mat-option>
-                            </mat-select>
-                        </mat-form-field>
-                    </div> 
-                  </div>
-                </div>   
+                </div> -->   
             </div>
 
             <div class="row">
-                <div class="row mb-12">
-                    <label for="input" class="col-sm-1 col-form-label" id="ID006">Division</label>
-                    <div class="col-sm-2">
-                        <mat-form-field appearance="outline" style="width: 93%;">
-                            <mat-select formControlName="reportto">
-                              <mat-option value="1"></mat-option>
-                            </mat-select>
-                          </mat-form-field>
+               <div class="col-md-3">
+                    <div class="row">
+                        <label for="input" class="col-sm-4 col-form-label" id="ID005">Diamond Section</label>
+                        <div class="col-sm-8 mt-2">
+                            <mat-form-field appearance="outline" style="width: 100%;">
+                                <mat-select formControlName="diamondsection">
+                                    <mat-option *ngFor="let item of diamondSectionArr" [value]="item.MASFIELD">
+                                        {{item.DISPNAME}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>   
                     </div>
-                    <div class="col-sm-2">
-                        <label for="input" class="col-sm-1 col-form-label"></label>
-                    </div>
-                    <label for="input" class="col-sm-3 col-form-label" id="ID007">Metal</label>
-                    <div class="col-sm-2">
-                        <mat-form-field appearance="outline" style="width: 100%;">
-                            <mat-select formControlName="reportto">
-                              <mat-option value="1"></mat-option>
-                            </mat-select>
-                          </mat-form-field>
-                    </div>
-                    <div class="col-sm-2">
-                        <div class="p-2 bd-highlight">
-                            <button type="button" class="btn btn-primary metal-issue-add-btn" id="ID008">
-                                Refresh
-                            </button>
-                        </div>
+               </div>   
+
+               <div class="col-md-3">
+                    <div class="row">
+                        <label for="input" class="col-sm-4 col-form-label" id="ID009">Divisions</label>
+                        <div class="col-sm-8 mt-2">
+                            <mat-form-field appearance="outline" style="width: 100%;">
+                                <mat-select formControlName="divisions">
+                                    <mat-option *ngFor="let item of divisionsArr" [value]="item.Code">
+                                        {{item.Type}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>   
                     </div>
                 </div>
-            </div>
+
+                <div class="col-md-3">
+                    <div class="row">
+                        <label for="input" class="col-sm-4 col-form-label" id="ID005">Metal</label>
+                        <div class="col-sm-8 mt-2">
+                            <mat-form-field appearance="outline" style="width: 100%;">
+                                <mat-select formControlName="metal">
+                                    <mat-option *ngFor="let item of metalSectionArr" [value]="item.MASFIELD">
+                                        {{item.DISPNAME}}
+                                    </mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                        </div>   
+                    </div>
+                </div>
+
+                <div class="col-sm-2">
+                    <div class="p-2 bd-highlight">
+                        <button type="button" class="btn btn-primary metal-issue-add-btn" id="ID008">
+                            Refresh
+                        </button>
+                    </div>
+                </div>    
+           </div>          
         </div>  
+
+        <dx-popup  [width]="300" [height]="180" [showTitle]="true" container=".dx-viewport" title="Template Data" 
+        [dragEnabled]="false" [showCloseButton]="false"
+        (onHidden)="popupClosed()" [visible]="popupVisible">
+            <div class="popup-content">
+                <div class="form-group">
+                <label for="T_Name">Name:</label>
+                <input type="text" id="T_Name" class="form-control" formControlName="templateName"/>
+                </div>
+                <div class="button-group d-flex">
+                    <button mat-flat-button [ngClass]="{'SaveNew_template': templateNameHasValue, 'btn-m-r-10': true, 'demo-button': true,
+                    'btn-width': true,'mx-1': true }" (click)="saveTemplate_DB()">
+                        {{ templateNameHasValue ? 'Save as New Template' : 'Save' }}
+                    </button>
+                    <button mat-flat-button class="btn-m-r-10 btn-width mx-1 cancelBTN" (click)="popupClosed()">Cancel</button>
+                </div>
+                <br>
+                <br>
+                <br>
+            </div>
+        </dx-popup>
        
         <div class="col-md-12 mt-3">
             <mat-tab-group style="background-color: #f5f2ee;">
@@ -126,7 +166,43 @@
                 <mat-tab label="Sales Suggestion(Metal Jew)">
                 </mat-tab>
             </mat-tab-group>
+        </div>
 
+        <div class="row mt-2 justify-content-end mx-2">
+            <div class="icon-label-container" (click)="saveTemplate()" matTooltip="Save the selections as a new template">
+              <i class="fa fa-bookmark fa-2x mt-3" style="color: #5497b2"></i>
+              <span style="font-size: inherit;">Save as Template</span>
+            </div>
+
+            <div class="icon-label-container" (click)="previewClick()" matTooltip="Preview the content">
+              <i class="fa fa-eye fa-2x" style="color: #5497b2"></i>
+              <span class="label">Preview</span>
+            </div>
+
+            <div class="icon-label-container" matTooltip="Take a print">
+              <i class="fa fa-print fa-2x" style="color: #031082"></i>
+              <span class="label">Print</span>
+            </div>
+
+            <div class="icon-label-container"  matTooltip="Generate Excel Report">
+              <i class="fa fa-file-excel fa-2x" style="color: green"></i>
+              <span class="label">Excel</span>
+            </div>
+
+            <div class="icon-label-container" matTooltip="Generate PDF Report">
+              <i class="fa fa-file-pdf fa-2x" style="color: orangered"></i>
+              <span class="label">PDF</span>
+            </div>
+
+            <div class="icon-label-container" matTooltip="Sent through mail">
+              <i class="fa fa-envelope fa-2x" style="color: deepskyblue"></i>
+              <span class="label">Email</span>
+            </div>
+
+            <div class="icon-label-container" matTooltip="Sent through whatsapp">
+              <i class="fab fa-whatsapp fa-2x" style="color: #29cf26"></i>
+              <span style="font-size: inherit;">Whatsapp</span>
+            </div>
         </div>
     </form>
 </div>

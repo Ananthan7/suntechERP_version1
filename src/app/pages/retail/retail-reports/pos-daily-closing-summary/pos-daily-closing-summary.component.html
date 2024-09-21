@@ -12,6 +12,42 @@
 <div class="container-fluid pt-3">
     <form [formGroup]="posDailyClosingSummaryForm">
 
+        <div class="row mb-3">
+            <label for="inputPassword"  class="col-sm-1 col-form-label"  id="ID001"> Branch</label>
+            <div class="col-md-2">
+                <mat-form-field appearance="outline" style="width: -webkit-fill-available">
+                <input matInput="text" name="branch" autocomplete="off" formControlName="branch"/>
+                <app-branch-division [fetchData]="fetchedBranchData" (newRowClick)="selectedData($event)"
+                class="branchDivisionelectr" [matTooltip]="branchDivisionControlsTooltip"
+                matTooltipClass="custom-tooltip"  matTooltipPosition="above"></app-branch-division>
+                </mat-form-field>
+            </div>
+
+            <div class="col-md-7">
+                <app-date (selectedDate)="setDateValue($event)"></app-date>
+            </div> 
+
+            <!-- <div class="col-md-2" style="margin-left: -5rem !important">
+                <div class="text-center d-flex justify-content-between mt-1">
+                    <div class="p-1 bd-highlight">
+                        <button type="button" class="btn btn-primary add-btn">
+                            <i class="fas fa-sync-alt"></i>
+                        </button>
+                    </div>
+                    <div class="p-1 bd-highlight">
+                        <button type="button" class="btn btn-primary add-btn">
+                            <i class="fas fa-print"></i>
+                        </button>
+                    </div>
+                    <div class="p-1 bd-highlight">
+                        <button type="button" class="btn btn-primary add-btn">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>  -->
+        </div>
+
         <div class="row mb-5">
             <label for="inputPassword" class="col-sm-1 col-form-label" id="ID002">Transaction</label>
             <div class="col-md-2">
@@ -50,45 +86,7 @@
                         </div>
                     </div>
                 </fieldset>
-            </div>
-
-            <div class="col-md-3">
-                <div class="text-center d-flex justify-content-between mt-1">
-                    <div class="p-1 bd-highlight">
-                        <button type="button" class="btn btn-primary add-btn">
-                            <i class="fas fa-sync-alt"></i>
-                        </button>
-                    </div>
-                    <div class="p-1 bd-highlight">
-                        <button type="button" class="btn btn-primary add-btn">
-                            <i class="fas fa-print"></i>
-                        </button>
-                    </div>
-                    <div class="p-1 bd-highlight">
-                        <button type="button" class="btn btn-primary add-btn">
-                            <i class="fas fa-sign-out-alt"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="row mb-3">
-                <div class="col-md-7 d-flex align-items-center">
-                    <app-date (selectedDate)="setDateValue($event)"></app-date>
-                </div> 
-                <label for="inputPassword" class="col-sm-1 col-form-label me-0" id="ID001" style="position: relative;
-                margin-left: -90px;">Branch</label>
-                <div class="col-md-2">
-                    <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
-                        <input matInput="text" name="branch" autocomplete="off"/>
-                        <app-branch-division (newRowClick)="selectedData($event)" class="branchDivisionelectr"
-                        [matTooltip]="branchDivisionControls"  matTooltipClass="custom-tooltip"  
-                        matTooltipPosition="above"></app-branch-division>
-                    </mat-form-field>
-                </div> 
-            </div>
-            
+            </div>      
 
             <div class="row">
                 <div class="col-md-6">
