@@ -6,7 +6,8 @@
     </button>
   </div>
   <!-- modal header component -->
-  <modal-header  (cancelClick)="close()" ></modal-header>
+  <modal-header  (cancelClick)="close()"  [isViewSave]="false" [isViewCancel]="false"
+  [isViewDelete]="false" [isViewMore]="false"  [isloading]="isLoading"></modal-header> 
   
   
   <div class="container-fluid">
@@ -23,16 +24,14 @@
                   </button>
               </div>
             </div>
-            <div class="col-md-4">
-
+            <div class="col-md-4 mt-2">
               <div class=" row ">
                 <div class="col-md-6">
-                  <mat-form-field style="width: 100%;">
+                  <mat-form-field appearance="outline" style="width: 100%;">
                     <input type="text" matInput formControlName="lossaccount" [readonly]="viewMode" />
                   </mat-form-field>
                 </div>
               </div>
-  
             </div>
           
           </div>
@@ -66,15 +65,15 @@
         <div class="row">
             <div class="col-md-8">
               
-              <div class="row">
+              <div class="row mb-1">
                 <label for="inputPassword" class="col-sm-2 col-form-label" id="ID002">Sales Man :</label>
                 <div class="col-md-5">
-                  <mat-form-field style="width: 72%;">
+                  <mat-form-field appearance="outline" style="width: 72%;">
                     <input type="text" matInput />
                   </mat-form-field>
                 </div>
-                <div class="col-md-5 pt-3">
-                  <div class="p-2 bd-highlight">
+                <div class="col-md-5 pt-1">
+                  <div class="bd-highlight">
                     <button type="button" class="btn btn-primary apporoval-add-btn" id="ID003">
                       Continue
                     </button>
@@ -82,15 +81,15 @@
                 </div>
               </div>
 
-              <div class="row">
+              <div class="row mb-1">
                 <label for="inputPassword" class="col-sm-2 col-form-label" id="ID004">Percentage :</label>
                 <div class="col-md-5">
-                  <mat-form-field style="width: 72%;">
+                  <mat-form-field appearance="outline" style="width: 72%;">
                     <input type="text" matInput />
                   </mat-form-field>
                 </div>
-                <div class="col-md-5 pt-3">
-                  <div class="p-2 bd-highlight">
+                <div class="col-md-5 pt-1">
+                  <div class="bd-highlight">
                     <button type="button" class="btn btn-primary apporoval-add-btn" id="ID005">
                   Save
                 </button>
@@ -98,15 +97,15 @@
                 </div>
               </div>
 
-              <div class="row">
+              <div class="row mb-1">
                 <label for="inputPassword" class="col-sm-2 col-form-label" id="ID006">Amount LC :</label>
                 <div class="col-md-5">
-                  <mat-form-field style="width: 72%;">
+                  <mat-form-field appearance="outline" style="width: 72%;">
                     <input type="text" matInput />
                   </mat-form-field>
                 </div>
-                <div class="col-md-5 pt-3">
-                  <div class="p-2 bd-highlight">
+                <div class="col-md-5 pt-1">
+                  <div class="bd-highlight">
                     <button type="button" class="btn btn-primary apporoval-add-btn" id="ID007">
                       Cancel
                     </button>
@@ -119,31 +118,7 @@
         </div>
       </div>
 
-      <div class="col-md-12">
-        <div class="row">
-          <div class="col-md-8 d-flex">
-
-            <div class="p-2 bd-highlight">
-              <button type="button" class="btn btn-primary apporoval-add-btn" id="ID008">
-                Add
-              </button>
-            </div>
-
-            <div class="p-2 bd-highlight mg_2">
-              <button type="button" class="btn btn-primary apporoval-add-btn" id="ID009">
-                Delete
-              </button>
-            </div>
-
-            <div class="p-2 bd-highlight mg_2">
-              <button type="button" class="btn btn-primary apporoval-add-btn" id="ID010">
-                Close
-              </button>
-            </div> 
-
-          </div>
-        </div>
-      </div>
+      
   
     </form>
   </div>
