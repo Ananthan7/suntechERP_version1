@@ -7,6 +7,7 @@ export interface MasterSearchModel {
     WHERECONDITION?: string,
     SEARCH_FIELD?: string;
     SEARCH_VALUE?: string;
+    VIEW_ICON?: boolean;
     VIEW_INPUT?: boolean;
     VIEW_TABLE?: boolean;
     LOAD_ONCLICK?: boolean;
