@@ -53,6 +53,7 @@ import { MasterFindIconComponent } from './common/master-find-icon/master-find-i
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { MasterSearchComponent } from './common/master-search/master-search.component';
 import { NumericInputDirective } from './directives/number-only.directive';
+
 import { DecimalInputDirective } from './directives/number-with-decimal.directive';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatTableModule } from '@angular/material/table';
@@ -99,6 +100,7 @@ import { DateComponent } from './common/date/date.component';
 import { AsOnDateComponent } from './common/as-on-date/as-on-date.component';
 import { CommonButtonsComponent } from './common/common-buttons/common-buttons.component';
 import { AlphabetOnlyDirective } from './directives/appAlphabetOnly.directive';
+import { ApplyOnlyNumbersDirective } from './directives/apply-only-numbers.directive';
 
 
 @NgModule({
@@ -140,6 +142,8 @@ import { AlphabetOnlyDirective } from './directives/appAlphabetOnly.directive';
     DurationPickerComponent,
     FormatThreeDecimalDirective,
     CommaSeparatedNumberDirective,
+    
+    ApplyOnlyNumbersDirective,
     AttachmentUploadComponent,
     AuthCheckerComponent,
     GridSearchComponent,
