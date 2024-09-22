@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild,ElementRef } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild, ElementRef } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
@@ -37,6 +37,7 @@ export class StoneIssueDetailComponent implements OnInit {
   jobNumberDetailData: any[] = [];
   imagepath: any[] = []
   viewMode: boolean = false;
+  isDisableSaveBtn: boolean = false;
   editMode: boolean = false;
   user: MasterSearchModel = {
     PAGENO: 1,
@@ -197,6 +198,7 @@ export class StoneIssueDetailComponent implements OnInit {
   }
   setFormValues() {
     if (!this.content) return
+    console.log(this.content,'view&edit')
     this.branchCode = this.content.BRANCH_CODE || this.content.HEADERDETAILS.BRANCH_CODE;
     this.stoneIssueDetailsFrom.controls.VOCTYPE.setValue(this.content.VOCTYPE || this.content.HEADERDETAILS.VOCTYPE)
     this.stoneIssueDetailsFrom.controls.VOCNO.setValue(this.content.VOCNO || this.content.HEADERDETAILS.VOCNO)
@@ -231,6 +233,8 @@ export class StoneIssueDetailComponent implements OnInit {
     this.stoneIssueDetailsFrom.controls.DIVCODE.setValue(this.content.DIVCODE)
     this.stoneIssueDetailsFrom.controls.pointerwt.setValue(this.content.WEIGHT)
     this.stoneIssueDetailsFrom.controls.unitrate.setValue(this.content.AMOUNTFC)
+    this.stoneIssueDetailsFrom.controls.PART_CODE.setValue(this.content.PART_CODE)
+    this.stoneIssueDetailsFrom.controls.batchid.setValue(this.content.SUB_STOCK_CODE)
   }
   setValueWithDecimal(formControlName: string, value: any, Decimal: string) {
     this.stoneIssueDetailsFrom.controls[formControlName].setValue(
@@ -289,7 +293,7 @@ export class StoneIssueDetailComponent implements OnInit {
   }
 
   stockCodeSelected(e: any) {
-    console.log(e,'eee')
+    console.log(e, 'eee')
     this.stoneIssueDetailsFrom.controls.stockCode.setValue(e.STOCK_CODE);
     this.stoneIssueDetailsFrom.controls.stockCodeDes.setValue(e.STOCK_DESCRIPTION);
     this.stoneIssueDetailsFrom.controls.DIVCODE.setValue(e.Item);
@@ -308,7 +312,7 @@ export class StoneIssueDetailComponent implements OnInit {
     this.stoneIssueDetailsFrom.controls.amount.setValue(e.AmountLC)
     this.stoneIssueDetailsFrom.controls.pointerwt.setValue(e.Weight)
     this.stoneIssueDetailsFrom.controls.batchid.setValue(e.STOCK_CODE);
-    
+
     this.setStockCodeWhereCondition()
   }
   setStockCodeWhereCondition() {
@@ -413,17 +417,16 @@ export class StoneIssueDetailComponent implements OnInit {
 
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     LOOKUPDATA.SEARCH_VALUE = event.target.value
-
-    if (event.target.value == '' || this.viewMode == true) return
+    if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
       WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
     }
-    this.comService.showSnackBarMsg('MSG81447');
-    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
-    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+    this.comService.toastInfoByMsgId('MSG81447');
+    let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
       .subscribe((result) => {
-        this.comService.closeSnackBarMsg()
+        this.isDisableSaveBtn = false;
         let data = this.comService.arrayEmptyObjectToString(result.dynamicData[0])
         if (data.length == 0) {
           this.comService.toastErrorByMsgId('MSG1531')
@@ -431,9 +434,12 @@ export class StoneIssueDetailComponent implements OnInit {
           LOOKUPDATA.SEARCH_VALUE = ''
           if (FORMNAME === 'LOCTYPE_CODE') {
             this.showOverleyPanel(event, FORMNAME);
+          } {
+            this.showOverleyPanel(event, FORMNAME);
           }
           return
         }
+
       }, err => {
         this.comService.toastErrorByMsgId('MSG2272')//Error occured, please try again
       })
@@ -487,11 +493,11 @@ export class StoneIssueDetailComponent implements OnInit {
       "SIZE": this.comService.nullToString(form.size),
       "JOB_PCS": 0,
       "PCS": this.comService.emptyToZero(form.pieces),
-      "GROSS_WT": 0,
+      "GROSS_WT": this.comService.emptyToZero(form.GROSS_WT),
       "CURRENCY_CODE": this.comService.nullToString(form.CURRENCY_CODE),
       "CURRENCY_RATE": this.comService.emptyToZero(form.CURRENCY_RATE),
-      "RATEFC": 0,
-      "RATELC": 0,
+      "RATEFC": this.comService.emptyToZero(form.RATEFC),
+      "RATELC": this.comService.emptyToZero(form.RATELC),
       "AMOUNTFC": this.comService.emptyToZero(form.unitrate),
       "AMOUNTLC": this.comService.emptyToZero(form.amount),
       "PROCESS_CODE": this.comService.nullToString(form.process),
@@ -533,9 +539,26 @@ export class StoneIssueDetailComponent implements OnInit {
     }
   }
   changeJobClicked() {
-    this.formSubmit('CONTINUE')
-    this.stoneIssueDetailsFrom.reset()
+    // Check if stock code is filled
+    const stockCode = this.stoneIssueDetailsFrom.controls.stockCode.value; // Assuming stockCode is the control name
+    
+    if (!stockCode || stockCode.trim() === '') {
+      // Show an error alert if stock code is not filled
+      Swal.fire({
+        title: 'Error',
+        text: 'Please fill the Stock Code before changing the Job Number!',
+        icon: 'error',
+        confirmButtonColor: '#336699',
+        confirmButtonText: 'OK'
+      });
+      return; // Prevent further action
+    }
+  
+    // If stock code is filled, proceed with the form submission
+    this.formSubmit('CONTINUE');
+    this.stoneIssueDetailsFrom.reset();
   }
+  
   resetStockDetails() {
     this.stoneIssueDetailsFrom.controls.stockCode.setValue('')
     this.stoneIssueDetailsFrom.controls.stockCodeDes.setValue('')
@@ -549,84 +572,84 @@ export class StoneIssueDetailComponent implements OnInit {
     this.tableData[0].STOCK_CODE = ''
   }
 
- stockCodeValidate(event: any) {
+  stockCodeValidate(event: any) {
     if (event.target.value === '') return;
 
     let postData = {
-        "SPID": "046",
-        "parameter": {
-            strStockCode: event.target.value,
-            strBranchCode: this.comService.nullToString(this.branchCode),
-            strVocType: this.content.HEADERDETAILS.VOCTYPE,
-            strUserName: this.comService.nullToString(this.userName),
-            strLocation: '',
-            strPartyCode: '',
-            strVocDate: this.comService.formatDateTime(this.comService.currentDate)
-        }
+      "SPID": "046",
+      "parameter": {
+        strStockCode: event.target.value,
+        strBranchCode: this.comService.nullToString(this.branchCode),
+        strVocType: this.content.HEADERDETAILS.VOCTYPE,
+        strUserName: this.comService.nullToString(this.userName),
+        strLocation: '',
+        strPartyCode: '',
+        strVocDate: this.comService.formatDateTime(this.comService.currentDate)
+      }
     };
 
     this.comService.showSnackBarMsg('MSG81447');
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
-        .subscribe((result) => {
-            this.comService.closeSnackBarMsg();
-            if (result.status === "Success" && result.dynamicData[0]) {
-                let data = result.dynamicData[0];
-                let stockDetails = result.dynamicData[1];
+      .subscribe((result) => {
+        this.comService.closeSnackBarMsg();
+        if (result.status === "Success" && result.dynamicData[0]) {
+          let data = result.dynamicData[0];
+          let stockDetails = result.dynamicData[1];
 
-                if (data.RESULT_TYPE === "Failed") {
-                    this.comService.toastErrorByMsgId("MSG1464");
-                    return;
-                }
+          if (data.RESULT_TYPE === "Failed") {
+            this.comService.toastErrorByMsgId("MSG1464");
+            return;
+          }
 
-                if (data[0].VALID_STOCK) {
-                    // Handle the valid stock case
-                    if (stockDetails) {
-                        console.log(stockDetails, 'data');
-                        this.stoneIssueDetailsFrom.controls.DIVCODE.setValue(stockDetails[0].DIVCODE);
-                        this.stoneIssueDetailsFrom.controls.carat.setValue(stockDetails[0].KARAT);
-                        this.stoneIssueDetailsFrom.controls.SIEVE_SET.setValue(stockDetails[0].SIEVE_SET);
-                        this.stoneIssueDetailsFrom.controls.size.setValue(stockDetails[0].SIZE);
-                        this.stoneIssueDetailsFrom.controls.sieve.setValue(stockDetails[0].SIEVE);
-                        this.stoneIssueDetailsFrom.controls.SIEVE_DESC.setValue(stockDetails[0].SIEVE_DESC);
-                        this.stoneIssueDetailsFrom.controls.pieces.setValue(stockDetails[0].PCS);
-                        this.stoneIssueDetailsFrom.controls.shape.setValue(stockDetails[0].SHAPE);
-                    }
-                    this.overlaystockCodeSearch.closeOverlayPanel(); // Close the overlay only if the stock is valid
-                } else {
-                    this.comService.toastErrorByMsgId('MSG1531');
-                    this.stoneIssueDetailsFrom.controls.stockCode.setValue('');
-                    // Do not close the overlay, keep it open
-                    this.showOverleyPanel(event, 'stockCode');
-                }
-            } else {
-                this.comService.toastErrorByMsgId('MSG1531');
-                this.stoneIssueDetailsFrom.controls.stockCode.setValue('');
-                this.showOverleyPanel(event, 'stockCode'); // Ensure the overlay remains open in case of errors
+          if (data[0].VALID_STOCK) {
+            // Handle the valid stock case
+            if (stockDetails) {
+              console.log(stockDetails, 'data');
+              this.stoneIssueDetailsFrom.controls.DIVCODE.setValue(stockDetails[0].DIVCODE);
+              this.stoneIssueDetailsFrom.controls.carat.setValue(stockDetails[0].KARAT);
+              this.stoneIssueDetailsFrom.controls.SIEVE_SET.setValue(stockDetails[0].SIEVE_SET);
+              this.stoneIssueDetailsFrom.controls.size.setValue(stockDetails[0].SIZE);
+              this.stoneIssueDetailsFrom.controls.sieve.setValue(stockDetails[0].SIEVE);
+              this.stoneIssueDetailsFrom.controls.SIEVE_DESC.setValue(stockDetails[0].SIEVE_DESC);
+              this.stoneIssueDetailsFrom.controls.pieces.setValue(stockDetails[0].PCS);
+              this.stoneIssueDetailsFrom.controls.shape.setValue(stockDetails[0].SHAPE);
             }
-        }, err => {
-            this.comService.closeSnackBarMsg();
+            this.overlaystockCodeSearch.closeOverlayPanel(); // Close the overlay only if the stock is valid
+          } else {
             this.comService.toastErrorByMsgId('MSG1531');
             this.stoneIssueDetailsFrom.controls.stockCode.setValue('');
-            this.showOverleyPanel(event, 'stockCode'); // Ensure the overlay remains open in case of errors
-        });
+            // Do not close the overlay, keep it open
+            this.showOverleyPanel(event, 'stockCode');
+          }
+        } else {
+          this.comService.toastErrorByMsgId('MSG1531');
+          this.stoneIssueDetailsFrom.controls.stockCode.setValue('');
+          this.showOverleyPanel(event, 'stockCode'); // Ensure the overlay remains open in case of errors
+        }
+      }, err => {
+        this.comService.closeSnackBarMsg();
+        this.comService.toastErrorByMsgId('MSG1531');
+        this.stoneIssueDetailsFrom.controls.stockCode.setValue('');
+        this.showOverleyPanel(event, 'stockCode'); // Ensure the overlay remains open in case of errors
+      });
 
     this.subscriptions.push(Sub);
-}
+  }
 
-getImageData() {
-  let API = `Image/${this.stoneIssueDetailsFrom.value.jobNumber}`
-  let Sub: Subscription = this.dataService.getDynamicAPI(API)
-    .subscribe((result) => {
-      if (result.response) {
-        let data = result.response
-        this.imagepath = data.map((item: any) => item.imagepath)
-      }
-    }, err => {
-      this.comService.toastErrorByMsgId('MSG1531')
-    })
-  this.subscriptions.push(Sub)
-}
-  
+  getImageData() {
+    let API = `Image/${this.stoneIssueDetailsFrom.value.jobNumber}`
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        if (result.response) {
+          let data = result.response
+          this.imagepath = data.map((item: any) => item.imagepath)
+        }
+      }, err => {
+        this.comService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
+  }
+
 
   subJobNumberValidate(event?: any) {
     // let postData = {
@@ -680,7 +703,7 @@ getImageData() {
       "parameter": {
         'strBranchCode': this.comService.nullToString(this.comService.branchCode),
         'strJobNumber': this.comService.nullToString(event.target.value),
-        'strCurrenctUser': this.comService.nullToString(this.userName)
+        'strCurrenctUser': this.comService.nullToString(this.comService.userName)
       }
     }
 
@@ -690,9 +713,9 @@ getImageData() {
         this.comService.closeSnackBarMsg()
         if (result.status == "Success" && result.dynamicData[0]) {
           let data = result.dynamicData[0]
-          if (data && data[0]?.UNQ_JOB_ID != '') {
-            console.log(data[0],'pick')
+          if (data[0] && data[0]?.UNQ_JOB_ID != '') {
             this.jobNumberDetailData = data
+            console.log(data, 'pick')
             this.stoneIssueDetailsFrom.controls.jobDes.setValue(data[0].JOB_DESCRIPTION)
             this.stoneIssueDetailsFrom.controls.subjobnumber.setValue(data[0].UNQ_JOB_ID)
             this.stoneIssueDetailsFrom.controls.subjobDes.setValue(data[0].DESCRIPTION)
@@ -704,7 +727,7 @@ getImageData() {
             // } else {
             //   this.stoneIssueDetailsFrom.controls.DIVCODE.setValue("Z");
             // }
-            this.overlayjobNumberSearch.closeOverlayPanel()
+            // this.overlayjobNumberSearch.closeOverlayPanel()
             this.subJobNumberValidate()
           } else {
             this.comService.toastErrorByMsgId('MSG1531')

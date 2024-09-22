@@ -28,7 +28,9 @@ export class PosSalesmanCommissionComponent implements OnInit {
   currentDate = new Date();
   viewMode: boolean = false;
   selectedKey: number[] = []
+  isLoading: boolean = false;
 
+  
   private subscriptions: Subscription[] = [];
 
   constructor(

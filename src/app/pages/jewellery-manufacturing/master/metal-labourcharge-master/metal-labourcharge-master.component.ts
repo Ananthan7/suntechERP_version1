@@ -399,13 +399,13 @@ export class MetalLabourchargeMasterComponent implements OnInit {
     karat: [''],
     labourAc: [''],
     color: [''],
-    metalcost_rate: [''],
+    metalcost_rate: ['', [Validators.required]],
     typecode: [''],
-    metalselling_rate: [''],
+    metalselling_rate: ['', [Validators.required]],
     category: [''],
-    metalSelling: [''],
+    metalSelling: ['', [Validators.required]],
     subCategory: [''],
-    wastage: [''],
+    wastage: ['', [Validators.required]],
     brand: [''],
     metalunitList: ['', [Validators.required]],
     purity: [''],
@@ -763,7 +763,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
     this.metallabourMasterForm.controls.purity.setValue(e.STD_PURITY);
     this.stockCodeData.WHERECONDITION = `DIVISION_CODE = '${this.metallabourMasterForm.value.metalDivision}' and SUBCODE = '0'`;
     this.getKaratcode()
-     this.codeDisable()
+    //  this.codeDisable[()
    
 
   }
@@ -959,9 +959,15 @@ export class MetalLabourchargeMasterComponent implements OnInit {
     let API = 'MetalStockMaster/GetMetalStockMasterHeaderAndDetail/' + this.metallabourMasterForm.value.stock_code + "/" + this.metallabourMasterForm.value.metalDivision;
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
-
+        console.log(result.response);
+        
         this.metallabourMasterForm.controls['karat'].setValue(result.response.KARAT_CODE);
         this.metallabourMasterForm.controls['purity'].setValue(result.response.PURITY);
+        this.metallabourMasterForm.controls['brand'].setValue(result.response.BRAND_CODE);
+        this.metallabourMasterForm.controls['category'].setValue(result.response.CATEGORY_CODE);
+        this.metallabourMasterForm.controls['subCategory'].setValue(result.response.SUB_CATEGORY_CODE);
+        this.metallabourMasterForm.controls['typecode'].setValue(result.response.TYPE_CODE);
+        this.metallabourMasterForm.controls['color'].setValue(result.response.COLOR_CODE);
 
       }, err => {
         this.commonService.toastErrorByMsgId('MSG81451')//Server Error occured, please try again
@@ -1002,6 +1008,10 @@ export class MetalLabourchargeMasterComponent implements OnInit {
       return true
     }
     else if (this.commonService.nullToString(form.metalunitList) == '') {
+      this.commonService.toastErrorByMsgId('MSG1927')//"unitList cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.metalselling_rate) == '' || this.commonService.nullToString(form.metalselling_rate) == '0.00') {
       this.commonService.toastErrorByMsgId('MSG1927')//"unitList cannot be empty"
       return true
     }
@@ -1460,11 +1470,11 @@ export class MetalLabourchargeMasterComponent implements OnInit {
     if (data == 'metalSelling') {
       this.viewsellingrateMetal = true;
       this.viewsellingMetal = false;
-      this.metallabourMasterForm.controls.metalselling_rate.setValue(0.00);
+      this.metallabourMasterForm.controls.metalselling_rate.setValue('0.00');
     } else if (data == 'metalselling_rate') {
       this.viewsellingMetal = true;
       this.viewsellingrateMetal = false;
-      this.metallabourMasterForm.controls.metalSelling.setValue(0.00);
+      this.metallabourMasterForm.controls.metalSelling.setValue('0.00');
     } else {
       this.viewsellingMetal = false;
       this.viewsellingrateMetal = false;

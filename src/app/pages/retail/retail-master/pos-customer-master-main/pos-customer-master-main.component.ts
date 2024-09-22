@@ -2,6 +2,7 @@ import { Component, Input, OnInit, ViewChild } from "@angular/core";
 import {
   AbstractControl,
   FormBuilder,
+  FormControl,
   FormGroup,
   ValidationErrors,
   Validators,
@@ -44,8 +45,12 @@ export class PosCustomerMasterMainComponent implements OnInit {
   @ViewChild("overlayAgeGroup") overlayAgeGroup!: MasterSearchComponent;
   @ViewChild("overlayNextVisit") overlayNextVisit!: MasterSearchComponent;
   @ViewChild("overlayOccupation") overlayOccupation!: MasterSearchComponent;
-  @ViewChild("overlayCustomerType") overlayCustomerType!: MasterSearchComponent;
 
+  @ViewChild("overlayOccupation1") overlayOccupation1!: MasterSearchComponent;
+  @ViewChild("overlaySourceOfFund")
+  overlaySourceOfFund!: MasterSearchComponent;
+
+  @ViewChild("overlayCustomerType") overlayCustomerType!: MasterSearchComponent;
 
   private subscriptions: Subscription[] = [];
   @Input() content!: any;
@@ -68,7 +73,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
   stateListData: any;
   selectedstateISO2: any;
   cityListData: any;
-
+  amlValidation: any;
   // Dialog box
   dialogBox: any;
   dialogBoxResult: any;
@@ -309,13 +314,25 @@ export class PosCustomerMasterMainComponent implements OnInit {
     VIEW_TABLE: true,
   };
 
+  sourceOfFundMasterCode: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "Source of Fund and Wealth",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "TYPES='SOURCE OF WEALTH AND FUNDS MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  };
+
   posCustomerMasterMainForm: FormGroup = this.formBuilder.group({
     code: [""],
     parentPosCode: [""],
     refBy: [""],
     name: [""],
     nameDesc: [""],
-    creditCardLimitCheck: [false],
+    creditCardLimitCheck: new FormControl({ value: "", disabled: false }),
     creditCardLimit: [{ value: "", disabled: true }],
     gender: [""],
     maritalSt: [""],
@@ -342,7 +359,11 @@ export class PosCustomerMasterMainComponent implements OnInit {
     city: [""],
     language: [""],
     favCelebration: [""],
-    vat: ["", [Validators.required, Validators.maxLength(15)]],
+    vat: new FormControl("", [
+      Validators.required,
+      Validators.maxLength(15),
+      Validators.pattern(/^\d{0,15}$/),
+    ]),
     panNo: [
       "",
       [Validators.required, Validators.maxLength(10), this.panValidator],
@@ -354,6 +375,8 @@ export class PosCustomerMasterMainComponent implements OnInit {
     zodiacSign: [""],
     noOfChildren: [""],
     religion: [""],
+    occupation1: [""],
+    sourceOfFund: [""],
     category: [""],
     custStatus: [""],
     income: [""],
@@ -372,6 +395,8 @@ export class PosCustomerMasterMainComponent implements OnInit {
     whatsapp: [false],
     notInterested: [false],
     tv: [false],
+    facebook: [""],
+    amltype: [""],
     outdoor: [false],
     online: [false],
     socialMedia: [false],
@@ -398,7 +423,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
     showroomAccessibility: [""],
     productRangeAvailability: [""],
     reasonOfPurchase: [""],
-    gifrPurchased: [""],
+    gifrPurchased: [{ value: "", disabled: true }],
     occasionOfPurchase: [""],
     ageGroup: [""],
     lookingFor: [""],
@@ -412,6 +437,46 @@ export class PosCustomerMasterMainComponent implements OnInit {
     amount: [""],
     totalSale: [""],
     fcn_cust_detail_gender: [""],
+    name1: [""],
+    name2: [""],
+    name3: [""],
+    name4: [""],
+    name5: [""],
+    dob1: [""],
+    dob2: [""],
+    dob3: [""],
+    dob4: [""],
+    dob5: [""],
+    spouseName: [""],
+    fatherName: [""],
+    aka: [""],
+    fka: [""],
+    unNumber: [""],
+    designation: [""],
+    goodQualityaka: [""],
+    lowQualityaka: [""],
+    nationalityCode1: [""],
+    nationality1: [""],
+    nationalityCode2: [""],
+    nationality2: [""],
+    nationalityCode3: [""],
+    nationality3: [""],
+    nationalityCode4: [""],
+    nationality4: [""],
+    nationalityCode5: [""],
+    nationality5: [""],
+    passport1: [""],
+    passport2: [""],
+    passport3: [""],
+    passport4: [""],
+    passport5: [""],
+    listedOn: [""],
+    nationalId: [""],
+    addressFromAml: [""],
+    otherInfo: [""],
+    link: [""],
+    twitter: [""],
+    instagram: [""],
   });
 
   constructor(
@@ -433,7 +498,19 @@ export class PosCustomerMasterMainComponent implements OnInit {
           this.posCustomerMasterMainForm.get("creditCardLimit")?.disable();
         }
       });
-    console.log(this.comService.allbranchMaster);
+
+    this.posCustomerMasterMainForm
+      .get("reasonOfPurchase")
+      ?.valueChanges.subscribe((value) => {
+        if (value === "Gift") {
+          this.posCustomerMasterMainForm.get("gifrPurchased")?.enable();
+        } else {
+          this.posCustomerMasterMainForm.get("gifrPurchased")?.disable();
+        }
+      });
+
+    this.amlValidation = this.comService.allbranchMaster.AMLNAMEVALIDATION;
+
     this.posCustomerMasterMainForm.controls.weddate.disable();
     this.countryList();
     this.generateCutomerCode();
@@ -445,15 +522,15 @@ export class PosCustomerMasterMainComponent implements OnInit {
 
   genderChanger(event: any) {
     const selectedName = event;
-    
+
     // Map name to gender
     switch (selectedName) {
-      case 'Mr.':
-        this.posCustomerMasterMainForm.controls.gender.setValue('Male');        
+      case "Mr.":
+        this.posCustomerMasterMainForm.controls.gender.setValue("Male");
         break;
-      case 'Ms.':
-      case 'Mrs.':
-        this.posCustomerMasterMainForm.controls.gender.setValue('Female');
+      case "Ms.":
+      case "Mrs.":
+        this.posCustomerMasterMainForm.controls.gender.setValue("Female");
         break;
       default:
         this.posCustomerMasterMainForm.controls.gender.reset();
@@ -482,6 +559,8 @@ export class PosCustomerMasterMainComponent implements OnInit {
     console.log(value);
     if (value === "Married") {
       this.posCustomerMasterMainForm.controls.weddate.enable();
+    } else if (value !== "Married") {
+      this.posCustomerMasterMainForm.controls.weddate.disable();
     }
   }
 
@@ -680,9 +759,19 @@ export class PosCustomerMasterMainComponent implements OnInit {
     this.posCustomerMasterMainForm.controls.occupation.setValue(e.CODE);
   }
 
+  occupation1MasterSelected(e: any) {
+    console.log(e);
+    this.posCustomerMasterMainForm.controls.occupation1.setValue(e.CODE);
+  }
+
   customerTypeSelected(e: any) {
     console.log(e);
-    this.posCustomerMasterMainForm.controls.custType.setValue(e.DESCRIPTION);
+    this.posCustomerMasterMainForm.controls.custType.setValue(e.CODE);
+  }
+
+  sourceOfFundMasterSelected(e: any) {
+    console.log(e);
+    this.posCustomerMasterMainForm.controls.sourceOfFund.setValue(e.CODE);
   }
 
   getDropDownStatus() {
@@ -861,7 +950,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
             this.posCustomerMasterMainForm.value.moblieCountry.toString() || "",
           MOBILECODE2:
             this.posCustomerMasterMainForm.value.moblie1Country || "",
-          IDCATEGORY: "",
+          IDCATEGORY: this.posCustomerMasterMainForm.value.custIdType || "",
           ADDRESS_OFFICIAL:
             this.posCustomerMasterMainForm.value.officialAddress || "",
           ADDRESS_DELIVARY:
@@ -947,7 +1036,8 @@ export class PosCustomerMasterMainComponent implements OnInit {
           AUTOCREATEMST: false,
           WUPMOBILECODE:
             this.posCustomerMasterMainForm.value.whatsappCountryCode,
-          WUPMOBILENO: this.posCustomerMasterMainForm.value.whatsappNumber,
+          WUPMOBILENO:
+            this.posCustomerMasterMainForm.value.whatsappNumber.toString(),
           OCCUPATION: "",
           ShowRoomAccessibility: "",
           ProductRangeAvailability: "",
@@ -1410,11 +1500,37 @@ export class PosCustomerMasterMainComponent implements OnInit {
       case "occupation":
         this.overlayOccupation.showOverlayPanel(event);
         break;
-        case "custType":
+      case "custType":
         this.overlayCustomerType.showOverlayPanel(event);
+        break;
+      case "occupation1":
+        this.overlayOccupation1.showOverlayPanel(event);
+        break;
+      case "sourceOfFound":
+        this.overlaySourceOfFund.showOverlayPanel(event);
         break;
       default:
         console.warn(`Unknown form control name: ${formControlName}`);
     }
+  }
+
+  transactionDetails(event: any) {
+    console.log(event);
+    console.log("Got Clicked");
+  }
+
+  printPrivilegeCard(event: any) {
+    console.log(event);
+    console.log("Got Clicked");
+  }
+
+  printCustomerLog(event: any) {
+    console.log(event);
+    console.log("Got Clicked");
+  }
+
+  getCustomerDetails(event: any) {
+    console.log(event);
+    console.log("Got Clicked");
   }
 }

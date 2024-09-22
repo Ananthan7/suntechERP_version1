@@ -169,7 +169,7 @@
                           <mat-form-field appearance="outline"
                             style="width: 110px;">
                             <input type="text" matInput [readonly]="viewMode"
-                              UpperCaseDirective
+                              UpperCaseDirective id="TO_PROCESS_CODE"
                               (keydown)="lookupKeyPress($event,'TO_PROCESS_CODE')"
                               (focusout)="toProcesscodeValidate($event)"
                               formControlName="TO_PROCESS_CODE" />
@@ -189,7 +189,7 @@
                           <mat-form-field appearance="outline"
                             style="width: 110px;">
                             <input type="text" matInput [readonly]="viewMode"
-                              UpperCaseDirective
+                              UpperCaseDirective id="FRM_WORKER_CODE"
                               (keydown)="lookupKeyPress($event,'FRM_WORKER_CODE')"
                               (focusout)="fromWorkercodeValidate($event)"
                               formControlName="FRM_WORKER_CODE" />
@@ -206,7 +206,7 @@
                           <mat-form-field appearance="outline"
                             style="width: 110px;">
                             <input type="text" matInput [readonly]="viewMode"
-                              UpperCaseDirective
+                              UpperCaseDirective id="TO_WORKER_CODE"
                               (keydown)="lookupKeyPress($event,'TO_WORKER_CODE')"
                               (focusout)="toWorkercodeValidate($event)"
                               formControlName="TO_WORKER_CODE" />
@@ -279,7 +279,7 @@
                         <mat-form-field appearance="outline"
                           style="width: 110px;">
                           <input type="text" matInput [readonly]="viewMode"
-                            class="text-right"
+                            class="text-right" id="TO_PCS"
                             NumberOnly maxlength="10"
                             (focusout)="checkFromToValues('FRM_PCS','TO_PCS')"
                             formControlName="TO_PCS" />
@@ -312,7 +312,7 @@
                         <mat-form-field appearance="outline"
                           style="width: 110px;">
                           <input type="text" matInput [readonly]="viewMode"
-                            class="text-right"
+                            class="text-right" id="GrossWeightTo"
                             MetalDecimalInput [max]="10"
                             (focusout)="GrossWeightToChange($event)"
                             formControlName="GrossWeightTo" />
@@ -430,7 +430,7 @@
                               <input type="text" matInput maxlength="15"
                                 (keydown)="lookupKeyPress($event,'stockCode')"
                                 (focusout)="stockCodeScrapValidate($event)"
-                                formControlName="stockCode"
+                                formControlName="stockCode" id="stockCode"
                                 [readonly]="viewMode" UpperCaseDirective/>
                               <master-search class="masterSearch"
                                 *ngIf="!viewMode"

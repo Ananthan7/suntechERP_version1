@@ -1702,11 +1702,32 @@ export class ProcessTransferDetailsComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
+  isProcessCodeEmpty(flag: boolean){
+    if(flag){
+      this.commonService.formControlSetReadOnly('TO_PROCESS_CODE', true)
+      this.commonService.formControlSetReadOnly('FRM_WORKER_CODE', true)
+      this.commonService.formControlSetReadOnly('TO_WORKER_CODE', true) 
+      this.commonService.formControlSetReadOnly('TO_PCS', true) 
+      this.commonService.formControlSetReadOnly('GrossWeightTo', true) 
+      this.commonService.formControlSetReadOnly('stockCode', true) 
+    }else{
+      this.commonService.formControlSetReadOnly('TO_PROCESS_CODE', false)
+      this.commonService.formControlSetReadOnly('FRM_WORKER_CODE', false)
+      this.commonService.formControlSetReadOnly('TO_WORKER_CODE', false) 
+      this.commonService.formControlSetReadOnly('TO_PCS', false) 
+      this.commonService.formControlSetReadOnly('GrossWeightTo', false) 
+      this.commonService.formControlSetReadOnly('stockCode', false) 
+    }
+  }
   /**USE:from porcesscode Validate API call */
   fromProcesscodeValidate(event: any) {
+    if(this.viewMode) return
     if (event.target.value == '') {
+      this.fromProcessMasterOverlay.showOverlayPanel(event)
+      this.isProcessCodeEmpty(true)
       return
     }
+    this.isProcessCodeEmpty(false)
     let form = this.processTransferdetailsForm.value
     let postData = {
       "SPID": "083",
@@ -1929,6 +1950,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
   processCodeFromSelected(event: any) {
     this.processTransferdetailsForm.controls.FRM_PROCESS_CODE.setValue(event.PROCESS)
     this.processTransferdetailsForm.controls.FRM_PROCESSNAME.setValue(event.Description)
+    this.isProcessCodeEmpty(false)
     this.setFromProcessWhereCondition()
     this.setFromWorkerWhereCondition()
     let data = this.subJobDetailData.filter((item: any) => event.PROCESS == item.PROCESS && event.WORKER == item.WORKER)
@@ -2018,6 +2040,14 @@ export class ProcessTransferDetailsComponent implements OnInit {
       if (this.commonService.nullToString(form.JOB_NUMBER) == '') {
         this.commonService.toastErrorByMsgId('MSG1358')
         this.renderer.selectRootElement('#jobNoSearch')?.focus();
+        return true;
+      }
+      if (this.commonService.nullToString(form.FRM_PROCESS_CODE) == '') {
+        this.commonService.toastErrorByMsgId('MSG1295')
+        return true;
+      }
+      if (this.commonService.nullToString(form.FRM_WORKER_CODE) == '') {
+        this.commonService.toastErrorByMsgId('MSG1296')
         return true;
       }
       if (this.commonService.nullToString(form.TO_WORKER_CODE) == '') {

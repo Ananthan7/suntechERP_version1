@@ -6,10 +6,47 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
+[isViewDelete]="false" [isViewMore]="false" [isViewSave]="false" [isViewCancel]="false"></modal-header>
 <!-- content section -->
 <div class="container-fluid pt-3">
     <form [formGroup]="posDailyClosingSummaryForm">
+
+        <div class="row mb-3">
+            <label for="inputPassword"  class="col-sm-1 col-form-label"  id="ID001"> Branch</label>
+            <div class="col-md-2">
+                <mat-form-field appearance="outline" style="width: -webkit-fill-available">
+                <input matInput="text" name="branch" autocomplete="off" formControlName="branch"/>
+                <app-branch-division [fetchData]="fetchedBranchData" (newRowClick)="selectedData($event)"
+                class="branchDivisionelectr" [matTooltip]="branchDivisionControlsTooltip"
+                matTooltipClass="custom-tooltip"  matTooltipPosition="above"></app-branch-division>
+                </mat-form-field>
+            </div>
+
+            <div class="col-md-7">
+                <app-date (selectedDate)="setDateValue($event)"></app-date>
+            </div> 
+
+            <!-- <div class="col-md-2" style="margin-left: -5rem !important">
+                <div class="text-center d-flex justify-content-between mt-1">
+                    <div class="p-1 bd-highlight">
+                        <button type="button" class="btn btn-primary add-btn">
+                            <i class="fas fa-sync-alt"></i>
+                        </button>
+                    </div>
+                    <div class="p-1 bd-highlight">
+                        <button type="button" class="btn btn-primary add-btn">
+                            <i class="fas fa-print"></i>
+                        </button>
+                    </div>
+                    <div class="p-1 bd-highlight">
+                        <button type="button" class="btn btn-primary add-btn">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>  -->
+        </div>
 
         <div class="row mb-5">
             <label for="inputPassword" class="col-sm-1 col-form-label" id="ID002">Transaction</label>
@@ -49,45 +86,7 @@
                         </div>
                     </div>
                 </fieldset>
-            </div>
-
-            <div class="col-md-3">
-                <div class="text-center d-flex justify-content-between mt-1">
-                    <div class="p-1 bd-highlight">
-                        <button type="button" class="btn btn-primary add-btn">
-                            <i class="fas fa-sync-alt"></i>
-                        </button>
-                    </div>
-                    <div class="p-1 bd-highlight">
-                        <button type="button" class="btn btn-primary add-btn">
-                            <i class="fas fa-print"></i>
-                        </button>
-                    </div>
-                    <div class="p-1 bd-highlight">
-                        <button type="button" class="btn btn-primary add-btn">
-                            <i class="fas fa-sign-out-alt"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="row mb-3">
-                <div class="col-md-7 d-flex align-items-center">
-                    <app-date (selectedDate)="setDateValue($event)"></app-date>
-                </div> 
-                <label for="inputPassword" class="col-sm-1 col-form-label me-0" id="ID001" style="position: relative;
-                margin-left: -90px;">Branch</label>
-                <div class="col-md-2">
-                    <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
-                        <input matInput="text" name="branch" autocomplete="off"/>
-                        <app-branch-division (newRowClick)="selectedData($event)" class="branchDivisionelectr"
-                        [matTooltip]="branchDivisionControls"  matTooltipClass="custom-tooltip"  
-                        matTooltipPosition="above"></app-branch-division>
-                    </mat-form-field>
-                </div> 
-            </div>
-            
+            </div>      
 
             <div class="row">
                 <div class="col-md-6">
@@ -257,7 +256,26 @@
                 </dx-data-grid>
             </div>
         </div> -->
-
+        <dx-popup  [width]="300" [height]="180" [showTitle]="true" container=".dx-viewport" title="Template Data" 
+        [dragEnabled]="false" [showCloseButton]="false"
+        (onHidden)="popupClosed()" [visible]="popupVisible">
+            <div class="popup-content">
+                <div class="form-group">
+                <label for="T_Name">Name:</label>
+                <input type="text" id="T_Name" class="form-control" formControlName="templateName"/>
+                </div>
+                <div class="button-group d-flex">
+                    <button mat-flat-button [ngClass]="{'SaveNew_template': templateNameHasValue, 'btn-m-r-10': true, 'demo-button': true,
+                    'btn-width': true,'mx-1': true }" (click)="saveTemplate_DB()">
+                        {{ templateNameHasValue ? 'Save as New Template' : 'Save' }}
+                    </button>
+                    <button mat-flat-button class="btn-m-r-10 btn-width mx-1 cancelBTN" (click)="popupClosed()">Cancel</button>
+                </div>
+                <br>
+                <br>
+                <br>
+            </div>
+        </dx-popup>
 
         <div class="row">
             <div class="col-md-12">
@@ -422,5 +440,43 @@
             </dx-data-grid>
             </div>
         </div>
+
+        <div class="row mt-2 justify-content-end mx-2">
+            <div class="icon-label-container" (click)="saveTemplate()" matTooltip="Save the selections as a new template">
+              <i class="fa fa-bookmark fa-2x mt-3" style="color: #5497b2"></i>
+              <span style="font-size: inherit;">Save as Template</span>
+            </div>
+
+            <div class="icon-label-container" (click)="previewClick()" matTooltip="Preview the content">
+              <i class="fa fa-eye fa-2x" style="color: #5497b2"></i>
+              <span class="label">Preview</span>
+            </div>
+
+            <div class="icon-label-container" matTooltip="Take a print">
+              <i class="fa fa-print fa-2x" style="color: #031082"></i>
+              <span class="label">Print</span>
+            </div>
+
+            <div class="icon-label-container"  matTooltip="Generate Excel Report">
+              <i class="fa fa-file-excel fa-2x" style="color: green"></i>
+              <span class="label">Excel</span>
+            </div>
+
+            <div class="icon-label-container" matTooltip="Generate PDF Report">
+              <i class="fa fa-file-pdf fa-2x" style="color: orangered"></i>
+              <span class="label">PDF</span>
+            </div>
+
+            <div class="icon-label-container" matTooltip="Sent through mail">
+              <i class="fa fa-envelope fa-2x" style="color: deepskyblue"></i>
+              <span class="label">Email</span>
+            </div>
+
+            <div class="icon-label-container" matTooltip="Sent through whatsapp">
+              <i class="fab fa-whatsapp fa-2x" style="color: #29cf26"></i>
+              <span style="font-size: inherit;">Whatsapp</span>
+            </div>
+        </div>
+
     </form>
 </div>

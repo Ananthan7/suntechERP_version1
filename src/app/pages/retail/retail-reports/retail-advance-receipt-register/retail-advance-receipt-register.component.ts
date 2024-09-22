@@ -31,7 +31,8 @@ export class RetailAdvanceReceiptRegisterComponent implements OnInit {
     toDate : [new Date()],
     salesman : [''],
     salesmanCode : [''],
-    reportTo : ['preview']
+    reportTo : ['preview'],
+    templateName: ['']
   })
 
   salesmanCodeData: MasterSearchModel = {
@@ -55,6 +56,8 @@ export class RetailAdvanceReceiptRegisterComponent implements OnInit {
   private cssFilePath = '/assets/scss/scheme_register_pdf.scss';
   // private cssFilePath = 'assets/scheme_register_pdf.scss';
   branchDivisionControls: any;
+  popupVisible: boolean =false;
+
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -214,6 +217,64 @@ export class RetailAdvanceReceiptRegisterComponent implements OnInit {
       this.toDateValitation()
     }
   }
+
+  previewClick() {
+    let postData = {
+      "SPID": "0150",
+      "parameter": {
+        
+      }
+    }
+    console.log(postData)  
+    this.comService.showSnackBarMsg('MSG81447');
+    this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+    .subscribe((result: any) => {
+      console.log(result);
+      let data = result.dynamicData;
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      const windowFeatures = `width=${width},height=${height},fullscreen=yes`;
+      var WindowPrt = window.open(' ', ' ', windowFeatures);
+      if (WindowPrt === null) {
+        console.error('Failed to open the print window. Possibly blocked by a popup blocker.');
+        return;
+      }
+      let printContent = data[0][0].HTMLINPUT;
+      WindowPrt.document.write(printContent);
+      WindowPrt.document.close();
+      WindowPrt.focus();  
+      WindowPrt.onload = function () {
+        if (WindowPrt && WindowPrt.document.head) {
+          let styleElement = WindowPrt.document.createElement('style');
+          styleElement.textContent = `
+                      @page {
+                          size: A5 landscape;
+                      }
+                      body {
+                          margin: 0mm;
+                      }
+                  `;
+          WindowPrt.document.head.appendChild(styleElement);
+
+          setTimeout(() => {
+            if (WindowPrt) {
+              WindowPrt.print();
+            } else {
+              console.error('Print window was closed before printing could occur.');
+            }
+          }, 800);
+        }
+      };
+      this.comService.closeSnackBarMsg()
+    });      
+  }
+
+  saveTemplate(){
+    this.popupVisible = true;
+    console.log(this.retailAdvanceReceiptRegisterForm.controls.templateName.value)
+  }
+
+
 
 
 }
