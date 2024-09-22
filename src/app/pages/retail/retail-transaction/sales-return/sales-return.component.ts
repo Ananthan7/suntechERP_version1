@@ -1345,7 +1345,7 @@ export class SalesReturnComponent implements OnInit {
     // }
     // let sub: Subscription = this.suntechApi.getDynamicAPIwithParams('RetailSalesDataInDotnet/GetRetailSalesData',param)
 
-    let API = `RetailSaleReturn/GetRetailSReturnHeaderAndDetail/${data.BRANCH_CODE}/${data.VOCTYPE}/${data.YEARMONTH}/${data.VOCNO}/${data.MID}`
+    let API = `RetailSaleReturn/GetRetailSReturnHeaderAndDetail/${data.BRANCH_CODE}/${data.VOCTYPE}/${data.YEARMONTH}/${data.VOCNO}`
     console.log('getRetailSalesMaster vocno', data.VOCNO);
     this.suntechApi.getDynamicAPI(API)
       .subscribe((res) => {
@@ -2923,9 +2923,9 @@ export class SalesReturnComponent implements OnInit {
     console.log(value);
     console.log('====================================');
     event.component.refresh();
-    this.isAllowWithoutRate=value.ALLOW_WITHOUT_RATE;
-    this.isPromotionalItem=value.TPROMOTIONALITEM;
-    this.blockNegativeStock= value.BLOCK_NEGATIVESTOCK;
+    this.isAllowWithoutRate = value.ALLOW_WITHOUT_RATE;
+    this.isPromotionalItem = value.TPROMOTIONALITEM;
+    this.blockNegativeStock = value.BLOCK_NEGATIVESTOCK;
     // console.log(this.ordered_items);
     // console.log(this.newLineItem);
     // let alldata = [];
@@ -8089,6 +8089,11 @@ export class SalesReturnComponent implements OnInit {
   salesreturndetails() {
 
     this.onCustomerNameFocus(this.salesReturnDetails[0].MOBILE, false);
+
+    this.vocDataForm.controls['sales_person'].setValue(
+      this.salesReturnDetails[0].SALESPERSON_CODE
+    );
+
     this.salesReturnDetails.map((data: any, index: any) => {
       console.log(
         '===============retailSalesDetails====================='
@@ -8905,11 +8910,12 @@ export class SalesReturnComponent implements OnInit {
             this.snackBar.dismiss();
             // try {
             if (res != null) {
-              if (res.status == 'SUCCESS') {
+              if (res.status == 'Success') {
                 // this.close('reloadMainGrid');
                 this.isNewButtonDisabled = false;
 
-                this.vocDataForm.controls['fcn_voc_no'].setValue(res.response.retailSales.VOCNO);
+                this.vocDataForm.controls['fcn_voc_no'].setValue(res.response.retailsReturn.VOCNO);
+                this.voucherNumber=res.response.retailsReturn.VOCNO;
 
                 console.log('==================tourVatRefuncYN==================');
                 const traNo = this.customerDataForm.value.tourVatRefundNo || '';
@@ -8929,7 +8935,7 @@ export class SalesReturnComponent implements OnInit {
                 this.saveAndContinue(type);
                 // let mid;
                 // mid = res.response.retailSales.MID;
-                this.midForInvoce = res.response.retailSales.MID;
+                this.midForInvoce = res.response.retailsReturn.MID;
                 // this.content.MID = res.response.retailSales.MID;
                 // console.log(this.content.MID)
                 if (this.midForInvoce) {
@@ -9420,7 +9426,7 @@ export class SalesReturnComponent implements OnInit {
     this.checkItemCode();
     this.setGrossWtFocus();
     if (event.target.value != '' && this.lineItemForm.value.fcn_li_item_code) {
-      if(this.comFunc.emptyToZero(event.target.value)==0){
+      if (this.comFunc.emptyToZero(event.target.value) == 0) {
 
         this.openDialog('Warning', this.comFunc.getMsgByID('MSG1308'), true);
         this.dialogBox.afterClosed().subscribe((data: any) => {
@@ -9486,8 +9492,8 @@ export class SalesReturnComponent implements OnInit {
         // blockNegativeStock = 'A'
         // this.setNettWeight();
         //   this.addValidationsForForms(this.lineItemForm, 'fcn_li_stone_wt', [
-                //     Validators.required,
-                //   ]);
+        //     Validators.required,
+        //   ]);
         this.manageCalculations();
       }
     } else {
@@ -9616,20 +9622,14 @@ export class SalesReturnComponent implements OnInit {
               if (this.divisionMS == 'S') {
 
                 this.lineItemForm.controls.fcn_li_rate.setValue(
-
-                  this.comFunc.transformDecimalVB(
-                    this.comFunc.allbranchMaster?.BAMTDECIMALS,
-                    nonMetalPreRateVal
-                  )
+                  this.comFunc.commaSeperation(
+                    nonMetalPreRateVal)
 
                 );
 
                 this.lineItemForm.controls.fcn_li_total_amount.setValue(
-
-                  this.comFunc.transformDecimalVB(
-                    this.comFunc.allbranchMaster?.BAMTDECIMALS,
-                    nonMetalPreTotalVal
-                  )
+                  this.comFunc.commaSeperation(
+                    nonMetalPreTotalVal)
 
                 );
 

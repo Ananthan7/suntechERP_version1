@@ -3519,7 +3519,7 @@ export class AddPosComponent implements OnInit {
             '',
           ZIPCODE: this.customerDetails?.ZIPCODE || '',
           COUNTRY_CODE:
-            this.customerDetailForm.value.fcn_cust_detail_country ||
+          this.customerDetails.COUNTRY_CODE ||
             // this.customerDetails?.COUNTRY_CODE ||
             '',
           EMAIL: this.customerDetailForm.value.fcn_cust_detail_email || '',
@@ -8425,7 +8425,7 @@ export class AddPosComponent implements OnInit {
             '',
           ZIPCODE: this.customerDetails?.ZIPCODE || '',
           COUNTRY_CODE:
-            this.customerDetailForm.value.fcn_cust_detail_country ||
+          this.customerDetails.COUNTRY_CODE ||
             // this.customerDetails?.COUNTRY_CODE ||
             '',
           EMAIL: this.customerDetailForm.value.fcn_cust_detail_email || '',
@@ -11604,7 +11604,7 @@ else{
         // this.customerDetails?.ADDRESS ||
         '',
       COUNTRY_CODE:
-        this.customerDetailForm.value.fcn_cust_detail_country ||
+      this.customerDetails.COUNTRY_CODE ||
         // this.customerDetails?.COUNTRY_CODE ||
         '',
       CUST_Language: this.customerDetails?.CUST_Language || '',
@@ -12270,7 +12270,7 @@ else{
         // this.customerDetails?.ADDRESS ||
         '',
       COUNTRY_CODE:
-        this.customerDetailForm.value.fcn_cust_detail_country ||
+      this.customerDetails.COUNTRY_CODE ||
         // this.customerDetails?.COUNTRY_CODE ||
         '',
       CUST_Language: this.customerDetails?.CUST_Language || '',
