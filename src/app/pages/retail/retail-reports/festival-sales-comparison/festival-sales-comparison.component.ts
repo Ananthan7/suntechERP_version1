@@ -36,6 +36,7 @@ export class FestivalSalesComparisonComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.prefillScreenValues()
   }
 
   close(data?: any) {
