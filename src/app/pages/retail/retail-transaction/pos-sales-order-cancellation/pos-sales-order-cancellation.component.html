@@ -127,14 +127,14 @@
            id="ID007" >Order Amount</label>
           <div class="col-md-3">
             <mat-form-field style="width: 100%" appearance="outline">
-              <input type="number" matInput formControlName="orderAmount" class="text-right" />
+              <input type="number" matInput formControlName="orderAmount" class="text-right" AmountDecimalInput />
             </mat-form-field>
           </div>
           <label for="inputPassword" class="col-sm-3 col-form-label"
            id="ID008" >Adv.Received</label>
           <div class="col-md-3">
             <mat-form-field style="width: 100%" appearance="outline">
-              <input type="number" matInput formControlName="advReceived" class="text-right"/>
+              <input type="number" matInput formControlName="advReceived" class="text-right" AmountDecimalInput/>
             </mat-form-field>
           </div>
         </div>
@@ -189,23 +189,23 @@
            id="ID013" >Currency</label>
           <div class="col-md-3">
             <mat-form-field style="width: 100%" appearance="outline">
-              <input type="text" matInput formControlName="currency" />
+              <input type="text" readonly matInput formControlName="currency" />
             </mat-form-field>
           </div>
           <div class="col-md-6">
             <mat-form-field style="width: 100%" appearance="outline">
-              <input type="text" matInput formControlName="currencyRate" />
+              <input type="text" matInput readonly formControlName="currencyRate" class="text-right"  />
             </mat-form-field>
           </div>
         </div>
         <div class="row mb-1">
-          <label for="inputPassword" class="col-sm-3 col-form-label"
+          <!-- <label for="inputPassword" class="col-sm-3 col-form-label"
            id="ID014" >Order Age</label>
           <div class="col-md-3">
             <mat-form-field style="width: 100%" appearance="outline">
               <input type="text" matInput formControlName="orderAge" />
             </mat-form-field>
-          </div>
+          </div> -->
           <label for="inputPassword" class="col-sm-3 col-form-label"
            id="ID015" >No Item</label>
           <div class="col-md-3">
@@ -293,7 +293,7 @@
               <input class="text-right"
                 type="number"
                 matInput
-                formControlName="cancellationCharge"
+                formControlName="cancellationCharge" AmountDecimalInput
               />
             </mat-form-field>
           </div>
@@ -303,11 +303,11 @@
            id="ID022" >Refund Amount</label>
           <div class="col-md-6">
             <mat-form-field style="width: 100%" appearance="outline">
-              <input type="number" matInput formControlName="refundAmount" class="text-right" />
+              <input type="number" matInput formControlName="refundAmount" class="text-right" AmountDecimalInput />
             </mat-form-field>
           </div>
         </div>
-        <div class="row mb-1">
+        <!-- <div class="row mb-1">
           <label for="inputPassword" class="col-sm-6 col-form-label"
            id="ID023" >Order Cancel A/c</label>
           <div class="col-md-6">
@@ -319,7 +319,7 @@
               ></master-search>
             </mat-form-field>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
   </form>

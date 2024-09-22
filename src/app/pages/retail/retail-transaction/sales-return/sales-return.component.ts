@@ -8915,7 +8915,7 @@ export class SalesReturnComponent implements OnInit {
                 this.isNewButtonDisabled = false;
 
                 this.vocDataForm.controls['fcn_voc_no'].setValue(res.response.retailsReturn.VOCNO);
-                this.voucherNumber=res.response.retailsReturn.VOCNO;
+                this.voucherNumber = res.response.retailsReturn.VOCNO;
 
                 console.log('==================tourVatRefuncYN==================');
                 const traNo = this.customerDataForm.value.tourVatRefundNo || '';
@@ -9728,7 +9728,11 @@ export class SalesReturnComponent implements OnInit {
       }
       else {
         // Rate Cannot be Less Than Cost
-        this.openDialog('Warning', this.comFunc.getMsgByID('MSG1203'), true);
+        this.openDialog('Warning', this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_discount_amount) >
+          this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount)
+          || this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_discount_percentage) > 100 ?
+          this.comFunc.getMsgByID('MSG1203') :
+          this.comFunc.getMsgByID('MSG1721'), true);
         this.dialogBox.afterClosed().subscribe((data: any) => {
           if (data == 'OK') {
             this.lineItemForm.controls.fcn_li_discount_percentage.setValue(
@@ -9995,7 +9999,7 @@ export class SalesReturnComponent implements OnInit {
         }
         else {
           // Rate Cannot be Less Than Cost
-          this.openDialog('Warning', this.comFunc.getMsgByID('MSG1723'), true);
+          this.openDialog('Warning', this.comFunc.emptyToZero(value) > preVal ? this.comFunc.getMsgByID('MSG1721') : this.comFunc.getMsgByID('MSG1723'), true);
           this.dialogBox.afterClosed().subscribe((data: any) => {
             if (data == 'OK') {
 
@@ -13296,7 +13300,7 @@ export class SalesReturnComponent implements OnInit {
 
     // this.accountLookupList.filter((data)=> data.)
   }
-  changeReceiptAmtFC(event: any, formName: keyof AddPosComponent, fieldName?: any) {
+  changeReceiptAmtFC(event: any, formName: keyof SalesReturnComponent, fieldName?: any) {
     const value = this.comFunc.emptyToZero(event.target.value);
     const upValue = this.comFunc.commaSeperation(this.comFunc.transformDecimalVB(
       this.comFunc.allbranchMaster?.BAMTDECIMALS, value));
