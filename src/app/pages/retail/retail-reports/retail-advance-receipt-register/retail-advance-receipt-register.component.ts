@@ -1,11 +1,13 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
+import Swal from 'sweetalert2';
 
 
 @Component({
@@ -52,11 +54,19 @@ export class RetailAdvanceReceiptRegisterComponent implements OnInit {
     this.retailAdvanceReceiptRegisterForm.controls.salesman.setValue(e.SALESPERSON_CODE);
     this.retailAdvanceReceiptRegisterForm.controls.salesmanCode.setValue(e.DESCRIPTION);
   }
-  dataToPass:any;
+
   private cssFilePath = '/assets/scss/scheme_register_pdf.scss';
   // private cssFilePath = 'assets/scheme_register_pdf.scss';
   branchDivisionControls: any;
   popupVisible: boolean =false;
+  @Input() content!: any; 
+  templateNameHasValue: boolean= false;
+  formattedBranchDivisionData: any;
+  fetchedBranchDataParam: any[]= [];
+  branchDivisionControlsTooltip: any;
+  fetchedBranchData: any[] =[];
+  isLoading: boolean = false;
+  dateToPass: { fromDate: string; toDate: string } = { fromDate: '', toDate: '' };
 
 
   constructor(
@@ -65,14 +75,15 @@ export class RetailAdvanceReceiptRegisterComponent implements OnInit {
     private dataService: SuntechAPIService,
     private datePipe: DatePipe,
     private comService: CommonServiceService,
-
+    private toastr: ToastrService,
   ) { }
 
   ngOnInit(): void {
+    this.prefillScreenValues();
+
     this.branchCode = this.comService.branchCode;
     
     const apiUrl = '/UseBranchNetMaster/ADMIN';
-  
       let sub: Subscription = this.dataService.getDynamicAPI(apiUrl).subscribe((resp: any) => {
         if (resp.status == 'Success') {
           this.branchOptions = resp.response;
@@ -159,6 +170,15 @@ export class RetailAdvanceReceiptRegisterComponent implements OnInit {
     this.activeModal.close(data);
   }
 
+
+  formatDateToYYYYMMDD(dateString: any) {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+ 
   selectedData(data: any) {
     console.log(data)
     // let content= ``, content2 =``,  content3 =``, content4 =``
@@ -166,9 +186,11 @@ export class RetailAdvanceReceiptRegisterComponent implements OnInit {
     let content2 = `Current Selected Divisions:  \n`
     let content3 = `Current Selected Area:  \n`
     let content4 = `Current Selected B category:  \n`
+    let branchDivisionData = '';
     if(data.BranchData){
       // content = `Current Selected Branches:  \n`
       data.BranchData.forEach((Bdata: any)=>{
+        branchDivisionData += Bdata.BRANCH_CODE+'#'
         content += Bdata.BRANCH_CODE ? `${Bdata.BRANCH_CODE}, ` : ''
       }) 
     }
@@ -176,6 +198,7 @@ export class RetailAdvanceReceiptRegisterComponent implements OnInit {
     if(data.DivisionData){
       // content2 = `Current Selected Divisions:  \n`
       data.DivisionData.forEach((Ddata: any)=>{
+        branchDivisionData += Ddata.DIVISION_CODE+'#'
         content2 += Ddata.DIVISION_CODE ? `${Ddata.DIVISION_CODE}, ` : ''
       }) 
     }
@@ -183,6 +206,7 @@ export class RetailAdvanceReceiptRegisterComponent implements OnInit {
     if(data.AreaData){
       // content3 = `Current Selected Area:  \n`
       data.AreaData.forEach((Adata: any)=>{
+        branchDivisionData += Adata.AREA_CODE+'#'
         content3 += Adata.AREA_CODE ? `${Adata.AREA_CODE}, ` : ''
       }) 
     }
@@ -190,6 +214,7 @@ export class RetailAdvanceReceiptRegisterComponent implements OnInit {
     if(data.BusinessCategData){
       // content4 = `Current Selected B category:  \n`
       data.BusinessCategData.forEach((BCdata: any)=>{
+        branchDivisionData += BCdata.CATEGORY_CODE+'#'
         content4 += BCdata.CATEGORY_CODE ? `${BCdata.CATEGORY_CODE}, ` : ''
       }) 
     }
@@ -198,10 +223,15 @@ export class RetailAdvanceReceiptRegisterComponent implements OnInit {
     content2 = content2.replace(/, $/, '');
     content3 = content3.replace(/, $/, '');
     content4 = content4.replace(/, $/, '');
-    this.branchDivisionControls = content +'\n'+content2 +'\n'+ content3 +'\n'+ content4
-    // console.log(this.branchDivisionControls);
-    this.retailAdvanceReceiptRegisterForm.controls.branch.setValue(this.branchDivisionControls);
+    this.branchDivisionControlsTooltip = content +'\n'+content2 +'\n'+ content3 +'\n'+ content4
+
+
+    // const uniqueArray = [...new Set(this.branchDivisionData)];
+    // const plainText = uniqueArray.join('');
+    this.formattedBranchDivisionData = branchDivisionData
+    this.retailAdvanceReceiptRegisterForm.controls.branch.setValue(this.formattedBranchDivisionData);
   }
+
   setValueFromCommon(event: any){
     this.retailAdvanceReceiptRegisterForm.controls.reportTo.setValue(event.value);
     console.log(this.retailAdvanceReceiptRegisterForm.controls.reportTo.value)
@@ -219,6 +249,7 @@ export class RetailAdvanceReceiptRegisterComponent implements OnInit {
   }
 
   previewClick() {
+    console.log(this.retailAdvanceReceiptRegisterForm)
     let postData = {
       "SPID": "0150",
       "parameter": {
@@ -273,8 +304,90 @@ export class RetailAdvanceReceiptRegisterComponent implements OnInit {
     this.popupVisible = true;
     console.log(this.retailAdvanceReceiptRegisterForm.controls.templateName.value)
   }
+  saveTemplate_DB(){
+    const payload = {
+      "SPID": "0115",
+      "parameter": {
+        "FLAG": 'INSERT',
+        "CONTROLS": JSON.stringify({
+            "CONTROL_HEADER": {
+              "USERNAME": localStorage.getItem('username'),
+              "TEMPLATEID": this.comService.getModuleName(),
+              "TEMPLATENAME": this.retailAdvanceReceiptRegisterForm.controls.templateName.value,
+              "FORM_NAME": this.comService.getModuleName(),
+              "ISDEFAULT": 1
+            },
+            "CONTROL_DETAIL": {
+              
+            }
+        })
+      }
+    };
+    this.comService.showSnackBarMsg('MSG81447');
+    this.dataService.postDynamicAPI('ExecueteSPInterface', payload)
+    .subscribe((result: any) => {
+      console.log(result);
+      let data = result.dynamicData.map((item: any) => item[0].ERRORMESSAGE);
+      let Notifdata = result.dynamicData.map((item: any) => item[0].ERRORCODE);
+      if (Notifdata == 1) {
+        this.comService.closeSnackBarMsg()
+        Swal.fire({
+          title: data || 'Success',
+          text: '',
+          icon: 'success',
+          confirmButtonColor: '#336699',
+          confirmButtonText: 'Ok'
+        })
+        this.popupVisible = false;
+        this.activeModal.close(data);
+      }
+      else {
+        this.toastr.error(Notifdata)
+      }
+    });   
+  }
 
+  popupClosed(){
+    if (this.content && Object.keys(this.content).length > 0) {
+      console.log(this.content)
+      let ParcedPreFetchData = JSON.parse(this.content?.CONTROL_LIST_JSON)
+      this.retailAdvanceReceiptRegisterForm.controls.templateName.setValue(ParcedPreFetchData.CONTROL_HEADER.TEMPLATENAME)
+      this.popupVisible = false;
+    }
+    else{
+      this.popupVisible = false;
+      this.retailAdvanceReceiptRegisterForm.controls.templateName.setValue(null)
+    }
+  }
 
+  prefillScreenValues(){
+    if ( Object.keys(this.content).length > 0) {
+      this.isLoading = true;
+      this.templateNameHasValue = !!(this.content?.TEMPLATE_NAME);
+      this.retailAdvanceReceiptRegisterForm.controls.templateName.setValue(this.content?.TEMPLATE_NAME);
+
+      var paresedItem = JSON.parse(this.content?.CONTROL_LIST_JSON);
+
+      this.dateToPass = {
+        fromDate:  paresedItem?.CONTROL_DETAIL.STRFROMDATE,
+        toDate: paresedItem?.CONTROL_DETAIL.STRTODATE
+      };
+      this.dateToPass.fromDate? this.retailAdvanceReceiptRegisterForm.controls.fromdate.setValue(this.dateToPass.fromDate) : null
+      this.dateToPass.toDate? this.retailAdvanceReceiptRegisterForm.controls.todate.setValue(this.dateToPass.toDate) : null
+
+      // this.loyaltyregisterFrom.controls.branch.setValue(paresedItem?.CONTROL_DETAIL.STRBRANCHES);
+
+      this.retailAdvanceReceiptRegisterForm.controls.customerfrom.setValue(paresedItem?.CONTROL_DETAIL.STRCUSTCODEFROM);
+      this.retailAdvanceReceiptRegisterForm.controls.customerto.setValue(paresedItem?.CONTROL_DETAIL.STRCUSTCODETO);
+
+      this.retailAdvanceReceiptRegisterForm.controls.pointsfrom.setValue(paresedItem?.CONTROL_DETAIL.STRPOINTSFROM);
+      this.retailAdvanceReceiptRegisterForm.controls.pointsto.setValue(paresedItem?.CONTROL_DETAIL.STRPOINTSTO);
+
+      this.retailAdvanceReceiptRegisterForm.controls.branch.setValue(paresedItem?.CONTROL_DETAIL.STRBRANCHES);
+      this.fetchedBranchData= paresedItem?.CONTROL_DETAIL.STRBRANCHES.split("#")
+      this.fetchedBranchDataParam = paresedItem?.CONTROL_DETAIL.STRBRANCHES
+    }
+  }
 
 
 }

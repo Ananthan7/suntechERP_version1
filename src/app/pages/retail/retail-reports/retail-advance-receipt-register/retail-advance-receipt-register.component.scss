@@ -41,3 +41,23 @@
     font-size: 14px;
     color: #000;
 }
+
+.popup-content {
+    display: flex;
+    flex-direction: column;
+    gap: 12px; /* Adds space between form groups */
+    padding: 16px; /* Adds padding inside the popup */
+  }
+  .form-group {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Adds space between label and input */
+  }
+  .form-group label {
+    width: 41px; 
+  }
+  .form-control {
+    flex: 1;
+    padding: 8px; 
+    border: 1px solid #ccc !important;
+}
