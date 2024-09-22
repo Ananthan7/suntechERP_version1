@@ -38,6 +38,11 @@ export class FestivalSalesComparisonComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  close(data?: any) {
+    //TODO reset forms and data before closing
+    this.activeModal.close(data);
+  }
+  
   setDateValue(event: any){
     if(event.FromDate){
       this.festivalSalesComparisonForm.controls.fromdate.setValue(event.FromDate);
