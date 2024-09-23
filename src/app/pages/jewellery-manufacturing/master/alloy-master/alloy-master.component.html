@@ -7,7 +7,7 @@
 </div>
 <!-- modal header component -->
 <modal-header [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode" (cancelClick)="close()"
-    (saveClick)="formSubmit()" (deleteClick)="deleteAlloyMaster()" [isViewDelete]="editMode"></modal-header>
+    (saveClick)="formSubmit()" (deleteClick)="deleteAlloyMaster()" [isViewDelete]="!viewMode && editMode"></modal-header>
 <!-- content section -->
 <div class="row">
     <div>
@@ -23,10 +23,9 @@
                                     <mat-form-field style="width: 100%" appearance="outline">
                                         <input type="text" id="code" matInput
                                             (focusout)="validateLookupField($event,codeData,'code')"
-                                            formControlName="code" [readonly]="viewMode || editMode" [disabled]="viewMode"
-                                            UpperCaseDirective autocomplete="off"
-                                            (keydown)="lookupKeyPress($event,'code')"
-                                             />
+                                            formControlName="code" [readonly]="viewMode || editMode"
+                                            [disabled]="viewMode" UpperCaseDirective autocomplete="off"
+                                            (keydown)="lookupKeyPress($event,'code')" />
                                         <master-search class="mstrScrch" *ngIf="!editMode && !viewMode"
                                             [MasterSearchData]="codeData" #overlaycodeSearch
                                             (newRowClick)="codeSelected($event)"></master-search>
@@ -177,7 +176,8 @@
                                     :</label>
                                 <div class="col-sm-7">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="vendorRef" [readonly]="viewMode" maxlength="50"/>
+                                        <input type="text" matInput formControlName="vendorRef" [readonly]="viewMode"
+                                            maxlength="50" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -269,7 +269,8 @@
                                 <div class="col-sm-4">
                                     <mat-form-field style="width: 100%" appearance="outline">
                                         <input type="text" matInput formControlName="weightAvgCostFC"
-                                            style="text-align: right" [readonly]="viewMode|| codeEnable"
+                                            style="text-align: right"
+                                             [readonly]="viewMode || isCurrencySelected"
                                             AmountDecimalInput (focusout)="calculateWeightAvgCostFC($event)" />
                                     </mat-form-field>
                                 </div>
@@ -334,20 +335,20 @@
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%" appearance="outline">
                                         <input type="text" matInput AmountDecimalInput formControlName="price1per"
-                                            class="text-right" [readonly]="viewMode" />
+                                            class="text-right" [readonly]="viewMode || isCurrencySelected" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%" appearance="outline">
                                         <input type="text" matInput AmountDecimalInput formControlName="price1Fc"
-                                            [max]="12" class="text-right" [readonly]="viewMode" />
+                                            [max]="12" class="text-right" [readonly]="viewMode || isCurrencySelected" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%" appearance="outline">
                                         <input type="text" matInput AmountDecimalInput formControlName="price1Lc"
                                             class="text-right" [readonly]="viewMode"
-                                            (input)="setupFormSubscription()" />
+                                            (focusout)="price1LcChange()" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -371,19 +372,19 @@
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%" appearance="outline">
                                         <input type="text" matInput formControlName="price2per" AmountDecimalInput
-                                            class="text-right" [readonly]="viewMode" />
+                                            class="text-right" [readonly]="viewMode || isCurrencySelected" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%" appearance="outline">
                                         <input type="text" matInput AmountDecimalInput formControlName="price2Fc"
-                                            [max]="12" class="text-right" [readonly]="viewMode" />
+                                            [max]="12" class="text-right" [readonly]="viewMode || isCurrencySelected"/>
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%" appearance="outline">
                                         <input type="text" matInput AmountDecimalInput formControlName="price2Lc"
-                                            class="text-right" [readonly]="viewMode" />
+                                            class="text-right" [readonly]="viewMode" (focusout)="price2LcChange()" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -407,19 +408,19 @@
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%" appearance="outline">
                                         <input type="text" matInput formControlName="price3per" AmountDecimalInput
-                                            class="text-right" [readonly]="viewMode" />
+                                            class="text-right" [readonly]="viewMode || isCurrencySelected" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%" appearance="outline">
                                         <input type="text" matInput formControlName="price3Fc" AmountDecimalInput
-                                            [max]="12" class="text-right" [readonly]="viewMode" />
+                                            [max]="12" class="text-right" [readonly]="viewMode || isCurrencySelected" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%" appearance="outline">
                                         <input type="text" matInput formControlName="price3Lc" AmountDecimalInput
-                                            class="text-right" [readonly]="viewMode" />
+                                            class="text-right" [readonly]="viewMode" (focusout)="price3LcChange()"/>
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -443,19 +444,19 @@
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%" appearance="outline">
                                         <input type="text" matInput formControlName="price4per" AmountDecimalInput
-                                            class="text-right" [readonly]="viewMode" />
+                                            class="text-right" [readonly]="viewMode || isCurrencySelected" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%" appearance="outline">
                                         <input type="text" matInput formControlName="price4Fc" AmountDecimalInput
-                                            [max]="12" class="text-right" [readonly]=" viewMode" />
+                                            [max]="12" class="text-right" [readonly]=" viewMode || isCurrencySelected" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%" appearance="outline">
                                         <input type="text" matInput formControlName="price4Lc" AmountDecimalInput
-                                            class="text-right" [readonly]="viewMode" />
+                                            class="text-right" [readonly]="viewMode"  (focusout)="price4LcChange()" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -479,19 +480,19 @@
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%" appearance="outline">
                                         <input type="text" matInput formControlName="price5per" AmountDecimalInput
-                                            class="text-right" [readonly]="viewMode" />
+                                            class="text-right" [readonly]="viewMode || isCurrencySelected" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%" appearance="outline">
                                         <input type="text" matInput formControlName="price5Fc" AmountDecimalInput
-                                            [max]="12" class="text-right" [readonly]=" viewMode" />
+                                            [max]="12" class="text-right" [readonly]=" viewMode || isCurrencySelected" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%" appearance="outline">
                                         <input type="text" matInput formControlName="price5Lc" AmountDecimalInput
-                                            class="text-right" [readonly]="viewMode" />
+                                            class="text-right" [readonly]="viewMode"  (focusout)="price5LcChange()" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -531,21 +532,21 @@
                         </div> -->
                         <div class="col-md-1">
                             <div class="upload-btn-wrapper">
-                                <button  class="btn btnnew" id="ID032" style="width:125px" [disabled]="viewMode">
+                                <button class="btn btnnew" id="ID032" style="width:125px" [disabled]="viewMode">
                                     Item Image
                                 </button>
                                 <input type="file" name="uploadproduct" formControlName="picture_name"
                                     accept=".png, .jpg, .jpeg" #fileInput class="uploadproduct" [disabled]="viewMode"
                                     (change)="onFileChanged($event)" />
                             </div>
-                        
+
                             <div class="image_box">
                                 <div class="img_box">
                                     <img *ngIf="image" src="{{ image }}" style="width: 209px; height: 163px" />
                                 </div>
                             </div>
                         </div>
-                        
+
                     </div>
                 </div>
             </div>
