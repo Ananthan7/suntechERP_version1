@@ -1345,14 +1345,14 @@ export class SalesReturnComponent implements OnInit {
     // }
     // let sub: Subscription = this.suntechApi.getDynamicAPIwithParams('RetailSalesDataInDotnet/GetRetailSalesData',param)
 
-    let API = `RetailSaleReturn/GetRetailSReturnHeaderAndDetail/${data.BRANCH_CODE}/${data.VOCTYPE}/${data.YEARMONTH}/${data.VOCNO}`
+    let API = `RetailSaleReturn/GetRetailSaleReturn/${data.BRANCH_CODE}/${data.VOCTYPE}/${data.VOCNO}/${data.YEARMONTH}/${data.MID}`
     console.log('getRetailSalesMaster vocno', data.VOCNO);
     this.suntechApi.getDynamicAPI(API)
       .subscribe((res) => {
         this.snackBar.dismiss();
         // console.log(res, 'getRetailSalesMaster');
         const posCustomer = res.response.customer;
-        const retailSaleData = res.response.retailSales;
+        const retailSaleData = res.response.retailsReturn;
         const retailSReturnData = res.response.retailsReturn;
         const metalPurchaseData = res.response.metalPurchase;
         this.receiptDetailsList = res.response.retailReceipt;

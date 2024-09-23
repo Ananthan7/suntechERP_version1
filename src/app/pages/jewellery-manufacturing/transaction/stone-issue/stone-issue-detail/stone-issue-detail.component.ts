@@ -71,7 +71,7 @@ export class StoneIssueDetailComponent implements OnInit {
     SEARCH_FIELD: 'job_number',
     SEARCH_HEADING: 'Job Search',
     SEARCH_VALUE: '',
-    WHERECONDITION: "job_number<> ''",
+    WHERECONDITION: `JOB_CLOSED_ON is null and  Branch_code = '${this.comService.branchCode}'`,
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -105,7 +105,7 @@ export class StoneIssueDetailComponent implements OnInit {
   stockCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 257,
+    LOOKUPID: 271,
     SEARCH_FIELD: 'STOCK_CODE',
     SEARCH_HEADING: 'Stock Search',
     SEARCH_VALUE: '',
@@ -198,7 +198,7 @@ export class StoneIssueDetailComponent implements OnInit {
   }
   setFormValues() {
     if (!this.content) return
-    console.log(this.content,'view&edit')
+    console.log(this.content, 'view&edit')
     this.branchCode = this.content.BRANCH_CODE || this.content.HEADERDETAILS.BRANCH_CODE;
     this.stoneIssueDetailsFrom.controls.VOCTYPE.setValue(this.content.VOCTYPE || this.content.HEADERDETAILS.VOCTYPE)
     this.stoneIssueDetailsFrom.controls.VOCNO.setValue(this.content.VOCNO || this.content.HEADERDETAILS.VOCNO)
@@ -317,13 +317,13 @@ export class StoneIssueDetailComponent implements OnInit {
   }
   setStockCodeWhereCondition() {
     let form = this.stoneIssueDetailsFrom.value;
-    let WHERECONDITION = `@strProcessCode='${this.comService.nullToString(form.process)}',`
-    WHERECONDITION += `@strWorkerCode='${this.comService.nullToString(form.worker)}',`
-    WHERECONDITION += `@strSubJobNumber='${this.comService.nullToString(form.subjobnumber)}',`
-    WHERECONDITION += `@strBranchCode='${this.comService.branchCode}',`
-    WHERECONDITION += `@strStockCode='${this.comService.nullToString(form.stockCode)}'`
-    this.stockCodeData.WHERECONDITION = WHERECONDITION
-  }
+    let WHERECONDITION = `@DIVISION='${this.comService.nullToString(form.DIVCODE)}',`
+    WHERECONDITION += `@JOBNO='${this.comService.nullToString(form.jobNumber)}',`
+    WHERECONDITION += `@SUBJOBNO='${this.comService.nullToString(form.subjobnumber)}',`
+    WHERECONDITION += `@STOCKCODE='${this.comService.nullToString(form.stockCode)}',`
+  //   WHERECONDITION += `@strStockCode='${this.comService.nullToString(form.stockCode)}'`
+  //   this.stockCodeData.WHERECONDITION = WHERECONDITION
+   }
 
   close(data?: any) {
     //TODO reset forms and data before closing
@@ -541,7 +541,7 @@ export class StoneIssueDetailComponent implements OnInit {
   changeJobClicked() {
     // Check if stock code is filled
     const stockCode = this.stoneIssueDetailsFrom.controls.stockCode.value; // Assuming stockCode is the control name
-    
+
     if (!stockCode || stockCode.trim() === '') {
       // Show an error alert if stock code is not filled
       Swal.fire({
@@ -553,12 +553,12 @@ export class StoneIssueDetailComponent implements OnInit {
       });
       return; // Prevent further action
     }
-  
+
     // If stock code is filled, proceed with the form submission
     this.formSubmit('CONTINUE');
     this.stoneIssueDetailsFrom.reset();
   }
-  
+
   resetStockDetails() {
     this.stoneIssueDetailsFrom.controls.stockCode.setValue('')
     this.stoneIssueDetailsFrom.controls.stockCodeDes.setValue('')
@@ -576,15 +576,12 @@ export class StoneIssueDetailComponent implements OnInit {
     if (event.target.value === '') return;
 
     let postData = {
-      "SPID": "046",
+      "SPID": "132",
       "parameter": {
-        strStockCode: event.target.value,
-        strBranchCode: this.comService.nullToString(this.branchCode),
-        strVocType: this.content.HEADERDETAILS.VOCTYPE,
-        strUserName: this.comService.nullToString(this.userName),
-        strLocation: '',
-        strPartyCode: '',
-        strVocDate: this.comService.formatDateTime(this.comService.currentDate)
+        DIVISION: this.stoneIssueDetailsFrom.value.DIVCODE,
+        JOBNO: this.stoneIssueDetailsFrom.value.jobNumber,
+        SUBJOBNO: this.stoneIssueDetailsFrom.value.subjobnumber,
+        STOCKCODE: this.stoneIssueDetailsFrom.value.stockCode
       }
     };
 
@@ -649,7 +646,19 @@ export class StoneIssueDetailComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
+  setJobnumberWhereCondition() {
+    let postData = {
+      "SPID": "131",
+      "parameter": {
+        'strjob_Number': this.stoneIssueDetailsFrom.value.jobNumber,
+        'strUnq_Job_Id': this.stoneIssueDetailsFrom.value.subjobnumber,
+        'strBranch_Code': this.comService.branchCode,
+        'strJObPcsWise': '',
+        'strLocTypeCode': ''
+      }
+    }
 
+  }
 
   subJobNumberValidate(event?: any) {
     // let postData = {
@@ -683,6 +692,7 @@ export class StoneIssueDetailComponent implements OnInit {
           this.stoneIssueDetailsFrom.controls.PICTURE_PATH.setValue(data[0].PICTURE_PATH)
           // this.tableData = result.dynamicData[1] || []
           // this.columnhead1 = Object.keys(this.tableData[0])
+          this.setJobnumberWhereCondition()
           this.setStockCodeWhereCondition()
           this.getImageData()
         } else {

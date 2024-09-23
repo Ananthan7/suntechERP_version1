@@ -1702,7 +1702,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
-  isProcessCodeEmpty(flag: boolean) {
+  isFromProcessCodeEmpty(flag: boolean) {
     if (flag) {
       this.commonService.formControlSetReadOnly('TO_PROCESS_CODE', true)
       this.commonService.formControlSetReadOnly('FRM_WORKER_CODE', true)
@@ -1729,15 +1729,38 @@ export class ProcessTransferDetailsComponent implements OnInit {
       this.stockCodeSearch.VIEW_ICON = true;
     }
   }
+  isFromWorkerCodeEmpty(flag: boolean) {
+    if (flag) {
+      this.commonService.formControlSetReadOnly('TO_PROCESS_CODE', true)
+      this.commonService.formControlSetReadOnly('TO_WORKER_CODE', true)
+      this.commonService.formControlSetReadOnly('TO_PCS', true)
+      this.commonService.formControlSetReadOnly('GrossWeightTo', true)
+      this.commonService.formControlSetReadOnly('stockCode', true)
+      this.commonService.formControlSetReadOnly('txtLossQty', true)
+      this.toProcessMasterSearch.VIEW_ICON = false;
+      this.toWorkerMasterSearch.VIEW_ICON = false;
+      this.stockCodeSearch.VIEW_ICON = false;
+    } else {
+      this.commonService.formControlSetReadOnly('TO_PROCESS_CODE', false)
+      this.commonService.formControlSetReadOnly('TO_WORKER_CODE', false)
+      this.commonService.formControlSetReadOnly('TO_PCS', false)
+      this.commonService.formControlSetReadOnly('GrossWeightTo', false)
+      this.commonService.formControlSetReadOnly('stockCode', false)
+      this.commonService.formControlSetReadOnly('txtLossQty', false)
+      this.toProcessMasterSearch.VIEW_ICON = true;
+      this.toWorkerMasterSearch.VIEW_ICON = true;
+      this.stockCodeSearch.VIEW_ICON = true;
+    }
+  }
   /**USE:from porcesscode Validate API call */
   fromProcesscodeValidate(event: any) {
     if (this.viewMode) return
     if (event.target.value == '') {
       this.fromProcessMasterOverlay.showOverlayPanel(event)
-      this.isProcessCodeEmpty(true)
+      this.isFromProcessCodeEmpty(true)
       return
     }
-    this.isProcessCodeEmpty(false)
+    this.isFromProcessCodeEmpty(false)
     let form = this.processTransferdetailsForm.value
     let postData = {
       "SPID": "083",
@@ -1809,9 +1832,13 @@ export class ProcessTransferDetailsComponent implements OnInit {
   }
   // from Workercode Validate
   fromWorkercodeValidate(event: any) {
+    if (this.viewMode) return
     if (event.target.value == '') {
+      this.fromWorkerMasterOverley.showOverlayPanel(event)
+      this.isFromWorkerCodeEmpty(true)
       return
     }
+    this.isFromWorkerCodeEmpty(false)
     let form = this.processTransferdetailsForm.value
     let postData = {
       "SPID": "084",
@@ -1960,7 +1987,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
   processCodeFromSelected(event: any) {
     this.processTransferdetailsForm.controls.FRM_PROCESS_CODE.setValue(event.PROCESS)
     this.processTransferdetailsForm.controls.FRM_PROCESSNAME.setValue(event.Description)
-    this.isProcessCodeEmpty(false)
+    this.isFromProcessCodeEmpty(false)
     this.setFromProcessWhereCondition()
     this.setFromWorkerWhereCondition()
     let data = this.subJobDetailData.filter((item: any) => event.PROCESS == item.PROCESS && event.WORKER == item.WORKER)
@@ -1989,6 +2016,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
 
   workerCodeFromSelected(event: any) {
     this.processTransferdetailsForm.controls.FRM_WORKER_CODE.setValue(event.WORKER_CODE)
+    this.isFromWorkerCodeEmpty(false)
     this.setFromWorkerWhereCondition()
   }
   workerCodeToSelected(event: any) {
