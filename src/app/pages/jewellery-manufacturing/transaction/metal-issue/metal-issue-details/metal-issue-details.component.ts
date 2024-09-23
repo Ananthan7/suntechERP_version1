@@ -726,15 +726,12 @@ export class MetalIssueDetailsComponent implements OnInit {
     if (event.target.value === '') return;
 
     let postData = {
-      "SPID": "046",
+      "SPID": "132",
       "parameter": {
-        strStockCode: event.target.value,
-        strBranchCode: this.comService.nullToString(this.branchCode),
-        strVocType: this.content.HEADERDETAILS.VOCTYPE,
-        strUserName: this.comService.nullToString(this.userName),
-        strLocation: '',
-        strPartyCode: '',
-        strVocDate: this.comService.formatDate(this.comService.currentDate)
+        DIVISION: this.comService.nullToString(this.metalIssueDetailsForm.value.DIVCODE),
+        JOBNO: this.comService.nullToString(this.metalIssueDetailsForm.value.jobNumber),
+        SUBJOBNO: this.comService.nullToString(this.metalIssueDetailsForm.value.subJobNo),
+        STOCKCODE: this.comService.nullToString(event.target.value),
       }
     };
 
@@ -745,15 +742,9 @@ export class MetalIssueDetailsComponent implements OnInit {
         if (result.status === "Success" && result.dynamicData[0]) {
           let data = result.dynamicData[0];
           if (data) {
-            console.log(data, 'data');
-            console.log("============");
-            
             if (data[0].VALID_STOCK) {
               // Handle the valid stock case
-              // You can set other form values or perform other actions here if needed
-
               let stockData = result.dynamicData[1][0]; // Assuming result.dynamicData[1] contains stock details
-              console.log(stockData);
               
               let purity = stockData.PURITY || 0; // Default to 0 if PURITY is not found
               let division = stockData.DIVISION || 0;
@@ -766,10 +757,6 @@ export class MetalIssueDetailsComponent implements OnInit {
               this.metalIssueDetailsForm.controls.pcs.setValue(pcs);
               this.metalIssueDetailsForm.controls.stockCodeDes.setValue(description);
               this.metalIssueDetailsForm.controls.STONE_WT.setValue(stoneWeight);
-
-
-
-
               this.overlaystockcode.closeOverlayPanel();
 
             } else {
