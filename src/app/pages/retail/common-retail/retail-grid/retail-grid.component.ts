@@ -362,8 +362,11 @@ export class RetailGridComponent implements OnInit {
         } catch (e) {
           return;
         }
-        const fromVocDate = parsedData.CONTROL_DETAIL?.FROMVOCDATE || parsedData.CONTROL_DETAIL?.STRFROMDATE;
-        const toVocDate = parsedData.CONTROL_DETAIL?.TOVOCDATE || parsedData.CONTROL_DETAIL?.STRTODATE;
+        console.log('data Refetch for retail template grid',parsedData.CONTROL_DETAIL)
+        const fromVocDate = parsedData.CONTROL_DETAIL?.FROMVOCDATE || parsedData.CONTROL_DETAIL?.STRFROMDATE ||
+          parsedData.CONTROL_DETAIL?.strFmDate;
+        const toVocDate = parsedData.CONTROL_DETAIL?.TOVOCDATE || parsedData.CONTROL_DETAIL?.STRTODATE ||
+          parsedData.CONTROL_DETAIL?.strToDate;
       
         item.FROMVOCDATE = fromVocDate;
         item.TOVOCDATE = toVocDate;
