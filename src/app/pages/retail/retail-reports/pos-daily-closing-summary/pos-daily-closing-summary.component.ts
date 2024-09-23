@@ -12,6 +12,7 @@ import { SuntechAPIService } from "src/app/services/suntech-api.service";
 import { Subscription } from "rxjs";
 import { ToastrService } from "ngx-toastr";
 import Swal from "sweetalert2";
+import { stringify } from "querystring";
 
 @Component({
   selector: "app-pos-daily-closing-summary",
@@ -73,9 +74,9 @@ export class PosDailyClosingSummaryComponent implements OnInit {
   ];
 
   transactionOptions = [
-    { value: "Sales", label: "Sales" },
-    { value: "Sales Returns", label: "Sales Returns" },
-    { value: "Net Sales", label: "Net Sales" },
+    { value: 0, label: "Sales" },
+    { value: 1, label: "Sales Returns" },
+    { value: 2, label: "Net Sales" },
   ];
 
   posDailyClosingSummaryForm: FormGroup = this.formBuilder.group({
@@ -84,9 +85,16 @@ export class PosDailyClosingSummaryComponent implements OnInit {
     diamondType: [""],
     fromDate: [new Date()],
     toDate: [new Date()],
+    branch: [''],
     templateName: ['']
   });
   branchDivisionControls: any;
+  branchDivisionControlsTooltip: any;
+  formattedBranchDivisionData: any;
+  popupVisible: boolean = false;
+  templateNameHasValue: boolean= false;
+  fetchedBranchDataParam: any[]= [];
+  fetchedBranchData: any[] =[];
 
   
   constructor(
@@ -284,15 +292,6 @@ export class PosDailyClosingSummaryComponent implements OnInit {
     );
   }
 
-
-
-
-  branchDivisionControlsTooltip: any;
-  formattedBranchDivisionData: any;
-  popupVisible: boolean = false;
-  templateNameHasValue: boolean= false;
-
-
   selectedData(data: any) {
     console.log(data)
     // let content= ``, content2 =``,  content3 =``, content4 =``
@@ -432,20 +431,16 @@ export class PosDailyClosingSummaryComponent implements OnInit {
 
   previewClick() {
     let postData = {
-      "SPID": "0150",
+      "SPID": "150",
       "parameter": {
-        "strSalType": '',
-        "strBranch" : '',
+        "strSalType": JSON.stringify( this.posDailyClosingSummaryForm.value.transactionType),
+        "strBranch" : this.formattedBranchDivisionData || this.fetchedBranchDataParam,
         "strFmDate" : this.formatDateToYYYYMMDD(this.posDailyClosingSummaryForm.value.fromDate),
         "strToDate" : this.formatDateToYYYYMMDD(this.posDailyClosingSummaryForm.value.toDate),
-        "str_MGroupBy": ''
-        // "STRBRANCHCODES": this.formattedBranchDivisionData || this.fetchedBranchDataParam,
-        // "STRVOCTYPES": this.VocTypeParam, //this.commonService.getqueryParamVocType(),
-        // "FROMVOCDATE": this.formatDateToYYYYMMDD(this.retailSalesCollection.value.fromDate),
-        // "TOVOCDATE": this.formatDateToYYYYMMDD(this.posDailyClosingSummaryForm.value.toDate) ,
-        // "flag": '',
-        // "USERBRANCH": localStorage.getItem('userbranch'),
-        // "USERNAME": localStorage.getItem('username')
+        "str_MGroupBy": this.posDailyClosingSummaryForm.value.metalType || this.posDailyClosingSummaryForm.value.diamondType,
+        'USERNAME': localStorage.getItem('username'),
+        'MODE': localStorage.getItem('userbranch'),
+        'VOCTYPE': ''
       }
     }
     console.log(postData)  

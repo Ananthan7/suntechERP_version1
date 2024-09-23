@@ -17,7 +17,7 @@
                 <div class="row align-items-center mb-1">
                   <label for="inputPassword" class="col-sm-2 col-form-label">Code * :</label>
                   <div class="col-md-3">
-                    <mat-form-field style="width: 100%;">
+                    <mat-form-field  appearance="outline" style="width: 100%;">
                       <input type="text" formControlName="code" matInput #code  id="code" (focusout)="checkCodeExists($event)" [readonly]="editableMode|| viewMode"
                         (input)="code.value = code.value.toUpperCase()" maxlength="6" appNoEmptySpace/>
                     </mat-form-field>
@@ -32,7 +32,7 @@
                 <div class="row align-items-center mb-1">
                   <label for="inputPassword" class="col-sm-2 col-form-label">Description * :</label>
                   <div class="col-md-6">
-                    <mat-form-field style="width: 100%;">
+                    <mat-form-field  appearance="outline" style="width: 100%;">
                       <input type="text" formControlName="description" matInput #description   [readonly]="viewMode"
                         (input)="description.value = description.value.toUpperCase()" maxlength="100" appNoEmptySpace/>
                     </mat-form-field>
@@ -73,7 +73,7 @@
             </dxi-column>
 
              <div *dxTemplate="let data of 'codetemp'">
-              <mat-form-field style="width: 100%; margin-left: 7px;"> 
+              <mat-form-field  appearance="outline" style="width: 100%; margin-left: 7px;"> 
                 <mat-select [(value)]="selectedOptions[data.data.SRNO - 1]" (selectionChange)="onCodeSelect($event, data)" *ngIf="componentSizeType && componentSizeType.length > 0">
                   <mat-option *ngFor="let option of componentSizeType" [value]="option" [disabled]="isOptionSelected(data.data.SRNO, option) || viewMode">
                     {{ option.COMPSIZE_CODE }}

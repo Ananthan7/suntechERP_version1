@@ -36,7 +36,7 @@ export class PosSalesOrderCancellationComponent implements OnInit {
     private snackBar: MatSnackBar,
     private dataService: SuntechAPIService,
     private comService: CommonServiceService
-  ) {}
+  ) { }
 
   salesOrderCancellationForm: FormGroup = this.formBuilder.group({
     vocType: [""],
@@ -66,26 +66,39 @@ export class PosSalesOrderCancellationComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    this.content?.FLAG === "EDIT" || this.content?.FLAG === "VIEW"
-      ? this.getDataToEdit(this.content)
-      : console.log("ADD");
+    this.handleExistingDetails();
+    this.setFormDefaults();
+  }
 
+  private handleExistingDetails(): void {
+    if (this.content?.FLAG === "EDIT" || this.content?.FLAG === "VIEW") {
+      this.getDataToEdit(this.content);
+    } else {
+      this.generateVocNo();
+    }
+  }
+
+  private setFormDefaults(): void {
     this.salesOrderCancellationForm.controls["vocType"].setValue(
       this.comService.getqueryParamVocType()
     );
-    this.generateVocNo();
-    this.salesOrderCancellationForm.controls.currency.setValue(
+
+    this.salesOrderCancellationForm.controls["currency"].setValue(
       this.comService.compCurrency
     );
-    this.salesOrderCancellationForm.controls.currencyRate.setValue(
-      this.comService.getCurrRate(this.comService.compCurrency)
+
+    const formattedCurrencyRate = this.comService.decimalQuantityFormat(
+      this.comService.getCurrRate(this.comService.compCurrency),
+      'RATE'
     );
+
+    this.salesOrderCancellationForm.controls["currencyRate"].setValue(formattedCurrencyRate);
   }
 
+
   generateVocNo() {
-    let API = `GenerateNewVoucherNumber/GenerateNewVocNum/${this.comService.getqueryParamVocType()}/${
-      this.branchCode
-    }/${this.yearMonth}/${this.convertDateToYMD(this.currentDate)}`;
+    let API = `GenerateNewVoucherNumber/GenerateNewVocNum/${this.comService.getqueryParamVocType()}/${this.branchCode
+      }/${this.yearMonth}/${this.convertDateToYMD(this.currentDate)}`;
     let sub: Subscription = this.dataService
       .getDynamicAPI(API)
       .subscribe((res) => {
@@ -164,7 +177,7 @@ export class PosSalesOrderCancellationComponent implements OnInit {
   };
 
   orderCodeSelected(e: any) {
-    this.salesOrderCancellationForm.controls["order"].setValue(e.NAME);
+    this.salesOrderCancellationForm.controls["order"].setValue(e.OrderCancellation);
   }
 
   orderCancelCode: MasterSearchModel = {
@@ -183,6 +196,7 @@ export class PosSalesOrderCancellationComponent implements OnInit {
   orderCancelSelected(e: any) {
     this.salesOrderCancellationForm.controls["orderCancel"].setValue(e.ACCODE);
   }
+
   acCode: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -199,62 +213,82 @@ export class PosSalesOrderCancellationComponent implements OnInit {
   acCodeSelected(e: any) {
     this.salesOrderCancellationForm.controls["ac"].setValue(e.ACCOUNT_MODE);
     this.salesOrderCancellationForm.controls["acCode"].setValue(
-      e["ACCOUNT HEAD"]
+      e.ACCOUNT_HEAD
     );
   }
 
-  getDataToEdit(data: any) {
-    this.salesOrderCancellationForm.controls["vocType"].setValue(data.VOCTYPE);
-    this.salesOrderCancellationForm.controls["vocNo"].setValue(data.VOCNO);
-    this.salesOrderCancellationForm.controls["vocDate"].setValue(data.VOCDATE);
-    this.salesOrderCancellationForm.controls["enteredBy"].setValue(
-      data.SALESPERSON_CODE
-    ),
-      this.salesOrderCancellationForm.controls["customerCode"].setValue(
-        data.POSCUSTCODE
-      );
-    // this.salesOrderCancellationForm.controls['customerName'].setvalue(data.)
-    this.salesOrderCancellationForm.controls["order"].setValue(data.ORDER_REF);
-    // this.salesOrderCancellationForm.controls['orderDate'].setValue(data.),
-    this.salesOrderCancellationForm.controls["orderAmount"].setValue(
-      data.ORDER_AMOUNTFC
-    );
-    this.salesOrderCancellationForm.controls["advReceived"].setValue(
-      data.ADV_AMOUNTFC
-    );
-    this.salesOrderCancellationForm.controls["ac"].setValue(data.ACCODE);
-    this.salesOrderCancellationForm.controls["acCode"].setValue(
-      data.HDACCOUNT_HEAD
-    );
-    this.salesOrderCancellationForm.controls["currency"].setValue(
-      data.CURRENCY_CODE
-    );
-    this.salesOrderCancellationForm.controls["currencyRate"].setValue(
-      data.CURRENCY_RATE
-    );
-    // this.salesOrderCancellationForm.controls['orderAge']: [""],
-    this.salesOrderCancellationForm.controls["noItem"].setValue(
-      data.ITEM_COUNT
-    );
-    this.salesOrderCancellationForm.controls["cheqNo"].setValue(data.CHEQUE_NO);
-    this.salesOrderCancellationForm.controls["cheqDate"].setValue(
-      data.CHEQUE_DATE
-    );
-    this.salesOrderCancellationForm.controls["cheqBank"].setValue(
-      data.CHEQUE_BANK
-    );
-    this.salesOrderCancellationForm.controls["depBank"].setValue(data.BANKCODE);
-    this.salesOrderCancellationForm.controls["cancellationCharge"].setValue(
-      data.CANCEL_CHARGECC
-    );
-    this.salesOrderCancellationForm.controls["refundAmount"].setValue(
-      data.REFUND_AMOUNTCC
-    );
-    // this.salesOrderCancellationForm.controls['orderCancel'].setValue(data.CHEQUE_NO)
-    this.salesOrderCancellationForm.controls["modeOfRefundSelect"].setValue(
-      data.REFUND_MODE
-    );
+  convertToISODate(vocDate: string): string {
+    const [day, month, year] = vocDate.split('-').map(Number);
+    const date = new Date(year, month - 1, day);
+    return date.toISOString();
   }
+
+  getDataToEdit(data: any): void {
+    this.salesOrderCancellationForm.controls["vocType"].setValue(data.VOCTYPE ?? '');
+    this.salesOrderCancellationForm.controls["vocNo"].setValue(data.VOCNO ?? '');
+    this.salesOrderCancellationForm.controls["vocDate"].setValue(
+      data.VOCDATE ? this.convertToISODate(data.VOCDATE) : ''
+    );
+
+    this.salesOrderCancellationForm.controls["enteredBy"].setValue(
+      data.SALESPERSON_CODE ?? ''
+    );
+
+    this.salesOrderCancellationForm.controls["customerCode"].setValue(
+      data.POSCUSTCODE ?? ''
+    );
+
+    if (data.POSCUSTCODE)
+      this.findCustomerName(data.POSCUSTCODE)
+
+    this.salesOrderCancellationForm.controls["order"].setValue(data.ORDER_REF ?? '');
+
+    this.salesOrderCancellationForm.controls["orderAmount"].setValue(
+      this.comService.transformDecimalVB(
+        this.comService.allbranchMaster?.BAMTDECIMALS,
+        data.ORDER_AMOUNTFC ?? 0
+      )
+    );
+
+    this.salesOrderCancellationForm.controls["advReceived"].setValue(
+      this.comService.transformDecimalVB(
+        this.comService.allbranchMaster?.BAMTDECIMALS,
+        data.ADV_AMOUNTFC ?? 0
+      )
+    );
+
+    this.salesOrderCancellationForm.controls["ac"].setValue(data.ACCODE ?? '');
+    this.salesOrderCancellationForm.controls["acCode"].setValue(data.HDACCOUNT_HEAD ?? '');
+
+    this.salesOrderCancellationForm.controls["currency"].setValue(data.CURRENCY_CODE ?? '');
+    this.salesOrderCancellationForm.controls["currencyRate"].setValue(data.CURRENCY_RATE ?? '');
+
+    this.salesOrderCancellationForm.controls["noItem"].setValue(data.ITEM_COUNT ?? 0);
+    this.salesOrderCancellationForm.controls["cheqNo"].setValue(data.CHEQUE_NO ?? '');
+    this.salesOrderCancellationForm.controls["cheqDate"].setValue(
+      data.CHEQUE_DATE ? this.convertToISODate(data.CHEQUE_DATE) : ''
+    );
+
+    this.salesOrderCancellationForm.controls["cheqBank"].setValue(data.CHEQUE_BANK ?? '');
+    this.salesOrderCancellationForm.controls["depBank"].setValue(data.BANKCODE ?? '');
+
+    this.salesOrderCancellationForm.controls["cancellationCharge"].setValue(
+      this.comService.transformDecimalVB(
+        this.comService.allbranchMaster?.BAMTDECIMALS,
+        data.CANCEL_CHARGECC ?? 0
+      )
+    );
+
+    this.salesOrderCancellationForm.controls["refundAmount"].setValue(
+      this.comService.transformDecimalVB(
+        this.comService.allbranchMaster?.BAMTDECIMALS,
+        data.REFUND_AMOUNTCC ?? 0
+      )
+    );
+
+    this.salesOrderCancellationForm.controls["modeOfRefundSelect"].setValue(data.REFUND_MODE ?? '');
+  }
+
 
   validateForm() {
     if (this.salesOrderCancellationForm.invalid) {
@@ -280,7 +314,7 @@ export class PosSalesOrderCancellationComponent implements OnInit {
       VOCTYPE: this.salesOrderCancellationForm.value.vocType,
       VOCNO: this.salesOrderCancellationForm.value.vocNo,
       YEARMONTH: this.yearMonth,
-      VOCDATE: this.salesOrderCancellationForm.value.vocDate,
+      VOCDATE: new Date(new Date(this.salesOrderCancellationForm.value.vocDate).setHours(0, 0, 0, 0) - (new Date().getTimezoneOffset() * 60000)).toISOString(),
       POSCUSTCODE: this.salesOrderCancellationForm.value.customerCode,
       ADV_BRANCH_CODE: "",
       ADV_VOCTYPE: "",
@@ -310,7 +344,7 @@ export class PosSalesOrderCancellationComponent implements OnInit {
       ORDERDAYS: 0,
       ITEM_COUNT: this.salesOrderCancellationForm.value.noItem,
       ACCODE_CODE: "",
-      CHEQUE_DATE: this.salesOrderCancellationForm.value.cheqDate,
+      CHEQUE_DATE: new Date(new Date(this.salesOrderCancellationForm.value.cheqDate).setHours(0, 0, 0, 0) - (new Date().getTimezoneOffset() * 60000)).toISOString(),
       CHEQUE_NO: this.salesOrderCancellationForm.value.cheqNo,
       CHEQUE_BANK: this.salesOrderCancellationForm.value.cheqBank,
       BANKCODE: this.salesOrderCancellationForm.value.depBank,
@@ -349,24 +383,38 @@ export class PosSalesOrderCancellationComponent implements OnInit {
     this.subscriptions.push(Sub);
   }
 
+  findCustomerName(customerCode: string) {
+    let API = `PosCustomerMaster/GetCustomerByCode/${customerCode}`;
+    this.dataService.getDynamicAPI(API)
+      .subscribe((resp) => {
+        if (resp.status == 'Success') {
+          this.salesOrderCancellationForm.controls["customerName"].setValue(
+            resp.response.NAME ?? ''
+          );
+
+        } else {
+
+        }
+      });
+  }
+
+
   update() {
     if (this.salesOrderCancellationForm.invalid) {
       this.toastr.error("select all required fields");
       return;
     }
 
-    let API = `POSOrderCancel/${
-      this.branchCode
-    }/${this.comService.getqueryParamVocType()}/${
-      this.salesOrderCancellationForm.value.vocNo
-    }/${this.yearMonth}`;
+    let API = `POSOrderCancel/${this.branchCode
+      }/${this.comService.getqueryParamVocType()}/${this.salesOrderCancellationForm.value.vocNo
+      }/${this.yearMonth}`;
     let postData = {
       MID: 0,
       BRANCH_CODE: this.branchCode,
       VOCTYPE: this.salesOrderCancellationForm.value.vocType,
       VOCNO: this.salesOrderCancellationForm.value.vocNo,
       YEARMONTH: this.yearMonth,
-      VOCDATE: this.salesOrderCancellationForm.value.vocDate,
+      VOCDATE: new Date(new Date(this.salesOrderCancellationForm.value.vocDate).setHours(0, 0, 0, 0) - (new Date().getTimezoneOffset() * 60000)).toISOString(),
       POSCUSTCODE: this.salesOrderCancellationForm.value.customerCode,
       ADV_BRANCH_CODE: "",
       ADV_VOCTYPE: "",
@@ -396,12 +444,12 @@ export class PosSalesOrderCancellationComponent implements OnInit {
       ORDERDAYS: 0,
       ITEM_COUNT: this.salesOrderCancellationForm.value.noItem,
       ACCODE_CODE: "",
-      CHEQUE_DATE: this.salesOrderCancellationForm.value.cheqDate,
+      CHEQUE_DATE: new Date(new Date(this.salesOrderCancellationForm.value.cheqDate).setHours(0, 0, 0, 0) - (new Date().getTimezoneOffset() * 60000)).toISOString(),
       CHEQUE_NO: this.salesOrderCancellationForm.value.cheqNo,
       CHEQUE_BANK: this.salesOrderCancellationForm.value.cheqBank,
       BANKCODE: this.salesOrderCancellationForm.value.depBank,
-      HDACCOUNT_HEAD: this.salesOrderCancellationForm.value.ac,
-      ACCODE: this.salesOrderCancellationForm.value.acCode,
+      HDACCOUNT_HEAD: this.salesOrderCancellationForm.value.acCode,
+      ACCODE: this.salesOrderCancellationForm.value.ac,
       PDCYN: "",
       GJVMID: 0,
       GJVREFERENCE: "",

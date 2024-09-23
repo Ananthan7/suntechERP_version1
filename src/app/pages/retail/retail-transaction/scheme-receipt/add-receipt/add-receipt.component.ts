@@ -18,6 +18,8 @@ export class AddReceiptComponent implements OnInit {
   @Output() closebtnClick = new EventEmitter();
   branchArray: any[] = [];
   typeCodeArray: any[] = [];
+  yearMonth?: any =
+    localStorage.getItem("YEAR") || this.commonService.yearSelected;
   selectedTypeArray: any[] = [];
   isViewTypeCode: boolean = false;
   isViewCheckDetail: boolean = true;
@@ -92,6 +94,7 @@ export class AddReceiptComponent implements OnInit {
     Narration: ['',],
     SRNO: [0],
     SchemeCode: [''],
+    POSCustomerCode: [''],
     SchemeId: [''],
     SchemeBalance: [0],
     SchemeTotalAmount: [''],
@@ -128,6 +131,7 @@ export class AddReceiptComponent implements OnInit {
   }
   setFormValues() {
     this.receiptEntryForm.controls.SchemeCode.setValue(this.content.SchemeCode)
+    this.receiptEntryForm.controls.POSCustomerCode.setValue(this.content.SCH_CUSTOMER_CODE??"")
     this.receiptEntryForm.controls.SchemeId.setValue(this.content.SchemeID)
     this.setFormControlValue('InstallmentAmount', this.content.SCH_INST_AMOUNT_FC)
     this.setFormControlValue('Header_Amount', this.content.SCH_INST_AMOUNT_FC)
@@ -179,10 +183,10 @@ export class AddReceiptComponent implements OnInit {
       SCH_CUSTOMER_CODE: this.content.SCH_CUSTOMER_CODE || '',
       SCH_CUSTOMER_ID: this.content.SchemeID || '',
     }
-    let Sub: Subscription = this.dataService.getDynamicAPIwithParams('SchemeReceipt/GetSchemeReceipts', param)
+    let Sub: Subscription = this.dataService.getDynamicAPI(`SchemeReceipt/GetSchemeReceipts/${this.content.SCH_CUSTOMER_CODE??this.content.POSCustomerCode}/${this.content.SchemeID}`)
       .subscribe((result) => {
-        if (result.response) {
-          this.gridDataSource = result.response
+        if (result) {
+          this.gridDataSource = result.dynamicData[1];
           this.calculateGridAmount()
         } else {
           this.disableAmountFC = true;
@@ -212,7 +216,7 @@ export class AddReceiptComponent implements OnInit {
       this.receiptEntryForm.controls.AC_Description.setValue(data.ACCOUNT_HEAD)
       this.getAccountMaster(data.ACCODE)
     }
-    if(data.CURRENCY_CODE){
+    if (data.CURRENCY_CODE) {
       this.receiptEntryForm.controls.CurrCode.setValue(data.CURRENCY_CODE)
     }
   }
@@ -282,7 +286,7 @@ export class AddReceiptComponent implements OnInit {
             this.disableAmountFC = true
           }
           this.currencyCodeChange(this.receiptEntryForm.value.CurrCode);
-         
+
         } else {
           this.commonService.toastErrorByMsgId('PartyCode not found in credit master')
         }
@@ -338,13 +342,13 @@ export class AddReceiptComponent implements OnInit {
       this.commonService.toastErrorByMsgId('Party Code Not Found')
       return
     }
-    let param ={
+    let param = {
       Accode: accountCode,
       strdate: this.commonService.formatDate(new Date()),
       branch_code: this.commonService.branchCode,
       mainvoctype: this.commonService.getqueryParamMainVocType()
     }
-    let Sub: Subscription = this.dataService.getDynamicAPIwithParams(`TaxDetails`,param)
+    let Sub: Subscription = this.dataService.getDynamicAPI(`TaxDetails/${accountCode}/${this.yearMonth}/${this.commonService.branchCode}/${this.commonService.getqueryParamMainVocType()}/${this.content.VocType ?? "pos"}`)
       .subscribe((result) => {
         if (result.response) {
           let data = result.response

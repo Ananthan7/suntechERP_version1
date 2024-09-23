@@ -6,68 +6,117 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" 
+ [isViewSave]="false" [isViewCancel]="false" [isViewDelete]="false" [isViewMore]="false"></modal-header>
+
 <div class="container-fluid pt-3">
-    <form>
+  <form [formGroup]="RetailKaratWiseSaleForm">
         
         <div class="row mb-3">
             <div class="col-md-9">
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="row">
-                            <label for="inputPassword" class="col-sm-4 col-form-label">From Date :</label>
-                            <div class="col-sm-8">
-                              <div class="position-relative d-flex">
-                                <mat-form-field style="width: 100%;">
-                                    <input matInput [matDatepicker]="vocdate"  
-                                    placeholder="DD/MM/YYYY"  DateValidation />
-                                  <mat-datepicker-toggle matSuffix [for]="vocdate"></mat-datepicker-toggle>
-                                  <mat-datepicker #vocdate></mat-datepicker>
-                                  </mat-form-field>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="row">
-                            <mat-checkbox class="example-margin">Branch Wise</mat-checkbox>
-                          </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="row">
-                            <label for="inputPassword" class="col-sm-4 col-form-label">To Date :</label>
-                            <div class="col-sm-8">
-                              <div class="position-relative d-flex">
-                                <mat-form-field style="width: 100%;">
-                                    <input matInput [matDatepicker]="vocdate"  
-                                    placeholder="DD/MM/YYYY"  DateValidation />
-                                  <mat-datepicker-toggle matSuffix [for]="vocdate"></mat-datepicker-toggle>
-                                  <mat-datepicker #vocdate></mat-datepicker>
-                                  </mat-form-field>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="row">
-                            <mat-checkbox class="example-margin">Invoice Wise</mat-checkbox>
-                          </div>
-                    </div> 
+              <div class="row mb-1">
+                <label for="inputPassword"  class="col-sm-1 col-form-label"  id="ID001"> Branch</label>
+                <div class="col-md-2">
+                    <mat-form-field appearance="outline" style="width: -webkit-fill-available">
+                    <input matInput="text" name="branch" autocomplete="off" formControlName="branch"/>
+                    <app-branch-division [fetchData]="fetchedBranchData" (newRowClick)="selectedData($event)"
+                    class="branchDivisionelectr" [matTooltip]="branchDivisionControlsTooltip"
+                    matTooltipClass="custom-tooltip"  matTooltipPosition="above"></app-branch-division>
+                    </mat-form-field>
                 </div>
+    
+                <div class="col-md-8">
+                    <app-date (selectedDate)="setDateValue($event)"></app-date>
+                </div> 
+
+                <div class="col-md-1 checkboxAlign">
+                  <div class="row">
+                      <mat-checkbox formControlName="BranchWise" class="example-margin">Branch Wise</mat-checkbox>
+                  </div>
+                  <div class="row">
+                      <mat-checkbox formControlName="InvoiceWise" class="example-margin">Invoice Wise</mat-checkbox>
+                  </div>
+                </div>
+              </div>
             </div>  
         </div>
-        <div class="row  mt-1 pt-3 mb-3">
-            <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
-                    [allowColumnReordering]="true"
-                    [allowColumnResizing]="true"
-                    [columnAutoWidth]="true">
-                      <dxo-paging [enabled]="false"></dxo-paging>
-                      <dxo-editing mode="cell" [allowUpdating]="true">
-                      </dxo-editing>
-                      <dxo-selection mode="multiple"></dxo-selection>
-                      <dxo-scrolling mode="virtual"></dxo-scrolling>
-        
-                      <dxi-column *ngFor="let data of columnhead" dataField="{{ data }}" caption="{{ data }}"
-                        [allowEditing]="true" alignment="center" backgroundcolor="#000">
-                      </dxi-column>
-                    </dx-data-grid>
-        </div>
 
-        </form>
-        </div>
+        <div class="row  mt-1 pt-3 mb-3">
+          <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
+            [allowColumnReordering]="true" [allowColumnResizing]="true" [columnAutoWidth]="true">
+            <dxo-paging [enabled]="false"></dxo-paging>
+            <dxo-editing mode="cell" [allowUpdating]="true">
+            </dxo-editing>
+            <dxo-selection mode="multiple"></dxo-selection>
+            <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+            <dxi-column *ngFor="let data of columnhead" dataField="{{ data }}" caption="{{ data }}"
+              [allowEditing]="true" alignment="center" backgroundcolor="#000">
+            </dxi-column>       
+            </dx-data-grid>
+        </div>  
+
+
+        <dx-popup [width]="300" [height]="180" [showTitle]="true" container=".dx-viewport"
+            title="Template Data" [dragEnabled]="false" [showCloseButton]="false" (onHidden)="popupClosed()"
+            [visible]="popupVisible">
+            <div class="popup-content">
+            <div class="form-group">
+                <label for="T_Name">Name:</label>
+                <input type="text" id="T_Name" class="form-control" formControlName="templateName"/>
+            </div>
+            <div class="button-group d-flex">
+                <button mat-flat-button [ngClass]="{SaveNew_template: templateNameHasValue,
+                    'btn-m-r-10': true, 'demo-button': true, 'btn-width': true, 'mx-1': true}"
+                (click)="saveTemplate_DB()">
+                {{ templateNameHasValue ? "Save as New Template" : "Save" }}
+                </button>
+                <button  mat-flat-button class="btn-m-r-10 btn-width mx-1 cancelBTN"
+                (click)="popupClosed()">
+                Cancel</button>
+            </div>
+            <br />
+            <br />
+            <br />
+            </div>
+        </dx-popup>
+
+        <div class="row mt-2 justify-content-end mx-2">
+            <div class="icon-label-container" (click)="saveTemplate()" matTooltip="Save the selections as a new template">
+              <i class="fa fa-bookmark fa-2x mt-3" style="color: #5497b2"></i>
+              <span style="font-size: inherit;">Save as Template</span>
+            </div>
+
+            <div class="icon-label-container" (click)="previewClick()" matTooltip="Preview the content">
+              <i class="fa fa-eye fa-2x" style="color: #5497b2"></i>
+              <span class="label">Preview</span>
+            </div>
+
+            <div class="icon-label-container" matTooltip="Take a print">
+              <i class="fa fa-print fa-2x" style="color: #031082"></i>
+              <span class="label">Print</span>
+            </div>
+
+            <div class="icon-label-container"  matTooltip="Generate Excel Report">
+              <i class="fa fa-file-excel fa-2x" style="color: green"></i>
+              <span class="label">Excel</span>
+            </div>
+
+            <div class="icon-label-container" matTooltip="Generate PDF Report">
+              <i class="fa fa-file-pdf fa-2x" style="color: orangered"></i>
+              <span class="label">PDF</span>
+            </div>
+
+            <div class="icon-label-container" matTooltip="Sent through mail">
+              <i class="fa fa-envelope fa-2x" style="color: deepskyblue"></i>
+              <span class="label">Email</span>
+            </div>
+
+            <div class="icon-label-container" matTooltip="Sent through whatsapp">
+              <i class="fab fa-whatsapp fa-2x" style="color: #29cf26"></i>
+              <span style="font-size: inherit;">Whatsapp</span>
+            </div>
+          </div>
+          
+  </form>
+</div>

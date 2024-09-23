@@ -1,36 +1,105 @@
 .metal-issue-add-btn {
-    font-size: 12px;
-    padding: 3px 20px !important;
-    border-radius: 5px !important;
+  font-size: 12px;
+  padding: 3px 20px !important;
+  border-radius: 5px !important;
+}
+
+.metal-issue-del-btn {
+  font-size: 12px;
+  padding: 2px 10px 2px 10px;
+  width: 200px;
+}
+.t-a1 {
+  text-align: end;
+}
+::ng-deep {
+  .cdk-overlay-container {
+    position: fixed;
+    z-index: 1070 !important;
   }
-  
-  .metal-issue-del-btn {
-    font-size: 12px;
-    padding: 2px 10px 2px 10px;
-    width: 200px;
+}
+::ng-deep {
+  .mat-form-field {
+    font-weight: 600 !important;
   }
-  .t-a1{
-    text-align: end;
-  }
-  ::ng-deep {
-    .cdk-overlay-container {
-      position: fixed;
-      z-index: 1070 !important;
-    }
-  }
-  ::ng-deep {
-    .mat-form-field {
-      font-weight: 600 !important;
-    }
-  }
-  .apporoval-add-btn {
-    font-size: 12px;
-    padding: 3px 20px !important;
-    border-radius: 5px !important;
-  }
-  .mg_2{
-    margin-left: 20px;
-  }
-  .mg_1{
-    margin-left: 13px;
-  }
+}
+.apporoval-add-btn {
+  font-size: 12px;
+  padding: 3px 20px !important;
+  border-radius: 5px !important;
+}
+.mg_2 {
+  margin-left: 20px;
+}
+.mg_1 {
+  margin-left: 13px;
+}
+
+
+//Report Dialogue UI
+.branchDivisionelectr {
+  position: absolute;
+}
+::ng-deep .mat-tooltip.custom-tooltip {
+  background-color: #151414;
+  color: #fff;
+  font-size: 14px;
+  border-radius: 4px;
+  // padding: 8px;
+  font-family: Arial, sans-serif;
+  white-space: pre-wrap;
+  word-break: break-all;
+  line-height: 1.5;
+}
+
+.popup-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px; /* Adds space between form groups */
+  padding: 16px; /* Adds padding inside the popup */
+}
+.form-group {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* Adds space between label and input */
+}
+.form-group label {
+  width: 41px;
+}
+.form-control {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ccc !important;
+}
+
+.icon-label-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 75px;
+}
+.label {
+  font-size: 14px;
+  color: #000;
+}
+
+.SaveNew_template {
+  min-width: 125px;
+  white-space: normal;
+  padding-bottom: 0px;
+}
+
+//buttond for Demo
+.demo-button {
+  background-color: #295094 !important;
+  color: white;
+  padding: 5px 10px;
+  line-height: 1.5;
+}
+
+.cancelBTN {
+  background-color: #b9c3d3;
+  width: 100px;
+}
