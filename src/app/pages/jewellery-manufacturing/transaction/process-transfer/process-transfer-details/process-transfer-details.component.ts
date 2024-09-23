@@ -784,7 +784,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
             this.setFormNullToString('DESIGN_TYPE', data[0].DESIGN_TYPE?.toUpperCase())
             this.setFormNullToString('METAL_STOCK_CODE', data[0].METAL_STOCK_CODE)
             this.designType = this.commonService.nullToString(data[0].DESIGN_TYPE?.toUpperCase());
-
+            this.setFromProcessWhereCondition()
             this.subJobNumberValidate()
             this.getSequenceDetailData()
           } else {
@@ -1702,26 +1702,36 @@ export class ProcessTransferDetailsComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
-  isProcessCodeEmpty(flag: boolean){
-    if(flag){
+  isProcessCodeEmpty(flag: boolean) {
+    if (flag) {
       this.commonService.formControlSetReadOnly('TO_PROCESS_CODE', true)
       this.commonService.formControlSetReadOnly('FRM_WORKER_CODE', true)
-      this.commonService.formControlSetReadOnly('TO_WORKER_CODE', true) 
-      this.commonService.formControlSetReadOnly('TO_PCS', true) 
-      this.commonService.formControlSetReadOnly('GrossWeightTo', true) 
-      this.commonService.formControlSetReadOnly('stockCode', true) 
-    }else{
+      this.commonService.formControlSetReadOnly('TO_WORKER_CODE', true)
+      this.commonService.formControlSetReadOnly('TO_PCS', true)
+      this.commonService.formControlSetReadOnly('GrossWeightTo', true)
+      this.commonService.formControlSetReadOnly('stockCode', true)
+      this.commonService.formControlSetReadOnly('txtLossQty', true)
+      this.toProcessMasterSearch.VIEW_ICON = false;
+      this.fromWorkerMasterSearch.VIEW_ICON = false;
+      this.toWorkerMasterSearch.VIEW_ICON = false;
+      this.stockCodeSearch.VIEW_ICON = false;
+    } else {
       this.commonService.formControlSetReadOnly('TO_PROCESS_CODE', false)
       this.commonService.formControlSetReadOnly('FRM_WORKER_CODE', false)
-      this.commonService.formControlSetReadOnly('TO_WORKER_CODE', false) 
-      this.commonService.formControlSetReadOnly('TO_PCS', false) 
-      this.commonService.formControlSetReadOnly('GrossWeightTo', false) 
-      this.commonService.formControlSetReadOnly('stockCode', false) 
+      this.commonService.formControlSetReadOnly('TO_WORKER_CODE', false)
+      this.commonService.formControlSetReadOnly('TO_PCS', false)
+      this.commonService.formControlSetReadOnly('GrossWeightTo', false)
+      this.commonService.formControlSetReadOnly('stockCode', false)
+      this.commonService.formControlSetReadOnly('txtLossQty', false)
+      this.toProcessMasterSearch.VIEW_ICON = true;
+      this.fromWorkerMasterSearch.VIEW_ICON = true;
+      this.toWorkerMasterSearch.VIEW_ICON = true;
+      this.stockCodeSearch.VIEW_ICON = true;
     }
   }
   /**USE:from porcesscode Validate API call */
   fromProcesscodeValidate(event: any) {
-    if(this.viewMode) return
+    if (this.viewMode) return
     if (event.target.value == '') {
       this.fromProcessMasterOverlay.showOverlayPanel(event)
       this.isProcessCodeEmpty(true)
