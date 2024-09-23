@@ -78,6 +78,8 @@ export class PosCustomerMasterMainComponent implements OnInit {
   dialogBox: any;
   dialogBoxResult: any;
 
+  image: File | null = null; 
+
   amlNameValidationData = false;
   dummyDate = "1900-01-01T00:00:00";
   dummyDateArr = [
@@ -331,9 +333,9 @@ export class PosCustomerMasterMainComponent implements OnInit {
     parentPosCode: [""],
     refBy: [""],
     name: [""],
-    nameDesc: [""],
+    nameDesc: ["", [Validators.maxLength(20)]],
     creditCardLimitCheck: new FormControl({ value: "", disabled: false }),
-    creditCardLimit: [{ value: "", disabled: true }],
+    creditCardLimit: [{ value: "", disabled: true }, [Validators.maxLength(20)]],
     gender: [""],
     maritalSt: [""],
     dob: [""],
@@ -346,13 +348,13 @@ export class PosCustomerMasterMainComponent implements OnInit {
     moblie1Number: [""],
     emailId: [
       "",
-      [Validators.required, Validators.email, this.domainValidator],
+      [Validators.maxLength(40), Validators.required, Validators.email, this.domainValidator],
     ],
     telRCountry: [""],
     telRNumber: [""],
     tel0Country: [""],
     tel0number: [""],
-    faxNo: [""],
+    faxNo: ["", Validators.maxLength(15)],
     custType: ["", [Validators.required, Validators.maxLength(6)]],
     nationality: [""],
     state: [""],
@@ -360,20 +362,20 @@ export class PosCustomerMasterMainComponent implements OnInit {
     language: [""],
     favCelebration: [""],
     vat: new FormControl("", [
-      Validators.required,
       Validators.maxLength(15),
-      Validators.pattern(/^\d{0,15}$/),
+      Validators.pattern("^[0-9]*$"),
+      
     ]),
     panNo: [
       "",
-      [Validators.required, Validators.maxLength(10), this.panValidator],
+      [ Validators.maxLength(10), this.panValidator],
     ],
     whatsappCountryCode: [""],
     whatsappNumber: [""],
-    spouse: [""],
-    company: [""],
-    zodiacSign: [""],
-    noOfChildren: [""],
+    spouse: ["", [Validators.maxLength(40)]],
+    company: ["", [Validators.maxLength(40)]],
+    zodiacSign: ["", [Validators.maxLength(15)]],
+    noOfChildren: ["", [Validators.maxLength(5)]],
     religion: [""],
     occupation1: [""],
     sourceOfFund: [""],
@@ -384,7 +386,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
     custIdType: [""],
     custID: [""],
     custDate: [""],
-    POBox: ["", [Validators.required, Validators.maxLength(6)]],
+    POBox: ["", [Validators.maxLength(6)]],
     address: [""],
     officialAddress: [""],
     deliveryAddress: [""],
@@ -680,8 +682,22 @@ export class PosCustomerMasterMainComponent implements OnInit {
   }
 
   typeidCodeSelected(e: any) {
+
     console.log(e);
+
+    if(!this.posCustomerMasterMainForm.controls.countryCode.value) {
+      return alert("please Select the Country Fisrt ")
+    }
+
+    let value = "United Arab Emirates"
+    let code = "EID"
+
+    if(this.posCustomerMasterMainForm.controls.countryCode.value !== value && e.CODE === code ) {
+      return alert("Please select the UAE country. Which ID you selected belongs to this country?")
+    }
+
     this.posCustomerMasterMainForm.controls.custIdType.setValue(e.CODE);
+    
   }
 
   stateSelected(e: any) {
@@ -901,7 +917,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
           RELIGION: this.posCustomerMasterMainForm.value.religion || "",
           TYPE: "",
           CATEGORY: this.posCustomerMasterMainForm.value.category || "",
-          INCOME: 0,
+          INCOME: this.posCustomerMasterMainForm.value.income,
           CUST_STATUS: this.posCustomerMasterMainForm.value.custStatus || "",
           MID: 0,
           PICTURE_NAME: "",
@@ -910,11 +926,11 @@ export class PosCustomerMasterMainComponent implements OnInit {
           SALDATE: this.posCustomerMasterMainForm.value.date || this.dummyDate,
           SALAMOUNT: this.posCustomerMasterMainForm.value.amount || 0,
           SALBRLOC: this.posCustomerMasterMainForm.value.branchLoc || "",
-          Branch_Code: "",
+          Branch_Code: this.branchCode,
           TOTALSALES: this.posCustomerMasterMainForm.value.totalSale || 0,
           POSCUSTIDNO: this.posCustomerMasterMainForm.value.custID || "",
           POSSMAN: "",
-          POSCustPrefix: "0",
+          POSCustPrefix: this.posCustomerMasterMainForm.value.name || "",
           MOBILE1:
             this.posCustomerMasterMainForm.value.moblie1Number.toString() || "",
           CUST_Language: this.posCustomerMasterMainForm.value.language || "",
@@ -960,7 +976,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
           NO_OF_CHILDREN:
             Number(this.posCustomerMasterMainForm.value.noOfChildren) || 0,
           ZODIAC_SIGN: this.posCustomerMasterMainForm.value.zodiacSign || "",
-          DESIGNATION: "",
+          DESIGNATION: this.posCustomerMasterMainForm.value.designation || "",
           LEVELFLAG: 0,
           INCOMERANGE: "",
           LAST_UPDATED_DATE: "1900-01-01T00:00:00",
@@ -994,34 +1010,34 @@ export class PosCustomerMasterMainComponent implements OnInit {
           AMLNAMEVALIDATION: false,
           AML_TYPE: false,
           UN_NUMBER: "",
-          NAME_1: "",
-          NAME_2: "",
-          NAME_3: "",
-          NAME_4: "",
-          NAME_5: "",
-          DOB_2: "1900-01-01T00:00:00",
-          DOB_3: "1900-01-01T00:00:00",
-          DOB_4: "1900-01-01T00:00:00",
-          DOB_5: "1900-01-01T00:00:00",
-          GOOD_QUALITY: "",
-          LOW_QUALITY: "",
-          A_K_A: "",
-          F_K_A: "",
-          NATIONALITY_2: "",
-          NATIONALITY_3: "",
-          NATIONALITY_4: "",
-          NATIONALITY_5: "",
-          PASSPORT_NO_1: "",
-          PASSPORT_NO_2: "",
-          PASSPORT_NO_3: "",
-          PASSPORT_NO_4: "",
-          PASSPORT_NO_5: "",
-          LISTED_ON_DATE: "1900-01-01T00:00:00",
+          NAME_1: this.posCustomerMasterMainForm.value.name1 || "",
+          NAME_2: this.posCustomerMasterMainForm.value.name2 || "",
+          NAME_3: this.posCustomerMasterMainForm.value.name3 || "",
+          NAME_4: this.posCustomerMasterMainForm.value.name4 || "",
+          NAME_5: this.posCustomerMasterMainForm.value.name5 || "",
+          DOB_2: this.posCustomerMasterMainForm.value.dob2 || "",
+          DOB_3:  this.posCustomerMasterMainForm.value.dob3 || "",
+          DOB_4:  this.posCustomerMasterMainForm.value.dob4 || "",
+          DOB_5:  this.posCustomerMasterMainForm.value.dob5 || "",
+          GOOD_QUALITY: this.posCustomerMasterMainForm.value.goodQualityaka || "",
+          LOW_QUALITY: this.posCustomerMasterMainForm.value.lowQualityaka || "",
+          A_K_A: this.posCustomerMasterMainForm.value.aka || "",
+          F_K_A: this.posCustomerMasterMainForm.value.fka || "",
+          NATIONALITY_2: this.posCustomerMasterMainForm.value.nationality2 || "",
+          NATIONALITY_3: this.posCustomerMasterMainForm.value.nationality3 || "",
+          NATIONALITY_4: this.posCustomerMasterMainForm.value.nationality4 || "",
+          NATIONALITY_5: this.posCustomerMasterMainForm.value.nationality5 || "",
+          PASSPORT_NO_1: this.posCustomerMasterMainForm.value.passport1 || "",
+          PASSPORT_NO_2: this.posCustomerMasterMainForm.value.passport2 || "",
+          PASSPORT_NO_3: this.posCustomerMasterMainForm.value.passport3 || "",
+          PASSPORT_NO_4: this.posCustomerMasterMainForm.value.passport4 || "",
+          PASSPORT_NO_5: this.posCustomerMasterMainForm.value.passport5 || "",
+          LISTED_ON_DATE: this.posCustomerMasterMainForm.value.listedOn,
           NATIONAL_IDENTIFICATION_NO:
             this.posCustomerMasterMainForm.value.fcn_cust_detail_idcard || "",
           OTHER_INFORMATION: "",
-          LINKS: "",
-          FATHERNAME: "",
+          LINKS: this.posCustomerMasterMainForm.value.link || "",
+          FATHERNAME: this.posCustomerMasterMainForm.value.fatherName  || "",
           PROMO_NEEDED: "",
           PROMO_HOW_OFTEN: "",
           CHILDNAME1: "",
@@ -1092,11 +1108,11 @@ export class PosCustomerMasterMainComponent implements OnInit {
           FESTIVAL_ONAM: false,
           FESTIVAL_PONGAL: false,
           FESTIVAL_NEWYEAR: false,
-          REASON_OF_PURCHASE: "",
-          AGE_GROUP: "",
-          GIFT_PURCHASED_FOR: "",
-          PURCHASE_OCCASION: "",
-          NEXT_VISIT: "",
+          REASON_OF_PURCHASE: this.posCustomerMasterMainForm.value.reasonOfPurchase || "",
+          AGE_GROUP: this.posCustomerMasterMainForm.value.ageGroup || "",
+          GIFT_PURCHASED_FOR: this.posCustomerMasterMainForm.value.gifrPurchased || "",
+          PURCHASE_OCCASION: this.posCustomerMasterMainForm.value.occasionOfPurchase || "",
+          NEXT_VISIT: this.posCustomerMasterMainForm.value.nextVisit,
           SHOWROOMACCESSIBILITY:
             this.posCustomerMasterMainForm.value.showroomAccessibility || "",
           PRODUCTRANGEAVAILABILITY:
@@ -1533,4 +1549,28 @@ export class PosCustomerMasterMainComponent implements OnInit {
     console.log(event);
     console.log("Got Clicked");
   }
+
+
+  preventInvalidInput(event: KeyboardEvent) {
+    // Prevent the letter "e", "E", "+", and "-" from being entered
+    if (["e", "E", "+", "-"].includes(event.key)) {
+      event.preventDefault();
+    }
+
+  }
+  
+  
+  onFileSelected(event: any) {
+    console.log("Clicked");
+    
+    const file: File = event.target.files[0];
+
+    if (file) {
+      this.image = file;  // Store the selected image in the `buddy` variable
+      console.log('Image stored in buddy:', this.image);
+    } else {
+      console.error('No file selected');
+    }
+  }
+
 }

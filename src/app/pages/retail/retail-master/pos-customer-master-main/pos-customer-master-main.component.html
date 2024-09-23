@@ -152,6 +152,7 @@
                       !posCustomerMasterMainForm.get('creditCardLimitCheck')
                         ?.value
                     "
+                    (keydown)="preventInvalidInput($event)"
                   />
                 </mat-form-field>
               </div>
@@ -337,8 +338,8 @@
               <div class="col-md-3">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
-                    readonly="true"
-                    matInput="text"
+                    matInput
+                    type="number"
                     style="text-align: end"
                     formControlName="moblieCountry"
                   />
@@ -351,6 +352,7 @@
                     type="number"
                     formControlName="moblieNumber"
                     class="text-right"
+                    (keydown)="preventInvalidInput($event)"
                   />
                 </mat-form-field>
               </div>
@@ -365,8 +367,8 @@
               <div class="col-md-3">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
-                    readonly="true"
-                    matInput="text"
+                    matInput
+                    type="number"
                     formControlName="moblie1Country"
                     class="text-right"
                   />
@@ -379,6 +381,7 @@
                     type="number"
                     formControlName="moblie1Number"
                     class="text-right"
+                    (keydown)="preventInvalidInput($event)"
                   />
                 </mat-form-field>
               </div>
@@ -394,8 +397,8 @@
               <div class="col-md-3">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
-                    readonly="true"
-                    matInput="text"
+                    matInput
+                    type="number"
                     formControlName="telRCountry"
                     class="text-right"
                   />
@@ -408,6 +411,7 @@
                     type="number"
                     formControlName="telRNumber"
                     class="text-right"
+                    (keydown)="preventInvalidInput($event)"
                   />
                 </mat-form-field>
               </div>
@@ -422,8 +426,8 @@
               <div class="col-md-3">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
-                    readonly="true"
-                    matInput="text"
+                    matInput
+                    type="number"
                     formControlName="tel0Country"
                     class="text-right"
                   />
@@ -436,6 +440,7 @@
                     type="number"
                     formControlName="tel0number"
                     class="text-right"
+                    (keydown)="preventInvalidInput($event)"
                   />
                 </mat-form-field>
               </div>
@@ -493,6 +498,7 @@
                     class="text-right"
                     matInput
                     type="number"
+                    (keydown)="preventInvalidInput($event)"
                     formControlName="faxNo"
                   />
                 </mat-form-field>
@@ -742,10 +748,9 @@
                 <div class="col-md-7">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
-                      maxlength="15"
                       matInput
-                      type="text"
-                      appApplyOnlyNumbers
+                      type="number"
+                      (keydown)="preventInvalidInput($event)"
                       formControlName="vat"
                     />
                   </mat-form-field>
@@ -756,7 +761,7 @@
                   for="inputPassword"
                   class="col-sm-5 col-form-label"
                   id="ID027"
-                  >PAN NO</label
+                  >PAN NO *</label
                 >
                 <div class="col-md-7">
                   <mat-form-field style="width: 100%" appearance="outline">
@@ -811,6 +816,7 @@
                     type="number"
                     formControlName="whatsappNumber"
                     class="text-right"
+                    (keydown)="preventInvalidInput($event)"
                   />
                 </mat-form-field>
               </div>
@@ -898,6 +904,7 @@
                                 matInput
                                 formControlName="noOfChildren"
                                 class="text-right"
+                                (keydown)="preventInvalidInput($event)"
                               />
                             </mat-form-field>
                           </div>
@@ -1153,12 +1160,14 @@
                                 formControlName="occupation1"
                               />
                               <master-search
-                            (focusout)="openTab($event, 'occupation1')"
-                            #overlayOccupation1
-                            [MasterSearchData]="occupationMasterCode"
-                            class="masterSearch"
-                            (newRowClick)="occupation1MasterSelected($event)"
-                          ></master-search>
+                                (focusout)="openTab($event, 'occupation1')"
+                                #overlayOccupation1
+                                [MasterSearchData]="occupationMasterCode"
+                                class="masterSearch"
+                                (newRowClick)="
+                                  occupation1MasterSelected($event)
+                                "
+                              ></master-search>
                             </mat-form-field>
                           </div>
                         </div>
@@ -1269,16 +1278,17 @@
                                 formControlName="sourceOfFund"
                               />
                               <master-search
-                            (focusout)="openTab($event, 'sourceOfFund')"
-                            #overlaySourceOfFund
-                            [MasterSearchData]="sourceOfFundMasterCode"
-                            class="masterSearch"
-                            (newRowClick)="sourceOfFundMasterSelected($event)"
-                          ></master-search>
+                                (focusout)="openTab($event, 'sourceOfFund')"
+                                #overlaySourceOfFund
+                                [MasterSearchData]="sourceOfFundMasterCode"
+                                class="masterSearch"
+                                (newRowClick)="
+                                  sourceOfFundMasterSelected($event)
+                                "
+                              ></master-search>
                             </mat-form-field>
                           </div>
                         </div>
-
                       </div>
                     </div>
                   </div>
@@ -1472,6 +1482,9 @@
               <mat-tab label="Opinion">
                 <div class="row mt-2">
                   <div class="col-md-10">
+                    <div class="row mb-1">
+                      <label class="col-sm-5 col-form-label">Service</label>
+                    </div>
                     <div class="row mb-1">
                       <label
                         for="inputPassword"
@@ -1964,6 +1977,7 @@
                                 type="text"
                                 matInput
                                 formControlName="unNumber"
+                                (keydown)="preventInvalidInput($event)"
                               />
                             </mat-form-field>
                           </div>
@@ -1981,6 +1995,7 @@
                               appearance="outline"
                             >
                               <input
+                                appAlphabetsOnly
                                 matInput
                                 type="text"
                                 formControlName="name1"
@@ -2001,6 +2016,7 @@
                               appearance="outline"
                             >
                               <input
+                                appAlphabetsOnly
                                 matInput
                                 type="text"
                                 formControlName="name2"
@@ -2021,6 +2037,7 @@
                               appearance="outline"
                             >
                               <input
+                                appAlphabetsOnly
                                 matInput
                                 type="text"
                                 formControlName="name3"
@@ -2041,6 +2058,7 @@
                               appearance="outline"
                             >
                               <input
+                                appAlphabetsOnly
                                 matInput
                                 type="text"
                                 formControlName="name4"
@@ -2061,6 +2079,7 @@
                               appearance="outline"
                             >
                               <input
+                                appAlphabetsOnly
                                 matInput
                                 type="text"
                                 formControlName="name5"
@@ -2081,6 +2100,7 @@
                               appearance="outline"
                             >
                               <input
+                                appAlphabetsOnly
                                 matInput
                                 type="text"
                                 formControlName="designation"
@@ -2349,6 +2369,7 @@
                               appearance="outline"
                             >
                               <input
+                                appAlphabetsOnly
                                 readonly="true"
                                 matInput="text"
                                 style="text-align: end"
@@ -2363,7 +2384,7 @@
                             >
                               <input
                                 matInput
-                                type="number"
+                                type="text"
                                 formControlName="nationality1"
                                 class="text-right"
                               />
@@ -2384,6 +2405,7 @@
                               appearance="outline"
                             >
                               <input
+                                appAlphabetsOnly
                                 readonly="true"
                                 matInput="text"
                                 style="text-align: end"
@@ -2397,8 +2419,9 @@
                               appearance="outline"
                             >
                               <input
+                                appAlphabetsOnly
                                 matInput
-                                type="number"
+                                type="text"
                                 formControlName="nationality2"
                                 class="text-right"
                               />
@@ -2419,6 +2442,7 @@
                               appearance="outline"
                             >
                               <input
+                                appAlphabetsOnly
                                 readonly="true"
                                 matInput="text"
                                 style="text-align: end"
@@ -2432,8 +2456,9 @@
                               appearance="outline"
                             >
                               <input
+                                appAlphabetsOnly
                                 matInput
-                                type="number"
+                                type="text"
                                 formControlName="nationality3"
                                 class="text-right"
                               />
@@ -2454,6 +2479,7 @@
                               appearance="outline"
                             >
                               <input
+                                appAlphabetsOnly
                                 readonly="true"
                                 matInput="text"
                                 style="text-align: end"
@@ -2468,7 +2494,7 @@
                             >
                               <input
                                 matInput
-                                type="number"
+                                type="text"
                                 formControlName="nationality4"
                                 class="text-right"
                               />
@@ -2488,6 +2514,7 @@
                               appearance="outline"
                             >
                               <input
+                                appAlphabetsOnly
                                 readonly="true"
                                 matInput="text"
                                 style="text-align: end"
@@ -2502,7 +2529,7 @@
                             >
                               <input
                                 matInput
-                                type="number"
+                                type="text"
                                 formControlName="nationality5"
                                 class="text-right"
                               />
@@ -2747,6 +2774,7 @@
                                 matInput
                                 type="text"
                                 formControlName="fatherName"
+                                appAlphabetsOnly
                               />
                             </mat-form-field>
                           </div>
@@ -2765,6 +2793,7 @@
                               appearance="outline"
                             >
                               <input
+                                appAlphabetsOnly
                                 matInput
                                 type="text"
                                 formControlName="spouseName"
@@ -2996,15 +3025,40 @@
           <div class="col-md-6">
             <div class="text-center d-flex justify-content-between mt-2">
               <div class="p-1 bd-highlight">
-                <button type="button" class="btn btn-primary add-btn">
+                <button
+                  type="button"
+                  class="btn btn-primary add-btn"
+                  (click)="fileInput.click()"
+                >
                   <i class="fas fa-camera-retro"></i>
                 </button>
-                <!-- <input type="file" name="uploadproduct" class="uploadproduct"> -->
+                <input
+                  type="file"
+                  name="uploadproduct"
+                  class="uploadproduct"
+                  #fileInput
+                  accept="image/*"
+                  capture="environment"
+                  (change)="onFileSelected($event)"
+                  style="display: none"
+                />
               </div>
+
               <div class="p-1 bd-highlight">
-                <button type="button" class="btn btn-primary add-btn">
+                <button
+                  type="button"
+                  class="btn btn-primary add-btn"
+                  (click)="fileInput.click()"
+                >
                   <i class="fas fa-image"></i>
                 </button>
+                <input
+                  type="file"
+                  #fileInput
+                  accept="image/*"
+                  (change)="onFileSelected($event)"
+                  style="display: none"
+                />
               </div>
             </div>
           </div>
