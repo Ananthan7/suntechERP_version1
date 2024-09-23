@@ -14,6 +14,11 @@ button.touch-big-button {
   margin-left: 5px;
 }
 
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .scanner-container {
   position: absolute;
   top: 0;
@@ -245,4 +250,92 @@ fieldset {
 .bgColourUpdate{
   background-color: #1a61a9 !important;
   color: #fff !important;
+}
+
+
+@media print {
+  @page {
+    size: A5;
+    margin: 0;
+  }
+  body {
+    width: 148mm;
+    height: 210mm;
+  }
+}
+
+.bgColourUpdate{
+  background-color: #1a61a9 !important;
+  color: #fff !important;
+}
+
+.next-item-button {
+  // background-color: #1a61a9;
+  background-color: #295094 !important;
+  color: white;
+  padding: 5px 10px;
+  line-height: 1.5;
+}
+
+.update-finish-button {
+  // background-color: #1E3C72;
+  background-color: #295094 !important;
+  color: white;
+  padding: 5px 10px;
+  line-height: 1.5;
+}
+
+.cancel-button {
+  // background-color: #428cc9;
+  background-color: #B9C3D3 !important;
+  color: white;
+  padding: 5px 10px;
+  line-height: 1.5;
+}
+
+.sReturnVocNumsearch{
+  position: absolute;
+  top: 1px;
+  margin-left: -0.3rem !important;
+}
+
+.btn-width {
+  width: 120px; 
+  text-align: center;
+}
+
+.slider{
+  margin-left: auto;
+  margin-right: auto;
+  width: fit-content;
+}
+
+.button-spacing {
+  margin-right: 16px;
+}
+
+.checkBoxCustom{
+  margin-top: 28px;
+}
+
+
+::ng-deep {
+
+  .mat-form-field-outline-start {
+    border-radius: 0px 0 0 0px !important;
+    min-width: 24px !important;
+    background-color: #f7f8fb;
+  }
+
+  .mat-form-field-outline-end {
+    border-radius: 0 0px 0px 0 !important;
+    min-width: 24px !important;
+    background-color: #f7f8fb;
+  }
+
+ .customheader{
+    font-size: 18px;
+    font-weight: 500;
+    color: black;
+  }
 }

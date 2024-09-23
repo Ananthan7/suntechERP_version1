@@ -6,12 +6,30 @@
     </button>
   </div>
   <!-- modal header component -->
-  <modal-header  (cancelClick)="close()" ></modal-header>
+  <modal-header  (cancelClick)="close()"  [isViewSave]="false" [isViewCancel]="false"
+  [isViewDelete]="false" [isViewMore]="false"  [isloading]="isLoading"></modal-header> 
   
   
   <div class="container-fluid">
-    <form>
+    <form [formGroup]="SalesmanCommissionForm">
   
+      <div class="row mb-1">
+        <label for="inputPassword"  class="col-sm-1 col-form-label"  id="ID001"> Branch</label>
+        <div class="col-md-2">
+            <mat-form-field appearance="outline" style="width: -webkit-fill-available">
+            <input matInput="text" name="branch" autocomplete="off" formControlName="branch"/>
+            <app-branch-division [fetchData]="fetchedBranchData" (newRowClick)="selectedData($event)"
+            class="branchDivisionelectr" [matTooltip]="branchDivisionControlsTooltip"
+            matTooltipClass="custom-tooltip"  matTooltipPosition="above"></app-branch-division>
+            </mat-form-field>
+        </div>
+
+        <div class="col-md-7">
+            <app-date (selectedDate)="setDateValue($event)"></app-date>
+        </div> 
+      </div>
+
+
       <div class="row">
         <div class="col-md-12">
           <div class="row ">
@@ -23,23 +41,22 @@
                   </button>
               </div>
             </div>
-            <div class="col-md-4">
-
+            <div class="col-md-4 mt-2">
               <div class=" row ">
                 <div class="col-md-6">
-                  <mat-form-field style="width: 100%;">
+                  <mat-form-field appearance="outline" style="width: 100%;">
                     <input type="text" matInput formControlName="lossaccount" [readonly]="viewMode" />
                   </mat-form-field>
                 </div>
               </div>
-  
             </div>
-          
           </div>
         </div>
       </div>
-      <div class="pt-2">
 
+
+
+      <div class="pt-2">
         <div class="row">
           <div class="col pt-2">
             <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true" [dataSource]="jewelleryaltrationdetail"
@@ -59,22 +76,20 @@
             </dx-data-grid>
           </div>
         </div>
-  
       </div>
 
       <div class="col-md-12 pt-2">
         <div class="row">
             <div class="col-md-8">
-              
-              <div class="row">
+              <div class="row mb-1">
                 <label for="inputPassword" class="col-sm-2 col-form-label" id="ID002">Sales Man :</label>
                 <div class="col-md-5">
-                  <mat-form-field style="width: 72%;">
-                    <input type="text" matInput />
+                  <mat-form-field appearance="outline" style="width: 72%;">
+                    <input type="text" matInput formControlName="salesMan" />
                   </mat-form-field>
                 </div>
-                <div class="col-md-5 pt-3">
-                  <div class="p-2 bd-highlight">
+                <div class="col-md-5 pt-1">
+                  <div class="bd-highlight">
                     <button type="button" class="btn btn-primary apporoval-add-btn" id="ID003">
                       Continue
                     </button>
@@ -82,15 +97,15 @@
                 </div>
               </div>
 
-              <div class="row">
+              <div class="row mb-1">
                 <label for="inputPassword" class="col-sm-2 col-form-label" id="ID004">Percentage :</label>
                 <div class="col-md-5">
-                  <mat-form-field style="width: 72%;">
-                    <input type="text" matInput />
+                  <mat-form-field appearance="outline" style="width: 72%;">
+                    <input type="text" matInput formControlName="commissionPercentage"/>
                   </mat-form-field>
                 </div>
-                <div class="col-md-5 pt-3">
-                  <div class="p-2 bd-highlight">
+                <div class="col-md-5 pt-1">
+                  <div class="bd-highlight">
                     <button type="button" class="btn btn-primary apporoval-add-btn" id="ID005">
                   Save
                 </button>
@@ -98,51 +113,84 @@
                 </div>
               </div>
 
-              <div class="row">
+              <div class="row mb-1">
                 <label for="inputPassword" class="col-sm-2 col-form-label" id="ID006">Amount LC :</label>
                 <div class="col-md-5">
-                  <mat-form-field style="width: 72%;">
-                    <input type="text" matInput />
+                  <mat-form-field appearance="outline" style="width: 72%;">
+                    <input type="text" matInput  formControlName="amountLC"/>
                   </mat-form-field>
                 </div>
-                <div class="col-md-5 pt-3">
-                  <div class="p-2 bd-highlight">
+                <div class="col-md-5 pt-1">
+                  <div class="bd-highlight">
                     <button type="button" class="btn btn-primary apporoval-add-btn" id="ID007">
                       Cancel
                     </button>
                   </div>
                 </div>
               </div>
-
             </div>
-
         </div>
       </div>
 
-      <div class="col-md-12">
-        <div class="row">
-          <div class="col-md-8 d-flex">
-
-            <div class="p-2 bd-highlight">
-              <button type="button" class="btn btn-primary apporoval-add-btn" id="ID008">
-                Add
-              </button>
+      <dx-popup [width]="300" [height]="180" [showTitle]="true" container=".dx-viewport"
+        title="Template Data" [dragEnabled]="false" [showCloseButton]="false" (onHidden)="popupClosed()"
+        [visible]="popupVisible">
+          <div class="popup-content">
+            <div class="form-group">
+                <label for="T_Name">Name:</label>
+                <input type="text" id="T_Name" class="form-control" formControlName="templateName"/>
             </div>
-
-            <div class="p-2 bd-highlight mg_2">
-              <button type="button" class="btn btn-primary apporoval-add-btn" id="ID009">
-                Delete
-              </button>
+            <div class="button-group d-flex">
+                <button mat-flat-button [ngClass]="{SaveNew_template: templateNameHasValue,
+                    'btn-m-r-10': true, 'demo-button': true, 'btn-width': true, 'mx-1': true}"
+                (click)="saveTemplate_DB()">
+                {{ templateNameHasValue ? "Save as New Template" : "Save" }}
+                </button>
+                <button  mat-flat-button class="btn-m-r-10 btn-width mx-1 cancelBTN"
+                (click)="popupClosed()">
+                Cancel</button>
             </div>
-
-            <div class="p-2 bd-highlight mg_2">
-              <button type="button" class="btn btn-primary apporoval-add-btn" id="ID010">
-                Close
-              </button>
-            </div> 
-
-          </div>
+            <br />
+            <br />
+            <br />
         </div>
+      </dx-popup>
+
+      <div class="row mt-2 justify-content-end mx-2">
+          <div class="icon-label-container" (click)="saveTemplate()" matTooltip="Save the selections as a new template">
+            <i class="fa fa-bookmark fa-2x mt-3" style="color: #5497b2"></i>
+            <span style="font-size: inherit;">Save as Template</span>
+          </div>
+
+          <div class="icon-label-container" (click)="previewClick()" matTooltip="Preview the content">
+            <i class="fa fa-eye fa-2x" style="color: #5497b2"></i>
+            <span class="label">Preview</span>
+          </div>
+
+          <div class="icon-label-container" matTooltip="Take a print">
+            <i class="fa fa-print fa-2x" style="color: #031082"></i>
+            <span class="label">Print</span>
+          </div>
+
+          <div class="icon-label-container"  matTooltip="Generate Excel Report">
+            <i class="fa fa-file-excel fa-2x" style="color: green"></i>
+            <span class="label">Excel</span>
+          </div>
+
+          <div class="icon-label-container" matTooltip="Generate PDF Report">
+            <i class="fa fa-file-pdf fa-2x" style="color: orangered"></i>
+            <span class="label">PDF</span>
+          </div>
+
+          <div class="icon-label-container" matTooltip="Sent through mail">
+            <i class="fa fa-envelope fa-2x" style="color: deepskyblue"></i>
+            <span class="label">Email</span>
+          </div>
+
+          <div class="icon-label-container" matTooltip="Sent through whatsapp">
+            <i class="fab fa-whatsapp fa-2x" style="color: #29cf26"></i>
+            <span style="font-size: inherit;">Whatsapp</span>
+          </div>
       </div>
   
     </form>

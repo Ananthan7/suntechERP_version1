@@ -7,6 +7,7 @@ import { Subscription } from "rxjs";
 import { SuntechAPIService } from "src/app/services/suntech-api.service";
 import { ToastrService } from "ngx-toastr";
 import Swal from "sweetalert2";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 @Component({
   selector: "app-tourist-vat-refund-verification",
@@ -15,15 +16,18 @@ import Swal from "sweetalert2";
 })
 export class TouristVatRefundVerificationComponent implements OnInit {
   @Input() content!: any;
+  amountDecimalFormat: any;
   yearMonth?: any =
     localStorage.getItem("YEAR") || this.comService.yearSelected;
   branchCode?: any =
     localStorage.getItem("userbranch") || this.comService.branchCode;
   private subscriptions: Subscription[] = [];
-
+  viewOnly: boolean = false;
+  editOnly: boolean = false;
   vocMaxDate = new Date();
   currentDate = new Date();
   pulledInvoice: any;
+  salesPersonOptions: any[] = [];
   columnhead: any[] = [
     "Sr.No",
     "VOCDATE",
@@ -59,13 +63,19 @@ export class TouristVatRefundVerificationComponent implements OnInit {
     private formBuilder: FormBuilder,
     private toastr: ToastrService,
     private dataService: SuntechAPIService,
-    private comService: CommonServiceService
-  ) {}
+    private comService: CommonServiceService,
+    private snackBar: MatSnackBar,
+  ) { }
 
   ngOnInit(): void {
     this.content?.FLAG === "VIEW" || this.content?.FLAG === "EDIT"
-      ? this.getDataToSet(this.content)
+      ? this.getRetailSalesMaster(this.content)
       : this.generateVocNoAndDefaultSet();
+
+    this.amountDecimalFormat = {
+      type: 'fixedPoint',
+      precision: this.comService.allbranchMaster?.BAMTDECIMALS,
+    };
   }
 
   onSelectionChanged(selectionInfo: any) {
@@ -89,14 +99,40 @@ export class TouristVatRefundVerificationComponent implements OnInit {
       .subscribe((res) => {
         if (res.status == "Success") {
           console.log(res);
+          this.pulledInvoice = res.dynamicData[0].map((invoice: any) => ({
+            ...invoice,
+            SRNO: invoice.srno,
+          }));
+
+
+          let vatAmountSum = this.pulledInvoice.reduce((acc: any, obj: any) => acc + (obj.VATAMOUNT ?? 0), 0);
+          let salesAmountSum = this.pulledInvoice.reduce((acc: any, obj: any) => acc + (obj.SALESAMOUNT ?? 0), 0);
+
+
+          this.touristVatRefundVerificationForm.controls["totalSale"].setValue(
+            this.comService.transformDecimalVB(
+              this.comService.allbranchMaster?.BAMTDECIMALS,
+              this.comService.emptyToZero(salesAmountSum)
+            )
+
+          );
+
+          this.touristVatRefundVerificationForm.controls["totalVat"].setValue(
+            this.comService.transformDecimalVB(
+              this.comService.allbranchMaster?.BAMTDECIMALS,
+              this.comService.emptyToZero(vatAmountSum)
+            )
+
+          );
+
+
         }
       });
   }
 
   generateVocNoAndDefaultSet() {
-    let API = `GenerateNewVoucherNumber/GenerateNewVocNum/${this.comService.getqueryParamVocType()}/${
-      this.branchCode
-    }/${this.yearMonth}/${this.convertDateToYMD(this.currentDate)}`;
+    let API = `GenerateNewVoucherNumber/GenerateNewVocNum/${this.comService.getqueryParamVocType()}/${this.branchCode
+      }/${this.yearMonth}/${this.convertDateToYMD(this.currentDate)}`;
     let sub: Subscription = this.dataService
       .getDynamicAPI(API)
       .subscribe((res) => {
@@ -141,6 +177,7 @@ export class TouristVatRefundVerificationComponent implements OnInit {
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
   };
+
 
   enteredBySelected(e: any) {
     console.log(e);
@@ -191,9 +228,47 @@ export class TouristVatRefundVerificationComponent implements OnInit {
     this.touristVatRefundVerificationForm.controls.partyCurrency.setValue(
       e.Currency
     );
+
     this.touristVatRefundVerificationForm.controls.partyCurrencyRate.setValue(
-      e["Conv Rate"]
+      this.comService.decimalQuantityFormat(e["Conv Rate"], "RATE")
     );
+  }
+
+  getRetailSalesMaster(data: any) {
+    this.getSalesPersonMaster()
+
+    if (this.content.FLAG == 'VIEW')
+      this.viewOnly = true;
+    if (this.content.FLAG == "EDIT") {
+      this.editOnly = true
+    }
+
+    this.snackBar.open('Loading...');
+    let API = `VATRefund/GetVATRefundDetailwithAllParam/${data.BRANCH_CODE}/${data.VOCTYPE}/${data.VOCNO}/${data.YEARMONTH}/${data.MID}`
+    this.dataService.getDynamicAPI(API).subscribe((res) => {
+
+
+      if (res.status == 'Success') {
+        this.snackBar.dismiss();
+        console.log('res', res);
+        const data = res.response;
+        this.getDataToSet(data);
+        this.pulledInvoice = data.Details;
+
+
+
+      }
+    })
+  }
+
+  getSalesPersonMaster() {
+    let sub: Subscription = this.dataService.getDynamicAPI('SalesPersonMaster/GetSalespersonMasterList')
+
+      .subscribe((resp: any) => {
+        var data = resp.response;
+        this.salesPersonOptions = data;
+
+      });
   }
 
   getDataToSet(data: any) {
@@ -212,11 +287,21 @@ export class TouristVatRefundVerificationComponent implements OnInit {
     this.touristVatRefundVerificationForm.controls["partyCurrency"].setValue(
       data.PARTY_CURRENCY
     );
+    this.touristVatRefundVerificationForm.controls["partyCodeHead"].setValue(
+      data.HHACCOUNT_HEAD
+    );
     this.touristVatRefundVerificationForm.controls[
       "partyCurrencyRate"
     ].setValue(data.PARTY_CURR_RATE);
+
     this.touristVatRefundVerificationForm.controls["enteredBy"].setValue(
       data.SALESPERSON_CODE
+    );
+
+    let salesPersonDetails = this.salesPersonOptions.find(item => item.SALESPERSON_CODE === data.SALESPERSON_CODE);
+
+    this.touristVatRefundVerificationForm.controls["enteredByCode"].setValue(
+      salesPersonDetails.DESCRIPTION
     );
     this.touristVatRefundVerificationForm.controls["narration"].setValue(
       data.REMARKS
@@ -233,26 +318,7 @@ export class TouristVatRefundVerificationComponent implements OnInit {
     this.touristVatRefundVerificationForm.controls["totalVat"].setValue(
       data.TOTALSALESVATAMOUNTCC
     );
-    // Details: [
-    //   {
-    //     UNIQUEID: 0,
-    //     SRNO: 0,
-    //     INVOICE_DATE: new Date(),
-    //     TAGNO: "",
-    //     VOCTYPE: "",
-    //     VOCNO: 0,
-    //     SALESAMOUNT: 0,
-    //     PLANETAMOUNT: 0,
-    //     VATAMOUNT: 0,
-    //     PLANETVATAMOUNT: 0,
-    //     INVMID: 0,
-    //     TRABRANCHCODE: "",
-    //     DT_BRANCH_CODE: "",
-    //     DT_VOCNO: 0,
-    //     DT_VOCTYPE: "",
-    //     DT_YEARMONTH: "",
-    //   },
-    // ];
+
   }
 
   validateForm() {
@@ -288,7 +354,7 @@ export class TouristVatRefundVerificationComponent implements OnInit {
       REMARKS: this.touristVatRefundVerificationForm.value.narration,
       SYSTEM_DATE: new Date(),
       NAVSEQNO: 0,
-      HHACCOUNT_HEAD: "",
+      HHACCOUNT_HEAD: this.touristVatRefundVerificationForm.value.partyCodeHead ?? "",
       HTUSERNAME: "",
       SUPINVNO: "",
       SUPINVDATE: new Date(),
@@ -306,32 +372,15 @@ export class TouristVatRefundVerificationComponent implements OnInit {
       POSTDATE: "",
       TOTALPLANETSALESAMOUNTCC: 0,
       TOTALPLANETVATAMOUNTCC: 0,
-      TOTALSALESAMOUNTCC: this.touristVatRefundVerificationForm.value.totalSale,
-      TOTALSALESVATAMOUNTCC:
-        this.touristVatRefundVerificationForm.value.totalVat,
+      TOTALSALESAMOUNTCC: this.touristVatRefundVerificationForm.value.totalSale ?? 0,
+      TOTALSALESVATAMOUNTCC: this.touristVatRefundVerificationForm.value.totalVat ?? 0,
       GJVREFERENCE: "",
       GJVMID: 0,
       VAT_REFUND_REMARKS: "",
-      Details: [
-        {
-          UNIQUEID: 0,
-          SRNO: 0,
-          INVOICE_DATE: new Date(),
-          TAGNO: "",
-          VOCTYPE: "",
-          VOCNO: 0,
-          SALESAMOUNT: 0,
-          PLANETAMOUNT: 0,
-          VATAMOUNT: 0,
-          PLANETVATAMOUNT: 0,
-          INVMID: 0,
-          TRABRANCHCODE: "",
-          DT_BRANCH_CODE: "",
-          DT_VOCNO: 0,
-          DT_VOCTYPE: "",
-          DT_YEARMONTH: "",
-        },
-      ],
+      Details: this.pulledInvoice.map((invoice: any) => ({
+        ...invoice,
+        INVOICE_DATE: new Date(invoice.INVOICE_DATE),
+      })),
     };
 
     let Sub: Subscription = this.dataService
@@ -368,11 +417,9 @@ export class TouristVatRefundVerificationComponent implements OnInit {
       return;
     }
 
-    let API = `VATRefund/UpdateVATRefund/${
-      this.branchCode
-    }/${this.comService.getqueryParamVocType()}/${
-      this.touristVatRefundVerificationForm.value.vocNo
-    }/${this.yearMonth}`;
+    let API = `VATRefund/UpdateVATRefund/${this.branchCode
+      }/${this.comService.getqueryParamVocType()}/${this.touristVatRefundVerificationForm.value.vocNo
+      }/${this.yearMonth}`;
     let postData = {
       MID: 0,
       BRANCH_CODE: this.branchCode,
@@ -388,7 +435,7 @@ export class TouristVatRefundVerificationComponent implements OnInit {
       REMARKS: this.touristVatRefundVerificationForm.value.narration,
       SYSTEM_DATE: new Date(),
       NAVSEQNO: 0,
-      HHACCOUNT_HEAD: "",
+      HHACCOUNT_HEAD: this.touristVatRefundVerificationForm.value.partyCodeHead ?? "",
       HTUSERNAME: "",
       SUPINVNO: "",
       SUPINVDATE: new Date(),
@@ -406,32 +453,15 @@ export class TouristVatRefundVerificationComponent implements OnInit {
       POSTDATE: "",
       TOTALPLANETSALESAMOUNTCC: 0,
       TOTALPLANETVATAMOUNTCC: 0,
-      TOTALSALESAMOUNTCC: this.touristVatRefundVerificationForm.value.totalSale,
-      TOTALSALESVATAMOUNTCC:
-        this.touristVatRefundVerificationForm.value.totalVat,
+      TOTALSALESAMOUNTCC: this.touristVatRefundVerificationForm.value.totalSale ?? 0,
+      TOTALSALESVATAMOUNTCC: this.touristVatRefundVerificationForm.value.totalVat ?? 0,
       GJVREFERENCE: "",
       GJVMID: 0,
       VAT_REFUND_REMARKS: "",
-      Details: [
-        {
-          UNIQUEID: 0,
-          SRNO: 0,
-          INVOICE_DATE: new Date(),
-          TAGNO: "",
-          VOCTYPE: "",
-          VOCNO: 0,
-          SALESAMOUNT: 0,
-          PLANETAMOUNT: 0,
-          VATAMOUNT: 0,
-          PLANETVATAMOUNT: 0,
-          INVMID: 0,
-          TRABRANCHCODE: "",
-          DT_BRANCH_CODE: "",
-          DT_VOCNO: 0,
-          DT_VOCTYPE: "",
-          DT_YEARMONTH: "",
-        },
-      ],
+      Details: this.pulledInvoice.map((invoice: any) => ({
+        ...invoice,
+        INVOICE_DATE: new Date(invoice.INVOICE_DATE),
+      })),
     };
 
     let Sub: Subscription = this.dataService

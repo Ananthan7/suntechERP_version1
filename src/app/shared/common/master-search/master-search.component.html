@@ -1,6 +1,6 @@
 <!-- prime ng drop down -->
 <span >
-    <button (click)="showOverlayPanel($event)" 
+    <button (click)="showOverlayPanel($event)" *ngIf="MasterSearchData.VIEW_ICON"
         style="border: none; background-color: transparent;padding-top: 6px;">
         <i class="fa fa-search searchIcon"></i>
     </button>
