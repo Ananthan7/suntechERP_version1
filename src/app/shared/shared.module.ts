@@ -103,6 +103,7 @@ import { AlphabetOnlyDirective } from './directives/appAlphabetOnly.directive';
 import { ApplyOnlyNumbersDirective } from './directives/apply-only-numbers.directive';
 
 
+
 @NgModule({
   declarations: [
     //pipes declarations
@@ -142,7 +143,6 @@ import { ApplyOnlyNumbersDirective } from './directives/apply-only-numbers.direc
     DurationPickerComponent,
     FormatThreeDecimalDirective,
     CommaSeparatedNumberDirective,
-    
     ApplyOnlyNumbersDirective,
     AttachmentUploadComponent,
     AuthCheckerComponent,
