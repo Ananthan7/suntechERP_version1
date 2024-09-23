@@ -56,23 +56,8 @@ export class PosDailyClosingSummaryComponent implements OnInit {
   branchCode?: String;
   yearMonth?: String;
   divisionMS: any = "ID";
-  metalOptions = [
-    { value: "TYPE", label: "TYPE" },
-    { value: "KARAT", label: "KARAT" },
-    { value: "BRAND", label: "BRAND" },
-    { value: "COUNTRY", label: "COUNTRY" },
-    { value: "STOCK CODE", label: "STOCK CODE" },
-    { value: "CATEGORY", label: "CATEGORY" },
-    { value: "COST CODE", label: "COST CODE" },
-    { value: "TYPE", label: "TYPE" },
-    { value: "KARAT", label: "KARAT" },
-    { value: "BRAND", label: "BRAND" },
-    { value: "COUNTRY", label: "COUNTRY" },
-    { value: "STOCK CODE", label: "STOCK CODE" },
-    { value: "CATEGORY", label: "CATEGORY" },
-    { value: "COST CODE", label: "COST CODE" },
-  ];
-
+  metalOptions: any[] = [];
+  diamondOptions: any[] = [];
   transactionOptions = [
     { value: 0, label: "Sales" },
     { value: 1, label: "Sales Returns" },
@@ -95,6 +80,8 @@ export class PosDailyClosingSummaryComponent implements OnInit {
   templateNameHasValue: boolean= false;
   fetchedBranchDataParam: any[]= [];
   fetchedBranchData: any[] =[];
+  isLoading: boolean = false;
+  dateToPass: { fromDate: string; toDate: string } = { fromDate: '', toDate: '' };
 
   
   constructor(
@@ -107,6 +94,8 @@ export class PosDailyClosingSummaryComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.prefillScreenValues();
+    this.dropdownValueFetch();
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
     this.metalInsert();
@@ -115,6 +104,15 @@ export class PosDailyClosingSummaryComponent implements OnInit {
     this.vocherInsert();
     this.closingPurchaseNetInsert();
     this.posClsngSmanSummaryNet();
+  }
+
+  dropdownValueFetch(){
+    const apiUrl = 'UspPosClosSumGetGroupByFilter/GetUspPosClosSumGetGroupByFilter'
+    this.dataService.getDynamicAPI(apiUrl).subscribe((resp: any) => {
+      this.metalOptions = resp.dynamicData[0] 
+      this.diamondOptions = resp.dynamicData[1] 
+      console.log('dropdoiwn', resp.dynamicData)
+    });
   }
 
   metalInsert() {
@@ -393,14 +391,15 @@ export class PosDailyClosingSummaryComponent implements OnInit {
               "ISDEFAULT": 1
             },
             "CONTROL_DETAIL": {
-              // "STRBRANCHCODES": this.formattedBranchDivisionData,
-              // "STRVOCTYPES": this.VocTypeParam,
-              // "FROMVOCDATE": this.formatDateToYYYYMMDD(this.posDailyClosingSummaryForm.value.fromDate),
-              // "TOVOCDATE": this.formatDateToYYYYMMDD(this.posDailyClosingSummaryForm.value.toDate),
-              // "USERBRANCH": localStorage.getItem('userbranch'),
-              // "USERNAME": localStorage.getItem('username'),
-              // "SHOWDATE": this.posDailyClosingSummaryForm.value.showDateCheckbox ? 0 : 1,
-              // "SHOWINVOICE": this.posDailyClosingSummaryForm.value.showInvoiceCheckbox ? 0 : 1
+              "strSalType": JSON.stringify( this.posDailyClosingSummaryForm.value.transactionType),
+              "strBranch" : this.formattedBranchDivisionData || this.fetchedBranchDataParam,
+              "strFmDate" : this.formatDateToYYYYMMDD(this.posDailyClosingSummaryForm.value.fromDate),
+              "strToDate" : this.formatDateToYYYYMMDD(this.posDailyClosingSummaryForm.value.toDate),
+              "str_MGroupBy": this.posDailyClosingSummaryForm.value.metalType,
+              "str_DGroupBy" : this.posDailyClosingSummaryForm.value.diamondType,
+              'USERNAME': localStorage.getItem('username'),
+              'MODE': localStorage.getItem('userbranch'),
+              'VOCTYPE': ''
             }
          })
       }
@@ -437,7 +436,8 @@ export class PosDailyClosingSummaryComponent implements OnInit {
         "strBranch" : this.formattedBranchDivisionData || this.fetchedBranchDataParam,
         "strFmDate" : this.formatDateToYYYYMMDD(this.posDailyClosingSummaryForm.value.fromDate),
         "strToDate" : this.formatDateToYYYYMMDD(this.posDailyClosingSummaryForm.value.toDate),
-        "str_MGroupBy": this.posDailyClosingSummaryForm.value.metalType || this.posDailyClosingSummaryForm.value.diamondType,
+        "str_MGroupBy": this.posDailyClosingSummaryForm.value.metalType,
+        "str_DGroupBy" : this.posDailyClosingSummaryForm.value.diamondType,
         'USERNAME': localStorage.getItem('username'),
         'MODE': localStorage.getItem('userbranch'),
         'VOCTYPE': ''
@@ -457,7 +457,7 @@ export class PosDailyClosingSummaryComponent implements OnInit {
         console.error('Failed to open the print window. Possibly blocked by a popup blocker.');
         return;
       }
-      let printContent = data[0][0].HTMLINPUT;
+      let printContent = data[0][0].HTMLReport;
       WindowPrt.document.write(printContent);
       WindowPrt.document.close();
       WindowPrt.focus();  
@@ -485,6 +485,31 @@ export class PosDailyClosingSummaryComponent implements OnInit {
       };
       this.comService.closeSnackBarMsg()
     });      
+  }
+
+  prefillScreenValues(){
+    if ( Object.keys(this.content).length > 0) {
+      this.isLoading = true;
+
+      this.templateNameHasValue = !!(this.content?.TEMPLATE_NAME);
+      this.posDailyClosingSummaryForm.controls.templateName.setValue(this.content?.TEMPLATE_NAME);
+
+      var paresedItem = JSON.parse(this.content?.CONTROL_LIST_JSON);
+      this.dateToPass = {
+        fromDate:  paresedItem?.CONTROL_DETAIL.strFmDate,
+        toDate: paresedItem?.CONTROL_DETAIL.strToDate
+      };
+
+      this.posDailyClosingSummaryForm.controls.branch.setValue(paresedItem?.CONTROL_DETAIL.strBranch);
+      this.fetchedBranchData= paresedItem?.CONTROL_DETAIL.strBranch.split("#")
+      this.fetchedBranchDataParam = paresedItem?.CONTROL_DETAIL.strBranch
+      
+      const filteredOptions = this.transactionOptions.filter(option => option.value == paresedItem?.CONTROL_DETAIL.strSalType );
+      this.posDailyClosingSummaryForm.controls.transactionType.setValue(filteredOptions[0].value);
+
+      this.posDailyClosingSummaryForm.controls.metalType.setValue(paresedItem?.CONTROL_DETAIL.str_MGroupBy);
+      this.posDailyClosingSummaryForm.controls.diamondType.setValue(paresedItem?.CONTROL_DETAIL.str_DGroupBy);
+    }
   }
 
 }

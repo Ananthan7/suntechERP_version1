@@ -24,7 +24,7 @@
             </div>
 
             <div class="col-md-7">
-                <app-date (selectedDate)="setDateValue($event)"></app-date>
+                <app-date (selectedDate)="setDateValue($event)" [dateValue]="dateToPass"></app-date>
             </div> 
 
             <!-- <div class="col-md-2" style="margin-left: -5rem !important">
@@ -68,8 +68,8 @@
                         <div class="col-md-4">
                             <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
                                 <mat-select formControlName="metalType">
-                                    <mat-option *ngFor="let option of metalOptions" [value]="option.value">{{
-                                        option.label }}</mat-option>
+                                    <mat-option *ngFor="let option of metalOptions" [value]="option.FIELD">{{
+                                        option.FIELD }}</mat-option>
                                 </mat-select>
                             </mat-form-field>
                         </div>
@@ -78,9 +78,9 @@
                         <div class="col-md-4">
                             <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
                                 <mat-select formControlName="diamondType">
-                                    <mat-option *ngFor="let option of metalOptions" [value]="option.value">{{
-                                        option.label
-                                        }}</mat-option>
+                                    <mat-option *ngFor="let option of diamondOptions" [value]="option.FIELD">
+                                        {{ option.FIELD }}
+                                    </mat-option>
                                 </mat-select>
                             </mat-form-field>
                         </div>
