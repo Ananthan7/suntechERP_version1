@@ -4035,7 +4035,7 @@ export class AddPosComponent implements OnInit {
       this.customerDetailForm.reset();
       this.customerDataForm.reset({
         fcn_customer_mobile: custMobile,
-        fcn_customer_code: value,
+        fcn_customer_code:this.isCustomerFindsOnCode? value:"",
       });
       this.customerDetailForm.reset({
         fcn_cust_detail_phone: custMobile,

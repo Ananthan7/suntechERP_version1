@@ -764,7 +764,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
     this.stockCodeData.WHERECONDITION = `DIVISION_CODE = '${this.metallabourMasterForm.value.metalDivision}' and SUBCODE = '0'`;
     this.getKaratcode()
     //  this.codeDisable[()
-   
+
 
   }
 
@@ -960,7 +960,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
         console.log(result.response);
-        
+
         this.metallabourMasterForm.controls['karat'].setValue(result.response.KARAT_CODE);
         this.metallabourMasterForm.controls['purity'].setValue(result.response.PURITY);
         this.metallabourMasterForm.controls['brand'].setValue(result.response.BRAND_CODE);
@@ -1012,7 +1012,15 @@ export class MetalLabourchargeMasterComponent implements OnInit {
       return true
     }
     else if (this.commonService.nullToString(form.metalselling_rate) == '' || this.commonService.nullToString(form.metalselling_rate) == '0.00') {
-      this.commonService.toastErrorByMsgId('MSG1927')//"unitList cannot be empty"
+      this.commonService.toastErrorByMsgId('MSG7728')//"Selling Rate cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.wastage) == '' || this.commonService.nullToString(form.wastage) == '0.00') {
+      this.commonService.toastErrorByMsgId('MSG7728')//"Selling Rate cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.metalcost_rate) == '' || this.commonService.nullToString(form.metalcost_rate) == '0.00') {
+      this.commonService.toastErrorByMsgId('MSG7729')//"Selling Rate cannot be empty"
       return true
     }
     if (this.metallabourMasterForm.value.wtFrom > this.metallabourMasterForm.value.wtTo) {
@@ -1031,6 +1039,9 @@ export class MetalLabourchargeMasterComponent implements OnInit {
     }
     return false;
   }
+
+
+
 
   setPostData() {
     let diamondForm = this.diamondlabourMasterForm.value
