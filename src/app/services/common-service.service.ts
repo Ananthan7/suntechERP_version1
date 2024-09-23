@@ -555,20 +555,20 @@ export class CommonServiceService {
   // Transform number to decimal
 
   transformDecimalVB(format: any, num: any) {
-    if (num === null || num === undefined) {
-      num = 0;
-    }
-
-    if (typeof num === 'string') {
-      num = num.replace(/,/g, '');
-    }
+    // alert((42385.6075).toFixed(1))
+    // alert(`${num} - ${parseFloat(num).toFixed(format)}`);
 
     const formatVal = `1.${format}-${format}`;
-    let val: any = this._decimalPipe.transform(num || 0, formatVal);
+    // console.log('formatVal',formatVal, 'num',num);
+    var val: any = this._decimalPipe.transform(num || 0, formatVal);
+    // console.log(val);
     val = val.includes(',') ? val.replaceAll(',', '') : val;
-    val = parseFloat(val).toFixed(format);
+    // console.log(val);
 
-    return this.addCommaSepration(val);
+    // alert(this._decimalPipe.transform(num, formatVal));
+    return parseFloat(val).toFixed(format);
+    // return parseFloat(num).toFixed(format);
+    // return parseFloat( parseFloat(num).toFixed(format));
   }
 
   addCommaSepration(data: any) {
@@ -845,9 +845,17 @@ export class CommonServiceService {
     });
     return queryParamAPI
   }
+  getSubmoduleType() {
+    let queryParamAPI
+    this.route.queryParams.subscribe((data: any) => {
+      queryParamAPI = data.menuSubModule;
+    });
+    return queryParamAPI
+  }
   getqueryParamVocType() {
     let queryParamAPI
     this.route.queryParams.subscribe((data: any) => {
+      console.log("helloooo",data)
       queryParamAPI = data.VocType;
     });
     return queryParamAPI
