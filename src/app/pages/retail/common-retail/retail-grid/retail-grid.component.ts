@@ -158,6 +158,7 @@ export class RetailGridComponent implements OnInit {
           "TRANSACTION": {
             "VOCTYPE": this.CommonService.nullToString(this.vocType),
             "MAIN_VOCTYPE": this.CommonService.nullToString(this.mainVocType),
+            "MASTER":this.CommonService.getSubmoduleType() == "Master" ? "1":"0"
           }
         }
       }

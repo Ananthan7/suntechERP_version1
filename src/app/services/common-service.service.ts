@@ -510,7 +510,7 @@ export class CommonServiceService {
     // Ensure amount and rate are numbers and convert empty values to zero
     // rate = this.emptyToZero(rate);
     // amount = this.emptyToZero(amount);
-  
+
     let convertedAmount = 0;
 
     // Filter the currency data for the given currency code
@@ -524,7 +524,7 @@ export class CommonServiceService {
       if (result[0].MUL_DIV === 'M') {
         convertedAmount = this.emptyToZero(amount) / this.emptyToZero(rate);
       } else {
-        convertedAmount =this.emptyToZero(amount) * this.emptyToZero(rate);
+        convertedAmount = this.emptyToZero(amount) * this.emptyToZero(rate);
       }
     } else {
       console.error('Currency not found');
@@ -553,6 +553,7 @@ export class CommonServiceService {
   //   }
   // }
   // Transform number to decimal
+
   transformDecimalVB(format: any, num: any) {
     // alert((42385.6075).toFixed(1))
     // alert(`${num} - ${parseFloat(num).toFixed(format)}`);
@@ -569,6 +570,28 @@ export class CommonServiceService {
     // return parseFloat(num).toFixed(format);
     // return parseFloat( parseFloat(num).toFixed(format));
   }
+
+  addCommaSepration(data: any) {
+    if (data === null || data === undefined) {
+      data = 0;
+    }
+
+    let number = '';
+    data = data.toString().replace(/,/g, '');
+
+    if (data.includes('.')) {
+      let parts = data.split('.');
+      data = parts[0];
+      number = Number(data).toLocaleString('en-US', { style: 'decimal' });
+      number = number + '.' + parts[1];
+    } else {
+      number = Number(data).toLocaleString('en-US', { style: 'decimal' });
+    }
+
+    return number;
+  }
+
+
 
   FCToCC(currency: any, amount: any, rate: any = null) {
     rate = rate || this.getCurrRate(currency);
@@ -690,7 +713,7 @@ export class CommonServiceService {
   }
 
   nullToString(value: any) {
-    value = !value || typeof value=='object' ? '' : value.toString();
+    value = !value || typeof value == 'object' ? '' : value.toString();
     return value
   }
 
@@ -822,9 +845,17 @@ export class CommonServiceService {
     });
     return queryParamAPI
   }
+  getSubmoduleType() {
+    let queryParamAPI
+    this.route.queryParams.subscribe((data: any) => {
+      queryParamAPI = data.menuSubModule;
+    });
+    return queryParamAPI
+  }
   getqueryParamVocType() {
     let queryParamAPI
     this.route.queryParams.subscribe((data: any) => {
+      console.log("helloooo",data)
       queryParamAPI = data.VocType;
     });
     return queryParamAPI
@@ -1142,11 +1173,11 @@ export class CommonServiceService {
   cDateFormat(value: any) {
     if (typeof value === 'string' && value.match(/^\d{2}-\d{2}-\d{4}$/)) {
       const [day, month, year] = value.split('-').map(Number);
-      value = new Date(year, month - 1, day); 
+      value = new Date(year, month - 1, day);
     }
     return this.datePipe.transform(value, 'yyyy-MM-ddTHH:mm:ss');
   }
-  
+
   // cDateFormat(value: any) {
   //   return this.datePipe.transform(value, 'yyyy-MM-ddTHH:mm:ss');
   // }
@@ -1167,7 +1198,7 @@ export class CommonServiceService {
   getVoctypeMasteMinDate() {
     const res = this.VocTypeMasterData.filter((data: any) =>
       data.BRANCH_CODE == this.branchCode && data.VOCTYPE == this.getqueryParamVocType()
-     && data.MAIN_VOCTYPE == this.getqueryParamMainVocType()
+      && data.MAIN_VOCTYPE == this.getqueryParamMainVocType()
     );
     if (res.length > 0) {
       return res[0].BLOCKBACKDATEDENTRIES ? new Date() : null;
@@ -1177,7 +1208,7 @@ export class CommonServiceService {
   getVoctypeMasterMaxDate() {
     const res = this.VocTypeMasterData.filter((data: any) =>
       data.BRANCH_CODE == this.branchCode && data.VOCTYPE == this.getqueryParamVocType()
-     && data.MAIN_VOCTYPE == this.getqueryParamMainVocType()
+      && data.MAIN_VOCTYPE == this.getqueryParamMainVocType()
     );
     if (res.length > 0) {
       return res[0].BLOCKFUTUREDATE ? new Date() : null;
@@ -1187,7 +1218,7 @@ export class CommonServiceService {
   getVoctypeMasterLockVoucher(): boolean {
     const res = this.VocTypeMasterData.filter((data: any) =>
       data.BRANCH_CODE == this.branchCode && data.VOCTYPE == this.getqueryParamVocType()
-     && data.MAIN_VOCTYPE == this.getqueryParamMainVocType()
+      && data.MAIN_VOCTYPE == this.getqueryParamMainVocType()
     );
     if (res.length > 0) {
       return this.Null2BitValue(res[0].LOCKVOUCHERNO);

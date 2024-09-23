@@ -9516,7 +9516,7 @@ export class SalesReturnComponent implements OnInit {
       if (this.lineItemModalForSalesReturn || this.comFunc.emptyToZero(value) != 0 || this.comFunc.emptyToZero(value) >= this.comFunc.emptyToZero(this.blockMinimumPriceValue)) {
 
         // if (this.lineItemModalForSalesReturn || parseFloat(value) >= parseFloat(this.newLineItem.STOCK_COST)) {
-
+        this.updateDiscountAmount();
         if (this.blockMinimumPrice == 'B') {
           this.lineItemForm.controls.fcn_li_rate.setValue(value);
           this.manageCalculations({ totalAmt: totalAmt, nettAmt });
@@ -9722,9 +9722,14 @@ export class SalesReturnComponent implements OnInit {
       this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt);
 
     if (this.divisionMS == 'S') {
-      if (this.lineItemModalForSalesReturn || checkStockCostVal >= parseFloat(this.newLineItem.STOCK_COST)) {
+      if (
+        this.lineItemModalForSalesReturn ||
+        (
+          this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_discount_amount) <= this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount) &&
+          this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_discount_percentage) <= 100
+        )
+      ) {
         this.manageCalculations();
-
       }
       else {
         // Rate Cannot be Less Than Cost
@@ -9828,8 +9833,8 @@ export class SalesReturnComponent implements OnInit {
     const preVal = this.comFunc.emptyToZero(localStorage.getItem('fcn_li_rate'));
 
     const makingAmount = this.comFunc.emptyToZero(localStorage.getItem('fcn_li_total_amount'));
-
     this.manageCalculations();
+    this.updateDiscountAmount();
     // this.openDialog(
     //   'Warning',
     //   `${this.comFunc.getMsgByID('MSG1731')} ${this.vocDataForm.value.txtCurrency} ${this.blockMinimumPriceValue
@@ -9946,6 +9951,8 @@ export class SalesReturnComponent implements OnInit {
       if (this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_discount_percentage) != 0)
         this.detectDiscountChange = true;
 
+
+
       if (this.divisionMS == 'M') {
 
         let dblStockCost: any = this.comFunc.emptyToZero(this.newLineItem.STOCK_COST);
@@ -9994,12 +10001,13 @@ export class SalesReturnComponent implements OnInit {
       //Changes as per Jebraj's Input on 17/07/2024
 
       if (this.divisionMS == 'S') {
-        if (this.isPromotionalItem && this.isAllowWithoutRate && this.comFunc.emptyToZero(value) >= 0) {
+
+        if ((this.isPromotionalItem && this.isAllowWithoutRate && this.comFunc.emptyToZero(value) >= 0) || this.comFunc.emptyToZero(value) > 0) {
           this.rateFunc(value);
         }
         else {
           // Rate Cannot be Less Than Cost
-          this.openDialog('Warning', this.comFunc.emptyToZero(value) > preVal ? this.comFunc.getMsgByID('MSG1721') : this.comFunc.getMsgByID('MSG1723'), true);
+          this.openDialog('Warning', this.comFunc.emptyToZero(value) != 0 ? this.comFunc.getMsgByID('MSG1721') : this.comFunc.getMsgByID('MSG1723'), true);
           this.dialogBox.afterClosed().subscribe((data: any) => {
             if (data == 'OK') {
 
@@ -11059,7 +11067,6 @@ export class SalesReturnComponent implements OnInit {
 
 
 
-    // this.updateDiscountAmount()
 
     /**  set Gross amt */
     if (argsData.nettAmt == null) {
@@ -11222,6 +11229,15 @@ export class SalesReturnComponent implements OnInit {
       const discountPercentage = parseFloat(discountPercentageString);
 
       const discountAmount = (totalAmount * (discountPercentage / 100)).toFixed(2);
+
+      this.lineItemForm.controls['fcn_li_discount_percentage'].setValue(
+        this.comFunc.transformDecimalVB(
+          this.comFunc.allbranchMaster?.BAMTDECIMALS,
+          this.comFunc.emptyToZero(discountPercentage)
+        )
+  
+      );
+
       this.lineItemForm.controls['fcn_li_discount_amount'].setValue(
         this.comFunc.commaSeperation(discountAmount) || this.zeroAmtVal
       );
@@ -11239,6 +11255,15 @@ export class SalesReturnComponent implements OnInit {
 
       this.detectDiscountChange = false;
     } else {
+      this.lineItemForm.controls['fcn_li_discount_percentage'].setValue(
+        this.comFunc.transformDecimalVB(
+          this.comFunc.allbranchMaster?.BAMTDECIMALS,
+          this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_discount_percentage)
+        )
+  
+      );
+      
+
       this.lineItemForm.controls['fcn_li_discount_amount'].setValue(
         this.comFunc.commaSeperation(this.lineItemForm.value.fcn_li_discount_amount) || this.zeroAmtVal
       );

@@ -628,7 +628,7 @@ export class SchemeReceiptComponent implements OnInit {
     this.VocNumberMain = "";
     this.resetSchemeDetails()
     this.commonService.showSnackBarMsg('Loading ...')
-    let API = `${searchFlag}=${event.target.value}`;
+    let API = `${searchFlag}/${event.target.value}`;
     let Sub: Subscription = this.dataService.getDynamicAPI(API).subscribe(
       (result) => {
         this.commonService.closeSnackBarMsg();

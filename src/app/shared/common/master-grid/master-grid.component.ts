@@ -265,6 +265,7 @@ export class MasterGridComponent implements OnInit {
       "VOCTYPE": this.CommonService.nullToString(this.vocType),
       "MAIN_VOCTYPE": this.CommonService.nullToString(this.mainVocType),
       "FILTERVAL": this.CommonService.nullToString(this.tableName),
+      "MASTER":this.CommonService.getSubmoduleType() == "Master" ? "1":"0"
     }
   }
   getGridVisibleSettings() {
