@@ -307,6 +307,19 @@ export class RetailSalesCollectionComponent implements OnInit {
   }
 
   previewClick() {
+    let logData =  {
+      "VOCTYPE": this.comService.getqueryParamVocType() || "",
+      "REFMID": "",
+      "USERNAME": this.comService.userName,
+      "MODE": "PRINT",
+      "DATETIME": this.comService.formatDateTime(new Date()),
+      "REMARKS":"",
+      "SYSTEMNAME": "",
+      "BRANCHCODE": this.comService.branchCode,
+      "VOCNO": "",
+      "VOCDATE": "",
+      "YEARMONTH" : this.comService.yearSelected
+    }
     let postData = {
       "SPID": "0114",
       "parameter": {
@@ -316,7 +329,8 @@ export class RetailSalesCollectionComponent implements OnInit {
         "TOVOCDATE": this.formatDateToYYYYMMDD(this.retailSalesCollection.value.toDate) ,
         "flag": '',
         "USERBRANCH": localStorage.getItem('userbranch'),
-        "USERNAME": localStorage.getItem('username')
+        "USERNAME": localStorage.getItem('username'),
+        "Logdata": JSON.stringify(logData)
       }
     }
     console.log(postData)  

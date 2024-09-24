@@ -109,11 +109,22 @@ export class StoneIssueDetailComponent implements OnInit {
     SEARCH_FIELD: 'STOCK_CODE',
     SEARCH_HEADING: 'Stock Search',
     SEARCH_VALUE: '',
-    WHERECONDITION: `@strProcessCode='',@strWorkerCode='',@strSubJobNumber='',@strBranchCode='${this.comService.branchCode}',@strStockCode=''`,
+    WHERECONDITION: "@DIVISION='',@JOBNO='',@SUBJOBNO='',@STOCKCODE=''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
     FRONTENDFILTER: true
+  }
+  divCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 18,
+    SEARCH_FIELD: 'DIVISION_CODE',
+    SEARCH_HEADING: 'Division Search',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "division = 'G'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
   }
 
   stoneIssueDetailsFrom: FormGroup = this.formBuilder.group({
@@ -235,6 +246,8 @@ export class StoneIssueDetailComponent implements OnInit {
     this.stoneIssueDetailsFrom.controls.unitrate.setValue(this.content.AMOUNTFC)
     this.stoneIssueDetailsFrom.controls.PART_CODE.setValue(this.content.PART_CODE)
     this.stoneIssueDetailsFrom.controls.batchid.setValue(this.content.SUB_STOCK_CODE)
+    this.stoneIssueDetailsFrom.controls.consignment.setValue(this.content.CONSIGNMENT)
+  console.log(this.content.CONSIGNMENT,'consignment')
   }
   setValueWithDecimal(formControlName: string, value: any, Decimal: string) {
     this.stoneIssueDetailsFrom.controls[formControlName].setValue(
@@ -320,9 +333,9 @@ export class StoneIssueDetailComponent implements OnInit {
     let WHERECONDITION = `@DIVISION='${this.comService.nullToString(form.DIVCODE)}',`
     WHERECONDITION += `@JOBNO='${this.comService.nullToString(form.jobNumber)}',`
     WHERECONDITION += `@SUBJOBNO='${this.comService.nullToString(form.subjobnumber)}',`
-    WHERECONDITION += `@STOCKCODE='${this.comService.nullToString(form.stockCode)}',`
+    WHERECONDITION += `@STOCKCODE='${this.comService.nullToString(form.stockCode)}'`
   //   WHERECONDITION += `@strStockCode='${this.comService.nullToString(form.stockCode)}'`
-  //   this.stockCodeData.WHERECONDITION = WHERECONDITION
+    this.stockCodeData.WHERECONDITION = WHERECONDITION
    }
 
   close(data?: any) {
@@ -345,8 +358,10 @@ export class StoneIssueDetailComponent implements OnInit {
   }
   SPvalidateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     LOOKUPDATA.SEARCH_VALUE = event.target.value;
-    if (event.target.value == '' || this.viewMode == true) return;
-
+  
+    // If the field is empty or view mode is active, return early
+    if (event.target.value === '' || this.viewMode === true) return;
+  
     let param = {
       "PAGENO": LOOKUPDATA.PAGENO,
       "RECORDS": LOOKUPDATA.RECORDS,
@@ -356,20 +371,38 @@ export class StoneIssueDetailComponent implements OnInit {
       "searchField": LOOKUPDATA.SEARCH_FIELD,
       "searchValue": LOOKUPDATA.SEARCH_VALUE
     };
-
+  
+    // Show a loading message
     this.comService.showSnackBarMsg('MSG81447');
+  
     let Sub: Subscription = this.dataService.postDynamicAPI('MasterLookUp', param)
       .subscribe((result) => {
+        // Close the loading message
         this.comService.closeSnackBarMsg();
+        
         let data = result.dynamicData[0];
+  
         if (data && data.length > 0) {
-          if (LOOKUPDATA.FRONTENDFILTER && LOOKUPDATA.SEARCH_VALUE != '') {
+          if (LOOKUPDATA.FRONTENDFILTER && LOOKUPDATA.SEARCH_VALUE !== '') {
             let searchResult = this.comService.searchAllItemsInArray(data, LOOKUPDATA.SEARCH_VALUE);
-            console.log(searchResult, 'result');
-            if (searchResult && searchResult.length == 0) {
+  
+            if (searchResult && searchResult.length > 0) {
+              let matchedItem = searchResult[0]; // Assuming the first match is correct
+  
+              // Set the description based on the form control (worker or process)
+              if (FORMNAME === 'worker') {
+                this.stoneIssueDetailsFrom.controls.workername.setValue(matchedItem.DESCRIPTION); // Set worker description
+              } else if (FORMNAME === 'process') {
+                this.stoneIssueDetailsFrom.controls.processname.setValue(matchedItem.DESCRIPTION); // Set process description
+              }
+  
+            } else {
+              // If no matching data is found, clear the input and show an error
               this.comService.toastErrorByMsgId('No data found');
               this.stoneIssueDetailsFrom.controls[FORMNAME].setValue('');
               LOOKUPDATA.SEARCH_VALUE = '';
+  
+              // Show the overlay panel for the form (worker or process)
               switch (FORMNAME) {
                 case 'worker':
                   this.showOverleyPanel(event, 'worker');
@@ -378,17 +411,19 @@ export class StoneIssueDetailComponent implements OnInit {
                   this.showOverleyPanel(event, 'process');
                   break;
                 default:
-
               }
-              return;
             }
           }
         }
       }, err => {
-        this.comService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+        // If there's an error, show a toast message
+        this.comService.toastErrorByMsgId('MSG2272'); // Error occurred, please try again
       });
+  
+    // Add the subscription to the subscriptions array
     this.subscriptions.push(Sub);
   }
+  
 
   showOverleyPanel(event: any, formControlName: string) {
     let value = this.stoneIssueDetailsFrom.value[formControlName]
@@ -416,7 +451,7 @@ export class StoneIssueDetailComponent implements OnInit {
   }
 
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
-    LOOKUPDATA.SEARCH_VALUE = event.target.value
+    LOOKUPDATA.SEARCH_VALUE = event.target.value.toUpperCase()
     if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,

@@ -180,6 +180,20 @@ export class LoyaltyRegisterComponent implements OnInit {
     return `${year}-${month}-${day}`;
   }
   previewClick() {
+    let logData =  {
+      "VOCTYPE": this.commonService.getqueryParamVocType() || "",
+      "REFMID": "",
+      "USERNAME": this.commonService.userName,
+      "MODE": "PRINT",
+      "DATETIME": this.commonService.formatDateTime(new Date()),
+      "REMARKS":"",
+      "SYSTEMNAME": "",
+      "BRANCHCODE": this.commonService.branchCode,
+      "VOCNO": "",
+      "VOCDATE": "",
+      "YEARMONTH" : this.commonService.yearSelected
+    }
+
     let postData = {
       "SPID": "0118",
       "parameter": {
@@ -189,7 +203,8 @@ export class LoyaltyRegisterComponent implements OnInit {
         "STRCUSTCODETO": this.loyaltyregisterFrom.value.customerto,
         "STRPOINTSFROM": JSON.stringify(this.loyaltyregisterFrom.value.pointsfrom),
         "STRPOINTSTO":  JSON.stringify(this.loyaltyregisterFrom.value.pointsto),
-        "STRBRANCHES": this.formattedBranchDivisionData || this.fetchedBranchDataParam
+        "STRBRANCHES": this.formattedBranchDivisionData || this.fetchedBranchDataParam,
+        "Logdata": JSON.stringify(logData)
       }
     }
     console.log(postData)  

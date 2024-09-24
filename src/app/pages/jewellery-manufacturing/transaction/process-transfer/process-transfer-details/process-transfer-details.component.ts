@@ -373,6 +373,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.processTransferdetailsForm.controls['startdate'].setValue(this.commonService.currentDate);
     this.processTransferdetailsForm.controls['enddate'].setValue(this.commonService.currentDate);
   }
+  // USE: SET ALL VIEW ADD AND EDIT MODE
   setFlagMode(FLAG: any) {
     switch (FLAG) {
       case 'VIEW':
@@ -381,6 +382,9 @@ export class ProcessTransferDetailsComponent implements OnInit {
         break;
       case 'EDIT':
         this.editMode = true;
+        break;
+      case 'DELETE':
+        this.viewMode = true;
         break;
       default:
         this.viewMode = false;
@@ -449,12 +453,6 @@ export class ProcessTransferDetailsComponent implements OnInit {
       this.setFormNullToString('TO_PROCESS_CODE', parentDetail.TO_PROCESS_CODE)
       this.setFormNullToString('TO_PROCESSNAME', parentDetail.TO_PROCESSNAME)
       this.setFormNullToString('stockCode', parentDetail.SCRAP_STOCK_CODE)
-      this.setFormNullToString('FRM_METAL_PCS', parentDetail.FRM_METAL_PCS)
-      this.setFormNullToString('TO_METAL_PCS', parentDetail.TO_METAL_PCS)
-      this.setFormNullToString('FRM_PCS', parentDetail.FRM_PCS)
-      this.setFormNullToString('TO_PCS', parentDetail.TO_PCS)
-      this.setFormNullToString('FRM_STONE_PCS', parentDetail.FRM_STONE_PCS)
-      this.setFormNullToString('TO_STONE_PCS', parentDetail.TO_STONE_PCS)
 
       this.setFormDecimal('FRM_METAL_WT', parentDetail.FRM_METAL_WT, 'METAL')
       this.setFormDecimal('TO_METAL_WT', parentDetail.TO_METAL_WT, 'METAL')
@@ -466,6 +464,13 @@ export class ProcessTransferDetailsComponent implements OnInit {
       this.setFormDecimal('PURITY', parentDetail.PURITY, 'PURITY')
       this.setFormDecimal('scrapWeight', parentDetail.SCRAP_WT, 'METAL')
       this.setFormDecimal('lossQty', parentDetail.LOSS_QTY, 'METAL')
+
+      this.processTransferdetailsForm.controls.FRM_METAL_PCS.setValue(parentDetail.FRM_METAL_PCS)
+      this.processTransferdetailsForm.controls.TO_METAL_PCS.setValue(parentDetail.TO_METAL_PCS)
+      this.processTransferdetailsForm.controls.FRM_PCS.setValue(parentDetail.FRM_PCS)
+      this.processTransferdetailsForm.controls.TO_PCS.setValue(parentDetail.TO_PCS)
+      this.processTransferdetailsForm.controls.FRM_STONE_PCS.setValue(parentDetail.FRM_STONE_PCS)
+      this.processTransferdetailsForm.controls.TO_STONE_PCS.setValue(parentDetail.TO_STONE_PCS)
 
     }
 
@@ -1198,6 +1203,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
   }
   //stockCode Scrap Validate
   stockCodeScrapValidate(event?: any) {
+    if(this.viewMode) return
     if (event && event.target.value == '') {
       return
     }
@@ -1793,7 +1799,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
   }
   // to processcode validate
   toProcesscodeValidate(event: any) {
-    if (event.target.value == '') {
+    if (event.target.value == '' || this.viewMode) {
       return
     }
     let form = this.processTransferdetailsForm.value
@@ -1872,7 +1878,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
   }
   // to Workercode Validate
   toWorkercodeValidate(event: any) {
-    if (event.target.value == '') {
+    if (event.target.value == '' || this.viewMode) {
       return
     }
     let form = this.processTransferdetailsForm.value
@@ -1976,7 +1982,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
   }
   selectAllBtnChange(event: any) {
     this.metalDetailData.forEach((item: any) => {
-      if (event.target.checked) {
+      if (event.checked) {
         item.SETTED_FLAG = true;
       } else {
         item.SETTED_FLAG = false;

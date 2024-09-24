@@ -431,7 +431,7 @@
                                 (keydown)="lookupKeyPress($event,'stockCode')"
                                 (focusout)="stockCodeScrapValidate($event)"
                                 formControlName="stockCode" id="stockCode"
-                                [readonly]="viewMode" UpperCaseDirective/>
+                                [readonly]="viewMode" UpperCaseDirective />
                               <master-search class="masterSearch"
                                 *ngIf="!viewMode"
                                 [MasterSearchData]="stockCodeSearch"
@@ -610,7 +610,7 @@
                           style="width: 100%;">
                           <input type="text" matInput readonly
                             formControlName="variancePercentage"
-                            class="text-right"/>
+                            class="text-right" />
                         </mat-form-field>
                       </div>
                       <div class="col-sm-4">
@@ -638,19 +638,15 @@
                         </mat-form-field>
                       </div>
                     </div>
-                    <div class="row mb-2 justify-content-end">
-                      <div class="col-md-7">
-                        <div class="form-check">
-                          <label class="form-check-label"
-                            for="flexRadioDefault1">
-                            Select All
-                          </label>
-                          <input class="form-check-input" type="checkbox"
-                            [disabled]="viewMode"
-                            name="flexRadioDefault" id="flexRadioDefault1"
-                            (focusout)="selectAllBtnChange($event)">
-                        </div>
-                      </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-7">
+                    <div class="form-check">
+                      <mat-checkbox 
+                        [disabled]="viewMode"
+                        (change)="selectAllBtnChange($event)">Select All Setted
+                      </mat-checkbox>
                     </div>
                   </div>
                 </div>
@@ -1524,7 +1520,7 @@
               <div class="col-md-9">
                 <mat-form-field appearance="outline" style="width: 100%;">
                   <input type="text" matInput formControlName="remarks"
-                    [readonly]="viewMode" maxlength="100"/>
+                    [readonly]="viewMode" maxlength="100" />
                 </mat-form-field>
               </div>
             </div>
@@ -1538,10 +1534,10 @@
 <ng-template #transferDetails let-modal modal-lg>
   <div class="card-content border-bottom d-flex justify-content-between p-2">
     <h5>Select Details</h5>
-    <button type="button" class="btn btn-close close-btn"
+    <!-- <button type="button" class="btn btn-close close-btn"
       (click)="modal.dismiss('Cross click')">
       <i class="feather icon-x close-icon"></i>
-    </button>
+    </button> -->
   </div>
   <div class="row p-2">
     <dx-data-grid id="gridContainer" [columnAutoWidth]="true"

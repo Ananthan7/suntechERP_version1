@@ -7,7 +7,7 @@
 </div>
 <!-- modal header component -->
 <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
-  [isViewAuditTrail]="editMode || viewMode" 
+  [isViewAuditTrail]="editMode || viewMode"
   [isViewPost]="editMode || viewMode" (deleteClick)="deleteRecord()"
   [isViewDelete]="editMode"></modal-header>
 <div class="container-fluid pt-3">
@@ -84,21 +84,22 @@
                     <mat-form-field appearance="outline" style="width: 80%">
                       <input type="text" matInput formControlName="currency"
                         readonly />
-                    </mat-form-field>
-                  </div>
-                  <div class="col-md-4">
-                    <mat-form-field appearance="outline" style="width: 80%">
-                      <input type="text" matInput formControlName="currencyrate"
-                        style="text-align: left;" readonly
-                        SixDecimalInput 
-                        (keydown)="lookupKeyPress($event,'currencyrate')"
-                        (focusout)="validateLookupField($event,CurrencyCodeData,'currencyrate')" />
                       <master-search class="masterSearch"
                         [MasterSearchData]="CurrencyCodeData"
                         #overlayCurrencyCode
                         (newRowClick)="CurrencyCodeSelected($event)"
                         *ngIf="!viewMode">
                       </master-search>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-4">
+                    <mat-form-field appearance="outline" style="width: 80%">
+                      <input type="text" matInput formControlName="currencyrate"
+                        style="text-align: left;" readonly
+                        SixDecimalInput
+                        (keydown)="lookupKeyPress($event,'currencyrate')"
+                        (focusout)="validateLookupField($event,CurrencyCodeData,'currencyrate')" />
+
                     </mat-form-field>
 
                   </div>
@@ -111,7 +112,8 @@
                       class="col-sm-3 col-form-label">Entered By:</label>
                     <div class="col-md-8">
                       <mat-form-field appearance="outline" style="width: 70%">
-                        <input type="text" matInput formControlName="enteredBy" UpperCaseDirective
+                        <input type="text" matInput formControlName="enteredBy"
+                          UpperCaseDirective
                           (keydown)="lookupKeyPress($event,'enteredBy')"
                           [readonly]="viewMode"
                           (focusout)="validateLookupField($event,SALESPERSON_CODEData,'enteredBy')" />
@@ -163,7 +165,8 @@
           <div class="col-md-12">
             <div class="row">
               <div class="col-3 d-flex">
-                <menu-buttons *ngIf="!viewMode" [viewAddBtn]="true" [viewDeleteBtn]="true"
+                <menu-buttons *ngIf="!viewMode" [viewAddBtn]="true"
+                  [viewDeleteBtn]="true"
                   [viewImportBtn]="false"
                   (addClick)="openaddstoneissuedetail()"
                   (deleteClick)="deleteTableData()">
@@ -193,7 +196,7 @@
                     </dxo-summary>
                   </dx-data-grid> -->
                 <dx-data-grid id="gridContainer" [dataSource]="stoneIssueData"
-                  [showBorders]="true"
+                  [showBorders]="true" [showRowLines]="true"
                   [allowColumnResizing]="true"
                   (onRowClick)="onRowClickHandler($event)"
                   [selectedRowKeys]="selectedKey"

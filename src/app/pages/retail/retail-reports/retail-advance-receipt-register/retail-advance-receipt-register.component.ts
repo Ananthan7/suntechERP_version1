@@ -83,14 +83,14 @@ export class RetailAdvanceReceiptRegisterComponent implements OnInit {
 
     this.branchCode = this.comService.branchCode;
     
-    const apiUrl = '/UseBranchNetMaster/ADMIN';
-      let sub: Subscription = this.dataService.getDynamicAPI(apiUrl).subscribe((resp: any) => {
-        if (resp.status == 'Success') {
-          this.branchOptions = resp.response;
-          // console.log(this.branchOptions);
-        }
+    // const apiUrl = '/UseBranchNetMaster/ADMIN';
+    //   let sub: Subscription = this.dataService.getDynamicAPI(apiUrl).subscribe((resp: any) => {
+    //     if (resp.status == 'Success') {
+    //       this.branchOptions = resp.response;
+    //       // console.log(this.branchOptions);
+    //     }
        
-      });
+    //   });
   }
 
   toDateValitation(){
@@ -250,11 +250,29 @@ export class RetailAdvanceReceiptRegisterComponent implements OnInit {
 
   previewClick() {
     console.log(this.retailAdvanceReceiptRegisterForm)
+    let logData =  {
+      "VOCTYPE": this.comService.getqueryParamVocType() || "",
+      "REFMID": "",
+      "USERNAME": this.comService.userName,
+      "MODE": "PRINT",
+      "DATETIME": this.comService.formatDateTime(new Date()),
+      "REMARKS":"",
+      "SYSTEMNAME": "",
+      "BRANCHCODE": this.comService.branchCode,
+      "VOCNO": "",
+      "VOCDATE": "",
+      "YEARMONTH" : this.comService.yearSelected
+    }
+
     let postData = {
-      "SPID": "0150",
+      "SPID": "151",
       "parameter": {
-        
-      }
+        "strBRANCHES": this.formattedBranchDivisionData || this.fetchedBranchDataParam,
+        "FrVocDate":  this.formatDateToYYYYMMDD(this.retailAdvanceReceiptRegisterForm.controls.fromDate.value),
+        "ToVocDate": this.formatDateToYYYYMMDD(this.retailAdvanceReceiptRegisterForm.controls.toDate.value),
+        "Pending": this.retailAdvanceReceiptRegisterForm.controls.show.value,
+        "Logdata": JSON.stringify(logData)
+      },
     }
     console.log(postData)  
     this.comService.showSnackBarMsg('MSG81447');
@@ -270,7 +288,7 @@ export class RetailAdvanceReceiptRegisterComponent implements OnInit {
         console.error('Failed to open the print window. Possibly blocked by a popup blocker.');
         return;
       }
-      let printContent = data[0][0].HTMLINPUT;
+      let printContent = data[0][0].HTML;
       WindowPrt.document.write(printContent);
       WindowPrt.document.close();
       WindowPrt.focus();  
@@ -305,6 +323,19 @@ export class RetailAdvanceReceiptRegisterComponent implements OnInit {
     console.log(this.retailAdvanceReceiptRegisterForm.controls.templateName.value)
   }
   saveTemplate_DB(){
+    let logData =  {
+      "VOCTYPE": this.comService.getqueryParamVocType() || "",
+      "REFMID": "",
+      "USERNAME": this.comService.userName,
+      "MODE": "PRINT",
+      "DATETIME": this.comService.formatDateTime(new Date()),
+      "REMARKS":"",
+      "SYSTEMNAME": "",
+      "BRANCHCODE": this.comService.branchCode,
+      "VOCNO": "",
+      "VOCDATE": "",
+      "YEARMONTH" : this.comService.yearSelected
+    }
     const payload = {
       "SPID": "0115",
       "parameter": {
@@ -318,7 +349,11 @@ export class RetailAdvanceReceiptRegisterComponent implements OnInit {
               "ISDEFAULT": 1
             },
             "CONTROL_DETAIL": {
-              
+              "strBRANCHES": this.formattedBranchDivisionData || this.fetchedBranchDataParam,
+              "FrVocDate":  this.formatDateToYYYYMMDD(this.retailAdvanceReceiptRegisterForm.controls.fromDate.value),
+              "ToVocDate": this.formatDateToYYYYMMDD(this.retailAdvanceReceiptRegisterForm.controls.toDate.value),
+              "Pending": this.retailAdvanceReceiptRegisterForm.controls.show.value,
+              "Logdata": JSON.stringify(logData)
             }
         })
       }
@@ -363,29 +398,23 @@ export class RetailAdvanceReceiptRegisterComponent implements OnInit {
   prefillScreenValues(){
     if ( Object.keys(this.content).length > 0) {
       this.isLoading = true;
+      console.log('data to prefill', paresedItem)   
       this.templateNameHasValue = !!(this.content?.TEMPLATE_NAME);
       this.retailAdvanceReceiptRegisterForm.controls.templateName.setValue(this.content?.TEMPLATE_NAME);
 
       var paresedItem = JSON.parse(this.content?.CONTROL_LIST_JSON);
-
+       
       this.dateToPass = {
-        fromDate:  paresedItem?.CONTROL_DETAIL.STRFROMDATE,
-        toDate: paresedItem?.CONTROL_DETAIL.STRTODATE
+        fromDate:  paresedItem?.CONTROL_DETAIL.FrVocDate,
+        toDate: paresedItem?.CONTROL_DETAIL.ToVocDate
       };
-      this.dateToPass.fromDate? this.retailAdvanceReceiptRegisterForm.controls.fromdate.setValue(this.dateToPass.fromDate) : null
-      this.dateToPass.toDate? this.retailAdvanceReceiptRegisterForm.controls.todate.setValue(this.dateToPass.toDate) : null
+      this.dateToPass.fromDate? this.retailAdvanceReceiptRegisterForm.controls.fromDate.setValue(this.dateToPass.fromDate) : null
+      this.dateToPass.toDate? this.retailAdvanceReceiptRegisterForm.controls.toDate.setValue(this.dateToPass.toDate) : null
 
-      // this.loyaltyregisterFrom.controls.branch.setValue(paresedItem?.CONTROL_DETAIL.STRBRANCHES);
+      this.retailAdvanceReceiptRegisterForm.controls.branch.setValue(paresedItem?.CONTROL_DETAIL.strBRANCHES);
+      this.fetchedBranchData= paresedItem?.CONTROL_DETAIL.strBRANCHES.split("#")
+      this.fetchedBranchDataParam = paresedItem?.CONTROL_DETAIL.strBRANCHES
 
-      this.retailAdvanceReceiptRegisterForm.controls.customerfrom.setValue(paresedItem?.CONTROL_DETAIL.STRCUSTCODEFROM);
-      this.retailAdvanceReceiptRegisterForm.controls.customerto.setValue(paresedItem?.CONTROL_DETAIL.STRCUSTCODETO);
-
-      this.retailAdvanceReceiptRegisterForm.controls.pointsfrom.setValue(paresedItem?.CONTROL_DETAIL.STRPOINTSFROM);
-      this.retailAdvanceReceiptRegisterForm.controls.pointsto.setValue(paresedItem?.CONTROL_DETAIL.STRPOINTSTO);
-
-      this.retailAdvanceReceiptRegisterForm.controls.branch.setValue(paresedItem?.CONTROL_DETAIL.STRBRANCHES);
-      this.fetchedBranchData= paresedItem?.CONTROL_DETAIL.STRBRANCHES.split("#")
-      this.fetchedBranchDataParam = paresedItem?.CONTROL_DETAIL.STRBRANCHES
     }
   }
 
