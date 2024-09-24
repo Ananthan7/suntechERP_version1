@@ -29,7 +29,7 @@
                                             style="width: 90%;">
                                             <input type="text" matInput
                                                 formControlName="jobNumber"
-                                                id="jobNumbercode"
+                                                id="jobNumbercode" tabindex="0"
                                                 (focusout)="jobNumberValidate($event)"
                                                 [readonly]="viewMode"
                                                 (keydown)="lookupKeyPress($event,'jobNumber')" />
@@ -59,7 +59,7 @@
                                     <div class="col-md-3">
                                         <mat-form-field appearance="outline"
                                             style="width: 90%;">
-                                            <input type="text" matInput
+                                            <input type="text" matInput tabindex="1"
                                                 formControlName="subJobNo"
                                                 (focusout)="subJobNumberValidate($event)"
                                                 [readonly]="viewMode" />
@@ -86,7 +86,7 @@
                                         <mat-form-field appearance="outline"
                                             style="width: 90%;">
                                             <input type="text" matInput
-                                                UpperCaseDirective
+                                                UpperCaseDirective tabindex="2"
                                                 formControlName="processCode"
                                                 [readonly]="viewMode"
                                                 (keydown)="lookupKeyPress($event,'processCode')"
@@ -119,7 +119,7 @@
                                             style="width: 90%;">
                                             <input type="text" matInput
                                                 formControlName="workerCode"
-                                                readonly
+                                                readonly tabindex="3"
                                                 (keydown)="lookupKeyPress($event,'workerCodeDes')"
                                                 [readonly]="viewMode"
                                                 (focusout)="WorkerCodeValidate($event)" />
@@ -276,7 +276,7 @@
                                             style="width: 100%;">
                                             <input type="text" matInput
                                                 formControlName="stockCode"
-                                                UpperCaseDirective
+                                                UpperCaseDirective tabindex="4"
                                                 placeholder="Stock Code"
                                                 (focusout)="stockCodeValidate($event)"
                                                 [readonly]="viewMode || masterMetalChecked"

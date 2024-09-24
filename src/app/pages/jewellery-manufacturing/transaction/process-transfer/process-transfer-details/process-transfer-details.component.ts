@@ -449,12 +449,6 @@ export class ProcessTransferDetailsComponent implements OnInit {
       this.setFormNullToString('TO_PROCESS_CODE', parentDetail.TO_PROCESS_CODE)
       this.setFormNullToString('TO_PROCESSNAME', parentDetail.TO_PROCESSNAME)
       this.setFormNullToString('stockCode', parentDetail.SCRAP_STOCK_CODE)
-      this.setFormNullToString('FRM_METAL_PCS', parentDetail.FRM_METAL_PCS)
-      this.setFormNullToString('TO_METAL_PCS', parentDetail.TO_METAL_PCS)
-      this.setFormNullToString('FRM_PCS', parentDetail.FRM_PCS)
-      this.setFormNullToString('TO_PCS', parentDetail.TO_PCS)
-      this.setFormNullToString('FRM_STONE_PCS', parentDetail.FRM_STONE_PCS)
-      this.setFormNullToString('TO_STONE_PCS', parentDetail.TO_STONE_PCS)
 
       this.setFormDecimal('FRM_METAL_WT', parentDetail.FRM_METAL_WT, 'METAL')
       this.setFormDecimal('TO_METAL_WT', parentDetail.TO_METAL_WT, 'METAL')
@@ -466,6 +460,13 @@ export class ProcessTransferDetailsComponent implements OnInit {
       this.setFormDecimal('PURITY', parentDetail.PURITY, 'PURITY')
       this.setFormDecimal('scrapWeight', parentDetail.SCRAP_WT, 'METAL')
       this.setFormDecimal('lossQty', parentDetail.LOSS_QTY, 'METAL')
+
+      this.processTransferdetailsForm.controls.FRM_METAL_PCS.setValue(parentDetail.FRM_METAL_PCS)
+      this.processTransferdetailsForm.controls.TO_METAL_PCS.setValue(parentDetail.TO_METAL_PCS)
+      this.processTransferdetailsForm.controls.FRM_PCS.setValue(parentDetail.FRM_PCS)
+      this.processTransferdetailsForm.controls.TO_PCS.setValue(parentDetail.TO_PCS)
+      this.processTransferdetailsForm.controls.FRM_STONE_PCS.setValue(parentDetail.FRM_STONE_PCS)
+      this.processTransferdetailsForm.controls.TO_STONE_PCS.setValue(parentDetail.TO_STONE_PCS)
 
     }
 
