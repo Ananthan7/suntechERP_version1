@@ -321,7 +321,7 @@
                                 <div class="col-sm-4">
                                     <mat-form-field style="width: 70%" appearance="outline">
                                         <input type="text" matInput formControlName="price1code" UpperCaseDirective
-                                            autocomplete="off" [readonly]="!isWeightAvgCost"
+                                            autocomplete="off" [readonly]="viewMode"
                                             (change)="priceCodeone($event)"
                                             (focusout)="validateLookupField($event,priceCodeData,'price1code')"
                                             (keydown)="lookupKeyPress($event,'price1code')" />
@@ -335,7 +335,7 @@
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%" appearance="outline">
                                         <input type="text" matInput AmountDecimalInput formControlName="price1per"
-                                            class="text-right" [readonly]="viewMode || isCurrencySelected" />
+                                            class="text-right" [readonly]="viewMode || codeEnable" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
@@ -372,7 +372,7 @@
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%" appearance="outline">
                                         <input type="text" matInput formControlName="price2per" AmountDecimalInput
-                                            class="text-right" [readonly]="viewMode || isCurrencySelected" />
+                                            class="text-right" [readonly]="viewMode || codeEnable" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
@@ -408,7 +408,7 @@
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%" appearance="outline">
                                         <input type="text" matInput formControlName="price3per" AmountDecimalInput
-                                            class="text-right" [readonly]="viewMode || isCurrencySelected" />
+                                            class="text-right" [readonly]="viewMode || codeEnable" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
@@ -444,7 +444,7 @@
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%" appearance="outline">
                                         <input type="text" matInput formControlName="price4per" AmountDecimalInput
-                                            class="text-right" [readonly]="viewMode || isCurrencySelected" />
+                                            class="text-right" [readonly]="viewMode || codeEnable" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
@@ -480,7 +480,7 @@
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%" appearance="outline">
                                         <input type="text" matInput formControlName="price5per" AmountDecimalInput
-                                            class="text-right" [readonly]="viewMode || isCurrencySelected" />
+                                            class="text-right" [readonly]="viewMode || codeEnable" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
