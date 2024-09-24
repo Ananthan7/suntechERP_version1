@@ -7,6 +7,7 @@
 </div>
 <!-- modal header component -->
 <modal-header
+  *ngIf="flag !== 'VIEW'"
   (saveClick)="customerSave()"
   (cancelClick)="close()"
 ></modal-header>
@@ -50,7 +51,8 @@
                 >
                   <input
                     readonly="true"
-                    matInput="text"
+                    matInput
+                    type="text"
                     formControlName="parentPosCode"
                   />
                   <master-search
@@ -108,6 +110,7 @@
                   <div class="col-md-8">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <mat-select
+                      [disabled]="flag === 'VIEW'"
                         (selectionChange)="genderChanger($event.value)"
                         formControlName="name"
                       >
@@ -128,7 +131,7 @@
                     appAlphabetsOnly
                     matInput="text"
                     formControlName="nameDesc"
-                    required
+                    [readonly]="flag === 'VIEW'"
                   />
                 </mat-form-field>
               </div>
@@ -540,29 +543,38 @@
               >
                 Nationality *
               </label>
-              <div class="col-md-8">
-                <mat-form-field style="width: 100%" appearance="outline">
-                  <mat-select (selectionChange)="onCountrySelect($event.value)">
-                    <mat-option
-                      *ngFor="let data of countryListData"
-                      [value]="data.COUNTRY_CODE_ISO2"
-                    >
-                      {{ data.COUNTRY_NAME }}
-                    </mat-option>
-                  </mat-select>
-                  <mat-error
-                    *ngIf="
-                      posCustomerMasterMainForm.controls.name.hasError(
-                        'required'
-                      )
-                    "
-                    id="ID005"
-                  >
-                    Country is <strong>required</strong>
-                  </mat-error>
-                </mat-form-field>
 
-                <!-- <mat-form-field
+              <div *ngIf="flag === 'VIEW'; else NeditMode" class="col-md-8">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <input
+                    readonly="true"
+                    appAlphabetsOnly
+                    matInput
+                    formControlName="nationality"
+                  />
+                </mat-form-field>
+              </div>
+
+              <!-- Else, show the dropdown -->
+              <ng-template #NeditMode>
+                <div class="col-md-8">
+                  <mat-form-field style="width: 100%" appearance="outline">
+                    <mat-select
+                      formControlName="nationality"
+                      (selectionChange)="onCountrySelect($event.value)"
+                    >
+                      <mat-option
+                        *ngFor="let data of countryListData"
+                        [value]="data.COUNTRY_CODE_ISO2"
+                      >
+                        {{ data.COUNTRY_NAME }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </ng-template>
+
+              <!-- <mat-form-field
                   style="width: -webkit-fill-available"
                   appearance="outline"
                 >
@@ -580,7 +592,6 @@
                     (newRowClick)="nationalitySelected($event)"
                   ></master-search>
                 </mat-form-field> -->
-              </div>
             </div>
             <div class="row mb-1">
               <label
@@ -589,6 +600,19 @@
                 id="ID021"
                 >State</label
               >
+
+              <div *ngIf="flag === 'VIEW'; else SeditMode" class="col-md-8">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <input
+                    readonly="true"
+                    appAlphabetsOnly
+                    matInput
+                    formControlName="state"
+                  />
+                </mat-form-field>
+              </div>
+
+              <ng-template #SeditMode>
               <div class="col-md-8">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <mat-select
@@ -602,16 +626,6 @@
                       {{ state.NAME || "State Not available" }}
                     </mat-option>
                   </mat-select>
-                  <mat-error
-                    *ngIf="
-                      posCustomerMasterMainForm.controls.state.hasError(
-                        'required'
-                      )
-                    "
-                    id="ID005"
-                  >
-                    State is <strong>required</strong>
-                  </mat-error>
                 </mat-form-field>
 
                 <!-- <mat-form-field
@@ -632,6 +646,7 @@
                   ></master-search>
                 </mat-form-field> -->
               </div>
+            </ng-template>
             </div>
             <div class="row mb-1">
               <label
@@ -640,6 +655,19 @@
                 id="ID022"
                 >City</label
               >
+
+              <div *ngIf="flag === 'VIEW'; else CeditMode" class="col-md-8">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <input
+                    readonly="true"
+                    appAlphabetsOnly
+                    matInput
+                    formControlName="city"
+                  />
+                </mat-form-field>
+              </div>
+              <ng-template #CeditMode>
+
               <div class="col-md-8">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <mat-select formControlName="city">
@@ -679,6 +707,7 @@
                   ></master-search>
                 </mat-form-field> -->
               </div>
+            </ng-template>
             </div>
             <div class="row mb-1">
               <label
@@ -1188,7 +1217,7 @@
                               <textarea
                                 matInput
                                 rows="3"
-                                formControlName="address"
+                                formControlName="addressPersonal"
                                 class=""
                                 style="resize: none"
                               ></textarea>
@@ -3054,6 +3083,7 @@
                 </button>
                 <input
                   type="file"
+                  formControlName="picture"
                   #fileInput
                   accept="image/*"
                   (change)="onFileSelected($event)"
@@ -3144,21 +3174,20 @@
                       <input
                         readonly="true"
                         matInput
-                        [matDatepicker]="date"
+                        [matDatepicker]="saleDate"
                         [max]="vocMaxDate"
                         name="date"
                         placeholder="DD/MM/YYYY"
                         DateValidation
-                        formControlName="date"
-                        readonly
+                        formControlName="saleDate"
                       />
                       <mat-datepicker-toggle
                         matSuffix
-                        [for]="date"
+                        [for]="saleDate"
                       ></mat-datepicker-toggle>
                       <mat-datepicker
                         [startAt]="currentDate"
-                        #date
+                        #saleDate
                       ></mat-datepicker>
                     </mat-form-field>
                   </div>
