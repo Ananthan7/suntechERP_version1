@@ -77,8 +77,11 @@ export class PosCustomerMasterMainComponent implements OnInit {
   // Dialog box
   dialogBox: any;
   dialogBoxResult: any;
-
-  image: File | null = null; 
+  existCustomerCode: any;
+  generatedCustomerCode: any;
+  flag: any;
+  image: File | null = null;
+  editdata: any;
 
   amlNameValidationData = false;
   dummyDate = "1900-01-01T00:00:00";
@@ -335,10 +338,14 @@ export class PosCustomerMasterMainComponent implements OnInit {
     name: [""],
     nameDesc: ["", [Validators.maxLength(20)]],
     creditCardLimitCheck: new FormControl({ value: "", disabled: false }),
-    creditCardLimit: [{ value: "", disabled: true }, [Validators.maxLength(20)]],
+    creditCardLimit: [
+      { value: "", disabled: true },
+      [Validators.maxLength(20)],
+    ],
     gender: [""],
     maritalSt: [""],
     dob: [""],
+    picture: [null],
     weddate: [""],
     country: [""],
     countryCode: [""],
@@ -348,7 +355,12 @@ export class PosCustomerMasterMainComponent implements OnInit {
     moblie1Number: [""],
     emailId: [
       "",
-      [Validators.maxLength(40), Validators.required, Validators.email, this.domainValidator],
+      [
+        Validators.maxLength(40),
+        Validators.required,
+        Validators.email,
+        this.domainValidator,
+      ],
     ],
     telRCountry: [""],
     telRNumber: [""],
@@ -364,12 +376,8 @@ export class PosCustomerMasterMainComponent implements OnInit {
     vat: new FormControl("", [
       Validators.maxLength(15),
       Validators.pattern("^[0-9]*$"),
-      
     ]),
-    panNo: [
-      "",
-      [ Validators.maxLength(10), this.panValidator],
-    ],
+    panNo: ["", [Validators.maxLength(10), this.panValidator]],
     whatsappCountryCode: [""],
     whatsappNumber: [""],
     spouse: ["", [Validators.maxLength(40)]],
@@ -387,7 +395,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
     custID: [""],
     custDate: [""],
     POBox: ["", [Validators.maxLength(6)]],
-    address: [""],
+    addressPersonal: [""],
     officialAddress: [""],
     deliveryAddress: [""],
     remarks: [""],
@@ -434,7 +442,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
     createdBranch: [""],
     openedOn: [""],
     voucher: [""],
-    date: [""],
+    saleDate: [""],
     branchLoc: [""],
     amount: [""],
     totalSale: [""],
@@ -491,16 +499,24 @@ export class PosCustomerMasterMainComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.posCustomerMasterMainForm
-      .get("creditCardLimitCheck")
-      ?.valueChanges.subscribe((isChecked) => {
-        if (isChecked) {
-          this.posCustomerMasterMainForm.get("creditCardLimit")?.enable();
-        } else {
-          this.posCustomerMasterMainForm.get("creditCardLimit")?.disable();
-        }
-      });
+    this.branchCode = this.comService.branchCode;
+    this.existCustomerCode = this.content?.CODE;
+    this.flag = this.content?.FLAG;
+    this.generateCutomerCode();
+    this.initialController(this.flag);
+    this.creditLimitCheck();
+    this.reasonOfPurchase();
+    this.amlValidation = this.comService.allbranchMaster.AMLNAMEVALIDATION;
+    this.posCustomerMasterMainForm.controls.weddate.disable();
+    this.countryList();
+    console.log(this.generatedCustomerCode);
 
+    this.getDropDownStatus();
+
+    this.posCustomerMasterMainForm.controls["createdBranch"].disable();
+  }
+
+  reasonOfPurchase() {
     this.posCustomerMasterMainForm
       .get("reasonOfPurchase")
       ?.valueChanges.subscribe((value) => {
@@ -510,16 +526,215 @@ export class PosCustomerMasterMainComponent implements OnInit {
           this.posCustomerMasterMainForm.get("gifrPurchased")?.disable();
         }
       });
+  }
 
-    this.amlValidation = this.comService.allbranchMaster.AMLNAMEVALIDATION;
+  creditLimitCheck() {
+    this.posCustomerMasterMainForm
+      .get("creditCardLimitCheck")
+      ?.valueChanges.subscribe((isChecked) => {
+        if (isChecked) {
+          this.posCustomerMasterMainForm.get("creditCardLimit")?.enable();
+        } else {
+          this.posCustomerMasterMainForm.get("creditCardLimit")?.disable();
+        }
+      });
+  }
 
-    this.posCustomerMasterMainForm.controls.weddate.disable();
-    this.countryList();
-    this.generateCutomerCode();
-    this.getDropDownStatus();
+  initialController(FLAG: any) {
+    if (FLAG === "VIEW") {
+      this.ViewController();
+    }
+    if (FLAG === "EDIT") {
+      this.editController();
+    }
+  }
 
-    this.branchCode = this.comService.branchCode;
-    this.posCustomerMasterMainForm.controls["createdBranch"].disable();
+  setvalues(setData: any) {
+    this.posCustomerMasterMainForm.controls.nameDesc.setValue(setData.NAME);
+    this.posCustomerMasterMainForm.controls.name.setValue(
+      setData.POSCUSTPREFIX
+    );
+
+    this.posCustomerMasterMainForm.controls.company.setValue(setData.COMPANY);
+    this.posCustomerMasterMainForm.controls.addressPersonal.setValue(
+      setData.ADDRESS
+    );
+    this.posCustomerMasterMainForm.controls.POBox.setValue(setData.POBOX_NO);
+    this.posCustomerMasterMainForm.controls.state.setValue(setData.STATE);
+    this.posCustomerMasterMainForm.controls.city.setValue(setData.CITY);
+    this.posCustomerMasterMainForm.controls.countryCode.setValue(
+      setData.COUNTRY_CODE
+    );
+    this.posCustomerMasterMainForm.controls.emailId.setValue(setData.EMAIL);
+    this.posCustomerMasterMainForm.controls.telRNumber.setValue(setData.TEL1);
+    this.posCustomerMasterMainForm.controls.tel0number.setValue(setData.TEL2);
+    this.posCustomerMasterMainForm.controls.moblieNumber.setValue(
+      setData.MOBILE
+    );
+    this.posCustomerMasterMainForm.controls.faxNo.setValue(setData.FAX);
+    this.posCustomerMasterMainForm.controls.maritalSt.setValue(
+      setData.MARITAL_ST
+    );
+    this.posCustomerMasterMainForm.controls.weddate.setValue(setData.WED_DATE);
+    this.posCustomerMasterMainForm.controls.spouse.setValue(
+      setData.SPOUSE_NAME
+    );
+    this.posCustomerMasterMainForm.controls.remarks.setValue(setData.REMARKS);
+    this.posCustomerMasterMainForm.controls.dob.setValue(setData.DATE_OF_BIRTH);
+    this.posCustomerMasterMainForm.controls.openedOn.setValue(
+      setData.OPENING_ON
+    );
+    this.posCustomerMasterMainForm.controls.gender.setValue(setData.GENDER);
+    this.posCustomerMasterMainForm.controls.religion.setValue(setData.RELIGION);
+    this.posCustomerMasterMainForm.controls.nationality.setValue(
+      setData.NATIONALITY
+    );
+    this.posCustomerMasterMainForm.controls.custType.setValue(setData.TYPE);
+    this.posCustomerMasterMainForm.controls.category.setValue(setData.CATEGORY);
+    this.posCustomerMasterMainForm.controls.income.setValue(setData.INCOME);
+    this.posCustomerMasterMainForm.controls.custStatus.setValue(
+      setData.CUST_STATUS
+    );
+    this.posCustomerMasterMainForm.controls.picture.setValue(setData.PICTURE);
+    this.posCustomerMasterMainForm.controls.voucher.setValue(
+      setData.SALVOCTYPE_NO
+    );
+    this.posCustomerMasterMainForm.controls.saleDate.setValue(setData.SALDATE);
+    this.posCustomerMasterMainForm.controls.amount.setValue(setData.SALAMOUNT);
+    this.posCustomerMasterMainForm.controls.branchLoc.setValue(
+      setData.SALBRLOC
+    );
+    this.posCustomerMasterMainForm.controls.createdBranch.setValue(
+      setData.BRANCH_CODE
+    );
+    this.posCustomerMasterMainForm.controls.totalSale.setValue(
+      setData.TOTALSALES
+    );
+    this.posCustomerMasterMainForm.controls.custID.setValue(
+      setData.POSCUSTIDNO
+    );
+    this.posCustomerMasterMainForm.controls.custID.setValue(
+      setData.POSCUSTIDNO
+    );
+    this.posCustomerMasterMainForm.controls.moblie1Number.setValue(
+      setData.MOBILE1
+    );
+    this.posCustomerMasterMainForm.controls.language.setValue(
+      setData.CUST_LANGUAGE
+    );
+    this.posCustomerMasterMainForm.controls.custType.setValue(
+      setData.CUST_TYPE
+    );
+    this.posCustomerMasterMainForm.controls.moblieCountry.setValue(
+      setData.MOBILECODE1
+    );
+    this.posCustomerMasterMainForm.controls.moblie1Country.setValue(
+      setData.MOBILECODE2
+    );
+    this.posCustomerMasterMainForm.controls.custIdType.setValue(
+      setData.IDCATEGORY
+    );
+    this.posCustomerMasterMainForm.controls.officialAddress.setValue(
+      setData.ADDRESS_OFFICIAL
+    );
+    this.posCustomerMasterMainForm.controls.deliveryAddress.setValue(
+      setData.ADDRESS_DELIVARY
+    );
+    // this.posCustomerMasterMainForm.controls.deliveryAddress.setValue(
+    //   setData.INTERESTED_IN
+    // );
+    this.posCustomerMasterMainForm.controls.bloodGroup.setValue(
+      setData.BLOOD_GROUP
+    );
+    this.posCustomerMasterMainForm.controls.noOfChildren.setValue(
+      setData.NO_OF_CHILDREN
+    );
+    this.posCustomerMasterMainForm.controls.zodiacSign.setValue(
+      setData.ZODIAC_SIGN
+    );
+    this.posCustomerMasterMainForm.controls.designation.setValue(
+      setData.DESIGNATION
+    );
+    this.posCustomerMasterMainForm.controls.amltype.setValue(setData.AML_TYPE);
+    this.posCustomerMasterMainForm.controls.unNumber.setValue(
+      setData.UN_NUMBER
+    );
+    this.posCustomerMasterMainForm.controls.name1.setValue(setData.NAME_1);
+    this.posCustomerMasterMainForm.controls.name2.setValue(setData.NAME_2);
+    this.posCustomerMasterMainForm.controls.name3.setValue(setData.NAME_3);
+    this.posCustomerMasterMainForm.controls.name4.setValue(setData.NAME_4);
+    this.posCustomerMasterMainForm.controls.name5.setValue(setData.NAME_5);
+    this.posCustomerMasterMainForm.controls.dob2.setValue(setData.DOB_2);
+    this.posCustomerMasterMainForm.controls.dob3.setValue(setData.DOB_3);
+    this.posCustomerMasterMainForm.controls.dob4.setValue(setData.DOB_4);
+    this.posCustomerMasterMainForm.controls.dob5.setValue(setData.DOB_5);
+    this.posCustomerMasterMainForm.controls.goodQualityaka.setValue(
+      setData.GOOD_QUALITY
+    );
+
+    this.posCustomerMasterMainForm.controls.lowQualityaka.setValue(
+      setData.LOW_QUALITY
+    );
+
+    this.posCustomerMasterMainForm.controls.aka.setValue(setData.A_K_A);
+
+    this.posCustomerMasterMainForm.controls.fka.setValue(setData.F_K_A);
+
+    this.posCustomerMasterMainForm.controls.nationality2.setValue(
+      setData.NATIONALITY_2
+    );
+    this.posCustomerMasterMainForm.controls.nationality3.setValue(
+      setData.NATIONALITY_3
+    );
+    this.posCustomerMasterMainForm.controls.nationality4.setValue(
+      setData.NATIONALITY_4
+    );
+    this.posCustomerMasterMainForm.controls.nationality5.setValue(
+      setData.NATIONALITY_5
+    );
+    this.posCustomerMasterMainForm.controls.passport1.setValue(
+      setData.PASSPORT_NO_1
+    );
+    this.posCustomerMasterMainForm.controls.passport2.setValue(
+      setData.PASSPORT_NO_2
+    );
+    this.posCustomerMasterMainForm.controls.passport3.setValue(
+      setData.PASSPORT_NO_3
+    );
+    this.posCustomerMasterMainForm.controls.passport4.setValue(
+      setData.PASSPORT_NO_4
+    );
+    this.posCustomerMasterMainForm.controls.passport5.setValue(
+      setData.PASSPORT_NO_5
+    );
+    this.posCustomerMasterMainForm.controls.listedOn.setValue(
+      setData.LISTED_ON_DATE
+    );
+    this.posCustomerMasterMainForm.controls.link.setValue(setData.LINKS);
+    this.posCustomerMasterMainForm.controls.fatherName.setValue(
+      setData.FATHERNAME
+    );
+    this.posCustomerMasterMainForm.controls.fatherName.setValue(
+      setData.FATHERNAME
+    );
+  }
+
+  editController() {
+    this.ViewController();
+  }
+
+  ViewController() {
+    let API = `PosCustomerMaster/GetCustomerByCode/${this.existCustomerCode}`;
+    let sub: Subscription = this.apiService
+      .getDynamicAPI(API)
+      .subscribe((res) => {
+        if (res.status == "Success") {
+          console.log(res.response);
+          this.editdata = res.response;
+
+          this.setvalues(this.editdata);
+        }
+      });
   }
 
   genderChanger(event: any) {
@@ -608,16 +823,23 @@ export class PosCustomerMasterMainComponent implements OnInit {
   }
 
   generateCutomerCode() {
-    let API = `PosCustomerCodeAutoGenerate`;
-    let sub: Subscription = this.apiService
-      .getDynamicAPIWithoutBranch(API)
-      .subscribe((res) => {
-        res.status == "Success"
-          ? this.posCustomerMasterMainForm.controls["code"].setValue(
-              res.PosCustomerCode
-            )
-          : console.log("Customer Code Auto Generate Is Failed");
-      });
+    if (this.existCustomerCode) {
+      this.posCustomerMasterMainForm.controls.code.setValue(
+        this.existCustomerCode
+      );
+    } else {
+      let API = `PosCustomerCodeAutoGenerate`;
+      let sub: Subscription = this.apiService
+        .getDynamicAPIWithoutBranch(API)
+        .subscribe((res) => {
+          if (res.status == "Success") {
+            this.generatedCustomerCode = res.PosCustomerCode;
+            this.posCustomerMasterMainForm.controls.code.setValue(
+              this.generatedCustomerCode
+            );
+          }
+        });
+    }
   }
 
   countrySelected(e: any) {
@@ -682,22 +904,25 @@ export class PosCustomerMasterMainComponent implements OnInit {
   }
 
   typeidCodeSelected(e: any) {
-
     console.log(e);
 
-    if(!this.posCustomerMasterMainForm.controls.countryCode.value) {
-      return alert("please Select the Country Fisrt ")
+    if (!this.posCustomerMasterMainForm.controls.countryCode.value) {
+      return alert("please Select the Country Fisrt ");
     }
 
-    let value = "United Arab Emirates"
-    let code = "EID"
+    let value = "United Arab Emirates";
+    let code = "EID";
 
-    if(this.posCustomerMasterMainForm.controls.countryCode.value !== value && e.CODE === code ) {
-      return alert("Please select the UAE country. Which ID you selected belongs to this country?")
+    if (
+      this.posCustomerMasterMainForm.controls.countryCode.value !== value &&
+      e.CODE === code
+    ) {
+      return alert(
+        "Please select the UAE country. Which ID you selected belongs to this country?"
+      );
     }
 
     this.posCustomerMasterMainForm.controls.custIdType.setValue(e.CODE);
-    
   }
 
   stateSelected(e: any) {
@@ -713,6 +938,9 @@ export class PosCustomerMasterMainComponent implements OnInit {
   parentPosSelected(e: any) {
     console.log(e);
     this.posCustomerMasterMainForm.controls.parentPosCode.setValue(e.CODE);
+    console.log(
+      this.posCustomerMasterMainForm.controls.parentPosCode.value.toString()
+    );
   }
 
   refBySelected(e: any) {
@@ -886,7 +1114,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
           CODE: this.posCustomerMasterMainForm.value.code || "",
           NAME: this.posCustomerMasterMainForm.value.nameDesc || "",
           COMPANY: this.posCustomerMasterMainForm.value.company || "",
-          ADDRESS: this.posCustomerMasterMainForm.value.address || "",
+          ADDRESS: this.posCustomerMasterMainForm.value.addressPersonal || "",
           POBOX_NO: this.posCustomerMasterMainForm.value.POBox || "",
           STATE: this.posCustomerMasterMainForm.value.state || "",
           CITY: this.posCustomerMasterMainForm.value.city || "",
@@ -930,7 +1158,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
           TOTALSALES: this.posCustomerMasterMainForm.value.totalSale || 0,
           POSCUSTIDNO: this.posCustomerMasterMainForm.value.custID || "",
           POSSMAN: "",
-          POSCustPrefix: this.posCustomerMasterMainForm.value.name || "",
+          POSCUSTPREFIX: this.posCustomerMasterMainForm.value.name || "",
           MOBILE1:
             this.posCustomerMasterMainForm.value.moblie1Number.toString() || "",
           CUST_Language: this.posCustomerMasterMainForm.value.language || "",
@@ -1016,17 +1244,22 @@ export class PosCustomerMasterMainComponent implements OnInit {
           NAME_4: this.posCustomerMasterMainForm.value.name4 || "",
           NAME_5: this.posCustomerMasterMainForm.value.name5 || "",
           DOB_2: this.posCustomerMasterMainForm.value.dob2 || "",
-          DOB_3:  this.posCustomerMasterMainForm.value.dob3 || "",
-          DOB_4:  this.posCustomerMasterMainForm.value.dob4 || "",
-          DOB_5:  this.posCustomerMasterMainForm.value.dob5 || "",
-          GOOD_QUALITY: this.posCustomerMasterMainForm.value.goodQualityaka || "",
+          DOB_3: this.posCustomerMasterMainForm.value.dob3 || "",
+          DOB_4: this.posCustomerMasterMainForm.value.dob4 || "",
+          DOB_5: this.posCustomerMasterMainForm.value.dob5 || "",
+          GOOD_QUALITY:
+            this.posCustomerMasterMainForm.value.goodQualityaka || "",
           LOW_QUALITY: this.posCustomerMasterMainForm.value.lowQualityaka || "",
           A_K_A: this.posCustomerMasterMainForm.value.aka || "",
           F_K_A: this.posCustomerMasterMainForm.value.fka || "",
-          NATIONALITY_2: this.posCustomerMasterMainForm.value.nationality2 || "",
-          NATIONALITY_3: this.posCustomerMasterMainForm.value.nationality3 || "",
-          NATIONALITY_4: this.posCustomerMasterMainForm.value.nationality4 || "",
-          NATIONALITY_5: this.posCustomerMasterMainForm.value.nationality5 || "",
+          NATIONALITY_2:
+            this.posCustomerMasterMainForm.value.nationality2 || "",
+          NATIONALITY_3:
+            this.posCustomerMasterMainForm.value.nationality3 || "",
+          NATIONALITY_4:
+            this.posCustomerMasterMainForm.value.nationality4 || "",
+          NATIONALITY_5:
+            this.posCustomerMasterMainForm.value.nationality5 || "",
           PASSPORT_NO_1: this.posCustomerMasterMainForm.value.passport1 || "",
           PASSPORT_NO_2: this.posCustomerMasterMainForm.value.passport2 || "",
           PASSPORT_NO_3: this.posCustomerMasterMainForm.value.passport3 || "",
@@ -1037,7 +1270,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
             this.posCustomerMasterMainForm.value.fcn_cust_detail_idcard || "",
           OTHER_INFORMATION: "",
           LINKS: this.posCustomerMasterMainForm.value.link || "",
-          FATHERNAME: this.posCustomerMasterMainForm.value.fatherName  || "",
+          FATHERNAME: this.posCustomerMasterMainForm.value.fatherName || "",
           PROMO_NEEDED: "",
           PROMO_HOW_OFTEN: "",
           CHILDNAME1: "",
@@ -1072,12 +1305,8 @@ export class PosCustomerMasterMainComponent implements OnInit {
           VAT_NUMBER: `${this.comService.emptyToZero(
             this.posCustomerMasterMainForm.value.vat
           )}`,
-          PARENT_CODE: `${this.comService.emptyToZero(
-            this.posCustomerMasterMainForm.value.parentPosCode
-          )}`,
-          REFERED_BY: `${this.comService.emptyToZero(
-            this.posCustomerMasterMainForm.value.refBy
-          )}`,
+          PARENT_CODE: this.posCustomerMasterMainForm.value.parentPosCode.toString(),
+          REFERED_BY: this.posCustomerMasterMainForm.value.refBy.toString(),
           CREDIT_LIMIT:
             this.posCustomerMasterMainForm.value.creditCardLimit || 0,
           CREDIT_LIMIT_STATUS: false,
@@ -1108,10 +1337,13 @@ export class PosCustomerMasterMainComponent implements OnInit {
           FESTIVAL_ONAM: false,
           FESTIVAL_PONGAL: false,
           FESTIVAL_NEWYEAR: false,
-          REASON_OF_PURCHASE: this.posCustomerMasterMainForm.value.reasonOfPurchase || "",
+          REASON_OF_PURCHASE:
+            this.posCustomerMasterMainForm.value.reasonOfPurchase || "",
           AGE_GROUP: this.posCustomerMasterMainForm.value.ageGroup || "",
-          GIFT_PURCHASED_FOR: this.posCustomerMasterMainForm.value.gifrPurchased || "",
-          PURCHASE_OCCASION: this.posCustomerMasterMainForm.value.occasionOfPurchase || "",
+          GIFT_PURCHASED_FOR:
+            this.posCustomerMasterMainForm.value.gifrPurchased || "",
+          PURCHASE_OCCASION:
+            this.posCustomerMasterMainForm.value.occasionOfPurchase || "",
           NEXT_VISIT: this.posCustomerMasterMainForm.value.nextVisit,
           SHOWROOMACCESSIBILITY:
             this.posCustomerMasterMainForm.value.showroomAccessibility || "",
@@ -1550,27 +1782,23 @@ export class PosCustomerMasterMainComponent implements OnInit {
     console.log("Got Clicked");
   }
 
-
   preventInvalidInput(event: KeyboardEvent) {
     // Prevent the letter "e", "E", "+", and "-" from being entered
     if (["e", "E", "+", "-"].includes(event.key)) {
       event.preventDefault();
     }
-
   }
-  
-  
+
   onFileSelected(event: any) {
     console.log("Clicked");
-    
+
     const file: File = event.target.files[0];
 
     if (file) {
-      this.image = file;  // Store the selected image in the `buddy` variable
-      console.log('Image stored in buddy:', this.image);
+      this.image = file; // Store the selected image in the `buddy` variable
+      console.log("Image stored in buddy:", this.image);
     } else {
-      console.error('No file selected');
+      console.error("No file selected");
     }
   }
-
 }
