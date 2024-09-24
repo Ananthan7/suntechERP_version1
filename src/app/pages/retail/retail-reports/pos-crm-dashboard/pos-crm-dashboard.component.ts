@@ -32,7 +32,10 @@ export class PosCrmDashboardComponent implements OnInit {
   divisionsArr: any[] = [];
   diamondSectionArr: any[] = [];
   metalSectionArr: any[] =[];
+  logDataParam: any;
+  dateToPass: { fromDate: string; toDate: string } = { fromDate: '', toDate: '' };
 
+  
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -43,18 +46,35 @@ export class PosCrmDashboardComponent implements OnInit {
   ) { }
 
  posCRMdasbordFrom: FormGroup = this.formBuilder.group({
-  festival: ['',[Validators.required]],
-  daterange: ['',[Validators.required]],
-  divisions: ['',[Validators.required]],
-  metal: ['',[Validators.required]],
-  diamondsection: ['',[Validators.required]],
-  branch: [''],
-  templateName: [''],
-  jobno: ['']
+    festival: ['',[Validators.required]],
+    daterange: ['',[Validators.required]],
+    divisions: ['',[Validators.required]],
+    metal: ['',[Validators.required]],
+    diamondsection: ['',[Validators.required]],
+    branch: [''],
+    templateName: [''],
+    jobno: [''],
+    fromDate: [''],
+    toDate: [''],
+    showBuyingPatternBln: [false]
   });
 
   ngOnInit(): void {
     this.initAPI()
+
+    this.logDataParam =  {
+      "VOCTYPE": this.commonService.getqueryParamVocType() || "",
+      "REFMID": "",
+      "USERNAME": this.commonService.userName,
+      "MODE": "PRINT",
+      "DATETIME": this.commonService.formatDateTime(new Date()),
+      "REMARKS":"",
+      "SYSTEMNAME": "",
+      "BRANCHCODE": this.commonService.branchCode,
+      "VOCNO": "",
+      "VOCDATE": "",
+      "YEARMONTH" : this.commonService.yearSelected
+    }
   }
 
   initAPI(){
@@ -143,7 +163,6 @@ export class PosCrmDashboardComponent implements OnInit {
     }
     else if(event.ToDate){
       this.posCRMdasbordFrom.controls.toDate.setValue(event.ToDate);
-      // console.log(this.retailAdvanceReceiptRegisterForm)
     }
   }
 
@@ -213,6 +232,65 @@ export class PosCrmDashboardComponent implements OnInit {
     }
   }
 
+  previewClick() {
+    let postData = {
+      "SPID": "152",
+      "parameter": {
+        "strFmDate" : this.formatDateToYYYYMMDD(this.posCRMdasbordFrom.value.fromDate),
+        "strToDate" : this.formatDateToYYYYMMDD(this.posCRMdasbordFrom.value.toDate),
+        "bln_ShowBuyingPattern": JSON.stringify(this.posCRMdasbordFrom.controls.showBuyingPatternBln.value? 0 : 1),
+        "str_DiaBuyPatternField": this.posCRMdasbordFrom.controls.diamondsection.value,
+        "str_MtlBuyPatternField": this.posCRMdasbordFrom.controls.metal.value,
+        "str_Divisions": this.posCRMdasbordFrom.controls.divisions.value,
+        "str_BranchList": this.formattedBranchDivisionData || this.fetchedBranchDataParam,
+        "str_SqlId": '',
+        "LOGDATA": JSON.stringify(this.logDataParam)
+      }
+    }
+    console.log(postData)  
+    this.commonService.showSnackBarMsg('MSG81447');
+    this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+    .subscribe((result: any) => {
+      console.log(result);
+      let data = result.dynamicData;
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      const windowFeatures = `width=${width},height=${height},fullscreen=yes`;
+      var WindowPrt = window.open(' ', ' ', windowFeatures);
+      if (WindowPrt === null) {
+        console.error('Failed to open the print window. Possibly blocked by a popup blocker.');
+        return;
+      }
+      let printContent = data[0][0].HTMLINPUT;
+      WindowPrt.document.write(printContent);
+      WindowPrt.document.close();
+      WindowPrt.focus();  
+      WindowPrt.onload = function () {
+        if (WindowPrt && WindowPrt.document.head) {
+          let styleElement = WindowPrt.document.createElement('style');
+          styleElement.textContent = `
+                      @page {
+                          size: A5 landscape;
+                      }
+                      body {
+                          margin: 0mm;
+                      }
+                  `;
+          WindowPrt.document.head.appendChild(styleElement);
+
+          setTimeout(() => {
+            if (WindowPrt) {
+              WindowPrt.print();
+            } else {
+              console.error('Print window was closed before printing could occur.');
+            }
+          }, 800);
+        }
+      };
+      this.commonService.closeSnackBarMsg()
+    });      
+  }
+
   saveTemplate(){
     this.popupVisible = true;
     console.log(this.posCRMdasbordFrom.controls.templateName.value)
@@ -265,64 +343,6 @@ export class PosCrmDashboardComponent implements OnInit {
         this.toastr.error(Notifdata)
       }
     }); 
-  }
-
-  previewClick() {
-    let postData = {
-      "SPID": "0150",
-      "parameter": {
-        "strSalType": JSON.stringify( this.posCRMdasbordFrom.value.transactionType),
-        "strBranch" : this.formattedBranchDivisionData || this.fetchedBranchDataParam,
-        "strFmDate" : this.formatDateToYYYYMMDD(this.posCRMdasbordFrom.value.fromDate),
-        "strToDate" : this.formatDateToYYYYMMDD(this.posCRMdasbordFrom.value.toDate),
-        "str_MGroupBy": '',
-        'USERNAME': localStorage.getItem('username'),
-        'MODE': '',
-        'VOCTYPE': ''
-      }
-    }
-    console.log(postData)  
-    this.commonService.showSnackBarMsg('MSG81447');
-    this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
-    .subscribe((result: any) => {
-      console.log(result);
-      let data = result.dynamicData;
-      const width = window.innerWidth;
-      const height = window.innerHeight;
-      const windowFeatures = `width=${width},height=${height},fullscreen=yes`;
-      var WindowPrt = window.open(' ', ' ', windowFeatures);
-      if (WindowPrt === null) {
-        console.error('Failed to open the print window. Possibly blocked by a popup blocker.');
-        return;
-      }
-      let printContent = data[0][0].HTMLINPUT;
-      WindowPrt.document.write(printContent);
-      WindowPrt.document.close();
-      WindowPrt.focus();  
-      WindowPrt.onload = function () {
-        if (WindowPrt && WindowPrt.document.head) {
-          let styleElement = WindowPrt.document.createElement('style');
-          styleElement.textContent = `
-                      @page {
-                          size: A5 landscape;
-                      }
-                      body {
-                          margin: 0mm;
-                      }
-                  `;
-          WindowPrt.document.head.appendChild(styleElement);
-
-          setTimeout(() => {
-            if (WindowPrt) {
-              WindowPrt.print();
-            } else {
-              console.error('Print window was closed before printing could occur.');
-            }
-          }, 800);
-        }
-      };
-      this.commonService.closeSnackBarMsg()
-    });      
   }
 
 

@@ -23,7 +23,7 @@
                     </div>
 
                     <div class="col-md-6">
-                        <app-date (selectedDate)="setDateValue($event)"></app-date>
+                        <app-date (selectedDate)="setDateValue($event)"  [dateValue]="dateToPass"></app-date>
                     </div> 
                 </div>
             </div>
@@ -44,7 +44,7 @@
 
                 <div class="col-sm-3">
                     <section class="example-section">
-                        <mat-checkbox class="example-margin" id="ID003">Show Buying Pattern Summary By
+                        <mat-checkbox class="example-margin" id="ID003" formControlName="showBuyingPatternBln">Show Buying Pattern Summary By
                         </mat-checkbox>
                     </section>
                 </div>
