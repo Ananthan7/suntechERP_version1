@@ -528,7 +528,7 @@ export class LabourChargeMasterComponent implements OnInit {
       }
     });
   }
-  
+
   setMode(mode: 'view' | 'edit') {
     this.viewMode = (mode === 'view');
     this.viewModeSetting = (mode === 'edit');
@@ -591,15 +591,16 @@ export class LabourChargeMasterComponent implements OnInit {
     this.diamondlabourMasterForm.controls.mid.setValue(this.content.MID);
     this.diamondlabourMasterForm.controls.labour_code.setValue(this.content.CODE);
     this.diamondlabourMasterForm.controls.labour_description.setValue(this.content.DESCRIPTION);
-    this.diamondlabourMasterForm.controls.labourType.setValue(this.content.LABTYPE);
+    // this.diamondlabourMasterForm.controls.labourType.setValue(this.content.LABTYPE);
     this.diamondlabourMasterForm.controls.method.setValue(this.content.METHOD);
     this.diamondlabourMasterForm.controls.divisions.setValue(this.content.DIVISION_CODE);
+    this.diamondlabourMasterForm.controls.labourType.setValue(this.content.DIVISION);
     this.diamondlabourMasterForm.controls.shape.setValue(this.content.SHAPE);
     this.diamondlabourMasterForm.controls.size_from.setValue(this.content.SIZE_FROM);
     this.diamondlabourMasterForm.controls.size_to.setValue(this.content.SIZE_TO);
     this.diamondlabourMasterForm.controls.currency.setValue(this.content.CURRENCYCODE);
     this.diamondlabourMasterForm.controls.sieve.setValue(this.content.SIEVE);
-    this.diamondlabourMasterForm.controls.process.setValue(this.content.PROCESS_TYPE);
+    this.diamondlabourMasterForm.controls.process.setValue(this.content.LABTYPE);
     this.diamondlabourMasterForm.controls.sieve_desc.setValue(this.content.SIEVEFROM_DESC);
     this.diamondlabourMasterForm.controls.unitList.setValue(this.content.UNITCODE);
     this.diamondlabourMasterForm.controls.accessories.setValue(this.content.ACCESSORIES);
@@ -1111,8 +1112,8 @@ export class LabourChargeMasterComponent implements OnInit {
     }
 
     else if (this.diamondlabourMasterForm.value.size_from > this.diamondlabourMasterForm.value.size_to) {
-     // this.commonService.toastErrorByMsgId('MSG2496') //"Size From should be lesser than Size To"
-     this.commonService.toastErrorByMsgId('MSG81517') //Size From should be lesser than Size To
+      // this.commonService.toastErrorByMsgId('MSG2496') //"Size From should be lesser than Size To"
+      this.commonService.toastErrorByMsgId('MSG81517') //Size From should be lesser than Size To
       return true
     }
 
@@ -1133,9 +1134,10 @@ export class LabourChargeMasterComponent implements OnInit {
       "SRNO": 0,
       "CODE": this.commonService.nullToString(diamondForm.labour_code?.toUpperCase()),
       "DESCRIPTION": this.commonService.nullToString(diamondForm.labour_description?.toUpperCase()),
-      "LABTYPE": this.commonService.nullToString(diamondForm.labourType),
+      "LABTYPE": this.commonService.nullToString(diamondForm.process),
+      // "LABTYPE": this.commonService.nullToString(diamondForm.labourType),
       "METHOD": this.commonService.nullToString(diamondForm.method),
-      "DIVISION": this.commonService.nullToString(diamondForm.divisions),
+      "DIVISION": this.commonService.nullToString(diamondForm.labourType),
       "SHAPE": this.commonService.nullToString(diamondForm.shape),
       "SIZE_FROM": this.commonService.nullToString(diamondForm.size_from),
       "SIZE_TO": this.commonService.nullToString(diamondForm.size_to),
@@ -1213,7 +1215,7 @@ export class LabourChargeMasterComponent implements OnInit {
   }
 
   updatelabourChargeMaster() {
- 
+
     if (this.submitValidation(this.diamondlabourMasterForm.value)) return;
 
     let API = 'LabourChargeMasterDj/UpdateLabourChargeMaster/' + this.content.CODE;
