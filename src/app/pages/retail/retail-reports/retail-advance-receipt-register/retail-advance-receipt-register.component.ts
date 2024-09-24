@@ -83,14 +83,14 @@ export class RetailAdvanceReceiptRegisterComponent implements OnInit {
 
     this.branchCode = this.comService.branchCode;
     
-    const apiUrl = '/UseBranchNetMaster/ADMIN';
-      let sub: Subscription = this.dataService.getDynamicAPI(apiUrl).subscribe((resp: any) => {
-        if (resp.status == 'Success') {
-          this.branchOptions = resp.response;
-          // console.log(this.branchOptions);
-        }
+    // const apiUrl = '/UseBranchNetMaster/ADMIN';
+    //   let sub: Subscription = this.dataService.getDynamicAPI(apiUrl).subscribe((resp: any) => {
+    //     if (resp.status == 'Success') {
+    //       this.branchOptions = resp.response;
+    //       // console.log(this.branchOptions);
+    //     }
        
-      });
+    //   });
   }
 
   toDateValitation(){
@@ -250,11 +250,29 @@ export class RetailAdvanceReceiptRegisterComponent implements OnInit {
 
   previewClick() {
     console.log(this.retailAdvanceReceiptRegisterForm)
+    let logData =  {
+      "VOCTYPE": this.comService.getqueryParamVocType() || "",
+      "REFMID": "",
+      "USERNAME": this.comService.userName,
+      "MODE": "PRINT",
+      "DATETIME": this.comService.formatDateTime(new Date()),
+      "REMARKS":"",
+      "SYSTEMNAME": "",
+      "BRANCHCODE": this.comService.branchCode,
+      "VOCNO": "",
+      "VOCDATE": "",
+      "YEARMONTH" : this.comService.yearSelected
+    }
+
     let postData = {
-      "SPID": "0150",
+      "SPID": "0151",
       "parameter": {
-        
-      }
+        "strBRANCHES": this.formattedBranchDivisionData || this.fetchedBranchDataParam,
+        "FrVocDate": this.retailAdvanceReceiptRegisterForm.controls.fromDate,
+        "ToVocDate": this.retailAdvanceReceiptRegisterForm.controls.toDate,
+        "Pending": this.retailAdvanceReceiptRegisterForm.controls.show,
+        "Logdata": logData
+      },
     }
     console.log(postData)  
     this.comService.showSnackBarMsg('MSG81447');
