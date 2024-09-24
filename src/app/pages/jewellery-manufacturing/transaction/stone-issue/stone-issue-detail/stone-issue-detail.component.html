@@ -139,6 +139,10 @@
               <input type="text" matInput formControlName="DIVCODE"
                 placeholder="Div Code" [readonly]="viewMode"
                 UpperCaseDirective />
+                <master-search class="masterSearch"
+                [MasterSearchData]="divCodeData" #overlaystockCodeSearch
+                (newRowClick)="stockCodeSelected($event)"
+                *ngIf="!viewMode"></master-search>
             </mat-form-field>
           </div>
           <div class="col-md-4">
