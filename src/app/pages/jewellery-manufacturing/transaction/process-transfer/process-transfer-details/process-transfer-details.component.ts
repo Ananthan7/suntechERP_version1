@@ -373,6 +373,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.processTransferdetailsForm.controls['startdate'].setValue(this.commonService.currentDate);
     this.processTransferdetailsForm.controls['enddate'].setValue(this.commonService.currentDate);
   }
+  // USE: SET ALL VIEW ADD AND EDIT MODE
   setFlagMode(FLAG: any) {
     switch (FLAG) {
       case 'VIEW':
@@ -381,6 +382,9 @@ export class ProcessTransferDetailsComponent implements OnInit {
         break;
       case 'EDIT':
         this.editMode = true;
+        break;
+      case 'DELETE':
+        this.viewMode = true;
         break;
       default:
         this.viewMode = false;
@@ -1199,6 +1203,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
   }
   //stockCode Scrap Validate
   stockCodeScrapValidate(event?: any) {
+    if(this.viewMode) return
     if (event && event.target.value == '') {
       return
     }
@@ -1794,7 +1799,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
   }
   // to processcode validate
   toProcesscodeValidate(event: any) {
-    if (event.target.value == '') {
+    if (event.target.value == '' || this.viewMode) {
       return
     }
     let form = this.processTransferdetailsForm.value
@@ -1873,7 +1878,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
   }
   // to Workercode Validate
   toWorkercodeValidate(event: any) {
-    if (event.target.value == '') {
+    if (event.target.value == '' || this.viewMode) {
       return
     }
     let form = this.processTransferdetailsForm.value
@@ -1977,7 +1982,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
   }
   selectAllBtnChange(event: any) {
     this.metalDetailData.forEach((item: any) => {
-      if (event.target.checked) {
+      if (event.checked) {
         item.SETTED_FLAG = true;
       } else {
         item.SETTED_FLAG = false;
