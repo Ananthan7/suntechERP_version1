@@ -22,6 +22,7 @@ export class StoneIssueDetailComponent implements OnInit {
   @ViewChild('overlayjobNumberSearch') public overlayjobNumberSearch!: MasterSearchComponent;
   @ViewChild('overlayprocessSearch') public overlayprocessSearch!: MasterSearchComponent;
   @ViewChild('overlayworkerSearch') public overlayworkerSearch!: MasterSearchComponent;
+  @ViewChild('overlayDivCodeSearch') public overlayDivCodeSearch!: MasterSearchComponent;
   @ViewChild('overlaystockCodeSearch') public overlaystockCodeSearch!: MasterSearchComponent;
   @ViewChild('overlaylocationSearch') public overlaylocationSearch!: MasterSearchComponent;
   columnhead1: any[] = [];
@@ -118,11 +119,11 @@ export class StoneIssueDetailComponent implements OnInit {
   divCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 18,
+    LOOKUPID: 273,
     SEARCH_FIELD: 'DIVISION_CODE',
     SEARCH_HEADING: 'Division Search',
     SEARCH_VALUE: '',
-    WHERECONDITION: "division = 'G'",
+    WHERECONDITION: `@SubJobNumber='',  @DivisionCode='', @DesignType=''`,
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -247,7 +248,7 @@ export class StoneIssueDetailComponent implements OnInit {
     this.stoneIssueDetailsFrom.controls.PART_CODE.setValue(this.content.PART_CODE)
     this.stoneIssueDetailsFrom.controls.batchid.setValue(this.content.SUB_STOCK_CODE)
     this.stoneIssueDetailsFrom.controls.consignment.setValue(this.content.CONSIGNMENT)
-  console.log(this.content.CONSIGNMENT,'consignment')
+    console.log(this.content.CONSIGNMENT, 'consignment')
   }
   setValueWithDecimal(formControlName: string, value: any, Decimal: string) {
     this.stoneIssueDetailsFrom.controls[formControlName].setValue(
@@ -304,7 +305,10 @@ export class StoneIssueDetailComponent implements OnInit {
     this.stoneIssueDetailsFrom.controls.workername.setValue(e.DESCRIPTION);
     this.processCodeData.WHERECONDITION = `@strWorker='${e.WORKER_CODE}',@strCurrentUser='${this.comService.userName}'`
   }
-
+  divCodeSelected(e: any){
+    console.log(e);
+    this.stoneIssueDetailsFrom.controls.DIVCODE.setValue(e.Division_Code);
+  }
   stockCodeSelected(e: any) {
     console.log(e, 'eee')
     this.stoneIssueDetailsFrom.controls.stockCode.setValue(e.STOCK_CODE);
@@ -334,9 +338,9 @@ export class StoneIssueDetailComponent implements OnInit {
     WHERECONDITION += `@JOBNO='${this.comService.nullToString(form.jobNumber)}',`
     WHERECONDITION += `@SUBJOBNO='${this.comService.nullToString(form.subjobnumber)}',`
     WHERECONDITION += `@STOCKCODE='${this.comService.nullToString(form.stockCode)}'`
-  //   WHERECONDITION += `@strStockCode='${this.comService.nullToString(form.stockCode)}'`
+    //   WHERECONDITION += `@strStockCode='${this.comService.nullToString(form.stockCode)}'`
     this.stockCodeData.WHERECONDITION = WHERECONDITION
-   }
+  }
 
   close(data?: any) {
     //TODO reset forms and data before closing
@@ -358,10 +362,10 @@ export class StoneIssueDetailComponent implements OnInit {
   }
   SPvalidateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     LOOKUPDATA.SEARCH_VALUE = event.target.value;
-  
+
     // If the field is empty or view mode is active, return early
     if (event.target.value === '' || this.viewMode === true) return;
-  
+
     let param = {
       "PAGENO": LOOKUPDATA.PAGENO,
       "RECORDS": LOOKUPDATA.RECORDS,
@@ -371,37 +375,37 @@ export class StoneIssueDetailComponent implements OnInit {
       "searchField": LOOKUPDATA.SEARCH_FIELD,
       "searchValue": LOOKUPDATA.SEARCH_VALUE
     };
-  
+
     // Show a loading message
     this.comService.showSnackBarMsg('MSG81447');
-  
+
     let Sub: Subscription = this.dataService.postDynamicAPI('MasterLookUp', param)
       .subscribe((result) => {
         // Close the loading message
         this.comService.closeSnackBarMsg();
-        
+
         let data = result.dynamicData[0];
-  
+
         if (data && data.length > 0) {
           if (LOOKUPDATA.FRONTENDFILTER && LOOKUPDATA.SEARCH_VALUE !== '') {
             let searchResult = this.comService.searchAllItemsInArray(data, LOOKUPDATA.SEARCH_VALUE);
-  
+
             if (searchResult && searchResult.length > 0) {
               let matchedItem = searchResult[0]; // Assuming the first match is correct
-  
+
               // Set the description based on the form control (worker or process)
               if (FORMNAME === 'worker') {
                 this.stoneIssueDetailsFrom.controls.workername.setValue(matchedItem.DESCRIPTION); // Set worker description
               } else if (FORMNAME === 'process') {
                 this.stoneIssueDetailsFrom.controls.processname.setValue(matchedItem.DESCRIPTION); // Set process description
               }
-  
+
             } else {
               // If no matching data is found, clear the input and show an error
               this.comService.toastErrorByMsgId('No data found');
               this.stoneIssueDetailsFrom.controls[FORMNAME].setValue('');
               LOOKUPDATA.SEARCH_VALUE = '';
-  
+
               // Show the overlay panel for the form (worker or process)
               switch (FORMNAME) {
                 case 'worker':
@@ -419,11 +423,11 @@ export class StoneIssueDetailComponent implements OnInit {
         // If there's an error, show a toast message
         this.comService.toastErrorByMsgId('MSG2272'); // Error occurred, please try again
       });
-  
+
     // Add the subscription to the subscriptions array
     this.subscriptions.push(Sub);
   }
-  
+
 
   showOverleyPanel(event: any, formControlName: string) {
     let value = this.stoneIssueDetailsFrom.value[formControlName]
@@ -445,6 +449,9 @@ export class StoneIssueDetailComponent implements OnInit {
       case 'LOCTYPE_CODE':
         this.overlaylocationSearch.showOverlayPanel(event);
         break;
+        case 'DIVCODE':
+          this.overlayDivCodeSearch.showOverlayPanel(event);
+          break;
       default:
 
     }
@@ -469,7 +476,8 @@ export class StoneIssueDetailComponent implements OnInit {
           LOOKUPDATA.SEARCH_VALUE = ''
           if (FORMNAME === 'LOCTYPE_CODE') {
             this.showOverleyPanel(event, FORMNAME);
-          } {
+          } 
+       {
             this.showOverleyPanel(event, FORMNAME);
           }
           return
@@ -606,6 +614,51 @@ export class StoneIssueDetailComponent implements OnInit {
     this.setValueWithDecimal('STONE_WT', 0, 'STONE')
     this.tableData[0].STOCK_CODE = ''
   }
+
+  divisionCodeValidate(event: any) {
+    // If the input value is empty, return early
+    if (event.target.value === '') return;
+
+    // Prepare the data to send to the backend
+    let postData = {
+      "SPID": "135", // Stored Procedure ID
+      "parameter": {
+        SubJobNumber: this.stoneIssueDetailsFrom.value.subjobnumber, // The subjob number from the form
+        DivisionCode: this.stoneIssueDetailsFrom.value.DIVCODE, // The division code from the form
+        DesignType: '', // Empty field for design type (can be updated if needed)
+      }
+    };
+
+    // Show a loading message or spinner
+    this.comService.showSnackBarMsg('Validating division code...');
+
+    // Call the backend API using a service (dataService)
+    let subscription: Subscription = this.dataService.postDynamicAPI('ValidateDivisionCode', postData)
+      .subscribe(
+        (response: any) => {
+          // Close the loading message
+          this.comService.closeSnackBarMsg();
+
+          // Check the response from the backend
+          if (response && response.isValid) {
+            // Division code is valid, perform any success actions
+            this.comService.toastSuccessByMsgId('Division code is valid');
+          } else {
+            // Division code is invalid, show error and reset the field
+            this.comService.toastErrorByMsgId('Invalid division code');
+            this.stoneIssueDetailsFrom.controls['DIVCODE'].setValue(''); // Reset the DIVCODE field
+          }
+        },
+        (error) => {
+          // Handle any errors that occur during the API call
+          this.comService.toastErrorByMsgId('Validation failed, please try again');
+        }
+      );
+
+    // Add subscription to the list (optional)
+    this.subscriptions.push(subscription);
+  }
+
 
   stockCodeValidate(event: any) {
     if (event.target.value === '') return;

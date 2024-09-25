@@ -138,7 +138,7 @@
                           maxlength="6" UpperCaseDirective
                           (keydown)="lookupKeyPress($event,'worker')"
                           [readonly]="viewMode"
-                          (focusout)="validateLookupField($event,WorkerCodeData,'worker')" />
+                          (focusout)="validateLookupFieldWorker($event,WorkerCodeData,'worker')" />
                         <master-search class="masterSearch"
                           [MasterSearchData]="WorkerCodeData"
                           #overlayworkerSearch
