@@ -387,6 +387,10 @@ export class MetalIssueDetailsComponent implements OnInit {
     if (event.key == 'Tab' && event.target.value == '') {
       this.showOverleyPanel(event, form)
     }
+    if (event.key === 'Enter') {
+      if (event.target.value == '') this.showOverleyPanel(event, form)
+      event.preventDefault();
+    }
   }
 
   setPostData() {
@@ -739,12 +743,10 @@ export class MetalIssueDetailsComponent implements OnInit {
             this.metalIssueDetailsForm.controls.pcs.setValue(pcs);
             this.metalIssueDetailsForm.controls.stockCodeDes.setValue(description);
             this.metalIssueDetailsForm.controls.STONE_WT.setValue(stoneWeight);
-            this.overlaystockcode.closeOverlayPanel();
           } 
         } else {
           this.comService.toastErrorByMsgId('MSG1747');
           this.metalIssueDetailsForm.controls.stockCode.setValue('');
-          this.overlaystockcode.closeOverlayPanel();
         }
       }, err => {
         this.comService.closeSnackBarMsg();
