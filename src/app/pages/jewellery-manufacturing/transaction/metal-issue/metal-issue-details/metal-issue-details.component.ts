@@ -315,7 +315,7 @@ export class MetalIssueDetailsComponent implements OnInit {
   processCodeSelected(e: any) {
     this.metalIssueDetailsForm.controls.processCode.setValue(e.PROCESS_CODE);
     this.metalIssueDetailsForm.controls.processCodeDesc.setValue(e.DESCRIPTION);
-    this.processCodeData.WHERECONDITION = `@strProcess='${e.Process_Code}',@blnActive='true'`
+    this.workerCodeData.WHERECONDITION = `@strProcess='${e.PROCESS_CODE}',@blnActive='true'`
   }
 
   subJobNoCodeSelected(e: any) {
@@ -324,8 +324,7 @@ export class MetalIssueDetailsComponent implements OnInit {
   workerCodeSelected(e: any) {
     this.metalIssueDetailsForm.controls.workerCode.setValue(e.WORKER_CODE);
     this.metalIssueDetailsForm.controls.workerCodeDes.setValue(e.DESCRIPTION);
-    this.workerCodeData.WHERECONDITION = `@strWorker='${e.WORKER_CODE}',@strCurrentUser='${this.comService.userName}'`
-    // workerCodeData  processCodeData
+    this.processCodeData.WHERECONDITION = `@strWorker='${e.WORKER_CODE}',@strCurrentUser='${this.comService.userName}'`
   }
 
 
@@ -396,7 +395,7 @@ export class MetalIssueDetailsComponent implements OnInit {
     let form = this.metalIssueDetailsForm.value
     // console.log(this.comService.getCurrencyRate(this.comService.compCurrency));    
     let currRate = this.comService.getCurrencyRate(this.comService.compCurrency)
-    
+
     return {
       "SRNO": this.comService.emptyToZero(this.content.SRNO),
       "VOCNO": this.comService.emptyToZero(form.VOCNO),
@@ -523,7 +522,7 @@ export class MetalIssueDetailsComponent implements OnInit {
     }
   }
 
-  
+
   /**use: for stone wt and gross wt calculation */
   private calculateNetWt(): boolean {
     let form = this.metalIssueDetailsForm.value
@@ -544,10 +543,10 @@ export class MetalIssueDetailsComponent implements OnInit {
     this.setValueWithDecimal('PURE_WT', PURE_WT, 'THREE');
     return false;
   }
-
+  //TODO 2 subjob method
   jobNumberValidate(event: any) {
     this.showOverleyPanel(event, 'jobNumber')
-    if (event.target.value == '') return
+    if (event.target.value == '' || this.viewMode) return
 
     // let postData = {
     //   "SPID": "028",
@@ -574,8 +573,8 @@ export class MetalIssueDetailsComponent implements OnInit {
           let data = result.dynamicData[0]
           console.log('--====data-----===');
           console.log(data);
-          
-          
+
+
           if (data[0] && data[0].UNQ_JOB_ID != '') {
             this.jobNumberDetailData = data
             this.metalIssueDetailsForm.controls.subJobNo.setValue(data[0].UNQ_JOB_ID)
@@ -667,7 +666,7 @@ export class MetalIssueDetailsComponent implements OnInit {
             this.comService.allbranchMaster.DMFGMLOC
           )
           // this.meltingIssuedetailsFrom.controls.PICTURE_PATH.setValue(data[0].PICTURE_PATH)
-        } 
+        }
         // else {
         //   this.metalIssueDetailsForm.controls.subJobNo.setValue('')
         //   this.comService.toastErrorByMsgId('MSG1747')
@@ -688,6 +687,7 @@ export class MetalIssueDetailsComponent implements OnInit {
   // }
 
   WorkerCodeValidate(event?: any) {
+    if (event.target.value == '' || this.viewMode == true) return;
     this.showOverleyPanel(event, 'workerCodeDes')
     let form = this.metalIssueDetailsForm.value;
     let postData = {
@@ -723,7 +723,7 @@ export class MetalIssueDetailsComponent implements OnInit {
   }
   stockCodeValidate(event: any) {
     this.showOverleyPanel(event, 'stockCode');
-    if (event.target.value === '') return;
+    if (event.target.value === '' || this.viewMode) return;
 
     let postData = {
       "SPID": "132",
@@ -745,14 +745,14 @@ export class MetalIssueDetailsComponent implements OnInit {
             if (data[0].VALID_STOCK) {
               // Handle the valid stock case
               let stockData = result.dynamicData[1][0]; // Assuming result.dynamicData[1] contains stock details
-              
+
               let purity = stockData.PURITY || 0; // Default to 0 if PURITY is not found
               let division = stockData.DIVISION || 0;
               let pcs = stockData.BALANCE_PCS || 0;
               let description = stockData.DESCRIPTION || 0;
               let stoneWeight = stockData.STONE_WT || 0;
               // Set the purity value in the form
-              this.metalIssueDetailsForm.controls.PURITY.setValue(purity);              
+              this.metalIssueDetailsForm.controls.PURITY.setValue(purity);
               this.metalIssueDetailsForm.controls.DIVCODE.setValue(division);
               this.metalIssueDetailsForm.controls.pcs.setValue(pcs);
               this.metalIssueDetailsForm.controls.stockCodeDes.setValue(description);
@@ -802,7 +802,7 @@ export class MetalIssueDetailsComponent implements OnInit {
           this.tableData = result.dynamicData[0]
           console.log(this.tableData);
           // console.log(Object.keys(this.tableData[0]));
-          
+
           // this.columnhead = Object.keys(this.tableData[0])
         }
       }
@@ -862,7 +862,7 @@ export class MetalIssueDetailsComponent implements OnInit {
         }
       }, err => {
         console.log(err);
-        
+
         this.comService.toastErrorByMsgId('MSG2272')//Error occured, please try again
 
       });
@@ -891,20 +891,14 @@ export class MetalIssueDetailsComponent implements OnInit {
         if (data && data.length > 0) {
           if (LOOKUPDATA.FRONTENDFILTER && LOOKUPDATA.SEARCH_VALUE != '') {
             let searchResult = this.comService.searchAllItemsInArray(data, LOOKUPDATA.SEARCH_VALUE);
-            console.log(searchResult, 'result');
             if (searchResult && searchResult.length == 0) {
-              this.comService.toastErrorByMsgId('No data found');
               this.metalIssueDetailsForm.controls[FORMNAME].setValue('');
               LOOKUPDATA.SEARCH_VALUE = '';
-              switch (FORMNAME) {
-                case 'processCode':
-                  this.showOverleyPanel(event, 'processCode');
-                  break;
-                default:
-
-              }
+              this.openOverlayPanelFormWise(event,FORMNAME)
               return;
             }
+            let result = this.comService.searchAllItemsInArray(data, LOOKUPDATA.SEARCH_VALUE)
+            if(result) this.setDescriptions(result, FORMNAME)
           }
         }
       }, err => {
@@ -912,7 +906,25 @@ export class MetalIssueDetailsComponent implements OnInit {
       });
     this.subscriptions.push(Sub);
   }
-
+  setDescriptions(result: any, FORMNAME: string) {
+    switch (FORMNAME) {
+      case 'processCode':
+        this.metalIssueDetailsForm.controls.processCodeDesc.setValue(result[0].DESCRIPTION)
+        break;
+      case 'workerCode':
+        this.metalIssueDetailsForm.controls.workerCodeDes.setValue(result[0].DESCRIPTION)
+        break;
+      default:
+    }
+  }
+  openOverlayPanelFormWise(event:any,FORMNAME: string){
+    switch (FORMNAME) {
+      case 'processCode':
+        this.showOverleyPanel(event, 'processCode');
+        break;
+      default:
+    }
+  }
 
 }
 

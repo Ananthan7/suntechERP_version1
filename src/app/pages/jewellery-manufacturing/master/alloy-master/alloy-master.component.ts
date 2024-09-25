@@ -352,6 +352,8 @@ export class AlloyMasterComponent implements OnInit {
     const form = this.alloyMastereForm.value;
     let curr = this.commonService.CCToFC(form.currency,form.price1Lc)
     this.alloyMastereForm.get('price1Fc')!.setValue(curr);
+    console.log(curr);
+    
     // Update percentage calculation
     this.alloyMastereForm.get('price1per')!.setValue(this.percentageCalculate(form.price1Lc)); 
   }
@@ -626,23 +628,24 @@ export class AlloyMasterComponent implements OnInit {
       };
     }
   }
+
   setValueWithDecimal(formControlName: string, value: any, Decimal: string) {
     this.alloyMastereForm.controls[formControlName].setValue(
       this.commonService.setCommaSerperatedNumber(value, Decimal)
     )
   }
+
   calculateWeightAvgCostFC(event: any) {
     let form = this.alloyMastereForm.value;
     let weightAvgCostLC = this.commonService.FCToCC(form.currencyRate, event.target.value);
     this.setValueWithDecimal('weightAvgCostFC', weightAvgCostLC, 'AMOUNT')
   }
+
   calculateWeightAvgCostLC(event: any) {
     let form = this.alloyMastereForm.value;
     let weightAvgCostFC = this.commonService.CCToFC(form.currency, event.target.value);
     this.setValueWithDecimal('weightAvgCostFC', weightAvgCostFC, 'AMOUNT')
-
     this.fillPriceSchemeDetails()
-
   }
 
   codeEnabled() {

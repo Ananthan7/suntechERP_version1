@@ -607,7 +607,8 @@ export class MetalLabourchargeMasterComponent implements OnInit {
     this.metallabourMasterForm.controls.brand.setValue(this.content.BRAND_CODE);
     this.metallabourMasterForm.controls.karat.setValue(this.content.KARAT_CODE);
     this.metallabourMasterForm.controls.stock_code.setValue(this.content.STOCK_CODE);
-    this.metallabourMasterForm.controls.purity.setValue(this.content.PURITY);
+    // this.metallabourMasterForm.controls.purity.setValue(this.content.PURITY);
+    this.metallabourMasterForm.controls.purity.setValue(this.commonService.decimalQuantityFormat(this.content.PURITY, "RATE"));
     this.metallabourMasterForm.controls.metalSelling.setValue(this.content.SELLING_PER);
     this.metallabourMasterForm.controls.color.setValue(this.content.COLOR);
     this.metallabourMasterForm.controls.forDesignOnly.setValue(this.viewchangeYorN(this.content.FOR_DESIGN));
@@ -962,7 +963,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
         console.log(result.response);
 
         this.metallabourMasterForm.controls['karat'].setValue(result.response.KARAT_CODE);
-        this.metallabourMasterForm.controls['purity'].setValue(result.response.PURITY);
+        this.metallabourMasterForm.controls['purity'].setValue(this.commonService.decimalQuantityFormat(result.response.PURITY, "RATE")      );
         this.metallabourMasterForm.controls['brand'].setValue(result.response.BRAND_CODE);
         this.metallabourMasterForm.controls['category'].setValue(result.response.CATEGORY_CODE);
         this.metallabourMasterForm.controls['subCategory'].setValue(result.response.SUB_CATEGORY_CODE);
@@ -1016,7 +1017,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
       return true
     }
     else if (this.commonService.nullToString(form.wastage) == '' || this.commonService.nullToString(form.wastage) == '0.00') {
-      this.commonService.toastErrorByMsgId('MSG7728')//"Selling Rate cannot be empty"
+      this.commonService.toastErrorByMsgId('MSG7731')//"Selling Rate cannot be empty"
       return true
     }
     else if (this.commonService.nullToString(form.metalcost_rate) == '' || this.commonService.nullToString(form.metalcost_rate) == '0.00') {

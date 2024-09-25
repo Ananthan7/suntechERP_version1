@@ -8,9 +8,9 @@
 <!-- modal header component -->
 <modal-header (saveClick)="formSubmit('SAVE')" (cancelClick)="close()"
     (changeJobClick)="changeJobClicked()"
-    (continueClick)="formSubmit('CONTINUE')" [isViewContinue]="true"
-    [isViewChangeJob]="true" [isViewDelete]="false"
-    [isViewMore]="false"></modal-header>
+    (continueClick)="formSubmit('CONTINUE')" [isViewContinue]="!viewMode"
+    [isViewChangeJob]="!viewMode" [isViewDelete]="false"
+    [isViewMore]="false" [isViewSave]="!viewMode"></modal-header>
 <div class="row">
     <div class="col-md-12">
         <form [formGroup]="metalIssueDetailsForm">
@@ -29,7 +29,7 @@
                                             style="width: 90%;">
                                             <input type="text" matInput
                                                 formControlName="jobNumber"
-                                                id="jobNumbercode"
+                                                id="jobNumbercode" tabindex="1"
                                                 (focusout)="jobNumberValidate($event)"
                                                 [readonly]="viewMode"
                                                 (keydown)="lookupKeyPress($event,'jobNumber')" />
@@ -60,8 +60,9 @@
                                         <mat-form-field appearance="outline"
                                             style="width: 90%;">
                                             <input type="text" matInput
+                                                tabindex="2"
                                                 formControlName="subJobNo"
-                                                (focusout)="subJobNumberValidate($event)"
+                                                (change)="subJobNumberValidate($event)"
                                                 [readonly]="viewMode" />
                                             <master-search class="masterSearch"
                                                 [MasterSearchData]="subJobNoCodeData"
@@ -80,17 +81,17 @@
                                 </div>
                                 <div class="row mb-1">
                                     <label for="inputPassword"
-                                        class="col-sm-4 col-form-label">Process
-                                        Code * :</label>
+                                        class="col-sm-4 col-form-label">
+                                        Process Code * :</label>
                                     <div class="col-md-3">
                                         <mat-form-field appearance="outline"
                                             style="width: 90%;">
                                             <input type="text" matInput
-                                                UpperCaseDirective
+                                                UpperCaseDirective tabindex="3"
                                                 formControlName="processCode"
                                                 [readonly]="viewMode"
                                                 (keydown)="lookupKeyPress($event,'processCode')"
-                                                (focusout)="SPvalidateLookupField($event,processCodeData,'processCode')" />
+                                                (change)="SPvalidateLookupField($event,processCodeData,'processCode')" />
                                             <master-search class="masterSearch"
                                                 [MasterSearchData]="processCodeData"
                                                 #overlayprocessCode
@@ -105,9 +106,7 @@
                                             <input type="text" matInput
                                                 formControlName="processCodeDesc"
                                                 readonly>
-
                                         </mat-form-field>
-
                                     </div>
                                 </div>
                                 <div class="row mb-1">
@@ -118,11 +117,12 @@
                                         <mat-form-field appearance="outline"
                                             style="width: 90%;">
                                             <input type="text" matInput
+                                                UpperCaseDirective
                                                 formControlName="workerCode"
-                                                readonly
-                                                (keydown)="lookupKeyPress($event,'workerCodeDes')"
+                                                readonly tabindex="4"
+                                                (keydown)="lookupKeyPress($event,'workerCode')"
                                                 [readonly]="viewMode"
-                                                (focusout)="WorkerCodeValidate($event)" />
+                                                (focusout)="SPvalidateLookupField($event,workerCodeData,'workerCode')" />
                                             <master-search class="masterSearch"
                                                 [MasterSearchData]="workerCodeData"
                                                 #overlayworkerCodeDes
@@ -133,11 +133,9 @@
                                     <div class="col-md-5">
                                         <mat-form-field appearance="outline"
                                             style="width: 80%;">
-                                            <input type="text" matInput
+                                            <input type="text" matInput readonly
                                                 formControlName="workerCodeDes" />
-
                                         </mat-form-field>
-
                                     </div>
                                 </div>
                             </div>
@@ -153,11 +151,11 @@
                                                     style="width:100%;height:124px">
 
                                             </button>
-                                            <input type="file"
+                                            <!-- <input type="file"
                                                 class="uploadproduct"
                                                 accept=".png, .jpg, .jpeg"
                                                 #fileInput
-                                                (change)="onFileChangedimage($event)">
+                                                (change)="onFileChangedimage($event)"> -->
                                         </div>
                                     </div>
                                     <div class="col-md-12">
@@ -203,11 +201,11 @@
                                                     style="width:100%;height:124px">
 
                                             </button>
-                                            <input type="file"
+                                            <!-- <input type="file"
                                                 class="uploadproduct"
                                                 accept=".png, .jpg, .jpeg"
                                                 #fileInput
-                                                (change)="onFileChanged($event)">
+                                                (change)="onFileChanged($event)"> -->
                                         </div>
                                     </div>
                                     <div class="col-md-12">
@@ -276,7 +274,7 @@
                                             style="width: 100%;">
                                             <input type="text" matInput
                                                 formControlName="stockCode"
-                                                UpperCaseDirective
+                                                UpperCaseDirective tabindex="5"
                                                 placeholder="Stock Code"
                                                 (focusout)="stockCodeValidate($event)"
                                                 [readonly]="viewMode || masterMetalChecked"
