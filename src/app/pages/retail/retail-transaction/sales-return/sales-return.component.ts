@@ -9286,6 +9286,7 @@ export class SalesReturnComponent implements OnInit {
           this.lineItemForm.controls['fcn_li_pcs'].setValue(
             preVal
           );
+          this.manageCalculations();
           this.renderer.selectRootElement('#fcn_li_pcs').focus();
           // this.detectDiscountChange = true;
           // this.checkDivisionForPcs(value)
@@ -9438,7 +9439,7 @@ export class SalesReturnComponent implements OnInit {
                 preVal
               )
             );
-
+            this.manageCalculations();
           }
         });
 

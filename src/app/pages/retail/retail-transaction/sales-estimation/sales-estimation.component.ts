@@ -9605,7 +9605,7 @@ export class SalesEstimationComponent implements OnInit {
         //Changes as per Jebraj's Input on 17/07/2024
   
         if (this.divisionMS == 'S') {
-          if (this.comFunc.emptyToZero(this.lineItemModalForSalesReturn) || (this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_rate)) >= this.comFunc.emptyToZero(this.newLineItem.STOCK_COST)) {
+          if (this.comFunc.emptyToZero(this.lineItemModalForSalesReturn) || ((this.comFunc.emptyToZero(value)) >= this.comFunc.emptyToZero(this.newLineItem.STOCK_COST))&&(this.comFunc.emptyToZero(value))>=this.comFunc.emptyToZero(this.blockMinimumPriceValue)) {
   
             this.rateFunc(value);
           }
