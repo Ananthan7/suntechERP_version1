@@ -12364,7 +12364,7 @@ export class AddPosComponent implements OnInit {
         );
       }
       if (source != 'byAPI')
-        this.renderer.selectRootElement('#fcn_cust_detail_phone')?.focus();
+        this.renderer.selectRootElement('moblieNumber')?.focus();
     } else {
       this.customerDetailForm.controls.fcn_customer_detail_fname.setValue('');
       this.customerDetailForm.controls.fcn_customer_detail_mname.setValue('');
