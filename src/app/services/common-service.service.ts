@@ -1090,25 +1090,41 @@ export class CommonServiceService {
     endDate.setDate(startDate.getDate() + numberOfWeeks * 7);
     return endDate;
   }
-  commaSeperation(data: any) {
-    if (data === null || data === undefined) {
-      data = 0;
-    }
 
-    let number = '';
-    data = data.toString().replace(/,/g, '');
-
-    if (data.includes('.')) {
-      let parts = data.split('.');
-      data = parts[0];
-      number = Number(data).toLocaleString('en-US', { style: 'decimal' });
-      number = number + '.' + parts[1];
-    } else {
-      number = Number(data).toLocaleString('en-US', { style: 'decimal' });
-    }
-
-    return number;
+commaSeperation(data: any) {
+  // Guard clause to return early for invalid data
+  if (data === null || data === undefined || data === '') {
+    return '0'; // Return '0' or handle null/undefined as per your needs
   }
+
+  let number = '';
+  
+  // Remove commas and ensure the data is a valid number
+  data = data.toString().replace(/,/g, '');
+
+  try {
+    if (!isNaN(data)) {  // Check if data is a valid number
+      if (data.includes('.')) {
+        let parts = data.split('.');
+        data = parts[0];
+
+        number = Number(data).toLocaleString('en-US', { style: 'decimal' });
+        number = number + '.' + parts[1];
+      } else {
+        number = Number(data).toLocaleString('en-US', { style: 'decimal' });
+      }
+    } else {
+      console.error('Invalid number format:', data); // Log invalid data once
+    }
+  } catch (error) {
+    console.error('Error occurred with value:', data, error); // Log error
+    throw error;  // Optionally re-throw the error if necessary
+  }
+
+  return number;
+}
+
+  
 
   calculateDateDifference(userDateValue: any) {
     const userDate: any = new Date(userDateValue);
