@@ -394,7 +394,7 @@ export class ApprovalMasterComponent implements OnInit {
 
       Swal.fire({
         title: '',
-        text: 'User Name Connot be empty',
+        text: 'User Name Cannot be empty',
         icon: 'error',
         confirmButtonColor: '#336699',
         confirmButtonText: 'Ok'
