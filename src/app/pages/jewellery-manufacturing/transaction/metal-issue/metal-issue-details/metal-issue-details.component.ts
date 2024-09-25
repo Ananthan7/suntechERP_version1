@@ -543,10 +543,10 @@ export class MetalIssueDetailsComponent implements OnInit {
     this.setValueWithDecimal('PURE_WT', PURE_WT, 'THREE');
     return false;
   }
-
+  //TODO 2 subjob method
   jobNumberValidate(event: any) {
     this.showOverleyPanel(event, 'jobNumber')
-    if (event.target.value == '') return
+    if (event.target.value == '' || this.viewMode) return
 
     // let postData = {
     //   "SPID": "028",
@@ -723,7 +723,7 @@ export class MetalIssueDetailsComponent implements OnInit {
   }
   stockCodeValidate(event: any) {
     this.showOverleyPanel(event, 'stockCode');
-    if (event.target.value === '') return;
+    if (event.target.value === '' || this.viewMode) return;
 
     let postData = {
       "SPID": "132",
