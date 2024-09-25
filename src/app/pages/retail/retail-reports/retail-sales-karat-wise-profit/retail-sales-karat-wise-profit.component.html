@@ -26,15 +26,17 @@
                 </div>
     
                 <div class="col-md-8">
-                    <app-date (selectedDate)="setDateValue($event)"></app-date>
+                    <app-date (selectedDate)="setDateValue($event)" [dateValue]="dateToPass"></app-date>
                 </div> 
 
                 <div class="col-md-1 checkboxAlign">
                   <div class="row">
-                      <mat-checkbox formControlName="BranchWise" class="example-margin">Branch Wise</mat-checkbox>
+                      <mat-checkbox formControlName="BranchWise" class="example-margin"
+                      [checked]="RetailKaratWiseSaleForm.controls.BranchWise.value">Branch Wise</mat-checkbox>
                   </div>
                   <div class="row">
-                      <mat-checkbox formControlName="InvoiceWise" class="example-margin">Invoice Wise</mat-checkbox>
+                      <mat-checkbox formControlName="InvoiceWise" class="example-margin"
+                      [checked]="RetailKaratWiseSaleForm.controls.InvoiceWise.value">Invoice Wise</mat-checkbox>
                   </div>
                 </div>
               </div>
