@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from "@angular/core";
+import { Component, Input, OnInit, Renderer2, ViewChild } from "@angular/core";
 import {
   AbstractControl,
   FormBuilder,
@@ -336,11 +336,14 @@ export class PosCustomerMasterMainComponent implements OnInit {
     parentPosCode: [""],
     refBy: [""],
     name: [""],
-    nameDesc: ["", [Validators.maxLength(20)]],
+    nameDesc: ["", [Validators.maxLength(40)]],
+    firstName: [""],
+    middleName: [""],
+    lastName: [""],
     creditCardLimitCheck: new FormControl({ value: "", disabled: false }),
     creditCardLimit: [
       { value: "", disabled: true },
-      [Validators.maxLength(20)],
+      [Validators.maxLength(21)],
     ],
     gender: [""],
     maritalSt: [""],
@@ -495,7 +498,8 @@ export class PosCustomerMasterMainComponent implements OnInit {
     private comService: CommonServiceService,
     private snackBar: MatSnackBar,
     private apiService: SuntechAPIService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private renderer: Renderer2
   ) {}
 
   ngOnInit(): void {
@@ -514,6 +518,41 @@ export class PosCustomerMasterMainComponent implements OnInit {
     this.getDropDownStatus();
 
     this.posCustomerMasterMainForm.controls["createdBranch"].disable();
+  }
+
+  nameChange(event: any) {
+    const value = event.target.value.toString().trim();
+    console.log(value);
+
+    // event.target.value = value;
+    if (value != "") {
+      const res = value.split(/\s+/);
+      event.target.value = res.join(" ");
+
+      this.posCustomerMasterMainForm.controls.firstName.setValue(res[0]);
+      if (res.length == 1) {
+        this.posCustomerMasterMainForm.controls.middleName.setValue("");
+        this.posCustomerMasterMainForm.controls.lastName.setValue("");
+      }
+      if (res.length == 2) {
+        this.posCustomerMasterMainForm.controls.middleName.setValue("");
+        this.posCustomerMasterMainForm.controls.lastName.setValue(res[1]);
+      }
+      if (res.length > 2) {
+        this.posCustomerMasterMainForm.controls.middleName.setValue(res[1]);
+        res.splice(0, 2);
+        this.posCustomerMasterMainForm.controls.lastName.setValue(
+          res.join(" ")
+        );
+      }
+      // if (source != "byAPI")
+      //   this.renderer.selectRootElement("#fcn_cust_detail_phone")?.focus();
+    } else {
+      this.posCustomerMasterMainForm.controls.firstName.setValue("");
+      this.posCustomerMasterMainForm.controls.middleName.setValue("");
+      this.posCustomerMasterMainForm.controls.lastName.setValue("");
+      this.amlNameValidationData = true;
+    }
   }
 
   reasonOfPurchase() {
@@ -918,7 +957,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
       e.CODE === code
     ) {
       return alert(
-        "Please select the UAE country. Which ID you selected belongs to this country?"
+        "Please select the UAE. Which ID you selected belongs to this country?"
       );
     }
 
@@ -936,7 +975,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
   }
 
   parentPosSelected(e: any) {
-    console.log(e);
+    console.log(e.CODE.tostring());
     this.posCustomerMasterMainForm.controls.parentPosCode.setValue(e.CODE);
     console.log(
       this.posCustomerMasterMainForm.controls.parentPosCode.value.toString()
@@ -1067,38 +1106,6 @@ export class PosCustomerMasterMainComponent implements OnInit {
 
     if (!this.isCustProcessing || this.isCustProcessing) {
       this.isCustProcessing = true;
-
-      this.customerDetails.MOBILE =
-        this.posCustomerMasterMainForm.value.fcn_cust_detail_phone;
-      this.customerDetails.EMAIL =
-        this.posCustomerMasterMainForm.value.fcn_cust_detail_email;
-      this.customerDetails.ADDRESS =
-        this.posCustomerMasterMainForm.value.fcn_cust_detail_address;
-      this.customerDetails.COUNTRY_CODE =
-        this.posCustomerMasterMainForm.value.fcn_cust_detail_country;
-      this.customerDetails.CITY =
-        this.posCustomerMasterMainForm.value.fcn_cust_detail_city;
-      this.customerDetails.STATE =
-        this.posCustomerMasterMainForm.value.fcn_cust_detail_state;
-      this.customerDetails.NATIONAL_IDENTIFICATION_NO =
-        this.posCustomerMasterMainForm.value.fcn_cust_detail_idcard;
-
-      this.customerDetails.NAME =
-        this.posCustomerMasterMainForm.value.fcn_customer_detail_name;
-
-      this.customerDetails.FIRSTNAME =
-        this.posCustomerMasterMainForm.value.fcn_customer_detail_fname;
-      this.customerDetails.MIDDLENAME =
-        this.posCustomerMasterMainForm.value.fcn_customer_detail_mname;
-      this.customerDetails.LASTNAME =
-        this.posCustomerMasterMainForm.value.fcn_customer_detail_lname;
-      this.customerDetails.MOBILE =
-        this.posCustomerMasterMainForm.value.fcn_cust_detail_phone;
-
-      this.customerDetails.IDCATEGORY =
-        // this.customerDetails.CUST_TYPE =
-        this.posCustomerMasterMainForm.value.fcn_cust_detail_idType;
-
       // this.modalService.
       // if (this.amlNameValidation) {
 
@@ -1223,15 +1230,9 @@ export class PosCustomerMasterMainComponent implements OnInit {
           WRIST_SIZE: "",
           FINGER_SIZE: "",
           LOYALTY_POINT: 0,
-          FIRSTNAME:
-            this.posCustomerMasterMainForm.value.fcn_customer_detail_fname ||
-            "",
-          MIDDLENAME:
-            this.posCustomerMasterMainForm.value.fcn_customer_detail_mname ||
-            "",
-          LASTNAME:
-            this.posCustomerMasterMainForm.value.fcn_customer_detail_lname ||
-            "",
+          FIRSTNAME: this.posCustomerMasterMainForm.value.firstName || "",
+          MIDDLENAME: this.posCustomerMasterMainForm.value.middleName || "",
+          LASTNAME: this.posCustomerMasterMainForm.value.lastName || "",
           POSKnownAbout: 0,
           CIVILID_IMGPATH: "",
           SUGGESTION: "",
@@ -1305,7 +1306,8 @@ export class PosCustomerMasterMainComponent implements OnInit {
           VAT_NUMBER: `${this.comService.emptyToZero(
             this.posCustomerMasterMainForm.value.vat
           )}`,
-          PARENT_CODE: this.posCustomerMasterMainForm.value.parentPosCode.toString(),
+          PARENT_CODE:
+            this.posCustomerMasterMainForm.value.parentPosCode.toString(),
           REFERED_BY: this.posCustomerMasterMainForm.value.refBy.toString(),
           CREDIT_LIMIT:
             this.posCustomerMasterMainForm.value.creditCardLimit || 0,
@@ -1786,6 +1788,13 @@ export class PosCustomerMasterMainComponent implements OnInit {
     // Prevent the letter "e", "E", "+", and "-" from being entered
     if (["e", "E", "+", "-"].includes(event.key)) {
       event.preventDefault();
+    }
+  }
+
+  onInput(event: any, limit: any) {
+    const input = event.target as HTMLInputElement;
+    if (input.value.length > limit) {
+      input.value = input.value.slice(0, limit);
     }
   }
 
