@@ -11132,12 +11132,10 @@ export class AddPosComponent implements OnInit {
       this.getPercentage(taxPercentage, grossAmount)
     );
   
-    // Set the tax amount in the form control
     this.lineItemForm.controls['fcn_li_tax_amount'].setValue(
       this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, taxAmount)
     );
   
-    // Store the tax amount in a class variable (if needed)
     this.li_tax_amount_val = this.comFunc.transformDecimalVB(
       this.comFunc.allbranchMaster?.BAMTDECIMALS,
       taxAmount
@@ -11151,18 +11149,15 @@ export class AddPosComponent implements OnInit {
   
     const netAmtValue = grossAmount + taxAmount;
   
-    // Set the net amount in the form control
     this.lineItemForm.controls['fcn_li_net_amount'].setValue(
       this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, netAmtValue)
     );
   
-    // Store the net amount in a class variable (if needed)
     this.li_net_amount_val = this.comFunc.transformDecimalVB(
       this.comFunc.allbranchMaster?.BAMTDECIMALS,
       netAmtValue
     );
   
-    // Store the net amount in local storage
     localStorage.setItem('fcn_li_net_amount', netAmtValue.toString());
   }
   
