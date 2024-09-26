@@ -34,8 +34,9 @@ export class PosCrmDashboardComponent implements OnInit {
   metalSectionArr: any[] =[];
   logDataParam: any;
   dateToPass: { fromDate: string; toDate: string } = { fromDate: '', toDate: '' };
+  isLoading: boolean = false;
+  buyingPatternBoolean: boolean = false;
 
-  
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -60,6 +61,7 @@ export class PosCrmDashboardComponent implements OnInit {
   });
 
   ngOnInit(): void {
+    this.prefillScreenValues()
     this.initAPI()
 
     this.logDataParam =  {
@@ -236,8 +238,8 @@ export class PosCrmDashboardComponent implements OnInit {
     let postData = {
       "SPID": "152",
       "parameter": {
-        "strFmDate" : this.formatDateToYYYYMMDD(this.posCRMdasbordFrom.value.fromDate),
-        "strToDate" : this.formatDateToYYYYMMDD(this.posCRMdasbordFrom.value.toDate),
+        "str_FmDate" : this.formatDateToYYYYMMDD(this.posCRMdasbordFrom.value.fromDate),
+        "str_ToDate" : this.formatDateToYYYYMMDD(this.posCRMdasbordFrom.value.toDate),
         "bln_ShowBuyingPattern": JSON.stringify(this.posCRMdasbordFrom.controls.showBuyingPatternBln.value? 0 : 1),
         "str_DiaBuyPatternField": this.posCRMdasbordFrom.controls.diamondsection.value,
         "str_MtlBuyPatternField": this.posCRMdasbordFrom.controls.metal.value,
@@ -261,7 +263,7 @@ export class PosCrmDashboardComponent implements OnInit {
         console.error('Failed to open the print window. Possibly blocked by a popup blocker.');
         return;
       }
-      let printContent = data[0][0].HTMLINPUT;
+      let printContent = data[0][0].HTMLResult;
       WindowPrt.document.write(printContent);
       WindowPrt.document.close();
       WindowPrt.focus();  
@@ -309,14 +311,15 @@ export class PosCrmDashboardComponent implements OnInit {
               "ISDEFAULT": 1
             },
             "CONTROL_DETAIL": {
-              // "STRBRANCHCODES": this.formattedBranchDivisionData,
-              // "STRVOCTYPES": this.VocTypeParam,
-              // "FROMVOCDATE": this.formatDateToYYYYMMDD(this.posDailyClosingSummaryForm.value.fromDate),
-              // "TOVOCDATE": this.formatDateToYYYYMMDD(this.posDailyClosingSummaryForm.value.toDate),
-              // "USERBRANCH": localStorage.getItem('userbranch'),
-              // "USERNAME": localStorage.getItem('username'),
-              // "SHOWDATE": this.posDailyClosingSummaryForm.value.showDateCheckbox ? 0 : 1,
-              // "SHOWINVOICE": this.posDailyClosingSummaryForm.value.showInvoiceCheckbox ? 0 : 1
+              "str_FmDate" : this.formatDateToYYYYMMDD(this.posCRMdasbordFrom.value.fromDate),
+              "str_ToDate" : this.formatDateToYYYYMMDD(this.posCRMdasbordFrom.value.toDate),
+              "bln_ShowBuyingPattern": JSON.stringify(this.posCRMdasbordFrom.controls.showBuyingPatternBln.value? 0 : 1),
+              "str_DiaBuyPatternField": this.posCRMdasbordFrom.controls.diamondsection.value,
+              "str_MtlBuyPatternField": this.posCRMdasbordFrom.controls.metal.value,
+              "str_Divisions": this.posCRMdasbordFrom.controls.divisions.value,
+              "str_BranchList": this.formattedBranchDivisionData || this.fetchedBranchDataParam,
+              "str_SqlId": '',
+              "LOGDATA": JSON.stringify(this.logDataParam)
             }
          })
       }
@@ -343,6 +346,35 @@ export class PosCrmDashboardComponent implements OnInit {
         this.toastr.error(Notifdata)
       }
     }); 
+  }
+
+  prefillScreenValues(){
+    if ( Object.keys(this.content).length > 0) {
+      this.isLoading = true;
+      // console.log('data to prefill', this.content)   
+      this.templateNameHasValue = !!(this.content?.TEMPLATE_NAME);
+      this.posCRMdasbordFrom.controls.templateName.setValue(this.content?.TEMPLATE_NAME);
+
+      var paresedItem = JSON.parse(this.content?.CONTROL_LIST_JSON);
+      this.dateToPass = {
+        fromDate:  paresedItem?.CONTROL_DETAIL.str_FmDate,
+        toDate: paresedItem?.CONTROL_DETAIL.str_ToDate
+      };
+      this.dateToPass.fromDate? this.posCRMdasbordFrom.controls.fromDate.setValue(this.dateToPass.fromDate) : null
+      this.dateToPass.toDate? this.posCRMdasbordFrom.controls.toDate.setValue(this.dateToPass.toDate) : null
+
+
+      this.posCRMdasbordFrom.controls.branch.setValue(paresedItem?.CONTROL_DETAIL.str_BranchList);
+      this.fetchedBranchData= paresedItem?.CONTROL_DETAIL.str_BranchList.split("#")
+      this.fetchedBranchDataParam = paresedItem?.CONTROL_DETAIL.str_BranchList
+
+      this.posCRMdasbordFrom.controls.diamondsection.setValue(paresedItem?.CONTROL_DETAIL.str_DiaBuyPatternField)
+      this.posCRMdasbordFrom.controls.divisions.setValue(paresedItem?.CONTROL_DETAIL.str_Divisions)
+      this.posCRMdasbordFrom.controls.metal.setValue(paresedItem?.CONTROL_DETAIL.str_MtlBuyPatternField)
+
+      this.buyingPatternBoolean = paresedItem?.CONTROL_DETAIL.bln_ShowBuyingPattern === 1 ? false : true;
+
+    }
   }
 
 
