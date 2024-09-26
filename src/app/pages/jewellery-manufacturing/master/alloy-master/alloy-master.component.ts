@@ -501,11 +501,11 @@ export class AlloyMasterComponent implements OnInit {
     // this.alloyMastereForm.controls.price4per.setValue(this.content.UDF4)
     // this.alloyMastereForm.controls.price5per.setValue(this.content.UDF5)
     
-    this.alloyMastereForm.controls.price1per.setValue(this.content.PRICE1PER)
-    this.alloyMastereForm.controls.price2per.setValue(this.content.PRICE2PER)
-    this.alloyMastereForm.controls.price3per.setValue(this.content.PRICE3PER)
-    this.alloyMastereForm.controls.price4per.setValue(this.content.PRICE4PER)
-    this.alloyMastereForm.controls.price5per.setValue(this.content.PRICE5PER)
+    // this.alloyMastereForm.controls.price1per.setValue(this.content.PRICE1PER)
+    // this.alloyMastereForm.controls.price2per.setValue(this.content.PRICE2PER)
+    // this.alloyMastereForm.controls.price3per.setValue(this.content.PRICE3PER)
+    // this.alloyMastereForm.controls.price4per.setValue(this.content.PRICE4PER)
+    // this.alloyMastereForm.controls.price5per.setValue(this.content.PRICE5PER)
 
 
     this.alloyMastereForm.controls.price1Lc.setValue(
@@ -1237,17 +1237,17 @@ export class AlloyMasterComponent implements OnInit {
       PICTURE_NAME1: this.commonService.nullToString(this.alloyMastereForm.value.picturename1),
       STOCK_FCCOST: this.commonService.emptyToZero(this.alloyMastereForm.value.weightAvgCostFC),
       STOCK_LCCOST: this.commonService.emptyToZero(this.alloyMastereForm.value.weightAvgCostLC),
-      // PRICE1PER: this.commonService.nullToString(this.alloyMastereForm.value.price1code),
-      // PRICE2PER: this.commonService.nullToString(this.alloyMastereForm.value.price2code),
-      // PRICE3PER: this.commonService.nullToString(this.alloyMastereForm.value.price3code),
-      // PRICE4PER: this.commonService.nullToString(this.alloyMastereForm.value.price4code),
-      // PRICE5PER: this.commonService.nullToString(this.alloyMastereForm.value.price5code),
+      PRICE1PER: this.commonService.nullToString(this.alloyMastereForm.value.price1code),
+      PRICE2PER: this.commonService.nullToString(this.alloyMastereForm.value.price2code),
+      PRICE3PER: this.commonService.nullToString(this.alloyMastereForm.value.price3code),
+      PRICE4PER: this.commonService.nullToString(this.alloyMastereForm.value.price4code),
+      PRICE5PER: this.commonService.nullToString(this.alloyMastereForm.value.price5code),
 
-      PRICE1PER: this.commonService.nullToString(this.alloyMastereForm.value.price1per),
-      PRICE2PER: this.commonService.nullToString(this.alloyMastereForm.value.price2per),
-      PRICE3PER: this.commonService.nullToString(this.alloyMastereForm.value.price3per),
-      PRICE4PER: this.commonService.nullToString(this.alloyMastereForm.value.price4per),
-      PRICE5PER: this.commonService.nullToString(this.alloyMastereForm.value.price5per),
+      // PRICE1PER: this.commonService.nullToString(this.alloyMastereForm.value.price1per),
+      // PRICE2PER: this.commonService.nullToString(this.alloyMastereForm.value.price2per),
+      // PRICE3PER: this.commonService.nullToString(this.alloyMastereForm.value.price3per),
+      // PRICE4PER: this.commonService.nullToString(this.alloyMastereForm.value.price4per),
+      // PRICE5PER: this.commonService.nullToString(this.alloyMastereForm.value.price5per),
 
       PRICE1FC: this.commonService.emptyToZero(this.alloyMastereForm.value.price1Fc),
       PRICE2FC: this.commonService.emptyToZero(this.alloyMastereForm.value.price2Fc),
@@ -1343,11 +1343,11 @@ export class AlloyMasterComponent implements OnInit {
       GOLDSMITH: "",
       STONESETTER: "",
       STD_LCCOST: 0,
-      TAG1: this.commonService.nullToString(this.alloyMastereForm.value.price1code),
-      TAG2: this.commonService.nullToString(this.alloyMastereForm.value.price2code),
-      TAG3: this.commonService.nullToString(this.alloyMastereForm.value.price3code),
-      TAG4: this.commonService.nullToString(this.alloyMastereForm.value.price4code),
-      TAG5: this.commonService.nullToString(this.alloyMastereForm.value.price5code),
+      TAG1: "",
+      TAG2: "",
+      TAG3: "",
+      TAG4: "",
+      TAG5: "",
       WEIGHT_PER_PCS: 0,
       DETAILDESCRIPTION: "",
       PROD_CUSTOMER_CODE: "",
@@ -1645,6 +1645,30 @@ export class AlloyMasterComponent implements OnInit {
     return postData
   }
 
+  checkCodeExists(event: any) {
+    if (event.target.value == '') return
+    let API = 'DesignMaster/CheckIfDesignCodePresent/' + event.target.value
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        if (result.checkifExists) {
+          Swal.fire({
+            title: '',
+            text: result.message || 'Design Code Already Exists!',
+            icon: 'warning',
+            confirmButtonColor: '#336699',
+            confirmButtonText: 'Ok'
+          }).then((result: any) => {
+            if (result.value) {
+            }
+          });
+          this.alloyMastereForm.controls.code.setValue('')
+        }
+      }, err => {
+        this.alloyMastereForm.controls.code.setValue('')
+      })
+    this.subscriptions.push(Sub)
+  }
+
 
   submitValidations(form: any) {
     if (this.commonService.nullToString(form.code) == '') {
@@ -1674,16 +1698,16 @@ export class AlloyMasterComponent implements OnInit {
         if (result.response) {
           let data = result.response
           console.log(data, 'alloy mater')
-          // this.alloyMastereForm.controls.price1code.setValue(data.PRICE1PER)
-          // this.alloyMastereForm.controls.price2code.setValue(data.PRICE2PER)
-          // this.alloyMastereForm.controls.price3code.setValue(data.PRICE3PER)
-          // this.alloyMastereForm.controls.price4code.setValue(data.PRICE4PER)
-          // this.alloyMastereForm.controls.price5code.setValue(data.PRICE5PER)
-          this.alloyMastereForm.controls.price1code.setValue(data.TAG1)
-          this.alloyMastereForm.controls.price2code.setValue(data.TAG2)
-          this.alloyMastereForm.controls.price3code.setValue(data.TAG3)
-          this.alloyMastereForm.controls.price4code.setValue(data.TAG4)
-          this.alloyMastereForm.controls.price5code.setValue(data.TAG5)
+          this.alloyMastereForm.controls.price1code.setValue(data.PRICE1PER)
+          this.alloyMastereForm.controls.price2code.setValue(data.PRICE2PER)
+          this.alloyMastereForm.controls.price3code.setValue(data.PRICE3PER)
+          this.alloyMastereForm.controls.price4code.setValue(data.PRICE4PER)
+          this.alloyMastereForm.controls.price5code.setValue(data.PRICE5PER)
+          // this.alloyMastereForm.controls.price1code.setValue(data.TAG1)
+          // this.alloyMastereForm.controls.price2code.setValue(data.TAG2)
+          // this.alloyMastereForm.controls.price3code.setValue(data.TAG3)
+          // this.alloyMastereForm.controls.price4code.setValue(data.TAG4)
+          // this.alloyMastereForm.controls.price5code.setValue(data.TAG5)
           this.alloyMastereForm.controls.currency.setValue(data.CURRENCY_CODE)
           this.alloyMastereForm.controls.currencyRate.setValue(data.CC_RATE)
 

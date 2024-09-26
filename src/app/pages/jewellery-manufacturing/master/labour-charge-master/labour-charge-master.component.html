@@ -205,7 +205,7 @@
           <label for="input" id="ID015" class="col-sm-2 col-form-label">Selling Rate * :</label>
           <div class="col-sm-3">
             <mat-form-field appearance="outline">
-              <input type="text" [readonly]="viewMode || codeEnableDiamond" matInput [max]="10" class="text-right"
+              <input type="text" [readonly]="viewMode || codeEnableDiamond" matInput [max]="15" class="text-right"
                 AmountDecimalInput (keypress)="salesChangesDia('selling_rate')" formControlName="selling_rate" />
             </mat-form-field>
           </div>
@@ -263,11 +263,11 @@
           </div>
         </div>
         <div class="row mb-2">
-          <label for="input" id="ID024" class="col-sm-2 col-form-label">Variance %
+          <label for="input" class="col-sm-2 col-form-label">Variance %
               :</label>
           <div class="col-sm-3">
               <mat-form-field  appearance="outline">
-                  <input matInput type="number" [readonly]="viewMode" matInput NumberOnly
+                  <input matInput type="number" [readonly]="viewMode" matInput 
                   AmountDecimalInput  formControlName="variance" class="text-right" />
               </mat-form-field>
           </div>
