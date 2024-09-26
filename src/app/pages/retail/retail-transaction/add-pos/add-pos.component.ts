@@ -37,6 +37,7 @@ import { ItemDetailService } from 'src/app/services/modal-service.service';
 import { PlanetService } from 'src/app/services/planet-integration.service';
 import { DxDataGridComponent } from 'devextreme-angular';
 import { MatSelectChange } from '@angular/material/select';
+import SignaturePad from 'signature_pad';
 
 const baseUrl = environment.baseUrl;
 const baseImgUrl = environment.baseImageUrl;
@@ -50,6 +51,11 @@ interface VocTypesEx {
   styleUrls: ['./add-pos.component.scss'],
 })
 export class AddPosComponent implements OnInit {
+
+  @ViewChild('signaturePadCanvas', { static: false }) signaturePadElement!: ElementRef;
+  signaturePad!: SignaturePad | undefined;
+
+
   @ViewChild(AuditTrailComponent) auditTrailComponent?: AuditTrailComponent;
   @Input() content!: any;
 
@@ -84,6 +90,7 @@ export class AddPosComponent implements OnInit {
   // @ViewChild('scanner', { static: false }) scanner: BarcodeScannerLivestreamOverlayComponent;
   // @ViewChild(BarcodeScannerLivestreamComponent) scanner: BarcodeScannerLivestreamComponent;
   LOCKVOUCHERNO: boolean = true;
+  isSignaturePadInitialized = false;
   voucherDetails: any;
   minDate: any;
   maxDate: any;
@@ -99,6 +106,8 @@ export class AddPosComponent implements OnInit {
   metalDecimalFormat: any;
   weightDecimalFormat: any;
   gridAmountDecimalFormat: any;
+  hideEsignButton:boolean=false;
+  hideEsignView:boolean=true;
   gridWeghtDecimalFormat: any;
   isOrderPullingRowSelected: boolean = false;
   isEstiPullingRowSelected: boolean = false;
@@ -1783,11 +1792,43 @@ export class AddPosComponent implements OnInit {
   onStarted(started: any) {
     console.log(started);
   }
-  // ngAfterViewInit() {
-  //   this.scanner.show();
-  //   // this.scanner.s
-  // }
 
+  ngAfterViewChecked(): void {
+    if (!this.isSignaturePadInitialized && !this.hideEsignView && this.signaturePadElement) {
+      this.initializeSignaturePad()
+        .then(() => {
+          console.log('Signature pad initialized');
+        })
+        .catch((error) => {
+          console.error('Signature pad initialization failed:', error);
+        });
+    }
+  }
+
+  initializeSignaturePad(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      if (this.signaturePadElement && !this.isSignaturePadInitialized) {
+        this.signaturePad = new SignaturePad(this.signaturePadElement.nativeElement, {
+          backgroundColor: 'white',
+          penColor: 'black',
+        });
+        this.isSignaturePadInitialized = true;
+        resolve(); 
+      } else {
+        reject('Signature pad element not found or already initialized');
+      }
+    });
+  }
+
+  openEsign() {
+  this.hideEsignView=false;
+  this.isSignaturePadInitialized=false;
+  }
+
+  cancelEsign() {
+    this.hideEsignView=true;
+    }
+  
   onValueChanges(result: any) {
     alert(JSON.stringify(result));
     this.barcode = result.codeResult.code;
@@ -1795,17 +1836,9 @@ export class AddPosComponent implements OnInit {
     // this.lineItemForm.controls.fcn_li_item_code.setValue(result.codeResult.code);
   }
 
-  ngAfterViewInit(): void {
-    //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
-    //Add 'implements AfterViewInit' to the class.
-    // if (this.viewOnly) this.setReadOnlyForViewMode();
 
-    // console.log('viewonly',this.viewOnly , this.editOnly);
 
-    // if(!this.viewOnly && !this.editOnly)
-    // this.open(this.mymodal);
 
-  }
   onChanges(): void {
     this.customerDataForm.value.tourVatRefuncYN.valueChanges.subscribe((isChecked: any) => {
       const tourVatRefundNoControl = this.customerDataForm.value.tourVatRefundNo;
@@ -13683,6 +13716,20 @@ export class AddPosComponent implements OnInit {
         console.log(`Dismissed ${reason}`);
       }
     );
+  }
+
+
+  clearSignature() {
+    this.signaturePad?.clear();
+  }
+
+  saveSignature() {
+    if (this.signaturePad?.isEmpty()) {
+      alert('Please provide a signature first.');
+    } else {
+      const dataURL = this.signaturePad?.toDataURL();
+      console.log('Signature saved:', dataURL);
+    }
   }
 
   openUserAttachmentModal() {

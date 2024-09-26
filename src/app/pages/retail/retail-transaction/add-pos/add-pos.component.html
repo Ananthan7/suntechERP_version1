@@ -403,7 +403,7 @@
           <h4 class="customheader">Retail Sales # {{voucherNumber}}</h4>
         </div>
       </div>
-    
+
       <div class="row" style="background-color: #efefef; margin-bottom: 10px">
         <div class="col-md-1 d-flex justify-content-center align-items-center">
           <div>
@@ -435,7 +435,7 @@
             </mat-autocomplete>
           </mat-form-field>
         </div>
-    
+
         <div class="col-md-1">
           <label for="txtCurRate">Cur. Rate</label>
           <mat-form-field appearance="outline" style="width: 100%">
@@ -445,7 +445,7 @@
               (change)="changeCurRate($event)" />
           </mat-form-field>
         </div>
-    
+
         <div class="col-md-2">
           <label for="vocdate">Date</label>
           <mat-form-field appearance="outline" style="width: 100%">
@@ -456,7 +456,7 @@
             <mat-datepicker #dob></mat-datepicker>
           </mat-form-field>
         </div>
-    
+
         <div class="col-md-2">
           <label for="sales_person">{{ sales_person_lbl }}</label>
           <mat-form-field appearance="outline" style="width: 100%">
@@ -469,7 +469,7 @@
               </mat-option>
             </mat-autocomplete>
             <i class="fas fa-chevron-down"
-            style="position: absolute; right: 10px; top: 40%; transform: translateY(-40%);"></i>
+              style="position: absolute; right: 10px; top: 40%; transform: translateY(-40%);"></i>
             <mat-error *ngIf="vocDataForm.controls.sales_person.hasError('required')">
               Salesman Code cannot be Empty
             </mat-error>
@@ -478,7 +478,7 @@
             </mat-error>
           </mat-form-field>
         </div>
-    
+
         <div class="col-md-3" style="background-color: #d6d8da">
           <div class="form-group">
             <div class="font-weight-bold" style="font-size: 20px; font-weight: 400; color: #0d4f9e">
@@ -491,11 +491,11 @@
         </div>
       </div>
     </form>
-    
+
   </div>
 </div>
 <div class="row" style="padding: 0px 15px 15px 15px">
-  
+
   <div class="col-xl-9">
     <div style="background-color: #ffffff">
       <div>
@@ -645,20 +645,20 @@
 
         <div class="text-right mt-2">
           <span class="customheader mr-2" style="margin-right: 24px;">Related Details:</span>
-        
+
           <button type="button" mat-flat-button (click)="importSalesEstimation()" class="update-finish-button">
             Import Sales Estimation
           </button>
-        
+
           <button type="button" class="mx-2 update-finish-button" mat-flat-button (click)="importSalesOrder()">
             Import Sales Order
           </button>
-        
+
           <button type="button" mat-flat-button *ngIf="strUser=='SUNTECH'" (click)="openParamterDetails()"
             class="button-spacing update-finish-button">
             Parameter Details
           </button>
-        
+
           <button type="button" mat-flat-button [disabled]="viewOnly && transAttachmentList.length == 0"
             (click)="openUserAttachmentModal()" class="update-finish-button">
             {{ !viewOnly ? 'Add Attachment' : 'View Attachment' }}
@@ -1112,7 +1112,130 @@
   </div>
   <div class="col-xl-3">
     <div class="card" style="background-color: #ececec !important">
-      <div class="card-body">
+
+      <div class="card-body" *ngIf="!hideEsignView">
+        <div class="col-xl-12 col-md-6" style="width: 100%;">
+          <table class="m-t-10 rhs-table-1" style="width: 100%;">
+            <tr>
+              <td class="td-w-40">Item Total</td>
+              <td>
+                <input type="text" class="form-control textboxcorner" id
+                  value="{{ prnt_inv_total_gross_amt | decimalFormat: 'AMOUNT' }}" aria-describedby
+                  [placeholder]="zeroAmtVal" readonly />
+              </td>
+            </tr>
+            <tr>
+              <td class="td-w-40">Tax Amount</td>
+              <td>
+                <input type="text" class="form-control textboxcorner" id
+                  value="{{ this.order_items_total_tax | decimalFormat: 'AMOUNT' }}" aria-describedby
+                  [placeholder]="zeroAmtVal" readonly />
+              </td>
+            </tr>
+            <tr>
+              <td class="td-w-40">Gross Total</td>
+              <td>
+                <input type="text" class="form-control textboxcorner" id
+                  value="{{ order_items_total_gross_amount | decimalFormat: 'AMOUNT' }}" aria-describedby
+                  [placeholder]="zeroAmtVal" readonly />
+              </td>
+            </tr>
+            <tr>
+              <td class="td-w-40" style="background: #adacab">Sales Return</td>
+              <td>
+                <input type="text" class="form-control textboxcorner" id
+                  value="{{ invReturnSalesTotalNetTotal | decimalFormat: 'AMOUNT' }}" aria-describedby
+                  [placeholder]="zeroAmtVal" readonly />
+              </td>
+            </tr>
+            <tr>
+              <td class="td-w-40" style="background: #adacab">Exchange</td>
+              <td>
+                <input type="text" class="form-control textboxcorner" id
+                  value="{{ order_total_exchange | decimalFormat: 'AMOUNT' }}" aria-describedby
+                  [placeholder]="zeroAmtVal" readonly />
+              </td>
+            </tr>
+            <tr>
+              <td class="td-w-40" style="background-color: #1a61a9; color: #fff">
+                <b>Roundoff Discount</b>
+              </td>
+              <td>
+                <input type="text" class="form-control textboxcorner" id="discountInput"
+                  [(ngModel)]="order_items_total_discount_amount" (focus)="clearField()"
+                  (blur)="order_items_total_discount_amount = formatValue(order_items_total_discount_amount)"
+                  (change)="changeFinalDiscount($event)" aria-describedby="helpId" [placeholder]="zeroAmtVal"
+                  [readonly]="viewOnly || isNoDiscountAllowed" />
+              </td>
+            </tr>
+            <tr>
+              <td class="td-w-40" style="background-color: #1a61a9; color: #fff">
+                <b>Net Amount</b>
+              </td>
+              <td>
+                <input type="text" class="form-control textboxcorner" id
+                  value="{{ netTotal | decimalFormat: 'AMOUNT' }}" aria-describedby [placeholder]="zeroAmtVal"
+                  readonly />
+              </td>
+            </tr>
+
+            <tr>
+              <td class="td-w-40" style="background-color: #1a61a9; color: #fff">
+                <b>Receipt Total</b>
+              </td>
+              <td>
+                <input type="text" class="form-control textboxcorner" id [(ngModel)]="receiptTotalNetAmt"
+                  aria-describedby [placeholder]="zeroAmtVal" readonly AmountDecimalInput />
+              </td>
+            </tr>
+
+            <tr>
+              <td class="td-w-40" style="background-color: #1a61a9; color: #fff">
+                <b>VAT Round Off</b>
+              </td>
+              <td>
+                <input type="text" class="form-control textboxcorner" id="vatroundoff" [(ngModel)]="vatRoundOffAmt"
+                  aria-describedby [placeholder]="zeroAmtVal" readonly />
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div class="col-xl-12 col-md-6" style="width: 100%;">
+          <label>Digital Signature</label>
+          <canvas #signaturePadCanvas id="signature-pad" width="450"
+            height="200" style="border: 2px solid black; border-radius: 5px;"></canvas></div>
+
+            <div class="col-xl-12 col-md-6" style="width: 100%;">
+             
+        <div class="row m-t-10 m-b-10">
+
+          <div class="col-md-4 col-xl-4" (click)="clearSignature()">
+            <div class="touch-big-button">
+              <div class="touch-big-button-inner">
+                <i class="fa fa-eraser"></i> <span>Clear</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4 col-xl-4 " (click)="saveSignature()">
+            <div class="touch-big-button">
+              <div class="touch-big-button-inner">
+                <i class="fa fa-paper-plane"></i> <span>Send Bill</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 col-xl-4" (click)="cancelEsign()">
+            <div class="touch-big-button">
+              <div class="touch-big-button-inner">
+                <i class="fa fa-window-close"></i> <span>Cancel</span>
+              </div>
+            </div>
+          </div>
+        </div>
+            </div>
+
+      </div>
+      <div class="card-body" *ngIf="hideEsignView">
         <div class="row" style="width: 100%;">
           <div class="col-xl-12 col-md-6" style="height: 140px; overflow-y: scroll; width: 100%;">
             <table class="tabletd_gray" style="width: 100%;">
@@ -1221,12 +1344,6 @@
             </table>
           </div>
 
-
-
-
-
-
-
         </div>
 
         <div class="col-xl-12 col-md-6" style="height: 140px; width: 100%;margin-top: 20px;">
@@ -1239,16 +1356,7 @@
         </div>
 
         <div class="row m-t-10 m-b-10">
-          <!-- <div class="col-md-6 col-xl-6" (click)="backToList()" *ngIf="viewOnly">
-            <div class="touch-big-button touch-big-button-black">
-              <div class="touch-big-button-inner">
-                <i class="fa fa-arrow-circle-left"></i> <span> Back</span>
-              </div>
-            </div>
-          </div> -->
 
-          <!-- matTooltip="You have already saved"
-          [matTooltipDisabled]="isSaved" -->
           <div class="col-md-6 col-xl-6" (click)="viewOnly || isSaved ? '' : saveOrder()" *ngIf="!viewOnly">
             <div class="touch-big-button touch-big-button-black">
               <div class="touch-big-button-inner">
@@ -1257,14 +1365,6 @@
             </div>
           </div>
 
-
-          <!-- <div class="col-md-6 col-xl-6 mt-2" (click)="this.viewOnly || this.editOnly ? sendToEmail() : ''">
-            <div class="touch-big-button">
-              <div class="touch-big-button-inner">
-                <i class="fa fa-print"></i> <span> Send Email</span>
-              </div>
-            </div>
-          </div> -->
           <div class="col-md-6 col-xl-6 " (click)="viewOnly || isSaved ? '' : saveOrder('continue')" *ngIf="!viewOnly">
             <div class="touch-big-button touch-big-button-black">
               <div class="touch-big-button-inner">
@@ -1312,16 +1412,28 @@
           </div>
         </div>
 
-        <!-- <div class="col-xl-12 col-md-6" style="height: 140px; width: 100%;margin-top: 20px;">
-          <label>Remarks</label>
+        <!-- <div class="row mt-2" *ngIf="this.viewOnly||isPrintingEnabled"> -->
+          <div class="row mt-2" *ngIf="hideEsignButton">
+            <div class="col-md-12 col-xl-12" (click)="openEsign()">
+              <div class="touch-big-button">
+                <div class="touch-big-button-inner">
+                  <i class="fa fa-signature"></i> <span>E-Sign</span>
+                </div>
+              </div>
+            </div>
+         
 
-          <mat-form-field appearance="outline" style="width: 100%;">
-            <textarea matInput [readonly]="viewOnly" rows="4" cols="50" class="form-control"></textarea>
-          </mat-form-field>
 
+        <!-- <div class="row mt-2">
+          <div class="col-md-6 col-xl-6" (click)="openEsign()">
+            <div class="touch-big-button">
+              <div class="touch-big-button-inner">
+                <i class="fa fa-file-export"></i> <span> Summary</span>
+              </div>
+            </div>
+          </div>
         </div> -->
-
-
+       
 
       </div>
     </div>
@@ -2635,31 +2747,27 @@
                 </label>
                 <div class="col-sm-8">
                   <mat-form-field appearance="outline" style="width: 100%">
-                    <input
-                      type="text"
-                      matInput
-                      formControlName="fcn_mob_code"
-                      [matAutocomplete]="auto"
-                      [disabled]="viewOnly"
-                    />
-                    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onCountryCodeSelection($event, false)" autoActiveFirstOption>
+                    <input type="text" matInput formControlName="fcn_mob_code" [matAutocomplete]="auto"
+                      [disabled]="viewOnly" />
+                    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onCountryCodeSelection($event, false)"
+                      autoActiveFirstOption>
                       <mat-option *ngFor="let data of filteredOptionsMobCode | async" [value]="data.MOBILECOUNTRYCODE">
                         {{ data.MOBILECOUNTRYCODE }}
                       </mat-option>
-                
+
                       <!-- <mat-option *ngFor="let data of filteredCountryList" [value]="data.MOBILECOUNTRYCODE">
                         {{ data.MOBILECOUNTRYCODE }}
                       </mat-option> -->
                     </mat-autocomplete>
                     <i class="fas fa-chevron-down"
-                    style="position: absolute; right: 10px; top: 40%; transform: translateY(-50%);"></i>
+                      style="position: absolute; right: 10px; top: 40%; transform: translateY(-50%);"></i>
                     <mat-error *ngIf="customerDetailForm.controls.fcn_mob_code.hasError('required')">
                       Country is <strong>required</strong>
                     </mat-error>
                   </mat-form-field>
-                  
-                  
-                
+
+
+
                 </div>
               </div>
             </div>
@@ -2673,14 +2781,10 @@
                 <div class="col-sm-8">
 
                   <mat-form-field appearance="outline" style="width: 100%">
-                    <input
-                      type="text"
-                      matInput
-                      formControlName="fcn_cust_detail_country"
-                      [matAutocomplete]="auto2"
-                      [disabled]="viewOnly"
-                    />
-                    <mat-autocomplete #auto2="matAutocomplete" autoActiveFirstOption (optionSelected)="onCountryCodeSelection($event.option.value, true)">
+                    <input type="text" matInput formControlName="fcn_cust_detail_country" [matAutocomplete]="auto2"
+                      [disabled]="viewOnly" />
+                    <mat-autocomplete #auto2="matAutocomplete" autoActiveFirstOption
+                      (optionSelected)="onCountryCodeSelection($event.option.value, true)">
                       <mat-option *ngFor="let data of filteredOptionsCountry | async" [value]="data.CODE_DESC">
                         {{ data.CODE_DESC }}
                       </mat-option>
@@ -2691,7 +2795,7 @@
                       Country is <strong>required</strong>
                     </mat-error>
                   </mat-form-field>
-                  
+
                 </div>
               </div>
             </div>
@@ -3353,7 +3457,8 @@
                         <input class="st_txt_right" [maxLength]="14" type="text" [min]="0"
                           (keyup)="this.comFunc.enforceMinMax($event.target)" matInput formControlName="fcn_li_gross_wt"
                           id="fcn_li_gross_wt" (focus)="setValToLocalStorage($event, 'fcn_li_gwt')"
-                          (change)="changeGrossWt($event)" [readonly]="viewOnly || !isGrossWtEditable" MetalDecimalInput />
+                          (change)="changeGrossWt($event)" [readonly]="viewOnly || !isGrossWtEditable"
+                          MetalDecimalInput />
                         <mat-error *ngIf="
                             lineItemForm.controls.fcn_li_gross_wt.hasError(
                               'required'
@@ -4283,7 +4388,7 @@
     <div class="row mb-2">
       <div class="col-md-12">
         <dx-data-grid #dataGrid id="estimationgrid" keyExpr="VOCNO" [dataSource]="estimationList" [showBorders]="true"
-          (onSelectionChanged)="onEstimationEntryChange($event)" >
+          (onSelectionChanged)="onEstimationEntryChange($event)">
           <dxo-paging [enabled]="true" [pageSize]="10"></dxo-paging>
           <dxo-selection mode="single"></dxo-selection>
           <dxi-column dataField="VOCNO" width="auto" caption="Estimation No" [allowEditing]="false" alignment="left">
@@ -4311,7 +4416,8 @@
     </div>
 
     <div class="text-right my-3">
-      <button mat-flat-button color="primary" class="mx-2" (click)="onApplyEstimation()"  [disabled]="!isEstiPullingRowSelected && estimationList.length" *ngIf="!viewOnly">
+      <button mat-flat-button color="primary" class="mx-2" (click)="onApplyEstimation()"
+        [disabled]="!isEstiPullingRowSelected && estimationList.length" *ngIf="!viewOnly">
         Apply
       </button>
       <button mat-flat-button color="warn" (click)="modal.dismiss('Cross click')">
