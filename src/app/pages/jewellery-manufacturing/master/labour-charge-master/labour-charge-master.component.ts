@@ -383,6 +383,7 @@ export class LabourChargeMasterComponent implements OnInit {
     currency: ['', [Validators.required]],
     accessories: [''],
     BRANCH_CODE: [0.00],
+    variance: [''],
   });
 
 
@@ -440,7 +441,6 @@ export class LabourChargeMasterComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.renderer.selectRootElement('#code')?.focus();
     this.grossWt = true;
     this.codeEnable1 = true;
     this.setInitialValues();
@@ -448,6 +448,7 @@ export class LabourChargeMasterComponent implements OnInit {
     console.log(this.content)
     if (this.content?.FLAG) {
       this.setFormValues();
+
       if (this.content.FLAG == 'VIEW') {
         this.viewMode = true;
         this.viewDisable = true;
@@ -461,6 +462,9 @@ export class LabourChargeMasterComponent implements OnInit {
         this.viewMode = true;
         this.deleteMeltingType()
       }
+    } else {
+      this.renderer.selectRootElement('#code')?.focus();
+
     }
     this.metallabourMasterForm.controls['stock_code'].enable();
     this.metallabourMasterForm.controls['color'].enable();
@@ -606,6 +610,8 @@ export class LabourChargeMasterComponent implements OnInit {
     this.diamondlabourMasterForm.controls.accessories.setValue(this.content.ACCESSORIES);
     this.diamondlabourMasterForm.controls.labour_ac.setValue(this.content.CRACCODE);
     this.diamondlabourMasterForm.controls.settingType.setValue(this.content.PROCESS_TYPE);
+    this.diamondlabourMasterForm.controls.variance.setValue(this.content.WASTAGE_AMT);
+
     // this.diamondlabourMasterForm.controls.variance.setValue(this.content.METALSTONE);
 
     // this.diamondlabourMasterForm.controls.variance.setValue(
@@ -1157,7 +1163,7 @@ export class LabourChargeMasterComponent implements OnInit {
       "CARATWT_TO": this.commonService.emptyToZero(diamondForm.ctWtTo),
       "SIEVE": diamondForm.sieve,
       "WASTAGE_PER": this.commonService.emptyToZero(metalForm.wastage),
-      "WASTAGE_AMT": 0,
+      "WASTAGE_AMT": this.commonService.emptyToZero(diamondForm.variance),
       "TYPE_CODE": this.commonService.nullToString(metalForm.typecode),
       "CATEGORY_CODE": this.commonService.nullToString(metalForm.category),
       "SUB_CATEGORY_CODE": this.commonService.nullToString(metalForm.subCategory),
