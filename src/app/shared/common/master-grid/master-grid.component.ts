@@ -198,8 +198,21 @@ export class MasterGridComponent implements OnInit {
             .map((key) => {
               return { FIELD_NAME: key };
             });
-          this.orderedItemsHead = this.orderedItemsHead.filter((item: any) => item.FIELD_NAME != 'FLAG' && item.FIELD_NAME != 'COUNT')
-
+          this.orderedItemsHead = this.orderedItemsHead.filter((item: any) => {
+            let shouldInclude = true;
+            switch (item.FIELD_NAME) {
+              case 'FLAG':
+              case 'COUNT':
+              case 'MID':
+              case 'SRNO':
+                shouldInclude = false;
+                break;
+              default:
+                shouldInclude = true;
+                break;
+            }
+            return shouldInclude;
+          });
           // this.orderedItemsHead = this.visibleFields.filter((data: any) => {
           //   if (data.DATA_TYPE == 'numeric' && data.FORMAT == 'Amount') {
           //     data.FORMAT = { type: 'fixedPoint', precision: 2, useGrouping: true };
@@ -265,7 +278,7 @@ export class MasterGridComponent implements OnInit {
       "VOCTYPE": this.CommonService.nullToString(this.vocType),
       "MAIN_VOCTYPE": this.CommonService.nullToString(this.mainVocType),
       "FILTERVAL": this.CommonService.nullToString(this.tableName),
-      "MASTER":this.CommonService.getSubmoduleType() == "Master" ? "1":"0"
+      "MASTER": this.CommonService.getSubmoduleType() == "Master" ? "1" : "0"
     }
   }
   getGridVisibleSettings() {

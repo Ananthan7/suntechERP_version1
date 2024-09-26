@@ -420,6 +420,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
 
   @ViewChild('codeInput1') codeInput1!: ElementRef;
   @ViewChild('codeInput2') codeInput2!: ElementRef;
+  srno: any;
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -764,7 +765,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
     this.metallabourMasterForm.controls.purity.setValue(e.STD_PURITY);
     this.stockCodeData.WHERECONDITION = `DIVISION_CODE = '${this.metallabourMasterForm.value.metalDivision}' and SUBCODE = '0'`;
     this.getKaratcode()
-    //  this.codeDisable[()
+    this.codeDisable()
 
 
   }
@@ -772,22 +773,22 @@ export class MetalLabourchargeMasterComponent implements OnInit {
   codeDisable() {
     this.codedisable = true;
 
-    if (this.metallabourMasterForm.value.stock_code == '') {
-      this.metallabourMasterForm.controls.karat.enable();
-      this.metallabourMasterForm.controls.color.enable();
-      this.metallabourMasterForm.controls.typecode.enable();
-      this.metallabourMasterForm.controls.category.enable();
-      this.metallabourMasterForm.controls.subCategory.enable();
-      this.metallabourMasterForm.controls.brand.enable();
-    }
-    else {
-      this.metallabourMasterForm.controls.karat.disable();
-      this.metallabourMasterForm.controls.color.disable();
-      this.metallabourMasterForm.controls.typecode.disable();
-      this.metallabourMasterForm.controls.category.disable();
-      this.metallabourMasterForm.controls.subCategory.disable();
-      this.metallabourMasterForm.controls.brand.disable();
-    }
+    // if (this.metallabourMasterForm.value.stock_code == '') {
+    //   this.metallabourMasterForm.controls.karat.enable();
+    //   this.metallabourMasterForm.controls.color.enable();
+    //   this.metallabourMasterForm.controls.typecode.enable();
+    //   this.metallabourMasterForm.controls.category.enable();
+    //   this.metallabourMasterForm.controls.subCategory.enable();
+    //   this.metallabourMasterForm.controls.brand.enable();
+    // }
+    // else {
+    //   this.metallabourMasterForm.controls.karat.disable();
+    //   this.metallabourMasterForm.controls.color.disable();
+    //   this.metallabourMasterForm.controls.typecode.disable();
+    //   this.metallabourMasterForm.controls.category.disable();
+    //   this.metallabourMasterForm.controls.subCategory.disable();
+    //   this.metallabourMasterForm.controls.brand.disable();
+    // }
   }
 
   currencyCodeSelected(e: any) {
@@ -963,7 +964,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
         console.log(result.response);
 
         this.metallabourMasterForm.controls['karat'].setValue(result.response.KARAT_CODE);
-        this.metallabourMasterForm.controls['purity'].setValue(this.commonService.decimalQuantityFormat(result.response.PURITY, "RATE")      );
+        this.metallabourMasterForm.controls['purity'].setValue(this.commonService.decimalQuantityFormat(result.response.PURITY, "RATE"));
         this.metallabourMasterForm.controls['brand'].setValue(result.response.BRAND_CODE);
         this.metallabourMasterForm.controls['category'].setValue(result.response.CATEGORY_CODE);
         this.metallabourMasterForm.controls['subCategory'].setValue(result.response.SUB_CATEGORY_CODE);
@@ -1012,10 +1013,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
       this.commonService.toastErrorByMsgId('MSG1927')//"unitList cannot be empty"
       return true
     }
-    else if (this.commonService.nullToString(form.metalselling_rate) == '' || this.commonService.nullToString(form.metalselling_rate) == '0.00') {
-      this.commonService.toastErrorByMsgId('MSG7728')//"Selling Rate cannot be empty"
-      return true
-    }
+
     else if (this.commonService.nullToString(form.wastage) == '' || this.commonService.nullToString(form.wastage) == '0.00') {
       this.commonService.toastErrorByMsgId('MSG7731')//"Selling Rate cannot be empty"
       return true
@@ -1038,6 +1036,17 @@ export class MetalLabourchargeMasterComponent implements OnInit {
       this.commonService.toastErrorByMsgId('MSG81517')// size From should be lesser than Weight To
       return true
     }
+
+    console.log(this.commonService.nullToString(form.metalSelling));
+    
+    // if (this.commonService.nullToString(form.metalselling_rate) == '' || this.commonService.nullToString(form.metalselling_rate) === "0.00"
+    //   && this.commonService.nullToString(form.metalSelling) == '' || this.commonService.nullToString(form.metalselling) === '0.00') {
+      if(this.metallabourMasterForm.controls.metalselling_rate.value === "0.00" && 
+        this.metallabourMasterForm.controls.metalSelling.value === "0.00")
+      {
+      this.commonService.toastErrorByMsgId('MSG7728')//"Selling Rate cannot be empty"
+      return true
+    }
     return false;
   }
 
@@ -1049,7 +1058,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
     let metalForm = this.metallabourMasterForm.value
     return {
       "MID": this.content?.MID || 0,
-      "SRNO": 0,
+      "SRNO": this.content?.SRNO,
       "CODE": this.commonService.nullToString(metalForm.metallabour_code),
       "DESCRIPTION": this.commonService.nullToString(metalForm.metallabour_description),
       "LABTYPE": this.commonService.nullToString(metalForm.metallabourType),
@@ -1476,8 +1485,16 @@ export class MetalLabourchargeMasterComponent implements OnInit {
 
   }
 
-  salesChange(data: any) {
+  metalValue(event:any ) {
+    console.log(this.commonService.nullToString(event.target.value));
+    
+  }
+
+  salesChange(data: any, event?: any) {
     console.log(data);
+
+    console.log(event);
+    
 
     if (data == 'metalSelling') {
       this.viewsellingrateMetal = true;

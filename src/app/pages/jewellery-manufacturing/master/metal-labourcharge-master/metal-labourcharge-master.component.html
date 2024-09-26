@@ -43,7 +43,7 @@
                                 formControlName="stock_code" appNoEmptySpace
                                 (keydown)="lookupKeyPress($event,'stock_code')" />
                             <master-search [MasterSearchData]="stockCodeData" (newRowClick)="stockCodeSelected($event)"
-                                #overlaystockcodeSearch *ngIf="viewDisable == false "
+                                #overlaystockcodeSearch *ngIf="viewDisable == false || viewDisable1 == false || stockcodeDisable == false"
                                 class="masterSearch"></master-search>
                         </mat-form-field>
                     </div>
@@ -102,7 +102,7 @@
                         :</label>
                     <div class="col-sm-3">
                         <mat-form-field style="width: 90%" appearance="outline">
-                            <input type="text" matInput [readonly]="viewMode || codeEnableMetal"
+                            <input type="text" matInput [readonly]="viewMode || codeEnableMetal || codedisable"
                                 (focusout)="validateLookupField($event,karatCodeData,'karat')" maxlength="6"
                                 formControlName="karat" oninput="this.value = this.value.toUpperCase()"
                                 (input)="inputValidate($event)" (keydown)="lookupKeyPress($event,'karat')" />
@@ -132,7 +132,7 @@
                         :</label>
                     <div class="col-sm-3">
                         <mat-form-field style="width: 90%" appearance="outline">
-                            <input type="text" matInput [readonly]="viewMode  || stockcodeDisable || codeEnableMetal"
+                            <input type="text" matInput [readonly]="viewMode  || stockcodeDisable || codeEnableMetal || codedisable"
                                 maxlength="6" formControlName="color"
                                 (focusout)="validateLookupField($event,colorData,'color')"
                                 oninput="this.value = this.value.toUpperCase()" (input)="inputValidate($event)"
@@ -158,7 +158,7 @@
                         :</label>
                     <div class="col-sm-3">
                         <mat-form-field style="width: 90%" appearance="outline">
-                            <input type="text" matInput [readonly]="viewMode || codeEnableMetal" maxlength="6"
+                            <input type="text" matInput [readonly]="viewMode || codeEnableMetal || codedisable" maxlength="6"
                                 formControlName="typecode"
                                 (focusout)="validateLookupField($event,typeCodeData,'typecode')"
                                 oninput="this.value = this.value.toUpperCase()" (input)="inputValidate($event)"
@@ -185,7 +185,7 @@
                         :</label>
                     <div class="col-sm-3">
                         <mat-form-field style="width: 90%" appearance="outline">
-                            <input type="text" matInput [readonly]="viewMode || codeEnableMetal"
+                            <input type="text" matInput [readonly]="viewMode || codeEnableMetal || codedisable"
                                 (focusout)="validateLookupField($event,categoryCodeData,'category')" maxlength="6"
                                 formControlName="category" oninput="this.value = this.value.toUpperCase()"
                                 (input)="inputValidate($event)" (keydown)="lookupKeyPress($event,'category')" />
@@ -201,7 +201,8 @@
                         <mat-form-field style="width: 90%" appearance="outline">
                             <input type="text" matInput [readonly]="viewMode || viewsellingMetal || codeEnableMetal"
                                 [max]="6" formControlName="metalSelling" AmountDecimalInput
-                                (keypress)="salesChange('metalSelling')" class="text-right" />
+                                (change)="metalValue($event)"
+                                (keypress)="salesChange('metalSelling', $event)" class="text-right" />
                         </mat-form-field>
                     </div>
                 </div>
@@ -211,7 +212,7 @@
                         :</label>
                     <div class="col-sm-3">
                         <mat-form-field style="width: 90%" appearance="outline">
-                            <input type="text" matInput [readonly]="viewMode || codeEnableMetal"
+                            <input type="text" matInput [readonly]="viewMode || codeEnableMetal || codedisable"
                                 (focusout)="validateLookupField($event,subcategoryCodeData,'subCategory')" maxlength="6"
                                 formControlName="subCategory" oninput="this.value = this.value.toUpperCase()"
                                 (input)="inputValidate($event)" (keydown)="lookupKeyPress($event,'subCategory')" />
@@ -235,7 +236,7 @@
                         :</label>
                     <div class="col-sm-3">
                         <mat-form-field style="width: 90%" appearance="outline">
-                            <input type="text" matInput [readonly]="viewMode || codeEnableMetal"
+                            <input type="text" matInput [readonly]="viewMode || codeEnableMetal || codedisable"
                                 (focusout)="validateLookupField($event,brandCodeData,'brand')" maxlength="6"
                                 formControlName="brand" oninput="this.value = this.value.toUpperCase()"
                                 (input)="inputValidate($event)" (keydown)="lookupKeyPress($event,'brand')" />

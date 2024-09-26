@@ -52,8 +52,8 @@ export class MfgGridComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.vocType =  this.CommonService.getqueryParamVocType();
-    this.mainVocType =  this.CommonService.getqueryParamMainVocType();
+    this.vocType = this.CommonService.getqueryParamVocType();
+    this.mainVocType = this.CommonService.getqueryParamMainVocType();
     this.tableName = this.CommonService.getqueryParamTable()
     this.getGridVisibleSettings();
     this.getMasterGridData()
@@ -123,17 +123,17 @@ export class MfgGridComponent implements OnInit {
       }
     });
   }
-  resetGridAction(){
+  resetGridAction() {
     this.isDisableDelete = false;
     this.isDisableEdit = false;
     this.isDisableView = false;
   }
-  refreshClicked(){
+  refreshClicked() {
     this.SEARCH_VALUE = ''
     this.getMasterGridData(1)
   }
-  validateBranchCode(){
-    if(this.vocType == 'MASSCH') return '';
+  validateBranchCode() {
+    if (this.vocType == 'MASSCH') return '';
     return this.branchCode
   }
   setCustomParamFilters() {
@@ -230,8 +230,8 @@ export class MfgGridComponent implements OnInit {
         this.skeltonLoading = false;
         if (resp.dynamicData && resp.dynamicData[0].length > 0) {
           // if (data == 1) {
-            // this.orderedItems = []
-            // this.SEARCH_VALUE = ''
+          // this.orderedItems = []
+          // this.SEARCH_VALUE = ''
           // }
           this.totalDataCount = resp.dynamicData[0][0].COUNT || 100000
 
@@ -243,8 +243,8 @@ export class MfgGridComponent implements OnInit {
           } else {
             this.orderedItems = resp.dynamicData[0];
             // this.orderedItems = this.removeKeyValueFromArray(this.orderedItems,'FLAG')
-            
-            
+
+
             if (this.orderedItems.length == 10) {
               this.nextPage()
             }
@@ -254,11 +254,26 @@ export class MfgGridComponent implements OnInit {
             .map((key) => {
               return { FIELD_NAME: key };
             });
-            this.orderedItemsHead = this.orderedItemsHead.filter((item:any)=> {
-              return item.FIELD_NAME !== 'FLAG' && item.FIELD_NAME !== 'COUNT' && item.FIELD_NAME !== 'MID'
-            })
-          
-            // this.orderedItemsHead = this.visibleFields.filter((data: any) => {
+          // this.orderedItemsHead = this.orderedItemsHead.filter((item:any)=> {
+          //   return item.FIELD_NAME !== 'FLAG' && item.FIELD_NAME !== 'COUNT' && item.FIELD_NAME !== 'MID'
+          // })
+          this.orderedItemsHead = this.orderedItemsHead.filter((item: any) => {
+            let shouldInclude = true;
+            switch (item.FIELD_NAME) {
+              case 'FLAG':
+              case 'COUNT':
+              case 'MID':
+              case 'SRNO':
+                shouldInclude = false;
+                break;
+              default:
+                shouldInclude = true;
+                break;
+            }
+            return shouldInclude;
+          });
+
+          // this.orderedItemsHead = this.visibleFields.filter((data: any) => {
           //   if (data.DATA_TYPE == 'numeric' && data.FORMAT == 'Amount') {
           //     data.FORMAT = { type: 'fixedPoint', precision: 2, useGrouping: true };
           //   }

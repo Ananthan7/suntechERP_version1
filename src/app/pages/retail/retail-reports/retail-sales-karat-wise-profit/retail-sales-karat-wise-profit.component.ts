@@ -30,8 +30,11 @@ export class RetailSalesKaratWiseProfitComponent implements OnInit {
   @Input() content!: any; 
   popupVisible: boolean = false;
   templateNameHasValue: boolean= false;
+  dateToPass: { fromDate: string; toDate: string } = { fromDate: '', toDate: '' };
+  logDataParam: any;
+  isLoading: boolean = false;
 
-  
+
   constructor(
     private toastr: ToastrService,
     private commonService: CommonServiceService,
@@ -42,6 +45,21 @@ export class RetailSalesKaratWiseProfitComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.logDataParam =  {
+      "VOCTYPE": this.commonService.getqueryParamVocType() || "",
+      "REFMID": "",
+      "USERNAME": this.commonService.userName,
+      "MODE": "PRINT",
+      "DATETIME": this.commonService.formatDateTime(new Date()),
+      "REMARKS":"",
+      "SYSTEMNAME": "",
+      "BRANCHCODE": this.commonService.branchCode,
+      "VOCNO": "",
+      "VOCDATE": "",
+      "YEARMONTH" : this.commonService.yearSelected
+    }
+
+    this.prefillScreenValues()
   }
 
   formSubmit(){
@@ -130,6 +148,14 @@ export class RetailSalesKaratWiseProfitComponent implements OnInit {
     }
   }
 
+  formatDateToYYYYMMDD(dateString: any) {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
   saveTemplate(){
     this.popupVisible = true;
     console.log(this.RetailKaratWiseSaleForm.controls.templateName.value)
@@ -148,7 +174,11 @@ export class RetailSalesKaratWiseProfitComponent implements OnInit {
               "ISDEFAULT": 1
             },
             "CONTROL_DETAIL": {
-             
+              "STRFROMDATE": this.formatDateToYYYYMMDD(this.RetailKaratWiseSaleForm.value.fromdate),             
+              "STRTODATE": this.formatDateToYYYYMMDD(this.RetailKaratWiseSaleForm.value.todate),                  
+              "BRANCHWISE": JSON.stringify(this.RetailKaratWiseSaleForm.value.BranchWise ?0 : 1) ,    
+              "INVOICEWISE": JSON.stringify(this.RetailKaratWiseSaleForm.value.InvoiceWise ?0 : 1),  
+              "LOGDATA": JSON.stringify(this.logDataParam) 
             }
         })
       }
@@ -179,9 +209,13 @@ export class RetailSalesKaratWiseProfitComponent implements OnInit {
 
   previewClick() {
     let postData = {
-      "SPID": "0118",
+      "SPID": "153",
       "parameter": {
-        
+        "STRFROMDATE": this.formatDateToYYYYMMDD(this.RetailKaratWiseSaleForm.value.fromdate),             
+	      "STRTODATE": this.formatDateToYYYYMMDD(this.RetailKaratWiseSaleForm.value.todate),                  
+	      "BRANCHWISE": JSON.stringify(this.RetailKaratWiseSaleForm.value.BranchWise ?0 : 1) ,    
+	      "INVOICEWISE": JSON.stringify(this.RetailKaratWiseSaleForm.value.InvoiceWise ?0 : 1),  
+	      "LOGDATA": JSON.stringify(this.logDataParam) 
       }
     }
     console.log(postData)  
@@ -198,7 +232,7 @@ export class RetailSalesKaratWiseProfitComponent implements OnInit {
         console.error('Failed to open the print window. Possibly blocked by a popup blocker.');
         return;
       }
-      let printContent = data[0][0].HTMLINPUT;
+      let printContent = data[0][0].Column1;
       WindowPrt.document.write(printContent);
       WindowPrt.document.close();
       WindowPrt.focus();  
@@ -228,6 +262,29 @@ export class RetailSalesKaratWiseProfitComponent implements OnInit {
     });      
   }
 
+  prefillScreenValues(){
+    if ( Object.keys(this.content).length > 0) {
+      this.isLoading = true;
 
+      this.templateNameHasValue = !!(this.content?.TEMPLATE_NAME);
+      this.RetailKaratWiseSaleForm.controls.templateName.setValue(this.content?.TEMPLATE_NAME);
+
+      var paresedItem = JSON.parse(this.content?.CONTROL_LIST_JSON);
+      console.log('parsed data', paresedItem)
+      this.dateToPass = {
+        fromDate:  paresedItem?.CONTROL_DETAIL.STRFROMDATE,
+        toDate: paresedItem?.CONTROL_DETAIL.STRTODATE
+      };
+
+      const branchWiseValue = this.content?.BRANCHWISE === '0';
+      const invoiceWiseValue = this.content?.INVOICEWISE === '0';
+  
+      this.RetailKaratWiseSaleForm.controls.BranchWise.setValue(branchWiseValue);
+      this.RetailKaratWiseSaleForm.controls.InvoiceWise.setValue(invoiceWiseValue);
+  
+      this.RetailKaratWiseSaleForm.controls.BranchWise.patchValue(branchWiseValue);
+      this.RetailKaratWiseSaleForm.controls.InvoiceWise.patchValue(invoiceWiseValue);
+    }
+  }
 
 }

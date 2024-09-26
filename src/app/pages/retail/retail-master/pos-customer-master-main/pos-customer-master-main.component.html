@@ -110,7 +110,7 @@
                   <div class="col-md-8">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <mat-select
-                      [disabled]="flag === 'VIEW'"
+                        [disabled]="flag === 'VIEW'"
                         (selectionChange)="genderChanger($event.value)"
                         formControlName="name"
                       >
@@ -130,7 +130,9 @@
                   <input
                     appAlphabetsOnly
                     matInput="text"
+                    [maxlength]="40"
                     formControlName="nameDesc"
+                    (change)="nameChange($event)"
                     [readonly]="flag === 'VIEW'"
                   />
                 </mat-form-field>
@@ -148,14 +150,87 @@
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
                     matInput
-                    type="number"
+                    type="text"
+                    [maxLength]="21"
+                    NumberOnly
                     formControlName="creditCardLimit"
                     style="text-align: end"
                     [disabled]="
                       !posCustomerMasterMainForm.get('creditCardLimitCheck')
                         ?.value
                     "
-                    (keydown)="preventInvalidInput($event)"
+                  />
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row mb-1">
+          <div class="col-md-8">
+            <div class="row mb-1">
+              <div class="col-md-6">
+                <div class="row mb-1">
+                  <label
+                    for="inputPassword"
+                    class="col-sm-4 col-form-label"
+                    id="ID004"
+                    >First Name
+                  </label>
+                  <div class="col-md-8">
+                    <mat-form-field style="width: 100%" appearance="outline">
+                      <input
+                        appAlphabetsOnly
+                        matInput
+                        type="text"
+                        [maxlength]="40"
+                        formControlName="firstName"
+                        readonly="true"
+                      />
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="row mb-1">
+                  <label
+                    for="inputPassword"
+                    class="col-sm-4 col-form-label"
+                    id="ID004"
+                    >Middle Name
+                  </label>
+                  <div class="col-md-8">
+                    <mat-form-field style="width: 100%" appearance="outline">
+                      <input
+                        appAlphabetsOnly
+                        matInput
+                        type="text"
+                        [maxlength]="40"
+                        formControlName="middleName"
+                        readonly="true"
+                      />
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="row mb-1">
+              <label
+                for="inputPassword"
+                class="col-sm-4 col-form-label"
+                id="ID004"
+                >Last Name
+              </label>
+              <div class="col-md-8">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <input
+                    appAlphabetsOnly
+                    matInput
+                    type="text"
+                    [maxlength]="40"
+                    formControlName="lastName"
+                    readonly="true"
                   />
                 </mat-form-field>
               </div>
@@ -173,7 +248,10 @@
               >
               <div class="col-md-8">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <mat-select formControlName="gender">
+                  <mat-select
+                    [disabled]="flag === 'VIEW'"
+                    formControlName="gender"
+                  >
                     <mat-option
                       *ngFor="let data of genderList"
                       [value]="data.ENGLISH"
@@ -208,6 +286,7 @@
                   <mat-select
                     (selectionChange)="onWeddingIsIt($event.value)"
                     formControlName="maritalSt"
+                    [disabled]="flag === 'VIEW'"
                   >
                     <mat-option
                       *ngFor="let data of maritalStatusList"
@@ -251,6 +330,7 @@
                     readonly
                   />
                   <mat-datepicker-toggle
+                    [disabled]="flag === 'VIEW'"
                     matSuffix
                     [for]="dob"
                   ></mat-datepicker-toggle>
@@ -356,6 +436,7 @@
                     formControlName="moblieNumber"
                     class="text-right"
                     (keydown)="preventInvalidInput($event)"
+                    (input)="onInput($event, 15)"
                   />
                 </mat-form-field>
               </div>
@@ -385,6 +466,7 @@
                     formControlName="moblie1Number"
                     class="text-right"
                     (keydown)="preventInvalidInput($event)"
+                    (input)="onInput($event, 15)"
                   />
                 </mat-form-field>
               </div>
@@ -414,6 +496,7 @@
                     type="number"
                     formControlName="telRNumber"
                     class="text-right"
+                    (input)="onInput($event, 15)"
                     (keydown)="preventInvalidInput($event)"
                   />
                 </mat-form-field>
@@ -442,6 +525,7 @@
                     matInput
                     type="number"
                     formControlName="tel0number"
+                    (input)="onInput($event, 15)"
                     class="text-right"
                     (keydown)="preventInvalidInput($event)"
                   />
@@ -467,6 +551,7 @@
                     matInput
                     formControlName="emailId"
                     required
+                    (input)="onInput($event, 40)"
                   />
                   <!-- <mat-error *ngIf="posCustomerMasterMainForm.get('emailId')?.hasError('required')">Email is required.</mat-error> -->
                   <mat-error
@@ -501,6 +586,7 @@
                     class="text-right"
                     matInput
                     type="number"
+                    (input)="onInput($event, 15)"
                     (keydown)="preventInvalidInput($event)"
                     formControlName="faxNo"
                   />
@@ -613,22 +699,22 @@
               </div>
 
               <ng-template #SeditMode>
-              <div class="col-md-8">
-                <mat-form-field style="width: 100%" appearance="outline">
-                  <mat-select
-                    (selectionChange)="onCitySelect($event.value)"
-                    formControlName="state"
-                  >
-                    <mat-option
-                      *ngFor="let state of stateListData"
-                      [value]="state.CODE"
+                <div class="col-md-8">
+                  <mat-form-field style="width: 100%" appearance="outline">
+                    <mat-select
+                      (selectionChange)="onCitySelect($event.value)"
+                      formControlName="state"
                     >
-                      {{ state.NAME || "State Not available" }}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>
+                      <mat-option
+                        *ngFor="let state of stateListData"
+                        [value]="state.CODE"
+                      >
+                        {{ state.NAME || "State Not available" }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
 
-                <!-- <mat-form-field
+                  <!-- <mat-form-field
                   style="width: -webkit-fill-available"
                   appearance="outline"
                 >
@@ -645,8 +731,8 @@
                     (newRowClick)="stateSelected($event)"
                   ></master-search>
                 </mat-form-field> -->
-              </div>
-            </ng-template>
+                </div>
+              </ng-template>
             </div>
             <div class="row mb-1">
               <label
@@ -667,29 +753,28 @@
                 </mat-form-field>
               </div>
               <ng-template #CeditMode>
-
-              <div class="col-md-8">
-                <mat-form-field style="width: 100%" appearance="outline">
-                  <mat-select formControlName="city">
-                    <mat-option
-                      *ngFor="let state of cityListData"
-                      [value]="state.NAME"
+                <div class="col-md-8">
+                  <mat-form-field style="width: 100%" appearance="outline">
+                    <mat-select formControlName="city">
+                      <mat-option
+                        *ngFor="let state of cityListData"
+                        [value]="state.NAME"
+                      >
+                        {{ state.NAME || "State Not available" }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error
+                      *ngIf="
+                        posCustomerMasterMainForm.controls.city.hasError(
+                          'required'
+                        )
+                      "
+                      id="ID005"
                     >
-                      {{ state.NAME || "State Not available" }}
-                    </mat-option>
-                  </mat-select>
-                  <mat-error
-                    *ngIf="
-                      posCustomerMasterMainForm.controls.city.hasError(
-                        'required'
-                      )
-                    "
-                    id="ID005"
-                  >
-                    State is <strong>required</strong>
-                  </mat-error>
-                </mat-form-field>
-                <!-- <mat-form-field
+                      State is <strong>required</strong>
+                    </mat-error>
+                  </mat-form-field>
+                  <!-- <mat-form-field
                   style="width: -webkit-fill-available"
                   appearance="outline"
                 >
@@ -706,8 +791,8 @@
                     (newRowClick)="citySelected($event)"
                   ></master-search>
                 </mat-form-field> -->
-              </div>
-            </ng-template>
+                </div>
+              </ng-template>
             </div>
             <div class="row mb-1">
               <label
@@ -779,6 +864,7 @@
                     <input
                       matInput
                       type="number"
+                      (input)="onInput($event, 15)"
                       (keydown)="preventInvalidInput($event)"
                       formControlName="vat"
                     />
@@ -873,6 +959,7 @@
                               <input
                                 appAlphabetsOnly
                                 matInput="text"
+                                (input)="onInput($event, 40)"
                                 formControlName="spouse"
                               />
                             </mat-form-field>
@@ -892,6 +979,7 @@
                             >
                               <input
                                 matInput="text"
+                                (input)="onInput($event, 40)"
                                 formControlName="company"
                               />
                             </mat-form-field>
@@ -911,6 +999,7 @@
                             >
                               <input
                                 matInput="text"
+                                (input)="onInput($event, 15)"
                                 formControlName="zodiacSign"
                               />
                             </mat-form-field>
@@ -933,6 +1022,7 @@
                                 matInput
                                 formControlName="noOfChildren"
                                 class="text-right"
+                                (input)="onInput($event, 5)"
                                 (keydown)="preventInvalidInput($event)"
                               />
                             </mat-form-field>
@@ -1035,6 +1125,7 @@
                                 AmountDecimalInput
                                 type="number"
                                 matInput
+                                (input)="onInput($event, 13)"
                                 formControlName="income"
                                 class="text-right"
                               />
@@ -1113,7 +1204,11 @@
                               style="width: -webkit-fill-available"
                               appearance="outline"
                             >
-                              <input matInput="text" formControlName="custID" />
+                              <input
+                                matInput="text"
+                                (input)="onInput($event, 25)"
+                                formControlName="custID"
+                              />
                             </mat-form-field>
                           </div>
                         </div>
@@ -1216,6 +1311,7 @@
                             >
                               <textarea
                                 matInput
+                                (input)="onInput($event, 150)"
                                 rows="3"
                                 formControlName="addressPersonal"
                                 class=""
@@ -1281,6 +1377,7 @@
                               <textarea
                                 matInput
                                 rows="3"
+                                (input)="onInput($event, 150)"
                                 formControlName="remarks"
                                 style="resize: none"
                               ></textarea>
@@ -3067,7 +3164,7 @@
                   class="uploadproduct"
                   #fileInput
                   accept="image/*"
-                  capture="environment"
+                  capture="user"
                   (change)="onFileSelected($event)"
                   style="display: none"
                 />

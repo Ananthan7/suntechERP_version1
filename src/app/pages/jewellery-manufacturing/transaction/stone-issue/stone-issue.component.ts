@@ -688,6 +688,67 @@ export class StoneIssueComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
+  validateLookupFieldWorker(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    const inputValue = event.target.value.toUpperCase();
+    LOOKUPDATA.SEARCH_VALUE = event.target.value;
+  
+    // Return early if the input is empty or in viewMode
+    if (event.target.value === '' || this.viewMode === true) {
+      if (FORMNAME === 'worker') {
+        this.stoneissueFrom.controls.workername.setValue(''); // Clear worker name if input is empty
+      }
+      return;
+    }
+  
+    // Prepare parameters for API call
+    let param = {
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+    };
+  
+    this.comService.toastInfoByMsgId('MSG81447');
+  
+    let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch';
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
+      .subscribe((result) => {
+        this.isDisableSaveBtn = false;
+        let data = this.comService.arrayEmptyObjectToString(result.dynamicData[0]);
+  
+        // Handle no data found
+        if (data.length === 0) {
+          this.comService.toastErrorByMsgId('MSG1531');
+          this.stoneissueFrom.controls[FORMNAME].setValue(''); // Clear worker code field
+          LOOKUPDATA.SEARCH_VALUE = '';
+          this.handleLookupError(FORMNAME, LOOKUPDATA);
+          return;
+        }
+  
+        // Find the matched item by worker code
+        const matchedItem = data.find((item: any) => item.WORKER_CODE.toUpperCase() === inputValue);
+        if (matchedItem) {
+          this.stoneissueFrom.controls[FORMNAME].setValue(matchedItem.WORKER_CODE); // Set worker code
+          if (FORMNAME === 'worker') {
+            this.stoneissueFrom.controls.workername.setValue(matchedItem.DESCRIPTION); // Set worker description
+          }
+        } else {
+          this.handleLookupError(FORMNAME, LOOKUPDATA);
+        }
+  
+      }, err => {
+        this.comService.toastErrorByMsgId('MSG2272'); // Error occurred, please try again
+      });
+  
+    this.subscriptions.push(Sub);
+  }
+  handleLookupError(FORMNAME: string, LOOKUPDATA: MasterSearchModel) {
+    this.comService.toastErrorByMsgId('MSG1531');
+    this.stoneissueFrom.controls[FORMNAME].setValue('');
+    LOOKUPDATA.SEARCH_VALUE = '';
+    if (FORMNAME === 'worker') {
+      this.stoneissueFrom.controls.workername.setValue('');
+    }
+  }
+  
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {
       this.subscriptions.forEach(subscription => subscription.unsubscribe());// unsubscribe all subscription

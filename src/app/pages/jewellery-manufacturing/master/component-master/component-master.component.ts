@@ -516,7 +516,7 @@ export class ComponentMasterComponent implements OnInit {
     SEARCH_FIELD: 'types',
     SEARCH_HEADING: 'Size',
     SEARCH_VALUE: '',
-    WHERECONDITION: "types = 'SIZE MASTER'",
+    WHERECONDITION: "",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -694,7 +694,6 @@ export class ComponentMasterComponent implements OnInit {
   sizeSetCodeSelected(e: any) {
     if (this.checkCode()) return;
     console.log(e);
-
     // Set the sizeSet form control value
     this.componentmasterForm.controls.sizeSet.setValue(e.COMPSET_CODE);
     console.log(this.componentmasterForm.value.sizeSet);
