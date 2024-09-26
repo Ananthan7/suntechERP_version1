@@ -10003,7 +10003,7 @@ export class SalesReturnComponent implements OnInit {
 
       if (this.divisionMS == 'S') {
 
-        if ((this.isPromotionalItem && this.isAllowWithoutRate && this.comFunc.emptyToZero(value) >= 0) || this.comFunc.emptyToZero(value) > 0) {
+        if (((this.isPromotionalItem && this.isAllowWithoutRate && this.comFunc.emptyToZero(value) >= 0)) || this.comFunc.emptyToZero(value) > 0) {
           this.rateFunc(value);
         }
         else {
