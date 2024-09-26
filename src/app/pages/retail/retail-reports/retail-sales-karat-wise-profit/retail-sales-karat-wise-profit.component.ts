@@ -276,14 +276,11 @@ export class RetailSalesKaratWiseProfitComponent implements OnInit {
         toDate: paresedItem?.CONTROL_DETAIL.STRTODATE
       };
 
-      const branchWiseValue = this.content?.BRANCHWISE === '0';
-      const invoiceWiseValue = this.content?.INVOICEWISE === '0';
-  
+      const branchWiseValue= paresedItem.CONTROL_DETAIL.BRANCHWISE  === '0'?true:false;
+      const invoiceWiseValue = paresedItem.CONTROL_DETAIL.INVOICEWISE === '0'?true:false;
       this.RetailKaratWiseSaleForm.controls.BranchWise.setValue(branchWiseValue);
       this.RetailKaratWiseSaleForm.controls.InvoiceWise.setValue(invoiceWiseValue);
-  
-      this.RetailKaratWiseSaleForm.controls.BranchWise.patchValue(branchWiseValue);
-      this.RetailKaratWiseSaleForm.controls.InvoiceWise.patchValue(invoiceWiseValue);
+
     }
   }
 
