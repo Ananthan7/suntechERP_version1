@@ -9350,9 +9350,15 @@ export class SalesReturnComponent implements OnInit {
                 this.manageCalculations();
 
               } else {
-                this.detectDiscountChange = true;
-                this.checkDivisionForPcs(value)
+                this.checkDivisionForPcs(value);
                 this.manageCalculations();
+                this.detectDiscountChange = true;
+                this.updateDiscountAmount();
+                // this.calculateTaxAmount();
+                // this.calculateNetAmount();
+                // this.detectDiscountChange = true;
+                // this.checkDivisionForPcs(value)
+                // this.manageCalculations();
 
               }
             });
@@ -9573,6 +9579,7 @@ export class SalesReturnComponent implements OnInit {
           this.manageCalculations({ totalAmt: totalAmt, nettAmt });
         }
         this.detectDiscountChange = true;
+        if(this.divisionMS!='M')
         this.updateDiscountAmount();
 
       } else {
@@ -10003,7 +10010,7 @@ export class SalesReturnComponent implements OnInit {
 
       if (this.divisionMS == 'S') {
 
-        if ((this.isPromotionalItem && this.isAllowWithoutRate && this.comFunc.emptyToZero(value) >= 0) || this.comFunc.emptyToZero(value) > 0) {
+        if (((this.isPromotionalItem && this.isAllowWithoutRate && this.comFunc.emptyToZero(value) >= 0)) || this.comFunc.emptyToZero(value) > 0) {
           this.rateFunc(value);
         }
         else {
@@ -10802,26 +10809,26 @@ export class SalesReturnComponent implements OnInit {
 
     const permittedNetAmount = netAmtVal - (this.lineItemForm.value.fcn_li_tax_percentage / 100) * netAmtVal;
     console.log(this.divisionMS)
-    if (this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_amount) <= permittedNetAmount && this.divisionMS == 'S') {
+    // if (this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_amount) <= permittedNetAmount && this.divisionMS == 'S') {
 
 
-      this.openDialog('Warning', this.comFunc.getMsgByID('MSG1443'), true);
-      this.dialogBox.afterClosed().subscribe((data: any) => {
-        if (data == 'OK') {
-          this.lineItemForm.controls.fcn_li_net_amount.setValue(
-            this.comFunc.commaSeperation(
-              this.comFunc.transformDecimalVB(
-                this.comFunc.allbranchMaster?.BAMTDECIMALS,
-                preVal
-              )
-            )
-          );
-          this.manageCalculations();
-        }
-      });
-    }
+    //   this.openDialog('Warning', this.comFunc.getMsgByID('MSG1443'), true);
+    //   this.dialogBox.afterClosed().subscribe((data: any) => {
+    //     if (data == 'OK') {
+    //       this.lineItemForm.controls.fcn_li_net_amount.setValue(
+    //         this.comFunc.commaSeperation(
+    //           this.comFunc.transformDecimalVB(
+    //             this.comFunc.allbranchMaster?.BAMTDECIMALS,
+    //             preVal
+    //           )
+    //         )
+    //       );
+    //       this.manageCalculations();
+    //     }
+    //   });
+    // }
 
-    else {
+    // else {
 
       if (!this.isRevCalculationBlock) {
         this.isNetAmountChange = true;
@@ -10861,9 +10868,15 @@ export class SalesReturnComponent implements OnInit {
 
           if (this.divisionMS == 'S') {
 
-            if (this.lineItemModalForSalesReturn || checkStockCostVal >= this.comFunc.emptyToZero(this.newLineItem.STOCK_COST)) {
-              this.netAmtFunc(event);
-            } else {
+            // if (this.lineItemModalForSalesReturn || checkStockCostVal >= this.comFunc.emptyToZero(this.newLineItem.STOCK_COST)) {
+              if(this.comFunc.emptyToZero(event.target.value)!=0){
+                this.netAmtFunc(event);
+                localStorage.setItem('existingNetAmount', this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_net_amount).toString());
+  
+              }
+       
+            // }
+            else {
               // Rate Cannot be Less Than Cost
               this.openDialog('Warning', this.comFunc.getMsgByID('MSG1721'), true);
               this.dialogBox.afterClosed().subscribe((data: any) => {
@@ -10871,7 +10884,7 @@ export class SalesReturnComponent implements OnInit {
                   this.lineItemForm.controls.fcn_li_net_amount.setValue(
                     this.comFunc.transformDecimalVB(
                       this.comFunc.allbranchMaster?.BAMTDECIMALS,
-                      preVal
+                      localStorage.getItem('existingNetAmount')
                     )
                   );
                 }
@@ -10888,7 +10901,7 @@ export class SalesReturnComponent implements OnInit {
           this.manageCalculations();
         }
       }
-    }
+    // }
   }
 
   changeDisAmount(event: any, nettAmt: any = null) {
@@ -11203,6 +11216,8 @@ export class SalesReturnComponent implements OnInit {
     );
 
     //  this.updateDiscountAmount();
+    if(this.divisionMS!="M")
+      this.updateDiscountAmount();
 
     this.lineItemForm.controls['fcn_li_tax_amount'].setValue(
       this.comFunc.commaSeperation(this.lineItemForm.value.fcn_li_tax_amount)
@@ -11252,7 +11267,7 @@ export class SalesReturnComponent implements OnInit {
       //   )
 
       // );
-
+      this.setGrossAmount();
 
       this.detectDiscountChange = false;
     } else {
@@ -11279,6 +11294,20 @@ export class SalesReturnComponent implements OnInit {
 
       // );
     }
+  }
+
+    setGrossAmount() {
+    const totalAmount = this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount);
+    const discountAmount = this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_discount_amount);
+    
+    const grossAmount = this.comFunc.transformDecimalVB(
+      this.comFunc.allbranchMaster?.BAMTDECIMALS,
+      totalAmount - discountAmount
+    );
+    
+    this.lineItemForm.controls['fcn_li_gross_amount'].setValue(grossAmount);
+    // this.calculateTaxAmount();
+    // this.calculateNetAmount();
   }
 
   setNettWeight() {

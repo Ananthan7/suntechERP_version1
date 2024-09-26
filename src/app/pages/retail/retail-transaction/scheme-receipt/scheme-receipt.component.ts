@@ -82,6 +82,7 @@ export class SchemeReceiptComponent implements OnInit {
   };
   SchemeMasterFindData: MasterSearchModel = {
     VIEW_INPUT: true,
+    VIEW_ICON:false,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
     API_VALUE: `SchemeRegistration/GetSchemeWithCustomerCode`
@@ -467,6 +468,7 @@ export class SchemeReceiptComponent implements OnInit {
     this.SchemeMasterFindData = {
       SEARCH_FIELD: 'SCH_CUSTOMER_ID,SCH_SCHEME_CODE',
       VIEW_INPUT: false,
+      VIEW_ICON:customerCode? true:false,
       VIEW_TABLE: true,
       LOAD_ONCLICK: true,
       API_VALUE: `SchemeRegistration/GetSchemeWithCustomerCode/${custCode}`
