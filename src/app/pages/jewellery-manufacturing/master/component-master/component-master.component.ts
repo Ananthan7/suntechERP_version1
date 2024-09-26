@@ -35,7 +35,7 @@ export class ComponentMasterComponent implements OnInit {
   maindetails: any[] = [];
   selectedIndexes: any = [];
   columnhead: any[] = ['Srno', 'Div.', 'Stock Code', 'Karat', 'Stock Type', 'Pcs', 'Wt/Ct', 'Color', 'Clarity', 'Shape', 'Sieve Std.', 'Description', 'Size', 'Process Type', 'Remarks', 'Pointer Wt', 'Ext.Clarity', 'Sieve From', 'Description', 'Sieve To', 'Description']
-  columnhead2: any[] = ['Design','Description','Pcs','Type','Sub Category','Brand']
+  columnhead2: any[] = ['Design', 'Description', 'Pcs', 'Type', 'Sub Category', 'Brand']
   selectedTabIndex = 0;
   urls: string | ArrayBuffer | null | undefined;
   url: any;
@@ -915,7 +915,7 @@ export class ComponentMasterComponent implements OnInit {
     } else {
       this.snackBar.open('Please select a record', 'OK', { duration: 2000 });
     }
-}
+  }
 
 
 
@@ -1482,7 +1482,14 @@ export class ComponentMasterComponent implements OnInit {
           this.commonService.toastErrorByMsgId('MSG1121')
         }
         else {
-          this.commonService.toastErrorByMsgId('MSG3577')
+          Swal.fire({
+            title: "Code is already Exists",
+            icon: 'error',
+            confirmButtonColor: '#336699',
+            confirmButtonText: 'Ok'
+          })
+          // this.commonService.toastErrorByMsgId('MSG3577')
+
         }
       }, err => {
         this.commonService.toastErrorByMsgId('MSG3577')
@@ -1540,7 +1547,7 @@ export class ComponentMasterComponent implements OnInit {
         if (result.status == "Success") {
           this.maindetails = result.dynamicData[0] || []
           console.log(this.maindetails);
-          
+
           // this.componentmasterForm.controls.jobno.setValue(result.dynamicData[0][0].JOB_NO)
         }
       }, err => {
@@ -1560,7 +1567,7 @@ export class ComponentMasterComponent implements OnInit {
     this.showConfirmationDialog().then((result) => {
       if (result.isConfirmed) {
         let API = 'DesignMaster/DeleteDesignMaster/' + this.content.DESIGN_CODE
-        this.commonService.showSnackBarMsg('MSG81447');
+        // this.commonService.showSnackBarMsg('MSG81447');
         let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
           .subscribe((result) => {
             if (result) {

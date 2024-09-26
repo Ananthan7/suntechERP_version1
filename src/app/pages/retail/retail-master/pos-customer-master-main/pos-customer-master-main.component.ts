@@ -17,6 +17,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { Subscription } from "rxjs";
 import Swal from "sweetalert2";
 import { MasterSearchComponent } from "src/app/shared/common/master-search/master-search.component";
+import { MatCheckboxChange } from "@angular/material/checkbox";
 
 @Component({
   selector: "app-pos-customer-master-main",
@@ -27,7 +28,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
   @ViewChild("overlayParentPosCode")
   overlayParentPosCode!: MasterSearchComponent;
   @ViewChild("overlayRefBy") overlayRefBy!: MasterSearchComponent;
-  @ViewChild("overlayCountryCode") overlayCountryCode!: MasterSearchComponent;
+  @ViewChild("overlayCountry") overlayCountry!: MasterSearchComponent;
   @ViewChild("overlayNationality") overlayNationality!: MasterSearchComponent;
   @ViewChild("overlayState") overlayState!: MasterSearchComponent;
   @ViewChild("overlayCity") overlayCity!: MasterSearchComponent;
@@ -82,6 +83,9 @@ export class PosCustomerMasterMainComponent implements OnInit {
   flag: any;
   image: File | null = null;
   editdata: any;
+  isCreditLimit: any;
+  contactPreferenceWay: any[] = [];
+  selectedValuesString: any;
 
   amlNameValidationData = false;
   dummyDate = "1900-01-01T00:00:00";
@@ -579,6 +583,10 @@ export class PosCustomerMasterMainComponent implements OnInit {
       });
   }
 
+  creditLimitChecker(event: MatCheckboxChange) {
+    this.isCreditLimit = event.checked;
+  }
+
   initialController(FLAG: any) {
     if (FLAG === "VIEW") {
       this.ViewController();
@@ -589,9 +597,29 @@ export class PosCustomerMasterMainComponent implements OnInit {
   }
 
   setvalues(setData: any) {
+    console.log(setData);
+    console.log(setData.CUST_TYPE);
+
     this.posCustomerMasterMainForm.controls.nameDesc.setValue(setData.NAME);
     this.posCustomerMasterMainForm.controls.name.setValue(
       setData.POSCUSTPREFIX
+    );
+    this.posCustomerMasterMainForm.controls.parentPosCode.setValue(
+      setData.PARENT_CODE
+    );
+    this.posCustomerMasterMainForm.controls.refBy.setValue(setData.REFERED_BY);
+    this.posCustomerMasterMainForm.controls.firstName.setValue(
+      setData.FIRSTNAME
+    );
+    this.posCustomerMasterMainForm.controls.middleName.setValue(
+      setData.MIDDLENAME
+    );
+    this.posCustomerMasterMainForm.controls.lastName.setValue(setData.LASTNAME);
+    this.posCustomerMasterMainForm.controls.creditCardLimitCheck.setValue(
+      setData.CREDIT_LIMIT_STATUS
+    );
+    this.posCustomerMasterMainForm.controls.creditCardLimit.setValue(
+      setData.CREDIT_LIMIT
     );
 
     this.posCustomerMasterMainForm.controls.company.setValue(setData.COMPANY);
@@ -604,8 +632,24 @@ export class PosCustomerMasterMainComponent implements OnInit {
     this.posCustomerMasterMainForm.controls.countryCode.setValue(
       setData.COUNTRY_CODE
     );
+    this.posCustomerMasterMainForm.controls.country.setValue(
+      setData.COUNTRY_DESC
+    );
     this.posCustomerMasterMainForm.controls.emailId.setValue(setData.EMAIL);
     this.posCustomerMasterMainForm.controls.telRNumber.setValue(setData.TEL1);
+    this.posCustomerMasterMainForm.controls.moblieCountry.setValue(
+      setData.MOBILECODE1
+    );
+    this.posCustomerMasterMainForm.controls.moblie1Country.setValue(
+      setData.MOBILECODE2
+    );
+    this.posCustomerMasterMainForm.controls.telRCountry.setValue(
+      setData.TEL_R_CODE
+    );
+    this.posCustomerMasterMainForm.controls.tel0Country.setValue(
+      setData.TEL_O_CODE
+    );
+
     this.posCustomerMasterMainForm.controls.tel0number.setValue(setData.TEL2);
     this.posCustomerMasterMainForm.controls.moblieNumber.setValue(
       setData.MOBILE
@@ -628,13 +672,44 @@ export class PosCustomerMasterMainComponent implements OnInit {
     this.posCustomerMasterMainForm.controls.nationality.setValue(
       setData.NATIONALITY
     );
-    this.posCustomerMasterMainForm.controls.custType.setValue(setData.TYPE);
     this.posCustomerMasterMainForm.controls.category.setValue(setData.CATEGORY);
     this.posCustomerMasterMainForm.controls.income.setValue(setData.INCOME);
     this.posCustomerMasterMainForm.controls.custStatus.setValue(
       setData.CUST_STATUS
     );
-    this.posCustomerMasterMainForm.controls.picture.setValue(setData.PICTURE);
+    this.posCustomerMasterMainForm.controls.custType.setValue(
+      setData.CUST_TYPE
+    );
+    this.posCustomerMasterMainForm.controls.moblie1Number.setValue(
+      setData.MOBILE1
+    );
+    this.posCustomerMasterMainForm.controls.language.setValue(
+      setData.CUST_LANGUAGE
+    );
+    this.posCustomerMasterMainForm.controls.favCelebration.setValue(
+      setData.FAVORITE_CELEB
+    );
+    this.posCustomerMasterMainForm.controls.vat.setValue(setData.VAT_NUMBER);
+    this.posCustomerMasterMainForm.controls.panNo.setValue(setData.PANCARDNO);
+    this.posCustomerMasterMainForm.controls.whatsappCountryCode.setValue(
+      setData.WUPMOBILECODE
+    );
+    this.posCustomerMasterMainForm.controls.whatsappNumber.setValue(
+      setData.WUPMOBILENO
+    );
+    this.posCustomerMasterMainForm.controls.zodiacSign.setValue(
+      setData.ZODIAC_SIGN
+    );
+
+    this.posCustomerMasterMainForm.controls.custDate.setValue(
+      setData.POSCUSTIDEXP_DATE
+    );
+
+    this.posCustomerMasterMainForm.controls.sourceOfFund.setValue(
+      setData.SOURCE
+    );
+
+    // this.posCustomerMasterMainForm.controls.picture.setValue(setData.PICTURE);
     this.posCustomerMasterMainForm.controls.voucher.setValue(
       setData.SALVOCTYPE_NO
     );
@@ -655,18 +730,11 @@ export class PosCustomerMasterMainComponent implements OnInit {
     this.posCustomerMasterMainForm.controls.custID.setValue(
       setData.POSCUSTIDNO
     );
-    this.posCustomerMasterMainForm.controls.moblie1Number.setValue(
-      setData.MOBILE1
-    );
+
     this.posCustomerMasterMainForm.controls.language.setValue(
       setData.CUST_LANGUAGE
     );
-    this.posCustomerMasterMainForm.controls.custType.setValue(
-      setData.CUST_TYPE
-    );
-    this.posCustomerMasterMainForm.controls.moblieCountry.setValue(
-      setData.MOBILECODE1
-    );
+
     this.posCustomerMasterMainForm.controls.moblie1Country.setValue(
       setData.MOBILECODE2
     );
@@ -688,9 +756,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
     this.posCustomerMasterMainForm.controls.noOfChildren.setValue(
       setData.NO_OF_CHILDREN
     );
-    this.posCustomerMasterMainForm.controls.zodiacSign.setValue(
-      setData.ZODIAC_SIGN
-    );
+
     this.posCustomerMasterMainForm.controls.designation.setValue(
       setData.DESIGNATION
     );
@@ -883,8 +949,8 @@ export class PosCustomerMasterMainComponent implements OnInit {
 
   countrySelected(e: any) {
     console.log(e);
-    this.posCustomerMasterMainForm.controls.country.setValue(e.CODE);
-    this.posCustomerMasterMainForm.controls.countryCode.setValue(e.DESCRIPTION);
+    this.posCustomerMasterMainForm.controls.countryCode.setValue(e.CODE);
+    this.posCustomerMasterMainForm.controls.country.setValue(e.DESCRIPTION);
     this.posCustomerMasterMainForm.controls.moblieCountry.setValue(
       e.MobileCountryCode
     );
@@ -945,7 +1011,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
   typeidCodeSelected(e: any) {
     console.log(e);
 
-    if (!this.posCustomerMasterMainForm.controls.countryCode.value) {
+    if (!this.posCustomerMasterMainForm.controls.country.value) {
       return alert("please Select the Country Fisrt ");
     }
 
@@ -953,7 +1019,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
     let code = "EID";
 
     if (
-      this.posCustomerMasterMainForm.controls.countryCode.value !== value &&
+      this.posCustomerMasterMainForm.controls.country.value !== value &&
       e.CODE === code
     ) {
       return alert(
@@ -975,7 +1041,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
   }
 
   parentPosSelected(e: any) {
-    console.log(e.CODE.tostring());
+    console.log(e.CODE.toString());
     this.posCustomerMasterMainForm.controls.parentPosCode.setValue(e.CODE);
     console.log(
       this.posCustomerMasterMainForm.controls.parentPosCode.value.toString()
@@ -1117,6 +1183,10 @@ export class PosCustomerMasterMainComponent implements OnInit {
       );
 
       if (!this.posCustomerMasterMainForm.invalid) {
+        console.log(this.posCustomerMasterMainForm.value.parentPosCode);
+        console.log(this.posCustomerMasterMainForm.value.refBy);
+        console.log(this.posCustomerMasterMainForm.value.nameDesc);
+
         const posCustomer = {
           CODE: this.posCustomerMasterMainForm.value.code || "",
           NAME: this.posCustomerMasterMainForm.value.nameDesc || "",
@@ -1195,8 +1265,8 @@ export class PosCustomerMasterMainComponent implements OnInit {
           LOCATION_PARKING:
             this.posCustomerMasterMainForm.value.loactionandParkingFacility ||
             "",
-          SOURCE: "",
-          PREFERENCE_CONTACT: "",
+          SOURCE: this.posCustomerMasterMainForm.value.sourceOfFund || "",
+          PREFERENCE_CONTACT: this.selectedValuesString || "NO",
           MOBILECODE1:
             this.posCustomerMasterMainForm.value.moblieCountry.toString() || "",
           MOBILECODE2:
@@ -1306,12 +1376,11 @@ export class PosCustomerMasterMainComponent implements OnInit {
           VAT_NUMBER: `${this.comService.emptyToZero(
             this.posCustomerMasterMainForm.value.vat
           )}`,
-          PARENT_CODE:
-            this.posCustomerMasterMainForm.value.parentPosCode.toString(),
-          REFERED_BY: this.posCustomerMasterMainForm.value.refBy.toString(),
+          PARENT_CODE: this.posCustomerMasterMainForm.value.parentPosCode || "",
+          REFERED_BY: this.posCustomerMasterMainForm.value.refBy || "",
           CREDIT_LIMIT:
             this.posCustomerMasterMainForm.value.creditCardLimit || 0,
-          CREDIT_LIMIT_STATUS: false,
+          CREDIT_LIMIT_STATUS: this.isCreditLimit,
           PANCARDNO:
             this.posCustomerMasterMainForm.value.panNo || "111111" || "",
           VOCTYPE: this.vocDetails?.VOCTYPE ?? "",
@@ -1320,7 +1389,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
           VOCDATE: this.vocDetails?.VOCDATE ?? "1900-01-01T00:00:00",
 
           OT_TRANSFER_TIME: "",
-          COUNTRY_DESC: this.posCustomerMasterMainForm.value.countryCode || "",
+          COUNTRY_DESC: this.posCustomerMasterMainForm.value.country || "",
           STATE_DESC: "",
           CITY_DESC: "",
           FAVORITE_CELEB_DESC: "",
@@ -1698,8 +1767,8 @@ export class PosCustomerMasterMainComponent implements OnInit {
       case "refBy":
         this.overlayRefBy.showOverlayPanel(event);
         break;
-      case "countryCode":
-        this.overlayCountryCode.showOverlayPanel(event);
+      case "country":
+        this.overlayCountry.showOverlayPanel(event);
         break;
       case "nationality":
         this.overlayNationality.showOverlayPanel(event);
@@ -1809,5 +1878,55 @@ export class PosCustomerMasterMainComponent implements OnInit {
     } else {
       console.error("No file selected");
     }
+  }
+
+  getContactPreference(event: MatCheckboxChange, value: string) {
+    if (value === "NO") {
+      this.check();
+      this.contactPreferenceWay = [];
+    } else {
+      console.log("Interested");
+    }
+
+    if (event.checked) {
+      if (!this.contactPreferenceWay.includes(value)) {
+        this.contactPreferenceWay.push(value);
+        console.log(`${value} added`);
+      }
+    } else {
+      const index = this.contactPreferenceWay.indexOf(value);
+      if (index !== -1) {
+        this.contactPreferenceWay.splice(index, 1);
+        console.log(`${value} removed`);
+      }
+    }
+
+    this.updateSelectedValuesString();
+  }
+
+  updateSelectedValuesString() {
+    this.selectedValuesString = this.contactPreferenceWay.join("#");
+    console.log("Selected Values:", this.selectedValuesString);
+  }
+
+  populateContactPreferences(selectedValuesString: string) {
+    const selectedValuesArray = selectedValuesString.split("#");
+
+    // Only update the checkboxes, leave other fields untouched
+    this.posCustomerMasterMainForm
+      .get("sms")
+      ?.setValue(selectedValuesArray.includes("SM"));
+    this.posCustomerMasterMainForm
+      .get("phoneCall")
+      ?.setValue(selectedValuesArray.includes("PH"));
+    this.posCustomerMasterMainForm
+      .get("email")
+      ?.setValue(selectedValuesArray.includes("EM"));
+    this.posCustomerMasterMainForm
+      .get("whatsapp")
+      ?.setValue(selectedValuesArray.includes("WH"));
+    this.posCustomerMasterMainForm
+      .get("notInterested")
+      ?.setValue(selectedValuesArray.includes("NO"));
   }
 }
