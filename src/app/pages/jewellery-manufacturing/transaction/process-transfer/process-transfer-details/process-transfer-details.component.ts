@@ -1708,8 +1708,11 @@ export class ProcessTransferDetailsComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
+  fromProcessCodeEmpty: boolean = false;
+  fromWorkerCodeEmpty: boolean = false;
   isFromProcessCodeEmpty(flag: boolean) {
     if (flag) {
+      this.fromProcessCodeEmpty = true;
       this.commonService.formControlSetReadOnly('TO_PROCESS_CODE', true)
       this.commonService.formControlSetReadOnly('FRM_WORKER_CODE', true)
       this.commonService.formControlSetReadOnly('TO_WORKER_CODE', true)
@@ -1722,6 +1725,8 @@ export class ProcessTransferDetailsComponent implements OnInit {
       this.toWorkerMasterSearch.VIEW_ICON = false;
       this.stockCodeSearch.VIEW_ICON = false;
     } else {
+      if(this.fromWorkerCodeEmpty) return
+      this.fromProcessCodeEmpty = false;
       this.commonService.formControlSetReadOnly('TO_PROCESS_CODE', false)
       this.commonService.formControlSetReadOnly('FRM_WORKER_CODE', false)
       this.commonService.formControlSetReadOnly('TO_WORKER_CODE', false)
@@ -1737,6 +1742,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
   }
   isFromWorkerCodeEmpty(flag: boolean) {
     if (flag) {
+      this.fromWorkerCodeEmpty = true;
       this.commonService.formControlSetReadOnly('TO_PROCESS_CODE', true)
       this.commonService.formControlSetReadOnly('TO_WORKER_CODE', true)
       this.commonService.formControlSetReadOnly('TO_PCS', true)
@@ -1747,6 +1753,8 @@ export class ProcessTransferDetailsComponent implements OnInit {
       this.toWorkerMasterSearch.VIEW_ICON = false;
       this.stockCodeSearch.VIEW_ICON = false;
     } else {
+      if(this.fromProcessCodeEmpty) return
+      this.fromWorkerCodeEmpty = false;
       this.commonService.formControlSetReadOnly('TO_PROCESS_CODE', false)
       this.commonService.formControlSetReadOnly('TO_WORKER_CODE', false)
       this.commonService.formControlSetReadOnly('TO_PCS', false)
@@ -1760,7 +1768,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
   }
   /**USE:from porcesscode Validate API call */
   fromProcesscodeValidate(event: any) {
-    if (this.viewMode) return
+    if (this.viewMode || this.fromWorkerCodeEmpty) return
     if (event.target.value == '') {
       this.fromProcessMasterOverlay.showOverlayPanel(event)
       this.isFromProcessCodeEmpty(true)
@@ -1799,6 +1807,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
   }
   // to processcode validate
   toProcesscodeValidate(event: any) {
+    if (this.fromWorkerCodeEmpty || this.fromProcessCodeEmpty) return
     if (event.target.value == '' || this.viewMode) {
       return
     }
@@ -1838,7 +1847,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
   }
   // from Workercode Validate
   fromWorkercodeValidate(event: any) {
-    if (this.viewMode) return
+    if (this.viewMode || this.fromProcessCodeEmpty) return
     if (event.target.value == '') {
       this.fromWorkerMasterOverley.showOverlayPanel(event)
       this.isFromWorkerCodeEmpty(true)
@@ -1878,6 +1887,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
   }
   // to Workercode Validate
   toWorkercodeValidate(event: any) {
+    if (this.fromWorkerCodeEmpty || this.fromProcessCodeEmpty) return
     if (event.target.value == '' || this.viewMode) {
       return
     }
