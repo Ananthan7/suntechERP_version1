@@ -32,6 +32,7 @@ export class ApprovalMasterComponent implements OnInit {
   userCodeEnable: boolean = false;
   editableMode: boolean = false;
   disable: boolean = false;
+  userId: any
 
 
 
@@ -181,6 +182,7 @@ export class ApprovalMasterComponent implements OnInit {
       console.log(value);
       console.log(data);
       this.tableData[value.data.SRNO - 1].USER_CODE = data.UsersName;
+      this.userId = data.UsersName;
     }
   }
 
@@ -380,6 +382,9 @@ export class ApprovalMasterComponent implements OnInit {
   }
 
   submitValidations(form: any) {
+
+    console.log(this.userId);
+    
     if (this.commonService.nullToString(form.code) == '' && this.approvalMasterForm.invalid) {
       this.commonService.toastErrorByMsgId('MSG1124') //"Code cannot be empty"
       return true
@@ -388,17 +393,20 @@ export class ApprovalMasterComponent implements OnInit {
       this.commonService.toastErrorByMsgId('MSG1193')//"description cannot be empty"
       return true
     }
+    
+    else if (this.userId == undefined) {
+      console.log("In");
+      this.toastr.error('User Name Cannot be empty')
+      // return Swal.fire({
+      //   title: '',
+      //   text: 'User Name Cannot be empty',
+      //   icon: 'error',
+      //   confirmButtonColor: '#336699',
+      //   confirmButtonText: 'Ok'
+      // })
+    }
     else if (this.checkFinalApproval()) {
-      // this.commonService.toastErrorByMsgId('MSG81520')//Final option should be selected
-      // return true
-
-      Swal.fire({
-        title: '',
-        text: 'User Name Cannot be empty',
-        icon: 'error',
-        confirmButtonColor: '#336699',
-        confirmButtonText: 'Ok'
-      })
+      this.commonService.toastErrorByMsgId('MSG81520')//Final option should be selected
       return true
     }
     return false;

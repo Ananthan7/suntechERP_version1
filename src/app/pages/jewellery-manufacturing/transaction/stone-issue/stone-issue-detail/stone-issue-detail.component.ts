@@ -197,6 +197,7 @@ export class StoneIssueDetailComponent implements OnInit {
           break;
         case 'EDIT':
           this.editMode = true;
+          this.viewMode = true;
           break;
         // Add other cases if needed
         default:
@@ -754,8 +755,8 @@ export class StoneIssueDetailComponent implements OnInit {
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
       .subscribe((result) => {
         this.comService.closeSnackBarMsg()
-        if (result.dynamicData && result.dynamicData[0].length > 0) {
-          let stoneIssueGridData = result.dynamicData[0]
+        if (result.dynamicData && result.dynamicData.length > 0) {
+          let stoneIssueGridData = result.dynamicData
           console.log(stoneIssueGridData, 'data')
           // this.tableData = result.dynamicData[1] || []
           // this.columnhead1 = Object.keys(this.tableData[0])

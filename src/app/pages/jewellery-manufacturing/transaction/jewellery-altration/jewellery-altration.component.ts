@@ -368,13 +368,12 @@ export class JewelleryAltrationComponent implements OnInit {
       // Show a confirmation dialog for duplicate entries
       const result = await Swal.fire({
         title: 'Duplicate Stock Code',
-        text: 'This Stock Code entry is already available in detail. Do you wish to continue?',
+        text: 'This Stock Code entry is already available in detail. Do you wish to cancel?',
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonColor: '#3085d6',
+        showConfirmButton: false,  // Hide the confirm button
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, continue!',
-        cancelButtonText: 'No, cancel'
+        cancelButtonText: 'Cancel'
       });
 
       if (result.isConfirmed) {

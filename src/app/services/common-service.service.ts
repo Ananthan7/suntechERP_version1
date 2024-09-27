@@ -855,7 +855,6 @@ export class CommonServiceService {
   getqueryParamVocType() {
     let queryParamAPI
     this.route.queryParams.subscribe((data: any) => {
-      console.log("helloooo",data)
       queryParamAPI = data.VocType;
     });
     return queryParamAPI

@@ -1014,10 +1014,6 @@ export class MetalLabourchargeMasterComponent implements OnInit {
       return true
     }
 
-    else if (this.commonService.nullToString(form.wastage) == '' || this.commonService.nullToString(form.wastage) == '0.00') {
-      this.commonService.toastErrorByMsgId('MSG7731')//"Selling Rate cannot be empty"
-      return true
-    }
     else if (this.commonService.nullToString(form.metalcost_rate) == '' || this.commonService.nullToString(form.metalcost_rate) == '0.00') {
       this.commonService.toastErrorByMsgId('MSG7729')//"Selling Rate cannot be empty"
       return true
