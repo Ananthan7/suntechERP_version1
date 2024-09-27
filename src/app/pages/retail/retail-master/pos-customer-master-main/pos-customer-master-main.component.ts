@@ -85,7 +85,12 @@ export class PosCustomerMasterMainComponent implements OnInit {
   editdata: any;
   isCreditLimit: any;
   contactPreferenceWay: any[] = [];
-  selectedValuesString: any;
+  knowAboutWay: any[] = [];
+  intrestedInWay: any[] = [];
+
+  selectedContactString: any;
+  selectedknowAboutString: any;
+  selectedIntrestedInString: any;
 
   amlNameValidationData = false;
   dummyDate = "1900-01-01T00:00:00";
@@ -447,7 +452,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
     nextVisit: [""],
     occupation: [""],
     createdBranch: [""],
-    openedOn: [""],
+    openedOn: [this.currentDate],
     voucher: [""],
     saleDate: [""],
     branchLoc: [""],
@@ -517,10 +522,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
     this.amlValidation = this.comService.allbranchMaster.AMLNAMEVALIDATION;
     this.posCustomerMasterMainForm.controls.weddate.disable();
     this.countryList();
-    console.log(this.generatedCustomerCode);
-
     this.getDropDownStatus();
-
     this.posCustomerMasterMainForm.controls["createdBranch"].disable();
   }
 
@@ -549,8 +551,6 @@ export class PosCustomerMasterMainComponent implements OnInit {
           res.join(" ")
         );
       }
-      // if (source != "byAPI")
-      //   this.renderer.selectRootElement("#fcn_cust_detail_phone")?.focus();
     } else {
       this.posCustomerMasterMainForm.controls.firstName.setValue("");
       this.posCustomerMasterMainForm.controls.middleName.setValue("");
@@ -597,8 +597,6 @@ export class PosCustomerMasterMainComponent implements OnInit {
   }
 
   setvalues(setData: any) {
-    console.log(setData);
-    console.log(setData.CUST_TYPE);
 
     this.posCustomerMasterMainForm.controls.nameDesc.setValue(setData.NAME);
     this.posCustomerMasterMainForm.controls.name.setValue(
@@ -705,11 +703,69 @@ export class PosCustomerMasterMainComponent implements OnInit {
       setData.POSCUSTIDEXP_DATE
     );
 
-    this.posCustomerMasterMainForm.controls.sourceOfFund.setValue(
-      setData.SOURCE
+    this.posCustomerMasterMainForm.controls.reasonOfPurchase.setValue(
+      setData.REASON_OF_PURCHASE
+    );
+    this.posCustomerMasterMainForm.controls.gifrPurchased.setValue(
+      setData.GIFT_PURCHASED_FOR
     );
 
-    // this.posCustomerMasterMainForm.controls.picture.setValue(setData.PICTURE);
+    this.posCustomerMasterMainForm.controls.occasionOfPurchase.setValue(
+      setData.PURCHASE_OCCASION
+    );
+    this.posCustomerMasterMainForm.controls.nextVisit.setValue(
+      setData.NEXT_VISIT
+    );
+    this.posCustomerMasterMainForm.controls.ageGroup.setValue(
+      setData.AGE_GROUP
+    );
+    this.posCustomerMasterMainForm.controls.staffCourtesy.setValue(
+      setData.STAFF_COURTESY
+    );
+
+    this.posCustomerMasterMainForm.controls.productSelection.setValue(
+      setData.PRODUCT_SELECTION
+    );
+
+    this.posCustomerMasterMainForm.controls.service.setValue(setData.SERVICE);
+
+    this.posCustomerMasterMainForm.controls.makingChanges.setValue(
+      setData.MAKING_CHARGES
+    );
+    this.posCustomerMasterMainForm.controls.brand.setValue(setData.BRAND_NAME);
+
+    this.posCustomerMasterMainForm.controls.buyBackPolicy.setValue(
+      setData.BUY_BACK
+    );
+    this.posCustomerMasterMainForm.controls.loactionandParkingFacility.setValue(
+      setData.LOCATION_PARKING
+    );
+    this.posCustomerMasterMainForm.controls.productKnowledgeOfOurStaff.setValue(
+      setData.PRODUCT_KNOWLEDGE
+    );
+    this.posCustomerMasterMainForm.controls.locationandAmbienceOfShop.setValue(
+      setData.PRODUCT_KNOWLEDGE
+    );
+    this.posCustomerMasterMainForm.controls.varietyAndQualityOfJewellery.setValue(
+      setData.VARIETY_QUALITY
+    );
+    this.posCustomerMasterMainForm.controls.overallExperience.setValue(
+      setData.OVERALL_EXP
+    );
+    this.posCustomerMasterMainForm.controls.showroomAccessibility.setValue(
+      setData.SHOWROOMACCESSIBILITY
+    );
+    this.posCustomerMasterMainForm.controls.productRangeAvailability.setValue(
+      setData.PRODUCTRANGEAVAILABILITY
+    );
+    this.populateKnowAbout(setData.SOURCE);
+
+    this.populateContactPreferences(setData.PREFERENCE_CONTACT);
+
+    this.populateIntrestedIn(setData.INTERESTED_IN);
+    this.posCustomerMasterMainForm.controls.unNumber.setValue(
+      setData.UN_NUMBER
+    );
     this.posCustomerMasterMainForm.controls.voucher.setValue(
       setData.SALVOCTYPE_NO
     );
@@ -747,9 +803,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
     this.posCustomerMasterMainForm.controls.deliveryAddress.setValue(
       setData.ADDRESS_DELIVARY
     );
-    // this.posCustomerMasterMainForm.controls.deliveryAddress.setValue(
-    //   setData.INTERESTED_IN
-    // );
+
     this.posCustomerMasterMainForm.controls.bloodGroup.setValue(
       setData.BLOOD_GROUP
     );
@@ -761,14 +815,15 @@ export class PosCustomerMasterMainComponent implements OnInit {
       setData.DESIGNATION
     );
     this.posCustomerMasterMainForm.controls.amltype.setValue(setData.AML_TYPE);
-    this.posCustomerMasterMainForm.controls.unNumber.setValue(
-      setData.UN_NUMBER
-    );
+
     this.posCustomerMasterMainForm.controls.name1.setValue(setData.NAME_1);
     this.posCustomerMasterMainForm.controls.name2.setValue(setData.NAME_2);
     this.posCustomerMasterMainForm.controls.name3.setValue(setData.NAME_3);
     this.posCustomerMasterMainForm.controls.name4.setValue(setData.NAME_4);
     this.posCustomerMasterMainForm.controls.name5.setValue(setData.NAME_5);
+    this.posCustomerMasterMainForm.controls.dob1.setValue(
+      setData.DATE_OF_BIRTH
+    );
     this.posCustomerMasterMainForm.controls.dob2.setValue(setData.DOB_2);
     this.posCustomerMasterMainForm.controls.dob3.setValue(setData.DOB_3);
     this.posCustomerMasterMainForm.controls.dob4.setValue(setData.DOB_4);
@@ -1012,7 +1067,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
     console.log(e);
 
     if (!this.posCustomerMasterMainForm.controls.country.value) {
-      return alert("please Select the Country Fisrt ");
+      return alert("please Select the Country First ");
     }
 
     let value = "United Arab Emirates";
@@ -1183,9 +1238,6 @@ export class PosCustomerMasterMainComponent implements OnInit {
       );
 
       if (!this.posCustomerMasterMainForm.invalid) {
-        console.log(this.posCustomerMasterMainForm.value.parentPosCode);
-        console.log(this.posCustomerMasterMainForm.value.refBy);
-        console.log(this.posCustomerMasterMainForm.value.nameDesc);
 
         const posCustomer = {
           CODE: this.posCustomerMasterMainForm.value.code || "",
@@ -1265,8 +1317,9 @@ export class PosCustomerMasterMainComponent implements OnInit {
           LOCATION_PARKING:
             this.posCustomerMasterMainForm.value.loactionandParkingFacility ||
             "",
-          SOURCE: this.posCustomerMasterMainForm.value.sourceOfFund || "",
-          PREFERENCE_CONTACT: this.selectedValuesString || "NO",
+          SOURCE: this.selectedknowAboutString || "",
+          PREFERENCE_CONTACT: this.selectedContactString || "NO",
+
           MOBILECODE1:
             this.posCustomerMasterMainForm.value.moblieCountry.toString() || "",
           MOBILECODE2:
@@ -1276,7 +1329,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
             this.posCustomerMasterMainForm.value.officialAddress || "",
           ADDRESS_DELIVARY:
             this.posCustomerMasterMainForm.value.deliveryAddress || "",
-          INTERESTED_IN: "",
+          INTERESTED_IN: this.selectedIntrestedInString || "",
           BLOOD_GROUP: this.posCustomerMasterMainForm.value.bloodGroup || "",
           NO_OF_CHILDREN:
             Number(this.posCustomerMasterMainForm.value.noOfChildren) || 0,
@@ -1438,15 +1491,15 @@ export class PosCustomerMasterMainComponent implements OnInit {
         //     ? `PosCustomerMaster/UpdateCustomerMaster/Code=${posCustomer.CODE}`
         //     : 'PosCustomerMaster/InsertCustomerMaster';
 
-        let apiCtrl;
+        let API;
         let method;
         let custResponse;
         if (this.content?.FLAG == "EDIT") {
-          apiCtrl = `PosCustomerMaster/UpdateCustomerMaster/Code=${posCustomer.CODE}`;
-          custResponse = this.apiService.putDynamicAPI(apiCtrl, posCustomer);
+          API = `PosCustomerMaster/UpdateCustomerMaster/${posCustomer.CODE}`;
+          custResponse = this.apiService.putDynamicAPI(API, posCustomer);
         } else {
-          apiCtrl = "PosCustomerMaster/InsertCustomerMaster";
-          custResponse = this.apiService.postDynamicAPI(apiCtrl, posCustomer);
+          API = "PosCustomerMaster/InsertCustomerMaster";
+          custResponse = this.apiService.postDynamicAPI(API, posCustomer);
         }
 
         custResponse.subscribe(async (data) => {
@@ -1868,15 +1921,72 @@ export class PosCustomerMasterMainComponent implements OnInit {
   }
 
   onFileSelected(event: any) {
-    console.log("Clicked");
-
     const file: File = event.target.files[0];
+    console.log(file);
+    
 
     if (file) {
-      this.image = file; // Store the selected image in the `buddy` variable
-      console.log("Image stored in buddy:", this.image);
+      const formData = new FormData();
+      formData.append(
+        "CODE",
+        this.existCustomerCode || this.generatedCustomerCode
+      );
+      formData.append("File", file);
+
+      // Ensure the API URL is correct
+      let API = `PosCustomerMaster/InsertPOSCustAttachments`;
+
+      console.log("FormData:", formData);
+
+      let Sub: Subscription = this.apiService
+        .postDynamicAPI(API, formData)
+        .subscribe(
+          (result) => {
+            console.log("API Response:", result);
+
+            // Safely handle the result object
+            if (result && result.status && result.status.trim() === "Success") {
+              Swal.fire({
+                title: "Success",
+                text: "Image uploaded successfully!",
+                icon: "success",
+                confirmButtonColor: "#336699",
+                confirmButtonText: "Ok",
+              });
+            } else {
+              // Handle cases where the result is not successful or undefined
+              Swal.fire({
+                title: "Upload Failed",
+                text:
+                  result?.message || "No response received. Please try again.",
+                icon: "error",
+                confirmButtonColor: "#336699",
+                confirmButtonText: "Ok",
+              });
+            }
+          },
+          (err) => {
+            // Handle HTTP or API error
+            console.error("API Error:", err);
+            Swal.fire({
+              title: "Error",
+              text: err.message || "An error occurred during the upload.",
+              icon: "error",
+              confirmButtonColor: "#336699",
+              confirmButtonText: "Ok",
+            });
+          }
+        );
+      this.subscriptions.push(Sub);
     } else {
       console.error("No file selected");
+      Swal.fire({
+        title: "No File Selected",
+        text: "Please select a file before uploading.",
+        icon: "error",
+        confirmButtonColor: "#336699",
+        confirmButtonText: "Ok",
+      });
     }
   }
 
@@ -1901,16 +2011,12 @@ export class PosCustomerMasterMainComponent implements OnInit {
       }
     }
 
-    this.updateSelectedValuesString();
+    this.selectedContactString = this.contactPreferenceWay.join("#");
+    console.log("Selected Values:", this.selectedContactString);
   }
 
-  updateSelectedValuesString() {
-    this.selectedValuesString = this.contactPreferenceWay.join("#");
-    console.log("Selected Values:", this.selectedValuesString);
-  }
-
-  populateContactPreferences(selectedValuesString: string) {
-    const selectedValuesArray = selectedValuesString.split("#");
+  populateContactPreferences(selectedContactString: string) {
+    const selectedValuesArray = selectedContactString.split("#");
 
     // Only update the checkboxes, leave other fields untouched
     this.posCustomerMasterMainForm
@@ -1928,5 +2034,100 @@ export class PosCustomerMasterMainComponent implements OnInit {
     this.posCustomerMasterMainForm
       .get("notInterested")
       ?.setValue(selectedValuesArray.includes("NO"));
+  }
+
+  getKnowAbout(event: MatCheckboxChange, value: any) {
+    if (value === "SM") {
+      this.toggle();
+      //this.knowAboutWay = [];
+    } //else {
+    //console.log("No SM");
+    //}
+
+    if (event.checked) {
+      if (!this.knowAboutWay.includes(value)) {
+        this.knowAboutWay.push(value);
+        console.log(`${value} added`);
+      }
+    } else {
+      const index = this.knowAboutWay.indexOf(value);
+      if (index !== -1) {
+        this.knowAboutWay.splice(index, 1);
+        console.log(`${value} removed`);
+      }
+    }
+
+    this.selectedknowAboutString = this.knowAboutWay.join("#");
+    console.log("Selected Values:", this.selectedknowAboutString);
+  }
+
+  populateKnowAbout(selectedKnowAboutString: string) {
+    const selectedValuesArray = selectedKnowAboutString.split("#");
+
+    // Only update the checkboxes, leave other fields untouched
+    this.posCustomerMasterMainForm
+      .get("tv")
+      ?.setValue(selectedValuesArray.includes("TV"));
+    this.posCustomerMasterMainForm
+      .get("outdoor")
+      ?.setValue(selectedValuesArray.includes("OU"));
+    this.posCustomerMasterMainForm
+      .get("online")
+      ?.setValue(selectedValuesArray.includes("ON"));
+    this.posCustomerMasterMainForm
+      .get("socialMedia")
+      ?.setValue(selectedValuesArray.includes("SM"));
+
+    this.posCustomerMasterMainForm
+      .get("radio")
+      ?.setValue(selectedValuesArray.includes("RA"));
+
+    this.posCustomerMasterMainForm
+      .get("other")
+      ?.setValue(selectedValuesArray.includes("OT"));
+  }
+
+  getIntrestedIn(event: MatCheckboxChange, value: any) {
+    if (event.checked) {
+      if (!this.intrestedInWay.includes(value)) {
+        this.intrestedInWay.push(value);
+        console.log(`${value} added`);
+      }
+    } else {
+      const index = this.intrestedInWay.indexOf(value);
+      if (index !== -1) {
+        this.intrestedInWay.splice(index, 1);
+        console.log(`${value} removed`);
+      }
+    }
+
+    this.selectedIntrestedInString = this.intrestedInWay.join("#");
+    console.log("Selected Values:", this.selectedIntrestedInString);
+  }
+
+  populateIntrestedIn(selectedKnowAboutString: string) {
+    const selectedValuesArray = selectedKnowAboutString.split("#");
+
+    // Only update the checkboxes, leave other fields untouched
+    this.posCustomerMasterMainForm
+      .get("promotionalOffers")
+      ?.setValue(selectedValuesArray.includes("PR"));
+    this.posCustomerMasterMainForm
+      .get("sportsEvents")
+      ?.setValue(selectedValuesArray.includes("SP"));
+    this.posCustomerMasterMainForm
+      .get("charityEvents")
+      ?.setValue(selectedValuesArray.includes("CH"));
+    this.posCustomerMasterMainForm
+      .get("stageShows")
+      ?.setValue(selectedValuesArray.includes("ST"));
+
+    this.posCustomerMasterMainForm
+      .get("seminars")
+      ?.setValue(selectedValuesArray.includes("SE"));
+
+    this.posCustomerMasterMainForm
+      .get("personalSkills")
+      ?.setValue(selectedValuesArray.includes("PE"));
   }
 }
