@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
@@ -9,13 +9,13 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 })
 export class AsOnDateComponent implements OnInit {
   dateForm!: FormGroup;
-
+  @Output() selectedDate = new EventEmitter();
 
   constructor(private datePipe: DatePipe, private fb: FormBuilder) { }
 
   ngOnInit(): void {
     this.dateForm = this.fb.group({
-      date: [null],
+      date: [new Date()],
     });
 
   }
@@ -26,7 +26,7 @@ export class AsOnDateComponent implements OnInit {
   
     if (!isNaN(parsedDate.getTime())) {
       const formattedDate = this.datePipe.transform(parsedDate, 'dd/MM/yyyy');
-      event.target.value = formattedDate;
+      this.selectedDate.emit({'asOnDate': formattedDate})
     } else {
       event.target.value = ''; 
       console.error('Invalid date input');
