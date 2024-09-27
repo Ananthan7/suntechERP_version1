@@ -22,14 +22,14 @@
       </div>
 
       <div class="col-md-7">
-          <app-date (selectedDate)="setDateValue($event)"></app-date>
+          <app-date (selectedDate)="setDateValue($event)"  [dateValue]="dateToPass"></app-date>
       </div> 
    </div>
 
 
 
     <div class="row mb-3 border">
-      <div class="col-md-3 border">
+      <!-- <div class="col-md-3 border"> -->
         <!-- <div class="row">
           <label for="inputPassword" class="col-sm-5 col-form-label">Branch :</label>
           <div class="col-sm-7">
@@ -55,29 +55,33 @@
           </div>
         </div> -->
 
-      </div>
+      <!-- </div> -->
       <div class="col-md-2 border">
         <div class="row mb-3 pt-1 border">
           <h6 id="ID002">Division</h6>
         </div>
 
-        <!-- <div class="row pt-1">
-                        <mat-radio-button value="1">Diamond</mat-radio-button>
-                        <mat-radio-button value="2" class="pl-3">Metal</mat-radio-button>
-                    </div> -->
-
+        <div class="row pt-1">
+          <mat-radio-button value="1">Diamond</mat-radio-button>
+          <mat-radio-button value="2" class="pl-3">Metal</mat-radio-button>
+        </div>
       </div>
+
       <div class="col-md-2 border">
         <div class="row mb-3 pt-1 border">
           <h6 id="ID001">Show</h6>
         </div>
 
-        <!-- <div class="row pt-1">
-                        <mat-radio-button value="1">Summary</mat-radio-button>
-                        <mat-radio-button value="2" class="pl-3">Detail</mat-radio-button>
-                    </div> -->
-
+        <div class="row pt-1">
+          <mat-radio-group formControlName="showSelection">
+            <div class="radio-group">
+              <mat-radio-button value="1">Summary</mat-radio-button>
+              <mat-radio-button value="2" class="pl-3">Detail</mat-radio-button>
+            </div>
+          </mat-radio-group>
+        </div>
       </div>
+      
       <div class="col-md-5">
         <div class="row">
 
@@ -85,7 +89,7 @@
             <div class="position-relative d-flex">
               <mat-form-field appearance="outline" style="width: 100%;">
                 <input matInput type="text" placeholder="POS Target Analysis" formControlName="POSTargetAnalysis" />
-                <master-search class="masterSearch"></master-search>
+                <!-- <master-search class="masterSearch"></master-search> -->
               </mat-form-field>
             </div>
           </div>
@@ -136,29 +140,28 @@
       </mat-tab-group>
     </div>
 
-
-    <dx-popup [width]="300" [height]="180" [showTitle]="true" container=".dx-viewport"
+    <dx-popup [width]="300" [height]="180" [showTitle]="true" container=".dx-viewport" *ngIf="popupVisible"
     title="Template Data" [dragEnabled]="false" [showCloseButton]="false" (onHidden)="popupClosed()"
     [visible]="popupVisible">
-    <div class="popup-content">
-    <div class="form-group">
-        <label for="T_Name">Name:</label>
-        <input type="text" id="T_Name" class="form-control" formControlName="templateName"/>
-    </div>
-    <div class="button-group d-flex">
-        <button mat-flat-button [ngClass]="{SaveNew_template: templateNameHasValue,
-            'btn-m-r-10': true, 'demo-button': true, 'btn-width': true, 'mx-1': true}"
-        (click)="saveTemplate_DB()">
-        {{ templateNameHasValue ? "Save as New Template" : "Save" }}
-        </button>
-        <button  mat-flat-button class="btn-m-r-10 btn-width mx-1 cancelBTN"
-        (click)="popupClosed()">
-        Cancel</button>
-    </div>
-    <br />
-    <br />
-    <br />
-    </div>
+      <div class="popup-content">
+      <div class="form-group">
+          <label for="T_Name">Name:</label>
+          <input type="text" id="T_Name" class="form-control" formControlName="templateName"/>
+      </div>
+      <div class="button-group d-flex">
+          <button mat-flat-button [ngClass]="{SaveNew_template: templateNameHasValue,
+              'btn-m-r-10': true, 'demo-button': true, 'btn-width': true, 'mx-1': true}"
+          (click)="saveTemplate_DB()">
+          {{ templateNameHasValue ? "Save as New Template" : "Save" }}
+          </button>
+          <button  mat-flat-button class="btn-m-r-10 btn-width mx-1 cancelBTN"
+          (click)="popupClosed()">
+          Cancel</button>
+      </div>
+      <br />
+      <br />
+      <br />
+      </div>
     </dx-popup>
 
     <div class="row mt-2 justify-content-end mx-2">

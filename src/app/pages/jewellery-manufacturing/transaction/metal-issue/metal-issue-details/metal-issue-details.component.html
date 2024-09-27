@@ -260,13 +260,13 @@
                                             <input type="text" matInput
                                                 formControlName="DIVCODE"
                                                 placeholder="Div Code"
-                                                readonly />
-                                        </mat-form-field>
-                                        <!-- <master-search  class="masterSearch"
+                                                (focusout)="SPvalidateLookupField($event,divCodeData,'DIVCODE')" />
+                                            <master-search class="masterSearch"
                                                 [MasterSearchData]="divCodeData"
-                                                (newRowClick)="stockCodeSelected($event)"
+                                                (newRowClick)="divCodeSelected($event)"
                                                 *ngIf="!masterMetalChecked">
-                                            </master-search> -->
+                                            </master-search>
+                                        </mat-form-field>
                                     </div>
                                     <div class="col-md-6">
 

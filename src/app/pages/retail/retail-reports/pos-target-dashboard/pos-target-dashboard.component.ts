@@ -34,13 +34,17 @@ export class PosTargetDashboardComponent implements OnInit {
     fromdate : [''],
     todate : [''],
     POSTargetAnalysis: [''],
-    templateName: ['']
+    templateName: [''],
+    showSelection: ['']
   });
   branchDivisionControlsTooltip: any;
   formattedBranchDivisionData: any;
   fetchedBranchData: any[] =[];
   popupVisible: boolean = false;
   templateNameHasValue: boolean= false;
+  logDataParam: any;
+  dateToPass: { fromDate: string; toDate: string } = { fromDate: '', toDate: '' };
+
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -54,6 +58,20 @@ export class PosTargetDashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.prefillScreenValues()
+
+    this.logDataParam =  {
+      "VOCTYPE": this.commonService.getqueryParamVocType() || "",
+      "REFMID": "",
+      "USERNAME": this.commonService.userName,
+      "MODE": "PRINT",
+      "DATETIME": this.commonService.formatDateTime(new Date()),
+      "REMARKS":"",
+      "SYSTEMNAME": "",
+      "BRANCHCODE": this.commonService.branchCode,
+      "VOCNO": "",
+      "VOCDATE": "",
+      "YEARMONTH" : this.commonService.yearSelected
+    }
   }
 
   branchCodeData: MasterSearchModel = {
@@ -196,12 +214,6 @@ export class PosTargetDashboardComponent implements OnInit {
     this.POSTargetStatusForm.controls.branch.setValue(this.formattedBranchDivisionData);
   }
 
-  prefillScreenValues(){
-    if ( Object.keys(this.content).length > 0) {
-      //  this.templateNameHasValue = !!(this.content?.TEMPLATE_NAME);
-    }
-  }
-
   popupClosed(){
     if (this.content && Object.keys(this.content).length > 0) {
       console.log(this.content)
@@ -215,6 +227,14 @@ export class PosTargetDashboardComponent implements OnInit {
     }
   }
 
+  formatDateToYYYYMMDD(dateString: any) {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+  
   saveTemplate(){
     this.popupVisible = true;
     console.log(this.POSTargetStatusForm.controls.templateName.value)
@@ -233,7 +253,11 @@ export class PosTargetDashboardComponent implements OnInit {
               "ISDEFAULT": 1
             },
             "CONTROL_DETAIL": {
-             
+              "str_CurrFyear": localStorage.getItem('YEAR'),
+              "strAsOnDate": this.formatDateToYYYYMMDD(this.POSTargetStatusForm.controls.todate.value),
+              "StrBranchList": this.POSTargetStatusForm.controls.branch.value,
+              "intShowSummary": this.POSTargetStatusForm.controls.showSelection.value,
+              "LOGDATA ": JSON.stringify(this.logDataParam)
             }
         })
       }
@@ -263,10 +287,15 @@ export class PosTargetDashboardComponent implements OnInit {
   }
 
   previewClick() {
+    debugger
     let postData = {
-      "SPID": "0118",
+      "SPID": "0154",
       "parameter": {
-        
+        "str_CurrFyear": localStorage.getItem('YEAR'),
+        "strAsOnDate": this.formatDateToYYYYMMDD(this.POSTargetStatusForm.controls.todate.value),
+        "StrBranchList": this.POSTargetStatusForm.controls.branch.value,
+        "intShowSummary": this.POSTargetStatusForm.controls.showSelection.value,
+        "LOGDATA ": JSON.stringify(this.logDataParam)
       }
     }
     console.log(postData)  
@@ -283,7 +312,7 @@ export class PosTargetDashboardComponent implements OnInit {
         console.error('Failed to open the print window. Possibly blocked by a popup blocker.');
         return;
       }
-      let printContent = data[0][0].HTMLINPUT;
+      let printContent = data[0][0].Column1;
       WindowPrt.document.write(printContent);
       WindowPrt.document.close();
       WindowPrt.focus();  
@@ -313,6 +342,24 @@ export class PosTargetDashboardComponent implements OnInit {
     });      
   }
 
+  prefillScreenValues(){
+    if ( Object.keys(this.content).length > 0) {
+      // console.log(' pREfECTHED VALUES FOR THE SCREEN', this.content)
+      this.templateNameHasValue = !!(this.content?.TEMPLATE_NAME);
+      this.POSTargetStatusForm.controls.templateName.setValue(this.content?.TEMPLATE_NAME);
+
+      var paresedItem = JSON.parse(this.content?.CONTROL_LIST_JSON);
+      this.POSTargetStatusForm.controls.branch.setValue(paresedItem?.CONTROL_DETAIL.StrBranchList);
+
+      this.dateToPass = {
+        fromDate:  paresedItem?.CONTROL_DETAIL.strAsOnDate,
+        toDate: paresedItem?.CONTROL_DETAIL.strAsOnDate
+      };
+
+      this.POSTargetStatusForm.controls.showSelection.setValue(paresedItem?.CONTROL_DETAIL.intShowSummary);
+      console.log('parsed data', paresedItem?.CONTROL_DETAIL )
+    }
+  }
 
 
 }

@@ -56,6 +56,7 @@
                     formControlName="parentPosCode"
                   />
                   <master-search
+                    *ngIf="flag !== 'VIEW'"
                     (focusout)="openTab($event, 'parentPosCode')"
                     #overlayParentPosCode
                     [MasterSearchData]="parentPosCode"
@@ -85,6 +86,7 @@
                     formControlName="refBy"
                   />
                   <master-search
+                    *ngIf="flag !== 'VIEW'"
                     (focusout)="openTab($event, 'refBy')"
                     #overlayRefBy
                     [MasterSearchData]="refByCode"
@@ -142,13 +144,19 @@
           <div class="col-md-4">
             <div class="row mb-1">
               <div class="col-md-6 mt-1">
-                <mat-checkbox formControlName="creditCardLimitCheck" id="ID006"
-                  >Credit Limit</mat-checkbox
+                <mat-checkbox
+                  (change)="creditLimitChecker($event)"
+                  formControlName="creditCardLimitCheck"
+                  id="ID006"
                 >
+                  Credit Limit
+                </mat-checkbox>
               </div>
+
               <div class="col-md-6">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
+                    [readOnly]="flag === 'VIEW'"
                     matInput
                     type="text"
                     [maxLength]="21"
@@ -386,7 +394,7 @@
                   <input
                     readonly="true"
                     matInput="text"
-                    formControlName="country"
+                    formControlName="countryCode"
                     required
                   />
                 </mat-form-field>
@@ -399,10 +407,11 @@
                   <input
                     readonly="true"
                     matInput="text"
-                    formControlName="countryCode"
+                    formControlName="country"
                   />
                   <master-search
-                    (focusout)="openTab($event, 'countryCode')"
+                    *ngIf="flag !== 'VIEW'"
+                    (focusout)="openTab($event, 'country')"
                     #overlayCountryCode
                     [MasterSearchData]="countryCodeData"
                     class="masterSearch"
@@ -421,8 +430,9 @@
               <div class="col-md-3">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
+                    [readonly]="flag === 'VIEW'"
                     matInput
-                    type="number"
+                    type="text"
                     style="text-align: end"
                     formControlName="moblieCountry"
                   />
@@ -431,6 +441,7 @@
               <div class="col-md-6">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
+                    [readonly]="flag === 'VIEW'"
                     matInput
                     type="number"
                     formControlName="moblieNumber"
@@ -451,8 +462,9 @@
               <div class="col-md-3">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
+                    [readonly]="flag === 'VIEW'"
                     matInput
-                    type="number"
+                    type="text"
                     formControlName="moblie1Country"
                     class="text-right"
                   />
@@ -461,6 +473,7 @@
               <div class="col-md-6">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
+                    [readonly]="flag === 'VIEW'"
                     matInput
                     type="number"
                     formControlName="moblie1Number"
@@ -482,8 +495,9 @@
               <div class="col-md-3">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
+                    [readonly]="flag === 'VIEW'"
                     matInput
-                    type="number"
+                    type="text"
                     formControlName="telRCountry"
                     class="text-right"
                   />
@@ -492,6 +506,7 @@
               <div class="col-md-6">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
+                    [readonly]="flag === 'VIEW'"
                     matInput
                     type="number"
                     formControlName="telRNumber"
@@ -513,7 +528,8 @@
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
                     matInput
-                    type="number"
+                    [readonly]="flag === 'VIEW'"
+                    type="text"
                     formControlName="tel0Country"
                     class="text-right"
                   />
@@ -523,6 +539,7 @@
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
                     matInput
+                    [readonly]="flag === 'VIEW'"
                     type="number"
                     formControlName="tel0number"
                     (input)="onInput($event, 15)"
@@ -549,6 +566,7 @@
                   <input
                     type="email"
                     matInput
+                    [readonly]="flag === 'VIEW'"
                     formControlName="emailId"
                     required
                     (input)="onInput($event, 40)"
@@ -585,6 +603,7 @@
                   <input
                     class="text-right"
                     matInput
+                    [readonly]="flag === 'VIEW'"
                     type="number"
                     (input)="onInput($event, 15)"
                     (keydown)="preventInvalidInput($event)"
@@ -606,6 +625,7 @@
                   appearance="outline"
                 >
                   <input
+                    [readonly]="flag === 'VIEW'"
                     matInput="text"
                     maxlength="6"
                     formControlName="custType"
@@ -630,7 +650,7 @@
                 Nationality *
               </label>
 
-              <div *ngIf="flag === 'VIEW'; else NeditMode" class="col-md-8">
+              <!-- <div *ngIf="flag === 'VIEW'; else NeditMode" class="col-md-8">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
                     readonly="true"
@@ -639,26 +659,27 @@
                     formControlName="nationality"
                   />
                 </mat-form-field>
-              </div>
+              </div> -->
 
               <!-- Else, show the dropdown -->
-              <ng-template #NeditMode>
-                <div class="col-md-8">
-                  <mat-form-field style="width: 100%" appearance="outline">
-                    <mat-select
-                      formControlName="nationality"
-                      (selectionChange)="onCountrySelect($event.value)"
+              <!-- <ng-template #NeditMode> -->
+              <div class="col-md-8">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <mat-select
+                    [disabled]="flag === 'VIEW'"
+                    formControlName="nationality"
+                    (selectionChange)="onCountrySelect($event.value)"
+                  >
+                    <mat-option
+                      *ngFor="let data of countryListData"
+                      [value]="data.COUNTRY_CODE_ISO2"
                     >
-                      <mat-option
-                        *ngFor="let data of countryListData"
-                        [value]="data.COUNTRY_CODE_ISO2"
-                      >
-                        {{ data.COUNTRY_NAME }}
-                      </mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                </div>
-              </ng-template>
+                      {{ data.COUNTRY_NAME }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <!-- </ng-template> -->
 
               <!-- <mat-form-field
                   style="width: -webkit-fill-available"
@@ -686,7 +707,7 @@
                 id="ID021"
                 >State</label
               >
-
+              <!-- 
               <div *ngIf="flag === 'VIEW'; else SeditMode" class="col-md-8">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
@@ -696,25 +717,26 @@
                     formControlName="state"
                   />
                 </mat-form-field>
-              </div>
+              </div> -->
 
-              <ng-template #SeditMode>
-                <div class="col-md-8">
-                  <mat-form-field style="width: 100%" appearance="outline">
-                    <mat-select
-                      (selectionChange)="onCitySelect($event.value)"
-                      formControlName="state"
+              <!-- <ng-template #SeditMode> -->
+              <div class="col-md-8">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <mat-select
+                    [disabled]="flag === 'VIEW'"
+                    (selectionChange)="onCitySelect($event.value)"
+                    formControlName="state"
+                  >
+                    <mat-option
+                      *ngFor="let state of stateListData"
+                      [value]="state.CODE"
                     >
-                      <mat-option
-                        *ngFor="let state of stateListData"
-                        [value]="state.CODE"
-                      >
-                        {{ state.NAME || "State Not available" }}
-                      </mat-option>
-                    </mat-select>
-                  </mat-form-field>
+                      {{ state.NAME || "State Not available" }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
 
-                  <!-- <mat-form-field
+                <!-- <mat-form-field
                   style="width: -webkit-fill-available"
                   appearance="outline"
                 >
@@ -731,8 +753,8 @@
                     (newRowClick)="stateSelected($event)"
                   ></master-search>
                 </mat-form-field> -->
-                </div>
-              </ng-template>
+              </div>
+              <!-- </ng-template> -->
             </div>
             <div class="row mb-1">
               <label
@@ -742,7 +764,7 @@
                 >City</label
               >
 
-              <div *ngIf="flag === 'VIEW'; else CeditMode" class="col-md-8">
+              <!-- <div *ngIf="flag === 'VIEW'; else CeditMode" class="col-md-8">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
                     readonly="true"
@@ -751,30 +773,31 @@
                     formControlName="city"
                   />
                 </mat-form-field>
-              </div>
-              <ng-template #CeditMode>
-                <div class="col-md-8">
-                  <mat-form-field style="width: 100%" appearance="outline">
-                    <mat-select formControlName="city">
-                      <mat-option
-                        *ngFor="let state of cityListData"
-                        [value]="state.NAME"
-                      >
-                        {{ state.NAME || "State Not available" }}
-                      </mat-option>
-                    </mat-select>
-                    <mat-error
-                      *ngIf="
-                        posCustomerMasterMainForm.controls.city.hasError(
-                          'required'
-                        )
-                      "
-                      id="ID005"
+              </div> -->
+              <!-- <ng-template #CeditMode> -->
+              <div class="col-md-8">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <mat-select formControlName="city">
+                    <mat-option
+                      [disabled]="flag === 'VIEW'"
+                      *ngFor="let state of cityListData"
+                      [value]="state.NAME"
                     >
-                      State is <strong>required</strong>
-                    </mat-error>
-                  </mat-form-field>
-                  <!-- <mat-form-field
+                      {{ state.NAME || "State Not available" }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error
+                    *ngIf="
+                      posCustomerMasterMainForm.controls.city.hasError(
+                        'required'
+                      )
+                    "
+                    id="ID005"
+                  >
+                    City is <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+                <!-- <mat-form-field
                   style="width: -webkit-fill-available"
                   appearance="outline"
                 >
@@ -791,8 +814,8 @@
                     (newRowClick)="citySelected($event)"
                   ></master-search>
                 </mat-form-field> -->
-                </div>
-              </ng-template>
+              </div>
+              <!-- </ng-template> -->
             </div>
             <div class="row mb-1">
               <label
@@ -863,6 +886,7 @@
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
                       matInput
+                      [readonly]="flag === 'VIEW'"
                       type="number"
                       (input)="onInput($event, 15)"
                       (keydown)="preventInvalidInput($event)"
@@ -882,6 +906,7 @@
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
                       maxlength="10"
+                      [readonly]="flag === 'VIEW'"
                       (input)="onPanNoInput($event)"
                       matInput="text"
                       formControlName="panNo"
@@ -917,7 +942,7 @@
               <div class="col-md-3">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
-                    readonly="true"
+                  [readonly]="flag === 'VIEW'"
                     matInput
                     type="number"
                     formControlName="whatsappCountryCode"
@@ -928,6 +953,7 @@
                 <mat-form-field style="width: 96%" appearance="outline">
                   <input
                     matInput
+                    [readonly]="flag === 'VIEW'"
                     type="number"
                     formControlName="whatsappNumber"
                     class="text-right"
@@ -1429,29 +1455,29 @@
                       </div>
                     </div>
                     <div class="col-md-5 pt-3">
-                      <mat-checkbox formControlName="sms" id="ID047"
+                      <mat-checkbox formControlName="sms" (change)="getContactPreference($event, 'SM')" id="ID047"
                         >SMS</mat-checkbox
                       >
                     </div>
                     <div class="col-md-5 pt-3">
-                      <mat-checkbox formControlName="phoneCall" id="ID048"
+                      <mat-checkbox formControlName="phoneCall" (change)="getContactPreference($event, 'PH')" id="ID048"
                         >PHONE CALL</mat-checkbox
                       >
                     </div>
                     <div class="col-md-5 pt-3">
-                      <mat-checkbox formControlName="email" id="ID049"
+                      <mat-checkbox formControlName="email" (change)="getContactPreference($event, 'EM')" id="ID049"
                         >EMAIL</mat-checkbox
                       >
                     </div>
                     <div class="col-md-5 pt-3">
-                      <mat-checkbox formControlName="whatsapp" id="ID050"
+                      <mat-checkbox formControlName="whatsapp" (change)="getContactPreference($event, 'WH')" id="ID050"
                         >WHATSAPP</mat-checkbox
                       >
                     </div>
                     <div class="col-md-5 pt-3">
                       <mat-checkbox
                         formControlName="notInterested"
-                        (change)="check()"
+                        (change)="getContactPreference($event, 'NO')"
                         id="ID051"
                         >NOT INTERESTED</mat-checkbox
                       >
