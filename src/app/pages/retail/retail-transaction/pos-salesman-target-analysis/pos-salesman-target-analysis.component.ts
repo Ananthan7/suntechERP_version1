@@ -24,7 +24,6 @@ export class PosSalesmanTargetAnalysisComponent implements OnInit {
 
   private subscriptions: Subscription[] = [];
 
-  dateToPass: { fromDate: string; toDate: string } = { fromDate: '', toDate: '' };
   branchDivisionControlsTooltip: any;
   formattedBranchDivisionData: any;
   fetchedBranchData: any[] =[];
@@ -59,8 +58,9 @@ export class PosSalesmanTargetAnalysisComponent implements OnInit {
       "YEARMONTH" : this.comService.yearSelected
     }
     this.MasterSearchData.VIEW_ICON = true;
+    this.prefillScreenValues();
   }
-
+ 
   posSalesmanTargetAnalysis: FormGroup = this.formBuilder.group({
     vocDate: [new Date()],
     salesPersonCode: [''],
@@ -194,7 +194,6 @@ export class PosSalesmanTargetAnalysisComponent implements OnInit {
 
   popupClosed(){
     if (this.content && Object.keys(this.content).length > 0) {
-      console.log(this.content)
       let ParcedPreFetchData = JSON.parse(this.content?.CONTROL_LIST_JSON)
       this.posSalesmanTargetAnalysis.controls.templateName.setValue(ParcedPreFetchData.CONTROL_HEADER.TEMPLATENAME)
       this.popupVisible = false;
@@ -254,7 +253,8 @@ export class PosSalesmanTargetAnalysisComponent implements OnInit {
           confirmButtonText: 'Ok'
         })
         this.popupVisible = false;
-        this.activeModal.close(data);
+        // this.activeModal.close(data);
+        this.close('reloadMainGrid')
       }
       else {
         this.toastr.error(Notifdata)
@@ -322,24 +322,18 @@ export class PosSalesmanTargetAnalysisComponent implements OnInit {
       this.templateNameHasValue = !!(this.content?.TEMPLATE_NAME);
       this.posSalesmanTargetAnalysis.controls.templateName.setValue(this.content?.TEMPLATE_NAME);
 
-      // var paresedItem = JSON.parse(this.content?.CONTROL_LIST_JSON);
-      // console.log('parsed data', paresedItem)
-      // this.dateToPass = {
-      //   fromDate:  paresedItem?.CONTROL_DETAIL.STRFROMDATE,
-      //   toDate: paresedItem?.CONTROL_DETAIL.STRTODATE
-      // };
-
-      // const branchWiseValue= paresedItem.CONTROL_DETAIL.BRANCHWISE  === '0'?true:false;
-      // const invoiceWiseValue = paresedItem.CONTROL_DETAIL.INVOICEWISE === '0'?true:false;
-      // this.RetailKaratWiseSaleForm.controls.BranchWise.setValue(branchWiseValue);
-      // this.RetailKaratWiseSaleForm.controls.InvoiceWise.setValue(invoiceWiseValue);
+      var paresedItem = JSON.parse(this.content?.CONTROL_LIST_JSON);
+      console.log('parsed data', paresedItem)
+      this.posSalesmanTargetAnalysis.controls.salesPersonCode.setValue(paresedItem.CONTROL_DETAIL.StrSmanList);
 
     }
   }
 
-
   salesCodeSelected(e: any) {
     this.posSalesmanTargetAnalysis.controls.salesPersonCode.setValue(e.SALESPERSON_CODE);
   }
+
+
+
 
 }

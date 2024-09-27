@@ -474,4 +474,8 @@ export class RetailTransactionComponent implements OnInit {
 
   }
 
+  handleActionViewClick(data: any) {
+    this.openModalView(data.data)
+  }
+  
 }
