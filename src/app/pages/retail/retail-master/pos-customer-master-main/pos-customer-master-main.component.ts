@@ -84,9 +84,24 @@ export class PosCustomerMasterMainComponent implements OnInit {
   image: File | null = null;
   editdata: any;
   isCreditLimit: any;
+  fetchedPicture: string | null = null;
   contactPreferenceWay: any[] = [];
   knowAboutWay: any[] = [];
   intrestedInWay: any[] = [];
+  zodiacSignArray: any[] = [
+    "Aries",
+    "Taurus",
+    "Gemini",
+    "Cancer",
+    "Leo",
+    "Virgo",
+    "Libra",
+    "Scorpio",
+    "Sagittarius",
+    "Capricorn",
+    "Aquarius",
+    "Pisces",
+  ];
 
   selectedContactString: any;
   selectedknowAboutString: any;
@@ -524,6 +539,24 @@ export class PosCustomerMasterMainComponent implements OnInit {
     this.countryList();
     this.getDropDownStatus();
     this.posCustomerMasterMainForm.controls["createdBranch"].disable();
+    this.fetchImage();
+  }
+
+  fetchImage() {
+    let customerCode = this.generatedCustomerCode
+      ? this.generatedCustomerCode
+      : this.existCustomerCode;
+
+    console.log(customerCode);
+
+    let API = `PosCustomerMaster/GetPOSCustImage/${customerCode}`;
+    let sub: Subscription = this.apiService
+      .getDynamicAPI(API)
+      .subscribe((res) => {
+        if (res.status.trim() === "Success") {
+          this.fetchedPicture = res.response.imagepath; // Make sure this is a valid URL
+        }
+      });
   }
 
   nameChange(event: any) {
@@ -597,7 +630,6 @@ export class PosCustomerMasterMainComponent implements OnInit {
   }
 
   setvalues(setData: any) {
-
     this.posCustomerMasterMainForm.controls.nameDesc.setValue(setData.NAME);
     this.posCustomerMasterMainForm.controls.name.setValue(
       setData.POSCUSTPREFIX
@@ -912,6 +944,12 @@ export class PosCustomerMasterMainComponent implements OnInit {
       default:
         this.posCustomerMasterMainForm.controls.gender.reset();
     }
+  }
+
+  selectCountryCode(event: any, controller: any) {
+    console.log(event.value);
+    console.log(controller);
+    this.posCustomerMasterMainForm.controls[controller].setValue(event.value);
   }
 
   countryList() {
@@ -1238,7 +1276,6 @@ export class PosCustomerMasterMainComponent implements OnInit {
       );
 
       if (!this.posCustomerMasterMainForm.invalid) {
-
         const posCustomer = {
           CODE: this.posCustomerMasterMainForm.value.code || "",
           NAME: this.posCustomerMasterMainForm.value.nameDesc || "",
@@ -1484,300 +1521,309 @@ export class PosCustomerMasterMainComponent implements OnInit {
           POSKNOWNABOUT: 0,
         };
 
-        // const apiCtrl =
-        //   posCustomer.CODE &&
-        //     posCustomer.CODE != '' &&
-        //     posCustomer.CODE.toString() != '0'
-        //     ? `PosCustomerMaster/UpdateCustomerMaster/Code=${posCustomer.CODE}`
-        //     : 'PosCustomerMaster/InsertCustomerMaster';
-
-        let API;
-        let method;
-        let custResponse;
         if (this.content?.FLAG == "EDIT") {
-          API = `PosCustomerMaster/UpdateCustomerMaster/${posCustomer.CODE}`;
-          custResponse = this.apiService.putDynamicAPI(API, posCustomer);
+          let API = `PosCustomerMaster/UpdateCustomerMaster/${posCustomer.CODE}`;
+          let sub: Subscription = this.apiService
+            .putDynamicAPI(API, posCustomer)
+            .subscribe(
+              (result) => {
+                console.log("API Response:", result);
+
+                if (result.status === "Success") {
+                  Swal.fire({
+                    title: "Success",
+                    text: "Customer Details Updated successfully!",
+                    icon: "success",
+                    confirmButtonColor: "#336699",
+                    confirmButtonText: "Ok",
+                  });
+
+                  if (this.image) {
+                    const formData = new FormData();
+                    formData.append(
+                      "CODE",
+                      this.existCustomerCode || this.generatedCustomerCode
+                    );
+                    formData.append("File", this.image);
+
+                    let API = `PosCustomerMaster/InsertPOSCustAttachments`;
+
+                    console.log("FormData:", formData);
+
+                    let Sub: Subscription = this.apiService
+                      .postDynamicAPI(API, formData)
+                      .subscribe(
+                        (result) => {
+                          console.log("API Response:", result);
+                        },
+                        (err) => {
+                          // Handle HTTP or API error
+                          console.error("API Error:", err);
+                        }
+                      );
+                    this.subscriptions.push(Sub);
+                  } else {
+                    console.error("No file selected");
+                  }
+
+                  this.close("reloadMainGrid");
+                } else {
+                  // Handle cases where the result is not successful or undefined
+                  Swal.fire({
+                    title: "Upload Failed",
+                    text: "Customer Details Not Updated Successfully",
+                    icon: "error",
+                    confirmButtonColor: "#336699",
+                    confirmButtonText: "Ok",
+                  });
+                }
+              },
+              (err) => {
+                // Handle HTTP or API error
+                console.error("API Error:", err);
+                Swal.fire({
+                  title: "Error",
+                  text: err.message || "An error occurred during the upload.",
+                  icon: "error",
+                  confirmButtonColor: "#336699",
+                  confirmButtonText: "Ok",
+                });
+              }
+            );
         } else {
-          API = "PosCustomerMaster/InsertCustomerMaster";
-          custResponse = this.apiService.postDynamicAPI(API, posCustomer);
+          let API = "PosCustomerMaster/InsertCustomerMaster";
+          let sub: Subscription = this.apiService
+            .postDynamicAPI(API, posCustomer)
+            .subscribe(
+              (result) => {
+                console.log("API Response:", result);
+
+                if (result.status === "Success") {
+                  Swal.fire({
+                    title: "Success",
+                    text: "Customer Details Inserted successfully!",
+                    icon: "success",
+                    confirmButtonColor: "#336699",
+                    confirmButtonText: "Ok",
+                  });
+                  this.close("reloadMainGrid");
+                } else {
+                  // Handle cases where the result is not successful or undefined
+                  Swal.fire({
+                    title: "Upload Failed",
+                    text: "Customer Details Not Inserted Successfully",
+                    icon: "error",
+                    confirmButtonColor: "#336699",
+                    confirmButtonText: "Ok",
+                  });
+                }
+              },
+              (err) => {
+                // Handle HTTP or API error
+                console.error("API Error:", err);
+                Swal.fire({
+                  title: "Error",
+                  text: err.message || "An error occurred during the upload.",
+                  icon: "error",
+                  confirmButtonColor: "#336699",
+                  confirmButtonText: "Ok",
+                });
+              }
+            );
         }
 
-        custResponse.subscribe(async (data) => {
-          this.isCustProcessing = false;
+        // RES.subscribe(async (data) => {
+        //   this.isCustProcessing = false;
 
-          if (data.status == "Success") {
-            this.customerDetails = await data.response;
+        //   if (data.status == "Success") {
+        //     this.customerDetails = await data.response;
+        //     console.log(this.customerDetails);
 
-            this.posCustomerMasterMainForm.controls[
-              "fcn_cust_detail_phone"
-            ].setValue(this.customerDetails.MOBILE);
-            this.posCustomerMasterMainForm.controls[
-              "fcn_cust_detail_email"
-            ].setValue(this.customerDetails.EMAIL);
-            this.posCustomerMasterMainForm.controls[
-              "fcn_cust_detail_address"
-            ].setValue(this.customerDetails.ADDRESS);
-            this.posCustomerMasterMainForm.controls[
-              "fcn_cust_detail_country"
-            ].setValue(this.customerDetails.COUNTRY_CODE);
-            this.posCustomerMasterMainForm.controls[
-              "fcn_cust_detail_city"
-            ].setValue(this.customerDetails.CITY);
-            this.posCustomerMasterMainForm.controls[
-              "fcn_cust_detail_idcard"
-            ].setValue(this.customerDetails.NATIONAL_IDENTIFICATION_NO);
-            // Customer data
-            this.posCustomerMasterMainForm.controls.fcn_customer_detail_name.setValue(
-              this.customerDetails.NAME
-            );
-            this.posCustomerMasterMainForm.controls.fcn_customer_detail_fname.setValue(
-              this.customerDetails.FIRSTNAME
-            );
-            this.posCustomerMasterMainForm.controls.fcn_customer_detail_mname.setValue(
-              this.customerDetails.MIDDLENAME
-            );
-            this.posCustomerMasterMainForm.controls.fcn_customer_detail_lname.setValue(
-              this.customerDetails.LASTNAME
-            );
-            this.posCustomerMasterMainForm.controls.fcn_cust_detail_phone2.setValue(
-              this.customerDetails.TEL2
-            );
-            this.posCustomerMasterMainForm.controls.fcn_cust_detail_gender.setValue(
-              this.customerDetails.GENDER
-            );
-            this.posCustomerMasterMainForm.controls.fcn_cust_detail_marital_status.setValue(
-              this.customerDetails.MARITAL_ST
-            );
-            this.posCustomerMasterMainForm.controls.fcn_cust_detail_marital_status.setValue(
-              this.customerDetails.MARITAL_ST
-            );
-            this.posCustomerMasterMainForm.controls.fcn_cust_detail_dob.setValue(
-              this.dummyDateCheck(this.customerDetails.DATE_OF_BIRTH)
-            );
-            // this.snackBar.open('Customer details saved successfully');
-            // this.snackBar.dismiss();
-            this.snackBar.open("Customer details saved successfully", "", {
-              duration: 1000, // time in milliseconds
-            });
+        //     this.snackBar.open("Customer details saved successfully", "", {
+        //       duration: 1000,
+        //     });
 
-            // ${data.AMLDIGICOMPANYNAME}/${data.AMLDIGIUSERNAME}/${data.AMLDIGIPASSWORD}/${data.CODE}/${data.FIRSTNAME}/${data.MIDDLENAME}/${data.LASTNAME}/%27%27/${data.POSCustIDNo}/${data.NATIONALITY}/${data.DATE_OF_BIRTH}/${data.CUST_Type}/${data.AMLUSERID}/${data.AMLDIGITHRESHOLD}/${data.AMLDIGICOMPANYNAME}/1/${data.DIGIIPPATH}`);
-            if (this.amlNameValidation && !this.customerDetails.DIGISCREENED) {
-              this.isCustProcessing = true;
+        //     if (this.amlNameValidation && !this.customerDetails.DIGISCREENED) {
+        //       this.isCustProcessing = true;
 
-              // const custCodeWithAcCode =
-              //   this.comService.allbranchMaster?.DIGICOMPACCODE &&
-              //     this.comService.allbranchMaster?.DIGICOMPACCODE != ''
-              //     ? `${this.comService.allbranchMaster?.DIGICOMPACCODE}/${this.customerDetails.CODE}`
-              //     : this.customerDetails.CODE;
+        //       const payload = {
+        //         AMLDIGICOMPANYNAME: encodeURIComponent(
+        //           this.comService.allbranchMaster.AMLDIGICOMPANYNAME || " "
+        //         ),
+        //         AMLDIGIUSERNAME: encodeURIComponent(
+        //           this.comService.allbranchMaster.AMLDIGIUSERNAME || " "
+        //         ),
+        //         AMLDIGIPASSWORD: encodeURIComponent(
+        //           this.comService.allbranchMaster.AMLDIGIPASSWORD || " "
+        //         ),
+        //         CODE: encodeURIComponent(this.customerDetails.CODE || " "),
+        //         FIRSTNAME: "",
 
-              const payload = {
-                AMLDIGICOMPANYNAME: encodeURIComponent(
-                  this.comService.allbranchMaster.AMLDIGICOMPANYNAME || " "
-                ),
-                AMLDIGIUSERNAME: encodeURIComponent(
-                  this.comService.allbranchMaster.AMLDIGIUSERNAME || " "
-                ),
-                AMLDIGIPASSWORD: encodeURIComponent(
-                  this.comService.allbranchMaster.AMLDIGIPASSWORD || " "
-                ),
-                CODE: encodeURIComponent(this.customerDetails.CODE || " "),
-                FIRSTNAME: "",
-                // encodeURIComponent(this.customerDetails.FIRSTNAME)
-                // || '%27%27'
-                MIDDLENAME: "",
-                // encodeURIComponent(this.customerDetails.MIDDLENAME)
-                // || '%27%27'
-                LASTNAME:
-                  encodeURIComponent(
-                    this.customerDetails.NAME //
-                    // this.customerDetails.LASTNAME || ''
-                  ) || "",
-                NATIONALITY: encodeURIComponent(
-                  this.customerDetails.NATIONALITY
-                ),
-                // ||                '%27%27',
-                // NATIONALITY:  encodeURIComponent(this.customerDetails.NATIONALITY || ' '),
-                DATE_OF_BIRTH:
-                  // this.comService.nullOrEmpty(
+        //         MIDDLENAME: "",
 
-                  encodeURIComponent(
-                    this.comService.convertDateToMDY(
-                      this.dummyDateCheck(this.customerDetails.DATE_OF_BIRTH)
-                    )
-                  ),
-                // CUST_Type: this.comService.nullOrEmpty(
-                //   encodeURIComponent(this.customerDetails.CUST_TYPE),
-                //   '%27%27'),
-                CUST_Type: encodeURIComponent("I"),
+        //         LASTNAME:
+        //           encodeURIComponent(
+        //             this.customerDetails.NAME
+        //           ) || "",
+        //         NATIONALITY: encodeURIComponent(
+        //           this.customerDetails.NATIONALITY
+        //         ),
 
-                // CUST_Type: encodeURIComponent(
-                //   this.customerDetails.CUST_Type || ' '
-                // ),
-                AMLUSERID: encodeURIComponent(
-                  this.comService.allbranchMaster.AMLUSERID
-                ),
-                AMLDIGITHRESHOLD:
-                  encodeURIComponent(
-                    this.comService.allbranchMaster.AMLDIGITHRESHOLD
-                  ) || "%27%27",
-                DIGIIPPATH:
-                  encodeURIComponent(
-                    this.comService.allbranchMaster.DIGIIPPATH
-                  ) || "%27%27",
-                Gender:
-                  encodeURIComponent(this.customerDetails?.GENDER) || "%27%27",
-                CustomerIdType:
-                  encodeURIComponent(this.customerDetails?.IDCATEGORY) ||
-                  "%27%27",
-                CustomerIdNumber:
-                  encodeURIComponent(
-                    this.customerDetails?.NATIONAL_IDENTIFICATION_NO
-                  ) || "%27%27",
-              };
-              this.snackBar.open("Loading...");
+        //         DATE_OF_BIRTH:
 
-              // companyname=${data.AMLDIGICOMPANYNAME}&username=${data.AMLDIGIUSERNAME}&Password=${data.AMLDIGIPASSWORD}&CustomerId=${data.CODE}&FirstName=${data.FIRSTNAME}&MiddleName=${data.MIDDLENAME}&LastName=${data.LASTNAME}&MatchCategory=&CustomerIdNumber=${data.CustomerIdNumber}&Nationality=${data.NATIONALITY}&DOB=${data.DATE_OF_BIRTH}&CustomerType=${data.CUST_Type}&UserId=${data.AMLUSERID}&Threshold=${data.AMLDIGITHRESHOLD}&CompName=${data.AMLDIGICOMPANYNAME}&GeneratePayload=1&IPPath=${data.DIGIIPPATH}&Gender=${data.Gender}&CustomerIdType=${data.CustomerIdType}
+        //           encodeURIComponent(
+        //             this.comService.convertDateToMDY(
+        //               this.dummyDateCheck(this.customerDetails.DATE_OF_BIRTH)
+        //             )
+        //           ),
 
-              const queryParams = {
-                companyname: payload.AMLDIGICOMPANYNAME,
-                username: payload.AMLDIGIUSERNAME,
-                Password: payload.AMLDIGIPASSWORD,
-                CustomerId: payload.CODE,
-                FirstName: payload.FIRSTNAME,
-                MiddleName: payload.MIDDLENAME,
-                LastName: payload.LASTNAME,
-                MatchCategory: "",
-                CustomerIdNumber: payload.CustomerIdNumber,
-                Nationality: payload.NATIONALITY,
-                DOB: payload.DATE_OF_BIRTH,
-                CustomerType: payload.CUST_Type,
-                UserId: payload.AMLUSERID,
-                Threshold: payload.AMLDIGITHRESHOLD,
-                CompName: payload.AMLDIGICOMPANYNAME,
-                GeneratePayload: "1",
-                IPPath: payload.DIGIIPPATH,
-                Gender: payload.Gender,
-                CustomerIdType: payload.CustomerIdType,
-              };
-              if (this.amlNameValidation) {
-                this.apiService
-                  .getDynamicAPIwithParams("AMLValidation", queryParams)
-                  .subscribe(async (data) => {
-                    this.isCustProcessing = false;
+        //         CUST_Type: encodeURIComponent("I"),
 
-                    this.snackBar.open("Loading...");
+        //         AMLUSERID: encodeURIComponent(
+        //           this.comService.allbranchMaster.AMLUSERID
+        //         ),
+        //         AMLDIGITHRESHOLD:
+        //           encodeURIComponent(
+        //             this.comService.allbranchMaster.AMLDIGITHRESHOLD
+        //           ) || "%27%27",
+        //         DIGIIPPATH:
+        //           encodeURIComponent(
+        //             this.comService.allbranchMaster.DIGIIPPATH
+        //           ) || "%27%27",
+        //         Gender:
+        //           encodeURIComponent(this.customerDetails?.GENDER) || "%27%27",
+        //         CustomerIdType:
+        //           encodeURIComponent(this.customerDetails?.IDCATEGORY) ||
+        //           "%27%27",
+        //         CustomerIdNumber:
+        //           encodeURIComponent(
+        //             this.customerDetails?.NATIONAL_IDENTIFICATION_NO
+        //           ) || "%27%27",
+        //       };
+        //       this.snackBar.open("Loading...");
 
-                    this.apiService
-                      .putDynamicAPI(
-                        `PosCustomerMaster/UpdateDigiScreened/code=${this.customerDetails.CODE}/DigiScreened=true`,
-                        ""
-                      )
-                      .subscribe((resp) => {
-                        this.snackBar.dismiss();
-                        if (resp.status == "Success") {
-                          // this.customerDetails = resp.response;
-                          this.customerDetails.DIGISCREENED =
-                            resp.response != null
-                              ? resp.response?.DIGISCREENED
-                              : true;
-                        } else {
-                          this.snackBar.open("Digiscreen Failed");
-                        }
+        //       const queryParams = {
+        //         companyname: payload.AMLDIGICOMPANYNAME,
+        //         username: payload.AMLDIGIUSERNAME,
+        //         Password: payload.AMLDIGIPASSWORD,
+        //         CustomerId: payload.CODE,
+        //         FirstName: payload.FIRSTNAME,
+        //         MiddleName: payload.MIDDLENAME,
+        //         LastName: payload.LASTNAME,
+        //         MatchCategory: "",
+        //         CustomerIdNumber: payload.CustomerIdNumber,
+        //         Nationality: payload.NATIONALITY,
+        //         DOB: payload.DATE_OF_BIRTH,
+        //         CustomerType: payload.CUST_Type,
+        //         UserId: payload.AMLUSERID,
+        //         Threshold: payload.AMLDIGITHRESHOLD,
+        //         CompName: payload.AMLDIGICOMPANYNAME,
+        //         GeneratePayload: "1",
+        //         IPPath: payload.DIGIIPPATH,
+        //         Gender: payload.Gender,
+        //         CustomerIdType: payload.CustomerIdType,
+        //       };
+        //       if (this.amlNameValidation) {
+        //         this.apiService
+        //           .getDynamicAPIwithParams("AMLValidation", queryParams)
+        //           .subscribe(async (data) => {
+        //             this.isCustProcessing = false;
 
-                        console.log("====================================");
-                        console.log("resp", resp);
-                        console.log("====================================");
-                      });
+        //             this.snackBar.open("Loading...");
 
-                    if (data.response.isMatched != null) {
-                      this.snackBar.dismiss();
+        //             this.apiService
+        //               .putDynamicAPI(
+        //                 `PosCustomerMaster/UpdateDigiScreened/code=${this.customerDetails.CODE}/DigiScreened=true`,
+        //                 ""
+        //               )
+        //               .subscribe((resp) => {
+        //                 this.snackBar.dismiss();
+        //                 if (resp.status == "Success") {
+        //                   this.customerDetails.DIGISCREENED =
+        //                     resp.response != null
+        //                       ? resp.response?.DIGISCREENED
+        //                       : true;
+        //                 } else {
+        //                   this.snackBar.open("Digiscreen Failed");
+        //                 }
 
-                      if (data.response.isMatched.toUpperCase() == "YES") {
-                        // if (data.response == 'yes') {
-                        this.openDialog("Warning", "We cannot proceed", true);
-                        this.dialogBox.afterClosed().subscribe((data: any) => {
-                          if (data == "OK") {
-                            // this.modalReference.close();
-                            // this.closeModal();
-                          }
-                        });
-                        // need to use put api
-                        this.amlNameValidationData = true;
+        //                 console.log("====================================");
+        //                 console.log("resp", resp);
+        //                 console.log("====================================");
+        //               });
 
-                        this.apiService
-                          .putDynamicAPI(
-                            `PosCustomerMaster/updateCustomerAmlNameValidation/code=${this.customerDetails.CODE}/AmlNameValidation=true`,
-                            ""
-                          )
-                          // .updateAMLNameValidation(this.customerDetails.CODE, true)
-                          .subscribe((resp) => {
-                            // this.customerDetails = resp.response;
-                            this.customerDetails.AMLNAMEVALIDATION =
-                              resp.response != null
-                                ? resp.response?.AMLNAMEVALIDATION
-                                : true;
+        //             if (data.response.isMatched != null) {
+        //               this.snackBar.dismiss();
 
-                            console.log("====================================");
-                            console.log("resp", resp);
-                            console.log("====================================");
-                          });
-                        // }
-                      } else {
-                        this.openDialog(
-                          "Success",
-                          JSON.stringify(data.response),
-                          true
-                        );
-                        this.dialogBox.afterClosed().subscribe((data: any) => {
-                          if (data == "OK") {
-                            // this.modalReference.close();
-                            // this.closeModal();
-                          }
-                        });
-                        //proceed
-                        this.amlNameValidationData = false;
-                      }
-                    } else {
-                      this.openDialog(
-                        "Warning",
-                        JSON.stringify(data.response),
-                        true
-                      );
-                      this.dialogBox.afterClosed().subscribe((data: any) => {
-                        if (data == "OK") {
-                          // this.modalReference.close();
-                          // this.closeModal();
-                        }
-                      });
-                      this.amlNameValidationData = true;
-                    }
-                  });
-              } else {
-                this.isCustProcessing = false;
-                // this.closeModal();
-              }
-            } else {
-              this.isCustProcessing = false;
+        //               if (data.response.isMatched.toUpperCase() == "YES") {
+        //                 this.openDialog("Warning", "We cannot proceed", true);
+        //                 this.dialogBox.afterClosed().subscribe((data: any) => {
+        //                   if (data == "OK") {
+        //                   }
+        //                 });
+        //                 this.amlNameValidationData = true;
 
-              // this.modalReference.close();
-              // this.closeModal();
-            }
-          } else {
-            // this.modalReference.close();
-            this.customerDetails = {};
-            this.snackBar.open(data.message, "", {
-              duration: 2000, // time in milliseconds
-            });
-            // this.modalReference.close();
-            this.closeModal();
-          }
-        });
-        // this.closeModal();
+        //                 this.apiService
+        //                   .putDynamicAPI(
+        //                     `PosCustomerMaster/updateCustomerAmlNameValidation/code=${this.customerDetails.CODE}/AmlNameValidation=true`,
+        //                     ""
+        //                   )
+        //                   .subscribe((resp) => {
+        //                     this.customerDetails.AMLNAMEVALIDATION =
+        //                       resp.response != null
+        //                         ? resp.response?.AMLNAMEVALIDATION
+        //                         : true;
+
+        //                     console.log("====================================");
+        //                     console.log("resp", resp);
+        //                     console.log("====================================");
+        //                   });
+        //                 // }
+        //               } else {
+        //                 this.openDialog(
+        //                   "Success",
+        //                   JSON.stringify(data.response),
+        //                   true
+        //                 );
+        //                 this.dialogBox.afterClosed().subscribe((data: any) => {
+        //                   if (data == "OK") {
+        //                   }
+        //                 });
+        //                 this.amlNameValidationData = false;
+        //               }
+        //             } else {
+        //               this.openDialog(
+        //                 "Warning",
+        //                 JSON.stringify(data.response),
+        //                 true
+        //               );
+        //               this.dialogBox.afterClosed().subscribe((data: any) => {
+        //                 if (data == "OK") {
+        //                 }
+        //               });
+        //               this.amlNameValidationData = true;
+        //             }
+        //           });
+        //       } else {
+        //         this.isCustProcessing = false;
+        //       }
+        //     } else {
+        //       this.isCustProcessing = false;
+
+        //     }
+        //   } else {
+        //     this.customerDetails = {};
+        //     this.snackBar.open(data.message, "", {
+        //       duration: 2000,
+        //     });
+        //     this.closeModal();
+        //   }
+        // });
       } else {
         this.isCustProcessing = false;
 
         this.snackBar.open("Please Fill Required Fields", "", {
-          duration: 2000, // time in milliseconds
+          duration: 2000,
         });
       }
     }
@@ -1921,73 +1967,8 @@ export class PosCustomerMasterMainComponent implements OnInit {
   }
 
   onFileSelected(event: any) {
-    const file: File = event.target.files[0];
-    console.log(file);
-    
-
-    if (file) {
-      const formData = new FormData();
-      formData.append(
-        "CODE",
-        this.existCustomerCode || this.generatedCustomerCode
-      );
-      formData.append("File", file);
-
-      // Ensure the API URL is correct
-      let API = `PosCustomerMaster/InsertPOSCustAttachments`;
-
-      console.log("FormData:", formData);
-
-      let Sub: Subscription = this.apiService
-        .postDynamicAPI(API, formData)
-        .subscribe(
-          (result) => {
-            console.log("API Response:", result);
-
-            // Safely handle the result object
-            if (result && result.status && result.status.trim() === "Success") {
-              Swal.fire({
-                title: "Success",
-                text: "Image uploaded successfully!",
-                icon: "success",
-                confirmButtonColor: "#336699",
-                confirmButtonText: "Ok",
-              });
-            } else {
-              // Handle cases where the result is not successful or undefined
-              Swal.fire({
-                title: "Upload Failed",
-                text:
-                  result?.message || "No response received. Please try again.",
-                icon: "error",
-                confirmButtonColor: "#336699",
-                confirmButtonText: "Ok",
-              });
-            }
-          },
-          (err) => {
-            // Handle HTTP or API error
-            console.error("API Error:", err);
-            Swal.fire({
-              title: "Error",
-              text: err.message || "An error occurred during the upload.",
-              icon: "error",
-              confirmButtonColor: "#336699",
-              confirmButtonText: "Ok",
-            });
-          }
-        );
-      this.subscriptions.push(Sub);
-    } else {
-      console.error("No file selected");
-      Swal.fire({
-        title: "No File Selected",
-        text: "Please select a file before uploading.",
-        icon: "error",
-        confirmButtonColor: "#336699",
-        confirmButtonText: "Ok",
-      });
-    }
+    this.image = event.target.files[0];
+    console.log(this.image);
   }
 
   getContactPreference(event: MatCheckboxChange, value: string) {
@@ -2037,7 +2018,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
   }
 
   getKnowAbout(event: MatCheckboxChange, value: any) {
-    if (value === "SM") {
+    if (value === "SO") {
       this.toggle();
       //this.knowAboutWay = [];
     } //else {
@@ -2076,7 +2057,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
       ?.setValue(selectedValuesArray.includes("ON"));
     this.posCustomerMasterMainForm
       .get("socialMedia")
-      ?.setValue(selectedValuesArray.includes("SM"));
+      ?.setValue(selectedValuesArray.includes("SO"));
 
     this.posCustomerMasterMainForm
       .get("radio")
