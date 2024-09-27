@@ -22,7 +22,7 @@
                         <div class="row">
                             <div class="col-md-12" style="min-height: 30vh;">
                                 <app-retail-grid (AddBtnClick)="openModalView()" [showAuditTrail]="showAuditTrail" (editRowClick)="editRowDetails($event)"
-                                    (viewRowClick)="viewRowDetails($event)" [templateViewForReports]="true" (actionViewClick)="handleActionViewClick($event)">
+                                    (viewRowClick)="viewRowDetails($event)" [templateViewForReports]="templateGridViewForReports" (actionViewClick)="handleActionViewClick($event)">
                                 </app-retail-grid>
                             </div>
                         </div>

@@ -94,6 +94,7 @@ export class RetailTransactionComponent implements OnInit {
   reasonMasterOptions!: Observable<any[]>;
 
   showAuditTrail: boolean = false;
+  templateGridViewForReports: boolean =false;
 
   constructor(
     private CommonService: CommonServiceService,
@@ -202,7 +203,6 @@ export class RetailTransactionComponent implements OnInit {
     }
     if (this.componentDbList[this.componentName]) {
       this.componentSelected = this.componentDbList[this.componentName]
-
     } else {
       this.CommonService.showSnackBarMsg('Module Not Created')
     }
@@ -274,6 +274,15 @@ export class RetailTransactionComponent implements OnInit {
       if (data.MENU_CAPTION_ENG) {
         this.menuTitle = data.MENU_CAPTION_ENG;
         this.PERMISSIONS = data.PERMISSION;
+
+        if(this.menuTitle === 'POS Salesman Target Analysis'){
+          this.templateGridViewForReports  = true;
+        }
+        else{
+          this.templateGridViewForReports  = false;
+        }
+        // alert('templateGridViewForReports   '+ this.templateGridViewForReports)
+
       } else {
         this.menuTitle = this.CommonService.getModuleName()
       }
@@ -477,5 +486,5 @@ export class RetailTransactionComponent implements OnInit {
   handleActionViewClick(data: any) {
     this.openModalView(data.data)
   }
-  
+
 }
