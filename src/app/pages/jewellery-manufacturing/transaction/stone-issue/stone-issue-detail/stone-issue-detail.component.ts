@@ -26,6 +26,7 @@ export class StoneIssueDetailComponent implements OnInit {
   @ViewChild('overlaystockCodeSearch') public overlaystockCodeSearch!: MasterSearchComponent;
   @ViewChild('overlaylocationSearch') public overlaylocationSearch!: MasterSearchComponent;
   columnhead1: any[] = [];
+  stoneIssueGridData: any[] = [];
   serialNo: any;
   subJobNo: any;
   tableData: any[] = [];
@@ -305,7 +306,7 @@ export class StoneIssueDetailComponent implements OnInit {
     this.stoneIssueDetailsFrom.controls.workername.setValue(e.DESCRIPTION);
     this.processCodeData.WHERECONDITION = `@strWorker='${e.WORKER_CODE}',@strCurrentUser='${this.comService.userName}'`
   }
-  divCodeSelected(e: any){
+  divCodeSelected(e: any) {
     console.log(e);
     this.stoneIssueDetailsFrom.controls.DIVCODE.setValue(e.Division_Code);
   }
@@ -449,9 +450,9 @@ export class StoneIssueDetailComponent implements OnInit {
       case 'LOCTYPE_CODE':
         this.overlaylocationSearch.showOverlayPanel(event);
         break;
-        case 'DIVCODE':
-          this.overlayDivCodeSearch.showOverlayPanel(event);
-          break;
+      case 'DIVCODE':
+        this.overlayDivCodeSearch.showOverlayPanel(event);
+        break;
       default:
 
     }
@@ -476,8 +477,8 @@ export class StoneIssueDetailComponent implements OnInit {
           LOOKUPDATA.SEARCH_VALUE = ''
           if (FORMNAME === 'LOCTYPE_CODE') {
             this.showOverleyPanel(event, FORMNAME);
-          } 
-       {
+          }
+          {
             this.showOverleyPanel(event, FORMNAME);
           }
           return
@@ -600,6 +601,10 @@ export class StoneIssueDetailComponent implements OnInit {
     // If stock code is filled, proceed with the form submission
     this.formSubmit('CONTINUE');
     this.stoneIssueDetailsFrom.reset();
+  }
+  onRowUpdateGrid(event: any) {
+ this.FillStnRequiredDetail()
+  
   }
 
   resetStockDetails() {
@@ -734,7 +739,7 @@ export class StoneIssueDetailComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
-  setJobnumberWhereCondition() {
+  FillStnRequiredDetail() {
     let postData = {
       "SPID": "131",
       "parameter": {
@@ -745,8 +750,27 @@ export class StoneIssueDetailComponent implements OnInit {
         'strLocTypeCode': ''
       }
     }
+    this.comService.showSnackBarMsg('MSG81447')
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        this.comService.closeSnackBarMsg()
+        if (result.dynamicData && result.dynamicData[0].length > 0) {
+          let stoneIssueGridData = result.dynamicData[0]
+          console.log(stoneIssueGridData, 'data')
+          // this.tableData = result.dynamicData[1] || []
+          // this.columnhead1 = Object.keys(this.tableData[0])
+     
 
+        } else {
+          this.comService.toastErrorByMsgId('MSG1747')
+        }
+      }, err => {
+        this.comService.closeSnackBarMsg()
+        this.comService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
   }
+
 
   subJobNumberValidate(event?: any) {
     // let postData = {
@@ -780,7 +804,7 @@ export class StoneIssueDetailComponent implements OnInit {
           this.stoneIssueDetailsFrom.controls.PICTURE_PATH.setValue(data[0].PICTURE_PATH)
           // this.tableData = result.dynamicData[1] || []
           // this.columnhead1 = Object.keys(this.tableData[0])
-          this.setJobnumberWhereCondition()
+          this.FillStnRequiredDetail()
           this.setStockCodeWhereCondition()
           this.getImageData()
         } else {
