@@ -275,7 +275,7 @@ export class RetailTransactionComponent implements OnInit {
         this.menuTitle = data.MENU_CAPTION_ENG;
         this.PERMISSIONS = data.PERMISSION;
 
-        if(this.menuTitle === 'POS Salesman Target Analysis'){
+        if(this.menuTitle === 'POS Salesman Target Analysis' || this.menuTitle === 'Scheme Registration'){
           this.templateGridViewForReports  = true;
         }
         else{
