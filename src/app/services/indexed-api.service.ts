@@ -156,8 +156,6 @@ export class IndexedApiService {
       }
     });
     this.inDb.getAllData('VocTypeMaster').subscribe((data) => {
-      console.log(data,'data');
-      
       if (data.length == 0 || data.length == 1) {
         this.getVocTypeMaster();
       } else {

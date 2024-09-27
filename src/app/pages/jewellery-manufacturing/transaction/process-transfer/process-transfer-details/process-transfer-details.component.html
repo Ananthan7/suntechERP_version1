@@ -47,6 +47,10 @@
                     (keydown)="lookupKeyPress($event,'JOB_NUMBER')"
                     (change)="jobNumberValidate($event)"
                     formControlName="JOB_NUMBER" [readonly]="viewMode" />
+                  <mat-error
+                    *ngIf="processTransferdetailsForm.controls.JOB_NUMBER.touched && processTransferdetailsForm.controls.JOB_NUMBER.hasError('required')">
+                    Job number required
+                  </mat-error>
                   <master-search class="masterSearch"
                     [MasterSearchData]="jobNoSearch"
                     *ngIf="!viewMode" #overlayjobNoSearch
@@ -157,6 +161,10 @@
                               formControlName="FRM_PROCESS_CODE"
                               (input)="fromProcesscodeInputChange()"
                               [readonly]="viewMode" />
+                            <mat-error *ngIf="processTransferdetailsForm.controls.FRM_PROCESS_CODE.touched 
+                              && processTransferdetailsForm.controls.FRM_PROCESS_CODE.hasError('required')">
+                              code is required
+                            </mat-error>
                             <master-search class="masterSearch"
                               *ngIf="!viewMode" #fromProcessMasterOverlay
                               [MasterSearchData]="fromProcessMasterSearch"
@@ -174,6 +182,10 @@
                               (keydown)="lookupKeyPress($event,'TO_PROCESS_CODE')"
                               (focusout)="toProcesscodeValidate($event)"
                               formControlName="TO_PROCESS_CODE" />
+                            <mat-error *ngIf="processTransferdetailsForm.controls.TO_PROCESS_CODE.touched 
+                              && processTransferdetailsForm.controls.TO_PROCESS_CODE.hasError('required')">
+                              code is required
+                            </mat-error>
                             <master-search class="masterSearch"
                               *ngIf="!viewMode" #toProcessMasterOverlay
                               [MasterSearchData]="toProcessMasterSearch"
@@ -195,6 +207,10 @@
                               (focusout)="fromWorkercodeValidate($event)"
                               (input)="fromWorkercodeInputChange()"
                               formControlName="FRM_WORKER_CODE" />
+                            <mat-error *ngIf="processTransferdetailsForm.controls.FRM_WORKER_CODE.touched 
+                              && processTransferdetailsForm.controls.FRM_WORKER_CODE.hasError('required')">
+                              code is required
+                            </mat-error>
                             <master-search class="masterSearch"
                               *ngIf="!viewMode" #fromWorkerMasterOverley
                               [MasterSearchData]="fromWorkerMasterSearch"
@@ -212,6 +228,10 @@
                               (keydown)="lookupKeyPress($event,'TO_WORKER_CODE')"
                               (focusout)="toWorkercodeValidate($event)"
                               formControlName="TO_WORKER_CODE" />
+                            <mat-error *ngIf="processTransferdetailsForm.controls.TO_WORKER_CODE.touched 
+                              && processTransferdetailsForm.controls.TO_WORKER_CODE.hasError('required')">
+                              code is required
+                            </mat-error>
                             <master-search class="masterSearch"
                               *ngIf="!viewMode" #overlayToWorker
                               [MasterSearchData]="toWorkerMasterSearch"
@@ -593,7 +613,7 @@
                         <mat-form-field appearance="outline"
                           style="width: 70%;">
                           <input type="text" matInput
-                            formControlName="consumed" readonly />
+                            formControlName="TIME_CONSUMED" readonly />
                           <datetime-picker class="masterSearch"
                             [DateTimeModelData]="consumedTimeData"
                             *ngIf="!viewMode"
@@ -645,7 +665,7 @@
                 <div class="row">
                   <div class="col-md-7">
                     <div class="form-check">
-                      <mat-checkbox 
+                      <mat-checkbox
                         [disabled]="viewMode"
                         (change)="selectAllBtnChange($event)">Select All Setted
                       </mat-checkbox>
