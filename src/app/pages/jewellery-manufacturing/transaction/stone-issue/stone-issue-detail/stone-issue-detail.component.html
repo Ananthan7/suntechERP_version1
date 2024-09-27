@@ -354,20 +354,20 @@
     </div>
     <div class="row">
       <div class="col-md-12">
-        <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true"
-          [allowColumnReordering]="true"
-          [dataSource]="tableData" [allowColumnResizing]="true"
-          [columnAutoWidth]="true">
-          <dxo-paging [enabled]="false"></dxo-paging>
+        <dx-data-grid  #dataGrid id="gridContainer" [showBorders]="true"
+          [allowColumnResizing]="true"
+          [dataSource]="stoneIssueGridData" [allowColumnResizing]="true"
+          [columnAutoWidth]="true"  (onRowUpdated)="onRowUpdateGrid($event)">
+          <dxo-paging [enabled]="true" [pageSize]="5"></dxo-paging>
           <dxo-editing mode="cell" [allowUpdating]="true">
           </dxo-editing>
           <dxo-selection mode="single"></dxo-selection>
-          <dxo-scrolling mode="virtual"></dxo-scrolling>
-
+          <!-- <dxo-scrolling mode="virtual"></dxo-scrolling> -->
+<!-- 
           <dxi-column *ngFor="let data of columnhead1" dataField="{{ data }}"
             caption="{{ data }}" [allowEditing]="true"
             alignment="center" backgroundcolor="#000">
-          </dxi-column>
+          </dxi-column> -->
           <dxi-column [allowEditing]="false" dataField="DIVCODE"
             caption="Div"></dxi-column>
           <dxi-column [allowEditing]="false" dataField="STOCK_CODE"
