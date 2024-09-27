@@ -745,7 +745,7 @@ export class JobcardComponent implements OnInit {
      
 
         this.mainmetalCodeData.WHERECONDITION = `kARAT_CODE = '${this.jobCardFrom.value.karat}' and PURITY = '${this.jobCardFrom.value.purity}'`;
-        this.tableData[0].Pcs = result.response.PCS;
+        // this.tableData[0].Pcs = result.response.PCS;
         this.tableData[0].metal_color = result.response.COLOR;
         this.tableData[0].metal_wt = result.response.METAL_WT;
         this.tableData[0].stone_wt = result.response.STONE_WT;
@@ -1038,7 +1038,7 @@ export class JobcardComponent implements OnInit {
     this.jobCardFrom.controls.designcode.setValue(this.content.DESIGN_CODE)
     this.jobCardFrom.controls.seqcode.setValue(this.content.SEQ_CODE)
     this.jobCardFrom.controls.designcode.setValue(this.content.DESIGN_CODE)
-    // this.jobCardFrom.controls.picture_name.setValue(this.url)
+    this.jobCardFrom.controls.picture_name.setValue(this.content.PICTURE_NAME)
     this.jobCardFrom.controls.setref.setValue(this.content.SET_REF)
     this.jobCardFrom.controls.totalpcs.setValue(this.content.TOTAL_PCS)
     this.jobCardFrom.controls.pending.setValue(this.content.PENDING_PCS)
@@ -1068,6 +1068,7 @@ export class JobcardComponent implements OnInit {
       this.commonService.transformDecimalVB(6, this.content.JOB_PURITY));
 
     this.urls = this.content.PICTURE_NAME
+    this.getDesignimagecode()
   }
 
   submitValidations(form: any) {
