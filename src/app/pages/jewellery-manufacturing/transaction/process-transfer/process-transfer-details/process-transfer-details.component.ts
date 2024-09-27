@@ -467,8 +467,8 @@ export class ProcessTransferDetailsComponent implements OnInit {
 
       this.processTransferdetailsForm.controls.FRM_METAL_PCS.setValue(parentDetail.FRM_METAL_PCS)
       this.processTransferdetailsForm.controls.TO_METAL_PCS.setValue(parentDetail.TO_METAL_PCS)
-      this.processTransferdetailsForm.controls.FRM_PCS.setValue(parentDetail.JOB_PCS)
-      this.processTransferdetailsForm.controls.TO_PCS.setValue(parentDetail.JOB_PCS)
+      this.processTransferdetailsForm.controls.FRM_PCS.setValue(parentDetail.FRM_PCS)
+      this.processTransferdetailsForm.controls.TO_PCS.setValue(parentDetail.TO_PCS)
       this.processTransferdetailsForm.controls.FRM_STONE_PCS.setValue(parentDetail.FRM_STONE_PCS)
       this.processTransferdetailsForm.controls.TO_STONE_PCS.setValue(parentDetail.TO_STONE_PCS)
 
@@ -1794,6 +1794,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
           if (data.length == 0) {
             this.setFormNullToString('FRM_PROCESS_CODE', '')
             this.commonService.toastErrorByMsgId('MSG1531')
+            this.fromProcesscodeInputChange()
             return
           }
         } else {
@@ -1845,6 +1846,20 @@ export class ProcessTransferDetailsComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
+  fromProcesscodeInputChange(){
+    if(this.processTransferdetailsForm.value.FRM_PROCESS_CODE.toString() == ''){
+      this.isFromProcessCodeEmpty(true)
+    }else{
+      this.isFromProcessCodeEmpty(false)
+    }
+  }
+  fromWorkercodeInputChange(){
+    if(this.processTransferdetailsForm.value.FRM_WORKER_CODE.toString() == ''){
+      this.isFromWorkerCodeEmpty(true)
+    }else{
+      this.isFromWorkerCodeEmpty(false)
+    }
+  }
   // from Workercode Validate
   fromWorkercodeValidate(event: any) {
     if (this.viewMode || this.fromProcessCodeEmpty) return
@@ -1874,6 +1889,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
           if (data.length == 0) {
             this.setFormNullToString('FRM_WORKER_CODE', '')
             this.commonService.toastErrorByMsgId('MSG1531')
+            this.fromWorkercodeInputChange()
             return
           }
         } else {
@@ -2003,7 +2019,8 @@ export class ProcessTransferDetailsComponent implements OnInit {
   processCodeFromSelected(event: any) {
     this.processTransferdetailsForm.controls.FRM_PROCESS_CODE.setValue(event.PROCESS)
     this.processTransferdetailsForm.controls.FRM_PROCESSNAME.setValue(event.Description)
-    this.isFromProcessCodeEmpty(false)
+    this.fromProcesscodeInputChange()
+    this.fromWorkercodeInputChange()
     this.setFromProcessWhereCondition()
     this.setFromWorkerWhereCondition()
     let data = this.subJobDetailData.filter((item: any) => event.PROCESS == item.PROCESS && event.WORKER == item.WORKER)
@@ -2019,6 +2036,8 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.processTransferdetailsForm.controls.TO_PROCESS_CODE.setValue(event.PROCESS_CODE)
     this.processTransferdetailsForm.controls.TO_PROCESSNAME.setValue(event.DESCRIPTION)
     this.setToWorkerWhereCondition()
+    this.fromProcesscodeInputChange()
+    this.fromWorkercodeInputChange()
   }
 
   metalprocessCodeFromSelected(event: any) {
@@ -2040,6 +2059,8 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.processTransferdetailsForm.controls.TO_WORKERNAME.setValue(event.DESCRIPTION)
     this.setToProcessWhereCondition()
     this.setToWorkerWhereCondition()
+    this.fromProcesscodeInputChange()
+    this.fromWorkercodeInputChange()
   }
 
   metalworkerCodeFromSelected(event: any) {

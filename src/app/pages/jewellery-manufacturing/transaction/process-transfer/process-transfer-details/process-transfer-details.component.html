@@ -155,6 +155,7 @@
                               (keydown)="lookupKeyPress($event,'FRM_PROCESS_CODE')"
                               (focusout)="fromProcesscodeValidate($event)"
                               formControlName="FRM_PROCESS_CODE"
+                              (input)="fromProcesscodeInputChange()"
                               [readonly]="viewMode" />
                             <master-search class="masterSearch"
                               *ngIf="!viewMode" #fromProcessMasterOverlay
@@ -192,6 +193,7 @@
                               UpperCaseDirective id="FRM_WORKER_CODE"
                               (keydown)="lookupKeyPress($event,'FRM_WORKER_CODE')"
                               (focusout)="fromWorkercodeValidate($event)"
+                              (input)="fromWorkercodeInputChange()"
                               formControlName="FRM_WORKER_CODE" />
                             <master-search class="masterSearch"
                               *ngIf="!viewMode" #fromWorkerMasterOverley
