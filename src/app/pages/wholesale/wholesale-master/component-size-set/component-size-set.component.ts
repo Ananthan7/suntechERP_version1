@@ -31,6 +31,8 @@ export class ComponentSizeSetComponent implements OnInit {
   componentSizeDesc: any[] = [];
   selectedOption: any;
   editableMode: boolean = false;
+  filteredOptions!: string[];
+  searchTerm: string = '';
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -115,6 +117,7 @@ export class ComponentSizeSetComponent implements OnInit {
       });
   }
 
+  
   // setFormValues() {
   //   if (!this.content) return;
 
@@ -138,6 +141,13 @@ export class ComponentSizeSetComponent implements OnInit {
   // }
 
 
+  onSearch(event: any): void {
+    const searchValue = event.target.value.toLowerCase();
+    this.searchTerm = searchValue;
+    this.filteredOptions = this.componentSizeType.filter((option: string) =>
+      option.toLowerCase().includes(searchValue)
+    );
+  }
 
   componentsizesetmasterForm: FormGroup = this.formBuilder.group({
     code: ['', [Validators.required]],
