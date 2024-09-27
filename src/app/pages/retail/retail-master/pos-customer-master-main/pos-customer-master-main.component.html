@@ -145,7 +145,7 @@
             <div class="row mb-1">
               <div class="col-md-6 mt-1">
                 <mat-checkbox
-                [disabled]="flag === 'VIEW'"
+                  [disabled]="flag === 'VIEW'"
                   (change)="creditLimitChecker($event)"
                   formControlName="creditCardLimitCheck"
                   id="ID006"
@@ -634,7 +634,7 @@
                     required
                   />
                   <master-search
-                  *ngIf="flag !== 'VIEW'"
+                    *ngIf="flag !== 'VIEW'"
                     (focusout)="openTab($event, 'custType')"
                     #overlayCustomerType
                     [MasterSearchData]="customerTypeCodeData"
@@ -674,10 +674,10 @@
                     (selectionChange)="onCountrySelect($event.value)"
                   >
                     <mat-option
-                      *ngFor="let data of countryListData"
-                      [value]="data.COUNTRY_CODE_ISO2"
+                      *ngFor="let country of countryListData"
+                      [value]="country.COUNTRY_CODE_ISO2"
                     >
-                      {{ data.COUNTRY_NAME }}
+                      {{ country.COUNTRY_NAME }}
                     </mat-option>
                   </mat-select>
                 </mat-form-field>
@@ -783,10 +783,10 @@
                   <mat-select formControlName="city">
                     <mat-option
                       [disabled]="flag === 'VIEW'"
-                      *ngFor="let state of cityListData"
-                      [value]="state.NAME"
+                      *ngFor="let city of cityListData"
+                      [value]="city.NAME"
                     >
-                      {{ state.NAME || "State Not available" }}
+                      {{ city.NAME || "City Not available" }}
                     </mat-option>
                   </mat-select>
                   <mat-error
@@ -838,7 +838,7 @@
                     formControlName="language"
                   />
                   <master-search
-                  *ngIf="flag !== 'VIEW'"
+                    *ngIf="flag !== 'VIEW'"
                     (focusout)="openTab($event, 'language')"
                     #overlayLanguage
                     [MasterSearchData]="languageCodeData"
@@ -866,7 +866,7 @@
                     formControlName="favCelebration"
                   />
                   <master-search
-                  *ngIf="flag !== 'VIEW'"
+                    *ngIf="flag !== 'VIEW'"
                     (focusout)="openTab($event, 'favCelebration')"
                     #overlayFavCelebration
                     [MasterSearchData]="favCelebrationCode"
@@ -988,7 +988,7 @@
                               appearance="outline"
                             >
                               <input
-                              [readonly]="flag === 'VIEW'"
+                                [readonly]="flag === 'VIEW'"
                                 appAlphabetsOnly
                                 matInput="text"
                                 (input)="onInput($event, 40)"
@@ -1010,7 +1010,7 @@
                               appearance="outline"
                             >
                               <input
-                              [readonly]="flag === 'VIEW'"
+                                [readonly]="flag === 'VIEW'"
                                 matInput="text"
                                 (input)="onInput($event, 40)"
                                 formControlName="company"
@@ -1030,13 +1030,29 @@
                               style="width: 100%"
                               appearance="outline"
                             >
+                              <mat-select
+                                [disabled]="flag === 'VIEW'"
+                                formControlName="zodiacSign"
+                              >
+                                <mat-option
+                                  *ngFor="let zodiac of zodiacSignArray"
+                                  [value]="zodiac"
+                                >
+                                  {{ zodiac }}
+                                </mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                            <!-- <mat-form-field
+                              style="width: 100%"
+                              appearance="outline"
+                            >
                               <input
-                              [readonly]="flag === 'VIEW'"
+                                [readonly]="flag === 'VIEW'"
                                 matInput="text"
                                 (input)="onInput($event, 15)"
                                 formControlName="zodiacSign"
                               />
-                            </mat-form-field>
+                            </mat-form-field> -->
                           </div>
                         </div>
                         <div class="row mb-1">
@@ -1052,7 +1068,7 @@
                               appearance="outline"
                             >
                               <input
-                              [readonly]="flag === 'VIEW'"
+                                [readonly]="flag === 'VIEW'"
                                 type="number"
                                 matInput
                                 formControlName="noOfChildren"
@@ -1081,7 +1097,7 @@
                                 formControlName="religion"
                               />
                               <master-search
-                              *ngIf="flag !== 'VIEW'"
+                                *ngIf="flag !== 'VIEW'"
                                 (focusout)="openTab($event, 'religion')"
                                 #overlayReligion
                                 [MasterSearchData]="religionCode"
@@ -1109,7 +1125,7 @@
                                 formControlName="category"
                               />
                               <master-search
-                              *ngIf="flag !== 'VIEW'"
+                                *ngIf="flag !== 'VIEW'"
                                 (focusout)="openTab($event, 'category')"
                                 #overlayCategory
                                 [MasterSearchData]="categoryCode"
@@ -1137,7 +1153,7 @@
                                 formControlName="custStatus"
                               />
                               <master-search
-                              *ngIf="flag !== 'VIEW'"
+                                *ngIf="flag !== 'VIEW'"
                                 (focusout)="openTab($event, 'custStatus')"
                                 #overlayCustStatus
                                 [MasterSearchData]="custStatusCode"
@@ -1160,8 +1176,8 @@
                               appearance="outline"
                             >
                               <input
-                              AmountDecimalInput
-                              [readonly]="flag === 'VIEW'"
+                                AmountDecimalInput
+                                [readonly]="flag === 'VIEW'"
                                 type="text"
                                 matInput
                                 (input)="onInput($event, 13)"
@@ -1183,7 +1199,10 @@
                               style="width: -webkit-fill-available"
                               appearance="outline"
                             >
-                              <mat-select [disabled]="flag === 'VIEW'" formControlName="bloodGroup">
+                              <mat-select
+                                [disabled]="flag === 'VIEW'"
+                                formControlName="bloodGroup"
+                              >
                                 <mat-option
                                   *ngFor="let data of bloodGroupList"
                                   [value]="data.ENGLISH"
@@ -1222,7 +1241,7 @@
                               />
 
                               <master-search
-                              *ngIf="flag !== 'VIEW'"
+                                *ngIf="flag !== 'VIEW'"
                                 (focusout)="openTab($event, 'custIdType')"
                                 #overlayCustIdType
                                 [MasterSearchData]="typeidCodeData"
@@ -1245,8 +1264,7 @@
                               appearance="outline"
                             >
                               <input
-                              [readonly]="flag === 'VIEW'"
-
+                                [readonly]="flag === 'VIEW'"
                                 matInput="text"
                                 (input)="onInput($event, 25)"
                                 formControlName="custID"
@@ -1277,7 +1295,7 @@
                                 formControlName="custDate"
                               />
                               <mat-datepicker-toggle
-                              [disabled]="flag === 'VIEW'"
+                                [disabled]="flag === 'VIEW'"
                                 matSuffix
                                 [for]="custDate"
                               ></mat-datepicker-toggle>
@@ -1301,7 +1319,7 @@
                               appearance="outline"
                             >
                               <input
-                              [readonly]="flag === 'VIEW'"
+                                [readonly]="flag === 'VIEW'"
                                 matInput="text"
                                 maxlength="6"
                                 formControlName="POBox"
@@ -1328,7 +1346,7 @@
                                 formControlName="occupation1"
                               />
                               <master-search
-                              *ngIf="flag !== 'VIEW'"
+                                *ngIf="flag !== 'VIEW'"
                                 (focusout)="openTab($event, 'occupation1')"
                                 #overlayOccupation1
                                 [MasterSearchData]="occupationMasterCode"
@@ -1379,7 +1397,7 @@
                               appearance="outline"
                             >
                               <textarea
-                              [readonly]="flag === 'VIEW'"
+                                [readonly]="flag === 'VIEW'"
                                 matInput
                                 rows="3"
                                 formControlName="officialAddress"
@@ -1401,7 +1419,7 @@
                               appearance="outline"
                             >
                               <textarea
-                              [readonly]="flag === 'VIEW'"
+                                [readonly]="flag === 'VIEW'"
                                 matInput
                                 rows="3"
                                 formControlName="deliveryAddress"
@@ -1423,7 +1441,7 @@
                               appearance="outline"
                             >
                               <textarea
-                              [readonly]="flag === 'VIEW'"
+                                [readonly]="flag === 'VIEW'"
                                 matInput
                                 rows="3"
                                 (input)="onInput($event, 150)"
@@ -1439,7 +1457,7 @@
                             for="inputPassword"
                             class="col-sm-5 col-form-label"
                             id="ID035"
-                            >Source of found</label
+                            >Source of fund</label
                           >
                           <div class="col-md-7">
                             <mat-form-field
@@ -1453,7 +1471,7 @@
                                 formControlName="sourceOfFund"
                               />
                               <master-search
-                              *ngIf="flag !== 'VIEW'"
+                                *ngIf="flag !== 'VIEW'"
                                 (focusout)="openTab($event, 'sourceOfFund')"
                                 #overlaySourceOfFund
                                 [MasterSearchData]="sourceOfFundMasterCode"
@@ -1562,7 +1580,7 @@
                         <div class="col-md-5 pt-3">
                           <mat-checkbox
                             formControlName="socialMedia"
-                            (change)="getKnowAbout($event, 'SM')"
+                            (change)="getKnowAbout($event, 'SO')"
                             id="ID056"
                             [disabled]="flag === 'VIEW'"
                             >SOCIAL MEDIA</mat-checkbox
@@ -1667,7 +1685,7 @@
                   <div class="col-md-12">
                     <div class="col-md-5 pt-3">
                       <mat-checkbox
-                      [disabled]="flag === 'VIEW'"
+                        [disabled]="flag === 'VIEW'"
                         formControlName="promotionalOffers"
                         (change)="getIntrestedIn($event, 'PR')"
                         id="ID060"
@@ -1676,7 +1694,7 @@
                     </div>
                     <div class="col-md-5 pt-3">
                       <mat-checkbox
-                      [disabled]="flag === 'VIEW'"
+                        [disabled]="flag === 'VIEW'"
                         formControlName="sportsEvents"
                         (change)="getIntrestedIn($event, 'SP')"
                         id="ID061"
@@ -1685,7 +1703,7 @@
                     </div>
                     <div class="col-md-5 pt-3">
                       <mat-checkbox
-                      [disabled]="flag === 'VIEW'"
+                        [disabled]="flag === 'VIEW'"
                         (change)="getIntrestedIn($event, 'CH')"
                         formControlName="charityEvents"
                         id="ID062"
@@ -1694,7 +1712,7 @@
                     </div>
                     <div class="col-md-5 pt-3">
                       <mat-checkbox
-                      [disabled]="flag === 'VIEW'"
+                        [disabled]="flag === 'VIEW'"
                         (change)="getIntrestedIn($event, 'ST')"
                         formControlName="stageShows"
                         id="ID063"
@@ -1703,7 +1721,7 @@
                     </div>
                     <div class="col-md-5 pt-3">
                       <mat-checkbox
-                      [disabled]="flag === 'VIEW'"
+                        [disabled]="flag === 'VIEW'"
                         (change)="getIntrestedIn($event, 'SE')"
                         formControlName="seminars"
                         id="ID064"
@@ -1712,7 +1730,7 @@
                     </div>
                     <div class="col-md-5 pt-3">
                       <mat-checkbox
-                      [disabled]="flag === 'VIEW'"
+                        [disabled]="flag === 'VIEW'"
                         (change)="getIntrestedIn($event, 'PE')"
                         formControlName="personalSkills"
                         id="ID065"
@@ -2574,7 +2592,7 @@
                               appearance="outline"
                             >
                               <input
-                              [readonly]="flag === 'VIEW'"
+                                [readonly]="flag === 'VIEW'"
                                 matInput
                                 type="text"
                                 formControlName="goodQualityaka"
@@ -2595,7 +2613,7 @@
                               appearance="outline"
                             >
                               <input
-                              [readonly]="flag === 'VIEW'"
+                                [readonly]="flag === 'VIEW'"
                                 matInput
                                 type="text"
                                 formControlName="lowQualityaka"
@@ -2616,7 +2634,7 @@
                               appearance="outline"
                             >
                               <input
-                              [readonly]="flag === 'VIEW'"
+                                [readonly]="flag === 'VIEW'"
                                 matInput
                                 type="text"
                                 formControlName="aka"
@@ -2637,7 +2655,7 @@
                               appearance="outline"
                             >
                               <input
-                              [readonly]="flag === 'VIEW'"
+                                [readonly]="flag === 'VIEW'"
                                 matInput
                                 type="text"
                                 formControlName="fka"
@@ -2660,9 +2678,8 @@
                               appearance="outline"
                             >
                               <input
-                              [readonly]="flag === 'VIEW'"
-                                appAlphabetsOnly
                                 readonly="true"
+                                appAlphabetsOnly
                                 matInput="text"
                                 style="text-align: end"
                                 formControlName="nationalityCode1"
@@ -2674,14 +2691,33 @@
                               style="width: 100%"
                               appearance="outline"
                             >
+                              <mat-select
+                                [disabled]="flag === 'VIEW'"
+                                formControlName="nationality1"
+                                (selectionChange)="
+                                  selectCountryCode($event, 'nationalityCode1')
+                                "
+                              >
+                                <mat-option
+                                  *ngFor="let country of countryListData"
+                                  [value]="country.COUNTRY_CODE_ISO2"
+                                >
+                                  {{ country.COUNTRY_NAME }}
+                                </mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                            <!-- <mat-form-field
+                              style="width: 100%"
+                              appearance="outline"
+                            >
                               <input
-                              [readonly]="flag === 'VIEW'"
+                                [readonly]="flag === 'VIEW'"
                                 matInput
                                 type="text"
                                 formControlName="nationality1"
                                 class="text-right"
                               />
-                            </mat-form-field>
+                            </mat-form-field> -->
                           </div>
                         </div>
 
@@ -2698,8 +2734,8 @@
                               appearance="outline"
                             >
                               <input
+                                readonly="true"
                                 appAlphabetsOnly
-                                [readonly]="flag === 'VIEW'"
                                 matInput="text"
                                 style="text-align: end"
                                 formControlName="nationalityCode2"
@@ -2711,15 +2747,34 @@
                               style="width: 100%"
                               appearance="outline"
                             >
+                              <mat-select
+                                [disabled]="flag === 'VIEW'"
+                                formControlName="nationality2"
+                                (selectionChange)="
+                                  selectCountryCode($event, 'nationalityCode2')
+                                "
+                              >
+                                <mat-option
+                                  *ngFor="let country of countryListData"
+                                  [value]="country.COUNTRY_CODE_ISO2"
+                                >
+                                  {{ country.COUNTRY_NAME }}
+                                </mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                            <!-- <mat-form-field
+                              style="width: 100%"
+                              appearance="outline"
+                            >
                               <input
-                              [readonly]="flag === 'VIEW'"
+                                [readonly]="flag === 'VIEW'"
                                 appAlphabetsOnly
                                 matInput
                                 type="text"
                                 formControlName="nationality2"
                                 class="text-right"
                               />
-                            </mat-form-field>
+                            </mat-form-field> -->
                           </div>
                         </div>
 
@@ -2736,8 +2791,8 @@
                               appearance="outline"
                             >
                               <input
+                                readonly="true"
                                 appAlphabetsOnly
-                                [readonly]="flag === 'VIEW'"
                                 matInput="text"
                                 style="text-align: end"
                                 formControlName="nationalityCode3"
@@ -2749,15 +2804,34 @@
                               style="width: 100%"
                               appearance="outline"
                             >
+                              <mat-select
+                                [disabled]="flag === 'VIEW'"
+                                formControlName="nationality3"
+                                (selectionChange)="
+                                  selectCountryCode($event, 'nationalityCode3')
+                                "
+                              >
+                                <mat-option
+                                  *ngFor="let country of countryListData"
+                                  [value]="country.COUNTRY_CODE_ISO2"
+                                >
+                                  {{ country.COUNTRY_NAME }}
+                                </mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                            <!-- <mat-form-field
+                              style="width: 100%"
+                              appearance="outline"
+                            >
                               <input
-                              [readonly]="flag === 'VIEW'"
+                                [readonly]="flag === 'VIEW'"
                                 appAlphabetsOnly
                                 matInput
                                 type="text"
                                 formControlName="nationality3"
                                 class="text-right"
                               />
-                            </mat-form-field>
+                            </mat-form-field> -->
                           </div>
                         </div>
 
@@ -2774,8 +2848,8 @@
                               appearance="outline"
                             >
                               <input
+                                readonly="true"
                                 appAlphabetsOnly
-                                [readonly]="flag === 'VIEW'"
                                 matInput="text"
                                 style="text-align: end"
                                 formControlName="nationalityCode4"
@@ -2787,14 +2861,33 @@
                               style="width: 100%"
                               appearance="outline"
                             >
+                              <mat-select
+                                [disabled]="flag === 'VIEW'"
+                                formControlName="nationality4"
+                                (selectionChange)="
+                                  selectCountryCode($event, 'nationalityCode4')
+                                "
+                              >
+                                <mat-option
+                                  *ngFor="let country of countryListData"
+                                  [value]="country.COUNTRY_CODE_ISO2"
+                                >
+                                  {{ country.COUNTRY_NAME }}
+                                </mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                            <!-- <mat-form-field
+                              style="width: 100%"
+                              appearance="outline"
+                            >
                               <input
-                              [readonly]="flag === 'VIEW'"
+                                [readonly]="flag === 'VIEW'"
                                 matInput
                                 type="text"
                                 formControlName="nationality4"
                                 class="text-right"
                               />
-                            </mat-form-field>
+                            </mat-form-field> -->
                           </div>
                         </div>
                         <div class="row mb-1">
@@ -2810,8 +2903,8 @@
                               appearance="outline"
                             >
                               <input
+                                readonly="true"
                                 appAlphabetsOnly
-                                [readonly]="flag === 'VIEW'"
                                 matInput="text"
                                 style="text-align: end"
                                 formControlName="nationalityCode5"
@@ -2823,14 +2916,33 @@
                               style="width: 100%"
                               appearance="outline"
                             >
+                              <mat-select
+                                [disabled]="flag === 'VIEW'"
+                                formControlName="nationality5"
+                                (selectionChange)="
+                                  selectCountryCode($event, 'nationalityCode5')
+                                "
+                              >
+                                <mat-option
+                                  *ngFor="let country of countryListData"
+                                  [value]="country.COUNTRY_CODE_ISO2"
+                                >
+                                  {{ country.COUNTRY_NAME }}
+                                </mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                            <!-- <mat-form-field
+                              style="width: 100%"
+                              appearance="outline"
+                            >
                               <input
-                              [readonly]="flag === 'VIEW'"
+                                [readonly]="flag === 'VIEW'"
                                 matInput
                                 type="text"
                                 formControlName="nationality5"
                                 class="text-right"
                               />
-                            </mat-form-field>
+                            </mat-form-field> -->
                           </div>
                         </div>
 
@@ -2847,9 +2959,9 @@
                               appearance="outline"
                             >
                               <input
-                              [readonly]="flag === 'VIEW'"
+                                [readonly]="flag === 'VIEW'"
                                 matInput
-                                type="text"
+                                type="number"
                                 formControlName="passport1"
                               />
                             </mat-form-field>
@@ -2867,8 +2979,8 @@
                               appearance="outline"
                             >
                               <input
-                              [readonly]="flag === 'VIEW'"
-                                type="text"
+                                [readonly]="flag === 'VIEW'"
+                                type="number"
                                 matInput
                                 formControlName="passport2"
                               />
@@ -2889,9 +3001,9 @@
                               appearance="outline"
                             >
                               <input
-                              [readonly]="flag === 'VIEW'"
+                                [readonly]="flag === 'VIEW'"
                                 matInput
-                                type="text"
+                                type="number"
                                 formControlName="passport3"
                               />
                             </mat-form-field>
@@ -2909,8 +3021,8 @@
                               appearance="outline"
                             >
                               <input
-                              [readonly]="flag === 'VIEW'"
-                                type="text"
+                                [readonly]="flag === 'VIEW'"
+                                type="number"
                                 matInput
                                 formControlName="passport4"
                               />
@@ -2931,9 +3043,9 @@
                               appearance="outline"
                             >
                               <input
-                              [readonly]="flag === 'VIEW'"
+                                [readonly]="flag === 'VIEW'"
                                 matInput
-                                type="text"
+                                type="number"
                                 formControlName="passport5"
                               />
                             </mat-form-field>
@@ -2961,7 +3073,7 @@
                                 readonly="true"
                               />
                               <mat-datepicker-toggle
-                              [disabled]="flag === 'VIEW'"
+                                [disabled]="flag === 'VIEW'"
                                 matSuffix
                                 [for]="listedOn"
                               ></mat-datepicker-toggle>
@@ -2986,7 +3098,7 @@
                               appearance="outline"
                             >
                               <input
-                              [readonly]="flag === 'VIEW'"
+                                [readonly]="flag === 'VIEW'"
                                 matInput
                                 type="text"
                                 formControlName="nationalId"
@@ -3008,7 +3120,7 @@
                               appearance="outline"
                             >
                               <textarea
-                              [readonly]="flag === 'VIEW'"
+                                [readonly]="flag === 'VIEW'"
                                 matInput
                                 rows="3"
                                 formControlName="addressFromAml"
@@ -3032,7 +3144,7 @@
                               appearance="outline"
                             >
                               <textarea
-                              [readonly]="flag === 'VIEW'"
+                                [readonly]="flag === 'VIEW'"
                                 matInput
                                 rows="3"
                                 formControlName="otherInfo"
@@ -3056,7 +3168,7 @@
                               appearance="outline"
                             >
                               <input
-                              [readonly]="flag === 'VIEW'"
+                                [readonly]="flag === 'VIEW'"
                                 matInput
                                 type="text"
                                 formControlName="link"
@@ -3078,7 +3190,7 @@
                               appearance="outline"
                             >
                               <input
-                              [readonly]="flag === 'VIEW'"
+                                [readonly]="flag === 'VIEW'"
                                 matInput
                                 type="text"
                                 formControlName="fatherName"
@@ -3101,7 +3213,7 @@
                               appearance="outline"
                             >
                               <input
-                              [readonly]="flag === 'VIEW'"
+                                [readonly]="flag === 'VIEW'"
                                 appAlphabetsOnly
                                 matInput
                                 type="text"
@@ -3302,7 +3414,7 @@
                         </mat-form-field>
                       </div>
                     </div>
-                    <div class="row mt-3">
+                    <!-- <div class="row mt-3">
                       <label
                         for="inputPassword"
                         class="col-sm-4 col-form-label"
@@ -3325,7 +3437,7 @@
                           ></master-search>
                         </mat-form-field>
                       </div>
-                    </div>
+                    </div> -->
                   </div>
                 </div>
               </mat-tab>
@@ -3337,7 +3449,14 @@
         <div class="row mb-1">
           <div class="col-md-10 p-2 mt-1">
             <div class="icons">
-              <div class="image_box"></div>
+              <div class="image_box">
+                <img
+                  class="image_box"
+                  *ngIf="fetchedPicture"
+                  [src]="fetchedPicture"
+                  alt="picture"
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -3368,6 +3487,7 @@
                 <button
                   type="button"
                   class="btn btn-primary add-btn"
+                  [disabled]="flag === 'VIEW'"
                   (click)="fileInput.click()"
                 >
                   <i class="fas fa-image"></i>
@@ -3417,7 +3537,7 @@
                 readonly="true"
               />
               <mat-datepicker-toggle
-              disabled="true"
+                disabled="true"
                 matSuffix
                 [for]="openedOn"
               ></mat-datepicker-toggle>
@@ -3543,6 +3663,7 @@
                 </div>
                 <div class="button-container">
                   <button
+                    disabled="true"
                     type="button"
                     class="btn btn-primary text-center m-2"
                     (click)="transactionDetails($event)"
@@ -3550,6 +3671,7 @@
                     Show Trans. Details
                   </button>
                   <button
+                    disabled="true"
                     type="button"
                     class="btn btn-primary text-center m-2"
                     (click)="printPrivilegeCard($event)"
@@ -3557,6 +3679,7 @@
                     Print Privilege Card
                   </button>
                   <button
+                    disabled="true"
                     type="button"
                     class="btn btn-primary text-center m-2"
                     (click)="printCustomerLog($event)"
