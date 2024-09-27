@@ -554,7 +554,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
       .getDynamicAPI(API)
       .subscribe((res) => {
         if (res.status.trim() === "Success") {
-          this.fetchedPicture = res.response.imagepath; // Make sure this is a valid URL
+          this.fetchedPicture = res.response?.imagepath; // Make sure this is a valid URL
         }
       });
   }
@@ -1606,6 +1606,34 @@ export class PosCustomerMasterMainComponent implements OnInit {
                     confirmButtonColor: "#336699",
                     confirmButtonText: "Ok",
                   });
+
+                  if (this.image) {
+                    const formData = new FormData();
+                    formData.append(
+                      "CODE",
+                      this.existCustomerCode || this.generatedCustomerCode
+                    );
+                    formData.append("File", this.image);
+
+                    let API = `PosCustomerMaster/InsertPOSCustAttachments`;
+
+                    console.log("FormData:", formData);
+
+                    let Sub: Subscription = this.apiService
+                      .postDynamicAPI(API, formData)
+                      .subscribe(
+                        (result) => {
+                          console.log("API Response:", result);
+                        },
+                        (err) => {
+                          // Handle HTTP or API error
+                          console.error("API Error:", err);
+                        }
+                      );
+                    this.subscriptions.push(Sub);
+                  } else {
+                    console.error("No file selected");
+                  }
                   this.close("reloadMainGrid");
                 } else {
                   // Handle cases where the result is not successful or undefined
