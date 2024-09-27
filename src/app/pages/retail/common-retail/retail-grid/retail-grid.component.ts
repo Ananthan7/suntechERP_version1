@@ -352,7 +352,6 @@ export class RetailGridComponent implements OnInit {
     };
     this.dataService.postDynamicAPI('ExecueteSPInterface', payload)
     .subscribe((result: any) => {
-      console.log('data Refetch for template',result.dynamicData);
       this.dataSource = result.dynamicData[0]
 
       this.dataSource.forEach((item: any) => {
@@ -364,9 +363,11 @@ export class RetailGridComponent implements OnInit {
         }
         console.log('data Refetch for retail template grid',parsedData.CONTROL_DETAIL)
         const fromVocDate = parsedData.CONTROL_DETAIL?.FROMVOCDATE || parsedData.CONTROL_DETAIL?.STRFROMDATE ||
-          parsedData.CONTROL_DETAIL?.strFmDate || parsedData.CONTROL_DETAIL?.FrVocDate || parsedData.CONTROL_DETAIL?.str_FmDate;
+          parsedData.CONTROL_DETAIL?.strFmDate || parsedData.CONTROL_DETAIL?.FrVocDate || parsedData.CONTROL_DETAIL?.str_FmDate
+          || parsedData.CONTROL_DETAIL?.strAsOnDate;;
         const toVocDate = parsedData.CONTROL_DETAIL?.TOVOCDATE || parsedData.CONTROL_DETAIL?.STRTODATE ||
-          parsedData.CONTROL_DETAIL?.strToDate || parsedData.CONTROL_DETAIL?.ToVocDate || parsedData.CONTROL_DETAIL?.str_ToDate;
+          parsedData.CONTROL_DETAIL?.strToDate || parsedData.CONTROL_DETAIL?.ToVocDate || parsedData.CONTROL_DETAIL?.str_ToDate
+          || parsedData.CONTROL_DETAIL?.strAsOnDate;;
       
         item.FROMVOCDATE = fromVocDate;
         item.TOVOCDATE = toVocDate;

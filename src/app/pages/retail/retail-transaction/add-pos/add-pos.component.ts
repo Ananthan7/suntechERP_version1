@@ -37,6 +37,7 @@ import { ItemDetailService } from 'src/app/services/modal-service.service';
 import { PlanetService } from 'src/app/services/planet-integration.service';
 import { DxDataGridComponent } from 'devextreme-angular';
 import { MatSelectChange } from '@angular/material/select';
+import SignaturePad from 'signature_pad';
 
 const baseUrl = environment.baseUrl;
 const baseImgUrl = environment.baseImageUrl;
@@ -50,6 +51,11 @@ interface VocTypesEx {
   styleUrls: ['./add-pos.component.scss'],
 })
 export class AddPosComponent implements OnInit {
+
+  @ViewChild('signaturePadCanvas', { static: false }) signaturePadElement!: ElementRef;
+  signaturePad!: SignaturePad | undefined;
+
+
   @ViewChild(AuditTrailComponent) auditTrailComponent?: AuditTrailComponent;
   @Input() content!: any;
 
@@ -84,6 +90,7 @@ export class AddPosComponent implements OnInit {
   // @ViewChild('scanner', { static: false }) scanner: BarcodeScannerLivestreamOverlayComponent;
   // @ViewChild(BarcodeScannerLivestreamComponent) scanner: BarcodeScannerLivestreamComponent;
   LOCKVOUCHERNO: boolean = true;
+  isSignaturePadInitialized = false;
   voucherDetails: any;
   minDate: any;
   maxDate: any;
@@ -93,11 +100,14 @@ export class AddPosComponent implements OnInit {
   isNewButtonDisabled: boolean = true;
   allowDescription: boolean = false;
   isGrossWtEditable: boolean = true;
+  isPcsEditable: boolean = true;
   editLineItem: boolean = false;
   amountDecimalFormat: any;
   metalDecimalFormat: any;
   weightDecimalFormat: any;
   gridAmountDecimalFormat: any;
+  hideEsignButton:boolean=false;
+  hideEsignView:boolean=true;
   gridWeghtDecimalFormat: any;
   isOrderPullingRowSelected: boolean = false;
   isEstiPullingRowSelected: boolean = false;
@@ -505,7 +515,8 @@ export class AddPosComponent implements OnInit {
   templateform = {
     testmn: 0.0,
   };
-
+  isAllowWithoutRate: boolean = false;
+  isPromotionalItem: boolean = false;
   currentLineItems: any = [];
   currentsalesReturnItems: any = [];
   currentExchangeMetalPurchase: any[] = [];
@@ -1781,11 +1792,43 @@ export class AddPosComponent implements OnInit {
   onStarted(started: any) {
     console.log(started);
   }
-  // ngAfterViewInit() {
-  //   this.scanner.show();
-  //   // this.scanner.s
-  // }
 
+  ngAfterViewChecked(): void {
+    if (!this.isSignaturePadInitialized && !this.hideEsignView && this.signaturePadElement) {
+      this.initializeSignaturePad()
+        .then(() => {
+          console.log('Signature pad initialized');
+        })
+        .catch((error) => {
+          console.error('Signature pad initialization failed:', error);
+        });
+    }
+  }
+
+  initializeSignaturePad(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      if (this.signaturePadElement && !this.isSignaturePadInitialized) {
+        this.signaturePad = new SignaturePad(this.signaturePadElement.nativeElement, {
+          backgroundColor: 'white',
+          penColor: 'black',
+        });
+        this.isSignaturePadInitialized = true;
+        resolve(); 
+      } else {
+        reject('Signature pad element not found or already initialized');
+      }
+    });
+  }
+
+  openEsign() {
+  this.hideEsignView=false;
+  this.isSignaturePadInitialized=false;
+  }
+
+  cancelEsign() {
+    this.hideEsignView=true;
+    }
+  
   onValueChanges(result: any) {
     alert(JSON.stringify(result));
     this.barcode = result.codeResult.code;
@@ -1793,17 +1836,9 @@ export class AddPosComponent implements OnInit {
     // this.lineItemForm.controls.fcn_li_item_code.setValue(result.codeResult.code);
   }
 
-  ngAfterViewInit(): void {
-    //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
-    //Add 'implements AfterViewInit' to the class.
-    // if (this.viewOnly) this.setReadOnlyForViewMode();
 
-    // console.log('viewonly',this.viewOnly , this.editOnly);
 
-    // if(!this.viewOnly && !this.editOnly)
-    // this.open(this.mymodal);
 
-  }
   onChanges(): void {
     this.customerDataForm.value.tourVatRefuncYN.valueChanges.subscribe((isChecked: any) => {
       const tourVatRefundNoControl = this.customerDataForm.value.tourVatRefundNo;
@@ -2530,7 +2565,11 @@ export class AddPosComponent implements OnInit {
       // }
       console.log('receipt detail', this.receiptDetailsList);
     } else {
-      this.snackBar.open('Please Fill All Fields', 'OK');
+      this.snackBar.open('Please Fill All Fields', 'OK', {
+        duration: 2000
+      });
+
+      // this.snackBar.open('Please Fill All Fields', 'OK');
     }
 
   }
@@ -2900,6 +2939,8 @@ export class AddPosComponent implements OnInit {
     console.log(value);
     console.log('====================================');
     event.component.refresh();
+    this.isAllowWithoutRate = value.ALLOW_WITHOUT_RATE;
+    this.isPromotionalItem = value.TPROMOTIONALITEM;
 
     // console.log(this.ordered_items);
     // console.log(this.newLineItem);
@@ -7445,6 +7486,7 @@ export class AddPosComponent implements OnInit {
           this.imageURL = []
         } else {
           this.enableFormControls(false);
+          this.renderer.selectRootElement('#fcn_li_item_code').focus();
           this.imageURL = []
         }
       } else {
@@ -7489,12 +7531,15 @@ export class AddPosComponent implements OnInit {
 
   focusAndSetReadOnly(stockInfos: any): void {
     this.isGrossWtEditable = true;
+    this.isPcsEditable=true;
     const isDivisionX = this.newLineItem.DIVISION === 'X';
     const excludeQtyValidations = ['M', 'D', 'W', 'N'];
     if (
       (excludeQtyValidations.some(v => this.newLineItem.DIVISION.toUpperCase().includes(v)))) {
       this.isGrossWtEditable = false;
-    }
+      this.isPcsEditable=true;
+    }else
+    this.isPcsEditable=false;
     if (!isDivisionX &&
       this.comFunc.emptyToZero(stockInfos.BALANCE_PCS) < 1 &&
       stockInfos.ENABLE_PCS &&
@@ -7513,7 +7558,8 @@ export class AddPosComponent implements OnInit {
           this.comFunc.allbranchMaster?.BMQTYDECIMALS,
           1));
       this.isGrossWtEditable = false;
-      this.comFunc.formControlSetReadOnly('fcn_li_pcs', true);
+      this.isPcsEditable=false;
+      // this.comFunc.formControlSetReadOnly('fcn_li_pcs', true);
       this.comFunc.formControlSetReadOnly('fcn_li_gross_wt', true);
     }
   }
@@ -7590,6 +7636,8 @@ export class AddPosComponent implements OnInit {
                 this.newLineItem.IGST_ACCODE = stockInfoTaxes[0]?.POS_TAX_ACCODE;
                 this.newLineItem.IGST_ACCODE_NON_POS = stockInfoTaxes[0]?.IGST_ACCODE;
                 this.newLineItem.IGST_PER = stockInfoTaxes[0]?.IGST_PER;
+                this.isPromotionalItem = stockInfos.TPROMOTIONALITEM;
+                this.blockNegativeStock = stockInfos.BLOCK_NEGATIVESTOCK;
                 // this.newLineItem.GPC_POSSALES_AC = stockInfos[0]?.GPC_POSSALES_AC;
                 // this.newLineItem.GPC_STONEDIFF_AC = stockInfos[0]?.GPC_STONEDIFF_AC;
                 // this.newLineItem.GPC_STONEVALUESALES_AC = stockInfos[0]?.GPC_STONEVALUESALES_AC;
@@ -8236,8 +8284,9 @@ export class AddPosComponent implements OnInit {
   managePcsGrossWt() {
     this.isGrossWtEditable = true;
     if (this.validatePCS == true || this.enablePieces == true || this.newLineItem.DIVISION != 'G') {
-      if (!this.viewOnly)
-        this.comFunc.formControlSetReadOnly('fcn_li_pcs', false);
+      // if (!this.viewOnly&& this.newLineItem.DIVISION !='X')
+      //   this.isPcsEditable=true;
+        // this.comFunc.formControlSetReadOnly('fcn_li_pcs', false);
 
       this['lineItemForm'].controls['fcn_li_pcs'].setValidators([
         Validators.required,
@@ -8262,7 +8311,8 @@ export class AddPosComponent implements OnInit {
       //   else this.comFunc.formControlSetReadOnly('fcn_li_gross_wt', true);
       // }
     } else {
-      this.comFunc.formControlSetReadOnly('fcn_li_pcs', true);
+      this.isPcsEditable=false;
+      // this.comFunc.formControlSetReadOnly('fcn_li_pcs', true);
       this.comFunc.formControlSetReadOnly('fcn_li_gross_wt', false);
 
       this.removeValidationsForForms(this.lineItemForm, ['fcn_li_pcs']);
@@ -9544,6 +9594,7 @@ export class AddPosComponent implements OnInit {
           this.manageCalculations({ totalAmt: totalAmt, nettAmt });
         }
         this.detectDiscountChange = true;
+        if(this.divisionMS!='M')
         this.updateDiscountAmount();
       } else {
         // Rate Cannot be Less Than Cost
@@ -9934,13 +9985,13 @@ export class AddPosComponent implements OnInit {
       //Changes as per Jebraj's Input on 17/07/2024
 
       if (this.divisionMS == 'S') {
-        if (this.comFunc.emptyToZero(this.lineItemModalForSalesReturn) || ((this.comFunc.emptyToZero(value)) >= this.comFunc.emptyToZero(this.newLineItem.STOCK_COST))&&(this.comFunc.emptyToZero(value))>=this.comFunc.emptyToZero(this.blockMinimumPriceValue)) {
+        if (((this.isPromotionalItem && this.isAllowWithoutRate && this.comFunc.emptyToZero(value) >= 0)) || this.comFunc.emptyToZero(value) > 0) {
 
           this.rateFunc(value);
         }
         else {
           // Rate Cannot be Less Than Cost
-          this.openDialog('Warning', this.comFunc.getMsgByID('MSG1721'), true);
+          this.openDialog('Warning', this.comFunc.emptyToZero(value) != 0 ? this.comFunc.getMsgByID('MSG1721') : this.comFunc.getMsgByID('MSG1723'), true);
           this.dialogBox.afterClosed().subscribe((data: any) => {
             if (data == 'OK') {
 
@@ -11081,12 +11132,10 @@ export class AddPosComponent implements OnInit {
       this.getPercentage(taxPercentage, grossAmount)
     );
   
-    // Set the tax amount in the form control
     this.lineItemForm.controls['fcn_li_tax_amount'].setValue(
       this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, taxAmount)
     );
   
-    // Store the tax amount in a class variable (if needed)
     this.li_tax_amount_val = this.comFunc.transformDecimalVB(
       this.comFunc.allbranchMaster?.BAMTDECIMALS,
       taxAmount
@@ -11100,18 +11149,15 @@ export class AddPosComponent implements OnInit {
   
     const netAmtValue = grossAmount + taxAmount;
   
-    // Set the net amount in the form control
     this.lineItemForm.controls['fcn_li_net_amount'].setValue(
       this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, netAmtValue)
     );
   
-    // Store the net amount in a class variable (if needed)
     this.li_net_amount_val = this.comFunc.transformDecimalVB(
       this.comFunc.allbranchMaster?.BAMTDECIMALS,
       netAmtValue
     );
   
-    // Store the net amount in local storage
     localStorage.setItem('fcn_li_net_amount', netAmtValue.toString());
   }
   
@@ -11187,7 +11233,7 @@ export class AddPosComponent implements OnInit {
           'AMOUNT')|| this.zeroAmtVal
  
     );
-
+    if(this.divisionMS!="M")
     this.updateDiscountAmount();
 
     this.lineItemForm.controls['fcn_li_tax_amount'].setValue(
@@ -12530,7 +12576,8 @@ export class AddPosComponent implements OnInit {
   }
   /**  end customer detail form */
   setReadOnlyForViewMode() {
-    this.comFunc.formControlSetReadOnly('fcn_li_pcs', false);
+    this.isPcsEditable=true;
+    // this.comFunc.formControlSetReadOnly('fcn_li_pcs', false);
     this.comFunc.formControlSetReadOnly('fcn_li_gross_wt', false);
   }
   dateFilter = (d: Date | null): boolean => {
@@ -13664,6 +13711,20 @@ export class AddPosComponent implements OnInit {
         console.log(`Dismissed ${reason}`);
       }
     );
+  }
+
+
+  clearSignature() {
+    this.signaturePad?.clear();
+  }
+
+  saveSignature() {
+    if (this.signaturePad?.isEmpty()) {
+      alert('Please provide a signature first.');
+    } else {
+      const dataURL = this.signaturePad?.toDataURL();
+      console.log('Signature saved:', dataURL);
+    }
   }
 
   openUserAttachmentModal() {

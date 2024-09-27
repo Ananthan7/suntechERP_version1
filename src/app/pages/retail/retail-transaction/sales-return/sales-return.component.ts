@@ -3061,10 +3061,15 @@ export class SalesReturnComponent implements OnInit {
         this.comFunc.allbranchMaster?.BAMTDECIMALS, value.DISCOUNTVALUEFC)
     );
 
-    this.lineItemForm.controls.fcn_li_gross_amount.setValue(
-      this.comFunc.transformDecimalVB(
-        this.comFunc.allbranchMaster?.BAMTDECIMALS, (value.GROSS_AMT))
+    this.lineItemForm.controls.fcn_li_gross_amount.setValue( 
+      this.comFunc.commaSeperation(
+        this.comFunc.transformDecimalVB(
+          this.comFunc.allbranchMaster?.BAMTDECIMALS, 
+          value.GROSS_AMT
+        )
+      )
     );
+    
 
     // this.lineItemForm.controls.fcn_li_gross_amount.setValue(
     //   this.comFunc.transformDecimalVB(
@@ -5133,9 +5138,14 @@ export class SalesReturnComponent implements OnInit {
             this.comFunc.allbranchMaster?.BAMTDECIMALS, value.DISCOUNTVALUEFC)
         );
         this.lineItemForm.controls.fcn_li_gross_amount.setValue(
-          this.comFunc.transformDecimalVB(
-            this.comFunc.allbranchMaster?.BAMTDECIMALS, value.NETVALUEFC)
+          this.comFunc.commaSeperation(
+            this.comFunc.transformDecimalVB(
+              this.comFunc.allbranchMaster?.BAMTDECIMALS, 
+              value.NETVALUEFC
+            )
+          )
         );
+        
         // this.lineItemForm.controls.fcn_li_gross_amount.setValue(value.GROSS_AMT);
         this.lineItemForm.controls.fcn_li_tax_percentage.setValue(
           this.comFunc.transformDecimalVB(
@@ -6837,6 +6847,7 @@ export class SalesReturnComponent implements OnInit {
       // new fields added - 03-02-2024 for posplanet save calculation
       "GSTVATONMAKING": data.GSTVATONMAKING,
       "EXCLUDEGSTVAT": data.EXCLUDEGSTVAT,
+      "BLOCK_NEGATIVESTOCK":this.blockNegativeStock
 
     };
     console.log(temp_pos_item_data);
@@ -8129,6 +8140,7 @@ export class SalesReturnComponent implements OnInit {
         metal_amt: data.METALVALUECC,
         // this.comFunc.emptyToZero(this.lineItemForm.value.fcn_ad_metal_amount) || 0,
         stone_amt: this.comFunc.emptyToZero(this.lineItemForm.value.fcn_ad_stone_amount) || 0,
+        
       };
 
       this.newLineItem.PCS = data.PCS;
@@ -9278,9 +9290,9 @@ export class SalesReturnComponent implements OnInit {
     this.isNetAmountChange = false;
     const value = this.comFunc.emptyToZero(event.target.value);
     if (this.comFunc.emptyToZero(event.target.value) == 0) {
+      // IS_BARCODED_ITEM
 
-
-      this.openDialog('Warning', this.comFunc.getMsgByID('MSG1560'), true);
+      this.openDialog('Warning',this.newLineItem.IS_BARCODED_ITEM ? this.comFunc.getMsgByID('MSG1563'):this.comFunc.getMsgByID('MSG1560'), true);
       this.dialogBox.afterClosed().subscribe((data: any) => {
         if (data == 'OK') {
           this.lineItemForm.controls['fcn_li_pcs'].setValue(
@@ -9350,9 +9362,15 @@ export class SalesReturnComponent implements OnInit {
                 this.manageCalculations();
 
               } else {
-                this.detectDiscountChange = true;
-                this.checkDivisionForPcs(value)
+                this.checkDivisionForPcs(value);
                 this.manageCalculations();
+                this.detectDiscountChange = true;
+                this.updateDiscountAmount();
+                // this.calculateTaxAmount();
+                // this.calculateNetAmount();
+                // this.detectDiscountChange = true;
+                // this.checkDivisionForPcs(value)
+                // this.manageCalculations();
 
               }
             });
@@ -9374,6 +9392,13 @@ export class SalesReturnComponent implements OnInit {
         this.detectDiscountChange = true;
         this.checkDivisionForPcs(value)
         this.manageCalculations();
+
+        if(this.divisionMS!='M'){
+          this.updateDiscountAmount();
+          this.calculateTaxAmount();
+          this.calculateNetAmount();
+        }
+        
       }
       else {
 
@@ -9389,7 +9414,43 @@ export class SalesReturnComponent implements OnInit {
     }
   }
 
+   calculateTaxAmount() {
+    const taxPercentage = this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_tax_percentage);
+    const grossAmount = this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_amount);
+  
+    const taxAmount = this.comFunc.transformDecimalVB(
+      this.comFunc.allbranchMaster?.BAMTDECIMALS,
+      this.getPercentage(taxPercentage, grossAmount)
+    );
+  
+    this.lineItemForm.controls['fcn_li_tax_amount'].setValue(
+      this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, taxAmount)
+    );
+  
+    this.li_tax_amount_val = this.comFunc.transformDecimalVB(
+      this.comFunc.allbranchMaster?.BAMTDECIMALS,
+      taxAmount
+    );
+  }
 
+  calculateNetAmount() {
+    const grossAmount = this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_amount);
+    const taxAmount = this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_tax_amount);
+  
+    const netAmtValue = grossAmount + taxAmount;
+  
+    this.lineItemForm.controls['fcn_li_net_amount'].setValue(
+      this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, netAmtValue)
+    );
+  
+    this.li_net_amount_val = this.comFunc.transformDecimalVB(
+      this.comFunc.allbranchMaster?.BAMTDECIMALS,
+      netAmtValue
+    );
+  
+    localStorage.setItem('fcn_li_net_amount', netAmtValue.toString());
+  }
+  
   checkDivisionForPcs(pcs: any) {
     const validDivisionCodes = ['M', 'D', 'W', 'N'];
     const filteredValidationCodes = validDivisionCodes.filter((code) => code === this.newLineItem.DIVISION.toUpperCase())
@@ -9573,6 +9634,7 @@ export class SalesReturnComponent implements OnInit {
           this.manageCalculations({ totalAmt: totalAmt, nettAmt });
         }
         this.detectDiscountChange = true;
+        if(this.divisionMS!='M')
         this.updateDiscountAmount();
 
       } else {
@@ -9763,12 +9825,13 @@ export class SalesReturnComponent implements OnInit {
     this.lineItemForm.controls.fcn_li_discount_amount.setValue(
       disAmt
     );
-
     this.lineItemForm.controls['fcn_li_gross_amount'].setValue(
-      this.comFunc.transformDecimalVB(
-        this.comFunc.allbranchMaster?.BAMTDECIMALS,
-        this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount) -
-        disAmt
+      this.comFunc.commaSeperation(
+        this.comFunc.transformDecimalVB(
+          this.comFunc.allbranchMaster?.BAMTDECIMALS,
+          this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount) -
+          disAmt
+        )
       )
     );
 
@@ -10003,7 +10066,7 @@ export class SalesReturnComponent implements OnInit {
 
       if (this.divisionMS == 'S') {
 
-        if ((this.isPromotionalItem && this.isAllowWithoutRate && this.comFunc.emptyToZero(value) >= 0) || this.comFunc.emptyToZero(value) > 0) {
+        if (((this.isPromotionalItem && this.isAllowWithoutRate && this.comFunc.emptyToZero(value) >= 0)) || this.comFunc.emptyToZero(value) > 0) {
           this.rateFunc(value);
         }
         else {
@@ -10647,9 +10710,11 @@ export class SalesReturnComponent implements OnInit {
           this.dialogBox.afterClosed().subscribe((data: any) => {
             if (data == 'OK') {
               this.lineItemForm.controls.fcn_li_gross_amount.setValue(
-                this.comFunc.transformDecimalVB(
-                  this.comFunc.allbranchMaster?.BAMTDECIMALS,
-                  preVal
+                this.comFunc.commaSeperation(
+                  this.comFunc.transformDecimalVB(
+                    this.comFunc.allbranchMaster?.BAMTDECIMALS,
+                    preVal
+                  )
                 )
               );
               // this.changeGrossFunc(totalAmt, preVal);
@@ -10734,7 +10799,10 @@ export class SalesReturnComponent implements OnInit {
 
 
     this.lineItemForm.controls.fcn_li_tax_amount.setValue(taxAmt);  //1047
-    this.lineItemForm.controls.fcn_li_gross_amount.setValue(grossAmt);
+    this.lineItemForm.controls.fcn_li_gross_amount.setValue(
+      this.comFunc.commaSeperation(grossAmt)
+    );
+    
     this.lineItemForm.controls.fcn_li_total_amount.setValue(totalAmt);
     // this.lineItemForm.controls.fcn_li_rate.setValue(totalAmt);
 
@@ -10802,26 +10870,26 @@ export class SalesReturnComponent implements OnInit {
 
     const permittedNetAmount = netAmtVal - (this.lineItemForm.value.fcn_li_tax_percentage / 100) * netAmtVal;
     console.log(this.divisionMS)
-    if (this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_amount) <= permittedNetAmount && this.divisionMS == 'S') {
+    // if (this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_amount) <= permittedNetAmount && this.divisionMS == 'S') {
 
 
-      this.openDialog('Warning', this.comFunc.getMsgByID('MSG1443'), true);
-      this.dialogBox.afterClosed().subscribe((data: any) => {
-        if (data == 'OK') {
-          this.lineItemForm.controls.fcn_li_net_amount.setValue(
-            this.comFunc.commaSeperation(
-              this.comFunc.transformDecimalVB(
-                this.comFunc.allbranchMaster?.BAMTDECIMALS,
-                preVal
-              )
-            )
-          );
-          this.manageCalculations();
-        }
-      });
-    }
+    //   this.openDialog('Warning', this.comFunc.getMsgByID('MSG1443'), true);
+    //   this.dialogBox.afterClosed().subscribe((data: any) => {
+    //     if (data == 'OK') {
+    //       this.lineItemForm.controls.fcn_li_net_amount.setValue(
+    //         this.comFunc.commaSeperation(
+    //           this.comFunc.transformDecimalVB(
+    //             this.comFunc.allbranchMaster?.BAMTDECIMALS,
+    //             preVal
+    //           )
+    //         )
+    //       );
+    //       this.manageCalculations();
+    //     }
+    //   });
+    // }
 
-    else {
+    // else {
 
       if (!this.isRevCalculationBlock) {
         this.isNetAmountChange = true;
@@ -10861,9 +10929,15 @@ export class SalesReturnComponent implements OnInit {
 
           if (this.divisionMS == 'S') {
 
-            if (this.lineItemModalForSalesReturn || checkStockCostVal >= this.comFunc.emptyToZero(this.newLineItem.STOCK_COST)) {
-              this.netAmtFunc(event);
-            } else {
+            // if (this.lineItemModalForSalesReturn || checkStockCostVal >= this.comFunc.emptyToZero(this.newLineItem.STOCK_COST)) {
+              if(this.comFunc.emptyToZero(event.target.value)!=0){
+                this.netAmtFunc(event);
+                localStorage.setItem('existingNetAmount', this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_net_amount).toString());
+  
+              }
+       
+            // }
+            else {
               // Rate Cannot be Less Than Cost
               this.openDialog('Warning', this.comFunc.getMsgByID('MSG1721'), true);
               this.dialogBox.afterClosed().subscribe((data: any) => {
@@ -10871,7 +10945,7 @@ export class SalesReturnComponent implements OnInit {
                   this.lineItemForm.controls.fcn_li_net_amount.setValue(
                     this.comFunc.transformDecimalVB(
                       this.comFunc.allbranchMaster?.BAMTDECIMALS,
-                      preVal
+                      localStorage.getItem('existingNetAmount')
                     )
                   );
                 }
@@ -10888,7 +10962,7 @@ export class SalesReturnComponent implements OnInit {
           this.manageCalculations();
         }
       }
-    }
+    // }
   }
 
   changeDisAmount(event: any, nettAmt: any = null) {
@@ -11074,22 +11148,28 @@ export class SalesReturnComponent implements OnInit {
       if (this.divisionMS == 'M') {
 
         this.lineItemForm.controls.fcn_li_gross_amount.setValue(
-          this.comFunc.transformDecimalVB(
-            this.comFunc.allbranchMaster?.BAMTDECIMALS,
-            this.comFunc.emptyToZero(stoneAmt) + this.comFunc.emptyToZero(mkgAmt) + this.comFunc.emptyToZero(mtlAmt)
+          this.comFunc.commaSeperation(
+            this.comFunc.transformDecimalVB(
+              this.comFunc.allbranchMaster?.BAMTDECIMALS,
+              this.comFunc.emptyToZero(stoneAmt) + 
+              this.comFunc.emptyToZero(mkgAmt) + 
+              this.comFunc.emptyToZero(mtlAmt)
+            )
           )
         );
+        
       } else {
 
         this.lineItemForm.controls['fcn_li_gross_amount'].setValue(
-
-          this.comFunc.transformDecimalVB(
-            this.comFunc.allbranchMaster?.BAMTDECIMALS,
-            this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount) -
-            this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_discount_amount)
+          this.comFunc.commaSeperation(
+            this.comFunc.transformDecimalVB(
+              this.comFunc.allbranchMaster?.BAMTDECIMALS,
+              this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount) -
+              this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_discount_amount)
+            )
           )
-
         );
+        
       }
     }
 
@@ -11135,14 +11215,15 @@ export class SalesReturnComponent implements OnInit {
     if (this.divisionMS != 'M') {
 
       this.lineItemForm.controls['fcn_li_gross_amount'].setValue(
-
-        this.comFunc.transformDecimalVB(
-          this.comFunc.allbranchMaster?.BAMTDECIMALS,
-          this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount) -
-          this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_discount_amount)
+        this.comFunc.commaSeperation(
+          this.comFunc.transformDecimalVB(
+            this.comFunc.allbranchMaster?.BAMTDECIMALS,
+            this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount) -
+            this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_discount_amount)
+          )
         )
-
       );
+      
     }
 
   }
@@ -11203,6 +11284,8 @@ export class SalesReturnComponent implements OnInit {
     );
 
     //  this.updateDiscountAmount();
+    if(this.divisionMS!="M")
+      this.updateDiscountAmount();
 
     this.lineItemForm.controls['fcn_li_tax_amount'].setValue(
       this.comFunc.commaSeperation(this.lineItemForm.value.fcn_li_tax_amount)
@@ -11252,7 +11335,7 @@ export class SalesReturnComponent implements OnInit {
       //   )
 
       // );
-
+      this.setGrossAmount();
 
       this.detectDiscountChange = false;
     } else {
@@ -11281,6 +11364,22 @@ export class SalesReturnComponent implements OnInit {
     }
   }
 
+    setGrossAmount() {
+    const totalAmount = this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount);
+    const discountAmount = this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_discount_amount);
+    
+    const grossAmount = this.comFunc.transformDecimalVB(
+      this.comFunc.allbranchMaster?.BAMTDECIMALS,
+      totalAmount - discountAmount
+    );
+    this.lineItemForm.controls.fcn_li_gross_amount.setValue(
+      this.comFunc.commaSeperation(grossAmount)
+    );
+    
+    // this.calculateTaxAmount();
+    // this.calculateNetAmount();
+  }
+
   setNettWeight() {
     this.lineItemForm.controls['fcn_li_net_wt'].setValue(
       (
@@ -11298,11 +11397,14 @@ export class SalesReturnComponent implements OnInit {
   }
   setGrossAmt() {
     this.lineItemForm.controls['fcn_li_gross_amount'].setValue(
-      Math.round(
-        this.lineItemForm.value.fcn_li_total_amount -
-        this.lineItemForm.value.fcn_li_discount_amount
-      ).toFixed(2)
+      this.comFunc.commaSeperation(
+        Math.round(
+          this.lineItemForm.value.fcn_li_total_amount -
+          this.lineItemForm.value.fcn_li_discount_amount
+        ).toFixed(2)
+      )
     );
+    
     this.setTaxAmt();
   }
   setTaxAmt() {

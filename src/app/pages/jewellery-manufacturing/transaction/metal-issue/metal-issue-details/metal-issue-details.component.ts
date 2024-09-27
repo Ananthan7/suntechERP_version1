@@ -123,7 +123,7 @@ export class MetalIssueDetailsComponent implements OnInit {
     SEARCH_FIELD: 'DIVISION_CODE',
     SEARCH_HEADING: 'Division Search',
     SEARCH_VALUE: '',
-    WHERECONDITION: "division = 'G'",
+    WHERECONDITION: "DIVISION = 'm'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -291,9 +291,12 @@ export class MetalIssueDetailsComponent implements OnInit {
     // this.metalIssueDetailsForm.controls.subJobNoDes.setValue(e.job_description);
     this.jobNumberValidate({ target: { value: e.job_number } })
   }
+  divCodeSelected(e: any) {
+    this.metalIssueDetailsForm.controls.DIVCODE.setValue(e.DIVISION_CODE);
+    this.setStockCodeWhereCondition()
+  }
   stockCodeSelected(e: any) {
-    console.log(e, 'e')
-    this.metalIssueDetailsForm.controls.stockCode.setValue(e.STOCK_CODE);
+    this.metalIssueDetailsForm.controls.stockCode.setValue(e.DIVISION_CODE);
     this.metalIssueDetailsForm.controls.stockCodeDes.setValue(e.DESCRIPTION);
     this.metalIssueDetailsForm.controls.DIVCODE.setValue(e.DIVISION);
     // this.metalIssueDetailsForm.controls.pcs.setValue(e.PCS);
