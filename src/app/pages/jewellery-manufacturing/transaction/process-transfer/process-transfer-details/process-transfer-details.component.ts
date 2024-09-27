@@ -2897,14 +2897,15 @@ export class ProcessTransferDetailsComponent implements OnInit {
     let blnLoss = this.emptyToZero(processData[0].STD_LOSS) != 0 ? true : false;
     if (blnLoss) {
       let lossQty = this.emptyToZero(form.GrossWeightFrom) - (this.emptyToZero(form.GrossWeightTo) + this.emptyToZero(form.scrapWeight));
+      let toMetalWt = (this.emptyToZero(form.FRM_METAL_WT) - (this.emptyToZero(lossQty) + this.emptyToZero(form.scrapWeight)));
       let actualLoss = this.commonService.lossQtyCalculate(form.FRM_METAL_WT, form.STD_LOSS);
       if (lossQty > actualLoss) {
+        lossQty = actualLoss
         // this.setFormDecimal('GrossWeightTo', this.FORM_VALIDATER.GrossWeightTo, 'METAL')
         let msg = this.commonService.getMsgByID('MSG1397') + actualLoss
         this.commonService.toastErrorByMsgId(msg)
       }
-      let toMetalWt = (this.emptyToZero(form.FRM_METAL_WT) - (this.emptyToZero(lossQty) + this.emptyToZero(form.scrapWeight)));
-      this.setFormDecimal('lossQty', actualLoss, 'METAL')
+      this.setFormDecimal('lossQty', lossQty, 'METAL')
       this.setFormDecimal('TO_METAL_WT', toMetalWt, 'METAL')
       this.setFormDecimal('GAIN_WT', 0, 'METAL')
       this.setFormDecimal('GAIN_PURE_WT', 0, 'METAL')
