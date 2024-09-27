@@ -22,6 +22,8 @@ export class ComponentSizeMasterComponent implements OnInit {
   viewMode: boolean = false;
   editableMode: boolean = false;
   codeEnable: boolean = true;
+
+
   componentsizemasterForm: FormGroup = this.formBuilder.group({
     code: ['', [Validators.required]],
     desc: ['', [Validators.required]],
@@ -30,6 +32,7 @@ export class ComponentSizeMasterComponent implements OnInit {
     length: [''],
     radius: ['']
   });
+  options: any;
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -45,11 +48,11 @@ export class ComponentSizeMasterComponent implements OnInit {
     this.renderer.selectRootElement('#code')?.focus();
     this.codeEnable = true;
 
- 
+
     this.subscribeToFormChanges();
 
     this.setInitialValues();
-    if(this.content?.FLAG){
+    if (this.content?.FLAG) {
       this.setFormValues()
       if (this.content.FLAG == 'VIEW') {
         this.viewMode = true;
@@ -165,15 +168,18 @@ export class ComponentSizeMasterComponent implements OnInit {
 
     // Format radius to have at least three decimal places
     const formattedRadius = radius.toFixed(3);
-    
+
 
     const formattedDesc = `H${Number(height)}#,W${Number(width)}#,L${Number(length)}#,R${Number(formattedRadius)}#`;
 
     // Update the form control with the calculated result and description
-    this.componentsizemasterForm.patchValue({
-      radius: radius,
-      desc: formattedDesc
-    }, { emitEvent: false });
+    this.componentsizemasterForm.patchValue(
+      {
+        radius: radius,
+        desc: formattedDesc,
+      },
+      { emitEvent: true }
+    );
   }
 
 
@@ -181,6 +187,7 @@ export class ComponentSizeMasterComponent implements OnInit {
     // Logic to set decimal point
     return parseFloat(value.toFixed(3)); // Return the value with exactly three decimal places
   }
+
 
 
   close(data?: any) {
@@ -230,7 +237,14 @@ export class ComponentSizeMasterComponent implements OnInit {
             });
           }
         } else {
-          this.toastr.error('Not saved')
+          // this.toastr.error('Not saved')
+          Swal.fire({
+            title: '',
+            text: 'This Component Size Detail Already Exists',
+            icon: 'error',
+            confirmButtonColor: '#336699',
+            confirmButtonText: 'Ok'
+          })
         }
       }, err => alert(err))
     this.subscriptions.push(Sub);

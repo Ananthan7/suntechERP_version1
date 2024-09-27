@@ -48,7 +48,7 @@ export class ComponentMasterComponent implements OnInit {
   viewDisable: boolean = false;
   prefixMasterDetail: any;
   PICTURE_NAME: string | null = null;
-
+  strBranchcode: any = localStorage.getItem("userbranch");
   // /images: any[] = [];
   private subscriptions: Subscription[] = [];
   images: string[] = [];
@@ -407,6 +407,7 @@ export class ComponentMasterComponent implements OnInit {
   ngOnInit(): void {
     console.log(this.content)
     this.setInitialValues();
+    // this.getDesignDetails();
     this.renderer.selectRootElement('#code')?.focus();
     if (this.content?.FLAG) {
       this.setFormValues();
@@ -671,7 +672,8 @@ export class ComponentMasterComponent implements OnInit {
     const des = e.DESCRIPTION.toUpperCase();
     this.componentmasterForm.controls.code.setValue(prefixCode);
     this.componentmasterForm.controls.codedes.setValue(des);
-    this.prefixCodeValidate()
+    this.prefixCodeValidate();
+    this.getDesignDetails();
   }
   typeCodeSelected(e: any) {
     if (this.checkCode()) return
@@ -701,7 +703,25 @@ export class ComponentMasterComponent implements OnInit {
     this.sizeCodeData.WHERECONDITION = `COMPSIZE_CODE IN (SELECT COMPSIZE_CODE FROM COMPONENTSIZESET_DETAIL WHERE COMPSET_CODE = '${this.componentmasterForm.value.sizeSet}')`;
   }
 
+  getDesignDetails() {
+    console.log("this.content", this.content);
+    // if (this.content.FLAG == "VIEW") this.viewOnly = true;
+    // if (this.content.FLAG == "EDIT") {
+    //   console.log(this.comService.EditDetail.REASON);
+    //   this.editOnly = true;
+    // }
 
+    this.snackBar.open("Loading...");
+    let Sub: Subscription = this.dataService
+      .getDynamicAPI(
+        `DesignMaster/GetComponentsGridinCompMaster/${this.componentmasterForm.value.code}`
+      ) .subscribe((result) => {
+        this.snackBar.dismiss();
+        if (result.status == "Success") {
+          const data = result.dynamicData;
+        }
+    });
+  }
 
   sizeCodeSelected(e: any) {
     if (this.checkCode()) return
