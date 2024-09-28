@@ -36,7 +36,8 @@ export class MeltingIssueDetailsComponent implements OnInit {
   isViewStock: boolean = false;
   isDisableSaveBtn: boolean = false;
   tableDatastocklist = [];
-
+  isSearchEnabled: boolean = false;
+  disableSearch: boolean = true;
 
   jobnoCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -102,23 +103,23 @@ export class MeltingIssueDetailsComponent implements OnInit {
 
   setLookup201WhereCondition() {
     let form = this.meltingIssuedetailsFrom.value
-    console.log(form,'form')
+    console.log(form, 'form')
     let where = `Branch_Code='${form.BRANCH_CODE}',`
     where += `JobNo='${form.jobno}',`
     where += `MetalStone='${form.METAL_STONE}',Process_Code='${form.process}',`
     where += `Worker_Code='${form.worker}',Stock_Code='${form.stockcode}',LocCode='${form.location}'`
-   this.stockCodeData.WHERECONDITION = where
-  //  this.ProcessCodeData.WHERECONDITION = where
-  //   this.WorkerCodeData.WHERECONDITION = where
+    this.stockCodeData.WHERECONDITION = where
+    //  this.ProcessCodeData.WHERECONDITION = where
+    //   this.WorkerCodeData.WHERECONDITION = where
   }
 
   StockCodeSelected(e: any) {
     console.log(e);
     this.meltingIssuedetailsFrom.controls.stockcode.setValue(e.STOCK_CODE);
     this.meltingIssuedetailsFrom.controls.tostock.setValue(e.STOCK_DESCRIPTION);
-    this.meltingIssuedetailsFrom.controls.stockdes.setValue(e.DIVISION_CODE); 
+    this.meltingIssuedetailsFrom.controls.stockdes.setValue(e.DIVISION_CODE);
     this.meltingIssuedetailsFrom.controls.mainstock.setValue(e.STOCK_CODE);
-   this.setLookup201WhereCondition()
+    this.setLookup201WhereCondition()
 
   }
 
@@ -158,7 +159,6 @@ export class MeltingIssueDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.branchCode = this.comService.branchCode;
-
     console.log(this.content)
     if (this.content && this.content.FLAG) {
       this.setInitialValue()
@@ -168,11 +168,17 @@ export class MeltingIssueDetailsComponent implements OnInit {
 
       }
     }
-   this.dataTochild()
-   this.setLookup201WhereCondition()
+    this.dataTochild()
+    this.setLookup201WhereCondition()
   }
-  dataTochild(dataToChild?:any){
-    console.log(this.content.HEADERDETAILS,'pick')
+  setViewMode(viewOnly: boolean) {
+    this.viewMode = viewOnly;
+    this.editMode = !viewOnly; // If viewMode is true, editMode is false
+    this.disableSearch = this.viewMode; // Disable search if viewMode is active
+  }
+
+  dataTochild(dataToChild?: any) {
+    console.log(this.content.HEADERDETAILS, 'pick')
     this.meltingIssuedetailsFrom.controls.voctype.setValue(this.content.voctype || this.content.HEADERDETAILS.voctype)
     this.meltingIssuedetailsFrom.controls.jobno.setValue(this.content.jobno || this.content.HEADERDETAILS.jobno);
     this.meltingIssuedetailsFrom.controls.jobdes.setValue(this.content.jobdes || this.content.HEADERDETAILS.jobdes);
@@ -185,7 +191,8 @@ export class MeltingIssueDetailsComponent implements OnInit {
     this.meltingIssuedetailsFrom.controls.subjobno.setValue(this.content.subjobno || this.content.HEADERDETAILS.subjobno)
     // this.meltingIssuedetailsFrom.controls.jobdes.setValue(this.content.jobdes || this.content.HEADERDETAILS.subJobDescription);
     // this.meltingIssuedetailsFrom.controls.jobdes.setValue(this.content.jobdes || this.content.HEADERDETAILS.subJobDescription);  
-    }
+
+  }
   setInitialValue() {
     console.log(this.content, 'content');
     if (!this.content) return;
@@ -286,7 +293,7 @@ export class MeltingIssueDetailsComponent implements OnInit {
     pureweight: ['', [Validators.required]],
     topurity: ['100.00', [Validators.required]],
     FLAG: [null],
-    VOCTYPE:[''],
+    VOCTYPE: [''],
     METAL_STONE: [''],
     UNQ_JOB_ID: [''],
     BRANCH_CODE: [''],
@@ -542,7 +549,7 @@ export class MeltingIssueDetailsComponent implements OnInit {
           this.commonService.toastErrorByMsgId('MSG1531')
           this.meltingIssuedetailsFrom.controls[FORMNAME].setValue('')
           LOOKUPDATA.SEARCH_VALUE = ''
-      if (FORMNAME === 'process' || FORMNAME === 'worker' || FORMNAME === 'location') {
+          if (FORMNAME === 'process' || FORMNAME === 'worker' || FORMNAME === 'location') {
             this.showOverleyPanel(event, FORMNAME);
           }
           return
@@ -560,11 +567,11 @@ export class MeltingIssueDetailsComponent implements OnInit {
       "SPID": "112",
       "parameter": {
         Process_Code: this.meltingIssuedetailsFrom.value.process,
-        JobNo :this.meltingIssuedetailsFrom.value.jobno,
+        JobNo: this.meltingIssuedetailsFrom.value.jobno,
         Branch_Code: this.comService.nullToString(this.branchCode),
-        Worker_Code : this.meltingIssuedetailsFrom.value.worker,
+        Worker_Code: this.meltingIssuedetailsFrom.value.worker,
         Stock_Code: this.meltingIssuedetailsFrom.value.stockcode,
-        LocCode :  this.meltingIssuedetailsFrom.value.location,
+        LocCode: this.meltingIssuedetailsFrom.value.location,
       }
     };
 
@@ -605,7 +612,7 @@ export class MeltingIssueDetailsComponent implements OnInit {
 
     this.subscriptions.push(Sub);
   }
-    
+
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {
       this.subscriptions.forEach(subscription => subscription.unsubscribe());// unsubscribe all subscription

@@ -1078,10 +1078,13 @@ export class MeltingIssueComponent implements OnInit {
 
 
 
-
   jobNumberValidate(event: any) {
-    if (event.target.value == '') return
+    if (event.target.value == '') return;
+  
+    // Capture the form values
     let form = this.meltingIssueFrom.value;
+  
+    // Prepare the data for the API call
     let postData = {
       "SPID": "108",
       "parameter": {
@@ -1090,40 +1093,57 @@ export class MeltingIssueComponent implements OnInit {
         'StrBranch': this.comService.branchCode,
         'StrColor': this.commonService.nullToString(form.color)
       }
-    }
-
-    this.commonService.showSnackBarMsg('MSG81447')
+    };
+  
+    // Show a message indicating that validation is in progress
+    this.commonService.showSnackBarMsg('Validating Job Number...');
+  
+    // Make the API call for job number validation
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
       .subscribe((result) => {
-        this.commonService.closeSnackBarMsg()
-        if (result.status == "Success" && result.dynamicData[0]) {
-          let data = result.dynamicData[0]
-          if (data[0] && data[0].UNQ_JOB_ID != '') {
-            // this.overlayjobNoSearch.closeOverlayPanel()
-            this.jobNumberDetailData = data
-            console.log(data, 'data')
-            this.meltingIssueFrom.controls.subjobno.setValue(data[0].UNQ_JOB_ID)
-            this.meltingIssueFrom.controls.subJobDescription.setValue(data[0].JOB_DESCRIPTION)
-            this.overlayjobNoSearch.closeOverlayPanel()
-            this.subJobNumberValidate()
+        // Close the progress message
+        this.commonService.closeSnackBarMsg();
+  
+        // If the API call is successful and data is valid
+        if (result.status === "Success" && result.dynamicData && result.dynamicData[0] && result.dynamicData[0][0]) {
+          let data = result.dynamicData[0][0];
+  
+          // Check if the unique job ID is valid
+          if (data.UNQ_JOB_ID && data.UNQ_JOB_ID !== '') {
+            // Set valid job details in the form controls
+            this.jobNumberDetailData = data;
+            this.meltingIssueFrom.controls.subjobno.setValue(data.UNQ_JOB_ID);
+            this.meltingIssueFrom.controls.subJobDescription.setValue(data.JOB_DESCRIPTION);
+            this.overlayjobNoSearch.closeOverlayPanel();
+            this.subJobNumberValidate(); // Trigger sub-job number validation
           } else {
-            this.comService.toastErrorByMsgId('MSG1531')
-            this.meltingIssueFrom.controls.jobno.setValue('')
-            this.showOverleyPanel(event, 'jobno')
-            return
+            // Invalid data: show error and clear job number field
+            this.handleInvalidJobNumber(event, 'Invalid Job Number!');
           }
         } else {
-          this.overlayjobNoSearch.closeOverlayPanel()
-          this.meltingIssueFrom.controls.jobno.setValue('')
-          this.comService.toastErrorByMsgId('MSG1747')
+          // Invalid data: show error and clear job number field
+          this.handleInvalidJobNumber(event, 'Job Number validation failed!');
         }
       }, err => {
-        this.comService.closeSnackBarMsg()
-        this.comService.toastErrorByMsgId('MSG1531')
-      })
-    this.subscriptions.push(Sub)
+        // Handle error from the API
+        this.commonService.closeSnackBarMsg();
+        this.handleInvalidJobNumber(event, 'Error validating Job Number!');
+      });
+  
+    // Add the subscription to track and clean up later
+    this.subscriptions.push(Sub);
   }
-
+  
+  // Method to handle invalid job number cases
+  handleInvalidJobNumber(event: any, message: string) {
+    // Show an error message using a toast or snackbar
+    this.comService.toastErrorByMsgId(message);
+  
+    // Clear the job number control and open the overlay for re-entry
+    this.meltingIssueFrom.controls.jobno.setValue('');
+    this.showOverleyPanel(event, 'jobno');
+  }
+  
 
   meltingTypeValidate(event?: any) {
     const meltingTypeValue = this.meltingIssueFrom.value.meltingtype;
