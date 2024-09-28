@@ -73,13 +73,15 @@
                   <!-- <mat-label></mat-label> -->
                   <input
                     matInput
+                    #vocDateInput 
+                    id="vocDateInput"
                     [max]=" currentDate"
                     [matDatepicker]="vocDate"
                     name="vocDate"
                     formControlName="vocDate"
                     placeholder="DD/MM/YYYY"
                     DateValidation
-                    [readonly]="true"
+                   
                   />
                   <mat-datepicker-toggle
                     matSuffix
@@ -222,6 +224,7 @@
                   <input
                     matInput
                     type="number"
+                    NumberOnly
                     [readonly]="viewOnly"
                     class="text-right"
                     [min]="0"
