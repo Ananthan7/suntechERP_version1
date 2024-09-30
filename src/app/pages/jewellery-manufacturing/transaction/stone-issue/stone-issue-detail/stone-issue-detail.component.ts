@@ -128,6 +128,17 @@ export class StoneIssueDetailComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
+  subJobNoCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 258,
+    SEARCH_FIELD: 'UNQ_JOB_ID',
+    SEARCH_HEADING: 'Sub Job Search',
+    SEARCH_VALUE: '',
+    WHERECONDITION: `BRANCH_CODE='${this.comService.branchCode}' AND ISNULL(PROD_REF,0)=0`,
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
 
   stoneIssueDetailsFrom: FormGroup = this.formBuilder.group({
     jobNumber: ['', [Validators.required]],
@@ -213,6 +224,7 @@ export class StoneIssueDetailComponent implements OnInit {
   setFormValues() {
     if (!this.content) return
     console.log(this.content, 'view&edit')
+   
     this.branchCode = this.content.BRANCH_CODE || this.content.HEADERDETAILS.BRANCH_CODE;
     this.stoneIssueDetailsFrom.controls.VOCTYPE.setValue(this.content.VOCTYPE || this.content.HEADERDETAILS.VOCTYPE)
     this.stoneIssueDetailsFrom.controls.VOCNO.setValue(this.content.VOCNO || this.content.HEADERDETAILS.VOCNO)
@@ -251,11 +263,14 @@ export class StoneIssueDetailComponent implements OnInit {
     this.stoneIssueDetailsFrom.controls.batchid.setValue(this.content.SUB_STOCK_CODE)
     this.stoneIssueDetailsFrom.controls.consignment.setValue(this.content.CONSIGNMENT)
     console.log(this.content.CONSIGNMENT, 'consignment')
+
   }
+ 
   setValueWithDecimal(formControlName: string, value: any, Decimal: string) {
     this.stoneIssueDetailsFrom.controls[formControlName].setValue(
       this.comService.setCommaSerperatedNumber(value, Decimal)
     )
+   
   }
 
   onFileChanged(event: any) {
@@ -311,6 +326,11 @@ export class StoneIssueDetailComponent implements OnInit {
     console.log(e);
     this.stoneIssueDetailsFrom.controls.DIVCODE.setValue(e.Division_Code);
   }
+  subJobNoCodeSelected(e: any) {
+    this.stoneIssueDetailsFrom.controls.subjobno.setValue(e.UNQ_JOB_ID);
+    this.stoneIssueDetailsFrom.controls.subjobDesc.setValue(e.DESCRIPTION);
+  }
+
   stockCodeSelected(e: any) {
     console.log(e, 'eee')
     this.stoneIssueDetailsFrom.controls.stockCode.setValue(e.STOCK_CODE);

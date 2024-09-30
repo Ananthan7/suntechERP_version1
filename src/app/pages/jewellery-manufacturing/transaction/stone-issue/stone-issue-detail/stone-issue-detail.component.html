@@ -16,16 +16,16 @@
 <div class="container-fluid pt-3">
   <form [formGroup]="stoneIssueDetailsFrom">
     <div class="row">
-      <div class="col-md-12 border-bottom">
+      <div class="col-md-10 border-bottom">
         <div class="row mb-1">
           <label for="inputPassword" class="col-sm-2 col-form-label">Job Number
             * : </label>
           <div class="col-md-2">
-            <mat-form-field appearance="outline" style="width: 100%;">
-              <input type="text" matInput formControlName="jobNumber"
+            <mat-form-field appearance="outline" style="width: 100%;" >
+              <input type="text" matInput formControlName="jobNumber" 
                 [readonly]="viewMode" UpperCaseDirective
                 (focusout)="jobNumberValidate($event)"
-                (keydown)="lookupKeyPress($event,'jobNumber')"
+                (keydown)="lookupKeyPress($event,'jobNumber')" 
                 #jobNumberInput />
               <master-search class="masterSearch"
                 [MasterSearchData]="jobNumberCodeData" #overlayjobNumberSearch
@@ -36,7 +36,7 @@
           </div>
           <div class="col-md-4">
             <mat-form-field appearance="outline" style="width: 100%;">
-              <input type="text" matInput formControlName="jobDes" readonly />
+              <input type="text" matInput formControlName="jobDes" readonly/>
             </mat-form-field>
           </div>
         </div>
@@ -47,6 +47,10 @@
             <mat-form-field appearance="outline" style="width: 100%;">
               <input type="text" matInput formControlName="subjobnumber"
                 [readonly]="viewMode" UpperCaseDirective />
+              <master-search class="masterSearch"
+                [MasterSearchData]="subJobNoCodeData" #overlaysubjobnoSearch
+                (newRowClick)="subJobNoCodeSelected($event)"
+                *ngIf="!viewMode"></master-search>
             </mat-form-field>
           </div>
           <div class="col-md-4">
@@ -354,16 +358,16 @@
     </div>
     <div class="row">
       <div class="col-md-12">
-        <dx-data-grid  #dataGrid id="gridContainer" [showBorders]="true"
+        <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true"
           [allowColumnResizing]="true"
           [dataSource]="stoneIssueGridData" [allowColumnResizing]="true"
-          [columnAutoWidth]="true"  (onRowUpdated)="onRowUpdateGrid($event)">
+          [columnAutoWidth]="true" (onRowUpdated)="onRowUpdateGrid($event)">
           <dxo-paging [enabled]="true" [pageSize]="5"></dxo-paging>
           <dxo-editing mode="cell" [allowUpdating]="true">
           </dxo-editing>
           <dxo-selection mode="single"></dxo-selection>
           <!-- <dxo-scrolling mode="virtual"></dxo-scrolling> -->
-<!-- 
+          <!-- 
           <dxi-column *ngFor="let data of columnhead1" dataField="{{ data }}"
             caption="{{ data }}" [allowEditing]="true"
             alignment="center" backgroundcolor="#000">
