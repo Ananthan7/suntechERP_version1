@@ -1078,7 +1078,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     }
     if (this.emptyToZero(form.lossQty) > 0) {
       if (this.sequenceDetails.length > 0) {
-        let processData = this.sequenceDetails.filter((item: any) => item.PROCESS_CODE == form.FRM_PROCESS_CODE)
+        let processData = this.sequenceDetails.filter((item: any) => item.PROCESS_CODE?.toUpperCase() == form.FRM_PROCESS_CODE?.toUpperCase())
         if (processData?.length == 0) {
           processData = this.processMasterDetails;
         }
@@ -2032,7 +2032,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.fromWorkercodeInputChange()
     this.setFromProcessWhereCondition()
     this.setFromWorkerWhereCondition()
-    let data = this.subJobDetailData.filter((item: any) => event.PROCESS == item.PROCESS && event.WORKER == item.WORKER)
+    let data = this.subJobDetailData.filter((item: any) => event.PROCESS?.toUpperCase() == item.PROCESS?.toUpperCase() && event.WORKER?.toUpperCase() == item.WORKER?.toUpperCase())
     if (data && data.length > 0) {
       if (this.designType == 'METAL') { //metal data assigning
         this.setMetalSubJob_Details(data)
@@ -2199,7 +2199,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
         return true;
       }
       if (this.emptyToZero(form.METAL_LossBooked) != 0 && this.designType == "METAL") {
-        let processData = this.sequenceDetails.filter((item: any) => item.seq_code == form.SEQ_CODE && item.PROCESS_CODE == form.METAL_FRM_PROCESS_CODE)
+        let processData = this.sequenceDetails.filter((item: any) => item.seq_code?.toUpperCase() == form.SEQ_CODE?.toUpperCase() && item.PROCESS_CODE?.toUpperCase() == form.METAL_FRM_PROCESS_CODE?.toUpperCase())
         if (processData.length != 0 && processData[0]["loss_accode"].toString() == "") {
           let msg = this.commonService.getMsgByID("MSG3770") + " " + form.METAL_FRM_PROCESS_CODE
           this.commonService.toastErrorByMsgId(msg)
@@ -2298,8 +2298,8 @@ export class ProcessTransferDetailsComponent implements OnInit {
     let form = this.processTransferdetailsForm.value;
     let LOSS_PURE_QTY = this.calculateLossPureQty(this.processTransferdetailsForm.value);
     let metalGridDataSum = this.calculateMetalStoneGridAmount();
-    let seqDataFrom = this.sequenceDetails.filter((item: any) => item.PROCESS_CODE == form.FRM_PROCESS_CODE);
-    let seqDataTo = this.sequenceDetails.filter((item: any) => item.PROCESS_CODE == form.TO_PROCESS_CODE);
+    let seqDataFrom = this.sequenceDetails.filter((item: any) => item.PROCESS_CODE?.toUpperCase() == form.FRM_PROCESS_CODE?.toUpperCase());
+    let seqDataTo = this.sequenceDetails.filter((item: any) => item.PROCESS_CODE?.toUpperCase() == form.TO_PROCESS_CODE?.toUpperCase());
     let scrapPureWt = this.emptyToZero(Number(form.scrapWeight) * Number(form.SCRAP_PURITY))
     // let amountFC = this.commonService.FCToCC(form.CURRENCY_CODE, stoneAmount)
     // console.log(this.commonService.timeToMinutes(form.consumed), 'time consumed');
@@ -2450,8 +2450,8 @@ export class ProcessTransferDetailsComponent implements OnInit {
     let form = this.processTransferdetailsForm.value;
     let LOSS_PURE_QTY = this.calculateLossPureQty(this.processTransferdetailsForm.value);
     let metalGridDataSum = this.calculateMetalStoneGridAmount();
-    let seqDataFrom = this.sequenceDetails.filter((item: any) => item.PROCESS_CODE == form.FRM_PROCESS_CODE);
-    let seqDataTo = this.sequenceDetails.filter((item: any) => item.PROCESS_CODE == form.TO_PROCESS_CODE);
+    let seqDataFrom = this.sequenceDetails.filter((item: any) => item.PROCESS_CODE?.toUpperCase() == form.FRM_PROCESS_CODE?.toUpperCase());
+    let seqDataTo = this.sequenceDetails.filter((item: any) => item.PROCESS_CODE?.toUpperCase() == form.TO_PROCESS_CODE?.toUpperCase());
     let scrapPureWt = this.emptyToZero(Number(form.scrapWeight) * Number(form.SCRAP_PURITY))
     // let amountFC = this.commonService.FCToCC(form.CURRENCY_CODE, stoneAmount)
     // console.log(this.commonService.timeToMinutes(form.consumed), 'time consumed');
@@ -2643,7 +2643,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
   InsertStoneDetail(flag: any): any[] {
     let form = this.processTransferdetailsForm.value;
     let scrapPureWt = this.emptyToZero(Number(form.scrapWeight) * Number(form.SCRAP_PURITY))
-    let seqData = this.sequenceDetails.filter((item: any) => item.PROCESS_CODE == form.FRM_PROCESS_CODE);
+    let seqData = this.sequenceDetails.filter((item: any) => item.PROCESS_CODE?.toUpperCase() == form.FRM_PROCESS_CODE?.toUpperCase());
     let LOSS_QTY = flag == 2 ? this.emptyToZero(form.lossQty) * -1 : 0;
     let SCRAP_WT = flag == 2 ? this.emptyToZero(form.scrapWeight) * -1 : 0;
     let SCRAP_PURE_WT = flag == 2 ? this.emptyToZero(scrapPureWt) * -1 : 0;
@@ -2893,8 +2893,9 @@ export class ProcessTransferDetailsComponent implements OnInit {
 
   CalculateLoss() {
     let form = this.processTransferdetailsForm.value
-    let processData = this.sequenceDetails.filter((item: any) => item.PROCESS_CODE == form.FRM_PROCESS_CODE)
-    let blnLoss = this.emptyToZero(processData[0].STD_LOSS) != 0 ? true : false;
+    let processData = this.sequenceDetails.filter((item: any) => item.PROCESS_CODE?.toUpperCase() == form.FRM_PROCESS_CODE?.toUpperCase())
+    let blnLoss = false;
+    if(processData.length>0) blnLoss = this.emptyToZero(processData[0]?.STD_LOSS) != 0 ? true : false;
     if (blnLoss) {
       let lossQty = this.emptyToZero(form.GrossWeightFrom) - (this.emptyToZero(form.GrossWeightTo) + this.emptyToZero(form.scrapWeight));
       let toMetalWt = (this.emptyToZero(form.FRM_METAL_WT) - (this.emptyToZero(lossQty) + this.emptyToZero(form.scrapWeight)));
@@ -3706,7 +3707,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       }
 
       if (this.emptyToZero(txtLossBooked) > 0) {
-        let processData = this.sequenceDetails.filter((item: any) => item.seq_code == form.SEQ_CODE && item.PROCESS_CODE == form.METAL_FRM_PROCESS_CODE)
+        let processData = this.sequenceDetails.filter((item: any) => item.seq_code?.toUpperCase() == form.SEQ_CODE?.toUpperCase() && item.PROCESS_CODE?.toUpperCase() == form.METAL_FRM_PROCESS_CODE?.toUpperCase())
         if (processData?.length > 0) {
           if (this.emptyToZero(processData[0]["MAX_LOSS"]) > 0) {
             nMax_Loss = this.commonService.lossQtyCalculate(form.METAL_FromNetWeight, processData[0]["MAX_LOSS"])
