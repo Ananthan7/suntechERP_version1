@@ -10,7 +10,7 @@ export class ModalHeaderComponent implements OnInit {
   @Output() saveClick = new EventEmitter();
   @Output() cancelClick = new EventEmitter();
   @Output() deleteClick = new EventEmitter();
-  @Output() continueClick = new EventEmitter();
+  @Output() continueClick = new EventEmitter<void>();
   @Output() stockClick = new EventEmitter();
   @Output() SaveGridDataClick = new EventEmitter();
   @Output() changeJobClick = new EventEmitter();
@@ -69,6 +69,7 @@ export class ModalHeaderComponent implements OnInit {
   continueClicked() {
     this.continueClick.emit();
   }
+
   saveGridDataClicked() {
     this.SaveGridDataClick.emit();
   }

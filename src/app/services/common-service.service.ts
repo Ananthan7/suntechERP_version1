@@ -10,12 +10,19 @@ import * as FileSaver from "file-saver";
 import { ToastrService } from 'ngx-toastr';
 import * as XLSX from "xlsx";
 import { EditReasonModel } from '../shared/data/edit-reason';
+import { BehaviorSubject, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CommonServiceService {
+
+  // private chartDataSource = new BehaviorSubject<any>(null);
+
+  // chartData$ = this.chartDataSource.asObservable();
   /** common variables and functions used in all components */
+  private nextElSource = new Subject<any>();
+  nextEl$ = this.nextElSource.asObservable();
   currentDate = new Date()
   branchCode: any = localStorage.getItem('userbranch') || '';
   userName: any = localStorage.getItem('username') || '';
@@ -1250,4 +1257,18 @@ commaSeperation(data: any) {
     const cleanedData = data.replace(/[^0-9.-]+/g, '');
     return cleanedData;
   }
+
+ 
+
+  catchSubscribeHeaderMenu(nextEl: any) {
+    this.nextElSource.next(nextEl);
+  }
+
+  // setChartData(data: any) {
+  //   this.chartDataSource.next(data);
+  // }
+
+  // getChartData() {
+  //   return this.chartDataSource.value;
+  // }
 }

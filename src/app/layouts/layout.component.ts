@@ -5,6 +5,8 @@ import {
   LAYOUT_VERTICAL, LAYOUT_HORIZONTAL, LAYOUT_MODE, LAYOUT_WIDTH,
   LAYOUT_POSITION, SIDEBAR_SIZE, SIDEBAR_COLOR, TOPBAR
 } from './layouts.model';
+import { BehaviorSubject } from 'rxjs';
+import { CommonServiceService } from '../services/common-service.service';
 
 @Component({
   selector: 'app-layout',
@@ -26,8 +28,12 @@ export class LayoutComponent implements OnInit {
   sidebarcolor!: string;
   sidebarsize!: string;
   isRTL = false;
+  private screenNameSubject = new BehaviorSubject<string>('Initial Screen Name');
+  public screenName$ = this.screenNameSubject.asObservable(); 
 
-  constructor(private eventService: EventService) { }
+  screenName: string  = "";
+
+  constructor(private eventService: EventService,private commonServ:CommonServiceService) { }
 
   ngOnInit(): void {
     this.layoutMode = LAYOUT_MODE;
@@ -84,6 +90,9 @@ export class LayoutComponent implements OnInit {
     });
   }
 
+  changeScreenName(newScreenName: string) {
+    this.screenNameSubject.next(newScreenName);  
+  }
   /**
   * Check if the vertical layout is requested
   */
@@ -91,10 +100,24 @@ export class LayoutComponent implements OnInit {
     return this.layoutType === LAYOUT_VERTICAL;
   }
 
+  subscribeScreenName(screen: any) {
+    console.log(screen);
+    if(screen)
+      localStorage.removeItem('screen')
+  }
+
   /**
    * Check if the horizontal layout is requested
    */
+
   isHorizontalLayoutRequested() {
+    this.changeScreenName(this.screenName);
+
+    this.commonServ.nextEl$.subscribe((screenName) => {
+      this.subscribeScreenName(screenName);
+    });
+    this.screenName=localStorage.getItem('screen')||"";
+    this.changeScreenName(this.screenName);
     return this.layoutType === LAYOUT_HORIZONTAL;
   }
 

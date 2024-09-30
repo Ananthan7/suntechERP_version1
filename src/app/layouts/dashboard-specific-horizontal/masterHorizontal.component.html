@@ -3,11 +3,12 @@
     <app-horizontaltopbar (mobileMenuButtonClicked)="onToggleMobileMenu()"
         (settingsButtonClicked)="onSettingsButtonClicked()"></app-horizontaltopbar>
     <div class="main-content">
-        <div class="page-content" [ngClass]="{'container-fluid': screenName !== 'Customer Master'}" [ngStyle]="screenName === 'Customer Master' ? {'padding-left': '20px', 'padding-right': '20px'} : {}">
-            <!-- content -->
-            <router-outlet></router-outlet>
-          </div>
-          
+        <div class="page-content">
+            <div style="padding-left: 20px;padding-right: 20px;">
+                <!-- content -->
+                <router-outlet></router-outlet>
+            </div>
+        </div>
         <!-- footer -->
         <app-footer></app-footer>
     </div>
