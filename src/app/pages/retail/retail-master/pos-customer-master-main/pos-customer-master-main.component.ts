@@ -108,13 +108,13 @@ export class PosCustomerMasterMainComponent implements OnInit {
   selectedIntrestedInString: any;
 
   amlNameValidationData = false;
-  dummyDate = "1900-01-01T00:00:00";
-  dummyDateArr = [
-    "1900-01-01T00:00:00",
-    "1900-01-01T00:00:00Z",
-    "1754-01-01T00:00:00Z",
-    "1754-01-01T00:00:00",
-  ];
+  // dummyDate = "1900-01-01T00:00:00";
+  // dummyDateArr = [
+  //   "1900-01-01T00:00:00",
+  //   "1900-01-01T00:00:00Z",
+  //   "1754-01-01T00:00:00Z",
+  //   "1754-01-01T00:00:00",
+  // ];
   typeidCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -649,7 +649,12 @@ export class PosCustomerMasterMainComponent implements OnInit {
       setData.CREDIT_LIMIT_STATUS
     );
     this.posCustomerMasterMainForm.controls.creditCardLimit.setValue(
-      setData.CREDIT_LIMIT
+
+      this.comService.decimalQuantityFormat(
+        this.comService.emptyToZero(setData.CREDIT_LIMIT),
+        "AMOUNT"
+      )
+      
     );
 
     this.posCustomerMasterMainForm.controls.company.setValue(setData.COMPANY);
@@ -1249,6 +1254,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
   }
 
   customerSave() {
+    
     if (
       this.posCustomerMasterMainForm.value.moblieNumber == "" &&
       this.posCustomerMasterMainForm.value.telRNumber == ""
@@ -1297,14 +1303,13 @@ export class PosCustomerMasterMainComponent implements OnInit {
           MARITAL_ST:
             this.posCustomerMasterMainForm.value.maritalSt || "Unknown",
           WED_DATE:
-            this.posCustomerMasterMainForm.value.weddate || this.dummyDate,
+            this.posCustomerMasterMainForm.value.weddate || this.currentDate,
           SPOUSE_NAME: this.posCustomerMasterMainForm.value.spouse || "",
           REMARKS: this.posCustomerMasterMainForm.value.remarks || "",
           DATE_OF_BIRTH:
-            this.posCustomerMasterMainForm.value.dob || this.dummyDate,
+            this.posCustomerMasterMainForm.value.dob || this.currentDate,
           OPENING_ON:
-            this.posCustomerMasterMainForm.value.openedOn ??
-            "1900-01-01T00:00:00",
+            this.posCustomerMasterMainForm.value.openedOn || this.currentDate,
           GENDER: this.posCustomerMasterMainForm.value.gender || "",
           REGION: "",
           NATIONALITY: this.posCustomerMasterMainForm.value.nationality || "",
@@ -1317,7 +1322,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
           PICTURE_NAME: "",
           PICTURE: "",
           SALVOCTYPE_NO: this.posCustomerMasterMainForm.value.voucher || "",
-          SALDATE: this.posCustomerMasterMainForm.value.date || this.dummyDate,
+          SALDATE: this.posCustomerMasterMainForm.value.date || this.currentDate,
           SALAMOUNT: this.posCustomerMasterMainForm.value.amount || 0,
           SALBRLOC: this.posCustomerMasterMainForm.value.branchLoc || "",
           Branch_Code: this.branchCode,
@@ -1374,7 +1379,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
           DESIGNATION: this.posCustomerMasterMainForm.value.designation || "",
           LEVELFLAG: 0,
           INCOMERANGE: "",
-          LAST_UPDATED_DATE: "1900-01-01T00:00:00",
+          LAST_UPDATED_DATE: this.currentDate,
 
           TAXOFFICENO: "",
           SALESMANNAME: "",
@@ -1404,10 +1409,10 @@ export class PosCustomerMasterMainComponent implements OnInit {
           NAME_3: this.posCustomerMasterMainForm.value.name3 || "",
           NAME_4: this.posCustomerMasterMainForm.value.name4 || "",
           NAME_5: this.posCustomerMasterMainForm.value.name5 || "",
-          DOB_2: this.posCustomerMasterMainForm.value.dob2 || "",
-          DOB_3: this.posCustomerMasterMainForm.value.dob3 || "",
-          DOB_4: this.posCustomerMasterMainForm.value.dob4 || "",
-          DOB_5: this.posCustomerMasterMainForm.value.dob5 || "",
+          DOB_2: this.posCustomerMasterMainForm.value.dob2 || this.currentDate,
+          DOB_3: this.posCustomerMasterMainForm.value.dob3 || this.currentDate,
+          DOB_4: this.posCustomerMasterMainForm.value.dob4 || this.currentDate,
+          DOB_5: this.posCustomerMasterMainForm.value.dob5 || this.currentDate,
           GOOD_QUALITY:
             this.posCustomerMasterMainForm.value.goodQualityaka || "",
           LOW_QUALITY: this.posCustomerMasterMainForm.value.lowQualityaka || "",
@@ -1426,7 +1431,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
           PASSPORT_NO_3: this.posCustomerMasterMainForm.value.passport3 || "",
           PASSPORT_NO_4: this.posCustomerMasterMainForm.value.passport4 || "",
           PASSPORT_NO_5: this.posCustomerMasterMainForm.value.passport5 || "",
-          LISTED_ON_DATE: this.posCustomerMasterMainForm.value.listedOn,
+          LISTED_ON_DATE: this.posCustomerMasterMainForm.value.listedOn || this.currentDate,
           NATIONAL_IDENTIFICATION_NO:
             this.posCustomerMasterMainForm.value.fcn_cust_detail_idcard || "",
           OTHER_INFORMATION: "",
@@ -1438,10 +1443,10 @@ export class PosCustomerMasterMainComponent implements OnInit {
           CHILDNAME2: "",
           CHILDNAME3: "",
           CHILDNAME4: "",
-          CHILDDATEOFBIRTH1: "1900-01-01T00:00:00",
-          CHILDDATEOFBIRTH2: "1900-01-01T00:00:00",
-          CHILDDATEOFBIRTH3: "1900-01-01T00:00:00",
-          CHILDDATEOFBIRTH4: "1900-01-01T00:00:00",
+          CHILDDATEOFBIRTH1: this.currentDate,
+          CHILDDATEOFBIRTH2: this.currentDate,
+          CHILDDATEOFBIRTH3: this.currentDate,
+          CHILDDATEOFBIRTH4: this.currentDate,
           OTHERNAMES: "",
           AUTOCREATEMST: false,
           WUPMOBILECODE:
@@ -1453,7 +1458,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
           ProductRangeAvailability: "",
           DIGISCREENED: false,
           BR_CODE: "",
-          SPOUSE_DATE_OF_BIRTH: "1900-01-01T00:00:00",
+          SPOUSE_DATE_OF_BIRTH: this.currentDate,
           TEL_R_CODE: `${this.comService.emptyToZero(
             this.posCustomerMasterMainForm.value.telRCountry
           )}`,
@@ -1476,7 +1481,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
           VOCTYPE: this.vocDetails?.VOCTYPE ?? "",
           YEARMONTH: this.vocDetails?.YEARMONTH ?? localStorage.getItem("YEAR"),
           VOCNO: this.vocDetails?.VOCNO ?? 0,
-          VOCDATE: this.vocDetails?.VOCDATE ?? "1900-01-01T00:00:00",
+          VOCDATE: this.vocDetails?.VOCDATE || this.currentDate,
 
           OT_TRANSFER_TIME: "",
           COUNTRY_DESC: this.posCustomerMasterMainForm.value.country || "",
@@ -1511,9 +1516,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
           PRODUCTRANGEAVAILABILITY:
             this.posCustomerMasterMainForm.value.productRangeAvailability || "",
           LOOKING_FOR: "",
-          POSCUSTIDEXP_DATE: this.posCustomerMasterMainForm.value.custDate
-            ? this.posCustomerMasterMainForm.value.custDate
-            : "1900-01-01T00:00:00",
+          POSCUSTIDEXP_DATE: this.posCustomerMasterMainForm.value.custDate || this.currentDate,
 
           ATTACHMENT_FROM_SCANNER: false,
           GOOD_QUALITY_A_K_A: "",
@@ -1873,10 +1876,10 @@ export class PosCustomerMasterMainComponent implements OnInit {
     this.activeModal.close(returnData);
   }
 
-  dummyDateCheck(date: any) {
-    if (this.dummyDateArr.includes(date)) return "";
-    else return date;
-  }
+  // dummyDateCheck(date: any) {
+  //   if (this.dummyDateArr.includes(date)) return "";
+  //   else return date;
+  // }
 
   openTab(event: any, formControlName: string) {
     console.log(event);
