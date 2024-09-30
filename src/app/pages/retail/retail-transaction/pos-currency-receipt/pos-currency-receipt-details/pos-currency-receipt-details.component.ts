@@ -954,7 +954,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
         // "AMOUNTFC": this.posCurrencyReceiptDetailsForm.value.amountFc,
         AMOUNTCC: this.posCurrencyReceiptDetailsForm.value.amountCc,
         HEADER_AMOUNT: this.posCurrencyReceiptDetailsForm.value.amountCc,
-        CHEQUE_NO: CHEQUE_NO|| "",
+        CHEQUE_NO: CHEQUE_NO.toString()|| "",
         CHEQUE_DATE: CHEQUE_DATE
           ? this.formatDateToISO(CHEQUE_DATE)
           : this.dummyDate,
@@ -969,7 +969,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
         MODEDESC: this.posCurrencyReceiptDetailsForm.value.modeDesc,
         D_POSSCHEMEID: "",
         D_POSSCHEMEUNITS: 1,
-        CARD_NO: this.posCurrencyReceiptDetailsForm.value.creditCardNumber,
+        CARD_NO: this.posCurrencyReceiptDetailsForm.value.creditCardNumber.toString()?? "",
         CARD_HOLDER: this.posCurrencyReceiptDetailsForm.value.creditCardName,
         CARD_EXPIRY: moment(this.posCurrencyReceiptDetailsForm.value.creditCardDate, 'MM/YYYY', true).isValid()
           ? this.formatDateToISO(this.posCurrencyReceiptDetailsForm.value.creditCardDate)
@@ -1018,8 +1018,8 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
         MIDPCR: 0,
         INCLUSIVE: false,
         COMM_PER: this.commisionRate ? this.commisionRate : 0,
-        COMM_AMOUNTCC: this.commissionAmount ? this.commissionAmount : 0,
-        COMM_AMOUNTFC: this.commissionAmount ? this.commissionAmount : 0,
+        COMM_AMOUNTCC: this.commissionAmount ? this.commissionAmount.toFixed(2) : 0,
+        COMM_AMOUNTFC: this.commissionAmount ? this.commissionAmount.toFixed(2) : 0,
         COMM_TAXPER:
           this.posCurrencyReceiptDetailsForm.value.modeOfSelect == "Credit Card"
             ? this.posCurrencyReceiptDetailsForm.value.vat
