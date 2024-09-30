@@ -191,46 +191,75 @@ export class RetailSalesCollectionComponent implements OnInit {
 
   prefillScreenValues(){ 
     if ( Object.keys(this.content).length > 0) {
-       this.isLoading = false;
-       console.log('data fetched from main grid',this.content )
-       let ParcedPreFetchData = JSON.parse(this.content?.CONTROL_LIST_JSON) //data from retailREPORT Component- modalRef instance
-       this.retailSalesCollection.controls.showDateCheckbox?.setValue(
-         ParcedPreFetchData?.CONTROL_DETAIL.SHOWDATE === 0 ? true :  false
-       );
+      this.isLoading = false;
+      console.log('data fetched from main grid',this.content )
+      let ParcedPreFetchData = JSON.parse(this.content?.CONTROL_LIST_JSON) //data from retailREPORT Component- modalRef instance
+      this.retailSalesCollection.controls.showDateCheckbox?.setValue(
+        ParcedPreFetchData?.CONTROL_DETAIL.SHOWDATE === 0 ? true :  false
+      );
  
-       this.retailSalesCollection.controls.showInvoiceCheckbox?.setValue(
-         ParcedPreFetchData?.CONTROL_DETAIL.SHOWINVOICE === 0 ? true :  false
-       );
+      this.retailSalesCollection.controls.showInvoiceCheckbox?.setValue(
+       ParcedPreFetchData?.CONTROL_DETAIL.SHOWINVOICE === 0 ? true :  false
+      );
  
-       this.templateNameHasValue = !!ParcedPreFetchData.CONTROL_HEADER.TEMPLATENAME;
-       this.retailSalesCollection.controls.templateName.setValue(ParcedPreFetchData.CONTROL_HEADER.TEMPLATENAME)
+      this.templateNameHasValue = !!ParcedPreFetchData.CONTROL_HEADER.TEMPLATENAME;
+      this.retailSalesCollection.controls.templateName.setValue(ParcedPreFetchData.CONTROL_HEADER.TEMPLATENAME)
  
-       let splittedText= ParcedPreFetchData?.CONTROL_DETAIL.STRVOCTYPES.split("#")
-       const selectedKeys = this.APIData.filter(item => splittedText?.includes(item.VOCTYPE)).map(item => item);
-       this.selectedRowKeys = selectedKeys;
- 
- 
-       const selectedSet = new Set(this.selectedRowKeys.map(item => item.SRNO));
-       this.APIData.sort((a, b) => {
-         const aIsSelected = selectedSet.has(a.SRNO) ? 1 : 0;
-         const bIsSelected = selectedSet.has(b.SRNO) ? 1 : 0;
-         return bIsSelected - aIsSelected;
-       });
+      let splittedText= ParcedPreFetchData?.CONTROL_DETAIL.STRVOCTYPES.split("#")
+      const selectedKeys = this.APIData.filter(item => splittedText?.includes(item.VOCTYPE)).map(item => item);
+      this.selectedRowKeys = selectedKeys;
  
  
-       this.dateToPass = {
-         fromDate:  ParcedPreFetchData?.CONTROL_DETAIL.FROMVOCDATE,
-         toDate: ParcedPreFetchData?.CONTROL_DETAIL.TOVOCDATE
-       };
-       this.dateToPass.fromDate? this.retailSalesCollection.controls.fromDate.setValue(this.dateToPass.fromDate) : null
-       this.dateToPass.toDate? this.retailSalesCollection.controls.toDate.setValue(this.dateToPass.toDate) : null
+      const selectedSet = new Set(this.selectedRowKeys.map(item => item.SRNO));
+      this.APIData.sort((a, b) => {
+        const aIsSelected = selectedSet.has(a.SRNO) ? 1 : 0;
+        const bIsSelected = selectedSet.has(b.SRNO) ? 1 : 0;
+        return bIsSelected - aIsSelected;
+      });
+ 
+ 
+      this.dateToPass = {
+        fromDate:  ParcedPreFetchData?.CONTROL_DETAIL.FROMVOCDATE,
+        toDate: ParcedPreFetchData?.CONTROL_DETAIL.TOVOCDATE
+      };
+      this.dateToPass.fromDate? this.retailSalesCollection.controls.fromDate.setValue(this.dateToPass.fromDate) : null
+      this.dateToPass.toDate? this.retailSalesCollection.controls.toDate.setValue(this.dateToPass.toDate) : null
 
 
-       this.retailSalesCollection.controls.branch.setValue(ParcedPreFetchData?.CONTROL_DETAIL.STRBRANCHCODES);
-       this.fetchedBranchData= ParcedPreFetchData?.CONTROL_DETAIL.STRBRANCHCODES.split("#")
-       this.fetchedBranchDataParam = ParcedPreFetchData?.CONTROL_DETAIL.STRBRANCHCODES
-     }
-   }
+      this.retailSalesCollection.controls.branch.setValue(ParcedPreFetchData?.CONTROL_DETAIL.STRBRANCHCODES);
+      this.fetchedBranchData= ParcedPreFetchData?.CONTROL_DETAIL.STRBRANCHCODES.split("#")
+      this.fetchedBranchDataParam = ParcedPreFetchData?.CONTROL_DETAIL.STRBRANCHCODES
+    }
+    else{
+      this.retailSalesCollection.controls.branch.setValue(localStorage.getItem('userbranch') )
+      this.fetchedBranchData.push(localStorage.getItem('userbranch') )
+
+      this.dateToPass = {
+        fromDate:  this.formatDateToYYYYMMDD(new Date()),
+        toDate: this.formatDateToYYYYMMDD(new Date()),
+      };
+      this.retailSalesCollection.controls.fromDate.setValue(this.dateToPass.fromDate);
+      this.retailSalesCollection.controls.toDate.setValue(this.dateToPass.toDate);
+
+      this.retailSalesCollection.controls.showDateCheckbox?.setValue(true);
+      this.retailSalesCollection.controls.showInvoiceCheckbox?.setValue(true);
+      this.retailSalesCollection.controls.showSalesCheckbox?.setValue(true);
+      this.retailSalesCollection.controls.showSalesReturnCheckbox?.setValue(true);
+      this.retailSalesCollection.controls.showExbSalesCheckbox?.setValue(true);
+      this.retailSalesCollection.controls.showExbSalesReturnCheckbox?.setValue(true);
+
+      let defaultVoctype = ['POS','RIN','PSR', 'POSC','POSEX','POSER']
+      console.log(this.APIData)
+      const selectedKeys = this.APIData.filter(item => defaultVoctype?.includes(item.VOCTYPE)).map(item => item);
+      this.selectedRowKeys = selectedKeys;
+      const selectedSet = new Set(this.selectedRowKeys.map(item => item.SRNO));
+      this.APIData.sort((a, b) => {
+        const aIsSelected = selectedSet.has(a.SRNO) ? 1 : 0;
+        const bIsSelected = selectedSet.has(b.SRNO) ? 1 : 0;
+        return bIsSelected - aIsSelected;
+      });
+    }
+  }
 
   saveTemplate(){
     this.popupVisible = true;
