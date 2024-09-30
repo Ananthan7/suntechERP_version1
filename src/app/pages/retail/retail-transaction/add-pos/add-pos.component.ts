@@ -7539,6 +7539,9 @@ export class AddPosComponent implements OnInit {
       this.isGrossWtEditable = false;
       this.isPcsEditable=true;
     }else
+    if(this.validatePCS == true || this.enablePieces == true)
+      this.isPcsEditable=true;
+    else
     this.isPcsEditable=false;
     if (!isDivisionX &&
       this.comFunc.emptyToZero(stockInfos.BALANCE_PCS) < 1 &&
@@ -9344,7 +9347,8 @@ export class AddPosComponent implements OnInit {
           this.updateDiscountAmount();
         }
       } else if (this.blockNegativeStock == 'W') {
-        if (this.comFunc.emptyToZero(this.lineItemPcs) < value) {
+        if(this.divisionMS!="M"){
+        if (this.comFunc.emptyToZero(this.lineItemPcs) < value ) {
           if (!divisionBasedAutoUpdation) {
             this.openDialog(
               'Warning',
@@ -9393,6 +9397,12 @@ export class AddPosComponent implements OnInit {
               this.updateDiscountAmount();
         }
       }
+      else{
+        this.lineItemForm.controls['fcn_li_pcs'].setValue(
+          value
+        );
+      }
+    }
       else if (this.blockNegativeStock == 'A') {
         this.checkDivisionForPcs(value);
               this.manageCalculations();
@@ -10561,6 +10571,21 @@ export class AddPosComponent implements OnInit {
       localStorage.setItem(name, event.target.value.toString());
     }
 
+  }
+
+  changeVocNumber(vocNum:any){
+    if(this.comFunc.emptyToZero(vocNum.target.value)==0){
+      const warning="Voucher number cannot be 0"
+      this.openDialog('Warning', warning, true);
+      this.dialogBox.afterClosed().subscribe((data: any) => {
+        if (data == 'OK') {
+          this.vocDataForm.controls.fcn_voc_no.setValue(
+           localStorage.getItem('voucherNumber')
+          );
+          this.manageCalculations();
+        }
+      });
+    }
   }
 
   changeGrossFunc(totalAmt: any, grossAmt: any) {
@@ -13416,6 +13441,7 @@ export class AddPosComponent implements OnInit {
         if (resp.status == "Success") {
           this.vocDataForm.controls['fcn_voc_no'].setValue(resp.newvocno);
           this.voucherNumber = resp.newvocno;
+          localStorage.setItem('voucherNumber',resp.newvocno)
         }
       });
   }

@@ -316,7 +316,7 @@ export class PosSalesmanTargetAnalysisComponent implements OnInit {
   }
 
   prefillScreenValues(){
-    if ( Object.keys(this.content).length > 0) {
+    if ( Object.keys(this.content)?.length > 0) {
       this.isLoading = true;
 
       this.templateNameHasValue = !!(this.content?.TEMPLATE_NAME);

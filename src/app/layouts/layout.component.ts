@@ -26,6 +26,7 @@ export class LayoutComponent implements OnInit {
   sidebarcolor!: string;
   sidebarsize!: string;
   isRTL = false;
+  screenName: string | null = null;
 
   constructor(private eventService: EventService) { }
 
@@ -95,6 +96,7 @@ export class LayoutComponent implements OnInit {
    * Check if the horizontal layout is requested
    */
   isHorizontalLayoutRequested() {
+    this.screenName=localStorage.getItem('screen');
     return this.layoutType === LAYOUT_HORIZONTAL;
   }
 
