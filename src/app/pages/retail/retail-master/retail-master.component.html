@@ -1,8 +1,8 @@
-<!-- menu section -->
 <app-menubar [menuTitle]="menuTitle" (subMenuChange)="getMasterGridData()"></app-menubar>
-<!-- content section starts -->
-<div class="row d-flex justify-content-between"
-    style="min-height: 100vh !important;">
+
+<!-- menu section -->
+
+<div *ngIf="!isCustomerDashboard" class="row d-flex justify-content-between" style="min-height: 100vh !important;">
     <div class="col-md-2 col-sm-12">
         <div class="card p-3">
             <div class="card_wrap">
@@ -25,10 +25,7 @@
         <div class="card p-3">
             <div class="card_wrap h-100">
                 <h5>Defect Analysis</h5>
-                <img
-                    src="../../assets/images/chats/chat-7.png"
-                    alt="chat"
-                    width="100%" />
+                <img src="../../assets/images/chats/chat-7.png" alt="chat" width="100%" />
             </div>
         </div>
     </div>
@@ -37,15 +34,15 @@
             <div class="col-md-12">
                 <div class="card_wrap">
                     <h5>{{menuTitle}}</h5>
-                        <div class="module_form">
-                            <div class="row">
-                                <div class="col-md-12" style="min-height: 30vh;">
-                                    <master-grid (AddBtnClick)="openModalView()" (editRowClick)="editRowDetails($event)"
-                                        (viewRowClick)="viewRowDetails($event)">
-                                    </master-grid>
-                                </div>
+                    <div class="module_form">
+                        <div class="row">
+                            <div class="col-md-12" style="min-height: 30vh;">
+                                <master-grid (AddBtnClick)="openModalView()" (editRowClick)="editRowDetails($event)"
+                                    (viewRowClick)="viewRowDetails($event)">
+                                </master-grid>
                             </div>
                         </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -53,11 +50,7 @@
             <div class="col-md-6">
                 <div class="card_wrap">
                     <h5>Avg Working Hours</h5>
-                    <img
-                        src="../../assets/images/chats/chat-5.png"
-                        alt="chat"
-                        width="100%"
-                        height=" 165px" />
+                    <img src="../../assets/images/chats/chat-5.png" alt="chat" width="100%" height=" 165px" />
                 </div>
             </div>
         </div>
@@ -72,10 +65,7 @@
         <div class="card p-3">
             <div class="card_wrap">
                 <h5>Overall</h5>
-                <img
-                    src="../../assets/images/chats/chat-2.png"
-                    alt="chat"
-                    width="100%" />
+                <img src="../../assets/images/chats/chat-2.png" alt="chat" width="100%" />
             </div>
         </div>
         <div class="card p-3">
@@ -83,6 +73,126 @@
                 <h5>Quantity Produced</h5>
                 <h3>32</h3>
             </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<div *ngIf="isCustomerDashboard" class="row" style="min-height: 100vh !important;">
+
+    <div class="col-md-12 mb-3">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card text-center p-3">
+                    <h5>Sales Revenue</h5>
+                    <h3>$304.01M</h3>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-center p-3">
+                    <h5>Total Customers</h5>
+                    <h3>5.36M</h3>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-center p-3">
+                    <h5>Avg Transaction Price</h5>
+                    <h3>$64.38</h3>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-center p-3">
+                    <h5>Avg Unit Per Customer</h5>
+                    <h3>3.09</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card p-3 mb-3">
+            <h5>Top 5 Collections by Revenue</h5>
+            <canvas #chart *ngIf="collectionByRevenue.labels&&collectionByRevenue.labels.length>0"
+                [plugins]="chartPlugins" baseChart [data]="collectionByRevenue" [options]="commonBarchartOptions"
+                [type]="ChartType" style="width: 100%; padding: 7px;"></canvas>
+            <!-- <img src="../../assets/images/top-5-collections-chart.png" alt="chart" width="100%" height="200px" /> -->
+        </div>
+
+        <div class="card p-3 mb-3">
+            <h5>Average Units and Unit per Transaction</h5>
+
+
+            <canvas [plugins]="chartPlugins" baseChart [data]="avgTransacUnitsData" [options]="transactionUnitLineOptions"
+                [type]="lineChartType" style="width: 100%; padding: 7px;"></canvas>
+
+            <!-- <img src="../../assets/images/average-units-chart.png" alt="chart" width="100%" height="200px" /> -->
+        </div>
+
+        <div class="card p-3 mb-3">
+            <h5>Out of Stock Items</h5>
+            <canvas baseChart class="chart" [data]="outofStockDetails" [plugins]="chartPlugins"
+            [options]="filledLineChartOptions" [type]="lineChartType" width="auto">
+        </canvas>
+            <!-- <img src="../../assets/images/out-of-stock-items-chart.png" alt="chart" width="100%" height="200px" /> -->
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card p-3 mb-3">
+            <div class="col-md-12">
+                <div class="card_wrap">
+                    <h5>{{menuTitle}}</h5>
+                    <div class="module_form">
+                        <div class="row">
+                            <div class="col-md-12" style="min-height: 30vh;">
+                                <master-grid (AddBtnClick)="openModalView()" (editRowClick)="editRowDetails($event)"
+                                    (viewRowClick)="viewRowDetails($event)">
+                                </master-grid>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card p-3 mb-3">
+            <div class="col-md-12">
+                <div class="card_wrap">
+                    <h5>Monthly Customers and Visitors</h5>
+                    <canvas baseChart class="chart" [data]="monthlyCustomerDetails" [plugins]="chartPlugins"
+                        [options]="monthlyCustomerOptions" [type]="lineChartType" width="auto">
+                    </canvas>
+                    <!-- <img src="../../assets/images/monthly-customers-chart.png" alt="chart" width="100%"
+                        height="200px" /> -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card p-3 mb-3">
+            <h5>Top 5 Articles by Sold Items</h5>
+            <canvas #chart1 *ngIf="articleSoldDetails.labels&&articleSoldDetails.labels.length>0"
+                [plugins]="chartPlugins" baseChart [data]="articleSoldDetails" [options]="commonBarchartOptions"
+                [type]="ChartType" style="width: 100%; padding: 7px;"></canvas>
+            <!-- <img src="../../assets/images/top-5-articles-chart.png" alt="chart" width="100%" height="200px" /> -->
+        </div>
+        <div class="card p-3 mb-3">
+            <h5>Sales by Division</h5>
+            <canvas baseChart class="chart" [data]="salesbyDivisionDetails" [options]="barchartOptions"
+                [plugins]="chartPlugins" [type]="barChartType">
+            </canvas>
+            <!-- <img src="../../assets/images/sales-by-division-chart.png" alt="chart" width="100%" height="200px" /> -->
+        </div>
+        <div class="card p-3 mb-3">
+            <h5>Sales by City</h5>
+            <canvas baseChart [data]="salesbyCityDetails" [type]="doughnutChartType"
+                [options]="doughnutChartOptions">
+            </canvas>
+            <!-- <img src="../../assets/images/sales-by-city-chart.png" alt="chart" width="100%" height="200px" /> -->
         </div>
     </div>
 </div>

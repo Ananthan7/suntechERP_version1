@@ -3,5 +3,6 @@
     <app-vertical *ngIf="isVerticalLayoutRequested()"></app-vertical>
 
     <!-- horizontal layout -->
-    <app-horizontal *ngIf="isHorizontalLayoutRequested()"></app-horizontal>
+    <app-masterHorizontal *ngIf="isHorizontalLayoutRequested() && screenName=='Customer Master'" ></app-masterHorizontal>
+    <app-horizontal *ngIf="isHorizontalLayoutRequested() && screenName!='Customer Master'" ></app-horizontal>
 </div>
