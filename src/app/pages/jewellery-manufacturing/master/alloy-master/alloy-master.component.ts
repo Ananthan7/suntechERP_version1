@@ -60,7 +60,7 @@ export class AlloyMasterComponent implements OnInit {
   editMode: boolean = false;
   codeEnable: boolean = true;
   prefixMasterDetail: any;
-  curr_type :boolean = true;
+  curr_type: boolean = true;
   // master search data starts
   codeData: MasterSearchModel = {
     PAGENO: 1,
@@ -300,6 +300,18 @@ export class AlloyMasterComponent implements OnInit {
     this.activeModal.close(data);
   }
 
+  setPriceCodeFromAPI(e:any) {
+    let API = `PriceMaster/GetPriceMasterDetails/${this.content.PRICE_CODE}`
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        if (result.response) {
+          let data = result.response
+          console.log(data)
+        }
+      })
+  }
+
+
   ngOnInit(): void {
     this.setInitialValues();
 
@@ -329,6 +341,7 @@ export class AlloyMasterComponent implements OnInit {
 
 
 
+
     // this.alloyMastereForm.get('currency')?.valueChanges.subscribe(value => {
     //   this.isCurrencySelected = !value;
     //   if (this.isCurrencySelected) {
@@ -348,46 +361,46 @@ export class AlloyMasterComponent implements OnInit {
     this.setCompanyCurrency();
   }
 
-  price1LcChange(){
+  price1LcChange() {
     const form = this.alloyMastereForm.value;
-    let curr = this.commonService.CCToFC(form.currency,form.price1Lc)
+    let curr = this.commonService.CCToFC(form.currency, form.price1Lc)
     this.alloyMastereForm.get('price1Fc')!.setValue(curr);
     console.log(curr);
-    
+
     // Update percentage calculation
-    this.alloyMastereForm.get('price1per')!.setValue(this.percentageCalculate(form.price1Lc)); 
+    this.alloyMastereForm.get('price1per')!.setValue(this.percentageCalculate(form.price1Lc));
   }
 
-  price2LcChange(){
+  price2LcChange() {
     const form = this.alloyMastereForm.value;
-    let curr = this.commonService.CCToFC(form.currency,form.price2Lc)
+    let curr = this.commonService.CCToFC(form.currency, form.price2Lc)
     this.alloyMastereForm.get('price2Fc')!.setValue(curr);
     // Update percentage calculation
-    this.alloyMastereForm.get('price2per')!.setValue(this.percentageCalculate(form.price2Lc)); 
+    this.alloyMastereForm.get('price2per')!.setValue(this.percentageCalculate(form.price2Lc));
   }
 
-  price3LcChange(){
+  price3LcChange() {
     const form = this.alloyMastereForm.value;
-    let curr = this.commonService.CCToFC(form.currency,form.price3Lc)
+    let curr = this.commonService.CCToFC(form.currency, form.price3Lc)
     this.alloyMastereForm.get('price3Fc')!.setValue(curr);
     // Update percentage calculation
-    this.alloyMastereForm.get('price3per')!.setValue(this.percentageCalculate(form.price3Lc)); 
+    this.alloyMastereForm.get('price3per')!.setValue(this.percentageCalculate(form.price3Lc));
   }
 
-  price4LcChange(){
+  price4LcChange() {
     const form = this.alloyMastereForm.value;
-    let curr = this.commonService.CCToFC(form.currency,form.price4Lc)
+    let curr = this.commonService.CCToFC(form.currency, form.price4Lc)
     this.alloyMastereForm.get('price4Fc')!.setValue(curr);
     // Update percentage calculation
-    this.alloyMastereForm.get('price4per')!.setValue(this.percentageCalculate(form.price4Lc)); 
+    this.alloyMastereForm.get('price4per')!.setValue(this.percentageCalculate(form.price4Lc));
   }
 
-  price5LcChange(){
+  price5LcChange() {
     const form = this.alloyMastereForm.value;
-    let curr = this.commonService.CCToFC(form.currency,form.price5Lc)
+    let curr = this.commonService.CCToFC(form.currency, form.price5Lc)
     this.alloyMastereForm.get('price5Fc')!.setValue(curr);
     // Update percentage calculation
-    this.alloyMastereForm.get('price5per')!.setValue(this.percentageCalculate(form.price5Lc)); 
+    this.alloyMastereForm.get('price5per')!.setValue(this.percentageCalculate(form.price5Lc));
   }
 
   // THIS METHOD IS WRONG TOO MUCH SUBSCRIDE METHODS no need of this function change to individual focusout 
@@ -399,7 +412,7 @@ export class AlloyMasterComponent implements OnInit {
       this.alloyMastereForm.get('price1Lc')!.valueChanges.subscribe(value => {
         // Update value of price1Fc whenever price1Lc changes
         // syed no need to pass rate 
-        this.alloyMastereForm.get('price1Fc')!.setValue(this.commonService.CCToFC(form.currency,value));
+        this.alloyMastereForm.get('price1Fc')!.setValue(this.commonService.CCToFC(form.currency, value));
         // Update percentage calculation
         this.alloyMastereForm.get('price1per')!.setValue(this.percentageCalculate(value));
       });
@@ -407,7 +420,7 @@ export class AlloyMasterComponent implements OnInit {
     if (this.alloyMastereForm.get('price2Lc') && this.alloyMastereForm.get('price2Fc')) {
       this.alloyMastereForm.get('price2Lc')!.valueChanges.subscribe(value => {
         // Update value of price2Fc whenever price2Lc changes
-        this.alloyMastereForm.get('price2Fc')!.setValue(this.commonService.CCToFC(form.currency,value));
+        this.alloyMastereForm.get('price2Fc')!.setValue(this.commonService.CCToFC(form.currency, value));
         // Update percentage calculation
         this.alloyMastereForm.get('price2per')!.setValue(this.percentageCalculate(value));
       });
@@ -415,7 +428,7 @@ export class AlloyMasterComponent implements OnInit {
     if (this.alloyMastereForm.get('price3Lc') && this.alloyMastereForm.get('price3Fc')) {
       this.alloyMastereForm.get('price3Lc')!.valueChanges.subscribe(value => {
         // Update value of price3Fc whenever price3Lc changes
-        this.alloyMastereForm.get('price3Fc')!.setValue(this.commonService.CCToFC(form.currency,value));
+        this.alloyMastereForm.get('price3Fc')!.setValue(this.commonService.CCToFC(form.currency, value));
         // Update percentage calculation
         this.alloyMastereForm.get('price3per')!.setValue(this.percentageCalculate(value));
       });
@@ -423,7 +436,7 @@ export class AlloyMasterComponent implements OnInit {
     if (this.alloyMastereForm.get('price4Lc') && this.alloyMastereForm.get('price4Fc')) {
       this.alloyMastereForm.get('price4Lc')!.valueChanges.subscribe(value => {
         // Update value of price4Fc whenever price4Lc changes
-        this.alloyMastereForm.get('price4Fc')!.setValue(this.commonService.CCToFC(form.currency,value));
+        this.alloyMastereForm.get('price4Fc')!.setValue(this.commonService.CCToFC(form.currency, value));
         // Update percentage calculation
         this.alloyMastereForm.get('price4per')!.setValue(this.percentageCalculate(value));
       });
@@ -431,7 +444,7 @@ export class AlloyMasterComponent implements OnInit {
     if (this.alloyMastereForm.get('price5Lc') && this.alloyMastereForm.get('price5Fc')) {
       this.alloyMastereForm.get('price5Lc')!.valueChanges.subscribe(value => {
         // Update value of price5Fc whenever price5Lc changes
-        this.alloyMastereForm.get('price5Fc')!.setValue(this.commonService.CCToFC(form.currency,value));
+        this.alloyMastereForm.get('price5Fc')!.setValue(this.commonService.CCToFC(form.currency, value));
         // Update percentage calculation
         this.alloyMastereForm.get('price5per')!.setValue(this.percentageCalculate(value));
       });
@@ -500,7 +513,7 @@ export class AlloyMasterComponent implements OnInit {
     // this.alloyMastereForm.controls.price3per.setValue(this.content.UDF3)
     // this.alloyMastereForm.controls.price4per.setValue(this.content.UDF4)
     // this.alloyMastereForm.controls.price5per.setValue(this.content.UDF5)
-    
+
     // this.alloyMastereForm.controls.price1per.setValue(this.content.PRICE1PER)
     // this.alloyMastereForm.controls.price2per.setValue(this.content.PRICE2PER)
     // this.alloyMastereForm.controls.price3per.setValue(this.content.PRICE3PER)
@@ -597,7 +610,7 @@ export class AlloyMasterComponent implements OnInit {
   //     this.commonService.decimalQuantityFormat(CURRENCY_RATE[0].CONV_RATE, 'RATE')
   //   );
   // }
-  
+
   setCompanyCurrency() {
     let CURRENCY_CODE = this.commonService.compCurrency;
     this.alloyMastereForm.controls.currency.setValue(CURRENCY_CODE);
@@ -645,7 +658,12 @@ export class AlloyMasterComponent implements OnInit {
     let form = this.alloyMastereForm.value;
     let weightAvgCostFC = this.commonService.CCToFC(form.currency, event.target.value);
     this.setValueWithDecimal('weightAvgCostFC', weightAvgCostFC, 'AMOUNT')
-    this.fillPriceSchemeDetails()
+    if (this.alloyMastereForm.value.priceScheme != "") {
+      this.fillPriceSchemeDetails();
+    } else {
+
+    }
+
   }
 
   codeEnabled() {
@@ -677,7 +695,7 @@ export class AlloyMasterComponent implements OnInit {
 
     LOOKUPDATA.SEARCH_VALUE = event.target.value
 
-    if (event.target.value == '' || this.viewMode == true || this.editMode == true ) return
+    if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
       WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
@@ -737,7 +755,8 @@ export class AlloyMasterComponent implements OnInit {
         if (result.status == "Success") {
           this.priceSchemeDetails = result.dynamicData[0] || []
           if (this.priceSchemeDetails?.length > 0) {
-            this.fillPriceSchemeDetails()
+            this.resetAllPriceDetails();
+            this.fillPriceSchemeDetails();
           } else {
             this.commonService.toastErrorByMsgId('MSG1531')
           }
@@ -754,7 +773,7 @@ export class AlloyMasterComponent implements OnInit {
       //   console.log('fillPriceSchemeDetails function is disabled in viewMode.');
       return; // Exit the function early if in viewMode
     }
-    this.resetAllPriceDetails()
+    // this.resetAllPriceDetails()
     let form = this.alloyMastereForm.value;
     this.priceSchemeDetails.forEach((item: any, i: any) => {
       console.log(`Processing item with PRICE_NUMBER: ${item.PRICE_NUMBER}`);
@@ -898,11 +917,11 @@ export class AlloyMasterComponent implements OnInit {
 
   currencyDataSelected(e: any) {
     console.log(e);
-    if(e.CURRENCY_CODE != "AED"){      
+    if (e.CURRENCY_CODE != "AED") {
       this.isCurrencySelected = false;
     }
-      
-     
+
+
     if (this.checkStockCode()) return
     this.alloyMastereForm.controls['currency'].setValue(e.CURRENCY_CODE);
     this.alloyMastereForm.controls['currencyRate'].setValue(e.CONV_RATE);
@@ -1146,6 +1165,7 @@ export class AlloyMasterComponent implements OnInit {
   }
 
   priceOneCodeSelected(e: any) {
+    console.log(e);
     if (this.isSamepriceCodeSelected(e.PRICE_CODE)) {
       this.commonService.toastErrorByMsgId('MSG1659');
       return;
@@ -1153,7 +1173,10 @@ export class AlloyMasterComponent implements OnInit {
     if (this.checkStockCode()) return
     this.alloyMastereForm.controls.price1code.setValue(e.PRICE_CODE);
     if (this.priceSchemeDetails?.length > 0) {
+      console.log("num");
       this.fillPriceSchemeDetails()
+    }else{
+      this.setPriceCodeFromAPI(e.PRICE_CODE)
     }
     // this.fillPriceSchemeDetails1()
   }
@@ -1207,7 +1230,8 @@ export class AlloyMasterComponent implements OnInit {
   }
 
   HSNCenterSelected(e: any) {
-    this.checkStockCode()
+    console.log(e);    
+    this.checkStockCode();
     this.alloyMastereForm.controls.hsncode.setValue(e.CODE);
   }
 
@@ -1461,7 +1485,7 @@ export class AlloyMasterComponent implements OnInit {
       PARENTSTOCK_CODE: "",
       PARTNER_CODE: "",
       KPNUMBER: "",
-      HSN_CODE: this.commonService.nullToString(this.alloyMastereForm.value.HSNcode),
+      HSN_CODE: this.commonService.nullToString(this.alloyMastereForm.value.hsncode),
       ITEM_ONHOLD: false,
       POS_CUST_CODE: this.commonService.nullToString(this.alloyMastereForm.value.POScus),
       CONSIGNMENT: false,
@@ -1503,7 +1527,8 @@ export class AlloyMasterComponent implements OnInit {
       ADDITIONAL_RATEFC: 0,
       ADDITIONAL_RATELC: 0,
       WBOXWOUTBOX: 0,
-      ALLOW_NEGATIVE: this.onchangeCheckBox(this.alloyMastereForm.value.silveralloy),
+      // ALLOW_NEGATIVE: this.onchangeCheckBox(this.alloyMastereForm.value.silveralloy),
+      ALLOW_NEGATIVE: false, // Discuss with ALS and hadcode as
       EXCLUDE_TRANSFER_WT: this.onchangeCheckBox(this.alloyMastereForm.value.excludeTransferWt),
       WT_VAR_PER: 0,
       HALLMARKING: this.commonService.nullToString(this.alloyMastereForm.value.hallmarking),
