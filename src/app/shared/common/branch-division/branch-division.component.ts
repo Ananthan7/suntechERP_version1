@@ -45,6 +45,12 @@ export class BranchDivisionComponent implements OnInit {
   selectedBcategData: any;
 
   @Input() fetchData: any;
+
+  @Input() branchView: boolean = true;
+  @Input() divisionView: boolean = true;
+  @Input() additionalFilterAreaView: boolean = true;
+  @Input() additionalFilterBCategView: boolean = true;
+
   constructor(private toastr: ToastrService, private commonService: CommonServiceService,
     private dataService: SuntechAPIService, private modalService: NgbModal,) { }
 
