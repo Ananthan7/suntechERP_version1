@@ -421,8 +421,8 @@
         <div class="col-md-1">
           <label for="fcn_voc_no">{{ vocno_lbl }}</label>
           <mat-form-field appearance="outline" style="width: 100%">
-            <input type="text" NumberOnly matInput formControlName="fcn_voc_no"
-              [readonly]="voucherDetails?.LOCKVOUCHERNO || viewOnly" class="st_txt_right" />
+            <input type="text" NumberOnly (focus)="setValToLocalStorage($event, 'voucherNumber')" matInput formControlName="fcn_voc_no"
+              (change)="changeVocNumber($event)" [readonly]="voucherDetails?.LOCKVOUCHERNO || viewOnly" class="st_txt_right" />
           </mat-form-field>
         </div>
         <div class="col-md-1">

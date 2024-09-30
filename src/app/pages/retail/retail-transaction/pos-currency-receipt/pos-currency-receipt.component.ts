@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from "@angular/core";
+import { Component, Input, OnInit, Renderer2, ViewChild } from "@angular/core";
 import {
   NgbActiveModal,
   NgbModal,
@@ -19,6 +19,7 @@ import { startOfDay } from "@fullcalendar/angular";
 import { IndexedDbService } from "src/app/services/indexed-db.service";
 import { AuditTrailComponent } from "src/app/shared/common/audit-trail/audit-trail.component";
 import { MasterSearchComponent } from "src/app/shared/common/master-search/master-search.component";
+import { ItemDetailService } from "src/app/services/modal-service.service";
 
 @Component({
   selector: "app-pos-currency-receipt",
@@ -104,7 +105,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
     SEARCH_FIELD: "ACCODE",
     SEARCH_HEADING: "Party Code",
     SEARCH_VALUE: "",
-    WHERECONDITION: "ACCODE<> ''",
+    WHERECONDITION: `ACCODE<> ''AND BRANCH_CODE = '${this.strBranchcode}'`,
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   };
@@ -157,7 +158,11 @@ export class PosCurrencyReceiptComponent implements OnInit {
     private dataService: SuntechAPIService,
     private snackBar: MatSnackBar,
     public comService: CommonServiceService,
-    private indexedDb: IndexedDbService
+    private indexedDb: IndexedDbService,
+    private renderer: Renderer2,
+    private dialogService: ItemDetailService,
+  
+
   ) {
     this.gridAmountDecimalFormat = {
       type: "fixedPoint",
@@ -199,6 +204,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
       this.getPartyCode();
       console.log("Working+++++");
     }
+    this.renderer.selectRootElement('#vocDateInput').focus();
   }
 
 
@@ -829,8 +835,19 @@ export class PosCurrencyReceiptComponent implements OnInit {
   }
 
   close(data?: any) {
-    this.activeModal.close(data);
+    if (this.viewOnly||data) {
+      this.activeModal.close();
+    } else {
+      const dialogRef = this.dialogService.openDialog('Warning', this.comService.getMsgByID('MSG1212'), false);
+      
+      dialogRef.afterClosed().subscribe((action: any) => {
+        if (action == 'Yes') {
+          this.activeModal.close();
+        }
+      });
+    }
   }
+
 
   // customer master add, view
   openCustMaster() {
@@ -975,40 +992,27 @@ export class PosCurrencyReceiptComponent implements OnInit {
       isViewOnly: this.viewOnly,
     };
 
+    modalRef.componentInstance.continueData.subscribe((postData: any) => {
+      console.log("Continue data from modal:", postData);
+      this.handlePostData(postData);  // Handle the postData as needed
+    });
+  
+    // Handle modal close when finish is clicked
     modalRef.result.then((postData) => {
       if (postData) {
         console.log("Data from modal:", postData);
         this.handlePostData(postData);
       }
     });
+
+    // modalRef.result.then((postData) => {
+    //   if (postData) {
+    //     console.log("Data from modal:", postData);
+    //     this.handlePostData(postData);
+    //   }
+    // });
   }
 
-  // getGSTDetails(acCode: any) {
-
-  //   let vatData = {
-
-  //     'BranchCode': this.branchCode,
-  //     'AcCode': acCode,
-  //     'VocType': this.comService.getqueryParamVocType(),
-  //     'Date': new Date().toISOString(),
-
-  //   };
-  //   let Sub: Subscription = this.dataService.postDynamicAPI('GetGSTCodeExpenseVoc', vatData)
-  //     .subscribe((result) => {
-
-  //       if (result.status == 'Success') {
-  //         let data = result.response;
-  //         console.log('vatData', data.GST_PER);
-  //         this.vatPercentage = data.GST_PER;
-  //         this.hsnCode = data.HSN_SAC_CODE;
-  //       }
-  //       else{
-  //         this.vatPercentage = '0';
-  //         this.hsnCode = ''
-  //       }
-  //     }
-  //     )
-  // }
 
   getGSTDetails(acCode: any) {
     // let vatData = {

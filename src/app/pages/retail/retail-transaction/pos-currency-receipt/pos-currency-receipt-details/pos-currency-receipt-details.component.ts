@@ -1,9 +1,12 @@
 import {
   Component,
   Directive,
+  EventEmitter,
   Injectable,
   Input,
   OnInit,
+  Output,
+  Renderer2,
   ViewChild,
 } from "@angular/core";
 import {
@@ -28,6 +31,8 @@ import * as _moment from "moment";
 import { IndexedDbService } from "src/app/services/indexed-db.service";
 import * as moment from "moment";
 import { MasterSearchComponent } from "src/app/shared/common/master-search/master-search.component";
+import { MatDialog } from "@angular/material/dialog";
+import { ItemDetailService } from "src/app/services/modal-service.service";
 
 @Component({
   selector: "app-pos-currency-receipt-details",
@@ -37,7 +42,7 @@ import { MasterSearchComponent } from "src/app/shared/common/master-search/maste
 export class PosCurrencyReceiptDetailsComponent implements OnInit {
   @ViewChild("overlayDebitCode") overlayDebitCode!: MasterSearchComponent;
   @ViewChild("overlayCurrencyCode") overlayCurrencyCode!: MasterSearchComponent;
-
+  @Output() continueData: EventEmitter<any> = new EventEmitter<any>();
   @Input() content!: any; //use: To get clicked row details from master grid
   @Input() receiptData!: any;
   @Input() queryParams!: any;
@@ -159,7 +164,9 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
     private dataService: SuntechAPIService,
     private snackBar: MatSnackBar,
     public comService: CommonServiceService,
-    private indexedDb: IndexedDbService
+    private indexedDb: IndexedDbService,
+    private dialogService: ItemDetailService,
+    private renderer: Renderer2,
   ) {
     this.indexedDb.getAllData("compparams").subscribe((data) => {
       if (data.length > 0) {
@@ -880,7 +887,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
   }
 
 
-  formSubmit() {
+  formSubmit(btnType:any) {
     if (this.content && this.content.FLAG == "EDIT") {
       // this.update()
       return;
@@ -915,7 +922,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
     console.log(this.posCurrencyReceiptDetailsForm.value.vocDate);
     const res = this.validateReceipt();
     if (!res) {
-      var CHEQUE_NO, CHEQUE_DATE, CHEQUE_BANK, CHEQUE_DEPOSIT_BANK;
+      var CHEQUE_NO="", CHEQUE_DATE, CHEQUE_BANK="", CHEQUE_DEPOSIT_BANK="";
       if (this.posCurrencyReceiptDetailsForm.value.modeOfSelect == "TT") {
         CHEQUE_NO = this.posCurrencyReceiptDetailsForm.value.ttNumber;
         CHEQUE_DATE = this.posCurrencyReceiptDetailsForm.value.ttDate;
@@ -947,7 +954,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
         // "AMOUNTFC": this.posCurrencyReceiptDetailsForm.value.amountFc,
         AMOUNTCC: this.posCurrencyReceiptDetailsForm.value.amountCc,
         HEADER_AMOUNT: this.posCurrencyReceiptDetailsForm.value.amountCc,
-        CHEQUE_NO: CHEQUE_NO.toString() || "",
+        CHEQUE_NO: CHEQUE_NO|| "",
         CHEQUE_DATE: CHEQUE_DATE
           ? this.formatDateToISO(CHEQUE_DATE)
           : this.dummyDate,
@@ -1041,9 +1048,28 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
         AMLTRANSACTION_TYPE: "",
       };
 
-      this.close(postData);
+
+      if (btnType === 'finish') {
+        this.close(postData);  
+      } else if (btnType === 'continue') {
+        this.continueData.emit(postData);
+         this.resetFormForContinue(); 
+      }
     }
   }
+
+  resetFormForContinue() {
+    this.posCurrencyReceiptDetailsForm.patchValue({
+      amountCc: '', 
+      amountFc: '',  
+      vatcc: '', 
+      totalFc: '',  
+      totalLc: '', 
+      headerVatAmt: '',  
+      vatNo: '',  
+      invoiceNo: '', 
+      remarks: '', 
+    });}
 
   deleteWorkerMaster() {
     if (this.content.MID == null) {
@@ -1117,77 +1143,103 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
   }
 
   changeAmountLc(event: any) {
-    console.log(event);
-    this.commissionAmount = 0;
-    let amountLc = event.target.value;
-    let amountFc = this.comService.CCToFC(
-      this.posCurrencyReceiptDetailsForm.value.currencyCode,
-      this.comService.emptyToZero(event.target.value)
-    );
-    let vatPrc = this.posCurrencyReceiptDetailsForm.controls.vat.value;
-    let vatCc = (amountFc * vatPrc) / 100;
-    this.vatAmountCC = (amountLc * vatPrc) / 100;
-    let amountWithVat = amountFc + vatCc;
-    let amountWithVatLC = this.vatAmountCC + parseFloat(amountLc);
-    console.log(vatCc);
-    this.posCurrencyReceiptDetailsForm.controls.amountCc.setValue(
-      this.comService.decimalQuantityFormat(
-        this.comService.emptyToZero(event.target.value),
-        "AMOUNT"
-      )
-    );
-    if (
-      this.posCurrencyReceiptDetailsForm.value.modeOfSelect == "Credit Card" &&
-      this.posCurrencyReceiptDetailsForm.value.modeDesc
-    ) {
-      this.commissionAmount = this.comService.emptyToZero(
-        amountLc * (this.commisionRate / 100)
-      );
-      console.log(this.commissionAmount);
+    const amountLc = this.comService.emptyToZero(event.target.value);
+  
+    if (amountLc === 0) {
+      this.handleZeroAmount();
+      return;
     }
-    //   this.comService.CCToFC(
-    //     this.comService.compCurrency,
-    //     this.comService.emptyToZero(this.order_items_total_amount)
-    // )
-    this.posCurrencyReceiptDetailsForm.controls.amountFc.setValue(
-      this.comService.decimalQuantityFormat(
-        this.comService.CCToFC(
-          this.posCurrencyReceiptDetailsForm.value.currencyCode,
-          this.comService.emptyToZero(event.target.value)
-        ),
-        "AMOUNT"
-      )
-    );
-    this.posCurrencyReceiptDetailsForm.controls.vatcc.setValue(
-      this.comService.decimalQuantityFormat(
-        this.comService.emptyToZero(vatCc),
-        "AMOUNT"
-      )
-    );
-
-    this.posCurrencyReceiptDetailsForm.controls.totalFc.setValue(
-      this.comService.decimalQuantityFormat(
-        this.comService.emptyToZero(amountWithVat),
-        "AMOUNT"
-      )
-    );
-
-    // this.posCurrencyReceiptDetailsForm.controls.totalFc.setValue(this.comService.decimalQuantityFormat(
-    //   this.comService.emptyToZero(amountWithVat),
-    //   'AMOUNT'));
-    this.posCurrencyReceiptDetailsForm.controls.totalLc.setValue(
-      this.comService.decimalQuantityFormat(
-        this.comService.emptyToZero(amountWithVatLC),
-        "AMOUNT"
-      )
-    );
-    this.posCurrencyReceiptDetailsForm.controls.headerVatAmt.setValue(
-      this.comService.decimalQuantityFormat(
-        this.comService.emptyToZero(amountWithVatLC),
-        "AMOUNT"
-      )
+  
+    this.resetCommissionAmount();
+    
+    const amountFc = this.convertToForeignCurrency(amountLc);
+    const vatPrc = this.posCurrencyReceiptDetailsForm.controls.vat.value;
+    const vatCc = this.calculateVat(amountFc, vatPrc);
+    const vatAmountLC = this.calculateVat(amountLc, vatPrc);
+    
+    // Only update values if amountLc is greater than 0
+    this.updateAmounts(amountLc, amountFc, vatCc, vatAmountLC);
+    
+    if (this.isCreditCardMode()) {
+      this.updateCommission(amountLc);
+    }
+  }
+  
+  handleZeroAmount() {
+    const dialogRef = this.dialogService.openDialog('Warning', this.comService.getMsgByID('MSG1031'), true);
+    dialogRef.afterClosed().subscribe((action: any) => {
+      if (action === 'OK') {
+        let lastUpdatedAmount=localStorage.getItem("amountLc")
+        this.posCurrencyReceiptDetailsForm.controls.amountCc.setValue(lastUpdatedAmount);
+        const amountFc = this.convertToForeignCurrency(lastUpdatedAmount);
+        const amountLc = lastUpdatedAmount;
+        const vatPrc = this.posCurrencyReceiptDetailsForm.controls.vat.value;
+        const vatCc = this.calculateVat(amountFc, vatPrc);
+        const vatAmountLC = this.calculateVat(amountLc, vatPrc);
+        
+        this.updateAmounts(amountLc, amountFc, vatCc, vatAmountLC);
+        this.renderer.selectRootElement('#ccAmount').focus();
+      }
+    });
+  }
+  
+  resetCommissionAmount() {
+    this.commissionAmount = 0;
+  }
+  
+  convertToForeignCurrency(amountLc: any): any {
+    return this.comService.CCToFC(
+      this.posCurrencyReceiptDetailsForm.value.currencyCode,
+      amountLc
     );
   }
+  
+  calculateVat(amount: any, vatPrc: any): any {
+    return (amount * vatPrc) / 100;
+  }
+  
+  updateAmounts(amountLc: any, amountFc: any, vatCc: any, vatAmountLC: any) {
+    const amountWithVatFc = amountFc + vatCc;
+    const amountWithVatLC = vatAmountLC + parseFloat(amountLc.toString());
+  
+    this.posCurrencyReceiptDetailsForm.controls.amountCc.setValue(
+      this.comService.decimalQuantityFormat(amountLc, "AMOUNT")
+    );
+  
+    this.posCurrencyReceiptDetailsForm.controls.amountFc.setValue(
+      this.comService.decimalQuantityFormat(amountFc, "AMOUNT")
+    );
+  
+    this.posCurrencyReceiptDetailsForm.controls.vatcc.setValue(
+      this.comService.decimalQuantityFormat(vatCc, "AMOUNT")
+    );
+  
+    this.posCurrencyReceiptDetailsForm.controls.totalFc.setValue(
+      this.comService.decimalQuantityFormat(amountWithVatFc, "AMOUNT")
+    );
+  
+    this.posCurrencyReceiptDetailsForm.controls.totalLc.setValue(
+      this.comService.decimalQuantityFormat(amountWithVatLC, "AMOUNT")
+    );
+  
+    this.posCurrencyReceiptDetailsForm.controls.headerVatAmt.setValue(
+      this.comService.decimalQuantityFormat(amountWithVatLC, "AMOUNT")
+    );
+    localStorage.setItem("amountLc", amountLc.toString());
+  }
+  
+  isCreditCardMode(): boolean {
+    return this.posCurrencyReceiptDetailsForm.value.modeOfSelect === "Credit Card" && 
+           this.posCurrencyReceiptDetailsForm.value.modeDesc;
+  }
+  
+  updateCommission(amountLc: number) {
+    this.commissionAmount = this.comService.emptyToZero(
+      amountLc * (this.commisionRate / 100)
+    );
+    console.log(this.commissionAmount);
+  }
+  
 
   changeTotalLc(event: any) {
     console.log(event.target.value);
@@ -1291,21 +1343,95 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
     return date ? date >= today : true;
   };
 
-  /**USE: close modal window */
-  close(data?: any) {
-    console.log(data);
 
-    // this.activeModal.close();
-    if (
-      this.receiptData != null &&
-      this.receiptData != undefined &&
-      data != null
-    ) {
-      data!.isUpdate = true;
-    }
 
-    this.activeModal.close(data);
+  SPvalidateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    LOOKUPDATA.SEARCH_VALUE = event.target.value;
+
+    if (event.target.value === '' || this.viewOnly === true) return;
+
+    let param = {
+      "PAGENO": LOOKUPDATA.PAGENO,
+      "RECORDS": LOOKUPDATA.RECORDS,
+      "LOOKUPID": LOOKUPDATA.LOOKUPID,
+      "WHERECONDITION": LOOKUPDATA.WHERECONDITION,
+      "searchField": LOOKUPDATA.SEARCH_FIELD,
+      "searchValue": LOOKUPDATA.SEARCH_VALUE
+    };
+
+    this.comService.showSnackBarMsg('MSG81447');
+
+    let Sub: Subscription = this.dataService.postDynamicAPI('MasterLookUp', param)
+      .subscribe((result) => {
+        this.comService.closeSnackBarMsg();
+
+        let data = result.dynamicData[0];
+
+        if (data && data.length > 0) {
+          if (LOOKUPDATA.FRONTENDFILTER && LOOKUPDATA.SEARCH_VALUE !== '') {
+            let searchResult = this.comService.searchAllItemsInArray(data, LOOKUPDATA.SEARCH_VALUE);
+
+            if (searchResult && searchResult.length > 0) {
+              let matchedItem = searchResult[0]; 
+              this.posCurrencyReceiptDetailsForm.controls.currencyCode.setValue(
+                matchedItem.Currency
+              );
+              this.posCurrencyReceiptDetailsForm.controls.currencyRate.setValue(
+                this.comService.decimalQuantityFormat(
+                  matchedItem['Conv Rate'],
+                  "RATE"
+                )
+              );
+
+           
+
+            } else {
+              this.comService.toastErrorByMsgId('No data found');
+              LOOKUPDATA.SEARCH_VALUE = '';
+            }
+          }
+        }
+      }, err => {
+        this.comService.toastErrorByMsgId('MSG2272');
+      });
+
+    this.subscriptions.push(Sub);
   }
+
+
+  /**USE: close modal window */
+  // close(data?: any) {
+  //   console.log(data);
+
+  //   // this.activeModal.close();
+  //   if (
+  //     this.receiptData != null &&
+  //     this.receiptData != undefined &&
+  //     data != null
+  //   ) {
+  //     data!.isUpdate = true;
+  //   }
+
+  //   this.activeModal.close(data);
+  // }
+  
+
+  close(data: any = null) {
+
+    if (this.viewOnly||data) {
+      this.activeModal.close(data);
+    } else {
+      const dialogRef = this.dialogService.openDialog('Warning', this.comService.getMsgByID('MSG1212'), false);
+      
+      dialogRef.afterClosed().subscribe((action: any) => {
+        if (action == 'Yes') {
+          this.activeModal.close();
+        }
+      });
+    }
+    
+  }
+
 
   openTab(event: any, formControlName: string) {
     console.log(event);

@@ -50,13 +50,14 @@ export class ItemDetailService {
       }
     });
   }
+
   openDialog(title: any, msg: any, okBtn: any, swapColor = false) {
-    this.dialogBox = this.dialog.open(DialogboxComponent, {
-        width: '40%',
-        disableClose: true,
-        data: { title, msg, okBtn, swapColor },
+    return this.dialog.open(DialogboxComponent, {
+      width: '40%',
+      disableClose: true,
+      data: { title, msg, okBtn, swapColor },
     });
-}
+  }
 
 
 generatePdf(elementId: string, filename: string): void {

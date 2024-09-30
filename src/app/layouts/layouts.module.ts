@@ -18,6 +18,7 @@ import { RightsidebarComponent } from './rightsidebar/rightsidebar.component';
 import { FooterComponent } from './footer/footer.component';
 import { HorizontalComponent } from './horizontal/horizontal.component';
 import { HorizontaltopbarComponent } from './horizontaltopbar/horizontaltopbar.component';
+import { MasterHorizontalComponent } from './dashboard-specific-horizontal/masterHorizontal.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { HorizontaltopbarComponent } from './horizontaltopbar/horizontaltopbar.c
     RightsidebarComponent,
     FooterComponent,
     HorizontalComponent,
+    MasterHorizontalComponent,
     HorizontaltopbarComponent
   ],
   imports: [
