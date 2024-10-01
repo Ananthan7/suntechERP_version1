@@ -4,7 +4,7 @@ MENU_SCREEN_NAME :POS Advance Return
 DEVELOPER : LINUS ELIAS JOSE
 */
 
-import { Component, Input, OnInit, ViewChild } from "@angular/core";
+import { Component, Input, OnInit, Renderer2, ViewChild } from "@angular/core";
 import {
   NgbActiveModal,
   NgbModal,
@@ -24,6 +24,7 @@ import Swal from "sweetalert2";
 import { IndexedDbService } from "src/app/services/indexed-db.service";
 import { AuditTrailComponent } from "src/app/shared/common/audit-trail/audit-trail.component";
 import { MasterSearchComponent } from "src/app/shared/common/master-search/master-search.component";
+import { ItemDetailService } from "src/app/services/modal-service.service";
 
 @Component({
   selector: "app-advance-return",
@@ -160,7 +161,9 @@ export class AdvanceReturnComponent implements OnInit {
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
     public dialog: MatDialog,
-    private indexedDb: IndexedDbService
+    private indexedDb: IndexedDbService,
+    private dialogService: ItemDetailService,
+    private renderer: Renderer2,
   ) {
     this.gridAmountDecimalFormat = {
       type: "fixedPoint",
@@ -179,8 +182,9 @@ export class AdvanceReturnComponent implements OnInit {
     this.advanceReturnForm.controls.baseCurrency.setValue(
       this.comService.compCurrency
     );
+
     this.advanceReturnForm.controls.baseCurrencyRate.setValue(
-      this.comService.getCurrRate(this.comService.compCurrency)
+      this.comService.decimalQuantityFormat(this.comService.getCurrRate(this.comService.compCurrency), 'RATE')
     );
     if (this.content?.MID != null) this.getArgsData();
     else {
@@ -188,18 +192,19 @@ export class AdvanceReturnComponent implements OnInit {
       this.generateVocNo();
       this.getPartyCode();
     }
+    this.renderer.selectRootElement('#vocDateInput').focus();
   }
 
   findGridCalculations() {
     let sumCGST_AMOUNTCC = 0;
     let sumAMOUNTCC = 0;
-    this.grossAmount=0;
+    this.grossAmount = 0;
 
     this.pcrSelectionData.forEach((data, index) => {
       data.SRNO = index + 1;
       sumCGST_AMOUNTCC += parseFloat(data.CGST_AMOUNTCC);
       sumAMOUNTCC += parseFloat(data.AMOUNTCC);
-      this.grossAmount=parseFloat(data.TOTAL_AMOUNTCC);
+      this.grossAmount = parseFloat(data.TOTAL_AMOUNTCC);
     });
 
     this.advanceReturnForm.controls.totalVat.setValue(
@@ -256,7 +261,7 @@ export class AdvanceReturnComponent implements OnInit {
           );
 
           this.advanceReturnForm.controls.partyCurrencyRate.setValue(
-            data.PARTY_CURR_RATE
+            this.comService.decimalQuantityFormat(data.PARTY_CURR_RATE, 'RATE')
           );
 
           this.advanceReturnForm.controls.enteredByCode.setValue(
@@ -274,7 +279,7 @@ export class AdvanceReturnComponent implements OnInit {
           );
 
           this.advanceReturnForm.controls.baseCurrencyRate.setValue(
-            data.BASE_CURR_RATE
+            this.comService.decimalQuantityFormat(data.BASE_CURR_RATE, 'RATE')
           );
           this.advanceReturnForm.controls.customerCode.setValue(
             data.POSCUSTOMERCODE
@@ -338,7 +343,7 @@ export class AdvanceReturnComponent implements OnInit {
                   data[0].CURRENCY_CODE
                 );
                 this.advanceReturnForm.controls.partyCurrencyRate.setValue(
-                  data[0].CONV_RATE
+                  this.comService.decimalQuantityFormat(data[0].CONV_RATE, 'RATE')
                 );
                 this.advanceReturnForm.controls.partyAddress.setValue(
                   data[0].ADDRESS
@@ -372,63 +377,62 @@ export class AdvanceReturnComponent implements OnInit {
     const modalRef: NgbModalRef = this.modalService.open(
       PcrSelectionComponent,
       {
-        size: "lg",
+        size: 'xl',
+        ariaLabelledBy: 'modal-basic-title',
         backdrop: true,
-        keyboard: false,
-        windowClass: "modal-full-width",
       }
     );
     modalRef.componentInstance.customerCode =
       this.advanceReturnForm.value.customerCode;
 
-    modalRef.componentInstance.selectionConfirmed.subscribe(
-      (selectedRows: any[]) => {
-        // this.advanceReturnForm.value.partyCurrency
-        const existingMIDs = new Set(
-          this.pcrSelectionData.map((data) => data.MID)
-        );
-        const newEntries: any = [];
-        const duplicateMIDs: any = [];
+    modalRef.componentInstance.selectionConfirmed.subscribe((selectedRows: any[]) => {
+      const existingMIDs = new Set(
+        this.pcrSelectionData.map((data) => data.MID)
+      );
+      const newEntries: any = [];
+      const duplicateMIDs: any = [];
 
-        selectedRows.forEach((row) => {
-          if (existingMIDs.has(row.MID)) {
-            duplicateMIDs.push(row.MID);
-          } else {
-            newEntries.push({
-              ...row,
-              CURRENCY_CODE: this.advanceReturnForm.value.partyCurrency,
-            });
-            // newEntries.push(row);
-          }
-        });
-
-        if (duplicateMIDs.length > 0) {
-          if (duplicateMIDs.length === selectedRows.length) {
-            this.openDialog("Warning", "PCR(s) already exist", true);
-          } else {
-            this.openDialog(
-              "Warning",
-              `PCR(s) with MID(s) ${duplicateMIDs.join(
-                ", "
-              )} already exist. Only unique entries will be added.`,
-              true
-            );
-
-            this.dialogBox.afterClosed().subscribe((data: any) => {
-              if (data == "OK") {
-                this.pcrSelectionData.push(...newEntries);
-              }
-            });
-          }
+      selectedRows.forEach((row) => {
+        if (existingMIDs.has(row.MID)) {
+          duplicateMIDs.push(row.MID);
         } else {
-          this.pcrSelectionData.push(...newEntries);
+          newEntries.push({
+            ...row,
+            CURRENCY_CODE: this.advanceReturnForm.value.partyCurrency,
+          });
         }
-        console.log("this.pcrSelectionData", this.pcrSelectionData);
+      });
 
-        this.pcrSelectionData.forEach((data, index) => (data.SRNO = index + 1));
-        this.updateFormValuesAndSRNO();
+      if (duplicateMIDs.length > 0) {
+        if (duplicateMIDs.length === selectedRows.length) {
+          this.openDialog("Warning", "PCR(s) already exist", true);
+          modalRef.componentInstance.shouldClose = false;
+        } else {
+          this.openDialog(
+            "Warning",
+            `PCR(s) with MID(s) ${duplicateMIDs.join(", ")} already exist. Only unique entries will be added.`,
+            true
+          );
+
+          this.dialogBox.afterClosed().subscribe((data: any) => {
+            if (data == "OK") {
+              this.pcrSelectionData.push(...newEntries);
+              this.updateFormValuesAndSRNO();
+              modalRef.componentInstance.shouldClose = true;
+            } else {
+              modalRef.componentInstance.shouldClose = false;
+            }
+          });
+        }
+      } else {
+        this.pcrSelectionData.push(...newEntries);
+        modalRef.componentInstance.shouldClose = true;
       }
-    );
+
+      this.pcrSelectionData.forEach((data, index) => (data.SRNO = index + 1));
+      this.updateFormValuesAndSRNO();
+    });
+
 
     modalRef.result.then((postData) => {
       if (postData) {
@@ -477,16 +481,30 @@ export class AdvanceReturnComponent implements OnInit {
   }
 
   close(data?: any) {
-    //TODO reset forms and data before closing
-    this.activeModal.close(data);
+    if (this.viewOnly || data) {
+      this.activeModal.close(data);
+    } else {
+      const dialogRef = this.dialogService.openDialog('Warning', this.comService.getMsgByID('MSG1215'), false);
+
+      dialogRef.afterClosed().subscribe((action: any) => {
+        if (action == 'Yes') {
+          this.activeModal.close();
+        }
+      });
+    }
   }
+
+  // close(data?: any) {
+  //   //TODO reset forms and data before closing
+  //   this.activeModal.close(data);
+  // }
 
   updateFormValuesAndSRNO() {
     let sumCGST_AMOUNTCC = 0;
     let sumAMOUNTCC = 0;
 
     this.pcrSelectionData.forEach((data, index) => {
-      // data.SRNO = index + 1;
+      data.SRNO = index + 1;
       sumCGST_AMOUNTCC += parseFloat(data.CGST_AMOUNTCC);
       sumAMOUNTCC += parseFloat(data.AMOUNTCC);
     });
@@ -562,9 +580,8 @@ export class AdvanceReturnComponent implements OnInit {
   }
 
   generateVocNo() {
-    const API = `GenerateNewVoucherNumber/GenerateNewVocNum/${this.comService.getqueryParamVocType()}/${
-      this.strBranchcode
-    }/${this.baseYear}/${this.convertDateToYMD(this.currentDate)}`;
+    const API = `GenerateNewVoucherNumber/GenerateNewVocNum/${this.comService.getqueryParamVocType()}/${this.strBranchcode
+      }/${this.baseYear}/${this.convertDateToYMD(this.currentDate)}`;
     this.dataService.getDynamicAPI(API).subscribe((resp) => {
       if (resp.status == "Success") {
         this.advanceReturnForm.controls.vocNo.setValue(resp.newvocno);
@@ -851,15 +868,12 @@ export class AdvanceReturnComponent implements OnInit {
 
     const API = `AccountPosting/${this.comService.nullToString(
       this.strBranchcode
-    )}/${this.comService.getqueryParamVocType()}/${
-      this.advanceReturnForm.value.vocNo
-    }/${this.comService.nullToString(this.baseYear)}/${
-      this.content
+    )}/${this.comService.getqueryParamVocType()}/${this.advanceReturnForm.value.vocNo
+      }/${this.comService.nullToString(this.baseYear)}/${this.content
         ? this.comService.emptyToZero(this.content?.MID)
         : this.midForInvoce
-    }/Y/${
-      this.comService.userName
-    }/${this.comService.getqueryParamMainVocType()}/${this.comService.getqueryParamTable()}`;
+      }/Y/${this.comService.userName
+      }/${this.comService.getqueryParamMainVocType()}/${this.comService.getqueryParamTable()}`;
 
     let Sub: Subscription = this.dataService
       .getDynamicAPI(API)

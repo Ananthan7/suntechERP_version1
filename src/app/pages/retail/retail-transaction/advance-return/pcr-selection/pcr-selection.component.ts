@@ -1,5 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { CommonServiceService } from 'src/app/services/common-service.service';
+import { ItemDetailService } from 'src/app/services/modal-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 
 @Component({
@@ -9,6 +11,7 @@ import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 })
 export class PcrSelectionComponent implements OnInit {
   strBranchcode: any = '';
+  shouldClose: boolean = true;
   @Input() customerCode: any;
   @Output() selectionConfirmed = new EventEmitter<any[]>();
 
@@ -22,7 +25,9 @@ export class PcrSelectionComponent implements OnInit {
   selectedRows: any[] = [];
 
   constructor(private activeModal: NgbActiveModal,
-    private suntechApi: SuntechAPIService) {
+    private suntechApi: SuntechAPIService,
+    private dialogService:ItemDetailService,
+    private comService: CommonServiceService,) {
     this.strBranchcode = localStorage.getItem('userbranch');
   }
 
@@ -41,20 +46,44 @@ export class PcrSelectionComponent implements OnInit {
         this.pcrSelectionData = result.dynamicData[0].map((item:any, index:any) => {
           return { ...item, id: index + 1 }; 
         });
+
+        this.pcrSelectionData.sort((a, b) => {
+          const dateA = new Date(a.VOCDATE.split('/').reverse().join('/'));
+          const dateB = new Date(b.VOCDATE.split('/').reverse().join('/'));
+        
+          return dateB.getTime() - dateA.getTime(); 
+        });
+        
+        console.log(this.pcrSelectionData);
       }
     });
   }
 
   confirmSelection() {
     this.selectionConfirmed.emit(this.selectedRows);
-    this.close();
+  
+    if (this.shouldClose) {
+      this.close();
+    }
   }
 
   onSelectionChanged(event: any) {
     this.selectedRows = event.selectedRowsData;
   }
 
-  close(data?: any) {
-    this.activeModal.close(data);
+  close(data?: any,isModalClose?:any) {
+    if ((data||this.selectedRows.length) && !isModalClose) {
+      this.activeModal.close(data);
+    } else {
+      const dialogRef = this.dialogService.openDialog('Warning', this.comService.getMsgByID('MSG1215'), false);
+      
+      dialogRef.afterClosed().subscribe((action: any) => {
+        if (action == 'Yes') {
+          this.activeModal.close();
+        }
+      });
+    }
   }
+
+
 }
