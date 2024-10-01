@@ -21,6 +21,7 @@ import { PosSalesmanCommissionComponent } from './pos-salesman-commission/pos-sa
 import { RetailSalesCollectionComponent } from './retail-sales-collection/retail-sales-collection.component';
 import { RetailGridComponent } from '../common-retail/retail-grid/retail-grid.component';
 import { CommonRetailModule } from '../common-retail/common-retail.module';
+import { SalesOrderRegisterComponent } from './sales-order-register/sales-order-register.component';
 
 
 @NgModule({
@@ -40,7 +41,8 @@ import { CommonRetailModule } from '../common-retail/common-retail.module';
     RepairRegisterComponent,
     LoyaltyRegisterComponent,
     PosSalesmanCommissionComponent,
-    RetailSalesCollectionComponent
+    RetailSalesCollectionComponent,
+    SalesOrderRegisterComponent
   ],
   imports: [
     CommonModule,

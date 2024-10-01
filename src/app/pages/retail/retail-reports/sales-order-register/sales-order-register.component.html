@@ -1,0 +1,30 @@
+<div class="card-content border-bottom d-flex justify-content-between p-2">
+    <h5 class="pos-modaltitle" id="modal-dia-metal"> Sales Order Register </h5>
+    <button type="button" class="btn btn-close close-btn" (click)="close()">
+        <i class="feather icon-x close-icon"></i>
+    </button>
+</div>
+<!-- modal header component -->
+<modal-header [isViewDelete]="false" [isViewMore]="false"  (saveClick)="savePdf()"
+    (cancelClick)="close()" [isViewCancel]="false" [isViewSave]="false" ></modal-header>
+
+<div class="container-fluid pt-3">
+    <form [formGroup]="salesOrderRegisterForm">
+        <div class="row">
+            <label for="inputPassword" class="col-sm-1 col-form-label" id="ID001">Branch</label>
+            <div class="col-md-2">
+                <mat-form-field appearance="outline" style="width: -webkit-fill-available">
+                    <input matInput="text" name="branch" autocomplete="off"
+                    formControlName="branch"/>
+                    <app-branch-division [fetchData]="fetchedBranchData" (newRowClick)="selectedData($event)"
+                    class="branchDivisionelectr" [matTooltip]="branchDivisionControlsTooltip"
+                    matTooltipClass="custom-tooltip"  matTooltipPosition="above"></app-branch-division>
+                </mat-form-field>
+            </div>
+
+            <div class="col-md-6">
+                <app-date ></app-date>
+            </div>
+        </div>
+    </form>  
+</div>

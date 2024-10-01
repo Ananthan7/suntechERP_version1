@@ -10,9 +10,15 @@
 
     <div class="row p-2">
       <mat-tab-group>
-        <mat-tab label="Branch/ Division Selection">
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <div *ngIf="branchView && divisionView">Branch/ Division Selection</div>
+            <div *ngIf="branchView && !divisionView">Branch Selection</div>
+            <div *ngIf="!branchView && divisionView">Division Selection</div>
+          </ng-template>
+          
           <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-6" *ngIf="branchView">
               <div class="col-md-12 text-center mt-2 gridLabel">
                 <label for="branch" class="mt-2">Branches</label>
               </div>
@@ -38,7 +44,7 @@
             </div>
 
             
-            <div class="col-md-6">
+            <div class="col-md-6" *ngIf="divisionView">
               <div class="col-md-12 text-center mt-2 gridLabel">
                 <label for="divisions" class="mt-2">Divisions</label>
               </div>
@@ -67,9 +73,9 @@
         </mat-tab>
 
 
-        <mat-tab label="Additional Filter">
+        <mat-tab label="Additional Filter" *ngIf="additionalFilterAreaView || additionalFilterBCategView">
           <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-6" *ngIf="additionalFilterAreaView">
               <div class="col-md-12 text-center mt-2 gridLabel">
                 <label for="area" class="mt-2">Area</label>
               </div>
@@ -94,8 +100,8 @@
               </div>
             </div>
 
-            <div class="col-md-6">
-              <div class="col-md-12 text-center mt-2 gridLabel">
+            <div class="col-md-6" *ngIf="additionalFilterBCategView">
+              <div class="col-md-12 text-center mt-2 gridLabel" >
                 <label for="Bcatgory" class="mt-2">Business Category</label>
               </div>
 

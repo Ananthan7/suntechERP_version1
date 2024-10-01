@@ -191,7 +191,7 @@ export class ProcessMasterComponent implements OnInit {
     LOSS_ACCODE: [''],
     RECOV_ACCODE: [''],
     GAIN_ACCODE: [''],
-    loss: [false],
+    loss: [false, [Validators.required]],
     recovery: [false],
     allowGain: [false],
     accode_start: [''],
@@ -554,6 +554,12 @@ export class ProcessMasterComponent implements OnInit {
       this.commonService.toastErrorByMsgId('MSG7901');//Standard Time  should not be Greater than Maximum Time
       return true;
     }
+
+    if (form.loss != true) {
+      this.commonService.toastErrorByMsgId('MSG1395');//loss cannot be empty
+        return true;
+    }
+
     if (form.loss == true) {
       if (this.commonService.emptyToZero(form.loss_standard) == 0) {
         this.commonService.toastErrorByMsgId('MSG1395');//loss cannot be empty
@@ -598,6 +604,11 @@ export class ProcessMasterComponent implements OnInit {
     if (form.RecoveryProcess == true && form.recovery == false) {
       this.commonService.toastErrorByMsgId('MSG81365');//Recovery details Must be Filled
       return true
+    }
+    const nameRegexp: RegExp = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/;
+    if(form.processCode == nameRegexp){
+      this.commonService.toastErrorByMsgId('MSG81525');//Process Code cannot be empty
+      return true;
     }
 
     if (!form.processCode) {

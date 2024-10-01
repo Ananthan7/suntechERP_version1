@@ -396,7 +396,9 @@ export class ApprovalMasterComponent implements OnInit {
     
     else if (this.userId == undefined) {
       console.log("In");
-      this.toastr.error('User Name Cannot be empty')
+      // this.toastr.error('User Name Cannot be empty')MSG1933
+      this.commonService.toastErrorByMsgId('MSG1933')//User Name Cannot be empty
+      return true
       // return Swal.fire({
       //   title: '',
       //   text: 'User Name Cannot be empty',
