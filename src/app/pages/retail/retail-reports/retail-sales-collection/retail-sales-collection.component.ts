@@ -49,8 +49,9 @@ export class RetailSalesCollectionComponent implements OnInit {
   @Input() content: any = {}; //get data from retailREPORT Component- modalRef instance
   dateToPass: { fromDate: string; toDate: string } = { fromDate: '', toDate: '' };
   fetchedBranchData: any[] =[];
-  fetchedBranchDataParam: any[]= [];
+  fetchedBranchDataParam: any= [];
   templateNameHasValue: boolean= false;
+  @Input() reportVouchers: any; //get Voucherdata from retailREPORT Component- GetReportVouchers API
 
   constructor(  private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder, private dataService: SuntechAPIService,  private comService: CommonServiceService,
@@ -58,7 +59,10 @@ export class RetailSalesCollectionComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.getAPIData()
+    // this.getAPIData()
+    // console.log('data from report component',this.reportVouchers)
+    this.APIData = this.reportVouchers;
+    this.prefillScreenValues()
   }
 
   selectedData(data: any) {
@@ -125,15 +129,27 @@ export class RetailSalesCollectionComponent implements OnInit {
     console.log(this.retailSalesCollection.controls.reportTo.value)
   }
 
-  getAPIData() {
-    const payload = {
-      // strLoginBranch: localStorage.getItem('userbranch')
-      "strReportName": "POS_COLLECTION_A",
-     "strMainVouchers":"#POS#POSC#RIN#PSR#POSEX#POSER",
-      "strExcludeVouchers": "",
-      "strWhereCond": "",
-      "strLoginBranch": "", //this.comService.branchCode
-    };
+  getAPIData(data?: any) {
+    let voucherData = localStorage.getItem('strMainVouchers');
+    
+    let payload: any
+    if(data){
+      payload = {
+        "strReportName": "POS_COLLECTION_A",
+        "strMainVouchers": voucherData+data,
+        "strExcludeVouchers": "",
+        "strWhereCond": "",
+        "strLoginBranch": "", //this.comService.branchCode
+      };
+    } else{
+      payload = {
+        "strReportName": "POS_COLLECTION_A",
+        "strMainVouchers": voucherData,
+        "strExcludeVouchers": "",
+        "strWhereCond": "",
+        "strLoginBranch": "", //this.comService.branchCode
+      };
+    }
     this.isLoading = true;
     this.dataService.postDynamicAPI('GetReportVouchers', payload).subscribe((response) => {
       console.log('Retailsales API call data', response);
@@ -146,6 +162,10 @@ export class RetailSalesCollectionComponent implements OnInit {
       console.error('Error occurred:', error);
       this.isLoading = false;
     });
+  }
+
+  onAdvanceReceiptCheckboxChange(value: boolean) {
+    value? this.getAPIData('#PCR'): this.getAPIData('')
   }
 
   onGridSelection(event: any) {
@@ -190,6 +210,7 @@ export class RetailSalesCollectionComponent implements OnInit {
 
 
   prefillScreenValues(){ 
+    
     if ( Object.keys(this.content).length > 0) {
       this.isLoading = false;
       console.log('data fetched from main grid',this.content )
@@ -209,7 +230,14 @@ export class RetailSalesCollectionComponent implements OnInit {
       const selectedKeys = this.APIData.filter(item => splittedText?.includes(item.VOCTYPE)).map(item => item);
       this.selectedRowKeys = selectedKeys;
  
- 
+      let vocTypeArr: any= []
+      this.selectedRowKeys.forEach((item: any)=>{
+        vocTypeArr.push(item.VOCTYPE+'#') 
+      })
+      const uniqueArray = [...new Set( vocTypeArr )];
+      const plainText = uniqueArray.join('');
+      this.VocTypeParam = plainText
+      
       const selectedSet = new Set(this.selectedRowKeys.map(item => item.SRNO));
       this.APIData.sort((a, b) => {
         const aIsSelected = selectedSet.has(a.SRNO) ? 1 : 0;
@@ -231,15 +259,16 @@ export class RetailSalesCollectionComponent implements OnInit {
       this.fetchedBranchDataParam = ParcedPreFetchData?.CONTROL_DETAIL.STRBRANCHCODES
     }
     else{
-      this.retailSalesCollection.controls.branch.setValue(localStorage.getItem('userbranch') )
-      this.fetchedBranchData.push(localStorage.getItem('userbranch') )
-
+      const userBranch = localStorage.getItem('userbranch');
+      const formattedUserBranch = userBranch ? `${userBranch}#` : null;
+      this.retailSalesCollection.controls.branch.setValue(formattedUserBranch);
+      this.fetchedBranchDataParam = formattedUserBranch;
+   
+      
       this.dateToPass = {
         fromDate:  this.formatDateToYYYYMMDD(new Date()),
         toDate: this.formatDateToYYYYMMDD(new Date()),
       };
-      this.retailSalesCollection.controls.fromDate.setValue(this.dateToPass.fromDate);
-      this.retailSalesCollection.controls.toDate.setValue(this.dateToPass.toDate);
 
       this.retailSalesCollection.controls.showDateCheckbox?.setValue(true);
       this.retailSalesCollection.controls.showInvoiceCheckbox?.setValue(true);
@@ -249,7 +278,6 @@ export class RetailSalesCollectionComponent implements OnInit {
       this.retailSalesCollection.controls.showExbSalesReturnCheckbox?.setValue(true);
 
       let defaultVoctype = ['POS','RIN','PSR', 'POSC','POSEX','POSER']
-      console.log(this.APIData)
       const selectedKeys = this.APIData.filter(item => defaultVoctype?.includes(item.VOCTYPE)).map(item => item);
       this.selectedRowKeys = selectedKeys;
       const selectedSet = new Set(this.selectedRowKeys.map(item => item.SRNO));
@@ -258,6 +286,14 @@ export class RetailSalesCollectionComponent implements OnInit {
         const bIsSelected = selectedSet.has(b.SRNO) ? 1 : 0;
         return bIsSelected - aIsSelected;
       });
+
+      let vocTypeArr: any= []
+      this.selectedRowKeys.forEach((item: any)=>{
+        vocTypeArr.push(item.VOCTYPE+'#') 
+      })
+      const uniqueArray = [...new Set( vocTypeArr )];
+      const plainText = uniqueArray.join('');
+      this.VocTypeParam = plainText
     }
   }
 

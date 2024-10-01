@@ -16,6 +16,7 @@ import { LoyaltyRegisterComponent } from './loyalty-register/loyalty-register.co
 import { PosSalesmanCommissionComponent } from './pos-salesman-commission/pos-salesman-commission.component';
 import { RetailSalesCollectionComponent } from './retail-sales-collection/retail-sales-collection.component';
 import { SalesOrderRegisterComponent } from './sales-order-register/sales-order-register.component';
+import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 @Component({
   selector: 'app-retail-reports',
   templateUrl: './retail-reports.component.html',
@@ -29,10 +30,12 @@ export class RetailReportsComponent implements OnInit {
   PERMISSIONS: any;
   componentSelected: any;
   private componentDbList: any = {}
+  ReportVouchers: any;
 
   constructor(
     private CommonService: CommonServiceService,
     private modalService: NgbModal,
+    private dataService: SuntechAPIService
     // private ChangeDetector: ChangeDetectorRef,
   ) {
     this.getMasterGridData()
@@ -41,8 +44,26 @@ export class RetailReportsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    localStorage.setItem('strMainVouchers', "#POS#POSC#RIN#PSR#POSEX#POSER")
     // for opening Report- Modal's
     // this.openModalView()
+    let voucherData = localStorage.getItem('strMainVouchers');
+    let payload = {
+      "strReportName": "POS_COLLECTION_A",
+      "strMainVouchers": voucherData,
+      "strExcludeVouchers": "",
+      "strWhereCond": "",
+      "strLoginBranch": "", //this.comService.branchCode
+    };
+ 
+    this.dataService.postDynamicAPI('GetReportVouchers', payload).subscribe((response) => {
+      console.log('Retailsales API call data', response);
+      this.ReportVouchers = response.dynamicData[0] || [];
+
+  
+    },(error: any) => {
+      console.error('Error occurred:', error);
+    });
   }
 
   viewRowDetails(e: any) {
@@ -102,6 +123,7 @@ export class RetailReportsComponent implements OnInit {
       // Handle modal dismissal (if needed)
     });
     modalRef.componentInstance.content = data || {};
+    modalRef.componentInstance.reportVouchers = this.ReportVouchers || {};
   }
 
   /**USE: to get table data from API */

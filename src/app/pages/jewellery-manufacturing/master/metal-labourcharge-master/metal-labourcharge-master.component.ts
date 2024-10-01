@@ -29,6 +29,8 @@ export class MetalLabourchargeMasterComponent implements OnInit {
 
   @Input() content!: any;
   viewMode: boolean = false;
+  editModeKarat: boolean = false;
+  editDisableModeKarat = false;
   buttonField: boolean = true;
   forDesignOnlyTrue: boolean = true;
   tableData: any[] = [];
@@ -442,6 +444,8 @@ export class MetalLabourchargeMasterComponent implements OnInit {
       this.editMode = true;
       this.codeEnableMetal = false;
       this.stockcodeDisable = false;
+      this.editModeKarat = true;
+      this.editDisableModeKarat = true;
       this.unitSelected();
     } else if (this.content.FLAG == 'DELETE') {
       this.viewMode = true;
