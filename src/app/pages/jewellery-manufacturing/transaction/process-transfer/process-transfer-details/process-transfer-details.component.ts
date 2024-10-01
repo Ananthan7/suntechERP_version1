@@ -24,6 +24,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
   @ViewChild('MetaloverleyLocation') MetaloverleyLocation!: MasterSearchComponent;
   @ViewChild('overlayToWorker') overlayToWorker!: MasterSearchComponent;
   @ViewChild('overlayjobNoSearch') overlayjobNoSearch!: MasterSearchComponent;
+  @ViewChild('overlaySubjobNoSearch') overlaySubjobNoSearch!: MasterSearchComponent;
   @ViewChild('fromProcessMasterOverlay') fromProcessMasterOverlay!: MasterSearchComponent;
   @ViewChild('toProcessMasterOverlay') toProcessMasterOverlay!: MasterSearchComponent;
   @ViewChild('fromWorkerMasterOverley') fromWorkerMasterOverley!: MasterSearchComponent;
@@ -35,6 +36,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
   minEndDate: string = '';
   divisionMS: any = 'ID';
   tableData: any[] = [];
+  subJobDetailData: any[] = []
   imagepath: any[] = []
   metalDetailData: any[] = [];
   metalDetailData_2: any[] = [];
@@ -80,6 +82,18 @@ export class ProcessTransferDetailsComponent implements OnInit {
     SEARCH_HEADING: 'Job search',
     SEARCH_VALUE: '',
     WHERECONDITION: `JOB_CLOSED_ON is null and  Branch_code = '${this.commonService.branchCode}'`,
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
+  subJobNoSearch: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 258,
+    SEARCH_FIELD: 'UNQ_JOB_ID',
+    SEARCH_HEADING: 'Sub Job Search',
+    SEARCH_VALUE: '',
+    WHERECONDITION: `ISNULL(PROD_REF,0)=0 and Branch_code = '${this.commonService.branchCode}'`,
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -349,13 +363,16 @@ export class ProcessTransferDetailsComponent implements OnInit {
       precision: this.commonService.allbranchMaster?.BAMTDECIMALS,
       currency: this.commonService.compCurrency
     };
+    // set data from header screen
     this.setHearderDetails()
   }
   ngAfterViewInit() {
+    this.commonService.formControlSetReadOnly('UNQ_JOB_ID', true);
+    this.subJobNoSearch.VIEW_ICON = false;
     this.setInitialValues() //set all values from parent to child
   }
   ngAfterContentChecked() {
-    if(this.processTransferdetailsForm.value.JOB_NUMBER.toString() == ''){
+    if (this.commonService.nullToString(this.processTransferdetailsForm.value.JOB_NUMBER) == '') {
       this.renderer.selectRootElement('#jobNoSearch')?.focus();
     }
   }
@@ -482,7 +499,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       this.setFormNullToString('APPROVED_USER', parentDetail.APPROVED_USER)
       this.approvalReqFlag = true
       this.processTransferdetailsForm.controls.approveddate.setValue(
-        new Date(parentDetail.APPROVED_DATE)
+        this.commonService.parseDateString(parentDetail.APPROVED_DATE)
       )
     }
     if (parentDetail.SCRAP_STOCK_CODE && this.content[0]?.FLAG == 'EDIT') {
@@ -759,7 +776,24 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.processTransferdetailsForm.controls[formControlName].setValue(val)
     this.FORM_VALIDATER[formControlName] = val
   }
-
+  setJobNumberData(data: any) {
+    if (data[0] && data[0].UNQ_JOB_ID != '') {
+      this.jobNumberDetailData = data
+      this.setFormNullToString('JOB_NUMBER', data[0].JOB_NUMBER)
+      this.setFormNullToString('UNQ_JOB_ID', data[0].UNQ_JOB_ID)
+      this.setFormNullToString('JOB_DESCRIPTION', data[0].JOB_DESCRIPTION)
+      this.setFormNullToString('SUB_JOB_DESCRIPTION', data[0].DESCRIPTION)
+      this.setFormNullToString('JOB_DATE', data[0].JOB_DATE)
+      this.setFormNullToString('DESIGN_CODE', data[0].DESIGN_CODE)
+      this.setFormNullToString('SEQ_CODE', data[0].SEQ_CODE)
+      this.setFormNullToString('METALLAB_TYPE', data[0].METALLAB_TYPE)
+      this.setFormNullToString('DESIGN_TYPE', data[0].DESIGN_TYPE?.toUpperCase())
+      this.setFormNullToString('METAL_STOCK_CODE', data[0].METAL_STOCK_CODE)
+      this.designType = this.commonService.nullToString(data[0].DESIGN_TYPE?.toUpperCase());
+      this.setFromProcessWhereCondition()
+      this.getSequenceDetailData()
+    }
+  }
   /**USE: jobnumber validate API call */
   jobNumberValidate(event?: any) {
     if ((event && event.target.value == '') || this.viewMode) {
@@ -778,29 +812,28 @@ export class ProcessTransferDetailsComponent implements OnInit {
       .subscribe((result) => {
         this.commonService.closeSnackBarMsg()
         if (result.status == "Success" && result.dynamicData[0]) {
-          let data = result.dynamicData[0]
-          if (data[0] && data[0].UNQ_JOB_ID != '') {
-            this.overlayjobNoSearch.closeOverlayPanel()
-            this.jobNumberDetailData = data
-            this.setFormNullToString('JOB_NUMBER', data[0].JOB_NUMBER)
-            this.setFormNullToString('UNQ_JOB_ID', data[0].UNQ_JOB_ID)
-            this.setFormNullToString('JOB_DESCRIPTION', data[0].JOB_DESCRIPTION)
-            this.setFormNullToString('SUB_JOB_DESCRIPTION', data[0].DESCRIPTION)
-            this.setFormNullToString('JOB_DATE', data[0].JOB_DATE)
-            this.setFormNullToString('DESIGN_CODE', data[0].DESIGN_CODE)
-            this.setFormNullToString('SEQ_CODE', data[0].SEQ_CODE)
-            this.setFormNullToString('METALLAB_TYPE', data[0].METALLAB_TYPE)
-            this.setFormNullToString('DESIGN_TYPE', data[0].DESIGN_TYPE?.toUpperCase())
-            this.setFormNullToString('METAL_STOCK_CODE', data[0].METAL_STOCK_CODE)
-            this.designType = this.commonService.nullToString(data[0].DESIGN_TYPE?.toUpperCase());
-            this.setFromProcessWhereCondition()
-            this.subJobNumberValidate()
-            this.getSequenceDetailData()
+          this.overlayjobNoSearch.closeOverlayPanel()
+          let data = result.dynamicData[0] || []
+          if (data.length > 0) {
+            this.setJobNumberData(data)
+            if (data.length == 1) {
+              this.commonService.formControlSetReadOnly('UNQ_JOB_ID', true);
+              this.subJobNoSearch.VIEW_ICON = false;
+              if (data[0].UNQ_JOB_ID != '') this.subJobNumberValidate()
+              return
+            }
+            if (data.length > 1) {
+              this.subJobNoSearch.VIEW_ICON = true;
+              this.subJobNoSearch.WHERECONDITION += `AND job_number='${this.processTransferdetailsForm.value.JOB_NUMBER?.toString()}'`
+              this.commonService.formControlSetReadOnly('UNQ_JOB_ID', false)
+              this.overlaySubjobNoSearch.showOverlayPanel(event)
+            }
           } else {
+            this.subJobNoSearch.VIEW_ICON = false;
+            this.commonService.formControlSetReadOnly('UNQ_JOB_ID', true)
             this.setFormNullToString('JOB_NUMBER', '')
             this.renderer.selectRootElement('#jobNoSearch')?.focus();
             this.commonService.toastErrorByMsgId('MSG1531')
-            return
           }
         } else {
           this.setFormNullToString('JOB_NUMBER', '')
@@ -834,7 +867,6 @@ export class ProcessTransferDetailsComponent implements OnInit {
       return diamondPostData
     }
   }
-  subJobDetailData: any[] = []
   /**USE: subjobnumber validate API call subjobvalidate */
   subJobNumberValidate(event?: any) {
     let postData = this.setSubJobSpPostData(this.processTransferdetailsForm.value) //set post data with designtype checking
@@ -843,29 +875,34 @@ export class ProcessTransferDetailsComponent implements OnInit {
       .subscribe((result) => {
         this.commonService.closeSnackBarMsg()
         try {
-          //TODO
-          let job_salesorder = result.dynamicData[1] || []
-          if (job_salesorder.length > 0) {
-            this.setDataFromSalesOrderDj(job_salesorder)
-          }
-          this.subJobDetailData = result.dynamicData[0] || []
+          let response = result.dynamicData
+          // set second result from job sales order dj table
+          if (response[1].length > 0) this.setDataFromSalesOrderDj(response[1]);
+          // SET frist result of subjob details
+          this.subJobDetailData = response[0] || []
           if (this.subJobDetailData.length > 0) {
+            //subjob data format changing
             this.subJobDetailData.forEach((item: any, index: any) => {
               item.SRNO = index + 1
               item.METAL = this.commonService.decimalQuantityFormat(item.METAL, 'METAL')
               item.STONE = this.commonService.decimalQuantityFormat(item.STONE, 'STONE')
             })
+            //opens modal for multiple details
             if (this.subJobDetailData.length > 1) {
-              this.openJobTransferDetails() //opens modal for multiple details
+              this.openJobTransferDetails()
               return
             }
-            if (this.designType == 'METAL') { //metal data assigning
+            //metal and diamond tab data assigning
+            if (this.designType == 'METAL') {
               this.setMetalSubJob_Details(this.subJobDetailData)
             } else {
               this.setSubJob_Details(this.subJobDetailData)
             }
+          } else {
+            this.resetPTFDetails()
+            let msg = this.commonService.getMsgByID('MSG7957')
+            this.showOkDialog(msg)
           }
-
         } catch (error) {
           this.commonService.toastErrorByMsgId('MSG1531')
         }
@@ -877,12 +914,12 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
   setSubJob_Details(data: any) {
+    // assigning values from API
     this.setFormNullToString('FRM_PROCESS_CODE', data[0].PROCESS)
     this.setFormNullToString('FRM_WORKER_CODE', data[0].WORKER)
     this.setFormNullToString('FRM_PROCESSNAME', data[0].PROCESSDESC)
     this.setFormNullToString('FRM_WORKERNAME', data[0].WORKERDESC)
     this.setFormNullToString('REPAIR_PROCESS', data[0].REPAIR_PROCESS)
-    this.approvalReqFlag = data[0].APPROVAL_REQUIRED ? true : false
     this.setFormNullToString('ZIRCON', data[0].ZIRCON)
     this.setFormNullToString('DIVCODE', data[0].DIVCODE)
     this.setFormNullToString('METALSTONE', data[0].METALSTONE)
@@ -890,7 +927,8 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.setFormNullToString('scrapWeight', '')
     this.setFormDecimal('PUREWT', data[0].PUREWT, 'AMOUNT')
     this.setFormDecimal('PURITY', data[0].PURITY, 'PURITY')
-    // /MAKEZIRCONEGROSSWT checking
+    this.approvalReqFlag = data[0].APPROVAL_REQUIRED ? true : false
+    // first gross wt calculation with MAKEZIRCONEGROSSWT checking
     let blnAddZirconasGross = this.commonService.getCompanyParamValue('MAKEZIRCONEGROSSWT')
     let dblZircon, txtFromStoneWt, txtFromGrossWeight
     if (blnAddZirconasGross) {
@@ -908,13 +946,13 @@ export class ProcessTransferDetailsComponent implements OnInit {
     }
     this.setFormDecimal('GrossWeightFrom', txtFromGrossWeight, 'METAL')
 
-
+    // APIs need to be called if subjob details is present
     this.getImageData()
     // this.stockCodeScrapValidate()
     this.getProcessMasterDetails()
     this.fillStoneDetails()
     this.getTimeAndLossDetails()
-    //set where conditions
+    // set where conditions
     this.stockCodeSearchWhereCondition()
     this.setFromProcessWhereCondition()
     this.setToProcessWhereCondition()
@@ -979,6 +1017,22 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.setFormNullToString('PICTURE_PATH', job_salesorder[0].PICTURE_PATH)
     this.setFormNullToString('TREE_NO', job_salesorder[0].TREE_NO)
     this.setFormNullToString('JOB_SO_NUMBER', job_salesorder[0].JOB_SO_NUMBER)
+  }
+  resetSubjobDetails() {
+    this.setFormNullToString('FRM_PROCESS_CODE', '')
+    this.setFormNullToString('FRM_WORKER_CODE', '')
+    this.setFormNullToString('FRM_PROCESSNAME', '')
+    this.setFormNullToString('FRM_WORKERNAME', '')
+    this.setFormNullToString('REPAIR_PROCESS', '')
+    this.setFormNullToString('ZIRCON', '')
+    this.setFormNullToString('DIVCODE', '')
+    this.setFormNullToString('METALSTONE', '')
+    this.setFormNullToString('stockCode', '')
+    this.setFormNullToString('scrapWeight', '')
+    this.setFormDecimal('PUREWT', 0, 'AMOUNT')
+    this.setFormDecimal('PURITY', 0, 'PURITY')
+    this.metalDetailData = []
+    this.imagepath = []
   }
   //use: on row click on multiple sub job details
   onRowClickHandler(event: any) {
@@ -1078,7 +1132,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     }
     if (this.emptyToZero(form.lossQty) > 0) {
       if (this.sequenceDetails.length > 0) {
-        let processData = this.sequenceDetails.filter((item: any) => item.PROCESS_CODE == form.FRM_PROCESS_CODE)
+        let processData = this.sequenceDetails.filter((item: any) => item.PROCESS_CODE?.toUpperCase() == form.FRM_PROCESS_CODE?.toUpperCase())
         if (processData?.length == 0) {
           processData = this.processMasterDetails;
         }
@@ -1123,7 +1177,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       }
     } else {
       txtBalDiaGrWt = (this.emptyToZero(form.GrossWeightFrom) - (this.emptyToZero(form.GrossWeightTo) + this.emptyToZero(form.scrapWeight) + this.emptyToZero(form.lossQty)));
-      if(this.emptyToZero(form.scrapWeight)==0 && this.emptyToZero(form.lossQty)==0){
+      if (this.emptyToZero(form.scrapWeight) == 0 && this.emptyToZero(form.lossQty) == 0) {
         if (this.emptyToZero(form.GrossWeightFrom) == this.emptyToZero(form.GrossWeightTo)) {
           txtBalDiaGrWt = 0
         }
@@ -1718,7 +1772,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
- 
+
   isFromProcessCodeEmpty(flag: boolean) {
     if (flag) {
       this.fromProcessCodeEmpty = true;
@@ -1734,7 +1788,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       this.toWorkerMasterSearch.VIEW_ICON = false;
       this.stockCodeSearch.VIEW_ICON = false;
     } else {
-      if(this.fromWorkerCodeEmpty) return
+      if (this.fromWorkerCodeEmpty) return
       this.fromProcessCodeEmpty = false;
       this.commonService.formControlSetReadOnly('TO_PROCESS_CODE', false)
       this.commonService.formControlSetReadOnly('FRM_WORKER_CODE', false)
@@ -1762,7 +1816,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       this.toWorkerMasterSearch.VIEW_ICON = false;
       this.stockCodeSearch.VIEW_ICON = false;
     } else {
-      if(this.fromProcessCodeEmpty) return
+      if (this.fromProcessCodeEmpty) return
       this.fromWorkerCodeEmpty = false;
       this.commonService.formControlSetReadOnly('TO_PROCESS_CODE', false)
       this.commonService.formControlSetReadOnly('TO_WORKER_CODE', false)
@@ -1855,17 +1909,17 @@ export class ProcessTransferDetailsComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
-  fromProcesscodeInputChange(){
-    if(this.processTransferdetailsForm.value.FRM_PROCESS_CODE.toString() == ''){
+  fromProcesscodeInputChange() {
+    if (this.processTransferdetailsForm.value.FRM_PROCESS_CODE.toString() == '') {
       this.isFromProcessCodeEmpty(true)
-    }else{
+    } else {
       this.isFromProcessCodeEmpty(false)
     }
   }
-  fromWorkercodeInputChange(){
-    if(this.processTransferdetailsForm.value.FRM_WORKER_CODE.toString() == ''){
+  fromWorkercodeInputChange() {
+    if (this.processTransferdetailsForm.value.FRM_WORKER_CODE.toString() == '') {
       this.isFromWorkerCodeEmpty(true)
-    }else{
+    } else {
       this.isFromWorkerCodeEmpty(false)
     }
   }
@@ -2032,7 +2086,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.fromWorkercodeInputChange()
     this.setFromProcessWhereCondition()
     this.setFromWorkerWhereCondition()
-    let data = this.subJobDetailData.filter((item: any) => event.PROCESS == item.PROCESS && event.WORKER == item.WORKER)
+    let data = this.subJobDetailData.filter((item: any) => event.PROCESS?.toUpperCase() == item.PROCESS?.toUpperCase() && event.WORKER?.toUpperCase() == item.WORKER?.toUpperCase())
     if (data && data.length > 0) {
       if (this.designType == 'METAL') { //metal data assigning
         this.setMetalSubJob_Details(data)
@@ -2119,6 +2173,12 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.processTransferdetailsForm.controls.JOB_DESCRIPTION.setValue(event.job_description)
     this.jobNumberValidate()
   }
+
+  subJobNumberSelected(event: any) {
+    this.processTransferdetailsForm.controls.UNQ_JOB_ID.setValue(event.UNQ_JOB_ID)
+    this.processTransferdetailsForm.controls.SUB_JOB_DESCRIPTION.setValue(event.DESCRIPTION)
+    this.subJobNumberValidate()
+  }
   submitValidations(form: any): boolean {
     try {
       if (this.commonService.nullToString(form.JOB_NUMBER) == '') {
@@ -2199,7 +2259,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
         return true;
       }
       if (this.emptyToZero(form.METAL_LossBooked) != 0 && this.designType == "METAL") {
-        let processData = this.sequenceDetails.filter((item: any) => item.seq_code == form.SEQ_CODE && item.PROCESS_CODE == form.METAL_FRM_PROCESS_CODE)
+        let processData = this.sequenceDetails.filter((item: any) => item.seq_code?.toUpperCase() == form.SEQ_CODE?.toUpperCase() && item.PROCESS_CODE?.toUpperCase() == form.METAL_FRM_PROCESS_CODE?.toUpperCase())
         if (processData.length != 0 && processData[0]["loss_accode"].toString() == "") {
           let msg = this.commonService.getMsgByID("MSG3770") + " " + form.METAL_FRM_PROCESS_CODE
           this.commonService.toastErrorByMsgId(msg)
@@ -2296,10 +2356,12 @@ export class ProcessTransferDetailsComponent implements OnInit {
   gridSRNO: number = 0
   setJOB_PROCESS_TRN_DETAIL_DJ() {
     let form = this.processTransferdetailsForm.value;
+    let approveddate = this.commonService.formatDateTime(form.approveddate)
+    approveddate = new Date(approveddate)
     let LOSS_PURE_QTY = this.calculateLossPureQty(this.processTransferdetailsForm.value);
     let metalGridDataSum = this.calculateMetalStoneGridAmount();
-    let seqDataFrom = this.sequenceDetails.filter((item: any) => item.PROCESS_CODE == form.FRM_PROCESS_CODE);
-    let seqDataTo = this.sequenceDetails.filter((item: any) => item.PROCESS_CODE == form.TO_PROCESS_CODE);
+    let seqDataFrom = this.sequenceDetails.filter((item: any) => item.PROCESS_CODE?.toUpperCase() == form.FRM_PROCESS_CODE?.toUpperCase());
+    let seqDataTo = this.sequenceDetails.filter((item: any) => item.PROCESS_CODE?.toUpperCase() == form.TO_PROCESS_CODE?.toUpperCase());
     let scrapPureWt = this.emptyToZero(Number(form.scrapWeight) * Number(form.SCRAP_PURITY))
     // let amountFC = this.commonService.FCToCC(form.CURRENCY_CODE, stoneAmount)
     // console.log(this.commonService.timeToMinutes(form.consumed), 'time consumed');
@@ -2312,7 +2374,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       "VOCTYPE": this.commonService.nullToString(form.VOCTYPE),
       "BRANCH_CODE": this.commonService.nullToString(this.branchCode),
       "JOB_NUMBER": this.commonService.nullToString(form.JOB_NUMBER),
-      "JOB_DATE": this.commonService.nullToString(form.JOB_DATE),
+      "JOB_DATE": this.commonService.formatYYMMDD(form.JOB_DATE),
       "UNQ_JOB_ID": this.commonService.nullToString(form.UNQ_JOB_ID),
       "UNQ_DESIGN_ID": this.commonService.nullToString(form.UNQ_DESIGN_ID),
       "DESIGN_CODE": this.commonService.nullToString(form.DESIGN_CODE),
@@ -2422,7 +2484,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       "SCRAP_PURE_WT": scrapPureWt,
       "SCRAP_PUDIFF": this.emptyToZero((Number(form.scrapWeight) - Number(form.PURITY)) * scrapPureWt),
       "SCRAP_ACCODE": seqDataFrom.length > 0 ? this.commonService.nullToString(seqDataFrom[0].GAIN_AC) : '',
-      "APPROVED_DATE": this.commonService.formatDateTime(form.approveddate),
+      "APPROVED_DATE": this.commonService.formatYYMMDD(approveddate),
       "APPROVED_USER": this.commonService.nullToString(form.APPROVED_USER),
       "SCRAP_PCS": this.emptyToZero(form.METAL_ScrapPCS),
       "SCRAP_STONEWT": this.emptyToZero(form.METAL_ScrapStoneWt),
@@ -2448,10 +2510,12 @@ export class ProcessTransferDetailsComponent implements OnInit {
   }
   setMetal_JOB_PROCESS_TRN_DETAIL_DJ() { //for metal
     let form = this.processTransferdetailsForm.value;
+    let approveddate = this.commonService.formatDateTime(form.approveddate)
+    approveddate = new Date(approveddate)
     let LOSS_PURE_QTY = this.calculateLossPureQty(this.processTransferdetailsForm.value);
     let metalGridDataSum = this.calculateMetalStoneGridAmount();
-    let seqDataFrom = this.sequenceDetails.filter((item: any) => item.PROCESS_CODE == form.FRM_PROCESS_CODE);
-    let seqDataTo = this.sequenceDetails.filter((item: any) => item.PROCESS_CODE == form.TO_PROCESS_CODE);
+    let seqDataFrom = this.sequenceDetails.filter((item: any) => item.PROCESS_CODE?.toUpperCase() == form.FRM_PROCESS_CODE?.toUpperCase());
+    let seqDataTo = this.sequenceDetails.filter((item: any) => item.PROCESS_CODE?.toUpperCase() == form.TO_PROCESS_CODE?.toUpperCase());
     let scrapPureWt = this.emptyToZero(Number(form.scrapWeight) * Number(form.SCRAP_PURITY))
     // let amountFC = this.commonService.FCToCC(form.CURRENCY_CODE, stoneAmount)
     // console.log(this.commonService.timeToMinutes(form.consumed), 'time consumed');
@@ -2574,7 +2638,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       "SCRAP_PURE_WT": this.emptyToZero(form.METAL_ScrapPureWt),
       "SCRAP_PUDIFF": this.emptyToZero((Number(form.METAL_ScrapGrWt) - Number(form.PURITY)) * form.METAL_ScrapPureWt),
       "SCRAP_ACCODE": seqDataFrom.length > 0 ? this.commonService.nullToString(seqDataFrom[0].GAIN_AC) : '',
-      "APPROVED_DATE": this.commonService.formatDateTime(form.approveddate),
+      "APPROVED_DATE": this.commonService.formatYYMMDD(approveddate),
       "APPROVED_USER": this.commonService.nullToString(form.APPROVED_USER),
       "SCRAP_PCS": this.emptyToZero(form.METAL_ScrapPCS),
       "SCRAP_STONEWT": this.emptyToZero(form.METAL_ScrapStoneWt),
@@ -2643,7 +2707,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
   InsertStoneDetail(flag: any): any[] {
     let form = this.processTransferdetailsForm.value;
     let scrapPureWt = this.emptyToZero(Number(form.scrapWeight) * Number(form.SCRAP_PURITY))
-    let seqData = this.sequenceDetails.filter((item: any) => item.PROCESS_CODE == form.FRM_PROCESS_CODE);
+    let seqData = this.sequenceDetails.filter((item: any) => item.PROCESS_CODE?.toUpperCase() == form.FRM_PROCESS_CODE?.toUpperCase());
     let LOSS_QTY = flag == 2 ? this.emptyToZero(form.lossQty) * -1 : 0;
     let SCRAP_WT = flag == 2 ? this.emptyToZero(form.scrapWeight) * -1 : 0;
     let SCRAP_PURE_WT = flag == 2 ? this.emptyToZero(scrapPureWt) * -1 : 0;
@@ -2828,6 +2892,18 @@ export class ProcessTransferDetailsComponent implements OnInit {
       confirmButtonText: 'Yes'
     });
   }
+  showOkDialog(msg: string): Promise<any> {
+    return Swal.fire({
+      title: '',
+      text: msg || "",
+      icon: 'warning',
+      showCancelButton: false,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      cancelButtonText: 'No',
+      confirmButtonText: 'Ok'
+    });
+  }
   scrapWeightChange(event: any) {
     if (this.viewMode) return
     let form = this.processTransferdetailsForm.value;
@@ -2893,8 +2969,9 @@ export class ProcessTransferDetailsComponent implements OnInit {
 
   CalculateLoss() {
     let form = this.processTransferdetailsForm.value
-    let processData = this.sequenceDetails.filter((item: any) => item.PROCESS_CODE == form.FRM_PROCESS_CODE)
-    let blnLoss = this.emptyToZero(processData[0].STD_LOSS) != 0 ? true : false;
+    let processData = this.sequenceDetails.filter((item: any) => item.PROCESS_CODE?.toUpperCase() == form.FRM_PROCESS_CODE?.toUpperCase())
+    let blnLoss = false;
+    if (processData.length > 0) blnLoss = this.emptyToZero(processData[0]?.STD_LOSS) != 0 ? true : false;
     if (blnLoss) {
       let lossQty = this.emptyToZero(form.GrossWeightFrom) - (this.emptyToZero(form.GrossWeightTo) + this.emptyToZero(form.scrapWeight));
       let toMetalWt = (this.emptyToZero(form.FRM_METAL_WT) - (this.emptyToZero(lossQty) + this.emptyToZero(form.scrapWeight)));
@@ -3213,6 +3290,9 @@ export class ProcessTransferDetailsComponent implements OnInit {
     switch (formControlName) {
       case 'JOB_NUMBER':
         this.overlayjobNoSearch.showOverlayPanel(event);
+        break;
+      case 'UNQ_JOB_ID':
+        this.overlaySubjobNoSearch.showOverlayPanel(event);
         break;
       case 'FRM_PROCESS_CODE':
         this.fromProcessMasterOverlay.showOverlayPanel(event);
@@ -3706,7 +3786,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       }
 
       if (this.emptyToZero(txtLossBooked) > 0) {
-        let processData = this.sequenceDetails.filter((item: any) => item.seq_code == form.SEQ_CODE && item.PROCESS_CODE == form.METAL_FRM_PROCESS_CODE)
+        let processData = this.sequenceDetails.filter((item: any) => item.seq_code?.toUpperCase() == form.SEQ_CODE?.toUpperCase() && item.PROCESS_CODE?.toUpperCase() == form.METAL_FRM_PROCESS_CODE?.toUpperCase())
         if (processData?.length > 0) {
           if (this.emptyToZero(processData[0]["MAX_LOSS"]) > 0) {
             nMax_Loss = this.commonService.lossQtyCalculate(form.METAL_FromNetWeight, processData[0]["MAX_LOSS"])

@@ -135,15 +135,17 @@ export class RetailMasterComponent implements OnInit {
   }
 
   setDashboardLayout(screen: any) {
+    localStorage.removeItem('screen');
 
     if (screen == "Customer Master") {
       this.isCustomerDashboard = true;
+      localStorage.setItem('screen', screen)
       this.setChartConfig();
     }
 
     else
       this.isCustomerDashboard = false;
-    localStorage.setItem('screen', screen)
+    
   }
 
 
@@ -181,7 +183,7 @@ export class RetailMasterComponent implements OnInit {
     datasets: [],
     labels: [],
   };
-  
+
 
   public avgTransacUnitsData: ChartConfiguration['data'] = {
     datasets: [],

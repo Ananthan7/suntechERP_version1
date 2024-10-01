@@ -10,7 +10,7 @@ import * as FileSaver from "file-saver";
 import { ToastrService } from 'ngx-toastr';
 import * as XLSX from "xlsx";
 import { EditReasonModel } from '../shared/data/edit-reason';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -21,6 +21,8 @@ export class CommonServiceService {
 
   // chartData$ = this.chartDataSource.asObservable();
   /** common variables and functions used in all components */
+  private nextElSource = new Subject<any>();
+  nextEl$ = this.nextElSource.asObservable();
   currentDate = new Date()
   branchCode: any = localStorage.getItem('userbranch') || '';
   userName: any = localStorage.getItem('username') || '';
@@ -993,21 +995,21 @@ export class CommonServiceService {
   }
   /**purpose: date in order format dd-mm-yy */
   formatDDMMYY(date: any) {
-    let day = date.getDate();
+    let day = this.isDate(date) ? date.getDate(): new Date(date).getDate();
     let month = (date.getMonth() > 9 ? date.getMonth() : date.getMonth()) + 1;
     let year = date.getFullYear();
     return `${day}-${month}-${year}`;
   }
   /**purpose: date in order format yyyy-mm-dd */
   formatYYMMDD(date: any) {
-    let day = date.getDate();
+    let day = this.isDate(date) ? date.getDate(): new Date(date).getDate();
     let month = (date.getMonth() > 9 ? date.getMonth() : date.getMonth()) + 1;
     let year = date.getFullYear();
     return `${year}-${month}-${day}`;
   }
   /**purpose: date in order format dd-mm-yy */
   formatMMDDYY(date: any) {
-    let day = date.getDate();
+    let day = this.isDate(date) ? date.getDate(): new Date(date).getDate();
     let month = (date.getMonth() > 9 ? date.getMonth() : date.getMonth()) + 1;
     let year = date.getFullYear();
     return `${month}-${day}-${year}`;
@@ -1015,10 +1017,40 @@ export class CommonServiceService {
   /**purpose: Get a date time as a string, using the ISO standard*/
   formatDateTime(date: any) {
     if (!date) return '';
-    if (typeof date === 'string') {
-      return date;
+    if(this.isDate(date)){
+      return date.toISOString()
     }
-    return date.toISOString()
+    // if (typeof date === 'string') {
+    //   return date;
+    // }
+    return new Date(date).toISOString()
+  }
+  isDate(value: any): boolean {
+    return value instanceof Date;
+  }
+  parseDateString(dateStr: string): Date {
+    // Split the date and time parts
+    const [datePart, timePart] = dateStr.split(' ');
+    
+    // Split the date into DD/MM/YYYY
+    const [day, month, year] = datePart.split('/').map(Number);
+  
+    // Combine the parts and create a new Date object
+    return new Date(year, month - 1, day, ...this.timePartTo24Hour(timePart));
+  }
+  
+  // Helper function to convert time from 12-hour to 24-hour format
+  timePartTo24Hour(timeStr: string): [number, number, number] {
+    const [time, period] = timeStr.split(' ');
+    let [hours, minutes, seconds] = time.split(':').map(Number);
+  
+    if (period === 'PM' && hours !== 12) {
+      hours += 12;
+    } else if (period === 'AM' && hours === 12) {
+      hours = 0;
+    }
+  
+    return [hours, minutes, seconds];
   }
   /**purpose: to format number with M,K values(eg: 1k,2M) */
   numberFormatter(value: any) {
@@ -1256,6 +1288,11 @@ commaSeperation(data: any) {
     return cleanedData;
   }
 
+ 
+
+  catchSubscribeHeaderMenu(nextEl: any) {
+    this.nextElSource.next(nextEl);
+  }
 
   // setChartData(data: any) {
   //   this.chartDataSource.next(data);

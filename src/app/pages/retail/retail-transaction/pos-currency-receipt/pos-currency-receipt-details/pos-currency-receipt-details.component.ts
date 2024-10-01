@@ -67,7 +67,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
   private subscriptions: Subscription[] = [];
   branchCode?: String;
   paymentModeList: any[] = [];
-  dummyDate = "1900-01-01T00:00:00";  
+  dummyDate = "1900-01-01T00:00:00";
   compCurrency: any;
   typeCodeArray: any[] = [];
   selectedTabIndex = 0;
@@ -132,7 +132,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
     currencyCode: [""],
     currencyRate: [""],
     amountFc: [""],
-    amountCc: ["",Validators.required],
+    amountCc: ["", Validators.required],
     creditCardNumber: [""],
     creditCardName: ["", [Validators.pattern(/^[a-zA-Z ]*$/)]],
     creditCardDate: [""],
@@ -315,7 +315,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
     });
   }
 
- 
+
 
   // getGSTDetails(acCode: any) {
 
@@ -451,7 +451,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
       this.posCurrencyReceiptDetailsForm.controls.remarks.setValue(
         this.receiptData.REMARKS
       );
-   
+
 
       this.hsnCodeList = [
         { code: this.receiptData.HSN_CODE, value: this.receiptData },
@@ -887,7 +887,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
   }
 
 
-  formSubmit(btnType:any) {
+  formSubmit(btnType: any) {
     if (this.content && this.content.FLAG == "EDIT") {
       // this.update()
       return;
@@ -922,7 +922,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
     console.log(this.posCurrencyReceiptDetailsForm.value.vocDate);
     const res = this.validateReceipt();
     if (!res) {
-      var CHEQUE_NO="", CHEQUE_DATE, CHEQUE_BANK="", CHEQUE_DEPOSIT_BANK="";
+      var CHEQUE_NO = "", CHEQUE_DATE, CHEQUE_BANK = "", CHEQUE_DEPOSIT_BANK = "";
       if (this.posCurrencyReceiptDetailsForm.value.modeOfSelect == "TT") {
         CHEQUE_NO = this.posCurrencyReceiptDetailsForm.value.ttNumber;
         CHEQUE_DATE = this.posCurrencyReceiptDetailsForm.value.ttDate;
@@ -954,7 +954,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
         // "AMOUNTFC": this.posCurrencyReceiptDetailsForm.value.amountFc,
         AMOUNTCC: this.posCurrencyReceiptDetailsForm.value.amountCc,
         HEADER_AMOUNT: this.posCurrencyReceiptDetailsForm.value.amountCc,
-        CHEQUE_NO: CHEQUE_NO|| "",
+        CHEQUE_NO: CHEQUE_NO.toString() || "",
         CHEQUE_DATE: CHEQUE_DATE
           ? this.formatDateToISO(CHEQUE_DATE)
           : this.dummyDate,
@@ -969,7 +969,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
         MODEDESC: this.posCurrencyReceiptDetailsForm.value.modeDesc,
         D_POSSCHEMEID: "",
         D_POSSCHEMEUNITS: 1,
-        CARD_NO: this.posCurrencyReceiptDetailsForm.value.creditCardNumber,
+        CARD_NO: this.posCurrencyReceiptDetailsForm.value.creditCardNumber.toString() ?? "",
         CARD_HOLDER: this.posCurrencyReceiptDetailsForm.value.creditCardName,
         CARD_EXPIRY: moment(this.posCurrencyReceiptDetailsForm.value.creditCardDate, 'MM/YYYY', true).isValid()
           ? this.formatDateToISO(this.posCurrencyReceiptDetailsForm.value.creditCardDate)
@@ -1002,11 +1002,11 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
         SGST_ACCODE: "",
         IGST_ACCODE: this.igstAccode,
         GST_HEADER_AMOUNT: 0,
-        GST_NUMBER: this.posCurrencyReceiptDetailsForm.value.vatNo.toString()??"",
+        GST_NUMBER: this.posCurrencyReceiptDetailsForm.value.vatNo.toString() ?? "",
         INVOICE_NUMBER: this.posCurrencyReceiptDetailsForm.value.invoiceNo,
         INVOICE_DATE: this.posCurrencyReceiptDetailsForm.value.invoiceDate ? this.formatDateToISO(
           this.posCurrencyReceiptDetailsForm.value.invoiceDate
-        ) :this.dummyDate,
+        ) : this.dummyDate,
         DT_GST_STATE_CODE: "",
         DT_GST_TYPE: "",
         DT_GST_CODE: "VAT",
@@ -1018,8 +1018,8 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
         MIDPCR: 0,
         INCLUSIVE: false,
         COMM_PER: this.commisionRate ? this.commisionRate : 0,
-        COMM_AMOUNTCC: this.commissionAmount ? this.commissionAmount : 0,
-        COMM_AMOUNTFC: this.commissionAmount ? this.commissionAmount : 0,
+        COMM_AMOUNTCC: this.commissionAmount ? this.commissionAmount.toFixed(2) : 0,
+        COMM_AMOUNTFC: this.commissionAmount ? this.commissionAmount.toFixed(2) : 0,
         COMM_TAXPER:
           this.posCurrencyReceiptDetailsForm.value.modeOfSelect == "Credit Card"
             ? this.posCurrencyReceiptDetailsForm.value.vat
@@ -1050,26 +1050,27 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
 
 
       if (btnType === 'finish') {
-        this.close(postData);  
+        this.close(postData);
       } else if (btnType === 'continue') {
         this.continueData.emit(postData);
-         this.resetFormForContinue(); 
+        this.resetFormForContinue();
       }
     }
   }
 
   resetFormForContinue() {
     this.posCurrencyReceiptDetailsForm.patchValue({
-      amountCc: '', 
-      amountFc: '',  
-      vatcc: '', 
-      totalFc: '',  
-      totalLc: '', 
-      headerVatAmt: '',  
-      vatNo: '',  
-      invoiceNo: '', 
-      remarks: '', 
-    });}
+      amountCc: '',
+      amountFc: '',
+      vatcc: '',
+      totalFc: '',
+      totalLc: '',
+      headerVatAmt: '',
+      vatNo: '',
+      invoiceNo: '',
+      remarks: '',
+    });
+  }
 
   deleteWorkerMaster() {
     if (this.content.MID == null) {
@@ -1144,102 +1145,102 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
 
   changeAmountLc(event: any) {
     const amountLc = this.comService.emptyToZero(event.target.value);
-  
+
     if (amountLc === 0) {
       this.handleZeroAmount();
       return;
     }
-  
+
     this.resetCommissionAmount();
-    
+
     const amountFc = this.convertToForeignCurrency(amountLc);
     const vatPrc = this.posCurrencyReceiptDetailsForm.controls.vat.value;
     const vatCc = this.calculateVat(amountFc, vatPrc);
     const vatAmountLC = this.calculateVat(amountLc, vatPrc);
-    
+
     // Only update values if amountLc is greater than 0
     this.updateAmounts(amountLc, amountFc, vatCc, vatAmountLC);
-    
+
     if (this.isCreditCardMode()) {
       this.updateCommission(amountLc);
     }
   }
-  
+
   handleZeroAmount() {
     const dialogRef = this.dialogService.openDialog('Warning', this.comService.getMsgByID('MSG1031'), true);
     dialogRef.afterClosed().subscribe((action: any) => {
       if (action === 'OK') {
-        let lastUpdatedAmount=localStorage.getItem("amountLc")
+        let lastUpdatedAmount = localStorage.getItem("amountLc")
         this.posCurrencyReceiptDetailsForm.controls.amountCc.setValue(lastUpdatedAmount);
         const amountFc = this.convertToForeignCurrency(lastUpdatedAmount);
         const amountLc = lastUpdatedAmount;
         const vatPrc = this.posCurrencyReceiptDetailsForm.controls.vat.value;
         const vatCc = this.calculateVat(amountFc, vatPrc);
         const vatAmountLC = this.calculateVat(amountLc, vatPrc);
-        
+
         this.updateAmounts(amountLc, amountFc, vatCc, vatAmountLC);
         this.renderer.selectRootElement('#ccAmount').focus();
       }
     });
   }
-  
+
   resetCommissionAmount() {
     this.commissionAmount = 0;
   }
-  
+
   convertToForeignCurrency(amountLc: any): any {
     return this.comService.CCToFC(
       this.posCurrencyReceiptDetailsForm.value.currencyCode,
       amountLc
     );
   }
-  
+
   calculateVat(amount: any, vatPrc: any): any {
     return (amount * vatPrc) / 100;
   }
-  
+
   updateAmounts(amountLc: any, amountFc: any, vatCc: any, vatAmountLC: any) {
     const amountWithVatFc = amountFc + vatCc;
     const amountWithVatLC = vatAmountLC + parseFloat(amountLc.toString());
-  
+
     this.posCurrencyReceiptDetailsForm.controls.amountCc.setValue(
       this.comService.decimalQuantityFormat(amountLc, "AMOUNT")
     );
-  
+
     this.posCurrencyReceiptDetailsForm.controls.amountFc.setValue(
       this.comService.decimalQuantityFormat(amountFc, "AMOUNT")
     );
-  
+
     this.posCurrencyReceiptDetailsForm.controls.vatcc.setValue(
       this.comService.decimalQuantityFormat(vatCc, "AMOUNT")
     );
-  
+
     this.posCurrencyReceiptDetailsForm.controls.totalFc.setValue(
       this.comService.decimalQuantityFormat(amountWithVatFc, "AMOUNT")
     );
-  
+
     this.posCurrencyReceiptDetailsForm.controls.totalLc.setValue(
       this.comService.decimalQuantityFormat(amountWithVatLC, "AMOUNT")
     );
-  
+
     this.posCurrencyReceiptDetailsForm.controls.headerVatAmt.setValue(
       this.comService.decimalQuantityFormat(amountWithVatLC, "AMOUNT")
     );
     localStorage.setItem("amountLc", amountLc.toString());
   }
-  
+
   isCreditCardMode(): boolean {
-    return this.posCurrencyReceiptDetailsForm.value.modeOfSelect === "Credit Card" && 
-           this.posCurrencyReceiptDetailsForm.value.modeDesc;
+    return this.posCurrencyReceiptDetailsForm.value.modeOfSelect === "Credit Card" &&
+      this.posCurrencyReceiptDetailsForm.value.modeDesc;
   }
-  
+
   updateCommission(amountLc: number) {
     this.commissionAmount = this.comService.emptyToZero(
       amountLc * (this.commisionRate / 100)
     );
     console.log(this.commissionAmount);
   }
-  
+
 
   changeTotalLc(event: any) {
     console.log(event.target.value);
@@ -1372,7 +1373,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
             let searchResult = this.comService.searchAllItemsInArray(data, LOOKUPDATA.SEARCH_VALUE);
 
             if (searchResult && searchResult.length > 0) {
-              let matchedItem = searchResult[0]; 
+              let matchedItem = searchResult[0];
               this.posCurrencyReceiptDetailsForm.controls.currencyCode.setValue(
                 matchedItem.Currency
               );
@@ -1383,7 +1384,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
                 )
               );
 
-           
+
 
             } else {
               this.comService.toastErrorByMsgId('No data found');
@@ -1414,22 +1415,30 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
 
   //   this.activeModal.close(data);
   // }
-  
+
 
   close(data: any = null) {
 
-    if (this.viewOnly||data) {
+    if (this.viewOnly) {
+
       this.activeModal.close(data);
-    } else {
+    }
+    else if (this.receiptData != null &&
+      this.receiptData != undefined &&
+      data != null) {
+      data!.isUpdate = true;
+      this.activeModal.close(data);
+    }
+    else {
       const dialogRef = this.dialogService.openDialog('Warning', this.comService.getMsgByID('MSG1212'), false);
-      
+
       dialogRef.afterClosed().subscribe((action: any) => {
         if (action == 'Yes') {
           this.activeModal.close();
         }
       });
     }
-    
+
   }
 
 
@@ -1458,8 +1467,8 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
   limitDigits(event: any): void {
     const input = event.target;
     if (input.value.length > 15) {
-      input.value = input.value.slice(0, 15);  
+      input.value = input.value.slice(0, 15);
     }
   }
-  
+
 }

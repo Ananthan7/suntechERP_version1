@@ -13,6 +13,7 @@ import { MENU } from './menu';
 import { MenuItem } from './menu.model';
 import { LAYOUT_MODE } from "../layouts.model";
 import { IndexedDbService } from 'src/app/services/indexed-db.service';
+import { CommonServiceService } from 'src/app/services/common-service.service';
 
 @Component({
   selector: 'app-horizontaltopbar',
@@ -59,7 +60,8 @@ export class HorizontaltopbarComponent implements OnInit {
     public _cookiesService: CookieService,
     private authService: AuthenticationService,
     private authFackservice: AuthfakeauthenticationService,
-    private inDb: IndexedDbService
+    private inDb: IndexedDbService,
+    private commonService:CommonServiceService
   ) {
     router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
@@ -126,6 +128,9 @@ export class HorizontaltopbarComponent implements OnInit {
    * On menu click
    */
   onMenuClick(event: any) {
+
+    this.commonService.catchSubscribeHeaderMenu(true);
+
     const nextEl = event.target.nextElementSibling;
     if (nextEl) {
       const parentEl = event.target.parentNode;
