@@ -129,7 +129,7 @@ export class RetailSalesCollectionComponent implements OnInit {
     const payload = {
       // strLoginBranch: localStorage.getItem('userbranch')
       "strReportName": "POS_COLLECTION_A",
-      "strMainVouchers": "" , // this.comService.getqueryParamMainVocType(),
+     "strMainVouchers":"#POS#POSC#RIN#PSR#POSEX#POSER",
       "strExcludeVouchers": "",
       "strWhereCond": "",
       "strLoginBranch": "", //this.comService.branchCode
