@@ -60,7 +60,8 @@
                     <mat-checkbox formControlName="showExbSalesReturnCheckbox">Exb. Sales Return</mat-checkbox>
                 </div>
                 <div class="row">
-                    <mat-checkbox formControlName="showAdvanceReceiptCheckbox">Advance Receipt</mat-checkbox>
+                    <mat-checkbox formControlName="showAdvanceReceiptCheckbox"
+                    (change)="onAdvanceReceiptCheckboxChange($event.checked)">Advance Receipt</mat-checkbox>
                 </div>
                 <div class="row">
                     <mat-checkbox formControlName="showSalesRegisterCheckbox">Sales Register</mat-checkbox> 
@@ -115,18 +116,6 @@
                 <br>
             </div>
         </dx-popup>
-
-       <!--  <div class="row align-items-center mt-1">
-            <div class="col-md-4 pt-2" style="margin-left: 284px;">
-                 <app-report-to-control (selectedvalue)="setValueFromCommon($event)"></app-report-to-control> 
-            </div>      
-
-            <div class="col-md-5 d-flex text-right p-2">
-               
-
-                 <app-common-buttons (saveClick)="okClick()"  (cancelClick)="close()"></app-common-buttons> 
-            </div>  
-        </div> -->  
        
         <div class="row mt-2 justify-content-end mx-2">
             <div class="icon-label-container" (click)="saveTemplate()" matTooltip="Save the selections as a new template">

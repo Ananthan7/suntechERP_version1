@@ -71,12 +71,12 @@
           
           <dxi-column dataField="FROMVOCDATE" caption="From Date" width="120" cellTemplate="FROMVOCDATECell"></dxi-column>
           <div *dxTemplate="let cellData of 'FROMVOCDATECell'">
-            <input type="date" [value]="cellData.value" style="width: -webkit-fill-available;">
+            <input type="date" [value]="cellData.value" class="retailGridCellInput">
           </div>
 
           <dxi-column dataField="TOVOCDATE" caption="To Date"  width="120" cellTemplate="TOVOCDATECell"></dxi-column>
           <div *dxTemplate="let cellData of 'TOVOCDATECell'">
-            <input type="date" [value]="cellData.value" style="width: -webkit-fill-available;">
+            <input type="date" [value]="cellData.value" class="retailGridCellInput">
           </div>
 
           <dxi-column caption="Report Type" cellTemplate="cellTemplate"  width="140"></dxi-column>
