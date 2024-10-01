@@ -353,15 +353,16 @@ export class RetailGridComponent implements OnInit {
     this.dataService.postDynamicAPI('ExecueteSPInterface', payload)
     .subscribe((result: any) => {
       this.dataSource = result.dynamicData[0]
-
+      
       this.dataSource.forEach((item: any) => {
+        // console.log('data Refetch for retail template grid',item)
         let parsedData;
         try {
           parsedData = JSON.parse(item['CONTROL_LIST_JSON']);
         } catch (e) {
           return;
         }
-        console.log('data Refetch for retail template grid',parsedData.CONTROL_DETAIL)
+
         const fromVocDate = parsedData.CONTROL_DETAIL?.FROMVOCDATE || parsedData.CONTROL_DETAIL?.STRFROMDATE ||
           parsedData.CONTROL_DETAIL?.strFmDate || parsedData.CONTROL_DETAIL?.FrVocDate || parsedData.CONTROL_DETAIL?.str_FmDate
           || parsedData.CONTROL_DETAIL?.strAsOnDate;;
