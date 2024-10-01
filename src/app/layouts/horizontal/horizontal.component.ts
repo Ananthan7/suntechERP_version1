@@ -24,7 +24,6 @@ export class HorizontalComponent implements OnInit {
 
     this.screenNameSubscription = this.screenName$.subscribe((value: string) => {
       this.screenName = value;
-      console.log('Screen name updated:', this.screenName);  
     });
 
     document.body.setAttribute('data-layout', 'horizontal');
