@@ -124,7 +124,7 @@ export class StoneIssueDetailComponent implements OnInit {
     SEARCH_FIELD: 'DIVISION_CODE',
     SEARCH_HEADING: 'Division Search',
     SEARCH_VALUE: '',
-    WHERECONDITION: `@SubJobNumber='',  @DivisionCode='', @DesignType=''`,
+    WHERECONDITION: `@SubJobNumber='',  @DivisionCode='S', @DesignType=''` ,
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }

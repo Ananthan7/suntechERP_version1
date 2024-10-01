@@ -31,9 +31,9 @@ export class MeltingIssueComponent implements OnInit {
   modalReference!: NgbModalRef;
   columnhead: any[] = ['SRNO', 'DIV', 'Job No', 'Stock Code', 'Stock Description', 'Main Stock', 'Process', 'Worker', 'Pcs', 'Gross Weight', 'Purity', 'Pure Weight', 'Rate', 'Amount']
   columnheader: any[] = ['Sr#', 'SO No', 'Party Code', 'Party Name', 'Job Number', 'Job Description', 'Design Code', 'UNQ Design ID', 'Process', 'Worker', 'Metal Required', 'Metal Allocated', 'Allocated Pure Wt', 'Job Pcs']
-  columnhead1: any[] = [    { title: 'SRNO', field: 'SRNO', format: '', alignment: 'left' },
-    { title: 'Ingredients', field: 'Ingredients', format: '', alignment: 'left' },
-    { title: 'QTY', field: 'STOCKCODE', format: '', alignment: 'left' },]
+  columnhead1: any[] = [{ title: 'SRNO', field: 'SRNO', format: '', alignment: 'left' },
+  { title: 'Ingredients', field: 'Ingredients', format: '', alignment: 'left' },
+  { title: 'QTY', field: 'STOCKCODE', format: '', alignment: 'left' },]
   db1: any[] = [
     { title: 'SRNO', field: 'SRNO', format: '', alignment: 'left' },
     { title: 'DIVISION', field: 'DIVISION', format: '', alignment: 'left' },
@@ -67,7 +67,7 @@ export class MeltingIssueComponent implements OnInit {
   branchCode?: String;
   yearMonth?: String;
   gridMetalDecimalFormat: any;
- 
+
 
   user: MasterSearchModel = {
     PAGENO: 1,
@@ -131,12 +131,13 @@ export class MeltingIssueComponent implements OnInit {
     WHERECONDITION: `"@StrJob_Number='',
     @StrMeltingTypeKarat='',
     @StrColor ='', 
+    @LookupFlag ='1',
     @StrBranch=${this.commonService.branchCode}`,
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
     FRONTENDFILTER: true
-}
+  }
 
   timeCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -181,7 +182,7 @@ export class MeltingIssueComponent implements OnInit {
     BRANCH_CODE: [''],
     VOCNO: [''],
     MID: [0],
-    Karat:[''],
+    Karat: [''],
     voctype: ['', [Validators.required]],
     vocdate: [''],
     MAIN_VOCTYPE: [''],
@@ -327,7 +328,7 @@ export class MeltingIssueComponent implements OnInit {
           // this.meltingIssueFrom.controls.StockDescription.setValue(data.STOCK_DESCRIPTION)
 
           this.meltingISsueDetailsData = data.Details
-          console.log(this.meltingISsueDetailsData,'data')
+          console.log(this.meltingISsueDetailsData, 'data')
           this.recalculateSRNO() //set to main grid
           this.meltingISsueDetailsData.forEach((element: any) => {
             this.tableData.push({
@@ -487,7 +488,7 @@ export class MeltingIssueComponent implements OnInit {
     this.meltingIssueFrom.controls.workerdes.setValue(e.DESCRIPTION);
   }
   WorkerCodeValidate(event?: any) {
-    if(event&&event.target.value==''){
+    if (event && event.target.value == '') {
       return
     }
     let form = this.meltingIssueFrom.value;
@@ -763,7 +764,7 @@ export class MeltingIssueComponent implements OnInit {
       "BRANCH_CODE": this.commonService.nullToString(this.meltingIssueFrom.value.BRANCH_CODE),
       "VOCTYPE": this.commonService.nullToString(this.meltingIssueFrom.value.voctype),
       "VOCNO": this.comService.emptyToZero(form.VOCNO),
-      "VOCDATE":this.comService.formatDateTime(form.vocdate),
+      "VOCDATE": this.comService.formatDateTime(form.vocdate),
       "YEARMONTH": this.commonService.nullToString(this.meltingIssueFrom.value.YEARMONTH),
       "NAVSEQNO": 0,
       "WORKER_CODE": this.meltingIssueFrom.value.worker,
@@ -1011,17 +1012,18 @@ export class MeltingIssueComponent implements OnInit {
   }
   updateJobNumberLookupFilter(karatCode: string) {
     // Update the WHERECONDITION for job number lookup filter based on KaratCode
-    this.jobnoCodeData.WHERECONDITION = `@StrJob_Number='',@StrMeltingTypeKarat='${karatCode}',@StrBranchCode=${this.commonService.branchCode},@StrColor =''`;
-  
+    this.jobnoCodeData.WHERECONDITION = `@StrJob_Number='',@StrMeltingTypeKarat='${karatCode}',@StrBranchCode=${this.commonService.branchCode},@StrColor ='',@LookupFlag = '1'`;
+
   }
-  
+
   setJobNumberWhereCondition() {
     let form = this.meltingIssueFrom.value;
-    console.log(form.Karat,'jobnumber')
+    console.log(form.Karat, 'jobnumber')
     this.jobnoCodeData.WHERECONDITION = `@StrJob_Number='${this.commonService.nullToString(form.jobno)}',`
     this.jobnoCodeData.WHERECONDITION += `@StrMeltingTypeKarat='${this.commonService.nullToString(form.Karat)}',`
     this.jobnoCodeData.WHERECONDITION += `@StrBranch='${this.commonService.nullToString(this.comService.branchCode)}',`
-    this.jobnoCodeData.WHERECONDITION += `@StrColor='${this.commonService.nullToString(form.color)}'`
+    this.jobnoCodeData.WHERECONDITION += `@StrColor='${this.commonService.nullToString(form.color)}',`
+    this.jobnoCodeData.WHERECONDITION += `@LookupFlag='1'`
   }
 
   subJobNumberValidate(event?: any) {
@@ -1080,10 +1082,10 @@ export class MeltingIssueComponent implements OnInit {
 
   jobNumberValidate(event: any) {
     if (event.target.value == '') return;
-  
+
     // Capture the form values
     let form = this.meltingIssueFrom.value;
-  
+
     // Prepare the data for the API call
     let postData = {
       "SPID": "108",
@@ -1091,59 +1093,60 @@ export class MeltingIssueComponent implements OnInit {
         'StrJob_Number': this.commonService.nullToString(form.jobno),
         'StrMeltingTypeKarat': this.commonService.nullToString(form.Karat),
         'StrBranch': this.comService.branchCode,
-        'StrColor': this.commonService.nullToString(form.color)
+        'StrColor': this.commonService.nullToString(form.color),
+        'LookupFlag':'0'
       }
     };
-  
-    // Show a message indicating that validation is in progress
-    this.commonService.showSnackBarMsg('Validating Job Number...');
-  
-    // Make the API call for job number validation
-    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
-      .subscribe((result) => {
-        // Close the progress message
-        this.commonService.closeSnackBarMsg();
-  
-        // If the API call is successful and data is valid
-        if (result.status === "Success" && result.dynamicData && result.dynamicData[0] && result.dynamicData[0][0]) {
-          let data = result.dynamicData[0][0];
-  
-          // Check if the unique job ID is valid
-          if (data.UNQ_JOB_ID && data.UNQ_JOB_ID !== '') {
-            // Set valid job details in the form controls
-            this.jobNumberDetailData = data;
-            this.meltingIssueFrom.controls.subjobno.setValue(data.UNQ_JOB_ID);
-            this.meltingIssueFrom.controls.subJobDescription.setValue(data.JOB_DESCRIPTION);
-            this.overlayjobNoSearch.closeOverlayPanel();
-            this.subJobNumberValidate(); // Trigger sub-job number validation
-          } else {
-            // Invalid data: show error and clear job number field
-            this.handleInvalidJobNumber(event, 'Invalid Job Number!');
-          }
-        } else {
-          // Invalid data: show error and clear job number field
-          this.handleInvalidJobNumber(event, 'Job Number validation failed!');
-        }
-      }, err => {
-        // Handle error from the API
-        this.commonService.closeSnackBarMsg();
-        this.handleInvalidJobNumber(event, 'Error validating Job Number!');
-      });
-  
-    // Add the subscription to track and clean up later
-    this.subscriptions.push(Sub);
-  }
-  
-  // Method to handle invalid job number cases
-  handleInvalidJobNumber(event: any, message: string) {
-    // Show an error message using a toast or snackbar
-    this.comService.toastErrorByMsgId(message);
-  
-    // Clear the job number control and open the overlay for re-entry
-    this.meltingIssueFrom.controls.jobno.setValue('');
-    this.showOverleyPanel(event, 'jobno');
-  }
-  
+// Show a message indicating that validation is in progress
+this.commonService.showSnackBarMsg('Validating Job Number...');
+
+// Make the API call for job number validation
+let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+  .subscribe((result) => {
+    // Close the progress message
+    this.commonService.closeSnackBarMsg();
+
+    // If the API call is successful and data is valid
+    if (result.status === "Success" && result.dynamicData && result.dynamicData[0] && result.dynamicData[0][0]) {
+      let data = result.dynamicData[0][0];
+console.log(data,'data')
+      // Check if the unique job ID is valid
+      if (data.UNQ_JOB_ID && data.UNQ_JOB_ID !== '') {
+        // Set valid job details in the form controls
+        this.jobNumberDetailData = data;
+        console.log(data,'data')
+        this.meltingIssueFrom.controls.subjobno.setValue(data.UNQ_JOB_ID);
+        this.meltingIssueFrom.controls.subJobDescription.setValue(data.JOB_DESCRIPTION);
+        this.overlayjobNoSearch.closeOverlayPanel();
+        this.subJobNumberValidate(); // Trigger sub-job number validation
+      } else {
+        // If job number is not valid, show 'Not Found' message and clear job number field
+        this.handleInvalidJobNumber(event, 'MSG1531');
+      }
+    } else {
+      // Show error if the API status is not success or if no data is returned
+      this.handleInvalidJobNumber(event, 'MSG2039');
+    }
+  }, err => {
+    // Handle error from the API
+    this.commonService.closeSnackBarMsg();
+    this.handleInvalidJobNumber(event, 'MSG2039');
+  });
+
+// Add the subscription to track and clean up later
+this.subscriptions.push(Sub);
+}
+
+// Method to handle invalid job number cases
+handleInvalidJobNumber(event: any, message: string) {
+  // Show an error message using a toast or snackbar
+  this.comService.toastErrorByMsgId(message);
+
+  // Clear the job number control and open the overlay for re-entry
+  this.meltingIssueFrom.controls.jobno.setValue('');
+  this.showOverleyPanel(event, 'jobno');
+}
+
 
   meltingTypeValidate(event?: any) {
     const meltingTypeValue = this.meltingIssueFrom.value.meltingtype;
@@ -1161,7 +1164,7 @@ export class MeltingIssueComponent implements OnInit {
         this.commonService.closeSnackBarMsg();
         if (result.response) {
           const data = result.response;
-          console.log(data,'data')
+          console.log(data, 'data')
           this.meltingIssueFrom.controls.color.setValue(data.COLOR);
           this.meltingIssueFrom.controls.jobpurity.setValue(data.PURITY);
           this.meltingIssueFrom.controls.Karat.setValue(data.KARAT_CODE)//KARAT_CODE

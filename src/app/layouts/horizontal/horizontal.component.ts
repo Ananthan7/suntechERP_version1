@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { Observable } from 'rxjs/internal/Observable';
 
 @Component({
   selector: 'app-horizontal',
@@ -12,14 +14,28 @@ import { Component, OnInit } from '@angular/core';
 export class HorizontalComponent implements OnInit {
 
   isCondensed = false;
+  @Input() screenName$!: Observable<string>;  
+  screenName: string = '';  
+  private screenNameSubscription!: Subscription;
 
   constructor() { }
 
   ngOnInit(): void {
+
+    this.screenNameSubscription = this.screenName$.subscribe((value: string) => {
+      this.screenName = value;
+    });
+
     document.body.setAttribute('data-layout', 'horizontal');
     document.body.removeAttribute('data-sidebar');
   }
 
+
+  ngOnDestroy(): void {
+    if (this.screenNameSubscription) {
+      this.screenNameSubscription.unsubscribe();
+    }
+  }
   /**
    * Mobile Toggle Menu
    */

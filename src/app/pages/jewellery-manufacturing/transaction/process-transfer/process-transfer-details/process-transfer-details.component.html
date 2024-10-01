@@ -76,7 +76,14 @@
               <div class="col-md-3">
                 <mat-form-field appearance="outline" style="width: 100%;">
                   <input type="text" matInput formControlName="UNQ_JOB_ID"
-                    UpperCaseDirective readonly />
+                    UpperCaseDirective [readonly]="viewMode" id="UNQ_JOB_ID" 
+                    (keydown)="lookupKeyPress($event,'UNQ_JOB_ID')"
+                    (change)="subJobNumberValidate($event)"/>
+                  <master-search class="masterSearch"
+                    [MasterSearchData]="subJobNoSearch"
+                    *ngIf="!viewMode" #overlaySubjobNoSearch
+                    (newRowClick)="subJobNumberSelected($event)">
+                  </master-search>
                 </mat-form-field>
               </div>
               <div class="col-md-4">
@@ -161,7 +168,8 @@
                               formControlName="FRM_PROCESS_CODE"
                               (input)="fromProcesscodeInputChange()"
                               [readonly]="viewMode" />
-                            <mat-error *ngIf="processTransferdetailsForm.controls.FRM_PROCESS_CODE.touched 
+                            <mat-error
+                              *ngIf="processTransferdetailsForm.controls.FRM_PROCESS_CODE.touched 
                               && processTransferdetailsForm.controls.FRM_PROCESS_CODE.hasError('required')">
                               code is required
                             </mat-error>
@@ -182,7 +190,8 @@
                               (keydown)="lookupKeyPress($event,'TO_PROCESS_CODE')"
                               (focusout)="toProcesscodeValidate($event)"
                               formControlName="TO_PROCESS_CODE" />
-                            <mat-error *ngIf="processTransferdetailsForm.controls.TO_PROCESS_CODE.touched 
+                            <mat-error
+                              *ngIf="processTransferdetailsForm.controls.TO_PROCESS_CODE.touched 
                               && processTransferdetailsForm.controls.TO_PROCESS_CODE.hasError('required')">
                               code is required
                             </mat-error>
@@ -207,7 +216,8 @@
                               (focusout)="fromWorkercodeValidate($event)"
                               (input)="fromWorkercodeInputChange()"
                               formControlName="FRM_WORKER_CODE" />
-                            <mat-error *ngIf="processTransferdetailsForm.controls.FRM_WORKER_CODE.touched 
+                            <mat-error
+                              *ngIf="processTransferdetailsForm.controls.FRM_WORKER_CODE.touched 
                               && processTransferdetailsForm.controls.FRM_WORKER_CODE.hasError('required')">
                               code is required
                             </mat-error>
@@ -228,7 +238,8 @@
                               (keydown)="lookupKeyPress($event,'TO_WORKER_CODE')"
                               (focusout)="toWorkercodeValidate($event)"
                               formControlName="TO_WORKER_CODE" />
-                            <mat-error *ngIf="processTransferdetailsForm.controls.TO_WORKER_CODE.touched 
+                            <mat-error
+                              *ngIf="processTransferdetailsForm.controls.TO_WORKER_CODE.touched 
                               && processTransferdetailsForm.controls.TO_WORKER_CODE.hasError('required')">
                               code is required
                             </mat-error>

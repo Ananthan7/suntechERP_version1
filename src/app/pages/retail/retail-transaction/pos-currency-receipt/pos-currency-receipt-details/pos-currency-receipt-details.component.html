@@ -59,7 +59,7 @@
               Debit Account:</label>
             <span class="col-md-3">
               <mat-form-field style="width: -webkit-fill-available" appearance="outline">
-                <input [readonly]="viewOnly || hideMasterSearch" type="text" matInput formControlName="debitAmount"
+                <input readonly type="text" matInput formControlName="debitAmount"
                   (change)="DebitamountChange($event)" />
                 <master-search class="masterSearch" (focusout)="openTab($event, 'debitAmount')" #overlayDebitCode
                   *ngIf="hideDebitLookup && !viewOnly" [MasterSearchData]="debitAmountData"
@@ -69,7 +69,7 @@
             </span>
             <div class="col-md-6">
               <mat-form-field style="width: 100%" appearance="outline">
-                <input [readonly]="viewOnly || hideMasterSearch" type="text" matInput
+                <input readonly type="text" matInput
                   formControlName="debitAmountDesc" />
               </mat-form-field>
             </div>
@@ -104,7 +104,7 @@
             <div class="col-md-3">
               <mat-form-field style="width: 100%" appearance="outline">
                 <input type="number" class="st_txt_right" [readonly]="viewOnly" (change)="changeAmountLc($event)"
-                  matInput #ccAmount id="ccAmount" AmountDecimalInput formControlName="amountCc" />
+                  matInput #ccAmount id="ccAmount"  formControlName="amountCc" />
 
                 <mat-error *ngIf="posCurrencyReceiptDetailsForm.controls.amountCc.hasError('required')">
                   Amount is <strong>required</strong>
@@ -305,8 +305,8 @@
                   <label for="inputPassword" class="col-sm-6 col-form-label" id="ID029">Total FC :</label>
                   <div class="col-md-6">
                     <mat-form-field style="width: 100%" appearance="outline">
-                      <input type="text" class="st_txt_right" [readonly]="isCurrencyUpdate || viewOnly"
-                        (change)="changeTotalLc($event)" matInput formControlName="totalFc" />
+                      <input type="text" class="st_txt_right" readonly
+                        matInput formControlName="totalFc" />
                     </mat-form-field>
                   </div>
                 </div>
