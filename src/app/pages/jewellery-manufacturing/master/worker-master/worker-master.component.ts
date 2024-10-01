@@ -246,13 +246,19 @@ export class WorkerMasterComponent implements OnInit {
       "TARGET_CARAT_WT": this.commonService.emptyToZero(form.TargetCaratWt),
       "TARGET_METAL_WT": this.commonService.emptyToZero(form.TargetMetalWt),
       "WORKER_EXPIRY_DATE": "",
-      "workerDetails": this.selectedProcessArr || [] 
+      "workerDetails": this.selectedProcessArr || []
     }
   }
   submitValidations(form: any) {
+    const nameRegexp: RegExp = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/;
+
+
     if (this.commonService.nullToString(form.WorkerCode) == '') {
       this.commonService.toastErrorByMsgId('MSG1951')// Worker code CANNOT BE EMPTY
       return true
+    } else if (form.WorkerCode == nameRegexp) {
+      this.commonService.toastErrorByMsgId('MSG81525');//Do not enter the special character in the
+      return true;
     }
     else if (this.commonService.nullToString(form.WorkerDESCRIPTION) == '') {
       this.commonService.toastErrorByMsgId('MSG1193')//"description cannot be empty"
@@ -281,14 +287,14 @@ export class WorkerMasterComponent implements OnInit {
     this.isloading = true;
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
-      this.isloading = false;
+        this.isloading = false;
         if (result) {
           if (result.status == "Success") {
             this.showSuccessDialog(this.commonService.getMsgByID('MSG2443') || 'Success');
           } else {
             this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
           }
-        }else {
+        } else {
           this.commonService.toastErrorByMsgId('MSG3577')
         }
       }, err => {
@@ -305,14 +311,14 @@ export class WorkerMasterComponent implements OnInit {
     this.isloading = true;
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
-      this.isloading = false;
+        this.isloading = false;
         if (result) {
           if (result.status == "Success") {
             this.showSuccessDialog(this.commonService.getMsgByID('MSG2443') || 'Success');
           } else {
             this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
           }
-        }else {
+        } else {
           this.commonService.toastErrorByMsgId('MSG3577')
         }
       }, err => {
@@ -320,10 +326,10 @@ export class WorkerMasterComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
-  afterSave(value:any){
-      this.workerMasterForm.reset()
-      this.tableData = []
-      this.close('reloadMainGrid')
+  afterSave(value: any) {
+    this.workerMasterForm.reset()
+    this.tableData = []
+    this.close('reloadMainGrid')
   }
   /**USE: delete worker master from row */
   deleteWorkerMaster() {
@@ -332,7 +338,7 @@ export class WorkerMasterComponent implements OnInit {
     //   this.showDeleteErrorDialog('Please Select data to delete!');
     //   return;
     // }
-  
+
     this.showConfirmationDialog().then((result) => {
       if (result.isConfirmed) {
         let API = 'WorkerMaster/DeleteWorkerMaster/' + this.content.WORKER_CODE;
@@ -354,7 +360,7 @@ export class WorkerMasterComponent implements OnInit {
       }
     });
   }
-  
+
   showConfirmationDialog(): Promise<any> {
     return Swal.fire({
       title: 'Are you sure?',
@@ -366,7 +372,7 @@ export class WorkerMasterComponent implements OnInit {
       confirmButtonText: 'Yes, delete!'
     });
   }
-  
+
   showDeleteErrorDialog(message: string): void {
     Swal.fire({
       title: '',
@@ -376,7 +382,7 @@ export class WorkerMasterComponent implements OnInit {
       confirmButtonText: 'Ok'
     });
   }
-  
+
   showSuccessDialog(message: string): void {
     Swal.fire({
       title: message,
@@ -388,7 +394,7 @@ export class WorkerMasterComponent implements OnInit {
       this.afterSave(result.value)
     });
   }
-  
+
   showErrorDialog(message: string): void {
     Swal.fire({
       title: message,
@@ -555,32 +561,32 @@ export class WorkerMasterComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
-      /**use: validate all lookups to check data exists in db */
-      validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
-        LOOKUPDATA.SEARCH_VALUE = event.target.value
-        if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
-        let param = {
-          LOOKUPID: LOOKUPDATA.LOOKUPID,
-          WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+  /**use: validate all lookups to check data exists in db */
+  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    LOOKUPDATA.SEARCH_VALUE = event.target.value
+    if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
+    let param = {
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+    }
+    this.commonService.toastInfoByMsgId('MSG81447');
+    let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
+      .subscribe((result) => {
+        this.isDisableSaveBtn = false;
+        let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+        if (data.length == 0) {
+          this.commonService.toastErrorByMsgId('MSG1531')
+          this.workerMasterForm.controls[FORMNAME].setValue('')
+          LOOKUPDATA.SEARCH_VALUE = ''
+          return
         }
-        this.commonService.toastInfoByMsgId('MSG81447');
-        let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
-        let Sub: Subscription = this.dataService.postDynamicAPI(API,param)
-          .subscribe((result) => {
-            this.isDisableSaveBtn = false;
-            let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
-            if (data.length == 0) {
-              this.commonService.toastErrorByMsgId('MSG1531')
-              this.workerMasterForm.controls[FORMNAME].setValue('')
-              LOOKUPDATA.SEARCH_VALUE = ''
-              return
-            }
-           
-          }, err => {
-            this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
-          })
-        this.subscriptions.push(Sub)
-      }
+
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+      })
+    this.subscriptions.push(Sub)
+  }
   // validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
   //   LOOKUPDATA.SEARCH_VALUE = event.target.value
   //   if (event.target.value == '' || this.viewMode == true) return
@@ -655,7 +661,7 @@ export class WorkerMasterComponent implements OnInit {
   }
 
   search() {
-   
+
     if (this.searchTerm.trim() !== '') {
       // Filter data based on search term
       this.filteredData = this.tableData.filter(item =>
@@ -668,15 +674,15 @@ export class WorkerMasterComponent implements OnInit {
   }
   @ViewChild('barcode') barcodeElement!: ElementRef;
   name: string = 'John Doe'; //
- 
-  
+
+
   printBarcode() {
     const inputText = this.workerMasterForm.value.WorkerCode
-    const barcodeElement:any = this.barcodeElement.nativeElement;
-    
+    const barcodeElement: any = this.barcodeElement.nativeElement;
+
     // Generate a simple barcode representation
     barcodeElement.innerText = inputText;
-    const printWindow:any = window.open('', '_blank');
+    const printWindow: any = window.open('', '_blank');
     printWindow.document.write('<html><head><title>Print Barcode</title></head><body>');
     printWindow.document.write('<img src="data:image/svg+xml;utf8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="200" height="100"><text x="0" y="15">' + barcodeElement.innerText + '</text></svg>') + '" />');
     printWindow.document.write('</body></html>');
@@ -708,13 +714,13 @@ export class WorkerMasterComponent implements OnInit {
       case 'NameOfSupervisor':
         this.overlayNameOfSupervisorSearch.showOverlayPanel(event);
         break;
-        case 'DefaultProcess':
-          this.overlaydefaultprocessSearch.showOverlayPanel(event);
-          break;
+      case 'DefaultProcess':
+        this.overlaydefaultprocessSearch.showOverlayPanel(event);
+        break;
       default:
     }
   }
-  
+
 
   // showOverleyPanel(event: any, formControlName: string) {
 
