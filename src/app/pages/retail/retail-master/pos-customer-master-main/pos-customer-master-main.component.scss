@@ -384,5 +384,10 @@
   }
 } 
 
+.no-border .ng-select-container {
+  border: none !important;
+  box-shadow: none !important;  /* This removes any shadow that might resemble a border */
+}
+
 
   

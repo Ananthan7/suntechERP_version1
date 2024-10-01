@@ -114,7 +114,7 @@
                       <mat-select
                         [disabled]="flag === 'VIEW'"
                         (selectionChange)="genderChanger($event.value)"
-                        formControlName="name"
+                        formControlName="prefix"
                       >
                         <mat-option
                           *ngFor="let data of nameList"
@@ -142,7 +142,7 @@
                         appAlphabetsOnly
                         matInput="text"
                         [maxlength]="40"
-                        formControlName="nameDesc"
+                        formControlName="name"
                         (change)="nameChange($event)"
                         [readonly]="flag === 'VIEW'"
                       />
@@ -349,6 +349,7 @@
                     DateValidation
                     formControlName="dob"
                     readonly="true"
+                    (dateChange)="dobValueSetting($event)"
                   />
                   <mat-datepicker-toggle
                     [disabled]="flag === 'VIEW'"
@@ -665,55 +666,19 @@
                 Nationality *
               </label>
 
-              <!-- <div *ngIf="flag === 'VIEW'; else NeditMode" class="col-md-8">
-                <mat-form-field style="width: 100%" appearance="outline">
-                  <input
-                    readonly="true"
-                    appAlphabetsOnly
-                    matInput
-                    formControlName="nationality"
-                  />
-                </mat-form-field>
-              </div> -->
-
-              <!-- Else, show the dropdown -->
-              <!-- <ng-template #NeditMode> -->
               <div class="col-md-8">
-                <mat-form-field style="width: 100%" appearance="outline">
-                  <mat-select
-                    [disabled]="flag === 'VIEW'"
+                <div class="border border-2">
+                  <ng-select
+                    class="no-border text-start"
+                    [items]="countryListData"
+                    bindLabel="COUNTRY_NAME"
+                    bindValue="COUNTRY_CODE_ISO2"
                     formControlName="nationality"
-                    (selectionChange)="onCountrySelect($event.value)"
+                    (change)="onCountrySelect($event.COUNTRY_CODE_ISO2)"
                   >
-                    <mat-option
-                      *ngFor="let country of countryListData"
-                      [value]="country.COUNTRY_CODE_ISO2"
-                    >
-                      {{ country.COUNTRY_NAME }}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>
+                  </ng-select>
+                </div>
               </div>
-              <!-- </ng-template> -->
-
-              <!-- <mat-form-field
-                  style="width: -webkit-fill-available"
-                  appearance="outline"
-                >
-                  <input
-                    readonly="true"
-                    matInput="text"
-                    formControlName="nationality"
-                    required
-                  />
-                  <master-search
-                    (focusout)="openTab($event, 'nationality')"
-                    #overlayNationality
-                    [MasterSearchData]="nationalityCode"
-                    class="masterSearch"
-                    (newRowClick)="nationalitySelected($event)"
-                  ></master-search>
-                </mat-form-field> -->
             </div>
             <div class="row mb-1">
               <label
@@ -722,54 +687,20 @@
                 id="ID021"
                 >State</label
               >
-              <!-- 
-              <div *ngIf="flag === 'VIEW'; else SeditMode" class="col-md-8">
-                <mat-form-field style="width: 100%" appearance="outline">
-                  <input
-                    readonly="true"
-                    appAlphabetsOnly
-                    matInput
-                    formControlName="state"
-                  />
-                </mat-form-field>
-              </div> -->
 
-              <!-- <ng-template #SeditMode> -->
               <div class="col-md-8">
-                <mat-form-field style="width: 100%" appearance="outline">
-                  <mat-select
-                    [disabled]="flag === 'VIEW'"
-                    (selectionChange)="onCitySelect($event.value)"
+                <div class="border border-2">
+                  <ng-select
+                    class="no-border text-start"
+                    [items]="stateListData"
+                    bindLabel="NAME"
+                    bindValue="CODE"
                     formControlName="state"
+                    (change)="onCitySelect($event.CODE)"
                   >
-                    <mat-option
-                      *ngFor="let state of stateListData"
-                      [value]="state.CODE"
-                    >
-                      {{ state.NAME || "State Not available" }}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>
-
-                <!-- <mat-form-field
-                  style="width: -webkit-fill-available"
-                  appearance="outline"
-                >
-                  <input
-                    readonly="true"
-                    matInput="text"
-                    formControlName="state"
-                  />
-                  <master-search
-                    (focusout)="openTab($event, 'state')"
-                    #overlayState
-                    [MasterSearchData]="stateCode"
-                    class="masterSearch"
-                    (newRowClick)="stateSelected($event)"
-                  ></master-search>
-                </mat-form-field> -->
+                  </ng-select>
+                </div>
               </div>
-              <!-- </ng-template> -->
             </div>
             <div class="row mb-1">
               <label
@@ -779,58 +710,18 @@
                 >City</label
               >
 
-              <!-- <div *ngIf="flag === 'VIEW'; else CeditMode" class="col-md-8">
-                <mat-form-field style="width: 100%" appearance="outline">
-                  <input
-                    readonly="true"
-                    appAlphabetsOnly
-                    matInput
-                    formControlName="city"
-                  />
-                </mat-form-field>
-              </div> -->
-              <!-- <ng-template #CeditMode> -->
               <div class="col-md-8">
-                <mat-form-field style="width: 100%" appearance="outline">
-                  <mat-select formControlName="city">
-                    <mat-option
-                      [disabled]="flag === 'VIEW'"
-                      *ngFor="let city of cityListData"
-                      [value]="city.NAME"
-                    >
-                      {{ city.NAME || "City Not available" }}
-                    </mat-option>
-                  </mat-select>
-                  <mat-error
-                    *ngIf="
-                      posCustomerMasterMainForm.controls.city.hasError(
-                        'required'
-                      )
-                    "
-                    id="ID005"
-                  >
-                    City is <strong>required</strong>
-                  </mat-error>
-                </mat-form-field>
-                <!-- <mat-form-field
-                  style="width: -webkit-fill-available"
-                  appearance="outline"
-                >
-                  <input
-                    readonly="true"
-                    matInput="text"
+                <div class="border border-2">
+                  <ng-select
+                    class="no-border text-start"
+                    [items]="cityListData"
+                    bindLabel="NAME"
+                    bindValue="CODE"
                     formControlName="city"
-                  />
-                  <master-search
-                    (focusout)="openTab($event, 'city')"
-                    #overlayCity
-                    [MasterSearchData]="cityCodeData"
-                    class="masterSearch"
-                    (newRowClick)="citySelected($event)"
-                  ></master-search>
-                </mat-form-field> -->
+                  >
+                  </ng-select>
+                </div>
               </div>
-              <!-- </ng-template> -->
             </div>
             <div class="row mb-1">
               <label
@@ -1003,7 +894,7 @@
                                 [readonly]="flag === 'VIEW'"
                                 appAlphabetsOnly
                                 matInput="text"
-                                (input)="onInput($event, 40)"
+                                (input)="onInput($event, 40, 'spouseName')"
                                 formControlName="spouse"
                               />
                             </mat-form-field>
@@ -1370,6 +1261,37 @@
                             </mat-form-field>
                           </div>
                         </div>
+                        <div class="row mb-1">
+                          <label
+                            for="inputPassword"
+                            class="col-sm-5 col-form-label"
+                            id="ID035"
+                            >Source of fund</label
+                          >
+                          <div class="col-md-7">
+                            <mat-form-field
+                              style="width: -webkit-fill-available"
+                              appearance="outline"
+                            >
+                              <input
+                                readonly="true"
+                                matInput
+                                type="text"
+                                formControlName="sourceOfFund"
+                              />
+                              <master-search
+                                *ngIf="flag !== 'VIEW'"
+                                (focusout)="openTab($event, 'sourceOfFund')"
+                                #overlaySourceOfFund
+                                [MasterSearchData]="sourceOfFundMasterCode"
+                                class="masterSearch"
+                                (newRowClick)="
+                                  sourceOfFundMasterSelected($event)
+                                "
+                              ></master-search>
+                            </mat-form-field>
+                          </div>
+                        </div>
                       </div>
                       <div class="col-md-6">
                         <div class="row mb-5">
@@ -1464,7 +1386,7 @@
                           </div>
                         </div>
 
-                        <div class="row mb-1">
+                        <!-- <div class="row mb-1">
                           <label
                             for="inputPassword"
                             class="col-sm-5 col-form-label"
@@ -1494,7 +1416,7 @@
                               ></master-search>
                             </mat-form-field>
                           </div>
-                        </div>
+                        </div> -->
                       </div>
                     </div>
                   </div>
@@ -3673,11 +3595,8 @@
                     </mat-form-field>
                   </div>
                 </div>
-                <div
-                *ngIf="flag === 'VIEW'"
-                 class="button-container">
+                <div *ngIf="flag === 'VIEW'" class="button-container">
                   <button
-                    
                     type="button"
                     class="btn btn-primary text-center m-2"
                     (click)="transactionDetails($event)"
