@@ -1318,26 +1318,52 @@ export class PosCustomerMasterMainComponent implements OnInit {
     this.activeModal.close(data);
   }
 
+  uploadCustomerImage() {
+    const formData = new FormData();
+    formData.append(
+      "CODE",
+      this.existCustomerCode || this.generatedCustomerCode
+    );
+    formData.append("File", this.image as Blob);
+
+    let API = `PosCustomerMaster/InsertPOSCustAttachments`;
+
+    console.log("FormData:", formData);
+
+    let sub: Subscription = this.apiService
+      .postDynamicAPI(API, formData)
+      .subscribe(
+        (result) => {
+          console.log("Image upload API Response:", result);
+        },
+        (err) => {
+          // Handle HTTP or API error for image upload
+          console.error("Image Upload Error:", err);
+        }
+      );
+    this.subscriptions.push(sub);
+  }
+
   customerSave() {
-    let POSTYPECOMPULSORY =
-      this.comService.getCompanyParamValue("POSTYPECOMPULSORY");
-    if (
-      POSTYPECOMPULSORY === 1 &&
-      !this.posCustomerMasterMainForm.controls.custType.value
-    ) {
-      this.comService.toastErrorByMsgId("MSG1923");
-    }
+    // let POSTYPECOMPULSORY =
+    //   this.comService.getCompanyParamValue("POSTYPECOMPULSORY");
+    // if (
+    //   POSTYPECOMPULSORY === 1 &&
+    //   !this.posCustomerMasterMainForm.controls.custType.value
+    // ) {
+    //   this.comService.toastErrorByMsgId("MSG1923");
+    // }
 
-    let POSIDNOCOMPULSORY =
-      this.comService.getCompanyParamValue("POSIDNOCOMPULSORY");
+    // let POSIDNOCOMPULSORY =
+    //   this.comService.getCompanyParamValue("POSIDNOCOMPULSORY");
 
-    if (
-      POSIDNOCOMPULSORY === true &&
-      !this.posCustomerMasterMainForm.controls.custIdType.value &&
-      !this.posCustomerMasterMainForm.controls.custID.value
-    ) {
-      this.comService.toastErrorByMsgId("MSG81405 ");
-    }
+    // if (
+    //   POSIDNOCOMPULSORY === true &&
+    //   !this.posCustomerMasterMainForm.controls.custIdType.value &&
+    //   !this.posCustomerMasterMainForm.controls.custID.value
+    // ) {
+    //   this.comService.toastErrorByMsgId("MSG81405 ");
+    // }
 
     // if (
     //   this.posCustomerMasterMainForm.value.moblieNumber == "" &&
@@ -1352,24 +1378,31 @@ export class PosCustomerMasterMainComponent implements OnInit {
     //   });
     //   return;
     // }
+    console.log("inside the function");
 
     if (!this.isCustProcessing || this.isCustProcessing) {
       this.isCustProcessing = true;
+
+      console.log("inknoen");
+
       // this.modalService.
       // if (this.amlNameValidation) {
 
       // trigger form errors
-      let validation = Object.values(
+      Object.values(this.posCustomerMasterMainForm.controls).forEach(
+        (control) => {
+          control.markAsTouched();
+        }
+      );
+
+      const invalidRequiredFields = Object.keys(
         this.posCustomerMasterMainForm.controls
-      ).forEach((control) => {
-        control.markAsTouched();
+      ).filter((controlName) => {
+        const control = this.posCustomerMasterMainForm.controls[controlName];
+        return control.invalid && control.errors?.["required"]; // Only check required fields
       });
 
-      const isAnyFieldValid = Object.values(
-        this.posCustomerMasterMainForm.controls
-      ).some((control) => control.valid);
-
-      if (!isAnyFieldValid) {
+      invalidRequiredFields.length > 0 &&
         Swal.fire({
           title: "Warning",
           text: "Please fill all the mandatory fields",
@@ -1377,11 +1410,10 @@ export class PosCustomerMasterMainComponent implements OnInit {
           confirmButtonColor: "#336699",
           confirmButtonText: "Ok",
         });
-      } else {
-        return; // No action needed if at least one field is valid
-      }
 
       if (!this.posCustomerMasterMainForm.invalid) {
+        console.log("data");
+
         const posCustomer = {
           CODE: this.posCustomerMasterMainForm.value.code || "",
           NAME: this.posCustomerMasterMainForm.value.name || "",
@@ -1631,139 +1663,65 @@ export class PosCustomerMasterMainComponent implements OnInit {
           let API = `PosCustomerMaster/UpdateCustomerMaster/${posCustomer.CODE}`;
           let sub: Subscription = this.apiService
             .putDynamicAPI(API, posCustomer)
-            .subscribe(
-              (result) => {
-                console.log("API Response:", result);
+            .subscribe((result) => {
+              console.log("API Response:", result);
 
-                if (result.status === "Success") {
-                  Swal.fire({
-                    title: "Success",
-                    text: "Customer Details Updated successfully!",
-                    icon: "success",
-                    confirmButtonColor: "#336699",
-                    confirmButtonText: "Ok",
-                  });
-
-                  if (this.image) {
-                    const formData = new FormData();
-                    formData.append(
-                      "CODE",
-                      this.existCustomerCode || this.generatedCustomerCode
-                    );
-                    formData.append("File", this.image);
-
-                    let API = `PosCustomerMaster/InsertPOSCustAttachments`;
-
-                    console.log("FormData:", formData);
-
-                    let Sub: Subscription = this.apiService
-                      .postDynamicAPI(API, formData)
-                      .subscribe(
-                        (result) => {
-                          console.log("API Response:", result);
-                        },
-                        (err) => {
-                          // Handle HTTP or API error
-                          console.error("API Error:", err);
-                        }
-                      );
-                    this.subscriptions.push(Sub);
-                  } else {
-                    console.error("No file selected");
-                  }
-
-                  this.close("reloadMainGrid");
-                } else {
-                  // Handle cases where the result is not successful or undefined
-                  Swal.fire({
-                    title: "Upload Failed",
-                    text: "Customer Details Not Updated Successfully",
-                    icon: "error",
-                    confirmButtonColor: "#336699",
-                    confirmButtonText: "Ok",
-                  });
-                }
-              },
-              (err) => {
-                // Handle HTTP or API error
-                console.error("API Error:", err);
+              if (result.status === "Success") {
                 Swal.fire({
-                  title: "Error",
-                  text: err.message || "An error occurred during the upload.",
+                  title: "Success",
+                  text: "Customer Details Updated successfully!",
+                  icon: "success",
+                  confirmButtonColor: "#336699",
+                  confirmButtonText: "Ok",
+                });
+
+                if (this.image) {
+                  this.uploadCustomerImage;
+                }
+
+                this.close("reloadMainGrid");
+              } else {
+                // Handle cases where the result is not successful or undefined
+                Swal.fire({
+                  title: "Upload Failed",
+                  text: "Customer Details Not Updated Successfully",
                   icon: "error",
                   confirmButtonColor: "#336699",
                   confirmButtonText: "Ok",
                 });
               }
-            );
+            });
         } else {
           let API = "PosCustomerMaster/InsertCustomerMaster";
           let sub: Subscription = this.apiService
             .postDynamicAPI(API, posCustomer)
-            .subscribe(
-              (result) => {
-                console.log("API Response:", result);
+            .subscribe((result) => {
+              console.log("API Response:", result);
 
-                if (result.status === "Success") {
-                  Swal.fire({
-                    title: "Success",
-                    text: "Customer Details Inserted successfully!",
-                    icon: "success",
-                    confirmButtonColor: "#336699",
-                    confirmButtonText: "Ok",
-                  });
-
-                  if (this.image) {
-                    const formData = new FormData();
-                    formData.append(
-                      "CODE",
-                      this.existCustomerCode || this.generatedCustomerCode
-                    );
-                    formData.append("File", this.image);
-
-                    let API = `PosCustomerMaster/InsertPOSCustAttachments`;
-
-                    console.log("FormData:", formData);
-
-                    let Sub: Subscription = this.apiService
-                      .postDynamicAPI(API, formData)
-                      .subscribe(
-                        (result) => {
-                          console.log("API Response:", result);
-                        },
-                        (err) => {
-                          // Handle HTTP or API error
-                          console.error("API Error:", err);
-                        }
-                      );
-                    this.subscriptions.push(Sub);
-                  } else {
-                    console.error("No file selected");
-                  }
-                  this.close("reloadMainGrid");
-                } else {
-                  // Handle cases where the result is not successful or undefined
-                  Swal.fire({
-                    title: "Upload Failed",
-                    text: "Customer Details Not Inserted Successfully",
-                    icon: "error",
-                    confirmButtonColor: "#336699",
-                    confirmButtonText: "Ok",
-                  });
-                }
-              },
-              (err) => {
-                // Handle HTTP or API error
-                console.error("API Error:", err);
+              if (result.status === "Success") {
                 Swal.fire({
-                  title: "Error",
-                  text: err.message || "An error occurred during the upload.",
+                  title: "Success",
+                  text: "Customer Details Inserted successfully!",
+                  icon: "success",
+                  confirmButtonColor: "#336699",
+                  confirmButtonText: "Ok",
+                });
+
+                if (this.image) {
+                  this.uploadCustomerImage;
+                }
+                this.close("reloadMainGrid");
+              } else {
+                // Handle cases where the result is not successful or undefined
+                Swal.fire({
+                  title: "Upload Failed",
+                  text: "Customer Details Not Inserted Successfully",
                   icon: "error",
                   confirmButtonColor: "#336699",
                   confirmButtonText: "Ok",
                 });
               }
-            );
+            });
         }
 
         // RES.subscribe(async (data) => {
