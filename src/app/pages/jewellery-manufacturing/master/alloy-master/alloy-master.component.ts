@@ -43,6 +43,11 @@ export class AlloyMasterComponent implements OnInit {
   viewMode: boolean = false;
   isDisabled: boolean = false;
   tableData: any[] = [];
+  price1Array: any = [];
+  price2Array: any = [];
+  price3Array: any = [];
+  price4Array: any = [];
+  price5Array: any = [];
   priceSchemeDetails: any[] = []
 
   isChecked: boolean = false;
@@ -279,15 +284,11 @@ export class AlloyMasterComponent implements OnInit {
   mode!: string;
 
 
-  //number validation
-  isNumeric(event: any) {
-    return this.commonService.isNumeric(event);
-  }
+
   constructor(
     private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
     private dataService: SuntechAPIService,
-    private toastr: ToastrService,
     private commonService: CommonServiceService,
     private renderer: Renderer2,
   ) {
@@ -295,26 +296,8 @@ export class AlloyMasterComponent implements OnInit {
     this.currencyDt = this.commonService.compCurrency;
   }
 
-  close(data?: any) {
-    //TODO reset forms and data before closing
-    this.activeModal.close(data);
-  }
-
-  setPriceCodeFromAPI(e:any) {
-    let API = `PriceMaster/GetPriceMasterDetails/${this.content.PRICE_CODE}`
-    let Sub: Subscription = this.dataService.getDynamicAPI(API)
-      .subscribe((result) => {
-        if (result.response) {
-          let data = result.response
-          console.log(data)
-        }
-      })
-  }
-
-
   ngOnInit(): void {
     this.setInitialValues();
-
     this.alloyMastereForm.controls.createdBy.setValue(this.commonService.userName);
 
     if (this.content?.FLAG) {
@@ -337,30 +320,16 @@ export class AlloyMasterComponent implements OnInit {
     } else {
       this.renderer.selectRootElement('#code')?.focus();
     }
-
-
-
-
-
-    // this.alloyMastereForm.get('currency')?.valueChanges.subscribe(value => {
-    //   this.isCurrencySelected = !value;
-    //   if (this.isCurrencySelected) {
-    //     this.alloyMastereForm.get('price1Fc')?.enable();
-    //   } else {
-    //     this.alloyMastereForm.get('price1Fc')?.disable();
-    //   }
-    // });
-    // this.alloyMastereForm.get('weightAvgCostLC')?.valueChanges.subscribe(value => {
-    //   this.isWeightAvgCost = !!value;
-    //   if (this.isWeightAvgCost) {
-    //     this.alloyMastereForm.get('PRICE1')?.enable();
-    //   } else {
-    //     this.alloyMastereForm.get('PRICE1')?.disable();
-    //   }
-    // });
     this.setCompanyCurrency();
   }
-
+  //number validation
+  isNumeric(event: any) {
+    return this.commonService.isNumeric(event);
+  }
+  close(data?: any) {
+    //TODO reset forms and data before closing
+    this.activeModal.close(data);
+  }
   price1LcChange() {
     const form = this.alloyMastereForm.value;
     let curr = this.commonService.CCToFC(form.currency, form.price1Lc)
@@ -402,96 +371,6 @@ export class AlloyMasterComponent implements OnInit {
     // Update percentage calculation
     this.alloyMastereForm.get('price5per')!.setValue(this.percentageCalculate(form.price5Lc));
   }
-
-  // THIS METHOD IS WRONG TOO MUCH SUBSCRIDE METHODS no need of this function change to individual focusout 
-  // change this function like that for all input in lc
-  setupFormSubscription(): void {
-    const form = this.alloyMastereForm.value;
-
-    if (this.alloyMastereForm.get('price1Lc') && this.alloyMastereForm.get('price1Fc')) {
-      this.alloyMastereForm.get('price1Lc')!.valueChanges.subscribe(value => {
-        // Update value of price1Fc whenever price1Lc changes
-        // syed no need to pass rate 
-        this.alloyMastereForm.get('price1Fc')!.setValue(this.commonService.CCToFC(form.currency, value));
-        // Update percentage calculation
-        this.alloyMastereForm.get('price1per')!.setValue(this.percentageCalculate(value));
-      });
-    }
-    if (this.alloyMastereForm.get('price2Lc') && this.alloyMastereForm.get('price2Fc')) {
-      this.alloyMastereForm.get('price2Lc')!.valueChanges.subscribe(value => {
-        // Update value of price2Fc whenever price2Lc changes
-        this.alloyMastereForm.get('price2Fc')!.setValue(this.commonService.CCToFC(form.currency, value));
-        // Update percentage calculation
-        this.alloyMastereForm.get('price2per')!.setValue(this.percentageCalculate(value));
-      });
-    }
-    if (this.alloyMastereForm.get('price3Lc') && this.alloyMastereForm.get('price3Fc')) {
-      this.alloyMastereForm.get('price3Lc')!.valueChanges.subscribe(value => {
-        // Update value of price3Fc whenever price3Lc changes
-        this.alloyMastereForm.get('price3Fc')!.setValue(this.commonService.CCToFC(form.currency, value));
-        // Update percentage calculation
-        this.alloyMastereForm.get('price3per')!.setValue(this.percentageCalculate(value));
-      });
-    }
-    if (this.alloyMastereForm.get('price4Lc') && this.alloyMastereForm.get('price4Fc')) {
-      this.alloyMastereForm.get('price4Lc')!.valueChanges.subscribe(value => {
-        // Update value of price4Fc whenever price4Lc changes
-        this.alloyMastereForm.get('price4Fc')!.setValue(this.commonService.CCToFC(form.currency, value));
-        // Update percentage calculation
-        this.alloyMastereForm.get('price4per')!.setValue(this.percentageCalculate(value));
-      });
-    }
-    if (this.alloyMastereForm.get('price5Lc') && this.alloyMastereForm.get('price5Fc')) {
-      this.alloyMastereForm.get('price5Lc')!.valueChanges.subscribe(value => {
-        // Update value of price5Fc whenever price5Lc changes
-        this.alloyMastereForm.get('price5Fc')!.setValue(this.commonService.CCToFC(form.currency, value));
-        // Update percentage calculation
-        this.alloyMastereForm.get('price5per')!.setValue(this.percentageCalculate(value));
-      });
-    }
-  }
-
-
-
-  // setupFormSubscription(): void {
-  //   if (this.alloyMastereForm.get('price1Lc') && this.alloyMastereForm.get('price1Fc')) {
-  //     this.alloyMastereForm.get('price1Lc')!.valueChanges.subscribe(value => {
-  //       // Update value of price1Fc whenever price1Lc changes
-  //       this.alloyMastereForm.get('price1Fc')!.setValue(value);
-  //     });
-  //   }
-  //   if (this.alloyMastereForm.get('price2Lc') && this.alloyMastereForm.get('price1Fc')) {
-  //     this.alloyMastereForm.get('price2Lc')!.valueChanges.subscribe(value => {
-  //       // Update value of price1Fc whenever price1Lc changes
-  //       this.alloyMastereForm.get('price2Fc')!.setValue(value);
-  //     });
-  //   }
-  //   if (this.alloyMastereForm.get('price3Lc') && this.alloyMastereForm.get('price1Fc')) {
-  //     this.alloyMastereForm.get('price3Lc')!.valueChanges.subscribe(value => {
-  //       // Update value of price1Fc whenever price1Lc changes
-  //       this.alloyMastereForm.get('price3Fc')!.setValue(value);
-  //     });
-  //   }
-  //   if (this.alloyMastereForm.get('price4Lc') && this.alloyMastereForm.get('price1Fc')) {
-  //     this.alloyMastereForm.get('price4Lc')!.valueChanges.subscribe(value => {
-  //       // Update value of price1Fc whenever price1Lc changes
-  //       this.alloyMastereForm.get('price4Fc')!.setValue(value);
-  //     });
-  //   }
-  //   if (this.alloyMastereForm.get('price5Lc') && this.alloyMastereForm.get('price1Fc')) {
-  //     this.alloyMastereForm.get('price5Lc')!.valueChanges.subscribe(value => {
-  //       // Update value of price1Fc whenever price1Lc changes
-  //       this.alloyMastereForm.get('price5Fc')!.setValue(value);
-  //     });
-  //   }
-  // }
-
-  @ViewChild('codeInput')
-  codeInput!: ElementRef;
-
-  // ngAfterViewInit(): void {
-  //   this.codeInput.nativeElement.focus();
-  // }
 
   setFormValues() {
     console.log(this.content, 'content');
@@ -661,9 +540,35 @@ export class AlloyMasterComponent implements OnInit {
     if (this.alloyMastereForm.value.priceScheme != "") {
       this.fillPriceSchemeDetails();
     } else {
-
+      this.validateStockLC()
     }
-
+  }
+  validateStockLC() {
+    if (this.price1Array.length > 0) {
+      let LC = this.TagPrice_Calculation(this.price1Array[0])
+      this.setValueWithDecimal('price1Lc',LC,'AMOUNT')
+      this.price1LcChange()
+    }
+    if (this.price2Array.length > 0) {
+      let LC = this.TagPrice_Calculation(this.price2Array[0])
+      this.setValueWithDecimal('price2Lc',LC,'AMOUNT')
+      this.price2LcChange()
+    }
+    if (this.price3Array.length > 0) {
+      let LC = this.TagPrice_Calculation(this.price3Array[0])
+      this.setValueWithDecimal('price3Lc',LC,'AMOUNT')
+      this.price3LcChange()
+    }
+    if (this.price4Array.length > 0) {
+      let LC = this.TagPrice_Calculation(this.price4Array[0])
+      this.setValueWithDecimal('price4Lc',LC,'AMOUNT')
+      this.price4LcChange()
+    }
+    if (this.price5Array.length > 0) {
+      let LC = this.TagPrice_Calculation(this.price5Array[0])
+      this.setValueWithDecimal('price5Lc',LC,'AMOUNT')
+      this.price5LcChange()
+    }
   }
 
   codeEnabled() {
@@ -720,8 +625,27 @@ export class AlloyMasterComponent implements OnInit {
   }
   /**use: for checking form validations */
   alloyMasterFormChecks(FORMNAME: string) {
-    if (FORMNAME == 'code') { //for validating code
-      this.prefixCodeValidate()
+    switch (FORMNAME) {
+      case 'code':
+        this.prefixCodeValidate()
+        break;
+      case 'price1code':
+        this.setPriceCodeFromAPI(this.alloyMastereForm.value.price1code,FORMNAME)
+        break;
+      case 'price2code':
+        this.setPriceCodeFromAPI(this.alloyMastereForm.value.price2code,FORMNAME)
+        break;
+      case 'price3code':
+        this.setPriceCodeFromAPI(this.alloyMastereForm.value.price3code,FORMNAME)
+        break;
+      case 'price4code':
+        this.setPriceCodeFromAPI(this.alloyMastereForm.value.price4code,FORMNAME)
+        break;
+      case 'price5code':
+        this.setPriceCodeFromAPI(this.alloyMastereForm.value.price5code,FORMNAME)
+        break;
+      default:
+        break;
     }
   }
   resetAllPriceDetails() {
@@ -1163,9 +1087,45 @@ export class AlloyMasterComponent implements OnInit {
       return;
     }
   }
-
+  setPriceCodeFromAPI(PRICE_CODE: string, PRICE_FEILD: string) {
+    this.commonService.showSnackBarMsg('MSG81447');
+    let API = `PriceMaster/GetPriceMasterDetails/${PRICE_CODE?.toUpperCase()}`
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        if (result.response) {
+          let data = result.response
+          if (data) {
+            switch (PRICE_FEILD) {
+              case 'price1code':
+                this.price1Array = []
+                this.price1Array.push(data)
+                break;
+              case 'price2code':
+                this.price2Array = []
+                this.price2Array.push(data)
+                break;
+              case 'price3code':
+                this.price3Array = []
+                this.price3Array.push(data)
+                break;
+              case 'price4code':
+                this.price4Array = []
+                this.price4Array.push(data)
+                break;
+              case 'price5code':
+                this.price5Array = []
+                this.price5Array.push(data)
+                break;
+              default:
+                break;
+            }
+            this.validateStockLC()
+          }
+        }
+      })
+    this.subscriptions.push(Sub)
+  }
   priceOneCodeSelected(e: any) {
-    console.log(e);
     if (this.isSamepriceCodeSelected(e.PRICE_CODE)) {
       this.commonService.toastErrorByMsgId('MSG1659');
       return;
@@ -1173,12 +1133,10 @@ export class AlloyMasterComponent implements OnInit {
     if (this.checkStockCode()) return
     this.alloyMastereForm.controls.price1code.setValue(e.PRICE_CODE);
     if (this.priceSchemeDetails?.length > 0) {
-      console.log("num");
-      this.fillPriceSchemeDetails()
-    }else{
-      this.setPriceCodeFromAPI(e.PRICE_CODE)
+      this.fillPriceSchemeDetails() //price scheme master API call
+    } else {
+      this.setPriceCodeFromAPI(e.PRICE_CODE, 'price1code')// price list master API call if scheme is not preset
     }
-    // this.fillPriceSchemeDetails1()
   }
 
   priceTwoCodeSelected(e: any) {
@@ -1189,7 +1147,9 @@ export class AlloyMasterComponent implements OnInit {
     if (this.checkStockCode()) return
     this.alloyMastereForm.controls.price2code.setValue(e.PRICE_CODE);
     if (this.priceSchemeDetails?.length > 0) {
-      this.fillPriceSchemeDetails()
+      this.fillPriceSchemeDetails() //price scheme master API call
+    } else {
+      this.setPriceCodeFromAPI(e.PRICE_CODE, 'price2code')// price list master API call if scheme is not preset
     }
   }
 
@@ -1201,7 +1161,9 @@ export class AlloyMasterComponent implements OnInit {
     if (this.checkStockCode()) return
     this.alloyMastereForm.controls.price3code.setValue(e.PRICE_CODE);
     if (this.priceSchemeDetails?.length > 0) {
-      this.fillPriceSchemeDetails()
+      this.fillPriceSchemeDetails() //price scheme master API call
+    } else {
+      this.setPriceCodeFromAPI(e.PRICE_CODE, 'price3code')// price list master API call if scheme is not preset
     }
   }
 
@@ -1213,7 +1175,9 @@ export class AlloyMasterComponent implements OnInit {
     if (this.checkStockCode()) return
     this.alloyMastereForm.controls.price4code.setValue(e.PRICE_CODE);
     if (this.priceSchemeDetails?.length > 0) {
-      this.fillPriceSchemeDetails()
+      this.fillPriceSchemeDetails() //price scheme master API call
+    } else {
+      this.setPriceCodeFromAPI(e.PRICE_CODE, 'price4code')// price list master API call if scheme is not preset
     }
 
   }
@@ -1225,21 +1189,18 @@ export class AlloyMasterComponent implements OnInit {
     if (this.checkStockCode()) return
     this.alloyMastereForm.controls.price5code.setValue(e.PRICE_CODE);
     if (this.priceSchemeDetails?.length > 0) {
-      this.fillPriceSchemeDetails()
+      this.fillPriceSchemeDetails() //price scheme master API call
+    } else {
+      this.setPriceCodeFromAPI(e.PRICE_CODE, 'price5code')// price list master API call if scheme is not preset
     }
   }
 
   HSNCenterSelected(e: any) {
-    console.log(e);    
+    console.log(e);
     this.checkStockCode();
     this.alloyMastereForm.controls.hsncode.setValue(e.CODE);
   }
-
-  // setFormValues() {
-  //   if (!this.content) return
-  //   console.log(this.content);
-
-  // }
+  // set post data to save
   setPostData() {
     let postData = {
       ITEM: 'Y',
