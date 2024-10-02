@@ -360,13 +360,13 @@
       <div class="col-md-12">
         <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true"
           [allowColumnResizing]="true"
-          [dataSource]="stoneIssueGridData" [allowColumnResizing]="true"
-          [columnAutoWidth]="true" (onRowUpdated)="onRowUpdateGrid($event)">
-          <dxo-paging [enabled]="true" [pageSize]="5"></dxo-paging>
+          [dataSource]="tableData" [allowColumnReordering]="true"
+          [columnAutoWidth]="true">
+          <dxo-paging [enabled]="false"></dxo-paging>
           <dxo-editing mode="cell" [allowUpdating]="true">
           </dxo-editing>
           <dxo-selection mode="single"></dxo-selection>
-          <!-- <dxo-scrolling mode="virtual"></dxo-scrolling> -->
+          <dxo-scrolling mode="virtual"></dxo-scrolling>
           <!-- 
           <dxi-column *ngFor="let data of columnhead1" dataField="{{ data }}"
             caption="{{ data }}" [allowEditing]="true"
@@ -387,10 +387,14 @@
           <dxi-column [allowEditing]="false" dataField="LOCTYPE_CODE"
             caption="Location"></dxi-column>
           <dxi-column [allowEditing]="false" dataField="CONSIGNMENT"
-            caption="Consignment"></dxi-column>
-          <dxi-column dataField="RATE" [allowEditing]="false"
+            caption="Consignment"   cellTemplate="Consignment">
+            <div *dxTemplate="let data1 of 'Consignment'">
+              <input type="checkbox"
+                [checked]="data1.value" />
+            </div>></dxi-column>
+          <dxi-column dataField="RATEFC" [allowEditing]="false"
             caption="Rate"></dxi-column>
-          <dxi-column dataField="AMOUNT" [allowEditing]="false"
+          <dxi-column dataField="AMOUNTFC" [allowEditing]="false"
             caption="Amount"></dxi-column>
           <dxi-column [allowEditing]="false" dataField="OTHER_ATTR"
             caption="Other Attributes"></dxi-column>
@@ -406,21 +410,21 @@
             caption="Sieve Set"></dxi-column>
           <dxi-column [allowEditing]="false" dataField="SIEVE_DESC"
             caption="Sieve Desc"></dxi-column>
-          <dxi-column [allowEditing]="false" dataField="REMARKS"
+          <dxi-column [allowEditing]="false" dataField="D_REMARKS"
             caption="Remarks"></dxi-column>
-          <dxi-column [allowEditing]="false" dataField="ISS_MTL_PCS"
+          <dxi-column [allowEditing]="false" dataField="ISS_STN_PCS"
             caption="Issued Pcs"></dxi-column>
-          <dxi-column [allowEditing]="false" dataField="ISS_MTL_WT"
+          <dxi-column [allowEditing]="false" dataField="ISS_STN_WT"
             caption="Issued Wt"></dxi-column>
-          <dxi-column [allowEditing]="false" dataField="BAL_MTL_PCS"
+          <dxi-column [allowEditing]="false" dataField="BAL_STN_PCS"
             caption="Bal Pcs"></dxi-column>
-          <dxi-column [allowEditing]="false" dataField="BAL_MTL_WT"
+          <dxi-column [allowEditing]="false" dataField="BAL_STN_WT"
             caption="Bal Wt"></dxi-column>
-          <dxi-column [allowEditing]="false" dataField="pointerwt"
+          <dxi-column [allowEditing]="false" dataField="POINTER_WT"
             caption="Pointer Wt"></dxi-column>
-          <dxi-column [allowEditing]="false" dataField="PROD_VARIANCE"
+          <dxi-column [allowEditing]="false" dataField="PCS_VARIANCE"
             caption="Pcs Variance"></dxi-column>
-          <dxi-column [allowEditing]="false" dataField="PROD_VARIANCE"
+          <dxi-column [allowEditing]="false" dataField="WEIGHT_VARIANCE"
             caption="Weight Variance"></dxi-column>
         </dx-data-grid>
       </div>

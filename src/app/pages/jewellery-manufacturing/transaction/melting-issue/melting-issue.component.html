@@ -260,7 +260,7 @@
 
                                     </dxi-column>
                                 </dx-data-grid>
-                                <button class="btn btn-primary add-btn" (click)="open(mymodal)">Add
+                                <button class="btn btn-primary add-btn" *ngIf="!viewMode"  (click)="open(mymodal)">Add
                                     Alloy
                                 </button>
                                 <div class="col-md-6">
@@ -312,7 +312,7 @@
                                                     <mat-form-field appearance="outline" appearance="outline"
                                                         style="width: 70%; margin-left: -225px;">
                                                         <input type="text" class="text-right" matInput [max]="10"
-                                                            formControlName="alloyQty" MetalDecimalInput />
+                                                            formControlName="alloyQty" MetalDecimalInput  [readonly]="viewMode"/>
                                                     </mat-form-field>
                                                 </div>
                                             </div>
