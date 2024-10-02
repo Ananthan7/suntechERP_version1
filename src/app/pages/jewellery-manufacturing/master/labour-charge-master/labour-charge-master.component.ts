@@ -645,6 +645,21 @@ export class LabourChargeMasterComponent implements OnInit {
 
 
 
+    this.diamondlabourMasterForm.controls.selling_rate.setValue(
+      Number(this.content.SELLING_RATE).toLocaleString('en-US', {
+        minimumFractionDigits: this.commonService.allbranchMaster?.BAMTDECIMALS,
+        maximumFractionDigits: this.commonService.allbranchMaster?.BAMTDECIMALS
+      })
+    );
+
+    this.diamondlabourMasterForm.controls.cost_rate.setValue(
+      Number(this.content.COST_RATE).toLocaleString('en-US', {
+        minimumFractionDigits: this.commonService.allbranchMaster?.BAMTDECIMALS,
+        maximumFractionDigits: this.commonService.allbranchMaster?.BAMTDECIMALS
+      })
+    );
+
+
     this.metallabourMasterForm.controls.metallabour_code.setValue(this.content.CODE);
     this.metallabourMasterForm.controls.metallabour_description.setValue(this.content.DESCRIPTION);
     this.metallabourMasterForm.controls.metalDivision.setValue(this.content.DIVISION_CODE);
@@ -667,15 +682,18 @@ export class LabourChargeMasterComponent implements OnInit {
         this.commonService.allbranchMaster?.BMQTYDECIMALS,
         this.content.PURITY));
 
-    this.metallabourMasterForm.controls.metalselling_rate.setValue(
-      this.commonService.transformDecimalVB(
-        this.commonService.allbranchMaster?.BMQTYDECIMALS,
-        this.content.LAST_SELLING_RATE));
+    // this.metallabourMasterForm.controls.metalselling_rate.setValue(
+    //   this.commonService.transformDecimalVB(
+    //     this.commonService.allbranchMaster?.BMQTYDECIMALS,
+    //     this.content.LAST_SELLING_RATE));
 
-    this.metallabourMasterForm.controls.metalcost_rate.setValue(
-      this.commonService.transformDecimalVB(
-        this.commonService.allbranchMaster?.BMQTYDECIMALS,
-        this.content.LAST_COST_RATE));
+    // this.metallabourMasterForm.controls.metalcost_rate.setValue(
+    //   this.commonService.transformDecimalVB(
+    //     this.commonService.allbranchMaster?.BMQTYDECIMALS,
+    //     this.content.LAST_COST_RATE));
+
+
+
 
     // this.metallabourMasterForm.controls.metalselling.setValue(
     //   this.commonService.transformDecimalVB(
