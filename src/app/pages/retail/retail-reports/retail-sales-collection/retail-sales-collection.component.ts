@@ -263,6 +263,7 @@ export class RetailSalesCollectionComponent implements OnInit {
       const formattedUserBranch = userBranch ? `${userBranch}#` : null;
       this.retailSalesCollection.controls.branch.setValue(formattedUserBranch);
       this.fetchedBranchDataParam = formattedUserBranch;
+      this.fetchedBranchData= this.fetchedBranchDataParam?.split("#")
    
       
       this.dateToPass = {
@@ -354,11 +355,11 @@ export class RetailSalesCollectionComponent implements OnInit {
   setDateValue(event: any){
     if(event.FromDate){
       this.retailSalesCollection.controls.fromDate.setValue(event.FromDate);
-      console.log(event.FromDate)
+      this.dateToPass.fromDate = event.FromDate
     }
     else if(event.ToDate){
       this.retailSalesCollection.controls.toDate.setValue(event.ToDate);
-      console.log(this.retailSalesCollection)
+      this.dateToPass.toDate = event.ToDate
       this.toDateValitation()
     }
   }

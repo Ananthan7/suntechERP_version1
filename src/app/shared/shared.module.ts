@@ -101,6 +101,7 @@ import { AsOnDateComponent } from './common/as-on-date/as-on-date.component';
 import { CommonButtonsComponent } from './common/common-buttons/common-buttons.component';
 import { AlphabetOnlyDirective } from './directives/appAlphabetOnly.directive';
 import { ApplyOnlyNumbersDirective } from './directives/apply-only-numbers.directive';
+import { ReportScreenButtonsComponent } from './common/report-screen-buttons/report-screen-buttons.component';
 
 
 
@@ -154,7 +155,8 @@ import { ApplyOnlyNumbersDirective } from './directives/apply-only-numbers.direc
     ReportToControlComponent,
     DateComponent,
     AsOnDateComponent,
-    CommonButtonsComponent
+    CommonButtonsComponent,
+    ReportScreenButtonsComponent
   ],
   imports: [
     CommonModule,
@@ -292,7 +294,7 @@ import { ApplyOnlyNumbersDirective } from './directives/apply-only-numbers.direc
     MatRadioModule, MatCardModule,
     OverlayPanelModule, DragDropModule,
     MatTableModule, CalendarModule,
-    BranchDivisionComponent, ReportToControlComponent,DateComponent, AsOnDateComponent, CommonButtonsComponent
+    BranchDivisionComponent, ReportToControlComponent,DateComponent, AsOnDateComponent, CommonButtonsComponent, ReportScreenButtonsComponent
   ],
   providers: [NgbActiveModal, { provide: DateAdapter, useClass: DateFormat }]
 })
