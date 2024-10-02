@@ -64,7 +64,8 @@
                     (change)="onAdvanceReceiptCheckboxChange($event.checked)">Advance Receipt</mat-checkbox>
                 </div>
                 <div class="row">
-                    <mat-checkbox formControlName="showSalesRegisterCheckbox">Sales Register</mat-checkbox> 
+                    <mat-checkbox formControlName="showSalesRegisterCheckbox"
+                    (change)="onSalesRegisterCheckboxChange($event.checked)">Sales Register</mat-checkbox> 
                 </div>
                 <div class="row">
                     <mat-checkbox formControlName="showOnlySummaryCheckbox">Only Summary</mat-checkbox>

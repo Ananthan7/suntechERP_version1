@@ -52,6 +52,7 @@ export class RetailSalesCollectionComponent implements OnInit {
   fetchedBranchDataParam: any= [];
   templateNameHasValue: boolean= false;
   @Input() reportVouchers: any; //get Voucherdata from retailREPORT Component- GetReportVouchers API
+  voucherData = localStorage.getItem('strMainVouchers');
 
   constructor(  private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder, private dataService: SuntechAPIService,  private comService: CommonServiceService,
@@ -59,7 +60,6 @@ export class RetailSalesCollectionComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    // this.getAPIData()
     // console.log('data from report component',this.reportVouchers)
     this.APIData = this.reportVouchers;
     this.prefillScreenValues()
@@ -129,43 +129,61 @@ export class RetailSalesCollectionComponent implements OnInit {
     console.log(this.retailSalesCollection.controls.reportTo.value)
   }
 
-  getAPIData(data?: any) {
-    let voucherData = localStorage.getItem('strMainVouchers');
-    
-    let payload: any
-    if(data){
-      payload = {
-        "strReportName": "POS_COLLECTION_A",
-        "strMainVouchers": voucherData+data,
-        "strExcludeVouchers": "",
-        "strWhereCond": "",
-        "strLoginBranch": "", //this.comService.branchCode
-      };
-    } else{
-      payload = {
-        "strReportName": "POS_COLLECTION_A",
-        "strMainVouchers": voucherData,
-        "strExcludeVouchers": "",
-        "strWhereCond": "",
-        "strLoginBranch": "", //this.comService.branchCode
-      };
-    }
-    this.isLoading = true;
-    this.dataService.postDynamicAPI('GetReportVouchers', payload).subscribe((response) => {
-      console.log('Retailsales API call data', response);
-      this.APIData = response.dynamicData[0] || [];
-      this.prefillScreenValues()
-      setTimeout(() => {
-        this.isLoading = false;
-      }, 1000);
-    },(error: any) => {
-      console.error('Error occurred:', error);
-      this.isLoading = false;
-    });
-  }
+  // getAPIData(data?: any) {
+  //   let payload: any
+  //   if(data){
+  //     payload = {
+  //       "strReportName": "POS_COLLECTION_A",
+  //       "strMainVouchers": this.voucherData,
+  //       "strExcludeVouchers": "",
+  //       "strWhereCond": "",
+  //       "strLoginBranch": "", //this.comService.branchCode
+  //     };
+  //   } else{
+  //     payload = {
+  //       "strReportName": "POS_COLLECTION_A",
+  //       "strMainVouchers": this.voucherData,
+  //       "strExcludeVouchers": "",
+  //       "strWhereCond": "",
+  //       "strLoginBranch": "", //this.comService.branchCode
+  //     };
+  //   }
+  //   this.isLoading = true;
+  //   this.dataService.postDynamicAPI('GetReportVouchers', payload).subscribe((response) => {
+  //     console.log('Retailsales API call data', response);
+  //     this.APIData = response.dynamicData[0] || [];
+  //     this.prefillScreenValues()
+  //     setTimeout(() => {
+  //       this.isLoading = false;
+  //     }, 1000);
+  //   },(error: any) => {
+  //     console.error('Error occurred:', error);
+  //     this.isLoading = false;
+  //   });
+  // }
 
   onAdvanceReceiptCheckboxChange(value: boolean) {
-    value? this.getAPIData('#PCR'): this.getAPIData('')
+    if(value){
+      const advanceKeys = this.APIData.filter(item => item.MAIN_VOCTYPE== 'PCR');
+      this.selectedRowKeys.push(...advanceKeys)
+    }
+    else{
+      this.selectedRowKeys = this.selectedRowKeys.filter(key => key.MAIN_VOCTYPE !== 'PCR');
+    }
+  }
+
+  onSalesRegisterCheckboxChange(value: boolean) {
+    if(value){
+      this.retailSalesCollection.controls.showSalesReturnCheckbox?.setValue(false);
+      this.retailSalesCollection.controls.showExbSalesReturnCheckbox?.setValue(false);
+      this.selectedRowKeys = this.selectedRowKeys.filter(key => key.MAIN_VOCTYPE !== 'PSR' && key.MAIN_VOCTYPE !== 'POSER');
+      console.log(this.selectedRowKeys)
+    }
+    else{
+      this.retailSalesCollection.controls.showSalesReturnCheckbox?.setValue(true);
+      this.retailSalesCollection.controls.showExbSalesReturnCheckbox?.setValue(true);
+      console.log(this.selectedRowKeys)
+    }
   }
 
   onGridSelection(event: any) {
@@ -278,8 +296,8 @@ export class RetailSalesCollectionComponent implements OnInit {
       this.retailSalesCollection.controls.showExbSalesCheckbox?.setValue(true);
       this.retailSalesCollection.controls.showExbSalesReturnCheckbox?.setValue(true);
 
-      let defaultVoctype = ['POS','RIN','PSR', 'POSC','POSEX','POSER']
-      const selectedKeys = this.APIData.filter(item => defaultVoctype?.includes(item.VOCTYPE)).map(item => item);
+      // let defaultVoctype = ['POS','RIN','PSR', 'POSC','POSEX','POSER', PCR]
+      const selectedKeys = this.APIData.filter(item => item.MAIN_VOCTYPE!== 'PCR').map(item => item);
       this.selectedRowKeys = selectedKeys;
       const selectedSet = new Set(this.selectedRowKeys.map(item => item.SRNO));
       this.APIData.sort((a, b) => {
