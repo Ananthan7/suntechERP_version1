@@ -200,7 +200,7 @@
                     <div class="col-sm-3">
                         <mat-form-field style="width: 90%" appearance="outline">
                             <input type="text" matInput [readonly]="viewMode || viewsellingMetal || codeEnableMetal"
-                                [max]="6" formControlName="metalSelling" AmountDecimalInput
+                                [max]="3" formControlName="metalSelling" AmountDecimalInput
                                 (change)="metalValue($event)"
                                 (keypress)="salesChange('metalSelling', $event)" class="text-right" />
                         </mat-form-field>
@@ -225,7 +225,7 @@
                         :</label>
                     <div class="col-sm-3">
                         <mat-form-field style="width: 90%" appearance="outline">
-                            <input matInput type="text" [readonly]="viewMode || codeEnableMetal" maxlength="13"
+                            <input matInput type="text" [readonly]="viewMode || codeEnableMetal" maxlength="3"
                                 formControlName="wastage" class="text-right" AmountDecimalInput />
                         </mat-form-field>
                     </div>
@@ -263,7 +263,7 @@
                         :</label>
                     <div class="col-sm-3">
                         <mat-form-field style="width: 90%" appearance="outline">
-                            <input matInput type="text" [readonly]="viewMode || codeEnableMetal"
+                            <input matInput type="text" [readonly]="viewMode || codeEnableMetal || PurityEditMode"
                                 formControlName="purity" class="text-right" SixDecimalInput maxlength="13"
                                 oninput="this.value = this.value.toUpperCase()" />
                         </mat-form-field>
