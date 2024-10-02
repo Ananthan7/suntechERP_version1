@@ -4741,6 +4741,7 @@ export class PointOfSalesOrderComponent implements OnInit {
       MCUNIT: items?.MCUNIT || 0,
       POSSALESSR: items?.POSSALESSR || '',
       PHYSICALSTOCK: items?.PHYSICALSTOCK || '',
+      DTPENDING: 1,
       METALAMT: items?.METALAMT || '',
       MAKINGAMT: items?.MAKINGAMT || '',
       STDIFFAC: items?.STDIFFAC || '', //need_input
@@ -6519,6 +6520,7 @@ export class PointOfSalesOrderComponent implements OnInit {
       MCUNIT: 0,
       POSSALESSR: '',
       PHYSICALSTOCK: '',
+      DTPENDING: 1,
       METALAMT: '0',
       MAKINGAMT: '0',
       // METALAMT: `${this.comFunc.emptyToZero(
@@ -11632,6 +11634,7 @@ export class PointOfSalesOrderComponent implements OnInit {
       COMP_WISE_INVOICE: false,
       REFBY_CUSTCODE: '',
       PRINT_COUNT_ACCOPY: 0,
+      ORDER_STATUS:'O',
       PRINT_COUNT_CNTLCOPY: 0,
       SOURCEOFWEALTHANDFUNDS: '',
       POSCUSTIDEXP_DATE: this.customerDataForm.value.fcn_customer_exp_date,

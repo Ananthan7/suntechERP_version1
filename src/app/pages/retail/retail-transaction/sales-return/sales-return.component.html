@@ -1436,8 +1436,11 @@
               <mat-form-field appearance="outline">
                 <!-- <mat-label>Voc No</mat-label> -->
                 <input type="text" matInput class="st_txt_right" id="fcn_returns_voc_no"
+                formControlName="fcn_returns_voc_no" 
+                [readonly]="viewOnly || this.sales_returns_items.length > 0" />
+                <!-- <input type="text" matInput class="st_txt_right" id="fcn_returns_voc_no"
                   formControlName="fcn_returns_voc_no" (change)="getRetailSReturn_EvnFn($event)"
-                  [readonly]="viewOnly || this.sales_returns_items.length > 0" />
+                  [readonly]="viewOnly || this.sales_returns_items.length > 0" /> -->
                 <mat-error *ngIf="
                       salesReturnForm.controls.fcn_returns_voc_no.hasError(
                         'required'
@@ -1542,7 +1545,7 @@
       <div class="col-md-12" style="padding-bottom: 20px">
         <div style="text-align: right; padding: 10px">
           <button mat-flat-button color="primary" class="btn-m-r-10" (click)="salesreturndetails()"
-            [disabled]="viewOnly">
+            [disabled]="viewOnly||!salesReturnsItems_forVoc.length">
             SAVE
           </button>
           <button mat-flat-button color="warn" (click)="modal.dismiss('Cross click')">
