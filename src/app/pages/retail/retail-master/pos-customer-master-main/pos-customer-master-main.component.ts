@@ -1378,13 +1378,9 @@ export class PosCustomerMasterMainComponent implements OnInit {
     //   });
     //   return;
     // }
-    console.log("inside the function");
 
     if (!this.isCustProcessing || this.isCustProcessing) {
       this.isCustProcessing = true;
-
-      console.log("inknoen");
-
       // this.modalService.
       // if (this.amlNameValidation) {
 
@@ -1399,7 +1395,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
         this.posCustomerMasterMainForm.controls
       ).filter((controlName) => {
         const control = this.posCustomerMasterMainForm.controls[controlName];
-        return control.invalid && control.errors?.["required"]; // Only check required fields
+        return control.invalid && control.errors?.["required"]; 
       });
 
       invalidRequiredFields.length > 0 &&
@@ -1451,7 +1447,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
           PICTURE_NAME: "",
           PICTURE: "",
           SALVOCTYPE_NO: this.posCustomerMasterMainForm.value.voucher || "",
-          SALDATE: this.posCustomerMasterMainForm.value.date || null,
+          SALDATE: this.posCustomerMasterMainForm.value.saleDate || this.currentDate,
           SALAMOUNT: this.posCustomerMasterMainForm.value.amount || 0,
           SALBRLOC: this.posCustomerMasterMainForm.value.branchLoc || "",
           Branch_Code: this.branchCode,
@@ -2016,7 +2012,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
       case "occupation1":
         this.overlayOccupation1.showOverlayPanel(event);
         break;
-      case "sourceOfFound":
+      case "sourceOfFund":
         this.overlaySourceOfFund.showOverlayPanel(event);
         break;
       default:
