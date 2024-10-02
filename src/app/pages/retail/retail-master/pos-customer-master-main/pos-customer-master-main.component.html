@@ -667,8 +667,21 @@
               </label>
 
               <div class="col-md-8">
-                <div class="border border-2">
-                  <ng-select
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <mat-select
+                    [disabled]="flag === 'VIEW'"
+                    formControlName="nationality"
+                    (selectionChange)="onCountrySelect($event.value)"
+                  >
+                    <mat-option
+                      *ngFor="let country of countryListData"
+                      [value]="country.COUNTRY_CODE_ISO2"
+                    >
+                      {{ country.COUNTRY_NAME }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <!-- <ng-select
                     class="no-border text-start"
                     [items]="countryListData"
                     bindLabel="COUNTRY_NAME"
@@ -676,8 +689,7 @@
                     formControlName="nationality"
                     (change)="onCountrySelect($event.COUNTRY_CODE_ISO2)"
                   >
-                  </ng-select>
-                </div>
+                  </ng-select> -->
               </div>
             </div>
             <div class="row mb-1">
@@ -689,8 +701,21 @@
               >
 
               <div class="col-md-8">
-                <div class="border border-2">
-                  <ng-select
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <mat-select
+                    [disabled]="flag === 'VIEW'"
+                    formControlName="state"
+                    (selectionChange)="onCitySelect($event.value)"
+                  >
+                    <mat-option
+                      *ngFor="let country of countryListData"
+                      [value]="country.CODE"
+                    >
+                      {{ country.NAME }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <!-- <ng-select
                     class="no-border text-start"
                     [items]="stateListData"
                     bindLabel="NAME"
@@ -698,8 +723,7 @@
                     formControlName="state"
                     (change)="onCitySelect($event.CODE)"
                   >
-                  </ng-select>
-                </div>
+                  </ng-select> -->
               </div>
             </div>
             <div class="row mb-1">
@@ -711,16 +735,27 @@
               >
 
               <div class="col-md-8">
-                <div class="border border-2">
-                  <ng-select
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <mat-select
+                    [disabled]="flag === 'VIEW'"
+                    formControlName="city"
+                  >
+                    <mat-option
+                      *ngFor="let country of cityListData"
+                      [value]="country.CODE"
+                    >
+                      {{ country.NAME }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <!-- <ng-select
                     class="no-border text-start"
                     [items]="cityListData"
                     bindLabel="NAME"
                     bindValue="CODE"
                     formControlName="city"
                   >
-                  </ng-select>
-                </div>
+                  </ng-select> -->
               </div>
             </div>
             <div class="row mb-1">
@@ -1385,38 +1420,6 @@
                             </mat-form-field>
                           </div>
                         </div>
-
-                        <!-- <div class="row mb-1">
-                          <label
-                            for="inputPassword"
-                            class="col-sm-5 col-form-label"
-                            id="ID035"
-                            >Source of fund</label
-                          >
-                          <div class="col-md-7">
-                            <mat-form-field
-                              style="width: -webkit-fill-available"
-                              appearance="outline"
-                            >
-                              <input
-                                readonly="true"
-                                matInput
-                                type="text"
-                                formControlName="sourceOfFund"
-                              />
-                              <master-search
-                                *ngIf="flag !== 'VIEW'"
-                                (focusout)="openTab($event, 'sourceOfFund')"
-                                #overlaySourceOfFund
-                                [MasterSearchData]="sourceOfFundMasterCode"
-                                class="masterSearch"
-                                (newRowClick)="
-                                  sourceOfFundMasterSelected($event)
-                                "
-                              ></master-search>
-                            </mat-form-field>
-                          </div>
-                        </div> -->
                       </div>
                     </div>
                   </div>

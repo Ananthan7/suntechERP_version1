@@ -106,8 +106,8 @@ export class AddPosComponent implements OnInit {
   metalDecimalFormat: any;
   weightDecimalFormat: any;
   gridAmountDecimalFormat: any;
-  hideEsignButton:boolean=false;
-  hideEsignView:boolean=true;
+  hideEsignButton: boolean = false;
+  hideEsignView: boolean = true;
   gridWeghtDecimalFormat: any;
   isOrderPullingRowSelected: boolean = false;
   isEstiPullingRowSelected: boolean = false;
@@ -165,7 +165,7 @@ export class AddPosComponent implements OnInit {
   ozWeight: any = 0;
 
   vocMaxDate = new Date();
-  existingCustomerDetails:any;
+  existingCustomerDetails: any;
   dummyDate = '1900-01-01T00:00:00';
   dummyDateArr = ['1900-01-01T00:00:00', '1900-01-01T00:00:00Z', '1754-01-01T00:00:00Z', '1754-01-01T00:00:00'];
 
@@ -1813,7 +1813,7 @@ export class AddPosComponent implements OnInit {
           penColor: 'black',
         });
         this.isSignaturePadInitialized = true;
-        resolve(); 
+        resolve();
       } else {
         reject('Signature pad element not found or already initialized');
       }
@@ -1821,14 +1821,14 @@ export class AddPosComponent implements OnInit {
   }
 
   openEsign() {
-  this.hideEsignView=false;
-  this.isSignaturePadInitialized=false;
+    this.hideEsignView = false;
+    this.isSignaturePadInitialized = false;
   }
 
   cancelEsign() {
-    this.hideEsignView=true;
-    }
-  
+    this.hideEsignView = true;
+  }
+
   onValueChanges(result: any) {
     alert(JSON.stringify(result));
     this.barcode = result.codeResult.code;
@@ -4079,7 +4079,7 @@ export class AddPosComponent implements OnInit {
       this.customerDetailForm.reset();
       this.customerDataForm.reset({
         fcn_customer_mobile: custMobile,
-        fcn_customer_code:this.isCustomerFindsOnCode? value:"",
+        fcn_customer_code: this.isCustomerFindsOnCode ? value : "",
       });
       this.customerDetailForm.reset({
         fcn_cust_detail_phone: custMobile,
@@ -4265,7 +4265,7 @@ export class AddPosComponent implements OnInit {
       fcn_cust_detail_idType: customerData.IDCATEGORY,
       fcn_cust_detail_email: customerData.EMAIL,
       fcn_cust_detail_address: customerData.ADDRESS,
-      fcn_cust_detail_country: `${customerData.COUNTRY_CODE}` ||"",
+      fcn_cust_detail_country: `${customerData.COUNTRY_CODE}` || "",
       fcn_cust_detail_city: customerData.CITY,
       fcn_cust_detail_idcard: customerData.NATIONAL_IDENTIFICATION_NO,
       fcn_customer_detail_name: customerData.NAME,
@@ -4282,7 +4282,7 @@ export class AddPosComponent implements OnInit {
       fcn_customer_exp_date: this.dummyDateCheck(customerData.POSCUSTIDEXP_DATE)
     };
   }
-  
+
 
   getUserAttachments() {
     const custCode = this.customerDataForm.value.fcn_customer_code;
@@ -4466,7 +4466,7 @@ export class AddPosComponent implements OnInit {
     if (selectedMobileCountry) {
       this.customerDetailForm.controls.fcn_cust_detail_country.setValue(selectedMobileCountry.CODE);
     } else {
-      this.customerDetailForm.controls.fcn_cust_detail_country.setValue(''); 
+      this.customerDetailForm.controls.fcn_cust_detail_country.setValue('');
     }
   }
 
@@ -7486,7 +7486,8 @@ export class AddPosComponent implements OnInit {
           this.imageURL = []
         } else {
           this.enableFormControls(false);
-          this.renderer.selectRootElement('#fcn_li_item_code').focus();
+          try { this.renderer.selectRootElement('#fcn_li_item_code', true).focus(); } catch (e) { console.warn('The selector "#fcn_li_item_code" did not match any elements.'); }
+          // this.renderer.selectRootElement('#fcn_li_item_code').focus();
           this.imageURL = []
         }
       } else {
@@ -7531,18 +7532,18 @@ export class AddPosComponent implements OnInit {
 
   focusAndSetReadOnly(stockInfos: any): void {
     this.isGrossWtEditable = true;
-    this.isPcsEditable=true;
+    this.isPcsEditable = true;
     const isDivisionX = this.newLineItem.DIVISION === 'X';
     const excludeQtyValidations = ['M', 'D', 'W', 'N'];
     if (
       (excludeQtyValidations.some(v => this.newLineItem.DIVISION.toUpperCase().includes(v)))) {
       this.isGrossWtEditable = false;
-      this.isPcsEditable=true;
-    }else
-    if(this.validatePCS == true || this.enablePieces == true)
-      this.isPcsEditable=true;
-    else
-    this.isPcsEditable=false;
+      this.isPcsEditable = true;
+    } else
+      if (this.validatePCS == true || this.enablePieces == true)
+        this.isPcsEditable = true;
+      else
+        this.isPcsEditable = false;
     if (!isDivisionX &&
       this.comFunc.emptyToZero(stockInfos.BALANCE_PCS) < 1 &&
       stockInfos.ENABLE_PCS &&
@@ -7551,7 +7552,7 @@ export class AddPosComponent implements OnInit {
       excludeQtyValidations.some(v => this.newLineItem.DIVISION.toUpperCase().includes(v))) {
       this.renderer.selectRootElement('#fcn_li_pcs').focus();
     } else {
-     if(this.divisionMS=='M') this.renderer.selectRootElement('#fcn_li_total_amount').focus();
+      if (this.divisionMS == 'M') this.renderer.selectRootElement('#fcn_li_total_amount').focus();
     }
 
     if (isDivisionX) {
@@ -7561,7 +7562,7 @@ export class AddPosComponent implements OnInit {
           this.comFunc.allbranchMaster?.BMQTYDECIMALS,
           1));
       this.isGrossWtEditable = false;
-      this.isPcsEditable=false;
+      this.isPcsEditable = false;
       // this.comFunc.formControlSetReadOnly('fcn_li_pcs', true);
       this.comFunc.formControlSetReadOnly('fcn_li_gross_wt', true);
     }
@@ -8289,7 +8290,7 @@ export class AddPosComponent implements OnInit {
     if (this.validatePCS == true || this.enablePieces == true || this.newLineItem.DIVISION != 'G') {
       // if (!this.viewOnly&& this.newLineItem.DIVISION !='X')
       //   this.isPcsEditable=true;
-        // this.comFunc.formControlSetReadOnly('fcn_li_pcs', false);
+      // this.comFunc.formControlSetReadOnly('fcn_li_pcs', false);
 
       this['lineItemForm'].controls['fcn_li_pcs'].setValidators([
         Validators.required,
@@ -8314,7 +8315,7 @@ export class AddPosComponent implements OnInit {
       //   else this.comFunc.formControlSetReadOnly('fcn_li_gross_wt', true);
       // }
     } else {
-      this.isPcsEditable=false;
+      this.isPcsEditable = false;
       // this.comFunc.formControlSetReadOnly('fcn_li_pcs', true);
       this.comFunc.formControlSetReadOnly('fcn_li_gross_wt', false);
 
@@ -8322,7 +8323,7 @@ export class AddPosComponent implements OnInit {
 
       if (this.newLineItem.BLOCK_GRWT == true)
         this.isGrossWtEditable = false;
-        // this.comFunc.formControlSetReadOnly('fcn_li_gross_wt', true);
+      // this.comFunc.formControlSetReadOnly('fcn_li_gross_wt', true);
       else this.comFunc.formControlSetReadOnly('fcn_li_gross_wt', false);
 
     }
@@ -9296,7 +9297,7 @@ export class AddPosComponent implements OnInit {
     this.isNetAmountChange = false;
     const value = this.comFunc.emptyToZero(event.target.value);
     if (event.target.value != '' && this.validatePCS == true || this.enablePieces) {
-      const validDivisionCodes = ['M', 'D', 'W','N'];
+      const validDivisionCodes = ['M', 'D', 'W', 'N'];
       const filteredValidationCodes = validDivisionCodes.filter((code) => code === this.newLineItem.DIVISION.toUpperCase())
       if (filteredValidationCodes.length > 0 && this.comFunc.emptyToZero(event.target.value) === 0) {
 
@@ -9307,15 +9308,15 @@ export class AddPosComponent implements OnInit {
               preVal
             );
             this.lineItemForm.controls['fcn_li_gross_wt'].setValue(
-              
+
               preVal
             );
             this.manageCalculations();
             this.renderer.selectRootElement('#fcn_li_pcs').focus();
-            
+
           }
         });
-}
+      }
 
       // if(!this.comFunc.emptyToZero(event.target.value))
       // this.clearDiscountValues();
@@ -9347,67 +9348,67 @@ export class AddPosComponent implements OnInit {
           this.updateDiscountAmount();
         }
       } else if (this.blockNegativeStock == 'W') {
-        if(this.divisionMS!="M"){
-        if (this.comFunc.emptyToZero(this.lineItemPcs) < value ) {
-          if (!divisionBasedAutoUpdation) {
-            this.openDialog(
-              'Warning',
-              'Current Stock Qty Exceeding Available Stock Qty. Do You Wish To Continue?',
-              false
-            );
+        if (this.divisionMS != "M") {
+          if (this.comFunc.emptyToZero(this.lineItemPcs) < value) {
+            if (!divisionBasedAutoUpdation) {
+              this.openDialog(
+                'Warning',
+                'Current Stock Qty Exceeding Available Stock Qty. Do You Wish To Continue?',
+                false
+              );
 
-            this.dialogBox.afterClosed().subscribe((data: any) => {
-              if (data == 'No') {
-                // this.checkDivisionForPcs(value)
-                this.lineItemForm.controls['fcn_li_pcs'].setValue(
-                  preVal
-                );
-                if (this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_pcs) == 0 &&
-                  this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt) == 0)
+              this.dialogBox.afterClosed().subscribe((data: any) => {
+                if (data == 'No') {
+                  // this.checkDivisionForPcs(value)
+                  this.lineItemForm.controls['fcn_li_pcs'].setValue(
+                    preVal
+                  );
+                  if (this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_pcs) == 0 &&
+                    this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt) == 0)
 
-                  this.renderer.selectRootElement('#fcn_li_pcs').focus();
+                    this.renderer.selectRootElement('#fcn_li_pcs').focus();
 
-                this.manageCalculations();
+                  this.manageCalculations();
 
-              } else {
-                this.checkDivisionForPcs(value);
-                this.manageCalculations();
-                this.detectDiscountChange = true;
-                this.updateDiscountAmount();
-                this.calculateTaxAmount();
-                this.calculateNetAmount();
+                } else {
+                  this.checkDivisionForPcs(value);
+                  this.manageCalculations();
+                  this.detectDiscountChange = true;
+                  this.updateDiscountAmount();
+                  this.calculateTaxAmount();
+                  this.calculateNetAmount();
 
-              }
-            });
-          }
-          else {
+                }
+              });
+            }
+            else {
+              this.checkDivisionForPcs(value);
+              this.manageCalculations();
+              this.detectDiscountChange = true;
+              this.updateDiscountAmount();
+            }
+          } else {
+
+            // this.lineItemForm.controls['fcn_li_pcs'].setValue(
+            //   this.lineItemPcs
+            // );
             this.checkDivisionForPcs(value);
             this.manageCalculations();
             this.detectDiscountChange = true;
             this.updateDiscountAmount();
           }
-        } else {
-
-          // this.lineItemForm.controls['fcn_li_pcs'].setValue(
-          //   this.lineItemPcs
-          // );
-          this.checkDivisionForPcs(value);
-              this.manageCalculations();
-              this.detectDiscountChange = true;
-              this.updateDiscountAmount();
+        }
+        else {
+          this.lineItemForm.controls['fcn_li_pcs'].setValue(
+            value
+          );
         }
       }
-      else{
-        this.lineItemForm.controls['fcn_li_pcs'].setValue(
-          value
-        );
-      }
-    }
       else if (this.blockNegativeStock == 'A') {
         this.checkDivisionForPcs(value);
-              this.manageCalculations();
-              this.detectDiscountChange = true;
-              this.updateDiscountAmount();
+        this.manageCalculations();
+        this.detectDiscountChange = true;
+        this.updateDiscountAmount();
       }
 
       else {
@@ -9426,7 +9427,7 @@ export class AddPosComponent implements OnInit {
 
 
   checkDivisionForPcs(pcs: any) {
-    const validDivisionCodes = ['M', 'D', 'W','N'];
+    const validDivisionCodes = ['M', 'D', 'W', 'N'];
     const filteredValidationCodes = validDivisionCodes.filter((code) => code === this.newLineItem.DIVISION.toUpperCase())
 
     if (filteredValidationCodes.length > 0) {
@@ -9474,7 +9475,7 @@ export class AddPosComponent implements OnInit {
                 preVal
               )
             );
-        this.manageCalculations();
+            this.manageCalculations();
           }
         });
 
@@ -9604,8 +9605,8 @@ export class AddPosComponent implements OnInit {
           this.manageCalculations({ totalAmt: totalAmt, nettAmt });
         }
         this.detectDiscountChange = true;
-        if(this.divisionMS!='M')
-        this.updateDiscountAmount();
+        if (this.divisionMS != 'M')
+          this.updateDiscountAmount();
       } else {
         // Rate Cannot be Less Than Cost
         this.openDialog('Warning', this.comFunc.getMsgByID('MSG1721'), true);
@@ -10573,14 +10574,14 @@ export class AddPosComponent implements OnInit {
 
   }
 
-  changeVocNumber(vocNum:any){
-    if(this.comFunc.emptyToZero(vocNum.target.value)==0){
-      const warning="Voucher number cannot be 0"
+  changeVocNumber(vocNum: any) {
+    if (this.comFunc.emptyToZero(vocNum.target.value) == 0) {
+      const warning = "Voucher number cannot be 0"
       this.openDialog('Warning', warning, true);
       this.dialogBox.afterClosed().subscribe((data: any) => {
         if (data == 'OK') {
           this.vocDataForm.controls.fcn_voc_no.setValue(
-           localStorage.getItem('voucherNumber')
+            localStorage.getItem('voucherNumber')
           );
           this.manageCalculations();
         }
@@ -11089,7 +11090,7 @@ export class AddPosComponent implements OnInit {
       } else {
 
         this.setGrossAmount();
-        
+
         // this.lineItemForm.controls['fcn_li_gross_amount'].setValue(
 
         //   this.comFunc.transformDecimalVB(
@@ -11104,8 +11105,8 @@ export class AddPosComponent implements OnInit {
 
     if (argsData.nettAmt == null) {
 
-    this.calculateTaxAmount();
-    this.calculateNetAmount();
+      this.calculateTaxAmount();
+      this.calculateNetAmount();
       /** set tax amount */
       // let taxAmount;
       // taxAmount = this.comFunc.transformDecimalVB(
@@ -11151,51 +11152,51 @@ export class AddPosComponent implements OnInit {
   calculateTaxAmount() {
     const taxPercentage = this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_tax_percentage);
     const grossAmount = this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_amount);
-  
+
     const taxAmount = this.comFunc.transformDecimalVB(
       this.comFunc.allbranchMaster?.BAMTDECIMALS,
       this.getPercentage(taxPercentage, grossAmount)
     );
-  
+
     this.lineItemForm.controls['fcn_li_tax_amount'].setValue(
       this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, taxAmount)
     );
-  
+
     this.li_tax_amount_val = this.comFunc.transformDecimalVB(
       this.comFunc.allbranchMaster?.BAMTDECIMALS,
       taxAmount
     );
   }
 
-  
+
   calculateNetAmount() {
     const grossAmount = this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_amount);
     const taxAmount = this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_tax_amount);
-  
+
     const netAmtValue = grossAmount + taxAmount;
-  
+
     this.lineItemForm.controls['fcn_li_net_amount'].setValue(
       this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, netAmtValue)
     );
-  
+
     this.li_net_amount_val = this.comFunc.transformDecimalVB(
       this.comFunc.allbranchMaster?.BAMTDECIMALS,
       netAmtValue
     );
-  
+
     localStorage.setItem('fcn_li_net_amount', netAmtValue.toString());
   }
-  
+
 
   setGrossAmount() {
     const totalAmount = this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount);
     const discountAmount = this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_discount_amount);
-    
+
     const grossAmount = this.comFunc.transformDecimalVB(
       this.comFunc.allbranchMaster?.BAMTDECIMALS,
       totalAmount - discountAmount
     );
-    
+
     this.lineItemForm.controls['fcn_li_gross_amount'].setValue(grossAmount);
     // this.calculateTaxAmount();
     // this.calculateNetAmount();
@@ -11253,13 +11254,13 @@ export class AddPosComponent implements OnInit {
       this.comFunc.commaSeperation(this.lineItemForm.value.fcn_li_gross_amount)
     );
     this.lineItemForm.controls['fcn_li_discount_percentage'].setValue(
-        this.comFunc.decimalQuantityFormat(
-          this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_discount_percentage),
-          'AMOUNT')|| this.zeroAmtVal
- 
+      this.comFunc.decimalQuantityFormat(
+        this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_discount_percentage),
+        'AMOUNT') || this.zeroAmtVal
+
     );
-    if(this.divisionMS!="M")
-    this.updateDiscountAmount();
+    if (this.divisionMS != "M")
+      this.updateDiscountAmount();
 
     this.lineItemForm.controls['fcn_li_tax_amount'].setValue(
       this.comFunc.commaSeperation(this.lineItemForm.value.fcn_li_tax_amount)
@@ -11280,7 +11281,7 @@ export class AddPosComponent implements OnInit {
 
       const discountAmount = (totalAmount * (discountPercentage / 100)).toFixed(2);
       this.lineItemForm.controls['fcn_li_discount_amount'].setValue(
-      discountAmount || this.zeroAmtVal
+        discountAmount || this.zeroAmtVal
       );
       this.setGrossAmount();
       this.detectDiscountChange = false;
@@ -12601,7 +12602,7 @@ export class AddPosComponent implements OnInit {
   }
   /**  end customer detail form */
   setReadOnlyForViewMode() {
-    this.isPcsEditable=true;
+    this.isPcsEditable = true;
     // this.comFunc.formControlSetReadOnly('fcn_li_pcs', false);
     this.comFunc.formControlSetReadOnly('fcn_li_gross_wt', false);
   }
@@ -13441,7 +13442,7 @@ export class AddPosComponent implements OnInit {
         if (resp.status == "Success") {
           this.vocDataForm.controls['fcn_voc_no'].setValue(resp.newvocno);
           this.voucherNumber = resp.newvocno;
-          localStorage.setItem('voucherNumber',resp.newvocno)
+          localStorage.setItem('voucherNumber', resp.newvocno)
         }
       });
   }
@@ -13668,24 +13669,24 @@ export class AddPosComponent implements OnInit {
   }
 
   pullSalesOrder() {
-    const orderNo = this.pendingSalesOrderForm.value.orderNo;
+    const orderNo = this.pendingSalesOrderForm.value.orderNo ?? 0;
     const branchTo = this.pendingSalesOrderForm.value.branchTo;
-    const customerCode = this.pendingSalesOrderForm.value.customerCode;
+    const customerCode = this.pendingSalesOrderForm.value.customerCode ?? 0;
 
-    if (!orderNo && !customerCode) {
-      this.snackBar.open('Please fill either "Order No." or "Customer Code" before searching.', 'Close', {
-        duration: 3000,
-      });
-      return;
-    }
+    // if (!orderNo && !customerCode) {
+    //   this.snackBar.open('Please fill either "Order No." or "Customer Code" before searching.', 'Close', {
+    //     duration: 3000,
+    //   });
+    //   return;
+    // }
 
     if (orderNo) {
       this.snackBar.open('Loading...');
 
-      this.suntechApi.getDynamicAPI(`PendingSalesOrder/GetPendingSalesOrderWithBranchandOrderNo/${branchTo}/${orderNo}`)
+      this.suntechApi.getDynamicAPI(`PendingSalesOrder/GetPendingSalesOrder/${branchTo}/${orderNo}/${customerCode}`)
         .subscribe((resp) => {
           if (resp.status === 'Success') {
-            this.pendingOrderList = resp.response;
+            this.pendingOrderList = resp.dynamicData[0];
             this.snackBar.dismiss();
 
           } else {
@@ -13698,10 +13699,10 @@ export class AddPosComponent implements OnInit {
     } else {
       this.snackBar.open('Loading...');
       this.suntechApi
-        .getDynamicAPI(`PendingSalesOrder/GetPendingSalesOrderWithBranchandCustomerCode/${branchTo}/${customerCode}`)
+        .getDynamicAPI(`PendingSalesOrder/GetPendingSalesOrder/${branchTo}/${orderNo}/${customerCode}`)
         .subscribe((resp) => {
           if (resp.status === 'Success') {
-            this.pendingOrderList = resp.response;
+            this.pendingOrderList = resp.dynamicData[0];
             this.snackBar.dismiss();
 
           } else {
@@ -13718,6 +13719,7 @@ export class AddPosComponent implements OnInit {
     this.pendingOrderList = [];
     this.isOrderPullingRowSelected = false;
     this.pendingSalesOrderForm.reset();
+    this.pendingSalesOrderForm.controls.branchTo.setValue(this.strBranchcode);
     this.modalRefePendingSalesOrder = this.modalService.open(
       this.pendingSalesOrderModal,
       {
@@ -13729,6 +13731,7 @@ export class AddPosComponent implements OnInit {
 
     this.modalRefePendingSalesOrder.result.then((result) => {
       if (result) {
+
         console.log("Result :", result);
       } else {
       }
@@ -14433,26 +14436,51 @@ export class AddPosComponent implements OnInit {
     if (this.selectedPendingOrder) {
 
       console.log('Selected Row Data:', this.selectedPendingOrder);
-      this.fetchSalesOrderDetails(this.selectedPendingOrder.VOCNO, this.selectedPendingOrder.MID);
+      this.fetchSalesOrderDetails(this.selectedPendingOrder.VOCNO, this.selectedPendingOrder.MID,this.selectedPendingOrder.VOCTYPE);
+      this.modalReference.close();
 
     }
   }
 
-  fetchSalesOrderDetails(vocNo: string, mid: any) {
+  fetchSalesOrderDetails(vocNo: string, mid: any,vocType:any) {
     this.snackBar.open('Loading...');
-    this.suntechApi.getDynamicAPI(`RetailSalesOrder/GetRetailSalesOrder/moe/ops/2024/27/13`)
+    // this.suntechApi.getDynamicAPI(`RetailSalesOrder/GetRetailSalesOrder/moe/ops/2024/27/13`)
 
-      //  this.suntechApi.getDynamicAPI(`RetailSalesOrder/GetRetailSalesOrder/${this.strBranchcode}/${this.mainVocType}/${this.baseYear}/${vocNo}/${mid}`)
+    this.suntechApi.getDynamicAPI(`RetailSalesOrder/GetRetailSalesOrder/${this.strBranchcode}/${vocType}/${this.baseYear}/${vocNo}/${mid}`)
       .subscribe((resp) => {
         if (resp.status === 'Success') {
           this.newLineItem = resp.response.salesOrder.Details[0];
-          this.addItemtoList('save_btn', resp.response.salesOrder.Details);
-          this.onCustomerNameFocus(resp.response.customer.MOBILE, false);
-          this.modalRefePendingSalesOrder.dismiss('Dismissed by user');
-          // this.pendingOrderList = resp.response;
-          this.snackBar.dismiss();
+          const salesOrderDetails = resp.response.salesOrder.Details;
+          const existingStockCodes = this.ordered_items.map(item => item.stock_code);
 
-        } else {
+          const newEntries = salesOrderDetails.filter(
+            (detail: any) => !existingStockCodes.includes(detail.STOCK_CODE)
+          );
+
+          if (newEntries.length === 0) {
+
+            this.openDialog(
+              'Warning',
+              'Order already exists',
+              true
+            );
+            this.dialogBox.afterClosed().subscribe((data: any) => {
+              if (data == 'OK') {
+                this.lineItemForm.controls['fcn_li_item_code'].setValue('');
+                this.renderer.selectRootElement('#fcn_li_item_code').focus();
+              }
+
+            });
+
+          } else {
+            this.addItemtoList('save_btn', newEntries);
+            this.modalRefePendingSalesOrder.dismiss('Dismissed by user');
+          }
+
+          this.onCustomerNameFocus(resp.response.customer.MOBILE, false);
+          this.snackBar.dismiss();
+        }
+        else {
           this.snackBar.open('No Data Found', 'Close', {
             duration: 3000,
           });
