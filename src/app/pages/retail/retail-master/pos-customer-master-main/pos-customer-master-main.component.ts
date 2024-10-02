@@ -573,6 +573,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
     twitter: [""],
     instagram: [""],
   });
+  imageName: any;
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -696,7 +697,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
 
   setvalues(setData: any) {
     this.posCustomerMasterMainForm.controls.name.setValue(setData.NAME);
-    this.posCustomerMasterMainForm.controls.Prefix.setValue(
+    this.posCustomerMasterMainForm.controls.prefix.setValue(
       setData.POSCUSTPREFIX
     );
     this.posCustomerMasterMainForm.controls.parentPosCode.setValue(
@@ -710,9 +711,9 @@ export class PosCustomerMasterMainComponent implements OnInit {
       setData.MIDDLENAME
     );
     this.posCustomerMasterMainForm.controls.lastName.setValue(setData.LASTNAME);
-    this.posCustomerMasterMainForm.controls.creditCardLimitCheck.setValue(
-      setData.CREDIT_LIMIT_STATUS
-    );
+    
+      this.isCreditLimit = setData.CREDIT_LIMIT_STATUS
+    
     this.posCustomerMasterMainForm.controls.creditCardLimit.setValue(
       this.comService.decimalQuantityFormat(
         this.comService.emptyToZero(setData.CREDIT_LIMIT),
@@ -977,6 +978,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
     this.posCustomerMasterMainForm.controls.fatherName.setValue(
       setData.FATHERNAME
     );
+    
   }
 
   editController() {
@@ -1056,6 +1058,14 @@ export class PosCustomerMasterMainComponent implements OnInit {
       this.cityListData = res.response;
       console.log(this.cityListData);
     });
+  }
+
+  onCity(value:any) {
+    console.log("In");
+    
+    console.log(value);
+    
+    this.posCustomerMasterMainForm.controls.city.setValue(value)
   }
 
   onPanNoInput(event: Event): void {
@@ -1504,7 +1514,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
           DESIGNATION: this.posCustomerMasterMainForm.value.designation || "",
           LEVELFLAG: 0,
           INCOMERANGE: "",
-          LAST_UPDATED_DATE: null,
+          LAST_UPDATED_DATE: this.currentDate,
 
           TAXOFFICENO: "",
           SALESMANNAME: "",
@@ -1528,7 +1538,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
           SUGGESTION: "",
           AMLNAMEVALIDATION: false,
           AML_TYPE: false,
-          UN_NUMBER: "",
+          UN_NUMBER: this.posCustomerMasterMainForm.value.unNumber || "",
           NAME_1: this.posCustomerMasterMainForm.value.name1 || "",
           NAME_2: this.posCustomerMasterMainForm.value.name2 || "",
           NAME_3: this.posCustomerMasterMainForm.value.name3 || "",
@@ -2060,7 +2070,17 @@ export class PosCustomerMasterMainComponent implements OnInit {
 
   onFileSelected(event: any) {
     this.image = event.target.files[0];
+    this.imageName = event.target.files[0].name
     console.log(this.image);
+
+    // Create a URL for the selected image and assign it to fetchedPicture
+    if (this.image) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.fetchedPicture = reader.result as string; // Set image for preview
+      };
+      reader.readAsDataURL(this.image);
+    }
   }
 
   getContactPreference(event: MatCheckboxChange, value: string) {
