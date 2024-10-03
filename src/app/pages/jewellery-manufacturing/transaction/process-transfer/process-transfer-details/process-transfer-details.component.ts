@@ -247,6 +247,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     timeTakenInMinutes: [''],
     consumedInMinutes: [''],
     PRODLAB_ACCODE: [''],
+    WIP_ACCODE: [''],
     toggleSwitchtIssue: [true],
     //DIAMOND DETAIL STARTS
     FRM_PROCESS_CODE: ['', Validators.required],
@@ -777,7 +778,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.processTransferdetailsForm.controls[formControlName].setValue(val)
     this.FORM_VALIDATER[formControlName] = val
   }
-  setJobNumberData(data: any) {
+  jobNumberFormData(data: any) {
     if (data[0] && data[0].UNQ_JOB_ID != '') {
       this.jobNumberDetailData = data
       this.setFormNullToString('JOB_NUMBER', data[0].JOB_NUMBER)
@@ -816,7 +817,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
           this.overlayjobNoSearch.closeOverlayPanel()
           let data = result.dynamicData[0] || []
           if (data.length > 0) {
-            this.setJobNumberData(data) // assign values to form
+            this.jobNumberFormData(data) // assign values to form
             if (data.length == 1) { // condition for 1 subjob
               this.commonService.formControlSetReadOnly('UNQ_JOB_ID', true); //disabling subjob
               this.subJobNoSearch.VIEW_ICON = false; //hides subjob search
@@ -2356,6 +2357,15 @@ export class ProcessTransferDetailsComponent implements OnInit {
     let val = this.commonService.pureWeightCalculate(netwt, purity)
     return this.emptyToZero(val.toFixed(this.commonService.mQtyDecimals))
   }
+  getWipAccode(processCode: string,CODE: string){
+    let seqData = this.sequenceDetails.filter((item: any) => item.PROCESS_CODE?.toUpperCase() == processCode);
+    if(seqData.length>0 && seqData[0][CODE] != ''){
+      return this.commonService.nullToString(seqData[0][CODE])
+    }
+    let processData = this.processMasterDetails.filter((item: any) => item.PROCESS_CODE?.toUpperCase() == processCode);
+    if(processData.length>0) return this.commonService.nullToString(processData[0][CODE])
+    return ''
+  }
   gridSRNO: number = 0
   setJOB_PROCESS_TRN_DETAIL_DJ() {
     let form = this.processTransferdetailsForm.value;
@@ -2364,8 +2374,11 @@ export class ProcessTransferDetailsComponent implements OnInit {
     let LOSS_PURE_QTY = this.calculateLossPureQty(this.processTransferdetailsForm.value);
     let metalGridDataSum = this.calculateMetalStoneGridAmount();
     let seqDataFrom = this.sequenceDetails.filter((item: any) => item.PROCESS_CODE?.toUpperCase() == form.FRM_PROCESS_CODE?.toUpperCase());
-    let seqDataTo = this.sequenceDetails.filter((item: any) => item.PROCESS_CODE?.toUpperCase() == form.TO_PROCESS_CODE?.toUpperCase());
-    let scrapPureWt = this.emptyToZero(Number(form.scrapWeight) * Number(form.SCRAP_PURITY))
+    let scrapPureWt = this.multiplyWithAmtDecimal(form.scrapWeight,form.SCRAP_PURITY)
+    let FRM_WIP_ACCODE = this.getWipAccode(form.FRM_PROCESS_CODE,'WIP_ACCODE')
+    let TO_WIP_ACCODE = this.getWipAccode(form.TO_PROCESS_CODE,'WIP_ACCODE')
+    let LAB_ACCODE = this.getWipAccode(form.TO_PROCESS_CODE,'LAB_ACCODE')
+    let LOSS_ACCODE = this.getWipAccode(form.TO_PROCESS_CODE,'LOSS_ACCODE')
     // let amountFC = this.commonService.FCToCC(form.CURRENCY_CODE, stoneAmount)
     // console.log(this.commonService.timeToMinutes(form.consumed), 'time consumed');
     this.gridSRNO += 1
@@ -2427,10 +2440,10 @@ export class ProcessTransferDetailsComponent implements OnInit {
       "LAB_UNIT": "",
       "LAB_RATEFC": 0,
       "LAB_RATELC": 0,
-      "LAB_ACCODE": seqDataFrom.length > 0 ? this.commonService.nullToString(seqDataFrom[0]?.LAB_ACCODE) : '',
-      "LOSS_ACCODE": seqDataFrom.length > 0 ? this.commonService.nullToString(seqDataFrom[0].LOSS_ACCODE) : '',
-      "FRM_WIP_ACCODE": seqDataFrom.length > 0 ? this.commonService.nullToString(seqDataFrom[0].WIP_ACCODE) : '',
-      "TO_WIP_ACCODE": seqDataTo.length > 0 ? this.commonService.nullToString(seqDataTo[0].WIP_ACCODE) : '',
+      "LAB_ACCODE": this.commonService.nullToString(LAB_ACCODE),
+      "LOSS_ACCODE": this.commonService.nullToString(LOSS_ACCODE),
+      "FRM_WIP_ACCODE": this.commonService.nullToString(FRM_WIP_ACCODE),
+      "TO_WIP_ACCODE": this.commonService.nullToString(TO_WIP_ACCODE),
       "RET_METAL_DIVCODE": "",
       "RET_METAL_STOCK_CODE": "",
       "RET_STONE_DIVCODE": "",
@@ -2519,9 +2532,6 @@ export class ProcessTransferDetailsComponent implements OnInit {
     let metalGridDataSum = this.calculateMetalStoneGridAmount();
     let seqDataFrom = this.sequenceDetails.filter((item: any) => item.PROCESS_CODE?.toUpperCase() == form.FRM_PROCESS_CODE?.toUpperCase());
     let seqDataTo = this.sequenceDetails.filter((item: any) => item.PROCESS_CODE?.toUpperCase() == form.TO_PROCESS_CODE?.toUpperCase());
-    let scrapPureWt = this.emptyToZero(Number(form.scrapWeight) * Number(form.SCRAP_PURITY))
-    // let amountFC = this.commonService.FCToCC(form.CURRENCY_CODE, stoneAmount)
-    // console.log(this.commonService.timeToMinutes(form.consumed), 'time consumed');
     this.gridSRNO += 1
     return {
       "SRNO": this.emptyToZero(form.SRNO),

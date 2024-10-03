@@ -104,9 +104,6 @@ export class ProcessTransferComponent implements OnInit {
   ngOnInit(): void {
     //flag setting
     if (this.content?.FLAG) {
-      if (this.content[0]?.FLAG == 'EDIT') {
-        this.checkMaxVocNumber()
-      }
       this.isSaved = true;
       if (this.content.FLAG == 'VIEW' || this.content.FLAG == 'DELETE') {
         this.viewMode = true;
@@ -128,6 +125,8 @@ export class ProcessTransferComponent implements OnInit {
     }
     this.gridSettings()
   }
+  ngAfterViewInit() {
+  }
   gridSettings() {
     this.gridAmountDecimalFormat = {
       type: 'fixedPoint',
@@ -144,6 +143,8 @@ export class ProcessTransferComponent implements OnInit {
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
         if (result.response) {
+          this.checkMaxVocNumber()
+
           let data = result.response
           this.tableData = data.JOB_PROCESS_TRN_DETAIL_DJ || []
           this.JOB_PROCESS_TRN_DETAIL_DJ = data.JOB_PROCESS_TRN_DETAIL_DJ || []
@@ -206,7 +207,6 @@ export class ProcessTransferComponent implements OnInit {
         this.commonService.closeSnackBarMsg()
         if (result.status == "Success" && result.dynamicData[0]) {
           let data = result.dynamicData[0]
-          
         }
       })
     this.subscriptions.push(Sub)
