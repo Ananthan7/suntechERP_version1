@@ -122,6 +122,14 @@
             </div>
         </dx-popup>
        
+        <dx-popup [visible]="previewpopup" [showTitle]="true" [showCloseButton]="true" (onHiding)="previewpopup = false"
+        height="700" width="1400">
+            <div class="custom-container">
+                <div [innerHTML]="htmlPreview"></div>
+            </div>
+        </dx-popup>
+
+
         <div class="row">
             <app-report-screen-buttons (saveTemplateClick)="saveTemplate()" (previewClicked)="previewClick()"></app-report-screen-buttons>
         </div>

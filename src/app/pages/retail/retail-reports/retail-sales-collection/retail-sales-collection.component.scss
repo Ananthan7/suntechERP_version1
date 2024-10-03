@@ -109,3 +109,13 @@
 // ::ng-deep .mat-checkbox-checked {
 //      background-color:  #009688 !important;
 // }
+
+
+.custom-container {
+    max-height: 600px;
+    overflow-y: auto;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+}
