@@ -158,6 +158,7 @@
                 <mat-checkbox
                   [disabled]="flag === 'VIEW'"
                   (change)="creditLimitChecker($event)"
+                  [checked]="isCreditLimit"
                   formControlName="creditCardLimitCheck"
                   id="ID006"
                 >

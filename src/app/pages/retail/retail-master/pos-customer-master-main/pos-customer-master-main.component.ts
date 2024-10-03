@@ -711,6 +711,8 @@ export class PosCustomerMasterMainComponent implements OnInit {
       setData.MIDDLENAME
     );
     this.posCustomerMasterMainForm.controls.lastName.setValue(setData.LASTNAME);
+    console.log(setData.CREDIT_LIMIT_STATUS);
+    
     
       this.isCreditLimit = setData.CREDIT_LIMIT_STATUS
     
@@ -1061,10 +1063,6 @@ export class PosCustomerMasterMainComponent implements OnInit {
   }
 
   onCity(value:any) {
-    console.log("In");
-    
-    console.log(value);
-    
     this.posCustomerMasterMainForm.controls.city.setValue(value)
   }
 
