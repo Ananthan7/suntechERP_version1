@@ -97,7 +97,7 @@
             <div class="col-md-3">
               <mat-form-field style="width: 100%" appearance="outline">
                 <input  type="text" id="amountFc" class="st_txt_right"  matInput
-                  formControlName="amountFc" [readonly]="viewOnly || compCurrency == posCurrencyReceiptDetailsForm.value?.currencyCode"
+                  formControlName="amountFc" (change)="changeAmountFc($event)" [readonly]="viewOnly || compCurrency == posCurrencyReceiptDetailsForm.value?.currencyCode"
                   />
               </mat-form-field>
             </div>
