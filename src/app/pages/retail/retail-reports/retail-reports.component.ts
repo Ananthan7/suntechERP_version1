@@ -44,7 +44,7 @@ export class RetailReportsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    localStorage.setItem('strMainVouchers', "#POS#POSC#RIN#PSR#POSEX#POSER")
+    localStorage.setItem('strMainVouchers', "#POS#POSC#RIN#PSR#POSEX#POSER#PCR")
     // for opening Report- Modal's
     // this.openModalView()
     let voucherData = localStorage.getItem('strMainVouchers');
