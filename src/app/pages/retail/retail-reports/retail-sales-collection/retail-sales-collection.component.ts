@@ -480,7 +480,8 @@ export class RetailSalesCollectionComponent implements OnInit {
     const day = String(date.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
   }
-
+htmlPreview: any;
+previewpopup: boolean = false;
   previewClick() {
     let logData =  {
       "VOCTYPE": this.comService.getqueryParamVocType() || "",
@@ -508,47 +509,50 @@ export class RetailSalesCollectionComponent implements OnInit {
         "Logdata": JSON.stringify(logData)
       }
     }
-    console.log(postData)  
+ 
     this.commonService.showSnackBarMsg('MSG81447');
     this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
     .subscribe((result: any) => {
       console.log(result);
+      this.previewpopup = true;
       let data = result.dynamicData;
-      const width = window.innerWidth;
-      const height = window.innerHeight;
-      const windowFeatures = `width=${width},height=${height},fullscreen=yes`;
-      var WindowPrt = window.open(' ', ' ', windowFeatures);
-      if (WindowPrt === null) {
-        console.error('Failed to open the print window. Possibly blocked by a popup blocker.');
-        return;
-      }
+      // const width = window.innerWidth;
+      // const height = window.innerHeight;
+      // const windowFeatures = `width=${width},height=${height},fullscreen=yes`;
+      // var WindowPrt = window.open(' ', ' ', windowFeatures);
+      // if (WindowPrt === null) {
+      //   console.error('Failed to open the print window. Possibly blocked by a popup blocker.');
+      //   return;
+      // }
       let printContent = data[0][0].HTMLINPUT;
-      WindowPrt.document.write(printContent);
-      WindowPrt.document.close();
-      WindowPrt.focus();  
-      WindowPrt.onload = function () {
-        if (WindowPrt && WindowPrt.document.head) {
-          let styleElement = WindowPrt.document.createElement('style');
-          styleElement.textContent = `
-                      @page {
-                          size: A5 landscape;
-                      }
-                      body {
-                          margin: 0mm;
-                      }
-                  `;
-          WindowPrt.document.head.appendChild(styleElement);
+      this.htmlPreview = printContent;
+      console.log(this.htmlPreview)
+      // WindowPrt.document.write(printContent);
+      // WindowPrt.document.close();
+      // WindowPrt.focus();  
+      // WindowPrt.onload = function () {
+      //   if (WindowPrt && WindowPrt.document.head) {
+      //     let styleElement = WindowPrt.document.createElement('style');
+      //     styleElement.textContent = `
+      //                 @page {
+      //                     size: A5 landscape;
+      //                 }
+      //                 body {
+      //                     margin: 0mm;
+      //                 }
+      //             `;
+      //     WindowPrt.document.head.appendChild(styleElement);
 
-          setTimeout(() => {
-            if (WindowPrt) {
-              WindowPrt.print();
-            } else {
-              console.error('Print window was closed before printing could occur.');
-            }
-          }, 800);
-        }
-      };
-      this.commonService.closeSnackBarMsg()
+      //     setTimeout(() => {
+      //       if (WindowPrt) {
+      //         WindowPrt.print();
+      //       } else {
+      //         console.error('Print window was closed before printing could occur.');
+      //       }
+      //     }, 800);
+      //   }
+      // };
+      // this.commonService.closeSnackBarMsg()
     });      
   }
   
