@@ -665,6 +665,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
         if (value === "Gift") {
           this.posCustomerMasterMainForm.get("gifrPurchased")?.enable();
         } else {
+          this.posCustomerMasterMainForm.controls.gifrPurchased.setValue("")
           this.posCustomerMasterMainForm.get("gifrPurchased")?.disable();
         }
       });
@@ -1327,51 +1328,57 @@ export class PosCustomerMasterMainComponent implements OnInit {
   }
 
   uploadCustomerImage() {
+
+    console.log(" inside the uploadCustomerImage");
+    
     const formData = new FormData();
-    formData.append(
-      "CODE",
-      this.existCustomerCode || this.generatedCustomerCode
-    );
+    const customerCode = this.existCustomerCode || this.generatedCustomerCode;
+
+    // Append customer code and image to formData
+    formData.append("CODE", customerCode);
     formData.append("File", this.image as Blob);
 
-    let API = `PosCustomerMaster/InsertPOSCustAttachments`;
+    const API = `PosCustomerMaster/InsertPOSCustAttachments`;
 
     console.log("FormData:", formData);
 
-    let sub: Subscription = this.apiService
-      .postDynamicAPI(API, formData)
+    const sub: Subscription = this.apiService.postDynamicAPI(API, formData)
       .subscribe(
         (result) => {
           console.log("Image upload API Response:", result);
         },
         (err) => {
-          // Handle HTTP or API error for image upload
           console.error("Image Upload Error:", err);
+          // Optionally, add user feedback here
         }
       );
+
     this.subscriptions.push(sub);
-  }
+    console.log("finished");
+    
+}
+
 
   customerSave() {
-    // let POSTYPECOMPULSORY =
-    //   this.comService.getCompanyParamValue("POSTYPECOMPULSORY");
-    // if (
-    //   POSTYPECOMPULSORY === 1 &&
-    //   !this.posCustomerMasterMainForm.controls.custType.value
-    // ) {
-    //   this.comService.toastErrorByMsgId("MSG1923");
-    // }
+    let POSTYPECOMPULSORY =
+      this.comService.getCompanyParamValue("POSTYPECOMPULSORY");
+    if (
+      POSTYPECOMPULSORY === 1 &&
+      !this.posCustomerMasterMainForm.controls.custType.value
+    ) {
+      this.comService.toastErrorByMsgId("MSG1923");
+    }
 
-    // let POSIDNOCOMPULSORY =
-    //   this.comService.getCompanyParamValue("POSIDNOCOMPULSORY");
+    let POSIDNOCOMPULSORY =
+      this.comService.getCompanyParamValue("POSIDNOCOMPULSORY");
 
-    // if (
-    //   POSIDNOCOMPULSORY === true &&
-    //   !this.posCustomerMasterMainForm.controls.custIdType.value &&
-    //   !this.posCustomerMasterMainForm.controls.custID.value
-    // ) {
-    //   this.comService.toastErrorByMsgId("MSG81405 ");
-    // }
+    if (
+      POSIDNOCOMPULSORY === true &&
+      !this.posCustomerMasterMainForm.controls.custIdType.value &&
+      !this.posCustomerMasterMainForm.controls.custID.value
+    ) {
+      this.comService.toastErrorByMsgId("MSG81405 ");
+    }
 
     // if (
     //   this.posCustomerMasterMainForm.value.moblieNumber == "" &&
@@ -1615,7 +1622,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
             this.posCustomerMasterMainForm.value.creditCardLimit || 0,
           CREDIT_LIMIT_STATUS: this.isCreditLimit,
           PANCARDNO:
-            this.posCustomerMasterMainForm.value.panNo || "111111" || "",
+            this.posCustomerMasterMainForm.value.panNo || "",
           VOCTYPE: this.vocDetails?.VOCTYPE ?? "",
           YEARMONTH: this.vocDetails?.YEARMONTH ?? localStorage.getItem("YEAR"),
           VOCNO: this.vocDetails?.VOCNO ?? 0,
@@ -1680,7 +1687,9 @@ export class PosCustomerMasterMainComponent implements OnInit {
                 });
 
                 if (this.image) {
-                  this.uploadCustomerImage;
+                  
+                  this.uploadCustomerImage();
+                  
                 }
 
                 this.close("reloadMainGrid");
@@ -1712,7 +1721,9 @@ export class PosCustomerMasterMainComponent implements OnInit {
                 });
 
                 if (this.image) {
-                  this.uploadCustomerImage;
+                  
+                  this.uploadCustomerImage();
+                  
                 }
                 this.close("reloadMainGrid");
               } else {
@@ -2069,7 +2080,6 @@ export class PosCustomerMasterMainComponent implements OnInit {
   onFileSelected(event: any) {
     this.image = event.target.files[0];
     this.imageName = event.target.files[0].name
-    console.log(this.image);
 
     // Create a URL for the selected image and assign it to fetchedPicture
     if (this.image) {
