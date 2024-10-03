@@ -180,7 +180,7 @@
           <label for="inputPassword" class="col-sm-2 col-form-label" id="ID010">Customer Code</label>
           <div class="col-md-4">
             <mat-form-field style="width: -webkit-fill-available;" appearance="outline">
-              <input type="text" [readonly]="true"
+              <input type="text"  (focusout)="SPvalidateLookupField($event,customerCodeData,'customerCode')" [readonly]="viewOnly"
                 matInput formControlName="customerCode" />
                 <master-search class="masterSearch"
                 (focusout)="openTab($event, 'customerCode')"
@@ -205,7 +205,7 @@
           <label for="inputPassword" class="col-sm-2 col-form-label" id="ID011">Party Address :</label>
           <div class="col-md-10">
             <mat-form-field style="width: 100%" appearance="outline">
-              <input type="text" [readonly]="viewOnly" matInput
+              <input type="text" readonly matInput
                 formControlName="partyAddress" />
             </mat-form-field>
           </div>

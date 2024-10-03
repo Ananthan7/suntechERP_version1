@@ -13751,8 +13751,30 @@ export class AddPosComponent implements OnInit {
     if (this.signaturePad?.isEmpty()) {
       alert('Please provide a signature first.');
     } else {
-      const dataURL = this.signaturePad?.toDataURL();
-      console.log('Signature saved:', dataURL);
+      const dataURL =  this.signaturePad?.toDataURL().replace(/^data:image\/(png|jpg);base64,/, '');
+
+
+      const API = `RetailSalesESignature/InsertRetailSalesESignature`;
+      const postData = {
+        "MID": 0,
+        "BRANCH_CODE": this.comFunc.nullToString(this.strBranchcode),
+        "VOCNO": this.comFunc.emptyToZero(this.vocDataForm.value.fcn_voc_no),
+        "VOCTYPE": this.comFunc.nullToString(this.vocDataForm.value.voc_type),
+        "YEARMONTH": this.comFunc.nullToString(this.baseYear),
+        "REFMID": this.content ? this.comFunc.emptyToZero(this.content?.MID) : this.midForInvoce,
+        "SIGN": dataURL
+      };
+
+      this.suntechApi.postDynamicAPI(API, postData)
+        .subscribe((res: any) => {
+          if (res.status == "Success") {
+            console.log(res);
+            this.snackBar.open('Esigned successfully', '', {
+              duration: 1000 
+            });
+
+          }
+        });
     }
   }
 
@@ -14436,13 +14458,13 @@ export class AddPosComponent implements OnInit {
     if (this.selectedPendingOrder) {
 
       console.log('Selected Row Data:', this.selectedPendingOrder);
-      this.fetchSalesOrderDetails(this.selectedPendingOrder.VOCNO, this.selectedPendingOrder.MID,this.selectedPendingOrder.VOCTYPE);
+      this.fetchSalesOrderDetails(this.selectedPendingOrder.VOCNO, this.selectedPendingOrder.MID, this.selectedPendingOrder.VOCTYPE);
       this.modalReference.close();
 
     }
   }
 
-  fetchSalesOrderDetails(vocNo: string, mid: any,vocType:any) {
+  fetchSalesOrderDetails(vocNo: string, mid: any, vocType: any) {
     this.snackBar.open('Loading...');
     // this.suntechApi.getDynamicAPI(`RetailSalesOrder/GetRetailSalesOrder/moe/ops/2024/27/13`)
 

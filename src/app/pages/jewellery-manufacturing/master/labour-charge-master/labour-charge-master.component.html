@@ -23,7 +23,7 @@
           <div class="col-sm-3">
             <mat-form-field appearance="outline">
               <input type="text" matInput maxlength="1" oninput="this.value = this.value.toUpperCase()"
-                [readonly]="viewMode || editMode" formControlName="divisions" id="code" #codeInput2 id="codeInput2"
+                [readonly]="viewMode || editMode" formControlName="divisions" id="code"
                 (focusout)="validateLookupField($event,diaDivisionCodeData,'divisions')" (input)="inputValidate($event)"
                 appNoEmptySpace (keydown)="lookupKeyPress($event,'divisions')" />
               <master-search [MasterSearchData]="diaDivisionCodeData" (newRowClick)="divisionCodeSelected($event)"
@@ -252,7 +252,7 @@
           <label id="ID020" for="input" class="col-sm-2 col-form-label">Ct Wt to :</label>
           <div class="col-sm-3">
             <mat-form-field appearance="outline">
-              <input type="text" matInput [readonly]="viewMode  || codeEnable2 || codeEnableDiamond" matInput
+              <input type="text" matInput [readonly]="viewMode  || codeEnableDiamond" matInput
                 class="text-right" formControlName="ctWtTo" MetalDecimalInput [max]="2"
                 (change)="onCtweighttto($event,'Ctwtto')" />
             </mat-form-field>
@@ -267,7 +267,7 @@
               :</label>
           <div class="col-sm-3">
               <mat-form-field  appearance="outline">
-                  <input matInput type="number" [readonly]="viewMode" matInput 
+                  <input matInput type="text" [readonly]="viewMode" matInput 
                   AmountDecimalInput  formControlName="variance" class="text-right" />
               </mat-form-field>
           </div>

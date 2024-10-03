@@ -43,8 +43,15 @@ export class PcrSelectionComponent implements OnInit {
     this.suntechApi.postDynamicAPI('AdvanceReceipt/GetPOSPCRSelection', postData).subscribe((result) => {
       console.log(result);
       if (result.status == 'Success') {
-        this.pcrSelectionData = result.dynamicData[0].map((item:any, index:any) => {
-          return { ...item, id: index + 1 }; 
+        this.pcrSelectionData = result.dynamicData[0].map((item: any, index: any) => {
+          return {
+            ...item,
+            AMOUNTCC: this.comService.decimalQuantityFormat(item.AMOUNTCC, 'AMOUNT'),
+            AMOUNTFC: this.comService.decimalQuantityFormat(item.AMOUNTFC, 'AMOUNT'),
+            BALANCE_FC: this.comService.decimalQuantityFormat(item.BALANCE_FC, 'AMOUNT'),
+            BALANCE_CC: this.comService.decimalQuantityFormat(item.BALANCE_CC, 'AMOUNT'),
+            id: index + 1
+          };
         });
 
         this.pcrSelectionData.sort((a, b) => {
@@ -72,17 +79,18 @@ export class PcrSelectionComponent implements OnInit {
   }
 
   close(data?: any,isModalClose?:any) {
-    if ((data||this.selectedRows.length) && !isModalClose) {
+    // if ((data||this.selectedRows.length) && !isModalClose) {
       this.activeModal.close(data);
-    } else {
-      const dialogRef = this.dialogService.openDialog('Warning', this.comService.getMsgByID('MSG1215'), false);
+    // } 
+    // else {
+    //   const dialogRef = this.dialogService.openDialog('Warning', this.comService.getMsgByID('MSG1215'), false);
       
-      dialogRef.afterClosed().subscribe((action: any) => {
-        if (action == 'Yes') {
-          this.activeModal.close();
-        }
-      });
-    }
+    //   dialogRef.afterClosed().subscribe((action: any) => {
+    //     if (action == 'Yes') {
+    //       this.activeModal.close();
+    //     }
+    //   });
+    // }
   }
 
 

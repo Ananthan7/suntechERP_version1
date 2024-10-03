@@ -18,7 +18,6 @@ import { MasterSearchModel } from "src/app/shared/data/master-find-model";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { SuntechAPIService } from "src/app/services/suntech-api.service";
 import { ToastrService } from "ngx-toastr";
-import { CommonServiceService } from "src/app/services/common-service.service";
 import { Subscription } from "rxjs";
 import Swal from "sweetalert2";
 import { MatSnackBar } from "@angular/material/snack-bar";
@@ -33,6 +32,7 @@ import * as moment from "moment";
 import { MasterSearchComponent } from "src/app/shared/common/master-search/master-search.component";
 import { MatDialog } from "@angular/material/dialog";
 import { ItemDetailService } from "src/app/services/modal-service.service";
+import { CommonServiceService } from "src/app/services/common-service.service";
 
 @Component({
   selector: "app-pos-currency-receipt-details",
@@ -64,12 +64,15 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
   ];
 
   today = _moment();
+  isForeignCurrency: boolean = false;
 
   private subscriptions: Subscription[] = [];
   branchCode?: String;
   paymentModeList: any[] = [];
   dummyDate = "1900-01-01T00:00:00";
-  compCurrency: any;
+  compCurrency: string = "";
+  compCurrencyRate: string = "";
+
   typeCodeArray: any[] = [];
   selectedTabIndex = 0;
   vatAmountCC = 0;
@@ -80,6 +83,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
   commissionPercentage: number = 0;
   commissionAmount: number = 0;
   currentDate = new Date(new Date());
+  headerCurrency: string = "";
   debitAmountData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -177,7 +181,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
         this.comService.allCompanyParams = data;
       }
     });
-    this.compCurrency = this.comService.compCurrency;
+    this.setCompanyCurrency();
   }
 
   ngOnInit(): void {
@@ -204,6 +208,24 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
       this.setReceiptData();
     else this.getAccountHead();
   }
+
+  setCompanyCurrency() {
+    this.compCurrency = this.comService.compCurrency;
+
+    if (this.comService.allBranchCurrency && this.comService.allBranchCurrency.length > 0) {
+      const CURRENCY_RATE: any[] = this.comService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == this.compCurrency);
+      if (CURRENCY_RATE.length > 0) {
+        this.compCurrencyRate = this.comService.decimalQuantityFormat(CURRENCY_RATE[0].CONV_RATE, 'RATE')
+
+      } else {
+        console.error("No matching currency rate found for the given currency code.");
+      }
+    } else {
+      console.error("allBranchCurrency is not defined or empty.");
+    }
+  }
+
+
 
   getUniqueValues(List: any[], field: string) {
     return List.filter(
@@ -250,23 +272,25 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
 
 
   getQueryParams(gstDetails?: any) {
-    this.selectedCurrency=gstDetails?.currecyCode || ""
+    this.selectedCurrency = gstDetails?.currecyCode || ""
     this.igstAccode = gstDetails?.igstAccode || "";
     this.posCurrencyReceiptDetailsForm.controls.hsnCode.setValue(
       gstDetails?.hsnCode || ""
     );
 
-    this.posCurrencyReceiptDetailsForm.controls.currencyCode.setValue(
-      gstDetails?.currecyCode || ""
-    );
+    this.headerCurrency = gstDetails?.currecyCode || this.compCurrency
 
-    const currencyConvRate = gstDetails?.currencyConvRate;
-    this.posCurrencyReceiptDetailsForm.controls.currencyRate.setValue(
-      this.comService.decimalQuantityFormat(
-        currencyConvRate && !isNaN(currencyConvRate) ? currencyConvRate : 0,
-        "RATE"
-      )
-    );
+    // this.posCurrencyReceiptDetailsForm.controls.currencyCode.setValue(
+    //   gstDetails?.currecyCode || ""
+    // );
+
+    // const currencyConvRate = gstDetails?.currencyConvRate;
+    // this.posCurrencyReceiptDetailsForm.controls.currencyRate.setValue(
+    //   this.comService.decimalQuantityFormat(
+    //     currencyConvRate && !isNaN(currencyConvRate) ? currencyConvRate : 0,
+    //     "RATE"
+    //   )
+    // );
 
     this.posCurrencyReceiptDetailsForm.controls.vat.setValue(
       this.comService.decimalQuantityFormat(
@@ -310,10 +334,14 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
         this.posCurrencyReceiptDetailsForm.controls.debitAmount.setValue(
           res.response.ACCODE
         );
+
+
         this.posCurrencyReceiptDetailsForm.controls.debitAmountDesc.setValue(
           res.response.ACCOUNT_HEAD
         );
+
         this.currencyData.WHERECONDITION = `@strBranch='${this.comService.branchCode}',@strPartyCode='${res.response.ACCODE}'`;
+        this.DebitamountChange({ target: { value: res.response.ACCODE } }, res.response.ACCODE);
       }
     });
   }
@@ -395,6 +423,8 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
         )
       );
 
+      this.compCurrencyRate = this.receiptData.CURRENCY_RATE ?? "";
+
       this.posCurrencyReceiptDetailsForm.controls.debitAmountDesc.setValue(
         this.receiptData.HDACCOUNT_HEAD
       );
@@ -410,7 +440,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
           )
         )
       );
-      
+
       this.posCurrencyReceiptDetailsForm.controls.amountCc.setValue(
         this.comService.commaSeperation(
           this.comService.decimalQuantityFormat(
@@ -419,7 +449,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
           )
         )
       );
-      
+
       this.posCurrencyReceiptDetailsForm.controls.totalLc.setValue(
         this.comService.commaSeperation(
           this.comService.decimalQuantityFormat(
@@ -428,7 +458,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
           )
         )
       );
-      
+
       this.posCurrencyReceiptDetailsForm.controls.totalFc.setValue(
         this.comService.commaSeperation(
           this.comService.decimalQuantityFormat(
@@ -437,25 +467,50 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
           )
         )
       );
-      
+
       this.posCurrencyReceiptDetailsForm.controls.headerVatAmt.setValue(
         this.comService.commaSeperation(
           this.comService.decimalQuantityFormat(
-            this.comService.emptyToZero(this.receiptData.TOTAL_AMOUNTCC),
+            this.comService.CCToFC(
+              this.headerCurrency,
+              this.comService.emptyToZero(this.receiptData.TOTAL_AMOUNTCC)
+            ),
             "AMOUNT"
           )
         )
       );
-      
+
+      // this.posCurrencyReceiptDetailsForm.controls.headerVatAmt.setValue(
+      //   this.comService.commaSeperation(
+      //     this.comService.decimalQuantityFormat(
+      //       this.comService.emptyToZero(this.receiptData.TOTAL_AMOUNTCC),
+      //       "AMOUNT"
+      //     )
+      //   )
+      // );
+
       this.posCurrencyReceiptDetailsForm.controls.vatcc.setValue(
         this.comService.commaSeperation(
           this.comService.decimalQuantityFormat(
-            this.comService.emptyToZero(this.receiptData.IGST_AMOUNTCC),
+            this.comService.FCToCC(
+              this.posCurrencyReceiptDetailsForm.value.currencyCode,
+              this.comService.emptyToZero(this.receiptData.IGST_AMOUNTCC),
+              this.comService.emptyToZero(this.compCurrencyRate)
+            ),
             "AMOUNT"
           )
         )
       );
-      
+
+      // this.posCurrencyReceiptDetailsForm.controls.vatcc.setValue(
+      //   this.comService.commaSeperation(
+      //     this.comService.decimalQuantityFormat(
+      //       this.comService.emptyToZero(this.receiptData.IGST_AMOUNTCC),
+      //       "AMOUNT"
+      //     )
+      //   )
+      // );
+
       this.posCurrencyReceiptDetailsForm.controls.vat.setValue(
         this.comService.commaSeperation(
           this.comService.decimalQuantityFormat(
@@ -464,7 +519,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
           )
         )
       );
-      
+
 
 
 
@@ -618,6 +673,9 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
     this.posCurrencyReceiptDetailsForm.controls.currencyRate.setValue(
       this.comService.decimalQuantityFormat(e["Conv Rate"], "RATE")
     );
+
+    this.compCurrencyRate = this.comService.decimalQuantityFormat(e["Conv Rate"], "RATE") ?? "";
+
   }
 
   getCreditCardMaster() {
@@ -725,6 +783,9 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
       )
     );
 
+    this.compCurrencyRate = this.posCurrencyReceiptDetailsForm.value.currencyCode ?? "";
+
+
   }
 
   onDateChange(event: MatDatepickerInputEvent<Date>) {
@@ -791,16 +852,37 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
 
               if (
                 this.posCurrencyReceiptDetailsForm.value.modeOfSelect ==
-                "Cheque"
+                "Cheque" || "Cash"
               ) {
                 const account = data.find(
                   (account: any) => account.ACCODE === accoutCode
                 );
-                const bankCode = account.BANK_CODE;
-                this.posCurrencyReceiptDetailsForm.controls.chequeDepositBank.setValue(
-                  bankCode
-                );
+                if (this.posCurrencyReceiptDetailsForm.value.modeOfSelect == "Cheque") {
+                  const bankCode = account.BANK_CODE;
+                  this.posCurrencyReceiptDetailsForm.controls.chequeDepositBank.setValue(
+                    bankCode
+                  );
+                }
+                else {
+                  const selectedAccount = data.find((entry: any) => entry.DEFAULT_CURRENCY === 1);
+
+                  this.posCurrencyReceiptDetailsForm.controls.currencyCode.setValue(
+                    selectedAccount.CURRENCY_CODE
+                  );
+
+                  this.posCurrencyReceiptDetailsForm.controls.currencyRate.setValue(
+                    this.comService.decimalQuantityFormat(selectedAccount.CONV_RATE, 'RATE')
+
+                  );
+                  this.compCurrencyRate = this.comService.decimalQuantityFormat(selectedAccount.CONV_RATE, 'RATE') ?? "";
+
+                }
+
+
+
+
               }
+
 
               if (data && data[0].CURRENCY_CODE) {
                 if (data[0].CURRENCY_CODE == this.compCurrency)
@@ -1163,7 +1245,39 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
     });
   }
 
+  changeAmountFc(event: any) {
+    this.isForeignCurrency = true;
+    const amountFc = this.comService.emptyToZero(event.target.value);
+
+    if (amountFc === 0) {
+      this.handleZeroAmount();
+      return;
+    }
+
+    this.resetCommissionAmount();
+
+    const amountLc = this.convertToLocalCurrency(amountFc);
+    const fcVatAmount = this.comService.FCToCC(
+      this.posCurrencyReceiptDetailsForm.value.currencyCode,
+      this.comService.emptyToZero(amountLc),
+      this.comService.emptyToZero(this.compCurrencyRate)
+    );
+    const vatPrc = this.posCurrencyReceiptDetailsForm.controls.vat.value;
+    const vatCc = this.calculateVat(amountFc, vatPrc);
+
+    const vatAmountLC = this.calculateVat(amountLc, vatPrc);
+    // const vatAmountLC = this.calculateVat(amountLc, vatPrc);
+
+    // Only update values if amountLc is greater than 0
+    this.updateAmounts(amountLc, amountFc, vatCc, vatAmountLC);
+
+    if (this.isCreditCardMode()) {
+      this.updateCommission(amountLc);
+    }
+  }
+
   changeAmountLc(event: any) {
+    this.isForeignCurrency = false;
     const amountLc = this.comService.emptyToZero(event.target.value);
 
     if (amountLc === 0) {
@@ -1174,8 +1288,13 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
     this.resetCommissionAmount();
 
     const amountFc = this.convertToForeignCurrency(amountLc);
+    const fcVatAmount = this.comService.FCToCC(
+      this.posCurrencyReceiptDetailsForm.value.currencyCode,
+      this.comService.emptyToZero(amountLc),
+      this.comService.emptyToZero(this.compCurrencyRate)
+    );
     const vatPrc = this.posCurrencyReceiptDetailsForm.controls.vat.value;
-    const vatCc = this.calculateVat(amountFc, vatPrc);
+    const vatCc = this.calculateVat(fcVatAmount, vatPrc);
     const vatAmountLC = this.calculateVat(amountLc, vatPrc);
 
     // Only update values if amountLc is greater than 0
@@ -1194,7 +1313,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
         this.posCurrencyReceiptDetailsForm.controls.amountCc.setValue(
           this.comService.commaSeperation(lastUpdatedAmount)
         );
-        
+
         // this.posCurrencyReceiptDetailsForm.controls.amountCc.setValue(lastUpdatedAmount);
         const amountFc = this.convertToForeignCurrency(lastUpdatedAmount);
         const amountLc = lastUpdatedAmount;
@@ -1219,6 +1338,13 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
     );
   }
 
+  convertToLocalCurrency(amountFc: any): any {
+    return this.comService.FCToCC(
+      this.posCurrencyReceiptDetailsForm.value.currencyCode,
+      amountFc, this.comService.emptyToZero(this.compCurrencyRate)
+    );
+  }
+
   calculateVat(amount: any, vatPrc: any): any {
     return (amount * vatPrc) / 100;
   }
@@ -1232,37 +1358,50 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
         this.comService.decimalQuantityFormat(amountLc, "AMOUNT")
       )
     );
-    
+
     this.posCurrencyReceiptDetailsForm.controls.amountFc.setValue(
       this.comService.commaSeperation(
         this.comService.decimalQuantityFormat(amountFc, "AMOUNT")
       )
     );
-    
+
+
     this.posCurrencyReceiptDetailsForm.controls.vatcc.setValue(
       this.comService.commaSeperation(
-        this.comService.decimalQuantityFormat(vatCc, "AMOUNT")
+        this.comService.decimalQuantityFormat(vatAmountLC, "AMOUNT")
       )
     );
-    
+
     this.posCurrencyReceiptDetailsForm.controls.totalFc.setValue(
       this.comService.commaSeperation(
         this.comService.decimalQuantityFormat(amountWithVatFc, "AMOUNT")
       )
     );
-    
+
     this.posCurrencyReceiptDetailsForm.controls.totalLc.setValue(
       this.comService.commaSeperation(
         this.comService.decimalQuantityFormat(amountWithVatLC, "AMOUNT")
       )
     );
-    
+
     this.posCurrencyReceiptDetailsForm.controls.headerVatAmt.setValue(
       this.comService.commaSeperation(
-        this.comService.decimalQuantityFormat(amountWithVatLC, "AMOUNT")
+        this.comService.decimalQuantityFormat(
+          this.comService.CCToFC(
+            this.headerCurrency,
+            this.comService.emptyToZero(this.isForeignCurrency ? amountWithVatFc : amountWithVatLC)
+          ),
+          "AMOUNT"
+        )
       )
     );
-    
+
+    // this.posCurrencyReceiptDetailsForm.controls.headerVatAmt.setValue(
+    //   this.comService.commaSeperation(
+    //     this.comService.decimalQuantityFormat(amountWithVatLC, "AMOUNT")
+    //   )
+    // );
+
     localStorage.setItem("amountLc", amountLc.toString());
   }
 
@@ -1290,16 +1429,28 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
         )
       )
     );
-    
+
     this.posCurrencyReceiptDetailsForm.controls.headerVatAmt.setValue(
       this.comService.commaSeperation(
         this.comService.decimalQuantityFormat(
-          this.comService.emptyToZero(event.target.value),
+          this.comService.CCToFC(
+            this.headerCurrency,
+            this.comService.emptyToZero(event.target.value)
+          ),
           "AMOUNT"
         )
       )
     );
-    
+
+    // this.posCurrencyReceiptDetailsForm.controls.headerVatAmt.setValue(
+    //   this.comService.commaSeperation(
+    //     this.comService.decimalQuantityFormat(
+    //       this.comService.emptyToZero(event.target.value),
+    //       "AMOUNT"
+    //     )
+    //   )
+    // );
+
     this.posCurrencyReceiptDetailsForm.controls.totalFc.setValue(
       this.comService.commaSeperation(
         this.comService.decimalQuantityFormat(
@@ -1311,7 +1462,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
         )
       )
     );
-    
+
 
     // this.posCurrencyReceiptDetailsForm.controls.totalFc.setValue(this.comService.decimalQuantityFormat(
     //   this.comService.emptyToZero(event.target.value),
@@ -1329,7 +1480,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
         )
       )
     );
-    
+
     this.posCurrencyReceiptDetailsForm.controls.amountFc.setValue(
       this.comService.commaSeperation(
         this.comService.decimalQuantityFormat(
@@ -1341,17 +1492,31 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
         )
       )
     );
-    
+
     let vatcc = this.comService.emptyToZero(this.posCurrencyReceiptDetailsForm.controls.totalLc.value) - sum;
+
     this.posCurrencyReceiptDetailsForm.controls.vatcc.setValue(
       this.comService.commaSeperation(
         this.comService.decimalQuantityFormat(
-          this.comService.emptyToZero(vatcc),
+          this.comService.FCToCC(
+            this.posCurrencyReceiptDetailsForm.value.currencyCode,
+            this.comService.emptyToZero(vatcc),
+            this.comService.emptyToZero(this.compCurrencyRate)
+          ),
           "AMOUNT"
         )
       )
     );
-    
+
+    // this.posCurrencyReceiptDetailsForm.controls.vatcc.setValue(
+    //   this.comService.commaSeperation(
+    //     this.comService.decimalQuantityFormat(
+    //       this.comService.emptyToZero(vatcc),
+    //       "AMOUNT"
+    //     )
+    //   )
+    // );
+
 
   }
 
@@ -1424,6 +1589,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
 
             if (searchResult && searchResult.length > 0) {
               let matchedItem = searchResult[0];
+              this.resetVatFields();
               this.posCurrencyReceiptDetailsForm.controls.currencyCode.setValue(
                 matchedItem.Currency
               );
@@ -1434,6 +1600,8 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
                 )
               );
 
+              this.compCurrencyRate = this.comService.decimalQuantityFormat(matchedItem['Conv Rate'],
+                "RATE") ?? "";
 
 
             } else {

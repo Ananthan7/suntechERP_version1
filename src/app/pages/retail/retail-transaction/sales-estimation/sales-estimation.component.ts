@@ -1529,7 +1529,7 @@ export class SalesEstimationComponent implements OnInit {
            this.order_items_total_discount_amount = retailSaleData.DISCOUNT;
  
            this.retailSalesDataPost = retailSaleData;
-           this.retailSalesDataPost.RetailDetails = [];
+           this.retailSalesDataPost.estimationDetail = [];
  
            if (this.ordered_items.length >= 0)
              this.comFunc.formControlSetReadOnlyByClass('karat_code', true);
@@ -6594,7 +6594,7 @@ export class SalesEstimationComponent implements OnInit {
       // this.currentLineItems[this.orderedItemEditId - 1] = temp_pos_item_data;
       this.orderedItemEditId = '';
     }
-    this.pos_main_data.RetailDetails = this.currentLineItems;
+    this.pos_main_data.estimationDetail = this.currentLineItems;
     console.log(this.pos_main_data);
   }
    
@@ -8107,7 +8107,7 @@ export class SalesEstimationComponent implements OnInit {
 
       const postData = {
         karatRate: this.karatRateDetails,
-        customer: {
+        posCustomer: {
           CODE: this.customerDetails?.CODE || '0',
           NAME: this.customerDataForm.value.fcn_customer_name || '',
           COMPANY: this.customerDetailForm.value.fcn_cust_detail_company
@@ -8391,59 +8391,10 @@ export class SalesEstimationComponent implements OnInit {
         },
         retailReceipt: this.receiptDetailsList,
         // "retailReceipt": this.receiptDetailsList.length > 0 ? this.receiptDetailsList : '',
-        metalPurchase: this.metalPurchaseDataPost,
-        retailsReturn: this.retailSReturnDataPost,
-        retailSales: this.retailSalesDataPost,
+        metalPurchaseData: this.metalPurchaseDataPost,
+        retailSReturnData: this.retailSReturnDataPost,
+        retailEstimation: this.retailSalesDataPost,
 
-        "additionalInfo": {
-          "strSchemeRedeem": this.selectedSchemeIdCollection.join(","),
-          "giftInfo": [
-            {
-              "GIFT_TYPE": this.giftReceiptForm.value.paymentsCreditGIftVoc || '',
-              "GIFT_CODE": this.giftReceiptForm.value.giftVocNo || '',
-              "REDEEMAMOUNTCC": this.giftReceiptForm.value.giftAmtFC || '',
-              "TOTALSALESAMOUNT": this.order_items_total_net_amount.toString() || '',
-
-
-              // "GIFT_TYPE": this.lineItemForm.value.fcn_li_gift_type || '',
-              // "GIFT_CODE": this.giftTypeOptions.find((e: any) => e.value == this.lineItemForm.value.fcn_li_gift_type)
-            }
-          ]
-        },
-        "doctranslog": [ // doubt
-          {
-            "MID": 0,
-            "VOCTYPE": this.vocType,
-            "REFMID": this.vocDataForm.value.fcn_voc_no,
-            "USERNAME": this.strUser,
-            "MODE": this.posMode, // ADD,EDIT,DELETE
-            "DATETIME": this.comFunc.cDateFormat(new Date()),
-            "REMARKS": "", // reason
-            "SYSTEMNAME": "",
-            "VOCNO": this.vocDataForm.value.fcn_voc_no || 0,
-            "VOCDATE": this.comFunc.cDateFormat(this.vocDataForm.value.vocdate),
-            "BRANCH_CODE": this.strBranchcode,
-            "MODECHECKED": false,
-            "FROM_BRANCH_CODE": this.strBranchcode,
-            "AUTH_TOTAL_AMT": 0,
-            "AUTH_MAKING_AMT": 0,
-            "AUTH_METAL_AMT": 0,
-            "AUTH_GROSSWT": 0,
-            "AUTH_PUREWT": 0,
-            "TVMODECHECKED": false,
-            "STOCK_CODE": "",
-            "YEARMONTH": this.baseYear,
-            "UNIQUEID": "",
-            "GROUPSUMMARY": "",
-            "PRINTMODECHECKED": false,
-            "PARTY_CODE": "",
-            "TRANS_REMARKS": "",
-            "TOTAL_AMOUNTCC": 0,
-            "AUTHORISED_TIME": this.comFunc.cDateFormat(new Date()),
-            "AUTHORISED_PERSON": "",
-            "EXEVERSIONMONTHYEAR": ""
-          }
-        ]
         // "transattachment": [
         //   {
         //     "VOCNO": 0,
@@ -8506,7 +8457,7 @@ export class SalesEstimationComponent implements OnInit {
 
                   this.saveAndContinue(type);
                   let mid;
-                  mid = res.response.retailSales.MID;
+                  mid = res.response.retailEstimation.MID;
 
                   if (mid) {
                     this.AccountPosting(mid);
@@ -8556,7 +8507,7 @@ export class SalesEstimationComponent implements OnInit {
                 this.saveAndContinue(type);
                 // let mid;
                 // mid = res.response.retailSales.MID;
-                this.midForInvoce = res.response.retailSales.MID;
+                this.midForInvoce = res.response.retailEstimation.MID;
                 // this.content.MID = res.response.retailSales.MID;
                 // console.log(this.content.MID)
                 if (this.midForInvoce) {
@@ -11122,8 +11073,8 @@ export class SalesEstimationComponent implements OnInit {
     }
   }
   setDetailsData() {
-    if (this.retailSalesDataPost.RetailDetails.length > 0)
-      this.retailSalesDataPost.RetailDetails.forEach((data: any) => {
+    if (this.retailSalesDataPost.estimationDetail.length > 0)
+      this.retailSalesDataPost.estimationDetail.forEach((data: any) => {
         data.DTSALESPERSON_CODE = this.vocDataForm.value.sales_person || '';
         data.SALESPERSON_CODE = this.vocDataForm.value.sales_person || '';
       }
@@ -11162,6 +11113,9 @@ export class SalesEstimationComponent implements OnInit {
       ),
       YEARMONTH: this.baseYear,
       PARTYNAME: this.customerDataForm.value.fcn_customer_name,
+      RSCUSTIDNO:"",
+      ESTIMATION_STATUS:"s",
+      POS_REFERENCE:"",
       // "PARTYNAME": "Urwashi Jani",
       TEL1: this.customerDetails?.TEL1 || '',
       TEL2: this.customerDetails?.TEL2 || '',
@@ -11437,7 +11391,7 @@ export class SalesEstimationComponent implements OnInit {
       "GROUPREF": "",
       "NEWMID": 0,
 
-      RetailDetails: this.currentLineItems,
+      estimationDetail: this.currentLineItems,
     };
     console.log('====================================');
     console.log(this.retailSalesDataPost);
