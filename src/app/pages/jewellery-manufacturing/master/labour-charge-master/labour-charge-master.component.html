@@ -23,7 +23,7 @@
           <div class="col-sm-3">
             <mat-form-field appearance="outline">
               <input type="text" matInput maxlength="1" oninput="this.value = this.value.toUpperCase()"
-                [readonly]="viewMode || editMode" formControlName="divisions"
+                [readonly]="viewMode || editMode" formControlName="divisions" id="code" #codeInput2 id="codeInput2"
                 (focusout)="validateLookupField($event,diaDivisionCodeData,'divisions')" (input)="inputValidate($event)"
                 appNoEmptySpace (keydown)="lookupKeyPress($event,'divisions')" />
               <master-search [MasterSearchData]="diaDivisionCodeData" (newRowClick)="divisionCodeSelected($event)"
@@ -36,7 +36,7 @@
           <label for="input" id="ID002" class="col-sm-2 col-form-label">Labour Code * :</label>
           <div class="col-sm-3">
             <mat-form-field appearance="outline">
-              <input type="text" matInput #codeInput2 id="codeInput2" maxlength="15" id="code"
+              <input type="text" matInput  maxlength="15" 
                 [readonly]="editMode || viewMode" formControlName="labour_code" (focusout)="diamondLabourCodeValidate()"
                 oninput="this.value = this.value.toUpperCase()" appNoEmptySpace />
             </mat-form-field>
@@ -205,7 +205,7 @@
           <label for="input" id="ID015" class="col-sm-2 col-form-label">Selling Rate * :</label>
           <div class="col-sm-3">
             <mat-form-field appearance="outline">
-              <input type="text" [readonly]="viewMode || codeEnableDiamond" matInput [max]="15" class="text-right"
+              <input type="text" [readonly]="viewMode || codeEnableDiamond" matInput [max]="12" class="text-right"
                 AmountDecimalInput (keypress)="salesChangesDia('selling_rate')" formControlName="selling_rate" />
             </mat-form-field>
           </div>

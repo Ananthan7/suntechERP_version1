@@ -178,201 +178,203 @@ export class ComponentSizeMasterComponent implements OnInit {
         radius: radius,
         desc: formattedDesc,
       },
-      { emitEvent: true }
+      { emitEvent: false }
     );
-  }
 
-
-  setDecimalPoints(value: number): number {
-    // Logic to set decimal point
-    return parseFloat(value.toFixed(3)); // Return the value with exactly three decimal places
   }
 
 
 
-  close(data?: any) {
-    //TODO reset forms and data before closing
-    this.activeModal.close(data);
+setDecimalPoints(value: number): number {
+  // Logic to set decimal point
+  return parseFloat(value.toFixed(3)); // Return the value with exactly three decimal places
+}
+
+
+
+close(data ?: any) {
+  //TODO reset forms and data before closing
+  this.activeModal.close(data);
+}
+formSubmit() {
+  console.log(this.componentsizemasterForm.value);
+
+  if (this.content?.FLAG == 'VIEW') return
+  if (this.content?.FLAG == 'EDIT') {
+
+    this.update()
+    return
   }
-  formSubmit() {
-    console.log(this.componentsizemasterForm.value);
 
-    if (this.content?.FLAG == 'VIEW') return
-    if (this.content?.FLAG == 'EDIT') {
-
-      this.update()
-      return
-    }
-
-    if (this.componentsizemasterForm.value.height > this.componentsizemasterForm.value.width / 2) {
-      this.toastr.error('The Height must be Less than the Half of the Width')
-      return;
-    }
+  if (this.componentsizemasterForm.value.height > this.componentsizemasterForm.value.width / 2) {
+    this.toastr.error('The Height must be Less than the Half of the Width')
+    return;
+  }
 
 
-    if (this.componentsizemasterForm.invalid) {
-      this.toastr.error('select all required fields')
-      return
-    }
+  if (this.componentsizemasterForm.invalid) {
+    this.toastr.error('select all required fields')
+    return
+  }
 
-    let API = 'ComponentSizeMaster/InsertComponentSizeMaster'
-    let postData = this.setPostData()
+  let API = 'ComponentSizeMaster/InsertComponentSizeMaster'
+  let postData = this.setPostData()
 
-    let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
-      .subscribe((result) => {
-        if (result.response) {
-          if (result.status == "Success") {
-            Swal.fire({
-              title: result.message || 'Success',
-              text: '',
-              icon: 'success',
-              confirmButtonColor: '#336699',
-              confirmButtonText: 'Ok'
-            }).then((result: any) => {
-              if (result.value) {
-                this.componentsizemasterForm.reset()
-                this.tableData = []
-                this.close('reloadMainGrid')
-              }
-            });
-          }
-        } else {
-          // this.toastr.error('Not saved')
+  let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
+    .subscribe((result) => {
+      if (result.response) {
+        if (result.status == "Success") {
           Swal.fire({
-            title: '',
-            text: 'This Component Size Detail Already Exists',
-            icon: 'error',
+            title: result.message || 'Success',
+            text: '',
+            icon: 'success',
             confirmButtonColor: '#336699',
             confirmButtonText: 'Ok'
-          })
-        }
-      }, err => alert(err))
-    this.subscriptions.push(Sub);
-  }
-  setPostData() {
-    let form = this.componentsizemasterForm.value
-    return {
-      "MID": this.content?.MID || 0,
-      "COMPSIZE_CODE": this.commonService.nullToString(form.code),
-      "DESCRIPTION": this.commonService.nullToString(form.desc),
-      "RADIUS": this.commonService.nullToString(form.radius),
-      "LENGTH": this.commonService.nullToString(form.length),
-      "WIDTH": this.commonService.nullToString(form.width),
-      "HEIGHT": this.commonService.nullToString(form.height),
-    }
-
-  }
-  update() {
-    if (this.componentsizemasterForm.invalid) {
-      this.toastr.error('select all required fields')
-      return
-    }
-
-    if (this.componentsizemasterForm.value.height > this.componentsizemasterForm.value.width / 2) {
-      this.toastr.error('The Height must be Less than the Half of the Width')
-      return;
-    }
-
-
-    let API = 'ComponentSizeMaster/UpdateComponentSizeMaster/' + this.content.COMPSIZE_CODE
-    let postData = this.setPostData()
-
-
-    let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
-      .subscribe((result) => {
-        if (result.response) {
-          if (result.status == "Success") {
-            Swal.fire({
-              title: result.message || 'Success',
-              text: '',
-              icon: 'success',
-              confirmButtonColor: '#336699',
-              confirmButtonText: 'Ok'
-            }).then((result: any) => {
-              if (result.value) {
-                this.componentsizemasterForm.reset()
-                this.tableData = []
-                this.close('reloadMainGrid')
-              }
-            });
-          }
-        } else {
-          this.toastr.error('Not saved')
-        }
-      }, err => alert(err))
-    this.subscriptions.push(Sub)
-  }
-  deleteRecord() {
-    if (!this.content.MID) {
-      Swal.fire({
-        title: '',
-        text: 'Please Select data to delete!',
-        icon: 'error',
-        confirmButtonColor: '#336699',
-        confirmButtonText: 'Ok'
-      }).then((result: any) => {
-        if (result.value) {
-        }
-      });
-      return
-    }
-    Swal.fire({
-      title: 'Are you sure?',
-      text: "You won't be able to revert this!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete!'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        let API = 'ComponentSizeMaster/DeleteComponentSizeMaster/' + this.content.COMPSIZE_CODE
-        let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
-          .subscribe((result) => {
-            if (result) {
-              if (result.status == "Success") {
-                Swal.fire({
-                  title: result.message || 'Success',
-                  text: '',
-                  icon: 'success',
-                  confirmButtonColor: '#336699',
-                  confirmButtonText: 'Ok'
-                }).then((result: any) => {
-                  if (result.value) {
-                    this.componentsizemasterForm.reset()
-                    this.tableData = []
-                    this.close('reloadMainGrid')
-                  }
-                });
-              } else {
-                Swal.fire({
-                  title: result.message || 'Error please try again',
-                  text: '',
-                  icon: 'error',
-                  confirmButtonColor: '#336699',
-                  confirmButtonText: 'Ok'
-                }).then((result: any) => {
-                  if (result.value) {
-                    this.componentsizemasterForm.reset()
-                    this.tableData = []
-                    this.close()
-                  }
-                });
-              }
-            } else {
-              this.toastr.error('Not deleted')
+          }).then((result: any) => {
+            if (result.value) {
+              this.componentsizemasterForm.reset()
+              this.tableData = []
+              this.close('reloadMainGrid')
             }
-          }, err => alert(err))
-        this.subscriptions.push(Sub)
+          });
+        }
+      } else {
+        // this.toastr.error('Not saved')
+        Swal.fire({
+          title: '',
+          text: 'This Component Size Detail Already Exists',
+          icon: 'error',
+          confirmButtonColor: '#336699',
+          confirmButtonText: 'Ok'
+        })
+      }
+    }, err => alert(err))
+  this.subscriptions.push(Sub);
+}
+setPostData() {
+  let form = this.componentsizemasterForm.value
+  return {
+    "MID": this.content?.MID || 0,
+    "COMPSIZE_CODE": this.commonService.nullToString(form.code),
+    "DESCRIPTION": this.commonService.nullToString(form.desc),
+    "RADIUS": this.commonService.nullToString(form.radius),
+    "LENGTH": this.commonService.nullToString(form.length),
+    "WIDTH": this.commonService.nullToString(form.width),
+    "HEIGHT": this.commonService.nullToString(form.height),
+  }
+
+}
+update() {
+  if (this.componentsizemasterForm.invalid) {
+    this.toastr.error('select all required fields')
+    return
+  }
+
+  if (this.componentsizemasterForm.value.height > this.componentsizemasterForm.value.width / 2) {
+    this.toastr.error('The Height must be Less than the Half of the Width')
+    return;
+  }
+
+
+  let API = 'ComponentSizeMaster/UpdateComponentSizeMaster/' + this.content.COMPSIZE_CODE
+  let postData = this.setPostData()
+
+
+  let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
+    .subscribe((result) => {
+      if (result.response) {
+        if (result.status == "Success") {
+          Swal.fire({
+            title: result.message || 'Success',
+            text: '',
+            icon: 'success',
+            confirmButtonColor: '#336699',
+            confirmButtonText: 'Ok'
+          }).then((result: any) => {
+            if (result.value) {
+              this.componentsizemasterForm.reset()
+              this.tableData = []
+              this.close('reloadMainGrid')
+            }
+          });
+        }
+      } else {
+        this.toastr.error('Not saved')
+      }
+    }, err => alert(err))
+  this.subscriptions.push(Sub)
+}
+deleteRecord() {
+  if (!this.content.MID) {
+    Swal.fire({
+      title: '',
+      text: 'Please Select data to delete!',
+      icon: 'error',
+      confirmButtonColor: '#336699',
+      confirmButtonText: 'Ok'
+    }).then((result: any) => {
+      if (result.value) {
       }
     });
+    return
   }
-
-  onInputChange(event: any, controlName: string, maxLength: number) {
-    const inputValue = event.target.value;
-
-    if (inputValue.length > maxLength) {
-      this.componentsizemasterForm.get(controlName)!.setValue(inputValue.slice(0, maxLength));
+  Swal.fire({
+    title: 'Are you sure?',
+    text: "You won't be able to revert this!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes, delete!'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      let API = 'ComponentSizeMaster/DeleteComponentSizeMaster/' + this.content.COMPSIZE_CODE
+      let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
+        .subscribe((result) => {
+          if (result) {
+            if (result.status == "Success") {
+              Swal.fire({
+                title: result.message || 'Success',
+                text: '',
+                icon: 'success',
+                confirmButtonColor: '#336699',
+                confirmButtonText: 'Ok'
+              }).then((result: any) => {
+                if (result.value) {
+                  this.componentsizemasterForm.reset()
+                  this.tableData = []
+                  this.close('reloadMainGrid')
+                }
+              });
+            } else {
+              Swal.fire({
+                title: result.message || 'Error please try again',
+                text: '',
+                icon: 'error',
+                confirmButtonColor: '#336699',
+                confirmButtonText: 'Ok'
+              }).then((result: any) => {
+                if (result.value) {
+                  this.componentsizemasterForm.reset()
+                  this.tableData = []
+                  this.close()
+                }
+              });
+            }
+          } else {
+            this.toastr.error('Not deleted')
+          }
+        }, err => alert(err))
+      this.subscriptions.push(Sub)
     }
+  });
+}
+
+onInputChange(event: any, controlName: string, maxLength: number) {
+  const inputValue = event.target.value;
+
+  if (inputValue.length > maxLength) {
+    this.componentsizemasterForm.get(controlName)!.setValue(inputValue.slice(0, maxLength));
   }
+}
 }

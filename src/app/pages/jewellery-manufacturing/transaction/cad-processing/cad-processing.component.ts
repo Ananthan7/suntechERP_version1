@@ -118,7 +118,7 @@ export class CADProcessingComponent implements OnInit {
     toProcess:['', [Validators.required]],
     job:[''],
     subJobId:[''],
-    timeTaken:[new Date().getDay()+':'+new Date().getHours()+':'+new Date().getMinutes()],
+    timeTaken:[new Date().getHours() + ':' + new Date().getMinutes() + ':' + new Date().getSeconds()],
     userId:[''], // No
     date:[''],
     copy:[''], // no

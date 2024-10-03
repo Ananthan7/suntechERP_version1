@@ -120,7 +120,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 29,
     SEARCH_FIELD: "Code",
-    SEARCH_HEADING: "Type Code",
+    SEARCH_HEADING: "Customer ID Type",
     SEARCH_VALUE: "",
     WHERECONDITION: "TYPES = 'ID MASTER'",
     VIEW_INPUT: true,
@@ -132,7 +132,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 26,
     SEARCH_FIELD: "CODE",
-    SEARCH_HEADING: "Country Type",
+    SEARCH_HEADING: "Countries",
     SEARCH_VALUE: "",
     WHERECONDITION: "TYPES='COUNTRY MASTER'",
     VIEW_INPUT: true,
@@ -144,7 +144,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 2,
     SEARCH_FIELD: "CODE",
-    SEARCH_HEADING: "Parent Pos Code",
+    SEARCH_HEADING: "Parent Code (POS)",
     SEARCH_VALUE: "",
     WHERECONDITION: "CODE<> ''",
     VIEW_INPUT: true,
@@ -157,7 +157,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 2,
     SEARCH_FIELD: "CODE",
-    SEARCH_HEADING: "Ref By Code",
+    SEARCH_HEADING: "Refered By",
     SEARCH_VALUE: "",
     WHERECONDITION: "CODE<> ''",
     VIEW_INPUT: true,
@@ -182,7 +182,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 48,
     SEARCH_FIELD: "STATE_CODE",
-    SEARCH_HEADING: "State Code",
+    SEARCH_HEADING: "State",
     SEARCH_VALUE: "",
     WHERECONDITION: "STATE_CODE<> ''",
     VIEW_INPUT: true,
@@ -195,7 +195,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 3,
     SEARCH_FIELD: "CODE",
-    SEARCH_HEADING: "City Code",
+    SEARCH_HEADING: "City",
     SEARCH_VALUE: "",
     WHERECONDITION: "TYPES='REGION MASTER'",
     VIEW_INPUT: true,
@@ -207,7 +207,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 45,
     SEARCH_FIELD: "CODE",
-    SEARCH_HEADING: "Language Code",
+    SEARCH_HEADING: "Languages",
     SEARCH_VALUE: "",
     WHERECONDITION: "TYPES = 'LANGUAGE MASTER'",
     VIEW_INPUT: true,
@@ -219,7 +219,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 3,
     SEARCH_FIELD: "CODE",
-    SEARCH_HEADING: "Fav Celebration Code",
+    SEARCH_HEADING: "Favorite Celebration",
     SEARCH_VALUE: "",
     WHERECONDITION: "TYPES='FAVORITE CELEBRATION MASTER'",
     VIEW_INPUT: true,
@@ -232,7 +232,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 3,
     SEARCH_FIELD: "CODE",
-    SEARCH_HEADING: "Religion Code",
+    SEARCH_HEADING: "Religions",
     SEARCH_VALUE: "",
     WHERECONDITION: "TYPES='RELIGION MASTER'",
     VIEW_INPUT: true,
@@ -245,7 +245,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 3,
     SEARCH_FIELD: "CODE",
-    SEARCH_HEADING: "Customer Status Code",
+    SEARCH_HEADING: "Customer Status",
     SEARCH_VALUE: "",
     WHERECONDITION: "TYPES='CUSTOMER STATUS MASTER'",
     VIEW_INPUT: true,
@@ -323,7 +323,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 3,
     SEARCH_FIELD: "CODE",
-    SEARCH_HEADING: "Occupation ",
+    SEARCH_HEADING: "Occupation",
     SEARCH_VALUE: "",
     WHERECONDITION: "TYPES='OCCUPATION MASTER'",
     VIEW_INPUT: true,
@@ -356,11 +356,11 @@ export class PosCustomerMasterMainComponent implements OnInit {
   };
 
   posCustomerMasterMainForm: FormGroup = this.formBuilder.group({
-    code: [""],
+    code: ["", [Validators.required]],
     parentPosCode: [""],
     refBy: [""],
-    name: [""],
-    nameDesc: ["", [Validators.maxLength(40)]],
+    prefix: ["", [Validators.required]],
+    name: ["", [Validators.required, Validators.maxLength(40)]],
     firstName: [""],
     middleName: [""],
     lastName: [""],
@@ -369,15 +369,27 @@ export class PosCustomerMasterMainComponent implements OnInit {
       { value: "", disabled: true },
       [Validators.maxLength(21)],
     ],
-    gender: [""],
-    maritalSt: [""],
-    dob: [""],
+    gender: ["", [Validators.required]],
+    maritalSt: ["", [Validators.required]],
+    dob: [
+      "",
+      this.comService.allbranchMaster.AMLDIGICOMPANYNAME === "MeenaJewellers" ||
+      this.comService.allbranchMaster.AMLTYPE === 2
+        ? [Validators.required]
+        : [],
+    ],
     picture: [null],
     weddate: [""],
-    country: [""],
-    countryCode: [""],
-    moblieCountry: [""],
-    moblieNumber: [""],
+    country: [
+      "",
+      this.comService.allbranchMaster.AMLDIGICOMPANYNAME === "MeenaJewellers" ||
+      this.comService.allbranchMaster.AMLNAMEVALIDATION === true
+        ? [Validators.required]
+        : [],
+    ],
+    countryCode: ["", [Validators.required]],
+    moblieCountry: ["", [Validators.required]],
+    moblieNumber: ["", [Validators.required]],
     moblie1Country: [""],
     moblie1Number: [""],
     emailId: [
@@ -394,8 +406,22 @@ export class PosCustomerMasterMainComponent implements OnInit {
     tel0Country: [""],
     tel0number: [""],
     faxNo: ["", Validators.maxLength(15)],
-    custType: ["", [Validators.required, Validators.maxLength(6)]],
-    nationality: [""],
+    custType: [
+      "",
+      this.comService.allbranchMaster.AMLDIGICOMPANYNAME === "MeenaJewellers" ||
+      this.comService.allbranchMaster.AMLNAMEVALIDATION === true
+        ? [Validators.required, Validators.maxLength(6)]
+        : [Validators.maxLength(6)],
+    ],
+    nationality: [
+      "",
+      this.comService.allbranchMaster.AMLDIGICOMPANYNAME === "Jawhara" ||
+      "MeenaJewellers" ||
+      this.comService.allbranchMaster.AMLNAMEVALIDATION === true ||
+      this.comService.allbranchMaster.AMLTYPE === 2
+        ? [Validators.required]
+        : [],
+    ],
     state: [""],
     city: [""],
     language: [""],
@@ -413,16 +439,43 @@ export class PosCustomerMasterMainComponent implements OnInit {
     noOfChildren: ["", [Validators.maxLength(5)]],
     religion: [""],
     occupation1: [""],
-    sourceOfFund: [""],
+    sourceOfFund: [
+      "",
+      this.comService.allbranchMaster.AMLTYPE === 2
+        ? [Validators.required]
+        : [],
+    ],
     category: [""],
     custStatus: [""],
     income: [""],
     bloodGroup: [""],
-    custIdType: [""],
-    custID: [""],
-    custDate: [""],
+    custIdType: [
+      "",
+      this.comService.allbranchMaster.AMLDIGICOMPANYNAME === "MeenaJewellers" ||
+      this.comService.allbranchMaster.AMLTYPE === 2
+        ? [Validators.required]
+        : [],
+    ],
+    custID: [
+      "",
+      this.comService.allbranchMaster.AMLDIGICOMPANYNAME === "MeenaJewellers" ||
+      this.comService.allbranchMaster.AMLTYPE === 2
+        ? [Validators.required]
+        : [],
+    ],
+    custDate: [
+      "",
+      this.comService.allbranchMaster.AMLTYPE === 2
+        ? [Validators.required]
+        : [],
+    ],
     POBox: ["", [Validators.maxLength(6)]],
-    addressPersonal: [""],
+    addressPersonal: [
+      "",
+      this.comService.allbranchMaster.AMLDIGICOMPANYNAME === "MeenaJewellers"
+        ? [Validators.required]
+        : [],
+    ],
     officialAddress: [""],
     deliveryAddress: [""],
     remarks: [""],
@@ -465,7 +518,12 @@ export class PosCustomerMasterMainComponent implements OnInit {
     ageGroup: [""],
     lookingFor: [""],
     nextVisit: [""],
-    occupation: [""],
+    occupation: [
+      "",
+      this.comService.allbranchMaster.AMLTYPE === 2
+        ? [Validators.required]
+        : [],
+    ],
     createdBranch: [""],
     openedOn: [this.currentDate],
     voucher: [""],
@@ -515,6 +573,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
     twitter: [""],
     instagram: [""],
   });
+  imageName: any;
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -559,12 +618,19 @@ export class PosCustomerMasterMainComponent implements OnInit {
       });
   }
 
+  dobValueSetting(event: any) {
+    const selectedDate = event.value;
+    this.posCustomerMasterMainForm.controls.dob1.setValue(selectedDate);
+    console.log("Selected Date:", selectedDate);
+  }
+
   nameChange(event: any) {
     const value = event.target.value.toString().trim();
     console.log(value);
 
     // event.target.value = value;
     if (value != "") {
+      this.posCustomerMasterMainForm.controls.name1.setValue(value);
       const res = value.split(/\s+/);
       event.target.value = res.join(" ");
 
@@ -630,8 +696,8 @@ export class PosCustomerMasterMainComponent implements OnInit {
   }
 
   setvalues(setData: any) {
-    this.posCustomerMasterMainForm.controls.nameDesc.setValue(setData.NAME);
-    this.posCustomerMasterMainForm.controls.name.setValue(
+    this.posCustomerMasterMainForm.controls.name.setValue(setData.NAME);
+    this.posCustomerMasterMainForm.controls.prefix.setValue(
       setData.POSCUSTPREFIX
     );
     this.posCustomerMasterMainForm.controls.parentPosCode.setValue(
@@ -645,16 +711,14 @@ export class PosCustomerMasterMainComponent implements OnInit {
       setData.MIDDLENAME
     );
     this.posCustomerMasterMainForm.controls.lastName.setValue(setData.LASTNAME);
-    this.posCustomerMasterMainForm.controls.creditCardLimitCheck.setValue(
-      setData.CREDIT_LIMIT_STATUS
-    );
+    
+      this.isCreditLimit = setData.CREDIT_LIMIT_STATUS
+    
     this.posCustomerMasterMainForm.controls.creditCardLimit.setValue(
-
       this.comService.decimalQuantityFormat(
         this.comService.emptyToZero(setData.CREDIT_LIMIT),
         "AMOUNT"
       )
-      
     );
 
     this.posCustomerMasterMainForm.controls.company.setValue(setData.COMPANY);
@@ -914,6 +978,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
     this.posCustomerMasterMainForm.controls.fatherName.setValue(
       setData.FATHERNAME
     );
+    
   }
 
   editController() {
@@ -965,8 +1030,8 @@ export class PosCustomerMasterMainComponent implements OnInit {
   }
 
   onCountrySelect(iso2Code: string) {
+    console.log("Selected Country ISO2: ", iso2Code);
     this.selectedCountryISO2 = iso2Code;
-    console.log("Selected Country ISO2: ", this.selectedCountryISO2);
 
     let API = `CountryMaster/GetStateList/${this.selectedCountryISO2}`;
     this.apiService.getDynamicAPI(API).subscribe((res) => {
@@ -993,6 +1058,14 @@ export class PosCustomerMasterMainComponent implements OnInit {
       this.cityListData = res.response;
       console.log(this.cityListData);
     });
+  }
+
+  onCity(value:any) {
+    console.log("In");
+    
+    console.log(value);
+    
+    this.posCustomerMasterMainForm.controls.city.setValue(value)
   }
 
   onPanNoInput(event: Event): void {
@@ -1036,6 +1109,8 @@ export class PosCustomerMasterMainComponent implements OnInit {
         .getDynamicAPIWithoutBranch(API)
         .subscribe((res) => {
           if (res.status == "Success") {
+            console.log(res);
+
             this.generatedCustomerCode = res.PosCustomerCode;
             this.posCustomerMasterMainForm.controls.code.setValue(
               this.generatedCustomerCode
@@ -1253,21 +1328,66 @@ export class PosCustomerMasterMainComponent implements OnInit {
     this.activeModal.close(data);
   }
 
+  uploadCustomerImage() {
+    const formData = new FormData();
+    formData.append(
+      "CODE",
+      this.existCustomerCode || this.generatedCustomerCode
+    );
+    formData.append("File", this.image as Blob);
+
+    let API = `PosCustomerMaster/InsertPOSCustAttachments`;
+
+    console.log("FormData:", formData);
+
+    let sub: Subscription = this.apiService
+      .postDynamicAPI(API, formData)
+      .subscribe(
+        (result) => {
+          console.log("Image upload API Response:", result);
+        },
+        (err) => {
+          // Handle HTTP or API error for image upload
+          console.error("Image Upload Error:", err);
+        }
+      );
+    this.subscriptions.push(sub);
+  }
+
   customerSave() {
-    
-    if (
-      this.posCustomerMasterMainForm.value.moblieNumber == "" &&
-      this.posCustomerMasterMainForm.value.telRNumber == ""
-    ) {
-      Swal.fire({
-        title: "Warning",
-        text: "Atleast One of the Field is Manditory Mobile Number (OR) Telephone Number",
-        icon: "warning",
-        confirmButtonColor: "#336699",
-        confirmButtonText: "Ok",
-      });
-      return;
-    }
+    // let POSTYPECOMPULSORY =
+    //   this.comService.getCompanyParamValue("POSTYPECOMPULSORY");
+    // if (
+    //   POSTYPECOMPULSORY === 1 &&
+    //   !this.posCustomerMasterMainForm.controls.custType.value
+    // ) {
+    //   this.comService.toastErrorByMsgId("MSG1923");
+    // }
+
+    // let POSIDNOCOMPULSORY =
+    //   this.comService.getCompanyParamValue("POSIDNOCOMPULSORY");
+
+    // if (
+    //   POSIDNOCOMPULSORY === true &&
+    //   !this.posCustomerMasterMainForm.controls.custIdType.value &&
+    //   !this.posCustomerMasterMainForm.controls.custID.value
+    // ) {
+    //   this.comService.toastErrorByMsgId("MSG81405 ");
+    // }
+
+    // if (
+    //   this.posCustomerMasterMainForm.value.moblieNumber == "" &&
+    //   this.posCustomerMasterMainForm.value.telRNumber == ""
+    // ) {
+    //   Swal.fire({
+    //     title: "Warning",
+    //     text: "Atleast One of the Field is Manditory Mobile Number (OR) Telephone Number",
+    //     icon: "warning",
+    //     confirmButtonColor: "#336699",
+    //     confirmButtonText: "Ok",
+    //   });
+    //   return;
+    // }
 
     if (!this.isCustProcessing || this.isCustProcessing) {
       this.isCustProcessing = true;
@@ -1281,10 +1401,28 @@ export class PosCustomerMasterMainComponent implements OnInit {
         }
       );
 
+      const invalidRequiredFields = Object.keys(
+        this.posCustomerMasterMainForm.controls
+      ).filter((controlName) => {
+        const control = this.posCustomerMasterMainForm.controls[controlName];
+        return control.invalid && control.errors?.["required"]; 
+      });
+
+      invalidRequiredFields.length > 0 &&
+        Swal.fire({
+          title: "Warning",
+          text: "Please fill all the mandatory fields",
+          icon: "warning",
+          confirmButtonColor: "#336699",
+          confirmButtonText: "Ok",
+        });
+
       if (!this.posCustomerMasterMainForm.invalid) {
+        console.log("data");
+
         const posCustomer = {
           CODE: this.posCustomerMasterMainForm.value.code || "",
-          NAME: this.posCustomerMasterMainForm.value.nameDesc || "",
+          NAME: this.posCustomerMasterMainForm.value.name || "",
           COMPANY: this.posCustomerMasterMainForm.value.company || "",
           ADDRESS: this.posCustomerMasterMainForm.value.addressPersonal || "",
           POBOX_NO: this.posCustomerMasterMainForm.value.POBox || "",
@@ -1302,14 +1440,11 @@ export class PosCustomerMasterMainComponent implements OnInit {
           FAX: this.posCustomerMasterMainForm.value.faxNo.toString() || "",
           MARITAL_ST:
             this.posCustomerMasterMainForm.value.maritalSt || "Unknown",
-          WED_DATE:
-            this.posCustomerMasterMainForm.value.weddate || this.currentDate,
+          WED_DATE: this.posCustomerMasterMainForm.value.weddate || null,
           SPOUSE_NAME: this.posCustomerMasterMainForm.value.spouse || "",
           REMARKS: this.posCustomerMasterMainForm.value.remarks || "",
-          DATE_OF_BIRTH:
-            this.posCustomerMasterMainForm.value.dob || this.currentDate,
-          OPENING_ON:
-            this.posCustomerMasterMainForm.value.openedOn || this.currentDate,
+          DATE_OF_BIRTH: this.posCustomerMasterMainForm.value.dob || null,
+          OPENING_ON: this.posCustomerMasterMainForm.value.openedOn || null,
           GENDER: this.posCustomerMasterMainForm.value.gender || "",
           REGION: "",
           NATIONALITY: this.posCustomerMasterMainForm.value.nationality || "",
@@ -1322,14 +1457,14 @@ export class PosCustomerMasterMainComponent implements OnInit {
           PICTURE_NAME: "",
           PICTURE: "",
           SALVOCTYPE_NO: this.posCustomerMasterMainForm.value.voucher || "",
-          SALDATE: this.posCustomerMasterMainForm.value.date || this.currentDate,
+          SALDATE: this.posCustomerMasterMainForm.value.saleDate || this.currentDate,
           SALAMOUNT: this.posCustomerMasterMainForm.value.amount || 0,
           SALBRLOC: this.posCustomerMasterMainForm.value.branchLoc || "",
           Branch_Code: this.branchCode,
           TOTALSALES: this.posCustomerMasterMainForm.value.totalSale || 0,
           POSCUSTIDNO: this.posCustomerMasterMainForm.value.custID || "",
           POSSMAN: "",
-          POSCUSTPREFIX: this.posCustomerMasterMainForm.value.name || "",
+          POSCUSTPREFIX: this.posCustomerMasterMainForm.value.prefix || "",
           MOBILE1:
             this.posCustomerMasterMainForm.value.moblie1Number.toString() || "",
           CUST_Language: this.posCustomerMasterMainForm.value.language || "",
@@ -1403,16 +1538,16 @@ export class PosCustomerMasterMainComponent implements OnInit {
           SUGGESTION: "",
           AMLNAMEVALIDATION: false,
           AML_TYPE: false,
-          UN_NUMBER: "",
+          UN_NUMBER: this.posCustomerMasterMainForm.value.unNumber || "",
           NAME_1: this.posCustomerMasterMainForm.value.name1 || "",
           NAME_2: this.posCustomerMasterMainForm.value.name2 || "",
           NAME_3: this.posCustomerMasterMainForm.value.name3 || "",
           NAME_4: this.posCustomerMasterMainForm.value.name4 || "",
           NAME_5: this.posCustomerMasterMainForm.value.name5 || "",
-          DOB_2: this.posCustomerMasterMainForm.value.dob2 || this.currentDate,
-          DOB_3: this.posCustomerMasterMainForm.value.dob3 || this.currentDate,
-          DOB_4: this.posCustomerMasterMainForm.value.dob4 || this.currentDate,
-          DOB_5: this.posCustomerMasterMainForm.value.dob5 || this.currentDate,
+          DOB_2: this.posCustomerMasterMainForm.value.dob2 || null,
+          DOB_3: this.posCustomerMasterMainForm.value.dob3 || null,
+          DOB_4: this.posCustomerMasterMainForm.value.dob4 || null,
+          DOB_5: this.posCustomerMasterMainForm.value.dob5 || null,
           GOOD_QUALITY:
             this.posCustomerMasterMainForm.value.goodQualityaka || "",
           LOW_QUALITY: this.posCustomerMasterMainForm.value.lowQualityaka || "",
@@ -1426,12 +1561,17 @@ export class PosCustomerMasterMainComponent implements OnInit {
             this.posCustomerMasterMainForm.value.nationality4 || "",
           NATIONALITY_5:
             this.posCustomerMasterMainForm.value.nationality5 || "",
-          PASSPORT_NO_1: this.posCustomerMasterMainForm.value.passport1 || "",
-          PASSPORT_NO_2: this.posCustomerMasterMainForm.value.passport2 || "",
-          PASSPORT_NO_3: this.posCustomerMasterMainForm.value.passport3 || "",
-          PASSPORT_NO_4: this.posCustomerMasterMainForm.value.passport4 || "",
-          PASSPORT_NO_5: this.posCustomerMasterMainForm.value.passport5 || "",
-          LISTED_ON_DATE: this.posCustomerMasterMainForm.value.listedOn || this.currentDate,
+          PASSPORT_NO_1:
+            this.posCustomerMasterMainForm.value.passport1.toString() || "",
+          PASSPORT_NO_2:
+            this.posCustomerMasterMainForm.value.passport2.toString() || "",
+          PASSPORT_NO_3:
+            this.posCustomerMasterMainForm.value.passport3.toString() || "",
+          PASSPORT_NO_4:
+            this.posCustomerMasterMainForm.value.passport4.toString() || "",
+          PASSPORT_NO_5:
+            this.posCustomerMasterMainForm.value.passport5.toString() || "",
+          LISTED_ON_DATE: this.posCustomerMasterMainForm.value.listedOn || null,
           NATIONAL_IDENTIFICATION_NO:
             this.posCustomerMasterMainForm.value.fcn_cust_detail_idcard || "",
           OTHER_INFORMATION: "",
@@ -1443,10 +1583,10 @@ export class PosCustomerMasterMainComponent implements OnInit {
           CHILDNAME2: "",
           CHILDNAME3: "",
           CHILDNAME4: "",
-          CHILDDATEOFBIRTH1: this.currentDate,
-          CHILDDATEOFBIRTH2: this.currentDate,
-          CHILDDATEOFBIRTH3: this.currentDate,
-          CHILDDATEOFBIRTH4: this.currentDate,
+          CHILDDATEOFBIRTH1: null,
+          CHILDDATEOFBIRTH2: null,
+          CHILDDATEOFBIRTH3: null,
+          CHILDDATEOFBIRTH4: null,
           OTHERNAMES: "",
           AUTOCREATEMST: false,
           WUPMOBILECODE:
@@ -1458,7 +1598,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
           ProductRangeAvailability: "",
           DIGISCREENED: false,
           BR_CODE: "",
-          SPOUSE_DATE_OF_BIRTH: this.currentDate,
+          SPOUSE_DATE_OF_BIRTH: null,
           TEL_R_CODE: `${this.comService.emptyToZero(
             this.posCustomerMasterMainForm.value.telRCountry
           )}`,
@@ -1481,7 +1621,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
           VOCTYPE: this.vocDetails?.VOCTYPE ?? "",
           YEARMONTH: this.vocDetails?.YEARMONTH ?? localStorage.getItem("YEAR"),
           VOCNO: this.vocDetails?.VOCNO ?? 0,
-          VOCDATE: this.vocDetails?.VOCDATE || this.currentDate,
+          VOCDATE: this.vocDetails?.VOCDATE || null,
 
           OT_TRANSFER_TIME: "",
           COUNTRY_DESC: this.posCustomerMasterMainForm.value.country || "",
@@ -1516,7 +1656,8 @@ export class PosCustomerMasterMainComponent implements OnInit {
           PRODUCTRANGEAVAILABILITY:
             this.posCustomerMasterMainForm.value.productRangeAvailability || "",
           LOOKING_FOR: "",
-          POSCUSTIDEXP_DATE: this.posCustomerMasterMainForm.value.custDate || this.currentDate,
+          POSCUSTIDEXP_DATE:
+            this.posCustomerMasterMainForm.value.custDate || null,
 
           ATTACHMENT_FROM_SCANNER: false,
           GOOD_QUALITY_A_K_A: "",
@@ -1528,139 +1669,65 @@ export class PosCustomerMasterMainComponent implements OnInit {
           let API = `PosCustomerMaster/UpdateCustomerMaster/${posCustomer.CODE}`;
           let sub: Subscription = this.apiService
             .putDynamicAPI(API, posCustomer)
-            .subscribe(
-              (result) => {
-                console.log("API Response:", result);
+            .subscribe((result) => {
+              console.log("API Response:", result);
 
-                if (result.status === "Success") {
-                  Swal.fire({
-                    title: "Success",
-                    text: "Customer Details Updated successfully!",
-                    icon: "success",
-                    confirmButtonColor: "#336699",
-                    confirmButtonText: "Ok",
-                  });
-
-                  if (this.image) {
-                    const formData = new FormData();
-                    formData.append(
-                      "CODE",
-                      this.existCustomerCode || this.generatedCustomerCode
-                    );
-                    formData.append("File", this.image);
-
-                    let API = `PosCustomerMaster/InsertPOSCustAttachments`;
-
-                    console.log("FormData:", formData);
-
-                    let Sub: Subscription = this.apiService
-                      .postDynamicAPI(API, formData)
-                      .subscribe(
-                        (result) => {
-                          console.log("API Response:", result);
-                        },
-                        (err) => {
-                          // Handle HTTP or API error
-                          console.error("API Error:", err);
-                        }
-                      );
-                    this.subscriptions.push(Sub);
-                  } else {
-                    console.error("No file selected");
-                  }
-
-                  this.close("reloadMainGrid");
-                } else {
-                  // Handle cases where the result is not successful or undefined
-                  Swal.fire({
-                    title: "Upload Failed",
-                    text: "Customer Details Not Updated Successfully",
-                    icon: "error",
-                    confirmButtonColor: "#336699",
-                    confirmButtonText: "Ok",
-                  });
-                }
-              },
-              (err) => {
-                // Handle HTTP or API error
-                console.error("API Error:", err);
+              if (result.status === "Success") {
                 Swal.fire({
-                  title: "Error",
-                  text: err.message || "An error occurred during the upload.",
+                  title: "Success",
+                  text: "Customer Details Updated successfully!",
+                  icon: "success",
+                  confirmButtonColor: "#336699",
+                  confirmButtonText: "Ok",
+                });
+
+                if (this.image) {
+                  this.uploadCustomerImage;
+                }
+
+                this.close("reloadMainGrid");
+              } else {
+                // Handle cases where the result is not successful or undefined
+                Swal.fire({
+                  title: "Upload Failed",
+                  text: "Customer Details Not Updated Successfully",
                   icon: "error",
                   confirmButtonColor: "#336699",
                   confirmButtonText: "Ok",
                 });
               }
-            );
+            });
         } else {
           let API = "PosCustomerMaster/InsertCustomerMaster";
           let sub: Subscription = this.apiService
             .postDynamicAPI(API, posCustomer)
-            .subscribe(
-              (result) => {
-                console.log("API Response:", result);
+            .subscribe((result) => {
+              console.log("API Response:", result);
 
-                if (result.status === "Success") {
-                  Swal.fire({
-                    title: "Success",
-                    text: "Customer Details Inserted successfully!",
-                    icon: "success",
-                    confirmButtonColor: "#336699",
-                    confirmButtonText: "Ok",
-                  });
-
-                  if (this.image) {
-                    const formData = new FormData();
-                    formData.append(
-                      "CODE",
-                      this.existCustomerCode || this.generatedCustomerCode
-                    );
-                    formData.append("File", this.image);
-
-                    let API = `PosCustomerMaster/InsertPOSCustAttachments`;
-
-                    console.log("FormData:", formData);
-
-                    let Sub: Subscription = this.apiService
-                      .postDynamicAPI(API, formData)
-                      .subscribe(
-                        (result) => {
-                          console.log("API Response:", result);
-                        },
-                        (err) => {
-                          // Handle HTTP or API error
-                          console.error("API Error:", err);
-                        }
-                      );
-                    this.subscriptions.push(Sub);
-                  } else {
-                    console.error("No file selected");
-                  }
-                  this.close("reloadMainGrid");
-                } else {
-                  // Handle cases where the result is not successful or undefined
-                  Swal.fire({
-                    title: "Upload Failed",
-                    text: "Customer Details Not Inserted Successfully",
-                    icon: "error",
-                    confirmButtonColor: "#336699",
-                    confirmButtonText: "Ok",
-                  });
-                }
-              },
-              (err) => {
-                // Handle HTTP or API error
-                console.error("API Error:", err);
+              if (result.status === "Success") {
                 Swal.fire({
-                  title: "Error",
-                  text: err.message || "An error occurred during the upload.",
+                  title: "Success",
+                  text: "Customer Details Inserted successfully!",
+                  icon: "success",
+                  confirmButtonColor: "#336699",
+                  confirmButtonText: "Ok",
+                });
+
+                if (this.image) {
+                  this.uploadCustomerImage;
+                }
+                this.close("reloadMainGrid");
+              } else {
+                // Handle cases where the result is not successful or undefined
+                Swal.fire({
+                  title: "Upload Failed",
+                  text: "Customer Details Not Inserted Successfully",
                   icon: "error",
                   confirmButtonColor: "#336699",
                   confirmButtonText: "Ok",
                 });
               }
-            );
+            });
         }
 
         // RES.subscribe(async (data) => {
@@ -1955,7 +2022,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
       case "occupation1":
         this.overlayOccupation1.showOverlayPanel(event);
         break;
-      case "sourceOfFound":
+      case "sourceOfFund":
         this.overlaySourceOfFund.showOverlayPanel(event);
         break;
       default:
@@ -1990,16 +2057,30 @@ export class PosCustomerMasterMainComponent implements OnInit {
     }
   }
 
-  onInput(event: any, limit: any) {
+  onInput(event: any, limit: any, controller?: any) {
     const input = event.target as HTMLInputElement;
     if (input.value.length > limit) {
       input.value = input.value.slice(0, limit);
+    }
+
+    if (controller) {
+      this.posCustomerMasterMainForm.controls[controller].setValue(input.value);
     }
   }
 
   onFileSelected(event: any) {
     this.image = event.target.files[0];
+    this.imageName = event.target.files[0].name
     console.log(this.image);
+
+    // Create a URL for the selected image and assign it to fetchedPicture
+    if (this.image) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.fetchedPicture = reader.result as string; // Set image for preview
+      };
+      reader.readAsDataURL(this.image);
+    }
   }
 
   getContactPreference(event: MatCheckboxChange, value: string) {
@@ -2141,5 +2222,11 @@ export class PosCustomerMasterMainComponent implements OnInit {
     this.posCustomerMasterMainForm
       .get("personalSkills")
       ?.setValue(selectedValuesArray.includes("PE"));
+  }
+
+  onChangeStatus(event: any) {
+    // this.selectedStatus = event.value;
+    // this.applyFilters();
+    console.log(event);
   }
 }
