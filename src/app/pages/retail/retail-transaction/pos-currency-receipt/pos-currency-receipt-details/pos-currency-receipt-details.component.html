@@ -96,14 +96,15 @@
             <label for="inputPassword" class="col-sm-3 col-form-label" id="ID005">Amount FC :</label>
             <div class="col-md-3">
               <mat-form-field style="width: 100%" appearance="outline">
-                <input  type="number" id="amountFc" class="st_txt_right"  matInput
-                  formControlName="amountFc" readonly />
+                <input  type="text" id="amountFc" class="st_txt_right"  matInput
+                  formControlName="amountFc" [readonly]="viewOnly || compCurrency == posCurrencyReceiptDetailsForm.value?.currencyCode"
+                  />
               </mat-form-field>
             </div>
             <label for="inputPassword" class="col-sm-3 col-form-label" id="ID006">Amount LC :</label>
             <div class="col-md-3">
               <mat-form-field style="width: 100%" appearance="outline">
-                <input type="number" class="st_txt_right" [readonly]="viewOnly" (change)="changeAmountLc($event)"
+                <input type="text" class="st_txt_right" [readonly]="viewOnly" (change)="changeAmountLc($event)"
                   matInput #ccAmount id="ccAmount"  formControlName="amountCc" />
 
                 <mat-error *ngIf="posCurrencyReceiptDetailsForm.controls.amountCc.hasError('required')">

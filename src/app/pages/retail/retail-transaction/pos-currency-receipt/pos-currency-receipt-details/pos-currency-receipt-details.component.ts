@@ -47,6 +47,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
   @Input() receiptData!: any;
   @Input() queryParams!: any;
   viewOnly: boolean = false;
+  selectedCurrency: string = "";
   igstAccode: string = "";
   hideMasterSearch: boolean = true;
   hideDebitLookup: boolean = true;
@@ -246,8 +247,10 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
     console.log("hsnCodeList", this.hsnCodeList);
   }
 
-  getQueryParams(gstDetails?: any) {
 
+
+  getQueryParams(gstDetails?: any) {
+    this.selectedCurrency=gstDetails?.currecyCode || ""
     this.igstAccode = gstDetails?.igstAccode || "";
     this.posCurrencyReceiptDetailsForm.controls.hsnCode.setValue(
       gstDetails?.hsnCode || ""
@@ -400,53 +403,70 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
       );
 
       this.posCurrencyReceiptDetailsForm.controls.amountFc.setValue(
-        this.comService.decimalQuantityFormat(
-          this.comService.emptyToZero(this.receiptData.AMOUNTFC),
-          "AMOUNT"
+        this.comService.commaSeperation(
+          this.comService.decimalQuantityFormat(
+            this.comService.emptyToZero(this.receiptData.AMOUNTFC),
+            "AMOUNT"
+          )
         )
       );
-
+      
       this.posCurrencyReceiptDetailsForm.controls.amountCc.setValue(
-        this.comService.decimalQuantityFormat(
-          this.comService.emptyToZero(this.receiptData.AMOUNTCC),
-          "AMOUNT"
+        this.comService.commaSeperation(
+          this.comService.decimalQuantityFormat(
+            this.comService.emptyToZero(this.receiptData.AMOUNTCC),
+            "AMOUNT"
+          )
         )
       );
-
+      
       this.posCurrencyReceiptDetailsForm.controls.totalLc.setValue(
-        this.comService.decimalQuantityFormat(
-          this.comService.emptyToZero(this.receiptData.TOTAL_AMOUNTCC),
-          "AMOUNT"
+        this.comService.commaSeperation(
+          this.comService.decimalQuantityFormat(
+            this.comService.emptyToZero(this.receiptData.TOTAL_AMOUNTCC),
+            "AMOUNT"
+          )
         )
       );
-
+      
       this.posCurrencyReceiptDetailsForm.controls.totalFc.setValue(
-        this.comService.decimalQuantityFormat(
-          this.comService.emptyToZero(this.receiptData.TOTAL_AMOUNTFC),
-          "AMOUNT"
+        this.comService.commaSeperation(
+          this.comService.decimalQuantityFormat(
+            this.comService.emptyToZero(this.receiptData.TOTAL_AMOUNTFC),
+            "AMOUNT"
+          )
         )
       );
-
+      
       this.posCurrencyReceiptDetailsForm.controls.headerVatAmt.setValue(
-        this.comService.decimalQuantityFormat(
-          this.comService.emptyToZero(this.receiptData.TOTAL_AMOUNTCC),
-          "AMOUNT"
+        this.comService.commaSeperation(
+          this.comService.decimalQuantityFormat(
+            this.comService.emptyToZero(this.receiptData.TOTAL_AMOUNTCC),
+            "AMOUNT"
+          )
         )
       );
-
+      
       this.posCurrencyReceiptDetailsForm.controls.vatcc.setValue(
-        this.comService.decimalQuantityFormat(
-          this.comService.emptyToZero(this.receiptData.IGST_AMOUNTCC),
-          "AMOUNT"
+        this.comService.commaSeperation(
+          this.comService.decimalQuantityFormat(
+            this.comService.emptyToZero(this.receiptData.IGST_AMOUNTCC),
+            "AMOUNT"
+          )
         )
       );
-
+      
       this.posCurrencyReceiptDetailsForm.controls.vat.setValue(
-        this.comService.decimalQuantityFormat(
-          this.comService.emptyToZero(this.receiptData.IGST_PER),
-          "AMOUNT"
+        this.comService.commaSeperation(
+          this.comService.decimalQuantityFormat(
+            this.comService.emptyToZero(this.receiptData.IGST_PER),
+            "AMOUNT"
+          )
         )
       );
+      
+
+
 
       this.posCurrencyReceiptDetailsForm.controls.remarks.setValue(
         this.receiptData.REMARKS
@@ -1171,7 +1191,11 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
     dialogRef.afterClosed().subscribe((action: any) => {
       if (action === 'OK') {
         let lastUpdatedAmount = localStorage.getItem("amountLc")
-        this.posCurrencyReceiptDetailsForm.controls.amountCc.setValue(lastUpdatedAmount);
+        this.posCurrencyReceiptDetailsForm.controls.amountCc.setValue(
+          this.comService.commaSeperation(lastUpdatedAmount)
+        );
+        
+        // this.posCurrencyReceiptDetailsForm.controls.amountCc.setValue(lastUpdatedAmount);
         const amountFc = this.convertToForeignCurrency(lastUpdatedAmount);
         const amountLc = lastUpdatedAmount;
         const vatPrc = this.posCurrencyReceiptDetailsForm.controls.vat.value;
@@ -1204,28 +1228,41 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
     const amountWithVatLC = vatAmountLC + parseFloat(amountLc.toString());
 
     this.posCurrencyReceiptDetailsForm.controls.amountCc.setValue(
-      this.comService.decimalQuantityFormat(amountLc, "AMOUNT")
+      this.comService.commaSeperation(
+        this.comService.decimalQuantityFormat(amountLc, "AMOUNT")
+      )
     );
-
+    
     this.posCurrencyReceiptDetailsForm.controls.amountFc.setValue(
-      this.comService.decimalQuantityFormat(amountFc, "AMOUNT")
+      this.comService.commaSeperation(
+        this.comService.decimalQuantityFormat(amountFc, "AMOUNT")
+      )
     );
-
+    
     this.posCurrencyReceiptDetailsForm.controls.vatcc.setValue(
-      this.comService.decimalQuantityFormat(vatCc, "AMOUNT")
+      this.comService.commaSeperation(
+        this.comService.decimalQuantityFormat(vatCc, "AMOUNT")
+      )
     );
-
+    
     this.posCurrencyReceiptDetailsForm.controls.totalFc.setValue(
-      this.comService.decimalQuantityFormat(amountWithVatFc, "AMOUNT")
+      this.comService.commaSeperation(
+        this.comService.decimalQuantityFormat(amountWithVatFc, "AMOUNT")
+      )
     );
-
+    
     this.posCurrencyReceiptDetailsForm.controls.totalLc.setValue(
-      this.comService.decimalQuantityFormat(amountWithVatLC, "AMOUNT")
+      this.comService.commaSeperation(
+        this.comService.decimalQuantityFormat(amountWithVatLC, "AMOUNT")
+      )
     );
-
+    
     this.posCurrencyReceiptDetailsForm.controls.headerVatAmt.setValue(
-      this.comService.decimalQuantityFormat(amountWithVatLC, "AMOUNT")
+      this.comService.commaSeperation(
+        this.comService.decimalQuantityFormat(amountWithVatLC, "AMOUNT")
+      )
     );
+    
     localStorage.setItem("amountLc", amountLc.toString());
   }
 
@@ -1246,63 +1283,76 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
     console.log(event.target.value);
 
     this.posCurrencyReceiptDetailsForm.controls.totalLc.setValue(
-      this.comService.decimalQuantityFormat(
-        this.comService.emptyToZero(event.target.value),
-        "AMOUNT"
+      this.comService.commaSeperation(
+        this.comService.decimalQuantityFormat(
+          this.comService.emptyToZero(event.target.value),
+          "AMOUNT"
+        )
       )
     );
+    
     this.posCurrencyReceiptDetailsForm.controls.headerVatAmt.setValue(
-      this.comService.decimalQuantityFormat(
-        this.comService.emptyToZero(event.target.value),
-        "AMOUNT"
+      this.comService.commaSeperation(
+        this.comService.decimalQuantityFormat(
+          this.comService.emptyToZero(event.target.value),
+          "AMOUNT"
+        )
       )
     );
-
+    
     this.posCurrencyReceiptDetailsForm.controls.totalFc.setValue(
-      this.comService.decimalQuantityFormat(
-        this.comService.CCToFC(
-          this.posCurrencyReceiptDetailsForm.value.currencyCode,
-          this.comService.emptyToZero(event.target.value)
-        ),
-        "AMOUNT"
+      this.comService.commaSeperation(
+        this.comService.decimalQuantityFormat(
+          this.comService.CCToFC(
+            this.posCurrencyReceiptDetailsForm.value.currencyCode,
+            this.comService.emptyToZero(event.target.value)
+          ),
+          "AMOUNT"
+        )
       )
     );
+    
 
     // this.posCurrencyReceiptDetailsForm.controls.totalFc.setValue(this.comService.decimalQuantityFormat(
     //   this.comService.emptyToZero(event.target.value),
     //   'AMOUNT'));
     let sum =
-      (this.posCurrencyReceiptDetailsForm.controls.totalLc.value * 100) /
+      (this.comService.emptyToZero(this.posCurrencyReceiptDetailsForm.controls.totalLc.value) * 100) /
       (100 + parseFloat(this.posCurrencyReceiptDetailsForm.controls.vat.value));
     console.log(sum);
 
     this.posCurrencyReceiptDetailsForm.controls.amountCc.setValue(
-      this.comService.decimalQuantityFormat(
-        this.comService.emptyToZero(sum),
-        "AMOUNT"
+      this.comService.commaSeperation(
+        this.comService.decimalQuantityFormat(
+          this.comService.emptyToZero(sum),
+          "AMOUNT"
+        )
       )
     );
-
+    
     this.posCurrencyReceiptDetailsForm.controls.amountFc.setValue(
-      this.comService.decimalQuantityFormat(
-        this.comService.CCToFC(
-          this.posCurrencyReceiptDetailsForm.value.currencyCode,
-          this.comService.emptyToZero(sum)
-        ),
-        "AMOUNT"
+      this.comService.commaSeperation(
+        this.comService.decimalQuantityFormat(
+          this.comService.CCToFC(
+            this.posCurrencyReceiptDetailsForm.value.currencyCode,
+            this.comService.emptyToZero(sum)
+          ),
+          "AMOUNT"
+        )
       )
     );
-
-    // this.posCurrencyReceiptDetailsForm.controls.amountFc.setValue(this.comService.decimalQuantityFormat(
-    //   this.comService.emptyToZero(sum),
-    //   'AMOUNT'));
-    let vatcc = this.posCurrencyReceiptDetailsForm.controls.totalFc.value - sum;
+    
+    let vatcc = this.comService.emptyToZero(this.posCurrencyReceiptDetailsForm.controls.totalLc.value) - sum;
     this.posCurrencyReceiptDetailsForm.controls.vatcc.setValue(
-      this.comService.decimalQuantityFormat(
-        this.comService.emptyToZero(vatcc),
-        "AMOUNT"
+      this.comService.commaSeperation(
+        this.comService.decimalQuantityFormat(
+          this.comService.emptyToZero(vatcc),
+          "AMOUNT"
+        )
       )
     );
+    
+
   }
 
   resetVatFields() {
