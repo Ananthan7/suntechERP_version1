@@ -8,6 +8,7 @@ import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ProcessTransferDetailsComponent } from './process-transfer-details/process-transfer-details.component';
 import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
+import { AuditTrailComponent } from 'src/app/shared/common/audit-trail/audit-trail.component';
 
 @Component({
   selector: 'app-process-transfer',
@@ -17,6 +18,8 @@ import { MasterSearchComponent } from 'src/app/shared/common/master-search/maste
 export class ProcessTransferComponent implements OnInit {
   @ViewChild('salesmanOverlay') salesmanOverlay!: MasterSearchComponent;
   @ViewChild('OverlayCurrencyRate') OverlayCurrencyRate!: MasterSearchComponent;
+  @ViewChild(AuditTrailComponent) auditTrailComponent?: AuditTrailComponent;
+
   @Input() content!: any;
   tableData: any[] = [];
   detailData: any[] = [];
@@ -101,6 +104,9 @@ export class ProcessTransferComponent implements OnInit {
   ngOnInit(): void {
     //flag setting
     if (this.content?.FLAG) {
+      if (this.content[0]?.FLAG == 'EDIT') {
+        this.checkMaxVocNumber()
+      }
       this.isSaved = true;
       if (this.content.FLAG == 'VIEW' || this.content.FLAG == 'DELETE') {
         this.viewMode = true;
@@ -132,6 +138,7 @@ export class ProcessTransferComponent implements OnInit {
   /**USE: get InitialLoadData */
   setInitialValues() {
     if (!this.content?.MID) return
+    this.processTransferFrom.controls.MID.setValue(this.content?.MID)
     this.commonService.showSnackBarMsg('MSG81447')
     let API = `JobProcessTrnMasterDJ/GetJobProcessTrnMasterDJDetailList/${this.content?.MID}`
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
@@ -183,6 +190,26 @@ export class ProcessTransferComponent implements OnInit {
       this.commonService.getqueryParamMainVocType()
     )
     this.setVocTypeMaster()
+  }
+  checkMaxVocNumber() {
+    let postData = {
+      "SPID": "137",
+      "parameter": {
+        'Str_JOB_NUMBER': this.commonService.nullToString(this.tableData[0].JOB_NUMBER),
+        'Str_SUB_JOB_NUMBER': this.commonService.nullToString(this.tableData[0].UNQ_JOB_ID),
+        'Str_VOCNO': this.commonService.nullToString(this.processTransferFrom.value.VOCNO)
+      }
+    }
+    this.commonService.showSnackBarMsg('MSG81447')
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        this.commonService.closeSnackBarMsg()
+        if (result.status == "Success" && result.dynamicData[0]) {
+          let data = result.dynamicData[0]
+          
+        }
+      })
+    this.subscriptions.push(Sub)
   }
   LOCKVOUCHERNO: boolean = true;
   minDate: any;
@@ -604,6 +631,51 @@ export class ProcessTransferComponent implements OnInit {
     }).then((result: any) => {
       this.close('reloadMainGrid')
     });
+  }
+  // let params = {
+    //   BRANCH_CODE: this.processTransferFrom.value.BRANCH_CODE,
+    //   VOCTYPE: this.processTransferFrom.value.VOCTYPE,
+    //   VOCNO: this.processTransferFrom.value.VOCNO,
+    //   YEARMONTH: this.processTransferFrom.value.YEARMONTH,
+    //   MID: this.commonService.nullToString(this.content?.MID),
+    //   ACCUPDATEYN: 'Y',
+    //   USERNAME: this.commonService.userName,
+    //   MAINVOCTYPE: this.commonService.getqueryParamMainVocType(),
+    //   HEADER_TABLE: this.commonService.getqueryParamTable(),
+    // }
+  //USE: account posting click fn 
+  AccountPosting() {
+    if (!this.content) return
+    let API =  'AccountPosting' + '/'+this.processTransferFrom.value.BRANCH_CODE+'/'+
+      this.processTransferFrom.value.VOCTYPE+'/'+
+      this.processTransferFrom.value.VOCNO+'/'+
+      this.processTransferFrom.value.YEARMONTH+'/'+
+      this.commonService.nullToString(this.content?.MID)+'/'+
+      'Y'+'/'+
+      this.commonService.userName+'/'+
+      this.commonService.getqueryParamMainVocType()+'/'+
+      this.commonService.getqueryParamTable()
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        if (result.status == "Success") {
+          this.commonService.toastSuccessByText('Posting Done')
+        } else {
+          this.commonService.toastErrorByMsgId(result.message)
+        }
+      },
+        (err) => this.commonService.toastErrorByMsgId("Server Error")
+      );
+    this.subscriptions.push(Sub);
+  }
+  auditTrailClick() {
+    let params = {
+      BRANCH_CODE: this.processTransferFrom.value.BRANCH_CODE,
+      VOCTYPE: this.processTransferFrom.value.VOCTYPE,
+      VOCNO: this.processTransferFrom.value.VOCNO,
+      MID: this.processTransferFrom.value.MID,
+      YEARMONTH: this.processTransferFrom.value.YEARMONTH,
+    }
+    this.auditTrailComponent?.showDialog(params)
   }
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {

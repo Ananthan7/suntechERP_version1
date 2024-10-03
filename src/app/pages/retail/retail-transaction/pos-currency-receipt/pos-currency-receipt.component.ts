@@ -49,6 +49,20 @@ export class PosCurrencyReceiptComponent implements OnInit {
     { title: "Total", field: "NET_TOTAL" },
   ];
 
+  currencyData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 9,
+    SEARCH_FIELD: "Currency",
+    SEARCH_HEADING: "Currency Code",
+    SEARCH_VALUE: "",
+    WHERECONDITION: `@strBranch='${this.comService.branchCode}',@strPartyCode=''`,
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  };
+
   viewOnly: boolean = false;
   editOnly: boolean = false;
   midForInvoce: any = 0;
@@ -121,9 +135,11 @@ export class PosCurrencyReceiptComponent implements OnInit {
     WHERECONDITION: "CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    FRONTENDFILTER: true,
+
   };
   selectedIndexes: any = [];
-
+  maxDate!: Date;
   posCurrencyReceiptForm: FormGroup = this.formBuilder.group({
     vocType: [""],
     vocNo: [""],
@@ -161,7 +177,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
     private indexedDb: IndexedDbService,
     private renderer: Renderer2,
     private dialogService: ItemDetailService,
-  
+
 
   ) {
     this.gridAmountDecimalFormat = {
@@ -177,6 +193,8 @@ export class PosCurrencyReceiptComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     await this.loadCompanyParams();
+    this.maxDate = new Date(this.currentDate);
+    this.maxDate.setDate(this.maxDate.getDate() + 365);
     console.log(this.isCustomerRequired);
     // this.posCurrencyReceiptForm.controls['vocType'].disable();
     // this.posCurrencyReceiptForm.controls['vocNo'].disable();
@@ -277,16 +295,16 @@ export class PosCurrencyReceiptComponent implements OnInit {
     }
   }
 
-  changeDueDate(event: any,isDateChanged:boolean=false) {
+  changeDueDate(event: any, isDateChanged: boolean = false) {
     const inputValue = this.posCurrencyReceiptForm.value.dueDays;
     const vocDate = new Date(this.posCurrencyReceiptForm.value.vocDate);
 
-    if (event&&!isDateChanged) {
+    if (event && !isDateChanged) {
       vocDate.setDate(vocDate.getDate() + event);
       this.posCurrencyReceiptForm
         .get("dueDays")
         ?.setValue(this.formatDate(vocDate));
-    } else if (inputValue !== ""||isDateChanged) {
+    } else if (inputValue !== "" || isDateChanged) {
       const selectedDate = new Date(inputValue);
       selectedDate.setHours(0, 0, 0, 0);
 
@@ -482,27 +500,32 @@ export class PosCurrencyReceiptComponent implements OnInit {
           if (result.status == "Success") {
             //
             if (result.dynamicData.length > 0) {
-              let data = result.dynamicData[0];
+              let data = result.dynamicData[0].find((entry: any) => entry.DEFAULT_CURRENCY === 1);
+
+              // let data = result.dynamicData[0];
               console.log("data", data);
 
-              if (data && data[0].CURRENCY_CODE) {
-                if (this.companyCurrency == data[0].CURRENCY_CODE)
+              if (data && data.CURRENCY_CODE
+              ) {
+                this.currencyData.WHERECONDITION = `@strBranch='${this.comService.branchCode}',@strPartyCode='${event.target.value}'`;
+
+                if (this.companyCurrency == data.CURRENCY_CODE)
                   this.isCurrencyUpdate = true;
                 else this.isCurrencyUpdate = false;
 
                 this.posCurrencyReceiptForm.controls.partyCurrency.setValue(
-                  data[0].CURRENCY_CODE
+                  data.CURRENCY_CODE
                 );
 
                 this.posCurrencyReceiptForm.controls.partyCurrencyRate.setValue(
-                  this.comService.decimalQuantityFormat(data[0].CONV_RATE, 'RATE')
+                  this.comService.decimalQuantityFormat(data.CONV_RATE, 'RATE')
                 );
 
                 this.posCurrencyReceiptForm.controls.partyCurr.setValue(
-                  data[0].CURRENCY_CODE
+                  data.CURRENCY_CODE
                 );
-                this.currencyCode = data[0].CURRENCY_CODE;
-                this.currencyConvRate = data[0].CONV_RATE;
+                this.currencyCode = data.CURRENCY_CODE;
+                this.currencyConvRate = data.CONV_RATE;
 
                 // this.PartyDetailsOrderForm.controls.partyCurrencyType.setValue(data[0].CURRENCY_CODE)
                 // this.PartyDetailsOrderForm.controls.ItemCurrency.setValue(data[0].CURRENCY_CODE)
@@ -532,6 +555,17 @@ export class PosCurrencyReceiptComponent implements OnInit {
         }
       );
     this.subscriptions.push(Sub);
+  }
+
+  currencySelected(e: any) {
+    console.log(e);
+    this.posCurrencyReceiptForm.controls.partyCurrency.setValue(
+      e.Currency
+    );
+
+    this.posCurrencyReceiptForm.controls.partyCurrencyRate.setValue(
+      this.comService.decimalQuantityFormat(e["Conv Rate"], "RATE")
+    );
   }
 
   partyCurrencyCodeSelected(e: any) {
@@ -835,11 +869,11 @@ export class PosCurrencyReceiptComponent implements OnInit {
   }
 
   close(data?: any) {
-    if (this.viewOnly||data) {
+    if (this.viewOnly || data) {
       this.activeModal.close();
     } else {
       const dialogRef = this.dialogService.openDialog('Warning', this.comService.getMsgByID('MSG1212'), false);
-      
+
       dialogRef.afterClosed().subscribe((action: any) => {
         if (action == 'Yes') {
           this.activeModal.close();
@@ -996,7 +1030,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
       console.log("Continue data from modal:", postData);
       this.handlePostData(postData);  // Handle the postData as needed
     });
-  
+
     // Handle modal close when finish is clicked
     modalRef.result.then((postData) => {
       if (postData) {
@@ -1126,4 +1160,76 @@ export class PosCurrencyReceiptComponent implements OnInit {
         console.warn(`Unknown form control name: ${formControlName}`);
     }
   }
+
+
+
+  SPvalidateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    LOOKUPDATA.SEARCH_VALUE = event.target.value;
+
+    if (event.target.value === '' || this.viewOnly === true) {
+      this.customerData = null;
+
+      const controlsToReset = ['customerName', 'mobile', 'email', 'partyAddress'];
+
+      controlsToReset.forEach(control => {
+        this.posCurrencyReceiptForm.controls[control].setValue('');
+      });
+
+      return;
+    }
+
+    let param = {
+      "PAGENO": LOOKUPDATA.PAGENO,
+      "RECORDS": LOOKUPDATA.RECORDS,
+      "LOOKUPID": LOOKUPDATA.LOOKUPID,
+      "WHERECONDITION": LOOKUPDATA.WHERECONDITION,
+      "searchField": LOOKUPDATA.SEARCH_FIELD,
+      "searchValue": LOOKUPDATA.SEARCH_VALUE
+    };
+
+    this.comService.showSnackBarMsg('MSG81447');
+
+    let Sub: Subscription = this.dataService.postDynamicAPI('MasterLookUp', param)
+      .subscribe((result) => {
+        this.comService.closeSnackBarMsg();
+
+        let data = result.dynamicData[0];
+
+        if (data && data.length > 0) {
+          if (LOOKUPDATA.FRONTENDFILTER && LOOKUPDATA.SEARCH_VALUE !== '') {
+            let searchResult = this.comService.searchAllItemsInArray(data, LOOKUPDATA.SEARCH_VALUE);
+
+            if (searchResult && searchResult.length > 0) {
+              let matchedItem = searchResult[0];
+              this.customerData = matchedItem;
+              this.posCurrencyReceiptForm.controls.customerName.setValue(
+                matchedItem.NAME
+              );
+              this.posCurrencyReceiptForm.controls.mobile.setValue(
+                matchedItem.MOBILE
+              );
+
+              this.posCurrencyReceiptForm.controls.email.setValue(
+                matchedItem.EMAIL
+              );
+
+              this.posCurrencyReceiptForm.controls.partyAddress.setValue(
+                matchedItem.ADDRESS
+              );
+
+
+
+            } else {
+              this.comService.toastErrorByMsgId('No data found');
+              LOOKUPDATA.SEARCH_VALUE = '';
+            }
+          }
+        }
+      }, err => {
+        this.comService.toastErrorByMsgId('MSG2272');
+      });
+
+    this.subscriptions.push(Sub);
+  }
+
 }

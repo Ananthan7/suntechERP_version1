@@ -10,6 +10,8 @@
     [isloading]="isloading" [isViewDelete]="editMode"
     [isViewAuditTrail]="true" [isViewPost]="true" [disableAuditTrail]="!isSaved"
     (deleteClick)="deleteClicked()"
+    (auditTrailClick)="auditTrailClick()"
+    (postClick)="AccountPosting()"
     [isViewSave]="!viewMode"></modal-header>
 <div class="row">
     <div class="col-md-12">
