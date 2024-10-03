@@ -317,15 +317,6 @@ export class RetailSalesCollectionComponent implements OnInit {
         fromDate:  ParcedPreFetchData?.CONTROL_DETAIL.FROMVOCDATE,
         toDate: ParcedPreFetchData?.CONTROL_DETAIL.TOVOCDATE
       };
- 
-
-      let vocTypeArr: any= []
-      this.selectedRowKeys.forEach((item: any)=>{
-        vocTypeArr.push(item.VOCTYPE+'#') 
-      })
-      const uniqueArray = [...new Set( vocTypeArr )];
-      const plainText = uniqueArray.join('');
-      this.VocTypeParam = plainText
 
 
       let splittedText= ParcedPreFetchData?.CONTROL_DETAIL.STRVOCTYPES.split("#")  
@@ -357,7 +348,14 @@ export class RetailSalesCollectionComponent implements OnInit {
       //   const bIsSelected = selectedSet.has(b.SRNO) ? 1 : 0;
       //   return bIsSelected - aIsSelected;
       // });
- 
+      
+      let vocTypeArr: any= []
+      this.selectedRowKeys.forEach((item: any)=>{
+        vocTypeArr.push(item.VOCTYPE+'#') 
+      })
+      const uniqueArray = [...new Set( vocTypeArr )];
+      const plainText = uniqueArray.join('');
+      this.VocTypeParam = plainText
  
   
       console.log(ParcedPreFetchData?.CONTROL_DETAIL.USERBRANCH)
@@ -409,8 +407,7 @@ export class RetailSalesCollectionComponent implements OnInit {
         this.APIData = [...this.APIData, ...poserData];
       }
       this.selectedRowKeys = this.APIData
-      console.log(this.APIData)
-
+ 
       let vocTypeArr: any= []
       this.selectedRowKeys.forEach((item: any)=>{
         vocTypeArr.push(item.VOCTYPE+'#') 
