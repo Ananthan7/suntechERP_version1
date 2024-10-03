@@ -198,6 +198,7 @@ export class StoneIssueDetailComponent implements OnInit {
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
     this.checkContent()
+    this.dataTochild()
   }
   checkContent() {
     if (this.content) {
@@ -477,7 +478,11 @@ export class StoneIssueDetailComponent implements OnInit {
 
     }
   }
-
+  dataTochild(dataToChild?: any) {
+    console.log(this.content.HEADERDETAILS, 'pick')
+    this.stoneIssueDetailsFrom.controls.worker.setValue(this.content.worker || this.content.HEADERDETAILS.worker)
+    this.stoneIssueDetailsFrom.controls.workername.setValue(this.content.woworkernamerker || this.content.HEADERDETAILS.workername)
+  }
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     LOOKUPDATA.SEARCH_VALUE = event.target.value.toUpperCase()
     if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
@@ -801,11 +806,12 @@ export class StoneIssueDetailComponent implements OnInit {
         this.comService.closeSnackBarMsg()
         if (result.dynamicData && result.dynamicData[0].length > 0) {
           let data = result.dynamicData[0]
-          console.log(data, 'data')
+          this.data = data[0].JOB_SO_NUMBER;
+          console.log(data[0].JOB_SO_NUMBER, 'data')
           this.stoneIssueDetailsFrom.controls.process.setValue(data[0].PROCESS)
           this.stoneIssueDetailsFrom.controls.processname.setValue(data[0].PROCESSDESC)
-          this.stoneIssueDetailsFrom.controls.worker.setValue(data[0].WORKER)
-          this.stoneIssueDetailsFrom.controls.workername.setValue(data[0].WORKERDESC)
+          // this.stoneIssueDetailsFrom.controls.worker.setValue(data[0].WORKER)
+          // this.stoneIssueDetailsFrom.controls.workername.setValue(data[0].WORKERDESC)
           this.stoneIssueDetailsFrom.controls.PICTURE_PATH.setValue(data[0].PICTURE_PATH)
           // this.tableData = result.dynamicData[1] || []
           // this.columnhead1 = Object.keys(this.tableData[0])
