@@ -54,6 +54,9 @@ export class RetailSalesCollectionComponent implements OnInit {
   @Input() reportVouchers: any; //get Voucherdata from retailREPORT Component- GetReportVouchers API
   voucherData = localStorage.getItem('strMainVouchers');
 
+  htmlPreview: any;
+  previewpopup: boolean = false;
+
   constructor(  private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder, private dataService: SuntechAPIService,  private comService: CommonServiceService,
     private commonService: CommonServiceService,   private toastr: ToastrService,
@@ -298,6 +301,7 @@ export class RetailSalesCollectionComponent implements OnInit {
       this.isLoading = false;
       console.log('data fetched from main grid',this.content )
       let ParcedPreFetchData = JSON.parse(this.content?.CONTROL_LIST_JSON) //data from retailREPORT Component- modalRef instance
+  
       this.retailSalesCollection.controls.showDateCheckbox?.setValue(
         ParcedPreFetchData?.CONTROL_DETAIL.SHOWDATE === 0 ? true :  false
       );
@@ -309,10 +313,12 @@ export class RetailSalesCollectionComponent implements OnInit {
       this.templateNameHasValue = !!ParcedPreFetchData.CONTROL_HEADER.TEMPLATENAME;
       this.retailSalesCollection.controls.templateName.setValue(ParcedPreFetchData.CONTROL_HEADER.TEMPLATENAME)
  
-      let splittedText= ParcedPreFetchData?.CONTROL_DETAIL.STRVOCTYPES.split("#")
-      const selectedKeys = this.APIData.filter(item => splittedText?.includes(item.VOCTYPE)).map(item => item);
-      this.selectedRowKeys = selectedKeys;
+      this.dateToPass = {
+        fromDate:  ParcedPreFetchData?.CONTROL_DETAIL.FROMVOCDATE,
+        toDate: ParcedPreFetchData?.CONTROL_DETAIL.TOVOCDATE
+      };
  
+
       let vocTypeArr: any= []
       this.selectedRowKeys.forEach((item: any)=>{
         vocTypeArr.push(item.VOCTYPE+'#') 
@@ -320,26 +326,45 @@ export class RetailSalesCollectionComponent implements OnInit {
       const uniqueArray = [...new Set( vocTypeArr )];
       const plainText = uniqueArray.join('');
       this.VocTypeParam = plainText
+
+
+      let splittedText= ParcedPreFetchData?.CONTROL_DETAIL.STRVOCTYPES.split("#")  
+      const selectedKeys = this.reportVouchers.filter((item: any) => splittedText?.includes(item.VOCTYPE)).map((item: any) => item);
+      this.APIData = selectedKeys;
+      this.selectedRowKeys = selectedKeys;
+ 
+      this.APIData.forEach((item: any)=>{
+        if(item.MAIN_VOCTYPE.includes('PCR') ){
+          this.retailSalesCollection.controls.showAdvanceReceiptCheckbox.setValue(true);
+        }
+        else if(item.MAIN_VOCTYPE.includes('PSR') ){
+          this.retailSalesCollection.controls.showSalesReturnCheckbox.setValue(true);
+        }
+        else if(item.MAIN_VOCTYPE.includes('POSEX') ){
+          this.retailSalesCollection.controls.showExbSalesCheckbox.setValue(true);
+        }
+        else if(item.MAIN_VOCTYPE.includes('POSER') ){
+          this.retailSalesCollection.controls.showExbSalesReturnCheckbox.setValue(true);
+        }
+        else if(item.MAIN_VOCTYPE.includes('POS','POSC','RIN') ){
+          this.retailSalesCollection.controls.showSalesCheckbox.setValue(true);
+        }    
+      })
       
-      const selectedSet = new Set(this.selectedRowKeys.map(item => item.SRNO));
-      this.APIData.sort((a, b) => {
-        const aIsSelected = selectedSet.has(a.SRNO) ? 1 : 0;
-        const bIsSelected = selectedSet.has(b.SRNO) ? 1 : 0;
-        return bIsSelected - aIsSelected;
-      });
+      // const selectedSet = new Set(this.selectedRowKeys.map(item => item.SRNO));
+      // this.APIData.sort((a, b) => {
+      //   const aIsSelected = selectedSet.has(a.SRNO) ? 1 : 0;
+      //   const bIsSelected = selectedSet.has(b.SRNO) ? 1 : 0;
+      //   return bIsSelected - aIsSelected;
+      // });
  
  
-      this.dateToPass = {
-        fromDate:  ParcedPreFetchData?.CONTROL_DETAIL.FROMVOCDATE,
-        toDate: ParcedPreFetchData?.CONTROL_DETAIL.TOVOCDATE
-      };
-      this.dateToPass.fromDate? this.retailSalesCollection.controls.fromDate.setValue(this.dateToPass.fromDate) : null
-      this.dateToPass.toDate? this.retailSalesCollection.controls.toDate.setValue(this.dateToPass.toDate) : null
-
-
-      this.retailSalesCollection.controls.branch.setValue(ParcedPreFetchData?.CONTROL_DETAIL.STRBRANCHCODES);
-      this.fetchedBranchData= ParcedPreFetchData?.CONTROL_DETAIL.STRBRANCHCODES.split("#")
-      this.fetchedBranchDataParam = ParcedPreFetchData?.CONTROL_DETAIL.STRBRANCHCODES
+  
+      console.log(ParcedPreFetchData?.CONTROL_DETAIL.USERBRANCH)
+      this.retailSalesCollection.controls.branch.setValue( ParcedPreFetchData?.CONTROL_DETAIL.STRBRANCHCODES? 
+        ParcedPreFetchData?.CONTROL_DETAIL.STRBRANCHCODES : ParcedPreFetchData?.CONTROL_DETAIL.USERBRANCH+'#');
+      this.fetchedBranchDataParam = ParcedPreFetchData?.CONTROL_DETAIL.USERBRANCH+'#'
+      this.fetchedBranchData= ParcedPreFetchData?.CONTROL_DETAIL.USERBRANCH
     }
     else{
       const userBranch = localStorage.getItem('userbranch');
@@ -480,8 +505,7 @@ export class RetailSalesCollectionComponent implements OnInit {
     const day = String(date.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
   }
-htmlPreview: any;
-previewpopup: boolean = false;
+
   previewClick() {
     let logData =  {
       "VOCTYPE": this.comService.getqueryParamVocType() || "",
