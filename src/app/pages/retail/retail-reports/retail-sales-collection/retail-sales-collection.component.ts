@@ -54,6 +54,9 @@ export class RetailSalesCollectionComponent implements OnInit {
   @Input() reportVouchers: any; //get Voucherdata from retailREPORT Component- GetReportVouchers API
   voucherData = localStorage.getItem('strMainVouchers');
 
+  htmlPreview: any;
+  previewpopup: boolean = false;
+
   constructor(  private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder, private dataService: SuntechAPIService,  private comService: CommonServiceService,
     private commonService: CommonServiceService,   private toastr: ToastrService,
@@ -61,9 +64,9 @@ export class RetailSalesCollectionComponent implements OnInit {
 
   ngOnInit(): void {
     // console.log('data from report component',this.reportVouchers)
-    this.APIData = this.reportVouchers;
-    this.prefillScreenValues()
+    this.prefillScreenValues();
   }
+
 
   selectedData(data: any) {
     console.log(data)
@@ -162,27 +165,93 @@ export class RetailSalesCollectionComponent implements OnInit {
   //   });
   // }
 
-  onAdvanceReceiptCheckboxChange(value: boolean) {
+  onSalesCheckboxChange(value: boolean){
     if(value){
-      const advanceKeys = this.APIData.filter(item => item.MAIN_VOCTYPE== 'PCR');
-      this.selectedRowKeys.push(...advanceKeys)
+      const salesData = this.reportVouchers.filter((item: any) => {
+        return item.MAIN_VOCTYPE === 'POS' || item.MAIN_VOCTYPE === 'RIN';
+      });
+      this.APIData = [...salesData, ...this.APIData]
+      this.selectedRowKeys = [...salesData, ...this.selectedRowKeys]
     }
     else{
-      this.selectedRowKeys = this.selectedRowKeys.filter(key => key.MAIN_VOCTYPE !== 'PCR');
+      this.APIData = this.APIData.filter((item: any) => {
+        return item.MAIN_VOCTYPE !== 'POS' && item.MAIN_VOCTYPE !== 'RIN';
+      });
     }
   }
-
+  onSalesReturnCheckboxChange(value: boolean){
+    if(value){
+      const SalesReturnData = this.reportVouchers.filter((item: any) => {
+        return item.MAIN_VOCTYPE === 'PSR'
+      });
+      this.APIData = [...SalesReturnData, ...this.APIData]
+      this.selectedRowKeys = [...SalesReturnData, ...this.selectedRowKeys]
+    }
+    else{
+      this.APIData = this.APIData.filter((item: any) => {
+        return item.MAIN_VOCTYPE !== 'PSR'
+      });
+    }
+  }
+  onExbSalesCheckboxChange(value: boolean){
+    if(value){
+      const ExbSalesData = this.reportVouchers.filter((item: any) => {
+        return item.MAIN_VOCTYPE === 'POSEX'
+      });
+      this.APIData = [...ExbSalesData, ...this.APIData]
+      this.selectedRowKeys = [...ExbSalesData, ...this.selectedRowKeys]
+    }
+    else{
+      this.APIData = this.APIData.filter((item: any) => {
+        return item.MAIN_VOCTYPE !== 'POSEX'
+      });
+    }
+  }
+  onExbSalesReturnCheckboxChange(value: boolean){
+    if(value){
+      const ExbSalesReturnData = this.reportVouchers.filter((item: any) => {
+        return item.MAIN_VOCTYPE === 'POSER'
+      });
+      this.APIData = [...ExbSalesReturnData, ...this.APIData]
+      this.selectedRowKeys = [...ExbSalesReturnData, ...this.selectedRowKeys]
+    }
+    else{
+      this.APIData = this.APIData.filter((item: any) => {
+        return item.MAIN_VOCTYPE !== 'POSER'
+      });
+    }
+  }
+  onAdvanceReceiptCheckboxChange(value: boolean) {
+    if(value){
+      const AdvanceReceiptData = this.reportVouchers.filter((item: any) => {
+        return item.MAIN_VOCTYPE === 'PCR'
+      });
+      this.APIData = [...AdvanceReceiptData, ...this.APIData]
+      this.selectedRowKeys = [...AdvanceReceiptData, ...this.selectedRowKeys]
+    }
+    else{
+      this.APIData = this.APIData.filter((item: any) => {
+        return item.MAIN_VOCTYPE !== 'PCR'
+      });
+    }
+  }
   onSalesRegisterCheckboxChange(value: boolean) {
     if(value){
       this.retailSalesCollection.controls.showSalesReturnCheckbox?.setValue(false);
       this.retailSalesCollection.controls.showExbSalesReturnCheckbox?.setValue(false);
-      this.selectedRowKeys = this.selectedRowKeys.filter(key => key.MAIN_VOCTYPE !== 'PSR' && key.MAIN_VOCTYPE !== 'POSER');
-      console.log(this.selectedRowKeys)
+      this.APIData = this.APIData.filter((item: any) => {
+        return item.MAIN_VOCTYPE !== 'PSR' && item.MAIN_VOCTYPE !== 'POSER'
+      });
     }
     else{
       this.retailSalesCollection.controls.showSalesReturnCheckbox?.setValue(true);
       this.retailSalesCollection.controls.showExbSalesReturnCheckbox?.setValue(true);
-      console.log(this.selectedRowKeys)
+  
+      const SalesRegisterData = this.reportVouchers.filter((item: any) => {
+        return item.MAIN_VOCTYPE === 'POSER' || item.MAIN_VOCTYPE === 'PSR'
+      });
+      this.APIData = [...SalesRegisterData, ...this.APIData]
+      this.selectedRowKeys = [...SalesRegisterData, ...this.selectedRowKeys]
     }
   }
 
@@ -228,11 +297,11 @@ export class RetailSalesCollectionComponent implements OnInit {
 
 
   prefillScreenValues(){ 
-    
     if ( Object.keys(this.content).length > 0) {
       this.isLoading = false;
       console.log('data fetched from main grid',this.content )
       let ParcedPreFetchData = JSON.parse(this.content?.CONTROL_LIST_JSON) //data from retailREPORT Component- modalRef instance
+  
       this.retailSalesCollection.controls.showDateCheckbox?.setValue(
         ParcedPreFetchData?.CONTROL_DETAIL.SHOWDATE === 0 ? true :  false
       );
@@ -244,10 +313,12 @@ export class RetailSalesCollectionComponent implements OnInit {
       this.templateNameHasValue = !!ParcedPreFetchData.CONTROL_HEADER.TEMPLATENAME;
       this.retailSalesCollection.controls.templateName.setValue(ParcedPreFetchData.CONTROL_HEADER.TEMPLATENAME)
  
-      let splittedText= ParcedPreFetchData?.CONTROL_DETAIL.STRVOCTYPES.split("#")
-      const selectedKeys = this.APIData.filter(item => splittedText?.includes(item.VOCTYPE)).map(item => item);
-      this.selectedRowKeys = selectedKeys;
+      this.dateToPass = {
+        fromDate:  ParcedPreFetchData?.CONTROL_DETAIL.FROMVOCDATE,
+        toDate: ParcedPreFetchData?.CONTROL_DETAIL.TOVOCDATE
+      };
  
+
       let vocTypeArr: any= []
       this.selectedRowKeys.forEach((item: any)=>{
         vocTypeArr.push(item.VOCTYPE+'#') 
@@ -255,26 +326,45 @@ export class RetailSalesCollectionComponent implements OnInit {
       const uniqueArray = [...new Set( vocTypeArr )];
       const plainText = uniqueArray.join('');
       this.VocTypeParam = plainText
+
+
+      let splittedText= ParcedPreFetchData?.CONTROL_DETAIL.STRVOCTYPES.split("#")  
+      const selectedKeys = this.reportVouchers.filter((item: any) => splittedText?.includes(item.VOCTYPE)).map((item: any) => item);
+      this.APIData = selectedKeys;
+      this.selectedRowKeys = selectedKeys;
+ 
+      this.APIData.forEach((item: any)=>{
+        if(item.MAIN_VOCTYPE.includes('PCR') ){
+          this.retailSalesCollection.controls.showAdvanceReceiptCheckbox.setValue(true);
+        }
+        else if(item.MAIN_VOCTYPE.includes('PSR') ){
+          this.retailSalesCollection.controls.showSalesReturnCheckbox.setValue(true);
+        }
+        else if(item.MAIN_VOCTYPE.includes('POSEX') ){
+          this.retailSalesCollection.controls.showExbSalesCheckbox.setValue(true);
+        }
+        else if(item.MAIN_VOCTYPE.includes('POSER') ){
+          this.retailSalesCollection.controls.showExbSalesReturnCheckbox.setValue(true);
+        }
+        else if(item.MAIN_VOCTYPE.includes('POS','POSC','RIN') ){
+          this.retailSalesCollection.controls.showSalesCheckbox.setValue(true);
+        }    
+      })
       
-      const selectedSet = new Set(this.selectedRowKeys.map(item => item.SRNO));
-      this.APIData.sort((a, b) => {
-        const aIsSelected = selectedSet.has(a.SRNO) ? 1 : 0;
-        const bIsSelected = selectedSet.has(b.SRNO) ? 1 : 0;
-        return bIsSelected - aIsSelected;
-      });
+      // const selectedSet = new Set(this.selectedRowKeys.map(item => item.SRNO));
+      // this.APIData.sort((a, b) => {
+      //   const aIsSelected = selectedSet.has(a.SRNO) ? 1 : 0;
+      //   const bIsSelected = selectedSet.has(b.SRNO) ? 1 : 0;
+      //   return bIsSelected - aIsSelected;
+      // });
  
  
-      this.dateToPass = {
-        fromDate:  ParcedPreFetchData?.CONTROL_DETAIL.FROMVOCDATE,
-        toDate: ParcedPreFetchData?.CONTROL_DETAIL.TOVOCDATE
-      };
-      this.dateToPass.fromDate? this.retailSalesCollection.controls.fromDate.setValue(this.dateToPass.fromDate) : null
-      this.dateToPass.toDate? this.retailSalesCollection.controls.toDate.setValue(this.dateToPass.toDate) : null
-
-
-      this.retailSalesCollection.controls.branch.setValue(ParcedPreFetchData?.CONTROL_DETAIL.STRBRANCHCODES);
-      this.fetchedBranchData= ParcedPreFetchData?.CONTROL_DETAIL.STRBRANCHCODES.split("#")
-      this.fetchedBranchDataParam = ParcedPreFetchData?.CONTROL_DETAIL.STRBRANCHCODES
+  
+      console.log(ParcedPreFetchData?.CONTROL_DETAIL.USERBRANCH)
+      this.retailSalesCollection.controls.branch.setValue( ParcedPreFetchData?.CONTROL_DETAIL.STRBRANCHCODES? 
+        ParcedPreFetchData?.CONTROL_DETAIL.STRBRANCHCODES : ParcedPreFetchData?.CONTROL_DETAIL.USERBRANCH+'#');
+      this.fetchedBranchDataParam = ParcedPreFetchData?.CONTROL_DETAIL.USERBRANCH+'#'
+      this.fetchedBranchData= ParcedPreFetchData?.CONTROL_DETAIL.USERBRANCH
     }
     else{
       const userBranch = localStorage.getItem('userbranch');
@@ -283,7 +373,6 @@ export class RetailSalesCollectionComponent implements OnInit {
       this.fetchedBranchDataParam = formattedUserBranch;
       this.fetchedBranchData= this.fetchedBranchDataParam?.split("#")
    
-      
       this.dateToPass = {
         fromDate:  this.formatDateToYYYYMMDD(new Date()),
         toDate: this.formatDateToYYYYMMDD(new Date()),
@@ -291,20 +380,36 @@ export class RetailSalesCollectionComponent implements OnInit {
 
       this.retailSalesCollection.controls.showDateCheckbox?.setValue(true);
       this.retailSalesCollection.controls.showInvoiceCheckbox?.setValue(true);
-      this.retailSalesCollection.controls.showSalesCheckbox?.setValue(true);
-      this.retailSalesCollection.controls.showSalesReturnCheckbox?.setValue(true);
-      this.retailSalesCollection.controls.showExbSalesCheckbox?.setValue(true);
-      this.retailSalesCollection.controls.showExbSalesReturnCheckbox?.setValue(true);
 
-      // let defaultVoctype = ['POS','RIN','PSR', 'POSC','POSEX','POSER', PCR]
-      const selectedKeys = this.APIData.filter(item => item.MAIN_VOCTYPE!== 'PCR').map(item => item);
-      this.selectedRowKeys = selectedKeys;
-      const selectedSet = new Set(this.selectedRowKeys.map(item => item.SRNO));
-      this.APIData.sort((a, b) => {
-        const aIsSelected = selectedSet.has(a.SRNO) ? 1 : 0;
-        const bIsSelected = selectedSet.has(b.SRNO) ? 1 : 0;
-        return bIsSelected - aIsSelected;
-      });
+      this.retailSalesCollection.controls.showSalesCheckbox?.setValue(true);
+      if(this.retailSalesCollection.controls.showSalesCheckbox.value == true){
+        this.APIData = this.reportVouchers.filter((item: any) => {
+          return item.MAIN_VOCTYPE === 'POS' || item.MAIN_VOCTYPE === 'RIN';
+        });
+      }
+      this.retailSalesCollection.controls.showSalesReturnCheckbox?.setValue(true);
+      if(this.retailSalesCollection.controls.showSalesReturnCheckbox.value == true){
+        const psrData = this.reportVouchers.filter((item: any) => {
+          return item.MAIN_VOCTYPE === 'PSR';
+        });
+        this.APIData = [...this.APIData, ...psrData];
+      }
+      this.retailSalesCollection.controls.showExbSalesCheckbox?.setValue(true);
+      if(this.retailSalesCollection.controls.showExbSalesCheckbox.value == true){
+        const posexData = this.reportVouchers.filter((item: any) => {
+          return item.MAIN_VOCTYPE === 'POSEX';
+        });
+        this.APIData = [...this.APIData, ...posexData];
+      }
+      this.retailSalesCollection.controls.showExbSalesReturnCheckbox?.setValue(true);
+      if(this.retailSalesCollection.controls.showExbSalesReturnCheckbox.value == true){
+        const poserData = this.reportVouchers.filter((item: any) => {
+          return item.MAIN_VOCTYPE === 'POSER';
+        });
+        this.APIData = [...this.APIData, ...poserData];
+      }
+      this.selectedRowKeys = this.APIData
+      console.log(this.APIData)
 
       let vocTypeArr: any= []
       this.selectedRowKeys.forEach((item: any)=>{
@@ -313,6 +418,16 @@ export class RetailSalesCollectionComponent implements OnInit {
       const uniqueArray = [...new Set( vocTypeArr )];
       const plainText = uniqueArray.join('');
       this.VocTypeParam = plainText
+
+    //   // let defaultVoctype = ['POS','RIN','PSR', 'POSC','POSEX','POSER', PCR]
+    //   const selectedKeys = this.APIData.filter(item => item.MAIN_VOCTYPE!== 'PCR').map(item => item);
+    //   this.selectedRowKeys = selectedKeys;
+    //   const selectedSet = new Set(this.selectedRowKeys.map(item => item.SRNO));
+    //   this.APIData.sort((a, b) => {
+    //     const aIsSelected = selectedSet.has(a.SRNO) ? 1 : 0;
+    //     const bIsSelected = selectedSet.has(b.SRNO) ? 1 : 0;
+    //     return bIsSelected - aIsSelected;
+    //   });
     }
   }
 
@@ -346,6 +461,7 @@ export class RetailSalesCollectionComponent implements OnInit {
          })
       }
     };
+
     this.commonService.showSnackBarMsg('MSG81447');
     this.dataService.postDynamicAPI('ExecueteSPInterface', payload)
     .subscribe((result: any) => {
@@ -417,47 +533,50 @@ export class RetailSalesCollectionComponent implements OnInit {
         "Logdata": JSON.stringify(logData)
       }
     }
-    console.log(postData)  
+ 
     this.commonService.showSnackBarMsg('MSG81447');
     this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
     .subscribe((result: any) => {
       console.log(result);
+      this.previewpopup = true;
       let data = result.dynamicData;
-      const width = window.innerWidth;
-      const height = window.innerHeight;
-      const windowFeatures = `width=${width},height=${height},fullscreen=yes`;
-      var WindowPrt = window.open(' ', ' ', windowFeatures);
-      if (WindowPrt === null) {
-        console.error('Failed to open the print window. Possibly blocked by a popup blocker.');
-        return;
-      }
+      // const width = window.innerWidth;
+      // const height = window.innerHeight;
+      // const windowFeatures = `width=${width},height=${height},fullscreen=yes`;
+      // var WindowPrt = window.open(' ', ' ', windowFeatures);
+      // if (WindowPrt === null) {
+      //   console.error('Failed to open the print window. Possibly blocked by a popup blocker.');
+      //   return;
+      // }
       let printContent = data[0][0].HTMLINPUT;
-      WindowPrt.document.write(printContent);
-      WindowPrt.document.close();
-      WindowPrt.focus();  
-      WindowPrt.onload = function () {
-        if (WindowPrt && WindowPrt.document.head) {
-          let styleElement = WindowPrt.document.createElement('style');
-          styleElement.textContent = `
-                      @page {
-                          size: A5 landscape;
-                      }
-                      body {
-                          margin: 0mm;
-                      }
-                  `;
-          WindowPrt.document.head.appendChild(styleElement);
+      this.htmlPreview = printContent;
+      console.log(this.htmlPreview)
+      // WindowPrt.document.write(printContent);
+      // WindowPrt.document.close();
+      // WindowPrt.focus();  
+      // WindowPrt.onload = function () {
+      //   if (WindowPrt && WindowPrt.document.head) {
+      //     let styleElement = WindowPrt.document.createElement('style');
+      //     styleElement.textContent = `
+      //                 @page {
+      //                     size: A5 landscape;
+      //                 }
+      //                 body {
+      //                     margin: 0mm;
+      //                 }
+      //             `;
+      //     WindowPrt.document.head.appendChild(styleElement);
 
-          setTimeout(() => {
-            if (WindowPrt) {
-              WindowPrt.print();
-            } else {
-              console.error('Print window was closed before printing could occur.');
-            }
-          }, 800);
-        }
-      };
-      this.commonService.closeSnackBarMsg()
+      //     setTimeout(() => {
+      //       if (WindowPrt) {
+      //         WindowPrt.print();
+      //       } else {
+      //         console.error('Print window was closed before printing could occur.');
+      //       }
+      //     }, 800);
+      //   }
+      // };
+      // this.commonService.closeSnackBarMsg()
     });      
   }
   

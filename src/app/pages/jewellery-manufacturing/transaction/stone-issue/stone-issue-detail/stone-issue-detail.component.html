@@ -21,11 +21,11 @@
           <label for="inputPassword" class="col-sm-2 col-form-label">Job Number
             * : </label>
           <div class="col-md-2">
-            <mat-form-field appearance="outline" style="width: 100%;" >
-              <input type="text" matInput formControlName="jobNumber" 
+            <mat-form-field appearance="outline" style="width: 100%;">
+              <input type="text" matInput formControlName="jobNumber"
                 [readonly]="viewMode" UpperCaseDirective
                 (focusout)="jobNumberValidate($event)"
-                (keydown)="lookupKeyPress($event,'jobNumber')" 
+                (keydown)="lookupKeyPress($event,'jobNumber')"
                 #jobNumberInput />
               <master-search class="masterSearch"
                 [MasterSearchData]="jobNumberCodeData" #overlayjobNumberSearch
@@ -36,7 +36,7 @@
           </div>
           <div class="col-md-4">
             <mat-form-field appearance="outline" style="width: 100%;">
-              <input type="text" matInput formControlName="jobDes" readonly/>
+              <input type="text" matInput formControlName="jobDes" readonly />
             </mat-form-field>
           </div>
         </div>
@@ -46,7 +46,8 @@
           <div class="col-md-2">
             <mat-form-field appearance="outline" style="width: 100%;">
               <input type="text" matInput formControlName="subjobnumber"
-                [readonly]="viewMode" UpperCaseDirective />
+                [readonly]="viewMode" UpperCaseDirective
+                (focusout)="subJobNumberValidate($event)" />
               <master-search class="masterSearch"
                 [MasterSearchData]="subJobNoCodeData" #overlaysubjobnoSearch
                 (newRowClick)="subJobNoCodeSelected($event)"
@@ -387,7 +388,7 @@
           <dxi-column [allowEditing]="false" dataField="LOCTYPE_CODE"
             caption="Location"></dxi-column>
           <dxi-column [allowEditing]="false" dataField="CONSIGNMENT"
-            caption="Consignment"   cellTemplate="Consignment">
+            caption="Consignment" cellTemplate="Consignment">
             <div *dxTemplate="let data1 of 'Consignment'">
               <input type="checkbox"
                 [checked]="data1.value" />

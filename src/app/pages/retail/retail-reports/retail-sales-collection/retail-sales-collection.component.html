@@ -48,16 +48,20 @@
        <div class="row">
             <div class="col-md-4 checkBoxDiv">
                 <div class="row">
-                    <mat-checkbox formControlName="showSalesCheckbox">Sales</mat-checkbox>
+                    <mat-checkbox formControlName="showSalesCheckbox"
+                    (change)="onSalesCheckboxChange($event.checked)">Sales</mat-checkbox>
                 </div>
                 <div class="row">
-                    <mat-checkbox formControlName="showSalesReturnCheckbox">Sales Return</mat-checkbox>
+                    <mat-checkbox formControlName="showSalesReturnCheckbox"
+                    (change)="onSalesReturnCheckboxChange($event.checked)">Sales Return</mat-checkbox>
                 </div>
                 <div class="row">
-                    <mat-checkbox formControlName="showExbSalesCheckbox">Exb. Sales</mat-checkbox>
+                    <mat-checkbox formControlName="showExbSalesCheckbox"
+                    (change)="onExbSalesCheckboxChange($event.checked)">Exb. Sales</mat-checkbox>
                 </div>
                 <div class="row">
-                    <mat-checkbox formControlName="showExbSalesReturnCheckbox">Exb. Sales Return</mat-checkbox>
+                    <mat-checkbox formControlName="showExbSalesReturnCheckbox"
+                    (change)="onExbSalesReturnCheckboxChange($event.checked)">Exb. Sales Return</mat-checkbox>
                 </div>
                 <div class="row">
                     <mat-checkbox formControlName="showAdvanceReceiptCheckbox"
@@ -118,6 +122,14 @@
             </div>
         </dx-popup>
        
+        <dx-popup [visible]="previewpopup" [showTitle]="true" [showCloseButton]="true" (onHiding)="previewpopup = false"
+        height="700" width="1400">
+            <div class="custom-container">
+                <div [innerHTML]="htmlPreview"></div>
+            </div>
+        </dx-popup>
+
+
         <div class="row">
             <app-report-screen-buttons (saveTemplateClick)="saveTemplate()" (previewClicked)="previewClick()"></app-report-screen-buttons>
         </div>
