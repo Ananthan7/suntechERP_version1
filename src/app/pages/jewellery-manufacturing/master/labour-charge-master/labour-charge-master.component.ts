@@ -276,7 +276,7 @@ export class LabourChargeMasterComponent implements OnInit {
   }
   currencyCodeData: MasterSearchModel = {
     PAGENO: 1,
-    RECORDS: 10,
+    RECORDS: 25,
     LOOKUPID: 8,
     SEARCH_FIELD: 'CURRENCY_CODE',
     SEARCH_HEADING: 'Currency',
@@ -585,7 +585,8 @@ export class LabourChargeMasterComponent implements OnInit {
 
   setFormValues() {
     if (!this.content) return
-
+    console.log(this.content);
+    
     this.diamondlabourMasterForm.controls.selling_rate.setValue(
       this.commonService.transformDecimalVB(
         this.commonService.allbranchMaster?.BAMTDECIMALS,
@@ -611,8 +612,7 @@ export class LabourChargeMasterComponent implements OnInit {
     this.diamondlabourMasterForm.controls.labour_ac.setValue(this.content.CRACCODE);
     this.diamondlabourMasterForm.controls.settingType.setValue(this.content.PROCESS_TYPE);
     this.diamondlabourMasterForm.controls.variance.setValue(this.content.WASTAGE_AMT);
-
-    // this.diamondlabourMasterForm.controls.variance.setValue(this.content.METALSTONE);
+    this.diamondlabourMasterForm.controls.variance.setValue(this.content.VAR_PER);
 
     // this.diamondlabourMasterForm.controls.variance.setValue(
     //   this.commonService.transformDecimalVB(
@@ -896,10 +896,10 @@ export class LabourChargeMasterComponent implements OnInit {
     const inputValue = event.target.value.toUpperCase();
     LOOKUPDATA.SEARCH_VALUE = event.target.value;
     // if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
-    if (event.target.value === '' || this.viewMode === true) {
-      if (FORMNAME === 'sieve') {
-        this.diamondlabourMasterForm.controls.sieve_desc.setValue('');
-      }
+    if (event.target.value === '' || this.viewMode === true ) {
+      // if (FORMNAME === 'sieve') {
+      //   this.diamondlabourMasterForm.controls.sieve_desc.setValue('');
+      // }
       return;
     }
     let param = {
@@ -919,7 +919,7 @@ export class LabourChargeMasterComponent implements OnInit {
           this.handleLookupError(FORMNAME, LOOKUPDATA);
           return
         }
-        const matchedItem = data.find((item: any) => item.CODE.toUpperCase() === inputValue);
+        const matchedItem = data.find((item: any) => item.CODE === inputValue);
         if (matchedItem) {
           this.diamondlabourMasterForm.controls[FORMNAME].setValue(matchedItem.CODE);
           if (FORMNAME === 'sieve') {
@@ -1113,13 +1113,22 @@ export class LabourChargeMasterComponent implements OnInit {
       this.commonService.toastErrorByMsgId('MSG1680')//"process cannot be empty"
       return true
     }
-    else if (this.commonService.nullToString(form.labour_ac) == '') {
+    else if (this.commonService.nullToString(form.labour_ac) == ' ') {
       this.commonService.toastErrorByMsgId('MSG1366')//"labour_ac cannot be empty"
       return true
     }
-    else if (this.commonService.nullToString(form.cost_rate) == '') {
-      this.commonService.toastErrorByMsgId('MSG1594')//"cost_rate cannot be empty"
-      return true
+    // else if (this.commonService.nullToString(form.cost_rate) == '' || this.commonService.nullToString(form.cost_rate) == '0.00' ) {
+    //   this.commonService.toastErrorByMsgId('MSG81526')//"cost_rate cannot be empty"
+    //   return true
+    // }
+    else if (
+      this.commonService.nullToString(form.cost_rate) === '' ||
+      this.commonService.nullToString(form.cost_rate) === '0' ||
+      this.commonService.nullToString(form.cost_rate) === '0.00' ||
+      /^0{2,}\.00$/.test(this.commonService.nullToString(form.cost_rate)) // Check for multiple leading zeros (00.00, 000.00, etc.)
+    ) {
+      this.commonService.toastErrorByMsgId('MSG81526'); // "Selling Rate cannot be empty"
+      return true;
     }
 
     else if (this.commonService.nullToString(form.unitList) == '') {
@@ -1181,7 +1190,7 @@ export class LabourChargeMasterComponent implements OnInit {
       "CARATWT_TO": this.commonService.emptyToZero(diamondForm.ctWtTo),
       "SIEVE": diamondForm.sieve,
       "WASTAGE_PER": this.commonService.emptyToZero(metalForm.wastage),
-      "WASTAGE_AMT": this.commonService.emptyToZero(diamondForm.variance),
+      "WASTAGE_AMT": this.commonService.emptyToZero(metalForm.variance),
       "TYPE_CODE": this.commonService.nullToString(metalForm.typecode),
       "CATEGORY_CODE": this.commonService.nullToString(metalForm.category),
       "SUB_CATEGORY_CODE": this.commonService.nullToString(metalForm.subCategory),
@@ -1195,6 +1204,7 @@ export class LabourChargeMasterComponent implements OnInit {
       "FOR_DESIGN": true,
       "SIEVEFROM_DESC": diamondForm.sieve_desc,
       "ON_GROSSWT": true,
+      "VAR_PER": this.commonService.emptyToZero(diamondForm.variance),
     }
   }
 
