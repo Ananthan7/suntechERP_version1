@@ -369,6 +369,9 @@ export class ProcessTransferDetailsComponent implements OnInit {
   ngAfterViewInit() {
     this.commonService.formControlSetReadOnly('UNQ_JOB_ID', true);
     this.subJobNoSearch.VIEW_ICON = false;
+    if (this.content[0]?.FLAG == 'EDIT') {
+      this.checkMaxVocNumber()
+    }
     this.setInitialValues() //set all values from parent to child
   }
   ngAfterContentChecked() {
@@ -540,6 +543,26 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.setToWorkerWhereCondition()
 
     this.FORM_VALIDATER = this.processTransferdetailsForm.value;
+  }
+  checkMaxVocNumber() {
+    let postData = {
+      "SPID": "137",
+      "parameter": {
+        'Str_JOB_NUMBER': this.commonService.nullToString(this.processTransferdetailsForm.value.JOB_NUMBER),
+        'Str_SUB_JOB_NUMBER': this.commonService.nullToString(this.processTransferdetailsForm.value.UNQ_JOB_ID),
+        'Str_VOCNO': this.commonService.nullToString(this.processTransferdetailsForm.value.VOCNO)
+      }
+    }
+    this.commonService.showSnackBarMsg('MSG81447')
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        this.commonService.closeSnackBarMsg()
+        if (result.status == "Success" && result.dynamicData[0]) {
+          let data = result.dynamicData[0]
+          
+        }
+      })
+    this.subscriptions.push(Sub)
   }
   getMetalLabStockCode() {
     let postData = {
@@ -2374,7 +2397,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       "VOCTYPE": this.commonService.nullToString(form.VOCTYPE),
       "BRANCH_CODE": this.commonService.nullToString(this.branchCode),
       "JOB_NUMBER": this.commonService.nullToString(form.JOB_NUMBER),
-      "JOB_DATE": this.commonService.formatYYMMDD(form.JOB_DATE),
+      "JOB_DATE": this.commonService.nullToString(form.JOB_DATE),
       "UNQ_JOB_ID": this.commonService.nullToString(form.UNQ_JOB_ID),
       "UNQ_DESIGN_ID": this.commonService.nullToString(form.UNQ_DESIGN_ID),
       "DESIGN_CODE": this.commonService.nullToString(form.DESIGN_CODE),
@@ -2999,6 +3022,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       this.setFormDecimal('TO_METAL_WT', txtToMetalWt, 'METAL')
     }
     form = this.processTransferdetailsForm.value;
+    this.FORM_VALIDATER = this.processTransferdetailsForm.value;
     let Balance_WT = (this.emptyToZero(form.GrossWeightFrom) - (this.emptyToZero(form.GrossWeightTo) + this.emptyToZero(form.scrapWeight) + this.emptyToZero(form.lossQty)));
     this.setFormDecimal('Balance_WT', Balance_WT, 'METAL')
     if (this.Multi_Metal()) {
@@ -3065,6 +3089,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
 
       let lossQtyper = 0
       form = this.processTransferdetailsForm.value;
+      this.FORM_VALIDATER = this.processTransferdetailsForm.value;
       if (this.emptyToZero(form.lossQty) > 0) {
         lossQtyper = ((this.emptyToZero(form.lossQty) / this.emptyToZero(form.FRM_METAL_WT)) * 100);
         this.setFormDecimal('lossQtyper', lossQtyper, 'AMOUNT')

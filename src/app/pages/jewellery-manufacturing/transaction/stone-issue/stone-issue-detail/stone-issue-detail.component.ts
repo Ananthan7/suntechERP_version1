@@ -111,7 +111,7 @@ export class StoneIssueDetailComponent implements OnInit {
     SEARCH_FIELD: 'STOCK_CODE',
     SEARCH_HEADING: 'Stock Search',
     SEARCH_VALUE: '',
-    WHERECONDITION: "@DIVISION='',@JOBNO='',@SUBJOBNO='',@STOCKCODE=''",
+    WHERECONDITION: "@DIVISION='',@JOBNO='',@SUBJOBNO='',@STOCKCODE=''@LOOKUPFLAG='1'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -325,6 +325,7 @@ export class StoneIssueDetailComponent implements OnInit {
   divCodeSelected(e: any) {
     console.log(e);
     this.stoneIssueDetailsFrom.controls.DIVCODE.setValue(e.Division_Code);
+    
   }
   subJobNoCodeSelected(e: any) {
     this.stoneIssueDetailsFrom.controls.subjobno.setValue(e.UNQ_JOB_ID);
@@ -335,33 +336,31 @@ export class StoneIssueDetailComponent implements OnInit {
     console.log(e, 'eee')
     this.stoneIssueDetailsFrom.controls.stockCode.setValue(e.STOCK_CODE);
     this.stoneIssueDetailsFrom.controls.stockCodeDes.setValue(e.STOCK_DESCRIPTION);
-    this.stoneIssueDetailsFrom.controls.DIVCODE.setValue(e.Item);
-    this.stoneIssueDetailsFrom.controls.stockCodeDes.setValue(e.Discription);
-    this.stoneIssueDetailsFrom.controls.DIVCODE.setValue(e.DivCode);
+    // this.stoneIssueDetailsFrom.controls.DIVCODE.setValue(e.DivCode);
 
-    this.stoneIssueDetailsFrom.controls.pieces.setValue(e.Pcs)
-    this.stoneIssueDetailsFrom.controls.size.setValue(e.Size)
-    this.stoneIssueDetailsFrom.controls.sieve.setValue(e.sieve)
-    this.stoneIssueDetailsFrom.controls.SIEVE_SET.setValue(e.sieve_set)
-    this.stoneIssueDetailsFrom.controls.color.setValue(e.color)
-    this.stoneIssueDetailsFrom.controls.unitrate.setValue(
-      this.comService.emptyToZero(e.rate)
-    )
-    this.stoneIssueDetailsFrom.controls.shape.setValue(e.shape)
-    this.stoneIssueDetailsFrom.controls.amount.setValue(e.AmountLC)
-    this.stoneIssueDetailsFrom.controls.pointerwt.setValue(e.Weight)
-    this.stoneIssueDetailsFrom.controls.batchid.setValue(e.STOCK_CODE);
+    // this.stoneIssueDetailsFrom.controls.pieces.setValue(e.Pcs)
+    // this.stoneIssueDetailsFrom.controls.size.setValue(e.Size)
+    // this.stoneIssueDetailsFrom.controls.sieve.setValue(e.sieve)
+    // this.stoneIssueDetailsFrom.controls.SIEVE_SET.setValue(e.sieve_set)
+    // this.stoneIssueDetailsFrom.controls.color.setValue(e.color)
+    // this.stoneIssueDetailsFrom.controls.unitrate.setValue(
+    //   this.comService.emptyToZero(e.rate)
+    // )
+    // this.stoneIssueDetailsFrom.controls.shape.setValue(e.shape)
+    // this.stoneIssueDetailsFrom.controls.amount.setValue(e.AmountLC)
+    // this.stoneIssueDetailsFrom.controls.pointerwt.setValue(e.Weight)
+    // this.stoneIssueDetailsFrom.controls.batchid.setValue(e.STOCK_CODE);
 
-    this.setStockCodeWhereCondition()
+    this.stockCodeValidate(event)
   }
   setStockCodeWhereCondition() {
     let form = this.stoneIssueDetailsFrom.value;
-    let WHERECONDITION = `@DIVISION='${this.comService.nullToString(form.DIVCODE)}',`
-    WHERECONDITION += `@JOBNO='${this.comService.nullToString(form.jobNumber)}',`
-    WHERECONDITION += `@SUBJOBNO='${this.comService.nullToString(form.subjobnumber)}',`
-    WHERECONDITION += `@STOCKCODE='${this.comService.nullToString(form.stockCode)}'`
+    this.stockCodeData.WHERECONDITION = `@DIVISION='${this.comService.nullToString(form.DIVCODE)}',`
+    this.stockCodeData.WHERECONDITION += `@JOBNO='${this.comService.nullToString(form.jobNumber)}',`
+    this.stockCodeData.WHERECONDITION += `@SUBJOBNO='${this.comService.nullToString(form.subjobnumber)}',`
+    this.stockCodeData.WHERECONDITION += `@STOCKCODE='${this.comService.nullToString(form.stockCode)}',@LOOKUPFLAG='1'`
     //   WHERECONDITION += `@strStockCode='${this.comService.nullToString(form.stockCode)}'`
-    this.stockCodeData.WHERECONDITION = WHERECONDITION
+    // this.stockCodeData.WHERECONDITION = WHERECONDITION
   }
 
   close(data?: any) {
@@ -623,10 +622,6 @@ export class StoneIssueDetailComponent implements OnInit {
     this.formSubmit('CONTINUE');
     this.stoneIssueDetailsFrom.reset();
   }
-  onRowUpdateGrid(event: any) {
- this.FillStnRequiredDetail()
-  
-  }
 
   resetStockDetails() {
     this.stoneIssueDetailsFrom.controls.stockCode.setValue('')
@@ -687,7 +682,11 @@ export class StoneIssueDetailComponent implements OnInit {
 
 
   stockCodeValidate(event: any) {
-    if (event.target.value === '') return;
+    if (this.viewMode) return;
+    if (event.target.value == ''){
+      this.showOverleyPanel(event, 'stockCode');
+      return
+    };
 
     let postData = {
       "SPID": "132",
@@ -695,7 +694,8 @@ export class StoneIssueDetailComponent implements OnInit {
         DIVISION: this.stoneIssueDetailsFrom.value.DIVCODE,
         JOBNO: this.stoneIssueDetailsFrom.value.jobNumber,
         SUBJOBNO: this.stoneIssueDetailsFrom.value.subjobnumber,
-        STOCKCODE: this.stoneIssueDetailsFrom.value.stockCode
+        STOCKCODE: this.stoneIssueDetailsFrom.value.stockCode,
+        LOOKUPFLAG: '0',
       }
     };
 
@@ -703,8 +703,9 @@ export class StoneIssueDetailComponent implements OnInit {
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
       .subscribe((result) => {
         this.comService.closeSnackBarMsg();
-        if (result.status === "Success" && result.dynamicData[0]) {
-          let data = result.dynamicData[0];
+        if (result.status === "Success" && result.dynamicData) {
+          let data = result.dynamicData;
+          console.log(data,'data')
           let stockDetails = result.dynamicData[1];
 
           if (data.RESULT_TYPE === "Failed") {
@@ -775,9 +776,9 @@ export class StoneIssueDetailComponent implements OnInit {
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
       .subscribe((result) => {
         this.comService.closeSnackBarMsg()
-        if (result.dynamicData && result.dynamicData.length > 0) {
-          let stoneIssueGridData = result.dynamicData
-          console.log(stoneIssueGridData, 'data')
+        if (result.dynamicData && result.dynamicData[0].length > 0) {
+          this.tableData = result.dynamicData[0]
+          console.log(this.tableData);
           // this.tableData = result.dynamicData[1] || []
           // this.columnhead1 = Object.keys(this.tableData[0])
      
@@ -826,7 +827,6 @@ export class StoneIssueDetailComponent implements OnInit {
           // this.tableData = result.dynamicData[1] || []
           // this.columnhead1 = Object.keys(this.tableData[0])
           this.FillStnRequiredDetail()
-          this.setStockCodeWhereCondition()
           this.getImageData()
         } else {
           this.comService.toastErrorByMsgId('MSG1747')
@@ -865,6 +865,7 @@ export class StoneIssueDetailComponent implements OnInit {
             this.stoneIssueDetailsFrom.controls.DESIGN_CODE.setValue(data[0].DESIGN_CODE)
             this.stoneIssueDetailsFrom.controls.PART_CODE.setValue(data[0].PART_CODE)
             this.stoneIssueDetailsFrom.controls.salesorderno.setValue(data[0].CUSTOMER_CODE)
+            this.stoneIssueDetailsFrom.controls.DIVCODE.setValue("L");
             // if (data[0].DESIGN_TYPE && data[0].DESIGN_TYPE == "DIAMOND") {
             //   this.stoneIssueDetailsFrom.controls.DIVCODE.setValue("L");
             // } else {
@@ -872,6 +873,7 @@ export class StoneIssueDetailComponent implements OnInit {
             // }
             // this.overlayjobNumberSearch.closeOverlayPanel()
             this.subJobNumberValidate()
+            this.setStockCodeWhereCondition()
           } else {
             this.comService.toastErrorByMsgId('MSG1531')
             this.stoneIssueDetailsFrom.controls.jobNumber.setValue('')
