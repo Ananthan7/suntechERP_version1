@@ -61,9 +61,9 @@ export class RetailSalesCollectionComponent implements OnInit {
 
   ngOnInit(): void {
     // console.log('data from report component',this.reportVouchers)
-    this.APIData = this.reportVouchers;
-    this.prefillScreenValues()
+    this.prefillScreenValues();
   }
+
 
   selectedData(data: any) {
     console.log(data)
@@ -162,27 +162,93 @@ export class RetailSalesCollectionComponent implements OnInit {
   //   });
   // }
 
-  onAdvanceReceiptCheckboxChange(value: boolean) {
+  onSalesCheckboxChange(value: boolean){
     if(value){
-      const advanceKeys = this.APIData.filter(item => item.MAIN_VOCTYPE== 'PCR');
-      this.selectedRowKeys.push(...advanceKeys)
+      const salesData = this.reportVouchers.filter((item: any) => {
+        return item.MAIN_VOCTYPE === 'POS' || item.MAIN_VOCTYPE === 'RIN';
+      });
+      this.APIData = [...salesData, ...this.APIData]
+      this.selectedRowKeys = [...salesData, ...this.selectedRowKeys]
     }
     else{
-      this.selectedRowKeys = this.selectedRowKeys.filter(key => key.MAIN_VOCTYPE !== 'PCR');
+      this.APIData = this.APIData.filter((item: any) => {
+        return item.MAIN_VOCTYPE !== 'POS' && item.MAIN_VOCTYPE !== 'RIN';
+      });
     }
   }
-
+  onSalesReturnCheckboxChange(value: boolean){
+    if(value){
+      const SalesReturnData = this.reportVouchers.filter((item: any) => {
+        return item.MAIN_VOCTYPE === 'PSR'
+      });
+      this.APIData = [...SalesReturnData, ...this.APIData]
+      this.selectedRowKeys = [...SalesReturnData, ...this.selectedRowKeys]
+    }
+    else{
+      this.APIData = this.APIData.filter((item: any) => {
+        return item.MAIN_VOCTYPE !== 'PSR'
+      });
+    }
+  }
+  onExbSalesCheckboxChange(value: boolean){
+    if(value){
+      const ExbSalesData = this.reportVouchers.filter((item: any) => {
+        return item.MAIN_VOCTYPE === 'POSEX'
+      });
+      this.APIData = [...ExbSalesData, ...this.APIData]
+      this.selectedRowKeys = [...ExbSalesData, ...this.selectedRowKeys]
+    }
+    else{
+      this.APIData = this.APIData.filter((item: any) => {
+        return item.MAIN_VOCTYPE !== 'POSEX'
+      });
+    }
+  }
+  onExbSalesReturnCheckboxChange(value: boolean){
+    if(value){
+      const ExbSalesReturnData = this.reportVouchers.filter((item: any) => {
+        return item.MAIN_VOCTYPE === 'POSER'
+      });
+      this.APIData = [...ExbSalesReturnData, ...this.APIData]
+      this.selectedRowKeys = [...ExbSalesReturnData, ...this.selectedRowKeys]
+    }
+    else{
+      this.APIData = this.APIData.filter((item: any) => {
+        return item.MAIN_VOCTYPE !== 'POSER'
+      });
+    }
+  }
+  onAdvanceReceiptCheckboxChange(value: boolean) {
+    if(value){
+      const AdvanceReceiptData = this.reportVouchers.filter((item: any) => {
+        return item.MAIN_VOCTYPE === 'PCR'
+      });
+      this.APIData = [...AdvanceReceiptData, ...this.APIData]
+      this.selectedRowKeys = [...AdvanceReceiptData, ...this.selectedRowKeys]
+    }
+    else{
+      this.APIData = this.APIData.filter((item: any) => {
+        return item.MAIN_VOCTYPE !== 'PCR'
+      });
+    }
+  }
   onSalesRegisterCheckboxChange(value: boolean) {
     if(value){
       this.retailSalesCollection.controls.showSalesReturnCheckbox?.setValue(false);
       this.retailSalesCollection.controls.showExbSalesReturnCheckbox?.setValue(false);
-      this.selectedRowKeys = this.selectedRowKeys.filter(key => key.MAIN_VOCTYPE !== 'PSR' && key.MAIN_VOCTYPE !== 'POSER');
-      console.log(this.selectedRowKeys)
+      this.APIData = this.APIData.filter((item: any) => {
+        return item.MAIN_VOCTYPE !== 'PSR' && item.MAIN_VOCTYPE !== 'POSER'
+      });
     }
     else{
       this.retailSalesCollection.controls.showSalesReturnCheckbox?.setValue(true);
       this.retailSalesCollection.controls.showExbSalesReturnCheckbox?.setValue(true);
-      console.log(this.selectedRowKeys)
+  
+      const SalesRegisterData = this.reportVouchers.filter((item: any) => {
+        return item.MAIN_VOCTYPE === 'POSER' || item.MAIN_VOCTYPE === 'PSR'
+      });
+      this.APIData = [...SalesRegisterData, ...this.APIData]
+      this.selectedRowKeys = [...SalesRegisterData, ...this.selectedRowKeys]
     }
   }
 
@@ -228,7 +294,6 @@ export class RetailSalesCollectionComponent implements OnInit {
 
 
   prefillScreenValues(){ 
-    
     if ( Object.keys(this.content).length > 0) {
       this.isLoading = false;
       console.log('data fetched from main grid',this.content )
@@ -283,7 +348,6 @@ export class RetailSalesCollectionComponent implements OnInit {
       this.fetchedBranchDataParam = formattedUserBranch;
       this.fetchedBranchData= this.fetchedBranchDataParam?.split("#")
    
-      
       this.dateToPass = {
         fromDate:  this.formatDateToYYYYMMDD(new Date()),
         toDate: this.formatDateToYYYYMMDD(new Date()),
@@ -291,20 +355,36 @@ export class RetailSalesCollectionComponent implements OnInit {
 
       this.retailSalesCollection.controls.showDateCheckbox?.setValue(true);
       this.retailSalesCollection.controls.showInvoiceCheckbox?.setValue(true);
-      this.retailSalesCollection.controls.showSalesCheckbox?.setValue(true);
-      this.retailSalesCollection.controls.showSalesReturnCheckbox?.setValue(true);
-      this.retailSalesCollection.controls.showExbSalesCheckbox?.setValue(true);
-      this.retailSalesCollection.controls.showExbSalesReturnCheckbox?.setValue(true);
 
-      // let defaultVoctype = ['POS','RIN','PSR', 'POSC','POSEX','POSER', PCR]
-      const selectedKeys = this.APIData.filter(item => item.MAIN_VOCTYPE!== 'PCR').map(item => item);
-      this.selectedRowKeys = selectedKeys;
-      const selectedSet = new Set(this.selectedRowKeys.map(item => item.SRNO));
-      this.APIData.sort((a, b) => {
-        const aIsSelected = selectedSet.has(a.SRNO) ? 1 : 0;
-        const bIsSelected = selectedSet.has(b.SRNO) ? 1 : 0;
-        return bIsSelected - aIsSelected;
-      });
+      this.retailSalesCollection.controls.showSalesCheckbox?.setValue(true);
+      if(this.retailSalesCollection.controls.showSalesCheckbox.value == true){
+        this.APIData = this.reportVouchers.filter((item: any) => {
+          return item.MAIN_VOCTYPE === 'POS' || item.MAIN_VOCTYPE === 'RIN';
+        });
+      }
+      this.retailSalesCollection.controls.showSalesReturnCheckbox?.setValue(true);
+      if(this.retailSalesCollection.controls.showSalesReturnCheckbox.value == true){
+        const psrData = this.reportVouchers.filter((item: any) => {
+          return item.MAIN_VOCTYPE === 'PSR';
+        });
+        this.APIData = [...this.APIData, ...psrData];
+      }
+      this.retailSalesCollection.controls.showExbSalesCheckbox?.setValue(true);
+      if(this.retailSalesCollection.controls.showExbSalesCheckbox.value == true){
+        const posexData = this.reportVouchers.filter((item: any) => {
+          return item.MAIN_VOCTYPE === 'POSEX';
+        });
+        this.APIData = [...this.APIData, ...posexData];
+      }
+      this.retailSalesCollection.controls.showExbSalesReturnCheckbox?.setValue(true);
+      if(this.retailSalesCollection.controls.showExbSalesReturnCheckbox.value == true){
+        const poserData = this.reportVouchers.filter((item: any) => {
+          return item.MAIN_VOCTYPE === 'POSER';
+        });
+        this.APIData = [...this.APIData, ...poserData];
+      }
+      this.selectedRowKeys = this.APIData
+      console.log(this.APIData)
 
       let vocTypeArr: any= []
       this.selectedRowKeys.forEach((item: any)=>{
@@ -313,6 +393,16 @@ export class RetailSalesCollectionComponent implements OnInit {
       const uniqueArray = [...new Set( vocTypeArr )];
       const plainText = uniqueArray.join('');
       this.VocTypeParam = plainText
+
+    //   // let defaultVoctype = ['POS','RIN','PSR', 'POSC','POSEX','POSER', PCR]
+    //   const selectedKeys = this.APIData.filter(item => item.MAIN_VOCTYPE!== 'PCR').map(item => item);
+    //   this.selectedRowKeys = selectedKeys;
+    //   const selectedSet = new Set(this.selectedRowKeys.map(item => item.SRNO));
+    //   this.APIData.sort((a, b) => {
+    //     const aIsSelected = selectedSet.has(a.SRNO) ? 1 : 0;
+    //     const bIsSelected = selectedSet.has(b.SRNO) ? 1 : 0;
+    //     return bIsSelected - aIsSelected;
+    //   });
     }
   }
 
@@ -346,6 +436,7 @@ export class RetailSalesCollectionComponent implements OnInit {
          })
       }
     };
+
     this.commonService.showSnackBarMsg('MSG81447');
     this.dataService.postDynamicAPI('ExecueteSPInterface', payload)
     .subscribe((result: any) => {
