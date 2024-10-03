@@ -1184,7 +1184,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
     console.log(e);
 
     if (!this.posCustomerMasterMainForm.controls.country.value) {
-      return alert("please Select the Country First ");
+      return alert("please Select the Country First");
     }
 
     let value = "United Arab Emirates";
