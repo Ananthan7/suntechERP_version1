@@ -158,6 +158,7 @@
                 <mat-checkbox
                   [disabled]="flag === 'VIEW'"
                   (change)="creditLimitChecker($event)"
+                  [checked]="isCreditLimit"
                   formControlName="creditCardLimitCheck"
                   id="ID006"
                 >
@@ -1303,7 +1304,7 @@
                             for="inputPassword"
                             class="col-sm-5 col-form-label"
                             id="ID035"
-                            >Source of fund *</label
+                            >Source of Fund *</label
                           >
                           <div class="col-md-7">
                             <mat-form-field
