@@ -285,4 +285,10 @@ button:disabled {
     font-weight: 500;
     color: black;
   }
+
+  .disabled {
+    pointer-events: none;
+    opacity: 0.5;
+  }
+  
 }
