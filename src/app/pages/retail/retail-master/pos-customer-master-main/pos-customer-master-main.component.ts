@@ -665,7 +665,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
         if (value === "Gift") {
           this.posCustomerMasterMainForm.get("gifrPurchased")?.enable();
         } else {
-          this.posCustomerMasterMainForm.controls.gifrPurchased.setValue("")
+          this.posCustomerMasterMainForm.controls.gifrPurchased.setValue("");
           this.posCustomerMasterMainForm.get("gifrPurchased")?.disable();
         }
       });
@@ -713,10 +713,9 @@ export class PosCustomerMasterMainComponent implements OnInit {
     );
     this.posCustomerMasterMainForm.controls.lastName.setValue(setData.LASTNAME);
     console.log(setData.CREDIT_LIMIT_STATUS);
-    
-    
-      this.isCreditLimit = setData.CREDIT_LIMIT_STATUS
-    
+
+    this.isCreditLimit = setData.CREDIT_LIMIT_STATUS;
+
     this.posCustomerMasterMainForm.controls.creditCardLimit.setValue(
       this.comService.decimalQuantityFormat(
         this.comService.emptyToZero(setData.CREDIT_LIMIT),
@@ -981,7 +980,6 @@ export class PosCustomerMasterMainComponent implements OnInit {
     this.posCustomerMasterMainForm.controls.fatherName.setValue(
       setData.FATHERNAME
     );
-    
   }
 
   editController() {
@@ -1063,8 +1061,8 @@ export class PosCustomerMasterMainComponent implements OnInit {
     });
   }
 
-  onCity(value:any) {
-    this.posCustomerMasterMainForm.controls.city.setValue(value)
+  onCity(value: any) {
+    this.posCustomerMasterMainForm.controls.city.setValue(value);
   }
 
   onPanNoInput(event: Event): void {
@@ -1328,9 +1326,8 @@ export class PosCustomerMasterMainComponent implements OnInit {
   }
 
   uploadCustomerImage() {
-
     console.log(" inside the uploadCustomerImage");
-    
+
     const formData = new FormData();
     const customerCode = this.existCustomerCode || this.generatedCustomerCode;
 
@@ -1342,7 +1339,8 @@ export class PosCustomerMasterMainComponent implements OnInit {
 
     console.log("FormData:", formData);
 
-    const sub: Subscription = this.apiService.postDynamicAPI(API, formData)
+    const sub: Subscription = this.apiService
+      .postDynamicAPI(API, formData)
       .subscribe(
         (result) => {
           console.log("Image upload API Response:", result);
@@ -1355,9 +1353,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
 
     this.subscriptions.push(sub);
     console.log("finished");
-    
-}
-
+  }
 
   customerSave() {
     let POSTYPECOMPULSORY =
@@ -1410,7 +1406,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
         this.posCustomerMasterMainForm.controls
       ).filter((controlName) => {
         const control = this.posCustomerMasterMainForm.controls[controlName];
-        return control.invalid && control.errors?.["required"]; 
+        return control.invalid && control.errors?.["required"];
       });
 
       invalidRequiredFields.length > 0 &&
@@ -1462,7 +1458,8 @@ export class PosCustomerMasterMainComponent implements OnInit {
           PICTURE_NAME: "",
           PICTURE: "",
           SALVOCTYPE_NO: this.posCustomerMasterMainForm.value.voucher || "",
-          SALDATE: this.posCustomerMasterMainForm.value.saleDate || this.currentDate,
+          SALDATE:
+            this.posCustomerMasterMainForm.value.saleDate || this.currentDate,
           SALAMOUNT: this.posCustomerMasterMainForm.value.amount || 0,
           SALBRLOC: this.posCustomerMasterMainForm.value.branchLoc || "",
           Branch_Code: this.branchCode,
@@ -1621,8 +1618,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
           CREDIT_LIMIT:
             this.posCustomerMasterMainForm.value.creditCardLimit || 0,
           CREDIT_LIMIT_STATUS: this.isCreditLimit,
-          PANCARDNO:
-            this.posCustomerMasterMainForm.value.panNo || "",
+          PANCARDNO: this.posCustomerMasterMainForm.value.panNo || "",
           VOCTYPE: this.vocDetails?.VOCTYPE ?? "",
           YEARMONTH: this.vocDetails?.YEARMONTH ?? localStorage.getItem("YEAR"),
           VOCNO: this.vocDetails?.VOCNO ?? 0,
@@ -1687,9 +1683,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
                 });
 
                 if (this.image) {
-                  
                   this.uploadCustomerImage();
-                  
                 }
 
                 this.close("reloadMainGrid");
@@ -1721,9 +1715,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
                 });
 
                 if (this.image) {
-                  
                   this.uploadCustomerImage();
-                  
                 }
                 this.close("reloadMainGrid");
               } else {
@@ -2079,7 +2071,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
 
   onFileSelected(event: any) {
     this.image = event.target.files[0];
-    this.imageName = event.target.files[0].name
+    this.imageName = event.target.files[0].name;
 
     // Create a URL for the selected image and assign it to fetchedPicture
     if (this.image) {

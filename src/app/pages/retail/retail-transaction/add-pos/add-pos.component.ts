@@ -108,6 +108,7 @@ export class AddPosComponent implements OnInit {
   gridAmountDecimalFormat: any;
   hideEsignButton: boolean = false;
   hideEsignView: boolean = true;
+  disableEsignButton:boolean=false;
   gridWeghtDecimalFormat: any;
   isOrderPullingRowSelected: boolean = false;
   isEstiPullingRowSelected: boolean = false;
@@ -1808,10 +1809,21 @@ export class AddPosComponent implements OnInit {
   initializeSignaturePad(): Promise<void> {
     return new Promise((resolve, reject) => {
       if (this.signaturePadElement && !this.isSignaturePadInitialized) {
-        this.signaturePad = new SignaturePad(this.signaturePadElement.nativeElement, {
+        const canvasElement = this.signaturePadElement.nativeElement;
+  
+        canvasElement.width = 450; 
+        canvasElement.height = 200;
+  
+        canvasElement.style.width = '100%'; 
+        canvasElement.style.height = 'auto';
+  
+        this.signaturePad = new SignaturePad(canvasElement, {
           backgroundColor: 'white',
           penColor: 'black',
+          minWidth: 0.5,
+          maxWidth: 2.0,
         });
+  
         this.isSignaturePadInitialized = true;
         resolve();
       } else {
@@ -1819,6 +1831,7 @@ export class AddPosComponent implements OnInit {
       }
     });
   }
+  
 
   openEsign() {
     this.hideEsignView = false;
@@ -13772,7 +13785,8 @@ export class AddPosComponent implements OnInit {
             this.snackBar.open('Esigned successfully', '', {
               duration: 1000 
             });
-
+            this.hideEsignView = true;
+            this.disableEsignButton=true;
           }
         });
     }

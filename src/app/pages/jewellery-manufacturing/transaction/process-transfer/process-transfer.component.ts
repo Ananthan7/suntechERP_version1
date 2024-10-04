@@ -345,11 +345,8 @@ export class ProcessTransferComponent implements OnInit {
       WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
     }
     this.commonService.showSnackBarMsg('MSG81447');
-    // let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
-      let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
-    console.log(API);
-    
-    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+    let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
+    let Sub: Subscription = this.dataService.postDynamicAPI(API,param)
       .subscribe((result) => {
         this.commonService.closeSnackBarMsg()
         let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
@@ -362,10 +359,21 @@ export class ProcessTransferComponent implements OnInit {
           }
           return
         }
+        this.showOverleyPanel(event, FORMNAME);
       }, err => {
         this.commonService.toastErrorByMsgId('MSG1531')
       })
     this.subscriptions.push(Sub)
+  }
+  closeOverlayPanel(FORMNAME:any){
+    if(FORMNAME === 'salesman'){
+      this.salesmanOverlay.closeOverlayPanel()
+      return
+    }
+    if(FORMNAME === 'CURRENCY_RATE'){
+      this.OverlayCurrencyRate.closeOverlayPanel()
+      return
+    }
   }
   ValidatingVocNo() {
     if (this.content?.FLAG == 'VIEW') return
