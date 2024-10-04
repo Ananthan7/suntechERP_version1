@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
+import { DomSanitizer } from '@angular/platform-browser';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
@@ -59,7 +60,7 @@ export class RetailSalesCollectionComponent implements OnInit {
 
   constructor(  private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder, private dataService: SuntechAPIService,  private comService: CommonServiceService,
-    private commonService: CommonServiceService,   private toastr: ToastrService,
+    private commonService: CommonServiceService,   private toastr: ToastrService, private sanitizer: DomSanitizer
   ) { }
 
   ngOnInit(): void {
@@ -504,6 +505,7 @@ export class RetailSalesCollectionComponent implements OnInit {
   }
 
   previewClick() {
+
     let logData =  {
       "VOCTYPE": this.comService.getqueryParamVocType() || "",
       "REFMID": "",
@@ -546,8 +548,12 @@ export class RetailSalesCollectionComponent implements OnInit {
       //   return;
       // }
       let printContent = data[0][0].HTMLINPUT;
-      this.htmlPreview = printContent;
-      console.log(this.htmlPreview)
+      // Sanitize and bind the HTML
+      this.htmlPreview = this.sanitizer.bypassSecurityTrustHtml(printContent);
+      console.log(this.htmlPreview);
+
+
+      // this.commonService.closeSnackBarMsg()
       // WindowPrt.document.write(printContent);
       // WindowPrt.document.close();
       // WindowPrt.focus();  
@@ -573,9 +579,17 @@ export class RetailSalesCollectionComponent implements OnInit {
       //     }, 800);
       //   }
       // };
-      // this.commonService.closeSnackBarMsg()
     });      
   }
   
+  printBtnClick(){
+    console.log( Object.keys(this.htmlPreview.changingThisBreaksApplicationSecurity).length === 0 )
+   
+      console.log(this.htmlPreview);
+      
+  
+   
+  }
+
 
 }

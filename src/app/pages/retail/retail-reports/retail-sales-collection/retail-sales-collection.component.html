@@ -123,7 +123,7 @@
         </dx-popup>
        
         <dx-popup [visible]="previewpopup" [showTitle]="true" [showCloseButton]="true" (onHiding)="previewpopup = false"
-        height="700" width="1400">
+        height="700" width="1400" >
             <div class="custom-container">
                 <div [innerHTML]="htmlPreview"></div>
             </div>
@@ -131,7 +131,8 @@
 
 
         <div class="row">
-            <app-report-screen-buttons (saveTemplateClick)="saveTemplate()" (previewClicked)="previewClick()"></app-report-screen-buttons>
+            <app-report-screen-buttons (saveTemplateClick)="saveTemplate()" (previewClicked)="previewClick()"
+            (printClicked)="printBtnClick()"></app-report-screen-buttons>
         </div>
 
     </form>
