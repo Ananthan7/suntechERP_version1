@@ -109,8 +109,8 @@
                                     <div class="col-md-3">
                                         <mat-form-field appearance="outline" style="width: 100%;">
                                             <input type="text" matInput formControlName="worker" [readonly]="viewMode"
-                                                (keydown)="lookupKeyPress($event,'workerDes')" id="code"
-                                                (focusout)="validateLookupField($event,workerCodeData,'workerDes')" />
+                                                (keydown)="lookupKeyPress($event,'worker')" id="code"
+                                                (focusout)="SPvalidateLookupField($event,workerCodeData,'worker')" />
                                             <master-search [MasterSearchData]="workerCodeData" #overlayworkerDes
                                                 class="masterSearch" (newRowClick)="workerCodeSelected($event)"
                                                 *ngIf="!viewMode">
