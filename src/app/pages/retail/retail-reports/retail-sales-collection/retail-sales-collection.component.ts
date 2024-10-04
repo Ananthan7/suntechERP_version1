@@ -505,7 +505,6 @@ export class RetailSalesCollectionComponent implements OnInit {
   }
 
   previewClick() {
-
     let logData =  {
       "VOCTYPE": this.comService.getqueryParamVocType() || "",
       "REFMID": "",
@@ -524,8 +523,8 @@ export class RetailSalesCollectionComponent implements OnInit {
       "parameter": {
         "STRBRANCHCODES": this.formattedBranchDivisionData || this.fetchedBranchDataParam,
         "STRVOCTYPES": this.VocTypeParam, //this.commonService.getqueryParamVocType(),
-        "FROMVOCDATE": this.formatDateToYYYYMMDD(this.retailSalesCollection.value.fromDate),
-        "TOVOCDATE": this.formatDateToYYYYMMDD(this.retailSalesCollection.value.toDate) ,
+        "FROMVOCDATE": this.formatDateToYYYYMMDD(this.dateToPass.fromDate),
+        "TOVOCDATE": this.formatDateToYYYYMMDD(this.dateToPass.toDate) ,
         "flag": '',
         "USERBRANCH": localStorage.getItem('userbranch'),
         "USERNAME": localStorage.getItem('username'),
@@ -545,9 +544,42 @@ export class RetailSalesCollectionComponent implements OnInit {
   }
   
   printBtnClick(){
-    console.log(this.htmlPreview)
-    if (this.htmlPreview !== undefined && this.htmlPreview !== null &&
-      Object.keys(this.htmlPreview.changingThisBreaksApplicationSecurity).length !== 0) {
+    let logData =  {
+      "VOCTYPE": this.comService.getqueryParamVocType() || "",
+      "REFMID": "",
+      "USERNAME": this.comService.userName,
+      "MODE": "PRINT",
+      "DATETIME": this.comService.formatDateTime(new Date()),
+      "REMARKS":"",
+      "SYSTEMNAME": "",
+      "BRANCHCODE": this.comService.branchCode,
+      "VOCNO": "",
+      "VOCDATE": "",
+      "YEARMONTH" : this.comService.yearSelected
+    }
+    let postData = {
+      "SPID": "0114",
+      "parameter": {
+        "STRBRANCHCODES": this.formattedBranchDivisionData || this.fetchedBranchDataParam,
+        "STRVOCTYPES": this.VocTypeParam, //this.commonService.getqueryParamVocType(),
+        "FROMVOCDATE": this.formatDateToYYYYMMDD(this.dateToPass.fromDate),
+        "TOVOCDATE": this.formatDateToYYYYMMDD(this.dateToPass.toDate) ,
+        "flag": '',
+        "USERBRANCH": localStorage.getItem('userbranch'),
+        "USERNAME": localStorage.getItem('username'),
+        "Logdata": JSON.stringify(logData)
+      }
+    }
+ 
+    this.commonService.showSnackBarMsg('MSG81447');
+    this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+    .subscribe((result: any) => {
+      let data = result.dynamicData;
+      let printContent = data[0][0].HTMLINPUT;
+      this.htmlPreview = this.sanitizer.bypassSecurityTrustHtml(printContent);
+    });      
+    
+    if (Object.keys(this.htmlPreview.changingThisBreaksApplicationSecurity).length !== 0) {
         const printWindow = window.open('', '', 'height=600,width=800');
         printWindow?.document.write(this.htmlPreview.changingThisBreaksApplicationSecurity);
         printWindow?.document.close();
