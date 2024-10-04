@@ -607,7 +607,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
     this.metallabourMasterForm.controls.metallabour_code.setValue(this.content.CODE);
     this.metallabourMasterForm.controls.metallabour_description.setValue(this.content.DESCRIPTION);
     this.metallabourMasterForm.controls.metalDivision.setValue(this.content.DIVISION_CODE);
-    this.metallabourMasterForm.controls.metalcurrency.setValue(this.content.CURRENCY_CODE);
+    this.metallabourMasterForm.controls.metalcurrency.setValue(this.content.CURRENCYCODE);
     // this.metallabourMasterForm.controls.wastage.setValue(this.content.WASTAGE_PER);
     this.metallabourMasterForm.controls.category.setValue(this.content.CATEGORY_CODE);
     this.metallabourMasterForm.controls.subCategory.setValue(this.content.SUB_CATEGORY_CODE);
@@ -623,8 +623,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
     this.metallabourMasterForm.controls.typecode.setValue(this.content.TYPE_CODE);
     this.metallabourMasterForm.controls.wtFrom.setValue(this.content.CARATWT_FROM);
     this.metallabourMasterForm.controls.wtTo.setValue(this.content.CARATWT_TO);
-    this.metallabourMasterForm.controls.variance.setValue(this.content.WASTAGE_AMT);
-
+    // this.metallabourMasterForm.controls.variance.setValue(this.content.VAR_PER);
     this.metallabourMasterForm.controls.metalSelling.setValue(this.content.SELLING_PER);
 
 
@@ -640,6 +639,11 @@ export class MetalLabourchargeMasterComponent implements OnInit {
     //   this.commonService.transformDecimalVB(
     //     this.commonService.allbranchMaster?.BMQTYDECIMALS,
     //     this.content.WASTAGE_PER));
+
+    this.metallabourMasterForm.controls.variance.setValue(
+      this.commonService.transformDecimalVB(
+        this.commonService.allbranchMaster?.BAMTDECIMALS,
+        this.content.VAR_PER));
 
     this.metallabourMasterForm.controls.wtFrom.setValue(
       this.commonService.transformDecimalVB(
@@ -1127,7 +1131,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
       "SHAPE": this.commonService.nullToString(diamondForm.shape),
       "SIZE_FROM": this.commonService.nullToString(diamondForm.size_from),
       "SIZE_TO": this.commonService.nullToString(diamondForm.size_to),
-      "CURRENCYCODE": this.commonService.nullToString(diamondForm.currency),
+      "CURRENCYCODE": this.commonService.nullToString(metalForm.metalcurrency),
       "UNITCODE": this.commonService.nullToString(metalForm.metalunitList),
       "COST_RATE": this.commonService.emptyToZero(metalForm.metalcost_rate),
       "SELLING_RATE": this.commonService.emptyToZero(metalForm.metalselling_rate),
@@ -1136,14 +1140,14 @@ export class MetalLabourchargeMasterComponent implements OnInit {
       "LAST_UPDATE": this.commonService.formatDateTime(this.commonService.currentDate),
       "CRACCODE": this.commonService.nullToString(metalForm.labourAc),
       "DIVISION_CODE": this.commonService.nullToString(metalForm.metalDivision).toUpperCase(),
-      "CURRENCY_CODE": this.commonService.nullToString(metalForm.metalcurrency),
+      "CURRENCY_CODE": "",
       "SELLING_PER": this.commonService.emptyToZero(metalForm.metalSelling),
       "ACCESSORIES": 0,
       "CARATWT_FROM": this.commonService.emptyToZero(metalForm.wtFrom),
       "CARATWT_TO": this.commonService.emptyToZero(metalForm.wtTo),
       "SIEVE": diamondForm.sieve,
       "WASTAGE_PER": this.commonService.emptyToZero(metalForm.wastage),
-      "WASTAGE_AMT": this.commonService.emptyToZero(metalForm.variance),
+      "WASTAGE_AMT": 0,
       "TYPE_CODE": this.commonService.nullToString(metalForm.typecode),
       "CATEGORY_CODE": this.commonService.nullToString(metalForm.category),
       "SUB_CATEGORY_CODE": this.commonService.nullToString(metalForm.subCategory),
@@ -1157,6 +1161,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
       "FOR_DESIGN": metalForm.forDesignOnly || false,
       "SIEVEFROM_DESC": diamondForm.sieve_desc,
       "ON_GROSSWT": metalForm.onGrossWt || false,
+      "VAR_PER": this.commonService.emptyToZero(metalForm.variance),
     }
   }
   formSubmit() {
