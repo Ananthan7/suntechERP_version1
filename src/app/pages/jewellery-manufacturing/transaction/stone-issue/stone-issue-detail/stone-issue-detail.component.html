@@ -373,21 +373,21 @@
             caption="{{ data }}" [allowEditing]="true"
             alignment="center" backgroundcolor="#000">
           </dxi-column> -->
-          <dxi-column [allowEditing]="false" dataField="DIVCODE"
+          <dxi-column [allowEditing]="true" dataField="DIVCODE"
             caption="Div"></dxi-column>
-          <dxi-column [allowEditing]="false" dataField="STOCK_CODE"
+          <dxi-column [allowEditing]="true" dataField="STOCK_CODE"
             caption="Stock Code"></dxi-column>
           <dxi-column [allowEditing]="false" dataField="SUB_STOCK_CODE"
             caption="Batch ID"></dxi-column>
           <dxi-column [allowEditing]="false" dataField="SUB_STOCK_CODE"
             caption="Stock Bal"></dxi-column>
-          <dxi-column [allowEditing]="false" dataField="PCS"
+          <dxi-column [allowEditing]="true" dataField="PCS"
             caption="Pcs"></dxi-column>
-          <dxi-column [allowEditing]="false" dataField="CARATWT_TO"
+          <dxi-column [allowEditing]="true" dataField="CARATWT_TO"
             caption="Carat"></dxi-column>
-          <dxi-column [allowEditing]="false" dataField="LOCTYPE_CODE"
+          <dxi-column [allowEditing]="true" dataField="LOCTYPE_CODE"
             caption="Location"></dxi-column>
-          <dxi-column [allowEditing]="false" dataField="CONSIGNMENT"
+          <dxi-column [allowEditing]="true" dataField="CONSIGNMENT"
             caption="Consignment" cellTemplate="Consignment">
             <div *dxTemplate="let data1 of 'Consignment'">
               <input type="checkbox"
@@ -411,7 +411,7 @@
             caption="Sieve Set"></dxi-column>
           <dxi-column [allowEditing]="false" dataField="SIEVE_DESC"
             caption="Sieve Desc"></dxi-column>
-          <dxi-column [allowEditing]="false" dataField="D_REMARKS"
+          <dxi-column [allowEditing]="true" dataField="D_REMARKS"
             caption="Remarks"></dxi-column>
           <dxi-column [allowEditing]="false" dataField="ISS_STN_PCS"
             caption="Issued Pcs"></dxi-column>

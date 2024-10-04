@@ -236,9 +236,9 @@ export class StoneIssueDetailComponent implements OnInit {
     this.stoneIssueDetailsFrom.controls.CURRENCY_RATE.setValue(this.content.CURRENCY_RATE || this.content.HEADERDETAILS.currencyrate)
 
     this.stoneIssueDetailsFrom.controls.jobNumber.setValue(this.content.JOB_NUMBER)
-    this.stoneIssueDetailsFrom.controls.jobDes.setValue(this.content.JOB_DESCRIPTION)
+    this.stoneIssueDetailsFrom.controls.jobDes.setValue(this.content.JOB_DESCRIPTION?.toUpperCase())
     this.stoneIssueDetailsFrom.controls.subjobnumber.setValue(this.content.UNQ_JOB_ID)
-    this.stoneIssueDetailsFrom.controls.subjobDes.setValue(this.content.JOB_DESCRIPTION)
+    this.stoneIssueDetailsFrom.controls.subjobDes.setValue(this.content.JOB_DESCRIPTION?.toUpperCase())
     this.stoneIssueDetailsFrom.controls.DESIGN_CODE.setValue(this.content.DESIGN_CODE)
     this.stoneIssueDetailsFrom.controls.stockCodeDes.setValue(this.content.STOCK_DESCRIPTION)
     this.stoneIssueDetailsFrom.controls.stockCode.setValue(this.content.STOCK_CODE)
@@ -419,7 +419,8 @@ export class StoneIssueDetailComponent implements OnInit {
               if (FORMNAME === 'worker') {
                 this.stoneIssueDetailsFrom.controls.workername.setValue(matchedItem.DESCRIPTION); // Set worker description
               } else if (FORMNAME === 'process') {
-                this.stoneIssueDetailsFrom.controls.processname.setValue(matchedItem.DESCRIPTION); // Set process description
+                this.stoneIssueDetailsFrom.controls.processname.setValue(matchedItem.DESCRIPTION);// Set process description
+                this.processCodeSelected(matchedItem); 
               }
 
             } else {
@@ -549,7 +550,7 @@ export class StoneIssueDetailComponent implements OnInit {
       "JOB_DATE": this.comService.formatDateTime(new Date(form.VOCDATE)),
       "JOB_SO_NUMBER": this.comService.emptyToZero(form.subjobnumber),
       "UNQ_JOB_ID": this.comService.nullToString(form.subjobnumber),
-      "JOB_DESCRIPTION": this.comService.nullToString(form.jobDes),
+      "JOB_DESCRIPTION": this.comService.nullToString(form.jobDes?.toUpperCase()),
       "BRANCH_CODE": this.comService.nullToString(this.comService.branchCode),
       "DESIGN_CODE": this.comService.nullToString(form.DESIGN_CODE),
       "DIVCODE": this.comService.nullToString(form.DIVCODE),
@@ -624,14 +625,14 @@ export class StoneIssueDetailComponent implements OnInit {
     }
 
     // If stock code is filled, proceed with the form submission
-    this.formSubmit('CONTINUE');
+    // this.formSubmit('CONTINUE');
     this.stoneIssueDetailsFrom.reset();
   }
 
   resetStockDetails() {
     this.stoneIssueDetailsFrom.controls.stockCode.setValue('')
     this.stoneIssueDetailsFrom.controls.stockCodeDes.setValue('')
-    // this.stoneIssueDetailsFrom.controls.DIVCODE.setValue('')
+    this.stoneIssueDetailsFrom.controls.DIVCODE.setValue('')
     this.setValueWithDecimal('PURE_WT', 0, 'THREE')
     this.setValueWithDecimal('GROSS_WT', 0, 'METAL')
     this.setValueWithDecimal('PURITY', 0, 'PURITY')
@@ -687,7 +688,7 @@ export class StoneIssueDetailComponent implements OnInit {
   stockCodeValidate(event: any) {
     if (this.viewMode) return;
     if (event.target.value == ''){
-      this.showOverleyPanel(event, 'stockCode');
+      // this.showOverleyPanel(event, 'stockCode');
       return
     };
 
@@ -708,21 +709,24 @@ export class StoneIssueDetailComponent implements OnInit {
         this.comService.closeSnackBarMsg();
         if (result.status === "Success" && result.dynamicData[0]) {
           let data = result.dynamicData[0];
-          console.log(data[0],'data')
-          let stockDetails = result.dynamicData;
+          console.log(data,'data')
+          let stockDetails = result.dynamicData[0];
             // Handle the valid stock case
             if (stockDetails) {
-              console.log(stockDetails, 'data');
-              this.stoneIssueDetailsFrom.controls.carat.setValue(data[0].KARAT);
-              this.stoneIssueDetailsFrom.controls.SIEVE_SET.setValue(data[0].SIEVE_SET);
-              this.stoneIssueDetailsFrom.controls.size.setValue(data[0].SIZE);
-              this.stoneIssueDetailsFrom.controls.sieve.setValue(data[0].SIEVE);
-              this.stoneIssueDetailsFrom.controls.SIEVE_DESC.setValue(data[0].SIEVE_DESC);
-              this.stoneIssueDetailsFrom.controls.pieces.setValue(data[0].PCS);
-              this.stoneIssueDetailsFrom.controls.shape.setValue(data[0].SHAPE);
-              this.stoneIssueDetailsFrom.controls.color.setValue(data[0].COLOR);
+              console.log(stockDetails[0], 'data');
+              this.stoneIssueDetailsFrom.controls.stockCodeDes.setValue(stockDetails[0].STOCK_DESCRIPTION);
+              this.stoneIssueDetailsFrom.controls.carat.setValue(stockDetails[0].KARAT);
+              this.stoneIssueDetailsFrom.controls.SIEVE_SET.setValue(stockDetails[0].SIEVE_SET);
+              this.stoneIssueDetailsFrom.controls.size.setValue(stockDetails[0].SIZE);
+              this.stoneIssueDetailsFrom.controls.sieve.setValue(stockDetails[0].SIEVE);
+              this.stoneIssueDetailsFrom.controls.SIEVE_DESC.setValue(stockDetails[0].SIEVE_DESC);
+              this.stoneIssueDetailsFrom.controls.pieces.setValue(stockDetails[0].PCS);
+              this.stoneIssueDetailsFrom.controls.shape.setValue(stockDetails[0].SHAPE);
+              this.stoneIssueDetailsFrom.controls.color.setValue(stockDetails[0].COLOR);
             } 
           } else {
+           
+            this.overlaystockCodeSearch.closeOverlayPanel();
             this.comService.toastErrorByMsgId('MSG1747');
             this.stoneIssueDetailsFrom.controls.stockCode.setValue('');
           }
@@ -810,8 +814,8 @@ export class StoneIssueDetailComponent implements OnInit {
           console.log(data[0].JOB_SO_NUMBER, 'data')
           this.stoneIssueDetailsFrom.controls.process.setValue(data[0].PROCESS)
           this.stoneIssueDetailsFrom.controls.processname.setValue(data[0].PROCESSDESC)
-          // this.stoneIssueDetailsFrom.controls.worker.setValue(data[0].WORKER)
-          // this.stoneIssueDetailsFrom.controls.workername.setValue(data[0].WORKERDESC)
+          this.stoneIssueDetailsFrom.controls.worker.setValue(data[0].WORKER)
+          this.stoneIssueDetailsFrom.controls.workername.setValue(data[0].WORKERDESC)
           this.stoneIssueDetailsFrom.controls.PICTURE_PATH.setValue(data[0].PICTURE_PATH)
           // this.tableData = result.dynamicData[1] || []
           // this.columnhead1 = Object.keys(this.tableData[0])
@@ -829,7 +833,7 @@ export class StoneIssueDetailComponent implements OnInit {
 
   jobNumberValidate(event: any) {
     this.showOverleyPanel(event, 'jobNumber')
-    if (event.target.value == '') return
+    if (event.target.value == '' || this.viewMode) return
     let postData = {
       "SPID": "028",
       "parameter": {
@@ -848,9 +852,9 @@ export class StoneIssueDetailComponent implements OnInit {
           if (data[0] && data[0]?.UNQ_JOB_ID != '') {
             this.jobNumberDetailData = data
             console.log(data, 'pick')
-            this.stoneIssueDetailsFrom.controls.jobDes.setValue(data[0].JOB_DESCRIPTION)
+            this.stoneIssueDetailsFrom.controls.jobDes.setValue(data[0].JOB_DESCRIPTION?.toUpperCase())
             this.stoneIssueDetailsFrom.controls.subjobnumber.setValue(data[0].UNQ_JOB_ID)
-            this.stoneIssueDetailsFrom.controls.subjobDes.setValue(data[0].DESCRIPTION)
+            this.stoneIssueDetailsFrom.controls.subjobDes.setValue(data[0].DESCRIPTION?.toUpperCase())
             this.stoneIssueDetailsFrom.controls.DESIGN_CODE.setValue(data[0].DESIGN_CODE)
             this.stoneIssueDetailsFrom.controls.PART_CODE.setValue(data[0].PART_CODE)
             this.stoneIssueDetailsFrom.controls.salesorderno.setValue(data[0].CUSTOMER_CODE)
