@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
+import { DomSanitizer } from '@angular/platform-browser';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
@@ -59,7 +60,7 @@ export class RetailSalesCollectionComponent implements OnInit {
 
   constructor(  private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder, private dataService: SuntechAPIService,  private comService: CommonServiceService,
-    private commonService: CommonServiceService,   private toastr: ToastrService,
+    private commonService: CommonServiceService,   private toastr: ToastrService, private sanitizer: DomSanitizer
   ) { }
 
   ngOnInit(): void {
@@ -317,15 +318,6 @@ export class RetailSalesCollectionComponent implements OnInit {
         fromDate:  ParcedPreFetchData?.CONTROL_DETAIL.FROMVOCDATE,
         toDate: ParcedPreFetchData?.CONTROL_DETAIL.TOVOCDATE
       };
- 
-
-      let vocTypeArr: any= []
-      this.selectedRowKeys.forEach((item: any)=>{
-        vocTypeArr.push(item.VOCTYPE+'#') 
-      })
-      const uniqueArray = [...new Set( vocTypeArr )];
-      const plainText = uniqueArray.join('');
-      this.VocTypeParam = plainText
 
 
       let splittedText= ParcedPreFetchData?.CONTROL_DETAIL.STRVOCTYPES.split("#")  
@@ -357,7 +349,14 @@ export class RetailSalesCollectionComponent implements OnInit {
       //   const bIsSelected = selectedSet.has(b.SRNO) ? 1 : 0;
       //   return bIsSelected - aIsSelected;
       // });
- 
+      
+      let vocTypeArr: any= []
+      this.selectedRowKeys.forEach((item: any)=>{
+        vocTypeArr.push(item.VOCTYPE+'#') 
+      })
+      const uniqueArray = [...new Set( vocTypeArr )];
+      const plainText = uniqueArray.join('');
+      this.VocTypeParam = plainText
  
   
       console.log(ParcedPreFetchData?.CONTROL_DETAIL.USERBRANCH)
@@ -409,8 +408,7 @@ export class RetailSalesCollectionComponent implements OnInit {
         this.APIData = [...this.APIData, ...poserData];
       }
       this.selectedRowKeys = this.APIData
-      console.log(this.APIData)
-
+ 
       let vocTypeArr: any= []
       this.selectedRowKeys.forEach((item: any)=>{
         vocTypeArr.push(item.VOCTYPE+'#') 
@@ -525,8 +523,8 @@ export class RetailSalesCollectionComponent implements OnInit {
       "parameter": {
         "STRBRANCHCODES": this.formattedBranchDivisionData || this.fetchedBranchDataParam,
         "STRVOCTYPES": this.VocTypeParam, //this.commonService.getqueryParamVocType(),
-        "FROMVOCDATE": this.formatDateToYYYYMMDD(this.retailSalesCollection.value.fromDate),
-        "TOVOCDATE": this.formatDateToYYYYMMDD(this.retailSalesCollection.value.toDate) ,
+        "FROMVOCDATE": this.formatDateToYYYYMMDD(this.dateToPass.fromDate),
+        "TOVOCDATE": this.formatDateToYYYYMMDD(this.dateToPass.toDate) ,
         "flag": '',
         "USERBRANCH": localStorage.getItem('userbranch'),
         "USERNAME": localStorage.getItem('username'),
@@ -540,45 +538,58 @@ export class RetailSalesCollectionComponent implements OnInit {
       console.log(result);
       this.previewpopup = true;
       let data = result.dynamicData;
-      // const width = window.innerWidth;
-      // const height = window.innerHeight;
-      // const windowFeatures = `width=${width},height=${height},fullscreen=yes`;
-      // var WindowPrt = window.open(' ', ' ', windowFeatures);
-      // if (WindowPrt === null) {
-      //   console.error('Failed to open the print window. Possibly blocked by a popup blocker.');
-      //   return;
-      // }
       let printContent = data[0][0].HTMLINPUT;
-      this.htmlPreview = printContent;
-      console.log(this.htmlPreview)
-      // WindowPrt.document.write(printContent);
-      // WindowPrt.document.close();
-      // WindowPrt.focus();  
-      // WindowPrt.onload = function () {
-      //   if (WindowPrt && WindowPrt.document.head) {
-      //     let styleElement = WindowPrt.document.createElement('style');
-      //     styleElement.textContent = `
-      //                 @page {
-      //                     size: A5 landscape;
-      //                 }
-      //                 body {
-      //                     margin: 0mm;
-      //                 }
-      //             `;
-      //     WindowPrt.document.head.appendChild(styleElement);
-
-      //     setTimeout(() => {
-      //       if (WindowPrt) {
-      //         WindowPrt.print();
-      //       } else {
-      //         console.error('Print window was closed before printing could occur.');
-      //       }
-      //     }, 800);
-      //   }
-      // };
-      // this.commonService.closeSnackBarMsg()
+      this.htmlPreview = this.sanitizer.bypassSecurityTrustHtml(printContent);
     });      
   }
   
+  printBtnClick(){
+    let logData =  {
+      "VOCTYPE": this.comService.getqueryParamVocType() || "",
+      "REFMID": "",
+      "USERNAME": this.comService.userName,
+      "MODE": "PRINT",
+      "DATETIME": this.comService.formatDateTime(new Date()),
+      "REMARKS":"",
+      "SYSTEMNAME": "",
+      "BRANCHCODE": this.comService.branchCode,
+      "VOCNO": "",
+      "VOCDATE": "",
+      "YEARMONTH" : this.comService.yearSelected
+    }
+    let postData = {
+      "SPID": "0114",
+      "parameter": {
+        "STRBRANCHCODES": this.formattedBranchDivisionData || this.fetchedBranchDataParam,
+        "STRVOCTYPES": this.VocTypeParam, //this.commonService.getqueryParamVocType(),
+        "FROMVOCDATE": this.formatDateToYYYYMMDD(this.dateToPass.fromDate),
+        "TOVOCDATE": this.formatDateToYYYYMMDD(this.dateToPass.toDate) ,
+        "flag": '',
+        "USERBRANCH": localStorage.getItem('userbranch'),
+        "USERNAME": localStorage.getItem('username'),
+        "Logdata": JSON.stringify(logData)
+      }
+    }
+ 
+    this.commonService.showSnackBarMsg('MSG81447');
+    this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+    .subscribe((result: any) => {
+      let data = result.dynamicData;
+      let printContent = data[0][0].HTMLINPUT;
+      this.htmlPreview = this.sanitizer.bypassSecurityTrustHtml(printContent);
+    });      
+    
+    if (Object.keys(this.htmlPreview.changingThisBreaksApplicationSecurity).length !== 0) {
+        const printWindow = window.open('', '', 'height=600,width=800');
+        printWindow?.document.write(this.htmlPreview.changingThisBreaksApplicationSecurity);
+        printWindow?.document.close();
+        printWindow?.focus();
+        printWindow?.print();
+        printWindow?.close();
+    } else {
+      Swal.fire( 'No Data!', 'There is no data to print!', 'info');
+    }
+  }
+
 
 }

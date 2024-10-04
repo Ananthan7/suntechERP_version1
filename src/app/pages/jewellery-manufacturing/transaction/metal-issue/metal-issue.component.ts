@@ -285,6 +285,10 @@ export class MetalIssueComponent implements OnInit {
     if(event.key == 'Tab' && event.target.value == ''){
       this.showOverleyPanel(event,form)
     }
+    if (event.key === 'Enter') {
+      if (event.target.value == '') this.showOverleyPanel(event, form)
+      event.preventDefault();
+    }
   }
 
   deleteRowClicked(): void {
@@ -607,7 +611,7 @@ export class MetalIssueComponent implements OnInit {
       case 'SALESPERSON_CODE':
         this.overlaysalesperson.showOverlayPanel(event)
         break;
-      case 'workerDes':
+      case 'worker':
         this.overlayworkerDes.showOverlayPanel(event)
         break;
 
@@ -624,8 +628,8 @@ export class MetalIssueComponent implements OnInit {
       WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
     }
     this.comService.showSnackBarMsg('MSG81447');
-    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
-    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch`
+    let Sub: Subscription = this.dataService.postDynamicAPI(API,param)
       .subscribe((result) => {
         this.comService.closeSnackBarMsg()
         let data = this.comService.arrayEmptyObjectToString(result.dynamicData[0])
@@ -636,7 +640,7 @@ export class MetalIssueComponent implements OnInit {
           LOOKUPDATA.SEARCH_VALUE = ''
           if (FORMNAME === 'SALESPERSON_CODE') {
             this.showOverleyPanel(event, 'SALESPERSON_CODE');
-          } else if (FORMNAME === 'workerDes') {
+          } else if (FORMNAME === 'worker') {
             this.showOverleyPanel(event, 'workerDes');
           }
           return
@@ -647,7 +651,50 @@ export class MetalIssueComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
+  SPvalidateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    LOOKUPDATA.SEARCH_VALUE = event.target.value;
+    if (event.target.value == '' || this.viewMode == true) return;
 
+    let param = {
+      "PAGENO": LOOKUPDATA.PAGENO,
+      "RECORDS": LOOKUPDATA.RECORDS,
+      "LOOKUPID": LOOKUPDATA.LOOKUPID,
+      "ORDER_TYPE": LOOKUPDATA.SEARCH_VALUE ? 1 : 0,
+      "WHERECONDITION": LOOKUPDATA.WHERECONDITION,
+      "searchField": LOOKUPDATA.SEARCH_FIELD,
+      "searchValue": LOOKUPDATA.SEARCH_VALUE
+    };
+
+    this.comService.showSnackBarMsg('MSG81447');
+    let Sub: Subscription = this.dataService.postDynamicAPI('MasterLookUp', param)
+      .subscribe((result) => {
+        this.comService.closeSnackBarMsg();
+        let data = result.dynamicData[0];
+        if (data && data.length > 0) {
+          if (LOOKUPDATA.FRONTENDFILTER && LOOKUPDATA.SEARCH_VALUE != '') {
+            let searchResult = this.comService.searchAllItemsInArray(data, LOOKUPDATA.SEARCH_VALUE);
+            if (searchResult && searchResult.length == 0) {
+              this.metalIssueForm.controls[FORMNAME].setValue('');
+              LOOKUPDATA.SEARCH_VALUE = '';
+              return;
+            }
+            let result = this.comService.searchAllItemsInArray(data, LOOKUPDATA.SEARCH_VALUE)
+            if (result) this.setDescriptions(result, FORMNAME)
+          }
+        }
+      }, err => {
+        this.comService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+      });
+    this.subscriptions.push(Sub);
+  }
+  setDescriptions(result: any, FORMNAME: string) {
+    switch (FORMNAME) {
+      case 'worker':
+        this.metalIssueForm.controls.worker.setValue(result[0].workerDes)
+        break;
+      default:
+    }
+  }
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {
       this.subscriptions.forEach(subscription => subscription.unsubscribe());// unsubscribe all subscription

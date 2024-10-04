@@ -188,6 +188,7 @@ export class MfgGridComponent implements OnInit {
   /**USE: to get table data from API */
   getMasterGridData(data?: any) {
     this.resetGridAction()
+    this.isdisableEnableButtons()
     if (data) {
       this.pageIndex = 1;
       this.pageSize = 10
@@ -305,6 +306,19 @@ export class MfgGridComponent implements OnInit {
         });
       });
     this.subscriptions$.push(sub)
+  }
+  isdisableEnableButtons(){
+    this.tableName = this.CommonService.getqueryParamTable()
+    const disableTables = [
+      'JOB_METAL_ISSUE_MASTER_DJ',
+      'JOB_METAL_RETURN_MASTER_DJ',
+      'JOB_STONE_ISSUE_MASTER_DJ',
+      'JOB_STONE_RETURN_MASTER_DJ'
+    ];
+    if (disableTables.includes(this.tableName)) {
+      this.isDisableDelete = true;
+      this.isDisableEdit = true;
+    }
   }
   getGridVisibleSettings() {
     let sub: Subscription = this.dataService.getDynamicAPI(`TransactionListView/GetTransactionListViewDetail/${this.vocType}/${this.CommonService.branchCode}`)
