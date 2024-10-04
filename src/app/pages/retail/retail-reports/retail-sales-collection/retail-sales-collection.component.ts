@@ -539,56 +539,24 @@ export class RetailSalesCollectionComponent implements OnInit {
       console.log(result);
       this.previewpopup = true;
       let data = result.dynamicData;
-      // const width = window.innerWidth;
-      // const height = window.innerHeight;
-      // const windowFeatures = `width=${width},height=${height},fullscreen=yes`;
-      // var WindowPrt = window.open(' ', ' ', windowFeatures);
-      // if (WindowPrt === null) {
-      //   console.error('Failed to open the print window. Possibly blocked by a popup blocker.');
-      //   return;
-      // }
       let printContent = data[0][0].HTMLINPUT;
-      // Sanitize and bind the HTML
       this.htmlPreview = this.sanitizer.bypassSecurityTrustHtml(printContent);
-      console.log(this.htmlPreview);
-
-
-      // this.commonService.closeSnackBarMsg()
-      // WindowPrt.document.write(printContent);
-      // WindowPrt.document.close();
-      // WindowPrt.focus();  
-      // WindowPrt.onload = function () {
-      //   if (WindowPrt && WindowPrt.document.head) {
-      //     let styleElement = WindowPrt.document.createElement('style');
-      //     styleElement.textContent = `
-      //                 @page {
-      //                     size: A5 landscape;
-      //                 }
-      //                 body {
-      //                     margin: 0mm;
-      //                 }
-      //             `;
-      //     WindowPrt.document.head.appendChild(styleElement);
-
-      //     setTimeout(() => {
-      //       if (WindowPrt) {
-      //         WindowPrt.print();
-      //       } else {
-      //         console.error('Print window was closed before printing could occur.');
-      //       }
-      //     }, 800);
-      //   }
-      // };
     });      
   }
   
   printBtnClick(){
-    console.log( Object.keys(this.htmlPreview.changingThisBreaksApplicationSecurity).length === 0 )
-   
-      console.log(this.htmlPreview);
-      
-  
-   
+    console.log(this.htmlPreview)
+    if (this.htmlPreview !== undefined && this.htmlPreview !== null &&
+      Object.keys(this.htmlPreview.changingThisBreaksApplicationSecurity).length !== 0) {
+        const printWindow = window.open('', '', 'height=600,width=800');
+        printWindow?.document.write(this.htmlPreview.changingThisBreaksApplicationSecurity);
+        printWindow?.document.close();
+        printWindow?.focus();
+        printWindow?.print();
+        printWindow?.close();
+    } else {
+      Swal.fire( 'No Data!', 'There is no data to print!', 'info');
+    }
   }
 
 
