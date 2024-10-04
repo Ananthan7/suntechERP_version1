@@ -741,7 +741,6 @@
                     [disabled]="flag === 'VIEW'"
                     formControlName="city"
                     (selectionChange)="onCity($event.value)"
-                    
                   >
                     <mat-option
                       *ngFor="let city of cityListData"
@@ -3442,8 +3441,9 @@
                 />
               </div>
 
-              <p class="text-muted fs-6" > {{imageName || 'No File Uploaded'}}</p>
-
+              <p class="text-muted fs-6">
+                {{ imageName || "No File Uploaded" }}
+              </p>
             </div>
           </div>
         </div>
