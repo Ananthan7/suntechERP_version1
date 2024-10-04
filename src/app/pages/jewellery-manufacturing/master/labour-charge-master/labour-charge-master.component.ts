@@ -518,14 +518,13 @@ export class LabourChargeMasterComponent implements OnInit {
   }
 
   onlabourtypeChange() {
-    this.diamondlabourMasterForm.controls.method.setValue('GENERAL');
     // this.diamondlabourMasterForm.controls.method.setValue('GEN');
     this.diamondlabourMasterForm.get('labourType')?.valueChanges.subscribe((selectedLabourType) => {
       if (selectedLabourType === 'SETTING') {
         this.viewModeSetting = false;
         this.ViewModemethod = false;
-
       } else {
+        this.diamondlabourMasterForm.controls.method.setValue('GENERAL');
         this.diamondlabourMasterForm.controls.settingType.setValue('GEN');
         this.viewModeSetting = true;
         this.ViewModemethod = true;
@@ -598,6 +597,8 @@ export class LabourChargeMasterComponent implements OnInit {
     this.diamondlabourMasterForm.controls.labour_description.setValue(this.content.DESCRIPTION);
     // this.diamondlabourMasterForm.controls.labourType.setValue(this.content.LABTYPE);
     this.diamondlabourMasterForm.controls.method.setValue(this.content.METHOD);
+    // console.log(this.content.METHOD);
+    
     this.diamondlabourMasterForm.controls.divisions.setValue(this.content.DIVISION_CODE);
     this.diamondlabourMasterForm.controls.labourType.setValue(this.content.DIVISION);
     this.diamondlabourMasterForm.controls.shape.setValue(this.content.SHAPE);
@@ -611,8 +612,7 @@ export class LabourChargeMasterComponent implements OnInit {
     this.diamondlabourMasterForm.controls.accessories.setValue(this.content.ACCESSORIES);
     this.diamondlabourMasterForm.controls.labour_ac.setValue(this.content.CRACCODE);
     this.diamondlabourMasterForm.controls.settingType.setValue(this.content.PROCESS_TYPE);
-    this.diamondlabourMasterForm.controls.variance.setValue(this.content.WASTAGE_AMT);
-    this.diamondlabourMasterForm.controls.variance.setValue(this.content.VAR_PER);
+    // this.diamondlabourMasterForm.controls.variance.setValue(this.content.VAR_PER);
 
     // this.diamondlabourMasterForm.controls.variance.setValue(
     //   this.commonService.transformDecimalVB(
@@ -623,6 +623,11 @@ export class LabourChargeMasterComponent implements OnInit {
       this.commonService.transformDecimalVB(
         this.commonService.allbranchMaster?.BAMTDECIMALS,
         this.content.SELLING_PER));
+
+    this.diamondlabourMasterForm.controls.variance.setValue(
+      this.commonService.transformDecimalVB(
+        this.commonService.allbranchMaster?.BAMTDECIMALS,
+        this.content.VAR_PER));
 
     //"PROCESS_TYPE": this.commonService.nullToString(diamondForm.settingType),
 
@@ -660,27 +665,27 @@ export class LabourChargeMasterComponent implements OnInit {
     );
 
 
-    this.metallabourMasterForm.controls.metallabour_code.setValue(this.content.CODE);
-    this.metallabourMasterForm.controls.metallabour_description.setValue(this.content.DESCRIPTION);
-    this.metallabourMasterForm.controls.metalDivision.setValue(this.content.DIVISION_CODE);
-    this.metallabourMasterForm.controls.metalcurrency.setValue(this.content.CURRENCY_CODE);
-    this.metallabourMasterForm.controls.wastage.setValue(this.content.WASTAGE_PER);
-    this.metallabourMasterForm.controls.category.setValue(this.content.CATEGORY_CODE);
-    this.metallabourMasterForm.controls.subCategory.setValue(this.content.SUB_CATEGORY_CODE);
-    this.metallabourMasterForm.controls.brand.setValue(this.content.BRAND_CODE);
-    this.metallabourMasterForm.controls.karat.setValue(this.content.KARAT_CODE);
-    this.metallabourMasterForm.controls.stock_code.setValue(this.content.STOCK_CODE);
-    this.metallabourMasterForm.controls.purity.setValue(this.content.PURITY);
-    this.metallabourMasterForm.controls.color.setValue(this.content.COLOR);
-    this.metallabourMasterForm.controls.forDesignOnly.setValue(this.content.FOR_DESIGN);
-    this.metallabourMasterForm.controls.onGrossWt.setValue(this.content.ON_GROSSWT);
-    this.metallabourMasterForm.controls.metalcost_rate.setValue(this.content.LAST_COST_RATE);
-    this.metallabourMasterForm.controls.typecode.setValue(this.content.TYPE_CODE);
+    // this.metallabourMasterForm.controls.metallabour_code.setValue(this.content.CODE);
+    // this.metallabourMasterForm.controls.metallabour_description.setValue(this.content.DESCRIPTION);
+    // this.metallabourMasterForm.controls.metalDivision.setValue(this.content.DIVISION_CODE);
+    // this.metallabourMasterForm.controls.metalcurrency.setValue(this.content.CURRENCY_CODE);
+    // this.metallabourMasterForm.controls.wastage.setValue(this.content.WASTAGE_PER);
+    // this.metallabourMasterForm.controls.category.setValue(this.content.CATEGORY_CODE);
+    // this.metallabourMasterForm.controls.subCategory.setValue(this.content.SUB_CATEGORY_CODE);
+    // this.metallabourMasterForm.controls.brand.setValue(this.content.BRAND_CODE);
+    // this.metallabourMasterForm.controls.karat.setValue(this.content.KARAT_CODE);
+    // this.metallabourMasterForm.controls.stock_code.setValue(this.content.STOCK_CODE);
+    // this.metallabourMasterForm.controls.purity.setValue(this.content.PURITY);
+    // this.metallabourMasterForm.controls.color.setValue(this.content.COLOR);
+    // this.metallabourMasterForm.controls.forDesignOnly.setValue(this.content.FOR_DESIGN);
+    // this.metallabourMasterForm.controls.onGrossWt.setValue(this.content.ON_GROSSWT);
+    // this.metallabourMasterForm.controls.metalcost_rate.setValue(this.content.LAST_COST_RATE);
+    // this.metallabourMasterForm.controls.typecode.setValue(this.content.TYPE_CODE);
 
-    this.metallabourMasterForm.controls.purity.setValue(
-      this.commonService.transformDecimalVB(
-        this.commonService.allbranchMaster?.BMQTYDECIMALS,
-        this.content.PURITY));
+    // this.metallabourMasterForm.controls.purity.setValue(
+    //   this.commonService.transformDecimalVB(
+    //     this.commonService.allbranchMaster?.BMQTYDECIMALS,
+    //     this.content.PURITY));
 
     // this.metallabourMasterForm.controls.metalselling_rate.setValue(
     //   this.commonService.transformDecimalVB(
@@ -1190,7 +1195,7 @@ export class LabourChargeMasterComponent implements OnInit {
       "CARATWT_TO": this.commonService.emptyToZero(diamondForm.ctWtTo),
       "SIEVE": diamondForm.sieve,
       "WASTAGE_PER": this.commonService.emptyToZero(metalForm.wastage),
-      "WASTAGE_AMT": this.commonService.emptyToZero(metalForm.variance),
+      "WASTAGE_AMT": 0,
       "TYPE_CODE": this.commonService.nullToString(metalForm.typecode),
       "CATEGORY_CODE": this.commonService.nullToString(metalForm.category),
       "SUB_CATEGORY_CODE": this.commonService.nullToString(metalForm.subCategory),
@@ -1201,9 +1206,9 @@ export class LabourChargeMasterComponent implements OnInit {
       "STOCK_CODE": this.commonService.nullToString(metalForm.stock_code),
       "PURITY": this.commonService.emptyToZero(this.metallabourMasterForm.value.purity),
       "COLOR": this.commonService.nullToString(metalForm.color),
-      "FOR_DESIGN": true,
+      "FOR_DESIGN": false,
       "SIEVEFROM_DESC": diamondForm.sieve_desc,
-      "ON_GROSSWT": true,
+      "ON_GROSSWT": false,
       "VAR_PER": this.commonService.emptyToZero(diamondForm.variance),
     }
   }

@@ -83,6 +83,25 @@ export class ComponentSizeMasterComponent implements OnInit {
 
   }
 
+  codeValidate() {
+    const code = this.componentsizemasterForm.value.code;
+    console.log(code);
+
+    if (!code) return;
+    let API = 'ComponentSizeMaster/GetComponentSizeMasterDetail/' + this.componentsizemasterForm.value.code;
+    this.commonService.showSnackBarMsg('MSG81447');
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        this.commonService.closeSnackBarMsg()
+        if (result.status == "Success") {
+          this.commonService.toastErrorByMsgId('MSG1121')//Code Already Exists
+          this.componentsizemasterForm.controls.code.setValue('')
+          this.renderer.selectRootElement('#code')?.focus();
+        }
+      });
+    this.subscriptions.push(Sub)
+  }
+
   checkCode(): boolean {
     if (this.componentsizemasterForm.value.code == '') {
       this.commonService.toastErrorByMsgId('Please enter the Code')
