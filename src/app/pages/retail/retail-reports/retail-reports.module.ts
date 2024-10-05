@@ -22,6 +22,7 @@ import { RetailSalesCollectionComponent } from './retail-sales-collection/retail
 import { RetailGridComponent } from '../common-retail/retail-grid/retail-grid.component';
 import { CommonRetailModule } from '../common-retail/common-retail.module';
 import { SalesOrderRegisterComponent } from './sales-order-register/sales-order-register.component';
+import { PosDailyClosingReportComponent } from './pos-daily-closing-report/pos-daily-closing-report.component';
 
 
 @NgModule({
@@ -42,7 +43,8 @@ import { SalesOrderRegisterComponent } from './sales-order-register/sales-order-
     LoyaltyRegisterComponent,
     PosSalesmanCommissionComponent,
     RetailSalesCollectionComponent,
-    SalesOrderRegisterComponent
+    SalesOrderRegisterComponent,
+    PosDailyClosingReportComponent
   ],
   imports: [
     CommonModule,
