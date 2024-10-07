@@ -135,7 +135,7 @@ export class StoneIssueDetailComponent implements OnInit {
     SEARCH_FIELD: 'UNQ_JOB_ID',
     SEARCH_HEADING: 'Sub Job Search',
     SEARCH_VALUE: '',
-    WHERECONDITION: `BRANCH_CODE='${this.comService.branchCode}' AND ISNULL(PROD_REF,0)=0`,
+    WHERECONDITION:`Job_Number = '' and Branch_code = '${this.comService.branchCode}' AND isnull(WAX_STATUS,'') <> 'I'`,
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -331,6 +331,7 @@ export class StoneIssueDetailComponent implements OnInit {
   subJobNoCodeSelected(e: any) {
     this.stoneIssueDetailsFrom.controls.subjobno.setValue(e.UNQ_JOB_ID);
     this.stoneIssueDetailsFrom.controls.subjobDesc.setValue(e.DESCRIPTION);
+    this.subJobNumberValidate()
   }
 
   stockCodeSelected(e: any) {
@@ -589,7 +590,7 @@ export class StoneIssueDetailComponent implements OnInit {
       "CONSIGNMENT": this.onchangeCheckBox(form.consignment),
       "SIEVE_SET": this.comService.nullToString(form.SIEVE_SET),
       "SUB_STOCK_CODE": "0",
-      "D_REMARKS": '' || this.comService.nullToString(form.remarks),
+      "D_REMARKS":this.comService.nullToString(form.remarks),
       "SIEVE_DESC": this.comService.nullToString(form.SIEVE_DESC),
       "EXCLUDE_TRANSFER_WT": true,
       "OTHER_ATTR": "",
@@ -841,8 +842,8 @@ export class StoneIssueDetailComponent implements OnInit {
         this.comService.closeSnackBarMsg()
         if (result.dynamicData && result.dynamicData[0].length > 0) {
           let data = result.dynamicData[0]
-          this.data = data[0].JOB_SO_NUMBER;
-          console.log(data[0].JOB_SO_NUMBER, 'data')
+          this.data = data[0].UNQ_JOB_ID;
+          console.log(data[0], 'data')
           this.stoneIssueDetailsFrom.controls.process.setValue(data[0].PROCESS)
           this.stoneIssueDetailsFrom.controls.processname.setValue(data[0].PROCESSDESC)
           this.stoneIssueDetailsFrom.controls.worker.setValue(data[0].WORKER)
