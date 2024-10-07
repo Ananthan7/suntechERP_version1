@@ -252,7 +252,7 @@
                                             (keydown)="lookupKeyPress($event,'currency')" />
                                         <master-search *ngIf="!viewMode" class="mstrScrch"
                                             [MasterSearchData]="currencyCodeData" #overlaycurrencySearch
-                                            (newRowClick)="currencyDataSelected($event)">
+                                            (newRowClick)="currencyDataSelected($event, 'weightAvgCostFC')">
                                         </master-search>
                                     </mat-form-field>
                                 </div>
@@ -289,9 +289,10 @@
                                         <master-search *ngIf="!viewMode && alloyMastereForm.value.weightAvgCostLC"
                                             [MasterSearchData]="priceSchemeData"
                                             (newRowClick)="priceSchemeValidate($event)"></master-search>
-                                        <a *ngIf="alloyMastereForm?.get('weightAvgCostFC')?.value">{{
-                                            alloyMastereForm?.value.priceScheme
-                                            }}</a>
+                                            <a *ngIf="alloyMastereForm?.get('weightAvgCostFC')?.value">{{
+                                                alloyMastereForm?.value.priceScheme }}
+                                            </a>
+                                                                                      
                                     </div>
 
                                 </div>
@@ -340,13 +341,13 @@
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput AmountDecimalInput formControlName="price1Fc"
+                                        <input type="text" matInput MetalDecimalInput formControlName="price1Fc"
                                             [max]="12" class="text-right" [readonly]="viewMode || isCurrencySelected" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput AmountDecimalInput formControlName="price1Lc"
+                                        <input type="text" matInput MetalDecimalInput formControlName="price1Lc"
                                             class="text-right" [readonly]="viewMode"
                                             (focusout)="price1LcChange()" />
                                     </mat-form-field>
@@ -377,13 +378,13 @@
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput AmountDecimalInput formControlName="price2Fc"
+                                        <input type="text" matInput MetalDecimalInput formControlName="price2Fc"
                                             [max]="12" class="text-right" [readonly]="viewMode || isCurrencySelected"/>
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput AmountDecimalInput formControlName="price2Lc"
+                                        <input type="text" matInput MetalDecimalInput formControlName="price2Lc"
                                             class="text-right" [readonly]="viewMode" (focusout)="price2LcChange()" />
                                     </mat-form-field>
                                 </div>
@@ -413,13 +414,13 @@
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="price3Fc" AmountDecimalInput
+                                        <input type="text" matInput formControlName="price3Fc" MetalDecimalInput
                                             [max]="12" class="text-right" [readonly]="viewMode || isCurrencySelected" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="price3Lc" AmountDecimalInput
+                                        <input type="text" matInput formControlName="price3Lc" MetalDecimalInput
                                             class="text-right" [readonly]="viewMode" (focusout)="price3LcChange()"/>
                                     </mat-form-field>
                                 </div>
@@ -449,13 +450,13 @@
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="price4Fc" AmountDecimalInput
+                                        <input type="text" matInput formControlName="price4Fc" MetalDecimalInput
                                             [max]="12" class="text-right" [readonly]=" viewMode || isCurrencySelected" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="price4Lc" AmountDecimalInput
+                                        <input type="text" matInput formControlName="price4Lc" MetalDecimalInput
                                             class="text-right" [readonly]="viewMode"  (focusout)="price4LcChange()" />
                                     </mat-form-field>
                                 </div>
@@ -485,13 +486,13 @@
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="price5Fc" AmountDecimalInput
+                                        <input type="text" matInput formControlName="price5Fc" MetalDecimalInput
                                             [max]="12" class="text-right" [readonly]=" viewMode || isCurrencySelected" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="price5Lc" AmountDecimalInput
+                                        <input type="text" matInput formControlName="price5Lc" MetalDecimalInput
                                             class="text-right" [readonly]="viewMode"  (focusout)="price5LcChange()" />
                                     </mat-form-field>
                                 </div>
