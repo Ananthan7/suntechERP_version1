@@ -9,7 +9,7 @@
 <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
     [isloading]="isloading" [isViewDelete]="editMode"
     [isViewAuditTrail]="true" [isViewPost]="true" [disableAuditTrail]="!isSaved"
-    (deleteClick)="deleteClicked()"
+    (deleteClick)="checkMaxVocNumber(1)"
     (auditTrailClick)="auditTrailClick()"
     (postClick)="AccountPosting()"
     [isViewSave]="!viewMode"></modal-header>
