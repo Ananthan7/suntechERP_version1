@@ -19,8 +19,18 @@ export class PosDailyClosingReportComponent implements OnInit {
     systemStockDiamond: [''],
     physicalStock: [''],
     differenceDiamond: [''],
-    remarks: ['']
-    
+    remarks: [''],
+    differenceRemarks: [''],
+    grandTotal: [''],
+    goldQtyGMS: [''],
+    goldAmount: [''],
+    diamondQtyPCS: [''],
+    diamondQtyGMS: [''],
+    diamondAmount: [''],
+    totalQtyPCS: [''],
+    totalQtyGMS: [''],
+    totalAmount: [''],
+    manualInvoiceRemarks: ['']
   })
   selectedTabIndex: number = 0; 
 
