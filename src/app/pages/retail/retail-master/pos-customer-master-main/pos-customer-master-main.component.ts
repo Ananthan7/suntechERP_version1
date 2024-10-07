@@ -103,6 +103,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
     "Pisces",
   ];
 
+  showSearchIcon: boolean = true;
   selectedContactString: any;
   selectedknowAboutString: any;
   selectedIntrestedInString: any;
@@ -1187,6 +1188,8 @@ export class PosCustomerMasterMainComponent implements OnInit {
       return alert("please Select the Country First");
     }
 
+    // MSG2473
+
     let value = "United Arab Emirates";
     let code = "EID";
 
@@ -1257,7 +1260,9 @@ export class PosCustomerMasterMainComponent implements OnInit {
 
   giftPurchasedSelected(e: any) {
     console.log(e);
-    this.posCustomerMasterMainForm.controls.gifrPurchased.setValue(e.CODE);
+    if (this.posCustomerMasterMainForm.controls.reasonOfPurchase.value) {
+      this.posCustomerMasterMainForm.controls.gifrPurchased.setValue(e.CODE);
+    }
   }
 
   occasionOfPurchaseSelected(e: any) {
@@ -2074,9 +2079,50 @@ export class PosCustomerMasterMainComponent implements OnInit {
     }
   }
 
+  // onFileSelected(event: any) {
+  //   this.image = event.target.files[0];
+  //   this.imageName = event.target.files[0].name;
+
+  //   // Create a URL for the selected image and assign it to fetchedPicture
+  //   if (this.image) {
+  //     const reader = new FileReader();
+  //     reader.onload = () => {
+  //       this.fetchedPicture = reader.result as string; // Set image for preview
+  //     };
+  //     reader.readAsDataURL(this.image);
+  //   }
+  // }
+
   onFileSelected(event: any) {
-    this.image = event.target.files[0];
-    this.imageName = event.target.files[0].name;
+    const file = event.target.files[0];
+    console.log(file.name);
+    
+    if(this.imageName === file.name ) {
+      Swal.fire({
+        icon: "warning",
+        title: "Already Uploaded!",
+        // text: "Alr.",
+      });
+      return
+    }
+
+    // Validate the file type
+    const allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+    if (file && !allowedExtensions.exec(file.name)) {
+      Swal.fire({
+        icon: "error",
+        title: "Invalid file type!",
+        text: "Please upload an image (jpg, jpeg, png, gif).",
+      });
+
+      this.imageName = null; // Clear the image name
+      this.image = null; // Clear the selected image
+      this.fetchedPicture = null; // Clear the fetched image preview
+      return; // Exit the function
+    }
+
+    this.image = file;
+    this.imageName = file.name;
 
     // Create a URL for the selected image and assign it to fetchedPicture
     if (this.image) {
