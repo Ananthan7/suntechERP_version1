@@ -143,8 +143,6 @@ export class ProcessTransferComponent implements OnInit {
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
         if (result.response) {
-          this.checkMaxVocNumber()
-
           let data = result.response
           this.tableData = data.JOB_PROCESS_TRN_DETAIL_DJ || []
           this.JOB_PROCESS_TRN_DETAIL_DJ = data.JOB_PROCESS_TRN_DETAIL_DJ || []
@@ -172,6 +170,7 @@ export class ProcessTransferComponent implements OnInit {
           )
           this.processTransferFrom.controls.salesman.setValue(data.SMAN)
           this.processTransferFrom.controls.Narration.setValue(data.REMARKS)
+          this.checkMaxVocNumber()
         } else {
           this.commonService.toastErrorByMsgId('MSG1531')
         }
@@ -196,9 +195,12 @@ export class ProcessTransferComponent implements OnInit {
     let postData = {
       "SPID": "137",
       "parameter": {
-        'Str_JOB_NUMBER': this.commonService.nullToString(this.tableData[0].JOB_NUMBER),
-        'Str_SUB_JOB_NUMBER': this.commonService.nullToString(this.tableData[0].UNQ_JOB_ID),
-        'Str_VOCNO': this.commonService.nullToString(this.processTransferFrom.value.VOCNO)
+        'BranchCode': this.commonService.branchCode || '',
+        'YearMonth': this.commonService.nullToString(this.content?.YEARMONTH) || '',
+        'VocNo': this.commonService.nullToString(this.content?.VOCNO) || '',
+        'VocType': this.commonService.nullToString(this.content?.VOCTYPE) || '',
+        'JobNo': this.tableData.length>0 ? this.commonService.nullToString(this.tableData[0].JOB_NUMBER) : '',
+        'VocDate': this.commonService.nullToString(this.content?.VOCDATE) || '',
       }
     }
     this.commonService.showSnackBarMsg('MSG81447')
