@@ -627,6 +627,37 @@ export class StoneIssueDetailComponent implements OnInit {
     // If stock code is filled, proceed with the form submission
     // this.formSubmit('CONTINUE');
     this.stoneIssueDetailsFrom.reset();
+    if (this.tableData && this.tableData.length > 0) {
+      // Loop through each row in tableData and reset the relevant fields
+      this.tableData.forEach((row) => {
+        console.log(row.CONSIGNMENT,'consignment')
+        row.STOCK_CODE = '';
+        row.DIVCODE = '';
+        row.SUB_STOCK_CODE = '';
+        row.SUB_STOCK_CODE = '';
+        row.PCS = '';
+        row.CARATWT_TO = '';
+        row.LOCTYPE_CODE = '';
+        row.CONSIGNMENT = false;
+        row.RATEFC = '';
+        row.AMOUNTFC = '';
+        row.OTHER_ATTR = '';
+        row.SHAPE = '';
+        row.COLOR = '';
+        row.CLARITY = '';
+        row.SIZE = '';
+        row.SIEVE_SET = '';
+        row.SIEVE_DESC = '';
+        row.D_REMARKS = '';
+        row.ISS_STN_PCS = '';
+        row.ISS_STN_WT = '';
+        row.BAL_STN_PCS = '';
+        row.BAL_STN_WT = '';
+        row.POINTER_WT = '';
+        row.PCS_VARIANCE = '';
+        row.WEIGHT_VARIANCE = '';
+      });
+    }
   }
 
   resetStockDetails() {
@@ -776,7 +807,7 @@ export class StoneIssueDetailComponent implements OnInit {
      
 
         } else {
-          this.comService.toastErrorByMsgId('MSG1747')
+          // this.comService.toastErrorByMsgId('MSG1747')
         }
       }, err => {
         this.comService.closeSnackBarMsg()
@@ -822,7 +853,7 @@ export class StoneIssueDetailComponent implements OnInit {
           this.FillStnRequiredDetail()
           this.getImageData()
         } else {
-          this.comService.toastErrorByMsgId('MSG1747')
+          // this.comService.toastErrorByMsgId('MSG1747')
         }
       }, err => {
         this.comService.closeSnackBarMsg()
