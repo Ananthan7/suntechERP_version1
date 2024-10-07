@@ -221,10 +221,15 @@ export class MetalIssueDetailsComponent implements OnInit {
 
   setNewFormValue() {
     if (this.content?.HEADERDETAILS) {
-      this.metalIssueDetailsForm.controls.VOCTYPE.setValue(this.content.HEADERDETAILS.VOCTYPE)
-      this.metalIssueDetailsForm.controls.VOCNO.setValue(this.content.HEADERDETAILS.VOCNO)
-      this.metalIssueDetailsForm.controls.VOCDATE.setValue(this.content.HEADERDETAILS.vocdate)
-      this.metalIssueDetailsForm.controls.BRANCH_CODE.setValue(this.content.HEADERDETAILS.BRANCH_CODE)
+      let data = this.content.HEADERDETAILS
+      this.metalIssueDetailsForm.controls.VOCTYPE.setValue(data.VOCTYPE)
+      this.metalIssueDetailsForm.controls.VOCNO.setValue(data.VOCNO)
+      this.metalIssueDetailsForm.controls.VOCDATE.setValue(data.vocdate)
+      this.metalIssueDetailsForm.controls.BRANCH_CODE.setValue(data.BRANCH_CODE)
+      if(this.comService.nullToString(data.worker) != ''){
+        this.metalIssueDetailsForm.controls.workerCode.setValue(data.worker?.toUpperCase())
+        this.metalIssueDetailsForm.controls.workerCodeDes.setValue(data.workerDes?.toUpperCase())
+      }
     }
     this.setValueWithDecimal('PURE_WT', 0, 'THREE')
     this.setValueWithDecimal('GROSS_WT', 0, 'METAL')
@@ -296,21 +301,16 @@ export class MetalIssueDetailsComponent implements OnInit {
     this.setStockCodeWhereCondition()
   }
   stockCodeSelected(e: any) {
-    this.metalIssueDetailsForm.controls.stockCode.setValue(e.DIVISION_CODE);
+    this.metalIssueDetailsForm.controls.stockCode.setValue(e.STOCK_CODE);
     this.metalIssueDetailsForm.controls.stockCodeDes.setValue(e.DESCRIPTION);
     this.metalIssueDetailsForm.controls.DIVCODE.setValue(e.DIVISION);
-    // this.metalIssueDetailsForm.controls.pcs.setValue(e.PCS);
-    // this.metalIssueDetailsForm.controls.toStockCode.setValue(e.STOCK_CODE);
-    // this.metalIssueDetailsForm.controls.toStockCodeDes.setValue(e.DESCRIPTION);
-    // this.metalIssueDetailsForm.controls.toDIVCODE.setValue(e.DIVISION_CODE);
     this.stockCodeValidate()
   }
 
   toStockCodeSelected(e: any) {
-    console.log(e, 'e')
     this.metalIssueDetailsForm.controls.toStockCode.setValue(e.STOCK_CODE);
     this.metalIssueDetailsForm.controls.toStockCodeDes.setValue(e.DESCRIPTION);
-    this.metalIssueDetailsForm.controls.toDIVCODE.setValue(e.DIVISION_CODE);
+    this.metalIssueDetailsForm.controls.toDIVCODE.setValue(e.STOCK_CODE);
   }
 
   processCodeSelected(e: any) {
@@ -472,12 +472,12 @@ export class MetalIssueDetailsComponent implements OnInit {
       this.comService.toastErrorByMsgId('MSG1358')//Job number is required
       return true
     }
-    if (this.comService.nullToString(form.workerCode) == '') {
-      this.comService.toastErrorByMsgId('MSG1951')//Worker code is required
-      return true
-    }
     if (this.comService.nullToString(form.processCode) == '') {
       this.comService.toastErrorByMsgId('MSG1680')//Process code is required
+      return true
+    }
+    if (this.comService.nullToString(form.workerCode) == '') {
+      this.comService.toastErrorByMsgId('MSG1951')//Worker code is required
       return true
     }
     if (this.comService.nullToString(form.stockCode) == '') {
@@ -554,6 +554,10 @@ export class MetalIssueDetailsComponent implements OnInit {
     this.stockCodeData.WHERECONDITION += `@JOBNO='${this.comService.nullToString(form.jobNumber)}',`
     this.stockCodeData.WHERECONDITION += `@SUBJOBNO='${this.comService.nullToString(form.subJobNo)}',`
     this.stockCodeData.WHERECONDITION += `@STOCKCODE='${this.comService.nullToString(form.stockCode)}',@LOOKUPFLAG='1'`
+    this.toStockCodeData.WHERECONDITION = `@DIVISION='${this.comService.nullToString(form.DIVCODE)}',`
+    this.toStockCodeData.WHERECONDITION += `@JOBNO='${this.comService.nullToString(form.jobNumber)}',`
+    this.toStockCodeData.WHERECONDITION += `@SUBJOBNO='${this.comService.nullToString(form.subJobNo)}',`
+    this.toStockCodeData.WHERECONDITION += `@STOCKCODE='${this.comService.nullToString(form.stockCode)}',@LOOKUPFLAG='1'`
   }
   //TODO 2 subjob method
   jobNumberValidate(event: any) {
@@ -734,6 +738,13 @@ export class MetalIssueDetailsComponent implements OnInit {
         if (result.status === "Success" && result.dynamicData[0]) {
           let data = result.dynamicData[0];
           if (data) {
+            let result = this.comService.searchAllItemsInArray(data, event.target.value?.toString().toUpperCase())
+            if (result && result.length == 0) {
+              this.metalIssueDetailsForm.controls.stockCode.setValue('');
+              this.metalIssueDetailsForm.controls.stockCodeDes.setValue('');
+              return
+            }
+            this.overlaystockcode.closeOverlayPanel()
             // Handle the valid stock case
             let stockData = data[0]; 
             let purity = stockData.PURITY || 0;
