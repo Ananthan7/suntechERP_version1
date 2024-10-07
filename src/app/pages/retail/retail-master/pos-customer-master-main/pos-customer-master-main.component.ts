@@ -2095,16 +2095,6 @@ export class PosCustomerMasterMainComponent implements OnInit {
 
   onFileSelected(event: any) {
     const file = event.target.files[0];
-    console.log(file.name);
-    
-    if(this.imageName === file.name ) {
-      Swal.fire({
-        icon: "warning",
-        title: "Already Uploaded!",
-        // text: "Alr.",
-      });
-      return
-    }
 
     // Validate the file type
     const allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
