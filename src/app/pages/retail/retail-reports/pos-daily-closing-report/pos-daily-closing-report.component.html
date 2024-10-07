@@ -12,85 +12,87 @@
     <form [formGroup]="dailyClosingReportForm">
 
         <div class="row">
-            <mat-tab-group #tabGroup [selectedIndex]="selectedTabIndex">
-                <mat-tab label="Daily Stock Count">
-                    <div class="border border-3 mt-2">
-                        <div class="row mx-1 mt-1">
-                            <label for="inputPassword" class="col-sm-2 col-form-label" >Sales Man :</label>
-                            <div class="col-md-4">
-                              <mat-form-field appearance="outline" style="width: 72%;">
-                                <input type="text" matInput formControlName="salesMan" />
-                              </mat-form-field>
-                            </div>
-                        </div>
-                    </div>
+          <mat-tab-group #tabGroup [selectedIndex]="selectedTabIndex">
+            <mat-tab label="Daily Stock Count">
+              <div class="border border-3 mt-2">
+                  <div class="row mx-1 mt-1">
+                      <label for="inputPassword" class="col-sm-2 col-form-label" >Sales Man :</label>
+                      <div class="col-md-4">
+                        <mat-form-field appearance="outline" style="width: 72%;">
+                          <input type="text" matInput formControlName="salesMan" />
+                        </mat-form-field>
+                      </div>
+                  </div>
+              </div>
 
-                    <div class="border border-3 mt-2">
-                        <div class="row mx-1 mt-2">
-                            <label for="inputPassword" class="col-sm-2 col-form-label" >System Stock- Gold :</label>
-                            <div class="col-md-2">
-                              <mat-form-field appearance="outline" style="width: 62%;">
-                                <input type="text" matInput formControlName="salesMan" />
-                              </mat-form-field>
-                            </div>
-    
-                            <label for="inputPassword" class="col-sm-2 col-form-label" >Physical Stock- Gold :</label>
-                            <div class="col-md-2">
-                              <mat-form-field appearance="outline" style="width: 62%;">
-                                <input type="text" matInput formControlName="salesMan" />
-                              </mat-form-field>
-                            </div>
-    
-                            <label for="inputPassword" class="col-sm-2 col-form-label" >Difference- Gold :</label>
-                            <div class="col-md-2">
-                              <mat-form-field appearance="outline" style="width: 62%;">
-                                <input type="text" matInput formControlName="salesMan" />
-                              </mat-form-field>
-                            </div>
-                        </div>
+              <div class="border border-3 mt-2">
+                <div class="row mx-1 mt-2">
+                  <label for="inputPassword" class="col-sm-2 col-form-label" >System Stock- Gold :</label>
+                  <div class="col-md-2">
+                    <mat-form-field appearance="outline" style="width: 62%;">
+                      <input type="text" matInput formControlName="systemStockGold" />
+                    </mat-form-field>
+                  </div>
 
-                        <div class="row mx-1 mt-2">
-                            <label for="inputPassword" class="col-sm-2 col-form-label" >System Stock- Diamond :</label>
-                            <div class="col-md-2">
-                              <mat-form-field appearance="outline" style="width: 62%;">
-                                <input type="text" matInput formControlName="salesMan" />
-                              </mat-form-field>
-                            </div>
-    
-                            <label for="inputPassword" class="col-sm-2 col-form-label" >Physical Stock-  :</label>
-                            <div class="col-md-2">
-                              <mat-form-field appearance="outline" style="width: 62%;">
-                                <input type="text" matInput formControlName="salesMan" />
-                              </mat-form-field>
-                            </div>
-    
-                            <label for="inputPassword" class="col-sm-2 col-form-label" >Difference- Diamond :</label>
-                            <div class="col-md-2">
-                              <mat-form-field appearance="outline" style="width: 62%;">
-                                <input type="text" matInput formControlName="salesMan" />
-                              </mat-form-field>
-                            </div>
-                        </div>
+                  <label for="inputPassword" class="col-sm-2 col-form-label" >Physical Stock- Gold :</label>
+                  <div class="col-md-2">
+                    <mat-form-field appearance="outline" style="width: 62%;">
+                      <input type="text" matInput formControlName="physicalStockGold" />
+                    </mat-form-field>
+                  </div>
 
-                        <div class="row mx-1 mt-2">
-                            <label for="inputPassword" class="col-sm-2 col-form-label">Remarks (If Any) :</label>
-                            <div class="col-md-9">
-                              <mat-form-field appearance="outline" style="width: 104%;">
-                                <input type="text" matInput formControlName="salesMan" />
-                              </mat-form-field>
-                            </div>
-                        </div>
-                    </div>
-                    
+                  <label for="inputPassword" class="col-sm-2 col-form-label" >Difference- Gold :</label>
+                  <div class="col-md-2">
+                    <mat-form-field appearance="outline" style="width: 62%;">
+                      <input type="text" matInput formControlName="differenceGold" />
+                    </mat-form-field>
+                  </div>
+                </div>
+                  
+                <div class="row mx-1 mt-2">
+                  <label for="inputPassword" class="col-sm-2 col-form-label" >System Stock- Diamond :</label>
+                  <div class="col-md-2">
+                    <mat-form-field appearance="outline" style="width: 62%;">
+                      <input type="text" matInput formControlName="systemStockDiamond" />
+                    </mat-form-field>
+                  </div>
 
-                </mat-tab>
-                
-                <mat-tab label="Cash On Hand">
-                </mat-tab>
+                  <label for="inputPassword" class="col-sm-2 col-form-label" >Physical Stock-  :</label>
+                  <div class="col-md-2">
+                    <mat-form-field appearance="outline" style="width: 62%;">
+                      <input type="text" matInput formControlName="physicalStock" />
+                    </mat-form-field>
+                  </div>
 
-                <mat-tab label="Petty Cash">
-                </mat-tab>
-            </mat-tab-group>      
+                  <label for="inputPassword" class="col-sm-2 col-form-label" >Difference- Diamond :</label>
+                  <div class="col-md-2">
+                    <mat-form-field appearance="outline" style="width: 62%;">
+                      <input type="text" matInput formControlName="differenceDiamond" />
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <div class="row mx-1 mt-2">
+                  <label for="inputPassword" class="col-sm-2 col-form-label">Remarks (If Any) :</label>
+                  <div class="col-md-9">
+                    <mat-form-field appearance="outline" style="width: 104%;">
+                      <input type="text" matInput formControlName="remarks" />
+                    </mat-form-field>
+                  </div>
+                </div>   
+              </div>
+
+              <div class="row bg-secondary">
+                <h5 class="text-white pt-2 px-3">Old Gold Purchase</h5>
+              </div>
+            </mat-tab>
+
+            <mat-tab label="Cash On Hand">
+            </mat-tab>
+
+            <mat-tab label="Petty Cash">
+            </mat-tab>       
+          </mat-tab-group>      
         </div>
     </form>  
 </div>

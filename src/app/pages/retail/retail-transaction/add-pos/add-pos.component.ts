@@ -187,6 +187,7 @@ export class AddPosComponent implements OnInit {
   filteredAdvanceBranchOptions!: Observable<any[]>;
   filteredGiftModeBranchOptions!: Observable<any[]>;
 
+  itemDivision: string = "";
   blockNegativeStock: any = "";
   blockNegativeStockValue: any;
   blockMinimumPrice: any;
@@ -3058,6 +3059,7 @@ export class AddPosComponent implements OnInit {
     this.newLineItem.STOCK_COST = value.STKTRANMKGCOST; // changed at 16/3/2024
     // this.newLineItem.STOCK_COST = value.StkTranMkgCost;
     // this.divisionMS = value.divisionMS;
+    this.itemDivision=value.DIVISION_CODE;
     this.lineItemForm.controls.fcn_li_item_code.setValue(value.STOCK_CODE);
     this.lineItemForm.controls.fcn_li_item_desc.setValue(value.STOCK_DOCDESC);
     this.lineItemForm.controls.fcn_li_division.setValue(value.DIVISION_CODE);
@@ -3116,8 +3118,18 @@ export class AddPosComponent implements OnInit {
 
     this.lineItemForm.controls.fcn_li_purity.setValue(
       this.comFunc.decimalQuantityFormat(value.PURITY, 'PURITY')
+      
     );
-    this.lineItemForm.controls.fcn_li_pure_wt.setValue(value.PUREWT);
+
+    this.lineItemForm.controls.fcn_li_pure_wt.setValue(
+      this.comFunc.transformDecimalVB(
+        this.comFunc.allbranchMaster?.BMQTYDECIMALS,
+        this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_net_wt) *
+        this.lineItemForm.value.fcn_li_purity
+      )
+    );
+
+    // this.lineItemForm.controls.fcn_li_pure_wt.setValue(value.PUREWT);
     // this.lineItemForm.controls.fcn_li_stone_wt.setValue(value.STONEWT);
 
     this.lineItemForm.controls.fcn_ad_amount.setValue(
@@ -7665,6 +7677,7 @@ export class AddPosComponent implements OnInit {
                 this.newLineItem.TAGLINES = stockInfos?.TAGLINES;
 
                 this.divisionMS = stockInfos.DIVISIONMS;
+                this.itemDivision=stockInfos.DIVISION;
 
                 this.setGiftType();
                 const validDivisionCodes = ['M', 'D', 'W', 'P', 'N'];
@@ -9384,12 +9397,17 @@ export class AddPosComponent implements OnInit {
                   this.manageCalculations();
 
                 } else {
-                  this.checkDivisionForPcs(value);
-                  this.manageCalculations();
-                  this.detectDiscountChange = true;
-                  this.updateDiscountAmount();
-                  this.calculateTaxAmount();
-                  this.calculateNetAmount();
+
+
+                  if (!['L', 'C', 'P'].includes(this.itemDivision)) {
+                    this.checkDivisionForPcs(value);
+                    this.manageCalculations();
+                    this.detectDiscountChange = true;
+                    this.updateDiscountAmount();
+                    this.calculateTaxAmount();
+                    this.calculateNetAmount();
+                  }
+                  
 
                 }
               });

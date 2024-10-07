@@ -10,6 +10,7 @@
   *ngIf="flag !== 'VIEW'"
   (saveClick)="customerSave()"
   (cancelClick)="close()"
+  (deleteClick)="deleteProcessMaster()"
 ></modal-header>
 <!-- content section -->
 <div class="container-fluid pt-3">
@@ -3435,7 +3436,7 @@
                   type="file"
                   formControlName="picture"
                   #fileInput
-                  accept="image/*"
+                  accept=".jpg,.jpeg,.png,.gif"
                   (change)="onFileSelected($event)"
                   style="display: none"
                 />
