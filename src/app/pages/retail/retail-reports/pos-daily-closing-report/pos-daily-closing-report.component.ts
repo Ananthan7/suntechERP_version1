@@ -12,6 +12,14 @@ export class PosDailyClosingReportComponent implements OnInit {
   dailyClosingReportForm: FormGroup = this.formBuilder.group({
     branch : [''],
     asOnDate : [new Date()],
+    salesMan: [''],
+    systemStockGold: [''],
+    physicalStockGold: [''],
+    differenceGold: [''],
+    systemStockDiamond: [''],
+    physicalStock: [''],
+    differenceDiamond: [''],
+    remarks: ['']
     
   })
 
