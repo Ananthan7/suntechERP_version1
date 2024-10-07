@@ -1,43 +1,28 @@
 import { Directive, HostListener, ElementRef } from '@angular/core';
+import { CommonServiceService } from 'src/app/services/common-service.service';
 
 @Directive({
-  selector: '[CommaSeparatedNumber]'
+  selector: '[NumberOnlyWithoutComma]'
 })
-export class CommaSeparatedNumberDirective {
+export class NumericWithoutCommaDirective {
 
-  constructor(private el: ElementRef) { }
+  constructor(private el: ElementRef, private commonService: CommonServiceService) { }
+
   @HostListener('keypress', ['$event']) onKeyPress(event: any) {
-    var keyCode = event.which ? event.which : event.keyCode;
-    var isValid = (keyCode >= 48 && keyCode <= 57) || keyCode === 8 || keyCode === 46;
+    console.log('Key pressed:', event);
+    const keyCode = event.which ? event.which : event.keyCode;
+    const isValid = (keyCode >= 48 && keyCode <= 57) || keyCode === 8;
     return isValid;  
   }
-  @HostListener('input', ['$event']) onInputChange(event: KeyboardEvent) {
+
+  @HostListener('input', ['$event']) onInputChange(event: Event): void {
     const input = this.el.nativeElement as HTMLInputElement;
-    let value = input.value.replace(/[^\d.]/g, ''); // Remove non-numeric characters except '.'
-    const parts = value.split('.'); // Split into integer and decimal parts
-    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ','); // Add comma for thousands
-    value = parts.join('.'); // Join integer and decimal parts with '.'
-    input.value = value; // Update input value
+    const value = input.value;
+    const sanitizedValue = value.replace(/[^0-9]/g, '').replace(/^0+/, '');
+
+    if (value !== sanitizedValue) {
+      input.value = sanitizedValue;
+      input.dispatchEvent(new Event('input')); 
+    }
   }
-
 }
-
-
-// import { Directive, ElementRef, HostListener } from '@angular/core';
-
-// @Directive({
-//   selector: '[appThousandSeparator]'
-// })
-// export class ThousandSeparatorDirective {
-
-//   constructor(private el: ElementRef) {}
-
-//   @HostListener('input', ['$event']) onInputChange(event: any) {
-//     // Get the input value and remove any existing commas
-//     let value = event.target.value.replace(/,/g, '');
-//     // Format the value with commas for thousands
-//     value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-//     // Update the input field value
-//     event.target.value = value;
-//   }
-// }
