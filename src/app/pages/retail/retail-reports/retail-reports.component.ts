@@ -17,6 +17,7 @@ import { PosSalesmanCommissionComponent } from './pos-salesman-commission/pos-sa
 import { RetailSalesCollectionComponent } from './retail-sales-collection/retail-sales-collection.component';
 import { SalesOrderRegisterComponent } from './sales-order-register/sales-order-register.component';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
+import { PosDailyClosingReportComponent } from './pos-daily-closing-report/pos-daily-closing-report.component';
 @Component({
   selector: 'app-retail-reports',
   templateUrl: './retail-reports.component.html',
@@ -94,8 +95,8 @@ export class RetailReportsComponent implements OnInit {
       'LoyaltyRegisterComponent': LoyaltyRegisterComponent,
       'PosSalesmanCommissionComponent': PosSalesmanCommissionComponent,
       'RetailSalesCollectionComponent': RetailSalesCollectionComponent,
-      'SalesOrderRegisterComponent': SalesOrderRegisterComponent
-      
+      'SalesOrderRegisterComponent': SalesOrderRegisterComponent,
+      'PosDailyClosingReportComponent': PosDailyClosingReportComponent
   
       // Add components and update in operationals > menu updation grid form component name
     }
