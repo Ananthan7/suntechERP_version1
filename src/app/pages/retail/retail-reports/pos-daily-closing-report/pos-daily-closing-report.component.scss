@@ -3,6 +3,11 @@
     background-color: rgb(198 201 205) !important;
 }
 
+::ng-deep .mat-tab-body-content {
+    height: 100%;
+    overflow: hidden;
+    overflow-x: hidden !important;
+}
 
 .custom-fieldset {
     border: 1px solid #333;
