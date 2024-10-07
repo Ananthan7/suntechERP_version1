@@ -143,7 +143,6 @@
                         </mat-form-field>
                     </div>
                     <label for="input" id="ID010" class="col-sm-2 col-form-label">Cost Rate
-                        *
                         :</label>
                     <div class="col-sm-3">
                         <mat-form-field style="width: 90%" appearance="outline">
@@ -225,7 +224,7 @@
                         :</label>
                     <div class="col-sm-3">
                         <mat-form-field style="width: 90%" appearance="outline">
-                            <input matInput type="text" [readonly]="viewMode || codeEnableMetal" maxlength="3"
+                            <input matInput type="text" [readonly]="viewMode || codeEnableMetal" [max]="3"
                                 formControlName="wastage" class="text-right" AmountDecimalInput />
                         </mat-form-field>
                     </div>
@@ -321,7 +320,7 @@
                         :</label>
                     <div class="col-sm-3">
                         <mat-form-field style="width: 100%" appearance="outline">
-                            <input matInput type="text" [readonly]="viewMode  || codeEnableMetal" matInput maxlength="3"
+                            <input matInput type="text" [readonly]="viewMode  || codeEnableMetal" matInput [max]="3"
                             AmountDecimalInput  formControlName="variance" class="text-right" />
                         </mat-form-field>
                     </div>

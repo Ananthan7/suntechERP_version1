@@ -267,7 +267,7 @@
               :</label>
           <div class="col-sm-3">
               <mat-form-field  appearance="outline">
-                  <input matInput type="text" [readonly]="viewMode" matInput maxlength="3"
+                  <input matInput type="text" [readonly]="viewMode" matInput [max]="3"
                   AmountDecimalInput  formControlName="variance" class="text-right" />
               </mat-form-field>
           </div>

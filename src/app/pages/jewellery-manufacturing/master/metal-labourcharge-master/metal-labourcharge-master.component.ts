@@ -402,7 +402,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
     karat: [''],
     labourAc: ['', [Validators.required]],
     color: [''],
-    metalcost_rate: ['', [Validators.required]],
+    metalcost_rate: [''],
     typecode: [''],
     metalselling_rate: ['', [Validators.required]],
     category: [''],
@@ -688,12 +688,12 @@ export class MetalLabourchargeMasterComponent implements OnInit {
     );
 
     // Set the cost rate with comma separator and decimals
-    this.metallabourMasterForm.controls.metalcost_rate.setValue(
-      Number(this.content.COST_RATE).toLocaleString('en-US', {
-        minimumFractionDigits: this.commonService.allbranchMaster?.BAMTDECIMALS,
-        maximumFractionDigits: this.commonService.allbranchMaster?.BAMTDECIMALS
-      })
-    );
+    // this.metallabourMasterForm.controls.metalcost_rate.setValue(
+    //   Number(this.content.COST_RATE).toLocaleString('en-US', {
+    //     minimumFractionDigits: this.commonService.allbranchMaster?.BAMTDECIMALS,
+    //     maximumFractionDigits: this.commonService.allbranchMaster?.BAMTDECIMALS
+    //   })
+    // );
 
 
     this.metallabourMasterForm.controls.metalSelling.setValue(
@@ -1060,15 +1060,15 @@ export class MetalLabourchargeMasterComponent implements OnInit {
       this.commonService.toastErrorByMsgId('MSG1927')//"unitList cannot be empty"
       return true
     }
-    else if (
-      this.commonService.nullToString(form.metalcost_rate) === '' ||
-      this.commonService.nullToString(form.metalcost_rate) === '0' ||
-      this.commonService.nullToString(form.metalcost_rate) === '0.00' ||
-      /^0{2,}\.00$/.test(this.commonService.nullToString(form.metalcost_rate))
-    ) {
-      this.commonService.toastErrorByMsgId('Cost Rate cannot be empty'); // "Cost Rate cannot be empty"
-      return true;
-    }
+    // else if (
+    //   this.commonService.nullToString(form.metalcost_rate) === '' ||
+    //   this.commonService.nullToString(form.metalcost_rate) === '0' ||
+    //   this.commonService.nullToString(form.metalcost_rate) === '0.00' ||
+    //   /^0{2,}\.00$/.test(this.commonService.nullToString(form.metalcost_rate))
+    // ) {
+    //   this.commonService.toastErrorByMsgId('Cost Rate cannot be empty'); // "Cost Rate cannot be empty"
+    //   return true;
+    // }
     if (this.metallabourMasterForm.value.wtFrom > this.metallabourMasterForm.value.wtTo) {
       this.commonService.toastErrorByMsgId('MSG7884')// Weight From should be lesser than Weight To
       return true
@@ -1380,12 +1380,12 @@ export class MetalLabourchargeMasterComponent implements OnInit {
 
     if (event.checked === true) {
       this.brandDisable = true;
-      this.metallabourMasterForm.controls['brand'].disable();
-      this.metallabourMasterForm.controls['brand'].setValue('');
+      // this.metallabourMasterForm.controls['brand'].disable();
+      // this.metallabourMasterForm.controls['brand'].setValue('');
     }
     else {
       this.brandDisable = false;
-      this.metallabourMasterForm.controls['brand'].enable();
+      // this.metallabourMasterForm.controls['brand'].enable();
     }
   }
 
@@ -1430,47 +1430,47 @@ export class MetalLabourchargeMasterComponent implements OnInit {
   }
 
 
-  // onweightto(event: any, data: String) {
-  //   let wtf = this.metallabourMasterForm.value.wtFrom;
-  //   let wtt = this.metallabourMasterForm.value.wtTo;
-  //   if (data != 'wtFrom') {
-  //     if (wtf > wtt) {
-  //       Swal.fire({
-  //         title: event.message || 'Weight From should be lesser than Weight To',
-  //         text: '',
-  //         icon: 'error',
-  //         confirmButtonColor: '#336699',
-  //         confirmButtonText: 'Ok'
-  //       })
-  //       this.metallabourMasterForm.controls.wtTo.setValue('');
-  //     }
-
-  //   }
-  // }
-
-  onweightto(event: any, data: string) {
-    // Retrieve the values of Wt From and Wt To from the form
-    const wtf: number = parseFloat(this.metallabourMasterForm.value.wtFrom);
-    const wtt: number = parseFloat(this.metallabourMasterForm.value.wtTo);
-
-    // Check if the data parameter is not 'wtfrom'
-    if (data == 'wtto') {
-      // Check if Wt From is greater than Wt To
+  onweightto(event: any, data: String) {
+    let wtf = this.metallabourMasterForm.value.wtFrom;
+    let wtt = this.metallabourMasterForm.value.wtTo;
+    if (data != 'wtFrom') {
       if (wtf > wtt) {
-        // Display an error message
         Swal.fire({
           title: event.message || 'Weight From should be lesser than Weight To',
           text: '',
           icon: 'error',
           confirmButtonColor: '#336699',
           confirmButtonText: 'Ok'
-        });
-
-        // Clear the value of Wt To input field
+        })
         this.metallabourMasterForm.controls.wtTo.setValue('');
       }
+
     }
   }
+
+  // onweightto(event: any, data: string) {
+  //   // Retrieve the values of Wt From and Wt To from the form
+  //   const wtf: number = parseFloat(this.metallabourMasterForm.value.wtFrom);
+  //   const wtt: number = parseFloat(this.metallabourMasterForm.value.wtTo);
+
+  //   // Check if the data parameter is not 'wtfrom'
+  //   if (data == 'wtto') {
+  //     // Check if Wt From is greater than Wt To
+  //     if (wtf > wtt) {
+  //       // Display an error message
+  //       Swal.fire({
+  //         title: event.message || 'Weight From should be lesser than Weight To',
+  //         text: '',
+  //         icon: 'error',
+  //         confirmButtonColor: '#336699',
+  //         confirmButtonText: 'Ok'
+  //       });
+
+  //       // Clear the value of Wt To input field
+  //       this.metallabourMasterForm.controls.wtTo.setValue('');
+  //     }
+  //   }
+  // }
 
 
   //  onCtweighttto(event: any, data: String) {

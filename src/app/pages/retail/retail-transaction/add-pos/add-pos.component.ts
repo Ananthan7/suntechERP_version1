@@ -108,7 +108,7 @@ export class AddPosComponent implements OnInit {
   gridAmountDecimalFormat: any;
   hideEsignButton: boolean = false;
   hideEsignView: boolean = true;
-  disableEsignButton:boolean=false;
+  disableEsignButton: boolean = false;
   gridWeghtDecimalFormat: any;
   isOrderPullingRowSelected: boolean = false;
   isEstiPullingRowSelected: boolean = false;
@@ -187,6 +187,7 @@ export class AddPosComponent implements OnInit {
   filteredAdvanceBranchOptions!: Observable<any[]>;
   filteredGiftModeBranchOptions!: Observable<any[]>;
 
+  itemDivision: string = "";
   blockNegativeStock: any = "";
   blockNegativeStockValue: any;
   blockMinimumPrice: any;
@@ -1810,20 +1811,20 @@ export class AddPosComponent implements OnInit {
     return new Promise((resolve, reject) => {
       if (this.signaturePadElement && !this.isSignaturePadInitialized) {
         const canvasElement = this.signaturePadElement.nativeElement;
-  
-        canvasElement.width = 450; 
+
+        canvasElement.width = 450;
         canvasElement.height = 200;
-  
-        canvasElement.style.width = '100%'; 
+
+        canvasElement.style.width = '100%';
         canvasElement.style.height = 'auto';
-  
+
         this.signaturePad = new SignaturePad(canvasElement, {
           backgroundColor: 'white',
           penColor: 'black',
           minWidth: 0.5,
           maxWidth: 2.0,
         });
-  
+
         this.isSignaturePadInitialized = true;
         resolve();
       } else {
@@ -1831,7 +1832,7 @@ export class AddPosComponent implements OnInit {
       }
     });
   }
-  
+
 
   openEsign() {
     this.hideEsignView = false;
@@ -2921,7 +2922,7 @@ export class AddPosComponent implements OnInit {
     this.setSalesReturnDetailsPostData();
   }
 
-  editTable = async (event: any) => {
+  editTable = async (event: any, isSalesReturn: boolean = false) => {
     // this.newLineItem.ALLOWEDITDESCRIPTION=false;
     this.editLineItem = true;
     this.allowDescription = false;
@@ -2942,10 +2943,18 @@ export class AddPosComponent implements OnInit {
     //          e.Visible = false;
     //      }
     //  };
+    let value: any;
+    if (!isSalesReturn) {
+      value = this.currentLineItems.filter(
+        (data: any) => data.SRNO === event.data.sn_no
+      )[0];
+    } else {
+      value = this.sales_returns_items.filter(
+        (data: any) => data.slsReturn.SRNO === event.data.sn_no
+      )[0]?.slsReturn;
 
-    const value: any = this.currentLineItems.filter(
-      (data: any) => data.SRNO == event.data.sn_no
-    )[0];
+    }
+
     console.log(
       '===============editTable==currentLineItems==================='
     );
@@ -3058,6 +3067,7 @@ export class AddPosComponent implements OnInit {
     this.newLineItem.STOCK_COST = value.STKTRANMKGCOST; // changed at 16/3/2024
     // this.newLineItem.STOCK_COST = value.StkTranMkgCost;
     // this.divisionMS = value.divisionMS;
+    this.itemDivision = value.DIVISION_CODE;
     this.lineItemForm.controls.fcn_li_item_code.setValue(value.STOCK_CODE);
     this.lineItemForm.controls.fcn_li_item_desc.setValue(value.STOCK_DOCDESC);
     this.lineItemForm.controls.fcn_li_division.setValue(value.DIVISION_CODE);
@@ -3116,8 +3126,18 @@ export class AddPosComponent implements OnInit {
 
     this.lineItemForm.controls.fcn_li_purity.setValue(
       this.comFunc.decimalQuantityFormat(value.PURITY, 'PURITY')
+
     );
-    this.lineItemForm.controls.fcn_li_pure_wt.setValue(value.PUREWT);
+
+    this.lineItemForm.controls.fcn_li_pure_wt.setValue(
+      this.comFunc.transformDecimalVB(
+        this.comFunc.allbranchMaster?.BMQTYDECIMALS,
+        this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_net_wt) *
+        this.lineItemForm.value.fcn_li_purity
+      )
+    );
+
+    // this.lineItemForm.controls.fcn_li_pure_wt.setValue(value.PUREWT);
     // this.lineItemForm.controls.fcn_li_stone_wt.setValue(value.STONEWT);
 
     this.lineItemForm.controls.fcn_ad_amount.setValue(
@@ -6475,7 +6495,8 @@ export class AddPosComponent implements OnInit {
   setPosItemData(sno: any, data: any, isPulled = false) {
     let fcn_li_rate = isPulled ? data.MKG_RATECC : this.lineItemForm.value.fcn_li_rate;
 
-    fcn_li_rate = (fcn_li_rate === null || fcn_li_rate === 0 || fcn_li_rate === '') ? 0 : parseFloat(fcn_li_rate.replace(/,/g, ''));
+    fcn_li_rate = (fcn_li_rate === null || fcn_li_rate === 0 || fcn_li_rate === '') ? 0 : parseFloat(fcn_li_rate.toString().replace(/,/g, ''));
+
 
 
     let fcn_ad_metal_rate = isPulled ? this.comFunc.decimalQuantityFormat(data.METAL_RATE, 'METAL_RATE') : this.lineItemForm.value.fcn_ad_metal_rate;
@@ -7665,6 +7686,7 @@ export class AddPosComponent implements OnInit {
                 this.newLineItem.TAGLINES = stockInfos?.TAGLINES;
 
                 this.divisionMS = stockInfos.DIVISIONMS;
+                this.itemDivision = stockInfos.DIVISION;
 
                 this.setGiftType();
                 const validDivisionCodes = ['M', 'D', 'W', 'P', 'N'];
@@ -9384,12 +9406,18 @@ export class AddPosComponent implements OnInit {
                   this.manageCalculations();
 
                 } else {
-                  this.checkDivisionForPcs(value);
-                  this.manageCalculations();
-                  this.detectDiscountChange = true;
-                  this.updateDiscountAmount();
-                  this.calculateTaxAmount();
-                  this.calculateNetAmount();
+
+
+                  if (!['L', 'C', 'P'].includes(this.itemDivision)) {
+                    this.checkDivisionForPcs(value);
+                    this.manageCalculations();
+                    this.detectDiscountChange = true;
+                    this.updateDiscountAmount();
+                    this.calculateTaxAmount();
+                    this.calculateNetAmount();
+                    this.lineItemCommaSeparation();
+                  }
+
 
                 }
               });
@@ -11272,8 +11300,12 @@ export class AddPosComponent implements OnInit {
         'AMOUNT') || this.zeroAmtVal
 
     );
-    if (this.divisionMS != "M")
+    if (this.divisionMS != "M") {
+      if (this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_discount_percentage))
+        this.detectDiscountChange = true;
       this.updateDiscountAmount();
+    }
+
 
     this.lineItemForm.controls['fcn_li_tax_amount'].setValue(
       this.comFunc.commaSeperation(this.lineItemForm.value.fcn_li_tax_amount)
@@ -11293,8 +11325,9 @@ export class AddPosComponent implements OnInit {
       const discountPercentage = parseFloat(discountPercentageString);
 
       const discountAmount = (totalAmount * (discountPercentage / 100)).toFixed(2);
+
       this.lineItemForm.controls['fcn_li_discount_amount'].setValue(
-        discountAmount || this.zeroAmtVal
+        this.comFunc.commaSeperation(discountAmount) || this.zeroAmtVal
       );
       this.setGrossAmount();
       this.detectDiscountChange = false;
@@ -13764,7 +13797,7 @@ export class AddPosComponent implements OnInit {
     if (this.signaturePad?.isEmpty()) {
       alert('Please provide a signature first.');
     } else {
-      const dataURL =  this.signaturePad?.toDataURL().replace(/^data:image\/(png|jpg);base64,/, '');
+      const dataURL = this.signaturePad?.toDataURL().replace(/^data:image\/(png|jpg);base64,/, '');
 
 
       const API = `RetailSalesESignature/InsertRetailSalesESignature`;
@@ -13783,10 +13816,10 @@ export class AddPosComponent implements OnInit {
           if (res.status == "Success") {
             console.log(res);
             this.snackBar.open('Esigned successfully', '', {
-              duration: 1000 
+              duration: 1000
             });
             this.hideEsignView = true;
-            this.disableEsignButton=true;
+            this.disableEsignButton = true;
           }
         });
     }
