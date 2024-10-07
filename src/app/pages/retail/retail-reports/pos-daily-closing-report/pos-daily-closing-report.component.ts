@@ -22,9 +22,13 @@ export class PosDailyClosingReportComponent implements OnInit {
     remarks: ['']
     
   })
-
   selectedTabIndex: number = 0; 
 
+  valueContent: string = '';
+  allowResizing: boolean = true;
+  contextMenuEnabled: boolean = true;
+
+  
   constructor( private activeModal: NgbActiveModal,  private formBuilder: FormBuilder,) { }
 
   ngOnInit(): void {
