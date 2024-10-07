@@ -79,6 +79,14 @@ export class RetailMasterComponent implements OnInit {
     str.FLAG = 'EDIT'
     this.openModalView(str)
   }
+  deleteBtnClicked(e: any) {
+    console.log(e);
+        
+    let str = e.row.data;
+    str.FLAG = 'DELETE'
+    this.openModalView(str)
+    // this.authCheckerComponent?.openAuthModal();
+  }
   //  open Jobcard in modal
   openModalView(data?: any) {
     if (data && data == 'Sale') {
