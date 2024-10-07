@@ -82,8 +82,13 @@
                 </div>   
               </div>
 
-              <div class="row bg-secondary">
+              <div class="row bg-secondary mt-2">
                 <h5 class="text-white pt-2 px-3">Old Gold Purchase</h5>
+                <dx-data-grid [showBorders]="true" [allowColumnResizing]="true" [columnAutoWidth]="true">
+                  <dxi-column dataField="ItemCode" caption="Item Code" alignment="center" [width]="70"></dxi-column>
+                  <dxi-column dataField="GrossWt" caption="Gross Wt" alignment="right" [width]="200"></dxi-column>
+                  <dxi-column dataField="Amount" caption="Amount" alignment="right" [width]="150"></dxi-column>
+                </dx-data-grid>
               </div>
             </mat-tab>
 
