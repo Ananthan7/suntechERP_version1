@@ -121,24 +121,3 @@
 }
 
 
-/* print.css */
-@media print {
-    @page {
-      margin: 0; /* Optional: set margins for the printed page */
-    }
-    
-    /* Hide unwanted headers and footers */
-    body {
-      margin: 0;
-    }
-    
-    /* Hide specific elements if necessary */
-    * {
-      display: none;
-    }
-  
-    /* Show only the content you want */
-    .custom-container {
-      display: block; /* Make your content visible */
-    }
-  }
