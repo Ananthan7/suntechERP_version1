@@ -74,7 +74,7 @@ import { CalendarModule } from 'primeng/calendar';
 import { UppercaseDirective } from './directives/uppercase.directive';
 import { DurationPickerComponent } from './common/duration-picker/duration-picker.component';
 import { FormatThreeDecimalDirective } from './directives/format-three-decimal.directive';
-import { CommaSeparatedNumberDirective } from './directives/comma-separated-number.directive';
+import {  NumericWithoutCommaDirective } from './directives/comma-separated-number.directive';
 import { AuditTrailComponent } from './common/audit-trail/audit-trail.component';
 import { DecimalFormatPipe } from './pipes/decimal-format.pipe';
 import { AttachmentUploadComponent } from './common/attachment-upload/attachment-upload.component';
@@ -122,6 +122,7 @@ import { ReportScreenButtonsComponent } from './common/report-screen-buttons/rep
     MasterSearchComponent,
     AuditTrailComponent,
     AlphabetOnlyDirective,
+    NumericWithoutCommaDirective,
     NumericInputDirective,
     DecimalInputDirective,
     DateValidationDirective,
@@ -143,7 +144,6 @@ import { ReportScreenButtonsComponent } from './common/report-screen-buttons/rep
     AlphabetsOnlyDirective,
     DurationPickerComponent,
     FormatThreeDecimalDirective,
-    CommaSeparatedNumberDirective,
     ApplyOnlyNumbersDirective,
     AttachmentUploadComponent,
     AuthCheckerComponent,
@@ -246,7 +246,6 @@ import { ReportScreenButtonsComponent } from './common/report-screen-buttons/rep
     NumericFilterDirective,
     FormatSixDecimalDirective,
     FormatThreeDecimalDirective,
-    CommaSeparatedNumberDirective,
     UppercaseDirective,
     AlphabetsOnlyDirective,
     DecimalInputDirective,
