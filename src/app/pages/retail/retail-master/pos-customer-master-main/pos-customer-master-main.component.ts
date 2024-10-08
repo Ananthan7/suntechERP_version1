@@ -1185,7 +1185,8 @@ export class PosCustomerMasterMainComponent implements OnInit {
     console.log(e);
 
     if (!this.posCustomerMasterMainForm.controls.country.value) {
-      return alert("please Select the Country First");
+      let message = `Please Select the Country First`;
+      return this.openDialog("Warning", message, true);
     }
 
     // MSG2473
@@ -1197,9 +1198,9 @@ export class PosCustomerMasterMainComponent implements OnInit {
       this.posCustomerMasterMainForm.controls.country.value !== value &&
       e.CODE === code
     ) {
-      return alert(
-        "Please select the UAE. Which ID you selected belongs to this country?"
-      );
+      let message =
+        "Please select the UAE. Which ID you selected belongs to this country?";
+      return this.openDialog("Warning", message, true);
     }
 
     this.posCustomerMasterMainForm.controls.custIdType.setValue(e.CODE);
@@ -2068,14 +2069,39 @@ export class PosCustomerMasterMainComponent implements OnInit {
     }
   }
 
-  onInput(event: any, limit: any, controller?: any) {
+  onInput(event: any, limit: any, controller?: any, checkExistCustomer?: any) {
+    if (checkExistCustomer === "YES") {
+      if (!this.posCustomerMasterMainForm.controls.country.value) {
+        let message = `Please Select the Country First`;
+        this.posCustomerMasterMainForm.controls[controller].setValue("");
+        return this.openDialog("Warning", message, true);
+      }
+    }
+
     const input = event.target as HTMLInputElement;
+
     if (input.value.length > limit) {
       input.value = input.value.slice(0, limit);
     }
 
     if (controller) {
       this.posCustomerMasterMainForm.controls[controller].setValue(input.value);
+    }
+
+    if (checkExistCustomer === "YES" && input.value.length > 6) {
+      let API = `PosCustomerMaster/GetCustomerMaster/${input.value}`;
+      let sub: Subscription = this.apiService
+        .getDynamicAPI(API)
+        .subscribe((res) => {
+          if (res.status.trim() === "Success") {
+            console.log(res.response);
+            if (res.response.MOBILE === input.value) {
+              let message = `Customer Already Exist ! `;
+              this.posCustomerMasterMainForm.controls[controller].setValue("");
+              return this.openDialog("Warning", message, true);
+            }
+          }
+        });
     }
   }
 

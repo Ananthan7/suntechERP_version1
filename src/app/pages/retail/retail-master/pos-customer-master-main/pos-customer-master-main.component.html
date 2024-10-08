@@ -464,7 +464,7 @@
                     formControlName="moblieNumber"
                     class="text-right"
                     (keydown)="preventInvalidInput($event)"
-                    (input)="onInput($event, 15)"
+                    (input)="onInput($event, 15, 'moblieNumber', 'YES')"
                   />
                 </mat-form-field>
               </div>
@@ -496,7 +496,7 @@
                     formControlName="moblie1Number"
                     class="text-right"
                     (keydown)="preventInvalidInput($event)"
-                    (input)="onInput($event, 15)"
+                    (input)="onInput($event, 15, 'moblie1Number', 'YES')"
                   />
                 </mat-form-field>
               </div>
@@ -528,7 +528,7 @@
                     type="number"
                     formControlName="telRNumber"
                     class="text-right"
-                    (input)="onInput($event, 15)"
+                    (input)="onInput($event, 15, 'telRNumber', 'YES')"
                     (keydown)="preventInvalidInput($event)"
                   />
                 </mat-form-field>
@@ -559,7 +559,7 @@
                     [readonly]="flag === 'VIEW'"
                     type="number"
                     formControlName="tel0number"
-                    (input)="onInput($event, 15)"
+                    (input)="onInput($event, 15, 'tel0number', 'YES')"
                     class="text-right"
                     (keydown)="preventInvalidInput($event)"
                   />
@@ -1232,7 +1232,6 @@
                                 readonly="true"
                                 [matDatepicker]="custDate"
                                 [min]="flag !== 'EDIT' ? vocMaxDate : null"
-                                [max]="flag === 'EDIT' ? null : vocMaxDate"
                                 name="custDate"
                                 placeholder="DD/MM/YYYY"
                                 DateValidation

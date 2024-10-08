@@ -275,10 +275,6 @@ export class MasterGridComponent implements OnInit {
     return {}
   }
   setCustomParamTransactions(isSearch?:any) {
-    console.log(this.CommonService.getSubmoduleType());
-    console.log( this.CommonService.getSubmoduleType() == "Master" ? "1" : "0");
-    
-    
     return {
       // "VOCTYPE": this.CommonService.nullToString(this.vocType),
       // "MAIN_VOCTYPE": this.CommonService.nullToString(this.mainVocType),
