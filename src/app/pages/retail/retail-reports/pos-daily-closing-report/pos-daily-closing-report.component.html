@@ -11,7 +11,29 @@
 <div class="container-fluid pt-3">
     <form [formGroup]="dailyClosingReportForm">
 
-        <div class="row">
+      <div class="row">
+        <div class="col-md-1 d-flex align-items-center">
+            <label for="inputPassword" class="col-form-label" id="ID001">Branch</label>
+        </div>
+        <div class="col-md-2 d-flex align-items-center">
+            <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
+              <input matInput="text" name="branch" autocomplete="off" formControlName="branch"/>
+              <app-branch-division [fetchData]="fetchedBranchData"
+                (newRowClick)="selectedData($event)" [branchView]="true" [divisionView]="false"
+                [additionalFilterAreaView]="false" [additionalFilterBCategView]="false"
+                class="branchDivisionelectr"
+                [matTooltip]="branchDivisionControlsTooltip"
+                matTooltipClass="custom-tooltip"
+                matTooltipPosition="above"></app-branch-division>
+            </mat-form-field>
+        </div>
+
+        <div class="col-md-7 d-flex align-items-center">
+          <app-date (selectedDate)="setDateValue($event)" [dateValue]="dateToPass"></app-date>
+        </div> 
+      </div>
+
+        <div class="row mt-2">
           <mat-tab-group #tabGroup [selectedIndex]="selectedTabIndex">
             <mat-tab label="Daily Stock Count">
               <div class="border border-3 mt-2">
@@ -633,7 +655,7 @@
           </mat-tab-group>      
         </div>
 
-        <div class="row mx-5 mb-5 mt-3">
+        <!-- <div class="row mx-5 mb-5 mt-3">
           <div class="col-md-6 d-flex align-items-center">
             <div class="col-auto mx-2">
               <button class="btn btn-primary w-100">
@@ -679,7 +701,10 @@
               </button>
             </div>    
           </div>
-        </div>
+        </div> -->
 
+        <div class="row">
+          <app-report-screen-buttons ></app-report-screen-buttons>
+        </div>
     </form>  
 </div>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -78,16 +78,83 @@ export class PosDailyClosingReportComponent implements OnInit {
   allowResizing: boolean = true;
   contextMenuEnabled: boolean = true;
 
-  
+  dateToPass: { fromDate: string; toDate: string } = { fromDate: '', toDate: '' };
+  branchDivisionControlsTooltip: any;
+  branchDivisionData: any[] = [];
+  formattedBranchDivisionData: any;
+  fetchedBranchData: any[] =[];
+  @Input() content: any = {}; //get data from retailREPORT Component- modalRef instance
+  fetchedBranchDataParam: any= [];
+  templateNameHasValue: boolean= false;
+  selectedRowKeys: any[] = [];
+  VocTypeParam: any = [];
+
+
   constructor( private activeModal: NgbActiveModal,  private formBuilder: FormBuilder,) { }
 
   ngOnInit(): void {
+    this.prefillScreenValues()
   }
 
+  formatDateToYYYYMMDD(dateString: any) {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
 
-  setAsOnDateValue(event: any){
-    console.log(event.asOnDate)
-    this.dailyClosingReportForm.controls.asOnDate.setValue(event.asOnDate);
+  selectedData(data: any) {
+    console.log(data)
+    // let content= ``, content2 =``,  content3 =``, content4 =``
+    let content = `Current Selected Branches:  \n`
+    let content2 = `Current Selected Divisions:  \n`
+    let content3 = `Current Selected Area:  \n`
+    let content4 = `Current Selected B category:  \n`
+    let branchDivisionData = '';
+    if(data.BranchData){
+      // content = `Current Selected Branches:  \n`
+      data.BranchData.forEach((Bdata: any)=>{
+        branchDivisionData += Bdata.BRANCH_CODE+'#'
+        content += Bdata.BRANCH_CODE ? `${Bdata.BRANCH_CODE}, ` : ''
+      }) 
+    }
+
+    if(data.DivisionData){
+      // content2 = `Current Selected Divisions:  \n`
+      data.DivisionData.forEach((Ddata: any)=>{
+        branchDivisionData += Ddata.DIVISION_CODE+'#'
+        content2 += Ddata.DIVISION_CODE ? `${Ddata.DIVISION_CODE}, ` : ''
+      }) 
+    }
+
+    if(data.AreaData){
+      // content3 = `Current Selected Area:  \n`
+      data.AreaData.forEach((Adata: any)=>{
+        branchDivisionData += Adata.AREA_CODE+'#'
+        content3 += Adata.AREA_CODE ? `${Adata.AREA_CODE}, ` : ''
+      }) 
+    }
+
+    if(data.BusinessCategData){
+      // content4 = `Current Selected B category:  \n`
+      data.BusinessCategData.forEach((BCdata: any)=>{
+        branchDivisionData += BCdata.CATEGORY_CODE+'#'
+        content4 += BCdata.CATEGORY_CODE ? `${BCdata.CATEGORY_CODE}, ` : ''
+      }) 
+    }
+
+    content = content.replace(/, $/, '');
+    content2 = content2.replace(/, $/, '');
+    content3 = content3.replace(/, $/, '');
+    content4 = content4.replace(/, $/, '');
+    this.branchDivisionControlsTooltip = content +'\n'+content2 +'\n'+ content3 +'\n'+ content4
+
+
+    // const uniqueArray = [...new Set(this.branchDivisionData)];
+    // const plainText = uniqueArray.join('');
+    this.formattedBranchDivisionData = branchDivisionData
+    this.dailyClosingReportForm.controls.branch.setValue(this.formattedBranchDivisionData);
   }
 
   savePdf() {
@@ -155,5 +222,46 @@ export class PosDailyClosingReportComponent implements OnInit {
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
+  }
+
+  setDateValue(event: any){
+    if(event.FromDate){
+      // this.dailyClosingReportForm.controls.fromDate.setValue(event.FromDate);
+      this.dateToPass.fromDate = event.FromDate
+    }
+    else if(event.ToDate){
+      // this.dailyClosingReportForm.controls.toDate.setValue(event.ToDate);
+      this.dateToPass.toDate = event.ToDate
+    }
+  }
+
+
+
+  prefillScreenValues(){ 
+    if ( Object.keys(this.content).length > 0) {
+   
+    }
+    else{
+      const userBranch = localStorage.getItem('userbranch');
+      const formattedUserBranch = userBranch ? `${userBranch}#` : null;
+      this.dailyClosingReportForm.controls.branch.setValue(formattedUserBranch);
+      this.fetchedBranchDataParam = formattedUserBranch;
+      this.fetchedBranchData= this.fetchedBranchDataParam?.split("#")
+   
+      this.dateToPass = {
+        fromDate:  this.formatDateToYYYYMMDD(new Date()),
+        toDate: this.formatDateToYYYYMMDD(new Date()),
+      };
+
+      let vocTypeArr: any= []
+      this.selectedRowKeys.forEach((item: any)=>{
+        vocTypeArr.push(item.VOCTYPE+'#') 
+      })
+      const uniqueArray = [...new Set( vocTypeArr )];
+      const plainText = uniqueArray.join('');
+      this.VocTypeParam = plainText
+
+      
+    }
   }
 }
