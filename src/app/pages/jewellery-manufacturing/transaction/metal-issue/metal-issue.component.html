@@ -75,7 +75,7 @@
                                         <span>
                                             <mat-form-field appearance="outline" style="width: 80%;">
                                                 <input type="text" matInput formControlName="SALESPERSON_CODE"
-                                                    [readonly]="viewMode"
+                                                    [readonly]="viewMode" UpperCaseDirective
                                                     (keydown)="lookupKeyPress($event,'SALESPERSON_CODE')"
                                                     (focusout)="validateLookupField($event,SALESPERSON_CODEData,'SALESPERSON_CODE')" />
                                                 <master-search [MasterSearchData]="SALESPERSON_CODEData"
@@ -108,7 +108,8 @@
                                         :</label>
                                     <div class="col-md-3">
                                         <mat-form-field appearance="outline" style="width: 100%;">
-                                            <input type="text" matInput formControlName="worker" [readonly]="viewMode"
+                                            <input type="text" matInput formControlName="worker" 
+                                                [readonly]="viewMode" UpperCaseDirective
                                                 (keydown)="lookupKeyPress($event,'worker')" id="code"
                                                 (focusout)="SPvalidateLookupField($event,workerCodeData,'worker')" />
                                             <master-search [MasterSearchData]="workerCodeData" #overlayworkerDes

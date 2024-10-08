@@ -105,16 +105,18 @@ export class ProcessTransferComponent implements OnInit {
     //flag setting
     if (this.content?.FLAG) {
       this.isSaved = true;
+      this.editMode = false;
+      this.viewMode = true;
       if (this.content.FLAG == 'VIEW' || this.content.FLAG == 'DELETE') {
         this.viewMode = true;
         this.LOCKVOUCHERNO = true;
       }
       if (this.content.FLAG == 'EDIT') {
-        this.editMode = true;
+        this.checkMaxVocNumber()
         this.LOCKVOUCHERNO = true;
       }
       if (this.content.FLAG == 'DELETE') {
-        this.deleteClicked()
+        this.checkMaxVocNumber()
       }
       this.processTransferFrom.controls.FLAG.setValue(this.content.FLAG)
       this.setInitialValues()
@@ -170,7 +172,6 @@ export class ProcessTransferComponent implements OnInit {
           )
           this.processTransferFrom.controls.salesman.setValue(data.SMAN)
           this.processTransferFrom.controls.Narration.setValue(data.REMARKS)
-          this.checkMaxVocNumber()
         } else {
           this.commonService.toastErrorByMsgId('MSG1531')
         }
@@ -191,7 +192,7 @@ export class ProcessTransferComponent implements OnInit {
     )
     this.setVocTypeMaster()
   }
-  checkMaxVocNumber() {
+  checkMaxVocNumber(clickFlag?: number) {
     let postData = {
       "SPID": "137",
       "parameter": {
@@ -199,7 +200,8 @@ export class ProcessTransferComponent implements OnInit {
         'YearMonth': this.commonService.nullToString(this.content?.YEARMONTH) || '',
         'VocNo': this.commonService.nullToString(this.content?.VOCNO) || '',
         'VocType': this.commonService.nullToString(this.content?.VOCTYPE) || '',
-        'JobNo': this.tableData.length>0 ? this.commonService.nullToString(this.tableData[0].JOB_NUMBER) : '',
+        'JobNo': '',
+        // 'JobNo': this.tableData.length>0 ? this.commonService.nullToString(this.tableData[0].JOB_NUMBER) : '',
         'VocDate': this.commonService.nullToString(this.content?.VOCDATE) || '',
       }
     }
@@ -209,6 +211,17 @@ export class ProcessTransferComponent implements OnInit {
         this.commonService.closeSnackBarMsg()
         if (result.status == "Success" && result.dynamicData[0]) {
           let data = result.dynamicData[0]
+          if(data &&data[0].RESULT == 1) {
+            this.editMode = true;
+            this.viewMode = false;
+            if(this.content.FLAG == 'DELETE' || clickFlag == 1) {
+              this.viewMode = true;
+              this.deleteClicked()
+            }
+          }
+          if(data[0].MESSAGE && data[0].MESSAGE != '') {
+            this.commonService.toastErrorByMsgId(data[0].MESSAGE)
+          }
         }
       })
     this.subscriptions.push(Sub)
