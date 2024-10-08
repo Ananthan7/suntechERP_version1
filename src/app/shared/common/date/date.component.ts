@@ -21,6 +21,11 @@ export class DateComponent implements OnInit {
       fromDate: [null],
       toDate: [null]
     });
+    
+    if(this.dateValue){
+      this.dateForm.controls.fromDate.setValue(this.dateValue.fromDate)
+      this.dateForm.controls.toDate.setValue(this.dateValue.toDate)
+    }
   }
   
   async ngAfterViewInit() {

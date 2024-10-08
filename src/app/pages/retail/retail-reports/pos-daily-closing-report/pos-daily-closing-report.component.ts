@@ -12,11 +12,33 @@ export class PosDailyClosingReportComponent implements OnInit {
   dailyClosingReportForm: FormGroup = this.formBuilder.group({
     branch : [''],
     asOnDate : [new Date()],
-    
+    salesMan: [''],
+    systemStockGold: [''],
+    physicalStockGold: [''],
+    differenceGold: [''],
+    systemStockDiamond: [''],
+    physicalStock: [''],
+    differenceDiamond: [''],
+    remarks: [''],
+    differenceRemarks: [''],
+    grandTotal: [''],
+    goldQtyGMS: [''],
+    goldAmount: [''],
+    diamondQtyPCS: [''],
+    diamondQtyGMS: [''],
+    diamondAmount: [''],
+    totalQtyPCS: [''],
+    totalQtyGMS: [''],
+    totalAmount: [''],
+    manualInvoiceRemarks: ['']
   })
-
   selectedTabIndex: number = 0; 
 
+  valueContent: string = '';
+  allowResizing: boolean = true;
+  contextMenuEnabled: boolean = true;
+
+  
   constructor( private activeModal: NgbActiveModal,  private formBuilder: FormBuilder,) { }
 
   ngOnInit(): void {

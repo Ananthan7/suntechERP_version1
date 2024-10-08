@@ -352,7 +352,7 @@ export class ProcessMasterComponent implements OnInit {
     this.setValueWithDecimal('loss_max', this.content.MAX_LOSS, 'AMOUNT')
     this.setValueWithDecimal('standard_end', this.content.RECOV_MIN, 'AMOUNT')
     this.setValueWithDecimal('min_end', this.content.RECOV_VAR1, 'AMOUNT')
-    console.log(this.processMasterForm.value, '.....fired.....');
+    // console.log(this.processMasterForm.value, '.....fired.....');
 
     // this.processMasterForm.controls.stand_time.setValue(this.content.STD_TIME);
     // this.processMasterForm.controls.max_time.setValue(this.content.MAX_TIME);
@@ -503,7 +503,7 @@ export class ProcessMasterComponent implements OnInit {
 
 
   onchangeCheckBox(e: any) {
-    console.log(e);
+    // console.log(e);
 
     if (e == true) {
       return true;
@@ -513,7 +513,7 @@ export class ProcessMasterComponent implements OnInit {
   }
 
   onchangeCheckBoxNum(e: any) {
-    console.log(e);
+    // console.log(e);
 
     if (e == true) {
       return 1;
@@ -522,7 +522,7 @@ export class ProcessMasterComponent implements OnInit {
     }
   }
   viewchangeYorN(e: any) {
-    console.log(e);
+    // console.log(e);
 
     if (e == 'Y') {
       return true;
@@ -530,6 +530,7 @@ export class ProcessMasterComponent implements OnInit {
       return false;
     }
   }
+
 
   submitValidations(form: any) {
     if (form.loss == true && this.validateLossRange()) {
@@ -627,6 +628,8 @@ export class ProcessMasterComponent implements OnInit {
       this.commonService.toastErrorByMsgId('MSG2497');
       return true;
     }
+
+
     return false;
   }
   setPostData() {
@@ -1122,7 +1125,7 @@ export class ProcessMasterComponent implements OnInit {
     // this.processMasterForm.controls.standard_end.setValue('');
 
 
-    console.log(event);
+    // console.log(event);
 
   }
 

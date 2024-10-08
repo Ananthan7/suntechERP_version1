@@ -421,7 +421,7 @@
         <div class="col-md-1">
           <label for="fcn_voc_no">{{ vocno_lbl }}</label>
           <mat-form-field appearance="outline" style="width: 100%">
-            <input type="text" NumberOnly (focus)="setValToLocalStorage($event, 'voucherNumber')" matInput
+            <input type="text"  NumberOnlyWithoutComma [maxLength]="6" (focus)="setValToLocalStorage($event, 'voucherNumber')" matInput
               formControlName="fcn_voc_no" (change)="changeVocNumber($event)"
               [readonly]="voucherDetails?.LOCKVOUCHERNO || viewOnly" class="st_txt_right" />
           </mat-form-field>
@@ -777,7 +777,7 @@
                     <div class="wrapper">
                       <div class="container">
                         <dx-data-grid id="sales_return_grid" [dataSource]="sales_returns_items" keyExpr="ID"
-                          (onRowRemoved)="removeSalesReturnGrid($event)" (onEditingStart)="editTableSalesReturn($event)"
+                          (onRowRemoved)="removeSalesReturnGrid($event)" (onEditingStart)="editTable($event,true)"
                           [showBorders]="true" [allowColumnResizing]="true" [columnAutoWidth]="true">
                           <dxo-editing [allowUpdating]="true" [allowDeleting]="!viewOnly">
                             <dxo-texts [editRow]="viewOnly ? 'View' : 'Edit'" deleteRow="Remove">

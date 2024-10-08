@@ -37,7 +37,7 @@
                                     <div class="col-md-8">
                                         <mat-form-field style="width: 100%;">
                                             <input type="text" matInput #Description
-                                            appNoEmptySpace
+                                            appNoEmptySpace maxlength="40"
                                                 formControlName="priceDescription"
                                                 [readonly]="viewMode || codeEnable"
                                                 (input)="Description.value = Description.value.toUpperCase()"

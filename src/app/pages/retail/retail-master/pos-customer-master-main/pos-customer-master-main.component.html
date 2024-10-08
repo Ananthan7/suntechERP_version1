@@ -10,6 +10,7 @@
   *ngIf="flag !== 'VIEW'"
   (saveClick)="customerSave()"
   (cancelClick)="close()"
+  (deleteClick)="deleteProcessMaster()"
 ></modal-header>
 <!-- content section -->
 <div class="container-fluid pt-3">
@@ -1196,7 +1197,7 @@
                             for="inputPassword"
                             class="col-sm-5 col-form-label"
                             id="ID039"
-                            >Cust. ID *</label
+                            >Cust. ID No *</label
                           >
                           <div class="col-md-7">
                             <mat-form-field
@@ -1205,9 +1206,11 @@
                             >
                               <input
                                 [readonly]="flag === 'VIEW'"
-                                matInput="text"
+                                matInput
+                                type="number"
                                 (input)="onInput($event, 25)"
                                 formControlName="custID"
+                                (keydown)="preventInvalidInput($event)"
                               />
                             </mat-form-field>
                           </div>
@@ -1228,7 +1231,8 @@
                                 matInput
                                 readonly="true"
                                 [matDatepicker]="custDate"
-                                [min]="vocMaxDate"
+                                [min]="flag !== 'EDIT' ? vocMaxDate : null"
+                                [max]="flag === 'EDIT' ? null : vocMaxDate"
                                 name="custDate"
                                 placeholder="DD/MM/YYYY"
                                 DateValidation
@@ -3435,7 +3439,7 @@
                   type="file"
                   formControlName="picture"
                   #fileInput
-                  accept="image/*"
+                  accept=".jpg,.jpeg,.png,.gif"
                   (change)="onFileSelected($event)"
                   style="display: none"
                 />

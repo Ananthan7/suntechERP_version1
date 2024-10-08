@@ -103,6 +103,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
     "Pisces",
   ];
 
+  showSearchIcon: boolean = true;
   selectedContactString: any;
   selectedknowAboutString: any;
   selectedIntrestedInString: any;
@@ -531,7 +532,6 @@ export class PosCustomerMasterMainComponent implements OnInit {
     branchLoc: [""],
     amount: [""],
     totalSale: [""],
-    fcn_cust_detail_gender: [""],
     name1: [""],
     name2: [""],
     name3: [""],
@@ -977,8 +977,11 @@ export class PosCustomerMasterMainComponent implements OnInit {
     this.posCustomerMasterMainForm.controls.fatherName.setValue(
       setData.FATHERNAME
     );
-    this.posCustomerMasterMainForm.controls.fatherName.setValue(
-      setData.FATHERNAME
+    this.posCustomerMasterMainForm.controls.nationalId.setValue(
+      setData.NATIONAL_IDENTIFICATION_NO
+    );
+    this.posCustomerMasterMainForm.controls.sourceOfFund.setValue(
+      setData.SOURCEOFWEALTHANDFUND
     );
   }
 
@@ -1185,6 +1188,8 @@ export class PosCustomerMasterMainComponent implements OnInit {
       return alert("please Select the Country First");
     }
 
+    // MSG2473
+
     let value = "United Arab Emirates";
     let code = "EID";
 
@@ -1255,7 +1260,9 @@ export class PosCustomerMasterMainComponent implements OnInit {
 
   giftPurchasedSelected(e: any) {
     console.log(e);
-    this.posCustomerMasterMainForm.controls.gifrPurchased.setValue(e.CODE);
+    if (this.posCustomerMasterMainForm.controls.reasonOfPurchase.value) {
+      this.posCustomerMasterMainForm.controls.gifrPurchased.setValue(e.CODE);
+    }
   }
 
   occasionOfPurchaseSelected(e: any) {
@@ -1575,7 +1582,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
             this.posCustomerMasterMainForm.value.passport5.toString() || "",
           LISTED_ON_DATE: this.posCustomerMasterMainForm.value.listedOn || null,
           NATIONAL_IDENTIFICATION_NO:
-            this.posCustomerMasterMainForm.value.fcn_cust_detail_idcard || "",
+            this.posCustomerMasterMainForm.value.nationalId || "",
           OTHER_INFORMATION: "",
           LINKS: this.posCustomerMasterMainForm.value.link || "",
           FATHERNAME: this.posCustomerMasterMainForm.value.fatherName || "",
@@ -1608,7 +1615,8 @@ export class PosCustomerMasterMainComponent implements OnInit {
             this.posCustomerMasterMainForm.value.tel0Country
           )}`,
           GST_NUMBER: `${this.comService.emptyToZero(
-            this.posCustomerMasterMainForm.value.fcn_cust_detail_city
+            ""
+            // this.posCustomerMasterMainForm.value
           )}`,
           VAT_NUMBER: `${this.comService.emptyToZero(
             this.posCustomerMasterMainForm.value.vat
@@ -1663,6 +1671,8 @@ export class PosCustomerMasterMainComponent implements OnInit {
           ATTACHMENT_FROM_SCANNER: false,
           GOOD_QUALITY_A_K_A: "",
           LOW_QUALITY_A_K_A: "",
+          SOURCEOFWEALTHANDFUND:
+            this.posCustomerMasterMainForm.value.sourceOfFund,
           POSKNOWNABOUT: 0,
         };
 
@@ -2069,9 +2079,40 @@ export class PosCustomerMasterMainComponent implements OnInit {
     }
   }
 
+  // onFileSelected(event: any) {
+  //   this.image = event.target.files[0];
+  //   this.imageName = event.target.files[0].name;
+
+  //   // Create a URL for the selected image and assign it to fetchedPicture
+  //   if (this.image) {
+  //     const reader = new FileReader();
+  //     reader.onload = () => {
+  //       this.fetchedPicture = reader.result as string; // Set image for preview
+  //     };
+  //     reader.readAsDataURL(this.image);
+  //   }
+  // }
+
   onFileSelected(event: any) {
-    this.image = event.target.files[0];
-    this.imageName = event.target.files[0].name;
+    const file = event.target.files[0];
+
+    // Validate the file type
+    const allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+    if (file && !allowedExtensions.exec(file.name)) {
+      Swal.fire({
+        icon: "error",
+        title: "Invalid file type!",
+        text: "Please upload an image (jpg, jpeg, png, gif).",
+      });
+
+      this.imageName = null; // Clear the image name
+      this.image = null; // Clear the selected image
+      this.fetchedPicture = null; // Clear the fetched image preview
+      return; // Exit the function
+    }
+
+    this.image = file;
+    this.imageName = file.name;
 
     // Create a URL for the selected image and assign it to fetchedPicture
     if (this.image) {
@@ -2224,9 +2265,75 @@ export class PosCustomerMasterMainComponent implements OnInit {
       ?.setValue(selectedValuesArray.includes("PE"));
   }
 
-  onChangeStatus(event: any) {
-    // this.selectedStatus = event.value;
-    // this.applyFilters();
-    console.log(event);
+  afterSave(value: any) {
+    if (value) {
+      this.posCustomerMasterMainForm.reset();
+      this.close("reloadMainGrid");
+    }
+  }
+
+  showSuccessDialog(message: string): void {
+    Swal.fire({
+      title: message,
+      text: "",
+      icon: "success",
+      confirmButtonColor: "#336699",
+      confirmButtonText: "Ok",
+    }).then((result: any) => {
+      this.afterSave(result.value);
+    });
+  }
+
+  showErrorDialog(message: string): void {
+    Swal.fire({
+      title: message,
+      text: "",
+      icon: "error",
+      confirmButtonColor: "#336699",
+      confirmButtonText: "Ok",
+    }).then((result: any) => {
+      this.afterSave(result.value);
+    });
+  }
+
+  showConfirmationDialog(): Promise<any> {
+    return Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete!",
+    });
+  }
+
+  deleteProcessMaster() {
+    if (this.content && this.content.FLAG == "VIEW") return;
+    this.showConfirmationDialog().then((result) => {
+      if (result.isConfirmed) {
+        let customerCode = this.generatedCustomerCode
+          ? this.generatedCustomerCode
+          : this.existCustomerCode;
+        let API = `PosCustomerMaster/DeleteCustomerMaster/${customerCode}`;
+        let Sub: Subscription = this.apiService.deleteDynamicAPI(API).subscribe(
+          (result) => {
+            if (result) {
+              if (result.status === "Success") {
+                this.showSuccessDialog("Deleted Successfully");
+              } else {
+                this.showErrorDialog(
+                  result.message || "Error please try again"
+                );
+              }
+            } else {
+              this.comService.toastErrorByMsgId("MSG1880"); // Not Deleted
+            }
+          },
+          (err) => alert(err)
+        );
+        this.subscriptions.push(Sub);
+      }
+    });
   }
 }
