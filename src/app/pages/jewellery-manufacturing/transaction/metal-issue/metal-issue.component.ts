@@ -675,7 +675,7 @@ export class MetalIssueComponent implements OnInit {
               return;
             }
             let result = this.comService.searchAllItemsInArray(data, LOOKUPDATA.SEARCH_VALUE)
-            if (result) this.setDescriptions(result, FORMNAME)
+            if (result) this.setFormValues(result, FORMNAME)
           }
         }
       }, err => {
@@ -683,10 +683,11 @@ export class MetalIssueComponent implements OnInit {
       });
     this.subscriptions.push(Sub);
   }
-  setDescriptions(result: any, FORMNAME: string) {
+  setFormValues(result: any, FORMNAME: string) {
     switch (FORMNAME) {
       case 'worker':
-        this.metalIssueForm.controls.worker.setValue(result[0].workerDes)
+        this.metalIssueForm.controls.worker.setValue(result[0].WORKER_CODE)
+        this.metalIssueForm.controls.workerDes.setValue(result[0].DESCRIPTION)
         break;
       default:
     }
