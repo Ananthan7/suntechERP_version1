@@ -421,8 +421,8 @@
         <div class="col-md-1">
           <label for="fcn_voc_no">{{ vocno_lbl }}</label>
           <mat-form-field appearance="outline" style="width: 100%">
-            <input type="text"  NumberOnlyWithoutComma [maxLength]="6" (focus)="setValToLocalStorage($event, 'voucherNumber')" matInput
-              formControlName="fcn_voc_no" (change)="changeVocNumber($event)"
+            <input type="text"  NumberOnlyWithoutComma [maxLength]="6"  (focusout)="ValidatingVocNo($event)" matInput
+              formControlName="fcn_voc_no" 
               [readonly]="voucherDetails?.LOCKVOUCHERNO || viewOnly" class="st_txt_right" />
           </mat-form-field>
         </div>
@@ -2494,7 +2494,7 @@
   <ng-template #adjust_sale_return_modal let-modal modal-lg>
     <div class="modal-header" style="padding: 10px 20px">
       <h4 class="modal-title" id="modal-pos-metal">Sales Return</h4>
-      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <button type="button" class="close" aria-label="Close" (click)="salesRetClose()">
         <span aria-hidden="true">×</span>
       </button>
     </div>
@@ -2695,7 +2695,7 @@
               </tr>
 
               <tr *ngFor="let slsReturn of salesReturnsItems_forVoc; let id = index"
-                (dblclick)="changeRetailSalesReturnVal(slsReturn)" class="sales-return-row">
+                 class="sales-return-row">
                 <td style="text-align: center" id="ID129">{{ slsReturn.DIVISION_CODE }}</td>
                 <td id="ID130">{{ slsReturn.STOCK_CODE }}</td>
                 <td id="ID131">{{ slsReturn.STOCK_DOCDESC }}</td>
@@ -2728,11 +2728,11 @@
         </div>
         <div class="col-md-12" style="padding-bottom: 20px">
           <div style="text-align: right; padding: 10px">
-            <button mat-flat-button class="btn-m-r-10 update-finish-button btn-width" (click)="addItemtoSalesReturn()"
-              [disabled]="viewOnly" id="ID092">
+            <button *ngIf="selectedItemsCount !== 0 "mat-flat-button class="btn-m-r-10 update-finish-button btn-width" (click)="addItemtoSalesReturn()"
+            [disabled]="viewOnly" id="ID092">
               SAVE
             </button>
-            <button mat-flat-button color="warn" (click)="modal.dismiss('Cross click')" id="ID093"
+            <button mat-flat-button color="warn" (click)="salesRetClose()" id="ID093"
               class="cancel-button btn-width">CANCEL
             </button>
             &nbsp;
@@ -3657,7 +3657,9 @@
                         <mat-form-field appearance="outline" style="width: 100%">
                           <input class="st_txt_right" type="text" [min]="0" [maxLength]="14"
                             (keyup)="this.comFunc.enforceMinMax($event.target)" id="fcn_li_total_amount" matInput
-                            formControlName="fcn_li_total_amount" (change)="changeTotalAmt($event)"
+                            formControlName="fcn_li_total_amount" (focus)="
+                            setValToLocalStorage($event, 'fcn_li_total_amount')
+                          " (change)="changeTotalAmt($event)"
                             id="fcn_li_total_amount" readonly="{{ viewOnly }}" AmountDecimalInput />
                           <!-- readonly="{{
                                   viewOnly || divisionMS == 'S' ? true : false

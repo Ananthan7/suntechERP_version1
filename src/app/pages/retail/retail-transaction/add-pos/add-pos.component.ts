@@ -3,7 +3,7 @@
 import { DialogboxComponent } from 'src/app/shared/common/dialogbox/dialogbox.component';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Component, OnInit, ViewChild, Renderer2, AfterViewInit, ElementRef, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, Renderer2, AfterViewInit, ElementRef, Input, TemplateRef } from '@angular/core';
 import { NgbModal, ModalDismissReasons, NgbModalRef, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 // import { environment } from '../../../environments/environment';
 // import { SuntechapiService } from '../../suntechapi.service';
@@ -54,7 +54,7 @@ export class AddPosComponent implements OnInit {
 
   @ViewChild('signaturePadCanvas', { static: false }) signaturePadElement!: ElementRef;
   signaturePad!: SignaturePad | undefined;
-
+  private subscriptions: Subscription[] = [];
 
   @ViewChild(AuditTrailComponent) auditTrailComponent?: AuditTrailComponent;
   @Input() content!: any;
@@ -64,10 +64,11 @@ export class AddPosComponent implements OnInit {
 
   attachedImageList: any = [];
   @ViewChild('mymodal') public mymodal!: NgbModal;
-  @ViewChild('adjust_sale_return_modal')
   public adjust_sale_return_modal_ref!: NgbModalRef;
-  @ViewChild('adjust_sale_return_modal')
-  public adjust_sale_return_modal!: NgbModal;
+  @ViewChild('adjust_sale_return_modal', { static: true })
+  public adjust_sale_return_modal!: TemplateRef<any>; // Use TemplateRef if it's an ng-template
+
+  public adjustSaleReturnModalRef!: NgbModalRef;
   @ViewChild('oldgoldmodal') public oldgoldmodal!: NgbModal;
   @ViewChild('sales_payment_modal') public sales_payment_modal!: NgbModal;
   @ViewChild('more_customer_detail_modal')
@@ -89,11 +90,13 @@ export class AddPosComponent implements OnInit {
   private cssFilePath = '../../../assets/estimation_pdf.scss';
   // @ViewChild('scanner', { static: false }) scanner: BarcodeScannerLivestreamOverlayComponent;
   // @ViewChild(BarcodeScannerLivestreamComponent) scanner: BarcodeScannerLivestreamComponent;
+  selectedItemsCount: number = 0;
   LOCKVOUCHERNO: boolean = true;
   isSignaturePadInitialized = false;
   voucherDetails: any;
   minDate: any;
   maxDate: any;
+  isloading: boolean = false;
   RECEIPT_MODEL: any = {}
   disableSaveBtn: boolean = false;
   isRateCannotLessCost: boolean = false;
@@ -794,7 +797,7 @@ export class AddPosComponent implements OnInit {
     // public service: NgxBarcodeScannerService,
     private acRoute: ActivatedRoute,
     private indexedDb: IndexedDbService,
-
+    private activeModal: NgbActiveModal,
     public indexedApiService: IndexedApiService,
     public lineItemService: ItemDetailService,
 
@@ -2588,6 +2591,24 @@ export class AddPosComponent implements OnInit {
 
   }
 
+  public salesRetClose(data: any = null) {
+    if (this.viewOnly) {
+      this.adjustSaleReturnModalRef.close(data); 
+    } else {
+      this.openDialog('Warning', this.comFunc.getMsgByID('MSG1212'), false);
+
+      this.dialogBox.afterClosed().subscribe((action: any) => {
+        if (action == 'Yes') {
+          let stockCodesToRemove = this.salesReturnsItems_forVoc.map((item: any) => item.STOCK_CODE);
+
+          this.sales_returns_items = this.sales_returns_items.filter((item: any) => !stockCodesToRemove.includes(item.stock_code));
+          
+          this.adjustSaleReturnModalRef.close(data);
+        }
+      });
+    }
+  }
+
   close(data: any = null) {
 
     // this.openDialog(
@@ -2714,11 +2735,22 @@ export class AddPosComponent implements OnInit {
       this.salesReturnForm.controls.fcn_returns_voc_type.setValue(this.vocType);
     }
 
-    this.modalReference = this.modalService.open(content, {
-      size: 'xl',
-      ariaLabelledBy: 'modal-basic-title',
-      backdrop: false,
-    });
+    if (content._declarationTContainer.localNames[0] !==
+      'adjust_sale_return_modal')
+      this.modalReference = this.modalService.open(content, {
+        size: 'xl',
+        ariaLabelledBy: 'modal-basic-title',
+        backdrop: false,
+      });
+    else {
+      this.adjustSaleReturnModalRef = this.modalService.open(this.adjust_sale_return_modal, {
+        size: 'xl',
+        ariaLabelledBy: 'modal-basic-title',
+        backdrop: false,
+      });
+    }
+
+
     if (this.modalService.hasOpenModals()) {
       if (
         content._declarationTContainer.localNames[0] ==
@@ -3247,6 +3279,9 @@ export class AddPosComponent implements OnInit {
     this.exchangeForm.controls.fcn_exchange_metal_amount.setValue(
       this.comFunc.setCommaSerperatedNumber(amount, 'AMOUNT')
     )
+  }
+  public openAdjustSaleReturnModal() {
+    this.adjustSaleReturnModalRef = this.modalService.open(this.adjust_sale_return_modal, { size: 'lg' });
   }
   editTableSalesReturn(event: any) {
     this.salesReturnEditId = event.data.ID;
@@ -5262,7 +5297,18 @@ export class AddPosComponent implements OnInit {
       }, 100);
     }
   }
+
+ 
+
+
   addSalesReturnOnSelect(event: any, slsReturn: any, index: any) {
+
+    if (event.target.checked) {
+      this.selectedItemsCount++;
+    } else {
+      this.selectedItemsCount--;
+    }
+    console.log(this.selectedItemsCount)
     // console.table(event);
     // console.table(slsReturn);
     let checked = event.target.checked;
@@ -9347,6 +9393,8 @@ export class AddPosComponent implements OnInit {
               preVal
             );
             this.manageCalculations();
+            this.calculateTaxAmount();
+            this.calculateNetAmount();
             this.renderer.selectRootElement('#fcn_li_pcs').focus();
 
           }
@@ -9437,12 +9485,16 @@ export class AddPosComponent implements OnInit {
             this.manageCalculations();
             this.detectDiscountChange = true;
             this.updateDiscountAmount();
+            this.calculateTaxAmount();
+            this.calculateNetAmount();
           }
         }
         else {
           this.lineItemForm.controls['fcn_li_pcs'].setValue(
             value
           );
+
+
         }
       }
       else if (this.blockNegativeStock == 'A') {
@@ -9927,6 +9979,7 @@ export class AddPosComponent implements OnInit {
           this.rateFuncDetail('B', value);
         }
       } else {
+
         this.manageCalculations();
       }
     }
@@ -9944,6 +9997,7 @@ export class AddPosComponent implements OnInit {
         }
       }
       else {
+
         this.manageCalculations();
       }
     } else {
@@ -9994,7 +10048,6 @@ export class AddPosComponent implements OnInit {
         let dblStockCost: any = this.comFunc.emptyToZero(this.newLineItem.STOCK_COST);
         let dblStockFcCost: any;
         let karatCode = this.newLineItem.KARAT_CODE;
-
 
         if (this.lineItemModalForSalesReturn || this.comFunc.emptyToZero(value) >= this.comFunc.emptyToZero(this.blockMinimumPriceValue)) {
 
@@ -11132,6 +11185,7 @@ export class AddPosComponent implements OnInit {
 
         this.setGrossAmount();
 
+
         // this.lineItemForm.controls['fcn_li_gross_amount'].setValue(
 
         //   this.comFunc.transformDecimalVB(
@@ -11238,7 +11292,7 @@ export class AddPosComponent implements OnInit {
       totalAmount - discountAmount
     );
 
-    this.lineItemForm.controls['fcn_li_gross_amount'].setValue(grossAmount);
+    this.lineItemForm.controls['fcn_li_gross_amount'].setValue(this.comFunc.commaSeperation(grossAmount));
     // this.calculateTaxAmount();
     // this.calculateNetAmount();
   }
@@ -11304,6 +11358,8 @@ export class AddPosComponent implements OnInit {
       if (this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_discount_percentage))
         this.detectDiscountChange = true;
       this.updateDiscountAmount();
+      this.calculateTaxAmount();
+      this.calculateNetAmount();
     }
 
 
@@ -13465,6 +13521,61 @@ export class AddPosComponent implements OnInit {
     } else {
       return false;
     }
+  }
+
+  ValidatingVocNo(vocNum:any) {
+    if (this.content?.FLAG == 'VIEW') return
+    this.comFunc.showSnackBarMsg('MSG81447');
+    if (this.comFunc.emptyToZero(vocNum.target.value) == 0) {
+      const warning = "Voucher number cannot be 0"
+      this.openDialog('Warning', warning, true);
+      this.dialogBox.afterClosed().subscribe((data: any) => {
+        if (data == 'OK') {
+          this.vocDataForm.controls.fcn_voc_no.setValue(
+            localStorage.getItem('voucherNumber')
+          );
+          this.manageCalculations();
+        }
+      });
+    }
+    else{
+      let API = `ValidatingVocNo/${this.comFunc.getqueryParamMainVocType()}/${this.vocDataForm.value.fcn_voc_no}`
+      API += `/${this.comFunc.branchCode}/${this.comFunc.getqueryParamVocType()}`
+      API += `/${this.comFunc.yearSelected}`
+      this.isloading = true;
+      let Sub: Subscription = this.suntechApi.getDynamicAPI(API)
+        .subscribe((result) => {
+          this.isloading = false;
+          this.comFunc.closeSnackBarMsg()
+          let data = this.comFunc.arrayEmptyObjectToString(result.dynamicData[0])
+          if (data && data[0]?.RESULT == 0) {
+            this.comFunc.toastErrorByMsgId('MSG2007');
+  
+            this.generateVocNo()
+            return
+          }
+  
+          else{
+            
+            this.openDialog('Warning',this.comFunc.getMsgByID(data[0].STATUS_MESSAGE), true);
+            this.dialogBox.afterClosed().subscribe((data: any) => {
+              if (data == 'OK') {
+                this.vocDataForm.controls.fcn_voc_no.setValue(
+                  localStorage.getItem('voucherNumber')
+                );
+                this.manageCalculations();
+              }
+            });
+          }
+        }, err => {
+          this.isloading = false;
+          this.generateVocNo()
+          this.comFunc.toastErrorByMsgId('MSG2272')
+  
+        })
+      this.subscriptions.push(Sub)
+    }
+    
   }
 
   generateVocNo() {
