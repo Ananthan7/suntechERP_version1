@@ -138,6 +138,8 @@ export class StoneIssueDetailComponent implements OnInit {
     WHERECONDITION:`Job_Number = '' and Branch_code = '${this.comService.branchCode}' AND isnull(WAX_STATUS,'') <> 'I'`,
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true
   }
 
   stoneIssueDetailsFrom: FormGroup = this.formBuilder.group({
@@ -155,7 +157,7 @@ export class StoneIssueDetailComponent implements OnInit {
     stockCode: [''],
     stockCodeDes: [''],
     batchid: [''],
-    LOCTYPE_CODE: [''],
+    LOCTYPE_CODE: ['000GEN', Validators.required],
     pieces: [],
     shape: [''],
     clarity: [''],
@@ -180,6 +182,7 @@ export class StoneIssueDetailComponent implements OnInit {
     YEARMONTH: [''],
     KARAT_CODE: [''],
     DIVCODE: [''],
+    JOB_SO_NUMBER:[''],
     METAL_STONE: [''],
     CURRENCY_CODE: [''],
     CURRENCY_RATE: [''],
@@ -199,6 +202,7 @@ export class StoneIssueDetailComponent implements OnInit {
     this.yearMonth = this.comService.yearSelected;
     this.checkContent()
     this.dataTochild()
+    this.setOnLoadDetails()
   }
   checkContent() {
     if (this.content) {
@@ -225,7 +229,7 @@ export class StoneIssueDetailComponent implements OnInit {
   setFormValues() {
     if (!this.content) return
     console.log(this.content, 'view&edit')
-   
+
     this.branchCode = this.content.BRANCH_CODE || this.content.HEADERDETAILS.BRANCH_CODE;
     this.stoneIssueDetailsFrom.controls.VOCTYPE.setValue(this.content.VOCTYPE || this.content.HEADERDETAILS.VOCTYPE)
     this.stoneIssueDetailsFrom.controls.VOCNO.setValue(this.content.VOCNO || this.content.HEADERDETAILS.VOCNO)
@@ -272,6 +276,10 @@ export class StoneIssueDetailComponent implements OnInit {
       this.comService.setCommaSerperatedNumber(value, Decimal)
     )
    
+  }
+  setOnLoadDetails(){
+    let branchParam = this.comService.allbranchMaster
+    this.stoneIssueDetailsFrom.controls.LOCTYPE_CODE.setValue(branchParam.DMFGMLOC)
   }
 
   onFileChanged(event: any) {
@@ -329,8 +337,8 @@ export class StoneIssueDetailComponent implements OnInit {
     
   }
   subJobNoCodeSelected(e: any) {
-    this.stoneIssueDetailsFrom.controls.subjobno.setValue(e.UNQ_JOB_ID);
-    this.stoneIssueDetailsFrom.controls.subjobDesc.setValue(e.DESCRIPTION);
+    this.stoneIssueDetailsFrom.controls.subjobnumber.setValue(e.UNQ_JOB_ID);
+    this.stoneIssueDetailsFrom.controls.subjobDes.setValue(e.DESCRIPTION);
     this.subJobNumberValidate()
   }
 
@@ -549,7 +557,7 @@ export class StoneIssueDetailComponent implements OnInit {
       "VOCDATE": this.comService.formatDateTime(new Date(form.VOCDATE)),
       "JOB_NUMBER": this.comService.nullToString(form.jobNumber),
       "JOB_DATE": this.comService.formatDateTime(new Date(form.VOCDATE)),
-      "JOB_SO_NUMBER": this.comService.emptyToZero(form.subjobnumber),
+      "JOB_SO_NUMBER": this.comService.emptyToZero(form.JOB_SO_NUMBER),
       "UNQ_JOB_ID": this.comService.nullToString(form.subjobnumber),
       "JOB_DESCRIPTION": this.comService.nullToString(form.jobDes?.toUpperCase()),
       "BRANCH_CODE": this.comService.nullToString(this.comService.branchCode),
@@ -865,7 +873,13 @@ export class StoneIssueDetailComponent implements OnInit {
 
   jobNumberValidate(event: any) {
     this.showOverleyPanel(event, 'jobNumber')
-    if (event.target.value == '' || this.viewMode) return
+    if (event.target.value == '' || this.viewMode) return;
+
+    this.subJobNoCodeData.WHERECONDITION = `
+    Job_Number = '${this.stoneIssueDetailsFrom.controls.jobNumber.value}'
+    and Branch_code = '${this.comService.branchCode}'
+    AND isnull(WAX_STATUS, '') <> 'I'
+  `;
     let postData = {
       "SPID": "028",
       "parameter": {
@@ -890,12 +904,12 @@ export class StoneIssueDetailComponent implements OnInit {
             this.stoneIssueDetailsFrom.controls.DESIGN_CODE.setValue(data[0].DESIGN_CODE)
             this.stoneIssueDetailsFrom.controls.PART_CODE.setValue(data[0].PART_CODE)
             this.stoneIssueDetailsFrom.controls.salesorderno.setValue(data[0].CUSTOMER_CODE)
-            this.stoneIssueDetailsFrom.controls.DIVCODE.setValue("L");
-            // if (data[0].DESIGN_TYPE && data[0].DESIGN_TYPE == "DIAMOND") {
-            //   this.stoneIssueDetailsFrom.controls.DIVCODE.setValue("L");
-            // } else {
-            //   this.stoneIssueDetailsFrom.controls.DIVCODE.setValue("Z");
-            // }
+            // this.stoneIssueDetailsFrom.controls.DIVCODE.setValue("L");
+            if (data[0].DESIGN_TYPE && data[0].DESIGN_TYPE == "DIAMOND") {
+              this.stoneIssueDetailsFrom.controls.DIVCODE.setValue("L");
+            } else {
+              this.stoneIssueDetailsFrom.controls.DIVCODE.setValue("Z");
+            }
             // this.overlayjobNumberSearch.closeOverlayPanel()
             this.subJobNumberValidate()
             this.setStockCodeWhereCondition()
