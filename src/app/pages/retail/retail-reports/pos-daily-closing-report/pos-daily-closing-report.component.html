@@ -15,14 +15,14 @@
           <mat-tab-group #tabGroup [selectedIndex]="selectedTabIndex">
             <mat-tab label="Daily Stock Count">
               <div class="border border-3 mt-2">
-                  <div class="row mx-1 mt-1">
-                      <label for="inputPassword" class="col-sm-2 col-form-label" id="ID001">Sales Man :</label>
-                      <div class="col-md-4">
-                        <mat-form-field appearance="outline" style="width: 72%;">
-                          <input type="text" matInput formControlName="salesMan" />
-                        </mat-form-field>
-                      </div>
+                <div class="row mx-1 mt-1">
+                  <label for="inputPassword" class="col-sm-2 col-form-label" id="ID001">Sales Man :</label>
+                  <div class="col-md-4">
+                    <mat-form-field appearance="outline" style="width: 72%;">
+                      <input type="text" matInput formControlName="salesMan" />
+                    </mat-form-field>
                   </div>
+                </div>
               </div>
 
               <div class="border border-3 mt-2">
@@ -95,7 +95,7 @@
                   <label for="inputPassword" class="col-sm-4 col-form-label" id="ID010">Grand Total :</label>
                   <div class="col-md-6">
                     <mat-form-field appearance="outline" style="width: 104%;">
-                      <input type="text" matInput formControlName="grandTotal" />
+                      <input type="text" matInput formControlName="dailyStockGrandTotal" />
                     </mat-form-field>
                   </div>
 
@@ -195,12 +195,491 @@
               </div>
             </mat-tab>
 
+
             <mat-tab label="Cash On Hand">
+              <div class="border border-3 mt-2">
+                <div class="row mx-1 mt-1">
+                  <label for="inputPassword" class="col-sm-2 col-form-label" id="ID022">Cash As Per System :</label>
+                  <div class="col-md-2">
+                    <mat-form-field appearance="outline" style="width: 100%;">
+                      <input type="text" matInput formControlName="cashAsPerSystem" />
+                    </mat-form-field>
+                  </div>
+
+                  <label for="inputPassword" class="col-sm-2 col-form-label" id="ID023">Physical Cash :</label>
+                  <div class="col-md-2">
+                    <mat-form-field appearance="outline" style="width: 100%;">
+                      <input type="text" matInput formControlName="physicalCash" />
+                    </mat-form-field>
+                  </div>
+
+                  <label for="inputPassword" class="col-sm-2 col-form-label" id="ID024">Cash Difference :</label>
+                  <div class="col-md-2">
+                    <mat-form-field appearance="outline" style="width: 100%;">
+                      <input type="text" matInput formControlName="cashDiff" />
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+
+              <div class="border border-3 mt-2" style="background-color: #f1f1f1;">
+                <div class="row mt-2">
+                  <div class="col-md-6">
+                    <dx-data-grid [showBorders]="true" [allowColumnResizing]="true" [columnAutoWidth]="true"
+                    #dataGrid id="gridContainer" class="h-75" >
+                      <dxi-column dataField="Dinomination" caption="Dinomination" alignment="center" [width]="150"></dxi-column>
+                      <dxi-column dataField="Count" caption="Count" alignment="right" [width]="100"></dxi-column>
+                      <dxi-column dataField="Amount" caption="Amount" alignment="right" [width]="100"></dxi-column>
+                    </dx-data-grid>
+
+                    <div class="row mx-1 border border-3">
+                      <label for="inputPassword" class="col-sm-4 col-form-label" id="ID025">Grand Total :-</label>
+                      <!-- <div class="col-md-6">
+                        <mat-form-field appearance="outline" style="width: 104%;">
+                          <input type="text" matInput formControlName="grandTotal" />
+                        </mat-form-field>
+                      </div> -->
+                    </div>
+                  </div>
+
+                  <div class="col-md-6">
+                    <div class="border border-1 border-dark bg-white text-center" style="line-height: 30px;">
+                      <label for="posSummary" style="margin: 0;" id="ID026">POS SUMMARY</label>
+                    </div>
+
+                    <div class="row mt-1">
+                      <label for="inputPassword" class="col-sm-6 col-form-label" id="ID027">Opening Balance (Cash) :</label>
+                      <div class="col-md-6">
+                        <mat-form-field appearance="outline" style="width: 100%;">
+                          <input type="text" matInput formControlName="openingCashBalance" />
+                        </mat-form-field>
+                      </div>
+                    </div>
+
+                    <div class="row mt-1">
+                      <label for="inputPassword" class="col-sm-6 col-form-label" id="ID028">Gold :</label>
+                      <div class="col-md-6">
+                        <mat-form-field appearance="outline" style="width: 100%;">
+                          <input type="text" matInput formControlName="goldSummary" />
+                        </mat-form-field>
+                      </div>
+                    </div>
+
+                    <div class="row mt-1">
+                      <label for="inputPassword" class="col-sm-6 col-form-label" id="ID029">Diamond :</label>
+                      <div class="col-md-6">
+                        <mat-form-field appearance="outline" style="width: 100%;">
+                          <input type="text" matInput formControlName="diamondSummary" />
+                        </mat-form-field>
+                      </div>
+                    </div>
+
+                    <div class="row mt-1">
+                      <label for="inputPassword" class="col-sm-6 col-form-label" id="ID030">Other Service :</label>
+                      <div class="col-md-6">
+                        <mat-form-field appearance="outline" style="width: 100%;">
+                          <input type="text" matInput formControlName="otherService" />
+                        </mat-form-field>
+                      </div>
+                    </div>
+
+                    <div class="row mt-1">
+                      <label for="inputPassword" class="col-sm-6 col-form-label" id="ID031">Advance :</label>
+                      <div class="col-md-6">
+                        <mat-form-field appearance="outline" style="width: 100%;">
+                          <input type="text" matInput formControlName="advanceSummary" />
+                        </mat-form-field>
+                      </div>
+                    </div>
+
+                    <div class="row mt-1">
+                      <label for="inputPassword" class="col-sm-6 col-form-label" id="ID032">Gift Voucher :</label>
+                      <div class="col-md-6">
+                        <mat-form-field appearance="outline" style="width: 100%;">
+                          <input type="text" matInput formControlName="giftVoucher" />
+                        </mat-form-field>
+                      </div>
+                    </div>
+
+                    <div class="row mt-1">
+                      <label for="inputPassword" class="col-sm-6 col-form-label" id="ID033">Gross Amount :</label>
+                      <div class="col-md-6">
+                        <mat-form-field appearance="outline" style="width: 100%;">
+                          <input type="text" matInput formControlName="grossAmount" />
+                        </mat-form-field>
+                      </div>
+                    </div>
+                  
+
+                    <div class="border border-1 border-dark bg-white text-center" style="line-height: 30px;">
+                      <label for="posSummary" style="margin: 0;" id="ID034">RECEIPT /PAYMENT</label>
+                    </div>
+
+                    <div class="row mt-1">
+                      <label for="inputPassword" class="col-sm-6 col-form-label" id="ID035">Cash :</label>
+                      <div class="col-md-6">
+                        <mat-form-field appearance="outline" style="width: 100%;">
+                          <input type="text" matInput formControlName="cashPayment" />
+                        </mat-form-field>
+                      </div>
+                    </div>
+
+                    <div class="row mt-1">
+                      <label for="inputPassword" class="col-sm-6 col-form-label" id="ID036">Currency Payment :</label>
+                      <div class="col-md-6">
+                        <mat-form-field appearance="outline" style="width: 100%;">
+                          <input type="text" matInput formControlName="currencyPayment" />
+                        </mat-form-field>
+                      </div>
+                    </div>
+
+                    <div class="row mt-1">
+                      <label for="inputPassword" class="col-sm-6 col-form-label" id="ID037">Credit Card :</label>
+                      <div class="col-md-6">
+                        <mat-form-field appearance="outline" style="width: 100%;">
+                          <input type="text" matInput formControlName="creditCard" />
+                        </mat-form-field>
+                      </div>
+                    </div>
+
+                    <div class="row mt-1">
+                      <label for="inputPassword" class="col-sm-6 col-form-label" id="ID038">Gold Purchase :</label>
+                      <div class="col-md-6">
+                        <mat-form-field appearance="outline" style="width: 100%;">
+                          <input type="text" matInput formControlName="goldPurchase" />
+                        </mat-form-field>
+                      </div>
+                    </div>
+
+                    <div class="row mt-1">
+                      <label for="inputPassword" class="col-sm-6 col-form-label" id="ID039">Sales Return :</label>
+                      <div class="col-md-6">
+                        <mat-form-field appearance="outline" style="width: 100%;">
+                          <input type="text" matInput formControlName="salesReturn" />
+                        </mat-form-field>
+                      </div>
+                    </div>
+
+                    <div class="row mt-1">
+                      <label for="inputPassword" class="col-sm-6 col-form-label" id="ID040">Redeem Advance :</label>
+                      <div class="col-md-6">
+                        <mat-form-field appearance="outline" style="width: 100%;">
+                          <input type="text" matInput formControlName="redeemAdvance" />
+                        </mat-form-field>
+                      </div>
+                    </div>
+
+                    <div class="row mt-1">
+                      <label for="inputPassword" class="col-sm-6 col-form-label" id="ID041">Redeem Gift Voucher :</label>
+                      <div class="col-md-6">
+                        <mat-form-field appearance="outline" style="width: 100%;">
+                          <input type="text" matInput formControlName="redeemGiftVoucher" />
+                        </mat-form-field>
+                      </div>
+                    </div>
+
+                    <div class="row mt-1">
+                      <label for="inputPassword" class="col-sm-6 col-form-label" id="ID042">Gross Amount :</label>
+                      <div class="col-md-6">
+                        <mat-form-field appearance="outline" style="width: 100%;">
+                          <input type="text" matInput formControlName="grossAmt" />
+                        </mat-form-field>
+                      </div>
+                    </div>
+
+                    <div class="row mt-1">
+                      <label for="inputPassword" class="col-sm-6 col-form-label" id="ID043">Closing Balance (Cash) :</label>
+                      <div class="col-md-6">
+                        <mat-form-field appearance="outline" style="width: 100%;">
+                          <input type="text" matInput formControlName="closingCashBalance" />
+                        </mat-form-field>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div> 
+
+              <div class="row mx-1 mt-3 mb-4">
+                <fieldset class="custom-fieldset">
+                  <legend class="custom-legend2" id="ID044">If Any Difference</legend>
+                  
+                  <div class="row mt-2">
+                    <div class="border border-1 border-dark bg-white w-25 p-0 mx-3">
+                      <label for="remarks" style="margin: 5px;" id="ID045">Remarks</label>
+                    </div>
+
+                    <div class="border border-1 border-dark bg-white mx-2 text-right" style="width: 22.5% !important; line-height: 30px;">
+                      <label for="amount" style="margin: 0;" id="ID046">Amount</label>
+                    </div>
+                  </div>
+
+                  <div class="row mx-1 mt-2">
+                    <div class=" bg-white w-25 p-0" style="line-height: 2.3;">
+                      <label for="posSummary" style="margin: 0;" id="ID047">Cash Transfer To HO :</label>
+                    </div>
+
+                    <div class=" bg-white mx-4 w-25">
+                      <mat-form-field appearance="outline" style="width: 100%;">
+                        <input type="text" matInput formControlName="cashTrnsfrtoHO" />
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                  <div class="row mx-1 mt-2">
+                    <div class=" bg-white w-25 p-0" style="line-height: 2.3;">
+                      <label for="posSummary" style="margin: 0;" id="ID048">Gift Voucher (Non Jawahara) :</label>
+                    </div>
+
+                    <div class=" bg-white text-right mx-4 w-25">
+                      <mat-form-field appearance="outline" style="width: 100%;">
+                        <input type="text" matInput formControlName="nonJawaharaGiftVoucher" />
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                  <div class="row mx-1 mt-2">
+                    <div class=" bg-white w-25 p-0" style="line-height: 2.3;">
+                      <label for="posSummary" style="margin: 0;" id="ID049">Round Off Amount :</label>
+                    </div>
+
+                    <div class=" bg-white text-right mx-4 w-25">
+                      <mat-form-field appearance="outline" style="width: 100%;">
+                        <input type="text" matInput formControlName="rounfOffAmt" />
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                  <div class="row mx-1 mt-2">
+                    <div class=" bg-white w-25 p-0" style="line-height: 2.3;">
+                      <label for="posSummary" style="margin: 0;" id="ID050">Other (SPECIFY):</label>
+                    </div>
+
+                    <div class=" bg-white text-right mx-4 w-25">
+                      <mat-form-field appearance="outline" style="width: 100%;">
+                        <input type="text" matInput formControlName="specifyOther1" />
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                  <div class="row mx-1 mt-2">
+                    <div class=" bg-white w-25 p-0" style="line-height: 2.3;">
+                      <label for="posSummary" style="margin: 0;" id="ID050">Other (SPECIFY):</label>
+                    </div>
+
+                    <div class=" bg-white text-right mx-4 w-25">
+                      <mat-form-field appearance="outline" style="width: 100%;">
+                        <input type="text" matInput formControlName="specifyOther2" />
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                  <div class="row mx-1 mt-2">
+                    <div class=" bg-white w-25 p-0" style="line-height: 2.3;">
+                      <label for="posSummary" style="margin: 0;" id="ID050">Other (SPECIFY):</label>
+                    </div>
+
+                    <div class=" bg-white text-right mx-4 w-25">
+                      <mat-form-field appearance="outline" style="width: 100%;">
+                        <input type="text" matInput formControlName="specifyOther3" />
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                  <div class="row mx-3 mt-2">
+                    <label for="inputPassword" class="col-sm-4 col-form-label" id="ID025">Grand Total :</label>
+                    <div class="col-md-4">
+                      <mat-form-field appearance="outline" style="width: 55%;">
+                        <input type="text" matInput formControlName="CashOnHandGrandTotal" />
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </fieldset>
+              </div>
             </mat-tab>
 
             <mat-tab label="Petty Cash">
+              <div class="border border-3 mt-2">
+                <div class="row mx-1 mt-1">
+                  <label for="inputPassword" class="col-sm-2 col-form-label" id="ID022">Cash As Per System :</label>
+                  <div class="col-md-2">
+                    <mat-form-field appearance="outline" style="width: 100%;">
+                      <input type="text" matInput formControlName="CashAsPerSystem2" />
+                    </mat-form-field>
+                  </div>
+
+                  <label for="inputPassword" class="col-sm-2 col-form-label" id="ID023">Physical Cash :</label>
+                  <div class="col-md-2">
+                    <mat-form-field appearance="outline" style="width: 100%;">
+                      <input type="text" matInput formControlName="physicalCash2" />
+                    </mat-form-field>
+                  </div>
+
+                  <label for="inputPassword" class="col-sm-2 col-form-label" id="ID024">Cash Difference :</label>
+                  <div class="col-md-2">
+                    <mat-form-field appearance="outline" style="width: 100%;">
+                      <input type="text" matInput formControlName="cashDifference2" />
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+
+              <div class="border border-3 mt-2">
+                <div class="row mt-2">
+                  <div class="col-md-6" style="background-color: #f1f1f1;">
+                    <dx-data-grid [showBorders]="true" [allowColumnResizing]="true" [columnAutoWidth]="true"
+                    #dataGrid id="gridContainer" class="h-75 mt-2" >
+                      <dxi-column dataField="Dinomination" caption="Dinomination" alignment="center" [width]="150"></dxi-column>
+                      <dxi-column dataField="Count" caption="Count" alignment="right" [width]="100"></dxi-column>
+                      <dxi-column dataField="Amount" caption="Amount" alignment="right" [width]="100"></dxi-column>
+                    </dx-data-grid>
+
+                    <div class="row mx-1 border border-3">
+                      <label for="inputPassword" class="col-sm-4 col-form-label" id="ID025">Grand Total :-</label>
+                      <!-- <div class="col-md-6">
+                        <mat-form-field appearance="outline" style="width: 104%;">
+                          <input type="text" matInput formControlName="grandTotal" />
+                        </mat-form-field>
+                      </div> -->
+                    </div>
+                  </div>
+
+                  <div class="col-md-6">
+                    <fieldset class="custom-fieldset">
+                      <legend class="custom-legend3" id="ID044">If Any Difference</legend>
+                      
+                      <div class="row mt-2">
+                        <div class="border border-1 border-dark bg-white p-0 mx-3 col-md-5">
+                          <label for="remarks" style="margin: 5px;" id="ID045">Remarks</label>
+                        </div>
+    
+                        <div class="border border-1 border-dark bg-white mx-2 col-md-5 text-right" style=" line-height: 30px;">
+                          <label for="amount" style="margin: 0;" id="ID046">Amount</label>
+                        </div>
+                      </div>
+    
+                     <div class="row mt-1">
+                        <div class="col-md-5">
+                          <label for="remarks" style="margin: 5px;" id="ID051">Bills Sent to HO</label>
+                        </div>
+
+                        <div class="col-md-5" style="margin-left: 1.8rem !important;">
+                          <mat-form-field appearance="outline" style="width: 111%;">
+                            <input type="text" matInput formControlName="billsSenttoHO" />
+                          </mat-form-field>
+                        </div>
+                      </div>
+
+                     <div class="row mt-2">
+                        <div class="col-md-5">
+                          <label for="remarks" style="margin: 5px;" id="ID052">Pending Bills At Store</label>
+                        </div>
+
+                        <div class="col-md-5" style="margin-left: 1.8rem !important;">
+                          <mat-form-field appearance="outline" style="width: 111%;">
+                            <input type="text" matInput formControlName="pendingStoreBills" />
+                          </mat-form-field>
+                        </div>
+                      </div>
+
+                      <div class="row mt-2">
+                        <div class="col-md-5">
+                          <label for="remarks" style="margin: 5px;" id="ID053">Round Off Amount</label>
+                        </div>
+
+                        <div class="col-md-5" style="margin-left: 1.8rem !important;">
+                          <mat-form-field appearance="outline" style="width: 111%;">
+                            <input type="text" matInput formControlName="roundOffAmount2" />
+                          </mat-form-field>
+                        </div>
+                      </div>
+
+                      <div class="row mt-2">
+                        <div class="col-md-5">
+                          <label for="posSummary" style="margin: 5px;" id="ID050">Other (SPECIFY):</label>
+                        </div>
+
+                        <div class="col-md-5" style="margin-left: 1.8rem !important;">
+                          <mat-form-field appearance="outline" style="width: 111%;">
+                            <input type="text" matInput formControlName="specifyOther4" />
+                          </mat-form-field>
+                        </div>
+                      </div>
+                   
+                      <div class="row mt-2">
+                        <div class="col-md-5">
+                          <label for="posSummary" style="margin: 5px;" id="ID050">Other (SPECIFY):</label>
+                        </div>
+
+                        <div class="col-md-5" style="margin-left: 1.8rem !important;">
+                          <mat-form-field appearance="outline" style="width: 111%;">
+                            <input type="text" matInput formControlName="specifyOther5" />
+                          </mat-form-field>
+                        </div>
+                      </div>
+    
+                      <div class="row mx-3 mt-2">
+                        <label for="inputPassword" class="col-sm-6 col-form-label" id="ID025">Grand Total :</label>
+                        <div class="col-md-6 p-0">
+                          <mat-form-field appearance="outline" style="width: 92%;">
+                            <input type="text" matInput formControlName="pettyCashGrandTotal" />
+                          </mat-form-field>
+                        </div>
+                      </div>
+                    </fieldset>
+                  </div>
+                </div> 
+              </div>
             </mat-tab>       
           </mat-tab-group>      
         </div>
+
+        <div class="row mx-5 mb-5 mt-3">
+          <div class="col-md-6 d-flex align-items-center">
+            <div class="col-auto mx-2">
+              <button class="btn btn-primary w-100">
+                      Action
+              </button>
+            </div>
+
+            <div class="col-md-3 mx-2">
+              <select class="form-select me-2" style="flex: 1;">
+                <option value="option1">Option 1</option>
+                <option value="option2">Option 2</option>
+                <option value="option3">Option 3</option>
+              </select>
+            </div>
+    
+            <div class="col-auto mx-2">
+              <button class="btn btn-primary">
+                Previous
+              </button>
+            </div>
+
+            <div class="col-auto mx-2">
+              <button class="btn btn-primary">
+              Next
+              </button>
+            </div>
+              
+            <div class="col-auto mx-2">
+              <button class="btn btn-primary">
+              Save
+              </button>
+            </div>
+
+            <div class="col-auto mx-2">
+              <button class="btn btn-primary">
+              Print
+              </button>
+            </div>
+
+            <div class="col-auto">
+              <button class="btn btn-primary">
+              Close
+              </button>
+            </div>    
+          </div>
+        </div>
+
     </form>  
 </div>
