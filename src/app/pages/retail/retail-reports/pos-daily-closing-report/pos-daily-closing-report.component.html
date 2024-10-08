@@ -16,7 +16,7 @@
             <mat-tab label="Daily Stock Count">
               <div class="border border-3 mt-2">
                   <div class="row mx-1 mt-1">
-                      <label for="inputPassword" class="col-sm-2 col-form-label" >Sales Man :</label>
+                      <label for="inputPassword" class="col-sm-2 col-form-label" id="ID001">Sales Man :</label>
                       <div class="col-md-4">
                         <mat-form-field appearance="outline" style="width: 72%;">
                           <input type="text" matInput formControlName="salesMan" />
@@ -27,21 +27,21 @@
 
               <div class="border border-3 mt-2">
                 <div class="row mx-1 mt-2">
-                  <label for="inputPassword" class="col-sm-2 col-form-label" >System Stock- Gold :</label>
+                  <label for="inputPassword" class="col-sm-2 col-form-label" id="ID002">System Stock- Gold :</label>
                   <div class="col-md-2">
                     <mat-form-field appearance="outline" style="width: 62%;">
                       <input type="text" matInput formControlName="systemStockGold" />
                     </mat-form-field>
                   </div>
 
-                  <label for="inputPassword" class="col-sm-2 col-form-label" >Physical Stock- Gold :</label>
+                  <label for="inputPassword" class="col-sm-2 col-form-label" id="ID003">Physical Stock- Gold :</label>
                   <div class="col-md-2">
                     <mat-form-field appearance="outline" style="width: 62%;">
                       <input type="text" matInput formControlName="physicalStockGold" />
                     </mat-form-field>
                   </div>
 
-                  <label for="inputPassword" class="col-sm-2 col-form-label" >Difference- Gold :</label>
+                  <label for="inputPassword" class="col-sm-2 col-form-label" id="ID004">Difference- Gold :</label>
                   <div class="col-md-2">
                     <mat-form-field appearance="outline" style="width: 62%;">
                       <input type="text" matInput formControlName="differenceGold" />
@@ -50,21 +50,21 @@
                 </div>
                   
                 <div class="row mx-1 mt-2">
-                  <label for="inputPassword" class="col-sm-2 col-form-label" >System Stock- Diamond :</label>
+                  <label for="inputPassword" class="col-sm-2 col-form-label" id="ID005">System Stock- Diamond :</label>
                   <div class="col-md-2">
                     <mat-form-field appearance="outline" style="width: 62%;">
                       <input type="text" matInput formControlName="systemStockDiamond" />
                     </mat-form-field>
                   </div>
 
-                  <label for="inputPassword" class="col-sm-2 col-form-label" >Physical Stock-  :</label>
+                  <label for="inputPassword" class="col-sm-2 col-form-label" id="ID006">Physical Stock-  :</label>
                   <div class="col-md-2">
                     <mat-form-field appearance="outline" style="width: 62%;">
                       <input type="text" matInput formControlName="physicalStock" />
                     </mat-form-field>
                   </div>
 
-                  <label for="inputPassword" class="col-sm-2 col-form-label" >Difference- Diamond :</label>
+                  <label for="inputPassword" class="col-sm-2 col-form-label" id="ID007">Difference- Diamond :</label>
                   <div class="col-md-2">
                     <mat-form-field appearance="outline" style="width: 62%;">
                       <input type="text" matInput formControlName="differenceDiamond" />
@@ -73,7 +73,7 @@
                 </div>
 
                 <div class="row mx-1 mt-2">
-                  <label for="inputPassword" class="col-sm-2 col-form-label">Remarks (If Any) :</label>
+                  <label for="inputPassword" class="col-sm-2 col-form-label" id="ID008">Remarks (If Any) :</label>
                   <div class="col-md-9">
                     <mat-form-field appearance="outline" style="width: 104%;">
                       <input type="text" matInput formControlName="remarks" />
@@ -82,8 +82,116 @@
                 </div>   
               </div>
 
-              <div class="row bg-secondary">
-                <h5 class="text-white pt-2 px-3">Old Gold Purchase</h5>
+              <div class="row bg-secondary mt-2">
+                <h5 class="text-white pt-2 px-3" id="ID009">Old Gold Purchase</h5>
+                <dx-data-grid [showBorders]="true" [allowColumnResizing]="true" [columnAutoWidth]="true"
+                #dataGrid id="gridContainer" >
+                  <dxi-column dataField="ItemCode" caption="Item Code" alignment="center" [width]="150"></dxi-column>
+                  <dxi-column dataField="GrossWt" caption="Gross Wt" alignment="right" [width]="100"></dxi-column>
+                  <dxi-column dataField="Amount" caption="Amount" alignment="right" [width]="100"></dxi-column>
+                </dx-data-grid>
+
+                <div class="row mx-1  bg-row border border-3">
+                  <label for="inputPassword" class="col-sm-4 col-form-label" id="ID010">Grand Total :</label>
+                  <div class="col-md-6">
+                    <mat-form-field appearance="outline" style="width: 104%;">
+                      <input type="text" matInput formControlName="grandTotal" />
+                    </mat-form-field>
+                  </div>
+
+                  <div class="row  bg-row border border-3 border-striped">
+                    <label for="inputPassword" class="col-sm-3 col-form-label" id="ID011">Remarks (If Any Difference) :</label>
+                    <div class="col-md-8">
+                      <mat-form-field appearance="outline" style="width: 104%;">
+                        <input type="text" matInput formControlName="differenceRemarks" />
+                      </mat-form-field>
+                    </div>
+                  </div> 
+                </div> 
+              </div>
+
+              <div class="row mx-1 mt-3 mb-4">
+                <fieldset class="custom-fieldset">
+                  <legend class="custom-legend">Manual Invoice</legend>
+                  
+                  <div class="row mx-1 mt-2">
+                    <label for="systemStockDiamond" class="col-sm-2 col-form-label" id="ID012">Gold Qty (In Pcs) :</label>
+                    <div class="col-md-2">
+                      <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
+                        <input id="systemStockDiamond" type="text" matInput formControlName="goldQtyPCS" />
+                      </mat-form-field>
+                    </div>
+                
+                    <label for="physicalStock" class="col-sm-2 col-form-label" id="ID013">Gold Qty (In Gms) :</label>
+                    <div class="col-md-2">
+                      <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
+                        <input id="physicalStock" type="text" matInput formControlName="goldQtyGMS" />
+                      </mat-form-field>
+                    </div>
+                
+                    <label for="differenceDiamond" class="col-sm-2 col-form-label" id="ID014">Amount - Gold :</label>
+                    <div class="col-md-2">
+                      <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
+                        <input id="differenceDiamond" type="text" matInput formControlName="goldAmount" />
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                  <div class="row mx-1 mt-2">
+                    <label for="systemStockDiamond" class="col-sm-2 col-form-label" id="ID015">Diamond Qty (In Pcs) :</label>
+                    <div class="col-md-2">
+                      <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
+                        <input id="systemStockDiamond" type="text" matInput formControlName="diamondQtyPCS" />
+                      </mat-form-field>
+                    </div>
+                
+                    <label for="physicalStock" class="col-sm-2 col-form-label" id="ID016">Diamond Qty (In Gms) :</label>
+                    <div class="col-md-2">
+                      <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
+                        <input id="physicalStock" type="text" matInput formControlName="diamondQtyGMS" />
+                      </mat-form-field>
+                    </div>
+                
+                    <label for="differenceDiamond" class="col-sm-2 col-form-label" id="ID017">Amount - Diamond :</label>
+                    <div class="col-md-2">
+                      <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
+                        <input id="differenceDiamond" type="text" matInput formControlName="diamondAmount" />
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                  <div class="row mx-1 mt-2">
+                    <label for="systemStockDiamond" class="col-sm-2 col-form-label" id="ID018">Total Qty (In Pcs) :</label>
+                    <div class="col-md-2">
+                      <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
+                        <input id="systemStockDiamond" type="text" matInput formControlName="totalQtyPCS" />
+                      </mat-form-field>
+                    </div>
+                
+                    <label for="physicalStock" class="col-sm-2 col-form-label" id="ID019">Total Qty (In Gms) :</label>
+                    <div class="col-md-2">
+                      <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
+                        <input id="physicalStock" type="text" matInput formControlName="totalQtyGMS" />
+                      </mat-form-field>
+                    </div>
+                
+                    <label for="differenceDiamond" class="col-sm-2 col-form-label" id="ID020">Total Amount :</label>
+                    <div class="col-md-2">
+                      <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
+                        <input id="differenceDiamond" type="text" matInput formControlName="totalAmount" />
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                  <div class="row  bg-row border border-3 border-striped">
+                    <label for="inputPassword" class="col-sm-3 col-form-label" id="ID021">Remarks (Manual Invoice) :</label>
+                    <div class="col-md-8">
+                      <mat-form-field appearance="outline" style="width: 104%;">
+                        <input type="text" matInput formControlName="manualInvoiceRemarks" />
+                      </mat-form-field>
+                    </div>
+                  </div> 
+                </fieldset>
               </div>
             </mat-tab>
 

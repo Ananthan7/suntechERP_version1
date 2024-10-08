@@ -540,7 +540,50 @@ export class RetailSalesCollectionComponent implements OnInit {
       let data = result.dynamicData;
       let printContent = data[0][0].HTMLINPUT;
       this.htmlPreview = this.sanitizer.bypassSecurityTrustHtml(printContent);
+      const blob = new Blob([this.htmlPreview.changingThisBreaksApplicationSecurity], { type: 'text/html' });
+      console.log(this.htmlPreview.changingThisBreaksApplicationSecurity)
+      const url = URL.createObjectURL(blob);
+      window.open(url, '_blank');
     });      
+
+
+    // this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+    // .subscribe((result: any) => {
+    //   console.log(result);
+    //   let data = result.dynamicData;
+    //   this.commonService.closeSnackBarMsg()
+    //   var WindowPrt = window.open(' ', ' ', 'width=900px, height=800px');
+    //   if (WindowPrt === null) {
+    //     console.error('Failed to open the print window. Possibly blocked by a popup blocker.');
+    //     return;
+    //   }
+    //   let printContent = data[0][0].HTMLINPUT;
+    //   WindowPrt.document.write(printContent);
+    //   WindowPrt.document.close();
+    //   WindowPrt.focus();  
+    //   WindowPrt.onload = function () {
+    //     if (WindowPrt && WindowPrt.document.head) {
+    //       let styleElement = WindowPrt.document.createElement('style');
+    //       styleElement.textContent = `
+    //                   @page {
+    //                       size: A5 landscape;
+    //                   }
+    //                   body {
+    //                       margin: 0mm;
+    //                   }
+    //               `;
+    //       WindowPrt.document.head.appendChild(styleElement);
+
+    //       setTimeout(() => {
+    //         if (WindowPrt) {
+    //           WindowPrt.print();
+    //         } else {
+    //           console.error('Print window was closed before printing could occur.');
+    //         }
+    //       }, 800);
+    //     }
+    //   };
+    // });   
   }
   
   printBtnClick(){
