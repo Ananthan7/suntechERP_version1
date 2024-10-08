@@ -263,8 +263,7 @@
                                                 (focusout)="SPvalidateLookupField($event,divCodeData,'DIVCODE')" />
                                             <master-search class="masterSearch"
                                                 [MasterSearchData]="divCodeData"
-                                                (newRowClick)="divCodeSelected($event)"
-                                                *ngIf="!masterMetalChecked">
+                                                (newRowClick)="divCodeSelected($event)">
                                             </master-search>
                                         </mat-form-field>
                                     </div>
@@ -277,13 +276,12 @@
                                                 UpperCaseDirective tabindex="5"
                                                 placeholder="Stock Code"
                                                 (focusout)="stockCodeValidate($event)"
-                                                [readonly]="viewMode || masterMetalChecked"
+                                                [readonly]="viewMode"
                                                 (keydown)="lookupKeyPress($event,'stockCode')" />
                                             <master-search class="masterSearch"
                                                 [MasterSearchData]="stockCodeData"
                                                 #overlaystockcode
-                                                (newRowClick)="stockCodeSelected($event)"
-                                                *ngIf="!masterMetalChecked"></master-search>
+                                                (newRowClick)="stockCodeSelected($event)"></master-search>
                                         </mat-form-field>
 
                                     </div>
@@ -380,19 +378,17 @@
                                     <label for="inputPassword"
                                         class="col-sm-3 col-form-label">To Stock
                                         Code : </label>
+                                    
                                     <div class="col-md-3">
                                         <mat-form-field appearance="outline"
-                                            style="width: 100%;">
+                                            style="width: 30%;">
                                             <input type="text" matInput
                                                 formControlName="toDIVCODE"
                                                 placeholder="Div Code"
                                                 readonly />
-
                                         </mat-form-field>
-                                    </div>
-                                    <div class="col-md-3">
                                         <mat-form-field appearance="outline"
-                                            style="width: 100%;">
+                                            style="width: 70%;">
                                             <input type="text" matInput
                                                 formControlName="toStockCode"
                                                 placeholder="Stock Code"
@@ -404,7 +400,7 @@
                                                 *ngIf="!masterMetalChecked"></master-search>
                                         </mat-form-field>
                                     </div>
-                                    <div class="col-md-3">
+                                    <div class="col-md-6">
                                         <mat-form-field appearance="outline"
                                             style="width: 100%;">
                                             <input type="text" matInput

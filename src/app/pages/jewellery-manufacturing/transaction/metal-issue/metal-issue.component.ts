@@ -46,7 +46,7 @@ export class MetalIssueComponent implements OnInit {
     { title: 'Karat', field: 'KARAT_CODE', format: '', alignment: 'right' },
     { title: 'Loaction', field: 'LOCTYPE_CODE', format: '', alignment: 'left' },
     // { title: 'Division', field: 'DIVCODE', format: '', alignment: 'left' },
-  
+
     // { title: 'Process', field: 'PROCESS_CODE', format: '', alignment: 'left' },
     // { title: 'Worker', field: 'WORKER_CODE', format: '', alignment: 'left' },
     {
@@ -244,7 +244,7 @@ export class MetalIssueComponent implements OnInit {
 
           this.metalIssueDetailsData = data.Details
           console.log(this.metalIssueDetailsData);
-          
+
           this.reCalculateSRNO() //set to main grid
 
           this.metalIssueDetailsData.forEach((element: any) => {
@@ -282,8 +282,8 @@ export class MetalIssueComponent implements OnInit {
     this.activeModal.close(data);
   }
   lookupKeyPress(event: any, form?: any) {
-    if(event.key == 'Tab' && event.target.value == ''){
-      this.showOverleyPanel(event,form)
+    if (event.key == 'Tab' && event.target.value == '') {
+      this.showOverleyPanel(event, form)
     }
     if (event.key === 'Enter') {
       if (event.target.value == '') this.showOverleyPanel(event, form)
@@ -433,7 +433,7 @@ export class MetalIssueComponent implements OnInit {
       "TOTAL_PCS": 0,
       "TOTAL_GROSS_WT": 0,
       "TOTAL_PURE_WT": 0,
-      "SMAN": this.comService.nullToString(this.metalIssueForm.value.SALESPERSON_CODE),
+      "SMAN": this.comService.nullToString(this.metalIssueForm.value.SALESPERSON_CODE?.toUpperCase()),
       "REMARKS": this.metalIssueForm.value.REMARKS || "",
       "NAVSEQNO": 0,
       "FIX_UNFIX": false,
@@ -629,20 +629,15 @@ export class MetalIssueComponent implements OnInit {
     }
     this.comService.showSnackBarMsg('MSG81447');
     let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch`
-    let Sub: Subscription = this.dataService.postDynamicAPI(API,param)
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
       .subscribe((result) => {
         this.comService.closeSnackBarMsg()
         let data = this.comService.arrayEmptyObjectToString(result.dynamicData[0])
         if (data.length == 0) {
           this.comService.toastErrorByMsgId('MSG1531')
           this.metalIssueForm.controls[FORMNAME].setValue('')
-
           LOOKUPDATA.SEARCH_VALUE = ''
-          if (FORMNAME === 'SALESPERSON_CODE') {
-            this.showOverleyPanel(event, 'SALESPERSON_CODE');
-          } else if (FORMNAME === 'worker') {
-            this.showOverleyPanel(event, 'workerDes');
-          }
+          this.showOverleyPanel(event, FORMNAME);
           return
         }
       }, err => {
@@ -676,6 +671,7 @@ export class MetalIssueComponent implements OnInit {
             if (searchResult && searchResult.length == 0) {
               this.metalIssueForm.controls[FORMNAME].setValue('');
               LOOKUPDATA.SEARCH_VALUE = '';
+              this.showOverleyPanel(event, FORMNAME);
               return;
             }
             let result = this.comService.searchAllItemsInArray(data, LOOKUPDATA.SEARCH_VALUE)

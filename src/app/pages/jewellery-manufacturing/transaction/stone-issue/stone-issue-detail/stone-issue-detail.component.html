@@ -47,7 +47,8 @@
             <mat-form-field appearance="outline" style="width: 100%;">
               <input type="text" matInput formControlName="subjobnumber"
                 [readonly]="viewMode" UpperCaseDirective
-                (focusout)="subJobNumberValidate($event)" />
+                (focusout)="subJobNumberValidate($event)"
+                (keydown)="lookupKeyPress($event,'subjobnumber')" />
               <master-search class="masterSearch"
                 [MasterSearchData]="subJobNoCodeData" #overlaysubjobnoSearch
                 (newRowClick)="subJobNoCodeSelected($event)"
