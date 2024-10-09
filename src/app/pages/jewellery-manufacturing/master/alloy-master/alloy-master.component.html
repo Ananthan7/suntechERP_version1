@@ -7,7 +7,8 @@
 </div>
 <!-- modal header component -->
 <modal-header [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode" (cancelClick)="close()"
-    (saveClick)="formSubmit()" (deleteClick)="deleteAlloyMaster()" [isViewDelete]="!viewMode && editMode"></modal-header>
+    (saveClick)="formSubmit()" (deleteClick)="deleteAlloyMaster()"
+    [isViewDelete]="!viewMode && editMode"></modal-header>
 <!-- content section -->
 <div class="row">
     <div>
@@ -21,8 +22,7 @@
                                     :</label>
                                 <div class="col-sm-7">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" id="code" matInput
-                                            (focusout)="checkCodeExists($event)"
+                                        <input type="text" id="code" matInput (focusout)="checkCodeExists($event)"
                                             formControlName="code" [readonly]="viewMode || editMode"
                                             [disabled]="viewMode" UpperCaseDirective autocomplete="off"
                                             (keydown)="lookupKeyPress($event,'code')" />
@@ -152,7 +152,8 @@
                                 <div class="col-sm-7">
                                     <mat-form-field style="width: 100%" appearance="outline">
                                         <input type="text" matInput formControlName="description" [readonly]="viewMode"
-                                            UpperCaseDirective oninput="this.value = this.value.toUpperCase()" autocomplete="off" />
+                                            UpperCaseDirective oninput="this.value = this.value.toUpperCase()"
+                                            autocomplete="off" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -269,9 +270,8 @@
                                 <div class="col-sm-4">
                                     <mat-form-field style="width: 100%" appearance="outline">
                                         <input type="text" matInput formControlName="weightAvgCostFC"
-                                            style="text-align: right"
-                                             [readonly]="isCurrencySelected"
-                                            AmountDecimalInput (focusout)="calculateWeightAvgCostFC($event)" />
+                                            style="text-align: right" [readonly]="isCurrencySelected" AmountDecimalInput
+                                            (focusout)="calculateWeightAvgCostFC($event)" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-4">
@@ -285,14 +285,22 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="price_box">
-                                        <a id="ID020">PriceScheme</a>
-                                        <master-search *ngIf="!viewMode && alloyMastereForm.value.weightAvgCostLC"
+                                        <a id="ID020" class="me-2">PriceScheme</a>
+                                        <!-- <master-search *ngIf="!viewMode && alloyMastereForm.value.weightAvgCostLC"
                                             [MasterSearchData]="priceSchemeData"
-                                            (newRowClick)="priceSchemeValidate($event)"></master-search>
-                                            <a *ngIf="alloyMastereForm?.get('weightAvgCostFC')?.value">{{
-                                                alloyMastereForm?.value.priceScheme }}
-                                            </a>
-                                                                                      
+                                            (newRowClick)="priceSchemeValidate($event)">
+                                        </master-search>
+                                        <a *ngIf="alloyMastereForm?.get('weightAvgCostFC')?.value">{{
+                                            alloyMastereForm?.value.priceScheme }}
+                                        </a> -->
+                                        <mat-form-field appearance="outline" class="stretch" *ngIf="alloyMastereForm.value.weightAvgCostLC">
+                                            <input type="text" matInput [readonly]="viewMode" formControlName="priceScheme"
+                                            (focusout)="priceShemeCode($event)"/>
+                                            <master-search *ngIf="!viewMode && alloyMastereForm.value.weightAvgCostLC"
+                                                [MasterSearchData]="priceSchemeData" class="mstrScrch"
+                                                (newRowClick)="priceSchemeValidate($event)">
+                                            </master-search>
+                                        </mat-form-field>
                                     </div>
 
                                 </div>
@@ -322,8 +330,7 @@
                                 <div class="col-sm-4">
                                     <mat-form-field style="width: 70%" appearance="outline">
                                         <input type="text" matInput formControlName="price1code" UpperCaseDirective
-                                            autocomplete="off" [readonly]="viewMode"
-                                            (change)="priceCodeOne($event)"
+                                            autocomplete="off" [readonly]="viewMode" (change)="priceCodeOne($event)"
                                             (focusout)="validateLookupField($event,priceCodeData,'price1code')"
                                             (keydown)="lookupKeyPress($event,'price1code')" />
                                         <master-search *ngIf="!viewMode && alloyMastereForm.value.weightAvgCostLC"
@@ -349,8 +356,7 @@
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%" appearance="outline">
                                         <input type="text" matInput MetalDecimalInput formControlName="price1Lc"
-                                            class="text-right" [readonly]="viewMode"
-                                            (focusout)="price1LcChange()" />
+                                            class="text-right" [readonly]="viewMode" (focusout)="price1LcChange()" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -360,8 +366,8 @@
                                 </div>
                                 <div class="col-sm-4">
                                     <mat-form-field style="width: 70%" appearance="outline">
-                                        <input type="text" matInput formControlName="price2code"
-                                            [readonly]="viewMode" (change)="priceTwoCode($event)"
+                                        <input type="text" matInput formControlName="price2code" [readonly]="viewMode"
+                                            (change)="priceTwoCode($event)"
                                             (focusout)="validateLookupField($event,priceCodeData,'price2code')"
                                             (keydown)="lookupKeyPress($event,'price2code')" />
                                         <master-search *ngIf="!viewMode && alloyMastereForm.value.weightAvgCostLC"
@@ -380,7 +386,8 @@
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%" appearance="outline">
                                         <input type="text" matInput MetalDecimalInput formControlName="price2Fc"
-                                            [max]="12" class="text-right" [readonly]="viewMode || isCurrencySelected" (focusout)="price2FcChange()"/>
+                                            [max]="12" class="text-right" [readonly]="viewMode || isCurrencySelected"
+                                            (focusout)="price2FcChange()" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
@@ -396,8 +403,8 @@
                                 </div>
                                 <div class="col-sm-4">
                                     <mat-form-field style="width: 70%" appearance="outline">
-                                        <input type="text" matInput formControlName="price3code"
-                                            [readonly]="viewMode" (change)="priceThreeCode($event)"
+                                        <input type="text" matInput formControlName="price3code" [readonly]="viewMode"
+                                            (change)="priceThreeCode($event)"
                                             (focusout)="validateLookupField($event,priceCodeData,'price3code')"
                                             (keydown)="lookupKeyPress($event,'price3code')" />
                                         <master-search *ngIf="!viewMode && alloyMastereForm.value.weightAvgCostLC"
@@ -410,19 +417,20 @@
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%" appearance="outline">
                                         <input type="text" matInput formControlName="price3per" AmountDecimalInput
-                                            class="text-right" [readonly]="viewMode || codeEnable"  (focusout)="price3FcChange()" />
+                                            class="text-right" [readonly]="viewMode || codeEnable" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%" appearance="outline">
                                         <input type="text" matInput formControlName="price3Fc" MetalDecimalInput
-                                            [max]="12" class="text-right" [readonly]="viewMode || isCurrencySelected" />
+                                            [max]="12" class="text-right" [readonly]="viewMode || isCurrencySelected"
+                                            (focusout)="price3FcChange()" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%" appearance="outline">
                                         <input type="text" matInput formControlName="price3Lc" MetalDecimalInput
-                                            class="text-right" [readonly]="viewMode" (focusout)="price3LcChange()"/>
+                                            class="text-right" [readonly]="viewMode" (focusout)="price3LcChange()" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -432,8 +440,8 @@
                                 </div>
                                 <div class="col-sm-4">
                                     <mat-form-field style="width: 70%" appearance="outline">
-                                        <input type="text" matInput formControlName="price4code"
-                                            [readonly]="viewMode" (change)="priceFourCode($event)"
+                                        <input type="text" matInput formControlName="price4code" [readonly]="viewMode"
+                                            (change)="priceFourCode($event)"
                                             (focusout)="validateLookupField($event,priceCodeData,'price4code')"
                                             (keydown)="lookupKeyPress($event,'price4code')" />
                                         <master-search *ngIf="!viewMode && alloyMastereForm.value.weightAvgCostLC"
@@ -452,13 +460,14 @@
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%" appearance="outline">
                                         <input type="text" matInput formControlName="price4Fc" MetalDecimalInput
-                                            [max]="12" class="text-right" [readonly]=" viewMode || isCurrencySelected"  (focusout)="price4FcChange()"/>
+                                            [max]="12" class="text-right" [readonly]=" viewMode || isCurrencySelected"
+                                            (focusout)="price4FcChange()" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%" appearance="outline">
                                         <input type="text" matInput formControlName="price4Lc" MetalDecimalInput
-                                            class="text-right" [readonly]="viewMode"  (focusout)="price4LcChange()" />
+                                            class="text-right" [readonly]="viewMode" (focusout)="price4LcChange()" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -468,8 +477,8 @@
                                 </div>
                                 <div class="col-sm-4">
                                     <mat-form-field style="width: 70%" appearance="outline">
-                                        <input type="text" matInput formControlName="price5code"
-                                            [readonly]="viewMode" (change)="priceFiveCode($event)"
+                                        <input type="text" matInput formControlName="price5code" [readonly]="viewMode"
+                                            (change)="priceFiveCode($event)"
                                             (focusout)="validateLookupField($event,priceCodeData,'price5code')"
                                             (keydown)="lookupKeyPress($event,'price5code')" />
                                         <master-search *ngIf="!viewMode && alloyMastereForm.value.weightAvgCostLC"
@@ -488,13 +497,14 @@
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%" appearance="outline">
                                         <input type="text" matInput formControlName="price5Fc" MetalDecimalInput
-                                            [max]="12" class="text-right" [readonly]=" viewMode || isCurrencySelected"  (focusout)="price5FcChange()"/>
+                                            [max]="12" class="text-right" [readonly]=" viewMode || isCurrencySelected"
+                                            (focusout)="price5FcChange()" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%" appearance="outline">
                                         <input type="text" matInput formControlName="price5Lc" MetalDecimalInput
-                                            class="text-right" [readonly]="viewMode"  (focusout)="price5LcChange()" />
+                                            class="text-right" [readonly]="viewMode" (focusout)="price5LcChange()" />
                                     </mat-form-field>
                                 </div>
                             </div>
