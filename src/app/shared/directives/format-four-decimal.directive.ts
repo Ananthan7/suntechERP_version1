@@ -42,7 +42,7 @@ export class FourDecimalDirective {
   @HostListener('blur', ['$event']) onBlur(event: Event): void {
     const input = event.target as HTMLInputElement;
     let value = input.value;
-    let AMTCount: any = this.commonService.allbranchMaster?.BMQTYDECIMALS;
+    let AMTCount: any = this.commonService.allbranchMaster?.BMQTYFORMAT_NET;
     let str = '0000';
 
     // Remove non-numeric characters except the decimal point
