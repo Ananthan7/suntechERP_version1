@@ -97,6 +97,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
+    FRONTENDFILTER: true
   }
   stockCodeSearch: MasterSearchModel = {
     PAGENO: 1,

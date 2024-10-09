@@ -459,7 +459,6 @@ export class CommonServiceService {
 
   formControlSetReadOnly(id: any, isReadonly: boolean) {
     const ele: any = document.getElementById(id);
-    console.log('ele ', ele);
     if (ele != null && ele != undefined)
       ele.readOnly = isReadonly;
     // (<any>formControl).nativeElement.readonly = isReadonly;
