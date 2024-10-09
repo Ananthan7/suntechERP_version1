@@ -24,7 +24,7 @@
                     <div class="col-sm-3">
                         <mat-form-field style="width: 90%" appearance="outline">
                             <input type="text" matInput [readonly]="viewMode" maxlength="1"
-                                formControlName="metalDivision"
+                                formControlName="metalDivision" #codeInput1 id="codeInput1"
                                 (focusout)="validateLookupField($event,metalDivisionCodeData,'metalDivision')"
                                 (input)="inputValidate($event)" UpperCaseDirective
                                 (keydown)="lookupKeyPress($event,'metalDivision')" />
@@ -53,7 +53,7 @@
                         Code *:</label>
                     <div class="col-sm-3">
                         <mat-form-field style="width: 90%" appearance="outline">
-                            <input type="text" matInput #codeInput1 id="codeInput1" autocomplete="off" maxlength="15"
+                            <input type="text" matInput  autocomplete="off" maxlength="15"
                                 [readonly]="editMode || viewMode" formControlName="metallabour_code"
                                 (focusout)="diamondLabourCodeValidate()" (keyup)="codeEnabledMetal()"
                                 oninput="this.value = this.value.toUpperCase()" appNoEmptySpace />
@@ -112,7 +112,7 @@
                         </mat-form-field>
                     </div>
                     <label for="input" id="ID008" class="col-sm-2 col-form-label">Labour
-                        A/C 
+                        A/C *
                         :</label>
                     <div class="col-sm-3">
                         <mat-form-field style="width: 90%" appearance="outline">

@@ -25,7 +25,7 @@ export class LoyaltyRegisterComponent implements OnInit {
   branchDivisionControls: any;
   VocTypeParam: any = [];
   formattedBranchDivisionData: any;
-  fetchedBranchDataParam: any[]= [];
+  fetchedBranchDataParam: any= [];
   popupVisible: boolean = false;
   templateNameHasValue: boolean= false;
   isLoading: boolean = false;
@@ -353,6 +353,18 @@ export class LoyaltyRegisterComponent implements OnInit {
       this.loyaltyregisterFrom.controls.branch.setValue(paresedItem?.CONTROL_DETAIL.STRBRANCHES);
       this.fetchedBranchData= paresedItem?.CONTROL_DETAIL.STRBRANCHES.split("#")
       this.fetchedBranchDataParam = paresedItem?.CONTROL_DETAIL.STRBRANCHES
+    }
+    else{
+      const userBranch = localStorage.getItem('userbranch');
+      const formattedUserBranch = userBranch ? `${userBranch}#` : null;
+      this.loyaltyregisterFrom.controls.branch.setValue(formattedUserBranch);
+      this.fetchedBranchDataParam = formattedUserBranch;
+      this.fetchedBranchData= this.fetchedBranchDataParam?.split("#")
+   
+      this.dateToPass = {
+        fromDate:  this.formatDateToYYYYMMDD(new Date()),
+        toDate: this.formatDateToYYYYMMDD(new Date()),
+      };
     }
   }
 
