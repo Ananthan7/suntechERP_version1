@@ -106,12 +106,21 @@ export class RetailReportsComponent implements OnInit {
       this.CommonService.showSnackBarMsg('Module Not Created')
     }
 
-    const modalRef: NgbModalRef = this.modalService.open(this.componentSelected, {
+    //check for determining the screen selected
+    const modalOptions: any = this.componentName === 'PosDailyclosingSummary' ? {
       size: 'xl',
       backdrop: 'static',
       keyboard: false,
-      // windowClass: 'modal-full-width',
-    });
+      windowClass: 'modal-full-width',
+      //page-content container-fluid
+    } : {
+      size: 'xl',
+      backdrop: 'static',
+      keyboard: false,
+    };
+    
+    const modalRef: NgbModalRef = this.modalService.open(this.componentSelected, modalOptions);
+    // console.log(this.componentName)
     modalRef.result.then((result:any) => {
       if (result === 'reloadMainGrid') {
         let details = { 
