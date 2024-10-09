@@ -620,18 +620,22 @@ export class RetailSalesCollectionComponent implements OnInit {
       let data = result.dynamicData;
       let printContent = data[0][0].HTMLINPUT;
       this.htmlPreview = this.sanitizer.bypassSecurityTrustHtml(printContent);
-    });      
-    
-    if (Object.keys(this.htmlPreview.changingThisBreaksApplicationSecurity).length !== 0) {
+    });  
+
+    setTimeout(() => {
+      const content = this.htmlPreview?.changingThisBreaksApplicationSecurity;
+
+      if (content && Object.keys(content).length !== 0) {
         const printWindow = window.open('', '', 'height=600,width=800');
         printWindow?.document.write(this.htmlPreview.changingThisBreaksApplicationSecurity);
         printWindow?.document.close();
         printWindow?.focus();
         printWindow?.print();
         printWindow?.close();
-    } else {
-      Swal.fire( 'No Data!', 'There is no data to print!', 'info');
-    }
+      } else {
+        Swal.fire('No Data!', 'There is no data to print!', 'info');
+      }
+    }, 3000); 
   }
 
 
