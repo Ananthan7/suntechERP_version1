@@ -779,7 +779,11 @@ export class AlloyMasterComponent implements OnInit {
     });
   }
 
-
+  priceSchemeValuevation(){
+    if (this.alloyMastereForm.controls.price1code.value === "") {
+      alert('This Aleat')
+    }
+  }
 
 
 
@@ -1040,22 +1044,6 @@ export class AlloyMasterComponent implements OnInit {
     this.alloyMastereForm.controls.price3Lc.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
     this.alloyMastereForm.controls.price4Lc.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
     this.alloyMastereForm.controls.price5Lc.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
-
-    // this.metallabourMasterForm.controls.metalcost_rate.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
-    // this.metallabourMasterForm.controls.wtFrom.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
-    // this.metallabourMasterForm.controls.wtTo.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
-    // this.metallabourMasterForm.controls.metalselling_rate.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
-    // this.metallabourMasterForm.controls.metalSelling.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
-    // this.metallabourMasterForm.controls.metalcost_rate.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
-    // this.metallabourMasterForm.controls.wastage.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
-
-
-    // this.diamondlabourMasterForm.controls.BRANCH_CODE.setValue(this.commonService.branchCode)
-    // this.diamondlabourMasterForm.controls.cost_rate.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
-    // this.diamondlabourMasterForm.controls.selling_rate.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
-    // this.diamondlabourMasterForm.controls.selling.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
-    // this.diamondlabourMasterForm.controls.ctWtFrom.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
-    // this.diamondlabourMasterForm.controls.ctWtTo.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
   }
 
 
@@ -1198,6 +1186,31 @@ export class AlloyMasterComponent implements OnInit {
   }
 
   // Use the function for each price code
+  priceShemeCode(e:any){
+    this.alloyMastereForm.controls.price1code.setValue(''); //
+    this.alloyMastereForm.controls.price2code.setValue('');
+    this.alloyMastereForm.controls.price3code.setValue('');
+    this.alloyMastereForm.controls.price4code.setValue('');
+    this.alloyMastereForm.controls.price5code.setValue('');
+    this.alloyMastereForm.controls.price1Lc.setValue('');
+    this.alloyMastereForm.controls.price1Fc.setValue('');
+    this.alloyMastereForm.controls.price1per.setValue('');
+    this.alloyMastereForm.controls.price2Lc.setValue('');
+    this.alloyMastereForm.controls.price2Fc.setValue('');
+    this.alloyMastereForm.controls.price2per.setValue('');
+    this.alloyMastereForm.controls.price2per.setValue('');
+    this.alloyMastereForm.controls.price3Lc.setValue('');
+    this.alloyMastereForm.controls.price3Fc.setValue('');
+    this.alloyMastereForm.controls.price3per.setValue('');
+    this.alloyMastereForm.controls.price4Lc.setValue('');
+    this.alloyMastereForm.controls.price4Fc.setValue('');
+    this.alloyMastereForm.controls.price3per.setValue('');
+    this.alloyMastereForm.controls.price5Lc.setValue('');
+    this.alloyMastereForm.controls.price5Fc.setValue('');
+    this.alloyMastereForm.controls.price5per.setValue('');
+  }
+
+
   priceCodeOne(e: any) {
     this.handlePriceCodeChange(
       'price1code',
