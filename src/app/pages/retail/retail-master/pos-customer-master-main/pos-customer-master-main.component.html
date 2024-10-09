@@ -3219,13 +3219,13 @@
                             formControlName="gifrPurchased"
                           />
                           <master-search
-                            *ngIf="flag !== 'VIEW'"
-                            (focusout)="openTab($event, 'gifrPurchased')"
-                            #overlayGifrPurchased
-                            [MasterSearchData]="giftPurchasedCode"
-                            class="masterSearch"
-                            (newRowClick)="giftPurchasedSelected($event)"
-                          ></master-search>
+                          *ngIf="flag !== 'VIEW' && isSelfGift"
+                          (focusout)="openTab($event, 'gifrPurchased')"
+                          #overlayGifrPurchased
+                          [MasterSearchData]="giftPurchasedCode"
+                          class="masterSearch"
+                          (newRowClick)="giftPurchasedSelected($event)"
+                        ></master-search>
                         </mat-form-field>
                       </div>
                     </div>
