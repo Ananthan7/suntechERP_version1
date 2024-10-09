@@ -22,8 +22,8 @@
             <div class="search-box">
                 <div class="position-relative">
                     <input type="text" [(ngModel)]="SEARCH_VALUE"
-                        (keydown.enter)="getMasterGridData(1)"
-                        (focusout)="getMasterGridData(1)"
+                        (keydown.enter)="getMasterGridData(1, 'search')"
+                        (focusout)="getMasterGridData(1,'search')"
                         class="form-control rounded bg-light border-0"
                         placeholder="Search...">
                     <i class="mdi mdi-magnify search-icon"></i>
