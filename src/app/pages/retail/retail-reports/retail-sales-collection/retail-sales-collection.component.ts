@@ -624,10 +624,21 @@ export class RetailSalesCollectionComponent implements OnInit {
 
     setTimeout(() => {
       const content = this.htmlPreview?.changingThisBreaksApplicationSecurity;
+      
+      let  userBranchDesc:any  = localStorage.getItem('BRANCH_PARAMETER')
+      userBranchDesc = JSON.parse(userBranchDesc)
 
       if (content && Object.keys(content).length !== 0) {
+        const modifiedContent = content.replace(/<title>.*?<\/title>/, `<title>${userBranchDesc.DESCRIPTION}</title>`);
+
+        //          workout for binding title from 2nd sheet
+        // const sections = content.match(/<div class="footer2">*?<\/div>/g); // Use the correct regex syntax
+        // const pageCount = sections ? sections.length : 1; // Default to 1 if no sections found
+        // console.log('Estimated Page content:', content);
+        // console.log('Estimated Page Count:', pageCount);
+
         const printWindow = window.open('', '', 'height=600,width=800');
-        printWindow?.document.write(this.htmlPreview.changingThisBreaksApplicationSecurity);
+        printWindow?.document.write(modifiedContent);
         printWindow?.document.close();
         printWindow?.focus();
         printWindow?.print();
