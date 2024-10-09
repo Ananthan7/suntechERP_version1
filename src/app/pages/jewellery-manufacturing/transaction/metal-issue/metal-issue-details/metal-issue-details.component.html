@@ -64,7 +64,7 @@
                                                 formControlName="subJobNo"
                                                 (change)="subJobNumberValidate($event)"
                                                 [readonly]="viewMode" />
-                                            <master-search class="masterSearch"
+                                            <master-search class="masterSearch" *ngIf="!viewMode"
                                                 [MasterSearchData]="subJobNoCodeData"
                                                 (newRowClick)="subJobNoCodeSelected($event)"></master-search>
                                         </mat-form-field>
@@ -273,9 +273,9 @@
                                             style="width: 60%;">
                                             <input type="text" matInput
                                                 formControlName="DIVCODE"
-                                                placeholder="Div Code"
-                                                (focusout)="SPvalidateLookupField($event,divCodeData,'DIVCODE')" />
-                                            <master-search class="masterSearch"
+                                                placeholder="Div Code" [readonly]="viewMode"
+                                                (focusout)="validateLookupField($event,divCodeData,'DIVCODE')" />
+                                            <master-search class="masterSearch" *ngIf="!viewMode"
                                                 [MasterSearchData]="divCodeData"
                                                 (newRowClick)="divCodeSelected($event)">
                                             </master-search>
@@ -292,7 +292,7 @@
                                                 (focusout)="stockCodeValidate($event)"
                                                 [readonly]="viewMode"
                                                 (keydown)="lookupKeyPress($event,'stockCode')" />
-                                            <master-search class="masterSearch"
+                                            <master-search class="masterSearch" *ngIf="!viewMode"
                                                 [MasterSearchData]="stockCodeData"
                                                 #overlaystockcode
                                                 (newRowClick)="stockCodeSelected($event)"></master-search>

@@ -104,6 +104,9 @@ export class MasterSearchComponent implements OnInit {
     this.subscriptions$ = this.dataService.postDynamicAPI(APIS, param).subscribe((result) => {
       this.isLoading = false;
       if (result.dynamicData && result.dynamicData[0].length > 0) {
+        if(this.MasterSearchData.SEARCH_VALUE != ''){
+          this.searchValueChange()
+        }
         this.dataSource = result.dynamicData[0];
         this.setGridHeaders()
         let dataCount = result.dynamicData[1];
@@ -241,7 +244,8 @@ export class MasterSearchComponent implements OnInit {
     this.currentPage = 1
     let param = this.setPostdata()
     this.isLoading = true;
-    this.subscriptions$ = this.dataService.postDynamicAPI('MasterLookUp', param).subscribe((result) => {
+    this.subscriptions$ = this.dataService.postDynamicAPI('MasterLookUp', param)
+    .subscribe((result) => {
       this.isLoading = false;
       let data = result.dynamicData[0]
       if (data && data.length > 0) {
