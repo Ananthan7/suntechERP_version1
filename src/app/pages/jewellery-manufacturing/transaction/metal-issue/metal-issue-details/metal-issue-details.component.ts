@@ -829,7 +829,11 @@ export class MetalIssueDetailsComponent implements OnInit {
         this.comService.closeSnackBarMsg()
         if (result.dynamicData && result.dynamicData[0].length > 0) {
           this.tableData = result.dynamicData[0]
-          console.log(this.tableData);
+          this.tableData.forEach((item: any, index: any) => {
+            item.MTL_WT = this.comService.decimalQuantityFormat(item.MTL_WT, 'METAL')
+            item.ISS_MTL_WT = this.comService.decimalQuantityFormat(item.ISS_MTL_WT, 'METAL')
+            item.BAL_MTL_WT = this.comService.decimalQuantityFormat(item.BAL_MTL_WT, 'METAL')
+          })
           // console.log(Object.keys(this.tableData[0]));
 
           // this.columnhead = Object.keys(this.tableData[0])
