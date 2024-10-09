@@ -96,6 +96,7 @@ export class AddPosComponent implements OnInit {
   voucherDetails: any;
   minDate: any;
   maxDate: any;
+  isDiscountAmountTrigger: boolean = false;
   isloading: boolean = false;
   RECEIPT_MODEL: any = {}
   disableSaveBtn: boolean = false;
@@ -9851,7 +9852,7 @@ export class AddPosComponent implements OnInit {
             this.lineItemForm.controls.fcn_li_discount_amount.setValue(
               preDisAmtVal || this.zeroAmtVal
             );
-            this.manageCalculations();
+            this.manageCalculations({isDiscoutStored:true});
           }
         });
       }
@@ -9897,8 +9898,8 @@ export class AddPosComponent implements OnInit {
 
     this.validateMinSalePrice()
   }
-  changeDisPer(event: any, discountAmt = null, nettAmt = null) {
-
+  changeDisPer(event: any, discountAmt = null, nettAmt = null,isDiscountAmountChange:boolean=false) {
+    this.isDiscountAmountTrigger=isDiscountAmountChange ? true:false;
 
     if (event.target.value != '') {
       let disAmt;
@@ -10993,6 +10994,7 @@ export class AddPosComponent implements OnInit {
   }
 
   changeDisAmount(event: any, nettAmt: any = null) {
+    this.isDiscountAmountTrigger=true;
     const preDisAmtVal =
       this.comFunc.decimalQuantityFormat(
         this.comFunc.emptyToZero(localStorage.getItem('fcn_li_discount_amount')),
@@ -11010,7 +11012,7 @@ export class AddPosComponent implements OnInit {
 
       this.lineItemForm.controls.fcn_li_discount_percentage.setValue(value);
 
-      this.changeDisPer({ target: { value: value } }, event.target.value, nettAmt);
+      this.changeDisPer({ target: { value: value } }, event.target.value, nettAmt,true);
 
     } else {
       this.lineItemForm.controls['fcn_li_total_amount'].setValue(0.0);
@@ -11021,7 +11023,7 @@ export class AddPosComponent implements OnInit {
     }
   }
   manageCalculations(
-    argsData: any = { totalAmt: null, nettAmt: null, disAmt: null }
+    argsData: any = { totalAmt: null, nettAmt: null, disAmt: null,isDiscoutStored:false }
   ) {
     console.log('====================================');
     console.log('manageCalculations', argsData);
@@ -11185,6 +11187,8 @@ export class AddPosComponent implements OnInit {
 
         this.setGrossAmount();
 
+        
+
 
         // this.lineItemForm.controls['fcn_li_gross_amount'].setValue(
 
@@ -11238,6 +11242,14 @@ export class AddPosComponent implements OnInit {
     } else {
 
       // taxAmount = this.lineItemForm.value.fcn_li_tax_amount;
+    }
+    if (this.divisionMS != "M") {
+      if (this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_discount_percentage))
+        this.detectDiscountChange =this.isDiscountAmountTrigger?false: true;
+        !argsData.isDiscoutStored ? this.updateDiscountAmount() : null;
+
+      this.calculateTaxAmount();
+      this.calculateNetAmount();
     }
     this.lineItemCommaSeparation();
 
@@ -11354,13 +11366,13 @@ export class AddPosComponent implements OnInit {
         'AMOUNT') || this.zeroAmtVal
 
     );
-    if (this.divisionMS != "M") {
-      if (this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_discount_percentage))
-        this.detectDiscountChange = true;
-      this.updateDiscountAmount();
-      this.calculateTaxAmount();
-      this.calculateNetAmount();
-    }
+    // if (this.divisionMS != "M") {
+    //   if (this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_discount_percentage))
+    //     this.detectDiscountChange = true;
+    //   this.updateDiscountAmount();
+    //   this.calculateTaxAmount();
+    //   this.calculateNetAmount();
+    // }
 
 
     this.lineItemForm.controls['fcn_li_tax_amount'].setValue(
