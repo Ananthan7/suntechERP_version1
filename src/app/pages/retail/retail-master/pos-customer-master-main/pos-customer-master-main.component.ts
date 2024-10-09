@@ -574,6 +574,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
     link: [""],
     twitter: [""],
     instagram: [""],
+    prefixAml:[""]
   });
   imageName: any;
 
