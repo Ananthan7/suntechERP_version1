@@ -7,7 +7,7 @@
 </div>
 <!-- modal header component -->
 <modal-header (saveClick)="formSubmit('SAVE')" (cancelClick)="close()"
-    (changeJobClick)="changeJobClicked()"
+    (changeJobClick)="formSubmit('CHANGEJOB')"
     (continueClick)="formSubmit('CONTINUE')" [isViewContinue]="!viewMode"
     [isViewChangeJob]="!viewMode" [isViewDelete]="false"
     [isViewMore]="false" [isViewSave]="!viewMode"></modal-header>
@@ -392,17 +392,18 @@
                                     <label for="inputPassword"
                                         class="col-sm-3 col-form-label">To Stock
                                         Code : </label>
-
                                     <div class="col-md-3">
                                         <mat-form-field appearance="outline"
-                                            style="width: 30%;">
+                                            style="width: 60%;">
                                             <input type="text" matInput
                                                 formControlName="toDIVCODE"
                                                 placeholder="Div Code"
                                                 readonly />
                                         </mat-form-field>
+                                    </div>
+                                    <div class="col-md-6">
                                         <mat-form-field appearance="outline"
-                                            style="width: 70%;">
+                                            style="width: 100%;">
                                             <input type="text" matInput
                                                 formControlName="toStockCode"
                                                 placeholder="Stock Code"
@@ -412,15 +413,6 @@
                                                 #overlaystockcode
                                                 (newRowClick)="toStockCodeSelected($event)"
                                                 *ngIf="!masterMetalChecked"></master-search>
-                                        </mat-form-field>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <mat-form-field appearance="outline"
-                                            style="width: 100%;">
-                                            <input type="text" matInput
-                                                formControlName="toStockCodeDes"
-                                                placeholder="Description"
-                                                readonly />
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -497,7 +489,7 @@
                                         </mat-form-field>
                                     </div> -->
                                 </div>
-                                <div class="row mb-1">
+                                <div class="row mt-3">
                                     <div class="col-md-6">
                                         <div class="form-check">
                                             <input class="form-check-input"
@@ -510,15 +502,18 @@
                                                 Master Metal
                                             </label>
                                         </div>
-                                        <!-- <mat-radio-button  formControlName="materMetal"> Master Metal</mat-radio-button> -->
                                     </div>
-                                    <!-- <div class="row mb-1">
-                                        <div class="col-md-3">
-                                            <mat-form-field appearance="outline" style="width: 100%;">
-                                                <input type="text" matInput [readonly]="viewMode"/>
-                                            </mat-form-field>
-                                        </div>
-                                    </div> -->
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-md-6">
+                                        <mat-form-field appearance="outline"
+                                            style="width: 100%;">
+                                            <input type="text" matInput
+                                                formControlName="toStockCodeDes"
+                                                placeholder="Description"
+                                                readonly />
+                                        </mat-form-field>
+                                    </div>
                                 </div>
                             </div>
                         </div>

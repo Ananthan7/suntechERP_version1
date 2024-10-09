@@ -372,8 +372,7 @@ export class MetalIssueDetailsComponent implements OnInit {
     }
   }
   changeJobClicked() {
-    // this.formSubmit('CONTINUE')
-    this.metalIssueDetailsForm.reset()
+    this.formSubmit('CONTINUE')
   }
   resetStockDetails() {
     this.metalIssueDetailsForm.controls.stockCode.setValue('')
@@ -506,6 +505,9 @@ export class MetalIssueDetailsComponent implements OnInit {
     if (flag == 'CONTINUE') {
       this.resetStockDetails()
     }
+    if (flag == 'CHANGEJOB') {
+      this.metalIssueDetailsForm.reset()
+    }
   }
   masterMetalChange(event: any) {
     console.log(event);
@@ -631,14 +633,20 @@ export class MetalIssueDetailsComponent implements OnInit {
           this.metalIssueDetailsForm.controls.DIVCODE.setValue(data[0].DIVCODE)
           // reassigning data set if worker is selected in header screen
           if (this.metalIssueDetailsForm.value.workerCode?.toString() != '') {
-            let index = 0
-            data.forEach((element:any,i:any) => {
-              if(element.WORKER == this.metalIssueDetailsForm.value.workerCode?.toUpperCase()) index = i
+            let index = data.length + 2
+            data.forEach((element: any, i: any) => {
+              if (element.WORKER == this.metalIssueDetailsForm.value.workerCode?.toUpperCase()) index = i
             });
-            this.metalIssueDetailsForm.controls.processCode.setValue(data[index].PROCESS)
-            this.metalIssueDetailsForm.controls.processCodeDesc.setValue(data[index].PROCESSDESC)
-            this.metalIssueDetailsForm.controls.DESIGN_CODE.setValue(data[index].DESIGN_CODE)
-            this.workerCodeData.WHERECONDITION = `@strProcess='${data[index].PROCESS}',@blnActive=1`
+            if (index == data.length + 2) {
+              this.metalIssueDetailsForm.controls.processCode.setValue('')
+              this.overlayprocessCode.showOverlayPanel(event)
+            } else {
+              this.metalIssueDetailsForm.controls.processCode.setValue(data[index].PROCESS)
+              this.metalIssueDetailsForm.controls.processCodeDesc.setValue(data[index].PROCESSDESC)
+              this.metalIssueDetailsForm.controls.DESIGN_CODE.setValue(data[index].DESIGN_CODE)
+              this.workerCodeData.WHERECONDITION = `@strProcess='${data[index].PROCESS}',@blnActive=1`
+            }
+
           } else {
             this.metalIssueDetailsForm.controls.processCode.setValue(data[0].PROCESS)
             this.metalIssueDetailsForm.controls.processCodeDesc.setValue(data[0].PROCESSDESC)
@@ -777,13 +785,16 @@ export class MetalIssueDetailsComponent implements OnInit {
             let purity = stockData.PURITY || 0;
             let division = stockData.DIVISION || 0;
             let pcs = stockData.BALANCE_PCS || 0;
-            let description = stockData.DESCRIPTION || 0;
             let stoneWeight = stockData.STONE_WT || 0;
+            let description = stockData.DESCRIPTION || '';
             // Set the purity value in the form
             this.metalIssueDetailsForm.controls.PURITY.setValue(purity);
             this.metalIssueDetailsForm.controls.pcs.setValue(pcs);
             this.metalIssueDetailsForm.controls.stockCodeDes.setValue(description);
             this.metalIssueDetailsForm.controls.STONE_WT.setValue(stoneWeight);
+            this.metalIssueDetailsForm.controls.toStockCode.setValue(stockData.STOCK_CODE);
+            this.metalIssueDetailsForm.controls.toStockCodeDes.setValue(stockData.DESCRIPTION);
+            this.metalIssueDetailsForm.controls.toDIVCODE.setValue(stockData.DIVISION);
           }
         } else {
           this.comService.toastErrorByMsgId('MSG1747');

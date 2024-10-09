@@ -368,7 +368,7 @@ export class MetalIssueComponent implements OnInit {
     }
     this.tableData.push(detailDataToParent)
     if (DATA.FLAG == 'SAVE') this.closeDetailScreen();
-    if (DATA.FLAG == 'CONTINUE') {
+    if (DATA.FLAG == 'CONTINUE' || DATA.FLAG == 'CHANGEJOB') {
       this.comService.showSnackBarMsg('Details added successfully')
     };
   }
