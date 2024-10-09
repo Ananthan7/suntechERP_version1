@@ -40,6 +40,7 @@ export class StoneIssueDetailComponent implements OnInit {
   imagepath: any[] = []
   viewMode: boolean = false;
   isDisableSaveBtn: boolean = false;
+  designType: string = 'DIAMOND';
   editMode: boolean = false;
   user: MasterSearchModel = {
     PAGENO: 1,
@@ -124,7 +125,7 @@ export class StoneIssueDetailComponent implements OnInit {
     SEARCH_FIELD: 'DIVISION_CODE',
     SEARCH_HEADING: 'Division Search',
     SEARCH_VALUE: '',
-    WHERECONDITION: `@SubJobNumber='',  @DivisionCode='L', @DesignType=''` ,
+    WHERECONDITION: `@SubJobNumber='',  @DivisionCode='L', @DesignType='DIAMOND'` ,
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -176,12 +177,14 @@ export class StoneIssueDetailComponent implements OnInit {
     remarks: [''],
     consignment: [false],
     VOCTYPE: [''],
+    GROSS_WT: [''],
     VOCNO: [''],
     VOCDATE: [''],
     BRANCH_CODE: [''],
     YEARMONTH: [''],
     KARAT_CODE: [''],
     DIVCODE: [''],
+    DESIGN_TYPE:[''],
     JOB_SO_NUMBER:[''],
     METAL_STONE: [''],
     CURRENCY_CODE: [''],
@@ -334,6 +337,7 @@ export class StoneIssueDetailComponent implements OnInit {
   divCodeSelected(e: any) {
     console.log(e);
     this.stoneIssueDetailsFrom.controls.DIVCODE.setValue(e.Division_Code);
+    this.divisionCodeValidate(event)
     
   }
   subJobNoCodeSelected(e: any) {
@@ -634,8 +638,9 @@ export class StoneIssueDetailComponent implements OnInit {
     }
 
     // If stock code is filled, proceed with the form submission
-    // this.formSubmit('CONTINUE');
+    this.formSubmit('CONTINUE');
     this.stoneIssueDetailsFrom.reset();
+   
     if (this.tableData && this.tableData.length > 0) {
       // Loop through each row in tableData and reset the relevant fields
       this.tableData.forEach((row) => {
@@ -690,38 +695,30 @@ export class StoneIssueDetailComponent implements OnInit {
       "parameter": {
         SubJobNumber: this.stoneIssueDetailsFrom.value.subjobnumber, 
         DivisionCode: this.stoneIssueDetailsFrom.value.DIVCODE, 
-        DesignType: '',
+        DesignType: this.stoneIssueDetailsFrom.value.DESIGN_TYPE,
       }
     };
 
     // Show a loading message or spinner
-    this.comService.showSnackBarMsg('Validating division code...');
-
-    // Call the backend API using a service (dataService)
-    let subscription: Subscription = this.dataService.postDynamicAPI('ValidateDivisionCode', postData)
-      .subscribe(
-        (response: any) => {
-          // Close the loading message
-          this.comService.closeSnackBarMsg();
-
-          // Check the response from the backend
-          if (response && response.isValid) {
-            // Division code is valid, perform any success actions
-            this.comService.toastSuccessByMsgId('Division code is valid');
-          } else {
-            // Division code is invalid, show error and reset the field
-            this.comService.toastErrorByMsgId('Invalid division code');
-            this.stoneIssueDetailsFrom.controls['DIVCODE'].setValue(''); // Reset the DIVCODE field
+    this.comService.showSnackBarMsg('MSG81447')
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        this.comService.closeSnackBarMsg()
+        if (result.status == "Success" && result.dynamicData[0]) {
+          let data = result.dynamicData[0]
+          if (data.length == 0) {
+            console.log(data,'di')
+            this.comService.toastErrorByMsgId('MSG1531')
+            return
           }
-        },
-        (error) => {
-          // Handle any errors that occur during the API call
-          this.comService.toastErrorByMsgId('Validation failed, please try again');
+        } else {
+          this.comService.toastErrorByMsgId('MSG1747')
         }
-      );
-
-    // Add subscription to the list (optional)
-    this.subscriptions.push(subscription);
+      }, err => {
+        this.comService.closeSnackBarMsg()
+        this.comService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
   }
 
 
@@ -827,6 +824,7 @@ export class StoneIssueDetailComponent implements OnInit {
 
 
   subJobNumberValidate(event?: any) {
+    if (event.target.value == '' || this.viewMode) return;
     // let postData = {
     //   "SPID": "071",
     //   "parameter": {
@@ -904,12 +902,13 @@ export class StoneIssueDetailComponent implements OnInit {
             this.stoneIssueDetailsFrom.controls.DESIGN_CODE.setValue(data[0].DESIGN_CODE)
             this.stoneIssueDetailsFrom.controls.PART_CODE.setValue(data[0].PART_CODE)
             this.stoneIssueDetailsFrom.controls.salesorderno.setValue(data[0].CUSTOMER_CODE)
-            // this.stoneIssueDetailsFrom.controls.DIVCODE.setValue("L");
-            if (data[0].DESIGN_TYPE && data[0].DESIGN_TYPE == "DIAMOND") {
-              this.stoneIssueDetailsFrom.controls.DIVCODE.setValue("L");
-            } else {
-              this.stoneIssueDetailsFrom.controls.DIVCODE.setValue("Z");
-            }
+            this.stoneIssueDetailsFrom.controls.DIVCODE.setValue("L");
+            this.stoneIssueDetailsFrom.controls.DESIGN_TYPE.setValue(this.designType)
+            // if (data[0].DESIGN_TYPE && data[0].DESIGN_TYPE == "DIAMOND") {
+            //   this.stoneIssueDetailsFrom.controls.DIVCODE.setValue("L");
+            // } else {
+            //   this.stoneIssueDetailsFrom.controls.DIVCODE.setValue("Z");
+            // }
             // this.overlayjobNumberSearch.closeOverlayPanel()
             this.subJobNumberValidate()
             this.setStockCodeWhereCondition()
