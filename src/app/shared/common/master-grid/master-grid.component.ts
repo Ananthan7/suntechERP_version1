@@ -134,7 +134,7 @@ export class MasterGridComponent implements OnInit {
   }
 
   /**USE: to get table data from API */
-  getMasterGridData(data?: any) {
+  getMasterGridData(data?: any, isSearch?:any) {
     this.resetGridAction()
     if (data) {
       this.pageIndex = 1;
@@ -162,7 +162,7 @@ export class MasterGridComponent implements OnInit {
       "TABLE_NAME": this.tableName || '',
       "CUSTOM_PARAM": {
         "FILTER": this.setCustomParamFilters(),
-        "TRANSACTION": this.setCustomParamTransactions(),
+        "TRANSACTION": this.setCustomParamTransactions(isSearch),
         "SEARCH": {
           "SEARCH_VALUE": this.CommonService.nullToString(this.SEARCH_VALUE)
         }
@@ -251,34 +251,35 @@ export class MasterGridComponent implements OnInit {
     return this.branchCode
   }
   setCustomParamFilters() {
-    if (this.mainVocType == 'MASDPX') {
-      return {
-        "YEARMONTH": this.CommonService.yearSelected,
-        // "BRANCH_CODE": this.validateBranchCode(),
-        "VOCTYPE": this.CommonService.nullToString(this.vocType),
-        "DIVISION": 'M'
-      }
-    }
-    if (this.mainVocType == 'MSDPM') {
-      return {
-        "YEARMONTH": this.CommonService.yearSelected,
-        // "BRANCH_CODE": this.validateBranchCode(),
-        "VOCTYPE": this.CommonService.nullToString(this.vocType),
-        "DIVISION": 'S'
-      }
-    }
-    return {
-      "YEARMONTH": this.CommonService.yearSelected,
-      "BRANCH_CODE": this.validateBranchCode(),
-      "VOCTYPE": this.CommonService.nullToString(this.vocType),
-    }
+    // if (this.mainVocType == 'MASDPX') {
+    //   return {
+    //     "YEARMONTH": this.CommonService.yearSelected,
+    //     // "BRANCH_CODE": this.validateBranchCode(),
+    //     "VOCTYPE": this.CommonService.nullToString(this.vocType),
+    //     "DIVISION": 'M'
+    //   }
+    // }
+    // if (this.mainVocType == 'MSDPM') {
+    //   return {
+    //     "YEARMONTH": this.CommonService.yearSelected,
+    //     // "BRANCH_CODE": this.validateBranchCode(),
+    //     "VOCTYPE": this.CommonService.nullToString(this.vocType),
+    //     "DIVISION": 'S'
+    //   }
+    // }
+    // return {
+    //   "YEARMONTH": this.CommonService.yearSelected,
+    //   "BRANCH_CODE": this.validateBranchCode(),
+    //   "VOCTYPE": this.CommonService.nullToString(this.vocType),
+    // }
+    return {}
   }
-  setCustomParamTransactions() {
+  setCustomParamTransactions(isSearch?:any) {
     return {
-      "VOCTYPE": this.CommonService.nullToString(this.vocType),
-      "MAIN_VOCTYPE": this.CommonService.nullToString(this.mainVocType),
+      // "VOCTYPE": this.CommonService.nullToString(this.vocType),
+      // "MAIN_VOCTYPE": this.CommonService.nullToString(this.mainVocType),
       "FILTERVAL": this.CommonService.nullToString(this.tableName),
-      "MASTER": this.CommonService.getSubmoduleType() == "Master" ? "1" : "0"
+      "MASTER": isSearch === "search" ? '0': this.CommonService.getSubmoduleType() == "Master" ? "1" : "0"
     }
   }
   getGridVisibleSettings() {
