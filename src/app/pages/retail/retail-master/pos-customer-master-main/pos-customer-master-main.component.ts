@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, Renderer2, ViewChild } from "@angular/core";
+import { ChangeDetectorRef, Component, Input, OnInit, Renderer2, ViewChild } from "@angular/core";
 import {
   AbstractControl,
   FormBuilder,
@@ -107,6 +107,8 @@ export class PosCustomerMasterMainComponent implements OnInit {
   selectedContactString: any;
   selectedknowAboutString: any;
   selectedIntrestedInString: any;
+
+  isSelfGift:boolean=false;
 
   amlNameValidationData = false;
   // dummyDate = "1900-01-01T00:00:00";
@@ -576,6 +578,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
   imageName: any;
 
   constructor(
+    private cdr: ChangeDetectorRef,
     private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
     private comService: CommonServiceService,
@@ -658,18 +661,36 @@ export class PosCustomerMasterMainComponent implements OnInit {
     }
   }
 
+  // reasonOfPurchase() {
+  //   this.posCustomerMasterMainForm
+  //     .get("reasonOfPurchase")
+  //     ?.valueChanges.subscribe((value) => {
+  //       if (value === "Gift") {
+  //         this.isSelfGift = true;
+  //         this.posCustomerMasterMainForm.get("gifrPurchased")?.enable();
+  //       } else {
+  //         this.isSelfGift = false;
+  //         this.posCustomerMasterMainForm.controls.gifrPurchased.setValue("");
+  //         this.posCustomerMasterMainForm.get("gifrPurchased")?.disable();
+  //       }
+  //     });
+  // }
+
   reasonOfPurchase() {
     this.posCustomerMasterMainForm
       .get("reasonOfPurchase")
       ?.valueChanges.subscribe((value) => {
         if (value === "Gift") {
+          this.isSelfGift = true;
           this.posCustomerMasterMainForm.get("gifrPurchased")?.enable();
         } else {
+          this.isSelfGift = false;
           this.posCustomerMasterMainForm.controls.gifrPurchased.setValue("");
           this.posCustomerMasterMainForm.get("gifrPurchased")?.disable();
         }
       });
   }
+  
 
   creditLimitCheck() {
     this.posCustomerMasterMainForm
@@ -1719,7 +1740,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
               if (result.status === "Success") {
                 Swal.fire({
                   title: "Success",
-                  text: "Customer Details Inserted successfully!",
+                  text: result.message ? result.message: "Customer Details Inserted successfully!",
                   icon: "success",
                   confirmButtonColor: "#336699",
                   confirmButtonText: "Ok",
