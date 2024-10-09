@@ -308,6 +308,9 @@ export class MetalIssueDetailsComponent implements OnInit {
     this.metalIssueDetailsForm.controls.stockCode.setValue(e.STOCK_CODE);
     this.metalIssueDetailsForm.controls.stockCodeDes.setValue(e.DESCRIPTION);
     this.metalIssueDetailsForm.controls.DIVCODE.setValue(e.DIVISION);
+    this.metalIssueDetailsForm.controls.toStockCode.setValue(e.STOCK_CODE);
+    this.metalIssueDetailsForm.controls.toStockCodeDes.setValue(e.DESCRIPTION);
+    this.metalIssueDetailsForm.controls.toDIVCODE.setValue(e.DIVISION);
     this.stockCodeValidate()
   }
 
