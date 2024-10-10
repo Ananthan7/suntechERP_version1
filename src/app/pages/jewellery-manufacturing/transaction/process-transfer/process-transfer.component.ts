@@ -415,6 +415,9 @@ export class ProcessTransferComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
   editFinalArray(DATA: any) {
+    // this.tableData.forEach((item: any) =>{
+      
+    // })
     this.JOB_PROCESS_TRN_DETAIL_DJ = this.detailData.map((item: any) => item.JOB_PROCESS_TRN_DETAIL_DJ)
     this.JOB_PROCESS_TRN_COMP_DJ = this.detailData.map((item: any) => item.JOB_PROCESS_TRN_COMP_DJ).flat()
     // this.JOB_PROCESS_TRN_LABCHRG_DJ = this.detailData.map((item: any) => item.JOB_PROCESS_TRN_LABCHRG_DJ)
