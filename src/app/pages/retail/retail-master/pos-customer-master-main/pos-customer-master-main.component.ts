@@ -908,9 +908,6 @@ export class PosCustomerMasterMainComponent implements OnInit {
     this.posCustomerMasterMainForm.controls.custID.setValue(
       setData.POSCUSTIDNO
     );
-    this.posCustomerMasterMainForm.controls.custID.setValue(
-      setData.POSCUSTIDNO
-    );
 
     this.posCustomerMasterMainForm.controls.language.setValue(
       setData.CUST_LANGUAGE
@@ -1494,7 +1491,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
           SALBRLOC: this.posCustomerMasterMainForm.value.branchLoc || "",
           Branch_Code: this.branchCode,
           TOTALSALES: this.posCustomerMasterMainForm.value.totalSale || 0,
-          POSCUSTIDNO: this.posCustomerMasterMainForm.value.custID || "",
+          POSCUSTIDNO: this.posCustomerMasterMainForm.value.custID.toString || "",
           POSSMAN: "",
           POSCUSTPREFIX: this.posCustomerMasterMainForm.value.prefix || "",
           MOBILE1:
