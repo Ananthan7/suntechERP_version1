@@ -243,9 +243,7 @@ export class MetalIssueComponent implements OnInit {
           this.metalIssueForm.controls.time.setValue(part[1])
 
           this.metalIssueDetailsData = data.Details
-          console.log(this.metalIssueDetailsData);
-
-          this.reCalculateSRNO() //set to main grid
+          this.formatMainGrid() //set to main grid
 
           this.metalIssueDetailsData.forEach((element: any) => {
             this.tableData.push({
@@ -271,10 +269,14 @@ export class MetalIssueComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
   // use : to recalculate index number
-  reCalculateSRNO() {
+  formatMainGrid() {
     this.metalIssueDetailsData.forEach((item: any, index: any) => {
       item.SRNO = index + 1
       item.GROSS_WT = this.comService.setCommaSerperatedNumber(item.GROSS_WT, 'METAL')
+      item.NET_WT = this.comService.setCommaSerperatedNumber(item.NET_WT, 'METAL')
+      item.PURITY = this.comService.setCommaSerperatedNumber(item.PURITY, 'PURITY')
+      item.PURE_WT = this.comService.setCommaSerperatedNumber(item.PURE_WT, 'METAL')
+      item.TOTAL_AMOUNTFC = this.comService.setCommaSerperatedNumber(item.TOTAL_AMOUNTFC, 'AMOUNT')
     })
   }
   close(data?: any) {
@@ -316,7 +318,7 @@ export class MetalIssueComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         this.metalIssueDetailsData = this.metalIssueDetailsData.filter((item: any, index: any) => item.SRNO != this.selectRowIndex)
-        this.reCalculateSRNO()
+        this.formatMainGrid()
       }
     }
     )
@@ -366,6 +368,7 @@ export class MetalIssueComponent implements OnInit {
       detailDataToParent.SRNO = this.metalIssueDetailsData.length + 1
       this.metalIssueDetailsData.push(detailDataToParent);
     }
+    this.formatMainGrid()
     this.tableData.push(detailDataToParent)
     if (DATA.FLAG == 'SAVE') this.closeDetailScreen();
     if (DATA.FLAG == 'CONTINUE' || DATA.FLAG == 'CHANGEJOB') {

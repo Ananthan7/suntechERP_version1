@@ -68,6 +68,7 @@ import { MenuButtonsComponent } from './common/menu-buttons/menu-buttons.compone
 import { AllowLeadingZeroDirective } from './directives/allow-leading-zero.directive';
 import { AmountDecimalDirective } from './directives/format-amount-decimal.directive';
 import { MetalDecimalDirective } from './directives/format-metal-decimal.directive';
+import { FourDecimalDirective } from './directives/format-four-decimal.directive';
 import { StoneDecimalDirective } from './directives/format-stone-decimal.directive';
 import { FormatSixDecimalDirective } from './directives/format-six-decimal.directive';
 import { CalendarModule } from 'primeng/calendar';
@@ -135,6 +136,7 @@ import { ReportScreenButtonsComponent } from './common/report-screen-buttons/rep
     NegativeAmountDecimalDirective,
     NextInputDirective,
     MetalDecimalDirective,
+    FourDecimalDirective,
     StoneDecimalDirective,
     FormatRateDecimalDirective,
     PurityDecimalDirective,
@@ -240,6 +242,7 @@ import { ReportScreenButtonsComponent } from './common/report-screen-buttons/rep
     NegativeAmountDecimalDirective,
     NextInputDirective,
     MetalDecimalDirective,
+    FourDecimalDirective,
     StoneDecimalDirective,
     FormatRateDecimalDirective,
     PurityDecimalDirective,

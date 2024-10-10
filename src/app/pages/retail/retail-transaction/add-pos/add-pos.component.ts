@@ -96,6 +96,7 @@ export class AddPosComponent implements OnInit {
   voucherDetails: any;
   minDate: any;
   maxDate: any;
+  isDiscountAmountTrigger: boolean = false;
   isloading: boolean = false;
   RECEIPT_MODEL: any = {}
   disableSaveBtn: boolean = false;
@@ -3064,7 +3065,7 @@ export class AddPosComponent implements OnInit {
           );
 
 
-          if (stockInfos.DIVISIONMS == 'M') this.setMetalRate(stockInfos.KARAT_CODE);
+          if (stockInfos.DIVISIONMS == 'M') this.setMetalRate(stockInfos.KARAT_CODE,'sales');
           this.newLineItem.BLOCK_GRWT = this.comFunc.stringToBoolean(stockInfos.BLOCK_GRWT?.toString());
           this.newLineItem.DIVISION = stockInfos.DIVISION;
           this.divisionCode = stockInfos.DIVISION;
@@ -6420,19 +6421,13 @@ export class AddPosComponent implements OnInit {
               // _exchangeItem[0].PURITY
             );
             this.standardPurity = this._exchangeItemchange.PURITY;
-            this.exchangeForm.controls['fcn_exchange_metal_rate'].setValue(
-              // this.comFunc.transformDecimalVB(
-              //   this.comFunc.allbranchMaster?.BAMTDECIMALS,
-              this.comFunc.decimalQuantityFormat(_exchangeItem[0].METAL_RATE_PERGMS_ITEMKARAT, 'METAL_RATE')
 
+            this.setMetalRate(_exchangeItem[0].KARAT_CODE,'exchange');
+            
+            // this.exchangeForm.controls['fcn_exchange_metal_rate'].setValue(
+            //   this.comFunc.decimalQuantityFormat(_exchangeItem[0].METAL_RATE_PERGMS_ITEMKARAT, 'METAL_RATE')
+            // );
 
-              // _exchangeItem[0].METAL_RATE_PERGMS_ITEMKARAT
-
-              // ) // type not showing so this..
-              // this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, _exchangeItem[0].METAL_RATE_PERGMS_24KARAT) // type not showing so this..
-              //  this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, _exchangeItem[0].METAL_RATE)
-              // _karatRateRec[0].KARAT_RATE
-            );
             this.exchangeFormMetalRateType = _exchangeItem[0].METAL_RATE_TYPE;
           }
 
@@ -6595,14 +6590,14 @@ export class AddPosComponent implements OnInit {
       RATE_TYPE: isPulled ? data.RATE_TYPE : (this.newLineItem.RATE_TYPE ?? ""),
 
       //  data.divisionMS == "S" ? '' : data.RATE_TYPE, //need_input
-      METAL_RATE: isPulled ? data.METAL_RATE : this.newLineItem.METAL_RATE_PERGMS_24KARAT ?? 0,
+      METAL_RATE: isPulled ? data.METAL_RATE : this.lineItemForm.value.fcn_ad_metal_rate ?? 0,
 
       // this.comFunc.emptyToZero(
       //   this.lineItemForm.value.fcn_ad_metal_rate
       // ),
 
-      METAL_RATE_GMSFC: isPulled ? data.METAL_RATE_GMSFC : this.newLineItem.METAL_RATE_PERGMS_24KARAT ?? 0,
-      METAL_RATE_GMSCC: isPulled ? data.METAL_RATE_GMSCC : this.newLineItem.METAL_RATE_PERGMS_24KARAT ?? 0,
+      METAL_RATE_GMSFC: isPulled ? data.METAL_RATE_GMSFC : this.lineItemForm.value.fcn_ad_metal_rate ?? 0,
+      METAL_RATE_GMSCC: isPulled ? data.METAL_RATE_GMSCC : this.lineItemForm.value.fcn_ad_metal_rate ?? 0,
 
       // "METAL_RATE_GMSFC": 18.1, // jeba
       // "METAL_RATE_GMSCC": 19.1, // jeba
@@ -7871,7 +7866,7 @@ export class AddPosComponent implements OnInit {
                     this.comFunc.emptyToZero(stockInfoPrice.STONE_SALES_PRICE)
                   );
 
-                  this.setMetalRate(stockInfos.KARAT_CODE);
+                  this.setMetalRate(stockInfos.KARAT_CODE,'sales');
 
                   this.manageCalculations();
                 } else {
@@ -9851,7 +9846,7 @@ export class AddPosComponent implements OnInit {
             this.lineItemForm.controls.fcn_li_discount_amount.setValue(
               preDisAmtVal || this.zeroAmtVal
             );
-            this.manageCalculations();
+            this.manageCalculations({isDiscoutStored:true});
           }
         });
       }
@@ -9897,8 +9892,8 @@ export class AddPosComponent implements OnInit {
 
     this.validateMinSalePrice()
   }
-  changeDisPer(event: any, discountAmt = null, nettAmt = null) {
-
+  changeDisPer(event: any, discountAmt = null, nettAmt = null,isDiscountAmountChange:boolean=false) {
+    this.isDiscountAmountTrigger=isDiscountAmountChange ? true:false;
 
     if (event.target.value != '') {
       let disAmt;
@@ -10993,6 +10988,7 @@ export class AddPosComponent implements OnInit {
   }
 
   changeDisAmount(event: any, nettAmt: any = null) {
+    this.isDiscountAmountTrigger=true;
     const preDisAmtVal =
       this.comFunc.decimalQuantityFormat(
         this.comFunc.emptyToZero(localStorage.getItem('fcn_li_discount_amount')),
@@ -11010,7 +11006,7 @@ export class AddPosComponent implements OnInit {
 
       this.lineItemForm.controls.fcn_li_discount_percentage.setValue(value);
 
-      this.changeDisPer({ target: { value: value } }, event.target.value, nettAmt);
+      this.changeDisPer({ target: { value: value } }, event.target.value, nettAmt,true);
 
     } else {
       this.lineItemForm.controls['fcn_li_total_amount'].setValue(0.0);
@@ -11021,7 +11017,7 @@ export class AddPosComponent implements OnInit {
     }
   }
   manageCalculations(
-    argsData: any = { totalAmt: null, nettAmt: null, disAmt: null }
+    argsData: any = { totalAmt: null, nettAmt: null, disAmt: null,isDiscoutStored:false }
   ) {
     console.log('====================================');
     console.log('manageCalculations', argsData);
@@ -11185,6 +11181,8 @@ export class AddPosComponent implements OnInit {
 
         this.setGrossAmount();
 
+        
+
 
         // this.lineItemForm.controls['fcn_li_gross_amount'].setValue(
 
@@ -11238,6 +11236,14 @@ export class AddPosComponent implements OnInit {
     } else {
 
       // taxAmount = this.lineItemForm.value.fcn_li_tax_amount;
+    }
+    if (this.divisionMS != "M") {
+      if (this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_discount_percentage))
+        this.detectDiscountChange =this.isDiscountAmountTrigger?false: true;
+        !argsData.isDiscoutStored ? this.updateDiscountAmount() : null;
+
+      this.calculateTaxAmount();
+      this.calculateNetAmount();
     }
     this.lineItemCommaSeparation();
 
@@ -11354,13 +11360,13 @@ export class AddPosComponent implements OnInit {
         'AMOUNT') || this.zeroAmtVal
 
     );
-    if (this.divisionMS != "M") {
-      if (this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_discount_percentage))
-        this.detectDiscountChange = true;
-      this.updateDiscountAmount();
-      this.calculateTaxAmount();
-      this.calculateNetAmount();
-    }
+    // if (this.divisionMS != "M") {
+    //   if (this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_discount_percentage))
+    //     this.detectDiscountChange = true;
+    //   this.updateDiscountAmount();
+    //   this.calculateTaxAmount();
+    //   this.calculateNetAmount();
+    // }
 
 
     this.lineItemForm.controls['fcn_li_tax_amount'].setValue(
@@ -11528,14 +11534,23 @@ export class AddPosComponent implements OnInit {
     return (parseFloat(percent.toString()) / 100) * parseFloat(total.toString());
     // return ((percent / 100) * total).toFixed(2);
   }
-  setMetalRate(karatCode: any) {
+  setMetalRate(karatCode: any,screen:any) {
     const value: any = this.karatRateDetails.filter(
       (data: any) => data.KARAT_CODE == karatCode
-    )[0].KARAT_RATE;
+    )[0].POPKARAT_RATE;
 
-    this.lineItemForm.controls.fcn_ad_metal_rate.setValue(
-      this.comFunc.decimalQuantityFormat(value, 'METAL_RATE')
-    );
+    if (screen === "sales") {
+      this.lineItemForm.controls['fcn_ad_metal_rate'].setValue(
+        this.comFunc.decimalQuantityFormat(value, 'METAL_RATE')
+      );
+    } else {
+      this.exchangeForm.controls['fcn_exchange_metal_rate'].setValue(
+        this.comFunc.decimalQuantityFormat(value, 'METAL_RATE')
+      );
+      this._exchangeItemchange.METAL_RATE_PERGMS_ITEMKARAT = value;
+    }
+    
+    
   }
   changeStoneWt(event: any) {
     this.isNetAmountChange = false;

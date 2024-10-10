@@ -80,8 +80,7 @@ export class RetailMasterComponent implements OnInit {
     this.openModalView(str)
   }
   deleteBtnClicked(e: any) {
-    console.log(e);
-        
+    console.log(e);        
     let str = e.row.data;
     str.FLAG = 'DELETE'
     this.openModalView(str)

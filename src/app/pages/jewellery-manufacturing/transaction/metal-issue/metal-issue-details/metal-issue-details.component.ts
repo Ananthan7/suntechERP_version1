@@ -308,6 +308,9 @@ export class MetalIssueDetailsComponent implements OnInit {
     this.metalIssueDetailsForm.controls.stockCode.setValue(e.STOCK_CODE);
     this.metalIssueDetailsForm.controls.stockCodeDes.setValue(e.DESCRIPTION);
     this.metalIssueDetailsForm.controls.DIVCODE.setValue(e.DIVISION);
+    this.metalIssueDetailsForm.controls.toStockCode.setValue(e.STOCK_CODE);
+    this.metalIssueDetailsForm.controls.toStockCodeDes.setValue(e.DESCRIPTION);
+    this.metalIssueDetailsForm.controls.toDIVCODE.setValue(e.DIVISION);
     this.stockCodeValidate()
   }
 
@@ -510,8 +513,6 @@ export class MetalIssueDetailsComponent implements OnInit {
     }
   }
   masterMetalChange(event: any) {
-    console.log(event);
-    console.log(event.target.checked);
     this.masterMetalChecked = event.target.checked
 
   }
@@ -750,7 +751,7 @@ export class MetalIssueDetailsComponent implements OnInit {
   }
   stockCodeValidate(event?: any) {
     if (this.viewMode) return;
-    if (event.target.value == '') {
+    if (event && event.target.value == '') {
       this.showOverleyPanel(event, 'stockCode');
       return
     };
@@ -761,7 +762,7 @@ export class MetalIssueDetailsComponent implements OnInit {
         DIVISION: this.comService.nullToString(this.metalIssueDetailsForm.value.DIVCODE),
         JOBNO: this.comService.nullToString(this.metalIssueDetailsForm.value.jobNumber),
         SUBJOBNO: this.comService.nullToString(this.metalIssueDetailsForm.value.subJobNo),
-        STOCKCODE: this.comService.nullToString(event.target.value),
+        STOCKCODE: this.comService.nullToString(this.metalIssueDetailsForm.value.stockCode),
         LOOKUPFLAG: '0',
       }
     };
@@ -771,31 +772,26 @@ export class MetalIssueDetailsComponent implements OnInit {
       .subscribe((result) => {
         this.comService.closeSnackBarMsg();
         if (result.status === "Success" && result.dynamicData[0]) {
-          let data = result.dynamicData[0];
-          if (data) {
-            let result = this.comService.searchAllItemsInArray(data, event.target.value?.toString().toUpperCase())
-            if (result && result.length == 0) {
-              this.metalIssueDetailsForm.controls.stockCode.setValue('');
-              this.metalIssueDetailsForm.controls.stockCodeDes.setValue('');
-              return
-            }
-            this.overlaystockcode.closeOverlayPanel()
-            // Handle the valid stock case
-            let stockData = data[0];
-            let purity = stockData.PURITY || 0;
-            let division = stockData.DIVISION || 0;
-            let pcs = stockData.BALANCE_PCS || 0;
-            let stoneWeight = stockData.STONE_WT || 0;
-            let description = stockData.DESCRIPTION || '';
-            // Set the purity value in the form
-            this.metalIssueDetailsForm.controls.PURITY.setValue(purity);
-            this.metalIssueDetailsForm.controls.pcs.setValue(pcs);
-            this.metalIssueDetailsForm.controls.stockCodeDes.setValue(description);
-            this.metalIssueDetailsForm.controls.STONE_WT.setValue(stoneWeight);
-            this.metalIssueDetailsForm.controls.toStockCode.setValue(stockData.STOCK_CODE);
-            this.metalIssueDetailsForm.controls.toStockCodeDes.setValue(stockData.DESCRIPTION);
-            this.metalIssueDetailsForm.controls.toDIVCODE.setValue(stockData.DIVISION);
+          let data:any[] = result.dynamicData[0] || [];
+          if (data && data.length == 0) {
+            this.metalIssueDetailsForm.controls.stockCode.setValue('');
+            this.metalIssueDetailsForm.controls.stockCodeDes.setValue('');
+            return
           }
+          if (data && data.length > 1){
+            data = this.comService.searchAllItemsInArray(data, event.target.value?.toString().toUpperCase())
+          } 
+          this.overlaystockcode.closeOverlayPanel()
+          // Handle the valid stock case
+          let stockData = data[0];
+          // Set the purity value in the form
+          this.setValueWithDecimal('PURITY', stockData?.PURITY, 'PURITY')
+          this.setValueWithDecimal('STONE_WT', stockData?.STONE_WT, 'STONE')
+          this.metalIssueDetailsForm.controls.pcs.setValue(this.comService.emptyToZero(stockData?.BALANCE_PCS));
+          this.metalIssueDetailsForm.controls.stockCodeDes.setValue(stockData?.DESCRIPTION);
+          this.metalIssueDetailsForm.controls.toStockCode.setValue(stockData?.STOCK_CODE);
+          this.metalIssueDetailsForm.controls.toStockCodeDes.setValue(stockData?.DESCRIPTION);
+          this.metalIssueDetailsForm.controls.toDIVCODE.setValue(stockData?.DIVISION);
         } else {
           this.comService.toastErrorByMsgId('MSG1747');
           this.metalIssueDetailsForm.controls.stockCode.setValue('');
@@ -826,7 +822,11 @@ export class MetalIssueDetailsComponent implements OnInit {
         this.comService.closeSnackBarMsg()
         if (result.dynamicData && result.dynamicData[0].length > 0) {
           this.tableData = result.dynamicData[0]
-          console.log(this.tableData);
+          this.tableData.forEach((item: any, index: any) => {
+            item.MTL_WT = this.comService.decimalQuantityFormat(item.MTL_WT, 'METAL')
+            item.ISS_MTL_WT = this.comService.decimalQuantityFormat(item.ISS_MTL_WT, 'METAL')
+            item.BAL_MTL_WT = this.comService.decimalQuantityFormat(item.BAL_MTL_WT, 'METAL')
+          })
           // console.log(Object.keys(this.tableData[0]));
 
           // this.columnhead = Object.keys(this.tableData[0])
