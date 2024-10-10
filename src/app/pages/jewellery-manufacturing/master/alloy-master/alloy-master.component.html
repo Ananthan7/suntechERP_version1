@@ -295,7 +295,7 @@
                                         </a> -->
                                         <mat-form-field appearance="outline" class="stretch" *ngIf="alloyMastereForm.value.weightAvgCostLC">
                                             <input type="text" matInput [readonly]="viewMode" formControlName="priceScheme"
-                                            (focusout)="priceShemeCode($event)"/>
+                                            (focusout)="resetAllPriceDetails()"/>
                                             <master-search *ngIf="!viewMode && alloyMastereForm.value.weightAvgCostLC"
                                                 [MasterSearchData]="priceSchemeData" class="mstrScrch"
                                                 (newRowClick)="priceSchemeValidate($event)">
@@ -350,7 +350,7 @@
                                     <mat-form-field style="width: 100%" appearance="outline">
                                         <input type="text" matInput MetalDecimalInput formControlName="price1Fc"
                                             [max]="12" class="text-right" [readonly]="viewMode || isCurrencySelected"
-                                            (focus)="price1FcChange()" />
+                                            (focusout)="price1FcChange()" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-2">

@@ -9997,9 +9997,9 @@ export class AddPosComponent implements OnInit {
       }
     } else {
 
-      this.lineItemForm.controls.fcn_li_rate.setValue(
-        preVal
-      );
+      // this.lineItemForm.controls.fcn_li_rate.setValue(
+      //   preVal
+      // );
       this.manageCalculations();
       //   }
 
@@ -10044,7 +10044,7 @@ export class AddPosComponent implements OnInit {
         let dblStockFcCost: any;
         let karatCode = this.newLineItem.KARAT_CODE;
 
-        if (this.lineItemModalForSalesReturn || this.comFunc.emptyToZero(value) >= this.comFunc.emptyToZero(this.blockMinimumPriceValue)) {
+        if (this.lineItemModalForSalesReturn || this.comFunc.emptyToZero(value) >= this.comFunc.emptyToZero(dblStockCost)) {
 
           this.rateFunc(value);
         }

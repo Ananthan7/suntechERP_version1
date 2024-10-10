@@ -436,6 +436,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
 
   ngOnInit(): void {
     this.setInitialValues();
+    this.setFormValues();
     console.log(this.content)
     if (this.content.FLAG == 'VIEW') {
       this.viewMode = true;
@@ -454,7 +455,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
     }
 
 
-    this.setFormValues();
+    
     this.grossWt = true;
     this.codeEnable1 = true;
 
@@ -732,8 +733,8 @@ export class MetalLabourchargeMasterComponent implements OnInit {
     // this.metallabourMasterForm.controls.wtFromdeci.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
     // this.metallabourMasterForm.controls.wtToDeci.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
     this.metallabourMasterForm.controls.metalcost_rate.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
-    // this.metallabourMasterForm.controls.wtFrom.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
-    // this.metallabourMasterForm.controls.wtTo.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
+    this.metallabourMasterForm.controls.wtFrom.setValue('.000')
+    this.metallabourMasterForm.controls.wtTo.setValue('.000')
     this.metallabourMasterForm.controls.metalselling_rate.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
     this.metallabourMasterForm.controls.metalSelling.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
     this.metallabourMasterForm.controls.metalcost_rate.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
@@ -1533,6 +1534,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
   }
 
   WtcodeEnabled() {
+
     if (this.metallabourMasterForm.value.wtFrom == '') {
       this.codeEnable1 = true;
     }
