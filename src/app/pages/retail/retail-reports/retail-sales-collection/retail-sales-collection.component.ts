@@ -541,7 +541,7 @@ export class RetailSalesCollectionComponent implements OnInit {
       let printContent = data[0][0].HTMLINPUT;
       this.htmlPreview = this.sanitizer.bypassSecurityTrustHtml(printContent);
       const blob = new Blob([this.htmlPreview.changingThisBreaksApplicationSecurity], { type: 'text/html' });
-      console.log(this.htmlPreview.changingThisBreaksApplicationSecurity)
+      this.commonService.closeSnackBarMsg();
       const url = URL.createObjectURL(blob);
       window.open(url, '_blank');
     });      
@@ -620,8 +620,13 @@ export class RetailSalesCollectionComponent implements OnInit {
       let data = result.dynamicData;
       let printContent = data[0][0].HTMLINPUT;
       this.htmlPreview = this.sanitizer.bypassSecurityTrustHtml(printContent);
-    });  
 
+      if (result.dynamicData) {
+        this.commonService.closeSnackBarMsg();
+      }
+    });  
+   
+    
     setTimeout(() => {
       const content = this.htmlPreview?.changingThisBreaksApplicationSecurity;
       
@@ -643,8 +648,11 @@ export class RetailSalesCollectionComponent implements OnInit {
         printWindow?.focus();
         printWindow?.print();
         printWindow?.close();
+       
       } else {
         Swal.fire('No Data!', 'There is no data to print!', 'info');
+        this.commonService.closeSnackBarMsg();
+        return
       }
     }, 3000); 
   }
