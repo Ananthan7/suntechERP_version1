@@ -274,7 +274,7 @@
                     <div class="col-sm-3">
                         <mat-form-field style="width: 100%" appearance="outline">
                             <input matInput type="text" [readonly]="viewMode || codeEnableMetal" matInput
-                                MetalDecimalInput formControlName="wtFrom" class="text-right" [max]="2"
+                                 formControlName="wtFrom" class="text-right" [max]="2" MetalDecimalInput
                                 (keyup)="WtcodeEnabled()" />
                         </mat-form-field>
                     </div>
@@ -285,7 +285,7 @@
                     <div class="col-sm-3">
                         <mat-form-field style="width: 100%" appearance="outline">
                             <input matInput type="text" [readonly]="viewMode  || codeEnableMetal"
-                                matInput [max]="2" MetalDecimalInput (change)="onweightto($event,'wtto')"
+                                matInput [max]="2"   MetalDecimalInput
                                 formControlName="wtTo" class="text-right" />
                         </mat-form-field>
                     </div>

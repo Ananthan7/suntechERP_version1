@@ -724,8 +724,8 @@ export class LabourChargeMasterComponent implements OnInit {
     this.diamondlabourMasterForm.controls.cost_rate.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
     this.diamondlabourMasterForm.controls.selling_rate.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
     this.diamondlabourMasterForm.controls.selling.setValue(this.commonService.decimalQuantityFormat(0, 'AMOUNT'))
-    this.diamondlabourMasterForm.controls.ctWtFrom.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
-    this.diamondlabourMasterForm.controls.ctWtTo.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
+    this.diamondlabourMasterForm.controls.ctWtFrom.setValue('.000')
+    this.diamondlabourMasterForm.controls.ctWtTo.setValue('.000')
   }
 
   divisionCodeSelected(e: any) {
@@ -1126,15 +1126,15 @@ export class LabourChargeMasterComponent implements OnInit {
     //   this.commonService.toastErrorByMsgId('MSG81526')//"cost_rate cannot be empty"
     //   return true
     // }
-    else if (
-      this.commonService.nullToString(form.cost_rate) === '' ||
-      this.commonService.nullToString(form.cost_rate) === '0' ||
-      this.commonService.nullToString(form.cost_rate) === '0.00' ||
-      /^0{2,}\.00$/.test(this.commonService.nullToString(form.cost_rate)) // Check for multiple leading zeros (00.00, 000.00, etc.)
-    ) {
-      this.commonService.toastErrorByMsgId('MSG81526'); // "Selling Rate cannot be empty"
-      return true;
-    }
+    // else if (
+    //   this.commonService.nullToString(form.cost_rate) === '' ||
+    //   this.commonService.nullToString(form.cost_rate) === '0' ||
+    //   this.commonService.nullToString(form.cost_rate) === '0.00' ||
+    //   /^0{2,}\.00$/.test(this.commonService.nullToString(form.cost_rate)) // Check for multiple leading zeros (00.00, 000.00, etc.)
+    // ) {
+    //   this.commonService.toastErrorByMsgId('MSG81526'); // "Selling Rate cannot be empty"
+    //   return true;
+    // }
 
     else if (this.commonService.nullToString(form.unitList) == '') {
       this.commonService.toastErrorByMsgId('MSG1927')//"unitList cannot be empty"
