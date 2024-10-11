@@ -9090,7 +9090,7 @@ export class AddPosComponent implements OnInit {
   }
 
   AccountPosting(mid: any) {
-    if (!this.content) return
+    // if (!this.content) return
     let params = {
       BRANCH_CODE: this.comFunc.nullToString(this.strBranchcode),
       VOCTYPE: this.comFunc.nullToString(this.vocDataForm.value.voc_type),
@@ -9104,15 +9104,15 @@ export class AddPosComponent implements OnInit {
 
 
     }
-    let API = `AccountPosting/${params.BRANCH_CODE}/${params.VOCTYPE}/${params.YEARMONTH}/${params.VOCNO}/${params.MID}/${params.ACCUPDATEYN}/${params.USERNAME}/${params.MAINVOCTYPE}/${params.HEADER_TABLE}`;
+    let API = `AccountPosting/${params.BRANCH_CODE}/${params.VOCTYPE}/${params.VOCNO}/${params.YEARMONTH}/${params.MID}/${params.ACCUPDATEYN}/${params.USERNAME}/${params.MAINVOCTYPE}/${params.HEADER_TABLE}`;
 
 
     let Sub: Subscription = this.suntechApi.getDynamicAPI(API)
       .subscribe((result) => {
         if (result.status == "Success") {
-          this.comFunc.toastSuccessByMsgId(result.message || 'Posting Done')
+          this.comFunc.toastSuccessByText(result.message || 'Posting Done')
         } else {
-          this.comFunc.toastErrorByMsgId(result.message)
+          this.comFunc.toastSuccessByText(result.message)
         }
       },
         (err) => this.comFunc.toastErrorByMsgId("Server Error")
