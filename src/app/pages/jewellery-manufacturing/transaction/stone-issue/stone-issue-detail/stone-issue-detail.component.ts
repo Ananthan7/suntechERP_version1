@@ -217,6 +217,7 @@ export class StoneIssueDetailComponent implements OnInit {
         case 'EDIT':
           this.editMode = true;
           this.viewMode = true;
+        
           break;
         // Add other cases if needed
         default:
@@ -232,7 +233,8 @@ export class StoneIssueDetailComponent implements OnInit {
   setFormValues() {
     if (!this.content) return
     console.log(this.content, 'view&edit')
-
+    console.log(this.tableData[0], 'view&edit')
+    this.tableData = ['DIVCODE',]
     this.branchCode = this.content.BRANCH_CODE || this.content.HEADERDETAILS.BRANCH_CODE;
     this.stoneIssueDetailsFrom.controls.VOCTYPE.setValue(this.content.VOCTYPE || this.content.HEADERDETAILS.VOCTYPE)
     this.stoneIssueDetailsFrom.controls.VOCNO.setValue(this.content.VOCNO || this.content.HEADERDETAILS.VOCNO)
@@ -241,6 +243,9 @@ export class StoneIssueDetailComponent implements OnInit {
     this.stoneIssueDetailsFrom.controls.YEARMONTH.setValue(this.content.YEARMONTH || this.content.HEADERDETAILS.YEARMONTH)
     this.stoneIssueDetailsFrom.controls.CURRENCY_CODE.setValue(this.content.CURRENCY_CODE || this.content.HEADERDETAILS.currency)
     this.stoneIssueDetailsFrom.controls.CURRENCY_RATE.setValue(this.content.CURRENCY_RATE || this.content.HEADERDETAILS.currencyrate)
+    this.stoneIssueDetailsFrom.controls.worker.setValue(this.content.worker || this.content.HEADERDETAILS.worker)
+    this.stoneIssueDetailsFrom.controls.workername.setValue(this.content.workername || this.content.HEADERDETAILS.workername)
+
 
     this.stoneIssueDetailsFrom.controls.jobNumber.setValue(this.content.JOB_NUMBER)
     this.stoneIssueDetailsFrom.controls.jobDes.setValue(this.content.JOB_DESCRIPTION?.toUpperCase())
@@ -495,7 +500,7 @@ export class StoneIssueDetailComponent implements OnInit {
   dataTochild(dataToChild?: any) {
     console.log(this.content.HEADERDETAILS, 'pick')
     this.stoneIssueDetailsFrom.controls.worker.setValue(this.content.worker || this.content.HEADERDETAILS.worker)
-    this.stoneIssueDetailsFrom.controls.workername.setValue(this.content.woworkernamerker || this.content.HEADERDETAILS.workername)
+    this.stoneIssueDetailsFrom.controls.workername.setValue(this.content.workername || this.content.HEADERDETAILS.workername)
   }
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     LOOKUPDATA.SEARCH_VALUE = event.target.value.toUpperCase()
@@ -675,6 +680,8 @@ export class StoneIssueDetailComponent implements OnInit {
   }
 
   resetStockDetails() {
+    this.tableData=[]
+    this.stoneIssueDetailsFrom.reset();
     this.stoneIssueDetailsFrom.controls.stockCode.setValue('')
     this.stoneIssueDetailsFrom.controls.stockCodeDes.setValue('')
     this.stoneIssueDetailsFrom.controls.DIVCODE.setValue('')
@@ -824,7 +831,7 @@ export class StoneIssueDetailComponent implements OnInit {
 
 
   subJobNumberValidate(event?: any) {
-    if (event.target.value == '' || this.viewMode) return;
+    if (event?.target.value == '' || this.viewMode) return;
     // let postData = {
     //   "SPID": "071",
     //   "parameter": {

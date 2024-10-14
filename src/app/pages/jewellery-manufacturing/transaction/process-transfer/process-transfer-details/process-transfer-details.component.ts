@@ -373,11 +373,11 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.subJobNoSearch.VIEW_ICON = false;
     this.setInitialValues() //set all values from parent to child
   }
-  ngAfterContentChecked() {
-    if (this.commonService.nullToString(this.processTransferdetailsForm.value.JOB_NUMBER) == '') {
-      this.renderer.selectRootElement('#jobNoSearch')?.focus();
-    }
-  }
+  // ngAfterContentChecked() {
+  //   if (this.commonService.nullToString(this.processTransferdetailsForm.value.JOB_NUMBER) == '') {
+  //     this.renderer.selectRootElement('#jobNoSearch')?.focus();
+  //   }
+  // }
   setOnLoadDetails() {
     this.DIAMANFBARCODE = this.commonService.getCompanyParamValue('DIAMANFBARCODE')
     let HEADERDETAILS = this.content[0]?.HEADERDETAILS || {}
@@ -880,7 +880,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
         try {
           let response = result.dynamicData
           // set second result from job sales order dj table
-          if (response[1].length > 0) this.setDataFromSalesOrderDj(response[1]);
+          if (response.length > 1) this.setDataFromSalesOrderDj(response[1]);
           // SET frist result of subjob details
           this.subJobDetailData = response[0] || []
           if (this.subJobDetailData.length > 0) {
@@ -2381,7 +2381,6 @@ export class ProcessTransferDetailsComponent implements OnInit {
     let LAB_ACCODE = this.getWipAccode(form.TO_PROCESS_CODE,'LAB_ACCODE')
     let LOSS_ACCODE = this.getWipAccode(form.TO_PROCESS_CODE,'LOSS_ACCODE')
     // let amountFC = this.commonService.FCToCC(form.CURRENCY_CODE, stoneAmount)
-    // console.log(this.commonService.timeToMinutes(form.consumed), 'time consumed');
     this.gridSRNO += 1
     return {
       "SRNO": this.emptyToZero(form.SRNO),
