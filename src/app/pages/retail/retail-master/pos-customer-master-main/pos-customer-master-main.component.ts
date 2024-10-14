@@ -1,4 +1,11 @@
-import { ChangeDetectorRef, Component, Input, OnInit, Renderer2, ViewChild } from "@angular/core";
+import {
+  ChangeDetectorRef,
+  Component,
+  Input,
+  OnInit,
+  Renderer2,
+  ViewChild,
+} from "@angular/core";
 import {
   AbstractControl,
   FormBuilder,
@@ -108,7 +115,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
   selectedknowAboutString: any;
   selectedIntrestedInString: any;
 
-  isSelfGift:boolean=false;
+  isSelfGift: boolean = false;
 
   amlNameValidationData = false;
   // dummyDate = "1900-01-01T00:00:00";
@@ -489,7 +496,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
     notInterested: [false],
     tv: [false],
     facebook: [""],
-    amltype: [""],
+    amltype: new FormControl("Individual"),
     outdoor: [false],
     online: [false],
     socialMedia: [false],
@@ -574,7 +581,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
     link: [""],
     twitter: [""],
     instagram: [""],
-    prefixAml:[""]
+    prefixAml: [""],
   });
   imageName: any;
 
@@ -691,7 +698,6 @@ export class PosCustomerMasterMainComponent implements OnInit {
         }
       });
   }
-  
 
   creditLimitCheck() {
     this.posCustomerMasterMainForm
@@ -936,7 +942,6 @@ export class PosCustomerMasterMainComponent implements OnInit {
     this.posCustomerMasterMainForm.controls.designation.setValue(
       setData.DESIGNATION
     );
-    this.posCustomerMasterMainForm.controls.amltype.setValue(setData.AML_TYPE);
 
     this.posCustomerMasterMainForm.controls.name1.setValue(setData.NAME_1);
     this.posCustomerMasterMainForm.controls.name2.setValue(setData.NAME_2);
@@ -1348,8 +1353,19 @@ export class PosCustomerMasterMainComponent implements OnInit {
   }
 
   close(data?: any) {
-    //TODO reset forms and data before closing
-    this.activeModal.close(data);
+    Swal.fire({
+      title: "Are you sure you want to close this?",
+      // text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, Close!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.activeModal.close(data);
+      }
+    });
   }
 
   uploadCustomerImage() {
@@ -1491,7 +1507,8 @@ export class PosCustomerMasterMainComponent implements OnInit {
           SALBRLOC: this.posCustomerMasterMainForm.value.branchLoc || "",
           Branch_Code: this.branchCode,
           TOTALSALES: this.posCustomerMasterMainForm.value.totalSale || 0,
-          POSCUSTIDNO: this.posCustomerMasterMainForm.value.custID.toString || "",
+          POSCUSTIDNO:
+            this.posCustomerMasterMainForm.value.custID.toString || "",
           POSSMAN: "",
           POSCUSTPREFIX: this.posCustomerMasterMainForm.value.prefix || "",
           MOBILE1:
@@ -1738,7 +1755,9 @@ export class PosCustomerMasterMainComponent implements OnInit {
               if (result.status === "Success") {
                 Swal.fire({
                   title: "Success",
-                  text: result.message ? result.message: "Customer Details Inserted successfully!",
+                  text: result.message
+                    ? result.message
+                    : "Customer Details Inserted successfully!",
                   icon: "success",
                   confirmButtonColor: "#336699",
                   confirmButtonText: "Ok",
@@ -2380,5 +2399,81 @@ export class PosCustomerMasterMainComponent implements OnInit {
         this.subscriptions.push(Sub);
       }
     });
+  }
+
+  switchToIndiCom(event: any) {
+    console.log(event.value); // This will output either 'Individual' or 'Company'
+
+    // Example switch statement based on the selected value
+    switch (event.value) {
+      case "Individual":
+        this.posCustomerMasterMainForm.controls["name1"].enable();
+        this.posCustomerMasterMainForm.controls["name2"].enable();
+        this.posCustomerMasterMainForm.controls["name3"].enable();
+        this.posCustomerMasterMainForm.controls["name4"].enable();
+        this.posCustomerMasterMainForm.controls["name5"].enable();
+        this.posCustomerMasterMainForm.controls["nationality1"].enable();
+        this.posCustomerMasterMainForm.controls["nationality2"].enable();
+        this.posCustomerMasterMainForm.controls["nationality3"].enable();
+        this.posCustomerMasterMainForm.controls["nationality4"].enable();
+        this.posCustomerMasterMainForm.controls["nationality5"].enable();
+        this.posCustomerMasterMainForm.controls["dob1"].enable();
+        this.posCustomerMasterMainForm.controls["dob2"].enable();
+        this.posCustomerMasterMainForm.controls["dob3"].enable();
+        this.posCustomerMasterMainForm.controls["dob4"].enable();
+        this.posCustomerMasterMainForm.controls["dob5"].enable();
+        this.posCustomerMasterMainForm.controls["passport1"].enable();
+        this.posCustomerMasterMainForm.controls["passport2"].enable();
+        this.posCustomerMasterMainForm.controls["passport3"].enable();
+        this.posCustomerMasterMainForm.controls["passport4"].enable();
+        this.posCustomerMasterMainForm.controls["passport5"].enable();
+        this.posCustomerMasterMainForm.controls["nationalityCode1"].enable();
+        this.posCustomerMasterMainForm.controls["nationalityCode2"].enable();
+        this.posCustomerMasterMainForm.controls["nationalityCode3"].enable();
+        this.posCustomerMasterMainForm.controls["nationalityCode4"].enable();
+        this.posCustomerMasterMainForm.controls["nationalityCode5"].enable();
+
+        break;
+      case "Company":
+        this.posCustomerMasterMainForm.controls["name1"].disable();
+        this.posCustomerMasterMainForm.controls["name2"].disable();
+        this.posCustomerMasterMainForm.controls["name3"].disable();
+        this.posCustomerMasterMainForm.controls["name4"].disable();
+        this.posCustomerMasterMainForm.controls["name5"].disable();
+        this.posCustomerMasterMainForm.controls["nationality1"].disable();
+        this.posCustomerMasterMainForm.controls["nationality2"].disable();
+        this.posCustomerMasterMainForm.controls["nationality3"].disable();
+        this.posCustomerMasterMainForm.controls["nationality4"].disable();
+        this.posCustomerMasterMainForm.controls["nationality5"].disable();
+        this.posCustomerMasterMainForm.controls["dob1"].disable();
+        this.posCustomerMasterMainForm.controls["dob2"].disable();
+        this.posCustomerMasterMainForm.controls["dob3"].disable();
+        this.posCustomerMasterMainForm.controls["dob4"].disable();
+        this.posCustomerMasterMainForm.controls["dob5"].disable();
+        this.posCustomerMasterMainForm.controls["passport1"].disable();
+        this.posCustomerMasterMainForm.controls["passport2"].disable();
+        this.posCustomerMasterMainForm.controls["passport3"].disable();
+        this.posCustomerMasterMainForm.controls["passport4"].disable();
+        this.posCustomerMasterMainForm.controls["passport5"].disable();
+        this.posCustomerMasterMainForm.controls["nationalityCode1"].disable();
+        this.posCustomerMasterMainForm.controls["nationalityCode2"].disable();
+        this.posCustomerMasterMainForm.controls["nationalityCode3"].disable();
+        this.posCustomerMasterMainForm.controls["nationalityCode4"].disable();
+        this.posCustomerMasterMainForm.controls["nationalityCode5"].disable();
+
+        break;
+      default:
+        break;
+    }
+  }
+
+  setPassport(event: any) {
+    if (
+      this.posCustomerMasterMainForm.controls["custIdType"].value === "PASSPORT"
+    ) {
+      this.posCustomerMasterMainForm.controls["passport1"].setValue(
+        event.target.value
+      );
+    }
   }
 }
