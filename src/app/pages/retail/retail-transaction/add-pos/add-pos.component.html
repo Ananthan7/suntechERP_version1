@@ -3447,7 +3447,7 @@
                       <mat-form-field appearance="outline" style="width: 100%" aria-readonly="true">
                         <input class="st_txt_right" type="text" [min]="0" autocomplete="off" [maxLength]="14"
                           (keyup)="this.comFunc.enforceMinMax($event.target)" matInput id="fcn_li_pcs"
-                          formControlName="fcn_li_pcs" (focus)="setValToLocalStorage($event, 'fcn_li_pcs')"
+                          formControlName="fcn_li_pcs"  (keydown)="focusField('fcn_li_net_amount')" (focus)="setValToLocalStorage($event, 'fcn_li_pcs')"
                           (change)="changePCS($event)" [readonly]="viewOnly || !isPcsEditable" NumberOnly />
                         <!-- <input class="st_txt_right" type="number" min="1" matInput formControlName="fcn_li_pcs"
                                   (keyup)="changePCS($event)" (mouseup)="changePCS($event)" (mouseleave)="changePCS($event)"
@@ -3474,7 +3474,7 @@
                           <input class="st_txt_right" [maxLength]="14" type="text" [min]="0"
                             (keyup)="this.comFunc.enforceMinMax($event.target)" matInput
                             formControlName="fcn_li_gross_wt" id="fcn_li_gross_wt"
-                            (focus)="setValToLocalStorage($event, 'fcn_li_gwt')" (change)="changeGrossWt($event)"
+                            (focus)="setValToLocalStorage($event, 'fcn_li_gwt')"  (change)="changeGrossWt($event)"
                             [readonly]="viewOnly || !isGrossWtEditable" MetalDecimalInput />
                           <mat-error *ngIf="
                             lineItemForm.controls.fcn_li_gross_wt.hasError(

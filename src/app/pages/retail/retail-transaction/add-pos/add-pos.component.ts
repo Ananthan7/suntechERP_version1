@@ -6390,7 +6390,7 @@ export class AddPosComponent implements OnInit {
     this.suntechApi.getDynamicAPI(API)
       .subscribe((resp) => {
         if (resp.status == "Success") {
-          this.renderer.selectRootElement('#fcn_exchange_gross_wt').focus();
+          this.renderer.selectRootElement('#fcn_exchange_gross_wt').select();
 
           if (!this.editOnly && !this.viewOnly) {
 
@@ -7619,15 +7619,31 @@ export class AddPosComponent implements OnInit {
         this.isPcsEditable = true;
       else
         this.isPcsEditable = false;
-    if (!isDivisionX &&
-      this.comFunc.emptyToZero(stockInfos.BALANCE_PCS) < 1 &&
-      stockInfos.ENABLE_PCS &&
-      this.newLineItem.DIVISION !== 'X' &&
-      this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt) === 0 &&
-      excludeQtyValidations.some(v => this.newLineItem.DIVISION.toUpperCase().includes(v))) {
-      this.renderer.selectRootElement('#fcn_li_pcs').focus();
-    } else {
-      if (this.divisionMS == 'M') this.renderer.selectRootElement('#fcn_li_total_amount').focus();
+        if (!isDivisionX && 
+           stockInfos.ENABLE_PCS &&
+          excludeQtyValidations.some(v => this.newLineItem.DIVISION.toUpperCase().includes(v))) {
+          this.renderer.selectRootElement('#fcn_li_pcs')?.select();
+        }
+    // if (!isDivisionX &&
+    //   this.comFunc.emptyToZero(stockInfos.BALANCE_PCS) < 1 &&
+    //   stockInfos.ENABLE_PCS &&
+    //   this.newLineItem.DIVISION !== 'X' &&
+    //   this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt) === 0 &&
+    //   excludeQtyValidations.some(v => this.newLineItem.DIVISION.toUpperCase().includes(v))) {
+    //   this.renderer.selectRootElement('#fcn_li_pcs').focus();
+    // }
+     else {
+      if (this.divisionMS == 'M') this.renderer.selectRootElement('#fcn_li_total_amount')?.select();
+
+      if(this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt) === 0 &&
+      this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_rate) === 0 )
+
+      this.renderer.selectRootElement('#fcn_li_rate').select();
+
+      else{
+        this.renderer.selectRootElement('#fcn_li_net_amount')?.select();
+
+      }
     }
 
     if (isDivisionX) {
@@ -7930,7 +7946,12 @@ export class AddPosComponent implements OnInit {
                 //     Validators.required,
                 //   ]);
                 // }
-                this.renderer.selectRootElement('#fcn_li_net_amount').focus();
+
+
+
+
+                
+                // this.renderer.selectRootElement('#fcn_li_net_amount').focus();
 
               } else {
                 this.enableFormControls(false);
@@ -9372,7 +9393,24 @@ export class AddPosComponent implements OnInit {
     const preVal = this.comFunc.emptyToZero(localStorage.getItem('fcn_li_pcs'));
     this.isNetAmountChange = false;
     const value = this.comFunc.emptyToZero(event.target.value);
-    if (event.target.value != '' && this.validatePCS == true || this.enablePieces) {
+
+    if (this.comFunc.emptyToZero(event.target.value) == 0 && this.newLineItem.IS_BARCODED_ITEM) {
+
+      this.openDialog('Warning', this.comFunc.getMsgByID('MSG1563'), true);
+      this.dialogBox.afterClosed().subscribe((data: any) => {
+        if (data == 'OK') {
+          this.lineItemForm.controls['fcn_li_pcs'].setValue(
+            preVal
+          );
+          this.manageCalculations();
+          this.renderer.selectRootElement('#fcn_li_pcs').select();
+        }
+      });
+
+    }
+
+
+   else if (event.target.value != '' && this.validatePCS == true || this.enablePieces) {
       const validDivisionCodes = ['M', 'D', 'W', 'N'];
       const filteredValidationCodes = validDivisionCodes.filter((code) => code === this.newLineItem.DIVISION.toUpperCase())
       if (filteredValidationCodes.length > 0 && this.comFunc.emptyToZero(event.target.value) === 0) {
@@ -9390,7 +9428,7 @@ export class AddPosComponent implements OnInit {
             this.manageCalculations();
             this.calculateTaxAmount();
             this.calculateNetAmount();
-            this.renderer.selectRootElement('#fcn_li_pcs').focus();
+            this.renderer.selectRootElement('#fcn_li_pcs').select();
 
           }
         });
@@ -9444,7 +9482,7 @@ export class AddPosComponent implements OnInit {
                   if (this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_pcs) == 0 &&
                     this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt) == 0)
 
-                    this.renderer.selectRootElement('#fcn_li_pcs').focus();
+                    this.renderer.selectRootElement('#fcn_li_pcs').select();
 
                   this.manageCalculations();
 
@@ -9735,7 +9773,7 @@ export class AddPosComponent implements OnInit {
 
               this.manageCalculations({ totalAmt: preTotalVal });
               // this.manageCalculations();
-              this.renderer.selectRootElement('#fcn_li_net_amount').focus();
+              this.renderer.selectRootElement('#fcn_li_net_amount').select();
             }
             else if (this.divisionMS == 'S') {
 
@@ -9828,11 +9866,39 @@ export class AddPosComponent implements OnInit {
       this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt);
 
     if (this.divisionMS == 'S') {
-      if (this.lineItemModalForSalesReturn || checkStockCostVal >= parseFloat(this.newLineItem.STOCK_COST)) {
+      if ((this.lineItemModalForSalesReturn || checkStockCostVal >= parseFloat(this.newLineItem.STOCK_COST) || (this.newLineItem.DIVISION === 'X'&& this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_discount_amount) <= this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount) &&
+      this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_discount_percentage) <= 100))) {
         this.manageCalculations();
+        if(this.newLineItem.DIVISION === 'X'){
+          this.removeValidationsForForms(this.lineItemForm, ['fcn_li_net_amount']);
+        }
 
       }
       else {
+        if(this.newLineItem.DIVISION === 'X'){
+
+          this.openDialog('Warning', this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_discount_amount) >
+          this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount)
+          || this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_discount_percentage) > 100 ?
+          this.comFunc.getMsgByID('MSG1203') :
+          this.comFunc.getMsgByID('MSG1721'), true);
+        this.dialogBox.afterClosed().subscribe((data: any) => {
+          if (data == 'OK') {
+            this.lineItemForm.controls.fcn_li_discount_percentage.setValue(
+              preDisPerVal || this.zeroAmtVal
+
+            );
+            if (parseFloat(preDisPerVal) == 0)
+              preDisAmtVal = 0;
+            this.lineItemForm.controls.fcn_li_discount_amount.setValue(
+              preDisAmtVal || this.zeroAmtVal
+            );
+            this.manageCalculations();
+          }
+        });
+
+        }
+        else{
         // Rate Cannot be Less Than Cost
         this.openDialog('Warning', this.comFunc.getMsgByID('MSG1721'), true);
         this.dialogBox.afterClosed().subscribe((data: any) => {
@@ -9849,6 +9915,7 @@ export class AddPosComponent implements OnInit {
             this.manageCalculations({isDiscoutStored:true});
           }
         });
+      }
       }
     }
     // }
@@ -10073,7 +10140,7 @@ export class AddPosComponent implements OnInit {
 
               this.manageCalculations();
 
-              this.renderer.selectRootElement('#fcn_li_rate').focus();
+              this.renderer.selectRootElement('#fcn_li_rate').select();
             }
           });
         }
@@ -10131,7 +10198,7 @@ export class AddPosComponent implements OnInit {
 
 
     } else {
-      this.renderer.selectRootElement('#fcn_li_rate').focus();
+      this.renderer.selectRootElement('#fcn_li_rate').select();
       this.lineItemForm.controls['fcn_li_total_amount'].setValue(this.zeroAmtVal);
       this.lineItemForm.controls['fcn_ad_amount'].setValue(this.zeroAmtVal);
       // this.setGrossAmt();
@@ -10252,10 +10319,10 @@ export class AddPosComponent implements OnInit {
   setFocusBasedExchangeStone() {
     if (this._exchangeItemchange.INCLUDE_STONE == false) {
       // focus
-      this.renderer.selectRootElement('#fcn_exchange_purity').focus();
+      this.renderer.selectRootElement('#fcn_exchange_purity').select();
     } else {
       // focus
-      this.renderer.selectRootElement('#fcn_exchange_stone_wt').focus();
+      this.renderer.selectRootElement('#fcn_exchange_stone_wt').select();
     }
   }
 
@@ -10897,7 +10964,7 @@ export class AddPosComponent implements OnInit {
 
     const permittedNetAmount = netAmtVal - (this.lineItemForm.value.fcn_li_tax_percentage / 100) * netAmtVal;
 
-    if (this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_amount) <= permittedNetAmount && this.divisionMS == 'S') {
+    if (this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_amount) <= permittedNetAmount && this.divisionMS == 'S' && this.newLineItem.DIVISION !== 'X') {
 
 
 
@@ -14418,8 +14485,8 @@ export class AddPosComponent implements OnInit {
   }
 
   setGrossWtFocus() {
-    if (this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt) == 0 && !this.validatePCS && this.lineItemForm.value.fcn_li_item_code && this.newLineItem.DIVISION != "X") {
-      this.renderer.selectRootElement('#fcn_li_gross_wt').focus();
+    if (this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt) == 0 && this.newLineItem.DIVISION=='G' && !this.validatePCS && this.lineItemForm.value.fcn_li_item_code && this.newLineItem.DIVISION != "X") {
+      this.renderer.selectRootElement('#fcn_li_gross_wt').select();
       this.snackBar.open('Gross Wt should not 0', 'OK', {
         duration: 2000
       });
@@ -14428,6 +14495,20 @@ export class AddPosComponent implements OnInit {
       this.checkItemCode();
     }
   }
+
+  
+
+  focusField(fieldName: any) {
+    const excludeQtyValidations = ['M', 'D', 'W', 'N'];
+    if (
+      (excludeQtyValidations.some(v => this.newLineItem.DIVISION.toUpperCase().includes(v)))) {
+        this.renderer.selectRootElement('#fcn_li_net_amount')?.select();
+        (this as any)[fieldName].nativeElement.select();
+    } 
+   
+    
+  }
+  
 
   setGiftType() {
     if (this.divisionMS == 'M') {
