@@ -1211,6 +1211,7 @@
                                 (input)="onInput($event, 25)"
                                 formControlName="custID"
                                 (keydown)="preventInvalidInput($event)"
+                                (change)="setPassport($event)"
                               />
                             </mat-form-field>
                           </div>
@@ -2170,8 +2171,10 @@
                               class="pt-4"
                               style="width: 100%"
                               appearance="outline"
+                              formControlName="amltype"
+                              (change)="switchToIndiCom($event)"
                             >
-                              <mat-radio-button (click)='switchToIndiCom($event) '  value="Individual" class="me-3"
+                              <mat-radio-button value="Individual" class="me-3"
                                 >Individual</mat-radio-button
                               >
                               <mat-radio-button value="Company"
