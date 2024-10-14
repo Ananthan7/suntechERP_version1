@@ -2381,4 +2381,12 @@ export class PosCustomerMasterMainComponent implements OnInit {
       }
     });
   }
+
+  switchToIndiCom(event:any){
+    console.log("Cae");
+    console.log(event);
+    
+    
+
+  }
 }
