@@ -160,6 +160,14 @@ export class PosSalesmanCommissionComponent implements OnInit {
 
       this.SalesmanCommissionForm.controls.salesManFrom.setValue(ParcedPreFetchData?.CONTROL_DETAIL.STRFRSMAN)
       this.SalesmanCommissionForm.controls.salesManTo.setValue(ParcedPreFetchData?.CONTROL_DETAIL.STRTOSMAN)
+
+      let vocTypeArr: any= []
+      this.selectedKey.forEach((item: any)=>{
+        vocTypeArr.push(item.VOCTYPE+'#') 
+      })
+      const uniqueArray = [...new Set( vocTypeArr )];
+      const plainText = uniqueArray.join('');
+      this.VocTypeParam = plainText
     }
     else{
       
@@ -370,36 +378,40 @@ export class PosSalesmanCommissionComponent implements OnInit {
     this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
     .subscribe((result: any) => {
       let data = result.dynamicData;
-      let printContent = data[0][0].HTMLINPUT;
-      this.htmlPreview = this.sanitizer.bypassSecurityTrustHtml(printContent);
+      if(result.status == "Success"){
+        let printContent = data[0][0].HTMLINPUT;
+        this.htmlPreview = this.sanitizer.bypassSecurityTrustHtml(printContent);
+        if(this.htmlPreview.changingThisBreaksApplicationSecurity){
 
-      if (result.dynamicData) {
-        this.commonService.closeSnackBarMsg();
-      }
-    });  
-   
-    
-    setTimeout(() => {
-      const content = this.htmlPreview?.changingThisBreaksApplicationSecurity;
+          setTimeout(() => {
+            const content = this.htmlPreview?.changingThisBreaksApplicationSecurity;
+
+            let  userBranchDesc:any  = localStorage.getItem('BRANCH_PARAMETER')
+            userBranchDesc = JSON.parse(userBranchDesc)
       
-      let  userBranchDesc:any  = localStorage.getItem('BRANCH_PARAMETER')
-      userBranchDesc = JSON.parse(userBranchDesc)
+            if (content && Object.keys(content).length !== 0) {
+              const modifiedContent = content.replace(/<title>.*?<\/title>/, `<title>${userBranchDesc.DESCRIPTION}</title>`);
+              const printWindow = window.open('', '', 'height=600,width=800');
+              printWindow?.document.write(modifiedContent);
+              printWindow?.document.close();
+              printWindow?.focus();
+              printWindow?.print();
+              printWindow?.close();
+             
+            } else {
+              Swal.fire('No Data!', 'There is no data to print!', 'info');
+              this.commonService.closeSnackBarMsg();
+              return
+            }
+          }, 1500); 
 
-      if (content && Object.keys(content).length !== 0) {
-        const modifiedContent = content.replace(/<title>.*?<\/title>/, `<title>${userBranchDesc.DESCRIPTION}</title>`);
-        const printWindow = window.open('', '', 'height=600,width=800');
-        printWindow?.document.write(modifiedContent);
-        printWindow?.document.close();
-        printWindow?.focus();
-        printWindow?.print();
-        printWindow?.close();
-       
-      } else {
-        Swal.fire('No Data!', 'There is no data to print!', 'info');
-        this.commonService.closeSnackBarMsg();
+        }
+      }
+      else{
+        this.toastr.error(result.message)
         return
       }
-    }, 3000); 
+    });  
   }
 
 
