@@ -537,13 +537,19 @@ export class RetailSalesCollectionComponent implements OnInit {
     .subscribe((result: any) => {
       console.log(result);
       this.previewpopup = true;
-      let data = result.dynamicData;
-      let printContent = data[0][0].HTMLINPUT;
-      this.htmlPreview = this.sanitizer.bypassSecurityTrustHtml(printContent);
-      const blob = new Blob([this.htmlPreview.changingThisBreaksApplicationSecurity], { type: 'text/html' });
-      this.commonService.closeSnackBarMsg();
-      const url = URL.createObjectURL(blob);
-      window.open(url, '_blank');
+      if(result.status != "Failed"){
+        let data = result.dynamicData;
+        let printContent = data[0][0].HTMLOUT;
+        this.htmlPreview = this.sanitizer.bypassSecurityTrustHtml(printContent);
+        const blob = new Blob([this.htmlPreview.changingThisBreaksApplicationSecurity], { type: 'text/html' });
+        this.commonService.closeSnackBarMsg();
+        const url = URL.createObjectURL(blob);
+        window.open(url, '_blank');
+      }
+      else{
+        this.toastr.error(result.message)
+        return
+      }
     });      
 
 
