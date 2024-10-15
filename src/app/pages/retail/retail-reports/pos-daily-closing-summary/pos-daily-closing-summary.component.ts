@@ -13,6 +13,8 @@ import { Subscription } from "rxjs";
 import { ToastrService } from "ngx-toastr";
 import Swal from "sweetalert2";
 import { stringify } from "querystring";
+import { DomSanitizer } from "@angular/platform-browser";
+import { CostCenterConsumablesDetailsComponent } from "src/app/pages/wholesale/wholesale-master/costcentre-consumable/cost-center-consumables-details/cost-center-consumables-details.component";
 
 @Component({
   selector: "app-pos-daily-closing-summary",
@@ -83,14 +85,16 @@ export class PosDailyClosingSummaryComponent implements OnInit {
   isLoading: boolean = false;
   dateToPass: { fromDate: string; toDate: string } = { fromDate: '', toDate: '' };
 
-  
+  htmlPreview: any;
+  VocTypeParam: any = [];
+
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
     private formBuilder: FormBuilder,
     private comService: CommonServiceService,
     private dataService: SuntechAPIService,
-    private toastr: ToastrService
+    private toastr: ToastrService,   private sanitizer: DomSanitizer
   ) {}
 
   ngOnInit(): void {
@@ -359,13 +363,16 @@ export class PosDailyClosingSummaryComponent implements OnInit {
   setDateValue(event: any){
     if(event.FromDate){
       this.posDailyClosingSummaryForm.controls.fromDate.setValue(event.FromDate);
-      console.log(event.FromDate)
+      this.dateToPass.fromDate = event.FromDate
+      // console.log(event.FromDate)
     }
     else if(event.ToDate){
       this.posDailyClosingSummaryForm.controls.toDate.setValue(event.ToDate);
-      console.log(this.posDailyClosingSummaryForm)
+      this.dateToPass.toDate = event.ToDate
+      // console.log(this.posDailyClosingSummaryForm)
     }
   }
+
   formatDateToYYYYMMDD(dateString: any) {
     const date = new Date(dateString);
     const year = date.getFullYear();
@@ -373,6 +380,7 @@ export class PosDailyClosingSummaryComponent implements OnInit {
     const day = String(date.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
   }
+
   saveTemplate(){
     this.popupVisible = true;
     console.log(this.posDailyClosingSummaryForm.controls.templateName.value)
@@ -396,10 +404,7 @@ export class PosDailyClosingSummaryComponent implements OnInit {
               "strFmDate" : this.formatDateToYYYYMMDD(this.posDailyClosingSummaryForm.value.fromDate),
               "strToDate" : this.formatDateToYYYYMMDD(this.posDailyClosingSummaryForm.value.toDate),
               "str_MGroupBy": this.posDailyClosingSummaryForm.value.metalType,
-              "str_DGroupBy" : this.posDailyClosingSummaryForm.value.diamondType,
-              'USERNAME': localStorage.getItem('username'),
-              'MODE': localStorage.getItem('userbranch'),
-              'VOCTYPE': ''
+              "LOGDATA" : '',
             }
          })
       }
@@ -437,54 +442,125 @@ export class PosDailyClosingSummaryComponent implements OnInit {
         "strFmDate" : this.formatDateToYYYYMMDD(this.posDailyClosingSummaryForm.value.fromDate),
         "strToDate" : this.formatDateToYYYYMMDD(this.posDailyClosingSummaryForm.value.toDate),
         "str_MGroupBy": this.posDailyClosingSummaryForm.value.metalType,
-        "str_DGroupBy" : this.posDailyClosingSummaryForm.value.diamondType,
-        'USERNAME': localStorage.getItem('username'),
-        'MODE': localStorage.getItem('userbranch'),
-        'VOCTYPE': ''
+        "LOGDATA" : '',
+        // "str_DGroupBy" : this.posDailyClosingSummaryForm.value.diamondType,
+        // 'USERNAME': localStorage.getItem('username'),
+        // 'MODE': localStorage.getItem('userbranch'),
+        // 'VOCTYPE': ''
       }
     }
-    console.log(postData)  
+    // console.log(postData)  
     this.comService.showSnackBarMsg('MSG81447');
     this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
     .subscribe((result: any) => {
-      console.log(result);
-      let data = result.dynamicData;
-      const width = window.innerWidth;
-      const height = window.innerHeight;
-      const windowFeatures = `width=${width},height=${height},fullscreen=yes`;
-      var WindowPrt = window.open(' ', ' ', windowFeatures);
-      if (WindowPrt === null) {
-        console.error('Failed to open the print window. Possibly blocked by a popup blocker.');
-        return;
+      // console.log(result);
+      // let data = result.dynamicData;
+      // const width = window.innerWidth;
+      // const height = window.innerHeight;
+      // const windowFeatures = `width=${width},height=${height},fullscreen=yes`;
+      // var WindowPrt = window.open(' ', ' ', windowFeatures);
+      // if (WindowPrt === null) {
+      //   console.error('Failed to open the print window. Possibly blocked by a popup blocker.');
+      //   return;
+      // }
+      // let printContent = data[0][0].HTMLReport;
+      // WindowPrt.document.write(printContent);
+      // WindowPrt.document.close();
+      // WindowPrt.focus();  
+      // WindowPrt.onload = function () {
+      //   if (WindowPrt && WindowPrt.document.head) {
+      //     let styleElement = WindowPrt.document.createElement('style');
+      //     styleElement.textContent = `
+      //                 @page {
+      //                     size: A5 landscape;
+      //                 }
+      //                 body {
+      //                     margin: 0mm;
+      //                 }
+      //             `;
+      //     WindowPrt.document.head.appendChild(styleElement);
+
+      //     setTimeout(() => {
+      //       if (WindowPrt) {
+      //         WindowPrt.print();
+      //       } else {
+      //         console.error('Print window was closed before printing could occur.');
+      //       }
+      //     }, 800);
+      //   }
+      // };
+      // this.comService.closeSnackBarMsg()
+
+      if(result.status != "Failed"){
+        let data = result.dynamicData;
+        let printContent = data[0][0].HTMLReport;
+        this.htmlPreview = this.sanitizer.bypassSecurityTrustHtml(printContent);
+        const blob = new Blob([this.htmlPreview.changingThisBreaksApplicationSecurity], { type: 'text/html' });
+        this.comService.closeSnackBarMsg();
+        const url = URL.createObjectURL(blob);
+        window.open(url, '_blank');
       }
-      let printContent = data[0][0].HTMLReport;
-      WindowPrt.document.write(printContent);
-      WindowPrt.document.close();
-      WindowPrt.focus();  
-      WindowPrt.onload = function () {
-        if (WindowPrt && WindowPrt.document.head) {
-          let styleElement = WindowPrt.document.createElement('style');
-          styleElement.textContent = `
-                      @page {
-                          size: A5 landscape;
-                      }
-                      body {
-                          margin: 0mm;
-                      }
-                  `;
-          WindowPrt.document.head.appendChild(styleElement);
+      else{
+        this.toastr.error(result.message)
+        return
+      }
+    });      
+  }
+
+  printBtnClick(){
+    let postData = {
+      "SPID": "150",
+      "parameter": {
+        "strSalType": JSON.stringify( this.posDailyClosingSummaryForm.value.transactionType),
+        "strBranch" : this.formattedBranchDivisionData || this.fetchedBranchDataParam,
+        "strFmDate" : this.formatDateToYYYYMMDD(this.posDailyClosingSummaryForm.value.fromDate),
+        "strToDate" : this.formatDateToYYYYMMDD(this.posDailyClosingSummaryForm.value.toDate),
+        "str_MGroupBy": this.posDailyClosingSummaryForm.value.metalType,
+        "LOGDATA" : '',
+        // "str_DGroupBy" : this.posDailyClosingSummaryForm.value.diamondType,
+        // 'USERNAME': localStorage.getItem('username'),
+        // 'MODE': localStorage.getItem('userbranch'),
+        // 'VOCTYPE': ''
+      }
+    }
+ 
+    this.comService.showSnackBarMsg('MSG81447');
+    this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+    .subscribe((result: any) => {
+      let data = result.dynamicData;
+      if(result.status == "Success"){
+        let printContent = data[0][0].HTMLReport;
+        this.htmlPreview = this.sanitizer.bypassSecurityTrustHtml(printContent);
+        if(this.htmlPreview.changingThisBreaksApplicationSecurity){
 
           setTimeout(() => {
-            if (WindowPrt) {
-              WindowPrt.print();
+            const content = this.htmlPreview?.changingThisBreaksApplicationSecurity;
+
+            let  userBranchDesc:any  = localStorage.getItem('BRANCH_PARAMETER')
+            userBranchDesc = JSON.parse(userBranchDesc)
+      
+            if (content && Object.keys(content).length !== 0) {
+              const modifiedContent = content.replace(/<title>.*?<\/title>/, `<title>${userBranchDesc.DESCRIPTION}</title>`);
+              const printWindow = window.open('', '', 'height=600,width=800');
+              printWindow?.document.write(modifiedContent);
+              printWindow?.focus();
+              printWindow?.print();
+              printWindow?.close();
+             
             } else {
-              console.error('Print window was closed before printing could occur.');
+              Swal.fire('No Data!', 'There is no data to print!', 'info');
+              this.comService.closeSnackBarMsg();
+              return
             }
-          }, 800);
+          }, 1500); 
+
         }
-      };
-      this.comService.closeSnackBarMsg()
-    });      
+      }
+      else{
+        this.toastr.error(result.message)
+        return
+      }
+    });  
   }
 
   prefillScreenValues(){
@@ -509,7 +585,10 @@ export class PosDailyClosingSummaryComponent implements OnInit {
 
       this.posDailyClosingSummaryForm.controls.metalType.setValue(paresedItem?.CONTROL_DETAIL.str_MGroupBy);
       this.posDailyClosingSummaryForm.controls.diamondType.setValue(paresedItem?.CONTROL_DETAIL.str_DGroupBy);
+
+      
     }
   }
+
 
 }
