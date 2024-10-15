@@ -13,7 +13,7 @@
   <div class="container-fluid">
     <form [formGroup]="SalesmanCommissionForm">
   
-      <div class="row mb-1">
+      <div class="row mb-1 mt-2">
         <label for="inputPassword"  class="col-sm-1 col-form-label"  id="ID001"> Branch</label>
         <div class="col-md-2">
             <mat-form-field appearance="outline" style="width: -webkit-fill-available">
@@ -25,9 +25,70 @@
         </div>
 
         <div class="col-md-7">
-            <app-date (selectedDate)="setDateValue($event)"></app-date>
+            <app-date (selectedDate)="setDateValue($event)" [dateValue]="dateToPass"></app-date>
         </div> 
       </div>
+
+      <div class="pt-2">
+        <div class="row">
+          <div class="col-md-6">
+            <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true" [dataSource]="reportVouchers"
+              [allowColumnReordering]="true" [allowColumnResizing]="true" [showColumnLines]="true" [showRowLines]="true" 
+              [columnAutoWidth]="true" [selectedRowKeys]="selectedKey" width="100%" height="310px"
+              (onSelectionChanged)="onGridSelection($event)">
+              <dxo-paging [enabled]="false"></dxo-paging>
+              <!-- <dxo-editing mode="cell" [allowUpdating]="true">
+              </dxo-editing> -->
+              <!-- <dxo-editing mode="cell" [allowUpdating]="!viewMode">
+              </dxo-editing> -->
+              <dxo-selection mode="multiple" showCheckBoxesMode="always"></dxo-selection>
+              <dxo-scrolling mode="virtual"></dxo-scrolling>
+  
+              <dxi-column alignment="center" dataField="VOCTYPE"></dxi-column>
+              <dxi-column alignment="left" dataField="DESCRIPTION"></dxi-column>
+            </dx-data-grid>
+          </div>
+
+          <div class="col-md-6">
+            <div class="header">
+              <p class="headerLabelText p-2">Salesman</p>
+            </div>
+            <div class="row mb-1">
+              <label for="inputPassword" class="col-sm-2 col-form-label" id="ID002">From :</label>
+              <div class="col-md-10">
+                <mat-form-field appearance="outline" style="width: 72%;">
+                  <input type="text" matInput formControlName="salesManFrom" />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row">
+              <label for="inputPassword" class="col-sm-2 col-form-label" id="ID002">To &nbsp;&nbsp;&nbsp;&nbsp; :</label>
+              <div class="col-md-10">
+                <mat-form-field appearance="outline" style="width: 72%;">
+                  <input type="text" matInput formControlName="salesManTo" />
+                </mat-form-field>
+              </div>
+            </div>
+
+
+            <div class=" mt-3">
+              <div class="header">
+                <p class="headerLabelText p-2">Group By</p>
+              </div>
+              <div class="col-md-10 mt-2">
+                <mat-form-field appearance="outline" ngClass="me-1" style="width:100%">
+                  <mat-select  formControlName="groupBySelection">
+                    <mat-option value="Salesman">Salesman</mat-option>
+                    <mat-option value="Invoice">Invoice</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
 
 
       <div class="row">
@@ -53,31 +114,6 @@
           </div>
         </div>
       </div>
-
-
-
-      <div class="pt-2">
-        <div class="row">
-          <div class="col pt-2">
-            <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true" [dataSource]="jewelleryaltrationdetail"
-              [allowColumnReordering]="true" [allowColumnResizing]="true"
-              [columnAutoWidth]="true" [selectedRowKeys]="selectedKey">
-              <dxo-paging [enabled]="false"></dxo-paging>
-              <!-- <dxo-editing mode="cell" [allowUpdating]="true">
-              </dxo-editing> -->
-              <!-- <dxo-editing mode="cell" [allowUpdating]="!viewMode">
-              </dxo-editing> -->
-              <dxo-selection mode="multiple"></dxo-selection>
-              <dxo-scrolling mode="virtual"></dxo-scrolling>
-  
-              <dxi-column *ngFor="let data of columnhead" dataField="{{ data }}" caption="{{ data }}"
-                [allowEditing]="false" alignment="center" backgroundcolor="#000">
-              </dxi-column>
-            </dx-data-grid>
-          </div>
-        </div>
-      </div>
-
       <div class="col-md-12 pt-2">
         <div class="row">
             <div class="col-md-8">
@@ -132,7 +168,7 @@
         </div>
       </div>
 
-      <dx-popup [width]="300" [height]="180" [showTitle]="true" container=".dx-viewport"
+      <dx-popup [width]="300" [height]="200" [showTitle]="true" container=".dx-viewport"
         title="Template Data" [dragEnabled]="false" [showCloseButton]="false" (onHidden)="popupClosed()"
         [visible]="popupVisible">
           <div class="popup-content">
@@ -157,40 +193,8 @@
       </dx-popup>
 
       <div class="row mt-2 justify-content-end mx-2">
-          <div class="icon-label-container" (click)="saveTemplate()" matTooltip="Save the selections as a new template">
-            <i class="fa fa-bookmark fa-2x mt-3" style="color: #5497b2"></i>
-            <span style="font-size: inherit;">Save as Template</span>
-          </div>
-
-          <div class="icon-label-container" (click)="previewClick()" matTooltip="Preview the content">
-            <i class="fa fa-eye fa-2x" style="color: #5497b2"></i>
-            <span class="label">Preview</span>
-          </div>
-
-          <div class="icon-label-container" matTooltip="Take a print">
-            <i class="fa fa-print fa-2x" style="color: #031082"></i>
-            <span class="label">Print</span>
-          </div>
-
-          <div class="icon-label-container"  matTooltip="Generate Excel Report">
-            <i class="fa fa-file-excel fa-2x" style="color: green"></i>
-            <span class="label">Excel</span>
-          </div>
-
-          <div class="icon-label-container" matTooltip="Generate PDF Report">
-            <i class="fa fa-file-pdf fa-2x" style="color: orangered"></i>
-            <span class="label">PDF</span>
-          </div>
-
-          <div class="icon-label-container" matTooltip="Sent through mail">
-            <i class="fa fa-envelope fa-2x" style="color: deepskyblue"></i>
-            <span class="label">Email</span>
-          </div>
-
-          <div class="icon-label-container" matTooltip="Sent through whatsapp">
-            <i class="fab fa-whatsapp fa-2x" style="color: #29cf26"></i>
-            <span style="font-size: inherit;">Whatsapp</span>
-          </div>
+        <app-report-screen-buttons (saveTemplateClick)="saveTemplate()" (previewClicked)="previewClick()"
+        (printClicked)="printBtnClick()"></app-report-screen-buttons>
       </div>
   
     </form>

@@ -7,6 +7,7 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-pos-salesman-commission',
@@ -18,7 +19,6 @@ export class PosSalesmanCommissionComponent implements OnInit {
   columnhead: any[] = ['S.No', 'Salesman', 'Amount',];
   @Input() content!: any;
   tableData: any[] = [];
-  jewelleryaltrationdetail: any[] = [];
   detailData: any[] = [];
   userName = localStorage.getItem('username');
   branchCode?: String;
@@ -30,6 +30,7 @@ export class PosSalesmanCommissionComponent implements OnInit {
   selectedKey: number[] = []
   isLoading: boolean = false;
 
+  jewelleryaltrationdetail: any[] = [];
   SalesmanCommissionForm: FormGroup = this.formBuilder.group({
     branch: [''],
     fromdate: [''],
@@ -38,7 +39,11 @@ export class PosSalesmanCommissionComponent implements OnInit {
     lossaccount: [''],
     salesMan: [''],
     commissionPercentage: [''],
-    amountLC: ['']
+    amountLC: [''],
+
+    salesManFrom: [''],
+    salesManTo: [''],
+    groupBySelection: ['']
   });
   branchDivisionControlsTooltip: any;
   formattedBranchDivisionData: any;
@@ -47,6 +52,14 @@ export class PosSalesmanCommissionComponent implements OnInit {
   templateNameHasValue: boolean= false;
   
   private subscriptions: Subscription[] = [];
+  dateToPass: { fromDate: string; toDate: string } = { fromDate: '', toDate: '' };
+  fetchedBranchDataParam: any= [];
+  userLoginBranch : any;
+  htmlPreview: any;
+  @Input() reportVouchers: any; //get Voucherdata from retailREPORT Component- GetReportVouchers API
+  selectedDatas: any[]= [];
+  VocTypeParam: any = [];
+
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -55,7 +68,7 @@ export class PosSalesmanCommissionComponent implements OnInit {
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
     private commonService: CommonServiceService,
-    private comService: CommonServiceService,
+    private sanitizer: DomSanitizer
   ) { }
 
   ngOnInit(): void {
@@ -121,18 +134,72 @@ export class PosSalesmanCommissionComponent implements OnInit {
   }
 
   prefillScreenValues(){
+    this.userLoginBranch= localStorage.getItem('userbranch');
+
     if ( Object.keys(this.content).length > 0) {
-      //  this.templateNameHasValue = !!(this.content?.TEMPLATE_NAME);
+      this.isLoading = false;
+      // console.log('data fetched from main grid',this.content )
+      let ParcedPreFetchData = JSON.parse(this.content?.CONTROL_LIST_JSON) //data from retailREPORT Component- modalRef instance
+
+      this.SalesmanCommissionForm.controls.branch.setValue( ParcedPreFetchData?.CONTROL_DETAIL.STRBRANCHES );
+      this.fetchedBranchDataParam = ParcedPreFetchData?.CONTROL_DETAIL.STRBRANCHES+'#';
+      this.fetchedBranchData= ParcedPreFetchData?.CONTROL_DETAIL.STRBRANCHES;
+
+      this.dateToPass = {
+        fromDate:  ParcedPreFetchData?.CONTROL_DETAIL.FRVOCDATE,
+        toDate: ParcedPreFetchData?.CONTROL_DETAIL.TOVOCDATE
+      };
+
+      this.templateNameHasValue = !!ParcedPreFetchData.CONTROL_HEADER.TEMPLATENAME;
+      this.SalesmanCommissionForm.controls.templateName.setValue(ParcedPreFetchData.CONTROL_HEADER.TEMPLATENAME)
+
+      console.log( ParcedPreFetchData?.CONTROL_DETAIL)
+      let splittedText= ParcedPreFetchData?.CONTROL_DETAIL.STRVOCTYPE1?.split("#")  
+      const selectedKeys = this.reportVouchers.filter((item: any) => splittedText?.includes(item.VOCTYPE)).map((item: any) => item);;
+      this.selectedKey = selectedKeys;
+
+      this.SalesmanCommissionForm.controls.salesManFrom.setValue(ParcedPreFetchData?.CONTROL_DETAIL.STRFRSMAN)
+      this.SalesmanCommissionForm.controls.salesManTo.setValue(ParcedPreFetchData?.CONTROL_DETAIL.STRTOSMAN)
+
+      let vocTypeArr: any= []
+      this.selectedKey.forEach((item: any)=>{
+        vocTypeArr.push(item.VOCTYPE+'#') 
+      })
+      const uniqueArray = [...new Set( vocTypeArr )];
+      const plainText = uniqueArray.join('');
+      this.VocTypeParam = plainText
     }
+    else{
+      
+      const formattedUserBranch = this.userLoginBranch ? `${this.userLoginBranch}#` : null;
+      this.SalesmanCommissionForm.controls.branch.setValue(formattedUserBranch);
+      this.fetchedBranchDataParam = formattedUserBranch;
+      this.fetchedBranchData= this.fetchedBranchDataParam?.split("#")
+   
+      this.dateToPass = {
+        fromDate:  this.formatDateToYYYYMMDD(new Date()),
+        toDate: this.formatDateToYYYYMMDD(new Date()),
+      };
+
+    }
+  }
+
+  formatDateToYYYYMMDD(dateString: any) {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   }
 
   setDateValue(event: any){
     if(event.FromDate){
       this.SalesmanCommissionForm.controls.fromdate.setValue(event.FromDate);
-      console.log(event.FromDate)
+      this.dateToPass.fromDate = event.FromDate
     }
     else if(event.ToDate){
       this.SalesmanCommissionForm.controls.todate.setValue(event.ToDate);
+      this.dateToPass.toDate = event.ToDate
     }
   }
 
@@ -148,6 +215,19 @@ export class PosSalesmanCommissionComponent implements OnInit {
       this.SalesmanCommissionForm.controls.templateName.setValue(null)
     }
   }
+
+  onGridSelection(event: any) {
+    this.selectedKey= event.selectedRowKeys;
+    this.selectedDatas = event.selectedRowsData;
+    let vocTypeArr: any= []
+    this.selectedDatas.forEach((item: any)=>{
+      vocTypeArr.push(item.VOCTYPE+'#') 
+    })
+    const uniqueArray = [...new Set( vocTypeArr )];
+    const plainText = uniqueArray.join('');
+    this.VocTypeParam = plainText
+  }
+
 
   saveTemplate(){
     this.popupVisible = true;
@@ -167,7 +247,15 @@ export class PosSalesmanCommissionComponent implements OnInit {
               "ISDEFAULT": 1
             },
             "CONTROL_DETAIL": {
-             
+              "STRVOCTYPE1" : this.VocTypeParam || '',
+              "STRVOCTYPE2" : this.VocTypeParam || '',
+              "STRBRANCHES" : this.formattedBranchDivisionData || this.fetchedBranchDataParam,
+              "STRFRSMAN" : this.SalesmanCommissionForm.controls.salesManFrom.value,
+              "STRTOSMAN" : this.SalesmanCommissionForm.controls.salesManTo.value,
+              "FRVOCDATE" : this.formatDateToYYYYMMDD(this.dateToPass.fromDate),
+              "TOVOCDATE" : this.formatDateToYYYYMMDD(this.dateToPass.toDate),
+              "LOGINBRANCH" : this.userLoginBranch,
+              "LOGDATA" : '',
             }
         })
       }
@@ -198,55 +286,133 @@ export class PosSalesmanCommissionComponent implements OnInit {
 
   previewClick() {
     let postData = {
-      "SPID": "0118",
+      "SPID": "0159",
       "parameter": {
-        
+        "STRVOCTYPE1" : this.VocTypeParam || '',
+        "STRVOCTYPE2" : this.VocTypeParam || '',
+        "STRBRANCHES" : this.formattedBranchDivisionData || this.fetchedBranchDataParam,
+        "STRFRSMAN" : this.SalesmanCommissionForm.controls.salesManFrom.value,
+        "STRTOSMAN" : this.SalesmanCommissionForm.controls.salesManTo.value,
+        "FRVOCDATE" : this.formatDateToYYYYMMDD(this.dateToPass.fromDate),
+        "TOVOCDATE" : this.formatDateToYYYYMMDD(this.dateToPass.toDate),
+        "LOGINBRANCH" : this.userLoginBranch,
+        "LOGDATA" : '',
       }
     }
     console.log(postData)  
     this.commonService.showSnackBarMsg('MSG81447');
     this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
     .subscribe((result: any) => {
-      console.log(result);
-      let data = result.dynamicData;
-      const width = window.innerWidth;
-      const height = window.innerHeight;
-      const windowFeatures = `width=${width},height=${height},fullscreen=yes`;
-      var WindowPrt = window.open(' ', ' ', windowFeatures);
-      if (WindowPrt === null) {
-        console.error('Failed to open the print window. Possibly blocked by a popup blocker.');
-        return;
+      // console.log(result);
+      if(result.status != "Failed"){
+        let data = result.dynamicData;
+        let printContent = data[0][0].HTMLOUT;
+        this.htmlPreview = this.sanitizer.bypassSecurityTrustHtml(printContent);
+        const blob = new Blob([this.htmlPreview.changingThisBreaksApplicationSecurity], { type: 'text/html' });
+        this.commonService.closeSnackBarMsg();
+        const url = URL.createObjectURL(blob);
+        window.open(url, '_blank');
       }
-      let printContent = data[0][0].HTMLINPUT;
-      WindowPrt.document.write(printContent);
-      WindowPrt.document.close();
-      WindowPrt.focus();  
-      WindowPrt.onload = function () {
-        if (WindowPrt && WindowPrt.document.head) {
-          let styleElement = WindowPrt.document.createElement('style');
-          styleElement.textContent = `
-                      @page {
-                          size: A5 landscape;
-                      }
-                      body {
-                          margin: 0mm;
-                      }
-                  `;
-          WindowPrt.document.head.appendChild(styleElement);
+      else{
+        this.toastr.error(result.message)
+        return
+      }
+   
+      // WindowPrt.document.write(printContent);
+      // WindowPrt.document.close();
+      // WindowPrt.focus();  
+      // WindowPrt.onload = function () {
+      //   if (WindowPrt && WindowPrt.document.head) {
+      //     let styleElement = WindowPrt.document.createElement('style');
+      //     styleElement.textContent = `
+      //                 @page {
+      //                     size: A5 landscape;
+      //                 }
+      //                 body {
+      //                     margin: 0mm;
+      //                 }
+      //             `;
+      //     WindowPrt.document.head.appendChild(styleElement);
 
-          setTimeout(() => {
-            if (WindowPrt) {
-              WindowPrt.print();
-            } else {
-              console.error('Print window was closed before printing could occur.');
-            }
-          }, 800);
-        }
-      };
-      this.commonService.closeSnackBarMsg()
+      //     setTimeout(() => {
+      //       if (WindowPrt) {
+      //         WindowPrt.print();
+      //       } else {
+      //         console.error('Print window was closed before printing could occur.');
+      //       }
+      //     }, 800);
+      //   }
+      // };
     });      
   }
 
+  printBtnClick(){
+    let logData =  {
+      "VOCTYPE": this.commonService.getqueryParamVocType() || "",
+      "REFMID": "",
+      "USERNAME": this.commonService.userName,
+      "MODE": "PRINT",
+      "DATETIME": this.commonService.formatDateTime(new Date()),
+      "REMARKS":"",
+      "SYSTEMNAME": "",
+      "BRANCHCODE": this.commonService.branchCode,
+      "VOCNO": "",
+      "VOCDATE": "",
+      "YEARMONTH" : this.commonService.yearSelected
+    }
+    let postData = {
+      "SPID": "0114",
+      "parameter": {
+        "STRBRANCHCODES": this.formattedBranchDivisionData || this.fetchedBranchDataParam,
+        "STRVOCTYPES": this.VocTypeParam, //this.commonService.getqueryParamVocType(),
+        "FROMVOCDATE": this.formatDateToYYYYMMDD(this.dateToPass.fromDate),
+        "TOVOCDATE": this.formatDateToYYYYMMDD(this.dateToPass.toDate) ,
+        "flag": '',
+        "USERBRANCH": localStorage.getItem('userbranch'),
+        "USERNAME": localStorage.getItem('username'),
+        "Logdata": JSON.stringify(logData)
+      }
+    }
+ 
+    this.commonService.showSnackBarMsg('MSG81447');
+    this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+    .subscribe((result: any) => {
+      let data = result.dynamicData;
+      if(result.status == "Success"){
+        let printContent = data[0][0].HTMLINPUT;
+        this.htmlPreview = this.sanitizer.bypassSecurityTrustHtml(printContent);
+        if(this.htmlPreview.changingThisBreaksApplicationSecurity){
+
+          setTimeout(() => {
+            const content = this.htmlPreview?.changingThisBreaksApplicationSecurity;
+
+            let  userBranchDesc:any  = localStorage.getItem('BRANCH_PARAMETER')
+            userBranchDesc = JSON.parse(userBranchDesc)
+      
+            if (content && Object.keys(content).length !== 0) {
+              const modifiedContent = content.replace(/<title>.*?<\/title>/, `<title>${userBranchDesc.DESCRIPTION}</title>`);
+              const printWindow = window.open('', '', 'height=600,width=800');
+              printWindow?.document.write(modifiedContent);
+              printWindow?.document.close();
+              printWindow?.focus();
+              printWindow?.print();
+              printWindow?.close();
+             
+            } else {
+              Swal.fire('No Data!', 'There is no data to print!', 'info');
+              this.commonService.closeSnackBarMsg();
+              return
+            }
+          }, 1500); 
+
+        }
+      }
+      else{
+        this.toastr.error(result.message)
+        return
+      }
+    });  
+  }
 
 
 }
