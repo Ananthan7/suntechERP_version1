@@ -13,7 +13,6 @@ import {
 import { PcrSelectionComponent } from "./pcr-selection/pcr-selection.component";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { MasterSearchModel } from "src/app/shared/data/master-find-model";
-import { CommonServiceService } from "src/app/services/common-service.service";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Subscription } from "rxjs";
 import { SuntechAPIService } from "src/app/services/suntech-api.service";
@@ -25,6 +24,7 @@ import { IndexedDbService } from "src/app/services/indexed-db.service";
 import { AuditTrailComponent } from "src/app/shared/common/audit-trail/audit-trail.component";
 import { MasterSearchComponent } from "src/app/shared/common/master-search/master-search.component";
 import { ItemDetailService } from "src/app/services/modal-service.service";
+import { CommonServiceService } from "src/app/services/common-service.service";
 
 @Component({
   selector: "app-advance-return",
@@ -130,7 +130,7 @@ export class AdvanceReturnComponent implements OnInit {
   advanceReturnForm: FormGroup = this.formBuilder.group({
     vocType: [""],
     vocNo: [""],
-    vocDate: [new Date()],
+    vocDate: [new Date(), Validators.required],
     partyCode: [""],
     partyCurrency: [""],
     partyCurrencyRate: [""],
@@ -193,6 +193,7 @@ export class AdvanceReturnComponent implements OnInit {
       this.generateVocNo();
       this.getPartyCode();
     }
+    this.triggerSelectedAction();
     this.renderer.selectRootElement('#vocDateInput').focus();
   }
 
@@ -228,13 +229,79 @@ export class AdvanceReturnComponent implements OnInit {
     );
   }
 
-  getArgsData() {
-    console.log("this.content", this.content);
+  triggerSelectedAction(){
     if (this.content.FLAG == "VIEW") this.viewOnly = true;
-    if (this.content.FLAG == "EDIT") {
+    else if (this.content.FLAG == "EDIT") {
       console.log(this.comService.EditDetail.REASON);
       this.editOnly = true;
     }
+    else if (this.content.FLAG == 'DELETE') {
+      this.viewOnly = true;
+      this.deleteRetrunRecord()
+    }
+  }
+
+  showConfirmationDialog(): Promise<any> {
+    return Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete!'
+    });
+  }
+
+  deleteRetrunRecord() {
+    if (this.content && this.content.FLAG == 'VIEW') return
+    if (!this.content?.MID) {
+      this.comService.toastErrorByMsgId('MSG2347');
+      return;
+    }
+
+    this.showConfirmationDialog().then((result) => {
+      if (result.isConfirmed) {
+        let API = `AdvanceReceipt/DeleteAdvanceReceipt/${this.content.BRANCH_CODE}/${this.content.VOCTYPE}/${this.content.VOCNO}/${this.content.YEARMONTH}`;
+        let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
+          .subscribe((result) => {
+            if (result) {
+              if (result.status == "Success") {
+                this.showSuccessDialog('Voucher '+ this.content?.VOCNO + ' Deleted successfully');
+              } else {
+                this.comService.toastErrorByMsgId('MSG2272');
+              }
+            } else {
+              this.comService.toastErrorByMsgId('MSG1880');
+            }
+          }, err => {
+            this.comService.toastErrorByMsgId('MSG1531')
+          });
+        this.subscriptions.push(Sub);
+      }
+    });
+  }
+
+  afterSave(value: any) {
+    if (value) {
+      this.advanceReturnForm.reset()
+      this.close('reloadMainGrid')
+    }
+  }
+
+  showSuccessDialog(message: string): void {
+    Swal.fire({
+      title: message,
+      text: '',
+      icon: 'success',
+      confirmButtonColor: '#336699',
+      confirmButtonText: 'Ok'
+    }).then((result: any) => {
+      this.afterSave(result.value)
+    });
+  }
+
+  getArgsData() {
 
     this.snackBar.open("Loading...");
     let Sub: Subscription = this.dataService

@@ -38,6 +38,7 @@ import { PlanetService } from 'src/app/services/planet-integration.service';
 import { DxDataGridComponent } from 'devextreme-angular';
 import { MatSelectChange } from '@angular/material/select';
 import SignaturePad from 'signature_pad';
+import Swal from 'sweetalert2';
 
 const baseUrl = environment.baseUrl;
 const baseImgUrl = environment.baseImageUrl;
@@ -1267,6 +1268,67 @@ export class AddPosComponent implements OnInit {
     return optionExists ? null : { optionNotFound: true };
   }
 
+  afterSave(value: any) {
+    if (value) {
+      this.vocDataForm.reset()
+      this.close('reloadMainGrid')
+    }
+  }
+
+  showSuccessDialog(message: string): void {
+    Swal.fire({
+      title: message,
+      text: '',
+      icon: 'success',
+      confirmButtonColor: '#336699',
+      confirmButtonText: 'Ok'
+    }).then((result: any) => {
+      this.afterSave(result.value)
+    });
+  }
+
+  
+  showConfirmationDialog(): Promise<any> {
+    return Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete!'
+    });
+  }
+
+  deleteSaleRecord() {
+    if (this.content && this.content.FLAG == 'VIEW') return
+    if (!this.content?.MID) {
+      this.comFunc.toastErrorByMsgId('MSG2347');
+      return;
+    }
+
+    this.showConfirmationDialog().then((result) => {
+      if (result.isConfirmed) {
+        let API = `RetailSales/DeleteRetailSales/${this.content.BRANCH_CODE}/${this.content.VOCTYPE}/${this.content.VOCNO}/${this.content.YEARMONTH}`;
+        let Sub: Subscription = this.suntechApi.deleteDynamicAPI(API)
+          .subscribe((result) => {
+            if (result) {
+              if (result.status == "Success") {
+                this.showSuccessDialog('Voucher '+ this.content?.VOCNO + ' Deleted successfully');
+              } else {
+                this.comFunc.toastErrorByMsgId('MSG2272');
+              }
+            } else {
+              this.comFunc.toastErrorByMsgId('MSG1880');
+            }
+          }, err => {
+            this.comFunc.toastErrorByMsgId('MSG1531')
+          });
+        this.subscriptions.push(Sub);
+      }
+    });
+  }
+
   async getArgs() {
     console.log('======content==============================');
     console.log(this.content);
@@ -1276,7 +1338,7 @@ export class AddPosComponent implements OnInit {
     if (this.content != undefined)
       this.posMode = this.content?.FLAG;
 
-    if (this.content?.FLAG == 'EDIT' || this.content?.FLAG == 'VIEW') {
+    if (this.content?.FLAG == 'EDIT' || this.content?.FLAG == 'VIEW'||this.content?.FLAG == 'DELETE') {
       this.LOCKVOUCHERNO = true;
       this.vocDataForm.controls.fcn_voc_no.setValue(this.content.VOCNO);
       this.vocDataForm.controls.vocdate.setValue(this.content.VOCDATE);
@@ -1294,9 +1356,13 @@ export class AddPosComponent implements OnInit {
         this.voucherDetails = this.comFunc.getVoctypeMasterByVocTypeMain(this.strBranchcode, this.vocDataForm.value.voc_type, this.mainVocType)
         console.log(this.voucherDetails)
       }
-      if (this.content.FLAG == 'VIEW') {
+      else if (this.content.FLAG == 'VIEW') {
         this.viewOnly = true;
 
+      }  
+      else if (this.content.FLAG == 'DELETE') {
+      this.viewOnly = true;
+      this.deleteSaleRecord()
       }
 
       console.log('!this.viewOnly && !this.editOnly', this.viewOnly, this.editOnly);
@@ -2697,10 +2763,48 @@ export class AddPosComponent implements OnInit {
     this.isNewCustomer = false;
   }
 
+  closeExchange() {
+
+    if(this.viewOnly){
+      this.modalReference.dismiss();
+    }
+
+    else {
+      this.openDialog('Warning', this.comFunc.getMsgByID('MSG1212'), false);
+
+      this.dialogBox.afterClosed().subscribe((action: any) => {
+        if (action == 'Yes') {
+
+          this.modalReference.dismiss();
+
+        }
+      });
+    }
+
+    
+  }
+
   closeItemModal() {
-    this.modalReference.dismiss();
-    this.isNetAmountChange = false;
-    this.editLineItem = false;
+
+    if(this.viewOnly){
+      this.modalReference.dismiss();
+      this.isNetAmountChange = false;
+      this.editLineItem = false;
+    }
+
+    else {
+      this.openDialog('Warning', this.comFunc.getMsgByID('MSG1212'), false);
+
+      this.dialogBox.afterClosed().subscribe((action: any) => {
+        if (action == 'Yes') {
+
+          this.modalReference.dismiss();
+
+        }
+      });
+    }
+
+    
   }
   open(content: any, salesReturnEdit = false, receiptItemData = null, custForm = false, receiptDetailView = false, isNewCustomer = false, isNewItem = false) {
     this.lineItemModalForSalesReturn = false;
@@ -3073,13 +3177,20 @@ export class AddPosComponent implements OnInit {
           this.newLineItem.LESSTHANCOST = stockInfos.LESSTHANCOST;
           this.newLineItem.TPROMOTIONALITEM = stockInfos.TPROMOTIONALITEM;
           this.managePcsGrossWt();
-          if (this.newLineItem.IS_BARCODED_ITEM != undefined && this.newLineItem.TPROMOTIONALITEM != undefined) {
-            if (!this.newLineItem?.IS_BARCODED_ITEM || this.comFunc.stringToBoolean(this.newLineItem?.TPROMOTIONALITEM.toString())) {
-              this.removeValidationsForForms(this.lineItemForm, ['fcn_li_rate', 'fcn_li_total_amount']);
-            } else {
-              this.setMakingValidation();
-            }
-          }
+
+          this.removeValidationsForForms(this.lineItemForm, ['fcn_li_rate', 'fcn_li_total_amount']);
+
+
+          // if (this.newLineItem.IS_BARCODED_ITEM != undefined && this.newLineItem.TPROMOTIONALITEM != undefined) {
+
+
+          //   if (!this.newLineItem?.IS_BARCODED_ITEM || this.comFunc.stringToBoolean(this.newLineItem?.TPROMOTIONALITEM.toString())) {
+          //     this.removeValidationsForForms(this.lineItemForm, ['fcn_li_rate', 'fcn_li_total_amount']);
+          //   } else {
+          //     this.setMakingValidation();
+          //   }
+          // }
+
           this.focusAndSetReadOnly(stockInfos);
         }
       }
@@ -3281,9 +3392,11 @@ export class AddPosComponent implements OnInit {
       this.comFunc.setCommaSerperatedNumber(amount, 'AMOUNT')
     )
   }
+
   public openAdjustSaleReturnModal() {
     this.adjustSaleReturnModalRef = this.modalService.open(this.adjust_sale_return_modal, { size: 'lg' });
   }
+  
   editTableSalesReturn(event: any) {
     this.salesReturnEditId = event.data.ID;
     event.cancel = true;
@@ -4819,7 +4932,7 @@ export class AddPosComponent implements OnInit {
       NETWT: this.divisionMS == "S" ? 0 : items.NETWT,
       PURITY: items.PURITY,
       PUREWT: items.PUREWT,
-      CHARGABLEWT: this.divisionMS == "S" ? 0 : items.CHARGABLEWT,
+      CHARGABLEWT: this.divisionMS == "M"||this.newLineItem.DIVISION == 'D' ? 0 : items.CHARGABLEWT,
       MKG_RATEFC: items.MKG_RATEFC,
       MKG_RATECC: this.comFunc.FCToCC(
         this.vocDataForm.value.txtCurrency,
@@ -5650,7 +5763,8 @@ export class AddPosComponent implements OnInit {
       //   net_amount: '',
       // };
       this.sumTotalValues();
-      this.modalReference.close();
+      this.adjustSaleReturnModalRef.close();
+      // this.modalReference.close();
       // this.modalReference.dismiss();
     } else {
       this.snackBar.open('Please Fill Required Fields', '', {
@@ -6572,10 +6686,9 @@ export class AddPosComponent implements OnInit {
       PUREWT: isPulled ? data.METAL_RATE_GMSFC : data.pure_wt, // m
       CHARGABLEWT: isPulled
         ? data.DIVISIONMS
-        : (data.divisionMS == "S"
+        : (data.divisionMS == "M"||this.newLineItem.DIVISION == 'D'
           ? 0
           : this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_net_wt)),
-      // CHARGABLEWT: data.NET_WT, // net weight
       MKG_RATEFC: isPulled ? data.MKG_RATEFC : this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_rate) || 0, //need
       MKG_RATECC: isPulled ? data.MKG_RATECC : this.comFunc.FCToCC(
         this.vocDataForm.value.txtCurrency,
@@ -7920,11 +8033,15 @@ export class AddPosComponent implements OnInit {
                   this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_net_amount);
                 // this.li_tag_val = this.newLineItem.TAG_LINES;
 
+                   this.removeValidationsForForms(this.lineItemForm, ['fcn_li_rate', 'fcn_li_total_amount']);
 
-                if (!this.newLineItem?.IS_BARCODED_ITEM || this.comFunc.stringToBoolean(this.newLineItem.TPROMOTIONALITEM.toString()))
-                  this.removeValidationsForForms(this.lineItemForm, ['fcn_li_rate', 'fcn_li_total_amount']);
-                else
-                  this.setMakingValidation();
+
+                // if (!this.newLineItem?.IS_BARCODED_ITEM || this.comFunc.stringToBoolean(this.newLineItem.TPROMOTIONALITEM.toString()))
+                //   this.removeValidationsForForms(this.lineItemForm, ['fcn_li_rate', 'fcn_li_total_amount']);
+                // else{
+                //   this.setMakingValidation();
+                // }
+                
 
                 const stoneCondition = this.comFunc.stringToBoolean(this.newLineItem.STONE?.toString());
                 this.toggleStoneAndNetWtFields(stoneCondition);
@@ -8055,7 +8172,7 @@ export class AddPosComponent implements OnInit {
     ]);
     this.addValidationsForForms(this.lineItemForm, 'fcn_li_total_amount', [
       Validators.required,
-      Validators.min(1),
+      Validators.min(0.1),
     ]);
   }
 
@@ -14498,16 +14615,16 @@ export class AddPosComponent implements OnInit {
 
   
 
-  focusField(fieldName: any) {
+  focusField(fieldName: string) {
     const excludeQtyValidations = ['M', 'D', 'W', 'N'];
-    if (
-      (excludeQtyValidations.some(v => this.newLineItem.DIVISION.toUpperCase().includes(v)))) {
-        this.renderer.selectRootElement('#fcn_li_net_amount')?.select();
-        (this as any)[fieldName].nativeElement.select();
+    if (excludeQtyValidations.some(v => this.newLineItem.DIVISION?.toUpperCase().includes(v))) {
+        this.renderer.selectRootElement(`#${fieldName}`)?.select();
+        if ((this as any)[fieldName] && (this as any)[fieldName].nativeElement) {
+            (this as any)[fieldName].nativeElement.select();
+        }
     } 
-   
-    
-  }
+}
+
   
 
   setGiftType() {
