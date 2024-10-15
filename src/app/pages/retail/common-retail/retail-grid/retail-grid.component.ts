@@ -362,13 +362,13 @@ export class RetailGridComponent implements OnInit {
         } catch (e) {
           return;
         }
-
+ 
         const fromVocDate = parsedData.CONTROL_DETAIL?.FROMVOCDATE || parsedData.CONTROL_DETAIL?.STRFROMDATE ||
           parsedData.CONTROL_DETAIL?.strFmDate || parsedData.CONTROL_DETAIL?.FrVocDate || parsedData.CONTROL_DETAIL?.str_FmDate
-          || parsedData.CONTROL_DETAIL?.strAsOnDate;;
+          || parsedData.CONTROL_DETAIL?.strAsOnDate || parsedData.CONTROL_DETAIL?.FRVOCDATE;
         const toVocDate = parsedData.CONTROL_DETAIL?.TOVOCDATE || parsedData.CONTROL_DETAIL?.STRTODATE ||
           parsedData.CONTROL_DETAIL?.strToDate || parsedData.CONTROL_DETAIL?.ToVocDate || parsedData.CONTROL_DETAIL?.str_ToDate
-          || parsedData.CONTROL_DETAIL?.strAsOnDate;;
+          || parsedData.CONTROL_DETAIL?.strAsOnDate || parsedData.CONTROL_DETAIL?.TOVOCDATE;
       
         item.FROMVOCDATE = fromVocDate;
         item.TOVOCDATE = toVocDate;
