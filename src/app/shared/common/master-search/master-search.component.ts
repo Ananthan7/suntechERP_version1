@@ -108,7 +108,21 @@ export class MasterSearchComponent implements OnInit {
           this.searchValueChange()
         }
         this.dataSource = result.dynamicData[0];
-        this.setGridHeaders()
+        this.setGridHeaders();
+
+        if (this.MasterSearchData.LOOKUPID === 9) {
+          this.dataSource = this.dataSource.map(item => {
+            const convRate = item["Conv Rate"];
+            const purRate = item["Pur Rate"];
+            
+            return {
+              ...item,
+              "Conv Rate": typeof convRate === 'number' ? this.commonService.decimalQuantityFormat(convRate, 'RATE')  : convRate,
+              "Pur Rate": typeof purRate === 'number' ?this.commonService.decimalQuantityFormat(purRate, 'RATE') : purRate
+            };
+          });
+        }
+
         let dataCount = result.dynamicData[1];
         if (dataCount) this.totalItems = this.commonService.emptyToZero(dataCount[0]?.COUNT)
         this.currentPage++;

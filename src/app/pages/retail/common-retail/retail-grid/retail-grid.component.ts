@@ -13,6 +13,7 @@ import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 export class RetailGridComponent implements OnInit {
   @Input() MasterGridData!: any;
   @Output() editRowClick = new EventEmitter<any>();
+  @Output() deleteBtnClick = new EventEmitter<any>();
   @Output() viewRowClick = new EventEmitter<any>();
   @Output() AddBtnClick = new EventEmitter<any>();
   @Output() AuditTrailClick = new EventEmitter<any>();
@@ -53,6 +54,7 @@ export class RetailGridComponent implements OnInit {
   ) {
     this.viewRowDetails = this.viewRowDetails.bind(this);
     this.editRowDetails = this.editRowDetails.bind(this);
+    this.deleteRowDetails = this.deleteRowDetails.bind(this);
     this.onClickAuditTrail = this.onClickAuditTrail.bind(this);
     this.tableName = this.CommonService.getqueryParamTable()
   }
@@ -70,6 +72,15 @@ export class RetailGridComponent implements OnInit {
   }
   editRowDetails(e: any) {
     this.editRowClick.emit(e);
+  }
+  deleteRowDetails(e: any) {
+    console.log(e.row.data);
+    let data = e.row.data
+    if (data.FLAG == 1) {
+      this.CommonService.toastErrorByMsgId('Cannot delete data in use')
+      return
+    }
+    this.deleteBtnClick.emit(e);
   }
   onClickAuditTrail(e: any) {
     this.AuditTrailClick.emit(e);

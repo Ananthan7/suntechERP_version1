@@ -882,7 +882,7 @@
 <ng-template #oldgoldmodal let-modal modal-lg>
   <div class="modal-header" style="padding: 10px 20px">
     <h4 class="modal-title" id="modal-pos-metal">Exchange</h4>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+    <button type="button" class="close" aria-label="Close"  (click)="closeExchange()">
       <span aria-hidden="true">×</span>
     </button>
   </div>
@@ -1257,7 +1257,7 @@
           Save
         </button>
         &nbsp;
-        <button mat-flat-button class="cancel-button btn-width" (click)="modal.dismiss('Cross click')" id="ID093">
+        <button mat-flat-button class="cancel-button btn-width" (click)="closeExchange()" id="ID093">
           Cancel
         </button>
         &nbsp;
@@ -1269,7 +1269,7 @@
 <ng-template #adjust_sale_return_modal let-modal modal-lg>
   <div class="modal-header" style="padding: 10px 20px">
     <h4 class="modal-title" id="modal-pos-metal">Sales Return</h4>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+    <button type="button" class="close" aria-label="Close" (click)="salesRetClose()">
       <span aria-hidden="true">×</span>
     </button>
   </div>
@@ -1502,13 +1502,13 @@
       </div>
       <div class="col-md-12" style="padding-bottom: 20px">
         <div style="text-align: right; padding: 10px">
-          <button mat-flat-button class="btn-m-r-10 update-finish-button btn-width" (click)="addItemtoSalesReturn()"
-            [disabled]="viewOnly" id="ID092">
+          <button *ngIf="selectedItemsCount !== 0 "mat-flat-button class="btn-m-r-10 update-finish-button btn-width" (click)="addItemtoSalesReturn()"
+          [disabled]="viewOnly||!salesReturnsItems_forVoc.length" id="ID092">
             SAVE
           </button>
-          <button mat-flat-button color="warn" (click)="modal.dismiss('Cross click')" id="ID093"
-            class="cancel-button btn-width">CANCEL
-          </button>
+          <button mat-flat-button color="warn" (click)="salesRetClose()" id="ID093"
+          class="cancel-button btn-width">CANCEL
+        </button>
           &nbsp;
         </div>
       </div>

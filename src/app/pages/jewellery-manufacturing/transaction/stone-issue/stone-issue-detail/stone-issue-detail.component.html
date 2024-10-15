@@ -10,7 +10,7 @@
   (changeJobClick)="changeJobClicked()" [isViewChangeJob]="!viewMode"
   [isViewSave]="!viewMode" [isViewContinue]="!viewMode"
   (continueClick)="formSubmit('CONTINUE')"
-  [isViewDelete]="true" [isViewSaveGridData]="!viewMode"
+  [isViewDelete]="false" [isViewSaveGridData]="!viewMode"
   [isViewMore]="false"></modal-header>
 
 <div class="container-fluid pt-3">
@@ -24,7 +24,7 @@
             <mat-form-field appearance="outline" style="width: 100%;">
               <input type="text" matInput formControlName="jobNumber"
                 [readonly]="viewMode" UpperCaseDirective
-                (focusout)="jobNumberValidate($event)"
+                (focusout)="jobNumberValidate($event)" (keyup)="codeEnabled()"
                 (keydown)="lookupKeyPress($event,'jobNumber')"
                 #jobNumberInput />
               <master-search class="masterSearch"
@@ -46,7 +46,7 @@
           <div class="col-md-2">
             <mat-form-field appearance="outline" style="width: 100%;">
               <input type="text" matInput formControlName="subjobnumber"
-                [readonly]="viewMode" UpperCaseDirective
+                [readonly]="viewMode || codeEnable" UpperCaseDirective
                 (focusout)="subJobNumberValidate($event)"
                 (keydown)="lookupKeyPress($event,'subjobnumber')" />
               <master-search class="masterSearch"
@@ -97,7 +97,7 @@
           <div class="col-md-5">
             <mat-form-field appearance="outline" style="width: 100%;">
               <input type="text" matInput formControlName="process"
-                [readonly]="viewMode" UpperCaseDirective
+              [readonly]="viewMode || codeEnable" UpperCaseDirective
                 (focusout)="SPvalidateLookupField($event,processCodeData,'process')"
                 (keydown)="lookupKeyPress($event,'process')" />
               <master-search class="masterSearch"
@@ -110,7 +110,7 @@
           <div class="col-md-5">
             <mat-form-field appearance="outline" style="width: 100%;">
               <input type="text" matInput formControlName="processname"
-                readonly />
+                readonly  [readonly]="viewMode || codeEnable"/>
             </mat-form-field>
           </div>
         </div>
@@ -120,7 +120,7 @@
           <div class="col-md-5">
             <mat-form-field appearance="outline" style="width: 100%;">
               <input type="text" matInput formControlName="worker"
-                [readonly]="viewMode" UpperCaseDirective
+                [readonly]="viewMode || codeEnable" UpperCaseDirective
                 (focusout)="SPvalidateLookupField($event,workerCodeData,'worker')"
                 (keydown)="lookupKeyPress($event,'worker')" />
               <master-search class="masterSearch"
@@ -143,8 +143,8 @@
           <div class="col-md-1">
             <mat-form-field appearance="outline" style="width: 80px;">
               <input type="text" matInput formControlName="DIVCODE"
-                placeholder="Div Code" [readonly]="viewMode"
-                (focusout)="divisionCodeValidate($event)"
+                placeholder="Div Code" [readonly]="viewMode || codeEnable"
+                (focusout)="divisionCodeValidate($event)" maxlength="1"
                 (keydown)="lookupKeyPress($event,'DIVCODE')"
                 UpperCaseDirective />
               <master-search class="masterSearch"
@@ -157,10 +157,10 @@
             <mat-form-field appearance="outline"
               style="width: 90%; margin-left: 28px;">
               <input type="text" matInput formControlName="stockCode"
-                placeholder="Stock Code"
+                placeholder="Stock Code" maxlength="16"
                 (focusout)="stockCodeValidate($event)" UpperCaseDirective
                 (keydown)="lookupKeyPress($event,'stockCode')"
-                [readonly]="viewMode" />
+                [readonly]="viewMode || codeEnable" />
               <master-search class="masterSearch"
                 [MasterSearchData]="stockCodeData" #overlaystockCodeSearch
                 (newRowClick)="stockCodeSelected($event)"
@@ -182,7 +182,7 @@
           <div class="col-md-5">
             <mat-form-field appearance="outline" style="width: 100%;">
               <input type="text" matInput formControlName="batchid"
-                [readonly]="viewMode" />
+                [readonly]="viewMode || codeEnable" />
             </mat-form-field>
           </div>
           <div class="col-sm-4 mt-3">
@@ -199,7 +199,7 @@
                 (keydown)="lookupKeyPress($event,'LOCTYPE_CODE')"
                 UpperCaseDirective
                 (focusout)="validateLookupField($event,locationCodeData,'LOCTYPE_CODE')"
-                [readonly]="viewMode" />
+                [readonly]="viewMode || codeEnable" />
               <master-search class="masterSearch"
                 [MasterSearchData]="locationCodeData" #overlaylocationSearch
                 (newRowClick)="locationCodeSelected($event)"
@@ -228,7 +228,7 @@
             <mat-form-field appearance="outline" style="width: 100%;">
               <input type="text" matInput formControlName="pieces"
                 maxlength="13" class="text-right" NumberOnly
-                [readonly]="viewMode" />
+                [readonly]="viewMode || codeEnable" />
             </mat-form-field>
           </div>
           <label for="inputPassword" class="col-sm-1 col-form-label">Shape :
@@ -254,7 +254,7 @@
             <mat-form-field appearance="outline" style="width: 100%;">
               <input type="text" matInput formControlName="carat"
               MetalDecimalInput maxlength="15"
-                style="text-align: right;" [readonly]="viewMode" />
+                style="text-align: right;" [readonly]="viewMode || codeEnable" />
             </mat-form-field>
           </div>
           <label for="inputPassword" class="col-sm-1 col-form-label">Size:
@@ -330,7 +330,7 @@
             <mat-form-field appearance="outline" style="width: 100%;">
               <input type="text" matInput formControlName="pointerwt"
                 maxlength="12" FourDecimalInput
-                style="text-align: right;" [readonly]="viewMode" />
+                style="text-align: right;" [readonly]="viewMode || codeEnable" />
             </mat-form-field>
           </div>
         </div>
@@ -340,7 +340,7 @@
           <div class="col-md-6">
             <mat-form-field appearance="outline" style="width: 100%;">
               <input type="text" matInput formControlName="otheratt"
-                maxlength="20" [readonly]="viewMode" />
+                maxlength="20" [readonly]="viewMode || codeEnable" />
             </mat-form-field>
           </div>
         </div>
@@ -352,7 +352,7 @@
           <div class="col-md-10">
             <mat-form-field appearance="outline" style="width: 100%;">
               <input type="text" matInput formControlName="remarks"
-                maxlength="40" [readonly]="viewMode" />
+                maxlength="40" [readonly]="viewMode || codeEnable" />
             </mat-form-field>
           </div>
         </div>

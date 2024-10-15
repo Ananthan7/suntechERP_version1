@@ -323,14 +323,17 @@ export class AlloyMasterComponent implements OnInit {
     }
     this.setCompanyCurrency();
   }
+
   //number validation
   isNumeric(event: any) {
     return this.commonService.isNumeric(event);
   }
+
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
+
   price1LcChange() {
     const form = this.alloyMastereForm.value;
     let curr = this.commonService.CCToFC(form.currency, form.price1Lc)
@@ -338,8 +341,7 @@ export class AlloyMasterComponent implements OnInit {
     console.log(curr);
     // Update percentage calculation
     this.alloyMastereForm.get('price1per')!.setValue(this.percentageCalculate(form.price1Lc));
-    console.log(this.alloyMastereForm.get('price1per')!.setValue(this.percentageCalculate(form.price1Lc)));
-
+    console.log(this.percentageCalculate(form.price1Lc));
 
   }
 
@@ -349,6 +351,7 @@ export class AlloyMasterComponent implements OnInit {
     this.alloyMastereForm.get('price2Fc')!.setValue(this.commonService.decimalQuantityFormat(curr, 'METAL'));
     // Update percentage calculation
     this.alloyMastereForm.get('price2per')!.setValue(this.percentageCalculate(form.price2Lc));
+    console.log(this.percentageCalculate(form.price2Lc));
   }
 
   price3LcChange() {
@@ -380,8 +383,9 @@ export class AlloyMasterComponent implements OnInit {
     let curr = this.commonService.FCToCC(form.currency, form.price1Fc)
     this.alloyMastereForm.get('price1Lc')!.setValue(this.commonService.decimalQuantityFormat(curr, 'METAL'));
     console.log(curr);
-    this.alloyMastereForm.get('price1per')!.setValue(this.percentageCalculate(form.price1Lc));
-    console.log(this.alloyMastereForm.get('price1per')!.setValue(this.percentageCalculate(form.price1Lc)));
+    // Update percentage calculation
+    this.alloyMastereForm.get('price1per')!.setValue(this.percentageCalculate(form.price1Fc));
+    console.log(this.percentageCalculate(form.price1Fc));
 
   }
 
@@ -390,7 +394,9 @@ export class AlloyMasterComponent implements OnInit {
     let curr = this.commonService.FCToCC(form.currency, form.price2Fc)
     this.alloyMastereForm.get('price2Lc')!.setValue(this.commonService.decimalQuantityFormat(curr, 'METAL'));
     console.log(curr);
-    this.alloyMastereForm.get('price2per')!.setValue(this.percentageCalculate(form.price2Lc));
+    // Update percentage calculation
+    this.alloyMastereForm.get('price2per')!.setValue(this.percentageCalculate(form.price2Fc));
+    console.log(this.percentageCalculate(form.price2Fc));
   }
 
   price3FcChange() {
@@ -398,7 +404,9 @@ export class AlloyMasterComponent implements OnInit {
     let curr = this.commonService.FCToCC(form.currency, form.price3Fc)
     this.alloyMastereForm.get('price3Lc')!.setValue(this.commonService.decimalQuantityFormat(curr, 'METAL'));
     console.log(curr);
-    this.alloyMastereForm.get('price3per')!.setValue(this.percentageCalculate(form.price3Lc));
+    // Update percentage calculation
+    this.alloyMastereForm.get('price3per')!.setValue(this.percentageCalculate(form.price3Fc));
+    console.log(this.percentageCalculate(form.price3Fc));
   }
 
   price4FcChange() {
@@ -406,7 +414,9 @@ export class AlloyMasterComponent implements OnInit {
     let curr = this.commonService.FCToCC(form.currency, form.price4Fc)
     this.alloyMastereForm.get('price4Lc')!.setValue(this.commonService.decimalQuantityFormat(curr, 'METAL'));
     console.log(curr);
-    this.alloyMastereForm.get('price4per')!.setValue(this.percentageCalculate(form.price4Lc));
+    // Update percentage calculation
+    this.alloyMastereForm.get('price4per')!.setValue(this.percentageCalculate(form.price4Fc));
+    console.log(this.percentageCalculate(form.price4Fc));
   }
 
   price5FcChange() {
@@ -414,7 +424,9 @@ export class AlloyMasterComponent implements OnInit {
     let curr = this.commonService.FCToCC(form.currency, form.price5Fc)
     this.alloyMastereForm.get('price5Lc')!.setValue(this.commonService.decimalQuantityFormat(curr, 'METAL'));
     console.log(curr);
-    this.alloyMastereForm.get('price5per')!.setValue(this.percentageCalculate(form.price5Lc));
+    // Update percentage calculation
+    this.alloyMastereForm.get('price5per')!.setValue(this.percentageCalculate(form.price5Fc));
+    console.log(this.percentageCalculate(form.price5Fc));
   }
 
 
@@ -585,10 +597,18 @@ export class AlloyMasterComponent implements OnInit {
     }
   }
 
+
+  checkCostCenter(event: any) {
+
+
+  }
+
   /**use: validate all lookups to check data exists in db */
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
 
     LOOKUPDATA.SEARCH_VALUE = event.target.value
+    console.log(this.alloyMastereForm.value.costCenter);
+
 
     if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
     let param = {
@@ -1238,9 +1258,12 @@ export class AlloyMasterComponent implements OnInit {
     this.priceSchemeDetails = [];
     if (this.priceSchemeDetails?.length > 0) {
       this.fillPriceSchemeDetails() //price scheme master API call
+      console.log('this working 1');
 
     } else {
       this.setPriceCodeFromAPI(e.PRICE_CODE, 'price1code') // price list master API call if scheme is not preset
+      console.log('this working 2');
+
     }
   }
 
@@ -1760,6 +1783,7 @@ export class AlloyMasterComponent implements OnInit {
       }, err => {
         this.alloyMastereForm.controls.code.setValue('')
       })
+    this.validateLookupField(event, this.codeData, 'code');
     this.subscriptions.push(Sub)
   }
 
@@ -1772,7 +1796,6 @@ export class AlloyMasterComponent implements OnInit {
     }
     else if (this.commonService.nullToString(form.costCenter) == '') {
       this.commonService.toastErrorByMsgId('MSG1150')//"costCenter cannot be empty"
-
       return true
     }
     else if (this.commonService.nullToString(form.currency) == '') {
@@ -1825,6 +1848,17 @@ export class AlloyMasterComponent implements OnInit {
       this.updateMeltingType()
       return
     }
+
+    // if (this.alloyMastereForm.value.costCenter != 'ALY') {
+    //   this.commonService.toastErrorByMsgId('Please enter cost center For CONSUMABLE ITEMS ')
+    //   return
+    // } else if (this.alloyMastereForm.value.costCenter != 'CNSL') {
+    //   this.commonService.toastErrorByMsgId('Please enter cost center For CONSUMABLE ITEMS ')
+    //   return
+    // }
+
+
+
     if (this.submitValidations(this.alloyMastereForm.value)) return;
     let API = "DiamondStockMaster/InsertDiamondStockMaster";
     let postData = this.setPostData()
