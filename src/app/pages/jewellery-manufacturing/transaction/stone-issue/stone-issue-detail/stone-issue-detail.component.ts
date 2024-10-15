@@ -35,6 +35,7 @@ export class StoneIssueDetailComponent implements OnInit {
   userName = localStorage.getItem('username');
   branchCode?: String;
   yearMonth?: String;
+  codeEnable: boolean = true;
   private subscriptions: Subscription[] = [];
   jobNumberDetailData: any[] = [];
   imagepath: any[] = []
@@ -158,7 +159,7 @@ export class StoneIssueDetailComponent implements OnInit {
     stockCode: [''],
     stockCodeDes: [''],
     batchid: [''],
-    LOCTYPE_CODE: ['000GEN', Validators.required],
+    LOCTYPE_CODE: [''],
     pieces: [],
     shape: [''],
     clarity: [''],
@@ -233,8 +234,6 @@ export class StoneIssueDetailComponent implements OnInit {
   setFormValues() {
     if (!this.content) return
     console.log(this.content, 'view&edit')
-    console.log(this.tableData[0], 'view&edit')
-    this.tableData = ['DIVCODE',]
     this.branchCode = this.content.BRANCH_CODE || this.content.HEADERDETAILS.BRANCH_CODE;
     this.stoneIssueDetailsFrom.controls.VOCTYPE.setValue(this.content.VOCTYPE || this.content.HEADERDETAILS.VOCTYPE)
     this.stoneIssueDetailsFrom.controls.VOCNO.setValue(this.content.VOCNO || this.content.HEADERDETAILS.VOCNO)
@@ -286,9 +285,13 @@ export class StoneIssueDetailComponent implements OnInit {
    
   }
   setOnLoadDetails(){
-    let branchParam = this.comService.allbranchMaster
-    this.stoneIssueDetailsFrom.controls.LOCTYPE_CODE.setValue(branchParam.DMFGMLOC)
+    let branchParam = this.comService.allbranchMaster;
+
+  // Set LOCTYPE_CODE only if it's not already set
+  if (!this.stoneIssueDetailsFrom.controls.LOCTYPE_CODE.value) {
+    this.stoneIssueDetailsFrom.controls.LOCTYPE_CODE.setValue(branchParam.DMFGMLOC);
   }
+}
 
   onFileChanged(event: any) {
     this.url = event.target.files[0].name
@@ -304,6 +307,7 @@ export class StoneIssueDetailComponent implements OnInit {
   }
 
   locationCodeSelected(e: any) {
+    if (this.checkCode()) return
     console.log(e);
     this.stoneIssueDetailsFrom.controls.LOCTYPE_CODE.setValue(e.LOCATION_CODE);
   }
@@ -329,18 +333,20 @@ export class StoneIssueDetailComponent implements OnInit {
   }
 
   processCodeSelected(e: any) {
+    if (this.checkCode()) return
     this.stoneIssueDetailsFrom.controls.process.setValue(e.PROCESS_CODE);
     this.stoneIssueDetailsFrom.controls.processname.setValue(e.DESCRIPTION);
     this.workerCodeData.WHERECONDITION = `@strProcess='${e.PROCESS_CODE}',@blnActive=1`
   }
 
   workerCodeSelected(e: any) {
+    if (this.checkCode()) return
     this.stoneIssueDetailsFrom.controls.worker.setValue(e.WORKER_CODE);
     this.stoneIssueDetailsFrom.controls.workername.setValue(e.DESCRIPTION);
     this.processCodeData.WHERECONDITION = `@strWorker='${e.WORKER_CODE}',@strCurrentUser='${this.comService.userName}'`
   }
   divCodeSelected(e: any) {
-    console.log(e);
+    if (this.checkCode()) return
     this.stoneIssueDetailsFrom.controls.DIVCODE.setValue(e.Division_Code);
     this.divisionCodeValidate(event)
     
@@ -352,7 +358,7 @@ export class StoneIssueDetailComponent implements OnInit {
   }
 
   stockCodeSelected(e: any) {
-    console.log(e, 'eee')
+    if (this.checkCode()) return
     this.stoneIssueDetailsFrom.controls.stockCode.setValue(e.STOCK_CODE);
     this.stoneIssueDetailsFrom.controls.stockCodeDes.setValue(e.STOCK_DESCRIPTION);
     // this.stoneIssueDetailsFrom.controls.DIVCODE.setValue(e.DivCode);
@@ -615,6 +621,18 @@ export class StoneIssueDetailComponent implements OnInit {
   }
   /**use: to save data to grid*/
   formSubmit(flag: any) {
+    const caratValue = this.stoneIssueDetailsFrom.controls['carat'].value;
+    const pcsValue = this.stoneIssueDetailsFrom.controls['pieces'].value;
+    // Check if carat is 0
+    if (caratValue === 0 || caratValue === '0' || caratValue == null) {
+      this.comService.toastErrorByMsgId('MSG1095'); 
+      return;
+    }
+    if (pcsValue === 0 || pcsValue === '0' || pcsValue == null) {
+      // Show an alert message for PCS being 0
+      this.comService.toastErrorByMsgId('MSG3665'); 
+      return; 
+    }
     if (this.submitValidations(this.stoneIssueDetailsFrom.value)) return;
     let dataToparent = {
       FLAG: flag,
@@ -680,8 +698,6 @@ export class StoneIssueDetailComponent implements OnInit {
   }
 
   resetStockDetails() {
-    this.tableData=[]
-    this.stoneIssueDetailsFrom.reset();
     this.stoneIssueDetailsFrom.controls.stockCode.setValue('')
     this.stoneIssueDetailsFrom.controls.stockCodeDes.setValue('')
     this.stoneIssueDetailsFrom.controls.DIVCODE.setValue('')
@@ -717,10 +733,12 @@ export class StoneIssueDetailComponent implements OnInit {
             console.log(data,'di')
             this.comService.toastErrorByMsgId('MSG1531')
             return
+          }  else {
+            this.comService.toastErrorByMsgId('MSG1531')
+            this.stoneIssueDetailsFrom.controls.DIVCODE.setValue('')
+            this.showOverleyPanel(event, 'DIVCODE')
           }
-        } else {
-          this.comService.toastErrorByMsgId('MSG1747')
-        }
+        } 
       }, err => {
         this.comService.closeSnackBarMsg()
         this.comService.toastErrorByMsgId('MSG1531')
@@ -919,6 +937,7 @@ export class StoneIssueDetailComponent implements OnInit {
             // this.overlayjobNumberSearch.closeOverlayPanel()
             this.subJobNumberValidate()
             this.setStockCodeWhereCondition()
+            this.codeEnabled()
           } else {
             this.comService.toastErrorByMsgId('MSG1531')
             this.stoneIssueDetailsFrom.controls.jobNumber.setValue('')
@@ -936,8 +955,23 @@ export class StoneIssueDetailComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
-
-
+  codeEnabled() {
+    if (this.stoneIssueDetailsFrom.value.jobNumber == '') {
+      this.codeEnable = true;
+    }
+    else {
+      this.codeEnable = false;
+    }
+  }
+  checkCode(): boolean {
+    const jobNumberValue = this.stoneIssueDetailsFrom.controls['jobNumber'].value;
+    if (!jobNumberValue || jobNumberValue.trim() === '') {
+      this.comService.toastErrorByMsgId('MSG3783'); 
+      return true; 
+    }
+    return false; 
+  }
+  
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {
       this.subscriptions.forEach(subscription => subscription.unsubscribe());// unsubscribe all subscription
