@@ -39,7 +39,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
   columnsList: any[] = [
     { title: "Sr #", field: "SRNO" },
     { title: "Branch", field: "BRANCH_CODE" },
-    { title: "Mode", field: "MODE" },
+    { title: "Mode", field: "RECPAY_TYPE" },
     { title: "A/c Code", field: "ACCODE" },
     { title: "Account Head", field: "HDACCOUNT_HEAD" },
     { title: "Currency", field: "CURRENCY_CODE" },
@@ -222,6 +222,8 @@ export class PosCurrencyReceiptComponent implements OnInit {
       this.getPartyCode();
       console.log("Working+++++");
     }
+    this.triggerSelectedAction();
+
     this.renderer.selectRootElement('#vocDateInput').focus();
   }
 
@@ -324,6 +326,18 @@ export class PosCurrencyReceiptComponent implements OnInit {
     return date.toISOString();
   }
 
+  triggerSelectedAction(){
+    if (this.content.FLAG == "VIEW") this.viewOnly = true;
+    else if (this.content.FLAG == "EDIT") {
+      console.log(this.comService.EditDetail.REASON);
+      this.editOnly = true;
+    }
+    else if (this.content.FLAG == 'DELETE') {
+      this.viewOnly = true;
+      this.deleteAdvanceReceipt()
+    }
+  }
+
 
   calculateDateDifference(dateA: Date, dateB: Date): number {
     const timeDifference = dateA.getTime() - dateB.getTime();
@@ -331,13 +345,68 @@ export class PosCurrencyReceiptComponent implements OnInit {
     return Math.floor(dayDifference);
   }
 
-  getArgsData() {
-    console.log("this.content", this.content);
-    if (this.content.FLAG == "VIEW") this.viewOnly = true;
-    if (this.content.FLAG == "EDIT") {
-      this.editOnly = true;
+  afterSave(value: any) {
+    if (value) {
+      this.posCurrencyReceiptForm.reset();
+      this.close('reloadMainGrid')
+    }
+  }
+
+  showSuccessDialog(message: string): void {
+    Swal.fire({
+      title: message,
+      text: '',
+      icon: 'success',
+      confirmButtonColor: '#336699',
+      confirmButtonText: 'Ok'
+    }).then((result: any) => {
+      this.afterSave(result.value)
+    });
+  }
+
+  
+  showConfirmationDialog(): Promise<any> {
+    return Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete!'
+    });
+  }
+
+  deleteAdvanceReceipt() {
+    if (this.content && this.content.FLAG == 'VIEW') return
+    if (!this.content?.MID) {
+      this.comService.toastErrorByMsgId('MSG2347');
+      return;
     }
 
+    this.showConfirmationDialog().then((result) => {
+      if (result.isConfirmed) {
+        let API = `AdvanceReceipt/DeleteAdvanceReceipt/${this.content.BRANCH_CODE}/${this.content.VOCTYPE}/${this.content.VOCNO}/${this.content.YEARMONTH}`;
+        let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
+          .subscribe((result) => {
+            if (result) {
+              if (result.status == "Success") {
+                this.showSuccessDialog('Voucher '+ this.content?.VOCNO + ' Deleted successfully');
+              } else {
+                this.comService.toastErrorByMsgId('MSG2272');
+              }
+            } else {
+              this.comService.toastErrorByMsgId('MSG1880');
+            }
+          }, err => {
+            this.comService.toastErrorByMsgId('MSG1531')
+          });
+        this.subscriptions.push(Sub);
+      }
+    });
+  }
+
+  getArgsData() {
     this.snackBar.open("Loading...");
     let Sub: Subscription = this.dataService
       .getDynamicAPI(
@@ -1079,9 +1148,9 @@ export class PosCurrencyReceiptComponent implements OnInit {
     const preItemIndex = this.posCurrencyDetailsData.findIndex(
       (data: any) => data.SRNO.toString() == postData.SRNO.toString()
     );
-    postData.NET_TOTAL = (
-      parseFloat(postData.AMOUNTFC) + parseFloat(postData.IGST_AMOUNTFC)
-    ).toFixed(2);
+    postData.NET_TOTAL = this.comService.commaSeperation( (
+      this.comService.decimalQuantityFormat( this.comService.emptyToZero(postData.AMOUNTFC) + this.comService.emptyToZero(postData.IGST_AMOUNTFC),'AMOUNT'
+      )  ))
 
     if (postData?.isUpdate && preItemIndex !== -1) {
       this.posCurrencyDetailsData[preItemIndex] = postData;
@@ -1099,24 +1168,30 @@ export class PosCurrencyReceiptComponent implements OnInit {
 
     this.posCurrencyDetailsData.forEach((data, index) => {
       data.SRNO = index + 1;
-      sumCGST_AMOUNTCC += parseFloat(data.IGST_AMOUNTCC);
-      sumAMOUNTCC += parseFloat(data.TOTAL_AMOUNTCC);
+      sumCGST_AMOUNTCC += this.comService.emptyToZero(data.IGST_AMOUNTCC);
+      sumAMOUNTCC += this.comService.emptyToZero(data.TOTAL_AMOUNTCC);
     });
 
     let totalSum = sumCGST_AMOUNTCC + sumAMOUNTCC;
 
     this.posCurrencyReceiptForm.controls.totalTax.setValue(
-      this.comService.decimalQuantityFormat(
-        this.comService.emptyToZero(sumCGST_AMOUNTCC),
-        "AMOUNT"
+      this.comService.commaSeperation(
+        this.comService.decimalQuantityFormat(
+          this.comService.transformDecimalVB(this.comService.allbranchMaster?.BAMTDECIMALS, this.comService.emptyToZero(sumCGST_AMOUNTCC)),
+          "AMOUNT"
+        )
       )
     );
+    
     this.posCurrencyReceiptForm.controls.total.setValue(
-      this.comService.decimalQuantityFormat(
-        this.comService.emptyToZero(sumAMOUNTCC),
-        "AMOUNT"
+      this.comService.commaSeperation(
+        this.comService.decimalQuantityFormat(
+          this.comService.transformDecimalVB(this.comService.allbranchMaster?.BAMTDECIMALS, this.comService.emptyToZero(sumAMOUNTCC)),
+          "AMOUNT"
+        )
       )
     );
+    
     this.posCurrencyReceiptForm.controls.partyAmountFC.setValue(
       this.comService.decimalQuantityFormat(
         this.comService.emptyToZero(sumAMOUNTCC),

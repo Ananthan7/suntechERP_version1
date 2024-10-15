@@ -61,7 +61,7 @@ export class SalesEstimationComponent implements OnInit {
     public more_customer_detail_modal!: NgbModal;
     @ViewChild('userAuthModal')
     public userAuthModal!: NgbModal;
-
+    public adjustSaleReturnModalRef!: NgbModalRef;
     @ViewChild('userAttachmentModal')
     public userAttachmentModal!: NgbModal;
 
@@ -91,6 +91,7 @@ export class SalesEstimationComponent implements OnInit {
     editLineItem: boolean = false;
     accountHeadDetails = '';
     sourceOfFundListOptions!: Observable<any[]>;
+    selectedItemsCount: number = 0;
     estMode: string = 'ADD';
     custTypeMasterOptions!: Observable<any[]>;
     // baseImgUrl = baseImgUrl;
@@ -2132,6 +2133,24 @@ export class SalesEstimationComponent implements OnInit {
     }
 
   }
+  public salesRetClose(data: any = null) {
+    if (this.viewOnly) {
+      this.adjustSaleReturnModalRef.close(data); 
+    } else {
+      this.openDialog('Warning', this.comFunc.getMsgByID('MSG1212'), false);
+
+      this.dialogBox.afterClosed().subscribe((action: any) => {
+        if (action == 'Yes') {
+          let stockCodesToRemove = this.salesReturnsItems_forVoc.map((item: any) => item.STOCK_CODE);
+
+          this.sales_returns_items = this.sales_returns_items.filter((item: any) => !stockCodesToRemove.includes(item.stock_code));
+          
+          this.adjustSaleReturnModalRef.close(data);
+        }
+      });
+    }
+  }
+
     validateReceipt() {
         if (this.selectedTabIndex == 0) {
             return this.cashreceiptForm.invalid;
@@ -2435,11 +2454,50 @@ export class SalesEstimationComponent implements OnInit {
         return 'Wt: ' + this.comFunc.decimalQuantityFormat(data['value'], 'AMOUNT');
     }
 
-    closeItemModal(){
+    closeExchange() {
+
+      if(this.viewOnly){
         this.modalReference.dismiss();
-        this.isNetAmountChange=false;
+      }
+  
+      else {
+        this.openDialog('Warning', this.comFunc.getMsgByID('MSG1212'), false);
+  
+        this.dialogBox.afterClosed().subscribe((action: any) => {
+          if (action == 'Yes') {
+  
+            this.modalReference.dismiss();
+  
+          }
+        });
+      }
+  
+    }  
+
+    
+
+    closeItemModal() {
+
+      if(this.viewOnly){
+        this.modalReference.dismiss();
+        this.isNetAmountChange = false;
         this.editLineItem = false;
       }
+  
+      else {
+        this.openDialog('Warning', this.comFunc.getMsgByID('MSG1212'), false);
+  
+        this.dialogBox.afterClosed().subscribe((action: any) => {
+          if (action == 'Yes') {
+  
+            this.modalReference.dismiss();
+  
+          }
+        });
+      }
+  
+      
+    }
 
       closeAddCustomerModal() {
         // this.resetCustomerData()
@@ -2491,16 +2549,28 @@ export class SalesEstimationComponent implements OnInit {
         this.salesReturnForm.controls.fcn_returns_voc_type.setValue(this.vocType);
       }
   
-      this.modalReference = this.modalService.open(content, {
-        size: 'xl',
-        ariaLabelledBy: 'modal-basic-title',
-        backdrop: false,
-      });
+      if (content._declarationTContainer.localNames[0] !==
+        'adjust_sale_return_modal')
+        this.modalReference = this.modalService.open(content, {
+          size: 'xl',
+          ariaLabelledBy: 'modal-basic-title',
+          backdrop: false,
+        });
+      else {
+        this.adjustSaleReturnModalRef = this.modalService.open(this.adjust_sale_return_modal, {
+          size: 'xl',
+          ariaLabelledBy: 'modal-basic-title',
+          backdrop: false,
+        });
+      }
+  
+  
       if (this.modalService.hasOpenModals()) {
         if (
           content._declarationTContainer.localNames[0] ==
           'more_customer_detail_modal'
         ) {
+          // this.customerDetailForm.patchValue(this.existingCustomerDetails);
           this.customerDetailForm.controls.fcn_cust_detail_phone.setValue(
             this.customerDataForm.value.fcn_customer_mobile
           );
@@ -2604,7 +2674,9 @@ export class SalesEstimationComponent implements OnInit {
       this.li_tag_val = '';
     }
   
-    
+    public openAdjustSaleReturnModal() {
+      this.adjustSaleReturnModalRef = this.modalService.open(this.adjust_sale_return_modal, { size: 'lg' });
+    }
 
     removeExchangeItemGrid(event: any) {
       console.log('remove row');
@@ -4946,6 +5018,11 @@ export class SalesEstimationComponent implements OnInit {
   }
   
   addSalesReturnOnSelect(event: any, slsReturn: any, index: any) {
+    if (event.target.checked) {
+      this.selectedItemsCount++;
+    } else {
+      this.selectedItemsCount--;
+    }
     // console.table(event);
     // console.table(slsReturn);
     let checked = event.target.checked;
@@ -5286,7 +5363,8 @@ export class SalesEstimationComponent implements OnInit {
         //   net_amount: '',
         // };
         this.sumTotalValues();
-        this.modalReference.close();
+        this.adjustSaleReturnModalRef.close();
+        // this.modalReference.close();
         // this.modalReference.dismiss();
       } else {
         this.snackBar.open('Please Fill Required Fields', '', {
@@ -5294,6 +5372,8 @@ export class SalesEstimationComponent implements OnInit {
         });
       }
     }
+
+    
 
     // addItemtoSalesReturn() {
     //   // alert('test');
