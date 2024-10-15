@@ -932,7 +932,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.setFormDecimal('PURITY', data[0].PURITY, 'PURITY')
     this.approvalReqFlag = data[0].APPROVAL_REQUIRED ? true : false
     this.processTransferdetailsForm.controls.approveddate.setValue(this.commonService.currentDate)
-    
+
     // first gross wt calculation with MAKEZIRCONEGROSSWT checking
     let blnAddZirconasGross = this.commonService.getCompanyParamValue('MAKEZIRCONEGROSSWT')
     let dblZircon, txtFromStoneWt, txtFromGrossWeight
@@ -1788,10 +1788,20 @@ export class ProcessTransferDetailsComponent implements OnInit {
       this.commonService.formControlSetReadOnly('GrossWeightTo', true)
       this.commonService.formControlSetReadOnly('stockCode', true)
       this.commonService.formControlSetReadOnly('txtLossQty', true)
+      // for metal tab
+      this.commonService.formControlSetReadOnly('METAL_TO_PROCESS_CODE', true)
+      this.commonService.formControlSetReadOnly('METAL_FRM_WORKER_CODE', true)
+      this.commonService.formControlSetReadOnly('METAL_TO_WORKER_CODE', true)
+      this.commonService.formControlSetReadOnly('METAL_ScrapLocCode', true)
+      this.commonService.formControlSetReadOnly('METAL_ToStockCode', true)
+      this.commonService.formControlSetReadOnly('METAL_ScrapStockCode', true)
+
       this.toProcessMasterSearch.VIEW_ICON = false;
       this.fromWorkerMasterSearch.VIEW_ICON = false;
       this.toWorkerMasterSearch.VIEW_ICON = false;
       this.stockCodeSearch.VIEW_ICON = false;
+      this.locationSearch.VIEW_ICON = false;
+      this.metalScrapStockCode.VIEW_ICON = false;
     } else {
       if (this.fromWorkerCodeEmpty) return
       this.fromProcessCodeEmpty = false;
@@ -1802,10 +1812,19 @@ export class ProcessTransferDetailsComponent implements OnInit {
       this.commonService.formControlSetReadOnly('GrossWeightTo', false)
       this.commonService.formControlSetReadOnly('stockCode', false)
       this.commonService.formControlSetReadOnly('txtLossQty', false)
+      // for metal tab
+      this.commonService.formControlSetReadOnly('METAL_TO_PROCESS_CODE', false)
+      this.commonService.formControlSetReadOnly('METAL_FRM_WORKER_CODE', false)
+      this.commonService.formControlSetReadOnly('METAL_TO_WORKER_CODE', false)
+      this.commonService.formControlSetReadOnly('METAL_ScrapLocCode', false)
+      this.commonService.formControlSetReadOnly('METAL_ToStockCode', false)
+      this.commonService.formControlSetReadOnly('METAL_ScrapStockCode', false)
       this.toProcessMasterSearch.VIEW_ICON = true;
       this.fromWorkerMasterSearch.VIEW_ICON = true;
       this.toWorkerMasterSearch.VIEW_ICON = true;
       this.stockCodeSearch.VIEW_ICON = true;
+      this.locationSearch.VIEW_ICON = true;
+      this.metalScrapStockCode.VIEW_ICON = true;
     }
   }
   isFromWorkerCodeEmpty(flag: boolean) {
@@ -1817,9 +1836,17 @@ export class ProcessTransferDetailsComponent implements OnInit {
       this.commonService.formControlSetReadOnly('GrossWeightTo', true)
       this.commonService.formControlSetReadOnly('stockCode', true)
       this.commonService.formControlSetReadOnly('txtLossQty', true)
+      // for metal tab
+      this.commonService.formControlSetReadOnly('METAL_TO_PROCESS_CODE', true)
+      this.commonService.formControlSetReadOnly('METAL_TO_WORKER_CODE', true)
+      this.commonService.formControlSetReadOnly('METAL_ScrapLocCode', true)
+      this.commonService.formControlSetReadOnly('METAL_ToStockCode', true)
+      this.commonService.formControlSetReadOnly('METAL_ScrapStockCode', true)
       this.toProcessMasterSearch.VIEW_ICON = false;
       this.toWorkerMasterSearch.VIEW_ICON = false;
       this.stockCodeSearch.VIEW_ICON = false;
+      this.locationSearch.VIEW_ICON = false;
+      this.metalScrapStockCode.VIEW_ICON = false;
     } else {
       if (this.fromProcessCodeEmpty) return
       this.fromWorkerCodeEmpty = false;
@@ -1829,9 +1856,17 @@ export class ProcessTransferDetailsComponent implements OnInit {
       this.commonService.formControlSetReadOnly('GrossWeightTo', false)
       this.commonService.formControlSetReadOnly('stockCode', false)
       this.commonService.formControlSetReadOnly('txtLossQty', false)
+      // for metal tab
+      this.commonService.formControlSetReadOnly('METAL_TO_PROCESS_CODE', false)
+      this.commonService.formControlSetReadOnly('METAL_TO_WORKER_CODE', false)
+      this.commonService.formControlSetReadOnly('METAL_ScrapLocCode', false)
+      this.commonService.formControlSetReadOnly('METAL_ToStockCode', false)
+      this.commonService.formControlSetReadOnly('METAL_ScrapStockCode', false)
       this.toProcessMasterSearch.VIEW_ICON = true;
       this.toWorkerMasterSearch.VIEW_ICON = true;
       this.stockCodeSearch.VIEW_ICON = true;
+      this.locationSearch.VIEW_ICON = true;
+      this.metalScrapStockCode.VIEW_ICON = true;
     }
   }
   /**USE:from porcesscode Validate API call */
@@ -1860,7 +1895,11 @@ export class ProcessTransferDetailsComponent implements OnInit {
         if (result.status == "Success" && result.dynamicData[0]) {
           let data = result.dynamicData[0]
           if (data.length == 0) {
-            this.setFormNullToString('FRM_PROCESS_CODE', '')
+            if(this.designType == 'METAL'){
+              this.setFormNullToString('METAL_FRM_PROCESS_CODE', '')
+            }else{
+              this.setFormNullToString('FRM_PROCESS_CODE', '')
+            }
             this.commonService.toastErrorByMsgId('MSG1531')
             this.fromProcesscodeInputChange()
             return
@@ -1915,17 +1954,33 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
   fromProcesscodeInputChange() {
-    if (this.processTransferdetailsForm.value.FRM_PROCESS_CODE.toString() == '') {
-      this.isFromProcessCodeEmpty(true)
-    } else {
-      this.isFromProcessCodeEmpty(false)
+    if(this.designType == 'METAL'){
+      if (this.processTransferdetailsForm.value.METAL_FRM_PROCESS_CODE.toString() == '') {
+        this.isFromProcessCodeEmpty(true)
+      } else {
+        this.isFromProcessCodeEmpty(false)
+      }
+    }else{
+      if (this.processTransferdetailsForm.value.FRM_PROCESS_CODE.toString() == '') {
+        this.isFromProcessCodeEmpty(true)
+      } else {
+        this.isFromProcessCodeEmpty(false)
+      }
     }
   }
   fromWorkercodeInputChange() {
-    if (this.processTransferdetailsForm.value.FRM_WORKER_CODE.toString() == '') {
-      this.isFromWorkerCodeEmpty(true)
-    } else {
-      this.isFromWorkerCodeEmpty(false)
+    if(this.designType == 'METAL'){
+      if (this.processTransferdetailsForm.value.METAL_FRM_WORKER_CODE.toString() == '') {
+        this.isFromWorkerCodeEmpty(true)
+      } else {
+        this.isFromWorkerCodeEmpty(false)
+      }
+    }else{
+      if (this.processTransferdetailsForm.value.FRM_WORKER_CODE.toString() == '') {
+        this.isFromWorkerCodeEmpty(true)
+      } else {
+        this.isFromWorkerCodeEmpty(false)
+      }
     }
   }
   // from Workercode Validate
@@ -1943,7 +1998,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       "parameter": {
         'StrSubJobNo': this.commonService.nullToString(form.UNQ_JOB_ID),
         'StrFromProcess': this.commonService.nullToString(form.FRM_PROCESS_CODE),
-        'StrFromWorker': this.commonService.nullToString(form.FRM_WORKER_CODE),
+        'StrFromWorker': this.commonService.nullToString(event.target.value),
         'StrBranchCode': this.commonService.nullToString(form.BRANCH_CODE),
         'blnProcessAuthroize': '',
       }
@@ -1955,7 +2010,11 @@ export class ProcessTransferDetailsComponent implements OnInit {
         if (result.status == "Success" && result.dynamicData[0]) {
           let data = result.dynamicData[0]
           if (data.length == 0) {
-            this.setFormNullToString('FRM_WORKER_CODE', '')
+            if(this.designType == 'METAL'){
+              this.setFormNullToString('METAL_FRM_WORKER_CODE', '')
+            }else{
+              this.setFormNullToString('FRM_WORKER_CODE', '')
+            }
             this.commonService.toastErrorByMsgId('MSG1531')
             this.fromWorkercodeInputChange()
             return
@@ -2110,6 +2169,18 @@ export class ProcessTransferDetailsComponent implements OnInit {
 
   metalprocessCodeFromSelected(event: any) {
     this.processTransferdetailsForm.controls.METAL_FRM_PROCESS_CODE.setValue(event.PROCESS)
+    this.fromProcesscodeInputChange()
+    this.fromWorkercodeInputChange()
+    this.setFromProcessWhereCondition()
+    this.setFromWorkerWhereCondition()
+    let data = this.subJobDetailData.filter((item: any) => event.PROCESS?.toUpperCase() == item.PROCESS?.toUpperCase() && event.WORKER?.toUpperCase() == item.WORKER?.toUpperCase())
+    if (data && data.length > 0) {
+      if (this.designType == 'METAL') { //metal data assigning
+        this.setMetalSubJob_Details(data)
+      } else {
+        this.setSubJob_Details(data)
+      }
+    }
   }
   metalprocessCodeToSelected(event: any) {
     this.processTransferdetailsForm.controls.METAL_TO_PROCESS_CODE.setValue(event.PROCESS_CODE)
@@ -2358,13 +2429,13 @@ export class ProcessTransferDetailsComponent implements OnInit {
     let val = this.commonService.pureWeightCalculate(netwt, purity)
     return this.emptyToZero(val.toFixed(this.commonService.mQtyDecimals))
   }
-  getWipAccode(processCode: string,CODE: string){
+  getWipAccode(processCode: string, CODE: string) {
     let seqData = this.sequenceDetails.filter((item: any) => item.PROCESS_CODE?.toUpperCase() == processCode);
-    if(seqData.length>0 && seqData[0][CODE] != ''){
+    if (seqData.length > 0 && seqData[0][CODE] != '') {
       return this.commonService.nullToString(seqData[0][CODE])
     }
     let processData = this.processMasterDetails.filter((item: any) => item.PROCESS_CODE?.toUpperCase() == processCode);
-    if(processData.length>0) return this.commonService.nullToString(processData[0][CODE])
+    if (processData.length > 0) return this.commonService.nullToString(processData[0][CODE])
     return ''
   }
   gridSRNO: number = 0
@@ -2375,11 +2446,11 @@ export class ProcessTransferDetailsComponent implements OnInit {
     let LOSS_PURE_QTY = this.calculateLossPureQty(this.processTransferdetailsForm.value);
     let metalGridDataSum = this.calculateMetalStoneGridAmount();
     let seqDataFrom = this.sequenceDetails.filter((item: any) => item.PROCESS_CODE?.toUpperCase() == form.FRM_PROCESS_CODE?.toUpperCase());
-    let scrapPureWt = this.multiplyWithAmtDecimal(form.scrapWeight,form.SCRAP_PURITY)
-    let FRM_WIP_ACCODE = this.getWipAccode(form.FRM_PROCESS_CODE,'WIP_ACCODE')
-    let TO_WIP_ACCODE = this.getWipAccode(form.TO_PROCESS_CODE,'WIP_ACCODE')
-    let LAB_ACCODE = this.getWipAccode(form.TO_PROCESS_CODE,'LAB_ACCODE')
-    let LOSS_ACCODE = this.getWipAccode(form.TO_PROCESS_CODE,'LOSS_ACCODE')
+    let scrapPureWt = this.multiplyWithAmtDecimal(form.scrapWeight, form.SCRAP_PURITY)
+    let FRM_WIP_ACCODE = this.getWipAccode(form.FRM_PROCESS_CODE, 'WIP_ACCODE')
+    let TO_WIP_ACCODE = this.getWipAccode(form.TO_PROCESS_CODE, 'WIP_ACCODE')
+    let LAB_ACCODE = this.getWipAccode(form.TO_PROCESS_CODE, 'LAB_ACCODE')
+    let LOSS_ACCODE = this.getWipAccode(form.TO_PROCESS_CODE, 'LOSS_ACCODE')
     // let amountFC = this.commonService.FCToCC(form.CURRENCY_CODE, stoneAmount)
     this.gridSRNO += 1
     return {
@@ -3276,7 +3347,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.commonService.showSnackBarMsg('MSG81447');
     // let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
     let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch`
-    let Sub: Subscription = this.dataService.postDynamicAPI(API,param)
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
       .subscribe((result) => {
         this.commonService.closeSnackBarMsg()
         let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
@@ -3320,15 +3391,15 @@ export class ProcessTransferDetailsComponent implements OnInit {
         this.fromWorkerMasterOverley.showOverlayPanel(event);
         break;
       case 'TO_WORKER_CODE':
-        if(this.fromProcessCodeEmpty || this.fromWorkerCodeEmpty) return
+        if (this.fromProcessCodeEmpty || this.fromWorkerCodeEmpty) return
         this.overlayToWorker.showOverlayPanel(event);
         break;
       case 'stockCode':
-        if(this.fromProcessCodeEmpty || this.fromWorkerCodeEmpty) return
+        if (this.fromProcessCodeEmpty || this.fromWorkerCodeEmpty) return
         this.stockCodeOverlay.showOverlayPanel(event);
         break;
       case 'location':
-        if(this.fromProcessCodeEmpty || this.fromWorkerCodeEmpty) return
+        if (this.fromProcessCodeEmpty || this.fromWorkerCodeEmpty) return
         this.overleyLocation.showOverlayPanel(event);
         break;
       case 'METAL_FRM_PROCESS_CODE':

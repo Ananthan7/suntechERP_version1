@@ -146,10 +146,14 @@ export class ProcessTransferComponent implements OnInit {
       .subscribe((result) => {
         if (result.response) {
           let data = result.response
-          this.tableData = data.JOB_PROCESS_TRN_DETAIL_DJ || []
           this.JOB_PROCESS_TRN_DETAIL_DJ = data.JOB_PROCESS_TRN_DETAIL_DJ || []
           this.JOB_PROCESS_TRN_COMP_DJ = data.JOB_PROCESS_TRN_COMP_DJ || []
-          this.tableData.forEach((item: any, index: number) => {
+          this.JOB_PROCESS_TRN_DETAIL_DJ.forEach((item: any, index: number) => {
+            item.LOSS_QTY = this.commonService.decimalQuantityFormat(item.LOSS_QTY, 'METAL')
+            item.VOCDATE = this.commonService.nullToString(item.VOCDATE.slice(0, 10))
+            item.JOB_DATE = this.commonService.nullToString(item.JOB_DATE.slice(0, 10))
+            item.IN_DATE = this.commonService.nullToString(item.IN_DATE.slice(0, 10))
+            item.OUT_DATE = this.commonService.nullToString(item.OUT_DATE.slice(0, 10))
             this.detailData.push({
               SRNO: item.SRNO,
               FLAG: this.commonService.nullToString(this.content.FLAG),
@@ -157,8 +161,8 @@ export class ProcessTransferComponent implements OnInit {
               // JOB_PROCESS_TRN_LABCHRG_DJ: data.JOB_PROCESS_TRN_LABCHRG_DJ?.filter((val: any) => item.UNIQUEID == val.REFMID),
               JOB_PROCESS_TRN_COMP_DJ: this.JOB_PROCESS_TRN_COMP_DJ?.filter((val: any) => item.JOB_NUMBER == val.JOB_NUMBER),
             })
-            item.LOSS_QTY = this.commonService.decimalQuantityFormat(item.LOSS_QTY, 'METAL')
           })
+          this.tableData = this.JOB_PROCESS_TRN_DETAIL_DJ
           this.processTransferFrom.controls.BRANCH_CODE.setValue(data.BRANCH_CODE)
           this.processTransferFrom.controls.YEARMONTH.setValue(data.YEARMONTH)
           this.processTransferFrom.controls.VOCNO.setValue(data.VOCNO)
@@ -202,7 +206,7 @@ export class ProcessTransferComponent implements OnInit {
         'VocType': this.commonService.nullToString(this.content?.VOCTYPE) || '',
         'JobNo': '',
         // 'JobNo': this.tableData.length>0 ? this.commonService.nullToString(this.tableData[0].JOB_NUMBER) : '',
-        'VocDate': this.commonService.nullToString(this.content?.VOCDATE) || '',
+        'VocDate': this.commonService.formatYYMMDD(this.content?.VOCDATE) || '',
       }
     }
     this.commonService.showSnackBarMsg('MSG81447')
