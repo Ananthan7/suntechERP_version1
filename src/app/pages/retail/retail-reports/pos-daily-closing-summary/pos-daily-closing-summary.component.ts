@@ -80,7 +80,7 @@ export class PosDailyClosingSummaryComponent implements OnInit {
   formattedBranchDivisionData: any;
   popupVisible: boolean = false;
   templateNameHasValue: boolean= false;
-  fetchedBranchDataParam: any[]= [];
+  fetchedBranchDataParam: any= [];
   fetchedBranchData: any[] =[];
   isLoading: boolean = false;
   dateToPass: { fromDate: string; toDate: string } = { fromDate: '', toDate: '' };
@@ -587,6 +587,19 @@ export class PosDailyClosingSummaryComponent implements OnInit {
       this.posDailyClosingSummaryForm.controls.diamondType.setValue(paresedItem?.CONTROL_DETAIL.str_DGroupBy);
 
       
+    }
+    else{
+      const userBranch = localStorage.getItem('userbranch');
+      const formattedUserBranch = userBranch ? `${userBranch}#` : null;
+      this.posDailyClosingSummaryForm.controls.branch.setValue(formattedUserBranch);
+      this.fetchedBranchDataParam = formattedUserBranch;
+      this.fetchedBranchData= this.fetchedBranchDataParam?.split("#")
+
+      this.dateToPass = {
+        fromDate:  this.formatDateToYYYYMMDD(new Date()),
+        toDate: this.formatDateToYYYYMMDD(new Date()),
+      };
+
     }
   }
 
