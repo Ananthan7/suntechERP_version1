@@ -5,56 +5,50 @@
     </button>
 </div>
  <!-- modal header component -->
- <modal-header [isViewSave]="false" [isViewPreview]="true" [isViewExport]="true" [isViewDelete]="false" [isViewMore]="false" (cancelClick)="close()"></modal-header>
+ <modal-header [isViewSave]="false" [isViewPreview]="false" [isViewExport]="false" [isViewDelete]="false" [isViewMore]="false" (cancelClick)="close()"></modal-header>
 
 <!-- content section -->
 <div class="container-fluid pt-3">
     <div class="row my-3">
         <div class="col-md-12">
             <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true" [showRowLines]="true"
-                [allowColumnReordering]="true" height="200"  [dataSource]="tableData">
+                [allowColumnReordering]="true" height="200"  [dataSource]="tableData"  [columnAutoWidth]="true">
                 <dxo-paging [enabled]="false"></dxo-paging>
-                <dxo-selection mode="multiple"></dxo-selection>
+                <dxo-selection mode="multiple" showCheckBoxesMode="always"></dxo-selection>
                 <dxo-scrolling mode="virtual"></dxo-scrolling>
-                <dxi-column [width]="100" dataField="Salesman">
+
+                <dxi-column caption="Salesman" alignment="center">
+                    <dxi-column dataField="SALESMAN" caption="Salesman"></dxi-column>
                 </dxi-column>
-                <dxi-column [width]="100" dataField="#Docs"> </dxi-column>
-                <dxi-column [width]="100" caption="Metal">
-                    <dxi-column [width]="100" caption="Qty" dataField="Metal_Qty">
-                    </dxi-column>
-                    <dxi-column [width]="100" caption="Mkg Amount" dataField="Metal_Mkg_Amount">
-                    </dxi-column>
-                    <dxi-column [width]="100" caption="Metal Amount" dataField="Metal_Amount">
-                    </dxi-column>
-                    <dxi-column [width]="100" caption="Total" dataField="Metal_Total">
-                    </dxi-column>
-                    <dxi-column [width]="100" caption="Making" dataField="Metal_Making">
-                    </dxi-column>
-                    <dxi-column [width]="100" caption="Metal" dataField="Metal_Metal">
-                    </dxi-column>
+   
+                <dxi-column caption="#Docs" alignment="center">
+                    <dxi-column dataField="DOCS" caption="#Docs" alignment="right"></dxi-column>
                 </dxi-column>
-                <dxi-column [width]="100" caption="Diamond & Others">
-                    <dxi-column [width]="100" caption="Qty/Pcs" dataField="Metal_Qty_pcs">
-                    </dxi-column>
-                    <dxi-column [width]="100" caption="Amount" dataField="Amount">
-                    </dxi-column>
-                    <dxi-column [width]="100" caption="Cost" dataField="Cost">
-                    </dxi-column>
+
+                <dxi-column caption="Metal" alignment="center">
+                    <dxi-column dataField="MSQTY" caption="Qty" alignment="right"></dxi-column>
+                    <dxi-column dataField="MSMKG" caption="Mkg Amount" alignment="right"></dxi-column>
+                    <dxi-column dataField="MSMETAL" caption="Metal Amount" alignment="right"></dxi-column>
+                    <dxi-column dataField="MSTOTAL" caption="Total" alignment="right"></dxi-column>
+                    <dxi-column dataField="MPMKG" caption="Making" alignment="right"></dxi-column>
+                    <dxi-column dataField="MPMETAL" caption="Metal" alignment="right"></dxi-column>
                 </dxi-column>
-                <dxi-column [width]="100" dataField="Profit"> </dxi-column>
-                <dxo-summary>
-                    <dxi-total-item column="Qty"> </dxi-total-item>
-                    <dxi-total-item column="Mkg Amount"> </dxi-total-item>
-                    <dxi-total-item column="Metal Amount"> </dxi-total-item>
-                    <dxi-total-item column="Total"> </dxi-total-item>
-                    <dxi-total-item column="Making"> </dxi-total-item>
-                    <dxi-total-item column="Metal"> </dxi-total-item>
-                    <dxi-total-item column="Qty/Pcs"> </dxi-total-item>
-                    <dxi-total-item column="Amount"> </dxi-total-item>
-                    <dxi-total-item column="Cost"> </dxi-total-item>
-                    <dxi-total-item column="Profit"> </dxi-total-item>
-                </dxo-summary>
+
+                <dxi-column caption="Diamond & Others" alignment="center">
+                    <dxi-column dataField="DIASQTY" caption="Qty/Pcs" alignment="right"></dxi-column>
+                    <dxi-column dataField="DIASVAL" caption="Amount" alignment="right"></dxi-column>
+                    <dxi-column dataField="DIACOST" caption="Cost" alignment="right"></dxi-column>
+                </dxi-column>
+
+                <dxi-column caption="Profit" alignment="center">
+                    <dxi-column dataField="PROFIT" caption="Profit" alignment="right"></dxi-column>
+                </dxi-column>
             </dx-data-grid>
         </div>
+    </div>
+
+    <div class="row mt-2 justify-content-end mx-2">
+        <app-report-screen-buttons (previewClicked)="previewClick()"
+        (printClicked)="printBtnClick()"></app-report-screen-buttons>
     </div>
 </div>
