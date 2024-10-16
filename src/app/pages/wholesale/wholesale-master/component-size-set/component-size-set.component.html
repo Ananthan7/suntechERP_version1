@@ -79,10 +79,10 @@
                 <mat-select [(value)]="selectedOptions[data.data.SRNO - 1]"
                   (selectionChange)="onCodeSelect($event, data)"
                   *ngIf="componentSizeType && componentSizeType.length > 0">
-                  <mat-select-trigger>
+                  <!-- <mat-select-trigger>
                     <input matInput type="text" placeholder="Search..." (click)="onSearch($event)" [value]=""
                       (click)="$event.stopPropagation()" />
-                  </mat-select-trigger>
+                  </mat-select-trigger> -->
 
                   <mat-option *ngFor="let option of componentSizeType" [value]="option"
                     [disabled]="isOptionSelected(data.data.SRNO, option) || viewMode">
