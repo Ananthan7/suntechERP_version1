@@ -612,13 +612,21 @@ export class CommonServiceService {
     console.log(result, rate);
     console.log('====================================');
     if (result[0].MUL_DIV == 'M') {
-      convertedAmount = amount / rate;
-
+      convertedAmount = amount * rate;
+      // console.log("This Multiple Amount : " +convertedAmount);
       return this.transformDecimalVB(this.amtDecimals, convertedAmount);
     } else {
-      convertedAmount = amount * rate;
+      convertedAmount = amount / rate;
+      // console.log("This Division Amount : " + convertedAmount);
       return this.transformDecimalVB(this.amtDecimals, convertedAmount);
     }
+    // if (result[0].MUL_DIV == 'M') {
+    //   convertedAmount = amount / rate;
+    //   return this.transformDecimalVB(this.amtDecimals, convertedAmount);
+    // } else {
+    //   convertedAmount = amount * rate;
+    //   return this.transformDecimalVB(this.amtDecimals, convertedAmount);
+    // }
   }
   // FCToCC(currency: any, amount: any) {
   //   let rate = this.getCurrRate(currency);

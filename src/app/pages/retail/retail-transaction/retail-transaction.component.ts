@@ -131,6 +131,13 @@ export class RetailTransactionComponent implements OnInit {
 
   }
 
+  deleteBtnClicked(e: any) {
+    let str = e.row.data;
+    str.FLAG = 'DELETE'
+    this.openModalView(str)
+    // this.authCheckerComponent?.openAuthModal();
+  }
+
 
   viewRowDetails(e: any) {
     let str = e.row.data;
