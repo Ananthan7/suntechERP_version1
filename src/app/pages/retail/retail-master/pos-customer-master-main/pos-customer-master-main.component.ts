@@ -437,10 +437,11 @@ export class PosCustomerMasterMainComponent implements OnInit {
     language: [""],
     favCelebration: [""],
     vat: new FormControl("", [
+      Validators.required,
       Validators.maxLength(15),
       Validators.pattern("^[0-9]*$"),
     ]),
-    panNo: ["", [Validators.maxLength(10), this.panValidator]],
+    panNo: ["", [ Validators.required, Validators.maxLength(10), this.panValidator]],
     whatsappCountryCode: [""],
     whatsappNumber: [""],
     spouse: ["", [Validators.maxLength(40)]],
@@ -1352,20 +1353,23 @@ export class PosCustomerMasterMainComponent implements OnInit {
     );
   }
 
-  close(data?: any) {
-    Swal.fire({
-      title: "Are you sure you want to close this?",
-      // text: "You won't be able to revert this!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, Close!",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.activeModal.close(data);
-      }
-    });
+  close(data?: any, preventDefault?: any) {
+    if (preventDefault === true) {
+      this.activeModal.close(data);
+    } else {
+      Swal.fire({
+        title: "Are you sure you want to close this?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, Close!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.activeModal.close(data);
+        }
+      });
+    }
   }
 
   uploadCustomerImage() {
@@ -1508,7 +1512,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
           Branch_Code: this.branchCode,
           TOTALSALES: this.posCustomerMasterMainForm.value.totalSale || 0,
           POSCUSTIDNO:
-            this.posCustomerMasterMainForm.value.custID.toString || "",
+            this.posCustomerMasterMainForm.value.custID.toString() || "",
           POSSMAN: "",
           POSCUSTPREFIX: this.posCustomerMasterMainForm.value.prefix || "",
           MOBILE1:
@@ -1607,16 +1611,11 @@ export class PosCustomerMasterMainComponent implements OnInit {
             this.posCustomerMasterMainForm.value.nationality4 || "",
           NATIONALITY_5:
             this.posCustomerMasterMainForm.value.nationality5 || "",
-          PASSPORT_NO_1:
-            this.posCustomerMasterMainForm.value.passport1.toString() || "",
-          PASSPORT_NO_2:
-            this.posCustomerMasterMainForm.value.passport2.toString() || "",
-          PASSPORT_NO_3:
-            this.posCustomerMasterMainForm.value.passport3.toString() || "",
-          PASSPORT_NO_4:
-            this.posCustomerMasterMainForm.value.passport4.toString() || "",
-          PASSPORT_NO_5:
-            this.posCustomerMasterMainForm.value.passport5.toString() || "",
+          PASSPORT_NO_1: this.posCustomerMasterMainForm.value.passport1 || "",
+          PASSPORT_NO_2: this.posCustomerMasterMainForm.value.passport2 || "",
+          PASSPORT_NO_3: this.posCustomerMasterMainForm.value.passport3 || "",
+          PASSPORT_NO_4: this.posCustomerMasterMainForm.value.passport4 || "",
+          PASSPORT_NO_5: this.posCustomerMasterMainForm.value.passport5 || "",
           LISTED_ON_DATE: this.posCustomerMasterMainForm.value.listedOn || null,
           NATIONAL_IDENTIFICATION_NO:
             this.posCustomerMasterMainForm.value.nationalId || "",
@@ -1733,7 +1732,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
                   this.uploadCustomerImage();
                 }
 
-                this.close("reloadMainGrid");
+                this.close("reloadMainGrid", true);
               } else {
                 // Handle cases where the result is not successful or undefined
                 Swal.fire({
@@ -1766,7 +1765,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
                 if (this.image) {
                   this.uploadCustomerImage();
                 }
-                this.close("reloadMainGrid");
+                this.close("reloadMainGrid", true);
               } else {
                 // Handle cases where the result is not successful or undefined
                 Swal.fire({
