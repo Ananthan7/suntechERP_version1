@@ -119,7 +119,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     SEARCH_FIELD: 'STOCK_CODE',
     SEARCH_HEADING: 'Stock code search',
     SEARCH_VALUE: '',
-    WHERECONDITION: "",
+    WHERECONDITION: "SUBCODE = 0",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -247,6 +247,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     StdTimeInMinutes: [''],
     timeTakenInMinutes: [''],
     consumedInMinutes: [''],
+    consumed: [''],
     PRODLAB_ACCODE: [''],
     WIP_ACCODE: [''],
     toggleSwitchtIssue: [true],
@@ -448,6 +449,12 @@ export class ProcessTransferDetailsComponent implements OnInit {
       parentDetail = this.content[0]?.JOB_PROCESS_TRN_DETAIL_DJ// setting detail data
       PROCESS_FORMDETAILS = this.content[0]?.PROCESS_FORMDETAILS
       this.metalDetailData = this.content[0]?.TRN_STNMTL_GRID || [] // setting component grid data
+      this.setFormDecimal('METAL_ScrapPCS', 0, 'METAL')
+      this.setFormDecimal('METAL_ScrapGrWt', 0, 'METAL')
+      this.setFormDecimal('METAL_ScrapStoneWt', 0, 'METAL')
+      this.setFormDecimal('METAL_ToIronScrapWt', 0, 'METAL')
+      this.setFormDecimal('METAL_ScrapNetWt', 0, 'METAL')
+      this.setFormDecimal('METAL_ScrapPureWt', 0, 'METAL')
     }
     if (!parentDetail) return;
     // setting values required for both diamond and metal tab
@@ -459,7 +466,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.setFormNullToString('UNQ_JOB_ID', parentDetail.UNQ_JOB_ID)
     this.setFormNullToString('SUB_JOB_DESCRIPTION', parentDetail.JOB_DESCRIPTION)
     this.setFormNullToString('SEQ_CODE', parentDetail.SEQ_CODE)
-    this.setFormNullToString('remarks', parentDetail.remarks)
+    this.setFormNullToString('remarks', parentDetail.REMARKS)
     this.setFormNullToString('DIVCODE', parentDetail.DIVCODE)
     this.setFormNullToString('METALSTONE', parentDetail.METALSTONE)
     this.setFormNullToString('PRODLAB_ACCODE', parentDetail.PRODLAB_ACCODE)
@@ -926,7 +933,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
   setSubJob_Details(data: any) {
-    // assigning values from API
+    // assigning values from API of subjob
     this.setFormNullToString('FRM_PROCESS_CODE', data[0].PROCESS)
     this.setFormNullToString('FRM_WORKER_CODE', data[0].WORKER)
     this.setFormNullToString('FRM_PROCESSNAME', data[0].PROCESSDESC)
@@ -974,6 +981,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.setToWorkerWhereCondition()
   }
   setMetalSubJob_Details(data: any) {
+    // assigning values from API of metal subjob
     this.setFormNullToString('METAL_FRM_PROCESS_CODE', data[0].PROCESS)
     this.setFormNullToString('METAL_FRM_WORKER_CODE', data[0].WORKER)
     this.setFormNullToString('FRM_PROCESSNAME', data[0].PROCESSDESC)
@@ -999,6 +1007,8 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.setFormDecimal('METAL_FromNetWeight', data[0].METAL, 'METAL')
     this.setFormDecimal('METAL_FromPureWt', data[0].PUREWT, 'METAL')
     this.setFormDecimal('PURITY', data[0].PURITY, 'PURITY')
+    this.approvalReqFlag = data[0].APPROVAL_REQUIRED ? true : false
+    this.processTransferdetailsForm.controls.approveddate.setValue(this.commonService.currentDate)
 
     let txtMFromStoneWt = data[0].STONE
     let dblZircon = 0;
@@ -3479,7 +3489,8 @@ export class ProcessTransferDetailsComponent implements OnInit {
       let Sub: Subscription = this.dataService.getDynamicAPI(API)
         .subscribe((result) => {
           this.commonService.closeSnackBarMsg()
-          let data = result.dynamicData[0] || []
+          let data:any = [result.response]
+          data = data?.filter((item:any)=> (item.EXCLUDE_TRANSFER_WT == true || this.emptyToZero(item.PURITY) == this.emptyToZero(form.PURITY)) && item.SUBCODE == false)
           if (data.length > 0) {
             let txtMScrapPurity = data[0]["PURITY"];
             this.setFormDecimal('METAL_ScrapPurity', txtMScrapPurity, 'PURITY')
@@ -3509,6 +3520,8 @@ export class ProcessTransferDetailsComponent implements OnInit {
             else {
               this.processTransferdetailsForm.controls.METAL_ScrapGrWt.enable()
             }
+          }else{
+            this.processTransferdetailsForm.controls.METAL_ScrapStockCode.setValue('')
           }
         }, err => {
           this.commonService.toastErrorByMsgId('MSG1531')
@@ -3699,6 +3712,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       let txtToIronWt = this.emptyToZero(form.METAL_ToIronWt)
       if ((this.emptyToZero(form.METAL_ToIronWt) + this.emptyToZero(form.METAL_ToIronScrapWt)) > this.emptyToZero(form.METAL_FromIronWeight)) {//Iron weight cannot be greater than
         let msg = this.commonService.getMsgByID("MSG81351") + " " + this.emptyToZero(form.METAL_FromIronWeight)
+        this.commonService.toastErrorByMsgId(msg)
         this.setFormDecimal('METAL_ToIronWt', this.FORM_VALIDATER.METAL_ToIronWt, 'STONE')
         return;
       }

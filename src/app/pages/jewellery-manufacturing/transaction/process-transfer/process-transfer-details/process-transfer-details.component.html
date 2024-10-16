@@ -827,7 +827,7 @@
                       <td>
                         <mat-form-field appearance="outline"
                           style="width: 130px;">
-                          <input type="text" matInput class="text-right"
+                          <input type="text" matInput
                             UpperCaseDirective
                             formControlName="METAL_ScrapLocCode" 
                             id="METAL_ScrapLocCode"/>
@@ -877,7 +877,7 @@
                       <td>
                         <mat-form-field appearance="outline"
                           style="width: 130px;">
-                          <input type="text" matInput class="text-right"
+                          <input type="text" matInput
                             formControlName="METAL_ScrapStockCode"
                             UpperCaseDirective id="METAL_ScrapStockCode"
                             (keydown)="lookupKeyPress($event,'METAL_ScrapStockCode')"
@@ -1135,12 +1135,11 @@
                         </mat-form-field> -->
                         <mat-form-field appearance="outline"
                           style="width: 100%">
-                          <input matInput DateValidation readonly
+                          <input matInput DateValidation 
                             (dateChange)="onStartDateChange()"
                             [matDatepicker]="start" formControlName="startdate"
                             placeholder="DD/MM/YYYY" />
                           <mat-datepicker-toggle matSuffix
-                            disabled="true"
                             [for]="start"></mat-datepicker-toggle>
                           <mat-datepicker #start></mat-datepicker>
                         </mat-form-field>
@@ -1152,11 +1151,10 @@
                       <div class="col-sm-7">
                         <mat-form-field appearance="outline"
                           style="width: 100%">
-                          <input matInput DateValidation readonly
+                          <input matInput DateValidation 
                             [matDatepicker]="end" formControlName="enddate"
                             placeholder="DD/MM/YYYY" [min]="minEndDate" />
                           <mat-datepicker-toggle matSuffix
-                            disabled="true"
                             [for]="end"></mat-datepicker-toggle>
                           <mat-datepicker #end></mat-datepicker>
                         </mat-form-field>
