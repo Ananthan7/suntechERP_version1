@@ -41,7 +41,7 @@
                 <mat-form-field appearance="outline" style="width: -webkit-fill-available">
                   <!-- <mat-label></mat-label> -->
                   <input matInput #vocDateInput id="vocDateInput" [max]=" currentDate" [matDatepicker]="vocDate"
-                    name="vocDate" formControlName="vocDate" placeholder="DD/MM/YYYY" DateValidation />
+                    name="vocDate" formControlName="vocDate" readonly placeholder="DD/MM/YYYY" DateValidation />
                   <mat-datepicker-toggle matSuffix [for]="vocDate"></mat-datepicker-toggle>
                   <mat-datepicker [startAt]="currentDate" #vocDate></mat-datepicker>
                 </mat-form-field>
@@ -286,7 +286,7 @@
                   <label for="inputPassword" class="col-sm-4 col-form-label" id="ID015">Total Tax :</label>
                   <div class="col-md-6">
                     <mat-form-field style="width: 100%" appearance="outline">
-                      <input readonly class="st_txt_right" type="number" matInput formControlName
+                      <input readonly class="st_txt_right"  matInput formControlName
                         formControlName="totalTax" />
                     </mat-form-field>
                   </div>
@@ -295,7 +295,7 @@
                   <label for="inputPassword" class="col-sm-4 col-form-label" id="ID016">Total :</label>
                   <div class="col-md-6">
                     <mat-form-field style="width: 100%" appearance="outline">
-                      <input readonly class="st_txt_right" type="number" matInput formControlName="total" />
+                      <input readonly class="st_txt_right"  matInput formControlName="total" />
                     </mat-form-field>
                   </div>
                 </div>

@@ -36,6 +36,7 @@ import { PlanetService } from 'src/app/services/planet-integration.service';
 import { DxDataGridComponent } from 'devextreme-angular';
 import { MatSelectChange } from '@angular/material/select';
 import { AddPosComponent } from '../add-pos/add-pos.component';
+import Swal from 'sweetalert2';
 
 const baseUrl = environment.baseUrl;
 const baseImgUrl = environment.baseImageUrl;
@@ -65,7 +66,7 @@ export class SalesReturnComponent implements OnInit {
   public more_customer_detail_modal!: NgbModal;
   @ViewChild('userAuthModal')
   public userAuthModal!: NgbModal;
-
+  private subscriptions: Subscription[] = [];
   @ViewChild('paramGrid')
   public paramGrid!: NgbModal;
 
@@ -1259,7 +1260,7 @@ export class SalesReturnComponent implements OnInit {
     if (this.content != undefined)
       this.posMode = this.content?.FLAG;
 
-    if (this.content?.FLAG == 'EDIT' || this.content?.FLAG == 'VIEW') {
+    if (this.content?.FLAG == 'EDIT' || this.content?.FLAG == 'VIEW' || this.content?.FLAG=='DELETE') {
       this.LOCKVOUCHERNO = true;
       this.vocDataForm.controls.fcn_voc_no.setValue(this.content.VOCNO);
       this.vocDataForm.controls.vocdate.setValue(this.content.VOCDATE);
@@ -1277,10 +1278,15 @@ export class SalesReturnComponent implements OnInit {
         this.voucherDetails = this.comFunc.getVoctypeMasterByVocTypeMain(this.strBranchcode, this.vocDataForm.value.voc_type, this.mainVocType)
         console.log(this.voucherDetails)
       }
-      if (this.content.FLAG == 'VIEW') {
+      else if (this.content.FLAG == 'VIEW') {
         this.viewOnly = true;
 
       }
+
+      else if (this.content.FLAG == 'DELETE') {
+        this.viewOnly = true;
+        this.deleteSaleRecord()
+        }
 
       console.log('!this.viewOnly && !this.editOnly', this.viewOnly, this.editOnly);
 
@@ -1316,6 +1322,67 @@ export class SalesReturnComponent implements OnInit {
     //     this.getRetailSalesMaster(params);
     //   }
     // });
+  }
+
+  afterSave(value: any) {
+    if (value) {
+      this.vocDataForm.reset()
+      this.close('reloadMainGrid')
+    }
+  }
+
+  showSuccessDialog(message: string): void {
+    Swal.fire({
+      title: message,
+      text: '',
+      icon: 'success',
+      confirmButtonColor: '#336699',
+      confirmButtonText: 'Ok'
+    }).then((result: any) => {
+      this.afterSave(result.value)
+    });
+  }
+
+  
+  showConfirmationDialog(): Promise<any> {
+    return Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete!'
+    });
+  }
+
+  deleteSaleRecord() {
+    if (this.content && this.content.FLAG == 'VIEW') return
+    if (!this.content?.MID) {
+      this.comFunc.toastErrorByMsgId('MSG2347');
+      return;
+    }
+
+    this.showConfirmationDialog().then((result) => {
+      if (result.isConfirmed) {
+        let API = `RetailSaleReturn/DeleteRetailSReturn/${this.content.BRANCH_CODE}/${this.content.VOCTYPE}/${this.content.VOCNO}/${this.content.YEARMONTH}`;
+        let Sub: Subscription = this.suntechApi.deleteDynamicAPI(API)
+          .subscribe((result) => {
+            if (result) {
+              if (result.status == "Success") {
+                this.showSuccessDialog('Voucher '+ this.content?.VOCNO + ' Deleted successfully');
+              } else {
+                this.comFunc.toastErrorByMsgId('MSG2272');
+              }
+            } else {
+              this.comFunc.toastErrorByMsgId('MSG1880');
+            }
+          }, err => {
+            this.comFunc.toastErrorByMsgId('MSG1531')
+          });
+        this.subscriptions.push(Sub);
+      }
+    });
   }
 
   formatDate(event: any) {

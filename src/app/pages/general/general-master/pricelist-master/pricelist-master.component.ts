@@ -231,13 +231,34 @@ export class PricelistMasterComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
+
   deleteRecord() {
     try {
       this.confirmDeletion().then((result) => {
         if (result.isConfirmed) {
           let API = 'PriceMaster/DeletePriceMaster/' + this.priceListMasterForm.value.priceCode;
-          this.handleDeletion(API);
+          let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
+            .subscribe((result) => {
+              if (result) {
+                if (result.status == "Success") {
+                  this.showSuccessDialog(this.content?.PRICE_CODE + ' Deleted successfully');
+                } else {
+                  this.commonService.toastErrorByMsgId('MSG2272');
+                }
+              } else {
+                this.commonService.toastErrorByMsgId('MSG1880');
+              }
+            }, err => {
+              this.commonService.toastErrorByMsgId('MSG1531')
+            });
+          this.subscriptions.push(Sub);
         }
+
+
+        // if (result.isConfirmed) {
+        //   let API = 'PriceMaster/DeletePriceMaster/' + this.priceListMasterForm.value.priceCode;
+        //   this.handleDeletion(API);
+        // }
       });
     } catch (error) {
       this.commonService.toastInfoByMsgId('Error occured! pls try again');;
@@ -335,6 +356,21 @@ export class PricelistMasterComponent implements OnInit {
     return true;
   }
   
+
+  showSuccessDialog(message: string): void {
+    Swal.fire({
+      title: message,
+      text: '',
+      icon: 'success',
+      confirmButtonColor: '#336699',
+      confirmButtonText: 'Ok'
+    }).then((result: any) => {
+      if (result.value) {
+        this.priceListMasterForm.reset();
+        this.close('reloadMainGrid');
+      }
+    });
+  }
 
   handleApiResponse(result: any) {
     if (result.response) {
