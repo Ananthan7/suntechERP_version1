@@ -12,6 +12,7 @@ import {
   ElementRef,
   Input,
   ChangeDetectorRef,
+  TemplateRef,
 } from "@angular/core";
 import {
   NgbModal,
@@ -51,6 +52,9 @@ import { ItemDetailService } from "src/app/services/modal-service.service";
 import { PlanetService } from "src/app/services/planet-integration.service";
 import { DxDataGridComponent } from "devextreme-angular";
 import { DatePipe } from "@angular/common";
+import SignaturePad from "signature_pad";
+import Swal from "sweetalert2";
+import { AddPosComponent } from "../add-pos/add-pos.component";
 
 @Component({
   selector: "app-point-of-sales-order",
@@ -58,6 +62,11 @@ import { DatePipe } from "@angular/common";
   styleUrls: ["./point-of-sales-order.component.scss"],
 })
 export class PointOfSalesOrderComponent implements OnInit {
+
+  @ViewChild('signaturePadCanvas', { static: false }) signaturePadElement!: ElementRef;
+  signaturePad!: SignaturePad | undefined;
+  private subscriptions: Subscription[] = [];
+
   @ViewChild(AuditTrailComponent) auditTrailComponent?: AuditTrailComponent;
   @Input() content!: any;
 
@@ -66,10 +75,11 @@ export class PointOfSalesOrderComponent implements OnInit {
 
   attachedImageList: any = [];
   @ViewChild('mymodal') public mymodal!: NgbModal;
-  @ViewChild('adjust_sale_return_modal')
   public adjust_sale_return_modal_ref!: NgbModalRef;
-  @ViewChild('adjust_sale_return_modal')
-  public adjust_sale_return_modal!: NgbModal;
+  @ViewChild('adjust_sale_return_modal', { static: true })
+  public adjust_sale_return_modal!: TemplateRef<any>; // Use TemplateRef if it's an ng-template
+
+  public adjustSaleReturnModalRef!: NgbModalRef;
   @ViewChild('oldgoldmodal') public oldgoldmodal!: NgbModal;
   @ViewChild('sales_payment_modal') public sales_payment_modal!: NgbModal;
   @ViewChild('more_customer_detail_modal')
@@ -91,20 +101,29 @@ export class PointOfSalesOrderComponent implements OnInit {
   private cssFilePath = '../../../assets/estimation_pdf.scss';
   // @ViewChild('scanner', { static: false }) scanner: BarcodeScannerLivestreamOverlayComponent;
   // @ViewChild(BarcodeScannerLivestreamComponent) scanner: BarcodeScannerLivestreamComponent;
+  selectedItemsCount: number = 0;
   LOCKVOUCHERNO: boolean = true;
+  isSignaturePadInitialized = false;
   voucherDetails: any;
   minDate: any;
   maxDate: any;
+  isDiscountAmountTrigger: boolean = false;
+  isloading: boolean = false;
   RECEIPT_MODEL: any = {}
   disableSaveBtn: boolean = false;
   isRateCannotLessCost: boolean = false;
   isNewButtonDisabled: boolean = true;
   allowDescription: boolean = false;
+  isGrossWtEditable: boolean = true;
+  isPcsEditable: boolean = true;
   editLineItem: boolean = false;
   amountDecimalFormat: any;
   metalDecimalFormat: any;
   weightDecimalFormat: any;
   gridAmountDecimalFormat: any;
+  hideEsignButton: boolean = false;
+  hideEsignView: boolean = true;
+  disableEsignButton: boolean = false;
   gridWeghtDecimalFormat: any;
   isOrderPullingRowSelected: boolean = false;
   isEstiPullingRowSelected: boolean = false;
@@ -162,7 +181,7 @@ export class PointOfSalesOrderComponent implements OnInit {
   ozWeight: any = 0;
 
   vocMaxDate = new Date();
-
+  existingCustomerDetails: any;
   dummyDate = '1900-01-01T00:00:00';
   dummyDateArr = ['1900-01-01T00:00:00', '1900-01-01T00:00:00Z', '1754-01-01T00:00:00Z', '1754-01-01T00:00:00'];
 
@@ -183,6 +202,7 @@ export class PointOfSalesOrderComponent implements OnInit {
   filteredAdvanceBranchOptions!: Observable<any[]>;
   filteredGiftModeBranchOptions!: Observable<any[]>;
 
+  itemDivision: string = "";
   blockNegativeStock: any = "";
   blockNegativeStockValue: any;
   blockMinimumPrice: any;
@@ -512,7 +532,8 @@ export class PointOfSalesOrderComponent implements OnInit {
   templateform = {
     testmn: 0.0,
   };
-
+  isAllowWithoutRate: boolean = false;
+  isPromotionalItem: boolean = false;
   currentLineItems: any = [];
   currentsalesReturnItems: any = [];
   currentExchangeMetalPurchase: any[] = [];
@@ -774,7 +795,6 @@ export class PointOfSalesOrderComponent implements OnInit {
 
   attachmentFile: any;
   parameterDetails: any[] = [];
-
   constructor(
     private modalService: NgbModal,
     private suntechApi: SuntechAPIService,
@@ -789,7 +809,7 @@ export class PointOfSalesOrderComponent implements OnInit {
     // public service: NgxBarcodeScannerService,
     private acRoute: ActivatedRoute,
     private indexedDb: IndexedDbService,
-
+    private activeModal: NgbActiveModal,
     public indexedApiService: IndexedApiService,
     public lineItemService: ItemDetailService,
 
@@ -1258,6 +1278,67 @@ export class PointOfSalesOrderComponent implements OnInit {
     return optionExists ? null : { optionNotFound: true };
   }
 
+  afterSave(value: any) {
+    if (value) {
+      this.vocDataForm.reset()
+      this.close('reloadMainGrid')
+    }
+  }
+
+  showSuccessDialog(message: string): void {
+    Swal.fire({
+      title: message,
+      text: '',
+      icon: 'success',
+      confirmButtonColor: '#336699',
+      confirmButtonText: 'Ok'
+    }).then((result: any) => {
+      this.afterSave(result.value)
+    });
+  }
+
+  
+  showConfirmationDialog(): Promise<any> {
+    return Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete!'
+    });
+  }
+
+  deleteSaleRecord() {
+    if (this.content && this.content.FLAG == 'VIEW') return
+    if (!this.content?.MID) {
+      this.comFunc.toastErrorByMsgId('MSG2347');
+      return;
+    }
+
+    this.showConfirmationDialog().then((result) => {
+      if (result.isConfirmed) {
+        let API = `RetailSalesOrder/DeleteRetailSalesOrder/${this.content.BRANCH_CODE}/${this.content.VOCTYPE}/${this.content.VOCNO}/${this.content.YEARMONTH}`;
+        let Sub: Subscription = this.suntechApi.deleteDynamicAPI(API)
+          .subscribe((result) => {
+            if (result) {
+              if (result.status == "Success") {
+                this.showSuccessDialog('Voucher '+ this.content?.VOCNO + ' Deleted successfully');
+              } else {
+                this.comFunc.toastErrorByMsgId('MSG2272');
+              }
+            } else {
+              this.comFunc.toastErrorByMsgId('MSG1880');
+            }
+          }, err => {
+            this.comFunc.toastErrorByMsgId('MSG1531')
+          });
+        this.subscriptions.push(Sub);
+      }
+    });
+  }
+
   async getArgs() {
     console.log('======content==============================');
     console.log(this.content);
@@ -1267,7 +1348,7 @@ export class PointOfSalesOrderComponent implements OnInit {
     if (this.content != undefined)
       this.posMode = this.content?.FLAG;
 
-    if (this.content?.FLAG == 'EDIT' || this.content?.FLAG == 'VIEW') {
+    if (this.content?.FLAG == 'EDIT' || this.content?.FLAG == 'VIEW'||this.content?.FLAG == 'DELETE') {
       this.LOCKVOUCHERNO = true;
       this.vocDataForm.controls.fcn_voc_no.setValue(this.content.VOCNO);
       this.vocDataForm.controls.vocdate.setValue(this.content.VOCDATE);
@@ -1285,9 +1366,13 @@ export class PointOfSalesOrderComponent implements OnInit {
         this.voucherDetails = this.comFunc.getVoctypeMasterByVocTypeMain(this.strBranchcode, this.vocDataForm.value.voc_type, this.mainVocType)
         console.log(this.voucherDetails)
       }
-      if (this.content.FLAG == 'VIEW') {
+      else if (this.content.FLAG == 'VIEW') {
         this.viewOnly = true;
 
+      }  
+      else if (this.content.FLAG == 'DELETE') {
+      this.viewOnly = true;
+      this.deleteSaleRecord()
       }
 
       console.log('!this.viewOnly && !this.editOnly', this.viewOnly, this.editOnly);
@@ -1536,15 +1621,17 @@ export class PointOfSalesOrderComponent implements OnInit {
               data.SRNO = index + 1;
             });
 
-          retailSaleData.Details.map((data: any, index: any) => {
-            console.log(
-              '===============retailSalesDetails====================='
-            );
+            retailSaleData.Details.map((data: any, index: any) => {
+              console.log(
+                '===============retailSalesDetails====================='
+              );
             console.log(data, index);
             console.log('====================================');
 
             this.newLineItem = data;
-            
+            // this.newLineItem.IGST_ACCODE_NON_POS = retailSaleData?.RetailDetails?.[0]?.IGST_ACCODE ?? '';
+            // this.newLineItem.HSN_CODE = retailSaleData?.RetailDetails?.[0]?.HSN_CODE ?? '';
+
 
             const values: any = {
               ID: data.SRNO,
@@ -1787,10 +1874,54 @@ export class PointOfSalesOrderComponent implements OnInit {
   onStarted(started: any) {
     console.log(started);
   }
-  // ngAfterViewInit() {
-  //   this.scanner.show();
-  //   // this.scanner.s
-  // }
+
+  ngAfterViewChecked(): void {
+    if (!this.isSignaturePadInitialized && !this.hideEsignView && this.signaturePadElement) {
+      this.initializeSignaturePad()
+        .then(() => {
+          console.log('Signature pad initialized');
+        })
+        .catch((error) => {
+          console.error('Signature pad initialization failed:', error);
+        });
+    }
+  }
+
+  initializeSignaturePad(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      if (this.signaturePadElement && !this.isSignaturePadInitialized) {
+        const canvasElement = this.signaturePadElement.nativeElement;
+
+        canvasElement.width = 450;
+        canvasElement.height = 200;
+
+        canvasElement.style.width = '100%';
+        canvasElement.style.height = 'auto';
+
+        this.signaturePad = new SignaturePad(canvasElement, {
+          backgroundColor: 'white',
+          penColor: 'black',
+          minWidth: 0.5,
+          maxWidth: 2.0,
+        });
+
+        this.isSignaturePadInitialized = true;
+        resolve();
+      } else {
+        reject('Signature pad element not found or already initialized');
+      }
+    });
+  }
+
+
+  openEsign() {
+    this.hideEsignView = false;
+    this.isSignaturePadInitialized = false;
+  }
+
+  cancelEsign() {
+    this.hideEsignView = true;
+  }
 
   onValueChanges(result: any) {
     alert(JSON.stringify(result));
@@ -1799,17 +1930,9 @@ export class PointOfSalesOrderComponent implements OnInit {
     // this.lineItemForm.controls.fcn_li_item_code.setValue(result.codeResult.code);
   }
 
-  ngAfterViewInit(): void {
-    //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
-    //Add 'implements AfterViewInit' to the class.
-    // if (this.viewOnly) this.setReadOnlyForViewMode();
 
-    // console.log('viewonly',this.viewOnly , this.editOnly);
 
-    // if(!this.viewOnly && !this.editOnly)
-    // this.open(this.mymodal);
 
-  }
   onChanges(): void {
     this.customerDataForm.value.tourVatRefuncYN.valueChanges.subscribe((isChecked: any) => {
       const tourVatRefundNoControl = this.customerDataForm.value.tourVatRefundNo;
@@ -2536,9 +2659,31 @@ export class PointOfSalesOrderComponent implements OnInit {
       // }
       console.log('receipt detail', this.receiptDetailsList);
     } else {
-      this.snackBar.open('Please Fill All Fields', 'OK');
+      this.snackBar.open('Please Fill All Fields', 'OK', {
+        duration: 2000
+      });
+
+      // this.snackBar.open('Please Fill All Fields', 'OK');
     }
 
+  }
+
+  public salesRetClose(data: any = null) {
+    if (this.viewOnly) {
+      this.adjustSaleReturnModalRef.close(data); 
+    } else {
+      this.openDialog('Warning', this.comFunc.getMsgByID('MSG1212'), false);
+
+      this.dialogBox.afterClosed().subscribe((action: any) => {
+        if (action == 'Yes') {
+          let stockCodesToRemove = this.salesReturnsItems_forVoc.map((item: any) => item.STOCK_CODE);
+
+          this.sales_returns_items = this.sales_returns_items.filter((item: any) => !stockCodesToRemove.includes(item.stock_code));
+          
+          this.adjustSaleReturnModalRef.close(data);
+        }
+      });
+    }
   }
 
   close(data: any = null) {
@@ -2622,15 +2767,54 @@ export class PointOfSalesOrderComponent implements OnInit {
   }
   closeAddCustomerModal() {
     // this.resetCustomerData()
+    this.customerDetailForm.patchValue(this.existingCustomerDetails);
     // this.modal.dismiss('Cross click')
     this.modalReference.dismiss();
     this.isNewCustomer = false;
   }
 
+  closeExchange() {
+
+    if(this.viewOnly){
+      this.modalReference.dismiss();
+    }
+
+    else {
+      this.openDialog('Warning', this.comFunc.getMsgByID('MSG1212'), false);
+
+      this.dialogBox.afterClosed().subscribe((action: any) => {
+        if (action == 'Yes') {
+
+          this.modalReference.dismiss();
+
+        }
+      });
+    }
+
+    
+  }
+
   closeItemModal() {
-    this.modalReference.dismiss();
-    this.isNetAmountChange = false;
-    this.editLineItem = false;
+
+    if(this.viewOnly){
+      this.modalReference.dismiss();
+      this.isNetAmountChange = false;
+      this.editLineItem = false;
+    }
+
+    else {
+      this.openDialog('Warning', this.comFunc.getMsgByID('MSG1212'), false);
+
+      this.dialogBox.afterClosed().subscribe((action: any) => {
+        if (action == 'Yes') {
+
+          this.modalReference.dismiss();
+
+        }
+      });
+    }
+
+    
   }
   open(content: any, salesReturnEdit = false, receiptItemData = null, custForm = false, receiptDetailView = false, isNewCustomer = false, isNewItem = false) {
     this.lineItemModalForSalesReturn = false;
@@ -2666,16 +2850,28 @@ export class PointOfSalesOrderComponent implements OnInit {
       this.salesReturnForm.controls.fcn_returns_voc_type.setValue(this.vocType);
     }
 
-    this.modalReference = this.modalService.open(content, {
-      size: 'xl',
-      ariaLabelledBy: 'modal-basic-title',
-      backdrop: false,
-    });
+    if (content._declarationTContainer.localNames[0] !==
+      'adjust_sale_return_modal')
+      this.modalReference = this.modalService.open(content, {
+        size: 'xl',
+        ariaLabelledBy: 'modal-basic-title',
+        backdrop: false,
+      });
+    else {
+      this.adjustSaleReturnModalRef = this.modalService.open(this.adjust_sale_return_modal, {
+        size: 'xl',
+        ariaLabelledBy: 'modal-basic-title',
+        backdrop: false,
+      });
+    }
+
+
     if (this.modalService.hasOpenModals()) {
       if (
         content._declarationTContainer.localNames[0] ==
         'more_customer_detail_modal'
       ) {
+        this.customerDetailForm.patchValue(this.existingCustomerDetails);
         this.customerDetailForm.controls.fcn_cust_detail_phone.setValue(
           this.customerDataForm.value.fcn_customer_mobile
         );
@@ -2873,7 +3069,7 @@ export class PointOfSalesOrderComponent implements OnInit {
     this.setSalesReturnDetailsPostData();
   }
 
-  editTable = async (event: any) => {
+  editTable = async (event: any, isSalesReturn: boolean = false) => {
     // this.newLineItem.ALLOWEDITDESCRIPTION=false;
     this.editLineItem = true;
     this.allowDescription = false;
@@ -2894,16 +3090,26 @@ export class PointOfSalesOrderComponent implements OnInit {
     //          e.Visible = false;
     //      }
     //  };
+    let value: any;
+    if (!isSalesReturn) {
+      value = this.currentLineItems.filter(
+        (data: any) => data.SRNO === event.data.sn_no
+      )[0];
+    } else {
+      value = this.sales_returns_items.filter(
+        (data: any) => data.slsReturn.SRNO === event.data.sn_no
+      )[0]?.slsReturn;
 
-    const value: any = this.currentLineItems.filter(
-      (data: any) => data.SRNO == event.data.sn_no
-    )[0];
+    }
+
     console.log(
       '===============editTable==currentLineItems==================='
     );
     console.log(value);
     console.log('====================================');
     event.component.refresh();
+    this.isAllowWithoutRate = value.ALLOW_WITHOUT_RATE;
+    this.isPromotionalItem = value.TPROMOTIONALITEM;
 
     // console.log(this.ordered_items);
     // console.log(this.newLineItem);
@@ -2973,7 +3179,7 @@ export class PointOfSalesOrderComponent implements OnInit {
           );
 
 
-          if (stockInfos.DIVISIONMS == 'M') this.setMetalRate(stockInfos.KARAT_CODE);
+          if (stockInfos.DIVISIONMS == 'M') this.setMetalRate(stockInfos.KARAT_CODE,'sales');
           this.newLineItem.BLOCK_GRWT = this.comFunc.stringToBoolean(stockInfos.BLOCK_GRWT?.toString());
           this.newLineItem.DIVISION = stockInfos.DIVISION;
           this.divisionCode = stockInfos.DIVISION;
@@ -2981,13 +3187,20 @@ export class PointOfSalesOrderComponent implements OnInit {
           this.newLineItem.LESSTHANCOST = stockInfos.LESSTHANCOST;
           this.newLineItem.TPROMOTIONALITEM = stockInfos.TPROMOTIONALITEM;
           this.managePcsGrossWt();
-          if (this.newLineItem.IS_BARCODED_ITEM != undefined && this.newLineItem.TPROMOTIONALITEM != undefined) {
-            if (!this.newLineItem?.IS_BARCODED_ITEM || this.comFunc.stringToBoolean(this.newLineItem?.TPROMOTIONALITEM.toString())) {
-              this.removeValidationsForForms(this.lineItemForm, ['fcn_li_rate', 'fcn_li_total_amount']);
-            } else {
-              this.setMakingValidation();
-            }
-          }
+
+          this.removeValidationsForForms(this.lineItemForm, ['fcn_li_rate', 'fcn_li_total_amount']);
+
+
+          // if (this.newLineItem.IS_BARCODED_ITEM != undefined && this.newLineItem.TPROMOTIONALITEM != undefined) {
+
+
+          //   if (!this.newLineItem?.IS_BARCODED_ITEM || this.comFunc.stringToBoolean(this.newLineItem?.TPROMOTIONALITEM.toString())) {
+          //     this.removeValidationsForForms(this.lineItemForm, ['fcn_li_rate', 'fcn_li_total_amount']);
+          //   } else {
+          //     this.setMakingValidation();
+          //   }
+          // }
+
           this.focusAndSetReadOnly(stockInfos);
         }
       }
@@ -3008,6 +3221,7 @@ export class PointOfSalesOrderComponent implements OnInit {
     this.newLineItem.STOCK_COST = value.STKTRANMKGCOST; // changed at 16/3/2024
     // this.newLineItem.STOCK_COST = value.StkTranMkgCost;
     // this.divisionMS = value.divisionMS;
+    this.itemDivision = value.DIVISION_CODE;
     this.lineItemForm.controls.fcn_li_item_code.setValue(value.STOCK_CODE);
     this.lineItemForm.controls.fcn_li_item_desc.setValue(value.STOCK_DOCDESC);
     this.lineItemForm.controls.fcn_li_division.setValue(value.DIVISION_CODE);
@@ -3066,8 +3280,18 @@ export class PointOfSalesOrderComponent implements OnInit {
 
     this.lineItemForm.controls.fcn_li_purity.setValue(
       this.comFunc.decimalQuantityFormat(value.PURITY, 'PURITY')
+
     );
-    this.lineItemForm.controls.fcn_li_pure_wt.setValue(value.PUREWT);
+
+    this.lineItemForm.controls.fcn_li_pure_wt.setValue(
+      this.comFunc.transformDecimalVB(
+        this.comFunc.allbranchMaster?.BMQTYDECIMALS,
+        this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_net_wt) *
+        this.lineItemForm.value.fcn_li_purity
+      )
+    );
+
+    // this.lineItemForm.controls.fcn_li_pure_wt.setValue(value.PUREWT);
     // this.lineItemForm.controls.fcn_li_stone_wt.setValue(value.STONEWT);
 
     this.lineItemForm.controls.fcn_ad_amount.setValue(
@@ -3178,6 +3402,11 @@ export class PointOfSalesOrderComponent implements OnInit {
       this.comFunc.setCommaSerperatedNumber(amount, 'AMOUNT')
     )
   }
+
+  public openAdjustSaleReturnModal() {
+    this.adjustSaleReturnModalRef = this.modalService.open(this.adjust_sale_return_modal, { size: 'lg' });
+  }
+  
   editTableSalesReturn(event: any) {
     this.salesReturnEditId = event.data.ID;
     event.cancel = true;
@@ -3894,6 +4123,7 @@ export class PointOfSalesOrderComponent implements OnInit {
             this.customerDataForm.controls.fcn_customer_exp_date.setValue(
               this.dummyDateCheck(this.customerDetails.POSCUSTIDEXP_DATE)
             );
+            this.existingCustomerDetails = this.setCustomerDPatchValues(this.customerDetails);
 
             // this.snackBar.open('Customer details saved successfully');
             // this.snackBar.dismiss();
@@ -4041,7 +4271,7 @@ export class PointOfSalesOrderComponent implements OnInit {
       this.customerDetailForm.reset();
       this.customerDataForm.reset({
         fcn_customer_mobile: custMobile,
-        fcn_customer_code:this.isCustomerFindsOnCode? value:"",
+        fcn_customer_code: this.isCustomerFindsOnCode ? value : "",
       });
       this.customerDetailForm.reset({
         fcn_cust_detail_phone: custMobile,
@@ -4156,7 +4386,7 @@ export class PointOfSalesOrderComponent implements OnInit {
             this.customerDataForm.controls.fcn_customer_exp_date.setValue(
               this.dummyDateCheck(result.POSCUSTIDEXP_DATE)
             );
-
+            this.existingCustomerDetails = this.setCustomerDPatchValues(result);
 
             this.customerDetails = result;
 
@@ -4213,6 +4443,36 @@ export class PointOfSalesOrderComponent implements OnInit {
     this.inv_sales_man = this.vocDataForm.value.sales_person;
     this.inv_bill_date = this.convertDate(this.vocDataForm.value.vocdate);
     this.inv_number = this.vocDataForm.value.fcn_voc_no;
+  }
+
+  setCustomerDPatchValues(customerData: any): any {
+    return {
+      fcn_customer_mobile: customerData.MOBILE,
+      fcn_customer_name: customerData.NAME,
+      fcn_customer_id_type: customerData.IDCATEGORY,
+      fcn_customer_id_number: customerData.POSCUSTIDNO,
+      fcn_mob_code: customerData.MOBILECODE1,
+      fcn_customer_code: customerData.CODE,
+      fcn_cust_detail_phone: customerData.MOBILE,
+      fcn_cust_detail_idType: customerData.IDCATEGORY,
+      fcn_cust_detail_email: customerData.EMAIL,
+      fcn_cust_detail_address: customerData.ADDRESS,
+      fcn_cust_detail_country: `${customerData.COUNTRY_CODE}` || "",
+      fcn_cust_detail_city: customerData.CITY,
+      fcn_cust_detail_idcard: customerData.NATIONAL_IDENTIFICATION_NO,
+      fcn_customer_detail_name: customerData.NAME,
+      fcn_customer_detail_fname: customerData.FIRSTNAME,
+      fcn_customer_detail_mname: customerData.MIDDLENAME,
+      fcn_customer_detail_lname: customerData.LASTNAME,
+      fcn_cust_detail_phone2: customerData.MOBILE1,
+      fcn_cust_detail_gender: customerData.GENDER,
+      fcn_cust_detail_marital_status: customerData.MARITAL_ST,
+      fcn_cust_detail_dob: this.dummyDateCheck(customerData.DATE_OF_BIRTH),
+      fcn_cust_detail_designation: customerData.DESIGNATION,
+      fcn_cust_detail_company: customerData.COMPANY,
+      fcn_cust_detail_nationality: customerData.NATIONALITY,
+      fcn_customer_exp_date: this.dummyDateCheck(customerData.POSCUSTIDEXP_DATE)
+    };
   }
 
 
@@ -4398,7 +4658,7 @@ export class PointOfSalesOrderComponent implements OnInit {
     if (selectedMobileCountry) {
       this.customerDetailForm.controls.fcn_cust_detail_country.setValue(selectedMobileCountry.CODE);
     } else {
-      this.customerDetailForm.controls.fcn_cust_detail_country.setValue(''); // Clear the country if no mobile code is selected
+      this.customerDetailForm.controls.fcn_cust_detail_country.setValue('');
     }
   }
 
@@ -4682,7 +4942,7 @@ export class PointOfSalesOrderComponent implements OnInit {
       NETWT: this.divisionMS == "S" ? 0 : items.NETWT,
       PURITY: items.PURITY,
       PUREWT: items.PUREWT,
-      CHARGABLEWT: this.divisionMS == "S" ? 0 : items.CHARGABLEWT,
+      CHARGABLEWT: this.divisionMS == "M"||this.newLineItem.DIVISION == 'D' ? 0 : items.CHARGABLEWT,
       MKG_RATEFC: items.MKG_RATEFC,
       MKG_RATECC: this.comFunc.FCToCC(
         this.vocDataForm.value.txtCurrency,
@@ -4741,7 +5001,6 @@ export class PointOfSalesOrderComponent implements OnInit {
       MCUNIT: items?.MCUNIT || 0,
       POSSALESSR: items?.POSSALESSR || '',
       PHYSICALSTOCK: items?.PHYSICALSTOCK || '',
-      DTPENDING: 1,
       METALAMT: items?.METALAMT || '',
       MAKINGAMT: items?.MAKINGAMT || '',
       STDIFFAC: items?.STDIFFAC || '', //need_input
@@ -5162,7 +5421,18 @@ export class PointOfSalesOrderComponent implements OnInit {
       }, 100);
     }
   }
+
+ 
+
+
   addSalesReturnOnSelect(event: any, slsReturn: any, index: any) {
+
+    if (event.target.checked) {
+      this.selectedItemsCount++;
+    } else {
+      this.selectedItemsCount--;
+    }
+    console.log(this.selectedItemsCount)
     // console.table(event);
     // console.table(slsReturn);
     let checked = event.target.checked;
@@ -5503,7 +5773,8 @@ export class PointOfSalesOrderComponent implements OnInit {
       //   net_amount: '',
       // };
       this.sumTotalValues();
-      this.modalReference.close();
+      this.adjustSaleReturnModalRef.close();
+      // this.modalReference.close();
       // this.modalReference.dismiss();
     } else {
       this.snackBar.open('Please Fill Required Fields', '', {
@@ -6243,7 +6514,7 @@ export class PointOfSalesOrderComponent implements OnInit {
     this.suntechApi.getDynamicAPI(API)
       .subscribe((resp) => {
         if (resp.status == "Success") {
-          this.renderer.selectRootElement('#fcn_exchange_gross_wt').focus();
+          this.renderer.selectRootElement('#fcn_exchange_gross_wt').select();
 
           if (!this.editOnly && !this.viewOnly) {
 
@@ -6274,19 +6545,13 @@ export class PointOfSalesOrderComponent implements OnInit {
               // _exchangeItem[0].PURITY
             );
             this.standardPurity = this._exchangeItemchange.PURITY;
-            this.exchangeForm.controls['fcn_exchange_metal_rate'].setValue(
-              // this.comFunc.transformDecimalVB(
-              //   this.comFunc.allbranchMaster?.BAMTDECIMALS,
-              this.comFunc.decimalQuantityFormat(_exchangeItem[0].METAL_RATE_PERGMS_ITEMKARAT, 'METAL_RATE')
 
+            this.setMetalRate(_exchangeItem[0].KARAT_CODE,'exchange');
+            
+            // this.exchangeForm.controls['fcn_exchange_metal_rate'].setValue(
+            //   this.comFunc.decimalQuantityFormat(_exchangeItem[0].METAL_RATE_PERGMS_ITEMKARAT, 'METAL_RATE')
+            // );
 
-              // _exchangeItem[0].METAL_RATE_PERGMS_ITEMKARAT
-
-              // ) // type not showing so this..
-              // this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, _exchangeItem[0].METAL_RATE_PERGMS_24KARAT) // type not showing so this..
-              //  this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, _exchangeItem[0].METAL_RATE)
-              // _karatRateRec[0].KARAT_RATE
-            );
             this.exchangeFormMetalRateType = _exchangeItem[0].METAL_RATE_TYPE;
           }
 
@@ -6395,7 +6660,8 @@ export class PointOfSalesOrderComponent implements OnInit {
   setPosItemData(sno: any, data: any, isPulled = false) {
     let fcn_li_rate = isPulled ? data.MKG_RATECC : this.lineItemForm.value.fcn_li_rate;
 
-    fcn_li_rate = (fcn_li_rate === null || fcn_li_rate === 0 || fcn_li_rate === '') ? 0 : parseFloat(fcn_li_rate.replace(/,/g, ''));
+    fcn_li_rate = (fcn_li_rate === null || fcn_li_rate === 0 || fcn_li_rate === '') ? 0 : parseFloat(fcn_li_rate.toString().replace(/,/g, ''));
+
 
 
     let fcn_ad_metal_rate = isPulled ? this.comFunc.decimalQuantityFormat(data.METAL_RATE, 'METAL_RATE') : this.lineItemForm.value.fcn_ad_metal_rate;
@@ -6430,10 +6696,9 @@ export class PointOfSalesOrderComponent implements OnInit {
       PUREWT: isPulled ? data.METAL_RATE_GMSFC : data.pure_wt, // m
       CHARGABLEWT: isPulled
         ? data.DIVISIONMS
-        : (data.divisionMS == "S"
+        : (data.divisionMS == "M"||this.newLineItem.DIVISION == 'D'
           ? 0
           : this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_net_wt)),
-      // CHARGABLEWT: data.NET_WT, // net weight
       MKG_RATEFC: isPulled ? data.MKG_RATEFC : this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_rate) || 0, //need
       MKG_RATECC: isPulled ? data.MKG_RATECC : this.comFunc.FCToCC(
         this.vocDataForm.value.txtCurrency,
@@ -6448,14 +6713,14 @@ export class PointOfSalesOrderComponent implements OnInit {
       RATE_TYPE: isPulled ? data.RATE_TYPE : (this.newLineItem.RATE_TYPE ?? ""),
 
       //  data.divisionMS == "S" ? '' : data.RATE_TYPE, //need_input
-      METAL_RATE: isPulled ? data.METAL_RATE : this.newLineItem.METAL_RATE_PERGMS_24KARAT ?? 0,
+      METAL_RATE: isPulled ? data.METAL_RATE : this.lineItemForm.value.fcn_ad_metal_rate ?? 0,
 
       // this.comFunc.emptyToZero(
       //   this.lineItemForm.value.fcn_ad_metal_rate
       // ),
 
-      METAL_RATE_GMSFC: isPulled ? data.METAL_RATE_GMSFC : this.newLineItem.METAL_RATE_PERGMS_24KARAT ?? 0,
-      METAL_RATE_GMSCC: isPulled ? data.METAL_RATE_GMSCC : this.newLineItem.METAL_RATE_PERGMS_24KARAT ?? 0,
+      METAL_RATE_GMSFC: isPulled ? data.METAL_RATE_GMSFC : this.lineItemForm.value.fcn_ad_metal_rate ?? 0,
+      METAL_RATE_GMSCC: isPulled ? data.METAL_RATE_GMSCC : this.lineItemForm.value.fcn_ad_metal_rate ?? 0,
 
       // "METAL_RATE_GMSFC": 18.1, // jeba
       // "METAL_RATE_GMSCC": 19.1, // jeba
@@ -6520,7 +6785,6 @@ export class PointOfSalesOrderComponent implements OnInit {
       MCUNIT: 0,
       POSSALESSR: '',
       PHYSICALSTOCK: '',
-      DTPENDING: 1,
       METALAMT: '0',
       MAKINGAMT: '0',
       // METALAMT: `${this.comFunc.emptyToZero(
@@ -7420,6 +7684,8 @@ export class PointOfSalesOrderComponent implements OnInit {
           this.imageURL = []
         } else {
           this.enableFormControls(false);
+          try { this.renderer.selectRootElement('#fcn_li_item_code', true).focus(); } catch (e) { console.warn('The selector "#fcn_li_item_code" did not match any elements.'); }
+          // this.renderer.selectRootElement('#fcn_li_item_code').focus();
           this.imageURL = []
         }
       } else {
@@ -7463,17 +7729,44 @@ export class PointOfSalesOrderComponent implements OnInit {
 
 
   focusAndSetReadOnly(stockInfos: any): void {
+    this.isGrossWtEditable = true;
+    this.isPcsEditable = true;
     const isDivisionX = this.newLineItem.DIVISION === 'X';
-    const excludeQtyValidations = ['M', 'D', 'W'];
-    if (!isDivisionX &&
-      this.comFunc.emptyToZero(stockInfos.BALANCE_PCS) < 1 &&
-      stockInfos.ENABLE_PCS &&
-      this.newLineItem.DIVISION !== 'X' &&
-      this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt) === 0 &&
-      excludeQtyValidations.some(v => this.newLineItem.DIVISION.toUpperCase().includes(v))) {
-      this.renderer.selectRootElement('#fcn_li_pcs').focus();
-    } else {
-     if(this.divisionMS=='M') this.renderer.selectRootElement('#fcn_li_total_amount').focus();
+    const excludeQtyValidations = ['M', 'D', 'W', 'N'];
+    if (
+      (excludeQtyValidations.some(v => this.newLineItem.DIVISION.toUpperCase().includes(v)))) {
+      this.isGrossWtEditable = false;
+      this.isPcsEditable = true;
+    } else
+      if (this.validatePCS == true || this.enablePieces == true)
+        this.isPcsEditable = true;
+      else
+        this.isPcsEditable = false;
+        if (!isDivisionX && 
+           stockInfos.ENABLE_PCS &&
+          excludeQtyValidations.some(v => this.newLineItem.DIVISION.toUpperCase().includes(v))) {
+          this.renderer.selectRootElement('#fcn_li_pcs')?.select();
+        }
+    // if (!isDivisionX &&
+    //   this.comFunc.emptyToZero(stockInfos.BALANCE_PCS) < 1 &&
+    //   stockInfos.ENABLE_PCS &&
+    //   this.newLineItem.DIVISION !== 'X' &&
+    //   this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt) === 0 &&
+    //   excludeQtyValidations.some(v => this.newLineItem.DIVISION.toUpperCase().includes(v))) {
+    //   this.renderer.selectRootElement('#fcn_li_pcs').focus();
+    // }
+     else {
+      if (this.divisionMS == 'M') this.renderer.selectRootElement('#fcn_li_total_amount')?.select();
+
+      if(this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt) === 0 &&
+      this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_rate) === 0 )
+
+      this.renderer.selectRootElement('#fcn_li_rate').select();
+
+      else{
+        this.renderer.selectRootElement('#fcn_li_net_amount')?.select();
+
+      }
     }
 
     if (isDivisionX) {
@@ -7482,8 +7775,9 @@ export class PointOfSalesOrderComponent implements OnInit {
         this.comFunc.transformDecimalVB(
           this.comFunc.allbranchMaster?.BMQTYDECIMALS,
           1));
-
-      this.comFunc.formControlSetReadOnly('fcn_li_pcs', true);
+      this.isGrossWtEditable = false;
+      this.isPcsEditable = false;
+      // this.comFunc.formControlSetReadOnly('fcn_li_pcs', true);
       this.comFunc.formControlSetReadOnly('fcn_li_gross_wt', true);
     }
   }
@@ -7560,6 +7854,8 @@ export class PointOfSalesOrderComponent implements OnInit {
                 this.newLineItem.IGST_ACCODE = stockInfoTaxes[0]?.POS_TAX_ACCODE;
                 this.newLineItem.IGST_ACCODE_NON_POS = stockInfoTaxes[0]?.IGST_ACCODE;
                 this.newLineItem.IGST_PER = stockInfoTaxes[0]?.IGST_PER;
+                this.isPromotionalItem = stockInfos.TPROMOTIONALITEM;
+                this.blockNegativeStock = stockInfos.BLOCK_NEGATIVESTOCK;
                 // this.newLineItem.GPC_POSSALES_AC = stockInfos[0]?.GPC_POSSALES_AC;
                 // this.newLineItem.GPC_STONEDIFF_AC = stockInfos[0]?.GPC_STONEDIFF_AC;
                 // this.newLineItem.GPC_STONEVALUESALES_AC = stockInfos[0]?.GPC_STONEVALUESALES_AC;
@@ -7570,6 +7866,7 @@ export class PointOfSalesOrderComponent implements OnInit {
                 this.newLineItem.TAGLINES = stockInfos?.TAGLINES;
 
                 this.divisionMS = stockInfos.DIVISIONMS;
+                this.itemDivision = stockInfos.DIVISION;
 
                 this.setGiftType();
                 const validDivisionCodes = ['M', 'D', 'W', 'P', 'N'];
@@ -7708,7 +8005,7 @@ export class PointOfSalesOrderComponent implements OnInit {
                     this.comFunc.emptyToZero(stockInfoPrice.STONE_SALES_PRICE)
                   );
 
-                  this.setMetalRate(stockInfos.KARAT_CODE);
+                  this.setMetalRate(stockInfos.KARAT_CODE,'sales');
 
                   this.manageCalculations();
                 } else {
@@ -7746,11 +8043,15 @@ export class PointOfSalesOrderComponent implements OnInit {
                   this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_net_amount);
                 // this.li_tag_val = this.newLineItem.TAG_LINES;
 
+                   this.removeValidationsForForms(this.lineItemForm, ['fcn_li_rate', 'fcn_li_total_amount']);
 
-                if (!this.newLineItem?.IS_BARCODED_ITEM || this.comFunc.stringToBoolean(this.newLineItem.TPROMOTIONALITEM.toString()))
-                  this.removeValidationsForForms(this.lineItemForm, ['fcn_li_rate', 'fcn_li_total_amount']);
-                else
-                  this.setMakingValidation();
+
+                // if (!this.newLineItem?.IS_BARCODED_ITEM || this.comFunc.stringToBoolean(this.newLineItem.TPROMOTIONALITEM.toString()))
+                //   this.removeValidationsForForms(this.lineItemForm, ['fcn_li_rate', 'fcn_li_total_amount']);
+                // else{
+                //   this.setMakingValidation();
+                // }
+                
 
                 const stoneCondition = this.comFunc.stringToBoolean(this.newLineItem.STONE?.toString());
                 this.toggleStoneAndNetWtFields(stoneCondition);
@@ -7772,6 +8073,12 @@ export class PointOfSalesOrderComponent implements OnInit {
                 //     Validators.required,
                 //   ]);
                 // }
+
+
+
+
+                
+                // this.renderer.selectRootElement('#fcn_li_net_amount').focus();
 
               } else {
                 this.enableFormControls(false);
@@ -7875,7 +8182,7 @@ export class PointOfSalesOrderComponent implements OnInit {
     ]);
     this.addValidationsForForms(this.lineItemForm, 'fcn_li_total_amount', [
       Validators.required,
-      Validators.min(1),
+      Validators.min(0.1),
     ]);
   }
 
@@ -8203,9 +8510,11 @@ export class PointOfSalesOrderComponent implements OnInit {
   // }
 
   managePcsGrossWt() {
+    this.isGrossWtEditable = true;
     if (this.validatePCS == true || this.enablePieces == true || this.newLineItem.DIVISION != 'G') {
-      if (!this.viewOnly)
-        this.comFunc.formControlSetReadOnly('fcn_li_pcs', false);
+      // if (!this.viewOnly&& this.newLineItem.DIVISION !='X')
+      //   this.isPcsEditable=true;
+      // this.comFunc.formControlSetReadOnly('fcn_li_pcs', false);
 
       this['lineItemForm'].controls['fcn_li_pcs'].setValidators([
         Validators.required,
@@ -8216,7 +8525,8 @@ export class PointOfSalesOrderComponent implements OnInit {
       const filteredValidationCodes = validDivisionCodes.filter((code) => code === this.newLineItem.DIVISION.toUpperCase())
 
       if (filteredValidationCodes.length > 0) {
-        this.comFunc.formControlSetReadOnly('fcn_li_gross_wt', true);
+        this.isGrossWtEditable = false;
+        // this.comFunc.formControlSetReadOnly('fcn_li_gross_wt', true);
       }
       else {
         this.comFunc.formControlSetReadOnly('fcn_li_gross_wt', false);
@@ -8229,13 +8539,15 @@ export class PointOfSalesOrderComponent implements OnInit {
       //   else this.comFunc.formControlSetReadOnly('fcn_li_gross_wt', true);
       // }
     } else {
-      this.comFunc.formControlSetReadOnly('fcn_li_pcs', true);
+      this.isPcsEditable = false;
+      // this.comFunc.formControlSetReadOnly('fcn_li_pcs', true);
       this.comFunc.formControlSetReadOnly('fcn_li_gross_wt', false);
 
       this.removeValidationsForForms(this.lineItemForm, ['fcn_li_pcs']);
 
       if (this.newLineItem.BLOCK_GRWT == true)
-        this.comFunc.formControlSetReadOnly('fcn_li_gross_wt', true);
+        this.isGrossWtEditable = false;
+      // this.comFunc.formControlSetReadOnly('fcn_li_gross_wt', true);
       else this.comFunc.formControlSetReadOnly('fcn_li_gross_wt', false);
 
     }
@@ -8926,7 +9238,7 @@ export class PointOfSalesOrderComponent implements OnInit {
   }
 
   AccountPosting(mid: any) {
-    if (!this.content) return
+    // if (!this.content) return
     let params = {
       BRANCH_CODE: this.comFunc.nullToString(this.strBranchcode),
       VOCTYPE: this.comFunc.nullToString(this.vocDataForm.value.voc_type),
@@ -8940,15 +9252,15 @@ export class PointOfSalesOrderComponent implements OnInit {
 
 
     }
-    let API = `AccountPosting/${params.BRANCH_CODE}/${params.VOCTYPE}/${params.YEARMONTH}/${params.VOCNO}/${params.MID}/${params.ACCUPDATEYN}/${params.USERNAME}/${params.MAINVOCTYPE}/${params.HEADER_TABLE}`;
+    let API = `AccountPosting/${params.BRANCH_CODE}/${params.VOCTYPE}/${params.VOCNO}/${params.YEARMONTH}/${params.MID}/${params.ACCUPDATEYN}/${params.USERNAME}/${params.MAINVOCTYPE}/${params.HEADER_TABLE}`;
 
 
     let Sub: Subscription = this.suntechApi.getDynamicAPI(API)
       .subscribe((result) => {
         if (result.status == "Success") {
-          this.comFunc.toastSuccessByMsgId(result.message || 'Posting Done')
+          this.comFunc.toastSuccessByText(result.message || 'Posting Done')
         } else {
-          this.comFunc.toastErrorByMsgId(result.message)
+          this.comFunc.toastSuccessByText(result.message)
         }
       },
         (err) => this.comFunc.toastErrorByMsgId("Server Error")
@@ -9208,7 +9520,46 @@ export class PointOfSalesOrderComponent implements OnInit {
     const preVal = this.comFunc.emptyToZero(localStorage.getItem('fcn_li_pcs'));
     this.isNetAmountChange = false;
     const value = this.comFunc.emptyToZero(event.target.value);
-    if (event.target.value != '' && this.validatePCS == true || this.enablePieces) {
+
+    if (this.comFunc.emptyToZero(event.target.value) == 0 && this.newLineItem.IS_BARCODED_ITEM) {
+
+      this.openDialog('Warning', this.comFunc.getMsgByID('MSG1563'), true);
+      this.dialogBox.afterClosed().subscribe((data: any) => {
+        if (data == 'OK') {
+          this.lineItemForm.controls['fcn_li_pcs'].setValue(
+            preVal
+          );
+          this.manageCalculations();
+          this.renderer.selectRootElement('#fcn_li_pcs').select();
+        }
+      });
+
+    }
+
+
+   else if (event.target.value != '' && this.validatePCS == true || this.enablePieces) {
+      const validDivisionCodes = ['M', 'D', 'W', 'N'];
+      const filteredValidationCodes = validDivisionCodes.filter((code) => code === this.newLineItem.DIVISION.toUpperCase())
+      if (filteredValidationCodes.length > 0 && this.comFunc.emptyToZero(event.target.value) === 0) {
+
+        this.openDialog('Warning', this.comFunc.getMsgByID('MSG1560'), true);
+        this.dialogBox.afterClosed().subscribe((data: any) => {
+          if (data == 'OK') {
+            this.lineItemForm.controls['fcn_li_pcs'].setValue(
+              preVal
+            );
+            this.lineItemForm.controls['fcn_li_gross_wt'].setValue(
+
+              preVal
+            );
+            this.manageCalculations();
+            this.calculateTaxAmount();
+            this.calculateNetAmount();
+            this.renderer.selectRootElement('#fcn_li_pcs').select();
+
+          }
+        });
+      }
 
       // if(!this.comFunc.emptyToZero(event.target.value))
       // this.clearDiscountValues();
@@ -9223,68 +9574,94 @@ export class PointOfSalesOrderComponent implements OnInit {
           );
           this.dialogBox.afterClosed().subscribe((data: any) => {
             if (data == 'OK') {
-              this.detectDiscountChange = true;
               this.lineItemForm.controls['fcn_li_pcs'].setValue(
                 this.lineItemPcs
               );
-              this.checkDivisionForPcs(value)
-
-
+              this.checkDivisionForPcs(value);
               this.manageCalculations();
+              this.detectDiscountChange = true;
+              this.updateDiscountAmount();
             }
 
           });
         } else {
-          this.checkDivisionForPcs(value)
+          this.checkDivisionForPcs(value);
           this.manageCalculations();
+          this.detectDiscountChange = true;
+          this.updateDiscountAmount();
         }
       } else if (this.blockNegativeStock == 'W') {
-        if (this.comFunc.emptyToZero(this.lineItemPcs) < value) {
-          if (!divisionBasedAutoUpdation) {
-            this.openDialog(
-              'Warning',
-              'Current Stock Qty Exceeding Available Stock Qty. Do You Wish To Continue?',
-              false
-            );
+        if (this.divisionMS != "M") {
+          if (this.comFunc.emptyToZero(this.lineItemPcs) < value) {
+            if (!divisionBasedAutoUpdation) {
+              this.openDialog(
+                'Warning',
+                'Current Stock Qty Exceeding Available Stock Qty. Do You Wish To Continue?',
+                false
+              );
 
-            this.dialogBox.afterClosed().subscribe((data: any) => {
-              if (data == 'No') {
-                // this.checkDivisionForPcs(value)
-                this.lineItemForm.controls['fcn_li_pcs'].setValue(
-                  preVal
-                );
-                if (this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_pcs) == 0 &&
-                  this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt) == 0)
+              this.dialogBox.afterClosed().subscribe((data: any) => {
+                if (data == 'No') {
+                  // this.checkDivisionForPcs(value)
+                  this.lineItemForm.controls['fcn_li_pcs'].setValue(
+                    preVal
+                  );
+                  if (this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_pcs) == 0 &&
+                    this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt) == 0)
 
-                  this.renderer.selectRootElement('#fcn_li_pcs').focus();
+                    this.renderer.selectRootElement('#fcn_li_pcs').select();
 
-                this.manageCalculations();
+                  this.manageCalculations();
 
-              } else {
-                this.detectDiscountChange = true;
-                this.checkDivisionForPcs(value)
-                this.manageCalculations();
+                } else {
 
-              }
-            });
-          }
-          else {
-            this.checkDivisionForPcs(value)
+
+                  if (!['L', 'C', 'P'].includes(this.itemDivision)) {
+                    this.checkDivisionForPcs(value);
+                    this.manageCalculations();
+                    this.detectDiscountChange = true;
+                    this.updateDiscountAmount();
+                    this.calculateTaxAmount();
+                    this.calculateNetAmount();
+                    this.lineItemCommaSeparation();
+                  }
+
+
+                }
+              });
+            }
+            else {
+              this.checkDivisionForPcs(value);
+              this.manageCalculations();
+              this.detectDiscountChange = true;
+              this.updateDiscountAmount();
+            }
+          } else {
+
+            // this.lineItemForm.controls['fcn_li_pcs'].setValue(
+            //   this.lineItemPcs
+            // );
+            this.checkDivisionForPcs(value);
             this.manageCalculations();
+            this.detectDiscountChange = true;
+            this.updateDiscountAmount();
+            this.calculateTaxAmount();
+            this.calculateNetAmount();
           }
-        } else {
+        }
+        else {
+          this.lineItemForm.controls['fcn_li_pcs'].setValue(
+            value
+          );
 
-          // this.lineItemForm.controls['fcn_li_pcs'].setValue(
-          //   this.lineItemPcs
-          // );
-          this.checkDivisionForPcs(value)
-          this.manageCalculations();
+
         }
       }
       else if (this.blockNegativeStock == 'A') {
-        this.detectDiscountChange = true;
-        this.checkDivisionForPcs(value)
+        this.checkDivisionForPcs(value);
         this.manageCalculations();
+        this.detectDiscountChange = true;
+        this.updateDiscountAmount();
       }
 
       else {
@@ -9303,7 +9680,7 @@ export class PointOfSalesOrderComponent implements OnInit {
 
 
   checkDivisionForPcs(pcs: any) {
-    const validDivisionCodes = ['M', 'D', 'W'];
+    const validDivisionCodes = ['M', 'D', 'W', 'N'];
     const filteredValidationCodes = validDivisionCodes.filter((code) => code === this.newLineItem.DIVISION.toUpperCase())
 
     if (filteredValidationCodes.length > 0) {
@@ -9339,6 +9716,23 @@ export class PointOfSalesOrderComponent implements OnInit {
     this.checkItemCode();
     this.setGrossWtFocus();
     if (event.target.value != '' && this.lineItemForm.value.fcn_li_item_code) {
+      if (this.comFunc.emptyToZero(event.target.value) == 0) {
+
+        this.openDialog('Warning', this.comFunc.getMsgByID('MSG1308'), true);
+        this.dialogBox.afterClosed().subscribe((data: any) => {
+          if (data == 'OK') {
+
+            this.lineItemForm.controls.fcn_li_gross_wt.setValue(
+              this.comFunc.transformDecimalVB(
+                this.comFunc.allbranchMaster?.BMQTYDECIMALS,
+                preVal
+              )
+            );
+            this.manageCalculations();
+          }
+        });
+
+      }
       if (this.blockNegativeStock == 'B') {
         if (this.comFunc.emptyToZero(this.lineItemGrossWt) < value) {
           this.openDialog(
@@ -9464,7 +9858,8 @@ export class PointOfSalesOrderComponent implements OnInit {
           this.manageCalculations({ totalAmt: totalAmt, nettAmt });
         }
         this.detectDiscountChange = true;
-        this.updateDiscountAmount();
+        if (this.divisionMS != 'M')
+          this.updateDiscountAmount();
       } else {
         // Rate Cannot be Less Than Cost
         this.openDialog('Warning', this.comFunc.getMsgByID('MSG1721'), true);
@@ -9505,7 +9900,7 @@ export class PointOfSalesOrderComponent implements OnInit {
 
               this.manageCalculations({ totalAmt: preTotalVal });
               // this.manageCalculations();
-              this.renderer.selectRootElement('#fcn_li_net_amount').focus();
+              this.renderer.selectRootElement('#fcn_li_net_amount').select();
             }
             else if (this.divisionMS == 'S') {
 
@@ -9598,13 +9993,22 @@ export class PointOfSalesOrderComponent implements OnInit {
       this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt);
 
     if (this.divisionMS == 'S') {
-      if (this.lineItemModalForSalesReturn || checkStockCostVal >= parseFloat(this.newLineItem.STOCK_COST)) {
+      if ((this.lineItemModalForSalesReturn || checkStockCostVal >= parseFloat(this.newLineItem.STOCK_COST) || (this.newLineItem.DIVISION === 'X'&& this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_discount_amount) <= this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount) &&
+      this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_discount_percentage) <= 100))) {
         this.manageCalculations();
+        if(this.newLineItem.DIVISION === 'X'){
+          this.removeValidationsForForms(this.lineItemForm, ['fcn_li_net_amount']);
+        }
 
       }
       else {
-        // Rate Cannot be Less Than Cost
-        this.openDialog('Warning', this.comFunc.getMsgByID('MSG1721'), true);
+        if(this.newLineItem.DIVISION === 'X'){
+
+          this.openDialog('Warning', this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_discount_amount) >
+          this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount)
+          || this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_discount_percentage) > 100 ?
+          this.comFunc.getMsgByID('MSG1203') :
+          this.comFunc.getMsgByID('MSG1721'), true);
         this.dialogBox.afterClosed().subscribe((data: any) => {
           if (data == 'OK') {
             this.lineItemForm.controls.fcn_li_discount_percentage.setValue(
@@ -9619,6 +10023,26 @@ export class PointOfSalesOrderComponent implements OnInit {
             this.manageCalculations();
           }
         });
+
+        }
+        else{
+        // Rate Cannot be Less Than Cost
+        this.openDialog('Warning', this.comFunc.getMsgByID('MSG1721'), true);
+        this.dialogBox.afterClosed().subscribe((data: any) => {
+          if (data == 'OK') {
+            this.lineItemForm.controls.fcn_li_discount_percentage.setValue(
+              preDisPerVal || this.zeroAmtVal
+
+            );
+            if (parseFloat(preDisPerVal) == 0)
+              preDisAmtVal = 0;
+            this.lineItemForm.controls.fcn_li_discount_amount.setValue(
+              preDisAmtVal || this.zeroAmtVal
+            );
+            this.manageCalculations({isDiscoutStored:true});
+          }
+        });
+      }
       }
     }
     // }
@@ -9662,8 +10086,8 @@ export class PointOfSalesOrderComponent implements OnInit {
 
     this.validateMinSalePrice()
   }
-  changeDisPer(event: any, discountAmt = null, nettAmt = null) {
-
+  changeDisPer(event: any, discountAmt = null, nettAmt = null,isDiscountAmountChange:boolean=false) {
+    this.isDiscountAmountTrigger=isDiscountAmountChange ? true:false;
 
     if (event.target.value != '') {
       let disAmt;
@@ -9744,6 +10168,7 @@ export class PointOfSalesOrderComponent implements OnInit {
           this.rateFuncDetail('B', value);
         }
       } else {
+
         this.manageCalculations();
       }
     }
@@ -9761,13 +10186,14 @@ export class PointOfSalesOrderComponent implements OnInit {
         }
       }
       else {
+
         this.manageCalculations();
       }
     } else {
 
-      this.lineItemForm.controls.fcn_li_rate.setValue(
-        preVal
-      );
+      // this.lineItemForm.controls.fcn_li_rate.setValue(
+      //   preVal
+      // );
       this.manageCalculations();
       //   }
 
@@ -9812,8 +10238,7 @@ export class PointOfSalesOrderComponent implements OnInit {
         let dblStockFcCost: any;
         let karatCode = this.newLineItem.KARAT_CODE;
 
-
-        if (this.lineItemModalForSalesReturn || this.comFunc.emptyToZero(value) >= this.comFunc.emptyToZero(this.blockMinimumPriceValue)) {
+        if (this.lineItemModalForSalesReturn || this.comFunc.emptyToZero(value) >= this.comFunc.emptyToZero(dblStockCost)) {
 
           this.rateFunc(value);
         }
@@ -9842,7 +10267,7 @@ export class PointOfSalesOrderComponent implements OnInit {
 
               this.manageCalculations();
 
-              this.renderer.selectRootElement('#fcn_li_rate').focus();
+              this.renderer.selectRootElement('#fcn_li_rate').select();
             }
           });
         }
@@ -9854,13 +10279,13 @@ export class PointOfSalesOrderComponent implements OnInit {
       //Changes as per Jebraj's Input on 17/07/2024
 
       if (this.divisionMS == 'S') {
-        if (this.comFunc.emptyToZero(this.lineItemModalForSalesReturn) || ((this.comFunc.emptyToZero(value)) >= this.comFunc.emptyToZero(this.newLineItem.STOCK_COST))&&(this.comFunc.emptyToZero(value))>=this.comFunc.emptyToZero(this.blockMinimumPriceValue)) {
+        if (((this.isPromotionalItem && this.isAllowWithoutRate && this.comFunc.emptyToZero(value) >= 0)) || this.comFunc.emptyToZero(value) > 0) {
 
           this.rateFunc(value);
         }
         else {
           // Rate Cannot be Less Than Cost
-          this.openDialog('Warning', this.comFunc.getMsgByID('MSG1721'), true);
+          this.openDialog('Warning', this.comFunc.emptyToZero(value) != 0 ? this.comFunc.getMsgByID('MSG1721') : this.comFunc.getMsgByID('MSG1723'), true);
           this.dialogBox.afterClosed().subscribe((data: any) => {
             if (data == 'OK') {
 
@@ -9900,7 +10325,7 @@ export class PointOfSalesOrderComponent implements OnInit {
 
 
     } else {
-      this.renderer.selectRootElement('#fcn_li_rate').focus();
+      this.renderer.selectRootElement('#fcn_li_rate').select();
       this.lineItemForm.controls['fcn_li_total_amount'].setValue(this.zeroAmtVal);
       this.lineItemForm.controls['fcn_ad_amount'].setValue(this.zeroAmtVal);
       // this.setGrossAmt();
@@ -10021,10 +10446,10 @@ export class PointOfSalesOrderComponent implements OnInit {
   setFocusBasedExchangeStone() {
     if (this._exchangeItemchange.INCLUDE_STONE == false) {
       // focus
-      this.renderer.selectRootElement('#fcn_exchange_purity').focus();
+      this.renderer.selectRootElement('#fcn_exchange_purity').select();
     } else {
       // focus
-      this.renderer.selectRootElement('#fcn_exchange_stone_wt').focus();
+      this.renderer.selectRootElement('#fcn_exchange_stone_wt').select();
     }
   }
 
@@ -10432,6 +10857,21 @@ export class PointOfSalesOrderComponent implements OnInit {
 
   }
 
+  changeVocNumber(vocNum: any) {
+    if (this.comFunc.emptyToZero(vocNum.target.value) == 0) {
+      const warning = "Voucher number cannot be 0"
+      this.openDialog('Warning', warning, true);
+      this.dialogBox.afterClosed().subscribe((data: any) => {
+        if (data == 'OK') {
+          this.vocDataForm.controls.fcn_voc_no.setValue(
+            localStorage.getItem('voucherNumber')
+          );
+          this.manageCalculations();
+        }
+      });
+    }
+  }
+
   changeGrossFunc(totalAmt: any, grossAmt: any) {
 
     this.lineItemForm.controls.fcn_li_discount_amount.setValue(
@@ -10651,7 +11091,7 @@ export class PointOfSalesOrderComponent implements OnInit {
 
     const permittedNetAmount = netAmtVal - (this.lineItemForm.value.fcn_li_tax_percentage / 100) * netAmtVal;
 
-    if (this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_amount) <= permittedNetAmount && this.divisionMS == 'S') {
+    if (this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_amount) <= permittedNetAmount && this.divisionMS == 'S' && this.newLineItem.DIVISION !== 'X') {
 
 
 
@@ -10742,6 +11182,7 @@ export class PointOfSalesOrderComponent implements OnInit {
   }
 
   changeDisAmount(event: any, nettAmt: any = null) {
+    this.isDiscountAmountTrigger=true;
     const preDisAmtVal =
       this.comFunc.decimalQuantityFormat(
         this.comFunc.emptyToZero(localStorage.getItem('fcn_li_discount_amount')),
@@ -10759,7 +11200,7 @@ export class PointOfSalesOrderComponent implements OnInit {
 
       this.lineItemForm.controls.fcn_li_discount_percentage.setValue(value);
 
-      this.changeDisPer({ target: { value: value } }, event.target.value, nettAmt);
+      this.changeDisPer({ target: { value: value } }, event.target.value, nettAmt,true);
 
     } else {
       this.lineItemForm.controls['fcn_li_total_amount'].setValue(0.0);
@@ -10770,7 +11211,7 @@ export class PointOfSalesOrderComponent implements OnInit {
     }
   }
   manageCalculations(
-    argsData: any = { totalAmt: null, nettAmt: null, disAmt: null }
+    argsData: any = { totalAmt: null, nettAmt: null, disAmt: null,isDiscoutStored:false }
   ) {
     console.log('====================================');
     console.log('manageCalculations', argsData);
@@ -10932,58 +11373,128 @@ export class PointOfSalesOrderComponent implements OnInit {
         );
       } else {
 
-        this.lineItemForm.controls['fcn_li_gross_amount'].setValue(
+        this.setGrossAmount();
 
-          this.comFunc.transformDecimalVB(
-            this.comFunc.allbranchMaster?.BAMTDECIMALS,
-            this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount) -
-            this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_discount_amount)
-          )
+        
 
-        );
+
+        // this.lineItemForm.controls['fcn_li_gross_amount'].setValue(
+
+        //   this.comFunc.transformDecimalVB(
+        //     this.comFunc.allbranchMaster?.BAMTDECIMALS,
+        //     this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount) -
+        //     this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_discount_amount)
+        //   )
+
+        // );
       }
     }
 
     if (argsData.nettAmt == null) {
+
+      this.calculateTaxAmount();
+      this.calculateNetAmount();
       /** set tax amount */
-      let taxAmount;
-      taxAmount = this.comFunc.transformDecimalVB(
-        this.comFunc.allbranchMaster?.BAMTDECIMALS,
-        this.getPercentage(
-          this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_tax_percentage),
-          this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_amount)
-        )
-      );
-      this.lineItemForm.controls['fcn_li_tax_amount'].setValue(
-        // Math.round(parseFloat(value)).toFixed(2)
-        this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, taxAmount)
-      );
-      this.li_tax_amount_val = this.comFunc.transformDecimalVB(
-        this.comFunc.allbranchMaster?.BAMTDECIMALS,
-        taxAmount
-      );
+      // let taxAmount;
+      // taxAmount = this.comFunc.transformDecimalVB(
+      //   this.comFunc.allbranchMaster?.BAMTDECIMALS,
+      //   this.getPercentage(
+      //     this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_tax_percentage),
+      //     this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_amount)
+      //   )
+      // );
+      // this.lineItemForm.controls['fcn_li_tax_amount'].setValue(
+      //   // Math.round(parseFloat(value)).toFixed(2)
+      //   this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, taxAmount)
+      // );
+      // this.li_tax_amount_val = this.comFunc.transformDecimalVB(
+      //   this.comFunc.allbranchMaster?.BAMTDECIMALS,
+      //   taxAmount
+      // );
 
-      const netAmtValue =
-        this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_amount) +
-        this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_tax_amount);
+      // const netAmtValue =
+      //   this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_amount) +
+      //   this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_tax_amount);
 
-      this.li_net_amount_val = this.comFunc.transformDecimalVB(
-        this.comFunc.allbranchMaster?.BAMTDECIMALS,
-        netAmtValue
-      );
-      this.lineItemForm.controls['fcn_li_net_amount'].setValue(
-        this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, netAmtValue)
-      );
+      // this.li_net_amount_val = this.comFunc.transformDecimalVB(
+      //   this.comFunc.allbranchMaster?.BAMTDECIMALS,
+      //   netAmtValue
+      // );
+      // this.lineItemForm.controls['fcn_li_net_amount'].setValue(
+      //   this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, netAmtValue)
+      // );
 
-      localStorage.setItem('fcn_li_net_amount', netAmtValue.toString());
+      // localStorage.setItem('fcn_li_net_amount', netAmtValue.toString());
 
 
     } else {
 
       // taxAmount = this.lineItemForm.value.fcn_li_tax_amount;
     }
+    if (this.divisionMS != "M") {
+      if (this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_discount_percentage))
+        this.detectDiscountChange =this.isDiscountAmountTrigger?false: true;
+        !argsData.isDiscoutStored ? this.updateDiscountAmount() : null;
+
+      this.calculateTaxAmount();
+      this.calculateNetAmount();
+    }
     this.lineItemCommaSeparation();
 
+  }
+
+
+  calculateTaxAmount() {
+    const taxPercentage = this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_tax_percentage);
+    const grossAmount = this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_amount);
+
+    const taxAmount = this.comFunc.transformDecimalVB(
+      this.comFunc.allbranchMaster?.BAMTDECIMALS,
+      this.getPercentage(taxPercentage, grossAmount)
+    );
+
+    this.lineItemForm.controls['fcn_li_tax_amount'].setValue(
+      this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, taxAmount)
+    );
+
+    this.li_tax_amount_val = this.comFunc.transformDecimalVB(
+      this.comFunc.allbranchMaster?.BAMTDECIMALS,
+      taxAmount
+    );
+  }
+
+
+  calculateNetAmount() {
+    const grossAmount = this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_amount);
+    const taxAmount = this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_tax_amount);
+
+    const netAmtValue = grossAmount + taxAmount;
+
+    this.lineItemForm.controls['fcn_li_net_amount'].setValue(
+      this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, netAmtValue)
+    );
+
+    this.li_net_amount_val = this.comFunc.transformDecimalVB(
+      this.comFunc.allbranchMaster?.BAMTDECIMALS,
+      netAmtValue
+    );
+
+    localStorage.setItem('fcn_li_net_amount', netAmtValue.toString());
+  }
+
+
+  setGrossAmount() {
+    const totalAmount = this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount);
+    const discountAmount = this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_discount_amount);
+
+    const grossAmount = this.comFunc.transformDecimalVB(
+      this.comFunc.allbranchMaster?.BAMTDECIMALS,
+      totalAmount - discountAmount
+    );
+
+    this.lineItemForm.controls['fcn_li_gross_amount'].setValue(this.comFunc.commaSeperation(grossAmount));
+    // this.calculateTaxAmount();
+    // this.calculateNetAmount();
   }
   lineItemCommaSeparation() {
     this.isNetAmountChange ? this.lineItemForm.controls['fcn_li_rate'].setValue(
@@ -11038,10 +11549,19 @@ export class PointOfSalesOrderComponent implements OnInit {
       this.comFunc.commaSeperation(this.lineItemForm.value.fcn_li_gross_amount)
     );
     this.lineItemForm.controls['fcn_li_discount_percentage'].setValue(
-      this.comFunc.commaSeperation(this.lineItemForm.value.fcn_li_discount_percentage || this.zeroAmtVal)
-    );
+      this.comFunc.decimalQuantityFormat(
+        this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_discount_percentage),
+        'AMOUNT') || this.zeroAmtVal
 
-    this.updateDiscountAmount();
+    );
+    // if (this.divisionMS != "M") {
+    //   if (this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_discount_percentage))
+    //     this.detectDiscountChange = true;
+    //   this.updateDiscountAmount();
+    //   this.calculateTaxAmount();
+    //   this.calculateNetAmount();
+    // }
+
 
     this.lineItemForm.controls['fcn_li_tax_amount'].setValue(
       this.comFunc.commaSeperation(this.lineItemForm.value.fcn_li_tax_amount)
@@ -11061,9 +11581,11 @@ export class PointOfSalesOrderComponent implements OnInit {
       const discountPercentage = parseFloat(discountPercentageString);
 
       const discountAmount = (totalAmount * (discountPercentage / 100)).toFixed(2);
+
       this.lineItemForm.controls['fcn_li_discount_amount'].setValue(
         this.comFunc.commaSeperation(discountAmount) || this.zeroAmtVal
       );
+      this.setGrossAmount();
       this.detectDiscountChange = false;
     } else {
       this.lineItemForm.controls['fcn_li_discount_amount'].setValue(
@@ -11206,14 +11728,23 @@ export class PointOfSalesOrderComponent implements OnInit {
     return (parseFloat(percent.toString()) / 100) * parseFloat(total.toString());
     // return ((percent / 100) * total).toFixed(2);
   }
-  setMetalRate(karatCode: any) {
+  setMetalRate(karatCode: any,screen:any) {
     const value: any = this.karatRateDetails.filter(
       (data: any) => data.KARAT_CODE == karatCode
-    )[0].KARAT_RATE;
+    )[0].POPKARAT_RATE;
 
-    this.lineItemForm.controls.fcn_ad_metal_rate.setValue(
-      this.comFunc.decimalQuantityFormat(value, 'METAL_RATE')
-    );
+    if (screen === "sales") {
+      this.lineItemForm.controls['fcn_ad_metal_rate'].setValue(
+        this.comFunc.decimalQuantityFormat(value, 'METAL_RATE')
+      );
+    } else {
+      this.exchangeForm.controls['fcn_exchange_metal_rate'].setValue(
+        this.comFunc.decimalQuantityFormat(value, 'METAL_RATE')
+      );
+      this._exchangeItemchange.METAL_RATE_PERGMS_ITEMKARAT = value;
+    }
+    
+    
   }
   changeStoneWt(event: any) {
     this.isNetAmountChange = false;
@@ -11634,7 +12165,6 @@ export class PointOfSalesOrderComponent implements OnInit {
       COMP_WISE_INVOICE: false,
       REFBY_CUSTCODE: '',
       PRINT_COUNT_ACCOPY: 0,
-      ORDER_STATUS:'O',
       PRINT_COUNT_CNTLCOPY: 0,
       SOURCEOFWEALTHANDFUNDS: '',
       POSCUSTIDEXP_DATE: this.customerDataForm.value.fcn_customer_exp_date,
@@ -12373,7 +12903,7 @@ export class PointOfSalesOrderComponent implements OnInit {
         );
       }
       if (source != 'byAPI')
-        this.renderer.selectRootElement('#fcn_cust_detail_phone')?.focus();
+        this.renderer.selectRootElement('moblieNumber')?.focus();
     } else {
       this.customerDetailForm.controls.fcn_customer_detail_fname.setValue('');
       this.customerDetailForm.controls.fcn_customer_detail_mname.setValue('');
@@ -12383,7 +12913,8 @@ export class PointOfSalesOrderComponent implements OnInit {
   }
   /**  end customer detail form */
   setReadOnlyForViewMode() {
-    this.comFunc.formControlSetReadOnly('fcn_li_pcs', false);
+    this.isPcsEditable = true;
+    // this.comFunc.formControlSetReadOnly('fcn_li_pcs', false);
     this.comFunc.formControlSetReadOnly('fcn_li_gross_wt', false);
   }
   dateFilter = (d: Date | null): boolean => {
@@ -13201,6 +13732,61 @@ export class PointOfSalesOrderComponent implements OnInit {
     }
   }
 
+  ValidatingVocNo(vocNum:any) {
+    if (this.content?.FLAG == 'VIEW') return
+    this.comFunc.showSnackBarMsg('MSG81447');
+    if (this.comFunc.emptyToZero(vocNum.target.value) == 0) {
+      const warning = "Voucher number cannot be 0"
+      this.openDialog('Warning', warning, true);
+      this.dialogBox.afterClosed().subscribe((data: any) => {
+        if (data == 'OK') {
+          this.vocDataForm.controls.fcn_voc_no.setValue(
+            localStorage.getItem('voucherNumber')
+          );
+          this.manageCalculations();
+        }
+      });
+    }
+    else{
+      let API = `ValidatingVocNo/${this.comFunc.getqueryParamMainVocType()}/${this.vocDataForm.value.fcn_voc_no}`
+      API += `/${this.comFunc.branchCode}/${this.comFunc.getqueryParamVocType()}`
+      API += `/${this.comFunc.yearSelected}`
+      this.isloading = true;
+      let Sub: Subscription = this.suntechApi.getDynamicAPI(API)
+        .subscribe((result) => {
+          this.isloading = false;
+          this.comFunc.closeSnackBarMsg()
+          let data = this.comFunc.arrayEmptyObjectToString(result.dynamicData[0])
+          if (data && data[0]?.RESULT == 0) {
+            this.comFunc.toastErrorByMsgId('MSG2007');
+  
+            this.generateVocNo()
+            return
+          }
+  
+          else{
+            
+            this.openDialog('Warning',this.comFunc.getMsgByID(data[0].STATUS_MESSAGE), true);
+            this.dialogBox.afterClosed().subscribe((data: any) => {
+              if (data == 'OK') {
+                this.vocDataForm.controls.fcn_voc_no.setValue(
+                  localStorage.getItem('voucherNumber')
+                );
+                this.manageCalculations();
+              }
+            });
+          }
+        }, err => {
+          this.isloading = false;
+          this.generateVocNo()
+          this.comFunc.toastErrorByMsgId('MSG2272')
+  
+        })
+      this.subscriptions.push(Sub)
+    }
+    
+  }
+
   generateVocNo() {
     // getDynamicAPIwithParams
 
@@ -13222,6 +13808,7 @@ export class PointOfSalesOrderComponent implements OnInit {
         if (resp.status == "Success") {
           this.vocDataForm.controls['fcn_voc_no'].setValue(resp.newvocno);
           this.voucherNumber = resp.newvocno;
+          localStorage.setItem('voucherNumber', resp.newvocno)
         }
       });
   }
@@ -13448,21 +14035,21 @@ export class PointOfSalesOrderComponent implements OnInit {
   }
 
   pullSalesOrder() {
-    const orderNo = this.pendingSalesOrderForm.value.orderNo;
+    const orderNo = this.pendingSalesOrderForm.value.orderNo ?? 0;
     const branchTo = this.pendingSalesOrderForm.value.branchTo;
-    const customerCode = this.pendingSalesOrderForm.value.customerCode;
+    const customerCode = this.pendingSalesOrderForm.value.customerCode ?? 0;
 
-    if (!orderNo && !customerCode) {
-      this.snackBar.open('Please fill either "Order No." or "Customer Code" before searching.', 'Close', {
-        duration: 3000,
-      });
-      return;
-    }
+    // if (!orderNo && !customerCode) {
+    //   this.snackBar.open('Please fill either "Order No." or "Customer Code" before searching.', 'Close', {
+    //     duration: 3000,
+    //   });
+    //   return;
+    // }
 
     if (orderNo) {
       this.snackBar.open('Loading...');
 
-      this.suntechApi.getDynamicAPI(`PendingSalesOrder/GetPendingSalesOrderWithBranchandOrderNo/${branchTo}/${orderNo}`)
+      this.suntechApi.getDynamicAPI(`PendingSalesOrder/GetPendingSalesOrder/${branchTo}/${orderNo}/${customerCode}`)
         .subscribe((resp) => {
           if (resp.status === 'Success') {
             this.pendingOrderList = resp.response;
@@ -13478,10 +14065,10 @@ export class PointOfSalesOrderComponent implements OnInit {
     } else {
       this.snackBar.open('Loading...');
       this.suntechApi
-        .getDynamicAPI(`PendingSalesOrder/GetPendingSalesOrderWithBranchandCustomerCode/${branchTo}/${customerCode}`)
+        .getDynamicAPI(`PendingSalesOrder/GetPendingSalesOrder/${branchTo}/${orderNo}/${customerCode}`)
         .subscribe((resp) => {
           if (resp.status === 'Success') {
-            this.pendingOrderList = resp.response;
+            this.pendingOrderList = resp.dynamicData[0];
             this.snackBar.dismiss();
 
           } else {
@@ -13498,6 +14085,7 @@ export class PointOfSalesOrderComponent implements OnInit {
     this.pendingOrderList = [];
     this.isOrderPullingRowSelected = false;
     this.pendingSalesOrderForm.reset();
+    this.pendingSalesOrderForm.controls.branchTo.setValue(this.strBranchcode);
     this.modalRefePendingSalesOrder = this.modalService.open(
       this.pendingSalesOrderModal,
       {
@@ -13509,6 +14097,7 @@ export class PointOfSalesOrderComponent implements OnInit {
 
     this.modalRefePendingSalesOrder.result.then((result) => {
       if (result) {
+
         console.log("Result :", result);
       } else {
       }
@@ -13517,6 +14106,43 @@ export class PointOfSalesOrderComponent implements OnInit {
         console.log(`Dismissed ${reason}`);
       }
     );
+  }
+
+
+  clearSignature() {
+    this.signaturePad?.clear();
+  }
+
+  saveSignature() {
+    if (this.signaturePad?.isEmpty()) {
+      alert('Please provide a signature first.');
+    } else {
+      const dataURL = this.signaturePad?.toDataURL().replace(/^data:image\/(png|jpg);base64,/, '');
+
+
+      const API = `RetailSalesESignature/InsertRetailSalesESignature`;
+      const postData = {
+        "MID": 0,
+        "BRANCH_CODE": this.comFunc.nullToString(this.strBranchcode),
+        "VOCNO": this.comFunc.emptyToZero(this.vocDataForm.value.fcn_voc_no),
+        "VOCTYPE": this.comFunc.nullToString(this.vocDataForm.value.voc_type),
+        "YEARMONTH": this.comFunc.nullToString(this.baseYear),
+        "REFMID": this.content ? this.comFunc.emptyToZero(this.content?.MID) : this.midForInvoce,
+        "SIGN": dataURL
+      };
+
+      this.suntechApi.postDynamicAPI(API, postData)
+        .subscribe((res: any) => {
+          if (res.status == "Success") {
+            console.log(res);
+            this.snackBar.open('Esigned successfully', '', {
+              duration: 1000
+            });
+            this.hideEsignView = true;
+            this.disableEsignButton = true;
+          }
+        });
+    }
   }
 
   openUserAttachmentModal() {
@@ -13986,8 +14612,8 @@ export class PointOfSalesOrderComponent implements OnInit {
   }
 
   setGrossWtFocus() {
-    if (this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt) == 0 && !this.validatePCS && this.lineItemForm.value.fcn_li_item_code && this.newLineItem.DIVISION != "X") {
-      this.renderer.selectRootElement('#fcn_li_gross_wt').focus();
+    if (this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt) == 0 && this.newLineItem.DIVISION=='G' && !this.validatePCS && this.lineItemForm.value.fcn_li_item_code && this.newLineItem.DIVISION != "X") {
+      this.renderer.selectRootElement('#fcn_li_gross_wt').select();
       this.snackBar.open('Gross Wt should not 0', 'OK', {
         duration: 2000
       });
@@ -13996,6 +14622,20 @@ export class PointOfSalesOrderComponent implements OnInit {
       this.checkItemCode();
     }
   }
+
+  
+
+  focusField(fieldName: string) {
+    const excludeQtyValidations = ['M', 'D', 'W', 'N'];
+    if (excludeQtyValidations.some(v => this.newLineItem.DIVISION?.toUpperCase().includes(v))) {
+        this.renderer.selectRootElement(`#${fieldName}`)?.select();
+        if ((this as any)[fieldName] && (this as any)[fieldName].nativeElement) {
+            (this as any)[fieldName].nativeElement.select();
+        }
+    } 
+}
+
+  
 
   setGiftType() {
     if (this.divisionMS == 'M') {
@@ -14016,7 +14656,7 @@ export class PointOfSalesOrderComponent implements OnInit {
       BRANCH_CODE: this.comFunc.nullToString(this.strBranchcode),
       VOCTYPE: this.comFunc.nullToString(this.vocDataForm.value.voc_type),
       VOCNO: this.comFunc.emptyToZero(this.vocDataForm.value.fcn_voc_no),
-      MID: this.comFunc.emptyToZero(this.content?.MID),
+      MID: this.content ? this.comFunc.emptyToZero(this.content?.MID) : this.midForInvoce,
       YEARMONTH: this.comFunc.nullToString(this.baseYear),
     }
     this.auditTrailComponent?.showDialog(params)
@@ -14199,26 +14839,51 @@ export class PointOfSalesOrderComponent implements OnInit {
     if (this.selectedPendingOrder) {
 
       console.log('Selected Row Data:', this.selectedPendingOrder);
-      this.fetchSalesOrderDetails(this.selectedPendingOrder.VOCNO, this.selectedPendingOrder.MID);
+      this.fetchSalesOrderDetails(this.selectedPendingOrder.VOCNO, this.selectedPendingOrder.MID, this.selectedPendingOrder.VOCTYPE);
+      this.modalReference.close();
 
     }
   }
 
-  fetchSalesOrderDetails(vocNo: string, mid: any) {
+  fetchSalesOrderDetails(vocNo: string, mid: any, vocType: any) {
     this.snackBar.open('Loading...');
-    this.suntechApi.getDynamicAPI(`RetailSalesOrder/GetRetailSalesOrder/moe/ops/2024/27/13`)
+    // this.suntechApi.getDynamicAPI(`RetailSalesOrder/GetRetailSalesOrder/moe/ops/2024/27/13`)
 
-      //  this.suntechApi.getDynamicAPI(`RetailSalesOrder/GetRetailSalesOrder/${this.strBranchcode}/${this.mainVocType}/${this.baseYear}/${vocNo}/${mid}`)
+    this.suntechApi.getDynamicAPI(`RetailSalesOrder/GetRetailSalesOrder/${this.strBranchcode}/${vocType}/${this.baseYear}/${vocNo}/${mid}`)
       .subscribe((resp) => {
         if (resp.status === 'Success') {
           this.newLineItem = resp.response.salesOrder.Details[0];
-          this.addItemtoList('save_btn', resp.response.salesOrder.Details);
-          this.onCustomerNameFocus(resp.response.customer.MOBILE, false);
-          this.modalRefePendingSalesOrder.dismiss('Dismissed by user');
-          // this.pendingOrderList = resp.response;
-          this.snackBar.dismiss();
+          const salesOrderDetails = resp.response.salesOrder.Details;
+          const existingStockCodes = this.ordered_items.map(item => item.stock_code);
 
-        } else {
+          const newEntries = salesOrderDetails.filter(
+            (detail: any) => !existingStockCodes.includes(detail.STOCK_CODE)
+          );
+
+          if (newEntries.length === 0) {
+
+            this.openDialog(
+              'Warning',
+              'Order already exists',
+              true
+            );
+            this.dialogBox.afterClosed().subscribe((data: any) => {
+              if (data == 'OK') {
+                this.lineItemForm.controls['fcn_li_item_code'].setValue('');
+                this.renderer.selectRootElement('#fcn_li_item_code').focus();
+              }
+
+            });
+
+          } else {
+            this.addItemtoList('save_btn', newEntries);
+            this.modalRefePendingSalesOrder.dismiss('Dismissed by user');
+          }
+
+          this.onCustomerNameFocus(resp.response.customer.MOBILE, false);
+          this.snackBar.dismiss();
+        }
+        else {
           this.snackBar.open('No Data Found', 'Close', {
             duration: 3000,
           });
@@ -14377,7 +15042,7 @@ export class PointOfSalesOrderComponent implements OnInit {
           this.order_items_total_discount_amount = retailSaleData.DISCOUNT;
 
           this.retailSalesDataPost = retailSaleData;
-          this.retailSalesDataPost.Details = [];
+          this.retailSalesDataPost.RetailDetails = [];
 
           if (this.ordered_items.length >= 0)
             this.comFunc.formControlSetReadOnlyByClass('karat_code', true);
@@ -14530,4 +15195,5 @@ export class PointOfSalesOrderComponent implements OnInit {
     this.onCustomerNameFocus(e.CODE, true);
 
   }
+
 }
