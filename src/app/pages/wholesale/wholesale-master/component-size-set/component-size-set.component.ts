@@ -176,7 +176,7 @@ export class ComponentSizeSetComponent implements OnInit {
 
     this.tableData.push(data);
 
-    this.selectedOptions.push(null);
+    // this.selectedOptions.push(null);
   }
 
 
