@@ -26,26 +26,6 @@
             <div class="col-md-7" style="width: 60% !important;">
                 <app-date (selectedDate)="setDateValue($event)" [dateValue]="dateToPass"></app-date>
             </div> 
-
-            <!-- <div class="col-md-2" style="margin-left: -5rem !important">
-                <div class="text-center d-flex justify-content-between mt-1">
-                    <div class="p-1 bd-highlight">
-                        <button type="button" class="btn btn-primary add-btn">
-                            <i class="fas fa-sync-alt"></i>
-                        </button>
-                    </div>
-                    <div class="p-1 bd-highlight">
-                        <button type="button" class="btn btn-primary add-btn">
-                            <i class="fas fa-print"></i>
-                        </button>
-                    </div>
-                    <div class="p-1 bd-highlight">
-                        <button type="button" class="btn btn-primary add-btn">
-                            <i class="fas fa-sign-out-alt"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>  -->
         </div>
 
         <div class="row mb-5">
@@ -416,10 +396,11 @@
                     </dxi-column>
                 </dx-data-grid> -->
                 <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true" [showRowLines]="true"
-                [allowColumnReordering]="true" height="200" [dataSource]="tableData">
+                [allowColumnReordering]="true" height="200" [dataSource]="tableData" [columnAutoWidth]="true">
                 <dxo-paging [enabled]="false"></dxo-paging>
                 <dxo-selection mode="multiple"></dxo-selection>
                 <dxo-scrolling mode="virtual"></dxo-scrolling>
+                
                 <dxi-column [width]="100" dataField="Salesman" caption="Salesman"></dxi-column>
                 <dxi-column dataField="#Docs" dataType="#Docs"></dxi-column>                
                 <dxi-column dataField="Tot. Amount" dataType="Tot. Amount"></dxi-column>
@@ -427,7 +408,7 @@
                 <dxi-column dataField="Dia & Others" dataType="Dia & Others"></dxi-column>               
                 <dxi-column dataField="Mkg.Value" dataType="Mkg.Value"></dxi-column>                
 
-                <dxo-summary>
+                <!-- <dxo-summary>
                     <dxi-total-item column="Tot. Amount">
                     </dxi-total-item>
                     <dxi-total-item column="Gold">
@@ -436,7 +417,7 @@
                     </dxi-total-item>
                     <dxi-total-item column="Mkg.Value">
                     </dxi-total-item>
-                </dxo-summary>
+                </dxo-summary> -->
             </dx-data-grid>
             </div>
         </div>

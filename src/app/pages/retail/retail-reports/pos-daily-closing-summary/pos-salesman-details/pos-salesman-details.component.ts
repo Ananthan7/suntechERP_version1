@@ -1,7 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { DomSanitizer } from '@angular/platform-browser';
 import { NgbActiveModal, } from '@ng-bootstrap/ng-bootstrap';
+import { DxDataGridComponent } from 'devextreme-angular';
+import { ToastrService } from 'ngx-toastr';
 import { CommonServiceService } from 'src/app/services/common-service.service';
+import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 
 @Component({
   selector: 'app-pos-salesman-details',
@@ -9,14 +13,38 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
   styleUrls: ['./pos-salesman-details.component.scss']
 })
 export class PosSalesmanDetailsComponent implements OnInit {
-  tableData: any[] = [];
+  tableData: any = [];
+  @Input() posDailyClosingSummaryFormData: any; //get data from PosDailyClosingSummaryComponent parent component
+  htmlPreview: any;
+
   constructor(
-    private activeModal: NgbActiveModal,
-    private formBuilder: FormBuilder,
-    private comService: CommonServiceService,
+    private activeModal: NgbActiveModal, private sanitizer: DomSanitizer,
+    private formBuilder: FormBuilder, private toastr: ToastrService,
+    private comService: CommonServiceService, private dataService: SuntechAPIService,
   ) { }
 
   ngOnInit(): void {
+    this.comService.showSnackBarMsg('MSG81447');
+    let API = "UspRptPosSalesmanwiseDetailsNet";
+    let postData = {
+      "strSalType": 0,
+      "strBranch": this.posDailyClosingSummaryFormData.value.branch,
+      "strFromDate": this.formatDateToYYYYMMDD(this.posDailyClosingSummaryFormData.value.fromDate),
+      "strToDate": this.formatDateToYYYYMMDD(this.posDailyClosingSummaryFormData.value.toDate),
+      "str_MGroupBy": ''
+    };
+    
+    this.dataService.postDynamicAPI(API, postData).subscribe((result: any) => {
+      if (result.status == "Success") {
+        this.toastr.success(result.status);                    
+        this.tableData.push(result.dynamicData[0][0]);
+        this.comService.closeSnackBarMsg();
+      }
+      else{
+        this.toastr.error(result.status);
+        this.comService.closeSnackBarMsg();
+      }
+    },(err: any) => this.toastr.error(err)); this.comService.closeSnackBarMsg();
   }
 
   close(data?: any) {
@@ -24,5 +52,29 @@ export class PosSalesmanDetailsComponent implements OnInit {
     this.activeModal.close(data);
   }
 
+  formatDateToYYYYMMDD(dateString: any) {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
+
+
+  previewClick() {
+    this.htmlPreview = this.sanitizer.bypassSecurityTrustHtml(this.tableData);
+    const blob = new Blob([this.htmlPreview.changingThisBreaksApplicationSecurity], { type: 'text/html' });
+    this.comService.closeSnackBarMsg();
+    const url = URL.createObjectURL(blob);
+    window.open(url, '_blank');     
+  }
+
+  printBtnClick(){
+    const printWindow = window.open('', '_blank');
+    printWindow?.document.write(``)
+    printWindow?.document.close();
+    printWindow?.print();
+  }
 
 }
