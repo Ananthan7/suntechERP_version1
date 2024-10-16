@@ -419,13 +419,17 @@ export class ProcessTransferDetailsComponent implements OnInit {
   }
   setInitialValues() {
     if (!this.content) return
+    //parentDetail sets all value of detail
     let parentDetail: any;
     let PROCESS_FORMDETAILS: any;
+    //if flag is present
     if (this.content[0]?.FLAG) {
+      //setting conditions related to flag
       this.setFlagMode(this.content[0]?.FLAG)
       this.processTransferdetailsForm.controls.FLAG.setValue(this.content[0]?.FLAG)
-      parentDetail = this.content[0]?.JOB_PROCESS_TRN_DETAIL_DJ || []
-      let compData = this.content[0]?.JOB_PROCESS_TRN_COMP_DJ || []
+      parentDetail = this.content[0]?.JOB_PROCESS_TRN_DETAIL_DJ || [] // setting detail data
+      let compData = this.content[0]?.JOB_PROCESS_TRN_COMP_DJ || [] // setting component data
+      // setting component grid data
       this.metalDetailData = []
       compData.forEach((item: any, index: any) => {
         item.FRM_PCS = item.SETTED_PCS
@@ -437,15 +441,16 @@ export class ProcessTransferDetailsComponent implements OnInit {
           this.metalDetailData.push(item)
         }
       })
-
-      this.formatMetalDetailDataGrid()
-    } else {// condition to load without saving
+      this.formatMetalDetailDataGrid() //number formatting component grid in detail screen
+    } else {
+      // condition to load without saving flag not present
       this.renderer.selectRootElement('#jobNoSearch')?.focus();
-      parentDetail = this.content[0]?.JOB_PROCESS_TRN_DETAIL_DJ
+      parentDetail = this.content[0]?.JOB_PROCESS_TRN_DETAIL_DJ// setting detail data
       PROCESS_FORMDETAILS = this.content[0]?.PROCESS_FORMDETAILS
-      this.metalDetailData = this.content[0]?.TRN_STNMTL_GRID || []
+      this.metalDetailData = this.content[0]?.TRN_STNMTL_GRID || [] // setting component grid data
     }
     if (!parentDetail) return;
+    // setting values required for both diamond and metal tab
     this.processTransferdetailsForm.controls.SRNO.setValue(this.content[0]?.SRNO)
     this.designType = this.commonService.nullToString(parentDetail.DESIGN_TYPE?.toUpperCase())
     this.setFormNullToString('DESIGN_TYPE', parentDetail.DESIGN_TYPE?.toUpperCase())
@@ -463,40 +468,14 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.setFormNullToString('METALLAB_TYPE', parentDetail.METALLAB_TYPE)
     this.setFormNullToString('TREE_NO', parentDetail.TREE_NO)
     this.setFormNullToString('JOB_SO_NUMBER', parentDetail.JOB_SO_NUMBER)
-
-    if (this.designType == 'METAL') {
-      this.onLoadMetalDetail(parentDetail)
+    this.setFormDecimal('PUREWT', parentDetail.PUREWT, 'AMOUNT')
+    this.setFormDecimal('PURITY', parentDetail.PURITY, 'PURITY')
+    if (this.designType == 'METAL') { 
+      this.setMetalDetailFormData(parentDetail)// setting values for metal tab
     } else {
-      this.setFormNullToString('FRM_WORKER_CODE', parentDetail.FRM_WORKER_CODE)
-      this.setFormNullToString('FRM_WORKERNAME', parentDetail.FRM_WORKERNAME)
-      this.setFormNullToString('TO_WORKER_CODE', parentDetail.TO_WORKER_CODE)
-      this.setFormNullToString('TO_WORKERNAME', parentDetail.TO_WORKERNAME)
-      this.setFormNullToString('FRM_PROCESS_CODE', parentDetail.FRM_PROCESS_CODE)
-      this.setFormNullToString('FRM_PROCESSNAME', parentDetail.FRM_PROCESSNAME)
-      this.setFormNullToString('TO_PROCESS_CODE', parentDetail.TO_PROCESS_CODE)
-      this.setFormNullToString('TO_PROCESSNAME', parentDetail.TO_PROCESSNAME)
-      this.setFormNullToString('stockCode', parentDetail.SCRAP_STOCK_CODE)
-
-      this.setFormDecimal('FRM_METAL_WT', parentDetail.FRM_METAL_WT, 'METAL')
-      this.setFormDecimal('TO_METAL_WT', parentDetail.TO_METAL_WT, 'METAL')
-      this.setFormDecimal('GrossWeightFrom', parentDetail.FRM_DIAGROSS_WT, 'METAL') //dbt
-      this.setFormDecimal('GrossWeightTo', parentDetail.TO_NET_WT, 'METAL')//dbt
-      this.setFormDecimal('FRM_STONE_WT', parentDetail.FRM_STONE_WT, 'STONE')
-      this.setFormDecimal('TO_STONE_WT', parentDetail.TO_STONE_WT, 'STONE')
-      this.setFormDecimal('PUREWT', parentDetail.PUREWT, 'AMOUNT')
-      this.setFormDecimal('PURITY', parentDetail.PURITY, 'PURITY')
-      this.setFormDecimal('scrapWeight', parentDetail.SCRAP_WT, 'METAL')
-      this.setFormDecimal('lossQty', parentDetail.LOSS_QTY, 'METAL')
-
-      this.processTransferdetailsForm.controls.FRM_METAL_PCS.setValue(parentDetail.FRM_METAL_PCS)
-      this.processTransferdetailsForm.controls.TO_METAL_PCS.setValue(parentDetail.TO_METAL_PCS)
-      this.processTransferdetailsForm.controls.FRM_PCS.setValue(parentDetail.FRM_PCS)
-      this.processTransferdetailsForm.controls.TO_PCS.setValue(parentDetail.TO_PCS)
-      this.processTransferdetailsForm.controls.FRM_STONE_PCS.setValue(parentDetail.FRM_STONE_PCS)
-      this.processTransferdetailsForm.controls.TO_STONE_PCS.setValue(parentDetail.TO_STONE_PCS)
-
+      this.setDiamondDetailFormData(parentDetail)// setting values for diamond tab
     }
-
+    // setting values required for both diamond and metal tab
     if (this.commonService.nullToString(parentDetail.APPROVED_USER) != '') {
       this.setFormNullToString('APPROVED_USER', parentDetail.APPROVED_USER)
       this.approvalReqFlag = true
@@ -527,6 +506,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.processTransferdetailsForm.controls.enddate.setValue(
       this.commonService.formatDateTime(parentDetail.OUT_DATE)
     )
+    //loading datasets and calculations
     this.getMetalLabStockCode()
     this.Calc_TimeDiff()
     this.stockCodeScrapValidate()
@@ -540,8 +520,8 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.setToProcessWhereCondition()
     this.setFromWorkerWhereCondition()
     this.setToWorkerWhereCondition()
-
-    this.FORM_VALIDATER = this.processTransferdetailsForm.value;
+    // set fomvalidater for checking previous value
+    this.FORM_VALIDATER = this.processTransferdetailsForm.value; 
   }
 
   getMetalLabStockCode() {
@@ -586,7 +566,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       this.setFormDecimal('Balance_WT', Balance_WT, 'AMOUNT')
     }
   }
-  onLoadMetalDetail(parentDetail: any) {
+  setMetalDetailFormData(parentDetail: any) {
     this.setFormNullToString('METAL_FRM_WORKER_CODE', parentDetail.FRM_WORKER_CODE)
     this.setFormNullToString('FRM_WORKERNAME', parentDetail.FRM_WORKERNAME)
     this.setFormNullToString('METAL_TO_WORKER_CODE', parentDetail.TO_WORKER_CODE)
@@ -598,6 +578,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.setFormNullToString('METAL_FromStockCode', parentDetail.FROM_MSTOCKCODE)
     this.setFormNullToString('METAL_ToStockCode', parentDetail.TO_MSTOCKCODE)
     this.setFormNullToString('METAL_ScrapStockCode', parentDetail.SCRAP_STOCK_CODE)
+    this.setFormNullToString('METAL_ScrapLocCode', parentDetail.LOCTYPE_CODE)
 
     this.setFormDecimal('METAL_GrossWeightFrom', parentDetail.FRM_METAL_WT, 'METAL')
     this.setFormDecimal('METAL_GrossWeightTo', parentDetail.TO_METAL_WT, 'METAL')
@@ -624,6 +605,34 @@ export class ProcessTransferDetailsComponent implements OnInit {
     let METAL_BalPCS = this.balanceCalculate(parentDetail.FRM_PCS, parentDetail.TO_PCS, parentDetail.SCRAP_PCS)
     this.processTransferdetailsForm.controls.METAL_BalPCS.setValue(METAL_BalPCS)
     this.calculateAllBalanceForMetalTab()
+  }
+  setDiamondDetailFormData(parentDetail: any) {
+    this.setFormNullToString('FRM_WORKER_CODE', parentDetail.FRM_WORKER_CODE)
+    this.setFormNullToString('FRM_WORKERNAME', parentDetail.FRM_WORKERNAME)
+    this.setFormNullToString('TO_WORKER_CODE', parentDetail.TO_WORKER_CODE)
+    this.setFormNullToString('TO_WORKERNAME', parentDetail.TO_WORKERNAME)
+    this.setFormNullToString('FRM_PROCESS_CODE', parentDetail.FRM_PROCESS_CODE)
+    this.setFormNullToString('FRM_PROCESSNAME', parentDetail.FRM_PROCESSNAME)
+    this.setFormNullToString('TO_PROCESS_CODE', parentDetail.TO_PROCESS_CODE)
+    this.setFormNullToString('TO_PROCESSNAME', parentDetail.TO_PROCESSNAME)
+    this.setFormNullToString('stockCode', parentDetail.SCRAP_STOCK_CODE)
+    this.setFormNullToString('location', parentDetail.LOCTYPE_CODE)
+
+    this.setFormDecimal('FRM_METAL_WT', parentDetail.FRM_METAL_WT, 'METAL')
+    this.setFormDecimal('TO_METAL_WT', parentDetail.TO_METAL_WT, 'METAL')
+    this.setFormDecimal('GrossWeightFrom', parentDetail.FRM_DIAGROSS_WT, 'METAL') //dbt
+    this.setFormDecimal('GrossWeightTo', parentDetail.TO_NET_WT, 'METAL')//dbt
+    this.setFormDecimal('FRM_STONE_WT', parentDetail.FRM_STONE_WT, 'STONE')
+    this.setFormDecimal('TO_STONE_WT', parentDetail.TO_STONE_WT, 'STONE')
+    this.setFormDecimal('scrapWeight', parentDetail.SCRAP_WT, 'METAL')
+    this.setFormDecimal('lossQty', parentDetail.LOSS_QTY, 'METAL')
+
+    this.processTransferdetailsForm.controls.FRM_METAL_PCS.setValue(parentDetail.FRM_METAL_PCS)
+    this.processTransferdetailsForm.controls.TO_METAL_PCS.setValue(parentDetail.TO_METAL_PCS)
+    this.processTransferdetailsForm.controls.FRM_PCS.setValue(parentDetail.FRM_PCS)
+    this.processTransferdetailsForm.controls.TO_PCS.setValue(parentDetail.TO_PCS)
+    this.processTransferdetailsForm.controls.FRM_STONE_PCS.setValue(parentDetail.FRM_STONE_PCS)
+    this.processTransferdetailsForm.controls.TO_STONE_PCS.setValue(parentDetail.TO_STONE_PCS)
   }
   calculateAllBalanceForMetalTab() {
     // Perform calculations
@@ -2686,7 +2695,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       "OUT_DATE": this.commonService.formatDateTime(form.enddate),
       "TIME_TAKEN_HRS": this.emptyToZero(this.TimeTakenData.TIMEINMINUTES),
       "METAL_DIVISION": "",
-      "LOCTYPE_CODE": this.commonService.nullToString(form.location),
+      "LOCTYPE_CODE": this.commonService.nullToString(form.METAL_ScrapLocCode),
       "PICTURE_PATH": this.commonService.nullToString(form.PICTURE_PATH),
       "AMOUNTLC": 0,
       "AMOUNTFC": 0,

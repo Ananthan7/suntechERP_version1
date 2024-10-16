@@ -1248,6 +1248,16 @@
                     </div>
                   </div>
                 </div>
+                <div class="row">
+                  <div class="col-md-7">
+                    <div class="form-check">
+                      <mat-checkbox
+                        [disabled]="viewMode"
+                        (change)="selectAllBtnChange($event)">Select All Setted
+                      </mat-checkbox>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </mat-tab>
