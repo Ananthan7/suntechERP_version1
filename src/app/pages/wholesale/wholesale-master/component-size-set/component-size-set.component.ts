@@ -30,6 +30,7 @@ export class ComponentSizeSetComponent implements OnInit {
   componentSizeType: any[] = [];
   componentSizeDesc: any[] = [];
   selectedOption: any;
+  updatedTableData:any;
   editableMode: boolean = false;
   filteredOptions!: string[];
   searchTerm: string = '';
@@ -111,34 +112,15 @@ export class ComponentSizeSetComponent implements OnInit {
 
           this.tableData = data.response.detail;
           console.log(data.response.detail);
+          this.selectedOptions = this.tableData.map(item => this.componentSizeType.find(option => option.COMPSIZE_CODE));
           this.selectedOptions = this.tableData.map(item => this.componentSizeType.find(option => option.COMPSIZE_CODE === item.COMPSIZE_CODE) || null);
-
+          
         }
       });
   }
 
   
-  // setFormValues() {
-  //   if (!this.content) return;
 
-  //   this.componentsizesetmasterForm.controls.code.setValue(this.content.COMPSET_CODE);
-  //   this.componentsizesetmasterForm.controls.description.setValue(this.content.DESCRIPTION);
-
-  //   this.dataService.getDynamicAPI('ComponentSizeSetMaster/GetComponentSizeSetMasterDetail/' + this.content.COMPSET_CODE)
-  //     .subscribe((data) => {
-  //       if (data.status === 'Success') {
-  //         this.tableData = data.response.detail;
-  //         console.log(data.response.detail);
-
-  //         // Initialize selectedOptions based on the fetched data
-  //         this.selectedOptions = this.tableData.map(item => ({
-  //           SRNO: item.SRNO,
-  //           COMPSIZE_CODE: item.COMPSIZE_CODE,
-  //           DESCRIPTION: item.COMPONENT_DESCRIPTION
-  //         }));
-  //       }
-  //     });
-  // }
 
 
   onSearch(event: any): void {
@@ -188,109 +170,42 @@ export class ComponentSizeSetComponent implements OnInit {
 
 
   onSelectionChanged(event: any) {
+    // const values = event.selectedRowKeys;
+    // console.log("Selected row keys:", values);
+    // console.log("Table data:", this.tableData);
+
+    // this.selectedIndexes = values;
+    // console.log("Selected indexes:", this.selectedIndexes-1);
+    // this.selectedIndexes-=1;
+    // console.log(this.selectedIndexes);
+    
+
+    // // this.tableData.forEach((item: any, i: any) => {
+    // //   item.SRNO = i + 1;
+    // // });
+
     const values = event.selectedRowKeys;
-    console.log("Selected row keys:", values);
-    console.log("Table data:", this.tableData);
+    console.log(values);
+    let indexes: Number[] = [];
+    this.tableData.reduce((acc, value, index) => {
+      if (values.includes(parseFloat(value.SRNO))) {
+        acc.push(index);
+        console.log(acc);
 
-    this.selectedIndexes = values;
-    console.log("Selected indexes:", this.selectedIndexes);
-
-    // this.tableData.forEach((item: any, i: any) => {
-    //   item.SRNO = i + 1;
-    // });
+      }
+      return acc;
+    }, indexes);
+    this.selectedIndexes = indexes;
+    console.log(this.selectedIndexes);
 
   }
 
 
 
-  // deleteTableData() {
-
-  //   if (this.selectedIndexes != undefined) {
-  //     // Display confirmation dialog before deleting
-  //     Swal.fire({
-  //       title: 'Are you sure?',
-  //       text: "You won't be able to revert this!",
-  //       icon: 'warning',
-  //       showCancelButton: true,
-  //       confirmButtonColor: '#3085d6',
-  //       cancelButtonColor: '#d33',
-  //       confirmButtonText: 'Yes, delete!'
-  //     }).then((result) => {
-  //       if (result.isConfirmed) {
-  //         // Proceed with deletion if user confirms
-  //         this.tableData = this.tableData.filter((data, index) => !this.selectedIndexes.includes(index));
-
-  //         // console.log(this.selectedIndexes);
-  //         this.tableData.forEach((element:any, index:number) =>{
-
-  //           if(element.SRNO == this.selectedIndexes[0]){
-
-  //             this.tableData.splice(index,1)
-
-  //           }
-
-  //         })
-  //         //this.tableData = this.tableData;
-  //         this.resetSrNumber()
-  //       }
-
-  //     });
-
-  //   } else {
-  //     // Display error message if no record is selected
-  //     this.snackBar.open('Please select a record', 'OK', { duration: 2000 });
-  //   }
-
-  //   // for (let i = 0; i < this.tableData.length; i++) {
-
-
-  //   //   for (let j = 0; j < this.selectedIndexes.length; j++) {
-
-  //   //     if (this.tableData[i].SRNO == this.selectedIndexes[j]) {
-
-  //   //       this.tableData.splice(i, 1);
-  //   //     }
-  //   //   }
-  //   // }
-  // }
-
-
-  // deleteTableData() {
-  //   if (this.selectedIndexes !== undefined && this.selectedIndexes.length > 0) {
-  //     // Display confirmation dialog before deleting
-  //     Swal.fire({
-  //       title: 'Are you sure?',
-  //       text: "You won't be able to revert this!",
-  //       icon: 'warning',
-  //       showCancelButton: true,
-  //       confirmButtonColor: '#3085d6',
-  //       cancelButtonColor: '#d33',
-  //       confirmButtonText: 'Yes, delete!'
-  //     }).then((result) => {
-  //       if (result.isConfirmed) {
-  //         // Proceed with deletion if user confirms
-  //         this.selectedIndexes.sort((a:any, b:any) => b - a); // Sort indexes in descending order to prevent issues with splice
-  //         for (const index of this.selectedIndexes) {
-  //           this.tableData.splice(index, 1); // Remove the item at the specified index
-  //         }
-  //         this.resetSrNumber();
-  //       }
-  //     });
-  //   } else {
-  //     // Display error message if no record is selected
-  //     this.snackBar.open('Please select a record', 'OK', { duration: 2000 });
-  //   }
-  // }
-
-
-  // resetSrNumber() {
-  //   this.tableData.forEach((data, index) => {
-  //     data.SRNO = index + 1
-  //   });
-
-  // }
 
   deleteTableData() {
+    console.log("After Selecting "+this.selectedIndexes);
+    
     if (this.selectedIndexes !== undefined && this.selectedIndexes.length > 0) {
       // Display confirmation dialog before deleting
       Swal.fire({
@@ -304,14 +219,59 @@ export class ComponentSizeSetComponent implements OnInit {
       }).then((result) => {
         if (result.isConfirmed) {
           // Create a copy of the indexes to avoid issues if selectedIndexes changes during the loop
-          const indexesToDelete = [...this.selectedIndexes].sort((a: number, b: number) => b - a);
-          for (const index of indexesToDelete) {
-            this.tableData.splice(index, 1); // Remove the item at the specified index
-          }
-          // Reset selectedIndexes after deletion
-          this.selectedIndexes = [];
-          // Update serial numbers
-          this.resetSrNumber();
+          // const indexesToDelete = [...this.selectedIndexes].filter((a: number, b: number) => b - a);
+          // console.log(indexesToDelete);          
+          // for (const index of indexesToDelete) {
+          //   this.tableData.splice(index, 1); // Remove the item at the specified index
+          //   console.log(this.tableData);   
+          // } 
+          // // Reset selectedIndexes after deletion
+          // this.selectedIndexes = [];
+          // console.log(this.selectedIndexes);
+          
+          // // Update serial numbers
+          // this.resetSrNumber();
+
+          // Simulate deletion without using an actual API call
+          if (this.tableData.length > 0) {
+            console.log('Initial Table Data:', this.tableData);
+            console.log('Selected Indexes:', this.selectedIndexes);
+            
+            this.tableData = this.tableData.filter((data, index) => {
+                const shouldDelete = this.selectedIndexes.includes(index);
+                if (shouldDelete) {
+                  console.log(shouldDelete);
+                  this.tableData = data;
+                  console.log(this.tableData);
+                    console.log('Deleting:', data); // Log the item being deleted
+                }
+              
+                   console.log(this.tableData);
+                   
+                return !shouldDelete;
+            });
+            
+            this.snackBar.open('Data deleted successfully!', 'OK', { duration: 2000 });
+            // this.tableData.forEach((item: any, i: any) => {
+            //     item.SRNO = i + 1;
+            // });
+            this.updatedTableData = this.tableData.map((item: any, index: any) => {
+              console.log(`Index: ${index}, Item:`, item); // Log each item and index
+              return { ...item, SRNO: index + 1 }; // Update SRNO and return updated object
+          });
+          
+            console.log('Updated Table Data:', this.updatedTableData);
+            this.updatedTableData.forEach((row:any, index:any) => {
+              this.tableData = this.updatedTableData;
+              console.log(`Serial Number: ${index + 1}, Row Data:`, row);
+          });
+          console.log('Updated Table Data:', this.tableData);
+
+            // let updatedData = [...this.tableData];  // Create a shallow copy to ensure change detection
+            // this.tableData = updatedData;         
+        } else {
+            this.snackBar.open('No data to delete!', 'OK', { duration: 2000 });
+        }
         }
       });
     } else {
