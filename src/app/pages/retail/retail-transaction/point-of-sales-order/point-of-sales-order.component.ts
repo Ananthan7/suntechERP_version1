@@ -3755,10 +3755,8 @@ export class PointOfSalesOrderComponent implements OnInit {
             // this.customerDetails?.CITY ||
             '',
           ZIPCODE: this.customerDetails?.ZIPCODE || '',
-          COUNTRY_CODE:
-            this.customerDetails.COUNTRY_CODE ||
-            // this.customerDetails?.COUNTRY_CODE ||
-            '',
+          COUNTRY_CODE: (this.customerDetails.COUNTRY_CODE || '').split('-')[0],
+
           EMAIL: this.customerDetailForm.value.fcn_cust_detail_email || '',
           TEL1: this.customerDetails?.TEL1 || '',
           TEL2:
@@ -5094,7 +5092,7 @@ export class PointOfSalesOrderComponent implements OnInit {
       EXTRA_STOCK_CODE: '',
       // EXTRA_STOCK_CODE: items?.EXTRA_STOCK_CODE || '',
       FLAGESTK: items?.FLAGESTK || 0,
-      OT_TRANSFER_TIME: items?.OT_TRANSFER_TIME || '',
+      OT_TRANSFER_TIME: items?.OT_TRANSFER_TIME ? new Date(items.OT_TRANSFER_TIME).toISOString() : '',
       // IssueGiftVoucher:
       //   this.comFunc.stringToBoolean(items?.ISSUEGIFTVOUCHER) || false,
 
@@ -8558,35 +8556,32 @@ export class PointOfSalesOrderComponent implements OnInit {
   validateBeforePrint() {
     let _status = [];
     console.log(
-      'order_items_total_net_amount',
-      this.order_items_total_net_amount
+        'order_items_total_net_amount',
+        this.order_items_total_net_amount
     );
     console.log(
-      'invReturnSalesTotalNetTotal',
-      this.invReturnSalesTotalNetTotal
+        'invReturnSalesTotalNetTotal',
+        this.invReturnSalesTotalNetTotal
     );
     console.log(this.receiptTotalNetAmt);
 
     if (this.order_items_total_net_amount.toString() != '0.00') {
-      // if (parseFloat(this.order_items_total_net_amount) > 0) {
-      if (parseFloat(this.order_items_total_net_amount) != this.comFunc.emptyToZero(this.receiptTotalNetAmt)) {
-        _status[0] = false;
-        _status[1] = 'Invalid Received Amount';
-      } else {
+        // if (parseFloat(this.order_items_total_net_amount) > 0) {
+        //   if (parseFloat(this.order_items_total_net_amount) != parseFloat(this.receiptTotalNetAmt)) {
+        //   _status[0] = false;
+        //   _status[1] = 'Invalid Received Amount';
+        // } else {
         _status[0] = true;
         _status[1] = 'Received Amount';
-      }
-      // }else{
-      // alert('tot net amt -ve value')
-
-      // }
+        //   }
+        // }
     } else {
-      _status[0] = false;
-      _status[1] = 'Invalid Invoice Data';
-      // alert('tot net amt 0')
+        _status[0] = false;
+        _status[1] = 'Invalid Invoice Data';
     }
     return _status;
-  }
+}
+
 
   saveOrder(type?: any) {
     Object.values(this.vocDataForm.controls).forEach(control => {
@@ -12810,10 +12805,8 @@ export class PointOfSalesOrderComponent implements OnInit {
         this.customerDetailForm.value.fcn_cust_detail_address ||
         // this.customerDetails?.ADDRESS ||
         '',
-      COUNTRY_CODE:
-        this.customerDetails.COUNTRY_CODE ||
-        // this.customerDetails?.COUNTRY_CODE ||
-        '',
+        COUNTRY_CODE: (this.customerDetails.COUNTRY_CODE || '').split('-')[0],
+
       CUST_Language: this.customerDetails?.CUST_Language || '',
 
       // PRINT_COUNT: '0',

@@ -59,7 +59,7 @@
               Debit Account:</label>
             <span class="col-md-3">
               <mat-form-field style="width: -webkit-fill-available" appearance="outline">
-                <input readonly type="text" matInput formControlName="debitAmount"
+                <input readonly #debitAccountCode id="debitAccountCode" type="text" matInput formControlName="debitAmount"
                   (change)="DebitamountChange($event)" />
                 <master-search class="masterSearch" (focusout)="openTab($event, 'debitAmount')" #overlayDebitCode
                   *ngIf="hideDebitLookup && !viewOnly" [MasterSearchData]="debitAmountData"
@@ -79,7 +79,7 @@
             <label for="inputPassword" class="col-sm-3 col-form-label" id="ID004">Currency :</label>
             <div class="col-md-3">
               <mat-form-field style="width: -webkit-fill-available" appearance="outline">
-                <input  type="text" (focusout)="SPvalidateLookupField($event,currencyData,'currencyCode')" matInput formControlName="currencyCode" />
+                <input  type="text" #currencyCode id="currencyCode" (focusout)="SPvalidateLookupField($event,currencyData,'currencyCode')" matInput formControlName="currencyCode" />
                 <master-search class="masterSearch" (focusout)="openTab($event, 'currencyCode')" #overlayCurrencyCode
                   *ngIf="
                     !isCurrencyUpdate || (!viewOnly && !hideCurrecnySearch)
@@ -292,7 +292,7 @@
                   </div>
                 </div>
                 <div class="row mb-1">
-                  <label for="inputPassword" class="st_txt_right" class="col-sm-6 col-form-label" id="ID028">VAT CC
+                  <label for="inputPassword" class="st_txt_right" class="col-sm-6 col-form-label" id="ID028">VAT FC
                     :</label>
                   <div class="col-md-6">
                     <mat-form-field style="width: 100%" appearance="outline">

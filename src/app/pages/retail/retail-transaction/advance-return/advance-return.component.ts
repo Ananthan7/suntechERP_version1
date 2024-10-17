@@ -11,7 +11,7 @@ import {
   NgbModalRef,
 } from "@ng-bootstrap/ng-bootstrap";
 import { PcrSelectionComponent } from "./pcr-selection/pcr-selection.component";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { AbstractControl, FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { MasterSearchModel } from "src/app/shared/data/master-find-model";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Subscription } from "rxjs";
@@ -130,7 +130,7 @@ export class AdvanceReturnComponent implements OnInit {
   advanceReturnForm: FormGroup = this.formBuilder.group({
     vocType: [""],
     vocNo: [""],
-    vocDate: [new Date(), Validators.required],
+    vocDate: [new Date(), Validators.required,this.dateValidator.bind(this)],
     partyCode: [""],
     partyCurrency: [""],
     partyCurrencyRate: [""],
@@ -230,15 +230,25 @@ export class AdvanceReturnComponent implements OnInit {
   }
 
   triggerSelectedAction(){
-    if (this.content.FLAG == "VIEW") this.viewOnly = true;
-    else if (this.content.FLAG == "EDIT") {
+    if (this.content?.FLAG == 'VIEW') this.viewOnly = true;
+    else if (this.content?.FLAG == "EDIT") {
       console.log(this.comService.EditDetail.REASON);
       this.editOnly = true;
     }
-    else if (this.content.FLAG == 'DELETE') {
+    else if (this.content?.FLAG == 'DELETE') {
       this.viewOnly = true;
       this.deleteRetrunRecord()
     }
+  }
+
+  dateValidator(control: AbstractControl): { [key: string]: boolean } | null {
+    if (control.value) {
+      const selectedDate = new Date(control.value);
+      if (selectedDate > this.currentDate) {
+        return { futureDate: true };
+      }
+    }
+    return null; 
   }
 
   showConfirmationDialog(): Promise<any> {
@@ -1113,4 +1123,6 @@ export class AdvanceReturnComponent implements OnInit {
 
     this.subscriptions.push(Sub);
   }
+
+  continue(){}
 }

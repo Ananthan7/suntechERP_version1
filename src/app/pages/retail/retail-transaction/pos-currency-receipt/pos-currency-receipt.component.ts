@@ -6,7 +6,7 @@ import {
 } from "@ng-bootstrap/ng-bootstrap";
 import { PosCurrencyReceiptDetailsComponent } from "./pos-currency-receipt-details/pos-currency-receipt-details.component";
 import { MasterSearchModel } from "src/app/shared/data/master-find-model";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { AbstractControl, FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { SuntechAPIService } from "src/app/services/suntech-api.service";
 import { ToastrService } from "ngx-toastr";
 import { CommonServiceService } from "src/app/services/common-service.service";
@@ -143,7 +143,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
   posCurrencyReceiptForm: FormGroup = this.formBuilder.group({
     vocType: [""],
     vocNo: [""],
-    vocDate: [""],
+    vocDate: ['', [Validators.required, this.dateValidator.bind(this)]],
     partyCode: [""],
     partyCodeDesc: [""], // No
     partyCurrency: [""],
@@ -224,7 +224,17 @@ export class PosCurrencyReceiptComponent implements OnInit {
     }
     this.triggerSelectedAction();
 
-    this.renderer.selectRootElement('#vocDateInput').focus();
+    this.renderer.selectRootElement('#vocDateInput').select();
+  }
+
+  dateValidator(control: AbstractControl): { [key: string]: boolean } | null {
+    if (control.value) {
+      const selectedDate = new Date(control.value);
+      if (selectedDate > this.currentDate) {
+        return { futureDate: true };
+      }
+    }
+    return null; 
   }
 
 
@@ -327,12 +337,12 @@ export class PosCurrencyReceiptComponent implements OnInit {
   }
 
   triggerSelectedAction(){
-    if (this.content.FLAG == "VIEW") this.viewOnly = true;
-    else if (this.content.FLAG == "EDIT") {
+    if (this.content?.FLAG == 'VIEW') this.viewOnly = true;
+    else if (this.content?.FLAG == "EDIT") {
       console.log(this.comService.EditDetail.REASON);
       this.editOnly = true;
     }
-    else if (this.content.FLAG == 'DELETE') {
+    else if (this.content?.FLAG == 'DELETE') {
       this.viewOnly = true;
       this.deleteAdvanceReceipt()
     }
@@ -459,6 +469,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
           this.posCurrencyReceiptForm.controls.partyCurrency.setValue(
             data.PARTY_CURRENCY
           );
+          this.currencyCode=data.PARTY_CURRENCY;
           this.posCurrencyReceiptForm.controls.partyCurrencyRate.setValue(
             data.PARTY_CURR_RATE
           );
@@ -586,6 +597,9 @@ export class PosCurrencyReceiptComponent implements OnInit {
                   data.CURRENCY_CODE
                 );
 
+                this.currencyCode=data.CURRENCY_CODE;
+
+
                 this.posCurrencyReceiptForm.controls.partyCurrencyRate.setValue(
                   this.comService.decimalQuantityFormat(data.CONV_RATE, 'RATE')
                 );
@@ -632,6 +646,8 @@ export class PosCurrencyReceiptComponent implements OnInit {
       e.Currency
     );
 
+    this.currencyCode=e.Currency;
+
     this.posCurrencyReceiptForm.controls.partyCurrencyRate.setValue(
       this.comService.decimalQuantityFormat(e["Conv Rate"], "RATE")
     );
@@ -645,6 +661,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
     this.posCurrencyReceiptForm.controls.partyCodeDesc.setValue(
       e.CURRENCY_CODE
     );
+    this.currencyCode=e.CURRENCY_CODE;
   }
 
   isCustomerDataAvailable(): boolean {
@@ -748,8 +765,8 @@ export class PosCurrencyReceiptComponent implements OnInit {
       GST_STATE_CODE: "",
       GST_NUMBER: "",
       GST_TYPE: "",
-      GST_TOTALFC: this.posCurrencyReceiptForm.value.totalTax || "",
-      GST_TOTALCC: this.posCurrencyReceiptForm.value.totalTax || "",
+      GST_TOTALFC: this.posCurrencyReceiptForm.value.totalTax.amountCc?.replace(/,/g, '') || 0,
+      GST_TOTALCC: this.posCurrencyReceiptForm.value.totalTax.amountCc?.replace(/,/g, '') || 0,
       DOC_REF: "",
       REC_STATUS: "",
       CUSTOMER_NAME: this.posCurrencyReceiptForm.value.customerName || "",
@@ -1306,5 +1323,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
 
     this.subscriptions.push(Sub);
   }
+
+  continue(){}
 
 }
