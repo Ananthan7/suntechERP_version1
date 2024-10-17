@@ -9006,7 +9006,14 @@ export class PointOfSalesOrderComponent implements OnInit {
           "LOW_QUALITY_A_K_A": "",
           "POSKNOWNABOUT": 0
         },
-        retailReceipt: this.receiptDetailsList,
+        retailReceipt: null,
+        userName: this.comFunc.userName,
+        editReason:
+        this.content?.FLAG == "EDIT" ? this.comFunc.EditDetail.REASON : "",
+        editDesc:
+        this.content?.FLAG == "EDIT"
+          ? this.comFunc.EditDetail.DESCRIPTION
+          : "",
         // "retailReceipt": this.receiptDetailsList.length > 0 ? this.receiptDetailsList : '',
         metalPurchase: this.metalPurchaseDataPost,
         retailsReturn: this.retailSReturnDataPost,

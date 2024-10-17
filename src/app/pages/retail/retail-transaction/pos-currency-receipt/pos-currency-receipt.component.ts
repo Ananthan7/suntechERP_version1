@@ -604,6 +604,8 @@ export class PosCurrencyReceiptComponent implements OnInit {
                   this.comService.decimalQuantityFormat(data.CONV_RATE, 'RATE')
                 );
 
+                this.currencyConvRate=data.CONV_RATE;
+
                 this.posCurrencyReceiptForm.controls.partyCurr.setValue(
                   data.CURRENCY_CODE
                 );
@@ -651,6 +653,8 @@ export class PosCurrencyReceiptComponent implements OnInit {
     this.posCurrencyReceiptForm.controls.partyCurrencyRate.setValue(
       this.comService.decimalQuantityFormat(e["Conv Rate"], "RATE")
     );
+
+    this.currencyConvRate=e["Conv Rate"];
   }
 
   partyCurrencyCodeSelected(e: any) {

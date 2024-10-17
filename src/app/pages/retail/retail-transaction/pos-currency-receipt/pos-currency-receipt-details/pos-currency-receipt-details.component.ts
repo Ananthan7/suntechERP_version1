@@ -1370,7 +1370,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
     );
 
     const amountWithVatFc = amountFc + this.comService.emptyToZero(this.posCurrencyReceiptDetailsForm.value.vatcc);
-    const amountWithVatLC = vatAmountLC + parseFloat(amountLc.toString());
+    const amountWithVatLC = (vatAmountLC*(this.comService.emptyToZero(this.posCurrencyReceiptDetailsForm.value.currencyRate))) + parseFloat(amountLc.toString());
 
     this.posCurrencyReceiptDetailsForm.controls.amountCc.setValue(
       this.comService.commaSeperation(
@@ -1399,13 +1399,12 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
       )
     );
 
+    let headerVatAmount=this.comService.emptyToZero(amountWithVatLC)/this.comService.emptyToZero(this.queryParams.currencyConvRate);
+
     this.posCurrencyReceiptDetailsForm.controls.headerVatAmt.setValue(
       this.comService.commaSeperation(
         this.comService.decimalQuantityFormat(
-          this.comService.CCToFC(
-            this.headerCurrency,
-            this.comService.emptyToZero(this.isForeignCurrency ? amountWithVatFc : amountWithVatLC)
-          ),
+          headerVatAmount,         
           "AMOUNT"
         )
       )
