@@ -10,6 +10,7 @@ import { ProcessTransferDetailsComponent } from './process-transfer-details/proc
 import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 import { AuditTrailComponent } from 'src/app/shared/common/audit-trail/audit-trail.component';
 
+
 @Component({
   selector: 'app-process-transfer',
   templateUrl: './process-transfer.component.html',
@@ -146,10 +147,14 @@ export class ProcessTransferComponent implements OnInit {
       .subscribe((result) => {
         if (result.response) {
           let data = result.response
-          this.tableData = data.JOB_PROCESS_TRN_DETAIL_DJ || []
           this.JOB_PROCESS_TRN_DETAIL_DJ = data.JOB_PROCESS_TRN_DETAIL_DJ || []
           this.JOB_PROCESS_TRN_COMP_DJ = data.JOB_PROCESS_TRN_COMP_DJ || []
-          this.tableData.forEach((item: any, index: number) => {
+          this.JOB_PROCESS_TRN_DETAIL_DJ.forEach((item: any, index: number) => {
+            item.LOSS_QTY = this.commonService.decimalQuantityFormat(item.LOSS_QTY, 'METAL')
+            item.VOCDATE = this.commonService.nullToString(item.VOCDATE.slice(0, 10))
+            item.JOB_DATE = this.commonService.nullToString(item.JOB_DATE.slice(0, 10))
+            item.IN_DATE = this.commonService.nullToString(item.IN_DATE.slice(0, 10))
+            item.OUT_DATE = this.commonService.nullToString(item.OUT_DATE.slice(0, 10))
             this.detailData.push({
               SRNO: item.SRNO,
               FLAG: this.commonService.nullToString(this.content.FLAG),
@@ -157,8 +162,8 @@ export class ProcessTransferComponent implements OnInit {
               // JOB_PROCESS_TRN_LABCHRG_DJ: data.JOB_PROCESS_TRN_LABCHRG_DJ?.filter((val: any) => item.UNIQUEID == val.REFMID),
               JOB_PROCESS_TRN_COMP_DJ: this.JOB_PROCESS_TRN_COMP_DJ?.filter((val: any) => item.JOB_NUMBER == val.JOB_NUMBER),
             })
-            item.LOSS_QTY = this.commonService.decimalQuantityFormat(item.LOSS_QTY, 'METAL')
           })
+          this.tableData = this.JOB_PROCESS_TRN_DETAIL_DJ
           this.processTransferFrom.controls.BRANCH_CODE.setValue(data.BRANCH_CODE)
           this.processTransferFrom.controls.YEARMONTH.setValue(data.YEARMONTH)
           this.processTransferFrom.controls.VOCNO.setValue(data.VOCNO)
@@ -202,7 +207,7 @@ export class ProcessTransferComponent implements OnInit {
         'VocType': this.commonService.nullToString(this.content?.VOCTYPE) || '',
         'JobNo': '',
         // 'JobNo': this.tableData.length>0 ? this.commonService.nullToString(this.tableData[0].JOB_NUMBER) : '',
-        'VocDate': this.commonService.nullToString(this.content?.VOCDATE) || '',
+        'VocDate': this.commonService.formatYYMMDD(this.content?.VOCDATE) || '',
       }
     }
     this.commonService.showSnackBarMsg('MSG81447')
@@ -211,15 +216,15 @@ export class ProcessTransferComponent implements OnInit {
         this.commonService.closeSnackBarMsg()
         if (result.status == "Success" && result.dynamicData[0]) {
           let data = result.dynamicData[0]
-          if(data &&data[0].RESULT == 1) {
+          if (data && data[0].RESULT == 1) {
             this.editMode = true;
             this.viewMode = false;
-            if(this.content.FLAG == 'DELETE' || clickFlag == 1) {
+            if (this.content.FLAG == 'DELETE' || clickFlag == 1) {
               this.viewMode = true;
               this.deleteClicked()
             }
           }
-          if(data[0].MESSAGE && data[0].MESSAGE != '') {
+          if (data[0].MESSAGE && data[0].MESSAGE != '') {
             this.commonService.toastErrorByMsgId(data[0].MESSAGE)
           }
         }
@@ -259,7 +264,7 @@ export class ProcessTransferComponent implements OnInit {
 
   lookupKeyPress(event: any, form?: any) {
     console.log(event);
-    
+
     if (event.key == 'Tab' && event.target.value == '') {
       this.showOverleyPanel(event, form)
     }
@@ -361,7 +366,7 @@ export class ProcessTransferComponent implements OnInit {
     }
     this.commonService.showSnackBarMsg('MSG81447');
     let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
-    let Sub: Subscription = this.dataService.postDynamicAPI(API,param)
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
       .subscribe((result) => {
         this.commonService.closeSnackBarMsg()
         let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
@@ -380,12 +385,12 @@ export class ProcessTransferComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
-  closeOverlayPanel(FORMNAME:any){
-    if(FORMNAME === 'salesman'){
+  closeOverlayPanel(FORMNAME: any) {
+    if (FORMNAME === 'salesman') {
       this.salesmanOverlay.closeOverlayPanel()
       return
     }
-    if(FORMNAME === 'CURRENCY_RATE'){
+    if (FORMNAME === 'CURRENCY_RATE') {
       this.OverlayCurrencyRate.closeOverlayPanel()
       return
     }
@@ -416,7 +421,7 @@ export class ProcessTransferComponent implements OnInit {
   }
   editFinalArray(DATA: any) {
     // this.tableData.forEach((item: any) =>{
-      
+
     // })
     this.JOB_PROCESS_TRN_DETAIL_DJ = this.detailData.map((item: any) => item.JOB_PROCESS_TRN_DETAIL_DJ)
     this.JOB_PROCESS_TRN_COMP_DJ = this.detailData.map((item: any) => item.JOB_PROCESS_TRN_COMP_DJ).flat()
@@ -450,7 +455,7 @@ export class ProcessTransferComponent implements OnInit {
   }
   /**USE: to set currency from branch currency master */
   setCurrencyRate() {
-    let CURRENCY_RATE: any =  this.commonService.getCurrencyRate(this.processTransferFrom.value.CURRENCY_CODE);
+    let CURRENCY_RATE: any = this.commonService.getCurrencyRate(this.processTransferFrom.value.CURRENCY_CODE);
     if (CURRENCY_RATE.length > 0) {
       this.processTransferFrom.controls.CURRENCY_RATE.setValue(CURRENCY_RATE);
     } else {
@@ -658,38 +663,26 @@ export class ProcessTransferComponent implements OnInit {
       this.close('reloadMainGrid')
     });
   }
-  // let params = {
-    //   BRANCH_CODE: this.processTransferFrom.value.BRANCH_CODE,
-    //   VOCTYPE: this.processTransferFrom.value.VOCTYPE,
-    //   VOCNO: this.processTransferFrom.value.VOCNO,
-    //   YEARMONTH: this.processTransferFrom.value.YEARMONTH,
-    //   MID: this.commonService.nullToString(this.content?.MID),
-    //   ACCUPDATEYN: 'Y',
-    //   USERNAME: this.commonService.userName,
-    //   MAINVOCTYPE: this.commonService.getqueryParamMainVocType(),
-    //   HEADER_TABLE: this.commonService.getqueryParamTable(),
-    // }
   //USE: account posting click fn 
   AccountPosting() {
     if (!this.content) return
-    let API =  'AccountPosting' + '/'+this.processTransferFrom.value.BRANCH_CODE+'/'+
-      this.processTransferFrom.value.VOCTYPE+'/'+
-      this.processTransferFrom.value.VOCNO+'/'+
-      this.processTransferFrom.value.YEARMONTH+'/'+
-      this.commonService.nullToString(this.content?.MID)+'/'+
-      'Y'+'/'+
-      this.commonService.userName+'/'+
-      this.commonService.getqueryParamMainVocType()+'/'+
-      this.commonService.getqueryParamTable()
+    let form = this.processTransferFrom.value;
+    let API = 'AccountPosting' + '/' + form.BRANCH_CODE + '/' + form.VOCTYPE + '/' + form.VOCNO + '/' +
+      form.YEARMONTH + '/' + this.commonService.nullToString(this.content?.MID) + '/' +
+      'Y' + '/' + this.commonService.userName + '/' + this.commonService.getqueryParamMainVocType() +
+      '/' + this.commonService.getqueryParamTable()
+    this.commonService.showSnackBarMsg('MSG81447')
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
         if (result.status == "Success") {
-          this.commonService.toastSuccessByText('Posting Done')
+          this.commonService.toastSuccessByText('MSG3697')
         } else {
           this.commonService.toastErrorByMsgId(result.message)
         }
       },
-        (err) => this.commonService.toastErrorByMsgId("Server Error")
+        (err) => {
+          this.commonService.toastErrorByMsgId("MSG81451")
+        }
       );
     this.subscriptions.push(Sub);
   }

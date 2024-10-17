@@ -115,7 +115,6 @@ export class PosDailyClosingSummaryComponent implements OnInit {
     this.dataService.getDynamicAPI(apiUrl).subscribe((resp: any) => {
       this.metalOptions = resp.dynamicData[0] 
       this.diamondOptions = resp.dynamicData[1] 
-      console.log('dropdoiwn', resp.dynamicData)
     });
   }
 
@@ -292,6 +291,7 @@ export class PosDailyClosingSummaryComponent implements OnInit {
         windowClass: "modal-full-width",
       }
     );
+    modalRef.componentInstance.posDailyClosingSummaryFormData = this.posDailyClosingSummaryForm;
   }
 
   selectedData(data: any) {

@@ -817,7 +817,37 @@
                 </mat-form-field>
               </div>
             </div>
-            <div class="row border">
+            <div class="row mb-1">
+              <label
+                for="inputPassword"
+                class="col-sm-4 col-form-label"
+                id="ID028"
+                >Whatsapp</label
+              >
+              <div class="col-md-3">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <input
+                    [readonly]="flag === 'VIEW'"
+                    matInput
+                    type="number"
+                    formControlName="whatsappCountryCode"
+                  />
+                </mat-form-field>
+              </div>
+              <div class="col-md-5">
+                <mat-form-field style="width: 96%" appearance="outline">
+                  <input
+                    matInput
+                    [readonly]="flag === 'VIEW'"
+                    type="number"
+                    formControlName="whatsappNumber"
+                    class="text-right"
+                    (keydown)="preventInvalidInput($event)"
+                  />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row border mb-4">
               <div class="col-md-12 p-3 text-center">
                 <h6 id="ID025">Tax Registration Details</h6>
               </div>
@@ -826,7 +856,7 @@
                   for="inputPassword"
                   class="col-sm-4 col-form-label"
                   id="ID026"
-                  >VAT</label
+                  >VAT NO *</label
                 >
                 <div class="col-md-8">
                   <mat-form-field style="width: 100%" appearance="outline">
@@ -878,36 +908,7 @@
                 </div>
               </div>
             </div>
-            <div class="row mt-4">
-              <label
-                for="inputPassword"
-                class="col-sm-4 col-form-label"
-                id="ID028"
-                >Whatsapp</label
-              >
-              <div class="col-md-3">
-                <mat-form-field style="width: 100%" appearance="outline">
-                  <input
-                    [readonly]="flag === 'VIEW'"
-                    matInput
-                    type="number"
-                    formControlName="whatsappCountryCode"
-                  />
-                </mat-form-field>
-              </div>
-              <div class="col-md-5">
-                <mat-form-field style="width: 96%" appearance="outline">
-                  <input
-                    matInput
-                    [readonly]="flag === 'VIEW'"
-                    type="number"
-                    formControlName="whatsappNumber"
-                    class="text-right"
-                    (keydown)="preventInvalidInput($event)"
-                  />
-                </mat-form-field>
-              </div>
-            </div>
+            
           </div>
           <div class="col-md-8">
             <mat-tab-group>
@@ -2159,7 +2160,7 @@
                   <div class="col-md-12">
                     <div class="row mb-1">
                       <div class="col-md-6">
-                        <div class="row mb-1">
+                        <div class="border border-2 shadow-sm row mb-4">
                           <label
                             for="inputPassword"
                             class="col-sm-4 pt-2 col-form-label"
@@ -2187,11 +2188,11 @@
                         <div class="row mb-1">
                           <label
                             for="inputPassword"
-                            class="col-md-1 col-form-label"
+                            class="col-sm-5 col-form-label"
                             id="ID029"
-                            >Title</label
+                            >Prefix</label
                           >
-                          <div class="col-md-4">
+                          <div class="col-md-7">
                             <mat-form-field
                               appearance="outline"
                               style="width: -webkit-fill-available"
@@ -2208,14 +2209,15 @@
                               </mat-select>
                             </mat-form-field>
                           </div>
-
+                        </div>
+                        <div class="row mb-1">
                           <label
                             for="inputPassword"
-                            class="col-md-3 col-form-label"
+                            class="col-md-5 col-form-label"
                             id="ID029"
                             >UN Number</label
                           >
-                          <div class="col-md-4">
+                          <div class="col-md-7">
                             <mat-form-field
                               style="width: 100%"
                               appearance="outline"
@@ -2235,7 +2237,7 @@
                             for="inputPassword"
                             class="col-sm-5 col-form-label"
                             id="ID030"
-                            >Name1</label
+                            >Name<sup>1</sup></label
                           >
                           <div class="col-md-7">
                             <mat-form-field
@@ -2257,7 +2259,7 @@
                             for="inputPassword"
                             class="col-sm-5 col-form-label"
                             id="ID030"
-                            >Name2</label
+                            >Name<sup>2</sup></label
                           >
                           <div class="col-md-7">
                             <mat-form-field
@@ -2279,7 +2281,7 @@
                             for="inputPassword"
                             class="col-sm-5 col-form-label"
                             id="ID030"
-                            >Name3</label
+                            >Name<sup>3</sup></label
                           >
                           <div class="col-md-7">
                             <mat-form-field
@@ -2301,7 +2303,7 @@
                             for="inputPassword"
                             class="col-sm-5 col-form-label"
                             id="ID030"
-                            >Name4</label
+                            >Name<sup>4</sup></label
                           >
                           <div class="col-md-7">
                             <mat-form-field
@@ -2323,7 +2325,7 @@
                             for="inputPassword"
                             class="col-sm-5 col-form-label"
                             id="ID030"
-                            >Name5</label
+                            >Name<sup>5</sup></label
                           >
                           <div class="col-md-7">
                             <mat-form-field
@@ -2365,11 +2367,11 @@
                         <div class="row mb-1">
                           <label
                             for="inputPassword"
-                            class="col-sm-2 col-form-label"
+                            class="col-sm-5 col-form-label"
                             id="ID010"
-                            >DOB1</label
+                            >DOB<sup>1</sup></label
                           >
-                          <div class="col-md-4">
+                          <div class="col-md-7">
                             <mat-form-field
                               style="width: 100%"
                               appearance="outline"
@@ -2395,14 +2397,85 @@
                               ></mat-datepicker>
                             </mat-form-field>
                           </div>
+                        </div>
 
+                        <div class="row mb-1">
                           <label
                             for="inputPassword"
-                            class="col-sm-2 col-form-label"
+                            class="col-sm-5 col-form-label"
                             id="ID010"
-                            >DOB4</label
+                            >DOB<sup>2</sup></label
                           >
-                          <div class="col-md-4">
+                          <div class="col-md-7">
+                            <mat-form-field
+                              style="width: 100%"
+                              appearance="outline"
+                            >
+                              <input
+                                matInput
+                                [matDatepicker]="dob2"
+                                [max]="vocMaxDate"
+                                name="dob2"
+                                placeholder="DD/MM/YYYY"
+                                DateValidation
+                                formControlName="dob2"
+                                readonly="true"
+                              />
+                              <mat-datepicker-toggle
+                                [disabled]="flag === 'VIEW'"
+                                matSuffix
+                                [for]="dob2"
+                              ></mat-datepicker-toggle>
+                              <mat-datepicker
+                                [startAt]="currentDate"
+                                #dob2
+                              ></mat-datepicker>
+                            </mat-form-field>
+                          </div>
+                        </div>
+
+                        <div class="row mb-1">
+                          <label
+                            for="inputPassword"
+                            class="col-sm-5 col-form-label"
+                            id="ID010"
+                            >DOB<sup>3</sup></label
+                          >
+                          <div class="col-md-7">
+                            <mat-form-field
+                              style="width: 100%"
+                              appearance="outline"
+                            >
+                              <input
+                                matInput
+                                [matDatepicker]="dob3"
+                                [max]="vocMaxDate"
+                                name="dob3"
+                                placeholder="DD/MM/YYYY"
+                                DateValidation
+                                formControlName="dob3"
+                                readonly="true"
+                              />
+                              <mat-datepicker-toggle
+                                [disabled]="flag === 'VIEW'"
+                                matSuffix
+                                [for]="dob3"
+                              ></mat-datepicker-toggle>
+                              <mat-datepicker
+                                [startAt]="currentDate"
+                                #dob3
+                              ></mat-datepicker>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                        <div class="row mb-1">
+                          <label
+                            for="inputPassword"
+                            class="col-sm-5 col-form-label"
+                            id="ID010"
+                            >DOB<sup>4</sup></label
+                          >
+                          <div class="col-md-7">
                             <mat-form-field
                               style="width: 100%"
                               appearance="outline"
@@ -2433,44 +2506,11 @@
                         <div class="row mb-1">
                           <label
                             for="inputPassword"
-                            class="col-sm-2 col-form-label"
+                            class="col-sm-5 col-form-label"
                             id="ID010"
-                            >DOB2</label
+                            >DOB<sup>5</sup></label
                           >
-                          <div class="col-md-4">
-                            <mat-form-field
-                              style="width: 100%"
-                              appearance="outline"
-                            >
-                              <input
-                                matInput
-                                [matDatepicker]="dob2"
-                                [max]="vocMaxDate"
-                                name="dob2"
-                                placeholder="DD/MM/YYYY"
-                                DateValidation
-                                formControlName="dob2"
-                                readonly="true"
-                              />
-                              <mat-datepicker-toggle
-                                [disabled]="flag === 'VIEW'"
-                                matSuffix
-                                [for]="dob2"
-                              ></mat-datepicker-toggle>
-                              <mat-datepicker
-                                [startAt]="currentDate"
-                                #dob2
-                              ></mat-datepicker>
-                            </mat-form-field>
-                          </div>
-
-                          <label
-                            for="inputPassword"
-                            class="col-sm-2 col-form-label"
-                            id="ID010"
-                            >DOB5</label
-                          >
-                          <div class="col-md-4">
+                          <div class="col-md-7">
                             <mat-form-field
                               style="width: 100%"
                               appearance="outline"
@@ -2493,41 +2533,6 @@
                               <mat-datepicker
                                 [startAt]="currentDate"
                                 #dob5
-                              ></mat-datepicker>
-                            </mat-form-field>
-                          </div>
-                        </div>
-
-                        <div class="row mb-1">
-                          <label
-                            for="inputPassword"
-                            class="col-sm-2 col-form-label"
-                            id="ID010"
-                            >DOB3</label
-                          >
-                          <div class="col-md-4">
-                            <mat-form-field
-                              style="width: 100%"
-                              appearance="outline"
-                            >
-                              <input
-                                matInput
-                                [matDatepicker]="dob3"
-                                [max]="vocMaxDate"
-                                name="dob3"
-                                placeholder="DD/MM/YYYY"
-                                DateValidation
-                                formControlName="dob3"
-                                readonly="true"
-                              />
-                              <mat-datepicker-toggle
-                                [disabled]="flag === 'VIEW'"
-                                matSuffix
-                                [for]="dob3"
-                              ></mat-datepicker-toggle>
-                              <mat-datepicker
-                                [startAt]="currentDate"
-                                #dob3
                               ></mat-datepicker>
                             </mat-form-field>
                           </div>
@@ -2622,9 +2627,9 @@
                         <div class="row mb-1">
                           <label
                             for="inputPassword"
-                            class="col-sm-3 col-form-label"
+                            class="col-sm-4 col-form-label"
                             id="ID013"
-                            >Nationality1</label
+                            >Nationality<sup>1</sup></label
                           >
                           <div class="col-md-3">
                             <mat-form-field
@@ -2640,7 +2645,7 @@
                               />
                             </mat-form-field>
                           </div>
-                          <div class="col-md-6">
+                          <div class="col-md-5">
                             <mat-form-field
                               style="width: 100%"
                               appearance="outline"
@@ -2678,9 +2683,9 @@
                         <div class="row mb-1">
                           <label
                             for="inputPassword"
-                            class="col-sm-3 col-form-label"
+                            class="col-sm-4 col-form-label"
                             id="ID013"
-                            >Nationality2</label
+                            >Nationality<sup>2</sup></label
                           >
                           <div class="col-md-3">
                             <mat-form-field
@@ -2696,7 +2701,7 @@
                               />
                             </mat-form-field>
                           </div>
-                          <div class="col-md-6">
+                          <div class="col-md-5">
                             <mat-form-field
                               style="width: 100%"
                               appearance="outline"
@@ -2735,9 +2740,9 @@
                         <div class="row mb-1">
                           <label
                             for="inputPassword"
-                            class="col-sm-3 col-form-label"
+                            class="col-sm-4 col-form-label"
                             id="ID013"
-                            >Nationality3</label
+                            >Nationality<sup>3</sup></label
                           >
                           <div class="col-md-3">
                             <mat-form-field
@@ -2753,7 +2758,7 @@
                               />
                             </mat-form-field>
                           </div>
-                          <div class="col-md-6">
+                          <div class="col-md-5">
                             <mat-form-field
                               style="width: 100%"
                               appearance="outline"
@@ -2792,9 +2797,9 @@
                         <div class="row mb-1">
                           <label
                             for="inputPassword"
-                            class="col-sm-3 col-form-label"
+                            class="col-sm-4 col-form-label"
                             id="ID013"
-                            >Nationality4</label
+                            >Nationality<sup>4</sup></label
                           >
                           <div class="col-md-3">
                             <mat-form-field
@@ -2810,7 +2815,7 @@
                               />
                             </mat-form-field>
                           </div>
-                          <div class="col-md-6">
+                          <div class="col-md-5">
                             <mat-form-field
                               style="width: 100%"
                               appearance="outline"
@@ -2847,9 +2852,9 @@
                         <div class="row mb-1">
                           <label
                             for="inputPassword"
-                            class="col-sm-3 col-form-label"
+                            class="col-sm-4 col-form-label"
                             id="ID013"
-                            >Nationality5</label
+                            >Nationality<sup>5</sup></label
                           >
                           <div class="col-md-3">
                             <mat-form-field
@@ -2865,7 +2870,7 @@
                               />
                             </mat-form-field>
                           </div>
-                          <div class="col-md-6">
+                          <div class="col-md-5">
                             <mat-form-field
                               style="width: 100%"
                               appearance="outline"
@@ -2903,11 +2908,11 @@
                         <div class="row mb-1">
                           <label
                             for="inputPassword"
-                            class="col-sm-2 col-form-label"
+                            class="col-sm-4 col-form-label"
                             id="ID010"
-                            >Passport1</label
+                            >Passport<sup>1</sup></label
                           >
-                          <div class="col-md-4">
+                          <div class="col-md-8">
                             <mat-form-field
                               style="width: 100%"
                               appearance="outline"
@@ -2920,14 +2925,15 @@
                               />
                             </mat-form-field>
                           </div>
-
+                        </div>
+                        <div class="row mb-1">
                           <label
                             for="inputPassword"
-                            class="col-sm-2 col-form-label"
+                            class="col-sm-4 col-form-label"
                             id="ID010"
-                            >Passport2</label
+                            >Passport<sup>2</sup></label
                           >
-                          <div class="col-md-4">
+                          <div class="col-md-8">
                             <mat-form-field
                               style="width: 100%"
                               appearance="outline"
@@ -2945,11 +2951,11 @@
                         <div class="row mb-1">
                           <label
                             for="inputPassword"
-                            class="col-sm-2 col-form-label"
+                            class="col-sm-4 col-form-label"
                             id="ID010"
-                            >Passport3</label
+                            >Passport<sup>3</sup></label
                           >
-                          <div class="col-md-4">
+                          <div class="col-md-8">
                             <mat-form-field
                               style="width: 100%"
                               appearance="outline"
@@ -2962,14 +2968,15 @@
                               />
                             </mat-form-field>
                           </div>
-
+                        </div>
+                        <div class="row mb-1">
                           <label
                             for="inputPassword"
-                            class="col-sm-2 col-form-label"
+                            class="col-sm-4 col-form-label"
                             id="ID010"
-                            >Passport4</label
+                            >Passport<sup>4</sup></label
                           >
-                          <div class="col-md-4">
+                          <div class="col-md-8">
                             <mat-form-field
                               style="width: 100%"
                               appearance="outline"
@@ -2987,11 +2994,11 @@
                         <div class="row mb-1">
                           <label
                             for="inputPassword"
-                            class="col-sm-2 col-form-label"
+                            class="col-sm-4 col-form-label"
                             id="ID010"
-                            >Passport5</label
+                            >Passport<sup>5</sup></label
                           >
-                          <div class="col-md-4">
+                          <div class="col-md-8">
                             <mat-form-field
                               style="width: 100%"
                               appearance="outline"
@@ -3004,14 +3011,15 @@
                               />
                             </mat-form-field>
                           </div>
-
+                        </div>
+                        <div class="row mb-1">
                           <label
                             for="inputPassword"
-                            class="col-sm-2 col-form-label"
+                            class="col-sm-4 col-form-label"
                             id="ID010"
-                            >Listed<sup>On</sup></label
+                            >Listed On</label
                           >
-                          <div class="col-md-4">
+                          <div class="col-md-8">
                             <mat-form-field
                               style="width: 100%"
                               appearance="outline"
@@ -3042,11 +3050,11 @@
                         <div class="row mb-1">
                           <label
                             for="inputPassword"
-                            class="col-sm-5 col-form-label"
+                            class="col-sm-4 col-form-label"
                             id="ID030"
                             >National Id</label
                           >
-                          <div class="col-md-7">
+                          <div class="col-md-8">
                             <mat-form-field
                               style="width: 100%"
                               appearance="outline"
@@ -3064,11 +3072,11 @@
                         <div class="row mb-5">
                           <label
                             for="inputPassword"
-                            class="col-form-label col-sm-3"
+                            class="col-form-label col-sm-4"
                             id="ID042"
                             >Address</label
                           >
-                          <div class="col-sm-9">
+                          <div class="col-sm-8">
                             <mat-form-field
                               style="width: 100%"
                               appearance="outline"
@@ -3088,11 +3096,11 @@
                         <div class="row mb-5">
                           <label
                             for="inputPassword"
-                            class="col-form-label col-sm-3"
+                            class="col-form-label col-sm-4"
                             id="ID042"
                             >Other Info</label
                           >
-                          <div class="col-sm-9">
+                          <div class="col-sm-8">
                             <mat-form-field
                               style="width: 100%"
                               appearance="outline"
@@ -3112,11 +3120,11 @@
                         <div class="row mb-1">
                           <label
                             for="inputPassword"
-                            class="col-sm-5 col-form-label"
+                            class="col-sm-4 col-form-label"
                             id="ID030"
                             >Link</label
                           >
-                          <div class="col-md-7">
+                          <div class="col-md-8">
                             <mat-form-field
                               style="width: 100%"
                               appearance="outline"
@@ -3134,11 +3142,11 @@
                         <div class="row mb-1">
                           <label
                             for="inputPassword"
-                            class="col-sm-5 col-form-label"
+                            class="col-sm-4 col-form-label"
                             id="ID030"
                             >Father name</label
                           >
-                          <div class="col-md-7">
+                          <div class="col-md-8">
                             <mat-form-field
                               style="width: 100%"
                               appearance="outline"
@@ -3157,11 +3165,11 @@
                         <div class="row mb-1">
                           <label
                             for="inputPassword"
-                            class="col-sm-5 col-form-label"
+                            class="col-sm-4 col-form-label"
                             id="ID030"
                             >Spouse Name</label
                           >
-                          <div class="col-md-7">
+                          <div class="col-md-8">
                             <mat-form-field
                               style="width: 100%"
                               appearance="outline"
