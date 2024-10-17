@@ -539,7 +539,7 @@ export class RetailSalesCollectionComponent implements OnInit {
       this.previewpopup = true;
       if(result.status != "Failed"){
         let data = result.dynamicData;
-        let printContent = data[0][0].HTMLOUT;
+        let printContent = data[0][0].HTMLINPUT;
         this.htmlPreview = this.sanitizer.bypassSecurityTrustHtml(printContent);
         const blob = new Blob([this.htmlPreview.changingThisBreaksApplicationSecurity], { type: 'text/html' });
         this.commonService.closeSnackBarMsg();
