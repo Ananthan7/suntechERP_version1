@@ -500,13 +500,13 @@ export class MeltingTypeComponent implements OnInit {
     console.log(this.meltingTypeForm.value.purity);
 
     // Calculate Metal and Alloy percentages
-    const purity = parseFloat(e.STD_PURITY.toFixed(4));
+    const purity = e.STD_PURITY;
     const metalPercentage = (purity * 100).toFixed(4);
     const alloyPercentage = (100 - parseFloat(metalPercentage)).toFixed(4);
 
     // Set the calculated values in the form controls
-    this.meltingTypeForm.controls.metal.setValue(parseFloat(metalPercentage));
-    this.meltingTypeForm.controls.alloy.setValue(parseFloat(alloyPercentage));
+    this.meltingTypeForm.controls.metal.setValue(this.commonService.decimalQuantityFormat(metalPercentage, 'AMOUNT'));
+    this.meltingTypeForm.controls.alloy.setValue(this.commonService.decimalQuantityFormat(alloyPercentage, 'AMOUNT'));
 
     this.meltingTypeForm.controls.stockCode.setValue('');
 
@@ -540,8 +540,8 @@ export class MeltingTypeComponent implements OnInit {
         this.meltingTypeForm.controls.description.setValue(data.MELTYPE_DESCRIPTION?.toUpperCase());
         this.meltingTypeForm.controls.karat.setValue(data.KARAT_CODE);
         this.meltingTypeForm.controls.purity.setValue(data.PURITY);
-        this.meltingTypeForm.controls.metal.setValue(data.METAL_PER);
-        this.meltingTypeForm.controls.alloy.setValue(data.ALLOY_PER);
+        this.meltingTypeForm.controls.metal.setValue(this.commonService.decimalQuantityFormat(data.METAL_PER, 'AMOUNT'));
+        this.meltingTypeForm.controls.alloy.setValue(this.commonService.decimalQuantityFormat(data.ALLOY_PER, 'AMOUNT'));
         this.meltingTypeForm.controls.color.setValue(data.COLOR?.toUpperCase());
         this.meltingTypeForm.controls.stockCode.setValue(data.STOCK_CODE);
         this.tableData = data.MELTING_TYPE_DETAIL;
@@ -719,6 +719,9 @@ export class MeltingTypeComponent implements OnInit {
 
   alloyPer(data: any, value: any) {
     this.tableData[value.data.SRNO - 1].ALLOY_PER = this.commonService.decimalQuantityFormat(data.target.value, 'AMOUNT');
+   if( this.tableData[value.data.SRNO - 1].ALLOY_PER >= 100){
+    this.commonService.toastErrorByMsgId('Only Enter Values Less Than 100%');
+   }
   }
 
   karatCodSearch(data: any) {

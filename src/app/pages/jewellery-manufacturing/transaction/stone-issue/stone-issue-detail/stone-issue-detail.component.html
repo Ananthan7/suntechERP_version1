@@ -97,7 +97,7 @@
           <div class="col-md-5">
             <mat-form-field appearance="outline" style="width: 100%;">
               <input type="text" matInput formControlName="process"
-              [readonly]="viewMode || codeEnable" UpperCaseDirective
+                [readonly]="viewMode || codeEnable" UpperCaseDirective
                 (focusout)="SPvalidateLookupField($event,processCodeData,'process')"
                 (keydown)="lookupKeyPress($event,'process')" />
               <master-search class="masterSearch"
@@ -110,7 +110,7 @@
           <div class="col-md-5">
             <mat-form-field appearance="outline" style="width: 100%;">
               <input type="text" matInput formControlName="processname"
-                readonly  [readonly]="viewMode || codeEnable"/>
+                readonly [readonly]="viewMode || codeEnable" />
             </mat-form-field>
           </div>
         </div>
@@ -140,7 +140,7 @@
         <div class="row mb-1">
           <label for="inputPassword" class="col-sm-2 col-form-label">Stock * :
           </label>
-          <div class="col-md-1">
+          <div class="col-md-2">
             <mat-form-field appearance="outline" style="width: 80px;">
               <input type="text" matInput formControlName="DIVCODE"
                 placeholder="Div Code" [readonly]="viewMode || codeEnable"
@@ -153,9 +153,9 @@
                 *ngIf="!viewMode"></master-search>
             </mat-form-field>
           </div>
-          <div class="col-md-4">
+          <div class="col-md-3">
             <mat-form-field appearance="outline"
-              style="width: 90%; margin-left: 28px;">
+              style="width: 284px;; margin-left: -70px;">
               <input type="text" matInput formControlName="stockCode"
                 placeholder="Stock Code" maxlength="16"
                 (focusout)="stockCodeValidate($event)" UpperCaseDirective
@@ -168,8 +168,8 @@
             </mat-form-field>
 
           </div>
-          <div class="col-md-5">
-            <mat-form-field appearance="outline" style="width: 100%;">
+          <div class="col-md-4">
+            <mat-form-field appearance="outline" style="width: 127%;">
               <input type="text" matInput formControlName="stockCodeDes"
                 placeholder="Description"
                 readonly />
@@ -253,8 +253,10 @@
           <div class="col-md-3">
             <mat-form-field appearance="outline" style="width: 100%;">
               <input type="text" matInput formControlName="carat"
-              MetalDecimalInput maxlength="15"
-                style="text-align: right;" [readonly]="viewMode || codeEnable" />
+                (focusout)="CalculatePiecesAndPointerWT()"
+                MetalDecimalInput maxlength="15"
+                style="text-align: right;"
+                [readonly]="viewMode || codeEnable" />
             </mat-form-field>
           </div>
           <label for="inputPassword" class="col-sm-1 col-form-label">Size:
@@ -303,7 +305,7 @@
           <div class="col-md-3">
             <mat-form-field appearance="outline" style="width: 100%;">
               <input type="text" matInput formControlName="amount"
-              AmountDecimalInput readonly
+                AmountDecimalInput readonly
                 style="text-align: right;" maxlength="12" />
             </mat-form-field>
           </div>
@@ -330,7 +332,8 @@
             <mat-form-field appearance="outline" style="width: 100%;">
               <input type="text" matInput formControlName="pointerwt"
                 maxlength="12" FourDecimalInput
-                style="text-align: right;" [readonly]="viewMode || codeEnable" />
+                style="text-align: right;"
+                [readonly]="viewMode || codeEnable" />
             </mat-form-field>
           </div>
         </div>
@@ -375,9 +378,28 @@
             alignment="center" backgroundcolor="#000">
           </dxi-column> -->
           <dxi-column [allowEditing]="true" dataField="DIVCODE"
-            caption="Div"></dxi-column>
+            caption="Div" cellTemplate="DivCodetemp"></dxi-column>
+            <div
+            *dxTemplate="let data of 'DivCodetemp'">
+            <div
+                (mouseenter)="onHoverDivcode(data)"
+                class="d-flex justify-content-between">
+                <div>
+                    <a
+                        href="javascript:void(0)"
+                        class="mx-1"
+                        [innerHTML]="data.value"
+                        (keypress)="lookupKeyPress($event)"></a>
+                </div>
+                <master-search
+                    *ngIf="!viewMode"
+                    [MasterSearchData]="divCodeData"
+                    (newRowClick)="divCodeSelected($event)">
+                </master-search>
+            </div>
+        </div>
           <dxi-column [allowEditing]="true" dataField="STOCK_CODE"
-            caption="Stock Code"></dxi-column>
+            caption="Stock Code" cellTemplate="StockCodetemp"></dxi-column>
           <dxi-column [allowEditing]="false" dataField="SUB_STOCK_CODE"
             caption="Batch ID"></dxi-column>
           <dxi-column [allowEditing]="false" dataField="SUB_STOCK_CODE"
@@ -387,7 +409,7 @@
           <dxi-column [allowEditing]="true" dataField="CARATWT_TO"
             caption="Carat"></dxi-column>
           <dxi-column [allowEditing]="true" dataField="LOCTYPE_CODE"
-            caption="Location"></dxi-column>
+            caption="Location" cellTemplate="locationCodetemp"></dxi-column>
           <dxi-column [allowEditing]="true" dataField="CONSIGNMENT"
             caption="Consignment" cellTemplate="Consignment">
             <div *dxTemplate="let data1 of 'Consignment'">
@@ -428,6 +450,21 @@
             caption="Pcs Variance"></dxi-column>
           <dxi-column [allowEditing]="false" dataField="WEIGHT_VARIANCE"
             caption="Weight Variance"></dxi-column>
+
+            
+            <div *dxTemplate="let data of 'StockCodetemp'">
+              <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value"></a>
+              <master-search [MasterSearchData]="divCodeData" *ngIf="!viewMode"
+                  (newRowClick)="divCodeSelected($event)" style="width: 60%;">
+              </master-search>
+            </div> 
+            <div *dxTemplate="let data of 'locationCodetemp'">
+              <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value"></a>
+              <master-search [MasterSearchData]="divCodeData" *ngIf="!viewMode"
+                  (newRowClick)="divCodeSelected($event)" style="width: 60%;">
+              </master-search>
+            </div>
+          
         </dx-data-grid>
       </div>
     </div>

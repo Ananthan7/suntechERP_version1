@@ -56,8 +56,7 @@ export class AuditTrailComponent implements OnInit {
     let API = `SchemeCurrencyReceipt/GetAuditTrial` +
       `/${formData.BRANCH_CODE}` +
       `/${formData.VOCTYPE}/${formData.VOCNO}` +
-      `/${formData.MID}/${formData.YEARMONTH}` +
-      `/n`
+      `/${formData.MID}/${formData.YEARMONTH}/n`
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
         if (result.dynamicData) {

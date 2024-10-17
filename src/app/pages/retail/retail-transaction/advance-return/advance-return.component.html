@@ -6,8 +6,15 @@
   </button>
 </div>
 <!-- modal header component -->
+
+<modal-header (saveClick)="formSubmit()" [isViewContinue]="true" [isViewAuditTrail]="viewOnly" [isViewDelete]="false" [isViewMore]="false" [isViewPrint]="viewOnly"
+    [isViewPost]="viewOnly"  (postClick)="AccountPosting()" (continueClick)="continue()"
+    (printClick)="printReceiptDetailsWeb()" (auditTrailClick)="auditTrailClick()" (cancelClick)="close()"
+    ></modal-header>
 <modal-header
   (saveClick)="formSubmit()"
+  [isViewContinue]="true"
+  [isViewDelete]="false" [isViewMore]="false" [isViewPrint]="viewOnly"
   [isViewDelete]="!viewOnly"
   (postClick)="AccountPosting()"
   (printClick)="printReceiptDetailsWeb()"
@@ -17,6 +24,7 @@
   [isViewAuditTrail]="viewOnly || editOnly"
   [isViewPrint]="viewOnly"
   [isViewPost]="viewOnly"
+  (continueClick)="continue()"
 ></modal-header>
 <audit-trail></audit-trail>
 <!-- content section -->

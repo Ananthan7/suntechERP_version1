@@ -44,6 +44,7 @@ export class StoneIssueComponent implements OnInit {
   vocMaxDate = new Date();
   tableRowCount: number = 0;
   detailData: any[] = [];
+  isSaved: boolean = false;
   selectRowIndex: any;
   selectedKey: number[] = [];
   selectedIndexes: any = [];
@@ -123,10 +124,12 @@ export class StoneIssueComponent implements OnInit {
         case 'VIEW':
           this.viewMode = true;
           this.LOCKVOUCHERNO = true;
+          this.isSaved = true;
           break;
         case 'EDIT':
           this.editMode = true;
           this.LOCKVOUCHERNO = true;
+          this.isSaved = true;
           break;
         case 'DELETE':
           this.viewMode = true;
@@ -536,8 +539,8 @@ export class StoneIssueComponent implements OnInit {
     this.stoneissueFrom.controls.VOCDATE.setValue(this.content.VOCDATE)
     this.stoneissueFrom.controls.currency.setValue(this.content.CURRENCY_CODE)
     this.stoneissueFrom.controls.currencyrate.setValue(this.content.CURRENCY_RATE)
-    this.stoneissueFrom.controls.worker.setValue(this.content.WORKER_CODE)
-    this.stoneissueFrom.controls.workername.setValue(this.content.WORKER_NAME)
+    this.stoneissueFrom.controls.worker.setValue(this.content.WORKER_CODE?.toUpperCase())
+    this.stoneissueFrom.controls.workername.setValue(this.content.WORKER_NAME?.toUpperCase())
     this.stoneissueFrom.controls.narration.setValue(this.content.REMARKS)
   }
 
@@ -693,7 +696,7 @@ export class StoneIssueComponent implements OnInit {
     LOOKUPDATA.SEARCH_VALUE = event.target.value;
   
     // Return early if the input is empty or in viewMode
-    if (event.target.value === '' || this.viewMode === true) {
+    if (event.target.value === '') {
       if (FORMNAME === 'worker') {
         this.stoneissueFrom.controls.workername.setValue(''); // Clear worker name if input is empty
       }

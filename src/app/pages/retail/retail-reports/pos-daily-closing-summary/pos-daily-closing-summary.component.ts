@@ -9,12 +9,13 @@ import { CommonServiceService } from "src/app/services/common-service.service";
 import { PosSalesmanDetailsComponent } from "./pos-salesman-details/pos-salesman-details.component";
 import { PosDailyClosingBranchComponent } from "./pos-daily-closing-branch/pos-daily-closing-branch.component";
 import { SuntechAPIService } from "src/app/services/suntech-api.service";
-import { Subscription } from "rxjs";
+import { Observable, Subscription } from "rxjs";
 import { ToastrService } from "ngx-toastr";
 import Swal from "sweetalert2";
 import { stringify } from "querystring";
 import { DomSanitizer } from "@angular/platform-browser";
 import { CostCenterConsumablesDetailsComponent } from "src/app/pages/wholesale/wholesale-master/costcentre-consumable/cost-center-consumables-details/cost-center-consumables-details.component";
+import { tap } from "rxjs/operators";
 
 @Component({
   selector: "app-pos-daily-closing-summary",
@@ -87,6 +88,9 @@ export class PosDailyClosingSummaryComponent implements OnInit {
 
   htmlPreview: any;
   VocTypeParam: any = [];
+  DiamonDivsnTableData: any[] = [];
+  salesmanSummaryArr: any[] = [];
+  receiptSummaryArr: any[] = [];
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -98,35 +102,40 @@ export class PosDailyClosingSummaryComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.prefillScreenValues();
-    this.dropdownValueFetch();
+    this.dropdownValueFetch().subscribe(() => {
+      this.prefillScreenValues();
+      this.metalInsert();
+      this.diamondInsert();
+      this.salesManclosingInsert();
+      this.vocherInsert();
+
+
+      
+        // this.closingPurchaseNetInsert();
+        // this.posClsngSmanSummaryNet();
+    })
+    
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
-    this.metalInsert();
-    this.diamondInsert();
-    this.salesManclosingInsert();
-    this.vocherInsert();
-    this.closingPurchaseNetInsert();
-    this.posClsngSmanSummaryNet();
   }
 
-  dropdownValueFetch(){
-    const apiUrl = 'UspPosClosSumGetGroupByFilter/GetUspPosClosSumGetGroupByFilter'
-    this.dataService.getDynamicAPI(apiUrl).subscribe((resp: any) => {
-      this.metalOptions = resp.dynamicData[0] 
-      this.diamondOptions = resp.dynamicData[1] 
-      console.log('dropdoiwn', resp.dynamicData)
-    });
+  dropdownValueFetch(): Observable<any> {
+    const apiUrl = 'UspPosClosSumGetGroupByFilter/GetUspPosClosSumGetGroupByFilter';
+    return this.dataService.getDynamicAPI(apiUrl).pipe(
+      tap((resp: any) => {
+        this.metalOptions = resp.dynamicData[0];
+        this.diamondOptions = resp.dynamicData[1];
+      })
+    );
   }
 
   metalInsert() {
     let API = "UspPosClosingMetalSalesNet";
-
     let postData = {
       "strSalType": 0,
       "strBranch": this.branchCode,
-      "strFmDate": this.posDailyClosingSummaryForm.value.fromDate,
-      "strToDate": this.posDailyClosingSummaryForm.value.toDate,
+      "strFmDate": this.dateToPass.fromDate,
+      "strToDate": this.dateToPass.toDate,
       "str_MGroupBy": this.posDailyClosingSummaryForm.value.metalType,
     };
 
@@ -134,9 +143,8 @@ export class PosDailyClosingSummaryComponent implements OnInit {
       .postDynamicAPI(API, postData)
       .subscribe(
         (result) => {
-          if (result.response) {
-            console.log(result.response);                      
-              this.tableData = [];
+          if (result) {                      
+            this.tableData.push(result.dynamicData[0][0]);
           }
         },
         (err) => alert(err)
@@ -149,8 +157,8 @@ export class PosDailyClosingSummaryComponent implements OnInit {
     let postData = {
       "strSalType": 0,      
       "strBranch": this.branchCode,
-      "strFmDate": this.posDailyClosingSummaryForm.value.fromDate,
-      "strToDate": this.posDailyClosingSummaryForm.value.toDate,
+      "strFmDate": this.dateToPass.fromDate,
+      "strToDate": this.dateToPass.toDate,
       "str_MGroupBy": this.posDailyClosingSummaryForm.value.diamondType,
     };
 
@@ -158,9 +166,8 @@ export class PosDailyClosingSummaryComponent implements OnInit {
       .postDynamicAPI(API, postData)
       .subscribe(
         (result) => {
-          if (result.response) {
-            console.log(result.response);                      
-              this.tableData = [];
+          if (result) {
+            this.DiamonDivsnTableData.push(result.dynamicData[0][0])               
           }
         },
         (err) => alert(err)
@@ -172,17 +179,16 @@ export class PosDailyClosingSummaryComponent implements OnInit {
     let API = "UspOpsClsngSmanSummaryNet";
     let postData = {    
       "strBranch": this.branchCode,
-      "strFmDate": this.posDailyClosingSummaryForm.value.fromDate,
-      "strToDate": this.posDailyClosingSummaryForm.value.toDate,
+      "strFmDate": this.dateToPass.fromDate,
+      "strToDate": this.dateToPass.toDate,
     };
 
     let Sub: Subscription = this.dataService
       .postDynamicAPI(API, postData)
       .subscribe(
         (result) => {
-          if (result.response) {
-            console.log(result.response);                      
-              this.tableData = [];
+          if (result) {                
+            this.salesmanSummaryArr.push(result.dynamicData[0][0]) 
           }
         },
         (err) => alert(err)
@@ -194,17 +200,17 @@ export class PosDailyClosingSummaryComponent implements OnInit {
     let API = "UspPosClosingVoucherSummaryNet";
     let postData = {    
       "strBranch": this.branchCode,
-      "strFmDate": this.posDailyClosingSummaryForm.value.fromDate,
-      "strToDate": this.posDailyClosingSummaryForm.value.toDate,
+      "strFmDate": this.dateToPass.fromDate,
+      "strToDate": this.dateToPass.toDate,
     };
 
     let Sub: Subscription = this.dataService
       .postDynamicAPI(API, postData)
       .subscribe(
         (result) => {
-          if (result.response) {
-            console.log(result.response);                      
-              this.tableData = [];
+          if (result) {
+            console.log('metalInsert API',result);                       
+            this.receiptSummaryArr = result.dynamicData[0];
           }
         },
         (err) => alert(err)
@@ -292,6 +298,7 @@ export class PosDailyClosingSummaryComponent implements OnInit {
         windowClass: "modal-full-width",
       }
     );
+    modalRef.componentInstance.posDailyClosingSummaryFormData = this.posDailyClosingSummaryForm;
   }
 
   selectedData(data: any) {
@@ -600,6 +607,9 @@ export class PosDailyClosingSummaryComponent implements OnInit {
         toDate: this.formatDateToYYYYMMDD(new Date()),
       };
 
+      this.posDailyClosingSummaryForm.controls.transactionType.setValue(this.transactionOptions[2].value);
+      this.posDailyClosingSummaryForm.controls.metalType.setValue(this.metalOptions[0].FIELD);
+      this.posDailyClosingSummaryForm.controls.diamondType.setValue(this.diamondOptions[0].FIELD);      
     }
   }
 

@@ -549,12 +549,11 @@
                         </mat-form-field> -->
                         <mat-form-field appearance="outline"
                           style="width: 100%">
-                          <input matInput DateValidation readonly
+                          <input matInput DateValidation
                             (dateChange)="onStartDateChange()"
                             [matDatepicker]="start" formControlName="startdate"
                             placeholder="DD/MM/YYYY" />
                           <mat-datepicker-toggle matSuffix
-                            disabled="true"
                             [for]="start"></mat-datepicker-toggle>
                           <mat-datepicker #start></mat-datepicker>
                         </mat-form-field>
@@ -566,11 +565,10 @@
                       <div class="col-sm-7">
                         <mat-form-field appearance="outline"
                           style="width: 100%">
-                          <input matInput DateValidation readonly
+                          <input matInput DateValidation 
                             [matDatepicker]="end" formControlName="enddate"
                             placeholder="DD/MM/YYYY" [min]="minEndDate" />
                           <mat-datepicker-toggle matSuffix
-                            disabled="true"
                             [for]="end"></mat-datepicker-toggle>
                           <mat-datepicker #end></mat-datepicker>
                         </mat-form-field>
@@ -742,8 +740,10 @@
                           <mat-form-field appearance="outline"
                             style="width: 130px;">
                             <input type="text" matInput
-                              (focusout)="SPvalidateLookupField($event,fromProcessMasterSearch,'METAL_FRM_PROCESS_CODE')"
+                              (focusout)="fromProcesscodeValidate($event)"
+                              id="METAL_FRM_PROCESS_CODE" UpperCaseDirective
                               formControlName="METAL_FRM_PROCESS_CODE"
+                              (input)="fromProcesscodeInputChange()"
                               (keydown)="lookupKeyPress($event,'METAL_FRM_PROCESS_CODE')">
                             <master-search class="masterSearch"
                               *ngIf="!viewMode" #MetalfromProcessMasterOverlay
@@ -762,6 +762,7 @@
                               (keydown)="lookupKeyPress($event,'METAL_TO_PROCESS_CODE')"
                               (focusout)="SPvalidateLookupField($event,toProcessMasterSearch,'METAL_TO_PROCESS_CODE')"
                               formControlName="METAL_TO_PROCESS_CODE"
+                              id="METAL_TO_PROCESS_CODE"
                               UpperCaseDirective />
                             <master-search class="masterSearch"
                               *ngIf="!viewMode" #MetaltoProcessMasterOverlay
@@ -791,7 +792,10 @@
                             style="width: 130px;">
                             <input type="text" matInput
                               (keydown)="lookupKeyPress($event,'METAL_FRM_WORKER_CODE')"
-                              formControlName="METAL_FRM_WORKER_CODE" />
+                              formControlName="METAL_FRM_WORKER_CODE" 
+                              id="METAL_FRM_WORKER_CODE"
+                              (input)="fromWorkercodeInputChange()"
+                              (focusout)="fromWorkercodeValidate($event)"/>
                             <master-search class="masterSearch"
                               *ngIf="!viewMode" #MetalfromWorkerMasterOverley
                               [MasterSearchData]="fromWorkerMasterSearch"
@@ -808,6 +812,7 @@
                             <input type="text" matInput UpperCaseDirective
                               (keydown)="lookupKeyPress($event,'METAL_TO_WORKER_CODE')"
                               formControlName="METAL_TO_WORKER_CODE"
+                              id="METAL_TO_WORKER_CODE"
                               (focusout)="SPvalidateLookupField($event,toWorkerMasterSearch,'METAL_TO_WORKER_CODE')" />
                             <master-search class="masterSearch"
                               *ngIf="!viewMode" #MetaloverlayToWorker
@@ -820,9 +825,10 @@
                       <td>
                         <mat-form-field appearance="outline"
                           style="width: 130px;">
-                          <input type="text" matInput class="text-right"
+                          <input type="text" matInput
                             UpperCaseDirective
-                            formControlName="METAL_ScrapLocCode" />
+                            formControlName="METAL_ScrapLocCode" 
+                            id="METAL_ScrapLocCode"/>
                           <master-search class="masterSearch"
                             #overleyLocation
                             [MasterSearchData]="locationSearch"
@@ -846,7 +852,7 @@
                         <mat-form-field appearance="outline"
                           style="width: 130px;">
                           <input type="text" matInput
-                            readonly
+                            readonly id="METAL_FromStockCode"
                             formControlName="METAL_FromStockCode" />
                         </mat-form-field>
                       </td>
@@ -857,6 +863,7 @@
                             UpperCaseDirective
                             (keydown)="lookupKeyPress($event,'METAL_ToStockCode')"
                             (focusout)="MToStockCode_Validating()"
+                            id="METAL_ToStockCode"
                             formControlName="METAL_ToStockCode" />
                           <master-search class="masterSearch"
                             *ngIf="!viewMode"
@@ -868,9 +875,9 @@
                       <td>
                         <mat-form-field appearance="outline"
                           style="width: 130px;">
-                          <input type="text" matInput class="text-right"
+                          <input type="text" matInput
                             formControlName="METAL_ScrapStockCode"
-                            UpperCaseDirective
+                            UpperCaseDirective id="METAL_ScrapStockCode"
                             (keydown)="lookupKeyPress($event,'METAL_ScrapStockCode')"
                             (focusout)="txtMScrapStockCode_Validating($event)" />
                           <master-search #METAL_ScrapStockCodeoverlay
@@ -1126,12 +1133,11 @@
                         </mat-form-field> -->
                         <mat-form-field appearance="outline"
                           style="width: 100%">
-                          <input matInput DateValidation readonly
+                          <input matInput DateValidation 
                             (dateChange)="onStartDateChange()"
                             [matDatepicker]="start" formControlName="startdate"
                             placeholder="DD/MM/YYYY" />
                           <mat-datepicker-toggle matSuffix
-                            disabled="true"
                             [for]="start"></mat-datepicker-toggle>
                           <mat-datepicker #start></mat-datepicker>
                         </mat-form-field>
@@ -1143,11 +1149,10 @@
                       <div class="col-sm-7">
                         <mat-form-field appearance="outline"
                           style="width: 100%">
-                          <input matInput DateValidation readonly
+                          <input matInput DateValidation 
                             [matDatepicker]="end" formControlName="enddate"
                             placeholder="DD/MM/YYYY" [min]="minEndDate" />
                           <mat-datepicker-toggle matSuffix
-                            disabled="true"
                             [for]="end"></mat-datepicker-toggle>
                           <mat-datepicker #end></mat-datepicker>
                         </mat-form-field>
@@ -1236,6 +1241,16 @@
                           </datetime-picker>
                         </mat-form-field>
                       </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-7">
+                    <div class="form-check">
+                      <mat-checkbox
+                        [disabled]="viewMode"
+                        (change)="selectAllBtnChange($event)">Select All Setted
+                      </mat-checkbox>
                     </div>
                   </div>
                 </div>

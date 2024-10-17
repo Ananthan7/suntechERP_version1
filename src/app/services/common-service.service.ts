@@ -992,6 +992,35 @@ export class CommonServiceService {
   padTo2Digits(num: any) {
     return num.toString().padStart(2, '0');
   }
+  isValidDDMMYYYY(input: any) {
+    // Regex to match DD-MM-YYYY format
+    const regex = /^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-\d{4}$/;
+
+    return regex.test(input);
+  }
+  isValidDDMMYYYY2(input: any) {
+    // Regex to match DD/MM/YYYY format
+    const regex = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
+
+    return regex.test(input);
+  }
+  convertToDate(dateStr: any) {
+    let date: any
+    let flg = this.isValidDDMMYYYY2(dateStr)
+    if (this.isValidDDMMYYYY(dateStr)) {
+      // Split the input date string (DD-MM-YYYY) into day, month, and year
+      const [day, month, year] = dateStr.split('-').map(Number);
+      date = new Date(year, month - 1, day);
+      return date;
+    } else if (this.isValidDDMMYYYY2(dateStr)) {
+      // Split the input date string (DD-MM-YYYY) into day, month, and year
+      const [day, month, year] = dateStr.split('/').map(Number);
+      date = new Date(year, month - 1, day);
+      return date;
+    } else {
+      return date = new Date(dateStr)
+    }
+  }
   /**purpose: format date */
   formatDate(date: any) {
     return [
@@ -1002,21 +1031,24 @@ export class CommonServiceService {
   }
   /**purpose: date in order format dd-mm-yy */
   formatDDMMYY(date: any) {
-    let day = this.isDate(date) ? date.getDate(): new Date(date).getDate();
+    date = this.convertToDate(date)
+    let day = date.getDate()
     let month = (date.getMonth() > 9 ? date.getMonth() : date.getMonth()) + 1;
     let year = date.getFullYear();
     return `${day}-${month}-${year}`;
   }
   /**purpose: date in order format yyyy-mm-dd */
   formatYYMMDD(date: any) {
-    let day = this.isDate(date) ? date.getDate(): new Date(date).getDate();
+    date = this.convertToDate(date)
+    let day = date.getDate()
     let month = (date.getMonth() > 9 ? date.getMonth() : date.getMonth()) + 1;
     let year = date.getFullYear();
     return `${year}-${month}-${day}`;
   }
   /**purpose: date in order format dd-mm-yy */
   formatMMDDYY(date: any) {
-    let day = this.isDate(date) ? date.getDate(): new Date(date).getDate();
+    date = this.convertToDate(date)
+    let day = date.getDate()
     let month = (date.getMonth() > 9 ? date.getMonth() : date.getMonth()) + 1;
     let year = date.getFullYear();
     return `${month}-${day}-${year}`;
@@ -1024,12 +1056,10 @@ export class CommonServiceService {
   /**purpose: Get a date time as a string, using the ISO standard*/
   formatDateTime(date: any) {
     if (!date) return '';
-    if(this.isDate(date)){
+    date = this.convertToDate(date)
+    if (this.isDate(date)) {
       return date.toISOString()
     }
-    // if (typeof date === 'string') {
-    //   return date;
-    // }
     return new Date(date).toISOString()
   }
   isDate(value: any): boolean {
@@ -1038,25 +1068,25 @@ export class CommonServiceService {
   parseDateString(dateStr: string): Date {
     // Split the date and time parts
     const [datePart, timePart] = dateStr.split(' ');
-    
+
     // Split the date into DD/MM/YYYY
     const [day, month, year] = datePart.split('/').map(Number);
-  
+
     // Combine the parts and create a new Date object
     return new Date(year, month - 1, day, ...this.timePartTo24Hour(timePart));
   }
-  
+
   // Helper function to convert time from 12-hour to 24-hour format
   timePartTo24Hour(timeStr: string): [number, number, number] {
     const [time, period] = timeStr.split(' ');
     let [hours, minutes, seconds] = time.split(':').map(Number);
-  
+
     if (period === 'PM' && hours !== 12) {
       hours += 12;
     } else if (period === 'AM' && hours === 12) {
       hours = 0;
     }
-  
+
     return [hours, minutes, seconds];
   }
   /**purpose: to format number with M,K values(eg: 1k,2M) */
@@ -1134,40 +1164,40 @@ export class CommonServiceService {
     return endDate;
   }
 
-commaSeperation(data: any) {
-  // Guard clause to return early for invalid data
-  if (data === null || data === undefined || data === '') {
-    return '0'; // Return '0' or handle null/undefined as per your needs
-  }
-
-  let number = '';
-  
-  // Remove commas and ensure the data is a valid number
-  data = data.toString().replace(/,/g, '');
-
-  try {
-    if (!isNaN(data)) {  // Check if data is a valid number
-      if (data.includes('.')) {
-        let parts = data.split('.');
-        data = parts[0];
-
-        number = Number(data).toLocaleString('en-US', { style: 'decimal' });
-        number = number + '.' + parts[1];
-      } else {
-        number = Number(data).toLocaleString('en-US', { style: 'decimal' });
-      }
-    } else {
-      console.error('Invalid number format:', data); // Log invalid data once
+  commaSeperation(data: any) {
+    // Guard clause to return early for invalid data
+    if (data === null || data === undefined || data === '') {
+      return '0'; // Return '0' or handle null/undefined as per your needs
     }
-  } catch (error) {
-    console.error('Error occurred with value:', data, error); // Log error
-    throw error;  // Optionally re-throw the error if necessary
+
+    let number = '';
+
+    // Remove commas and ensure the data is a valid number
+    data = data.toString().replace(/,/g, '');
+
+    try {
+      if (!isNaN(data)) {  // Check if data is a valid number
+        if (data.includes('.')) {
+          let parts = data.split('.');
+          data = parts[0];
+
+          number = Number(data).toLocaleString('en-US', { style: 'decimal' });
+          number = number + '.' + parts[1];
+        } else {
+          number = Number(data).toLocaleString('en-US', { style: 'decimal' });
+        }
+      } else {
+        console.error('Invalid number format:', data); // Log invalid data once
+      }
+    } catch (error) {
+      console.error('Error occurred with value:', data, error); // Log error
+      throw error;  // Optionally re-throw the error if necessary
+    }
+
+    return number;
   }
 
-  return number;
-}
 
-  
 
   calculateDateDifference(userDateValue: any) {
     const userDate: any = new Date(userDateValue);
@@ -1295,7 +1325,7 @@ commaSeperation(data: any) {
     return cleanedData;
   }
 
- 
+
 
   catchSubscribeHeaderMenu(nextEl: any) {
     this.nextElSource.next(nextEl);
