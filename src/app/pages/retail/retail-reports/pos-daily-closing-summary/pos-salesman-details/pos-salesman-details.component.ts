@@ -63,11 +63,34 @@ export class PosSalesmanDetailsComponent implements OnInit {
 
 
   previewClick() {
-    this.htmlPreview = this.sanitizer.bypassSecurityTrustHtml(this.tableData);
-    const blob = new Blob([this.htmlPreview.changingThisBreaksApplicationSecurity], { type: 'text/html' });
-    this.comService.closeSnackBarMsg();
-    const url = URL.createObjectURL(blob);
-    window.open(url, '_blank');     
+    let postData = {
+      "SPID": "160",
+      "parameter": {
+        "strFromDate ": this.formatDateToYYYYMMDD(this.posDailyClosingSummaryFormData.value.fromDate),
+        "strToDate " : this.formatDateToYYYYMMDD(this.posDailyClosingSummaryFormData.value.toDate),
+        "strBranch " : this.posDailyClosingSummaryFormData.value.branch,
+        "blnBlockCost " : '',
+        "LOGDATA ": '',
+      }
+    }
+    this.comService.showSnackBarMsg('MSG81447');
+    this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+    .subscribe((result: any) => {
+      console.log(result)  
+      if(result.status != "Failed"){
+        let data = result.dynamicData;
+        let printContent = data[0][0].HTMLReport;
+        this.htmlPreview = this.sanitizer.bypassSecurityTrustHtml(printContent);
+        const blob = new Blob([this.htmlPreview.changingThisBreaksApplicationSecurity], { type: 'text/html' });
+        this.comService.closeSnackBarMsg();
+        const url = URL.createObjectURL(blob);
+        window.open(url, '_blank');
+      }
+      else{
+        this.toastr.error(result.message)
+        return
+      }
+    });  
   }
 
   printBtnClick(){
