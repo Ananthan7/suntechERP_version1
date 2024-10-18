@@ -92,6 +92,7 @@ export class PosDailyClosingSummaryComponent implements OnInit {
   salesmanSummaryArr: any[] = [];
   transactionWiseSummaryArr: any[] = [];
   scrapPurchseSummaryArr: any[] =[];
+  receiptSummaryArr: any[] = [];
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -106,16 +107,18 @@ export class PosDailyClosingSummaryComponent implements OnInit {
     this.comService.showSnackBarMsg('MSG81447');
   
     this.dropdownValueFetch().subscribe(() => {
+      this.prefillScreenValues();
       const insertObservables = [
-        this.prefillScreenValues(),
         this.metalInsert(),
         this.diamondInsert(),
         this.vocherInsert(),
         this.closingPurchaseNetInsert(),
         this.posClsngSmanSummaryNet(),
+        this.receiptSummaryDataFetch(),
+
+
         this.salesManclosingInsert()
       ];
-  
       // Use forkJoin to wait till observable calls to complete
       forkJoin(insertObservables).subscribe(() => {
         this.comService.closeSnackBarMsg();
@@ -124,6 +127,7 @@ export class PosDailyClosingSummaryComponent implements OnInit {
   
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
+
   }
 
   dropdownValueFetch(): Observable<any> {
@@ -261,6 +265,21 @@ export class PosDailyClosingSummaryComponent implements OnInit {
     this.subscriptions.push(Sub);
   }
 
+  receiptSummaryDataFetch(){
+    let API = "UspPosClosingNetCollectionNet";
+    let postData = {    
+      "strBranch": this.branchCode,
+      "strFmDate": this.formatDateToYYYYMMDD( this.dateToPass.fromDate ),
+      "strToDate": this.formatDateToYYYYMMDD( this.dateToPass.toDate ),
+    };
+
+    this.dataService.postDynamicAPI(API, postData).subscribe((result) => {
+      if (result) {       
+        this.receiptSummaryArr =  result.dynamicData[0]           
+      }
+    },(err) => alert(err));
+  }
+
   setDateValue(event: any){
     if(event.FromDate){
       this.posDailyClosingSummaryForm.controls.fromDate.setValue(event.FromDate);
@@ -275,10 +294,13 @@ export class PosDailyClosingSummaryComponent implements OnInit {
     const insertObservables = [
       this.metalInsert(),
       this.diamondInsert(),
-      this.salesManclosingInsert(),
       this.vocherInsert(),
       this.closingPurchaseNetInsert(),
-      this.posClsngSmanSummaryNet()
+      this.posClsngSmanSummaryNet(),
+      this.receiptSummaryDataFetch(),
+
+
+      this.salesManclosingInsert(),
     ];
 
     forkJoin(insertObservables).subscribe(() => {
