@@ -274,7 +274,10 @@ export class StoneIssueDetailComponent implements OnInit {
     this.stoneIssueDetailsFrom.controls.PART_CODE.setValue(this.content.PART_CODE)
     this.stoneIssueDetailsFrom.controls.batchid.setValue(this.content.SUB_STOCK_CODE)
     this.stoneIssueDetailsFrom.controls.consignment.setValue(this.content.CONSIGNMENT)
-    console.log(this.content.CONSIGNMENT, 'consignment')
+    this.setValueWithDecimal('unitrate', 0, 'THREE')
+    this.setValueWithDecimal('amount', 0, 'METAL')
+    this.setValueWithDecimal('pointerwt', 0, 'THREE')
+    this.setValueWithDecimal('stockbal', 0, 'THREE')
     this.getImageData()
     this.CalculatePiecesAndPointerWT()
   }
@@ -788,6 +791,7 @@ export class StoneIssueDetailComponent implements OnInit {
         this.comService.closeSnackBarMsg()
         if (result.status == "Success" && result.dynamicData[0]) {
           let data = result.dynamicData[0]
+          console.log(data,'division')
           if (data.length == 0) {
             console.log(data, 'di')
             this.comService.toastErrorByMsgId('MSG1531')
