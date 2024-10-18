@@ -46,7 +46,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
     { title: "Curr.Rate", field: "CURRENCY_RATE" },
     { title: "Amount", field: "AMOUNTFC" },
     { title: "VAT_E_", field: "IGST_AMOUNTCC" },
-    { title: "Total", field: "NET_TOTAL" },
+    { title: "Total", field: "TOTAL_AMOUNTCC" },
   ];
 
   currencyData: MasterSearchModel = {
@@ -437,9 +437,13 @@ export class PosCurrencyReceiptComponent implements OnInit {
           );
 
           this.posCurrencyDetailsData.forEach((item) => {
-            item.NET_TOTAL = (
-              parseFloat(item.AMOUNTCC) + parseFloat(item.IGST_AMOUNTCC)
-            ).toFixed(2);
+            item.TOTAL_AMOUNTCC=this.comService.decimalQuantityFormat(
+              this.comService.emptyToZero(item.TOTAL_AMOUNTCC),
+              "AMOUNT"
+            );
+            // item.NET_TOTAL = (
+            //   parseFloat(item.AMOUNTCC) + parseFloat(item.IGST_AMOUNTCC)
+            // ).toFixed(2);
             item.CURRENCY_RATE = this.comService.decimalQuantityFormat(
               this.comService.emptyToZero(item.CURRENCY_RATE),
               "RATE"
@@ -597,12 +601,19 @@ export class PosCurrencyReceiptComponent implements OnInit {
                   data.CURRENCY_CODE
                 );
 
+                this.posCurrencyReceiptForm.controls.partyCurr.setValue(
+                  data.CURRENCY_CODE
+                );
+
                 this.currencyCode=data.CURRENCY_CODE;
 
 
                 this.posCurrencyReceiptForm.controls.partyCurrencyRate.setValue(
                   this.comService.decimalQuantityFormat(data.CONV_RATE, 'RATE')
                 );
+
+                localStorage.setItem("partyCurrencyCode", data.CURRENCY_CODE.toString());
+                localStorage.setItem("partyCurrencyRate", data.CONV_RATE.toString());
 
                 this.currencyConvRate=data.CONV_RATE;
 
@@ -648,6 +659,10 @@ export class PosCurrencyReceiptComponent implements OnInit {
       e.Currency
     );
 
+    this.posCurrencyReceiptForm.controls.partyCurr.setValue(
+      e.Currency
+    );
+
     this.currencyCode=e.Currency;
 
     this.posCurrencyReceiptForm.controls.partyCurrencyRate.setValue(
@@ -663,6 +678,11 @@ export class PosCurrencyReceiptComponent implements OnInit {
       e.CURRENCY_CODE
     );
     this.posCurrencyReceiptForm.controls.partyCodeDesc.setValue(
+      e.CURRENCY_CODE
+    );
+
+    
+    this.posCurrencyReceiptForm.controls.partyCurr.setValue(
       e.CURRENCY_CODE
     );
     this.currencyCode=e.CURRENCY_CODE;
@@ -728,8 +748,8 @@ export class PosCurrencyReceiptComponent implements OnInit {
       PARTY_CURRENCY: this.posCurrencyReceiptForm.value.partyCurrency || "",
       PARTY_CURR_RATE:
         this.posCurrencyReceiptForm.value.partyCurrencyRate || "0",
-      TOTAL_AMOUNTFC: this.posCurrencyReceiptForm.value.partyAmountFC || 0,
-      TOTAL_AMOUNTCC: this.posCurrencyReceiptForm.value.partyAmountFC || 0,
+      TOTAL_AMOUNTFC: this.posCurrencyReceiptForm.value.partyAmountFC?.replace(/,/g, '') || 0,
+      TOTAL_AMOUNTCC: this.posCurrencyReceiptForm.value.partyAmountFC?.replace(/,/g, '') || 0,
       REMARKS: this.posCurrencyReceiptForm.value.narration || "",
       SYSTEM_DATE: "2023-10-10T11:05:50.756Z",
       NAVSEQNO: 0,
@@ -742,8 +762,8 @@ export class PosCurrencyReceiptComponent implements OnInit {
       HHACCOUNT_HEAD: this.posCurrencyReceiptForm.value.partyCodeDesc || "",
       SALESPERSON_CODE: this.posCurrencyReceiptForm.value.enteredby,
       SALESPERSON_NAME: this.posCurrencyReceiptForm.value.enteredbyuser,
-      BALANCE_FC: this.posCurrencyReceiptForm.value.partyAmountFC || 0,
-      BALANCE_CC: this.posCurrencyReceiptForm.value.partyAmountFC || 0,
+      BALANCE_FC: this.posCurrencyReceiptForm.value.partyAmountFC?.replace(/,/g, '') || 0,
+      BALANCE_CC: this.posCurrencyReceiptForm.value.partyAmountFC?.replace(/,/g, '') || 0,
       AUTHORIZEDPOSTING: false,
       AUTOGENREF: "",
       AUTOGENMID: 0,
@@ -769,8 +789,8 @@ export class PosCurrencyReceiptComponent implements OnInit {
       GST_STATE_CODE: "",
       GST_NUMBER: "",
       GST_TYPE: "",
-      GST_TOTALFC: this.posCurrencyReceiptForm.value.totalTax.amountCc?.replace(/,/g, '') || 0,
-      GST_TOTALCC: this.posCurrencyReceiptForm.value.totalTax.amountCc?.replace(/,/g, '') || 0,
+      GST_TOTALFC: this.posCurrencyReceiptForm.value.totalTax?.replace(/,/g, '') || 0,
+      GST_TOTALCC: this.posCurrencyReceiptForm.value.totalTax?.replace(/,/g, '') || 0,
       DOC_REF: "",
       REC_STATUS: "",
       CUSTOMER_NAME: this.posCurrencyReceiptForm.value.customerName || "",
@@ -1169,9 +1189,14 @@ export class PosCurrencyReceiptComponent implements OnInit {
     const preItemIndex = this.posCurrencyDetailsData.findIndex(
       (data: any) => data.SRNO.toString() == postData.SRNO.toString()
     );
-    postData.NET_TOTAL = this.comService.commaSeperation( (
-      this.comService.decimalQuantityFormat( this.comService.emptyToZero(postData.AMOUNTFC) + this.comService.emptyToZero(postData.IGST_AMOUNTFC),'AMOUNT'
-      )  ))
+
+    postData.TOTAL_AMOUNTCC=this.comService.decimalQuantityFormat(
+      this.comService.emptyToZero(postData.TOTAL_AMOUNTCC),
+      "AMOUNT"
+    );
+    // postData.NET_TOTAL = this.comService.commaSeperation( (
+    //   this.comService.decimalQuantityFormat( this.comService.emptyToZero(postData.AMOUNTFC) + this.comService.emptyToZero(postData.IGST_AMOUNTFC),'AMOUNT'
+    //   )  ))
 
     if (postData?.isUpdate && preItemIndex !== -1) {
       this.posCurrencyDetailsData[preItemIndex] = postData;
@@ -1214,10 +1239,11 @@ export class PosCurrencyReceiptComponent implements OnInit {
     );
     
     this.posCurrencyReceiptForm.controls.partyAmountFC.setValue(
+      this.comService.commaSeperation(
       this.comService.decimalQuantityFormat(
-        this.comService.emptyToZero(sumAMOUNTCC),
+        (this.comService.emptyToZero(sumAMOUNTCC)/this.comService.emptyToZero(this.posCurrencyReceiptForm.value.partyCurrencyRate)),
         "AMOUNT"
-      )
+      ))
     );
   }
 
@@ -1252,81 +1278,100 @@ export class PosCurrencyReceiptComponent implements OnInit {
       case "customerCode":
         this.overlayCustomerCode.showOverlayPanel(event);
         break;
+        case "currencyCode":
+          this.overlayCustomerCode.showOverlayPanel(event);
+          break;
       default:
         console.warn(`Unknown form control name: ${formControlName}`);
     }
   }
 
-
-
-  SPvalidateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+  SPvalidateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string, isCurrencyField: boolean) {
     LOOKUPDATA.SEARCH_VALUE = event.target.value;
 
     if (event.target.value === '' || this.viewOnly === true) {
-      this.customerData = null;
+        if (isCurrencyField) {
+            let currencyRate = localStorage.getItem("partyCurrencyRate");
+            let currencyCode = localStorage.getItem("partyCurrencyCode");
 
-      const controlsToReset = ['customerName', 'mobile', 'email', 'partyAddress'];
+            this.posCurrencyReceiptForm.controls.partyCurrency.setValue(currencyCode);
+            this.posCurrencyReceiptForm.controls.partyCurrencyRate.setValue(
+                this.comService.decimalQuantityFormat(this.comService.emptyToZero(currencyRate), "RATE")
+            );
 
-      controlsToReset.forEach(control => {
-        this.posCurrencyReceiptForm.controls[control].setValue('');
-      });
+            
 
-      return;
+            this.renderer.selectRootElement('#currencyCode').select();
+        } else {
+            this.customerData = null;
+            const controlsToReset = ['customerName', 'mobile', 'email', 'partyAddress'];
+            controlsToReset.forEach(control => {
+                this.posCurrencyReceiptForm.controls[control].setValue('');
+            });
+        }
+        return;
     }
 
     let param = {
-      "PAGENO": LOOKUPDATA.PAGENO,
-      "RECORDS": LOOKUPDATA.RECORDS,
-      "LOOKUPID": LOOKUPDATA.LOOKUPID,
-      "WHERECONDITION": LOOKUPDATA.WHERECONDITION,
-      "searchField": LOOKUPDATA.SEARCH_FIELD,
-      "searchValue": LOOKUPDATA.SEARCH_VALUE
+        "PAGENO": LOOKUPDATA.PAGENO,
+        "RECORDS": LOOKUPDATA.RECORDS,
+        "LOOKUPID": LOOKUPDATA.LOOKUPID,
+        "WHERECONDITION": LOOKUPDATA.WHERECONDITION,
+        "searchField": LOOKUPDATA.SEARCH_FIELD,
+        "searchValue": LOOKUPDATA.SEARCH_VALUE
     };
 
     this.comService.showSnackBarMsg('MSG81447');
 
     let Sub: Subscription = this.dataService.postDynamicAPI('MasterLookUp', param)
-      .subscribe((result) => {
-        this.comService.closeSnackBarMsg();
+        .subscribe((result) => {
+            this.comService.closeSnackBarMsg();
+            let data = result.dynamicData[0];
 
-        let data = result.dynamicData[0];
+            if (data && data.length > 0) {
+                if (LOOKUPDATA.FRONTENDFILTER && LOOKUPDATA.SEARCH_VALUE !== '') {
+                    let searchResult = this.comService.searchAllItemsInArray(data, LOOKUPDATA.SEARCH_VALUE);
 
-        if (data && data.length > 0) {
-          if (LOOKUPDATA.FRONTENDFILTER && LOOKUPDATA.SEARCH_VALUE !== '') {
-            let searchResult = this.comService.searchAllItemsInArray(data, LOOKUPDATA.SEARCH_VALUE);
+                    if (searchResult && searchResult.length > 0) {
+                        let matchedItem = searchResult[0];
 
-            if (searchResult && searchResult.length > 0) {
-              let matchedItem = searchResult[0];
-              this.customerData = matchedItem;
-              this.posCurrencyReceiptForm.controls.customerName.setValue(
-                matchedItem.NAME
-              );
-              this.posCurrencyReceiptForm.controls.mobile.setValue(
-                matchedItem.MOBILE
-              );
+                        if (isCurrencyField) {
+                            this.posCurrencyReceiptForm.controls.partyCurrency.setValue(matchedItem.Currency);
+                            this.posCurrencyReceiptForm.controls.partyCurrencyRate.setValue(
+                                this.comService.decimalQuantityFormat(matchedItem['Conv Rate'], "RATE")
+                            );
+                            this.currencyCode=matchedItem.Currency;
+                            this.currencyConvRate=(matchedItem['Conv Rate']);
+                        } else {
+                            this.customerData = matchedItem;
+                            this.posCurrencyReceiptForm.controls.customerName.setValue(matchedItem.NAME);
+                            this.posCurrencyReceiptForm.controls.mobile.setValue(matchedItem.MOBILE);
+                            this.posCurrencyReceiptForm.controls.email.setValue(matchedItem.EMAIL);
+                            this.posCurrencyReceiptForm.controls.partyAddress.setValue(matchedItem.ADDRESS);
+                        }
+                    } else {
+                        this.comService.toastErrorByMsgId('No data found');
+                        LOOKUPDATA.SEARCH_VALUE = '';
+                        if (isCurrencyField) {
+                          let currencyRate = localStorage.getItem("partyCurrencyRate");
+                          let currencyCode = localStorage.getItem("partyCurrencyCode");
 
-              this.posCurrencyReceiptForm.controls.email.setValue(
-                matchedItem.EMAIL
-              );
+                          this.posCurrencyReceiptForm.controls.partyCurrency.setValue(currencyCode);
+                          this.posCurrencyReceiptForm.controls.partyCurrencyRate.setValue(
+                              this.comService.decimalQuantityFormat(this.comService.emptyToZero(currencyRate), "RATE")
+                          );
 
-              this.posCurrencyReceiptForm.controls.partyAddress.setValue(
-                matchedItem.ADDRESS
-              );
-
-
-
-            } else {
-              this.comService.toastErrorByMsgId('No data found');
-              LOOKUPDATA.SEARCH_VALUE = '';
+                          this.renderer.selectRootElement('#currencyCode').select();
+                      }
+                    }
+                }
             }
-          }
-        }
-      }, err => {
-        this.comService.toastErrorByMsgId('MSG2272');
-      });
+        }, err => {
+            this.comService.toastErrorByMsgId('MSG2272');
+        });
 
     this.subscriptions.push(Sub);
-  }
+}
 
   continue(){}
 
