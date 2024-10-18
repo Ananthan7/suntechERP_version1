@@ -4,11 +4,11 @@
         <button type="button" class="btn-close" aria-label="Close"
             (click)="modal.dismiss('Cross click')"></button>
     </div>
-    <div>
+    <div class="row p-3">
         <dx-data-grid id="gridContainer"
             [dataSource]="gridData"
             [showRowLines]="true"
-            height="300" [columnAutoWidth]="true"
+            height="500" [columnAutoWidth]="true"
             [showBorders]="true"
             [allowColumnResizing]="true">
             <dxo-paging [enabled]="false"></dxo-paging>
@@ -46,9 +46,5 @@
                 </dxi-total-item>
             </dxo-summary>
         </dx-data-grid>
-    </div>
-    <div class="modal-footer">
-        <!-- <button type="button" class="btn btn-secondary"
-            (click)="modal.close('Close click')">Close</button> -->
     </div>
 </ng-template>

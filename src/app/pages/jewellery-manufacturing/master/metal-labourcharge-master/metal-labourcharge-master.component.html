@@ -274,7 +274,7 @@
                     <div class="col-sm-3">
                         <mat-form-field style="width: 100%" appearance="outline">
                             <input matInput type="text" [readonly]="viewMode || codeEnableMetal" matInput
-                                 formControlName="wtFrom" class="text-right" [max]="2" MetalDecimalInput
+                                 formControlName="wtFrom" class="text-right" [max]="2" MetalDecimalInput                                
                                 (keyup)="WtcodeEnabled()" />
                         </mat-form-field>
                     </div>
@@ -285,13 +285,13 @@
                     <div class="col-sm-3">
                         <mat-form-field style="width: 100%" appearance="outline">
                             <input matInput type="text" [readonly]="viewMode  || codeEnableMetal"
-                                matInput [max]="2"   MetalDecimalInput
+                                matInput [max]="2"   MetalDecimalInput  (change)="onweightto($event,'wtto')"
                                 formControlName="wtTo" class="text-right" />
                         </mat-form-field>
                     </div>
                     <div class="col-sm-3 mb-2">
                         <mat-checkbox class="example-margin mx-2" [disabled]="viewMode || codeEnableMetal || grossWt"
-                            formControlName="onGrossWt" (change)="onforongrossOnlyChange($event)" id="ID022">
+                            formControlName="onGrossWt"  (change)="onforongrossOnlyChange($event)" id="ID022">
                             On Gross
                             Wt</mat-checkbox>
                         <mat-checkbox class="example-margin mx-2" [disabled]="viewMode || codeEnableMetal"

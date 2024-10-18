@@ -1852,9 +1852,6 @@ export class AlloyMasterComponent implements OnInit {
     // if (this.alloyMastereForm.value.costCenter != 'ALY') {
     //   this.commonService.toastErrorByMsgId('Please enter cost center For CONSUMABLE ITEMS ')
     //   return
-    // } else if (this.alloyMastereForm.value.costCenter != 'CNSL') {
-    //   this.commonService.toastErrorByMsgId('Please enter cost center For CONSUMABLE ITEMS ')
-    //   return
     // }
 
 
