@@ -340,12 +340,13 @@
 
                         <dxi-column [width]="100" dataField="voctype" caption="Rcvd.In"></dxi-column>
                         <dxi-column [width]="200" dataField="vocdescp" caption="decrip .In"></dxi-column>
-                        <dxi-column [width]="100" dataField="NO_VOCS" caption="Rcvd.In"></dxi-column>
-                        <dxi-column [width]="100"  dataField="amount" dataType="Amount"></dxi-column>
-                        <!-- <dxo-summary>
-                            <dxi-total-item column="Amount">
-                            </dxi-total-item>
-                        </dxo-summary> -->
+                        <dxi-column [width]="100" dataField="NO_VOCS" caption="#Docs"></dxi-column>
+                        <dxi-column [width]="150"  dataField="amount" dataType="Amount"></dxi-column>
+                        
+    <dxo-summary>
+        <dxi-total-item column="NO_VOCS" summaryType="sum"  ></dxi-total-item>
+        <dxi-total-item column="amount" summaryType="sum" displayFormat="Total: {0}" ></dxi-total-item>
+    </dxo-summary>
                     </dx-data-grid>
             </div>
             <div class="col-md-4">
