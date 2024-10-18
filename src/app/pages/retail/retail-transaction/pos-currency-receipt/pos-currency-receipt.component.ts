@@ -597,6 +597,10 @@ export class PosCurrencyReceiptComponent implements OnInit {
                   data.CURRENCY_CODE
                 );
 
+                this.posCurrencyReceiptForm.controls.partyCurr.setValue(
+                  data.CURRENCY_CODE
+                );
+
                 this.currencyCode=data.CURRENCY_CODE;
 
 
@@ -648,6 +652,10 @@ export class PosCurrencyReceiptComponent implements OnInit {
       e.Currency
     );
 
+    this.posCurrencyReceiptForm.controls.partyCurr.setValue(
+      e.Currency
+    );
+
     this.currencyCode=e.Currency;
 
     this.posCurrencyReceiptForm.controls.partyCurrencyRate.setValue(
@@ -663,6 +671,11 @@ export class PosCurrencyReceiptComponent implements OnInit {
       e.CURRENCY_CODE
     );
     this.posCurrencyReceiptForm.controls.partyCodeDesc.setValue(
+      e.CURRENCY_CODE
+    );
+
+    
+    this.posCurrencyReceiptForm.controls.partyCurr.setValue(
       e.CURRENCY_CODE
     );
     this.currencyCode=e.CURRENCY_CODE;
@@ -1214,10 +1227,11 @@ export class PosCurrencyReceiptComponent implements OnInit {
     );
     
     this.posCurrencyReceiptForm.controls.partyAmountFC.setValue(
+      this.comService.commaSeperation(
       this.comService.decimalQuantityFormat(
-        this.comService.emptyToZero(sumAMOUNTCC),
+        (this.comService.emptyToZero(sumAMOUNTCC)/this.comService.emptyToZero(this.posCurrencyReceiptForm.value.partyCurrencyRate)),
         "AMOUNT"
-      )
+      ))
     );
   }
 
