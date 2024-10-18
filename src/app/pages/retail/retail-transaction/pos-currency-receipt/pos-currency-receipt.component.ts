@@ -612,6 +612,9 @@ export class PosCurrencyReceiptComponent implements OnInit {
                   this.comService.decimalQuantityFormat(data.CONV_RATE, 'RATE')
                 );
 
+                localStorage.setItem("partyCurrencyCode", data.CURRENCY_CODE.toString());
+                localStorage.setItem("partyCurrencyRate", data.CONV_RATE.toString());
+
                 this.currencyConvRate=data.CONV_RATE;
 
                 this.posCurrencyReceiptForm.controls.partyCurr.setValue(
@@ -1275,81 +1278,100 @@ export class PosCurrencyReceiptComponent implements OnInit {
       case "customerCode":
         this.overlayCustomerCode.showOverlayPanel(event);
         break;
+        case "currencyCode":
+          this.overlayCustomerCode.showOverlayPanel(event);
+          break;
       default:
         console.warn(`Unknown form control name: ${formControlName}`);
     }
   }
 
-
-
-  SPvalidateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+  SPvalidateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string, isCurrencyField: boolean) {
     LOOKUPDATA.SEARCH_VALUE = event.target.value;
 
     if (event.target.value === '' || this.viewOnly === true) {
-      this.customerData = null;
+        if (isCurrencyField) {
+            let currencyRate = localStorage.getItem("partyCurrencyRate");
+            let currencyCode = localStorage.getItem("partyCurrencyCode");
 
-      const controlsToReset = ['customerName', 'mobile', 'email', 'partyAddress'];
+            this.posCurrencyReceiptForm.controls.partyCurrency.setValue(currencyCode);
+            this.posCurrencyReceiptForm.controls.partyCurrencyRate.setValue(
+                this.comService.decimalQuantityFormat(this.comService.emptyToZero(currencyRate), "RATE")
+            );
 
-      controlsToReset.forEach(control => {
-        this.posCurrencyReceiptForm.controls[control].setValue('');
-      });
+            
 
-      return;
+            this.renderer.selectRootElement('#currencyCode').select();
+        } else {
+            this.customerData = null;
+            const controlsToReset = ['customerName', 'mobile', 'email', 'partyAddress'];
+            controlsToReset.forEach(control => {
+                this.posCurrencyReceiptForm.controls[control].setValue('');
+            });
+        }
+        return;
     }
 
     let param = {
-      "PAGENO": LOOKUPDATA.PAGENO,
-      "RECORDS": LOOKUPDATA.RECORDS,
-      "LOOKUPID": LOOKUPDATA.LOOKUPID,
-      "WHERECONDITION": LOOKUPDATA.WHERECONDITION,
-      "searchField": LOOKUPDATA.SEARCH_FIELD,
-      "searchValue": LOOKUPDATA.SEARCH_VALUE
+        "PAGENO": LOOKUPDATA.PAGENO,
+        "RECORDS": LOOKUPDATA.RECORDS,
+        "LOOKUPID": LOOKUPDATA.LOOKUPID,
+        "WHERECONDITION": LOOKUPDATA.WHERECONDITION,
+        "searchField": LOOKUPDATA.SEARCH_FIELD,
+        "searchValue": LOOKUPDATA.SEARCH_VALUE
     };
 
     this.comService.showSnackBarMsg('MSG81447');
 
     let Sub: Subscription = this.dataService.postDynamicAPI('MasterLookUp', param)
-      .subscribe((result) => {
-        this.comService.closeSnackBarMsg();
+        .subscribe((result) => {
+            this.comService.closeSnackBarMsg();
+            let data = result.dynamicData[0];
 
-        let data = result.dynamicData[0];
+            if (data && data.length > 0) {
+                if (LOOKUPDATA.FRONTENDFILTER && LOOKUPDATA.SEARCH_VALUE !== '') {
+                    let searchResult = this.comService.searchAllItemsInArray(data, LOOKUPDATA.SEARCH_VALUE);
 
-        if (data && data.length > 0) {
-          if (LOOKUPDATA.FRONTENDFILTER && LOOKUPDATA.SEARCH_VALUE !== '') {
-            let searchResult = this.comService.searchAllItemsInArray(data, LOOKUPDATA.SEARCH_VALUE);
+                    if (searchResult && searchResult.length > 0) {
+                        let matchedItem = searchResult[0];
 
-            if (searchResult && searchResult.length > 0) {
-              let matchedItem = searchResult[0];
-              this.customerData = matchedItem;
-              this.posCurrencyReceiptForm.controls.customerName.setValue(
-                matchedItem.NAME
-              );
-              this.posCurrencyReceiptForm.controls.mobile.setValue(
-                matchedItem.MOBILE
-              );
+                        if (isCurrencyField) {
+                            this.posCurrencyReceiptForm.controls.partyCurrency.setValue(matchedItem.Currency);
+                            this.posCurrencyReceiptForm.controls.partyCurrencyRate.setValue(
+                                this.comService.decimalQuantityFormat(matchedItem['Conv Rate'], "RATE")
+                            );
+                            this.currencyCode=matchedItem.Currency;
+                            this.currencyConvRate=(matchedItem['Conv Rate']);
+                        } else {
+                            this.customerData = matchedItem;
+                            this.posCurrencyReceiptForm.controls.customerName.setValue(matchedItem.NAME);
+                            this.posCurrencyReceiptForm.controls.mobile.setValue(matchedItem.MOBILE);
+                            this.posCurrencyReceiptForm.controls.email.setValue(matchedItem.EMAIL);
+                            this.posCurrencyReceiptForm.controls.partyAddress.setValue(matchedItem.ADDRESS);
+                        }
+                    } else {
+                        this.comService.toastErrorByMsgId('No data found');
+                        LOOKUPDATA.SEARCH_VALUE = '';
+                        if (isCurrencyField) {
+                          let currencyRate = localStorage.getItem("partyCurrencyRate");
+                          let currencyCode = localStorage.getItem("partyCurrencyCode");
 
-              this.posCurrencyReceiptForm.controls.email.setValue(
-                matchedItem.EMAIL
-              );
+                          this.posCurrencyReceiptForm.controls.partyCurrency.setValue(currencyCode);
+                          this.posCurrencyReceiptForm.controls.partyCurrencyRate.setValue(
+                              this.comService.decimalQuantityFormat(this.comService.emptyToZero(currencyRate), "RATE")
+                          );
 
-              this.posCurrencyReceiptForm.controls.partyAddress.setValue(
-                matchedItem.ADDRESS
-              );
-
-
-
-            } else {
-              this.comService.toastErrorByMsgId('No data found');
-              LOOKUPDATA.SEARCH_VALUE = '';
+                          this.renderer.selectRootElement('#currencyCode').select();
+                      }
+                    }
+                }
             }
-          }
-        }
-      }, err => {
-        this.comService.toastErrorByMsgId('MSG2272');
-      });
+        }, err => {
+            this.comService.toastErrorByMsgId('MSG2272');
+        });
 
     this.subscriptions.push(Sub);
-  }
+}
 
   continue(){}
 
