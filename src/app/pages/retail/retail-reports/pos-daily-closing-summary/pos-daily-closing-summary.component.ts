@@ -9,7 +9,7 @@ import { CommonServiceService } from "src/app/services/common-service.service";
 import { PosSalesmanDetailsComponent } from "./pos-salesman-details/pos-salesman-details.component";
 import { PosDailyClosingBranchComponent } from "./pos-daily-closing-branch/pos-daily-closing-branch.component";
 import { SuntechAPIService } from "src/app/services/suntech-api.service";
-import { Observable, Subscription } from "rxjs";
+import { forkJoin, Observable, Subscription } from "rxjs";
 import { ToastrService } from "ngx-toastr";
 import Swal from "sweetalert2";
 import { stringify } from "querystring";
@@ -90,7 +90,8 @@ export class PosDailyClosingSummaryComponent implements OnInit {
   VocTypeParam: any = [];
   DiamonDivsnTableData: any[] = [];
   salesmanSummaryArr: any[] = [];
-  receiptSummaryArr: any[] = [];
+  transactionWiseSummaryArr: any[] = [];
+  scrapPurchseSummaryArr: any[] =[];
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -102,19 +103,25 @@ export class PosDailyClosingSummaryComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.comService.showSnackBarMsg('MSG81447');
+  
     this.dropdownValueFetch().subscribe(() => {
-      this.prefillScreenValues();
-      this.metalInsert();
-      this.diamondInsert();
-      this.salesManclosingInsert();
-      this.vocherInsert();
-
-
-      
-        // this.closingPurchaseNetInsert();
-        // this.posClsngSmanSummaryNet();
-    })
-    
+      const insertObservables = [
+        this.prefillScreenValues(),
+        this.metalInsert(),
+        this.diamondInsert(),
+        this.vocherInsert(),
+        this.closingPurchaseNetInsert(),
+        this.posClsngSmanSummaryNet(),
+        this.salesManclosingInsert()
+      ];
+  
+      // Use forkJoin to wait till observable calls to complete
+      forkJoin(insertObservables).subscribe(() => {
+        this.comService.closeSnackBarMsg();
+      });
+    });
+  
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
   }
@@ -130,12 +137,13 @@ export class PosDailyClosingSummaryComponent implements OnInit {
   }
 
   metalInsert() {
+    // this.comService.showSnackBarMsg('MSG81447');
     let API = "UspPosClosingMetalSalesNet";
     let postData = {
       "strSalType": 0,
       "strBranch": this.branchCode,
-      "strFmDate": this.dateToPass.fromDate,
-      "strToDate": this.dateToPass.toDate,
+      "strFmDate": this.formatDateToYYYYMMDD(this.dateToPass.fromDate),
+      "strToDate": this.formatDateToYYYYMMDD(this.dateToPass.toDate),
       "str_MGroupBy": this.posDailyClosingSummaryForm.value.metalType,
     };
 
@@ -143,8 +151,10 @@ export class PosDailyClosingSummaryComponent implements OnInit {
       .postDynamicAPI(API, postData)
       .subscribe(
         (result) => {
-          if (result) {                      
-            this.tableData.push(result.dynamicData[0][0]);
+          if (result) {
+            // console.log('UspPosClosingMetalSalesNet', result.dynamicData[0])                  
+            this.tableData = result.dynamicData[0];
+            // this.comService.closeSnackBarMsg();
           }
         },
         (err) => alert(err)
@@ -153,12 +163,13 @@ export class PosDailyClosingSummaryComponent implements OnInit {
   }
 
   diamondInsert() {
+    // this.comService.showSnackBarMsg('MSG81447');
     let API = "UspPosClsngDiamondSalesNet";
     let postData = {
       "strSalType": 0,      
       "strBranch": this.branchCode,
-      "strFmDate": this.dateToPass.fromDate,
-      "strToDate": this.dateToPass.toDate,
+      "strFmDate": this.formatDateToYYYYMMDD( this.dateToPass.fromDate ),
+      "strToDate": this.formatDateToYYYYMMDD( this.dateToPass.toDate ),
       "str_MGroupBy": this.posDailyClosingSummaryForm.value.diamondType,
     };
 
@@ -167,28 +178,9 @@ export class PosDailyClosingSummaryComponent implements OnInit {
       .subscribe(
         (result) => {
           if (result) {
-            this.DiamonDivsnTableData.push(result.dynamicData[0][0])               
-          }
-        },
-        (err) => alert(err)
-      );
-    this.subscriptions.push(Sub);
-  }
-
-  salesManclosingInsert() {
-    let API = "UspOpsClsngSmanSummaryNet";
-    let postData = {    
-      "strBranch": this.branchCode,
-      "strFmDate": this.dateToPass.fromDate,
-      "strToDate": this.dateToPass.toDate,
-    };
-
-    let Sub: Subscription = this.dataService
-      .postDynamicAPI(API, postData)
-      .subscribe(
-        (result) => {
-          if (result) {                
-            this.salesmanSummaryArr.push(result.dynamicData[0][0]) 
+            // console.log('UspPosClsngDiamondSalesNet', result.dynamicData[0])                  
+            this.DiamonDivsnTableData = result.dynamicData[0]; 
+            // this.comService.closeSnackBarMsg();             
           }
         },
         (err) => alert(err)
@@ -197,20 +189,22 @@ export class PosDailyClosingSummaryComponent implements OnInit {
   }
 
   vocherInsert() {
+    // this.comService.showSnackBarMsg('MSG81447');
     let API = "UspPosClosingVoucherSummaryNet";
     let postData = {    
       "strBranch": this.branchCode,
-      "strFmDate": this.dateToPass.fromDate,
-      "strToDate": this.dateToPass.toDate,
+      "strFmDate": this.formatDateToYYYYMMDD( this.dateToPass.fromDate ),
+      "strToDate": this.formatDateToYYYYMMDD( this.dateToPass.toDate ),
     };
 
     let Sub: Subscription = this.dataService
       .postDynamicAPI(API, postData)
       .subscribe(
         (result) => {
-          if (result) {
-            console.log('metalInsert API',result);                       
-            this.receiptSummaryArr = result.dynamicData[0];
+          if (result) {      
+            // console.log('UspPosClosingVoucherSummaryNet', result.dynamicData[0])                 
+            this.transactionWiseSummaryArr = result.dynamicData[0];
+            // this.comService.closeSnackBarMsg(); 
           }
         },
         (err) => alert(err)
@@ -219,22 +213,22 @@ export class PosDailyClosingSummaryComponent implements OnInit {
   }
 
   closingPurchaseNetInsert() {
+    // this.comService.showSnackBarMsg('MSG81447');
     let API = "UspPosClosingPosPurchaseNet";
     let postData = {    
       "strBranch": this.branchCode,
-      "strFmDate": this.posDailyClosingSummaryForm.value.fromDate,
-      "strToDate": this.posDailyClosingSummaryForm.value.toDate,
+      "strFmDate": this.formatDateToYYYYMMDD( this.dateToPass.fromDate ),
+      "strToDate": this.formatDateToYYYYMMDD( this.dateToPass.toDate ),
     };
 
     let Sub: Subscription = this.dataService
       .postDynamicAPI(API, postData)
       .subscribe(
         (result) => {
-          if (result.response) {
-            if (result.status == "Success") {
-              console.log(result.response);                      
-              this.tableData = [];
-            }
+          if (result) {
+            // console.log('UspPosClosingPosPurchaseNet', result.dynamicData[0])                     
+            this.scrapPurchseSummaryArr = result.dynamicData[0];
+            // this.comService.closeSnackBarMsg(); 
           }
         },
         (err) => alert(err)
@@ -243,6 +237,7 @@ export class PosDailyClosingSummaryComponent implements OnInit {
   }
 
   posClsngSmanSummaryNet(){
+    // this.comService.showSnackBarMsg('MSG81447');
     let API = "UspPosClsngSmanSummaryNet";
     let postData = { 
       "SalType": 0,   
@@ -255,15 +250,66 @@ export class PosDailyClosingSummaryComponent implements OnInit {
       .postDynamicAPI(API, postData)
       .subscribe(
         (result) => {
-          if (result.response) {
-            console.log(result.response);                      
-              this.tableData = [];
+          if (result) {
+            // console.log('UspPosClsngSmanSummaryNet', result.dynamicData[0])
+            this.salesmanSummaryArr = result.dynamicData[0];
+            // this.comService.closeSnackBarMsg(); 
           } 
         },
         (err) => alert(err)
       );
     this.subscriptions.push(Sub);
   }
+
+  setDateValue(event: any){
+    if(event.FromDate){
+      this.posDailyClosingSummaryForm.controls.fromDate.setValue(event.FromDate);
+      this.dateToPass.fromDate = event.FromDate
+    }
+    else if(event.ToDate){
+      this.posDailyClosingSummaryForm.controls.toDate.setValue(event.ToDate);
+      this.dateToPass.toDate = event.ToDate
+    }
+
+    this.comService.showSnackBarMsg('MSG81447');
+    const insertObservables = [
+      this.metalInsert(),
+      this.diamondInsert(),
+      this.salesManclosingInsert(),
+      this.vocherInsert(),
+      this.closingPurchaseNetInsert(),
+      this.posClsngSmanSummaryNet()
+    ];
+
+    forkJoin(insertObservables).subscribe(() => {
+      this.comService.closeSnackBarMsg();
+    });
+  }
+
+
+  salesManclosingInsert() {
+    // this.comService.showSnackBarMsg('MSG81447');
+    let API = "UspOpsClsngSmanSummaryNet";
+    let postData = {    
+      "strBranch": this.branchCode,
+      "strFmDate": this.formatDateToYYYYMMDD( this.dateToPass.fromDate ),
+      "strToDate": this.formatDateToYYYYMMDD( this.dateToPass.toDate ),
+    };
+
+    let Sub: Subscription = this.dataService
+      .postDynamicAPI(API, postData)
+      .subscribe(
+        (result) => {
+          if (result) {       
+            // console.log('UspOpsClsngSmanSummaryNet', result.dynamicData[0])          
+            // this.comService.closeSnackBarMsg();    
+          }
+        },
+        (err) => alert(err)
+      );
+    this.subscriptions.push(Sub);
+  }
+
 
   formSubmit() {
     
@@ -364,19 +410,6 @@ export class PosDailyClosingSummaryComponent implements OnInit {
     else{
       this.popupVisible = false;
       this.posDailyClosingSummaryForm.controls.templateName.setValue(null)
-    }
-  }
-
-  setDateValue(event: any){
-    if(event.FromDate){
-      this.posDailyClosingSummaryForm.controls.fromDate.setValue(event.FromDate);
-      this.dateToPass.fromDate = event.FromDate
-      // console.log(event.FromDate)
-    }
-    else if(event.ToDate){
-      this.posDailyClosingSummaryForm.controls.toDate.setValue(event.ToDate);
-      this.dateToPass.toDate = event.ToDate
-      // console.log(this.posDailyClosingSummaryForm)
     }
   }
 
