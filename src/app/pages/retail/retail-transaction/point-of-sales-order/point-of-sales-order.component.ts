@@ -9006,7 +9006,7 @@ export class PointOfSalesOrderComponent implements OnInit {
           "LOW_QUALITY_A_K_A": "",
           "POSKNOWNABOUT": 0
         },
-        retailReceipt: null,
+        retailReceipt: this.receiptDetailsList,
         userName: this.comFunc.userName,
         editReason:
         this.content?.FLAG == "EDIT" ? this.comFunc.EditDetail.REASON : "",
@@ -9118,7 +9118,7 @@ export class PointOfSalesOrderComponent implements OnInit {
                   this.snackBar.open('POS Updated Successfully', 'OK');
                   this.isNewButtonDisabled = false;
 
-                  this.vocDataForm.controls['fcn_voc_no'].setValue(res.response.retailSales.VOCNO);
+                  this.vocDataForm.controls['fcn_voc_no'].setValue(res.response.salesOrder.VOCNO);
 
                   // this.close('reloadMainGrid');
                   if (this.posPlanetIssuing && this.customerDataForm.value.tourVatRefuncYN && this.customerDataForm.value.tourVatRefundNo == '') {
@@ -9160,7 +9160,7 @@ export class PointOfSalesOrderComponent implements OnInit {
                 // this.close('reloadMainGrid');
                 this.isNewButtonDisabled = false;
 
-                this.vocDataForm.controls['fcn_voc_no'].setValue(res.response.retailSales.VOCNO);
+                this.vocDataForm.controls['fcn_voc_no'].setValue(res.response.salesOrder.VOCNO);
 
                 console.log('==================tourVatRefuncYN==================');
                 const traNo = this.customerDataForm.value.tourVatRefundNo || '';
@@ -9180,7 +9180,7 @@ export class PointOfSalesOrderComponent implements OnInit {
                 this.saveAndContinue(type);
                 // let mid;
                 // mid = res.response.retailSales.MID;
-                this.midForInvoce = res.response.retailSales.MID;
+                this.midForInvoce = res.response.salesOrder.MID;
                 // this.content.MID = res.response.retailSales.MID;
                 // console.log(this.content.MID)
                 if (this.midForInvoce) {

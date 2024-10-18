@@ -1123,8 +1123,8 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
         SGST_AMOUNTFC: 0,
         SGST_AMOUNTCC: 0,
         IGST_PER: this.posCurrencyReceiptDetailsForm.value.vat || 0,
-        IGST_AMOUNTFC: this.posCurrencyReceiptDetailsForm.value.vatcc.amountCc?.replace(/,/g, '') || 0,
-        IGST_AMOUNTCC: this.posCurrencyReceiptDetailsForm.value.vatcc.amountCc?.replace(/,/g, '') || 0,
+        IGST_AMOUNTFC: this.posCurrencyReceiptDetailsForm.value.vatcc?.replace(/,/g, '') || 0,
+        IGST_AMOUNTCC: this.posCurrencyReceiptDetailsForm.value.vatcc?.replace(/,/g, '') || 0,
         CGST_ACCODE: "",
         SGST_ACCODE: "",
         IGST_ACCODE: this.igstAccode,
@@ -1153,11 +1153,11 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
             : 0,
         COMM_TAXAMOUNTCC:
           this.posCurrencyReceiptDetailsForm.value.modeOfSelect == "Credit Card"
-            ? this.posCurrencyReceiptDetailsForm.value.vatcc.amountCc?.replace(/,/g, '') || 0
+            ? this.posCurrencyReceiptDetailsForm.value.vatcc?.replace(/,/g, '') || 0
             : 0,
         COMM_TAXAMOUNTFC:
           this.posCurrencyReceiptDetailsForm.value.modeOfSelect == "Credit Card"
-            ? this.posCurrencyReceiptDetailsForm.value.vatcc.amountCc?.replace(/,/g, '') || 0
+            ? this.posCurrencyReceiptDetailsForm.value.vatcc?.replace(/,/g, '') || 0
             : 0,
         DT_TDS_CODE: "",
         TDS_PER: 0,

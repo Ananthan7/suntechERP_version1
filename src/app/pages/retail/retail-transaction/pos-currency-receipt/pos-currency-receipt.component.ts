@@ -46,7 +46,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
     { title: "Curr.Rate", field: "CURRENCY_RATE" },
     { title: "Amount", field: "AMOUNTFC" },
     { title: "VAT_E_", field: "IGST_AMOUNTCC" },
-    { title: "Total", field: "NET_TOTAL" },
+    { title: "Total", field: "TOTAL_AMOUNTCC" },
   ];
 
   currencyData: MasterSearchModel = {
@@ -437,9 +437,13 @@ export class PosCurrencyReceiptComponent implements OnInit {
           );
 
           this.posCurrencyDetailsData.forEach((item) => {
-            item.NET_TOTAL = (
-              parseFloat(item.AMOUNTCC) + parseFloat(item.IGST_AMOUNTCC)
-            ).toFixed(2);
+            item.TOTAL_AMOUNTCC=this.comService.decimalQuantityFormat(
+              this.comService.emptyToZero(item.TOTAL_AMOUNTCC),
+              "AMOUNT"
+            );
+            // item.NET_TOTAL = (
+            //   parseFloat(item.AMOUNTCC) + parseFloat(item.IGST_AMOUNTCC)
+            // ).toFixed(2);
             item.CURRENCY_RATE = this.comService.decimalQuantityFormat(
               this.comService.emptyToZero(item.CURRENCY_RATE),
               "RATE"
@@ -741,8 +745,8 @@ export class PosCurrencyReceiptComponent implements OnInit {
       PARTY_CURRENCY: this.posCurrencyReceiptForm.value.partyCurrency || "",
       PARTY_CURR_RATE:
         this.posCurrencyReceiptForm.value.partyCurrencyRate || "0",
-      TOTAL_AMOUNTFC: this.posCurrencyReceiptForm.value.partyAmountFC || 0,
-      TOTAL_AMOUNTCC: this.posCurrencyReceiptForm.value.partyAmountFC || 0,
+      TOTAL_AMOUNTFC: this.posCurrencyReceiptForm.value.partyAmountFC?.replace(/,/g, '') || 0,
+      TOTAL_AMOUNTCC: this.posCurrencyReceiptForm.value.partyAmountFC?.replace(/,/g, '') || 0,
       REMARKS: this.posCurrencyReceiptForm.value.narration || "",
       SYSTEM_DATE: "2023-10-10T11:05:50.756Z",
       NAVSEQNO: 0,
@@ -755,8 +759,8 @@ export class PosCurrencyReceiptComponent implements OnInit {
       HHACCOUNT_HEAD: this.posCurrencyReceiptForm.value.partyCodeDesc || "",
       SALESPERSON_CODE: this.posCurrencyReceiptForm.value.enteredby,
       SALESPERSON_NAME: this.posCurrencyReceiptForm.value.enteredbyuser,
-      BALANCE_FC: this.posCurrencyReceiptForm.value.partyAmountFC || 0,
-      BALANCE_CC: this.posCurrencyReceiptForm.value.partyAmountFC || 0,
+      BALANCE_FC: this.posCurrencyReceiptForm.value.partyAmountFC?.replace(/,/g, '') || 0,
+      BALANCE_CC: this.posCurrencyReceiptForm.value.partyAmountFC?.replace(/,/g, '') || 0,
       AUTHORIZEDPOSTING: false,
       AUTOGENREF: "",
       AUTOGENMID: 0,
@@ -782,8 +786,8 @@ export class PosCurrencyReceiptComponent implements OnInit {
       GST_STATE_CODE: "",
       GST_NUMBER: "",
       GST_TYPE: "",
-      GST_TOTALFC: this.posCurrencyReceiptForm.value.totalTax.amountCc?.replace(/,/g, '') || 0,
-      GST_TOTALCC: this.posCurrencyReceiptForm.value.totalTax.amountCc?.replace(/,/g, '') || 0,
+      GST_TOTALFC: this.posCurrencyReceiptForm.value.totalTax?.replace(/,/g, '') || 0,
+      GST_TOTALCC: this.posCurrencyReceiptForm.value.totalTax?.replace(/,/g, '') || 0,
       DOC_REF: "",
       REC_STATUS: "",
       CUSTOMER_NAME: this.posCurrencyReceiptForm.value.customerName || "",
@@ -1182,9 +1186,14 @@ export class PosCurrencyReceiptComponent implements OnInit {
     const preItemIndex = this.posCurrencyDetailsData.findIndex(
       (data: any) => data.SRNO.toString() == postData.SRNO.toString()
     );
-    postData.NET_TOTAL = this.comService.commaSeperation( (
-      this.comService.decimalQuantityFormat( this.comService.emptyToZero(postData.AMOUNTFC) + this.comService.emptyToZero(postData.IGST_AMOUNTFC),'AMOUNT'
-      )  ))
+
+    postData.TOTAL_AMOUNTCC=this.comService.decimalQuantityFormat(
+      this.comService.emptyToZero(postData.TOTAL_AMOUNTCC),
+      "AMOUNT"
+    );
+    // postData.NET_TOTAL = this.comService.commaSeperation( (
+    //   this.comService.decimalQuantityFormat( this.comService.emptyToZero(postData.AMOUNTFC) + this.comService.emptyToZero(postData.IGST_AMOUNTFC),'AMOUNT'
+    //   )  ))
 
     if (postData?.isUpdate && preItemIndex !== -1) {
       this.posCurrencyDetailsData[preItemIndex] = postData;
