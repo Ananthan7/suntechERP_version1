@@ -3745,10 +3745,12 @@ export class AddPosComponent implements OnInit {
             // this.customerDetails?.CITY ||
             '',
           ZIPCODE: this.customerDetails?.ZIPCODE || '',
-          COUNTRY_CODE:
-            this.customerDetails.COUNTRY_CODE ||
-            // this.customerDetails?.COUNTRY_CODE ||
-            '',
+          COUNTRY_CODE: (this.customerDetails.COUNTRY_CODE || '').split('-')[0],
+
+          // COUNTRY_CODE:
+          //   this.customerDetails.COUNTRY_CODE ||
+          //   // this.customerDetails?.COUNTRY_CODE ||
+          //   '',
           EMAIL: this.customerDetailForm.value.fcn_cust_detail_email || '',
           TEL1: this.customerDetails?.TEL1 || '',
           TEL2:
@@ -5084,7 +5086,7 @@ export class AddPosComponent implements OnInit {
       EXTRA_STOCK_CODE: '',
       // EXTRA_STOCK_CODE: items?.EXTRA_STOCK_CODE || '',
       FLAGESTK: items?.FLAGESTK || 0,
-      OT_TRANSFER_TIME: items?.OT_TRANSFER_TIME || '',
+      OT_TRANSFER_TIME: items?.OT_TRANSFER_TIME ? new Date(items.OT_TRANSFER_TIME).toISOString() : '',
       // IssueGiftVoucher:
       //   this.comFunc.stringToBoolean(items?.ISSUEGIFTVOUCHER) || false,
 
@@ -12800,10 +12802,12 @@ export class AddPosComponent implements OnInit {
         this.customerDetailForm.value.fcn_cust_detail_address ||
         // this.customerDetails?.ADDRESS ||
         '',
-      COUNTRY_CODE:
-        this.customerDetails.COUNTRY_CODE ||
-        // this.customerDetails?.COUNTRY_CODE ||
-        '',
+        COUNTRY_CODE: (this.customerDetails.COUNTRY_CODE || '').split('-')[0],
+
+      // COUNTRY_CODE:
+      //   this.customerDetails.COUNTRY_CODE ||
+      //   // this.customerDetails?.COUNTRY_CODE ||
+      //   '',
       CUST_Language: this.customerDetails?.CUST_Language || '',
 
       // PRINT_COUNT: '0',

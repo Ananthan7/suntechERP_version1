@@ -585,7 +585,6 @@
                     matInput
                     [readonly]="flag === 'VIEW'"
                     formControlName="emailId"
-                    required
                     (input)="onInput($event, 40)"
                   />
                   <!-- <mat-error *ngIf="posCustomerMasterMainForm.get('emailId')?.hasError('required')">Email is required.</mat-error> -->
@@ -856,7 +855,7 @@
                   for="inputPassword"
                   class="col-sm-4 col-form-label"
                   id="ID026"
-                  >VAT NO *</label
+                  >VAT NO</label
                 >
                 <div class="col-md-8">
                   <mat-form-field style="width: 100%" appearance="outline">
@@ -864,7 +863,7 @@
                       matInput
                       [readonly]="flag === 'VIEW'"
                       type="number"
-                      (input)="onInput($event, 15)"
+                      (input)="onInput($event, 15, 'vat')"
                       (keydown)="preventInvalidInput($event)"
                       formControlName="vat"
                     />

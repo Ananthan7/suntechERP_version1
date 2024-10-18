@@ -1,6 +1,12 @@
 <div class="items border-bottom">
     <div class="col-md-10">
         <div class="d-flex justify-content-start text-start">
+            <div class="p-1" *ngIf="isViewContinue">
+                <button type="button" class="btn btn-primary text-center"
+                    (click)="continueClicked()">
+                    Continue
+                </button>
+            </div>
             <div class="p-1" *ngIf="isViewSave">
                 <button type="button" class="btn btn-primary text-center"
                     *ngIf="!isloading; else elseBlock"
@@ -45,12 +51,7 @@
                     Stock
                 </button>
             </div>
-            <div class="p-1" *ngIf="isViewContinue">
-                <button type="button" class="btn btn-primary text-center"
-                    (click)="continueClicked()">
-                    Continue
-                </button>
-            </div>
+           
             <div class="p-1" *ngIf="isViewAuditTrail">
                 <button type="button" class="btn btn-primary text-center"
                     [disabled]="disableAuditTrail"
