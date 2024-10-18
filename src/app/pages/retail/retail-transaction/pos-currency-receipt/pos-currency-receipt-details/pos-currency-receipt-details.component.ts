@@ -664,6 +664,20 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
     // this.getGSTDetails(e.ACCODE);
   }
 
+  setHeaderCurrencyRate(currency: any,currRate:any) {
+    if (currency == this.headerCurrency) {
+      this.posCurrencyReceiptDetailsForm.controls.currencyRate.setValue(
+        this.comService.decimalQuantityFormat(this.queryParams.currencyConvRate, "RATE")
+      );
+
+    }
+    else{
+      this.posCurrencyReceiptDetailsForm.controls.currencyRate.setValue(
+        this.comService.decimalQuantityFormat(currRate, "RATE")
+      );
+    }
+  }
+
   CurrencySelected(e: any) {
     console.log(e);
     this.resetVatFields();
@@ -671,9 +685,11 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
       e.Currency
     );
 
-    this.posCurrencyReceiptDetailsForm.controls.currencyRate.setValue(
-      this.comService.decimalQuantityFormat(e["Conv Rate"], "RATE")
-    );
+    this.setHeaderCurrencyRate(e.Currency,e["Conv Rate"])
+
+    // this.posCurrencyReceiptDetailsForm.controls.currencyRate.setValue(
+    //   this.comService.decimalQuantityFormat(e["Conv Rate"], "RATE")
+    // );
 
     this.compCurrencyRate = this.comService.decimalQuantityFormat(e["Conv Rate"], "RATE") ?? "";
 
@@ -867,14 +883,18 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
                 else {
                   const selectedAccount = data.find((entry: any) => entry.DEFAULT_CURRENCY === 1);
 
+
                   this.posCurrencyReceiptDetailsForm.controls.currencyCode.setValue(
                     selectedAccount.CURRENCY_CODE
                   );
 
-                  this.posCurrencyReceiptDetailsForm.controls.currencyRate.setValue(
-                    this.comService.decimalQuantityFormat(selectedAccount.CONV_RATE, 'RATE')
+                  this.setHeaderCurrencyRate(selectedAccount.CURRENCY_CODE,selectedAccount.CONV_RATE)
 
-                  );
+
+                  // this.posCurrencyReceiptDetailsForm.controls.currencyRate.setValue(
+                  //   this.comService.decimalQuantityFormat(selectedAccount.CONV_RATE, 'RATE')
+
+                  // );
 
                   localStorage.setItem("currencyCode", selectedAccount.CURRENCY_CODE.toString());
                   localStorage.setItem("currencyRate", selectedAccount.CONV_RATE.toString());
@@ -1057,10 +1077,10 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
         ACCODE: this.posCurrencyReceiptDetailsForm.value.debitAmount,
         CURRENCY_CODE: this.posCurrencyReceiptDetailsForm.value.currencyCode,
         CURRENCY_RATE: this.posCurrencyReceiptDetailsForm.value.currencyRate,
-        AMOUNTFC: this.posCurrencyReceiptDetailsForm.value.amountFc?.replace(/,/g, '')||0,
+        AMOUNTFC: this.posCurrencyReceiptDetailsForm.value.amountFc?.replace(/,/g, '') || 0,
         // "AMOUNTFC": this.posCurrencyReceiptDetailsForm.value.amountFc,
-        AMOUNTCC: this.posCurrencyReceiptDetailsForm.value.amountCc.replace(/,/g, '')||0,
-        HEADER_AMOUNT: this.posCurrencyReceiptDetailsForm.value.amountCc?.replace(/,/g, '')||0,
+        AMOUNTCC: this.posCurrencyReceiptDetailsForm.value.amountCc.replace(/,/g, '') || 0,
+        HEADER_AMOUNT: this.posCurrencyReceiptDetailsForm.value.amountCc?.replace(/,/g, '') || 0,
         CHEQUE_NO: CHEQUE_NO.toString() || "",
         CHEQUE_DATE: CHEQUE_DATE
           ? this.formatDateToISO(CHEQUE_DATE)
@@ -1133,11 +1153,11 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
             : 0,
         COMM_TAXAMOUNTCC:
           this.posCurrencyReceiptDetailsForm.value.modeOfSelect == "Credit Card"
-            ? this.posCurrencyReceiptDetailsForm.value.vatcc.amountCc?.replace(/,/g, '')||0
+            ? this.posCurrencyReceiptDetailsForm.value.vatcc.amountCc?.replace(/,/g, '') || 0
             : 0,
         COMM_TAXAMOUNTFC:
           this.posCurrencyReceiptDetailsForm.value.modeOfSelect == "Credit Card"
-            ? this.posCurrencyReceiptDetailsForm.value.vatcc.amountCc?.replace(/,/g, '')||0
+            ? this.posCurrencyReceiptDetailsForm.value.vatcc.amountCc?.replace(/,/g, '') || 0
             : 0,
         DT_TDS_CODE: "",
         TDS_PER: 0,
@@ -1284,7 +1304,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
   changeAmountLc(event: any) {
     this.isForeignCurrency = false;
     const amountLc = this.comService.emptyToZero(event.target.value);
-    const currencyRate=this.comService.emptyToZero(this.posCurrencyReceiptDetailsForm.value.currencyRate) ?? 1
+    const currencyRate = this.comService.emptyToZero(this.posCurrencyReceiptDetailsForm.value.currencyRate) ?? 1
     if (amountLc === 0) {
       this.handleZeroAmount();
       return;
@@ -1292,7 +1312,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
 
     this.resetCommissionAmount();
 
-    const amountFc = this.convertToForeignCurrency(amountLc,currencyRate);
+    const amountFc = this.convertToForeignCurrency(amountLc, currencyRate);
     const fcVatAmount = this.comService.FCToCC(
       this.posCurrencyReceiptDetailsForm.value.currencyCode,
       this.comService.emptyToZero(amountLc),
@@ -1312,7 +1332,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
 
   handleZeroAmount() {
     const dialogRef = this.dialogService.openDialog('Warning', this.comService.getMsgByID('MSG1031'), true);
-    const currencyRate=this.comService.emptyToZero(this.posCurrencyReceiptDetailsForm.value.currencyRate) ?? 1
+    const currencyRate = this.comService.emptyToZero(this.posCurrencyReceiptDetailsForm.value.currencyRate) ?? 1
 
     dialogRef.afterClosed().subscribe((action: any) => {
       if (action === 'OK') {
@@ -1322,7 +1342,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
         );
 
         // this.posCurrencyReceiptDetailsForm.controls.amountCc.setValue(lastUpdatedAmount);
-        const amountFc = this.convertToForeignCurrency(lastUpdatedAmount,currencyRate);
+        const amountFc = this.convertToForeignCurrency(lastUpdatedAmount, currencyRate);
         const amountLc = lastUpdatedAmount;
         const vatPrc = this.posCurrencyReceiptDetailsForm.controls.vat.value;
         const vatCc = this.calculateVat(amountFc, vatPrc);
@@ -1341,7 +1361,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
   convertToForeignCurrency(amountLc: any, conversionRate: any): any {
     return amountLc / conversionRate;
   }
-  
+
 
   // convertToForeignCurrency(amountLc: any): any {
   //   return this.comService.CCToFC(
@@ -1370,7 +1390,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
     );
 
     const amountWithVatFc = amountFc + this.comService.emptyToZero(this.posCurrencyReceiptDetailsForm.value.vatcc);
-    const amountWithVatLC = (vatAmountLC*(this.comService.emptyToZero(this.posCurrencyReceiptDetailsForm.value.currencyRate))) + parseFloat(amountLc.toString());
+    const amountWithVatLC = (vatAmountLC * (this.comService.emptyToZero(this.posCurrencyReceiptDetailsForm.value.currencyRate))) + parseFloat(amountLc.toString());
 
     this.posCurrencyReceiptDetailsForm.controls.amountCc.setValue(
       this.comService.commaSeperation(
@@ -1385,7 +1405,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
     );
 
 
-   
+
 
     this.posCurrencyReceiptDetailsForm.controls.totalFc.setValue(
       this.comService.commaSeperation(
@@ -1399,12 +1419,12 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
       )
     );
 
-    let headerVatAmount=this.comService.emptyToZero(amountWithVatLC)/this.comService.emptyToZero(this.queryParams.currencyConvRate);
+    let headerVatAmount = this.comService.emptyToZero(amountWithVatLC) / this.comService.emptyToZero(this.queryParams.currencyConvRate);
 
     this.posCurrencyReceiptDetailsForm.controls.headerVatAmt.setValue(
       this.comService.commaSeperation(
         this.comService.decimalQuantityFormat(
-          headerVatAmount,         
+          headerVatAmount,
           "AMOUNT"
         )
       )
@@ -1605,15 +1625,20 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
             if (searchResult && searchResult.length > 0) {
               let matchedItem = searchResult[0];
               this.resetVatFields();
-              this.posCurrencyReceiptDetailsForm.controls.currencyCode.setValue(
+
+               this.posCurrencyReceiptDetailsForm.controls.currencyCode.setValue(
                 matchedItem.Currency
               );
-              this.posCurrencyReceiptDetailsForm.controls.currencyRate.setValue(
-                this.comService.decimalQuantityFormat(
-                  matchedItem['Conv Rate'],
-                  "RATE"
-                )
-              );
+
+              this.setHeaderCurrencyRate(matchedItem.Currency, matchedItem['Conv Rate'])
+
+
+              // this.posCurrencyReceiptDetailsForm.controls.currencyRate.setValue(
+              //   this.comService.decimalQuantityFormat(
+              //     matchedItem['Conv Rate'],
+              //     "RATE"
+              //   )
+              // );
 
               this.compCurrencyRate = this.comService.decimalQuantityFormat(matchedItem['Conv Rate'],
                 "RATE") ?? "";
@@ -1622,13 +1647,13 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
             } else {
               this.comService.toastErrorByMsgId('No data found');
               LOOKUPDATA.SEARCH_VALUE = '';
-              let currencyRate=   localStorage.getItem("currencyRate");
-              let currencyCode= localStorage.getItem("currencyCode");
+              let currencyRate = localStorage.getItem("currencyRate");
+              let currencyCode = localStorage.getItem("currencyCode");
 
               this.posCurrencyReceiptDetailsForm.controls.currencyCode.setValue(
                 currencyCode
               );
-        
+
               this.posCurrencyReceiptDetailsForm.controls.currencyRate.setValue(
                 this.comService.decimalQuantityFormat(
                   this.comService.emptyToZero(currencyRate),
@@ -1637,7 +1662,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
               );
 
               this.renderer.selectRootElement('#currencyCode').select();
-           
+
             }
           }
         }
