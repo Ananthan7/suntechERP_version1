@@ -9,7 +9,7 @@ export class UppercaseDirective {
     private renderer: Renderer2,
   ) { }
 
-  @HostListener('keyup') onKeyUp() {
+  @HostListener('input') onInputChange() {
     this.transformToUppercase();
   }
 
