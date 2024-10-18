@@ -406,7 +406,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
       "",
       [
         Validators.maxLength(40),
-        Validators.required,
+        // Validators.required,
         Validators.email,
         this.domainValidator,
       ],
@@ -437,7 +437,6 @@ export class PosCustomerMasterMainComponent implements OnInit {
     language: [""],
     favCelebration: [""],
     vat: new FormControl("", [
-      Validators.required,
       Validators.maxLength(15),
       Validators.pattern("^[0-9]*$"),
     ]),
@@ -1403,6 +1402,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
   }
 
   customerSave() {
+    
     let POSTYPECOMPULSORY =
       this.comService.getCompanyParamValue("POSTYPECOMPULSORY");
     if (
@@ -2106,23 +2106,42 @@ export class PosCustomerMasterMainComponent implements OnInit {
     }
   }
 
+  preventInvalidInputs(event: KeyboardEvent) {
+    // Prevent any character that is not a digit
+    if (!/^\d$/.test(event.key)) {
+      event.preventDefault();
+    }
+  }
+  
+
+  
+
   onInput(event: any, limit: any, controller?: any, checkExistCustomer?: any) {
+
+    const input = event.target as HTMLInputElement;
+
+    setTimeout(() => {
+      if (input.value.length > limit) {
+        input.value = input.value.slice(0, limit);
+        if (controller) {
+          this.posCustomerMasterMainForm.controls[controller].setValue(input.value);
+        }
+      }
+    }, 0);
+    // if (input.value.length > limit) {
+    //   input.value = input.value.slice(0, limit);
+    // }
+
+    if (controller) {
+      this.posCustomerMasterMainForm.controls[controller].setValue(input.value);
+    }
+
     if (checkExistCustomer === "YES") {
       if (!this.posCustomerMasterMainForm.controls.country.value) {
         let message = `Please Select the Country First`;
         this.posCustomerMasterMainForm.controls[controller].setValue("");
         return this.openDialog("Warning", message, true);
       }
-    }
-
-    const input = event.target as HTMLInputElement;
-
-    if (input.value.length > limit) {
-      input.value = input.value.slice(0, limit);
-    }
-
-    if (controller) {
-      this.posCustomerMasterMainForm.controls[controller].setValue(input.value);
     }
 
     if (checkExistCustomer === "YES" && input.value.length > 6) {

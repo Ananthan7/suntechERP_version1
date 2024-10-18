@@ -108,7 +108,7 @@ export class MasterSearchComponent implements OnInit {
           this.searchValueChange()
         }
         this.dataSource = result.dynamicData[0];
-        this.setGridHeaders();
+        this.setGridHeaders();// common function for setting lookupid decimal formats
 
         if (this.MasterSearchData.LOOKUPID === 9) {
           this.dataSource = this.dataSource.map(item => {
@@ -162,6 +162,7 @@ export class MasterSearchComponent implements OnInit {
       // }
     })
   }
+  // common function for setting lookupid decimal formats
   dataSourceAlteration() {
     switch (this.MasterSearchData.LOOKUPID) {
       case 8:
@@ -281,7 +282,7 @@ export class MasterSearchComponent implements OnInit {
   setGridHeaders() {
     if (this.dataSource[0]) {
       this.dataSourceHead = Object.keys(this.dataSource[0]);
-      this.dataSourceAlteration()
+      this.dataSourceAlteration()// common function for setting lookupid decimal formats
     }
   }
   isNumber(value: string): boolean {

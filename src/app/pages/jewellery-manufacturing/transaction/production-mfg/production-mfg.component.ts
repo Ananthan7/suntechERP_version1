@@ -163,27 +163,27 @@ export class ProductionMfgComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    if (this.content?.FLAG) {
-      if (this.content.FLAG == 'VIEW' || this.content.FLAG == 'DELETE') {
-        this.viewMode = true;
-        // this.LOCKVOUCHERNO = true;
-      }
-      if (this.content.FLAG == 'EDIT') {
-        this.editMode = true;
-        // this.LOCKVOUCHERNO = true;
-      }
-      if (this.content.FLAG == 'DELETE') {
-        this.viewMode = true;
-        this.deleteClicked()
-      }
-      this.productionFrom.controls.FLAG.setValue(this.content.FLAG)
-      this.loadSavedData()
-    } else {
-      this.generateVocNo()
-      this.setInitialValue()
-      this.setCompanyCurrency()
-      this.getRateType()
-    }
+    // if (this.content?.FLAG) {
+    //   if (this.content.FLAG == 'VIEW' || this.content.FLAG == 'DELETE') {
+    //     this.viewMode = true;
+    //     // this.LOCKVOUCHERNO = true;
+    //   }
+    //   if (this.content.FLAG == 'EDIT') {
+    //     this.editMode = true;
+    //     // this.LOCKVOUCHERNO = true;
+    //   }
+    //   if (this.content.FLAG == 'DELETE') {
+    //     this.viewMode = true;
+    //     this.deleteClicked()
+    //   }
+    //   this.productionFrom.controls.FLAG.setValue(this.content.FLAG)
+    //   this.loadSavedData()
+    // } else {
+    //   this.generateVocNo()
+    //   this.setInitialValue()
+    //   this.setCompanyCurrency()
+    //   this.getRateType()
+    // }
   }
   setInitialValue() {
     this.productionFrom.controls.VOCDATE.setValue(this.commonService.currentDate)

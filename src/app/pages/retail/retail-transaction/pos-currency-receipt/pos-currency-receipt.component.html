@@ -6,11 +6,13 @@
       <i class="feather icon-x close-icon"></i>
     </button>
   </div>
+  
   <!-- modal header component -->
-  <modal-header (saveClick)="formSubmit()" [isViewAuditTrail]="viewOnly" [isViewPrint]="viewOnly"
-    [isViewPost]="viewOnly" [isViewDelete]="!viewOnly" (postClick)="AccountPosting()"
+
+  <modal-header (saveClick)="formSubmit()" [isViewContinue]="true" [isViewAuditTrail]="viewOnly" [isViewDelete]="false" [isViewMore]="false" [isViewPrint]="viewOnly"
+    [isViewPost]="viewOnly"  (postClick)="AccountPosting()" (continueClick)="continue()"
     (printClick)="printReceiptDetailsWeb()" (auditTrailClick)="auditTrailClick()" (cancelClick)="close()"
-    (deleteClick)="deleteCurrencyReceipt()"></modal-header>
+    ></modal-header>
   <audit-trail></audit-trail>
 </div>
 
@@ -41,7 +43,7 @@
                 <mat-form-field appearance="outline" style="width: -webkit-fill-available">
                   <!-- <mat-label></mat-label> -->
                   <input matInput #vocDateInput id="vocDateInput" [max]=" currentDate" [matDatepicker]="vocDate"
-                    name="vocDate" formControlName="vocDate" readonly placeholder="DD/MM/YYYY" DateValidation />
+                    name="vocDate" formControlName="vocDate" [readonly]="viewOnly" placeholder="DD/MM/YYYY" DateValidation />
                   <mat-datepicker-toggle matSuffix [for]="vocDate"></mat-datepicker-toggle>
                   <mat-datepicker [startAt]="currentDate" #vocDate></mat-datepicker>
                 </mat-form-field>
