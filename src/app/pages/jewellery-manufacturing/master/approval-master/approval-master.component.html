@@ -30,11 +30,20 @@
                             <label for="inputPassword" id="ID002" class="col-sm-3 col-form-label">Description *
                                 :</label>
                             <div class="col-md-6">
-                                <mat-form-field style="width: 100%;" appearance="outline">
+                                <!-- <mat-form-field style="width: 100%;" appearance="outline">
                                     <input type="text" matInput formControlName="description" autocomplete="off"
                                         maxlength="100" oninput="this.value = this.value.toUpperCase()"
+                                        (focusout)="checkSpecialCharacters();"
                                         [readonly]="viewMode" [disabled]="viewMode" appNoEmptySpace />
-                                </mat-form-field>
+                                </mat-form-field> -->
+
+                                <mat-form-field style="width: 100%;" appearance="outline">
+                                    <input type="text" matInput formControlName="description" autocomplete="off"
+                                           maxlength="100" oninput="this.value = this.value.toUpperCase()"
+                                           (focusout)="checkSpecialCharacters();"
+                                           [readonly]="viewMode" [disabled]="viewMode" appNoEmptySpace />
+                                  </mat-form-field>
+                                  
                             </div>
                         </div>
 

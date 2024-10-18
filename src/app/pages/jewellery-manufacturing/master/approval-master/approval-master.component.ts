@@ -103,6 +103,8 @@ export class ApprovalMasterComponent implements OnInit {
         this.deleteRecord()
       }
     }
+
+
   }
 
 
@@ -118,7 +120,13 @@ export class ApprovalMasterComponent implements OnInit {
       });
   }
 
-
+  checkSpecialCharacters() {
+    const nameRegexp: RegExp = /[!@#$%^&*()+\=\[\]{};':"\\|,.<>\/?]/;
+    if (nameRegexp.test(this.approvalMasterForm.value.description)) {
+      this.approvalMasterForm.controls.description.setValue('');
+    }
+  }
+  
 
   checkCodeExists(event: any) {
     if (this.content && this.content.FLAG == 'EDIT') {
@@ -354,7 +362,7 @@ export class ApprovalMasterComponent implements OnInit {
       WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
     }
     let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch`
-    let Sub: Subscription = this.dataService.postDynamicAPI(API,param)
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
       .subscribe((result) => {
 
         let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
@@ -384,7 +392,8 @@ export class ApprovalMasterComponent implements OnInit {
   submitValidations(form: any) {
 
     console.log(this.userId);
-    
+
+
     if (this.commonService.nullToString(form.code) == '' && this.approvalMasterForm.invalid) {
       this.commonService.toastErrorByMsgId('MSG1124') //"Code cannot be empty"
       return true
@@ -393,7 +402,7 @@ export class ApprovalMasterComponent implements OnInit {
       this.commonService.toastErrorByMsgId('MSG1193')//"description cannot be empty"
       return true
     }
-    
+
     else if (this.userId == undefined) {
       console.log("In");
       // this.toastr.error('User Name Cannot be empty')MSG1933
@@ -411,6 +420,8 @@ export class ApprovalMasterComponent implements OnInit {
       this.commonService.toastErrorByMsgId('MSG81520')//Final option should be selected
       return true
     }
+
+
     return false;
   }
 
