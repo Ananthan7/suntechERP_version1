@@ -675,7 +675,8 @@ export class ProcessTransferComponent implements OnInit {
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
         if (result.status == "Success") {
-          this.commonService.toastSuccessByText('MSG3697')
+          this.commonService.toastSuccessByText("MSG3607")
+          this.commonService.toastSuccessByText(result.message)
         } else {
           this.commonService.toastErrorByMsgId(result.message)
         }

@@ -486,9 +486,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     if (this.commonService.nullToString(parentDetail.APPROVED_USER) != '') {
       this.setFormNullToString('APPROVED_USER', parentDetail.APPROVED_USER)
       this.approvalReqFlag = true
-      this.processTransferdetailsForm.controls.approveddate.setValue(
-        this.commonService.parseDateString(parentDetail.APPROVED_DATE)
-      )
+      this.processTransferdetailsForm.controls.approveddate.setValue(parentDetail.APPROVED_DATE)
     }
     if (parentDetail.SCRAP_STOCK_CODE && this.content[0]?.FLAG == 'EDIT') {
       this.locationSearchFlag = true;
@@ -2296,7 +2294,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
         return true;
       }
       if (this.approvalReqFlag && this.commonService.nullToString(form.APPROVED_USER) == '') {
-        this.commonService.toastErrorByMsgId("MSG1933");
+        this.commonService.toastErrorByMsgId("MSG7741");
         return true;
       }
       let SettedData = this.metalDetailData.filter((item: any) => item.SETTED_FLAG == true)
@@ -2384,6 +2382,10 @@ export class ProcessTransferDetailsComponent implements OnInit {
         this.commonService.toastErrorByMsgId("MSG3574"); //"No components details !..."
         return true;
       }
+      if (this.approvalReqFlag && this.commonService.nullToString(form.APPROVED_USER) == '') {
+        this.commonService.toastErrorByMsgId("MSG7741");
+        return true;
+      }
       return false;
     }
     catch (err) {
@@ -2435,8 +2437,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
   gridSRNO: number = 0
   setJOB_PROCESS_TRN_DETAIL_DJ() {
     let form = this.processTransferdetailsForm.value;
-    let approveddate = this.commonService.formatDateTime(form.approveddate)
-    approveddate = approveddate ? new Date(approveddate) : this.commonService.currentDate
+    
     let LOSS_PURE_QTY = this.calculateLossPureQty(this.processTransferdetailsForm.value);
     let metalGridDataSum = this.calculateMetalStoneGridAmount();
     let seqDataFrom = this.sequenceDetails.filter((item: any) => item.PROCESS_CODE?.toUpperCase() == form.FRM_PROCESS_CODE?.toUpperCase());
@@ -2565,7 +2566,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       "SCRAP_PURE_WT": scrapPureWt,
       "SCRAP_PUDIFF": this.emptyToZero((Number(form.scrapWeight) - Number(form.PURITY)) * scrapPureWt),
       "SCRAP_ACCODE": seqDataFrom.length > 0 ? this.commonService.nullToString(seqDataFrom[0].GAIN_AC) : '',
-      "APPROVED_DATE": this.commonService.formatYYMMDD(approveddate),
+      "APPROVED_DATE": this.commonService.formatYYMMDD(form.approveddate),
       "APPROVED_USER": this.commonService.nullToString(form.APPROVED_USER),
       "SCRAP_PCS": this.emptyToZero(form.METAL_ScrapPCS),
       "SCRAP_STONEWT": this.emptyToZero(form.METAL_ScrapStoneWt),
@@ -2591,8 +2592,6 @@ export class ProcessTransferDetailsComponent implements OnInit {
   }
   setMetal_JOB_PROCESS_TRN_DETAIL_DJ() { //for metal
     let form = this.processTransferdetailsForm.value;
-    let approveddate = this.commonService.formatDateTime(form.approveddate)
-    approveddate = new Date(approveddate)
     let LOSS_PURE_QTY = this.calculateLossPureQty(this.processTransferdetailsForm.value);
     let metalGridDataSum = this.calculateMetalStoneGridAmount();
     let seqDataFrom = this.sequenceDetails.filter((item: any) => item.PROCESS_CODE?.toUpperCase() == form.FRM_PROCESS_CODE?.toUpperCase());
@@ -2716,7 +2715,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       "SCRAP_PURE_WT": this.emptyToZero(form.METAL_ScrapPureWt),
       "SCRAP_PUDIFF": this.emptyToZero((Number(form.METAL_ScrapGrWt) - Number(form.PURITY)) * form.METAL_ScrapPureWt),
       "SCRAP_ACCODE": seqDataFrom.length > 0 ? this.commonService.nullToString(seqDataFrom[0].GAIN_AC) : '',
-      "APPROVED_DATE": this.commonService.formatYYMMDD(approveddate),
+      "APPROVED_DATE": this.commonService.formatYYMMDD(form.approveddate),
       "APPROVED_USER": this.commonService.nullToString(form.APPROVED_USER),
       "SCRAP_PCS": this.emptyToZero(form.METAL_ScrapPCS),
       "SCRAP_STONEWT": this.emptyToZero(form.METAL_ScrapStoneWt),
