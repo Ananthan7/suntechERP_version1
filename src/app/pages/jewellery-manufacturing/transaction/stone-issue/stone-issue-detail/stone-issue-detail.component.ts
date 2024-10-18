@@ -42,6 +42,7 @@ export class StoneIssueDetailComponent implements OnInit {
   viewMode: boolean = false;
   isDisableSaveBtn: boolean = false;
   designType: string = 'DIAMOND';
+  validLetters: string[] = ['C', 'D', 'L', 'M', 'P', 'W', 'Y'];
   editMode: boolean = false;
   user: MasterSearchModel = {
     PAGENO: 1,
@@ -623,7 +624,7 @@ export class StoneIssueDetailComponent implements OnInit {
   formSubmit(flag: any) {
     const caratValue = this.stoneIssueDetailsFrom.controls['carat'].value;
     const pcsValue = this.stoneIssueDetailsFrom.controls['pieces'].value;
-    console.log(caratValue,'carat')
+    console.log(caratValue, 'carat')
     // Check if carat is 0
     if (caratValue === 0 || caratValue === '0' || caratValue == null) {
       this.comService.toastErrorByMsgId('MSG1095');
@@ -702,6 +703,14 @@ export class StoneIssueDetailComponent implements OnInit {
     this.stoneIssueDetailsFrom.controls.stockCode.setValue('')
     this.stoneIssueDetailsFrom.controls.stockCodeDes.setValue('')
     this.stoneIssueDetailsFrom.controls.DIVCODE.setValue('')
+    this.stoneIssueDetailsFrom.controls.carat.setValue('')
+    this.stoneIssueDetailsFrom.controls.size.setValue('')
+    this.stoneIssueDetailsFrom.controls.SIEVE_SET.setValue('')
+    this.stoneIssueDetailsFrom.controls.sieve.setValue('')
+    this.stoneIssueDetailsFrom.controls.color.setValue('')
+    this.stoneIssueDetailsFrom.controls.pointerwt.setValue('')
+    this.stoneIssueDetailsFrom.controls.stockbal.setValue('')
+    this.stoneIssueDetailsFrom.controls.pieces.setValue('')
     this.setValueWithDecimal('PURE_WT', 0, 'THREE')
     this.setValueWithDecimal('GROSS_WT', 0, 'METAL')
     this.setValueWithDecimal('PURITY', 0, 'PURITY')
@@ -711,20 +720,15 @@ export class StoneIssueDetailComponent implements OnInit {
     this.tableData[0].STOCK_CODE = ''
   }
   CalculatePiecesAndPointerWT() {
-    // Get the form controls
-    let piecesControl = this.stoneIssueDetailsFrom.controls['pieces'];
-    let pointerWtControl = this.stoneIssueDetailsFrom.controls['pointerwt'];
-    let caratControl = this.stoneIssueDetailsFrom.controls['carat'];
+    // Get the form values
+    const pieces = this.stoneIssueDetailsFrom.controls.pieces.value || 0;  // Default to 0 if null or undefined
+    const pointerwt = this.stoneIssueDetailsFrom.controls.pointerwt.value || 0;  // Default to 0 if null or undefined
+    
+    // Perform the calculation (as an example, this multiplies pieces by pointerwt)
+    const calculatedCarat = pieces * pointerwt;
   
-    // Get the values from the form controls
-    let pieces = piecesControl.value || 0; // default to 0 if null/undefined
-    let pointerWt = pointerWtControl.value || 0; // default to 0 if null/undefined
-  
-    // Calculate the carat value
-    let carat = pieces * pointerWt;
-  
-    // Set the calculated carat value in the form control
-    caratControl.setValue(carat);
+    // Set the calculated value to the 'carat' form control
+    this.stoneIssueDetailsFrom.controls.carat.setValue(calculatedCarat);
   }
   
   CollectPointerWtValidation() {
@@ -760,7 +764,7 @@ export class StoneIssueDetailComponent implements OnInit {
         (err) => {
           // Handle errors during the API call
           this.comService.closeSnackBarMsg();
-          this.comService.toastErrorByMsgId('MSG1531'); 
+          this.comService.toastErrorByMsgId('MSG1531');
         }
       );
     this.subscriptions.push(Sub);
@@ -777,7 +781,6 @@ export class StoneIssueDetailComponent implements OnInit {
         DesignType: this.stoneIssueDetailsFrom.value.DESIGN_TYPE,
       }
     };
-
     // Show a loading message or spinner
     this.comService.showSnackBarMsg('MSG81447')
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
@@ -789,10 +792,6 @@ export class StoneIssueDetailComponent implements OnInit {
             console.log(data, 'di')
             this.comService.toastErrorByMsgId('MSG1531')
             return
-          } else {
-            this.comService.toastErrorByMsgId('MSG1531')
-            this.stoneIssueDetailsFrom.controls.DIVCODE.setValue('')
-            this.showOverleyPanel(event, 'DIVCODE')
           }
         }
       }, err => {
@@ -801,15 +800,32 @@ export class StoneIssueDetailComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
+  validateManualEntry(event: any) {
+    const enteredValue = event.target.value.toUpperCase(); // Convert entered value to uppercase
+    const validLetters = this.validLetters; // The array of valid letters
 
+    // Check if the entered value is in the list of valid letters
+    if (!validLetters.includes(enteredValue)) {
+      // Show an error message if invalid
+      this.comService.toastErrorByMsgId('MSG1531'); // Example: "Invalid entry, only certain letters allowed"
+
+      // Clear the field if invalid value
+      this.stoneIssueDetailsFrom.controls.DIVCODE.setValue('');
+      return;
+    }
+    console.log('Valid value entered:', enteredValue);
+
+  }
 
   stockCodeValidate(event: any) {
     if (this.viewMode) return;
-    if (event.target.value == '') {
-      // this.showOverleyPanel(event, 'stockCode');
-      return
-    };
-
+  
+    // Check if the input is empty
+    if (event.target.value === '') {
+      return;  // Exit if no input
+    }
+  
+    // Prepare the data for the API call
     let postData = {
       "SPID": "132",
       "parameter": {
@@ -817,47 +833,68 @@ export class StoneIssueDetailComponent implements OnInit {
         JOBNO: this.stoneIssueDetailsFrom.value.jobNumber,
         SUBJOBNO: this.stoneIssueDetailsFrom.value.subjobnumber,
         STOCKCODE: this.stoneIssueDetailsFrom.value.stockCode,
-
       }
     };
-
+  
+    // Show loading message
     this.comService.showSnackBarMsg('MSG81447');
+  
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
       .subscribe((result) => {
+        // Hide loading message
         this.comService.closeSnackBarMsg();
+  
         if (result.status === "Success" && result.dynamicData[0]) {
           let data = result.dynamicData[0];
-          console.log(data, 'data')
-          let stockDetails = result.dynamicData[0];
-          // Handle the valid stock case
-          if (stockDetails) {
-            console.log(stockDetails[0], 'data');
-            this.stoneIssueDetailsFrom.controls.stockCodeDes.setValue(stockDetails[0].STOCK_DESCRIPTION);
-            this.stoneIssueDetailsFrom.controls.carat.setValue(stockDetails[0].KARAT);
-            this.stoneIssueDetailsFrom.controls.SIEVE_SET.setValue(stockDetails[0].SIEVE_SET);
-            this.stoneIssueDetailsFrom.controls.size.setValue(stockDetails[0].SIZE);
-            this.stoneIssueDetailsFrom.controls.sieve.setValue(stockDetails[0].SIEVE);
-            this.stoneIssueDetailsFrom.controls.SIEVE_DESC.setValue(stockDetails[0].SIEVE_DESC);
-            this.stoneIssueDetailsFrom.controls.pieces.setValue(stockDetails[0].PCS);
-            this.stoneIssueDetailsFrom.controls.shape.setValue(stockDetails[0].SHAPE);
-            this.stoneIssueDetailsFrom.controls.color.setValue(stockDetails[0].COLOR);
-            this.CollectPointerWtValidation()
+          console.log(data, 'data');
+  
+          // Check if VALID_STOCK is 0, indicating an invalid stock code
+          if (data[0].VALID_STOCK === 0) {
+            console.log(data, 'invalid stock');
+  
+            // Clear the stock code and open the lookup overlay
+            this.overlaystockCodeSearch.closeOverlayPanel(); 
+            this.stoneIssueDetailsFrom.controls.stockCode.setValue('');  // Clear stock code
+            this.comService.toastErrorByMsgId('MSG1531');  // Show error message
+            this.showOverleyPanel(event, 'stockCode');  // Automatically open the lookup overlay
+  
+          } else {
+            // Valid stock code, handle the valid case
+             // Close overlay panel
+  
+            let stockDetails = data[0];
+            console.log(stockDetails, 'valid stock data');
+            this.stoneIssueDetailsFrom.controls.stockCodeDes.setValue(stockDetails.STOCK_DESCRIPTION);
+            this.stoneIssueDetailsFrom.controls.carat.setValue(stockDetails.KARAT);
+            this.stoneIssueDetailsFrom.controls.SIEVE_SET.setValue(stockDetails.SIEVE_SET);
+            this.stoneIssueDetailsFrom.controls.size.setValue(stockDetails.SIZE);
+            this.stoneIssueDetailsFrom.controls.sieve.setValue(stockDetails.SIEVE);
+            this.stoneIssueDetailsFrom.controls.SIEVE_DESC.setValue(stockDetails.SIEVE_DESC);
+            this.stoneIssueDetailsFrom.controls.pieces.setValue(stockDetails.PCS);
+            this.stoneIssueDetailsFrom.controls.shape.setValue(stockDetails.SHAPE);
+            this.stoneIssueDetailsFrom.controls.color.setValue(stockDetails.COLOR);
+  
+            // Additional validation logic
+            this.CollectPointerWtValidation();
           }
+  
         } else {
-
+          // Handle when no valid stock data is returned
           this.overlaystockCodeSearch.closeOverlayPanel();
-          this.comService.toastErrorByMsgId('MSG1747');
-          this.stoneIssueDetailsFrom.controls.stockCode.setValue('');
+          this.comService.toastErrorByMsgId('MSG1747');  // Show "Not Found" error message
+          this.stoneIssueDetailsFrom.controls.stockCode.setValue('');  // Clear stock code
         }
       }, err => {
+        // Handle error in API call
         this.comService.closeSnackBarMsg();
-        this.comService.toastErrorByMsgId('MSG1531');
-        this.stoneIssueDetailsFrom.controls.stockCode.setValue('');
-        this.showOverleyPanel(event, 'stockCode');
+        this.comService.toastErrorByMsgId('MSG1531');  // Show general error message
+        this.stoneIssueDetailsFrom.controls.stockCode.setValue('');  // Clear stock code
+        this.showOverleyPanel(event, 'stockCode');  // Automatically open the lookup overlay
       });
-
+  
     this.subscriptions.push(Sub);
   }
+  
 
   getImageData() {
     let API = `Image/${this.stoneIssueDetailsFrom.value.jobNumber}`
@@ -1027,13 +1064,6 @@ export class StoneIssueDetailComponent implements OnInit {
       return true;
     }
     return false;
-  }
-
-  onHoverDivcode({data}:any){
-    this.divCodeData.WHERECONDITION = `TYPES = 'SHAPE MASTER' AND  DIV_${data.DIVCODE}=1`
-  }
-  DivCodeSelected(event: any, value: any) {
-    this.tableData[value.data.Srno - 1].DIVCODE = event.DIVCODE;
   }
 
   ngOnDestroy() {
