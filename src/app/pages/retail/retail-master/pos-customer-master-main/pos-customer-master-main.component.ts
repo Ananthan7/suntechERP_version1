@@ -1499,7 +1499,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
           RELIGION: this.posCustomerMasterMainForm.value.religion || "",
           TYPE: "",
           CATEGORY: this.posCustomerMasterMainForm.value.category || "",
-          INCOME: this.posCustomerMasterMainForm.value.income,
+          INCOME: Number(this.posCustomerMasterMainForm.value.income) ,
           CUST_STATUS: this.posCustomerMasterMainForm.value.custStatus || "",
           MID: 0,
           PICTURE_NAME: "",
