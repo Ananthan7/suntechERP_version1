@@ -3495,6 +3495,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
               this.processTransferdetailsForm.controls.METAL_ScrapGrWt.enable()
             }
           } else {
+            this.commonService.toastErrorByMsgId('MSG1531')
             this.processTransferdetailsForm.controls.METAL_ScrapStockCode.setValue('')
           }
         }, err => {
