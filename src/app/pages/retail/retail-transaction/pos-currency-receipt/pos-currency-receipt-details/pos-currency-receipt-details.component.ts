@@ -493,11 +493,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
       this.posCurrencyReceiptDetailsForm.controls.vatcc.setValue(
         this.comService.commaSeperation(
           this.comService.decimalQuantityFormat(
-            this.comService.FCToCC(
-              this.posCurrencyReceiptDetailsForm.value.currencyCode,
               this.comService.emptyToZero(this.receiptData.IGST_AMOUNTCC),
-              this.comService.emptyToZero(this.compCurrencyRate)
-            ),
             "AMOUNT"
           )
         )
