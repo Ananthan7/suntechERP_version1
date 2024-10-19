@@ -31,7 +31,7 @@ export class ComponentSizeSetComponent implements OnInit {
   componentSizeType: any[] = [];
   componentSizeDesc: any[] = [];
   selectedOption: any;
-  updatedTableData:any;
+  updatedTableData: any;
   editableMode: boolean = false;
   filteredOptions!: string[];
   searchTerm: string = '';
@@ -109,7 +109,7 @@ export class ComponentSizeSetComponent implements OnInit {
     this.subscriptions.push(Sub);
   }
 
- 
+
 
 
   setFormValues() {
@@ -126,12 +126,12 @@ export class ComponentSizeSetComponent implements OnInit {
           console.log(data.response.detail);
           this.selectedOptions = this.tableData.map(item => this.componentSizeType.find(option => option.COMPSIZE_CODE));
           this.selectedOptions = this.tableData.map(item => this.componentSizeType.find(option => option.COMPSIZE_CODE === item.COMPSIZE_CODE) || null);
-          
+
         }
       });
   }
 
-  
+
 
 
 
@@ -190,7 +190,7 @@ export class ComponentSizeSetComponent implements OnInit {
     // console.log("Selected indexes:", this.selectedIndexes-1);
     // this.selectedIndexes-=1;
     // console.log(this.selectedIndexes);
-    
+
 
     // // this.tableData.forEach((item: any, i: any) => {
     // //   item.SRNO = i + 1;
@@ -215,8 +215,8 @@ export class ComponentSizeSetComponent implements OnInit {
 
 
   deleteTableData() {
-    console.log("After Selecting "+this.selectedIndexes);
-    
+    console.log("After Selecting " + this.selectedIndexes);
+
     if (this.selectedIndexes !== undefined && this.selectedIndexes.length > 0) {
       // Display confirmation dialog before deleting
       Swal.fire({
@@ -239,50 +239,52 @@ export class ComponentSizeSetComponent implements OnInit {
           // // Reset selectedIndexes after deletion
           // this.selectedIndexes = [];
           // console.log(this.selectedIndexes);
-          
+
           // // Update serial numbers
           // this.resetSrNumber();
 
           // Simulate deletion without using an actual API call
+          // If there's data to delete
           if (this.tableData.length > 0) {
-            console.log('Initial Table Data:', this.tableData);
-            console.log('Selected Indexes:', this.selectedIndexes);
-            
-            this.tableData = this.tableData.filter((data, index) => {
-                const shouldDelete = this.selectedIndexes.includes(index);
-                if (shouldDelete) {
-                  console.log(shouldDelete);
-                  this.tableData = data;
-                  console.log(this.tableData);
-                    console.log('Deleting:', data); // Log the item being deleted
-                }
-              
-                   console.log(this.tableData);
-                   
-                return !shouldDelete;
-            });
-            
-            this.snackBar.open('Data deleted successfully!', 'OK', { duration: 2000 });
-            // this.tableData.forEach((item: any, i: any) => {
-            //     item.SRNO = i + 1;
-            // });
-            this.updatedTableData = this.tableData.map((item: any, index: any) => {
-              console.log(`Index: ${index}, Item:`, item); // Log each item and index
-              return { ...item, SRNO: index + 1 }; // Update SRNO and return updated object
-          });
-          
-            console.log('Updated Table Data:', this.updatedTableData);
-            this.updatedTableData.forEach((row:any, index:any) => {
-              this.tableData = this.updatedTableData;
-              console.log(`Serial Number: ${index + 1}, Row Data:`, row);
-          });
-          console.log('Updated Table Data:', this.tableData);
+            // Log the selected indexes before filtering
+            console.log('Selected indexes to delete:', this.selectedIndexes);
 
-            // let updatedData = [...this.tableData];  // Create a shallow copy to ensure change detection
-            // this.tableData = updatedData;         
-        } else {
+            // Ensure selectedIndexes is an array and contains valid numbers
+            if (this.selectedIndexes && this.selectedIndexes.length > 0) {
+              console.log('Before deletion, tableData length:', this.tableData.length);
+              console.log('Selected indexes to delete:', this.selectedIndexes);
+
+              // Filter out items whose index is included in the selectedIndexes
+              this.tableData = this.tableData.filter((data, index) => {
+                const shouldDelete = !this.selectedIndexes.includes(index);
+                console.log(`Index ${index} - Should Delete: ${!shouldDelete}`);
+                return shouldDelete;
+              });
+
+              console.log('After deletion, tableData length:', this.tableData.length);
+              console.log('  tableData:', this.tableData);
+
+              // Show success message after deletion
+              this.snackBar.open('Data deleted successfully!', 'OK', { duration: 2000 });
+
+              // Update serial numbers after deletion
+              this.tableData.forEach((item: any, i: number) => {
+                item.SRNO = i + 1; // Reset serial numbers starting from 1
+              });
+
+              // Reset selectedIndexes after deletion
+              this.selectedIndexes = [];
+              console.log('Selected indexes after reset:', this.selectedIndexes);
+            } else {
+              console.warn('No indexes selected for deletion.');
+            }
+
+          } else {
+            // No data to delete message
             this.snackBar.open('No data to delete!', 'OK', { duration: 2000 });
-        }
+          }
+
+
         }
       });
     } else {
@@ -299,23 +301,52 @@ export class ComponentSizeSetComponent implements OnInit {
     this.tableData = [...this.tableData];
   }
 
+  selectedOptions: any[] = Array(this.tableData.length).fill(null);
+
+  onCodeSelect(event: MatSelectChange, data: any) {
+    console.log(event);
+
+    console.log(data);
+
+    let index = data.data.SRNO - 1;
+    const selectedCode = event.value.COMPSIZE_CODE;
+    // Find the corresponding description for the selected code
+    const selectedDescription = this.componentSizeType.find(option => option.COMPSIZE_CODE === selectedCode)?.DESCRIPTION;
+
+    // this.selectedOptions[data.data.SRNO] = event.value;
+    // Update the description in the grid data
+    // data.data.COMPONENT_DESCRIPTION = selectedDescription;
+    // data.data.COMPSIZE_CODE = selectedCode;
+
+    let lastIndex = this.tableData.length - 1
+
+    this.tableData[index].COMPONENT_DESCRIPTION = selectedDescription;
+    this.tableData[index].COMPSIZE_CODE = selectedCode;
+
+  }
+  isOptionSelected(SRNO: number, option: any): boolean {
+    // Check if the option is already selected for another row
+    return Object.values(this.selectedOptions).some((value: any) => value && value.COMPSIZE_CODE === option.COMPSIZE_CODE && value.SRNO !== SRNO);
+  }
+
+
 
   formSubmit() {
     console.log(this.componentSizeType);
     console.log(this.content);
-  
+
     // If the form is in edit mode, handle the update
     if (this.content && this.content.FLAG == 'EDIT') {
       this.update();
       return;
     }
-  
+
     // Check if the form is valid
     if (this.componentsizesetmasterForm.invalid) {
       this.toastr.error('Select all required fields');
       return;
     }
-  
+
     // Check if the tableData is empty
     if (this.tableData.length == 0) {
       this.commonService.toastErrorByMsgId('MSG1453');  // 'Details not added' error
@@ -329,7 +360,7 @@ export class ComponentSizeSetComponent implements OnInit {
         data = true
         this.toastr.error('Grid Values Cannot be Empty');
       }
-      
+
     })
 
     if (data == true) {
@@ -474,33 +505,6 @@ export class ComponentSizeSetComponent implements OnInit {
         this.subscriptions.push(Sub)
       }
     });
-  }
-  selectedOptions: any[] = Array(this.tableData.length).fill(null);
-
-  onCodeSelect(event: MatSelectChange, data: any) {
-    console.log(data);
-
-    let index = data.data.SRNO - 1;
-    const selectedCode = event.value.COMPSIZE_CODE;
-    // Find the corresponding description for the selected code
-    const selectedDescription = this.componentSizeType.find(option => option.COMPSIZE_CODE === selectedCode)?.DESCRIPTION;
-
-    // this.selectedOptions[data.data.SRNO] = event.value;
-    // Update the description in the grid data
-    // data.data.COMPONENT_DESCRIPTION = selectedDescription;
-    // data.data.COMPSIZE_CODE = selectedCode;
-
-    let lastIndex = this.tableData.length - 1
-
-    this.tableData[index].COMPONENT_DESCRIPTION = selectedDescription;
-    this.tableData[index].COMPSIZE_CODE = selectedCode;
-
-
-  }
-
-  isOptionSelected(SRNO: number, option: any): boolean {
-    // Check if the option is already selected for another row
-    return Object.values(this.selectedOptions).some((value: any) => value && value.COMPSIZE_CODE === option.COMPSIZE_CODE && value.SRNO !== SRNO);
   }
 
 
