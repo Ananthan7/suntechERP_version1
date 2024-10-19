@@ -59,6 +59,11 @@ export class PosCustomerMasterMainComponent implements OnInit {
   overlaySourceOfFund!: MasterSearchComponent;
 
   @ViewChild("overlayCustomerType") overlayCustomerType!: MasterSearchComponent;
+  @ViewChild("overlayNationality1") overlayNationality1!: MasterSearchComponent;
+  @ViewChild("overlayNationality2") overlayNationality2!: MasterSearchComponent;
+  @ViewChild("overlayNationality3") overlayNationality3!: MasterSearchComponent;
+  @ViewChild("overlayNationality4") overlayNationality4!: MasterSearchComponent;
+  @ViewChild("overlayNationality5") overlayNationality5!: MasterSearchComponent;
 
   private subscriptions: Subscription[] = [];
   @Input() content!: any;
@@ -198,10 +203,11 @@ export class PosCustomerMasterMainComponent implements OnInit {
         ? [Validators.required]
         : [],
     ],
-    nationalityDesc:[""],
+    nationalityDesc: [""],
     state: [""],
     stateDesc: [""],
     city: [""],
+    cityDesc: [""],
     language: [""],
     favCelebration: [""],
     favCelebrationDesc: [""],
@@ -624,6 +630,8 @@ export class PosCustomerMasterMainComponent implements OnInit {
     this.posCustomerMasterMainForm.controls.weddate.disable();
     this.countryList();
     this.getDropDownStatus();
+    console.log(this.nameList);
+
     this.posCustomerMasterMainForm.controls["createdBranch"].disable();
     this.fetchImage();
   }
@@ -1150,6 +1158,9 @@ export class PosCustomerMasterMainComponent implements OnInit {
 
   countrySelected(e: any) {
     console.log(e);
+    this.nationalCode = e.CODE
+    this.stateCode.WHERECONDITION = `TYPES='state master' and COUNTRY_CODE = '${this.nationalCode}'`;
+    this.isViewState = true;
     this.posCustomerMasterMainForm.controls.countryCode.setValue(e.CODE);
     this.posCustomerMasterMainForm.controls.country.setValue(e.DESCRIPTION);
     this.posCustomerMasterMainForm.controls.moblieCountry.setValue(
@@ -1239,7 +1250,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
     this.posCustomerMasterMainForm.controls.state.setValue(e.CODE);
     this.posCustomerMasterMainForm.controls.stateDesc.setValue(e.DESCRIPTION);
     this.cityCodeData.WHERECONDITION = `TYPES='city master' and COUNTRY_CODE = '${this.nationalCode}' and STATE_CODE = '${e.CODE}' `;
-    this.isViewCity = true
+    this.isViewCity = true;
   }
 
   categorySelected(e: any) {
@@ -1266,10 +1277,20 @@ export class PosCustomerMasterMainComponent implements OnInit {
   nationalitySelected(e: any) {
     console.log(e);
     this.posCustomerMasterMainForm.controls.nationality.setValue(e.CODE);
-    this.posCustomerMasterMainForm.controls.nationalityDesc.setValue(e.DESCRIPTION);
-    this.nationalCode = e.CODE;
-    this.stateCode.WHERECONDITION = `TYPES='state master' and COUNTRY_CODE = '${this.nationalCode}'`;
-    this.isViewState = true
+    this.posCustomerMasterMainForm.controls.nationalityDesc.setValue(
+      e.DESCRIPTION
+    );
+  }
+  allNationalitySelected(e: any, controlIndex: number) {
+    const nationalityCodeControl = `nationalityCode${controlIndex}`;
+    const nationalityControl = `nationality${controlIndex}`;
+
+    this.posCustomerMasterMainForm.controls[nationalityCodeControl].setValue(
+      e.CODE
+    );
+    this.posCustomerMasterMainForm.controls[nationalityControl].setValue(
+      e.DESCRIPTION
+    );
   }
 
   citySelected(e: any) {
@@ -1498,8 +1519,8 @@ export class PosCustomerMasterMainComponent implements OnInit {
           COMPANY: this.posCustomerMasterMainForm.value.company || "",
           ADDRESS: this.posCustomerMasterMainForm.value.addressPersonal || "",
           POBOX_NO: this.posCustomerMasterMainForm.value.POBox || "",
-          STATE: this.posCustomerMasterMainForm.value.state || "",
-          CITY: this.posCustomerMasterMainForm.value.city || "",
+          STATE: this.posCustomerMasterMainForm.value.stateDesc || "",
+          CITY: this.posCustomerMasterMainForm.value.cityDesc || "",
           ZIPCODE: "",
           COUNTRY_CODE: this.posCustomerMasterMainForm.value.countryCode || "",
           EMAIL: this.posCustomerMasterMainForm.value.emailId || "",
@@ -1694,8 +1715,8 @@ export class PosCustomerMasterMainComponent implements OnInit {
 
           OT_TRANSFER_TIME: "",
           COUNTRY_DESC: this.posCustomerMasterMainForm.value.country || "",
-          STATE_DESC: this.posCustomerMasterMainForm.value.stateDesc||"",
-          CITY_DESC:  this.posCustomerMasterMainForm.value.cityDesc||"",
+          STATE_DESC: this.posCustomerMasterMainForm.value.state || "",
+          CITY_DESC: this.posCustomerMasterMainForm.value.city || "",
           FAVORITE_CELEB_DESC:
             this.posCustomerMasterMainForm.value.favCelebrationDesc || "",
           RELIGION_DESC:
@@ -1704,7 +1725,8 @@ export class PosCustomerMasterMainComponent implements OnInit {
             this.posCustomerMasterMainForm.value.categoryDesc || "",
           CUST_STATUS_DESC:
             this.posCustomerMasterMainForm.value.custStatusDesc || "",
-          NATIONALITY_DESC: this.posCustomerMasterMainForm.value.nationalityDesc||"",
+          NATIONALITY_DESC:
+            this.posCustomerMasterMainForm.value.nationalityDesc || "",
           TYPE_DESC: this.posCustomerMasterMainForm.value.custDesc || "",
           DETAILS_JOHARA: "",
           DETAILS_FARAH: "",
@@ -2102,6 +2124,21 @@ export class PosCustomerMasterMainComponent implements OnInit {
       case "sourceOfFund":
         this.overlaySourceOfFund.showOverlayPanel(event);
         break;
+      case "nationality1":
+        this.overlayNationality1.showOverlayPanel(event);
+        break;
+      case "nationality2":
+        this.overlayNationality2.showOverlayPanel(event);
+        break;
+      case "nationality3":
+        this.overlayNationality3.showOverlayPanel(event);
+        break;
+      case "nationality4":
+        this.overlayNationality4.showOverlayPanel(event);
+        break;
+      case "nationality5":
+        this.overlayNationality5.showOverlayPanel(event);
+        break;
       default:
         console.warn(`Unknown form control name: ${formControlName}`);
     }
@@ -2253,6 +2290,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
       }
     }
 
+    this.contactPreferenceWay.sort((a, b) => a.localeCompare(b));
     this.selectedContactString = this.contactPreferenceWay.join("#");
     console.log("Selected Values:", this.selectedContactString);
   }
@@ -2278,14 +2316,12 @@ export class PosCustomerMasterMainComponent implements OnInit {
       ?.setValue(selectedValuesArray.includes("NO"));
   }
 
-  getKnowAbout(event: MatCheckboxChange, value: any) {
+  getKnowAbout(event: MatCheckboxChange, value: string) {
     if (value === "SO") {
-      this.toggle();
-      //this.knowAboutWay = [];
-    } //else {
-    //console.log("No SM");
-    //}
+      this.toggle(); // Show/hide social media input fields when 'SO' is clicked
+    }
 
+    // Add or remove the checkbox values from the array
     if (event.checked) {
       if (!this.knowAboutWay.includes(value)) {
         this.knowAboutWay.push(value);
@@ -2299,34 +2335,78 @@ export class PosCustomerMasterMainComponent implements OnInit {
       }
     }
 
-    this.selectedknowAboutString = this.knowAboutWay.join("#");
+    // Sort alphabetically
+    this.knowAboutWay.sort();
+
+    // If 'SO' (Social Media) is selected, include social media input values
+    let socialMediaPart = "";
+    if (this.knowAboutWay.includes("SO")) {
+      const socialMediaFields = ["facebook", "twitter", "instagram"];
+      const socialMediaValues = socialMediaFields
+        .map((field) => this.posCustomerMasterMainForm.controls[field].value)
+        .filter((value) => value); // Only add if the user entered a value
+
+      // Join social media values with '-'
+      if (socialMediaValues.length > 0) {
+        socialMediaPart = "-" + socialMediaValues.join("-");
+      }
+    }
+
+    // Join knowAboutWay with '#', append the social media part (if any)
+    this.selectedknowAboutString =
+      this.knowAboutWay.join("#") + socialMediaPart;
+
     console.log("Selected Values:", this.selectedknowAboutString);
   }
 
   populateKnowAbout(selectedKnowAboutString: string) {
-    const selectedValuesArray = selectedKnowAboutString.split("#");
+    // Split the string by '#', which separates the checkbox values from the social media part
+    const parts = selectedKnowAboutString.split("#");
 
-    // Only update the checkboxes, leave other fields untouched
+    // Check if social media part exists (contains a '-'), separate checkbox and social media data
+    const checkboxValues = parts.filter((part) => !part.includes("-")); // Checkbox values without '-'
+    const socialMediaPart = parts.find((part) => part.includes("-")); // Social media values with '-'
+
+    // Populate checkboxes
     this.posCustomerMasterMainForm
       .get("tv")
-      ?.setValue(selectedValuesArray.includes("TV"));
+      ?.setValue(checkboxValues.includes("TV"));
     this.posCustomerMasterMainForm
       .get("outdoor")
-      ?.setValue(selectedValuesArray.includes("OU"));
+      ?.setValue(checkboxValues.includes("OU"));
     this.posCustomerMasterMainForm
       .get("online")
-      ?.setValue(selectedValuesArray.includes("ON"));
+      ?.setValue(checkboxValues.includes("ON"));
     this.posCustomerMasterMainForm
       .get("socialMedia")
-      ?.setValue(selectedValuesArray.includes("SO"));
-
+      ?.setValue(checkboxValues.includes("SO"));
     this.posCustomerMasterMainForm
       .get("radio")
-      ?.setValue(selectedValuesArray.includes("RA"));
-
+      ?.setValue(checkboxValues.includes("RA"));
     this.posCustomerMasterMainForm
       .get("other")
-      ?.setValue(selectedValuesArray.includes("OT"));
+      ?.setValue(checkboxValues.includes("OT"));
+
+    // If social media data exists, split by '-' and populate the respective form controls
+    if (socialMediaPart) {
+      const socialMediaValues = socialMediaPart.split("-");
+
+      // Populate social media fields (assuming the order: facebook, twitter, instagram)
+      this.posCustomerMasterMainForm
+        .get("facebook")
+        ?.setValue(socialMediaValues[0] || "");
+      this.posCustomerMasterMainForm
+        .get("twitter")
+        ?.setValue(socialMediaValues[1] || "");
+      this.posCustomerMasterMainForm
+        .get("instagram")
+        ?.setValue(socialMediaValues[2] || "");
+    } else {
+      // If no social media part is found, clear those fields
+      this.posCustomerMasterMainForm.get("facebook")?.setValue("");
+      this.posCustomerMasterMainForm.get("twitter")?.setValue("");
+      this.posCustomerMasterMainForm.get("instagram")?.setValue("");
+    }
   }
 
   getIntrestedIn(event: MatCheckboxChange, value: any) {
@@ -2343,6 +2423,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
       }
     }
 
+    this.intrestedInWay.sort((a, b) => a.localeCompare(b));
     this.selectedIntrestedInString = this.intrestedInWay.join("#");
     console.log("Selected Values:", this.selectedIntrestedInString);
   }

@@ -119,7 +119,7 @@
                       >
                         <mat-option
                           *ngFor="let data of nameList"
-                          [value]="data.ENGLISH"
+                          [value]="data.SRNO"
                         >
                           {{ data.ENGLISH }}
                         </mat-option>
@@ -641,7 +641,7 @@
                   appearance="outline"
                 >
                   <input
-                    [readonly]="flag === 'VIEW'"
+                    readonly="true"
                     matInput="text"
                     maxlength="6"
                     formControlName="custType"
@@ -673,22 +673,21 @@
               </label>
 
               <div class="col-md-8">
-
                 <mat-form-field
                   style="width: -webkit-fill-available"
                   appearance="outline"
                 >
                   <input
-                    [readonly]="flag === 'VIEW'"
+                    readonly="true"
                     matInput="text"
                     formControlName="nationality"
                     required
                   />
                   <input
-                  *ngIf="showCustDesc"
-                  matInput="text"
-                  formControlName="nationalityDesc"
-                />
+                    *ngIf="showCustDesc"
+                    matInput="text"
+                    formControlName="nationalityDesc"
+                  />
                   <master-search
                     *ngIf="flag !== 'VIEW'"
                     (focusout)="openTab($event, 'nationality')"
@@ -709,22 +708,21 @@
               >
 
               <div class="col-md-8">
-
                 <mat-form-field
                   style="width: -webkit-fill-available"
                   appearance="outline"
                 >
                   <input
-                    [readonly]="flag === 'VIEW'"
+                    readonly="true"
                     matInput="text"
                     formControlName="state"
                     required
                   />
                   <input
-                  *ngIf="showCustDesc"
-                  matInput="text"
-                  formControlName="stateDesc"
-                />
+                    *ngIf="showCustDesc"
+                    matInput="text"
+                    formControlName="stateDesc"
+                  />
                   <master-search
                     *ngIf="flag !== 'VIEW' && isViewState"
                     (focusout)="openTab($event, 'state')"
@@ -750,16 +748,16 @@
                   appearance="outline"
                 >
                   <input
-                    [readonly]="flag === 'VIEW'"
+                    readonly="true"
                     matInput="text"
                     formControlName="city"
                     required
                   />
                   <input
-                  *ngIf="showCustDesc"
-                  matInput="text"
-                  formControlName="cityDesc"
-                />
+                    *ngIf="showCustDesc"
+                    matInput="text"
+                    formControlName="cityDesc"
+                  />
                   <master-search
                     *ngIf="flag !== 'VIEW' && isViewCity"
                     (focusout)="openTab($event, 'city')"
@@ -2676,36 +2674,26 @@
                           </div>
                           <div class="col-md-5">
                             <mat-form-field
-                              style="width: 100%"
-                              appearance="outline"
-                            >
-                              <mat-select
-                                [disabled]="flag === 'VIEW'"
-                                formControlName="nationality1"
-                                (selectionChange)="
-                                  selectCountryCode($event, 'nationalityCode1')
-                                "
-                              >
-                                <mat-option
-                                  *ngFor="let country of countryListData"
-                                  [value]="country.COUNTRY_CODE_ISO2"
-                                >
-                                  {{ country.COUNTRY_NAME }}
-                                </mat-option>
-                              </mat-select>
-                            </mat-form-field>
-                            <!-- <mat-form-field
-                              style="width: 100%"
+                              style="width: -webkit-fill-available"
                               appearance="outline"
                             >
                               <input
                                 [readonly]="flag === 'VIEW'"
-                                matInput
-                                type="text"
+                                matInput="text"
                                 formControlName="nationality1"
-                                class="text-right"
+                                required
                               />
-                            </mat-form-field> -->
+                              <master-search
+                                *ngIf="flag !== 'VIEW'"
+                                (focusout)="openTab($event, 'nationality1')"
+                                #overlayNationality1
+                                [MasterSearchData]="nationalityCode"
+                                class="masterSearch"
+                                (newRowClick)="
+                                  allNationalitySelected($event, 1)
+                                "
+                              ></master-search>
+                            </mat-form-field>
                           </div>
                         </div>
 
@@ -2732,37 +2720,26 @@
                           </div>
                           <div class="col-md-5">
                             <mat-form-field
-                              style="width: 100%"
-                              appearance="outline"
-                            >
-                              <mat-select
-                                [disabled]="flag === 'VIEW'"
-                                formControlName="nationality2"
-                                (selectionChange)="
-                                  selectCountryCode($event, 'nationalityCode2')
-                                "
-                              >
-                                <mat-option
-                                  *ngFor="let country of countryListData"
-                                  [value]="country.COUNTRY_CODE_ISO2"
-                                >
-                                  {{ country.COUNTRY_NAME }}
-                                </mat-option>
-                              </mat-select>
-                            </mat-form-field>
-                            <!-- <mat-form-field
-                              style="width: 100%"
+                              style="width: -webkit-fill-available"
                               appearance="outline"
                             >
                               <input
                                 [readonly]="flag === 'VIEW'"
-                                appAlphabetsOnly
-                                matInput
-                                type="text"
+                                matInput="text"
                                 formControlName="nationality2"
-                                class="text-right"
+                                required
                               />
-                            </mat-form-field> -->
+                              <master-search
+                                *ngIf="flag !== 'VIEW'"
+                                (focusout)="openTab($event, 'nationality2')"
+                                #overlayNationality2
+                                [MasterSearchData]="nationalityCode"
+                                class="masterSearch"
+                                (newRowClick)="
+                                  allNationalitySelected($event, 2)
+                                "
+                              ></master-search>
+                            </mat-form-field>
                           </div>
                         </div>
 
@@ -2789,37 +2766,26 @@
                           </div>
                           <div class="col-md-5">
                             <mat-form-field
-                              style="width: 100%"
-                              appearance="outline"
-                            >
-                              <mat-select
-                                [disabled]="flag === 'VIEW'"
-                                formControlName="nationality3"
-                                (selectionChange)="
-                                  selectCountryCode($event, 'nationalityCode3')
-                                "
-                              >
-                                <mat-option
-                                  *ngFor="let country of countryListData"
-                                  [value]="country.COUNTRY_CODE_ISO2"
-                                >
-                                  {{ country.COUNTRY_NAME }}
-                                </mat-option>
-                              </mat-select>
-                            </mat-form-field>
-                            <!-- <mat-form-field
-                              style="width: 100%"
+                              style="width: -webkit-fill-available"
                               appearance="outline"
                             >
                               <input
                                 [readonly]="flag === 'VIEW'"
-                                appAlphabetsOnly
-                                matInput
-                                type="text"
+                                matInput="text"
                                 formControlName="nationality3"
-                                class="text-right"
+                                required
                               />
-                            </mat-form-field> -->
+                              <master-search
+                                *ngIf="flag !== 'VIEW'"
+                                (focusout)="openTab($event, 'nationality3')"
+                                #overlayNationality3
+                                [MasterSearchData]="nationalityCode"
+                                class="masterSearch"
+                                (newRowClick)="
+                                  allNationalitySelected($event, 3)
+                                "
+                              ></master-search>
+                            </mat-form-field>
                           </div>
                         </div>
 
@@ -2846,36 +2812,26 @@
                           </div>
                           <div class="col-md-5">
                             <mat-form-field
-                              style="width: 100%"
-                              appearance="outline"
-                            >
-                              <mat-select
-                                [disabled]="flag === 'VIEW'"
-                                formControlName="nationality4"
-                                (selectionChange)="
-                                  selectCountryCode($event, 'nationalityCode4')
-                                "
-                              >
-                                <mat-option
-                                  *ngFor="let country of countryListData"
-                                  [value]="country.COUNTRY_CODE_ISO2"
-                                >
-                                  {{ country.COUNTRY_NAME }}
-                                </mat-option>
-                              </mat-select>
-                            </mat-form-field>
-                            <!-- <mat-form-field
-                              style="width: 100%"
+                              style="width: -webkit-fill-available"
                               appearance="outline"
                             >
                               <input
                                 [readonly]="flag === 'VIEW'"
-                                matInput
-                                type="text"
+                                matInput="text"
                                 formControlName="nationality4"
-                                class="text-right"
+                                required
                               />
-                            </mat-form-field> -->
+                              <master-search
+                                *ngIf="flag !== 'VIEW'"
+                                (focusout)="openTab($event, 'nationality4')"
+                                #overlayNationality4
+                                [MasterSearchData]="nationalityCode"
+                                class="masterSearch"
+                                (newRowClick)="
+                                  allNationalitySelected($event, 4)
+                                "
+                              ></master-search>
+                            </mat-form-field>
                           </div>
                         </div>
                         <div class="row mb-1">
@@ -2901,23 +2857,25 @@
                           </div>
                           <div class="col-md-5">
                             <mat-form-field
-                              style="width: 100%"
+                              style="width: -webkit-fill-available"
                               appearance="outline"
                             >
-                              <mat-select
-                                [disabled]="flag === 'VIEW'"
+                              <input
+                                [readonly]="flag === 'VIEW'"
+                                matInput="text"
                                 formControlName="nationality5"
-                                (selectionChange)="
-                                  selectCountryCode($event, 'nationalityCode5')
+                                required
+                              />
+                              <master-search
+                                *ngIf="flag !== 'VIEW'"
+                                (focusout)="openTab($event, 'nationality5')"
+                                #overlayNationality5
+                                [MasterSearchData]="nationalityCode"
+                                class="masterSearch"
+                                (newRowClick)="
+                                  allNationalitySelected($event, 5)
                                 "
-                              >
-                                <mat-option
-                                  *ngFor="let country of countryListData"
-                                  [value]="country.COUNTRY_CODE_ISO2"
-                                >
-                                  {{ country.COUNTRY_NAME }}
-                                </mat-option>
-                              </mat-select>
+                              ></master-search>
                             </mat-form-field>
                             <!-- <mat-form-field
                               style="width: 100%"
@@ -3589,6 +3547,7 @@
                         formControlName="saleDate"
                       />
                       <mat-datepicker-toggle
+                      [disabled]="true"
                         matSuffix
                         [for]="saleDate"
                       ></mat-datepicker-toggle>
