@@ -163,29 +163,29 @@ export class ProductionMfgComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    // if (this.content?.FLAG) {
-    //   if (this.content.FLAG == 'VIEW' || this.content.FLAG == 'DELETE') {
-    //     this.viewMode = true;
-    //     // this.LOCKVOUCHERNO = true;
-    //   }
-    //   if (this.content.FLAG == 'EDIT') {
-    //     this.editMode = true;
-    //     // this.LOCKVOUCHERNO = true;
-    //   }
-    //   if (this.content.FLAG == 'DELETE') {
-    //     this.viewMode = true;
-    //     this.deleteClicked()
-    //   }
-    //   this.productionFrom.controls.FLAG.setValue(this.content.FLAG)
-    //   this.loadSavedData()
-    // } else {
-    //   this.generateVocNo()
-    //   this.setInitialValue()
-    //   this.setCompanyCurrency()
-    //   this.getRateType()
-    // }
+    if (this.content?.FLAG) {
+      if (this.content.FLAG == 'VIEW' || this.content.FLAG == 'DELETE') {
+        this.viewMode = true;
+        // this.LOCKVOUCHERNO = true;
+      }
+      if (this.content.FLAG == 'EDIT') {
+        this.editMode = true;
+        // this.LOCKVOUCHERNO = true;
+      }
+      if (this.content.FLAG == 'DELETE') {
+        this.viewMode = true;
+        this.deleteClicked()
+      }
+      this.productionFrom.controls.FLAG.setValue(this.content.FLAG)
+      this.setInitialValues()
+    } else {
+      this.generateVocNo()
+      this.setLoadValues()
+      this.setCompanyCurrency()
+      this.getRateType()
+    }
   }
-  setInitialValue() {
+  setLoadValues() {
     this.productionFrom.controls.VOCDATE.setValue(this.commonService.currentDate)
     this.productionFrom.controls.VOCTYPE.setValue(this.commonService.getqueryParamVocType())
     this.productionFrom.controls.TIME.setValue(this.commonService.getTime())
@@ -193,7 +193,8 @@ export class ProductionMfgComponent implements OnInit {
     this.productionFrom.controls.YEARMONTH.setValue(this.commonService.yearSelected)
     this.branchCode = this.commonService.branchCode
   }
-  loadSavedData() {
+  // use: set saved values from production get API
+  setInitialValues() {
     if (!this.content?.MID) return
     this.commonService.showSnackBarMsg('MSG81447')
     let API = `JobProductionMaster/GetJobProductionMasterWithMID/${this.content?.MID}`
@@ -220,6 +221,10 @@ export class ProductionMfgComponent implements OnInit {
           this.productionFrom.controls.VOCDATE.setValue(data.VOCDATE)
           this.productionFrom.controls.VOCTYPE.setValue(data.VOCTYPE)
           this.productionFrom.controls.MID.setValue(data.MID)
+          this.productionFrom.controls.METAL_RATE_TYPE.setValue(data.METAL_RATE_TYPE)
+          this.productionFrom.controls.METAL_RATE.setValue(
+            this.commonService.decimalQuantityFormat(data.METAL_RATE, 'RATE')
+          )
           this.productionFrom.controls.CURRENCY_CODE.setValue(data.CURRENCY_CODE)
           this.productionFrom.controls.CURRENCY_RATE.setValue(
             this.commonService.decimalQuantityFormat(data.CURRENCY_RATE, 'RATE')
@@ -295,18 +300,7 @@ export class ProductionMfgComponent implements OnInit {
     this.setFormDecimal('BASE_CURRENCY_RATE', CURRENCY_RATE[0].CONV_RATE, 'RATE')
     this.setCurrencyRate()
   }
-  // setCurrencyRate() {
-  //   if(this.viewMode) return
-  //   const CURRENCY_RATE: any[] = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == this.productionFrom.value.CURRENCY_CODE);
-  //   if (CURRENCY_RATE.length > 0) {
-  //     this.setFormDecimal('CURRENCY_RATE', CURRENCY_RATE[0].CONV_RATE, 'RATE')
-  //   } else {
-  //     this.productionFrom.controls.CURRENCY_CODE.setValue('')
-  //     this.productionFrom.controls.CURRENCY_RATE.setValue('')
-  //     this.commonService.toastErrorByMsgId('MSG1531')
-  //   }
-  //   this.BaseCurrencyRateVisibility(this.productionFrom.value.CURRENCY_CODE, this.productionFrom.value.CURRENCY_RATE)
-  // }
+
   /**USE: to set currency from branch currency master */
   setCurrencyRate() {
     const CURRENCY_RATE: any[] = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == this.productionFrom.value.CURRENCY_CODE);
@@ -318,7 +312,6 @@ export class ProductionMfgComponent implements OnInit {
       this.commonService.toastErrorByMsgId('MSG1531')
     }
   }
-
 
   BaseCurrencyRateVisibility(txtPCurr: any, txtPCurrRate: any) {
     let ConvRateArr: any = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == this.productionFrom.value.CURRENCY_CODE && item.CMBRANCH_CODE == this.productionFrom.value.BRANCH_CODE)
@@ -412,7 +405,6 @@ export class ProductionMfgComponent implements OnInit {
     }
     return false;
   }
-
 
   setPostData() {
     let form = this.productionFrom.value

@@ -542,8 +542,8 @@ export class ComponentMasterComponent implements OnInit {
         if (result.response) {
           this.prefixMasterDetail = result.response;
           this.prefixMasterDetail.LAST_NO = this.incrementAndPadNumber(this.prefixMasterDetail.LAST_NO, 1)
-          this.componentmasterForm.controls.code.setValue(this.prefixMasterDetail.PREFIX_CODE + this.prefixMasterDetail.LAST_NO)
-          this.componentmasterForm.controls.codedes.setValue(result.response.DESCRIPTION)
+          this.componentmasterForm.controls.code.setValue(this.prefixMasterDetail.PREFIX_CODE.toUpperCase() + this.prefixMasterDetail.LAST_NO)
+          this.componentmasterForm.controls.codedes.setValue(result.response.DESCRIPTION.toUpperCase())
 
         } else {
           // this.alloyMastereForm.controls.code.setValue('')
