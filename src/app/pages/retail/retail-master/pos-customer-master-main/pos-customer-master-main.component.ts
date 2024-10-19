@@ -116,6 +116,9 @@ export class PosCustomerMasterMainComponent implements OnInit {
   selectedIntrestedInString: any;
 
   isSelfGift: boolean = false;
+  showCustDesc: boolean = false;
+
+  nationalCode: any = "";
 
   amlNameValidationData = false;
   // dummyDate = "1900-01-01T00:00:00";
@@ -125,6 +128,234 @@ export class PosCustomerMasterMainComponent implements OnInit {
   //   "1754-01-01T00:00:00Z",
   //   "1754-01-01T00:00:00",
   // ];
+
+  posCustomerMasterMainForm: FormGroup = this.formBuilder.group({
+    code: ["", [Validators.required]],
+    parentPosCode: [""],
+    refBy: [""],
+    prefix: ["", [Validators.required]],
+    name: ["", [Validators.required, Validators.maxLength(40)]],
+    firstName: [""],
+    middleName: [""],
+    lastName: [""],
+    creditCardLimitCheck: new FormControl({ value: "", disabled: false }),
+    creditCardLimit: [
+      { value: "", disabled: true },
+      [Validators.maxLength(21)],
+    ],
+    gender: ["", [Validators.required]],
+    maritalSt: ["", [Validators.required]],
+    dob: [
+      "",
+      this.comService.allbranchMaster.AMLDIGICOMPANYNAME === "MeenaJewellers" ||
+      this.comService.allbranchMaster.AMLTYPE === 2
+        ? [Validators.required]
+        : [],
+    ],
+    picture: [null],
+    weddate: [""],
+    country: [
+      "",
+      this.comService.allbranchMaster.AMLDIGICOMPANYNAME === "MeenaJewellers" ||
+      this.comService.allbranchMaster.AMLNAMEVALIDATION === true
+        ? [Validators.required]
+        : [],
+    ],
+    countryCode: ["", [Validators.required]],
+    moblieCountry: ["", [Validators.required]],
+    moblieNumber: ["", [Validators.required]],
+    moblie1Country: [""],
+    moblie1Number: [""],
+    emailId: [
+      "",
+      [
+        Validators.maxLength(40),
+        // Validators.required,
+        Validators.email,
+        this.domainValidator,
+      ],
+    ],
+    telRCountry: [""],
+    telRNumber: [""],
+    tel0Country: [""],
+    tel0number: [""],
+    faxNo: ["", Validators.maxLength(15)],
+    custType: [
+      "",
+      this.comService.allbranchMaster.AMLDIGICOMPANYNAME === "MeenaJewellers" ||
+      this.comService.allbranchMaster.AMLNAMEVALIDATION === true
+        ? [Validators.required, Validators.maxLength(6)]
+        : [Validators.maxLength(6)],
+    ],
+    custDesc: [""],
+    nationality: [
+      "",
+      this.comService.allbranchMaster.AMLDIGICOMPANYNAME === "Jawhara" ||
+      "MeenaJewellers" ||
+      this.comService.allbranchMaster.AMLNAMEVALIDATION === true ||
+      this.comService.allbranchMaster.AMLTYPE === 2
+        ? [Validators.required]
+        : [],
+    ],
+    state: [""],
+    city: [""],
+    language: [""],
+    favCelebration: [""],
+    favCelebrationDesc: [""],
+    vat: new FormControl("", [
+      Validators.maxLength(15),
+      Validators.pattern("^[0-9]*$"),
+    ]),
+    panNo: [
+      "",
+      [Validators.required, Validators.maxLength(10), this.panValidator],
+    ],
+    whatsappCountryCode: [""],
+    whatsappNumber: [""],
+    spouse: ["", [Validators.maxLength(40)]],
+    company: ["", [Validators.maxLength(40)]],
+    zodiacSign: ["", [Validators.maxLength(15)]],
+    noOfChildren: ["", [Validators.maxLength(5)]],
+    religion: [""],
+    religionDesc: [""],
+    occupation1: [""],
+    sourceOfFund: [
+      "",
+      this.comService.allbranchMaster.AMLTYPE === 2
+        ? [Validators.required]
+        : [],
+    ],
+    category: [""],
+    categoryDesc: [""],
+    custStatus: [""],
+    custStatusDesc: [""],
+    income: [""],
+    bloodGroup: [""],
+    custIdType: [
+      "",
+      this.comService.allbranchMaster.AMLDIGICOMPANYNAME === "MeenaJewellers" ||
+      this.comService.allbranchMaster.AMLTYPE === 2
+        ? [Validators.required]
+        : [],
+    ],
+    custID: [
+      "",
+      this.comService.allbranchMaster.AMLDIGICOMPANYNAME === "MeenaJewellers" ||
+      this.comService.allbranchMaster.AMLTYPE === 2
+        ? [Validators.required]
+        : [],
+    ],
+    custDate: [
+      "",
+      this.comService.allbranchMaster.AMLTYPE === 2
+        ? [Validators.required]
+        : [],
+    ],
+    POBox: ["", [Validators.maxLength(6)]],
+    addressPersonal: [
+      "",
+      this.comService.allbranchMaster.AMLDIGICOMPANYNAME === "MeenaJewellers"
+        ? [Validators.required]
+        : [],
+    ],
+    officialAddress: [""],
+    deliveryAddress: [""],
+    remarks: [""],
+    sms: [false],
+    phoneCall: [false],
+    email: [false],
+    whatsapp: [false],
+    notInterested: [false],
+    tv: [false],
+    facebook: [""],
+    amltype: new FormControl("Individual"),
+    outdoor: [false],
+    online: [false],
+    socialMedia: [false],
+    newspaper: [false],
+    radio: [false],
+    other: [false],
+    promotionalOffers: [false],
+    sportsEvents: [false],
+    charityEvents: [false],
+    stageShows: [false],
+    seminars: [false],
+    personalSkills: [false],
+    productSelection: [""],
+    service: [""],
+    makingChanges: [""],
+    brand: [""],
+    buyBackPolicy: [""],
+    loactionandParkingFacility: [""],
+    staffCourtesy: [""],
+    productKnowledgeOfOurStaff: [""],
+    locationandAmbienceOfShop: [""],
+    varietyAndQualityOfJewellery: [""],
+    overallExperience: [""],
+    showroomAccessibility: [""],
+    productRangeAvailability: [""],
+    reasonOfPurchase: [""],
+    gifrPurchased: [{ value: "", disabled: true }],
+    occasionOfPurchase: [""],
+    ageGroup: [""],
+    lookingFor: [""],
+    nextVisit: [""],
+    occupation: [
+      "",
+      this.comService.allbranchMaster.AMLTYPE === 2
+        ? [Validators.required]
+        : [],
+    ],
+    createdBranch: [""],
+    openedOn: [this.currentDate],
+    voucher: [""],
+    saleDate: [""],
+    branchLoc: [""],
+    amount: [""],
+    totalSale: [""],
+    name1: [""],
+    name2: [""],
+    name3: [""],
+    name4: [""],
+    name5: [""],
+    dob1: [""],
+    dob2: [""],
+    dob3: [""],
+    dob4: [""],
+    dob5: [""],
+    spouseName: [""],
+    fatherName: [""],
+    aka: [""],
+    fka: [""],
+    unNumber: [""],
+    designation: [""],
+    goodQualityaka: [""],
+    lowQualityaka: [""],
+    nationalityCode1: [""],
+    nationality1: [""],
+    nationalityCode2: [""],
+    nationality2: [""],
+    nationalityCode3: [""],
+    nationality3: [""],
+    nationalityCode4: [""],
+    nationality4: [""],
+    nationalityCode5: [""],
+    nationality5: [""],
+    passport1: [""],
+    passport2: [""],
+    passport3: [""],
+    passport4: [""],
+    passport5: [""],
+    listedOn: [""],
+    nationalId: [""],
+    addressFromAml: [""],
+    otherInfo: [""],
+    link: [""],
+    twitter: [""],
+    instagram: [""],
+    prefixAml: [""],
+  });
+
   typeidCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -190,11 +421,11 @@ export class PosCustomerMasterMainComponent implements OnInit {
   stateCode: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 48,
+    LOOKUPID: 27,
     SEARCH_FIELD: "STATE_CODE",
     SEARCH_HEADING: "State",
     SEARCH_VALUE: "",
-    WHERECONDITION: "STATE_CODE<> ''",
+    WHERECONDITION: "",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -365,224 +596,6 @@ export class PosCustomerMasterMainComponent implements OnInit {
     VIEW_TABLE: true,
   };
 
-  posCustomerMasterMainForm: FormGroup = this.formBuilder.group({
-    code: ["", [Validators.required]],
-    parentPosCode: [""],
-    refBy: [""],
-    prefix: ["", [Validators.required]],
-    name: ["", [Validators.required, Validators.maxLength(40)]],
-    firstName: [""],
-    middleName: [""],
-    lastName: [""],
-    creditCardLimitCheck: new FormControl({ value: "", disabled: false }),
-    creditCardLimit: [
-      { value: "", disabled: true },
-      [Validators.maxLength(21)],
-    ],
-    gender: ["", [Validators.required]],
-    maritalSt: ["", [Validators.required]],
-    dob: [
-      "",
-      this.comService.allbranchMaster.AMLDIGICOMPANYNAME === "MeenaJewellers" ||
-      this.comService.allbranchMaster.AMLTYPE === 2
-        ? [Validators.required]
-        : [],
-    ],
-    picture: [null],
-    weddate: [""],
-    country: [
-      "",
-      this.comService.allbranchMaster.AMLDIGICOMPANYNAME === "MeenaJewellers" ||
-      this.comService.allbranchMaster.AMLNAMEVALIDATION === true
-        ? [Validators.required]
-        : [],
-    ],
-    countryCode: ["", [Validators.required]],
-    moblieCountry: ["", [Validators.required]],
-    moblieNumber: ["", [Validators.required]],
-    moblie1Country: [""],
-    moblie1Number: [""],
-    emailId: [
-      "",
-      [
-        Validators.maxLength(40),
-        // Validators.required,
-        Validators.email,
-        this.domainValidator,
-      ],
-    ],
-    telRCountry: [""],
-    telRNumber: [""],
-    tel0Country: [""],
-    tel0number: [""],
-    faxNo: ["", Validators.maxLength(15)],
-    custType: [
-      "",
-      this.comService.allbranchMaster.AMLDIGICOMPANYNAME === "MeenaJewellers" ||
-      this.comService.allbranchMaster.AMLNAMEVALIDATION === true
-        ? [Validators.required, Validators.maxLength(6)]
-        : [Validators.maxLength(6)],
-    ],
-    nationality: [
-      "",
-      this.comService.allbranchMaster.AMLDIGICOMPANYNAME === "Jawhara" ||
-      "MeenaJewellers" ||
-      this.comService.allbranchMaster.AMLNAMEVALIDATION === true ||
-      this.comService.allbranchMaster.AMLTYPE === 2
-        ? [Validators.required]
-        : [],
-    ],
-    state: [""],
-    city: [""],
-    language: [""],
-    favCelebration: [""],
-    vat: new FormControl("", [
-      Validators.maxLength(15),
-      Validators.pattern("^[0-9]*$"),
-    ]),
-    panNo: ["", [ Validators.required, Validators.maxLength(10), this.panValidator]],
-    whatsappCountryCode: [""],
-    whatsappNumber: [""],
-    spouse: ["", [Validators.maxLength(40)]],
-    company: ["", [Validators.maxLength(40)]],
-    zodiacSign: ["", [Validators.maxLength(15)]],
-    noOfChildren: ["", [Validators.maxLength(5)]],
-    religion: [""],
-    occupation1: [""],
-    sourceOfFund: [
-      "",
-      this.comService.allbranchMaster.AMLTYPE === 2
-        ? [Validators.required]
-        : [],
-    ],
-    category: [""],
-    custStatus: [""],
-    income: [""],
-    bloodGroup: [""],
-    custIdType: [
-      "",
-      this.comService.allbranchMaster.AMLDIGICOMPANYNAME === "MeenaJewellers" ||
-      this.comService.allbranchMaster.AMLTYPE === 2
-        ? [Validators.required]
-        : [],
-    ],
-    custID: [
-      "",
-      this.comService.allbranchMaster.AMLDIGICOMPANYNAME === "MeenaJewellers" ||
-      this.comService.allbranchMaster.AMLTYPE === 2
-        ? [Validators.required]
-        : [],
-    ],
-    custDate: [
-      "",
-      this.comService.allbranchMaster.AMLTYPE === 2
-        ? [Validators.required]
-        : [],
-    ],
-    POBox: ["", [Validators.maxLength(6)]],
-    addressPersonal: [
-      "",
-      this.comService.allbranchMaster.AMLDIGICOMPANYNAME === "MeenaJewellers"
-        ? [Validators.required]
-        : [],
-    ],
-    officialAddress: [""],
-    deliveryAddress: [""],
-    remarks: [""],
-    sms: [false],
-    phoneCall: [false],
-    email: [false],
-    whatsapp: [false],
-    notInterested: [false],
-    tv: [false],
-    facebook: [""],
-    amltype: new FormControl("Individual"),
-    outdoor: [false],
-    online: [false],
-    socialMedia: [false],
-    newspaper: [false],
-    radio: [false],
-    other: [false],
-    promotionalOffers: [false],
-    sportsEvents: [false],
-    charityEvents: [false],
-    stageShows: [false],
-    seminars: [false],
-    personalSkills: [false],
-    productSelection: [""],
-    service: [""],
-    makingChanges: [""],
-    brand: [""],
-    buyBackPolicy: [""],
-    loactionandParkingFacility: [""],
-    staffCourtesy: [""],
-    productKnowledgeOfOurStaff: [""],
-    locationandAmbienceOfShop: [""],
-    varietyAndQualityOfJewellery: [""],
-    overallExperience: [""],
-    showroomAccessibility: [""],
-    productRangeAvailability: [""],
-    reasonOfPurchase: [""],
-    gifrPurchased: [{ value: "", disabled: true }],
-    occasionOfPurchase: [""],
-    ageGroup: [""],
-    lookingFor: [""],
-    nextVisit: [""],
-    occupation: [
-      "",
-      this.comService.allbranchMaster.AMLTYPE === 2
-        ? [Validators.required]
-        : [],
-    ],
-    createdBranch: [""],
-    openedOn: [this.currentDate],
-    voucher: [""],
-    saleDate: [""],
-    branchLoc: [""],
-    amount: [""],
-    totalSale: [""],
-    name1: [""],
-    name2: [""],
-    name3: [""],
-    name4: [""],
-    name5: [""],
-    dob1: [""],
-    dob2: [""],
-    dob3: [""],
-    dob4: [""],
-    dob5: [""],
-    spouseName: [""],
-    fatherName: [""],
-    aka: [""],
-    fka: [""],
-    unNumber: [""],
-    designation: [""],
-    goodQualityaka: [""],
-    lowQualityaka: [""],
-    nationalityCode1: [""],
-    nationality1: [""],
-    nationalityCode2: [""],
-    nationality2: [""],
-    nationalityCode3: [""],
-    nationality3: [""],
-    nationalityCode4: [""],
-    nationality4: [""],
-    nationalityCode5: [""],
-    nationality5: [""],
-    passport1: [""],
-    passport2: [""],
-    passport3: [""],
-    passport4: [""],
-    passport5: [""],
-    listedOn: [""],
-    nationalId: [""],
-    addressFromAml: [""],
-    otherInfo: [""],
-    link: [""],
-    twitter: [""],
-    instagram: [""],
-    prefixAml: [""],
-  });
   imageName: any;
 
   constructor(
@@ -1007,6 +1020,9 @@ export class PosCustomerMasterMainComponent implements OnInit {
     this.posCustomerMasterMainForm.controls.sourceOfFund.setValue(
       setData.SOURCEOFWEALTHANDFUND
     );
+    this.posCustomerMasterMainForm.controls.lookingFor.setValue(
+      setData.LOOKING_FOR
+    );
   }
 
   editController() {
@@ -1232,12 +1248,15 @@ export class PosCustomerMasterMainComponent implements OnInit {
 
   stateSelected(e: any) {
     console.log(e);
-    this.posCustomerMasterMainForm.controls.state.setValue(e.STATE_DESCRIPTION);
+    this.posCustomerMasterMainForm.controls.state.setValue(e.STATE_CODE);
   }
 
   categorySelected(e: any) {
     console.log(e);
-    this.posCustomerMasterMainForm.controls.category.setValue(e.DESCRIPTION);
+    this.posCustomerMasterMainForm.controls.category.setValue(e.CODE);
+    this.posCustomerMasterMainForm.controls.categoryDesc.setValue(
+      e.DESCRIPTION
+    );
   }
 
   parentPosSelected(e: any) {
@@ -1255,12 +1274,17 @@ export class PosCustomerMasterMainComponent implements OnInit {
 
   nationalitySelected(e: any) {
     console.log(e);
-    this.posCustomerMasterMainForm.controls.nationality.setValue(e.DESCRIPTION);
+    this.posCustomerMasterMainForm.controls.nationality.setValue(e.CODE);
+
+    this.nationalCode = e.CODE;
+    console.log(this.nationalCode);
+
+    this.stateCode.WHERECONDITION = `TYPES='state master' and COUNTRY_CODE = ${this.nationalCode}`;
   }
 
   citySelected(e: any) {
     console.log(e);
-    this.posCustomerMasterMainForm.controls.city.setValue(e.DESCRIPTION);
+    this.posCustomerMasterMainForm.controls.city.setValue(e.CODE);
   }
 
   languageSelected(e: any) {
@@ -1271,16 +1295,25 @@ export class PosCustomerMasterMainComponent implements OnInit {
   favCelebrationSelected(e: any) {
     console.log(e);
     this.posCustomerMasterMainForm.controls.favCelebration.setValue(e.CODE);
+    this.posCustomerMasterMainForm.controls.favCelebrationDesc.setValue(
+      e.DESCRIPTION
+    );
   }
 
   religionSelected(e: any) {
     console.log(e);
-    this.posCustomerMasterMainForm.controls.religion.setValue(e.DESCRIPTION);
+    this.posCustomerMasterMainForm.controls.religion.setValue(e.CODE);
+    this.posCustomerMasterMainForm.controls.religionDesc.setValue(
+      e.DESCRIPTION
+    );
   }
 
   custStatusSelected(e: any) {
     console.log(e);
-    this.posCustomerMasterMainForm.controls.custStatus.setValue(e.DESCRIPTION);
+    this.posCustomerMasterMainForm.controls.custStatus.setValue(e.CODE);
+    this.posCustomerMasterMainForm.controls.custStatusDesc.setValue(
+      e.DESCRIPTION
+    );
   }
 
   giftPurchasedSelected(e: any) {
@@ -1318,6 +1351,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
   customerTypeSelected(e: any) {
     console.log(e);
     this.posCustomerMasterMainForm.controls.custType.setValue(e.CODE);
+    this.posCustomerMasterMainForm.controls.custDesc.setValue(e.DESCRIPTION);
   }
 
   sourceOfFundMasterSelected(e: any) {
@@ -1402,7 +1436,6 @@ export class PosCustomerMasterMainComponent implements OnInit {
   }
 
   customerSave() {
-    
     let POSTYPECOMPULSORY =
       this.comService.getCompanyParamValue("POSTYPECOMPULSORY");
     if (
@@ -1477,7 +1510,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
           STATE: this.posCustomerMasterMainForm.value.state || "",
           CITY: this.posCustomerMasterMainForm.value.city || "",
           ZIPCODE: "",
-          COUNTRY_CODE: this.posCustomerMasterMainForm.value.country || "",
+          COUNTRY_CODE: this.posCustomerMasterMainForm.value.countryCode || "",
           EMAIL: this.posCustomerMasterMainForm.value.emailId || "",
           TEL1:
             this.posCustomerMasterMainForm.value.telRNumber.toString() || "",
@@ -1497,9 +1530,9 @@ export class PosCustomerMasterMainComponent implements OnInit {
           REGION: "",
           NATIONALITY: this.posCustomerMasterMainForm.value.nationality || "",
           RELIGION: this.posCustomerMasterMainForm.value.religion || "",
-          TYPE: "",
+          TYPE: this.posCustomerMasterMainForm.value.custType || "",
           CATEGORY: this.posCustomerMasterMainForm.value.category || "",
-          INCOME: Number(this.posCustomerMasterMainForm.value.income) ,
+          INCOME: Number(this.posCustomerMasterMainForm.value.income),
           CUST_STATUS: this.posCustomerMasterMainForm.value.custStatus || "",
           MID: 0,
           PICTURE_NAME: "",
@@ -1518,7 +1551,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
           MOBILE1:
             this.posCustomerMasterMainForm.value.moblie1Number.toString() || "",
           CUST_Language: this.posCustomerMasterMainForm.value.language || "",
-          CUST_TYPE: this.posCustomerMasterMainForm.value.custType || "",
+          CUST_TYPE: "",
           FAVORITE_CELEB:
             this.posCustomerMasterMainForm.value.favCelebration || "",
           STAFF_COURTESY:
@@ -1672,12 +1705,16 @@ export class PosCustomerMasterMainComponent implements OnInit {
           COUNTRY_DESC: this.posCustomerMasterMainForm.value.country || "",
           STATE_DESC: "",
           CITY_DESC: "",
-          FAVORITE_CELEB_DESC: "",
-          RELIGION_DESC: "",
-          CATEGORY_DESC: "",
-          CUST_STATUS_DESC: "",
+          FAVORITE_CELEB_DESC:
+            this.posCustomerMasterMainForm.value.favCelebrationDesc || "",
+          RELIGION_DESC:
+            this.posCustomerMasterMainForm.value.religionDesc || "",
+          CATEGORY_DESC:
+            this.posCustomerMasterMainForm.value.categoryDesc || "",
+          CUST_STATUS_DESC:
+            this.posCustomerMasterMainForm.value.custStatusDesc || "",
           NATIONALITY_DESC: "",
-          TYPE_DESC: "",
+          TYPE_DESC: this.posCustomerMasterMainForm.value.custDesc || "",
           DETAILS_JOHARA: "",
           DETAILS_FARAH: "",
           DETAILS_JAWAHERALSHARQ: "",
@@ -1700,7 +1737,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
             this.posCustomerMasterMainForm.value.showroomAccessibility || "",
           PRODUCTRANGEAVAILABILITY:
             this.posCustomerMasterMainForm.value.productRangeAvailability || "",
-          LOOKING_FOR: "",
+          LOOKING_FOR: this.posCustomerMasterMainForm.value.lookingFor || "",
           POSCUSTIDEXP_DATE:
             this.posCustomerMasterMainForm.value.custDate || null,
 
@@ -2112,19 +2149,17 @@ export class PosCustomerMasterMainComponent implements OnInit {
       event.preventDefault();
     }
   }
-  
-
-  
 
   onInput(event: any, limit: any, controller?: any, checkExistCustomer?: any) {
-
     const input = event.target as HTMLInputElement;
 
     setTimeout(() => {
       if (input.value.length > limit) {
         input.value = input.value.slice(0, limit);
         if (controller) {
-          this.posCustomerMasterMainForm.controls[controller].setValue(input.value);
+          this.posCustomerMasterMainForm.controls[controller].setValue(
+            input.value
+          );
         }
       }
     }, 0);
