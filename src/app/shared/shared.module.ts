@@ -233,6 +233,7 @@ import { ReportScreenButtonsComponent } from './common/report-screen-buttons/rep
     NumberFormatterPipe,
     DecimalFormatPipe,
     CamelCasePipe,
+    NumericWithoutCommaDirective,
     NumericInputDirective,
     DateValidationDirective,
     FocusOnLoadDirective,

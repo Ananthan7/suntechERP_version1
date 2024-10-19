@@ -60,9 +60,6 @@ export class ProductionStockDetailComponent implements OnInit {
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
   }
-  settingChrgSelected(e: any) {
-    this.productionStockFrom.controls.SETTING_ACCODE.setValue(e.ACCODE);
-  }
   polishChrgData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -74,9 +71,6 @@ export class ProductionStockDetailComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
-  }
-  polishChrgSelected(e: any) {
-    this.productionStockFrom.controls.POLISH_ACCODE.setValue(e.ACCODE);
   }
   rhodiumChrgData: MasterSearchModel = {
     PAGENO: 1,
@@ -90,9 +84,6 @@ export class ProductionStockDetailComponent implements OnInit {
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
   }
-  rhodiumChrgSelected(e: any) {
-    this.productionStockFrom.controls.RHODIUM_ACCODE.setValue(e.ACCODE);
-  }
   labourChrgData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -105,9 +96,6 @@ export class ProductionStockDetailComponent implements OnInit {
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
   }
-  labourChrgSelected(e: any) {
-    this.productionStockFrom.controls.LABOUR_ACCODE.setValue(e.ACCODE);
-  }
   miscChrgData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -119,9 +107,6 @@ export class ProductionStockDetailComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
-  }
-  miscChrgSelected(e: any) {
-    this.productionStockFrom.controls.MISC_ACCODE.setValue(e.ACCODE);
   }
   productionStockFrom: FormGroup = this.formBuilder.group({
     FLAG: [''],
@@ -274,8 +259,16 @@ export class ProductionStockDetailComponent implements OnInit {
               stoneValue += item.GROSS_WT
               settingCharge += item.LAB_RATE
             }
+            item.GROSS_WT = this.commonService.setCommaSerperatedNumber(item.GROSS_WT, 'METAL')
+            item.STONE_WT = this.commonService.setCommaSerperatedNumber(item.STONE_WT, 'STONE')
+            item.NET_WT = this.commonService.setCommaSerperatedNumber(item.NET_WT, 'METAL')
+            item.AMOUNTFC = this.commonService.setCommaSerperatedNumber(item.AMOUNTFC, 'AMOUNT')
+            item.LAB_AMTFC = this.commonService.setCommaSerperatedNumber(item.LAB_AMTFC, 'AMOUNT')
+            item.PUREWT = this.commonService.setCommaSerperatedNumber(item.PUREWT, 'METAL')
+            item.LAB_RATE = this.commonService.setCommaSerperatedNumber(item.LAB_RATE, 'RATE')
+            item.PURITY = this.commonService.setCommaSerperatedNumber(item.PURITY, 'PURITY')
           })
-          this.groupComponentDetails()
+          this.groupComponentDetails()// grouping data
           this.generateTagline() 
           this.setFormDecimal('metalValue', metalValue, 'AMOUNT')
           this.setFormDecimal('stockValue', stoneValue, 'AMOUNT')
@@ -364,8 +357,8 @@ export class ProductionStockDetailComponent implements OnInit {
       return res;
     }, {});
     result.forEach((item: any) => {
-      item.GROSS_WT = this.commonService.decimalQuantityFormat(item.GROSS_WT, 'METAL')
-      item.AMOUNT_FC = this.commonService.decimalQuantityFormat(item.AMOUNT_FC, 'AMOUNT')
+      item.GROSS_WT = this.commonService.setCommaSerperatedNumber(item.GROSS_WT, 'METAL')
+      item.AMOUNT_FC = this.commonService.setCommaSerperatedNumber(item.AMOUNT_FC, 'AMOUNT')
     })
     this.componentGroupedList = result
   }
@@ -660,6 +653,21 @@ export class ProductionStockDetailComponent implements OnInit {
 
       })
     this.subscriptions.push(Sub)
+  }
+  settingChrgSelected(e: any) {
+    this.productionStockFrom.controls.SETTING_ACCODE.setValue(e.ACCODE);
+  }
+  polishChrgSelected(e: any) {
+    this.productionStockFrom.controls.POLISH_ACCODE.setValue(e.ACCODE);
+  }
+  rhodiumChrgSelected(e: any) {
+    this.productionStockFrom.controls.RHODIUM_ACCODE.setValue(e.ACCODE);
+  }
+  labourChrgSelected(e: any) {
+    this.productionStockFrom.controls.LABOUR_ACCODE.setValue(e.ACCODE);
+  }
+  miscChrgSelected(e: any) {
+    this.productionStockFrom.controls.MISC_ACCODE.setValue(e.ACCODE);
   }
 
   onDragStarted() {
