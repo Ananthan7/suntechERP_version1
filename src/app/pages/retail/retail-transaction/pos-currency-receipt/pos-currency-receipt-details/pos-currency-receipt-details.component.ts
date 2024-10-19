@@ -680,7 +680,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
 
   CurrencySelected(e: any) {
     console.log(e);
-    this.resetVatFields();
+    // this.resetVatFields();
     this.posCurrencyReceiptDetailsForm.controls.currencyCode.setValue(
       e.Currency
     );
@@ -692,6 +692,28 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
     // );
 
     this.compCurrencyRate = this.comService.decimalQuantityFormat(e["Conv Rate"], "RATE") ?? "";
+
+
+
+
+    const amountFc = this.comService.emptyToZero(this.posCurrencyReceiptDetailsForm.value.amountCc)/this.comService.emptyToZero(this.posCurrencyReceiptDetailsForm.value.currencyRate);
+
+    // if (amountFc === 0) {
+    //   this.handleZeroAmount();
+    //   return;
+    // }
+
+    // this.resetCommissionAmount();
+
+    const amountLc = this.convertToLocalCurrency(amountFc);
+ 
+    const vatPrc = this.posCurrencyReceiptDetailsForm.controls.vat.value;
+    const vatCc = this.calculateVat(amountFc, vatPrc);
+
+    const vatAmountLC = this.calculateVat(amountFc, vatPrc);
+
+    this.updateAmounts(amountLc, amountFc, vatCc, vatAmountLC);
+
 
   }
 
@@ -1123,8 +1145,8 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
         SGST_AMOUNTFC: 0,
         SGST_AMOUNTCC: 0,
         IGST_PER: this.posCurrencyReceiptDetailsForm.value.vat || 0,
-        IGST_AMOUNTFC: this.posCurrencyReceiptDetailsForm.value.vatcc.amountCc?.replace(/,/g, '') || 0,
-        IGST_AMOUNTCC: this.posCurrencyReceiptDetailsForm.value.vatcc.amountCc?.replace(/,/g, '') || 0,
+        IGST_AMOUNTFC: this.posCurrencyReceiptDetailsForm.value.vatcc?.replace(/,/g, '') || 0,
+        IGST_AMOUNTCC: this.posCurrencyReceiptDetailsForm.value.vatcc?.replace(/,/g, '') || 0,
         CGST_ACCODE: "",
         SGST_ACCODE: "",
         IGST_ACCODE: this.igstAccode,
@@ -1153,11 +1175,11 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
             : 0,
         COMM_TAXAMOUNTCC:
           this.posCurrencyReceiptDetailsForm.value.modeOfSelect == "Credit Card"
-            ? this.posCurrencyReceiptDetailsForm.value.vatcc.amountCc?.replace(/,/g, '') || 0
+            ? this.posCurrencyReceiptDetailsForm.value.vatcc?.replace(/,/g, '') || 0
             : 0,
         COMM_TAXAMOUNTFC:
           this.posCurrencyReceiptDetailsForm.value.modeOfSelect == "Credit Card"
-            ? this.posCurrencyReceiptDetailsForm.value.vatcc.amountCc?.replace(/,/g, '') || 0
+            ? this.posCurrencyReceiptDetailsForm.value.vatcc?.replace(/,/g, '') || 0
             : 0,
         DT_TDS_CODE: "",
         TDS_PER: 0,
@@ -1282,11 +1304,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
     this.resetCommissionAmount();
 
     const amountLc = this.convertToLocalCurrency(amountFc);
-    const fcVatAmount = this.comService.FCToCC(
-      this.posCurrencyReceiptDetailsForm.value.currencyCode,
-      this.comService.emptyToZero(amountLc),
-      this.comService.emptyToZero(this.compCurrencyRate)
-    );
+ 
     const vatPrc = this.posCurrencyReceiptDetailsForm.controls.vat.value;
     const vatCc = this.calculateVat(amountFc, vatPrc);
 
@@ -1371,7 +1389,9 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
   // }
 
   convertToLocalCurrency(amountFc: any): any {
-    return this.comService.FCToCC(
+    return this.comService.emptyToZero(amountFc) * this.comService.emptyToZero(this.posCurrencyReceiptDetailsForm.value.currencyRate)
+  
+     this.comService.FCToCC(
       this.posCurrencyReceiptDetailsForm.value.currencyCode,
       amountFc, this.comService.emptyToZero(this.compCurrencyRate)
     );
@@ -1596,7 +1616,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
 
 
   SPvalidateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
-    this.resetVatFields();
+    // this.resetVatFields();
     LOOKUPDATA.SEARCH_VALUE = event.target.value;
 
     if (event.target.value === '' || this.viewOnly === true) return;
@@ -1624,7 +1644,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
 
             if (searchResult && searchResult.length > 0) {
               let matchedItem = searchResult[0];
-              this.resetVatFields();
+              // this.resetVatFields();
 
                this.posCurrencyReceiptDetailsForm.controls.currencyCode.setValue(
                 matchedItem.Currency
@@ -1642,6 +1662,25 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
 
               this.compCurrencyRate = this.comService.decimalQuantityFormat(matchedItem['Conv Rate'],
                 "RATE") ?? "";
+
+
+                const amountFc = this.comService.emptyToZero(this.posCurrencyReceiptDetailsForm.value.amountCc)/this.comService.emptyToZero(this.posCurrencyReceiptDetailsForm.value.currencyRate);
+
+                // if (amountFc === 0) {
+                //   this.handleZeroAmount();
+                //   return;
+                // }
+            
+                // this.resetCommissionAmount();
+            
+                const amountLc = this.convertToLocalCurrency(amountFc);
+             
+                const vatPrc = this.posCurrencyReceiptDetailsForm.controls.vat.value;
+                const vatCc = this.calculateVat(amountFc, vatPrc);
+            
+                const vatAmountLC = this.calculateVat(amountFc, vatPrc);
+            
+                this.updateAmounts(amountLc, amountFc, vatCc, vatAmountLC);
 
 
             } else {

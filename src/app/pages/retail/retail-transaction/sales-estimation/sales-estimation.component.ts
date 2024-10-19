@@ -9060,7 +9060,7 @@ export class SalesEstimationComponent implements OnInit {
                   this.snackBar.open('POS Updated Successfully', 'OK');
                   this.isNewButtonDisabled = false;
 
-                  this.vocDataForm.controls['fcn_voc_no'].setValue(res.response.retailSales.VOCNO);
+                  this.vocDataForm.controls['fcn_voc_no'].setValue(res.response.retailEstimation.VOCNO);
 
                   // this.close('reloadMainGrid');
                   if (this.posPlanetIssuing && this.customerDataForm.value.tourVatRefuncYN && this.customerDataForm.value.tourVatRefundNo == '') {

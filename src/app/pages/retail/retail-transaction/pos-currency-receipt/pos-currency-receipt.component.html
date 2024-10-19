@@ -69,8 +69,8 @@
               <label for="inputPassword" class="col-sm-3 col-form-label" id="ID004">Party currency :</label>
               <div class="col-md-4">
                 <mat-form-field style="width: -webkit-fill-available" appearance="outline">
-                  <input type="text" [readonly]="true" matInput formControlName="partyCurrency" readonly />
-                  <master-search class="masterSearch" *ngIf="!viewOnly" (newRowClick)="currencySelected($event)"
+                  <input type="text" [readonly]="true" (focusout)="SPvalidateLookupField($event,currencyData,'currencyCode',true)" matInput formControlName="partyCurrency" [readonly]="viewOnly" />
+                  <master-search class="masterSearch" (focusout)="openTab($event, 'partyCurrency')" *ngIf="!viewOnly" (newRowClick)="currencySelected($event)"
                     [MasterSearchData]="currencyData"></master-search>
                 </mat-form-field>
                 <!-- <mat-form-field style="width: 70%">
@@ -130,7 +130,7 @@
               <div class="col-md-3">
 
                 <mat-form-field style="width: -webkit-fill-available" appearance="outline">
-                  <input type="text" (focusout)="SPvalidateLookupField($event,customerCodeData,'customerCode')" matInput
+                  <input type="text" (focusout)="SPvalidateLookupField($event,customerCodeData,'customerCode',false)" matInput
                     formControlName="customerCode" />
                   <master-search class="masterSearch" (focusout)="openTab($event, 'customerCode')" #overlayCustomerCode
                     *ngIf="!viewOnly" [MasterSearchData]="customerCodeData"

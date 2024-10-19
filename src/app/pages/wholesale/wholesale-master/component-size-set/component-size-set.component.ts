@@ -22,6 +22,7 @@ export class ComponentSizeSetComponent implements OnInit {
   allMode: string;
   checkBoxesMode: string;
   viewMode: boolean = false;
+  codeEnable: boolean = true;
   private subscriptions: Subscription[] = [];
   @Input() content!: any;
   tableData: any[] = [];
@@ -75,7 +76,17 @@ export class ComponentSizeSetComponent implements OnInit {
     } else if (this.content.FLAG == 'EDIT') {
       this.setFormValues();
       this.editableMode = true;
+      this.codeEnable = false;
       this.getComponentSizeTypeOptions();
+    }
+  }
+
+  codeEnabled() {
+    if (this.componentsizesetmasterForm.value.code == '') {
+      this.codeEnable = true;
+    }
+    else {
+      this.codeEnable = false;
     }
   }
 
@@ -98,6 +109,7 @@ export class ComponentSizeSetComponent implements OnInit {
     this.subscriptions.push(Sub);
   }
 
+ 
 
 
   setFormValues() {
@@ -191,7 +203,6 @@ export class ComponentSizeSetComponent implements OnInit {
       if (values.includes(parseFloat(value.SRNO))) {
         acc.push(index);
         console.log(acc);
-
       }
       return acc;
     }, indexes);
