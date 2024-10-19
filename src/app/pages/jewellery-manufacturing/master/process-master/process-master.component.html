@@ -123,7 +123,7 @@
                             </div>
                             <div class="row mb-2">
                                 <label for="input" id="ID008" class="col-sm-2 col-form-label">Approval
-                                    Code :</label>
+                                    Code <span class="required" *ngIf="processMasterForm.value.ApprovalRequired">*</span> : </label>
                                 <div class="col-sm-3">
                                     <mat-form-field style="width: 87%" appearance="outline">
                                         <input type="text" matInput maxlength="6" UpperCaseDirective autocomplete="off"
