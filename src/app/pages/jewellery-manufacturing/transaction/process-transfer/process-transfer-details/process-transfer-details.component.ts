@@ -3463,7 +3463,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       let Sub: Subscription = this.dataService.getDynamicAPI(API)
         .subscribe((result) => {
           this.commonService.closeSnackBarMsg()
-          let data: any = [result.response]
+          let data: any = result.status == 'Success' ? [result.response] : []
           data = data?.filter((item: any) => (item.EXCLUDE_TRANSFER_WT == true || this.emptyToZero(item.PURITY) == this.emptyToZero(form.PURITY)) && item.SUBCODE == false)
           if (data.length > 0) {
             let txtMScrapPurity = data[0]["PURITY"];
