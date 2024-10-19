@@ -684,6 +684,11 @@
                     formControlName="nationality"
                     required
                   />
+                  <input
+                  *ngIf="showCustDesc"
+                  matInput="text"
+                  formControlName="nationalityDesc"
+                />
                   <master-search
                     *ngIf="flag !== 'VIEW'"
                     (focusout)="openTab($event, 'nationality')"
@@ -704,20 +709,6 @@
               >
 
               <div class="col-md-8">
-                <!-- <mat-form-field style="width: 100%" appearance="outline">
-                  <mat-select
-                    [disabled]="flag === 'VIEW'"
-                    formControlName="state"
-                    (selectionChange)="onCitySelect($event.value)"
-                  >
-                    <mat-option
-                      *ngFor="let state of stateListData"
-                      [value]="state.CODE"
-                    >
-                      {{ state.NAME }}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field> -->
 
                 <mat-form-field
                   style="width: -webkit-fill-available"
@@ -729,8 +720,13 @@
                     formControlName="state"
                     required
                   />
+                  <input
+                  *ngIf="showCustDesc"
+                  matInput="text"
+                  formControlName="stateDesc"
+                />
                   <master-search
-                    *ngIf="flag !== 'VIEW'"
+                    *ngIf="flag !== 'VIEW' && isViewState"
                     (focusout)="openTab($event, 'state')"
                     #overlayState
                     [MasterSearchData]="stateCode"
@@ -749,20 +745,6 @@
               >
 
               <div class="col-md-8">
-                <!-- <mat-form-field style="width: 100%" appearance="outline">
-                  <mat-select
-                    [disabled]="flag === 'VIEW'"
-                    formControlName="city"
-                    (selectionChange)="onCity($event.value)"
-                  >
-                    <mat-option
-                      *ngFor="let city of cityListData"
-                      [value]="city.NAME"
-                    >
-                      {{ city.NAME }}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field> -->
                 <mat-form-field
                   style="width: -webkit-fill-available"
                   appearance="outline"
@@ -773,8 +755,13 @@
                     formControlName="city"
                     required
                   />
+                  <input
+                  *ngIf="showCustDesc"
+                  matInput="text"
+                  formControlName="cityDesc"
+                />
                   <master-search
-                    *ngIf="flag !== 'VIEW'"
+                    *ngIf="flag !== 'VIEW' && isViewCity"
                     (focusout)="openTab($event, 'city')"
                     #overlayCity
                     [MasterSearchData]="cityCodeData"

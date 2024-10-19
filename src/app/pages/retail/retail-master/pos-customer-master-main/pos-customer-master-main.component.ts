@@ -117,7 +117,8 @@ export class PosCustomerMasterMainComponent implements OnInit {
 
   isSelfGift: boolean = false;
   showCustDesc: boolean = false;
-
+  isViewState: boolean = false;
+  isViewCity: boolean = false;
   nationalCode: any = "";
 
   amlNameValidationData = false;
@@ -197,7 +198,9 @@ export class PosCustomerMasterMainComponent implements OnInit {
         ? [Validators.required]
         : [],
     ],
+    nationalityDesc:[""],
     state: [""],
+    stateDesc: [""],
     city: [""],
     language: [""],
     favCelebration: [""],
@@ -422,7 +425,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 27,
-    SEARCH_FIELD: "STATE_CODE",
+    SEARCH_FIELD: "CODE",
     SEARCH_HEADING: "State",
     SEARCH_VALUE: "",
     WHERECONDITION: "",
@@ -434,11 +437,11 @@ export class PosCustomerMasterMainComponent implements OnInit {
   cityCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 3,
+    LOOKUPID: 28,
     SEARCH_FIELD: "CODE",
     SEARCH_HEADING: "City",
     SEARCH_VALUE: "",
-    WHERECONDITION: "TYPES='REGION MASTER'",
+    WHERECONDITION: "",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   };
@@ -681,21 +684,6 @@ export class PosCustomerMasterMainComponent implements OnInit {
       this.amlNameValidationData = true;
     }
   }
-
-  // reasonOfPurchase() {
-  //   this.posCustomerMasterMainForm
-  //     .get("reasonOfPurchase")
-  //     ?.valueChanges.subscribe((value) => {
-  //       if (value === "Gift") {
-  //         this.isSelfGift = true;
-  //         this.posCustomerMasterMainForm.get("gifrPurchased")?.enable();
-  //       } else {
-  //         this.isSelfGift = false;
-  //         this.posCustomerMasterMainForm.controls.gifrPurchased.setValue("");
-  //         this.posCustomerMasterMainForm.get("gifrPurchased")?.disable();
-  //       }
-  //     });
-  // }
 
   reasonOfPurchase() {
     this.posCustomerMasterMainForm
@@ -1248,7 +1236,10 @@ export class PosCustomerMasterMainComponent implements OnInit {
 
   stateSelected(e: any) {
     console.log(e);
-    this.posCustomerMasterMainForm.controls.state.setValue(e.STATE_CODE);
+    this.posCustomerMasterMainForm.controls.state.setValue(e.CODE);
+    this.posCustomerMasterMainForm.controls.stateDesc.setValue(e.DESCRIPTION);
+    this.cityCodeData.WHERECONDITION = `TYPES='city master' and COUNTRY_CODE = '${this.nationalCode}' and STATE_CODE = '${e.CODE}' `;
+    this.isViewCity = true
   }
 
   categorySelected(e: any) {
@@ -1275,16 +1266,16 @@ export class PosCustomerMasterMainComponent implements OnInit {
   nationalitySelected(e: any) {
     console.log(e);
     this.posCustomerMasterMainForm.controls.nationality.setValue(e.CODE);
-
+    this.posCustomerMasterMainForm.controls.nationalityDesc.setValue(e.DESCRIPTION);
     this.nationalCode = e.CODE;
-    console.log(this.nationalCode);
-
-    this.stateCode.WHERECONDITION = `TYPES='state master' and COUNTRY_CODE = ${this.nationalCode}`;
+    this.stateCode.WHERECONDITION = `TYPES='state master' and COUNTRY_CODE = '${this.nationalCode}'`;
+    this.isViewState = true
   }
 
   citySelected(e: any) {
     console.log(e);
     this.posCustomerMasterMainForm.controls.city.setValue(e.CODE);
+    this.posCustomerMasterMainForm.controls.cityDesc.setValue(e.DESCRIPTION);
   }
 
   languageSelected(e: any) {
@@ -1703,8 +1694,8 @@ export class PosCustomerMasterMainComponent implements OnInit {
 
           OT_TRANSFER_TIME: "",
           COUNTRY_DESC: this.posCustomerMasterMainForm.value.country || "",
-          STATE_DESC: "",
-          CITY_DESC: "",
+          STATE_DESC: this.posCustomerMasterMainForm.value.stateDesc||"",
+          CITY_DESC:  this.posCustomerMasterMainForm.value.cityDesc||"",
           FAVORITE_CELEB_DESC:
             this.posCustomerMasterMainForm.value.favCelebrationDesc || "",
           RELIGION_DESC:
@@ -1713,7 +1704,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
             this.posCustomerMasterMainForm.value.categoryDesc || "",
           CUST_STATUS_DESC:
             this.posCustomerMasterMainForm.value.custStatusDesc || "",
-          NATIONALITY_DESC: "",
+          NATIONALITY_DESC: this.posCustomerMasterMainForm.value.nationalityDesc||"",
           TYPE_DESC: this.posCustomerMasterMainForm.value.custDesc || "",
           DETAILS_JOHARA: "",
           DETAILS_FARAH: "",
