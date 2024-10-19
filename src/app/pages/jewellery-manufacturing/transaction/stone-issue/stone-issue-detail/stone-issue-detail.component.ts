@@ -274,10 +274,11 @@ export class StoneIssueDetailComponent implements OnInit {
     this.stoneIssueDetailsFrom.controls.PART_CODE.setValue(this.content.PART_CODE)
     this.stoneIssueDetailsFrom.controls.batchid.setValue(this.content.SUB_STOCK_CODE)
     this.stoneIssueDetailsFrom.controls.consignment.setValue(this.content.CONSIGNMENT)
-    this.setValueWithDecimal('unitrate', 0, 'THREE')
-    this.setValueWithDecimal('amount', 0, 'METAL')
+    this.setValueWithDecimal('unitrate', 0, 'AMOUNT')
+    this.setValueWithDecimal('amount', 0, 'AMOUNT')
     this.setValueWithDecimal('pointerwt', 0, 'THREE')
     this.setValueWithDecimal('stockbal', 0, 'THREE')
+    this.setValueWithDecimal('carat', 0, 'METAL')
     this.getImageData()
     this.CalculatePiecesAndPointerWT()
   }
@@ -724,14 +725,10 @@ export class StoneIssueDetailComponent implements OnInit {
   }
   CalculatePiecesAndPointerWT() {
     // Get the form values
-    const pieces = this.stoneIssueDetailsFrom.controls.pieces.value || 0;  // Default to 0 if null or undefined
-    const pointerwt = this.stoneIssueDetailsFrom.controls.pointerwt.value || 0;  // Default to 0 if null or undefined
-    
-    // Perform the calculation (as an example, this multiplies pieces by pointerwt)
+    const pieces = this.stoneIssueDetailsFrom.controls.pieces.value || 0;  
+    const pointerwt = this.stoneIssueDetailsFrom.controls.pointerwt.value || 0;  
     const calculatedCarat = pieces * pointerwt;
-  
-    // Set the calculated value to the 'carat' form control
-    this.stoneIssueDetailsFrom.controls.carat.setValue(calculatedCarat);
+    this.stoneIssueDetailsFrom.controls.carat.setValue(calculatedCarat.toFixed(3));
   }
   
   CollectPointerWtValidation() {
@@ -982,6 +979,7 @@ export class StoneIssueDetailComponent implements OnInit {
           // this.columnhead1 = Object.keys(this.tableData[0])
           this.FillStnRequiredDetail()
           this.getImageData()
+          this.setOnLoadDetails()
         } else {
           // this.comService.toastErrorByMsgId('MSG1747')
         }
