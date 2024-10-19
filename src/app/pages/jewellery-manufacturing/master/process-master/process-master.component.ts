@@ -21,6 +21,7 @@ export class ProcessMasterComponent implements OnInit {
   @ViewChild('overlayapprovalProcessSearch') overlayapprovalProcessSearch!: MasterSearchComponent;
   @ViewChild('overlayrecStockCodeSearch') overlayrecStockCodeSearch!: MasterSearchComponent;
   @ViewChild('overlayadjustaccodeSearch') overlayadjustaccodeSearch!: MasterSearchComponent;
+  @ViewChild('overlayjobNoSearch') overlayjobNoSearch!: MasterSearchComponent; //
   @ViewChild('overlaylossaccodeSearch') overlaylossaccodeSearch!: MasterSearchComponent;
   @ViewChild('overlayrecoveaccodeSearch') overlayrecoveaccodeSearch!: MasterSearchComponent;
   @ViewChild('overlaygainaccodeSearch') overlaygainaccodeSearch!: MasterSearchComponent;
@@ -45,7 +46,7 @@ export class ProcessMasterComponent implements OnInit {
   lossDisable: boolean = false;
   // processMasterForm !: FormGroup;
   dele: boolean = false;
-
+  selectedTabIndex = 0;
   lossData: boolean = false;
   recoveryData: boolean = false;
 
@@ -173,6 +174,19 @@ export class ProcessMasterComponent implements OnInit {
     VIEW_TABLE: true,
   }
 
+  jobNoData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 46,
+    SEARCH_FIELD: 'job_number',
+    SEARCH_HEADING: 'Job No',
+    SEARCH_VALUE: '',
+    WHERECONDITION: `JOB_CLOSED_ON is null and  Branch_code = '${this.commonService.branchCode}'`,
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+
   maxInputLength: number = 2
   processMasterForm: FormGroup = this.formBuilder.group({
     mid: [''],
@@ -186,6 +200,7 @@ export class ProcessMasterComponent implements OnInit {
     trayWeight: [''],
     approvalCode: [''],
     approvalProcess: [''],
+    jobNumber: [''],
     recStockCode: [''],
     labour_charge: [''],
     LOSS_ACCODE: [''],
@@ -219,6 +234,7 @@ export class ProcessMasterComponent implements OnInit {
     RecoveryProcess: [false],
     AutoTransfer: [false],
     ApplySetting: [false],
+    applySetting: [false],
     loss_standard: [''],
     loss_min: [''],
     loss_max: [''],
@@ -255,7 +271,9 @@ export class ProcessMasterComponent implements OnInit {
     // this.islossReadOnly = true;
     // this.isRecovReadOnly = true;
     // this.isAlloWGainReadOnly = true;
-
+    this.jobNumberShow();
+    this.mandatoryChecklist();
+    this.applySettinglist();
     this.setInitialValues()
     this.getProcessTypeOptions()
     if (this.content?.FLAG) {
@@ -331,6 +349,7 @@ export class ProcessMasterComponent implements OnInit {
     this.processMasterForm.controls.ADJUST_ACCODE.setValue(this.content.ADJUST_ACCODE);
     // this.processMasterForm.controls.ApplySetting.setValue(this.onchangeCheckBoxNum(this.content.APPLY_SETTING));
     this.processMasterForm.controls.WIPaccount.setValue(this.content.WIP_ACCODE);
+    this.processMasterForm.controls.jobNumber.setValue(this.content.JOB_NUMBER);
 
     this.processMasterForm.controls.Position.setValue(this.content.POSITION);
     this.processMasterForm.controls.recStockCode.setValue(this.content.RECOV_STOCK_CODE);
@@ -373,6 +392,28 @@ export class ProcessMasterComponent implements OnInit {
     }
   }
 
+  jobNumberShow() {
+    // console.log(this.commonService.getCompanyParamValue('PROCESSBALANCETOJOB'));
+    if (this.commonService.getCompanyParamValue('PROCESSBALANCETOJOB') == 1) {
+      return true
+    }
+    return false  
+  }
+
+  mandatoryChecklist(){
+    console.log(this.commonService.getCompanyParamValue('COMPACCODE'));    
+    if(this.commonService.getCompanyParamValue('COMPACCODE') == 'SUNTECH'){
+      return true
+    } return false
+  }
+
+  applySettinglist(){
+    console.log(this.commonService.getCompanyParamValue('DIALABOURCHARGETYPE'));    
+    if(this.commonService.getCompanyParamValue('DIALABOURCHARGETYPE') == 4){
+      return true
+    } return false
+  }
+
   codeEnabled() {
     if (this.processMasterForm.value.processCode == '') {
       this.codeEnable = true;
@@ -388,6 +429,10 @@ export class ProcessMasterComponent implements OnInit {
       return { minValue: true };
     }
     return null;
+  }
+
+  changedCheckbox(event: any) {
+    this.tableData[event.data.SRNO - 1].SELECT1 = !event.data.SELECT1;
   }
 
   /**use: to check code exists in db */
@@ -558,7 +603,7 @@ export class ProcessMasterComponent implements OnInit {
 
     if (form.loss != true) {
       this.commonService.toastErrorByMsgId('MSG1395');//loss cannot be empty
-        return true;
+      return true;
     }
 
     if (form.loss == true) {
@@ -607,7 +652,7 @@ export class ProcessMasterComponent implements OnInit {
       return true
     }
     const nameRegexp: RegExp = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/;
-    if(form.processCode == nameRegexp){
+    if (form.processCode == nameRegexp) {
       this.commonService.toastErrorByMsgId('MSG81525');//Process Code cannot be empty
       return true;
     }
@@ -682,7 +727,7 @@ export class ProcessMasterComponent implements OnInit {
       "MIN_LOSS": form.loss_min || 0,
       "MAX_LOSS": form.loss_max || 0,
       "LOSS_ON_GROSS": this.onchangeCheckBox(form.loss_on_gross),
-      "JOB_NUMBER": "",
+      "JOB_NUMBER": this.commonService.nullToString(form.jobNumber),
       "LABCHRG_PERHOUR": this.commonService.emptyToZero(form.labour_charge),
       "APPLY_SETTING": form.ApplySetting,
       "TIMEON_PROCESS": this.onchangeCheckBox(form.TimeCalculateonProcess),
@@ -797,7 +842,10 @@ export class ProcessMasterComponent implements OnInit {
     if (this.checkCode()) return
     this.processMasterForm.controls.ADJUST_ACCODE.setValue(e.ACCODE);
   }
-
+  jobNoSelected(e: any) {
+    if (this.checkCode()) return
+    this.processMasterForm.controls.jobNumber.setValue(e.job_number);
+  }
   /** checking for same account code selection */
   private isSameAccountCodeSelected(accountCode: any, formControlName: string): boolean {
     console.log(this.processMasterForm.value, 'this.processMasterForm.value');
@@ -1222,8 +1270,11 @@ export class ProcessMasterComponent implements OnInit {
       case 'ADJUST_ACCODE':
         this.overlayadjustaccodeSearch.showOverlayPanel(event);
         break;
+      case 'JOB_NO':
+        this.overlayjobNoSearch.showOverlayPanel(event);
+        break;
       case 'LOSS_ACCODE':
-        this.overlaylossaccodeSearch.showOverlayPanel(event);
+        this.overlaylossaccodeSearch.showOverlayPanel(event);//
         break;
       case 'RECOV_ACCODE':
         this.overlayrecoveaccodeSearch.showOverlayPanel(event);

@@ -20,8 +20,9 @@
                   <div class="col-md-3">
                     <mat-form-field appearance="outline" style="width: 100%;">
                       <input type="text" formControlName="code" matInput #code id="code"
-                        (focusout)="checkCodeExists($event)" (keyup)="codeEnabled()" [readonly]="editableMode|| viewMode"
-                        (input)="code.value = code.value.toUpperCase()" maxlength="6" appNoEmptySpace />
+                        (focusout)="checkCodeExists($event)" (keyup)="codeEnabled()"
+                        [readonly]="editableMode|| viewMode" (input)="code.value = code.value.toUpperCase()"
+                        maxlength="6" appNoEmptySpace />
                     </mat-form-field>
 
                   </div>
@@ -35,7 +36,8 @@
                   <label for="inputPassword" class="col-sm-2 col-form-label">Description * :</label>
                   <div class="col-md-6">
                     <mat-form-field appearance="outline" style="width: 100%;">
-                      <input type="text" formControlName="description" matInput #description [readonly]="viewMode || codeEnable"
+                      <input type="text" formControlName="description" matInput #description
+                        [readonly]="viewMode || codeEnable"
                         (input)="description.value = description.value.toUpperCase()" maxlength="100" appNoEmptySpace />
                     </mat-form-field>
                   </div>
@@ -52,8 +54,8 @@
             <div class="col-md-8">
               <div class="d-flex justify-content-start text-start">
                 <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
-                  [viewAddBtn]="!viewMode && !codeEnable" [viewDeleteBtn]="!viewMode && !codeEnable" (addClick)="addTableData()"
-                  (deleteClick)="deleteTableData()">
+                  [viewAddBtn]="!viewMode && !codeEnable" [viewDeleteBtn]="!viewMode && !codeEnable"
+                  (addClick)="addTableData()" (deleteClick)="deleteTableData()">
                 </menu-buttons>
               </div>
             </div>
@@ -79,10 +81,6 @@
                 <mat-select [(value)]="selectedOptions[data.data.SRNO - 1]"
                   (selectionChange)="onCodeSelect($event, data)"
                   *ngIf="componentSizeType && componentSizeType.length > 0">
-                  <!-- <mat-select-trigger>
-                    <input matInput type="text" placeholder="Search..." (click)="onSearch($event)" [value]=""
-                      (click)="$event.stopPropagation()" />
-                  </mat-select-trigger> -->
 
                   <mat-option *ngFor="let option of componentSizeType" [value]="option"
                     [disabled]="isOptionSelected(data.data.SRNO, option) || viewMode || codeEnable">
@@ -90,13 +88,12 @@
                   </mat-option>
                 </mat-select>
               </mat-form-field>
+
             </div>
-
-
-
             <div *dxTemplate="let data of 'descriptiontemp'">
               <mat-form-field appearance="outline" style="width: 100%;">
-                <input type="text" matInput readonly style="width: 100%;" [value]="data.value" [readonly]="viewMode || codeEnable" />
+                <input type="text" matInput readonly style="width: 100%;" [value]="data.value"
+                  [readonly]="viewMode || codeEnable" />
               </mat-form-field>
             </div>
           </dx-data-grid>
