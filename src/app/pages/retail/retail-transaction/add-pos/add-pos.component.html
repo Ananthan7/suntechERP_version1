@@ -2607,7 +2607,7 @@
                     <mat-form-field appearance="outline">
                       <input type="text" matInput id="fcn_returns_voc_no" formControlName="fcn_returns_voc_no"
                         (change)="getRetailSReturn_EvnFn($event)"
-                        [readonly]="viewOnly || this.sales_returns_items.length > 0" NumberOnly />
+                        [readonly]="viewOnly || this.sales_returns_items.length > 0" NumberOnlyWithoutComma />
                       <i class="fa fa-search sReturnVocNumsearch" (click)="searchVocNoSalRet()"></i>
                       <mat-error *ngIf="salesReturnForm.controls.fcn_returns_voc_no.hasError('required')" id="ID117">
                         VOC No. is <strong>required</strong>
