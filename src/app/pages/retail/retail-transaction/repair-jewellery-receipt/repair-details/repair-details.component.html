@@ -293,8 +293,7 @@
               <div class="col-md-2">
                 <div class="position-relative d-flex">
                   <mat-form-field style="width: 100%">
-                    <input [readonly]="viewOnly === true" type="number" matInput formControlName="no_of" min="0"
-                      required />
+                    <input [readonly]="viewOnly === true" type="number" matInput formControlName="no_of" min="0" />
                   </mat-form-field>
                 </div>
               </div>
@@ -329,7 +328,14 @@
     <div class="row mb-1">
       <div class="col-md-10 p-2 mt-1">
         <div class="icons">
-          <div class="image_box"></div>
+          <div class="image_box">
+            <img
+            class="image_box"
+            *ngIf="fetchedPicture"
+            [src]="fetchedPicture"
+            alt="picture"
+          />
+          </div>
         </div>
       </div>
     </div>
@@ -337,16 +343,28 @@
       <div class="col-md-8 p-2 mt-1">
         <div class="text-center d-flex justify-content-between mt-2">
           <div class="p-1 bd-highlight">
-            <button type="button" class="btn btn-primary add-btn">
-              <i class="fas fa-camera-retro"></i>
+            <button
+              type="button"
+              class="btn btn-primary add-btn"
+              [disabled]="flag === 'VIEW'"
+              (click)="fileInput.click()"
+            >
+              <i class="fas fa-image"></i>
             </button>
-            <!-- <input type="file" name="uploadproduct" class="uploadproduct"> -->
+            <input
+              type="file"
+              formControlName="picture"
+              #fileInput
+              accept=".jpg,.jpeg,.png,.gif"
+              (change)="onFileSelected($event)"
+              style="display: none"
+            />
           </div>
-          <div class="p-1 bd-highlight">
+          <!-- <div class="p-1 bd-highlight">
             <button type="button" class="btn btn-primary add-btn">
               <i class="fas fa-image"></i>
             </button>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
