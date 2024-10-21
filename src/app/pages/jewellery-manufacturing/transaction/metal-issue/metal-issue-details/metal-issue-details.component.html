@@ -91,7 +91,7 @@
                                                 formControlName="processCode"
                                                 [readonly]="viewMode"
                                                 (keydown)="lookupKeyPress($event,'processCode')"
-                                                (change)="SPvalidateLookupField($event,processCodeData,'processCode')" />
+                                                (change)="processCodeValidate($event)" />
                                             <master-search class="masterSearch"
                                                 [MasterSearchData]="processCodeData"
                                                 #overlayprocessCode
@@ -122,7 +122,7 @@
                                                 readonly tabindex="4"
                                                 (keydown)="lookupKeyPress($event,'workerCode')"
                                                 [readonly]="viewMode"
-                                                (focusout)="SPvalidateLookupField($event,workerCodeData,'workerCode')" />
+                                                (focusout)="WorkerCodeValidate($event)" />
                                             <master-search class="masterSearch"
                                                 [MasterSearchData]="workerCodeData"
                                                 #overlayworkerCodeDes

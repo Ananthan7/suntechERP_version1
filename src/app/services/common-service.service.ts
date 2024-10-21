@@ -376,6 +376,7 @@ export class CommonServiceService {
       'PURITY': 6,
       'RATE': 6,
       'THREE': 3,
+      'FOUR': 4,
       'METAL_RATE': Number(this.allCompanyParameters?.MRATEDECIMALS) || 0
     };
   }
