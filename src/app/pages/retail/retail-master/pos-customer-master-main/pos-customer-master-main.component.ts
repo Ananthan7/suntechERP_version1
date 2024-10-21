@@ -1280,6 +1280,10 @@ export class PosCustomerMasterMainComponent implements OnInit {
     this.posCustomerMasterMainForm.controls.nationalityDesc.setValue(
       e.DESCRIPTION
     );
+    this.posCustomerMasterMainForm.controls.nationalityCode1.setValue(e.CODE);
+    this.posCustomerMasterMainForm.controls.nationality1.setValue(
+      e.DESCRIPTION
+    );
   }
   allNationalitySelected(e: any, controlIndex: number) {
     const nationalityCodeControl = `nationalityCode${controlIndex}`;
@@ -2457,7 +2461,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
   afterSave(value: any) {
     if (value) {
       this.posCustomerMasterMainForm.reset();
-      this.close("reloadMainGrid");
+      this.close("reloadMainGrid", true);
     }
   }
 
@@ -2594,7 +2598,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
 
   setPassport(event: any) {
     if (
-      this.posCustomerMasterMainForm.controls["custIdType"].value === "PASSPORT"
+      this.posCustomerMasterMainForm.controls["custIdType"].value === "PASSPORT" && this.posCustomerMasterMainForm.controls["passport1"].value.length > 0
     ) {
       this.posCustomerMasterMainForm.controls["passport1"].setValue(
         event.target.value
