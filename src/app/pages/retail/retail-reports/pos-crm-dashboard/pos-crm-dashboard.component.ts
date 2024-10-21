@@ -7,6 +7,7 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-pos-crm-dashboard',
@@ -37,12 +38,14 @@ export class PosCrmDashboardComponent implements OnInit {
   isLoading: boolean = false;
   buyingPatternBoolean: boolean = false;
 
+  htmlPreview: any;
+
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
     private formBuilder: FormBuilder,
     private dataService: SuntechAPIService,
-    private toastr: ToastrService,
+    private toastr: ToastrService, private sanitizer: DomSanitizer,
     private commonService: CommonServiceService,
   ) { }
 
@@ -254,43 +257,75 @@ export class PosCrmDashboardComponent implements OnInit {
     this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
     .subscribe((result: any) => {
       console.log(result);
-      let data = result.dynamicData;
-      const width = window.innerWidth;
-      const height = window.innerHeight;
-      const windowFeatures = `width=${width},height=${height},fullscreen=yes`;
-      var WindowPrt = window.open(' ', ' ', windowFeatures);
-      if (WindowPrt === null) {
-        console.error('Failed to open the print window. Possibly blocked by a popup blocker.');
-        return;
+      if(result.status != "Failed"){
+        let data = result.dynamicData;
+        let printContent = data[0][0].HTMLResult;
+        this.htmlPreview = this.sanitizer.bypassSecurityTrustHtml(printContent);
+        const blob = new Blob([this.htmlPreview.changingThisBreaksApplicationSecurity], { type: 'text/html' });
+        this.commonService.closeSnackBarMsg();
+        const url = URL.createObjectURL(blob);
+        window.open(url, '_blank');
       }
-      let printContent = data[0][0].HTMLResult;
-      WindowPrt.document.write(printContent);
-      WindowPrt.document.close();
-      WindowPrt.focus();  
-      WindowPrt.onload = function () {
-        if (WindowPrt && WindowPrt.document.head) {
-          let styleElement = WindowPrt.document.createElement('style');
-          styleElement.textContent = `
-                      @page {
-                          size: A5 landscape;
-                      }
-                      body {
-                          margin: 0mm;
-                      }
-                  `;
-          WindowPrt.document.head.appendChild(styleElement);
+      else{
+        this.toastr.error(result.message)
+        return
+      }
+    });      
+  }
+
+  printBtnClick(){
+    let postData = {
+      "SPID": "152",
+      "parameter": {
+        "str_FmDate" : this.formatDateToYYYYMMDD(this.posCRMdasbordFrom.value.fromDate),
+        "str_ToDate" : this.formatDateToYYYYMMDD(this.posCRMdasbordFrom.value.toDate),
+        "bln_ShowBuyingPattern": JSON.stringify(this.posCRMdasbordFrom.controls.showBuyingPatternBln.value? 0 : 1),
+        "str_DiaBuyPatternField": this.posCRMdasbordFrom.controls.diamondsection.value,
+        "str_MtlBuyPatternField": this.posCRMdasbordFrom.controls.metal.value,
+        "str_Divisions": this.posCRMdasbordFrom.controls.divisions.value,
+        "str_BranchList": this.formattedBranchDivisionData || this.fetchedBranchDataParam,
+        "str_SqlId": '',
+        "LOGDATA": JSON.stringify(this.logDataParam)
+      }
+    }
+ 
+    this.commonService.showSnackBarMsg('MSG81447');
+    this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+    .subscribe((result: any) => {
+      let data = result.dynamicData;
+      if(result.status == "Success"){
+        let printContent = data[0][0].HTMLResult;
+        this.htmlPreview = this.sanitizer.bypassSecurityTrustHtml(printContent);
+        if(this.htmlPreview.changingThisBreaksApplicationSecurity){
 
           setTimeout(() => {
-            if (WindowPrt) {
-              WindowPrt.print();
+            const content = this.htmlPreview?.changingThisBreaksApplicationSecurity;
+
+            let  userBranchDesc:any  = localStorage.getItem('BRANCH_PARAMETER')
+            userBranchDesc = JSON.parse(userBranchDesc)
+      
+            if (content && Object.keys(content).length !== 0) {
+              const modifiedContent = content.replace(/<title>.*?<\/title>/, `<title>${userBranchDesc.DESCRIPTION}</title>`);
+              const printWindow = window.open('', '', 'height=600,width=800');
+              printWindow?.document.write(modifiedContent);
+              printWindow?.focus();
+              printWindow?.print();
+              printWindow?.close();
+             
             } else {
-              console.error('Print window was closed before printing could occur.');
+              Swal.fire('No Data!', 'There is no data to print!', 'info');
+              this.commonService.closeSnackBarMsg();
+              return
             }
-          }, 800);
+          }, 1500); 
+
         }
-      };
-      this.commonService.closeSnackBarMsg()
-    });      
+      }
+      else{
+        this.toastr.error(result.message)
+        return
+      }
+    });  
   }
 
   saveTemplate(){
