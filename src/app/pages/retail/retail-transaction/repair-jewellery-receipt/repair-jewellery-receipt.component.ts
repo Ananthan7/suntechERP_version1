@@ -60,6 +60,8 @@ export class RepairJewelleryReceiptComponent implements OnInit {
   tel_edit: boolean = false;
   country_edit: boolean = false;
   address_edit: boolean = false;
+  flag:any;
+  client: any;
 
 
   constructor(
@@ -75,6 +77,8 @@ export class RepairJewelleryReceiptComponent implements OnInit {
   ngOnInit(): void {
 
 
+    this.client =  this.comService.allbranchMaster?.BRANCH_NAME    
+    this.flag = this.content?.FLAG;
 
     if (this.content?.MID != null) this.getArgsData();
     else this.generateVocNo();

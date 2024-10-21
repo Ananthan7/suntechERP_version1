@@ -39,6 +39,10 @@ export class RepairDetailsComponent implements OnInit {
     "Repair Type",
     "Type",
   ];
+  imageName: any;
+  image: any;
+  fetchedPicture: any;
+  flag: any;
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -49,6 +53,9 @@ export class RepairDetailsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    
+    this.flag = this.content?.FLAG;
+    
     this.getQueryParams(this.queryParams);
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
@@ -592,5 +599,36 @@ export class RepairDetailsComponent implements OnInit {
   repair_charge_change(event: any) {
     this.repairjewelleryreceiptdetailsFrom.controls.Est_repair_charge.setValue(this.comService.decimalQuantityFormat(event.target.value, 'AMOUNT'));
     console.log(this.comService.decimalQuantityFormat(event.target.value, 'AMOUNT'));
+  }
+
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+
+    // Validate the file type
+    const allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+    if (file && !allowedExtensions.exec(file.name)) {
+      Swal.fire({
+        icon: "error",
+        title: "Invalid file type!",
+        text: "Please upload an image (jpg, jpeg, png, gif).",
+      });
+
+      this.imageName = null; // Clear the image name
+      this.image = null; // Clear the selected image
+      this.fetchedPicture = null; // Clear the fetched image preview
+      return; // Exit the function
+    }
+
+    this.image = file;
+    this.imageName = file.name;
+
+    // Create a URL for the selected image and assign it to fetchedPicture
+    if (this.image) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.fetchedPicture = reader.result as string; // Set image for preview
+      };
+      reader.readAsDataURL(this.image);
+    }
   }
 }
