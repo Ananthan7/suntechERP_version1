@@ -631,4 +631,11 @@ export class RepairDetailsComponent implements OnInit {
       reader.readAsDataURL(this.image);
     }
   }
+
+  preventInvalidInput(event: KeyboardEvent) {
+    // Prevent the letter "e", "E", "+", and "-" from being entered
+    if (["e", "E", "+", "-"].includes(event.key)) {
+      event.preventDefault();
+    }
+  }
 }
