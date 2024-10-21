@@ -453,8 +453,15 @@ export class CommonServiceService {
     return isValid;
   }
   //service for ADD POS starts
-  stringToBoolean = (string: string) => string != undefined && string != null ? string.toString().toLowerCase() == 'false' ? false : true : false;
-
+  stringToBoolean = (input: string | boolean) => {
+    if (typeof input === 'boolean') {
+      return input; 
+    }
+    return input !== undefined && input !== null
+      ? input.toString().toLowerCase() === 'false' ? false : true
+      : false;
+  };
+  
   numberToBoolean = (num: number) => num != undefined && num != null ? num === 0 ? false : true : false;
 
   formControlSetReadOnly(id: any, isReadonly: boolean) {

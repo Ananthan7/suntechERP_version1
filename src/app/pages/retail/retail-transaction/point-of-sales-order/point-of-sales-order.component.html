@@ -73,7 +73,13 @@
     
         <div class="col-md-2">
           <label for="sales_person">{{ sales_person_lbl }}</label>
-          <mat-form-field appearance="outline" style="width: 100%">
+          <mat-form-field style="width: -webkit-fill-available" appearance="outline">
+            <input type="text" [readonly]="viewOnly" matInput  (focusout)="SPvalidateLookupField($event,enteredByCode,'sales_person',false)" formControlName="sales_person" />
+            <master-search class="masterSearch" (focusout)="openTab($event, 'sales_person')" #salesPersonCode
+              *ngIf="!viewOnly" [MasterSearchData]="enteredByCode"
+              (newRowClick)="enteredBySelected($event)"></master-search>
+          </mat-form-field>
+          <!-- <mat-form-field appearance="outline" style="width: 100%">
             <input type="text" matInput formControlName="sales_person" id="sales_person" [matAutocomplete]="salesperson"
               [readonly]="viewOnly" />
             <mat-autocomplete #salesperson="matAutocomplete" autoActiveFirstOption
@@ -83,14 +89,14 @@
               </mat-option>
             </mat-autocomplete>
             <i class="fas fa-chevron-down"
-            style="position: absolute; right: 10px; top: 40%; transform: translateY(-40%);"></i>
+              style="position: absolute; right: 10px; top: 40%; transform: translateY(-40%);"></i>
             <mat-error *ngIf="vocDataForm.controls.sales_person.hasError('required')">
               Salesman Code cannot be Empty
             </mat-error>
             <mat-error *ngIf="vocDataForm.controls.sales_person.hasError('notInOptions')">
               Invalid value
             </mat-error>
-          </mat-form-field>
+          </mat-form-field> -->
         </div>
     
         <div class="col-md-3" style="background-color: #d6d8da">
@@ -119,7 +125,7 @@
             <div class="col-md-2">
               <label for="fcn_customer_mobile">Mobile Number</label>
               <mat-form-field appearance="outline" style="width: 100%">
-                <input type="text"
+                <input type="text" id="fcn_customer_mobile"
                   onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))"
                   matInput (focusout)="!viewOnly && onCustomerNameFocus()" formControlName="fcn_customer_mobile"
                   [readonly]="viewOnly" />
@@ -345,16 +351,13 @@
                             " -->
                         <!-- <button type="submit" [disabled]="this.viewOnly" (click)="open(mymodal)" -->
                         <!-- <button type="submit" (click)="open(mymodal)" [disabled]="this.viewOnly " -->
-                        <button class="btn btn-secondary" type="submit" [disabled]="this.viewOnly"
-                          (click)="open(mymodal,false, null, false,false,false,true)" style="
-                            border: none;
-                            margin: 10px;
-                            width: 20px !important;
-                            padding: 3px 10px;
-                            padding-right: 21px; background-color: #1E3C72;
-                          ">
-                          <i class="fa fa-plus"></i>
-                        </button>
+                          <button class="btn btn-secondary"  
+                          type="submit" 
+                          [disabled]="this.viewOnly"
+                          (click)="amlNameValidation && isCustomerDetailsEmpty()? triggerAmlValidation() : openSalesModalAfterAML()"  
+                          style="border: none; margin: 10px; width: 20px !important; padding: 3px 10px; padding-right: 21px; background-color: #1E3C72;">
+                      <i class="fa fa-plus"></i>
+                  </button>
                       </div>
                     </div>
                   </div>
@@ -876,13 +879,15 @@
             </div>
           </div>
 
-          <div class="col-md-6 col-xl-6" *ngIf="!viewOnly" (click)="cancelBill()">
-            <div class="touch-big-button">
-              <div class="touch-big-button-inner">
-                <i class="fa fa-window-close"></i> <span> Cancel Bill</span>
-              </div>
+          <div class="col-md-6 col-xl-6" *ngIf="!viewOnly" [class.disabled]="!isNewButtonDisabled && !viewOnly"
+          (click)="!isNewButtonDisabled && cancelBill()">
+          <div class="touch-big-button">
+            <div class="touch-big-button-inner">
+              <i class="fa fa-window-close"></i>
+              <span> Cancel Bill</span>
             </div>
           </div>
+        </div>
         </div>
         <div class="row mt-2" *ngIf="this.viewOnly||isPrintingEnabled">
 
