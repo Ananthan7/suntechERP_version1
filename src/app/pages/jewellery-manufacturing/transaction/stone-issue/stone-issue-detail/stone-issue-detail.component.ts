@@ -219,7 +219,6 @@ export class StoneIssueDetailComponent implements OnInit {
         case 'EDIT':
           this.editMode = true;
           this.viewMode = true;
-
           break;
         // Add other cases if needed
         default:
@@ -232,6 +231,7 @@ export class StoneIssueDetailComponent implements OnInit {
       this.setFormValues()
     }
   }
+  
   setFormValues() {
     if (!this.content) return
     console.log(this.content, 'view&edit')
@@ -276,11 +276,12 @@ export class StoneIssueDetailComponent implements OnInit {
     this.stoneIssueDetailsFrom.controls.consignment.setValue(this.content.CONSIGNMENT)
     this.setValueWithDecimal('unitrate', 0, 'AMOUNT')
     this.setValueWithDecimal('amount', 0, 'AMOUNT')
-    this.setValueWithDecimal('pointerwt', 0, 'THREE')
+    this.setValueWithDecimal('pointerwt', 0, 'FOUR')
     this.setValueWithDecimal('stockbal', 0, 'THREE')
     this.setValueWithDecimal('carat', 0, 'METAL')
     this.getImageData()
     this.CalculatePiecesAndPointerWT()
+
   }
 
   setValueWithDecimal(formControlName: string, value: any, Decimal: string) {
@@ -291,7 +292,6 @@ export class StoneIssueDetailComponent implements OnInit {
   }
   setOnLoadDetails() {
     let branchParam = this.comService.allbranchMaster;
-
     // Set LOCTYPE_CODE only if it's not already set
     if (!this.stoneIssueDetailsFrom.controls.LOCTYPE_CODE.value) {
       this.stoneIssueDetailsFrom.controls.LOCTYPE_CODE.setValue(branchParam.DMFGMLOC);
@@ -663,7 +663,7 @@ export class StoneIssueDetailComponent implements OnInit {
         confirmButtonColor: '#336699',
         confirmButtonText: 'OK'
       });
-      return; // Prevent further action
+      return; 
     }
 
     // If stock code is filled, proceed with the form submission
@@ -910,7 +910,9 @@ export class StoneIssueDetailComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
-  FillStnRequiredDetail() {
+
+  FillStnRequiredDetail(event?: any) {
+    if (event?.target.value == '' || this.viewMode) return;
     let postData = {
       "SPID": "131",
       "parameter": {
@@ -931,7 +933,12 @@ export class StoneIssueDetailComponent implements OnInit {
           // this.tableData = result.dynamicData[1] || []
           // this.columnhead1 = Object.keys(this.tableData[0])
 
-
+          this.tableData.forEach((row) => {
+            if (!row.LOCTYPE_CODE) {  // If location field is not already set
+              row.LOCTYPE_CODE = '000GEN';  // Replace with your actual default value
+            }
+          });
+          console.log(this.tableData); 
         } else {
           // this.comService.toastErrorByMsgId('MSG1747')
         }
@@ -1066,6 +1073,19 @@ export class StoneIssueDetailComponent implements OnInit {
       return true;
     }
     return false;
+  }
+  DivCodetemp(data:any,value: any){
+    this.tableData[value.data.SRNO - 1].DIVCODE = data.target.value;
+  }
+  
+  
+  GriddivCodeSelected(event: any, value: any) {
+    console.log(event,'event')
+    this.tableData[value.data.SRNO - 1].DIVCODE  = event.Division_Code;
+  }
+  
+  onHoverCategory({data}:any){
+    this.divCodeData.WHERECONDITION =  `@SubJobNumber='',  @DivisionCode='L', @DesignType='DIAMOND'`
   }
 
   ngOnDestroy() {
