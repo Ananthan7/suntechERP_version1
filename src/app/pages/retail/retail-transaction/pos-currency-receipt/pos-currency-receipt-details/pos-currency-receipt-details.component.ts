@@ -493,11 +493,7 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
       this.posCurrencyReceiptDetailsForm.controls.vatcc.setValue(
         this.comService.commaSeperation(
           this.comService.decimalQuantityFormat(
-            this.comService.FCToCC(
-              this.posCurrencyReceiptDetailsForm.value.currencyCode,
               this.comService.emptyToZero(this.receiptData.IGST_AMOUNTCC),
-              this.comService.emptyToZero(this.compCurrencyRate)
-            ),
             "AMOUNT"
           )
         )
@@ -1150,14 +1146,14 @@ export class PosCurrencyReceiptDetailsComponent implements OnInit {
         CGST_ACCODE: "",
         SGST_ACCODE: "",
         IGST_ACCODE: this.igstAccode,
-        GST_HEADER_AMOUNT: 0,
+        GST_HEADER_AMOUNT: this.posCurrencyReceiptDetailsForm.value.totalLc?.replace(/,/g, '') || 0,
         GST_NUMBER: this.posCurrencyReceiptDetailsForm.value.vatNo.toString() ?? "",
         INVOICE_NUMBER: this.posCurrencyReceiptDetailsForm.value.invoiceNo,
         INVOICE_DATE: this.posCurrencyReceiptDetailsForm.value.invoiceDate ? this.formatDateToISO(
           this.posCurrencyReceiptDetailsForm.value.invoiceDate
         ) : this.dummyDate,
         DT_GST_STATE_CODE: "",
-        DT_GST_TYPE: "",
+        DT_GST_TYPE: "IGST",
         DT_GST_CODE: "VAT",
         DT_GST_GROUP: "R",
         CGST_CTRLACCODE: "",
