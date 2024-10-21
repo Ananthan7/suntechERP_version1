@@ -28,7 +28,7 @@ export class PosDailyClosingSummaryComponent implements OnInit {
   currentDate = new Date();
   private subscriptions: Subscription[] = [];
   tableData: any[] = [];
-  columnhead: any[] = ["No.Inv", "Amt.Rcvd", "Gold", "Dia & Other"];
+  // columnhead: any[] = ["No.Inv", "", "", "Dia & Other"];
   columnheadTransaction: any[] = ["Voucher", "No.Inv", "Amount"];
   columnheadMetal: any[] = [
     "Division",
@@ -93,6 +93,7 @@ export class PosDailyClosingSummaryComponent implements OnInit {
   transactionWiseSummaryArr: any[] = [];
   scrapPurchseSummaryArr: any[] =[];
   receiptSummaryArr: any[] = [];
+  pendingSalesOrderSummaryArr: any[] =[];
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -115,9 +116,10 @@ export class PosDailyClosingSummaryComponent implements OnInit {
         this.closingPurchaseNetInsert(),
         this.posClsngSmanSummaryNet(),
         this.receiptSummaryDataFetch(),
+        this.pendingSalesOrderSummaryDataFetch(),
 
 
-        this.salesManclosingInsert()
+        this.salesManclosingInsert(),
       ];
       // Use forkJoin to wait till observable calls to complete
       forkJoin(insertObservables).subscribe(() => {
@@ -280,6 +282,21 @@ export class PosDailyClosingSummaryComponent implements OnInit {
     },(err) => alert(err));
   }
 
+  pendingSalesOrderSummaryDataFetch(){
+    let API = "UspOpsClsngSmanSummaryNet";
+    let postData = {    
+      "strBranch": this.branchCode,
+      "strFmDate": this.formatDateToYYYYMMDD( this.dateToPass.fromDate ),
+      "strToDate": this.formatDateToYYYYMMDD( this.dateToPass.toDate ),
+    };
+
+    this.dataService.postDynamicAPI(API, postData).subscribe((result) => {
+      if (result) {       
+        this.pendingSalesOrderSummaryArr =  result.dynamicData[0]           
+      }
+    },(err) => alert(err));
+  }
+
   setDateValue(event: any){
     if(event.FromDate){
       this.posDailyClosingSummaryForm.controls.fromDate.setValue(event.FromDate);
@@ -298,7 +315,7 @@ export class PosDailyClosingSummaryComponent implements OnInit {
       this.closingPurchaseNetInsert(),
       this.posClsngSmanSummaryNet(),
       this.receiptSummaryDataFetch(),
-
+      this.pendingSalesOrderSummaryDataFetch(),
 
       this.salesManclosingInsert(),
     ];

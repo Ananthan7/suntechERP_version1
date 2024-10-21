@@ -49,7 +49,7 @@ export class ProcessMasterComponent implements OnInit {
   selectedTabIndex = 0;
   lossData: boolean = false;
   recoveryData: boolean = false;
-
+  maindetails: any[] = [];
 
   maxTime: any;
   standTime: any;
@@ -275,7 +275,7 @@ export class ProcessMasterComponent implements OnInit {
     this.mandatoryChecklist();
     this.applySettinglist();
     this.setInitialValues()
-    this.getProcessTypeOptions()
+    this.getProcessTypeOptions();
     if (this.content?.FLAG) {
       this.setFormValues();
       if (this.content?.FLAG == 'VIEW') {
@@ -289,6 +289,7 @@ export class ProcessMasterComponent implements OnInit {
         this.onlossChange();
         this.onRecovery();
         this.onAllowGain();
+        this.maindesigndetails();
         this.dele = false;
       } else if (this.content.FLAG == 'DELETE') {
         this.viewMode = true;
@@ -397,19 +398,19 @@ export class ProcessMasterComponent implements OnInit {
     if (this.commonService.getCompanyParamValue('PROCESSBALANCETOJOB') == 1) {
       return true
     }
-    return false  
+    return false
   }
 
-  mandatoryChecklist(){
-    console.log(this.commonService.getCompanyParamValue('COMPACCODE'));    
-    if(this.commonService.getCompanyParamValue('COMPACCODE') == 'SUNTECH'){
+  mandatoryChecklist() {
+    // console.log(this.commonService.getCompanyParamValue('COMPACCODE'));
+    if (this.commonService.getCompanyParamValue('COMPACCODE') == 'SUNTECH') {
       return true
     } return false
   }
 
-  applySettinglist(){
-    console.log(this.commonService.getCompanyParamValue('DIALABOURCHARGETYPE'));    
-    if(this.commonService.getCompanyParamValue('DIALABOURCHARGETYPE') == 4){
+  applySettinglist() {
+    // console.log(this.commonService.getCompanyParamValue('DIALABOURCHARGETYPE'));
+    if (this.commonService.getCompanyParamValue('DIALABOURCHARGETYPE') == 4) {
       return true
     } return false
   }
@@ -435,8 +436,17 @@ export class ProcessMasterComponent implements OnInit {
     this.tableData[event.data.SRNO - 1].SELECT1 = !event.data.SELECT1;
   }
 
+  ProcessDes() {
+    if (this.processMasterForm.value.processDesc == '') {
+
+    }
+  }
+
   /**use: to check code exists in db */
   checkCodeExists(event: any) {
+    this.renderer.selectRootElement('#codeDesc').focus();
+
+
     if (this.content && this.content.FLAG == 'EDIT') {
       return; // Exit the function if in edit mode
     }
@@ -447,6 +457,8 @@ export class ProcessMasterComponent implements OnInit {
     const sub = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
         if (result.checkifExists) {
+          this.processMasterForm.controls.processType.markAsTouched();
+
           Swal.fire({
             title: '',
             text: result.message || 'Process Already Exists!',
@@ -456,20 +468,25 @@ export class ProcessMasterComponent implements OnInit {
           }).then(() => {
             // Clear the input value
             this.processMasterForm.controls.processCode.setValue('');
-
+            // this.processMasterForm.controls.processCode.focus()
             this.codeEnable = true;
             setTimeout(() => {
               this.renderer.selectRootElement('#code').focus();
             }, 500);
 
           });
+        } else {
+          // this.processMasterForm.markAllAsTouched();
         }
       }, err => {
         this.processMasterForm.reset();
       });
 
+
     this.subscriptions.push(sub);
   }
+
+
 
   updateStandardTime(duration: any) {
     // this.yourContent.standardTime.totalDays = duration[0] || 0;
@@ -846,6 +863,31 @@ export class ProcessMasterComponent implements OnInit {
     if (this.checkCode()) return
     this.processMasterForm.controls.jobNumber.setValue(e.job_number);
   }
+
+
+  maindesigndetails() {
+
+    let postData = {
+      "SPID": "161",
+      "parameter": {
+        "strProcess": this.processMasterForm.value.processCode,
+        "strAction": "LOAD",
+      }
+    }
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        if (result.status == "Success") {
+          this.maindetails = result.dynamicData[0] || []
+          console.log("maindetails" + this.maindetails);
+
+          // this.componentmasterForm.controls.jobno.setValue(result.dynamicData[0][0].JOB_NO)
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG81451')
+      })
+    this.subscriptions.push(Sub)
+  }
+
   /** checking for same account code selection */
   private isSameAccountCodeSelected(accountCode: any, formControlName: string): boolean {
     console.log(this.processMasterForm.value, 'this.processMasterForm.value');
@@ -1200,16 +1242,31 @@ export class ProcessMasterComponent implements OnInit {
   }
 
   onRecovStockCode(event: any) {
-    if (this.processMasterForm.value.allowGain == true) {
+    if (this.processMasterForm.value.RecoveryProcess == true) {
+      this.renderer.selectRootElement('#recStockCode').focus();
       this.processMasterForm.get('recStockCode')?.setValidators(Validators.required);
     }
     else {
       this.processMasterForm.get('recStockCode')?.clearValidators();
     }
-    // this.isAlloWGainReadOnly = !this.isAlloWGainReadOnly;
-    //this.searchModeAllow = !this.searchModeAllow;
     console.log(event);
     this.processMasterForm.controls.recStockCode.setValue('');
+  }
+
+  approvalSelect(event: any) {
+    if (this.processMasterForm.value.ApprovalRequired == true) {
+      this.renderer.selectRootElement('#approvalCode').focus();
+      this.renderer.selectRootElement('#approvalProcess').focus();
+      this.processMasterForm.get('approvalCode')?.setValidators(Validators.required);
+      this.processMasterForm.get('approvalProcess')?.setValidators(Validators.required);
+    }
+    else {
+      this.processMasterForm.get('approvalCode')?.clearValidators();
+      this.processMasterForm.get('approvalProcess')?.clearValidators();
+    }
+    console.log(event);
+    this.processMasterForm.controls.approvalCode.setValue('');
+    this.processMasterForm.controls.approvalProcess.setValue('');
   }
 
 

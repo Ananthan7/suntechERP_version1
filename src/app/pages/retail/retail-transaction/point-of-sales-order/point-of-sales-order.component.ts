@@ -55,6 +55,7 @@ import { DatePipe } from "@angular/common";
 import SignaturePad from "signature_pad";
 import Swal from "sweetalert2";
 import { AddPosComponent } from "../add-pos/add-pos.component";
+import { MasterSearchComponent } from "src/app/shared/common/master-search/master-search.component";
 
 @Component({
   selector: "app-point-of-sales-order",
@@ -62,6 +63,7 @@ import { AddPosComponent } from "../add-pos/add-pos.component";
   styleUrls: ["./point-of-sales-order.component.scss"],
 })
 export class PointOfSalesOrderComponent implements OnInit {
+  @ViewChild("salesPersonCode") salesPersonCode!: MasterSearchComponent;
 
   @ViewChild('signaturePadCanvas', { static: false }) signaturePadElement!: ElementRef;
   signaturePad!: SignaturePad | undefined;
@@ -105,6 +107,8 @@ export class PointOfSalesOrderComponent implements OnInit {
   LOCKVOUCHERNO: boolean = true;
   isSignaturePadInitialized = false;
   voucherDetails: any;
+  isCustomerDetailsAdd:Boolean=false;
+  isPartialAMLValidation: boolean = false;
   minDate: any;
   maxDate: any;
   isDiscountAmountTrigger: boolean = false;
@@ -237,6 +241,21 @@ export class PointOfSalesOrderComponent implements OnInit {
     _retailReceipt: [],
     _retailsReturn: {},
     _metalPurchase: {},
+  };
+
+  enteredByCode: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 1,
+    SEARCH_FIELD: "SALESPERSON_CODE",
+    SEARCH_HEADING: "",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "SALESPERSON_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+
   };
 
   customerCodeData: MasterSearchModel = {
@@ -820,6 +839,7 @@ export class PointOfSalesOrderComponent implements OnInit {
     let branchParams: any = localStorage.getItem('BRANCH_PARAMETER')
     this.comFunc.allbranchMaster = JSON.parse(branchParams);
     this.isGiftTypeRequired = this.comFunc.allbranchMaster.BRNCHSHOW_GIFTMODULE ? this.comFunc.allbranchMaster.BRNCHSHOW_GIFTMODULE : false;
+    this.isPartialAMLValidation = this.comFunc.allbranchMaster.isPartialAMLValidation;
 
     this.amlNameValidation = this.comFunc.allbranchMaster.AMLNAMEVALIDATION;
 
@@ -1063,7 +1083,13 @@ export class PointOfSalesOrderComponent implements OnInit {
         this.comFunc.allCompanyParams = data;
 
         let companyParameter = '';
+        let companyParameterNewCustomer = this.comFunc.allCompanyParams.find((item: any) => item.PARAMETER === 'POSCUSTDETAILSADDNEW');
         let companyParameterObject = this.comFunc.allCompanyParams.find((item: any) => item.PARAMETER === 'POSSHOPCTRLAC');
+      
+        if (companyParameterNewCustomer) {
+          this.isCustomerDetailsAdd = this.comFunc.numberToBoolean(Number(companyParameterNewCustomer.PARAM_VALUE));
+
+        }
 
         if (companyParameterObject) {
           companyParameter = companyParameterObject.PARAM_VALUE;
@@ -1386,7 +1412,7 @@ export class PointOfSalesOrderComponent implements OnInit {
       // this.setVoucherTypeMaster();
     }
 
-    if (!this.viewOnly && !this.editOnly)
+    if (!this.viewOnly && !this.editOnly && !this.amlNameValidation && this.isCustomerDetailsAdd)
       this.open(this.mymodal);
 
     // this.vocDataForm.get('vocdate')?.valueChanges.subscribe((val) => {
@@ -4387,6 +4413,8 @@ export class PointOfSalesOrderComponent implements OnInit {
             this.existingCustomerDetails = this.setCustomerDPatchValues(result);
 
             this.customerDetails = result;
+            this.isCustomerDetailsAdd=true;
+            this.isCustomerDetailsEmpty();
 
             this.getUserAttachments();
 
@@ -10281,7 +10309,7 @@ export class PointOfSalesOrderComponent implements OnInit {
       //Changes as per Jebraj's Input on 17/07/2024
 
       if (this.divisionMS == 'S') {
-        if (((this.isPromotionalItem && this.isAllowWithoutRate && this.comFunc.emptyToZero(value) >= 0)) || this.comFunc.emptyToZero(value) > 0) {
+        if (((this.isPromotionalItem && this.isAllowWithoutRate && this.comFunc.emptyToZero(value) >= 0)) || this.comFunc.emptyToZero(value) >= this.comFunc.emptyToZero(this.blockMinimumPriceValue)) {
 
           this.rateFunc(value);
         }
@@ -10363,14 +10391,36 @@ export class PointOfSalesOrderComponent implements OnInit {
         (totalAmtVal / this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt))
       );
 
+      if ((!this.comFunc.stringToBoolean(this.isPromotionalItem)
+        && !this.isAllowWithoutRate
+        && this.comFunc.emptyToZero(value) === 0)) {
+        // Handle the case here
+        this.openDialog('Warning', this.comFunc.getMsgByID('MSG1917'), true);
+        this.dialogBox.afterClosed().subscribe((data: any) => {
+          if (data == 'OK') {
+            this.lineItemForm.controls.fcn_li_total_amount.setValue(
+              this.comFunc.transformDecimalVB(
+                this.comFunc.allbranchMaster?.BAMTDECIMALS,
+                this.lineItemForm.value.fcn_li_rate
+              )
+            );
+            this.renderer.selectRootElement('#fcn_li_total_amount')?.select();
+            // this.changeGrossFunc(totalAmt, preVal);
+            // this.manageCalculations();
+          }
+        });
 
-      this.validateMinSalePriceByTotalAmt(
-        value,
-        val,
-        parseFloat(lsTotalAmt),
-        nettAmt
-      );
-      // this.manageCalculations();
+      }
+      else {
+        this.validateMinSalePriceByTotalAmt(
+          value,
+          val,
+          parseFloat(lsTotalAmt),
+          nettAmt
+        );
+        // this.manageCalculations();
+      }
+
     } else {
       this.lineItemForm.controls['fcn_li_total_amount'].setValue(0.0);
       this.lineItemForm.controls['fcn_ad_amount'].setValue(0.0);
@@ -14128,6 +14178,7 @@ export class PointOfSalesOrderComponent implements OnInit {
         "VOCTYPE": this.comFunc.nullToString(this.vocDataForm.value.voc_type),
         "YEARMONTH": this.comFunc.nullToString(this.baseYear),
         "REFMID": this.content ? this.comFunc.emptyToZero(this.content?.MID) : this.midForInvoce,
+        "CUST_CODE":this.customerDetails.CODE??this.customerDataForm.value.fcn_customer_code,
         "SIGN": dataURL
       };
 
@@ -15195,5 +15246,135 @@ export class PointOfSalesOrderComponent implements OnInit {
     this.onCustomerNameFocus(e.CODE, true);
 
   }
+
+  isCustomerDetailsEmpty(): boolean {
+    return Object.keys(this.customerDetails).length === 0;
+  }
+
+  openSalesModalAfterAML() {
+
+    if (this.isCustomerDetailsAdd && !this.isCustomerDetailsEmpty)
+      this.triggerAmlValidation();
+
+    else {
+
+      if (this.isPartialAMLValidation) {
+        this.openDialog(
+          'Alert',
+          this.comFunc.getMsgByID('MSG7676'),
+          false
+        );
+        this.dialogBox.afterClosed().subscribe((data: any) => {
+          if (data == 'No') {
+
+            this.open(this.mymodal, false, null, false, false, false, true);
+
+          } else {
+          }
+        });
+      }
+      else {
+        this.open(this.mymodal, false, null, false, false, false, true);
+
+      }
+
+
+    }
+
+
+  }
+
+  triggerAmlValidation(){
+    this.openDialog('Warning', "Please fill the customer Details", true);
+    this.dialogBox.afterClosed().subscribe((data: any) => {
+      if (data == 'OK') {
+        this.renderer.selectRootElement('#fcn_customer_mobile').select();
+
+      }
+    });
+  }
+
+  openTab(event: any, formControlName: string) {
+    console.log(event);
+
+    if (event.target.value === "") {
+      this.openPanel(event, formControlName);
+    }
+  }
+
+  openPanel(event: any, formControlName: string) {
+    switch (formControlName) {
+      case "enteredby":
+        this.salesPersonCode.showOverlayPanel(event);
+        break;
+     
+      default:
+        console.warn(`Unknown form control name: ${formControlName}`);
+    }
+  }
+
+
+
+  SPvalidateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string, isCurrencyField: boolean) {
+    LOOKUPDATA.SEARCH_VALUE = event.target.value;
+
+    if (event.target.value === '' || this.viewOnly === true) {
+  
+        return;
+    }
+
+    let param = {
+        "PAGENO": LOOKUPDATA.PAGENO,
+        "RECORDS": LOOKUPDATA.RECORDS,
+        "LOOKUPID": LOOKUPDATA.LOOKUPID,
+        "WHERECONDITION": LOOKUPDATA.WHERECONDITION,
+        "searchField": LOOKUPDATA.SEARCH_FIELD,
+        "searchValue": LOOKUPDATA.SEARCH_VALUE
+    };
+
+    this.comFunc.showSnackBarMsg('MSG81447');
+
+    let Sub: Subscription = this.suntechApi.postDynamicAPI('MasterLookUp', param)
+        .subscribe((result) => {
+            this.comFunc.closeSnackBarMsg();
+            let data = result.dynamicData[0];
+
+            if (data && data.length > 0) {
+                if (LOOKUPDATA.FRONTENDFILTER && LOOKUPDATA.SEARCH_VALUE !== '') {
+                    let searchResult = this.comFunc.searchAllItemsInArray(data, LOOKUPDATA.SEARCH_VALUE);
+
+                    if (searchResult && searchResult.length > 0) {
+                        let matchedItem = searchResult[0];
+
+                        this.vocDataForm.controls.sales_person.setValue(matchedItem.SALESPERSON_CODE);
+                          
+                       
+                    } else {
+                        this.comFunc.toastErrorByMsgId('No data found');
+                        LOOKUPDATA.SEARCH_VALUE = '';
+                        this.vocDataForm.controls.sales_person.setValue('');
+                  
+                    }
+                }
+            }
+            else {
+              this.comFunc.toastErrorByMsgId('No data found');
+              LOOKUPDATA.SEARCH_VALUE = '';
+              this.vocDataForm.controls.sales_person.setValue('');
+        
+          }
+        }, err => {
+            this.comFunc.toastErrorByMsgId('MSG2272');
+            this.vocDataForm.controls.sales_person.setValue('');
+        });
+
+    this.subscriptions.push(Sub);
+}
+
+enteredBySelected(e: any) {
+
+  this.vocDataForm.controls.sales_person.setValue(e.SALESPERSON_CODE);
+
+}
 
 }

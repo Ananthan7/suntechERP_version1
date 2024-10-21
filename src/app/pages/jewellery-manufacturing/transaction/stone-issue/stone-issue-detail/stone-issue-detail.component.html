@@ -380,7 +380,7 @@
             alignment="center" backgroundcolor="#000">
           </dxi-column> -->
           <dxi-column [allowEditing]="false" dataField="DIVCODE"
-            caption="Div" cellTemplate="DivCodetemp"></dxi-column>
+            caption="DIVCODE" cellTemplate="DivCodetemp"></dxi-column>
           <div
             *dxTemplate="let data of 'DivCodetemp'">
             <div
@@ -395,7 +395,7 @@
               <master-search
                 *ngIf="!viewMode"
                 [MasterSearchData]="divCodeData"
-                (newRowClick)="divCodeSelected($event)">
+                (newRowClick)="GriddivCodeSelected($event,data)">
               </master-search>
             </div>
           </div>
@@ -424,8 +424,9 @@
             caption="Batch ID"></dxi-column>
           <dxi-column [allowEditing]="false" dataField="SUB_STOCK_CODE"
             caption="Stock Bal"></dxi-column>
-          <dxi-column [allowEditing]="true" dataField="PCS"
-            caption="Pcs"></dxi-column>
+          <dxi-column [allowEditing]="true" dataField="PCS" 
+            caption="Pcs">
+          </dxi-column>
           <dxi-column [allowEditing]="true" dataField="CARATWT_TO"
             caption="Carat" dataType="number">
           </dxi-column>
