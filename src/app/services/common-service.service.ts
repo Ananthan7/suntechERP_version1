@@ -574,7 +574,7 @@ export class CommonServiceService {
 
     const formatVal = `1.${format}-${format}`;
     // console.log('formatVal',formatVal, 'num',num);
-    var val: any = this._decimalPipe.transform(num || 0, formatVal);
+    var val: any = this._decimalPipe.transform(this.emptyToZero(num) || 0, formatVal);
     // console.log(val);
     val = val.includes(',') ? val.replaceAll(',', '') : val;
     // console.log(val);
