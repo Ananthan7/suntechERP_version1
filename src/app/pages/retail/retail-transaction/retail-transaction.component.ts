@@ -131,10 +131,17 @@ export class RetailTransactionComponent implements OnInit {
 
   }
 
-  deleteBtnClicked(e: any) {
+  async deleteBtnClicked(e: any) {
     let str = e.row.data;
-    str.FLAG = 'DELETE'
-    this.openModalView(str)
+    str.FLAG = 'DELETE';
+
+    let isAuth = await this.openAuthModal();
+    if (isAuth)
+      this.openModalView(str)
+    else
+      this.snackBar.open('Authentication Failed', 'OK');
+
+    // this.openModalView(str)
     // this.authCheckerComponent?.openAuthModal();
   }
 

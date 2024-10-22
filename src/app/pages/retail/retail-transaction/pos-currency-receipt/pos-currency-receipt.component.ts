@@ -1214,7 +1214,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
 
     this.posCurrencyDetailsData.forEach((data, index) => {
       data.SRNO = index + 1;
-      sumCGST_AMOUNTCC += this.comService.emptyToZero(data.IGST_AMOUNTCC);
+      sumCGST_AMOUNTCC += (this.comService.emptyToZero(data.IGST_AMOUNTCC)) * (this.comService.emptyToZero(data.CURRENCY_RATE));
       sumAMOUNTCC += this.comService.emptyToZero(data.TOTAL_AMOUNTCC);
     });
 

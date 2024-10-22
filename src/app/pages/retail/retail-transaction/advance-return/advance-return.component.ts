@@ -130,7 +130,7 @@ export class AdvanceReturnComponent implements OnInit {
   advanceReturnForm: FormGroup = this.formBuilder.group({
     vocType: [""],
     vocNo: [""],
-    vocDate: [new Date(), Validators.required,this.dateValidator.bind(this)],
+    vocDate: [new Date(), [Validators.required, this.dateValidator.bind(this)]],  
     partyCode: [""],
     partyCurrency: [""],
     partyCurrencyRate: [""],

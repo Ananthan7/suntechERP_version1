@@ -829,7 +829,7 @@ export class AddPosComponent implements OnInit {
     let branchParams: any = localStorage.getItem('BRANCH_PARAMETER')
     this.comFunc.allbranchMaster = JSON.parse(branchParams);
     this.isGiftTypeRequired = this.comFunc.allbranchMaster.BRNCHSHOW_GIFTMODULE ? this.comFunc.allbranchMaster.BRNCHSHOW_GIFTMODULE : false;
-    this.isPartialAMLValidation = this.comFunc.allbranchMaster.isPartialAMLValidation;
+    this.isPartialAMLValidation = this.comFunc.allbranchMaster.PARTIALAMLSCANNING;
     this.amlNameValidation = this.comFunc.allbranchMaster.AMLNAMEVALIDATION;
 
     this.getBranchList();
@@ -3271,7 +3271,7 @@ export class AddPosComponent implements OnInit {
 
     this.lineItemForm.controls.fcn_li_gross_amount.setValue(
       this.comFunc.transformDecimalVB(
-        this.comFunc.allbranchMaster?.BAMTDECIMALS, (value.GROSS_AMT))
+        this.comFunc.allbranchMaster?.BAMTDECIMALS, (value.GROSS_AMT?? (this.comFunc.emptyToZero(value.MKGVALUEFC) - this.comFunc.emptyToZero(value.DISCOUNTVALUECC))))
     );
 
     // this.lineItemForm.controls.fcn_li_gross_amount.setValue(
@@ -7779,7 +7779,7 @@ export class AddPosComponent implements OnInit {
       if(this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt) === 0 &&
       this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_rate) === 0 )
 
-      this.renderer.selectRootElement('#fcn_li_rate').select();
+      this.renderer.selectRootElement('#fcn_li_gross_wt')?.select();
 
       else{
         this.renderer.selectRootElement('#fcn_li_net_amount')?.select();
@@ -7797,6 +7797,8 @@ export class AddPosComponent implements OnInit {
       this.isPcsEditable = false;
       // this.comFunc.formControlSetReadOnly('fcn_li_pcs', true);
       this.comFunc.formControlSetReadOnly('fcn_li_gross_wt', true);
+      this.renderer.selectRootElement('#fcn_li_rate')?.select();
+
     }
   }
 
@@ -9786,10 +9788,12 @@ export class AddPosComponent implements OnInit {
               );
               // this.setNettWeight();
               this.manageCalculations();
+              this.renderer.selectRootElement('#fcn_li_gross_wt')?.select();
 
             } else {
               // this.setNettWeight();
               this.manageCalculations();
+              this.renderer.selectRootElement('#fcn_li_rate')?.select();
             }
           });
         } else {
@@ -9879,7 +9883,20 @@ export class AddPosComponent implements OnInit {
         if (this.divisionMS != 'M')
           this.updateDiscountAmount();
       } else {
+
+        if(this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_pcs)==0 &&
+        this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt)==0 && this.newLineItem.DIVISION !== 'X'){
+          this.lineItemForm.controls.fcn_li_total_amount.setValue(
+            this.comFunc.transformDecimalVB(
+              this.comFunc.allbranchMaster?.BAMTDECIMALS,
+              this.zeroAmtVal
+            )
+          );
+          this.renderer.selectRootElement('#fcn_li_gross_wt').select();
+
+        }
         // Rate Cannot be Less Than Cost
+        else{
         this.openDialog('Warning', this.comFunc.getMsgByID('MSG1721'), true);
         this.dialogBox.afterClosed().subscribe((data: any) => {
           if (data == 'OK') {
@@ -9935,6 +9952,7 @@ export class AddPosComponent implements OnInit {
           }
 
         });
+      }
       }
     } else {
       this.lineItemForm.controls.fcn_li_rate.setValue(0);
@@ -10296,13 +10314,36 @@ export class AddPosComponent implements OnInit {
 
       //Changes as per Jebraj's Input on 17/07/2024
 
+ 
       if (this.divisionMS == 'S') {
-        if (((this.isPromotionalItem && this.isAllowWithoutRate && this.comFunc.emptyToZero(value) >= 0)) || this.comFunc.emptyToZero(value) >= this.comFunc.emptyToZero(this.blockMinimumPriceValue)) {
+        const isPromotional = this.isPromotionalItem && this.isAllowWithoutRate && this.comFunc.emptyToZero(value) >= 0;
+        const isValidValue = this.comFunc.emptyToZero(value) >= this.comFunc.emptyToZero(this.blockMinimumPriceValue) && this.newLineItem.DIVISION !== 'X';
+        const isDivisionXValid = this.newLineItem.DIVISION === 'X' && this.comFunc.emptyToZero(value) > 0;
 
+        if (isPromotional || isValidValue || isDivisionXValid) {
           this.rateFunc(value);
         }
+        // if (((this.isPromotionalItem && this.isAllowWithoutRate && this.comFunc.emptyToZero(value) >= 0)) || 
+        // (this.comFunc.emptyToZero(value) >= this.comFunc.emptyToZero(this.blockMinimumPriceValue) && this.newLineItem.DIVISION !== 'X') ||
+        //  (this.newLineItem.DIVISION == 'X' && this.comFunc.emptyToZero(value) >= 0)) {
+
+        //   this.rateFunc(value);
+        // }
         else {
           // Rate Cannot be Less Than Cost
+
+          if(this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_pcs)==0 &&
+          this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt)==0 && this.newLineItem.DIVISION !== 'X'){
+            this.lineItemForm.controls.fcn_li_rate.setValue(
+              this.comFunc.transformDecimalVB(
+                this.comFunc.allbranchMaster?.BAMTDECIMALS,
+                this.zeroAmtVal
+              )
+            );
+            this.renderer.selectRootElement('#fcn_li_gross_wt').select();
+
+          }
+          else{
           this.openDialog('Warning', this.comFunc.emptyToZero(value) != 0 ? this.comFunc.getMsgByID('MSG1721') : this.comFunc.getMsgByID('MSG1723'), true);
           this.dialogBox.afterClosed().subscribe((data: any) => {
             if (data == 'OK') {
@@ -10328,15 +10369,18 @@ export class AddPosComponent implements OnInit {
               );
 
               this.manageCalculations();
-
+              this.renderer.selectRootElement('#fcn_li_rate')?.select();
               // this.lineItemForm.controls.fcn_li_net_amount.setValue(
               //   this.comFunc.transformDecimalVB(
               //     this.comFunc.allbranchMaster?.BAMTDECIMALS,
               //     preVal
               //   )
               // );
+              if(this.newLineItem.DIVISION == 'X')
+                this.renderer.selectRootElement('#fcn_li_rate')?.select();
             }
           });
+        }
         }
       }
 
@@ -15253,7 +15297,7 @@ export class AddPosComponent implements OnInit {
       if (this.isPartialAMLValidation) {
         this.openDialog(
           'Alert',
-          this.comFunc.getMsgByID('MSG7676'),
+          this.comFunc.getMsgByID('MSG81396'),
           false
         );
         this.dialogBox.afterClosed().subscribe((data: any) => {
