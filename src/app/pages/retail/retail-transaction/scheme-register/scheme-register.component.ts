@@ -267,7 +267,7 @@ export class SchemeRegisterComponent implements OnInit {
   }
   fetchSchemeWithCustCode(SCHEME_CUSTCODE: string) {
     // let API = `Scheme/SchemeMaster?SCHEME_CUSTCODE=${SCHEME_CUSTCODE}`
-    let API = `SchemeMaster/GetSchemeMasterDetails/${this.commonService.branchCode}/${SCHEME_CUSTCODE}`
+    let API = `SchemeMaster/GetSchemeMasterDetails/${SCHEME_CUSTCODE}`
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result: any) => {
 

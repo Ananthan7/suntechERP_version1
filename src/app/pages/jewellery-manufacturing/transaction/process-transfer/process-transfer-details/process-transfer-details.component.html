@@ -491,9 +491,10 @@
                             <mat-form-field appearance="outline"
                               style="width: 100px;">
                               <input type="text" matInput
-                                maxlength="15"
+                                maxlength="15" UpperCaseDirective
                                 (keydown)="lookupKeyPress($event,'location')"
-                                formControlName="location" readonly />
+                                (change)="locationCodeValidate($event)"
+                                formControlName="location" />
                               <master-search class="masterSearch"
                                 *ngIf="locationSearchFlag" #overleyLocation
                                 [MasterSearchData]="locationSearch"
@@ -760,7 +761,7 @@
                             style="width: 130px;">
                             <input type="text" matInput [readonly]="viewMode"
                               (keydown)="lookupKeyPress($event,'METAL_TO_PROCESS_CODE')"
-                              (focusout)="SPvalidateLookupField($event,toProcessMasterSearch,'METAL_TO_PROCESS_CODE')"
+                              (focusout)="toProcesscodeValidate($event)"
                               formControlName="METAL_TO_PROCESS_CODE"
                               id="METAL_TO_PROCESS_CODE"
                               UpperCaseDirective />
@@ -813,7 +814,7 @@
                               (keydown)="lookupKeyPress($event,'METAL_TO_WORKER_CODE')"
                               formControlName="METAL_TO_WORKER_CODE"
                               id="METAL_TO_WORKER_CODE"
-                              (focusout)="SPvalidateLookupField($event,toWorkerMasterSearch,'METAL_TO_WORKER_CODE')" />
+                              (focusout)="toWorkercodeValidate($event)" />
                             <master-search class="masterSearch"
                               *ngIf="!viewMode" #MetaloverlayToWorker
                               [MasterSearchData]="toWorkerMasterSearch"
@@ -827,6 +828,8 @@
                           style="width: 130px;">
                           <input type="text" matInput
                             UpperCaseDirective
+                            (keydown)="lookupKeyPress($event,'METAL_ScrapLocCode')"
+                            (change)="locationCodeValidate($event)"
                             formControlName="METAL_ScrapLocCode" 
                             id="METAL_ScrapLocCode"/>
                           <master-search class="masterSearch"

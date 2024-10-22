@@ -211,7 +211,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     WHERECONDITION: `@strBranch =${this.commonService.branchCode},
     @strUserCode=${this.commonService.userName},
     @strAvoidFORSALES='',
-	  @strFrom=''`,
+	  @strFrom='',@strLoc=''`,
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -370,15 +370,14 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.setOnLoadDetails()
   }
   ngAfterViewInit() {
-    this.commonService.formControlSetReadOnly('UNQ_JOB_ID', true);
     this.subJobNoSearch.VIEW_ICON = false;
     this.setInitialValues() //set all values from parent to child
   }
-  // ngAfterContentChecked() {
-  //   if (this.commonService.nullToString(this.processTransferdetailsForm.value.JOB_NUMBER) == '') {
-  //     this.renderer.selectRootElement('#jobNoSearch')?.focus();
-  //   }
-  // }
+  ngAfterContentChecked() {
+    if (this.commonService.nullToString(this.processTransferdetailsForm.value.JOB_NUMBER) == '') {
+      this.renderer.selectRootElement('#jobNoSearch')?.focus();
+    }
+  }
   setOnLoadDetails() {
     this.DIAMANFBARCODE = this.commonService.getCompanyParamValue('DIAMANFBARCODE')
     let HEADERDETAILS = this.content[0]?.HEADERDETAILS || {}
@@ -529,6 +528,31 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.FORM_VALIDATER = this.processTransferdetailsForm.value;
   }
 
+  locationCodeValidate(event: any) {
+    let postData = {
+      "SPID": "057",
+      "parameter": {
+        'strBranch': this.commonService.branchCode,
+        'strUserCode': this.commonService.userName,
+        'strAvoidFORSALES': '',
+        'strFrom': '',
+        'strLoc': this.commonService.nullToString(event.target.value)
+      }
+    }
+    this.commonService.showSnackBarMsg('MSG81447')
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        this.commonService.closeSnackBarMsg()
+        if (result.status == "Success" && result.dynamicData[0]) {
+          let data = result.dynamicData[0] || []
+          if (data && data.length == 0) {
+            this.overlayjobNoSearch.closeOverlayPanel()
+            this.setFormNullToString(this.designType=='METAL'?'METAL_ScrapLocCode':'location', '')
+          }
+        }
+      })
+    this.subscriptions.push(Sub)
+  }
   getMetalLabStockCode() {
     let postData = {
       "SPID": "028",
@@ -833,21 +857,17 @@ export class ProcessTransferDetailsComponent implements OnInit {
           this.overlayjobNoSearch.closeOverlayPanel()
           let data = result.dynamicData[0] || []
           if (data.length > 0) {
+            this.subJobNoSearch.VIEW_ICON = true;
+            this.subJobNoSearch.WHERECONDITION += `AND job_number='${this.processTransferdetailsForm.value.JOB_NUMBER?.toString()}'`
             this.jobNumberFormData(data) // assign values to form
             if (data.length == 1) { // condition for 1 subjob
-              this.commonService.formControlSetReadOnly('UNQ_JOB_ID', true); //disabling subjob
-              this.subJobNoSearch.VIEW_ICON = false; //hides subjob search
               if (data[0].UNQ_JOB_ID != '') this.subJobNumberValidate() // sub job number API call
               return
             }
             if (data.length > 1) { // condition for multiple subjob
-              this.subJobNoSearch.VIEW_ICON = true;
-              this.subJobNoSearch.WHERECONDITION += `AND job_number='${this.processTransferdetailsForm.value.JOB_NUMBER?.toString()}'`
-              this.commonService.formControlSetReadOnly('UNQ_JOB_ID', false)
               this.overlaySubjobNoSearch.showOverlayPanel(event) // opening lookup with subjobs
             }
           } else { // condition for no response
-            this.subJobNoSearch.VIEW_ICON = false;
             this.commonService.formControlSetReadOnly('UNQ_JOB_ID', true)
             this.setFormNullToString('JOB_NUMBER', '')
             this.renderer.selectRootElement('#jobNoSearch')?.focus();
@@ -1896,6 +1916,8 @@ export class ProcessTransferDetailsComponent implements OnInit {
       return
     }
     this.isFromProcessCodeEmpty(false)
+    this.setFromWorkerWhereCondition()
+    this.setFromProcessWhereCondition()
     let form = this.processTransferdetailsForm.value
     let postData = {
       "SPID": "083",
@@ -1913,13 +1935,11 @@ export class ProcessTransferDetailsComponent implements OnInit {
         if (result.status == "Success" && result.dynamicData[0]) {
           let data = result.dynamicData[0]
           if (data.length == 0) {
-            if (this.designType == 'METAL') {
-              this.setFormNullToString('METAL_FRM_PROCESS_CODE', '')
-            } else {
-              this.setFormNullToString('FRM_PROCESS_CODE', '')
-            }
+            this.setFormNullToString(this.designType == 'METAL' ? 'METAL_FRM_PROCESS_CODE' : 'FRM_PROCESS_CODE', '')
             this.commonService.toastErrorByMsgId('MSG1531')
             this.fromProcesscodeInputChange()
+            this.setFromWorkerWhereCondition()
+            this.setFromProcessWhereCondition()
             return
           }
         } else {
@@ -1937,6 +1957,8 @@ export class ProcessTransferDetailsComponent implements OnInit {
     if (event.target.value == '' || this.viewMode) {
       return
     }
+    this.setToProcessWhereCondition()
+    this.setToWorkerWhereCondition()
     let form = this.processTransferdetailsForm.value
     let postData = {
       "SPID": "098",
@@ -1944,8 +1966,8 @@ export class ProcessTransferDetailsComponent implements OnInit {
         'JobNumber': this.commonService.nullToString(form.JOB_NUMBER),
         'BranchCode': this.commonService.nullToString(form.BRANCH_CODE),
         'CurrentUser': this.commonService.nullToString(this.commonService.userName),
-        'ToWorker': this.commonService.nullToString(form.TO_WORKER_CODE),
-        'ToProcesscode': this.commonService.nullToString(form.TO_PROCESS_CODE),
+        'ToWorker': this.commonService.nullToString(this.designType=='METAL'?form.METAL_TO_WORKER_CODE:form.TO_WORKER_CODE),
+        'ToProcesscode': this.commonService.nullToString(event.target.value),
         'ToWorkerFocus': '1'
       }
     }
@@ -1956,7 +1978,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
         if (result.status == "Success" && result.dynamicData[0]) {
           let data = result.dynamicData[0]
           if (data.length == 0) {
-            this.setFormNullToString('TO_PROCESS_CODE', '')
+            this.setFormNullToString(this.designType=='METAL'?'METAL_TO_PROCESS_CODE': 'TO_PROCESS_CODE', '')
             this.setToProcessWhereCondition()
             this.setToWorkerWhereCondition()
             this.commonService.toastErrorByMsgId('MSG1531')
@@ -1986,20 +2008,21 @@ export class ProcessTransferDetailsComponent implements OnInit {
   // from Workercode Validate
   fromWorkercodeValidate(event: any) {
     if (this.viewMode || this.fromProcessCodeEmpty) return
-    let workerCode = event.target.value
-    if (this.commonService.nullToString(workerCode) == '') {
+    if (this.commonService.nullToString(event.target.value) == '') {
       this.fromWorkerMasterOverley.showOverlayPanel(event)
       this.isFromWorkerCodeEmpty(true)
       return
     }
     this.isFromWorkerCodeEmpty(false)
+    this.setFromWorkerWhereCondition()
+    this.setFromProcessWhereCondition()
     let form = this.processTransferdetailsForm.value
     let postData = {
       "SPID": "084",
       "parameter": {
         'StrSubJobNo': this.commonService.nullToString(form.UNQ_JOB_ID),
-        'StrFromProcess': this.commonService.nullToString(form.FRM_PROCESS_CODE),
-        'StrFromWorker': this.commonService.nullToString(workerCode),
+        'StrFromProcess': this.commonService.nullToString(this.designType=='METAL'?form.METAL_FRM_PROCESS_CODE:form.FRM_PROCESS_CODE),
+        'StrFromWorker': this.commonService.nullToString(event.target.value),
         'StrBranchCode': this.commonService.nullToString(form.BRANCH_CODE),
         'blnProcessAuthroize': '',
       }
@@ -2013,6 +2036,8 @@ export class ProcessTransferDetailsComponent implements OnInit {
           this.setFormNullToString(this.designType == 'METAL' ? 'METAL_FRM_WORKER_CODE' : 'FRM_WORKER_CODE', '')
           this.commonService.toastErrorByMsgId('MSG1531')
           this.fromWorkercodeInputChange()
+          this.setFromWorkerWhereCondition()
+          this.setFromProcessWhereCondition()
         }
       }, err => {
         this.commonService.closeSnackBarMsg()
@@ -2026,12 +2051,14 @@ export class ProcessTransferDetailsComponent implements OnInit {
     if (event.target.value == '' || this.viewMode) {
       return
     }
+    this.setToWorkerWhereCondition()
+    this.setToProcessWhereCondition()
     let form = this.processTransferdetailsForm.value
     let postData = {
       "SPID": "085",
       "parameter": {
-        'StrToProcess': this.commonService.nullToString(form.TO_PROCESS_CODE),
-        'StrToWorker': this.commonService.nullToString(form.TO_WORKER_CODE),
+        'StrToProcess': this.commonService.nullToString(this.designType=='METAL'?form.METAL_TO_PROCESS_CODE:form.TO_PROCESS_CODE),
+        'StrToWorker': this.commonService.nullToString(event.target.value),
         'blntoWorkerFocus': '1',
       }
     }
@@ -2040,10 +2067,13 @@ export class ProcessTransferDetailsComponent implements OnInit {
       .subscribe((result) => {
         this.commonService.closeSnackBarMsg()
         if (result.status == "Success" && result.dynamicData[0]) {
+
           let data = result.dynamicData[0]
           if (data.length == 0) {
-            this.setFormNullToString('TO_WORKER_CODE', '')
+            this.setFormNullToString(this.designType=='METAL'?'METAL_TO_WORKER_CODE':'TO_WORKER_CODE', '')
             this.commonService.toastErrorByMsgId('MSG1531')
+            this.setToWorkerWhereCondition()
+            this.setToProcessWhereCondition()
             return
           }
         } else {
@@ -2082,48 +2112,6 @@ export class ProcessTransferDetailsComponent implements OnInit {
       this.processTransferdetailsForm.controls.TO_PROCESS_CODE.setValue(response.PROCESS_CODE)
       this.processTransferdetailsForm.controls.TO_PROCESSNAME.setValue(response.DESCRIPTION)
     }
-  }
-
-  SPvalidateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
-    LOOKUPDATA.SEARCH_VALUE = event.target.value
-    if (FORMNAME == 'FRM_PROCESS_CODE') {
-      this.setFromProcessWhereCondition()
-    }
-
-    if (event.target.value == '' || this.viewMode == true) return
-    let param = {
-      "PAGENO": LOOKUPDATA.PAGENO,
-      "RECORDS": LOOKUPDATA.RECORDS,
-      "LOOKUPID": LOOKUPDATA.LOOKUPID,
-      "ORDER_TYPE": 0,
-      "WHERECONDITION": LOOKUPDATA.WHERECONDITION,
-      "searchField": LOOKUPDATA.SEARCH_FIELD,
-      "searchValue": LOOKUPDATA.SEARCH_VALUE
-    }
-    this.commonService.showSnackBarMsg('MSG81447');
-    let Sub: Subscription = this.dataService.postDynamicAPI('MasterLookUp', param)
-      .subscribe((result) => {
-        this.commonService.closeSnackBarMsg()
-        let data = result.dynamicData[0]
-        if (data && data.length > 0) {
-          if (LOOKUPDATA.FRONTENDFILTER && LOOKUPDATA.SEARCH_VALUE != '') {
-            let result = this.commonService.searchAllItemsInArray(data, LOOKUPDATA.SEARCH_VALUE)
-            if (result && result.length == 0) {
-              this.commonService.toastErrorByMsgId('MSG1460')
-              this.processTransferdetailsForm.controls[FORMNAME].setValue('')
-              LOOKUPDATA.SEARCH_VALUE = ''
-            }
-            return
-          }
-        } else {
-          this.commonService.toastErrorByMsgId('MSG1460')
-          this.processTransferdetailsForm.controls[FORMNAME].setValue('')
-          LOOKUPDATA.SEARCH_VALUE = ''
-        }
-      }, err => {
-        this.commonService.toastErrorByMsgId('MSG1531')
-      })
-    this.subscriptions.push(Sub)
   }
   selectAllBtnChange(event: any) {
     this.metalDetailData.forEach((item: any) => {
@@ -2177,7 +2165,8 @@ export class ProcessTransferDetailsComponent implements OnInit {
   metalprocessCodeToSelected(event: any) {
     this.processTransferdetailsForm.controls.METAL_TO_PROCESS_CODE.setValue(event.PROCESS_CODE)
     this.processTransferdetailsForm.controls.METAL_TO_PROCESSNAME.setValue(event.DESCRIPTION)
-
+    this.setToProcessWhereCondition()
+    this.setToWorkerWhereCondition()
   }
 
   workerCodeFromSelected(event: any) {
@@ -2196,11 +2185,15 @@ export class ProcessTransferDetailsComponent implements OnInit {
 
   metalworkerCodeFromSelected(event: any) {
     this.processTransferdetailsForm.controls.METAL_FRM_WORKER_CODE.setValue(event.WORKER_CODE)
+    this.setFromProcessWhereCondition()
+    this.setFromWorkerWhereCondition()
   }
 
   metalworkerCodeToSelected(event: any) {
     this.processTransferdetailsForm.controls.METAL_TO_WORKER_CODE.setValue(event.WORKER_CODE)
     this.processTransferdetailsForm.controls.METAL_TO_WORKERNAME.setValue(event.DESCRIPTION)
+    this.setToProcessWhereCondition()
+    this.setToWorkerWhereCondition()
   }
   metalScrapStockCodeSelected(event: any) {
     this.processTransferdetailsForm.controls.METAL_ScrapStockCode.setValue(event.STOCK_CODE)
@@ -2437,7 +2430,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
   gridSRNO: number = 0
   setJOB_PROCESS_TRN_DETAIL_DJ() {
     let form = this.processTransferdetailsForm.value;
-    
+
     let LOSS_PURE_QTY = this.calculateLossPureQty(this.processTransferdetailsForm.value);
     let metalGridDataSum = this.calculateMetalStoneGridAmount();
     let seqDataFrom = this.sequenceDetails.filter((item: any) => item.PROCESS_CODE?.toUpperCase() == form.FRM_PROCESS_CODE?.toUpperCase());
@@ -2985,7 +2978,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     if (this.viewMode) return
     let form = this.processTransferdetailsForm.value;
     if (this.emptyToZero(form.scrapWeight) > this.emptyToZero(form.lossQty)) {
-      let msg = this.commonService.getMsgByID('MSG7921') //msg - scrap wt greater than loss wt, proceed?
+      let msg = this.commonService.getMsgByID('MSG7921') //Scrap wt greater than Loss weight. Do you want to proceed ?
       this.showConfirmationDialog(msg).then((result) => {
         if (result.isConfirmed) {
           this.checkfromMetalScrapWeight(this.processTransferdetailsForm.value)
@@ -3019,24 +3012,24 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.CalculateLoss()
   }
   GrossWeightToChange(event: any) {
-    // this.checkFromToValues('GrossWeightFrom', 'GrossWeightTo')
     let form = this.processTransferdetailsForm.value;
 
     let scrapTot = (this.emptyToZero(form.GrossWeightTo) + this.emptyToZero(form.scrapWeight))
     if (this.emptyToZero(form.GrossWeightTo) > this.emptyToZero(form.GrossWeightFrom)) {
-      let msg = this.commonService.getMsgByID('MSG1312')
+      let msg = this.commonService.getMsgByID('MSG1312') // Gross wt. cannot be greater than fromvalue
       this.commonService.toastErrorByMsgId(msg + ' ' + form.GrossWeightFrom)
       this.setFormDecimal('GrossWeightTo', this.FORM_VALIDATER.GrossWeightTo, 'METAL')
       return
     } else if (this.emptyToZero(form.scrapWeight) != 0 && scrapTot > this.emptyToZero(form.GrossWeightFrom)) {
-      let msg = this.commonService.getMsgByID('MSG7921') //+ ' ' + form.GrossWeightTo
+      let msg = this.commonService.getMsgByID('MSG7921') //Scrap wt greater than Loss weight. Do you want to proceed ?
       this.showConfirmationDialog(msg).then((result) => {
-        if (result.isConfirmed) {
-          this.CalculateLoss()
-        } else {
+        if (!result.isConfirmed) {
           this.setFormDecimal('scrapWeight', 0, 'METAL')
-          this.CalculateLoss()
         }
+        this.CalculateLoss()
+        //  else {
+        //   this.CalculateLoss()
+        // }
       })
       return
     }
@@ -3055,7 +3048,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       let actualLoss = this.commonService.lossQtyCalculate(form.FRM_METAL_WT, form.STD_LOSS);
       if (lossQty > actualLoss) {
         lossQty = actualLoss
-        // this.setFormDecimal('GrossWeightTo', this.FORM_VALIDATER.GrossWeightTo, 'METAL')
+        // msg - Loss qty cannot be exceed > actualLoss
         let msg = this.commonService.getMsgByID('MSG1397') + actualLoss
         this.commonService.toastErrorByMsgId(msg)
       }
@@ -3077,16 +3070,22 @@ export class ProcessTransferDetailsComponent implements OnInit {
     }
     form = this.processTransferdetailsForm.value;
     this.FORM_VALIDATER = this.processTransferdetailsForm.value;
-    let Balance_WT = (this.emptyToZero(form.GrossWeightFrom) - (this.emptyToZero(form.GrossWeightTo) + this.emptyToZero(form.scrapWeight) + this.emptyToZero(form.lossQty)));
-    this.setFormDecimal('Balance_WT', Balance_WT, 'METAL')
+    // let Balance_WT = (this.emptyToZero(form.GrossWeightFrom) - (this.emptyToZero(form.GrossWeightTo) + this.emptyToZero(form.scrapWeight) + this.emptyToZero(form.lossQty)));
+    // this.setFormDecimal('Balance_WT', Balance_WT, 'METAL')
     if (this.Multi_Metal()) {
       this.Split_Loss_New
     } else {
       this.Split_Loss(this.processTransferdetailsForm.value)
     }
+    this.calculateBalanceWt()
     // if (blnLoss) {
     //   this.renderer.selectRootElement('#txtLossQty')?.focus();
     // }
+  }
+  calculateBalanceWt(){
+    let form = this.processTransferdetailsForm.value
+    let Balance_WT = (this.emptyToZero(form.GrossWeightFrom) - (this.emptyToZero(form.GrossWeightTo) + this.emptyToZero(form.scrapWeight) + this.emptyToZero(form.lossQty)));
+    this.setFormDecimal('Balance_WT', Balance_WT, 'METAL')
   }
   Split_Loss(form: any) {
     if (form.METAL_STOCK_CODE != '') {
@@ -3113,9 +3112,9 @@ export class ProcessTransferDetailsComponent implements OnInit {
         }
       }
       if (this.emptyToZero(form.lossQty) >= this.emptyToZero(dblMaster_Metal) && bFlag) {
-        let msg = this.commonService.getMsgByID("MSG1397")
+        let msg = this.commonService.getMsgByID("MSG1397")//Loss qty cannot be exceed >dblMaster_Metal
         this.commonService.toastErrorByMsgId(msg + " " + dblMaster_Metal);
-        this.resetOnLoadWeights('MSG7611')
+        this.resetOnLoadWeights('MSG7611') //Master metal stock code not defined
       }
       form = this.processTransferdetailsForm.value;
 
@@ -3126,8 +3125,9 @@ export class ProcessTransferDetailsComponent implements OnInit {
         this.metalDetailData[k].NET_WT = this.commonService.decimalQuantityFormat(NET_WT, 'METAL');
         this.metalDetailData[k].LOSS_QTY = this.commonService.decimalQuantityFormat(form.lossQty, 'METAL');
       } else if (intMetalcount == 1) { // by alsmon on 16-08-2024 for single metal or barcode item
-        if (this.commonService.emptyToZero(form.lossQty) >= dblSub_Metal + this.commonService.emptyToZero(this.metalDetailData[intMetalRow].LOSS_QTY)) {
-          let msg = this.commonService.getMsgByID("MSG1397") + " " + (dblSub_Metal + this.commonService.emptyToZero(this.metalDetailData[intMetalRow].LOSS_QTY))
+        if (this.commonService.emptyToZero(form.lossQty) >= dblSub_Metal + this.emptyToZero(this.metalDetailData[intMetalRow].LOSS_QTY)) {
+          //	msg - Loss qty cannot be exceed >
+          let msg = this.commonService.getMsgByID("MSG1397") + " " + (dblSub_Metal + this.emptyToZero(this.metalDetailData[intMetalRow].LOSS_QTY))
           this.commonService.toastErrorByMsgId(msg);
           this.setFormDecimal('TO_METAL_WT', form.FRM_METAL_WT, 'METAL')
           this.setFormDecimal('GrossWeightTo', form.GrossWeightFrom, 'METAL')
@@ -3138,9 +3138,9 @@ export class ProcessTransferDetailsComponent implements OnInit {
           this.metalDetailData[intMetalRow].LOSS_QTY = form.lossQty;
         }
       } else {
-        this.resetOnLoadWeights('MSG7611')
+        this.resetOnLoadWeights('MSG7611') //Master metal stock code not defined
       }
-
+      //set lossQtyper
       let lossQtyper = 0
       form = this.processTransferdetailsForm.value;
       this.FORM_VALIDATER = this.processTransferdetailsForm.value;
@@ -3152,7 +3152,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       }
 
     } else {
-      this.resetOnLoadWeights('MSG7611')
+      this.resetOnLoadWeights('MSG7611') //Master metal stock code not defined
     }
   }
   Split_Loss_Metal() {
@@ -3392,6 +3392,10 @@ export class ProcessTransferDetailsComponent implements OnInit {
         this.stockCodeOverlay.showOverlayPanel(event);
         break;
       case 'location':
+        if (this.fromProcessCodeEmpty || this.fromWorkerCodeEmpty) return
+        this.overleyLocation.showOverlayPanel(event);
+        break;
+      case 'METAL_ScrapLocCode':
         if (this.fromProcessCodeEmpty || this.fromWorkerCodeEmpty) return
         this.overleyLocation.showOverlayPanel(event);
         break;

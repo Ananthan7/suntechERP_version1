@@ -49,7 +49,7 @@ export class MetalIssueDetailsComponent implements OnInit {
     SEARCH_FIELD: 'LOCATION_CODE',
     SEARCH_HEADING: 'Location Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "LOCATION_CODE<> ''",
+    WHERECONDITION: "",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -213,7 +213,11 @@ export class MetalIssueDetailsComponent implements OnInit {
       this.setNewFormValue()
     }
   }
-
+  ngAfterContentChecked() {
+    if (this.comService.nullToString(this.metalIssueDetailsForm.value.jobNumber) == '') {
+      this.renderer.selectRootElement('#jobNumbercode')?.focus();
+    }
+  }
   setNewFormValue() {
     if (this.content?.HEADERDETAILS) {
       let data = this.content.HEADERDETAILS
@@ -910,7 +914,6 @@ export class MetalIssueDetailsComponent implements OnInit {
   }
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     LOOKUPDATA.SEARCH_VALUE = event.target.value;
-
     if (event.target.value == '' || this.viewMode) return;
 
     let param = {
@@ -920,8 +923,8 @@ export class MetalIssueDetailsComponent implements OnInit {
 
     this.comService.showSnackBarMsg('MSG81447');
 
-    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`;
-    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+    let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch`;
+    let Sub: Subscription = this.dataService.postDynamicAPI(API,param)
       .subscribe((result) => {
         this.comService.closeSnackBarMsg();
         let data = this.comService.arrayEmptyObjectToString(result.dynamicData[0]);

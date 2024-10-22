@@ -44,7 +44,7 @@ export class MetalIssueComponent implements OnInit {
     { title: 'Purity', field: 'PURITY', format: '', alignment: 'right' },
     { title: 'Pure Wt', field: 'PURE_WT', format: '', alignment: 'right' },
     { title: 'Karat', field: 'KARAT_CODE', format: '', alignment: 'right' },
-    { title: 'Loaction', field: 'LOCTYPE_CODE', format: '', alignment: 'left' },
+    { title: 'Location', field: 'LOCTYPE_CODE', format: '', alignment: 'left' },
     // { title: 'Division', field: 'DIVCODE', format: '', alignment: 'left' },
 
     // { title: 'Process', field: 'PROCESS_CODE', format: '', alignment: 'left' },
@@ -268,7 +268,7 @@ export class MetalIssueComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
-  // use : to recalculate index number
+  // use : to recalculate index number and decimal points
   formatMainGrid() {
     this.metalIssueDetailsData.forEach((item: any, index: any) => {
       item.SRNO = index + 1

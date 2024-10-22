@@ -428,7 +428,7 @@
                                             style="width: 70%;">
                                             <input type="text" matInput
                                                 formControlName="location"
-                                                [readonly]="viewMode"
+                                                [readonly]="viewMode" UpperCaseDirective
                                                 (keydown)="lookupKeyPress($event,'location')"
                                                 (focusout)="validateLookupField($event,locationCodeData,'location')" />
                                             <master-search class="masterSearch"
