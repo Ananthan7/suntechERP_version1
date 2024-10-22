@@ -829,7 +829,7 @@ export class AddPosComponent implements OnInit {
     let branchParams: any = localStorage.getItem('BRANCH_PARAMETER')
     this.comFunc.allbranchMaster = JSON.parse(branchParams);
     this.isGiftTypeRequired = this.comFunc.allbranchMaster.BRNCHSHOW_GIFTMODULE ? this.comFunc.allbranchMaster.BRNCHSHOW_GIFTMODULE : false;
-    this.isPartialAMLValidation = this.comFunc.allbranchMaster.isPartialAMLValidation;
+    this.isPartialAMLValidation = this.comFunc.allbranchMaster.PARTIALAMLSCANNING;
     this.amlNameValidation = this.comFunc.allbranchMaster.AMLNAMEVALIDATION;
 
     this.getBranchList();
@@ -7779,7 +7779,7 @@ export class AddPosComponent implements OnInit {
       if(this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt) === 0 &&
       this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_rate) === 0 )
 
-      this.renderer.selectRootElement('#fcn_li_rate').select();
+      this.renderer.selectRootElement('#fcn_li_gross_wt').select();
 
       else{
         this.renderer.selectRootElement('#fcn_li_net_amount')?.select();
@@ -15253,7 +15253,7 @@ export class AddPosComponent implements OnInit {
       if (this.isPartialAMLValidation) {
         this.openDialog(
           'Alert',
-          this.comFunc.getMsgByID('MSG7676'),
+          this.comFunc.getMsgByID('MSG81396'),
           false
         );
         this.dialogBox.afterClosed().subscribe((data: any) => {
