@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
@@ -67,6 +67,14 @@ export class DurationPickerComponent implements OnInit {
 
   }
 
+
+
+  allowOnlyNumbers(event: KeyboardEvent) {
+    const char = String.fromCharCode(event.keyCode);
+    if (!/[0-9]/.test(char) && event.keyCode !== 8) {
+      event.preventDefault(); // Prevent non-numeric input
+    }
+  }
 
   timeConvert(time: any) {
     const daysTime = Math.floor(time / 24 / 60);

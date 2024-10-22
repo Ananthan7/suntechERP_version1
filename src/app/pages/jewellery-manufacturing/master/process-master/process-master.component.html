@@ -108,7 +108,7 @@
                                     :</label>
                                 <div class="col-sm-3">
                                     <mat-form-field appearance="outline" style="width: 87%;">
-                                        <input type="text" matInput class="text-right" maxlength="2"
+                                        <input type="text" matInput class="text-right" maxlength="2" (focusout)="postionCodeValidates()"
                                             formControlName="Position" (focus)="showAlertIfCodeIsEmpty()"
                                             onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))"
                                             [readonly]="viewMode" tabindex="5" />

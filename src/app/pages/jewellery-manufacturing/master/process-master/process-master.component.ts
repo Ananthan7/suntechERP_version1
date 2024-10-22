@@ -50,6 +50,7 @@ export class ProcessMasterComponent implements OnInit {
   lossData: boolean = false;
   recoveryData: boolean = false;
   maindetails: any[] = [];
+  positionCode: number = 0;
 
   maxTime: any;
   standTime: any;
@@ -271,6 +272,9 @@ export class ProcessMasterComponent implements OnInit {
     // this.islossReadOnly = true;
     // this.isRecovReadOnly = true;
     // this.isAlloWGainReadOnly = true;
+    if (this.content?.FLAG != 'VIEW' && this.content?.FLAG != 'EDIT' && this.content?.FLAG != 'DELETE') {
+      this.postionCodeValidate();
+    }
     this.jobNumberShow();
     this.mandatoryChecklist();
     this.applySettinglist();
@@ -278,6 +282,7 @@ export class ProcessMasterComponent implements OnInit {
     this.getProcessTypeOptions();
     if (this.content?.FLAG) {
       this.setFormValues();
+      
       if (this.content?.FLAG == 'VIEW') {
         this.viewMode = true;
         this.codeMode = true;
@@ -759,39 +764,167 @@ export class ProcessMasterComponent implements OnInit {
       "AUTO_LOSS": this.onchangeCheckBox(form.ApplyAutoLossToRefinery),
       "ISACCUPDT": AutopostingFlag,
       "TREE_NO": this.onchangeCheckBox(form.HaveTreeNo),
-      "ADJUST_ACCODE": this.commonService.nullToString(form.ADJUST_ACCODE)
+      "ADJUST_ACCODE": this.commonService.nullToString(form.ADJUST_ACCODE),
+      "Details": [
+        {
+          "PROCESS_CODE": form.processCode?.toUpperCase(),
+          "SRNO": 0,
+          "MAND_CODE": "string",
+          "MAND_DESCRIPTION": "string"
+        }
+      ]
     }
   }
   // final save
+  // formSubmit() {
+  //   if (this.content && this.content.FLAG == 'VIEW') return
+  //   if (this.submitValidations(this.processMasterForm.value)) return;
+  //   if (this.content && this.content.FLAG == 'EDIT') {
+  //     this.updateProcessMaster()
+  //     return;
+  //   }
+  //   let API = 'ProcessMasterDj/InsertProcessMasterDJ'
+  //   let postData = this.setPostData()
+  //   this.commonService.showSnackBarMsg('Loading')
+  //   this.isloading = true;
+  //   let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
+  // .subscribe((result) => {
+  //   this.submitTwoConfirm().then((result) => {
+  //     // Call the submitThreeConfirm function and use .then() on the returned promise
+  //     this.submitThreeConfirm().then((result) => {
+  //       this.isloading = false;
+  //       this.commonService.closeSnackBarMsg();
+  //       if (result) {
+  //         if (result.status.trim() === "Success") {
+  //           this.showSuccessDialog(this.commonService.getMsgByID('MSG2443') || 'Success');
+  //         } else {
+  //           this.showErrorDialog(result.message || 'Error please try again');
+  //         }
+  //       } else {
+  //         this.commonService.toastErrorByMsgId('MSG3577');
+  //       }
+  //     });
+  //   });
+  // }, err => {
+  //   this.isloading = false;
+  //   this.commonService.toastErrorByMsgId('MSG3577');
+  // });
+
+  //   this.subscriptions.push(Sub);
+  // }
+
   formSubmit() {
-    if (this.content && this.content.FLAG == 'VIEW') return
+    // Skip submission if in VIEW mode
+    if (this.content && this.content.FLAG == 'VIEW') return;
+
+    // Run validations before submission
     if (this.submitValidations(this.processMasterForm.value)) return;
+
+    // Handle EDIT mode
     if (this.content && this.content.FLAG == 'EDIT') {
-      this.updateProcessMaster()
+      this.updateProcessMaster();
       return;
     }
-    let API = 'ProcessMasterDj/InsertProcessMasterDJ'
-    let postData = this.setPostData()
-    this.commonService.showSnackBarMsg('Loading')
+
+    // API call for INSERT
+    let API = 'ProcessMasterDj/InsertProcessMasterDJ';
+    let postData = this.setPostData();
+
+    this.commonService.showSnackBarMsg('Loading');
     this.isloading = true;
+
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
-        this.isloading = false;
-        this.commonService.closeSnackBarMsg()
-        if (result) {
-          if (result.status === "Success") {
-            this.showSuccessDialog(this.commonService.getMsgByID('MSG2443') || 'Success');
+
+        // Confirm adding all users
+        this.submitTwoConfirm().then((firstResult) => {
+          if (firstResult.isConfirmed) { // If confirmed, proceed with next confirm
+
+            // Confirm adding all sequences
+            this.submitThreeConfirm().then((secondResult) => {
+              this.isloading = false;
+              this.commonService.closeSnackBarMsg();
+
+              if (secondResult.isConfirmed) {
+                // Handle success from second confirm
+                if (result.status.trim() === "Success") {
+                  this.showSuccessDialog(this.commonService.getMsgByID('MSG2443') || 'Success');
+                } else {
+                  this.showErrorDialog(result.message || 'Error please try again');
+                }
+              } else {
+                // Handle denial/cancellation from second confirm
+                this.commonService.toastErrorByMsgId('MSG3577');
+              }
+            });
           } else {
-            this.showErrorDialog(result.message || 'Error please try again');
+            // Handle denial/cancellation from first confirm
+            this.isloading = false;
+            this.commonService.toastErrorByMsgId('MSG3577');
           }
-        } else {
-          this.commonService.toastErrorByMsgId('MSG3577')
-        }
+        });
+
       }, err => {
         this.isloading = false;
-        this.commonService.toastErrorByMsgId('MSG3577')
-      })
+        this.commonService.toastErrorByMsgId('MSG3577');
+      });
+
+    // Push the subscription to the array to manage unsubscriptions if needed
     this.subscriptions.push(Sub);
+  }
+
+  submitTwoConfirm(): Promise<any> {
+    return Swal.fire({
+      title: 'Do you want to add all Users?',
+      icon: 'warning',
+      showDenyButton: true,
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      denyButtonColor: '#2a5298 ',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes',
+      denyButtonText: 'No',
+      cancelButtonText: 'Cancel'
+    });
+  }
+
+  submitThreeConfirm(): Promise<any> {
+    return Swal.fire({
+      title: 'Do you want to add all sequences?',
+      icon: 'warning',
+      showDenyButton: true,
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      denyButtonColor: '#2a5298',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes',
+      denyButtonText: 'No',
+      cancelButtonText: 'Cancel'
+    });
+  }
+
+
+  /**USE: delete worker master from row */
+  deleteProcessMaster() {
+    if (this.content && this.content.FLAG == 'VIEW') return
+    this.showConfirmationDialog().then((result) => {
+      if (result.isConfirmed) {
+        let API = 'ProcessMasterDj/DeleteProcessMasterDJ/' + this.content?.PROCESS_CODE;
+        let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
+          .subscribe((result) => {
+            if (result) {
+              if (result.status === "Success") {
+                this.showSuccessDialog('Deleted Successfully');
+              } else {
+                this.showErrorDialog(result.message || 'Error please try again');
+              }
+            } else {
+              this.commonService.toastErrorByMsgId('MSG1880');// Not Deleted
+            }
+          }, err => alert(err));
+        this.subscriptions.push(Sub);
+      }
+    });
   }
 
   updateProcessMaster() {
@@ -807,6 +940,7 @@ export class ProcessMasterComponent implements OnInit {
         this.commonService.closeSnackBarMsg()
         if (result) {
           if (result.status === "Success") {
+            console.log(this.commonService.getMsgByID('MSG2443'));
             this.showSuccessDialog(this.commonService.getMsgByID('MSG2443') || 'Success');
           } else {
             this.showErrorDialog(result.message || 'Error please try again');
@@ -886,6 +1020,47 @@ export class ProcessMasterComponent implements OnInit {
         this.commonService.toastErrorByMsgId('MSG81451')
       })
     this.subscriptions.push(Sub)
+  }
+
+
+  postionCodeValidate(event?: any) {
+   
+    let postData = {
+      "SPID": "141",
+      "parameter": {
+      }
+    }
+    // if(this.alloyMastereForm.value.price5code.length > 0) return
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        this.commonService.closeSnackBarMsg()
+
+        if (result.dynamicData && result.dynamicData[0].length > 0) {
+          let data = result.dynamicData[0];
+          this.processMasterForm.controls.Position.setValue(data[0].POSITION);
+          this.positionCode = data[0].POSITION;
+        } else {
+          this.processMasterForm.controls.Position.setValue('')
+          this.commonService.toastErrorByMsgId('MSG1531')
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG1747')
+      })
+    this.subscriptions.push(Sub)
+  }
+
+  postionCodeValidates(){
+    // console.log(this.positionCode);
+    let curr_value = this.processMasterForm.controls.Position.value;
+    // console.log(curr_value);
+    // console.log(typeof(curr_value));
+    // console.log(typeof(this.positionCode));
+    if(this.positionCode > curr_value){      
+      Swal.fire({
+        icon:"error",
+        text:"This Details Already Exists"
+      });
+    }
   }
 
   /** checking for same account code selection */
@@ -989,6 +1164,7 @@ export class ProcessMasterComponent implements OnInit {
 
   /**use: sp call to validate same accode to avoid same accode selection */
   accodeValidateSP(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    console.log(event.target.value);
     LOOKUPDATA.SEARCH_VALUE = event.target.value
     if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
     let param = {
@@ -1082,28 +1258,7 @@ export class ProcessMasterComponent implements OnInit {
         return false
     }
   }
-  /**USE: delete worker master from row */
-  deleteProcessMaster() {
-    if (this.content && this.content.FLAG == 'VIEW') return
-    this.showConfirmationDialog().then((result) => {
-      if (result.isConfirmed) {
-        let API = 'ProcessMasterDj/DeleteProcessMasterDJ/' + this.content?.PROCESS_CODE;
-        let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
-          .subscribe((result) => {
-            if (result) {
-              if (result.status === "Success") {
-                this.showSuccessDialog('Deleted Successfully');
-              } else {
-                this.showErrorDialog(result.message || 'Error please try again');
-              }
-            } else {
-              this.commonService.toastErrorByMsgId('MSG1880');// Not Deleted
-            }
-          }, err => alert(err));
-        this.subscriptions.push(Sub);
-      }
-    });
-  }
+
 
   showConfirmationDialog(): Promise<any> {
     return Swal.fire({
@@ -1117,7 +1272,42 @@ export class ProcessMasterComponent implements OnInit {
     });
   }
 
+  submitTwoConfrim(): Promise<any> {
+    return Swal.fire({
+      title: 'Process Master',
+      text: "Do you want to add all Users?",
+      icon: 'warning',
+      showDenyButton: true,
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      denyButtonColor: '#f39c12',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes',
+      denyButtonText: 'No',
+      cancelButtonText: 'Cancel'
+    });
+  }
+
+  submitThreeConfrim(): Promise<any> {
+    return Swal.fire({
+      title: 'Process Master',
+      text: "Do you want to add all sequences?",
+      icon: 'warning',
+      showDenyButton: true,
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      denyButtonColor: '#f39c12',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes',
+      denyButtonText: 'No',
+      cancelButtonText: 'Cancel'
+    });
+  }
+
+
   showSuccessDialog(message: string): void {
+    console.log('sucess Icons');
+
     Swal.fire({
       title: message,
       text: '',
@@ -1250,7 +1440,7 @@ export class ProcessMasterComponent implements OnInit {
       this.processMasterForm.get('recStockCode')?.clearValidators();
     }
     console.log(event);
-    this.processMasterForm.controls.recStockCode.setValue('');
+    
   }
 
   approvalSelect(event: any) {
