@@ -386,7 +386,7 @@ export class PosCrmDashboardComponent implements OnInit {
   prefillScreenValues(){
     if ( Object.keys(this.content).length > 0) {
       this.isLoading = true;
-      // console.log('data to prefill', this.content)   
+      console.log('data to prefill', this.content)   
       this.templateNameHasValue = !!(this.content?.TEMPLATE_NAME);
       this.posCRMdasbordFrom.controls.templateName.setValue(this.content?.TEMPLATE_NAME);
 
@@ -408,7 +408,7 @@ export class PosCrmDashboardComponent implements OnInit {
       this.posCRMdasbordFrom.controls.metal.setValue(paresedItem?.CONTROL_DETAIL.str_MtlBuyPatternField)
 
       this.buyingPatternBoolean = paresedItem?.CONTROL_DETAIL.bln_ShowBuyingPattern === 1 ? false : true;
-
+      console.log(this.buyingPatternBoolean)
     }
   }
 
