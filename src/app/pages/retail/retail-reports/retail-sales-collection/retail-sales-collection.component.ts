@@ -525,7 +525,7 @@ export class RetailSalesCollectionComponent implements OnInit {
         "STRVOCTYPES": this.VocTypeParam, //this.commonService.getqueryParamVocType(),
         "FROMVOCDATE": this.formatDateToYYYYMMDD(this.dateToPass.fromDate),
         "TOVOCDATE": this.formatDateToYYYYMMDD(this.dateToPass.toDate) ,
-        "flag": '',
+        "flag": this.retailSalesCollection.controls.OutpuGridView? 'GRID' : '',
         "USERBRANCH": localStorage.getItem('userbranch'),
         "USERNAME": localStorage.getItem('username'),
         "Logdata": JSON.stringify(logData)
