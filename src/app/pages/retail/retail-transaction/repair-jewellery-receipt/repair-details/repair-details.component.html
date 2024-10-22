@@ -45,7 +45,7 @@
               <div class="col-md-2">
                 <div class="position-relative d-flex">
                   <mat-form-field style="width: 100%">
-                    <input min="0" [readonly]="viewOnly === true" type="number" matInput formControlName="Pcs" />
+                    <input min="0" [readonly]="viewOnly === true" type="number" matInput formControlName="Pcs" (keydown)="preventInvalidInput($event)" />
                   </mat-form-field>
                 </div>
               </div>
@@ -85,7 +85,7 @@
               <div class="col-md-2">
                 <div class="position-relative d-flex">
                   <mat-form-field style="width: 100%">
-                    <input [readonly]="viewOnly" type="text" matInput formControlName="gross_Wt" ThreeDecimalInput />
+                    <input [readonly]="viewOnly" type="text" matInput formControlName="gross_Wt" ThreeDecimalInput (keydown)="preventInvalidInput($event)" />
                   </mat-form-field>
                 </div>
               </div>

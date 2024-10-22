@@ -721,7 +721,13 @@ export class PosCustomerMasterMainComponent implements OnInit {
   }
 
   creditLimitChecker(event: MatCheckboxChange) {
+    console.log(event.checked);
+    
     this.isCreditLimit = event.checked;
+
+    if(this.isCreditLimit === false) {
+      this.posCustomerMasterMainForm.controls.creditCardLimit.setValue("")
+    }
   }
 
   initialController(FLAG: any) {
@@ -1243,6 +1249,13 @@ export class PosCustomerMasterMainComponent implements OnInit {
     }
 
     this.posCustomerMasterMainForm.controls.custIdType.setValue(e.CODE);
+
+    if (this.posCustomerMasterMainForm.value.custIdType === 'PASSPORT') {
+      this.posCustomerMasterMainForm.controls.passport1.setValue(this.posCustomerMasterMainForm.value.custID) 
+    }
+    if (this.posCustomerMasterMainForm.value.custIdType !== 'PASSPORT') {
+      this.posCustomerMasterMainForm.controls.passport1.setValue("") 
+    }
   }
 
   stateSelected(e: any) {
@@ -2598,7 +2611,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
 
   setPassport(event: any) {
     if (
-      this.posCustomerMasterMainForm.controls["custIdType"].value === "PASSPORT" && this.posCustomerMasterMainForm.controls["passport1"].value.length > 0
+      this.posCustomerMasterMainForm.controls["custIdType"].value === "PASSPORT"
     ) {
       this.posCustomerMasterMainForm.controls["passport1"].setValue(
         event.target.value
