@@ -122,7 +122,8 @@
             </div>
         </dx-popup>
        
-        <dx-popup [showTitle]="true" container=".dx-viewport" [dragEnabled]="false" [visible]="outputInGridBoolean" >
+        <dx-popup [showTitle]="true" container=".dx-viewport" [dragEnabled]="false" [visible]="outputInGridBoolean" 
+        (onHidden)="onOutputInGridPopupHidden()">
             <!-- <div style="overflow-x: auto;"> -->
                 <dx-data-grid [dataSource]="outputGridDataSource" [columns]="OutputGridColumns"
                   [showBorders]="true" [allowColumnResizing]="true"

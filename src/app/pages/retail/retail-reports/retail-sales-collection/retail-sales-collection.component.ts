@@ -681,5 +681,7 @@ export class RetailSalesCollectionComponent implements OnInit {
     }, 3000); 
   }
 
-
+  onOutputInGridPopupHidden(){
+    this.outputInGridBoolean = !this.outputInGridBoolean;
+  }
 }

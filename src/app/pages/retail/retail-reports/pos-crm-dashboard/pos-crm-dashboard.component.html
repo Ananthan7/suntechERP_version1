@@ -158,12 +158,41 @@
         </dx-popup>
        
         <div class="col-md-12 mt-3">
-            <mat-tab-group style="background-color: #f5f2ee;">
+            <mat-tab-group>
                 <mat-tab label="Customer Details">
                     <dx-data-grid></dx-data-grid>
                 </mat-tab>
+
                 <mat-tab label="Summary">
+                    <div class="row mt-1">
+                        <div class="col-md-6 d-flex justify-content-center flex-column">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="summary-tab-label text-center text-danger">Nationality Wise Sales</div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <dx-data-grid></dx-data-grid>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 d-flex justify-content-center flex-column">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="summary-tab-label text-center text-danger">Customer Type Wise Sales</div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <dx-data-grid></dx-data-grid>
+                                </div>
+                            </div>
+                        </div>  
+                    </div>
                 </mat-tab>
+                
                 <mat-tab label="Sales Suggestion(Diamond Jew)">
                 </mat-tab>
                 <mat-tab label="Sales Suggestion(Metal Jew)">
