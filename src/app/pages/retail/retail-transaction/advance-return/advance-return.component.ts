@@ -130,7 +130,7 @@ export class AdvanceReturnComponent implements OnInit {
   advanceReturnForm: FormGroup = this.formBuilder.group({
     vocType: [""],
     vocNo: [""],
-    vocDate: [new Date(), [Validators.required, this.dateValidator.bind(this)]],  
+    vocDate: [new Date(), [Validators.required]],
     partyCode: [""],
     partyCurrency: [""],
     partyCurrencyRate: [""],
@@ -229,7 +229,7 @@ export class AdvanceReturnComponent implements OnInit {
     );
   }
 
-  triggerSelectedAction(){
+  triggerSelectedAction() {
     if (this.content?.FLAG == 'VIEW') this.viewOnly = true;
     else if (this.content?.FLAG == "EDIT") {
       console.log(this.comService.EditDetail.REASON);
@@ -241,15 +241,41 @@ export class AdvanceReturnComponent implements OnInit {
     }
   }
 
+  onDateBlur() {
+    const vocDateControl = this.advanceReturnForm.get('vocDate');
+    if (vocDateControl) {
+      if (vocDateControl.value) {
+        const selectedDate = new Date(vocDateControl.value);
+
+        if (this.isValidDate(selectedDate) && selectedDate > this.currentDate) {
+          vocDateControl.setValue(this.currentDate);
+          vocDateControl.markAsPristine();
+          vocDateControl.markAsUntouched();
+        }
+      }
+
+      if (!vocDateControl.value)
+        vocDateControl.setValue(this.currentDate);
+    }
+
+  }
+
+  isValidDate(d: Date): boolean {
+    return d instanceof Date && !isNaN(d.getTime());
+  }
+
+
   dateValidator(control: AbstractControl): { [key: string]: boolean } | null {
     if (control.value) {
       const selectedDate = new Date(control.value);
       if (selectedDate > this.currentDate) {
+        control.setValue(this.currentDate, { emitEvent: false });
         return { futureDate: true };
       }
     }
-    return null; 
+    return null;
   }
+
 
   showConfirmationDialog(): Promise<any> {
     return Swal.fire({
@@ -277,7 +303,7 @@ export class AdvanceReturnComponent implements OnInit {
           .subscribe((result) => {
             if (result) {
               if (result.status == "Success") {
-                this.showSuccessDialog('Voucher '+ this.content?.VOCNO + ' Deleted successfully');
+                this.showSuccessDialog('Voucher ' + this.content?.VOCNO + ' Deleted successfully');
               } else {
                 this.comService.toastErrorByMsgId('MSG2272');
               }
@@ -463,6 +489,9 @@ export class AdvanceReturnComponent implements OnInit {
     modalRef.componentInstance.customerCode =
       this.advanceReturnForm.value.customerCode;
 
+    modalRef.componentInstance.preSelectedRows = this.pcrSelectionData;
+
+
     modalRef.componentInstance.selectionConfirmed.subscribe((selectedRows: any[]) => {
       const existingMIDs = new Set(
         this.pcrSelectionData.map((data) => data.MID)
@@ -516,7 +545,6 @@ export class AdvanceReturnComponent implements OnInit {
       if (postData) {
         console.log("Data from modal:", postData);
         this.pcrSelectionData.push(postData);
-
         this.pcrSelectionData.forEach((data, index) => (data.SRNO = index + 1));
       }
       this.updateFormValuesAndSRNO();
@@ -1124,5 +1152,5 @@ export class AdvanceReturnComponent implements OnInit {
     this.subscriptions.push(Sub);
   }
 
-  continue(){}
+  continue() { }
 }

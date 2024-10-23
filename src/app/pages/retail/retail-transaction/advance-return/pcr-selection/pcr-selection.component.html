@@ -25,22 +25,38 @@
             </div>
             <div class="row mb-2">
                 <div class="col-md-12">
-                    <dx-data-grid #dataGrid id="gridContainer" keyExpr="id" [showBorders]="true"
-                        [dataSource]="pcrSelectionData" (onSelectionChanged)="onSelectionChanged($event)">
-                        <dxo-paging [pageSize]="12"></dxo-paging>
-                        <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[12, 24, 48]" [showInfo]="true"
-                            [showNavigationButtons]="true"></dxo-pager>
-                        <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
-
-                        <dxo-selection mode="multiple" showCheckBoxesMode="always"></dxo-selection>
-                        <dxo-scrolling mode="standard"></dxo-scrolling>
-                        <dxo-filter-row [visible]="true" [applyFilter]="true"></dxo-filter-row>
-
-                        <dxi-column *ngFor="let data of columnsList" [dataField]="data.field" [caption]="data.title"
-                            alignment="center">
-                            <dxo-header-filter [visible]="true"></dxo-header-filter>
-                        </dxi-column>
-                    </dx-data-grid>
+                    <dx-data-grid
+                    id="gridContainer"
+                    keyExpr="id"
+                    [showBorders]="true"
+                    [dataSource]="pcrSelectionData"
+                    [selectedRowKeys]="selectedRowKeys"
+                    (onSelectionChanged)="onSelectionChanged($event)"
+                    (onCellPrepared)="onCellPrepared($event)"
+                  >
+                    <dxo-paging [pageSize]="12"></dxo-paging>
+                    <dxo-pager
+                      [showPageSizeSelector]="true"
+                      [allowedPageSizes]="[12, 24, 48]"
+                      [showInfo]="true"
+                      [showNavigationButtons]="true"
+                    ></dxo-pager>
+                    <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
+                    <dxo-selection mode="multiple" showCheckBoxesMode="always"></dxo-selection>
+                    <dxo-scrolling mode="standard"></dxo-scrolling>
+                    <dxo-filter-row [visible]="true" [applyFilter]="true"></dxo-filter-row>
+                  
+                    <dxi-column
+                      *ngFor="let data of columnsList"
+                      [dataField]="data.field"
+                      [caption]="data.title"
+                      alignment="center"
+                    >
+                      <dxo-header-filter [visible]="true"></dxo-header-filter>
+                    </dxi-column>
+                  </dx-data-grid>
+                  
+                  
 
                 </div>
             </div>

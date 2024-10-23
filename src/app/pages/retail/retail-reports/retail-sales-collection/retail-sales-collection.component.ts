@@ -57,7 +57,10 @@ export class RetailSalesCollectionComponent implements OnInit {
 
   htmlPreview: any;
   previewpopup: boolean = false;
-
+  outputInGridBoolean: boolean = false;
+  outputGridDataSource: any;
+  OutputGridColumns: any;
+  
   constructor(  private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder, private dataService: SuntechAPIService,  private comService: CommonServiceService,
     private commonService: CommonServiceService,   private toastr: ToastrService, private sanitizer: DomSanitizer
@@ -525,7 +528,7 @@ export class RetailSalesCollectionComponent implements OnInit {
         "STRVOCTYPES": this.VocTypeParam, //this.commonService.getqueryParamVocType(),
         "FROMVOCDATE": this.formatDateToYYYYMMDD(this.dateToPass.fromDate),
         "TOVOCDATE": this.formatDateToYYYYMMDD(this.dateToPass.toDate) ,
-        "flag": this.retailSalesCollection.controls.OutpuGridView? 'GRID' : '',
+        "flag": this.retailSalesCollection.controls.OutpuGridView.value == true? 'GRID' : '',
         "USERBRANCH": localStorage.getItem('userbranch'),
         "USERNAME": localStorage.getItem('username'),
         "Logdata": JSON.stringify(logData)
@@ -538,13 +541,28 @@ export class RetailSalesCollectionComponent implements OnInit {
       console.log(result);
       this.previewpopup = true;
       if(result.status != "Failed"){
-        let data = result.dynamicData;
-        let printContent = data[0][0].HTMLINPUT;
-        this.htmlPreview = this.sanitizer.bypassSecurityTrustHtml(printContent);
-        const blob = new Blob([this.htmlPreview.changingThisBreaksApplicationSecurity], { type: 'text/html' });
-        this.commonService.closeSnackBarMsg();
-        const url = URL.createObjectURL(blob);
-        window.open(url, '_blank');
+        if(this.retailSalesCollection.controls.OutpuGridView.value == true){
+          this.outputInGridBoolean = true;
+          this.outputGridDataSource = result.dynamicData[0];
+
+          this.OutputGridColumns = Object.keys(this.outputGridDataSource[0] || {}).map(key => {
+            return {
+              dataField: key,
+              caption: key,
+              width: key === 'Branch Name' ? 400 : 120  // Set specific width for each column
+            };
+          });
+        }
+        else{
+          this.outputInGridBoolean = false;
+          let data = result.dynamicData;
+          let printContent = data[0][0].HTMLINPUT;
+          this.htmlPreview = this.sanitizer.bypassSecurityTrustHtml(printContent);
+          const blob = new Blob([this.htmlPreview.changingThisBreaksApplicationSecurity], { type: 'text/html' });
+          this.commonService.closeSnackBarMsg();
+          const url = URL.createObjectURL(blob);
+          window.open(url, '_blank');
+        }
       }
       else{
         this.toastr.error(result.message)
