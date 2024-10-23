@@ -49,7 +49,6 @@ export class ProcessMasterComponent implements OnInit {
   selectedTabIndex = 0;
   lossData: boolean = false;
   recoveryData: boolean = false;
-  maindetails: any[] = [];
   positionCode: number = 0;
 
   maxTime: any;
@@ -269,20 +268,11 @@ export class ProcessMasterComponent implements OnInit {
     this.searchModeLoss = false;
     this.searchModeRecov = false;
     this.searchModeAllow = false;
-    // this.islossReadOnly = true;
-    // this.isRecovReadOnly = true;
-    // this.isAlloWGainReadOnly = true;
-    if (this.content?.FLAG != 'VIEW' && this.content?.FLAG != 'EDIT' && this.content?.FLAG != 'DELETE') {
-      this.postionCodeValidate();
-    }
-    this.jobNumberShow();
-    this.mandatoryChecklist();
-    this.applySettinglist();
     this.setInitialValues()
     this.getProcessTypeOptions();
+    this.getMandatoryDetails(); // mandatory checklist called in inital load
     if (this.content?.FLAG) {
       this.setFormValues();
-      
       if (this.content?.FLAG == 'VIEW') {
         this.viewMode = true;
         this.codeMode = true;
@@ -294,12 +284,13 @@ export class ProcessMasterComponent implements OnInit {
         this.onlossChange();
         this.onRecovery();
         this.onAllowGain();
-        this.maindesigndetails();
         this.dele = false;
       } else if (this.content.FLAG == 'DELETE') {
         this.viewMode = true;
         this.deleteProcessMaster()
       }
+    } else {
+      this.postionCodeValidate();//to get position only for new entry
     }
 
   }
@@ -438,7 +429,7 @@ export class ProcessMasterComponent implements OnInit {
   }
 
   changedCheckbox(event: any) {
-    this.tableData[event.data.SRNO - 1].SELECT1 = !event.data.SELECT1;
+    this.tableData[event.data.SRNO - 1].ISMANDATORY = !event.data.ISMANDATORY;
   }
 
   ProcessDes() {
@@ -765,115 +756,71 @@ export class ProcessMasterComponent implements OnInit {
       "ISACCUPDT": AutopostingFlag,
       "TREE_NO": this.onchangeCheckBox(form.HaveTreeNo),
       "ADJUST_ACCODE": this.commonService.nullToString(form.ADJUST_ACCODE),
-      "Details": [
-        {
-          "PROCESS_CODE": form.processCode?.toUpperCase(),
-          "SRNO": 0,
-          "MAND_CODE": "string",
-          "MAND_DESCRIPTION": "string"
-        }
-      ]
+      "Details": this.setDetailArray()
     }
   }
-  // final save
-  // formSubmit() {
-  //   if (this.content && this.content.FLAG == 'VIEW') return
-  //   if (this.submitValidations(this.processMasterForm.value)) return;
-  //   if (this.content && this.content.FLAG == 'EDIT') {
-  //     this.updateProcessMaster()
-  //     return;
-  //   }
-  //   let API = 'ProcessMasterDj/InsertProcessMasterDJ'
-  //   let postData = this.setPostData()
-  //   this.commonService.showSnackBarMsg('Loading')
-  //   this.isloading = true;
-  //   let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
-  // .subscribe((result) => {
-  //   this.submitTwoConfirm().then((result) => {
-  //     // Call the submitThreeConfirm function and use .then() on the returned promise
-  //     this.submitThreeConfirm().then((result) => {
-  //       this.isloading = false;
-  //       this.commonService.closeSnackBarMsg();
-  //       if (result) {
-  //         if (result.status.trim() === "Success") {
-  //           this.showSuccessDialog(this.commonService.getMsgByID('MSG2443') || 'Success');
-  //         } else {
-  //           this.showErrorDialog(result.message || 'Error please try again');
-  //         }
-  //       } else {
-  //         this.commonService.toastErrorByMsgId('MSG3577');
-  //       }
-  //     });
-  //   });
-  // }, err => {
-  //   this.isloading = false;
-  //   this.commonService.toastErrorByMsgId('MSG3577');
-  // });
-
-  //   this.subscriptions.push(Sub);
-  // }
-
+  // detail array setting
+  private setDetailArray() {
+    let data: any = []
+    this.tableData.forEach((element: any, index: any) => {
+      if (element.ISMANDATORY) {
+        data.push({
+          "PROCESS_CODE": this.processMasterForm.value.processCode?.toUpperCase() || '',
+          "SRNO": index + 1,
+          "MAND_CODE": this.commonService.nullToString(element.MAND_CODE),
+          "MAND_DESCRIPTION": this.commonService.nullToString(element.MAND_DESCRIPTION)
+        })
+      }
+    });
+    return data
+  }
   formSubmit() {
     // Skip submission if in VIEW mode
     if (this.content && this.content.FLAG == 'VIEW') return;
-
     // Run validations before submission
     if (this.submitValidations(this.processMasterForm.value)) return;
-
     // Handle EDIT mode
     if (this.content && this.content.FLAG == 'EDIT') {
       this.updateProcessMaster();
       return;
     }
-
-    // API call for INSERT
+    // Confirm adding all users
+    this.UsersConfirmation().then((firstResult) => {
+      if (firstResult.isConfirmed) { // If confirmed, proceed with next confirm
+        // Confirm adding all sequences
+        this.sequencesConfirmation().then((secondResult) => {
+          this.saveFinalData()
+        });
+      } else {
+        this.saveFinalData()
+      }
+    });
+  }
+  // API call for INSERT
+  saveFinalData() {
     let API = 'ProcessMasterDj/InsertProcessMasterDJ';
     let postData = this.setPostData();
 
-    this.commonService.showSnackBarMsg('Loading');
+    this.commonService.showSnackBarMsg('MSG81447');
     this.isloading = true;
-
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
-
-        // Confirm adding all users
-        this.submitTwoConfirm().then((firstResult) => {
-          if (firstResult.isConfirmed) { // If confirmed, proceed with next confirm
-
-            // Confirm adding all sequences
-            this.submitThreeConfirm().then((secondResult) => {
-              this.isloading = false;
-              this.commonService.closeSnackBarMsg();
-
-              if (secondResult.isConfirmed) {
-                // Handle success from second confirm
-                if (result.status.trim() === "Success") {
-                  this.showSuccessDialog(this.commonService.getMsgByID('MSG2443') || 'Success');
-                } else {
-                  this.showErrorDialog(result.message || 'Error please try again');
-                }
-              } else {
-                // Handle denial/cancellation from second confirm
-                this.commonService.toastErrorByMsgId('MSG3577');
-              }
-            });
-          } else {
-            // Handle denial/cancellation from first confirm
-            this.isloading = false;
-            this.commonService.toastErrorByMsgId('MSG3577');
-          }
-        });
+        // Handle success from second confirm
+        this.isloading = false;
+        if (result.status.trim() === "Success") {
+          this.showSuccessDialog(this.commonService.getMsgByID('MSG2443') || 'Success');
+        } else {
+          this.showErrorDialog(result.message || 'Error please try again');
+        }
 
       }, err => {
         this.isloading = false;
         this.commonService.toastErrorByMsgId('MSG3577');
       });
-
     // Push the subscription to the array to manage unsubscriptions if needed
     this.subscriptions.push(Sub);
   }
-
-  submitTwoConfirm(): Promise<any> {
+  UsersConfirmation(): Promise<any> {
     return Swal.fire({
       title: 'Do you want to add all Users?',
       icon: 'warning',
@@ -888,7 +835,7 @@ export class ProcessMasterComponent implements OnInit {
     });
   }
 
-  submitThreeConfirm(): Promise<any> {
+  sequencesConfirmation(): Promise<any> {
     return Swal.fire({
       title: 'Do you want to add all sequences?',
       icon: 'warning',
@@ -999,21 +946,30 @@ export class ProcessMasterComponent implements OnInit {
   }
 
 
-  maindesigndetails() {
-
+  getMandatoryDetails() {
+    let FLAG = 'ADD'
+    switch (this.content?.FLAG) {
+      case 'EDIT':
+        FLAG = 'EDIT'
+        break;
+      case 'VIEW':
+        FLAG = 'LOAD'
+        break;
+      default:
+        FLAG = 'ADD'
+        break;
+    }
     let postData = {
       "SPID": "161",
       "parameter": {
         "strProcess": this.processMasterForm.value.processCode,
-        "strAction": "LOAD",
+        "strAction": this.commonService.nullToString(FLAG),
       }
     }
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
       .subscribe((result) => {
         if (result.status == "Success") {
-          this.maindetails = result.dynamicData[0] || []
-          console.log("maindetails" + this.maindetails);
-
+          this.tableData = result.dynamicData[0] || []
           // this.componentmasterForm.controls.jobno.setValue(result.dynamicData[0][0].JOB_NO)
         }
       }, err => {
@@ -1024,7 +980,7 @@ export class ProcessMasterComponent implements OnInit {
 
 
   postionCodeValidate(event?: any) {
-   
+
     let postData = {
       "SPID": "141",
       "parameter": {
@@ -1049,16 +1005,16 @@ export class ProcessMasterComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
 
-  postionCodeValidates(){
+  postionCodeValidates() {
     // console.log(this.positionCode);
     let curr_value = this.processMasterForm.controls.Position.value;
     // console.log(curr_value);
     // console.log(typeof(curr_value));
     // console.log(typeof(this.positionCode));
-    if(this.positionCode > curr_value){      
+    if (this.positionCode > curr_value) {
       Swal.fire({
-        icon:"error",
-        text:"This Details Already Exists"
+        icon: "error",
+        text: "This Details Already Exists"
       });
     }
   }
@@ -1440,7 +1396,7 @@ export class ProcessMasterComponent implements OnInit {
       this.processMasterForm.get('recStockCode')?.clearValidators();
     }
     console.log(event);
-    
+
   }
 
   approvalSelect(event: any) {

@@ -709,7 +709,7 @@ export class CommonServiceService {
   getDivisionMS(division: any) {
     return this.divisionMasterList.filter((data: any) => data.DIVISION_CODE == division)[0].DIVISION;
   }
-  Null2BitValue(value: any) {
+  Null2BitValue(value: any):boolean {
     value = value.toString().trim();
     // if (value == null || value.toString() == '' || value.toString().toUpperCase().trim() == "FALSE" || value.toString() == "0") {
     if (value.toString() == '') {
