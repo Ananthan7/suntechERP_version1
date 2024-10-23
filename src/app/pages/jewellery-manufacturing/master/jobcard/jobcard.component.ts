@@ -450,8 +450,15 @@ export class JobcardComponent implements OnInit {
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
         if (result.response) {
-          let data = result.dynamicData[0]
-          this.jobsalesorderdetailDJ = data[0].JOB_SALESORDER_DETAIL_DJ
+          let data = result.response
+          this.jobsalesorderdetailDJ = data.JOB_SALESORDER_DETAIL_DJ|| []
+          if(this.jobsalesorderdetailDJ.length>0){
+            this.jobsalesorderdetailDJ.forEach((item:any) => {
+              item.GROSS_WT = this.commonService.setCommaSerperatedNumber(item.GROSS_WT,'METAL')
+              item.METAL_WT = this.commonService.setCommaSerperatedNumber(item.GROSS_WT,'METAL')
+              item.STONE_WT = this.commonService.setCommaSerperatedNumber(item.GROSS_WT,'STONE')
+            });
+          }
         }
       }, err => {
         this.commonService.toastErrorByMsgId('MSG1531')
