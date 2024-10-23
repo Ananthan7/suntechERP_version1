@@ -8,6 +8,7 @@ import { PosCustomerMasterMainComponent } from './pos-customer-master-main/pos-c
 import { SchemeMasterComponent } from './scheme-master/scheme-master.component';
 import { CommonRetailModule } from '../common-retail/common-retail.module';
 import { PosWalkinCustomerComponent } from './pos-walkin-customer/pos-walkin-customer.component';
+import { ShowTransDetailsComponent } from './pos-customer-master-main/show-trans-details/show-trans-details.component';
 
 
 @NgModule({
@@ -15,7 +16,8 @@ import { PosWalkinCustomerComponent } from './pos-walkin-customer/pos-walkin-cus
     RetailMasterComponent,
     PosCustomerMasterMainComponent,
     SchemeMasterComponent,
-    PosWalkinCustomerComponent
+    PosWalkinCustomerComponent,
+    ShowTransDetailsComponent
   ],
   imports: [
     CommonModule,

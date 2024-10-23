@@ -1,0 +1,187 @@
+<!-- header section starts -->
+<div class="card-content border-bottom d-flex justify-content-between p-2">
+  <h5 class="pos-modaltitle" id="modal-dia-metal">
+    Priviliage Customer Net Sales Summary
+  </h5>
+  <button type="button" class="btn btn-close close-btn" (click)="close()">
+    <i class="feather icon-x close-icon"></i>
+  </button>
+</div>
+
+<div class="container-fluid pt-3">
+  <form [formGroup]="showTarnsDetailsForm">
+    <div class="row">
+      <div class="col-md-7">
+        <div class="row mb-2">
+          <label for="customer" class="col-sm-3 col-form-label">Customer</label>
+          <div class="col-md-3">
+            <mat-form-field style="width: 100%" appearance="outline">
+              <input
+                readonly="true"
+                matInput="text"
+                formControlName="customerCode"
+              />
+            </mat-form-field>
+          </div>
+          <div class="col-md-6">
+            <mat-form-field
+              style="width: -webkit-fill-available"
+              appearance="outline"
+            >
+              <input
+                readonly="true"
+                matInput="text"
+                formControlName="customer"
+              />
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row mb-2">
+          <label for="mobile" class="col-sm-3 col-form-label">Mobile</label>
+          <div class="col-md-3">
+            <mat-form-field style="width: 100%" appearance="outline">
+              <input readonly="true" matInput="text" formControlName="mobile" />
+            </mat-form-field>
+          </div>
+          <label for="teleRes" class="col-sm-3 col-form-label"
+            >Tel.(Res).</label
+          >
+          <div class="col-md-3">
+            <mat-form-field style="width: 100%" appearance="outline">
+              <input
+                readonly="true"
+                matInput="text"
+                formControlName="teleRes"
+              />
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row mb-2">
+          <label for="teleOff" class="col-sm-3 col-form-label"
+            >Tel.(Off).</label
+          >
+          <div class="col-md-3">
+            <mat-form-field style="width: 100%" appearance="outline">
+              <input
+                readonly="true"
+                matInput="text"
+                formControlName="teleOff"
+              />
+            </mat-form-field>
+          </div>
+          <label for="faxNo" class="col-sm-3 col-form-label">Fax No.</label>
+          <div class="col-md-3">
+            <mat-form-field style="width: 100%" appearance="outline">
+              <input readonly="true" matInput="text" formControlName="faxNo" />
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row mb-2">
+          <label for="emailId" class="col-sm-3 col-form-label">Email ID</label>
+          <div class="col-md-9">
+            <mat-form-field style="width: 100%" appearance="outline">
+              <input
+                readonly="true"
+                matInput="text"
+                formControlName="emailId"
+              />
+            </mat-form-field>
+          </div>
+          <!-- <label for="faxNo" class="col-sm-3 col-form-label">Fax No.</label> -->
+          <!-- <div class="col-md-3">
+            <mat-form-field style="width: 100%" appearance="outline">
+              <input readonly="true" matInput="text" formControlName="faxNo" />
+            </mat-form-field>
+          </div> -->
+        </div>
+        <div class="row mb-2">
+          <label for="poBox" class="col-sm-3 col-form-label">P.O Box</label>
+          <div class="col-md-3">
+            <mat-form-field style="width: 100%" appearance="outline">
+              <input readonly="true" matInput="text" formControlName="poBox" />
+            </mat-form-field>
+          </div>
+          <label for="faxNo" class="col-sm-3 col-form-label">City</label>
+          <div class="col-md-3">
+            <mat-form-field style="width: 100%" appearance="outline">
+              <input readonly="true" matInput="text" formControlName="city" />
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row mb-2">
+          <label for="country" class="col-sm-3 col-form-label">Country</label>
+          <div class="col-md-3">
+            <mat-form-field style="width: 100%" appearance="outline">
+              <input
+                readonly="true"
+                matInput="text"
+                formControlName="countryCode"
+              />
+            </mat-form-field>
+          </div>
+          <div class="col-md-6">
+            <mat-form-field
+              style="width: -webkit-fill-available"
+              appearance="outline"
+            >
+              <input
+                readonly="true"
+                matInput="text"
+                formControlName="country"
+              />
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-5">
+        <div class="row mb-1">
+          <div class="col-md-6"></div>
+          <div class="col-md-6 p-2 mt-1">
+            <p class="btn btn-primary text-center rounded-0 w-100">Photo</p>
+            <div class="icons">
+              <div class="image_box">
+                <img
+                  class="image_box"
+                  *ngIf="fetchedPicture"
+                  [src]="fetchedPicture"
+                  alt="picture"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- <div class="col-md-12">
+        <mat-tab-group>
+          <mat-tab>
+            <div class="row pt-2">
+              <div class="col-md-12">
+                <dx-data-grid
+                  id="gridContainer"
+                  [showBorders]="true"
+                  [dataSource]="repairDetailsData"
+                  [showColumnLines]="true"
+                  [showRowLines]="true"
+                  class="mt-3"
+                >
+                  <dxo-selection mode="single"></dxo-selection>
+
+                  <dxi-column
+                    *ngFor="let data of columnheadItemDetails"
+                    dataField="{{ data }}"
+                    caption="{{ data }}"
+                    [allowEditing]="true"
+                    alignment="center"
+                    backgroundcolor="#000"
+                  >
+                  </dxi-column>
+                </dx-data-grid>
+              </div>
+            </div>
+          </mat-tab>
+        </mat-tab-group>
+      </div> -->
+    </div>
+  </form>
+</div>
