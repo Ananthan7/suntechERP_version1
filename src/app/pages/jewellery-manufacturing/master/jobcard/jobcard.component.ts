@@ -40,7 +40,8 @@ export class JobcardComponent implements OnInit {
   @ViewChild('overlaytimeSearch') overlaytimeSearch!: MasterSearchComponent;
   @ViewChild('overlayrangeSearch') overlayrangeSearch!: MasterSearchComponent;
   @ViewChild('overlayseqcodeSearch') overlayseqcodeSearch!: MasterSearchComponent;
-
+  @Input() content!: any;
+  @ViewChild('codeInput1') codeInput1!: ElementRef;
 
   //variables
   jobnumber: any[] = []
@@ -55,7 +56,7 @@ export class JobcardComponent implements OnInit {
   showHeaderFilter: boolean = false;
   divisionMS: any = 'ID';
   itemList: any[] = []
-  @Input() content!: any;
+
   tableData: any[] = [];
   isDisableSaveBtn: boolean = false;
   userName = localStorage.getItem('username');
@@ -69,24 +70,12 @@ export class JobcardComponent implements OnInit {
   allMode: string;
   checkBoxesMode: string;
   selectedIndexes: any = [];
-  serialNo: any;
   JobNo: any;
   private subscriptions: Subscription[] = [];
   selectedValue: string = 'singleMetal';
   currencyDt: any;
   jobMaterialBOQ: any = [];
   jobsalesorderdetailDJ: any = [];
-
-
-  @ViewChild('codeInput1') codeInput1!: ElementRef;
-
-
-  ngAfterViewInit() {
-    // Focus on the first input
-    if (this.codeInput1) {
-      this.codeInput1.nativeElement.focus();
-    }
-  }
 
   commentsCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -100,8 +89,6 @@ export class JobcardComponent implements OnInit {
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
   }
-
-
   lengthCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -137,8 +124,6 @@ export class JobcardComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-
-
   customerCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -304,9 +289,6 @@ export class JobcardComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-
-
-
   timeCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -342,10 +324,6 @@ export class JobcardComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-
-
-
-
 
   jobCardFrom: FormGroup = this.formBuilder.group({
     orderType: ['', [Validators.required]],
@@ -390,55 +368,6 @@ export class JobcardComponent implements OnInit {
     picture_name: [''],
 
   });
-
-
-
-  constructor(
-    private activeModal: NgbActiveModal,
-    private modalService: NgbModal,
-    private formBuilder: FormBuilder,
-    private dataService: SuntechAPIService,
-    private toastr: ToastrService,
-    private commonService: CommonServiceService,
-    private renderer: Renderer2,
-  ) {
-    this.allMode = 'allPages';
-    this.checkBoxesMode = themes.current().startsWith('material') ? 'always' : 'onClick';
-    this.currencyDt = this.commonService.compCurrency;
-  }
-
-  ngOnInit(): void {
-    console.log(this.content);
-    this.branchCode = this.commonService.branchCode;
-    this.yearMonth = this.commonService.yearSelected;
-    this.setCompanyCurrency();
-    if (this.content == undefined) {
-      this.priceSchemeValidate();
-    }
-    this.setFormValues();
-    this.setInitialValues();
-
-    if (this.content.FLAG == 'VIEW') {
-      this.viewMode = true;
-    } else if (this.content.FLAG == 'EDIT') {
-      this.editMode = true;
-    } else if (this.content.FLAG == 'DELETE') {
-      this.viewMode = true;
-    }
-
-    // if (this.content.FLAG !== 'EDIT') {
-    //   this.priceSchemeValidate();
-    // }
-    // this.jobCardFrom.controls['date'].disable()
-
-    // if (this.content) {
-    //   this.setFormValues()
-    //   this.setInitialValues()
-    // }
-    this.serialNo = this.content;
-  }
-
-
   mainmetalCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -451,20 +380,6 @@ export class JobcardComponent implements OnInit {
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
   }
-  // sizeCodeData: MasterSearchModel = {
-  //   PAGENO: 1,
-  //   RECORDS: 10,
-  //   LOOKUPID: 74,
-  //   SEARCH_FIELD: '',
-  //   SEARCH_HEADING: 'Size ',
-  //   SEARCH_VALUE: '',
-  //   WHERECONDITION: `DESIGN_CODE='${this.jobCardFrom.value.designcode}'`,
-  //   // WHERECONDITION: `kARAT_CODE = '${this.jobCardFrom.value.karat}' and PURITY = '${this.jobCardFrom.value.purity}'`,
-  //   VIEW_INPUT: true,
-  //   VIEW_TABLE: true,
-  //   LOAD_ONCLICK: true,
-  // }
-
   sizeCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -478,20 +393,70 @@ export class JobcardComponent implements OnInit {
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
   }
-
-
-  setCompanyCurrency() {
-    let CURRENCY_CODE = this.commonService.compCurrency;
-    this.jobCardFrom.controls.currency.setValue(CURRENCY_CODE);
+  constructor(
+    private activeModal: NgbActiveModal,
+    private modalService: NgbModal,
+    private formBuilder: FormBuilder,
+    private dataService: SuntechAPIService,
+    private commonService: CommonServiceService,
+  ) {
+    this.allMode = 'allPages';
+    this.checkBoxesMode = themes.current().startsWith('material') ? 'always' : 'onClick';
+    this.currencyDt = this.commonService.compCurrency;
   }
+
+  ngOnInit(): void {
+    this.setInitialValues();
+    if (this.content) {
+      this.setLoadFormValues();
+      this.getSavedDetails()
+      switch (this.content.FLAG) {
+        case 'VIEW':
+          this.viewMode = true;
+          break;
+        case 'EDIT':
+          this.editMode = true;
+          break;
+        case 'DELETE':
+          this.viewMode = true;
+          break;
+        default:
+          break;
+      }
+    } else {
+      this.priceSchemeValidate();
+    }
+
+  }
+  ngAfterViewInit() {
+    // Focus on the first input
+    if (this.codeInput1) {
+      this.codeInput1.nativeElement.focus();
+    }
+  }
+
   setInitialValues() {
-    // this.branchCode = this.jobCardFrom.branchCode;
-    // this.companyName = this.commonService.companyName;
+    this.branchCode = this.commonService.branchCode;
+    this.yearMonth = this.commonService.yearSelected;
     this.yearMonth = this.commonService.yearSelected;
     this.jobCardFrom.controls.jobdate.setValue(this.currentDate)
     this.jobCardFrom.controls.deldate.setValue(this.currentDate)
     this.jobCardFrom.controls.date.setValue(this.currentDate)
-    //this.jobCardFrom.controls.purity.setValue(this.commonService.transformDecimalVB(6,'PURITY'));
+    let CURRENCY_CODE = this.commonService.compCurrency;
+    this.jobCardFrom.controls.currency.setValue(CURRENCY_CODE);
+  }
+  getSavedDetails() {
+    let API = `JobMasterDj/GetJobMasterDjHeaderDetail/${this.commonService.branchCode}/${this.jobCardFrom.value.jobno}`;
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        if (result.response) {
+          let data = result.dynamicData[0]
+          this.jobsalesorderdetailDJ = data[0].JOB_SALESORDER_DETAIL_DJ
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
   }
   inputValidate(event: any) {
     if (event.target.value != '') {
@@ -660,7 +625,7 @@ export class JobcardComponent implements OnInit {
         "gross_wt": "",
       };
       this.tableData.push(data);
-      console.log(this.tableData,'tabledate')
+      console.log(this.tableData, 'tabledate')
     };
 
     this.getDesigncode();
@@ -670,20 +635,19 @@ export class JobcardComponent implements OnInit {
 
   getDesignimagecode() {
 
-    let API = `ImageforJobCad/${ this.jobCardFrom.value.designcode}`;
+    let API = `ImageforJobCad/${this.jobCardFrom.value.designcode}`;
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
-    .subscribe((result) => {
-      if (result.response) {
-        let data = result.response
-        console.log(data,'pic')
-        this.urls = data.map((item: any) => item.imagepath)
-      }
-    }, err => {
-      this.commonService.toastErrorByMsgId('MSG1531')
-    })
-  this.subscriptions.push(Sub)
-}
-
+      .subscribe((result) => {
+        if (result.response) {
+          let data = result.response
+          console.log(data, 'pic')
+          this.urls = data.map((item: any) => item.imagepath)
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
+  }
 
   // getDesigncode() {
 
@@ -727,7 +691,7 @@ export class JobcardComponent implements OnInit {
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
         let formattedPurity = parseFloat(result.response.PURITY).toFixed(6);
-        console.log(result.response,'data')
+        console.log(result.response, 'data')
         this.jobCardFrom.controls['purity'].setValue(formattedPurity);
         this.jobCardFrom.controls['color'].setValue(result.response.COLOR);
         this.jobCardFrom.controls['karat'].setValue(result.response.KARAT_CODE);
@@ -740,9 +704,9 @@ export class JobcardComponent implements OnInit {
         this.jobCardFrom.controls['seqcode'].setValue(result.response.SEQ_CODE);
         this.jobCardFrom.controls['category'].setValue(result.response.CATEGORY_CODE);
         this.jobCardFrom.controls['setref'].setValue(result.response.SET_REF);
-        console.log(result.response.PICTURE_NAME,'picyure')
+        console.log(result.response.PICTURE_NAME, 'picyure')
         this.jobCardFrom.controls['picture_name'].setValue(result.response.PICTURE_NAME);
-     
+
 
         this.mainmetalCodeData.WHERECONDITION = `kARAT_CODE = '${this.jobCardFrom.value.karat}' and PURITY = '${this.jobCardFrom.value.purity}'`;
         // this.tableData[0].Pcs = result.response.PCS;
@@ -1019,7 +983,7 @@ export class JobcardComponent implements OnInit {
     this.jobCardFrom.controls.seqcode.setValue(e.SEQ_CODE);
   }
 
-  setFormValues() {
+  setLoadFormValues() {
     if (!this.content) return
 
     this.mainmetalCodeData.WHERECONDITION = `kARAT_CODE  = '${this.jobCardFrom.value.karat}' and PURITY = '${this.jobCardFrom.value.purity}'`;
@@ -1808,7 +1772,7 @@ export class JobcardComponent implements OnInit {
 
 
 
-  ErrorMessageFounder(alertMsg : any) {
+  ErrorMessageFounder(alertMsg: any) {
     if (alertMsg == null) {
       Swal.fire({
         title: "Not Found",
@@ -1816,11 +1780,11 @@ export class JobcardComponent implements OnInit {
         icon: 'warning',
         confirmButtonColor: '#336699',
         confirmButtonText: 'Ok'
-      });  
+      });
     } else {
-    return alertMsg
+      return alertMsg
     }
-    
+
   }
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     const inputValue = event.target.value.toUpperCase();
@@ -1843,8 +1807,8 @@ export class JobcardComponent implements OnInit {
         this.isDisableSaveBtn = false;
         let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
         if (data.length == 0) {
-         let alertMsg = this.commonService.toastErrorByMsgId('MSG1531');
-          console.log( this.commonService.toastErrorByMsgId('MSG1531'));
+          let alertMsg = this.commonService.toastErrorByMsgId('MSG1531');
+          console.log(this.commonService.toastErrorByMsgId('MSG1531'));
           this.jobCardFrom.controls[FORMNAME].setValue('');
           this.jobCardFrom.controls.customername.setValue('');
           this.jobCardFrom.controls.designtype.setValue('');
@@ -1854,8 +1818,8 @@ export class JobcardComponent implements OnInit {
           //   return "NOT FOUND";
           // }
           return this.ErrorMessageFounder(alertMsg) && console.log("data and error message fetched succesdsfully");
-          
-          
+
+
         }
 
         if (data == '') {
@@ -1888,7 +1852,7 @@ export class JobcardComponent implements OnInit {
 
 
         const matchedItem2 = data.find((item: any) => item.DESIGN_CODE.toUpperCase() === inputValue);
-        console.log(matchedItem2,'data')
+        console.log(matchedItem2, 'data')
         if (matchedItem2) {
           this.jobCardFrom.controls[FORMNAME].setValue(matchedItem2.DESIGN_CODE);
           if (FORMNAME === 'designcode') {
@@ -1901,7 +1865,7 @@ export class JobcardComponent implements OnInit {
             this.jobCardFrom.controls.jobtype.setValue(matchedItem2.DESIGN_TYPE);
             this.jobCardFrom.controls.type.setValue(matchedItem2.TYPE_CODE);
             this.jobCardFrom.controls.purity.setValue(matchedItem2.PURITY);
-           this.getDesigncode()
+            this.getDesigncode()
           }
         } else {
           this.handleLookupError(FORMNAME, LOOKUPDATA);
@@ -1983,8 +1947,8 @@ export class JobcardComponent implements OnInit {
 
   setFromProcessWhereCondition() {
     //${this.commonService.nullToString(this.processTransferdetailsForm.value.FRM_PROCESS_CODE)}
-    this.commentsCodeData.WHERECONDITION =`@strAcCode='${this.commonService.nullToString(this.jobCardFrom.value.comments)}'`
-    
+    this.commentsCodeData.WHERECONDITION = `@strAcCode='${this.commonService.nullToString(this.jobCardFrom.value.comments)}'`
+
   }
 
   showOverleyPanel(event: any, formControlName: string) {
