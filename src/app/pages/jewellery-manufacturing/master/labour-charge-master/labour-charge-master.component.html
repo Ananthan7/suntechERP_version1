@@ -36,9 +36,9 @@
           <label for="input" id="ID002" class="col-sm-2 col-form-label">Labour Code * :</label>
           <div class="col-sm-3">
             <mat-form-field appearance="outline">
-              <input type="text" matInput  maxlength="15" 
-                [readonly]="editMode || viewMode" formControlName="labour_code" (focusout)="diamondLabourCodeValidate()"
-                oninput="this.value = this.value.toUpperCase()" appNoEmptySpace />
+              <input type="text" matInput maxlength="15" [readonly]="editMode || viewMode" formControlName="labour_code"
+                (focusout)="diamondLabourCodeValidate()" oninput="this.value = this.value.toUpperCase()"
+                appNoEmptySpace />
             </mat-form-field>
           </div>
           <label for="input" class="col-sm-2 col-form-label" id="ID003">Description * :</label>
@@ -104,16 +104,27 @@
         </div>
         <div class="row mb-2">
           <label for="input" id="ID008" class="col-sm-2 col-form-label">Shape
+            <span class="required" *ngIf="diamondlabourMasterForm.value.labourType == 'SETTING'">*</span>
             :</label>
           <div class="col-sm-3">
-            <mat-form-field appearance="outline">
+            <!-- <mat-form-field appearance="outline">
               <input type="text" matInput oninput="this.value = this.value.toUpperCase()"
-                (focusout)="validateLookupField($event,shapeCodeData,'shape')"
+                (focusout)="validateLookupField($event,shapeCodeData,'shape')" id="shape" #shape
                 [readonly]="viewMode || codeEnableDiamond" maxlength="6" formControlName="shape"
                 (keydown)="lookupKeyPress($event,'shape')" />
               <master-search [MasterSearchData]="shapeCodeData" (newRowClick)="shapeCodeSelected($event)"
                 #overlayshapeSearch *ngIf=" viewDisable == false" class="masterSearch"></master-search>
+            </mat-form-field> -->
+            <mat-form-field appearance="outline">
+              <input type="text" matInput oninput="this.value = this.value.toUpperCase()"
+                (focusout)="validateLookupField($event, shapeCodeData, 'shape')" id="shape" #shape
+                [readonly]="viewMode || codeEnableDiamond" maxlength="6" formControlName="shape"
+                (keydown)="lookupKeyPress($event, 'shape')" />
+              <master-search [MasterSearchData]="shapeCodeData" (newRowClick)="shapeCodeSelected($event)"
+                #overlayshapeSearch *ngIf="!viewDisable" class="masterSearch">
+              </master-search>
             </mat-form-field>
+
           </div>
 
           <label for="input" class="col-sm-2 col-form-label" id="ID009">Process *
@@ -136,7 +147,7 @@
             <mat-form-field appearance="outline">
               <input type="text" matInput oninput="this.value = this.value.toUpperCase()"
                 [readonly]="viewMode ||codeEnableDiamond" maxlength="6" formControlName="size_from"
-                (focusout)="validateLookupField($event,sizeFromCodeData,'size_from')"
+                (focusout)="validateLookupField($event,sizeFromCodeData,'size_from')" id="size_from" #size_from
                 (change)="sizeFromToValidate('size_from')" (keydown)="lookupKeyPress($event,'size_from')" />
               <master-search [MasterSearchData]="sizeFromCodeData" (newRowClick)="sizeFromCodeSelected($event)"
                 #overlaysizefromSearch *ngIf=" viewDisable == false" class="masterSearch"></master-search>
@@ -161,6 +172,7 @@
           <div class="col-sm-3">
             <mat-form-field appearance="outline">
               <input type="text" matInput maxlength="6" oninput="this.value = this.value.toUpperCase()"
+                id="size_to" #size_to
                 formControlName="size_to" (focusout)="validateLookupField($event,sizeToCodeData,'size_to')"
                 (change)="sizeFromToValidate('size_to')" [readonly]="viewMode"
                 (keydown)="lookupKeyPress($event,'size_to')" />
@@ -195,6 +207,7 @@
           <div class="col-sm-3">
             <mat-form-field appearance="outline">
               <input type="text" matInput [readonly]="viewMode" oninput="this.value = this.value.toUpperCase()"
+              id="sieve" #sieve
                 (focusout)="validateLookupField($event, sieveCodeData, 'sieve')" maxlength="6" formControlName="sieve"
                 (keydown)="lookupKeyPress($event,'sieve')" />
               <master-search [MasterSearchData]="sieveCodeData" (newRowClick)="sieveSelected($event)"
@@ -231,7 +244,7 @@
           <div class="col-sm-3">
             <mat-form-field appearance="outline">
               <input type="text" matInput [readonly]="viewMode || codeEnableDiamond" class="text-right" [max]="2"
-                formControlName="ctWtFrom"  (keyup)="CtWtcodeEnabled()" />
+                formControlName="ctWtFrom" (keyup)="CtWtcodeEnabled()" />
             </mat-form-field>
           </div>
 
@@ -252,9 +265,8 @@
           <label id="ID020" for="input" class="col-sm-2 col-form-label">Ct Wt to :</label>
           <div class="col-sm-3">
             <mat-form-field appearance="outline">
-              <input type="text" matInput [readonly]="viewMode  || codeEnableDiamond" matInput
-                class="text-right" formControlName="ctWtTo"  [max]="2"
-                (change)="onCtweighttto($event,'Ctwtto')" />
+              <input type="text" matInput [readonly]="viewMode  || codeEnableDiamond" matInput class="text-right"
+                formControlName="ctWtTo" [max]="2" (change)="onCtweighttto($event,'Ctwtto')" />
             </mat-form-field>
           </div>
           <div class="col-sm-6">
@@ -264,14 +276,14 @@
         </div>
         <div class="row mb-2">
           <label for="input" class="col-sm-2 col-form-label">Variance %
-              :</label>
+            :</label>
           <div class="col-sm-3">
-              <mat-form-field  appearance="outline">
-                  <input matInput type="text" [readonly]="viewMode" matInput [max]="3"
-                  AmountDecimalInput  formControlName="variance" class="text-right" />
-              </mat-form-field>
+            <mat-form-field appearance="outline">
+              <input matInput type="text" [readonly]="viewMode" matInput [max]="3" AmountDecimalInput
+                formControlName="variance" class="text-right" />
+            </mat-form-field>
           </div>
-      </div>
+        </div>
       </form>
       <!-- </div>
           </div> -->
