@@ -2331,9 +2331,10 @@ export class ProcessTransferDetailsComponent implements OnInit {
         this.commonService.toastErrorByMsgId("MSG1695");
         return true;
       }
-      if (this.emptyToZero(form.METAL_FromNetWeight) != this.emptyToZero(form.METAL_ToNetWt) +
-        this.emptyToZero(form.METAL_ScrapNetWt) + this.emptyToZero(form.METAL_LossBooked) +
-        this.emptyToZero(form.METAL_BalNetWt) - this.emptyToZero(form.METAL_GainGrWt)) {
+      let totalWt = ((this.emptyToZero(form.METAL_ToNetWt) +
+      this.emptyToZero(form.METAL_ScrapNetWt) + this.emptyToZero(form.METAL_LossBooked) +
+      this.emptyToZero(form.METAL_BalNetWt)) - this.emptyToZero(form.METAL_GainGrWt))
+      if (this.emptyToZero(form.METAL_FromNetWeight) != this.emptyToZero(this.commonService.decimalQuantityFormat(totalWt,'THREE'))) {
         this.commonService.toastErrorByMsgId("MSG1695");
         return true;
       }
@@ -2419,11 +2420,11 @@ export class ProcessTransferDetailsComponent implements OnInit {
     return this.emptyToZero(val.toFixed(this.commonService.mQtyDecimals))
   }
   getWipAccode(processCode: string, CODE: string) {
-    let seqData = this.sequenceDetails.filter((item: any) => item.PROCESS_CODE?.toUpperCase() == processCode);
+    let seqData = this.sequenceDetails.filter((item: any) => item.PROCESS_CODE?.toUpperCase() == processCode?.toUpperCase());
     if (seqData.length > 0 && seqData[0][CODE] != '') {
       return this.commonService.nullToString(seqData[0][CODE])
     }
-    let processData = this.processMasterDetails.filter((item: any) => item.PROCESS_CODE?.toUpperCase() == processCode);
+    let processData = this.processMasterDetails.filter((item: any) => item.PROCESS_CODE?.toUpperCase() == processCode?.toUpperCase());
     if (processData.length > 0) return this.commonService.nullToString(processData[0][CODE])
     return ''
   }
@@ -2589,6 +2590,10 @@ export class ProcessTransferDetailsComponent implements OnInit {
     let metalGridDataSum = this.calculateMetalStoneGridAmount();
     let seqDataFrom = this.sequenceDetails.filter((item: any) => item.PROCESS_CODE?.toUpperCase() == form.FRM_PROCESS_CODE?.toUpperCase());
     let seqDataTo = this.sequenceDetails.filter((item: any) => item.PROCESS_CODE?.toUpperCase() == form.TO_PROCESS_CODE?.toUpperCase());
+    let FRM_WIP_ACCODE = this.getWipAccode(form.FRM_PROCESS_CODE, 'WIP_ACCODE')
+    let TO_WIP_ACCODE = this.getWipAccode(form.TO_PROCESS_CODE, 'WIP_ACCODE')
+    let LAB_ACCODE = this.getWipAccode(form.TO_PROCESS_CODE, 'LAB_ACCODE')
+    let LOSS_ACCODE = this.getWipAccode(form.TO_PROCESS_CODE, 'LOSS_ACCODE')
     this.gridSRNO += 1
     return {
       "SRNO": this.emptyToZero(form.SRNO),
@@ -2648,10 +2653,10 @@ export class ProcessTransferDetailsComponent implements OnInit {
       "LAB_UNIT": "",
       "LAB_RATEFC": 0,
       "LAB_RATELC": 0,
-      "LAB_ACCODE": seqDataFrom.length > 0 ? this.commonService.nullToString(seqDataFrom[0]?.LAB_ACCODE) : '',
-      "LOSS_ACCODE": seqDataFrom.length > 0 ? this.commonService.nullToString(seqDataFrom[0].LOSS_ACCODE) : '',
-      "FRM_WIP_ACCODE": seqDataFrom.length > 0 ? this.commonService.nullToString(seqDataFrom[0].WIP_ACCODE) : '',
-      "TO_WIP_ACCODE": seqDataTo.length > 0 ? this.commonService.nullToString(seqDataTo[0].WIP_ACCODE) : '',
+      "LAB_ACCODE": this.commonService.nullToString(LAB_ACCODE),
+      "LOSS_ACCODE": this.commonService.nullToString(LOSS_ACCODE),
+      "FRM_WIP_ACCODE": this.commonService.nullToString(FRM_WIP_ACCODE),
+      "TO_WIP_ACCODE": this.commonService.nullToString(TO_WIP_ACCODE),
       "RET_METAL_DIVCODE": "",
       "RET_METAL_STOCK_CODE": "",
       "RET_STONE_DIVCODE": "",
