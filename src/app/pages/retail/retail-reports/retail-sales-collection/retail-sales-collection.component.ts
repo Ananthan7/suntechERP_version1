@@ -549,7 +549,7 @@ export class RetailSalesCollectionComponent implements OnInit {
             return {
               dataField: key,
               caption: key,
-              width: key === 'Branch Name' ? 400 : 120  // Set specific width for each column
+              width: key === 'Branch Name' ? 400 : 120 
             };
           });
         }
