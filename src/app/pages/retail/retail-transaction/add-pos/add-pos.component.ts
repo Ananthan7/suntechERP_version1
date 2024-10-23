@@ -9135,7 +9135,7 @@ export class AddPosComponent implements OnInit {
                 if (res.status == 'SUCCESS') {
                   this.snackBar.open('POS Updated Successfully', 'OK');
                   this.isNewButtonDisabled = false;
-
+                  this.viewOnly=true;
                   this.vocDataForm.controls['fcn_voc_no'].setValue(res.response.retailSales.VOCNO);
 
                   // this.close('reloadMainGrid');
@@ -9199,6 +9199,7 @@ export class AddPosComponent implements OnInit {
                 // let mid;
                 // mid = res.response.retailSales.MID;
                 this.midForInvoce = res.response.retailSales.MID;
+                this.viewOnly=true;
                 // this.content.MID = res.response.retailSales.MID;
                 // console.log(this.content.MID)
                 if (this.midForInvoce) {
@@ -9629,7 +9630,7 @@ export class AddPosComponent implements OnInit {
                   if (this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_pcs) == 0 &&
                     this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt) == 0)
 
-                    this.renderer.selectRootElement('#fcn_li_pcs').select();
+                    this.renderer.selectRootElement('#fcn_li_pcs')?.select();
 
                   this.manageCalculations();
 
@@ -9644,7 +9645,7 @@ export class AddPosComponent implements OnInit {
                     this.calculateTaxAmount();
                     this.calculateNetAmount();
                     this.lineItemCommaSeparation();
-                  }
+                    this.renderer.selectRootElement('#fcn_li_net_amount')?.select();                  }
 
 
                 }
@@ -11105,7 +11106,7 @@ export class AddPosComponent implements OnInit {
     // );
 
 
-
+    if(this.newLineItem.DIVISION !== 'X'){
     this.lineItemForm.controls.fcn_li_tax_amount.setValue(taxAmt);  //1047
     this.lineItemForm.controls.fcn_li_gross_amount.setValue(grossAmt);
     this.lineItemForm.controls.fcn_li_total_amount.setValue(totalAmt);
@@ -11138,7 +11139,14 @@ export class AddPosComponent implements OnInit {
         this.lineItemForm.value.fcn_li_net_amount
       );
 
-
+    }
+    }
+    else{
+      this.lineItemForm.controls.fcn_li_tax_amount.setValue(taxAmt);  
+      this.lineItemForm.controls.fcn_li_gross_amount.setValue(grossAmt);
+      this.lineItemForm.controls.fcn_li_total_amount.setValue(grossAmt);
+      this.lineItemForm.controls.fcn_li_rate.setValue(grossAmt);
+      this.clearDiscountValues();
     }
     let inputAmount = parseFloat(event.target.value?.replace(/,/g, '') || '0');
     let grossAmtValue = parseFloat(localStorage.getItem('fcn_li_net_amount')?.replace(/,/g, '') || '0');
