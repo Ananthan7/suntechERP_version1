@@ -643,11 +643,13 @@ export class StoneIssueDetailComponent implements OnInit {
     let dataToparent = {
       FLAG: flag,
       POSTDATA: this.setPostData()
+
     }
     // this.close(postData);
     this.saveDetail.emit(dataToparent);
     if (flag == 'CONTINUE') {
       this.resetStockDetails()
+     
     }
   }
   changeJobClicked() {
@@ -723,12 +725,52 @@ export class StoneIssueDetailComponent implements OnInit {
     this.setValueWithDecimal('STONE_WT', 0, 'STONE')
     this.tableData[0].STOCK_CODE = ''
   }
+
+  CollectRate(){
+    let postData = {
+      "SPID": "140",
+      "parameter": {
+        SubJobNumber :this.stoneIssueDetailsFrom.value.subjobnumber, 
+        SubStockCode :this.stoneIssueDetailsFrom.value.stockCode, 
+        StockCode :this.stoneIssueDetailsFrom.value.stockCode, 
+        BranchCode :this.comService.nullToString(this.branchCode), 
+        DEFPRICESMANUF:'',
+        VocDate :this.stoneIssueDetailsFrom.value.VOCDATE
+      }
+    };
+    console.log('API Request Data:', postData);
+    this.comService.showSnackBarMsg('MSG81447'); // Loading message
+    // API call to execute the stored procedure
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe(
+        (result) => {
+          this.comService.closeSnackBarMsg();
+          if (result.status === "Success" && result.dynamicData && result.dynamicData.length > 0) {
+            console.log('Valid Response Data:', result.dynamicData);
+            let data = result.dynamicData[1]
+            console.log(data,'data')
+            let uniteRateValue = data[0].RATEFC;
+            this.stoneIssueDetailsFrom.controls.unitrate.setValue(uniteRateValue.toFixed(2));
+          } else {
+            this.comService.toastErrorByMsgId('MSG1747'); // "Not Found" error message
+          }
+        },
+        (err) => {
+          // Handle errors during the API call
+          this.comService.closeSnackBarMsg();
+          this.comService.toastErrorByMsgId('MSG1531');
+        }
+      );
+    this.subscriptions.push(Sub);
+  }
+  
   CalculatePiecesAndPointerWT() {
     // Get the form values
     const pieces = this.stoneIssueDetailsFrom.controls.pieces.value || 0;  
     const pointerwt = this.stoneIssueDetailsFrom.controls.pointerwt.value || 0;  
     const calculatedCarat = pieces * pointerwt;
     this.stoneIssueDetailsFrom.controls.carat.setValue(calculatedCarat.toFixed(3));
+    this.CollectRate()
   }
   
   CollectPointerWtValidation() {
@@ -877,6 +919,7 @@ export class StoneIssueDetailComponent implements OnInit {
   
             // Additional validation logic
             this.CollectPointerWtValidation();
+            this.CollectRate()
           }
   
         } else {
@@ -1074,11 +1117,40 @@ export class StoneIssueDetailComponent implements OnInit {
     }
     return false;
   }
+// Grid Pcs Max Length  
+pcsEditorOptions = {
+  onInput: (e: any) => {
+    const maxLength = 10;
+    const input = e.event.target;
+    if (input.value.length > maxLength) {
+      input.value = input.value.slice(0, maxLength); // Limit the value length
+    }
+  },
+};
+RemarkEditorOptions = {
+  onInput: (e: any) => {
+    const maxLength = 40;
+    const input = e.event.target;
+    if (input.value.length > maxLength) {
+      input.value = input.value.slice(0, maxLength); // Limit the value length
+    }
+  },
+};
+CaratEditorOptions = {
+  onInput: (e: any) => {
+    const maxLength = 10;
+    const input = e.event.target;
+    if (input.value.length > maxLength) {
+      input.value = input.value.slice(0, maxLength); 
+      this.formatMainGrid()
+    }
+  },
+};
+
   DivCodetemp(data:any,value: any){
     this.tableData[value.data.SRNO - 1].DIVCODE = data.target.value;
   }
-  
-  
+
   GriddivCodeSelected(event: any, value: any) {
     console.log(event,'event')
     this.tableData[value.data.SRNO - 1].DIVCODE  = event.Division_Code;
@@ -1087,6 +1159,22 @@ export class StoneIssueDetailComponent implements OnInit {
   onHoverCategory({data}:any){
     this.divCodeData.WHERECONDITION =  `@SubJobNumber='',  @DivisionCode='L', @DesignType='DIAMOND'`
   }
+  formatMainGrid() {
+    this.tableData.forEach((item: any, index: any) => {
+      console.log(item.CARATWT_TO)
+      item.CARATWT_TO = this.comService.setCommaSerperatedNumber(item.CARATWT_TO, 'METAL')
+    })
+  }
+customizeText(data:any){
+  if(data){
+    const decimalPlaces=3;
+    return data.value.toFixed(decimalPlaces)
+  }
+}
+SaveGridData(){
+  let gridData = this.tableData
+  console.log(gridData)
+}
 
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {
