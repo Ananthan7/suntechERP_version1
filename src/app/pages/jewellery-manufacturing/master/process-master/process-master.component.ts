@@ -597,12 +597,24 @@ export class ProcessMasterComponent implements OnInit {
     if (form.recovery == true && this.validateRecoveryRange()) {
       return true;
     }
-    if (form.ApprovalRequired == true && this.commonService.nullToString(form.approvalProcess) == '') {
-      this.processMasterForm.controls.approvalProcess.setValidators(Validators.required)
-      this.approvalProcessInput.nativeElement.focus();
-      this.commonService.toastErrorByMsgId('MSG81513 ');//Approval Process must be Required
-      return true;
+
+    if (form.ApprovalRequired == true ){
+      if (this.commonService.nullToString(form.approvalProcess) == ''){
+        this.commonService.toastErrorByMsgId('MSG81513 ');//Approval Process must be Required
+        return true;
+      }
+      if (this.commonService.nullToString(form.approvalCode) == ''){
+        this.commonService.toastErrorByMsgId('MSG81513 ');//Approval Process must be Required
+        return true;
+      }
     }
+
+    // if (form.ApprovalRequired == true && this.commonService.nullToString(form.approvalProcess) == '') {
+    //   this.processMasterForm.controls.approvalProcess.setValidators(Validators.required)
+    //   this.approvalProcessInput.nativeElement.focus();
+    //   this.commonService.toastErrorByMsgId('MSG81513 ');//Approval Process must be Required
+    //   return true;
+    // }
 
     if (form.TimeCalculateonProcess == true && this.formattedTime == 0 && this.formattedMaxTime == 0) {
       this.commonService.toastErrorByMsgId('MSG81516');//Standard Time  and  Maximum Time must be Required

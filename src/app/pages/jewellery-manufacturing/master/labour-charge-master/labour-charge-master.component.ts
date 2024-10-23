@@ -523,13 +523,26 @@ export class LabourChargeMasterComponent implements OnInit {
       if (selectedLabourType === 'SETTING') {
         this.viewModeSetting = false;
         this.ViewModemethod = false;
+
       } else {
         this.diamondlabourMasterForm.controls.method.setValue('GENERAL');
         this.diamondlabourMasterForm.controls.settingType.setValue('GEN');
         this.viewModeSetting = true;
         this.ViewModemethod = true;
+
       }
     });
+
+
+  }
+
+  SettingSelectCode() {
+    if (this.diamondlabourMasterForm.value.labourType == 'SETTING') {
+      this.renderer.selectRootElement('#shape').focus();
+      this.diamondlabourMasterForm.get('shape')?.setValidators(Validators.required);
+    } else {
+      this.diamondlabourMasterForm.get('shape')?.clearValidators();
+    }
   }
 
   setMode(mode: 'view' | 'edit') {
@@ -585,7 +598,7 @@ export class LabourChargeMasterComponent implements OnInit {
   setFormValues() {
     if (!this.content) return
     console.log(this.content);
-    
+
     this.diamondlabourMasterForm.controls.selling_rate.setValue(
       this.commonService.transformDecimalVB(
         this.commonService.allbranchMaster?.BAMTDECIMALS,
@@ -598,7 +611,7 @@ export class LabourChargeMasterComponent implements OnInit {
     // this.diamondlabourMasterForm.controls.labourType.setValue(this.content.LABTYPE);
     this.diamondlabourMasterForm.controls.method.setValue(this.content.METHOD);
     // console.log(this.content.METHOD);
-    
+
     this.diamondlabourMasterForm.controls.divisions.setValue(this.content.DIVISION_CODE);
     this.diamondlabourMasterForm.controls.labourType.setValue(this.content.DIVISION);
     this.diamondlabourMasterForm.controls.shape.setValue(this.content.SHAPE);
@@ -664,46 +677,6 @@ export class LabourChargeMasterComponent implements OnInit {
       })
     );
 
-
-    // this.metallabourMasterForm.controls.metallabour_code.setValue(this.content.CODE);
-    // this.metallabourMasterForm.controls.metallabour_description.setValue(this.content.DESCRIPTION);
-    // this.metallabourMasterForm.controls.metalDivision.setValue(this.content.DIVISION_CODE);
-    // this.metallabourMasterForm.controls.metalcurrency.setValue(this.content.CURRENCY_CODE);
-    // this.metallabourMasterForm.controls.wastage.setValue(this.content.WASTAGE_PER);
-    // this.metallabourMasterForm.controls.category.setValue(this.content.CATEGORY_CODE);
-    // this.metallabourMasterForm.controls.subCategory.setValue(this.content.SUB_CATEGORY_CODE);
-    // this.metallabourMasterForm.controls.brand.setValue(this.content.BRAND_CODE);
-    // this.metallabourMasterForm.controls.karat.setValue(this.content.KARAT_CODE);
-    // this.metallabourMasterForm.controls.stock_code.setValue(this.content.STOCK_CODE);
-    // this.metallabourMasterForm.controls.purity.setValue(this.content.PURITY);
-    // this.metallabourMasterForm.controls.color.setValue(this.content.COLOR);
-    // this.metallabourMasterForm.controls.forDesignOnly.setValue(this.content.FOR_DESIGN);
-    // this.metallabourMasterForm.controls.onGrossWt.setValue(this.content.ON_GROSSWT);
-    // this.metallabourMasterForm.controls.metalcost_rate.setValue(this.content.LAST_COST_RATE);
-    // this.metallabourMasterForm.controls.typecode.setValue(this.content.TYPE_CODE);
-
-    // this.metallabourMasterForm.controls.purity.setValue(
-    //   this.commonService.transformDecimalVB(
-    //     this.commonService.allbranchMaster?.BMQTYDECIMALS,
-    //     this.content.PURITY));
-
-    // this.metallabourMasterForm.controls.metalselling_rate.setValue(
-    //   this.commonService.transformDecimalVB(
-    //     this.commonService.allbranchMaster?.BMQTYDECIMALS,
-    //     this.content.LAST_SELLING_RATE));
-
-    // this.metallabourMasterForm.controls.metalcost_rate.setValue(
-    //   this.commonService.transformDecimalVB(
-    //     this.commonService.allbranchMaster?.BMQTYDECIMALS,
-    //     this.content.LAST_COST_RATE));
-
-
-
-
-    // this.metallabourMasterForm.controls.metalselling.setValue(
-    //   this.commonService.transformDecimalVB(
-    //     this.commonService.allbranchMaster?.BMQTYDECIMALS,
-    //     this.content.METALSTONE));
 
   }
 
@@ -897,16 +870,55 @@ export class LabourChargeMasterComponent implements OnInit {
   }
 
   /**use: validate all lookups to check data exists in db */
+  // validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+  //   const inputValue = event.target.value.toUpperCase();
+  //   LOOKUPDATA.SEARCH_VALUE = event.target.value;
+  //   // if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
+  //   if (event.target.value === '' || this.viewMode === true) {
+  //     // if (FORMNAME === 'sieve') {
+  //     //   this.diamondlabourMasterForm.controls.sieve_desc.setValue('');
+  //     // }
+  //     return;
+  //   }
+  //   let param = {
+  //     LOOKUPID: LOOKUPDATA.LOOKUPID,
+  //     WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+  //   }
+  //   this.commonService.toastInfoByMsgId('MSG81447');
+  //   let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
+  //   let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
+  //     .subscribe((result) => {
+  //       this.isDisableSaveBtn = false;
+  //       let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+  //       if (data.length == 0) {
+  //         this.commonService.toastErrorByMsgId('MSG1531')
+  //         this.diamondlabourMasterForm.controls[FORMNAME].setValue('')
+  //         LOOKUPDATA.SEARCH_VALUE = ''
+  //         this.handleLookupError(FORMNAME, LOOKUPDATA);
+  //         return
+  //       }
+  //       const matchedItem = data.find((item: any) => item.CODE === inputValue);
+  //       if (matchedItem) {
+  //         this.diamondlabourMasterForm.controls[FORMNAME].setValue(matchedItem.CODE);
+  //         if (FORMNAME === 'sieve') {
+  //           this.diamondlabourMasterForm.controls.sieve_desc.setValue(matchedItem.DESCRIPTION);
+  //         }
+  //       } else {
+  //         this.handleLookupError(FORMNAME, LOOKUPDATA);
+  //       }
+  //     }, err => {
+  //       this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+  //     })
+  //   this.subscriptions.push(Sub)
+  // }
+
+
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
-    const inputValue = event.target.value.toUpperCase();
-    LOOKUPDATA.SEARCH_VALUE = event.target.value;
-    // if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
-    if (event.target.value === '' || this.viewMode === true ) {
-      // if (FORMNAME === 'sieve') {
-      //   this.diamondlabourMasterForm.controls.sieve_desc.setValue('');
-      // }
-      return;
-    }
+    this.stockCodeData.WHERECONDITION = `DIVISION_CODE = '${this.diamondlabourMasterForm.value.divisions}' and SUBCODE = '0'`;
+    LOOKUPDATA.SEARCH_VALUE = event.target.value
+    this.stockcodeDisable = false;
+    
+    if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
       WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
@@ -920,65 +932,17 @@ export class LabourChargeMasterComponent implements OnInit {
         if (data.length == 0) {
           this.commonService.toastErrorByMsgId('MSG1531')
           this.diamondlabourMasterForm.controls[FORMNAME].setValue('')
+          this.renderer.selectRootElement(FORMNAME).focus();
           LOOKUPDATA.SEARCH_VALUE = ''
-          this.handleLookupError(FORMNAME, LOOKUPDATA);
           return
         }
-        const matchedItem = data.find((item: any) => item.CODE === inputValue);
-        if (matchedItem) {
-          this.diamondlabourMasterForm.controls[FORMNAME].setValue(matchedItem.CODE);
-          if (FORMNAME === 'sieve') {
-            this.diamondlabourMasterForm.controls.sieve_desc.setValue(matchedItem.DESCRIPTION);
-          }
-        } else {
-          this.handleLookupError(FORMNAME, LOOKUPDATA);
-        }
+
       }, err => {
         this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
       })
     this.subscriptions.push(Sub)
   }
 
-  //   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
-  //     const inputValue = event.target.value.toUpperCase();
-  //     LOOKUPDATA.SEARCH_VALUE = event.target.value;
-  //     if (event.target.value === '' || this.viewMode === true) {
-  //         if (FORMNAME === 'sieve') {
-  //             this.diamondlabourMasterForm.controls.sieve_desc.setValue('');
-  //         }
-  //         return;
-  //     }
-
-  //     let param = {
-  //         LOOKUPID: LOOKUPDATA.LOOKUPID,
-  //         WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${inputValue}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
-  //     };
-
-  //     let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`;
-  //     this.commonService.showSnackBarMsg('MSG81447');
-  //     let Sub: Subscription = this.dataService.getDynamicAPI(API)
-  //         .subscribe((result) => {
-  //             let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0]);
-  //             if (data.length === 0) {
-  //                 this.handleLookupError(FORMNAME, LOOKUPDATA);
-  //                 return;
-  //             }
-
-  //             const matchedItem = data.find((item: any) => item.CODE.toUpperCase() === inputValue);
-  //             if (matchedItem) {
-  //                 this.diamondlabourMasterForm.controls[FORMNAME].setValue(matchedItem.CODE);
-  //                 if (FORMNAME === 'sieve') {
-  //                     this.diamondlabourMasterForm.controls.sieve_desc.setValue(matchedItem.DESCRIPTION);
-  //                 }
-  //             } else {
-  //                 this.handleLookupError(FORMNAME, LOOKUPDATA);
-  //             }
-  //         }, err => {
-  //             this.commonService.toastErrorByMsgId('network issue found');
-  //         });
-
-  //     this.subscriptions.push(Sub);
-  // }
 
   handleLookupError(FORMNAME: string, LOOKUPDATA: MasterSearchModel) {
     this.commonService.toastErrorByMsgId('MSG1531');
@@ -1160,6 +1124,82 @@ export class LabourChargeMasterComponent implements OnInit {
       return true
     }
 
+    // if (this.diamondlabourMasterForm.value.labourType == 'SETTING') {
+    //   this.renderer.selectRootElement('#shape').focus();
+    //   const shapeControl = this.diamondlabourMasterForm.get('shape');
+    //   shapeControl?.setValidators(Validators.required);
+    //   shapeControl?.updateValueAndValidity();
+    //   const sizeFromControl = this.diamondlabourMasterForm.get('size_from');
+    //   shapeControl?.setValidators(Validators.required);
+    //   shapeControl?.updateValueAndValidity();  
+    //   const sizeTromControl = this.diamondlabourMasterForm.get('size_to');
+    //   shapeControl?.setValidators(Validators.required);
+    //   shapeControl?.updateValueAndValidity(); 
+    //   const sieveControl = this.diamondlabourMasterForm.get('sieve');
+    //   shapeControl?.setValidators(Validators.required);
+    //   shapeControl?.updateValueAndValidity();  
+
+    //   if (shapeControl?.value == '' || sizeFromControl?.value == '') {
+    //     this.commonService.toastErrorByMsgId('Shape cannot be empty');
+    //     return true;
+    //   }
+    // }
+
+    // if (this.diamondlabourMasterForm.value.labourType == 'SETTING') {
+    //   this.renderer.selectRootElement('#shape').focus();
+
+    //   const shapeControl = this.diamondlabourMasterForm.get('shape');
+    //   const sizeFromControl = this.diamondlabourMasterForm.get('size_from');
+    //   const sizeToControl = this.diamondlabourMasterForm.get('size_to');
+    //   const sieveControl = this.diamondlabourMasterForm.get('sieve');
+
+    //   shapeControl?.setValidators(Validators.required);
+    //   sizeFromControl?.setValidators(Validators.required);
+    //   sizeToControl?.setValidators(Validators.required);
+    //   sieveControl?.setValidators(Validators.required);
+
+    //   shapeControl?.updateValueAndValidity();
+    //   sizeFromControl?.updateValueAndValidity();
+    //   sizeToControl?.updateValueAndValidity();
+    //   sieveControl?.updateValueAndValidity();
+
+
+    //   if (!shapeControl?.value || !sizeFromControl?.value || !sizeToControl?.value || !sieveControl?.value) {
+    //     this.commonService.toastErrorByMsgId('Shape, Size From, Size To, or Sieve cannot be empty');
+    //     return true; 
+    //   }else if(shapeControl?.value || sizeFromControl?.value || sizeToControl?.value || sieveControl?.value) {
+    //     return true;
+    //   }
+
+    // }
+
+    if (this.diamondlabourMasterForm.value.labourType == 'SETTING') {
+      this.renderer.selectRootElement('#shape').focus();
+  
+      const shapeControl = this.diamondlabourMasterForm.get('shape');
+      const sizeFromControl = this.diamondlabourMasterForm.get('size_from');
+      const sizeToControl = this.diamondlabourMasterForm.get('size_to');
+      const sieveControl = this.diamondlabourMasterForm.get('sieve');
+  
+      shapeControl?.setValidators(Validators.required);
+      sizeFromControl?.setValidators(Validators.required);
+      sizeToControl?.setValidators(Validators.required);
+      sieveControl?.setValidators(Validators.required);
+  
+      shapeControl?.updateValueAndValidity();
+      sizeFromControl?.updateValueAndValidity();
+      sizeToControl?.updateValueAndValidity();
+      sieveControl?.updateValueAndValidity();
+  
+      // Check if any field has a value
+      if (shapeControl?.value || sizeFromControl?.value || sizeToControl?.value || sieveControl?.value) {
+          return false; // Return true if at least one field has a value
+      } else if(!shapeControl?.value || !sizeFromControl?.value || !sizeToControl?.value || !sieveControl?.value) {
+          this.commonService.toastErrorByMsgId('Shape, Size From, Size To, or Sieve cannot be empty');
+          return true; // Return false if none of the fields have a value
+      }
+  }
+  
 
     return false;
   }
