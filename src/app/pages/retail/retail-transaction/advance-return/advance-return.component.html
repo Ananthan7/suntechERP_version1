@@ -42,12 +42,13 @@
             <mat-form-field style="width: 100%" appearance="outline">
               <input
                 matInput
-                #vocDateInput 
+                #vocDateInput
                 id="vocDateInput"
                 [readonly]="viewOnly"
                 [matDatepicker]="vocDate"
                 [max]="currentDate"
                 formControlName="vocDate"
+                (blur)="onDateBlur()"
                 placeholder="DD/MM/YYYY"
                 DateValidation
               />
@@ -56,8 +57,13 @@
                 [for]="vocDate"
               ></mat-datepicker-toggle>
               <mat-datepicker [startAt]="currentDate" #vocDate></mat-datepicker>
+          
+              <!-- <mat-error *ngIf="advanceReturnForm.get('vocDate')?.hasError('futureDate')">
+                Future date not allowed, reverting to current date.
+              </mat-error> -->
             </mat-form-field>
           </div>
+          
         </div>
         <div class="row mb-1">
           <label for="inputPassword" class="col-sm-4 col-form-label" id="ID004">Party Code</label>

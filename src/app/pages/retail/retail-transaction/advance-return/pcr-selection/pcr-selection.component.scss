@@ -7,3 +7,9 @@
     max-height: 60vh;
     overflow-y: auto;
   }
+
+  .selected-cell {
+    background-color: #f28b82 !important;  /* Light red shade */
+    color: white !important;  /* Text color remains white */
+  }
+  
