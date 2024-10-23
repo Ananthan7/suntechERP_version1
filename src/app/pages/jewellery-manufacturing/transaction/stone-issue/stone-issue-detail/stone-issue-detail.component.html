@@ -9,7 +9,7 @@
 <modal-header (saveClick)="formSubmit('SAVE')" (cancelClick)="close()"
   (changeJobClick)="changeJobClicked()" [isViewChangeJob]="!viewMode"
   [isViewSave]="!viewMode" [isViewContinue]="!viewMode"
-  (continueClick)="formSubmit('CONTINUE')"
+  (continueClick)="formSubmit('CONTINUE')" (SaveGridDataClick)="SaveGridData()"
   [isViewDelete]="false" [isViewSaveGridData]="!viewMode"
   [isViewMore]="false"></modal-header>
 
@@ -424,11 +424,12 @@
             caption="Batch ID"></dxi-column>
           <dxi-column [allowEditing]="false" dataField="SUB_STOCK_CODE"
             caption="Stock Bal"></dxi-column>
-          <dxi-column [allowEditing]="true" dataField="PCS" 
-            caption="Pcs">
+          <dxi-column [allowEditing]="true" dataField="PCS" caption="Pcs"
+            [editorOptions]="pcsEditorOptions">
           </dxi-column>
           <dxi-column [allowEditing]="true" dataField="CARATWT_TO"
-            caption="Carat" dataType="number">
+            caption="Carat" dataType="number"
+            [editorOptions]="CaratEditorOptions">
           </dxi-column>
           <dxi-column [allowEditing]="false" dataField="LOCTYPE_CODE"
             caption="Location" cellTemplate="locationCodetemp"></dxi-column>
@@ -475,7 +476,8 @@
           <dxi-column [allowEditing]="false" dataField="SIEVE_DESC"
             caption="Sieve Desc"></dxi-column>
           <dxi-column [allowEditing]="true" dataField="D_REMARKS"
-            caption="Remarks"></dxi-column>
+            caption="Remarks"
+            [editorOptions]="RemarkEditorOptions"></dxi-column>
           <dxi-column [allowEditing]="false" dataField="ISS_STN_PCS"
             caption="Issued Pcs"></dxi-column>
           <dxi-column [allowEditing]="false" dataField="ISS_STN_WT"
