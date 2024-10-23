@@ -9556,17 +9556,24 @@ export class PointOfSalesOrderComponent implements OnInit {
     const value = this.comFunc.emptyToZero(event.target.value);
 
     if (this.comFunc.emptyToZero(event.target.value) == 0 && this.newLineItem.IS_BARCODED_ITEM) {
+      if (!['L', 'C', 'P'].includes(this.itemDivision)) {
+        this.openDialog('Warning', this.comFunc.getMsgByID('MSG1563'), true);
+        this.dialogBox.afterClosed().subscribe((data: any) => {
+          if (data == 'OK') {
+            this.lineItemForm.controls['fcn_li_pcs'].setValue(
+              preVal
+            );
+            this.manageCalculations();
+            this.renderer.selectRootElement('#fcn_li_pcs').select();
+          }
+        });
+      }
+      else {
+        this.lineItemForm.controls['fcn_li_pcs'].setValue(
+          event.target.value
+        );
+      }
 
-      this.openDialog('Warning', this.comFunc.getMsgByID('MSG1563'), true);
-      this.dialogBox.afterClosed().subscribe((data: any) => {
-        if (data == 'OK') {
-          this.lineItemForm.controls['fcn_li_pcs'].setValue(
-            preVal
-          );
-          this.manageCalculations();
-          this.renderer.selectRootElement('#fcn_li_pcs').select();
-        }
-      });
 
     }
 
@@ -9647,8 +9654,9 @@ export class PointOfSalesOrderComponent implements OnInit {
 
                   this.manageCalculations();
 
-                  if (filteredValidationCodes.length > 0)
-                    this.renderer.selectRootElement('#fcn_li_net_amount')?.select();
+                  if (filteredValidationCodes.length > 0 && this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_pcs) !== 0 &&
+                  this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt) !== 0)
+                  this.renderer.selectRootElement('#fcn_li_net_amount')?.select();
 
                 } else {
 

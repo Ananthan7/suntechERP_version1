@@ -825,7 +825,7 @@ export class AddPosComponent implements OnInit {
   ) {
     this.strBranchcode = localStorage.getItem('userbranch');
     this.strUser = localStorage.getItem('username');
-    // this.baseYear = localStorage.getItem('YEAR');
+    this.baseYear = localStorage.getItem('YEAR');
     let branchParams: any = localStorage.getItem('BRANCH_PARAMETER')
     this.comFunc.allbranchMaster = JSON.parse(branchParams);
     this.isGiftTypeRequired = this.comFunc.allbranchMaster.BRNCHSHOW_GIFTMODULE ? this.comFunc.allbranchMaster.BRNCHSHOW_GIFTMODULE : false;
@@ -9543,22 +9543,28 @@ export class AddPosComponent implements OnInit {
     const value = this.comFunc.emptyToZero(event.target.value);
 
     if (this.comFunc.emptyToZero(event.target.value) == 0 && this.newLineItem.IS_BARCODED_ITEM) {
+      if (!['L', 'C', 'P'].includes(this.itemDivision)) {
+        this.openDialog('Warning', this.comFunc.getMsgByID('MSG1563'), true);
+        this.dialogBox.afterClosed().subscribe((data: any) => {
+          if (data == 'OK') {
+            this.lineItemForm.controls['fcn_li_pcs'].setValue(
+              preVal
+            );
+            this.manageCalculations();
+            this.renderer.selectRootElement('#fcn_li_pcs').select();
+          }
+        });
+      }
+      else {
+        this.lineItemForm.controls['fcn_li_pcs'].setValue(
+          event.target.value
+        );
+      }
 
-      this.openDialog('Warning', this.comFunc.getMsgByID('MSG1563'), true);
-      this.dialogBox.afterClosed().subscribe((data: any) => {
-        if (data == 'OK') {
-          this.lineItemForm.controls['fcn_li_pcs'].setValue(
-            preVal
-          );
-          this.manageCalculations();
-          this.renderer.selectRootElement('#fcn_li_pcs').select();
-        }
-      });
 
     }
 
-
-   else if (event.target.value != '' && this.validatePCS == true || this.enablePieces) {
+    else if (event.target.value != '' && this.validatePCS == true || this.enablePieces) {
       const validDivisionCodes = ['M', 'D', 'W', 'N'];
       const filteredValidationCodes = validDivisionCodes.filter((code) => code === this.newLineItem.DIVISION.toUpperCase())
       if (filteredValidationCodes.length > 0 && this.comFunc.emptyToZero(event.target.value) === 0) {
@@ -9634,7 +9640,11 @@ export class AddPosComponent implements OnInit {
 
                   this.manageCalculations();
 
-                } else {
+                  if (filteredValidationCodes.length > 0 && this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_pcs) !== 0 &&
+                  this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt) !== 0)
+                  this.renderer.selectRootElement('#fcn_li_net_amount')?.select();
+
+              }else {
 
 
                   if (!['L', 'C', 'P'].includes(this.itemDivision)) {
@@ -9645,7 +9655,10 @@ export class AddPosComponent implements OnInit {
                     this.calculateTaxAmount();
                     this.calculateNetAmount();
                     this.lineItemCommaSeparation();
-                    this.renderer.selectRootElement('#fcn_li_net_amount')?.select();                  }
+                      if (filteredValidationCodes.length > 0)
+                    this.renderer.selectRootElement('#fcn_li_net_amount')?.select();
+
+                  }
 
 
                 }
@@ -10055,7 +10068,9 @@ export class AddPosComponent implements OnInit {
             if (parseFloat(preDisPerVal) == 0)
               preDisAmtVal = 0;
             this.lineItemForm.controls.fcn_li_discount_amount.setValue(
-              preDisAmtVal || this.zeroAmtVal
+              this.comFunc.transformDecimalVB(
+                this.comFunc.allbranchMaster?.BAMTDECIMALS, preDisAmtVal || this.zeroAmtVal)
+              
             );
             this.manageCalculations();
           }
@@ -10073,9 +10088,13 @@ export class AddPosComponent implements OnInit {
             );
             if (parseFloat(preDisPerVal) == 0)
               preDisAmtVal = 0;
+
             this.lineItemForm.controls.fcn_li_discount_amount.setValue(
-              preDisAmtVal || this.zeroAmtVal
+              this.comFunc.transformDecimalVB(
+                this.comFunc.allbranchMaster?.BAMTDECIMALS, preDisAmtVal || this.zeroAmtVal)
+              
             );
+           
             this.manageCalculations({isDiscoutStored:true});
           }
         });
@@ -10088,7 +10107,8 @@ export class AddPosComponent implements OnInit {
 
   disFunc(disAmt: any) {
     this.lineItemForm.controls.fcn_li_discount_amount.setValue(
-      disAmt
+      this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS,
+      disAmt)
     );
 
     this.lineItemForm.controls['fcn_li_gross_amount'].setValue(
@@ -11132,7 +11152,9 @@ export class AddPosComponent implements OnInit {
       if (parseFloat(discountAmt.toString()) < 0)
         discountAmt = this.zeroAmtVal;
       this.lineItemForm.controls.fcn_li_discount_amount.setValue(
-        discountAmt
+        this.comFunc.transformDecimalVB(
+          this.comFunc.allbranchMaster?.BAMTDECIMALS,
+        discountAmt)
       );
       this.changeDisAmount(
         { target: { value: discountAmt } },
@@ -14717,18 +14739,6 @@ export class AddPosComponent implements OnInit {
       this.checkItemCode();
     }
   }
-
-  
-
-  focusField(fieldName: string) {
-    const excludeQtyValidations = ['M', 'D', 'W', 'N'];
-    if (excludeQtyValidations.some(v => this.newLineItem.DIVISION?.toUpperCase().includes(v))) {
-        this.renderer.selectRootElement(`#${fieldName}`)?.select();
-        if ((this as any)[fieldName] && (this as any)[fieldName].nativeElement) {
-            (this as any)[fieldName].nativeElement.select();
-        }
-    } 
-}
 
   
 
