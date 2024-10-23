@@ -234,8 +234,8 @@
                 <input matInput [matDatepicker]="expDate" name="fcn_customer_exp_date"
                   formControlName="fcn_customer_exp_date" placeholder="DD/MM/YYYY" [min]="currentDate"
                   [readonly]="viewOnly" DateValidation />
-                <mat-datepicker-toggle matSuffix [for]="expDate"></mat-datepicker-toggle>
-                <mat-datepicker [startAt]="currentDate" #expDate></mat-datepicker>
+                <mat-datepicker-toggle matSuffix [for]="expDate" [disabled]="viewOnly"></mat-datepicker-toggle>
+                <mat-datepicker [startAt]="currentDate"  #expDate></mat-datepicker>
                 <mat-error *ngIf="customerDataForm.controls.fcn_customer_exp_date.hasError('required')">
                   Expiry date is <strong>required</strong>
                 </mat-error>
@@ -879,7 +879,7 @@
             </div>
           </div>
 
-          <div class="col-md-6 col-xl-6" *ngIf="!viewOnly" [class.disabled]="!isNewButtonDisabled && !viewOnly"
+          <div class="col-md-6 col-xl-6"  [class.disabled]="viewOnly"
           (click)="!isNewButtonDisabled && cancelBill()">
           <div class="touch-big-button">
             <div class="touch-big-button-inner">
@@ -889,7 +889,7 @@
           </div>
         </div>
         </div>
-        <div class="row mt-2" *ngIf="this.viewOnly||isPrintingEnabled">
+        <div class="row mt-2" *ngIf="viewOnly||isPrintingEnabled">
 
           <div class="col-md-6 col-xl-6" (click)="printReceiptDetailsWeb()">
             <div class="touch-big-button">

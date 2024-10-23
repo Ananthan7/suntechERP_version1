@@ -117,7 +117,7 @@ export class RetailGridComponent implements OnInit {
   }
   checkVocTypeReturnNumber(value: any) {
     if (!value) return 0
-    if (this.vocType == 'SCR') return 0;
+    // if (this.vocType == 'SCR') return 0;
     if (this.vocType == 'SRC') return 0;
     if (this.vocType == 'MASSCH') return 0;
     return value
