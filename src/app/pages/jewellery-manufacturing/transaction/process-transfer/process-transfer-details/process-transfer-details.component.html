@@ -865,11 +865,11 @@
                           <input type="text" matInput
                             UpperCaseDirective
                             (keydown)="lookupKeyPress($event,'METAL_ToStockCode')"
-                            (focusout)="MToStockCode_Validating()"
+                            (focusout)="MToStockCode_Validating($event)"
                             id="METAL_ToStockCode"
                             formControlName="METAL_ToStockCode" />
                           <master-search class="masterSearch"
-                            *ngIf="!viewMode"
+                            *ngIf="!viewMode" #METAL_ToStockCodeOverley
                             [MasterSearchData]="metalScrapStockCode"
                             (newRowClick)="metalToStockCodeSelected($event)">
                           </master-search>
