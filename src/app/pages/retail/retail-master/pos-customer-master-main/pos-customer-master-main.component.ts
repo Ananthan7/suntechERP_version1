@@ -14,7 +14,11 @@ import {
   ValidationErrors,
   Validators,
 } from "@angular/forms";
-import { NgbActiveModal, NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
+import {
+  NgbActiveModal,
+  NgbModal,
+  NgbModalRef,
+} from "@ng-bootstrap/ng-bootstrap";
 import { MasterSearchModel } from "src/app/shared/data/master-find-model";
 import { CommonServiceService } from "src/app/services/common-service.service";
 import { MatSnackBar } from "@angular/material/snack-bar";
@@ -607,6 +611,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
   };
 
   imageName: any;
+  PrivilegeCardData: any;
 
   constructor(
     private modalService: NgbModal,
@@ -723,11 +728,11 @@ export class PosCustomerMasterMainComponent implements OnInit {
 
   creditLimitChecker(event: MatCheckboxChange) {
     console.log(event.checked);
-    
+
     this.isCreditLimit = event.checked;
 
-    if(this.isCreditLimit === false) {
-      this.posCustomerMasterMainForm.controls.creditCardLimit.setValue("")
+    if (this.isCreditLimit === false) {
+      this.posCustomerMasterMainForm.controls.creditCardLimit.setValue("");
     }
   }
 
@@ -1165,7 +1170,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
 
   countrySelected(e: any) {
     console.log(e);
-    this.nationalCode = e.CODE
+    this.nationalCode = e.CODE;
     this.stateCode.WHERECONDITION = `TYPES='state master' and COUNTRY_CODE = '${this.nationalCode}'`;
     this.isViewState = true;
     this.posCustomerMasterMainForm.controls.countryCode.setValue(e.CODE);
@@ -1251,11 +1256,13 @@ export class PosCustomerMasterMainComponent implements OnInit {
 
     this.posCustomerMasterMainForm.controls.custIdType.setValue(e.CODE);
 
-    if (this.posCustomerMasterMainForm.value.custIdType === 'PASSPORT') {
-      this.posCustomerMasterMainForm.controls.passport1.setValue(this.posCustomerMasterMainForm.value.custID) 
+    if (this.posCustomerMasterMainForm.value.custIdType === "PASSPORT") {
+      this.posCustomerMasterMainForm.controls.passport1.setValue(
+        this.posCustomerMasterMainForm.value.custID
+      );
     }
-    if (this.posCustomerMasterMainForm.value.custIdType !== 'PASSPORT') {
-      this.posCustomerMasterMainForm.controls.passport1.setValue("") 
+    if (this.posCustomerMasterMainForm.value.custIdType !== "PASSPORT") {
+      this.posCustomerMasterMainForm.controls.passport1.setValue("");
     }
   }
 
@@ -2167,14 +2174,64 @@ export class PosCustomerMasterMainComponent implements OnInit {
     console.log("Got Clicked");
   }
 
-  printPrivilegeCard(event: any) {
+  printCustomerLog(event: any) {
     console.log(event);
     console.log("Got Clicked");
   }
 
-  printCustomerLog(event: any) {
-    console.log(event);
-    console.log("Got Clicked");
+  printPrivilegeCard(event: any) {
+    let API = `PrivilegeCustomerNetSalesSummary/GetUspRptCustomerPrivilegeCardNet/${this.existCustomerCode}`;
+    let sub: Subscription = this.apiService
+      .getDynamicAPI(API)
+      .subscribe((res) => {
+        if (res.status.trim() === "Success") {
+          this.PrivilegeCardData = res.dynamicData[0];
+          console.log(this.PrivilegeCardData);
+          this.generatePrintableContent();
+        }
+      });
+  }
+
+  generatePrintableContent() {
+    const printWindow = window.open("", "", "width=800,height=600");
+    printWindow?.document.write(`
+      <html>
+        <head>
+          <title>Customer Privilege Card</title>
+          <style>
+            body {
+              font-family: Arial, sans-serif;
+            }
+            .card {
+              padding: 20px;
+              border: 1px solid #ccc;
+              margin: 10px;
+            }
+            h4 {
+              text-align: center;
+              margin-bottom: 20px;
+            }
+            p {
+              margin: 5px 0;
+            }
+          </style>
+        </head>
+        <body>
+          <div class="card">
+            <h4>Customer Privilege Card</h4>
+            <p><strong>Customer Code:</strong> ${this.PrivilegeCardData?.Cert_Code}</p>
+            <p><strong>Customer Name:</strong> ${this.PrivilegeCardData?.NAME}</p>
+            <p><strong>Mobile:</strong> ${this.PrivilegeCardData?.MOBILE}</p>
+            <p><strong>Email:</strong> ${this.PrivilegeCardData?.EMAIL}</p>
+            <p><strong>Address:</strong> ${this.PrivilegeCardData?.ADDRESS}</p>
+          </div>
+        </body>
+      </html>
+    `);
+    printWindow?.document.close();
+    printWindow?.focus();
+    printWindow?.print();
+    printWindow?.close();
   }
 
   getCustomerDetails(event: any) {
@@ -2610,8 +2667,6 @@ export class PosCustomerMasterMainComponent implements OnInit {
     }
   }
 
-
-
   setPassport(event: any) {
     if (
       this.posCustomerMasterMainForm.controls["custIdType"].value === "PASSPORT"
@@ -2622,20 +2677,17 @@ export class PosCustomerMasterMainComponent implements OnInit {
     }
   }
 
-
-
   openShowTransdetails() {
-
     const modalRef: NgbModalRef = this.modalService.open(
       ShowTransDetailsComponent,
       {
         size: "xl",
         backdrop: true,
         keyboard: false,
-        windowClass: 'modal-dialog-centered modal-dialog-scrollable',
+        windowClass: "modal-dialog-centered modal-dialog-scrollable",
       }
     );
-    // modalRef.componentInstance.receiptData = { ...data };
+    modalRef.componentInstance.customerCode = this.existCustomerCode;
     // modalRef.componentInstance.queryParams = { isViewOnly: this.viewOnly };
     // if (date) {
     //   modalRef.componentInstance.delivery_date = date._d;
