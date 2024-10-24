@@ -14,6 +14,7 @@ import Swal from 'sweetalert2';
   styleUrls: ['./process-transfer-details.component.scss']
 })
 export class ProcessTransferDetailsComponent implements OnInit {
+  @ViewChild('METAL_ToStockCodeOverley') METAL_ToStockCodeOverley!: MasterSearchComponent;
   @ViewChild('METAL_ScrapStockCodeoverlay') METAL_ScrapStockCodeoverlay!: MasterSearchComponent;
   @ViewChild('MetaloverlayToWorker') MetaloverlayToWorker!: MasterSearchComponent;
   @ViewChild('MetaloverlayjobNoSearch') MetaloverlayjobNoSearch!: MasterSearchComponent;
@@ -1350,7 +1351,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.setFormNullToString('FRM_PCS', this.emptyToZero(data[0].FRM_PCS))
     this.setFormNullToString('TO_PCS', this.emptyToZero(data[0].FRM_PCS))
     this.setFormDecimal('METAL_LossBooked', data[0].STD_LOSS, 'AMOUNT')
-    this.setFormDecimal('PURITY', data[0].PURITY, 'PURITY')
+    if(this.emptyToZero(data[0].PURITY)!=0) this.setFormDecimal('PURITY', data[0].PURITY, 'PURITY') // already taking from subjobsp
     this.setToProcessWhereCondition()
     this.setToWorkerWhereCondition()
     // setTimeDetails
@@ -1416,8 +1417,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.setFormNullToString('TO_PROCESSNAME', data[0].TO_PROCESSNAME)
     this.setFormNullToString('PRODLAB_ACCODE', data[0].LAB_ACCODE)
     this.setFormDecimal('STD_LOSS', data[0].STD_LOSS, 'AMOUNT')
-    this.setFormDecimal('PURITY', data[0].PURITY, 'PURITY')
-
+    if(this.emptyToZero(data[0].PURITY)!=0) this.setFormDecimal('PURITY', data[0].PURITY, 'PURITY')
     this.processTransferdetailsForm.controls.FRM_PCS.setValue(this.emptyToZero(data[0].FRM_PCS))
     this.processTransferdetailsForm.controls.TO_PCS.setValue(this.emptyToZero(data[0].FRM_PCS))
     this.setToProcessWhereCondition()
@@ -3419,6 +3419,9 @@ export class ProcessTransferDetailsComponent implements OnInit {
       case 'METAL_ScrapStockCode':
         this.METAL_ScrapStockCodeoverlay.showOverlayPanel(event);
         break;
+      case 'METAL_ToStockCode':
+        this.METAL_ToStockCodeOverley.showOverlayPanel(event);
+        break;
       default:
       // Optionally handle the default case if needed
       // break;
@@ -3454,8 +3457,31 @@ export class ProcessTransferDetailsComponent implements OnInit {
     }
   }
   /** METAL SECTION VALIDATIONS STARTS*/
-  MToStockCode_Validating() {
+  MToStockCode_Validating(event:any) {
+    try {
+      let code = this.processTransferdetailsForm.value.METAL_ScrapStockCode
+      code = this.commonService.nullToString(code)
+      this.commonService.showSnackBarMsg('MSG81447');
+      let API = `MetalStockMaster/GetMetalStockMasterHeaderAndDetail/${code?.toUpperCase()}`
+      let Sub: Subscription = this.dataService.getDynamicAPI(API)
+        .subscribe((result) => {
+          this.commonService.closeSnackBarMsg()
+          let data: any = result.status == 'Success' ? [result.response] : []
+          data = data?.filter((item: any) => (this.emptyToZero(item.PURITY) == this.emptyToZero(this.processTransferdetailsForm.value.PURITY)) && item.SUBCODE == false)
+          if (data.length == 0) {
+            this.commonService.toastErrorByMsgId('MSG1531')
+            this.processTransferdetailsForm.controls.METAL_ScrapStockCode.setValue('')
+            this.METAL_ToStockCodeOverley.showOverlayPanel(event)
+          }
+        }, err => {
+          this.commonService.toastErrorByMsgId('MSG1531')
+        })
+      this.subscriptions.push(Sub)
 
+    } catch (Exception) {
+      this.commonService.toastInfoByMsgId("MSG2100");
+      return;
+    }
   }
   /**USE: SCRAP STOCK CODE CHANGE VALIDATION */
   txtMScrapStockCode_Validating(event?: any) {

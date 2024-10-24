@@ -456,13 +456,13 @@ export class CommonServiceService {
   //service for ADD POS starts
   stringToBoolean = (input: string | boolean) => {
     if (typeof input === 'boolean') {
-      return input; 
+      return input;
     }
     return input !== undefined && input !== null
       ? input.toString().toLowerCase() === 'false' ? false : true
       : false;
   };
-  
+
   numberToBoolean = (num: number) => num != undefined && num != null ? num === 0 ? false : true : false;
 
   formControlSetReadOnly(id: any, isReadonly: boolean) {
@@ -709,7 +709,7 @@ export class CommonServiceService {
   getDivisionMS(division: any) {
     return this.divisionMasterList.filter((data: any) => data.DIVISION_CODE == division)[0].DIVISION;
   }
-  Null2BitValue(value: any):boolean {
+  Null2BitValue(value: any): boolean {
     value = value.toString().trim();
     // if (value == null || value.toString() == '' || value.toString().toUpperCase().trim() == "FALSE" || value.toString() == "0") {
     if (value.toString() == '') {
@@ -722,6 +722,14 @@ export class CommonServiceService {
   }
 
   emptyToZero(value: any) {
+    // Check if value is an object
+    if (typeof value === 'object' && !Array.isArray(value)) {
+      return 0; // Return 0 if value is an object
+    }
+    // Check if value is an array
+    if (Array.isArray(value)) {
+      return 0; // Return 0 if value is an array
+    }
     if (value) {
       value = value.toString().replace(/,/g, '');
     }
