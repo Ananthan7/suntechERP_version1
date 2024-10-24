@@ -14,7 +14,11 @@ import {
   ValidationErrors,
   Validators,
 } from "@angular/forms";
-import { NgbActiveModal, NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
+import {
+  NgbActiveModal,
+  NgbModal,
+  NgbModalRef,
+} from "@ng-bootstrap/ng-bootstrap";
 import { MasterSearchModel } from "src/app/shared/data/master-find-model";
 import { CommonServiceService } from "src/app/services/common-service.service";
 import { MatSnackBar } from "@angular/material/snack-bar";
@@ -88,7 +92,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
   selectedstateISO2: any;
   cityListData: any;
   amlValidation: any;
-  // Dialog box
+  IDDetailsValidation : boolean = false
   dialogBox: any;
   dialogBoxResult: any;
   existCustomerCode: any;
@@ -364,6 +368,29 @@ export class PosCustomerMasterMainComponent implements OnInit {
     twitter: [""],
     instagram: [""],
     prefixAml: [""],
+
+    arabicGender: [""],
+    arabicNationality: [""],
+    issuanceDate: [""],
+    documentNo: [""],
+    serialNo: [""],
+    atr: [""],
+    moiRefIndic: [""],
+    moiReference: [""],
+    district: [""],
+    block: [""],
+    street: [""],
+    buildingNo: [""],
+    unitType: [""],
+    unitNo: [""],
+    floor: [""],
+    bloodType: [""],
+    guardianCivilId: [""],
+    additionalField1: [""],
+    additionalField2: [""],
+    appVersion: [""],
+    passport: [""],
+    connectedReaders: [""],
   });
 
   typeidCodeData: MasterSearchModel = {
@@ -607,6 +634,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
   };
 
   imageName: any;
+  PrivilegeCardData: any;
 
   constructor(
     private modalService: NgbModal,
@@ -620,6 +648,8 @@ export class PosCustomerMasterMainComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    console.log(this.comService.allbranchMaster);
+    
     this.branchCode = this.comService.branchCode;
     this.existCustomerCode = this.content?.CODE;
     this.flag = this.content?.FLAG;
@@ -723,11 +753,11 @@ export class PosCustomerMasterMainComponent implements OnInit {
 
   creditLimitChecker(event: MatCheckboxChange) {
     console.log(event.checked);
-    
+
     this.isCreditLimit = event.checked;
 
-    if(this.isCreditLimit === false) {
-      this.posCustomerMasterMainForm.controls.creditCardLimit.setValue("")
+    if (this.isCreditLimit === false) {
+      this.posCustomerMasterMainForm.controls.creditCardLimit.setValue("");
     }
   }
 
@@ -1165,7 +1195,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
 
   countrySelected(e: any) {
     console.log(e);
-    this.nationalCode = e.CODE
+    this.nationalCode = e.CODE;
     this.stateCode.WHERECONDITION = `TYPES='state master' and COUNTRY_CODE = '${this.nationalCode}'`;
     this.isViewState = true;
     this.posCustomerMasterMainForm.controls.countryCode.setValue(e.CODE);
@@ -1251,11 +1281,13 @@ export class PosCustomerMasterMainComponent implements OnInit {
 
     this.posCustomerMasterMainForm.controls.custIdType.setValue(e.CODE);
 
-    if (this.posCustomerMasterMainForm.value.custIdType === 'PASSPORT') {
-      this.posCustomerMasterMainForm.controls.passport1.setValue(this.posCustomerMasterMainForm.value.custID) 
+    if (this.posCustomerMasterMainForm.value.custIdType === "PASSPORT") {
+      this.posCustomerMasterMainForm.controls.passport1.setValue(
+        this.posCustomerMasterMainForm.value.custID
+      );
     }
-    if (this.posCustomerMasterMainForm.value.custIdType !== 'PASSPORT') {
-      this.posCustomerMasterMainForm.controls.passport1.setValue("") 
+    if (this.posCustomerMasterMainForm.value.custIdType !== "PASSPORT") {
+      this.posCustomerMasterMainForm.controls.passport1.setValue("");
     }
   }
 
@@ -2167,14 +2199,21 @@ export class PosCustomerMasterMainComponent implements OnInit {
     console.log("Got Clicked");
   }
 
-  printPrivilegeCard(event: any) {
+  printCustomerLog(event: any) {
     console.log(event);
     console.log("Got Clicked");
   }
 
-  printCustomerLog(event: any) {
-    console.log(event);
-    console.log("Got Clicked");
+  printPrivilegeCard(event: any) {
+    let API = `PrivilegeCustomerNetSalesSummary/GetUspRptCustomerPrivilegeCardNet/${this.existCustomerCode}`;
+    let sub: Subscription = this.apiService
+      .getDynamicAPI(API)
+      .subscribe((res) => {
+        if (res.status.trim() === "Success") {
+          this.PrivilegeCardData = res.dynamicData[0];
+          console.log(this.PrivilegeCardData);
+        }
+      });
   }
 
   getCustomerDetails(event: any) {
@@ -2610,8 +2649,6 @@ export class PosCustomerMasterMainComponent implements OnInit {
     }
   }
 
-
-
   setPassport(event: any) {
     if (
       this.posCustomerMasterMainForm.controls["custIdType"].value === "PASSPORT"
@@ -2622,20 +2659,18 @@ export class PosCustomerMasterMainComponent implements OnInit {
     }
   }
 
-
-
   openShowTransdetails() {
-
     const modalRef: NgbModalRef = this.modalService.open(
       ShowTransDetailsComponent,
       {
         size: "xl",
         backdrop: true,
         keyboard: false,
-        windowClass: 'modal-dialog-centered modal-dialog-scrollable',
+        windowClass: "modal-dialog-centered modal-dialog-scrollable",
       }
     );
-    // modalRef.componentInstance.receiptData = { ...data };
+    modalRef.componentInstance.customerCode = this.existCustomerCode;
+    modalRef.componentInstance.data = this.content;
     // modalRef.componentInstance.queryParams = { isViewOnly: this.viewOnly };
     // if (date) {
     //   modalRef.componentInstance.delivery_date = date._d;
@@ -2647,5 +2682,15 @@ export class PosCustomerMasterMainComponent implements OnInit {
     //     this.handlePostData(postData);
     //   }
     // });
+  }
+
+  IDDetailsEnable() {
+    if (
+      (this.comService.allbranchMaster?.POSCUSTDETAILSFROMREADER === true &&
+        this.posCustomerMasterMainForm.value.countryCode === "KWT") ||
+      "KW"
+    ) {
+      this.IDDetailsValidation = true
+    }
   }
 }

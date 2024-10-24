@@ -3257,9 +3257,9 @@ export class AddPosComponent implements OnInit {
     this.lineItemForm.controls.fcn_li_rate.setValue(
       this.comFunc.transformDecimalVB(
         this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(value.MKG_RATEFC)));
-    this.lineItemForm.controls.fcn_li_total_amount.setValue(
+    this.lineItemForm.controls.fcn_li_total_amount.setValue(this.comFunc.commaSeperation(
       this.comFunc.transformDecimalVB(
-        this.comFunc.allbranchMaster?.BAMTDECIMALS, value.MKGVALUEFC));
+        this.comFunc.allbranchMaster?.BAMTDECIMALS, value.MKGVALUEFC)));
     this.lineItemForm.controls.fcn_li_discount_percentage.setValue(
       this.comFunc.transformDecimalVB(
         this.comFunc.allbranchMaster?.BAMTDECIMALS, value.DISCOUNT)
@@ -3285,12 +3285,13 @@ export class AddPosComponent implements OnInit {
       )
     );
     this.lineItemForm.controls.fcn_li_tax_amount.setValue(
+      this.comFunc.commaSeperation(
       this.comFunc.transformDecimalVB(
-        this.comFunc.allbranchMaster?.BAMTDECIMALS, value.VAT_AMOUNTFC));
+        this.comFunc.allbranchMaster?.BAMTDECIMALS, value.VAT_AMOUNTFC)));
     // this.lineItemForm.controls.fcn_li_net_amount.setValue(value.NETVALUEFC);
-    this.lineItemForm.controls.fcn_li_net_amount.setValue(
+    this.lineItemForm.controls.fcn_li_net_amount.setValue(this.comFunc.commaSeperation(
       this.comFunc.transformDecimalVB(
-        this.comFunc.allbranchMaster?.BAMTDECIMALS, value.TOTALWITHVATFC));
+        this.comFunc.allbranchMaster?.BAMTDECIMALS, value.TOTALWITHVATFC)));
 
     this.lineItemForm.controls.fcn_li_purity.setValue(
       this.comFunc.decimalQuantityFormat(value.PURITY, 'PURITY')
@@ -5377,9 +5378,9 @@ export class AddPosComponent implements OnInit {
         this.lineItemForm.controls.fcn_li_rate.setValue(
           this.comFunc.transformDecimalVB(
             this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(value.MKG_RATEFC)));
-        this.lineItemForm.controls.fcn_li_total_amount.setValue(
+        this.lineItemForm.controls.fcn_li_total_amount.setValue(this.comFunc.commaSeperation(
           this.comFunc.transformDecimalVB(
-            this.comFunc.allbranchMaster?.BAMTDECIMALS, value.MKGVALUEFC));
+            this.comFunc.allbranchMaster?.BAMTDECIMALS, value.MKGVALUEFC)));
         this.lineItemForm.controls.fcn_li_discount_percentage.setValue(
           this.comFunc.transformDecimalVB(
             this.comFunc.allbranchMaster?.BAMTDECIMALS, value.DISCOUNT)
@@ -5397,12 +5398,13 @@ export class AddPosComponent implements OnInit {
           this.comFunc.transformDecimalVB(
             this.comFunc.allbranchMaster?.BAMTDECIMALS, value.VAT_PER));
         this.lineItemForm.controls.fcn_li_tax_amount.setValue(
+          this.comFunc.commaSeperation(
           this.comFunc.transformDecimalVB(
-            this.comFunc.allbranchMaster?.BAMTDECIMALS, value.VAT_AMOUNTFC));
+            this.comFunc.allbranchMaster?.BAMTDECIMALS, value.VAT_AMOUNTFC)));
         // this.lineItemForm.controls.fcn_li_net_amount.setValue(value.NETVALUEFC);
-        this.lineItemForm.controls.fcn_li_net_amount.setValue(
+        this.lineItemForm.controls.fcn_li_net_amount.setValue(this.comFunc.commaSeperation(
           this.comFunc.transformDecimalVB(
-            this.comFunc.allbranchMaster?.BAMTDECIMALS, value.TOTALWITHVATFC));
+            this.comFunc.allbranchMaster?.BAMTDECIMALS, value.TOTALWITHVATFC)));
 
         this.lineItemForm.controls.fcn_li_purity.setValue(
           // value.PURITY
@@ -8041,9 +8043,10 @@ export class AddPosComponent implements OnInit {
                     )
                   );
                   this.lineItemForm.controls['fcn_li_total_amount'].setValue(
+                    this.comFunc.commaSeperation(
                     this.comFunc.transformDecimalVB(
                       this.comFunc.allbranchMaster?.BAMTDECIMALS,
-                      stockInfoPrice.SELLING_PRICE
+                      stockInfoPrice.SELLING_PRICE)
                     )
                   );
 
@@ -9980,7 +9983,7 @@ export class AddPosComponent implements OnInit {
 
   async validateMinSalePriceByTotalAmtFunc(bOrW: String, value: any, totalAmt: any, lsTotalAmt: any, nettAmt: any = null) {
 
-    lsTotalAmt = this.comFunc.emptyToZero(lsTotalAmt);
+    lsTotalAmt = this.comFunc.commaSeperation(this.comFunc.emptyToZero(lsTotalAmt));
     nettAmt = this.comFunc.emptyToZero(nettAmt);
     // alert('called validateMinSalePriceByTotalAmtFunc')
     console.log('validateMinSalePriceByTotalAmtFunc nettAmt', nettAmt, 'lsTotalAmt', lsTotalAmt, 'totalAmt', totalAmt);
@@ -10128,7 +10131,8 @@ export class AddPosComponent implements OnInit {
       )
     );
     this.lineItemForm.controls['fcn_li_tax_amount'].setValue(
-      this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, taxAmount)
+      this.comFunc.commaSeperation(
+      this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, taxAmount))
     );
 
 
@@ -10136,8 +10140,8 @@ export class AddPosComponent implements OnInit {
     const netAmtValue =
       this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_amount) +
       this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_tax_amount);
-    this.lineItemForm.controls['fcn_li_net_amount'].setValue(
-      this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, netAmtValue)
+    this.lineItemForm.controls['fcn_li_net_amount'].setValue(this.comFunc.commaSeperation(
+      this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, netAmtValue))
     );
     localStorage.setItem('fcn_li_net_amount', netAmtValue.toString())
 
@@ -10452,9 +10456,10 @@ export class AddPosComponent implements OnInit {
         this.dialogBox.afterClosed().subscribe((data: any) => {
           if (data == 'OK') {
             this.lineItemForm.controls.fcn_li_total_amount.setValue(
+              this.comFunc.commaSeperation(
               this.comFunc.transformDecimalVB(
                 this.comFunc.allbranchMaster?.BAMTDECIMALS,
-                this.lineItemForm.value.fcn_li_rate
+                this.lineItemForm.value.fcn_li_rate)
               )
             );
             this.renderer.selectRootElement('#fcn_li_total_amount')?.select();
@@ -11079,43 +11084,44 @@ export class AddPosComponent implements OnInit {
 
 
     this.lineItemForm.controls.fcn_li_net_amount.setValue(
+      this.comFunc.commaSeperation(
       this.comFunc.transformDecimalVB(
         this.comFunc.allbranchMaster?.BAMTDECIMALS,
-        this.comFunc.emptyToZero(event.target.value)
+        this.comFunc.emptyToZero(event.target.value))
       )
     );
 
-    const taxAmt = this.comFunc.transformDecimalVB(
+    const taxAmt =     this.comFunc.commaSeperation(this.comFunc.transformDecimalVB(
       this.comFunc.allbranchMaster?.BAMTDECIMALS,
       (this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_net_amount) *
         this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_tax_percentage)) /
       (100 + this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_tax_percentage))
-    );
-    const grossAmt =
+    ));
+    const grossAmt =this.comFunc.commaSeperation(
       this.comFunc.transformDecimalVB(
         this.comFunc.allbranchMaster?.BAMTDECIMALS,
         this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_net_amount) -
-        this.comFunc.emptyToZero(taxAmt));
+        this.comFunc.emptyToZero(taxAmt)));
 
 
     let totalAmt;
     let grossAmount = '';
 
     if (this.divisionMS == 'M') {
-      totalAmt = this.comFunc.transformDecimalVB(
+      totalAmt =this.comFunc.commaSeperation( this.comFunc.transformDecimalVB(
         this.comFunc.allbranchMaster?.BAMTDECIMALS,
         parseFloat(grossAmt) -
         (this.comFunc.emptyToZero(this.lineItemForm.value.fcn_ad_stone_amount || 0) +
-          this.comFunc.emptyToZero(this.lineItemForm.value.fcn_ad_metal_amount || 0))
+          this.comFunc.emptyToZero(this.lineItemForm.value.fcn_ad_metal_amount || 0)))
       );
     } else {
       grossAmount = this.comFunc.transformDecimalVB(
         this.comFunc.allbranchMaster?.BAMTDECIMALS,
         this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_amount)
       );
-      totalAmt = this.comFunc.transformDecimalVB(
+      totalAmt = this.comFunc.commaSeperation(this.comFunc.transformDecimalVB(
         this.comFunc.allbranchMaster?.BAMTDECIMALS,
-        this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount)
+        this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_total_amount))
       );
     }
 
@@ -11213,11 +11219,10 @@ export class AddPosComponent implements OnInit {
       this.dialogBox.afterClosed().subscribe((data: any) => {
         if (data == 'OK') {
           this.lineItemForm.controls.fcn_li_net_amount.setValue(
-            this.comFunc.commaSeperation(
               this.comFunc.transformDecimalVB(
                 this.comFunc.allbranchMaster?.BAMTDECIMALS,
                 preVal
-              )
+              
             )
           );
           this.manageCalculations();
@@ -11251,12 +11256,11 @@ export class AddPosComponent implements OnInit {
               this.dialogBox.afterClosed().subscribe((data: any) => {
                 if (data == 'OK') {
                   this.lineItemForm.controls.fcn_li_net_amount.setValue(
-                    this.comFunc.commaSeperation(
                       this.comFunc.transformDecimalVB(
                         this.comFunc.allbranchMaster?.BAMTDECIMALS,
                         preVal
                       )
-                    )
+                   
                   );
                 }
               });
@@ -11383,9 +11387,9 @@ export class AddPosComponent implements OnInit {
     if (argsData.totalAmt != null) {
       mkgvalue = argsData.totalAmt;
       localStorage.setItem(
-        'fcn_li_total_amount',
+        'fcn_li_total_amount',this.comFunc.commaSeperation(
         this.comFunc
-          .transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(mkgvalue))
+          .transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, this.comFunc.emptyToZero(mkgvalue)))
           .toString()
       );
     } else {
@@ -11437,10 +11441,10 @@ export class AddPosComponent implements OnInit {
 
     this.lineItemForm.controls['fcn_li_total_amount'].setValue(
       // Math.round(parseFloat(mkgvalue)).toFixed(2)
-
+      this.comFunc.commaSeperation(
       this.comFunc.transformDecimalVB(
         this.comFunc.allbranchMaster?.BAMTDECIMALS,
-        this.comFunc.emptyToZero(mkgvalue)
+        this.comFunc.emptyToZero(mkgvalue))
       )
     );
 
@@ -11448,10 +11452,11 @@ export class AddPosComponent implements OnInit {
     localStorage.setItem(
       'fcn_li_total_amount',
       // Math.round(parseFloat(mkgvalue)).toFixed(2)
+      this.comFunc.commaSeperation(
       this.comFunc
         .transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, mkgvalue)
         .toString()
-    );
+    ));
 
 
 
@@ -11568,7 +11573,8 @@ export class AddPosComponent implements OnInit {
     );
 
     this.lineItemForm.controls['fcn_li_tax_amount'].setValue(
-      this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, taxAmount)
+      this.comFunc.commaSeperation(
+      this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, taxAmount))
     );
 
     this.li_tax_amount_val = this.comFunc.transformDecimalVB(
@@ -11582,7 +11588,7 @@ export class AddPosComponent implements OnInit {
     const grossAmount = this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_amount);
     const taxAmount = this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_tax_amount);
 
-    const netAmtValue = grossAmount + taxAmount;
+    const netAmtValue = this.comFunc.commaSeperation(grossAmount + taxAmount);
 
     this.lineItemForm.controls['fcn_li_net_amount'].setValue(
       this.comFunc.transformDecimalVB(this.comFunc.allbranchMaster?.BAMTDECIMALS, netAmtValue)
@@ -11733,10 +11739,10 @@ export class AddPosComponent implements OnInit {
     this.setTaxAmt();
   }
   setTaxAmt() {
-    const value = this.comFunc.transformDecimalVB(
+    const value =     this.comFunc.commaSeperation(this.comFunc.transformDecimalVB(
       this.comFunc.allbranchMaster?.BAMTDECIMALS, this.getPercentage(
         this.lineItemForm.value.fcn_li_tax_percentage,
-        this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_amount)
+        this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_amount))
       ));
     this.lineItemForm.controls['fcn_li_tax_amount'].setValue(value);
     this.li_tax_amount_val = value;
@@ -11748,10 +11754,10 @@ export class AddPosComponent implements OnInit {
       this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_amount) +
       this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_tax_amount);
     console.log('value', value);
-    const nettAmt = this.comFunc.transformDecimalVB(
+    const nettAmt = this.comFunc.commaSeperation(this.comFunc.transformDecimalVB(
       this.comFunc.allbranchMaster?.BAMTDECIMALS,
       value
-    );
+    ));
     this.lineItemForm.controls['fcn_li_net_amount'].setValue(nettAmt);
     // this.order_items_total_gross_amount = value;
     this.li_net_amount_val = nettAmt;
