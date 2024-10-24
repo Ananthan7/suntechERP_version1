@@ -92,7 +92,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
   selectedstateISO2: any;
   cityListData: any;
   amlValidation: any;
-  // Dialog box
+  IDDetailsValidation : boolean = false
   dialogBox: any;
   dialogBoxResult: any;
   existCustomerCode: any;
@@ -368,6 +368,29 @@ export class PosCustomerMasterMainComponent implements OnInit {
     twitter: [""],
     instagram: [""],
     prefixAml: [""],
+
+    arabicGender: [""],
+    arabicNationality: [""],
+    issuanceDate: [""],
+    documentNo: [""],
+    serialNo: [""],
+    atr: [""],
+    moiRefIndic: [""],
+    moiReference: [""],
+    district: [""],
+    block: [""],
+    street: [""],
+    buildingNo: [""],
+    unitType: [""],
+    unitNo: [""],
+    floor: [""],
+    bloodType: [""],
+    guardianCivilId: [""],
+    additionalField1: [""],
+    additionalField2: [""],
+    appVersion: [""],
+    passport: [""],
+    connectedReaders: [""],
   });
 
   typeidCodeData: MasterSearchModel = {
@@ -625,6 +648,8 @@ export class PosCustomerMasterMainComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    console.log(this.comService.allbranchMaster);
+    
     this.branchCode = this.comService.branchCode;
     this.existCustomerCode = this.content?.CODE;
     this.flag = this.content?.FLAG;
@@ -2187,51 +2212,8 @@ export class PosCustomerMasterMainComponent implements OnInit {
         if (res.status.trim() === "Success") {
           this.PrivilegeCardData = res.dynamicData[0];
           console.log(this.PrivilegeCardData);
-          this.generatePrintableContent();
         }
       });
-  }
-
-  generatePrintableContent() {
-    const printWindow = window.open("", "", "width=800,height=600");
-    printWindow?.document.write(`
-      <html>
-        <head>
-          <title>Customer Privilege Card</title>
-          <style>
-            body {
-              font-family: Arial, sans-serif;
-            }
-            .card {
-              padding: 20px;
-              border: 1px solid #ccc;
-              margin: 10px;
-            }
-            h4 {
-              text-align: center;
-              margin-bottom: 20px;
-            }
-            p {
-              margin: 5px 0;
-            }
-          </style>
-        </head>
-        <body>
-          <div class="card">
-            <h4>Customer Privilege Card</h4>
-            <p><strong>Customer Code:</strong> ${this.PrivilegeCardData?.Cert_Code}</p>
-            <p><strong>Customer Name:</strong> ${this.PrivilegeCardData?.NAME}</p>
-            <p><strong>Mobile:</strong> ${this.PrivilegeCardData?.MOBILE}</p>
-            <p><strong>Email:</strong> ${this.PrivilegeCardData?.EMAIL}</p>
-            <p><strong>Address:</strong> ${this.PrivilegeCardData?.ADDRESS}</p>
-          </div>
-        </body>
-      </html>
-    `);
-    printWindow?.document.close();
-    printWindow?.focus();
-    printWindow?.print();
-    printWindow?.close();
   }
 
   getCustomerDetails(event: any) {
@@ -2688,6 +2670,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
       }
     );
     modalRef.componentInstance.customerCode = this.existCustomerCode;
+    modalRef.componentInstance.data = this.content;
     // modalRef.componentInstance.queryParams = { isViewOnly: this.viewOnly };
     // if (date) {
     //   modalRef.componentInstance.delivery_date = date._d;
@@ -2699,5 +2682,15 @@ export class PosCustomerMasterMainComponent implements OnInit {
     //     this.handlePostData(postData);
     //   }
     // });
+  }
+
+  IDDetailsEnable() {
+    if (
+      (this.comService.allbranchMaster?.POSCUSTDETAILSFROMREADER === true &&
+        this.posCustomerMasterMainForm.value.countryCode === "KWT") ||
+      "KW"
+    ) {
+      this.IDDetailsValidation = true
+    }
   }
 }
