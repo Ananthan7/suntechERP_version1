@@ -613,7 +613,7 @@ export class AddReceiptComponent implements OnInit {
     let Sub: Subscription = this.dataService.getDynamicAPI('BranchMaster')
       .subscribe((result) => {
         if (result.response) {
-          this.branchArray = result.response
+          this.branchArray = result.response ? [result.response] : []
           let AcCode = this.branchArray.filter((item: any) => item.BRANCH_CODE = this.receiptEntryForm.value.Branch)
           if (AcCode[0].CASH_ACCODE) {
             this.receiptEntryForm.controls.AC_Code.setValue(AcCode[0].CASH_ACCODE)
