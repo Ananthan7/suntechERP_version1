@@ -73,12 +73,6 @@
                   <master-search class="masterSearch" (focusout)="openTab($event, 'partyCurrency')" *ngIf="!viewOnly" (newRowClick)="currencySelected($event)"
                     [MasterSearchData]="currencyData"></master-search>
                 </mat-form-field>
-                <!-- <mat-form-field style="width: 70%">
-                  <input type="text" [readonly]="viewOnly||isCurrencyUpdate" matInput formControlName="partyCurrency"
-                    readonly />
-                </mat-form-field> -->
-                <!-- <master-search [MasterSearchData]="partyCurrencyCodeData" readonly
-                                (newRowClick)="partyCurrencyCodeSelected($event)"></master-search> -->
               </div>
               <div class="col-md-5">
                 <mat-form-field style="width: 100%" appearance="outline">

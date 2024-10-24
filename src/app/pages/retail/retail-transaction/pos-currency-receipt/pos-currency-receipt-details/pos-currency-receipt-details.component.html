@@ -28,7 +28,7 @@
             <div class="col-md-3">
               <mat-form-field style="width: 100%" appearance="outline">
                 <input *ngIf="viewOnly" readonly matInput formControlName="modeOfSelect" />
-                <mat-select *ngIf="!viewOnly" formControlName="modeOfSelect" (selectionChange)="onModeChange($event)">
+                <mat-select *ngIf="!viewOnly||editReturn" formControlName="modeOfSelect" (selectionChange)="onModeChange($event)">
                   <mat-option *ngFor="let data of paymentModeList" [value]="data.ENGLISH">{{ data.ENGLISH
                     }}</mat-option>
                 </mat-select>
@@ -40,7 +40,7 @@
               ">
               <mat-form-field style="width: 70%" appearance="outline">
                 <input readonly type="text" matInput formControlName="modeCODE" />
-                <master-search class="masterSearch" *ngIf="!viewOnly" [MasterSearchData]="modeOfData"
+                <master-search class="masterSearch" *ngIf="!viewOnly||editReturn" [MasterSearchData]="modeOfData"
                   (newRowClick)="receiptModeSelected($event)"></master-search>
               </mat-form-field>
             </div>
@@ -62,7 +62,7 @@
                 <input readonly #debitAccountCode id="debitAccountCode" type="text" matInput formControlName="debitAmount"
                   (change)="DebitamountChange($event)" />
                 <master-search class="masterSearch" (focusout)="openTab($event, 'debitAmount')" #overlayDebitCode
-                  *ngIf="hideDebitLookup && !viewOnly" [MasterSearchData]="debitAmountData"
+                  *ngIf="(hideDebitLookup && !viewOnly)" [MasterSearchData]="debitAmountData"
                   (newRowClick)="debitAmountSelected($event)">
                 </master-search>
               </mat-form-field>
@@ -79,11 +79,10 @@
             <label for="inputPassword" class="col-sm-3 col-form-label" id="ID004">Currency :</label>
             <div class="col-md-3">
               <mat-form-field style="width: -webkit-fill-available" appearance="outline">
-                <input  type="text" #currencyCode id="currencyCode" (focusout)="SPvalidateLookupField($event,currencyData,'currencyCode')" matInput formControlName="currencyCode" />
+                <input  type="text" #currencyCode id="currencyCode" [readonly]="viewOnly||editReturn" (focusout)="SPvalidateLookupField($event,currencyData,'currencyCode')" matInput formControlName="currencyCode" />
                 <master-search class="masterSearch" (focusout)="openTab($event, 'currencyCode')" #overlayCurrencyCode
-                  *ngIf="
-                    !isCurrencyUpdate || (!viewOnly && !hideCurrecnySearch)
-                  " [MasterSearchData]="currencyData" (newRowClick)="CurrencySelected($event)"></master-search>
+                *ngIf="!editReturn && (!isCurrencyUpdate || (!viewOnly && !hideCurrecnySearch))"
+                [MasterSearchData]="currencyData" (newRowClick)="CurrencySelected($event)"></master-search>
               </mat-form-field>
             </div>
             <div class="col-md-6">
@@ -97,14 +96,14 @@
             <div class="col-md-3">
               <mat-form-field style="width: 100%" appearance="outline">
                 <input  type="text" id="amountFc" class="st_txt_right"  matInput
-                  formControlName="amountFc" (change)="changeAmountFc($event)" [readonly]="viewOnly || compCurrency == posCurrencyReceiptDetailsForm.value?.currencyCode"
+                  formControlName="amountFc" (change)="changeAmountFc($event)" [readonly]="viewOnly||editReturn || compCurrency == posCurrencyReceiptDetailsForm.value?.currencyCode"
                   />
               </mat-form-field>
             </div>
             <label for="inputPassword" class="col-sm-3 col-form-label" id="ID006">Amount LC :</label>
             <div class="col-md-3">
               <mat-form-field style="width: 100%" appearance="outline">
-                <input type="text" class="st_txt_right" [readonly]="viewOnly" (change)="changeAmountLc($event)"
+                <input type="text" class="st_txt_right" [readonly]="viewOnly||editReturn" (change)="changeAmountLc($event)"
                   matInput #ccAmount id="ccAmount"  formControlName="amountCc" />
 
                 <mat-error *ngIf="posCurrencyReceiptDetailsForm.controls.amountCc.hasError('required')">
@@ -230,7 +229,7 @@
             <label for="inputPassword" class="col-sm-3 col-form-label" id="ID021">Remarks :</label>
             <div class="col-md-9">
               <mat-form-field style="width: 100%" appearance="outline">
-                <input [readonly]="viewOnly" type="text" matInput formControlName="remarks" />
+                <input [readonly]="viewOnly||editReturn" type="text" matInput formControlName="remarks" />
               </mat-form-field>
             </div>
           </div>
@@ -246,7 +245,7 @@
                   <label for="inputPassword" class="col-sm-6 col-form-label" id="ID023">VAT No :</label>
                   <div class="col-md-6">
                     <mat-form-field style="width: 100%" appearance="outline">
-                      <input [readonly]="viewOnly" type="number" (input)="limitDigits($event)" matInput
+                      <input [readonly]="viewOnly||editReturn" type="number" (input)="limitDigits($event)" matInput
                         formControlName="vatNo" />
                     </mat-form-field>
                   </div>
@@ -265,7 +264,7 @@
                   <label for="inputPassword" class="col-sm-6 col-form-label" id="ID025">Invoice No :</label>
                   <div class="col-md-6">
                     <mat-form-field style="width: 100%" appearance="outline">
-                      <input [readonly]="viewOnly" type="text" matInput formControlName="invoiceNo" />
+                      <input [readonly]="viewOnly||editReturn" type="text" matInput formControlName="invoiceNo" />
                     </mat-form-field>
                   </div>
                 </div>
@@ -274,7 +273,7 @@
                   <div class="col-md-6">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <!-- <input type="date" matInput formControlName="invoiceDate" /> -->
-                      <input [readonly]="viewOnly" matInput [max]="currentDate" [matDatepicker]="invoiceDate"
+                      <input [readonly]="viewOnly||editReturn" matInput [max]="currentDate" [matDatepicker]="invoiceDate"
                         name="invoiceDate" placeholder="DD/MM/YYYY" DateValidation formControlName="invoiceDate" />
                       <mat-datepicker-toggle matSuffix [for]="invoiceDate"></mat-datepicker-toggle>
                       <mat-datepicker #invoiceDate></mat-datepicker>
@@ -315,7 +314,7 @@
                   <label for="inputPassword" class="col-sm-6 col-form-label" id="ID030">Total LC :</label>
                   <div class="col-md-6">
                     <mat-form-field style="width: 100%" appearance="outline">
-                      <input type="text" class="st_txt_right" [readonly]="viewOnly" (change)="changeTotalLc($event)"
+                      <input type="text" class="st_txt_right" [readonly]="viewOnly||editReturn" (change)="changeTotalLc($event)"
                         matInput formControlName="totalLc" />
                     </mat-form-field>
                   </div>
