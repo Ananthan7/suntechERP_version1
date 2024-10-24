@@ -1,4 +1,4 @@
-.price_box{
+.price_box {
     background-color: #b1ebed;
     color: #54739f;
     padding: 5px;
@@ -6,16 +6,18 @@
     font-size: 14px;
     text-decoration: underline;
 }
+
 ::ng-deep {
     .mat-form-field {
-      font-weight: 600 !important;
+        font-weight: 600 !important;
     }
+
     .mat-input-element {
         font-size: 14px !important;
-      }
-  }
-  
-.image_box h4{
+    }
+}
+
+.image_box h4 {
     font-size: 14px;
     font-weight: 300;
     background: #eaeaea;
@@ -37,8 +39,7 @@
     text-align: center;
 }
 
-.upload-btn-wrapper 
-.btnnew {
+.upload-btn-wrapper .btnnew {
     color: white;
     border-radius: 5px;
     font-size: 14px;
@@ -48,8 +49,7 @@
     margin-left: 45px;
 }
 
-.upload-btn-wrapper 
-.uploadproduct {
+.upload-btn-wrapper .uploadproduct {
     position: absolute;
     top: 0;
     left: 0;
@@ -57,16 +57,4 @@
     opacity: 0;
     font-size: 100px;
     cursor: pointer;
-}
-
-.flexbox { display: flex; }
-.flexbox .stretch { flex: 1; }
-.flexbox .normal { flex: 0; margin: 15px 0px 0px 0rem; }
-.flexbox div input { padding: .5em 1em; width: 80%; }
-.flexbox div button { padding: .5em 1em; white-space: nowrap; }
-
-.mstrScrch{
-    position: absolute;
-    top: -4px;
-    margin-left: -0.3rem !important;
 }

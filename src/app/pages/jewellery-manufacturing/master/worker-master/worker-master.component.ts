@@ -44,6 +44,7 @@ export class WorkerMasterComponent implements OnInit {
   isloading: boolean = false;
   filteredData: any[] = []; // Data source for the filtered grid
   searchTerm: string = '';
+  afterSaveBtn: boolean = true;
 
   accountMasterData: MasterSearchModel = {
     PAGENO: 1,
@@ -132,12 +133,15 @@ export class WorkerMasterComponent implements OnInit {
       if (this.content?.FLAG == 'VIEW') {
         this.viewMode = true;
         this.isViewMode = true;
+        this.afterSaveBtn = false;
       } else if (this.content?.FLAG == 'EDIT') {
         this.viewMode = false;
         this.editMode = true;
         this.codeEnable = false;
+        this.afterSaveBtn = false;
       } else if (this.content?.FLAG == 'DELETE') {
         this.viewMode = true;
+        this.afterSaveBtn = false;
         this.deleteWorkerMaster()
       }
     }
@@ -276,6 +280,7 @@ export class WorkerMasterComponent implements OnInit {
   /**USE:  final save API call*/
   formSubmit() {
     this.buttonField = false;
+    this.afterSaveBtn = false;
     if (this.content && this.content.FLAG == 'VIEW') return
     if (this.submitValidations(this.workerMasterForm.value)) return;
     if (this.content && this.content.FLAG == 'EDIT') {
@@ -682,6 +687,8 @@ export class WorkerMasterComponent implements OnInit {
 
     // Generate a simple barcode representation
     barcodeElement.innerText = inputText;
+    barcodeElement.style.display = 'none';
+
     const printWindow: any = window.open('', '_blank');
     printWindow.document.write('<html><head><title>Print Barcode</title></head><body>');
     printWindow.document.write('<img src="data:image/svg+xml;utf8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="200" height="100"><text x="0" y="15">' + barcodeElement.innerText + '</text></svg>') + '" />');
@@ -721,22 +728,34 @@ export class WorkerMasterComponent implements OnInit {
     }
   }
 
-
-  // showOverleyPanel(event: any, formControlName: string) {
-
-  //   if (formControlName == 'WorkerAcCode') {
-  //     this.overlayWorkerAcCodeSearch.showOverlayPanel(event)
-  //   }
-  //   if (formControlName == 'NameOfSupervisor') {
-  //     this.overlayNameOfSupervisorSearch.showOverlayPanel(event)
-  //   }
-  // }
-
-  ngOnDestroy() {
-    if (this.subscriptions.length > 0) {
-      this.subscriptions.forEach(subscription => subscription.unsubscribe());// unsubscribe all subscription
-      this.subscriptions = []; // Clear the array
-    }
+ checkCapsOn(event:any) {
+  // Check if the Caps Lock key is on
+  if (event.getModifierState("CapsLock")) {
+    Swal.fire({
+      icon: "warning",
+      title: "Caps Lock is On",
+      text: "Having Caps Lock on may cause you to enter your password incorrectly. You should press Caps Lock to turn it off before entering your password.",
+    });
   }
+}
+
+
+
+// showOverleyPanel(event: any, formControlName: string) {
+
+//   if (formControlName == 'WorkerAcCode') {
+//     this.overlayWorkerAcCodeSearch.showOverlayPanel(event)
+//   }
+//   if (formControlName == 'NameOfSupervisor') {
+//     this.overlayNameOfSupervisorSearch.showOverlayPanel(event)
+//   }
+// }
+
+ngOnDestroy() {
+  if (this.subscriptions.length > 0) {
+    this.subscriptions.forEach(subscription => subscription.unsubscribe());// unsubscribe all subscription
+    this.subscriptions = []; // Clear the array
+  }
+}
 
 }
