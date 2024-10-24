@@ -93,6 +93,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
   cityListData: any;
   amlValidation: any;
   IDDetailsValidation : boolean = false
+  getCustomerDetailsValidation : boolean = false
   dialogBox: any;
   dialogBoxResult: any;
   existCustomerCode: any;
@@ -648,8 +649,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    console.log(this.comService.allbranchMaster);
-    
+    this.getCustomerDetailsValidation = this.comService.allbranchMaster.POSCUSTDETAILSFROMREADER
     this.branchCode = this.comService.branchCode;
     this.existCustomerCode = this.content?.CODE;
     this.flag = this.content?.FLAG;

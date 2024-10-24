@@ -3173,7 +3173,7 @@
               </mat-tab>
               <mat-tab label="Other Details">
                 <div class="row">
-                  <div class="col-md-10">
+                  <div class="col-md-6">
                     <div class="row mb-1 mt-2">
                       <h6 id="ID079">Other Details</h6>
                     </div>
@@ -3358,30 +3358,195 @@
                         </mat-form-field>
                       </div>
                     </div>
-                    <!-- <div class="row mt-3">
+                    
+                  </div>
+
+                  <div class="col-md-6">
+                    <div class="row mb-1 mt-2">
+                      <h6 id="ID079">Other Details</h6>
+                    </div>
+                    <!-- <div class="row mb-1">
+                                            <h6>Details</h6>
+                                        </div> -->
+                    <div class="row mb-1">
                       <label
                         for="inputPassword"
                         class="col-sm-4 col-form-label"
-                        id="ID086"
-                        >Occupation</label
+                        id="ID080"
+                        >Reason of Purchase</label
+                      >
+                      <div class="col-md-8">
+                        <mat-form-field
+                          style="width: 100%"
+                          appearance="outline"
+                        >
+                          <mat-select
+                            [disabled]="flag === 'VIEW'"
+                            formControlName="reasonOfPurchase"
+                          >
+                            <mat-option value="Self Use">Self Use </mat-option>
+                            <mat-option value="Gift">Gift </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div class="row mb-1">
+                      <label
+                        for="inputPassword"
+                        class="col-sm-4 col-form-label"
+                        id="ID081"
+                        >Gift Purchased For</label
                       >
                       <div class="col-md-8">
                         <mat-form-field
                           style="width: -webkit-fill-available"
                           appearance="outline"
                         >
-                          <input matInput="text" formControlName="occupation" />
+                          <input
+                            readonly="true"
+                            matInput
+                            type="text"
+                            formControlName="gifrPurchased"
+                          />
                           <master-search
-                          *ngIf="flag !== 'VIEW'"
-                            (focusout)="openTab($event, 'occupation')"
-                            #overlayOccupation
-                            [MasterSearchData]="occupationMasterCode"
+                            *ngIf="flag !== 'VIEW' && isSelfGift"
+                            (focusout)="openTab($event, 'gifrPurchased')"
+                            #overlayGifrPurchased
+                            [MasterSearchData]="giftPurchasedCode"
                             class="masterSearch"
-                            (newRowClick)="occupationMasterSelected($event)"
+                            (newRowClick)="giftPurchasedSelected($event)"
                           ></master-search>
                         </mat-form-field>
                       </div>
-                    </div> -->
+                    </div>
+                    <div class="row mb-1">
+                      <label
+                        for="inputPassword"
+                        class="col-sm-4 col-form-label"
+                        id="ID082"
+                        >Occasion Of Purchase</label
+                      >
+                      <div class="col-md-8">
+                        <mat-form-field
+                          style="width: -webkit-fill-available"
+                          appearance="outline"
+                        >
+                          <input
+                            readonly="true"
+                            matInput
+                            type="text"
+                            formControlName="occasionOfPurchase"
+                          />
+                          <master-search
+                            *ngIf="flag !== 'VIEW'"
+                            (focusout)="openTab($event, 'occasionOfPurchase')"
+                            #overlayOccasionOfPurchase
+                            [MasterSearchData]="occasionOfPurchaseCode"
+                            class="masterSearch"
+                            (newRowClick)="occasionOfPurchaseSelected($event)"
+                          ></master-search>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div class="row mb-1">
+                      <label
+                        for="inputPassword"
+                        class="col-sm-4 col-form-label"
+                        id="ID083"
+                        >Age Group</label
+                      >
+                      <div class="col-md-8">
+                        <mat-form-field
+                          style="width: -webkit-fill-available"
+                          appearance="outline"
+                        >
+                          <input
+                            matInput
+                            type="text"
+                            readonly="true"
+                            formControlName="ageGroup"
+                          />
+
+                          <master-search
+                            *ngIf="flag !== 'VIEW'"
+                            (focusout)="openTab($event, 'ageGroup')"
+                            #overlayAgeGroup
+                            [MasterSearchData]="ageGroupCode"
+                            class="masterSearch"
+                            (newRowClick)="ageGroupSelected($event)"
+                          ></master-search>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div class="row mb-1">
+                      <label
+                        for="inputPassword"
+                        class="col-sm-7 col-form-label"
+                        id="ID084"
+                        >Did You Get What You Are Looking For</label
+                      >
+                    </div>
+                    <div class="row mb-1">
+                      <div class="col-md-12">
+                        <mat-form-field
+                          style="width: 100%"
+                          appearance="outline"
+                        >
+                          <mat-select
+                            [disabled]="flag === 'VIEW'"
+                            formControlName="lookingFor"
+                          >
+                            <mat-option
+                              *ngFor="let data of ratingList"
+                              [value]="data.ENGLISH"
+                              >{{ data.ENGLISH }}</mat-option
+                            >
+                          </mat-select>
+                          <!-- <mat-error
+                            *ngIf="
+                              posCustomerMasterMainForm.controls.name.hasError(
+                                'required'
+                              )
+                            "
+                            id="ID005"
+                          >
+                            Name is <strong>required</strong>
+                          </mat-error> -->
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div class="row mb-1">
+                      <label
+                        for="inputPassword"
+                        class="col-sm-7 col-form-label"
+                        id="ID085"
+                        >Will See You in Next Visit Within:</label
+                      >
+                    </div>
+                    <div class="row mb-1">
+                      <div class="col-md-12">
+                        <mat-form-field
+                          style="width: -webkit-fill-available"
+                          appearance="outline"
+                        >
+                          <input
+                            type="text"
+                            readonly="true"
+                            matInput="text"
+                            formControlName="nextVisit"
+                          />
+                          <master-search
+                            *ngIf="flag !== 'VIEW'"
+                            (focusout)="openTab($event, 'nextVisit')"
+                            #overlayNextVisit
+                            [MasterSearchData]="nextVisitCode"
+                            class="masterSearch"
+                            (newRowClick)="nextVisitSelected($event)"
+                          ></master-search>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    
                   </div>
                 </div>
               </mat-tab>
@@ -4149,6 +4314,7 @@
                     Print Customer Log
                   </button>
                   <button
+                  *ngIf="getCustomerDetailsValidation"
                     type="button"
                     class="btn btn-primary text-center m-2"
                     (click)="getCustomerDetails($event)"
