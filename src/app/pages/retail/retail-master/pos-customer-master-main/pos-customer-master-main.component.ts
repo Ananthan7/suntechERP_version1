@@ -14,7 +14,7 @@ import {
   ValidationErrors,
   Validators,
 } from "@angular/forms";
-import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
+import { NgbActiveModal, NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
 import { MasterSearchModel } from "src/app/shared/data/master-find-model";
 import { CommonServiceService } from "src/app/services/common-service.service";
 import { MatSnackBar } from "@angular/material/snack-bar";
@@ -25,6 +25,7 @@ import { Subscription } from "rxjs";
 import Swal from "sweetalert2";
 import { MasterSearchComponent } from "src/app/shared/common/master-search/master-search.component";
 import { MatCheckboxChange } from "@angular/material/checkbox";
+import { ShowTransDetailsComponent } from "./show-trans-details/show-trans-details.component";
 
 @Component({
   selector: "app-pos-customer-master-main",
@@ -608,7 +609,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
   imageName: any;
 
   constructor(
-    private cdr: ChangeDetectorRef,
+    private modalService: NgbModal,
     private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
     private comService: CommonServiceService,
@@ -2609,6 +2610,8 @@ export class PosCustomerMasterMainComponent implements OnInit {
     }
   }
 
+
+
   setPassport(event: any) {
     if (
       this.posCustomerMasterMainForm.controls["custIdType"].value === "PASSPORT"
@@ -2617,5 +2620,32 @@ export class PosCustomerMasterMainComponent implements OnInit {
         event.target.value
       );
     }
+  }
+
+
+
+  openShowTransdetails() {
+
+    const modalRef: NgbModalRef = this.modalService.open(
+      ShowTransDetailsComponent,
+      {
+        size: "xl",
+        backdrop: true,
+        keyboard: false,
+        windowClass: 'modal-dialog-centered modal-dialog-scrollable',
+      }
+    );
+    // modalRef.componentInstance.receiptData = { ...data };
+    // modalRef.componentInstance.queryParams = { isViewOnly: this.viewOnly };
+    // if (date) {
+    //   modalRef.componentInstance.delivery_date = date._d;
+    // }
+
+    // modalRef.result.then((postData) => {
+    //   if (postData) {
+    //     console.log("Data from modal:", postData);
+    //     this.handlePostData(postData);
+    //   }
+    // });
   }
 }

@@ -93,7 +93,6 @@ export class PosCrmDashboardComponent implements OnInit {
         this.diamondSectionArr = resp.dynamicData[2]
         this.metalSectionArr = resp.dynamicData[3]
       }
-     
     });
   }
 

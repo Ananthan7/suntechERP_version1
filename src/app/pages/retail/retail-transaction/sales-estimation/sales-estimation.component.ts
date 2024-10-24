@@ -823,7 +823,7 @@ export class SalesEstimationComponent implements OnInit {
   ) {
     this.strBranchcode = localStorage.getItem('userbranch');
     this.strUser = localStorage.getItem('username');
-    // this.baseYear = localStorage.getItem('YEAR');
+    this.baseYear = localStorage.getItem('YEAR');
     let branchParams: any = localStorage.getItem('BRANCH_PARAMETER')
     this.comFunc.allbranchMaster = JSON.parse(branchParams);
     this.isGiftTypeRequired = this.comFunc.allbranchMaster.BRNCHSHOW_GIFTMODULE ? this.comFunc.allbranchMaster.BRNCHSHOW_GIFTMODULE : false;
@@ -9103,9 +9103,9 @@ export class SalesEstimationComponent implements OnInit {
                   let mid;
                   mid = res.response.retailSales.MID;
 
-                  if (mid) {
-                    this.AccountPosting(mid);
-                  }
+                  // if (mid) {
+                  //   this.AccountPosting(mid);
+                  // }
 
                 } else {
                   this.isSaved = false;
@@ -9155,9 +9155,9 @@ export class SalesEstimationComponent implements OnInit {
                 this.viewOnly=true;
                 // this.content.MID = res.response.retailSales.MID;
                 // console.log(this.content.MID)
-                if (this.midForInvoce) {
-                  this.AccountPosting(this.midForInvoce);
-                }
+                // if (this.midForInvoce) {
+                //   this.AccountPosting(this.midForInvoce);
+                // }
 
                 // console.log(this.content.MID, 'middddddddddd');
 
@@ -9314,62 +9314,69 @@ export class SalesEstimationComponent implements OnInit {
   //     return '';
   //   }
   // }
-
   printReceiptDetailsWeb() {
+    console.log('printing...');
     let _validate = this.validateBeforePrint();
-    if (_validate[0] === false) {
-      if (typeof _validate[1] === 'string') {
-        this.snackBar.open(_validate[1], 'OK');
-      } else {
-        console.error('Error message is not a string:', _validate[1]);
-      }
-      return;
-    }
-    let postData = {
-      "MID": this.content ? this.comFunc.emptyToZero(this.content?.MID) : this.midForInvoce,
-      "BRANCH_CODE": this.comFunc.nullToString(this.strBranchcode),
-      "VOCNO": this.comFunc.emptyToZero(this.vocDataForm.value.fcn_voc_no),
-      "VOCTYPE": this.comFunc.nullToString(this.vocDataForm.value.voc_type),
-      "YEARMONTH": this.comFunc.nullToString(this.baseYear),
-    };
-    this.suntechApi.postDynamicAPI(`UspReceiptDetailsWeb`, postData)
-      .subscribe((result: any) => {
+    if (_validate[0]) {
+      let postData = {
+        "MID": this.content ? this.comFunc.emptyToZero(this.content?.MID) : this.midForInvoce,
+        "BRANCH_CODE": this.comFunc.nullToString(this.strBranchcode),
+        "VOCNO": this.comFunc.emptyToZero(this.vocDataForm.value.fcn_voc_no),
+        "VOCTYPE": this.comFunc.nullToString(this.vocDataForm.value.voc_type),
+        "YEARMONTH": this.comFunc.nullToString(this.baseYear),
+      };
+      this.suntechApi.postDynamicAPI('RetailEstimationWeb', postData).subscribe((result: any) => {
         console.log(result);
-        let data = result.dynamicData;
-        var WindowPrt = window.open(' ', ' ', 'width=900px, height=800px');
-        if (WindowPrt === null) {
-          console.error('Failed to open the print window. Possibly blocked by a popup blocker.');
-          return;
-        }
-        let printContent = data[0][0].HTMLOUT;
-        WindowPrt.document.write(printContent);
-        WindowPrt.document.close();
-        WindowPrt.focus();
-
-        WindowPrt.onload = function () {
-          if (WindowPrt && WindowPrt.document.head) {
-            let styleElement = WindowPrt.document.createElement('style');
-            styleElement.textContent = `
-                        @page {
-                            size: A5 landscape;
-                        }
-                        body {
-                            margin: 0mm;
-                        }
-                    `;
-            WindowPrt.document.head.appendChild(styleElement);
-
-            setTimeout(() => {
-              if (WindowPrt) {
-                WindowPrt.print();
-              } else {
-                console.error('Print window was closed before printing could occur.');
-              }
-            }, 800);
+        let data = result.dynamicData[0][0].HTMLOUT;
+        const printContent: any = data;
+        const qrCodeElement: any = document.getElementById('qrCodeBig');
+  
+        var WindowPrt = window.open(
+          '',
+          '_blank',
+          `height=${window.innerHeight / 1.5}, width=${window.innerWidth / 2.5}`
+        );
+  
+        WindowPrt?.document.write(`
+          <html>
+            <head>
+              <title>SunTech - Estimation ${new Date().toISOString()}</title>
+              <style>
+                @media print {
+                  @page {
+                    size: A4 portrait;
+                    margin: 10mm;
+                  }
+                }
+              </style>
+            </head>
+            <body>
+              <div>
+                ${printContent}
+              </div>
+            </body>
+          </html>
+        `);
+  
+        const linkElement: any = WindowPrt?.document.createElement('link');
+        linkElement?.setAttribute('rel', 'stylesheet');
+        linkElement?.setAttribute('type', 'text/css');
+        linkElement?.setAttribute('href', this.cssFilePath);
+        WindowPrt?.document.head.appendChild(linkElement);
+  
+        WindowPrt?.document.close();
+        WindowPrt?.focus();
+        setTimeout(() => {
+          if (WindowPrt) {
+            WindowPrt.print();
+          } else {
+            console.error('Print window was closed before printing could occur.');
           }
-        };
+        }, 800);
       });
+    }
   }
+  
 
 
   // printReceiptDetailsWeb() {
@@ -9496,20 +9503,26 @@ export class SalesEstimationComponent implements OnInit {
     const value = this.comFunc.emptyToZero(event.target.value);
 
     if (this.comFunc.emptyToZero(event.target.value) == 0 && this.newLineItem.IS_BARCODED_ITEM) {
+      if (!['L', 'C', 'P'].includes(this.itemDivision)) {
+        this.openDialog('Warning', this.comFunc.getMsgByID('MSG1563'), true);
+        this.dialogBox.afterClosed().subscribe((data: any) => {
+          if (data == 'OK') {
+            this.lineItemForm.controls['fcn_li_pcs'].setValue(
+              preVal
+            );
+            this.manageCalculations();
+            this.renderer.selectRootElement('#fcn_li_pcs').select();
+          }
+        });
+      }
+      else {
+        this.lineItemForm.controls['fcn_li_pcs'].setValue(
+          event.target.value
+        );
+      }
 
-      this.openDialog('Warning', this.comFunc.getMsgByID('MSG1563'), true);
-      this.dialogBox.afterClosed().subscribe((data: any) => {
-        if (data == 'OK') {
-          this.lineItemForm.controls['fcn_li_pcs'].setValue(
-            preVal
-          );
-          this.manageCalculations();
-          this.renderer.selectRootElement('#fcn_li_pcs').select();
-        }
-      });
 
     }
-
 
     else if (event.target.value != '' && this.validatePCS == true || this.enablePieces) {
       const validDivisionCodes = ['M', 'D', 'W', 'N'];
@@ -9587,8 +9600,9 @@ export class SalesEstimationComponent implements OnInit {
 
                   this.manageCalculations();
 
-                  if (filteredValidationCodes.length > 0)
-                    this.renderer.selectRootElement('#fcn_li_net_amount')?.select();
+                  if (filteredValidationCodes.length > 0 && this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_pcs) !== 0 &&
+                  this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt) !== 0)
+                  this.renderer.selectRootElement('#fcn_li_net_amount')?.select();
 
                 } else {
 

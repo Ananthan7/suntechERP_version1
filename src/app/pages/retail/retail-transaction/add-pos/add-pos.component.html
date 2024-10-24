@@ -3456,7 +3456,7 @@
                       <mat-form-field appearance="outline" style="width: 100%" aria-readonly="true">
                         <input class="st_txt_right" type="text" [min]="0" autocomplete="off" [maxLength]="14"
                           (keyup)="this.comFunc.enforceMinMax($event.target)" matInput id="fcn_li_pcs"
-                          formControlName="fcn_li_pcs"  (blur)="focusField('fcn_li_net_amount')" (focus)="setValToLocalStorage($event, 'fcn_li_pcs')"
+                          formControlName="fcn_li_pcs" (focus)="setValToLocalStorage($event, 'fcn_li_pcs')"
                           (change)="changePCS($event)" [readonly]="viewOnly || !isPcsEditable" NumberOnly />
                         <!-- <input class="st_txt_right" type="number" min="1" matInput formControlName="fcn_li_pcs"
                                   (keyup)="changePCS($event)" (mouseup)="changePCS($event)" (mouseleave)="changePCS($event)"
