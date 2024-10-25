@@ -112,14 +112,14 @@
                       class="col-sm-3 col-form-label">Entered By:</label>
                     <div class="col-md-8">
                       <mat-form-field appearance="outline" style="width: 70%">
-                        <input type="text" matInput formControlName="enteredBy"
+                        <input type="text" matInput formControlName="SALESPERSON_CODE"
                           UpperCaseDirective
-                          (keydown)="lookupKeyPress($event,'enteredBy')"
+                          (keydown)="lookupKeyPress($event,'SALESPERSON_CODE')"
                           [readonly]="viewMode"
-                          (focusout)="validateLookupField($event,SALESPERSON_CODEData,'enteredBy')" />
+                          (focusout)="validateLookupField($event,SALESPERSON_CODEData,'SALESPERSON_CODE')" />
                         <master-search class="masterSearch"
                           [MasterSearchData]="SALESPERSON_CODEData"
-                          #overlayenteredBySearch
+                          #overlaySALESPERSON_CODESearch
                           (newRowClick)="userDataSelected($event)"
                           *ngIf="!viewMode">
                         </master-search>

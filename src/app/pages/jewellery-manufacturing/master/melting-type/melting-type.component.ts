@@ -397,6 +397,12 @@ export class MeltingTypeComponent implements OnInit {
       return true;
     }
 
+    if(totalAlloyPer < 100){
+      console.log('This Working If Condition');
+      this.commonService.toastErrorByMsgId('MSG7954')
+      return true
+    }
+
     return false;
   }
   setPostData(form: any) {
@@ -435,6 +441,7 @@ export class MeltingTypeComponent implements OnInit {
   formSubmit() {
     if (this.submitValidations()) return;
     if (this.submitValidation(this.meltingTypeForm.value)) return;
+    
 
     let API = 'MeltingType/InsertMeltingType';
     let postData = this.setPostData(this.meltingTypeForm.value)
@@ -556,6 +563,9 @@ export class MeltingTypeComponent implements OnInit {
   }
 
   updateMeltingType() {
+    if (this.submitValidations()) return;
+    if (this.submitValidation(this.meltingTypeForm.value)) return;
+    
     let API = 'MeltingType/UpdateMeltingType/' + this.meltingTypeForm.value.code;
     let postData = this.setPostData(this.meltingTypeForm.value)
 

@@ -79,3 +79,15 @@
     width: 100%;
     display: block;
 }
+
+// for mat-select dropdowns
+::ng-deep {
+    .cdk-overlay-container {
+      position: fixed;
+      z-index: 1070 !important;
+    }
+}
+
+.purchaseValueCntrlClass{
+    margin-left: 0rem !important;
+}
