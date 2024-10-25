@@ -519,6 +519,7 @@ export class ProcessTransferComponent implements OnInit {
           this.showSuccessDialog(this.commonService.getMsgByID('MSG2443') || 'Success');
           let res = result.response
           this.processTransferFrom.controls.VOCNO.setValue(res.VOCNO)
+          this.viewMode=true;
         } else {
           this.commonService.toastErrorByMsgId('MSG1531')
         }

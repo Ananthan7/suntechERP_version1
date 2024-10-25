@@ -1454,6 +1454,92 @@
                             </mat-form-field>
                           </div>
                         </div>
+
+                        <div class="col-md-12 border p-4">
+                          <div class="row mb-1">
+                            <div class="col-md-12 pt-3">
+                              <mat-checkbox
+                                [disabled]="flag === 'VIEW'"
+                                formControlName="loyaltyCustomerCheck"
+                                id="ID060"
+                                >Loyalty Customer</mat-checkbox
+                              >
+                              <div class="row mb-1">
+                                <label
+                                  for="loyaltyCode"
+                                  class="col-sm-4 col-form-label"
+                                  id="ID090"
+                                  >Loyalty Code</label
+                                >
+                                <div class="col-md-8">
+                                  <mat-form-field
+                                    style="width: 100%"
+                                    appearance="outline"
+                                  >
+                                    <input
+                                      readonly="true"
+                                      matInput="text"
+                                      formControlName="loyaltyCode"
+                                    />
+                                  </mat-form-field>
+                                </div>
+                              </div>
+
+                              <div class="row mb-1">
+                                <label
+                                  for="openingLoyaltyPoints"
+                                  class="col-sm-4 col-form-label"
+                                  id="ID090"
+                                  >Opening Loyalty Points</label
+                                >
+                                <div class="col-md-8">
+                                  <mat-form-field
+                                    style="width: 100%"
+                                    appearance="outline"
+                                  >
+                                    <input
+                                      readonly="true"
+                                      matInput="text"
+                                      formControlName="openingLoyaltyPoints"
+                                    />
+                                  </mat-form-field>
+                                </div>
+                              </div>
+
+                              <button
+                              type="button"
+                              class=" col-md-12 p-4 mb-4 btn btn-primary text-center"
+                            >
+                              Update loyalty Points
+                            </button>
+
+
+                            <div class="row mb-1">
+                              <label
+                                for="loyaltyPoints"
+                                class="col-sm-4 col-form-label"
+                                id="ID090"
+                                >Loyalty Points</label
+                              >
+                              <div class="col-md-8">
+                                <mat-form-field
+                                  style="width: 100%"
+                                  appearance="outline"
+                                >
+                                  <input
+                                    readonly="true"
+                                    matInput="text"
+                                    formControlName="loyaltyPoints"
+                                  />
+                                </mat-form-field>
+                              </div>
+                            </div>
+
+
+
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -3173,9 +3259,9 @@
               </mat-tab>
               <mat-tab label="Other Details">
                 <div class="row">
-                  <div class="col-md-10">
+                  <div class="col-md-6">
                     <div class="row mb-1 mt-2">
-                      <h6 id="ID079">Other Details</h6>
+                      <h6 id="ID079">Details 1</h6>
                     </div>
                     <!-- <div class="row mb-1">
                                             <h6>Details</h6>
@@ -3358,30 +3444,683 @@
                         </mat-form-field>
                       </div>
                     </div>
-                    <!-- <div class="row mt-3">
+                  </div>
+
+                  <div class="col-md-6">
+                    <div class="row mb-1 mt-2">
+                      <h6 id="ID079">Details 2</h6>
+                    </div>
+                    <div class="row mb-1">
                       <label
                         for="inputPassword"
-                        class="col-sm-4 col-form-label"
-                        id="ID086"
-                        >Occupation</label
-                      >
-                      <div class="col-md-8">
-                        <mat-form-field
-                          style="width: -webkit-fill-available"
-                          appearance="outline"
-                        >
-                          <input matInput="text" formControlName="occupation" />
-                          <master-search
-                          *ngIf="flag !== 'VIEW'"
-                            (focusout)="openTab($event, 'occupation')"
-                            #overlayOccupation
-                            [MasterSearchData]="occupationMasterCode"
-                            class="masterSearch"
-                            (newRowClick)="occupationMasterSelected($event)"
-                          ></master-search>
-                        </mat-form-field>
+                        class="col-sm-8 col-form-label"
+                        id="ID080"
+                        >Festivals You Celebrate:
+                      </label>
+                      <div class="row mb-1">
+                        <div class="col-md-12">
+                          <div class="col-md-5 pt-3">
+                            <mat-checkbox
+                              [disabled]="flag === 'VIEW'"
+                              formControlName="eidFest"
+                              id="ID060"
+                              >EID</mat-checkbox
+                            >
+                          </div>
+                          <div class="col-md-5 pt-3">
+                            <mat-checkbox
+                              [disabled]="flag === 'VIEW'"
+                              formControlName="christmasFest"
+                              id="ID061"
+                              >CHRISTMAS</mat-checkbox
+                            >
+                          </div>
+                          <div class="col-md-5 pt-3">
+                            <mat-checkbox
+                              [disabled]="flag === 'VIEW'"
+                              formControlName="diwaliFest"
+                              id="ID062"
+                              >DIWALI</mat-checkbox
+                            >
+                          </div>
+                          <div class="col-md-5 pt-3">
+                            <mat-checkbox
+                              [disabled]="flag === 'VIEW'"
+                              formControlName="nationalDayFest"
+                              id="ID063"
+                              >NATIONAL DAY</mat-checkbox
+                            >
+                          </div>
+                          <div class="col-md-5 pt-3">
+                            <mat-checkbox
+                              [disabled]="flag === 'VIEW'"
+                              formControlName="onamFest"
+                              id="ID064"
+                              >ONAM</mat-checkbox
+                            >
+                          </div>
+                          <div class="col-md-5 pt-3">
+                            <mat-checkbox
+                              [disabled]="flag === 'VIEW'"
+                              formControlName="pongalandsankrantiFest"
+                              id="ID065"
+                              >PONGAL/SANKRANTI</mat-checkbox
+                            >
+                          </div>
+                          <div class="col-md-5 pt-3">
+                            <mat-checkbox
+                              [disabled]="flag === 'VIEW'"
+                              formControlName="newyearFest"
+                              id="ID065"
+                              >NEW YEAR</mat-checkbox
+                            >
+                          </div>
+                        </div>
                       </div>
-                    </div> -->
+                    </div>
+
+                    <div class="row mb-1">
+                      <label
+                        for="inputPassword"
+                        class="col-sm-8 col-form-label"
+                        id="ID080"
+                        >How likely are you to recommend jewellery to your
+                        family and friends?
+                      </label>
+                      <div class="row mb-1">
+                        <label
+                          for="johara"
+                          class="col-sm-4 col-form-label"
+                          id="ID018"
+                          >Johara</label
+                        >
+                        <div class="col-md-8">
+                          <mat-form-field
+                            style="width: 100%"
+                            appearance="outline"
+                          >
+                            <mat-select
+                              [disabled]="flag === 'VIEW'"
+                              formControlName="johara"
+                            >
+                              <mat-option
+                                *ngFor="let data of ratingList"
+                                [value]="data.ENGLISH"
+                                >{{ data.ENGLISH }}</mat-option
+                              >
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                      </div>
+
+                      <div class="row mb-1">
+                        <label
+                          for="farah"
+                          class="col-sm-4 col-form-label"
+                          id="ID018"
+                          >Farah</label
+                        >
+                        <div class="col-md-8">
+                          <mat-form-field
+                            style="width: 100%"
+                            appearance="outline"
+                          >
+                            <mat-select
+                              [disabled]="flag === 'VIEW'"
+                              formControlName="farah"
+                            >
+                              <mat-option
+                                *ngFor="let data of ratingList"
+                                [value]="data.ENGLISH"
+                                >{{ data.ENGLISH }}</mat-option
+                              >
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                      </div>
+
+                      <div class="row mb-1">
+                        <label
+                          for="jawaher"
+                          class="col-sm-4 col-form-label"
+                          id="ID018"
+                          >Jawaher Al Sharq</label
+                        >
+                        <div class="col-md-8">
+                          <mat-form-field
+                            style="width: 100%"
+                            appearance="outline"
+                          >
+                            <mat-select
+                              [disabled]="flag === 'VIEW'"
+                              formControlName="jawaher"
+                            >
+                              <mat-option
+                                *ngFor="let data of ratingList"
+                                [value]="data.ENGLISH"
+                                >{{ data.ENGLISH }}</mat-option
+                              >
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </mat-tab>
+              <mat-tab label="ID Details">
+                <div class="row mt-2">
+                  <div class="col-md-12">
+                    <div class="row mb-1">
+                      <div class="col-md-6">
+                        <div class="row mb-1">
+                          <label
+                            for="arabicGender"
+                            class="col-sm-5 col-form-label"
+                            id="ID029"
+                            >ARABIC GENDER</label
+                          >
+                          <div class="col-md-7">
+                            <mat-form-field
+                              style="width: 100%"
+                              appearance="outline"
+                            >
+                              <input
+                                [readonly]="flag === 'VIEW'"
+                                appAlphabetsOnly
+                                matInput="text"
+                                (input)="onInput($event, 40)"
+                                formControlName="arabicGender"
+                              />
+                            </mat-form-field>
+                          </div>
+                        </div>
+
+                        <div class="row mb-1">
+                          <label
+                            for="arabicNationality"
+                            class="col-sm-5 col-form-label"
+                            id="ID029"
+                            >ARABIC NATIONALITY</label
+                          >
+                          <div class="col-md-7">
+                            <mat-form-field
+                              style="width: 100%"
+                              appearance="outline"
+                            >
+                              <input
+                                [readonly]="flag === 'VIEW'"
+                                appAlphabetsOnly
+                                matInput="text"
+                                (input)="onInput($event, 40)"
+                                formControlName="arabicNationality"
+                              />
+                            </mat-form-field>
+                          </div>
+                        </div>
+
+                        <div class="row mb-1">
+                          <label
+                            for="issuanceDate"
+                            class="col-sm-5 col-form-label"
+                            id="ID029"
+                            >ISSUANCE DATE</label
+                          >
+                          <div class="col-md-7">
+                            <mat-form-field
+                              style="width: 100%"
+                              appearance="outline"
+                            >
+                              <input
+                                [readonly]="flag === 'VIEW'"
+                                appAlphabetsOnly
+                                matInput="text"
+                                (input)="onInput($event, 40)"
+                                formControlName="issuanceDate"
+                              />
+                            </mat-form-field>
+                          </div>
+                        </div>
+
+                        <div class="row mb-1">
+                          <label
+                            for="documentNo"
+                            class="col-sm-5 col-form-label"
+                            id="ID029"
+                            >DOCUMENT NO</label
+                          >
+                          <div class="col-md-7">
+                            <mat-form-field
+                              style="width: 100%"
+                              appearance="outline"
+                            >
+                              <input
+                                [readonly]="flag === 'VIEW'"
+                                appAlphabetsOnly
+                                matInput="text"
+                                (input)="onInput($event, 40)"
+                                formControlName="documentNo"
+                              />
+                            </mat-form-field>
+                          </div>
+                        </div>
+
+                        <div class="row mb-1">
+                          <label
+                            for="serialNo"
+                            class="col-sm-5 col-form-label"
+                            id="ID029"
+                            >SERIAL NO</label
+                          >
+                          <div class="col-md-7">
+                            <mat-form-field
+                              style="width: 100%"
+                              appearance="outline"
+                            >
+                              <input
+                                [readonly]="flag === 'VIEW'"
+                                appAlphabetsOnly
+                                matInput="text"
+                                (input)="onInput($event, 40)"
+                                formControlName="serialNo"
+                              />
+                            </mat-form-field>
+                          </div>
+                        </div>
+
+                        <div class="row mb-1">
+                          <label
+                            for="atr"
+                            class="col-sm-5 col-form-label"
+                            id="ID029"
+                            >ATR</label
+                          >
+                          <div class="col-md-7">
+                            <mat-form-field
+                              style="width: 100%"
+                              appearance="outline"
+                            >
+                              <input
+                                [readonly]="flag === 'VIEW'"
+                                appAlphabetsOnly
+                                matInput="text"
+                                (input)="onInput($event, 40)"
+                                formControlName="atr"
+                              />
+                            </mat-form-field>
+                          </div>
+                        </div>
+
+                        <div class="row mb-1">
+                          <label
+                            for="moiRefIndic"
+                            class="col-sm-5 col-form-label"
+                            id="ID029"
+                            >MOI REF INDIC</label
+                          >
+                          <div class="col-md-7">
+                            <mat-form-field
+                              style="width: 100%"
+                              appearance="outline"
+                            >
+                              <input
+                                [readonly]="flag === 'VIEW'"
+                                appAlphabetsOnly
+                                matInput="text"
+                                (input)="onInput($event, 40)"
+                                formControlName="moiRefIndic"
+                              />
+                            </mat-form-field>
+                          </div>
+                        </div>
+
+                        <div class="row mb-1">
+                          <label
+                            for="moiReference"
+                            class="col-sm-5 col-form-label"
+                            id="ID029"
+                            >MOI REFERENCE</label
+                          >
+                          <div class="col-md-7">
+                            <mat-form-field
+                              style="width: 100%"
+                              appearance="outline"
+                            >
+                              <input
+                                [readonly]="flag === 'VIEW'"
+                                appAlphabetsOnly
+                                matInput="text"
+                                (input)="onInput($event, 40)"
+                                formControlName="moiReference"
+                              />
+                            </mat-form-field>
+                          </div>
+                        </div>
+
+                        <div class="row mb-1">
+                          <label
+                            for="district"
+                            class="col-sm-5 col-form-label"
+                            id="ID029"
+                            >DISTRICT</label
+                          >
+                          <div class="col-md-7">
+                            <mat-form-field
+                              style="width: 100%"
+                              appearance="outline"
+                            >
+                              <input
+                                [readonly]="flag === 'VIEW'"
+                                appAlphabetsOnly
+                                matInput="text"
+                                (input)="onInput($event, 40)"
+                                formControlName="district"
+                              />
+                            </mat-form-field>
+                          </div>
+                        </div>
+
+                        <div class="row mb-1">
+                          <label
+                            for="block"
+                            class="col-sm-5 col-form-label"
+                            id="ID029"
+                            >BLOCK</label
+                          >
+                          <div class="col-md-7">
+                            <mat-form-field
+                              style="width: 100%"
+                              appearance="outline"
+                            >
+                              <input
+                                [readonly]="flag === 'VIEW'"
+                                appAlphabetsOnly
+                                matInput="text"
+                                (input)="onInput($event, 40)"
+                                formControlName="block"
+                              />
+                            </mat-form-field>
+                          </div>
+                        </div>
+
+                        <div class="row mb-1">
+                          <label
+                            for="serialNo"
+                            class="col-sm-5 col-form-label"
+                            id="ID029"
+                            >STREET</label
+                          >
+                          <div class="col-md-7">
+                            <mat-form-field
+                              style="width: 100%"
+                              appearance="outline"
+                            >
+                              <input
+                                [readonly]="flag === 'VIEW'"
+                                appAlphabetsOnly
+                                matInput="text"
+                                (input)="onInput($event, 40)"
+                                formControlName="street"
+                              />
+                            </mat-form-field>
+                          </div>
+                        </div>
+
+                        <div class="row mb-1">
+                          <label
+                            for="buildingNo"
+                            class="col-sm-5 col-form-label"
+                            id="ID029"
+                            >BUILDING NO</label
+                          >
+                          <div class="col-md-7">
+                            <mat-form-field
+                              style="width: 100%"
+                              appearance="outline"
+                            >
+                              <input
+                                [readonly]="flag === 'VIEW'"
+                                appAlphabetsOnly
+                                matInput="text"
+                                (input)="onInput($event, 40)"
+                                formControlName="buildingNo"
+                              />
+                            </mat-form-field>
+                          </div>
+                        </div>
+
+                        <div class="row mb-1">
+                          <label
+                            for="unitType"
+                            class="col-sm-5 col-form-label"
+                            id="ID029"
+                            >UNIT TYPE</label
+                          >
+                          <div class="col-md-7">
+                            <mat-form-field
+                              style="width: 100%"
+                              appearance="outline"
+                            >
+                              <input
+                                [readonly]="flag === 'VIEW'"
+                                appAlphabetsOnly
+                                matInput="text"
+                                (input)="onInput($event, 40)"
+                                formControlName="unitType"
+                              />
+                            </mat-form-field>
+                          </div>
+                        </div>
+
+                        <div class="row mb-1">
+                          <label
+                            for="unitNo"
+                            class="col-sm-5 col-form-label"
+                            id="ID029"
+                            >UNIT NO</label
+                          >
+                          <div class="col-md-7">
+                            <mat-form-field
+                              style="width: 100%"
+                              appearance="outline"
+                            >
+                              <input
+                                [readonly]="flag === 'VIEW'"
+                                appAlphabetsOnly
+                                matInput="text"
+                                (input)="onInput($event, 40)"
+                                formControlName="unitNo"
+                              />
+                            </mat-form-field>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="row mb-1">
+                          <label
+                            for="floor"
+                            class="col-sm-5 col-form-label"
+                            id="ID029"
+                            >FLOOR</label
+                          >
+                          <div class="col-md-7">
+                            <mat-form-field
+                              style="width: 100%"
+                              appearance="outline"
+                            >
+                              <input
+                                [readonly]="flag === 'VIEW'"
+                                appAlphabetsOnly
+                                matInput="text"
+                                (input)="onInput($event, 40)"
+                                formControlName="floor"
+                              />
+                            </mat-form-field>
+                          </div>
+                        </div>
+
+                        <div class="row mb-1">
+                          <label
+                            for="bloodType"
+                            class="col-sm-5 col-form-label"
+                            id="ID029"
+                            >BLOOD TYPE</label
+                          >
+                          <div class="col-md-7">
+                            <mat-form-field
+                              style="width: 100%"
+                              appearance="outline"
+                            >
+                              <input
+                                [readonly]="flag === 'VIEW'"
+                                appAlphabetsOnly
+                                matInput="text"
+                                (input)="onInput($event, 40)"
+                                formControlName="bloodType"
+                              />
+                            </mat-form-field>
+                          </div>
+                        </div>
+
+                        <div class="row mb-1">
+                          <label
+                            for="guardianCivilId"
+                            class="col-sm-5 col-form-label"
+                            id="ID029"
+                            >GUARDIAN CIVIL ID</label
+                          >
+                          <div class="col-md-7">
+                            <mat-form-field
+                              style="width: 100%"
+                              appearance="outline"
+                            >
+                              <input
+                                [readonly]="flag === 'VIEW'"
+                                appAlphabetsOnly
+                                matInput="text"
+                                (input)="onInput($event, 40)"
+                                formControlName="guardianCivilId"
+                              />
+                            </mat-form-field>
+                          </div>
+                        </div>
+
+                        <div class="row mb-1">
+                          <label
+                            for="additionalField1"
+                            class="col-sm-5 col-form-label"
+                            id="ID029"
+                            >ADDITIONAL FIELD 1</label
+                          >
+                          <div class="col-md-7">
+                            <mat-form-field
+                              style="width: 100%"
+                              appearance="outline"
+                            >
+                              <input
+                                [readonly]="flag === 'VIEW'"
+                                appAlphabetsOnly
+                                matInput="text"
+                                (input)="onInput($event, 40)"
+                                formControlName="additionalField1"
+                              />
+                            </mat-form-field>
+                          </div>
+                        </div>
+
+                        <div class="row mb-1">
+                          <label
+                            for="additionalField2"
+                            class="col-sm-5 col-form-label"
+                            id="ID029"
+                            >ADDITIONAL FIELD 2</label
+                          >
+                          <div class="col-md-7">
+                            <mat-form-field
+                              style="width: 100%"
+                              appearance="outline"
+                            >
+                              <input
+                                [readonly]="flag === 'VIEW'"
+                                appAlphabetsOnly
+                                matInput="text"
+                                (input)="onInput($event, 40)"
+                                formControlName="additionalField2"
+                              />
+                            </mat-form-field>
+                          </div>
+                        </div>
+
+                        <div class="row mb-1">
+                          <label
+                            for="appVersion"
+                            class="col-sm-5 col-form-label"
+                            id="ID029"
+                            >APP VERSION</label
+                          >
+                          <div class="col-md-7">
+                            <mat-form-field
+                              style="width: 100%"
+                              appearance="outline"
+                            >
+                              <input
+                                [readonly]="flag === 'VIEW'"
+                                appAlphabetsOnly
+                                matInput="text"
+                                (input)="onInput($event, 40)"
+                                formControlName="appVersion"
+                              />
+                            </mat-form-field>
+                          </div>
+                        </div>
+
+                        <div class="row mb-1">
+                          <label
+                            for="passport"
+                            class="col-sm-5 col-form-label"
+                            id="ID029"
+                            >PASSPORT</label
+                          >
+                          <div class="col-md-7">
+                            <mat-form-field
+                              style="width: 100%"
+                              appearance="outline"
+                            >
+                              <input
+                                [readonly]="flag === 'VIEW'"
+                                appAlphabetsOnly
+                                matInput="text"
+                                (input)="onInput($event, 40)"
+                                formControlName="passport"
+                              />
+                            </mat-form-field>
+                          </div>
+                        </div>
+
+                        <div class="row mb-1">
+                          <label
+                            for="connectedReaders"
+                            class="col-sm-5 col-form-label"
+                            id="ID029"
+                            >CONNECTED READERS</label
+                          >
+                          <div class="col-md-7">
+                            <mat-form-field
+                              style="width: 100%"
+                              appearance="outline"
+                            >
+                              <input
+                                [readonly]="flag === 'VIEW'"
+                                appAlphabetsOnly
+                                matInput="text"
+                                (input)="onInput($event, 40)"
+                                formControlName="connectedReaders"
+                              />
+                            </mat-form-field>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </mat-tab>
@@ -3542,7 +4281,7 @@
                         formControlName="saleDate"
                       />
                       <mat-datepicker-toggle
-                      [disabled]="true"
+                        [disabled]="true"
                         matSuffix
                         [for]="saleDate"
                       ></mat-datepicker-toggle>
@@ -3628,11 +4367,12 @@
                   <button
                     type="button"
                     class="btn btn-primary text-center m-2"
-                    (click)="printCustomerLog($event)"
+                    (click)="printCustomerLog()"
                   >
                     Print Customer Log
                   </button>
                   <button
+                    *ngIf="getCustomerDetailsValidation"
                     type="button"
                     class="btn btn-primary text-center m-2"
                     (click)="getCustomerDetails($event)"

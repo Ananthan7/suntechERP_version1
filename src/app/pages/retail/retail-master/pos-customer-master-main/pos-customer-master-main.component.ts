@@ -14,7 +14,11 @@ import {
   ValidationErrors,
   Validators,
 } from "@angular/forms";
-import { NgbActiveModal, NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
+import {
+  NgbActiveModal,
+  NgbModal,
+  NgbModalRef,
+} from "@ng-bootstrap/ng-bootstrap";
 import { MasterSearchModel } from "src/app/shared/data/master-find-model";
 import { CommonServiceService } from "src/app/services/common-service.service";
 import { MatSnackBar } from "@angular/material/snack-bar";
@@ -26,6 +30,7 @@ import Swal from "sweetalert2";
 import { MasterSearchComponent } from "src/app/shared/common/master-search/master-search.component";
 import { MatCheckboxChange } from "@angular/material/checkbox";
 import { ShowTransDetailsComponent } from "./show-trans-details/show-trans-details.component";
+import { PrintCustomerLogComponent } from "./print-customer-log/print-customer-log.component";
 
 @Component({
   selector: "app-pos-customer-master-main",
@@ -70,6 +75,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
   @Input() content!: any;
   @Input() amlNameValidation?: boolean;
   @Input() vocDetails?: any;
+  htmlContentForCustomerLog: string = "";
   genderList: any = [];
   maritalStatusList: any = [];
   nameList: any = [];
@@ -88,7 +94,8 @@ export class PosCustomerMasterMainComponent implements OnInit {
   selectedstateISO2: any;
   cityListData: any;
   amlValidation: any;
-  // Dialog box
+  IDDetailsValidation: boolean = false;
+  getCustomerDetailsValidation: boolean = false;
   dialogBox: any;
   dialogBoxResult: any;
   existCustomerCode: any;
@@ -364,6 +371,46 @@ export class PosCustomerMasterMainComponent implements OnInit {
     twitter: [""],
     instagram: [""],
     prefixAml: [""],
+
+    arabicGender: [""],
+    arabicNationality: [""],
+    issuanceDate: [""],
+    documentNo: [""],
+    serialNo: [""],
+    atr: [""],
+    moiRefIndic: [""],
+    moiReference: [""],
+    district: [""],
+    block: [""],
+    street: [""],
+    buildingNo: [""],
+    unitType: [""],
+    unitNo: [""],
+    floor: [""],
+    bloodType: [""],
+    guardianCivilId: [""],
+    additionalField1: [""],
+    additionalField2: [""],
+    appVersion: [""],
+    passport: [""],
+    connectedReaders: [""],
+
+    eidFest: [""],
+    christmasFest: [""],
+    diwaliFest: [""],
+    nationalDayFest: [""],
+    onamFest: [""],
+    pongalandsankrantiFest: [""],
+    newyearFest: [""],
+
+    johara: [""],
+    farah: [""],
+    jawaher: [""],
+
+    loyaltyCustomerCheck: [""],
+    loyaltyCode: [""],
+    openingLoyaltyPoints: [""],
+    loyaltyPoints: [""],
   });
 
   typeidCodeData: MasterSearchModel = {
@@ -607,6 +654,8 @@ export class PosCustomerMasterMainComponent implements OnInit {
   };
 
   imageName: any;
+  PrivilegeCardData: any;
+  htmlCustomerLog: any;
 
   constructor(
     private modalService: NgbModal,
@@ -620,6 +669,8 @@ export class PosCustomerMasterMainComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.getCustomerDetailsValidation =
+      this.comService.allbranchMaster.POSCUSTDETAILSFROMREADER;
     this.branchCode = this.comService.branchCode;
     this.existCustomerCode = this.content?.CODE;
     this.flag = this.content?.FLAG;
@@ -723,11 +774,11 @@ export class PosCustomerMasterMainComponent implements OnInit {
 
   creditLimitChecker(event: MatCheckboxChange) {
     console.log(event.checked);
-    
+
     this.isCreditLimit = event.checked;
 
-    if(this.isCreditLimit === false) {
-      this.posCustomerMasterMainForm.controls.creditCardLimit.setValue("")
+    if (this.isCreditLimit === false) {
+      this.posCustomerMasterMainForm.controls.creditCardLimit.setValue("");
     }
   }
 
@@ -1165,7 +1216,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
 
   countrySelected(e: any) {
     console.log(e);
-    this.nationalCode = e.CODE
+    this.nationalCode = e.CODE;
     this.stateCode.WHERECONDITION = `TYPES='state master' and COUNTRY_CODE = '${this.nationalCode}'`;
     this.isViewState = true;
     this.posCustomerMasterMainForm.controls.countryCode.setValue(e.CODE);
@@ -1251,11 +1302,13 @@ export class PosCustomerMasterMainComponent implements OnInit {
 
     this.posCustomerMasterMainForm.controls.custIdType.setValue(e.CODE);
 
-    if (this.posCustomerMasterMainForm.value.custIdType === 'PASSPORT') {
-      this.posCustomerMasterMainForm.controls.passport1.setValue(this.posCustomerMasterMainForm.value.custID) 
+    if (this.posCustomerMasterMainForm.value.custIdType === "PASSPORT") {
+      this.posCustomerMasterMainForm.controls.passport1.setValue(
+        this.posCustomerMasterMainForm.value.custID
+      );
     }
-    if (this.posCustomerMasterMainForm.value.custIdType !== 'PASSPORT') {
-      this.posCustomerMasterMainForm.controls.passport1.setValue("") 
+    if (this.posCustomerMasterMainForm.value.custIdType !== "PASSPORT") {
+      this.posCustomerMasterMainForm.controls.passport1.setValue("");
     }
   }
 
@@ -2167,14 +2220,82 @@ export class PosCustomerMasterMainComponent implements OnInit {
     console.log("Got Clicked");
   }
 
-  printPrivilegeCard(event: any) {
-    console.log(event);
-    console.log("Got Clicked");
+  printCustomerLog() {
+    let payload = {
+      SPID: "163",
+      parameter: {
+        STRBRANCHES: "MCC#",
+        STRDATEFROM: "2024-09-01",
+        STRDATETO: "2024-10-23",
+        USERBRANCH: "MOE",
+        USP_ID: "{46DC1FCE-985B-4A39-A0F4-A3218B66FFAD}",
+        Logdata: JSON.stringify({
+          VOCTYPE: "GEN",
+          REFMID: "",
+          USERNAME: "ADMIN",
+          MODE: "PRINT",
+          DATETIME: "2024-10-23T05:22:11.286Z",
+          REMARKS: "",
+          SYSTEMNAME: "",
+          BRANCHCODE: "MOE",
+          VOCNO: "",
+          VOCDATE: "",
+          YEARMONTH: "2024",
+        }),
+      },
+    };
+
+    let API = "ExecueteSPInterface";
+
+    let sub: Subscription = this.apiService
+      .postDynamicAPI(API, payload)
+      .subscribe(
+        (res) => {
+          if (res.status && res.status.trim() === "Success") {
+            if (
+              res.dynamicData &&
+              res.dynamicData[0] &&
+              res.dynamicData[0][0] &&
+              res.dynamicData[0][0].HTMLOUT
+            ) {
+              this.htmlContentForCustomerLog = res.dynamicData[0][0].HTMLOUT;
+
+              const modalRef: NgbModalRef = this.modalService.open(
+                PrintCustomerLogComponent,
+                {
+                  size: "xl",
+                  backdrop: true,
+                  keyboard: false,
+                  windowClass: "modal-dialog-centered modal-dialog-scrollable",
+                }
+              );
+              modalRef.componentInstance.htmlContentForCustomerLog = this.htmlContentForCustomerLog;
+              // modalRef.componentInstance.data = this.content;
+            } else {
+              console.error("HTMLOUT not found in the response");
+            }
+          } else {
+            console.error("API did not return success:", res);
+          }
+        },
+        (error) => {
+          console.error("API call failed:", error);
+        }
+      );
   }
 
-  printCustomerLog(event: any) {
-    console.log(event);
-    console.log("Got Clicked");
+  // Declare a class variable to hold the HTML content
+
+  printPrivilegeCard(event: any) {
+    let API = `PrivilegeCustomerNetSalesSummary/GetUspRptCustomerPrivilegeCardNet/${this.existCustomerCode}`;
+    let sub: Subscription = this.apiService
+      .getDynamicAPI(API)
+      .subscribe((res) => {
+        if (res.status.trim() === "Success") {
+          this.PrivilegeCardData = res.dynamicData[0];
+          console.log(this.PrivilegeCardData);
+        }
+      });
   }
 
   getCustomerDetails(event: any) {
@@ -2610,8 +2731,6 @@ export class PosCustomerMasterMainComponent implements OnInit {
     }
   }
 
-
-
   setPassport(event: any) {
     if (
       this.posCustomerMasterMainForm.controls["custIdType"].value === "PASSPORT"
@@ -2622,20 +2741,18 @@ export class PosCustomerMasterMainComponent implements OnInit {
     }
   }
 
-
-
   openShowTransdetails() {
-
     const modalRef: NgbModalRef = this.modalService.open(
       ShowTransDetailsComponent,
       {
         size: "xl",
         backdrop: true,
         keyboard: false,
-        windowClass: 'modal-dialog-centered modal-dialog-scrollable',
+        windowClass: "modal-dialog-centered modal-dialog-scrollable",
       }
     );
-    // modalRef.componentInstance.receiptData = { ...data };
+    modalRef.componentInstance.customerCode = this.existCustomerCode;
+    modalRef.componentInstance.data = this.content;
     // modalRef.componentInstance.queryParams = { isViewOnly: this.viewOnly };
     // if (date) {
     //   modalRef.componentInstance.delivery_date = date._d;
@@ -2647,5 +2764,15 @@ export class PosCustomerMasterMainComponent implements OnInit {
     //     this.handlePostData(postData);
     //   }
     // });
+  }
+
+  IDDetailsEnable() {
+    if (
+      (this.comService.allbranchMaster?.POSCUSTDETAILSFROMREADER === true &&
+        this.posCustomerMasterMainForm.value.countryCode === "KWT") ||
+      "KW"
+    ) {
+      this.IDDetailsValidation = true;
+    }
   }
 }

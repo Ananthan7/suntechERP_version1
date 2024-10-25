@@ -153,7 +153,7 @@
               <mat-form-field appearance="outline" style="width: 100%">
                 <input type="text" matInput (change)="triggerCustomerEntry($event)"
                   formControlName="fcn_customer_code" />
-                <master-search [MasterSearchData]="customerCodeData" (newRowClick)="triggerCustomerMasterSearch($event)"
+                <master-search *ngIf="!viewOnly" [MasterSearchData]="customerCodeData" (newRowClick)="triggerCustomerMasterSearch($event)"
                   class="masterSearch"></master-search>
 
               </mat-form-field>

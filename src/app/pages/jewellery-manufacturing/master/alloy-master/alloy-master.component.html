@@ -16,17 +16,17 @@
             <div class="container-fluid pt-3">
                 <div class="check_radio_btn">
                     <div class="row">
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <div class="row mb-1">
-                                <label for="input" id="ID001" class="col-sm-5 col-form-label">Code *
+                                <label for="input" id="ID001" class="col-sm-6 col-form-label">Code *
                                     :</label>
-                                <div class="col-sm-7">
+                                <div class="col-sm-6">
                                     <mat-form-field style="width: 100%" appearance="outline">
                                         <input type="text" id="code" matInput (focusout)="checkCodeExists($event)"
                                             formControlName="code" [readonly]="viewMode || editMode"
                                             [disabled]="viewMode" UpperCaseDirective autocomplete="off"
                                             (keydown)="lookupKeyPress($event,'code')" />
-                                        <master-search class="mstrScrch" *ngIf="!editMode && !viewMode"
+                                        <master-search class="masterSearch" *ngIf="!editMode && !viewMode"
                                             [MasterSearchData]="codeData" #overlaycodeSearch
                                             (newRowClick)="codeSelected($event)"></master-search>
                                     </mat-form-field>
@@ -34,90 +34,90 @@
                                 </div>
                             </div>
                             <div class="row mb-1">
-                                <label for="input" id="ID002" class="col-sm-5 col-form-label">Cost Center
+                                <label for="input" id="ID002" class="col-sm-6 col-form-label">Cost Center
                                     * :</label>
-                                <div class="col-sm-7">
+                                <div class="col-sm-6">
                                     <mat-form-field style="width: 100%" appearance="outline">
                                         <input type="text" matInput formControlName="costCenter" [readonly]="viewMode"
                                             UpperCaseDirective
                                             (focusout)="validateLookupField($event,costCenterData,'costCenter')"
                                             (keydown)="lookupKeyPress($event,'costCenter')" />
-                                        <master-search class="mstrScrch" *ngIf="!viewMode"
+                                        <master-search class="masterSearch" *ngIf="!viewMode"
                                             [MasterSearchData]="costCenterData" #overlaycostCenterSearch
                                             (newRowClick)="costCenterSelected($event)"></master-search>
                                     </mat-form-field>
                                 </div>
                             </div>
                             <div class="row mb-1">
-                                <label for="input" id="ID003" class="col-sm-5 col-form-label">Type
+                                <label for="input" id="ID003" class="col-sm-6 col-form-label">Type
                                     :</label>
-                                <div class="col-sm-7">
+                                <div class="col-sm-6">
                                     <mat-form-field style="width: 100%" appearance="outline">
                                         <input type="text" matInput formControlName="type" UpperCaseDirective
                                             [readonly]="viewMode"
                                             (focusout)="validateLookupField($event,typeCodeData,'type')"
                                             (keydown)="lookupKeyPress($event,'type')" />
-                                        <master-search class="mstrScrch" *ngIf="!viewMode"
+                                        <master-search class="masterSearch" *ngIf="!viewMode"
                                             [MasterSearchData]="typeCodeData" #overlaytypeSearch
                                             (newRowClick)="typeCodeSelected($event)"></master-search>
                                     </mat-form-field>
                                 </div>
                             </div>
                             <div class="row mb-1">
-                                <label for="input" id="ID004" class="col-sm-5 col-form-label">Category
+                                <label for="input" id="ID004" class="col-sm-6 col-form-label">Category
                                     :</label>
-                                <div class="col-sm-7">
+                                <div class="col-sm-6">
                                     <mat-form-field style="width: 100%" appearance="outline">
                                         <input type="text" matInput formControlName="category" UpperCaseDirective
                                             [readonly]="viewMode"
                                             (focusout)="validateLookupField($event,categoryCodeData,'category')"
                                             (keydown)="lookupKeyPress($event,'category')" />
-                                        <master-search *ngIf="!viewMode" class="mstrScrch"
+                                        <master-search *ngIf="!viewMode" class="masterSearch"
                                             [MasterSearchData]="categoryCodeData" #overlaycategorySearch
                                             (newRowClick)="categoryCodeSelected($event)"></master-search>
                                     </mat-form-field>
                                 </div>
                             </div>
                             <div class="row mb-1">
-                                <label for="input" id="ID005" class="col-sm-5 col-form-label">Sub Category
+                                <label for="input" id="ID005" class="col-sm-6 col-form-label">Sub Category
                                     :</label>
-                                <div class="col-sm-7">
+                                <div class="col-sm-6">
                                     <mat-form-field style="width: 100%" appearance="outline">
                                         <input type="text" matInput formControlName="subCategory" UpperCaseDirective
                                             [readonly]="viewMode"
                                             (focusout)="validateLookupField($event,subcategoryCodeData,'subCategory')"
                                             (keydown)="lookupKeyPress($event,'subCategory')" />
-                                        <master-search class="mstrScrch" *ngIf="!viewMode"
+                                        <master-search class="masterSearch" *ngIf="!viewMode"
                                             [MasterSearchData]="subcategoryCodeData" #overlaysubCategorySearch
                                             (newRowClick)="subcategoryCodeSelected($event)"></master-search>
                                     </mat-form-field>
                                 </div>
                             </div>
                             <div class="row mb-1">
-                                <label for="input" id="ID006" class="col-sm-5 col-form-label">Brand
+                                <label for="input" id="ID006" class="col-sm-6 col-form-label">Brand
                                     :</label>
-                                <div class="col-sm-7">
+                                <div class="col-sm-6">
                                     <mat-form-field style="width: 100%" appearance="outline">
                                         <input type="text" matInput formControlName="brand" UpperCaseDirective
                                             [readonly]="viewMode"
                                             (focusout)="validateLookupField($event,BrandCodeData,'brand')"
                                             (keydown)="lookupKeyPress($event,'brand')" />
-                                        <master-search *ngIf="!viewMode" class="mstrScrch"
+                                        <master-search *ngIf="!viewMode" class="masterSearch"
                                             [MasterSearchData]="BrandCodeData" #overlaybrandSearch
                                             (newRowClick)="brandCodeSelected($event)"></master-search>
                                     </mat-form-field>
                                 </div>
                             </div>
                             <div class="row mb-1">
-                                <label for="input" id="ID007" class="col-sm-5 col-form-label">Color
+                                <label for="input" id="ID007" class="col-sm-6 col-form-label">Color
                                     :</label>
-                                <div class="col-sm-7">
+                                <div class="col-sm-6">
                                     <mat-form-field style="width: 100%" appearance="outline">
                                         <input type="text" matInput formControlName="color" [readonly]="viewMode"
                                             UpperCaseDirective
                                             (focusout)="validateLookupField($event,colorData,'color')"
                                             (keydown)="lookupKeyPress($event,'color')" />
-                                        <master-search *ngIf="!viewMode" class="mstrScrch"
+                                        <master-search *ngIf="!viewMode" class="masterSearch"
                                             [MasterSearchData]="colorData" #overlaycolorSearch
                                             (newRowClick)="colorDataSelected($event)">
                                         </master-search>
@@ -166,7 +166,7 @@
                                             [readonly]="viewMode" UpperCaseDirective
                                             (focusout)="validateLookupField($event,vendorCodeData,'vendor')"
                                             (keydown)="lookupKeyPress($event,'vendor')" />
-                                        <master-search *ngIf="!viewMode" class="mstrScrch"
+                                        <master-search *ngIf="!viewMode" class="masterSearch"
                                             [MasterSearchData]="vendorCodeData" #overlayvendorSearch
                                             (newRowClick)="vendorCodeSelected($event)"></master-search>
                                     </mat-form-field>
@@ -234,24 +234,22 @@
                                             [for]="lasttransaction"></mat-datepicker-toggle>
                                         <mat-datepicker [startAt]="currentDate" #lasttransaction
                                             [disabled]="true"></mat-datepicker>
-                                        <!-- <input type="text" matInput
-                                            formControlName="lasttransaction" [readonly]="true"/> -->
                                     </mat-form-field>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="col-md-5">
+                        <div class="col-md-6">
                             <div class="row mb-1">
                                 <label for="input" id="ID018" class="col-sm-4 col-form-label">Currency *
                                     :</label>
                                 <div class="col-sm-4 flexbox">
-                                    <mat-form-field style="width: 80%" appearance="outline" class="stretch">
+                                    <mat-form-field style="width: 100%" appearance="outline" class="stretch">
                                         <input type="text" matInput readonly formControlName="currency"
                                             [readonly]="viewMode"
                                             (focusout)="validateLookupField($event,currencyCodeData,'currency')"
                                             (keydown)="lookupKeyPress($event,'currency')" />
-                                        <master-search *ngIf="!viewMode" class="mstrScrch"
+                                        <master-search *ngIf="!viewMode" class="masterSearch"
                                             [MasterSearchData]="currencyCodeData" #overlaycurrencySearch
                                             (newRowClick)="currencyDataSelected($event, 'weightAvgCostFC')">
                                         </master-search>
@@ -297,7 +295,7 @@
                                             <input type="text" matInput [readonly]="viewMode" formControlName="priceScheme"
                                             (focusout)="resetAllPriceDetails()"/>
                                             <master-search *ngIf="!viewMode && alloyMastereForm.value.weightAvgCostLC"
-                                                [MasterSearchData]="priceSchemeData" class="mstrScrch"
+                                                [MasterSearchData]="priceSchemeData" class="masterSearch"
                                                 (newRowClick)="priceSchemeValidate($event)">
                                             </master-search>
                                         </mat-form-field>
@@ -409,7 +407,7 @@
                                             (keydown)="lookupKeyPress($event,'price3code')" />
                                         <master-search *ngIf="!viewMode && alloyMastereForm.value.weightAvgCostLC"
                                             [MasterSearchData]="priceCodeData" #overlayprice3codeSearch
-                                            class="mstrScrch"
+                                            class="masterSearch"
                                             (newRowClick)="priceThreeCodeSelected($event)"></master-search>
                                     </mat-form-field>
 
@@ -446,7 +444,7 @@
                                             (keydown)="lookupKeyPress($event,'price4code')" />
                                         <master-search *ngIf="!viewMode && alloyMastereForm.value.weightAvgCostLC"
                                             [MasterSearchData]="priceCodeData" #overlayprice4codeSearch
-                                            class="mstrScrch"
+                                            class="masterSearch"
                                             (newRowClick)="priceFourCodeSelected($event)"></master-search>
                                     </mat-form-field>
 
@@ -483,7 +481,7 @@
                                             (keydown)="lookupKeyPress($event,'price5code')" />
                                         <master-search *ngIf="!viewMode && alloyMastereForm.value.weightAvgCostLC"
                                             [MasterSearchData]="priceCodeData" #overlayprice5codeSearch
-                                            class="mstrScrch"
+                                            class="masterSearch"
                                             (newRowClick)="priceFiveCodeSelected($event)"></master-search>
                                     </mat-form-field>
 
@@ -518,7 +516,7 @@
                                             UpperCaseDirective
                                             (focusout)="validateLookupField($event,HSNCodeData,'hsncode')"
                                             (keydown)="lookupKeyPress($event,'hsncode')" />
-                                        <master-search *ngIf="!viewMode" class="mstrScrch"
+                                        <master-search *ngIf="!viewMode" class="masterSearch"
                                             [MasterSearchData]="HSNCodeData" #overlayhsncodeSearch
                                             (newRowClick)="HSNCenterSelected($event)"></master-search>
                                     </mat-form-field>
@@ -526,22 +524,7 @@
                             </div>
                         </div>
 
-                        <!-- <div class="col-md-1">
-                            <div class="upload-btn-wrapper">
-                                <button class="btn btnnew" id="ID032" [disabled]="viewMode">
-                                    Item Image
-                                </button>
-                                <input type="file" name="uploadproduct" formControlName="picture_name"
-                                    accept=".png, .jpg, .jpeg" #fileInput class="uploadproduct" [disabled]="viewMode"
-                                    (change)="onFileChanged($event)" />
-                            </div>
-
-                            <div class="image_box">
-                                <div class="img_box">
-                                    <img src="{{ image }}" style="width: 209px; height: 163px" />
-                                </div>
-                            </div>
-                        </div> -->
+                      
                         <div class="col-md-1">
                             <div class="upload-btn-wrapper">
                                 <button class="btn btnnew" id="ID032" style="width:125px" [disabled]="viewMode">

@@ -76,9 +76,9 @@
               <div class="col-md-3">
                 <mat-form-field appearance="outline" style="width: 100%;">
                   <input type="text" matInput formControlName="UNQ_JOB_ID"
-                    UpperCaseDirective [readonly]="viewMode" id="UNQ_JOB_ID" 
+                    UpperCaseDirective [readonly]="viewMode" id="UNQ_JOB_ID"
                     (keydown)="lookupKeyPress($event,'UNQ_JOB_ID')"
-                    (change)="subJobNumberValidate($event)"/>
+                    (change)="subJobNumberValidate($event)" />
                   <master-search class="masterSearch"
                     [MasterSearchData]="subJobNoSearch"
                     *ngIf="!viewMode" #overlaySubjobNoSearch
@@ -156,103 +156,111 @@
                       <th>From</th>
                       <th>To</th>
                     </tr>
-                    <tr>
-                      <th>Process</th>
-                      <td>
-                        <div class="d-flex">
-                          <mat-form-field appearance="outline"
-                            style="width: 110px;">
-                            <input type="text" matInput UpperCaseDirective
-                              (keydown)="lookupKeyPress($event,'FRM_PROCESS_CODE')"
-                              (focusout)="fromProcesscodeValidate($event)"
-                              formControlName="FRM_PROCESS_CODE"
-                              (input)="fromProcesscodeInputChange()"
-                              [readonly]="viewMode" />
-                            <mat-error
-                              *ngIf="processTransferdetailsForm.controls.FRM_PROCESS_CODE.touched 
+                    <ng-container *ngTemplateOutlet="processWorkerOrder() ? processTemplate : workerTemplate">
+                    </ng-container>
+                    <ng-container *ngTemplateOutlet="processWorkerOrder() ? workerTemplate : processTemplate">
+                    </ng-container>
+                    <ng-template #processTemplate>
+                      <tr>
+                        <th>Process</th>
+                        <td>
+                          <div class="d-flex">
+                            <mat-form-field appearance="outline"
+                              style="width: 110px;">
+                              <input type="text" matInput UpperCaseDirective
+                                (keydown)="lookupKeyPress($event,'FRM_PROCESS_CODE')"
+                                (focusout)="fromProcesscodeValidate($event)"
+                                formControlName="FRM_PROCESS_CODE"
+                                (input)="fromProcesscodeInputChange()"
+                                [readonly]="viewMode" />
+                              <mat-error
+                                *ngIf="processTransferdetailsForm.controls.FRM_PROCESS_CODE.touched 
                               && processTransferdetailsForm.controls.FRM_PROCESS_CODE.hasError('required')">
-                              code is required
-                            </mat-error>
-                            <master-search class="masterSearch"
-                              *ngIf="!viewMode" #fromProcessMasterOverlay
-                              [MasterSearchData]="fromProcessMasterSearch"
-                              (newRowClick)="processCodeFromSelected($event)">
-                            </master-search>
-                          </mat-form-field>
-                        </div>
-                      </td>
-                      <td>
-                        <div class="d-flex">
-                          <mat-form-field appearance="outline"
-                            style="width: 110px;">
-                            <input type="text" matInput [readonly]="viewMode"
-                              UpperCaseDirective id="TO_PROCESS_CODE"
-                              (keydown)="lookupKeyPress($event,'TO_PROCESS_CODE')"
-                              (focusout)="toProcesscodeValidate($event)"
-                              formControlName="TO_PROCESS_CODE" />
-                            <mat-error
-                              *ngIf="processTransferdetailsForm.controls.TO_PROCESS_CODE.touched 
+                                code is required
+                              </mat-error>
+                              <master-search class="masterSearch"
+                                *ngIf="!viewMode" #fromProcessMasterOverlay
+                                [MasterSearchData]="fromProcessMasterSearch"
+                                (newRowClick)="processCodeFromSelected($event)">
+                              </master-search>
+                            </mat-form-field>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="d-flex">
+                            <mat-form-field appearance="outline"
+                              style="width: 110px;">
+                              <input type="text" matInput [readonly]="viewMode"
+                                UpperCaseDirective id="TO_PROCESS_CODE"
+                                (keydown)="lookupKeyPress($event,'TO_PROCESS_CODE')"
+                                (focusout)="toProcesscodeValidate($event)"
+                                formControlName="TO_PROCESS_CODE" />
+                              <mat-error
+                                *ngIf="processTransferdetailsForm.controls.TO_PROCESS_CODE.touched 
                               && processTransferdetailsForm.controls.TO_PROCESS_CODE.hasError('required')">
-                              code is required
-                            </mat-error>
-                            <master-search class="masterSearch"
-                              *ngIf="!viewMode" #toProcessMasterOverlay
-                              [MasterSearchData]="toProcessMasterSearch"
-                              (newRowClick)="processCodeToSelected($event)">
-                            </master-search>
-                          </mat-form-field>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Worker</th>
-                      <td>
-                        <div class="d-flex">
-                          <mat-form-field appearance="outline"
-                            style="width: 110px;">
-                            <input type="text" matInput [readonly]="viewMode"
-                              UpperCaseDirective id="FRM_WORKER_CODE"
-                              (keydown)="lookupKeyPress($event,'FRM_WORKER_CODE')"
-                              (focusout)="fromWorkercodeValidate($event)"
-                              (input)="fromWorkercodeInputChange()"
-                              formControlName="FRM_WORKER_CODE" />
-                            <mat-error
-                              *ngIf="processTransferdetailsForm.controls.FRM_WORKER_CODE.touched 
+                                code is required
+                              </mat-error>
+                              <master-search class="masterSearch"
+                                *ngIf="!viewMode" #toProcessMasterOverlay
+                                [MasterSearchData]="toProcessMasterSearch"
+                                (newRowClick)="processCodeToSelected($event)">
+                              </master-search>
+                            </mat-form-field>
+                          </div>
+                        </td>
+                      </tr>
+                    </ng-template>
+                    <ng-template #workerTemplate>
+                      <tr>
+                        <th>Worker</th>
+                        <td>
+                          <div class="d-flex">
+                            <mat-form-field appearance="outline"
+                              style="width: 110px;">
+                              <input type="text" matInput [readonly]="viewMode"
+                                UpperCaseDirective id="FRM_WORKER_CODE"
+                                (keydown)="lookupKeyPress($event,'FRM_WORKER_CODE')"
+                                (focusout)="fromWorkercodeValidate($event)"
+                                (input)="fromWorkercodeInputChange()"
+                                formControlName="FRM_WORKER_CODE" />
+                              <mat-error
+                                *ngIf="processTransferdetailsForm.controls.FRM_WORKER_CODE.touched 
                               && processTransferdetailsForm.controls.FRM_WORKER_CODE.hasError('required')">
-                              code is required
-                            </mat-error>
-                            <master-search class="masterSearch"
-                              *ngIf="!viewMode" #fromWorkerMasterOverley
-                              [MasterSearchData]="fromWorkerMasterSearch"
-                              (newRowClick)="workerCodeFromSelected($event)">
-                            </master-search>
-                          </mat-form-field>
-                        </div>
-                      </td>
-                      <td>
-                        <div class="d-flex">
-                          <mat-form-field appearance="outline"
-                            style="width: 110px;">
-                            <input type="text" matInput [readonly]="viewMode"
-                              UpperCaseDirective id="TO_WORKER_CODE"
-                              (keydown)="lookupKeyPress($event,'TO_WORKER_CODE')"
-                              (focusout)="toWorkercodeValidate($event)"
-                              formControlName="TO_WORKER_CODE" />
-                            <mat-error
-                              *ngIf="processTransferdetailsForm.controls.TO_WORKER_CODE.touched 
+                                code is required
+                              </mat-error>
+                              <master-search class="masterSearch"
+                                *ngIf="!viewMode" #fromWorkerMasterOverley
+                                [MasterSearchData]="fromWorkerMasterSearch"
+                                (newRowClick)="workerCodeFromSelected($event)">
+                              </master-search>
+                            </mat-form-field>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="d-flex">
+                            <mat-form-field appearance="outline"
+                              style="width: 110px;">
+                              <input type="text" matInput [readonly]="viewMode"
+                                UpperCaseDirective id="TO_WORKER_CODE"
+                                (keydown)="lookupKeyPress($event,'TO_WORKER_CODE')"
+                                (focusout)="toWorkercodeValidate($event)"
+                                formControlName="TO_WORKER_CODE" />
+                              <mat-error
+                                *ngIf="processTransferdetailsForm.controls.TO_WORKER_CODE.touched 
                               && processTransferdetailsForm.controls.TO_WORKER_CODE.hasError('required')">
-                              code is required
-                            </mat-error>
-                            <master-search class="masterSearch"
-                              *ngIf="!viewMode" #overlayToWorker
-                              [MasterSearchData]="toWorkerMasterSearch"
-                              (newRowClick)="workerCodeToSelected($event)">
-                            </master-search>
-                          </mat-form-field>
+                                code is required
+                              </mat-error>
+                              <master-search class="masterSearch"
+                                *ngIf="!viewMode" #toWorkerMasterOverley
+                                [MasterSearchData]="toWorkerMasterSearch"
+                                (newRowClick)="workerCodeToSelected($event)">
+                              </master-search>
+                            </mat-form-field>
 
-                        </div>
-                      </td>
-                    </tr>
+                          </div>
+                        </td>
+                      </tr>
+                    </ng-template>
                     <tr>
                       <td>Metal Pcs</td>
                       <td>
@@ -566,7 +574,7 @@
                       <div class="col-sm-7">
                         <mat-form-field appearance="outline"
                           style="width: 100%">
-                          <input matInput DateValidation 
+                          <input matInput DateValidation
                             [matDatepicker]="end" formControlName="enddate"
                             placeholder="DD/MM/YYYY" [min]="minEndDate" />
                           <mat-datepicker-toggle matSuffix
@@ -793,10 +801,10 @@
                             style="width: 130px;">
                             <input type="text" matInput
                               (keydown)="lookupKeyPress($event,'METAL_FRM_WORKER_CODE')"
-                              formControlName="METAL_FRM_WORKER_CODE" 
+                              formControlName="METAL_FRM_WORKER_CODE"
                               id="METAL_FRM_WORKER_CODE"
                               (input)="fromWorkercodeInputChange()"
-                              (focusout)="fromWorkercodeValidate($event)"/>
+                              (focusout)="fromWorkercodeValidate($event)" />
                             <master-search class="masterSearch"
                               *ngIf="!viewMode" #MetalfromWorkerMasterOverley
                               [MasterSearchData]="fromWorkerMasterSearch"
@@ -816,7 +824,7 @@
                               id="METAL_TO_WORKER_CODE"
                               (focusout)="toWorkercodeValidate($event)" />
                             <master-search class="masterSearch"
-                              *ngIf="!viewMode" #MetaloverlayToWorker
+                              *ngIf="!viewMode" #MetaltoWorkerMasterOverley
                               [MasterSearchData]="toWorkerMasterSearch"
                               (newRowClick)="metalworkerCodeToSelected($event)">
                             </master-search>
@@ -830,8 +838,8 @@
                             UpperCaseDirective
                             (keydown)="lookupKeyPress($event,'METAL_ScrapLocCode')"
                             (change)="locationCodeValidate($event)"
-                            formControlName="METAL_ScrapLocCode" 
-                            id="METAL_ScrapLocCode"/>
+                            formControlName="METAL_ScrapLocCode"
+                            id="METAL_ScrapLocCode" />
                           <master-search class="masterSearch"
                             #overleyLocation
                             [MasterSearchData]="locationSearch"
@@ -865,11 +873,11 @@
                           <input type="text" matInput
                             UpperCaseDirective
                             (keydown)="lookupKeyPress($event,'METAL_ToStockCode')"
-                            (focusout)="MToStockCode_Validating()"
+                            (focusout)="MToStockCode_Validating($event)"
                             id="METAL_ToStockCode"
                             formControlName="METAL_ToStockCode" />
                           <master-search class="masterSearch"
-                            *ngIf="!viewMode"
+                            *ngIf="!viewMode" #METAL_ToStockCodeOverley
                             [MasterSearchData]="metalScrapStockCode"
                             (newRowClick)="metalToStockCodeSelected($event)">
                           </master-search>
@@ -1136,7 +1144,7 @@
                         </mat-form-field> -->
                         <mat-form-field appearance="outline"
                           style="width: 100%">
-                          <input matInput DateValidation 
+                          <input matInput DateValidation
                             (dateChange)="onStartDateChange()"
                             [matDatepicker]="start" formControlName="startdate"
                             placeholder="DD/MM/YYYY" />
@@ -1152,7 +1160,7 @@
                       <div class="col-sm-7">
                         <mat-form-field appearance="outline"
                           style="width: 100%">
-                          <input matInput DateValidation 
+                          <input matInput DateValidation
                             [matDatepicker]="end" formControlName="enddate"
                             placeholder="DD/MM/YYYY" [min]="minEndDate" />
                           <mat-datepicker-toggle matSuffix
