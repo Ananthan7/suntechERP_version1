@@ -2833,7 +2833,7 @@ export class PointOfSalesOrderComponent implements OnInit {
 
       this.dialogBox.afterClosed().subscribe((action: any) => {
         if (action == 'Yes') {
-
+          this.editLineItem=false;
           this.modalReference.dismiss();
 
         }
@@ -7799,9 +7799,18 @@ export class PointOfSalesOrderComponent implements OnInit {
       if (this.divisionMS == 'M') this.renderer.selectRootElement('#fcn_li_total_amount')?.select();
 
       if(this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt) === 0 &&
-      this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_rate) === 0 )
+      this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_rate) === 0 &&this.itemDivision!=='L'){
 
       this.renderer.selectRootElement('#fcn_li_gross_wt')?.select();
+
+      }
+
+      else if(this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt) === 0 &&
+      this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_rate) === 0 && this.itemDivision==='L'){
+
+        this.renderer.selectRootElement('#fcn_li_rate')?.select();
+
+      }
 
       else{
         this.renderer.selectRootElement('#fcn_li_net_amount')?.select();
@@ -7885,6 +7894,8 @@ export class PointOfSalesOrderComponent implements OnInit {
                     this.snackBar.open('Stock Already Exists', 'OK', {
                       duration: 2000
                     });
+                    this.lineItemForm.controls.fcn_li_item_code.setValue('');
+                    this.renderer.selectRootElement('#fcn_li_item_code').focus();
                     return;
                   }
 
@@ -11574,8 +11585,8 @@ export class PointOfSalesOrderComponent implements OnInit {
         !argsData.isDiscoutStored ? this.updateDiscountAmount() : null;
 
       this.calculateTaxAmount();
-      this.calculateNetAmount();
-    }
+      if(!this.isNetAmountChange)
+        this.calculateNetAmount();    }
     this.lineItemCommaSeparation();
 
   }
