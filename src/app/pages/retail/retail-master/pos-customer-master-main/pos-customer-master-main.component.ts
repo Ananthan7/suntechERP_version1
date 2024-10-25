@@ -31,6 +31,7 @@ import { MasterSearchComponent } from "src/app/shared/common/master-search/maste
 import { MatCheckboxChange } from "@angular/material/checkbox";
 import { ShowTransDetailsComponent } from "./show-trans-details/show-trans-details.component";
 import { PrintCustomerLogComponent } from "./print-customer-log/print-customer-log.component";
+import { PrintPrivilegeCardComponent } from "./print-privilege-card/print-privilege-card.component";
 
 @Component({
   selector: "app-pos-customer-master-main",
@@ -656,6 +657,9 @@ export class PosCustomerMasterMainComponent implements OnInit {
   imageName: any;
   PrivilegeCardData: any;
   htmlCustomerLog: any;
+  loyaltyCode: any;
+  isLoyaltyVisible: boolean = true;
+  htmlContentForPrivilege: any;
 
   constructor(
     private modalService: NgbModal,
@@ -669,8 +673,9 @@ export class PosCustomerMasterMainComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.loyaltyCode = this.comService.allbranchMaster?.LOYALTY_CODE;
     this.getCustomerDetailsValidation =
-      this.comService.allbranchMaster.POSCUSTDETAILSFROMREADER;
+      this.comService.allbranchMaster?.POSCUSTDETAILSFROMREADER;
     this.branchCode = this.comService.branchCode;
     this.existCustomerCode = this.content?.CODE;
     this.flag = this.content?.FLAG;
@@ -683,6 +688,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
     this.countryList();
     this.getDropDownStatus();
     console.log(this.nameList);
+    // this.loyaltyDetailsVisiblity();
 
     this.posCustomerMasterMainForm.controls["createdBranch"].disable();
     this.fetchImage();
@@ -788,6 +794,8 @@ export class PosCustomerMasterMainComponent implements OnInit {
     }
     if (FLAG === "EDIT") {
       this.editController();
+    } else if (this.content.FLAG == "DELETE") {
+      this.deleteCustomerMaster();
     }
   }
 
@@ -2269,7 +2277,8 @@ export class PosCustomerMasterMainComponent implements OnInit {
                   windowClass: "modal-dialog-centered modal-dialog-scrollable",
                 }
               );
-              modalRef.componentInstance.htmlContentForCustomerLog = this.htmlContentForCustomerLog;
+              modalRef.componentInstance.htmlContentForCustomerLog =
+                this.htmlContentForCustomerLog;
               // modalRef.componentInstance.data = this.content;
             } else {
               console.error("HTMLOUT not found in the response");
@@ -2284,18 +2293,51 @@ export class PosCustomerMasterMainComponent implements OnInit {
       );
   }
 
-  // Declare a class variable to hold the HTML content
+  printPrivilegeCard() {
+    let payload = {
+      SPID: "162",
+      parameter: {
+        strCertCode: "BD36798",
+      },
+    };
 
-  printPrivilegeCard(event: any) {
-    let API = `PrivilegeCustomerNetSalesSummary/GetUspRptCustomerPrivilegeCardNet/${this.existCustomerCode}`;
+    let API = "ExecueteSPInterface";
+
     let sub: Subscription = this.apiService
-      .getDynamicAPI(API)
-      .subscribe((res) => {
-        if (res.status.trim() === "Success") {
-          this.PrivilegeCardData = res.dynamicData[0];
-          console.log(this.PrivilegeCardData);
+      .postDynamicAPI(API, payload)
+      .subscribe(
+        (res) => {
+          if (res.status && res.status.trim() === "Success") {
+            if (
+              res.dynamicData &&
+              res.dynamicData[0] &&
+              res.dynamicData[0][0] &&
+              res.dynamicData[0][0].HTMLOUT
+            ) {
+              this.htmlContentForPrivilege = res.dynamicData[0][0].HTMLOUT;
+
+              const modalRef: NgbModalRef = this.modalService.open(
+                PrintPrivilegeCardComponent,
+                {
+                  size: "xl",
+                  backdrop: true,
+                  keyboard: false,
+                  windowClass: "modal-dialog-centered modal-dialog-scrollable",
+                }
+              );
+              modalRef.componentInstance.htmlContentForPrivilege =
+                this.htmlContentForPrivilege;
+            } else {
+              console.error("HTMLOUT not found in the response");
+            }
+          } else {
+            console.error("API did not return success:", res);
+          }
+        },
+        (error) => {
+          console.error("API call failed:", error);
         }
-      });
+      );
   }
 
   getCustomerDetails(event: any) {
@@ -2636,7 +2678,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
     });
   }
 
-  deleteProcessMaster() {
+  deleteCustomerMaster() {
     if (this.content && this.content.FLAG == "VIEW") return;
     this.showConfirmationDialog().then((result) => {
       if (result.isConfirmed) {
@@ -2774,5 +2816,60 @@ export class PosCustomerMasterMainComponent implements OnInit {
     ) {
       this.IDDetailsValidation = true;
     }
+  }
+
+  // loyaltyDetailsVisiblity() {
+
+  //   console.log();
+
+  //   if (this.loyaltyCode !== "") {
+  //     this.isLoyaltyVisible = true;
+  //   }
+  // }
+
+  updateLoyaltyPoints() {
+    let payload = {
+      REFMID: 0,
+      BRANCH_CODE: this.branchCode,
+      VOCTYPE: this.vocDetails?.VOCTYPE || "",
+      VOCNO: this.vocDetails?.VOCNO || "",
+      YEARMONTH: this.vocDetails?.YEARMONTH || "",
+      LOYALTY_CODE: this.posCustomerMasterMainForm.value.loyaltyCode || "",
+      SALE_WT: 0,
+      LOYALTY_WT: 0,
+      REDEEM_WT: 0,
+      CUSTOMER_CODE: this.generatedCustomerCode
+        ? this.generatedCustomerCode
+        : this.existCustomerCode || "",
+      MID: 0,
+      REDEEM_MID: 0,
+      SALE_AMT: 0,
+      LOYALTY_POINTS: Number(
+        this.posCustomerMasterMainForm.value.openingLoyaltyPoints
+      ),
+      REDEEM_POINTS: 0,
+      REDEEM_AMT: 0,
+      LOYALTY_AMT: 0,
+      LTVOCDATE: "2024-10-25T06:58:45.374Z",
+      EXPIRE_DATE: "2024-10-25T06:58:45.374Z",
+      ALLOCATE_POINTS: 0,
+      PENDING_POINTS: 0,
+    };
+
+    let API = `LoyaltyTrans/UpdateLoyaltyOpeningPOSCustMaster`;
+
+    let sub: Subscription = this.apiService
+      .postDynamicAPI(API, payload)
+      .subscribe((res) => {
+        if (res.status === "Success") {
+          Swal.fire({
+            title: "Success",
+            text: "Customer Loyalty Points Updated!",
+            icon: "success",
+            confirmButtonColor: "#336699",
+            confirmButtonText: "Ok",
+          });
+        }
+      });
   }
 }
