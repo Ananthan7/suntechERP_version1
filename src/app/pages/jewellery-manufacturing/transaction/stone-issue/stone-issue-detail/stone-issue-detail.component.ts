@@ -193,6 +193,7 @@ export class StoneIssueDetailComponent implements OnInit {
     CURRENCY_RATE: [''],
     FLAG: [null]
   });
+  userId: any;
 
 
   constructor(
@@ -231,7 +232,7 @@ export class StoneIssueDetailComponent implements OnInit {
       this.setFormValues()
     }
   }
-  
+
   setFormValues() {
     if (!this.content) return
     console.log(this.content, 'view&edit')
@@ -649,7 +650,7 @@ export class StoneIssueDetailComponent implements OnInit {
     this.saveDetail.emit(dataToparent);
     if (flag == 'CONTINUE') {
       this.resetStockDetails()
-     
+
     }
   }
   changeJobClicked() {
@@ -665,7 +666,7 @@ export class StoneIssueDetailComponent implements OnInit {
         confirmButtonColor: '#336699',
         confirmButtonText: 'OK'
       });
-      return; 
+      return;
     }
 
     // If stock code is filled, proceed with the form submission
@@ -726,16 +727,16 @@ export class StoneIssueDetailComponent implements OnInit {
     this.tableData[0].STOCK_CODE = ''
   }
 
-  CollectRate(){
+  CollectRate() {
     let postData = {
       "SPID": "140",
       "parameter": {
-        SubJobNumber :this.stoneIssueDetailsFrom.value.subjobnumber, 
-        SubStockCode :this.stoneIssueDetailsFrom.value.stockCode, 
-        StockCode :this.stoneIssueDetailsFrom.value.stockCode, 
-        BranchCode :this.comService.nullToString(this.branchCode), 
-        DEFPRICESMANUF:'',
-        VocDate :this.stoneIssueDetailsFrom.value.VOCDATE
+        SubJobNumber: this.stoneIssueDetailsFrom.value.subjobnumber,
+        SubStockCode: this.stoneIssueDetailsFrom.value.stockCode,
+        StockCode: this.stoneIssueDetailsFrom.value.stockCode,
+        BranchCode: this.comService.nullToString(this.branchCode),
+        DEFPRICESMANUF: '',
+        VocDate: this.stoneIssueDetailsFrom.value.VOCDATE
       }
     };
     console.log('API Request Data:', postData);
@@ -748,7 +749,7 @@ export class StoneIssueDetailComponent implements OnInit {
           if (result.status === "Success" && result.dynamicData && result.dynamicData.length > 0) {
             console.log('Valid Response Data:', result.dynamicData);
             let data = result.dynamicData[1]
-            console.log(data,'data')
+            console.log(data, 'data')
             let uniteRateValue = data[0].RATEFC;
             this.stoneIssueDetailsFrom.controls.unitrate.setValue(uniteRateValue.toFixed(2));
           } else {
@@ -763,16 +764,21 @@ export class StoneIssueDetailComponent implements OnInit {
       );
     this.subscriptions.push(Sub);
   }
-  
+
   CalculatePiecesAndPointerWT() {
     // Get the form values
-    const pieces = this.stoneIssueDetailsFrom.controls.pieces.value || 0;  
-    const pointerwt = this.stoneIssueDetailsFrom.controls.pointerwt.value || 0;  
+    const pieces = this.stoneIssueDetailsFrom.controls.pieces.value || 0;
+    const pointerwt = this.stoneIssueDetailsFrom.controls.pointerwt.value || 0;
     const calculatedCarat = pieces * pointerwt;
     this.stoneIssueDetailsFrom.controls.carat.setValue(calculatedCarat.toFixed(3));
     this.CollectRate()
   }
-  
+  CalculateCaratAndUnitrate() {
+    const carat = this.stoneIssueDetailsFrom.controls.carat.value || 0;
+    const unitrate = this.stoneIssueDetailsFrom.controls.unitrate.value || 0;
+    const calculateamount = carat * unitrate;
+    this.stoneIssueDetailsFrom.controls.amount.setValue(calculateamount.toFixed(2))
+  }
   CollectPointerWtValidation() {
     let postData = {
       "SPID": "139",
@@ -830,7 +836,7 @@ export class StoneIssueDetailComponent implements OnInit {
         this.comService.closeSnackBarMsg()
         if (result.status == "Success" && result.dynamicData[0]) {
           let data = result.dynamicData[0]
-          console.log(data,'division')
+          console.log(data, 'division')
           if (data.length == 0) {
             console.log(data, 'di')
             this.comService.toastErrorByMsgId('MSG1531')
@@ -862,12 +868,12 @@ export class StoneIssueDetailComponent implements OnInit {
 
   stockCodeValidate(event: any) {
     if (this.viewMode) return;
-  
+
     // Check if the input is empty
     if (event.target.value === '') {
       return;  // Exit if no input
     }
-  
+
     // Prepare the data for the API call
     let postData = {
       "SPID": "132",
@@ -878,33 +884,33 @@ export class StoneIssueDetailComponent implements OnInit {
         STOCKCODE: this.stoneIssueDetailsFrom.value.stockCode,
       }
     };
-  
+
     // Show loading message
     this.comService.showSnackBarMsg('MSG81447');
-  
+
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
       .subscribe((result) => {
         // Hide loading message
         this.comService.closeSnackBarMsg();
-  
+
         if (result.status === "Success" && result.dynamicData[0]) {
           let data = result.dynamicData[0];
           console.log(data, 'data');
-  
+
           // Check if VALID_STOCK is 0, indicating an invalid stock code
           if (data[0].VALID_STOCK === 0) {
             console.log(data, 'invalid stock');
-  
+
             // Clear the stock code and open the lookup overlay
-            this.overlaystockCodeSearch.closeOverlayPanel(); 
+            this.overlaystockCodeSearch.closeOverlayPanel();
             this.stoneIssueDetailsFrom.controls.stockCode.setValue('');  // Clear stock code
             this.comService.toastErrorByMsgId('MSG1531');  // Show error message
             this.showOverleyPanel(event, 'stockCode');  // Automatically open the lookup overlay
-  
+
           } else {
             // Valid stock code, handle the valid case
-             // Close overlay panel
-  
+            // Close overlay panel
+
             let stockDetails = data[0];
             console.log(stockDetails, 'valid stock data');
             this.stoneIssueDetailsFrom.controls.stockCodeDes.setValue(stockDetails.STOCK_DESCRIPTION);
@@ -916,12 +922,12 @@ export class StoneIssueDetailComponent implements OnInit {
             this.stoneIssueDetailsFrom.controls.pieces.setValue(stockDetails.PCS);
             this.stoneIssueDetailsFrom.controls.shape.setValue(stockDetails.SHAPE);
             this.stoneIssueDetailsFrom.controls.color.setValue(stockDetails.COLOR);
-  
+
             // Additional validation logic
             this.CollectPointerWtValidation();
             this.CollectRate()
           }
-  
+
         } else {
           // Handle when no valid stock data is returned
           this.overlaystockCodeSearch.closeOverlayPanel();
@@ -935,10 +941,10 @@ export class StoneIssueDetailComponent implements OnInit {
         this.stoneIssueDetailsFrom.controls.stockCode.setValue('');  // Clear stock code
         this.showOverleyPanel(event, 'stockCode');  // Automatically open the lookup overlay
       });
-  
+
     this.subscriptions.push(Sub);
   }
-  
+
 
   getImageData() {
     let API = `Image/${this.stoneIssueDetailsFrom.value.jobNumber}`
@@ -978,10 +984,11 @@ export class StoneIssueDetailComponent implements OnInit {
 
           this.tableData.forEach((row) => {
             if (!row.LOCTYPE_CODE) {  // If location field is not already set
-              row.LOCTYPE_CODE = '000GEN';  // Replace with your actual default value
+              row.LOCTYPE_CODE = '000GEN';
+              row.CARATWT_TO = this.setValueWithDecimal('CARATWT_TO',0,'METAL')  // Replace with your actual default value
             }
           });
-          console.log(this.tableData); 
+          console.log(this.tableData);
         } else {
           // this.comService.toastErrorByMsgId('MSG1747')
         }
@@ -1117,64 +1124,119 @@ export class StoneIssueDetailComponent implements OnInit {
     }
     return false;
   }
-// Grid Pcs Max Length  
-pcsEditorOptions = {
-  onInput: (e: any) => {
-    const maxLength = 10;
-    const input = e.event.target;
-    if (input.value.length > maxLength) {
-      input.value = input.value.slice(0, maxLength); // Limit the value length
-    }
-  },
-};
-RemarkEditorOptions = {
-  onInput: (e: any) => {
-    const maxLength = 40;
-    const input = e.event.target;
-    if (input.value.length > maxLength) {
-      input.value = input.value.slice(0, maxLength); // Limit the value length
-    }
-  },
-};
-CaratEditorOptions = {
-  onInput: (e: any) => {
-    const maxLength = 10;
-    const input = e.event.target;
-    if (input.value.length > maxLength) {
-      input.value = input.value.slice(0, maxLength); 
-      this.formatMainGrid()
-    }
-  },
-};
+  // Grid Pcs Max Length  
+  pcsEditorOptions = {
+    onInput: (e: any) => {
+      const maxLength = 10;
+      const input = e.event.target;
+      if (input.value.length > maxLength) {
+        input.value = input.value.slice(0, maxLength); // Limit the value length
+      }
+    },
+  };
+  RemarkEditorOptions = {
+    onInput: (e: any) => {
+      const maxLength = 40;
+      const input = e.event.target;
+      if (input.value.length > maxLength) {
+        input.value = input.value.slice(0, maxLength); // Limit the value length
+      }
+    },
+  };
+  CaratEditorOptions = {
+    onInput: (e: any) => {
+      const maxLength = 10;
+      const input = e.event.target;
+      if (input.value.length > maxLength) {
+        input.value = input.value.slice(0, maxLength);
+        this.formatMainGrid()
+      }
+    },
+  };
 
-  DivCodetemp(data:any,value: any){
-    this.tableData[value.data.SRNO - 1].DIVCODE = data.target.value;
-  }
-
-  GriddivCodeSelected(event: any, value: any) {
-    console.log(event,'event')
-    this.tableData[value.data.SRNO - 1].DIVCODE  = event.Division_Code;
-  }
-  
-  onHoverCategory({data}:any){
-    this.divCodeData.WHERECONDITION =  `@SubJobNumber='',  @DivisionCode='L', @DesignType='DIAMOND'`
-  }
   formatMainGrid() {
     this.tableData.forEach((item: any, index: any) => {
       console.log(item.CARATWT_TO)
       item.CARATWT_TO = this.comService.setCommaSerperatedNumber(item.CARATWT_TO, 'METAL')
     })
   }
-customizeText(data:any){
-  if(data){
-    const decimalPlaces=3;
-    return data.value.toFixed(decimalPlaces)
+  customizeText(data: any) {
+    if (data) {
+      const decimalPlaces = 3;
+      return data.value.toFixed(decimalPlaces)
+    }
   }
-}
-SaveGridData(){
-  let gridData = this.tableData
-  console.log(gridData)
-}
+  SaveGridData() {
+    let gridData = this.tableData
+    console.log(gridData)
+  }
+
+  dataGridConfig = {
+    columns: [
+      {
+        dataField: 'DIVCODE',
+        caption: 'DIVCODE',
+        cellTemplate: 'DivCodetemp',
+        validationRules: [{ type: 'required', message: 'User Id is required' }]
+      },
+      {
+        dataField: 'STOCK_CODE',
+        caption: 'Stock Code',
+        cellTemplate: 'StockCodetemp',
+        validationRules: [{ type: 'required', message: 'User Id is required' }]
+      },
+      {
+        dataField: 'LOCTYPE_CODE',
+        caption: 'Location',
+        cellTemplate: 'locationCodetemp',
+        validationRules: [{ type: 'required', message: 'User Id is required' }]
+      },
+      // Other columns in your DataGrid
+    ],
+    // Other DataGrid configuration options
+  };
+  GriddivCodeSelected(data: any, value: any, controlName: string) {
+    let userData = [];
+    userData = this.tableData.filter((item: any) => item.DIVCODE == data.Division_Code)
+    console.log(this.tableData)
+    if (userData.length > 0) {
+      this.comService.toastErrorByMsgId('MSG1932')
+    }
+    else {
+      console.log(value);
+      console.log(  this.tableData);
+      this.tableData[0].DIVCODE = data.Division_Code;
+      this.userId = data.Division_Code;
+    }
+  }
+  GridstockCodeSelected(data: any, value: any, controlName: string) {
+    let userData = [];
+    userData = this.tableData.filter((item: any) => item.STOCK_CODE == data.STOCK_CODE)
+    console.log(this.tableData)
+    if (userData.length > 0) {
+      this.comService.toastErrorByMsgId('MSG1932')
+    }
+    else {
+      console.log(value);
+      console.log(  this.tableData);
+      this.tableData[0].STOCK_CODE = data.STOCK_CODE;
+      this.userId = data.STOCK_CODE;
+    }
+  }
+  GridlocationCodeSelected(data: any, value: any, controlName: string) {
+    let userData = [];
+    userData = this.tableData.filter((item: any) => item.LOCTYPE_CODE == data.LOCATION_CODE)
+    console.log(this.tableData)
+    if (userData.length > 0) {
+      this.comService.toastErrorByMsgId('MSG1932')
+    }
+    else {
+      console.log(value);
+      console.log(  this.tableData);
+      this.tableData[0].LOCTYPE_CODE = data.LOCATION_CODE;
+      this.userId = data.LOCATION_CODE;
+    }
+  }
 
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {

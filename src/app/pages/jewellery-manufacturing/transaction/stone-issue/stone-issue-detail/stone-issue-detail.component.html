@@ -254,8 +254,9 @@
           </label>
           <div class="col-md-3">
             <mat-form-field appearance="outline" style="width: 100%;">
-              <input type="text" matInput formControlName="carat"
+              <input type="number" matInput formControlName="carat"
                 MetalDecimalInput maxlength="15"
+                (focusout)="CalculateCaratAndUnitrate()"
                 style="text-align: right;"
                 [readonly]="viewMode || codeEnable" />
             </mat-form-field>
@@ -281,8 +282,9 @@
             Rate:</label>
           <div class="col-md-3">
             <mat-form-field appearance="outline" style="width: 100%;">
-              <input type="text" matInput formControlName="unitrate"
-                AmountDecimalInput readonly class="text-right" />
+              <input type="number" matInput formControlName="unitrate"
+                AmountDecimalInput readonly class="text-right"
+                (focusout)="CalculateCaratAndUnitrate()" />
             </mat-form-field>
           </div>
           <label for="inputPassword" class="col-sm-1 col-form-label">Sieve:
@@ -381,45 +383,8 @@
           </dxi-column> -->
           <dxi-column [allowEditing]="false" dataField="DIVCODE"
             caption="DIVCODE" cellTemplate="DivCodetemp"></dxi-column>
-          <div
-            *dxTemplate="let data of 'DivCodetemp'">
-            <div
-              class="d-flex justify-content-between">
-              <div>
-                <a
-                  href="javascript:void(0)"
-                  class="mx-1"
-                  [innerHTML]="data.value"
-                  (keypress)="lookupKeyPress($event)"></a>
-              </div>
-              <master-search
-                *ngIf="!viewMode"
-                [MasterSearchData]="divCodeData"
-                (newRowClick)="GriddivCodeSelected($event,data)">
-              </master-search>
-            </div>
-          </div>
           <dxi-column [allowEditing]="false" dataField="STOCK_CODE"
             caption="Stock Code" cellTemplate="StockCodetemp"></dxi-column>
-
-          <div
-            *dxTemplate="let data of 'StockCodetemp'">
-            <div
-              class="d-flex justify-content-between">
-              <div>
-                <a
-                  href="javascript:void(0)"
-                  class="mx-1"
-                  [innerHTML]="data.value"
-                  (keypress)="lookupKeyPress($event)"></a>
-              </div>
-              <master-search
-                *ngIf="!viewMode"
-                [MasterSearchData]="stockCodeData"
-                (newRowClick)="stockCodeSelected($event)">
-              </master-search>
-            </div>
-          </div>
           <dxi-column [allowEditing]="false" dataField="SUB_STOCK_CODE"
             caption="Batch ID"></dxi-column>
           <dxi-column [allowEditing]="false" dataField="SUB_STOCK_CODE"
@@ -433,24 +398,6 @@
           </dxi-column>
           <dxi-column [allowEditing]="false" dataField="LOCTYPE_CODE"
             caption="Location" cellTemplate="locationCodetemp"></dxi-column>
-          <div
-            *dxTemplate="let data of 'locationCodetemp'">
-            <div
-              class="d-flex justify-content-between">
-              <div>
-                <a
-                  href="javascript:void(0)"
-                  class="mx-1"
-                  [innerHTML]="data.value"
-                  (keypress)="lookupKeyPress($event)"></a>
-              </div>
-              <master-search
-                *ngIf="!viewMode"
-                [MasterSearchData]="locationCodeData"
-                (newRowClick)="locationCodeSelected($event)">
-              </master-search>
-            </div>
-          </div>
           <dxi-column [allowEditing]="true" dataField="CONSIGNMENT"
             caption="Consignment" cellTemplate="Consignment">
             <div *dxTemplate="let data1 of 'Consignment'">
@@ -458,9 +405,11 @@
                 [checked]="data1.value" />
             </div>></dxi-column>
           <dxi-column dataField="RATEFC" [allowEditing]="false"
-            caption="Rate"></dxi-column>
+            caption="Rate"
+            [format]="{ type: 'fixedPoint', precision: 3 }"></dxi-column>
           <dxi-column dataField="AMOUNTFC" [allowEditing]="false"
-            caption="Amount"></dxi-column>
+            caption="Amount"
+            [format]="{ type: 'fixedPoint', precision: 2 }"></dxi-column>
           <dxi-column [allowEditing]="false" dataField="OTHER_ATTR"
             caption="Other Attributes"></dxi-column>
           <dxi-column [allowEditing]="false" dataField="SHAPE"
@@ -481,17 +430,41 @@
           <dxi-column [allowEditing]="false" dataField="ISS_STN_PCS"
             caption="Issued Pcs"></dxi-column>
           <dxi-column [allowEditing]="false" dataField="ISS_STN_WT"
-            caption="Issued Wt"></dxi-column>
+            caption="Issued Wt"
+            [format]="{ type: 'fixedPoint', precision: 3 }"></dxi-column>
           <dxi-column [allowEditing]="false" dataField="BAL_STN_PCS"
             caption="Bal Pcs"></dxi-column>
           <dxi-column [allowEditing]="false" dataField="BAL_STN_WT"
-            caption="Bal Wt"></dxi-column>
+            caption="Bal Wt"
+            [format]="{ type: 'fixedPoint', precision: 3 }"></dxi-column>
           <dxi-column [allowEditing]="false" dataField="POINTER_WT"
-            caption="Pointer Wt"></dxi-column>
+            caption="Pointer Wt"
+            [format]="{ type: 'fixedPoint', precision: 3 }"></dxi-column>
           <dxi-column [allowEditing]="false" dataField="PCS_VARIANCE"
             caption="Pcs Variance"></dxi-column>
           <dxi-column [allowEditing]="false" dataField="WEIGHT_VARIANCE"
             caption="Weight Variance"></dxi-column>
+          <div *dxTemplate="let data of 'DivCodetemp'">
+            <a href="javascript:void(0)" class="mx-1"
+              [innerHTML]="data.value"></a>
+            <master-search [MasterSearchData]="divCodeData"
+              (newRowClick)="GriddivCodeSelected($event,data,'DivCodetemp')">
+            </master-search>
+          </div>
+          <div *dxTemplate="let data of 'StockCodetemp'">
+            <a href="javascript:void(0)" class="mx-1"
+              [innerHTML]="data.value"></a>
+            <master-search [MasterSearchData]="stockCodeData"
+              (newRowClick)="GridstockCodeSelected($event,data,'StockCodetemp')">
+            </master-search>
+          </div>
+          <div *dxTemplate="let data of 'locationCodetemp'">
+            <a href="javascript:void(0)" class="mx-1"
+              [innerHTML]="data.value"></a>
+            <master-search [MasterSearchData]="locationCodeData"
+              (newRowClick)="GridlocationCodeSelected($event,data,'locationCodetemp')">
+            </master-search>
+          </div>
         </dx-data-grid>
       </div>
     </div>
