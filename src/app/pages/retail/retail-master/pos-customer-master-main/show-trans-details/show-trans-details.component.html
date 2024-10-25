@@ -152,25 +152,28 @@
         </div>
       </div>
 
-      <!-- <div class="col-md-12">
-        <mat-tab-group>
+      <div class="col-md-12">
+        <mat-tab-group class="mb-4">
           <mat-tab>
             <div class="row pt-2">
               <div class="col-md-12">
                 <dx-data-grid
                   id="gridContainer"
                   [showBorders]="true"
-                  [dataSource]="repairDetailsData"
+                  [dataSource]="POSCustomerWiseInvoiceDetails"
                   [showColumnLines]="true"
                   [showRowLines]="true"
                   class="mt-3"
+                  [paging]="{ pageSize: 5 }"
                 >
+                  <dxo-paging [enabled]="true"></dxo-paging>
+                  <dxo-pager [showInfo]="true"></dxo-pager>
                   <dxo-selection mode="single"></dxo-selection>
 
                   <dxi-column
-                    *ngFor="let data of columnheadItemDetails"
-                    dataField="{{ data }}"
-                    caption="{{ data }}"
+                    *ngFor="let data of columnHeadings"
+                    [dataField]="data.field"
+                    [caption]="data.caption"
                     [allowEditing]="true"
                     alignment="center"
                     backgroundcolor="#000"
@@ -181,7 +184,104 @@
             </div>
           </mat-tab>
         </mat-tab-group>
-      </div> -->
+
+        <div class="col-md-12 mb-4">
+          <p class="btn btn-primary text-center rounded-0 w-100">
+            Invoice Details
+          </p>
+          <mat-tab-group>
+            <mat-tab label="Invoice Details">
+              <div class="row pt-2">
+                <div class="col-md-12">
+                  <dx-data-grid
+                    id="gridContainer"
+                    [showBorders]="true"
+                    [dataSource]="POSCustomerWiseInvoiceVoucherDetails"
+                    [showColumnLines]="true"
+                    [showRowLines]="true"
+                    class="mt-3"
+                    [paging]="{ pageSize: 5 }"
+                  >
+                    <dxo-paging [enabled]="true"></dxo-paging>
+                    <dxo-pager [showInfo]="true"></dxo-pager>
+                    <dxo-selection mode="single"></dxo-selection>
+
+                    <dxi-column
+                      *ngFor="let data of invoiceDetailsHeadings"
+                      [dataField]="data.field"
+                      [caption]="data.caption"
+                      [allowEditing]="true"
+                      alignment="center"
+                      backgroundcolor="#000"
+                    >
+                    </dxi-column>
+                  </dx-data-grid>
+                </div>
+              </div>
+            </mat-tab>
+            <mat-tab label="Advance Details">
+              <div class="row pt-2">
+                <div class="col-md-12">
+                  <dx-data-grid
+                    id="gridContainer"
+                    [showBorders]="true"
+                    [dataSource]="POSCustomerWiseAdvanceSummary"
+                    [showColumnLines]="true"
+                    [showRowLines]="true"
+                    class="mt-3"
+                    [paging]="{ pageSize: 5 }"
+                  >
+                    <dxo-paging [enabled]="true"></dxo-paging>
+                    <dxo-pager [showInfo]="true"></dxo-pager>
+                    <dxo-selection mode="single"></dxo-selection>
+
+                    <dxi-column
+                      *ngFor="let data of advanceDetailsHeadings"
+                      [dataField]="data.field"
+                      [caption]="data.caption"
+                      [allowEditing]="true"
+                      alignment="center"
+                      backgroundcolor="#000"
+                    >
+                    </dxi-column>
+                  </dx-data-grid>
+                </div>
+              </div>
+            </mat-tab>
+            <mat-tab label="Loyalty Trans. Details">
+              <div class="row pt-2">
+                <div class="col-md-12">
+                  <dx-data-grid
+                    id="gridContainer"
+                    [showBorders]="true"
+                    [dataSource]="tableData"
+                    [showColumnLines]="true"
+                    [showRowLines]="true"
+                    class="mt-3"
+                    [paging]="{ pageSize: 5 }"
+
+                  >
+                  <dxo-paging [enabled]="true"></dxo-paging>
+                  <dxo-pager [showInfo]="true"></dxo-pager>
+                  <dxo-selection mode="single"></dxo-selection>
+
+
+                    <dxi-column
+                      *ngFor="let data of loyaltyTransDetailsHeading"
+                      [dataField]="data.field"
+                      [caption]="data.caption"
+                      [allowEditing]="true"
+                      alignment="center"
+                      backgroundcolor="#000"
+                    >
+                    </dxi-column>
+                  </dx-data-grid>
+                </div>
+              </div>
+            </mat-tab>
+          </mat-tab-group>
+        </div>
+      </div>
     </div>
   </form>
 </div>

@@ -549,7 +549,8 @@ export class RetailSalesCollectionComponent implements OnInit {
             return {
               dataField: key,
               caption: key,
-              width: key === 'Branch Name' ? 400 : 120 
+              width: key === 'Branch Name' ? 400 : 120,
+              alignment: key === 'Branch Name' ? 'left' : key === 'Voc No' ? 'right' : 'center'
             };
           });
         }
