@@ -24,7 +24,7 @@ import { MasterSearchComponent } from 'src/app/shared/common/master-search/maste
 })
 export class StoneIssueComponent implements OnInit {
   @ViewChild('stoneIssueDetailScreen') public stoneIssueDetailComponent!: NgbModal;
-  @ViewChild('overlayenteredBySearch') overlayenteredBySearch!: MasterSearchComponent;
+  @ViewChild('overlaySALESPERSON_CODESearch') overlaySALESPERSON_CODESearch!: MasterSearchComponent;
   @ViewChild('overlayworkerSearch') overlayworkerSearch!: MasterSearchComponent;
   @ViewChild('overlayCurrencyCode') overlayCurrencyCode!: MasterSearchComponent;
   modalReference!: NgbModalRef;
@@ -40,7 +40,7 @@ export class StoneIssueComponent implements OnInit {
   companyName = this.comService.allbranchMaster['BRANCH_NAME'];
   branchCode?: String;
   private subscriptions: Subscription[] = [];
-  currentDate: any = this.comService.currentDate;
+  currentDate = new Date();
   vocMaxDate = new Date();
   tableRowCount: number = 0;
   detailData: any[] = [];
@@ -94,7 +94,7 @@ export class StoneIssueComponent implements OnInit {
     VOCDATE: [''],
     YEARMONTH: [''],
     BRANCH_CODE: [''],
-    enteredBy: [''],
+    SALESPERSON_CODE: [''],
     currency: [''],
     currencyrate: [''],
     worker: ['',],
@@ -186,7 +186,7 @@ export class StoneIssueComponent implements OnInit {
           )
           // this.stoneissueFrom.controls.worker.setValue(data.WORKER)
           // this.stoneissueFrom.controls.workername.setValue(data.WORKER_NAME)
-          this.stoneissueFrom.controls.enteredBy.setValue(data.SMAN)
+          this.stoneissueFrom.controls.SALESPERSON_CODE.setValue(data.SMAN)
           this.stoneissueFrom.controls.narration.setValue(data.REMARKS)
           this.stoneissueFrom.controls.caratTotal.setValue(data.REMARKS)
           this.stoneIssueData = data.Details
@@ -280,7 +280,7 @@ export class StoneIssueComponent implements OnInit {
 
 
   userDataSelected(value: any) {
-    this.stoneissueFrom.controls.enteredBy.setValue(value.SALESPERSON_CODE);
+    this.stoneissueFrom.controls.SALESPERSON_CODE.setValue(value.SALESPERSON_CODE);
   }
 
   CurrencyCodeSelected(e: any) {
@@ -481,14 +481,14 @@ export class StoneIssueComponent implements OnInit {
       "TOTAL_GROSS_WT": 0,
       "TOTAL_AMOUNTFC": 0,
       "TOTAL_AMOUNTLC": 0,
-      "SMAN": this.comService.nullToString(form.enteredBy),
+      "SMAN": this.comService.nullToString(this.stoneissueFrom.value.SALESPERSON_CODE?.toUpperCase()),
       "REMARKS": this.comService.nullToString(form.narration),
       "NAVSEQNO": 0,
       "BASE_CURRENCY": "",
       "BASE_CURR_RATE": 0,
       "BASE_CONV_RATE": 0,
       "AUTOPOSTING": true,
-      "POSTDATE": "",
+      "POSTDATE": this.comService.formatDateTime((form.VOCDATE)),
       "SYSTEM_DATE": (form.VOCDATE),
       "PRINT_COUNT": 0,
       "PRINT_COUNT_ACCOPY": 0,
@@ -651,8 +651,8 @@ export class StoneIssueComponent implements OnInit {
       case 'worker':
         this.overlayworkerSearch.showOverlayPanel(event);
         break;
-      case 'enteredBy':
-        this.overlayenteredBySearch.showOverlayPanel(event);
+      case 'SALESPERSON_CODE':
+        this.overlaySALESPERSON_CODESearch.showOverlayPanel(event);
         break;
       case 'currencyrate':
         this.overlayCurrencyCode.showOverlayPanel(event);
@@ -678,7 +678,7 @@ export class StoneIssueComponent implements OnInit {
           this.comService.toastErrorByMsgId('MSG1531')
           this.stoneissueFrom.controls[FORMNAME].setValue('')
           LOOKUPDATA.SEARCH_VALUE = ''
-          if (FORMNAME === 'worker' || FORMNAME === 'enteredBy' || FORMNAME === 'currencyrate') {
+          if (FORMNAME === 'worker' || FORMNAME === 'SALESPERSON_CODE' || FORMNAME === 'currencyrate') {
             this.showOverleyPanel(event, FORMNAME);
           } {
             this.showOverleyPanel(event, FORMNAME);
