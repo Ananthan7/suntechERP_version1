@@ -7,12 +7,12 @@
 </div>
 
 <div class="container-fluid pt-3">
-    <form [formGroup]="posCRMdasbordFrom">
+    <form [formGroup]="posCRMdasbordForm">
         <div class="col-md-12">
             <div class="row">
                 <div class="row mb-1">
                     <label for="inputPassword"  class="col-sm-1 col-form-label" id="ID001"> Branch</label>
-                    <div class="col-md-4">
+                    <div class="col-md-5">
                         <mat-form-field appearance="outline" style="width: -webkit-fill-available">
                         <input matInput="text" name="branch" autocomplete="off"
                             formControlName="branch"/>
@@ -32,23 +32,15 @@
             
             <div class="row mt-1">
                 <label for="input" class="col-sm-1 col-form-label" id="ID002">Festival</label>
-                <div class="col-sm-2">
+                <div class="col-sm-4">
                     <div class="datepick">
                         <mat-form-field appearance="outline" style="width: 100%;">
-                            <!-- <mat-select formControlName="festival">
-                                <mat-option *ngFor="let festival of festivalArr" [value]="festival">
-                                  {{ festival.Festival }}, {{ festival.Year }}, 
-                                  <strong>From:</strong>{{festival.Fromdate | date: 'shortDate'}}, 
-                                  <strong>To:</strong>{{festival.todate | date: 'shortDate'}}
-                                </mat-option>
-                            </mat-select> -->
-                        
                             <mat-select formControlName="festival" (selectionChange)="onFestivalChange($event)">
-                                <mat-option *ngFor="let festival of festivalArr" [value]="festival.Festival">
-                                  {{ festival.Festival }} ({{ festival.Year }}) - From: {{ festival.Fromdate | date:'shortDate' }} to: {{ festival.todate | date:'shortDate' }}
+                                <mat-option *ngFor="let festival of festivalArr" [value]="festival.srno">
+                                  {{ festival.Festival }} ({{ festival.Year }}) - <strong>From:</strong> {{ festival.Fromdate | date:'shortDate' }} 
+                                  <strong>to:</strong> {{ festival.todate | date:'shortDate' }}
                                 </mat-option>
-                              </mat-select>
-                              
+                              </mat-select>     
                         </mat-form-field>
                     </div>
                 </div>
@@ -61,8 +53,8 @@
                     </section>
                 </div>
 
-                <div class="col-sm-4">
-                    <mat-form-field appearance="outline" style="width: 100%;">
+                <div class="col-sm-3">
+                    <mat-form-field appearance="outline" style="width: 94%;">
                         <input type="text" matInput formControlName="jobno" />
                     </mat-form-field>
                 </div>
@@ -90,10 +82,10 @@
             </div>
 
             <div class="row">
-               <div class="col-md-3">
+               <div class="col-md-4">
                     <div class="row">
-                        <label for="input" class="col-sm-4 col-form-label" id="ID005">Diamond Section</label>
-                        <div class="col-sm-8 mt-2">
+                        <label for="input" class="col-sm-5 col-form-label" id="ID005">Diamond Section</label>
+                        <div class="col-sm-6 mt-2">
                             <mat-form-field appearance="outline" style="width: 100%;">
                                 <mat-select formControlName="diamondsection">
                                     <mat-option *ngFor="let item of diamondSectionArr" [value]="item.MASFIELD">
@@ -105,10 +97,10 @@
                     </div>
                </div>   
 
-               <div class="col-md-3">
+               <div class="col-md-4">
                     <div class="row">
                         <label for="input" class="col-sm-4 col-form-label" id="ID009">Divisions</label>
-                        <div class="col-sm-8 mt-2">
+                        <div class="col-sm-7 mt-2">
                             <mat-form-field appearance="outline" style="width: 100%;">
                                 <mat-select formControlName="divisions">
                                     <mat-option *ngFor="let item of divisionsArr" [value]="item.Code">
@@ -123,7 +115,7 @@
                 <div class="col-md-3">
                     <div class="row">
                         <label for="input" class="col-sm-4 col-form-label" id="ID005">Metal</label>
-                        <div class="col-sm-8 mt-2">
+                        <div class="col-sm-7 mt-2">
                             <mat-form-field appearance="outline" style="width: 100%;">
                                 <mat-select formControlName="metal">
                                     <mat-option *ngFor="let item of metalSectionArr" [value]="item.MASFIELD">
@@ -135,13 +127,13 @@
                     </div>
                 </div>
 
-                <div class="col-sm-2">
+                <!-- <div class="col-sm-2">
                     <div class="p-2 bd-highlight">
                         <button type="button" class="btn btn-primary metal-issue-add-btn" id="ID008">
                             Refresh
                         </button>
                     </div>
-                </div>    
+                </div>     -->
            </div>          
         </div>  
 
@@ -203,6 +195,39 @@
                 </mat-tab>
                 
                 <mat-tab label="Sales Suggestion(Diamond Jew)">
+                    <div class="row">
+                        <div class="col-md-5 bg-warning mt-1">
+                            <div class="col-5 mt-1 mx-1">
+                                <div class="summary-tab-label text-center text-danger">Total Purchase Value</div>
+                            </div>
+                            <div class="row mb-1 purchaseValueCntrlClass">
+                                <label for="inputPassword" class="col-sm-4 col-form-label">Total Purchase Value</label>
+                                <div class="col-md-8">
+                                  <mat-form-field appearance="outline" style="width: 100%;">
+                                    <input type="text" matInput formControlName="TotPurchaseValue"/>
+                                  </mat-form-field>
+                                </div>
+                            </div>
+
+                            <div class="row mb-1 purchaseValueCntrlClass">
+                                <label for="inputPassword" class="col-sm-4 col-form-label">Last Purchase Value</label>
+                                <div class="col-md-8">
+                                  <mat-form-field appearance="outline" style="width: 100%;">
+                                    <input type="text" matInput formControlName="lastPurchaseValue"/>
+                                  </mat-form-field>
+                                </div>
+                            </div>
+
+                            <div class="row mb-1 purchaseValueCntrlClass">
+                                <label for="inputPassword" class="col-sm-4 col-form-label">Avg Purchase Value</label>
+                                <div class="col-md-8">
+                                  <mat-form-field appearance="outline" style="width: 100%;">
+                                    <input type="text" matInput formControlName="avgPurchaseValue"/>
+                                  </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </mat-tab>
                 <mat-tab label="Sales Suggestion(Metal Jew)">
                 </mat-tab>
