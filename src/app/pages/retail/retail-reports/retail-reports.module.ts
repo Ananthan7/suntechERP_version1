@@ -24,6 +24,7 @@ import { CommonRetailModule } from '../common-retail/common-retail.module';
 import { SalesOrderRegisterComponent } from './sales-order-register/sales-order-register.component';
 import { PosDailyClosingReportComponent } from './pos-daily-closing-report/pos-daily-closing-report.component';
 import { POSDaybookComponent } from './posdaybook/posdaybook.component';
+import { CustomerEnquiryComponent } from './customer-enquiry/customer-enquiry.component';
 
 
 @NgModule({
@@ -46,7 +47,8 @@ import { POSDaybookComponent } from './posdaybook/posdaybook.component';
     RetailSalesCollectionComponent,
     SalesOrderRegisterComponent,
     PosDailyClosingReportComponent,
-    POSDaybookComponent
+    POSDaybookComponent,
+    CustomerEnquiryComponent
   ],
   imports: [
     CommonModule,
