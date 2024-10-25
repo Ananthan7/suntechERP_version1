@@ -123,14 +123,12 @@
         </dx-popup>
        
         <dx-popup [showTitle]="true" container=".dx-viewport" [dragEnabled]="false" [visible]="outputInGridBoolean" 
-        (onHidden)="onOutputInGridPopupHidden()">
-            <!-- <div style="overflow-x: auto;"> -->
-                <dx-data-grid [dataSource]="outputGridDataSource" [columns]="OutputGridColumns"
-                  [showBorders]="true" [allowColumnResizing]="true"
-                  [scrolling]="{ mode: 'all' }"  [height]="500" 
-                  [width]="'100%'">
-                </dx-data-grid>
-              <!-- </div> -->
+        (onHidden)="onOutputInGridPopupHidden()"  [width]="'100%'"  [height]="'60%'" title="Pos Collection Report" >
+            <dx-data-grid [dataSource]="outputGridDataSource" [columns]="OutputGridColumns"
+            [showBorders]="true" [allowColumnResizing]="true" [paging]="{ enabled: false }"
+            [scrolling]="{ mode: 'all' }"  [height]="'100%'" 
+            [width]="'100%'">
+            </dx-data-grid>  
         </dx-popup>
 
 

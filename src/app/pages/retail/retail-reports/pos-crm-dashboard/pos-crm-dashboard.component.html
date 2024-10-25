@@ -35,13 +35,20 @@
                 <div class="col-sm-2">
                     <div class="datepick">
                         <mat-form-field appearance="outline" style="width: 100%;">
-                            <mat-select formControlName="festival">
+                            <!-- <mat-select formControlName="festival">
                                 <mat-option *ngFor="let festival of festivalArr" [value]="festival">
                                   {{ festival.Festival }}, {{ festival.Year }}, 
                                   <strong>From:</strong>{{festival.Fromdate | date: 'shortDate'}}, 
                                   <strong>To:</strong>{{festival.todate | date: 'shortDate'}}
                                 </mat-option>
-                            </mat-select>
+                            </mat-select> -->
+                        
+                            <mat-select formControlName="festival" (selectionChange)="onFestivalChange($event)">
+                                <mat-option *ngFor="let festival of festivalArr" [value]="festival.Festival">
+                                  {{ festival.Festival }} ({{ festival.Year }}) - From: {{ festival.Fromdate | date:'shortDate' }} to: {{ festival.todate | date:'shortDate' }}
+                                </mat-option>
+                              </mat-select>
+                              
                         </mat-form-field>
                     </div>
                 </div>

@@ -11,6 +11,8 @@ import { SuntechAPIService } from "src/app/services/suntech-api.service";
 })
 export class ShowTransDetailsComponent implements OnInit {
   @Input() customerCode!: string;
+  @Input() data!: string;
+
   fetchedPicture: any;
   tableData: any = [];
   POSCustomerWiseInvoiceDetails: any = [];
@@ -53,8 +55,8 @@ export class ShowTransDetailsComponent implements OnInit {
     { field: "VOCNO", caption: "Voc No" },
     { field: "VOCDATE", caption: "Voc Date" },
     { field: "TOTAL_AMOUNTFC", caption: "Sales Amount" },
-    { field: "BALANCE_FC", caption: "Loyalty Points" },
-    { field: "BALANCE_FC", caption: "Redeem Points" },
+    { field: "Loyalty Points", caption: "Loyalty Points" },
+    { field: "Redeem", caption: "Redeem Points" },
   ];
   constructor(
     private activeModal: NgbActiveModal,
@@ -77,10 +79,11 @@ export class ShowTransDetailsComponent implements OnInit {
   });
 
   ngOnInit(): void {
+    this.valuesBindingOnForm(this.data);
     this.getPOSCustomerWiseInvoiceDetails();
     this.getPOSCustomerWiseInvoiceVoucherDetails();
     this.getPOSCustomerWiseAdvanceSummary();
-    this.getPOSCustomerWiseLoyaltyDetails()
+    this.getPOSCustomerWiseLoyaltyDetails();
   }
 
   getPOSCustomerWiseInvoiceDetails() {
@@ -129,6 +132,22 @@ export class ShowTransDetailsComponent implements OnInit {
           this.POSCustomerWiseLoyaltyDetails = res.dynamicData[0];
         }
       });
+  }
+
+  valuesBindingOnForm(data: any) {
+    this.showTarnsDetailsForm.controls["customerCode"].setValue(data.CODE);
+    this.showTarnsDetailsForm.controls["customer"].setValue(data.NAME);
+    this.showTarnsDetailsForm.controls["mobile"].setValue(data.MOBILE);
+    this.showTarnsDetailsForm.controls["teleRes"].setValue(data.TEL1);
+    this.showTarnsDetailsForm.controls["teleOff"].setValue(data.TEL2);
+    this.showTarnsDetailsForm.controls["faxNo"].setValue(data.FAX);
+    this.showTarnsDetailsForm.controls["emailId"].setValue(data.EMAIL);
+    this.showTarnsDetailsForm.controls["poBox"].setValue(data.POBOX_NO);
+    this.showTarnsDetailsForm.controls["city"].setValue(data.CITY);
+    this.showTarnsDetailsForm.controls["countryCode"].setValue(
+      data.COUNTRY_CODE
+    );
+    this.showTarnsDetailsForm.controls["country"].setValue(data.COUNTRY_DESC);
   }
 
   close() {

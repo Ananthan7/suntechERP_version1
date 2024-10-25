@@ -25,6 +25,7 @@ import { AuditTrailComponent } from "src/app/shared/common/audit-trail/audit-tra
 import { MasterSearchComponent } from "src/app/shared/common/master-search/master-search.component";
 import { ItemDetailService } from "src/app/services/modal-service.service";
 import { CommonServiceService } from "src/app/services/common-service.service";
+import { PosCurrencyReceiptDetailsComponent } from "../pos-currency-receipt/pos-currency-receipt-details/pos-currency-receipt-details.component";
 
 @Component({
   selector: "app-advance-return",
@@ -56,20 +57,20 @@ export class AdvanceReturnComponent implements OnInit {
   baseYear: any = localStorage.getItem("YEAR") || "";
   midForInvoce: any = 0;
   grossAmount: any = 0;
-
+  currencyCode: any;
+  currencyConvRate: any;
   columnhead: any[] = [
     { title: "Sr #", field: "SRNO" },
     { title: "Branch", field: "BRANCH_CODE" },
     { title: "ACCODE", field: "ACCODE" },
     { title: "Type", field: "RECPAY_TYPE" },
-    { title: "Cheque No", field: "HDACCOUNT_HEAD" },
-    { title: "Cheque Date", field: "CURRENCY_CODE" },
+    { title: "Currency Code", field: "CURRENCY_CODE" },
     { title: "Bank", field: "BANKCODE" },
     { title: "Amount FC", field: "AMOUNTFC" },
     { title: "Amount LC", field: "AMOUNTCC" },
-    { title: "Balance", field: "SRNO" },
-    { title: "VAT %", field: "CGST_PER" },
-    { title: "VAT Amount", field: "CGST_AMOUNTCC" },
+    { title: "Balance", field: "BALANCE_CC" },
+    { title: "VAT %", field: "IGST_PER" },
+    { title: "VAT Amount", field: "IGST_AMOUNTCC" },
     { title: "Total Amount", field: "TOTAL_AMOUNTCC" },
     { title: "COMM_TAX AMOUNT CC", field: "COMM_TAXAMOUNTCC" },
     { title: "COMM_TAX PER", field: "COMM_TAXPER" },
@@ -88,6 +89,20 @@ export class AdvanceReturnComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
+  };
+
+  currencyData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 9,
+    SEARCH_FIELD: "Currency",
+    SEARCH_HEADING: "Currency Code",
+    SEARCH_VALUE: "",
+    WHERECONDITION: `@strBranch='${this.comService.branchCode}',@strPartyCode=''`,
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
   };
 
   partyCodeData: MasterSearchModel = {
@@ -201,31 +216,39 @@ export class AdvanceReturnComponent implements OnInit {
     let sumCGST_AMOUNTCC = 0;
     let sumAMOUNTCC = 0;
     this.grossAmount = 0;
+    let sumTOTAMOUNTCC = 0;
 
     this.pcrSelectionData.forEach((data, index) => {
       data.SRNO = index + 1;
-      sumCGST_AMOUNTCC += parseFloat(data.CGST_AMOUNTCC);
+      sumCGST_AMOUNTCC += parseFloat(data.IGST_AMOUNTCC);
       sumAMOUNTCC += parseFloat(data.AMOUNTCC);
       this.grossAmount = parseFloat(data.TOTAL_AMOUNTCC);
+      sumTOTAMOUNTCC += parseFloat(data.TOTAL_AMOUNTCC);
     });
 
+    let partyAmount = this.comService.emptyToZero(sumTOTAMOUNTCC) / this.comService.emptyToZero(this.advanceReturnForm.value.partyCurrencyRate);
+
+
     this.advanceReturnForm.controls.totalVat.setValue(
-      this.comService.decimalQuantityFormat(
-        this.comService.emptyToZero(sumCGST_AMOUNTCC),
-        "AMOUNT"
-      )
+      this.comService.commaSeperation(
+        this.comService.decimalQuantityFormat(
+          this.comService.emptyToZero(sumCGST_AMOUNTCC),
+          "AMOUNT"
+        ))
     );
     this.advanceReturnForm.controls.total.setValue(
-      this.comService.decimalQuantityFormat(
-        this.comService.emptyToZero(sumAMOUNTCC),
-        "AMOUNT"
-      )
+      this.comService.commaSeperation(
+        this.comService.decimalQuantityFormat(
+          this.comService.emptyToZero(sumTOTAMOUNTCC),
+          "AMOUNT"
+        ))
     );
     this.advanceReturnForm.controls.partyAmount.setValue(
-      this.comService.decimalQuantityFormat(
-        this.comService.emptyToZero(sumAMOUNTCC),
-        "AMOUNT"
-      )
+      this.comService.commaSeperation(
+        this.comService.decimalQuantityFormat(
+          this.comService.emptyToZero(partyAmount),
+          "AMOUNT"
+        ))
     );
   }
 
@@ -337,6 +360,58 @@ export class AdvanceReturnComponent implements OnInit {
     });
   }
 
+  formatSelctedPCREntries() {
+    this.pcrSelectionData.forEach((item) => {
+      item.AMOUNTFC = this.comService.decimalQuantityFormat(
+        this.comService.emptyToZero(item.AMOUNTFC),
+        "AMOUNT"
+      );
+
+      item.AMOUNTCC = this.comService.decimalQuantityFormat(
+        this.comService.emptyToZero(item.AMOUNTCC),
+        "AMOUNT"
+      );
+
+      item.BALANCE_CC = this.comService.decimalQuantityFormat(
+        this.comService.emptyToZero(item.BALANCE_CC),
+        "AMOUNT"
+      );
+
+
+      item.IGST_AMOUNTCC = this.comService.decimalQuantityFormat(
+        this.comService.emptyToZero(item.IGST_AMOUNTCC),
+        "AMOUNT"
+      );
+
+
+      item.IGST_PER = this.comService.decimalQuantityFormat(
+        this.comService.emptyToZero(item.IGST_PER),
+        "AMOUNT"
+      );
+
+      item.TOTAL_AMOUNTCC = this.comService.decimalQuantityFormat(
+        this.comService.emptyToZero(item.TOTAL_AMOUNTCC),
+        "AMOUNT"
+      );
+
+      item.COMM_TAXPER = this.comService.decimalQuantityFormat(
+        this.comService.emptyToZero(item.COMM_TAXPER),
+        "AMOUNT"
+      );
+
+      item.COMM_TAXAMOUNTCC = this.comService.decimalQuantityFormat(
+        this.comService.emptyToZero(item.COMM_TAXAMOUNTCC),
+        "AMOUNT"
+      );
+
+      item.COMM_PER = this.comService.decimalQuantityFormat(
+        this.comService.emptyToZero(item.COMM_PER),
+        "AMOUNT"
+      );
+    });
+  }
+
+
   getArgsData() {
 
     this.snackBar.open("Loading...");
@@ -350,6 +425,9 @@ export class AdvanceReturnComponent implements OnInit {
         if (result.status == "Success") {
           const data = result.response;
           this.pcrSelectionData = data.currencyReceiptDetails;
+          this.formatSelctedPCREntries();
+
+
 
           this.findGridCalculations();
 
@@ -411,6 +489,9 @@ export class AdvanceReturnComponent implements OnInit {
       if (resp.status == "Success") {
         console.log("resp", resp.Accode);
         this.advanceReturnForm.controls.partyCode.setValue(resp.Accode);
+        this.advanceReturnForm.controls.advanceFromCustomers.setValue(
+          resp.AccountHead
+        );
         this.partyCodeChange({ target: { value: resp.Accode } });
       }
     });
@@ -435,25 +516,31 @@ export class AdvanceReturnComponent implements OnInit {
           if (result.status == "Success") {
             //
             if (result.dynamicData.length > 0) {
-              let data = result.dynamicData[0];
+              let data = result.dynamicData[0].find((entry: any) => entry.DEFAULT_CURRENCY === 1);
               console.log("data", data);
 
-              if (data && data[0].CURRENCY_CODE) {
-                if (this.companyCurrency == data[0].CURRENCY_CODE)
+              if (data && data.CURRENCY_CODE) {
+                this.currencyData.WHERECONDITION = `@strBranch='${this.comService.branchCode}',@strPartyCode='${event.target.value}'`;
+
+                if (this.companyCurrency == data.CURRENCY_CODE)
                   this.isCurrencyUpdate = true;
                 else this.isCurrencyUpdate = false;
 
                 this.advanceReturnForm.controls.partyCurrency.setValue(
-                  data[0].CURRENCY_CODE
+                  data.CURRENCY_CODE
                 );
                 this.advanceReturnForm.controls.partyCurrencyRate.setValue(
-                  this.comService.decimalQuantityFormat(data[0].CONV_RATE, 'RATE')
+                  this.comService.decimalQuantityFormat(data.CONV_RATE, 'RATE')
                 );
+
+                localStorage.setItem("partyCurrencyCode", data.CURRENCY_CODE.toString());
+                localStorage.setItem("partyCurrencyRate", data.CONV_RATE.toString());
+
                 this.advanceReturnForm.controls.partyAddress.setValue(
-                  data[0].ADDRESS
+                  data.ADDRESS
                 );
                 this.advanceReturnForm.controls.advanceFromCustomers.setValue(
-                  data[0].ACCOUNT_HEAD
+                  data.ACCOUNT_HEAD
                 );
               }
             }
@@ -475,6 +562,67 @@ export class AdvanceReturnComponent implements OnInit {
         }
       );
     this.subscriptions.push(Sub);
+  }
+
+  onRowDoubleClicked(e: any) {
+    console.log(e);
+
+    e.cancel = true;
+    this.openRecieptDetails(e.data);
+  }
+
+  //data to pass to child
+  openRecieptDetails(data: any = null) {
+    const modalRef: NgbModalRef = this.modalService.open(
+      PosCurrencyReceiptDetailsComponent,
+      {
+        size: "xl",
+        backdrop: true,
+        keyboard: false,
+        windowClass: "modal-full-width",
+      }
+    );
+    modalRef.componentInstance.receiptData = { ...data };
+    modalRef.componentInstance.queryParams = {
+      // vatPercentage: this.vatPercentage,
+      // hsnCode: this.hsnCode,
+      // igstAccode: this.igst_accode,
+      headerCurrecyCode: this.advanceReturnForm.value.partyCurrency,
+      headerCurrencyConvRate: this.advanceReturnForm.value.partyCurrencyRate,
+      isReturn: true,
+      isViewOnly: this.viewOnly,
+    };
+
+    modalRef.componentInstance.continueData.subscribe((postData: any) => {
+      console.log("Continue data from modal:", postData);
+      this.handlePostData(postData);  // Handle the postData as needed
+    });
+
+    // Handle modal close when finish is clicked
+    modalRef.result.then((postData) => {
+      if (postData) {
+        console.log("Data from modal:", postData);
+        this.handlePostData(postData);
+      }
+    });
+  }
+
+
+  handlePostData(postData: any) {
+    // const preItemIndex = this.posCurrencyDetailsData.findIndex(
+    //   (data: any) => data.SRNO.toString() == postData.SRNO.toString()
+    // );
+
+    let index = this.pcrSelectionData.findIndex(item => item.SRNO === postData.SRNO);
+
+    if (index !== -1) {
+      this.pcrSelectionData[index] = { ...this.pcrSelectionData[index], ...postData };
+      console.log("Updated Array:", this.pcrSelectionData);
+    } else {
+      console.log("SRNO not found");
+    }
+
+    this.updateFormValuesAndSRNO();
   }
 
   openaddposdetails() {
@@ -524,6 +672,7 @@ export class AdvanceReturnComponent implements OnInit {
           this.dialogBox.afterClosed().subscribe((data: any) => {
             if (data == "OK") {
               this.pcrSelectionData.push(...newEntries);
+              this.formatSelctedPCREntries();
               this.updateFormValuesAndSRNO();
               modalRef.componentInstance.shouldClose = true;
             } else {
@@ -537,6 +686,7 @@ export class AdvanceReturnComponent implements OnInit {
       }
 
       this.pcrSelectionData.forEach((data, index) => (data.SRNO = index + 1));
+      this.formatSelctedPCREntries();
       this.updateFormValuesAndSRNO();
     });
 
@@ -610,32 +760,37 @@ export class AdvanceReturnComponent implements OnInit {
   updateFormValuesAndSRNO() {
     let sumCGST_AMOUNTCC = 0;
     let sumAMOUNTCC = 0;
+    let sumTOTAMOUNTCC = 0;
 
     this.pcrSelectionData.forEach((data, index) => {
       data.SRNO = index + 1;
-      sumCGST_AMOUNTCC += parseFloat(data.CGST_AMOUNTCC);
+      sumCGST_AMOUNTCC += parseFloat(data.IGST_AMOUNTCC);
       sumAMOUNTCC += parseFloat(data.AMOUNTCC);
+      sumTOTAMOUNTCC += parseFloat(data.TOTAL_AMOUNTCC);
     });
 
     let totalSum = sumCGST_AMOUNTCC + sumAMOUNTCC;
+    let partyAmount = this.comService.emptyToZero(sumTOTAMOUNTCC) / this.comService.emptyToZero(this.advanceReturnForm.value.partyCurrencyRate);
 
     this.advanceReturnForm.controls.totalVat.setValue(
-      this.comService.decimalQuantityFormat(
-        this.comService.emptyToZero(sumCGST_AMOUNTCC),
-        "AMOUNT"
-      )
+      this.comService.commaSeperation(
+        this.comService.decimalQuantityFormat(
+          this.comService.emptyToZero(sumCGST_AMOUNTCC),
+          "AMOUNT"
+        ))
     );
     this.advanceReturnForm.controls.total.setValue(
-      this.comService.decimalQuantityFormat(
-        this.comService.emptyToZero(totalSum),
-        "AMOUNT"
-      )
+      this.comService.commaSeperation(
+        this.comService.decimalQuantityFormat(
+          this.comService.emptyToZero(sumTOTAMOUNTCC),
+          "AMOUNT"
+        ))
     );
     this.advanceReturnForm.controls.partyAmount.setValue(
-      this.comService.decimalQuantityFormat(
-        this.comService.emptyToZero(totalSum),
+      this.comService.commaSeperation(this.comService.decimalQuantityFormat(
+        this.comService.emptyToZero(partyAmount),
         "AMOUNT"
-      )
+      ))
     );
   }
 
@@ -1092,19 +1247,62 @@ export class AdvanceReturnComponent implements OnInit {
   }
 
 
-  SPvalidateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+
+  currencySelected(e: any) {
+    console.log(e);
+    this.advanceReturnForm.controls.partyCurrency.setValue(
+      e.Currency
+    );
+
+
+
+    this.currencyCode = e.Currency;
+
+    this.advanceReturnForm.controls.partyCurrencyRate.setValue(
+      this.comService.decimalQuantityFormat(e["Conv Rate"], "RATE")
+    );
+
+    this.currencyConvRate = e["Conv Rate"];
+  }
+
+
+  SPvalidateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string, isCurrencyField: boolean) {
     LOOKUPDATA.SEARCH_VALUE = event.target.value;
 
+
     if (event.target.value === '' || this.viewOnly === true) {
+      if (isCurrencyField) {
+        let currencyRate = localStorage.getItem("partyCurrencyRate");
+        let currencyCode = localStorage.getItem("partyCurrencyCode");
 
-      const controlsToReset = ['customerName', 'partyAddress'];
+        this.advanceReturnForm.controls.partyCurrency.setValue(currencyCode);
+        this.advanceReturnForm.controls.partyCurrencyRate.setValue(
+          this.comService.decimalQuantityFormat(this.comService.emptyToZero(currencyRate), "RATE")
+        );
 
-      controlsToReset.forEach(control => {
-        this.advanceReturnForm.controls[control].setValue('');
-      });
 
+
+        this.renderer.selectRootElement('#currencyCode').select();
+      } else {
+        // this.customerData = null;
+        const controlsToReset = ['customerName', 'partyAddress'];
+        controlsToReset.forEach(control => {
+          this.advanceReturnForm.controls[control].setValue('');
+        });
+      }
       return;
     }
+
+    // if (event.target.value === '' || this.viewOnly === true) {
+
+    //   const controlsToReset = ['customerName', 'partyAddress'];
+
+    //   controlsToReset.forEach(control => {
+    //     this.advanceReturnForm.controls[control].setValue('');
+    //   });
+
+    //   return;
+    // }
 
     let param = {
       "PAGENO": LOOKUPDATA.PAGENO,
@@ -1129,22 +1327,58 @@ export class AdvanceReturnComponent implements OnInit {
 
             if (searchResult && searchResult.length > 0) {
               let matchedItem = searchResult[0];
-              this.advanceReturnForm.controls.customerName.setValue(
-                matchedItem.NAME
-              );
 
-              this.advanceReturnForm.controls.partyAddress.setValue(
-                matchedItem.ADDRESS
-              );
-
-
-
+              if (isCurrencyField) {
+                this.advanceReturnForm.controls.partyCurrency.setValue(matchedItem.Currency);
+                this.advanceReturnForm.controls.partyCurrencyRate.setValue(
+                  this.comService.decimalQuantityFormat(matchedItem['Conv Rate'], "RATE")
+                );
+                this.currencyCode = matchedItem.Currency;
+                // this.currencyConvRate=(matchedItem['Conv Rate']);
+              } else {
+                this.advanceReturnForm.controls.customerName.setValue(matchedItem.NAME);
+                this.advanceReturnForm.controls.partyAddress.setValue(matchedItem.ADDRESS);
+              }
             } else {
               this.comService.toastErrorByMsgId('No data found');
               LOOKUPDATA.SEARCH_VALUE = '';
+              if (isCurrencyField) {
+                let currencyRate = localStorage.getItem("partyCurrencyRate");
+                let currencyCode = localStorage.getItem("partyCurrencyCode");
+
+                this.advanceReturnForm.controls.partyCurrency.setValue(currencyCode);
+                this.advanceReturnForm.controls.partyCurrencyRate.setValue(
+                  this.comService.decimalQuantityFormat(this.comService.emptyToZero(currencyRate), "RATE")
+                );
+
+                this.renderer.selectRootElement('#currencyCode').select();
+              }
             }
           }
         }
+
+        // if (data && data.length > 0) {
+        //   if (LOOKUPDATA.FRONTENDFILTER && LOOKUPDATA.SEARCH_VALUE !== '') {
+        //     let searchResult = this.comService.searchAllItemsInArray(data, LOOKUPDATA.SEARCH_VALUE);
+
+        //     if (searchResult && searchResult.length > 0) {
+        //       let matchedItem = searchResult[0];
+        //       this.advanceReturnForm.controls.customerName.setValue(
+        //         matchedItem.NAME
+        //       );
+
+        //       this.advanceReturnForm.controls.partyAddress.setValue(
+        //         matchedItem.ADDRESS
+        //       );
+
+
+
+        //     } else {
+        //       this.comService.toastErrorByMsgId('No data found');
+        //       LOOKUPDATA.SEARCH_VALUE = '';
+        //     }
+        //   }
+        // }
       }, err => {
         this.comService.toastErrorByMsgId('MSG2272');
       });

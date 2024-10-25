@@ -7760,11 +7760,25 @@ export class SalesEstimationComponent implements OnInit {
         this.isPcsEditable = true;
       else
         this.isPcsEditable = false;
-    if (!isDivisionX &&
-      stockInfos.ENABLE_PCS &&
-      excludeQtyValidations.some(v => this.newLineItem.DIVISION.toUpperCase().includes(v))) {
-      this.renderer.selectRootElement('#fcn_li_pcs')?.select();
-    }
+        if (!isDivisionX && 
+           stockInfos.ENABLE_PCS &&
+          excludeQtyValidations.some(v => this.newLineItem.DIVISION.toUpperCase().includes(v))) {
+            if(this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_pcs)==0)
+          this.renderer.selectRootElement('#fcn_li_pcs')?.select();
+        else{
+          if (!isDivisionX && stockInfos.ENABLE_PCS && excludeQtyValidations.some(v => this.newLineItem.DIVISION.toUpperCase().includes(v))) {
+            if (this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_pcs) == 0) {
+              this.renderer.selectRootElement('#fcn_li_pcs')?.select();
+            } else {
+              const element = this.renderer.selectRootElement('#fcn_li_net_amount');
+              element.focus();  
+              setTimeout(() => element.select(), 0);  
+            }
+          }
+          
+        }
+        // this.renderer.selectRootElement('#fcn_li_net_amount')?.select();
+        }
     // if (!isDivisionX &&
     //   this.comFunc.emptyToZero(stockInfos.BALANCE_PCS) < 1 &&
     //   stockInfos.ENABLE_PCS &&
@@ -7773,15 +7787,15 @@ export class SalesEstimationComponent implements OnInit {
     //   excludeQtyValidations.some(v => this.newLineItem.DIVISION.toUpperCase().includes(v))) {
     //   this.renderer.selectRootElement('#fcn_li_pcs').focus();
     // }
-    else {
+     else {
       if (this.divisionMS == 'M') this.renderer.selectRootElement('#fcn_li_total_amount')?.select();
 
-      if (this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt) === 0 &&
-        this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_rate) === 0)
+      if(this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt) === 0 &&
+      this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_rate) === 0 )
 
-        this.renderer.selectRootElement('#fcn_li_gross_wt')?.select();
+      this.renderer.selectRootElement('#fcn_li_gross_wt')?.select();
 
-      else {
+      else{
         this.renderer.selectRootElement('#fcn_li_net_amount')?.select();
 
       }

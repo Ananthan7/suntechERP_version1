@@ -7771,7 +7771,21 @@ export class PointOfSalesOrderComponent implements OnInit {
         if (!isDivisionX && 
            stockInfos.ENABLE_PCS &&
           excludeQtyValidations.some(v => this.newLineItem.DIVISION.toUpperCase().includes(v))) {
+            if(this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_pcs)==0)
           this.renderer.selectRootElement('#fcn_li_pcs')?.select();
+        else{
+          if (!isDivisionX && stockInfos.ENABLE_PCS && excludeQtyValidations.some(v => this.newLineItem.DIVISION.toUpperCase().includes(v))) {
+            if (this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_pcs) == 0) {
+              this.renderer.selectRootElement('#fcn_li_pcs')?.select();
+            } else {
+              const element = this.renderer.selectRootElement('#fcn_li_net_amount');
+              element.focus();  
+              setTimeout(() => element.select(), 0);  
+            }
+          }
+          
+        }
+        // this.renderer.selectRootElement('#fcn_li_net_amount')?.select();
         }
     // if (!isDivisionX &&
     //   this.comFunc.emptyToZero(stockInfos.BALANCE_PCS) < 1 &&

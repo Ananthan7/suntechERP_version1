@@ -598,12 +598,12 @@ export class ProcessMasterComponent implements OnInit {
       return true;
     }
 
-    if (form.ApprovalRequired == true ){
-      if (this.commonService.nullToString(form.approvalProcess) == ''){
+    if (form.ApprovalRequired == true) {
+      if (this.commonService.nullToString(form.approvalProcess) == '') {
         this.commonService.toastErrorByMsgId('MSG81513 ');//Approval Process must be Required
         return true;
       }
-      if (this.commonService.nullToString(form.approvalCode) == ''){
+      if (this.commonService.nullToString(form.approvalCode) == '') {
         this.commonService.toastErrorByMsgId('MSG81513 ');//Approval Process must be Required
         return true;
       }
@@ -1413,18 +1413,21 @@ export class ProcessMasterComponent implements OnInit {
 
   approvalSelect(event: any) {
     if (this.processMasterForm.value.ApprovalRequired == true) {
-      this.renderer.selectRootElement('#approvalCode').focus();
-      this.renderer.selectRootElement('#approvalProcess').focus();
-      this.processMasterForm.get('approvalCode')?.setValidators(Validators.required);
-      this.processMasterForm.get('approvalProcess')?.setValidators(Validators.required);
+      if (this.processMasterForm.controls.approvalCode.value == '') {
+        this.renderer.selectRootElement('#approvalCode').focus();
+        this.renderer.selectRootElement('#approvalProcess').focus();
+        this.processMasterForm.get('approvalCode')?.setValidators(Validators.required);
+        this.processMasterForm.get('approvalProcess')?.setValidators(Validators.required);
+        this.processMasterForm.controls.approvalCode.setValue('');
+        this.processMasterForm.controls.approvalProcess.setValue('');
+      }
     }
     else {
       this.processMasterForm.get('approvalCode')?.clearValidators();
       this.processMasterForm.get('approvalProcess')?.clearValidators();
     }
     console.log(event);
-    this.processMasterForm.controls.approvalCode.setValue('');
-    this.processMasterForm.controls.approvalProcess.setValue('');
+
   }
 
 
