@@ -1454,6 +1454,92 @@
                             </mat-form-field>
                           </div>
                         </div>
+
+                        <div class="col-md-12 border p-4">
+                          <div class="row mb-1">
+                            <div class="col-md-12 pt-3">
+                              <mat-checkbox
+                                [disabled]="flag === 'VIEW'"
+                                formControlName="loyaltyCustomerCheck"
+                                id="ID060"
+                                >Loyalty Customer</mat-checkbox
+                              >
+                              <div class="row mb-1">
+                                <label
+                                  for="loyaltyCode"
+                                  class="col-sm-4 col-form-label"
+                                  id="ID090"
+                                  >Loyalty Code</label
+                                >
+                                <div class="col-md-8">
+                                  <mat-form-field
+                                    style="width: 100%"
+                                    appearance="outline"
+                                  >
+                                    <input
+                                      readonly="true"
+                                      matInput="text"
+                                      formControlName="loyaltyCode"
+                                    />
+                                  </mat-form-field>
+                                </div>
+                              </div>
+
+                              <div class="row mb-1">
+                                <label
+                                  for="openingLoyaltyPoints"
+                                  class="col-sm-4 col-form-label"
+                                  id="ID090"
+                                  >Opening Loyalty Points</label
+                                >
+                                <div class="col-md-8">
+                                  <mat-form-field
+                                    style="width: 100%"
+                                    appearance="outline"
+                                  >
+                                    <input
+                                      readonly="true"
+                                      matInput="text"
+                                      formControlName="openingLoyaltyPoints"
+                                    />
+                                  </mat-form-field>
+                                </div>
+                              </div>
+
+                              <button
+                              type="button"
+                              class=" col-md-12 p-4 mb-4 btn btn-primary text-center"
+                            >
+                              Update loyalty Points
+                            </button>
+
+
+                            <div class="row mb-1">
+                              <label
+                                for="loyaltyPoints"
+                                class="col-sm-4 col-form-label"
+                                id="ID090"
+                                >Loyalty Points</label
+                              >
+                              <div class="col-md-8">
+                                <mat-form-field
+                                  style="width: 100%"
+                                  appearance="outline"
+                                >
+                                  <input
+                                    readonly="true"
+                                    matInput="text"
+                                    formControlName="loyaltyPoints"
+                                  />
+                                </mat-form-field>
+                              </div>
+                            </div>
+
+
+
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -3175,7 +3261,7 @@
                 <div class="row">
                   <div class="col-md-6">
                     <div class="row mb-1 mt-2">
-                      <h6 id="ID079">Other Details</h6>
+                      <h6 id="ID079">Details 1</h6>
                     </div>
                     <!-- <div class="row mb-1">
                                             <h6>Details</h6>
@@ -3358,195 +3444,167 @@
                         </mat-form-field>
                       </div>
                     </div>
-                    
                   </div>
 
                   <div class="col-md-6">
                     <div class="row mb-1 mt-2">
-                      <h6 id="ID079">Other Details</h6>
+                      <h6 id="ID079">Details 2</h6>
                     </div>
-                    <!-- <div class="row mb-1">
-                                            <h6>Details</h6>
-                                        </div> -->
                     <div class="row mb-1">
                       <label
                         for="inputPassword"
-                        class="col-sm-4 col-form-label"
+                        class="col-sm-8 col-form-label"
                         id="ID080"
-                        >Reason of Purchase</label
-                      >
-                      <div class="col-md-8">
-                        <mat-form-field
-                          style="width: 100%"
-                          appearance="outline"
-                        >
-                          <mat-select
-                            [disabled]="flag === 'VIEW'"
-                            formControlName="reasonOfPurchase"
-                          >
-                            <mat-option value="Self Use">Self Use </mat-option>
-                            <mat-option value="Gift">Gift </mat-option>
-                          </mat-select>
-                        </mat-form-field>
-                      </div>
-                    </div>
-                    <div class="row mb-1">
-                      <label
-                        for="inputPassword"
-                        class="col-sm-4 col-form-label"
-                        id="ID081"
-                        >Gift Purchased For</label
-                      >
-                      <div class="col-md-8">
-                        <mat-form-field
-                          style="width: -webkit-fill-available"
-                          appearance="outline"
-                        >
-                          <input
-                            readonly="true"
-                            matInput
-                            type="text"
-                            formControlName="gifrPurchased"
-                          />
-                          <master-search
-                            *ngIf="flag !== 'VIEW' && isSelfGift"
-                            (focusout)="openTab($event, 'gifrPurchased')"
-                            #overlayGifrPurchased
-                            [MasterSearchData]="giftPurchasedCode"
-                            class="masterSearch"
-                            (newRowClick)="giftPurchasedSelected($event)"
-                          ></master-search>
-                        </mat-form-field>
-                      </div>
-                    </div>
-                    <div class="row mb-1">
-                      <label
-                        for="inputPassword"
-                        class="col-sm-4 col-form-label"
-                        id="ID082"
-                        >Occasion Of Purchase</label
-                      >
-                      <div class="col-md-8">
-                        <mat-form-field
-                          style="width: -webkit-fill-available"
-                          appearance="outline"
-                        >
-                          <input
-                            readonly="true"
-                            matInput
-                            type="text"
-                            formControlName="occasionOfPurchase"
-                          />
-                          <master-search
-                            *ngIf="flag !== 'VIEW'"
-                            (focusout)="openTab($event, 'occasionOfPurchase')"
-                            #overlayOccasionOfPurchase
-                            [MasterSearchData]="occasionOfPurchaseCode"
-                            class="masterSearch"
-                            (newRowClick)="occasionOfPurchaseSelected($event)"
-                          ></master-search>
-                        </mat-form-field>
-                      </div>
-                    </div>
-                    <div class="row mb-1">
-                      <label
-                        for="inputPassword"
-                        class="col-sm-4 col-form-label"
-                        id="ID083"
-                        >Age Group</label
-                      >
-                      <div class="col-md-8">
-                        <mat-form-field
-                          style="width: -webkit-fill-available"
-                          appearance="outline"
-                        >
-                          <input
-                            matInput
-                            type="text"
-                            readonly="true"
-                            formControlName="ageGroup"
-                          />
-
-                          <master-search
-                            *ngIf="flag !== 'VIEW'"
-                            (focusout)="openTab($event, 'ageGroup')"
-                            #overlayAgeGroup
-                            [MasterSearchData]="ageGroupCode"
-                            class="masterSearch"
-                            (newRowClick)="ageGroupSelected($event)"
-                          ></master-search>
-                        </mat-form-field>
-                      </div>
-                    </div>
-                    <div class="row mb-1">
-                      <label
-                        for="inputPassword"
-                        class="col-sm-7 col-form-label"
-                        id="ID084"
-                        >Did You Get What You Are Looking For</label
-                      >
-                    </div>
-                    <div class="row mb-1">
-                      <div class="col-md-12">
-                        <mat-form-field
-                          style="width: 100%"
-                          appearance="outline"
-                        >
-                          <mat-select
-                            [disabled]="flag === 'VIEW'"
-                            formControlName="lookingFor"
-                          >
-                            <mat-option
-                              *ngFor="let data of ratingList"
-                              [value]="data.ENGLISH"
-                              >{{ data.ENGLISH }}</mat-option
+                        >Festivals You Celebrate:
+                      </label>
+                      <div class="row mb-1">
+                        <div class="col-md-12">
+                          <div class="col-md-5 pt-3">
+                            <mat-checkbox
+                              [disabled]="flag === 'VIEW'"
+                              formControlName="eidFest"
+                              id="ID060"
+                              >EID</mat-checkbox
                             >
-                          </mat-select>
-                          <!-- <mat-error
-                            *ngIf="
-                              posCustomerMasterMainForm.controls.name.hasError(
-                                'required'
-                              )
-                            "
-                            id="ID005"
-                          >
-                            Name is <strong>required</strong>
-                          </mat-error> -->
-                        </mat-form-field>
+                          </div>
+                          <div class="col-md-5 pt-3">
+                            <mat-checkbox
+                              [disabled]="flag === 'VIEW'"
+                              formControlName="christmasFest"
+                              id="ID061"
+                              >CHRISTMAS</mat-checkbox
+                            >
+                          </div>
+                          <div class="col-md-5 pt-3">
+                            <mat-checkbox
+                              [disabled]="flag === 'VIEW'"
+                              formControlName="diwaliFest"
+                              id="ID062"
+                              >DIWALI</mat-checkbox
+                            >
+                          </div>
+                          <div class="col-md-5 pt-3">
+                            <mat-checkbox
+                              [disabled]="flag === 'VIEW'"
+                              formControlName="nationalDayFest"
+                              id="ID063"
+                              >NATIONAL DAY</mat-checkbox
+                            >
+                          </div>
+                          <div class="col-md-5 pt-3">
+                            <mat-checkbox
+                              [disabled]="flag === 'VIEW'"
+                              formControlName="onamFest"
+                              id="ID064"
+                              >ONAM</mat-checkbox
+                            >
+                          </div>
+                          <div class="col-md-5 pt-3">
+                            <mat-checkbox
+                              [disabled]="flag === 'VIEW'"
+                              formControlName="pongalandsankrantiFest"
+                              id="ID065"
+                              >PONGAL/SANKRANTI</mat-checkbox
+                            >
+                          </div>
+                          <div class="col-md-5 pt-3">
+                            <mat-checkbox
+                              [disabled]="flag === 'VIEW'"
+                              formControlName="newyearFest"
+                              id="ID065"
+                              >NEW YEAR</mat-checkbox
+                            >
+                          </div>
+                        </div>
                       </div>
                     </div>
+
                     <div class="row mb-1">
                       <label
                         for="inputPassword"
-                        class="col-sm-7 col-form-label"
-                        id="ID085"
-                        >Will See You in Next Visit Within:</label
-                      >
-                    </div>
-                    <div class="row mb-1">
-                      <div class="col-md-12">
-                        <mat-form-field
-                          style="width: -webkit-fill-available"
-                          appearance="outline"
+                        class="col-sm-8 col-form-label"
+                        id="ID080"
+                        >How likely are you to recommend jewellery to your
+                        family and friends?
+                      </label>
+                      <div class="row mb-1">
+                        <label
+                          for="johara"
+                          class="col-sm-4 col-form-label"
+                          id="ID018"
+                          >Johara</label
                         >
-                          <input
-                            type="text"
-                            readonly="true"
-                            matInput="text"
-                            formControlName="nextVisit"
-                          />
-                          <master-search
-                            *ngIf="flag !== 'VIEW'"
-                            (focusout)="openTab($event, 'nextVisit')"
-                            #overlayNextVisit
-                            [MasterSearchData]="nextVisitCode"
-                            class="masterSearch"
-                            (newRowClick)="nextVisitSelected($event)"
-                          ></master-search>
-                        </mat-form-field>
+                        <div class="col-md-8">
+                          <mat-form-field
+                            style="width: 100%"
+                            appearance="outline"
+                          >
+                            <mat-select
+                              [disabled]="flag === 'VIEW'"
+                              formControlName="johara"
+                            >
+                              <mat-option
+                                *ngFor="let data of ratingList"
+                                [value]="data.ENGLISH"
+                                >{{ data.ENGLISH }}</mat-option
+                              >
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                      </div>
+
+                      <div class="row mb-1">
+                        <label
+                          for="farah"
+                          class="col-sm-4 col-form-label"
+                          id="ID018"
+                          >Farah</label
+                        >
+                        <div class="col-md-8">
+                          <mat-form-field
+                            style="width: 100%"
+                            appearance="outline"
+                          >
+                            <mat-select
+                              [disabled]="flag === 'VIEW'"
+                              formControlName="farah"
+                            >
+                              <mat-option
+                                *ngFor="let data of ratingList"
+                                [value]="data.ENGLISH"
+                                >{{ data.ENGLISH }}</mat-option
+                              >
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                      </div>
+
+                      <div class="row mb-1">
+                        <label
+                          for="jawaher"
+                          class="col-sm-4 col-form-label"
+                          id="ID018"
+                          >Jawaher Al Sharq</label
+                        >
+                        <div class="col-md-8">
+                          <mat-form-field
+                            style="width: 100%"
+                            appearance="outline"
+                          >
+                            <mat-select
+                              [disabled]="flag === 'VIEW'"
+                              formControlName="jawaher"
+                            >
+                              <mat-option
+                                *ngFor="let data of ratingList"
+                                [value]="data.ENGLISH"
+                                >{{ data.ENGLISH }}</mat-option
+                              >
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
                       </div>
                     </div>
-                    
                   </div>
                 </div>
               </mat-tab>
@@ -4309,12 +4367,12 @@
                   <button
                     type="button"
                     class="btn btn-primary text-center m-2"
-                    (click)="printCustomerLog($event)"
+                    (click)="printCustomerLog()"
                   >
                     Print Customer Log
                   </button>
                   <button
-                  *ngIf="getCustomerDetailsValidation"
+                    *ngIf="getCustomerDetailsValidation"
                     type="button"
                     class="btn btn-primary text-center m-2"
                     (click)="getCustomerDetails($event)"

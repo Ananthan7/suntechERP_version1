@@ -30,6 +30,7 @@ import Swal from "sweetalert2";
 import { MasterSearchComponent } from "src/app/shared/common/master-search/master-search.component";
 import { MatCheckboxChange } from "@angular/material/checkbox";
 import { ShowTransDetailsComponent } from "./show-trans-details/show-trans-details.component";
+import { PrintCustomerLogComponent } from "./print-customer-log/print-customer-log.component";
 
 @Component({
   selector: "app-pos-customer-master-main",
@@ -74,6 +75,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
   @Input() content!: any;
   @Input() amlNameValidation?: boolean;
   @Input() vocDetails?: any;
+  htmlContentForCustomerLog: string = "";
   genderList: any = [];
   maritalStatusList: any = [];
   nameList: any = [];
@@ -92,8 +94,8 @@ export class PosCustomerMasterMainComponent implements OnInit {
   selectedstateISO2: any;
   cityListData: any;
   amlValidation: any;
-  IDDetailsValidation : boolean = false
-  getCustomerDetailsValidation : boolean = false
+  IDDetailsValidation: boolean = false;
+  getCustomerDetailsValidation: boolean = false;
   dialogBox: any;
   dialogBoxResult: any;
   existCustomerCode: any;
@@ -392,6 +394,23 @@ export class PosCustomerMasterMainComponent implements OnInit {
     appVersion: [""],
     passport: [""],
     connectedReaders: [""],
+
+    eidFest: [""],
+    christmasFest: [""],
+    diwaliFest: [""],
+    nationalDayFest: [""],
+    onamFest: [""],
+    pongalandsankrantiFest: [""],
+    newyearFest: [""],
+
+    johara: [""],
+    farah: [""],
+    jawaher: [""],
+
+    loyaltyCustomerCheck: [""],
+    loyaltyCode: [""],
+    openingLoyaltyPoints: [""],
+    loyaltyPoints: [""],
   });
 
   typeidCodeData: MasterSearchModel = {
@@ -636,6 +655,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
 
   imageName: any;
   PrivilegeCardData: any;
+  htmlCustomerLog: any;
 
   constructor(
     private modalService: NgbModal,
@@ -649,7 +669,8 @@ export class PosCustomerMasterMainComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.getCustomerDetailsValidation = this.comService.allbranchMaster.POSCUSTDETAILSFROMREADER
+    this.getCustomerDetailsValidation =
+      this.comService.allbranchMaster.POSCUSTDETAILSFROMREADER;
     this.branchCode = this.comService.branchCode;
     this.existCustomerCode = this.content?.CODE;
     this.flag = this.content?.FLAG;
@@ -2199,10 +2220,71 @@ export class PosCustomerMasterMainComponent implements OnInit {
     console.log("Got Clicked");
   }
 
-  printCustomerLog(event: any) {
-    console.log(event);
-    console.log("Got Clicked");
+  printCustomerLog() {
+    let payload = {
+      SPID: "163",
+      parameter: {
+        STRBRANCHES: "MCC#",
+        STRDATEFROM: "2024-09-01",
+        STRDATETO: "2024-10-23",
+        USERBRANCH: "MOE",
+        USP_ID: "{46DC1FCE-985B-4A39-A0F4-A3218B66FFAD}",
+        Logdata: JSON.stringify({
+          VOCTYPE: "GEN",
+          REFMID: "",
+          USERNAME: "ADMIN",
+          MODE: "PRINT",
+          DATETIME: "2024-10-23T05:22:11.286Z",
+          REMARKS: "",
+          SYSTEMNAME: "",
+          BRANCHCODE: "MOE",
+          VOCNO: "",
+          VOCDATE: "",
+          YEARMONTH: "2024",
+        }),
+      },
+    };
+
+    let API = "ExecueteSPInterface";
+
+    let sub: Subscription = this.apiService
+      .postDynamicAPI(API, payload)
+      .subscribe(
+        (res) => {
+          if (res.status && res.status.trim() === "Success") {
+            if (
+              res.dynamicData &&
+              res.dynamicData[0] &&
+              res.dynamicData[0][0] &&
+              res.dynamicData[0][0].HTMLOUT
+            ) {
+              this.htmlContentForCustomerLog = res.dynamicData[0][0].HTMLOUT;
+
+              const modalRef: NgbModalRef = this.modalService.open(
+                PrintCustomerLogComponent,
+                {
+                  size: "xl",
+                  backdrop: true,
+                  keyboard: false,
+                  windowClass: "modal-dialog-centered modal-dialog-scrollable",
+                }
+              );
+              modalRef.componentInstance.htmlContentForCustomerLog = this.htmlContentForCustomerLog;
+              // modalRef.componentInstance.data = this.content;
+            } else {
+              console.error("HTMLOUT not found in the response");
+            }
+          } else {
+            console.error("API did not return success:", res);
+          }
+        },
+        (error) => {
+          console.error("API call failed:", error);
+        }
+      );
   }
+
+  // Declare a class variable to hold the HTML content
 
   printPrivilegeCard(event: any) {
     let API = `PrivilegeCustomerNetSalesSummary/GetUspRptCustomerPrivilegeCardNet/${this.existCustomerCode}`;
@@ -2690,7 +2772,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
         this.posCustomerMasterMainForm.value.countryCode === "KWT") ||
       "KW"
     ) {
-      this.IDDetailsValidation = true
+      this.IDDetailsValidation = true;
     }
   }
 }
