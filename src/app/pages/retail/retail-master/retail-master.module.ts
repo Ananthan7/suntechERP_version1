@@ -9,6 +9,7 @@ import { SchemeMasterComponent } from './scheme-master/scheme-master.component';
 import { CommonRetailModule } from '../common-retail/common-retail.module';
 import { PosWalkinCustomerComponent } from './pos-walkin-customer/pos-walkin-customer.component';
 import { ShowTransDetailsComponent } from './pos-customer-master-main/show-trans-details/show-trans-details.component';
+import { PrintCustomerLogComponent } from './pos-customer-master-main/print-customer-log/print-customer-log.component';
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import { ShowTransDetailsComponent } from './pos-customer-master-main/show-trans
     PosCustomerMasterMainComponent,
     SchemeMasterComponent,
     PosWalkinCustomerComponent,
-    ShowTransDetailsComponent
+    ShowTransDetailsComponent,
+    PrintCustomerLogComponent
   ],
   imports: [
     CommonModule,

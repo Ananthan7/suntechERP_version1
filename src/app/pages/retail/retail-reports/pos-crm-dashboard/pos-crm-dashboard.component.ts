@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { ToastrService } from 'ngx-toastr';
 import { CommonServiceService } from 'src/app/services/common-service.service';
@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { DomSanitizer } from '@angular/platform-browser';
+import { MatSelectChange } from '@angular/material/select';
 
 @Component({
   selector: 'app-pos-crm-dashboard',
@@ -28,7 +29,7 @@ export class PosCrmDashboardComponent implements OnInit {
   formattedBranchDivisionData: any;
   templateNameHasValue: boolean= false;
   popupVisible: boolean = false;
-  fetchedBranchDataParam: any[]= [];
+  fetchedBranchDataParam: any= [];
   festivalArr: any[] = [];
   divisionsArr: any[] = [];
   diamondSectionArr: any[] = [];
@@ -64,7 +65,6 @@ export class PosCrmDashboardComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    this.prefillScreenValues()
     this.initAPI()
 
     this.logDataParam =  {
@@ -88,10 +88,12 @@ export class PosCrmDashboardComponent implements OnInit {
     this.dataService.getDynamicAPI(apiUrl).subscribe((resp: any) => {
       if (resp.status == 'Success') {
         console.log( resp.dynamicData )
-        this.festivalArr = resp.dynamicData[0]
-        this.divisionsArr = resp.dynamicData[1]
-        this.diamondSectionArr = resp.dynamicData[2]
-        this.metalSectionArr = resp.dynamicData[3]
+        this.festivalArr = resp.dynamicData[0];
+        this.divisionsArr = resp.dynamicData[1];
+        this.diamondSectionArr = resp.dynamicData[2];
+        this.metalSectionArr = resp.dynamicData[3];
+
+        this.prefillScreenValues();
       }
     });
   }
@@ -147,15 +149,15 @@ export class PosCrmDashboardComponent implements OnInit {
 
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {
-      this.subscriptions.forEach(subscription => subscription.unsubscribe());// unsubscribe all subscription
-      this.subscriptions = []; // Clear the array
+      this.subscriptions.forEach(subscription => subscription.unsubscribe());
+      this.subscriptions = [];
     }
   }
-
+  
   formatDateToYYYYMMDD(dateString: any) {
     const date = new Date(dateString);
     const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
+    const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
   }
@@ -409,7 +411,31 @@ export class PosCrmDashboardComponent implements OnInit {
       this.buyingPatternBoolean = paresedItem?.CONTROL_DETAIL.bln_ShowBuyingPattern === 1 ? false : true;
       console.log(this.buyingPatternBoolean)
     }
+    else{
+      const userBranch = localStorage.getItem('userbranch');
+      const formattedUserBranch = userBranch ? `${userBranch}#` : null;
+      this.posCRMdasbordFrom.controls.branch.setValue(formattedUserBranch);
+      this.fetchedBranchDataParam = formattedUserBranch;
+      this.fetchedBranchData= this.fetchedBranchDataParam?.split("#")
+   
+      this.dateToPass = {
+        fromDate:  this.formatDateToYYYYMMDD(new Date()),
+        toDate: this.formatDateToYYYYMMDD(new Date()),
+      };
+
+      this.posCRMdasbordFrom.controls.diamondsection.setValue(this.diamondSectionArr[0].DISPNAME);
+      this.posCRMdasbordFrom.controls.divisions.setValue(this.divisionsArr[0].Type);
+      this.posCRMdasbordFrom.controls.metal.setValue(this.metalSectionArr[0].DISPNAME);
+      console.log(this.posCRMdasbordFrom)
+      
+    }
   }
+
+  onFestivalChange(event: MatSelectChange) {
+    console.log('Selected Festival:', event.value);
+    this.posCRMdasbordFrom.controls.festival.setValue(event.value)
+  }
+
 
 
 }
