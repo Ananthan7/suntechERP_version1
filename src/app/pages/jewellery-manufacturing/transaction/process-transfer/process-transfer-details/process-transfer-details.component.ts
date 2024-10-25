@@ -369,7 +369,6 @@ export class ProcessTransferDetailsComponent implements OnInit {
     };
     // set data from header screen
     this.setOnLoadDetails()
-    this.processWorkerOrder()
   }
   ngAfterViewInit() {
     this.subJobNoSearch.VIEW_ICON = false;
@@ -759,7 +758,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
   setFromWorkerWhereCondition() {
     this.fromWorkerMasterSearch.WHERECONDITION = `@StrSubJobNo='${this.commonService.nullToString(this.processTransferdetailsForm.value.UNQ_JOB_ID)}',`
     this.fromWorkerMasterSearch.WHERECONDITION += `@StrFromProcess='${this.commonService.nullToString(this.processTransferdetailsForm.value.FRM_PROCESS_CODE)}',`
-    this.fromWorkerMasterSearch.WHERECONDITION += `@StrFromWorker='${this.commonService.nullToString(this.processTransferdetailsForm.value.FRM_WORKER_CODE)}',`
+    this.fromWorkerMasterSearch.WHERECONDITION += `@StrFromWorker='',`
     this.fromWorkerMasterSearch.WHERECONDITION += `@StrBranchCode='${this.commonService.branchCode}',`
     this.fromWorkerMasterSearch.WHERECONDITION += `@blnProcessAuthroize=1`
   }
@@ -1918,7 +1917,6 @@ export class ProcessTransferDetailsComponent implements OnInit {
   }
   /**USE:from porcesscode Validate API call */
   fromProcesscodeValidate(event: any) {
-    this.fromProcessMasterSearch.SEARCH_VALUE = event.target.value;
     this.setFromWorkerWhereCondition()
     this.setFromProcessWhereCondition()
     if (this.viewMode) return
@@ -1944,6 +1942,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
         if (result.status == "Success" && result.dynamicData[0]) {
           let data = result.dynamicData[0]
           if (data.length == 0) {
+            this.fromProcessMasterSearch.SEARCH_VALUE = event.target.value;
             if(this.designType == 'METAL'){
               this.MetalfromProcessMasterOverlay.showOverlayPanel(event);
               this.setFormNullToString('METAL_FRM_PROCESS_CODE', '')
@@ -1967,7 +1966,6 @@ export class ProcessTransferDetailsComponent implements OnInit {
   }
   // to processcode validate
   toProcesscodeValidate(event: any) {
-    this.toProcessMasterSearch.SEARCH_VALUE = event.target.value;
     this.setToProcessWhereCondition()
     this.setToWorkerWhereCondition()
     if (this.fromWorkerCodeEmpty || this.fromProcessCodeEmpty) return
@@ -1993,6 +1991,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
         if (result.status == "Success" && result.dynamicData[0]) {
           let data = result.dynamicData[0]
           if (data.length == 0) {
+            this.toProcessMasterSearch.SEARCH_VALUE = event.target.value;
             if(this.designType == 'METAL'){
               this.MetaltoProcessMasterOverlay.showOverlayPanel(event);
               this.setFormNullToString('METAL_TO_PROCESS_CODE', '')
@@ -2026,7 +2025,6 @@ export class ProcessTransferDetailsComponent implements OnInit {
   }
   // from Workercode Validate
   fromWorkercodeValidate(event: any) {
-    this.fromWorkerMasterSearch.SEARCH_VALUE = event.target.value;
     this.setFromWorkerWhereCondition()
     this.setFromProcessWhereCondition()
     if (this.viewMode || this.fromProcessCodeEmpty) return
@@ -2052,6 +2050,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
         this.commonService.closeSnackBarMsg()
         let data = result?.dynamicData[0] || []
         if (data.length == 0) {
+          this.fromWorkerMasterSearch.SEARCH_VALUE = event.target.value;
           if(this.designType == 'METAL'){
             this.MetalfromWorkerMasterOverley.showOverlayPanel(event);
             this.setFormNullToString('METAL_FRM_WORKER_CODE', '')
@@ -2071,7 +2070,6 @@ export class ProcessTransferDetailsComponent implements OnInit {
   }
   // to Workercode Validate
   toWorkercodeValidate(event: any) {
-    this.toWorkerMasterSearch.SEARCH_VALUE = event.target.value;
     this.setToWorkerWhereCondition()
     this.setToProcessWhereCondition()
     if (this.fromWorkerCodeEmpty || this.fromProcessCodeEmpty) return
@@ -2095,6 +2093,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
 
           let data = result.dynamicData[0]
           if (data.length == 0) {
+            this.toWorkerMasterSearch.SEARCH_VALUE = event.target.value;
             if(this.designType=='METAL'){
               this.MetaltoWorkerMasterOverley.showOverlayPanel(event)
               this.setFormNullToString('METAL_TO_WORKER_CODE', '')
