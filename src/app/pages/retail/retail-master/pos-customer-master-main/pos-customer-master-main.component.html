@@ -923,7 +923,7 @@
             </div>
           </div>
           <div class="col-md-8">
-            <mat-tab-group>
+            <mat-tab-group #tabGroup >
               <mat-tab label="Other Detail">
                 <div class="row mt-2">
                   <div class="col-md-12">
@@ -3606,7 +3606,7 @@
                   </div>
                 </div>
               </mat-tab>
-              <mat-tab label="ID Details">
+              <mat-tab label="ID Details" *ngIf="IDDetailsValidation" >
                 <div class="row mt-2">
                   <div class="col-md-12">
                     <div class="row mb-1">
@@ -3843,7 +3843,7 @@
 
                         <div class="row mb-1">
                           <label
-                            for="serialNo"
+                            for="street"
                             class="col-sm-5 col-form-label"
                             id="ID029"
                             >STREET</label
