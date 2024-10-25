@@ -671,6 +671,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
   loyaltyCode: any;
   isLoyaltyVisible: boolean = false;
   htmlContentForPrivilege: any;
+  compAccode: any;
 
   constructor(
     private modalService: NgbModal,
@@ -684,6 +685,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.compAccode = this.comService?.allCompanyParameters?.COMPACCODE;
     this.loyaltyCode = this.comService.allbranchMaster?.LOYALTY_CODE;
     this.getCustomerDetailsValidation =
       this.comService.allbranchMaster?.POSCUSTDETAILSFROMREADER;
@@ -1818,16 +1820,16 @@ export class PosCustomerMasterMainComponent implements OnInit {
           NATIONALITY_DESC:
             this.posCustomerMasterMainForm.value.nationalityDesc || "",
           TYPE_DESC: this.posCustomerMasterMainForm.value.custDesc || "",
-          DETAILS_JOHARA: "",
-          DETAILS_FARAH: "",
-          DETAILS_JAWAHERALSHARQ: "",
-          FESTIVAL_EID: false,
-          FESTIVAL_CHRISTMAS: false,
-          FESTIVAL_DIWALI: false,
-          FESTIVAL_NATIONALDAY: false,
-          FESTIVAL_ONAM: false,
-          FESTIVAL_PONGAL: false,
-          FESTIVAL_NEWYEAR: false,
+          DETAILS_JOHARA: this.posCustomerMasterMainForm.value.johara || "",
+          DETAILS_FARAH: this.posCustomerMasterMainForm.value.farah || "",
+          DETAILS_JAWAHERALSHARQ: this.posCustomerMasterMainForm.value.jawaher || "",
+          FESTIVAL_EID: this.isFestivalEid,
+          FESTIVAL_CHRISTMAS: this.isFestivalChristmas,
+          FESTIVAL_DIWALI: this.isFestivalDiwali,
+          FESTIVAL_NATIONALDAY: this.isFestivalNationalday,
+          FESTIVAL_ONAM: this.isFestivalOnam,
+          FESTIVAL_PONGAL: this.isFestivalPongal,
+          FESTIVAL_NEWYEAR: this.isFestivalNewyear,
           REASON_OF_PURCHASE:
             this.posCustomerMasterMainForm.value.reasonOfPurchase || "",
           AGE_GROUP: this.posCustomerMasterMainForm.value.ageGroup || "",
@@ -2953,6 +2955,26 @@ export class PosCustomerMasterMainComponent implements OnInit {
     switch (controller) {
       case "eidFest":
         this.isFestivalEid = event.checked;
+
+        break;
+      case "christmasFest":
+        this.isFestivalChristmas = event.checked;
+
+        break;
+      case "diwaliFest":
+        this.isFestivalDiwali = event.checked;
+
+        break;
+      case "nationalDayFest":
+        this.isFestivalNationalday = event.checked;
+
+        break;
+      case "pongalandsankrantiFest":
+        this.isFestivalPongal = event.checked;
+
+        break;
+      case "newyearFest":
+        this.isFestivalNewyear = event.checked;
 
         break;
 
