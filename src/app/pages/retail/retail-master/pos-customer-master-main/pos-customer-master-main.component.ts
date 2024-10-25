@@ -794,7 +794,9 @@ export class PosCustomerMasterMainComponent implements OnInit {
     }
     if (FLAG === "EDIT") {
       this.editController();
-    } else if (this.content.FLAG == "DELETE") {
+    }
+
+    if (FLAG == "DELETE") {
       this.deleteCustomerMaster();
     }
   }
@@ -1451,6 +1453,8 @@ export class PosCustomerMasterMainComponent implements OnInit {
   }
 
   getDropDownStatus() {
+    console.log("In 1454");
+
     this.maritalStatusList = this.getUniqueValues(
       this.comService.getComboFilterByID("Marital Status"),
       "ENGLISH"
