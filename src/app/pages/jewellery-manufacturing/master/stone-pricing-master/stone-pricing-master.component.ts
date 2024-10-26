@@ -553,7 +553,6 @@ export class StonePricingMasterComponent implements OnInit {
       this.commonService.toastErrorByMsgId('MSG1172')//"currency cannot be empty"
       return true
     }
-
     else if (this.commonService.nullToString(form.carat_wt) == '') {
       this.commonService.toastErrorByMsgId('MSG1095')//"carat_wt cannot be empty"
       return true
@@ -572,37 +571,45 @@ export class StonePricingMasterComponent implements OnInit {
       return true
     }
 
-    if (this.stonePrizeMasterForm.value.selling === '' && this.stonePrizeMasterForm.value.selling_rate === '') {
+    if (this.stonePrizeMasterForm.value.selling === '0.00' && this.stonePrizeMasterForm.value.selling_rate === '0.00') {
       this.commonService.toastErrorByMsgId('MSG7728');//Enter values either Selling % or Selling Rate
       return;
     }
+    // if (this.commonService.nullToString(form.selling) == "0.00" ||
+    //   this.commonService.nullToString(form.selling) === '' ||
+    //   this.commonService.nullToString(form.selling) === '0' ||
+    //   /^0{2,}\.00$/.test(this.commonService.nullToString(form.selling))) {
+    //   this.commonService.toastErrorByMsgId('MSG7728')// 
+    //   return true
+    // }
+
+    // if (this.commonService.nullToString(form.selling_rate) == "0.00" ||
+    //   this.commonService.nullToString(form.selling_rate) === '' ||
+    //   this.commonService.nullToString(form.selling_rate) === '0' ||
+    //   /^0{2,}\.00$/.test(this.commonService.nullToString(form.selling_rate))) {
+    //   this.commonService.toastErrorByMsgId('MSG7728')// 
+    //   return true
+    // }
 
     if (this.stonePrizeMasterForm.value.sieve_form > this.stonePrizeMasterForm.value.sieve_to) {
       this.commonService.toastErrorByMsgId('MSG81518');// Sieve From Should not be Greater than Sieve To
       return;
     }
 
-    // else if (this.commonService.nullToString(form.currency) == '') {
-    //   this.commonService.toastErrorByMsgId('MSG1173')//"currency cannot be empty"
-    //   return true
-    // }
-    // else if (this.diamondlabourMasterForm.value.selling_rate == 0 && this.diamondlabourMasterForm.value.selling == 0) {
-    //   this.commonService.toastErrorByMsgId('MSG7728') //"Select Either Selling % or Selling Rate"
-    //   return true
-    // }
-
-    // else if (this.diamondlabourMasterForm.value.size_from > this.diamondlabourMasterForm.value.size_to) {
-    //  // this.commonService.toastErrorByMsgId('MSG2496') //"Size From should be lesser than Size To"
-    //   this.toastr.error('Size From should be lesser than Size To')
-    //   return true
-    // }
-
-    // else if (this.diamondlabourMasterForm.value.ctWtFrom > this.diamondlabourMasterForm.value.ctWtTo) {
-    //   this.commonService.toastErrorByMsgId('MSG3805')//Weight From should be lesser than Weight To
-    //   return true
-    // }
+    if (this.stonePrizeMasterForm.value.wtFrom > this.stonePrizeMasterForm.value.wtTo) {
+      this.commonService.toastErrorByMsgId('MSG7884')// Weight From should be lesser than Weight To
+      return true
+    }
 
 
+    return false;
+  }
+
+  checkCondition(value: string, msgId: string): boolean {
+    if (value === '0.000' || value === '0.00' || value === '0.0' || value === '0' || /^0{2,}\.00$/.test(value)) {
+      this.commonService.toastErrorByMsgId(msgId);
+      return true;
+    }
     return false;
   }
 
@@ -613,6 +620,19 @@ export class StonePricingMasterComponent implements OnInit {
       this.update()
       return
     }
+
+    // if (this.stonePrizeMasterForm.value.selling_rate === 0.00 && this.stonePrizeMasterForm.value.selling === 0) {
+    //   this.commonService.toastErrorByMsgId('MSG7728');
+    //   return;
+    // }
+
+    if (this.checkCondition(this.stonePrizeMasterForm.value.carat_wt, 'MSG1095')) return;
+    if (this.checkCondition(this.stonePrizeMasterForm.value.wt_from, 'MSG3565')) return;
+    if (this.checkCondition(this.stonePrizeMasterForm.value.wt_to, 'MSG3565')) return;
+    if (this.checkCondition(this.stonePrizeMasterForm.value.issue_rate, 'MSG1723')) return;
+
+
+
     if (this.submitValidation(this.stonePrizeMasterForm.value)) return;
 
     let API = 'StonePriceMasterDJ/InsertStonePriceMaster'
@@ -1025,7 +1045,7 @@ export class StonePricingMasterComponent implements OnInit {
           LOOKUPDATA.SEARCH_VALUE = ''
           return
         }
-       
+
         if (FORMNAME === 'sieve_set') {
           this.sieve_setDataSelected(data[0]); // Assuming the first data element is used
         } else {

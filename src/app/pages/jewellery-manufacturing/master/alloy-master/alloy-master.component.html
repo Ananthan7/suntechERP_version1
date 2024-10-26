@@ -354,7 +354,7 @@
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%" appearance="outline">
                                         <input type="text" matInput AmountDecimalInput formControlName="price1Lc"
-                                            class="text-right" [readonly]="viewMode" (focusout)="price1LcChange()" />
+                                        [max]="13"   class="text-right" [readonly]="viewMode" (focusout)="price1LcChange()" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -391,7 +391,7 @@
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%" appearance="outline">
                                         <input type="text" matInput AmountDecimalInput formControlName="price2Lc"
-                                            class="text-right" [readonly]="viewMode" (focusout)="price2LcChange()" />
+                                        [max]="13"  class="text-right" [readonly]="viewMode" (focusout)="price2LcChange()" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -428,7 +428,7 @@
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%" appearance="outline">
                                         <input type="text" matInput formControlName="price3Lc" AmountDecimalInput
-                                            class="text-right" [readonly]="viewMode" (focusout)="price3LcChange()" />
+                                        [max]="13" class="text-right" [readonly]="viewMode" (focusout)="price3LcChange()" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -465,7 +465,7 @@
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%" appearance="outline">
                                         <input type="text" matInput formControlName="price4Lc" AmountDecimalInput
-                                            class="text-right" [readonly]="viewMode" (focusout)="price4LcChange()" />
+                                        [max]="13"  class="text-right" [readonly]="viewMode" (focusout)="price4LcChange()" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -502,7 +502,7 @@
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%" appearance="outline">
                                         <input type="text" matInput formControlName="price5Lc" AmountDecimalInput
-                                            class="text-right" [readonly]="viewMode" (focusout)="price5LcChange()" />
+                                        [max]="13"  class="text-right" [readonly]="viewMode" (focusout)="price5LcChange()" />
                                     </mat-form-field>
                                 </div>
                             </div>
