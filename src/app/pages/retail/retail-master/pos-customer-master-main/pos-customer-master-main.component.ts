@@ -847,10 +847,14 @@ export class PosCustomerMasterMainComponent implements OnInit {
     );
     this.posCustomerMasterMainForm.controls.POBox.setValue(setData.POBOX_NO);
     this.posCustomerMasterMainForm.controls.state.setValue(setData.STATE);
+    this.cityCodeData.WHERECONDITION = `TYPES='city master' and COUNTRY_CODE = '${setData.COUNTRY_CODE}' and STATE_CODE = '${setData.STATE}' `;
+    this.isViewCity = true;
     this.posCustomerMasterMainForm.controls.city.setValue(setData.CITY);
     this.posCustomerMasterMainForm.controls.countryCode.setValue(
       setData.COUNTRY_CODE
     );
+    this.stateCode.WHERECONDITION = `TYPES='state master' and COUNTRY_CODE = '${setData.COUNTRY_CODE}'`;
+    this.isViewState = true;
     this.posCustomerMasterMainForm.controls.country.setValue(
       setData.COUNTRY_DESC
     );
