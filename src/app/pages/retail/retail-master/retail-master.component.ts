@@ -1,60 +1,92 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { Subscription } from 'rxjs';
-import { CommonServiceService } from 'src/app/services/common-service.service';
-import { SuntechAPIService } from 'src/app/services/suntech-api.service';
-import { MasterGridComponent } from 'src/app/shared/common/master-grid/master-grid.component';
-import { PosCustomerMasterMainComponent } from './pos-customer-master-main/pos-customer-master-main.component';
-import { SchemeMasterComponent } from './scheme-master/scheme-master.component';
-import { PosWalkinCustomerComponent } from './pos-walkin-customer/pos-walkin-customer.component';
-import DataLabelsPlugin from 'chartjs-plugin-datalabels';
-import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
-import { BaseChartDirective } from 'ng2-charts';
-import { Colors } from 'src/app/layouts/themes/_themeCode';
-
+import { Component, OnInit, ViewChild } from "@angular/core";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
+import { Observable, Subscription } from "rxjs";
+import { CommonServiceService } from "src/app/services/common-service.service";
+import { SuntechAPIService } from "src/app/services/suntech-api.service";
+import { MasterGridComponent } from "src/app/shared/common/master-grid/master-grid.component";
+import { PosCustomerMasterMainComponent } from "./pos-customer-master-main/pos-customer-master-main.component";
+import { SchemeMasterComponent } from "./scheme-master/scheme-master.component";
+import { PosWalkinCustomerComponent } from "./pos-walkin-customer/pos-walkin-customer.component";
+import DataLabelsPlugin from "chartjs-plugin-datalabels";
+import { ChartConfiguration, ChartData, ChartType } from "chart.js";
+import { BaseChartDirective } from "ng2-charts";
+import { Colors } from "src/app/layouts/themes/_themeCode";
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from "@angular/forms";
+import { map, startWith } from "rxjs/operators";
 
 @Component({
-  selector: 'app-retail-master',
-  templateUrl: './retail-master.component.html',
-  styleUrls: ['./retail-master.component.scss']
+  selector: "app-retail-master",
+  templateUrl: "./retail-master.component.html",
+  styleUrls: ["./retail-master.component.scss"],
 })
 export class RetailMasterComponent implements OnInit {
   @ViewChild(MasterGridComponent) masterGridComponent?: MasterGridComponent;
   @ViewChild(BaseChartDirective) chart!: BaseChartDirective;
+  @ViewChild("userAuthModal")
+  public userAuthModal!: NgbModal;
+  modalReferenceUserAuth!: NgbModalRef;
+
+  authForm: FormGroup = this.formBuilder.group({
+    // username: [localStorage.getItem('username'), Validators.required],
+    password: ["", Validators.required],
+    // reason: ['', Validators.required],
+    reason: [
+      "",
+      [
+        Validators.required,
+        this.autoCompleteValidator(() => this.reasonMaster, "CODE"),
+      ],
+    ],
+    description: ["", Validators.required],
+  });
 
   //variables
+  reasonMaster: any = [];
+  reasonMasterOptions!: Observable<any[]>;
   public colors = Colors;
-  menuTitle: string = '';
+  menuTitle: string = "";
   apiCtrl: any;
   orderedItems: any[] = [];
   orderedItemsHead: any[] = [];
   tableName: any;
-  PERMISSIONS: any
+  PERMISSIONS: any;
   componentName: any;
-  private componentDbList: any = {}
+  private componentDbList: any = {};
   componentSelected: any;
   isCustomerDashboard: boolean = false;
+  posPlanetIssuing: boolean = false;
+
   constructor(
     private CommonService: CommonServiceService,
     private dataService: SuntechAPIService,
     private snackBar: MatSnackBar,
     private modalService: NgbModal,
-    // private ChangeDetector: ChangeDetectorRef, //to detect changes in dom
+    private formBuilder: FormBuilder // private ChangeDetector: ChangeDetectorRef, //to detect changes in dom
   ) {
-    this.getMasterGridData()
-    this.menuTitle = this.CommonService.getModuleName()
+    this.getMasterGridData();
+    this.menuTitle = this.CommonService.getModuleName();
     this.componentName = this.CommonService.getFormComponentName();
   }
 
   ngOnInit(): void {
-    if (localStorage.getItem('AddNewFlag') && localStorage.getItem('AddNewFlag') == '1') {
-      this.openModalView('Sale')
-      localStorage.removeItem('AddNewFlag')
+    this.posPlanetIssuing = this.CommonService.allbranchMaster.POSPLANETISSUING;
+
+    if (
+      localStorage.getItem("AddNewFlag") &&
+      localStorage.getItem("AddNewFlag") == "1"
+    ) {
+      this.openModalView("Sale");
+      localStorage.removeItem("AddNewFlag");
     }
     this.setBarChartOptions();
+    this.getReasonMasters();
   }
-
 
   /**USE: to get table data from API */
   getMasterGridData(data?: any) {
@@ -64,73 +96,109 @@ export class RetailMasterComponent implements OnInit {
     } else {
       this.menuTitle = this.CommonService.getModuleName();
       this.setDashboardLayout(this.menuTitle);
-
     }
-    this.masterGridComponent?.getMasterGridData(data)
+    this.masterGridComponent?.getMasterGridData(data);
   }
 
   viewRowDetails(e: any) {
     let str = e.row.data;
-    str.FLAG = 'VIEW'
-    this.openModalView(str)
+    str.FLAG = "VIEW";
+    this.openModalView(str);
   }
-  editRowDetails(e: any) {
+  async editRowDetails(e: any) {
     let str = e.row.data;
-    str.FLAG = 'EDIT'
-    this.openModalView(str)
+    str.FLAG = "EDIT";
+
+    console.log("====================================");
+    console.log(this.posPlanetIssuing, str.PLANETRESPONEFLG, str.TRAYN);
+    console.log("====================================");
+    if (
+      this.posPlanetIssuing &&
+      str.PLANETRESPONEFLG == "Y" &&
+      str.TRAYN == "Y"
+    ) {
+      let posPlanetFile: any = await this.createPlanetPOSFindFile(str);
+      console.log(posPlanetFile);
+
+      if (posPlanetFile.value) {
+      } else {
+        this.snackBar.open(posPlanetFile.data.message, "OK");
+        return;
+      }
+    }
+
+    let isAuth = await this.openAuthModal();
+    if (isAuth) this.openModalView(str);
+    else this.snackBar.open("Authentication Failed", "OK");
   }
-  deleteBtnClicked(e: any) {
-    console.log(e);        
+  async deleteBtnClicked(e: any) {
+    console.log(e);
     let str = e.row.data;
-    str.FLAG = 'DELETE'
-    this.openModalView(str)
+    str.FLAG = "DELETE";
+
+    let isAuth = await this.openAuthModal();
+    if (isAuth) this.openModalView(str);
+    else this.snackBar.open("Authentication Failed", "OK");
     // this.authCheckerComponent?.openAuthModal();
   }
   //  open Jobcard in modal
   openModalView(data?: any) {
-    if (data && data == 'Sale') {
-      this.menuTitle = data
+    if (data && data == "Sale") {
+      this.menuTitle = data;
     }
     let contents: any;
     this.componentDbList = {
-      'PosCustomerMaster': PosCustomerMasterMainComponent,
-      'SchemeMasterComponent': SchemeMasterComponent,
-      'PosWalkinCustomerComponent': PosWalkinCustomerComponent,
+      PosCustomerMaster: PosCustomerMasterMainComponent,
+      SchemeMasterComponent: SchemeMasterComponent,
+      PosWalkinCustomerComponent: PosWalkinCustomerComponent,
 
       // Add components and update in operationals > menu updation grid form component name
-    }
+    };
     if (this.componentDbList[this.componentName]) {
-      this.componentSelected = this.componentDbList[this.componentName]
+      this.componentSelected = this.componentDbList[this.componentName];
     } else {
-      this.CommonService.showSnackBarMsg('Module Not Created')
+      this.CommonService.showSnackBarMsg("Module Not Created");
     }
 
-    const modalRef: NgbModalRef = this.modalService.open(this.componentSelected, {
-      size: 'xl',
-      backdrop: 'static',
-      keyboard: false,
-      windowClass: 'modal-full-width'
-    });
-    modalRef.result.then((result) => {
-      if (result === 'reloadMainGrid') {
-        this.getMasterGridData({ HEADER_TABLE: this.CommonService.getqueryParamTable() })
+    const modalRef: NgbModalRef = this.modalService.open(
+      this.componentSelected,
+      {
+        size: "xl",
+        backdrop: "static",
+        keyboard: false,
+        windowClass: "modal-full-width",
       }
-    }, (reason) => {
-      // Handle modal dismissal (if needed)
-    });
+    );
+    modalRef.result.then(
+      (result) => {
+        if (result === "reloadMainGrid") {
+          this.getMasterGridData({
+            HEADER_TABLE: this.CommonService.getqueryParamTable(),
+          });
+        } else if (result == "OpenModal") {
+          this.openModalView();
+        }
+      },
+      (reason) => {
+        if (reason === 'reloadMainGrid') {
+          this.getMasterGridData({ HEADER_TABLE: this.CommonService.getqueryParamTable() })
+        } else if (reason == 'OpenModal') {
+          this.openModalView()
+        }
+        // Handle modal dismissal (if needed)
+      }
+    );
     modalRef.componentInstance.content = data;
   }
 
-
-
   setChartConfig() {
-    const articleSold: any = localStorage.getItem('soldItemDetails');
-    const collectionbyRevenue: any = localStorage.getItem('collectionWiseData');
-    const outofStock: any = localStorage.getItem('outofStock');
-    const divisionWiseData: any = localStorage.getItem('divisionWiseData');
-    const salebyCity: any = localStorage.getItem('salesbyCity');
-    const customerCount: any = localStorage.getItem('customerCountChart');
-    const averageTransaction: any = localStorage.getItem('avgTransaction');
+    const articleSold: any = localStorage.getItem("soldItemDetails");
+    const collectionbyRevenue: any = localStorage.getItem("collectionWiseData");
+    const outofStock: any = localStorage.getItem("outofStock");
+    const divisionWiseData: any = localStorage.getItem("divisionWiseData");
+    const salebyCity: any = localStorage.getItem("salesbyCity");
+    const customerCount: any = localStorage.getItem("customerCountChart");
+    const averageTransaction: any = localStorage.getItem("avgTransaction");
     this.articleSoldDetails = JSON.parse(articleSold);
     this.salesbyDivisionDetails = JSON.parse(divisionWiseData);
     this.avgTransacUnitsData = JSON.parse(averageTransaction);
@@ -138,101 +206,94 @@ export class RetailMasterComponent implements OnInit {
     this.monthlyCustomerDetails = JSON.parse(customerCount);
     this.salesbyCityDetails = JSON.parse(salebyCity);
     this.collectionByRevenue = JSON.parse(collectionbyRevenue);
-
   }
 
   setDashboardLayout(screen: any) {
-    localStorage.removeItem('screen');
+    localStorage.removeItem("screen");
 
     if (screen == "Customer Master") {
       this.isCustomerDashboard = true;
-      localStorage.setItem('screen', screen)
+      localStorage.setItem("screen", screen);
       this.setChartConfig();
-    }
-
-    else
-      this.isCustomerDashboard = false;
-    
+    } else this.isCustomerDashboard = false;
   }
 
-
-  public collectionByRevenue: ChartConfiguration['data'] = {
+  public collectionByRevenue: ChartConfiguration["data"] = {
     datasets: [
       {
-        "data": [],
-        "label": "Revenue",
-        "backgroundColor": '#336699',
-      }
+        data: [],
+        label: "Revenue",
+        backgroundColor: "#336699",
+      },
     ],
-    labels: []
+    labels: [],
   };
 
-  public articleSoldDetails: ChartConfiguration['data'] = {
+  public articleSoldDetails: ChartConfiguration["data"] = {
     datasets: [
       {
-        "data": [],
-        "label": "Sold Items",
-        "backgroundColor": '#336699',
-      }
+        data: [],
+        label: "Sold Items",
+        backgroundColor: "#336699",
+      },
     ],
-    labels: []
+    labels: [],
   };
 
+  public chartPlugins = [DataLabelsPlugin];
 
-
-  public chartPlugins = [
-    DataLabelsPlugin
-  ];
-
-  public doughnutChartType: ChartType = 'doughnut';
-  public lineChartType: ChartType = 'line';
-  public salesbyDivisionDetails: ChartConfiguration['data'] = {
+  public doughnutChartType: ChartType = "doughnut";
+  public lineChartType: ChartType = "line";
+  public salesbyDivisionDetails: ChartConfiguration["data"] = {
     datasets: [],
     labels: [],
   };
 
-
-  public avgTransacUnitsData: ChartConfiguration['data'] = {
+  public avgTransacUnitsData: ChartConfiguration["data"] = {
     datasets: [],
     labels: [],
   };
-  public salesbyCityDetails: ChartData<'doughnut'> = {
+  public salesbyCityDetails: ChartData<"doughnut"> = {
     labels: [],
-    datasets: [
-      { data: [] },
-    ],
+    datasets: [{ data: [] }],
   };
-  public outofStockDetails: ChartConfiguration['data'] = {
+  public outofStockDetails: ChartConfiguration["data"] = {
     datasets: [],
     labels: [],
   };
-  public monthlyCustomerDetails: ChartConfiguration['data'] = {
+  public monthlyCustomerDetails: ChartConfiguration["data"] = {
     datasets: [],
     labels: [],
   };
 
-  public filledLineChartOptions: ChartConfiguration['options'];
-  public barchartOptions: ChartConfiguration['options'];
-  public transactionUnitLineOptions: ChartConfiguration['options'];
-  public doughnutChartOptions: ChartConfiguration['options'];
-  public commonBarchartOptions: ChartConfiguration['options'];
-  public monthlyCustomerOptions: ChartConfiguration['options'];
+  public filledLineChartOptions: ChartConfiguration["options"];
+  public barchartOptions: ChartConfiguration["options"];
+  public transactionUnitLineOptions: ChartConfiguration["options"];
+  public doughnutChartOptions: ChartConfiguration["options"];
+  public commonBarchartOptions: ChartConfiguration["options"];
+  public monthlyCustomerOptions: ChartConfiguration["options"];
 
-  public ChartType: ChartType = 'bar';
-  public barChartType: ChartType = 'bar';
+  public ChartType: ChartType = "bar";
+  public barChartType: ChartType = "bar";
 
   setBarChartOptions() {
-    let layoutDataSet = this.getLayoutDataSet('light');
+    let layoutDataSet = this.getLayoutDataSet("light");
 
-    this.transactionUnitLineOptions = this.createChartOptions(layoutDataSet, { curvedLine: true });
+    this.transactionUnitLineOptions = this.createChartOptions(layoutDataSet, {
+      curvedLine: true,
+    });
 
     this.filledLineChartOptions = this.createChartOptions(layoutDataSet, {
-      curvedLine: true,  // Curved lines for filled chart
+      curvedLine: true, // Curved lines for filled chart
       fill: true,
       // backgroundColor: 'rgba(255, 99, 132, 0.2)',  // Area fill color with transparency
       // borderColor: 'rgba(255, 99, 132, 1)'         // Line color
     });
-    this.barchartOptions = this.createChartOptions(layoutDataSet, { curvedLine: false, hideXAxisGrid: true, lineWidth: 0.3 });
+    this.barchartOptions = this.createChartOptions(layoutDataSet, {
+      curvedLine: false,
+      hideXAxisGrid: true,
+      lineWidth: 0.3,
+    });
 
     this.doughnutChartOptions = this.createDoughnutChartOptions(layoutDataSet);
 
@@ -241,15 +302,22 @@ export class RetailMasterComponent implements OnInit {
     this.commonBarchartOptions = this.createProductChartOptions(layoutDataSet);
   }
 
-  private getLayoutDataSet(theme: 'light' | 'dark') {
-    if (theme === 'dark') {
-      return { gridLineColor: 'white', LabelColor: 'white', LegendColor: 'white' };
+  private getLayoutDataSet(theme: "light" | "dark") {
+    if (theme === "dark") {
+      return {
+        gridLineColor: "white",
+        LabelColor: "white",
+        LegendColor: "white",
+      };
     } else {
-      return { gridLineColor: 'grey', LabelColor: 'grey', LegendColor: 'grey' };
+      return { gridLineColor: "grey", LabelColor: "grey", LegendColor: "grey" };
     }
   }
 
-  private createChartOptions(layoutDataSet: any, options: any = {}): ChartConfiguration['options'] {
+  private createChartOptions(
+    layoutDataSet: any,
+    options: any = {}
+  ): ChartConfiguration["options"] {
     return {
       responsive: true,
       scales: {
@@ -258,20 +326,20 @@ export class RetailMasterComponent implements OnInit {
           grid: {
             display: true,
             color: layoutDataSet.gridLineColor,
-            lineWidth: options.lineWidth || 1
+            lineWidth: options.lineWidth || 1,
           },
           ticks: {
             color: layoutDataSet.LabelColor,
-            callback: (value: any) => this.formatTickValue(value)
-          }
+            callback: (value: any) => this.formatTickValue(value),
+          },
         },
         x: {
           grid: {
-            display: !options.hideXAxisGrid
+            display: !options.hideXAxisGrid,
           },
           ticks: {
             color: layoutDataSet.LabelColor,
-          }
+          },
         },
       },
       elements: {
@@ -282,14 +350,14 @@ export class RetailMasterComponent implements OnInit {
           borderColor: options.borderColor || undefined,
         },
         point: {
-          radius: 4
+          radius: 4,
         },
       },
       plugins: {
         legend: {
           display: true,
-          align: 'center',
-          position: 'bottom',
+          align: "center",
+          position: "bottom",
           labels: {
             color: layoutDataSet.LegendColor,
             boxWidth: 8,
@@ -301,19 +369,21 @@ export class RetailMasterComponent implements OnInit {
         },
         datalabels: {
           color: layoutDataSet.LabelColor,
-          anchor: 'end',
-          align: 'end',
+          anchor: "end",
+          align: "end",
           font: {
-            size: 10
+            size: 10,
           },
           padding: 5,
-          formatter: (value: any) => this.formatTickValue(value)
-        }
-      }
+          formatter: (value: any) => this.formatTickValue(value),
+        },
+      },
     };
   }
 
-  private createDoughnutChartOptions(layoutDataSet: any): ChartConfiguration['options'] {
+  private createDoughnutChartOptions(
+    layoutDataSet: any
+  ): ChartConfiguration["options"] {
     return {
       responsive: true,
       plugins: {
@@ -322,83 +392,253 @@ export class RetailMasterComponent implements OnInit {
           labels: {
             color: layoutDataSet.LabelColor,
             padding: 5,
-          }
-        }
-      }
+          },
+        },
+      },
     };
   }
 
-  private createProductChartOptions(layoutDataSet: any): ChartConfiguration['options'] {
+  private createProductChartOptions(
+    layoutDataSet: any
+  ): ChartConfiguration["options"] {
     return {
       responsive: true,
-      indexAxis: 'y',
+      indexAxis: "y",
       scales: {
         y: {
           grid: {
-            display: true
+            display: true,
           },
           ticks: {
             color: layoutDataSet.LabelColor,
-          }
+          },
         },
         x: {
           display: true,
           grid: {
             display: true,
             color: layoutDataSet.gridLineColor,
-            lineWidth: 0.3
+            lineWidth: 0.3,
           },
           ticks: {
             color: layoutDataSet.LabelColor,
-            callback: (value: any) => this.formatTickValue(value)
-          }
-        }
+            callback: (value: any) => this.formatTickValue(value),
+          },
+        },
       },
       elements: {
         point: {
-          radius: 2
-        }
+          radius: 2,
+        },
       },
       plugins: {
         legend: {
           display: true,
-          align: 'center',
-          position: 'bottom',
+          align: "center",
+          position: "bottom",
           labels: {
             color: layoutDataSet.LegendColor,
             boxWidth: 7,
             font: {
-              size: 12
+              size: 12,
             },
-            padding: 5
-          }
+            padding: 5,
+          },
         },
         datalabels: {
           display: true,
-          color: 'black',
-          anchor: 'end',
-          align: 'center',
+          color: "black",
+          anchor: "end",
+          align: "center",
           font: {
-            size: 10
+            size: 10,
           },
           padding: 5,
-          formatter: (value: any) => this.formatTickValue(value)
-        }
-      }
+          formatter: (value: any) => this.formatTickValue(value),
+        },
+      },
     };
   }
 
   private formatTickValue(value: any) {
     if (value >= 1000000) {
-      return (value / 1000000).toFixed(2).replace(/\.0$/, '') + 'M';
+      return (value / 1000000).toFixed(2).replace(/\.0$/, "") + "M";
     } else if (value >= 1000) {
-      return (value / 1000).toFixed(2).replace(/\.0$/, '') + 'K';
+      return (value / 1000).toFixed(2).replace(/\.0$/, "") + "K";
     } else if (value < 1 && value > -1) {
       return value.toFixed(4);
     }
     return value;
   }
 
+  openAuthModal() {
+    return new Promise((resolve) => {
+      this.modalReferenceUserAuth = this.modalService.open(this.userAuthModal, {
+        size: "lg",
+        backdrop: true,
+        keyboard: true,
+        // windowClass: "modal-full-width",
+      });
 
+      // if (this.modalService.hasOpenModals()) {
+      //     this.getReasonMasters();
+      // }
 
+      this.modalReferenceUserAuth.result.then(
+        (result) => {
+          if (result) {
+            console.log("Result :", result);
+            resolve(true);
+          } else {
+            resolve(false);
+          }
+        },
+        (reason) => {
+          console.log(`Dismissed ${reason}`);
+          resolve(false);
+        }
+      );
+    });
+  }
+
+  autoCompleteValidator(optionsProvider: any, field: any = null) {
+    return (control: AbstractControl) => {
+      const options = optionsProvider();
+      const inputValue = control.value;
+      if (!options || !Array.isArray(options)) {
+        return null;
+      }
+      if (field == null) {
+        if (
+          control.value &&
+          options.length > 0 &&
+          !options.includes(control.value)
+        ) {
+          return { notInOptions: true };
+        }
+      } else {
+        if (
+          inputValue &&
+          options.length > 0 &&
+          !options.some((option) => option[field] === inputValue)
+        ) {
+          return { notInOptions: true };
+        }
+      }
+      return null;
+    };
+  }
+
+  private _filterMasters(
+    arrName: any,
+    value: string,
+    optVal1: any,
+    optVal2: any = null
+  ): any[] {
+    const filterValue = (value || "").toLowerCase();
+    return arrName.filter(
+      (option: any) =>
+        option[optVal1].toLowerCase().includes(filterValue) ||
+        option[optVal2].toLowerCase().includes(filterValue)
+    );
+  }
+
+  getReasonMasters() {
+    let API = `GeneralMaster/GetGeneralMasterList/reason%20master`;
+    this.dataService.getDynamicAPI(API).subscribe((data) => {
+      if (data.status == "Success") {
+        this.reasonMaster = data.response;
+        this.reasonMasterOptions =
+          this.authForm.controls.reason.valueChanges.pipe(
+            startWith(""),
+            map((value) =>
+              this._filterMasters(
+                this.reasonMaster,
+                value,
+                "CODE",
+                "DESCRIPTION"
+              )
+            )
+          );
+        console.log(this.reasonMasterOptions);
+      } else {
+        this.reasonMaster = [];
+      }
+    });
+  }
+
+  checkPlanetTag(data: any): Promise<any> {
+    const API = `POSPlanetFile/CheckPlanetTag/${data.BRANCH_CODE}/${data.VOCTYPE}/${data.YEARMONTH}/${data.VOCNO}`;
+
+    return new Promise((resolve) => {
+      this.dataService.getDynamicAPI(API).subscribe((res: any) => {
+        if (res.status === "Success") {
+          if (res.planetResponseData.StatusCode === 6) {
+            resolve({ value: true, data: res });
+          } else {
+            resolve({ value: false, data: res });
+          }
+        } else {
+          resolve({ value: false, data: res });
+        }
+      });
+    });
+  }
+
+  createPlanetPOSFindFile(data: any) {
+    return new Promise((resolve) => {
+      this.snackBar.open("loading...");
+      const API = `POSPlanetFile/CreatePlanetPOSFindFile/${data.BRANCH_CODE}/${data.VOCTYPE}/${data.YEARMONTH}/${data.VOCNO}`;
+      this.dataService.postDynamicAPI(API, {}).subscribe((res: any) => {
+        if (res.status == "Success") {
+          // const isPlanetTagValid = await this.checkPlanetTag(data);
+          this.checkPlanetTag(data).then((isPlanetTagRes) => {
+            this.snackBar.dismiss();
+
+            resolve(isPlanetTagRes);
+          });
+        } else {
+          resolve({ value: false, data: res });
+        }
+      });
+    });
+  }
+
+  changeReason(e: any) {
+    console.log(e);
+    const res = this.reasonMaster.filter((data: any) => data.CODE == e.value);
+    let description = res.length > 0 ? res[0]["DESCRIPTION"] : "";
+    this.authForm.controls.description.setValue(description);
+  }
+
+  submitAuth() {
+    if (!this.authForm.invalid) {
+      let API = "ValidatePassword/ValidateEditDelete";
+      const postData = {
+        // "Username": this.authForm.value.username,
+        Username: localStorage.getItem("username") || "",
+        Password: this.authForm.value.password,
+      };
+      let sub: Subscription = this.dataService
+        .postDynamicAPICustom(API, postData)
+        .subscribe((resp: any) => {
+          if (resp.status == "Success") {
+            this.CommonService.EditDetail.REASON = this.authForm.value.reason;
+            this.CommonService.EditDetail.DESCRIPTION =
+              this.authForm.value.description;
+            this.CommonService.EditDetail.PASSWORD =
+              this.authForm.value.password;
+            this.modalReferenceUserAuth.close(true);
+            this.authForm.reset();
+            // this.authForm.controls.password.setValue(null);
+            // this.authForm.controls.reason.setValue('');
+            // this.authForm.controls.description.setValue('');
+          } else {
+            this.snackBar.open(resp.message, "OK", { duration: 2000 });
+          }
+        });
+    } else {
+      this.snackBar.open("Please fill all fields", "OK", { duration: 1000 });
+    }
+  }
 }
