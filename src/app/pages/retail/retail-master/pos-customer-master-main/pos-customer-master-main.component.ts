@@ -32,6 +32,7 @@ import { MatCheckboxChange } from "@angular/material/checkbox";
 import { ShowTransDetailsComponent } from "./show-trans-details/show-trans-details.component";
 import { PrintCustomerLogComponent } from "./print-customer-log/print-customer-log.component";
 import { PrintPrivilegeCardComponent } from "./print-privilege-card/print-privilege-card.component";
+import { MatTabGroup } from "@angular/material/tabs";
 
 @Component({
   selector: "app-pos-customer-master-main",
@@ -71,6 +72,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
   @ViewChild("overlayNationality3") overlayNationality3!: MasterSearchComponent;
   @ViewChild("overlayNationality4") overlayNationality4!: MasterSearchComponent;
   @ViewChild("overlayNationality5") overlayNationality5!: MasterSearchComponent;
+  @ViewChild("tabGroup") tabGroup!: MatTabGroup;
 
   private subscriptions: Subscription[] = [];
   @Input() content!: any;
@@ -96,7 +98,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
   cityListData: any;
   amlValidation: any;
   IDDetailsValidation: boolean = false;
-  getCustomerDetailsValidation: boolean = false;
+  getCustomerDetailsValidation: boolean = true;
   dialogBox: any;
   dialogBoxResult: any;
   existCustomerCode: any;
@@ -109,6 +111,15 @@ export class PosCustomerMasterMainComponent implements OnInit {
   contactPreferenceWay: any[] = [];
   knowAboutWay: any[] = [];
   intrestedInWay: any[] = [];
+
+  isFestivalEid: boolean = false;
+  isFestivalChristmas: boolean = false;
+  isFestivalDiwali: boolean = false;
+  isFestivalNationalday: boolean = false;
+  isFestivalOnam: boolean = false;
+  isFestivalPongal: boolean = false;
+  isFestivalNewyear: boolean = false;
+
   zodiacSignArray: any[] = [
     "Aries",
     "Taurus",
@@ -449,6 +460,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
   };
 
   refByCode: MasterSearchModel = {
@@ -462,6 +474,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
   };
 
   nationalityCode: MasterSearchModel = {
@@ -658,8 +671,9 @@ export class PosCustomerMasterMainComponent implements OnInit {
   PrivilegeCardData: any;
   htmlCustomerLog: any;
   loyaltyCode: any;
-  isLoyaltyVisible: boolean = true;
+  isLoyaltyVisible: boolean = false;
   htmlContentForPrivilege: any;
+  compAccode: any;
 
   constructor(
     private modalService: NgbModal,
@@ -673,6 +687,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.compAccode = this.comService?.allCompanyParameters?.COMPACCODE;
     this.loyaltyCode = this.comService.allbranchMaster?.LOYALTY_CODE;
     this.getCustomerDetailsValidation =
       this.comService.allbranchMaster?.POSCUSTDETAILSFROMREADER;
@@ -687,8 +702,8 @@ export class PosCustomerMasterMainComponent implements OnInit {
     this.posCustomerMasterMainForm.controls.weddate.disable();
     this.countryList();
     this.getDropDownStatus();
-    console.log(this.nameList);
-    // this.loyaltyDetailsVisiblity();
+    this.loyaltyDetailsVisiblity();
+    this.IDDetailsTabEnable();
 
     this.posCustomerMasterMainForm.controls["createdBranch"].disable();
     this.fetchImage();
@@ -834,10 +849,14 @@ export class PosCustomerMasterMainComponent implements OnInit {
     );
     this.posCustomerMasterMainForm.controls.POBox.setValue(setData.POBOX_NO);
     this.posCustomerMasterMainForm.controls.state.setValue(setData.STATE);
+    this.cityCodeData.WHERECONDITION = `TYPES='city master' and COUNTRY_CODE = '${setData.COUNTRY_CODE}' and STATE_CODE = '${setData.STATE}' `;
+    this.isViewCity = true;
     this.posCustomerMasterMainForm.controls.city.setValue(setData.CITY);
     this.posCustomerMasterMainForm.controls.countryCode.setValue(
       setData.COUNTRY_CODE
     );
+    this.stateCode.WHERECONDITION = `TYPES='state master' and COUNTRY_CODE = '${setData.COUNTRY_CODE}'`;
+    this.isViewState = true;
     this.posCustomerMasterMainForm.controls.country.setValue(
       setData.COUNTRY_DESC
     );
@@ -883,9 +902,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
     this.posCustomerMasterMainForm.controls.custStatus.setValue(
       setData.CUST_STATUS
     );
-    this.posCustomerMasterMainForm.controls.custType.setValue(
-      setData.CUST_TYPE
-    );
+    this.posCustomerMasterMainForm.controls.custType.setValue(setData.TYPE);
     this.posCustomerMasterMainForm.controls.moblie1Number.setValue(
       setData.MOBILE1
     );
@@ -1453,8 +1470,6 @@ export class PosCustomerMasterMainComponent implements OnInit {
   }
 
   getDropDownStatus() {
-    console.log("In 1454");
-
     this.maritalStatusList = this.getUniqueValues(
       this.comService.getComboFilterByID("Marital Status"),
       "ENGLISH"
@@ -1811,16 +1826,16 @@ export class PosCustomerMasterMainComponent implements OnInit {
           NATIONALITY_DESC:
             this.posCustomerMasterMainForm.value.nationalityDesc || "",
           TYPE_DESC: this.posCustomerMasterMainForm.value.custDesc || "",
-          DETAILS_JOHARA: "",
-          DETAILS_FARAH: "",
-          DETAILS_JAWAHERALSHARQ: "",
-          FESTIVAL_EID: false,
-          FESTIVAL_CHRISTMAS: false,
-          FESTIVAL_DIWALI: false,
-          FESTIVAL_NATIONALDAY: false,
-          FESTIVAL_ONAM: false,
-          FESTIVAL_PONGAL: false,
-          FESTIVAL_NEWYEAR: false,
+          DETAILS_JOHARA: this.posCustomerMasterMainForm.value.johara || "",
+          DETAILS_FARAH: this.posCustomerMasterMainForm.value.farah || "",
+          DETAILS_JAWAHERALSHARQ: this.posCustomerMasterMainForm.value.jawaher || "",
+          FESTIVAL_EID: this.isFestivalEid,
+          FESTIVAL_CHRISTMAS: this.isFestivalChristmas,
+          FESTIVAL_DIWALI: this.isFestivalDiwali,
+          FESTIVAL_NATIONALDAY: this.isFestivalNationalday,
+          FESTIVAL_ONAM: this.isFestivalOnam,
+          FESTIVAL_PONGAL: this.isFestivalPongal,
+          FESTIVAL_NEWYEAR: this.isFestivalNewyear,
           REASON_OF_PURCHASE:
             this.posCustomerMasterMainForm.value.reasonOfPurchase || "",
           AGE_GROUP: this.posCustomerMasterMainForm.value.ageGroup || "",
@@ -2345,8 +2360,76 @@ export class PosCustomerMasterMainComponent implements OnInit {
   }
 
   getCustomerDetails(event: any) {
-    console.log(event);
-    console.log("Got Clicked");
+    let API = `PrivilegeCustomerNetSalesSummary/GetCustomerDetails/${true}/${
+      this.branchCode
+    }/`;
+    this.tabGroup.selectedIndex = 8;
+    let sub: Subscription = this.apiService
+      .getDynamicAPI(API)
+      .subscribe((res) => {
+        if (res.status.trim() === "Success") {
+          let data = res.dynamicData[0][0];
+
+          this.posCustomerMasterMainForm.controls.arabicGender.setValue(
+            data.ARABIC_GENDER
+          );
+          this.posCustomerMasterMainForm.controls.arabicNationality.setValue(
+            data.ARABIC_NATIONALITY
+          );
+          this.posCustomerMasterMainForm.controls.issuanceDate.setValue(
+            data.ISSUANCE_DATE
+          );
+
+          this.posCustomerMasterMainForm.controls.documentNo.setValue(
+            data.DOCUMENT_NO
+          );
+          this.posCustomerMasterMainForm.controls.serialNo.setValue(
+            data.SERIAL_NO
+          );
+
+          this.posCustomerMasterMainForm.controls.atr.setValue(data.ATR);
+          this.posCustomerMasterMainForm.controls.moiRefIndic.setValue(
+            data.MOI_REF_INDIC
+          );
+          this.posCustomerMasterMainForm.controls.moiReference.setValue(
+            data.MOI_REFERENCE
+          );
+          this.posCustomerMasterMainForm.controls.district.setValue(
+            data.DISTRICT
+          );
+          this.posCustomerMasterMainForm.controls.block.setValue(data.BLOCK);
+          this.posCustomerMasterMainForm.controls.street.setValue(data.STREET);
+          this.posCustomerMasterMainForm.controls.buildingNo.setValue(
+            data.BUILDING_NO
+          );
+          this.posCustomerMasterMainForm.controls.unitType.setValue(
+            data.UNIT_TYPE
+          );
+          this.posCustomerMasterMainForm.controls.unitNo.setValue(data.UNIT_NO);
+          this.posCustomerMasterMainForm.controls.floor.setValue(data.FLOOR);
+          this.posCustomerMasterMainForm.controls.bloodType.setValue(
+            data.BLOOD_TYPE
+          );
+          this.posCustomerMasterMainForm.controls.guardianCivilId.setValue(
+            data.GUARDIAN_CIVIL_ID
+          );
+          this.posCustomerMasterMainForm.controls.additionalField1.setValue(
+            data.ADDITIONAL_FIELD_1
+          );
+          this.posCustomerMasterMainForm.controls.additionalField2.setValue(
+            data.ADDITIONAL_FIELD_2
+          );
+          this.posCustomerMasterMainForm.controls.appVersion.setValue(
+            data.APP_VERSION
+          );
+          this.posCustomerMasterMainForm.controls.passport.setValue(
+            data.PASSPORT
+          );
+          this.posCustomerMasterMainForm.controls.connectedReaders.setValue(
+            data.CONNECTED_READERS
+          );
+        }
+      });
   }
 
   preventInvalidInput(event: KeyboardEvent) {
@@ -2684,6 +2767,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
 
   deleteCustomerMaster() {
     if (this.content && this.content.FLAG == "VIEW") return;
+    this.setvalues(this.content)
     this.showConfirmationDialog().then((result) => {
       if (result.isConfirmed) {
         let customerCode = this.generatedCustomerCode
@@ -2812,24 +2896,21 @@ export class PosCustomerMasterMainComponent implements OnInit {
     // });
   }
 
-  IDDetailsEnable() {
+  IDDetailsTabEnable() {
     if (
       (this.comService.allbranchMaster?.POSCUSTDETAILSFROMREADER === true &&
-        this.posCustomerMasterMainForm.value.countryCode === "KWT") ||
+        this.comService.allbranchMaster?.COUNTRY_CODE === "KWT") ||
       "KW"
     ) {
       this.IDDetailsValidation = true;
     }
   }
 
-  // loyaltyDetailsVisiblity() {
-
-  //   console.log();
-
-  //   if (this.loyaltyCode !== "") {
-  //     this.isLoyaltyVisible = true;
-  //   }
-  // }
+  loyaltyDetailsVisiblity() {
+    if (this.loyaltyCode !== "") {
+      this.isLoyaltyVisible = true;
+    }
+  }
 
   updateLoyaltyPoints() {
     let payload = {
@@ -2876,4 +2957,93 @@ export class PosCustomerMasterMainComponent implements OnInit {
         }
       });
   }
+
+  getFestivalCheck(event: any, controller: any) {
+    switch (controller) {
+      case "eidFest":
+        this.isFestivalEid = event.checked;
+
+        break;
+      case "christmasFest":
+        this.isFestivalChristmas = event.checked;
+
+        break;
+      case "diwaliFest":
+        this.isFestivalDiwali = event.checked;
+
+        break;
+      case "nationalDayFest":
+        this.isFestivalNationalday = event.checked;
+
+        break;
+      case "pongalandsankrantiFest":
+        this.isFestivalPongal = event.checked;
+
+        break;
+      case "newyearFest":
+        this.isFestivalNewyear = event.checked;
+
+        break;
+
+      default:
+        break;
+    }
+  }
+
+  SPvalidateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string, isCurrencyField: boolean) {
+    LOOKUPDATA.SEARCH_VALUE = event.target.value;
+
+    if (event.target.value === '' || this.flag?.VIEW) {
+  
+        return;
+    }
+
+    let param = {
+        "PAGENO": LOOKUPDATA.PAGENO,
+        "RECORDS": LOOKUPDATA.RECORDS,
+        "LOOKUPID": LOOKUPDATA.LOOKUPID,
+        "WHERECONDITION": LOOKUPDATA.WHERECONDITION,
+        "searchField": LOOKUPDATA.SEARCH_FIELD,
+        "searchValue": LOOKUPDATA.SEARCH_VALUE
+    };
+
+    this.comService.showSnackBarMsg('MSG81447');
+
+    let Sub: Subscription = this.apiService.postDynamicAPI('MasterLookUp', param)
+        .subscribe((result) => {
+            this.comService.closeSnackBarMsg();
+            let data = result.dynamicData[0];
+
+            if (data && data.length > 0) {
+                if (LOOKUPDATA.FRONTENDFILTER && LOOKUPDATA.SEARCH_VALUE !== '') {
+                    let searchResult = this.comService.searchAllItemsInArray(data, LOOKUPDATA.SEARCH_VALUE);
+
+                    if (searchResult && searchResult.length > 0) {
+                        let matchedItem = searchResult[0];
+                        this.posCustomerMasterMainForm.controls.parentPosCode.setValue(matchedItem.CODE);
+
+                          
+                       
+                    } else {
+                        this.comService.toastErrorByMsgId('No data found');
+                        LOOKUPDATA.SEARCH_VALUE = '';
+                        this.posCustomerMasterMainForm.controls.parentPosCode.setValue('');
+
+                  
+                    }
+                }
+            }
+            else {
+              this.comService.toastErrorByMsgId('No data found');
+              LOOKUPDATA.SEARCH_VALUE = '';
+              this.posCustomerMasterMainForm.controls.parentPosCode.setValue('');
+        
+          }
+        }, err => {
+            this.comService.toastErrorByMsgId('MSG2272');
+            this.posCustomerMasterMainForm.controls.parentPosCode.setValue('');
+          });
+
+    this.subscriptions.push(Sub);
+}
 }

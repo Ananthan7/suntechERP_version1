@@ -1,7 +1,7 @@
 <!-- header section starts -->
 <div class="card-content border-bottom d-flex justify-content-between p-2">
   <h5 class="pos-modaltitle" id="modal-dia-metal">POS Customer Master</h5>
-  <button type="button" class="btn btn-close close-btn" (click)="close()">
+  <button type="button" class="btn btn-close close-btn" (click)="close(null, true)">
     <i class="feather icon-x close-icon"></i>
   </button>
 </div>
@@ -51,7 +51,7 @@
                   appearance="outline"
                 >
                   <input
-                    readonly="true"
+                  (focusout)="SPvalidateLookupField($event,parentPosCode,'parentPosCode',false)"
                     matInput
                     type="text"
                     formControlName="parentPosCode"
@@ -82,7 +82,7 @@
                   appearance="outline"
                 >
                   <input
-                    readonly="true"
+                  (focusout)="SPvalidateLookupField($event,refByCode,'refBy',false)"
                     matInput="text"
                     formControlName="refBy"
                   />
@@ -923,7 +923,7 @@
             </div>
           </div>
           <div class="col-md-8">
-            <mat-tab-group>
+            <mat-tab-group #tabGroup>
               <mat-tab label="Other Detail">
                 <div class="row mt-2">
                   <div class="col-md-12">
@@ -1455,7 +1455,10 @@
                           </div>
                         </div>
 
-                        <div *ngIf="isLoyaltyVisible" class="col-md-12 border p-4">
+                        <div
+                          *ngIf="isLoyaltyVisible"
+                          class="col-md-12 border p-4"
+                        >
                           <div class="row mb-1">
                             <div class="col-md-12 pt-3">
                               <mat-checkbox
@@ -1505,36 +1508,32 @@
                               </div>
 
                               <button
-                              (click)="updateLoyaltyPoints()"
-                              type="button"
-                              class=" col-md-12 p-4 mb-4 btn btn-primary text-center"
-                            >
-                              Update loyalty Points
-                            </button>
-
-
-                            <div class="row mb-1">
-                              <label
-                                for="loyaltyPoints"
-                                class="col-sm-4 col-form-label"
-                                id="ID090"
-                                >Loyalty Points</label
+                                (click)="updateLoyaltyPoints()"
+                                type="button"
+                                class="col-md-12 p-4 mb-4 btn btn-primary text-center"
                               >
-                              <div class="col-md-8">
-                                <mat-form-field
-                                  style="width: 100%"
-                                  appearance="outline"
+                                Update loyalty Points
+                              </button>
+
+                              <div class="row mb-1">
+                                <label
+                                  for="loyaltyPoints"
+                                  class="col-sm-4 col-form-label"
+                                  id="ID090"
+                                  >Loyalty Points</label
                                 >
-                                  <input
-                                    matInput="text"
-                                    formControlName="loyaltyPoints"
-                                  />
-                                </mat-form-field>
+                                <div class="col-md-8">
+                                  <mat-form-field
+                                    style="width: 100%"
+                                    appearance="outline"
+                                  >
+                                    <input
+                                      matInput="text"
+                                      formControlName="loyaltyPoints"
+                                    />
+                                  </mat-form-field>
+                                </div>
                               </div>
-                            </div>
-
-
-
                             </div>
                           </div>
                         </div>
@@ -3444,7 +3443,7 @@
                     </div>
                   </div>
 
-                  <div class="col-md-6">
+                  <div class="col-md-6" *ngIf="compAccode === 'AM0018'">
                     <div class="row mb-1 mt-2">
                       <h6 id="ID079">Details 2</h6>
                     </div>
@@ -3461,6 +3460,7 @@
                             <mat-checkbox
                               [disabled]="flag === 'VIEW'"
                               formControlName="eidFest"
+                              (change)="getFestivalCheck($event, 'eidFest')"
                               id="ID060"
                               >EID</mat-checkbox
                             >
@@ -3469,6 +3469,9 @@
                             <mat-checkbox
                               [disabled]="flag === 'VIEW'"
                               formControlName="christmasFest"
+                              (change)="
+                                getFestivalCheck($event, 'christmasFest')
+                              "
                               id="ID061"
                               >CHRISTMAS</mat-checkbox
                             >
@@ -3477,6 +3480,7 @@
                             <mat-checkbox
                               [disabled]="flag === 'VIEW'"
                               formControlName="diwaliFest"
+                              (change)="getFestivalCheck($event, 'diwaliFest')"
                               id="ID062"
                               >DIWALI</mat-checkbox
                             >
@@ -3485,6 +3489,9 @@
                             <mat-checkbox
                               [disabled]="flag === 'VIEW'"
                               formControlName="nationalDayFest"
+                              (change)="
+                                getFestivalCheck($event, 'nationalDayFest')
+                              "
                               id="ID063"
                               >NATIONAL DAY</mat-checkbox
                             >
@@ -3493,6 +3500,7 @@
                             <mat-checkbox
                               [disabled]="flag === 'VIEW'"
                               formControlName="onamFest"
+                              (change)="getFestivalCheck($event, 'onamFest')"
                               id="ID064"
                               >ONAM</mat-checkbox
                             >
@@ -3501,6 +3509,12 @@
                             <mat-checkbox
                               [disabled]="flag === 'VIEW'"
                               formControlName="pongalandsankrantiFest"
+                              (change)="
+                                getFestivalCheck(
+                                  $event,
+                                  'pongalandsankrantiFest'
+                                )
+                              "
                               id="ID065"
                               >PONGAL/SANKRANTI</mat-checkbox
                             >
@@ -3509,6 +3523,7 @@
                             <mat-checkbox
                               [disabled]="flag === 'VIEW'"
                               formControlName="newyearFest"
+                              (change)="getFestivalCheck($event, 'newyearFest')"
                               id="ID065"
                               >NEW YEAR</mat-checkbox
                             >
@@ -3606,7 +3621,7 @@
                   </div>
                 </div>
               </mat-tab>
-              <mat-tab label="ID Details">
+              <mat-tab label="ID Details" *ngIf="IDDetailsValidation">
                 <div class="row mt-2">
                   <div class="col-md-12">
                     <div class="row mb-1">
@@ -3843,7 +3858,7 @@
 
                         <div class="row mb-1">
                           <label
-                            for="serialNo"
+                            for="street"
                             class="col-sm-5 col-form-label"
                             id="ID029"
                             >STREET</label
