@@ -1,6 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { DomSanitizer } from '@angular/platform-browser';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
@@ -62,12 +63,12 @@ export class RetailAdvanceReceiptRegisterComponent implements OnInit {
   @Input() content!: any; 
   templateNameHasValue: boolean= false;
   formattedBranchDivisionData: any;
-  fetchedBranchDataParam: any[]= [];
+  fetchedBranchDataParam: any= [];
   branchDivisionControlsTooltip: any;
   fetchedBranchData: any[] =[];
   isLoading: boolean = false;
   dateToPass: { fromDate: string; toDate: string } = { fromDate: '', toDate: '' };
-
+  htmlPreview: any;
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -75,7 +76,7 @@ export class RetailAdvanceReceiptRegisterComponent implements OnInit {
     private dataService: SuntechAPIService,
     private datePipe: DatePipe,
     private comService: CommonServiceService,
-    private toastr: ToastrService,
+    private toastr: ToastrService, private sanitizer: DomSanitizer
   ) { }
 
   ngOnInit(): void {
@@ -254,7 +255,7 @@ export class RetailAdvanceReceiptRegisterComponent implements OnInit {
       "VOCTYPE": this.comService.getqueryParamVocType() || "",
       "REFMID": "",
       "USERNAME": this.comService.userName,
-      "MODE": "PRINT",
+      "MODE": "",
       "DATETIME": this.comService.formatDateTime(new Date()),
       "REMARKS":"",
       "SYSTEMNAME": "",
@@ -280,42 +281,82 @@ export class RetailAdvanceReceiptRegisterComponent implements OnInit {
     .subscribe((result: any) => {
       console.log(result);
       let data = result.dynamicData;
-      const width = window.innerWidth;
-      const height = window.innerHeight;
-      const windowFeatures = `width=${width},height=${height},fullscreen=yes`;
-      var WindowPrt = window.open(' ', ' ', windowFeatures);
-      if (WindowPrt === null) {
-        console.error('Failed to open the print window. Possibly blocked by a popup blocker.');
-        return;
-      }
-      let printContent = data[0][0].HTML;
-      WindowPrt.document.write(printContent);
-      WindowPrt.document.close();
-      WindowPrt.focus();  
-      WindowPrt.onload = function () {
-        if (WindowPrt && WindowPrt.document.head) {
-          let styleElement = WindowPrt.document.createElement('style');
-          styleElement.textContent = `
-                      @page {
-                          size: A5 landscape;
-                      }
-                      body {
-                          margin: 0mm;
-                      }
-                  `;
-          WindowPrt.document.head.appendChild(styleElement);
-
-          setTimeout(() => {
-            if (WindowPrt) {
-              WindowPrt.print();
-            } else {
-              console.error('Print window was closed before printing could occur.');
-            }
-          }, 800);
-        }
-      };
-      this.comService.closeSnackBarMsg()
+      let printContent = data[0][0].HTMLINPUT;
+      this.htmlPreview = this.sanitizer.bypassSecurityTrustHtml(printContent);
+      const blob = new Blob([this.htmlPreview.changingThisBreaksApplicationSecurity], { type: 'text/html' });
+      this.comService.closeSnackBarMsg();
+      const url = URL.createObjectURL(blob);
+      window.open(url, '_blank');
     });      
+  }
+
+  printBtnClick(){
+    let logData =  {
+      "VOCTYPE": this.comService.getqueryParamVocType() || "",
+      "REFMID": "",
+      "USERNAME": this.comService.userName,
+      "MODE": "PRINT",
+      "DATETIME": this.comService.formatDateTime(new Date()),
+      "REMARKS":"",
+      "SYSTEMNAME": "",
+      "BRANCHCODE": this.comService.branchCode,
+      "VOCNO": "",
+      "VOCDATE": "",
+      "YEARMONTH" : this.comService.yearSelected
+    }
+
+    let postData = {
+      "SPID": "151",
+      "parameter": {
+        "strBRANCHES": this.formattedBranchDivisionData || this.fetchedBranchDataParam,
+        "FrVocDate":  this.formatDateToYYYYMMDD(this.retailAdvanceReceiptRegisterForm.controls.fromDate.value),
+        "ToVocDate": this.formatDateToYYYYMMDD(this.retailAdvanceReceiptRegisterForm.controls.toDate.value),
+        "Pending": this.retailAdvanceReceiptRegisterForm.controls.show.value,
+        "Logdata": JSON.stringify(logData)
+      },
+    }
+ 
+    this.comService.showSnackBarMsg('MSG81447');
+    this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+    .subscribe((result: any) => {
+      let data = result.dynamicData;
+      let printContent = data[0][0].HTMLINPUT;
+      this.htmlPreview = this.sanitizer.bypassSecurityTrustHtml(printContent);
+
+      if (result.dynamicData) {
+        this.comService.closeSnackBarMsg();
+      }
+    });  
+   
+    
+    setTimeout(() => {
+      const content = this.htmlPreview?.changingThisBreaksApplicationSecurity;
+      
+      let  userBranchDesc:any  = localStorage.getItem('BRANCH_PARAMETER')
+      userBranchDesc = JSON.parse(userBranchDesc)
+
+      if (content && Object.keys(content).length !== 0) {
+        const modifiedContent = content.replace(/<title>.*?<\/title>/, `<title>${userBranchDesc.DESCRIPTION}</title>`);
+
+        //          workout for binding title from 2nd sheet
+        // const sections = content.match(/<div class="footer2">*?<\/div>/g); // Use the correct regex syntax
+        // const pageCount = sections ? sections.length : 1; // Default to 1 if no sections found
+        // console.log('Estimated Page content:', content);
+        // console.log('Estimated Page Count:', pageCount);
+
+        const printWindow = window.open('', '', 'height=600,width=800');
+        printWindow?.document.write(modifiedContent);
+        printWindow?.document.close();
+        printWindow?.focus();
+        printWindow?.print();
+        printWindow?.close();
+       
+      } else {
+        Swal.fire('No Data!', 'There is no data to print!', 'info');
+        this.comService.closeSnackBarMsg();
+        return
+      }
+    }, 3000); 
   }
 
   saveTemplate(){
@@ -415,6 +456,18 @@ export class RetailAdvanceReceiptRegisterComponent implements OnInit {
       this.fetchedBranchData= paresedItem?.CONTROL_DETAIL.strBRANCHES.split("#")
       this.fetchedBranchDataParam = paresedItem?.CONTROL_DETAIL.strBRANCHES
 
+    }
+    else{
+      const userBranch = localStorage.getItem('userbranch');
+      const formattedUserBranch = userBranch ? `${userBranch}#` : null;
+      this.retailAdvanceReceiptRegisterForm.controls.branch.setValue(formattedUserBranch);
+      this.fetchedBranchDataParam = formattedUserBranch;
+      this.fetchedBranchData= this.fetchedBranchDataParam?.split("#")
+   
+      this.dateToPass = {
+        fromDate:  this.formatDateToYYYYMMDD(new Date()),
+        toDate: this.formatDateToYYYYMMDD(new Date()),
+      };
     }
   }
 

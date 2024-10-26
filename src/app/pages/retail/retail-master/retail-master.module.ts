@@ -10,6 +10,7 @@ import { CommonRetailModule } from '../common-retail/common-retail.module';
 import { PosWalkinCustomerComponent } from './pos-walkin-customer/pos-walkin-customer.component';
 import { ShowTransDetailsComponent } from './pos-customer-master-main/show-trans-details/show-trans-details.component';
 import { PrintCustomerLogComponent } from './pos-customer-master-main/print-customer-log/print-customer-log.component';
+import { PrintPrivilegeCardComponent } from './pos-customer-master-main/print-privilege-card/print-privilege-card.component';
 
 
 @NgModule({
@@ -19,7 +20,8 @@ import { PrintCustomerLogComponent } from './pos-customer-master-main/print-cust
     SchemeMasterComponent,
     PosWalkinCustomerComponent,
     ShowTransDetailsComponent,
-    PrintCustomerLogComponent
+    PrintCustomerLogComponent,
+    PrintPrivilegeCardComponent
   ],
   imports: [
     CommonModule,

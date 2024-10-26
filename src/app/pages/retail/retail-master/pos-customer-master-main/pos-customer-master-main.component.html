@@ -10,7 +10,7 @@
   *ngIf="flag !== 'VIEW'"
   (saveClick)="customerSave()"
   (cancelClick)="close()"
-  (deleteClick)="deleteProcessMaster()"
+  (deleteClick)="deleteCustomerMaster()"
 ></modal-header>
 <!-- content section -->
 <div class="container-fluid pt-3">
@@ -1455,7 +1455,7 @@
                           </div>
                         </div>
 
-                        <div class="col-md-12 border p-4">
+                        <div *ngIf="isLoyaltyVisible" class="col-md-12 border p-4">
                           <div class="row mb-1">
                             <div class="col-md-12 pt-3">
                               <mat-checkbox
@@ -1477,7 +1477,6 @@
                                     appearance="outline"
                                   >
                                     <input
-                                      readonly="true"
                                       matInput="text"
                                       formControlName="loyaltyCode"
                                     />
@@ -1498,7 +1497,6 @@
                                     appearance="outline"
                                   >
                                     <input
-                                      readonly="true"
                                       matInput="text"
                                       formControlName="openingLoyaltyPoints"
                                     />
@@ -1507,6 +1505,7 @@
                               </div>
 
                               <button
+                              (click)="updateLoyaltyPoints()"
                               type="button"
                               class=" col-md-12 p-4 mb-4 btn btn-primary text-center"
                             >
@@ -1527,7 +1526,6 @@
                                   appearance="outline"
                                 >
                                   <input
-                                    readonly="true"
                                     matInput="text"
                                     formControlName="loyaltyPoints"
                                   />
@@ -4360,7 +4358,7 @@
                   <button
                     type="button"
                     class="btn btn-primary text-center m-2"
-                    (click)="printPrivilegeCard($event)"
+                    (click)="printPrivilegeCard()"
                   >
                     Print Privilege Card
                   </button>

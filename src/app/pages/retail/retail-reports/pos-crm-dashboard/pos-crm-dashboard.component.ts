@@ -40,7 +40,7 @@ export class PosCrmDashboardComponent implements OnInit {
   buyingPatternBoolean: boolean = false;
 
   htmlPreview: any;
-
+  posCRMdasbordForm: FormGroup;
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -48,23 +48,30 @@ export class PosCrmDashboardComponent implements OnInit {
     private dataService: SuntechAPIService,
     private toastr: ToastrService, private sanitizer: DomSanitizer,
     private commonService: CommonServiceService,
-  ) { }
+  ) { 
+    this.posCRMdasbordForm = this.formBuilder.group({
+      festival: ['',[Validators.required]],
+      daterange: ['',[Validators.required]],
+      divisions: ['',[Validators.required]],
+      metal: ['',[Validators.required]],
+      diamondsection: ['',[Validators.required]],
+      branch: [''],
+      templateName: [''],
+      jobno: [''],
+      fromDate: [''],
+      toDate: [''],
+      showBuyingPatternBln: [false],
+      TotPurchaseValue: [''],
+      lastPurchaseValue: [''],
+      avgPurchaseValue: [''],
+    });
+  }
 
- posCRMdasbordFrom: FormGroup = this.formBuilder.group({
-    festival: ['',[Validators.required]],
-    daterange: ['',[Validators.required]],
-    divisions: ['',[Validators.required]],
-    metal: ['',[Validators.required]],
-    diamondsection: ['',[Validators.required]],
-    branch: [''],
-    templateName: [''],
-    jobno: [''],
-    fromDate: [''],
-    toDate: [''],
-    showBuyingPatternBln: [false]
-  });
 
   ngOnInit(): void {
+ 
+
+    
     this.initAPI()
 
     this.logDataParam =  {
@@ -89,6 +96,9 @@ export class PosCrmDashboardComponent implements OnInit {
       if (resp.status == 'Success') {
         console.log( resp.dynamicData )
         this.festivalArr = resp.dynamicData[0];
+        this.festivalArr.forEach((item: any,index: any)=>{
+          item.srno = index+1;
+        })
         this.divisionsArr = resp.dynamicData[1];
         this.diamondSectionArr = resp.dynamicData[2];
         this.metalSectionArr = resp.dynamicData[3];
@@ -105,7 +115,7 @@ export class PosCrmDashboardComponent implements OnInit {
 
   formSubmit() {
 
-    if (this.posCRMdasbordFrom.invalid) {
+    if (this.posCRMdasbordForm.invalid) {
       this.toastr.error('select all required fields')
       return
     }
@@ -132,7 +142,7 @@ export class PosCrmDashboardComponent implements OnInit {
               confirmButtonText: 'Ok'
             }).then((result: any) => {
               if (result.value) {
-                this.posCRMdasbordFrom.reset()
+                this.posCRMdasbordForm.reset()
                 this.tableData = []
                 this.close('reloadMainGrid')
               }
@@ -164,11 +174,11 @@ export class PosCrmDashboardComponent implements OnInit {
 
   setDateValue(event: any){
     if(event.FromDate){
-      this.posCRMdasbordFrom.controls.fromDate.setValue(event.FromDate);
+      this.posCRMdasbordForm.controls.fromDate.setValue(event.FromDate);
       console.log(event.FromDate)
     }
     else if(event.ToDate){
-      this.posCRMdasbordFrom.controls.toDate.setValue(event.ToDate);
+      this.posCRMdasbordForm.controls.toDate.setValue(event.ToDate);
     }
   }
 
@@ -222,19 +232,19 @@ export class PosCrmDashboardComponent implements OnInit {
     // const uniqueArray = [...new Set(this.branchDivisionData)];
     // const plainText = uniqueArray.join('');
     this.formattedBranchDivisionData = branchDivisionData
-    this.posCRMdasbordFrom.controls.branch.setValue(this.formattedBranchDivisionData);
+    this.posCRMdasbordForm.controls.branch.setValue(this.formattedBranchDivisionData);
   }
 
   popupClosed(){
     if (this.content && Object.keys(this.content).length > 0) {
       console.log(this.content)
       let ParcedPreFetchData = JSON.parse(this.content?.CONTROL_LIST_JSON)
-      this.posCRMdasbordFrom.controls.templateName.setValue(ParcedPreFetchData.CONTROL_HEADER.TEMPLATENAME)
+      this.posCRMdasbordForm.controls.templateName.setValue(ParcedPreFetchData.CONTROL_HEADER.TEMPLATENAME)
       this.popupVisible = false;
     }
     else{
       this.popupVisible = false;
-      this.posCRMdasbordFrom.controls.templateName.setValue(null)
+      this.posCRMdasbordForm.controls.templateName.setValue(null)
     }
   }
 
@@ -242,12 +252,12 @@ export class PosCrmDashboardComponent implements OnInit {
     let postData = {
       "SPID": "152",
       "parameter": {
-        "str_FmDate" : this.formatDateToYYYYMMDD(this.posCRMdasbordFrom.value.fromDate),
-        "str_ToDate" : this.formatDateToYYYYMMDD(this.posCRMdasbordFrom.value.toDate),
-        "bln_ShowBuyingPattern": JSON.stringify(this.posCRMdasbordFrom.controls.showBuyingPatternBln.value? 0 : 1),
-        "str_DiaBuyPatternField": this.posCRMdasbordFrom.controls.diamondsection.value,
-        "str_MtlBuyPatternField": this.posCRMdasbordFrom.controls.metal.value,
-        "str_Divisions": this.posCRMdasbordFrom.controls.divisions.value,
+        "str_FmDate" : this.formatDateToYYYYMMDD(this.posCRMdasbordForm.value.fromDate),
+        "str_ToDate" : this.formatDateToYYYYMMDD(this.posCRMdasbordForm.value.toDate),
+        "bln_ShowBuyingPattern": JSON.stringify(this.posCRMdasbordForm.controls.showBuyingPatternBln.value? 0 : 1),
+        "str_DiaBuyPatternField": this.posCRMdasbordForm.controls.diamondsection.value,
+        "str_MtlBuyPatternField": this.posCRMdasbordForm.controls.metal.value,
+        "str_Divisions": this.posCRMdasbordForm.controls.divisions.value,
         "str_BranchList": this.formattedBranchDivisionData || this.fetchedBranchDataParam,
         "str_SqlId": '',
         "LOGDATA": JSON.stringify(this.logDataParam)
@@ -278,12 +288,12 @@ export class PosCrmDashboardComponent implements OnInit {
     let postData = {
       "SPID": "152",
       "parameter": {
-        "str_FmDate" : this.formatDateToYYYYMMDD(this.posCRMdasbordFrom.value.fromDate),
-        "str_ToDate" : this.formatDateToYYYYMMDD(this.posCRMdasbordFrom.value.toDate),
-        "bln_ShowBuyingPattern": JSON.stringify(this.posCRMdasbordFrom.controls.showBuyingPatternBln.value? 0 : 1),
-        "str_DiaBuyPatternField": this.posCRMdasbordFrom.controls.diamondsection.value,
-        "str_MtlBuyPatternField": this.posCRMdasbordFrom.controls.metal.value,
-        "str_Divisions": this.posCRMdasbordFrom.controls.divisions.value,
+        "str_FmDate" : this.formatDateToYYYYMMDD(this.posCRMdasbordForm.value.fromDate),
+        "str_ToDate" : this.formatDateToYYYYMMDD(this.posCRMdasbordForm.value.toDate),
+        "bln_ShowBuyingPattern": JSON.stringify(this.posCRMdasbordForm.controls.showBuyingPatternBln.value? 0 : 1),
+        "str_DiaBuyPatternField": this.posCRMdasbordForm.controls.diamondsection.value,
+        "str_MtlBuyPatternField": this.posCRMdasbordForm.controls.metal.value,
+        "str_Divisions": this.posCRMdasbordForm.controls.divisions.value,
         "str_BranchList": this.formattedBranchDivisionData || this.fetchedBranchDataParam,
         "str_SqlId": '',
         "LOGDATA": JSON.stringify(this.logDataParam)
@@ -331,7 +341,7 @@ export class PosCrmDashboardComponent implements OnInit {
 
   saveTemplate(){
     this.popupVisible = true;
-    console.log(this.posCRMdasbordFrom.controls.templateName.value)
+    console.log(this.posCRMdasbordForm.controls.templateName.value)
   }
   saveTemplate_DB(){
     const payload = {
@@ -342,17 +352,17 @@ export class PosCrmDashboardComponent implements OnInit {
             "CONTROL_HEADER": {
               "USERNAME": localStorage.getItem('username'),
               "TEMPLATEID": this.commonService.getModuleName(),
-              "TEMPLATENAME": this.posCRMdasbordFrom.controls.templateName.value,
+              "TEMPLATENAME": this.posCRMdasbordForm.controls.templateName.value,
               "FORM_NAME": this.commonService.getModuleName(),
               "ISDEFAULT": 1
             },
             "CONTROL_DETAIL": {
-              "str_FmDate" : this.formatDateToYYYYMMDD(this.posCRMdasbordFrom.value.fromDate),
-              "str_ToDate" : this.formatDateToYYYYMMDD(this.posCRMdasbordFrom.value.toDate),
-              "bln_ShowBuyingPattern": JSON.stringify(this.posCRMdasbordFrom.controls.showBuyingPatternBln.value? 0 : 1),
-              "str_DiaBuyPatternField": this.posCRMdasbordFrom.controls.diamondsection.value,
-              "str_MtlBuyPatternField": this.posCRMdasbordFrom.controls.metal.value,
-              "str_Divisions": this.posCRMdasbordFrom.controls.divisions.value,
+              "str_FmDate" : this.formatDateToYYYYMMDD(this.posCRMdasbordForm.value.fromDate),
+              "str_ToDate" : this.formatDateToYYYYMMDD(this.posCRMdasbordForm.value.toDate),
+              "bln_ShowBuyingPattern": JSON.stringify(this.posCRMdasbordForm.controls.showBuyingPatternBln.value? 0 : 1),
+              "str_DiaBuyPatternField": this.posCRMdasbordForm.controls.diamondsection.value,
+              "str_MtlBuyPatternField": this.posCRMdasbordForm.controls.metal.value,
+              "str_Divisions": this.posCRMdasbordForm.controls.divisions.value,
               "str_BranchList": this.formattedBranchDivisionData || this.fetchedBranchDataParam,
               "str_SqlId": '',
               "LOGDATA": JSON.stringify(this.logDataParam)
@@ -389,24 +399,24 @@ export class PosCrmDashboardComponent implements OnInit {
       this.isLoading = true;
       console.log('data to prefill', this.content)   
       this.templateNameHasValue = !!(this.content?.TEMPLATE_NAME);
-      this.posCRMdasbordFrom.controls.templateName.setValue(this.content?.TEMPLATE_NAME);
+      this.posCRMdasbordForm.controls.templateName.setValue(this.content?.TEMPLATE_NAME);
 
       var paresedItem = JSON.parse(this.content?.CONTROL_LIST_JSON);
       this.dateToPass = {
         fromDate:  paresedItem?.CONTROL_DETAIL.str_FmDate,
         toDate: paresedItem?.CONTROL_DETAIL.str_ToDate
       };
-      this.dateToPass.fromDate? this.posCRMdasbordFrom.controls.fromDate.setValue(this.dateToPass.fromDate) : null
-      this.dateToPass.toDate? this.posCRMdasbordFrom.controls.toDate.setValue(this.dateToPass.toDate) : null
+      this.dateToPass.fromDate? this.posCRMdasbordForm.controls.fromDate.setValue(this.dateToPass.fromDate) : null
+      this.dateToPass.toDate? this.posCRMdasbordForm.controls.toDate.setValue(this.dateToPass.toDate) : null
 
 
-      this.posCRMdasbordFrom.controls.branch.setValue(paresedItem?.CONTROL_DETAIL.str_BranchList);
+      this.posCRMdasbordForm.controls.branch.setValue(paresedItem?.CONTROL_DETAIL.str_BranchList);
       this.fetchedBranchData= paresedItem?.CONTROL_DETAIL.str_BranchList.split("#")
       this.fetchedBranchDataParam = paresedItem?.CONTROL_DETAIL.str_BranchList
 
-      this.posCRMdasbordFrom.controls.diamondsection.setValue(paresedItem?.CONTROL_DETAIL.str_DiaBuyPatternField)
-      this.posCRMdasbordFrom.controls.divisions.setValue(paresedItem?.CONTROL_DETAIL.str_Divisions)
-      this.posCRMdasbordFrom.controls.metal.setValue(paresedItem?.CONTROL_DETAIL.str_MtlBuyPatternField)
+      this.posCRMdasbordForm.controls.diamondsection.setValue(paresedItem?.CONTROL_DETAIL.str_DiaBuyPatternField)
+      this.posCRMdasbordForm.controls.divisions.setValue(paresedItem?.CONTROL_DETAIL.str_Divisions)
+      this.posCRMdasbordForm.controls.metal.setValue(paresedItem?.CONTROL_DETAIL.str_MtlBuyPatternField)
 
       this.buyingPatternBoolean = paresedItem?.CONTROL_DETAIL.bln_ShowBuyingPattern === 1 ? false : true;
       console.log(this.buyingPatternBoolean)
@@ -414,7 +424,7 @@ export class PosCrmDashboardComponent implements OnInit {
     else{
       const userBranch = localStorage.getItem('userbranch');
       const formattedUserBranch = userBranch ? `${userBranch}#` : null;
-      this.posCRMdasbordFrom.controls.branch.setValue(formattedUserBranch);
+      this.posCRMdasbordForm.controls.branch.setValue(formattedUserBranch);
       this.fetchedBranchDataParam = formattedUserBranch;
       this.fetchedBranchData= this.fetchedBranchDataParam?.split("#")
    
@@ -423,17 +433,17 @@ export class PosCrmDashboardComponent implements OnInit {
         toDate: this.formatDateToYYYYMMDD(new Date()),
       };
 
-      this.posCRMdasbordFrom.controls.diamondsection.setValue(this.diamondSectionArr[0].DISPNAME);
-      this.posCRMdasbordFrom.controls.divisions.setValue(this.divisionsArr[0].Type);
-      this.posCRMdasbordFrom.controls.metal.setValue(this.metalSectionArr[0].DISPNAME);
-      console.log(this.posCRMdasbordFrom)
+      this.posCRMdasbordForm.controls.festival.setValue(1)
+      this.posCRMdasbordForm.controls.diamondsection.setValue(this.diamondSectionArr[0].MASFIELD);
+      this.posCRMdasbordForm.controls.divisions.setValue(this.divisionsArr[0].Code);
+      this.posCRMdasbordForm.controls.metal.setValue(this.metalSectionArr[0].MASFIELD);
       
     }
   }
 
-  onFestivalChange(event: MatSelectChange) {
+  onFestivalChange(event: any) {
     console.log('Selected Festival:', event.value);
-    this.posCRMdasbordFrom.controls.festival.setValue(event.value)
+    this.posCRMdasbordForm.controls.festival.setValue(event.value)
   }
 
 

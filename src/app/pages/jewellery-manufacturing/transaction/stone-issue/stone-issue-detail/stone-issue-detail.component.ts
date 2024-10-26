@@ -999,7 +999,28 @@ export class StoneIssueDetailComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
 
-
+  FillUniqueDesignDetails(){
+    if (this.viewMode || this.editMode) return;
+    let postData = {
+      "SPID": "142",
+      "parameter": {
+        'subJobNum ': this.stoneIssueDetailsFrom.value.subjobnumber,
+        'strBranch ': this.comService.nullToString(this.branchCode),
+      }
+    }
+    
+    this.comService.showSnackBarMsg('MSG81447')
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        this.comService.closeSnackBarMsg()
+        if (result.dynamicData && result.dynamicData.length > 0) {
+          let data = result.dynamicData[0]
+          console.log(data[0],'design')
+          this.stoneIssueDetailsFrom.controls.salesorderno.setValue(data[0].job_so_number)
+        }
+      })
+}
+  
   subJobNumberValidate(event?: any) {
     if (event?.target.value == '' || this.viewMode) return;
     // let postData = {
@@ -1035,6 +1056,7 @@ export class StoneIssueDetailComponent implements OnInit {
           // this.tableData = result.dynamicData[1] || []
           // this.columnhead1 = Object.keys(this.tableData[0])
           this.FillStnRequiredDetail()
+          this.FillUniqueDesignDetails()
           this.getImageData()
           this.setOnLoadDetails()
         } else {
@@ -1079,7 +1101,7 @@ export class StoneIssueDetailComponent implements OnInit {
             this.stoneIssueDetailsFrom.controls.subjobDes.setValue(data[0].DESCRIPTION?.toUpperCase())
             this.stoneIssueDetailsFrom.controls.DESIGN_CODE.setValue(data[0].DESIGN_CODE)
             this.stoneIssueDetailsFrom.controls.PART_CODE.setValue(data[0].PART_CODE)
-            this.stoneIssueDetailsFrom.controls.salesorderno.setValue(data[0].CUSTOMER_CODE)
+            // this.stoneIssueDetailsFrom.controls.salesorderno.setValue(data[0].CUSTOMER_CODE)
             this.stoneIssueDetailsFrom.controls.DIVCODE.setValue("L");
             this.stoneIssueDetailsFrom.controls.DESIGN_TYPE.setValue(this.designType)
             // if (data[0].DESIGN_TYPE && data[0].DESIGN_TYPE == "DIAMOND") {
