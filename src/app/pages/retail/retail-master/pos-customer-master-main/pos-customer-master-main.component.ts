@@ -460,6 +460,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
   };
 
   refByCode: MasterSearchModel = {
@@ -473,6 +474,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
   };
 
   nationalityCode: MasterSearchModel = {
@@ -2986,4 +2988,61 @@ export class PosCustomerMasterMainComponent implements OnInit {
         break;
     }
   }
+
+  SPvalidateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string, isCurrencyField: boolean) {
+    LOOKUPDATA.SEARCH_VALUE = event.target.value;
+
+    if (event.target.value === '' || this.flag?.VIEW) {
+  
+        return;
+    }
+
+    let param = {
+        "PAGENO": LOOKUPDATA.PAGENO,
+        "RECORDS": LOOKUPDATA.RECORDS,
+        "LOOKUPID": LOOKUPDATA.LOOKUPID,
+        "WHERECONDITION": LOOKUPDATA.WHERECONDITION,
+        "searchField": LOOKUPDATA.SEARCH_FIELD,
+        "searchValue": LOOKUPDATA.SEARCH_VALUE
+    };
+
+    this.comService.showSnackBarMsg('MSG81447');
+
+    let Sub: Subscription = this.apiService.postDynamicAPI('MasterLookUp', param)
+        .subscribe((result) => {
+            this.comService.closeSnackBarMsg();
+            let data = result.dynamicData[0];
+
+            if (data && data.length > 0) {
+                if (LOOKUPDATA.FRONTENDFILTER && LOOKUPDATA.SEARCH_VALUE !== '') {
+                    let searchResult = this.comService.searchAllItemsInArray(data, LOOKUPDATA.SEARCH_VALUE);
+
+                    if (searchResult && searchResult.length > 0) {
+                        let matchedItem = searchResult[0];
+                        this.posCustomerMasterMainForm.controls.parentPosCode.setValue(matchedItem.CODE);
+
+                          
+                       
+                    } else {
+                        this.comService.toastErrorByMsgId('No data found');
+                        LOOKUPDATA.SEARCH_VALUE = '';
+                        this.posCustomerMasterMainForm.controls.parentPosCode.setValue('');
+
+                  
+                    }
+                }
+            }
+            else {
+              this.comService.toastErrorByMsgId('No data found');
+              LOOKUPDATA.SEARCH_VALUE = '';
+              this.posCustomerMasterMainForm.controls.parentPosCode.setValue('');
+        
+          }
+        }, err => {
+            this.comService.toastErrorByMsgId('MSG2272');
+            this.posCustomerMasterMainForm.controls.parentPosCode.setValue('');
+          });
+
+    this.subscriptions.push(Sub);
+}
 }

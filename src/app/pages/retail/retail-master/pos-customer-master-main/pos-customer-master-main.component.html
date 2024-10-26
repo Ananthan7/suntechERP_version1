@@ -51,7 +51,7 @@
                   appearance="outline"
                 >
                   <input
-                    readonly="true"
+                  (focusout)="SPvalidateLookupField($event,parentPosCode,'parentPosCode',false)"
                     matInput
                     type="text"
                     formControlName="parentPosCode"
@@ -82,7 +82,7 @@
                   appearance="outline"
                 >
                   <input
-                    readonly="true"
+                  (focusout)="SPvalidateLookupField($event,refByCode,'refBy',false)"
                     matInput="text"
                     formControlName="refBy"
                   />
