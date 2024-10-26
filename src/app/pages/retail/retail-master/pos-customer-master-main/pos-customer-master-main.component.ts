@@ -2767,6 +2767,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
 
   deleteCustomerMaster() {
     if (this.content && this.content.FLAG == "VIEW") return;
+    this.setvalues(this.content)
     this.showConfirmationDialog().then((result) => {
       if (result.isConfirmed) {
         let customerCode = this.generatedCustomerCode
