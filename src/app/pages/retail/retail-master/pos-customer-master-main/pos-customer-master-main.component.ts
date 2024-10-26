@@ -32,6 +32,7 @@ import { MatCheckboxChange } from "@angular/material/checkbox";
 import { ShowTransDetailsComponent } from "./show-trans-details/show-trans-details.component";
 import { PrintCustomerLogComponent } from "./print-customer-log/print-customer-log.component";
 import { PrintPrivilegeCardComponent } from "./print-privilege-card/print-privilege-card.component";
+import { MatTabGroup } from "@angular/material/tabs";
 
 @Component({
   selector: "app-pos-customer-master-main",
@@ -71,6 +72,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
   @ViewChild("overlayNationality3") overlayNationality3!: MasterSearchComponent;
   @ViewChild("overlayNationality4") overlayNationality4!: MasterSearchComponent;
   @ViewChild("overlayNationality5") overlayNationality5!: MasterSearchComponent;
+  @ViewChild("tabGroup") tabGroup!: MatTabGroup;
 
   private subscriptions: Subscription[] = [];
   @Input() content!: any;
@@ -96,12 +98,12 @@ export class PosCustomerMasterMainComponent implements OnInit {
   cityListData: any;
   amlValidation: any;
   IDDetailsValidation: boolean = false;
-  getCustomerDetailsValidation: boolean = false;
+  getCustomerDetailsValidation: boolean = true;
   dialogBox: any;
   dialogBoxResult: any;
   existCustomerCode: any;
   generatedCustomerCode: any;
-  flag: any;
+  flag:any = this.content?.FLAG;;
   image: File | null = null;
   editdata: any;
   isCreditLimit: any;
@@ -109,6 +111,15 @@ export class PosCustomerMasterMainComponent implements OnInit {
   contactPreferenceWay: any[] = [];
   knowAboutWay: any[] = [];
   intrestedInWay: any[] = [];
+
+  isFestivalEid: boolean = false;
+  isFestivalChristmas: boolean = false;
+  isFestivalDiwali: boolean = false;
+  isFestivalNationalday: boolean = false;
+  isFestivalOnam: boolean = false;
+  isFestivalPongal: boolean = false;
+  isFestivalNewyear: boolean = false;
+
   zodiacSignArray: any[] = [
     "Aries",
     "Taurus",
@@ -144,11 +155,296 @@ export class PosCustomerMasterMainComponent implements OnInit {
   //   "1754-01-01T00:00:00",
   // ];
 
+
+
+  typeidCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 29,
+    SEARCH_FIELD: "Code",
+    SEARCH_HEADING: "Customer ID Type",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "TYPES = 'ID MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  };
+
+  countryCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 26,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "Countries",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "TYPES='COUNTRY MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  };
+
+  parentPosCode: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 2,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "Parent Code (POS)",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  };
+
+  refByCode: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 2,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "Refered By",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  };
+
+  nationalityCode: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "Nationality",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "TYPES='NATIONALITY MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  };
+
+  stateCode: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 27,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "State",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  };
+
+  cityCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 28,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "City",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  };
+
+  languageCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 45,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "Languages",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "TYPES = 'LANGUAGE MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  };
+
+  favCelebrationCode: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "Favorite Celebration",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "TYPES='FAVORITE CELEBRATION MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  };
+
+  religionCode: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "Religions",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "TYPES='RELIGION MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  };
+
+  custStatusCode: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "Customer Status",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "TYPES='CUSTOMER STATUS MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  };
+
+  categoryCode: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "Category",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "TYPES='CUSTOMER CATEGORY MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  };
+
+  giftPurchasedCode: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "Gift Purchased For",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "TYPES='GIFT PURCHASE MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  };
+
+  occasionOfPurchaseCode: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "Occasion Of Purchase",
+    SEARCH_VALUE: "",
+    WHERECONDITION: " TYPES='PURCHASE OCCASION MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  };
+
+  ageGroupCode: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "Age Group",
+    SEARCH_VALUE: "",
+    WHERECONDITION: " TYPES='AGEGROUP MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  };
+
+  nextVisitCode: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "Next Visit",
+    SEARCH_VALUE: "",
+    WHERECONDITION: " TYPES='NEXT VISIT MASTER'  ",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  };
+
+  occupationMasterCode: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "Occupation",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "TYPES='OCCUPATION MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  };
+
+  customerTypeCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "Customer Type",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "TYPES='CUSTOMER TYPE MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  };
+
+  sourceOfFundMasterCode: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "Source of Fund and Wealth",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "TYPES='SOURCE OF WEALTH AND FUNDS MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  };
+
+  imageName: any;
+  PrivilegeCardData: any;
+  htmlCustomerLog: any;
+  loyaltyCode: any;
+  isLoyaltyVisible: boolean = false;
+  htmlContentForPrivilege: any;
+  compAccode: any;
+
+  constructor(
+    private modalService: NgbModal,
+    private activeModal: NgbActiveModal,
+    private formBuilder: FormBuilder,
+    private comService: CommonServiceService,
+    private snackBar: MatSnackBar,
+    private apiService: SuntechAPIService,
+    public dialog: MatDialog,
+    private renderer: Renderer2
+  ) {}
+
+  ngOnInit(): void {
+    this.compAccode = this.comService?.allCompanyParameters?.COMPACCODE;
+    this.loyaltyCode = this.comService.allbranchMaster?.LOYALTY_CODE;
+    this.getCustomerDetailsValidation =
+      this.comService.allbranchMaster?.POSCUSTDETAILSFROMREADER;
+    this.branchCode = this.comService.branchCode;
+    this.existCustomerCode = this.content?.CODE;
+    this.flag = this.content?.FLAG;
+    this.generateCutomerCode();
+    this.initialController(this.flag);
+    this.creditLimitCheck();
+    this.reasonOfPurchase();
+    this.amlValidation = this.comService.allbranchMaster.AMLNAMEVALIDATION;
+    this.posCustomerMasterMainForm.controls.weddate.disable();
+    this.countryList();
+    this.getDropDownStatus();
+    this.loyaltyDetailsVisiblity();
+    this.IDDetailsTabEnable();
+    this.posCustomerMasterMainForm.controls["createdBranch"].disable();
+    this.fetchImage();
+  }
+
   posCustomerMasterMainForm: FormGroup = this.formBuilder.group({
     code: ["", [Validators.required]],
     parentPosCode: [""],
     refBy: [""],
-    prefix: ["", [Validators.required]],
+    prefix: ["", Validators.required], 
     name: ["", [Validators.required, Validators.maxLength(40)]],
     firstName: [""],
     middleName: [""],
@@ -414,292 +710,10 @@ export class PosCustomerMasterMainComponent implements OnInit {
     loyaltyPoints: [""],
   });
 
-  typeidCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 29,
-    SEARCH_FIELD: "Code",
-    SEARCH_HEADING: "Customer ID Type",
-    SEARCH_VALUE: "",
-    WHERECONDITION: "TYPES = 'ID MASTER'",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  };
-
-  countryCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 26,
-    SEARCH_FIELD: "CODE",
-    SEARCH_HEADING: "Countries",
-    SEARCH_VALUE: "",
-    WHERECONDITION: "TYPES='COUNTRY MASTER'",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  };
-
-  parentPosCode: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 2,
-    SEARCH_FIELD: "CODE",
-    SEARCH_HEADING: "Parent Code (POS)",
-    SEARCH_VALUE: "",
-    WHERECONDITION: "CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-    LOAD_ONCLICK: true,
-  };
-
-  refByCode: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 2,
-    SEARCH_FIELD: "CODE",
-    SEARCH_HEADING: "Refered By",
-    SEARCH_VALUE: "",
-    WHERECONDITION: "CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-    LOAD_ONCLICK: true,
-  };
-
-  nationalityCode: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 3,
-    SEARCH_FIELD: "CODE",
-    SEARCH_HEADING: "Nationality",
-    SEARCH_VALUE: "",
-    WHERECONDITION: "TYPES='NATIONALITY MASTER'",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  };
-
-  stateCode: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 27,
-    SEARCH_FIELD: "CODE",
-    SEARCH_HEADING: "State",
-    SEARCH_VALUE: "",
-    WHERECONDITION: "",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-    LOAD_ONCLICK: true,
-  };
-
-  cityCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 28,
-    SEARCH_FIELD: "CODE",
-    SEARCH_HEADING: "City",
-    SEARCH_VALUE: "",
-    WHERECONDITION: "",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  };
-
-  languageCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 45,
-    SEARCH_FIELD: "CODE",
-    SEARCH_HEADING: "Languages",
-    SEARCH_VALUE: "",
-    WHERECONDITION: "TYPES = 'LANGUAGE MASTER'",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  };
-
-  favCelebrationCode: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 3,
-    SEARCH_FIELD: "CODE",
-    SEARCH_HEADING: "Favorite Celebration",
-    SEARCH_VALUE: "",
-    WHERECONDITION: "TYPES='FAVORITE CELEBRATION MASTER'",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-    LOAD_ONCLICK: true,
-  };
-
-  religionCode: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 3,
-    SEARCH_FIELD: "CODE",
-    SEARCH_HEADING: "Religions",
-    SEARCH_VALUE: "",
-    WHERECONDITION: "TYPES='RELIGION MASTER'",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-    LOAD_ONCLICK: true,
-  };
-
-  custStatusCode: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 3,
-    SEARCH_FIELD: "CODE",
-    SEARCH_HEADING: "Customer Status",
-    SEARCH_VALUE: "",
-    WHERECONDITION: "TYPES='CUSTOMER STATUS MASTER'",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-    LOAD_ONCLICK: true,
-  };
-
-  categoryCode: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 3,
-    SEARCH_FIELD: "CODE",
-    SEARCH_HEADING: "Category",
-    SEARCH_VALUE: "",
-    WHERECONDITION: "TYPES='CUSTOMER CATEGORY MASTER'",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-    LOAD_ONCLICK: true,
-  };
-
-  giftPurchasedCode: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 3,
-    SEARCH_FIELD: "CODE",
-    SEARCH_HEADING: "Gift Purchased For",
-    SEARCH_VALUE: "",
-    WHERECONDITION: "TYPES='GIFT PURCHASE MASTER'",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-    LOAD_ONCLICK: true,
-  };
-
-  occasionOfPurchaseCode: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 3,
-    SEARCH_FIELD: "CODE",
-    SEARCH_HEADING: "Occasion Of Purchase",
-    SEARCH_VALUE: "",
-    WHERECONDITION: " TYPES='PURCHASE OCCASION MASTER'",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-    LOAD_ONCLICK: true,
-  };
-
-  ageGroupCode: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 3,
-    SEARCH_FIELD: "CODE",
-    SEARCH_HEADING: "Age Group",
-    SEARCH_VALUE: "",
-    WHERECONDITION: " TYPES='AGEGROUP MASTER'",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-    LOAD_ONCLICK: true,
-  };
-
-  nextVisitCode: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 3,
-    SEARCH_FIELD: "CODE",
-    SEARCH_HEADING: "Next Visit",
-    SEARCH_VALUE: "",
-    WHERECONDITION: " TYPES='NEXT VISIT MASTER'  ",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-    LOAD_ONCLICK: true,
-  };
-
-  occupationMasterCode: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 3,
-    SEARCH_FIELD: "CODE",
-    SEARCH_HEADING: "Occupation",
-    SEARCH_VALUE: "",
-    WHERECONDITION: "TYPES='OCCUPATION MASTER'",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-    LOAD_ONCLICK: true,
-  };
-
-  customerTypeCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 3,
-    SEARCH_FIELD: "CODE",
-    SEARCH_HEADING: "Customer Type",
-    SEARCH_VALUE: "",
-    WHERECONDITION: "TYPES='CUSTOMER TYPE MASTER'",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  };
-
-  sourceOfFundMasterCode: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 3,
-    SEARCH_FIELD: "CODE",
-    SEARCH_HEADING: "Source of Fund and Wealth",
-    SEARCH_VALUE: "",
-    WHERECONDITION: "TYPES='SOURCE OF WEALTH AND FUNDS MASTER'",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  };
-
-  imageName: any;
-  PrivilegeCardData: any;
-  htmlCustomerLog: any;
-  loyaltyCode: any;
-  isLoyaltyVisible: boolean = true;
-  htmlContentForPrivilege: any;
-
-  constructor(
-    private modalService: NgbModal,
-    private activeModal: NgbActiveModal,
-    private formBuilder: FormBuilder,
-    private comService: CommonServiceService,
-    private snackBar: MatSnackBar,
-    private apiService: SuntechAPIService,
-    public dialog: MatDialog,
-    private renderer: Renderer2
-  ) {}
-
-  ngOnInit(): void {
-    this.loyaltyCode = this.comService.allbranchMaster?.LOYALTY_CODE;
-    this.getCustomerDetailsValidation =
-      this.comService.allbranchMaster?.POSCUSTDETAILSFROMREADER;
-    this.branchCode = this.comService.branchCode;
-    this.existCustomerCode = this.content?.CODE;
-    this.flag = this.content?.FLAG;
-    this.generateCutomerCode();
-    this.initialController(this.flag);
-    this.creditLimitCheck();
-    this.reasonOfPurchase();
-    this.amlValidation = this.comService.allbranchMaster.AMLNAMEVALIDATION;
-    this.posCustomerMasterMainForm.controls.weddate.disable();
-    this.countryList();
-    this.getDropDownStatus();
-    console.log(this.nameList);
-    // this.loyaltyDetailsVisiblity();
-
-    this.posCustomerMasterMainForm.controls["createdBranch"].disable();
-    this.fetchImage();
-  }
-
   fetchImage() {
     let customerCode = this.generatedCustomerCode
       ? this.generatedCustomerCode
       : this.existCustomerCode;
-
-    console.log(customerCode);
 
     let API = `PosCustomerMaster/GetPOSCustImage/${customerCode}`;
     let sub: Subscription = this.apiService
@@ -714,12 +728,10 @@ export class PosCustomerMasterMainComponent implements OnInit {
   dobValueSetting(event: any) {
     const selectedDate = event.value;
     this.posCustomerMasterMainForm.controls.dob1.setValue(selectedDate);
-    console.log("Selected Date:", selectedDate);
   }
 
   nameChange(event: any) {
     const value = event.target.value.toString().trim();
-    console.log(value);
 
     // event.target.value = value;
     if (value != "") {
@@ -779,8 +791,6 @@ export class PosCustomerMasterMainComponent implements OnInit {
   }
 
   creditLimitChecker(event: MatCheckboxChange) {
-    console.log(event.checked);
-
     this.isCreditLimit = event.checked;
 
     if (this.isCreditLimit === false) {
@@ -817,7 +827,6 @@ export class PosCustomerMasterMainComponent implements OnInit {
       setData.MIDDLENAME
     );
     this.posCustomerMasterMainForm.controls.lastName.setValue(setData.LASTNAME);
-    console.log(setData.CREDIT_LIMIT_STATUS);
 
     this.isCreditLimit = setData.CREDIT_LIMIT_STATUS;
 
@@ -834,10 +843,14 @@ export class PosCustomerMasterMainComponent implements OnInit {
     );
     this.posCustomerMasterMainForm.controls.POBox.setValue(setData.POBOX_NO);
     this.posCustomerMasterMainForm.controls.state.setValue(setData.STATE);
+    this.cityCodeData.WHERECONDITION = `TYPES='city master' and COUNTRY_CODE = '${setData.COUNTRY_CODE}' and STATE_CODE = '${setData.STATE}' `;
+    this.isViewCity = true;
     this.posCustomerMasterMainForm.controls.city.setValue(setData.CITY);
     this.posCustomerMasterMainForm.controls.countryCode.setValue(
       setData.COUNTRY_CODE
     );
+    this.stateCode.WHERECONDITION = `TYPES='state master' and COUNTRY_CODE = '${setData.COUNTRY_CODE}'`;
+    this.isViewState = true;
     this.posCustomerMasterMainForm.controls.country.setValue(
       setData.COUNTRY_DESC
     );
@@ -883,9 +896,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
     this.posCustomerMasterMainForm.controls.custStatus.setValue(
       setData.CUST_STATUS
     );
-    this.posCustomerMasterMainForm.controls.custType.setValue(
-      setData.CUST_TYPE
-    );
+    this.posCustomerMasterMainForm.controls.custType.setValue(setData.TYPE);
     this.posCustomerMasterMainForm.controls.moblie1Number.setValue(
       setData.MOBILE1
     );
@@ -1099,7 +1110,6 @@ export class PosCustomerMasterMainComponent implements OnInit {
       .getDynamicAPI(API)
       .subscribe((res) => {
         if (res.status == "Success") {
-          console.log(res.response);
           this.editdata = res.response;
 
           this.setvalues(this.editdata);
@@ -1125,8 +1135,6 @@ export class PosCustomerMasterMainComponent implements OnInit {
   }
 
   selectCountryCode(event: any, controller: any) {
-    console.log(event.value);
-    console.log(controller);
     this.posCustomerMasterMainForm.controls[controller].setValue(event.value);
   }
 
@@ -1138,18 +1146,15 @@ export class PosCustomerMasterMainComponent implements OnInit {
   }
 
   onCountrySelect(iso2Code: string) {
-    console.log("Selected Country ISO2: ", iso2Code);
     this.selectedCountryISO2 = iso2Code;
 
     let API = `CountryMaster/GetStateList/${this.selectedCountryISO2}`;
     this.apiService.getDynamicAPI(API).subscribe((res) => {
       this.stateListData = res.response;
-      console.log(this.stateListData);
     });
   }
 
   onWeddingIsIt(value: any) {
-    console.log(value);
     if (value === "Married") {
       this.posCustomerMasterMainForm.controls.weddate.enable();
     } else if (value !== "Married") {
@@ -1159,12 +1164,10 @@ export class PosCustomerMasterMainComponent implements OnInit {
 
   onCitySelect(iso2Code: string) {
     this.selectedstateISO2 = iso2Code;
-    console.log("Selected Country ISO2: ", this.selectedstateISO2);
 
     let API = `CountryMaster/GetCityList/${this.selectedCountryISO2}/${this.selectedstateISO2}/`;
     this.apiService.getDynamicAPI(API).subscribe((res) => {
       this.cityListData = res.response;
-      console.log(this.cityListData);
     });
   }
 
@@ -1213,8 +1216,6 @@ export class PosCustomerMasterMainComponent implements OnInit {
         .getDynamicAPIWithoutBranch(API)
         .subscribe((res) => {
           if (res.status == "Success") {
-            console.log(res);
-
             this.generatedCustomerCode = res.PosCustomerCode;
             this.posCustomerMasterMainForm.controls.code.setValue(
               this.generatedCustomerCode
@@ -1225,7 +1226,6 @@ export class PosCustomerMasterMainComponent implements OnInit {
   }
 
   countrySelected(e: any) {
-    console.log(e);
     this.nationalCode = e.CODE;
     this.stateCode.WHERECONDITION = `TYPES='state master' and COUNTRY_CODE = '${this.nationalCode}'`;
     this.isViewState = true;
@@ -1289,8 +1289,6 @@ export class PosCustomerMasterMainComponent implements OnInit {
   }
 
   typeidCodeSelected(e: any) {
-    console.log(e);
-
     if (!this.posCustomerMasterMainForm.controls.country.value) {
       let message = `Please Select the Country First`;
       return this.openDialog("Warning", message, true);
@@ -1323,7 +1321,6 @@ export class PosCustomerMasterMainComponent implements OnInit {
   }
 
   stateSelected(e: any) {
-    console.log(e);
     this.posCustomerMasterMainForm.controls.state.setValue(e.CODE);
     this.posCustomerMasterMainForm.controls.stateDesc.setValue(e.DESCRIPTION);
     this.cityCodeData.WHERECONDITION = `TYPES='city master' and COUNTRY_CODE = '${this.nationalCode}' and STATE_CODE = '${e.CODE}' `;
@@ -1331,7 +1328,6 @@ export class PosCustomerMasterMainComponent implements OnInit {
   }
 
   categorySelected(e: any) {
-    console.log(e);
     this.posCustomerMasterMainForm.controls.category.setValue(e.CODE);
     this.posCustomerMasterMainForm.controls.categoryDesc.setValue(
       e.DESCRIPTION
@@ -1339,20 +1335,14 @@ export class PosCustomerMasterMainComponent implements OnInit {
   }
 
   parentPosSelected(e: any) {
-    console.log(e.CODE.toString());
     this.posCustomerMasterMainForm.controls.parentPosCode.setValue(e.CODE);
-    console.log(
-      this.posCustomerMasterMainForm.controls.parentPosCode.value.toString()
-    );
   }
 
   refBySelected(e: any) {
-    console.log(e);
     this.posCustomerMasterMainForm.controls.refBy.setValue(e.CODE);
   }
 
   nationalitySelected(e: any) {
-    console.log(e);
     this.posCustomerMasterMainForm.controls.nationality.setValue(e.CODE);
     this.posCustomerMasterMainForm.controls.nationalityDesc.setValue(
       e.DESCRIPTION
@@ -1375,18 +1365,15 @@ export class PosCustomerMasterMainComponent implements OnInit {
   }
 
   citySelected(e: any) {
-    console.log(e);
     this.posCustomerMasterMainForm.controls.city.setValue(e.CODE);
     this.posCustomerMasterMainForm.controls.cityDesc.setValue(e.DESCRIPTION);
   }
 
   languageSelected(e: any) {
-    console.log(e);
     this.posCustomerMasterMainForm.controls.language.setValue(e.CODE);
   }
 
   favCelebrationSelected(e: any) {
-    console.log(e);
     this.posCustomerMasterMainForm.controls.favCelebration.setValue(e.CODE);
     this.posCustomerMasterMainForm.controls.favCelebrationDesc.setValue(
       e.DESCRIPTION
@@ -1394,7 +1381,6 @@ export class PosCustomerMasterMainComponent implements OnInit {
   }
 
   religionSelected(e: any) {
-    console.log(e);
     this.posCustomerMasterMainForm.controls.religion.setValue(e.CODE);
     this.posCustomerMasterMainForm.controls.religionDesc.setValue(
       e.DESCRIPTION
@@ -1402,7 +1388,6 @@ export class PosCustomerMasterMainComponent implements OnInit {
   }
 
   custStatusSelected(e: any) {
-    console.log(e);
     this.posCustomerMasterMainForm.controls.custStatus.setValue(e.CODE);
     this.posCustomerMasterMainForm.controls.custStatusDesc.setValue(
       e.DESCRIPTION
@@ -1410,51 +1395,41 @@ export class PosCustomerMasterMainComponent implements OnInit {
   }
 
   giftPurchasedSelected(e: any) {
-    console.log(e);
     if (this.posCustomerMasterMainForm.controls.reasonOfPurchase.value) {
       this.posCustomerMasterMainForm.controls.gifrPurchased.setValue(e.CODE);
     }
   }
 
   occasionOfPurchaseSelected(e: any) {
-    console.log(e);
     this.posCustomerMasterMainForm.controls.occasionOfPurchase.setValue(e.CODE);
   }
 
   ageGroupSelected(e: any) {
-    console.log(e);
     this.posCustomerMasterMainForm.controls.ageGroup.setValue(e.CODE);
   }
 
   nextVisitSelected(e: any) {
-    console.log(e);
     this.posCustomerMasterMainForm.controls.nextVisit.setValue(e.CODE);
   }
 
   occupationMasterSelected(e: any) {
-    console.log(e);
     this.posCustomerMasterMainForm.controls.occupation.setValue(e.CODE);
   }
 
   occupation1MasterSelected(e: any) {
-    console.log(e);
     this.posCustomerMasterMainForm.controls.occupation1.setValue(e.CODE);
   }
 
   customerTypeSelected(e: any) {
-    console.log(e);
     this.posCustomerMasterMainForm.controls.custType.setValue(e.CODE);
     this.posCustomerMasterMainForm.controls.custDesc.setValue(e.DESCRIPTION);
   }
 
   sourceOfFundMasterSelected(e: any) {
-    console.log(e);
     this.posCustomerMasterMainForm.controls.sourceOfFund.setValue(e.CODE);
   }
 
   getDropDownStatus() {
-    console.log("In 1454");
-
     this.maritalStatusList = this.getUniqueValues(
       this.comService.getComboFilterByID("Marital Status"),
       "ENGLISH"
@@ -1501,8 +1476,6 @@ export class PosCustomerMasterMainComponent implements OnInit {
   }
 
   uploadCustomerImage() {
-    console.log(" inside the uploadCustomerImage");
-
     const formData = new FormData();
     const customerCode = this.existCustomerCode || this.generatedCustomerCode;
 
@@ -1512,14 +1485,10 @@ export class PosCustomerMasterMainComponent implements OnInit {
 
     const API = `PosCustomerMaster/InsertPOSCustAttachments`;
 
-    console.log("FormData:", formData);
-
     const sub: Subscription = this.apiService
       .postDynamicAPI(API, formData)
       .subscribe(
-        (result) => {
-          console.log("Image upload API Response:", result);
-        },
+        (result) => {},
         (err) => {
           console.error("Image Upload Error:", err);
           // Optionally, add user feedback here
@@ -1527,7 +1496,6 @@ export class PosCustomerMasterMainComponent implements OnInit {
       );
 
     this.subscriptions.push(sub);
-    console.log("finished");
   }
 
   customerSave() {
@@ -1594,8 +1562,6 @@ export class PosCustomerMasterMainComponent implements OnInit {
         });
 
       if (!this.posCustomerMasterMainForm.invalid) {
-        console.log("data");
-
         const posCustomer = {
           CODE: this.posCustomerMasterMainForm.value.code || "",
           NAME: this.posCustomerMasterMainForm.value.name || "",
@@ -1811,16 +1777,17 @@ export class PosCustomerMasterMainComponent implements OnInit {
           NATIONALITY_DESC:
             this.posCustomerMasterMainForm.value.nationalityDesc || "",
           TYPE_DESC: this.posCustomerMasterMainForm.value.custDesc || "",
-          DETAILS_JOHARA: "",
-          DETAILS_FARAH: "",
-          DETAILS_JAWAHERALSHARQ: "",
-          FESTIVAL_EID: false,
-          FESTIVAL_CHRISTMAS: false,
-          FESTIVAL_DIWALI: false,
-          FESTIVAL_NATIONALDAY: false,
-          FESTIVAL_ONAM: false,
-          FESTIVAL_PONGAL: false,
-          FESTIVAL_NEWYEAR: false,
+          DETAILS_JOHARA: this.posCustomerMasterMainForm.value.johara || "",
+          DETAILS_FARAH: this.posCustomerMasterMainForm.value.farah || "",
+          DETAILS_JAWAHERALSHARQ:
+            this.posCustomerMasterMainForm.value.jawaher || "",
+          FESTIVAL_EID: this.isFestivalEid,
+          FESTIVAL_CHRISTMAS: this.isFestivalChristmas,
+          FESTIVAL_DIWALI: this.isFestivalDiwali,
+          FESTIVAL_NATIONALDAY: this.isFestivalNationalday,
+          FESTIVAL_ONAM: this.isFestivalOnam,
+          FESTIVAL_PONGAL: this.isFestivalPongal,
+          FESTIVAL_NEWYEAR: this.isFestivalNewyear,
           REASON_OF_PURCHASE:
             this.posCustomerMasterMainForm.value.reasonOfPurchase || "",
           AGE_GROUP: this.posCustomerMasterMainForm.value.ageGroup || "",
@@ -1850,8 +1817,6 @@ export class PosCustomerMasterMainComponent implements OnInit {
           let sub: Subscription = this.apiService
             .putDynamicAPI(API, posCustomer)
             .subscribe((result) => {
-              console.log("API Response:", result);
-
               if (result.status === "Success") {
                 Swal.fire({
                   title: "Success",
@@ -1882,8 +1847,6 @@ export class PosCustomerMasterMainComponent implements OnInit {
           let sub: Subscription = this.apiService
             .postDynamicAPI(API, posCustomer)
             .subscribe((result) => {
-              console.log("API Response:", result);
-
               if (result.status === "Success") {
                 Swal.fire({
                   title: "Success",
@@ -1911,194 +1874,6 @@ export class PosCustomerMasterMainComponent implements OnInit {
               }
             });
         }
-
-        // RES.subscribe(async (data) => {
-        //   this.isCustProcessing = false;
-
-        //   if (data.status == "Success") {
-        //     this.customerDetails = await data.response;
-        //     console.log(this.customerDetails);
-
-        //     this.snackBar.open("Customer details saved successfully", "", {
-        //       duration: 1000,
-        //     });
-
-        //     if (this.amlNameValidation && !this.customerDetails.DIGISCREENED) {
-        //       this.isCustProcessing = true;
-
-        //       const payload = {
-        //         AMLDIGICOMPANYNAME: encodeURIComponent(
-        //           this.comService.allbranchMaster.AMLDIGICOMPANYNAME || " "
-        //         ),
-        //         AMLDIGIUSERNAME: encodeURIComponent(
-        //           this.comService.allbranchMaster.AMLDIGIUSERNAME || " "
-        //         ),
-        //         AMLDIGIPASSWORD: encodeURIComponent(
-        //           this.comService.allbranchMaster.AMLDIGIPASSWORD || " "
-        //         ),
-        //         CODE: encodeURIComponent(this.customerDetails.CODE || " "),
-        //         FIRSTNAME: "",
-
-        //         MIDDLENAME: "",
-
-        //         LASTNAME:
-        //           encodeURIComponent(
-        //             this.customerDetails.NAME
-        //           ) || "",
-        //         NATIONALITY: encodeURIComponent(
-        //           this.customerDetails.NATIONALITY
-        //         ),
-
-        //         DATE_OF_BIRTH:
-
-        //           encodeURIComponent(
-        //             this.comService.convertDateToMDY(
-        //               this.dummyDateCheck(this.customerDetails.DATE_OF_BIRTH)
-        //             )
-        //           ),
-
-        //         CUST_Type: encodeURIComponent("I"),
-
-        //         AMLUSERID: encodeURIComponent(
-        //           this.comService.allbranchMaster.AMLUSERID
-        //         ),
-        //         AMLDIGITHRESHOLD:
-        //           encodeURIComponent(
-        //             this.comService.allbranchMaster.AMLDIGITHRESHOLD
-        //           ) || "%27%27",
-        //         DIGIIPPATH:
-        //           encodeURIComponent(
-        //             this.comService.allbranchMaster.DIGIIPPATH
-        //           ) || "%27%27",
-        //         Gender:
-        //           encodeURIComponent(this.customerDetails?.GENDER) || "%27%27",
-        //         CustomerIdType:
-        //           encodeURIComponent(this.customerDetails?.IDCATEGORY) ||
-        //           "%27%27",
-        //         CustomerIdNumber:
-        //           encodeURIComponent(
-        //             this.customerDetails?.NATIONAL_IDENTIFICATION_NO
-        //           ) || "%27%27",
-        //       };
-        //       this.snackBar.open("Loading...");
-
-        //       const queryParams = {
-        //         companyname: payload.AMLDIGICOMPANYNAME,
-        //         username: payload.AMLDIGIUSERNAME,
-        //         Password: payload.AMLDIGIPASSWORD,
-        //         CustomerId: payload.CODE,
-        //         FirstName: payload.FIRSTNAME,
-        //         MiddleName: payload.MIDDLENAME,
-        //         LastName: payload.LASTNAME,
-        //         MatchCategory: "",
-        //         CustomerIdNumber: payload.CustomerIdNumber,
-        //         Nationality: payload.NATIONALITY,
-        //         DOB: payload.DATE_OF_BIRTH,
-        //         CustomerType: payload.CUST_Type,
-        //         UserId: payload.AMLUSERID,
-        //         Threshold: payload.AMLDIGITHRESHOLD,
-        //         CompName: payload.AMLDIGICOMPANYNAME,
-        //         GeneratePayload: "1",
-        //         IPPath: payload.DIGIIPPATH,
-        //         Gender: payload.Gender,
-        //         CustomerIdType: payload.CustomerIdType,
-        //       };
-        //       if (this.amlNameValidation) {
-        //         this.apiService
-        //           .getDynamicAPIwithParams("AMLValidation", queryParams)
-        //           .subscribe(async (data) => {
-        //             this.isCustProcessing = false;
-
-        //             this.snackBar.open("Loading...");
-
-        //             this.apiService
-        //               .putDynamicAPI(
-        //                 `PosCustomerMaster/UpdateDigiScreened/code=${this.customerDetails.CODE}/DigiScreened=true`,
-        //                 ""
-        //               )
-        //               .subscribe((resp) => {
-        //                 this.snackBar.dismiss();
-        //                 if (resp.status == "Success") {
-        //                   this.customerDetails.DIGISCREENED =
-        //                     resp.response != null
-        //                       ? resp.response?.DIGISCREENED
-        //                       : true;
-        //                 } else {
-        //                   this.snackBar.open("Digiscreen Failed");
-        //                 }
-
-        //                 console.log("====================================");
-        //                 console.log("resp", resp);
-        //                 console.log("====================================");
-        //               });
-
-        //             if (data.response.isMatched != null) {
-        //               this.snackBar.dismiss();
-
-        //               if (data.response.isMatched.toUpperCase() == "YES") {
-        //                 this.openDialog("Warning", "We cannot proceed", true);
-        //                 this.dialogBox.afterClosed().subscribe((data: any) => {
-        //                   if (data == "OK") {
-        //                   }
-        //                 });
-        //                 this.amlNameValidationData = true;
-
-        //                 this.apiService
-        //                   .putDynamicAPI(
-        //                     `PosCustomerMaster/updateCustomerAmlNameValidation/code=${this.customerDetails.CODE}/AmlNameValidation=true`,
-        //                     ""
-        //                   )
-        //                   .subscribe((resp) => {
-        //                     this.customerDetails.AMLNAMEVALIDATION =
-        //                       resp.response != null
-        //                         ? resp.response?.AMLNAMEVALIDATION
-        //                         : true;
-
-        //                     console.log("====================================");
-        //                     console.log("resp", resp);
-        //                     console.log("====================================");
-        //                   });
-        //                 // }
-        //               } else {
-        //                 this.openDialog(
-        //                   "Success",
-        //                   JSON.stringify(data.response),
-        //                   true
-        //                 );
-        //                 this.dialogBox.afterClosed().subscribe((data: any) => {
-        //                   if (data == "OK") {
-        //                   }
-        //                 });
-        //                 this.amlNameValidationData = false;
-        //               }
-        //             } else {
-        //               this.openDialog(
-        //                 "Warning",
-        //                 JSON.stringify(data.response),
-        //                 true
-        //               );
-        //               this.dialogBox.afterClosed().subscribe((data: any) => {
-        //                 if (data == "OK") {
-        //                 }
-        //               });
-        //               this.amlNameValidationData = true;
-        //             }
-        //           });
-        //       } else {
-        //         this.isCustProcessing = false;
-        //       }
-        //     } else {
-        //       this.isCustProcessing = false;
-
-        //     }
-        //   } else {
-        //     this.customerDetails = {};
-        //     this.snackBar.open(data.message, "", {
-        //       duration: 2000,
-        //     });
-        //     this.closeModal();
-        //   }
-        // });
       } else {
         this.isCustProcessing = false;
 
@@ -2131,8 +1906,6 @@ export class PosCustomerMasterMainComponent implements OnInit {
   // }
 
   openTab(event: any, formControlName: string) {
-    console.log(event);
-
     if (event.target.value === "") {
       this.openPanel(event, formControlName);
     }
@@ -2225,11 +1998,6 @@ export class PosCustomerMasterMainComponent implements OnInit {
       default:
         console.warn(`Unknown form control name: ${formControlName}`);
     }
-  }
-
-  transactionDetails(event: any) {
-    console.log(event);
-    console.log("Got Clicked");
   }
 
   printCustomerLog() {
@@ -2345,8 +2113,76 @@ export class PosCustomerMasterMainComponent implements OnInit {
   }
 
   getCustomerDetails(event: any) {
-    console.log(event);
-    console.log("Got Clicked");
+    let API = `PrivilegeCustomerNetSalesSummary/GetCustomerDetails/${true}/${
+      this.branchCode
+    }/`;
+    this.tabGroup.selectedIndex = 8;
+    let sub: Subscription = this.apiService
+      .getDynamicAPI(API)
+      .subscribe((res) => {
+        if (res.status.trim() === "Success") {
+          let data = res.dynamicData[0][0];
+
+          this.posCustomerMasterMainForm.controls.arabicGender.setValue(
+            data.ARABIC_GENDER
+          );
+          this.posCustomerMasterMainForm.controls.arabicNationality.setValue(
+            data.ARABIC_NATIONALITY
+          );
+          this.posCustomerMasterMainForm.controls.issuanceDate.setValue(
+            data.ISSUANCE_DATE
+          );
+
+          this.posCustomerMasterMainForm.controls.documentNo.setValue(
+            data.DOCUMENT_NO
+          );
+          this.posCustomerMasterMainForm.controls.serialNo.setValue(
+            data.SERIAL_NO
+          );
+
+          this.posCustomerMasterMainForm.controls.atr.setValue(data.ATR);
+          this.posCustomerMasterMainForm.controls.moiRefIndic.setValue(
+            data.MOI_REF_INDIC
+          );
+          this.posCustomerMasterMainForm.controls.moiReference.setValue(
+            data.MOI_REFERENCE
+          );
+          this.posCustomerMasterMainForm.controls.district.setValue(
+            data.DISTRICT
+          );
+          this.posCustomerMasterMainForm.controls.block.setValue(data.BLOCK);
+          this.posCustomerMasterMainForm.controls.street.setValue(data.STREET);
+          this.posCustomerMasterMainForm.controls.buildingNo.setValue(
+            data.BUILDING_NO
+          );
+          this.posCustomerMasterMainForm.controls.unitType.setValue(
+            data.UNIT_TYPE
+          );
+          this.posCustomerMasterMainForm.controls.unitNo.setValue(data.UNIT_NO);
+          this.posCustomerMasterMainForm.controls.floor.setValue(data.FLOOR);
+          this.posCustomerMasterMainForm.controls.bloodType.setValue(
+            data.BLOOD_TYPE
+          );
+          this.posCustomerMasterMainForm.controls.guardianCivilId.setValue(
+            data.GUARDIAN_CIVIL_ID
+          );
+          this.posCustomerMasterMainForm.controls.additionalField1.setValue(
+            data.ADDITIONAL_FIELD_1
+          );
+          this.posCustomerMasterMainForm.controls.additionalField2.setValue(
+            data.ADDITIONAL_FIELD_2
+          );
+          this.posCustomerMasterMainForm.controls.appVersion.setValue(
+            data.APP_VERSION
+          );
+          this.posCustomerMasterMainForm.controls.passport.setValue(
+            data.PASSPORT
+          );
+          this.posCustomerMasterMainForm.controls.connectedReaders.setValue(
+            data.CONNECTED_READERS
+          );
+        }
+      });
   }
 
   preventInvalidInput(event: KeyboardEvent) {
@@ -2398,7 +2234,6 @@ export class PosCustomerMasterMainComponent implements OnInit {
         .getDynamicAPI(API)
         .subscribe((res) => {
           if (res.status.trim() === "Success") {
-            console.log(res.response);
             if (res.response.MOBILE === input.value) {
               let message = `Customer Already Exist ! `;
               this.posCustomerMasterMainForm.controls[controller].setValue("");
@@ -2459,25 +2294,21 @@ export class PosCustomerMasterMainComponent implements OnInit {
       this.check();
       this.contactPreferenceWay = [];
     } else {
-      console.log("Interested");
     }
 
     if (event.checked) {
       if (!this.contactPreferenceWay.includes(value)) {
         this.contactPreferenceWay.push(value);
-        console.log(`${value} added`);
       }
     } else {
       const index = this.contactPreferenceWay.indexOf(value);
       if (index !== -1) {
         this.contactPreferenceWay.splice(index, 1);
-        console.log(`${value} removed`);
       }
     }
 
     this.contactPreferenceWay.sort((a, b) => a.localeCompare(b));
     this.selectedContactString = this.contactPreferenceWay.join("#");
-    console.log("Selected Values:", this.selectedContactString);
   }
 
   populateContactPreferences(selectedContactString: string) {
@@ -2510,13 +2341,11 @@ export class PosCustomerMasterMainComponent implements OnInit {
     if (event.checked) {
       if (!this.knowAboutWay.includes(value)) {
         this.knowAboutWay.push(value);
-        console.log(`${value} added`);
       }
     } else {
       const index = this.knowAboutWay.indexOf(value);
       if (index !== -1) {
         this.knowAboutWay.splice(index, 1);
-        console.log(`${value} removed`);
       }
     }
 
@@ -2540,8 +2369,6 @@ export class PosCustomerMasterMainComponent implements OnInit {
     // Join knowAboutWay with '#', append the social media part (if any)
     this.selectedknowAboutString =
       this.knowAboutWay.join("#") + socialMediaPart;
-
-    console.log("Selected Values:", this.selectedknowAboutString);
   }
 
   populateKnowAbout(selectedKnowAboutString: string) {
@@ -2598,19 +2425,16 @@ export class PosCustomerMasterMainComponent implements OnInit {
     if (event.checked) {
       if (!this.intrestedInWay.includes(value)) {
         this.intrestedInWay.push(value);
-        console.log(`${value} added`);
       }
     } else {
       const index = this.intrestedInWay.indexOf(value);
       if (index !== -1) {
         this.intrestedInWay.splice(index, 1);
-        console.log(`${value} removed`);
       }
     }
 
     this.intrestedInWay.sort((a, b) => a.localeCompare(b));
     this.selectedIntrestedInString = this.intrestedInWay.join("#");
-    console.log("Selected Values:", this.selectedIntrestedInString);
   }
 
   populateIntrestedIn(selectedKnowAboutString: string) {
@@ -2684,6 +2508,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
 
   deleteCustomerMaster() {
     if (this.content && this.content.FLAG == "VIEW") return;
+    this.setvalues(this.content);
     this.showConfirmationDialog().then((result) => {
       if (result.isConfirmed) {
         let customerCode = this.generatedCustomerCode
@@ -2712,8 +2537,6 @@ export class PosCustomerMasterMainComponent implements OnInit {
   }
 
   switchToIndiCom(event: any) {
-    console.log(event.value); // This will output either 'Individual' or 'Company'
-
     // Example switch statement based on the selected value
     switch (event.value) {
       case "Individual":
@@ -2799,37 +2622,23 @@ export class PosCustomerMasterMainComponent implements OnInit {
     );
     modalRef.componentInstance.customerCode = this.existCustomerCode;
     modalRef.componentInstance.data = this.content;
-    // modalRef.componentInstance.queryParams = { isViewOnly: this.viewOnly };
-    // if (date) {
-    //   modalRef.componentInstance.delivery_date = date._d;
-    // }
-
-    // modalRef.result.then((postData) => {
-    //   if (postData) {
-    //     console.log("Data from modal:", postData);
-    //     this.handlePostData(postData);
-    //   }
-    // });
   }
 
-  IDDetailsEnable() {
+  IDDetailsTabEnable() {
     if (
-      (this.comService.allbranchMaster?.POSCUSTDETAILSFROMREADER === true &&
-        this.posCustomerMasterMainForm.value.countryCode === "KWT") ||
-      "KW"
+      this.comService.allbranchMaster?.POSCUSTDETAILSFROMREADER === true &&
+      (this.comService.allbranchMaster?.COUNTRY_CODE === "KWT" ||
+        this.comService.allbranchMaster?.COUNTRY_CODE === "KW")
     ) {
       this.IDDetailsValidation = true;
     }
   }
 
-  // loyaltyDetailsVisiblity() {
-
-  //   console.log();
-
-  //   if (this.loyaltyCode !== "") {
-  //     this.isLoyaltyVisible = true;
-  //   }
-  // }
+  loyaltyDetailsVisiblity() {
+    if (this.loyaltyCode !== "") {
+      this.isLoyaltyVisible = true;
+    }
+  }
 
   updateLoyaltyPoints() {
     let payload = {
@@ -2875,5 +2684,102 @@ export class PosCustomerMasterMainComponent implements OnInit {
           });
         }
       });
+  }
+
+  getFestivalCheck(event: any, controller: any) {
+    switch (controller) {
+      case "eidFest":
+        this.isFestivalEid = event.checked;
+
+        break;
+      case "christmasFest":
+        this.isFestivalChristmas = event.checked;
+
+        break;
+      case "diwaliFest":
+        this.isFestivalDiwali = event.checked;
+
+        break;
+      case "nationalDayFest":
+        this.isFestivalNationalday = event.checked;
+
+        break;
+      case "pongalandsankrantiFest":
+        this.isFestivalPongal = event.checked;
+
+        break;
+      case "newyearFest":
+        this.isFestivalNewyear = event.checked;
+
+        break;
+
+      default:
+        break;
+    }
+  }
+
+  SPvalidateLookupField(
+    event: any,
+    LOOKUPDATA: MasterSearchModel,
+    FORMNAME: string,
+    isCurrencyField: boolean
+  ) {
+    LOOKUPDATA.SEARCH_VALUE = event.target.value;
+
+    if (event.target.value === "" || this.flag?.VIEW) {
+      return;
+    }
+
+    let param = {
+      PAGENO: LOOKUPDATA.PAGENO,
+      RECORDS: LOOKUPDATA.RECORDS,
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECONDITION: LOOKUPDATA.WHERECONDITION,
+      searchField: LOOKUPDATA.SEARCH_FIELD,
+      searchValue: LOOKUPDATA.SEARCH_VALUE,
+    };
+
+    this.comService.showSnackBarMsg("MSG81447");
+
+    let Sub: Subscription = this.apiService
+      .postDynamicAPI("MasterLookUp", param)
+      .subscribe(
+        (result) => {
+          this.comService.closeSnackBarMsg();
+          let data = result.dynamicData[0];
+
+          if (data && data.length > 0) {
+            if (LOOKUPDATA.FRONTENDFILTER && LOOKUPDATA.SEARCH_VALUE !== "") {
+              let searchResult = this.comService.searchAllItemsInArray(
+                data,
+                LOOKUPDATA.SEARCH_VALUE
+              );
+
+              if (searchResult && searchResult.length > 0) {
+                let matchedItem = searchResult[0];
+                this.posCustomerMasterMainForm.controls.parentPosCode.setValue(
+                  matchedItem.CODE
+                );
+              } else {
+                this.comService.toastErrorByMsgId("No data found");
+                LOOKUPDATA.SEARCH_VALUE = "";
+                this.posCustomerMasterMainForm.controls.parentPosCode.setValue(
+                  ""
+                );
+              }
+            }
+          } else {
+            this.comService.toastErrorByMsgId("No data found");
+            LOOKUPDATA.SEARCH_VALUE = "";
+            this.posCustomerMasterMainForm.controls.parentPosCode.setValue("");
+          }
+        },
+        (err) => {
+          this.comService.toastErrorByMsgId("MSG2272");
+          this.posCustomerMasterMainForm.controls.parentPosCode.setValue("");
+        }
+      );
+
+    this.subscriptions.push(Sub);
   }
 }
