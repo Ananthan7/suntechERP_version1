@@ -1,7 +1,10 @@
+import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { DomSanitizer } from '@angular/platform-browser';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { control } from 'leaflet';
 import { ToastrService } from 'ngx-toastr';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
@@ -29,15 +32,40 @@ export class CustomerEnquiryComponent implements OnInit {
     Email: [''],
     customerfrom: [''],
     customerto: [''],
+    birthMonth: [''],
+    birthDate: [''],
+    DOBValue:[new Date()],
+    birthMonth2: [''],
+    birthDate2: [''],
+    DOBValue2: [new Date()],
+    weddingMonth: [''],
+    weddingDate: [''],
+    WeddingDateValue: [new Date()],
+    weddingMonth2: [''],
+    WeddingDate2: [''],
+    WeddingDateValue2: [new Date()],
+    telephoneContact: [''],
+    mobileContact: [''],
+    MaritalStatusSelection: [''],
+    GenderSelection: [''],
     
-
+    
     templateName: ['']
   })
+  currentDate: Date = new Date();
+  maritalStatusArr = [
+    { value: 'S', label: 'Single' },
+    { value: 'M', label: 'Married' },
+    { value: 'W', label: 'Widow' },
+    { value: 'D', label: 'Divorced' }
+  ];
   constructor(private activeModal: NgbActiveModal, private formBuilder: FormBuilder, 
     private dataService: SuntechAPIService, private commonService: CommonServiceService, 
-    private toastr: ToastrService, private sanitizer: DomSanitizer) { }
+    private toastr: ToastrService, private sanitizer: DomSanitizer,
+    private datePipe: DatePipe) { }
 
   ngOnInit(): void {
+ 
   }
 
   selectedData(data: any) {
@@ -90,7 +118,53 @@ export class CustomerEnquiryComponent implements OnInit {
     this.customerEnquiryForm.controls.branch.setValue(this.formattedBranchDivisionData);
   }
 
+  onDateChange(controlName: string, event: MatDatepickerInputEvent<Date>) {
+    if (event.value) {
+      const formattedDate = this.datePipe.transform(event.value, 'MMMM, d');
 
+      if (typeof formattedDate === 'string') {
+        const [month, day] = formattedDate.split(', ').map(part => part.trim());
+        let shortMonthValue = this.getShortMonth(month);
+
+        if(controlName == 'bdayPicker1'){
+          this.customerEnquiryForm.controls.birthMonth.setValue(shortMonthValue);
+          this.customerEnquiryForm.controls.birthDate.setValue(day);
+        }
+        else if(controlName == 'bdayPicker2'){
+          this.customerEnquiryForm.controls.birthMonth2.setValue(shortMonthValue);
+          this.customerEnquiryForm.controls.birthDate2.setValue(day);
+        }
+        else if(controlName == 'weddingDataPicker1'){
+          this.customerEnquiryForm.controls.weddingMonth.setValue(shortMonthValue);
+          this.customerEnquiryForm.controls.weddingDate.setValue(day);
+        }
+        else if(controlName == 'weddingDayPicker2'){
+          this.customerEnquiryForm.controls.weddingMonth2.setValue(shortMonthValue);
+          this.customerEnquiryForm.controls.WeddingDate2.setValue(day);
+        }
+      }
+      else{
+        console.log('no Formatted Date:', formattedDate);
+      }
+    }
+  }
+  getShortMonth(month: string): string {
+    switch (month) {
+        case 'January': return 'Jan';
+        case 'February': return 'Feb';
+        case 'March': return 'Mar';
+        case 'April': return 'Apr';
+        case 'May': return 'May';
+        case 'June': return 'Jun';
+        case 'July': return 'Jul';
+        case 'August': return 'Aug';
+        case 'September': return 'Sep';
+        case 'October': return 'Oct';
+        case 'November': return 'Nov';
+        case 'December': return 'Dec';
+        default: return month;
+    }
+  }
 
 
 
