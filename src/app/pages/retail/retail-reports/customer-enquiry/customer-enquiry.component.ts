@@ -48,8 +48,20 @@ export class CustomerEnquiryComponent implements OnInit {
     mobileContact: [''],
     MaritalStatusSelection: [''],
     GenderSelection: [''],
-    
-    
+    country: [''],
+    type: [''],
+    nationality: [''],
+    category: [''],
+    city: [''],
+    cust: [''],
+    religion: [''],
+    division: [''],
+    state: [''],
+    loyalty: [''],
+    saleDateFrom: [''],
+    dateTo: [''],
+
+
     templateName: ['']
   })
   currentDate: Date = new Date();
