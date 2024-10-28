@@ -38,12 +38,14 @@
                     <div class="col-sm-3">
                         <mat-form-field style="width: 90%" appearance="outline">
                             <input type="text" matInput [readonly]="viewMode  || stockcodeDisable"
+                                (focus)="getKaratcode()"
                                 (focusout)="validateLookupField($event,stockCodeData,'stock_code')"
                                 oninput="this.value = this.value.toUpperCase()" (input)="inputValidate($event)"
                                 formControlName="stock_code" appNoEmptySpace
                                 (keydown)="lookupKeyPress($event,'stock_code')" />
                             <master-search [MasterSearchData]="stockCodeData" (newRowClick)="stockCodeSelected($event)"
-                                #overlaystockcodeSearch *ngIf="viewDisable == false || viewDisable1 == false || stockcodeDisable == false"
+                                #overlaystockcodeSearch
+                                *ngIf="viewDisable == false || viewDisable1 == false || stockcodeDisable == false"
                                 class="masterSearch"></master-search>
                         </mat-form-field>
                     </div>
@@ -53,7 +55,7 @@
                         Code *:</label>
                     <div class="col-sm-3">
                         <mat-form-field style="width: 90%" appearance="outline">
-                            <input type="text" matInput  autocomplete="off" maxlength="15"
+                            <input type="text" matInput autocomplete="off" maxlength="15"
                                 [readonly]="editMode || viewMode" formControlName="metallabour_code"
                                 (focusout)="diamondLabourCodeValidate()" (keyup)="codeEnabledMetal()"
                                 oninput="this.value = this.value.toUpperCase()" appNoEmptySpace />
@@ -102,12 +104,14 @@
                         :</label>
                     <div class="col-sm-3">
                         <mat-form-field style="width: 90%" appearance="outline">
-                            <input type="text" matInput [readonly]="viewMode || codeEnableMetal || codedisable || editModeKarat"
+                            <input type="text" matInput
+                                [readonly]="viewMode || codeEnableMetal || codedisable || editModeKarat"
                                 (focusout)="validateLookupField($event,karatCodeData,'karat')" maxlength="6"
                                 formControlName="karat" oninput="this.value = this.value.toUpperCase()"
                                 (input)="inputValidate($event)" (keydown)="lookupKeyPress($event,'karat')" />
                             <master-search [MasterSearchData]="karatCodeData" (newRowClick)="karatCodeSelected($event)"
-                                #overlaykaratSearch *ngIf="viewDisable == false && codedisable  == false && editDisableModeKarat == false"
+                                #overlaykaratSearch
+                                *ngIf="viewDisable == false && codedisable  == false && editDisableModeKarat == false"
                                 class="masterSearch"></master-search>
                         </mat-form-field>
                     </div>
@@ -132,7 +136,8 @@
                         :</label>
                     <div class="col-sm-3">
                         <mat-form-field style="width: 90%" appearance="outline">
-                            <input type="text" matInput [readonly]="viewMode  || stockcodeDisable || codeEnableMetal || codedisable"
+                            <input type="text" matInput
+                                [readonly]="viewMode  || stockcodeDisable || codeEnableMetal || codedisable"
                                 maxlength="6" formControlName="color"
                                 (focusout)="validateLookupField($event,colorData,'color')"
                                 oninput="this.value = this.value.toUpperCase()" (input)="inputValidate($event)"
@@ -157,8 +162,8 @@
                         :</label>
                     <div class="col-sm-3">
                         <mat-form-field style="width: 90%" appearance="outline">
-                            <input type="text" matInput [readonly]="viewMode || codeEnableMetal || codedisable" maxlength="6"
-                                formControlName="typecode"
+                            <input type="text" matInput [readonly]="viewMode || codeEnableMetal || codedisable"
+                                maxlength="6" formControlName="typecode"
                                 (focusout)="validateLookupField($event,typeCodeData,'typecode')"
                                 oninput="this.value = this.value.toUpperCase()" (input)="inputValidate($event)"
                                 (keydown)="lookupKeyPress($event,'typecode')" />
@@ -190,7 +195,8 @@
                                 (input)="inputValidate($event)" (keydown)="lookupKeyPress($event,'category')" />
                             <master-search [MasterSearchData]="categoryCodeData"
                                 (newRowClick)="categorySelected($event)" #overlaycategorySearch
-                                *ngIf=" viewDisable== false && codedisable  == false" class="masterSearch"></master-search>
+                                *ngIf=" viewDisable== false && codedisable  == false"
+                                class="masterSearch"></master-search>
                         </mat-form-field>
                     </div>
                     <label for="input" id="ID014" class="col-sm-2 col-form-label">Selling %
@@ -200,8 +206,8 @@
                         <mat-form-field style="width: 90%" appearance="outline">
                             <input type="text" matInput [readonly]="viewMode || viewsellingMetal || codeEnableMetal"
                                 [max]="3" formControlName="metalSelling" AmountDecimalInput
-                                (change)="metalValue($event)"
-                                (keypress)="salesChange('metalSelling', $event)" class="text-right" />
+                                (change)="metalValue($event)" (keypress)="salesChange('metalSelling', $event)"
+                                class="text-right" />
                         </mat-form-field>
                     </div>
                 </div>
@@ -274,7 +280,7 @@
                     <div class="col-sm-3">
                         <mat-form-field style="width: 100%" appearance="outline">
                             <input matInput type="text" [readonly]="viewMode || codeEnableMetal" matInput
-                                 formControlName="wtFrom" class="text-right" [max]="2" MetalDecimalInput                                
+                                formControlName="wtFrom" class="text-right" [max]="2" MetalDecimalInput
                                 (keyup)="WtcodeEnabled()" />
                         </mat-form-field>
                     </div>
@@ -284,14 +290,14 @@
                         :</label>
                     <div class="col-sm-3">
                         <mat-form-field style="width: 100%" appearance="outline">
-                            <input matInput type="text" [readonly]="viewMode  || codeEnableMetal"
-                                matInput [max]="2"   MetalDecimalInput  (change)="onweightto($event,'wtto')"
-                                formControlName="wtTo" class="text-right" />
+                            <input matInput type="text" [readonly]="viewMode  || codeEnableMetal" matInput [max]="2"
+                                MetalDecimalInput (change)="onweightto($event,'wtto')" formControlName="wtTo"
+                                class="text-right" />
                         </mat-form-field>
                     </div>
                     <div class="col-sm-3 mb-2">
                         <mat-checkbox class="example-margin mx-2" [disabled]="viewMode || codeEnableMetal || grossWt"
-                            formControlName="onGrossWt"  (change)="onforongrossOnlyChange($event)" id="ID022">
+                            formControlName="onGrossWt" (change)="onforongrossOnlyChange($event)" id="ID022">
                             On Gross
                             Wt</mat-checkbox>
                         <mat-checkbox class="example-margin mx-2" [disabled]="viewMode || codeEnableMetal"
@@ -321,7 +327,7 @@
                     <div class="col-sm-3">
                         <mat-form-field style="width: 100%" appearance="outline">
                             <input matInput type="text" [readonly]="viewMode  || codeEnableMetal" matInput [max]="3"
-                            AmountDecimalInput  formControlName="variance" class="text-right" />
+                                AmountDecimalInput formControlName="variance" class="text-right" />
                         </mat-form-field>
                     </div>
                 </div>
