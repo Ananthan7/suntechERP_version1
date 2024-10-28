@@ -103,7 +103,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
   dialogBoxResult: any;
   existCustomerCode: any;
   generatedCustomerCode: any;
-  flag:any = this.content?.FLAG;;
+  flag: any = this.content?.FLAG;
   image: File | null = null;
   editdata: any;
   isCreditLimit: any;
@@ -154,8 +154,6 @@ export class PosCustomerMasterMainComponent implements OnInit {
   //   "1754-01-01T00:00:00Z",
   //   "1754-01-01T00:00:00",
   // ];
-
-
 
   typeidCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -444,7 +442,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
     code: ["", [Validators.required]],
     parentPosCode: [""],
     refBy: [""],
-    prefix: ["", Validators.required], 
+    prefix: ["", Validators.required],
     name: ["", [Validators.required, Validators.maxLength(40)]],
     firstName: [""],
     middleName: [""],
@@ -1229,6 +1227,8 @@ export class PosCustomerMasterMainComponent implements OnInit {
     this.nationalCode = e.CODE;
     this.stateCode.WHERECONDITION = `TYPES='state master' and COUNTRY_CODE = '${this.nationalCode}'`;
     this.isViewState = true;
+    this.cityCodeData.WHERECONDITION = `types='city master' and country_code='${this.nationalCode}'`;
+    this.isViewCity = true;
     this.posCustomerMasterMainForm.controls.countryCode.setValue(e.CODE);
     this.posCustomerMasterMainForm.controls.country.setValue(e.DESCRIPTION);
     this.posCustomerMasterMainForm.controls.moblieCountry.setValue(
@@ -2532,6 +2532,8 @@ export class PosCustomerMasterMainComponent implements OnInit {
           (err) => alert(err)
         );
         this.subscriptions.push(Sub);
+      } else {
+        this.flag = "VIEW";
       }
     });
   }
