@@ -1227,6 +1227,8 @@ export class PosCustomerMasterMainComponent implements OnInit {
     this.nationalCode = e.CODE;
     this.stateCode.WHERECONDITION = `TYPES='state master' and COUNTRY_CODE = '${this.nationalCode}'`;
     this.isViewState = true;
+    this.cityCodeData.WHERECONDITION = `types='city master' and country_code='${this.nationalCode}'`;
+    this.isViewCity = true;
     this.posCustomerMasterMainForm.controls.countryCode.setValue(e.CODE);
     this.posCustomerMasterMainForm.controls.country.setValue(e.DESCRIPTION);
     this.posCustomerMasterMainForm.controls.moblieCountry.setValue(

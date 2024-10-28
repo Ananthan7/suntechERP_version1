@@ -924,7 +924,7 @@ export class PosCustomerMasterComponent implements OnInit {
               this.dummyDateCheck(this.customerDetails.DATE_OF_BIRTH)
             );
             this.customerDetailForm.controls.fcn_customer_exp_date.setValue(
-              this.customerDetails.POSCUSTIDEXP_DATE
+              this.dummyDateCheck(this.customerDetails.POSCUSTIDEXP_DATE)
             );
             // this.snackBar.open('Customer details saved successfully');
             // this.snackBar.dismiss();
