@@ -103,7 +103,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
   dialogBoxResult: any;
   existCustomerCode: any;
   generatedCustomerCode: any;
-  flag:any = this.content?.FLAG;;
+  flag: any = this.content?.FLAG;
   image: File | null = null;
   editdata: any;
   isCreditLimit: any;
@@ -154,8 +154,6 @@ export class PosCustomerMasterMainComponent implements OnInit {
   //   "1754-01-01T00:00:00Z",
   //   "1754-01-01T00:00:00",
   // ];
-
-
 
   typeidCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -444,7 +442,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
     code: ["", [Validators.required]],
     parentPosCode: [""],
     refBy: [""],
-    prefix: ["", Validators.required], 
+    prefix: ["", Validators.required],
     name: ["", [Validators.required, Validators.maxLength(40)]],
     firstName: [""],
     middleName: [""],
@@ -2532,6 +2530,8 @@ export class PosCustomerMasterMainComponent implements OnInit {
           (err) => alert(err)
         );
         this.subscriptions.push(Sub);
+      } else {
+        this.flag = "VIEW";
       }
     });
   }

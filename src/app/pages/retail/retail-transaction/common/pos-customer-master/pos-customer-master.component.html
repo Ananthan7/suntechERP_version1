@@ -328,7 +328,7 @@
                 class="col-form-label col-sm-4"
                 for="cust_detail_email"
                 id="ID148"
-                >Email Address <span class="text-danger">&ast;</span></label
+                >Email Address<span class="text-danger">&ast;</span></label
               >
               <div class="col-sm-8">
                 <mat-form-field appearance="outline" style="width: 100%">
@@ -337,16 +337,38 @@
                     matInput
                     formControlName="fcn_cust_detail_email"
                     [readonly]="viewOnly"
+                    required
                   />
                   <mat-error
                     *ngIf="
-                      customerDetailForm.controls.fcn_cust_detail_email.hasError(
+                      customerDetailForm.controls.fcn_cust_detail_email
+                        .touched &&
+                      (customerDetailForm.controls.fcn_cust_detail_email.hasError(
                         'email'
-                      )
+                      ) ||
+                        customerDetailForm.controls.fcn_cust_detail_email.hasError(
+                          'required'
+                        ))
                     "
-                    id="ID149"
                   >
-                    Please enter a valid email address
+                    <ng-container
+                      *ngIf="
+                        customerDetailForm.controls.fcn_cust_detail_email.hasError(
+                          'email'
+                        )
+                      "
+                    >
+                      Please enter a valid email address
+                    </ng-container>
+                    <ng-container
+                      *ngIf="
+                        customerDetailForm.controls.fcn_cust_detail_email.hasError(
+                          'required'
+                        )
+                      "
+                    >
+                      Email-ID is <strong>required</strong>
+                    </ng-container>
                   </mat-error>
                 </mat-form-field>
               </div>
@@ -466,18 +488,22 @@
                 >Nationality <span class="text-danger">&ast;</span></label
               >
               <div class="col-sm-8">
-                <mat-form-field appearance="outline" style="width: 100%">
-                  <mat-select
+                <mat-form-field
+                  style="width: -webkit-fill-available"
+                  appearance="outline"
+                >
+                  <input
+                    [readonly]="viewOnly"
+                    matInput="text"
                     formControlName="fcn_cust_detail_nationality"
-                    [disabled]="viewOnly"
-                  >
-                    <mat-option
-                      *ngFor="let data of sortedCountryList"
-                      [value]="data.CODE"
-                    >
-                      {{ data.DESCRIPTION }}
-                    </mat-option>
-                  </mat-select>
+                    required
+                  />
+                  <master-search
+                    [MasterSearchData]="nationalityCode"
+                    class="masterSearch"
+                    (newRowClick)="nationalitySelected($event)"
+                  ></master-search>
+
                   <mat-error
                     *ngIf="
                       customerDetailForm.controls.fcn_cust_detail_nationality.hasError(
@@ -643,7 +669,7 @@
         </div>
 
         <div class="form-group row">
-          <div class="col-md-3">
+          <!-- <div class="col-md-3">
             <div class="row">
               <label
                 for="inputPassword"
@@ -872,7 +898,6 @@
               >
               <div class="col-md-4">
                 <mat-form-field appearance="outline">
-                  <!-- <input type="text" matInput formControlName="fcn_cust_detail_city" [readonly]="viewOnly" /> -->
                   <input
                     type="text"
                     matInput
@@ -937,7 +962,7 @@
                 </mat-form-field>
               </div>
             </div>
-          </div>
+          </div> -->
 
           <div class="col-md-4">
             <div class="form-group row">
@@ -1140,6 +1165,7 @@
                     [min]="currentDate"
                     [readonly]="viewOnly"
                     DateValidation
+                    (dateChange)="datehfbhjkfb($event)"
                   />
                   <mat-datepicker-toggle
                     matSuffix

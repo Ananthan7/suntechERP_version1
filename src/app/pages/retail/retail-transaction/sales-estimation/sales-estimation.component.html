@@ -43,7 +43,7 @@
         <div class="col-md-1">
           <label for="txtCurrency">Currency</label>
           <mat-form-field appearance="outline" style="width: 100%">
-            <input type="text" matInput id="txtCurrency" formControlName="txtCurrency" readonly
+            <input type="text" matInput id="txtCurrency" formControlName="txtCurrency" readonCustomer Detailsly
               [matAutocomplete]="currencyList" />
             <mat-autocomplete #currencyList="matAutocomplete" autoActiveFirstOption
               (optionSelected)="changeCurrency($event)">
@@ -131,7 +131,7 @@
                   matInput (focusout)="!viewOnly && onCustomerNameFocus()" formControlName="fcn_customer_mobile"
                   [readonly]="viewOnly" />
                 <mat-error *ngIf="customerDataForm.controls.fcn_customer_mobile.hasError('required')">
-                  Mobile Number is <strong>required</strong>
+                  Mobile number is <strong>required</strong>
                 </mat-error>
               </mat-form-field>
             </div>
@@ -1559,7 +1559,7 @@
                     <i class="fas fa-chevron-down"
                     style="position: absolute; right: 10px; top: 40%; transform: translateY(-50%);"></i>
                     <mat-error *ngIf="customerDetailForm.controls.fcn_mob_code.hasError('required')">
-                      Country is <strong>required</strong>
+                      Country code is <strong>required</strong>
                     </mat-error>
                   </mat-form-field>
                   
@@ -1615,7 +1615,7 @@
                       maxlength="20" />
                     <mat-error *ngIf="customerDetailForm.controls.fcn_cust_detail_phone.hasError('required')"
                       id="ID138">
-                      Mobile Number is <strong>required</strong>
+                      Mobile1 Number is <strong>required</strong>
                     </mat-error>
                   </mat-form-field>
                 </div>
@@ -1733,12 +1733,13 @@
                 <div class="col-sm-8">
                   <mat-form-field appearance="outline" style="width: 100%">
                     <input type="email" matInput formControlName="fcn_cust_detail_email" [readonly]="viewOnly" />
-                    <mat-error *ngIf="
-                        customerDetailForm.controls.fcn_cust_detail_email.hasError(
-                          'email'
-                        )
-                      " id="ID149">
-                      Please enter a valid email address
+                    <mat-error *ngIf="customerDetailForm.controls.fcn_cust_detail_email.touched && (customerDetailForm.controls.fcn_cust_detail_email.hasError('email') || customerDetailForm.controls.fcn_cust_detail_email.hasError('required'))">
+                      <ng-container *ngIf="customerDetailForm.controls.fcn_cust_detail_email.hasError('email')">
+                        Please enter a valid email address
+                      </ng-container>
+                      <ng-container *ngIf="customerDetailForm.controls.fcn_cust_detail_email.hasError('required')">
+                        Email address is <strong>required</strong>
+                      </ng-container>
                     </mat-error>
                   </mat-form-field>
                 </div>
@@ -1802,7 +1803,7 @@
                           'required'
                         )
                       " id="ID154">
-                      Date of Birth is <strong>required</strong>
+                      Date of birth is <strong>required</strong>
                     </mat-error>
                   </mat-form-field>
                 </div>
