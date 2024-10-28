@@ -106,6 +106,7 @@ export class SalesEstimationComponent implements OnInit {
   isNewButtonDisabled: boolean = true;
   allowDescription: boolean = false;
   isGrossWtEditable: boolean = true;
+  blockRepeatedBarcode: boolean = false;
   isPcsEditable: boolean = true;
   editLineItem: boolean = false;
   isPartialAMLValidation: boolean = false;
@@ -939,7 +940,7 @@ export class SalesEstimationComponent implements OnInit {
       fcn_exchange_chargeable_wt: [''],
       fcn_exchange_making_rate: [''],
       fcn_exchange_making_amt: [''],
-      fcn_exchange_net_amount: [{ value: 0 }, Validators.required],
+      fcn_exchange_net_amount:  [''],
       fcn_exchange_scrap_bag_no: [''],
       fcn_exchange_scrap_bag_desc: [''],
       fcn_exchange_location: [''],
@@ -1073,7 +1074,10 @@ export class SalesEstimationComponent implements OnInit {
         let companyParameter = '';
         let companyParameterNewCustomer = this.comFunc.allCompanyParams.find((item: any) => item.PARAMETER === 'POSCUSTDETAILSADDNEW');
         let companyParameterObject = this.comFunc.allCompanyParams.find((item: any) => item.PARAMETER === 'POSSHOPCTRLAC');
-      
+        let allowRepeatedStocks=this.comFunc.allCompanyParams.find((item: any) =>
+          item.PARAMETER === 'DONTALLOW2BARCODES')
+        this.blockRepeatedBarcode = this.comFunc.numberToBoolean(Number(allowRepeatedStocks.PARAM_VALUE));
+       
         if (companyParameterNewCustomer) {
           this.isCustomerDetailsAdd = this.comFunc.numberToBoolean(Number(companyParameterNewCustomer.PARAM_VALUE));
 
@@ -6534,7 +6538,7 @@ export class SalesEstimationComponent implements OnInit {
         if (resp.status == "Success") {
           this.renderer.selectRootElement('#fcn_exchange_gross_wt').select();
 
-          if (!this.editOnly && !this.viewOnly) {
+          // if (!this.editOnly && !this.viewOnly) {
 
             _exchangeItem = resp.response.filter((i: any) => i.STOCK_CODE == _exchangeCode.toUpperCase());
 
@@ -6571,7 +6575,7 @@ export class SalesEstimationComponent implements OnInit {
             // );
 
             this.exchangeFormMetalRateType = _exchangeItem[0].METAL_RATE_TYPE;
-          }
+          // }
 
           this.toggleExchangeFormControls(_exchangeItem[0].INCLUDE_STONE);
 
@@ -7882,12 +7886,56 @@ export class SalesEstimationComponent implements OnInit {
 
                   const res = this.ordered_items.filter((data: any) => data.stock_code == this.newLineItem.STOCK_CODE);
                   if (res.length > 0) {
-                    this.snackBar.open('Stock Already Exists', 'OK', {
-                      duration: 2000
-                    });
-                    this.lineItemForm.controls.fcn_li_item_code.setValue('');
-                    this.renderer.selectRootElement('#fcn_li_item_code').focus();
-                    return;
+
+
+
+
+                    if (this.blockRepeatedBarcode) {
+                      this.openDialog(
+                        'Warning',
+                        this.comFunc.getMsgByID('MSG1890'),
+                        true
+                      );
+                      this.dialogBox.afterClosed().subscribe((data: any) => {
+                        if (data == 'OK') {
+
+                          this.lineItemForm.controls.fcn_li_item_code.setValue('');
+                          this.renderer.selectRootElement('#fcn_li_item_code').focus();
+                          return;
+                        }
+
+                      });
+                    }
+
+                    else {
+                      this.openDialog(
+                        'Warning',
+                        this.comFunc.getMsgByID('MSG1889'),
+                        false
+                      );
+                      this.dialogBox.afterClosed().subscribe((data: any) => {
+                        if (data == 'No') {
+                          this.lineItemForm.controls.fcn_li_item_code.setValue('');
+                          this.lineItemForm.reset();
+                          this.renderer.selectRootElement('#fcn_li_item_code').focus();
+                          return;
+
+                        }
+                        else{
+                          this.focusAndSetReadOnly(stockInfos);
+                        }
+                      });
+                    }
+
+
+
+                    // this.snackBar.open('Stock Already Exists', 'OK', {
+                    //   duration: 2000
+                    // });
+                    // this.lineItemForm.controls.fcn_li_item_code.setValue('');
+                    // this.renderer.selectRootElement('#fcn_li_item_code').focus();
+                    // return;
+
                   }
 
                 }
@@ -10155,37 +10203,38 @@ export class SalesEstimationComponent implements OnInit {
       this.manageCalculations();
     }
   }
+  
   rateFuncDetail(bOrW: String, value: any) {
     const preVal = this.comFunc.emptyToZero(localStorage.getItem('fcn_li_rate'));
 
     const makingAmount = this.comFunc.emptyToZero(localStorage.getItem('fcn_li_total_amount'));
 
-    this.manageCalculations();
-    // this.openDialog(
-    //   'Warning',
-    //   `${this.comFunc.getMsgByID('MSG1731')} ${this.vocDataForm.value.txtCurrency} ${this.blockMinimumPriceValue
-    //   }`,
-    //   bOrW == 'B' ? true : false
-    // );
-    // this.dialogBox.afterClosed().subscribe((data: any) => {
-    //   if (data == 'OK') {
+    // this.manageCalculations();
+    this.openDialog(
+      'Warning',
+      `${this.comFunc.getMsgByID('MSG1731')} ${this.vocDataForm.value.txtCurrency} ${this.blockMinimumPriceValue
+      }`,
+      bOrW == 'B' ? true : false
+    );
+    this.dialogBox.afterClosed().subscribe((data: any) => {
+      if (data == 'OK') {
 
-    //     this.lineItemForm.controls.fcn_li_rate.setValue(
-    //       preVal
-    //     );
-    //     this.manageCalculations({ totalAmt: makingAmount });
-    //   }
-    //   else if (data == 'No') {
-    //     this.lineItemForm.controls.fcn_li_rate.setValue(
-    //       preVal
+        this.lineItemForm.controls.fcn_li_rate.setValue(
+          preVal
+        );
+        this.manageCalculations({ totalAmt: makingAmount });
+      }
+      else if (data == 'No') {
+        this.lineItemForm.controls.fcn_li_rate.setValue(
+          preVal
 
-    //     );
-    //     this.manageCalculations();
+        );
+        this.manageCalculations();
 
-    //   } else {
-    //     this.manageCalculations();
-    //   }
-    // });
+      } else {
+        this.manageCalculations();
+      }
+    });
   }
 
   async rateFunc(value: any) {
@@ -10194,7 +10243,7 @@ export class SalesEstimationComponent implements OnInit {
     console.log(this.blockMinimumPriceValue);
     console.log(this.blockMinimumPrice);
     if (this.blockMinimumPrice == 'B') {
-      if (this.lineItemModalForSalesReturn || this.comFunc.emptyToZero(this.blockMinimumPriceValue) >= this.comFunc.emptyToZero(value)) {
+      if (this.lineItemModalForSalesReturn || this.comFunc.emptyToZero(this.blockMinimumPriceValue) > this.comFunc.emptyToZero(value)) {
         if (this.userwiseDiscount) {
 
           this.rateFuncDetail('B', value);

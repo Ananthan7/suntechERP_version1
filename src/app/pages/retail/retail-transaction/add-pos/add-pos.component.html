@@ -1362,7 +1362,7 @@
           <label>Remarks</label>
 
           <mat-form-field appearance="outline" style="width: 100%;">
-            <textarea matInput [readonly]="viewOnly" rows="4" cols="50" class="form-control"></textarea>
+            <textarea matInput [readonly]="viewOnly" [(ngModel)]="remarks" rows="4" cols="50" class="form-control"></textarea>
           </mat-form-field>
 
         </div>
@@ -2380,7 +2380,7 @@
                     <mat-form-field appearance="outline" style="width: 100%">
                       <input type="text" AmountDecimalInput [max]="14"
                         (keyup)="this.comFunc.enforceMinMax($event.target)" class="st_txt_right" matInput
-                        formControlName="fcn_exchange_net_amount" [readonly]="true" (change)="changeExNetAmt($event)" />
+                        formControlName="fcn_exchange_net_amount" readonly (change)="changeExNetAmt($event)" />
                     </mat-form-field>
                   </div>
                 </div>
@@ -3454,7 +3454,7 @@
                     <label class=" col-sm-5" for="li_pcs" id="ID175">Pcs</label>
                     <div class="col-sm-12" style="width: 135%;">
                       <mat-form-field appearance="outline" style="width: 100%" aria-readonly="true">
-                        <input class="st_txt_right" type="text" [min]="0" autocomplete="off" [maxLength]="14"
+                        <input class="st_txt_right" type="text" [min]="0" autocomplete="off" [maxLength]="6"
                           (keyup)="this.comFunc.enforceMinMax($event.target)" matInput id="fcn_li_pcs"
                           formControlName="fcn_li_pcs" (focus)="setValToLocalStorage($event, 'fcn_li_pcs')"
                           (change)="changePCS($event)" [readonly]="viewOnly || !isPcsEditable" NumberOnly />
@@ -3480,7 +3480,7 @@
                     <div class="form-group row">
                       <div class="col-sm-12">
                         <mat-form-field appearance="outline" style="width: 100%">
-                          <input class="st_txt_right" [maxLength]="14" type="text" [min]="0"
+                          <input class="st_txt_right" [maxLength]="6" type="text" [min]="0"
                             (keyup)="this.comFunc.enforceMinMax($event.target)" matInput
                             formControlName="fcn_li_gross_wt" id="fcn_li_gross_wt"
                             (focus)="setValToLocalStorage($event, 'fcn_li_gwt')"  (change)="changeGrossWt($event)"
