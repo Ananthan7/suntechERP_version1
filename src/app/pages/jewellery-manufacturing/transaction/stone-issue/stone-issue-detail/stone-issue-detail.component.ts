@@ -14,6 +14,7 @@ import { MasterSearchComponent } from 'src/app/shared/common/master-search/maste
   styleUrls: ['./stone-issue-detail.component.scss']
 })
 export class StoneIssueDetailComponent implements OnInit {
+  [x: string]: any;
   @Output() saveDetail = new EventEmitter<any>();
   @Output() closeDetail = new EventEmitter<any>();
   @Input() data!: any;
@@ -38,7 +39,7 @@ export class StoneIssueDetailComponent implements OnInit {
   codeEnable: boolean = true;
   private subscriptions: Subscription[] = [];
   jobNumberDetailData: any[] = [];
-  imagepath: any[] = []
+  imagepath: any[] = [];
   viewMode: boolean = false;
   isDisableSaveBtn: boolean = false;
   designType: string = 'DIAMOND';
@@ -182,6 +183,7 @@ export class StoneIssueDetailComponent implements OnInit {
     GROSS_WT: [''],
     VOCNO: [''],
     VOCDATE: [''],
+    SUB_STOCK_CODE: [''],
     BRANCH_CODE: [''],
     YEARMONTH: [''],
     KARAT_CODE: [''],
@@ -284,13 +286,17 @@ export class StoneIssueDetailComponent implements OnInit {
     this.CalculatePiecesAndPointerWT()
 
   }
-
   setValueWithDecimal(formControlName: string, value: any, Decimal: string) {
-    this.stoneIssueDetailsFrom.controls[formControlName].setValue(
-      this.comService.setCommaSerperatedNumber(value, Decimal)
-    )
-
+    let val = this.comService.setCommaSerperatedNumber(value, Decimal)
+    this.stoneIssueDetailsFrom.controls[formControlName].setValue(val)
+    this.FORM_VALIDATER[formControlName] = val
   }
+  // setValueWithDecimal(formControlName: string, value: any, Decimal: string) {
+  //   this.stoneIssueDetailsFrom.controls[formControlName].setValue(
+  //     this.comService.setCommaSerperatedNumber(value, Decimal)
+  //   )
+
+  // }
   setOnLoadDetails() {
     let branchParam = this.comService.allbranchMaster;
     // Set LOCTYPE_CODE only if it's not already set
@@ -926,6 +932,7 @@ export class StoneIssueDetailComponent implements OnInit {
             // Additional validation logic
             this.CollectPointerWtValidation();
             this.CollectRate()
+            this.BoqAlert()
           }
 
         } else {
@@ -1259,7 +1266,40 @@ export class StoneIssueDetailComponent implements OnInit {
       this.userId = data.LOCATION_CODE;
     }
   }
-
+ 
+  BoqAlert() {
+    const tableStockCodes = this.tableData.map((item: any) => item.STOCK_CODE);
+    const formStockCode = this.stoneIssueDetailsFrom.value.stockCode;
+    const stockExists = tableStockCodes.includes(formStockCode);
+  
+    if (stockExists) {
+      
+    
+      // Show the SweetAlert confirmation dialog
+      this.showConfirmationDialog().then((result) => {
+        if (result.isConfirmed) {
+          console.log("Continuing with validation...");
+        }
+         else {
+          console.log("Action cancelled by user.");
+          this.stoneIssueDetailsFrom.controls.stockCode.setValue(''); // Clear the stock code field
+        }
+      });
+    }
+  }
+  
+  showConfirmationDialog(): Promise<any> {
+    return Swal.fire({
+      text: "StockCode is not found in BOQ",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, continue',
+      cancelButtonText: 'No, cancel'
+    });
+  }
+  
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {
       this.subscriptions.forEach(subscription => subscription.unsubscribe());// unsubscribe all subscription
