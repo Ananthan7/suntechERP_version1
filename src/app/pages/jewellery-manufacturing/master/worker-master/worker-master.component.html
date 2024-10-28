@@ -251,33 +251,37 @@
                             <button (click)="search()">Search</button>
                         </div> -->
 
+                        <div>
+                            <!-- Master checkbox for selecting all checkboxes -->
+                            <mat-checkbox [checked]="isAllSelected()" (change)="toggleAllCheckboxes($event)">Select
+                                All</mat-checkbox>
+                        </div>
+
                         <dx-data-grid #dataGrid id="gridContainer" width="100%" height="400px" [dataSource]="tableData"
                             [showRowLines]="true" [allowColumnResizing]="true" [selectedRowKeys]="selectedKey"
                             (onSelectionChanged)="changedCheckbox($event)" [showBorders]="true">
-                            <dxo-filter-row [visible]="true"></dxo-filter-row>
-                            <!-- <dxo-header-filter
-                                [visible]="showHeaderFilter"></dxo-header-filter> -->
-                            <!-- <dxo-search-panel [visible]="true" [width]="240" placeholder="Search..."></dxo-search-panel> -->
+                            <dxo-filter-row [visible]="true" mode="multiple"></dxo-filter-row>
                             <dxo-paging [enabled]="false"></dxo-paging>
-                            <!-- <dxo-editing mode="cell" [allowUpdating]="true">
-                            </dxo-editing> -->
-                            <!-- <dxo-selection mode="multiple"
-                                [showCheckBoxesMode]= "isViewMode ? 'never':'always'"></dxo-selection> -->
+                            <dxo-scrolling mode="virtual"></dxo-scrolling>
 
-                            <dxi-column width="auto" dataField="SELECT1" caption cellTemplate="limitTemplate"
-                                alignment="right"></dxi-column>
+                            <dxi-column width="100" dataField="SELECT1" caption cellTemplate="limitTemplate"
+                                [visible]="true" mode="multiple" alignment="right"></dxi-column>
+                            <div *dxTemplate="let data of 'limitTemplate'">
+                                <mat-checkbox [checked]="isAllSelected()" (change)="toggleAllCheckboxes($event)">Select
+                                    All</mat-checkbox>
+                            </div>
                             <div *dxTemplate="let data of 'limitTemplate'">
                                 <mat-checkbox [checked]="data.value" [disabled]="viewMode"
                                     (change)="changedCheckbox(data)"></mat-checkbox>
                             </div>
-                            <dxo-scrolling mode="virtual"></dxo-scrolling>
-                            <dxi-column dataField="SRNO" width="auto" caption="Sr No" alignment="center">
-                            </dxi-column>
-                            <dxi-column dataField="PROCESS_CODE" width="auto" caption="Process Code" alignment="left">
-                            </dxi-column>
-                            <dxi-column dataField="DESCRIPTION" width="auto" caption="Description" alignment="left">
-                            </dxi-column>
+
+                            <dxi-column dataField="SRNO" width="auto" caption="Sr No" alignment="center"></dxi-column>
+                            <dxi-column dataField="PROCESS_CODE" width="auto" caption="Process Code"
+                                alignment="left"></dxi-column>
+                            <dxi-column dataField="DESCRIPTION" width="auto" caption="Description"
+                                alignment="left"></dxi-column>
                         </dx-data-grid>
+
                     </div>
                 </div>
             </div>

@@ -33,7 +33,8 @@ export class ApprovalMasterComponent implements OnInit {
   editableMode: boolean = false;
   disable: boolean = false;
   userId: any
-
+  editMode: boolean = false;
+  codeEnable: boolean = true;
 
 
   // @ViewChild('codeInput')
@@ -126,7 +127,9 @@ export class ApprovalMasterComponent implements OnInit {
       this.approvalMasterForm.controls.description.setValue('');
     }
   }
-  
+
+
+
 
   checkCodeExists(event: any) {
     if (this.content && this.content.FLAG == 'EDIT') {
@@ -136,32 +139,35 @@ export class ApprovalMasterComponent implements OnInit {
     if (event.target.value === '' || this.viewMode) {
       return; // Exit the function if the input is empty or in view mode
     }
-
+    console.log('this w');
+    
     const API = 'ApprovalMaster/CheckIfApprCodePresent/' + event.target.value;
     const sub = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
         if (result.checkifExists) {
           Swal.fire({
             title: '',
-            text: result.message || 'Approval Already Exists!',
+            text: 'Code Already Exists!',
             icon: 'warning',
             confirmButtonColor: '#336699',
             confirmButtonText: 'Ok'
           }).then(() => {
             // Clear the input value
             this.approvalMasterForm.controls.code.setValue('');
-
-            setTimeout(() => {
-              this.renderer.selectRootElement('#code').focus();
-            }, 500);
+            this.renderer.selectRootElement('#code').focus();
 
           });
+          this.commonService.toastErrorByMsgId('MSG1121')//Code Already Exists
+        }else{
+          this.codeEnable = false;
         }
       }, err => {
         this.approvalMasterForm.reset();
+
       });
 
     this.subscriptions.push(sub);
+
   }
 
   isNumeric(event: any) {
@@ -390,9 +396,11 @@ export class ApprovalMasterComponent implements OnInit {
   }
 
   submitValidations(form: any) {
+    if (this.content && this.content.FLAG == 'EDIT') {
+      return; // Exit the function if in edit mode
+    }
 
-    console.log(this.userId);
-
+    console.log(this.userId);    
 
     if (this.commonService.nullToString(form.code) == '' && this.approvalMasterForm.invalid) {
       this.commonService.toastErrorByMsgId('MSG1124') //"Code cannot be empty"
