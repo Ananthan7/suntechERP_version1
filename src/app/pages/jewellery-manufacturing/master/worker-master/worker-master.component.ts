@@ -758,4 +758,15 @@ ngOnDestroy() {
   }
 }
 
+  // Method to check if all checkboxes are selected
+  isAllSelected(): boolean {
+    return this.tableData.every(item => item.SELECT1);
+  }
+
+  // Method to toggle all checkboxes
+  toggleAllCheckboxes(event: any): void {
+    const isChecked = event.checked;
+    this.tableData.forEach(item => item.SELECT1 = isChecked);
+  }
+
 }
