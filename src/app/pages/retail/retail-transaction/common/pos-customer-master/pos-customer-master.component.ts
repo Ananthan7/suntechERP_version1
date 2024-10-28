@@ -26,7 +26,10 @@ import { DialogboxComponent } from "src/app/shared/common/dialogbox/dialogbox.co
 import { MatDialog } from "@angular/material/dialog";
 import { MatSelectChange } from "@angular/material/select";
 import { MasterSearchModel } from "src/app/shared/data/master-find-model";
-import { MatDatepicker, MatDatepickerInputEvent } from "@angular/material/datepicker";
+import {
+  MatDatepicker,
+  MatDatepickerInputEvent,
+} from "@angular/material/datepicker";
 
 @Component({
   selector: "app-pos-customer-master",
@@ -68,6 +71,7 @@ export class PosCustomerMasterComponent implements OnInit {
   genderList: any = [];
 
   customerDetails: any = {};
+  formattedDate: any;
 
   dummyDate = "1900-01-01T00:00:00";
   dummyDateArr = [
@@ -138,6 +142,7 @@ export class PosCustomerMasterComponent implements OnInit {
     fcn_mob_code: ["", [Validators.required]],
     fcn_customer_exp_date: ["", [Validators.required]],
   });
+  selectedDate: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -838,8 +843,7 @@ export class PosCustomerMasterComponent implements OnInit {
 
           LOOKING_FOR: this.customerDetails?.LOOKING_FOR || "",
 
-          POSCUSTIDEXP_DATE:
-            this.customerDetails?.POSCUSTIDEXP_DATE || this.dummyDate,
+          POSCUSTIDEXP_DATE: this.formattedDate || this.dummyDate,
 
           // new fields added 12-02-2024
           ATTACHMENT_FROM_SCANNER:
@@ -1351,7 +1355,16 @@ export class PosCustomerMasterComponent implements OnInit {
     );
   }
 
-  datehfbhjkfb(event: any) {
-    console.log(event);
+  datepicker(event: any) {
+    this.selectedDate = event.value;
+    this.formattedDate = this.selectedDate
+      ? new Date(this.selectedDate).toISOString()
+      : null;
+
+    console.log(this.formattedDate);
+
+    // Example payload with the formatted date
+
+    // Now you can pass `payload` to your API
   }
 }
