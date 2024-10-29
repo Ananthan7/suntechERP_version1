@@ -100,14 +100,28 @@ export class MenubarComponent implements OnInit {
     })
   }
 
-  pageRoutes(path: any, obj: any,submenu:any) {
-    this.subMenuChange.emit(submenu);
-    
+  pageRoutes(path: any, obj: any, submenu: any) {
     let navigationExtras: NavigationExtras = {
       queryParams: obj
     };
-    this.router.navigate([path], navigationExtras);
+    this.router.navigate([path], navigationExtras).then(() => {
+      this.subMenuChange.emit(submenu);
+    });
   }
+
+  // pageRoutes(path: any, obj: any,submenu:any) {
+  //   this.subMenuChange.emit(submenu);
+    
+  //   let navigationExtras: NavigationExtras = {
+  //     queryParams: obj
+  //   };
+  //   this.router.navigate([path], {
+  //     ...navigationExtras,
+  //     skipLocationChange: true // try adding this if it suits your routing needs
+  //   });
+    
+  //   // this.router.navigate([path], navigationExtras);
+  // }
 
   ngOnDestroy():void{
     this.subscriptions$ && this.subscriptions$.unsubscribe()

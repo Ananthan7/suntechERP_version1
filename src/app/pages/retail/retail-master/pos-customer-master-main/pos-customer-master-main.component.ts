@@ -12,6 +12,7 @@ import {
   FormControl,
   FormGroup,
   ValidationErrors,
+  ValidatorFn,
   Validators,
 } from "@angular/forms";
 import {
@@ -438,6 +439,18 @@ export class PosCustomerMasterMainComponent implements OnInit {
     this.fetchImage();
   }
 
+  conditionalRequiredValidator(controlNameToValidate: string): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } | null => {
+      const controlToValidate = control.root.get(controlNameToValidate);
+  
+      if (controlToValidate && controlToValidate.value) {
+        return Validators.required(control);
+      }
+  
+      return null;
+    };
+  }
+
   posCustomerMasterMainForm: FormGroup = this.formBuilder.group({
     code: ["", [Validators.required]],
     parentPosCode: [""],
@@ -450,7 +463,7 @@ export class PosCustomerMasterMainComponent implements OnInit {
     creditCardLimitCheck: new FormControl({ value: "", disabled: false }),
     creditCardLimit: [
       { value: "", disabled: true },
-      [Validators.maxLength(21)],
+      [Validators.maxLength(21), this.conditionalRequiredValidator('creditCardLimitCheck')],
     ],
     gender: ["", [Validators.required]],
     maritalSt: ["", [Validators.required]],
@@ -1246,6 +1259,10 @@ export class PosCustomerMasterMainComponent implements OnInit {
     this.posCustomerMasterMainForm.controls.whatsappCountryCode.setValue(
       e.MobileCountryCode
     );
+
+    this.posCustomerMasterMainForm.controls.state.setValue("");
+    this.posCustomerMasterMainForm.controls.city.setValue("");
+
   }
 
   check() {
@@ -2720,19 +2737,86 @@ export class PosCustomerMasterMainComponent implements OnInit {
     }
   }
 
+  // SPvalidateLookupField(
+  //   event: any,
+  //   LOOKUPDATA: MasterSearchModel,
+  //   FORMNAME: string,
+  //   isCurrencyField: boolean
+  // ) {
+  //   LOOKUPDATA.SEARCH_VALUE = event.target.value;
+
+  //   if (event.target.value === "" || this.flag?.VIEW) {
+  //     return;
+  //   }
+
+  //   let param = {
+  //     PAGENO: LOOKUPDATA.PAGENO,
+  //     RECORDS: LOOKUPDATA.RECORDS,
+  //     LOOKUPID: LOOKUPDATA.LOOKUPID,
+  //     WHERECONDITION: LOOKUPDATA.WHERECONDITION,
+  //     searchField: LOOKUPDATA.SEARCH_FIELD,
+  //     searchValue: LOOKUPDATA.SEARCH_VALUE,
+  //   };
+
+  //   this.comService.showSnackBarMsg("MSG81447");
+
+  //   let Sub: Subscription = this.apiService
+  //     .postDynamicAPI("MasterLookUp", param)
+  //     .subscribe(
+  //       (result) => {
+  //         this.comService.closeSnackBarMsg();
+  //         let data = result.dynamicData[0];
+
+  //         if (data && data.length > 0) {
+  //           if (LOOKUPDATA.FRONTENDFILTER && LOOKUPDATA.SEARCH_VALUE !== "") {
+  //             let searchResult = this.comService.searchAllItemsInArray(
+  //               data,
+  //               LOOKUPDATA.SEARCH_VALUE
+  //             );
+
+  //             if (searchResult && searchResult.length > 0) {
+  //               let matchedItem = searchResult[0];
+  //               this.posCustomerMasterMainForm.controls.parentPosCode.setValue(
+  //                 matchedItem.CODE
+  //               );
+  //             } else {
+  //               this.comService.toastErrorByMsgId("No data found");
+  //               LOOKUPDATA.SEARCH_VALUE = "";
+  //               this.posCustomerMasterMainForm.controls.parentPosCode.setValue(
+  //                 ""
+  //               );
+  //             }
+  //           }
+  //         } else {
+  //           this.comService.toastErrorByMsgId("No data found");
+  //           LOOKUPDATA.SEARCH_VALUE = "";
+  //           this.posCustomerMasterMainForm.controls.parentPosCode.setValue("");
+  //         }
+  //       },
+  //       (err) => {
+  //         this.comService.toastErrorByMsgId("MSG2272");
+  //         this.posCustomerMasterMainForm.controls.parentPosCode.setValue("");
+  //       }
+  //     );
+
+  //   this.subscriptions.push(Sub);
+  // }
+
+
+
   SPvalidateLookupField(
     event: any,
     LOOKUPDATA: MasterSearchModel,
     FORMNAME: string,
     isCurrencyField: boolean
   ) {
-    LOOKUPDATA.SEARCH_VALUE = event.target.value;
-
-    if (event.target.value === "" || this.flag?.VIEW) {
-      return;
-    }
-
-    let param = {
+    const searchValue = event.target.value?.trim();
+    
+    if (!searchValue || this.flag === 'VIEW') return;
+  
+    LOOKUPDATA.SEARCH_VALUE = searchValue;
+  
+    const param = {
       PAGENO: LOOKUPDATA.PAGENO,
       RECORDS: LOOKUPDATA.RECORDS,
       LOOKUPID: LOOKUPDATA.LOOKUPID,
@@ -2740,48 +2824,48 @@ export class PosCustomerMasterMainComponent implements OnInit {
       searchField: LOOKUPDATA.SEARCH_FIELD,
       searchValue: LOOKUPDATA.SEARCH_VALUE,
     };
-
+  
     this.comService.showSnackBarMsg("MSG81447");
-
-    let Sub: Subscription = this.apiService
-      .postDynamicAPI("MasterLookUp", param)
-      .subscribe(
-        (result) => {
-          this.comService.closeSnackBarMsg();
-          let data = result.dynamicData[0];
-
-          if (data && data.length > 0) {
-            if (LOOKUPDATA.FRONTENDFILTER && LOOKUPDATA.SEARCH_VALUE !== "") {
-              let searchResult = this.comService.searchAllItemsInArray(
-                data,
-                LOOKUPDATA.SEARCH_VALUE
+  
+    const sub: Subscription = this.apiService.postDynamicAPI("MasterLookUp", param).subscribe({
+      next: (result) => {
+        this.comService.closeSnackBarMsg();
+        const data = result.dynamicData?.[0];
+  
+        if (data?.length) {
+          if (LOOKUPDATA.FRONTENDFILTER && LOOKUPDATA.SEARCH_VALUE) {
+            const searchResult = this.comService.searchAllItemsInArray(
+              data,
+              LOOKUPDATA.SEARCH_VALUE
+            );
+  
+            if (searchResult?.length) {
+              const matchedItem = searchResult[0];
+              this.posCustomerMasterMainForm.controls[FORMNAME].setValue(
+                matchedItem.CODE
               );
-
-              if (searchResult && searchResult.length > 0) {
-                let matchedItem = searchResult[0];
-                this.posCustomerMasterMainForm.controls.parentPosCode.setValue(
-                  matchedItem.CODE
-                );
-              } else {
-                this.comService.toastErrorByMsgId("No data found");
-                LOOKUPDATA.SEARCH_VALUE = "";
-                this.posCustomerMasterMainForm.controls.parentPosCode.setValue(
-                  ""
-                );
-              }
+            } else {
+              this.comService.toastErrorByMsgId("No data found");
+              this.clearLookupData(LOOKUPDATA, FORMNAME);
             }
-          } else {
-            this.comService.toastErrorByMsgId("No data found");
-            LOOKUPDATA.SEARCH_VALUE = "";
-            this.posCustomerMasterMainForm.controls.parentPosCode.setValue("");
           }
-        },
-        (err) => {
-          this.comService.toastErrorByMsgId("MSG2272");
-          this.posCustomerMasterMainForm.controls.parentPosCode.setValue("");
+        } else {
+          this.comService.toastErrorByMsgId("No data found");
+          this.clearLookupData(LOOKUPDATA, FORMNAME);
         }
-      );
-
-    this.subscriptions.push(Sub);
+      },
+      error: () => {
+        this.comService.toastErrorByMsgId("MSG2272");
+        this.clearLookupData(LOOKUPDATA, FORMNAME);
+      }
+    });
+  
+    this.subscriptions.push(sub);
   }
+  
+  clearLookupData(LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    LOOKUPDATA.SEARCH_VALUE = "";
+    this.posCustomerMasterMainForm.controls[FORMNAME].setValue("");
+  }
+  
 }

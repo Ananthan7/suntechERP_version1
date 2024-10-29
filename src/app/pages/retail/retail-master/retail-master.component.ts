@@ -154,6 +154,7 @@ export class RetailMasterComponent implements OnInit {
 
       // Add components and update in operationals > menu updation grid form component name
     };
+    this.componentName = this.CommonService.getFormComponentName();
     if (this.componentDbList[this.componentName]) {
       this.componentSelected = this.componentDbList[this.componentName];
     } else {
