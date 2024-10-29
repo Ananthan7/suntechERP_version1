@@ -829,12 +829,12 @@ export class MetalIssueDetailsComponent implements OnInit {
           if (data && data.length == 0) {
             this.metalIssueDetailsForm.controls.stockCode.setValue('');
             this.metalIssueDetailsForm.controls.stockCodeDes.setValue('');
+            this.overlaystockcode.closeOverlayPanel()
             return
           }
           if (data && data.length > 1) {
             data = this.comService.searchAllItemsInArray(data, event.target.value?.toString().toUpperCase())
           }
-          this.overlaystockcode.closeOverlayPanel()
           // Handle the valid stock case
           let stockData = data[0];
           // Set the purity value in the form
