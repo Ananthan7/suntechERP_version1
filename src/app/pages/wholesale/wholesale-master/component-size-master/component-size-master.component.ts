@@ -33,6 +33,12 @@ export class ComponentSizeMasterComponent implements OnInit {
     radius: ['']
   });
   options: any;
+  descEdited: boolean = false;
+  lastHeight: number = 0;
+  lastWidth: number = 0;
+  lastLength: number = 0;
+  lastRadius: number = 0;
+
   constructor(
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
@@ -47,9 +53,13 @@ export class ComponentSizeMasterComponent implements OnInit {
   ngOnInit(): void {
     this.renderer.selectRootElement('#code')?.focus();
     this.codeEnable = true;
-
-
+    this.updateDescription();    
     this.subscribeToFormChanges();
+    // Set up a listener to detect manual edits to the `desc` field
+    this.componentsizemasterForm.get('desc')?.valueChanges.subscribe((value) => {
+        const autoDesc = this.generateAutoDescription(); 
+        this.descEdited = value === autoDesc; 
+    });
 
     this.setInitialValues();
     if (this.content?.FLAG) {
@@ -64,16 +74,89 @@ export class ComponentSizeMasterComponent implements OnInit {
         this.deleteRecord()
       }
     }
+
+
+
+  }
+
+  private calculateRadius1(): number {
+    const form = this.componentsizemasterForm.value;
+    const height = this.commonService.emptyToZero(form.height);
+    const width = this.commonService.emptyToZero(form.width);
+
+    if (height !== null && width !== null) {    
+      const radiusValue = Math.pow(((width * width) / (8 * height) + (height / 2)), 3 / 3);
+      return parseFloat(radiusValue.toFixed(3)); 
+    } else {
+      return 0; 
+    }
   }
 
   private subscribeToFormChanges() {
-    this.componentsizemasterForm.valueChanges.subscribe(() => {
-      //this.calculateRadius();
-      this.getValues()
+    this.componentsizemasterForm.valueChanges.subscribe((formValues) => {
+      
+      if (
+        formValues.height !== this.lastHeight ||
+        formValues.width !== this.lastWidth ||
+        formValues.length !== this.lastLength ||
+        formValues.radius !== this.lastRadius
+      ) {
+        this.updateDescription();
+    
+        this.lastHeight = formValues.height;
+        this.lastWidth = formValues.width;
+        this.lastLength = formValues.length;
+        this.lastRadius = formValues.radius;
+      }
     });
-
-
   }
+
+  private updateDescription() {
+    const height = this.componentsizemasterForm.value.height || 0;
+    const width = this.componentsizemasterForm.value.width || 0;
+    const length = this.componentsizemasterForm.value.length || 0;
+
+    let radius: number = this.calculateRadius1();
+    if (isNaN(radius)) {
+      radius = 0;
+    } else {
+      radius = this.setDecimalPoints(radius);
+    }
+
+    const formattedRadius = radius.toFixed(3);
+    const autoDesc = this.generateAutoDescription();
+
+    // Update form with calculated `desc` only if it has not been manually edited
+    if (!this.descEdited) {
+      this.componentsizemasterForm.patchValue(
+        {
+          radius: radius,
+          desc: autoDesc,
+        },
+        { emitEvent: false } // Prevent loop
+      );
+    }
+  }
+
+  // Helper function to generate the auto-generated `desc` text
+  private generateAutoDescription(): string {
+    const height = this.componentsizemasterForm.value.height || 0;
+    const width = this.componentsizemasterForm.value.width || 0;
+    const length = this.componentsizemasterForm.value.length || 0;
+
+    let radius: number = this.calculateRadius1();
+    if (isNaN(radius)) {
+      radius = 0;
+    } else {
+      radius = this.setDecimalPoints(radius);
+    }
+
+    const formattedRadius = radius.toFixed(3);
+    return `H${Number(height)}#,W${Number(width)}#,L${Number(length)}#,R${Number(formattedRadius)}#`;
+  }
+
+
+
 
   private setInitialValues() {
     this.componentsizemasterForm.controls.height.setValue(this.commonService.decimalQuantityFormat(0, 'METAL'))
@@ -131,269 +214,206 @@ export class ComponentSizeMasterComponent implements OnInit {
     this.componentsizemasterForm.controls.length.setValue(this.setDecimalPoint(this.content.LENGTH))
     this.componentsizemasterForm.controls.radius.setValue(this.setDecimalPoint(this.content.RADIUS))
   }
+
   setDecimalPoint(data: any) {
     let number = this.commonService.decimalQuantityFormat(data, 'THREE')
     return this.commonService.commaSeperation(number)
   }
 
-  calculateRadius() {
+
+  setDecimalPoints(value: number): number {
+    // Logic to set decimal point
+    return parseFloat(value.toFixed(3)); // Return the value with exactly three decimal places
+  }
+
+
+
+  close(data?: any) {
+    //TODO reset forms and data before closing
+    this.activeModal.close(data);
+  }
+
+  formSubmit() {
+    console.log(this.componentsizemasterForm.value);
+
+    if (this.content?.FLAG == 'VIEW') return
+    if (this.content?.FLAG == 'EDIT') {
+
+      this.update()
+      return
+    }
+
+    if (this.componentsizemasterForm.value.height > this.componentsizemasterForm.value.width / 2) {
+      this.toastr.error('The Height must be Less than the Half of the Width')
+      return;
+    }
+
+
+    if (this.componentsizemasterForm.invalid) {
+      this.toastr.error('select all required fields')
+      return
+    }
+
+    let API = 'ComponentSizeMaster/InsertComponentSizeMaster'
+    let postData = this.setPostData()
+
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
+      .subscribe((result) => {
+        if (result.response) {
+          if (result.status == "Success") {
+            Swal.fire({
+              title: result.message || 'Success',
+              text: '',
+              icon: 'success',
+              confirmButtonColor: '#336699',
+              confirmButtonText: 'Ok'
+            }).then((result: any) => {
+              if (result.value) {
+                this.componentsizemasterForm.reset()
+                this.tableData = []
+                this.close('reloadMainGrid')
+              }
+            });
+          }
+        } else {
+          // this.toastr.error('Not saved')
+          Swal.fire({
+            title: '',
+            text: 'This Component Size Detail Already Exists',
+            icon: 'error',
+            confirmButtonColor: '#336699',
+            confirmButtonText: 'Ok'
+          })
+        }
+      }, err => alert(err))
+    this.subscriptions.push(Sub);
+  }
+
+  setPostData() {
     let form = this.componentsizemasterForm.value
-    const height = this.commonService.emptyToZero(form.height)
-    const width = this.commonService.emptyToZero(form.width)
-
-    if (height !== null && width !== null) {
-      // Calculate the radius based on the provided formula
-      const radiusValue = Math.pow(((width * width) / (8 * height) + (height / 2)), 3 / 3);
-      return radiusValue.toFixed(3);
-    } else {
-      return '0';
-    }
-  }
-
-  // getValues() {
-  //   const height = this.componentsizemasterForm.value.height || 0;
-  //   const width = this.componentsizemasterForm.value.width || 0;
-  //   const length = this.componentsizemasterForm.value.length || 0;
-  //   let radius = this.calculateRadius();
-  //   radius = this.setDecimalPoint(radius)
-
-
-  //   const formattedDesc = `H ${height}#, W ${width}#, L ${length}#, R ${radius}#`;
-
-  //   // Update the form control with the calculated result and description
-  //   this.componentsizemasterForm.patchValue({
-  //     radius: radius,
-  //     desc: formattedDesc
-  //   }, { emitEvent: false });
-  // }
-
-
-  getValues() {
-    const height = this.componentsizemasterForm.value.height || 0;
-    const width = this.componentsizemasterForm.value.width || 0;
-    const length = this.componentsizemasterForm.value.length || 0;
-
-    // Ensure radius is a number
-    let radius: number = parseFloat(this.calculateRadius()); // Convert to number
-
-    // Check if radius is a valid number, if not, set it to 0
-    if (isNaN(radius)) {
-      radius = 0;
+    return {
+      "MID": this.content?.MID || 0,
+      "COMPSIZE_CODE": this.commonService.nullToString(form.code),
+      "DESCRIPTION": this.commonService.nullToString(form.desc),
+      "RADIUS": this.commonService.nullToString(form.radius),
+      "LENGTH": this.commonService.nullToString(form.length),
+      "WIDTH": this.commonService.nullToString(form.width),
+      "HEIGHT": this.commonService.nullToString(form.height),
     }
 
-    else {
-      radius = this.setDecimalPoints(radius);
+  }
+
+  update() {
+    if (this.componentsizemasterForm.invalid) {
+      this.toastr.error('select all required fields')
+      return
     }
 
-    // Format radius to have at least three decimal places
-    const formattedRadius = radius.toFixed(3);
+    if (this.componentsizemasterForm.value.height > this.componentsizemasterForm.value.width / 2) {
+      this.toastr.error('The Height must be Less than the Half of the Width')
+      return;
+    }
 
 
-    const formattedDesc = `H${Number(height)}#,W${Number(width)}#,L${Number(length)}#,R${Number(formattedRadius)}#`;
-
-    // Update the form control with the calculated result and description
-    this.componentsizemasterForm.patchValue(
-      {
-        radius: radius,
-        desc: formattedDesc,
-      },
-      { emitEvent: false }
-    );
-
-  }
+    let API = 'ComponentSizeMaster/UpdateComponentSizeMaster/' + this.content.COMPSIZE_CODE
+    let postData = this.setPostData()
 
 
-
-setDecimalPoints(value: number): number {
-  // Logic to set decimal point
-  return parseFloat(value.toFixed(3)); // Return the value with exactly three decimal places
-}
-
-
-
-close(data ?: any) {
-  //TODO reset forms and data before closing
-  this.activeModal.close(data);
-}
-formSubmit() {
-  console.log(this.componentsizemasterForm.value);
-
-  if (this.content?.FLAG == 'VIEW') return
-  if (this.content?.FLAG == 'EDIT') {
-
-    this.update()
-    return
-  }
-
-  if (this.componentsizemasterForm.value.height > this.componentsizemasterForm.value.width / 2) {
-    this.toastr.error('The Height must be Less than the Half of the Width')
-    return;
-  }
-
-
-  if (this.componentsizemasterForm.invalid) {
-    this.toastr.error('select all required fields')
-    return
-  }
-
-  let API = 'ComponentSizeMaster/InsertComponentSizeMaster'
-  let postData = this.setPostData()
-
-  let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
-    .subscribe((result) => {
-      if (result.response) {
-        if (result.status == "Success") {
-          Swal.fire({
-            title: result.message || 'Success',
-            text: '',
-            icon: 'success',
-            confirmButtonColor: '#336699',
-            confirmButtonText: 'Ok'
-          }).then((result: any) => {
-            if (result.value) {
-              this.componentsizemasterForm.reset()
-              this.tableData = []
-              this.close('reloadMainGrid')
-            }
-          });
+    let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
+      .subscribe((result) => {
+        if (result.response) {
+          if (result.status == "Success") {
+            Swal.fire({
+              title: result.message || 'Success',
+              text: '',
+              icon: 'success',
+              confirmButtonColor: '#336699',
+              confirmButtonText: 'Ok'
+            }).then((result: any) => {
+              if (result.value) {
+                this.componentsizemasterForm.reset()
+                this.tableData = []
+                this.close('reloadMainGrid')
+              }
+            });
+          }
+        } else {
+          this.toastr.error('Not saved')
         }
-      } else {
-        // this.toastr.error('Not saved')
-        Swal.fire({
-          title: '',
-          text: 'This Component Size Detail Already Exists',
-          icon: 'error',
-          confirmButtonColor: '#336699',
-          confirmButtonText: 'Ok'
-        })
-      }
-    }, err => alert(err))
-  this.subscriptions.push(Sub);
-}
-setPostData() {
-  let form = this.componentsizemasterForm.value
-  return {
-    "MID": this.content?.MID || 0,
-    "COMPSIZE_CODE": this.commonService.nullToString(form.code),
-    "DESCRIPTION": this.commonService.nullToString(form.desc),
-    "RADIUS": this.commonService.nullToString(form.radius),
-    "LENGTH": this.commonService.nullToString(form.length),
-    "WIDTH": this.commonService.nullToString(form.width),
-    "HEIGHT": this.commonService.nullToString(form.height),
+      }, err => alert(err))
+    this.subscriptions.push(Sub)
   }
-
-}
-update() {
-  if (this.componentsizemasterForm.invalid) {
-    this.toastr.error('select all required fields')
-    return
-  }
-
-  if (this.componentsizemasterForm.value.height > this.componentsizemasterForm.value.width / 2) {
-    this.toastr.error('The Height must be Less than the Half of the Width')
-    return;
-  }
-
-
-  let API = 'ComponentSizeMaster/UpdateComponentSizeMaster/' + this.content.COMPSIZE_CODE
-  let postData = this.setPostData()
-
-
-  let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
-    .subscribe((result) => {
-      if (result.response) {
-        if (result.status == "Success") {
-          Swal.fire({
-            title: result.message || 'Success',
-            text: '',
-            icon: 'success',
-            confirmButtonColor: '#336699',
-            confirmButtonText: 'Ok'
-          }).then((result: any) => {
-            if (result.value) {
-              this.componentsizemasterForm.reset()
-              this.tableData = []
-              this.close('reloadMainGrid')
-            }
-          });
+  deleteRecord() {
+    if (!this.content.MID) {
+      Swal.fire({
+        title: '',
+        text: 'Please Select data to delete!',
+        icon: 'error',
+        confirmButtonColor: '#336699',
+        confirmButtonText: 'Ok'
+      }).then((result: any) => {
+        if (result.value) {
         }
-      } else {
-        this.toastr.error('Not saved')
-      }
-    }, err => alert(err))
-  this.subscriptions.push(Sub)
-}
-deleteRecord() {
-  if (!this.content.MID) {
+      });
+      return
+    }
     Swal.fire({
-      title: '',
-      text: 'Please Select data to delete!',
-      icon: 'error',
-      confirmButtonColor: '#336699',
-      confirmButtonText: 'Ok'
-    }).then((result: any) => {
-      if (result.value) {
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        let API = 'ComponentSizeMaster/DeleteComponentSizeMaster/' + this.content.COMPSIZE_CODE
+        let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
+          .subscribe((result) => {
+            if (result) {
+              if (result.status == "Success") {
+                Swal.fire({
+                  title: result.message || 'Success',
+                  text: '',
+                  icon: 'success',
+                  confirmButtonColor: '#336699',
+                  confirmButtonText: 'Ok'
+                }).then((result: any) => {
+                  if (result.value) {
+                    this.componentsizemasterForm.reset()
+                    this.tableData = []
+                    this.close('reloadMainGrid')
+                  }
+                });
+              } else {
+                Swal.fire({
+                  title: result.message || 'Error please try again',
+                  text: '',
+                  icon: 'error',
+                  confirmButtonColor: '#336699',
+                  confirmButtonText: 'Ok'
+                }).then((result: any) => {
+                  if (result.value) {
+                    this.componentsizemasterForm.reset()
+                    this.tableData = []
+                    this.close()
+                  }
+                });
+              }
+            } else {
+              this.toastr.error('Not deleted')
+            }
+          }, err => alert(err))
+        this.subscriptions.push(Sub)
       }
     });
-    return
   }
-  Swal.fire({
-    title: 'Are you sure?',
-    text: "You won't be able to revert this!",
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonColor: '#3085d6',
-    cancelButtonColor: '#d33',
-    confirmButtonText: 'Yes, delete!'
-  }).then((result) => {
-    if (result.isConfirmed) {
-      let API = 'ComponentSizeMaster/DeleteComponentSizeMaster/' + this.content.COMPSIZE_CODE
-      let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
-        .subscribe((result) => {
-          if (result) {
-            if (result.status == "Success") {
-              Swal.fire({
-                title: result.message || 'Success',
-                text: '',
-                icon: 'success',
-                confirmButtonColor: '#336699',
-                confirmButtonText: 'Ok'
-              }).then((result: any) => {
-                if (result.value) {
-                  this.componentsizemasterForm.reset()
-                  this.tableData = []
-                  this.close('reloadMainGrid')
-                }
-              });
-            } else {
-              Swal.fire({
-                title: result.message || 'Error please try again',
-                text: '',
-                icon: 'error',
-                confirmButtonColor: '#336699',
-                confirmButtonText: 'Ok'
-              }).then((result: any) => {
-                if (result.value) {
-                  this.componentsizemasterForm.reset()
-                  this.tableData = []
-                  this.close()
-                }
-              });
-            }
-          } else {
-            this.toastr.error('Not deleted')
-          }
-        }, err => alert(err))
-      this.subscriptions.push(Sub)
+
+  onInputChange(event: any, controlName: string, maxLength: number) {
+    const inputValue = event.target.value;
+
+    if (inputValue.length > maxLength) {
+      this.componentsizemasterForm.get(controlName)!.setValue(inputValue.slice(0, maxLength));
     }
-  });
-}
-
-onInputChange(event: any, controlName: string, maxLength: number) {
-  const inputValue = event.target.value;
-
-  if (inputValue.length > maxLength) {
-    this.componentsizemasterForm.get(controlName)!.setValue(inputValue.slice(0, maxLength));
   }
-}
 }
