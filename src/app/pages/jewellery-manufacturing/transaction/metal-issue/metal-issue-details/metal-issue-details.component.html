@@ -33,6 +33,10 @@
                                                 (focusout)="jobNumberValidate($event)"
                                                 [readonly]="viewMode"
                                                 (keydown)="lookupKeyPress($event,'jobNumber')" />
+                                            <mat-error *ngIf="metalIssueDetailsForm.controls.jobNumber.touched 
+                                                && metalIssueDetailsForm.controls.jobNumber.hasError('required')">
+                                                Job number required
+                                            </mat-error>
                                             <master-search class="masterSearch"
                                                 [MasterSearchData]="jobNumberCodeData"
                                                 #overlayjobNumDes
@@ -64,7 +68,8 @@
                                                 formControlName="subJobNo"
                                                 (change)="subJobNumberValidate($event)"
                                                 [readonly]="viewMode" />
-                                            <master-search class="masterSearch" *ngIf="!viewMode"
+                                            <master-search class="masterSearch"
+                                                *ngIf="!viewMode"
                                                 [MasterSearchData]="subJobNoCodeData"
                                                 (newRowClick)="subJobNoCodeSelected($event)"></master-search>
                                         </mat-form-field>
@@ -118,7 +123,8 @@
                                             style="width: 90%;">
                                             <input type="text" matInput
                                                 UpperCaseDirective
-                                                formControlName="workerCode" tabindex="4"
+                                                formControlName="workerCode"
+                                                tabindex="4"
                                                 (keydown)="lookupKeyPress($event,'workerCode')"
                                                 [readonly]="viewMode"
                                                 (focusout)="WorkerCodeValidate($event)" />
@@ -272,9 +278,11 @@
                                             style="width: 60%;">
                                             <input type="text" matInput
                                                 formControlName="DIVCODE"
-                                                placeholder="Div Code" [readonly]="viewMode"
+                                                placeholder="Div Code"
+                                                [readonly]="viewMode"
                                                 (focusout)="validateLookupField($event,divCodeData,'DIVCODE')" />
-                                            <master-search class="masterSearch" *ngIf="!viewMode"
+                                            <master-search class="masterSearch"
+                                                *ngIf="!viewMode"
                                                 [MasterSearchData]="divCodeData"
                                                 (newRowClick)="divCodeSelected($event)">
                                             </master-search>
@@ -291,7 +299,8 @@
                                                 (focusout)="stockCodeValidate($event)"
                                                 [readonly]="viewMode"
                                                 (keydown)="lookupKeyPress($event,'stockCode')" />
-                                            <master-search class="masterSearch" *ngIf="!viewMode"
+                                            <master-search class="masterSearch"
+                                                *ngIf="!viewMode"
                                                 [MasterSearchData]="stockCodeData"
                                                 #overlaystockcode
                                                 (newRowClick)="stockCodeSelected($event)"></master-search>
@@ -427,7 +436,8 @@
                                             style="width: 70%;">
                                             <input type="text" matInput
                                                 formControlName="location"
-                                                [readonly]="viewMode" UpperCaseDirective
+                                                [readonly]="viewMode"
+                                                UpperCaseDirective
                                                 (keydown)="lookupKeyPress($event,'location')"
                                                 (focusout)="validateLookupField($event,locationCodeData,'location')" />
                                             <master-search class="masterSearch"
@@ -558,7 +568,8 @@
                             <dxi-column [allowEditing]="false"
                                 dataField="ISS_MTL_WT" alignment="right"
                                 caption="ISS_MTL_WT"></dxi-column>
-                            <dxi-column dataField="BAL_MTL_PCS" alignment="right"
+                            <dxi-column dataField="BAL_MTL_PCS"
+                                alignment="right"
                                 caption="BAL_MTL_PCS"></dxi-column>
                             <dxi-column dataField="BAL_MTL_WT" alignment="right"
                                 caption="BAL_MTL_WT"></dxi-column>

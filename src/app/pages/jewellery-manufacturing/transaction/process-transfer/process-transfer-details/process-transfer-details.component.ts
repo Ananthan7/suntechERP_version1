@@ -1451,7 +1451,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     }
     let date = this.commonService.getCompanyParamValue('PROCESSTIMEVALIDATE')
     this.Calc_TimeDiff()
-    
+
     //to calculate saved data in stnmtl table
     let metalstone_M = result.dynamicData[1] || []
     let metalstone_S = result.dynamicData[2] || []
@@ -1778,8 +1778,9 @@ export class ProcessTransferDetailsComponent implements OnInit {
       element.SELECTED = true
       element.GEN = 'GEN'
       element.FROM_STOCK_CODE = element.STOCK_CODE,
-        element.FROM_SUB_STOCK_CODE = element.SUB_STOCK_CODE,
-        element.GROSS_WT = this.commonService.setCommaSerperatedNumber(element.GROSS_WT, 'METAL')
+      element.FROM_SUB_STOCK_CODE = element.SUB_STOCK_CODE,
+      element.GROSS_WT = this.commonService.setCommaSerperatedNumber(element.GROSS_WT, 'METAL')
+      element.NET_WT = this.commonService.setCommaSerperatedNumber(element.NET_WT, 'METAL')
       element.STONE_WT = this.commonService.setCommaSerperatedNumber(element.STONE_WT, 'STONE')
       element.PURITY = this.commonService.setCommaSerperatedNumber(element.PURITY, 'PURITY')
       element.LOSS_QTY = this.commonService.setCommaSerperatedNumber(element.LOSS_QTY, 'THREE')

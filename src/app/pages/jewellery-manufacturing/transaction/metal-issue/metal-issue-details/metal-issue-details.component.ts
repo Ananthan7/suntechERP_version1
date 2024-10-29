@@ -213,11 +213,11 @@ export class MetalIssueDetailsComponent implements OnInit {
       this.setNewFormValue()
     }
   }
-  ngAfterContentChecked() {
-    if (this.comService.nullToString(this.metalIssueDetailsForm.value.jobNumber) == '') {
-      this.renderer.selectRootElement('#jobNumbercode')?.focus();
-    }
-  }
+  // ngAfterContentChecked() {
+  //   if (this.comService.nullToString(this.metalIssueDetailsForm.value.jobNumber) == '') {
+  //     this.renderer.selectRootElement('#jobNumbercode')?.focus();
+  //   }
+  // }
   setNewFormValue() {
     if (this.content?.HEADERDETAILS) {
       let data = this.content.HEADERDETAILS
@@ -646,10 +646,24 @@ export class MetalIssueDetailsComponent implements OnInit {
     this.subJobNoCodeData.WHERECONDITION = `ISNULL(PROD_REF,0)=0 and Branch_code = '${this.comService.branchCode}'`
     this.subJobNoCodeData.WHERECONDITION += `and job_number='${this.comService.nullToString(form.jobNumber)}'`
   }
+  isJobNumberEmpty(flag: boolean){
+    this.subJobNoCodeData.VIEW_ICON = flag;
+    this.processCodeData.VIEW_ICON = flag;
+    this.workerCodeData.VIEW_ICON = flag;
+    this.divCodeData.VIEW_ICON = flag;
+    this.stockCodeData.VIEW_ICON = flag;
+    this.toStockCodeData.VIEW_ICON = flag;
+    this.locationCodeData.VIEW_ICON = flag;
+  }
   //TODO 2 subjob method
   jobNumberValidate(event: any) {
     this.showOverleyPanel(event, 'jobNumber')
-    if (event.target.value == '' || this.viewMode) return
+    if (this.viewMode) return;
+    if (event && event.target.value == ''){
+      this.isJobNumberEmpty(false);
+      return;
+    }
+    this.isJobNumberEmpty(true);
     let postData = {
       "SPID": "064",
       "parameter": {
