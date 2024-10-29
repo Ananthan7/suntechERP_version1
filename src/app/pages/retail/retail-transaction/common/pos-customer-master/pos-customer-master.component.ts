@@ -119,7 +119,7 @@ export class PosCustomerMasterComponent implements OnInit {
     fcn_customer_detail_fname: [""],
     fcn_customer_detail_mname: [""],
     fcn_customer_detail_lname: [""],
-    fcn_cust_detail_gender: [""],
+    fcn_cust_detail_gender: ["", [Validators.required]],
     fcn_cust_detail_marital_status: [""],
     fcn_cust_detail_dob: ["", [Validators.required]],
     fcn_cust_detail_idType: [
@@ -132,8 +132,7 @@ export class PosCustomerMasterComponent implements OnInit {
     fcn_cust_detail_phone: ["", Validators.required],
     fcn_cust_detail_phone2: [""],
     fcn_cust_detail_email: ["", [Validators.required, Validators.email]],
-    fcn_cust_detail_address: [""],
-    // fcn_cust_detail_address: [''],
+    fcn_cust_detail_address: ["",[Validators.required]],
     fcn_cust_detail_country: ["", [Validators.required]],
     fcn_cust_detail_city: [
       "",
