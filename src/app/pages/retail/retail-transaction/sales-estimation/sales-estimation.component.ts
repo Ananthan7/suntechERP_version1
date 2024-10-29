@@ -7796,17 +7796,29 @@ export class SalesEstimationComponent implements OnInit {
 
       if(this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt) === 0 &&
       this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_rate) === 0 &&this.itemDivision!=='L'){
-
-      this.renderer.selectRootElement('#fcn_li_gross_wt')?.select();
+        this.renderer.selectRootElement('#fcn_li_gross_wt')?.select();
 
       }
 
       else if(this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt) === 0 &&
-      this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_rate) === 0 && this.itemDivision==='L'){
+      this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_rate) === 0 && !['L', 'C', 'P'].includes(this.itemDivision)){
 
         this.renderer.selectRootElement('#fcn_li_rate')?.select();
 
       }
+
+
+      else if (['L', 'C', 'P'].includes(this.itemDivision)) {
+        if (this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_gross_wt) === 0 &&
+          this.comFunc.emptyToZero(this.lineItemForm.value.fcn_li_rate) === 0) {
+          this.renderer.selectRootElement('#fcn_li_gross_wt')?.select();
+        }
+
+        else {
+          this.renderer.selectRootElement('#fcn_li_rate')?.select();
+        }
+      }
+
       else{
         this.renderer.selectRootElement('#fcn_li_net_amount')?.select();
 
@@ -7827,6 +7839,7 @@ export class SalesEstimationComponent implements OnInit {
 
     }
   }
+
 
 
   async getStockDesc(event: any) {

@@ -23,9 +23,9 @@
                                 <div class="col-sm-6">
                                     <mat-form-field style="width: 100%" appearance="outline">
                                         <input type="text" id="code" matInput (focusout)="checkCodeExists($event)"
-                                            formControlName="code" [readonly]="viewMode || editMode"
-                                            [disabled]="viewMode" UpperCaseDirective autocomplete="off"
-                                            (keydown)="lookupKeyPress($event,'code')" />
+                                            (change)="prefixCodeValidate()" formControlName="code"
+                                            [readonly]="viewMode || editMode" [disabled]="viewMode" UpperCaseDirective
+                                            autocomplete="off" (keydown)="lookupKeyPress($event,'code')" />
                                         <master-search class="masterSearch" *ngIf="!editMode && !viewMode"
                                             [MasterSearchData]="codeData" #overlaycodeSearch
                                             (newRowClick)="codeSelected($event)"></master-search>
@@ -291,9 +291,10 @@
                                         <a *ngIf="alloyMastereForm?.get('weightAvgCostFC')?.value">{{
                                             alloyMastereForm?.value.priceScheme }}
                                         </a> -->
-                                        <mat-form-field appearance="outline" class="stretch" *ngIf="alloyMastereForm.value.weightAvgCostLC">
-                                            <input type="text" matInput [readonly]="viewMode" formControlName="priceScheme"
-                                            (focusout)="resetAllPriceDetails()"/>
+                                        <mat-form-field appearance="outline" class="stretch"
+                                            *ngIf="alloyMastereForm.value.weightAvgCostLC">
+                                            <input type="text" matInput [readonly]="viewMode"
+                                                formControlName="priceScheme" (focusout)="resetAllPriceDetails()" />
                                             <master-search *ngIf="!viewMode && alloyMastereForm.value.weightAvgCostLC"
                                                 [MasterSearchData]="priceSchemeData" class="masterSearch"
                                                 (newRowClick)="priceSchemeValidate($event)">
@@ -354,7 +355,8 @@
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%" appearance="outline">
                                         <input type="text" matInput AmountDecimalInput formControlName="price1Lc"
-                                        [max]="13"   class="text-right" [readonly]="viewMode" (focusout)="price1LcChange()" />
+                                            [max]="13" class="text-right" [readonly]="viewMode"
+                                            (focusout)="price1LcChange()" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -391,7 +393,8 @@
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%" appearance="outline">
                                         <input type="text" matInput AmountDecimalInput formControlName="price2Lc"
-                                        [max]="13"  class="text-right" [readonly]="viewMode" (focusout)="price2LcChange()" />
+                                            [max]="13" class="text-right" [readonly]="viewMode"
+                                            (focusout)="price2LcChange()" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -428,7 +431,8 @@
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%" appearance="outline">
                                         <input type="text" matInput formControlName="price3Lc" AmountDecimalInput
-                                        [max]="13" class="text-right" [readonly]="viewMode" (focusout)="price3LcChange()" />
+                                            [max]="13" class="text-right" [readonly]="viewMode"
+                                            (focusout)="price3LcChange()" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -465,7 +469,8 @@
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%" appearance="outline">
                                         <input type="text" matInput formControlName="price4Lc" AmountDecimalInput
-                                        [max]="13"  class="text-right" [readonly]="viewMode" (focusout)="price4LcChange()" />
+                                            [max]="13" class="text-right" [readonly]="viewMode"
+                                            (focusout)="price4LcChange()" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -502,7 +507,8 @@
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%" appearance="outline">
                                         <input type="text" matInput formControlName="price5Lc" AmountDecimalInput
-                                        [max]="13"  class="text-right" [readonly]="viewMode" (focusout)="price5LcChange()" />
+                                            [max]="13" class="text-right" [readonly]="viewMode"
+                                            (focusout)="price5LcChange()" />
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -524,7 +530,7 @@
                             </div>
                         </div>
 
-                      
+
                         <div class="col-md-1">
                             <div class="upload-btn-wrapper">
                                 <button class="btn btnnew" id="ID032" style="width:125px" [disabled]="viewMode">
