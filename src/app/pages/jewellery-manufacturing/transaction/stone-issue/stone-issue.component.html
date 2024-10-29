@@ -70,7 +70,8 @@
                         [min]="minDate" [max]="maxDate" />
                       <mat-datepicker-toggle matSuffix
                         [for]="vocDate"></mat-datepicker-toggle>
-                      <mat-datepicker [startAt]="currentDate" [disabled]="isSaved"
+                      <mat-datepicker [startAt]="currentDate"
+                        [disabled]="isSaved"
                         #vocDate></mat-datepicker>
                     </mat-form-field>
                   </div>
@@ -112,7 +113,8 @@
                       class="col-sm-3 col-form-label">Entered By:</label>
                     <div class="col-md-8">
                       <mat-form-field appearance="outline" style="width: 70%">
-                        <input type="text" matInput formControlName="SALESPERSON_CODE"
+                        <input type="text" matInput
+                          formControlName="SALESPERSON_CODE"
                           UpperCaseDirective
                           (keydown)="lookupKeyPress($event,'SALESPERSON_CODE')"
                           [readonly]="viewMode"
@@ -221,8 +223,8 @@
                     caption="Division"></dxi-column>
                   <dxi-column dataField="STOCK_DESCRIPTION"
                     caption="Description"></dxi-column>
-                  <dxi-column dataField caption="Carat"></dxi-column>
-                  <dxi-column dataField caption="Rate"></dxi-column>
+                  <dxi-column dataField="GROSS_WT" caption="Carat"></dxi-column>
+                  <dxi-column dataField="RATEFC" caption="Rate"></dxi-column>
                   <dxi-column dataField="PROCESS_CODE"
                     caption="Process"></dxi-column>
                   <dxi-column dataField="AMOUNTLC"
@@ -273,7 +275,7 @@
                     <div class="col-md-8">
                       <mat-form-field appearance="outline" style="width: 70%">
                         <input type="text" matInput maxlength="40"
-                          formControlName="narration" [readonly]="viewMode"/>
+                          formControlName="narration" [readonly]="viewMode" />
                       </mat-form-field>
                     </div>
                   </div>

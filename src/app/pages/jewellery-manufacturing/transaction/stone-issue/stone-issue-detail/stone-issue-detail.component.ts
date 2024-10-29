@@ -181,6 +181,7 @@ export class StoneIssueDetailComponent implements OnInit {
     consignment: [false],
     VOCTYPE: [''],
     GROSS_WT: [''],
+    RATEFC: [''],
     VOCNO: [''],
     VOCDATE: [''],
     SUB_STOCK_CODE: [''],
@@ -273,7 +274,8 @@ export class StoneIssueDetailComponent implements OnInit {
     this.stoneIssueDetailsFrom.controls.amount.setValue(this.content.AMOUNTLC)
     this.stoneIssueDetailsFrom.controls.DIVCODE.setValue(this.content.DIVCODE)
     this.stoneIssueDetailsFrom.controls.pointerwt.setValue(this.content.POINTERWEIGHT)
-    this.stoneIssueDetailsFrom.controls.unitrate.setValue(this.content.AMOUNTFC)
+    this.stoneIssueDetailsFrom.controls.unitrate.setValue(this.content.RATEFC)
+    this.stoneIssueDetailsFrom.controls.carat.setValue(this.content.GROSS_WT)
     this.stoneIssueDetailsFrom.controls.PART_CODE.setValue(this.content.PART_CODE)
     this.stoneIssueDetailsFrom.controls.batchid.setValue(this.content.SUB_STOCK_CODE)
     this.stoneIssueDetailsFrom.controls.consignment.setValue(this.content.CONSIGNMENT)
@@ -599,10 +601,10 @@ export class StoneIssueDetailComponent implements OnInit {
       "SIZE": this.comService.nullToString(form.size),
       "JOB_PCS": 0,
       "PCS": this.comService.emptyToZero(form.pieces),
-      "GROSS_WT": this.comService.emptyToZero(form.GROSS_WT),
+      "GROSS_WT": this.comService.emptyToZero(form.carat),
       "CURRENCY_CODE": this.comService.nullToString(form.CURRENCY_CODE),
       "CURRENCY_RATE": this.comService.emptyToZero(form.CURRENCY_RATE),
-      "RATEFC": this.comService.emptyToZero(form.RATEFC),
+      "RATEFC": this.comService.emptyToZero(form.unitrate),
       "RATELC": this.comService.emptyToZero(form.RATELC),
       "AMOUNTFC": this.comService.emptyToZero(form.unitrate),
       "AMOUNTLC": this.comService.emptyToZero(form.amount),
@@ -624,7 +626,7 @@ export class StoneIssueDetailComponent implements OnInit {
       "DT_YEARMONTH": this.comService.nullToString(this.yearMonth),
       "CONSIGNMENT": this.onchangeCheckBox(form.consignment),
       "SIEVE_SET": this.comService.nullToString(form.SIEVE_SET),
-      "SUB_STOCK_CODE": "0",
+      "SUB_STOCK_CODE": this.comService.nullToString(this.stoneIssueDetailsFrom.value.SUB_STOCK_CODE),
       "D_REMARKS": this.comService.nullToString(form.remarks),
       "SIEVE_DESC": this.comService.nullToString(form.SIEVE_DESC),
       "EXCLUDE_TRANSFER_WT": true,
@@ -726,6 +728,7 @@ export class StoneIssueDetailComponent implements OnInit {
     this.stoneIssueDetailsFrom.controls.pieces.setValue('')
     this.setValueWithDecimal('PURE_WT', 0, 'THREE')
     this.setValueWithDecimal('GROSS_WT', 0, 'METAL')
+    this.setValueWithDecimal('RATEFC', 0, 'METAL')
     this.setValueWithDecimal('PURITY', 0, 'PURITY')
     this.setValueWithDecimal('NET_WT', 0, 'THREE')
     this.setValueWithDecimal('KARAT', 0, 'THREE')
@@ -738,7 +741,7 @@ export class StoneIssueDetailComponent implements OnInit {
       "SPID": "140",
       "parameter": {
         SubJobNumber: this.stoneIssueDetailsFrom.value.subjobnumber,
-        SubStockCode: this.stoneIssueDetailsFrom.value.stockCode,
+        SubStockCode: this.stoneIssueDetailsFrom.value.batchid,
         StockCode: this.stoneIssueDetailsFrom.value.stockCode,
         BranchCode: this.comService.nullToString(this.branchCode),
         DEFPRICESMANUF: '',
@@ -890,13 +893,9 @@ export class StoneIssueDetailComponent implements OnInit {
         STOCKCODE: this.stoneIssueDetailsFrom.value.stockCode,
       }
     };
-
-    // Show loading message
     this.comService.showSnackBarMsg('MSG81447');
-
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
       .subscribe((result) => {
-        // Hide loading message
         this.comService.closeSnackBarMsg();
 
         if (result.status === "Success" && result.dynamicData[0]) {
@@ -914,15 +913,13 @@ export class StoneIssueDetailComponent implements OnInit {
             this.showOverleyPanel(event, 'stockCode');  // Automatically open the lookup overlay
 
           } else {
-            // Valid stock code, handle the valid case
-            // Close overlay panel
-
             let stockDetails = data[0];
             console.log(stockDetails, 'valid stock data');
             this.stoneIssueDetailsFrom.controls.stockCodeDes.setValue(stockDetails.STOCK_DESCRIPTION);
-            this.stoneIssueDetailsFrom.controls.carat.setValue(stockDetails.KARAT);
+            this.stoneIssueDetailsFrom.controls.batchid.setValue(stockDetails.KARAT);
             this.stoneIssueDetailsFrom.controls.SIEVE_SET.setValue(stockDetails.SIEVE_SET);
             this.stoneIssueDetailsFrom.controls.size.setValue(stockDetails.SIZE);
+            this.stoneIssueDetailsFrom.controls.batchid.setValue(stockDetails.STOCK_CODE);
             this.stoneIssueDetailsFrom.controls.sieve.setValue(stockDetails.SIEVE);
             this.stoneIssueDetailsFrom.controls.SIEVE_DESC.setValue(stockDetails.SIEVE_DESC);
             this.stoneIssueDetailsFrom.controls.pieces.setValue(stockDetails.PCS);
@@ -990,9 +987,8 @@ export class StoneIssueDetailComponent implements OnInit {
           // this.columnhead1 = Object.keys(this.tableData[0])
 
           this.tableData.forEach((row) => {
-            if (!row.LOCTYPE_CODE) {  // If location field is not already set
-              row.LOCTYPE_CODE = '000GEN';
-              row.CARATWT_TO = this.setValueWithDecimal('CARATWT_TO',0,'METAL')  // Replace with your actual default value
+            if (!row.LOCTYPE_CODE || row.LOCTYPE_CODE.trim() === "") { 
+              row.LOCTYPE_CODE = '000GEN'; 
             }
           });
           console.log(this.tableData);
@@ -1006,7 +1002,7 @@ export class StoneIssueDetailComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
 
-  FillUniqueDesignDetails(){
+  FillUniqueDesignDetails() {
     if (this.viewMode || this.editMode) return;
     let postData = {
       "SPID": "142",
@@ -1015,19 +1011,19 @@ export class StoneIssueDetailComponent implements OnInit {
         'strBranch ': this.comService.nullToString(this.branchCode),
       }
     }
-    
+
     this.comService.showSnackBarMsg('MSG81447')
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
       .subscribe((result) => {
         this.comService.closeSnackBarMsg()
         if (result.dynamicData && result.dynamicData.length > 0) {
           let data = result.dynamicData[0]
-          console.log(data[0],'design')
+          console.log(data[0], 'design')
           this.stoneIssueDetailsFrom.controls.salesorderno.setValue(data[0].job_so_number)
         }
       })
-}
-  
+  }
+
   subJobNumberValidate(event?: any) {
     if (event?.target.value == '' || this.viewMode) return;
     // let postData = {
@@ -1233,7 +1229,7 @@ export class StoneIssueDetailComponent implements OnInit {
     }
     else {
       console.log(value);
-      console.log(  this.tableData);
+      console.log(this.tableData);
       this.tableData[0].DIVCODE = data.Division_Code;
       this.userId = data.Division_Code;
     }
@@ -1247,7 +1243,7 @@ export class StoneIssueDetailComponent implements OnInit {
     }
     else {
       console.log(value);
-      console.log(  this.tableData);
+      console.log(this.tableData);
       this.tableData[0].STOCK_CODE = data.STOCK_CODE;
       this.userId = data.STOCK_CODE;
     }
@@ -1261,33 +1257,33 @@ export class StoneIssueDetailComponent implements OnInit {
     }
     else {
       console.log(value);
-      console.log(  this.tableData);
+      console.log(this.tableData);
       this.tableData[0].LOCTYPE_CODE = data.LOCATION_CODE;
       this.userId = data.LOCATION_CODE;
     }
   }
- 
+
   BoqAlert() {
     const tableStockCodes = this.tableData.map((item: any) => item.STOCK_CODE);
     const formStockCode = this.stoneIssueDetailsFrom.value.stockCode;
     const stockExists = tableStockCodes.includes(formStockCode);
-  
+
     if (stockExists) {
-      
-    
+
+
       // Show the SweetAlert confirmation dialog
       this.showConfirmationDialog().then((result) => {
         if (result.isConfirmed) {
           console.log("Continuing with validation...");
         }
-         else {
+        else {
           console.log("Action cancelled by user.");
           this.stoneIssueDetailsFrom.controls.stockCode.setValue(''); // Clear the stock code field
         }
       });
     }
   }
-  
+
   showConfirmationDialog(): Promise<any> {
     return Swal.fire({
       text: "StockCode is not found in BOQ",
@@ -1299,7 +1295,7 @@ export class StoneIssueDetailComponent implements OnInit {
       cancelButtonText: 'No, cancel'
     });
   }
-  
+
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {
       this.subscriptions.forEach(subscription => subscription.unsubscribe());// unsubscribe all subscription
