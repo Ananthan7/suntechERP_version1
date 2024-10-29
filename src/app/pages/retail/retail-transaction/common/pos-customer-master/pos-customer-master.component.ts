@@ -1449,9 +1449,10 @@ export class PosCustomerMasterComponent implements OnInit {
   SPvalidateLookupField(
     event: any,
     LOOKUPDATA: MasterSearchModel,
-    FORMNAME: string,
+    FORMNAMES: string[],
     isCurrencyField: boolean,
-    lookupField?: string
+    lookupFields?: string[],
+    FROMCODE?:boolean
   ) {
     const searchValue = event.target.value?.trim();
   
@@ -1481,47 +1482,65 @@ export class PosCustomerMasterComponent implements OnInit {
   
           if (data?.length) {
             if (LOOKUPDATA.FRONTENDFILTER && LOOKUPDATA.SEARCH_VALUE) {
-              const searchResult = this.comService.searchAllItemsInArray(
+              let searchResult = this.comService.searchAllItemsInArray(
                 data,
                 LOOKUPDATA.SEARCH_VALUE
               );
   
               console.log("Filtered Search Result:", searchResult);
+
+              if (FROMCODE === true) {
+              searchResult = [
+                ...searchResult.filter((item: any) => item.MobileCountryCode === LOOKUPDATA.SEARCH_VALUE),
+                ...searchResult.filter((item: any) => item.MobileCountryCode !== LOOKUPDATA.SEARCH_VALUE),
+              ];
+            } else if (FROMCODE === false) {
+              searchResult = [
+                ...searchResult.filter((item: any) => item.DESCRIPTION === LOOKUPDATA.SEARCH_VALUE),
+                ...searchResult.filter((item: any) => item.DESCRIPTION !== LOOKUPDATA.SEARCH_VALUE),
+              ];
+            }
   
               if (searchResult?.length) {
                 const matchedItem = searchResult[0];
-  
-                if (lookupField! in matchedItem) {
-                  this.customerDetailForm.controls[FORMNAME].setValue(
-                    matchedItem[lookupField!]
-                  );
-                } else {
-                  console.error(`Property ${lookupField} not found in matched item.`);
-                  this.comService.toastErrorByMsgId("No data found");
-                  this.clearLookupData(LOOKUPDATA, FORMNAME);
-                }
+                
+                FORMNAMES.forEach((formName, index) => {
+                  const field = lookupFields?.[index];
+                  if (field && field in matchedItem) {
+                    this.customerDetailForm.controls[formName].setValue(
+                      matchedItem[field]
+                    );
+                  } else {
+                    console.error(`Property ${field} not found in matched item.`);
+                    this.comService.toastErrorByMsgId("No data found");
+                    this.clearLookupData(LOOKUPDATA, FORMNAMES);
+                  }
+                });
               } else {
                 this.comService.toastErrorByMsgId("No data found");
-                this.clearLookupData(LOOKUPDATA, FORMNAME);
+                this.clearLookupData(LOOKUPDATA, FORMNAMES);
               }
             }
           } else {
             this.comService.toastErrorByMsgId("No data found");
-            this.clearLookupData(LOOKUPDATA, FORMNAME);
+            this.clearLookupData(LOOKUPDATA, FORMNAMES);
           }
         },
         error: () => {
           this.comService.toastErrorByMsgId("MSG2272");
-          this.clearLookupData(LOOKUPDATA, FORMNAME);
+          this.clearLookupData(LOOKUPDATA, FORMNAMES);
         },
       });
   
     this.subscriptions.push(sub);
   }
   
-
-  clearLookupData(LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+  // Clear multiple form controls
+  clearLookupData(LOOKUPDATA: MasterSearchModel, FORMNAMES: string[]) {
     LOOKUPDATA.SEARCH_VALUE = "";
-    this.customerDetailForm.controls[FORMNAME].setValue("");
+    FORMNAMES.forEach((formName) => {
+      this.customerDetailForm.controls[formName].setValue("");
+    });
   }
+  
 }
