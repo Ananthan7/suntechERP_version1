@@ -17,18 +17,20 @@
                 <div class="row align-items-center">
                     <label for="inputPassword" class="col-sm-2 col-form-label">Code</label>
                     <div class="col-md-2">
-                        <mat-form-field style="width: 100%;">
+                        <mat-form-field style="width: 100%;" appearance="outline">
                             <input type="text" (focusout)="getSchemeMasterList($event)" 
                                 matInput formControlName="code" />
                         </mat-form-field>
                     </div>
                     <label for="inputPassword" class="col-sm-2 col-form-label">Prefix</label>
                     <div class="col-md-2">
-                        <mat-form-field style="width: 70%;">
+                        <mat-form-field style="width: 70%;" appearance="outline">
+                            
                             <input type="text" matInput formControlName="prefix" />
-                        </mat-form-field>
-                        <master-search [MasterSearchData]="prefixCodeData"
+                            <master-search [MasterSearchData]="prefixCodeData" class="masterSearch"
                             (newRowClick)="prefixSelected($event)"></master-search>
+                        </mat-form-field>
+                       
                     </div>
                     <label for="inputPassword" class="col-sm-1 col-form-label">Status</label>
                     <div class="col-md-3">
@@ -38,7 +40,7 @@
                 <div class="row align-items-center">
                     <label for="inputPassword" class="col-sm-2 col-form-label">Description</label>
                     <div class="col-md-10">
-                        <mat-form-field style="width: 100%;">
+                        <mat-form-field style="width: 100%;" appearance="outline">
                             <input type="text" matInput formControlName="description" />
                         </mat-form-field>
                     </div>
@@ -46,7 +48,7 @@
                 <div class="row align-items-center">
                     <label for="inputPassword" class="col-sm-2 col-form-label">Frequency</label>
                     <div class="col-md-2">
-                        <mat-form-field  style="width: 100%;">
+                        <mat-form-field  style="width: 100%;" appearance="outline">
                             <mat-select formControlName="frequency">
                                 <mat-option
                                 *ngFor="let data of frequencyList"
@@ -60,7 +62,7 @@
                 <div class="row align-items-center">
                     <label for="inputPassword" class="col-sm-2 col-form-label">Tenure/Period</label>
                     <div class="col-md-2">
-                        <mat-form-field style="width: 100%;">
+                        <mat-form-field style="width: 100%;" appearance="outline">
                             <input type="text" matInput formControlName="tenurePeriod" />
                         </mat-form-field>
                     </div>
@@ -68,14 +70,14 @@
                 <div class="row align-items-center">
                     <label for="inputPassword" class="col-sm-2 col-form-label">Installment Amount</label>
                     <div class="col-md-2">
-                        <mat-form-field style="width: 100%;">
+                        <mat-form-field style="width: 100%;" appearance="outline">
                             <input type="text" style="text-align: right;"
                             matInput formControlName="installmentAmount" />
                         </mat-form-field>
                     </div>
                     <label for="inputPassword" class="col-sm-2 col-form-label">Receipt Mode</label>
                     <div class="col-md-2">
-                        <mat-form-field style="width: 100%;">
+                        <mat-form-field style="width: 100%;" appearance="outline">
                             <mat-select formControlName="receiptModeone">
                                 <mat-option
                                 *ngFor="let data of receipt1List" 
@@ -90,14 +92,14 @@
                     <label for="inputPassword" 
                     class="col-sm-2 col-form-label">Bonus Installment </label>
                     <div class="col-md-2">
-                        <mat-form-field style="width: 100%;">
+                        <mat-form-field style="width: 100%;" appearance="outline">
                             <input type="text" style="text-align: right;"
                             matInput formControlName="bonusInstallment" />
                         </mat-form-field>
                     </div>
                     <label for="inputPassword" class="col-sm-2 col-form-label">Receipt Mode</label>
                     <div class="col-md-2">
-                        <mat-form-field style="width: 100%;">
+                        <mat-form-field style="width: 100%;" appearance="outline">
                             <mat-select formControlName="receiptModeTwo">
                                 <mat-option
                                 *ngFor="let data of receipt2List" 
@@ -111,14 +113,14 @@
                 <div class="row align-items-center">
                     <label for="inputPassword" class="col-sm-2 col-form-label">Cancel Charges </label>
                     <div class="col-md-2">
-                        <mat-form-field style="width: 100%;">
+                        <mat-form-field style="width: 100%;" appearance="outline">
                             <input type="text" style="text-align: right;"
                             matInput formControlName="cancelCharges" />
                         </mat-form-field>
                     </div>
                     <label for="inputPassword" class="col-sm-2 col-form-label">Receipt Mode</label>
                     <div class="col-md-2">
-                        <mat-form-field style="width: 100%;">
+                        <mat-form-field style="width: 100%;" appearance="outline">
                             <mat-select formControlName="receiptModeThree">
                                 <mat-option
                                 *ngFor="let data of receipt2List" 
@@ -132,7 +134,7 @@
                 <div class="row align-items-center">
                     <label for="inputPassword" class="col-sm-2 col-form-label">Deposit In</label>
                     <div class="col-md-2">
-                        <mat-form-field style="width: 100%;">
+                        <mat-form-field style="width: 100%;" appearance="outline">
                             <mat-select formControlName="depositIn">
                                 <mat-option
                                 *ngFor="let data of depositinList"
@@ -146,7 +148,7 @@
                 <div class="row align-items-center">
                     <label for="inputPassword" class="col-sm-2 col-form-label">Start Date</label>
                     <div class="col-md-2">
-                        <mat-form-field style="width: 100%;">
+                        <mat-form-field style="width: 100%;" appearance="outline">
                             <input matInput [matDatepicker]="startDate" [max]="startDate" formControlName="startDate"
                                 placeholder="DD/MM/YYYY" DateValidation  (dateChange)="formatDate($event)"/>
                             <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
@@ -160,7 +162,7 @@
                 <div class="row align-items-center">
                     <label for="inputPassword" class="col-sm-2 col-form-label">Remarks</label>
                     <div class="col-md-10">
-                        <mat-form-field style="width: 100%;">
+                        <mat-form-field style="width: 100%;" appearance="outline">
                             <input type="text" matInput formControlName="remarks" />
                         </mat-form-field>
                     </div>

@@ -455,7 +455,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
     }
 
 
-    
+
     this.grossWt = true;
     this.codeEnable1 = true;
 
@@ -953,16 +953,60 @@ export class MetalLabourchargeMasterComponent implements OnInit {
         if (data.length == 0) {
           this.commonService.toastErrorByMsgId('MSG1531')
           this.metallabourMasterForm.controls[FORMNAME].setValue('')
-          this.renderer.selectRootElement(FORMNAME).focus();
+          // this.renderer.selectRootElement(FORMNAME).focus();
           LOOKUPDATA.SEARCH_VALUE = ''
+          this.openOverlay(FORMNAME, event);
           return
         }
+
 
       }, err => {
         this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
       })
     this.subscriptions.push(Sub)
   }
+
+  openOverlay(FORMNAME: string, event: any) {
+    switch (FORMNAME) {
+      case 'color':
+        this.overlaycolorSearch.showOverlayPanel(event);
+        break;
+      case 'metalDivision':
+        this.overlaymetalDivisionSearch.showOverlayPanel(event);
+        break;
+      case 'metalDivision':
+        this.overlaymetalDivisionSearch.showOverlayPanel(event);
+        break;
+      case 'stock_code':
+        this.overlaystockcodeSearch.showOverlayPanel(event);
+        break;
+      case 'metalcurrency':
+        this.overlaymetalcurrencySearch.showOverlayPanel(event);
+        break;
+      case 'karat':
+        this.overlaykaratSearch.showOverlayPanel(event);
+        break;
+      case 'labourAc':
+        this.overlaylabourAcSearch.showOverlayPanel(event);
+        break;
+      case 'typecode':
+        this.overlaytypeSearch.showOverlayPanel(event);
+        break;
+      case 'category':
+        this.overlaycategorySearch.showOverlayPanel(event);
+        break;
+      case 'subCategory':
+        this.overlaysubCategorySearch.showOverlayPanel(event);
+        break;
+      case 'brand':
+        this.overlaybrandSearch.showOverlayPanel(event);
+        break;
+      default:
+        console.warn(`Unknown FORMNAME: ${FORMNAME}`);
+        break;
+    }
+  }
+
 
   // validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
 
@@ -1388,7 +1432,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
     else {
       this.brandDisable = false;
       // this.metallabourMasterForm.controls['brand'].enable();
-    }    
+    }
   }
 
   DiaCostRatekeyupvalue(e: any) {
@@ -1433,7 +1477,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
 
 
   onweightto(event: any, data: String) {
-    
+
     let wtf = this.metallabourMasterForm.value.wtFrom;
     let wtt = this.metallabourMasterForm.value.wtTo;
     if (data != 'wtFrom') {
@@ -1449,7 +1493,7 @@ export class MetalLabourchargeMasterComponent implements OnInit {
       }
 
     }
-    
+
   }
 
 
