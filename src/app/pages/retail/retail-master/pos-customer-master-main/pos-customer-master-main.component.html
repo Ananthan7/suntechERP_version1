@@ -55,6 +55,7 @@
                     matInput
                     type="text"
                     formControlName="parentPosCode"
+                    [readonly]="flag === 'VIEW'"
                   />
                   <master-search
                     *ngIf="flag !== 'VIEW'"
@@ -85,6 +86,7 @@
                   (focusout)="SPvalidateLookupField($event,refByCode,'refBy',false)"
                     matInput="text"
                     formControlName="refBy"
+                    [readonly]="flag === 'VIEW'"
                   />
                   <master-search
                     *ngIf="flag !== 'VIEW'"
