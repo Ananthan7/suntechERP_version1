@@ -34,7 +34,10 @@ export class POSDaybookComponent implements OnInit {
   popupVisible: boolean = false;
   @Input() content!: any;  //for getting data from retail reports
   templateNameHasValue: boolean= false;
-  
+  userLoginBranch: any;
+
+  RegisterGridData: any =[];
+
   constructor(private activeModal: NgbActiveModal, private formBuilder: FormBuilder, 
     private dataService: SuntechAPIService, private commonService: CommonServiceService, 
     private toastr: ToastrService, private sanitizer: DomSanitizer) { 
@@ -43,6 +46,31 @@ export class POSDaybookComponent implements OnInit {
 
   ngOnInit(): void {
     this. prefillScreenValues();
+    this.gridData()
+  }
+
+  gridData(){
+    this.userLoginBranch= localStorage.getItem('userbranch');
+    this.commonService.showSnackBarMsg('MSG81447');
+    let API = "/POSDayBook/GetPOSRegisterGrid";
+    let postData = {
+      "strFmDate": this.dateToPass.fromDate,
+      "strToDate": this.dateToPass.toDate,
+      "strBranch": this.formattedBranchDivisionData? this.formattedBranchDivisionData : this.userLoginBranch
+    };
+    
+    this.dataService.postDynamicAPI(API, postData).subscribe((result: any) => {
+      if (result.status == "Success") {
+        this.toastr.success(result.status);                    
+        this.RegisterGridData.push(result.dynamicData[0][0]) ;
+        console.log(this.RegisterGridData)
+        this.commonService.closeSnackBarMsg();
+      }
+      else{
+        this.toastr.error(result.status);
+        this.commonService.closeSnackBarMsg();
+      }
+    },(err: any) => this.toastr.error(err)); this.commonService.closeSnackBarMsg();
   }
 
   selectedData(data: any) {

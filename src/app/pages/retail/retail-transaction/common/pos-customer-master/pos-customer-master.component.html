@@ -26,10 +26,36 @@
                 for="fcn_mob_code"
                 id="ID135"
               >
-                Code <span class="text-danger">&ast;</span>
+                ISD <span class="text-danger">&ast;</span>
               </label>
               <div class="col-sm-8">
-                <mat-form-field appearance="outline" style="width: 100%">
+                <mat-form-field
+                  style="width: -webkit-fill-available"
+                  appearance="outline"
+                >
+                  <input
+                  (focusout)="SPvalidateLookupField($event,countryCodeData,'fcn_mob_code',false, 'MobileCountryCode')"
+                    [readonly]="viewOnly"
+                    matInput="text"
+                    formControlName="fcn_mob_code"
+                  />
+                  <master-search
+                    [MasterSearchData]="countryCodeData"
+                    class="masterSearch"
+                    (newRowClick)="countrySelected($event)"
+                  ></master-search>
+                  <mat-error
+                    *ngIf="
+                      customerDetailForm.controls.fcn_mob_code.hasError(
+                        'required'
+                      )
+                    "
+                    id="fcn_mob_code"
+                  >
+                    Mobile code is <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+                <!-- <mat-form-field appearance="outline" style="width: 100%">
                   <mat-select
                     (selectionChange)="onCountryCodeSelection($event, false)"
                     formControlName="fcn_mob_code"
@@ -52,7 +78,7 @@
                   >
                     Country is <strong>required</strong>
                   </mat-error>
-                </mat-form-field>
+                </mat-form-field> -->
                 <!-- <mat-form-field appearance="outline" style="width: 100%">
                   <mat-select formControlName="fcn_mob_code" [disabled]="viewOnly">
                   </mat-select>
@@ -78,7 +104,34 @@
                 Country <span class="text-danger">&ast;</span>
               </label>
               <div class="col-sm-8">
-                <mat-form-field appearance="outline" style="width: 100%">
+                <mat-form-field
+                  style="width: -webkit-fill-available"
+                  appearance="outline"
+                >
+                  <input
+                  (focusout)="SPvalidateLookupField($event,countryCodeData,'fcn_cust_detail_country',false, 'DESCRIPTION')"
+                    [readonly]="viewOnly"
+                    matInput="text"
+                    formControlName="fcn_cust_detail_country"
+                  />
+                  <master-search
+                    [MasterSearchData]="countryCodeData"
+                    class="masterSearch"
+                    (newRowClick)="countrySelected($event)"
+                  ></master-search>
+                  <mat-error
+                    *ngIf="
+                      customerDetailForm.controls.fcn_cust_detail_country.hasError(
+                        'required'
+                      )
+                    "
+                    id="fcn_mob_code"
+                  >
+                    Country is <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+
+                <!-- <mat-form-field appearance="outline" style="width: 100%">
                   <mat-select
                     (selectionChange)="onCountryCodeSelection($event, true)"
                     formControlName="fcn_cust_detail_country"
@@ -101,7 +154,7 @@
                   >
                     Country is <strong>required</strong>
                   </mat-error>
-                </mat-form-field>
+                </mat-form-field> -->
                 <!-- <mat-form-field appearance="outline" style="width: 100%;">
                   <input type="text" matInput formControlName="fcn_cust_detail_country" id="fcn_cust_detail_country"
                     [matAutocomplete]="country" [readonly]="viewOnly" />

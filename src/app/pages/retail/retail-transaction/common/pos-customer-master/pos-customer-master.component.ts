@@ -19,7 +19,7 @@ import { CommonServiceService } from "src/app/services/common-service.service";
 import { SuntechAPIService } from "src/app/services/suntech-api.service";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { ActivatedRoute } from "@angular/router";
-import { Observable } from "rxjs";
+import { Observable, Subscription } from "rxjs";
 import { IndexedDbService } from "src/app/services/indexed-db.service";
 import { map, startWith } from "rxjs/operators";
 import { DialogboxComponent } from "src/app/shared/common/dialogbox/dialogbox.component";
@@ -37,6 +37,7 @@ import {
   styleUrls: ["./pos-customer-master.component.scss"],
 })
 export class PosCustomerMasterComponent implements OnInit {
+  private subscriptions: Subscription[] = [];
   @Output() closebtnClick = new EventEmitter();
   @Input() public customerData: any;
   @Input() amlNameValidation?: boolean;
@@ -98,6 +99,20 @@ export class PosCustomerMasterComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   };
+
+  countryCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 26,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "Countries",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "TYPES='COUNTRY MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    FRONTENDFILTER: true,
+  };
+
   //formgroups
   customerDetailForm: FormGroup = this.formBuilder.group({
     fcn_customer_detail_name: ["", Validators.required],
@@ -792,12 +807,8 @@ export class PosCustomerMasterComponent implements OnInit {
           VAT_NUMBER: `${this.comService.emptyToZero(
             this.customerDetails?.VAT_NUMBER
           )}`,
-          PARENT_CODE: `${this.comService.emptyToZero(
-            this.customerDetails?.PARENT_CODE
-          )}`,
-          REFERED_BY: `${this.comService.emptyToZero(
-            this.customerDetails?.REFERED_BY
-          )}`,
+          PARENT_CODE: this.customerDetails?.PARENT_CODE,
+          REFERED_BY: this.customerDetails?.REFERED_BY,
           CREDIT_LIMIT: this.customerDetails?.CREDIT_LIMIT || 0,
           CREDIT_LIMIT_STATUS:
             this.customerDetails?.CREDIT_LIMIT_STATUS || false,
@@ -1356,15 +1367,161 @@ export class PosCustomerMasterComponent implements OnInit {
   }
 
   datepicker(event: any) {
-    this.selectedDate = event.value;
-    this.formattedDate = this.selectedDate
-      ? new Date(this.selectedDate).toISOString()
-      : null;
+    this.selectedDate = new Date(event.value);
+    // Ensure the date is set to the end of the day to avoid time zone issues
+    this.selectedDate.setHours(23, 59, 59, 999);
+    this.formattedDate = this.selectedDate.toISOString();
 
     console.log(this.formattedDate);
+  }
 
-    // Example payload with the formatted date
+  countrySelected(e: any) {
+    console.log(e);
 
-    // Now you can pass `payload` to your API
+    this.customerDetailForm.controls.fcn_mob_code.setValue(e.MobileCountryCode);
+    this.customerDetailForm.controls.fcn_cust_detail_country.setValue(
+      e.DESCRIPTION
+    );
+  }
+
+  // SPvalidateLookupField(
+  //   event: any,
+  //   LOOKUPDATA: MasterSearchModel,
+  //   FORMNAME: string,
+  //   isCurrencyField: boolean,
+  //   lookupField?: string
+  // ) {
+  //   const searchValue = event.target.value?.trim();
+
+  //   if (!searchValue || this.viewOnly) return;
+
+  //   LOOKUPDATA.SEARCH_VALUE = searchValue;
+
+  //   const param = {
+  //     PAGENO: LOOKUPDATA.PAGENO,
+  //     RECORDS: LOOKUPDATA.RECORDS,
+  //     LOOKUPID: LOOKUPDATA.LOOKUPID,
+  //     WHERECONDITION: LOOKUPDATA.WHERECONDITION,
+  //     searchField: LOOKUPDATA.SEARCH_FIELD,
+  //     searchValue: LOOKUPDATA.SEARCH_VALUE,
+  //   };
+
+  //   this.comService.showSnackBarMsg("MSG81447");
+
+  //   const sub: Subscription = this.apiService
+  //     .postDynamicAPI("MasterLookUp", param)
+  //     .subscribe({
+  //       next: (result) => {
+  //         this.comService.closeSnackBarMsg();
+  //         const data = result.dynamicData?.[0];
+
+  //         if (data?.length) {
+  //           if (LOOKUPDATA.FRONTENDFILTER && LOOKUPDATA.SEARCH_VALUE) {
+  //             const searchResult = this.comService.searchAllItemsInArray(
+  //               data,
+  //               LOOKUPDATA.SEARCH_VALUE
+  //             );
+
+  //             if (searchResult?.length) {
+  //               const matchedItem = searchResult[0];
+  //               this.customerDetailForm.controls[FORMNAME].setValue(
+  //                 matchedItem[lookupField!]
+  //               );
+  //             } else {
+  //               this.comService.toastErrorByMsgId("No data found");
+  //               this.clearLookupData(LOOKUPDATA, FORMNAME);
+  //             }
+  //           }
+  //         } else {
+  //           this.comService.toastErrorByMsgId("No data found");
+  //           this.clearLookupData(LOOKUPDATA, FORMNAME);
+  //         }
+  //       },
+  //       error: () => {
+  //         this.comService.toastErrorByMsgId("MSG2272");
+  //         this.clearLookupData(LOOKUPDATA, FORMNAME);
+  //       },
+  //     });
+
+  //   this.subscriptions.push(sub);
+  // }
+
+  SPvalidateLookupField(
+    event: any,
+    LOOKUPDATA: MasterSearchModel,
+    FORMNAME: string,
+    isCurrencyField: boolean,
+    lookupField?: string
+  ) {
+    const searchValue = event.target.value?.trim();
+  
+    if (!searchValue || this.viewOnly) return;
+  
+    LOOKUPDATA.SEARCH_VALUE = searchValue;
+  
+    const param = {
+      PAGENO: LOOKUPDATA.PAGENO,
+      RECORDS: LOOKUPDATA.RECORDS,
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECONDITION: LOOKUPDATA.WHERECONDITION,
+      searchField: LOOKUPDATA.SEARCH_FIELD,
+      searchValue: LOOKUPDATA.SEARCH_VALUE,
+    };
+  
+    this.comService.showSnackBarMsg("MSG81447");
+  
+    const sub: Subscription = this.apiService
+      .postDynamicAPI("MasterLookUp", param)
+      .subscribe({
+        next: (result) => {
+          this.comService.closeSnackBarMsg();
+          const data = result.dynamicData?.[0];
+  
+          console.log("API Response Data:", data);
+  
+          if (data?.length) {
+            if (LOOKUPDATA.FRONTENDFILTER && LOOKUPDATA.SEARCH_VALUE) {
+              const searchResult = this.comService.searchAllItemsInArray(
+                data,
+                LOOKUPDATA.SEARCH_VALUE
+              );
+  
+              console.log("Filtered Search Result:", searchResult);
+  
+              if (searchResult?.length) {
+                const matchedItem = searchResult[0];
+  
+                if (lookupField! in matchedItem) {
+                  this.customerDetailForm.controls[FORMNAME].setValue(
+                    matchedItem[lookupField!]
+                  );
+                } else {
+                  console.error(`Property ${lookupField} not found in matched item.`);
+                  this.comService.toastErrorByMsgId("No data found");
+                  this.clearLookupData(LOOKUPDATA, FORMNAME);
+                }
+              } else {
+                this.comService.toastErrorByMsgId("No data found");
+                this.clearLookupData(LOOKUPDATA, FORMNAME);
+              }
+            }
+          } else {
+            this.comService.toastErrorByMsgId("No data found");
+            this.clearLookupData(LOOKUPDATA, FORMNAME);
+          }
+        },
+        error: () => {
+          this.comService.toastErrorByMsgId("MSG2272");
+          this.clearLookupData(LOOKUPDATA, FORMNAME);
+        },
+      });
+  
+    this.subscriptions.push(sub);
+  }
+  
+
+  clearLookupData(LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    LOOKUPDATA.SEARCH_VALUE = "";
+    this.customerDetailForm.controls[FORMNAME].setValue("");
   }
 }

@@ -136,7 +136,7 @@
                         :</label>
                     <div class="col-sm-3">
                         <mat-form-field style="width: 90%" appearance="outline">
-                            <input type="text" matInput
+                            <input type="text" matInput #color id="color"
                                 [readonly]="viewMode  || stockcodeDisable || codeEnableMetal || codedisable"
                                 maxlength="6" formControlName="color"
                                 (focusout)="validateLookupField($event,colorData,'color')"
