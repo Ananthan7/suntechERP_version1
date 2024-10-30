@@ -806,12 +806,12 @@ export class PosCustomerMasterComponent implements OnInit {
           VAT_NUMBER: `${this.comService.emptyToZero(
             this.customerDetails?.VAT_NUMBER
           )}`,
-          PARENT_CODE: this.customerDetails?.PARENT_CODE,
-          REFERED_BY: this.customerDetails?.REFERED_BY,
+          PARENT_CODE: this.customerDetails?.PARENT_CODE || "",
+          REFERED_BY: this.customerDetails?.REFERED_BY || "",
           CREDIT_LIMIT: this.customerDetails?.CREDIT_LIMIT || 0,
           CREDIT_LIMIT_STATUS:
             this.customerDetails?.CREDIT_LIMIT_STATUS || false,
-          PANCARDNO: this.customerDetails?.PANCARDNO || "111111" || "",
+          PANCARDNO: this.customerDetails?.PANCARDNO  || "",
           VOCTYPE: this.vocDetails.VOCTYPE || "",
           YEARMONTH: this.vocDetails.YEARMONTH || localStorage.getItem("YEAR"),
           VOCNO: this.vocDetails.VOCNO || "",
