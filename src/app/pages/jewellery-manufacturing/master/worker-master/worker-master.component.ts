@@ -584,6 +584,7 @@ export class WorkerMasterComponent implements OnInit {
           this.commonService.toastErrorByMsgId('MSG1531')
           this.workerMasterForm.controls[FORMNAME].setValue('')
           LOOKUPDATA.SEARCH_VALUE = ''
+          this.openOverlay(FORMNAME, event);
           return
         }
 
@@ -617,6 +618,23 @@ export class WorkerMasterComponent implements OnInit {
   //     })
   //   this.subscriptions.push(Sub)
   // }
+
+  openOverlay(FORMNAME: string, event: any) {
+    switch (FORMNAME) {
+      case 'WorkerAcCode':
+        this.overlayWorkerAcCodeSearch.showOverlayPanel(event);
+        break;
+      case 'NameOfSupervisor':
+        this.overlayNameOfSupervisorSearch.showOverlayPanel(event);
+        break;
+      case 'DefaultProcess':
+        this.overlaydefaultprocessSearch.showOverlayPanel(event);
+        break;
+      default:
+        console.warn(`Unknown FORMNAME: ${FORMNAME}`);
+        break;
+    }
+  }
 
   setwithFormControl(status: any, code: any) {
     if (status == "Failed") {
@@ -728,35 +746,35 @@ export class WorkerMasterComponent implements OnInit {
     }
   }
 
- checkCapsOn(event:any) {
-  // Check if the Caps Lock key is on
-  if (event.getModifierState("CapsLock")) {
-    Swal.fire({
-      icon: "warning",
-      title: "Caps Lock is On",
-      text: "Having Caps Lock on may cause you to enter your password incorrectly. You should press Caps Lock to turn it off before entering your password.",
-    });
+  checkCapsOn(event: any) {
+    // Check if the Caps Lock key is on
+    if (event.getModifierState("CapsLock")) {
+      Swal.fire({
+        icon: "warning",
+        title: "Caps Lock is On",
+        text: "Having Caps Lock on may cause you to enter your password incorrectly. You should press Caps Lock to turn it off before entering your password.",
+      });
+    }
   }
-}
 
 
 
-// showOverleyPanel(event: any, formControlName: string) {
+  // showOverleyPanel(event: any, formControlName: string) {
 
-//   if (formControlName == 'WorkerAcCode') {
-//     this.overlayWorkerAcCodeSearch.showOverlayPanel(event)
-//   }
-//   if (formControlName == 'NameOfSupervisor') {
-//     this.overlayNameOfSupervisorSearch.showOverlayPanel(event)
-//   }
-// }
+  //   if (formControlName == 'WorkerAcCode') {
+  //     this.overlayWorkerAcCodeSearch.showOverlayPanel(event)
+  //   }
+  //   if (formControlName == 'NameOfSupervisor') {
+  //     this.overlayNameOfSupervisorSearch.showOverlayPanel(event)
+  //   }
+  // }
 
-ngOnDestroy() {
-  if (this.subscriptions.length > 0) {
-    this.subscriptions.forEach(subscription => subscription.unsubscribe());// unsubscribe all subscription
-    this.subscriptions = []; // Clear the array
+  ngOnDestroy() {
+    if (this.subscriptions.length > 0) {
+      this.subscriptions.forEach(subscription => subscription.unsubscribe());// unsubscribe all subscription
+      this.subscriptions = []; // Clear the array
+    }
   }
-}
 
   // Method to check if all checkboxes are selected
   isAllSelected(): boolean {
