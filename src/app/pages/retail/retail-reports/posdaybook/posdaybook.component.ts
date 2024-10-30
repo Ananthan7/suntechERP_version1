@@ -37,6 +37,7 @@ export class POSDaybookComponent implements OnInit {
   userLoginBranch: any;
 
   RegisterGridData: any =[];
+  RegisterGridcolumnkeys: any;
 
   constructor(private activeModal: NgbActiveModal, private formBuilder: FormBuilder, 
     private dataService: SuntechAPIService, private commonService: CommonServiceService, 
@@ -46,7 +47,7 @@ export class POSDaybookComponent implements OnInit {
 
   ngOnInit(): void {
     this. prefillScreenValues();
-    this.gridData()
+    this.gridData();
   }
 
   gridData(){
@@ -62,7 +63,12 @@ export class POSDaybookComponent implements OnInit {
     this.dataService.postDynamicAPI(API, postData).subscribe((result: any) => {
       if (result.status == "Success") {
         this.toastr.success(result.status);                    
-        this.RegisterGridData.push(result.dynamicData[0][0]) ;
+        this.RegisterGridData.push(result.dynamicData[0][0]);
+        this.RegisterGridcolumnkeys = Object.keys(this.RegisterGridData[0]);
+        this.RegisterGridcolumnkeys.map((key: any) => key.replace(/_/g, ' '));
+       
+      
+
         console.log(this.RegisterGridData)
         this.commonService.closeSnackBarMsg();
       }
@@ -71,6 +77,9 @@ export class POSDaybookComponent implements OnInit {
         this.commonService.closeSnackBarMsg();
       }
     },(err: any) => this.toastr.error(err)); this.commonService.closeSnackBarMsg();
+  }
+  customizeText(data: any) {
+    return Number(data).toFixed(2);
   }
 
   selectedData(data: any) {
@@ -132,6 +141,7 @@ export class POSDaybookComponent implements OnInit {
       this.posDayBookForm.controls.toDate.setValue(event.ToDate);
       this.dateToPass.toDate = event.ToDate
     }
+    this.gridData();
   }
 
   formatDateToYYYYMMDD(dateString: any) {

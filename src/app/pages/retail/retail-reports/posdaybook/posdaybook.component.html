@@ -38,7 +38,7 @@
         <div class="col-md-12 mt-3">
             <mat-tab-group>
                 <mat-tab label="POS Register">
-                    <dx-data-grid [columnAutoWidth]="true" [dataSource]="RegisterGridData">
+                    <dx-data-grid [columnAutoWidth]="true" [dataSource]="RegisterGridData" [columns]="RegisterGridcolumnkeys">
                         <dxo-paging [enabled]="false"></dxo-paging>
                         <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
                         <dxo-scrolling mode="virtual"></dxo-scrolling>
@@ -54,7 +54,7 @@
                         <dxi-column dataField="lcreceived" caption="LC Received" [allowResizing]="true"></dxi-column>
                         <dxi-column dataField="creditcrd" caption="Credit Card" [allowResizing]="true"></dxi-column>
                         <dxi-column dataField="advance" caption="Advance" [allowResizing]="true"></dxi-column>
-                      </dx-data-grid>
+                    </dx-data-grid>
                 </mat-tab>
                 
                 <mat-tab label="POS Collection & Old Gold Purchase">
