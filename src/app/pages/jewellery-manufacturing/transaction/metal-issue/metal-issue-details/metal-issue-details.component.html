@@ -414,11 +414,13 @@
                                             style="width: 100%;">
                                             <input type="text" matInput
                                                 formControlName="toStockCode"
-                                                placeholder="Stock Code"
-                                                readonly />
+                                                placeholder="Stock Code" UpperCaseDirective
+                                                (focusout)="stockCodeValidate($event)"
+                                                [readonly]="viewMode"
+                                                (keydown)="lookupKeyPress($event,'stockCode')" />
                                             <master-search class="masterSearch"
                                                 [MasterSearchData]="toStockCodeData"
-                                                #overlaystockcode
+                                                #overlayTostockcode
                                                 (newRowClick)="toStockCodeSelected($event)"
                                                 *ngIf="!masterMetalChecked"></master-search>
                                         </mat-form-field>
