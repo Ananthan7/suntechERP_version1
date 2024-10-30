@@ -41,15 +41,11 @@
                    <div class="row mt-1">
                         <app-loader [isLoading]="isLoading"></app-loader>
                         <dx-data-grid [columnAutoWidth]="true" [dataSource]="RegisterGridData" [columns]="RegisterGridcolumnkeys"
-                        *ngIf="!isLoading" >
+                        *ngIf="!isLoading">
                             <dxo-paging [pageSize]="12"></dxo-paging>
-                            <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[12, 24, 48]" [showInfo]="true"
-                            [showNavigationButtons]="true"></dxo-pager>
                             <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
-                            <dxo-scrolling mode="virtual"></dxo-scrolling>
-                    
-                        
-                            
+                            <dxo-scrolling mode="standard"></dxo-scrolling>
+
                             <dxo-summary>
                                 <dxi-total-item column="GrossAmt" summaryType="sum" [customizeText]="customizeSummaryContent"></dxi-total-item>
                                 <dxi-total-item column="CC_CommissionAmt" summaryType="sum" [customizeText]="customizeSummaryContent"></dxi-total-item>
@@ -62,28 +58,39 @@
                     <div class="row">
                         <div class="col-md-4">
                             <div class="grid-label text-center mt-1" id="ID002">Total Purchase Value</div>
-                            <dx-data-grid>
-                                <dxi-column alignment="center" caption="Mode"></dxi-column>
-                                <dxi-column alignment="center" caption="Received In"></dxi-column>
-                                <dxi-column alignment="center" caption="Description"></dxi-column>
-                                <dxi-column alignment="center" caption="Amount"></dxi-column>
-    
+                            <app-loader [isLoading]="isLoading"></app-loader>
+                            <dx-data-grid #dataGrid id="gridContainer" [dataSource]="Collectn_GoldPurchaseGrid" [showBorders]="true"
+                            [allowColumnResizing]="true" *ngIf="!isLoading">
+                                <dxo-paging [pageSize]="12"></dxo-paging>
+                                <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
+                                <dxo-scrolling mode="standard"></dxo-scrolling>
+
+                                <dxi-column dataField="modename" caption="Mode"></dxi-column>
+                                <dxi-column dataField="RCVDIN"  caption="Received In"></dxi-column>
+                                <dxi-column dataField="acdescp"  caption="Description"></dxi-column>
+                                <dxi-column dataField="amount"  caption="Amount"></dxi-column>
+
                                 <dxo-summary>
-                                    <dxi-total-item column="amount" summaryType="sum" displayFormat="Total: {0}"></dxi-total-item>
+                                    <dxi-total-item column="amount" summaryType="sum" [customizeText]="customizeSummaryContent"></dxi-total-item>
                                 </dxo-summary>
                             </dx-data-grid>
                         </div>
     
                         <div class="col-md-4">
                             <div class="grid-label text-center mt-1" id="ID003">Old Gold Purchase Summary</div>
-                            <dx-data-grid>
-                                <dxi-column alignment="center" caption="Stock Code"></dxi-column>
-                                <dxi-column alignment="center" caption="Quantity"></dxi-column>
-                                <dxi-column alignment="center" caption="Amount"></dxi-column>
+                            <app-loader [isLoading]="isLoading"></app-loader>
+                            <dx-data-grid #dataGrid id="gridContainer" [dataSource]="GoldSum_collection" [showBorders]="true"
+                            [allowColumnResizing]="true" *ngIf="!isLoading">
+                                <dxo-paging [pageSize]="12"></dxo-paging>
+                                <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
+                                <dxo-scrolling mode="standard"></dxo-scrolling>
+
+                                <dxi-column dataField="STOCK_CODE" caption="Stock Code"></dxi-column>
+                                <dxi-column dataField="qty"  caption="Quantity"></dxi-column>
+                                <dxi-column dataField="amount"  caption="Amount"></dxi-column>
 
                                 <dxo-summary>
-                                    <dxi-total-item column="Quantity" summaryType="sum" displayFormat="Total: {0}"></dxi-total-item>
-                                    <dxi-total-item column="amount" summaryType="sum" displayFormat="Total: {0}"></dxi-total-item>
+                                    <dxi-total-item column="amount" summaryType="sum" [customizeText]="customizeSummaryContent"></dxi-total-item>
                                 </dxo-summary>
                             </dx-data-grid>
                         </div>

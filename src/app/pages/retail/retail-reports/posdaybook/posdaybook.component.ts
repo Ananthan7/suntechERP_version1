@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
+import { forkJoin } from 'rxjs';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import Swal from 'sweetalert2';
@@ -39,6 +40,8 @@ export class POSDaybookComponent implements OnInit {
   RegisterGridData: any =[];
   RegisterGridcolumnkeys: any;
   currentTab: any;
+  Collectn_GoldPurchaseGrid: any =[];
+  GoldSum_collection: any = [];
 
 
   constructor(private activeModal: NgbActiveModal, private formBuilder: FormBuilder, 
@@ -123,6 +126,7 @@ export class POSDaybookComponent implements OnInit {
     switch(this.currentTab){
       case this.currentTab = 'POS Register': this.POSRegisterGridData(); break;
       case 'POS Collection & Old Gold Purchase': this.POSCollectn_GoldPurchaseGridData(); break;
+
     }
     
   }
@@ -362,7 +366,6 @@ export class POSDaybookComponent implements OnInit {
   }
 
   onTabChange(event: any){
-    debugger
     this.currentTab = event.tab.textLabel
     switch(this.currentTab){
       case 'POS Register': this.POSRegisterGridData(); break;
@@ -387,7 +390,10 @@ export class POSDaybookComponent implements OnInit {
       if (result.status == "Success") {
         this.isLoading = false;
         if(result.dynamicData.length>0){
-          this.toastr.success(result.status); 
+          this.commonService.showSnackBarMsg('data loaded successfully!');
+        }
+        else{
+          this.commonService.showSnackBarMsg('No Data!');
         }
         // const newFilteredItem = { ...result.dynamicData[0] };
         // delete newFilteredItem.mid; // Removing the mid property
@@ -429,9 +435,6 @@ export class POSDaybookComponent implements OnInit {
           { dataField: 'creditamt', caption: 'Credit Amount' },
           { dataField: 'others', caption: 'Credit Amount' }
         ];
-
-
-        this.commonService.closeSnackBarMsg();
       }
       else{
         this.toastr.error(result.status);
@@ -449,17 +452,48 @@ export class POSDaybookComponent implements OnInit {
 
   POSCollectn_GoldPurchaseGridData(){
     this.isLoading = true;
-    this.userLoginBranch= localStorage.getItem('userbranch');
+    this.userLoginBranch = localStorage.getItem('userbranch');
     this.commonService.showSnackBarMsg('MSG81447');
-    let API = "/POSDayBook/GetPOSNetCollectionGrid";
-    let postData = {
-      "strFmDate": this.dateToPass.fromDate,
-      "strToDate": this.dateToPass.toDate,
-      "strBranch": this.formattedBranchDivisionData? this.formattedBranchDivisionData : this.userLoginBranch
+
+    const API1 = "/POSDayBook/GetPOSNetCollectionGrid";
+    const postData1 = {
+        "strFmDate": this.dateToPass.fromDate,
+        "strToDate": this.dateToPass.toDate,
+        "strBranch": this.formattedBranchDivisionData ? this.formattedBranchDivisionData : this.userLoginBranch
     };
-    this.dataService.postDynamicAPI(API, postData).subscribe((response: any) => {
-      console.log(response)
+
+    const API2 = "/POSDayBook/GetOldGoldSummGrid";
+    const postData2 = {
+        "strFmDate": this.dateToPass.fromDate,
+        "strToDate": this.dateToPass.toDate,
+        "strBranch": this.formattedBranchDivisionData ? this.formattedBranchDivisionData : this.userLoginBranch
+    };
+    this.Collectn_GoldPurchaseGrid = [];
+    this.GoldSum_collection = [];
+    forkJoin({
+        collectionData: this.dataService.postDynamicAPI(API1, postData1),
+        goldSumData: this.dataService.postDynamicAPI(API2, postData2)
+    }).subscribe({
+        next: (response) => {
+          this.Collectn_GoldPurchaseGrid = response.collectionData.dynamicData[0];
+          this.GoldSum_collection = response.goldSumData.dynamicData[0];
+          
+          if(response.collectionData.dynamicData[0].length>0 ||  response.goldSumData.dynamicData[0].length>0){
+            this.commonService.showSnackBarMsg('data loaded successfully!');
+          }
+          else{
+            this.commonService.showSnackBarMsg('No Data!');
+          }
+        },
+        error: (error) => {
+            console.error('Error loading data:', error);
+            this.commonService.showSnackBarMsg('Error loading data.');
+        },
+        complete: () => {
+            this.isLoading = false;
+        }
     });
+
   }
 
   
