@@ -38,6 +38,8 @@ export class POSDaybookComponent implements OnInit {
 
   RegisterGridData: any =[];
   RegisterGridcolumnkeys: any;
+  currentTab: any;
+
 
   constructor(private activeModal: NgbActiveModal, private formBuilder: FormBuilder, 
     private dataService: SuntechAPIService, private commonService: CommonServiceService, 
@@ -47,39 +49,16 @@ export class POSDaybookComponent implements OnInit {
 
   ngOnInit(): void {
     this. prefillScreenValues();
-    this.gridData();
+    this.currentTab = 'POS Register';
+    this.POSRegisterGridData();
   }
 
-  gridData(){
-    this.userLoginBranch= localStorage.getItem('userbranch');
-    this.commonService.showSnackBarMsg('MSG81447');
-    let API = "/POSDayBook/GetPOSRegisterGrid";
-    let postData = {
-      "strFmDate": this.dateToPass.fromDate,
-      "strToDate": this.dateToPass.toDate,
-      "strBranch": this.formattedBranchDivisionData? this.formattedBranchDivisionData : this.userLoginBranch
-    };
-    
-    this.dataService.postDynamicAPI(API, postData).subscribe((result: any) => {
-      if (result.status == "Success") {
-        this.toastr.success(result.status);                    
-        this.RegisterGridData.push(result.dynamicData[0][0]);
-        this.RegisterGridcolumnkeys = Object.keys(this.RegisterGridData[0]);
-        this.RegisterGridcolumnkeys.map((key: any) => key.replace(/_/g, ' '));
-       
-      
-
-        console.log(this.RegisterGridData)
-        this.commonService.closeSnackBarMsg();
-      }
-      else{
-        this.toastr.error(result.status);
-        this.commonService.closeSnackBarMsg();
-      }
-    },(err: any) => this.toastr.error(err)); this.commonService.closeSnackBarMsg();
-  }
-  customizeText(data: any) {
-    return Number(data).toFixed(2);
+  formatDate(dateString: string): string {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
+    const year = date.getFullYear();
+    return `${day}-${month}-${year}`;
   }
 
   selectedData(data: any) {
@@ -141,7 +120,11 @@ export class POSDaybookComponent implements OnInit {
       this.posDayBookForm.controls.toDate.setValue(event.ToDate);
       this.dateToPass.toDate = event.ToDate
     }
-    this.gridData();
+    switch(this.currentTab){
+      case this.currentTab = 'POS Register': this.POSRegisterGridData(); break;
+      case 'POS Collection & Old Gold Purchase': this.POSCollectn_GoldPurchaseGridData(); break;
+    }
+    
   }
 
   formatDateToYYYYMMDD(dateString: any) {
@@ -378,6 +361,106 @@ export class POSDaybookComponent implements OnInit {
     }
   }
 
+  onTabChange(event: any){
+    debugger
+    this.currentTab = event.tab.textLabel
+    switch(this.currentTab){
+      case 'POS Register': this.POSRegisterGridData(); break;
+      case 'POS Collection & Old Gold Purchase': this.POSCollectn_GoldPurchaseGridData(); break;
+    }
+  }
+
+  POSRegisterGridData(){
+    this.isLoading = true;
+    this.userLoginBranch= localStorage.getItem('userbranch');
+    this.commonService.showSnackBarMsg('MSG81447');
+    let API = "/POSDayBook/GetPOSRegisterGrid";
+    let postData = {
+      "strFmDate": this.dateToPass.fromDate,
+      "strToDate": this.dateToPass.toDate,
+      "strBranch": this.formattedBranchDivisionData? this.formattedBranchDivisionData : this.userLoginBranch
+    };
+    this.RegisterGridData = [];
+    this.RegisterGridcolumnkeys = [];
+
+    this.dataService.postDynamicAPI(API, postData).subscribe((result: any) => {
+      if (result.status == "Success") {
+        this.isLoading = false;
+        if(result.dynamicData.length>0){
+          this.toastr.success(result.status); 
+        }
+        // const newFilteredItem = { ...result.dynamicData[0] };
+        // delete newFilteredItem.mid; // Removing the mid property
+        // this.RegisterGridData.push(newFilteredItem);                 
+        // this.RegisterGridcolumnkeys = Object.keys(this.RegisterGridData);
+        // this.RegisterGridcolumnkeys.map((key: any) => key.replace(/_/g, ' '));
+   
+
+        // this.RegisterGridData.forEach((item: any) => {
+        //   item.vocdate = this.formatDate(item.vocdate)
+        //   for (const key in item) {
+        //     if (typeof item[key] === 'number' && key !== 'mid') {
+        //       item[key] = this.customizeText(item[key]);
+        //     }
+        //   }
+        // });
+
+
+        this.RegisterGridData = result.dynamicData[0];
+        this.RegisterGridcolumnkeys = [
+          // { dataField: 'mid', caption: 'ID' },
+          { dataField: 'branch_code', caption: 'Branch Code' },
+          { dataField: 'VOCTYPE', caption: 'Voucher Type' },
+          { dataField: 'vocno', caption: 'Voucher No' },
+          { dataField: 'vocdate', caption: 'Voucher Date', dataType: 'date' },
+          { dataField: 'sman', caption: 'Salesman' },
+          { dataField: 'GrossAmt', caption: 'Gross Amount' },
+          { dataField: 'CC_CommissionAmt', caption: 'Commission Amount' },
+          { dataField: 'invamt', caption: 'Invoice Amount' },
+          { dataField: 'sretamt', caption: 'sretamt' },
+          { dataField: 'scpamt', caption: 'scpamt' },
+          { dataField: 'roundoff', caption: 'Round Off' },
+          { dataField: 'lcreceived', caption: 'LC Received'},
+          { dataField: 'fc', caption: 'fc' },
+          { dataField: 'fcreceived', caption: 'fcreceived' },
+          { dataField: 'creditcrd', caption: 'Credit Card' },
+          { dataField: 'advance', caption: 'Advance' },
+          { dataField: 'creditac', caption: 'Credit Ac' },
+          { dataField: 'creditamt', caption: 'Credit Amount' },
+          { dataField: 'others', caption: 'Credit Amount' }
+        ];
+
+
+        this.commonService.closeSnackBarMsg();
+      }
+      else{
+        this.toastr.error(result.status);
+        this.commonService.closeSnackBarMsg();
+      }
+    },(err: any) => this.toastr.error(err)); 
+    this.commonService.closeSnackBarMsg();
+  }
+  customizeText(data: any) {
+    return Number(data).toFixed(2);
+  }
+  customizeSummaryContent(data: any) {
+    return Number(data.value).toFixed(2);
+  }
+
+  POSCollectn_GoldPurchaseGridData(){
+    this.isLoading = true;
+    this.userLoginBranch= localStorage.getItem('userbranch');
+    this.commonService.showSnackBarMsg('MSG81447');
+    let API = "/POSDayBook/GetPOSNetCollectionGrid";
+    let postData = {
+      "strFmDate": this.dateToPass.fromDate,
+      "strToDate": this.dateToPass.toDate,
+      "strBranch": this.formattedBranchDivisionData? this.formattedBranchDivisionData : this.userLoginBranch
+    };
+    this.dataService.postDynamicAPI(API, postData).subscribe((response: any) => {
+      console.log(response)
+    });
+  }
 
   
   close(data?: any) {

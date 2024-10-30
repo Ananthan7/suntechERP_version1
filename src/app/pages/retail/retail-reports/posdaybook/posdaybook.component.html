@@ -36,25 +36,26 @@
         </div>
 
         <div class="col-md-12 mt-3">
-            <mat-tab-group>
+            <mat-tab-group (selectedTabChange)="onTabChange($event)">
                 <mat-tab label="POS Register">
-                    <dx-data-grid [columnAutoWidth]="true" [dataSource]="RegisterGridData" [columns]="RegisterGridcolumnkeys">
-                        <dxo-paging [enabled]="false"></dxo-paging>
-                        <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
-                        <dxo-scrolling mode="virtual"></dxo-scrolling>
-                      
-                        <dxi-column dataField="branch_code" caption="Branch Code" [allowResizing]="true"></dxi-column>
-                        <dxi-column dataField="VOCTYPE" caption="Voucher Type" [allowResizing]="true"></dxi-column>
-                        <dxi-column dataField="vocno" caption="Voucher No" [allowResizing]="true"></dxi-column>
-                        <dxi-column dataField="vocdate" caption="Voucher Date" dataType="date" [allowResizing]="true"></dxi-column>
-                        <dxi-column dataField="sman" caption="Salesman" [allowResizing]="true"></dxi-column>
-                        <dxi-column dataField="GrossAmt" caption="Gross Amount" [allowResizing]="true"></dxi-column>
-                        <dxi-column dataField="CC_CommissionAmt" caption="Commission Amount" [allowResizing]="true"></dxi-column>
-                        <dxi-column dataField="invamt" caption="Invoice Amount" [allowResizing]="true"></dxi-column>
-                        <dxi-column dataField="lcreceived" caption="LC Received" [allowResizing]="true"></dxi-column>
-                        <dxi-column dataField="creditcrd" caption="Credit Card" [allowResizing]="true"></dxi-column>
-                        <dxi-column dataField="advance" caption="Advance" [allowResizing]="true"></dxi-column>
-                    </dx-data-grid>
+                   <div class="row mt-1">
+                        <app-loader [isLoading]="isLoading"></app-loader>
+                        <dx-data-grid [columnAutoWidth]="true" [dataSource]="RegisterGridData" [columns]="RegisterGridcolumnkeys"
+                        *ngIf="!isLoading" >
+                            <dxo-paging [pageSize]="12"></dxo-paging>
+                            <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[12, 24, 48]" [showInfo]="true"
+                            [showNavigationButtons]="true"></dxo-pager>
+                            <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
+                            <dxo-scrolling mode="virtual"></dxo-scrolling>
+                    
+                        
+                            
+                            <dxo-summary>
+                                <dxi-total-item column="GrossAmt" summaryType="sum" [customizeText]="customizeSummaryContent"></dxi-total-item>
+                                <dxi-total-item column="CC_CommissionAmt" summaryType="sum" [customizeText]="customizeSummaryContent"></dxi-total-item>
+                            </dxo-summary>
+                        </dx-data-grid>
+                   </div>
                 </mat-tab>
                 
                 <mat-tab label="POS Collection & Old Gold Purchase">
