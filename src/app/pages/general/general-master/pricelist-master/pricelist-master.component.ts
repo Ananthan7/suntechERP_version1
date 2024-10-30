@@ -118,8 +118,8 @@ export class PricelistMasterComponent implements OnInit {
     this.onPriceTypeChangeOnSetValues(this.content.PRICE_METHOD);
     console.log("passed");
     
-    this.priceListMasterForm.controls.priceCode.setValue(this.content.PRICE_CODE);
-    this.priceListMasterForm.controls.description.setValue(this.content.DESCRIPTION);
+    this.priceListMasterForm.controls.priceCode.setValue(this.content.PRICE_CODE.toUpperCase());
+    this.priceListMasterForm.controls.description.setValue(this.content.DESCRIPTION.toUpperCase());
     
     this.priceListMasterForm.controls.priceMethod.setValue(this.content.PRICE_METHOD);
     this.priceListMasterForm.controls.priceSign.setValue(this.content.PRICE_SIGN);
@@ -290,8 +290,8 @@ export class PricelistMasterComponent implements OnInit {
               this.priceListMasterForm.controls.priceSign.setValue('');
               this.isDisabled = true;
             }
-            this.priceListMasterForm.controls.priceCode.setValue(data.PRICE_CODE)
-            this.priceListMasterForm.controls.description.setValue(data.DESCRIPTION)
+            this.priceListMasterForm.controls.priceCode.setValue(data.PRICE_CODE.toUpperCase())
+            this.priceListMasterForm.controls.description.setValue(data.DESCRIPTION.toUpperCase())
             this.priceListMasterForm.controls.priceMethod.setValue(data.PRICE_METHOD)
             this.priceListMasterForm.controls.priceSign.setValue(data.PRICE_SIGN)
             this.priceListMasterForm.controls.priceValue.setValue(data.PRICE_VALUE)
