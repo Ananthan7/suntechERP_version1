@@ -97,7 +97,7 @@
           <div class="col-md-5">
             <mat-form-field appearance="outline" style="width: 100%;">
               <input type="text" matInput formControlName="process"
-                [readonly]="viewMode || codeEnable" UpperCaseDirective
+              readonly UpperCaseDirective
                 (focusout)="SPvalidateLookupField($event,processCodeData,'process')"
                 (keydown)="lookupKeyPress($event,'process')" />
               <master-search class="masterSearch"
@@ -196,10 +196,10 @@
             : </label>
           <div class="col-md-5">
             <mat-form-field appearance="outline" style="width: 90%;">
-              <input type="text" matInput formControlName="LOCTYPE_CODE"
-                (keydown)="lookupKeyPress($event,'LOCTYPE_CODE')"
+              <input type="text" matInput formControlName="Location"
+                (keydown)="lookupKeyPress($event,'Location')"
                 UpperCaseDirective
-                (focusout)="validateLookupField($event,locationCodeData,'LOCTYPE_CODE')"
+                (focusout)="validateLookupField($event,locationCodeData,'Location')"
                 [readonly]="viewMode || codeEnable" />
               <master-search class="masterSearch"
                 [MasterSearchData]="locationCodeData" #overlaylocationSearch
