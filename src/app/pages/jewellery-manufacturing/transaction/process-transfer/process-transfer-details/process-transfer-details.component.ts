@@ -866,7 +866,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
             this.subJobNoSearch.WHERECONDITION += `AND job_number='${this.processTransferdetailsForm.value.JOB_NUMBER?.toString()}'`
             this.jobNumberFormData(data) // assign values to form
             if (data.length == 1) { // condition for 1 subjob
-              if (data[0].UNQ_JOB_ID != '') this.subJobNumberValidate() // sub job number API call
+              this.subJobNumberValidate() // sub job number API call
               return
             }
             if (data.length > 1) { // condition for multiple subjob
@@ -1451,9 +1451,68 @@ export class ProcessTransferDetailsComponent implements OnInit {
     }
     let date = this.commonService.getCompanyParamValue('PROCESSTIMEVALIDATE')
     this.Calc_TimeDiff()
+
     //to calculate saved data in stnmtl table
-    this.calculateSTNMTLdata(result)
-    console.log('fired');
+    let metalstone_M = result.dynamicData[1] || []
+    let metalstone_S = result.dynamicData[2] || []
+    let form = this.processTransferdetailsForm.value;
+    if (metalstone_M.length > 0) {
+      let txtFromMetalPcs = this.emptyToZero(metalstone_M[0]["PCS"]);
+      let txtFromMetalWeight = this.emptyToZero(metalstone_M[0]["GROSS_WT"]);
+      let txtLossQty: number = 0
+      if ((form.STD_LOSS != 0) && (this.emptyToZero(metalstone_M[0]["GROSS_WT"]) != 0)) {
+        txtLossQty = this.commonService.lossQtyCalculate(metalstone_M[0]["GROSS_WT"], form.STD_LOSS);
+      }
+      let txtToMetalPcs = this.emptyToZero(metalstone_M[0]["PCS"]);
+      let txtToMetalWt = (this.emptyToZero(metalstone_M[0]["GROSS_WT"]) - this.emptyToZero(txtLossQty));
+      this.processTransferdetailsForm.controls.TO_METAL_PCS.setValue(this.emptyToZero(txtToMetalPcs))
+      this.processTransferdetailsForm.controls.FRM_METAL_PCS.setValue(this.emptyToZero(txtFromMetalPcs))
+      this.setFormDecimal('lossQty', txtLossQty, 'METAL')
+      this.setFormDecimal('TO_METAL_WT', txtToMetalWt, 'METAL')
+      this.setFormDecimal('FRM_METAL_WT', txtFromMetalWeight, 'METAL')
+    }
+
+    form = this.processTransferdetailsForm.value;
+    let nTotalWt = 0;
+    let nTotalPcs = 0;
+    let nWeightInGram = 0;
+    let dblZircon = this.commonService.getCompanyParamValue('MAKEZIRCONEGROSSWT');
+    if (metalstone_S.length > 0) {
+      metalstone_S.forEach((item: any) => {
+        nTotalPcs += this.emptyToZero(item["PCS"]);
+        if (dblZircon && item["DIVCODE"]?.trim().toUpperCase() == "Z") {
+          nWeightInGram += this.emptyToZero(item["GROSS_WT"]);
+          nTotalWt += this.emptyToZero(item["GROSS_WT"]) * 5;
+        }
+        else {
+          if (item["DIVCODE"]?.trim().toUpperCase() == "Z") {
+            nWeightInGram += this.emptyToZero(item["GROSS_WT"]);
+            nTotalWt += this.emptyToZero(item["GROSS_WT"]);
+          }
+          else {
+            nWeightInGram += this.emptyToZero(item["GROSS_WT"]) / 5;
+            nTotalWt += this.emptyToZero(item["GROSS_WT"]);
+          }
+        }
+      })
+    }
+    this.processTransferdetailsForm.controls.FRM_STONE_PCS.setValue(this.emptyToZero(nTotalPcs))
+    this.processTransferdetailsForm.controls.TO_STONE_PCS.setValue(this.emptyToZero(nTotalPcs))
+    this.setFormDecimal('FRM_STONE_WT', nTotalWt, 'STONE')
+    this.setFormDecimal('TO_STONE_WT', nTotalWt, 'STONE')
+
+    let txtFromGrossWeight = (this.emptyToZero(form.FRM_METAL_WT) + nWeightInGram);
+    let TxtToGrossWt = (this.emptyToZero(txtFromGrossWeight) - this.emptyToZero(form.lossQty));
+
+    this.setFormDecimal('GrossWeightFrom', txtFromGrossWeight, 'METAL')
+    this.setFormDecimal('GrossWeightTo', TxtToGrossWt, 'METAL')
+    let nGrossWt = this.emptyToZero(txtFromGrossWeight) - this.emptyToZero(form.lossQty);
+    this.FORM_VALIDATER = this.processTransferdetailsForm.value
+    if (this.Multi_Metal()) {
+      this.Split_Loss_New()
+    } else {
+      this.Split_Loss(this.processTransferdetailsForm.value)
+    }
 
   }
   /**USE: calculate STNMTLdata  call */
@@ -1521,66 +1580,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
   }
   // for diamond tab
   calculateSTNMTLdata(result: any) {
-    let metalstone_M = result.dynamicData[1] || []
-    let metalstone_S = result.dynamicData[2] || []
-    let form = this.processTransferdetailsForm.value;
-    if (metalstone_M.length > 0) {
-      let txtFromMetalPcs = this.emptyToZero(metalstone_M[0]["PCS"]);
-      let txtFromMetalWeight = this.emptyToZero(metalstone_M[0]["GROSS_WT"]);
-      let txtLossQty: number = 0
-      if ((form.STD_LOSS != 0) && (this.emptyToZero(metalstone_M[0]["GROSS_WT"]) != 0)) {
-        txtLossQty = this.commonService.lossQtyCalculate(metalstone_M[0]["GROSS_WT"], form.STD_LOSS);
-      }
-      let txtToMetalPcs = this.emptyToZero(metalstone_M[0]["PCS"]);
-      let txtToMetalWt = (this.emptyToZero(metalstone_M[0]["GROSS_WT"]) - this.emptyToZero(txtLossQty));
-      this.processTransferdetailsForm.controls.TO_METAL_PCS.setValue(this.emptyToZero(txtToMetalPcs))
-      this.processTransferdetailsForm.controls.FRM_METAL_PCS.setValue(this.emptyToZero(txtFromMetalPcs))
-      this.setFormDecimal('lossQty', txtLossQty, 'METAL')
-      this.setFormDecimal('TO_METAL_WT', txtToMetalWt, 'METAL')
-      this.setFormDecimal('FRM_METAL_WT', txtFromMetalWeight, 'METAL')
-    }
-
-    form = this.processTransferdetailsForm.value;
-    let nTotalWt = 0;
-    let nTotalPcs = 0;
-    let nWeightInGram = 0;
-    let dblZircon = this.commonService.getCompanyParamValue('MAKEZIRCONEGROSSWT');
-    if (metalstone_S.length > 0) {
-      metalstone_S.forEach((item: any) => {
-        nTotalPcs += this.emptyToZero(item["PCS"]);
-        if (dblZircon && item["DIVCODE"]?.trim().toUpperCase() == "Z") {
-          nWeightInGram += this.emptyToZero(item["GROSS_WT"]);
-          nTotalWt += this.emptyToZero(item["GROSS_WT"]) * 5;
-        }
-        else {
-          if (item["DIVCODE"]?.trim().toUpperCase() == "Z") {
-            nWeightInGram += this.emptyToZero(item["GROSS_WT"]);
-            nTotalWt += this.emptyToZero(item["GROSS_WT"]);
-          }
-          else {
-            nWeightInGram += this.emptyToZero(item["GROSS_WT"]) / 5;
-            nTotalWt += this.emptyToZero(item["GROSS_WT"]);
-          }
-        }
-      })
-    }
-    this.processTransferdetailsForm.controls.FRM_STONE_PCS.setValue(this.emptyToZero(nTotalPcs))
-    this.processTransferdetailsForm.controls.TO_STONE_PCS.setValue(this.emptyToZero(nTotalPcs))
-    this.setFormDecimal('FRM_STONE_WT', nTotalWt, 'STONE')
-    this.setFormDecimal('TO_STONE_WT', nTotalWt, 'STONE')
-
-    let txtFromGrossWeight = (this.emptyToZero(form.FRM_METAL_WT) + nWeightInGram);
-    let TxtToGrossWt = (this.emptyToZero(txtFromGrossWeight) - this.emptyToZero(form.lossQty));
-
-    this.setFormDecimal('GrossWeightFrom', txtFromGrossWeight, 'METAL')
-    this.setFormDecimal('GrossWeightTo', TxtToGrossWt, 'METAL')
-    let nGrossWt = this.emptyToZero(txtFromGrossWeight) - this.emptyToZero(form.lossQty);
-    this.FORM_VALIDATER = this.processTransferdetailsForm.value
-    if (this.Multi_Metal()) {
-      this.Split_Loss_New()
-    } else {
-      this.Split_Loss(this.processTransferdetailsForm.value)
-    }
+   
   }
 
   Calc_TimeDiff(): void {
@@ -1778,8 +1778,9 @@ export class ProcessTransferDetailsComponent implements OnInit {
       element.SELECTED = true
       element.GEN = 'GEN'
       element.FROM_STOCK_CODE = element.STOCK_CODE,
-        element.FROM_SUB_STOCK_CODE = element.SUB_STOCK_CODE,
-        element.GROSS_WT = this.commonService.setCommaSerperatedNumber(element.GROSS_WT, 'METAL')
+      element.FROM_SUB_STOCK_CODE = element.SUB_STOCK_CODE,
+      element.GROSS_WT = this.commonService.setCommaSerperatedNumber(element.GROSS_WT, 'METAL')
+      element.NET_WT = this.commonService.setCommaSerperatedNumber(element.NET_WT, 'METAL')
       element.STONE_WT = this.commonService.setCommaSerperatedNumber(element.STONE_WT, 'STONE')
       element.PURITY = this.commonService.setCommaSerperatedNumber(element.PURITY, 'PURITY')
       element.LOSS_QTY = this.commonService.setCommaSerperatedNumber(element.LOSS_QTY, 'THREE')

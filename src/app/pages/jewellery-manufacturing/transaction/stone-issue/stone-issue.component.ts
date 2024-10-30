@@ -192,6 +192,9 @@ export class StoneIssueComponent implements OnInit {
           this.stoneIssueData = data.Details
           this.stoneissueFrom.controls.worker.setValue(this.stoneIssueData[0].WORKER_CODE)
           this.stoneissueFrom.controls.workername.setValue(this.stoneIssueData[0].WORKER_NAME)
+          this.stoneissueFrom.controls.carat.setValue(this.stoneIssueData[0].GROSS_WT)
+          this.stoneissueFrom.controls.unitrate.setValue(this.stoneIssueData[0].RATEFC)
+
 
           let detailData = data.Details
           // if (detailData.length > 0) {

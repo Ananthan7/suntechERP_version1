@@ -18,6 +18,7 @@ export class MetalIssueDetailsComponent implements OnInit {
   @ViewChild('overlayjobNumDes') overlayjobNumDes!: MasterSearchComponent;
   @ViewChild('overlaylocation') overlaylocation!: MasterSearchComponent;
   @ViewChild('overlaystockcode') overlaystockcode!: MasterSearchComponent;
+  @ViewChild('overlayTostockcode') overlayTostockcode!: MasterSearchComponent;
   @ViewChild('overlayworkerCodeDes') overlayworkerCodeDes!: MasterSearchComponent;
   @ViewChild('overlayprocessCode') overlayprocessCode!: MasterSearchComponent;
   @Output() saveDetail = new EventEmitter<any>();
@@ -213,11 +214,11 @@ export class MetalIssueDetailsComponent implements OnInit {
       this.setNewFormValue()
     }
   }
-  ngAfterContentChecked() {
-    if (this.comService.nullToString(this.metalIssueDetailsForm.value.jobNumber) == '') {
-      this.renderer.selectRootElement('#jobNumbercode')?.focus();
-    }
-  }
+  // ngAfterContentChecked() {
+  //   if (this.comService.nullToString(this.metalIssueDetailsForm.value.jobNumber) == '') {
+  //     this.renderer.selectRootElement('#jobNumbercode')?.focus();
+  //   }
+  // }
   setNewFormValue() {
     if (this.content?.HEADERDETAILS) {
       let data = this.content.HEADERDETAILS
@@ -459,6 +460,7 @@ export class MetalIssueDetailsComponent implements OnInit {
     this.metalIssueDetailsForm.controls.toStockCodeDes.setValue('')
     this.metalIssueDetailsForm.controls.DIVCODE.setValue('')
     this.metalIssueDetailsForm.controls.toDIVCODE.setValue('')
+    this.metalIssueDetailsForm.controls.pcs.setValue('')
     this.setValueWithDecimal('PURE_WT', 0, 'THREE')
     this.setValueWithDecimal('GROSS_WT', 0, 'METAL')
     this.setValueWithDecimal('PURITY', 0, 'PURITY')
@@ -557,10 +559,10 @@ export class MetalIssueDetailsComponent implements OnInit {
       this.comService.toastErrorByMsgId('MSG1680')//Process code is required
       return true
     }
-    if (this.comService.nullToString(form.workerCode) == '') {
-      this.comService.toastErrorByMsgId('MSG1951')//Worker code is required
-      return true
-    }
+    // if (this.comService.nullToString(form.workerCode) == '') {
+    //   this.comService.toastErrorByMsgId('MSG1951')//Worker code is required
+    //   return true
+    // }
     if (this.comService.nullToString(form.stockCode) == '') {
       this.comService.toastErrorByMsgId('MSG1816')//Stock code is required
       return true
@@ -646,10 +648,24 @@ export class MetalIssueDetailsComponent implements OnInit {
     this.subJobNoCodeData.WHERECONDITION = `ISNULL(PROD_REF,0)=0 and Branch_code = '${this.comService.branchCode}'`
     this.subJobNoCodeData.WHERECONDITION += `and job_number='${this.comService.nullToString(form.jobNumber)}'`
   }
+  isJobNumberEmpty(flag: boolean){
+    this.subJobNoCodeData.VIEW_ICON = flag;
+    this.processCodeData.VIEW_ICON = flag;
+    this.workerCodeData.VIEW_ICON = flag;
+    this.divCodeData.VIEW_ICON = flag;
+    this.stockCodeData.VIEW_ICON = flag;
+    this.toStockCodeData.VIEW_ICON = flag;
+    this.locationCodeData.VIEW_ICON = flag;
+  }
   //TODO 2 subjob method
   jobNumberValidate(event: any) {
     this.showOverleyPanel(event, 'jobNumber')
-    if (event.target.value == '' || this.viewMode) return
+    if (this.viewMode) return;
+    if (event && event.target.value == ''){
+      this.isJobNumberEmpty(false);
+      return;
+    }
+    this.isJobNumberEmpty(true);
     let postData = {
       "SPID": "064",
       "parameter": {
@@ -829,12 +845,12 @@ export class MetalIssueDetailsComponent implements OnInit {
           if (data && data.length == 0) {
             this.metalIssueDetailsForm.controls.stockCode.setValue('');
             this.metalIssueDetailsForm.controls.stockCodeDes.setValue('');
+            this.overlaystockcode.closeOverlayPanel()
             return
           }
           if (data && data.length > 1) {
             data = this.comService.searchAllItemsInArray(data, event.target.value?.toString().toUpperCase())
           }
-          this.overlaystockcode.closeOverlayPanel()
           // Handle the valid stock case
           let stockData = data[0];
           // Set the purity value in the form
@@ -856,6 +872,56 @@ export class MetalIssueDetailsComponent implements OnInit {
         this.showOverleyPanel(event, 'stockCode');
       });
 
+    this.subscriptions.push(Sub);
+  }
+  toStockCodeValidate(event?: any) {
+    if (this.viewMode) return;
+    if (event && event.target.value == '') {
+      this.showOverleyPanel(event, 'toStockCode');
+      return
+    };
+
+    let postData = {
+      "SPID": "133",
+      "parameter": {
+        DIVISION: this.comService.nullToString(this.metalIssueDetailsForm.value.DIVCODE),
+        JOBNO: this.comService.nullToString(this.metalIssueDetailsForm.value.jobNumber),
+        SUBJOBNO: this.comService.nullToString(this.metalIssueDetailsForm.value.subJobNo),
+        STOCKCODE: this.comService.nullToString(this.metalIssueDetailsForm.value.toStockCode),
+        LOOKUPFLAG: '0',
+      }
+    };
+
+    this.comService.showSnackBarMsg('MSG81447');
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        this.comService.closeSnackBarMsg();
+        if (result.status === "Success" && result.dynamicData[0]) {
+          let data: any[] = result.dynamicData[0] || [];
+          if (data && data.length == 0) {
+            this.metalIssueDetailsForm.controls.toStockCode.setValue('');
+            this.metalIssueDetailsForm.controls.toStockCodeDes.setValue('');
+            this.overlayTostockcode.closeOverlayPanel()
+            return
+          }
+          if (data && data.length > 1) {
+            data = this.comService.searchAllItemsInArray(data, event.target.value?.toString().toUpperCase())
+          }
+          // Set the purity value in the form
+          this.metalIssueDetailsForm.controls.toStockCode.setValue(data[0]?.STOCK_CODE);
+          this.metalIssueDetailsForm.controls.toStockCodeDes.setValue(data[0]?.DESCRIPTION);
+        } else {
+          this.comService.toastErrorByMsgId('MSG1747');
+          this.metalIssueDetailsForm.controls.toStockCode.setValue('');
+          this.metalIssueDetailsForm.controls.toStockCodeDes.setValue('');
+        }
+      }, err => {
+        this.comService.closeSnackBarMsg();
+        this.comService.toastErrorByMsgId('MSG1531');
+        this.metalIssueDetailsForm.controls.toStockCode.setValue('');
+        this.metalIssueDetailsForm.controls.toStockCodeDes.setValue('');
+        this.showOverleyPanel(event, 'toStockCode');
+      });
     this.subscriptions.push(Sub);
   }
 
@@ -900,6 +966,9 @@ export class MetalIssueDetailsComponent implements OnInit {
         break;
       case 'stockCode':
         this.overlaystockcode.showOverlayPanel(event);
+        break;
+      case 'toStockCode':
+        this.overlayTostockcode.showOverlayPanel(event);
         break;
       case 'workerCodeDes':
         this.overlayworkerCodeDes.showOverlayPanel(event);
