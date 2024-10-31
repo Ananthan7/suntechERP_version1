@@ -259,6 +259,32 @@ export class SalesEstimationComponent implements OnInit {
     VIEW_TABLE: true,
   };
 
+  countryCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 26,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "Countries",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "TYPES='COUNTRY MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    FRONTENDFILTER: true,
+  };
+
+  
+  nationalityCode: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "Nationality",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "TYPES='NATIONALITY MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  };
+
   vocTypesinSalesReturn: any = [
     // { value: 'POS', viewValue: 'POS' },
     // { value: 'POS', viewValue: 'POS' },
@@ -391,6 +417,8 @@ export class SalesEstimationComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   };
+  selectedDate: any;
+  formattedDate: any;
 
   itemcodeSelected(value: any) {
     this.lineItemForm.controls.fcn_li_item_code.setValue(value.STOCK_CODE);
@@ -2905,12 +2933,12 @@ export class SalesEstimationComponent implements OnInit {
         this.customerDetailForm.controls.fcn_customer_exp_date.setValue(
           this.dummyDateCheck(this.customerDataForm.value.fcn_customer_exp_date)
         );
-        setTimeout(() => {
-          if (custForm == true)
-            this.renderer.selectRootElement('#fcn_customer_detail_name')?.focus();
-          else
-            this.renderer.selectRootElement('#fcn_cust_detail_phone')?.focus();
-        }, 100);
+        // setTimeout(() => {
+        //   if (custForm == true)
+        //     this.renderer.selectRootElement('#fcn_customer_detail_name')?.focus();
+        //   else
+        //     this.renderer.selectRootElement('#fcn_cust_detail_phone')?.focus();
+        // }, 100);
       }
       if (content._declarationTContainer.localNames[0] == 'oldgoldmodal')
         setTimeout(() => {
@@ -15479,6 +15507,129 @@ enteredBySelected(e: any) {
 
   this.vocDataForm.controls.sales_person.setValue(e.SALESPERSON_CODE);
 
+}
+
+
+
+SPvalidateLookupFieldModified(
+  event: any,
+  LOOKUPDATA: MasterSearchModel,
+  FORMNAMES: string[],
+  isCurrencyField: boolean,
+  lookupFields?: string[],
+  FROMCODE?:boolean
+) {
+  const searchValue = event.target.value?.trim();
+
+  if (!searchValue || this.viewOnly) return;
+
+  LOOKUPDATA.SEARCH_VALUE = searchValue;
+
+  const param = {
+    PAGENO: LOOKUPDATA.PAGENO,
+    RECORDS: LOOKUPDATA.RECORDS,
+    LOOKUPID: LOOKUPDATA.LOOKUPID,
+    WHERECONDITION: LOOKUPDATA.WHERECONDITION,
+    searchField: LOOKUPDATA.SEARCH_FIELD,
+    searchValue: LOOKUPDATA.SEARCH_VALUE,
+  };
+
+  this.comFunc.showSnackBarMsg("MSG81447");
+
+  const sub: Subscription = this.suntechApi
+    .postDynamicAPI("MasterLookUp", param)
+    .subscribe({
+      next: (result:any) => {
+        this.comFunc.closeSnackBarMsg();
+        const data = result.dynamicData?.[0];
+
+        console.log("API Response Data:", data);
+
+        if (data?.length) {
+          if (LOOKUPDATA.FRONTENDFILTER && LOOKUPDATA.SEARCH_VALUE) {
+            let searchResult = this.comFunc.searchAllItemsInArray(
+              data,
+              LOOKUPDATA.SEARCH_VALUE
+            );
+
+            console.log("Filtered Search Result:", searchResult);
+
+            if (FROMCODE === true) {
+            searchResult = [
+              ...searchResult.filter((item: any) => item.MobileCountryCode === LOOKUPDATA.SEARCH_VALUE),
+              ...searchResult.filter((item: any) => item.MobileCountryCode !== LOOKUPDATA.SEARCH_VALUE),
+            ];
+          } else if (FROMCODE === false) {
+            searchResult = [
+              ...searchResult.filter((item: any) => item.DESCRIPTION === LOOKUPDATA.SEARCH_VALUE),
+              ...searchResult.filter((item: any) => item.DESCRIPTION !== LOOKUPDATA.SEARCH_VALUE),
+            ];
+          }
+
+            if (searchResult?.length) {
+              const matchedItem = searchResult[0];
+              
+              FORMNAMES.forEach((formName, index) => {
+                const field = lookupFields?.[index];
+                if (field && field in matchedItem) {
+                  this.customerDetailForm.controls[formName].setValue(
+                    matchedItem[field]
+                  );
+                } else {
+                  console.error(`Property ${field} not found in matched item.`);
+                  this.comFunc.toastErrorByMsgId("No data found");
+                  this.clearLookupData(LOOKUPDATA, FORMNAMES);
+                }
+              });
+            } else {
+              this.comFunc.toastErrorByMsgId("No data found");
+              this.clearLookupData(LOOKUPDATA, FORMNAMES);
+            }
+          }
+        } else {
+          this.comFunc.toastErrorByMsgId("No data found");
+          this.clearLookupData(LOOKUPDATA, FORMNAMES);
+        }
+      },
+      error: () => {
+        this.comFunc.toastErrorByMsgId("MSG2272");
+        this.clearLookupData(LOOKUPDATA, FORMNAMES);
+      },
+    });
+
+  this.subscriptions.push(sub);
+}
+
+// Clear multiple form controls
+clearLookupData(LOOKUPDATA: MasterSearchModel, FORMNAMES: string[]) {
+  LOOKUPDATA.SEARCH_VALUE = "";
+  FORMNAMES.forEach((formName) => {
+    this.customerDetailForm.controls[formName].setValue("");
+  });
+}
+
+countrySelected(e: any) {
+  console.log(e);
+
+  this.customerDetailForm.controls.fcn_mob_code.setValue(e.MobileCountryCode);
+  this.customerDetailForm.controls.fcn_cust_detail_country.setValue(
+    e.DESCRIPTION
+  );
+}
+
+nationalitySelected(e: any) {
+  this.customerDetailForm.controls.fcn_cust_detail_nationality.setValue(
+    e.CODE
+  );
+}
+
+datepicker(event: any) {
+  this.selectedDate = new Date(event.value);
+  // Ensure the date is set to the end of the day to avoid time zone issues
+  this.selectedDate.setHours(23, 59, 59, 999);
+  this.formattedDate = this.selectedDate.toISOString();
+
+  console.log(this.formattedDate);
 }
 
 }

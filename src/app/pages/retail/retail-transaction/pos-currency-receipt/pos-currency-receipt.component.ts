@@ -92,7 +92,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 1,
     SEARCH_FIELD: "SALESPERSON_CODE",
-    SEARCH_HEADING: "",
+    SEARCH_HEADING: "Sales Person",
     SEARCH_VALUE: "",
     WHERECONDITION: "SALESPERSON_CODE<> ''",
     VIEW_INPUT: true,

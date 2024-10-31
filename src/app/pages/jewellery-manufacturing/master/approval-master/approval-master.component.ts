@@ -34,7 +34,7 @@ export class ApprovalMasterComponent implements OnInit {
   disable: boolean = false;
   userId: any
   editMode: boolean = false;
-  codeEnable: boolean = true;
+  codeEnable: boolean = false;
 
 
   // @ViewChild('codeInput')
@@ -90,6 +90,7 @@ export class ApprovalMasterComponent implements OnInit {
 
   ngOnInit(): void {
     this.renderer.selectRootElement('#code')?.focus();
+    this.codeEnable = true;
     if (this.content?.FLAG) {
       this.setFormValues();
       if (this.content.FLAG == 'VIEW') {
@@ -168,6 +169,15 @@ export class ApprovalMasterComponent implements OnInit {
 
     this.subscriptions.push(sub);
 
+  }
+
+  codeEnabledMetal() {
+    if (this.approvalMasterForm.value.code == '') {
+      this.codeEnable = true;
+    }
+    else {
+      this.codeEnable = false;
+    }
   }
 
   isNumeric(event: any) {

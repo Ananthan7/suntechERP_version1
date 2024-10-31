@@ -167,13 +167,13 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-6 pt-5">
+                            <div class="col-6">
                                 <br>
-                                <div class="row mb-1 head2" style="margin-top: -46px;">
+                                <div class="row mb-1" style="">
                                     <label for="inputPassword" id="ID010" class="col-sm-4 col-form-label">Currency
                                         * :</label>
                                     <div class="col-sm-8">
-                                        <mat-form-field style="width: 90%" appearance="outline">
+                                        <mat-form-field style="width: 100%" appearance="outline">
                                             <input type="text" [readonly]="viewModeAll" matInput maxlength="6"
                                                 formControlName="currency" (input)="inputValidate($event)"
                                                 UpperCaseDirective
@@ -192,7 +192,7 @@
                                         Weight * : </label>
                                     <div class="col-sm-8">
                                         <mat-form-field appearance="outline"
-                                            style="width: 100%; margin-left: 7px; text-align: right;">
+                                            style="width: 100%;  text-align: right;">
                                             <input type="text" [readonly]="viewModeAll" matInput
                                                 formControlName="carat_wt" StoneDecimalInput
                                                 (input)="onInputChange($event,'carat_wt', 12)" />
@@ -204,7 +204,7 @@
                                         From Desc :
                                     </label>
                                     <div class="col-sm-8">
-                                        <mat-form-field appearance="outline" style="width: 100%; margin-left: 7px;">
+                                        <mat-form-field appearance="outline" style="width: 100%; ">
                                             <input type="text" matInput [readonly]="viewMode"
                                                 formControlName="sieve_from_desc" />
                                         </mat-form-field>
@@ -214,7 +214,7 @@
                                     <label for="inputPassword" id="ID013" class="col-sm-4 col-form-label">Sieve to
                                         Desc : </label>
                                     <div class="col-sm-8">
-                                        <mat-form-field appearance="outline" style="width: 100%; margin-left: 7px;">
+                                        <mat-form-field appearance="outline" style="width: 100%; ">
                                             <input type="text" matInput (change)="onSievetto($event,'sieve_to_desc')"
                                                 [readonly]="viewMode" formControlName="sieve_to_desc" UpperCaseDirective
                                                 autocomplete="off" />
@@ -225,7 +225,7 @@
                                     <label for="inputPassword" id="ID014" class="col-sm-4 col-form-label">Weight
                                         From: </label>
                                     <div class="col-sm-8">
-                                        <mat-form-field appearance="outline" style="width: 100%; margin-left: 7px;">
+                                        <mat-form-field appearance="outline" style="width: 100%; ">
                                             <input type="text" [readonly]="viewModeAll" matInput maxlength="15"
                                                 class="text-right" formControlName="wt_from" StoneDecimalInput
                                                 (input)="onInputChange($event,'wt_from', 12)" />
@@ -236,7 +236,7 @@
                                     <label for="inputPassword" id="ID015" class="col-sm-4 col-form-label">Weight
                                         To : </label>
                                     <div class="col-sm-8">
-                                        <mat-form-field appearance="outline" style="width: 100%; margin-left: 7px;">
+                                        <mat-form-field appearance="outline" style="width: 100%; ">
                                             <input type="text" [readonly]="viewModeAll" matInput maxlength="15"
                                                 class="text-right" formControlName="wt_to"
                                                 (change)="onweightto($event,'wt_to')" StoneDecimalInput
@@ -248,7 +248,7 @@
                                     <label for="inputPassword" id="ID016" class="col-sm-4 col-form-label">Issue
                                         Rate * : </label>
                                     <div class="col-sm-8">
-                                        <mat-form-field appearance="outline" style="width: 100%; margin-left: 7px;">
+                                        <mat-form-field appearance="outline" style="width: 100%; ">
                                             <input type="text" [readonly]="viewModeAll" matInput maxlength="15"
                                                 class="text-right" formControlName="issue_rate" AmountDecimalInput
                                                 (input)="onInputChange($event,'issue_rate', 12)" />
@@ -259,7 +259,7 @@
                                     <label for="inputPassword" id="ID017" class="col-sm-4 col-form-label">Selling
                                         % * : </label>
                                     <div class="col-sm-8">
-                                        <mat-form-field appearance="outline" style="width: 100%; margin-left: 7px;">
+                                        <mat-form-field appearance="outline" style="width: 100%; ">
                                             <input type="text" [readonly]="viewModeAll || viewselling" matInput
                                                 class="text-right" AmountDecimalInput NumberOnly [max]="3"
                                                 formControlName="selling" (keypress)="salesChange1('selling')" />
@@ -271,7 +271,7 @@
                                     <label for="inputPassword" id="ID018" class="col-sm-4 col-form-label">Selling
                                         Rate * : </label>
                                     <div class="col-sm-8">
-                                        <mat-form-field appearance="outline" style="width: 100%; margin-left: 7px;">
+                                        <mat-form-field appearance="outline" style="width: 100%; ">
                                             <input type="text" AmountDecimalInput NumberOnly [max]="13"
                                                 [readonly]="viewModeAll || viewsellingrate" matInput class="text-right"
                                                 formControlName="selling_rate"

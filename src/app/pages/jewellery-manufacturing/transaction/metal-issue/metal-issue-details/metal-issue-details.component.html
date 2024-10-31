@@ -66,7 +66,7 @@
                                             <input type="text" matInput
                                                 tabindex="2"
                                                 formControlName="subJobNo"
-                                                (change)="subJobNumberValidate($event)"
+                                                (change)="subJobNumberChange($event)"
                                                 [readonly]="viewMode" />
                                             <master-search class="masterSearch"
                                                 *ngIf="!viewMode"
@@ -415,7 +415,7 @@
                                             <input type="text" matInput
                                                 formControlName="toStockCode"
                                                 placeholder="Stock Code" UpperCaseDirective
-                                                (focusout)="stockCodeValidate($event)"
+                                                (focusout)="toStockCodeValidate($event)"
                                                 [readonly]="viewMode"
                                                 (keydown)="lookupKeyPress($event,'stockCode')" />
                                             <master-search class="masterSearch"
