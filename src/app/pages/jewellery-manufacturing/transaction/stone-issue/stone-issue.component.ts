@@ -308,7 +308,7 @@ export class StoneIssueComponent implements OnInit {
   WorkerCodeSelected(e: any) {
     console.log(e);
     this.stoneissueFrom.controls.worker.setValue(e.WORKER_CODE);
-    this.stoneissueFrom.controls.workername.setValue(e.DESCRIPTION);
+    this.stoneissueFrom.controls.workername.setValue(e.DESCRIPTION.toUpperCase());
   }
   selectedRows: any[] = [];
 
@@ -739,7 +739,7 @@ export class StoneIssueComponent implements OnInit {
         if (matchedItem) {
           this.stoneissueFrom.controls[FORMNAME].setValue(matchedItem.WORKER_CODE); // Set worker code
           if (FORMNAME === 'worker') {
-            this.stoneissueFrom.controls.workername.setValue(matchedItem.DESCRIPTION); // Set worker description
+            this.stoneissueFrom.controls.workername.setValue(matchedItem.DESCRIPTION.toUpperCase()); // Set worker description
           }
         } else {
           this.handleLookupError(FORMNAME, LOOKUPDATA);
