@@ -74,13 +74,14 @@ export class MasterComponent implements OnInit {
   editRowDetails(e: any) {
     this.dataToEdit = e.row.data;
     this.dataToEdit.FLAG = 'EDIT'
-    this.openModalView(this.dataToEdit)
+    this.authCheckerComponent?.openAuthModal();
+    // this.openModalView(this.dataToEdit)
   }
   deleteBtnClicked(e: any) {
     this.dataToEdit = e.row.data;
     this.dataToEdit.FLAG = 'DELETE'
-    this.openModalView(this.dataToEdit)
-    // this.authCheckerComponent?.openAuthModal();
+    // this.openModalView(this.dataToEdit)
+    this.authCheckerComponent?.openAuthModal();
   }
   authSubmit(){
     this.openModalView(this.dataToEdit)
