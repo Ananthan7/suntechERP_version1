@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
+import { forkJoin } from 'rxjs';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import Swal from 'sweetalert2';
@@ -37,6 +38,11 @@ export class POSDaybookComponent implements OnInit {
   userLoginBranch: any;
 
   RegisterGridData: any =[];
+  RegisterGridcolumnkeys: any;
+  currentTab: any;
+  Collectn_GoldPurchaseGrid: any =[];
+  GoldSum_collection: any = [];
+
 
   constructor(private activeModal: NgbActiveModal, private formBuilder: FormBuilder, 
     private dataService: SuntechAPIService, private commonService: CommonServiceService, 
@@ -46,31 +52,16 @@ export class POSDaybookComponent implements OnInit {
 
   ngOnInit(): void {
     this. prefillScreenValues();
-    this.gridData()
+    this.currentTab = 'POS Register';
+    this.POSRegisterGridData();
   }
 
-  gridData(){
-    this.userLoginBranch= localStorage.getItem('userbranch');
-    this.commonService.showSnackBarMsg('MSG81447');
-    let API = "/POSDayBook/GetPOSRegisterGrid";
-    let postData = {
-      "strFmDate": this.dateToPass.fromDate,
-      "strToDate": this.dateToPass.toDate,
-      "strBranch": this.formattedBranchDivisionData? this.formattedBranchDivisionData : this.userLoginBranch
-    };
-    
-    this.dataService.postDynamicAPI(API, postData).subscribe((result: any) => {
-      if (result.status == "Success") {
-        this.toastr.success(result.status);                    
-        this.RegisterGridData.push(result.dynamicData[0][0]) ;
-        console.log(this.RegisterGridData)
-        this.commonService.closeSnackBarMsg();
-      }
-      else{
-        this.toastr.error(result.status);
-        this.commonService.closeSnackBarMsg();
-      }
-    },(err: any) => this.toastr.error(err)); this.commonService.closeSnackBarMsg();
+  formatDate(dateString: string): string {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
+    const year = date.getFullYear();
+    return `${day}-${month}-${year}`;
   }
 
   selectedData(data: any) {
@@ -132,6 +123,12 @@ export class POSDaybookComponent implements OnInit {
       this.posDayBookForm.controls.toDate.setValue(event.ToDate);
       this.dateToPass.toDate = event.ToDate
     }
+    switch(this.currentTab){
+      case this.currentTab = 'POS Register': this.POSRegisterGridData(); break;
+      case 'POS Collection & Old Gold Purchase': this.POSCollectn_GoldPurchaseGridData(); break;
+
+    }
+    
   }
 
   formatDateToYYYYMMDD(dateString: any) {
@@ -368,6 +365,136 @@ export class POSDaybookComponent implements OnInit {
     }
   }
 
+  onTabChange(event: any){
+    this.currentTab = event.tab.textLabel
+    switch(this.currentTab){
+      case 'POS Register': this.POSRegisterGridData(); break;
+      case 'POS Collection & Old Gold Purchase': this.POSCollectn_GoldPurchaseGridData(); break;
+    }
+  }
+
+  POSRegisterGridData(){
+    this.isLoading = true;
+    this.userLoginBranch= localStorage.getItem('userbranch');
+    this.commonService.showSnackBarMsg('MSG81447');
+    let API = "/POSDayBook/GetPOSRegisterGrid";
+    let postData = {
+      "strFmDate": this.dateToPass.fromDate,
+      "strToDate": this.dateToPass.toDate,
+      "strBranch": this.formattedBranchDivisionData? this.formattedBranchDivisionData : this.userLoginBranch
+    };
+    this.RegisterGridData = [];
+    this.RegisterGridcolumnkeys = [];
+
+    this.dataService.postDynamicAPI(API, postData).subscribe((result: any) => {
+      if (result.status == "Success") {
+        this.isLoading = false;
+        if(result.dynamicData.length>0){
+          this.commonService.showSnackBarMsg('data loaded successfully!');
+        }
+        else{
+          this.commonService.showSnackBarMsg('No Data!');
+        }
+        // const newFilteredItem = { ...result.dynamicData[0] };
+        // delete newFilteredItem.mid; // Removing the mid property
+        // this.RegisterGridData.push(newFilteredItem);                 
+        // this.RegisterGridcolumnkeys = Object.keys(this.RegisterGridData);
+        // this.RegisterGridcolumnkeys.map((key: any) => key.replace(/_/g, ' '));
+   
+
+        // this.RegisterGridData.forEach((item: any) => {
+        //   item.vocdate = this.formatDate(item.vocdate)
+        //   for (const key in item) {
+        //     if (typeof item[key] === 'number' && key !== 'mid') {
+        //       item[key] = this.customizeText(item[key]);
+        //     }
+        //   }
+        // });
+
+
+        this.RegisterGridData = result.dynamicData[0];
+        this.RegisterGridcolumnkeys = [
+          // { dataField: 'mid', caption: 'ID' },
+          { dataField: 'branch_code', caption: 'Branch Code' },
+          { dataField: 'VOCTYPE', caption: 'Voucher Type' },
+          { dataField: 'vocno', caption: 'Voucher No' },
+          { dataField: 'vocdate', caption: 'Voucher Date', dataType: 'date' },
+          { dataField: 'sman', caption: 'Salesman' },
+          { dataField: 'GrossAmt', caption: 'Gross Amount' },
+          { dataField: 'CC_CommissionAmt', caption: 'Commission Amount' },
+          { dataField: 'invamt', caption: 'Invoice Amount' },
+          { dataField: 'sretamt', caption: 'sretamt' },
+          { dataField: 'scpamt', caption: 'scpamt' },
+          { dataField: 'roundoff', caption: 'Round Off' },
+          { dataField: 'lcreceived', caption: 'LC Received'},
+          { dataField: 'fc', caption: 'fc' },
+          { dataField: 'fcreceived', caption: 'fcreceived' },
+          { dataField: 'creditcrd', caption: 'Credit Card' },
+          { dataField: 'advance', caption: 'Advance' },
+          { dataField: 'creditac', caption: 'Credit Ac' },
+          { dataField: 'creditamt', caption: 'Credit Amount' },
+          { dataField: 'others', caption: 'Credit Amount' }
+        ];
+      }
+      else{
+        this.toastr.error(result.status);
+        this.commonService.closeSnackBarMsg();
+      }
+    },(err: any) => this.toastr.error(err)); 
+    this.commonService.closeSnackBarMsg();
+  }
+  customizeText(data: any) {
+    return Number(data).toFixed(2);
+  }
+  customizeSummaryContent(data: any) {
+    return Number(data.value).toFixed(2);
+  }
+
+  POSCollectn_GoldPurchaseGridData(){
+    this.isLoading = true;
+    this.userLoginBranch = localStorage.getItem('userbranch');
+    this.commonService.showSnackBarMsg('MSG81447');
+
+    const API1 = "/POSDayBook/GetPOSNetCollectionGrid";
+    const postData1 = {
+        "strFmDate": this.dateToPass.fromDate,
+        "strToDate": this.dateToPass.toDate,
+        "strBranch": this.formattedBranchDivisionData ? this.formattedBranchDivisionData : this.userLoginBranch
+    };
+
+    const API2 = "/POSDayBook/GetOldGoldSummGrid";
+    const postData2 = {
+        "strFmDate": this.dateToPass.fromDate,
+        "strToDate": this.dateToPass.toDate,
+        "strBranch": this.formattedBranchDivisionData ? this.formattedBranchDivisionData : this.userLoginBranch
+    };
+    this.Collectn_GoldPurchaseGrid = [];
+    this.GoldSum_collection = [];
+    forkJoin({
+        collectionData: this.dataService.postDynamicAPI(API1, postData1),
+        goldSumData: this.dataService.postDynamicAPI(API2, postData2)
+    }).subscribe({
+        next: (response) => {
+          this.Collectn_GoldPurchaseGrid = response.collectionData.dynamicData[0];
+          this.GoldSum_collection = response.goldSumData.dynamicData[0];
+          
+          if(response.collectionData.dynamicData[0].length>0 ||  response.goldSumData.dynamicData[0].length>0){
+            this.commonService.showSnackBarMsg('data loaded successfully!');
+          }
+          else{
+            this.commonService.showSnackBarMsg('No Data!');
+          }
+        },
+        error: (error) => {
+            console.error('Error loading data:', error);
+            this.commonService.showSnackBarMsg('Error loading data.');
+        },
+        complete: () => {
+            this.isLoading = false;
+        }
+    });
+
+  }
 
   
   close(data?: any) {

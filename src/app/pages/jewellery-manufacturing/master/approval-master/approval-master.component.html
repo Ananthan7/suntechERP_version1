@@ -9,10 +9,10 @@
 <!-- <modal-header [isViewDelete]="!viewMode" [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode"
     [isViewAttachment]="!viewMode" [isViewLog]="!viewMode" [isViewCopy]="!viewMode" (saveClick)="formSubmit()"
     (cancelClick)="close()" (deleteClick)="deleteRecord()"></modal-header> -->
-    
-<modal-header (cancelClick)="close()" (deleteClick)="deleteRecord()" [isViewSave]="!viewMode"
-    (saveClick)="formSubmit()" [isViewCancel]="!viewMode" [isViewMore]="!viewMode"
-    [isViewDelete]="editMode"></modal-header>
+
+
+<modal-header [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode" (cancelClick)="close()"
+    (saveClick)="formSubmit()" (deleteClick)="deleteRecord()" [isViewDelete]="!viewMode && editableMode"></modal-header>
 <!-- content section -->
 <div class="row">
     <form [formGroup]="approvalMasterForm">
@@ -45,7 +45,7 @@
                                 <mat-form-field style="width: 100%;" appearance="outline">
                                     <input type="text" matInput formControlName="description" autocomplete="off"
                                         maxlength="100" oninput="this.value = this.value.toUpperCase()"
-                                        (focusout)="checkSpecialCharacters();" [readonly]="viewMode"
+                                        (focusout)="checkSpecialCharacters();" [readonly]="viewMode || codeEnable"
                                         [disabled]="viewMode" appNoEmptySpace />
                                 </mat-form-field>
 
