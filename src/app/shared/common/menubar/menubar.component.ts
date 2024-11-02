@@ -53,8 +53,7 @@ export class MenubarComponent implements OnInit {
           FORM_NAME: item.ANG_WEB_FORM_NAME,
           PATH_NAME: item.ANG_WEB_PATH_NAME
         }));
-        localStorage.setItem('menuPermissions', JSON.stringify(specificData));
-
+        this.CommonService.screenSpecificPermissions = specificData
 
         let menuData = response.response
         menuData = menuData.filter((item:any) => item.VISIBLE_IN_WEB == true || item.VISIBLE_IN_CLIENT == true)
