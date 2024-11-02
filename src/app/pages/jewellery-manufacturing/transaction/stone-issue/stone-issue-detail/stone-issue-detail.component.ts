@@ -17,6 +17,7 @@ export class StoneIssueDetailComponent implements OnInit {
   [x: string]: any;
   @Output() saveDetail = new EventEmitter<any>();
   @Output() closeDetail = new EventEmitter<any>();
+  @Output() gridDetail = new EventEmitter<any>();
   @Input() data!: any;
   @Input() isViewChangeJob: boolean = true;
   @Input() content!: any;
@@ -26,6 +27,7 @@ export class StoneIssueDetailComponent implements OnInit {
   @ViewChild('overlayDivCodeSearch') public overlayDivCodeSearch!: MasterSearchComponent;
   @ViewChild('overlaystockCodeSearch') public overlaystockCodeSearch!: MasterSearchComponent;
   @ViewChild('overlaylocationSearch') public overlaylocationSearch!: MasterSearchComponent;
+  @ViewChild('overlaysubjobnoSearch') public overlaysubjobnoSearch!: MasterSearchComponent;
   columnhead1: any[] = [];
   stoneIssueGridData: any[] = [];
   serialNo: any;
@@ -139,11 +141,16 @@ export class StoneIssueDetailComponent implements OnInit {
     SEARCH_FIELD: 'UNQ_JOB_ID',
     SEARCH_HEADING: 'Sub Job Search',
     SEARCH_VALUE: '',
-    WHERECONDITION: `Job_Number = '' and Branch_code = '${this.comService.branchCode}' AND isnull(WAX_STATUS,'') <> 'I'`,
+    WHERECONDITION: `isnull(WAX_STATUS,'') <> 'I' and Branch_code = '${this.comService.branchCode}'`,
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
     FRONTENDFILTER: true
+  }
+  setSubJobCondition() {
+    let form = this.stoneIssueDetailsFrom.value;
+    this.subJobNoCodeData.WHERECONDITION = `isnull(WAX_STATUS,'') <> 'I' and Branch_code = '${this.comService.branchCode}'`
+    this.subJobNoCodeData.WHERECONDITION += `and job_number='${this.comService.nullToString(form.jobNumber)}'`
   }
 
   stoneIssueDetailsFrom: FormGroup = this.formBuilder.group({
@@ -191,6 +198,7 @@ export class StoneIssueDetailComponent implements OnInit {
     DIVCODE: [''],
     DESIGN_TYPE: [''],
     JOB_SO_NUMBER: [''],
+    Location: [''],
     METAL_STONE: [''],
     CURRENCY_CODE: [''],
     CURRENCY_RATE: [''],
@@ -268,7 +276,7 @@ export class StoneIssueDetailComponent implements OnInit {
     this.stoneIssueDetailsFrom.controls.processname.setValue(this.content.PROCESS_NAME)
     this.stoneIssueDetailsFrom.controls.worker.setValue(this.content.WORKER_CODE)
     this.stoneIssueDetailsFrom.controls.workername.setValue(this.content.WORKER_NAME)
-    this.stoneIssueDetailsFrom.controls.LOCTYPE_CODE.setValue(this.content.LOCTYPE_CODE)
+    this.stoneIssueDetailsFrom.controls.Location.setValue(this.content.LOCTYPE_CODE)
     this.stoneIssueDetailsFrom.controls.SIEVE_SET.setValue(this.content.SIEVE_SET)
     this.stoneIssueDetailsFrom.controls.remarks.setValue(this.content.D_REMARKS)
     this.stoneIssueDetailsFrom.controls.amount.setValue(this.content.AMOUNTLC)
@@ -288,22 +296,19 @@ export class StoneIssueDetailComponent implements OnInit {
     this.CalculatePiecesAndPointerWT()
 
   }
-  setValueWithDecimal(formControlName: string, value: any, Decimal: string) {
-    let val = this.comService.setCommaSerperatedNumber(value, Decimal)
-    this.stoneIssueDetailsFrom.controls[formControlName].setValue(val)
-    this.FORM_VALIDATER[formControlName] = val
-  }
-  // setValueWithDecimal(formControlName: string, value: any, Decimal: string) {
-  //   this.stoneIssueDetailsFrom.controls[formControlName].setValue(
-  //     this.comService.setCommaSerperatedNumber(value, Decimal)
-  //   )
 
-  // }
+  setValueWithDecimal(formControlName: string, value: any, Decimal: string) {
+    this.stoneIssueDetailsFrom.controls[formControlName].setValue(
+      this.comService.setCommaSerperatedNumber(value, Decimal)
+    )
+  }
+
   setOnLoadDetails() {
     let branchParam = this.comService.allbranchMaster;
+    console.log(branchParam, 'ui')
     // Set LOCTYPE_CODE only if it's not already set
-    if (!this.stoneIssueDetailsFrom.controls.LOCTYPE_CODE.value) {
-      this.stoneIssueDetailsFrom.controls.LOCTYPE_CODE.setValue(branchParam.DMFGMLOC);
+    if (!this.stoneIssueDetailsFrom.controls.Location.value) {
+      this.stoneIssueDetailsFrom.controls.Location.setValue(branchParam.DMFGMLOC);
     }
   }
 
@@ -323,7 +328,7 @@ export class StoneIssueDetailComponent implements OnInit {
   locationCodeSelected(e: any) {
     if (this.checkCode()) return
     console.log(e);
-    this.stoneIssueDetailsFrom.controls.LOCTYPE_CODE.setValue(e.LOCATION_CODE);
+    this.stoneIssueDetailsFrom.controls.Location.setValue(e.LOCATION_CODE);
   }
 
   @ViewChild('jobNumberInput') jobNumberInput!: ElementRef;
@@ -513,6 +518,9 @@ export class StoneIssueDetailComponent implements OnInit {
       case 'DIVCODE':
         this.overlayDivCodeSearch.showOverlayPanel(event);
         break;
+      case 'subjobnumber':
+        this.overlaysubjobnoSearch.showOverlayPanel(event);
+        break;
       default:
 
     }
@@ -539,7 +547,7 @@ export class StoneIssueDetailComponent implements OnInit {
           this.comService.toastErrorByMsgId('MSG1531')
           this.stoneIssueDetailsFrom.controls[FORMNAME].setValue('')
           LOOKUPDATA.SEARCH_VALUE = ''
-          if (FORMNAME === 'LOCTYPE_CODE') {
+          if (FORMNAME === 'Location') {
             this.showOverleyPanel(event, FORMNAME);
           }
           {
@@ -615,7 +623,7 @@ export class StoneIssueDetailComponent implements OnInit {
       "UNQ_DESIGN_ID": "",
       "WIP_ACCODE": "",
       "UNIQUEID": 0,
-      "LOCTYPE_CODE": this.comService.nullToString(form.LOCTYPE_CODE),
+      "LOCTYPE_CODE": this.comService.nullToString(form.Location),
       "PICTURE_NAME": "",
       "PART_CODE": this.comService.nullToString(form.PART_CODE),
       "REPAIRJOB": 0,
@@ -626,7 +634,7 @@ export class StoneIssueDetailComponent implements OnInit {
       "DT_YEARMONTH": this.comService.nullToString(this.yearMonth),
       "CONSIGNMENT": this.onchangeCheckBox(form.consignment),
       "SIEVE_SET": this.comService.nullToString(form.SIEVE_SET),
-      "SUB_STOCK_CODE": this.comService.nullToString(this.stoneIssueDetailsFrom.value.SUB_STOCK_CODE),
+      "SUB_STOCK_CODE": this.comService.nullToString(form.batchid),
       "D_REMARKS": this.comService.nullToString(form.remarks),
       "SIEVE_DESC": this.comService.nullToString(form.SIEVE_DESC),
       "EXCLUDE_TRANSFER_WT": true,
@@ -987,8 +995,8 @@ export class StoneIssueDetailComponent implements OnInit {
           // this.columnhead1 = Object.keys(this.tableData[0])
 
           this.tableData.forEach((row) => {
-            if (!row.LOCTYPE_CODE || row.LOCTYPE_CODE.trim() === "") { 
-              row.LOCTYPE_CODE = '000GEN'; 
+            if (!row.LOCTYPE_CODE || row.LOCTYPE_CODE.trim() === "") {
+              row.LOCTYPE_CODE = '000GEN';
             }
           });
           console.log(this.tableData);
@@ -1051,25 +1059,33 @@ export class StoneIssueDetailComponent implements OnInit {
           let data = result.dynamicData[0]
           this.data = data[0].UNQ_JOB_ID;
           console.log(data[0], 'data')
-          this.stoneIssueDetailsFrom.controls.process.setValue(data[0].PROCESS)
-          this.stoneIssueDetailsFrom.controls.processname.setValue(data[0].PROCESSDESC)
-          this.stoneIssueDetailsFrom.controls.worker.setValue(data[0].WORKER)
-          this.stoneIssueDetailsFrom.controls.workername.setValue(data[0].WORKERDESC)
+          this.stoneIssueDetailsFrom.controls.process.setValue(data[0].PROCESS.toUpperCase())
+          this.stoneIssueDetailsFrom.controls.processname.setValue(data[0].PROCESSDESC.toUpperCase())
+          this.stoneIssueDetailsFrom.controls.worker.setValue(data[0].WORKER.toUpperCase())
+          this.stoneIssueDetailsFrom.controls.workername.setValue(data[0].WORKERDESC.toUpperCase())
           this.stoneIssueDetailsFrom.controls.PICTURE_PATH.setValue(data[0].PICTURE_PATH)
           // this.tableData = result.dynamicData[1] || []
           // this.columnhead1 = Object.keys(this.tableData[0])
           this.FillStnRequiredDetail()
           this.FillUniqueDesignDetails()
           this.getImageData()
-          this.setOnLoadDetails()
+
+          this.overlaysubjobnoSearch.closeOverlayPanel();
+
         } else {
-          // this.comService.toastErrorByMsgId('MSG1747')
+          // Handle case where no data is found
+          this.comService.toastErrorByMsgId('MSG1531');
+          this.stoneIssueDetailsFrom.controls.subjobnumber.setValue('');
+          this.showOverleyPanel(event, 'subjobnumber');
         }
-      }, err => {
-        this.comService.closeSnackBarMsg()
-        this.comService.toastErrorByMsgId('MSG1531')
-      })
-    this.subscriptions.push(Sub)
+      },
+        (err) => {
+          // Error handling
+          this.comService.closeSnackBarMsg();
+          this.comService.toastErrorByMsgId('MSG1531');
+        }
+      );
+    this.subscriptions.push(Sub);
   }
 
   jobNumberValidate(event: any) {
@@ -1113,6 +1129,7 @@ export class StoneIssueDetailComponent implements OnInit {
             //   this.stoneIssueDetailsFrom.controls.DIVCODE.setValue("Z");
             // }
             // this.overlayjobNumberSearch.closeOverlayPanel()
+            this.setSubJobCondition()
             this.subJobNumberValidate()
             this.setStockCodeWhereCondition()
             this.codeEnabled()
@@ -1194,6 +1211,7 @@ export class StoneIssueDetailComponent implements OnInit {
   SaveGridData() {
     let gridData = this.tableData
     console.log(gridData)
+    this.gridDetail.emit(gridData);
   }
 
   dataGridConfig = {

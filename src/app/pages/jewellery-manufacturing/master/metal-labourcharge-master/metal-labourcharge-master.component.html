@@ -38,7 +38,7 @@
                     <div class="col-sm-3">
                         <mat-form-field style="width: 90%" appearance="outline">
                             <input type="text" matInput [readonly]="viewMode  || stockcodeDisable"
-                                (focus)="getKaratcode()"
+                                (change)="getKaratcode()"
                                 (focusout)="validateLookupField($event,stockCodeData,'stock_code')"
                                 oninput="this.value = this.value.toUpperCase()" (input)="inputValidate($event)"
                                 formControlName="stock_code" appNoEmptySpace
@@ -304,23 +304,8 @@
                             formControlName="forDesignOnly" (change)="onforDesignOnlyChange($event)" id="ID023">For
                             Design
                             Only</mat-checkbox>
-                        <!-- <mat-radio-group aria-label="Select an option">
-                        <mat-radio-button value="1"  formControlName="onGrossWt" class="mx-2"> On Gross Wt</mat-radio-button>
-                        <mat-radio-button value="2"  formControlName="forDesignOnly" class="mx-2">For Design Only</mat-radio-button>
-                      </mat-radio-group> -->
                     </div>
                 </div>
-                <!-- <div class="row mb-2">
-                    <label for="input" id="ID021" class="col-sm-2 col-form-label">Variance %
-                        :</label>
-                    <div class="col-sm-3">
-                        <mat-form-field style="width: 100%" appearance="outline">
-                            <input type="text" matInput [readonly]="viewMode || viewsellingMetal || codeEnableMetal"
-                                [max]="6" formControlName="variance" AmountDecimalInput
-                                (keypress)="salesChange('metalSelling')" class="text-right" />
-                        </mat-form-field>
-                    </div>
-                </div> -->
                 <div class="row mb-2">
                     <label for="input" id="ID024" class="col-sm-2 col-form-label">Variance %
                         :</label>
