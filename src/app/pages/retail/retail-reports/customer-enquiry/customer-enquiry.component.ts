@@ -427,20 +427,22 @@ export class CustomerEnquiryComponent implements OnInit {
 
     }
     else{
+      const userBranch = localStorage.getItem('userbranch');
+      const formattedUserBranch = userBranch ? `${userBranch}#` : null;
+      this.customerEnquiryForm.controls.branch.setValue(formattedUserBranch);
+      this.fetchedBranchDataParam = formattedUserBranch;
+      this.fetchedBranchData= this.fetchedBranchDataParam?.split("#")
+
       this.customerEnquiryForm.controls.MaritalStatusSelection.setValue(this.maritalStatusArr[0].value);
       this.customerEnquiryForm.controls.GenderSelection.setValue('M');
 
 
-      // const userBranch = localStorage.getItem('userbranch');
-      // const formattedUserBranch = userBranch ? `${userBranch}#` : null;
-      // this.retailAdvanceReceiptRegisterForm.controls.branch.setValue(formattedUserBranch);
-      // this.fetchedBranchDataParam = formattedUserBranch;
-      // this.fetchedBranchData= this.fetchedBranchDataParam?.split("#")
-   
-      // this.dateToPass = {
-      //   fromDate:  this.formatDateToYYYYMMDD(new Date()),
-      //   toDate: this.formatDateToYYYYMMDD(new Date()),
-      // };
+      const now = new Date();
+      const startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+      const endDate = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+      this.customerEnquiryForm.controls.saleDateFrom.setValue(startDate)
+      this.customerEnquiryForm.controls.dateTo.setValue(endDate)
+
     }
   }
 

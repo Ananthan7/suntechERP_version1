@@ -47,8 +47,10 @@
                             <dxo-scrolling mode="standard"></dxo-scrolling>
 
                             <dxo-summary>
-                                <dxi-total-item column="GrossAmt" summaryType="sum" [customizeText]="customizeSummaryContent"></dxi-total-item>
-                                <dxi-total-item column="CC_CommissionAmt" summaryType="sum" [customizeText]="customizeSummaryContent"></dxi-total-item>
+                                <dxi-total-item column="GrossAmt" summaryType="sum" [customizeText]="customizeSummaryContent"
+                                alignment="right"></dxi-total-item>
+                                <dxi-total-item column="CC_CommissionAmt" summaryType="sum" [customizeText]="customizeSummaryContent"
+                                alignment="right"></dxi-total-item>
                             </dxo-summary>
                         </dx-data-grid>
                    </div>
@@ -68,7 +70,7 @@
                                 <dxi-column dataField="modename" caption="Mode"></dxi-column>
                                 <dxi-column dataField="RCVDIN"  caption="Received In"></dxi-column>
                                 <dxi-column dataField="acdescp"  caption="Description"></dxi-column>
-                                <dxi-column dataField="amount"  caption="Amount"></dxi-column>
+                                <dxi-column dataField="amount"  caption="Amount" alignment="right"></dxi-column>
 
                                 <dxo-summary>
                                     <dxi-total-item column="amount" summaryType="sum" [customizeText]="customizeSummaryContent"></dxi-total-item>
@@ -86,12 +88,14 @@
                                 <dxo-scrolling mode="standard"></dxo-scrolling>
 
                                 <dxi-column dataField="STOCK_CODE" caption="Stock Code"></dxi-column>
-                                <dxi-column dataField="qty"  caption="Quantity"></dxi-column>
-                                <dxi-column dataField="amt"  caption="Amount"></dxi-column>
+                                <dxi-column dataField="qty"  caption="Quantity" alignment="right"></dxi-column>
+                                <dxi-column dataField="amt"  caption="Amount" alignment="right"></dxi-column>
 
                                 <dxo-summary>
-                                    <dxi-total-item column="qty" summaryType="sum" [customizeText]="customizeSummaryContent"></dxi-total-item>
-                                    <dxi-total-item column="amt" summaryType="sum" [customizeText]="customizeSummaryContent"></dxi-total-item>
+                                    <dxi-total-item column="qty" summaryType="sum" [customizeText]="customizeSummaryContent"
+                                     alignment="right"></dxi-total-item>
+                                    <dxi-total-item column="amt" summaryType="sum" [customizeText]="customizeSummaryContent"
+                                    alignment="right"></dxi-total-item>
                                 </dxo-summary>
                             </dx-data-grid>
                         </div>
@@ -107,8 +111,8 @@
 
                                 <dxi-column alignment="center" caption="Account"></dxi-column>
                                 <dxi-column alignment="center" caption="Description"></dxi-column>
-                                <dxi-column alignment="center" caption="Currency"></dxi-column>
-                                <dxi-column alignment="center" caption="Amount"></dxi-column>
+                                <dxi-column alignment="center" caption="Currency" alignment="right"></dxi-column>
+                                <dxi-column alignment="center" caption="Amount" alignment="right"></dxi-column>
 
                                 <dxo-summary>
                                     <dxi-total-item column="amt" summaryType="sum" [customizeText]="customizeSummaryContent"></dxi-total-item>
@@ -155,10 +159,10 @@
                                 <dxi-column dataField="branch_code" caption="Branch"></dxi-column>
                                 <!-- <dxi-column dataField="description" caption="Description"></dxi-column> -->
                                 <dxi-column dataField="status" caption="Status"></dxi-column>
-                                <dxi-column dataField="voc_nos" caption="#Vocs"></dxi-column>
-                                <dxi-column dataField="amount" caption="Amount"></dxi-column>
-                                <dxi-column dataField="metal" caption="Gold & Oth"></dxi-column>
-                                <dxi-column dataField="nonmetal" caption="Dia & Oth"></dxi-column>
+                                <dxi-column dataField="voc_nos" caption="#Vocs" alignment="right"></dxi-column>
+                                <dxi-column dataField="amount" caption="Amount" alignment="right"></dxi-column>
+                                <dxi-column dataField="metal" caption="Gold & Oth" alignment="right"></dxi-column>
+                                <dxi-column dataField="nonmetal" caption="Dia & Oth" alignment="right"></dxi-column>
 
                                 <dxo-summary>
                                     <dxi-total-item column="amount" summaryType="sum" displayFormat="{0}"
@@ -183,16 +187,16 @@
                                 
                                 <dxi-column alignment="center" caption="Salesman"></dxi-column>
                                 <dxi-column alignment="center" caption="#Docs"></dxi-column>
-                                <dxi-column alignment="center" caption="Tot Amount"></dxi-column>
-                                <dxi-column alignment="center" caption="Gold"></dxi-column>
-                                <dxi-column alignment="center" caption="Dia & Oth"></dxi-column>
-                                <dxi-column alignment="center" caption="Mkg. Value"></dxi-column>
+                                <dxi-column alignment="center" caption="Tot Amount" alignment="right"></dxi-column>
+                                <dxi-column alignment="center" caption="Gold" alignment="right"></dxi-column>
+                                <dxi-column alignment="center" caption="Dia & Oth" alignment="right"></dxi-column>
+                                <dxi-column alignment="center" caption="Mkg. Value" alignment="right"></dxi-column>
 
                                 <dxo-summary>
-                                    <dxi-total-item column="amount" summaryType="sum" displayFormat="Total: {0}"></dxi-total-item>
-                                    <dxi-total-item column="Gold" summaryType="sum" displayFormat="Total: {0}"></dxi-total-item>
-                                    <dxi-total-item column="Dia & Oth" summaryType="sum" displayFormat="Total: {0}"></dxi-total-item>
-                                    <dxi-total-item column="Mkg. Value" summaryType="sum" displayFormat="Total: {0}"></dxi-total-item>
+                                    <dxi-total-item column="amount" summaryType="sum" displayFormat="Total: {0}" alignment="right"></dxi-total-item>
+                                    <dxi-total-item column="Gold" summaryType="sum" displayFormat="Total: {0}" alignment="right"></dxi-total-item>
+                                    <dxi-total-item column="Dia & Oth" summaryType="sum" displayFormat="Total: {0}" alignment="right"></dxi-total-item>
+                                    <dxi-total-item column="Mkg. Value" summaryType="sum" displayFormat="Total: {0}" alignment="right"></dxi-total-item>
                                 </dxo-summary>
                             </dx-data-grid>  
                         </div>
@@ -207,14 +211,14 @@
                                 <dxo-scrolling mode="standard"></dxo-scrolling>
                                 
                                 <dxi-column dataField="MODE_DESCP" caption="Mode"></dxi-column>
-                                <dxi-column dataField="VOCTYPE" caption="Voc Type"></dxi-column>
-                                <dxi-column dataField="CREDIT_CODE" caption="Receive As"></dxi-column>
-                                <dxi-column dataField="CURRENCY_CODE" caption="Currency"></dxi-column>
-                                <dxi-column dataField="AMTFC" caption="Amount FC"></dxi-column>
-                                <dxi-column dataField="AMTCC" caption="Amount CC"></dxi-column>
+                                <dxi-column dataField="VOCTYPE" caption="Voc Type" alignment="right"></dxi-column>
+                                <dxi-column dataField="CREDIT_CODE" caption="Receive As" alignment="right"></dxi-column>
+                                <dxi-column dataField="CURRENCY_CODE" caption="Currency" alignment="right"></dxi-column>
+                                <dxi-column dataField="AMTFC" caption="Amount FC" alignment="right"></dxi-column>
+                                <dxi-column dataField="AMTCC" caption="Amount CC" alignment="right"></dxi-column>
 
                                 <dxo-summary>
-                                    <dxi-total-item column="AMTCC" summaryType="sum" displayFormat="{0}"></dxi-total-item>
+                                    <dxi-total-item column="AMTCC" summaryType="sum" displayFormat="{0}" alignment="right"></dxi-total-item>
                                 </dxo-summary>
                             </dx-data-grid>  
                         </div>
