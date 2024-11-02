@@ -375,7 +375,7 @@ export class IndexedApiService {
     });
   }
   getReasonMasterList() {
-    this.suntechApi.getDynamicAPI('GeneralMaster/GetGeneralMasterList/reason%20master').subscribe((resp) => {
+    this.suntechApi.getDynamicAPI(`GeneralMaster/GetGeneralMasterList/${encodeURIComponent('REASON MASTER')}`).subscribe((resp) => {
       if (resp.status == 'Success') {
         this.comFunc.reasonMasterList = resp.response;
         this.inDb.bulkInsert('ReasonMaster', resp.response);

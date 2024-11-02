@@ -27,6 +27,7 @@ export class StoneIssueDetailComponent implements OnInit {
   @ViewChild('overlayDivCodeSearch') public overlayDivCodeSearch!: MasterSearchComponent;
   @ViewChild('overlaystockCodeSearch') public overlaystockCodeSearch!: MasterSearchComponent;
   @ViewChild('overlaylocationSearch') public overlaylocationSearch!: MasterSearchComponent;
+  @ViewChild('overlaysubjobnoSearch') public overlaysubjobnoSearch!: MasterSearchComponent;
   columnhead1: any[] = [];
   stoneIssueGridData: any[] = [];
   serialNo: any;
@@ -140,7 +141,7 @@ export class StoneIssueDetailComponent implements OnInit {
     SEARCH_FIELD: 'UNQ_JOB_ID',
     SEARCH_HEADING: 'Sub Job Search',
     SEARCH_VALUE: '',
-    WHERECONDITION:`isnull(WAX_STATUS,'') <> 'I' and Branch_code = '${this.comService.branchCode}'`,
+    WHERECONDITION: `isnull(WAX_STATUS,'') <> 'I' and Branch_code = '${this.comService.branchCode}'`,
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -304,7 +305,7 @@ export class StoneIssueDetailComponent implements OnInit {
 
   setOnLoadDetails() {
     let branchParam = this.comService.allbranchMaster;
-    console.log(branchParam,'ui')
+    console.log(branchParam, 'ui')
     // Set LOCTYPE_CODE only if it's not already set
     if (!this.stoneIssueDetailsFrom.controls.Location.value) {
       this.stoneIssueDetailsFrom.controls.Location.setValue(branchParam.DMFGMLOC);
@@ -517,6 +518,9 @@ export class StoneIssueDetailComponent implements OnInit {
       case 'DIVCODE':
         this.overlayDivCodeSearch.showOverlayPanel(event);
         break;
+      case 'subjobnumber':
+        this.overlaysubjobnoSearch.showOverlayPanel(event);
+        break;
       default:
 
     }
@@ -630,7 +634,7 @@ export class StoneIssueDetailComponent implements OnInit {
       "DT_YEARMONTH": this.comService.nullToString(this.yearMonth),
       "CONSIGNMENT": this.onchangeCheckBox(form.consignment),
       "SIEVE_SET": this.comService.nullToString(form.SIEVE_SET),
-      "SUB_STOCK_CODE": this.comService.nullToString(this.stoneIssueDetailsFrom.value.SUB_STOCK_CODE),
+      "SUB_STOCK_CODE": this.comService.nullToString(form.batchid),
       "D_REMARKS": this.comService.nullToString(form.remarks),
       "SIEVE_DESC": this.comService.nullToString(form.SIEVE_DESC),
       "EXCLUDE_TRANSFER_WT": true,
@@ -991,8 +995,8 @@ export class StoneIssueDetailComponent implements OnInit {
           // this.columnhead1 = Object.keys(this.tableData[0])
 
           this.tableData.forEach((row) => {
-            if (!row.LOCTYPE_CODE || row.LOCTYPE_CODE.trim() === "") { 
-              row.LOCTYPE_CODE = '000GEN'; 
+            if (!row.LOCTYPE_CODE || row.LOCTYPE_CODE.trim() === "") {
+              row.LOCTYPE_CODE = '000GEN';
             }
           });
           console.log(this.tableData);
@@ -1055,25 +1059,33 @@ export class StoneIssueDetailComponent implements OnInit {
           let data = result.dynamicData[0]
           this.data = data[0].UNQ_JOB_ID;
           console.log(data[0], 'data')
-          this.stoneIssueDetailsFrom.controls.process.setValue(data[0].PROCESS)
-          this.stoneIssueDetailsFrom.controls.processname.setValue(data[0].PROCESSDESC)
-          this.stoneIssueDetailsFrom.controls.worker.setValue(data[0].WORKER)
-          this.stoneIssueDetailsFrom.controls.workername.setValue(data[0].WORKERDESC)
+          this.stoneIssueDetailsFrom.controls.process.setValue(data[0].PROCESS.toUpperCase())
+          this.stoneIssueDetailsFrom.controls.processname.setValue(data[0].PROCESSDESC.toUpperCase())
+          this.stoneIssueDetailsFrom.controls.worker.setValue(data[0].WORKER.toUpperCase())
+          this.stoneIssueDetailsFrom.controls.workername.setValue(data[0].WORKERDESC.toUpperCase())
           this.stoneIssueDetailsFrom.controls.PICTURE_PATH.setValue(data[0].PICTURE_PATH)
           // this.tableData = result.dynamicData[1] || []
           // this.columnhead1 = Object.keys(this.tableData[0])
           this.FillStnRequiredDetail()
           this.FillUniqueDesignDetails()
           this.getImageData()
-   
+
+          this.overlaysubjobnoSearch.closeOverlayPanel();
+
         } else {
-          // this.comService.toastErrorByMsgId('MSG1747')
+          // Handle case where no data is found
+          this.comService.toastErrorByMsgId('MSG1531');
+          this.stoneIssueDetailsFrom.controls.subjobnumber.setValue('');
+          this.showOverleyPanel(event, 'subjobnumber');
         }
-      }, err => {
-        this.comService.closeSnackBarMsg()
-        this.comService.toastErrorByMsgId('MSG1531')
-      })
-    this.subscriptions.push(Sub)
+      },
+        (err) => {
+          // Error handling
+          this.comService.closeSnackBarMsg();
+          this.comService.toastErrorByMsgId('MSG1531');
+        }
+      );
+    this.subscriptions.push(Sub);
   }
 
   jobNumberValidate(event: any) {

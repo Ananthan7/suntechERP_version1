@@ -37,6 +37,8 @@ export class AuthCheckerComponent implements OnInit {
 
   ngOnInit(): void {
   }
+  ngAfterViewInit() {
+  }
   reseForm() {
     this.authForm.controls.password.setValue('')
     this.authForm.controls.reason.setValue('')
@@ -79,7 +81,6 @@ export class AuthCheckerComponent implements OnInit {
 
 
   getReasonMasters() {
-
     console.log(this.CommonService.reasonMasterList, 'reasonMasterList');
     this.reasonMaster = this.CommonService.reasonMasterList;
     this.reasonMasterOptions = this.authForm.controls.reason.valueChanges.pipe(
