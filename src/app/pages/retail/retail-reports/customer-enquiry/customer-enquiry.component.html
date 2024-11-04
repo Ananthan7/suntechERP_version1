@@ -1,6 +1,6 @@
 <!-- header section starts -->
 <div class="card-content border-bottom d-flex justify-content-between p-2">
-    <h5 class="pos-modaltitle" id="modal-dia-metal"> POS Daybook </h5>
+    <h5 class="pos-modaltitle" id="modal-dia-metal"> Customer Enquiry </h5>
     <button type="button" class="btn btn-close close-btn" (click)="close()">
         <i class="feather icon-x close-icon"></i>
     </button>
@@ -385,7 +385,7 @@
                             </mat-form-field>
                         </div>
                     </div>
-                </div> 
+                </div>
             </div>
 
 
@@ -418,8 +418,20 @@
         </div>
 
         <div class="row">
-            <app-report-screen-buttons (saveTemplateClick)="saveTemplate()" (previewClicked)="previewClick()"
-            (printClicked)="printBtnClick()"></app-report-screen-buttons>
+            <div class="col">
+                <label for="label" class="col-form-label text-danger" id="ID024">Remove the Sales from date to List all Customers</label>
+            </div>
+            <div class="row">
+                <div class="col-md-2 mt-4">
+                    <button mat-flat-button color="primary" class="cancel-button btn-width mx-5"> Select Customer </button>
+                </div>
+
+                <div class="col-md-10">
+                    <app-report-screen-buttons (saveTemplateClick)="saveTemplate()" (previewClicked)="previewClick()"
+                    (printClicked)="printBtnClick()"></app-report-screen-buttons>
+                </div>
+            </div>
+            
         </div>
     </form>
 </div>

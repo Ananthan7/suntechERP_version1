@@ -376,7 +376,7 @@ export class RetailGridComponent implements OnInit {
  
         const fromVocDate = parsedData.CONTROL_DETAIL?.FROMVOCDATE || parsedData.CONTROL_DETAIL?.STRFROMDATE ||
           parsedData.CONTROL_DETAIL?.strFmDate || parsedData.CONTROL_DETAIL?.FrVocDate || parsedData.CONTROL_DETAIL?.str_FmDate
-          || parsedData.CONTROL_DETAIL?.strAsOnDate || parsedData.CONTROL_DETAIL?.FRVOCDATE;
+          || parsedData.CONTROL_DETAIL?.strAsOnDate || parsedData.CONTROL_DETAIL?.FRVOCDATE || parsedData.CONTROL_DETAIL?.STRFMDATE;
       
         const toVocDate = parsedData.CONTROL_DETAIL?.TOVOCDATE || parsedData.CONTROL_DETAIL?.STRTODATE ||
           parsedData.CONTROL_DETAIL?.strToDate || parsedData.CONTROL_DETAIL?.ToVocDate || parsedData.CONTROL_DETAIL?.str_ToDate
@@ -461,21 +461,6 @@ export class RetailGridComponent implements OnInit {
 
   ngAfterViewInit(){
     this.screenName = this.CommonService.getModuleName();
-    const retrievedData = localStorage.getItem('menuPermissions');
-    if (retrievedData) {
-      const menuPermissions = JSON.parse(retrievedData);
-      console.log('retrievedData in retail grid',menuPermissions)
-      const filteredData = menuPermissions.filter((item: any) => item.MENU_CAPTION_ENG === this.screenName)
-      .map((item: any) => ({
-        MENU_ID: item.MENU_ID,
-        MENU_CAPTION_ENG: item.MENU_CAPTION_ENG,
-        PERMISSION: item.PERMISSION
-      }));
-      this.PermissionArray = filteredData[0].PERMISSION.split("#")
-      if(this.PermissionArray.includes('P')){
-        this.printPreviewFlag = true;
-      }
-    }
   }
 
 }

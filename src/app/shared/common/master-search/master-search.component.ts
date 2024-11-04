@@ -18,6 +18,7 @@ export class MasterSearchComponent implements OnInit {
   @ViewChild('overlayPanel') overlayPanels!: OverlayPanel
   @ViewChild('dropdown') dropDown!: NgbDropdown;
   @Output() newRowClick = new EventEmitter();
+  @Output() focusOut = new EventEmitter();
   @Input() MasterSearchData!: MasterSearchModel;
   searchFieldLabel: any;
   searchNameLabel: any;
@@ -256,6 +257,7 @@ export class MasterSearchComponent implements OnInit {
 
   //search Value Change
   searchValueChange(event?: any) {
+    this.focusOut.emit(event)
     this.currentPage = 1
     let param = this.setPostdata()
     this.isLoading = true;

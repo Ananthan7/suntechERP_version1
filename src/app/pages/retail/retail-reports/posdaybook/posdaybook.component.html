@@ -36,64 +36,87 @@
         </div>
 
         <div class="col-md-12 mt-3">
-            <mat-tab-group>
+            <mat-tab-group (selectedTabChange)="onTabChange($event)">
                 <mat-tab label="POS Register">
-                    <dx-data-grid [columnAutoWidth]="true" [dataSource]="RegisterGridData">
-                        <dxo-paging [enabled]="false"></dxo-paging>
-                        <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
-                        <dxo-scrolling mode="virtual"></dxo-scrolling>
-                      
-                        <dxi-column dataField="branch_code" caption="Branch Code" [allowResizing]="true"></dxi-column>
-                        <dxi-column dataField="VOCTYPE" caption="Voucher Type" [allowResizing]="true"></dxi-column>
-                        <dxi-column dataField="vocno" caption="Voucher No" [allowResizing]="true"></dxi-column>
-                        <dxi-column dataField="vocdate" caption="Voucher Date" dataType="date" [allowResizing]="true"></dxi-column>
-                        <dxi-column dataField="sman" caption="Salesman" [allowResizing]="true"></dxi-column>
-                        <dxi-column dataField="GrossAmt" caption="Gross Amount" [allowResizing]="true"></dxi-column>
-                        <dxi-column dataField="CC_CommissionAmt" caption="Commission Amount" [allowResizing]="true"></dxi-column>
-                        <dxi-column dataField="invamt" caption="Invoice Amount" [allowResizing]="true"></dxi-column>
-                        <dxi-column dataField="lcreceived" caption="LC Received" [allowResizing]="true"></dxi-column>
-                        <dxi-column dataField="creditcrd" caption="Credit Card" [allowResizing]="true"></dxi-column>
-                        <dxi-column dataField="advance" caption="Advance" [allowResizing]="true"></dxi-column>
-                      </dx-data-grid>
+                   <div class="row mt-1">
+                        <app-loader [isLoading]="isLoading"></app-loader>
+                        <dx-data-grid [columnAutoWidth]="true" [dataSource]="RegisterGridData" [columns]="RegisterGridcolumnkeys"
+                        *ngIf="!isLoading">
+                            <dxo-paging [pageSize]="12"></dxo-paging>
+                            <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
+                            <dxo-scrolling mode="standard"></dxo-scrolling>
+
+                            <dxo-summary>
+                                <dxi-total-item column="GrossAmt" summaryType="sum" [customizeText]="customizeSummaryContent"
+                                alignment="right"></dxi-total-item>
+                                <dxi-total-item column="CC_CommissionAmt" summaryType="sum" [customizeText]="customizeSummaryContent"
+                                alignment="right"></dxi-total-item>
+                            </dxo-summary>
+                        </dx-data-grid>
+                   </div>
                 </mat-tab>
                 
                 <mat-tab label="POS Collection & Old Gold Purchase">
                     <div class="row">
                         <div class="col-md-4">
-                            <div class="grid-label text-center mt-1" id="ID002">Total Purchase Value</div>
-                            <dx-data-grid>
-                                <dxi-column alignment="center" caption="Mode"></dxi-column>
-                                <dxi-column alignment="center" caption="Received In"></dxi-column>
-                                <dxi-column alignment="center" caption="Description"></dxi-column>
-                                <dxi-column alignment="center" caption="Amount"></dxi-column>
-    
+                            <div class="grid-label text-center mt-1" id="ID002">Net Collection</div>
+                            <app-loader [isLoading]="isLoading"></app-loader>
+                            <dx-data-grid #dataGrid id="gridContainer" [dataSource]="Collectn_GoldPurchaseGrid" [showBorders]="true"
+                            [allowColumnResizing]="true" *ngIf="!isLoading">
+                                <dxo-paging [pageSize]="12"></dxo-paging>
+                                <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
+                                <dxo-scrolling mode="standard"></dxo-scrolling>
+
+                                <dxi-column dataField="modename" caption="Mode"></dxi-column>
+                                <dxi-column dataField="RCVDIN"  caption="Received In"></dxi-column>
+                                <dxi-column dataField="acdescp"  caption="Description"></dxi-column>
+                                <dxi-column dataField="amount"  caption="Amount" alignment="right"></dxi-column>
+
                                 <dxo-summary>
-                                    <dxi-total-item column="amount" summaryType="sum" displayFormat="Total: {0}"></dxi-total-item>
+                                    <dxi-total-item column="amount" summaryType="sum" [customizeText]="customizeSummaryContent"></dxi-total-item>
                                 </dxo-summary>
                             </dx-data-grid>
                         </div>
     
                         <div class="col-md-4">
                             <div class="grid-label text-center mt-1" id="ID003">Old Gold Purchase Summary</div>
-                            <dx-data-grid>
-                                <dxi-column alignment="center" caption="Stock Code"></dxi-column>
-                                <dxi-column alignment="center" caption="Quantity"></dxi-column>
-                                <dxi-column alignment="center" caption="Amount"></dxi-column>
+                            <app-loader [isLoading]="isLoading"></app-loader>
+                            <dx-data-grid #dataGrid id="gridContainer" [dataSource]="GoldSum_collection" [showBorders]="true"
+                            [allowColumnResizing]="true" *ngIf="!isLoading">
+                                <dxo-paging [pageSize]="12"></dxo-paging>
+                                <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
+                                <dxo-scrolling mode="standard"></dxo-scrolling>
+
+                                <dxi-column dataField="STOCK_CODE" caption="Stock Code"></dxi-column>
+                                <dxi-column dataField="qty"  caption="Quantity" alignment="right"></dxi-column>
+                                <dxi-column dataField="amt"  caption="Amount" alignment="right"></dxi-column>
 
                                 <dxo-summary>
-                                    <dxi-total-item column="Quantity" summaryType="sum" displayFormat="Total: {0}"></dxi-total-item>
-                                    <dxi-total-item column="amount" summaryType="sum" displayFormat="Total: {0}"></dxi-total-item>
+                                    <dxi-total-item column="qty" summaryType="sum" [customizeText]="customizeSummaryContent"
+                                     alignment="right"></dxi-total-item>
+                                    <dxi-total-item column="amt" summaryType="sum" [customizeText]="customizeSummaryContent"
+                                    alignment="right"></dxi-total-item>
                                 </dxo-summary>
                             </dx-data-grid>
                         </div>
     
                         <div class="col-md-4">
                             <div class="grid-label text-center mt-1" id="ID004">POS Account Balance</div>
-                            <dx-data-grid>
+                            <app-loader [isLoading]="isLoading"></app-loader>
+                            <dx-data-grid #dataGrid id="gridContainer" [dataSource]="accountBalanceGrid" [showBorders]="true"
+                            [allowColumnResizing]="true" *ngIf="!isLoading">
+                                <dxo-paging [pageSize]="12"></dxo-paging>
+                                <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
+                                <dxo-scrolling mode="standard"></dxo-scrolling>
+
                                 <dxi-column alignment="center" caption="Account"></dxi-column>
                                 <dxi-column alignment="center" caption="Description"></dxi-column>
-                                <dxi-column alignment="center" caption="Currency"></dxi-column>
-                                <dxi-column alignment="center" caption="Amount"></dxi-column>
+                                <dxi-column alignment="center" caption="Currency" alignment="right"></dxi-column>
+                                <dxi-column alignment="center" caption="Amount" alignment="right"></dxi-column>
+
+                                <dxo-summary>
+                                    <dxi-total-item column="amt" summaryType="sum" [customizeText]="customizeSummaryContent"></dxi-total-item>
+                                </dxo-summary>
                             </dx-data-grid>
                         </div>
                     </div>
@@ -103,7 +126,14 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="grid-label text-center mt-1" id="ID005">POS Account Movement</div>
-                            <dx-data-grid>
+                            <app-loader [isLoading]="isLoading"></app-loader>
+                            <dx-data-grid #dataGrid id="gridContainer" [dataSource]="acccountMovementGrid" [showBorders]="true"
+                            [allowColumnResizing]="true" *ngIf="!isLoading">
+                                <dxo-paging [pageSize]="12"></dxo-paging>
+                                <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
+                                <dxo-scrolling mode="standard"></dxo-scrolling>
+
+
                                 <dxi-column alignment="center" caption="Account"></dxi-column>
                                 <dxi-column alignment="center" caption="Account Name"></dxi-column>
                                 <dxi-column alignment="center" caption="Voc Description"></dxi-column>
@@ -111,23 +141,32 @@
                                 <dxi-column alignment="center" caption="Amount"></dxi-column>
 
                                 <dxo-summary>
-                                    <dxi-total-item column="amount" summaryType="sum" displayFormat="Total: {0}"></dxi-total-item>
+                                    <dxi-total-item column="amount" summaryType="sum" displayFormat="Tot: {0}"></dxi-total-item>
                                 </dxo-summary>
                             </dx-data-grid>  
                         </div>
 
                         <div class="col-md-6">
                             <div class="grid-label text-center mt-1" id="ID006">POS Sales Order Summary</div>
-                            <dx-data-grid>
-                                <dxi-column alignment="center" caption="Branch"></dxi-column>
-                                <dxi-column alignment="center" caption="Status"></dxi-column>
-                                <dxi-column alignment="center" caption="#Vocs"></dxi-column>
-                                <dxi-column alignment="center" caption="Amount"></dxi-column>
-                                <dxi-column alignment="center" caption="Gold & Oth"></dxi-column>
-                                <dxi-column alignment="center" caption="Dia & Oth"></dxi-column>
+                            <app-loader [isLoading]="isLoading"></app-loader>
+                            <dx-data-grid #dataGrid id="gridContainer" [dataSource]="salesOrderSumaryGrid" [showBorders]="true"
+                            [allowColumnResizing]="true" *ngIf="!isLoading">
+                                <dxo-paging [pageSize]="12"></dxo-paging>
+                                <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
+                                <dxo-scrolling mode="standard"></dxo-scrolling>
+
+
+                                <dxi-column dataField="branch_code" caption="Branch"></dxi-column>
+                                <!-- <dxi-column dataField="description" caption="Description"></dxi-column> -->
+                                <dxi-column dataField="status" caption="Status"></dxi-column>
+                                <dxi-column dataField="voc_nos" caption="#Vocs" alignment="right"></dxi-column>
+                                <dxi-column dataField="amount" caption="Amount" alignment="right"></dxi-column>
+                                <dxi-column dataField="metal" caption="Gold & Oth" alignment="right"></dxi-column>
+                                <dxi-column dataField="nonmetal" caption="Dia & Oth" alignment="right"></dxi-column>
 
                                 <dxo-summary>
-                                    <dxi-total-item column="amount" summaryType="sum" displayFormat="Total: {0}"></dxi-total-item>
+                                    <dxi-total-item column="amount" summaryType="sum" displayFormat="{0}"
+                                    [customizeText]="customizeSummaryContent"></dxi-total-item>
                                 </dxo-summary>
                             </dx-data-grid> 
                         </div>
@@ -138,35 +177,48 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="grid-label text-center mt-1" id="ID007">Salesman Wise Summary</div>
-                            <dx-data-grid>
+                            <app-loader [isLoading]="isLoading"></app-loader>
+                            <dx-data-grid #dataGrid id="gridContainer" [dataSource]="salesmanSummaryGridArr" [showBorders]="true"
+                            [allowColumnResizing]="true" *ngIf="!isLoading">
+                                <dxo-paging [pageSize]="12"></dxo-paging>
+                                <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
+                                <dxo-scrolling mode="standard"></dxo-scrolling>
+
+                                
                                 <dxi-column alignment="center" caption="Salesman"></dxi-column>
                                 <dxi-column alignment="center" caption="#Docs"></dxi-column>
-                                <dxi-column alignment="center" caption="Tot Amount"></dxi-column>
-                                <dxi-column alignment="center" caption="Gold"></dxi-column>
-                                <dxi-column alignment="center" caption="Dia & Oth"></dxi-column>
-                                <dxi-column alignment="center" caption="Mkg. Value"></dxi-column>
+                                <dxi-column alignment="center" caption="Tot Amount" alignment="right"></dxi-column>
+                                <dxi-column alignment="center" caption="Gold" alignment="right"></dxi-column>
+                                <dxi-column alignment="center" caption="Dia & Oth" alignment="right"></dxi-column>
+                                <dxi-column alignment="center" caption="Mkg. Value" alignment="right"></dxi-column>
 
                                 <dxo-summary>
-                                    <dxi-total-item column="amount" summaryType="sum" displayFormat="Total: {0}"></dxi-total-item>
-                                    <dxi-total-item column="Gold" summaryType="sum" displayFormat="Total: {0}"></dxi-total-item>
-                                    <dxi-total-item column="Dia & Oth" summaryType="sum" displayFormat="Total: {0}"></dxi-total-item>
-                                    <dxi-total-item column="Mkg. Value" summaryType="sum" displayFormat="Total: {0}"></dxi-total-item>
+                                    <dxi-total-item column="amount" summaryType="sum" displayFormat="Total: {0}" alignment="right"></dxi-total-item>
+                                    <dxi-total-item column="Gold" summaryType="sum" displayFormat="Total: {0}" alignment="right"></dxi-total-item>
+                                    <dxi-total-item column="Dia & Oth" summaryType="sum" displayFormat="Total: {0}" alignment="right"></dxi-total-item>
+                                    <dxi-total-item column="Mkg. Value" summaryType="sum" displayFormat="Total: {0}" alignment="right"></dxi-total-item>
                                 </dxo-summary>
                             </dx-data-grid>  
                         </div>
 
                         <div class="col-md-6">
                             <div class="grid-label text-center mt-1" id="ID008">Cash & Credit Card Receipt Summary</div>
-                            <dx-data-grid>
-                                <dxi-column alignment="center" caption="Mode"></dxi-column>
-                                <dxi-column alignment="center" caption="Voc Type"></dxi-column>
-                                <dxi-column alignment="center" caption="Receive As"></dxi-column>
-                                <dxi-column alignment="center" caption="Currency"></dxi-column>
-                                <dxi-column alignment="center" caption="Amount FC"></dxi-column>
-                                <dxi-column alignment="center" caption="Amount CC"></dxi-column>
+                            <app-loader [isLoading]="isLoading"></app-loader>
+                            <dx-data-grid #dataGrid id="gridContainer" [dataSource]="cashCreditSmryGrid" [showBorders]="true"
+                            [allowColumnResizing]="true" *ngIf="!isLoading">
+                                <dxo-paging [pageSize]="12"></dxo-paging>
+                                <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
+                                <dxo-scrolling mode="standard"></dxo-scrolling>
+                                
+                                <dxi-column dataField="MODE_DESCP" caption="Mode"></dxi-column>
+                                <dxi-column dataField="VOCTYPE" caption="Voc Type" alignment="right"></dxi-column>
+                                <dxi-column dataField="CREDIT_CODE" caption="Receive As" alignment="right"></dxi-column>
+                                <dxi-column dataField="CURRENCY_CODE" caption="Currency" alignment="right"></dxi-column>
+                                <dxi-column dataField="AMTFC" caption="Amount FC" alignment="right"></dxi-column>
+                                <dxi-column dataField="AMTCC" caption="Amount CC" alignment="right"></dxi-column>
 
                                 <dxo-summary>
-                                    <dxi-total-item column="amount" summaryType="sum" displayFormat="Total: {0}"></dxi-total-item>
+                                    <dxi-total-item column="AMTCC" summaryType="sum" displayFormat="{0}" alignment="right"></dxi-total-item>
                                 </dxo-summary>
                             </dx-data-grid>  
                         </div>

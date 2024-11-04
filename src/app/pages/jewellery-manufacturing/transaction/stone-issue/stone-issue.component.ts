@@ -48,6 +48,7 @@ export class StoneIssueComponent implements OnInit {
   selectRowIndex: any;
   selectedKey: number[] = [];
   selectedIndexes: any = [];
+  parentGridData: any[] = [];
   gridAmountDecimalFormat: any;
   isDisableSaveBtn: boolean = false;
   viewMode: boolean = false;
@@ -165,6 +166,11 @@ export class StoneIssueComponent implements OnInit {
     this.setvoucherTypeMaster()
   }
 
+  onSaveGridData(gridData: any[]) {
+    this.parentGridData = gridData;
+    console.log("Grid data saved to parent:", this.parentGridData);
+    // Here you can also make an API call to save the data if needed
+  }
 
   setInitialValues() {
     console.log(this.content)
@@ -192,9 +198,8 @@ export class StoneIssueComponent implements OnInit {
           this.stoneIssueData = data.Details
           this.stoneissueFrom.controls.worker.setValue(this.stoneIssueData[0].WORKER_CODE)
           this.stoneissueFrom.controls.workername.setValue(this.stoneIssueData[0].WORKER_NAME)
-          this.stoneissueFrom.controls.carat.setValue(this.stoneIssueData[0].GROSS_WT)
-          this.stoneissueFrom.controls.unitrate.setValue(this.stoneIssueData[0].RATEFC)
-
+          // this.stoneissueFrom.controls.carat.setValue(this.stoneIssueData[0].GROSS_WT)
+          // this.stoneissueFrom.controls.unitrate.setValue(this.stoneIssueData[0].RATEFC)
 
           let detailData = data.Details
           // if (detailData.length > 0) {
@@ -217,8 +222,6 @@ export class StoneIssueComponent implements OnInit {
           //     })
           //   });
           // }
-
-
 
         } else {
           this.comService.toastErrorByMsgId('MSG1531')
@@ -305,7 +308,7 @@ export class StoneIssueComponent implements OnInit {
   WorkerCodeSelected(e: any) {
     console.log(e);
     this.stoneissueFrom.controls.worker.setValue(e.WORKER_CODE);
-    this.stoneissueFrom.controls.workername.setValue(e.DESCRIPTION);
+    this.stoneissueFrom.controls.workername.setValue(e.DESCRIPTION.toUpperCase());
   }
   selectedRows: any[] = [];
 
@@ -452,6 +455,7 @@ export class StoneIssueComponent implements OnInit {
       detailDataToParent.SRNO = this.stoneIssueData.length + 1
       this.stoneIssueData.push(detailDataToParent);
       // this.recalculateSRNO()
+      this.onSaveGridData
     }
     if (DATA.FLAG == 'SAVE') this.closeDetailScreen();
     if (DATA.FLAG == 'CONTINUE') {
@@ -695,6 +699,7 @@ export class StoneIssueComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
   validateLookupFieldWorker(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    if (this.viewMode || this.editMode) return;
     const inputValue = event.target.value.toUpperCase();
     LOOKUPDATA.SEARCH_VALUE = event.target.value;
   
@@ -734,7 +739,7 @@ export class StoneIssueComponent implements OnInit {
         if (matchedItem) {
           this.stoneissueFrom.controls[FORMNAME].setValue(matchedItem.WORKER_CODE); // Set worker code
           if (FORMNAME === 'worker') {
-            this.stoneissueFrom.controls.workername.setValue(matchedItem.DESCRIPTION); // Set worker description
+            this.stoneissueFrom.controls.workername.setValue(matchedItem.DESCRIPTION.toUpperCase()); // Set worker description
           }
         } else {
           this.handleLookupError(FORMNAME, LOOKUPDATA);

@@ -6,7 +6,6 @@ import { TransactionComponent } from './transaction.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { DiamondSalesorderComponent } from './diamond-salesorder/diamond-salesorder.component';
 import { DiamondQuotationComponent } from './diamond-quotation/diamond-quotation.component';
-import { JobCardComponent } from './job-card/job-card.component';
 import { JobCreationComponent } from './job-creation/job-creation.component';
 import { MetalIssueComponent } from './metal-issue/metal-issue.component';
 import { StoneIssueComponent } from './stone-issue/stone-issue.component';
@@ -63,7 +62,6 @@ import { JobAllocationMeltingComponent } from './melting-process/job-allocation-
     DiamondSalesorderComponent,
     DiamondQuotationComponent,
     AddNewdiamondquotationComponent,
-    JobCardComponent,
     JobCreationComponent,
     MeltingProcessComponent,
     MetalIssueComponent,

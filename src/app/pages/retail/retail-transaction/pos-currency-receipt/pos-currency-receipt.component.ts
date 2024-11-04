@@ -20,6 +20,7 @@ import { IndexedDbService } from "src/app/services/indexed-db.service";
 import { AuditTrailComponent } from "src/app/shared/common/audit-trail/audit-trail.component";
 import { MasterSearchComponent } from "src/app/shared/common/master-search/master-search.component";
 import { ItemDetailService } from "src/app/services/modal-service.service";
+import { environment } from "src/environments/environment";
 
 @Component({
   selector: "app-pos-currency-receipt",
@@ -66,6 +67,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
   viewOnly: boolean = false;
   editOnly: boolean = false;
   midForInvoce: any = 0;
+  remarks: string = ''; 
   posCurrencyDetailsData: any[] = [];
   private subscriptions: Subscription[] = [];
   amlNameValidation?: boolean;
@@ -92,7 +94,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 1,
     SEARCH_FIELD: "SALESPERSON_CODE",
-    SEARCH_HEADING: "",
+    SEARCH_HEADING: "Sales Person",
     SEARCH_VALUE: "",
     WHERECONDITION: "SALESPERSON_CODE<> ''",
     VIEW_INPUT: true,
@@ -418,6 +420,7 @@ export class PosCurrencyReceiptComponent implements OnInit {
 
   getArgsData() {
     this.snackBar.open("Loading...");
+    this.midForInvoce=this.content.MID||0;
     let Sub: Subscription = this.dataService
       .getDynamicAPI(
         `AdvanceReceipt/GetAdvanceReceiptWithMID/${this.content.MID}`
@@ -949,10 +952,11 @@ export class PosCurrencyReceiptComponent implements OnInit {
       MAINVOCTYPE: this.comService.getqueryParamMainVocType(),
       HEADER_TABLE: this.comService.getqueryParamTable(),
     };
-    let Sub: Subscription = this.dataService
-      .getDynamicAPIwithParams("AccountPosting", params)
-      .subscribe(
-        (result) => {
+
+    let API = `AccountPosting/${params.BRANCH_CODE}/${params.VOCTYPE}/${params.VOCNO}/${params.YEARMONTH}/${params.MID}/${params.ACCUPDATEYN}/${params.USERNAME}/${params.MAINVOCTYPE}/${params.HEADER_TABLE}/${this.content?.FLAG === 'Edit' ? 'E' : 'A'}/${environment.app_version}/${this.remarks || 'N'}`;
+
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
           if (result.status == "Success") {
             this.comService.toastSuccessByMsgId(
               result.message || "Posting Done"

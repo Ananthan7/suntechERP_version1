@@ -7,9 +7,10 @@
 <!-- modal header component -->
 <!-- <modal-header [isViewDelete]="!viewMode" [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode"
     (saveClick)="formSubmit()" (cancelClick)="close()" (deleteClick)="deleteCheckingPricList()"></modal-header> -->
-<modal-header (cancelClick)="close()" (deleteClick)="deleteCheckingPricList()" [isViewSave]="!viewMode"
-    (saveClick)="formSubmit()" [isViewCancel]="!viewMode" [isViewMore]="!viewMode"
-    [isViewDelete]="editMode"></modal-header>
+
+<modal-header [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode" (cancelClick)="close()"
+    (saveClick)="formSubmit()" (deleteClick)="deleteCheckingPricList()"
+    [isViewDelete]="!viewMode && editMode"></modal-header>
 <div class="row">
     <div class="col-md-12">
         <form [formGroup]="priceListMasterForm">
@@ -124,7 +125,7 @@
                                                 (change)="roundoffDis()" [disabled]="viewMode || codeEnable">Round
                                                 off
                                                 Digits </mat-checkbox>
-                                        </section>                                       
+                                        </section>
                                     </div>
                                     <div class="col-md-2">
                                         <mat-form-field appearance="outline" style="width: 100%;">

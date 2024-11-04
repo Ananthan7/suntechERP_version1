@@ -75,6 +75,7 @@ export class CommonServiceService {
   public VocTypeMasterData: any = [];
   private DECIMAL_CONSTANTS_FLAG: any = {};
   public reasonMasterList: any = [];
+  screenSpecificPermissions: any;
 
   constructor(
     private route: ActivatedRoute,

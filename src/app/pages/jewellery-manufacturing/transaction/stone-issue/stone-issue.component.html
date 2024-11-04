@@ -84,7 +84,8 @@
                   <div class="col-md-4">
                     <mat-form-field appearance="outline" style="width: 80%">
                       <input type="text" matInput formControlName="currency"
-                        readonly />
+                        UpperCaseDirective
+                        [readonly]="viewMode" />
                       <master-search class="masterSearch"
                         [MasterSearchData]="CurrencyCodeData"
                         #overlayCurrencyCode
@@ -153,6 +154,7 @@
                     <div class="col-md-4">
                       <mat-form-field appearance="outline" style="width: 80%">
                         <input type="text" matInput formControlName="workername"
+                          UpperCaseDirective
                           maxlength="20" readonly />
                       </mat-form-field>
                     </div>
@@ -291,5 +293,6 @@
 <ng-template #stoneIssueDetailScreen>
   <app-stone-issue-detail [content]="dataToDetailScreen"
     (saveDetail)="setValuesToHeaderGrid($event)"
-    (closeDetail)="closeDetailScreen()"></app-stone-issue-detail>
+    (closeDetail)="closeDetailScreen()"
+    (gridDetail)="setValuesToHeaderGrid"></app-stone-issue-detail>
 </ng-template>

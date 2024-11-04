@@ -162,9 +162,26 @@ export class LossRecoveryComponent implements OnInit {
     this.lossRecoveryFrom.controls.locationTo.setValue(branchParam.DMFGMLOC)
   }
 
-
   close(data?: any) {
-    this.activeModal.close(data);
+    if (this.content && this.content.FLAG == 'VIEW'){
+      this.activeModal.close(data);
+      return
+    }
+    Swal.fire({
+      title: 'Do you want to exit?',
+      text: '',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes!',
+      cancelButtonText: 'No'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.activeModal.close(data);
+      }
+    }
+    )
   }
 
   userDataSelected(e: any) {
@@ -619,5 +636,10 @@ export class LossRecoveryComponent implements OnInit {
       );
     this.subscriptions.push(Sub);
   }
-
+  ngOnDestroy() {
+    if (this.subscriptions.length > 0) {
+      this.subscriptions.forEach((subscription) => subscription.unsubscribe()); // unsubscribe all subscription
+      this.subscriptions = []; // Clear the array
+    }
+  }
 }
