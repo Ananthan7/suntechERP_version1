@@ -19,6 +19,7 @@ import {
   Validators,
 } from "@angular/forms";
 import { map, startWith } from "rxjs/operators";
+import { JewelleryAssemblingMasterComponent } from "./jewellery-assembling-master/jewellery-assembling-master.component";
 
 @Component({
   selector: "app-retail-master",
@@ -151,6 +152,7 @@ export class RetailMasterComponent implements OnInit {
       PosCustomerMaster: PosCustomerMasterMainComponent,
       SchemeMasterComponent: SchemeMasterComponent,
       PosWalkinCustomerComponent: PosWalkinCustomerComponent,
+      JewelleryAssemblingMasterComponent: JewelleryAssemblingMasterComponent,
 
       // Add components and update in operationals > menu updation grid form component name
     };

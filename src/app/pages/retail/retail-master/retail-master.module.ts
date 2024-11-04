@@ -12,6 +12,7 @@ import { ShowTransDetailsComponent } from './pos-customer-master-main/show-trans
 import { PrintCustomerLogComponent } from './pos-customer-master-main/print-customer-log/print-customer-log.component';
 import { PrintPrivilegeCardComponent } from './pos-customer-master-main/print-privilege-card/print-privilege-card.component';
 import { EmployeeMasterComponent } from '../../jewellery-manufacturing/master/employee-master/employee-master.component';
+import { JewelleryAssemblingMasterComponent } from './jewellery-assembling-master/jewellery-assembling-master.component';
 
 
 @NgModule({
@@ -23,7 +24,8 @@ import { EmployeeMasterComponent } from '../../jewellery-manufacturing/master/em
     ShowTransDetailsComponent,
     PrintCustomerLogComponent,
     PrintPrivilegeCardComponent,
-    EmployeeMasterComponent
+    EmployeeMasterComponent,
+    JewelleryAssemblingMasterComponent
   ],
   imports: [
     CommonModule,
