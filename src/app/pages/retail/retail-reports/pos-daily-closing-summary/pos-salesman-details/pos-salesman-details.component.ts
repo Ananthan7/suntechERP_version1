@@ -24,7 +24,7 @@ export class PosSalesmanDetailsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.comService.showSnackBarMsg('MSG81447');
+    this.toastr.info("Please wait for a moment!!");
     let API = "UspRptPosSalesmanwiseDetailsNet";
     let postData = {
       "strSalType": 0,
