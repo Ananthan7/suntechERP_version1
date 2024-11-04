@@ -1098,9 +1098,7 @@ export class DiamondSalesorderComponent implements OnInit {
     });
   }
 
-  close(data?: string) {
-    this.activeModal.close(data);
-  }
+
   showOverleyPanel(event: any, formControlName: string) {
     if (this.PartyDetailsOrderForm.value[formControlName] != '') return;
 
@@ -1155,7 +1153,27 @@ export class DiamondSalesorderComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
   
-
+  close(data?: any) {
+    if (this.content && this.content.FLAG == 'VIEW'){
+      this.activeModal.close(data);
+      return
+    }
+    Swal.fire({
+      title: 'Do you want to exit?',
+      text: '',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes!',
+      cancelButtonText: 'No'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.activeModal.close(data);
+      }
+    }
+    )
+  }
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {
       this.subscriptions.forEach(subscription => subscription.unsubscribe());// unsubscribe all subscription
