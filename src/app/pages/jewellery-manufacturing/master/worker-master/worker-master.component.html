@@ -135,7 +135,7 @@
                             <mat-form-field style="width: 100px" appearance="outline">
                                 <input type="password" matInput autocomplete="Password" maxlength="25"
                                     [readonly]="viewMode || codeEnable" formControlName="Password"
-                                    (keydown)="checkCapsOn($event)" />
+                                    (keypress)="checkCapsOn($event)" />
                             </mat-form-field>
                         </div>
 
