@@ -51,7 +51,7 @@
                                 Type <span class="required">*</span>
                                 :</label>
                             <div class="col-sm-3 mt-2">
-                                <mat-form-field appearance="outline" style="width: 100%;" >
+                                <mat-form-field appearance="outline" style="width: 100%;">
                                     <mat-select tabindex="3" formControlName="processType" (change)="ProcessDes()"
                                         (focus)="showAlertIfCodeIsEmpty()" [disabled]="viewMode">
                                         <mat-option *ngFor="let option of processTypeList" [value]="option.SRNO">
@@ -165,12 +165,13 @@
                         <div class="row">
                             <label for="input" id="ID010" class="col-sm-2 col-form-label"> Recov.
                                 Stock
-                                Code :</label>
+                                Code :
+                                <span class="required" *ngIf="processMasterForm.value.RecoveryProcess">*</span></label>
                             <div class="col-sm-3">
                                 <mat-form-field style="width: 100%;" appearance="outline">
                                     <input type="text" matInput UpperCaseDirective autocomplete="off"
-                                        formControlName="recStockCode" #recStockCode (focus)="showAlertIfCodeIsEmpty()"
-                                        id="recStockCode"
+                                        formControlName="recStockCode" #recStockCode id="recStockCode"
+                                        (focus)="showAlertIfCodeIsEmpty()"
                                         (focusout)="validateLookupField($event,StockProcessData,'recStockCode')"
                                         [readonly]="viewMode" tabindex="9"
                                         (keydown)="lookupKeyPress($event,'recStockCode')" />
@@ -228,31 +229,18 @@
                                 (change)="onlossChange()" (focus)="showAlertIfCodeIsEmpty()"
                                 [disabled]="viewMode || codeEnable">
                                 Loss <span class="required">*</span></mat-checkbox>
-                            <!-- <input class="form-check-input" type="checkbox" formControlName="loss"
-                            (change)="onlossChange($event)">
-                        <label class="form-check-label">
-                            Loss
-                        </label> -->
                         </div>
                         <div class="form-check">
                             <mat-checkbox formControlName="recovery" id="ID014" class="example-margin"
                                 (change)="onRecovery()" [disabled]="viewMode || codeEnable || lossDisable"
                                 (focus)="showAlertIfCodeIsEmpty()" tabindex="16">
                                 Recovery </mat-checkbox>
-                            <!-- <input class="form-check-input" type="checkbox" formControlName="recovery">
-                        <label class="form-check-label">
-                            Recovery
-                        </label> -->
                         </div>
                         <div class="form-check">
                             <mat-checkbox formControlName="allowGain" id="ID015" class="example-margin" tabindex="20"
                                 (change)="onAllowGain()" (focus)="showAlertIfCodeIsEmpty()"
                                 [disabled]="viewMode || codeEnable">
                                 Allow Gain </mat-checkbox>
-                            <!-- <input class="form-check-input" type="checkbox" formControlName="AllowGain">
-                        <label class="form-check-label">
-                            Allow Gain
-                        </label> -->
                         </div>
                     </div>
                     <div class="col-md-2">
