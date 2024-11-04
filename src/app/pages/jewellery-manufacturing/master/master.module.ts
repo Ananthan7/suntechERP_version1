@@ -28,6 +28,7 @@ import { LabourChargesDetailsComponent } from './design-master/labour-charges-de
 import { DesignTransactionComponent } from './design-master/design-transaction/design-transaction.component';
 import { CommonMfgModule } from '../common-mfg/common-mfg.module';
 import { MetalLabourchargeMasterComponent } from './metal-labourcharge-master/metal-labourcharge-master.component';
+import { EmployeeMasterComponent } from './employee-master/employee-master.component';
 
 @NgModule({
   declarations: [
@@ -55,6 +56,7 @@ import { MetalLabourchargeMasterComponent } from './metal-labourcharge-master/me
     LabourChargesDetailsComponent,
     DesignTransactionComponent,
     MetalLabourchargeMasterComponent,
+    EmployeeMasterComponent,
     
   ],
   imports: [
