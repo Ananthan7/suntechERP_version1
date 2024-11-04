@@ -19,6 +19,8 @@ import {
   Validators,
 } from "@angular/forms";
 import { map, startWith } from "rxjs/operators";
+import { PosBranchTargetComponent } from "./pos-branch-target/pos-branch-target.component";
+import { BuyBackPolicyComponent } from "./buy-back-policy/buy-back-policy.component";
 
 @Component({
   selector: "app-retail-master",
@@ -151,6 +153,9 @@ export class RetailMasterComponent implements OnInit {
       PosCustomerMaster: PosCustomerMasterMainComponent,
       SchemeMasterComponent: SchemeMasterComponent,
       PosWalkinCustomerComponent: PosWalkinCustomerComponent,
+      PosBranchTargetComponent:PosBranchTargetComponent,
+      BuyBackPolicyComponent:BuyBackPolicyComponent,
+
 
       // Add components and update in operationals > menu updation grid form component name
     };

@@ -11,6 +11,8 @@ import { PosWalkinCustomerComponent } from './pos-walkin-customer/pos-walkin-cus
 import { ShowTransDetailsComponent } from './pos-customer-master-main/show-trans-details/show-trans-details.component';
 import { PrintCustomerLogComponent } from './pos-customer-master-main/print-customer-log/print-customer-log.component';
 import { PrintPrivilegeCardComponent } from './pos-customer-master-main/print-privilege-card/print-privilege-card.component';
+import { PosBranchTargetComponent } from './pos-branch-target/pos-branch-target.component';
+import { BuyBackPolicyComponent } from './buy-back-policy/buy-back-policy.component';
 
 
 @NgModule({
@@ -21,7 +23,9 @@ import { PrintPrivilegeCardComponent } from './pos-customer-master-main/print-pr
     PosWalkinCustomerComponent,
     ShowTransDetailsComponent,
     PrintCustomerLogComponent,
-    PrintPrivilegeCardComponent
+    PrintPrivilegeCardComponent,
+    PosBranchTargetComponent,
+    BuyBackPolicyComponent
   ],
   imports: [
     CommonModule,
