@@ -16,6 +16,7 @@ import Swal from 'sweetalert2';
 export class MetalIssueDetailsComponent implements OnInit {
 
   @ViewChild('overlayjobNumDes') overlayjobNumDes!: MasterSearchComponent;
+  @ViewChild('subJobNoCodeOverlay') subJobNoCodeOverlay!: MasterSearchComponent;
   @ViewChild('overlaylocation') overlaylocation!: MasterSearchComponent;
   @ViewChild('overlaystockcode') overlaystockcode!: MasterSearchComponent;
   @ViewChild('overlayTostockcode') overlayTostockcode!: MasterSearchComponent;
@@ -584,7 +585,7 @@ export class MetalIssueDetailsComponent implements OnInit {
       return true
     }
     if (this.comService.emptyToZero(form.GROSS_WT) == 0) {
-      this.comService.toastErrorByMsgId('MSG1293')//Gross weight is required
+      this.comService.toastErrorByMsgId('MSG1302')//Gross weight is required
       return true
     }
     return false
@@ -713,6 +714,7 @@ export class MetalIssueDetailsComponent implements OnInit {
             this.metalIssueDetailsForm.controls.JOB_DATE.setValue(data[0].JOB_DATE)
             this.metalIssueDetailsForm.controls.PART_CODE.setValue(data[0].PART_CODE)
             this.metalIssueDetailsForm.controls.KARAT_CODE.setValue(data[0].KARAT_CODE)
+            this.metalIssueDetailsForm.controls.DESIGN_CODE.setValue(data[0].DESIGN_CODE)
             this.setValueWithDecimal('jobPurity', data[0].JOB_PURITY, 'PURITY')
             this.setSubJobCondition()
             this.subJobNumberValidate()
@@ -721,6 +723,14 @@ export class MetalIssueDetailsComponent implements OnInit {
           } else {
             this.comService.toastErrorByMsgId('MSG1531')
             this.metalIssueDetailsForm.controls.jobNumber.setValue('')
+            this.metalIssueDetailsForm.controls.subJobNo.setValue('')
+            this.metalIssueDetailsForm.controls.jobNumDes.setValue('')
+            this.metalIssueDetailsForm.controls.subJobNoDes.setValue('')
+            this.metalIssueDetailsForm.controls.DIVCODE.setValue("");
+            this.metalIssueDetailsForm.controls.JOB_DATE.setValue('')
+            this.metalIssueDetailsForm.controls.PART_CODE.setValue('')
+            this.metalIssueDetailsForm.controls.KARAT_CODE.setValue('')
+            this.metalIssueDetailsForm.controls.DESIGN_CODE.setValue('')
             this.showOverleyPanel(event, 'jobNumber')
             return
           }
@@ -765,7 +775,7 @@ export class MetalIssueDetailsComponent implements OnInit {
             } else {
               this.metalIssueDetailsForm.controls.processCode.setValue(data[index].PROCESS)
               this.metalIssueDetailsForm.controls.processCodeDesc.setValue(data[index].PROCESSDESC)
-              this.metalIssueDetailsForm.controls.DESIGN_CODE.setValue(data[index].DESIGN_CODE)
+              // this.metalIssueDetailsForm.controls.DESIGN_CODE.setValue(data[index].DESIGN_CODE)
               this.setWorkerCodeWhereCondition()
             }
 
@@ -774,7 +784,7 @@ export class MetalIssueDetailsComponent implements OnInit {
             this.metalIssueDetailsForm.controls.processCodeDesc.setValue(data[0].PROCESSDESC)
             this.metalIssueDetailsForm.controls.workerCode.setValue(data[0].WORKER)
             this.metalIssueDetailsForm.controls.workerCodeDes.setValue(data[0].WORKERDESC)
-            this.metalIssueDetailsForm.controls.DESIGN_CODE.setValue(data[0].DESIGN_CODE)
+            // this.metalIssueDetailsForm.controls.DESIGN_CODE.setValue(data[0].DESIGN_CODE)
             this.setProcessCodeWhereCondition()
             this.setWorkerCodeWhereCondition()
           }
@@ -793,7 +803,7 @@ export class MetalIssueDetailsComponent implements OnInit {
           this.metalIssueDetailsForm.controls.processCodeDesc.setValue('')
           this.metalIssueDetailsForm.controls.workerCode.setValue('')
           this.metalIssueDetailsForm.controls.workerCodeDes.setValue('')
-          this.metalIssueDetailsForm.controls.DESIGN_CODE.setValue('')
+          // this.metalIssueDetailsForm.controls.DESIGN_CODE.setValue('')
           this.setProcessCodeWhereCondition()
           this.setWorkerCodeWhereCondition()
           this.comService.toastErrorByMsgId('MSG1747')
@@ -823,7 +833,9 @@ export class MetalIssueDetailsComponent implements OnInit {
         if (result.dynamicData && result.dynamicData[0].length > 0) {
           let data = result.dynamicData[0]
           this.metalIssueDetailsForm.controls.subJobNo.setValue(data[0].UNQ_JOB_ID)
+          this.subJobNoCodeOverlay.closeOverlayPanel()
         }else{
+          this.subJobNoCodeOverlay.showOverlayPanel(event)
           this.metalIssueDetailsForm.controls.subJobNo.setValue('')
           this.metalIssueDetailsForm.controls.subJobNoDes.setValue('')
         }
@@ -999,6 +1011,9 @@ export class MetalIssueDetailsComponent implements OnInit {
     switch (formControlName) {
       case 'jobNumber':
         this.overlayjobNumDes.showOverlayPanel(event);
+        break;
+      case 'subJobNo':
+        this.subJobNoCodeOverlay.showOverlayPanel(event);
         break;
       case 'location':
         this.overlaylocation.showOverlayPanel(event);

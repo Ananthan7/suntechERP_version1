@@ -7972,6 +7972,11 @@ export class AddPosComponent implements OnInit {
                 this.divisionMS = stockInfos.DIVISIONMS;
                 this.itemDivision = stockInfos.DIVISION;
 
+                this.lineItemForm.controls['fcn_tab_details'].setValue(
+                  stockInfos.TAGLINES??""
+                );
+                this.li_tag_val = stockInfos.TAGLINES??"";
+
                 this.setGiftType();
                 const validDivisionCodes = ['M', 'D', 'W', 'P', 'N'];
 
