@@ -73,7 +73,7 @@ export class StoneIssueComponent implements OnInit {
     SEARCH_FIELD: 'currency',
     SEARCH_HEADING: 'Currency Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CURRENCY_CODE<> ''",
+    WHERECONDITION: "CURRENCY_CODE <> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -289,21 +289,47 @@ export class StoneIssueComponent implements OnInit {
     this.stoneissueFrom.controls.SALESPERSON_CODE.setValue(value.SALESPERSON_CODE);
   }
 
-  CurrencyCodeSelected(e: any) {
-    console.log(e);
-    // this.stoneissueFrom.controls.currency.setValue(e.CURRENCY_CODE);
-    // this.stoneissueFrom.controls.currencyrate.setValue(e.CONV_RATE);
-    if (e.CURRENCY_CODE) {
-      this.stoneissueFrom.controls.currency.setValue(e.CURRENCY_CODE)
-      this.stoneissueFrom.controls.currencyrate.setValue(e.CONV_RATE)
+  // CurrencyCodeSelected(e: any) {
+  //   console.log(e);
+  //   // this.stoneissueFrom.controls.currency.setValue(e.CURRENCY_CODE);
+  //   // this.stoneissueFrom.controls.currencyrate.setValue(e.CONV_RATE);
+  //   if (e.CURRENCY_CODE) {
+  //     this.stoneissueFrom.controls.currency.setValue(e.CURRENCY_CODE)
+  //     this.stoneissueFrom.controls.currencyrate.setValue(e.CONV_RATE)
+  //   }
+  //   if (e.Currency) {
+  //     this.stoneissueFrom.controls.currency.setValue(e.Currency)
+  //     this.stoneissueFrom.controls.currencyrate.setValue(
+  //       this.comService.decimalQuantityFormat(e['Conv Rate'], 'RATE')
+  //     )
+  //   }
+  // }
+    /**USE: to set currency on selected change*/
+    currencyDataSelected(event: any) {
+      if (event.target?.value) {
+        this.stoneissueFrom.controls.currency.setValue((event.target.value).toUpperCase())
+      } else {
+        this.stoneissueFrom.controls.currency.setValue(event.CURRENCY_CODE)
+      }
+      this.setCurrencyRate()
     }
-    if (e.Currency) {
-      this.stoneissueFrom.controls.currency.setValue(e.Currency)
-      this.stoneissueFrom.controls.currencyrate.setValue(
-        this.comService.decimalQuantityFormat(e['Conv Rate'], 'RATE')
-      )
+    /**USE: to set currency from company parameter */
+    setCompanyCurrency() {
+      let CURRENCY_CODE = this.comService.getCurrencyCode()
+      this.stoneissueFrom.controls.currency.setValue(CURRENCY_CODE);
+      this.setCurrencyRate()
     }
-  }
+    /**USE: to set currency from branch currency master */
+    setCurrencyRate() {
+      let CURRENCY_RATE: any = this.comService.getCurrencyRate(this.stoneissueFrom.value.currency);
+      if (CURRENCY_RATE.length > 0) {
+        this.stoneissueFrom.controls.currencyrate.setValue(CURRENCY_RATE);
+      } else {
+        this.stoneissueFrom.controls.currency.setValue('')
+        this.stoneissueFrom.controls.currencyrate.setValue('')
+        this.comService.toastErrorByMsgId('MSG1531')
+      }
+    }
 
   WorkerCodeSelected(e: any) {
     console.log(e);
@@ -393,24 +419,24 @@ export class StoneIssueComponent implements OnInit {
       item.GROSS_WT = this.comService.setCommaSerperatedNumber(item.GROSS_WT, 'METAL')
     })
   }
-  setCompanyCurrency() {
-    let CURRENCY_CODE = this.comService.getCompanyParamValue('COMPANYCURRENCY')
-    this.stoneissueFrom.controls.currency.setValue(CURRENCY_CODE);
-    this.setCurrencyRate()
-  }
+  // setCompanyCurrency() {
+  //   let CURRENCY_CODE = this.comService.getCompanyParamValue('COMPANYCURRENCY')
+  //   this.stoneissueFrom.controls.currency.setValue(CURRENCY_CODE);
+  //   this.setCurrencyRate()
+  // }
   /**USE: to set currency from branch currency master */
-  setCurrencyRate() {
-    const CURRENCY_RATE: any[] = this.comService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == this.stoneissueFrom.value.currency);
-    if (CURRENCY_RATE.length > 0) {
-      this.stoneissueFrom.controls.currencyrate.setValue(
-        this.comService.decimalQuantityFormat(CURRENCY_RATE[0].CONV_RATE, 'RATE')
-      );
-    } else {
-      this.stoneissueFrom.controls.currency.setValue('')
-      this.stoneissueFrom.controls.currencyrate.setValue('')
-      this.comService.toastErrorByMsgId('MSG1531')
-    }
-  }
+  // setCurrencyRate() {
+  //   const CURRENCY_RATE: any[] = this.comService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == this.stoneissueFrom.value.currency);
+  //   if (CURRENCY_RATE.length > 0) {
+  //     this.stoneissueFrom.controls.currencyrate.setValue(
+  //       this.comService.decimalQuantityFormat(CURRENCY_RATE[0].CONV_RATE, 'RATE')
+  //     );
+  //   } else {
+  //     this.stoneissueFrom.controls.currency.setValue('')
+  //     this.stoneissueFrom.controls.currencyrate.setValue('')
+  //     this.comService.toastErrorByMsgId('MSG1531')
+  //   }
+  // }
   openaddstoneissuedetail(data?: any) {
     // console.log(data,'data to child')
     if (data) {
@@ -469,10 +495,17 @@ export class StoneIssueComponent implements OnInit {
     this.tableData.pop();
   }
   lookupKeyPress(event: any, form?: any) {
+    console.log(event);
+
     if (event.key == 'Tab' && event.target.value == '') {
       this.showOverleyPanel(event, form)
     }
+    if (event.key === 'Enter') {
+      if (event.target.value == '') this.showOverleyPanel(event, form)
+      event.preventDefault();
+    }
   }
+  
   setPostData(form: any) {
     return {
       "MID": 0,
@@ -661,7 +694,7 @@ export class StoneIssueComponent implements OnInit {
       case 'SALESPERSON_CODE':
         this.overlaySALESPERSON_CODESearch.showOverlayPanel(event);
         break;
-      case 'currencyrate':
+      case 'currency':
         this.overlayCurrencyCode.showOverlayPanel(event);
         break;
       default:
@@ -670,34 +703,43 @@ export class StoneIssueComponent implements OnInit {
   }
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     LOOKUPDATA.SEARCH_VALUE = event.target.value
-    if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
+    if (event.target.value == '' || this.viewMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
       WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
     }
-    this.comService.toastInfoByMsgId('MSG81447');
+    this.comService.showSnackBarMsg('MSG81447');
     let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
     let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
       .subscribe((result) => {
-        this.isDisableSaveBtn = false;
+        this.comService.closeSnackBarMsg()
         let data = this.comService.arrayEmptyObjectToString(result.dynamicData[0])
         if (data.length == 0) {
           this.comService.toastErrorByMsgId('MSG1531')
           this.stoneissueFrom.controls[FORMNAME].setValue('')
           LOOKUPDATA.SEARCH_VALUE = ''
-          if (FORMNAME === 'worker' || FORMNAME === 'SALESPERSON_CODE' || FORMNAME === 'currencyrate') {
+          if (FORMNAME === 'worker' || FORMNAME === 'SALESPERSON_CODE' || FORMNAME === 'currency') {
             this.showOverleyPanel(event, FORMNAME);
-          } {
-            this.showOverleyPanel(event, FORMNAME);
-          }
+          } 
           return
         }
-
+        this.showOverleyPanel(event, FORMNAME);
       }, err => {
-        this.comService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+        this.comService.toastErrorByMsgId('MSG1531')
       })
     this.subscriptions.push(Sub)
   }
+  closeOverlayPanel(FORMNAME: any) {
+    if (FORMNAME === 'SALESPERSON_CODE') {
+      this.overlaySALESPERSON_CODESearch.closeOverlayPanel()
+      return
+    }
+    if (FORMNAME === 'currency') {
+      this.overlayCurrencyCode.closeOverlayPanel()
+      return
+    }
+  }
+
   validateLookupFieldWorker(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     if (this.viewMode || this.editMode) return;
     const inputValue = event.target.value.toUpperCase();
