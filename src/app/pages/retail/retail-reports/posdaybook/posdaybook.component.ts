@@ -383,6 +383,7 @@ export class POSDaybookComponent implements OnInit {
 
   POSRegisterGridData(){
     this.isLoading = true;
+    this.commonService.showSnackBarMsg('MSG81447');
     this.userLoginBranch= localStorage.getItem('userbranch');
  
     let API = "POSDayBook/GetPOSRegisterGrid";
@@ -393,7 +394,6 @@ export class POSDaybookComponent implements OnInit {
     };
     this.RegisterGridData = [];
     this.RegisterGridcolumnkeys = [];
-    this.commonService.showSnackBarMsg('MSG81447');
     this.dataService.postDynamicAPI(API, postData).subscribe((result: any) => {
       if (result.status == "Success") {
         this.isLoading = false;
