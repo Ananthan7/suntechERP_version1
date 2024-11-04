@@ -461,21 +461,6 @@ export class RetailGridComponent implements OnInit {
 
   ngAfterViewInit(){
     this.screenName = this.CommonService.getModuleName();
-    const retrievedData = localStorage.getItem('menuPermissions');
-    if (retrievedData) {
-      const menuPermissions = JSON.parse(retrievedData);
-      console.log('retrievedData in retail grid',menuPermissions)
-      const filteredData = menuPermissions.filter((item: any) => item.MENU_CAPTION_ENG === this.screenName)
-      .map((item: any) => ({
-        MENU_ID: item.MENU_ID,
-        MENU_CAPTION_ENG: item.MENU_CAPTION_ENG,
-        PERMISSION: item.PERMISSION
-      }));
-      this.PermissionArray = filteredData[0].PERMISSION.split("#")
-      if(this.PermissionArray.includes('P')){
-        this.printPreviewFlag = true;
-      }
-    }
   }
 
 }

@@ -251,6 +251,10 @@ export class LoyaltyRegisterComponent implements OnInit {
     });      
   }
 
+  printBtnClick(){
+
+  }
+  
   popupClosed(){
     if (this.content && Object.keys(this.content).length > 0) {
       console.log(this.content)

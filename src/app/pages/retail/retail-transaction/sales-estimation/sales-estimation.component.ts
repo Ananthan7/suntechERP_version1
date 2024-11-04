@@ -5144,7 +5144,7 @@ export class SalesEstimationComponent implements OnInit {
       EXTRA_STOCK_CODE: '',
       // EXTRA_STOCK_CODE: items?.EXTRA_STOCK_CODE || '',
       FLAGESTK: items?.FLAGESTK || 0,
-      OT_TRANSFER_TIME: items?.OT_TRANSFER_TIME ? new Date(items.OT_TRANSFER_TIME).toISOString() : '',
+      OT_TRANSFER_TIME: items?.OT_TRANSFER_TIME ? this.parseDate(items.OT_TRANSFER_TIME) : '',
       // IssueGiftVoucher:
       //   this.comFunc.stringToBoolean(items?.ISSUEGIFTVOUCHER) || false,
 
@@ -15630,6 +15630,12 @@ datepicker(event: any) {
   this.formattedDate = this.selectedDate.toISOString();
 
   console.log(this.formattedDate);
+}
+
+parseDate(dateString: string): string {
+  const [day, month, year, hour, minute, second, period] = dateString.split(/[/\s:]+/);
+  const hours = period === 'PM' && parseInt(hour) < 12 ? parseInt(hour) + 12 : parseInt(hour);
+  return new Date(parseInt(year), parseInt(month) - 1, parseInt(day), hours, parseInt(minute), parseInt(second)).toISOString();
 }
 
 }

@@ -42,6 +42,11 @@ export class POSDaybookComponent implements OnInit {
   currentTab: any;
   Collectn_GoldPurchaseGrid: any =[];
   GoldSum_collection: any = [];
+  accountBalanceGrid: any =[];
+  acccountMovementGrid: any= [];
+  salesOrderSumaryGrid: any = [];
+  salesmanSummaryGridArr: any = [];
+  cashCreditSmryGrid: any = [];
 
 
   constructor(private activeModal: NgbActiveModal, private formBuilder: FormBuilder, 
@@ -127,6 +132,7 @@ export class POSDaybookComponent implements OnInit {
       case this.currentTab = 'POS Register': this.POSRegisterGridData(); break;
       case this.currentTab = 'POS Collection & Old Gold Purchase': this.POSCollectn_GoldPurchaseGridData(); break;
       case this.currentTab = 'Movements' : this.POSMovementTabGridData(); break;
+      case this.currentTab = 'Others' : this.OthersGridData(); break;
     }
     
   }
@@ -356,10 +362,10 @@ export class POSDaybookComponent implements OnInit {
       this.posDayBookForm.controls.branch.setValue(formattedUserBranch);
       this.fetchedBranchDataParam = formattedUserBranch;
       this.fetchedBranchData= this.fetchedBranchDataParam?.split("#")
-   
+    
       this.dateToPass = {
-        fromDate:  this.commonService.formatYYMMDD(new Date()),
-        toDate: this.commonService.formatYYMMDD(new Date()),
+        fromDate:  this.formatDateToYYYYMMDD(new Date()),
+        toDate: this.formatDateToYYYYMMDD(new Date()),
       };
 
     }
@@ -371,13 +377,14 @@ export class POSDaybookComponent implements OnInit {
       case 'POS Register': this.POSRegisterGridData(); break;
       case 'POS Collection & Old Gold Purchase': this.POSCollectn_GoldPurchaseGridData(); break;
       case 'Movements' : this.POSMovementTabGridData(); break;
+      case 'Others' : this.OthersGridData(); break;
     }
   }
 
   POSRegisterGridData(){
     this.isLoading = true;
     this.userLoginBranch= localStorage.getItem('userbranch');
-    this.commonService.showSnackBarMsg('MSG81447');
+ 
     let API = "POSDayBook/GetPOSRegisterGrid";
     let postData = {
       "strFmDate": this.dateToPass.fromDate,
@@ -386,7 +393,7 @@ export class POSDaybookComponent implements OnInit {
     };
     this.RegisterGridData = [];
     this.RegisterGridcolumnkeys = [];
-
+    this.commonService.showSnackBarMsg('MSG81447');
     this.dataService.postDynamicAPI(API, postData).subscribe((result: any) => {
       if (result.status == "Success") {
         this.isLoading = false;
@@ -465,21 +472,21 @@ export class POSDaybookComponent implements OnInit {
     this.userLoginBranch = localStorage.getItem('userbranch');
     this.commonService.showSnackBarMsg('MSG81447');
 
-    const API1 = "/POSDayBook/GetPOSNetCollectionGrid";
+    const API1 = "POSDayBook/GetPOSNetCollectionGrid";
     const postData1 = {
         "strFmDate": this.dateToPass.fromDate,
         "strToDate": this.dateToPass.toDate,
         "strBranch": this.formattedBranchDivisionData ? this.formattedBranchDivisionData : this.userLoginBranch
     };
 
-    const API2 = "/POSDayBook/GetOldGoldSummGrid";
+    const API2 = "POSDayBook/GetOldGoldSummGrid";
     const postData2 = {
         "strFmDate": this.dateToPass.fromDate,
         "strToDate": this.dateToPass.toDate,
         "strBranch": this.formattedBranchDivisionData ? this.formattedBranchDivisionData : this.userLoginBranch
     };
 
-    const API3 = "/POSDayBook/GetPOSAcctBalanceGrid/MOE";
+    const API3 = "POSDayBook/GetPOSAcctBalanceGrid/MOE";
    
     this.Collectn_GoldPurchaseGrid = [];
     this.GoldSum_collection = [];
@@ -490,7 +497,6 @@ export class POSDaybookComponent implements OnInit {
     }).subscribe({
         next: (response) => {
           this.Collectn_GoldPurchaseGrid = response.collectionData.dynamicData[0];
-          console.log(this.Collectn_GoldPurchaseGrid)
           this.Collectn_GoldPurchaseGrid.forEach((item: any) => {
             for (const key in item) {
               if (typeof item[key] === 'number' && key !== 'mid') {
@@ -508,7 +514,15 @@ export class POSDaybookComponent implements OnInit {
             }
           });
 
-          console.log(response.accountBalance.dynamicData[0])
+          console.log('GetPOSAcctBalanceGrid', response)
+          this.accountBalanceGrid = response.accountBalance.dynamicData[0];
+           this.accountBalanceGrid.forEach((item: any) => {
+            for (const key in item) {
+              if (typeof item[key] === 'number' && key !== 'mid') {
+                item[key] = this.customizeText(item[key]);
+              }
+            }
+          });
 
           if(response.collectionData.dynamicData[0].length>0 ||  response.goldSumData.dynamicData[0].length>0){
             this.commonService.showSnackBarMsg('data loaded successfully!');
@@ -537,17 +551,50 @@ export class POSDaybookComponent implements OnInit {
 
     const API1 = "POSDayBook/GetPOSAccountMovement";
     const postData1 = {
-        "strFmDate": this.formatDateToYYYYMMDD(this.dateToPass.fromDate) ,
+        "strFmDate": this.formatDateToYYYYMMDD(this.dateToPass.fromDate),
         "strToDate": this.dateToPass.toDate,
         "strBranch": this.formattedBranchDivisionData ? this.formattedBranchDivisionData : this.userLoginBranch
     };
 
+    const API2 = "POSDayBook/GetPOSSalesOrdSumm";
+    const postData2 = {
+      "strFmDate": this.formatDateToYYYYMMDD(this.dateToPass.fromDate),
+      "strToDate": this.dateToPass.toDate
+    };
+
     forkJoin({
       movementData: this.dataService.postDynamicAPI(API1, postData1),
-      // goldSumData: this.dataService.postDynamicAPI(API2, postData2),
-      // accountBalance: this.dataService.getDynamicAPI('')
+      salesOrderSum: this.dataService.postDynamicAPI(API2, postData2),
     }).subscribe({
-      next: (response) => { },
+      next: (response) => { 
+        this.acccountMovementGrid = response.movementData.dynamicData[0];
+        this.acccountMovementGrid.forEach((item: any) => {
+          for (const key in item) {
+            if (typeof item[key] === 'number' && key !== 'mid') {
+              item[key] = this.customizeText(item[key]);
+            }
+          }
+        });
+
+        this.salesOrderSumaryGrid = response.salesOrderSum.dynamicData[0];
+        this.salesOrderSumaryGrid.forEach((item: any) => {
+          for (const key in item) {
+            if (typeof item[key] === 'number' && key !== 'mid') {
+              item[key] = this.customizeText(item[key]);
+            }
+          }
+        });
+
+
+        if(response.movementData.dynamicData[0].length>0 ||  response.salesOrderSum.dynamicData[0].length>0){
+          this.commonService.showSnackBarMsg('data loaded successfully!');
+          this.isLoading = false;
+        }
+        else{
+          this.commonService.showSnackBarMsg('No Data!');
+          this.isLoading = false;
+        }
+      },
       error: (error) => {
         console.error('Error loading data:', error);
         this.commonService.showSnackBarMsg('Error loading data.');
@@ -556,6 +603,65 @@ export class POSDaybookComponent implements OnInit {
       },
     })
 
+  }
+
+  OthersGridData(){
+    this.isLoading = true;
+    this.userLoginBranch = localStorage.getItem('userbranch');
+    this.commonService.showSnackBarMsg('MSG81447');
+
+    const API1 = "POSDayBook/GetSmanWiseSummgrid";
+    const postData1 = {
+      "strFmDate": this.formatDateToYYYYMMDD(this.dateToPass.fromDate),
+      "strToDate": this.dateToPass.toDate,
+    };
+
+    const API2 = "POSDayBook/GetCashCreditSummgrid";
+    const postData2 = {
+      "strFmDate": this.formatDateToYYYYMMDD(this.dateToPass.fromDate),
+      "strToDate": this.dateToPass.toDate,
+      "strBranch": this.formattedBranchDivisionData ? this.formattedBranchDivisionData : this.userLoginBranch
+    };
+
+    forkJoin({
+      salesmanSummary: this.dataService.postDynamicAPI(API1, postData1),
+      cashCreditSummry: this.dataService.postDynamicAPI(API2, postData2),
+    }).subscribe({
+      next: (response) => { 
+        this.salesmanSummaryGridArr = response.salesmanSummary?.dynamicData?.[0];
+        this.salesmanSummaryGridArr?.forEach((item: any) => {
+          for (const key in item) {
+            if (typeof item[key] === 'number' && key !== 'mid') {
+              item[key] = this.customizeText(item[key]);
+            }
+          }
+        }); 
+
+        this.cashCreditSmryGrid = response.cashCreditSummry.dynamicData?.[0];
+        this.cashCreditSmryGrid?.forEach((item: any) => {
+          for (const key in item) {
+            if (typeof item[key] === 'number' && key !== 'mid') {
+              item[key] = this.customizeText(item[key]);
+            }
+          }
+        });
+
+        if(response.salesmanSummary.dynamicData?.[0]?.length>0 || response.cashCreditSummry.dynamicData?.[0]?.length>0){
+          this.commonService.showSnackBarMsg('data loaded successfully!');
+          this.isLoading = false;
+        }
+        else{
+          this.commonService.showSnackBarMsg('No Data!');
+          this.isLoading = false;
+        }
+      },
+      error: (error) => {
+        console.error('Error loading data:', error);
+        this.commonService.showSnackBarMsg('Error loading data.');
+        this.isLoading = false;
+      
+      },
+    })
   }
   
   close(data?: any) {
