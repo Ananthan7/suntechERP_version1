@@ -1,0 +1,131 @@
+<!-- header section starts -->
+<div class="card-content border-bottom d-flex justify-content-between p-2">
+    <h5 class="pos-modaltitle" id="modal-dia-metal">Buy Back Policy</h5>
+    <button type="button" class="btn btn-close close-btn" (click)="close()">
+        <i class="feather icon-x close-icon"></i>
+    </button>
+</div>
+<!-- modal header component -->
+<modal-header [isViewDelete]="editMode" [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode"
+    (saveClick)="formSubmit()" (cancelClick)="close()" (deleteClick)="deleteMeltingType()"></modal-header>
+<!-- content section -->
+<div class="row">
+    <form [formGroup]="buybackpolicy">
+        <div class="p-4">
+            <div class="row">
+
+                <div class="col-md-3">
+                    <div class="row mb-2">
+                        <label for="input" is="ID001" class="col-sm-4 col-form-label"> Policy Code
+                            :</label>
+                        <div class="col-sm-8">
+                            <mat-form-field appearance="outline" style="width: 100%;">
+                                <input type="text" #codeInput maxlength="15" matInput formControlName="code">
+                                <master-search [MasterSearchData]="karatcodeData"
+                                    (newRowClick)="karatcodeSelected($event)" class="masterSearch" #overlaykaratSearch
+                                    *ngIf="SearchDisable == viewMode">
+                                </master-search>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="row mb-2">
+                        <label for="input" is="ID001" class="col-sm-4 col-form-label"> Divisions
+                            :</label>
+                        <div class="col-sm-8">
+                            <mat-form-field appearance="outline" style="width: 100%;">
+                                <mat-select 
+                                name="selectedValue" [disabled]="viewMode">
+                                <mat-option value="singleMetal"></mat-option>
+                            </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="row mb-2">
+                        <label for="input" id="ID005" class="col-sm-4 col-form-label">Date From :</label>
+                        <div class="col-sm-8">
+                            <div class="datepick">
+                                <mat-form-field style="width: 100%" appearance="outline">
+                                    <input matInput DateValidation [matDatepicker]="jobdate" formControlName="jobdate"
+                                        placeholder="DD/MM/YYYY" [disabled]="viewMode"/>
+                                    <mat-datepicker-toggle matSuffix [for]="jobdate"></mat-datepicker-toggle>
+                                    <mat-datepicker #jobdate></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="row mb-2">
+                        <label for="input" id="ID005" class="col-sm-4 col-form-label">Date To :</label>
+                        <div class="col-sm-8">
+                            <div class="datepick">
+                                <mat-form-field style="width: 100%" appearance="outline">
+                                    <input matInput DateValidation [matDatepicker]="jobdate" formControlName="jobdate"
+                                        placeholder="DD/MM/YYYY" [disabled]="viewMode" />
+                                    <mat-datepicker-toggle matSuffix [for]="jobdate"></mat-datepicker-toggle>
+                                    <mat-datepicker #jobdate></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="row mb-2">
+                        <label for="input" is="ID001" class="col-sm-3 col-form-label"> Per. %
+                            :</label>
+                        <div class="col-sm-4">
+                            <mat-form-field appearance="outline" style="width: 100%;">
+                                <input type="text" #codeInput maxlength="15" matInput formControlName="code">
+
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <button type="button" class="btn btn-outline-primary metal-issue-del-btn">Quick Fill</button>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="check_radio_btn">
+                <div class="col-md-12">
+
+                    <!-- <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true " [viewImportBtn]="false"
+                        [viewAddBtn]="!viewMode" [viewDeleteBtn]="!viewMode" (addClick)="addTableData()"
+                        (deleteClick)="deleteTableData()">
+                    </menu-buttons> -->
+
+                    <dx-data-grid id="gridContainer" [dataSource]="tableData" [showBorders]="true"
+                        [showColumnLines]="true" [showRowLines]="true" [allowColumnResizing]="true" class="mt-3"
+                        keyExpr="SRNO" (onSelectionChanged)="onSelectionChanged($event)">
+                        <dxo-selection mode="single"></dxo-selection>
+                        <dxi-column dataField="SRNO" caption="SR No" class="tab"> </dxi-column>
+                        <dxi-column dataField="DIVISION_CODE" caption="Division" cellTemplate="division">
+                        </dxi-column>
+                        <dxi-column dataField="DEF_ALLOY_STOCK" caption="Date From" cellTemplate="defaultAlloy">
+                        </dxi-column>
+                        <dxi-column dataField="DEF_ALLOY_DESCRIPTION" caption="Date To"> </dxi-column>
+                        <dxi-column dataField="ALLOY_PER" caption="Policy Details" cellTemplate="alloyper">
+                        </dxi-column>
+                        <dxi-column dataField="ALLOY_PER" caption="Refund %" cellTemplate="alloyper">
+                        </dxi-column>
+
+
+                    </dx-data-grid>
+                </div>
+            </div>
+
+        </div>
+
+    </form>
+
+</div>

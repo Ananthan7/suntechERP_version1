@@ -50,6 +50,7 @@ export class StonePricingMasterComponent implements OnInit {
   FORM_VALIDATER: any
   viewselling: boolean = false;
   viewsellingrate: boolean = false;
+  codeEnable: boolean = false;
 
   @ViewChild('codeInput')
   codeInput!: ElementRef;
@@ -232,6 +233,7 @@ export class StonePricingMasterComponent implements OnInit {
   ngOnInit(): void {
     this.setCompanyCurrency();
     this.setInitialValues();
+    this.codeEnable = true;
     if (this.content?.FLAG) {
       if (this.content.FLAG == 'VIEW') {
         this.viewFormValues();
@@ -243,12 +245,24 @@ export class StonePricingMasterComponent implements OnInit {
       else if (this.content.FLAG == 'EDIT') {
         this.editPrice = true;
         this.editMode = true;
+        this.codeEnable = false;
+
         this.setFormValues();
       } else if (this.content.FLAG == 'DELETE') {
         this.viewMode = true;
         this.deleteStonepriceMaster()
       }
     }
+  }
+
+
+  checkCode(): boolean {
+    if (this.stonePrizeMasterForm.value.price_code == '') {
+      this.commonService.toastErrorByMsgId('MSG1124')// Please Enter the Code
+      this.codeEnable = true;
+      return true
+    }
+    return false
   }
 
   notZeroValidator(): ValidatorFn {
@@ -686,6 +700,8 @@ export class StonePricingMasterComponent implements OnInit {
           this.commonService.toastErrorByMsgId('MSG1121')//code already exsist
           // Reset the form control value
           this.stonePrizeMasterForm.controls.price_code.setValue('');
+        } else {
+          this.codeEnable = false;
         }
 
       },
@@ -921,6 +937,7 @@ export class StonePricingMasterComponent implements OnInit {
   }
 
   sieve_setDataSelected(data: any) {
+    if (this.checkCode()) return
     this.stonePrizeMasterForm.controls.sieve_set.setValue(data.CODE);
 
     let postData = {
@@ -971,10 +988,12 @@ export class StonePricingMasterComponent implements OnInit {
 
 
   shapeDataSelected(data: any) {
+    if (this.checkCode()) return
     this.stonePrizeMasterForm.controls.shape.setValue(data.CODE)
   }
 
   sievefromDataSelected(data: any) {
+    if (this.checkCode()) return
     console.log(data);
     // const finalsieve_form = this.commonService.dataSplitPop(data.CODE);
 
@@ -982,6 +1001,7 @@ export class StonePricingMasterComponent implements OnInit {
     this.stonePrizeMasterForm.controls.sieve_from_desc.setValue(data.DESCRIPTION);
   }
   sievetoDataSelected(data: any) {
+    if (this.checkCode()) return
     console.log(data);
     // const finalsieve_to = this.commonService.dataSplitPop(data.CODE);
 
@@ -993,18 +1013,23 @@ export class StonePricingMasterComponent implements OnInit {
 
 
   colorDataSelected(data: any) {
+    if (this.checkCode()) return
     this.stonePrizeMasterForm.controls.color.setValue(data.CODE)
   }
   clarityDataSelected(data: any) {
+    if (this.checkCode()) return
     this.stonePrizeMasterForm.controls.clarity.setValue(data.CODE)
   }
   sizefromDataSelected(data: any) {
+    if (this.checkCode()) return
     this.stonePrizeMasterForm.controls.size_from.setValue(data.CODE)
   }
   sizetoDataSelected(data: any) {
+    if (this.checkCode()) return
     this.stonePrizeMasterForm.controls.size_to.setValue(data.CODE)
   }
   currencyDataSelected(data: any) {
+    if (this.checkCode()) return
     this.stonePrizeMasterForm.controls.currency.setValue(data.CURRENCY_CODE)
   }
 

@@ -1401,15 +1401,18 @@ export class ProcessMasterComponent implements OnInit {
 
   onRecovStockCode(event: any) {
     if (this.processMasterForm.value.RecoveryProcess == true) {
-      this.renderer.selectRootElement('#recStockCode').focus();
-      this.processMasterForm.get('recStockCode')?.setValidators(Validators.required);
+      if (this.processMasterForm.controls.recStockCode.value == '') {
+        this.renderer.selectRootElement('#recStockCode').focus();
+        // this.processMasterForm.get('recStockCode')?.setValidators(Validators.required);
+        this.processMasterForm.get('recStockCode')?.setValidators(Validators.required);
+      }
     }
     else {
       this.processMasterForm.get('recStockCode')?.clearValidators();
     }
     console.log(event);
-
   }
+
 
   approvalSelect(event: any) {
     if (this.processMasterForm.value.ApprovalRequired == true) {
