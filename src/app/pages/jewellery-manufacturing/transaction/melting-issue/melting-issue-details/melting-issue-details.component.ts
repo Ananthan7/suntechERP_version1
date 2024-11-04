@@ -737,5 +737,6 @@ export class MeltingIssueDetailsComponent implements OnInit {
   closeStockPopup() {
     this.isViewStock = false;
   }
+  
 }
 

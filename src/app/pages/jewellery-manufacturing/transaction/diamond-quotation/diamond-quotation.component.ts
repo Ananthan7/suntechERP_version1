@@ -571,8 +571,26 @@ export class DiamondQuotationComponent implements OnInit {
     this.SalesmanData.SEARCH_VALUE = event.target.value
   }
 
-  close() {
-    this.activeModal.close();
+  close(data?: any) {
+    if (this.content && this.content.FLAG == 'VIEW'){
+      this.activeModal.close(data);
+      return
+    }
+    Swal.fire({
+      title: 'Do you want to exit?',
+      text: '',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes!',
+      cancelButtonText: 'No'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.activeModal.close(data);
+      }
+    }
+    )
   }
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {

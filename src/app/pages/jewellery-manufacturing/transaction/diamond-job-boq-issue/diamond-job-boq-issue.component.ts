@@ -1,4 +1,4 @@
-import { Component, Input, OnInit,ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -23,9 +23,9 @@ export class DiamondJobBoqIssueComponent implements OnInit {
   @Input() content!: any;
   private subscriptions: Subscription[] = [];
   currentFilter: any;
-  tableData: any[] = ['Sr No','Job Ref','So.No','Design','PCS','Select'];
-  columnhead : any[] = ['Sr No','Div','Location','StockId','Shape','Color',' Clarity','Sieve','Pcs','Ct.Wt','Rate','Amount'];
-  columnheader : any[] = ['Job number','Job Id','Design Code','Div','StockId','Shape','Color','Clarity','Size','Sieve','Pcs','Weight','Rate','Amount','Location'];
+  tableData: any[] = ['Sr No', 'Job Ref', 'So.No', 'Design', 'PCS', 'Select'];
+  columnhead: any[] = ['Sr No', 'Div', 'Location', 'StockId', 'Shape', 'Color', ' Clarity', 'Sieve', 'Pcs', 'Ct.Wt', 'Rate', 'Amount'];
+  columnheader: any[] = ['Job number', 'Job Id', 'Design Code', 'Div', 'StockId', 'Shape', 'Color', 'Clarity', 'Size', 'Sieve', 'Pcs', 'Weight', 'Rate', 'Amount', 'Location'];
   branchCode?: String;
   isDisableSaveBtn: boolean = false;
   editMode: boolean = false;
@@ -61,7 +61,7 @@ export class DiamondJobBoqIssueComponent implements OnInit {
   //   VIEW_INPUT: true,
   //   VIEW_TABLE: true,
   // }
- 
+
   // WorkerCodeData: MasterSearchModel = {
   //   PAGENO: 1,
   //   RECORDS: 10,
@@ -72,7 +72,7 @@ export class DiamondJobBoqIssueComponent implements OnInit {
   //   WHERECONDITION: "WORKER_CODE<> ''",
   //   VIEW_INPUT: true,
   //   VIEW_TABLE: true,
-   rateTypeMasterData: MasterSearchModel = {
+  rateTypeMasterData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 22,
@@ -83,7 +83,7 @@ export class DiamondJobBoqIssueComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
- 
+
   CurrencyCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -118,11 +118,11 @@ export class DiamondJobBoqIssueComponent implements OnInit {
   }
   diamondJobBoqIssue: FormGroup = this.formBuilder.group({
 
-    vocType: ['',[Validators.required]],
-    vocNo : ['',[Validators.required]],
-    vocDate : [''],
+    vocType: ['', [Validators.required]],
+    vocNo: ['', [Validators.required]],
+    vocDate: [''],
     // vocTime : [new Date().toTimeString().slice(0, 5),[Validators.required]],
-    enteredBy : [''],
+    enteredBy: [''],
     kariggerType: [''],
     kariggerNo: [''],
     currencyType: [''],
@@ -131,8 +131,8 @@ export class DiamondJobBoqIssueComponent implements OnInit {
     baseCurrencyNo: [''],
     metalRateType: [''],
     metalRateNo: [''],
-    location : ['',[Validators.required]],
-    remarks : [''],
+    location: ['', [Validators.required]],
+    remarks: [''],
   });
 
   constructor(
@@ -154,10 +154,10 @@ export class DiamondJobBoqIssueComponent implements OnInit {
     this.setvalues()
   }
 
-  setvalues(){
+  setvalues() {
     this.diamondJobBoqIssue.controls.vocType.setValue(this.commonService.getqueryParamVocType())
-  
-    
+
+
   }
   /**USE: to set currency on selected change*/
   currencyDataSelected(event: any) {
@@ -245,57 +245,72 @@ export class DiamondJobBoqIssueComponent implements OnInit {
       this.diamondJobBoqIssue.controls.vocdate.setValue(new Date(date))
     }
   }
-    //number validation
-
   close(data?: any) {
-    //TODO reset forms and data before closing
-    this.activeModal.close(data);
+    if (this.content && this.content.FLAG == 'VIEW'){
+      this.activeModal.close(data);
+      return
+    }
+    Swal.fire({
+      title: 'Do you want to exit?',
+      text: '',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes!',
+      cancelButtonText: 'No'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.activeModal.close(data);
+      }
+    }
+    )
   }
   lookupKeyPress(event: any, form?: any) {
-    if(event.key == 'Tab' && event.target.value == ''){
-      this.showOverleyPanel(event,form)
+    if (event.key == 'Tab' && event.target.value == '') {
+      this.showOverleyPanel(event, form)
     }
   }
 
   userDataSelected(value: any) {
     console.log(value);
-       this.diamondJobBoqIssue.controls.enteredBy.setValue(value.UsersName);
+    this.diamondJobBoqIssue.controls.enteredBy.setValue(value.UsersName);
   }
 
-  ProcessCodeSelected(e:any){
+  ProcessCodeSelected(e: any) {
     console.log(e);
     this.diamondJobBoqIssue.controls.process.setValue(e.Process_Code);
   }
-  
-  WorkerCodeSelected(e:any){
+
+  WorkerCodeSelected(e: any) {
     console.log(e);
     this.diamondJobBoqIssue.controls.worker.setValue(e.WORKER_CODE);
   }
 
-  locationCodeSelected(e:any){
+  locationCodeSelected(e: any) {
     console.log(e);
     this.diamondJobBoqIssue.controls.location.setValue(e.LOCATION_CODE);
   }
 
   openaddmetalreturn() {
-    const modalRef: NgbModalRef = this.modalService.open( {
+    const modalRef: NgbModalRef = this.modalService.open({
       size: 'xl',
       backdrop: true,//'static'
       keyboard: false,
       windowClass: 'modal-full-width',
     });
     modalRef.result.then((postData) => {
-      console.log(postData);      
+      console.log(postData);
       if (postData) {
-        console.log('Data from modal:', postData);       
+        console.log('Data from modal:', postData);
         this.columnhead.push(postData);
       }
     });
 
   }
 
-  deleteTableData(){
-   
+  deleteTableData() {
+
   }
 
   submitValidations(form: any) {
@@ -323,7 +338,7 @@ export class DiamondJobBoqIssueComponent implements OnInit {
     if (this.submitValidations(this.diamondJobBoqIssue.value)) return;
 
     let API = 'JobMetalReturnMasterDJ/InsertJobMetalReturnMasterDJ'
-    let postData ={
+    let postData = {
       "MID": 0,
       "VOCTYPE": this.diamondJobBoqIssue.value.vocType,
       "BRANCH_CODE": this.branchCode,
@@ -356,27 +371,27 @@ export class DiamondJobBoqIssueComponent implements OnInit {
       "PRINT_COUNT_CNTLCOPY": 0,
       "Details": this.columnhead,
     }
-    
+
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
       .subscribe((result) => {
-          if (result && result.status == "Success") {
-            Swal.fire({
-              title: result.message || 'Success',
-              text: '',
-              icon: 'success',
-              confirmButtonColor: '#336699',
-              confirmButtonText: 'Ok'
-            }).then((result: any) => {
-              if (result.value) {
-                this.diamondJobBoqIssue.reset()
-                this.tableData = []
-                this.close('reloadMainGrid')
-              }
-            });
-          }
-          else {
-            this.commonService.toastErrorByMsgId('MSG3577')
-          }
+        if (result && result.status == "Success") {
+          Swal.fire({
+            title: result.message || 'Success',
+            text: '',
+            icon: 'success',
+            confirmButtonColor: '#336699',
+            confirmButtonText: 'Ok'
+          }).then((result: any) => {
+            if (result.value) {
+              this.diamondJobBoqIssue.reset()
+              this.tableData = []
+              this.close('reloadMainGrid')
+            }
+          });
+        }
+        else {
+          this.commonService.toastErrorByMsgId('MSG3577')
+        }
       }, err => alert(err))
     this.subscriptions.push(Sub)
   }
@@ -384,33 +399,33 @@ export class DiamondJobBoqIssueComponent implements OnInit {
   updateMeltingType() {
 
     if (this.submitValidations(this.diamondJobBoqIssue.value)) return;
-    
-    let API = 'JobMetalReturnMasterDJ/UpdateJobMetalReturnMasterDJ/'+ this.diamondJobBoqIssue.value.brnachCode + this.diamondJobBoqIssue.value.voctype + this.diamondJobBoqIssue.value.vocNo + this.diamondJobBoqIssue.value.yearMoth ;
-      let postData ={}
-  
-      let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
-        .subscribe((result) => {
-            if (result && result.status == "Success") {
-              Swal.fire({
-                title: result.message || 'Success',
-                text: '',
-                icon: 'success',
-                confirmButtonColor: '#336699',
-                confirmButtonText: 'Ok'
-              }).then((result: any) => {
-                if (result.value) {
-                  this.diamondJobBoqIssue.reset()
-                  this.tableData = []
-                  this.close('reloadMainGrid')
-                }
-              });
-            }else {
-              this.commonService.toastErrorByMsgId('MSG3577')
+
+    let API = 'JobMetalReturnMasterDJ/UpdateJobMetalReturnMasterDJ/' + this.diamondJobBoqIssue.value.brnachCode + this.diamondJobBoqIssue.value.voctype + this.diamondJobBoqIssue.value.vocNo + this.diamondJobBoqIssue.value.yearMoth;
+    let postData = {}
+
+    let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
+      .subscribe((result) => {
+        if (result && result.status == "Success") {
+          Swal.fire({
+            title: result.message || 'Success',
+            text: '',
+            icon: 'success',
+            confirmButtonColor: '#336699',
+            confirmButtonText: 'Ok'
+          }).then((result: any) => {
+            if (result.value) {
+              this.diamondJobBoqIssue.reset()
+              this.tableData = []
+              this.close('reloadMainGrid')
             }
-        }, err => alert(err))
-      this.subscriptions.push(Sub)
-    }
-      /**USE: delete Melting Type From Row */
+          });
+        } else {
+          this.commonService.toastErrorByMsgId('MSG3577')
+        }
+      }, err => alert(err))
+    this.subscriptions.push(Sub)
+  }
+  /**USE: delete Melting Type From Row */
   deleteMeltingType() {
     if (!this.content.WORKER_CODE) {
       Swal.fire({
@@ -477,7 +492,7 @@ export class DiamondJobBoqIssueComponent implements OnInit {
       }
     });
   }
-  
+
   processCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -490,7 +505,7 @@ export class DiamondJobBoqIssueComponent implements OnInit {
     VIEW_TABLE: true,
   }
 
-  processSelected(e:any){
+  processSelected(e: any) {
     console.log(e);
     this.diamondJobBoqIssue.controls.process.setValue(e.Process_Code);
   }
@@ -507,13 +522,13 @@ export class DiamondJobBoqIssueComponent implements OnInit {
     VIEW_TABLE: true,
   }
 
-  workerSelected(e:any){
+  workerSelected(e: any) {
     console.log(e);
     this.diamondJobBoqIssue.controls.worker.setValue(e.WORKER_CODE);
   }
   showOverleyPanel(event: any, formControlName: string) {
     if (this.diamondJobBoqIssue.value[formControlName] != '') return;
-  
+
     switch (formControlName) {
       case 'enteredBy':
         this.overlayenteredBy.showOverlayPanel(event);
@@ -530,7 +545,7 @@ export class DiamondJobBoqIssueComponent implements OnInit {
       default:
     }
   }
-  
+
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     LOOKUPDATA.SEARCH_VALUE = event.target.value
     if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
@@ -553,10 +568,16 @@ export class DiamondJobBoqIssueComponent implements OnInit {
           }
           return
         }
-  
+
       }, err => {
         this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
       })
     this.subscriptions.push(Sub)
   }
+  ngOnDestroy() {
+    if (this.subscriptions.length > 0) {
+      this.subscriptions.forEach((subscription) => subscription.unsubscribe()); // unsubscribe all subscription
+      this.subscriptions = []; // Clear the array
+    }
   }
+}

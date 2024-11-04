@@ -519,7 +519,7 @@ export class ProcessTransferComponent implements OnInit {
           this.showSuccessDialog(this.commonService.getMsgByID('MSG2443') || 'Success');
           let res = result.response
           this.processTransferFrom.controls.VOCNO.setValue(res.VOCNO)
-          this.viewMode=true;
+          this.viewMode = true;
         } else {
           this.commonService.toastErrorByMsgId('MSG1531')
         }
@@ -599,7 +599,7 @@ export class ProcessTransferComponent implements OnInit {
       this.commonService.toastErrorByMsgId('MSG1458') //No record is selected.
       return
     }
-    this.showConfirmationDialog().then((result) => {
+    this.showConfirmationDialog("You won't be able to revert this!").then((result) => {
       if (result.isConfirmed) {
         this.tableData = this.tableData.filter((item: any) => item.SRNO != this.selectRowIndex)
         this.detailData = this.detailData.filter((item: any) => item.SRNO != this.selectRowIndex)
@@ -608,6 +608,7 @@ export class ProcessTransferComponent implements OnInit {
     }
     )
   }
+
   reCalculateSRNO() {
     this.tableData.forEach((item, index) => item.SRNO = index + 1)
     this.detailData.forEach((item: any, index: any) => item.SRNO = index + 1)
@@ -618,7 +619,7 @@ export class ProcessTransferComponent implements OnInit {
       this.commonService.showSnackBarMsg('MSG1632')
       return
     }
-    this.showConfirmationDialog().then((result) => {
+    this.showConfirmationDialog("You won't be able to revert this!").then((result) => {
       if (result.isConfirmed) {
         let API = 'JobProcessTrnMasterDJ/DeleteJobProcessTrnMasterDJ/' +
           this.content?.BRANCH_CODE + '/' +
@@ -642,10 +643,10 @@ export class ProcessTransferComponent implements OnInit {
       }
     });
   }
-  showConfirmationDialog(): Promise<any> {
+  showConfirmationDialog(message: string): Promise<any> {
     return Swal.fire({
       title: 'Are you sure?',
-      text: "You won't be able to revert this!",
+      text: message,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -705,7 +706,24 @@ export class ProcessTransferComponent implements OnInit {
     }
   }
   close(data?: any) {
-    //TODO reset forms and data before closing
-    this.activeModal.close(data);
+    if (this.content && this.content.FLAG == 'VIEW'){
+      this.activeModal.close(data);
+      return
+    }
+    Swal.fire({
+      title: 'Do you want to exit?',
+      text: '',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes!',
+      cancelButtonText: 'No'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.activeModal.close(data);
+      }
+    }
+    )
   }
 }
