@@ -66,10 +66,12 @@
                                             <input type="text" matInput
                                                 tabindex="2"
                                                 formControlName="subJobNo"
+                                                (keydown)="lookupKeyPress($event,'subJobNo')"
                                                 (change)="subJobNumberChange($event)"
                                                 [readonly]="viewMode" />
                                             <master-search class="masterSearch"
                                                 *ngIf="!viewMode"
+                                                #subJobNoCodeOverlay
                                                 [MasterSearchData]="subJobNoCodeData"
                                                 (newRowClick)="subJobNoCodeSelected($event)"></master-search>
                                         </mat-form-field>
