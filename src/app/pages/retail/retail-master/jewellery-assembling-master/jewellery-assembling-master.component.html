@@ -1,0 +1,44 @@
+<!-- header section starts -->
+<div class="card-content border-bottom d-flex justify-content-between p-2">
+  <h5 class="pos-modaltitle" id="modal-dia-metal">POS Customer Master</h5>
+  <button type="button" class="btn btn-close close-btn" (click)="close()">
+    <i class="feather icon-x close-icon"></i>
+  </button>
+</div>
+<!-- modal header component -->
+<modal-header
+  (saveClick)="formSave()"
+  (cancelClick)="close()"
+  (deleteClick)="deleteMaster()"
+></modal-header>
+
+<mat-tab-group #tabGroup>
+  <mat-tab label="General">
+    <div class="row mt-2">
+      <div class="col-md-12">
+        <div class="row mb-1">
+          <div class="col-md-6">
+            <div class="row mb-1">
+              <label
+                for="userDefined"
+                class="col-sm-5 col-form-label"
+                id="ID029"
+                >User Defined</label
+              >
+              <div class="col-md-7">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <input
+                    appAlphabetsOnly
+                    matInput
+                    formControlName="userDefined"
+                  />
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-tab>
+  <mat-tab label="UDF Grouping"> </mat-tab>
+</mat-tab-group>
