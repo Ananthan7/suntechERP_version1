@@ -200,7 +200,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
     SRNO: [0],
     FLAG: [''],
     BRANCH_CODE: [''],
-    JOB_NUMBER: [''],
+    JOB_NUMBER: ['', Validators.required],
     JOB_DESCRIPTION: [''],
     JOB_DATE: [''],
     UNQ_JOB_ID: [''],
@@ -312,8 +312,10 @@ export class ProductionEntryDetailsComponent implements OnInit {
       this.productiondetailsFrom.controls.FLAG.setValue(this.content[0]?.FLAG)
       parentDetail = this.content[0]?.JOB_PRODUCTION_DETAIL_DJ
     } else {// condition to load without saving
-      this.renderer.selectRootElement('#jobNoSearch')?.focus();
       parentDetail = this.content[0]?.JOB_PRODUCTION_DETAIL_DJ
+      if(!parentDetail || parentDetail.JOB_NUMBER == ''){
+        this.renderer.selectRootElement('#jobNoSearch')?.focus();
+      }
       PRODUCTION_FORMDETAILS = this.content[0]?.PRODUCTION_FORMDETAILS
     }
     if (!parentDetail) return;
@@ -347,6 +349,10 @@ export class ProductionEntryDetailsComponent implements OnInit {
     this.setFormNullToString('PURE_WT', parentDetail.PURE_WT)
     this.setFormNullToString('KARAT_CODE', parentDetail.KARAT_CODE)
     this.setFormNullToString('TOTAL_PCS', parentDetail.PCS)
+    this.setFormNullToString('WORKER_CODE', parentDetail.WORKER_CODE)
+    this.setFormNullToString('WORKER_NAME', parentDetail.WORKER_NAME)
+    this.setFormNullToString('PROCESS_CODE', parentDetail.PROCESS_CODE)
+    this.setFormNullToString('PROCESS_NAME', parentDetail.PROCESS_NAME)
     this.setFormDecimal('METAL_WT', parentDetail.METAL_WT, 'METAL')
     this.setFormDecimal('STONE_WT', parentDetail.STONE_WT, 'STONE')
     this.setFormDecimal('GROSS_WT', parentDetail.GROSS_WT, 'METAL')

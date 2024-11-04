@@ -52,7 +52,7 @@
                     placeholder="DD/MM/YYYY" DateValidation
                     [readonly]="viewMode" />
                   <mat-datepicker-toggle matSuffix
-                    [for]="vocDate"></mat-datepicker-toggle>
+                    [for]="vocDate" [disabled]="viewMode"></mat-datepicker-toggle>
                   <mat-datepicker [startAt]="currentDate"
                     #vocDate></mat-datepicker>
                 </mat-form-field>
