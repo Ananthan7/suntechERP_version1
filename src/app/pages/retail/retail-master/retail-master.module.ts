@@ -11,6 +11,7 @@ import { PosWalkinCustomerComponent } from './pos-walkin-customer/pos-walkin-cus
 import { ShowTransDetailsComponent } from './pos-customer-master-main/show-trans-details/show-trans-details.component';
 import { PrintCustomerLogComponent } from './pos-customer-master-main/print-customer-log/print-customer-log.component';
 import { PrintPrivilegeCardComponent } from './pos-customer-master-main/print-privilege-card/print-privilege-card.component';
+import { EmployeeMasterComponent } from '../../jewellery-manufacturing/master/employee-master/employee-master.component';
 
 
 @NgModule({
@@ -21,7 +22,8 @@ import { PrintPrivilegeCardComponent } from './pos-customer-master-main/print-pr
     PosWalkinCustomerComponent,
     ShowTransDetailsComponent,
     PrintCustomerLogComponent,
-    PrintPrivilegeCardComponent
+    PrintPrivilegeCardComponent,
+    EmployeeMasterComponent
   ],
   imports: [
     CommonModule,
