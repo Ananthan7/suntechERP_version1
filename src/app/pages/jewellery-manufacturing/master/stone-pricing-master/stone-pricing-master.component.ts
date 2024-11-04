@@ -233,7 +233,6 @@ export class StonePricingMasterComponent implements OnInit {
   ngOnInit(): void {
     this.setCompanyCurrency();
     this.setInitialValues();
-    this.codeEnabled();
     this.codeEnable = true;
     if (this.content?.FLAG) {
       if (this.content.FLAG == 'VIEW') {
@@ -246,6 +245,8 @@ export class StonePricingMasterComponent implements OnInit {
       else if (this.content.FLAG == 'EDIT') {
         this.editPrice = true;
         this.editMode = true;
+        this.codeEnable = false;
+
         this.setFormValues();
       } else if (this.content.FLAG == 'DELETE') {
         this.viewMode = true;
@@ -254,18 +255,11 @@ export class StonePricingMasterComponent implements OnInit {
     }
   }
 
-  codeEnabled() {
-    if (this.stonePrizeMasterForm.value.price_code == '') {
-      this.codeEnable = true;
-    }
-    else {
-      this.codeEnable = false;
-    }
-  }
 
   checkCode(): boolean {
     if (this.stonePrizeMasterForm.value.price_code == '') {
       this.commonService.toastErrorByMsgId('MSG1124')// Please Enter the Code
+      this.codeEnable = true;
       return true
     }
     return false
@@ -706,6 +700,8 @@ export class StonePricingMasterComponent implements OnInit {
           this.commonService.toastErrorByMsgId('MSG1121')//code already exsist
           // Reset the form control value
           this.stonePrizeMasterForm.controls.price_code.setValue('');
+        } else {
+          this.codeEnable = false;
         }
 
       },
