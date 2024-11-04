@@ -1,0 +1,287 @@
+<!-- header section starts -->
+<div class="card-content border-bottom d-flex justify-content-between p-2">
+  <h5 class="pos-modaltitle" id="modal-dia-metal">Manufactured Item </h5>
+  <button type="button" class="btn btn-close close-btn" (click)="close()">
+    <i class="feather icon-x close-icon"></i>
+  </button>
+</div>
+<!-- modal header component -->
+<modal-header
+  (saveClick)="formSave()"
+  (cancelClick)="close()"
+  (deleteClick)="deleteMaster()"
+></modal-header>
+
+  <mat-tab-group #tabGroup>
+    <mat-tab label="General">
+      <div class="row mt-2">
+        <div class="col-md-12">
+          <div class="row mb-1">
+            <div class="col-md-6">
+              <div class="row mb-1" *ngFor="let field of fields">
+                <label
+                  for="inputPassword"
+                  class="col-sm-5 col-form-label"
+                  [attr.id]="field.label"
+                  >{{ field.label }}</label
+                >
+                <div class="col-md-7">
+                  <mat-form-field style="width: 100%" appearance="outline">
+                    <input matInput [formControlName]="field.formControlName" />
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="row mb-5">
+                <label
+                  for="inputPassword"
+                  class="col-form-label col-sm-12"
+                  id="ID042"
+                  >Comments</label
+                >
+                <div class="col-sm-12">
+                  <mat-form-field style="width: 100%" appearance="outline">
+                    <textarea
+                      matInput
+                      rows="3"
+                      formControlName="comments"
+                      style="resize: none"
+                    ></textarea>
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <div class="row mb-5">
+                <label
+                  for="inputPassword"
+                  class="col-form-label col-sm-12"
+                  id="ID042"
+                  >Sales Tag Details</label
+                >
+                <div class="col-sm-12">
+                  <mat-form-field style="width: 100%" appearance="outline">
+                    <textarea
+                      matInput
+                      rows="3"
+                      formControlName="salesTagDetails"
+                      style="resize: none"
+                    ></textarea>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+       
+      </div>
+    </mat-tab>
+    <mat-tab label="UDF Grouping">
+      <div class="row mt-2">
+        <div class="col-md-12">
+          <div class="row mb-1">
+            <div class="col-md-6">
+              <div class="row mb-5">
+                <label
+                  for="inputPassword"
+                  class="col-form-label col-sm-12"
+                  id="ID042"
+                  >Comments</label
+                >
+                <div class="col-sm-12">
+                  <mat-form-field style="width: 100%" appearance="outline">
+                    <textarea
+                      matInput
+                      rows="3"
+                      formControlName="comments"
+                      style="resize: none"
+                    ></textarea>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+
+
+  <div class="row justify-content-between m-5">
+    <div class="col-md-2">
+      <div class="row">
+        <label
+          for="inputPassword"
+          class="col-sm-4 col-form-label"
+          id="ID030"
+          >Created By</label
+        >
+        <div class="col-md-8">
+          <mat-form-field style="width: 100%" appearance="outline">
+            <input
+              matInput
+              type="text"
+              formControlName="fatherName"
+              appAlphabetsOnly
+            />
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <label
+          for="inputPassword"
+          class="col-sm-4 col-form-label"
+          id="ID030"
+          >Created On</label
+        >
+        <div class="col-md-8">
+          <mat-form-field style="width: 100%" appearance="outline">
+            <input
+              matInput
+              type="text"
+              formControlName="fatherName"
+              appAlphabetsOnly
+            />
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2">
+      <div class="row">
+        <label
+          for="inputPassword"
+          class="col-sm-4 col-form-label"
+          id="ID030"
+          >Last Edit By</label
+        >
+        <div class="col-md-8">
+          <mat-form-field style="width: 100%" appearance="outline">
+            <input
+              matInput
+              type="text"
+              formControlName="fatherName"
+              appAlphabetsOnly
+            />
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <label
+          for="inputPassword"
+          class="col-sm-4 col-form-label"
+          id="ID030"
+          >Last Edit On</label
+        >
+        <div class="col-md-8">
+          <mat-form-field style="width: 100%" appearance="outline">
+            <input
+              matInput
+              type="text"
+              formControlName="fatherName"
+              appAlphabetsOnly
+            />
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2">
+      <div class="row">
+        <label
+          for="inputPassword"
+          class="col-sm-4 col-form-label"
+          id="ID030"
+          >First Transaction</label
+        >
+        <div class="col-md-8">
+          <mat-form-field style="width: 100%" appearance="outline">
+            <input
+              matInput
+              type="text"
+              formControlName="fatherName"
+              appAlphabetsOnly
+            />
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <label
+          for="inputPassword"
+          class="col-sm-4 col-form-label"
+          id="ID030"
+          >Last Transaction</label
+        >
+        <div class="col-md-8">
+          <mat-form-field style="width: 100%" appearance="outline">
+            <input
+              matInput
+              type="text"
+              formControlName="fatherName"
+              appAlphabetsOnly
+            />
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2">
+      <div class="row">
+        <label
+          for="inputPassword"
+          class="col-sm-4 col-form-label"
+          id="ID030"
+          >Sales Man</label
+        >
+        <div class="col-md-8">
+          <mat-form-field style="width: 100%" appearance="outline">
+            <input
+              matInput
+              type="text"
+              formControlName="fatherName"
+              appAlphabetsOnly
+            />
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="col-md-2">
+      <div class="row">
+        <label
+          for="inputPassword"
+          class="col-sm-4 col-form-label"
+          id="ID030"
+          >First Transaction</label
+        >
+        <div class="col-md-8">
+          <mat-form-field style="width: 100%" appearance="outline">
+            <input
+              matInput
+              type="text"
+              formControlName="fatherName"
+              appAlphabetsOnly
+            />
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <label
+          for="inputPassword"
+          class="col-sm-4 col-form-label"
+          id="ID030"
+          >Last Transaction</label
+        >
+        <div class="col-md-8">
+          <mat-form-field style="width: 100%" appearance="outline">
+            <input
+              matInput
+              type="text"
+              formControlName="fatherName"
+              appAlphabetsOnly
+            />
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+  </div>

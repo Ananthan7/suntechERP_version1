@@ -137,7 +137,7 @@ export class StoneIssueDetailComponent implements OnInit {
   subJobNoCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 258,
+    LOOKUPID: 275,
     SEARCH_FIELD: 'UNQ_JOB_ID',
     SEARCH_HEADING: 'Sub Job Search',
     SEARCH_VALUE: '',
@@ -372,7 +372,7 @@ export class StoneIssueDetailComponent implements OnInit {
   }
   subJobNoCodeSelected(e: any) {
     this.stoneIssueDetailsFrom.controls.subjobnumber.setValue(e.UNQ_JOB_ID);
-    this.stoneIssueDetailsFrom.controls.subjobDes.setValue(e.DESCRIPTION);
+    this.stoneIssueDetailsFrom.controls.subjobDes.setValue(e.PART_CODE);
     this.subJobNumberValidate()
   }
 
@@ -1026,7 +1026,7 @@ export class StoneIssueDetailComponent implements OnInit {
         this.comService.closeSnackBarMsg()
         if (result.dynamicData && result.dynamicData.length > 0) {
           let data = result.dynamicData[0]
-          console.log(data[0], 'design')
+          console.log(data, 'design')
           this.stoneIssueDetailsFrom.controls.salesorderno.setValue(data[0].job_so_number)
         }
       })
@@ -1058,7 +1058,7 @@ export class StoneIssueDetailComponent implements OnInit {
         if (result.dynamicData && result.dynamicData[0].length > 0) {
           let data = result.dynamicData[0]
           this.data = data[0].UNQ_JOB_ID;
-          console.log(data[0], 'data')
+          console.log(data[0].UNQ_JOB_ID, 'data')
           this.stoneIssueDetailsFrom.controls.process.setValue(data[0].PROCESS.toUpperCase())
           this.stoneIssueDetailsFrom.controls.processname.setValue(data[0].PROCESSDESC.toUpperCase())
           this.stoneIssueDetailsFrom.controls.worker.setValue(data[0].WORKER.toUpperCase())
@@ -1070,13 +1070,14 @@ export class StoneIssueDetailComponent implements OnInit {
           this.FillUniqueDesignDetails()
           this.getImageData()
 
-          this.overlaysubjobnoSearch.closeOverlayPanel();
+          // this.overlaysubjobnoSearch.closeOverlayPanel();
 
         } else {
           // Handle case where no data is found
           this.comService.toastErrorByMsgId('MSG1531');
           this.stoneIssueDetailsFrom.controls.subjobnumber.setValue('');
-          this.showOverleyPanel(event, 'subjobnumber');
+          this.stoneIssueDetailsFrom.controls.subjobDes.setValue('');
+          // this.showOverleyPanel(event, 'subjobnumber');
         }
       },
         (err) => {
@@ -1285,26 +1286,26 @@ export class StoneIssueDetailComponent implements OnInit {
     const tableStockCodes = this.tableData.map((item: any) => item.STOCK_CODE);
     const formStockCode = this.stoneIssueDetailsFrom.value.stockCode;
     const stockExists = tableStockCodes.includes(formStockCode);
-
-    if (stockExists) {
-
-
+  
+    if (!stockExists) {  // Check if stock code does not exist in component details (BOQ)
+  
       // Show the SweetAlert confirmation dialog
-      this.showConfirmationDialog().then((result) => {
-        if (result.isConfirmed) {
-          console.log("Continuing with validation...");
-        }
-        else {
-          console.log("Action cancelled by user.");
-          this.stoneIssueDetailsFrom.controls.stockCode.setValue(''); // Clear the stock code field
-        }
-      });
+      this.showConfirmationDialog("The Stock details not found in the BOQ. Do you want to continue?")
+        .then((result) => {
+          if (result.isConfirmed) {
+            console.log("Continuing with validation...");
+          } else {
+            console.log("Action cancelled by user.");
+            this.stoneIssueDetailsFrom.controls.stockCode.setValue(''); // Clear the stock code field
+          }
+        });
     }
   }
 
-  showConfirmationDialog(): Promise<any> {
+  showConfirmationDialog(message: string): Promise<any> {
     return Swal.fire({
-      text: "StockCode is not found in BOQ",
+      title: 'Confirmation',
+      text: message,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',

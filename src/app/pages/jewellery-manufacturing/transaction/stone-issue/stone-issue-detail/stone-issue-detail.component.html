@@ -96,10 +96,11 @@
           </label>
           <div class="col-md-5">
             <mat-form-field appearance="outline" style="width: 100%;">
-              <input type="text" matInput formControlName="process"
-              readonly UpperCaseDirective
+              <input type="text" matInput formControlName="process" maxlength="7"
+                UpperCaseDirective
                 (focusout)="SPvalidateLookupField($event,processCodeData,'process')"
-                (keydown)="lookupKeyPress($event,'process')" />
+                (keydown)="lookupKeyPress($event,'process')"
+                [readonly]="viewMode || codeEnable" />
               <master-search class="masterSearch"
                 [MasterSearchData]="processCodeData" #overlayprocessSearch
                 (newRowClick)="processCodeSelected($event)"
@@ -110,7 +111,7 @@
           <div class="col-md-5">
             <mat-form-field appearance="outline" style="width: 100%;">
               <input type="text" matInput formControlName="processname"
-                readonly [readonly]="viewMode || codeEnable" />
+                readonly />
             </mat-form-field>
           </div>
         </div>
