@@ -25,7 +25,11 @@ import { BuyBackPolicyComponent } from './buy-back-policy/buy-back-policy.compon
     PosWalkinCustomerComponent,
     ShowTransDetailsComponent,
     PrintCustomerLogComponent,
-    PrintPrivilegeCardComponent
+    PrintPrivilegeCardComponent,
+    BuyBackPolicyComponent,
+    FestivalMasterComponent,
+    StoneWeightMasterComponent,
+    PosBranchTargetComponent
   ],
   imports: [
     CommonModule,
