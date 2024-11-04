@@ -9,6 +9,15 @@ import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
 })
 export class JewelleryAssemblingMasterComponent implements OnInit {
 
+
+  // In your component.ts
+  // Array to hold label and formControlName properties for each loop iteration
+  fields = Array.from({ length: 15 }, (_, index) => ({
+    label: `User defined ${index + 1}`, // Customize each label text if needed
+    formControlName: `userDefined${index + 1}` // Customize each formControlName
+  }));
+
+
   @ViewChild("tabGroup") tabGroup!: MatTabGroup;
 
   constructor(private activeModal: NgbActiveModal) {}
