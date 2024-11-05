@@ -1,0 +1,66 @@
+<div class="card-content border-bottom d-flex justify-content-between p-2">
+    <h5 class="pos-modaltitle" id="modal-dia-metal"> Festival Master
+    </h5>
+    <button type="button" class="btn btn-close close-btn" (click)="close()">
+        <i class="feather icon-x close-icon"></i>
+    </button>
+</div>
+<!-- modal header component -->
+<modal-header (cancelClick)="close()" (saveClick)="formSubmit()"></modal-header>
+<!-- content section -->
+
+<div class="container-fluid pt-3">
+    <form [formGroup]="festivalmaster" class="p-1">
+        <div class="row">
+            <div class="col-md-8">
+
+                <div class="row align-items-center">
+                    <label for="inputPassword" class="col-sm-2 col-form-label">Code</label>
+                    <div class="col-md-2">
+                        <mat-form-field style="width: 100%;" appearance="outline">
+                            <input type="text" id="inputPassword"
+                                matInput formControlName="code" />
+                        </mat-form-field>
+                    </div>              
+                   
+                </div>
+
+                <div class="row align-items-center my-2">
+                    <label for="inputPassword" class="col-sm-2 col-form-label">Description</label>
+                    <div class="col-md-8">
+                        <mat-form-field style="width: 100%;" appearance="outline">
+                            <input type="text" id="inputPassword" matInput formControlName="description" />
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <dx-data-grid id="gridContainer" [dataSource]="maindetails" [showBorders]="true"
+                [showColumnLines]="true" [showRowLines]="true" [allowColumnResizing]="true"
+                keyExpr="SRNO">
+               
+
+                    <dxi-column dataField="SRNO" caption="S.NO"> </dxi-column>
+                    <dxi-column dataField="YEAR" caption="Year" cellTemplate="usertemp">
+                    </dxi-column>
+                    <dxi-column dataField="FROM_DATE" caption="From Date" cellTemplate="typetemp">
+                    </dxi-column>
+                    <dxi-column dataField="TO_DATE" caption="To Date"
+                        cellTemplate="Mandatorytemp">
+                    </dxi-column>
+                    <dxi-column dataField="TARGET" caption="Target" width="auto"
+                        cellTemplate="atttemp">
+                    </dxi-column>
+
+            </dx-data-grid>  
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-md-3">
+                <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true " [viewImportBtn]="false"
+                [viewAddBtn]="!viewMode" [viewDeleteBtn]="!viewMode" (addClick)="addTableData()"
+                (deleteClick)="deleteTableData()">
+            </menu-buttons>
+            </div>
+        </div>
+    </form>
+</div>

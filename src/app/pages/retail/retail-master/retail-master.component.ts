@@ -19,6 +19,8 @@ import {
   Validators,
 } from "@angular/forms";
 import { map, startWith } from "rxjs/operators";
+import { FestivalMasterComponent } from "./festival-master/festival-master.component";
+import { StoneWeightMasterComponent } from "./stone-weight-master/stone-weight-master.component";
 
 @Component({
   selector: "app-retail-master",
@@ -151,6 +153,9 @@ export class RetailMasterComponent implements OnInit {
       PosCustomerMaster: PosCustomerMasterMainComponent,
       SchemeMasterComponent: SchemeMasterComponent,
       PosWalkinCustomerComponent: PosWalkinCustomerComponent,
+      FestivalMasterComponent:  FestivalMasterComponent,
+      StoneWeightMasterComponent: StoneWeightMasterComponent
+
 
       // Add components and update in operationals > menu updation grid form component name
     };
