@@ -159,6 +159,10 @@ export class RetailMasterComponent implements OnInit {
       SchemeMasterComponent: SchemeMasterComponent,
       PosWalkinCustomerComponent: PosWalkinCustomerComponent,
       JewelleryAssemblingMasterComponent: JewelleryAssemblingMasterComponent,
+      BuyBackPolicyComponent:BuyBackPolicyComponent,
+      PosBranchTargetComponent:PosBranchTargetComponent,
+      StoneWeightMasterComponent : StoneWeightMasterComponent,
+      FestivalMasterComponent : FestivalMasterComponent
 
       // Add components and update in operationals > menu updation grid form component name
     };
