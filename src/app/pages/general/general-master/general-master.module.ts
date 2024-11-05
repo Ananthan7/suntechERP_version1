@@ -11,6 +11,7 @@ import { EnterMetalDetailsComponent } from './jewellery-master/enter-metal-detai
 import { StoneDetailsComponent } from './jewellery-master/stone-details/stone-details.component';
 import { PricelistMasterComponent } from './pricelist-master/pricelist-master.component';
 import { AccountContactComponent } from './account-contact/account-contact.component';
+import { WholesaleSalesmanTargetComponent } from './wholesale-salesman-target/wholesale-salesman-target.component';
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import { AccountContactComponent } from './account-contact/account-contact.compo
     EnterMetalDetailsComponent,
     StoneDetailsComponent,
     PricelistMasterComponent,
-    AccountContactComponent
+    AccountContactComponent,
+    WholesaleSalesmanTargetComponent
   ],
   imports: [
     CommonModule,
