@@ -32,25 +32,6 @@ export class RetailComponent implements OnInit {
     this.menuTitle = event.MENU_MODULE
   }
 
-  openModleFromFavorites(componentName: any) {
-    const componentToOpen = this.componentList[componentName];
-    
-    if (!componentToOpen) {
-      console.error("Component not found:", componentName);
-      return;
-    }
-  
-    const modalRef: NgbModalRef = this.modalService.open(componentToOpen, {
-      size: "xl",
-      backdrop: true,
-      keyboard: false,
-      windowClass: "modal-dialog-centered modal-dialog-scrollable",
-    });
-  
-    // Optional: pass data to the modal component instance
-    // modalRef.componentInstance.customerCode = this.existCustomerCode;
-    // modalRef.componentInstance.data = this.content;
-  }
   
 
 }
