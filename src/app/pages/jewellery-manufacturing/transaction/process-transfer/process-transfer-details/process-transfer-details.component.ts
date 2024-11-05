@@ -896,7 +896,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
         "parameter": {
           'strUNQ_JOB_ID': this.processTransferdetailsForm.value.UNQ_JOB_ID,
           'strBranchCode': this.commonService.nullToString(this.branchCode),
-          'strCurrenctUser': ''
+          'strCurrenctUser': this.commonService.userName || ''
         }
       }
       return metalSubjobData
@@ -906,6 +906,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
         "parameter": {
           'StrSubJobNo': this.commonService.nullToString(form.UNQ_JOB_ID),
           'StrBranchCode': this.commonService.nullToString(this.branchCode),
+          'CurrentUser': this.commonService.userName
         }
       }
       return diamondPostData
