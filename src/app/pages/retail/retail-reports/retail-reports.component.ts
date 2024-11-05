@@ -20,6 +20,7 @@ import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { PosDailyClosingReportComponent } from './pos-daily-closing-report/pos-daily-closing-report.component';
 import { POSDaybookComponent } from './posdaybook/posdaybook.component';
 import { CustomerEnquiryComponent } from './customer-enquiry/customer-enquiry.component';
+import { CreditSaleReportComponent } from './credit-sale-report/credit-sale-report.component';
 @Component({
   selector: 'app-retail-reports',
   templateUrl: './retail-reports.component.html',
@@ -100,7 +101,8 @@ export class RetailReportsComponent implements OnInit {
       'SalesOrderRegisterComponent': SalesOrderRegisterComponent,
       'PosDailyClosingReportComponent': PosDailyClosingReportComponent,
       'POSDaybookComponent': POSDaybookComponent,
-      'CustomerEnquiryComponent': CustomerEnquiryComponent
+      'CustomerEnquiryComponent': CustomerEnquiryComponent,
+      'CreditSaleReportComponent': CreditSaleReportComponent
       // Add components and update in operationals > menu updation grid form component name
     }
     if (this.componentDbList[this.componentName]) {

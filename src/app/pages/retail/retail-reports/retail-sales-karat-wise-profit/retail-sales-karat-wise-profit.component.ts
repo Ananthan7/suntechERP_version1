@@ -34,6 +34,7 @@ export class RetailSalesKaratWiseProfitComponent implements OnInit {
   logDataParam: any;
   isLoading: boolean = false;
 
+  fetchedBranchDataParam: any= [];
 
   constructor(
     private toastr: ToastrService,
@@ -262,6 +263,10 @@ export class RetailSalesKaratWiseProfitComponent implements OnInit {
     });      
   }
 
+  printBtnClick(){
+
+  }
+
   prefillScreenValues(){
     if ( Object.keys(this.content).length > 0) {
       this.isLoading = true;
@@ -281,6 +286,18 @@ export class RetailSalesKaratWiseProfitComponent implements OnInit {
       this.RetailKaratWiseSaleForm.controls.BranchWise.setValue(branchWiseValue);
       this.RetailKaratWiseSaleForm.controls.InvoiceWise.setValue(invoiceWiseValue);
 
+    }
+    else{
+      const userBranch = localStorage.getItem('userbranch');
+      const formattedUserBranch = userBranch ? `${userBranch}#` : null;
+      this.RetailKaratWiseSaleForm.controls.branch.setValue(formattedUserBranch);
+      this.fetchedBranchDataParam = formattedUserBranch;
+      this.fetchedBranchData= this.fetchedBranchDataParam?.split("#")
+   
+      this.dateToPass = {
+        fromDate:  this.formatDateToYYYYMMDD(new Date()),
+        toDate: this.formatDateToYYYYMMDD(new Date()),
+      };
     }
   }
 
