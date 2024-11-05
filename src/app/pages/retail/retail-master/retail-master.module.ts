@@ -18,6 +18,7 @@ import { StoneWeightMasterComponent } from './stone-weight-master/stone-weight-m
 import { PosBranchTargetComponent } from './pos-branch-target/pos-branch-target.component';
 import { BuyBackPolicyComponent } from './buy-back-policy/buy-back-policy.component';
 import { ReversePriceRatioComponent } from './reverse-price-ratio/reverse-price-ratio.component';
+import { FixingCommodityMasterComponent } from './fixing-commodity-master/fixing-commodity-master.component';
 
 
 @NgModule({
@@ -35,7 +36,8 @@ import { ReversePriceRatioComponent } from './reverse-price-ratio/reverse-price-
     FestivalMasterComponent,
     StoneWeightMasterComponent,
     PosBranchTargetComponent,
-    ReversePriceRatioComponent
+    ReversePriceRatioComponent,
+    FixingCommodityMasterComponent
   ],
   imports: [
     CommonModule,
