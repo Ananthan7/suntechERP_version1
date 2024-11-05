@@ -15,6 +15,8 @@
 
 <!-- content section -->
 <div class="container-fluid pt-3">
+  <form [formGroup]="manufacturedItemMainForm">
+
   <mat-tab-group #tabGroup>
     <mat-tab label="General">
       <div class="row mt-2">
@@ -1553,21 +1555,24 @@
 
                       <div class="col-md-4">
                         <div class="row mb-1">
-                            <label
-                              for="noOfPlat"
-                              class="col-sm-5 col-form-label"
-                              id="ID029"
-                              >No Of Plat
-                            </label>
-                            <div class="col-md-7">
-                              <mat-form-field style="width: 100%" appearance="outline">
-                                <input
-                                  matInput="text"
-                                  formControlName="noOfPlat"
-                                />
-                              </mat-form-field>
-                            </div>
+                          <label
+                            for="noOfPlat"
+                            class="col-sm-5 col-form-label"
+                            id="ID029"
+                            >No Of Plat
+                          </label>
+                          <div class="col-md-7">
+                            <mat-form-field
+                              style="width: 100%"
+                              appearance="outline"
+                            >
+                              <input
+                                matInput="text"
+                                formControlName="noOfPlat"
+                              />
+                            </mat-form-field>
                           </div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -1805,4 +1810,5 @@
       </div>
     </div>
   </div>
+</form>
 </div>

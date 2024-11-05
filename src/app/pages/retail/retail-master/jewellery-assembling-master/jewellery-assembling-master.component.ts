@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
+import { FormBuilder, FormGroup } from "@angular/forms";
 import { MatTabGroup } from "@angular/material/tabs";
 import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
-
 
 export interface TableElement {
   description: string;
@@ -20,12 +20,11 @@ export class JewelleryAssemblingMasterComponent implements OnInit {
   componentAndLaburChargeSummaryData: any;
   partyDetailsData: any;
 
-
-  displayedColumns: string[] = ['srNo', 'description', 'fc', 'lc'];
+  displayedColumns: string[] = ["srNo", "description", "fc", "lc"];
   dataSource: TableElement[] = [
-    { description: 'Settings', fc: 0.0, lc: 0.0 },
-    { description: 'Polishing', fc: 0.0, lc: 0.0 },
-    { description: 'Rhodium', fc: 0.0, lc: 0.0 },
+    { description: "Settings", fc: 0.0, lc: 0.0 },
+    { description: "Polishing", fc: 0.0, lc: 0.0 },
+    { description: "Rhodium", fc: 0.0, lc: 0.0 },
     // { description: 'Rhodium', fc: 0.0, lc: 0.0 },
     // { description: 'Rhodium', fc: 0.0, lc: 0.0 },
     // { description: 'Rhodium', fc: 0.0, lc: 0.0 },
@@ -36,9 +35,7 @@ export class JewelleryAssemblingMasterComponent implements OnInit {
     // { description: 'Rhodium', fc: 0.0, lc: 0.0 },
     // { description: 'Rhodium', fc: 0.0, lc: 0.0 },
     // { description: 'Rhodium', fc: 0.0, lc: 0.0 },
-
   ];
-
 
   fields = Array.from({ length: 15 }, (_, index) => ({
     label: `User defined ${index + 1}`,
@@ -103,8 +100,14 @@ export class JewelleryAssemblingMasterComponent implements OnInit {
   ];
 
   @ViewChild("tabGroup") tabGroup!: MatTabGroup;
+  manufacturedItemMainForm: FormGroup = this.formBuilder.group({});
 
-  constructor(private activeModal: NgbActiveModal) {}
+
+  constructor(
+    private activeModal: NgbActiveModal,
+    private formBuilder: FormBuilder
+  ) {}
+
 
   ngOnInit(): void {}
 
