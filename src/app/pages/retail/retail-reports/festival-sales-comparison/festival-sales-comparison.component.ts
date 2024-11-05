@@ -28,6 +28,9 @@ export class FestivalSalesComparisonComponent implements OnInit {
   popupVisible: boolean = false;
   templateNameHasValue: boolean= false;
 
+  dateToPass: { fromDate: string; toDate: string } = { fromDate: '', toDate: '' };
+  fetchedBranchDataParam: any= [];
+
 
   constructor( private formBuilder: FormBuilder,
     private toastr: ToastrService,
@@ -44,6 +47,14 @@ export class FestivalSalesComparisonComponent implements OnInit {
     this.activeModal.close(data);
   }
   
+  formatDateToYYYYMMDD(dateString: any) {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
   setDateValue(event: any){
     if(event.FromDate){
       this.festivalSalesComparisonForm.controls.fromdate.setValue(event.FromDate);
@@ -110,6 +121,18 @@ export class FestivalSalesComparisonComponent implements OnInit {
  prefillScreenValues(){
     if ( Object.keys(this.content).length > 0) {
       //  this.templateNameHasValue = !!(this.content?.TEMPLATE_NAME);
+    }
+    else{
+      const userBranch = localStorage.getItem('userbranch');
+      const formattedUserBranch = userBranch ? `${userBranch}#` : null;
+      this.festivalSalesComparisonForm.controls.branch.setValue(formattedUserBranch);
+      this.fetchedBranchDataParam = formattedUserBranch;
+      this.fetchedBranchData= this.fetchedBranchDataParam?.split("#")
+   
+      this.dateToPass = {
+        fromDate:  this.formatDateToYYYYMMDD(new Date()),
+        toDate: this.formatDateToYYYYMMDD(new Date()),
+      };
     }
   }
 
@@ -224,5 +247,7 @@ export class FestivalSalesComparisonComponent implements OnInit {
     });      
   }
 
-
+  printBtnClick(){
+    
+  }
 }
