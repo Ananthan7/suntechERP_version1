@@ -47,7 +47,12 @@ import { ManufacturedItemsComponent } from './manufactured-items/manufactured-it
     JewelleryBrandingComponent,
     CertificateMasterComponent,
     ZirconMasterComponent,
-    ManufacturedItemsComponent
+    ManufacturedItemsComponent,
+    JewelleryBrandingComponent,
+    CertificateMasterComponent,
+    ZirconMasterComponent,
+    ManufacturedItemsComponent,
+    FixingCommodityMasterComponent
   ],
   imports: [
     CommonModule,
