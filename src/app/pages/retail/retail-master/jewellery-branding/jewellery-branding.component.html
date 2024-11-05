@@ -1,0 +1,210 @@
+<!-- header section starts -->
+<div class="card-content border-bottom d-flex justify-content-between p-2">
+  <h5 class="pos-modaltitle" id="modal-dia-metal">Jewellery branding</h5>
+  <button type="button" class="btn btn-close close-btn" (click)="close()">
+    <i class="feather icon-x close-icon"></i>
+  </button>
+</div>
+
+<!-- modal header component -->
+<modal-header
+  (saveClick)="formSave()"
+  (cancelClick)="close()"
+  (deleteClick)="deleteMaster()"
+></modal-header>
+
+<!-- content section -->
+<div class="container-fluid pt-3">
+  <form [formGroup]="jewelleryBrandingMainForm">
+    <div class="row mt-2">
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-3">
+            <div class="row mb-1">
+              <label for="vocType" class="col-sm-5 col-form-label" id="ID029"
+                >Voc Type</label
+              >
+              <div class="col-md-7">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <input matInput="text" formControlName="vocType" />
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="row mb-1">
+              <label for="vocNo" class="col-sm-5 col-form-label" id="ID029"
+                >Voc No</label
+              >
+              <div class="col-md-7">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <input matInput="text" formControlName="vocNo" />
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="row mb-1">
+              <label for="vocCode" class="col-sm-5 col-form-label" id="ID029"
+                >Voc Date</label
+              >
+              <div class="col-md-7">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <input
+                    matInput
+                    [matDatepicker]="dob"
+                    name="dob"
+                    placeholder="DD/MM/YYYY"
+                    DateValidation
+                    formControlName="vocDate"
+                    readonly="true"
+                  />
+                  <mat-datepicker-toggle matSuffix></mat-datepicker-toggle>
+                  <mat-datepicker [startAt]="" #dob></mat-datepicker>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="row mb-1">
+              <label for="enteredBy" class="col-sm-5 col-form-label" id="ID029"
+                >Entered By</label
+              >
+              <div class="col-md-7">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <input matInput="text" formControlName="enteredBy" />
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="row mb-1">
+              <label for="Range" class="col-sm-5 col-form-label" id="ID029"
+                >Range</label
+              >
+              <div class="col-md-7">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <input matInput="text" formControlName="Range" />
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="row mb-1">
+              <label for="division" class="col-sm-5 col-form-label" id="ID029"
+                >Division</label
+              >
+              <div class="col-md-7">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <input matInput="text" formControlName="division" />
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="row mb-1">
+              <label for="stockCode" class="col-sm-5 col-form-label" id="ID029"
+                >Stock Code</label
+              >
+              <div class="col-md-7">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <input matInput="text" formControlName="stockCode" />
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-2">
+            <div class="row mb-1">
+              <label class="col-md-12 col-form-label" id="ID029">From</label>
+            </div>
+
+            <div class="row mb-1">
+              <div class="col-md-10">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <input matInput="text" formControlName="from" />
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="row mb-1">
+              <div class="col-md-10 pt-3">
+                <mat-checkbox formControlName="loyaltyCustomerCheck" id="ID060"
+                  >Show Only Stock items</mat-checkbox
+                >
+              </div>
+            </div>
+          </div>
+          <div class="col-md-2">
+            <div class="row mb-1">
+              <label class="col-md-12 col-form-label" id="ID029">To</label>
+            </div>
+
+            <div class="row mb-1">
+              <div class="col-md-10">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <input matInput="text" formControlName="to" />
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="row mb-1">
+              <div class="col-md-10 pt-3">
+                <button
+                  type="button"
+                  class="col-md-12 p-4 mb-4 btn btn-primary text-center"
+                >
+                  Show
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-2">
+            <div class="row mb-1">
+              <div class="col-md-10 p-2 mt-1">
+                <div class="icons">
+                  <div class="image_box">
+                    <!-- <img
+                      class="image_box"
+                      alt="picture"
+                    /> -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-12  mt-4">
+        <div class="row">
+          <div class="col-md-12">
+            <dx-data-grid
+              [dataSource]="tableData"
+              #dataGrid
+              id="gridContainer"
+              keyExpr="MID"
+              [showBorders]="true"
+              (onSelectionChanged)="onSelectionChanged($event)"
+            >
+              <!-- Paging disabled -->
+              <dxo-paging [enabled]="false"></dxo-paging>
+
+              <!-- Cell Editing Enabled -->
+              <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
+
+              <!-- Multiple Selection Mode -->
+              <dxo-selection mode="multiple"></dxo-selection>
+
+              <!-- Virtual Scrolling -->
+              <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+              <!-- Columns Definition -->
+              <dxi-column
+                *ngFor="let column of columns"
+                [dataField]="column.dataField"
+                [caption]="column.caption"
+                [allowEditing]="true"
+                alignment="center"
+              ></dxi-column>
+            </dx-data-grid>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

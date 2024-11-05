@@ -12,7 +12,6 @@ import { ShowTransDetailsComponent } from './pos-customer-master-main/show-trans
 import { PrintCustomerLogComponent } from './pos-customer-master-main/print-customer-log/print-customer-log.component';
 import { PrintPrivilegeCardComponent } from './pos-customer-master-main/print-privilege-card/print-privilege-card.component';
 import { EmployeeMasterComponent } from '../../jewellery-manufacturing/master/employee-master/employee-master.component';
-import { JewelleryAssemblingMasterComponent } from './jewellery-assembling-master/jewellery-assembling-master.component';
 import { FestivalMasterComponent } from './festival-master/festival-master.component';
 import { StoneWeightMasterComponent } from './stone-weight-master/stone-weight-master.component';
 import { PosBranchTargetComponent } from './pos-branch-target/pos-branch-target.component';
@@ -21,6 +20,10 @@ import { ReversePriceRatioComponent } from './reverse-price-ratio/reverse-price-
 import { AllowanceMasterComponent } from './allowance-master/allowance-master.component';
 import { DeductionMasterComponent } from './deduction-master/deduction-master.component';
 import { FixingCommodityMasterComponent } from './fixing-commodity-master/fixing-commodity-master.component';
+import { JewelleryBrandingComponent } from './jewellery-branding/jewellery-branding.component';
+import { CertificateMasterComponent } from './certificate-master/certificate-master.component';
+import { ZirconMasterComponent } from './zircon-master/zircon-master.component';
+import { ManufacturedItemsComponent } from './manufactured-items/manufactured-items.component';
 
 
 @NgModule({
@@ -33,7 +36,6 @@ import { FixingCommodityMasterComponent } from './fixing-commodity-master/fixing
     PrintCustomerLogComponent,
     PrintPrivilegeCardComponent,
     EmployeeMasterComponent,
-    JewelleryAssemblingMasterComponent,
     BuyBackPolicyComponent,
     FestivalMasterComponent,
     StoneWeightMasterComponent,
@@ -41,7 +43,11 @@ import { FixingCommodityMasterComponent } from './fixing-commodity-master/fixing
     ReversePriceRatioComponent,
     AllowanceMasterComponent,
     DeductionMasterComponent,
-    FixingCommodityMasterComponent
+    FixingCommodityMasterComponent,
+    JewelleryBrandingComponent,
+    CertificateMasterComponent,
+    ZirconMasterComponent,
+    ManufacturedItemsComponent
   ],
   imports: [
     CommonModule,

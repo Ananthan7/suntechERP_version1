@@ -19,7 +19,6 @@ import {
   Validators,
 } from "@angular/forms";
 import { map, startWith } from "rxjs/operators";
-import { JewelleryAssemblingMasterComponent } from "./jewellery-assembling-master/jewellery-assembling-master.component";
 import { FestivalMasterComponent } from "./festival-master/festival-master.component";
 import { StoneWeightMasterComponent } from "./stone-weight-master/stone-weight-master.component";
 
@@ -32,6 +31,10 @@ import { AllowanceMasterComponent } from "./allowance-master/allowance-master.co
 import { DeductionMasterComponent } from "./deduction-master/deduction-master.component";
 import { WholesaleSalesmanTargetComponent } from "../../general/general-master/wholesale-salesman-target/wholesale-salesman-target.component";
 import { FixingCommodityMasterComponent } from "./fixing-commodity-master/fixing-commodity-master.component";
+import { JewelleryBrandingComponent } from "./jewellery-branding/jewellery-branding.component";
+import { CertificateMasterComponent } from "./certificate-master/certificate-master.component";
+import { ZirconMasterComponent } from "./zircon-master/zircon-master.component";
+import { ManufacturedItemsComponent } from "./manufactured-items/manufactured-items.component";
 @Component({
   selector: "app-retail-master",
   templateUrl: "./retail-master.component.html",
@@ -163,7 +166,6 @@ export class RetailMasterComponent implements OnInit {
       PosCustomerMaster: PosCustomerMasterMainComponent,
       SchemeMasterComponent: SchemeMasterComponent,
       PosWalkinCustomerComponent: PosWalkinCustomerComponent,
-      JewelleryAssemblingMasterComponent: JewelleryAssemblingMasterComponent,
       BuyBackPolicyComponent:BuyBackPolicyComponent,
       PosBranchTargetComponent:PosBranchTargetComponent,
       StoneWeightMasterComponent : StoneWeightMasterComponent,
@@ -172,7 +174,11 @@ export class RetailMasterComponent implements OnInit {
       AllowanceMasterComponent:AllowanceMasterComponent,
       DeductionMasterComponent : DeductionMasterComponent,
       WholesaleSalesmanTargetComponent:WholesaleSalesmanTargetComponent,
-      FixingCommodityMasterComponent:FixingCommodityMasterComponent
+      FixingCommodityMasterComponent:FixingCommodityMasterComponent,
+      JewelleryBrandingComponent: JewelleryBrandingComponent,
+      CertificateMasterComponent: CertificateMasterComponent,
+      ZirconMasterComponent: ZirconMasterComponent,
+      ManufacturedItemsComponent:ManufacturedItemsComponent,
 
       // Add components and update in operationals > menu updation grid form component name
     };

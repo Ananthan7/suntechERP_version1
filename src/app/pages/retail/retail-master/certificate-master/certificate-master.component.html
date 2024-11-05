@@ -1,0 +1,125 @@
+<!-- header section starts -->
+<div class="card-content border-bottom d-flex justify-content-between p-2">
+  <h5 class="pos-modaltitle" id="modal-dia-metal">Certificate Master</h5>
+  <button type="button" class="btn btn-close close-btn" (click)="close()">
+    <i class="feather icon-x close-icon"></i>
+  </button>
+</div>
+
+<!-- modal header component -->
+<modal-header
+  (saveClick)="formSave()"
+  (cancelClick)="close()"
+  (deleteClick)="deleteMaster()"
+></modal-header>
+
+<!-- content section -->
+<div class="container-fluid pt-3">
+  <form [formGroup]="certificateMasterMainForm">
+    <div class="row mt-2">
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-3">
+            <div class="row mb-1">
+              <label for="code" class="col-sm-5 col-form-label" id="ID029"
+                >Code</label
+              >
+              <div class="col-md-7">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <input matInput="text" formControlName="code" />
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="row mb-1">
+              <label for="stdcharges" class="col-sm-5 col-form-label" id="ID029"
+                >Std. charges</label
+              >
+              <div class="col-md-7">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <input matInput="text" formControlName="stdcharges" />
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="row mb-1">
+              <label for="ledger" class="col-sm-5 col-form-label" id="ID029"
+                >Ledger</label
+              >
+              <div class="col-md-7">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <input matInput="text" formControlName="ledger" />
+                </mat-form-field>
+              </div>
+            </div>
+
+
+            <div class="row mb-1">
+                <label for="email" class="col-sm-5 col-form-label" id="ID029"
+                  >Email</label
+                >
+                <div class="col-md-7">
+                  <mat-form-field style="width: 100%" appearance="outline">
+                    <input matInput="text" formControlName="email" />
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <div class="row mb-1">
+                <label for="web" class="col-sm-5 col-form-label" id="ID029"
+                  >Web</label
+                >
+                <div class="col-md-7">
+                  <mat-form-field style="width: 100%" appearance="outline">
+                    <input matInput="text" formControlName="web" />
+                  </mat-form-field>
+                </div>
+              </div>
+          </div>
+          <div class="col-md-3">
+            <div class="row mb-1">
+              <label for="description" class="col-sm-5 col-form-label" id="ID029"
+                >Description</label
+              >
+              <div class="col-md-7">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <input matInput="text" formControlName="description" />
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="row mb-1">
+              <label for="leadDays" class="col-sm-5 col-form-label" id="ID029"
+                >Lead Days</label
+              >
+              <div class="col-md-7">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <input matInput="text" formControlName="leadDays" />
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="row mb-1">
+              <label for="offsetAccount" class="col-sm-5 col-form-label" id="ID029"
+                >Offset Account</label
+              >
+              <div class="col-md-7">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <input matInput="text" formControlName="offsetAccount" />
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-2">
+           
+          </div>
+          <div class="col-md-2">
+          </div>
+          <div class="col-md-2">
+          
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
