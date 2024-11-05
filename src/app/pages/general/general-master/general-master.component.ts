@@ -10,6 +10,7 @@ import { ChartOfAccountsComponent } from './chart-of-accounts/chart-of-accounts.
 import { JewelleryMasterComponent } from './jewellery-master/jewellery-master.component';
 import { LocationMasterComponent } from './location-master/location-master.component';
 import { PricelistMasterComponent } from './pricelist-master/pricelist-master.component';
+import { AccountContactComponent } from './account-contact/account-contact.component';
 @Component({
   selector: 'app-general-master',
   templateUrl: './general-master.component.html',
@@ -73,6 +74,7 @@ export class GeneralMasterComponent implements OnInit {
       'JewelleryMasterComponent': JewelleryMasterComponent,
       'LocationMasterComponent': LocationMasterComponent,
       'PricelistMasterComponent': PricelistMasterComponent,
+      'AccountContactComponent':AccountContactComponent
       // Add components and update in operationals > menu updation grid form component name
     }
     let contents;
