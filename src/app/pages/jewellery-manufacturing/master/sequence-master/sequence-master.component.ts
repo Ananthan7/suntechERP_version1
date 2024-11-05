@@ -799,9 +799,31 @@ export class SequenceMasterComponent implements OnInit {
 
 
   /**USE: close modal window */
+  // close(data?: any) {
+  //   this.sequenceMasterForm.reset()
+  //   this.activeModal.close(data);
+  // }
+
   close(data?: any) {
-    this.sequenceMasterForm.reset()
-    this.activeModal.close(data);
+    if (this.content && this.content.FLAG == 'VIEW'){
+      this.activeModal.close(data);
+      return
+    }
+    Swal.fire({
+      title: 'Do you want to exit?',
+      text: '',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes!',
+      cancelButtonText: 'No'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.activeModal.close(data);
+      }
+    }
+    )
   }
 
   ngOnDestroy() {

@@ -127,6 +127,8 @@ export class WorkerMasterComponent implements OnInit {
 
   ngOnInit(): void {
     this.renderer.selectRootElement('#code')?.focus();
+   
+
     if (this.content?.FLAG) {
       this.setFormValues();
       this.selectProcessWithSP()
@@ -255,17 +257,13 @@ export class WorkerMasterComponent implements OnInit {
     }
   }
   submitValidations(form: any) {
-    const nameRegexp: RegExp = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/;
 
 
     if (this.commonService.nullToString(form.WorkerCode) == '') {
       this.commonService.toastErrorByMsgId('MSG1951')// Worker code CANNOT BE EMPTY
       return true
-    } else if (form.WorkerCode == nameRegexp) {
-      this.commonService.toastErrorByMsgId('MSG81525');//Do not enter the special character in the
-      return true;
-    }
-    else if (this.commonService.nullToString(form.WorkerDESCRIPTION) == '') {
+    } else 
+     if (this.commonService.nullToString(form.WorkerDESCRIPTION) == '') {
       this.commonService.toastErrorByMsgId('MSG1193')//"description cannot be empty"
       return true
     }
@@ -516,6 +514,13 @@ export class WorkerMasterComponent implements OnInit {
   }
 
   checkWorkerExists(event: any) {
+
+    const nameRegexp: RegExp = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/;
+
+    if (event.target.value  == nameRegexp) {
+      this.commonService.toastErrorByMsgId('MSG81525');//Do not enter the special character in the  
+    }
+
     if (this.content && this.content.FLAG == 'EDIT') {
       return; // Exit the function if in edit mode
     }
@@ -651,11 +656,35 @@ export class WorkerMasterComponent implements OnInit {
   }
 
   /**USE: close modal window */
+  // close(data?: any) {
+  //   this.workerMasterForm.reset()
+  //   this.tableData = []
+  //   // this.activeModal.close();
+  //   this.activeModal.close(data);
+  // }
+
   close(data?: any) {
-    this.workerMasterForm.reset()
-    this.tableData = []
-    // this.activeModal.close();
-    this.activeModal.close(data);
+    if (this.content && this.content.FLAG == 'VIEW'){
+      this.workerMasterForm.reset()
+      this.tableData = []
+      this.activeModal.close(data);
+      return
+    }
+    Swal.fire({
+      title: 'Do you want to exit?',
+      text: '',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes!',
+      cancelButtonText: 'No'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.activeModal.close(data);
+      }
+    }
+    )
   }
   //number validation
   isNumeric(event: any) {
