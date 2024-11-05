@@ -24,6 +24,7 @@ import { StoneCostUpdationComponent } from './stone-cost-updation/stone-cost-upd
 import { MfgGridComponent } from '../common-mfg/mfg-grid/mfg-grid.component';
 import { AuthCheckerComponent } from 'src/app/shared/common/auth-checker/auth-checker.component';
 import { MetalLabourchargeMasterComponent } from './metal-labourcharge-master/metal-labourcharge-master.component';
+import { EmployeeMasterComponent } from './employee-master/employee-master.component';
 @Component({
   selector: 'app-master',
   templateUrl: './master.component.html',
@@ -105,6 +106,7 @@ export class MasterComponent implements OnInit {
       'ComponentMasterComponent': ComponentMasterComponent,
       'StoneCostUpdationComponent': StoneCostUpdationComponent,
       'MetalLabourchargeMasterComponent': MetalLabourchargeMasterComponent,
+      'EmployeeMasterComponent' : EmployeeMasterComponent,
       // Add components and update in operationals > menu updation grid form component name
     }
     let contents;
