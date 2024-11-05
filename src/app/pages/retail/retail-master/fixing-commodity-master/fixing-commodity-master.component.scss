@@ -1,0 +1,30 @@
+
+
+.boxed-label {
+  padding: 5px;
+  background-color: rgb(241, 241, 241);
+  border: 1px solid #ddd;
+  text-align: center;
+  width: 100%;
+}
+
+.your-box-container {
+  border: 1px solid #ccc;
+  padding: 10px;
+ 
+}
+
+
+.border-card{
+  border: 1px solid #ccc;
+  padding: 10px;
+ border-radius: 5px;
+ margin-top: 10px;
+ margin-bottom: 10px;
+}
+
+::ng-deep{
+  .mat-tab-body-content{
+    overflow-x: hidden !important;
+  }
+}

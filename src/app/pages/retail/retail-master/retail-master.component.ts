@@ -31,6 +31,7 @@ import { JewelleryBrandingComponent } from "./jewellery-branding/jewellery-brand
 import { CertificateMasterComponent } from "./certificate-master/certificate-master.component";
 import { ZirconMasterComponent } from "./zircon-master/zircon-master.component";
 import { ManufacturedItemsComponent } from "./manufactured-items/manufactured-items.component";
+import { FixingCommodityMasterComponent } from "./fixing-commodity-master/fixing-commodity-master.component";
 @Component({
   selector: "app-retail-master",
   templateUrl: "./retail-master.component.html",
@@ -171,6 +172,7 @@ export class RetailMasterComponent implements OnInit {
       CertificateMasterComponent: CertificateMasterComponent,
       ZirconMasterComponent: ZirconMasterComponent,
       ManufacturedItemsComponent:ManufacturedItemsComponent,
+      FixingCommodityMasterComponent:FixingCommodityMasterComponent
 
       // Add components and update in operationals > menu updation grid form component name
     };
