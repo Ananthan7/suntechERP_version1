@@ -1,1 +1,199 @@
-<p>reverse-price-ratio works!</p>
+<!-- header section starts -->
+<div class="card-content border-bottom d-flex justify-content-between p-2">
+    <h5 class="pos-modaltitle" id="modal-dia-metal">Reverse Price Ratio Works</h5>
+    <button type="button" class="btn btn-close close-btn" (click)="close()">
+        <i class="feather icon-x close-icon"></i>
+    </button>
+</div>
+<!-- modal header component -->
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" (deleteClick)="deleteRecord()"></modal-header>
+<!-- content section -->
+
+<div class="pos-sales-modalbody modelbody">
+    <div class="card-body sales-card-body p-2">
+        <form [formGroup]="reversepriceratioForm">
+            <div class="row">
+                <div class="col-md-2">
+                    <div>
+                        <mat-radio-group aria-label="Select an option" formControlName="prefixSelect">
+                            <mat-radio-button value="M" id="ID001" class="mx-3"> Metal </mat-radio-button>
+                            <mat-radio-button value="S" id="ID002" class="mx-3">Diamond</mat-radio-button>
+                        </mat-radio-group>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="row mb-2">
+                        <label for="input" is="ID001" class="col-sm-4 col-form-label">Division
+                            :</label>
+                        <div class="col-sm-6">
+                            <mat-form-field appearance="outline" style="width: 100%;">
+                                <input type="text" #codeInput maxlength="15" matInput formControlName="code">
+
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row mb-2">
+                        <label for="input" is="ID001" class="col-sm-2 col-form-label">Branches
+                            :</label>
+                        <div class="col-sm-6">
+                            <button type="button" class="btn btn-outline-primary metal-issue-del-btn">Branch</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <mat-tab-group>
+                <mat-tab label="Metal">
+                    <div class="row mb-3">
+                    <div class="col-md-6 py-2">
+                        <div class="row mb-3">
+                            <mat-checkbox class="example-margin" class="col-md-3" id="ID044">Direct Propotion</mat-checkbox>
+                        </div>
+                        <div class="row mb-3">
+                            <mat-checkbox class="example-margin" class="col-md-3"  id="ID045">Metal Ratio</mat-checkbox>
+                            <div class="col-md-4">
+                                <mat-form-field appearance="outline" style="width: 100%;">
+                                    <input type="text" #codeInput maxlength="15" matInput formControlName="code">
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <mat-checkbox class="example-margin" class="col-md-3"  id="ID046">Stone Ratio</mat-checkbox>
+                            <div class="col-md-4">
+                                <mat-form-field appearance="outline" style="width: 100%;">
+                                    <input type="text" #codeInput maxlength="15" matInput formControlName="code">
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <mat-checkbox class="example-margin" class="col-md-3"  id="ID046">Labour Ratio</mat-checkbox>
+                            <div class="col-md-4">
+                                <mat-form-field appearance="outline" style="width: 100%;">
+                                    <input type="text" #codeInput maxlength="15" matInput formControlName="code">
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 py-5">
+                        <div class="row mb-3">
+                            <mat-checkbox class="example-margin" class="col-md-3" id="ID044">Kundan Ratio</mat-checkbox>
+                            <div class="col-md-4">
+                                <mat-form-field appearance="outline" style="width: 100%;">
+                                    <input type="text" #codeInput maxlength="15" matInput formControlName="code">
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <mat-checkbox class="example-margin" class="col-md-3"  id="ID045">Wastage Ratio</mat-checkbox>
+                            <div class="col-md-4">
+                                <mat-form-field appearance="outline" style="width: 100%;">
+                                    <input type="text" #codeInput maxlength="15" matInput formControlName="code">
+                                </mat-form-field>
+                            </div>
+                        </div>
+                      <div class="row mb-3">
+                            <mat-checkbox class="example-margin" class="col-md-3"  id="ID046">Total %</mat-checkbox>
+                            <div class="col-md-4">
+                                <mat-form-field appearance="outline" style="width: 100%;">
+                                    <input type="text" #codeInput maxlength="15" matInput formControlName="code">
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </mat-tab>
+                <mat-tab label="Diamond">
+                    <div class="row mb-3">
+                    <div class="col-md-6 py-2">
+                        <div class="row mb-3">
+                            <mat-checkbox class="example-margin" class="col-md-3" id="ID044">Direct Propotion</mat-checkbox>
+                        </div>
+                        <div class="row mb-3">
+                            <mat-checkbox class="example-margin" class="col-md-3"  id="ID045">Metal Ratio</mat-checkbox>
+                            <div class="col-md-4">
+                                <mat-form-field appearance="outline" style="width: 100%;">
+                                    <input type="text" #codeInput maxlength="15" matInput formControlName="code">
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <mat-checkbox class="example-margin" class="col-md-3"  id="ID046">Stone Ratio</mat-checkbox>
+                            <div class="col-md-4">
+                                <mat-form-field appearance="outline" style="width: 100%;">
+                                    <input type="text" #codeInput maxlength="15" matInput formControlName="code">
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <mat-checkbox class="example-margin" class="col-md-3"  id="ID046">Labour Ratio</mat-checkbox>
+                            <div class="col-md-4">
+                                <mat-form-field appearance="outline" style="width: 100%;">
+                                    <input type="text" #codeInput maxlength="15" matInput formControlName="code">
+                                </mat-form-field>
+                            </div>
+                        </div>
+                            
+                        <div class="row mb-3">
+                            <mat-checkbox class="example-margin" class="col-md-3"  id="ID046">Total %</mat-checkbox>
+                            <div class="col-md-4">
+                                <mat-form-field appearance="outline" style="width: 100%;">
+                                    <input type="text" #codeInput maxlength="15" matInput formControlName="code">
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 py-2">
+                        <div class="row mb-3">
+                            <mat-checkbox class="example-margin" class="col-md-3" id="ID044">Stone Splitting Ratio</mat-checkbox>
+                        </div>
+                        <div class="row mb-3">
+                            <mat-checkbox class="example-margin" class="col-md-3"  id="ID045">Loose Diamond Ratio</mat-checkbox>
+                            <div class="col-md-4">
+                                <mat-form-field appearance="outline" style="width: 100%;">
+                                    <input type="text" #codeInput maxlength="15" matInput formControlName="code">
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <mat-checkbox class="example-margin" class="col-md-3"  id="ID045">Color Stone Ratio</mat-checkbox>
+                            <div class="col-md-4">
+                                <mat-form-field appearance="outline" style="width: 100%;">
+                                    <input type="text" #codeInput maxlength="15" matInput formControlName="code">
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <mat-checkbox class="example-margin" class="col-md-3"  id="ID045">Pearls Ratio</mat-checkbox>
+                            <div class="col-md-4">
+                                <mat-form-field appearance="outline" style="width: 100%;">
+                                    <input type="text" #codeInput maxlength="15" matInput formControlName="code">
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <mat-checkbox class="example-margin" class="col-md-3"  id="ID045">Zircon Ratio</mat-checkbox>
+                            <div class="col-md-4">
+                                <mat-form-field appearance="outline" style="width: 100%;">
+                                    <input type="text" #codeInput maxlength="15" matInput formControlName="code">
+                                </mat-form-field>
+                            </div>
+                        </div>
+                      <div class="row mb-3">
+                            <mat-checkbox class="example-margin" class="col-md-3"  id="ID046">Total %</mat-checkbox>
+                            <div class="col-md-4">
+                                <mat-form-field appearance="outline" style="width: 100%;">
+                                    <input type="text" #codeInput maxlength="15" matInput formControlName="code">
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </mat-tab>
+            </mat-tab-group>
+        </form>
+    </div>
+
+</div>

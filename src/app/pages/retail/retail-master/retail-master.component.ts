@@ -29,6 +29,7 @@ import { PosBranchTargetComponent } from "./pos-branch-target/pos-branch-target.
 import { BuyBackPolicyComponent } from "./buy-back-policy/buy-back-policy.component";
 import { ReversePriceRatioComponent } from "./reverse-price-ratio/reverse-price-ratio.component";
 import { WholesaleSalesmanTargetComponent } from "../../general/general-master/wholesale-salesman-target/wholesale-salesman-target.component";
+import { FixingCommodityMasterComponent } from "./fixing-commodity-master/fixing-commodity-master.component";
 @Component({
   selector: "app-retail-master",
   templateUrl: "./retail-master.component.html",
@@ -166,7 +167,8 @@ export class RetailMasterComponent implements OnInit {
       StoneWeightMasterComponent : StoneWeightMasterComponent,
       FestivalMasterComponent : FestivalMasterComponent,
       ReversePriceRatioComponent:ReversePriceRatioComponent,
-      WholesaleSalesmanTargetComponent:WholesaleSalesmanTargetComponent
+      WholesaleSalesmanTargetComponent:WholesaleSalesmanTargetComponent,
+      FixingCommodityMasterComponent:FixingCommodityMasterComponent
 
       // Add components and update in operationals > menu updation grid form component name
     };
