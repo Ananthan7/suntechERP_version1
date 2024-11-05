@@ -183,11 +183,36 @@ export class PricelistMasterComponent implements OnInit {
     let API = 'PriceMaster/InsertPriceMaster';
     let postData = this.createPostData();
 
-    this.dataService.postDynamicAPI(API, postData)
-      .subscribe(
-        result => this.handleApiResponse(result),
-        err => alert(err)
-      );
+    // this.dataService.postDynamicAPI(API, postData)
+    //   .subscribe(
+    //     result => this.handleApiResponse(result),
+    //     err => alert(err)
+    //   );
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, postData)
+      .subscribe((result: any) => {
+        console.log('Server Response:', result);
+        if (result.response) {
+          if (result.status == "Success") {
+            Swal.fire({
+              title: result?.message || 'Success',
+              text: '',
+              icon: 'success',
+              confirmButtonColor: '#336699',
+              confirmButtonText: 'Ok'
+            }).then((result: any) => {
+              if (result.value) {
+                this.priceListMasterForm.reset()
+                this.close('reloadMainGrid')
+              }
+            });
+          }
+        } else {
+          this.commonService.toastErrorByMsgId('MSG3577')
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG3577')
+      })
+    this.subscriptions.push(Sub)
   }
 
 
@@ -198,11 +223,35 @@ export class PricelistMasterComponent implements OnInit {
     let API = `PriceMaster/UpdatePriceMaster/${this.priceListMasterForm.value.priceCode}`;
     let postData = this.createPostData();
 
-    this.dataService.putDynamicAPI(API, postData)
-      .subscribe(
-        result => this.handleApiResponse(result),
-        err => alert(err)
-      );
+    // this.dataService.putDynamicAPI(API, postData)
+      // .subscribe(
+      //   result => this.handleApiResponse(result),
+      //   err => alert(err)
+      // );
+      let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
+      .subscribe((result) => {
+        if (result.response) {
+          if (result.status == "Success") {
+            Swal.fire({
+              title: result.message || 'Success',
+              text: '',
+              icon: 'success',
+              confirmButtonColor: '#336699',
+              confirmButtonText: 'Ok'
+            }).then((result: any) => {
+              if (result.value) {
+                this.priceListMasterForm.reset()
+                this.close('reloadMainGrid')
+              }
+            });
+          }
+        } else {
+          this.commonService.toastErrorByMsgId('MSG3577')
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG3577')
+      })
+    this.subscriptions.push(Sub)
   }
   deleteCheckingPricList() {
     if (!this.content.MID) {

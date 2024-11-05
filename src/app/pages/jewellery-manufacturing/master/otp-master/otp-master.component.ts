@@ -58,9 +58,31 @@ export class OtpMasterComponent implements OnInit {
     this.otpForm.controls.branchdesc.setValue(e.BRANCH_NAME);
   }
 
+  // close(data?: any) {
+  //   //TODO reset forms and data before closing
+  //   this.activeModal.close(data);
+  // }
+
   close(data?: any) {
-    //TODO reset forms and data before closing
-    this.activeModal.close(data);
+    if (this.content && this.content.FLAG == 'VIEW'){
+      this.activeModal.close(data);
+      return
+    }
+    Swal.fire({
+      title: 'Do you want to exit?',
+      text: '',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes!',
+      cancelButtonText: 'No'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.activeModal.close(data);
+      }
+    }
+    )
   }
 
   submitValidation(form: any) {

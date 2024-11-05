@@ -20,6 +20,7 @@ import { MasterSearchComponent } from 'src/app/shared/common/master-search/maste
 export class DesignSequenceComponent implements OnInit {
   @ViewChild('overlayprocessSearch') overlayprocessSearch!: MasterSearchComponent;
   tableDataProcess: any[] = [];
+  @Input() content!: any; 
 
   viewMode: boolean = false;
   columnhead: any[] = ['SRNO', 'PROCESS_CODE', 'POINTS', 'STD_LOSS', 'MAX_LOSS', 'STD_TIME', 'LOSS_ACCODE', 'WIP_ACCODE', 'TIMEON_PROCESS']
@@ -78,9 +79,31 @@ export class DesignSequenceComponent implements OnInit {
     this.designSequenceForm.controls.processDesc.setValue(e.DESCRIPTION);
   }
 
+  // close(data?: any) {
+  //   //TODO reset forms and data before closing
+  //   this.activeModal.close(data);
+  // }
+
   close(data?: any) {
-    //TODO reset forms and data before closing
-    this.activeModal.close(data);
+    if (this.content && this.content.FLAG == 'VIEW'){
+      this.activeModal.close(data);
+      return
+    }
+    Swal.fire({
+      title: 'Do you want to exit?',
+      text: '',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes!',
+      cancelButtonText: 'No'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.activeModal.close(data);
+      }
+    }
+    )
   }
 
   formSubmit() {
