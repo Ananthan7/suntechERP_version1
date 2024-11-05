@@ -17,6 +17,7 @@ import { FestivalMasterComponent } from './festival-master/festival-master.compo
 import { StoneWeightMasterComponent } from './stone-weight-master/stone-weight-master.component';
 import { PosBranchTargetComponent } from './pos-branch-target/pos-branch-target.component';
 import { BuyBackPolicyComponent } from './buy-back-policy/buy-back-policy.component';
+import { ReversePriceRatioComponent } from './reverse-price-ratio/reverse-price-ratio.component';
 
 
 @NgModule({
@@ -33,7 +34,8 @@ import { BuyBackPolicyComponent } from './buy-back-policy/buy-back-policy.compon
     BuyBackPolicyComponent,
     FestivalMasterComponent,
     StoneWeightMasterComponent,
-    PosBranchTargetComponent
+    PosBranchTargetComponent,
+    ReversePriceRatioComponent
   ],
   imports: [
     CommonModule,
