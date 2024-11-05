@@ -403,6 +403,7 @@ export class StoneIssueDetailComponent implements OnInit {
     this.stockCodeData.WHERECONDITION += `@JOBNO='${this.comService.nullToString(form.jobNumber)}',`
     this.stockCodeData.WHERECONDITION += `@SUBJOBNO='${this.comService.nullToString(form.subjobnumber)}',`
     this.stockCodeData.WHERECONDITION += `@STOCKCODE='${this.comService.nullToString(form.stockCode)}',@LOOKUPFLAG=1`
+    this.stockCodeData.WHERECONDITION += `@BRANCHCODE='${this.comService.nullToString(form.branchCode)}'`
     //   WHERECONDITION += `@strStockCode='${this.comService.nullToString(form.stockCode)}'`
     // this.stockCodeData.WHERECONDITION = WHERECONDITION
   }
@@ -643,11 +644,11 @@ export class StoneIssueDetailComponent implements OnInit {
   }
   /**use: to save data to grid*/
   formSubmit(flag: any) {
-    const caratValue = this.stoneIssueDetailsFrom.controls['carat'].value;
+    const carat = this.stoneIssueDetailsFrom.controls['carat'].value;
     const pcsValue = this.stoneIssueDetailsFrom.controls['pieces'].value;
-    console.log(caratValue, 'carat')
+    console.log(carat, 'carat')
     // Check if carat is 0
-    if (caratValue === 0 || caratValue === '0' || caratValue == null) {
+    if (carat === 0 || carat === '0' || carat == null) {
       this.comService.toastErrorByMsgId('MSG1095');
       return;
     }
@@ -784,18 +785,22 @@ export class StoneIssueDetailComponent implements OnInit {
 
   CalculatePiecesAndPointerWT() {
     // Get the form values
-    const pieces = this.stoneIssueDetailsFrom.controls.pieces.value || 0;
-    const pointerwt = this.stoneIssueDetailsFrom.controls.pointerwt.value || 0;
-    const calculatedCarat = pieces * pointerwt;
-    this.stoneIssueDetailsFrom.controls.carat.setValue(calculatedCarat.toFixed(3));
-    this.CollectRate()
-  }
+      const pieces = this.stoneIssueDetailsFrom.controls.pieces.value || 0;
+      const pointerwt = this.stoneIssueDetailsFrom.controls.pointerwt.value || 0;
+      const calculatedCarat = pieces * pointerwt;
+      this.stoneIssueDetailsFrom.controls.carat.setValue(calculatedCarat.toFixed(3));
+      this.CollectRate()
+      this.checkPcsRequired()
+    }
+  
   CalculateCaratAndUnitrate() {
-    const carat = this.stoneIssueDetailsFrom.controls.carat.value || 0;
-    const unitrate = this.stoneIssueDetailsFrom.controls.unitrate.value || 0;
-    const calculateamount = carat * unitrate;
-    this.stoneIssueDetailsFrom.controls.amount.setValue(calculateamount.toFixed(2))
+      const carat = this.stoneIssueDetailsFrom.controls.carat.value || 0;
+      const unitrate = this.stoneIssueDetailsFrom.controls.unitrate.value || 0;
+      const calculateamount = carat * unitrate;
+      this.stoneIssueDetailsFrom.controls.amount.setValue(calculateamount.toFixed(2))
+      this.checkCaratRequired()
   }
+
   CollectPointerWtValidation() {
     let postData = {
       "SPID": "139",
@@ -890,7 +895,7 @@ export class StoneIssueDetailComponent implements OnInit {
     if (event.target.value === '') {
       return;  // Exit if no input
     }
-
+    this.setStockCodeWhereCondition()
     // Prepare the data for the API call
     let postData = {
       "SPID": "132",
@@ -899,6 +904,9 @@ export class StoneIssueDetailComponent implements OnInit {
         JOBNO: this.stoneIssueDetailsFrom.value.jobNumber,
         SUBJOBNO: this.stoneIssueDetailsFrom.value.subjobnumber,
         STOCKCODE: this.stoneIssueDetailsFrom.value.stockCode,
+        BRANCHCODE: this.comService.branchCode,
+        SUBSTOCKCODE: this.stoneIssueDetailsFrom.value.batchid
+
       }
     };
     this.comService.showSnackBarMsg('MSG81447');
@@ -1286,9 +1294,9 @@ export class StoneIssueDetailComponent implements OnInit {
     const tableStockCodes = this.tableData.map((item: any) => item.STOCK_CODE);
     const formStockCode = this.stoneIssueDetailsFrom.value.stockCode;
     const stockExists = tableStockCodes.includes(formStockCode);
-  
+
     if (!stockExists) {  // Check if stock code does not exist in component details (BOQ)
-  
+
       // Show the SweetAlert confirmation dialog
       this.showConfirmationDialog("The Stock details not found in the BOQ. Do you want to continue?")
         .then((result) => {
@@ -1301,6 +1309,51 @@ export class StoneIssueDetailComponent implements OnInit {
         });
     }
   }
+
+  // Function to check if grid PCS is greater than form PCS
+  checkPcsRequired() {
+    const tablePcs = this.tableData.map((item: any) => item.PCS);
+    const formPieces = this.stoneIssueDetailsFrom.value.pieces;
+
+    // Check if any grid PCS is greater than form PCS
+    const gridHasGreaterPcs = tablePcs.some((gridPcs) => gridPcs > formPieces);
+
+    if (gridHasGreaterPcs) {
+      // Show confirmation dialog with the PCS message
+      this.showConfirmationDialog("Issued Pcs is greater than the Required Pcs.")
+        .then((result) => {
+          if (result.isConfirmed) {
+            console.log("Continuing with validation for PCS...");
+          } else {
+            console.log("Action cancelled by user.");
+            this.stoneIssueDetailsFrom.controls.pieces.setValue(''); // Clear the pieces field
+          }
+        });
+    }
+  }
+
+  // Function to check if grid CARATWT_TO is greater than form carat
+  checkCaratRequired() {
+    const tableCarat = this.tableData.map((item: any) => item.CARATWT_TO);
+    const formCarat = this.stoneIssueDetailsFrom.value.carat;
+
+    // Check if any grid CARATWT_TO is greater than form carat
+    const gridHasGreaterCarat = tableCarat.some((gridCarat) => gridCarat > formCarat);
+
+    if (gridHasGreaterCarat) {
+      // Show confirmation dialog with the carat message
+      this.showConfirmationDialog("Issued Carat is greater than the Required Carat.")
+        .then((result) => {
+          if (result.isConfirmed) {
+            console.log("Continuing with validation for carat...");
+          } else {
+            console.log("Action cancelled by user.");
+            this.stoneIssueDetailsFrom.controls.carat.setValue(''); // Clear the carat field
+          }
+        });
+    }
+  }
+
 
   showConfirmationDialog(message: string): Promise<any> {
     return Swal.fire({
