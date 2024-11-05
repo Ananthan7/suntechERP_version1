@@ -23,7 +23,7 @@
           <div class="col-sm-3">
             <mat-form-field appearance="outline" style="width: 100%;">
               <input type="text" matInput [readonly]="viewMode"
-                (focusout)="jobNumberValidate($event)" id="jobNoSearch"
+                (change)="jobNumberValidate($event)" id="jobNoSearch"
                 formControlName="JOB_NUMBER" UpperCaseDirective />
               <mat-error
                 *ngIf="productiondetailsFrom.controls.JOB_NUMBER.touched 

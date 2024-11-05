@@ -638,7 +638,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.processTransferdetailsForm.controls.METAL_ScrapPCS.setValue(parentDetail.SCRAP_PCS)
     let METAL_BalPCS = this.balanceCalculate(parentDetail.FRM_PCS, parentDetail.TO_PCS, parentDetail.SCRAP_PCS)
     this.processTransferdetailsForm.controls.METAL_BalPCS.setValue(METAL_BalPCS)
-    this.calculateAllBalanceForMetalTab()
+    // this.calculateAllBalanceForMetalTab()
   }
   setDiamondDetailFormData(parentDetail: any) {
     this.setFormNullToString('FRM_WORKER_CODE', parentDetail.FRM_WORKER_CODE)
