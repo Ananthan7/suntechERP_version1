@@ -20,6 +20,7 @@ import { BuyBackPolicyComponent } from './buy-back-policy/buy-back-policy.compon
 import { ReversePriceRatioComponent } from './reverse-price-ratio/reverse-price-ratio.component';
 import { AllowanceMasterComponent } from './allowance-master/allowance-master.component';
 import { DeductionMasterComponent } from './deduction-master/deduction-master.component';
+import { FixingCommodityMasterComponent } from './fixing-commodity-master/fixing-commodity-master.component';
 
 
 @NgModule({
@@ -39,7 +40,8 @@ import { DeductionMasterComponent } from './deduction-master/deduction-master.co
     PosBranchTargetComponent,
     ReversePriceRatioComponent,
     AllowanceMasterComponent,
-    DeductionMasterComponent
+    DeductionMasterComponent,
+    FixingCommodityMasterComponent
   ],
   imports: [
     CommonModule,

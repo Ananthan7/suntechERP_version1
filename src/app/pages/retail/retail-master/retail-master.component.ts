@@ -30,6 +30,8 @@ import { BuyBackPolicyComponent } from "./buy-back-policy/buy-back-policy.compon
 import { ReversePriceRatioComponent } from "./reverse-price-ratio/reverse-price-ratio.component";
 import { AllowanceMasterComponent } from "./allowance-master/allowance-master.component";
 import { DeductionMasterComponent } from "./deduction-master/deduction-master.component";
+import { WholesaleSalesmanTargetComponent } from "../../general/general-master/wholesale-salesman-target/wholesale-salesman-target.component";
+import { FixingCommodityMasterComponent } from "./fixing-commodity-master/fixing-commodity-master.component";
 @Component({
   selector: "app-retail-master",
   templateUrl: "./retail-master.component.html",
@@ -168,7 +170,10 @@ export class RetailMasterComponent implements OnInit {
       FestivalMasterComponent : FestivalMasterComponent,
       ReversePriceRatioComponent:ReversePriceRatioComponent,
       AllowanceMasterComponent:AllowanceMasterComponent,
-      DeductionMasterComponent : DeductionMasterComponent
+      DeductionMasterComponent : DeductionMasterComponent,
+      WholesaleSalesmanTargetComponent:WholesaleSalesmanTargetComponent,
+      FixingCommodityMasterComponent:FixingCommodityMasterComponent
+
       // Add components and update in operationals > menu updation grid form component name
     };
     this.componentName = this.CommonService.getFormComponentName();

@@ -1,0 +1,20 @@
+.icons .image_box {
+    height: 150px;
+    width: 100%;
+  }
+
+  .icons {
+    width: 100%;
+    border: 1px solid #ddd;
+    margin-bottom: 2px;
+  }
+
+  .icon {
+    cursor: pointer;
+    margin: 0 10px; 
+    color: #333; 
+  }
+  
+  .icon:hover {
+    color: #007bff;
+}
