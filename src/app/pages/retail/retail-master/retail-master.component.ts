@@ -19,7 +19,6 @@ import {
   Validators,
 } from "@angular/forms";
 import { map, startWith } from "rxjs/operators";
-import { JewelleryAssemblingMasterComponent } from "./jewellery-assembling-master/jewellery-assembling-master.component";
 import { FestivalMasterComponent } from "./festival-master/festival-master.component";
 import { StoneWeightMasterComponent } from "./stone-weight-master/stone-weight-master.component";
 
@@ -30,6 +29,8 @@ import { BuyBackPolicyComponent } from "./buy-back-policy/buy-back-policy.compon
 import { ReversePriceRatioComponent } from "./reverse-price-ratio/reverse-price-ratio.component";
 import { JewelleryBrandingComponent } from "./jewellery-branding/jewellery-branding.component";
 import { CertificateMasterComponent } from "./certificate-master/certificate-master.component";
+import { ZirconMasterComponent } from "./zircon-master/zircon-master.component";
+import { ManufacturedItemsComponent } from "./manufactured-items/manufactured-items.component";
 @Component({
   selector: "app-retail-master",
   templateUrl: "./retail-master.component.html",
@@ -161,7 +162,6 @@ export class RetailMasterComponent implements OnInit {
       PosCustomerMaster: PosCustomerMasterMainComponent,
       SchemeMasterComponent: SchemeMasterComponent,
       PosWalkinCustomerComponent: PosWalkinCustomerComponent,
-      JewelleryAssemblingMasterComponent: JewelleryAssemblingMasterComponent,
       BuyBackPolicyComponent:BuyBackPolicyComponent,
       PosBranchTargetComponent:PosBranchTargetComponent,
       StoneWeightMasterComponent : StoneWeightMasterComponent,
@@ -169,6 +169,8 @@ export class RetailMasterComponent implements OnInit {
       ReversePriceRatioComponent: ReversePriceRatioComponent,
       JewelleryBrandingComponent: JewelleryBrandingComponent,
       CertificateMasterComponent: CertificateMasterComponent,
+      ZirconMasterComponent: ZirconMasterComponent,
+      ManufacturedItemsComponent:ManufacturedItemsComponent,
 
       // Add components and update in operationals > menu updation grid form component name
     };

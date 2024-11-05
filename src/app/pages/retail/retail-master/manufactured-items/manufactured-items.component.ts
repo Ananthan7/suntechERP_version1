@@ -1,7 +1,8 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
-import { FormBuilder, FormGroup } from "@angular/forms";
-import { MatTabGroup } from "@angular/material/tabs";
-import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { MatTabGroup } from '@angular/material/tabs';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+
 
 export interface TableElement {
   description: string;
@@ -10,11 +11,11 @@ export interface TableElement {
 }
 
 @Component({
-  selector: "app-jewellery-assembling-master",
-  templateUrl: "./jewellery-assembling-master.component.html",
-  styleUrls: ["./jewellery-assembling-master.component.scss"],
+  selector: 'app-manufactured-items',
+  templateUrl: './manufactured-items.component.html',
+  styleUrls: ['./manufactured-items.component.scss']
 })
-export class JewelleryAssemblingMasterComponent implements OnInit {
+export class ManufacturedItemsComponent implements OnInit {
   metalDetailsData: any;
   stoneDetailsData: any;
   componentAndLaburChargeSummaryData: any;
@@ -126,4 +127,5 @@ export class JewelleryAssemblingMasterComponent implements OnInit {
   getTotalLC(): number {
     return this.dataSource.reduce((acc, element) => acc + element.lc, 0);
   }
+
 }

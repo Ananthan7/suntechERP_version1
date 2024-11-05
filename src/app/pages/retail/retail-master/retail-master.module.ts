@@ -12,7 +12,6 @@ import { ShowTransDetailsComponent } from './pos-customer-master-main/show-trans
 import { PrintCustomerLogComponent } from './pos-customer-master-main/print-customer-log/print-customer-log.component';
 import { PrintPrivilegeCardComponent } from './pos-customer-master-main/print-privilege-card/print-privilege-card.component';
 import { EmployeeMasterComponent } from '../../jewellery-manufacturing/master/employee-master/employee-master.component';
-import { JewelleryAssemblingMasterComponent } from './jewellery-assembling-master/jewellery-assembling-master.component';
 import { FestivalMasterComponent } from './festival-master/festival-master.component';
 import { StoneWeightMasterComponent } from './stone-weight-master/stone-weight-master.component';
 import { PosBranchTargetComponent } from './pos-branch-target/pos-branch-target.component';
@@ -20,6 +19,8 @@ import { BuyBackPolicyComponent } from './buy-back-policy/buy-back-policy.compon
 import { ReversePriceRatioComponent } from './reverse-price-ratio/reverse-price-ratio.component';
 import { JewelleryBrandingComponent } from './jewellery-branding/jewellery-branding.component';
 import { CertificateMasterComponent } from './certificate-master/certificate-master.component';
+import { ZirconMasterComponent } from './zircon-master/zircon-master.component';
+import { ManufacturedItemsComponent } from './manufactured-items/manufactured-items.component';
 
 
 @NgModule({
@@ -32,14 +33,15 @@ import { CertificateMasterComponent } from './certificate-master/certificate-mas
     PrintCustomerLogComponent,
     PrintPrivilegeCardComponent,
     EmployeeMasterComponent,
-    JewelleryAssemblingMasterComponent,
     BuyBackPolicyComponent,
     FestivalMasterComponent,
     StoneWeightMasterComponent,
     PosBranchTargetComponent,
     ReversePriceRatioComponent,
     JewelleryBrandingComponent,
-    CertificateMasterComponent
+    CertificateMasterComponent,
+    ZirconMasterComponent,
+    ManufacturedItemsComponent
   ],
   imports: [
     CommonModule,
