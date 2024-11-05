@@ -76,7 +76,7 @@ export class GeneralMasterComponent implements OnInit {
       'LocationMasterComponent': LocationMasterComponent,
       'PricelistMasterComponent': PricelistMasterComponent,
       'AccountContactComponent':AccountContactComponent,
-      'WholesaleSalesmanTargetComponent':WholesaleSalesmanTargetComponent
+      // 'WholesaleSalesmanTargetComponent':WholesaleSalesmanTargetComponent
       // Add components and update in operationals > menu updation grid form component name
     }
     let contents;

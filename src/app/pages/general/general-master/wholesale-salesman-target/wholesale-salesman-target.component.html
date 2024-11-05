@@ -1,1 +1,107 @@
-<p>wholesale-salesman-target works!</p>
+<div class="card-content border-bottom d-flex justify-content-between p-2">
+    <h5 class="pos-modaltitle" id="modal-dia-metal"> WholeSale SalesMan Target
+    </h5>
+    <button type="button" class="btn btn-close close-btn" (click)="close()">
+        <i class="feather icon-x close-icon"></i>
+    </button>
+</div>
+<!-- modal header component -->
+<modal-header (cancelClick)="close()" (saveClick)="formSubmit()"></modal-header>
+<!-- content section -->
+
+<div class="container-fluid pt-3">
+    <form [formGroup]="wholesalesmanform" class="p-1">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="row align-items-center">
+                    <label for="inputPassword" class="col-sm-2 col-form-label">SalesMan</label>
+                    <div class="col-md-2">
+                        <mat-form-field style="width: 100%;" appearance="outline">
+                            <input type="text" id="inputPassword" matInput formControlName="salesman" />
+                            <master-search [MasterSearchData]="enteredCodeData" class="masterSearch"
+                                (newRowClick)="enteredCodeSelected($event)"></master-search>
+                        </mat-form-field>
+                    </div>
+
+                </div>
+
+                <div class="row align-items-center my-2">
+                    <label for="inputPassword" class="col-sm-2 col-form-label">Fin. Year </label>
+                    <div class="col-md-2">
+                        <mat-form-field style="width: 100%;" appearance="outline">
+                            <input type="text" id="inputPassword" matInput formControlName="fin_year" />
+                            <master-search [MasterSearchData]="enteredCodeData" class="masterSearch"
+                                (newRowClick)="enteredCodeSelected($event)"></master-search>
+                        </mat-form-field>
+                    </div>
+
+                    <label for="inputPassword" class="col-sm-2 col-form-label">Date From</label>
+                    <div class="col-md-2">
+                        <div class="datepick">
+                            <mat-form-field style="width: 100%" appearance="outline">
+                                <input matInput DateValidation [matDatepicker]="datefrom" formControlName="datefrom"
+                                    placeholder="DD/MM/YYYY" [disabled]="viewMode"/>
+                                <mat-datepicker-toggle matSuffix [for]="datefrom"></mat-datepicker-toggle>
+                                <mat-datepicker #datefrom></mat-datepicker>
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row align-items-center">
+                    <label for="inputPassword" class="col-sm-2 col-form-label">Code</label>
+                    <div class="col-md-2">
+                        <mat-form-field style="width: 100%;" appearance="outline">
+                            <input type="text" id="inputPassword" matInput formControlName="code" />
+                        </mat-form-field>
+                    </div>
+                    <label for="inputPassword" class="col-sm-2 col-form-label">Date To</label>
+                    <div class="col-md-2">
+                        <div class="datepick">
+                            <mat-form-field style="width: 100%" appearance="outline">
+                                <input matInput DateValidation [matDatepicker]="dateto" formControlName="dateto"
+                                    placeholder="DD/MM/YYYY" [disabled]="viewMode"/>
+                                <mat-datepicker-toggle matSuffix [for]="dateto"></mat-datepicker-toggle>
+                                <mat-datepicker #dateto></mat-datepicker>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-2">
+                <div class="col-md-3">
+                    <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true " [viewImportBtn]="false"
+                        [viewAddBtn]="!viewMode" [viewDeleteBtn]="!viewMode" (addClick)="addTableData()"
+                        (deleteClick)="deleteTableData()">
+                    </menu-buttons>
+                </div>
+            </div>
+
+            <dx-data-grid id="gridContainer" [dataSource]="maindetails" [showBorders]="true" [showColumnLines]="true"
+                [showRowLines]="true" [allowColumnResizing]="true" keyExpr="SRNO">
+
+
+                <dxi-column dataField="SRNO" caption="S.NO"> </dxi-column>
+                <dxi-column dataField="DETAIL_TARGET_CODE" caption="Detail Target Code" >
+                </dxi-column>
+                <dxi-column dataField="DESCRIPTION" caption="Description">
+                </dxi-column>
+                <dxi-column dataField="DIA/METAL" caption="Dia/Metal">
+                </dxi-column>
+                <dxi-column dataField="TARGET_ON" caption="Target On" width="auto" >
+                </dxi-column>
+                <dxi-column dataField="TARGET" caption="Target">
+                </dxi-column>
+                <dxi-column dataField="CUSTOMER" caption="CUSTOMER">
+                </dxi-column>
+                <dxi-column dataField="DIVISION" caption="Division">
+                </dxi-column>
+                
+
+            </dx-data-grid>
+        </div>
+       
+    </form>
+</div>
