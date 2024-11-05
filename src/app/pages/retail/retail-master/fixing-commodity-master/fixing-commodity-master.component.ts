@@ -5,16 +5,13 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { ToastrService } from 'ngx-toastr';
 import { CommonServiceService } from 'src/app/services/common-service.service';
-import { Subscription } from 'rxjs';
-import Swal from 'sweetalert2';
-import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 
 @Component({
-  selector: 'app-reverse-price-ratio',
-  templateUrl: './reverse-price-ratio.component.html',
-  styleUrls: ['./reverse-price-ratio.component.scss']
+  selector: 'app-fixing-commodity-master',
+  templateUrl: './fixing-commodity-master.component.html',
+  styleUrls: ['./fixing-commodity-master.component.scss']
 })
-export class ReversePriceRatioComponent implements OnInit {
+export class FixingCommodityMasterComponent implements OnInit {
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -23,19 +20,37 @@ export class ReversePriceRatioComponent implements OnInit {
     private toastr: ToastrService,
     private commonService: CommonServiceService,
     private modalService: NgbModal,
-  ) { 
-    
-  }
+  ) { }
 
   ngOnInit(): void {
   }
 
 
-  reversepriceratioForm: FormGroup = this.formBuilder.group({
+
+
+  fixingcommodityForm: FormGroup = this.formBuilder.group({
     code:[],
 
 
   });
+
+
+
+  karatcodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 17,
+    SEARCH_FIELD: 'KARAT_CODE',
+    SEARCH_HEADING: 'Karat Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "KARAT_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  karatcodeSelected(e: any) {
+    
+  }
 
   formSubmit(){
 
