@@ -1,10 +1,11 @@
 <!-- header section starts -->
 <div class="card-content border-bottom d-flex justify-content-between p-2">
-  <h5 class="pos-modaltitle" id="modal-dia-metal">Manufactured Item </h5>
+  <h5 class="pos-modaltitle" id="modal-dia-metal">Manufactured Item</h5>
   <button type="button" class="btn btn-close close-btn" (click)="close()">
     <i class="feather icon-x close-icon"></i>
   </button>
 </div>
+
 <!-- modal header component -->
 <modal-header
   (saveClick)="formSave()"
@@ -12,8 +13,1020 @@
   (deleteClick)="deleteMaster()"
 ></modal-header>
 
+<!-- content section -->
+<div class="container-fluid pt-3">
   <mat-tab-group #tabGroup>
     <mat-tab label="General">
+      <div class="row mt-2">
+        <div class="col-md-12">
+          <div class="row mb-1">
+            <div class="col-md-5">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="row mb-1">
+                    <label
+                      for="itemCode"
+                      class="col-sm-5 col-form-label"
+                      id="ID029"
+                      >Item Code</label
+                    >
+                    <div class="col-md-7">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input matInput="text" formControlName="itemCode" />
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                  <div class="row mb-1">
+                    <label
+                      for="design"
+                      class="col-sm-5 col-form-label"
+                      id="ID029"
+                      >Design</label
+                    >
+                    <div class="col-md-7">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input matInput="text" formControlName="design" />
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                  <div class="row mb-1">
+                    <label
+                      for="modelCode"
+                      class="col-sm-5 col-form-label"
+                      id="ID029"
+                      >Model Code</label
+                    >
+                    <div class="col-md-7">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input matInput="text" formControlName="modelCode" />
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                  <div class="row mb-1">
+                    <label
+                      for="description"
+                      class="col-sm-5 col-form-label"
+                      id="ID029"
+                      >Description</label
+                    >
+                    <div class="col-md-7">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input matInput="text" formControlName="description" />
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                  <div class="row mb-1">
+                    <label
+                      for="costCentre"
+                      class="col-sm-5 col-form-label"
+                      id="ID029"
+                      >Cost Centre</label
+                    >
+                    <div class="col-md-7">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input matInput="text" formControlName="costCentre" />
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                  <div class="row mb-1">
+                    <label for="type" class="col-sm-5 col-form-label" id="ID029"
+                      >Type</label
+                    >
+                    <div class="col-md-7">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input matInput="text" formControlName="type" />
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                  <div class="row mb-1">
+                    <label
+                      for="category"
+                      class="col-sm-5 col-form-label"
+                      id="ID029"
+                      >Category</label
+                    >
+                    <div class="col-md-7">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input matInput="text" formControlName="category" />
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                  <div class="row mb-1">
+                    <label
+                      for="brand"
+                      class="col-sm-5 col-form-label"
+                      id="ID029"
+                      >Brand</label
+                    >
+                    <div class="col-md-7">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input matInput="text" formControlName="brand" />
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                  <div class="row mb-1">
+                    <label
+                      for="fluorescence"
+                      class="col-sm-5 col-form-label"
+                      id="ID029"
+                      >Fluorescence</label
+                    >
+                    <div class="col-md-7">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input matInput="text" formControlName="fluorescence" />
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                  <div class="row mb-1">
+                    <label
+                      for="range"
+                      class="col-sm-5 col-form-label"
+                      id="ID029"
+                      >Range</label
+                    >
+                    <div class="col-md-7">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input matInput="text" formControlName="range" />
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                  <div class="row mb-1">
+                    <label
+                      for="hsnCode"
+                      class="col-sm-5 col-form-label"
+                      id="ID029"
+                      >HSN Code</label
+                    >
+                    <div class="col-md-7">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input matInput="text" formControlName="hsnCode" />
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                  <div class="row mb-1">
+                    <label
+                      for="vendorRef"
+                      class="col-sm-5 col-form-label"
+                      id="ID029"
+                      >Vendor Ref</label
+                    >
+                    <div class="col-md-7">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input matInput="text" formControlName="vendorRef" />
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                  <div class="row mb-1">
+                    <label
+                      for="pcsOrUnit"
+                      class="col-sm-5 col-form-label"
+                      id="ID029"
+                      >Pcs / Unit</label
+                    >
+                    <div class="col-md-7">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input matInput="text" formControlName="pcsOrUnit" />
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                  <div class="row mb-1">
+                    <label
+                      for="overAll"
+                      class="col-sm-5 col-form-label"
+                      id="ID029"
+                      >Over All</label
+                    >
+                    <div class="col-md-7">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input matInput="text" formControlName="vendorName" />
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                  <div class="row mb-1">
+                    <label
+                      for="vendorName"
+                      class="col-sm-5 col-form-label"
+                      id="ID029"
+                      >Vendor Name</label
+                    >
+                    <div class="col-md-7">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input matInput="text" formControlName="vendorName" />
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                  <div class="row mb-1">
+                    <label
+                      for="otherDesc"
+                      class="col-sm-5 col-form-label"
+                      id="ID029"
+                      >Other Desc.</label
+                    >
+                    <div class="col-md-7">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input matInput="text" formControlName="otherDesc" />
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="row mb-1">
+                    <div class="col-md-4 pt-3"></div>
+
+                    <div class="col-md-8 pt-3">
+                      <mat-checkbox formControlName="vatOnMargin"
+                        >VAT On Margin</mat-checkbox
+                      >
+                    </div>
+                  </div>
+
+                  <div class="row mb-1">
+                    <div class="col-md-4 pt-3"></div>
+
+                    <div class="col-md-8 pt-3">
+                      <mat-checkbox formControlName="excludeTax"
+                        >Exclude Tax</mat-checkbox
+                      >
+                    </div>
+                  </div>
+
+                  <div class="row mb-1">
+                    <div class="col-md-4 pt-3"></div>
+
+                    <div class="col-md-8 pt-3">
+                      <mat-checkbox formControlName="onhold"
+                        >On Hold</mat-checkbox
+                      >
+                    </div>
+                  </div>
+
+                  <div class="row mb-1">
+                    <label
+                      for="country"
+                      class="col-sm-5 col-form-label"
+                      id="ID029"
+                      >Country</label
+                    >
+                    <div class="col-md-7">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input matInput="text" formControlName="country" />
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                  <div class="row mb-1">
+                    <label
+                      for="vendor"
+                      class="col-sm-5 col-form-label"
+                      id="ID029"
+                      >Vendor</label
+                    >
+                    <div class="col-md-7">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input matInput="text" formControlName="vendor" />
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                  <div class="row mb-1">
+                    <label
+                      for="subCat"
+                      class="col-sm-5 col-form-label"
+                      id="ID029"
+                      >Sub Cat.</label
+                    >
+                    <div class="col-md-7">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input matInput="text" formControlName="subCat" />
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                  <div class="row mb-1">
+                    <label
+                      for="color"
+                      class="col-sm-5 col-form-label"
+                      id="ID029"
+                      >Color</label
+                    >
+                    <div class="col-md-7">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input matInput="text" formControlName="color" />
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                  <div class="row mb-1">
+                    <label
+                      for="clarity"
+                      class="col-sm-5 col-form-label"
+                      id="ID029"
+                      >Clarity</label
+                    >
+                    <div class="col-md-7">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input matInput="text" formControlName="clarity" />
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                  <div class="row mb-1">
+                    <label
+                      for="style"
+                      class="col-sm-5 col-form-label"
+                      id="ID029"
+                      >Style</label
+                    >
+                    <div class="col-md-7">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input matInput="text" formControlName="style" />
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                  <div class="row mb-1">
+                    <label for="time" class="col-sm-5 col-form-label" id="ID029"
+                      >Time</label
+                    >
+                    <div class="col-md-7">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input matInput="text" formControlName="time" />
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                  <div class="row mb-1">
+                    <label
+                      for="setRef"
+                      class="col-sm-5 col-form-label"
+                      id="ID029"
+                      >Set Ref</label
+                    >
+                    <div class="col-md-7">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input matInput="text" formControlName="setRef" />
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                  <div class="row mb-1">
+                    <label for="size" class="col-sm-5 col-form-label" id="ID029"
+                      >Size</label
+                    >
+                    <div class="col-md-7">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input matInput="text" formControlName="size" />
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-5">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="row mb-1">
+                    <div class="col-sm-3"></div>
+                    <label
+                      for="price1"
+                      class="col-sm-3 col-form-label"
+                      id="ID029"
+                      >Currency</label
+                    >
+
+                    <label
+                      for="price1"
+                      class="col-sm-2 col-form-label"
+                      id="ID029"
+                      >% (Percent)</label
+                    >
+
+                    <label
+                      for="price1"
+                      class="col-sm-2 col-form-label"
+                      id="ID029"
+                      >Value In</label
+                    >
+
+                    <label
+                      for="price1"
+                      class="col-sm-2 col-form-label"
+                      id="ID029"
+                      >Value In (AED)</label
+                    >
+                  </div>
+
+                  <div class="row mb-2">
+                    <div class="col-sm-3">
+                      <button type="button" class="btn btn-primary text-center">
+                        Price Schema
+                      </button>
+                    </div>
+                    <div class="col-md-3">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input matInput="text" formControlName="currency" />
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-md-2">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input matInput="text" formControlName="percent" />
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-md-2">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input matInput="text" formControlName="valueIn" />
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-md-2">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input matInput="text" formControlName="valueInAed" />
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                  <div class="row mb-1">
+                    <label
+                      for="price1"
+                      class="col-sm-3 col-form-label"
+                      id="ID029"
+                      >Price 1</label
+                    >
+                    <div class="col-md-3">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input
+                          matInput="text"
+                          formControlName="price1Currency"
+                        />
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-md-2">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input
+                          matInput="text"
+                          formControlName="price1percent"
+                        />
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-md-2">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input
+                          matInput="text"
+                          formControlName="price1valueIn"
+                        />
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-md-2">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input
+                          matInput="text"
+                          formControlName="price1ValueInAed"
+                        />
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                  <div class="row mb-1">
+                    <label
+                      for="price1"
+                      class="col-sm-3 col-form-label"
+                      id="ID029"
+                      >Price 2</label
+                    >
+                    <div class="col-md-3">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input
+                          matInput="text"
+                          formControlName="price2Currency"
+                        />
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-md-2">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input
+                          matInput="text"
+                          formControlName="price2percent"
+                        />
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-md-2">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input
+                          matInput="text"
+                          formControlName="price2ValueIn"
+                        />
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-md-2">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input
+                          matInput="text"
+                          formControlName="price2ValueInAed"
+                        />
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                  <div class="row mb-1">
+                    <label
+                      for="price1"
+                      class="col-sm-3 col-form-label"
+                      id="ID029"
+                      >Price 3</label
+                    >
+                    <div class="col-md-3">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input
+                          matInput="text"
+                          formControlName="price3Currency"
+                        />
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-md-2">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input
+                          matInput="text"
+                          formControlName="price3percent"
+                        />
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-md-2">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input
+                          matInput="text"
+                          formControlName="price3ValueIn"
+                        />
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-md-2">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input
+                          matInput="text"
+                          formControlName="price3ValueInAed"
+                        />
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                  <div class="row mb-1">
+                    <label
+                      for="price1"
+                      class="col-sm-3 col-form-label"
+                      id="ID029"
+                      >Price 4</label
+                    >
+                    <div class="col-md-3">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input
+                          matInput="text"
+                          formControlName="price4Currency"
+                        />
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-md-2">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input
+                          matInput="text"
+                          formControlName="price4Percent"
+                        />
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-md-2">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input
+                          matInput="text"
+                          formControlName="price4ValueIn"
+                        />
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-md-2">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input
+                          matInput="text"
+                          formControlName="price4ValueInAed"
+                        />
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                  <div class="row mb-1">
+                    <label
+                      for="price1"
+                      class="col-sm-3 col-form-label"
+                      id="ID029"
+                      >Price 5</label
+                    >
+                    <div class="col-md-3">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input
+                          matInput="text"
+                          formControlName="price5Currency"
+                        />
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-md-2">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input
+                          matInput="text"
+                          formControlName="price5Percent"
+                        />
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-md-2">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input
+                          matInput="text"
+                          formControlName="price5ValueIn"
+                        />
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-md-2">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input
+                          matInput="text"
+                          formControlName="price5ValueInAed"
+                        />
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="row mb-1">
+                    <label
+                      for="landedCost"
+                      class="col-sm-5 col-form-label"
+                      id="ID029"
+                      >Landed Cost
+                    </label>
+                    <div class="col-md-7">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input matInput="text" formControlName="landedCost" />
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                  <div class="row mb-1">
+                    <label
+                      for="marketCost"
+                      class="col-sm-5 col-form-label"
+                      id="ID029"
+                      >Market Cost</label
+                    >
+                    <div class="col-md-7">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input matInput="text" formControlName="marketCost" />
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                  <div class="row mb-1">
+                    <label
+                      for="posCust#"
+                      class="col-sm-5 col-form-label"
+                      id="ID029"
+                      >POS Cust #</label
+                    >
+                    <div class="col-md-7">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input matInput="text" formControlName="posCust#" />
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                  <div class="row mb-1">
+                    <label
+                      for="certificateNo"
+                      class="col-sm-5 col-form-label"
+                      id="ID029"
+                      >Certificate No
+                    </label>
+                    <div class="col-md-7">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input
+                          matInput="text"
+                          formControlName="certificateNo"
+                        />
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                  <div class="row mb-1">
+                    <label
+                      for="certificateNo1"
+                      class="col-sm-5 col-form-label"
+                      id="ID029"
+                      >Certificate No 1</label
+                    >
+                    <div class="col-md-7">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input
+                          matInput="text"
+                          formControlName="certificateNo1"
+                        />
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                  <div class="row mb-1">
+                    <label
+                      for="certDate"
+                      class="col-sm-5 col-form-label"
+                      id="ID029"
+                      >Cert. Date</label
+                    >
+                    <div class="col-md-7">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input matInput="text" formControlName="certDate" />
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                  <div class="row mb-1">
+                    <label
+                      for="noOfCert"
+                      class="col-sm-5 col-form-label"
+                      id="ID029"
+                      >No of cert</label
+                    >
+                    <div class="col-md-7">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input matInput="text" formControlName="noOfCert" />
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                  <div class="row mb-1">
+                    <label
+                      for="hallmarking"
+                      class="col-sm-5 col-form-label"
+                      id="ID029"
+                      >HallMarking</label
+                    >
+                    <div class="col-md-7">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input matInput="text" formControlName="hallmarking" />
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="row mb-1">
+                    <label
+                      for="foreignCost"
+                      class="col-sm-5 col-form-label"
+                      id="ID029"
+                      >Foreign Cost</label
+                    >
+                    <div class="col-md-7">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input matInput="text" formControlName="foreignCost" />
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                  <div class="row mb-1">
+                    <label
+                      for="grossWt"
+                      class="col-sm-5 col-form-label"
+                      id="ID029"
+                      >Gross Wt</label
+                    >
+                    <div class="col-md-7">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input matInput="text" formControlName="grossWt" />
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                  <div class="row mb-1">
+                    <div class="col-sm-5"></div>
+
+                    <div class="col-sm-7">
+                      <button type="button" class="btn btn-primary text-center">
+                        Image
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="row mb-1">
+                    <label
+                      for="certifiedBy"
+                      class="col-sm-5 col-form-label"
+                      id="ID029"
+                      >Certified By</label
+                    >
+                    <div class="col-md-7">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input matInput="text" formControlName="certifiedBy" />
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                  <div class="row mb-1">
+                    <label
+                      for="certifiedBy1"
+                      class="col-sm-5 col-form-label"
+                      id="ID029"
+                      >Certified By 1</label
+                    >
+                    <div class="col-md-7">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input matInput="text" formControlName="certifiedBy1" />
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                  <div class="row mb-1">
+                    <label
+                      for="certDate1"
+                      class="col-sm-5 col-form-label"
+                      id="ID029"
+                      >Cert Date 1</label
+                    >
+                    <div class="col-md-7">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input matInput="text" formControlName="certDate1" />
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-2">
+              <div class="row mb-1">
+                <div class="col-md-10 p-2 mt-1">
+                  <div class="icons">
+                    <div class="image_box">
+                      <img class="image_box" alt="picture" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row mb-1">
+                <div
+                  class="col-md-10 border border-2 mt-1 d-flex justify-content-between align-items-center"
+                >
+                  <label class="col-form-label" id="ID029">0/0</label>
+
+                  <!-- Playback Icon -->
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    class="icon"
+                  >
+                    <path d="M9 19l-7-7 7-7v14zM16 5v14l-7-7z" />
+                  </svg>
+
+                  <!-- Play-Forward Icon -->
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    class="icon"
+                  >
+                    <path d="M15 19l7-7-7-7v14zM8 5v14l7-7z" />
+                  </svg>
+
+                  <!-- Play Icon -->
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    class="icon"
+                  >
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
+
+                  <!-- Cancel Icon -->
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    class="icon"
+                  >
+                    <path
+                      d="M18.3 5.7a1 1 0 0 0-1.4 0L12 10.6 7.1 5.7a1 1 0 1 0-1.4 1.4l4.9 4.9-4.9 4.9a1 1 0 1 0 1.4 1.4L12 13.4l4.9 4.9a1 1 0 0 0 1.4-1.4L13.4 12l4.9-4.9a1 1 0 0 0 0-1.4z"
+                    />
+                  </svg>
+
+                  <!-- Plus Icon -->
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    class="icon"
+                  >
+                    <path d="M19 11h-6V5h-2v6H5v2h6v6h2v-6h6z" />
+                  </svg>
+                </div>
+              </div>
+
+              <div class="row mb-1">
+                <label for="costDiff" class="col-sm-4 col-form-label" id="ID029"
+                  >Cost Diff</label
+                >
+                <div class="col-md-6">
+                  <mat-form-field style="width: 100%" appearance="outline">
+                    <input matInput="text" formControlName="costDiff" />
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <div class="row mb-1">
+                <div class="col-md-10">
+                  <button type="button" class="btn btn-primary text-center">
+                    Tag Details
+                  </button>
+                </div>
+              </div>
+
+              <div class="row mb-2">
+                <div class="col-sm-10">
+                  <mat-form-field style="width: 100%" appearance="outline">
+                    <textarea
+                      matInput
+                      rows="3"
+                      formControlName="tagDetails"
+                      class=""
+                      style="resize: none"
+                    ></textarea>
+                  </mat-form-field>
+                </div>
+              </div>
+
+
+
+
+              <div class="row mb-1">
+                <label for="type" class="col-sm-4 col-form-label" id="ID029"
+                  >Type</label
+                >
+                <div class="col-md-6">
+                    <mat-form-field style="width: 100%" appearance="outline">
+                        <mat-select formControlName="type">
+                          <mat-option
+                            *ngFor="let data of typeList"
+                            [value]="data.field"
+                          >
+                            {{ data.field }}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                </div>
+              </div>
+
+           
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+    <mat-tab label="UDF Grouping">
       <div class="row mt-2">
         <div class="col-md-12">
           <div class="row mb-1">
@@ -74,51 +1087,17 @@
             </div>
           </div>
         </div>
-
-       
-      </div>
-    </mat-tab>
-    <mat-tab label="UDF Grouping">
-      <div class="row mt-2">
-        <div class="col-md-12">
-          <div class="row mb-1">
-            <div class="col-md-6">
-              <div class="row mb-5">
-                <label
-                  for="inputPassword"
-                  class="col-form-label col-sm-12"
-                  id="ID042"
-                  >Comments</label
-                >
-                <div class="col-sm-12">
-                  <mat-form-field style="width: 100%" appearance="outline">
-                    <textarea
-                      matInput
-                      rows="3"
-                      formControlName="comments"
-                      style="resize: none"
-                    ></textarea>
-                  </mat-form-field>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     </mat-tab>
   </mat-tab-group>
 
-
-  <div class="row justify-content-between m-5">
+  <div class="row justify-content-between mt-4 mb-4">
     <div class="col-md-2">
       <div class="row">
-        <label
-          for="inputPassword"
-          class="col-sm-4 col-form-label"
-          id="ID030"
+        <label for="inputPassword" class="col-sm-5 col-form-label" id="ID030"
           >Created By</label
         >
-        <div class="col-md-8">
+        <div class="col-md-7">
           <mat-form-field style="width: 100%" appearance="outline">
             <input
               matInput
@@ -130,13 +1109,10 @@
         </div>
       </div>
       <div class="row">
-        <label
-          for="inputPassword"
-          class="col-sm-4 col-form-label"
-          id="ID030"
+        <label for="inputPassword" class="col-sm-5 col-form-label" id="ID030"
           >Created On</label
         >
-        <div class="col-md-8">
+        <div class="col-md-7">
           <mat-form-field style="width: 100%" appearance="outline">
             <input
               matInput
@@ -150,13 +1126,10 @@
     </div>
     <div class="col-md-2">
       <div class="row">
-        <label
-          for="inputPassword"
-          class="col-sm-4 col-form-label"
-          id="ID030"
+        <label for="inputPassword" class="col-sm-5 col-form-label" id="ID030"
           >Last Edit By</label
         >
-        <div class="col-md-8">
+        <div class="col-md-7">
           <mat-form-field style="width: 100%" appearance="outline">
             <input
               matInput
@@ -168,13 +1141,10 @@
         </div>
       </div>
       <div class="row">
-        <label
-          for="inputPassword"
-          class="col-sm-4 col-form-label"
-          id="ID030"
+        <label for="inputPassword" class="col-sm-5 col-form-label" id="ID030"
           >Last Edit On</label
         >
-        <div class="col-md-8">
+        <div class="col-md-7">
           <mat-form-field style="width: 100%" appearance="outline">
             <input
               matInput
@@ -188,31 +1158,20 @@
     </div>
     <div class="col-md-2">
       <div class="row">
-        <label
-          for="inputPassword"
-          class="col-sm-4 col-form-label"
-          id="ID030"
+        <label for="inputPassword" class="col-sm-7 col-form-label" id="ID030"
           >First Transaction</label
         >
-        <div class="col-md-8">
+        <div class="col-md-5">
           <mat-form-field style="width: 100%" appearance="outline">
-            <input
-              matInput
-              type="text"
-              formControlName="fatherName"
-              appAlphabetsOnly
-            />
+            <input matInput type="text" formControlName="fatherName" />
           </mat-form-field>
         </div>
       </div>
       <div class="row">
-        <label
-          for="inputPassword"
-          class="col-sm-4 col-form-label"
-          id="ID030"
+        <label for="inputPassword" class="col-sm-7 col-form-label" id="ID030"
           >Last Transaction</label
         >
-        <div class="col-md-8">
+        <div class="col-md-5">
           <mat-form-field style="width: 100%" appearance="outline">
             <input
               matInput
@@ -226,13 +1185,10 @@
     </div>
     <div class="col-md-2">
       <div class="row">
-        <label
-          for="inputPassword"
-          class="col-sm-4 col-form-label"
-          id="ID030"
+        <label for="inputPassword" class="col-sm-5 col-form-label" id="ID030"
           >Sales Man</label
         >
-        <div class="col-md-8">
+        <div class="col-md-7">
           <mat-form-field style="width: 100%" appearance="outline">
             <input
               matInput
@@ -245,43 +1201,26 @@
       </div>
     </div>
 
-
     <div class="col-md-2">
       <div class="row">
-        <label
-          for="inputPassword"
-          class="col-sm-4 col-form-label"
-          id="ID030"
-          >First Transaction</label
-        >
-        <div class="col-md-8">
-          <mat-form-field style="width: 100%" appearance="outline">
-            <input
-              matInput
-              type="text"
-              formControlName="fatherName"
-              appAlphabetsOnly
-            />
-          </mat-form-field>
+        <div class="col-md-12">
+          <button type="button" class="btn btn-primary text-center m-2">
+            Enquiry
+          </button>
         </div>
       </div>
       <div class="row">
-        <label
-          for="inputPassword"
-          class="col-sm-4 col-form-label"
-          id="ID030"
-          >Last Transaction</label
-        >
-        <div class="col-md-8">
-          <mat-form-field style="width: 100%" appearance="outline">
-            <input
-              matInput
-              type="text"
-              formControlName="fatherName"
-              appAlphabetsOnly
-            />
-          </mat-form-field>
+        <div class="col-md-6">
+          <button type="button" class="btn btn-primary text-center m-2">
+            Save
+          </button>
+        </div>
+        <div class="col-md-6">
+          <button type="button" class="btn btn-primary text-center m-2">
+            Cancel
+          </button>
         </div>
       </div>
     </div>
   </div>
+</div>
