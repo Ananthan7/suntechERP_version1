@@ -26,6 +26,7 @@ import { PosDailyClosingReportComponent } from './pos-daily-closing-report/pos-d
 import { POSDaybookComponent } from './posdaybook/posdaybook.component';
 import { CustomerEnquiryComponent } from './customer-enquiry/customer-enquiry.component';
 import { CreditSaleReportComponent } from './credit-sale-report/credit-sale-report.component';
+import { DailyClosingSummaryWatchComponent } from './daily-closing-summary-watch/daily-closing-summary-watch.component';
 
 
 @NgModule({
@@ -50,7 +51,8 @@ import { CreditSaleReportComponent } from './credit-sale-report/credit-sale-repo
     PosDailyClosingReportComponent,
     POSDaybookComponent,
     CustomerEnquiryComponent,
-    CreditSaleReportComponent
+    CreditSaleReportComponent,
+    DailyClosingSummaryWatchComponent
   ],
   imports: [
     CommonModule,
