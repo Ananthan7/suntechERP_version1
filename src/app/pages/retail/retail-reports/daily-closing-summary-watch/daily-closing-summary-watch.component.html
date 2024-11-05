@@ -1,0 +1,188 @@
+<!-- header section -->
+<div class="card-content border-bottom d-flex justify-content-between p-2">
+    <h5 class="pos-modaltitle" id="modal-dia-metal">Credit Sale Report</h5>
+    <button type="button" class="btn btn-close close-btn" (click)="close()">
+        <i class="feather icon-x close-icon"></i>
+    </button>
+</div>
+
+<!-- modal header component -->
+<modal-header (cancelClick)="close()" [isViewDelete]="false" 
+[isViewMore]="false" [isViewSave]="false" [isViewCancel]="false"></modal-header>
+
+<div class="row">
+    <form [formGroup]="dailyClosingSummary_WatchForm">
+        <div class="container-fluid pt-3">
+            <div class="row mb-1">
+                <label for="inputPassword"  class="col-sm-1 col-form-label"  id="ID001"> Branch</label>
+                <div class="col-md-2">
+                    <mat-form-field appearance="outline" style="width: -webkit-fill-available">
+                    <input matInput="text" name="branch" autocomplete="off" formControlName="branch"/>
+                    <app-branch-division [fetchData]="fetchedBranchData" (newRowClick)="selectedData($event)"
+                    class="branchDivisionelectr" [matTooltip]="branchDivisionControlsTooltip"
+                    matTooltipClass="custom-tooltip"  matTooltipPosition="above"></app-branch-division>
+                    </mat-form-field>
+                </div>
+    
+                <div class="col-md-7">
+                    <app-date (selectedDate)="setDateValue($event)" [dateValue]="dateToPass"></app-date>
+                </div> 
+            </div>
+
+            <div class="row mb-3">
+                <label for="inputPassword"  class="col-sm-1 col-form-label"  id="ID002"> Transaction</label>
+                <div class="col-md-2">
+                    <mat-form-field appearance="outline" ngClass="me-1" style="width:100%">
+                        <mat-select  formControlName="groupBySelection">
+                          <mat-option value="Salesman">Salesman</mat-option>
+                          <mat-option value="Invoice">Invoice</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                
+               <div class="col-md-5">
+                    <fieldset class="custom-fieldset">
+                        <legend class="custom-legend" id="ID003">Group By</legend>
+                        
+                        <div class="row mx-1 mt-2">
+                        <label for="systemStockDiamond" class="col-sm-3 col-form-label" id="ID004">Watch</label>
+                        <div class="col-md-9">
+                            <mat-form-field appearance="outline" ngClass="me-1" style="width:100%">
+                                <mat-select  formControlName="groupBySelection">
+                                  <mat-option value="Salesman">Salesman</mat-option>
+                                  <mat-option value="Invoice">Invoice</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        </div>
+                    </fieldset>
+               </div>
+            </div>
+
+            <div class="row mb-2">
+                <div class="col-md-6">
+                    <h6 class="header_title" id="ID005">Pending Sales Order Summary</h6>
+                    <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true" [height]="'auto'"
+                    [columnAutoWidth]="true" [dataSource]="pendingSalesOrderSummaryArr">
+                        <dxo-paging [enabled]="false"></dxo-paging>
+                        <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
+                        <!-- <dxo-selection mode="multiple"></dxo-selection> -->
+                        <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+                        <dxi-column  dataField="voc_nos" caption="No.Inv" [allowResizing]="true"></dxi-column>
+                        <dxi-column  dataField="amount" caption="Amt.Rcvd" [allowResizing]="true"></dxi-column>
+                        <dxi-column  dataField="amount" caption="Gold" [allowResizing]="true"></dxi-column>
+                        <dxi-column  dataField="amount" caption="Dia & Other" [allowResizing]="true"></dxi-column>
+                    </dx-data-grid>
+                </div>
+
+                <div class="col-md-6">
+                    <h6 class="header_title" id="ID006">Transaction wise Summary</h6>
+                    <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true" [height]="'auto'"
+                    [columnAutoWidth]="true" [dataSource]="transactionWiseSummaryArr">
+                        <dxo-paging [enabled]="false"></dxo-paging>
+                        <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
+                        <!-- <dxo-selection mode="multiple"></dxo-selection> -->
+                        <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+                        <dxi-column  dataField="voc_nos" caption="Voucher" [allowResizing]="true"></dxi-column>
+                        <dxi-column  dataField="voc_nos" caption="No.Inv" [allowResizing]="true"></dxi-column>
+                        <dxi-column  dataField="amount" caption="Amount" [allowResizing]="true"></dxi-column>
+                    </dx-data-grid>
+                </div>
+            </div>
+
+            <div class="row mb-2">
+                <h6 class="header_title" id="ID007">Point Of Sales Summary (Watch)</h6>
+                <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true" [height]="'auto'"
+                [columnAutoWidth]="true" [dataSource]="pendingSalesOrderSummaryArr">
+                    <dxo-paging [enabled]="false"></dxo-paging>
+                    <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
+                    <!-- <dxo-selection mode="multiple"></dxo-selection> -->
+                    <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+                    <dxi-column  dataField="voc_nos" caption="Division" [allowResizing]="true"></dxi-column>
+                    <dxi-column  dataField="amount" caption="Type" [allowResizing]="true"></dxi-column>
+                    <dxi-column  dataField="amount" caption="Pcs" [allowResizing]="true"></dxi-column>
+                    <dxi-column  dataField="amount" caption="Weight" [allowResizing]="true"></dxi-column>
+                    <dxi-column  dataField="amount" caption="Amount" [allowResizing]="true"></dxi-column>
+
+                    <dxo-summary>
+                        <dxi-total-item column="Pcs" summaryType="sum" displayFormat="{0}" alignment="right"></dxi-total-item>
+                        <dxi-total-item column="Weight" summaryType="sum" displayFormat="{0}" alignment="right"></dxi-total-item>
+                        <dxi-total-item column="Amount" summaryType="sum" displayFormat="{0}" alignment="right"></dxi-total-item>
+                    </dxo-summary>
+                </dx-data-grid>
+            </div>
+
+            <div class="row mb-2">
+                <div class="col-md-2">
+                    <h6 class="header_title" id="ID008">Receipt Summary</h6>
+                    <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true" [height]="'auto'"
+                    [columnAutoWidth]="true" [dataSource]="pendingSalesOrderSummaryArr">
+                        <dxo-paging [enabled]="false"></dxo-paging>
+                        <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
+                        <!-- <dxo-selection mode="multiple"></dxo-selection> -->
+                        <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+                        <dxi-column  dataField="amount" caption="Rcvd In" [allowResizing]="true" [width]="70"></dxi-column>
+                        <dxi-column  dataField="amount" caption="Amount" [allowResizing]="true" [width]="100"></dxi-column>
+
+                        <dxo-summary>
+                            <dxi-total-item column="Amount" summaryType="sum" displayFormat="{0}" alignment="right"></dxi-total-item>
+                        </dxo-summary>
+                    </dx-data-grid>
+                </div>
+
+                <div class="col-md-10">
+                    <h6 class="header_title" id="ID009">Salesman wise Summary</h6>
+                    <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true" [height]="'auto'"
+                    [columnAutoWidth]="true" [dataSource]="pendingSalesOrderSummaryArr">
+                        <dxo-paging [enabled]="false"></dxo-paging>
+                        <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
+                        <!-- <dxo-selection mode="multiple"></dxo-selection> -->
+                        <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+                        <dxi-column  dataField="voc_nos" caption="Salesman" [allowResizing]="true"></dxi-column>
+                        <dxi-column  dataField="amount" caption="# Docs" [allowResizing]="true"></dxi-column>
+                        <dxi-column  dataField="amount" caption="Tot. Amount" [allowResizing]="true"></dxi-column>
+                        <dxi-column  dataField="amount" caption="Watch" [allowResizing]="true"></dxi-column>
+                        <dxi-column  dataField="amount" caption="Mkg. Value" [allowResizing]="true"></dxi-column>
+
+                        <dxo-summary>
+                            <dxi-total-item column="Tot. Amount" summaryType="sum" displayFormat="{0}" alignment="right"></dxi-total-item>
+                            <dxi-total-item column="Watch" summaryType="sum" displayFormat="{0}" alignment="right"></dxi-total-item>
+                            <dxi-total-item column="Mkg. Value" summaryType="sum" displayFormat="{0}" alignment="right"></dxi-total-item>
+                        </dxo-summary>
+                    </dx-data-grid>
+                </div>
+            </div>
+
+            <dx-popup [width]="300" [height]="180" [showTitle]="true" container=".dx-viewport"
+            title="Template Data" [dragEnabled]="false" [showCloseButton]="false" (onHidden)="popupClosed()"
+            [visible]="popupVisible">
+                <div class="popup-content">
+                    <div class="form-group">
+                        <label for="T_Name">Name:</label>
+                        <input type="text" id="T_Name" class="form-control" formControlName="templateName"/>
+                    </div>
+                    <div class="button-group d-flex">
+                        <button mat-flat-button [ngClass]="{SaveNew_template: templateNameHasValue,
+                            'btn-m-r-10': true, 'demo-button': true, 'btn-width': true, 'mx-1': true}"
+                        (click)="saveTemplate_DB()">
+                        {{ templateNameHasValue ? "Save as New Template" : "Save" }}
+                        </button>
+                        <button  mat-flat-button class="btn-m-r-10 btn-width mx-1 cancelBTN"
+                        (click)="popupClosed()">
+                        Cancel</button>
+                    </div>
+                </div>
+            </dx-popup>
+
+            <div class="row mt-2 justify-content-end mx-2">
+                <app-report-screen-buttons (saveTemplateClick)="saveTemplate()" (previewClicked)="previewClick()"
+                (printClicked)="printBtnClick()"></app-report-screen-buttons>
+            </div>
+        </div> 
+    </form>
+</div>
