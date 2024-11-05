@@ -74,6 +74,30 @@
                             </mat-form-field>
                         </div>
                     </div>
+                    <div class="row">
+                        <label for="inputPassword" id="ID002" class="col-sm-2 col-form-label">Designation : </label>
+                        <div class="col-sm-4">
+                            <mat-form-field style="width: 100%" appearance="outline">
+                                <input type="text" matInput formControlName="Department" UpperCaseDirective />
+                                <master-search class="masterSearch" [MasterSearchData]="DepartmentData"
+                                    (newRowClick)="DepartmentSelected($event)">
+                                </master-search>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-sm-5">
+                            <mat-form-field style="width: 100%" appearance="outline">
+                                <input type="text" matInput formControlName="DepartmentDes" UpperCaseDirective />
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label for="inputPassword" id="ID002" class="col-sm-2 col-form-label">Group Code : </label>
+                        <div class="col-sm-4">
+                            <mat-form-field style="width: 100%" appearance="outline">
+                                <input type="text" matInput formControlName="Department" UpperCaseDirective />
+                            </mat-form-field>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-md-2">
                     <div class="image_box">

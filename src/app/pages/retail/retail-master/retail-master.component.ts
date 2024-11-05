@@ -28,6 +28,8 @@ import { StoneWeightMasterComponent } from "./stone-weight-master/stone-weight-m
 import { PosBranchTargetComponent } from "./pos-branch-target/pos-branch-target.component";
 import { BuyBackPolicyComponent } from "./buy-back-policy/buy-back-policy.component";
 import { ReversePriceRatioComponent } from "./reverse-price-ratio/reverse-price-ratio.component";
+import { AllowanceMasterComponent } from "./allowance-master/allowance-master.component";
+import { DeductionMasterComponent } from "./deduction-master/deduction-master.component";
 @Component({
   selector: "app-retail-master",
   templateUrl: "./retail-master.component.html",
@@ -164,8 +166,9 @@ export class RetailMasterComponent implements OnInit {
       PosBranchTargetComponent:PosBranchTargetComponent,
       StoneWeightMasterComponent : StoneWeightMasterComponent,
       FestivalMasterComponent : FestivalMasterComponent,
-      ReversePriceRatioComponent:ReversePriceRatioComponent
-
+      ReversePriceRatioComponent:ReversePriceRatioComponent,
+      AllowanceMasterComponent:AllowanceMasterComponent,
+      DeductionMasterComponent : DeductionMasterComponent
       // Add components and update in operationals > menu updation grid form component name
     };
     this.componentName = this.CommonService.getFormComponentName();
