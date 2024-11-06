@@ -34,6 +34,11 @@ import { KycMasterComponent } from './kyc-master/kyc-master.component';
 import { CurrencyComponent } from './currency/currency.component';
 import { BoxMasterComponent } from './box-master/box-master.component';
 import { YearlyBudgetPlannerDetailsComponent } from './yearly-budget-planner/yearly-budget-planner-details/yearly-budget-planner-details.component';
+import { CostAndPriceTypesComponent } from './cost-and-price-types/cost-and-price-types.component';
+import { PriceListMasterComponent } from './price-list-master/price-list-master.component';
+import { AdditionalAmountComponent } from './additional-amount/additional-amount.component';
+import { CustomerWiseStonePricingAndLabourChargesComponent } from './customer-wise-stone-pricing-and-labour-charges/customer-wise-stone-pricing-and-labour-charges.component';
+import { ReceiptModesComponent } from './receipt-modes/receipt-modes.component';
 
 
 @NgModule({
@@ -72,7 +77,12 @@ import { YearlyBudgetPlannerDetailsComponent } from './yearly-budget-planner/yea
     KycMasterComponent,
     CurrencyComponent,
     BoxMasterComponent,
-    YearlyBudgetPlannerDetailsComponent
+    YearlyBudgetPlannerDetailsComponent,
+    CostAndPriceTypesComponent,
+    PriceListMasterComponent,
+    AdditionalAmountComponent,
+    CustomerWiseStonePricingAndLabourChargesComponent,
+    ReceiptModesComponent
   ],
   imports: [
     CommonModule,

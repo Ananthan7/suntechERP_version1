@@ -44,6 +44,11 @@ import { SubledgerPrefixMasterComponent } from "./subledger-prefix-master/subled
 import { KycMasterComponent } from "./kyc-master/kyc-master.component";
 import { CurrencyComponent } from "./currency/currency.component";
 import { BoxMasterComponent } from "./box-master/box-master.component";
+import { CostAndPriceTypesComponent } from "./cost-and-price-types/cost-and-price-types.component";
+import { PriceListMasterComponent } from "./price-list-master/price-list-master.component";
+import { AdditionalAmountComponent } from "./additional-amount/additional-amount.component";
+import { CustomerWiseStonePricingAndLabourChargesComponent } from "./customer-wise-stone-pricing-and-labour-charges/customer-wise-stone-pricing-and-labour-charges.component";
+import { ReceiptModesComponent } from "./receipt-modes/receipt-modes.component";
 @Component({
   selector: "app-retail-master",
   templateUrl: "./retail-master.component.html",
@@ -197,13 +202,11 @@ export class RetailMasterComponent implements OnInit {
       KycMasterComponent: KycMasterComponent,
       CurrencyComponent: CurrencyComponent,
       BoxMasterComponent: BoxMasterComponent,
-      
-
-
-
-
-
-
+      CostAndPriceTypesComponent: CostAndPriceTypesComponent,
+      PricelistMasterComponent: PriceListMasterComponent,
+      AdditionalAmountComponent: AdditionalAmountComponent,
+      CustomerWiseStonePricingAndLabourChargesComponent: CustomerWiseStonePricingAndLabourChargesComponent,
+      ReceiptModesComponent: ReceiptModesComponent,
       // Add components and update in operationals > menu updation grid form component name
     };
     this.componentName = this.CommonService.getFormComponentName();
