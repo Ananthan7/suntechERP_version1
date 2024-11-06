@@ -33,6 +33,8 @@ import { SubledgerPrefixMasterComponent } from './subledger-prefix-master/subled
 import { KycMasterComponent } from './kyc-master/kyc-master.component';
 import { CurrencyComponent } from './currency/currency.component';
 import { BoxMasterComponent } from './box-master/box-master.component';
+import { CostAndPriceTypesComponent } from './cost-and-price-types/cost-and-price-types.component';
+import { PriceListMasterComponent } from './price-list-master/price-list-master.component';
 
 
 @NgModule({
@@ -70,7 +72,9 @@ import { BoxMasterComponent } from './box-master/box-master.component';
     SubledgerPrefixMasterComponent,
     KycMasterComponent,
     CurrencyComponent,
-    BoxMasterComponent
+    BoxMasterComponent,
+    CostAndPriceTypesComponent,
+    PriceListMasterComponent
   ],
   imports: [
     CommonModule,
