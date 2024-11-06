@@ -98,7 +98,7 @@ export class MetalReturnComponent implements OnInit {
     VOCTYPE: ['', [Validators.required]],
     VOCNO: [''],
     vocDate: [''],
-    vocTime: [new Date().toTimeString().slice(0, 5), [Validators.required]],
+    vocTime:  [new Date().getHours() + ':' + new Date().getMinutes() + ':' + new Date().getSeconds()],
     enteredBy: [''],
     process: [''],
     worker: [''],
@@ -152,6 +152,7 @@ export class MetalReturnComponent implements OnInit {
       this.generateVocNo()
       this.setNewFormValue()
       this.setvoucherTypeMaster()
+      this.setOnLoadDetails()
     }
   }
   minDate: any;
@@ -239,7 +240,13 @@ export class MetalReturnComponent implements OnInit {
       this.showOverleyPanel(event, form)
     }
   }
-
+  setOnLoadDetails() {
+    let branchParam = this.commonService.allbranchMaster;
+    // Set LOCTYPE_CODE only if it's not already set
+    if (!this.metalReturnForm.controls.location.value) {
+      this.metalReturnForm.controls.location.setValue(branchParam.DMFGMLOC);
+    }
+  }
 
   close(data?: any) {
     if (this.content && this.content.FLAG == 'VIEW'){

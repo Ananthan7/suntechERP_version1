@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
+import { log } from 'console';
 @Component({
   selector: 'app-stone-return-details',
   templateUrl: './stone-return-details.component.html',
@@ -173,6 +174,7 @@ export class StoneReturnDetailsComponent implements OnInit {
   ngOnInit(): void {
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
+    this.setOnLoadDetails()
     if (this.content) {
       this.stonereturndetailsFrom.controls.FLAG.setValue(this.content.HEADERDETAILS.FLAG)
       if (this.content.HEADERDETAILS.FLAG == 'VIEW') {
@@ -256,7 +258,13 @@ export class StoneReturnDetailsComponent implements OnInit {
     this.setProcessCodeWhereCondition()
     this.setStockCodeWhereCondition()
   }
-
+  setOnLoadDetails() {
+    let branchParam = this.comService.allbranchMaster;
+    // Set LOCTYPE_CODE only if it's not already set
+    if (!this.stonereturndetailsFrom.controls.location.value) {
+      this.stonereturndetailsFrom.controls.location.setValue(branchParam.DMFGMLOC);
+    }
+  }
   stockCodeSelected(e: any) {
     console.log(e,'eee')
     this.stonereturndetailsFrom.controls.stockCode.setValue(e.STOCK_CODE);
@@ -269,18 +277,24 @@ export class StoneReturnDetailsComponent implements OnInit {
     this.stonereturndetailsFrom.controls.sieveset.setValue(e.sieve_set)
     this.stonereturndetailsFrom.controls.color.setValue(e.color)
     this.stonereturndetailsFrom.controls.unitrate.setValue(
-      this.comService.emptyToZero(e.rate)
+      this.comService.emptyToZero(e.rate).toFixed(2)
     )
     this.stonereturndetailsFrom.controls.shape.setValue(e.shape)
-    this.stonereturndetailsFrom.controls.amount.setValue(e.AmountLC)
-    this.stonereturndetailsFrom.controls.pointerwt.setValue(e.Weight)
+    // this.stonereturndetailsFrom.controls.amount.setValue(e.AmountLC)
+    // this.stonereturndetailsFrom.controls.pointerwt.setValue(e.Weight)
     this.stonereturndetailsFrom.controls.batchid.setValue(e.STOCK_CODE);
     this.stonereturndetailsFrom.controls.broken.setValue(e.STOCK_CODE)
     this.stonereturndetailsFrom.controls.brokenDescription.setValue(e.Discription)
-
-    // this.stonereturndetailsFrom.controls.carat.setValue(e.KARAT_CODE)
-
+    this.stonereturndetailsFrom.controls.carat.setValue(e.Weight)
+    this.setValueWithDecimal('unitrate', 0, 'AMOUNT')
+    this.setValueWithDecimal('amount', 0, 'AMOUNT')
+    this.setValueWithDecimal('pointerwt', 0, 'FOUR')
     this.setStockCodeWhereCondition()
+  }
+  setValueWithDecimal(formControlName: string, value: any, Decimal: string) {
+    this.stonereturndetailsFrom.controls[formControlName].setValue(
+      this.comService.setCommaSerperatedNumber(value, Decimal)
+    )
   }
   setProcessCodeWhereCondition() {
     let WHERECONDITION = `@strProcessCode='${this.stonereturndetailsFrom.value.process}',`
@@ -320,7 +334,6 @@ export class StoneReturnDetailsComponent implements OnInit {
       this.showOverleyPanel(event, form)
     }
   }
-
 
   setPostData(form: any) {
     return {
@@ -481,7 +494,7 @@ export class StoneReturnDetailsComponent implements OnInit {
           // this.stonereturndetailsFrom.controls.stockCode.setValue(data[0].STOCK_CODE)
           // this.stonereturndetailsFrom.controls.stockCodeDes.setValue(data[0].STOCK_DESCRIPTION)
           this.stonereturndetailsFrom.controls.designcode.setValue(data[0].DESIGN_CODE)
-          this.stonereturndetailsFrom.controls.location.setValue(data[0].LOCTYPE_CODE)
+          // this.stonereturndetailsFrom.controls.location.setValue(data[0].LOCTYPE_CODE)
           this.stonereturndetailsFrom.controls.PICTURE_PATH.setValue(data[0].PICTURE_PATH)
 
           this.setProcessCodeWhereCondition()
@@ -735,5 +748,15 @@ calculateCarat(event: any) {
 
   // Set the calculated carat value to the form control
   this.stonereturndetailsFrom.get('carat')?.setValue(carat1.toFixed(3));
+}
+calculateAmount(event: any) {
+  const carat = parseFloat(this.stonereturndetailsFrom.get('carat')?.value) || 0;
+  console.log(carat)
+  const unitrate = parseFloat(this.stonereturndetailsFrom.get('unitrate')?.value) || 0;
+  console.log(unitrate)
+  
+  const amount = carat * unitrate;
+  console.log(amount)
+  this.stonereturndetailsFrom.get('amount')?.setValue(amount.toFixed(2));
 }
 }
