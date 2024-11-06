@@ -43,13 +43,13 @@
                                         [matDatepicker]="vocDate" formControlName="vocDate" readonly
                                         placeholder="DD/MM/YYYY" [min]="minDate" [max]="maxDate" />
                                     <mat-datepicker-toggle matSuffix [for]="vocDate"></mat-datepicker-toggle>
-                                    <mat-datepicker #vocDate [disabled]="true"></mat-datepicker>
+                                    <mat-datepicker #vocDate  [startAt]="currentDate" [disabled]="isSaved"></mat-datepicker>
                                 </mat-form-field>
                             </div>
                             <div class="col-sm-4 ">
                                 <mat-form-field appearance="outline" style="width: 100%;">
-                                    <input type="time-local" matInput formControlName="vocTime" class="text-right"
-                                        [readonly]="viewMode" />
+                                    <input type="datetime" matInput formControlName="vocTime" class="text-right"
+                                        readonly />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -167,14 +167,14 @@
                             <dxi-column dataField="STOCK_CODE" caption="Stock Code"></dxi-column>
                             <dxi-column dataField="STOCK_DESCRIPTION" caption="Description"></dxi-column>
                             <dxi-column dataField="JOB_DESCRIPTION" caption="Job Description"></dxi-column>
-                            <dxi-column dataField="PCS" caption="Pcs"></dxi-column>
+                            <dxi-column dataField="PCS" caption="Pcs"   alignment="right"></dxi-column>
                             <dxi-column dataField="DESIGN_CODE" caption="Design"></dxi-column>
                             <dxi-column dataField="DIVCODE" caption="Division"></dxi-column>
                             <dxi-column dataField="GROSSWT" caption="Gross Wt"></dxi-column>
                             <dxi-column dataField="PUREWT" caption="Pure Wt"></dxi-column>
                             <dxi-column dataField="JOB_NUMBER" caption="Job Number"></dxi-column>
                             <dxi-column dataField="UNQ_JOB_ID" caption="Uniq job Id"></dxi-column>
-                            <dxi-column dataField="PURITY" caption="Purity"></dxi-column>
+                            <dxi-column dataField="PURITY" caption="Purity"   alignment="right"></dxi-column>
                             <dxi-column dataField="STONE_WT" caption="Stone Wt"></dxi-column>
                             <dxi-column dataField="NET_WT" caption="Net Wt"></dxi-column>
                             <dxi-column dataField="PROCESS_CODE" caption="Process Code"></dxi-column>

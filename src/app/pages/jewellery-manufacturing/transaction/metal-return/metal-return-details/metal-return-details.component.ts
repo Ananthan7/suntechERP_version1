@@ -180,19 +180,20 @@ export class MetalReturnDetailsComponent implements OnInit {
     }
     this.setLookup201WhereCondition();
     this.setLookupStockCodeWhereCondition();
+    this.setOnLoadDetails()
   }
 
   setInitialValue() {
     console.log(this.content, 'content');
     if (!this.content) return;
     let branchParam = this.comService.allbranchMaster
-    this.metalReturnDetailsForm.controls.location.setValue(branchParam.DMFGMLOC)
+    // this.metalReturnDetailsForm.controls.location.setValue(branchParam.DMFGMLOC)
     this.branchCode = this.content.BRANCH_CODE || this.content.HEADERDETAILS.BRANCH_CODE;
     this.metalReturnDetailsForm.controls.VOCTYPE.setValue(this.content.VOCTYPE || this.content.HEADERDETAILS.VOCTYPE)
     this.metalReturnDetailsForm.controls.VOCNO.setValue(this.content.VOCNO || this.content.HEADERDETAILS.VOCNO)
     this.metalReturnDetailsForm.controls.VOCDATE.setValue(this.content.VOCDATE || this.content.HEADERDETAILS.vocDate)
     this.metalReturnDetailsForm.controls.BRANCH_CODE.setValue(this.content.BRANCH_CODE || this.content.HEADERDETAILS.BRANCH_CODE)
-    // this.metalReturnDetailsForm.controls.location.setValue(this.content.LOCTYPE_CODE)
+    this.metalReturnDetailsForm.controls.location.setValue(this.content.LOCTYPE_CODE)
     this.metalReturnDetailsForm.controls.YEARMONTH.setValue(this.content.YEARMONTH || this.content.HEADERDETAILS.YEARMONTH)
     this.metalReturnDetailsForm.controls.jobNumber.setValue(this.content.JOB_NUMBER)
     this.metalReturnDetailsForm.controls.jobDes.setValue(this.content.JOB_DESCRIPTION)
@@ -237,7 +238,13 @@ export class MetalReturnDetailsComponent implements OnInit {
       this.comService.setCommaSerperatedNumber(value, Decimal)
     );
   }
-
+  setOnLoadDetails() {
+    let branchParam = this.comService.allbranchMaster;
+    // Set LOCTYPE_CODE only if it's not already set
+    if (!this.metalReturnDetailsForm.controls.location.value) {
+      this.metalReturnDetailsForm.controls.location.setValue(branchParam.DMFGMLOC);
+    }
+  }
   // setLookup201WhereCondition() {
   //   let form = this.metalReturnDetailsForm.value
   //   let where = `@strBranch_Code='${form.BRANCH_CODE}',`
@@ -734,6 +741,7 @@ setLookupStockCodeWhereCondition() {
         this.comService.closeSnackBarMsg()
         if (result.dynamicData && result.dynamicData[0].length > 0) {
           let data = result.dynamicData[0]
+          console.log(data,'data')
           this.subJoBDetailData = data
           this.metalReturnDetailsForm.controls.subJobNoDes.setValue(data[0].DESCRIPTION)
           // this.metalReturnDetailsForm.controls.processCode.setValue(data[0].PROCESS)
@@ -770,6 +778,7 @@ setLookupStockCodeWhereCondition() {
     this.subscriptions.push(Sub)
   }
   jobNumberValidate(event: any) {
+    if (this.viewMode) return;
     if (event.target.value == '') return
     // let postData = {
     //   "SPID": "064",

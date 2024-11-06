@@ -183,7 +183,7 @@
             <div class="position-relative d-flex">
               <mat-form-field appearance="outline" style="width: 100%">
                 <input type="text" matInput formControlName="batchid"
-                  maxlength="20" [readonly]="viewMode" />
+                  maxlength="20" readonly />
               </mat-form-field>
               <!-- <master-search class="masterSearch"  [MasterSearchData]="subJobNoCodeData"
                 (newRowClick)="subJobNoCodeSelected($event)"
@@ -206,7 +206,7 @@
             <div class="col-sm-4 offset-sm-1">
               <mat-form-field appearance="outline" style="width: 100%">
                 <input type="text" matInput formControlName="broken"
-                  maxlength="20" [readonly]="viewMode" />
+                  maxlength="20" [readonly]="!selectedOption" />
               </mat-form-field>
             </div>
             <div class="col-sm-4">
@@ -303,8 +303,8 @@
             <div class="position-relative d-flex">
               <mat-form-field appearance="outline" style="width: 100%">
                 <input type="text" matInput formControlName="carat"
-                  maxlength="12" readonly StoneDecimalInput
-                  class="text-right" />
+                  maxlength="12" readonly
+                  class="text-right" (focusout)="calculateAmount($event)"/>
               </mat-form-field>
               <!-- <master-search class="masterSearch"  [MasterSearchData]="subJobNoCodeData"
                 (newRowClick)="subJobNoCodeSelected($event)" *ngIf="!viewMode" ></master-search> -->
@@ -372,8 +372,8 @@
             <div class="position-relative d-flex">
               <mat-form-field appearance="outline" style="width: 100%">
                 <input type="text" matInput formControlName="unitrate"
-                  maxlength="12" readonly RateDecimalInput
-                  class="text-right" />
+                  maxlength="12" AmountDecimalInput [readonly]="viewMode"
+                  class="text-right" (focusout)="calculateAmount($event)"/>
               </mat-form-field>
             </div>
           </div>
@@ -382,8 +382,10 @@
           <div class="col-md-2">
             <div class="position-relative d-flex">
               <mat-form-field appearance="outline" style="width: 100%">
-                <input type="text" matInput formControlName="amount" maxlength="12" readonly
-                  class="text-right" AmountDecimalInput  />
+                <input type="text" matInput formControlName="amount"
+                  maxlength="12" readonly
+                  class="text-right" AmountDecimalInput
+                   />
               </mat-form-field>
             </div>
           </div>

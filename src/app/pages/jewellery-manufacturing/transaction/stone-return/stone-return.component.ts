@@ -112,6 +112,7 @@ export class StoneReturnComponent implements OnInit {
   editMode: boolean = false;
   dataToDetailScreen: any;
   modalReference!: NgbModalRef;
+  viewMode1: boolean = true;
 
   private subscriptions: Subscription[] = [];
   userData: MasterSearchModel = {
