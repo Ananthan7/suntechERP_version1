@@ -24,6 +24,15 @@ import { JewelleryBrandingComponent } from './jewellery-branding/jewellery-brand
 import { CertificateMasterComponent } from './certificate-master/certificate-master.component';
 import { ZirconMasterComponent } from './zircon-master/zircon-master.component';
 import { ManufacturedItemsComponent } from './manufactured-items/manufactured-items.component';
+import { SubLedgerMasterComponent } from './sub-ledger-master/sub-ledger-master.component';
+import { DepartmentMasterComponent } from './department-master/department-master.component';
+import { LoanSalaryAdvanceMasterComponent } from './loan-salary-advance-master/loan-salary-advance-master.component';
+import { YearlyBudgetPlannerComponent } from './yearly-budget-planner/yearly-budget-planner.component';
+import { TdsMasterComponent } from './tds-master/tds-master.component';
+import { SubledgerPrefixMasterComponent } from './subledger-prefix-master/subledger-prefix-master.component';
+import { KycMasterComponent } from './kyc-master/kyc-master.component';
+import { CurrencyComponent } from './currency/currency.component';
+import { BoxMasterComponent } from './box-master/box-master.component';
 
 
 @NgModule({
@@ -52,7 +61,16 @@ import { ManufacturedItemsComponent } from './manufactured-items/manufactured-it
     CertificateMasterComponent,
     ZirconMasterComponent,
     ManufacturedItemsComponent,
-    FixingCommodityMasterComponent
+    FixingCommodityMasterComponent,
+    SubLedgerMasterComponent,
+    DepartmentMasterComponent,
+    LoanSalaryAdvanceMasterComponent,
+    YearlyBudgetPlannerComponent,
+    TdsMasterComponent,
+    SubledgerPrefixMasterComponent,
+    KycMasterComponent,
+    CurrencyComponent,
+    BoxMasterComponent
   ],
   imports: [
     CommonModule,
