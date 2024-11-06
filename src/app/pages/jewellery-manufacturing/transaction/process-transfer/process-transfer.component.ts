@@ -179,6 +179,7 @@ export class ProcessTransferComponent implements OnInit {
           )
           this.processTransferFrom.controls.salesman.setValue(data.SMAN)
           this.processTransferFrom.controls.Narration.setValue(data.REMARKS)
+          if(this.content?.FLAG == 'VIEW' && this.commonService.nullToString(data.POSTDATE) != '') this.isViewPost = true;
         } else {
           this.commonService.toastErrorByMsgId('MSG1531')
         }
@@ -671,15 +672,28 @@ export class ProcessTransferComponent implements OnInit {
   AccountPosting() {
     if (!this.content) return
     let form = this.processTransferFrom.value;
-    let API = 'AccountPosting' + '/' + form.BRANCH_CODE + '/' + form.VOCTYPE + '/' + form.VOCNO + '/' +
-      form.YEARMONTH + '/' + this.commonService.nullToString(this.content?.MID) + '/' +
-      'Y' + '/' + this.commonService.userName + '/' + this.commonService.getqueryParamMainVocType() +
-      '/' + this.commonService.getqueryParamTable() + + '/' +'E'+ '/'+ environment.app_version+ '/'+'post'
+    let params = {
+      BRANCH_CODE: this.commonService.nullToString(form.BRANCH_CODE),
+      VOCTYPE: this.commonService.nullToString(form.VOCTYPE),
+      VOCNO: this.commonService.emptyToZero(form.VOCNO),
+      YEARMONTH: this.commonService.nullToString(form.YEARMONTH),
+      MID: this.commonService.nullToString(this.content?.MID),
+      ACCUPDATEYN: 'Y',
+      USERNAME: this.commonService.userName,
+      MAINVOCTYPE: this.commonService.getqueryParamMainVocType(),
+      HEADER_TABLE: this.commonService.getqueryParamTable(),
+    }
+
+    let API = `AccountPosting/${params.BRANCH_CODE}/${params.VOCTYPE}/${params.VOCNO}/${params.YEARMONTH}/${params.MID}/${params.ACCUPDATEYN}/${params.USERNAME}/${params.MAINVOCTYPE}/${params.HEADER_TABLE}/${this.content === 'EDIT' ? 'E' : 'A'}/${environment.app_version}/${'N'}`;
+
+    // let API = 'AccountPosting' + '/' + form.BRANCH_CODE + '/' + form.VOCTYPE + '/' + form.VOCNO + '/' +
+    //   form.YEARMONTH + '/' + this.commonService.nullToString(this.content?.MID) + '/' +
+    //   'Y' + '/' + this.commonService.userName + '/' + this.commonService.getqueryParamMainVocType() +
+    //   '/' + this.commonService.getqueryParamTable() + '/' +'E'+ '/'+ environment.app_version+ '/'+'post'
     this.commonService.showSnackBarMsg('MSG81447')
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
         if (result.status == "Success") {
-          this.commonService.toastSuccessByText("MSG3607")
           this.isViewPost = true;
           this.commonService.toastSuccessByText(result.message)
         } else {
