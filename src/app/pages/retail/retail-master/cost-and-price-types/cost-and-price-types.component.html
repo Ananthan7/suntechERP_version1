@@ -1,0 +1,209 @@
+<!-- header section starts -->
+<div class="card-content border-bottom d-flex justify-content-between p-2">
+  <h5 class="pos-modaltitle" id="modal-dia-metal">Cost And Price Types</h5>
+  <button type="button" class="btn btn-close close-btn" (click)="close()">
+    <i class="feather icon-x close-icon"></i>
+  </button>
+</div>
+
+<!-- modal header component -->
+<modal-header
+  (saveClick)="formSave()"
+  (cancelClick)="close()"
+  (deleteClick)="deleteMaster()"
+></modal-header>
+
+<!-- content section -->
+<div class="container-fluid pt-3">
+  <form [formGroup]="costAndPriceTypeMainForm">
+    <div class="row mt-2">
+      <div class="col-md-12">
+        <div class="row">
+          <h4 class="mt-2 mb-4">Header Details</h4>
+          <div class="col-md-6">
+            <div class="row mb-1">
+              <label for="code" class="col-sm-2 col-form-label" id="ID029"
+                >Code</label
+              >
+              <div class="col-md-4">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <input matInput="text" formControlName="code" />
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="row mb-1">
+              <label
+                for="description"
+                class="col-sm-2 col-form-label"
+                id="ID029"
+                >Description</label
+              >
+              <div class="col-md-6">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <input matInput="text" formControlName="description" />
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="row mb-1">
+              <label for="party" class="col-sm-2 col-form-label" id="ID029"
+                >Party</label
+              >
+              <div class="col-md-4">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <input matInput="text" formControlName="party" />
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="row mb-1">
+              <label for="division" class="col-sm-2 col-form-label" id="ID029"
+                >Division</label
+              >
+              <div class="col-md-4">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <input matInput="text" formControlName="division" />
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="row mb-1">
+              <div class="col-md-6">
+                <mat-checkbox formControlName="applyPriceValue" id="ID060"
+                  >Apply Price Value</mat-checkbox
+                >
+              </div>
+
+              <div class="col-md-6">
+                <mat-checkbox formControlName="forceMaking" id="ID060"
+                  >Force Making Charges On Net. Wt.</mat-checkbox
+                >
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="row mb-1">
+              <label
+                for="standardPrice"
+                class="col-sm-3 col-form-label"
+                id="ID029"
+                >Standard Price</label
+              >
+              <div class="col-md-4">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <input matInput="text" formControlName="standardPrice" />
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="row mb-1">
+              <label
+                for="minimumPrice"
+                class="col-sm-3 col-form-label"
+                id="ID029"
+                >Minimum Price</label
+              >
+              <div class="col-md-4">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <input matInput="text" formControlName="minimumPrice" />
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="row mb-1">
+              <label
+                for="maximumPrice"
+                class="col-sm-3 col-form-label"
+                id="ID029"
+                >Maximum Price</label
+              >
+              <div class="col-md-4">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <input matInput="text" formControlName="maximumPrice" />
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="row mb-1">
+              <label
+                for="standardVariance"
+                class="col-sm-3 col-form-label"
+                id="ID029"
+                >Standard Variance</label
+              >
+              <div class="col-md-4">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <input matInput="text" formControlName="standardVariance" />
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="row mb-1">
+              <label
+                for="defaultWastage"
+                class="col-sm-3 col-form-label"
+                id="ID029"
+                >Default Wastage %</label
+              >
+              <div class="col-md-4">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <input matInput="text" formControlName="defaultWastage" />
+                </mat-form-field>
+              </div>
+
+              <div class="col-md-4">
+                <button
+                  type="button"
+                  class="col-md-12 p-4 mb-4 btn btn-primary text-center"
+                >
+                  Select Stock Masters
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row mt-4">
+          <h4 class="mt-2 mb-4">Item Details</h4>
+
+          <menu-buttons
+            [viewAddBtn]="true"
+            [viewDeleteBtn]="true"
+            [viewImportBtn]="false"
+            (addClick)="openItemdetails()"
+            (deleteClick)="removeItemDetails()"
+          >
+          </menu-buttons>
+
+
+
+          <div class="col-md-12">
+            <dx-data-grid
+              id="gridContainer"
+              [showBorders]="true"
+              [dataSource]="itemDetailsData"
+              [showColumnLines]="true"
+              [showRowLines]="true"
+              class="mt-3"
+              [paging]="{ pageSize: 5 }"
+            >
+              <dxo-paging [enabled]="true"></dxo-paging>
+              <dxo-pager [showInfo]="true"></dxo-pager>
+              <dxo-selection mode="single"></dxo-selection>
+
+              <dxi-column
+                *ngFor="let data of columnHeadings"
+                [dataField]="data.field"
+                [caption]="data.caption"
+                [allowEditing]="true"
+                alignment="center"
+                backgroundcolor="#000"
+              >
+              </dxi-column>
+            </dx-data-grid>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
