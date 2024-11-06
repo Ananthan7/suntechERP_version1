@@ -1,12 +1,12 @@
 <!-- header section starts -->
 <div class="card-content border-bottom d-flex justify-content-between p-2">
     <h5 class="pos-modaltitle" id="modal-dia-metal">Stone Cost Updation</h5>
-    <button type="button" class="btn btn-close close-btn" (click)="close()">
+    <button type="button" class="btn btn-close close-btn" (click)="closed()">
         <i class="feather icon-x close-icon"></i>
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
+<modal-header (saveClick)="formSubmit()" (cancelClick)="closed()"
     [isViewDelete]="editMode"
     (deleteClick)="deleteRecord()"></modal-header>
 <div class="row">

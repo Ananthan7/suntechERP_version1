@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, ElementRef, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
@@ -45,7 +45,7 @@ export class WorkerMasterComponent implements OnInit {
   filteredData: any[] = []; // Data source for the filtered grid
   searchTerm: string = '';
   afterSaveBtn: boolean = true;
-  capscheck :boolean = false;
+  capscheck: boolean = false;
 
   accountMasterData: MasterSearchModel = {
     PAGENO: 1,
@@ -92,7 +92,7 @@ export class WorkerMasterComponent implements OnInit {
   }
 
   workerMasterForm = this.formBuilder.group({
-    WorkerCode: ['', [Validators.required]],
+    WorkerCode: ['', [Validators.required], this.nameValidator],
     WorkerDESCRIPTION: ['', [Validators.required]],
     WorkerAcCode: [''],
     NameOfSupervisor: [''],
@@ -125,9 +125,17 @@ export class WorkerMasterComponent implements OnInit {
     this.filteredData = this.tableData;
   }
 
+  nameValidator(control: FormControl): { [key: string]: boolean } | null {
+    const nameRegexp: RegExp = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/;
+    if (control.value && nameRegexp.test(control.value)) {
+      return { invalidName: true };
+    }
+    return null; // Return null if no errors
+  }
+
   ngOnInit(): void {
     this.renderer.selectRootElement('#code')?.focus();
-   
+
 
     if (this.content?.FLAG) {
       this.setFormValues();
@@ -159,6 +167,13 @@ export class WorkerMasterComponent implements OnInit {
       this.isDisableSaveBtn = false;
     }
   }
+
+  sanitizeInput(event: any): void {
+    const input = event.target as HTMLInputElement;
+    input.value = input.value.replace(/[^a-zA-Z0-9-]/g, '');  // Remove special characters
+    this.workerMasterForm.get('WorkerCode')?.setValue(input.value, { emitEvent: false });
+  }
+
 
   checkCode(): boolean {
     if (this.workerMasterForm.value.WorkerCode == '') {
@@ -262,11 +277,11 @@ export class WorkerMasterComponent implements OnInit {
     if (this.commonService.nullToString(form.WorkerCode) == '') {
       this.commonService.toastErrorByMsgId('MSG1951')// Worker code CANNOT BE EMPTY
       return true
-    } else 
-     if (this.commonService.nullToString(form.WorkerDESCRIPTION) == '') {
-      this.commonService.toastErrorByMsgId('MSG1193')//"description cannot be empty"
-      return true
-    }
+    } else
+      if (this.commonService.nullToString(form.WorkerDESCRIPTION) == '') {
+        this.commonService.toastErrorByMsgId('MSG1193')//"description cannot be empty"
+        return true
+      }
     return false;
   }
   reCalculateSrno() {
@@ -517,7 +532,7 @@ export class WorkerMasterComponent implements OnInit {
 
     const nameRegexp: RegExp = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/;
 
-    if (event.target.value  == nameRegexp) {
+    if (event.target.value == nameRegexp) {
       this.commonService.toastErrorByMsgId('MSG81525');//Do not enter the special character in the  
     }
 
@@ -573,9 +588,9 @@ export class WorkerMasterComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
   /**use: validate all lookups to check data exists in db */
-  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {    
+  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     LOOKUPDATA.SEARCH_VALUE = event.target.value
-    if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
+    if (event.target.value == '' || this.viewMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
       WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
@@ -656,15 +671,15 @@ export class WorkerMasterComponent implements OnInit {
   }
 
   /**USE: close modal window */
-  // close(data?: any) {
-  //   this.workerMasterForm.reset()
-  //   this.tableData = []
-  //   // this.activeModal.close();
-  //   this.activeModal.close(data);
-  // }
-
   close(data?: any) {
-    if (this.content && this.content.FLAG == 'VIEW'){
+    this.workerMasterForm.reset()
+    this.tableData = []
+    // this.activeModal.close();
+    this.activeModal.close(data);
+  }
+
+  closed(data?: any) {
+    if (this.content && this.content.FLAG == 'VIEW') {
       this.workerMasterForm.reset()
       this.tableData = []
       this.activeModal.close(data);
@@ -755,14 +770,14 @@ export class WorkerMasterComponent implements OnInit {
   }
 
   checkCapsOn(event: any) {
-    if(this.capscheck == false){
-    if (event.getModifierState("CapsLock")) {
-      Swal.fire({
-        icon: "warning",
-        title: "Caps Lock is On",
-      });
-    }
-    this.capscheck =true;
+    if (this.capscheck == false) {
+      if (event.getModifierState("CapsLock")) {
+        Swal.fire({
+          icon: "warning",
+          title: "Caps Lock is On",
+        });
+      }
+      this.capscheck = true;
     }
   }
 

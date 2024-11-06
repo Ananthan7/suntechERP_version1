@@ -2,12 +2,12 @@
     <!-- header section starts -->
     <div class="card-content border-bottom d-flex justify-content-between">
         <h5 class="pos-modaltitle" id="modal-dia-metal">Worker Master</h5>
-        <button type="button" class="btn btn-close close-btn" (click)="close()">
+        <button type="button" class="btn btn-close close-btn" (click)="closed()">
             <i class="feather icon-x close-icon"></i>
         </button>
     </div>
     <!-- modal header component -->
-    <modal-header (saveClick)="formSubmit()" (cancelClick)="close()" [isloading]="isloading"
+    <modal-header (saveClick)="formSubmit()" (cancelClick)="closed()" [isloading]="isloading"
         (deleteClick)="deleteWorkerMaster()" [isViewDelete]="editMode" [isViewSave]="!viewMode"
         [disableSaveBtn]="isDisableSaveBtn" [isViewCancel]="!viewMode" [isViewMore]="!viewMode"></modal-header>
     <!-- content section -->
@@ -22,6 +22,7 @@
                             <mat-form-field appearance="outline">
                                 <input type="text" matInput placeholder="WORKER CODE" maxlength="6" id="WorkerCode"
                                     formControlName="WorkerCode" id="code" [readonly]="viewMode || editMode" #code
+                                    (input)="sanitizeInput($event)"
                                     UpperCaseDirective (focusout)="checkWorkerExists($event)" (keyup)="codeEnabled()"
                                     autocomplete="off" />
                                 <!-- <mat-error

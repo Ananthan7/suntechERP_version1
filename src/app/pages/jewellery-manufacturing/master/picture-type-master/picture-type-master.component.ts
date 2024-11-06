@@ -77,12 +77,12 @@ subscriptions: any;
     this.tableData[value.data.SN - 1].mandatory = data.target.value;
   }
 
-  // close(data?: any) {
-  //   //TODO reset forms and data before closing
-  //   this.activeModal.close(data);
-  // }
-
   close(data?: any) {
+    //TODO reset forms and data before closing
+    this.activeModal.close(data);
+  }
+
+  closed(data?: any) {
     if (this.content && this.content.FLAG == 'VIEW'){
       this.activeModal.close(data);
       return

@@ -585,25 +585,12 @@ export class StonePricingMasterComponent implements OnInit {
       return true
     }
 
-    if (this.stonePrizeMasterForm.value.selling === '0.00' && this.stonePrizeMasterForm.value.selling_rate === '0.00') {
+
+
+    if (this.stonePrizeMasterForm.value.selling === '' && this.stonePrizeMasterForm.value.selling_rate === '') {
       this.commonService.toastErrorByMsgId('MSG7728');//Enter values either Selling % or Selling Rate
       return;
     }
-    // if (this.commonService.nullToString(form.selling) == "0.00" ||
-    //   this.commonService.nullToString(form.selling) === '' ||
-    //   this.commonService.nullToString(form.selling) === '0' ||
-    //   /^0{2,}\.00$/.test(this.commonService.nullToString(form.selling))) {
-    //   this.commonService.toastErrorByMsgId('MSG7728')// 
-    //   return true
-    // }
-
-    // if (this.commonService.nullToString(form.selling_rate) == "0.00" ||
-    //   this.commonService.nullToString(form.selling_rate) === '' ||
-    //   this.commonService.nullToString(form.selling_rate) === '0' ||
-    //   /^0{2,}\.00$/.test(this.commonService.nullToString(form.selling_rate))) {
-    //   this.commonService.toastErrorByMsgId('MSG7728')// 
-    //   return true
-    // }
 
     if (this.stonePrizeMasterForm.value.sieve_form > this.stonePrizeMasterForm.value.sieve_to) {
       this.commonService.toastErrorByMsgId('MSG81518');// Sieve From Should not be Greater than Sieve To
@@ -635,19 +622,40 @@ export class StonePricingMasterComponent implements OnInit {
       return
     }
 
-    // if (this.stonePrizeMasterForm.value.selling_rate === 0.00 && this.stonePrizeMasterForm.value.selling === 0) {
-    //   this.commonService.toastErrorByMsgId('MSG7728');
-    //   return;
-    // }
-
     if (this.checkCondition(this.stonePrizeMasterForm.value.carat_wt, 'MSG1095')) return;
     if (this.checkCondition(this.stonePrizeMasterForm.value.wt_from, 'MSG3565')) return;
     if (this.checkCondition(this.stonePrizeMasterForm.value.wt_to, 'MSG3565')) return;
     if (this.checkCondition(this.stonePrizeMasterForm.value.issue_rate, 'MSG1723')) return;
-
-
-
     if (this.submitValidation(this.stonePrizeMasterForm.value)) return;
+
+
+
+    console.log(this.stonePrizeMasterForm.value.selling);
+    console.log(this.stonePrizeMasterForm.value.selling_rate);
+
+
+    if (this.stonePrizeMasterForm.value.selling === '0' || this.stonePrizeMasterForm.value.selling_rate === '0') {
+      this.commonService.toastErrorByMsgId('MSG7728'); // Enter values either Selling % or Selling Rate
+      console.log("From second Func");
+      return;
+    }
+
+
+    console.log( typeof(this.stonePrizeMasterForm.value.selling) );
+    console.log(typeof(this.stonePrizeMasterForm.value.selling_rate));
+
+
+    if (
+      (this.stonePrizeMasterForm.value.selling === '0.00' || this.stonePrizeMasterForm.value.selling_rate === '0.00')
+    ) {
+      this.commonService.toastErrorByMsgId('MSG7728'); // Enter values either Selling % or Selling Rate
+      console.log("From first Func");
+      return;
+    }
+
+    
+
+
 
     let API = 'StonePriceMasterDJ/InsertStonePriceMaster'
     let postData = this.setPostData()
@@ -750,13 +758,13 @@ export class StonePricingMasterComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
 
-  // close(data?: any) {
-  //   //TODO reset forms and data before closing
-  //   this.activeModal.close(data);
-  // }
-
   close(data?: any) {
-    if (this.content && this.content.FLAG == 'VIEW'){
+    //TODO reset forms and data before closing
+    this.activeModal.close(data);
+  }
+
+  closed(data?: any) {
+    if (this.content && this.content.FLAG == 'VIEW') {
       this.activeModal.close(data);
       return
     }
@@ -1074,7 +1082,7 @@ export class StonePricingMasterComponent implements OnInit {
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     const inputValue = event.target.value.toUpperCase();
     LOOKUPDATA.SEARCH_VALUE = event.target.value
-    if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
+    if (event.target.value == '' || this.viewMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
       WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`

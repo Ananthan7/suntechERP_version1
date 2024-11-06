@@ -17,12 +17,12 @@ export class DepartmentMasterComponent implements OnInit {
   }
 
   
-// close(data?: any) {
-//     //TODO reset forms and data before closing
-//     this.activeModal.close(data);
-//   }
+close(data?: any) {
+    //TODO reset forms and data before closing
+    this.activeModal.close(data);
+  }
 
-  close(data?: any) {
+closed(data?: any) {
     if (this.content && this.content.FLAG == 'VIEW'){
       this.activeModal.close(data);
       return

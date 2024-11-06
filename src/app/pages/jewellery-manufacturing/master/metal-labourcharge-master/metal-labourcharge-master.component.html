@@ -3,12 +3,12 @@
     <div class="card-content border-bottom d-flex justify-content-between p-2">
         <h5 class="pos-modaltitle" id="modal-dia-metal">Metal Labour Charge
             Master</h5>
-        <button type="button" class="btn btn-close close-btn" (click)="close()">
+        <button type="button" class="btn btn-close close-btn" (click)="closed()">
             <i class="feather icon-x close-icon"></i>
         </button>
     </div>
     <!-- modal header component -->
-    <modal-header (cancelClick)="close()" (deleteClick)="deleteMeltingType()" [isViewSave]="!viewMode"
+    <modal-header (cancelClick)="closed()" (deleteClick)="deleteMeltingType()" [isViewSave]="!viewMode"
         (saveClick)="formSubmit()" [isViewCancel]="!viewMode" [isViewMore]="!viewMode"
         [isViewDelete]="editMode"></modal-header>
     <!-- content section -->

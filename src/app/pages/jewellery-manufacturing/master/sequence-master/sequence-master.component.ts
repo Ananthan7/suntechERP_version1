@@ -799,12 +799,12 @@ export class SequenceMasterComponent implements OnInit {
 
 
   /**USE: close modal window */
-  // close(data?: any) {
-  //   this.sequenceMasterForm.reset()
-  //   this.activeModal.close(data);
-  // }
-
   close(data?: any) {
+    this.sequenceMasterForm.reset()
+    this.activeModal.close(data);
+  }
+
+  closed(data?: any) {
     if (this.content && this.content.FLAG == 'VIEW'){
       this.activeModal.close(data);
       return
