@@ -620,7 +620,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.setFormDecimal('METAL_FRM_STONE_WT', parentDetail.FRM_STONE_WT, 'STONE')
     this.setFormDecimal('METAL_TO_STONE_WT', parentDetail.TO_STONE_WT, 'STONE')
     this.setFormDecimal('METAL_ScrapStoneWt', parentDetail.SCRAP_STONEWT, 'STONE')
-    this.setFormDecimal('PURITY', parentDetail.PURITY, 'PURITY')
+    this.setFormDecimal('PURITY', this.metalDetailData[0].PURITY, 'PURITY')
     this.setFormDecimal('METAL_ScrapGrWt', parentDetail.SCRAP_WT, 'METAL')
     this.setFormDecimal('METAL_LossBooked', parentDetail.LOSS_QTY, 'METAL')
     this.setFormDecimal('METAL_FromIronWeight', parentDetail.FROM_IRONWT, 'METAL')
