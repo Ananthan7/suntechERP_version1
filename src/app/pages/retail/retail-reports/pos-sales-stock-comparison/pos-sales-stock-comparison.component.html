@@ -1,0 +1,218 @@
+<!-- header section -->
+<div class="card-content border-bottom d-flex justify-content-between p-2">
+    <h5 class="pos-modaltitle" id="modal-dia-metal">POS Sales And Stock Comparison</h5>
+    <button type="button" class="btn btn-close close-btn" (click)="close()">
+        <i class="feather icon-x close-icon"></i>
+    </button>
+</div>
+
+<!-- modal header component -->
+<modal-header (cancelClick)="close()" [isViewDelete]="false" 
+[isViewMore]="false" [isViewSave]="false" [isViewCancel]="false"></modal-header>
+
+<div class="row">
+    <form [formGroup]="POS_Sales_Stock_ComparisonForm">
+        <div class="container-fluid pt-3">
+            <div class="row mb-1">
+                <label for="inputPassword"  class="col-sm-1 col-form-label"  id="ID001"> Branch</label>
+                <div class="col-md-2">
+                    <mat-form-field appearance="outline" style="width: -webkit-fill-available">
+                    <input matInput="text" name="branch" autocomplete="off" formControlName="branch"/>
+                    <app-branch-division [fetchData]="fetchedBranchData" (newRowClick)="selectedData($event)"
+                    class="branchDivisionelectr" [matTooltip]="branchDivisionControlsTooltip"
+                    matTooltipClass="custom-tooltip"  matTooltipPosition="above"></app-branch-division>
+                    </mat-form-field>
+                </div>
+    
+                <div class="col-md-7">
+                    <app-date (selectedDate)="setDateValue($event)" [dateValue]="dateToPass"></app-date>
+                </div> 
+            </div>
+
+            <div class="row mb-4">
+                <label for="transaction"  class="col-sm-1 col-form-label"  id="ID002"> Transaction</label>
+                <div class="col-md-2">
+                    <mat-form-field appearance="outline" ngClass="me-1" style="width:100%">
+                        <mat-select  formControlName="transaction">
+                          <mat-option value="Sales">Sales</mat-option>
+                          <mat-option value="Sales Return">Sales Returns</mat-option>
+                          <mat-option value="Net Sales">Net Sales</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-md-6">
+                    <fieldset class="custom-fieldset">
+                        <legend class="custom-legend" id="ID003">Group By</legend>
+                        
+                        <div class="row mx-1 mt-2">
+                            <label for="systemStockDiamond" class="col-sm-3 col-form-label" id="ID004">Metal</label>
+                            <div class="col-md-9">
+                                <mat-form-field appearance="outline" ngClass="me-1" style="width:100%">
+                                    <mat-select  formControlName="groupByMetal">
+                                    <mat-option value="Salesman">Salesman</mat-option>
+                                    <mat-option value="Invoice">Invoice</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
+
+                        <div class="row mx-1 mt-2">
+                            <label for="systemStockDiamond" class="col-sm-3 col-form-label" id="ID004">Diamond</label>
+                            <div class="col-md-9">
+                                <mat-form-field appearance="outline" ngClass="me-1" style="width:100%">
+                                    <mat-select  formControlName="groupByMetal">
+                                    <mat-option value="Salesman">Salesman</mat-option>
+                                    <mat-option value="Invoice">Invoice</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </fieldset>
+               </div>
+            </div>
+
+            <div class="row mb-1">
+                <mat-tab-group (selectedTabChange)="onTabChange($event)">
+                    <mat-tab label="Metal Division">
+                        <div class="row mt-1">
+                            <div class="col-md-6">
+                                <div class="grid-label text-center mt-1 text-warning" id="ID007">Sales</div>
+                                <app-loader [isLoading]="isLoading"></app-loader>
+                                <dx-data-grid #dataGrid id="gridContainer" [dataSource]="salesGridArr" [showBorders]="true"
+                                [allowColumnResizing]="true" *ngIf="!isLoading">
+                                    <dxo-paging [pageSize]="12"></dxo-paging>
+                                    <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
+                                    <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+                                    
+                                    <dxi-column alignment="center" caption="Division"></dxi-column>
+                                    <dxi-column alignment="center" caption="Branch"></dxi-column>
+                                    <dxi-column alignment="center" caption="Type"></dxi-column>
+                                    <dxi-column alignment="center" caption="Pcs"></dxi-column>
+                                    <dxi-column alignment="center" caption="Gms"></dxi-column>
+                                    <dxi-column alignment="center" caption="Mkg. Value"></dxi-column>
+                                    <dxi-column alignment="center" caption="Metal Value"></dxi-column>
+                                    <dxi-column alignment="center" caption="Total Value"></dxi-column>
+
+                                    <dxo-summary>
+                                        <dxi-total-item column="Pcs" summaryType="sum" displayFormat="{0}" alignment="right"></dxi-total-item>
+                                        <dxi-total-item column="Gms" summaryType="sum" displayFormat="{0}" alignment="right"></dxi-total-item>
+                                        <dxi-total-item column="Mkg. Value" summaryType="sum" displayFormat="{0}" alignment="right"></dxi-total-item>
+                                        <dxi-total-item column="Metal Value" summaryType="sum" displayFormat="{0}" alignment="right"></dxi-total-item>
+                                        <dxi-total-item column="Total Value" summaryType="sum" displayFormat="{0}" alignment="right"></dxi-total-item>
+                                    </dxo-summary>
+                                </dx-data-grid>  
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="grid-label text-center mt-1 text-warning" id="ID007">Stock</div>
+                                <app-loader [isLoading]="isLoading"></app-loader>
+                                <dx-data-grid #dataGrid id="gridContainer" [dataSource]="stockGridArr" [showBorders]="true"
+                                [allowColumnResizing]="true" *ngIf="!isLoading">
+                                    <dxo-paging [pageSize]="12"></dxo-paging>
+                                    <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
+                                    <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+                                    
+                                    <dxi-column alignment="center" caption="Division"></dxi-column>
+                                    <dxi-column alignment="center" caption="Branch"></dxi-column>
+                                    <dxi-column alignment="center" caption="Type"></dxi-column>
+                                    <dxi-column alignment="center" caption="Pcs"></dxi-column>
+                                    <dxi-column alignment="center" caption="Gms"></dxi-column>
+                                    <dxi-column alignment="center" caption="Mkg. Value"></dxi-column>
+
+                                    <dxo-summary>
+                                        <dxi-total-item column="Pcs" summaryType="sum" displayFormat="{0}" alignment="right"></dxi-total-item>
+                                        <dxi-total-item column="Gms" summaryType="sum" displayFormat="{0}" alignment="right"></dxi-total-item>
+                                        <dxi-total-item column="Mkg. Value" summaryType="sum" displayFormat="{0}" alignment="right"></dxi-total-item>
+                                    </dxo-summary>
+                                </dx-data-grid>  
+                            </div>
+                        </div>
+                    </mat-tab>
+
+                    <mat-tab label="Diamond Division">
+                        <div class="row mt-1">
+                            <div class="col-md-6">
+                                <div class="grid-label text-center mt-1 text-warning" id="ID007">Sales</div>
+                                <app-loader [isLoading]="isLoading"></app-loader>
+                                <dx-data-grid #dataGrid id="gridContainer" [dataSource]="diamonSalesGridArr" [showBorders]="true"
+                                [allowColumnResizing]="true" *ngIf="!isLoading">
+                                    <dxo-paging [pageSize]="12"></dxo-paging>
+                                    <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
+                                    <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+                                    
+                                    <dxi-column alignment="center" caption="Branch"></dxi-column>
+                                    <dxi-column alignment="center" caption="Type"></dxi-column>
+                                    <dxi-column alignment="center" caption="Pcs"></dxi-column>
+                                    <dxi-column alignment="center" caption="Weight"></dxi-column>
+                                    <dxi-column alignment="center" caption="Amount"></dxi-column>
+
+                                    <dxo-summary>
+                                        <dxi-total-item column="Pcs" summaryType="sum" displayFormat="{0}" alignment="right"></dxi-total-item>
+                                        <dxi-total-item column="Weight" summaryType="sum" displayFormat="{0}" alignment="right"></dxi-total-item>
+                                        <dxi-total-item column="Amount" summaryType="sum" displayFormat="{0}" alignment="right"></dxi-total-item>
+                                    </dxo-summary>
+                                </dx-data-grid>  
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="grid-label text-center mt-1 text-warning" id="ID007">Physical Stock</div>
+                                <app-loader [isLoading]="isLoading"></app-loader>
+                                <dx-data-grid #dataGrid id="gridContainer" [dataSource]="physicalStockGridArr" [showBorders]="true"
+                                [allowColumnResizing]="true" *ngIf="!isLoading">
+                                    <dxo-paging [pageSize]="12"></dxo-paging>
+                                    <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
+                                    <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+                                    
+                                    <dxi-column alignment="center" caption="Branch"></dxi-column>
+                                    <dxi-column alignment="center" caption="Type"></dxi-column>
+                                    <dxi-column alignment="center" caption="Pcs"></dxi-column>
+                                    <dxi-column alignment="center" caption="Gms"></dxi-column>
+                                    <dxi-column alignment="center" caption="Mkg. Value"></dxi-column>
+
+                                    <dxo-summary>
+                                        <dxi-total-item column="Pcs" summaryType="sum" displayFormat="{0}" alignment="right"></dxi-total-item>
+                                        <dxi-total-item column="Gms" summaryType="sum" displayFormat="{0}" alignment="right"></dxi-total-item>
+                                        <dxi-total-item column="Mkg. Value" summaryType="sum" displayFormat="{0}" alignment="right"></dxi-total-item>
+                                    </dxo-summary>
+                                </dx-data-grid>  
+                            </div>
+                        </div>
+                    </mat-tab>
+                </mat-tab-group> 
+            </div>
+
+            
+            <dx-popup [width]="300" [height]="180" [showTitle]="true" container=".dx-viewport"
+            title="Template Data" [dragEnabled]="false" [showCloseButton]="false" (onHidden)="popupClosed()"
+            [visible]="popupVisible">
+                <div class="popup-content">
+                    <div class="form-group">
+                        <label for="T_Name">Name:</label>
+                        <input type="text" id="T_Name" class="form-control" formControlName="templateName"/>
+                    </div>
+                    <div class="button-group d-flex">
+                        <button mat-flat-button [ngClass]="{SaveNew_template: templateNameHasValue,
+                            'btn-m-r-10': true, 'demo-button': true, 'btn-width': true, 'mx-1': true}"
+                        (click)="saveTemplate_DB()">
+                        {{ templateNameHasValue ? "Save as New Template" : "Save" }}
+                        </button>
+                        <button  mat-flat-button class="btn-m-r-10 btn-width mx-1 cancelBTN"
+                        (click)="popupClosed()">
+                        Cancel</button>
+                    </div>
+                </div>
+            </dx-popup>
+
+            
+            <div class="row mt-2 justify-content-end mx-2">
+                <app-report-screen-buttons (saveTemplateClick)="saveTemplate()" (previewClicked)="previewClick()"
+                (printClicked)="printBtnClick()"></app-report-screen-buttons>
+            </div>
+        </div>
+    </form>
+</div>
