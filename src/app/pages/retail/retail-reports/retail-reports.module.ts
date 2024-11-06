@@ -28,6 +28,8 @@ import { CustomerEnquiryComponent } from './customer-enquiry/customer-enquiry.co
 import { CreditSaleReportComponent } from './credit-sale-report/credit-sale-report.component';
 import { DailyClosingSummaryWatchComponent } from './daily-closing-summary-watch/daily-closing-summary-watch.component';
 import { PointSalesSMJComponent } from './point-sales-smj/point-sales-smj.component';
+import { POSSales_Stock_ComparisonComponent } from './pos-sales-stock-comparison/pos-sales-stock-comparison.component';
+import { TimeWiseSalesAnalysisComponent } from './time-wise-sales-analysis/time-wise-sales-analysis.component';
 
 
 @NgModule({
@@ -54,7 +56,9 @@ import { PointSalesSMJComponent } from './point-sales-smj/point-sales-smj.compon
     CustomerEnquiryComponent,
     CreditSaleReportComponent,
     DailyClosingSummaryWatchComponent,
-    PointSalesSMJComponent
+    PointSalesSMJComponent,
+    POSSales_Stock_ComparisonComponent,
+    TimeWiseSalesAnalysisComponent
   ],
   imports: [
     CommonModule,
