@@ -6,7 +6,11 @@
   </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" *ngIf="viewOnly === false"></modal-header>
+<modal-header
+  (saveClick)="formSubmit()"
+  (cancelClick)="close()"
+  *ngIf="viewOnly === false"
+></modal-header>
 <!-- content section -->
 <div class="row">
   <div class="col-md-10">
@@ -15,22 +19,37 @@
         <div class="row">
           <div class="col-md-10">
             <div class="row mb-1">
-              <label for="inputPassword" class="col-sm-2 col-form-label">Description * :
+              <label for="inputPassword" class="col-sm-2 col-form-label"
+                >Description * :
               </label>
               <div class="col-md-3">
                 <div class="position-relative d-flex">
                   <mat-form-field style="width: 100%">
-                    <input [readonly]="true" type="text" matInput formControlName="descriptionCode" />
+                    <input
+                      [readonly]="true"
+                      type="text"
+                      matInput
+                      formControlName="descriptionCode"
+                    />
                   </mat-form-field>
                 </div>
               </div>
               <div class="col-md-3">
                 <div class="position-relative d-flex">
                   <mat-form-field style="width: 90%">
-                    <input [readonly]="true" class="text-right" type="text" formControlName="description" matInput />
+                    <input
+                      [readonly]="true"
+                      class="text-right"
+                      type="text"
+                      formControlName="description"
+                      matInput
+                    />
                   </mat-form-field>
-                  <master-search *ngIf="viewOnly === false" [MasterSearchData]="DescCodeData"
-                    (newRowClick)="DescCodeSelected($event)"></master-search>
+                  <master-search
+                    *ngIf="viewOnly === false"
+                    [MasterSearchData]="DescCodeData"
+                    (newRowClick)="DescCodeSelected($event)"
+                  ></master-search>
                 </div>
               </div>
             </div>
@@ -40,36 +59,66 @@
         <div class="row">
           <div class="col-md-10">
             <div class="row mb-1">
-              <label for="inputPassword" class="col-sm-2 col-form-label">Pcs :
+              <label for="inputPassword" class="col-sm-2 col-form-label"
+                >Pcs :
               </label>
               <div class="col-md-2">
                 <div class="position-relative d-flex">
                   <mat-form-field style="width: 100%">
-                    <input min="0" [readonly]="viewOnly === true" type="number" matInput formControlName="Pcs" (keydown)="preventInvalidInput($event)" />
+                    <input
+                    class="text-right"
+                      min="0"
+                      [readonly]="viewOnly === true"
+                      type="number"
+                      matInput
+                      formControlName="Pcs"
+                      (keydown)="preventInvalidInput($event)"
+                    />
                   </mat-form-field>
                 </div>
               </div>
 
-              <label for="inputPassword" class="col-sm-2 col-form-label">Type of :
+              <label for="inputPassword" class="col-sm-2 col-form-label"
+                >Type of :
               </label>
               <div class="col-md-2">
                 <div class="position-relative d-flex">
                   <mat-form-field style="width: 80%">
-                    <input [readonly]="true" class="text-right" type="text" matInput formControlName="type_of" />
+                    <input
+                      [readonly]="true"
+                      class="text-right"
+                      type="text"
+                      matInput
+                      formControlName="type_of"
+                    />
                   </mat-form-field>
-                  <master-search *ngIf="viewOnly === false" [MasterSearchData]="typeOfCodeData"
-                    (newRowClick)="typeOfCodeSelected($event)"></master-search>
+                  <master-search
+                    *ngIf="viewOnly === false"
+                    [MasterSearchData]="typeOfCodeData"
+                    (newRowClick)="typeOfCodeSelected($event)"
+                  ></master-search>
                 </div>
               </div>
 
-              <label for="inputPassword" class="col-sm-2 col-form-label">Delivery Date :
+              <label for="inputPassword" class="col-sm-2 col-form-label"
+                >Delivery Date :
               </label>
               <div class="col-sm-2">
                 <mat-form-field style="width: 100%">
-                  <input [min]="currentDate" [readonly]="viewOnly === true" matInput [matDatepicker]="delivery_date"
-                    formControlName="delivery_date" placeholder="DD/MM/YYYY" DateValidation />
-                  <mat-datepicker-toggle *ngIf="viewOnly === false" matSuffix
-                    [for]="delivery_date"></mat-datepicker-toggle>
+                  <input
+                    [min]="currentDate"
+                    [readonly]="viewOnly === true"
+                    matInput
+                    [matDatepicker]="delivery_date"
+                    formControlName="delivery_date"
+                    placeholder="DD/MM/YYYY"
+                    DateValidation
+                  />
+                  <mat-datepicker-toggle
+                    *ngIf="viewOnly === false"
+                    matSuffix
+                    [for]="delivery_date"
+                  ></mat-datepicker-toggle>
                   <mat-datepicker #delivery_date></mat-datepicker>
                 </mat-form-field>
               </div>
@@ -80,25 +129,44 @@
         <div class="row">
           <div class="col-md-10">
             <div class="row mb-1">
-              <label for="inputPassword" class="col-sm-2 col-form-label">Gross Wt :
+              <label for="inputPassword" class="col-sm-2 col-form-label"
+                >Gross Wt :
               </label>
               <div class="col-md-2">
                 <div class="position-relative d-flex">
                   <mat-form-field style="width: 100%">
-                    <input [readonly]="viewOnly" type="text" matInput formControlName="gross_Wt" ThreeDecimalInput (keydown)="preventInvalidInput($event)" />
+                    <input
+                      [readonly]="viewOnly"
+                      type="text"
+                      class="text-right"
+                      matInput
+                      formControlName="gross_Wt"
+                      ThreeDecimalInput
+                      (keydown)="preventInvalidInput($event)"
+                    />
                   </mat-form-field>
                 </div>
               </div>
 
-              <label for="inputPassword" class="col-sm-2 col-form-label">Type of Item :
+              <label for="inputPassword" class="col-sm-2 col-form-label"
+                >Type of Item :
               </label>
               <div class="col-md-2">
                 <div class="position-relative d-flex">
                   <mat-form-field style="width: 80%">
-                    <input [readonly]="true" class="text-right" type="text" matInput formControlName="type_of_item" />
+                    <input
+                      [readonly]="true"
+                      class="text-right"
+                      type="text"
+                      matInput
+                      formControlName="type_of_item"
+                    />
                   </mat-form-field>
-                  <master-search *ngIf="viewOnly === false" [MasterSearchData]="typeOfItemCodeData"
-                    (newRowClick)="typeOfItemCodeSelected($event)"></master-search>
+                  <master-search
+                    *ngIf="viewOnly === false"
+                    [MasterSearchData]="typeOfItemCodeData"
+                    (newRowClick)="typeOfItemCodeSelected($event)"
+                  ></master-search>
                 </div>
               </div>
             </div>
@@ -108,26 +176,43 @@
         <div class="row">
           <div class="col-md-10">
             <div class="row mb-1">
-              <label for="inputPassword" class="col-sm-2 col-form-label">Total Amount :
+              <label for="inputPassword" class="col-sm-2 col-form-label"
+                >Total Amount :
               </label>
               <div class="col-md-2">
                 <div class="position-relative d-flex">
                   <mat-form-field style="width: 100%">
-                    <input [readonly]="viewOnly === true" type="number" (change)="total_amount_change($event)" matInput
-                      formControlName="total_amount" />
+                    <input
+                    class="text-right"
+                      [readonly]="viewOnly === true"
+                      type="number"
+                      (change)="total_amount_change($event)"
+                      matInput
+                      formControlName="total_amount"
+                    />
                   </mat-form-field>
                 </div>
               </div>
 
-              <label for="inputPassword" class="col-sm-2 col-form-label">Status :
+              <label for="inputPassword" class="col-sm-2 col-form-label"
+                >Status :
               </label>
               <div class="col-md-2">
                 <div class="position-relative d-flex">
                   <mat-form-field style="width: 80%">
-                    <input [readonly]="true" class="text-right" type="text" matInput formControlName="status" />
+                    <input
+                      [readonly]="true"
+                      class="text-right"
+                      type="text"
+                      matInput
+                      formControlName="status"
+                    />
                   </mat-form-field>
-                  <master-search *ngIf="viewOnly === false" [MasterSearchData]="statusCodeData"
-                    (newRowClick)="statusCodeSelected($event)"></master-search>
+                  <master-search
+                    *ngIf="viewOnly === false"
+                    [MasterSearchData]="statusCodeData"
+                    (newRowClick)="statusCodeSelected($event)"
+                  ></master-search>
                 </div>
               </div>
             </div>
@@ -137,26 +222,46 @@
         <div class="row">
           <div class="col-md-10">
             <div class="row mb-1">
-              <label for="inputPassword" class="col-sm-2 col-form-label">Material :
+              <label for="inputPassword" class="col-sm-2 col-form-label"
+                >Material :
               </label>
               <div class="col-md-2">
                 <div class="position-relative d-flex">
                   <mat-form-field style="width: 80%">
-                    <input [readonly]="true" type="text" matInput formControlName="material" />
+                    <input
+                      [readonly]="true"
+                      type="text"
+                      matInput
+                      formControlName="material"
+                    />
                   </mat-form-field>
-                  <master-search *ngIf="viewOnly === false" [MasterSearchData]="materialCodeData"
-                    (newRowClick)="materialCodeSelected($event)"></master-search>
+                  <master-search
+                    *ngIf="viewOnly === false"
+                    [MasterSearchData]="materialCodeData"
+                    (newRowClick)="materialCodeSelected($event)"
+                  ></master-search>
                 </div>
               </div>
 
-              <label for="inputPassword" class="col-sm-4 col-form-label text-right">Est. Repair Charge :
+              <label
+                for="inputPassword"
+                class="col-sm-4 col-form-label text-right"
+                >Est. Repair Charge :
               </label>
 
               <div class="col-md-2">
                 <div class="position-relative d-flex">
                   <mat-form-field style="width: 80%">
-                    <input [readonly]="viewOnly === true" class="text-right" type="number" matInput
-                      formControlName="Est_repair_charge" (change)="repair_charge_change($event)" />
+                    <input
+                      [readonly]="viewOnly === true"
+                      class="text-right"
+                      type="text"
+                      matInput
+                      ThreeDecimalInput
+                      formControlName="Est_repair_charge"
+                      (change)="repair_charge_change($event)"
+                      (keydown)="preventInvalidInput($event)"
+                    />
                   </mat-form-field>
                   <!-- <master-search [MasterSearchData]="EstRepairChargeCodeData"
                                     (newRowClick)="EstRepairChargeCodeSelected($event)"></master-search> -->
@@ -169,16 +274,25 @@
         <div class="row">
           <div class="col-md-10">
             <div class="row mb-1">
-              <label for="inputPassword" class="col-sm-2 col-form-label">Own Stock :
+              <label for="inputPassword" class="col-sm-2 col-form-label"
+                >Own Stock :
               </label>
               <div class="col-md-2">
                 <div class="position-relative d-flex">
                   <mat-form-field style="width: 100%">
-                    <input [readonly]="true" type="text" matInput formControlName="own_stock" />
+                    <input
+                      [readonly]="true"
+                      type="text"
+                      matInput
+                      formControlName="own_stock"
+                    />
                   </mat-form-field>
 
-                  <master-search *ngIf="viewOnly === false" [MasterSearchData]="stockCodeData"
-                    (newRowClick)="stockCodeSelected($event)"></master-search>
+                  <master-search
+                    *ngIf="viewOnly === false"
+                    [MasterSearchData]="stockCodeData"
+                    (newRowClick)="stockCodeSelected($event)"
+                  ></master-search>
                 </div>
               </div>
             </div>
@@ -187,29 +301,41 @@
 
         <div class="row">
           <div class="col-md-4">
-            <div style="
+            <div
+              style="
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-              ">
+              "
+            >
               <span>Check The Diamond/Product before Accepting for</span>
-              <mat-checkbox [disabled]="viewOnly === true" class="example-margin"
-                formControlName="checked"></mat-checkbox>
+              <mat-checkbox
+                [disabled]="viewOnly === true"
+                class="example-margin"
+                formControlName="checked"
+              ></mat-checkbox>
             </div>
           </div>
         </div>
 
         <div class="row">
           <div class="col-md-4">
-            <div style="
+            <div
+              style="
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-              ">
-              <span>Changes found other than the details mentioned in the
-                jobs</span>
-              <mat-checkbox [disabled]="viewOnly === true" class="example-margin"
-                formControlName="damaged"></mat-checkbox>
+              "
+            >
+              <span
+                >Changes found other than the details mentioned in the
+                jobs</span
+              >
+              <mat-checkbox
+                [disabled]="viewOnly === true"
+                class="example-margin"
+                formControlName="damaged"
+              ></mat-checkbox>
             </div>
           </div>
         </div>
@@ -217,12 +343,19 @@
         <div class="row">
           <div class="col-md-10">
             <div class="row mb-1">
-              <label for="inputPassword" class="col-sm-2 col-form-label">Repair bags :
+              <label for="inputPassword" class="col-sm-2 col-form-label"
+                >Repair bags :
               </label>
               <div class="col-md-6">
                 <div class="position-relative d-flex">
                   <mat-form-field style="width: 100%">
-                    <input [readonly]="viewOnly === true" type="number" matInput formControlName="repair_bags" />
+                    <input
+                    class="text-right"
+                      [readonly]="viewOnly === true"
+                      type="number"
+                      matInput
+                      formControlName="repair_bags"
+                    />
                   </mat-form-field>
                 </div>
               </div>
@@ -233,12 +366,18 @@
         <div class="row">
           <div class="col-md-10">
             <div class="row mb-1">
-              <label for="inputPassword" class="col-sm-2 col-form-label">Remarks :
+              <label for="inputPassword" class="col-sm-2 col-form-label"
+                >Remarks :
               </label>
               <div class="col-md-8">
                 <div class="position-relative d-flex">
                   <mat-form-field style="width: 100%">
-                    <input [readonly]="viewOnly === true" type="text" matInput formControlName="remark" />
+                    <input
+                      [readonly]="viewOnly === true"
+                      type="text"
+                      matInput
+                      formControlName="remark"
+                    />
                   </mat-form-field>
                 </div>
               </div>
@@ -249,8 +388,13 @@
         <div class="row">
           <div class="col-md-2"></div>
           <div class="col-md-4">
-            <mat-checkbox [disabled]="viewOnly === true" class="example-margin" (change)="withStoneCheck($event)"
-              formControlName="withStone" required>
+            <mat-checkbox
+              [disabled]="viewOnly === true"
+              class="example-margin"
+              (change)="withStoneCheck($event)"
+              formControlName="withStone"
+              required
+            >
               With Stone *
             </mat-checkbox>
           </div>
@@ -259,18 +403,25 @@
         <div *ngIf="stoneCheck === true" class="row">
           <div class="col-md-10">
             <div class="row mb-1">
-              <label for="inputPassword" class="col-sm-2 col-form-label"></label>
+              <label
+                for="inputPassword"
+                class="col-sm-2 col-form-label"
+              ></label>
 
-              <label for="inputPassword" class="col-sm-2 col-form-label">Stone Type
+              <label for="inputPassword" class="col-sm-2 col-form-label"
+                >Stone Type
               </label>
 
-              <label for="inputPassword" class="col-sm-2 col-form-label">No Of *
+              <label for="inputPassword" class="col-sm-2 col-form-label"
+                >No Of *
               </label>
 
-              <label for="inputPassword" class="col-sm-2 col-form-label">Cut
+              <label for="inputPassword" class="col-sm-2 col-form-label"
+                >Cut
               </label>
 
-              <label for="inputPassword" class="col-sm-2 col-form-label">Approx
+              <label for="inputPassword" class="col-sm-2 col-form-label"
+                >Approx
               </label>
             </div>
           </div>
@@ -279,21 +430,38 @@
         <div *ngIf="stoneCheck === true" class="row">
           <div class="col-md-10">
             <div class="row mb-1">
-              <label for="inputPassword" class="col-sm-2 col-form-label"></label>
+              <label
+                for="inputPassword"
+                class="col-sm-2 col-form-label"
+              ></label>
               <div class="col-md-2">
                 <div class="position-relative d-flex">
                   <mat-form-field style="width: 80%">
-                    <input [readonly]="true" type="text" matInput formControlName="stone_type" />
+                    <input
+                      [readonly]="true"
+                      type="text"
+                      matInput
+                      formControlName="stone_type"
+                    />
                   </mat-form-field>
-                  <master-search *ngIf="viewOnly === false" [MasterSearchData]="stoneTypeCodeData"
-                    (newRowClick)="stoneTypeCodeSelected($event)"></master-search>
+                  <master-search
+                    *ngIf="viewOnly === false"
+                    [MasterSearchData]="stoneTypeCodeData"
+                    (newRowClick)="stoneTypeCodeSelected($event)"
+                  ></master-search>
                 </div>
               </div>
 
               <div class="col-md-2">
                 <div class="position-relative d-flex">
                   <mat-form-field style="width: 100%">
-                    <input [readonly]="viewOnly === true" type="number" matInput formControlName="no_of" min="0" />
+                    <input
+                      [readonly]="viewOnly === true"
+                      type="number"
+                      matInput
+                      formControlName="no_of"
+                      min="0"
+                    />
                   </mat-form-field>
                 </div>
               </div>
@@ -301,20 +469,36 @@
               <div class="col-md-2">
                 <div class="position-relative d-flex">
                   <mat-form-field style="width: 80%">
-                    <input [readonly]="true" type="text" matInput formControlName="Cut" />
+                    <input
+                      [readonly]="true"
+                      type="text"
+                      matInput
+                      formControlName="Cut"
+                    />
                   </mat-form-field>
-                  <master-search *ngIf="viewOnly === false" [MasterSearchData]="CutCodeData"
-                    (newRowClick)="CutCodeSelected($event)"></master-search>
+                  <master-search
+                    *ngIf="viewOnly === false"
+                    [MasterSearchData]="CutCodeData"
+                    (newRowClick)="CutCodeSelected($event)"
+                  ></master-search>
                 </div>
               </div>
 
               <div class="col-md-2">
                 <div class="position-relative d-flex">
                   <mat-form-field style="width: 80%">
-                    <input [readonly]="true" type="text" matInput formControlName="Approx" />
+                    <input
+                      [readonly]="true"
+                      type="text"
+                      matInput
+                      formControlName="Approx"
+                    />
                   </mat-form-field>
-                  <master-search *ngIf="viewOnly === false" [MasterSearchData]="ApproxCodeData"
-                    (newRowClick)="ApproxCodeSelected($event)"></master-search>
+                  <master-search
+                    *ngIf="viewOnly === false"
+                    [MasterSearchData]="ApproxCodeData"
+                    (newRowClick)="ApproxCodeSelected($event)"
+                  ></master-search>
                 </div>
               </div>
             </div>
@@ -330,11 +514,11 @@
         <div class="icons">
           <div class="image_box">
             <img
-            class="image_box"
-            *ngIf="fetchedPicture"
-            [src]="fetchedPicture"
-            alt="picture"
-          />
+              class="image_box"
+              *ngIf="fetchedPicture"
+              [src]="fetchedPicture"
+              alt="picture"
+            />
           </div>
         </div>
       </div>

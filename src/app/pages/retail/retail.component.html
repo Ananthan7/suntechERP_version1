@@ -1,23 +1,6 @@
 <!-- title menu section -->
 <app-menubar *ngIf="menuTitle != ''" [menuTitle]="menuTitle" (subMenuChange)="menuClicked($event)"></app-menubar>
 <!-- content section starts -->
-
-
-
-<div class="card p-3">
-    <h5>Favorites</h5>
-    <ul>
-        <li><h6 class="favItems" (click)="openModleFromFavorites('JewelleryAssemblingMasterComponent')" >Jewellery Assembling Master</h6></li>
-        <!-- <li><h6 class="favItems">Departement Master</h6></li>
-        <li><h6 class="favItems">Sales Master</h6></li>
-        <li><h6 class="favItems">Inventory Master</h6></li>
-        <li><h6 class="favItems">Departement Master</h6></li>
-        <li><h6 class="favItems">Inventory Master</h6></li>
-        <li><h6 class="favItems">Inventory Master</h6></li>
-        <li><h6 class="favItems">Job Master</h6></li>
-        <li><h6 class="favItems">Sales Master</h6></li> -->
-    </ul>
-</div>
  
 <section class="sales-dashboard">
     <header class="dashboard-header">

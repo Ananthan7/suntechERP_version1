@@ -638,7 +638,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.processTransferdetailsForm.controls.METAL_ScrapPCS.setValue(parentDetail.SCRAP_PCS)
     let METAL_BalPCS = this.balanceCalculate(parentDetail.FRM_PCS, parentDetail.TO_PCS, parentDetail.SCRAP_PCS)
     this.processTransferdetailsForm.controls.METAL_BalPCS.setValue(METAL_BalPCS)
-    this.calculateAllBalanceForMetalTab()
+    // this.calculateAllBalanceForMetalTab()
   }
   setDiamondDetailFormData(parentDetail: any) {
     this.setFormNullToString('FRM_WORKER_CODE', parentDetail.FRM_WORKER_CODE)
@@ -896,7 +896,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
         "parameter": {
           'strUNQ_JOB_ID': this.processTransferdetailsForm.value.UNQ_JOB_ID,
           'strBranchCode': this.commonService.nullToString(this.branchCode),
-          'strCurrenctUser': ''
+          'strCurrenctUser': this.commonService.userName || ''
         }
       }
       return metalSubjobData
@@ -906,6 +906,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
         "parameter": {
           'StrSubJobNo': this.commonService.nullToString(form.UNQ_JOB_ID),
           'StrBranchCode': this.commonService.nullToString(this.branchCode),
+          'CurrentUser': this.commonService.userName
         }
       }
       return diamondPostData

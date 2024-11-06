@@ -200,7 +200,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
     SRNO: [0],
     FLAG: [''],
     BRANCH_CODE: [''],
-    JOB_NUMBER: [''],
+    JOB_NUMBER: ['', Validators.required],
     JOB_DESCRIPTION: [''],
     JOB_DATE: [''],
     UNQ_JOB_ID: [''],
@@ -312,8 +312,10 @@ export class ProductionEntryDetailsComponent implements OnInit {
       this.productiondetailsFrom.controls.FLAG.setValue(this.content[0]?.FLAG)
       parentDetail = this.content[0]?.JOB_PRODUCTION_DETAIL_DJ
     } else {// condition to load without saving
-      this.renderer.selectRootElement('#jobNoSearch')?.focus();
       parentDetail = this.content[0]?.JOB_PRODUCTION_DETAIL_DJ
+      if (!parentDetail || parentDetail.JOB_NUMBER == '') {
+        this.renderer.selectRootElement('#jobNoSearch')?.focus();
+      }
       PRODUCTION_FORMDETAILS = this.content[0]?.PRODUCTION_FORMDETAILS
     }
     if (!parentDetail) return;
@@ -347,13 +349,17 @@ export class ProductionEntryDetailsComponent implements OnInit {
     this.setFormNullToString('PURE_WT', parentDetail.PURE_WT)
     this.setFormNullToString('KARAT_CODE', parentDetail.KARAT_CODE)
     this.setFormNullToString('TOTAL_PCS', parentDetail.PCS)
+    this.setFormNullToString('WORKER_CODE', parentDetail.WORKER_CODE)
+    this.setFormNullToString('WORKER_NAME', parentDetail.WORKER_NAME)
+    this.setFormNullToString('PROCESS_CODE', parentDetail.PROCESS_CODE)
+    this.setFormNullToString('PROCESS_NAME', parentDetail.PROCESS_NAME)
     this.setFormDecimal('METAL_WT', parentDetail.METAL_WT, 'METAL')
     this.setFormDecimal('STONE_WT', parentDetail.STONE_WT, 'STONE')
     this.setFormDecimal('GROSS_WT', parentDetail.GROSS_WT, 'METAL')
     this.setFormDecimal('PUREWT', parentDetail.PUREWT, 'METAL')
     this.setFormDecimal('PURITY', parentDetail.PURITY, 'PURITY')
     this.setFormDecimal('Job_Purity', parentDetail.PURITY, 'PURITY')
-    if(PRODUCTION_FORMDETAILS){
+    if (PRODUCTION_FORMDETAILS) {
       this.setFormNullToString('DESIGN_DESCRIPTION', PRODUCTION_FORMDETAILS.DESIGN_DESCRIPTION)
       this.setFormNullToString('CUSTOMER_DESC', PRODUCTION_FORMDETAILS.CUSTOMER_DESC)
       this.setFormNullToString('METALLAB_TYPE', PRODUCTION_FORMDETAILS.METALLAB_TYPE)
@@ -363,7 +369,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
       this.setFormNullToString('PART_NAME', PRODUCTION_FORMDETAILS.PART_NAME)
       this.setFormNullToString('PREFIX_LASTNO', PRODUCTION_FORMDETAILS.PREFIX_LASTNO)
     }
-  
+
     if (this.designType == 'METAL') {
       // this.onLoadMetalDetail(parentDetail)
     } else {
@@ -437,17 +443,28 @@ export class ProductionEntryDetailsComponent implements OnInit {
     this.productiondetailsFrom.controls.DESIGN_DESCRIPTION.setValue(value.DESIGN_DESCRIPTION);
   }
   validatePurity() {
-    if (this.emptyToZero(this.productiondetailsFrom.value.PURITY) <= 0) {
+    let form = this.productiondetailsFrom.value
+    if (this.emptyToZero(form.PURITY) <= 0) {
       this.commonService.toastErrorByMsgId("MSG1703");//"purity cannot be zero/negative"
       this.setFormDecimal('PURITY', this.FORM_VALIDATER.PURITY, 'PURITY')
       return
     }
-    else if (this.emptyToZero(this.productiondetailsFrom.value.PURITY) >= 1.01) {
+    else if (this.emptyToZero(form.PURITY) >= 1.01) {
       this.commonService.toastErrorByMsgId("MSG1701");//"Purity cannot be Morethan 1.01000"
       this.setFormDecimal('PURITY', this.FORM_VALIDATER.PURITY, 'PURITY')
       return
     }
-    return
+    let dblTmpNetWt = 0;
+
+    dblTmpNetWt = this.emptyToZero(form.METAL_WT);
+    let actualPureWt = this.commonService.pureWeightCalculate(dblTmpNetWt,this.emptyToZero(form.Job_Purity));
+    let newPureWt = this.commonService.pureWeightCalculate(dblTmpNetWt,this.emptyToZero(form.PURITY))
+    
+    actualPureWt = this.commonService.decimalQuantityFormat(actualPureWt, 'METAL');
+    newPureWt = this.commonService.decimalQuantityFormat(newPureWt, 'METAL');
+    this.setValueWithDecimal('PURE_WT',newPureWt, 'METAL')
+    let txtDPurityDiff = this.commonService.purityDiffCalculate(actualPureWt,newPureWt);
+    this.setValueWithDecimal('PURITY_DIFF',txtDPurityDiff, 'METAL')
   }
   priceSchemeValidate(e: any) {
     this.productiondetailsFrom.controls.pricescheme.setValue(e.PRICE_CODE)
@@ -588,15 +605,15 @@ export class ProductionEntryDetailsComponent implements OnInit {
           this.setFormDecimal('OTHER_STONE', 0, 'STONE')
           this.setFormDecimal('PURITY_DIFF', 0, 'METAL')
 
-          if(data.length>0){
+          if (data.length > 0) {
             let metalWt = 0
-            data.forEach((element:any) => {
+            data.forEach((element: any) => {
               metalWt += element.METAL
             });
             this.setFormDecimal('METAL_WT', metalWt, 'METAL')
           }
           this.FORM_VALIDATER = this.productiondetailsFrom.value
-          if(data[0].PROCESS?.toUpperCase() != 'FINAL') this.pendingProcessValidate()
+          if (data[0].PROCESS?.toUpperCase() != 'FINAL') this.pendingProcessValidate()
           // this.fillStoneDetails()
         } else {
           this.commonService.toastErrorByMsgId('MSG1747');
@@ -608,7 +625,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
-  setPendingPcs(result:any){
+  setPendingPcs(result: any) {
     if (result.dynamicData && result.dynamicData[1].length > 0) {
       let PCSdata = result.dynamicData[1] || []
       let TxtPendingPcs = 0
@@ -630,6 +647,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
         'BRANCHCODE': this.commonService.nullToString(this.branchCode),
         'VOCDATE': this.commonService.nullToString(this.productiondetailsFrom.value.VOCDATE),
         'JobNo': this.commonService.nullToString(this.productiondetailsFrom.value.JOB_NUMBER),
+        'Designtype': this.commonService.nullToString(this.designType),
       }
     }
     this.commonService.showSnackBarMsg('MSG81447')//loading msg
@@ -656,7 +674,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
-  setVendorRef(result:any){
+  setVendorRef(result: any) {
     if (result.dynamicData && result.dynamicData[1].length > 0) {
       let dtSubCategory: any[] = result.dynamicData[1] || []
       if (dtSubCategory?.length > 0) {
@@ -871,7 +889,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
           LOOKUPDATA.SEARCH_VALUE = ''
           return
         }
-        if(formControlName == 'PREFIX') this.prefixCodeValidate()
+        if (formControlName == 'PREFIX') this.prefixCodeValidate()
       }, err => {
         this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
       })
@@ -1089,6 +1107,11 @@ export class ProductionEntryDetailsComponent implements OnInit {
   }
   closeDetailScreen() {
     this.modalStock.close()
+  }
+  setValueWithDecimal(formControlName: string, value: any, Decimal: string) {
+    this.productiondetailsFrom.controls[formControlName].setValue(
+      this.commonService.setCommaSerperatedNumber(value, Decimal)
+    )
   }
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {

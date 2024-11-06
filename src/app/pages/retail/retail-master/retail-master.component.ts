@@ -19,7 +19,6 @@ import {
   Validators,
 } from "@angular/forms";
 import { map, startWith } from "rxjs/operators";
-import { JewelleryAssemblingMasterComponent } from "./jewellery-assembling-master/jewellery-assembling-master.component";
 import { FestivalMasterComponent } from "./festival-master/festival-master.component";
 import { StoneWeightMasterComponent } from "./stone-weight-master/stone-weight-master.component";
 
@@ -28,8 +27,23 @@ import { StoneWeightMasterComponent } from "./stone-weight-master/stone-weight-m
 import { PosBranchTargetComponent } from "./pos-branch-target/pos-branch-target.component";
 import { BuyBackPolicyComponent } from "./buy-back-policy/buy-back-policy.component";
 import { ReversePriceRatioComponent } from "./reverse-price-ratio/reverse-price-ratio.component";
+import { AllowanceMasterComponent } from "./allowance-master/allowance-master.component";
+import { DeductionMasterComponent } from "./deduction-master/deduction-master.component";
 import { WholesaleSalesmanTargetComponent } from "../../general/general-master/wholesale-salesman-target/wholesale-salesman-target.component";
 import { FixingCommodityMasterComponent } from "./fixing-commodity-master/fixing-commodity-master.component";
+import { JewelleryBrandingComponent } from "./jewellery-branding/jewellery-branding.component";
+import { CertificateMasterComponent } from "./certificate-master/certificate-master.component";
+import { ZirconMasterComponent } from "./zircon-master/zircon-master.component";
+import { ManufacturedItemsComponent } from "./manufactured-items/manufactured-items.component";
+import { SubLedgerMasterComponent } from "./sub-ledger-master/sub-ledger-master.component";
+import { DepartmentMasterComponent } from "./department-master/department-master.component";
+import { LoanSalaryAdvanceMasterComponent } from "./loan-salary-advance-master/loan-salary-advance-master.component";
+import { YearlyBudgetPlannerComponent } from "./yearly-budget-planner/yearly-budget-planner.component";
+import { TdsMasterComponent } from "./tds-master/tds-master.component";
+import { SubledgerPrefixMasterComponent } from "./subledger-prefix-master/subledger-prefix-master.component";
+import { KycMasterComponent } from "./kyc-master/kyc-master.component";
+import { CurrencyComponent } from "./currency/currency.component";
+import { BoxMasterComponent } from "./box-master/box-master.component";
 @Component({
   selector: "app-retail-master",
   templateUrl: "./retail-master.component.html",
@@ -161,14 +175,34 @@ export class RetailMasterComponent implements OnInit {
       PosCustomerMaster: PosCustomerMasterMainComponent,
       SchemeMasterComponent: SchemeMasterComponent,
       PosWalkinCustomerComponent: PosWalkinCustomerComponent,
-      JewelleryAssemblingMasterComponent: JewelleryAssemblingMasterComponent,
       BuyBackPolicyComponent:BuyBackPolicyComponent,
       PosBranchTargetComponent:PosBranchTargetComponent,
       StoneWeightMasterComponent : StoneWeightMasterComponent,
       FestivalMasterComponent : FestivalMasterComponent,
       ReversePriceRatioComponent:ReversePriceRatioComponent,
+      AllowanceMasterComponent:AllowanceMasterComponent,
+      DeductionMasterComponent : DeductionMasterComponent,
       WholesaleSalesmanTargetComponent:WholesaleSalesmanTargetComponent,
-      FixingCommodityMasterComponent:FixingCommodityMasterComponent
+      FixingCommodityMasterComponent:FixingCommodityMasterComponent,
+      JewelleryBrandingComponent: JewelleryBrandingComponent,
+      CertificateMasterComponent: CertificateMasterComponent,
+      ZirconMasterComponent: ZirconMasterComponent,
+      ManufacturedItemsComponent:ManufacturedItemsComponent,
+      SubLedgerMasterComponent: SubLedgerMasterComponent,
+      DepartmentMasterComponent: DepartmentMasterComponent, 
+      LoanSalaryAdvanceMasterComponent: LoanSalaryAdvanceMasterComponent,
+      YearlyBudgetPlannerComponent: YearlyBudgetPlannerComponent,
+      TdsMasterComponent: TdsMasterComponent,
+      SubledgerPrefixMasterComponent: SubledgerPrefixMasterComponent,
+      KycMasterComponent: KycMasterComponent,
+      CurrencyComponent: CurrencyComponent,
+      BoxMasterComponent: BoxMasterComponent,
+      
+
+
+
+
+
 
       // Add components and update in operationals > menu updation grid form component name
     };

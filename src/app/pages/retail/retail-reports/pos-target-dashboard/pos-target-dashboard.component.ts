@@ -45,6 +45,8 @@ export class PosTargetDashboardComponent implements OnInit {
   logDataParam: any;
   dateToPass: { fromDate: string; toDate: string } = { fromDate: '', toDate: '' };
 
+  fetchedBranchDataParam: any = [];
+  
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -342,6 +344,10 @@ export class PosTargetDashboardComponent implements OnInit {
     });      
   }
 
+  printBtnClick(){
+
+  }
+
   prefillScreenValues(){
     if ( Object.keys(this.content).length > 0) {
       // console.log(' pREfECTHED VALUES FOR THE SCREEN', this.content)
@@ -358,6 +364,18 @@ export class PosTargetDashboardComponent implements OnInit {
 
       this.POSTargetStatusForm.controls.showSelection.setValue(paresedItem?.CONTROL_DETAIL.intShowSummary);
       console.log('parsed data', paresedItem?.CONTROL_DETAIL )
+    }
+    else{
+      const userBranch = localStorage.getItem('userbranch');
+      const formattedUserBranch = userBranch ? `${userBranch}#` : null;
+      this.POSTargetStatusForm.controls.branch.setValue(formattedUserBranch);
+      this.fetchedBranchDataParam = formattedUserBranch;
+      this.fetchedBranchData= this.fetchedBranchDataParam?.split("#")
+   
+      this.dateToPass = {
+        fromDate:  this.formatDateToYYYYMMDD(new Date()),
+        toDate: this.formatDateToYYYYMMDD(new Date()),
+      };
     }
   }
 
