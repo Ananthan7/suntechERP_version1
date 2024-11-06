@@ -9,6 +9,7 @@ import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstra
 import { ProcessTransferDetailsComponent } from './process-transfer-details/process-transfer-details.component';
 import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 import { AuditTrailComponent } from 'src/app/shared/common/audit-trail/audit-trail.component';
+import { environment } from 'src/environments/environment';
 
 
 @Component({
@@ -672,7 +673,7 @@ export class ProcessTransferComponent implements OnInit {
     let API = 'AccountPosting' + '/' + form.BRANCH_CODE + '/' + form.VOCTYPE + '/' + form.VOCNO + '/' +
       form.YEARMONTH + '/' + this.commonService.nullToString(this.content?.MID) + '/' +
       'Y' + '/' + this.commonService.userName + '/' + this.commonService.getqueryParamMainVocType() +
-      '/' + this.commonService.getqueryParamTable()
+      '/' + this.commonService.getqueryParamTable()+ '/' +'E'+ '/'+ environment.app_version+ '/'+'post'
     this.commonService.showSnackBarMsg('MSG81447')
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
