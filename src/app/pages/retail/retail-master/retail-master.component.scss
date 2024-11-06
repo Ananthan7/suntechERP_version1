@@ -32,7 +32,18 @@
   }
 
   // form field ends
+
+  .cdk-overlay-container {
+    position: fixed;
+    z-index: 1070 !important;
+  }
+
+  .mat-tab-body-content {
+    width: 100%;
+    overflow-x: hidden !important;
+  }
 }
+
 
 // table section styles
 .module_form {
@@ -182,5 +193,3 @@
     }
   }
 }
-
-
