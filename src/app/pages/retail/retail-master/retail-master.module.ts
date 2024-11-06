@@ -24,6 +24,9 @@ import { JewelleryBrandingComponent } from './jewellery-branding/jewellery-brand
 import { CertificateMasterComponent } from './certificate-master/certificate-master.component';
 import { ZirconMasterComponent } from './zircon-master/zircon-master.component';
 import { ManufacturedItemsComponent } from './manufactured-items/manufactured-items.component';
+import { SubLedgerMasterComponent } from './sub-ledger-master/sub-ledger-master.component';
+import { DepartmentMasterComponent } from './department-master/department-master.component';
+import { LoanSalaryAdvanceMasterComponent } from './loan-salary-advance-master/loan-salary-advance-master.component';
 
 
 @NgModule({
@@ -52,7 +55,10 @@ import { ManufacturedItemsComponent } from './manufactured-items/manufactured-it
     CertificateMasterComponent,
     ZirconMasterComponent,
     ManufacturedItemsComponent,
-    FixingCommodityMasterComponent
+    FixingCommodityMasterComponent,
+    SubLedgerMasterComponent,
+    DepartmentMasterComponent,
+    LoanSalaryAdvanceMasterComponent
   ],
   imports: [
     CommonModule,
