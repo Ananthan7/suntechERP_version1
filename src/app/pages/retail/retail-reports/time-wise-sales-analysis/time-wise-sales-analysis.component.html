@@ -1,0 +1,87 @@
+<!-- header section -->
+<div class="card-content border-bottom d-flex justify-content-between p-2">
+    <h5 class="pos-modaltitle" id="modal-dia-metal">Time Wise Sales Analysis</h5>
+    <button type="button" class="btn btn-close close-btn" (click)="close()">
+        <i class="feather icon-x close-icon"></i>
+    </button>
+</div>
+
+<!-- modal header component -->
+<modal-header (cancelClick)="close()" [isViewDelete]="false" 
+[isViewMore]="false" [isViewSave]="false" [isViewCancel]="false"></modal-header>
+
+<div class="row">
+    <form [formGroup]="timeWiseSalesAnalysisForm">
+        <div class="container-fluid pt-3">
+            <div class="row mb-1">
+                <label for="inputPassword"  class="col-sm-1 col-form-label"  id="ID001"> Branch</label>
+                <div class="col-md-2">
+                    <mat-form-field appearance="outline" style="width: -webkit-fill-available">
+                    <input matInput="text" name="branch" autocomplete="off" formControlName="branch"/>
+                    <app-branch-division [fetchData]="fetchedBranchData" (newRowClick)="selectedData($event)"
+                    class="branchDivisionelectr" [matTooltip]="branchDivisionControlsTooltip"
+                    matTooltipClass="custom-tooltip"  matTooltipPosition="above"></app-branch-division>
+                    </mat-form-field>
+                </div>
+    
+                <div class="col-md-7">
+                    <app-date (selectedDate)="setDateValue($event)" [dateValue]="dateToPass"></app-date>
+                </div> 
+            </div>
+
+            <div class="row mb-1">
+                <div class="col-md-5">
+                    <fieldset class="custom-fieldset">
+                        <legend class="custom-legend" id="ID003">Show</legend>
+                        
+                        <div class="row mt-1">
+                            <div class="col-auto">
+                                <input type="checkbox" id="checkbox1" name="checkbox1" class="mx-1" formControlName="invoiceChkbox">
+                                <label for="checkbox1">No of Invoice</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-auto">
+                                <input type="checkbox" id="checkbox2" name="checkbox2" class="mx-1" formControlName="salesAmtChkbox">
+                                <label for="checkbox2">Sales Amount</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-auto">
+                                <input type="checkbox" id="checkbox3" name="checkbox3" class="mx-1" formControlName="quantityChkbox">
+                                <label for="checkbox3">Quantity</label>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+
+               <div class="col-md-5 chkbox_Fieldset2">
+                    <fieldset class="custom-fieldset">
+                        <div class="row mt-1">
+                            <div class="col-auto">
+                                <input type="checkbox" id="checkbox4" name="checkbox1" class="mx-1" formControlName="metalChkbox">
+                                <label for="checkbox4">Only Metal</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-auto">
+                                <input type="checkbox" id="checkbox5" name="checkbox2" class="mx-1" formControlName="stoneChkbox">
+                                <label for="checkbox5">Only Stone</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-auto">
+                                <input type="checkbox" id="checkbox6" name="checkbox3" class="mx-1" formControlName="Metal_StoneChkbox">
+                                <label for="checkbox6">Metal & Stone</label>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+
+            <div class="row mb-1">
+
+            </div>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,44 @@
+.branchDivisionelectr{
+    position: absolute;
+}
+::ng-deep .mat-tooltip.custom-tooltip {
+    background-color: #151414;
+    color: #fff;
+    font-size: 14px;
+    border-radius: 4px;
+    // padding: 8px;
+    font-family: Arial, sans-serif;
+    white-space: pre-wrap;
+    word-break: break-all;
+    line-height: 1.5;
+}
+
+::ng-deep {
+    .cdk-overlay-container {
+        position: fixed;
+        z-index: 1070 !important;
+    }
+}
+
+//legend
+.custom-fieldset {
+    border: 1px solid #333;
+    padding: 3px;
+    position: relative;
+    border-radius: 5px;
+    top: 10px;
+    width: 30%;
+} 
+.custom-legend {
+    position: absolute;
+    top: -15px;
+    background: white;
+    width: 33%;
+    font-size: large;
+}
+
+
+.chkbox_Fieldset2{
+    position: absolute; 
+    left: 180px;
+}
