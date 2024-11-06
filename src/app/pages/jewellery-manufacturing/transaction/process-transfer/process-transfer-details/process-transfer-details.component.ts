@@ -925,8 +925,12 @@ export class ProcessTransferDetailsComponent implements OnInit {
         this.commonService.closeSnackBarMsg()
         try {
           let response = result.dynamicData
+          let userflag:any[] = []
           // set second result from job sales order dj table
-          if (response.length > 1) this.setDataFromSalesOrderDj(response[1]);
+          if (response.length > 1) {
+            userflag= response[2]
+            this.setDataFromSalesOrderDj(response[2]);
+          }
           // SET frist result of subjob details
           this.subJobDetailData = response[0] || []
           if (this.subJobDetailData.length > 0) {
@@ -948,8 +952,11 @@ export class ProcessTransferDetailsComponent implements OnInit {
               this.setSubJob_Details(this.subJobDetailData)
             }
           } else {
+            if(this.commonService.Null2BitValue(userflag[0].USERALLOCATIONFLAG)){
+              return
+            }
             this.resetPTFDetails()
-            let msg = this.commonService.getMsgByID('MSG7957')
+            let msg = this.commonService.getMsgByID('MSG7957') //	No Worker is having balance
             this.showOkDialog(msg)
           }
         } catch (error) {
@@ -1358,6 +1365,9 @@ export class ProcessTransferDetailsComponent implements OnInit {
   }
   setMetalTimeLossDetail(result: any) {
     let data = result.dynamicData[0]
+    // if(data[0].TO_PROCESS_CODE == ''){
+    //   this.commonService.toastErrorByMsgId('MSG7961')
+    // }
     this.setFormNullToString('METAL_TO_PROCESS_CODE', data[0].TO_PROCESS_CODE)
     this.setFormNullToString('METAL_TO_PROCESSNAME', data[0].TO_PROCESSNAME)
     this.setFormNullToString('PRODLAB_ACCODE', data[0].LAB_ACCODE)
@@ -1404,7 +1414,8 @@ export class ProcessTransferDetailsComponent implements OnInit {
         'strWorker_Code': this.commonService.nullToString(this.designType == 'METAL' ? form.METAL_FRM_WORKER_CODE : form.FRM_WORKER_CODE),
         'strUNQ_JOB_ID': this.commonService.nullToString(form.UNQ_JOB_ID),
         'strBranchCode': this.commonService.nullToString(this.commonService.branchCode),
-        'StrStockCode': this.commonService.nullToString(this.designType == 'METAL' ? form.METAL_FromStockCode : '')
+        'StrStockCode': this.commonService.nullToString(this.designType == 'METAL' ? form.METAL_FromStockCode : ''),
+        'CurrentUser': this.commonService.userName
       }
     }
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
