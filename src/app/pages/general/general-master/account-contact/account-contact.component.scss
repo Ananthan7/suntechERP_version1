@@ -18,3 +18,41 @@
   .icon:hover {
     color: #007bff;
 }
+
+.boxed-label {
+  padding: 5px;
+  background-color: #f1f1f1;
+  background: linear-gradient(0deg, #557cb1 42%, #3864b4 82%);
+  color: #fff !important;
+  border: 1px solid #3864b4;
+  text-align: center;
+  width: 100%;
+}
+
+.boxed-label h6 {
+  color: #FFF !important;
+  margin-bottom: 0;
+}
+
+.your-box-container {
+  border: 1px solid #3864b4;
+  padding: 10px;
+}
+
+fieldset {
+  padding: 10px;
+  border: solid 1px #949494;
+  position: relative;
+  margin-top: 25px;
+
+  legend {
+      color: #333334;
+      position: absolute;
+      top: -8px;
+      background: #fff;
+      width: 85px;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 600;
+  }
+}

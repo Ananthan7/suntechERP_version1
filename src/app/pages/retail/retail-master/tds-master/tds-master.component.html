@@ -1,1 +1,153 @@
-<p>tds-master works!</p>
+<div>
+    <div class="card-content border-bottom d-flex justify-content-between p-2">
+        <h5 class="pos-modaltitle" id="modal-dia-metal">TDS Master</h5>
+        <button type="button" class="btn btn-close close-btn" (click)="close()">
+            <i class="feather icon-x close-icon"></i>
+        </button>
+    </div>
+
+    <modal-header (cancelClick)="close()" (saveClick)="formSubmit()"></modal-header>
+
+
+
+    <div class="container-fluid pt-3">
+        <form [formGroup]="tdsform" class="p-1">
+            <div class="row p-4">
+                <div class="col-md-12">
+                    <div class="col-md-6">
+                        <div class="row mb-2">
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <label for="inputPassword" id="ID001" class="col-sm-4 col-form-label">
+                                        Section Code :</label>
+                                    <div class="col-sm-8">
+                                        <mat-form-field style="width: 100%" appearance="outline">
+                                            <input type="text" #codeInput matInput formControlName="section_code"
+                                                UpperCaseDirective autocomplete="off" />
+
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <label for="financial_year" id="ID001" class="col-sm-4 col-form-label">
+                                        Financial Year :
+                                    </label>
+                                    <div class="col-sm-8">
+                                        <mat-form-field style="width: 100%" appearance="outline">
+
+                                            <mat-select formControlName="financial_year">
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="row mb-2">
+                            <div class="col-md-2">
+                                <label for="inputPassword" id="ID001" class="col-sm-12 col-form-label">
+                                    Description (NP) :</label>
+                            </div>
+                            <div class="col-md-10">
+                                <mat-form-field style="width: 100%" appearance="outline">
+                                    <input type="text" #codeInput matInput formControlName="description"
+                                        UpperCaseDirective autocomplete="off" />
+                                </mat-form-field>
+                            </div>
+                        </div>
+
+                        <div class="row mb-2">
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <label for="inputPassword" id="ID001" class="col-sm-4 col-form-label">
+                                        Credit A/c :</label>
+                                    <div class="col-sm-8">
+                                        <mat-form-field style="width: 100%" appearance="outline">
+                                            <input type="text" #codeInput matInput formControlName="credit_ac"
+                                                UpperCaseDirective autocomplete="off" />
+                                            <master-search class="masterSearch" [MasterSearchData]="BranchData"
+                                                (newRowClick)="BranchDataSelected($event)">
+                                            </master-search>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <label for="datefrom" id="ID001" class="col-sm-4 col-form-label">
+                                        Debit A/c :
+                                    </label>
+                                    <!-- <mat-form-field style="width: 100%" appearance="outline">
+                                            <input type="date" matInput id="datefrom" formControlName="dateto"
+                                                autocomplete="off" />
+                                        </mat-form-field> -->
+                                    <div class="col-sm-8">
+                                        <mat-form-field style="width: 100%" appearance="outline">
+                                            <input type="text" #codeInput matInput formControlName="debit_ac"
+                                                UpperCaseDirective autocomplete="off" />
+                                            <master-search class="masterSearch" [MasterSearchData]="BranchData"
+                                                (newRowClick)="BranchDataSelected($event)">
+                                            </master-search>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row text-center">
+                            <div class="col-sm-8">
+                                <mat-checkbox formControlName="call" id="call"> Cal On Taxable Amt</mat-checkbox>
+                            </div>
+                        </div>
+                    
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="row">
+                    <div class="col-md-8">
+                        <dx-data-grid id="gridContainer" [dataSource]="maindetails" [showBorders]="true"
+                            [showColumnLines]="true" [showRowLines]="true" [allowColumnResizing]="true" keyExpr="SRNO"
+                            style="height: 250px;">
+
+                            <dxi-column dataField="SRNO" caption="S.NO #">
+                            </dxi-column>
+
+                            <dxi-column dataField="TDS_CODE" caption="TDS Code" format="dd/MM/yyyy">
+                            </dxi-column>
+
+
+                            <dxi-column dataField="EFFECT_DATE" caption="Effect Date %">
+                            </dxi-column>
+
+                            <dxi-column dataField="INDIVIDUAL" caption="Individual %">
+                            </dxi-column>
+
+                            <dxi-column dataField="COMPANY" caption="Company %">
+                            </dxi-column>
+
+                            <dxi-column dataField="NO_PAN" caption="No Pan %">
+                            </dxi-column>
+
+                            <dxi-column dataField="TDS_LIMIT" caption="TDS Limit">
+                            </dxi-column>
+
+
+                        </dx-data-grid>
+                    </div>
+
+                </div>
+
+
+
+            </div>
+        </form>
+
+    </div>
+</div>
