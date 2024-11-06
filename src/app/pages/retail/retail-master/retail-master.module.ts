@@ -37,6 +37,7 @@ import { CostAndPriceTypesComponent } from './cost-and-price-types/cost-and-pric
 import { PriceListMasterComponent } from './price-list-master/price-list-master.component';
 import { AdditionalAmountComponent } from './additional-amount/additional-amount.component';
 import { CustomerWiseStonePricingAndLabourChargesComponent } from './customer-wise-stone-pricing-and-labour-charges/customer-wise-stone-pricing-and-labour-charges.component';
+import { ReceiptModesComponent } from './receipt-modes/receipt-modes.component';
 
 
 @NgModule({
@@ -78,7 +79,8 @@ import { CustomerWiseStonePricingAndLabourChargesComponent } from './customer-wi
     CostAndPriceTypesComponent,
     PriceListMasterComponent,
     AdditionalAmountComponent,
-    CustomerWiseStonePricingAndLabourChargesComponent
+    CustomerWiseStonePricingAndLabourChargesComponent,
+    ReceiptModesComponent
   ],
   imports: [
     CommonModule,
