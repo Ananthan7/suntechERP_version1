@@ -45,6 +45,7 @@ import { KycMasterComponent } from "./kyc-master/kyc-master.component";
 import { CurrencyComponent } from "./currency/currency.component";
 import { BoxMasterComponent } from "./box-master/box-master.component";
 import { CostAndPriceTypesComponent } from "./cost-and-price-types/cost-and-price-types.component";
+import { PriceListMasterComponent } from "./price-list-master/price-list-master.component";
 @Component({
   selector: "app-retail-master",
   templateUrl: "./retail-master.component.html",
@@ -198,14 +199,8 @@ export class RetailMasterComponent implements OnInit {
       KycMasterComponent: KycMasterComponent,
       CurrencyComponent: CurrencyComponent,
       BoxMasterComponent: BoxMasterComponent,
-      CostAndPriceTypesComponent: CostAndPriceTypesComponent
-
-
-
-
-
-
-
+      CostAndPriceTypesComponent: CostAndPriceTypesComponent,
+      PricelistMasterComponent: PriceListMasterComponent,
       // Add components and update in operationals > menu updation grid form component name
     };
     this.componentName = this.CommonService.getFormComponentName();
