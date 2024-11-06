@@ -27,6 +27,12 @@ import { ManufacturedItemsComponent } from './manufactured-items/manufactured-it
 import { SubLedgerMasterComponent } from './sub-ledger-master/sub-ledger-master.component';
 import { DepartmentMasterComponent } from './department-master/department-master.component';
 import { LoanSalaryAdvanceMasterComponent } from './loan-salary-advance-master/loan-salary-advance-master.component';
+import { YearlyBudgetPlannerComponent } from './yearly-budget-planner/yearly-budget-planner.component';
+import { TdsMasterComponent } from './tds-master/tds-master.component';
+import { SubledgerPrefixMasterComponent } from './subledger-prefix-master/subledger-prefix-master.component';
+import { KycMasterComponent } from './kyc-master/kyc-master.component';
+import { CurrencyComponent } from './currency/currency.component';
+import { BoxMasterComponent } from './box-master/box-master.component';
 
 
 @NgModule({
@@ -58,7 +64,13 @@ import { LoanSalaryAdvanceMasterComponent } from './loan-salary-advance-master/l
     FixingCommodityMasterComponent,
     SubLedgerMasterComponent,
     DepartmentMasterComponent,
-    LoanSalaryAdvanceMasterComponent
+    LoanSalaryAdvanceMasterComponent,
+    YearlyBudgetPlannerComponent,
+    TdsMasterComponent,
+    SubledgerPrefixMasterComponent,
+    KycMasterComponent,
+    CurrencyComponent,
+    BoxMasterComponent
   ],
   imports: [
     CommonModule,
