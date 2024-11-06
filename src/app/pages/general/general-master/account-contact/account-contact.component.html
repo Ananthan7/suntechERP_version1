@@ -8,8 +8,11 @@
 <!-- modal header component -->
 <modal-header (cancelClick)="close()" (saveClick)="formSubmit()"></modal-header>
 <!-- content section -->
+<fieldset class="custom-fieldset mb-2 p-2">
+    <legend class="custom-legend">Contact Details
+    </legend>
 
-<div class=" p-4">
+<div class="">
     <form [formGroup]="accountcontactform" class="p-1">
 
         <div class="row">
@@ -362,7 +365,9 @@
                                     </div>
                                     <div class="col-md-8">
                                         <mat-form-field style="width: 90%;" appearance="outline">
-                                            <input type="text" id="inputPassword" matInput formControlName="blood_group" />
+                                            <!-- <input type="text" id="inputPassword" matInput formControlName="blood_group" /> -->
+                                            <mat-select formControlName="blood_group">
+                                            </mat-select>
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -580,3 +585,4 @@
 
     </form>
 </div>
+</fieldset>
