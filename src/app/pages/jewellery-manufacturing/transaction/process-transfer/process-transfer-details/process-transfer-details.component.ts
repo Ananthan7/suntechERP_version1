@@ -640,7 +640,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     // let METAL_BalPCS = this.balanceCalculate(parentDetail.FRM_PCS, parentDetail.TO_PCS, parentDetail.SCRAP_PCS)
     // this.processTransferdetailsForm.controls.METAL_BalPCS.setValue(METAL_BalPCS)
     // this.calculateAllBalanceForMetalTab()
-    // this.CalculateNetAndPureWt()
+    this.CalculateNetAndPureWt()
     this.CalculateMetalBalance()
     // this.Split_Loss_Metal()
   }
@@ -3933,7 +3933,8 @@ export class ProcessTransferDetailsComponent implements OnInit {
         let txtBalGrWt = (this.emptyToZero(form.METAL_GrossWeightFrom) - (this.emptyToZero(form.METAL_GrossWeightTo) + this.emptyToZero(form.METAL_ScrapGrWt) + this.emptyToZero(form.METAL_LossBooked)));
         let txtBalStoneWt = (this.emptyToZero(form.METAL_FRM_STONE_WT) - (this.emptyToZero(form.METAL_TO_STONE_WT) + this.emptyToZero(form.txtMScrapStoneWt)));
         let txtBalNetWt = (this.emptyToZero(form.METAL_FromNetWeight) - (this.emptyToZero(form.METAL_ToNetWt) + this.emptyToZero(form.METAL_ScrapNetWt) + this.emptyToZero(form.METAL_LossBooked)));
-        let txtBalPureWt = (this.emptyToZero(form.METAL_FromPureWt) - (this.emptyToZero(form.METAL_ToPureWt) + this.emptyToZero(form.METAL_ScrapPureWt) + this.emptyToZero(form.METAL_LossPureWt)));
+        // let txtBalPureWt = (this.emptyToZero(form.METAL_FromPureWt) - (this.emptyToZero(form.METAL_ToPureWt) + this.emptyToZero(form.METAL_ScrapPureWt) + this.emptyToZero(form.METAL_LossPureWt)));
+        let txtBalPureWt = this.commonService.pureWeightCalculate(txtBalGrWt,form.PURITY)
         let txtBalIronWt = (this.emptyToZero(form.METAL_FromIronWeight) - (this.emptyToZero(form.METAL_ToIronWt) + this.emptyToZero(form.METAL_ToIronScrapWt)));
         this.setFormDecimal('METAL_BalPCS', txtBalPCS, 'METAL')
         this.setFormDecimal('METAL_BalGrWt', txtBalGrWt, 'METAL')
