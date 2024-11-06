@@ -35,6 +35,17 @@ import { JewelleryBrandingComponent } from "./jewellery-branding/jewellery-brand
 import { CertificateMasterComponent } from "./certificate-master/certificate-master.component";
 import { ZirconMasterComponent } from "./zircon-master/zircon-master.component";
 import { ManufacturedItemsComponent } from "./manufactured-items/manufactured-items.component";
+import { SubLedgerMasterComponent } from "./sub-ledger-master/sub-ledger-master.component";
+import { DepartmentMasterComponent } from "./department-master/department-master.component";
+import { LoanSalaryAdvanceMasterComponent } from "./loan-salary-advance-master/loan-salary-advance-master.component";
+import { YearlyBudgetPlannerComponent } from "./yearly-budget-planner/yearly-budget-planner.component";
+import { TdsMasterComponent } from "./tds-master/tds-master.component";
+import { SubledgerPrefixMasterComponent } from "./subledger-prefix-master/subledger-prefix-master.component";
+import { KycMasterComponent } from "./kyc-master/kyc-master.component";
+import { CurrencyComponent } from "./currency/currency.component";
+import { BoxMasterComponent } from "./box-master/box-master.component";
+import { CostAndPriceTypesComponent } from "./cost-and-price-types/cost-and-price-types.component";
+import { PriceListMasterComponent } from "./price-list-master/price-list-master.component";
 @Component({
   selector: "app-retail-master",
   templateUrl: "./retail-master.component.html",
@@ -179,7 +190,17 @@ export class RetailMasterComponent implements OnInit {
       CertificateMasterComponent: CertificateMasterComponent,
       ZirconMasterComponent: ZirconMasterComponent,
       ManufacturedItemsComponent:ManufacturedItemsComponent,
-
+      SubLedgerMasterComponent: SubLedgerMasterComponent,
+      DepartmentMasterComponent: DepartmentMasterComponent, 
+      LoanSalaryAdvanceMasterComponent: LoanSalaryAdvanceMasterComponent,
+      YearlyBudgetPlannerComponent: YearlyBudgetPlannerComponent,
+      TdsMasterComponent: TdsMasterComponent,
+      SubledgerPrefixMasterComponent: SubledgerPrefixMasterComponent,
+      KycMasterComponent: KycMasterComponent,
+      CurrencyComponent: CurrencyComponent,
+      BoxMasterComponent: BoxMasterComponent,
+      CostAndPriceTypesComponent: CostAndPriceTypesComponent,
+      PricelistMasterComponent: PriceListMasterComponent,
       // Add components and update in operationals > menu updation grid form component name
     };
     this.componentName = this.CommonService.getFormComponentName();

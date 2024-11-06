@@ -15,12 +15,12 @@
                       <div class="row align-items-center mb-1">
                         <label for="inputPassword" class="col-sm-2 col-form-label">Code * :</label>
                         <div class="col-md-2">
-                          <mat-form-field style="width: 100%;">
+                          <mat-form-field style="width: 100%;" appearance="outline">
                             <input type="text" matInput formControlName="locationcode"  />
                           </mat-form-field>
                         </div>
                         <div class="col-md-5">
-                          <mat-form-field style="width: 100%;">
+                          <mat-form-field style="width: 100%;" appearance="outline">
                             <input type="text" matInput formControlName="codedesc"  />
                           </mat-form-field>
                         </div>
@@ -31,41 +31,47 @@
                       <div class="row align-items-center mb-1">
                         <label for="inputPassword" class="col-sm-2 col-form-label">Type :</label>
                         <div class="col-md-2">
-                          <mat-form-field style="width: 70%;">
+                          <mat-form-field style="width: 70%;" appearance="outline">
                             <input type="text" matInput formControlName="type" />
+
+                            <master-search [MasterSearchData]="typeCodeData" class="masterSearch"
+                            (newRowClick)="typeCodeSelected($event)">
+                        </master-search>
                           </mat-form-field>
-                          <master-search [MasterSearchData]="typeCodeData"
-                          (newRowClick)="typeCodeSelected($event)">
-                      </master-search>
+                       
                         </div>
                         <label for="inputPassword" class="col-sm-1 col-form-label">Division :</label>
                         <div class="col-md-2">
-                            <mat-form-field style="width: 70%;">
+                            <mat-form-field style="width: 70%;" appearance="outline">
                               <input type="text" matInput formControlName="division"/>
                             </mat-form-field>
                           </div>
                         <div class="col-md-2">
-                          <mat-form-field style="width: 70%;">
+                          <mat-form-field style="width: 70%;" appearance="outline">
                             <input type="text" matInput formControlName="divisionDesc" />
+
+                            <master-search [MasterSearchData]="divisionCodeData" class="masterSearch"
+                            (newRowClick)="divisionCodeSelected($event)">
+                        </master-search>
                           </mat-form-field>
-                          <master-search [MasterSearchData]="divisionCodeData"
-                          (newRowClick)="divisionCodeSelected($event)">
-                      </master-search>
+                         
                         </div>
                         <label for="inputPassword" class="col-sm-1 col-form-label">Branch :</label>
                         <div class="col-md-2">
-                          <mat-form-field style="width: 70%;">
+                          <mat-form-field style="width: 70%;" appearance="outline">
                             <input type="text" matInput formControlName="branch" />
+
+                            <master-search [MasterSearchData]="branchCodeData" class="masterSearch"
+                            (newRowClick)="branchCodeSelected($event)">
+                        </master-search>
                           </mat-form-field>
-                          <master-search [MasterSearchData]="branchCodeData"
-                          (newRowClick)="branchCodeSelected($event)">
-                      </master-search>
+                        
                         </div>
                       </div>
                       <div class="row align-items-center mb-1">
                         <label for="inputPassword" class="col-sm-2 col-form-label">No. Of Pieces :</label>
                         <div class="col-md-2">
-                          <mat-form-field style="width: 100%;">
+                          <mat-form-field style="width: 100%;" appearance="outline">
                             <input type="text" matInput />
                           </mat-form-field>
                         </div>
@@ -93,17 +99,17 @@
                       <div class="row align-items-center mb-1">
                         <label for="inputPassword" class="col-sm-2 col-form-label">% :</label>
                         <div class="col-md-2">
-                          <mat-form-field style="width: 100%;">
+                          <mat-form-field style="width: 100%;" appearance="outline">
                             <input type="text" matInput />
                           </mat-form-field>
                         </div>
                         <div class="col-md-2">
-                          <mat-form-field style="width: 100%;">
+                          <mat-form-field style="width: 100%;" appearance="outline">
                             <input type="text" matInput />
                           </mat-form-field>
                         </div>
                         <div class="col-md-2">
-                          <mat-form-field style="width: 100%;">
+                          <mat-form-field style="width: 100%;" appearance="outline">
                             <input type="text" matInput />
                           </mat-form-field>
                         </div>
@@ -112,36 +118,44 @@
                       <div class="row align-items-center mb-1">
                         <label for="inputPassword" class="col-sm-2 col-form-label">P/L AC Code :</label>
                         <div class="col-md-2">
-                          <mat-form-field style="width: 70%;">
+                          <mat-form-field style="width: 70%;" appearance="outline">
                             <input type="text" matInput formControlName="PLACCode1"/>
+
+                            <master-search [MasterSearchData]="PLACCodeCodeData" class="masterSearch"
+                            (newRowClick)="PLACCodeCodeSelected($event)">
+                        </master-search>
                           </mat-form-field>
-                          <master-search [MasterSearchData]="PLACCodeCodeData"
-                          (newRowClick)="PLACCodeCodeSelected($event)">
-                      </master-search>
+                        
                         </div>
                         <div class="col-md-2">
-                          <mat-form-field style="width: 70%;">
+                          <mat-form-field style="width: 70%;" appearance="outline">
                             <input type="text" matInput formControlName="PLACCode2" />
+
+                            <master-search [MasterSearchData]="PLACCodeCodeData" class="masterSearch"
+                            (newRowClick)="PLACCodeCodeSelected($event)">
+                        </master-search>
                           </mat-form-field>
-                          <master-search [MasterSearchData]="PLACCodeCodeData"
-                          (newRowClick)="PLACCodeCodeSelected($event)">
-                      </master-search>
+                         
                         </div>
                         <div class="col-md-2">
-                          <mat-form-field style="width: 70%;">
+                          <mat-form-field style="width: 70%;" appearance="outline">
                             <input type="text" matInput formControlName="PLACCode3" />
+
+                            <master-search [MasterSearchData]="PLACCodeCodeData" class="masterSearch"
+                            (newRowClick)="PLACCodeCodeSelected($event)">
+                        </master-search>
                           </mat-form-field>
-                          <master-search [MasterSearchData]="PLACCodeCodeData"
-                          (newRowClick)="PLACCodeCodeSelected($event)">
-                      </master-search>
+                        
                         </div>
                         <div class="col-md-2">
-                          <mat-form-field style="width: 70%;">
+                          <mat-form-field style="width: 70%;" appearance="outline">
                             <input type="text" matInput  formControlName="PLACCode4" />
+
+                            <master-search [MasterSearchData]="PLACCodeCodeData" class="masterSearch"
+                            (newRowClick)="PLACCodeCodeSelected($event)">
+                        </master-search>
                           </mat-form-field>
-                          <master-search [MasterSearchData]="PLACCodeCodeData"
-                          (newRowClick)="PLACCodeCodeSelected($event)">
-                      </master-search>
+                        
                         </div>
                       </div>
                     </div>
