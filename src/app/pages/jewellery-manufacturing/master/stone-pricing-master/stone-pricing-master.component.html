@@ -2,13 +2,13 @@
     <!-- header section starts -->
     <div class="card-content border-bottom d-flex justify-content-between p-2">
         <h5 class="pos-modaltitle" id="modal-dia-metal">Stone Pricing Master</h5>
-        <button type="button" class="btn btn-close close-btn" (click)="close()">
+        <button type="button" class="btn btn-close close-btn" (click)="closed()">
             <i class="feather icon-x close-icon"></i>
         </button>
     </div>
     <!-- modal header component -->
     <modal-header [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode"
-        (saveClick)="formSubmit()" (cancelClick)="close()" (deleteClick)="deleteStonepriceMaster()"
+        (saveClick)="formSubmit()" (cancelClick)="closed()" (deleteClick)="deleteStonepriceMaster()"
         [isViewDelete]="editMode"></modal-header>
     <!-- content section -->
     <div class="row">

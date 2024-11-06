@@ -1,7 +1,7 @@
 <!-- header section starts -->
 <div class="card-content border-bottom d-flex justify-content-between p-2">
     <h5 class="pos-modaltitle" id="modal-dia-metal">Approval Master</h5>
-    <button type="button" class="btn btn-close close-btn" (click)="close()">
+    <button type="button" class="btn btn-close close-btn" (click)="closed()">
         <i class="feather icon-x close-icon"></i>
     </button>
 </div>
@@ -11,7 +11,7 @@
     (cancelClick)="close()" (deleteClick)="deleteRecord()"></modal-header> -->
 
 
-<modal-header [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode" (cancelClick)="close()"
+<modal-header [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode" (cancelClick)="closed()"
     (saveClick)="formSubmit()" (deleteClick)="deleteRecord()" [isViewDelete]="!viewMode && editableMode"></modal-header>
 <!-- content section -->
 <div class="row">
@@ -26,6 +26,7 @@
                                 <mat-form-field style="width: 100%;" appearance="outline">
                                     <input #codeInput type="text" matInput id="code" formControlName="code"
                                         (focusout)="checkCodeExists($event)" maxlength="6"
+                                        (input)="sanitizeInput($event)"
                                         oninput="this.value = this.value.toUpperCase()"
                                         [readonly]="editableMode || viewMode" [disabled]="viewMode" appNoEmptySpace />
                                 </mat-form-field>

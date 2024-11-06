@@ -179,9 +179,9 @@ export class ProcessMasterComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 46,
     SEARCH_FIELD: 'job_number',
-    SEARCH_HEADING: 'Job No',
+    SEARCH_HEADING: 'Job Master',
     SEARCH_VALUE: '',
-    WHERECONDITION: `JOB_CLOSED_ON is null and  Branch_code = '${this.commonService.branchCode}'`,
+    WHERECONDITION: `DESIGN_TYPE = 'METAL' AND JOB_CLOSED_ON is null and  Branch_code = '${this.commonService.branchCode}'`,
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -234,7 +234,6 @@ export class ProcessMasterComponent implements OnInit {
     RecoveryProcess: [false],
     AutoTransfer: [false],
     ApplySetting: [false],
-    applySetting: [false],
     loss_standard: [''],
     loss_min: [''],
     loss_max: [''],
@@ -914,12 +913,12 @@ export class ProcessMasterComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
 
-  // close(data?: any) {
-  //   //TODO reset forms and data before closing
-  //   this.activeModal.close(data);
-  // }
-
   close(data?: any) {
+    //TODO reset forms and data before closing
+    this.activeModal.close(data);
+  }
+
+  closed(data?: any) {
     if (this.content && this.content.FLAG == 'VIEW'){
       this.activeModal.close(data);
       return
