@@ -44,6 +44,10 @@ import { JewelleryMasterComponent } from './jewellery-master/jewellery-master.co
 import { SetRefMasterComponent } from './set-ref-master/set-ref-master.component';
 import { ModelMasterComponent } from './model-master/model-master.component';
 import { RefiningChargePostingComponent } from './refining-charge-posting/refining-charge-posting.component';
+import { PosSalespersonTargetComponent } from './pos-salesperson-target/pos-salesperson-target.component';
+import { LoyaltyCardMasterComponent } from './loyalty-card-master/loyalty-card-master.component';
+import { LoyaltyProgramSettingsMasterComponent } from './loyalty-program-settings-master/loyalty-program-settings-master.component';
+import { GeneralDocumentMasterComponent } from './general-document-master/general-document-master.component';
 
 
 @NgModule({
@@ -92,7 +96,11 @@ import { RefiningChargePostingComponent } from './refining-charge-posting/refini
     JewelleryMasterComponent,
     SetRefMasterComponent,
     ModelMasterComponent,
-    RefiningChargePostingComponent
+    RefiningChargePostingComponent,
+    PosSalespersonTargetComponent,
+    LoyaltyCardMasterComponent,
+    LoyaltyProgramSettingsMasterComponent,
+    GeneralDocumentMasterComponent
   ],
   imports: [
     CommonModule,
