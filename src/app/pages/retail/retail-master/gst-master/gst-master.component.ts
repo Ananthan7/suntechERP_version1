@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { MatTabGroup } from '@angular/material/tabs';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
@@ -8,6 +9,8 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./gst-master.component.scss']
 })
 export class GstMasterComponent implements OnInit {
+  @ViewChild("tabGroup") tabGroup!: MatTabGroup;
+
 
   
   expenseHsnOrSacAllocationData:any;

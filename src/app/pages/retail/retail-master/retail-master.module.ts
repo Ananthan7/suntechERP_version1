@@ -51,6 +51,9 @@ import { GeneralDocumentMasterComponent } from './general-document-master/genera
 import { GstMasterComponent } from './gst-master/gst-master.component';
 import { VatMasterComponent } from './vat-master/vat-master.component';
 import { ReorderLevelSetupComponent } from './reorder-level-setup/reorder-level-setup.component';
+import { SalesPersonMasterComponent } from './sales-person-master/sales-person-master.component';
+import { GiftVoucherMasterComponent } from './gift-voucher-master/gift-voucher-master.component';
+import { ServiceMasterComponent } from './service-master/service-master.component';
 
 
 @NgModule({
@@ -106,7 +109,10 @@ import { ReorderLevelSetupComponent } from './reorder-level-setup/reorder-level-
     GeneralDocumentMasterComponent,
     GstMasterComponent,
     VatMasterComponent,
-    ReorderLevelSetupComponent
+    ReorderLevelSetupComponent,
+    SalesPersonMasterComponent,
+    GiftVoucherMasterComponent,
+    ServiceMasterComponent
   ],
   imports: [
     CommonModule,
