@@ -313,12 +313,12 @@ export class StoneReturnDetailsComponent implements OnInit {
   }
   setStockCodeWhereCondition() {
     let form = this.stonereturndetailsFrom.value;
-    let WHERECONDITION = `@strProcessCode='${this.comService.nullToString(form.process)}',`
-    WHERECONDITION += `@strWorkerCode='${this.comService.nullToString(form.worker)}',`
-    WHERECONDITION += `@strSubJobNumber='${this.comService.nullToString(form.subjobno)}',`
-    WHERECONDITION += `@strBranchCode='${this.comService.branchCode}',`
-    WHERECONDITION += `@strStockCode='${this.comService.nullToString(form.stockCode)}'`
-    this.stockCodeData.WHERECONDITION = WHERECONDITION
+    this.stockCodeData.WHERECONDITION = `@strProcessCode='${this.comService.nullToString(form.process)}',`
+    this.stockCodeData.WHERECONDITION += `@strWorkerCode='${this.comService.nullToString(form.worker)}',`
+    this.stockCodeData.WHERECONDITION += `@strSubJobNumber='${this.comService.nullToString(form.subjobno)}',`
+    this.stockCodeData.WHERECONDITION += `@strBranchCode='${this.comService.branchCode}',`
+    this.stockCodeData.WHERECONDITION += `@strStockCode='${this.comService.nullToString(form.stockCode)}'`
+    // this.stockCodeData.WHERECONDITION = WHERECONDITION
   }
   locationCodeSelected(e: any) {
     console.log(e);
@@ -487,15 +487,15 @@ export class StoneReturnDetailsComponent implements OnInit {
         if (result.dynamicData && result.dynamicData[0].length > 0) {
           let data = result.dynamicData[0]
           console.log(data,'data')
-          this.stonereturndetailsFrom.controls.process.setValue(data[0].PROCESS)
-          this.stonereturndetailsFrom.controls.processname.setValue(data[0].PROCESSDESC)
-          this.stonereturndetailsFrom.controls.worker.setValue(data[0].WORKER)
-          this.stonereturndetailsFrom.controls.workername.setValue(data[0].WORKERDESC)
+          this.stonereturndetailsFrom.controls.process.setValue(data.PROCESS)
+          this.stonereturndetailsFrom.controls.processname.setValue(data.PROCESSDESC)
+          this.stonereturndetailsFrom.controls.worker.setValue(data.WORKER)
+          this.stonereturndetailsFrom.controls.workername.setValue(data.WORKERDESC)
           // this.stonereturndetailsFrom.controls.stockCode.setValue(data[0].STOCK_CODE)
           // this.stonereturndetailsFrom.controls.stockCodeDes.setValue(data[0].STOCK_DESCRIPTION)
-          this.stonereturndetailsFrom.controls.designcode.setValue(data[0].DESIGN_CODE)
+          // this.stonereturndetailsFrom.controls.designcode.setValue(data.DESIGN_CODE)
           // this.stonereturndetailsFrom.controls.location.setValue(data[0].LOCTYPE_CODE)
-          this.stonereturndetailsFrom.controls.PICTURE_PATH.setValue(data[0].PICTURE_PATH)
+          this.stonereturndetailsFrom.controls.PICTURE_PATH.setValue(data.PICTURE_PATH)
 
           this.setProcessCodeWhereCondition()
           this.setWorkerCodeWhereCondition()
@@ -562,12 +562,12 @@ export class StoneReturnDetailsComponent implements OnInit {
       "SPID": "103",
       "parameter": {
         strBranch_Code: this.comService.nullToString(form.BRANCH_CODE),
-        strJob_Number: this.comService.nullToString(form.JOB_NUMBER),
+        strJob_Number: this.comService.nullToString(form.jobNumber),
         strUnq_Job_Id: this.comService.nullToString(form.UNQ_JOB_ID),
         strMetalStone: this.comService.nullToString(form.METAL_STONE),
-        strProcess_Code: this.comService.nullToString(form.PROCESS_CODE),
-        strWorker_Code: this.comService.nullToString(form.WORKER_CODE),
-        strStock_Code: '',
+        strProcess_Code: this.comService.nullToString(form.process),
+        strWorker_Code: this.comService.nullToString(form.worker),
+        strStock_Code: this.comService.nullToString(form.stockCode),
         strUserName: '',
       }
     }
@@ -580,7 +580,7 @@ export class StoneReturnDetailsComponent implements OnInit {
 
         } else {
           this.overlayworkerSearch.showOverlayPanel(event)
-          this.comService.toastErrorByMsgId('MSG1747')
+          // this.comService.toastErrorByMsgId('MSG1747')
           this.stonereturndetailsFrom.controls.worker.setValue('')
           this.showOverleyPanel(event, 'worker')
         }
@@ -597,12 +597,12 @@ export class StoneReturnDetailsComponent implements OnInit {
       "SPID": "103",
       "parameter": {
         strBranch_Code: this.comService.nullToString(form.BRANCH_CODE),
-        strJob_Number: this.comService.nullToString(form.JOB_NUMBER),
+        strJob_Number: this.comService.nullToString(form.jobNumber),
         strUnq_Job_Id: this.comService.nullToString(form.UNQ_JOB_ID),
         strMetalStone: '',
-        strProcess_Code: this.comService.nullToString(form.PROCESS_CODE),
-        strWorker_Code: this.comService.nullToString(form.WORKER_CODE),
-        strStock_Code: '',
+        strProcess_Code: this.comService.nullToString(form.process),
+        strWorker_Code: this.comService.nullToString(form.worker),
+        strStock_Code: this.comService.nullToString(form.stockCode),
         strUserName: '',
       }
     }
@@ -618,7 +618,7 @@ export class StoneReturnDetailsComponent implements OnInit {
 
           this.stonereturndetailsFrom.controls.process.setValue('')
           // this.showOverleyPanel(event, 'process')
-          this.comService.toastErrorByMsgId('MSG1747')
+          // this.comService.toastErrorByMsgId('MSG1747')
         }
       }, err => {
         this.comService.closeSnackBarMsg()

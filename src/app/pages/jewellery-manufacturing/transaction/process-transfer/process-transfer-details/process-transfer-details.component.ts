@@ -632,12 +632,16 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.setFormDecimal('METAL_FromPureWt', parentDetail.FRM_PURE_WT, 'METAL')
     this.setFormDecimal('METAL_ToPureWt', parentDetail.TO_PURE_WT, 'METAL')
     this.setFormDecimal('METAL_ScrapPureWt', parentDetail.SCRAP_PURE_WT, 'METAL')
-
+    let stdLoss = (this.emptyToZero(parentDetail.LOSS_QTY)/this.emptyToZero(parentDetail.FRM_METAL_WT))*100
+    this.setFormDecimal('METAL_STD_LOSS', stdLoss, 'METAL')
     this.processTransferdetailsForm.controls.METAL_FromPCS.setValue(parentDetail.FRM_PCS)
     this.processTransferdetailsForm.controls.METAL_ToPCS.setValue(parentDetail.TO_PCS)
     this.processTransferdetailsForm.controls.METAL_ScrapPCS.setValue(parentDetail.SCRAP_PCS)
-    let METAL_BalPCS = this.balanceCalculate(parentDetail.FRM_PCS, parentDetail.TO_PCS, parentDetail.SCRAP_PCS)
-    this.processTransferdetailsForm.controls.METAL_BalPCS.setValue(METAL_BalPCS)
+    // let METAL_BalPCS = this.balanceCalculate(parentDetail.FRM_PCS, parentDetail.TO_PCS, parentDetail.SCRAP_PCS)
+    // this.processTransferdetailsForm.controls.METAL_BalPCS.setValue(METAL_BalPCS)
+    // this.calculateAllBalanceForMetalTab()
+    this.CalculateNetAndPureWt()
+    this.CalculateMetalBalance()
     // this.calculateAllBalanceForMetalTab()
   }
   setDiamondDetailFormData(parentDetail: any) {
@@ -1369,6 +1373,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     this.setFormNullToString('PRODLAB_ACCODE', data[0].LAB_ACCODE)
     this.setFormNullToString('FRM_PCS', this.emptyToZero(data[0].FRM_PCS))
     this.setFormNullToString('TO_PCS', this.emptyToZero(data[0].FRM_PCS))
+    this.setFormNullToString('METAL_STD_LOSS', this.emptyToZero(data[0].STD_LOSS))
     this.setFormDecimal('METAL_LossBooked', data[0].STD_LOSS, 'AMOUNT')
     if (this.emptyToZero(data[0].PURITY) != 0) this.setFormDecimal('PURITY', data[0].PURITY, 'PURITY') // already taking from subjobsp
     this.setToProcessWhereCondition()
@@ -2651,10 +2656,10 @@ export class ProcessTransferDetailsComponent implements OnInit {
     let metalGridDataSum = this.calculateMetalStoneGridAmount();
     let seqDataFrom = this.sequenceDetails.filter((item: any) => item.PROCESS_CODE?.toUpperCase() == form.FRM_PROCESS_CODE?.toUpperCase());
     let seqDataTo = this.sequenceDetails.filter((item: any) => item.PROCESS_CODE?.toUpperCase() == form.TO_PROCESS_CODE?.toUpperCase());
-    let FRM_WIP_ACCODE = this.getWipAccode(form.FRM_PROCESS_CODE, 'WIP_ACCODE')
-    let TO_WIP_ACCODE = this.getWipAccode(form.TO_PROCESS_CODE, 'WIP_ACCODE')
-    let LAB_ACCODE = this.getWipAccode(form.TO_PROCESS_CODE, 'LAB_ACCODE')
-    let LOSS_ACCODE = this.getWipAccode(form.TO_PROCESS_CODE, 'LOSS_ACCODE')
+    let FRM_WIP_ACCODE = this.getWipAccode(form.METAL_FRM_PROCESS_CODE, 'WIP_ACCODE')
+    let TO_WIP_ACCODE = this.getWipAccode(form.METAL_TO_PROCESS_CODE, 'WIP_ACCODE')
+    let LAB_ACCODE = this.getWipAccode(form.METAL_TO_PROCESS_CODE, 'LAB_ACCODE')
+    let LOSS_ACCODE = this.getWipAccode(form.METAL_TO_PROCESS_CODE, 'LOSS_ACCODE')
     this.gridSRNO += 1
     return {
       "SRNO": this.emptyToZero(form.SRNO),
@@ -3939,7 +3944,8 @@ export class ProcessTransferDetailsComponent implements OnInit {
         let txtBalGrWt = (this.emptyToZero(form.METAL_GrossWeightFrom) - (this.emptyToZero(form.METAL_GrossWeightTo) + this.emptyToZero(form.METAL_ScrapGrWt) + this.emptyToZero(form.METAL_LossBooked)));
         let txtBalStoneWt = (this.emptyToZero(form.METAL_FRM_STONE_WT) - (this.emptyToZero(form.METAL_TO_STONE_WT) + this.emptyToZero(form.txtMScrapStoneWt)));
         let txtBalNetWt = (this.emptyToZero(form.METAL_FromNetWeight) - (this.emptyToZero(form.METAL_ToNetWt) + this.emptyToZero(form.METAL_ScrapNetWt) + this.emptyToZero(form.METAL_LossBooked)));
-        let txtBalPureWt = (this.emptyToZero(form.METAL_FromPureWt) - (this.emptyToZero(form.METAL_ToPureWt) + this.emptyToZero(form.METAL_ScrapPureWt) + this.emptyToZero(form.METAL_LossPureWt)));
+        // let txtBalPureWt = (this.emptyToZero(form.METAL_FromPureWt) - (this.emptyToZero(form.METAL_ToPureWt) + this.emptyToZero(form.METAL_ScrapPureWt) + this.emptyToZero(form.METAL_LossPureWt)));
+        let txtBalPureWt = this.commonService.pureWeightCalculate(txtBalGrWt,form.PURITY)
         let txtBalIronWt = (this.emptyToZero(form.METAL_FromIronWeight) - (this.emptyToZero(form.METAL_ToIronWt) + this.emptyToZero(form.METAL_ToIronScrapWt)));
         this.setFormDecimal('METAL_BalPCS', txtBalPCS, 'METAL')
         this.setFormDecimal('METAL_BalGrWt', txtBalGrWt, 'METAL')
