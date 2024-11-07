@@ -9,11 +9,11 @@ import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
-  selector: 'app-diamond-prefix-master',
-  templateUrl: './diamond-prefix-master.component.html',
-  styleUrls: ['./diamond-prefix-master.component.scss']
+  selector: 'app-sales-person-master',
+  templateUrl: './sales-person-master.component.html',
+  styleUrls: ['./sales-person-master.component.scss']
 })
-export class DiamondPrefixMasterComponent implements OnInit {
+export class SalesPersonMasterComponent implements OnInit {
   divisionMS: any = 'ID';
   subscriptions: any;
   @Input() content!: any;
@@ -50,8 +50,8 @@ export class DiamondPrefixMasterComponent implements OnInit {
     }
   }
   
-  diamondprefixForm: FormGroup = this.formBuilder.group({
-    prefixcode: ['',[Validators.required]],
+  salesPersonForm: FormGroup = this.formBuilder.group({
+    code: [''],
     prefixcodedes: ['',[Validators.required]],
     currencyRate: ['',[Validators.required]],
     currency: [''],
@@ -92,32 +92,32 @@ export class DiamondPrefixMasterComponent implements OnInit {
   setFormValues() {
     console.log(this.content);
     if (!this.content) return
-    this.diamondprefixForm.controls.prefixcode.setValue(this.content.PREFIX_CODE)
-    this.diamondprefixForm.controls.prefixcodedes.setValue(this.content.DESCRIPTION)
-    this.diamondprefixForm.controls.lastno.setValue(this.content.LAST_NO)
-    this.diamondprefixForm.controls.currency.setValue(this.content.CURRENCY_CODE)
-    this.diamondprefixForm.controls.currencyRate.setValue(this.content.CONV_RATE)
-    this.diamondprefixForm.controls.refinervprefix.setValue(this.viewchangeYorN(this.content.REFINE_PREFIX))
-    this.diamondprefixForm.controls.setrefprefix.setValue(this.viewchangeYorN(this.content.SETREF_PREFIX))
-    this.diamondprefixForm.controls.jobcardprefix.setValue(this.viewchangeYorN(this.content.JOB_PREFIX))
-    this.diamondprefixForm.controls.designprefix.setValue(this.viewchangeYorN(this.content.DESIGN_PREFIX))
-    this.diamondprefixForm.controls.Componentprefix.setValue(this.viewchangeYorN(this.content.COMP_PREFIX))
-    this.diamondprefixForm.controls.branch.setValue(this.content.BRANCH_CODE)
-    //this.diamondprefixForm.controls.suffixcode.setValue(this.content.SCHEME_PREFIX)
-    this.diamondprefixForm.controls.Country.setValue(this.content.COUNTRY_CODE)
-    this.diamondprefixForm.controls.subCategory.setValue(this.content.SUBCATEGORY_CODE)
-    this.diamondprefixForm.controls.Type.setValue(this.content.TYPE_CODE)
-    this.diamondprefixForm.controls.Category.setValue(this.content.CATEGORY_CODE)
-    this.diamondprefixForm.controls.brand.setValue(this.content.BRAND_CODE)
-    this.diamondprefixForm.controls.costcode.setValue(this.content.COUNTRY_CODE)
-    this.diamondprefixForm.controls.hsn.setValue(this.content.HSN_CODE)
+    this.salesPersonForm.controls.prefixcode.setValue(this.content.PREFIX_CODE)
+    this.salesPersonForm.controls.prefixcodedes.setValue(this.content.DESCRIPTION)
+    this.salesPersonForm.controls.lastno.setValue(this.content.LAST_NO)
+    this.salesPersonForm.controls.currency.setValue(this.content.CURRENCY_CODE)
+    this.salesPersonForm.controls.currencyRate.setValue(this.content.CONV_RATE)
+    this.salesPersonForm.controls.refinervprefix.setValue(this.viewchangeYorN(this.content.REFINE_PREFIX))
+    this.salesPersonForm.controls.setrefprefix.setValue(this.viewchangeYorN(this.content.SETREF_PREFIX))
+    this.salesPersonForm.controls.jobcardprefix.setValue(this.viewchangeYorN(this.content.JOB_PREFIX))
+    this.salesPersonForm.controls.designprefix.setValue(this.viewchangeYorN(this.content.DESIGN_PREFIX))
+    this.salesPersonForm.controls.Componentprefix.setValue(this.viewchangeYorN(this.content.COMP_PREFIX))
+    this.salesPersonForm.controls.branch.setValue(this.content.BRANCH_CODE)
+    //this.salesPersonForm.controls.suffixcode.setValue(this.content.SCHEME_PREFIX)
+    this.salesPersonForm.controls.Country.setValue(this.content.COUNTRY_CODE)
+    this.salesPersonForm.controls.subCategory.setValue(this.content.SUBCATEGORY_CODE)
+    this.salesPersonForm.controls.Type.setValue(this.content.TYPE_CODE)
+    this.salesPersonForm.controls.Category.setValue(this.content.CATEGORY_CODE)
+    this.salesPersonForm.controls.brand.setValue(this.content.BRAND_CODE)
+    this.salesPersonForm.controls.costcode.setValue(this.content.COUNTRY_CODE)
+    this.salesPersonForm.controls.hsn.setValue(this.content.HSN_CODE)
   }
   /**USE: to set currency from company parameter */
   setCompanyCurrency() {
     let CURRENCY_CODE = this.commonService.getCompanyParamValue('COMPANYCURRENCY')
-    this.diamondprefixForm.controls.currency.setValue(CURRENCY_CODE);
+    this.salesPersonForm.controls.currency.setValue(CURRENCY_CODE);
     const CURRENCY_RATE: any[] = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == CURRENCY_CODE);
-    this.diamondprefixForm.controls.currencyRate.setValue(
+    this.salesPersonForm.controls.currencyRate.setValue(
       this.commonService.decimalQuantityFormat(CURRENCY_RATE[0].CONV_RATE, 'RATE')
     );
   }
@@ -135,7 +135,7 @@ export class DiamondPrefixMasterComponent implements OnInit {
   }
   branchCodeSelected(e: any) {
     console.log(e);
-    this.diamondprefixForm.controls.branch.setValue(e.BRANCH_CODE);
+    this.salesPersonForm.controls.branch.setValue(e.BRANCH_CODE);
   }
 
   HSNCodeData: MasterSearchModel = {
@@ -151,7 +151,7 @@ export class DiamondPrefixMasterComponent implements OnInit {
   }
   HSNCenterSelected(e: any) {
     console.log(e);
-    this.diamondprefixForm.controls.hsn.setValue(e.CODE);
+    this.salesPersonForm.controls.hsn.setValue(e.CODE);
   }
   currencyCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -167,8 +167,8 @@ export class DiamondPrefixMasterComponent implements OnInit {
   }
   currencyCodeSelected(e: any) {
     console.log(e);
-    this.diamondprefixForm.controls.currency.setValue(e.CURRENCY_CODE);
-    this.diamondprefixForm.controls.currencyRate.setValue(e.CONV_RATE);
+    this.salesPersonForm.controls.currency.setValue(e.CURRENCY_CODE);
+    this.salesPersonForm.controls.currencyRate.setValue(e.CONV_RATE);
   }
   costCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -183,7 +183,7 @@ export class DiamondPrefixMasterComponent implements OnInit {
   }
   costCodeSelected(e: any) {
     console.log(e);
-    this.diamondprefixForm.controls.costcode.setValue(e.COST_CODE);
+    this.salesPersonForm.controls.costcode.setValue(e.COST_CODE);
   }
   categoryCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -198,7 +198,7 @@ export class DiamondPrefixMasterComponent implements OnInit {
     LOAD_ONCLICK: true,
   }
   categoryCodeSelected(e: any) {
-    this.diamondprefixForm.controls.Category.setValue(e.CODE);
+    this.salesPersonForm.controls.Category.setValue(e.CODE);
   }
   subcategoryCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -213,7 +213,7 @@ export class DiamondPrefixMasterComponent implements OnInit {
     LOAD_ONCLICK: true,
   }
   subcategoryCodeSelected(e: any) {
-    this.diamondprefixForm.controls.subCategory.setValue(e.CODE);
+    this.salesPersonForm.controls.subCategory.setValue(e.CODE);
   }
   typeCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -228,7 +228,7 @@ export class DiamondPrefixMasterComponent implements OnInit {
     LOAD_ONCLICK: true,
   }
   typeCodeSelected(e: any) {
-    this.diamondprefixForm.controls.Type.setValue(e.CODE);
+    this.salesPersonForm.controls.Type.setValue(e.CODE);
   }
   BrandCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -243,7 +243,7 @@ export class DiamondPrefixMasterComponent implements OnInit {
     LOAD_ONCLICK: true,
   }
   brandCodeSelected(e: any) {
-    this.diamondprefixForm.controls.brand.setValue(e.CODE);
+    this.salesPersonForm.controls.brand.setValue(e.CODE);
   }
   countryCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -258,14 +258,14 @@ export class DiamondPrefixMasterComponent implements OnInit {
   }
   countryCodeSelected(e: any) {
     console.log(e);
-    this.diamondprefixForm.controls.Country.setValue(e.CODE);
+    this.salesPersonForm.controls.Country.setValue(e.CODE);
   }
   toggleViewMode(): void {
     this.viewMode = !this.viewMode;
     if (this.viewMode) {
-      this.diamondprefixForm.controls.jobcardprefix.disable();
+      this.salesPersonForm.controls.jobcardprefix.disable();
     } else {
-      this.diamondprefixForm.controls.jobcardprefix.enable();
+      this.salesPersonForm.controls.jobcardprefix.enable();
     }
   }
   viewchangeYorN(e: any) {
@@ -289,48 +289,48 @@ export class DiamondPrefixMasterComponent implements OnInit {
   }
   setPostData(){
     return{
-    "PREFIX_CODE": this.diamondprefixForm.value.prefixcode?.toUpperCase(),
-    "DESCRIPTION": this.diamondprefixForm.value.prefixcodedes?.toUpperCase(),
-    "LAST_NO": this.commonService.nullToString(this.diamondprefixForm.value.lastno),
-    "CURRENCY_CODE": this.commonService.nullToString(this.diamondprefixForm.value.currency),
-    "CONV_RATE": this.commonService.emptyToZero(this.diamondprefixForm.value.currencyRate),
-    "COST_CODE": this.commonService.nullToString(this.diamondprefixForm.value.costcode),
-    "CATEGORY_CODE":this.commonService.nullToString(this.diamondprefixForm.value.Category),
-    "SUBCATEGORY_CODE":this.commonService.nullToString(this.diamondprefixForm.value.subCategory),
-    "BRAND_CODE":this.commonService.nullToString(this.diamondprefixForm.value.brand),
-    "TYPE_CODE": this.commonService.nullToString(this.diamondprefixForm.value.Type),
-    "COUNTRY_CODE":this.commonService.nullToString(this.diamondprefixForm.value.Country),
+    "PREFIX_CODE": this.salesPersonForm.value.prefixcode?.toUpperCase(),
+    "DESCRIPTION": this.salesPersonForm.value.prefixcodedes?.toUpperCase(),
+    "LAST_NO": this.commonService.nullToString(this.salesPersonForm.value.lastno),
+    "CURRENCY_CODE": this.commonService.nullToString(this.salesPersonForm.value.currency),
+    "CONV_RATE": this.commonService.emptyToZero(this.salesPersonForm.value.currencyRate),
+    "COST_CODE": this.commonService.nullToString(this.salesPersonForm.value.costcode),
+    "CATEGORY_CODE":this.commonService.nullToString(this.salesPersonForm.value.Category),
+    "SUBCATEGORY_CODE":this.commonService.nullToString(this.salesPersonForm.value.subCategory),
+    "BRAND_CODE":this.commonService.nullToString(this.salesPersonForm.value.brand),
+    "TYPE_CODE": this.commonService.nullToString(this.salesPersonForm.value.Type),
+    "COUNTRY_CODE":this.commonService.nullToString(this.salesPersonForm.value.Country),
     "MID":this.content?.MID || 0,
     "DIVISION": "S",
     "SYSTEM_DATE": "2023-11-28T08:50:38.675Z",
     "PM_BRANCHCODE": "",
-    "JOB_PREFIX": this.onchangeCheckBox(this.diamondprefixForm.value.jobcardprefix),
-    "SETREF_PREFIX": this.onchangeCheckBox(this.diamondprefixForm.value.setrefprefix),
+    "JOB_PREFIX": this.onchangeCheckBox(this.salesPersonForm.value.jobcardprefix),
+    "SETREF_PREFIX": this.onchangeCheckBox(this.salesPersonForm.value.setrefprefix),
     "BRANCH_CODE": this.commonService.branchCode,
     "BOIL_PREFIX": true,
     "SCHEME_PREFIX": true,
-    "UDF1": this.diamondprefixForm.value.userdefined_1 || "",
-    "UDF2": this.diamondprefixForm.value.userdefined_2 || "",
-    "UDF3": this.diamondprefixForm.value.userdefined_3 || "",
-    "UDF4": this.diamondprefixForm.value.userdefined_4 || "",
-    "UDF5": this.diamondprefixForm.value.userdefined_5 || "",
-    "UDF6": this.diamondprefixForm.value.userdefined_6 || "",
-    "UDF7": this.diamondprefixForm.value.userdefined_7 || "",
-    "UDF8": this.diamondprefixForm.value.userdefined_8 || "",
-    "UDF9": this.diamondprefixForm.value.userdefined_9 || "",
-    "UDF10": this.diamondprefixForm.value.userdefined_10 || "",
-    "UDF11": this.diamondprefixForm.value.userdefined_11 || "",
-    "UDF12": this.diamondprefixForm.value.userdefined_12 || "",
-    "UDF13": this.diamondprefixForm.value.userdefined_13 || "",
-    "UDF14": this.diamondprefixForm.value.userdefined_14 || "",
-    "UDF15": this.diamondprefixForm.value.userdefined_15 || "",
+    "UDF1": this.salesPersonForm.value.userdefined_1 || "",
+    "UDF2": this.salesPersonForm.value.userdefined_2 || "",
+    "UDF3": this.salesPersonForm.value.userdefined_3 || "",
+    "UDF4": this.salesPersonForm.value.userdefined_4 || "",
+    "UDF5": this.salesPersonForm.value.userdefined_5 || "",
+    "UDF6": this.salesPersonForm.value.userdefined_6 || "",
+    "UDF7": this.salesPersonForm.value.userdefined_7 || "",
+    "UDF8": this.salesPersonForm.value.userdefined_8 || "",
+    "UDF9": this.salesPersonForm.value.userdefined_9 || "",
+    "UDF10": this.salesPersonForm.value.userdefined_10 || "",
+    "UDF11": this.salesPersonForm.value.userdefined_11 || "",
+    "UDF12": this.salesPersonForm.value.userdefined_12 || "",
+    "UDF13": this.salesPersonForm.value.userdefined_13 || "",
+    "UDF14": this.salesPersonForm.value.userdefined_14 || "",
+    "UDF15": this.salesPersonForm.value.userdefined_15 || "",
     "TAG_WT": 0,
-    "COMP_PREFIX": this.onchangeCheckBox(this.diamondprefixForm.value.Componentprefix),
-    "DESIGN_PREFIX": this.onchangeCheckBox(this.diamondprefixForm.value.designprefix),
-    "REFINE_PREFIX": this.onchangeCheckBox(this.diamondprefixForm.value.refinervprefix),
+    "COMP_PREFIX": this.onchangeCheckBox(this.salesPersonForm.value.Componentprefix),
+    "DESIGN_PREFIX": this.onchangeCheckBox(this.salesPersonForm.value.designprefix),
+    "REFINE_PREFIX": this.onchangeCheckBox(this.salesPersonForm.value.refinervprefix),
     "SUBLEDGER_PREFIX": true,
-    "SUFFIX_CODE": this.diamondprefixForm.value.suffixcode || "",
-    "HSN_CODE": this.diamondprefixForm.value.hsn || "",
+    "SUFFIX_CODE": this.salesPersonForm.value.suffixcode || "",
+    "HSN_CODE": this.salesPersonForm.value.hsn || "",
   }
   }
 
@@ -340,7 +340,7 @@ export class DiamondPrefixMasterComponent implements OnInit {
       this.update()
       return
     }
-    // if (this.diamondprefixForm.invalid) {
+    // if (this.salesPersonForm.invalid) {
     //   this.toastr.error('select all required fields')
     //   return
     // }
@@ -360,7 +360,7 @@ export class DiamondPrefixMasterComponent implements OnInit {
               confirmButtonText: 'Ok'
             }).then((result: any) => {
               if (result.value) {
-                this.diamondprefixForm.reset()
+                this.salesPersonForm.reset()
                 this.tableData = []
                 this.close('reloadMainGrid')
               }
@@ -374,12 +374,12 @@ export class DiamondPrefixMasterComponent implements OnInit {
   }
  
   update() {
-    if (this.diamondprefixForm.invalid) {
+    if (this.salesPersonForm.invalid) {
       this.toastr.error('select all required fields')
       return
     }
 
-    let API = 'PrefixMaster/UpdatePrefixMaster/' + this.diamondprefixForm.value.prefixcode
+    let API = 'PrefixMaster/UpdatePrefixMaster/' + this.salesPersonForm.value.prefixcode
     let postData = this.setPostData()
   
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
@@ -394,7 +394,7 @@ export class DiamondPrefixMasterComponent implements OnInit {
               confirmButtonText: 'Ok'
             }).then((result: any) => {
               if (result.value) {
-                this.diamondprefixForm.reset()
+                this.salesPersonForm.reset()
                 this.tableData = []
                 this.close('reloadMainGrid')
               }
@@ -418,7 +418,7 @@ export class DiamondPrefixMasterComponent implements OnInit {
       confirmButtonText: 'Yes, delete!'
     }).then((result) => {
       if (result.isConfirmed) {
-        let API = 'PrefixMaster/DeletePrefixMaster/' + this.diamondprefixForm.value.prefixcode
+        let API = 'PrefixMaster/DeletePrefixMaster/' + this.salesPersonForm.value.prefixcode
         let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
           .subscribe((result) => {
             if (result) {
@@ -431,7 +431,7 @@ export class DiamondPrefixMasterComponent implements OnInit {
                   confirmButtonText: 'Ok'
                 }).then((result: any) => {
                   if (result.value) {
-                    this.diamondprefixForm.reset()
+                    this.salesPersonForm.reset()
                     this.tableData = []
                     this.close('reloadMainGrid')
                   }
@@ -445,7 +445,7 @@ export class DiamondPrefixMasterComponent implements OnInit {
                   confirmButtonText: 'Ok'
                 }).then((result: any) => {
                   if (result.value) {
-                    this.diamondprefixForm.reset()
+                    this.salesPersonForm.reset()
                     this.tableData = []
                     this.close()
                   }

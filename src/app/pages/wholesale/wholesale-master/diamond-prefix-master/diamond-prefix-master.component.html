@@ -26,7 +26,7 @@
                                                 Code :</label>
                                             <div class="col-md-3">
                                                 <mat-form-field
-                                                    style="width: 100%;">
+                                                style="width: 100%;" appearance="outline">
                                                     <input type="text" matInput
                                                         formControlName="prefixcode"
                                                         #prefixcode
@@ -39,7 +39,7 @@
                                             </div>
                                             <div class="col-md-6">
                                                 <mat-form-field
-                                                    style="width: 100%;">
+                                                style="width: 100%;" appearance="outline">
                                                     <input type="text" matInput
                                                         formControlName="prefixcodedes"
                                                         #prefixcodedes
@@ -58,7 +58,7 @@
                                                 No :</label>
                                             <div class="col-sm-3">
                                                 <mat-form-field
-                                                    style="width: 100%;">
+                                                style="width: 100%;" appearance="outline">
                                                     <input
                                                         type="text" matInput
                                                         formControlName="lastno"
@@ -72,21 +72,22 @@
                                                 * :</label>
                                             <div class="col-md-2">
                                                 <mat-form-field
-                                                    style="width: 80%;">
+                                                style="width: 100%;" appearance="outline">
                                                     <input id="currency"
                                                         type="text" matInput
                                                         formControlName="currency"
                                                         [readonly]="viewMode" />
+                                                        <master-search  class="masterSearch"
+                                                        *ngIf="!viewMode"
+                                                        [MasterSearchData]="currencyCodeData"
+                                                        (newRowClick)="currencyCodeSelected($event)">
+                                                    </master-search>
                                                 </mat-form-field>
-                                                <master-search
-                                                    *ngIf="!viewMode"
-                                                    [MasterSearchData]="currencyCodeData"
-                                                    (newRowClick)="currencyCodeSelected($event)">
-                                                </master-search>
+                                              
                                             </div>
                                             <div class="col-sm-2">
                                                 <mat-form-field
-                                                    style="width: 100%; margin-left: -38; text-align: right;">
+                                                style="width: 100%; margin-left: -38; text-align: right;" appearance="outline">
                                                     <input id="currencyRate"
                                                         type="number" matInput
                                                         SixDecimalInput
@@ -103,33 +104,35 @@
                                                 Code :</label>
                                             <div class="col-md-3">
                                                 <mat-form-field
-                                                    style="width: 80%;">
+                                                style="width: 100%;" appearance="outline">
                                                     <input type="text" matInput
                                                         formControlName="costcode"
                                                         [readonly]="viewMode" />
+                                                        <master-search class="masterSearch"
+                                                        *ngIf="!viewMode"
+                                                        [MasterSearchData]="costCodeData"
+                                                        (newRowClick)="costCodeSelected($event)">
+                                                    </master-search>
                                                 </mat-form-field>
-                                                <master-search
-                                                    *ngIf="!viewMode"
-                                                    [MasterSearchData]="costCodeData"
-                                                    (newRowClick)="costCodeSelected($event)">
-                                                </master-search>
+                                             
                                             </div>
                                             <label for="Brand"
                                                 class="col-sm-2 col-form-label">Brand
                                                 :</label>
                                             <div class="col-md-2">
                                                 <mat-form-field
-                                                    style="width: 80%;">
+                                                style="width: 100%;" appearance="outline">
                                                     <input id="brand"
                                                         type="text" matInput
                                                         formControlName="brand"
                                                         [readonly]="viewMode" />
+                                                        <master-search class="masterSearch"
+                                                        *ngIf="!viewMode"
+                                                        [MasterSearchData]="BrandCodeData"
+                                                        (newRowClick)="brandCodeSelected($event)">
+                                                    </master-search>
                                                 </mat-form-field>
-                                                <master-search
-                                                    *ngIf="!viewMode"
-                                                    [MasterSearchData]="BrandCodeData"
-                                                    (newRowClick)="brandCodeSelected($event)">
-                                                </master-search>
+                                               
                                             </div>
 
                                         </div>
@@ -140,33 +143,35 @@
                                                 :</label>
                                             <div class="col-md-3">
                                                 <mat-form-field
-                                                    style="width: 80%;">
+                                                style="width: 100%;" appearance="outline">
                                                     <input type="text" matInput
                                                         formControlName="Category"
                                                         [readonly]="viewMode" />
+                                                        <master-search class="masterSearch"
+                                                        *ngIf="!viewMode"
+                                                        [MasterSearchData]="categoryCodeData"
+                                                        (newRowClick)="categoryCodeSelected($event)">
+                                                    </master-search>
                                                 </mat-form-field>
-                                                <master-search
-                                                    *ngIf="!viewMode"
-                                                    [MasterSearchData]="categoryCodeData"
-                                                    (newRowClick)="categoryCodeSelected($event)">
-                                                </master-search>
+                                              
                                             </div>
                                             <label for="Type"
                                                 class="col-sm-2 col-form-label">Type
                                                 :</label>
                                             <div class="col-md-2">
                                                 <mat-form-field
-                                                    style="width: 80%;">
+                                                style="width: 100%;" appearance="outline">
                                                     <input id="Type"
                                                         type="text" matInput
                                                         formControlName="Type"
                                                         [readonly]="viewMode" />
+                                                        <master-search class="masterSearch"
+                                                        *ngIf="!viewMode"
+                                                        [MasterSearchData]="typeCodeData"
+                                                        (newRowClick)="typeCodeSelected($event)">
+                                                    </master-search>
                                                 </mat-form-field>
-                                                <master-search
-                                                    *ngIf="!viewMode"
-                                                    [MasterSearchData]="typeCodeData"
-                                                    (newRowClick)="typeCodeSelected($event)">
-                                                </master-search>
+                                              
                                             </div>
 
                                         </div>
@@ -178,33 +183,35 @@
                                                 :</label>
                                             <div class="col-md-3">
                                                 <mat-form-field
-                                                    style="width: 80%;">
+                                                style="width: 100%;" appearance="outline">
                                                     <input type="text" matInput
                                                         formControlName="subCategory"
                                                         [readonly]="viewMode" />
-                                                </mat-form-field>
-                                                <master-search
+                                                        <master-search class="masterSearch"
                                                     *ngIf="!viewMode"
                                                     [MasterSearchData]="subcategoryCodeData"
                                                     (newRowClick)="subcategoryCodeSelected($event)">
                                                 </master-search>
+                                                </mat-form-field>
+                                                
                                             </div>
                                             <label for="Country"
                                                 class="col-sm-2 col-form-label">Country
                                                 :</label>
                                             <div class="col-md-2">
                                                 <mat-form-field
-                                                    style="width: 80%;">
+                                                style="width: 100%;" appearance="outline">
                                                     <input id="Country"
                                                         type="text" matInput
                                                         formControlName="Country"
                                                         [readonly]="viewMode" />
+                                                        <master-search  class="masterSearch"
+                                                        *ngIf="!viewMode"
+                                                        [MasterSearchData]="countryCodeData"
+                                                        (newRowClick)="countryCodeSelected($event)">
+                                                    </master-search>
                                                 </mat-form-field>
-                                                <master-search
-                                                    *ngIf="!viewMode"
-                                                    [MasterSearchData]="countryCodeData"
-                                                    (newRowClick)="countryCodeSelected($event)">
-                                                </master-search>
+                                               
                                             </div>
 
                                         </div>
@@ -215,16 +222,17 @@
                                                 :</label>
                                             <div class="col-md-3">
                                                 <mat-form-field
-                                                    style="width: 80%;">
+                                                style="width: 100%;" appearance="outline">
                                                     <input type="text" matInput
                                                         formControlName="branch"
                                                         [readonly]="viewMode" />
-                                                </mat-form-field>
-                                                <master-search
+                                                        <master-search  class="masterSearch"
                                                     *ngIf="!viewMode"
                                                     [MasterSearchData]="BranchCodeData"
                                                     (newRowClick)="branchCodeSelected($event)">
                                                 </master-search>
+                                                </mat-form-field>
+                                                
                                             </div>
                                             <label for="suffixcode"
                                                 class="col-sm-2 col-form-label">Suffix
@@ -232,7 +240,7 @@
                                                 :</label>
                                             <div class="col-md-2">
                                                 <mat-form-field
-                                                    style="width: 80%;">
+                                                style="width: 100%;" appearance="outline">
                                                     <input id="suffixcode"
                                                         type="text" matInput
                                                         formControlName="suffixcode"
@@ -248,21 +256,21 @@
                                                 :</label>
                                             <div class="col-md-3">
                                                 <mat-form-field
-                                                    style="width: 80%;">
+                                                style="width: 100%;" appearance="outline">
                                                     <input type="text" matInput
                                                         formControlName="hsn"
                                                         [readonly]="viewMode" />
+                                                        <master-search
+                                                        *ngIf="!viewMode"   class="masterSearch"
+                                                        [MasterSearchData]="HSNCodeData"
+                                                        (newRowClick)="HSNCenterSelected($event)">
+                                                    </master-search>
                                                 </mat-form-field>
-                                                <master-search
-                                                    *ngIf="!viewMode"
-                                                    [MasterSearchData]="HSNCodeData"
-                                                    (newRowClick)="HSNCenterSelected($event)">
-                                                </master-search>
+                                               
                                             </div>
                                         </div>
-                                        <div
-                                            class="row align-items-center mb-1">
-                                            <div class="col-md-6">
+                                        <div class="row align-items-center mb-1">
+                                            <div class="col-md-3">
                                                 <div class="form-check mb-2">
                                                     <div
                                                         class="form-check-label">
@@ -274,6 +282,9 @@
                                                         </mat-checkbox>
                                                     </div>
                                                 </div>
+                                            </div>
+
+                                            <div class="col-md-3">
                                                 <div class="form-check">
                                                     <div
                                                         class="form-check-label">
@@ -286,8 +297,24 @@
                                                         </mat-checkbox>
                                                     </div>
                                                 </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                <div class="form-check">
+                                                    <div
+                                                        class="form-check-label">
+                                                        <mat-checkbox
+                                                            type="checkbox"
+                                                            type="checkbox"
+                                                            formControlName="boilProcessPrefix"
+                                                            [disabled]="viewMode">
+                                                            BoilProcess Prefix
+                                                        </mat-checkbox>
+                                                    </div>
+                                                </div>
+                                                </div>
                                             </div>
-                                            <div class="col-md-6">
+                                            <div class="row align-items-center mb-1">
+                                            <div class="col-md-3">
                                                 <div class="form-check mb-2">
                                                     <div
                                                         class="form-check-label">
@@ -299,7 +326,9 @@
                                                         </mat-checkbox>
                                                     </div>
                                                 </div>
-                                                <div class="form-check">
+                                                </div>
+                                                <div class="col-md-3">
+                                                <div class="form-check  mb-2">
                                                     <div
                                                         class="form-check-label">
                                                         <mat-checkbox
@@ -326,11 +355,16 @@
                                         class="col-sm-4 col-form-label">User
                                         defined :</label>
                                     <div class="col-md-8">
-                                        <mat-form-field style="width: 70%;">
+                                        <mat-form-field  style="width: 100%;" appearance="outline">
                                             <input type="text" matInput
                                                 formControlName="userdefined_1" />
+                                                <master-search  class="masterSearch"
+                                                *ngIf="!viewMode"
+                                                [MasterSearchData]="currencyCodeData"
+                                                (newRowClick)="currencyCodeSelected($event)">
+                                            </master-search>
                                         </mat-form-field>
-                                        <master-search></master-search>
+                                       
                                     </div>
                                 </div>
                                 <div class="row align-items-center mb-1">
@@ -338,11 +372,16 @@
                                         class="col-sm-4 col-form-label">User
                                         defined :</label>
                                     <div class="col-md-8">
-                                        <mat-form-field style="width: 70%;">
+                                        <mat-form-field  style="width: 100%;" appearance="outline">
                                             <input type="text" matInput
                                                 formControlName="userdefined_2" />
+                                                <master-search  class="masterSearch"
+                                                *ngIf="!viewMode"
+                                                [MasterSearchData]="currencyCodeData"
+                                                (newRowClick)="currencyCodeSelected($event)">
+                                            </master-search>
                                         </mat-form-field>
-                                        <master-search></master-search>
+                                    
                                     </div>
                                 </div>
                                 <div class="row align-items-center mb-1">
@@ -350,11 +389,16 @@
                                         class="col-sm-4 col-form-label">User
                                         defined :</label>
                                     <div class="col-md-8">
-                                        <mat-form-field style="width: 70%;">
+                                        <mat-form-field  style="width: 100%;" appearance="outline">
                                             <input type="text" matInput
                                                 formControlName="userdefined_3" />
+                                                <master-search  class="masterSearch"
+                                        *ngIf="!viewMode"
+                                        [MasterSearchData]="currencyCodeData"
+                                        (newRowClick)="currencyCodeSelected($event)">
+                                    </master-search>
                                         </mat-form-field>
-                                        <master-search></master-search>
+                                        
                                     </div>
                                 </div>
                                 <div class="row align-items-center mb-1">
@@ -362,11 +406,16 @@
                                         class="col-sm-4 col-form-label">User
                                         defined :</label>
                                     <div class="col-md-8">
-                                        <mat-form-field style="width: 70%;">
+                                        <mat-form-field  style="width: 100%;" appearance="outline">
                                             <input type="text" matInput
                                                 formControlName="userdefined_4" />
+                                                <master-search  class="masterSearch"
+                                                *ngIf="!viewMode"
+                                                [MasterSearchData]="currencyCodeData"
+                                                (newRowClick)="currencyCodeSelected($event)">
+                                            </master-search>
                                         </mat-form-field>
-                                        <master-search></master-search>
+                                       
                                     </div>
                                 </div>
                                 <div class="row align-items-center mb-1">
@@ -374,11 +423,16 @@
                                         class="col-sm-4 col-form-label">User
                                         defined :</label>
                                     <div class="col-md-8">
-                                        <mat-form-field style="width: 70%;">
+                                        <mat-form-field  style="width: 100%;" appearance="outline">
                                             <input type="text" matInput
                                                 formControlName="userdefined_5" />
+                                                <master-search  class="masterSearch"
+                                                *ngIf="!viewMode"
+                                                [MasterSearchData]="currencyCodeData"
+                                                (newRowClick)="currencyCodeSelected($event)">
+                                            </master-search>
                                         </mat-form-field>
-                                        <master-search></master-search>
+                                  
                                     </div>
                                 </div>
                                 <div class="row align-items-center mb-1">
@@ -386,49 +440,70 @@
                                         class="col-sm-4 col-form-label">User
                                         defined :</label>
                                     <div class="col-md-8">
-                                        <mat-form-field style="width: 70%;">
+                                        <mat-form-field  style="width: 100%;" appearance="outline">
                                             <input type="text" matInput
                                                 formControlName="userdefined_6" />
+                                                <master-search  class="masterSearch"
+                                                *ngIf="!viewMode"
+                                                [MasterSearchData]="currencyCodeData"
+                                                (newRowClick)="currencyCodeSelected($event)">
+                                            </master-search>
                                         </mat-form-field>
-                                        <master-search></master-search>
+                                     
+                                    </div>
+                                </div>
+                                <div class="row align-items-center mb-1">
+                                    <label for="inputPassword"
+                                        class="col-sm-4 col-form-label">User
+                                        defined :</label>
+                                    <div class="col-md-8">
+                                        <mat-form-field  style="width: 100%;" appearance="outline">
+                                            <input type="text" matInput
+                                                formControlName="userdefined_7" />
+                                                <master-search  class="masterSearch"
+                                                *ngIf="!viewMode"
+                                                [MasterSearchData]="currencyCodeData"
+                                                (newRowClick)="currencyCodeSelected($event)">
+                                            </master-search>
+                                        </mat-form-field>
+                                     
+                                    </div>
+                                </div>
+                                <div class="row align-items-center mb-1">
+                                    <label for="inputPassword"
+                                        class="col-sm-4 col-form-label">User
+                                        defined :</label>
+                                    <div class="col-md-8">
+                                        <mat-form-field  style="width: 100%;" appearance="outline">
+                                            <input type="text" matInput
+                                                formControlName="userdefined_8" />
+                                                <master-search  class="masterSearch"
+                                                *ngIf="!viewMode"
+                                                [MasterSearchData]="currencyCodeData"
+                                                (newRowClick)="currencyCodeSelected($event)">
+                                            </master-search>
+                                        </mat-form-field>
+                                       
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-5">
+                      
                                 <div class="row align-items-center mb-1">
                                     <label for="inputPassword"
                                         class="col-sm-4 col-form-label">User
                                         defined :</label>
                                     <div class="col-md-8">
-                                        <mat-form-field style="width: 70%;">
-                                            <input type="text" matInput
-                                                formControlName="userdefined_7" />
-                                        </mat-form-field>
-                                        <master-search></master-search>
-                                    </div>
-                                </div>
-                                <div class="row align-items-center mb-1">
-                                    <label for="inputPassword"
-                                        class="col-sm-4 col-form-label">User
-                                        defined :</label>
-                                    <div class="col-md-8">
-                                        <mat-form-field style="width: 70%;">
-                                            <input type="text" matInput
-                                                formControlName="userdefined_8" />
-                                        </mat-form-field>
-                                        <master-search></master-search>
-                                    </div>
-                                </div>
-                                <div class="row align-items-center mb-1">
-                                    <label for="inputPassword"
-                                        class="col-sm-4 col-form-label">User
-                                        defined :</label>
-                                    <div class="col-md-8">
-                                        <mat-form-field style="width: 70%;">
+                                        <mat-form-field  style="width: 100%;" appearance="outline">
                                             <input type="text" matInput
                                                 formControlName="userdefined_9" />
+                                                <master-search  class="masterSearch"
+                                                *ngIf="!viewMode"
+                                                [MasterSearchData]="currencyCodeData"
+                                                (newRowClick)="currencyCodeSelected($event)">
+                                            </master-search>
                                         </mat-form-field>
-                                        <master-search></master-search>
+                                      
                                     </div>
                                 </div>
                                 <div class="row align-items-center mb-1">
@@ -436,11 +511,16 @@
                                         class="col-sm-4 col-form-label">User
                                         defined :</label>
                                     <div class="col-md-8">
-                                        <mat-form-field style="width: 70%;">
+                                        <mat-form-field  style="width: 100%;" appearance="outline">
                                             <input type="text" matInput
                                                 formControlName="userdefined_10" />
+                                                <master-search  class="masterSearch"
+                                                *ngIf="!viewMode"
+                                                [MasterSearchData]="currencyCodeData"
+                                                (newRowClick)="currencyCodeSelected($event)">
+                                            </master-search>
                                         </mat-form-field>
-                                        <master-search></master-search>
+                                       
                                     </div>
                                 </div>
                                 <div class="row align-items-center mb-1">
@@ -448,11 +528,16 @@
                                         class="col-sm-4 col-form-label">User
                                         defined :</label>
                                     <div class="col-md-8">
-                                        <mat-form-field style="width: 70%;">
+                                        <mat-form-field  style="width: 100%;" appearance="outline">
                                             <input type="text" matInput
                                                 formControlName="userdefined_11" />
+                                                <master-search  class="masterSearch"
+                                                *ngIf="!viewMode"
+                                                [MasterSearchData]="currencyCodeData"
+                                                (newRowClick)="currencyCodeSelected($event)">
+                                            </master-search>
                                         </mat-form-field>
-                                        <master-search></master-search>
+                                      
                                     </div>
                                 </div>
                                 <div class="row align-items-center mb-1">
@@ -460,11 +545,16 @@
                                         class="col-sm-4 col-form-label">User
                                         defined :</label>
                                     <div class="col-md-8">
-                                        <mat-form-field style="width: 70%;">
+                                        <mat-form-field  style="width: 100%;" appearance="outline">
                                             <input type="text" matInput
                                                 formControlName="userdefined_12" />
+                                                <master-search  class="masterSearch"
+                                                *ngIf="!viewMode"
+                                                [MasterSearchData]="currencyCodeData"
+                                                (newRowClick)="currencyCodeSelected($event)">
+                                            </master-search>
                                         </mat-form-field>
-                                        <master-search></master-search>
+                                   
                                     </div>
                                 </div>
                                 <div class="row align-items-center mb-1">
@@ -472,11 +562,16 @@
                                         class="col-sm-4 col-form-label">User
                                         defined :</label>
                                     <div class="col-md-8">
-                                        <mat-form-field style="width: 70%;">
+                                        <mat-form-field  style="width: 100%;" appearance="outline">
                                             <input type="text" matInput
                                                 formControlName="userdefined_13" />
+                                                <master-search  class="masterSearch"
+                                                *ngIf="!viewMode"
+                                                [MasterSearchData]="currencyCodeData"
+                                                (newRowClick)="currencyCodeSelected($event)">
+                                            </master-search>
                                         </mat-form-field>
-                                        <master-search></master-search>
+                                      
                                     </div>
                                 </div>
                                 <div class="row align-items-center mb-1">
@@ -484,11 +579,16 @@
                                         class="col-sm-4 col-form-label">User
                                         defined :</label>
                                     <div class="col-md-8">
-                                        <mat-form-field style="width: 70%;">
+                                        <mat-form-field  style="width: 100%;" appearance="outline">
                                             <input type="text" matInput
                                                 formControlName="userdefined_14" />
+                                                <master-search  class="masterSearch"
+                                                *ngIf="!viewMode"
+                                                [MasterSearchData]="currencyCodeData"
+                                                (newRowClick)="currencyCodeSelected($event)">
+                                            </master-search>
                                         </mat-form-field>
-                                        <master-search></master-search>
+                                       
                                     </div>
                                 </div>
                                 <div class="row align-items-center mb-1">
@@ -496,11 +596,16 @@
                                         class="col-sm-4 col-form-label">User
                                         defined :</label>
                                     <div class="col-md-8">
-                                        <mat-form-field style="width: 70%;">
+                                        <mat-form-field  style="width: 100%;" appearance="outline">
                                             <input type="text" matInput
                                                 formControlName="userdefined_15" />
+                                                <master-search  class="masterSearch"
+                                                *ngIf="!viewMode"
+                                                [MasterSearchData]="currencyCodeData"
+                                                (newRowClick)="currencyCodeSelected($event)">
+                                            </master-search>
                                         </mat-form-field>
-                                        <master-search></master-search>
+
                                     </div>
                                 </div>
                             </div>

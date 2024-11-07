@@ -17,16 +17,16 @@
                 <div class="row align-items-center mb-1">
                   <label for="inputPassword" class="col-sm-3 col-form-label">Stock Code :</label>
                   <div class="col-md-3">
-                    <mat-form-field style="width: 100%;">
+                    <mat-form-field  style="width: 100%;"  appearance="outline">
                       <input type="text" matInput formControlName="stockCodeDes"/>
                     </mat-form-field>
                   </div>
                   <div class="col-md-5">
-                    <mat-form-field style="width: 70%;">
+                    <mat-form-field  style="width: 100%;"  appearance="outline">
                       <input type="text" matInput formControlName="stockCode" />
-                    </mat-form-field>
-                    <master-search [MasterSearchData]="stockCodeData"
+                      <master-search  class="masterSearch"  [MasterSearchData]="stockCodeData"
                       (newRowClick)="stockCodeSelected($event)"></master-search>
+                    </mat-form-field>
                   </div>
                 </div>
               </div>
@@ -34,16 +34,17 @@
                 <div class="row align-items-center mb-1">
                   <label for="inputPassword" class="col-sm-3 col-form-label">Karat :</label>
                   <div class="col-md-3">
-                    <mat-form-field style="width: 80%;">
+                    <mat-form-field  style="width: 100%;"  appearance="outline">
                       <input type="text" matInput formControlName="karat"/>
+                      <master-search  class="masterSearch" [MasterSearchData]="karatcodeData"
+                      (newRowClick)="karatcodeSelected($event)"> 
+                      </master-search>
                     </mat-form-field>
-                    <master-search [MasterSearchData]="karatcodeData"
-                    (newRowClick)="karatcodeSelected($event)"> 
-                    </master-search>
+                   
                   </div>
                   <label for="inputPassword" class="col-sm-3 col-form-label">Metal Wt :</label>
                   <div class="col-md-3">
-                    <mat-form-field style="width: 100%;">
+                    <mat-form-field  style="width: 100%;"  appearance="outline">
                       <input type="text" matInput />
                     </mat-form-field>
                   </div>
@@ -53,13 +54,13 @@
                 <div class="row align-items-center mb-1">
                   <label for="inputPassword" class="col-sm-3 col-form-label">Purity :</label>
                   <div class="col-md-3">
-                    <mat-form-field style="width: 100%;">
+                    <mat-form-field  style="width: 100%;"  appearance="outline">
                       <input type="text" matInput />
                     </mat-form-field>
                   </div>
                   <label for="inputPassword" class="col-sm-3 col-form-label">Pure Weight :</label>
                   <div class="col-md-3">
-                    <mat-form-field style="width: 100%;">
+                    <mat-form-field  style="width: 100%;"  appearance="outline">
                       <input type="text" matInput />
                     </mat-form-field>
                   </div>
@@ -69,16 +70,17 @@
                 <div class="row align-items-center mb-1">
                   <label for="inputPassword" class="col-sm-3 col-form-label">Rate Type :</label>
                   <div class="col-md-3">
-                    <mat-form-field style="width: 80%;">
+                    <mat-form-field  style="width: 100%;"  appearance="outline">
                       <input type="text" matInput formControlName="rateType"/>
-                    </mat-form-field>
-                    <master-search [MasterSearchData]="rateTypecodeData"
+                      <master-search  class="masterSearch" [MasterSearchData]="rateTypecodeData"
                     (newRowClick)="rateTypecodeSelected($event)">
                     </master-search>
+                    </mat-form-field>
+                    
                   </div>
                   <label for="inputPassword" class="col-sm-3 col-form-label">Rate :</label>
                   <div class="col-md-3">
-                    <mat-form-field style="width: 100%;">
+                    <mat-form-field  style="width: 100%;"  appearance="outline">
                       <input type="text" matInput />
                     </mat-form-field>
                   </div>
@@ -89,13 +91,13 @@
                 <div class="row align-items-center mb-1">
                   <label for="inputPassword" class="col-sm-3 col-form-label">Amount FC :</label>
                   <div class="col-md-3">
-                    <mat-form-field style="width: 100%;">
+                    <mat-form-field  style="width: 100%;"  appearance="outline">
                       <input type="text" matInput />
                     </mat-form-field>
                   </div>
                   <label for="inputPassword" class="col-sm-3 col-form-label">Amount LC :</label>
                   <div class="col-md-3">
-                    <mat-form-field style="width: 100%;">
+                    <mat-form-field  style="width: 100%;"  appearance="outline">
                       <input type="text" matInput />
                     </mat-form-field>
                   </div>
@@ -103,15 +105,15 @@
               </div>
               <div class="row">
                 <div class="row align-items-center mb-1">
-                  <label for="inputPassword" class="col-sm-3 col-form-label">Sale Amount FC :</label>
+                  <label for="inputPassword" class="col-sm-3 col-form-label">Sale % :</label>
                   <div class="col-md-3">
-                    <mat-form-field style="width: 100%;">
+                    <mat-form-field  style="width: 100%;"  appearance="outline">
                       <input type="text" matInput />
                     </mat-form-field>
                   </div>
-                  <label for="inputPassword" class="col-sm-3 col-form-label">Sale Amount LC :</label>
+                  <label for="inputPassword" class="col-sm-3 col-form-label">Sale Amount FC :</label>
                   <div class="col-md-3">
-                    <mat-form-field style="width: 100%;">
+                    <mat-form-field  style="width: 100%;"  appearance="outline">
                       <input type="text" matInput />
                     </mat-form-field>
                   </div>
@@ -126,7 +128,7 @@
                   <div class="row align-items-center mb-1">
                     <label for="inputPassword" class="col-sm-5 col-form-label">Metal Rate/Gms :</label>
                     <div class="col-md-7">
-                      <mat-form-field style="width: 80%;">
+                      <mat-form-field  style="width: 100%;"  appearance="outline">
                         <input type="text" matInput />
                       </mat-form-field>
 
@@ -139,7 +141,7 @@
                   <div class="row align-items-center mb-1">
                     <label for="inputPassword" class="col-sm-5 col-form-label">Labour Charge :</label>
                     <div class="col-md-7">
-                      <mat-form-field style="width: 80%;">
+                      <mat-form-field  style="width: 100%;"  appearance="outline">
                         <input type="text" matInput />
                       </mat-form-field>
 
@@ -152,7 +154,7 @@
                   <div class="row align-items-center mb-1">
                     <label for="inputPassword" class="col-sm-5 col-form-label">Labour Rate :</label>
                     <div class="col-md-7">
-                      <mat-form-field style="width: 80%;">
+                      <mat-form-field  style="width: 100%;"  appearance="outline">
                         <input type="text" matInput />
                       </mat-form-field>
 
@@ -165,7 +167,7 @@
                   <div class="row align-items-center mb-1">
                     <label for="inputPassword" class="col-sm-5 col-form-label">Labour Amount :</label>
                     <div class="col-md-7">
-                      <mat-form-field style="width: 80%;">
+                      <mat-form-field  style="width: 100%;"  appearance="outline">
                         <input type="text" matInput />
                       </mat-form-field>
 
@@ -176,9 +178,9 @@
               <div class="row">
                 <div class="col-md-10">
                   <div class="row align-items-center mb-1">
-                    <label for="inputPassword" class="col-sm-5 col-form-label">Sale % :</label>
+                    <label for="inputPassword" class="col-sm-5 col-form-label">Sale Amount LC :</label>
                     <div class="col-md-7">
-                      <mat-form-field style="width: 80%;">
+                      <mat-form-field style="width: 100%;"  appearance="outline">
                         <input type="text" matInput />
                       </mat-form-field>
 
