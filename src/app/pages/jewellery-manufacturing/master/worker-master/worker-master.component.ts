@@ -46,6 +46,8 @@ export class WorkerMasterComponent implements OnInit {
   searchTerm: string = '';
   afterSaveBtn: boolean = true;
   capscheck: boolean = false;
+  isCapsLockOn = false;
+  capsLockToastShown = false;
 
   accountMasterData: MasterSearchModel = {
     PAGENO: 1,
@@ -92,7 +94,7 @@ export class WorkerMasterComponent implements OnInit {
   }
 
   workerMasterForm = this.formBuilder.group({
-    WorkerCode: ['', [Validators.required], this.nameValidator],
+    WorkerCode: ['', [Validators.required]],
     WorkerDESCRIPTION: ['', [Validators.required]],
     WorkerAcCode: [''],
     NameOfSupervisor: [''],
@@ -125,13 +127,7 @@ export class WorkerMasterComponent implements OnInit {
     this.filteredData = this.tableData;
   }
 
-  nameValidator(control: FormControl): { [key: string]: boolean } | null {
-    const nameRegexp: RegExp = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/;
-    if (control.value && nameRegexp.test(control.value)) {
-      return { invalidName: true };
-    }
-    return null; // Return null if no errors
-  }
+
 
   ngOnInit(): void {
     this.renderer.selectRootElement('#code')?.focus();
@@ -157,9 +153,41 @@ export class WorkerMasterComponent implements OnInit {
       }
     }
   }
+
   changeTextUpperCase(event: any) {
     event.target.value = event.target.value.toString().toUpperCase();
   }
+
+  // checkCapsOn(event: KeyboardEvent): void {
+  //   if (event.getModifierState && event.getModifierState('CapsLock')) {
+  //     this.commonService.toastErrorByMsgId('Capslock On');
+  //   }
+  // }
+
+  checkCapsOn(event: KeyboardEvent): void {
+    this.isCapsLockOn = event.getModifierState && event.getModifierState('CapsLock');
+    
+    if (this.isCapsLockOn && !this.capsLockToastShown) {
+      // this.commonService.toastErrorByMsgId('Capslock On');
+      this.capsLockToastShown = true; // Set the flag to true after showing the toast
+    } else if (!this.isCapsLockOn && this.capsLockToastShown) {
+      // Reset the flag when Caps Lock is turned off
+      this.capsLockToastShown = false;
+    }
+  }
+
+  // checkCapsOn(event: any) {
+  //   if (this.capscheck == false) {
+  //     if (event.getModifierState("CapsLock")) {
+  //       Swal.fire({
+  //         icon: "warning",
+  //         title: "Caps Lock is On",
+  //       });
+  //     }
+  //     this.capscheck = true;
+  //   }
+  // }
+
   inputValidate(event: any) {
     if (event.target.value != '') {
       this.isDisableSaveBtn = true;
@@ -168,11 +196,7 @@ export class WorkerMasterComponent implements OnInit {
     }
   }
 
-  sanitizeInput(event: any): void {
-    const input = event.target as HTMLInputElement;
-    input.value = input.value.replace(/[^a-zA-Z0-9-]/g, '');  // Remove special characters
-    this.workerMasterForm.get('WorkerCode')?.setValue(input.value, { emitEvent: false });
-  }
+
 
 
   checkCode(): boolean {
@@ -192,6 +216,8 @@ export class WorkerMasterComponent implements OnInit {
     }
 
   }
+
+
   setValueWithDecimal(formControlName: string, value: any, Decimal: string) {
     this.workerMasterForm.controls[formControlName].setValue(
       this.commonService.setCommaSerperatedNumber(value, Decimal)
@@ -671,14 +697,19 @@ export class WorkerMasterComponent implements OnInit {
   }
 
   /**USE: close modal window */
-  close(data?: any) {
-    this.workerMasterForm.reset()
-    this.tableData = []
-    // this.activeModal.close();
-    this.activeModal.close(data);
-  }
+  // close(data?: any) {
+  //   this.workerMasterForm.reset()
+  //   this.tableData = []
+  //   // this.activeModal.close();
+  //   this.activeModal.close(data);
+  // }
 
-  closed(data?: any) {
+  close(data?: any) {
+    if (data){
+      this.viewMode = true;
+      this.activeModal.close(data);
+      return
+    }
     if (this.content && this.content.FLAG == 'VIEW') {
       this.workerMasterForm.reset()
       this.tableData = []
@@ -769,17 +800,7 @@ export class WorkerMasterComponent implements OnInit {
     }
   }
 
-  checkCapsOn(event: any) {
-    if (this.capscheck == false) {
-      if (event.getModifierState("CapsLock")) {
-        Swal.fire({
-          icon: "warning",
-          title: "Caps Lock is On",
-        });
-      }
-      this.capscheck = true;
-    }
-  }
+
 
 
 

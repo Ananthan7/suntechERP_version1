@@ -1,12 +1,12 @@
 <!-- header section starts -->
 <div class="card-content border-bottom d-flex justify-content-between p-2">
   <h5 class="pos-modaltitle" id="modal-dia-metal">Design Master (MFG)</h5>
-  <button type="button" class="btn btn-close close-btn" (click)="closed()">
+  <button type="button" class="btn btn-close close-btn" (click)="close()">
     <i class="feather icon-x close-icon"></i>
   </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="closed()" (deleteClick)="deleteRecord()"></modal-header>
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" (deleteClick)="deleteRecord()"></modal-header>
 <!-- content section -->
 
 <div class="pos-sales-modalbody modelbody">

@@ -589,11 +589,16 @@ export class JobcardComponent implements OnInit {
   }
 
   /**USE: close modal window */
-  close(data?: any) {
-    this.activeModal.close(data);
-  }
+  // close(data?: any) {
+  //   this.activeModal.close(data);
+  // }
 
-  closed(data?: any) {
+  close(data?: any) {
+    if (data){
+      this.viewMode = true;
+      this.activeModal.close(data);
+      return
+    }
     if (this.content && this.content.FLAG == 'VIEW'){
       this.activeModal.close(data);
       return
