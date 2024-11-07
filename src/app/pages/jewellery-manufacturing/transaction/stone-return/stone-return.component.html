@@ -112,7 +112,7 @@
               <div class="col-sm-4">
                 <mat-form-field appearance="outline" style="width: 100%;">
                   <input type="text" matInput formControlName="basecurrencyrate"
-                   readonly SixDecimalInput
+                    readonly SixDecimalInput
                     class="text-right" />
                 </mat-form-field>
               </div>
@@ -214,6 +214,7 @@
                   <div class="col-sm-4">
                     <mat-form-field appearance="outline" style="width: 100%;">
                       <input type="text" matInput formControlName="remark"
+                        [readonly]="viewMode"
                         maxlength="40" />
                     </mat-form-field>
                   </div>

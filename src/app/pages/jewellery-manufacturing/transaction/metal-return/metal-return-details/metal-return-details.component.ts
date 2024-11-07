@@ -268,9 +268,10 @@ export class MetalReturnDetailsComponent implements OnInit {
     where += `@strUserName='${this.comService.userName}'`;
 
     // Assign to the stock code data
-    this.stockCodeData.WHERECONDITION = where;
     this.ProcessCodeData.WHERECONDITION = where;
     this.WorkerCodeData.WHERECONDITION = where;
+    this.stockCodeData.WHERECONDITION = where;
+   
 }
 
 setLookupStockCodeWhereCondition() {
@@ -861,7 +862,7 @@ setLookupStockCodeWhereCondition() {
             if (data[0].VALID_STOCK) {
               // Handle the valid stock case
               // You can set other form values or perform other actions here if needed
-              this.overlaystockCodeSearch.closeOverlayPanel();
+              // this.overlaystockCodeSearch.closeOverlayPanel();
             } else {
               this.comService.toastErrorByMsgId('MSG1531');
               this.metalReturnDetailsForm.controls.stockCode.setValue('');
