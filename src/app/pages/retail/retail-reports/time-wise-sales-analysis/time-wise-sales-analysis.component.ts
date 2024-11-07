@@ -20,6 +20,7 @@ export class TimeWiseSalesAnalysisComponent implements OnInit {
     metalChkbox: [false],
     stoneChkbox: [false],
     Metal_StoneChkbox: [false],
+    firstInput: [''],
     
 
   });
@@ -30,6 +31,10 @@ export class TimeWiseSalesAnalysisComponent implements OnInit {
   branchDivisionControlsTooltip: any;
   formattedBranchDivisionData: any;
   isLoading: boolean = false;
+  timeWiseSaleCmprsneArr: any = [];
+  dayWiseSaleCmprsneArr: any = [];
+  popupVisible: boolean = false;
+  templateNameHasValue: boolean= false;
 
 
   constructor(private activeModal: NgbActiveModal, private formBuilder: FormBuilder) { }
@@ -57,6 +62,19 @@ export class TimeWiseSalesAnalysisComponent implements OnInit {
     }
     else if(event.ToDate){
       this.timeWiseSalesAnalysisForm.controls.todate.setValue(event.ToDate);
+    }
+  }
+
+  popupClosed(){
+    if (this.content && Object.keys(this.content).length > 0) {
+      console.log(this.content)
+      let ParcedPreFetchData = JSON.parse(this.content?.CONTROL_LIST_JSON)
+      this.timeWiseSalesAnalysisForm.controls.templateName.setValue(ParcedPreFetchData.CONTROL_HEADER.TEMPLATENAME)
+      this.popupVisible = false;
+    }
+    else{
+      this.popupVisible = false;
+      this.timeWiseSalesAnalysisForm.controls.templateName.setValue(null)
     }
   }
 
@@ -110,7 +128,21 @@ export class TimeWiseSalesAnalysisComponent implements OnInit {
     this.timeWiseSalesAnalysisForm.controls.branch.setValue(this.formattedBranchDivisionData);
   }
 
+ saveTemplate(){
+    this.popupVisible = true;
+    console.log(this.timeWiseSalesAnalysisForm.controls.templateName.value)
+  }
+  saveTemplate_DB(){
 
+  }
+
+  previewClick(){
+
+  }
+
+  printBtnClick(){
+
+  }
 
   prefillScreenValues(){
     if ( Object.keys(this.content).length > 0) {

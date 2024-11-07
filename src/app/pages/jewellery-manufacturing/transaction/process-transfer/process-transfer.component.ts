@@ -724,6 +724,7 @@ export class ProcessTransferComponent implements OnInit {
   }
   close(data?: any) {
     if (data){
+      this.viewMode = true;
       this.activeModal.close(data);
       return
     }
