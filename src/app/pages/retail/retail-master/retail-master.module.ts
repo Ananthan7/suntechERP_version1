@@ -41,6 +41,9 @@ import { CustomerWiseStonePricingAndLabourChargesComponent } from './customer-wi
 import { ReceiptModesComponent } from './receipt-modes/receipt-modes.component';
 import { DesignMasterComponent } from './design-master/design-master.component';
 import { JewelleryMasterComponent } from './jewellery-master/jewellery-master.component';
+import { SetRefMasterComponent } from './set-ref-master/set-ref-master.component';
+import { ModelMasterComponent } from './model-master/model-master.component';
+import { RefiningChargePostingComponent } from './refining-charge-posting/refining-charge-posting.component';
 
 
 @NgModule({
@@ -86,7 +89,10 @@ import { JewelleryMasterComponent } from './jewellery-master/jewellery-master.co
     CustomerWiseStonePricingAndLabourChargesComponent,
     ReceiptModesComponent,
     DesignMasterComponent,
-    JewelleryMasterComponent
+    JewelleryMasterComponent,
+    SetRefMasterComponent,
+    ModelMasterComponent,
+    RefiningChargePostingComponent
   ],
   imports: [
     CommonModule,
