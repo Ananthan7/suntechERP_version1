@@ -29,27 +29,27 @@
                 </div> 
             </div>
 
-            <div class="row mb-1">
+            <div class="row mb-4">
                 <div class="col-md-5">
                     <fieldset class="custom-fieldset">
-                        <legend class="custom-legend" id="ID003">Show</legend>
+                        <legend class="custom-legend" id="ID002">Show</legend>
                         
                         <div class="row mt-1">
                             <div class="col-auto">
                                 <input type="checkbox" id="checkbox1" name="checkbox1" class="mx-1" formControlName="invoiceChkbox">
-                                <label for="checkbox1">No of Invoice</label>
+                                <label for="checkbox1" id="ID003">No of Invoice</label>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-auto">
                                 <input type="checkbox" id="checkbox2" name="checkbox2" class="mx-1" formControlName="salesAmtChkbox">
-                                <label for="checkbox2">Sales Amount</label>
+                                <label for="checkbox2" id="ID004">Sales Amount</label>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-auto">
                                 <input type="checkbox" id="checkbox3" name="checkbox3" class="mx-1" formControlName="quantityChkbox">
-                                <label for="checkbox3">Quantity</label>
+                                <label for="checkbox3" id="ID005">Quantity</label>
                             </div>
                         </div>
                     </fieldset>
@@ -60,19 +60,19 @@
                         <div class="row mt-1">
                             <div class="col-auto">
                                 <input type="checkbox" id="checkbox4" name="checkbox1" class="mx-1" formControlName="metalChkbox">
-                                <label for="checkbox4">Only Metal</label>
+                                <label for="checkbox4" id="ID006">Only Metal</label>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-auto">
                                 <input type="checkbox" id="checkbox5" name="checkbox2" class="mx-1" formControlName="stoneChkbox">
-                                <label for="checkbox5">Only Stone</label>
+                                <label for="checkbox5" id="ID007">Only Stone</label>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-auto">
                                 <input type="checkbox" id="checkbox6" name="checkbox3" class="mx-1" formControlName="Metal_StoneChkbox">
-                                <label for="checkbox6">Metal & Stone</label>
+                                <label for="checkbox6" id="ID008">Metal & Stone</label>
                             </div>
                         </div>
                     </fieldset>
@@ -80,8 +80,125 @@
             </div>
 
             <div class="row mb-1">
+                <div class="container">
+                    <div class="row">
+                        <div class="container_block_columns bg-warning text-center border border-dark" id="ID009">Block 1</div>
+                        <div class="container_block_columns bg-warning text-center border border-dark" id="ID010">Block 2</div>
+                        <div class="container_block_columns bg-warning text-center border border-dark" id="ID011">Block 3</div>
+                        <div class="container_block_columns bg-warning text-center border border-dark" id="ID012">Block 4</div>
+                        <div class="container_block_columns bg-warning text-center border border-dark" id="ID013">Block 5</div>
+                        <div class="container_block_columns bg-warning text-center border border-dark" id="ID014">Block 6</div>
+                    </div>
 
+                    <div class="row">
+                        <div class="container_block_values px-0">
+                            <input type="text" value="9" formControlName="firstInput" class="w-100 text-center border border-dark"/>
+                        </div>
+                        <div class="container_block_values px-0">
+                            <input type="text" value="12" class="w-100 text-center border border-dark"/>
+                        </div>
+
+                        <div class="container_block_values px-0">
+                            <input type="text" value="12" disabled class="w-100 text-center border border-dark"/>
+                        </div>
+                        <div class="container_block_values px-0">
+                            <input type="text" value="14" class="w-100 text-center border border-dark"/>
+                        </div>
+
+                        <div class="container_block_values px-0">
+                            <input type="text" value="14" disabled class="w-100 text-center border border-dark"/>
+                        </div>
+                        <div class="container_block_values px-0">
+                            <input type="text" value="16" class="w-100 text-center border border-dark"/>
+                        </div>
+
+                        <div class="container_block_values px-0">
+                            <input type="text" value="16" disabled class="w-100 text-center border border-dark"/>
+                        </div>
+                        <div class="container_block_values px-0">
+                            <input type="text" value="18" class="w-100 text-center border border-dark"/>
+                        </div>
+
+                        <div class="container_block_values px-0">
+                            <input type="text" value="18" disabled class="w-100 text-center border border-dark"/>
+                        </div>
+                        <div class="container_block_values px-0">
+                            <input type="text" value="20" class="w-100 text-center border border-dark"/>
+                        </div>
+
+                        <div class="container_block_values px-0">
+                            <input type="text" value="20" disabled class="w-100 text-center border border-dark"/>
+                        </div>
+                        <div class="container_block_values px-0">
+                            <input type="text" value="24" class="w-100 text-center border border-dark"/>
+                        </div>
+
+                        <div class="col-1" style="top: -5px;">
+                            <i class="uil uil-redo icon-style" title="Reset Time"></i>
+                        </div>
+                    </div>
+                </div>
             </div>
+
+            <div class="row mb-1">
+                <h6 class="header_title" id="ID008">Time Wise Sales Comparison</h6>
+                <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true" [height]="'auto'"
+                [columnAutoWidth]="true" [dataSource]="timeWiseSaleCmprsneArr">
+                    <dxo-paging [enabled]="false"></dxo-paging>
+                    <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
+                    <!-- <dxo-selection mode="multiple"></dxo-selection> -->
+                    <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+                    
+
+                    <dxo-summary>
+                        <dxi-total-item column="Amount" summaryType="sum" displayFormat="{0}" alignment="right"></dxi-total-item>
+                    </dxo-summary>
+                </dx-data-grid>
+            </div>
+
+            <div class="row mb-1">
+                <h6 class="header_title" id="ID008">Day Wise Sales Comparison</h6>
+                <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true" [height]="'auto'"
+                [columnAutoWidth]="true" [dataSource]="dayWiseSaleCmprsneArr">
+                    <dxo-paging [enabled]="false"></dxo-paging>
+                    <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
+                    <!-- <dxo-selection mode="multiple"></dxo-selection> -->
+                    <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+                    
+
+                    <dxo-summary>
+                        <dxi-total-item column="Amount" summaryType="sum" displayFormat="{0}" alignment="right"></dxi-total-item>
+                    </dxo-summary>
+                </dx-data-grid>
+            </div>
+        </div>
+
+        <dx-popup [width]="300" [height]="180" [showTitle]="true" container=".dx-viewport"
+        title="Template Data" [dragEnabled]="false" [showCloseButton]="false" (onHidden)="popupClosed()"
+        [visible]="popupVisible">
+            <div class="popup-content">
+                <div class="form-group">
+                    <label for="T_Name">Name:</label>
+                    <input type="text" id="T_Name" class="form-control" formControlName="templateName"/>
+                </div>
+                <div class="button-group d-flex">
+                    <button mat-flat-button [ngClass]="{SaveNew_template: templateNameHasValue,
+                        'btn-m-r-10': true, 'demo-button': true, 'btn-width': true, 'mx-1': true}"
+                    (click)="saveTemplate_DB()">
+                    {{ templateNameHasValue ? "Save as New Template" : "Save" }}
+                    </button>
+                    <button  mat-flat-button class="btn-m-r-10 btn-width mx-1 cancelBTN"
+                    (click)="popupClosed()">
+                    Cancel</button>
+                </div>
+            </div>
+        </dx-popup>
+
+        <div class="row mt-2 justify-content-end mx-2">
+            <app-report-screen-buttons (saveTemplateClick)="saveTemplate()" (previewClicked)="previewClick()"
+            (printClicked)="printBtnClick()"></app-report-screen-buttons>
         </div>
     </form>
 </div>
