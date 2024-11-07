@@ -49,6 +49,8 @@ import { PriceListMasterComponent } from "./price-list-master/price-list-master.
 import { AdditionalAmountComponent } from "./additional-amount/additional-amount.component";
 import { CustomerWiseStonePricingAndLabourChargesComponent } from "./customer-wise-stone-pricing-and-labour-charges/customer-wise-stone-pricing-and-labour-charges.component";
 import { ReceiptModesComponent } from "./receipt-modes/receipt-modes.component";
+import { DesignMasterComponent } from "./design-master/design-master.component";
+import { JewelleryMasterComponent } from "./jewellery-master/jewellery-master.component";
 @Component({
   selector: "app-retail-master",
   templateUrl: "./retail-master.component.html",
@@ -207,6 +209,8 @@ export class RetailMasterComponent implements OnInit {
       AdditionalAmountComponent: AdditionalAmountComponent,
       CustomerWiseStonePricingAndLabourChargesComponent: CustomerWiseStonePricingAndLabourChargesComponent,
       ReceiptModesComponent: ReceiptModesComponent,
+      DesignMasterComponent: DesignMasterComponent,
+      JewelleryMasterComponent: JewelleryMasterComponent,
       // Add components and update in operationals > menu updation grid form component name
     };
     this.componentName = this.CommonService.getFormComponentName();

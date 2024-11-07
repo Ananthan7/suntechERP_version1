@@ -39,6 +39,8 @@ import { PriceListMasterComponent } from './price-list-master/price-list-master.
 import { AdditionalAmountComponent } from './additional-amount/additional-amount.component';
 import { CustomerWiseStonePricingAndLabourChargesComponent } from './customer-wise-stone-pricing-and-labour-charges/customer-wise-stone-pricing-and-labour-charges.component';
 import { ReceiptModesComponent } from './receipt-modes/receipt-modes.component';
+import { DesignMasterComponent } from './design-master/design-master.component';
+import { JewelleryMasterComponent } from './jewellery-master/jewellery-master.component';
 
 
 @NgModule({
@@ -82,7 +84,9 @@ import { ReceiptModesComponent } from './receipt-modes/receipt-modes.component';
     PriceListMasterComponent,
     AdditionalAmountComponent,
     CustomerWiseStonePricingAndLabourChargesComponent,
-    ReceiptModesComponent
+    ReceiptModesComponent,
+    DesignMasterComponent,
+    JewelleryMasterComponent
   ],
   imports: [
     CommonModule,
