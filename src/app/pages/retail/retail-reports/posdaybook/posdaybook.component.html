@@ -141,7 +141,8 @@
                                 <dxi-column alignment="center" caption="Amount"></dxi-column>
 
                                 <dxo-summary>
-                                    <dxi-total-item column="amount" summaryType="sum" displayFormat="Tot: {0}"></dxi-total-item>
+                                    <dxi-total-item column="amount" summaryType="sum" displayFormat="{0}"
+                                    [customizeText]="customizeSummaryContent"></dxi-total-item>
                                 </dxo-summary>
                             </dx-data-grid>  
                         </div>

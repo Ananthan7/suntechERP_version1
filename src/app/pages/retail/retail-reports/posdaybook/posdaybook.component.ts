@@ -424,7 +424,7 @@ export class POSDaybookComponent implements OnInit {
         this.RegisterGridData.forEach((item: any) => {
           for (const key in item) {
             if (typeof item[key] === 'number' && key !== 'mid') {
-              item[key] = this.customizeText(item[key]);
+              item[key] = this.customizeText(item[key], 2);
             }
           }
         });
@@ -460,8 +460,8 @@ export class POSDaybookComponent implements OnInit {
     this.commonService.closeSnackBarMsg();
     this.isLoading = false;
   }
-  customizeText(data: any) {
-    return Number(data).toFixed(2);
+  customizeText(data: any, decimalPoints: any) {
+    return Number(data).toFixed(decimalPoints);
   }
   customizeSummaryContent(data: any) {
     return Number(data.value).toFixed(2);
@@ -500,7 +500,7 @@ export class POSDaybookComponent implements OnInit {
           this.Collectn_GoldPurchaseGrid.forEach((item: any) => {
             for (const key in item) {
               if (typeof item[key] === 'number' && key !== 'mid') {
-                item[key] = this.customizeText(item[key]);
+                item[key] = this.customizeText(item[key], 2);
               }
             }
           });
@@ -509,7 +509,7 @@ export class POSDaybookComponent implements OnInit {
            this.GoldSum_collection.forEach((item: any) => {
             for (const key in item) {
               if (typeof item[key] === 'number' && key !== 'mid') {
-                item[key] = this.customizeText(item[key]);
+                item[key] = this.customizeText(item[key], 2);
               }
             }
           });
@@ -519,7 +519,7 @@ export class POSDaybookComponent implements OnInit {
            this.accountBalanceGrid.forEach((item: any) => {
             for (const key in item) {
               if (typeof item[key] === 'number' && key !== 'mid') {
-                item[key] = this.customizeText(item[key]);
+                item[key] = this.customizeText(item[key], 2);
               }
             }
           });
@@ -571,7 +571,7 @@ export class POSDaybookComponent implements OnInit {
         this.acccountMovementGrid.forEach((item: any) => {
           for (const key in item) {
             if (typeof item[key] === 'number' && key !== 'mid') {
-              item[key] = this.customizeText(item[key]);
+              item[key] = this.customizeText(item[key], 2);
             }
           }
         });
@@ -580,7 +580,7 @@ export class POSDaybookComponent implements OnInit {
         this.salesOrderSumaryGrid.forEach((item: any) => {
           for (const key in item) {
             if (typeof item[key] === 'number' && key !== 'mid') {
-              item[key] = this.customizeText(item[key]);
+              item[key] = this.customizeText(item[key], 2);
             }
           }
         });
@@ -632,7 +632,7 @@ export class POSDaybookComponent implements OnInit {
         this.salesmanSummaryGridArr?.forEach((item: any) => {
           for (const key in item) {
             if (typeof item[key] === 'number' && key !== 'mid') {
-              item[key] = this.customizeText(item[key]);
+              item[key] = this.customizeText(item[key], 2);
             }
           }
         }); 
@@ -641,7 +641,7 @@ export class POSDaybookComponent implements OnInit {
         this.cashCreditSmryGrid?.forEach((item: any) => {
           for (const key in item) {
             if (typeof item[key] === 'number' && key !== 'mid') {
-              item[key] = this.customizeText(item[key]);
+              item[key] = this.customizeText(item[key], 2);
             }
           }
         });
