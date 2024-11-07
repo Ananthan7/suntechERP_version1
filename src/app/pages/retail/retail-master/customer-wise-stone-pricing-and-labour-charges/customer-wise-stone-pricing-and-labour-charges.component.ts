@@ -117,4 +117,6 @@ export class CustomerWiseStonePricingAndLabourChargesComponent implements OnInit
 
   removeItemDetails() {}
 
+  cancelStone(){}
+  submitStone(){}
 }

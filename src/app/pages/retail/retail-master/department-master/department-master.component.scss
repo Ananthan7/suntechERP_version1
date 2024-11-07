@@ -17,3 +17,21 @@
     border: 1px solid #3864b4;
     padding: 10px;
 }
+
+fieldset {
+    padding: 10px;
+    border: solid 1px #949494;
+    position: relative;
+    margin-top: 25px;
+
+    legend {
+        color: #333334;
+        position: absolute;
+        top: -8px;
+        background: #fff;
+        width: 85px;
+        text-align: center;
+        font-size: 12px;
+        font-weight: 600;
+    }
+}
