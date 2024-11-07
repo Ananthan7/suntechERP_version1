@@ -156,6 +156,7 @@ export class MetalReturnDetailsComponent implements OnInit {
     DIVCODE: [''],
     METAL_STONE: [''],
     UNQ_JOB_ID: [''],
+    JOB_SO_NUMBER: [''],
     FLAG: [null]
   });
 
@@ -443,7 +444,7 @@ setLookupStockCodeWhereCondition() {
       "VOCDATE": this.comService.formatDateTime(new Date(form.VOCDATE)),
       "JOB_NUMBER": this.comService.nullToString(form.jobNumber),
       "JOB_DATE": this.comService.formatDateTime(new Date(form.VOCDATE)),
-      "JOB_SO_NUMBER": this.comService.emptyToZero(form.subJobNo),
+      "JOB_SO_NUMBER": this.comService.emptyToZero(form.JOB_SO_NUMBER),
       "UNQ_JOB_ID": this.comService.nullToString(form.subJobNo),
       "JOB_DESCRIPTION": form.subJobNoDes,
       "BRANCH_CODE": this.comService.nullToString(form.BRANCH_CODE),
