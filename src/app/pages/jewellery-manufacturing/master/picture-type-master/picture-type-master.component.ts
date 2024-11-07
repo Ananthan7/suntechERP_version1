@@ -20,6 +20,7 @@ export class PictureTypeMasterComponent implements OnInit {
   columnheader:any[] = ['SN','Code','Description'];
   allMode: string;
   checkBoxesMode: string;
+  viewMode=false;
 
 subscriptions: any;
   @Input() content!: any; 
@@ -77,12 +78,17 @@ subscriptions: any;
     this.tableData[value.data.SN - 1].mandatory = data.target.value;
   }
 
-  close(data?: any) {
-    //TODO reset forms and data before closing
-    this.activeModal.close(data);
-  }
+  // close(data?: any) {
+  //   //TODO reset forms and data before closing
+  //   this.activeModal.close(data);
+  // }
 
-  closed(data?: any) {
+  close(data?: any) {
+    if (data){
+      this.viewMode = true;
+      this.activeModal.close(data);
+      return
+    }
     if (this.content && this.content.FLAG == 'VIEW'){
       this.activeModal.close(data);
       return

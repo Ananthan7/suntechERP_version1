@@ -49,38 +49,7 @@ export class DiamondPrefixMasterComponent implements OnInit {
       this.deleteMetalPrefix()
     }
   }
-  setFormValues() {
-    console.log(this.content);
-    if (!this.content) return
-    this.diamondprefixForm.controls.prefixcode.setValue(this.content.PREFIX_CODE)
-    this.diamondprefixForm.controls.prefixcodedes.setValue(this.content.DESCRIPTION)
-    this.diamondprefixForm.controls.lastno.setValue(this.content.LAST_NO)
-    this.diamondprefixForm.controls.currency.setValue(this.content.CURRENCY_CODE)
-    this.diamondprefixForm.controls.currencyRate.setValue(this.content.CONV_RATE)
-    this.diamondprefixForm.controls.refinervprefix.setValue(this.viewchangeYorN(this.content.REFINE_PREFIX))
-    this.diamondprefixForm.controls.setrefprefix.setValue(this.viewchangeYorN(this.content.SETREF_PREFIX))
-    this.diamondprefixForm.controls.jobcardprefix.setValue(this.viewchangeYorN(this.content.JOB_PREFIX))
-    this.diamondprefixForm.controls.designprefix.setValue(this.viewchangeYorN(this.content.DESIGN_PREFIX))
-    this.diamondprefixForm.controls.Componentprefix.setValue(this.viewchangeYorN(this.content.COMP_PREFIX))
-    this.diamondprefixForm.controls.branch.setValue(this.content.BRANCH_CODE)
-    //this.diamondprefixForm.controls.suffixcode.setValue(this.content.SCHEME_PREFIX)
-    this.diamondprefixForm.controls.Country.setValue(this.content.COUNTRY_CODE)
-    this.diamondprefixForm.controls.subCategory.setValue(this.content.SUBCATEGORY_CODE)
-    this.diamondprefixForm.controls.Type.setValue(this.content.TYPE_CODE)
-    this.diamondprefixForm.controls.Category.setValue(this.content.CATEGORY_CODE)
-    this.diamondprefixForm.controls.brand.setValue(this.content.BRAND_CODE)
-    this.diamondprefixForm.controls.costcode.setValue(this.content.COUNTRY_CODE)
-    this.diamondprefixForm.controls.hsn.setValue(this.content.HSN_CODE)
-  }
-  /**USE: to set currency from company parameter */
-  setCompanyCurrency() {
-    let CURRENCY_CODE = this.commonService.getCompanyParamValue('COMPANYCURRENCY')
-    this.diamondprefixForm.controls.currency.setValue(CURRENCY_CODE);
-    const CURRENCY_RATE: any[] = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == CURRENCY_CODE);
-    this.diamondprefixForm.controls.currencyRate.setValue(
-      this.commonService.decimalQuantityFormat(CURRENCY_RATE[0].CONV_RATE, 'RATE')
-    );
-  }
+  
   diamondprefixForm: FormGroup = this.formBuilder.group({
     prefixcode: ['',[Validators.required]],
     prefixcodedes: ['',[Validators.required]],
@@ -117,7 +86,41 @@ export class DiamondPrefixMasterComponent implements OnInit {
     userdefined_14: [''],
     userdefined_15: [''],
     currencydes:[''],
+    boilProcessPrefix: false,
   })
+
+  setFormValues() {
+    console.log(this.content);
+    if (!this.content) return
+    this.diamondprefixForm.controls.prefixcode.setValue(this.content.PREFIX_CODE)
+    this.diamondprefixForm.controls.prefixcodedes.setValue(this.content.DESCRIPTION)
+    this.diamondprefixForm.controls.lastno.setValue(this.content.LAST_NO)
+    this.diamondprefixForm.controls.currency.setValue(this.content.CURRENCY_CODE)
+    this.diamondprefixForm.controls.currencyRate.setValue(this.content.CONV_RATE)
+    this.diamondprefixForm.controls.refinervprefix.setValue(this.viewchangeYorN(this.content.REFINE_PREFIX))
+    this.diamondprefixForm.controls.setrefprefix.setValue(this.viewchangeYorN(this.content.SETREF_PREFIX))
+    this.diamondprefixForm.controls.jobcardprefix.setValue(this.viewchangeYorN(this.content.JOB_PREFIX))
+    this.diamondprefixForm.controls.designprefix.setValue(this.viewchangeYorN(this.content.DESIGN_PREFIX))
+    this.diamondprefixForm.controls.Componentprefix.setValue(this.viewchangeYorN(this.content.COMP_PREFIX))
+    this.diamondprefixForm.controls.branch.setValue(this.content.BRANCH_CODE)
+    //this.diamondprefixForm.controls.suffixcode.setValue(this.content.SCHEME_PREFIX)
+    this.diamondprefixForm.controls.Country.setValue(this.content.COUNTRY_CODE)
+    this.diamondprefixForm.controls.subCategory.setValue(this.content.SUBCATEGORY_CODE)
+    this.diamondprefixForm.controls.Type.setValue(this.content.TYPE_CODE)
+    this.diamondprefixForm.controls.Category.setValue(this.content.CATEGORY_CODE)
+    this.diamondprefixForm.controls.brand.setValue(this.content.BRAND_CODE)
+    this.diamondprefixForm.controls.costcode.setValue(this.content.COUNTRY_CODE)
+    this.diamondprefixForm.controls.hsn.setValue(this.content.HSN_CODE)
+  }
+  /**USE: to set currency from company parameter */
+  setCompanyCurrency() {
+    let CURRENCY_CODE = this.commonService.getCompanyParamValue('COMPANYCURRENCY')
+    this.diamondprefixForm.controls.currency.setValue(CURRENCY_CODE);
+    const CURRENCY_RATE: any[] = this.commonService.allBranchCurrency.filter((item: any) => item.CURRENCY_CODE == CURRENCY_CODE);
+    this.diamondprefixForm.controls.currencyRate.setValue(
+      this.commonService.decimalQuantityFormat(CURRENCY_RATE[0].CONV_RATE, 'RATE')
+    );
+  }
 
   BranchCodeData: MasterSearchModel = {
     PAGENO: 1,

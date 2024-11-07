@@ -489,12 +489,17 @@ export class MeltingTypeComponent implements OnInit {
     (event.target as HTMLInputElement).value = limitedValue;
   }
   
-  close(data?: any) {
-    //TODO reset forms and data before closing
-    this.activeModal.close(data);
-  }
+  // close(data?: any) {
+  //   //TODO reset forms and data before closing
+  //   this.activeModal.close(data);
+  // }
 
-  closed(data?: any) {
+  close(data?: any) {
+    if (data){
+      this.viewMode = true;
+      this.activeModal.close(data);
+      return
+    }
     if (this.content && this.content.FLAG == 'VIEW'){
       this.activeModal.close(data);
       return

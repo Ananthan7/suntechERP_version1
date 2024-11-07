@@ -1,12 +1,12 @@
 <div class="card-content border-bottom d-flex justify-content-between p-2">
   <h5 class="pos-modaltitle" id="modal-dia-metal">Customer Wise Stone / Labour Master</h5>
-  <button type="button" class="btn btn-close close-btn" (click)="closed()">
+  <button type="button" class="btn btn-close close-btn" (click)="close()">
     <i class="feather icon-x close-icon"></i>
   </button>
 </div>
 <!-- modal header component -->
-<modal-header (cancelClick)="closed()" (saveClick)="formSubmit()" (deleteClick)="deleteRecord()" 
-    [isViewDelete]="editMode" [isViewSave]="!viewMode" [isViewCancel]="!viewMode"
+<modal-header (cancelClick)="close()" (saveClick)="formSubmit()" (deleteClick)="deleteRecord()" 
+    [isViewDelete]="editMode  && !viewMode" [isViewSave]="!viewMode" [isViewCancel]="!viewMode"
 [isViewMore]="!viewMode" [disableSaveBtn]="isDisableSaveBtn" ></modal-header>
 <div class="row">
   <div class="col-md-12">

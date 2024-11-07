@@ -2,13 +2,13 @@
     <!-- header section starts -->
     <div class="card-content border-bottom d-flex justify-content-between p-2">
         <h5 class="pos-modaltitle" id="modal-dia-metal">Stone Pricing Master</h5>
-        <button type="button" class="btn btn-close close-btn" (click)="closed()">
+        <button type="button" class="btn btn-close close-btn" (click)="close()">
             <i class="feather icon-x close-icon"></i>
         </button>
     </div>
     <!-- modal header component -->
     <modal-header [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode"
-        (saveClick)="formSubmit()" (cancelClick)="closed()" (deleteClick)="deleteStonepriceMaster()"
+        (saveClick)="formSubmit()" (cancelClick)="close()" (deleteClick)="deleteStonepriceMaster()"
         [isViewDelete]="editMode"></modal-header>
     <!-- content section -->
     <div class="row">
@@ -38,7 +38,7 @@
                                             <input type="text" [readonly]="viewModeAll || codeEnable" matInput maxlength="15"
                                                 formControlName="sieve_set" (input)="inputValidate($event)"
                                                 UpperCaseDirective
-                                                (focusout)="validateLookupField($event,sieve_setData,'sieve_set')"
+                                                (focusout)="validateLookupFieldSieveSet($event,sieve_setData,'sieve_set')"
                                                 (keydown)="lookupKeyPress($event,'sieve_set')" />
                                             <master-search class="masterSearch" [MasterSearchData]="sieve_setData"
                                                 #overlaysievesetSearch (newRowClick)="sieve_setDataSelected($event)"
