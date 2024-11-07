@@ -8,7 +8,7 @@
 <!-- modal header component -->
 
 <modal-header (saveClick)="formSubmit()" [isViewContinue]="true" [isViewAuditTrail]="viewOnly" [isViewDelete]="false"
-  [isViewMore]="false" [isViewPrint]="viewOnly" [isViewPost]="viewOnly" (postClick)="AccountPosting()"
+  [isViewMore]="false" [isViewPrint]="viewOnly"[isViewPost]="viewOnly || midForInvoce!==0" (postClick)="AccountPosting()"
   (continueClick)="continue()" (printClick)="printReceiptDetailsWeb()" (auditTrailClick)="auditTrailClick()"
   (cancelClick)="close()"></modal-header>
 
