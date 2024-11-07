@@ -54,6 +54,16 @@ import { JewelleryMasterComponent } from "./jewellery-master/jewellery-master.co
 import { SetRefMasterComponent } from "./set-ref-master/set-ref-master.component";
 import { ModelMasterComponent } from "./model-master/model-master.component";
 import { RefiningChargePostingComponent } from "./refining-charge-posting/refining-charge-posting.component";
+import { PosSalespersonTargetComponent } from "./pos-salesperson-target/pos-salesperson-target.component";
+import { LoyaltyCardMasterComponent } from "./loyalty-card-master/loyalty-card-master.component";
+import { LoyaltyProgramSettingsMasterComponent } from "./loyalty-program-settings-master/loyalty-program-settings-master.component";
+import { GeneralDocumentMasterComponent } from "./general-document-master/general-document-master.component";
+import { GstMasterComponent } from "./gst-master/gst-master.component";
+import { VatMasterComponent } from "./vat-master/vat-master.component";
+import { ReorderLevelSetupComponent } from "./reorder-level-setup/reorder-level-setup.component";
+import { SalesPersonMasterComponent } from "./sales-person-master/sales-person-master.component";
+import { GiftVoucherMasterComponent } from "./gift-voucher-master/gift-voucher-master.component";
+import { ServiceMasterComponent } from "./service-master/service-master.component";
 @Component({
   selector: "app-retail-master",
   templateUrl: "./retail-master.component.html",
@@ -217,6 +227,17 @@ export class RetailMasterComponent implements OnInit {
       SetRefMasterComponent: SetRefMasterComponent,
       ModelMasterComponent: ModelMasterComponent,
       RefiningChargePostingComponent: RefiningChargePostingComponent,
+      PosSalespersonTargetComponent: PosSalespersonTargetComponent,
+      LoyaltyCardMasterComponent: LoyaltyCardMasterComponent,
+      LoyaltyProgramSettingsMasterComponent: LoyaltyProgramSettingsMasterComponent,
+      GeneralDocumentMasterComponent: GeneralDocumentMasterComponent,
+      GstMasterComponent: GstMasterComponent,
+      VatMasterComponent: VatMasterComponent,
+      ReorderLevelSetupComponent: ReorderLevelSetupComponent, 
+      SalesPersonMasterComponent: SalesPersonMasterComponent,
+      GiftVoucherMasterComponent: GiftVoucherMasterComponent,
+      ServiceMasterComponent: ServiceMasterComponent,
+
       // Add components and update in operationals > menu updation grid form component name
     };
     this.componentName = this.CommonService.getFormComponentName();
