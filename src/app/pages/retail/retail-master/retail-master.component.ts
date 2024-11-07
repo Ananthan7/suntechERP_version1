@@ -64,6 +64,7 @@ import { ReorderLevelSetupComponent } from "./reorder-level-setup/reorder-level-
 import { SalesPersonMasterComponent } from "./sales-person-master/sales-person-master.component";
 import { GiftVoucherMasterComponent } from "./gift-voucher-master/gift-voucher-master.component";
 import { ServiceMasterComponent } from "./service-master/service-master.component";
+import { SetRefMasterRealComponent } from "./set-ref-master-real/set-ref-master-real.component";
 @Component({
   selector: "app-retail-master",
   templateUrl: "./retail-master.component.html",
@@ -237,6 +238,7 @@ export class RetailMasterComponent implements OnInit {
       SalesPersonMasterComponent: SalesPersonMasterComponent,
       GiftVoucherMasterComponent: GiftVoucherMasterComponent,
       ServiceMasterComponent: ServiceMasterComponent,
+      SetRefMasterRealComponent: SetRefMasterRealComponent,
 
       // Add components and update in operationals > menu updation grid form component name
     };
