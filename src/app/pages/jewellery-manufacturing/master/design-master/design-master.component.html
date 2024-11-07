@@ -378,65 +378,68 @@
                         <div class="row align-items-center mb-1">
                           <label for="inputPassword" id="ID047" class="col-sm-3 col-form-label">Price 1</label>
                           <div class="col-md-3">
-                            <mat-form-field style="width: 80%;">
+                            <mat-form-field style="width: 100%;"  appearance="outline">
                               <input type="text" matInput formControlName="price1"
                                 (focusout)="validateLookupField($event,price1CodeData,'price1')"
                                 (keydown)="lookupKeyPress($event,'price1')" />
-                            </mat-form-field>
-                            <master-search [MasterSearchData]="price1CodeData" #overlayprice1Search
+                                <master-search  class="masterSearch" [MasterSearchData]="price1CodeData" #overlayprice1Search
                               (newRowClick)="price1CodeSelected($event)"></master-search>
+                            </mat-form-field>
+                            
                           </div>
 
                         </div>
                         <div class="row align-items-center mb-1">
                           <label for="inputPassword" id="ID048" class="col-sm-3 col-form-label">Price 2:</label>
                           <div class="col-md-3">
-                            <mat-form-field style="width: 80%;">
+                            <mat-form-field style="width: 100%;"  appearance="outline">
                               <input type="text" matInput formControlName="price2"
                                 (focusout)="validateLookupField($event,price2CodeData,'price2')"
                                 (keydown)="lookupKeyPress($event,'price2')" />
+                                <master-search class="masterSearch" [MasterSearchData]="price2CodeData" #overlayprice2Search
+                                (newRowClick)="price2CodeSelected($event)"></master-search>
                             </mat-form-field>
-                            <master-search [MasterSearchData]="price2CodeData" #overlayprice2Search
-                              (newRowClick)="price2CodeSelected($event)"></master-search>
                           </div>
 
                         </div>
                         <div class="row align-items-center mb-1">
                           <label for="inputPassword" id="ID049" class="col-sm-3 col-form-label">Price 3:</label>
                           <div class="col-md-3">
-                            <mat-form-field style="width: 80%;">
+                            <mat-form-field  style="width: 100%;"  appearance="outline">
                               <input type="text" matInput formControlName="price3"
                                 (focusout)="validateLookupField($event,price3CodeData,'price3')"
                                 (keydown)="lookupKeyPress($event,'price3')" />
+                                <master-search class="masterSearch"  [MasterSearchData]="price3CodeData" #overlayprice3Search
+                                (newRowClick)="price3CodeSelected($event)"></master-search>
                             </mat-form-field>
-                            <master-search [MasterSearchData]="price3CodeData" #overlayprice3Search
-                              (newRowClick)="price3CodeSelected($event)"></master-search>
+                         
                           </div>
 
                         </div>
                         <div class="row align-items-center mb-1">
                           <label for="inputPassword" id="ID050" class="col-sm-3 col-form-label">Price 4</label>
                           <div class="col-md-3">
-                            <mat-form-field style="width: 80%;">
+                            <mat-form-field  style="width: 100%;"  appearance="outline">
                               <input type="text" matInput formControlName="price4"
                                 (focusout)="validateLookupField($event,price4CodeData,'price4')"
                                 (keydown)="lookupKeyPress($event,'price4')" />
+                                <master-search class="masterSearch"   [MasterSearchData]="price4CodeData" #overlayprice4Search
+                                (newRowClick)="price4CodeSelected($event)"></master-search>
                             </mat-form-field>
-                            <master-search [MasterSearchData]="price4CodeData" #overlayprice4Search
-                              (newRowClick)="price4CodeSelected($event)"></master-search>
+                          
                           </div>
 
                         </div>
                         <div class="row align-items-center mb-1">
                           <label for="inputPassword" id="ID051" class="col-sm-3 col-form-label">Price 5</label>
                           <div class="col-md-3">
-                            <mat-form-field style="width: 80%;">
+                            <mat-form-field  style="width: 100%;"  appearance="outline">
                               <input type="text" matInput formControlName="price5"
                                 (focusout)="validateLookupField($event,price5CodeData,'price5')"
                                 (keydown)="lookupKeyPress($event,'price5')" />
+                                <master-search class="masterSearch" [MasterSearchData]="price5CodeData" #overlayprice5Search
+                                (newRowClick)="price5CodeSelected($event)"></master-search>
                             </mat-form-field>
-                            <master-search [MasterSearchData]="price5CodeData" #overlayprice5Search
-                              (newRowClick)="price5CodeSelected($event)"></master-search>
                           </div>
                         </div>
 
@@ -1017,7 +1020,7 @@
 
                         <dxi-column dataField="SINO" caption="SINO">
                         </dxi-column>
-                        <dxi-column dataField="Width Code" caption="Width Code">
+                        <dxi-column dataField="Width Code" caption="Model No">
                         </dxi-column>
                         <dxi-column dataField="Description" caption="Description">
                         </dxi-column>
