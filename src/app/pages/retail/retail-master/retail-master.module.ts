@@ -41,6 +41,16 @@ import { CustomerWiseStonePricingAndLabourChargesComponent } from './customer-wi
 import { ReceiptModesComponent } from './receipt-modes/receipt-modes.component';
 import { DesignMasterComponent } from './design-master/design-master.component';
 import { JewelleryMasterComponent } from './jewellery-master/jewellery-master.component';
+import { SetRefMasterComponent } from './set-ref-master/set-ref-master.component';
+import { ModelMasterComponent } from './model-master/model-master.component';
+import { RefiningChargePostingComponent } from './refining-charge-posting/refining-charge-posting.component';
+import { PosSalespersonTargetComponent } from './pos-salesperson-target/pos-salesperson-target.component';
+import { LoyaltyCardMasterComponent } from './loyalty-card-master/loyalty-card-master.component';
+import { LoyaltyProgramSettingsMasterComponent } from './loyalty-program-settings-master/loyalty-program-settings-master.component';
+import { GeneralDocumentMasterComponent } from './general-document-master/general-document-master.component';
+import { GstMasterComponent } from './gst-master/gst-master.component';
+import { VatMasterComponent } from './vat-master/vat-master.component';
+import { ReorderLevelSetupComponent } from './reorder-level-setup/reorder-level-setup.component';
 
 
 @NgModule({
@@ -86,7 +96,17 @@ import { JewelleryMasterComponent } from './jewellery-master/jewellery-master.co
     CustomerWiseStonePricingAndLabourChargesComponent,
     ReceiptModesComponent,
     DesignMasterComponent,
-    JewelleryMasterComponent
+    JewelleryMasterComponent,
+    SetRefMasterComponent,
+    ModelMasterComponent,
+    RefiningChargePostingComponent,
+    PosSalespersonTargetComponent,
+    LoyaltyCardMasterComponent,
+    LoyaltyProgramSettingsMasterComponent,
+    GeneralDocumentMasterComponent,
+    GstMasterComponent,
+    VatMasterComponent,
+    ReorderLevelSetupComponent
   ],
   imports: [
     CommonModule,
