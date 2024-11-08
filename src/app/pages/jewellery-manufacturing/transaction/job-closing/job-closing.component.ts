@@ -133,6 +133,11 @@ export class JobClosingComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
   close(data?: any) {
+    if (data){
+      this.viewMode = true;
+      this.activeModal.close(data);
+      return
+    }
     if (this.content && this.content.FLAG == 'VIEW'){
       this.activeModal.close(data);
       return

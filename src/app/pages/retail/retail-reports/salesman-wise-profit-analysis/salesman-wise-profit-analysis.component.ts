@@ -1,43 +1,37 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { CommonServiceService } from 'src/app/services/common-service.service';
 
 @Component({
-  selector: 'app-time-wise-sales-analysis',
-  templateUrl: './time-wise-sales-analysis.component.html',
-  styleUrls: ['./time-wise-sales-analysis.component.scss']
+  selector: 'app-salesman-wise-profit-analysis',
+  templateUrl: './salesman-wise-profit-analysis.component.html',
+  styleUrls: ['./salesman-wise-profit-analysis.component.scss']
 })
-export class TimeWiseSalesAnalysisComponent implements OnInit {
-  timeWiseSalesAnalysisForm: FormGroup = this.formBuilder.group({
+export class SalesmanWiseProfitAnalysisComponent implements OnInit {
+  salesmanWiseProfitAnalysisForm: FormGroup = this.formBuilder.group({
     branch: [''],
     fromdate: [''],
     todate: [''],
     templateName: [''],
 
-    invoiceChkbox: [false],
-    salesAmtChkbox: [false],
-    quantityChkbox: [false],
-    metalChkbox: [false],
-    stoneChkbox: [false],
-    Metal_StoneChkbox: [false],
-    firstInput: [''],
-
+    
+    
 
   });
+  @Input() content!: any; 
   fetchedBranchData: any[] =[];
   fetchedBranchDataParam: any= [];
-  @Input() content!: any; 
   dateToPass: { fromDate: string; toDate: string } = { fromDate: '', toDate: '' };
   branchDivisionControlsTooltip: any;
   formattedBranchDivisionData: any;
-  isLoading: boolean = false;
-  timeWiseSaleCmprsneArr: any = [];
-  dayWiseSaleCmprsneArr: any = [];
+  salesmanWiseProfitArr: any = [];
   popupVisible: boolean = false;
   templateNameHasValue: boolean= false;
 
-
-  constructor(private activeModal: NgbActiveModal, private formBuilder: FormBuilder) { }
+  
+  constructor(private activeModal: NgbActiveModal, private formBuilder: FormBuilder,
+    private commonService: CommonServiceService) { }
 
   ngOnInit(): void {
     this.prefillScreenValues();
@@ -58,10 +52,10 @@ export class TimeWiseSalesAnalysisComponent implements OnInit {
 
   setDateValue(event: any){
     if(event.FromDate){
-      this.timeWiseSalesAnalysisForm.controls.fromdate.setValue(event.FromDate);
+      this.salesmanWiseProfitAnalysisForm.controls.fromdate.setValue(event.FromDate);
     }
     else if(event.ToDate){
-      this.timeWiseSalesAnalysisForm.controls.todate.setValue(event.ToDate);
+      this.salesmanWiseProfitAnalysisForm.controls.todate.setValue(event.ToDate);
     }
   }
 
@@ -69,14 +63,18 @@ export class TimeWiseSalesAnalysisComponent implements OnInit {
     if (this.content && Object.keys(this.content).length > 0) {
       console.log(this.content)
       let ParcedPreFetchData = JSON.parse(this.content?.CONTROL_LIST_JSON)
-      this.timeWiseSalesAnalysisForm.controls.templateName.setValue(ParcedPreFetchData.CONTROL_HEADER.TEMPLATENAME)
+      this.salesmanWiseProfitAnalysisForm.controls.templateName.setValue(ParcedPreFetchData.CONTROL_HEADER.TEMPLATENAME)
       this.popupVisible = false;
     }
     else{
       this.popupVisible = false;
-      this.timeWiseSalesAnalysisForm.controls.templateName.setValue(null)
+      this.salesmanWiseProfitAnalysisForm.controls.templateName.setValue(null)
     }
   }
+
+  customizeSummaryContent = (data: any) => {
+    return this.commonService.decimalPoints(data, 3);
+  };
 
   selectedData(data: any) {
     console.log(data)
@@ -125,12 +123,12 @@ export class TimeWiseSalesAnalysisComponent implements OnInit {
     this.branchDivisionControlsTooltip = content +'\n'+content2 +'\n'+ content3 +'\n'+ content4
 
     this.formattedBranchDivisionData = branchDivisionData
-    this.timeWiseSalesAnalysisForm.controls.branch.setValue(this.formattedBranchDivisionData);
+    this.salesmanWiseProfitAnalysisForm.controls.branch.setValue(this.formattedBranchDivisionData);
   }
 
   saveTemplate(){
     this.popupVisible = true;
-    console.log(this.timeWiseSalesAnalysisForm.controls.templateName.value)
+    console.log(this.salesmanWiseProfitAnalysisForm.controls.templateName.value)
   }
   saveTemplate_DB(){
 
@@ -144,6 +142,8 @@ export class TimeWiseSalesAnalysisComponent implements OnInit {
 
   }
 
+
+
   prefillScreenValues(){
     if ( Object.keys(this.content).length > 0) {
       //  this.templateNameHasValue = !!(this.content?.TEMPLATE_NAME);
@@ -151,7 +151,7 @@ export class TimeWiseSalesAnalysisComponent implements OnInit {
     else{
       const userBranch = localStorage.getItem('userbranch');
       const formattedUserBranch = userBranch ? `${userBranch}#` : null;
-      this.timeWiseSalesAnalysisForm.controls.branch.setValue(formattedUserBranch);
+      this.salesmanWiseProfitAnalysisForm.controls.branch.setValue(formattedUserBranch);
       this.fetchedBranchDataParam = formattedUserBranch;
       this.fetchedBranchData= this.fetchedBranchDataParam?.split("#")
    

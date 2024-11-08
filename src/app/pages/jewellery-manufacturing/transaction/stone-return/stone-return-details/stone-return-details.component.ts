@@ -62,16 +62,34 @@ export class StoneReturnDetailsComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
+  // subJobNoCodeData: MasterSearchModel = {
+  //   PAGENO: 1,
+  //   RECORDS: 10,
+  //   LOOKUPID: 258,
+  //   SEARCH_FIELD: 'UNQ_JOB_ID',
+  //   SEARCH_HEADING: 'Sub Job Search',
+  //   SEARCH_VALUE: '',
+  //   WHERECONDITION: `BRANCH_CODE='${this.comService.branchCode}' AND ISNULL(PROD_REF,0)=0`,
+  //   VIEW_INPUT: true,
+  //   VIEW_TABLE: true,
+  // }
   subJobNoCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 258,
+    LOOKUPID: 275,
     SEARCH_FIELD: 'UNQ_JOB_ID',
     SEARCH_HEADING: 'Sub Job Search',
     SEARCH_VALUE: '',
-    WHERECONDITION: `BRANCH_CODE='${this.comService.branchCode}' AND ISNULL(PROD_REF,0)=0`,
+    WHERECONDITION: ` ISNULL(PROD_REF,0)=0 and Branch_code = '${this.comService.branchCode}'`,
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true
+  }
+  setSubJobCondition() {
+    let form = this.stonereturndetailsFrom.value;
+    this.subJobNoCodeData.WHERECONDITION = `isnull(WAX_STATUS,'') <> 'I' and Branch_code = '${this.comService.branchCode}'`
+    this.subJobNoCodeData.WHERECONDITION += `and job_number='${this.comService.nullToString(form.jobNumber)}'`
   }
   processCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -297,11 +315,11 @@ export class StoneReturnDetailsComponent implements OnInit {
     )
   }
   setProcessCodeWhereCondition() {
-    let WHERECONDITION = `@strProcessCode='${this.stonereturndetailsFrom.value.process}',`
-    WHERECONDITION += `@strSubJobNumber='${this.stonereturndetailsFrom.value.subjobno}',`
-    WHERECONDITION += `@strCurrentUser='${this.comService.userName}',`
-    WHERECONDITION += `@strBranchCode='${this.comService.branchCode}'`,
-      this.processCodeData.WHERECONDITION = WHERECONDITION
+    this.processCodeData. WHERECONDITION = `@strProcessCode='${this.stonereturndetailsFrom.value.process}',`
+    this.processCodeData.WHERECONDITION += `@strSubJobNumber='${this.stonereturndetailsFrom.value.subjobno}',`
+    this.processCodeData.WHERECONDITION += `@strCurrentUser='${this.comService.userName}',`
+    this.processCodeData.WHERECONDITION += `@strBranchCode='${this.comService.branchCode}'`
+      // this.processCodeData.WHERECONDITION = WHERECONDITION
   }
   setWorkerCodeWhereCondition() {
     let WHERECONDITION = `@strWorkerCode='${this.stonereturndetailsFrom.value.worker}',`
@@ -513,6 +531,12 @@ export class StoneReturnDetailsComponent implements OnInit {
   jobNumberValidate(event: any) {
     this.showOverleyPanel(event, 'jobNumber')
     if (event.target.value == '') return
+    
+    this.subJobNoCodeData.WHERECONDITION = `
+    Job_Number = '${this.stonereturndetailsFrom.controls.jobNumber.value}'
+    and Branch_code = '${this.comService.branchCode}'
+    AND isnull(WAX_STATUS, '') <> 'I'
+  `;
     let postData = {
       "SPID": "028",
       "parameter": {
@@ -536,7 +560,7 @@ export class StoneReturnDetailsComponent implements OnInit {
             this.stonereturndetailsFrom.controls.subjobDesc.setValue(data[0].JOB_DESCRIPTION)
             this.stonereturndetailsFrom.controls.designcode.setValue(data[0].DESIGN_CODE)
             this.stonereturndetailsFrom.controls.JOB_DATE.setValue(data[0].JOB_DATE)
-
+            this.setSubJobCondition()
             this.subJobNumberValidate()
           } else {
             this.comService.toastErrorByMsgId('MSG1531')
@@ -563,7 +587,7 @@ export class StoneReturnDetailsComponent implements OnInit {
       "parameter": {
         strBranch_Code: this.comService.nullToString(form.BRANCH_CODE),
         strJob_Number: this.comService.nullToString(form.jobNumber),
-        strUnq_Job_Id: this.comService.nullToString(form.UNQ_JOB_ID),
+        strUnq_Job_Id: this.comService.nullToString(form.subjobno),
         strMetalStone: this.comService.nullToString(form.METAL_STONE),
         strProcess_Code: this.comService.nullToString(form.process),
         strWorker_Code: this.comService.nullToString(form.worker),

@@ -2,12 +2,12 @@
     <!-- header section starts -->
     <div class="card-content border-bottom d-flex justify-content-between">
         <h5 class="pos-modaltitle" id="modal-dia-metal">Worker Master</h5>
-        <button type="button" class="btn btn-close close-btn" (click)="closed()">
+        <button type="button" class="btn btn-close close-btn" (click)="close()">
             <i class="feather icon-x close-icon"></i>
         </button>
     </div>
     <!-- modal header component -->
-    <modal-header (saveClick)="formSubmit()" (cancelClick)="closed()" [isloading]="isloading"
+    <modal-header (saveClick)="formSubmit()" (cancelClick)="close()" [isloading]="isloading"
         (deleteClick)="deleteWorkerMaster()" [isViewDelete]="editMode" [isViewSave]="!viewMode"
         [disableSaveBtn]="isDisableSaveBtn" [isViewCancel]="!viewMode" [isViewMore]="!viewMode"></modal-header>
     <!-- content section -->
@@ -22,9 +22,8 @@
                             <mat-form-field appearance="outline">
                                 <input type="text" matInput placeholder="WORKER CODE" maxlength="6" id="WorkerCode"
                                     formControlName="WorkerCode" id="code" [readonly]="viewMode || editMode" #code
-                                    (input)="sanitizeInput($event)"
-                                    UpperCaseDirective (focusout)="checkWorkerExists($event)" (keyup)="codeEnabled()"
-                                    autocomplete="off" />
+                                    appAlphabetOnly UpperCaseDirective
+                                    (focusout)="checkWorkerExists($event)" (keyup)="codeEnabled()" autocomplete="off" />
                                 <!-- <mat-error
                                     *ngIf="workerMasterForm.controls.WorkerCode.touched 
                                         && workerMasterForm.controls.WorkerCode.hasError('required')">
@@ -133,11 +132,18 @@
 
                         <span class="col-sm-3 col-form-label" id="ID005">Password (optional) :</span>
                         <div class="col-sm-2">
+                            <!-- <mat-form-field style="width: 100px" appearance="outline">
+                                <input type="password" matInput autocomplete="Password" maxlength="25"
+                                    [readonly]="viewMode || codeEnable" formControlName="Password"
+                                    (keypress)="checkCapsOn($event)" />
+                            </mat-form-field> -->
                             <mat-form-field style="width: 100px" appearance="outline">
                                 <input type="password" matInput autocomplete="Password" maxlength="25"
                                     [readonly]="viewMode || codeEnable" formControlName="Password"
                                     (keypress)="checkCapsOn($event)" />
                             </mat-form-field>
+                            <p id="capsWarning" *ngIf="isCapsLockOn" style="color: red;">Caps Lock is ON!</p>
+
                         </div>
 
                     </div>

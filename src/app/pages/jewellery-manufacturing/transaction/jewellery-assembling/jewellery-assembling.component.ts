@@ -638,6 +638,10 @@ export class JewelleryAssemblingComponent implements OnInit {
       });
     }
     close(data?: any) {
+      if (data){
+        this.activeModal.close(data);
+        return
+      }
       if (this.content && this.content.FLAG == 'VIEW'){
         this.activeModal.close(data);
         return

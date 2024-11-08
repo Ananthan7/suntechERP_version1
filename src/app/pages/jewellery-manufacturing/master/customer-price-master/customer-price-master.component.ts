@@ -279,12 +279,17 @@ export class CustomerPriceMasterComponent implements OnInit {
     }
   }
   
-  close(data?: any) {
-    //TODO reset forms and data before closing
-    this.activeModal.close(data);
-  }
+  // close(data?: any) {
+  //   //TODO reset forms and data before closing
+  //   this.activeModal.close(data);
+  // }
 
-  closed(data?: any) {
+  close(data?: any) {
+    if (data){
+      this.viewMode = true;
+      this.activeModal.close(data);
+      return
+    }
     if (this.content && this.content.FLAG == 'VIEW'){
       this.activeModal.close(data);
       return
@@ -336,6 +341,10 @@ export class CustomerPriceMasterComponent implements OnInit {
       value: 'MAKING'
     },
     {
+      name: 'SETTING',
+      value: 'SETTING'
+    },
+    {
       name: 'POLISH',
       value: 'POLISH'
     },
@@ -353,16 +362,16 @@ export class CustomerPriceMasterComponent implements OnInit {
     },
     {
       name: 'RHODIUM',
-      value: 'RHODIUM'
+      value: 'RHOODIUM'
     },
-    {
-      name: 'STAMPING',
-      value: 'STAMPING'
-    },
-    {
-      name: 'WASTAGE',
-      value: 'WASTAGE'
-    },
+    // {
+    //   name: 'STAMPING',
+    //   value: 'STAMPING'
+    // },
+    // {
+    //   name: 'WASTAGE',
+    //   value: 'WASTAGE'
+    // },
   ];
 
   formatNumber(): void {

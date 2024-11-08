@@ -30,6 +30,7 @@ import { DailyClosingSummaryWatchComponent } from './daily-closing-summary-watch
 import { PointSalesSMJComponent } from './point-sales-smj/point-sales-smj.component';
 import { POSSales_Stock_ComparisonComponent } from './pos-sales-stock-comparison/pos-sales-stock-comparison.component';
 import { TimeWiseSalesAnalysisComponent } from './time-wise-sales-analysis/time-wise-sales-analysis.component';
+import { SalesmanWiseProfitAnalysisComponent } from './salesman-wise-profit-analysis/salesman-wise-profit-analysis.component';
 
 
 @NgModule({
@@ -58,7 +59,8 @@ import { TimeWiseSalesAnalysisComponent } from './time-wise-sales-analysis/time-
     DailyClosingSummaryWatchComponent,
     PointSalesSMJComponent,
     POSSales_Stock_ComparisonComponent,
-    TimeWiseSalesAnalysisComponent
+    TimeWiseSalesAnalysisComponent,
+    SalesmanWiseProfitAnalysisComponent
   ],
   imports: [
     CommonModule,

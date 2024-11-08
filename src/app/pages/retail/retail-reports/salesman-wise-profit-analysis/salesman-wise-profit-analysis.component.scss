@@ -20,47 +20,6 @@
     }
 }
 
-//legend
-.custom-fieldset {
-    border: 1px solid #333;
-    padding: 3px;
-    position: relative;
-    border-radius: 5px;
-    top: 10px;
-    width: 30%;
-} 
-.custom-legend {
-    position: absolute;
-    top: -15px;
-    background: white;
-    width: 33%;
-    font-size: large;
-}
-
-
-.chkbox_Fieldset2{
-    position: absolute; 
-    left: 180px;
-}
-
-.container_block_columns{
-    flex: 0 0 auto;
-    width: 15%;
-}
-.container_block_values{
-    flex: 0 0 auto;
-    width: 7.5%;
-}
-
-// reset icon class
-.icon-style {
-    font-size: 24px;
-}
-.icon-style:hover {
-    border: 2px solid #5b5c5e;
-    border-radius: 5px;
-}
-
 //grid header
 .header_title{
     background-color: #ddd;

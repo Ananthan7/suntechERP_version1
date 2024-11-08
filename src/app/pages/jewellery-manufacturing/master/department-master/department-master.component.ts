@@ -9,6 +9,7 @@ import Swal from 'sweetalert2';
 })
 export class DepartmentMasterComponent implements OnInit {
   @Input() content!: any;
+  viewMode= false
   constructor(
     private activeModal: NgbActiveModal,
   ){ }
@@ -17,12 +18,17 @@ export class DepartmentMasterComponent implements OnInit {
   }
 
   
-close(data?: any) {
-    //TODO reset forms and data before closing
-    this.activeModal.close(data);
-  }
+// close(data?: any) {
+//     //TODO reset forms and data before closing
+//     this.activeModal.close(data);
+//   }
 
-closed(data?: any) {
+close(data?: any) {
+  if (data){
+    this.viewMode = true;
+    this.activeModal.close(data);
+    return
+  }
     if (this.content && this.content.FLAG == 'VIEW'){
       this.activeModal.close(data);
       return

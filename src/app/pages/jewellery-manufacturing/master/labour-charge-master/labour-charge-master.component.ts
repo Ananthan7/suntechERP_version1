@@ -1051,12 +1051,17 @@ export class LabourChargeMasterComponent implements OnInit {
   // }
 
 
-  close(data?: any) {
+  closed(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
 
-  closed(data?: any) {
+  close(data?: any) {
+    if (data){
+      this.viewMode = true;
+      this.activeModal.close(data);
+      return
+    }
     if (this.content && this.content.FLAG == 'VIEW'){
       this.activeModal.close(data);
       return

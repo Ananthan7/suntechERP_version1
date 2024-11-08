@@ -1,1 +1,162 @@
-<p>loyalty-card-master works!</p>
+<div>
+    <!-- header section starts -->
+    <div class="card-content border-bottom d-flex justify-content-between p-2">
+        <h5 class="pos-modaltitle" id="modal-dia-metal">Loyalty Card Master</h5>
+        <button type="button" class="btn btn-close close-btn" (click)="close()">
+            <i class="feather icon-x close-icon"></i>
+        </button>
+    </div>
+    <!-- modal header component -->
+    <modal-header (cancelClick)="close()" (saveClick)="formSubmit()"></modal-header>
+    <!-- content section -->
+    <div class="p-4 ">
+        <form [formGroup]="loyaltycardform">
+            <div class="row mt-2">
+                <div class="col-md-10">
+
+                    <div class="row mt-2">
+                        <div class="col-md-10">
+                            <div class="row">
+                                <label for="prefixcode" class="col-sm-2 col-form-label">Code:</label>
+                                <div class="col-md-2 p-0 ms-2">
+                                    <mat-form-field style="width: 100%;" appearance="outline">
+                                        <input type="text" id="code" matInput class="p-0" />
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-6 p-0">
+                                    <mat-form-field style="width: 100%;" appearance="outline">
+                                        <input type="text" id="codedesc" matInput formControlName="codedesc"
+                                            class="p-0" />
+                                    </mat-form-field>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="row mt-2">
+                                        <label for="inputPassword" id="ID001" class="col-sm-4 col-form-label">
+                                            Points From :</label>
+                                        <div class="col-sm-6">
+                                            <mat-form-field style="width: 100%" appearance="outline">
+                                                <input type="text" #codeInput matInput formControlName="pointsfrom"
+                                                    UpperCaseDirective autocomplete="off" />
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="row mt-2">
+                                        <label for="inputPassword" id="ID001" class="col-sm-6 col-form-label">
+                                            Points To :</label>
+                                        <div class="col-sm-6">
+                                            <mat-form-field style="width: 100%" appearance="outline">
+                                                <input type="text" #codeInput matInput formControlName="pointsto"
+                                                    UpperCaseDirective autocomplete="off" />
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="row mt-2">
+                                        <label for="inputPassword" id="ID001" class="col-sm-4 col-form-label">
+                                            Metal Discount % : </label>
+                                        <div class="col-sm-6">
+                                            <mat-form-field style="width: 100%" appearance="outline">
+                                                <input type="text" #codeInput matInput formControlName="metaldiscount"
+                                                    UpperCaseDirective autocomplete="off" />
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="row mt-2">
+                                        <label for="inputPassword" id="ID001" class="col-sm-6 col-form-label">
+                                            Diamond Discount % :</label>
+                                        <div class="col-sm-6">
+                                            <mat-form-field style="width: 100%" appearance="outline">
+                                                <input type="text" #codeInput matInput formControlName="diamonddiscount"
+                                                    UpperCaseDirective autocomplete="off" />
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="row mt-2">
+                                        <label for="inputPassword" id="ID001" class="col-sm-4 col-form-label">
+                                            Points Exp. Days : </label>
+                                        <div class="col-sm-6">
+                                            <mat-form-field style="width: 100%" appearance="outline">
+                                                <input type="text" #codeInput matInput formControlName="pointsexpdays"
+                                                    UpperCaseDirective autocomplete="off" />
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="row mt-2">
+                                        <div class="col-md-6">
+                                            <mat-checkbox id="ID022" formControlName="sendmessage"
+                                                class="example-margin">Send Message
+                                            </mat-checkbox>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <mat-checkbox id="ID022" formControlName="sendemail"
+                                                class="example-margin">Send Email
+                                            </mat-checkbox>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="row mt-2">
+                                        <label for="inputPassword" id="ID001" class="col-sm-4 col-form-label">
+                                            Poins Multiply Fact : </label>
+                                        <div class="col-sm-6">
+                                            <mat-form-field style="width: 100%" appearance="outline">
+                                                <input type="text" #codeInput matInput formControlName="pointsexpdays"
+                                                    UpperCaseDirective autocomplete="off" />
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mt-3">
+                                <dx-data-grid id="gridContainer" [dataSource]="maindetails" [showBorders]="true"
+                                    [showColumnLines]="true" [showRowLines]="true" [allowColumnResizing]="true"
+                                    keyExpr="SRNO">
+
+                                    <dxi-column dataField="CODE" caption="Code">
+                                    </dxi-column>
+
+                                    <dxi-column dataField="DESCRIPTION" caption="Description" format="dd/MM/yyyy">
+                                    </dxi-column>
+
+                                    <dxi-column dataField="POINTS_FROM" caption="Points From">
+                                    </dxi-column>
+
+                                    <dxi-column dataField="POINTS_TO" caption="Points To">
+                                    </dxi-column>
+
+                                </dx-data-grid>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-loyalty-card-master',
@@ -6,10 +8,29 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./loyalty-card-master.component.scss']
 })
 export class LoyaltyCardMasterComponent implements OnInit {
+  maindetails:any=[];
+  constructor(
+    private activeModal: NgbActiveModal,
+    private formBuilder: FormBuilder,
+  ) { }
 
-  constructor() { }
+  loyaltycardform: FormGroup = this.formBuilder.group({
+    code:[''],
+  })
 
   ngOnInit(): void {
+  }
+
+  close(data?: any) {
+    this.activeModal.close(data);
+  }
+
+  formSubmit(){
+    
+  }
+
+  BranchDataSelected(e:any){
+
   }
 
 }

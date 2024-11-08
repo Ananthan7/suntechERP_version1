@@ -25,6 +25,7 @@ import { DailyClosingSummaryWatchComponent } from './daily-closing-summary-watch
 import { PointSalesSMJComponent } from './point-sales-smj/point-sales-smj.component';
 import { POSSales_Stock_ComparisonComponent } from './pos-sales-stock-comparison/pos-sales-stock-comparison.component';
 import { TimeWiseSalesAnalysisComponent } from './time-wise-sales-analysis/time-wise-sales-analysis.component';
+import { SalesmanWiseProfitAnalysisComponent } from './salesman-wise-profit-analysis/salesman-wise-profit-analysis.component';
 @Component({
   selector: 'app-retail-reports',
   templateUrl: './retail-reports.component.html',
@@ -111,6 +112,7 @@ export class RetailReportsComponent implements OnInit {
       'PointSalesSMJComponent': PointSalesSMJComponent,
       'POSSales_Stock_ComparisonComponent': POSSales_Stock_ComparisonComponent,
       'TimeWiseSalesAnalysisComponent': TimeWiseSalesAnalysisComponent,
+      'SalesmanWiseProfitAnalysisComponent': SalesmanWiseProfitAnalysisComponent,
       // Add components and update in operationals > menu updation grid form component name
     }
     if (this.componentDbList[this.componentName]) {

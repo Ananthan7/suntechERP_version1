@@ -1,7 +1,7 @@
 <!-- header section starts -->
 <div class="card-content border-bottom d-flex justify-content-between p-2">
     <h5 class="pos-modaltitle" id="modal-dia-metal">Approval Master</h5>
-    <button type="button" class="btn btn-close close-btn" (click)="closed()">
+    <button type="button" class="btn btn-close close-btn" (click)="close()">
         <i class="feather icon-x close-icon"></i>
     </button>
 </div>
@@ -11,7 +11,7 @@
     (cancelClick)="close()" (deleteClick)="deleteRecord()"></modal-header> -->
 
 
-<modal-header [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode" (cancelClick)="closed()"
+<modal-header [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode"  [isViewAttachment]="!viewMode" (cancelClick)="close()"
     (saveClick)="formSubmit()" (deleteClick)="deleteRecord()" [isViewDelete]="!viewMode && editableMode"></modal-header>
 <!-- content section -->
 <div class="row">
