@@ -1016,6 +1016,8 @@ export class ProcessMasterComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
 
+  
+
 
   postionCodeValidate(event?: any) {
 
@@ -1226,7 +1228,8 @@ export class ProcessMasterComponent implements OnInit {
       return;
     }
 
-    this.onCheckAccodeSelected(event, LOOKUPDATA, formname);
+    // this.onCheckAccodeSelected(event, LOOKUPDATA, formname);
+    this.accodeValidateSPOne()
 
     if (this.isSameAccountCodeSelected(event.target.value, formname)) {
       this.processMasterForm.controls[formname].setValue('');
@@ -1309,6 +1312,34 @@ export class ProcessMasterComponent implements OnInit {
         }
       }, err => {
         this.commonService.toastErrorByMsgId('MSG2272'); // Error occurred, please try again
+      });
+
+    this.subscriptions.push(Sub);
+  }
+
+  accodeValidateSPOne(){
+
+    let postData = {
+      "SPID": "0176",
+      "parameter": {
+        "strType": this.processMasterForm.value.WIPaccount,
+        "Adjust_AC":"",
+        "Wip_AC": "",
+        "Process_Code":"",
+        "Loss_AC":"",
+        "RecAccode":"",
+        "Gain_AC":"",
+      }
+    };
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        if (result.status == "Success") {
+          const responseData = result.dynamicData[0][0];
+          console.log(responseData);
+          
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG81451');
       });
 
     this.subscriptions.push(Sub);
