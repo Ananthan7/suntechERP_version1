@@ -4,12 +4,13 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 
 @Component({
-  selector: 'app-salesman-wise-profit-analysis',
-  templateUrl: './salesman-wise-profit-analysis.component.html',
-  styleUrls: ['./salesman-wise-profit-analysis.component.scss']
+  selector: 'app-possummary',
+  templateUrl: './possummary.component.html',
+  styleUrls: ['./possummary.component.scss']
 })
-export class SalesmanWiseProfitAnalysisComponent implements OnInit {
-  salesmanWiseProfitAnalysisForm: FormGroup = this.formBuilder.group({
+export class POSSummaryComponent implements OnInit {
+  @Input() content!: any; 
+  POS_SummaryForm: FormGroup = this.formBuilder.group({
     branch: [''],
     fromdate: [''],
     todate: [''],
@@ -19,22 +20,18 @@ export class SalesmanWiseProfitAnalysisComponent implements OnInit {
     
 
   });
-  @Input() content!: any; 
   fetchedBranchData: any[] =[];
   fetchedBranchDataParam: any= [];
   dateToPass: { fromDate: string; toDate: string } = { fromDate: '', toDate: '' };
   branchDivisionControlsTooltip: any;
   formattedBranchDivisionData: any;
-  salesmanWiseProfitArr: any = [];
-  popupVisible: boolean = false;
-  templateNameHasValue: boolean= false;
 
-  
+
+
   constructor(private activeModal: NgbActiveModal, private formBuilder: FormBuilder,
     private commonService: CommonServiceService) { }
 
   ngOnInit(): void {
-    this.prefillScreenValues();
   }
 
   close(data?: any) {
@@ -52,30 +49,12 @@ export class SalesmanWiseProfitAnalysisComponent implements OnInit {
 
   setDateValue(event: any){
     if(event.FromDate){
-      this.salesmanWiseProfitAnalysisForm.controls.fromdate.setValue(event.FromDate);
+      this.POS_SummaryForm.controls.fromdate.setValue(event.FromDate);
     }
     else if(event.ToDate){
-      this.salesmanWiseProfitAnalysisForm.controls.todate.setValue(event.ToDate);
+      this.POS_SummaryForm.controls.todate.setValue(event.ToDate);
     }
   }
-
-  popupClosed(){
-    if (this.content && Object.keys(this.content).length > 0) {
-      console.log(this.content)
-      let ParcedPreFetchData = JSON.parse(this.content?.CONTROL_LIST_JSON)
-      this.salesmanWiseProfitAnalysisForm.controls.templateName.setValue(ParcedPreFetchData.CONTROL_HEADER.TEMPLATENAME)
-      this.popupVisible = false;
-    }
-    else{
-      this.popupVisible = false;
-      this.salesmanWiseProfitAnalysisForm.controls.templateName.setValue(null)
-    }
-  }
-
-  customizeSummaryContent = (data: any) => {
-    // decimal point hanlder from commonService
-    return this.commonService.decimalQuantityFormat(data.value, 'THREE');
-  };
 
   selectedData(data: any) {
     console.log(data)
@@ -124,23 +103,7 @@ export class SalesmanWiseProfitAnalysisComponent implements OnInit {
     this.branchDivisionControlsTooltip = content +'\n'+content2 +'\n'+ content3 +'\n'+ content4
 
     this.formattedBranchDivisionData = branchDivisionData
-    this.salesmanWiseProfitAnalysisForm.controls.branch.setValue(this.formattedBranchDivisionData);
-  }
-
-  saveTemplate(){
-    this.popupVisible = true;
-    console.log(this.salesmanWiseProfitAnalysisForm.controls.templateName.value)
-  }
-  saveTemplate_DB(){
-
-  }
-
-  previewClick(){
-
-  }
-
-  printBtnClick(){
-
+    this.POS_SummaryForm.controls.branch.setValue(this.formattedBranchDivisionData);
   }
 
 
@@ -152,7 +115,7 @@ export class SalesmanWiseProfitAnalysisComponent implements OnInit {
     else{
       const userBranch = localStorage.getItem('userbranch');
       const formattedUserBranch = userBranch ? `${userBranch}#` : null;
-      this.salesmanWiseProfitAnalysisForm.controls.branch.setValue(formattedUserBranch);
+      this.POS_SummaryForm.controls.branch.setValue(formattedUserBranch);
       this.fetchedBranchDataParam = formattedUserBranch;
       this.fetchedBranchData= this.fetchedBranchDataParam?.split("#")
    

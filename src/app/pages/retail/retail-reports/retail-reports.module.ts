@@ -31,6 +31,7 @@ import { PointSalesSMJComponent } from './point-sales-smj/point-sales-smj.compon
 import { POSSales_Stock_ComparisonComponent } from './pos-sales-stock-comparison/pos-sales-stock-comparison.component';
 import { TimeWiseSalesAnalysisComponent } from './time-wise-sales-analysis/time-wise-sales-analysis.component';
 import { SalesmanWiseProfitAnalysisComponent } from './salesman-wise-profit-analysis/salesman-wise-profit-analysis.component';
+import { POSSummaryComponent } from './possummary/possummary.component';
 
 
 @NgModule({
@@ -60,7 +61,8 @@ import { SalesmanWiseProfitAnalysisComponent } from './salesman-wise-profit-anal
     PointSalesSMJComponent,
     POSSales_Stock_ComparisonComponent,
     TimeWiseSalesAnalysisComponent,
-    SalesmanWiseProfitAnalysisComponent
+    SalesmanWiseProfitAnalysisComponent,
+    POSSummaryComponent
   ],
   imports: [
     CommonModule,

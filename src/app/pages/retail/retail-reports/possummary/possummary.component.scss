@@ -1,0 +1,21 @@
+.branchDivisionelectr{
+    position: absolute;
+}
+::ng-deep .mat-tooltip.custom-tooltip {
+    background-color: #151414;
+    color: #fff;
+    font-size: 14px;
+    border-radius: 4px;
+    // padding: 8px;
+    font-family: Arial, sans-serif;
+    white-space: pre-wrap;
+    word-break: break-all;
+    line-height: 1.5;
+}
+
+::ng-deep {
+    .cdk-overlay-container {
+        position: fixed;
+        z-index: 1070 !important;
+    }
+}

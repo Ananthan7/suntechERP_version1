@@ -1,0 +1,37 @@
+<!-- header section -->
+<div class="card-content border-bottom d-flex justify-content-between p-2">
+    <h5 class="pos-modaltitle" id="modal-dia-metal">POS Summary</h5>
+    <button type="button" class="btn btn-close close-btn" (click)="close()">
+        <i class="feather icon-x close-icon"></i>
+    </button>
+</div>
+
+<!-- modal header component -->
+<modal-header (cancelClick)="close()" [isViewDelete]="false" 
+[isViewMore]="false" [isViewSave]="false" [isViewCancel]="false"></modal-header>
+
+<div class="row">
+    <form [formGroup]="POS_SummaryForm">
+        <div class="container-fluid pt-3">
+            <div class="row mb-1">
+                <label for="inputPassword"  class="col-sm-1 col-form-label"  id="ID001"> Branch</label>
+                <div class="col-md-2">
+                    <mat-form-field appearance="outline" style="width: -webkit-fill-available">
+                    <input matInput="text" name="branch" autocomplete="off" formControlName="branch"/>
+                    <app-branch-division [fetchData]="fetchedBranchData" (newRowClick)="selectedData($event)"
+                    class="branchDivisionelectr" [matTooltip]="branchDivisionControlsTooltip"
+                    matTooltipClass="custom-tooltip"  matTooltipPosition="above"></app-branch-division>
+                    </mat-form-field>
+                </div>
+    
+                <div class="col-md-7">
+                    <app-date (selectedDate)="setDateValue($event)" [dateValue]="dateToPass"></app-date>
+                </div> 
+            </div>
+
+            <div class="row mb-1">
+                
+            </div>
+        </div>
+    </form>
+</div>

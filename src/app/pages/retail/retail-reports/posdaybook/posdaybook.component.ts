@@ -423,7 +423,7 @@ export class POSDaybookComponent implements OnInit {
         this.RegisterGridData = result.dynamicData[0];
         this.RegisterGridData.forEach((item: any) => {
           for (const key in item) {
-            if (typeof item[key] === 'number' && key !== 'mid') {
+            if (typeof item[key] === 'number' && key !== 'mid' && key !== 'vocno') {
               item[key] = this.customizeText(item[key], 2);
             }
           }
@@ -435,7 +435,7 @@ export class POSDaybookComponent implements OnInit {
           { dataField: 'vocno', caption: 'Voucher No' },
           { dataField: 'vocdate', caption: 'Voucher Date', dataType: 'date' },
           { dataField: 'sman', caption: 'Salesman' },
-          { dataField: 'GrossAmt', caption: 'Gross Amount' },
+          { dataField: 'GrossAmt', caption: 'Gross Amount', alignment: 'right' },
           { dataField: 'CC_CommissionAmt', caption: 'Commission Amount' },
           { dataField: 'invamt', caption: 'Invoice Amount' },
           { dataField: 'sretamt', caption: 'sretamt' },
