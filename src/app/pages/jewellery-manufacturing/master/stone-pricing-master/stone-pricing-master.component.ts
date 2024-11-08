@@ -526,8 +526,8 @@ export class StonePricingMasterComponent implements OnInit {
     return {
       "MID": this.content?.MID || 0,
       "SRNO": 0,
-      "CODE": this.stonePrizeMasterForm.value.price_code || "",
-      "DESCRIPTION": this.stonePrizeMasterForm.value.price_code + " " + this.stonePrizeMasterForm.value.shape + this.stonePrizeMasterForm.value.color,
+      "CODE": this.stonePrizeMasterForm.value.price_code.toUpperCase() || "",
+      "DESCRIPTION": this.stonePrizeMasterForm.value.price_code.toUpperCase() + " " + this.stonePrizeMasterForm.value.shape.toUpperCase() + this.stonePrizeMasterForm.value.color.toUpperCase(),
       "SHAPE": this.stonePrizeMasterForm.value.shape || "",
       "COLOR": this.stonePrizeMasterForm.value.color || "",
       "CLARITY": this.stonePrizeMasterForm.value.clarity || "",
