@@ -239,6 +239,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     startdate: [''],
     enddate: [''],
     STD_TIME: [''],
+    SETTED_FLAG: [false],
     TIME_TAKEN_HRS: [''],
     TIME_CONSUMED: [''],
     variance: [''],
@@ -436,6 +437,9 @@ export class ProcessTransferDetailsComponent implements OnInit {
         item.FRM_PCS = item.SETTED_PCS
         if (item.GROSS_WT > 0) {
           item.SRNO = index + 1
+          if(this.commonService.Null2BitValue(item.SETTED)==false){
+            this.processTransferdetailsForm.controls.SETTED_FLAG.setValue(false)
+          }
           // item.GROSS_WT = Math.abs(item.GROSS_WT)
           // item.PCS = Math.abs(item.PCS)
           // item.AMOUNTFC = Math.abs(item.AMOUNTFC)
@@ -449,6 +453,13 @@ export class ProcessTransferDetailsComponent implements OnInit {
       parentDetail = this.content[0]?.JOB_PROCESS_TRN_DETAIL_DJ// setting detail data
       PROCESS_FORMDETAILS = this.content[0]?.PROCESS_FORMDETAILS
       this.metalDetailData = this.content[0]?.TRN_STNMTL_GRID || [] // setting component grid data
+      if(this.metalDetailData.length>0){
+        this.metalDetailData.forEach((item:any)=>{
+          if(this.commonService.Null2BitValue(item.SETTED_FLAG)==false){
+            this.processTransferdetailsForm.controls.SETTED_FLAG.setValue(false)
+          }
+        })
+      }
       this.setFormDecimal('METAL_ScrapPCS', 0, 'METAL')
       this.setFormDecimal('METAL_ScrapGrWt', 0, 'METAL')
       this.setFormDecimal('METAL_ScrapStoneWt', 0, 'METAL')
