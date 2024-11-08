@@ -910,6 +910,7 @@ setLookupStockCodeWhereCondition() {
           return
         }
 
+
         // const matchedItem = data.find((item: any) => item.CODE.toUpperCase() === inputValue);
         // if (matchedItem) {
         //   this.diamondlabourMasterForm.controls[FORMNAME].setValue(matchedItem.CODE);

@@ -298,7 +298,7 @@ export class StoneReturnDetailsComponent implements OnInit {
       this.comService.emptyToZero(e.rate).toFixed(2)
     )
     this.stonereturndetailsFrom.controls.shape.setValue(e.shape)
-    // this.stonereturndetailsFrom.controls.amount.setValue(e.AmountLC)
+    this.stonereturndetailsFrom.controls.amount.setValue(e.AmountFC)
     // this.stonereturndetailsFrom.controls.pointerwt.setValue(e.Weight)
     this.stonereturndetailsFrom.controls.batchid.setValue(e.STOCK_CODE);
     this.stonereturndetailsFrom.controls.broken.setValue(e.STOCK_CODE)
@@ -361,7 +361,7 @@ export class StoneReturnDetailsComponent implements OnInit {
       "VOCDATE": this.comService.formatDate(new Date(form.VOCDATE)),
       "JOB_NUMBER": this.comService.nullToString(form.jobNumber),
       "JOB_DATE": this.comService.formatDate(new Date(form.JOB_DATE)),
-      "JOB_SO_NUMBER": this.comService.emptyToZero(form.subjobno),
+      "JOB_SO_NUMBER": this.comService.emptyToZero(form.JOB_SO_NUMBER),
       "UNQ_JOB_ID": this.comService.nullToString(form.jobNumber),
       "JOB_DESCRIPTION": form.jobDesc,
       "BRANCH_CODE": this.comService.nullToString(form.BRANCH_CODE),
@@ -376,8 +376,8 @@ export class StoneReturnDetailsComponent implements OnInit {
       "SIZE": this.comService.nullToString(form.size),
       "PCS": 0,
       "GROSS_WT": 0,
-      "CURRENCY_CODE": "",
-      "CURRENCY_RATE": 0,
+      "CURRENCY_CODE": this.comService.nullToString(form.CURRENCY_CODE),
+      "CURRENCY_RATE": this.comService.emptyToZero(form.CURRENCY_RATE),
       "RATEFC":this.comService.nullToString(form.unitrate),
       "RATELC":this.comService.nullToString(form.unitrate),
       "AMOUNTFC":this.comService.nullToString(form.amount),
@@ -531,7 +531,7 @@ export class StoneReturnDetailsComponent implements OnInit {
   jobNumberValidate(event: any) {
     this.showOverleyPanel(event, 'jobNumber')
     if (event.target.value == '') return
-    
+
     this.subJobNoCodeData.WHERECONDITION = `
     Job_Number = '${this.stonereturndetailsFrom.controls.jobNumber.value}'
     and Branch_code = '${this.comService.branchCode}'

@@ -8,7 +8,7 @@
 <!-- modal header component -->
 <modal-header (saveClick)="formSubmit('SAVE')" (cancelClick)="close()"
   (changeJobClick)="changeJobClicked()"
-  (continueClick)="formSubmit('CONTINUE')" [isViewContinue]="true"
+  (continueClick)="formSubmit('CONTINUE')" [isViewContinue]="true"  [isViewSave]="!viewMode"
   [isViewChangeJob]="true" [isViewDelete]="false"
   [isViewMore]="false"></modal-header>
 <div class="container-fluid pt-3">
