@@ -73,6 +73,7 @@ export class SalesmanWiseProfitAnalysisComponent implements OnInit {
   }
 
   customizeSummaryContent = (data: any) => {
+    // decimal point hanlder from commonService
     return this.commonService.decimalQuantityFormat(data.value, 'THREE');
   };
 
