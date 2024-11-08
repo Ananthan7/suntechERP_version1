@@ -12,21 +12,9 @@ export class SetRefMasterRealComponent implements OnInit {
 
   columns = [
     { dataField: "VOCNO", caption: "Sr No" },
-    { dataField: "STOCK_CODE", caption: "Division" },
-    { dataField: "REPAIRBAGNO", caption: "Item Code" },
-    { dataField: "PARTYNAME", caption: "Description" },
-    { dataField: "MOBILE", caption: "Design" },
-    { dataField: "DELIVERYDATE", caption: "Category" },
-    { dataField: "STATUS", caption: "Sub Category" },
-    { dataField: "STATUS", caption: "Type" },
-    { dataField: "STATUS", caption: "Brand" },
-    { dataField: "STATUS", caption: "Flouresence" },
-    { dataField: "STATUS", caption: "Range" },
-    { dataField: "STATUS", caption: "Color" },
-    { dataField: "STATUS", caption: "Style" },
-    { dataField: "STATUS", caption: "Time" },
-    { dataField: "STATUS", caption: "Vendor Ref" },
-    { dataField: "STATUS", caption: "Vendor" },
+    { dataField: "STOCK_CODE", caption: "Stock Code" },
+    { dataField: "REPAIRBAGNO", caption: "Description" },
+    { dataField: "PARTYNAME", caption: "Select" },
   ];
 
   constructor(
@@ -47,4 +35,7 @@ export class SetRefMasterRealComponent implements OnInit {
   deleteMaster() {}
 
   onSelectionChanged(data: any) {}
+
+  openRepairdetails() {}
+  removedata() {}
 }

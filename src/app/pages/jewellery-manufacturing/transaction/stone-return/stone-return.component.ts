@@ -108,6 +108,7 @@ export class StoneReturnComponent implements OnInit {
   selectedIndexes: any = [];
   viewMode: boolean = false;
   isloading: boolean = false;
+  isSaved: boolean = false;
   isDisableSaveBtn: boolean = false;
   editMode: boolean = false;
   dataToDetailScreen: any;
@@ -199,6 +200,7 @@ export class StoneReturnComponent implements OnInit {
       if (this.content.FLAG == 'VIEW' || this.content.FLAG == 'DELETE') {
         this.viewMode = true;
         this.LOCKVOUCHERNO = true;
+         this.isSaved = true;
       }
       if (this.content.FLAG == 'EDIT') {
         this.editMode = true;
@@ -348,9 +350,9 @@ export class StoneReturnComponent implements OnInit {
             this.commonService.toastErrorByMsgId('MSG1200')//	Detail record not found
           }
           this.stonereturnFrom.controls.basecurrency.setValue(data.BASE_CURRENCY)
-          this.stonereturnFrom.controls.basecurrencyrate.setValue(data.BASE_CURR_RATE)
+          this.stonereturnFrom.controls.basecurrencyrate.setValue(this.commonService.decimalQuantityFormat(data.BASE_CURR_RATE,'RATE'))
           this.stonereturnFrom.controls.currency.setValue(data.CURRENCY_CODE)
-          this.stonereturnFrom.controls.currencyrate.setValue(data.CURRENCY_RATE)
+          this.stonereturnFrom.controls.currencyrate.setValue(this.commonService.decimalQuantityFormat(data.CURRENCY_RATE,'RATE'))
           this.stonereturnFrom.controls.worker.setValue(data.WORKER)
           this.stonereturnFrom.controls.workername.setValue(data.WORKER_NAME)
           this.stonereturnFrom.controls.enterdBy.setValue(data.HTUSERNAME)
@@ -572,9 +574,9 @@ export class StoneReturnComponent implements OnInit {
       this.commonService.toastErrorByMsgId('MSG1173')// currency code CANNOT BE EMPTY
       return true
     }
-    else if (this.commonService.nullToString(form.currencyrate) == '') {
-      this.commonService.toastErrorByMsgId('MSG1177')//"currencyrate cannot be empty"
-      return true
+    if (this.stoneReturnData.length <= 0) {
+      this.commonService.toastErrorByMsgId('MSG1262'); // Minimum one row should be entered in grid
+      return true;
     }
     return false;
   }

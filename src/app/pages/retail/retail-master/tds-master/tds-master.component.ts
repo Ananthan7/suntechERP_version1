@@ -23,11 +23,12 @@ export class TdsMasterComponent implements OnInit {
   }
 
   tdsform: FormGroup = this.formBuilder.group({
-    branchcode:[''],
-    datefrom:[''],
-    finyear:[''],
-    dateto:[''],
-    narration:[''],
+    section_code:[''],
+    financial_year:[''],
+    description:[''],
+    credit_ac:[''],
+    debit_ac:[''],
+    call:[''],
   })
 
   close(data?: any) {
