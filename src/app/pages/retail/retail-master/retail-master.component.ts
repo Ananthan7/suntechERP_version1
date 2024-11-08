@@ -65,6 +65,10 @@ import { SalesPersonMasterComponent } from "./sales-person-master/sales-person-m
 import { GiftVoucherMasterComponent } from "./gift-voucher-master/gift-voucher-master.component";
 import { ServiceMasterComponent } from "./service-master/service-master.component";
 import { SetRefMasterRealComponent } from "./set-ref-master-real/set-ref-master-real.component";
+import { SupplierQuotaAllocationComponent } from "./supplier-quota-allocation/supplier-quota-allocation.component";
+import { SalesCommissionSetupComponent } from "./sales-commission-setup/sales-commission-setup.component";
+import { TransactionReferenceMasterComponent } from "./transaction-reference-master/transaction-reference-master.component";
+import { SequanceMasterComponent } from "./sequance-master/sequance-master.component";
 @Component({
   selector: "app-retail-master",
   templateUrl: "./retail-master.component.html",
@@ -239,6 +243,10 @@ export class RetailMasterComponent implements OnInit {
       GiftVoucherMasterComponent: GiftVoucherMasterComponent,
       ServiceMasterComponent: ServiceMasterComponent,
       SetRefMasterRealComponent: SetRefMasterRealComponent,
+      SupplierQuotaAllocationComponent: SupplierQuotaAllocationComponent,
+      SalesCommissionSetupComponent: SalesCommissionSetupComponent,
+      TransactionReferenceMasterComponent: TransactionReferenceMasterComponent,
+      SequanceMasterComponent: SequanceMasterComponent,
 
       // Add components and update in operationals > menu updation grid form component name
     };
