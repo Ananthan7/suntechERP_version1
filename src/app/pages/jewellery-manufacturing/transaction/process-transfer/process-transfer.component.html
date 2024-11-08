@@ -8,7 +8,8 @@
 <!-- modal header component -->
 <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
     [isloading]="isloading" [isViewDelete]="editMode"
-    [isViewAuditTrail]="true" [isViewPost]="true" [disableAuditTrail]="!isSaved"
+    [isViewAuditTrail]="true" [isViewPost]="true" 
+    [disableAuditTrail]="!isSaved" [disablePostBtn]="isViewPost"
     (deleteClick)="checkMaxVocNumber(1)"
     (auditTrailClick)="auditTrailClick()"
     (postClick)="AccountPosting()"
@@ -159,7 +160,7 @@
                                     dataField="JOB_PCS">
                                 </dxi-column>
                             </dxi-column>
-                            <dxi-column alignment="left" caption="From">
+                            <dxi-column alignment="center" caption="From">
                                 <dxi-column alignment="left" caption="Process"
                                     dataField="FRM_PROCESS_CODE">
                                 </dxi-column>

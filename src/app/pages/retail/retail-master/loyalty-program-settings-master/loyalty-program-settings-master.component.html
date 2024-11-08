@@ -1,0 +1,279 @@
+<div>
+    <div class="card-content border-bottom d-flex justify-content-between p-2">
+        <h5 class="pos-modaltitle" id="modal-dia-metal">Loyalty Program Setting Master</h5>
+        <button type="button" class="btn btn-close close-btn" (click)="close()">
+            <i class="feather icon-x close-icon"></i>
+        </button>
+    </div>
+    <modal-header (cancelClick)="close()" (saveClick)="formSubmit()"></modal-header>
+    <div class="p-4 ">
+        <form [formGroup]="loyaltysettingform">
+            <div class="row mt-2">
+                <div class="col-md-10">
+
+                    <div class="row mt-2">
+                        <label for="prefixcode" class="col-sm-2 col-form-label">Code :</label>
+                        <div class="col-md-2 p-0 ms-2">
+                            <mat-form-field style="width: 100%;" appearance="outline">
+                                <input type="text" id="code" matInput class="p-0" />
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-4 p-0">
+                            <mat-form-field style="width: 100%;" appearance="outline">
+                                <input type="text" id="codedesc" matInput formControlName="codedesc" class="p-0" />
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="col-md-3">
+                                <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true " [viewImportBtn]="false"
+                                    [viewAddBtn]="!viewMode" [viewDeleteBtn]="!viewMode" (addClick)="addTableData()"
+                                    (deleteClick)="deleteTableData()">
+                                </menu-buttons>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-1">
+                        <div class="col-md-4">
+                            <div class="row">
+                                <label for="prefixcode" class="col-sm-4 col-form-label">Division :</label>
+                                <div class="col-md-7">
+                                    <mat-form-field style="width: 100%;" appearance="outline">
+                                        <mat-select>
+                                            <mat-option></mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="row">
+                                <label for="inputPassword" id="ID001" class="col-sm-4 col-form-label">
+                                    Divisions : </label>
+                                <div class="col-sm-6">
+                                    <mat-form-field style="width: 100%" appearance="outline">
+                                        <input type="text" #codeInput matInput formControlName="division"
+                                            UpperCaseDirective autocomplete="off" />
+                                        <master-search class="masterSearch" [MasterSearchData]="BranchData"
+                                            (newRowClick)="BranchDataSelected($event)">
+                                        </master-search>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-2">
+                                    <button mat-raised-button color="primary" (click)="clear('division')">Clear</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-1">
+                        <div class="col-md-4">
+                            <div class="row">
+                                <label for="prefixcode" class="col-sm-4 col-form-label">Group 1 :</label>
+                                <div class="col-md-7">
+                                    <mat-form-field style="width: 100%;" appearance="outline">
+                                        <mat-select>
+                                            <mat-option></mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="row">
+                                <div class="col-sm-8">
+                                    <mat-form-field style="width: 100%" appearance="outline">
+                                        <input type="text" #codeInput matInput formControlName="division"
+                                            UpperCaseDirective autocomplete="off" />
+                                        <master-search class="masterSearch" [MasterSearchData]="BranchData"
+                                            (newRowClick)="BranchDataSelected($event)">
+                                        </master-search>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-2">
+                                    <button mat-raised-button color="primary" (click)="clear('division')">Clear</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-1">
+                        <div class="col-md-4">
+                            <div class="row">
+                                <label for="prefixcode" class="col-sm-4 col-form-label">Group 2 :</label>
+                                <div class="col-md-7">
+                                    <mat-form-field style="width: 100%;" appearance="outline">
+                                        <mat-select>
+                                            <mat-option></mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="row">
+                                <div class="col-sm-8">
+                                    <mat-form-field style="width: 100%" appearance="outline">
+                                        <input type="text" #codeInput matInput formControlName="division"
+                                            UpperCaseDirective autocomplete="off" />
+                                        <master-search class="masterSearch" [MasterSearchData]="BranchData"
+                                            (newRowClick)="BranchDataSelected($event)">
+                                        </master-search>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-2">
+                                    <button mat-raised-button color="primary" (click)="clear('division')">Clear</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-1">
+                        <div class="col-md-4">
+                            <div class="row">
+                                <label for="prefixcode" class="col-sm-4 col-form-label">Group 3 :</label>
+                                <div class="col-md-7">
+                                    <mat-form-field style="width: 100%;" appearance="outline">
+                                        <mat-select>
+                                            <mat-option></mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="row">
+                                <div class="col-sm-8">
+                                    <mat-form-field style="width: 100%" appearance="outline">
+                                        <input type="text" #codeInput matInput formControlName="division"
+                                            UpperCaseDirective autocomplete="off" />
+                                        <master-search class="masterSearch" [MasterSearchData]="BranchData"
+                                            (newRowClick)="BranchDataSelected($event)">
+                                        </master-search>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-2">
+                                    <button mat-raised-button color="primary" (click)="clear('division')">Clear</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-1">
+                        <div class="col-md-3">
+                            <div class="row">
+                                <label for="prefixcode" class="col-sm-12 col-form-label">Standard Amount Spent For 1
+                                    Point </label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <mat-form-field style="width: 100%" appearance="outline">
+                                        <input type="text" #codeInput matInput formControlName="code" UpperCaseDirective
+                                            autocomplete="off" />
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-2">
+                                    <mat-form-field style="width: 100%" appearance="outline">
+                                        <input type="text" #codeInput matInput formControlName="code" UpperCaseDirective
+                                            autocomplete="off" />
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-2">
+                                    <mat-form-field style="width: 100%" appearance="outline">
+                                        <input type="text" #codeInput matInput formControlName="code" UpperCaseDirective
+                                            autocomplete="off" />
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-2">
+                                    <mat-form-field style="width: 100%" appearance="outline">
+                                        <input type="text" #codeInput matInput formControlName="code" UpperCaseDirective
+                                            autocomplete="off" />
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-1">
+                        <div class="col-md-3">
+                            <div class="row">
+                                <label for="prefixcode" class="col-sm-12 col-form-label">Standard Amount Redeem For 1
+                                    Point </label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <mat-form-field style="width: 100%" appearance="outline">
+                                        <input type="text" #codeInput matInput formControlName="code" UpperCaseDirective
+                                            autocomplete="off" />
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-md-2">
+                                    <mat-checkbox id="ID022" formControlName="no_redeem_points" class="example-margin">
+                                        No Redeem Points Slab</mat-checkbox>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-1">
+                        <div class="col-md-1">
+                            <button class="btn btn-outline-primary">Apply</button>
+                        </div>
+
+                        <div class="col-md-3">
+                            <mat-checkbox id="ID022" formControlName="no_redeem_points" class="example-margin">
+                                Don't Calculate Standard Points</mat-checkbox>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="row">
+                                <label for="inputPassword" id="ID001" class="col-md-5 col-form-label">
+                                    1 st Reference % :</label>
+                                <div class="col-md-4">
+                                    <mat-form-field style="width: 100%" appearance="outline">
+                                        <input type="text" #codeInput matInput formControlName="1streference"
+                                            UpperCaseDirective autocomplete="off" />
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="row">
+                                <label for="inputPassword" id="ID001" class="col-md-5 col-form-label">
+                                    Sub Reference % :</label>
+                                <div class="col-md-4">
+                                    <mat-form-field style="width: 100%" appearance="outline">
+                                        <input type="text" #codeInput matInput formControlName="subreference"
+                                            UpperCaseDirective autocomplete="off" />
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <div class="row mt-2">
+                        <dx-data-grid id="gridContainer" [dataSource]="maindetails" [showBorders]="true"
+                            [showColumnLines]="true" [showRowLines]="true" [allowColumnResizing]="true" keyExpr="SRNO">
+                            <dxi-column dataField="SLNO" caption="SL. NO"></dxi-column>
+                            <dxi-column dataField="DIA_METAL" caption="Dia/Metal"></dxi-column>
+                            <dxi-column dataField="DIVISIONS" caption="Divisions"></dxi-column>
+                            <dxi-column dataField="INVFILTER1" caption="INVFILT1"></dxi-column>
+                            <dxi-column dataField="INVFILTER2" caption="INVFILT2"></dxi-column>
+                            <dxi-column dataField="INVFILTER3" caption="INVFILT3"></dxi-column>
+                            <dxi-column dataField="AMTSPENT" caption="1 Point For Amt Spent"></dxi-column>
+                        </dx-data-grid>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

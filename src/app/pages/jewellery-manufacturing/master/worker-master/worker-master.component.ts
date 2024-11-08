@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, ElementRef, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
@@ -45,7 +45,9 @@ export class WorkerMasterComponent implements OnInit {
   filteredData: any[] = []; // Data source for the filtered grid
   searchTerm: string = '';
   afterSaveBtn: boolean = true;
-  capscheck :boolean = false;
+  capscheck: boolean = false;
+  isCapsLockOn = false;
+  capsLockToastShown = false;
 
   accountMasterData: MasterSearchModel = {
     PAGENO: 1,
@@ -125,9 +127,11 @@ export class WorkerMasterComponent implements OnInit {
     this.filteredData = this.tableData;
   }
 
+
+
   ngOnInit(): void {
     this.renderer.selectRootElement('#code')?.focus();
-   
+
 
     if (this.content?.FLAG) {
       this.setFormValues();
@@ -149,9 +153,41 @@ export class WorkerMasterComponent implements OnInit {
       }
     }
   }
+
   changeTextUpperCase(event: any) {
     event.target.value = event.target.value.toString().toUpperCase();
   }
+
+  // checkCapsOn(event: KeyboardEvent): void {
+  //   if (event.getModifierState && event.getModifierState('CapsLock')) {
+  //     this.commonService.toastErrorByMsgId('Capslock On');
+  //   }
+  // }
+
+  checkCapsOn(event: KeyboardEvent): void {
+    this.isCapsLockOn = event.getModifierState && event.getModifierState('CapsLock');
+    
+    if (this.isCapsLockOn && !this.capsLockToastShown) {
+      // this.commonService.toastErrorByMsgId('Capslock On');
+      this.capsLockToastShown = true; // Set the flag to true after showing the toast
+    } else if (!this.isCapsLockOn && this.capsLockToastShown) {
+      // Reset the flag when Caps Lock is turned off
+      this.capsLockToastShown = false;
+    }
+  }
+
+  // checkCapsOn(event: any) {
+  //   if (this.capscheck == false) {
+  //     if (event.getModifierState("CapsLock")) {
+  //       Swal.fire({
+  //         icon: "warning",
+  //         title: "Caps Lock is On",
+  //       });
+  //     }
+  //     this.capscheck = true;
+  //   }
+  // }
+
   inputValidate(event: any) {
     if (event.target.value != '') {
       this.isDisableSaveBtn = true;
@@ -159,6 +195,9 @@ export class WorkerMasterComponent implements OnInit {
       this.isDisableSaveBtn = false;
     }
   }
+
+
+
 
   checkCode(): boolean {
     if (this.workerMasterForm.value.WorkerCode == '') {
@@ -177,6 +216,8 @@ export class WorkerMasterComponent implements OnInit {
     }
 
   }
+
+
   setValueWithDecimal(formControlName: string, value: any, Decimal: string) {
     this.workerMasterForm.controls[formControlName].setValue(
       this.commonService.setCommaSerperatedNumber(value, Decimal)
@@ -262,11 +303,11 @@ export class WorkerMasterComponent implements OnInit {
     if (this.commonService.nullToString(form.WorkerCode) == '') {
       this.commonService.toastErrorByMsgId('MSG1951')// Worker code CANNOT BE EMPTY
       return true
-    } else 
-     if (this.commonService.nullToString(form.WorkerDESCRIPTION) == '') {
-      this.commonService.toastErrorByMsgId('MSG1193')//"description cannot be empty"
-      return true
-    }
+    } else
+      if (this.commonService.nullToString(form.WorkerDESCRIPTION) == '') {
+        this.commonService.toastErrorByMsgId('MSG1193')//"description cannot be empty"
+        return true
+      }
     return false;
   }
   reCalculateSrno() {
@@ -517,7 +558,7 @@ export class WorkerMasterComponent implements OnInit {
 
     const nameRegexp: RegExp = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/;
 
-    if (event.target.value  == nameRegexp) {
+    if (event.target.value == nameRegexp) {
       this.commonService.toastErrorByMsgId('MSG81525');//Do not enter the special character in the  
     }
 
@@ -573,9 +614,9 @@ export class WorkerMasterComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
   /**use: validate all lookups to check data exists in db */
-  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {    
+  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     LOOKUPDATA.SEARCH_VALUE = event.target.value
-    if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
+    if (event.target.value == '' || this.viewMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
       WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
@@ -664,7 +705,12 @@ export class WorkerMasterComponent implements OnInit {
   // }
 
   close(data?: any) {
-    if (this.content && this.content.FLAG == 'VIEW'){
+    if (data){
+      this.viewMode = true;
+      this.activeModal.close(data);
+      return
+    }
+    if (this.content && this.content.FLAG == 'VIEW') {
       this.workerMasterForm.reset()
       this.tableData = []
       this.activeModal.close(data);
@@ -754,17 +800,7 @@ export class WorkerMasterComponent implements OnInit {
     }
   }
 
-  checkCapsOn(event: any) {
-    if(this.capscheck == false){
-    if (event.getModifierState("CapsLock")) {
-      Swal.fire({
-        icon: "warning",
-        title: "Caps Lock is On",
-      });
-    }
-    this.capscheck =true;
-    }
-  }
+
 
 
 

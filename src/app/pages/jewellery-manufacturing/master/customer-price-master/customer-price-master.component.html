@@ -6,7 +6,7 @@
 </div>
 <!-- modal header component -->
 <modal-header (cancelClick)="close()" (saveClick)="formSubmit()" (deleteClick)="deleteRecord()" 
-    [isViewDelete]="editMode" [isViewSave]="!viewMode" [isViewCancel]="!viewMode"
+    [isViewDelete]="editMode  && !viewMode" [isViewSave]="!viewMode" [isViewCancel]="!viewMode"
 [isViewMore]="!viewMode" [disableSaveBtn]="isDisableSaveBtn" ></modal-header>
 <div class="row">
   <div class="col-md-12">

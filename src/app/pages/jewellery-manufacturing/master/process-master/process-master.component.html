@@ -175,10 +175,14 @@
                                         (focusout)="validateLookupField($event,StockProcessData,'recStockCode')"
                                         [readonly]="viewMode" tabindex="9"
                                         (keydown)="lookupKeyPress($event,'recStockCode')" />
+
                                     <master-search class="masterSearch" [MasterSearchData]="StockProcessData"
                                         #overlayrecStockCodeSearch (newRowClick)="StockProcesSelected($event)"
                                         *ngIf="!viewMode">
                                     </master-search>
+                                    <mat-error class="mt-2" *ngIf="processMasterForm.value.RecoveryProcess">
+                                        Process Description is <strong>required</strong>
+                                    </mat-error>
                                 </mat-form-field>
                             </div>
                             <label for="input" id="ID011" class="col-sm-2 col-form-label" *ngIf="jobNumberShow()">Job No
@@ -512,7 +516,7 @@
                                         </div>
                                         <div class="col-md-3" *ngIf="applySettinglist()">
                                             <div class="form-check mt-2">
-                                                <mat-checkbox id="ID041" formControlName="applySetting"
+                                                <mat-checkbox id="ID042" formControlName="ApplySetting"
                                                     [disabled]="viewMode|| codeEnable" class="example-margin">
                                                     Apply Setting</mat-checkbox>
                                             </div>

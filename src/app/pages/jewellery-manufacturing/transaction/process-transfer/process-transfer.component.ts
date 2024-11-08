@@ -9,6 +9,7 @@ import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstra
 import { ProcessTransferDetailsComponent } from './process-transfer-details/process-transfer-details.component';
 import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 import { AuditTrailComponent } from 'src/app/shared/common/audit-trail/audit-trail.component';
+import { environment } from 'src/environments/environment';
 
 
 @Component({
@@ -39,6 +40,7 @@ export class ProcessTransferComponent implements OnInit {
   viewMode: boolean = false;
   editMode: boolean = false;
   isSaved: boolean = false;
+  isViewPost: boolean = false;
 
   user: MasterSearchModel = {
     PAGENO: 1,
@@ -177,6 +179,7 @@ export class ProcessTransferComponent implements OnInit {
           )
           this.processTransferFrom.controls.salesman.setValue(data.SMAN)
           this.processTransferFrom.controls.Narration.setValue(data.REMARKS)
+          if(this.content?.FLAG == 'VIEW' && this.commonService.nullToString(data.POSTDATE) != '') this.isViewPost = true;
         } else {
           this.commonService.toastErrorByMsgId('MSG1531')
         }
@@ -669,15 +672,29 @@ export class ProcessTransferComponent implements OnInit {
   AccountPosting() {
     if (!this.content) return
     let form = this.processTransferFrom.value;
-    let API = 'AccountPosting' + '/' + form.BRANCH_CODE + '/' + form.VOCTYPE + '/' + form.VOCNO + '/' +
-      form.YEARMONTH + '/' + this.commonService.nullToString(this.content?.MID) + '/' +
-      'Y' + '/' + this.commonService.userName + '/' + this.commonService.getqueryParamMainVocType() +
-      '/' + this.commonService.getqueryParamTable()
+    let params = {
+      BRANCH_CODE: this.commonService.nullToString(form.BRANCH_CODE),
+      VOCTYPE: this.commonService.nullToString(form.VOCTYPE),
+      VOCNO: this.commonService.emptyToZero(form.VOCNO),
+      YEARMONTH: this.commonService.nullToString(form.YEARMONTH),
+      MID: this.commonService.nullToString(this.content?.MID),
+      ACCUPDATEYN: 'Y',
+      USERNAME: this.commonService.userName,
+      MAINVOCTYPE: this.commonService.getqueryParamMainVocType(),
+      HEADER_TABLE: this.commonService.getqueryParamTable(),
+    }
+
+    let API = `AccountPosting/${params.BRANCH_CODE}/${params.VOCTYPE}/${params.VOCNO}/${params.YEARMONTH}/${params.MID}/${params.ACCUPDATEYN}/${params.USERNAME}/${params.MAINVOCTYPE}/${params.HEADER_TABLE}/${this.content === 'EDIT' ? 'E' : 'A'}/${environment.app_version}/${'N'}`;
+
+    // let API = 'AccountPosting' + '/' + form.BRANCH_CODE + '/' + form.VOCTYPE + '/' + form.VOCNO + '/' +
+    //   form.YEARMONTH + '/' + this.commonService.nullToString(this.content?.MID) + '/' +
+    //   'Y' + '/' + this.commonService.userName + '/' + this.commonService.getqueryParamMainVocType() +
+    //   '/' + this.commonService.getqueryParamTable() + '/' +'E'+ '/'+ environment.app_version+ '/'+'post'
     this.commonService.showSnackBarMsg('MSG81447')
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
         if (result.status == "Success") {
-          this.commonService.toastSuccessByText("MSG3607")
+          this.isViewPost = true;
           this.commonService.toastSuccessByText(result.message)
         } else {
           this.commonService.toastErrorByMsgId(result.message)
@@ -706,6 +723,11 @@ export class ProcessTransferComponent implements OnInit {
     }
   }
   close(data?: any) {
+    if (data){
+      this.viewMode = true;
+      this.activeModal.close(data);
+      return
+    }
     if (this.content && this.content.FLAG == 'VIEW'){
       this.activeModal.close(data);
       return

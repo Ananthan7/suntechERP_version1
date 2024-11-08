@@ -11,7 +11,7 @@
     (cancelClick)="close()" (deleteClick)="deleteRecord()"></modal-header> -->
 
 
-<modal-header [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode" (cancelClick)="close()"
+<modal-header [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode"  [isViewAttachment]="!viewMode" (cancelClick)="close()"
     (saveClick)="formSubmit()" (deleteClick)="deleteRecord()" [isViewDelete]="!viewMode && editableMode"></modal-header>
 <!-- content section -->
 <div class="row">
@@ -26,6 +26,7 @@
                                 <mat-form-field style="width: 100%;" appearance="outline">
                                     <input #codeInput type="text" matInput id="code" formControlName="code"
                                         (focusout)="checkCodeExists($event)" maxlength="6"
+                                        (input)="sanitizeInput($event)"
                                         oninput="this.value = this.value.toUpperCase()"
                                         [readonly]="editableMode || viewMode" [disabled]="viewMode" appNoEmptySpace />
                                 </mat-form-field>

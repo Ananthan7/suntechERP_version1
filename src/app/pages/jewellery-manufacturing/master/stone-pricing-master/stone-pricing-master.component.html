@@ -38,7 +38,7 @@
                                             <input type="text" [readonly]="viewModeAll || codeEnable" matInput maxlength="15"
                                                 formControlName="sieve_set" (input)="inputValidate($event)"
                                                 UpperCaseDirective
-                                                (focusout)="validateLookupField($event,sieve_setData,'sieve_set')"
+                                                (focusout)="validateLookupFieldSieveSet($event,sieve_setData,'sieve_set')"
                                                 (keydown)="lookupKeyPress($event,'sieve_set')" />
                                             <master-search class="masterSearch" [MasterSearchData]="sieve_setData"
                                                 #overlaysievesetSearch (newRowClick)="sieve_setDataSelected($event)"

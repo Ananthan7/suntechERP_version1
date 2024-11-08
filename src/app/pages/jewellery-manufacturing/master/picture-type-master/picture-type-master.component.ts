@@ -20,6 +20,7 @@ export class PictureTypeMasterComponent implements OnInit {
   columnheader:any[] = ['SN','Code','Description'];
   allMode: string;
   checkBoxesMode: string;
+  viewMode=false;
 
 subscriptions: any;
   @Input() content!: any; 
@@ -83,6 +84,11 @@ subscriptions: any;
   // }
 
   close(data?: any) {
+    if (data){
+      this.viewMode = true;
+      this.activeModal.close(data);
+      return
+    }
     if (this.content && this.content.FLAG == 'VIEW'){
       this.activeModal.close(data);
       return

@@ -1,0 +1,260 @@
+<div>
+    <!-- header section starts -->
+    <div class="card-content border-bottom d-flex justify-content-between p-2">
+        <h5 class="pos-modaltitle" id="modal-dia-metal">POS Salesperson Target Master</h5>
+        <button type="button" class="btn btn-close close-btn" (click)="close()">
+            <i class="feather icon-x close-icon"></i>
+        </button>
+    </div>
+    <!-- modal header component -->
+    <modal-header (cancelClick)="close()" (saveClick)="formSubmit()"></modal-header>
+    <!-- content section -->
+    <div class="p-4 ">
+        <form [formGroup]="salespersontargetform">
+            <div class="row mt-2">
+                <div class="col-md-6">
+                    <div class="row  mt-2">
+                        <div class="col-md-6">
+                            <div class="row">
+                                <label for="inputPassword" id="ID001" class="col-sm-4 col-form-label">
+                                    Code :</label>
+                                <div class="col-sm-8">
+                                    <mat-form-field style="width: 100%" appearance="outline">
+                                        <input type="text" #codeInput matInput formControlName="code" UpperCaseDirective
+                                            autocomplete="off" />
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="row">
+                                <label for="inputPassword" id="ID001" class="col-sm-4 col-form-label">
+                                    Fin Year :</label>
+                                <div class="col-sm-8">
+                                    <mat-form-field style="width: 100%" appearance="outline">
+                                        <input type="text" #codeInput matInput formControlName="finyear"
+                                            UpperCaseDirective autocomplete="off" />
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-2">
+                        <div class="col-md-6">
+                            <div class="row">
+                                <label for="datefrom" id="ID001" class="col-sm-4 col-form-label">
+                                    Date From :
+                                </label>
+                                <div class="col-sm-8">
+                                    <!-- <mat-form-field style="width: 100%" appearance="outline">
+                                                <input type="date" matInput id="datefrom" formControlName="datefrom"
+                                                    autocomplete="off" />
+                                            </mat-form-field> -->
+                                    <mat-form-field style="width: 100%" appearance="outline">
+                                        <input matInput [matDatepicker]="datefrom" name="datefrom" placeholder="DD/MM/YYYY"
+                                            formControlName="datefrom" readonly="true" />
+                                        <mat-datepicker-toggle matSuffix [for]="datefrom"></mat-datepicker-toggle>
+                                    </mat-form-field>
+                                    <mat-datepicker #datefrom></mat-datepicker>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="row">
+                                <label for="dateto" id="ID001" class="col-sm-4 col-form-label">
+                                    Date To :
+                                </label>
+                                <div class="col-sm-8">
+                                    <mat-form-field style="width: 100%" appearance="outline">
+                                        <input matInput [matDatepicker]="dateto" name="dateto" placeholder="DD/MM/YYYY"
+                                            formControlName="dateto" readonly="true" />
+                                        <mat-datepicker-toggle matSuffix [for]="dateto"></mat-datepicker-toggle>
+                                    </mat-form-field>
+                                    <mat-datepicker #dateto></mat-datepicker>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-2">
+                        <div class="col-md-6">
+                            <div class="row">
+                                <label for="inputPassword" id="ID001" class="col-sm-4 col-form-label">
+                                    Sales Man :</label>
+                                <div class="col-sm-8">
+                                    <mat-form-field style="width: 100%" appearance="outline">
+                                        <input type="text" #codeInput matInput formControlName="salesman"
+                                            UpperCaseDirective autocomplete="off" />
+
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-2">
+
+                        <div class="col-md-5 mx-2">
+                            <div class="row">
+                                <div class="boxed-label">
+                                    <h6>Diamond Division Target On</h6>
+                                </div>
+                                <div class="your-box-container">
+                                    <div class="row">
+                                        <mat-radio-group aria-label="Select an option" formControlName="diamond_division">
+                                            <mat-radio-button value="F" id="diamond_sale_amount"
+                                                class="mx-4 mt-2"><b>Sale Amount</b></mat-radio-button>
+                                            <mat-radio-button value="P" id="diamond_profit"
+                                                class="mx-2 mt-2"><b>Profit</b></mat-radio-button>
+                                        </mat-radio-group>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-5">
+                            <div class="row">
+                                <div class="boxed-label">
+                                    <h6>Metal Division Target On</h6>
+                                </div>
+                                <div class="your-box-container">
+                                    <div class="row">
+                                        <mat-radio-group aria-label="Select an option" formControlName="metal_division">
+                                            <mat-radio-button value="F" id="metal_qty"
+                                                class="mx-4 mt-2"><b>Qty</b></mat-radio-button>
+                                            <mat-radio-button value="P" id="metal_making" class="mx-2 mt-2"><b>Making
+                                                    Charge</b></mat-radio-button>
+                                        </mat-radio-group>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="row mt-2">
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="boxed-label">
+                                    <h6>Yearly Sales Target</h6>
+                                </div>
+                                <div class="your-box-container">
+                                    <div class="row mt-2">
+                                        <label for="inputPassword" id="ID002" class="col-sm-6 col-form-label">Diamond
+                                            Jewellery :
+                                        </label>
+                                        <div class="col-sm-6">
+                                            <mat-form-field style="width: 100%" appearance="outline">
+                                                <input type="text" matInput formControlName="diamondjewellery"
+                                                    UpperCaseDirective />
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-2">
+                                        <label for="inputPassword" id="ID002" class="col-sm-6 col-form-label">Gold
+                                            Making
+                                            Charge :
+                                        </label>
+                                        <div class="col-sm-6">
+                                            <mat-form-field style="width: 100%" appearance="outline">
+                                                <input type="text" matInput formControlName="goldmakingcharge"
+                                                    UpperCaseDirective />
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-2">
+                                        <label for="inputPassword" id="ID002" class="col-sm-6 col-form-label">Gold
+                                            Quantity :
+                                        </label>
+                                        <div class="col-sm-6">
+                                            <mat-form-field style="width: 100%" appearance="outline">
+                                                <input type="text" matInput formControlName="goldquantity"
+                                                    UpperCaseDirective />
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="boxed-label">
+                                    <h6> Divisions</h6>
+                                </div>
+                                <div class="your-box-container">
+                                    <div class="row  mt-2">
+                                        <label for="inputPassword" class="col-sm-5 col-form-label">Dia Divisions
+                                            :</label>
+                                        <div class="col-md-7">
+                                            <mat-form-field style="width: 100%;" appearance="outline">
+                                                <mat-select formControlName="dia_division">
+                                                    <mat-option></mat-option>
+                                                </mat-select>
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <label for="inputPassword" class="col-sm-5 col-form-label">Metal Divisions
+                                            :</label>
+                                        <div class="col-md-7">
+                                            <mat-form-field style="width: 100%;" appearance="outline">
+                                                <mat-select formControlName="metal_divisions_">
+                                                    <mat-option></mat-option>
+                                                </mat-select>
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="row mt-4">
+                <div class="col-md-4">
+                    <dx-data-grid id="gridContainer" [dataSource]="maindetails" [showBorders]="true"
+                        [showColumnLines]="true" [showRowLines]="true" [allowColumnResizing]="true" #dataGrid
+                        id="gridContainer" keyExpr="MID" [showBorders]="true"
+                        (onSelectionChanged)="onSelectionChanged()" keyExpr="SRNO">
+
+                        <dxo-paging [enabled]="false"></dxo-paging>
+                        <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
+                        <dxo-selection mode="multiple"></dxo-selection>
+                        <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+
+                        <dxi-column dataField="SRNO" caption="SR No"></dxi-column>
+                        <dxi-column dataField="SALESMAN" caption="SALESMAN"></dxi-column>
+                        <dxi-column dataField="BRANCH" caption="BRANCH"></dxi-column>
+
+                    </dx-data-grid>
+                </div>
+
+
+                <div class="col-md-8">
+                    <dx-data-grid id="gridContainer" [dataSource]="maindetails2" [showBorders]="true"
+                        [showColumnLines]="true" [showRowLines]="true" [allowColumnResizing]="true" keyExpr="SRNO">
+                        <dxi-column dataField="SRNO" caption="SR NO"></dxi-column>
+                        <dxi-column dataField="MONTH" caption="MONTH"></dxi-column>
+                        <dxi-column dataField="DIA_AMOUNT" caption="DIA AMOUNT"></dxi-column>
+                        <dxi-column dataField="GOLD_AMOUNT" caption="GOLD AMOUNT"></dxi-column>
+                        <dxi-column dataField="GOLD_QTY" caption="GOLD QTY"></dxi-column>
+
+                    </dx-data-grid>
+                </div>
+
+            </div>
+
+
+        </form>
+    </div>
+</div>

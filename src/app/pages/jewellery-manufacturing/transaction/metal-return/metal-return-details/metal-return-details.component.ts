@@ -156,6 +156,7 @@ export class MetalReturnDetailsComponent implements OnInit {
     DIVCODE: [''],
     METAL_STONE: [''],
     UNQ_JOB_ID: [''],
+    JOB_SO_NUMBER: [''],
     FLAG: [null]
   });
 
@@ -267,9 +268,10 @@ export class MetalReturnDetailsComponent implements OnInit {
     where += `@strUserName='${this.comService.userName}'`;
 
     // Assign to the stock code data
-    this.stockCodeData.WHERECONDITION = where;
     this.ProcessCodeData.WHERECONDITION = where;
     this.WorkerCodeData.WHERECONDITION = where;
+    this.stockCodeData.WHERECONDITION = where;
+   
 }
 
 setLookupStockCodeWhereCondition() {
@@ -443,7 +445,7 @@ setLookupStockCodeWhereCondition() {
       "VOCDATE": this.comService.formatDateTime(new Date(form.VOCDATE)),
       "JOB_NUMBER": this.comService.nullToString(form.jobNumber),
       "JOB_DATE": this.comService.formatDateTime(new Date(form.VOCDATE)),
-      "JOB_SO_NUMBER": this.comService.emptyToZero(form.subJobNo),
+      "JOB_SO_NUMBER": this.comService.emptyToZero(form.JOB_SO_NUMBER),
       "UNQ_JOB_ID": this.comService.nullToString(form.subJobNo),
       "JOB_DESCRIPTION": form.subJobNoDes,
       "BRANCH_CODE": this.comService.nullToString(form.BRANCH_CODE),
@@ -860,7 +862,7 @@ setLookupStockCodeWhereCondition() {
             if (data[0].VALID_STOCK) {
               // Handle the valid stock case
               // You can set other form values or perform other actions here if needed
-              this.overlaystockCodeSearch.closeOverlayPanel();
+              // this.overlaystockCodeSearch.closeOverlayPanel();
             } else {
               this.comService.toastErrorByMsgId('MSG1531');
               this.metalReturnDetailsForm.controls.stockCode.setValue('');

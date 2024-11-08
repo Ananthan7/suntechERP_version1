@@ -33,11 +33,28 @@ import { SubledgerPrefixMasterComponent } from './subledger-prefix-master/subled
 import { KycMasterComponent } from './kyc-master/kyc-master.component';
 import { CurrencyComponent } from './currency/currency.component';
 import { BoxMasterComponent } from './box-master/box-master.component';
+import { YearlyBudgetPlannerDetailsComponent } from './yearly-budget-planner/yearly-budget-planner-details/yearly-budget-planner-details.component';
 import { CostAndPriceTypesComponent } from './cost-and-price-types/cost-and-price-types.component';
 import { PriceListMasterComponent } from './price-list-master/price-list-master.component';
 import { AdditionalAmountComponent } from './additional-amount/additional-amount.component';
 import { CustomerWiseStonePricingAndLabourChargesComponent } from './customer-wise-stone-pricing-and-labour-charges/customer-wise-stone-pricing-and-labour-charges.component';
 import { ReceiptModesComponent } from './receipt-modes/receipt-modes.component';
+import { DesignMasterComponent } from './design-master/design-master.component';
+import { JewelleryMasterComponent } from './jewellery-master/jewellery-master.component';
+import { SetRefMasterComponent } from './set-ref-master/set-ref-master.component';
+import { ModelMasterComponent } from './model-master/model-master.component';
+import { RefiningChargePostingComponent } from './refining-charge-posting/refining-charge-posting.component';
+import { PosSalespersonTargetComponent } from './pos-salesperson-target/pos-salesperson-target.component';
+import { LoyaltyCardMasterComponent } from './loyalty-card-master/loyalty-card-master.component';
+import { LoyaltyProgramSettingsMasterComponent } from './loyalty-program-settings-master/loyalty-program-settings-master.component';
+import { GeneralDocumentMasterComponent } from './general-document-master/general-document-master.component';
+import { GstMasterComponent } from './gst-master/gst-master.component';
+import { VatMasterComponent } from './vat-master/vat-master.component';
+import { ReorderLevelSetupComponent } from './reorder-level-setup/reorder-level-setup.component';
+import { SalesPersonMasterComponent } from './sales-person-master/sales-person-master.component';
+import { GiftVoucherMasterComponent } from './gift-voucher-master/gift-voucher-master.component';
+import { ServiceMasterComponent } from './service-master/service-master.component';
+import { SetRefMasterRealComponent } from './set-ref-master-real/set-ref-master-real.component';
 
 
 @NgModule({
@@ -76,11 +93,28 @@ import { ReceiptModesComponent } from './receipt-modes/receipt-modes.component';
     KycMasterComponent,
     CurrencyComponent,
     BoxMasterComponent,
+    YearlyBudgetPlannerDetailsComponent,
     CostAndPriceTypesComponent,
     PriceListMasterComponent,
     AdditionalAmountComponent,
     CustomerWiseStonePricingAndLabourChargesComponent,
-    ReceiptModesComponent
+    ReceiptModesComponent,
+    DesignMasterComponent,
+    JewelleryMasterComponent,
+    SetRefMasterComponent,
+    ModelMasterComponent,
+    RefiningChargePostingComponent,
+    PosSalespersonTargetComponent,
+    LoyaltyCardMasterComponent,
+    LoyaltyProgramSettingsMasterComponent,
+    GeneralDocumentMasterComponent,
+    GstMasterComponent,
+    VatMasterComponent,
+    ReorderLevelSetupComponent,
+    SalesPersonMasterComponent,
+    GiftVoucherMasterComponent,
+    ServiceMasterComponent,
+    SetRefMasterRealComponent
   ],
   imports: [
     CommonModule,

@@ -585,25 +585,12 @@ export class StonePricingMasterComponent implements OnInit {
       return true
     }
 
-    if (this.stonePrizeMasterForm.value.selling === '0.00' && this.stonePrizeMasterForm.value.selling_rate === '0.00') {
+
+
+    if (this.stonePrizeMasterForm.value.selling === '' && this.stonePrizeMasterForm.value.selling_rate === '') {
       this.commonService.toastErrorByMsgId('MSG7728');//Enter values either Selling % or Selling Rate
       return;
     }
-    // if (this.commonService.nullToString(form.selling) == "0.00" ||
-    //   this.commonService.nullToString(form.selling) === '' ||
-    //   this.commonService.nullToString(form.selling) === '0' ||
-    //   /^0{2,}\.00$/.test(this.commonService.nullToString(form.selling))) {
-    //   this.commonService.toastErrorByMsgId('MSG7728')// 
-    //   return true
-    // }
-
-    // if (this.commonService.nullToString(form.selling_rate) == "0.00" ||
-    //   this.commonService.nullToString(form.selling_rate) === '' ||
-    //   this.commonService.nullToString(form.selling_rate) === '0' ||
-    //   /^0{2,}\.00$/.test(this.commonService.nullToString(form.selling_rate))) {
-    //   this.commonService.toastErrorByMsgId('MSG7728')// 
-    //   return true
-    // }
 
     if (this.stonePrizeMasterForm.value.sieve_form > this.stonePrizeMasterForm.value.sieve_to) {
       this.commonService.toastErrorByMsgId('MSG81518');// Sieve From Should not be Greater than Sieve To
@@ -635,19 +622,40 @@ export class StonePricingMasterComponent implements OnInit {
       return
     }
 
-    // if (this.stonePrizeMasterForm.value.selling_rate === 0.00 && this.stonePrizeMasterForm.value.selling === 0) {
-    //   this.commonService.toastErrorByMsgId('MSG7728');
-    //   return;
-    // }
-
     if (this.checkCondition(this.stonePrizeMasterForm.value.carat_wt, 'MSG1095')) return;
     if (this.checkCondition(this.stonePrizeMasterForm.value.wt_from, 'MSG3565')) return;
     if (this.checkCondition(this.stonePrizeMasterForm.value.wt_to, 'MSG3565')) return;
     if (this.checkCondition(this.stonePrizeMasterForm.value.issue_rate, 'MSG1723')) return;
-
-
-
     if (this.submitValidation(this.stonePrizeMasterForm.value)) return;
+
+
+
+    console.log(this.stonePrizeMasterForm.value.selling);
+    console.log(this.stonePrizeMasterForm.value.selling_rate);
+
+
+    if (this.stonePrizeMasterForm.value.selling === '0' || this.stonePrizeMasterForm.value.selling_rate === '0') {
+      this.commonService.toastErrorByMsgId('MSG7728'); // Enter values either Selling % or Selling Rate
+      console.log("From second Func");
+      return;
+    }
+
+
+    console.log( typeof(this.stonePrizeMasterForm.value.selling) );
+    console.log(typeof(this.stonePrizeMasterForm.value.selling_rate));
+
+
+    if (
+      (this.stonePrizeMasterForm.value.selling === '0.00' || this.stonePrizeMasterForm.value.selling_rate === '0.00')
+    ) {
+      this.commonService.toastErrorByMsgId('MSG7728'); // Enter values either Selling % or Selling Rate
+      console.log("From first Func");
+      return;
+    }
+
+    
+
+
 
     let API = 'StonePriceMasterDJ/InsertStonePriceMaster'
     let postData = this.setPostData()
@@ -756,7 +764,12 @@ export class StonePricingMasterComponent implements OnInit {
   // }
 
   close(data?: any) {
-    if (this.content && this.content.FLAG == 'VIEW'){
+    if (data){
+      this.viewMode = true;
+      this.activeModal.close(data);
+      return
+    }
+    if (this.content && this.content.FLAG == 'VIEW') {
       this.activeModal.close(data);
       return
     }
@@ -1074,7 +1087,72 @@ export class StonePricingMasterComponent implements OnInit {
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
     const inputValue = event.target.value.toUpperCase();
     LOOKUPDATA.SEARCH_VALUE = event.target.value
-    if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
+    if (event.target.value == '' || this.viewMode == true) return
+    let param = {
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+    }
+    this.commonService.toastInfoByMsgId('MSG81447');
+    let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
+      .subscribe((result) => {
+        this.isDisableSaveBtn = false;
+        let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+        console.log(data);
+        if (data.length == 0) {
+          this.commonService.toastErrorByMsgId('MSG1531')
+          this.stonePrizeMasterForm.controls[FORMNAME].setValue('')
+          LOOKUPDATA.SEARCH_VALUE = ''
+          return
+        }
+
+        // if (FORMNAME === 'sieve_set') {
+        //   this.sieve_setDataSelected(data[0]); // Assuming the first data element is used
+        // } else {
+        //   // Handle other form names
+        //   const matchedItem = data.find((item: any) => item.SIEVE_SET === inputValue);
+        //   if (matchedItem) {
+        //     this.stonePrizeMasterForm.controls[FORMNAME].setValue(matchedItem.SIEVE_SET);
+        //     // Set additional form fields if needed
+        //     this.stonePrizeMasterForm.controls.shape.setValue(matchedItem.SHAPE);
+        //     this.stonePrizeMasterForm.controls.size_from.setValue(matchedItem.SIZE_FROM);
+        //     this.stonePrizeMasterForm.controls.size_to.setValue(matchedItem.SIZE_TO);
+        //     this.stonePrizeMasterForm.controls.sieve_form.setValue(matchedItem.SIEVE);
+        //     this.stonePrizeMasterForm.controls.sieve_to.setValue(matchedItem.SIEVE_TO);
+        //     this.stonePrizeMasterForm.controls.sieve_from_desc.setValue(matchedItem.SIEVEFROM_DESC);
+        //     this.stonePrizeMasterForm.controls.sieve_to_desc.setValue(matchedItem.SIEVETO_DESC);
+        //   } else {
+        //     this.handleLookupError(FORMNAME, LOOKUPDATA);
+        //   }
+        // }
+
+
+
+        // const matchedItem2 = data.find((item: any) => item.SIEVE_SET === inputValue);
+        // if (matchedItem2) {
+        //   this.stonePrizeMasterForm.controls[FORMNAME].setValue(matchedItem2.SIEVE_SET);
+        //   if (FORMNAME === 'sieve_set') {
+        //     this.stonePrizeMasterForm.controls.shape.setValue(matchedItem2.SHAPE);
+        //     this.stonePrizeMasterForm.controls.size_from.setValue(matchedItem2.SIZE_FROM);
+        //     this.stonePrizeMasterForm.controls.size_to.setValue(matchedItem2.SIZE_TO);
+        //     this.stonePrizeMasterForm.controls.sieve_form.setValue(matchedItem2.SIEVE);
+        //     this.stonePrizeMasterForm.controls.sieve_to.setValue(matchedItem2.SIEVE_TO);
+        //     this.stonePrizeMasterForm.controls.sieve_from_desc.setValue(matchedItem2.SIEVEFROM_DESC);
+        //     this.stonePrizeMasterForm.controls.sieve_to_desc.setValue(matchedItem2.SIEVETO_DESC);
+        //   }
+        // } else {
+        //   this.handleLookupError(FORMNAME, LOOKUPDATA);
+        // }
+
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+      })
+    this.subscriptions.push(Sub)
+  }
+  validateLookupFieldSieveSet(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    const inputValue = event.target.value.toUpperCase();
+    LOOKUPDATA.SEARCH_VALUE = event.target.value
+    if (event.target.value == '' || this.viewMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
       WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`

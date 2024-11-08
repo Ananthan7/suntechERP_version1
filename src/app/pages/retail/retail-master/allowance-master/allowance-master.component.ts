@@ -32,6 +32,10 @@ export class AllowanceMasterComponent implements OnInit {
     this.activeModal.close(data);
   }
 
+  formSubmit(){
+    
+  }
+
   BranchDataSelected(e:any){
 
   }
