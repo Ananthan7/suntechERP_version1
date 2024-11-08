@@ -20,7 +20,7 @@ export class OvertimeMasterComponent implements OnInit {
     private formBuilder: FormBuilder,
   ) { }
 
-  receiptModesMainForm: FormGroup = this.formBuilder.group({});
+  overTimeMainForm: FormGroup = this.formBuilder.group({});
 
 
   ngOnInit(): void {
