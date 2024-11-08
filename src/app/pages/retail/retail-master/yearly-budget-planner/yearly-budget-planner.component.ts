@@ -31,10 +31,13 @@ export class YearlyBudgetPlannerComponent implements OnInit {
 
   yearlybudgetform: FormGroup = this.formBuilder.group({
     branchcode:[''],
-    datefrom:[''],
+    date_from:[''],
     finyear:[''],
     dateto:[''],
     narration:[''],
+    datefrom:[''],
+    description:[''],
+    increase:[''],
   })
 
   ngOnInit(): void {

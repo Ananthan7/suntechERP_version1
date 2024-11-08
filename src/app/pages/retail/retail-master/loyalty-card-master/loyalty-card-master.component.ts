@@ -16,6 +16,15 @@ export class LoyaltyCardMasterComponent implements OnInit {
 
   loyaltycardform: FormGroup = this.formBuilder.group({
     code:[''],
+    codedesc:[''],
+    pointsfrom:[''],
+    pointsto:[''],
+    metaldiscount:[''],
+    diamonddiscount:[''],
+    pointexpdays:[''],
+    sendmessage:[''],
+    sendemail:[''],
+    pointmulfact:[''],
   })
 
   ngOnInit(): void {

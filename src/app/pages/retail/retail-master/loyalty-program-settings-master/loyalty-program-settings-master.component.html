@@ -14,7 +14,7 @@
                     <div class="row mt-2">
                         <label for="prefixcode" class="col-sm-2 col-form-label">Code :</label>
                         <div class="col-md-2 p-0 ms-2">
-                            <mat-form-field style="width: 100%;" appearance="outline">
+                            <mat-form-field style="width: 100%;" appearance="outline" formControlName="code">
                                 <input type="text" id="code" matInput class="p-0" />
                             </mat-form-field>
                         </div>
@@ -38,7 +38,7 @@
                             <div class="row">
                                 <label for="prefixcode" class="col-sm-4 col-form-label">Division :</label>
                                 <div class="col-md-7">
-                                    <mat-form-field style="width: 100%;" appearance="outline">
+                                    <mat-form-field style="width: 100%;" appearance="outline" formControlName="division">
                                         <mat-select>
                                             <mat-option></mat-option>
                                         </mat-select>
@@ -52,7 +52,7 @@
                                     Divisions : </label>
                                 <div class="col-sm-6">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" #codeInput matInput formControlName="division"
+                                        <input type="text" #codeInput matInput formControlName="divisions"
                                             UpperCaseDirective autocomplete="off" />
                                         <master-search class="masterSearch" [MasterSearchData]="BranchData"
                                             (newRowClick)="BranchDataSelected($event)">
@@ -60,7 +60,7 @@
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-2">
-                                    <button mat-raised-button color="primary" (click)="clear('division')">Clear</button>
+                                    <button mat-raised-button color="primary" (click)="clear('divisions')">Clear</button>
                                 </div>
                             </div>
                         </div>
@@ -71,7 +71,7 @@
                             <div class="row">
                                 <label for="prefixcode" class="col-sm-4 col-form-label">Group 1 :</label>
                                 <div class="col-md-7">
-                                    <mat-form-field style="width: 100%;" appearance="outline">
+                                    <mat-form-field style="width: 100%;" appearance="outline" formControlName="group1">
                                         <mat-select>
                                             <mat-option></mat-option>
                                         </mat-select>
@@ -83,7 +83,7 @@
                             <div class="row">
                                 <div class="col-sm-8">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" #codeInput matInput formControlName="division"
+                                        <input type="text" #codeInput matInput formControlName="group1search"
                                             UpperCaseDirective autocomplete="off" />
                                         <master-search class="masterSearch" [MasterSearchData]="BranchData"
                                             (newRowClick)="BranchDataSelected($event)">
@@ -91,7 +91,7 @@
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-2">
-                                    <button mat-raised-button color="primary" (click)="clear('division')">Clear</button>
+                                    <button mat-raised-button color="primary" (click)="clear('group1search')">Clear</button>
                                 </div>
                             </div>
                         </div>
@@ -102,7 +102,7 @@
                             <div class="row">
                                 <label for="prefixcode" class="col-sm-4 col-form-label">Group 2 :</label>
                                 <div class="col-md-7">
-                                    <mat-form-field style="width: 100%;" appearance="outline">
+                                    <mat-form-field style="width: 100%;" appearance="outline" formControlName="group2">
                                         <mat-select>
                                             <mat-option></mat-option>
                                         </mat-select>
@@ -114,7 +114,7 @@
                             <div class="row">
                                 <div class="col-sm-8">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" #codeInput matInput formControlName="division"
+                                        <input type="text" #codeInput matInput formControlName="group2search"
                                             UpperCaseDirective autocomplete="off" />
                                         <master-search class="masterSearch" [MasterSearchData]="BranchData"
                                             (newRowClick)="BranchDataSelected($event)">
@@ -122,7 +122,7 @@
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-2">
-                                    <button mat-raised-button color="primary" (click)="clear('division')">Clear</button>
+                                    <button mat-raised-button color="primary" (click)="clear('group2search')">Clear</button>
                                 </div>
                             </div>
                         </div>
@@ -133,7 +133,7 @@
                             <div class="row">
                                 <label for="prefixcode" class="col-sm-4 col-form-label">Group 3 :</label>
                                 <div class="col-md-7">
-                                    <mat-form-field style="width: 100%;" appearance="outline">
+                                    <mat-form-field style="width: 100%;" appearance="outline" formControlName="group3">
                                         <mat-select>
                                             <mat-option></mat-option>
                                         </mat-select>
@@ -145,7 +145,7 @@
                             <div class="row">
                                 <div class="col-sm-8">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" #codeInput matInput formControlName="division"
+                                        <input type="text" #codeInput matInput formControlName="group3search"
                                             UpperCaseDirective autocomplete="off" />
                                         <master-search class="masterSearch" [MasterSearchData]="BranchData"
                                             (newRowClick)="BranchDataSelected($event)">
@@ -153,7 +153,7 @@
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-2">
-                                    <button mat-raised-button color="primary" (click)="clear('division')">Clear</button>
+                                    <button mat-raised-button color="primary" (click)="clear('group3search')">Clear</button>
                                 </div>
                             </div>
                         </div>
@@ -170,25 +170,25 @@
                             <div class="row">
                                 <div class="col-sm-4">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" #codeInput matInput formControlName="code" UpperCaseDirective
+                                        <input type="text" #codeInput matInput formControlName="standardamt1" UpperCaseDirective
                                             autocomplete="off" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-2">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" #codeInput matInput formControlName="code" UpperCaseDirective
+                                        <input type="text" #codeInput matInput formControlName="standardamt2" UpperCaseDirective
                                             autocomplete="off" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-2">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" #codeInput matInput formControlName="code" UpperCaseDirective
+                                        <input type="text" #codeInput matInput formControlName="standardamt3" UpperCaseDirective
                                             autocomplete="off" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-2">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" #codeInput matInput formControlName="code" UpperCaseDirective
+                                        <input type="text" #codeInput matInput formControlName="standardamt4" UpperCaseDirective
                                             autocomplete="off" />
                                     </mat-form-field>
                                 </div>
@@ -207,7 +207,7 @@
                             <div class="row">
                                 <div class="col-sm-4">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" #codeInput matInput formControlName="code" UpperCaseDirective
+                                        <input type="text" #codeInput matInput formControlName="redeem" UpperCaseDirective
                                             autocomplete="off" />
                                     </mat-form-field>
                                 </div>
@@ -227,7 +227,7 @@
                         </div>
 
                         <div class="col-md-3">
-                            <mat-checkbox id="ID022" formControlName="no_redeem_points" class="example-margin">
+                            <mat-checkbox id="ID022" formControlName="calculate_points" class="example-margin">
                                 Don't Calculate Standard Points</mat-checkbox>
                         </div>
 
@@ -237,7 +237,7 @@
                                     1 st Reference % :</label>
                                 <div class="col-md-4">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" #codeInput matInput formControlName="1streference"
+                                        <input type="text" #codeInput matInput formControlName="reference1"
                                             UpperCaseDirective autocomplete="off" />
                                     </mat-form-field>
                                 </div>

@@ -1,1 +1,110 @@
-<p>supplier-quota-allocation works!</p>
+<div>
+    <!-- header section starts -->
+    <div class="card-content border-bottom d-flex justify-content-between p-2">
+        <h5 class="pos-modaltitle" id="modal-dia-metal">Supplier Quota Allocation</h5>
+        <button type="button" class="btn btn-close close-btn" (click)="close()">
+            <i class="feather icon-x close-icon"></i>
+        </button>
+    </div>
+    <!-- modal header component -->
+    <modal-header (cancelClick)="close()" (saveClick)="formSubmit()"></modal-header>
+    <!-- content section -->
+    <div class="p-4 ">
+        <form [formGroup]="supplierquotaform">
+            <div class="row">
+
+                <div class="col-md-4">
+                    <div class="row mb-1">
+                        <label for="inputPassword" id="ID001" class="col-md-4 col-form-label">
+                            Party Code :</label>
+                        <div class="col-md-6">
+                            <mat-form-field style="width: 100%" appearance="outline">
+                                <input type="text" #codeInput matInput formControlName="partycode" UpperCaseDirective
+                                    autocomplete="off" />
+                                <master-search class="masterSearch" [MasterSearchData]="BranchData"
+                                    (newRowClick)="BranchDataSelected($event)">
+                                </master-search>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="row mb-1">
+                        <label for="inputPassword" id="ID001" class="col-md-4 col-form-label">
+                            Metal Division :</label>
+                        <div class="col-md-6">
+
+                            <mat-form-field style="width: 100%;" appearance="outline" formControlName="metal_division">
+                                <mat-select>
+                                    <mat-option></mat-option>
+                                    <mat-option></mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="row mb-1">
+                        <div class="col-md-12">
+                            <mat-radio-group aria-label="Select period type" formControlName="periodType">
+                                <mat-radio-button class="mx-2" value="monthWise">Month Wise</mat-radio-button>
+                                <mat-radio-button class="mx-2" value="weekWise">Week Wise</mat-radio-button>
+                              </mat-radio-group>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-3">
+                    <div class="col-md-4">
+                        <div class="row mb-1">
+                            <label for="inputPassword" id="ID001" class="col-md-4 col-form-label">
+                                Fin. Year :</label>
+                            <div class="col-md-6">
+                                <mat-form-field style="width: 100%" appearance="outline">
+                                    <input type="text" #codeInput matInput formControlName="fin_year" UpperCaseDirective
+                                        autocomplete="off" />
+                                    <master-search class="masterSearch" [MasterSearchData]="BranchData"
+                                        (newRowClick)="BranchDataSelected($event)">
+                                    </master-search>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row">
+                <dx-data-grid id="gridContainer" [dataSource]="maindetails" [showBorders]="true"
+                    [showColumnLines]="true" [showRowLines]="true" [allowColumnResizing]="true" keyExpr="SRNO">
+
+                    <dxi-column dataField="SRNO" caption="SR.NO">
+                    </dxi-column>
+
+                    <dxi-column dataField="MONTH" caption="MONTH" format="dd/MM/yyyy">
+                    </dxi-column>
+
+                    <dxi-column dataField="WEEK" caption="WEEK">
+                    </dxi-column>
+
+                    <dxi-column dataField="QTY_GOLD" caption="QTY GOLD">
+                    </dxi-column>
+
+                    <dxi-column dataField="QTY_SILVER" caption="QTY SILVER">
+                    </dxi-column>
+
+                    <dxi-column dataField="QTY_PLATINUM" caption="QTY PLATINUM">
+                    </dxi-column>
+
+                    <dxi-column dataField="QTY_PALLADIUM" caption="QTY PALLADIUM">
+                    </dxi-column>
+
+                </dx-data-grid>
+            </div>
+
+
+        </form>
+    </div>
+</div>

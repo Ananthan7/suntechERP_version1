@@ -17,6 +17,24 @@ export class LoyaltyProgramSettingsMasterComponent implements OnInit {
 
   loyaltysettingform: FormGroup = this.formBuilder.group({
     code:[''],
+    codedesc:[''],
+    division:[''],
+    divisions:[''],
+    group1:[''],
+    group1search:[''],
+    group2:[''],
+    group2search:[''],
+    group3:[''],
+    group3search:[''],
+    standardamt1:[''],
+    standardamt2:[''],
+    standardamt3:[''],
+    standardamt4:[''],
+    redeem:[''],
+    no_redeem_points:[''],
+    calculate_points:[''],
+    reference1:[''],
+    subreference:[''],
   })
 
 

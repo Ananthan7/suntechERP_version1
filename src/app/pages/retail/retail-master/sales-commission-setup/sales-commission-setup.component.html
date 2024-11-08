@@ -1,1 +1,217 @@
-<p>sales-commission-setup works!</p>
+<div>
+    <div class="card-content border-bottom d-flex justify-content-between p-2">
+        <h5 class="pos-modaltitle" id="modal-dia-metal">Sales Commission Setup</h5>
+        <button type="button" class="btn btn-close close-btn" (click)="close()">
+            <i class="feather icon-x close-icon"></i>
+        </button>
+    </div>
+    <modal-header (cancelClick)="close()" (saveClick)="formSubmit()"></modal-header>
+    <div class="p-4 ">
+        <form [formGroup]="salescommissionform">
+
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="row">
+                        <label for="inputPassword" id="ID001" class="col-md-4 col-form-label">
+                            Code :</label>
+                        <div class="col-sm-8">
+                            <mat-form-field style="width: 100%" appearance="outline">
+                                <input type="text" #codeInput matInput formControlName="code" UpperCaseDirective
+                                    autocomplete="off" />
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+
+
+                    <div class="row">
+                        <label for="datefrom" id="ID001" class="col-sm-4 col-form-label">
+                            Start Date :
+                        </label>
+                        <div class="col-sm-8">
+                            <mat-form-field style="width: 100%" appearance="outline">
+                                <input matInput [matDatepicker]="start_date" formControlName="start_date" placeholder="DD/MM/YYYY"
+                                    formControlName="start_date" readonly="true" />
+                                <mat-datepicker-toggle matSuffix [for]="start_date"></mat-datepicker-toggle>
+                            </mat-form-field>
+
+                            <mat-datepicker #start_date></mat-datepicker>
+
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <label for="datefrom" id="ID001" class="col-sm-4 col-form-label">
+                            End Date :
+                        </label>
+                        <div class="col-sm-8">
+                            <mat-form-field style="width: 100%" appearance="outline">
+                                <input matInput [matDatepicker]="end_date" formControlName="end_date" placeholder="DD/MM/YYYY"
+                                    formControlName="end_date" readonly="true" />
+                                <mat-datepicker-toggle matSuffix [for]="end_date"></mat-datepicker-toggle>
+                            </mat-form-field>
+
+                            <mat-datepicker #end_date></mat-datepicker>
+
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <label for="inputPassword" id="ID001" class="col-md-4 col-form-label">
+                            Group :</label>
+                        <div class="col-md-8">
+                            <mat-form-field style="width: 100%;" appearance="outline" formControlName="group">
+                                <mat-select>
+                                    <mat-option></mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-md-3">
+
+                    <div class="row">
+                        <div class="boxed-label">
+                            <h6><input type="checkbox" class="mx-2"/>Metal Commission Type</h6>
+                        </div>
+                        <div class="your-box-container">
+                            <div class="row" style="padding-inline: 5px;">
+                                <mat-radio-group aria-label="Select an option" formControlName="metal_commission">
+                                    <mat-radio-button value="F" id="diamond_sale_amount"
+                                        class="mx-4 mt-2"><b>Making</b></mat-radio-button>
+                                    <mat-radio-button value="P" id="diamond_profit"
+                                        class="mx-2 mt-2"><b>Quantity</b></mat-radio-button>
+                                    <mat-radio-button value="P" id="diamond_profit"
+                                        class="mx-2 mt-2"><b>Profit</b></mat-radio-button>
+                                </mat-radio-group>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-md-3">
+                    <div class="row"  style="padding-inline: 5px;">
+                        <div class="boxed-label">
+                            <h6><input type="checkbox" class="mx-2"/>Diamond Commission Type</h6>
+                        </div>
+                        <div class="your-box-container">
+                            <div class="row">
+                                <mat-radio-group aria-label="Select an option" formControlName="diamond_commission">
+                                    <mat-radio-button value="Amount" id="diamond_sale_amount"
+                                        class="mx-4 mt-2"><b>Amount</b></mat-radio-button>
+                                    <mat-radio-button value="Profit" id="diamond_profit"
+                                        class="mx-2 mt-2"><b>Profit</b></mat-radio-button>
+                                </mat-radio-group>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="row"  style="padding-inline: 5px;">
+                        <div class="boxed-label">
+                            <h6> Divisions</h6>
+                        </div>
+                        <div class="your-box-container">
+                            <div class="row  mt-2">
+                                <label for="inputPassword" class="col-sm-5 col-form-label">Dia Divisions
+                                    :</label>
+                                <div class="col-md-7">
+                                    <mat-form-field style="width: 100%;" appearance="outline">
+                                        <mat-select formControlName="dia_division">
+                                            <mat-option></mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <label for="inputPassword" class="col-sm-5 col-form-label">Metal Divisions
+                                    :</label>
+                                <div class="col-md-7">
+                                    <mat-form-field style="width: 100%;" appearance="outline">
+                                        <mat-select formControlName="metal_divisions_">
+                                            <mat-option></mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <mat-tab-group>
+
+                    <mat-tab label="Commission">
+                        <div class="row mt-2">
+                            <div class="col-md-2">
+                                <div class="col-md-3">
+                                    <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true " [viewImportBtn]="false"
+                                        [viewAddBtn]="!viewMode" [viewDeleteBtn]="!viewMode" (addClick)="addTableData()"
+                                        (deleteClick)="deleteTableData()">
+                                    </menu-buttons>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-md-10">
+                                <dx-data-grid id="gridContainer" [dataSource]="maindetails2" [showBorders]="true"
+                                    [showColumnLines]="true" [showRowLines]="true" [allowColumnResizing]="true"
+                                    keyExpr="SRNO">
+                                    <dxi-column dataField="SRNO" caption="SR NO"></dxi-column>
+                                    <dxi-column dataField="GROUPTYPE" caption="GroupType"></dxi-column>
+                                    <dxi-column dataField="RANGEFROM" caption="RangeFrom"></dxi-column>
+                                    <dxi-column dataField="RANGETO" caption="RangeTo"></dxi-column>
+                                    <dxi-column dataField="COMMISSION" caption="Commission"></dxi-column>
+                                    <dxi-column dataField="POINTS" caption="Points"></dxi-column>
+                                </dx-data-grid>
+                            </div>
+                        </div>
+                    </mat-tab>
+
+                    <mat-tab label="Branch">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <dx-data-grid id="gridContainer" [dataSource]="maindetails2" [showBorders]="true"
+                                    [showColumnLines]="true" [showRowLines]="true" [allowColumnResizing]="true"
+                                    keyExpr="SRNO" (onSelectionChanged)="onSelectionChanged($event)" >
+                                    
+                                    <dxo-paging [enabled]="false"></dxo-paging>
+                                    <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
+                                    <dxo-selection mode="multiple"></dxo-selection>
+                                    <dxo-scrolling mode="virtual"></dxo-scrolling>
+                                    <dxi-column dataField="SRNO" caption="SR NO"></dxi-column>
+                                    <dxi-column dataField="BRANCH" caption="Branch"></dxi-column>
+                                </dx-data-grid>
+                            </div>
+                        </div>
+                    </mat-tab>
+                    <mat-tab label="Salesman">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <dx-data-grid id="gridContainer" [dataSource]="maindetails2" [showBorders]="true"
+                                    [showColumnLines]="true" [showRowLines]="true" [allowColumnResizing]="true"
+                                    keyExpr="SRNO"  (onSelectionChanged)="onSelectionChanged($event)"
+                                    >
+                     
+                                    <dxo-paging [enabled]="false"></dxo-paging>
+                                    <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
+                                    <dxo-selection mode="multiple"></dxo-selection>
+                                    <dxo-scrolling mode="virtual"></dxo-scrolling>
+                                    <dxi-column dataField="SRNO" caption="SR NO"></dxi-column>
+                                    <dxi-column dataField="GROUP_NAME" caption="Group_Name"></dxi-column>
+                                    <dxi-column dataField="SALESPERSON" caption="SALESPERSON"></dxi-column>
+                                </dx-data-grid>
+                            </div>
+                        </div>
+
+                    </mat-tab>
+                </mat-tab-group>
+            </div>
+
+        </form>
+    </div>
+</div>

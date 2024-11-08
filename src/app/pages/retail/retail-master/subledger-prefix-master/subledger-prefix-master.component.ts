@@ -18,9 +18,9 @@ export class SubledgerPrefixMasterComponent implements OnInit {
   ) { }
 
   festivalmasterform: FormGroup = this.formBuilder.group({
-    mid: [""],
-    code: [""],
-    description: [""],
+    prefixcode: [""],
+    prefixcodedesc: [""],
+    last_no: [""],
    
   });
   

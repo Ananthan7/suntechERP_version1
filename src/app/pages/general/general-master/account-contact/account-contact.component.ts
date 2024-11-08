@@ -60,6 +60,7 @@ export class AccountContactComponent implements OnInit {
     official_address: [""],
     delivey_address: [""],
     remarks: [""],
+    subledgercode: [""],
    
   });
 
