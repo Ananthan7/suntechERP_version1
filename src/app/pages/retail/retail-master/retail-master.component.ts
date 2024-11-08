@@ -73,6 +73,11 @@ import { WpsAgentMasterComponent } from "./wps-agent-master/wps-agent-master.com
 import { GratuityMasterComponent } from "./gratuity-master/gratuity-master.component";
 import { LeaveSalaryMasterComponent } from "./leave-salary-master/leave-salary-master.component";
 import { AirTicketMasterComponent } from "./air-ticket-master/air-ticket-master.component";
+import { JobCardComponent } from "./job-card/job-card.component";
+import { OvertimeMasterComponent } from "./overtime-master/overtime-master.component";
+import { HolidayMasterComponent } from "./holiday-master/holiday-master.component";
+import { SalesInvoiceComponent } from "./sales-invoice/sales-invoice.component";
+import { ClientAuthorizationComponent } from "./client-authorization/client-authorization.component";
 @Component({
   selector: "app-retail-master",
   templateUrl: "./retail-master.component.html",
@@ -255,9 +260,11 @@ export class RetailMasterComponent implements OnInit {
       GratuityMasterComponent: GratuityMasterComponent,
       LeaveSalaryMasterComponent: LeaveSalaryMasterComponent,
       AirTicketMasterComponent: AirTicketMasterComponent,
-
-
-
+      JobCardComponent: JobCardComponent,
+      OvertimeMasterComponent: OvertimeMasterComponent,
+      HolidayMasterComponent: HolidayMasterComponent,
+      SalesInvoiceComponent: SalesInvoiceComponent,
+      ClientAuthorizationComponent: ClientAuthorizationComponent,
       // Add components and update in operationals > menu updation grid form component name
     };
     this.componentName = this.CommonService.getFormComponentName();

@@ -63,6 +63,11 @@ import { WpsAgentMasterComponent } from './wps-agent-master/wps-agent-master.com
 import { GratuityMasterComponent } from './gratuity-master/gratuity-master.component';
 import { LeaveSalaryMasterComponent } from './leave-salary-master/leave-salary-master.component';
 import { AirTicketMasterComponent } from './air-ticket-master/air-ticket-master.component';
+import { JobCardComponent } from './job-card/job-card.component';
+import { OvertimeMasterComponent } from './overtime-master/overtime-master.component';
+import { HolidayMasterComponent } from './holiday-master/holiday-master.component';
+import { SalesInvoiceComponent } from './sales-invoice/sales-invoice.component';
+import { ClientAuthorizationComponent } from './client-authorization/client-authorization.component';
 
 
 @NgModule({
@@ -130,7 +135,12 @@ import { AirTicketMasterComponent } from './air-ticket-master/air-ticket-master.
     WpsAgentMasterComponent,
     GratuityMasterComponent,
     LeaveSalaryMasterComponent,
-    AirTicketMasterComponent
+    AirTicketMasterComponent,
+    JobCardComponent,
+    OvertimeMasterComponent,
+    HolidayMasterComponent,
+    SalesInvoiceComponent,
+    ClientAuthorizationComponent
   ],
   imports: [
     CommonModule,
