@@ -85,6 +85,10 @@
             </div>
         </dx-popup>
 
+        <div class="row mt-2 justify-content-end mx-2">
+            <app-report-screen-buttons (saveTemplateClick)="saveTemplate()" (previewClicked)="previewClick()"
+            (printClicked)="printBtnClick()"></app-report-screen-buttons>
+        </div>
 
     </form>
 </div>

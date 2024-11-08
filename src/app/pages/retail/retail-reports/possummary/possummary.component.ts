@@ -16,7 +16,8 @@ export class POSSummaryComponent implements OnInit {
     todate: [''],
     templateName: [''],
 
-    
+    serviceChargeBoolean: [true],
+
     
 
   });
@@ -25,13 +26,22 @@ export class POSSummaryComponent implements OnInit {
   dateToPass: { fromDate: string; toDate: string } = { fromDate: '', toDate: '' };
   branchDivisionControlsTooltip: any;
   formattedBranchDivisionData: any;
-
-
+  pointOfSalesSummaryArr: any = [];
+  receiptSummaryArr: any = [];
+  isLoading: boolean = false;
+  currentTab: any;
+  availableStockGridDataArr: any = [];
+  posCollectionGridDataArr: any = [];
+  posPurchaseGridDataArr: any = [];
+  accountsGridDataArr: any = [];
+  popupVisible: boolean = false;
+  templateNameHasValue: boolean = false
 
   constructor(private activeModal: NgbActiveModal, private formBuilder: FormBuilder,
     private commonService: CommonServiceService) { }
 
   ngOnInit(): void {
+    this.prefillScreenValues();
   }
 
   close(data?: any) {
@@ -55,6 +65,24 @@ export class POSSummaryComponent implements OnInit {
       this.POS_SummaryForm.controls.todate.setValue(event.ToDate);
     }
   }
+
+  popupClosed(){
+    if (this.content && Object.keys(this.content).length > 0) {
+      console.log(this.content)
+      let ParcedPreFetchData = JSON.parse(this.content?.CONTROL_LIST_JSON)
+      this.POS_SummaryForm.controls.templateName.setValue(ParcedPreFetchData.CONTROL_HEADER.TEMPLATENAME)
+      this.popupVisible = false;
+    }
+    else{
+      this.popupVisible = false;
+      this.POS_SummaryForm.controls.templateName.setValue(null)
+    }
+  }
+
+  customizeSummaryContent = (data: any) => {
+    // decimal point hanlder from commonService
+    return this.commonService.decimalQuantityFormat(data.value, 'THREE');
+  };
 
   selectedData(data: any) {
     console.log(data)
@@ -107,6 +135,44 @@ export class POSSummaryComponent implements OnInit {
   }
 
 
+  onTabChange(event: any){
+    this.currentTab = event.tab.textLabel
+    switch(this.currentTab){
+      case 'Available Stock': this.availableStockGridData(); break;
+      case 'POS Collection': this.POSCollectnGridData(); break;
+      case 'POS Purchase' : this.posPurchaseGridData(); break;
+      case 'Accounts' : this.accountsGridData(); break;
+    }
+  }
+  availableStockGridData(){
+
+  }
+  POSCollectnGridData(){
+
+  }
+  posPurchaseGridData(){
+
+  }
+  accountsGridData(){
+
+  }
+
+  saveTemplate(){
+    this.popupVisible = true;
+    console.log(this.POS_SummaryForm.controls.templateName.value)
+  }
+  saveTemplate_DB(){
+
+  }
+
+  previewClick(){
+
+  }
+
+  printBtnClick(){
+
+  }
+
 
   prefillScreenValues(){
     if ( Object.keys(this.content).length > 0) {
@@ -119,6 +185,8 @@ export class POSSummaryComponent implements OnInit {
       this.fetchedBranchDataParam = formattedUserBranch;
       this.fetchedBranchData= this.fetchedBranchDataParam?.split("#")
    
+      // let x = this.commonService.formatYYMMDD(new Date());
+      // console.log(x)
       this.dateToPass = {
         fromDate:  this.formatDateToYYYYMMDD(new Date()),
         toDate: this.formatDateToYYYYMMDD(new Date()),

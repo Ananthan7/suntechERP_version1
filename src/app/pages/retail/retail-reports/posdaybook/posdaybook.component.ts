@@ -436,19 +436,19 @@ export class POSDaybookComponent implements OnInit {
           { dataField: 'vocdate', caption: 'Voucher Date', dataType: 'date' },
           { dataField: 'sman', caption: 'Salesman' },
           { dataField: 'GrossAmt', caption: 'Gross Amount', alignment: 'right' },
-          { dataField: 'CC_CommissionAmt', caption: 'Commission Amount' },
-          { dataField: 'invamt', caption: 'Invoice Amount' },
-          { dataField: 'sretamt', caption: 'sretamt' },
-          { dataField: 'scpamt', caption: 'scpamt' },
-          { dataField: 'roundoff', caption: 'Round Off' },
-          { dataField: 'lcreceived', caption: 'LC Received'},
+          { dataField: 'CC_CommissionAmt', caption: 'Commission Amount', alignment: 'right' },
+          { dataField: 'invamt', caption: 'Invoice Amount', alignment: 'right' },
+          { dataField: 'sretamt', caption: 'sretamt', alignment: 'right' },
+          { dataField: 'scpamt', caption: 'scpamt', alignment: 'right' },
+          { dataField: 'roundoff', caption: 'Round Off', alignment: 'right' },
+          { dataField: 'lcreceived', caption: 'LC Received', alignment: 'right'},
           { dataField: 'fc', caption: 'fc' },
           { dataField: 'fcreceived', caption: 'fcreceived' },
-          { dataField: 'creditcrd', caption: 'Credit Card' },
-          { dataField: 'advance', caption: 'Advance' },
-          { dataField: 'creditac', caption: 'Credit Ac' },
-          { dataField: 'creditamt', caption: 'Credit Amount' },
-          { dataField: 'others', caption: 'Credit Amount' }
+          { dataField: 'creditcrd', caption: 'Credit Card', alignment: 'right' },
+          { dataField: 'advance', caption: 'Advance', alignment: 'right' },
+          { dataField: 'creditac', caption: 'Credit Ac', alignment: 'right' },
+          { dataField: 'creditamt', caption: 'Credit Amount', alignment: 'right' },
+          { dataField: 'others', caption: 'Credit Amount', alignment: 'right' }
         ];
       }
       else{
