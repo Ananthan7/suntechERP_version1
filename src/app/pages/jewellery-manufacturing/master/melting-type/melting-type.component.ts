@@ -364,6 +364,41 @@ export class MeltingTypeComponent implements OnInit {
     //   this.toastr.error('color is required');
     //   return true;
     // }
+  
+
+    return false;
+  }
+  setPostData(form: any) {
+    return {
+      "MID": this.content?.MID || 0,
+      "MELTYPE_CODE": this.commonService.nullToString(form.code?.toUpperCase()),
+      "MELTYPE_DESCRIPTION": this.commonService.nullToString(form.description?.toUpperCase()),
+      "KARAT_CODE": this.commonService.nullToString(form.karat),
+      "PURITY": this.commonService.transformDecimalVB(6, form.purity),
+      "METAL_PER": this.commonService.emptyToZero(form.metal),
+      "ALLOY_PER": this.commonService.emptyToZero(form.alloy),
+      "CREATED_BY": this.commonService.nullToString(this.userName),
+      "COLOR": this.commonService.nullToString(form.color?.toUpperCase()),
+      "STOCK_CODE": this.commonService.nullToString(form.stockCode),
+      "MELTING_TYPE_DETAIL": this.tableData,
+    }
+  }
+
+  submitValidation(form: any) {
+    if (this.commonService.nullToString(form.code) == '') {
+      this.commonService.toastErrorByMsgId('MSG1124') //"Code cannot be empty"
+      return true
+    }
+
+    else if (this.commonService.nullToString(form.description) == '') {
+      this.commonService.toastErrorByMsgId('MSG1193')//"description cannot be empty"
+      return true
+    }
+    else if (this.commonService.nullToString(form.color) == '') {
+      this.commonService.toastErrorByMsgId('MSG1125')//"color cannot be empty"
+      return true
+    }
+
     if (this.tableData.length == 0) {
       this.commonService.toastErrorByMsgId('MSG1453') //details not added
       // this.toastr.error('details not added');
@@ -400,39 +435,6 @@ export class MeltingTypeComponent implements OnInit {
     if(totalAlloyPer < 100){
       console.log('This Working If Condition');
       this.commonService.toastErrorByMsgId('MSG7954')
-      return true
-    }
-
-    return false;
-  }
-  setPostData(form: any) {
-    return {
-      "MID": this.content?.MID || 0,
-      "MELTYPE_CODE": this.commonService.nullToString(form.code?.toUpperCase()),
-      "MELTYPE_DESCRIPTION": this.commonService.nullToString(form.description?.toUpperCase()),
-      "KARAT_CODE": this.commonService.nullToString(form.karat),
-      "PURITY": this.commonService.transformDecimalVB(6, form.purity),
-      "METAL_PER": this.commonService.emptyToZero(form.metal),
-      "ALLOY_PER": this.commonService.emptyToZero(form.alloy),
-      "CREATED_BY": this.commonService.nullToString(this.userName),
-      "COLOR": this.commonService.nullToString(form.color?.toUpperCase()),
-      "STOCK_CODE": this.commonService.nullToString(form.stockCode),
-      "MELTING_TYPE_DETAIL": this.tableData,
-    }
-  }
-
-  submitValidation(form: any) {
-    if (this.commonService.nullToString(form.code) == '') {
-      this.commonService.toastErrorByMsgId('MSG1124') //"Code cannot be empty"
-      return true
-    }
-
-    else if (this.commonService.nullToString(form.description) == '') {
-      this.commonService.toastErrorByMsgId('MSG1193')//"description cannot be empty"
-      return true
-    }
-    else if (this.commonService.nullToString(form.color) == '') {
-      this.commonService.toastErrorByMsgId('MSG1125')//"color cannot be empty"
       return true
     }
     return false;
@@ -592,7 +594,7 @@ export class MeltingTypeComponent implements OnInit {
   }
 
   updateMeltingType() {
-    if (this.submitValidations()) return;
+    // if (this.submitValidations()) return;
     if (this.submitValidation(this.meltingTypeForm.value)) return;
     
     let API = 'MeltingType/UpdateMeltingType/' + this.meltingTypeForm.value.code;

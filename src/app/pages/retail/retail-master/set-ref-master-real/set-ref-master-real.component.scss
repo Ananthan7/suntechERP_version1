@@ -1,0 +1,42 @@
+.icons {
+  width: 100%;
+  border: 1px solid #ddd;
+  margin-bottom: 2px;
+}
+
+.icons .image_box {
+  height: 200px;
+  width: 100%;
+}
+
+.mat-form-field-appearance-outline .mat-form-field-flex {
+  padding: 0 20px !important;
+}
+
+.mat-flat-button.mat-primary {
+  background-color: #428cc9 !important;
+  color: #fff;
+}
+
+.mat-flat-button.mat-primary:disabled {
+  color: #fff;
+  background-color: #7e8790 !important;
+  border-color: #7e8790 !important;
+  cursor: not-allowed !important;
+}
+
+.btn-primary {
+  // background-color: #415a77 !important;
+  // border-color: #415a77 !important;
+  background: linear-gradient(0deg, #2a5298 30%, #1e3c72 60%) !important;
+  font-size: 12px;
+  border-radius: 3px !important;
+  padding: 2px 15px 6px 2px !important;
+  width: 100%;
+}
+
+.btn-danger {
+  font-size: 12px;
+  padding: 6px 15px 6px 15px !important;
+  border-radius: 5px !important;
+}
