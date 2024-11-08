@@ -439,6 +439,10 @@ export class POSDaybookComponent implements OnInit {
           { dataField: 'invamt', caption: 'Invoice Amount', alignment: 'right' },
 
 
+          { dataField: 'others', caption: 'Others', alignment: 'right' },
+
+
+
 
 
           { dataField: 'branch_code', caption: 'Branch Code' },
@@ -453,7 +457,7 @@ export class POSDaybookComponent implements OnInit {
           { dataField: 'advance', caption: 'Advance', alignment: 'right' },
           { dataField: 'creditac', caption: 'Credit Ac', alignment: 'right' },
           { dataField: 'creditamt', caption: 'Credit Amount', alignment: 'right' },
-          { dataField: 'others', caption: 'Others', alignment: 'right' }
+          
         ];
       }
       else{
