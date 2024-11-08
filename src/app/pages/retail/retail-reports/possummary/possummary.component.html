@@ -1,0 +1,190 @@
+<!-- header section -->
+<div class="card-content border-bottom d-flex justify-content-between p-2">
+    <h5 class="pos-modaltitle" id="modal-dia-metal">POS Summary</h5>
+    <button type="button" class="btn btn-close close-btn" (click)="close()">
+        <i class="feather icon-x close-icon"></i>
+    </button>
+</div>
+
+<!-- modal header component -->
+<modal-header (cancelClick)="close()" [isViewDelete]="false" 
+[isViewMore]="false" [isViewSave]="false" [isViewCancel]="false"></modal-header>
+
+<div class="row">
+    <form [formGroup]="POS_SummaryForm">
+        <div class="container-fluid pt-3">
+            <div class="row mb-1">
+                <label for="inputPassword"  class="col-sm-1 col-form-label"  id="ID001"> Branch</label>
+                <div class="col-md-2">
+                    <mat-form-field appearance="outline" style="width: -webkit-fill-available">
+                    <input matInput="text" name="branch" autocomplete="off" formControlName="branch"/>
+                    <app-branch-division [fetchData]="fetchedBranchData" (newRowClick)="selectedData($event)"
+                    class="branchDivisionelectr" [matTooltip]="branchDivisionControlsTooltip"
+                    matTooltipClass="custom-tooltip"  matTooltipPosition="above"></app-branch-division>
+                    </mat-form-field>
+                </div>
+    
+                <div class="col-md-7">
+                    <app-date (selectedDate)="setDateValue($event)" [dateValue]="dateToPass"></app-date>
+                </div>
+            </div>
+
+            <div class="row mb-1">
+                <div class="col-md-1">
+                    <button mat-flat-button class="bg-secondary" id="ID002">Summary</button>
+                </div>
+
+                <div class="col-md-1">
+                    <button mat-flat-button class="bg-secondary mx-3" id="ID003">Detail</button>
+                </div>
+
+                <div class="col-md-2 mt-2 mx-2">
+                    <input class="form-check-input" type="checkbox" id="serviceCharge" formControlName="serviceChargeBoolean">
+                    <label class="mx-2" for="serviceCharge" id="ID004">Show Service Charge</label>
+                </div>
+            </div>
+
+            <div class="row mb-2">
+                <div class="col-md-6">
+                    <h6 class="header_title" id="ID005">Point Of Sales Summary</h6>
+                    <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true" [height]="'auto'"
+                    [columnAutoWidth]="true" [dataSource]="pointOfSalesSummaryArr">
+                        <dxo-paging [enabled]="false"></dxo-paging>
+                        <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
+                        <!-- <dxo-selection mode="multiple"></dxo-selection> -->
+                        <dxo-scrolling mode="virtual"></dxo-scrolling>
+    
+                        <dxi-column  dataField="branch_code" caption="Branch Code" [allowResizing]="true"></dxi-column>
+                        <dxi-column  dataField="Division" caption="Division" [allowResizing]="true"></dxi-column>
+                        <dxi-column  dataField="Division_Name" caption="Division Name" [allowResizing]="true"></dxi-column>
+                        <dxi-column  dataField="pcs" caption="PCS" [allowResizing]="true" alignment="right"></dxi-column>
+                        <dxi-column  dataField="Quantity" caption="Quantity" [allowResizing]="true" alignment="right"></dxi-column>
+                        <dxi-column  dataField="amount" caption="Amount" [allowResizing]="true" alignment="right"></dxi-column>
+                        <dxi-column  dataField="vat_GST_amt" caption="VAT/ GST Amount" [allowResizing]="true" alignment="right"></dxi-column>
+                        <dxi-column  dataField="gross_amt" caption="Gross Amount" [allowResizing]="true" alignment="right"></dxi-column>
+                        <dxi-column  dataField="profit" caption="Profit" [allowResizing]="true" alignment="right"></dxi-column>
+
+                    </dx-data-grid>
+                </div>
+
+                <div class="col-md-6">
+                    <h6 class="header_title" id="ID006">Receipts</h6>
+                    <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true" [height]="'auto'"
+                    [columnAutoWidth]="true" [dataSource]="receiptSummaryArr">
+                        <dxo-paging [enabled]="false"></dxo-paging>
+                        <dxo-editing mode="cell" [allowUpdating]="false"></dxo-editing>
+                        <!-- <dxo-selection mode="multiple"></dxo-selection> -->
+                        <dxo-scrolling mode="virtual"></dxo-scrolling>
+    
+                        <dxi-column  dataField="branch" caption="Branch" [allowResizing]="true"></dxi-column>
+                        <dxi-column  dataField="CreditMode" caption="Credit Mode" [allowResizing]="true"></dxi-column>
+                        <dxi-column  dataField="Division_Name" caption="Division Name" [allowResizing]="true"></dxi-column>
+                        <dxi-column  dataField="amountFC" caption="Amount FC" [allowResizing]="true" alignment="right"></dxi-column>
+                        <dxi-column  dataField="amountLC" caption="Amount LC" [allowResizing]="true" alignment="right"></dxi-column>
+
+                        
+                        <dxo-summary>
+                            <dxi-total-item column="Amount FC" summaryType="sum" displayFormat="{0}" alignment="right"></dxi-total-item>
+                            <dxi-total-item column="Amount LC" summaryType="sum" displayFormat="{0}" alignment="right"></dxi-total-item>
+                        </dxo-summary>
+                    </dx-data-grid>
+
+                    <div class="row mt-2">
+                        <mat-tab-group (selectedTabChange)="onTabChange($event)">
+                            <mat-tab label="Available Stock">
+                               <div class="row mt-1">
+                                    <app-loader [isLoading]="isLoading"></app-loader>
+                                    <dx-data-grid [columnAutoWidth]="true" [dataSource]="availableStockGridDataArr" *ngIf="!isLoading">
+                                        <dxo-paging [pageSize]="12"></dxo-paging>
+                                        <dxo-editing mode="cell" [allowUpdating]="false"></dxo-editing>
+                                        <dxo-scrolling mode="standard"></dxo-scrolling>
+        
+                                        <dxi-column  dataField="branch" caption="Branch" [allowResizing]="true"></dxi-column>
+                                        <dxi-column  dataField="division" caption="Division" [allowResizing]="true"></dxi-column>
+                                        <dxi-column  dataField="qty" caption="Qty/Pcs" [allowResizing]="true" alignment="right"></dxi-column>
+                                        <dxi-column  dataField="cost" caption="Cost" [allowResizing]="true" alignment="right"></dxi-column>
+
+                                    </dx-data-grid>
+                               </div>
+                            </mat-tab>
+                            
+                            <mat-tab label="POS Collection">
+                                <div class="row mt-1">
+                                    <app-loader [isLoading]="isLoading"></app-loader>
+                                    <dx-data-grid [columnAutoWidth]="true" [dataSource]="posCollectionGridDataArr" *ngIf="!isLoading">
+                                        <dxo-paging [pageSize]="12"></dxo-paging>
+                                        <dxo-editing mode="cell" [allowUpdating]="false"></dxo-editing>
+                                        <dxo-scrolling mode="standard"></dxo-scrolling>
+        
+                                        <dxi-column  dataField="branch" caption="Branch" [allowResizing]="true"></dxi-column>
+                                        <dxi-column  dataField="Receipts" caption="Mode of Receipts" [allowResizing]="true"></dxi-column>
+                                        <dxi-column  dataField="amount" caption="Amount" [allowResizing]="true" alignment="right"></dxi-column>
+
+                                    </dx-data-grid>
+                                </div>
+                            </mat-tab>
+                           
+                            <mat-tab label="POS Purchase">
+                                <div class="row mt-1">
+                                    <app-loader [isLoading]="isLoading"></app-loader>
+                                    <dx-data-grid [columnAutoWidth]="true" [dataSource]="posPurchaseGridDataArr" *ngIf="!isLoading">
+                                        <dxo-paging [pageSize]="12"></dxo-paging>
+                                        <dxo-editing mode="cell" [allowUpdating]="false"></dxo-editing>
+                                        <dxo-scrolling mode="standard"></dxo-scrolling>
+        
+                                        <dxi-column  dataField="branch" caption="Branch" [allowResizing]="true"></dxi-column>
+                                        <dxi-column  dataField="grossWt" caption="Gross Weight" [allowResizing]="true"></dxi-column>
+                                        <dxi-column  dataField="amount" caption="Amount" [allowResizing]="true" alignment="right"></dxi-column>
+
+                                    </dx-data-grid>
+                                </div>
+                            </mat-tab>
+
+                            <mat-tab label="Accounts">
+                                <div class="row mt-1">
+                                    <app-loader [isLoading]="isLoading"></app-loader>
+                                    <dx-data-grid [columnAutoWidth]="true" [dataSource]="accountsGridDataArr" *ngIf="!isLoading">
+                                        <dxo-paging [pageSize]="12"></dxo-paging>
+                                        <dxo-editing mode="cell" [allowUpdating]="false"></dxo-editing>
+                                        <dxo-scrolling mode="standard"></dxo-scrolling>
+        
+                                        <dxi-column  dataField="accCode" caption="ACC Code" [allowResizing]="true"></dxi-column>
+                                        <dxi-column  dataField="description" caption="Description" [allowResizing]="true"></dxi-column>
+                                        <dxi-column  dataField="branch" caption="Branch" [allowResizing]="true"></dxi-column>
+                                        <dxi-column  dataField="amount" caption="Amount" [allowResizing]="true" alignment="right"></dxi-column>
+                                    </dx-data-grid>
+                                </div>
+                            </mat-tab>
+                        </mat-tab-group>
+                    </div>
+                </div>
+            </div>
+
+            <dx-popup [width]="300" [height]="180" [showTitle]="true" container=".dx-viewport"
+            title="Template Data" [dragEnabled]="false" [showCloseButton]="false" (onHidden)="popupClosed()"
+            [visible]="popupVisible">
+                <div class="popup-content">
+                    <div class="form-group">
+                        <label for="T_Name">Name:</label>
+                        <input type="text" id="T_Name" class="form-control" formControlName="templateName"/>
+                    </div>
+                    <div class="button-group d-flex">
+                        <button mat-flat-button [ngClass]="{SaveNew_template: templateNameHasValue,
+                            'btn-m-r-10': true, 'demo-button': true, 'btn-width': true, 'mx-1': true}"
+                        (click)="saveTemplate_DB()">
+                        {{ templateNameHasValue ? "Save as New Template" : "Save" }}
+                        </button>
+                        <button  mat-flat-button class="btn-m-r-10 btn-width mx-1 cancelBTN"
+                        (click)="popupClosed()">
+                        Cancel</button>
+                    </div>
+                </div>
+            </dx-popup>
+            
+            <div class="row mt-2 justify-content-end mx-2">
+                <app-report-screen-buttons (saveTemplateClick)="saveTemplate()" (previewClicked)="previewClick()"
+                (printClicked)="printBtnClick()"></app-report-screen-buttons>
+            </div>
+        </div>
+    </form>
+</div>

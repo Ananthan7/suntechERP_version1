@@ -1357,7 +1357,7 @@ export class CommonServiceService {
   //   return this.chartDataSource.value;
   // }
 
-  decimalPoints(data: any, decimalPoints: any){
-    return Number(data.value).toFixed(decimalPoints);
-  }
+  // decimalPoints(data: any, decimalPoints: any){
+  //   return Number(data.value).toFixed(decimalPoints);
+  // }
 }

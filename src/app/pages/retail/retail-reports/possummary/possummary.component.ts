@@ -4,32 +4,39 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 
 @Component({
-  selector: 'app-salesman-wise-profit-analysis',
-  templateUrl: './salesman-wise-profit-analysis.component.html',
-  styleUrls: ['./salesman-wise-profit-analysis.component.scss']
+  selector: 'app-possummary',
+  templateUrl: './possummary.component.html',
+  styleUrls: ['./possummary.component.scss']
 })
-export class SalesmanWiseProfitAnalysisComponent implements OnInit {
-  salesmanWiseProfitAnalysisForm: FormGroup = this.formBuilder.group({
+export class POSSummaryComponent implements OnInit {
+  @Input() content!: any; 
+  POS_SummaryForm: FormGroup = this.formBuilder.group({
     branch: [''],
     fromdate: [''],
     todate: [''],
     templateName: [''],
 
-    
+    serviceChargeBoolean: [true],
+
     
 
   });
-  @Input() content!: any; 
   fetchedBranchData: any[] =[];
   fetchedBranchDataParam: any= [];
   dateToPass: { fromDate: string; toDate: string } = { fromDate: '', toDate: '' };
   branchDivisionControlsTooltip: any;
   formattedBranchDivisionData: any;
-  salesmanWiseProfitArr: any = [];
+  pointOfSalesSummaryArr: any = [];
+  receiptSummaryArr: any = [];
+  isLoading: boolean = false;
+  currentTab: any;
+  availableStockGridDataArr: any = [];
+  posCollectionGridDataArr: any = [];
+  posPurchaseGridDataArr: any = [];
+  accountsGridDataArr: any = [];
   popupVisible: boolean = false;
-  templateNameHasValue: boolean= false;
+  templateNameHasValue: boolean = false
 
-  
   constructor(private activeModal: NgbActiveModal, private formBuilder: FormBuilder,
     private commonService: CommonServiceService) { }
 
@@ -52,10 +59,10 @@ export class SalesmanWiseProfitAnalysisComponent implements OnInit {
 
   setDateValue(event: any){
     if(event.FromDate){
-      this.salesmanWiseProfitAnalysisForm.controls.fromdate.setValue(event.FromDate);
+      this.POS_SummaryForm.controls.fromdate.setValue(event.FromDate);
     }
     else if(event.ToDate){
-      this.salesmanWiseProfitAnalysisForm.controls.todate.setValue(event.ToDate);
+      this.POS_SummaryForm.controls.todate.setValue(event.ToDate);
     }
   }
 
@@ -63,12 +70,12 @@ export class SalesmanWiseProfitAnalysisComponent implements OnInit {
     if (this.content && Object.keys(this.content).length > 0) {
       console.log(this.content)
       let ParcedPreFetchData = JSON.parse(this.content?.CONTROL_LIST_JSON)
-      this.salesmanWiseProfitAnalysisForm.controls.templateName.setValue(ParcedPreFetchData.CONTROL_HEADER.TEMPLATENAME)
+      this.POS_SummaryForm.controls.templateName.setValue(ParcedPreFetchData.CONTROL_HEADER.TEMPLATENAME)
       this.popupVisible = false;
     }
     else{
       this.popupVisible = false;
-      this.salesmanWiseProfitAnalysisForm.controls.templateName.setValue(null)
+      this.POS_SummaryForm.controls.templateName.setValue(null)
     }
   }
 
@@ -124,12 +131,35 @@ export class SalesmanWiseProfitAnalysisComponent implements OnInit {
     this.branchDivisionControlsTooltip = content +'\n'+content2 +'\n'+ content3 +'\n'+ content4
 
     this.formattedBranchDivisionData = branchDivisionData
-    this.salesmanWiseProfitAnalysisForm.controls.branch.setValue(this.formattedBranchDivisionData);
+    this.POS_SummaryForm.controls.branch.setValue(this.formattedBranchDivisionData);
+  }
+
+
+  onTabChange(event: any){
+    this.currentTab = event.tab.textLabel
+    switch(this.currentTab){
+      case 'Available Stock': this.availableStockGridData(); break;
+      case 'POS Collection': this.POSCollectnGridData(); break;
+      case 'POS Purchase' : this.posPurchaseGridData(); break;
+      case 'Accounts' : this.accountsGridData(); break;
+    }
+  }
+  availableStockGridData(){
+
+  }
+  POSCollectnGridData(){
+
+  }
+  posPurchaseGridData(){
+
+  }
+  accountsGridData(){
+
   }
 
   saveTemplate(){
     this.popupVisible = true;
-    console.log(this.salesmanWiseProfitAnalysisForm.controls.templateName.value)
+    console.log(this.POS_SummaryForm.controls.templateName.value)
   }
   saveTemplate_DB(){
 
@@ -144,7 +174,6 @@ export class SalesmanWiseProfitAnalysisComponent implements OnInit {
   }
 
 
-
   prefillScreenValues(){
     if ( Object.keys(this.content).length > 0) {
       //  this.templateNameHasValue = !!(this.content?.TEMPLATE_NAME);
@@ -152,10 +181,12 @@ export class SalesmanWiseProfitAnalysisComponent implements OnInit {
     else{
       const userBranch = localStorage.getItem('userbranch');
       const formattedUserBranch = userBranch ? `${userBranch}#` : null;
-      this.salesmanWiseProfitAnalysisForm.controls.branch.setValue(formattedUserBranch);
+      this.POS_SummaryForm.controls.branch.setValue(formattedUserBranch);
       this.fetchedBranchDataParam = formattedUserBranch;
       this.fetchedBranchData= this.fetchedBranchDataParam?.split("#")
    
+      // let x = this.commonService.formatYYMMDD(new Date());
+      // console.log(x)
       this.dateToPass = {
         fromDate:  this.formatDateToYYYYMMDD(new Date()),
         toDate: this.formatDateToYYYYMMDD(new Date()),

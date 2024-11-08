@@ -30,7 +30,7 @@
             </div>
       
             <div class="row mb-1">
-                <h6 class="header_title" id="ID008">Diamond Section (Total Amount), Metal Section - Making charge</h6>
+                <h6 class="header_title" id="ID002">Diamond Section (Total Amount), Metal Section - Making charge</h6>
                 <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true" [height]="'auto'"
                 [columnAutoWidth]="true" [dataSource]="salesmanWiseProfitArr">
                     <dxo-paging [enabled]="false"></dxo-paging>
@@ -85,6 +85,10 @@
             </div>
         </dx-popup>
 
+        <div class="row mt-2 justify-content-end mx-2">
+            <app-report-screen-buttons (saveTemplateClick)="saveTemplate()" (previewClicked)="previewClick()"
+            (printClicked)="printBtnClick()"></app-report-screen-buttons>
+        </div>
 
     </form>
 </div>

@@ -43,13 +43,15 @@
                         <dx-data-grid [columnAutoWidth]="true" [dataSource]="RegisterGridData" [columns]="RegisterGridcolumnkeys"
                         *ngIf="!isLoading">
                             <dxo-paging [pageSize]="12"></dxo-paging>
-                            <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
+                            <dxo-editing mode="cell" [allowUpdating]="false"></dxo-editing>
                             <dxo-scrolling mode="standard"></dxo-scrolling>
 
                             <dxo-summary>
                                 <dxi-total-item column="GrossAmt" summaryType="sum" [customizeText]="customizeSummaryContent"
                                 alignment="right"></dxi-total-item>
                                 <dxi-total-item column="CC_CommissionAmt" summaryType="sum" [customizeText]="customizeSummaryContent"
+                                alignment="right"></dxi-total-item>
+                                <dxi-total-item column="invamt" summaryType="sum" [customizeText]="customizeSummaryContent"
                                 alignment="right"></dxi-total-item>
                             </dxo-summary>
                         </dx-data-grid>
@@ -64,7 +66,7 @@
                             <dx-data-grid #dataGrid id="gridContainer" [dataSource]="Collectn_GoldPurchaseGrid" [showBorders]="true"
                             [allowColumnResizing]="true" *ngIf="!isLoading">
                                 <dxo-paging [pageSize]="12"></dxo-paging>
-                                <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
+                                <dxo-editing mode="cell" [allowUpdating]="false"></dxo-editing>
                                 <dxo-scrolling mode="standard"></dxo-scrolling>
 
                                 <dxi-column dataField="modename" caption="Mode"></dxi-column>
@@ -84,7 +86,7 @@
                             <dx-data-grid #dataGrid id="gridContainer" [dataSource]="GoldSum_collection" [showBorders]="true"
                             [allowColumnResizing]="true" *ngIf="!isLoading">
                                 <dxo-paging [pageSize]="12"></dxo-paging>
-                                <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
+                                <dxo-editing mode="cell" [allowUpdating]="false"></dxo-editing>
                                 <dxo-scrolling mode="standard"></dxo-scrolling>
 
                                 <dxi-column dataField="STOCK_CODE" caption="Stock Code"></dxi-column>
@@ -106,7 +108,7 @@
                             <dx-data-grid #dataGrid id="gridContainer" [dataSource]="accountBalanceGrid" [showBorders]="true"
                             [allowColumnResizing]="true" *ngIf="!isLoading">
                                 <dxo-paging [pageSize]="12"></dxo-paging>
-                                <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
+                                <dxo-editing mode="cell" [allowUpdating]="false"></dxo-editing>
                                 <dxo-scrolling mode="standard"></dxo-scrolling>
 
                                 <dxi-column alignment="center" caption="Account"></dxi-column>
@@ -130,7 +132,7 @@
                             <dx-data-grid #dataGrid id="gridContainer" [dataSource]="acccountMovementGrid" [showBorders]="true"
                             [allowColumnResizing]="true" *ngIf="!isLoading">
                                 <dxo-paging [pageSize]="12"></dxo-paging>
-                                <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
+                                <dxo-editing mode="cell" [allowUpdating]="false"></dxo-editing>
                                 <dxo-scrolling mode="standard"></dxo-scrolling>
 
 
@@ -153,7 +155,7 @@
                             <dx-data-grid #dataGrid id="gridContainer" [dataSource]="salesOrderSumaryGrid" [showBorders]="true"
                             [allowColumnResizing]="true" *ngIf="!isLoading">
                                 <dxo-paging [pageSize]="12"></dxo-paging>
-                                <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
+                                <dxo-editing mode="cell" [allowUpdating]="false"></dxo-editing>
                                 <dxo-scrolling mode="standard"></dxo-scrolling>
 
 
@@ -182,7 +184,7 @@
                             <dx-data-grid #dataGrid id="gridContainer" [dataSource]="salesmanSummaryGridArr" [showBorders]="true"
                             [allowColumnResizing]="true" *ngIf="!isLoading">
                                 <dxo-paging [pageSize]="12"></dxo-paging>
-                                <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
+                                <dxo-editing mode="cell" [allowUpdating]="false"></dxo-editing>
                                 <dxo-scrolling mode="standard"></dxo-scrolling>
 
                                 
@@ -208,13 +210,13 @@
                             <dx-data-grid #dataGrid id="gridContainer" [dataSource]="cashCreditSmryGrid" [showBorders]="true"
                             [allowColumnResizing]="true" *ngIf="!isLoading">
                                 <dxo-paging [pageSize]="12"></dxo-paging>
-                                <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
+                                <dxo-editing mode="cell" [allowUpdating]="false"></dxo-editing>
                                 <dxo-scrolling mode="standard"></dxo-scrolling>
                                 
                                 <dxi-column dataField="MODE_DESCP" caption="Mode"></dxi-column>
-                                <dxi-column dataField="VOCTYPE" caption="Voc Type" alignment="right"></dxi-column>
-                                <dxi-column dataField="CREDIT_CODE" caption="Receive As" alignment="right"></dxi-column>
-                                <dxi-column dataField="CURRENCY_CODE" caption="Currency" alignment="right"></dxi-column>
+                                <dxi-column dataField="VOCTYPE" caption="Voc Type"></dxi-column>
+                                <dxi-column dataField="CREDIT_CODE" caption="Receive As"></dxi-column>
+                                <dxi-column dataField="CURRENCY_CODE" caption="Currency"></dxi-column>
                                 <dxi-column dataField="AMTFC" caption="Amount FC" alignment="right"></dxi-column>
                                 <dxi-column dataField="AMTCC" caption="Amount CC" alignment="right"></dxi-column>
 

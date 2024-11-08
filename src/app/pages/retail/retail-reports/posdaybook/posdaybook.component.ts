@@ -421,34 +421,43 @@ export class POSDaybookComponent implements OnInit {
 
 
         this.RegisterGridData = result.dynamicData[0];
-        this.RegisterGridData.forEach((item: any) => {
+        console.log(this.RegisterGridData)
+        this.RegisterGridData?.forEach((item: any) => {
           for (const key in item) {
-            if (typeof item[key] === 'number' && key !== 'mid') {
+            if (typeof item[key] === 'number' && key !== 'mid' && key !== 'vocno') {
               item[key] = this.customizeText(item[key], 2);
             }
           }
         });
         this.RegisterGridcolumnkeys = [
           // { dataField: 'mid', caption: 'ID' },
-          { dataField: 'branch_code', caption: 'Branch Code' },
-          { dataField: 'VOCTYPE', caption: 'Voucher Type' },
           { dataField: 'vocno', caption: 'Voucher No' },
           { dataField: 'vocdate', caption: 'Voucher Date', dataType: 'date' },
           { dataField: 'sman', caption: 'Salesman' },
-          { dataField: 'GrossAmt', caption: 'Gross Amount' },
-          { dataField: 'CC_CommissionAmt', caption: 'Commission Amount' },
-          { dataField: 'invamt', caption: 'Invoice Amount' },
-          { dataField: 'sretamt', caption: 'sretamt' },
-          { dataField: 'scpamt', caption: 'scpamt' },
-          { dataField: 'roundoff', caption: 'Round Off' },
-          { dataField: 'lcreceived', caption: 'LC Received'},
+          { dataField: 'GrossAmt', caption: 'Gross Amount', alignment: 'right' },
+          { dataField: 'CC_CommissionAmt', caption: 'Commission Amount', alignment: 'right' },
+          { dataField: 'invamt', caption: 'Invoice Amount', alignment: 'right' },
+
+
+          { dataField: 'others', caption: 'Others', alignment: 'right' },
+
+
+
+
+
+          { dataField: 'branch_code', caption: 'Branch Code' },
+          { dataField: 'VOCTYPE', caption: 'Voucher Type' },
+          { dataField: 'sretamt', caption: 'sretamt', alignment: 'right' },
+          { dataField: 'scpamt', caption: 'scpamt', alignment: 'right' },
+          { dataField: 'roundoff', caption: 'Round Off', alignment: 'right' },
+          { dataField: 'lcreceived', caption: 'LC Received', alignment: 'right'},
           { dataField: 'fc', caption: 'fc' },
           { dataField: 'fcreceived', caption: 'fcreceived' },
-          { dataField: 'creditcrd', caption: 'Credit Card' },
-          { dataField: 'advance', caption: 'Advance' },
-          { dataField: 'creditac', caption: 'Credit Ac' },
-          { dataField: 'creditamt', caption: 'Credit Amount' },
-          { dataField: 'others', caption: 'Credit Amount' }
+          { dataField: 'creditcrd', caption: 'Credit Card', alignment: 'right' },
+          { dataField: 'advance', caption: 'Advance', alignment: 'right' },
+          { dataField: 'creditac', caption: 'Credit Ac', alignment: 'right' },
+          { dataField: 'creditamt', caption: 'Credit Amount', alignment: 'right' },
+          
         ];
       }
       else{
@@ -497,7 +506,7 @@ export class POSDaybookComponent implements OnInit {
     }).subscribe({
         next: (response) => {
           this.Collectn_GoldPurchaseGrid = response.collectionData.dynamicData[0];
-          this.Collectn_GoldPurchaseGrid.forEach((item: any) => {
+          this.Collectn_GoldPurchaseGrid?.forEach((item: any) => {
             for (const key in item) {
               if (typeof item[key] === 'number' && key !== 'mid') {
                 item[key] = this.customizeText(item[key], 2);
@@ -506,7 +515,7 @@ export class POSDaybookComponent implements OnInit {
           });
 
           this.GoldSum_collection = response.goldSumData.dynamicData[0];
-           this.GoldSum_collection.forEach((item: any) => {
+           this.GoldSum_collection?.forEach((item: any) => {
             for (const key in item) {
               if (typeof item[key] === 'number' && key !== 'mid') {
                 item[key] = this.customizeText(item[key], 2);
@@ -516,7 +525,7 @@ export class POSDaybookComponent implements OnInit {
 
           console.log('GetPOSAcctBalanceGrid', response)
           this.accountBalanceGrid = response.accountBalance.dynamicData[0];
-           this.accountBalanceGrid.forEach((item: any) => {
+           this.accountBalanceGrid?.forEach((item: any) => {
             for (const key in item) {
               if (typeof item[key] === 'number' && key !== 'mid') {
                 item[key] = this.customizeText(item[key], 2);

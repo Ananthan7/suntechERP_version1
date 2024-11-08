@@ -1,1 +1,176 @@
-<p>set-ref-master-real works!</p>
+<!-- header section starts -->
+<div class="card-content border-bottom d-flex justify-content-between p-2">
+  <h5 class="pos-modaltitle" id="modal-dia-metal">Set Ref Master</h5>
+  <button type="button" class="btn btn-close close-btn" (click)="close()">
+    <i class="feather icon-x close-icon"></i>
+  </button>
+</div>
+
+<!-- modal header component -->
+<modal-header
+  (saveClick)="formSave()"
+  (cancelClick)="close()"
+  (deleteClick)="deleteMaster()"
+></modal-header>
+
+<!-- content section -->
+<div class="container-fluid pt-3">
+  <form [formGroup]="setRefMasterMainForm">
+    <div class="row mt-2">
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-9">
+            <div class="row mb-1">
+              <label for="division" class="col-sm-2 col-form-label" id="ID029"
+                >Division</label
+              >
+              <div class="col-md-4">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <input matInput="text" formControlName="division" />
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="row mb-1">
+              <label for="division" class="col-sm-2 col-form-label" id="ID029"
+                >Set Ref Code</label
+              >
+              <div class="col-md-4">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <input matInput="text" formControlName="division" />
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="row mb-1">
+              <label for="division" class="col-sm-2 col-form-label" id="ID029"
+                >Description</label
+              >
+              <div class="col-md-4">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <input matInput="text" formControlName="division" />
+                </mat-form-field>
+              </div>
+
+              <div class="col-md-6">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <input matInput="text" formControlName="division" />
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="row mb-1">
+              <div class="col-md-4">
+                <button type="button" class="btn btn-primary text-center m-2">
+                  Select Pending MBC Stock Masters
+                </button>
+              </div>
+
+              <div class="col-md-8">
+                <div class="row mb-1">
+                  <div class="col-md-6">
+                    <div class="row">
+                      <label
+                        for="division"
+                        class="col-sm-4 col-form-label"
+                        id="ID029"
+                        >Description</label
+                      >
+                      <div class="col-md-4">
+                        <mat-form-field
+                          style="width: 100%"
+                          appearance="outline"
+                        >
+                          <input matInput="text" formControlName="division" />
+                        </mat-form-field>
+                      </div>
+
+                      <div class="col-md-4">
+                        <mat-form-field
+                          style="width: 100%"
+                          appearance="outline"
+                        >
+                          <input matInput="text" formControlName="division" />
+                        </mat-form-field>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="row">
+                      <div class="col-md-6">
+                        <button
+                          type="button"
+                          class="btn btn-primary text-center m-2"
+                        >
+                          DPU Voc No :
+                        </button>
+                      </div>
+
+                      <div class="col-md-6">
+                        <mat-form-field
+                          style="width: 100%"
+                          appearance="outline"
+                        >
+                          <input matInput="text" formControlName="division" />
+                        </mat-form-field>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="row mb-1">
+              <div class="col-md-12 p-2 mt-1">
+                <div class="icons">
+                  <p class="btn btn-primary text-center" >Set Image</p>
+                  <div class="image_box">
+                    <img class="image_box" alt="picture" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+
+            <div class="col-md-12">
+                <dx-data-grid
+                  [dataSource]="tableData"
+                  #dataGrid
+                  id="gridContainer"
+                  keyExpr="MID"
+                  [showBorders]="true"
+                  (onSelectionChanged)="onSelectionChanged($event)"
+                >
+                  <!-- Paging disabled -->
+                  <dxo-paging [enabled]="false"></dxo-paging>
+    
+                  <!-- Cell Editing Enabled -->
+                  <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
+    
+                  <!-- Multiple Selection Mode -->
+                  <dxo-selection mode="multiple"></dxo-selection>
+    
+                  <!-- Virtual Scrolling -->
+                  <dxo-scrolling mode="virtual"></dxo-scrolling>
+    
+                  <!-- Columns Definition -->
+                  <dxi-column
+                    *ngFor="let column of columns"
+                    [dataField]="column.dataField"
+                    [caption]="column.caption"
+                    [allowEditing]="true"
+                    alignment="center"
+                  ></dxi-column>
+                </dx-data-grid>
+              </div>
+
+        </div>
+
+      </div>
+    </div>
+  </form>
+</div>
