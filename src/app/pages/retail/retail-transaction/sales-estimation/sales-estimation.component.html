@@ -17,7 +17,7 @@
           class="col-md-12 d-flex justify-content-between align-items-center"
         >
           <div class="customheader">Voucher Details</div>
-          <h4 class="customheader">POS Order # {{ voucherNumber }}</h4>
+          <h4 class="customheader">POS Estimation No # {{ voucherNumber }}</h4>
         </div>
       </div>
 
@@ -2560,7 +2560,7 @@
                   <mat-form-field appearance="outline" style="width: 100%">
                     <input
                       type="text"
-                      #mobile1
+                      #mobile1 (change)="onCustomerNameFocus(mobile1.value)"
                       onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))"
                       matInput
                       formControlName="fcn_cust_detail_phone"

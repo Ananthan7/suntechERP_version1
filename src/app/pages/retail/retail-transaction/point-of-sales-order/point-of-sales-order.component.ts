@@ -8583,7 +8583,10 @@ export class PointOfSalesOrderComponent implements OnInit {
 
               this.divisionMS = stockInfos.DIVISIONMS;
               this.itemDivision = stockInfos.DIVISION;
-
+              this.lineItemForm.controls['fcn_tab_details'].setValue(
+                stockInfos.TAGLINES??""
+              );
+              this.li_tag_val = stockInfos.TAGLINES??"";
               this.setGiftType();
               const validDivisionCodes = ["M", "D", "W", "P", "N"];
 
@@ -12734,20 +12737,24 @@ export class PointOfSalesOrderComponent implements OnInit {
     );
     // return ((percent / 100) * total).toFixed(2);
   }
-  setMetalRate(karatCode: any, screen: any) {
-    const value: any = this.karatRateDetails.filter(
+  setMetalRate(karatCode: any,screen:any) {
+    const exchangeMetalRate: any = this.karatRateDetails.filter(
       (data: any) => data.KARAT_CODE == karatCode
     )[0].POPKARAT_RATE;
 
+    const salesMetalRate: any = this.karatRateDetails.filter(
+      (data: any) => data.KARAT_CODE == karatCode
+    )[0].KARAT_RATE;
+
     if (screen === "sales") {
-      this.lineItemForm.controls["fcn_ad_metal_rate"].setValue(
-        this.comFunc.decimalQuantityFormat(value, "METAL_RATE")
+      this.lineItemForm.controls['fcn_ad_metal_rate'].setValue(
+        this.comFunc.decimalQuantityFormat(salesMetalRate, 'METAL_RATE')
       );
     } else {
-      this.exchangeForm.controls["fcn_exchange_metal_rate"].setValue(
-        this.comFunc.decimalQuantityFormat(value, "METAL_RATE")
+      this.exchangeForm.controls['fcn_exchange_metal_rate'].setValue(
+        this.comFunc.decimalQuantityFormat(exchangeMetalRate, 'METAL_RATE')
       );
-      this._exchangeItemchange.METAL_RATE_PERGMS_ITEMKARAT = value;
+      this._exchangeItemchange.METAL_RATE_PERGMS_ITEMKARAT = exchangeMetalRate;
     }
   }
   changeStoneWt(event: any) {
