@@ -1,0 +1,150 @@
+<!-- header section starts -->
+<div class="card-content border-bottom d-flex justify-content-between p-2">
+  <h5 class="pos-modaltitle" id="modal-dia-metal">Client Authentication  </h5>
+  <button type="button" class="btn btn-close close-btn" (click)="close()">
+    <i class="feather icon-x close-icon"></i>
+  </button>
+</div>
+<!-- modal header component -->
+<modal-header
+  (saveClick)="formSave()"
+  (cancelClick)="close()"
+  (deleteClick)="deleteMaster()"
+></modal-header>
+<!-- content section -->
+<div class="container-fluid pt-3">
+  <form [formGroup]="SalesInvoiceMainForm">
+    <div class="row">
+      <div class="col-md-5">
+        <div class="row mb-1">
+          <label for="code" class="col-sm-4 col-form-label" id="ID029"
+            >Company Name</label
+          >
+          <div class="col-md-8">
+            <mat-form-field style="width: 100%" appearance="outline">
+              <input matInput="text" formControlName="mode" />
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="row mb-1">
+          <label for="code" class="col-sm-4 col-form-label" id="ID029"
+            >User Name</label
+          >
+          <div class="col-md-8">
+            <mat-form-field style="width: 100%" appearance="outline">
+              <input matInput="text" formControlName="mode" />
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="row mb-1">
+          <label for="code" class="col-sm-4 col-form-label" id="ID029"
+            >Mtl Sale Name</label
+          >
+          <div class="col-md-8">
+            <mat-form-field style="width: 100%" appearance="outline">
+              <input matInput="text" formControlName="mode" />
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="row mb-1">
+          <label for="code" class="col-sm-4 col-form-label" id="ID029"
+            >Dia Sale Name</label
+          >
+          <div class="col-md-8">
+            <mat-form-field style="width: 100%" appearance="outline">
+              <input matInput="text" formControlName="mode" />
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="row mb-1">
+          <label for="code" class="col-sm-4 col-form-label" id="ID029"
+            >Cns Sale Name</label
+          >
+          <div class="col-md-8">
+            <mat-form-field style="width: 100%" appearance="outline">
+              <input matInput="text" formControlName="mode" />
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="row mb-1">
+          <label for="code" class="col-sm-4 col-form-label" id="ID029"
+            >Base URL
+          </label>
+          <div class="col-md-8">
+            <mat-form-field style="width: 100%" appearance="outline">
+              <input matInput="text" formControlName="mode" />
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-5">
+        <div class="row mb-1">
+          <label for="code" class="col-sm-4 col-form-label" id="ID029"
+            >Purchase Name
+          </label>
+          <div class="col-md-8">
+            <mat-form-field style="width: 100%" appearance="outline">
+              <input matInput="text" formControlName="mode" />
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row mb-1">
+          <label for="code" class="col-sm-4 col-form-label" id="ID029"
+            >Inventory Name
+          </label>
+          <div class="col-md-8">
+            <mat-form-field style="width: 100%" appearance="outline">
+              <input matInput="text" formControlName="mode" />
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row mb-1">
+          <label for="code" class="col-sm-4 col-form-label" id="ID029"
+            >Acc. Bal Name
+          </label>
+          <div class="col-md-8">
+            <mat-form-field style="width: 100%" appearance="outline">
+              <input matInput="text" formControlName="mode" />
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row mb-1">
+          <label for="code" class="col-sm-4 col-form-label" id="ID029"
+            >Cash_Bank Name
+          </label>
+          <div class="col-md-8">
+            <mat-form-field style="width: 100%" appearance="outline">
+              <input matInput="text" formControlName="mode" />
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row mb-1">
+          <label for="code" class="col-sm-4 col-form-label" id="ID029"
+            >Overdue Name
+          </label>
+          <div class="col-md-8">
+            <mat-form-field style="width: 100%" appearance="outline">
+              <input matInput="text" formControlName="mode" />
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-2">
+        <div class="row p-2">
+          <mat-checkbox formControlName="sms" id="ID047">Active</mat-checkbox>
+        </div>
+
+        <div class="row p-2">
+          <mat-checkbox formControlName="sms" id="ID047"
+            >Other Language</mat-checkbox
+          >
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

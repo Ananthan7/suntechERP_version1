@@ -1,1 +1,185 @@
-<p>gift-voucher-master works!</p>
+<div class="card-content border-bottom d-flex justify-content-between p-2">
+    <h5 class="pos-modaltitle" id="modal-dia-metal">Gift Voucher Master</h5>
+    <button type="button" class="btn btn-close close-btn" (click)="close()">
+        <i class="feather icon-x close-icon"></i>
+    </button>
+</div>
+<!-- modal header component -->
+<modal-header (cancelClick)="close()" (saveClick)="formSubmit()" (deleteClick)="deleteRecord()"></modal-header>
+
+
+<!-- content section -->
+<div class="container-fluid pt-3">
+    <form [formGroup]="giftVoucherMasterForm">
+        <div class="row mt-2">
+            <div class="col-md-12">
+                <div class="row mb-1">
+                    <label for="code" class="col-sm-2 col-form-label" id="ID029">Code:</label>
+                    <div class="col-md-2">
+                        <mat-form-field style="width: 100%" appearance="outline">
+                            <input matInput="text" formControlName="code" />
+                        </mat-form-field>
+                    </div>
+                    <label for="code" class="col-sm-2 offset-md-1 col-form-label" id="ID029">Branches</label>
+
+                    <div class="col-md-2">
+                        <button class="btn btn-primary btn-sm">Branch</button>
+                        </div>
+                </div>
+
+                <div class="row mb-1">
+                    <label for="code" class="col-sm-2 col-form-label" id="ID029">Description:</label>
+                    <div class="col-md-7">
+                        <mat-form-field style="width: 100%" appearance="outline">
+                            <input matInput="text" formControlName="code" />
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <div class="row mb-1">
+                    <label for="code" class="col-sm-2 col-form-label" id="ID029">Gift On:</label>
+                    <div class="col-md-2">
+                        <mat-form-field style="width: 100%;" appearance="outline">
+                            <mat-select>
+                                <mat-option></mat-option>
+                                <mat-option></mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <label for="code" class="col-sm-2 offset-md-1 col-form-label" id="ID029">Division</label>
+                    <div class="col-md-2">
+                        <mat-form-field style="width: 100%;" appearance="outline">
+                            <mat-select>
+                                <mat-option></mat-option>
+                                <mat-option></mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
+
+
+                <div class="row mb-1">
+                    <label for="code" class="col-sm-2 col-form-label" id="ID029">Validity:</label>
+                    <div class="col-md-2">
+                        <mat-form-field style="width: 100%" appearance="outline">
+                            <input matInput="text" formControlName="code" />
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-1">
+                        <mat-checkbox class="example-margin">Skip</mat-checkbox>
+                    </div>
+                    <label for="code" class="col-sm-2 col-form-label" id="ID029">Cost Centre</label>
+
+                    <div class="col-md-2">
+                        <mat-form-field style="width: 100%" appearance="outline">
+                            <input matInput="text" formControlName="code" />
+
+                            <master-search [MasterSearchData]="PLACCodeCodeData" class="masterSearch"
+                            (newRowClick)="PLACCodeCodeSelected($event)">
+                        </master-search>
+                        </mat-form-field>
+                    </div>
+                </div>
+
+
+                <div class="row mb-1">
+                    <label for="code" class="col-sm-2 col-form-label" id="ID029">Amount:</label>
+                    <div class="col-md-2">
+                        <mat-form-field style="width: 100%" appearance="outline">
+                            <input matInput="text" formControlName="code" />
+                        </mat-form-field>
+                    </div>
+                    <label for="code" class="col-sm-2 offset-md-1 col-form-label" id="ID029">Base currency</label>
+
+                    <div class="col-md-2">
+                        <mat-form-field style="width: 100%" appearance="outline">
+                            <input matInput="text" formControlName="code" />
+                        </mat-form-field>
+                    </div>
+                </div>
+
+
+                <div class="row mb-1">
+                    <label for="code" class="col-sm-2 col-form-label" id="ID029">Actual Amt:</label>
+                    <div class="col-md-2">
+                        <mat-form-field style="width: 100%" appearance="outline">
+                            <input matInput="text" formControlName="code" />
+                        </mat-form-field>
+                    </div>
+                  
+                </div>
+
+
+                <div class="row mb-1">
+                    <label for="code" class="col-sm-2 col-form-label" id="ID029">Min Invoice Amt:</label>
+                    <div class="col-md-2">
+                        <mat-form-field style="width: 100%" appearance="outline">
+                            <input matInput="text" formControlName="code" />
+                        </mat-form-field>
+                    </div>
+
+                    <label for="code" class="col-sm-2 offset-md-1 col-form-label" id="ID029">Issue Type</label>
+
+                    <div class="col-md-4">
+                        <mat-radio-group aria-label="Select an option"
+                                formControlName="Metalsoption">
+                                <mat-radio-button value="D"  class="mx-2">One Voucher Per Invoice</mat-radio-button>
+                                <mat-radio-button value="M"  class="mx-2">Multi Voucher Per Invoice</mat-radio-button>
+                              
+                            </mat-radio-group>
+
+                    </div>
+
+                  
+                </div>
+
+
+                <div class="row mb-1">
+                    <label for="code" class="col-sm-2 col-form-label" id="ID029">Prefix:</label>
+                    <div class="col-md-2">
+                        <mat-form-field style="width: 100%" appearance="outline">
+                            <input matInput="text" formControlName="code" />
+
+                            <master-search [MasterSearchData]="PLACCodeCodeData" class="masterSearch"
+                            (newRowClick)="PLACCodeCodeSelected($event)">
+                        </master-search>
+                        </mat-form-field>
+                    </div>
+                    <label for="code" class="col-sm-2 offset-md-1 col-form-label" id="ID029">Status</label>
+
+                    <div class="col-md-2">
+                        <mat-checkbox class="example-margin">Active</mat-checkbox>
+                    </div>
+                </div>
+
+                
+                <div class="row mb-1">
+                    <label for="code" class="col-sm-2 col-form-label" id="ID029">Validity Till Date:</label>
+
+                    <div class="col-md-2">
+                        <mat-form-field style="width: 100%" appearance="outline">
+                            <input
+                              matInput
+                              [matDatepicker]="dob"
+                              [max]="vocMaxDate"
+                              name="dob"
+                              placeholder="DD/MM/YYYY"
+                              DateValidation
+                              formControlName="dob"
+                              readonly="true"
+                              (dateChange)="dobValueSetting($event)"
+                            />
+                            <mat-datepicker-toggle
+                              matSuffix
+                              [for]="dob"
+                            ></mat-datepicker-toggle>
+                            <mat-datepicker [startAt]="currentDate" #dob></mat-datepicker>
+                          </mat-form-field>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </form>
+</div>

@@ -124,7 +124,7 @@
             <div class="row mb-1">
               <div class="col-md-12 p-2 mt-1">
                 <div class="icons">
-                  <p class="btn btn-primary text-center" >Set Image</p>
+                  <p class="btn btn-primary text-center">Set Image</p>
                   <div class="image_box">
                     <img class="image_box" alt="picture" />
                   </div>
@@ -135,41 +135,83 @@
         </div>
 
         <div class="row">
+          <div class="col-md-12">
+            <div class="row">
+              <menu-buttons
+                [viewAddBtn]="true"
+                [viewDeleteBtn]="true"
+                [viewImportBtn]="false"
+                (addClick)="openRepairdetails()"
+                (deleteClick)="removedata()"
+              >
+              </menu-buttons>
+            </div>
 
-            <div class="col-md-12">
-                <dx-data-grid
-                  [dataSource]="tableData"
-                  #dataGrid
-                  id="gridContainer"
-                  keyExpr="MID"
-                  [showBorders]="true"
-                  (onSelectionChanged)="onSelectionChanged($event)"
-                >
-                  <!-- Paging disabled -->
-                  <dxo-paging [enabled]="false"></dxo-paging>
-    
-                  <!-- Cell Editing Enabled -->
-                  <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
-    
-                  <!-- Multiple Selection Mode -->
-                  <dxo-selection mode="multiple"></dxo-selection>
-    
-                  <!-- Virtual Scrolling -->
-                  <dxo-scrolling mode="virtual"></dxo-scrolling>
-    
-                  <!-- Columns Definition -->
-                  <dxi-column
-                    *ngFor="let column of columns"
-                    [dataField]="column.dataField"
-                    [caption]="column.caption"
-                    [allowEditing]="true"
-                    alignment="center"
-                  ></dxi-column>
-                </dx-data-grid>
-              </div>
+            <dx-data-grid
+              [dataSource]="tableData"
+              #dataGrid
+              id="gridContainer"
+              keyExpr="MID"
+              [showBorders]="true"
+              (onSelectionChanged)="onSelectionChanged($event)"
+            >
+              <!-- Paging disabled -->
+              <dxo-paging [enabled]="false"></dxo-paging>
 
+              <!-- Cell Editing Enabled -->
+              <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
+
+              <!-- Multiple Selection Mode -->
+              <dxo-selection mode="multiple"></dxo-selection>
+
+              <!-- Virtual Scrolling -->
+              <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+              <!-- Columns Definition -->
+              <dxi-column
+                *ngFor="let column of columns"
+                [dataField]="column.dataField"
+                [caption]="column.caption"
+                [allowEditing]="true"
+                alignment="center"
+              ></dxi-column>
+            </dx-data-grid>
+          </div>
         </div>
 
+        <div class="row mt-4">
+          <div class="col-md-12">
+            <dx-data-grid
+              [dataSource]="tableData"
+              #dataGrid
+              id="gridContainer"
+              keyExpr="MID"
+              [showBorders]="true"
+              (onSelectionChanged)="onSelectionChanged($event)"
+            >
+              <!-- Paging disabled -->
+              <dxo-paging [enabled]="false"></dxo-paging>
+
+              <!-- Cell Editing Enabled -->
+              <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
+
+              <!-- Multiple Selection Mode -->
+              <dxo-selection mode="multiple"></dxo-selection>
+
+              <!-- Virtual Scrolling -->
+              <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+              <!-- Columns Definition -->
+              <dxi-column
+                *ngFor="let column of columns"
+                [dataField]="column.dataField"
+                [caption]="column.caption"
+                [allowEditing]="true"
+                alignment="center"
+              ></dxi-column>
+            </dx-data-grid>
+          </div>
+        </div>
       </div>
     </div>
   </form>

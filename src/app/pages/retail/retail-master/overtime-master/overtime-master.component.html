@@ -1,0 +1,213 @@
+<!-- header section starts -->
+<div class="card-content border-bottom d-flex justify-content-between p-2">
+  <h5 class="pos-modaltitle" id="modal-dia-metal">Over Time Master</h5>
+  <button type="button" class="btn btn-close close-btn" (click)="close()">
+    <i class="feather icon-x close-icon"></i>
+  </button>
+</div>
+
+<!-- modal header component -->
+<modal-header
+  (saveClick)="formSave()"
+  (cancelClick)="close()"
+  (deleteClick)="deleteMaster()"
+></modal-header>
+
+<!-- content section -->
+<div class="container-fluid pt-3">
+  <form [formGroup]="overTimeMainForm">
+    <div class="row mt-2">
+      <div class="col-md-12">
+        <div class="row">
+          <mat-tab-group #tabGroup>
+            <mat-tab label="General">
+              <div class="row mt-2">
+                <div class="col-md-12">
+                  <div class="row mb-1">
+                    <label for="code" class="col-sm-2 col-form-label" id="ID029"
+                      >Code</label
+                    >
+                    <div class="col-md-3">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input matInput="text" formControlName="mode" />
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                  <div class="row mb-1">
+                    <label
+                      for="description"
+                      class="col-sm-2 col-form-label"
+                      id="ID029"
+                      >Description</label
+                    >
+                    <div class="col-md-6">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input matInput="text" formControlName="mode" />
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                  <div class="row mb-1">
+                    <label
+                      for="description"
+                      class="col-sm-2 col-form-label"
+                      id="ID029"
+                      >GL Code</label
+                    >
+                    <div class="col-md-3">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input matInput="text" formControlName="mode" />
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-md-3">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input matInput="text" formControlName="mode" />
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                  <div class="row mb-1">
+                    <label
+                      for="description"
+                      class="col-sm-2 col-form-label"
+                      id="ID029"
+                      >Calculation By</label
+                    >
+                    <div class="col-md-3">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input matInput="text" formControlName="mode" />
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-md-2">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input matInput="text" formControlName="mode" />
+                      </mat-form-field>
+                    </div>
+
+                    <label
+                      for="description"
+                      class="col-sm-2 col-form-label"
+                      id="ID029"
+                      >Per Hour</label
+                    >
+                  </div>
+
+                  <div class="row mb-1">
+                    <label
+                      for="description"
+                      class="col-sm-2 col-form-label"
+                      id="ID029"
+                      >Based On</label
+                    >
+                    <div class="col-md-3">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input matInput="text" formControlName="mode" />
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-md-4 mt-2">
+                      <mat-checkbox
+                        formControlName="creditCardLimitCheck"
+                        id="ID006"
+                      >
+                        Holiday Over Time
+                      </mat-checkbox>
+                    </div>
+                  </div>
+
+                  <div class="row mb-1">
+                    <div class="col-md-5"></div>
+
+                    <div class="col-md-4 mt-2">
+                      <mat-checkbox
+                        formControlName="creditCardLimitCheck"
+                        id="ID006"
+                      >
+                        Calculate Arrear
+                      </mat-checkbox>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </mat-tab>
+            <mat-tab label="User Defined">
+              <div class="row mt-4">
+                <!-- First Column: Shows first 5 fields -->
+                <div class="col-md-4">
+                  <div
+                    class="row mb-1"
+                    *ngFor="let field of fields | slice : 0 : 5"
+                  >
+                    <label
+                      for="inputPassword"
+                      class="col-sm-5 col-form-label"
+                      [attr.id]="field.label"
+                      >{{ field.label }}</label
+                    >
+                    <div class="col-md-7">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input
+                          matInput
+                          [formControlName]="field.formControlName"
+                        />
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Second Column: Shows next 5 fields (index 5 to 9) -->
+                <div class="col-md-4">
+                  <div
+                    class="row mb-1"
+                    *ngFor="let field of fields | slice : 5 : 10"
+                  >
+                    <label
+                      for="inputPassword"
+                      class="col-sm-5 col-form-label"
+                      [attr.id]="field.label"
+                      >{{ field.label }}</label
+                    >
+                    <div class="col-md-7">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input
+                          matInput
+                          [formControlName]="field.formControlName"
+                        />
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Third Column: Shows last 5 fields (index 10 to 14) -->
+                <div class="col-md-4">
+                  <div
+                    class="row mb-1"
+                    *ngFor="let field of fields | slice : 10 : 15"
+                  >
+                    <label
+                      for="inputPassword"
+                      class="col-sm-5 col-form-label"
+                      [attr.id]="field.label"
+                      >{{ field.label }}</label
+                    >
+                    <div class="col-md-7">
+                      <mat-form-field style="width: 100%" appearance="outline">
+                        <input
+                          matInput
+                          [formControlName]="field.formControlName"
+                        />
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </mat-tab>
+          </mat-tab-group>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
