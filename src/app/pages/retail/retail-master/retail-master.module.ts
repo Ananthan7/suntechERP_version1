@@ -59,6 +59,10 @@ import { SupplierQuotaAllocationComponent } from './supplier-quota-allocation/su
 import { SalesCommissionSetupComponent } from './sales-commission-setup/sales-commission-setup.component';
 import { TransactionReferenceMasterComponent } from './transaction-reference-master/transaction-reference-master.component';
 import { SequanceMasterComponent } from './sequance-master/sequance-master.component';
+import { WpsAgentMasterComponent } from './wps-agent-master/wps-agent-master.component';
+import { GratuityMasterComponent } from './gratuity-master/gratuity-master.component';
+import { LeaveSalaryMasterComponent } from './leave-salary-master/leave-salary-master.component';
+import { AirTicketMasterComponent } from './air-ticket-master/air-ticket-master.component';
 
 
 @NgModule({
@@ -122,7 +126,11 @@ import { SequanceMasterComponent } from './sequance-master/sequance-master.compo
     SupplierQuotaAllocationComponent,
     SalesCommissionSetupComponent,
     TransactionReferenceMasterComponent,
-    SequanceMasterComponent
+    SequanceMasterComponent,
+    WpsAgentMasterComponent,
+    GratuityMasterComponent,
+    LeaveSalaryMasterComponent,
+    AirTicketMasterComponent
   ],
   imports: [
     CommonModule,

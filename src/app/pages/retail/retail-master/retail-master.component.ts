@@ -69,6 +69,10 @@ import { SupplierQuotaAllocationComponent } from "./supplier-quota-allocation/su
 import { SalesCommissionSetupComponent } from "./sales-commission-setup/sales-commission-setup.component";
 import { TransactionReferenceMasterComponent } from "./transaction-reference-master/transaction-reference-master.component";
 import { SequanceMasterComponent } from "./sequance-master/sequance-master.component";
+import { WpsAgentMasterComponent } from "./wps-agent-master/wps-agent-master.component";
+import { GratuityMasterComponent } from "./gratuity-master/gratuity-master.component";
+import { LeaveSalaryMasterComponent } from "./leave-salary-master/leave-salary-master.component";
+import { AirTicketMasterComponent } from "./air-ticket-master/air-ticket-master.component";
 @Component({
   selector: "app-retail-master",
   templateUrl: "./retail-master.component.html",
@@ -247,6 +251,12 @@ export class RetailMasterComponent implements OnInit {
       SalesCommissionSetupComponent: SalesCommissionSetupComponent,
       TransactionReferenceMasterComponent: TransactionReferenceMasterComponent,
       SequanceMasterComponent: SequanceMasterComponent,
+      WpsAgentMasterComponent: WpsAgentMasterComponent,
+      GratuityMasterComponent: GratuityMasterComponent,
+      LeaveSalaryMasterComponent: LeaveSalaryMasterComponent,
+      AirTicketMasterComponent: AirTicketMasterComponent,
+
+
 
       // Add components and update in operationals > menu updation grid form component name
     };
