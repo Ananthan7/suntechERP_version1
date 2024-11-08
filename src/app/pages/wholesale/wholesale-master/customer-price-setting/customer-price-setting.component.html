@@ -13,119 +13,99 @@
       <div class="container-fluid pt-3">
         <div class="row">
           <div class="col-md-5">
-            <div class="row">
-              <div class="col-md-6">
-                <div class="row align-items-center mb-1">
-                  <label for="inputPassword" class="col-sm-6 col-form-label">Price Code * :</label>
-                  <div class="col-md-6">
-                    <mat-form-field style="width: 70%;">
-                      <input type="text" matInput formControlName="pricecode"
-                        oninput="this.value = this.value.toUpperCase()" (keyup)="codeEnabled()" />
-                    </mat-form-field>
-                  </div>
-                </div>
+            <div class="row align-items-center mb-1">
+              <label for="inputPassword" class="col-sm-3 col-form-label">Price Code * :</label>
+              <div class="col-md-3">
+                <mat-form-field style="width: 100%;" appearance="outline">
+                  <input type="text" matInput formControlName="pricecode"
+                    oninput="this.value = this.value.toUpperCase()" (keyup)="codeEnabled()" />
+                </mat-form-field>
               </div>
-              <div class="col-md-6">
-                <div class="row align-items-center mb-1">
-                  <label for="inputPassword" class="col-sm-3 col-form-label">Date :</label>
-                  <div class="col-md-6">
-                    <mat-form-field style="width: 72%;">
-                      <input matInput [matDatepicker]="date" formControlName="date" placeholder="DD/MM/YYYY"
-                        [readonly]=" codeEnable" DateValidation />
-                      <mat-datepicker-toggle matSuffix [for]="date"></mat-datepicker-toggle>
-                      <mat-datepicker [startAt]="currentDate" [disabled]=" codeEnable" #date></mat-datepicker>
-                    </mat-form-field>
-                  </div>
-                </div>
+              <label for="inputPassword" class="col-sm-3 col-form-label">Date :</label>
+              <div class="col-md-3">
+                <mat-form-field style="width: 100%;" appearance="outline">
+                  <input matInput [matDatepicker]="date" formControlName="date" placeholder="DD/MM/YYYY"
+                    [readonly]=" codeEnable" DateValidation />
+                  <mat-datepicker-toggle matSuffix [for]="date"></mat-datepicker-toggle>
+                  <mat-datepicker [startAt]="currentDate" [disabled]=" codeEnable" #date></mat-datepicker>
+                </mat-form-field>
               </div>
             </div>
-            <div class="row">
-              <div class="col-md-11">
-                <div class="row align-items-center mb-1">
-                  <label for="inputPassword" class="col-sm-3 col-form-label">Description:</label>
-                  <div class="col-md-9">
-                    <mat-form-field style="width: 100%;">
-                      <input type="text" matInput formControlName="description" [readonly]=" codeEnable"
-                        oninput="this.value = this.value.toUpperCase()" />
-                    </mat-form-field>
+            <div class="row align-items-center mb-1">
+              <label for="inputPassword" class="col-sm-3 col-form-label">Description:</label>
+              <div class="col-md-9">
+                <mat-form-field style="width: 100%;" appearance="outline">
+                  <input type="text" matInput formControlName="description" [readonly]=" codeEnable"
+                    oninput="this.value = this.value.toUpperCase()" />
+                </mat-form-field>
 
-                  </div>
-                </div>
               </div>
             </div>
-            <div class="row">
-              <div class="col-md-6">
-                <div class="row align-items-center mb-1">
-                  <label for="inputPassword" class="col-sm-6 col-form-label">Division * :</label>
-                  <div class="col-md-6">
-                    <mat-form-field style="width: 70%;">
-                      <input type="text" matInput [readonly]=" codeEnable" formControlName="division" />
-                    </mat-form-field>
-                    <master-search [MasterSearchData]="divisionCodeData" (newRowClick)="divisionCodeSelected($event)">
-                    </master-search>
-                  </div>
-                </div>
+            <div class="row align-items-center mb-1">
+              <label for="inputPassword" class="col-sm-3 col-form-label">Division * :</label>
+              <div class="col-md-3">
+                <mat-form-field style="width: 100%;" appearance="outline">
+                  <input type="text" matInput [readonly]=" codeEnable" formControlName="division" />
+                  <master-search class="masterSearch" [MasterSearchData]="divisionCodeData"
+                    (newRowClick)="divisionCodeSelected($event)">
+                  </master-search>
+                </mat-form-field>
+
               </div>
-              <div class="col-md-6">
-                <div class="row align-items-center mb-1">
-                  <label for="inputPassword" class="col-sm-5 col-form-label">Currency * :</label>
-                  <div class="col-md-6">
-                    <mat-form-field style="width: 70%;">
-                      <input type="text" matInput [readonly]=" codeEnable" formControlName="currency" />
-                    </mat-form-field>
-                    <master-search [MasterSearchData]="currencyCodeData" (newRowClick)="currencyCodeSelected($event)">
-                    </master-search>
-                  </div>
-                </div>
+              <label for="inputPassword" class="col-sm-3 col-form-label">Currency * :</label>
+              <div class="col-md-3">
+                <mat-form-field style="width: 100%;" appearance="outline">
+                  <input type="text" matInput [readonly]=" codeEnable" formControlName="currency" />
+                  <master-search class="masterSearch" [MasterSearchData]="currencyCodeData"
+                    (newRowClick)="currencyCodeSelected($event)">
+                  </master-search>
+                </mat-form-field>
+
               </div>
             </div>
-            <div class="row">
-              <div class="col-md-6">
-                <div class="row align-items-center mb-1">
-                  <label for="inputPassword" class="col-sm-6 col-form-label">Entered By:</label>
-                  <div class="col-md-6">
-                    <mat-form-field style="width: 70%;">
-                      <input type="text" matInput [readonly]=" codeEnable" formControlName="enteredBy" />
-                    </mat-form-field>
-                    <master-search [MasterSearchData]="user" (newRowClick)="userDataSelected($event)">
-                    </master-search>
-                  </div>
-                </div>
+            <div class="row align-items-center mb-1">
+              <label for="inputPassword" class="col-sm-3 col-form-label">Entered By:</label>
+              <div class="col-md-3">
+                <mat-form-field style="width: 100%;" appearance="outline">
+                  <input type="text" matInput [readonly]=" codeEnable" formControlName="enteredBy" />
+                  <master-search class="masterSearch" [MasterSearchData]="user"
+                    (newRowClick)="userDataSelected($event)">
+                  </master-search>
+                </mat-form-field>
+
               </div>
             </div>
-            <div class="row">
-              <div class="col-md-6">
-                <div class="row align-items-center mb-1">
-                  <label for="inputPassword" class="col-sm-6 col-form-label">Approved By:</label>
-                  <div class="col-md-6">
-                    <mat-form-field style="width: 70%;">
-                      <input type="text" matInput [readonly]="enableUpdate" formControlName="approvedby" />
-                    </mat-form-field>
-                    <master-search [MasterSearchData]="approvedbyCodeData"
-                      (newRowClick)="ApprovedbyCodeSelected($event)" *ngIf=" approveDisable == false">
-                    </master-search>
-                  </div>
-                </div>
+            <div class="row align-items-center mb-1">
+              <label for="inputPassword" class="col-sm-3 col-form-label">Approved By:</label>
+              <div class="col-md-3">
+                <mat-form-field style="width: 100%;" appearance="outline">
+                  <input type="text" matInput [readonly]="enableUpdate" formControlName="approvedby" />
+                  <master-search class="masterSearch" [MasterSearchData]="approvedbyCodeData"
+                    (newRowClick)="ApprovedbyCodeSelected($event)" *ngIf=" approveDisable == false">
+                  </master-search>
+                </mat-form-field>
+
               </div>
             </div>
 
           </div>
 
           <div class="col-md-7 pt-3">
-            <div class="row d-flex">
-              <div class="col-2">
+           <div class="border p-2">
+            <div class="row">
+              <div class="col-sm-2">
                 <mat-checkbox class="example-margin" formControlName="stockCode" [disabled]="codeEnable"
                   [(ngModel)]="disableSelect" (change)="onStockCodeChange($event)">Stock Code
                   * </mat-checkbox>
               </div>
-              <div class="col-2">
+              <div class="col-sm-2">
                 <mat-checkbox class="example-margin" formControlName="designCode" (change)="toggleStockCode($event)"
                   [disabled]="designCodeEnable">Design Code *
                 </mat-checkbox>
               </div>
 
             </div>
-            <div class="row pt-5">
+            <div class="row pt-1">
               <div class="col-2"><label>Group 1 *</label></div>
               <div class="col-2"><label>Group 2 </label></div>
               <div class="col-2"><label>Group 3 </label></div>
@@ -135,7 +115,7 @@
             </div>
             <div class="row">
               <div class="col-2">
-                <mat-form-field style="width: 80%;">
+                <mat-form-field style="width: 100%;" appearance="outline">
                   <mat-select formControlName="group1" [disabled]="disableSelect || codeEnable "
                     (selectionChange)="onSelectionChange($event.value, 'group1')">
                     <mat-option [value]="group.value" *ngFor="let group of groups">{{ group.type }}</mat-option>
@@ -143,7 +123,7 @@
                 </mat-form-field>
               </div>
               <div class="col-2">
-                <mat-form-field style="width: 80%;">
+                <mat-form-field style="width: 100%;" appearance="outline">
                   <mat-select formControlName="group2" [disabled]="disableSelect || codeEnable "
                     (selectionChange)="onSelectionChange($event.value, 'group2')">
                     <mat-option [value]="group.value" *ngFor="let group of groups">{{ group.type }}</mat-option>
@@ -151,7 +131,7 @@
                 </mat-form-field>
               </div>
               <div class="col-2">
-                <mat-form-field style="width: 80%;">
+                <mat-form-field style="width: 100%;" appearance="outline">
                   <mat-select formControlName="group3" [disabled]="disableSelect || codeEnable "
                     (selectionChange)="onSelectionChange($event.value, 'group3')">
                     <mat-option [value]="group.value" *ngFor="let group of groups">{{ group.type }}</mat-option>
@@ -159,7 +139,7 @@
                 </mat-form-field>
               </div>
               <div class="col-2">
-                <mat-form-field style="width: 80%;">
+                <mat-form-field style="width: 100%;" appearance="outline">
                   <mat-select formControlName="group4" [disabled]="disableSelect || codeEnable "
                     (selectionChange)="onSelectionChange($event.value, 'group4')">
                     <mat-option [value]="group.value" *ngFor="let group of groups">{{ group.type }}</mat-option>
@@ -167,7 +147,7 @@
                 </mat-form-field>
               </div>
               <div class="col-2">
-                <mat-form-field style="width: 80%;">
+                <mat-form-field style="width: 100%;" appearance="outline">
                   <mat-select formControlName="group5" [disabled]="disableSelect || codeEnable "
                     (selectionChange)="onSelectionChange($event.value, 'group5')">
                     <mat-option [value]="group.value" *ngFor="let group of groups">{{ group.type }}</mat-option>
@@ -175,7 +155,7 @@
                 </mat-form-field>
               </div>
               <div class="col-2">
-                <mat-form-field style="width: 80%;">
+                <mat-form-field style="width: 100%;" appearance="outline">
                   <mat-select formControlName="group6" [disabled]="disableSelect || codeEnable "
                     (selectionChange)="onSelectionChange($event.value, 'group6')">
                     <mat-option [value]="group.value" *ngFor="let group of groups">{{ group.type }}</mat-option>
@@ -183,115 +163,111 @@
                 </mat-form-field>
               </div>
             </div>
-            <div class="row">
-              <div class="d-flex offset-7 pl-5">
-                <div class="p-2 bd-highlight">
-                  <button type="button" class="btn btn-outline-primary metal-issue-del-btn"
-                    (click)="designCodeChange()">
-                    Apply
-                  </button>
-                </div>
-                <div class="p-2 bd-highlight">
-                  <button type="button" class="btn btn-outline-primary metal-issue-del-btn">
-                    Group Filter
-                  </button>
-                </div>
+            <div class="row mt-3">
+              <div class="col-sm-2  offset-md-8">
+                <button type="button" class="btn btn-outline-primary btn-sm w-100" (click)="designCodeChange()">
+                  Apply
+                </button>
               </div>
-
+              <div class="col-sm-2">
+                <button type="button" class="btn btn-outline-primary btn-sm w-100">
+                  Group Filter
+                </button>
+              </div>
             </div>
-
+           </div>
           </div>
-        </div>
-        <div class="col-md-12">
 
-          <mat-tab-group [selectedIndex]="this.divisionMS == 'ID' ? 0 : 1">
+          <div class="col-md-12">
 
-            <mat-tab label="Group Details">
-              <dx-data-grid #dataGrid id="gridContainer" keyExpr="SRNO" [showBorders]="true"
-                [dataSource]="tableDataGroupDetails">
-                <dxo-paging [enabled]="false"></dxo-paging>
-                <dxo-editing mode="cell" [allowUpdating]="true">
-                </dxo-editing>
-                <dxo-selection mode="multiple"></dxo-selection>
-                <dxo-scrolling mode="virtual"></dxo-scrolling>
+            <mat-tab-group [selectedIndex]="this.divisionMS == 'ID' ? 0 : 1">
 
-                <!-- <dxi-column *ngFor="let data of columnheader" dataField="{{ data }}" caption="{{ data }}"
+              <mat-tab label="Group Details">
+                <dx-data-grid #dataGrid id="gridContainer" keyExpr="SRNO" [showBorders]="true"
+                  [dataSource]="tableDataGroupDetails">
+                  <dxo-paging [enabled]="false"></dxo-paging>
+                  <dxo-editing mode="cell" [allowUpdating]="true">
+                  </dxo-editing>
+                  <dxo-selection mode="multiple"></dxo-selection>
+                  <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+                  <!-- <dxi-column *ngFor="let data of columnheader" dataField="{{ data }}" caption="{{ data }}"
                   [allowEditing]="true" alignment="center" backgroundcolor="#000">
                 </dxi-column> -->
 
-                <dxi-column dataField="SRNO" caption="Srno"> </dxi-column>
+                  <dxi-column dataField="SRNO" caption="Srno"> </dxi-column>
 
-                <dxi-column dataField="GROUP1" caption="GROUP 1"></dxi-column>
+                  <dxi-column dataField="GROUP1" caption="GROUP 1"></dxi-column>
 
-                <dxi-column dataField="GROUP2" caption="GROUP 2"></dxi-column>
+                  <dxi-column dataField="GROUP2" caption="GROUP 2"></dxi-column>
 
-                <dxi-column dataField="GROUP3" caption="GROUP 3"></dxi-column>
+                  <dxi-column dataField="GROUP3" caption="GROUP 3"></dxi-column>
 
-                <dxi-column dataField="GROUP4" caption="GROUP 4"></dxi-column>
+                  <dxi-column dataField="GROUP4" caption="GROUP 4"></dxi-column>
 
-                <dxi-column dataField="GROUP5" caption="GROUP 5"></dxi-column>
+                  <dxi-column dataField="GROUP5" caption="GROUP 5"></dxi-column>
 
-                <dxi-column dataField="GROUP6" caption="GROUP 6"></dxi-column>
+                  <dxi-column dataField="GROUP6" caption="GROUP 6"></dxi-column>
 
-                <dxi-column dataField="STD_MKG_RATE" caption="STD MKG RATE"></dxi-column>
+                  <dxi-column dataField="STD_MKG_RATE" caption="STD MKG RATE"></dxi-column>
 
-                <dxi-column dataField="MKG_RATE_MIN" caption="MKG RATE MIN"></dxi-column>
+                  <dxi-column dataField="MKG_RATE_MIN" caption="MKG RATE MIN"></dxi-column>
 
-                <dxi-column dataField="MKG_RATE_MAX" caption="MKG RATE MAX"></dxi-column>
+                  <dxi-column dataField="MKG_RATE_MAX" caption="MKG RATE MAX"></dxi-column>
 
-                <dxi-column dataField="VARIANCE" caption="VARIANCE"></dxi-column>
+                  <dxi-column dataField="VARIANCE" caption="VARIANCE"></dxi-column>
 
-                <dxi-column dataField="WASTAGE_PER" caption="WASTAGE %"></dxi-column>
+                  <dxi-column dataField="WASTAGE_PER" caption="WASTAGE %"></dxi-column>
 
-                <dxi-column dataField="MIN_WASTAGE_QTY" caption="MIN WASTAGE QTY"></dxi-column>
+                  <dxi-column dataField="MIN_WASTAGE_QTY" caption="MIN WASTAGE QTY"></dxi-column>
 
-                <dxi-column dataField="MARKUP_PER" caption="MARKUP %"></dxi-column>
+                  <dxi-column dataField="MARKUP_PER" caption="MARKUP %"></dxi-column>
 
-                <dxi-column dataField="STAMP_CHARGE" caption="STAMP CHARGE"></dxi-column>
+                  <dxi-column dataField="STAMP_CHARGE" caption="STAMP CHARGE"></dxi-column>
 
-                <!-- <dxi-column dataField="APPLY_ON_WEIGHT"
+                  <!-- <dxi-column dataField="APPLY_ON_WEIGHT"
                   caption="APPLY ON WEIGHT" [dataType]="'boolean'"
                   cellTemplate="compCodetemp" mode="multiple"></dxi-column> -->
 
 
-                <dxi-column dataField="APPLY_ON_WEIGHT" caption="APPLY ON WEIGHT" [dataType]="'boolean'"
-                  mode="multiple">
-                  <div *dxTemplate="let cellData of 'compCodetemp'">
-                    <dx-check-box [(value)]="cellData.value" class="custom-checkbox"></dx-check-box>
+                  <dxi-column dataField="APPLY_ON_WEIGHT" caption="APPLY ON WEIGHT" [dataType]="'boolean'"
+                    mode="multiple">
+                    <div *dxTemplate="let cellData of 'compCodetemp'">
+                      <dx-check-box [(value)]="cellData.value" class="custom-checkbox"></dx-check-box>
+                    </div>
+                  </dxi-column>
+
+
+
+
+                  <div *dxTemplate="let datas of 'compCodetemp'">
+                    <input type="checkbox" [checked]="datas.value" (change)="compCodetemp($event, datas)"
+                      style="width: 100%;" />
                   </div>
-                </dxi-column>
+                </dx-data-grid>
 
+              </mat-tab>
 
-
-
-                <div *dxTemplate="let datas of 'compCodetemp'">
-                  <input type="checkbox" [checked]="datas.value" (change)="compCodetemp($event, datas)"
-                    style="width: 100%;" />
-                </div>
-              </dx-data-grid>
-
-            </mat-tab>
-
-            <mat-tab label="Weight Range" *ngIf="isCheckboxChecked()">
-              <div class="row">
-                <div class="col-md-3 d-flex mb-2">
-                  <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
-                    (addClick)="addweightdata()" (deleteClick)="removeweightdata()">
-                  </menu-buttons>
-                </div>
-                <div class="col-md-12">
-                  <dx-data-grid #dataGrid id="gridContainer" keyExpr="SR_NO" [showBorders]="true"
-                    [dataSource]="tableData">
-                    <dxo-paging [enabled]="false"></dxo-paging>
-                    <dxo-editing mode="cell" [allowUpdating]="true">
-                    </dxo-editing>
-                    <dxo-selection mode="multiple"></dxo-selection>
-                    <dxo-scrolling mode="virtual"></dxo-scrolling>
-                    <!-- <dxi-column *ngFor="let data of columnheaderweightRange" dataField="{{ data }}"
+              <mat-tab label="Weight Range" *ngIf="isCheckboxChecked()">
+                <div class="row">
+                  <div class="col-md-3 d-flex mb-2">
+                    <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
+                      (addClick)="addweightdata()" (deleteClick)="removeweightdata()">
+                    </menu-buttons>
+                  </div>
+                  <div class="col-md-12">
+                    <dx-data-grid #dataGrid id="gridContainer" keyExpr="SR_NO" [showBorders]="true"
+                      [dataSource]="tableData">
+                      <dxo-paging [enabled]="false"></dxo-paging>
+                      <dxo-editing mode="cell" [allowUpdating]="true">
+                      </dxo-editing>
+                      <dxo-selection mode="multiple"></dxo-selection>
+                      <dxo-scrolling mode="virtual"></dxo-scrolling>
+                      <!-- <dxi-column *ngFor="let data of columnheaderweightRange" dataField="{{ data }}"
                       caption="{{ data }}" [allowEditing]="true" alignment="center" backgroundcolor="#000">
                     </dxi-column> -->
 
-                    <!-- "SR_NO": srno,
+                      <!-- "SR_NO": srno,
                     "UNIQUEID": 0,
                     "UNIQUE_ITEM_ID": 0,
                     "PRICE_CODE": "",
@@ -303,84 +279,85 @@
                     "SRCH_VALUE": "",
                     "UNIT_CODE": "", -->
 
-                    <dxi-column dataField="SR_NO" caption="SN"> </dxi-column>
+                      <dxi-column dataField="SR_NO" caption="SN"> </dxi-column>
 
-                    <dxi-column dataField="DIVISION_CODE" caption="Division Code"
-                      cellTemplate="DIVISION_CODEtemp"></dxi-column>
+                      <dxi-column dataField="DIVISION_CODE" caption="Division Code"
+                        cellTemplate="DIVISION_CODEtemp"></dxi-column>
 
-                    <dxi-column dataField="SRCH_CRITERIA" caption="Apply On Weight"
-                      cellTemplate="SRCH_CRITERIAtemp"></dxi-column>
+                      <dxi-column dataField="SRCH_CRITERIA" caption="Apply On Weight"
+                        cellTemplate="SRCH_CRITERIAtemp"></dxi-column>
 
-                    <dxi-column dataField="SRCH_VALUE" caption="MKG on %" cellTemplate="SRCH_VALUEtemp"></dxi-column>
+                      <dxi-column dataField="SRCH_VALUE" caption="MKG on %" cellTemplate="SRCH_VALUEtemp"></dxi-column>
 
-                    <dxi-column dataField="WT_RANGE_FROM" caption="Weight From"
-                      cellTemplate="WT_RANGE_FROMtemp"></dxi-column>
+                      <dxi-column dataField="WT_RANGE_FROM" caption="Weight From"
+                        cellTemplate="WT_RANGE_FROMtemp"></dxi-column>
 
-                    <dxi-column dataField="WT_RANGE_TO" caption="Weight From"
-                      cellTemplate="WT_RANGE_TOtemp"></dxi-column>
+                      <dxi-column dataField="WT_RANGE_TO" caption="Weight From"
+                        cellTemplate="WT_RANGE_TOtemp"></dxi-column>
 
-                    <dxi-column dataField="STD_MKGRATE" caption="Making Rate"
-                      cellTemplate="STD_MKGRATEtemp"></dxi-column>
+                      <dxi-column dataField="STD_MKGRATE" caption="Making Rate"
+                        cellTemplate="STD_MKGRATEtemp"></dxi-column>
 
-                    <div *dxTemplate="let data of 'DIVISION_CODEtemp'">
-                      <input type="text" [value]="data.value" [disabled]="data.value == ''" style="width: 100%;"
-                        required />
-                    </div>
+                      <div *dxTemplate="let data of 'DIVISION_CODEtemp'">
+                        <input type="text" [value]="data.value" [disabled]="data.value == ''" style="width: 100%;"
+                          required />
+                      </div>
 
-                    <div *dxTemplate="let data of 'SRCH_CRITERIAtemp'">
-                      <input type="text" [value]="data.value" style="width: 100%;" required />
-                    </div>
+                      <div *dxTemplate="let data of 'SRCH_CRITERIAtemp'">
+                        <input type="text" [value]="data.value" style="width: 100%;" required />
+                      </div>
 
-                    <div *dxTemplate="let data of 'SRCH_VALUEtemp'">
-                      <input type="checkbox" [checked]="data.value" (change)="SRCH_VALUEtemp($event, data)"
-                        style="width: 100%;" />
-                    </div>
+                      <div *dxTemplate="let data of 'SRCH_VALUEtemp'">
+                        <input type="checkbox" [checked]="data.value" (change)="SRCH_VALUEtemp($event, data)"
+                          style="width: 100%;" />
+                      </div>
 
-                    <div *dxTemplate="let data of 'STD_MKGRATEtemp'">
-                      <input type="text" [value]="data.value" style="width: 100%;" required />
-                    </div>
+                      <div *dxTemplate="let data of 'STD_MKGRATEtemp'">
+                        <input type="text" [value]="data.value" style="width: 100%;" required />
+                      </div>
 
-                    <div *dxTemplate="let data of 'WT_RANGE_FROMtemp'">
-                      <input type="text" [value]="data.value" style="width: 100%;" required />
-                    </div>
+                      <div *dxTemplate="let data of 'WT_RANGE_FROMtemp'">
+                        <input type="text" [value]="data.value" style="width: 100%;" required />
+                      </div>
 
-                    <div *dxTemplate="let data of 'WT_RANGE_TOtemp'">
-                      <input type="text" [value]="data.value" style="width: 100%;" required />
-                    </div>
+                      <div *dxTemplate="let data of 'WT_RANGE_TOtemp'">
+                        <input type="text" [value]="data.value" style="width: 100%;" required />
+                      </div>
 
+                    </dx-data-grid>
+                  </div>
+                </div>
+              </mat-tab>
+              <mat-tab label="Transaction Purity">
+                <div class="col-md-12">
+                  <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
+                    <dxo-paging [enabled]="false"></dxo-paging>
+                    <dxo-editing mode="cell" [allowUpdating]="true">
+                    </dxo-editing>
+                    <dxo-selection mode="multiple"></dxo-selection>
+                    <dxo-scrolling mode="virtual"></dxo-scrolling>
+                    <dxi-column *ngFor="let data of columnheaderTransaction" dataField="{{ data }}" caption="{{ data }}"
+                      [allowEditing]="true" alignment="center" backgroundcolor="#000">
+                    </dxi-column>
                   </dx-data-grid>
                 </div>
+              </mat-tab>
+            </mat-tab-group>
+            <div class="row">
+              <div class="d-flex pl-2">
+                <div class="p-2 bd-highlight">
+                  <button type="button" class="btn btn-outline-primary btn-sm">
+                    Approve
+                  </button>
+                </div>
+                <div class="p-2 bd-highlight">
+                  <button type="button" class="btn btn-outline-primary btn-sm">
+                    Add Missing
+                  </button>
+                </div>
               </div>
-            </mat-tab>
-            <mat-tab label="Transaction Purity">
-              <div class="col-md-12">
-                <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true">
-                  <dxo-paging [enabled]="false"></dxo-paging>
-                  <dxo-editing mode="cell" [allowUpdating]="true">
-                  </dxo-editing>
-                  <dxo-selection mode="multiple"></dxo-selection>
-                  <dxo-scrolling mode="virtual"></dxo-scrolling>
-                  <dxi-column *ngFor="let data of columnheaderTransaction" dataField="{{ data }}" caption="{{ data }}"
-                    [allowEditing]="true" alignment="center" backgroundcolor="#000">
-                  </dxi-column>
-                </dx-data-grid>
-              </div>
-            </mat-tab>
-          </mat-tab-group>
-          <div class="row">
-            <div class="d-flex pl-2">
-              <div class="p-2 bd-highlight">
-                <button type="button" class="btn btn-outline-primary metal-issue-del-btn">
-                  Approve
-                </button>
-              </div>
-              <div class="p-2 bd-highlight">
-                <button type="button" class="btn btn-outline-primary metal-issue-del-btn">
-                  Add Missing
-                </button>
-              </div>
-            </div>
 
+            </div>
           </div>
         </div>
       </div>
