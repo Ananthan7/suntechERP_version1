@@ -1175,8 +1175,13 @@ export class MetalReturnComponent implements OnInit {
           this.commonService.toastErrorByMsgId('MSG1531')
           this.metalReturnForm.controls[FORMNAME].setValue('')
           LOOKUPDATA.SEARCH_VALUE = ''
+          if (FORMNAME === 'enteredBy'|| FORMNAME === 'process' || FORMNAME === 'worker') {
+            this.showOverleyPanel(event, FORMNAME);
+          }
           return
         }
+
+        
 
         // const matchedItem = data.find((item: any) => item.CODE.toUpperCase() === inputValue);
         // if (matchedItem) {
