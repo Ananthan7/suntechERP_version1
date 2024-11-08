@@ -370,6 +370,7 @@ export class CommonServiceService {
     )
   }
   private initializeDecimalConstantsFlag() {
+    // object contains flag for each decimal requirements any number missing add to this object
     this.DECIMAL_CONSTANTS_FLAG = {
       'AMOUNT': Number(this.allbranchMaster.BAMTDECIMALS),
       'METAL': Number(this.allbranchMaster.BMQTYDECIMALS),
