@@ -432,13 +432,18 @@ export class POSDaybookComponent implements OnInit {
         });
         this.RegisterGridcolumnkeys = [
           // { dataField: 'mid', caption: 'ID' },
+          { dataField: 'branch_code', caption: 'Branch Code' },
+          { dataField: 'VOCTYPE', caption: 'Voucher Type' },
           { dataField: 'vocno', caption: 'Voucher No' },
           { dataField: 'vocdate', caption: 'Voucher Date', dataType: 'date' },
           { dataField: 'sman', caption: 'Salesman' },
           { dataField: 'GrossAmt', caption: 'Gross Amount', alignment: 'right' },
           { dataField: 'CC_CommissionAmt', caption: 'Commission Amount', alignment: 'right' },
           { dataField: 'invamt', caption: 'Invoice Amount', alignment: 'right' },
-
+          { dataField: 'sretamt', caption: 'Sal Return Amount', alignment: 'right' },
+          { dataField: 'scpamt', caption: 'Sal Exchange Amount', alignment: 'right' },
+          { dataField: 'advance', caption: 'Advance', alignment: 'right' },
+          { dataField: 'roundoff', caption: 'Round Off', alignment: 'right' },
 
           { dataField: 'others', caption: 'Others', alignment: 'right' },
 
@@ -446,16 +451,12 @@ export class POSDaybookComponent implements OnInit {
 
 
 
-          { dataField: 'branch_code', caption: 'Branch Code' },
-          { dataField: 'VOCTYPE', caption: 'Voucher Type' },
-          { dataField: 'sretamt', caption: 'Sal Return Amount', alignment: 'right' },
-          { dataField: 'scpamt', caption: 'Sal Exchange Amount', alignment: 'right' },
-          { dataField: 'roundoff', caption: 'Round Off', alignment: 'right' },
+    
+
           { dataField: 'lcreceived', caption: 'LC Received', alignment: 'right'},
           { dataField: 'fc', caption: 'fc' },
           { dataField: 'fcreceived', caption: 'fcreceived' },
           { dataField: 'creditcrd', caption: 'Credit Card', alignment: 'right' },
-          { dataField: 'advance', caption: 'Advance', alignment: 'right' },
           { dataField: 'creditac', caption: 'Credit Ac', alignment: 'right' },
           { dataField: 'creditamt', caption: 'Credit Amount', alignment: 'right' },
           
