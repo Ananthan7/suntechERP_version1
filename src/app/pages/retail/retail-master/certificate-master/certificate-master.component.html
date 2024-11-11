@@ -49,36 +49,46 @@
               <div class="col-md-7">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input matInput="text" formControlName="ledger" />
+
+                  <master-search
+                    (focusout)="openTab($event, 'design')"
+                    #overlayDesignCode
+                    [MasterSearchData]="designCode"
+                    class="masterSearch"
+                    (newRowClick)="lookupCodeSelected($event, 'CODE')"
+                  ></master-search>
                 </mat-form-field>
               </div>
             </div>
 
+            <div class="row mb-1">
+              <label for="email" class="col-sm-5 col-form-label" id="ID029"
+                >Email</label
+              >
+              <div class="col-md-7">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <input matInput="text" formControlName="email" />
+                </mat-form-field>
+              </div>
+            </div>
 
             <div class="row mb-1">
-                <label for="email" class="col-sm-5 col-form-label" id="ID029"
-                  >Email</label
-                >
-                <div class="col-md-7">
-                  <mat-form-field style="width: 100%" appearance="outline">
-                    <input matInput="text" formControlName="email" />
-                  </mat-form-field>
-                </div>
+              <label for="web" class="col-sm-5 col-form-label" id="ID029"
+                >Web</label
+              >
+              <div class="col-md-7">
+                <mat-form-field style="width: 100%" appearance="outline">
+                  <input matInput="text" formControlName="web" />
+                </mat-form-field>
               </div>
-
-              <div class="row mb-1">
-                <label for="web" class="col-sm-5 col-form-label" id="ID029"
-                  >Web</label
-                >
-                <div class="col-md-7">
-                  <mat-form-field style="width: 100%" appearance="outline">
-                    <input matInput="text" formControlName="web" />
-                  </mat-form-field>
-                </div>
-              </div>
+            </div>
           </div>
           <div class="col-md-3">
             <div class="row mb-1">
-              <label for="description" class="col-sm-5 col-form-label" id="ID029"
+              <label
+                for="description"
+                class="col-sm-5 col-form-label"
+                id="ID029"
                 >Description</label
               >
               <div class="col-md-7">
@@ -100,24 +110,30 @@
             </div>
 
             <div class="row mb-1">
-              <label for="offsetAccount" class="col-sm-5 col-form-label" id="ID029"
+              <label
+                for="offsetAccount"
+                class="col-sm-5 col-form-label"
+                id="ID029"
                 >Offset Account</label
               >
               <div class="col-md-7">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input matInput="text" formControlName="offsetAccount" />
+
+                  <master-search
+                    (focusout)="openTab($event, 'design')"
+                    #overlayDesignCode
+                    [MasterSearchData]="designCode"
+                    class="masterSearch"
+                    (newRowClick)="lookupCodeSelected($event, 'CODE')"
+                  ></master-search>
                 </mat-form-field>
               </div>
             </div>
           </div>
-          <div class="col-md-2">
-           
-          </div>
-          <div class="col-md-2">
-          </div>
-          <div class="col-md-2">
-          
-          </div>
+          <div class="col-md-2"></div>
+          <div class="col-md-2"></div>
+          <div class="col-md-2"></div>
         </div>
       </div>
     </div>

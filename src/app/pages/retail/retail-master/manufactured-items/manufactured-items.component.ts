@@ -1,8 +1,9 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { MatTabGroup } from '@angular/material/tabs';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-
+import { Component, OnInit, ViewChild } from "@angular/core";
+import { FormBuilder, FormGroup } from "@angular/forms";
+import { MatTabGroup } from "@angular/material/tabs";
+import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
+import { MasterSearchComponent } from "src/app/shared/common/master-search/master-search.component";
+import { MasterSearchModel } from "src/app/shared/data/master-find-model";
 
 export interface TableElement {
   description: string;
@@ -11,11 +12,15 @@ export interface TableElement {
 }
 
 @Component({
-  selector: 'app-manufactured-items',
-  templateUrl: './manufactured-items.component.html',
-  styleUrls: ['./manufactured-items.component.scss']
+  selector: "app-manufactured-items",
+  templateUrl: "./manufactured-items.component.html",
+  styleUrls: ["./manufactured-items.component.scss"],
 })
 export class ManufacturedItemsComponent implements OnInit {
+  @ViewChild("tabGroup") tabGroup!: MatTabGroup;
+  @ViewChild("overlayDesignCode")
+  overlayDesignCode!: MasterSearchComponent;
+
   metalDetailsData: any;
   stoneDetailsData: any;
   componentAndLaburChargeSummaryData: any;
@@ -26,16 +31,6 @@ export class ManufacturedItemsComponent implements OnInit {
     { description: "Settings", fc: 0.0, lc: 0.0 },
     { description: "Polishing", fc: 0.0, lc: 0.0 },
     { description: "Rhodium", fc: 0.0, lc: 0.0 },
-    // { description: 'Rhodium', fc: 0.0, lc: 0.0 },
-    // { description: 'Rhodium', fc: 0.0, lc: 0.0 },
-    // { description: 'Rhodium', fc: 0.0, lc: 0.0 },
-    // { description: 'Rhodium', fc: 0.0, lc: 0.0 },
-    // { description: 'Rhodium', fc: 0.0, lc: 0.0 },
-    // { description: 'Rhodium', fc: 0.0, lc: 0.0 },
-    // { description: 'Rhodium', fc: 0.0, lc: 0.0 },
-    // { description: 'Rhodium', fc: 0.0, lc: 0.0 },
-    // { description: 'Rhodium', fc: 0.0, lc: 0.0 },
-    // { description: 'Rhodium', fc: 0.0, lc: 0.0 },
   ];
 
   fields = Array.from({ length: 15 }, (_, index) => ({
@@ -100,15 +95,29 @@ export class ManufacturedItemsComponent implements OnInit {
     { field: "Redeem", caption: "Redeem Points" },
   ];
 
-  @ViewChild("tabGroup") tabGroup!: MatTabGroup;
+
+  designCode: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 16,
+    SEARCH_FIELD: "",
+    SEARCH_HEADING: "DESIGN",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  };
+
   manufacturedItemMainForm: FormGroup = this.formBuilder.group({});
+
 
 
   constructor(
     private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder
   ) {}
-
 
   ngOnInit(): void {}
 
@@ -128,4 +137,23 @@ export class ManufacturedItemsComponent implements OnInit {
     return this.dataSource.reduce((acc, element) => acc + element.lc, 0);
   }
 
+  openTab(event: any, formControlName: string) {
+    if (event.target.value === "") {
+      this.openPanel(event, formControlName);
+    }
+  }
+
+  openPanel(event: any, formControlName: string) {
+    switch (formControlName) {
+      case "design":
+        this.overlayDesignCode.showOverlayPanel(event);
+        break;
+      default:
+        console.warn(`Unknown form control name: ${formControlName}`);
+    }
+  }
+
+  lookupCodeSelected(e: any, fieldName:any) {
+    this.manufacturedItemMainForm.controls.design.setValue(e.CODE);
+  }
 }
