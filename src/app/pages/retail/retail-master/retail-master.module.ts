@@ -150,6 +150,7 @@ import { DocumentPrintSetupComponent } from './document-print-setup/document-pri
     ClientAuthorizationComponent,
     FixedAssetsCategoryMasterComponent,
     DocumentPrintSetupComponent
+    
   ],
   imports: [
     CommonModule,
