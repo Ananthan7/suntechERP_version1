@@ -73,6 +73,7 @@ import { MobileAppSettingComponent } from './mobile-app-setting/mobile-app-setti
 import { FixedAssetsCategoryMasterComponent } from './fixed-assets-category-master/fixed-assets-category-master.component';
 import { DocumentPrintSetupComponent } from './document-print-setup/document-print-setup.component';
 import { EmailTemplateComponent } from './email-template/email-template.component';
+import { FixedAssetsComponent } from './fixed-assets/fixed-assets.component';
 
 
 @NgModule({
@@ -151,7 +152,9 @@ import { EmailTemplateComponent } from './email-template/email-template.componen
     ClientAuthorizationComponent,
     FixedAssetsCategoryMasterComponent,
     DocumentPrintSetupComponent,
-    EmailTemplateComponent
+    EmailTemplateComponent,
+    FixedAssetsComponent
+    
   ],
   imports: [
     CommonModule,

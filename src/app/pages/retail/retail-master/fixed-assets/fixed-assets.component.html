@@ -1,0 +1,761 @@
+<div>
+    <div class="card-content border-bottom d-flex justify-content-between p-2">
+        <h5 class="pos-modaltitle" id="modal-dia-metal">Fixed Assets Master</h5>
+        <button type="button" class="btn btn-close close-btn" (click)="close()">
+            <i class="feather icon-x close-icon"></i>
+        </button>
+    </div>
+    <modal-header (cancelClick)="close()" (saveClick)="formSubmit()"></modal-header>
+    <div class="p-4 ">
+        <form [formGroup]="fixedassetsform">
+            <mat-tab-group>
+                <mat-tab label="General">
+                    <div class="row mt-2 mb-2">
+                        <label for="inputPassword" id="ID001" class="col-sm-2 col-form-label">
+                            Fixing Asset Category :</label>
+                        <div class="col-md-2 p-0">
+                            <mat-form-field style="width: 100%" appearance="outline">
+                                <input type="text" #codeInput matInput formControlName="code" UpperCaseDirective
+                                    autocomplete="off" />
+                                <master-search class="masterSearch" [MasterSearchData]="BranchData"
+                                    (newRowClick)="BranchDataSelected($event)">
+                                </master-search>
+                            </mat-form-field>
+
+                        </div>
+                        <div class="col-md-4 p-0">
+                            <mat-form-field style="width: 100%" appearance="outline">
+                                <input type="text" #codeInput matInput formControlName="code" UpperCaseDirective
+                                    autocomplete="off" />
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <div class="row mb-2">
+                        <div class="col-md-6">
+                            <div class="row">
+                                <label for="inputPassword" id="ID002" class="col-md-4 col-form-label">Assets Code :
+                                </label>
+                                <div class="col-md-3">
+                                    <mat-form-field style="width: 100%" appearance="outline">
+                                        <input type="text" matInput formControlName="Branch" />
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="row">
+                                <label for="inputPassword" id="ID002" class="col-md-2 col-form-label">Description :
+                                </label>
+                                <div class="col-md-8">
+                                    <mat-form-field style="width: 100%" appearance="outline">
+                                        <input type="text" matInput formControlName="Branch" />
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-2">
+                        <div class="col-md-6">
+                            <div class="row">
+                                <label for="inputPassword" id="ID002" class="col-md-4 col-form-label">Currency :
+                                </label>
+                                <div class="col-md-3">
+                                    <mat-form-field style="width: 100%" appearance="outline">
+                                        <input type="text" matInput formControlName="Branch" />
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-3">
+                                    <mat-form-field style="width: 100%" appearance="outline">
+                                        <input type="text" matInput formControlName="Branch" />
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="row">
+                                <label for="inputPassword" id="ID002" class="col-md-5 col-form-label">Landed Cost LC :
+                                </label>
+                                <div class="col-md-5">
+                                    <mat-form-field style="width: 100%" appearance="outline">
+                                        <input type="text" matInput formControlName="Branch" />
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-2">
+                        <div class="col-md-6">
+                            <div class="row">
+                                <label for="inputPassword" id="ID002" class="col-md-4 col-form-label">Cost LC :
+                                </label>
+                                <div class="col-md-3">
+                                    <mat-form-field style="width: 100%" appearance="outline">
+                                        <input type="text" matInput formControlName="Branch" />
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="row">
+                                <label for="inputPassword" id="ID002" class="col-md-5 col-form-label">Opening
+                                    Accumulated Depreciation :
+                                </label>
+                                <div class="col-md-5">
+                                    <mat-form-field style="width: 100%" appearance="outline">
+                                        <input type="text" matInput formControlName="Branch" />
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-2">
+                        <div class="col-md-6">
+                            <div class="row">
+                                <label for="inputPassword" id="ID002" class="col-md-4 col-form-label">Cost FC :
+                                </label>
+                                <div class="col-md-3">
+                                    <mat-form-field style="width: 100%" appearance="outline">
+                                        <input type="text" matInput formControlName="Branch" />
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="row">
+                                <label for="inputPassword" id="ID002" class="col-md-5 col-form-label">Opening Net Value
+                                    :
+                                </label>
+                                <div class="col-md-5">
+                                    <mat-form-field style="width: 100%" appearance="outline">
+                                        <input type="text" matInput formControlName="Branch" />
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-2">
+                        <div class="col-md-8">
+                            <div class="row">
+                                <label for="inputPassword" id="ID002" class="col-sm-4 col-form-label">Branch Code :
+                                </label>
+                                <div class="col-sm-3 p-0">
+                                    <mat-form-field style="width: 100%" appearance="outline">
+                                        <input type="text" matInput formControlName="Branch" UpperCaseDirective />
+                                        <master-search class="masterSearch" [MasterSearchData]="BranchData"
+                                            (newRowClick)="BranchDataSelected($event)">
+                                        </master-search>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-sm-5 p-0">
+                                    <mat-form-field style="width: 100%" appearance="outline">
+                                        <input type="text" matInput formControlName="Branch" UpperCaseDirective />
+                                    </mat-form-field>
+                                </div>
+                            </div>
+
+
+
+                            <div class="row">
+                                <label for="inputPassword" id="ID002" class="col-sm-4 col-form-label">Department :
+                                </label>
+                                <div class="col-sm-3 p-0">
+                                    <mat-form-field style="width: 100%" appearance="outline">
+                                        <input type="text" matInput formControlName="Branch" UpperCaseDirective />
+                                        <master-search class="masterSearch" [MasterSearchData]="BranchData"
+                                            (newRowClick)="BranchDataSelected($event)">
+                                        </master-search>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-sm-5 p-0">
+                                    <mat-form-field style="width: 100%" appearance="outline">
+                                        <input type="text" matInput formControlName="Branch" UpperCaseDirective />
+                                    </mat-form-field>
+                                </div>
+                            </div>
+
+
+
+                            <div class="row">
+                                <label for="inputPassword" id="ID002" class="col-sm-4 col-form-label">Location :
+                                </label>
+                                <div class="col-sm-3 p-0">
+                                    <mat-form-field style="width: 100%" appearance="outline">
+                                        <input type="text" matInput formControlName="Branch" UpperCaseDirective />
+                                        <master-search class="masterSearch" [MasterSearchData]="BranchData"
+                                            (newRowClick)="BranchDataSelected($event)">
+                                        </master-search>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-sm-5 p-0">
+                                    <mat-form-field style="width: 100%" appearance="outline">
+                                        <input type="text" matInput formControlName="Branch" UpperCaseDirective />
+                                    </mat-form-field>
+                                </div>
+                            </div>
+
+
+
+                            <div class="row">
+                                <label for="inputPassword" id="ID002" class="col-sm-4 col-form-label">Used By : </label>
+                                <div class="col-sm-3 p-0">
+                                    <mat-form-field style="width: 100%" appearance="outline">
+                                        <input type="text" matInput formControlName="Branch" UpperCaseDirective />
+                                        <master-search class="masterSearch" [MasterSearchData]="BranchData"
+                                            (newRowClick)="BranchDataSelected($event)">
+                                        </master-search>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-sm-5 p-0">
+                                    <mat-form-field style="width: 100%" appearance="outline">
+                                        <input type="text" matInput formControlName="Branch" UpperCaseDirective />
+                                    </mat-form-field>
+                                </div>
+                            </div>
+
+
+
+                            <div class="row">
+                                <label for="inputPassword" id="ID002" class="col-sm-4 col-form-label">Type : </label>
+                                <div class="col-sm-3 p-0">
+                                    <mat-form-field style="width: 100%" appearance="outline">
+                                        <input type="text" matInput formControlName="Branch" UpperCaseDirective />
+                                        <master-search class="masterSearch" [MasterSearchData]="BranchData"
+                                            (newRowClick)="BranchDataSelected($event)">
+                                        </master-search>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-sm-5 p-0">
+                                    <mat-form-field style="width: 100%" appearance="outline">
+                                        <input type="text" matInput formControlName="Branch" UpperCaseDirective />
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="row">
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-2">
+                        <div class="col-md-6">
+                            <div class="col-md-12">
+                                <div class="boxed-label">
+                                    <h6>Depreciation Parameters</h6>
+                                </div>
+                                <div class="your-box-container">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="row">
+                                                <label for="datefrom" id="ID001" class="col-sm-4 col-form-label">
+                                                    Date From :
+                                                </label>
+                                                <div class="col-sm-8">
+                                                    <!-- <mat-form-field style="width: 100%" appearance="outline">
+                                                        <input type="date" matInput id="datefrom" formControlName="datefrom"
+                                                            autocomplete="off" />
+                                                    </mat-form-field> -->
+                                                    <mat-form-field style="width: 100%" appearance="outline">
+                                                        <input matInput [matDatepicker]="datefrom" name="date_from"
+                                                            placeholder="DD/MM/YYYY" formControlName="date_from"
+                                                            readonly="true" />
+                                                        <mat-datepicker-toggle matSuffix
+                                                            [for]="datefrom"></mat-datepicker-toggle>
+                                                    </mat-form-field>
+                                                    <mat-datepicker #datefrom></mat-datepicker>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="row">
+                                                <label for="method" id="ID001" class="col-sm-4 col-form-label">
+                                                    Method :
+                                                </label>
+                                                <div class="col-sm-8">
+                                                    <mat-form-field style="width: 100%" appearance="outline">
+
+                                                        <mat-select formControlName="method">
+                                                        </mat-select>
+                                                    </mat-form-field>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <mat-radio-group aria-label="Select an option"
+                                                    formControlName="DailyTarget" class="d-flex">
+                                                    <mat-radio-button value="P" id="ID015" class="mx-2">
+                                                        <b>%</b>
+                                                        <mat-form-field style="width: 30% ;margin-inline: 5px;" appearance="outline">
+                                                            <input type="text" matInput formControlName="Branch"
+                                                                UpperCaseDirective />
+                                                        </mat-form-field>
+                                                        <span> (Yearly)</span>
+                                                    </mat-radio-button>
+                                                    <mat-radio-button value="P" id="ID014" class="mx-2">
+                                                        <b>Life
+                                                            Period</b>
+                                                        <mat-form-field style="width: 30%; margin-inline: 5px;" appearance="outline">
+                                                            <input type="text" matInput formControlName="Branch"
+                                                                UpperCaseDirective />
+                                                        </mat-form-field>
+                                                        <span> (In Month)</span>
+                                                    </mat-radio-button>
+                                                </mat-radio-group>
+                                            </div>
+                                            <!-- <div class="col-md-3">
+                                                <mat-radio-group aria-label="Select an option"
+                                                    formControlName="DailyTarget" class="d-flex flex-column">
+                                                    <mat-radio-button value="P" id="ID013"
+                                                        class="mx-2"><b></b></mat-radio-button>
+                                                </mat-radio-group>
+                                                <mat-form-field style="width: 100%" appearance="outline">
+                                                    <input type="text" matInput formControlName="Branch"
+                                                        UpperCaseDirective />
+                                                </mat-form-field><b>(In Months)</b>
+                                            </div> -->
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="row"><label for="inputPassword" id="ID002"
+                                                        class="col-sm-4 col-form-label">Last Dep Date
+                                                    </label>
+                                                    <div class="col-sm-8">
+                                                        <mat-form-field style="width: 100%" appearance="outline">
+                                                            <input matInput [matDatepicker]="datefrom" name="date_from"
+                                                                placeholder="DD/MM/YYYY" formControlName="date_from"
+                                                                readonly="true" />
+                                                            <mat-datepicker-toggle matSuffix
+                                                                [for]="datefrom"></mat-datepicker-toggle>
+                                                        </mat-form-field>
+                                                        <mat-datepicker #datefrom></mat-datepicker>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="col-md-12">
+                                <div class="boxed-label">
+                                    <h6>Assests Status</h6>
+                                </div>
+                                <div class="your-box-container">
+                                    <div class="row">
+                                        <label for="inputPassword" id="ID002" class="col-sm-3 col-form-label">Status
+                                        </label>
+                                        <div class="col-sm-4 p-0">
+                                            <mat-form-field style="width: 100%" appearance="outline">
+                                                <input type="text" matInput formControlName="Branch"
+                                                    UpperCaseDirective />
+                                                <master-search class="masterSearch" [MasterSearchData]="BranchData"
+                                                    (newRowClick)="BranchDataSelected($event)">
+                                                </master-search>
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-sm-4 p-0">
+                                            <mat-form-field style="width: 100%" appearance="outline">
+                                                <input type="text" matInput formControlName="Branch"
+                                                    UpperCaseDirective />
+                                            </mat-form-field>
+                                        </div>
+
+
+                                        <div class="col-md-6">
+                                            <div class="row">
+                                                <label for="disposal_date" id="ID001" class="col-sm-4 col-form-label">
+                                                    Disposal Date :
+                                                </label>
+                                                <div class="col-sm-8">
+                                                    <mat-form-field style="width: 100%" appearance="outline">
+                                                        <input matInput [matDatepicker]="datefrom" name="disposal_date"
+                                                            placeholder="DD/MM/YYYY" formControlName="disposal_date"
+                                                            readonly="true" />
+                                                        <mat-datepicker-toggle matSuffix
+                                                            [for]="disposal_date"></mat-datepicker-toggle>
+                                                    </mat-form-field>
+                                                    <mat-datepicker #disposal_date></mat-datepicker>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                                <mat-checkbox id="ID022" formControlName="FinalProcess"
+                                                    class="example-margin">
+                                                    Opening</mat-checkbox>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </mat-tab>
+
+                <mat-tab label="Details">
+                    <div class="row mb-2">
+                        <div class="col-md-12">
+                            <div class="boxed-label">
+                                <h6>Purchase Documents Details</h6>
+                            </div>
+                            <div class="your-box-container">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <div class="row">
+                                            <label for="inputPassword" id="ID002"
+                                                class="col-sm-3 col-form-label">Supplier Code : </label>
+                                            <div class="col-sm-3 p-0">
+                                                <mat-form-field style="width: 100%" appearance="outline">
+                                                    <input type="text" matInput formControlName="Branch"
+                                                        UpperCaseDirective />
+                                                    <master-search class="masterSearch" [MasterSearchData]="BranchData"
+                                                        (newRowClick)="BranchDataSelected($event)">
+                                                    </master-search>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-sm-6 p-0">
+                                                <mat-form-field style="width: 100%" appearance="outline">
+                                                    <input type="text" matInput formControlName="BranchDes"
+                                                        UpperCaseDirective />
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <label for="inputPassword" id="ID002"
+                                                class="col-sm-3 col-form-label">Subledger Code : </label>
+                                            <div class="col-sm-3 p-0">
+                                                <mat-form-field style="width: 100%" appearance="outline">
+                                                    <input type="text" matInput formControlName="Branch"
+                                                        UpperCaseDirective />
+                                                    <master-search class="masterSearch" [MasterSearchData]="BranchData"
+                                                        (newRowClick)="BranchDataSelected($event)">
+                                                    </master-search>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-sm-6 p-0">
+                                                <mat-form-field style="width: 100%" appearance="outline">
+                                                    <input type="text" matInput formControlName="BranchDes"
+                                                        UpperCaseDirective />
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <label for="inputPassword" id="ID002"
+                                                class="col-sm-3 col-form-label">Purchase Inv.# : </label>
+                                            <div class="col-sm-3">
+                                                <mat-form-field style="width: 100%" appearance="outline">
+                                                    <input type="text" matInput formControlName="Branch"
+                                                        UpperCaseDirective />
+                                                </mat-form-field>
+                                            </div>
+                                            <label for="supp_inv_date" id="ID001" class="col-sm-3 col-form-label">
+                                                Supplier Inv. Date :
+                                            </label>
+                                            <div class="col-sm-3">
+                                                <mat-form-field style="width: 100%" appearance="outline">
+                                                    <input matInput [matDatepicker]="datefrom" name="supp_inv_date"
+                                                        placeholder="DD/MM/YYYY" formControlName="supp_inv_date"
+                                                        readonly="true" />
+                                                    <mat-datepicker-toggle matSuffix
+                                                        [for]="supp_inv_date"></mat-datepicker-toggle>
+                                                </mat-form-field>
+                                                <mat-datepicker #supp_inv_date></mat-datepicker>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <label for="inputPassword" id="ID001" class="col-sm-3 col-form-label">
+                                                Cost LC :</label>
+                                            <div class="col-sm-3">
+                                                <mat-form-field style="width: 100%" appearance="outline">
+                                                    <input type="text" #codeInput matInput formControlName="code"
+                                                        UpperCaseDirective autocomplete="off" />
+                                                </mat-form-field>
+                                            </div>
+                                            <label for="inputPassword" id="ID001" class="col-sm-3 col-form-label">
+                                                Cost FC :</label>
+                                            <div class="col-sm-3">
+                                                <mat-form-field style="width: 100%" appearance="outline">
+                                                    <input type="text" #codeInput matInput formControlName="code"
+                                                        UpperCaseDirective autocomplete="off" />
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <div class="col-md-12">
+                                            <div class="boxed-label">
+                                                <h6>Account Integration Parameters</h6>
+                                            </div>
+                                            <div class="your-box-container">
+                                                <div class="row">
+                                                    <label for="inputPassword" id="ID002"
+                                                        class="col-sm-4 col-form-label">Doc. Type
+                                                    </label>
+                                                    <div class="col-sm-8 p-0">
+                                                        <mat-form-field style="width: 100%" appearance="outline">
+                                                            <input type="text" matInput formControlName="Branch"
+                                                                UpperCaseDirective />
+                                                            <master-search class="masterSearch"
+                                                                [MasterSearchData]="BranchData"
+                                                                (newRowClick)="BranchDataSelected($event)">
+                                                            </master-search>
+                                                        </mat-form-field>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <label for="inputPassword" id="ID002"
+                                                        class="col-sm-4 col-form-label">Doc. No
+                                                    </label>
+                                                    <div class="col-sm-8 p-0">
+                                                        <mat-form-field style="width: 100%" appearance="outline">
+                                                            <input type="text" matInput formControlName="Branch"
+                                                                UpperCaseDirective />
+                                                            <master-search class="masterSearch"
+                                                                [MasterSearchData]="BranchData"
+                                                                (newRowClick)="BranchDataSelected($event)">
+                                                            </master-search>
+                                                        </mat-form-field>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <label for="inputPassword" id="ID002"
+                                                        class="col-sm-4 col-form-label">Doc. Type
+                                                    </label>
+                                                    <div class="col-sm-8 p-0">
+                                                        <mat-form-field style="width: 100%" appearance="outline">
+                                                            <input type="text" matInput formControlName="Branch"
+                                                                UpperCaseDirective />
+                                                        </mat-form-field>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="boxed-label">
+                                <h6>Optional Details</h6>
+                            </div>
+                            <div class="your-box-container">
+                                <div class="row">
+                                    <label for="inputPassword" id="ID001" class="col-sm-4 col-form-label">
+                                        Reg No :</label>
+                                    <div class="col-sm-8">
+                                        <mat-form-field style="width: 100%" appearance="outline">
+                                            <input type="text" #codeInput matInput formControlName="code"
+                                                UpperCaseDirective autocomplete="off" />
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <label for="inputPassword" id="ID001" class="col-sm-4 col-form-label">
+                                        Insurance :</label>
+                                    <div class="col-sm-8">
+                                        <mat-form-field style="width: 100%" appearance="outline">
+                                            <input type="text" #codeInput matInput formControlName="code"
+                                                UpperCaseDirective autocomplete="off" />
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <label for="inputPassword" id="ID001" class="col-sm-4 col-form-label">
+                                        Certification No :</label>
+                                    <div class="col-sm-8">
+                                        <mat-form-field style="width: 100%" appearance="outline">
+                                            <input type="text" #codeInput matInput formControlName="code"
+                                                UpperCaseDirective autocomplete="off" />
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <label for="inputPassword" id="ID001" class="col-sm-4 col-form-label">
+                                        Installation Details :</label>
+                                    <div class="col-sm-8">
+                                        <mat-form-field style="width: 100%" appearance="outline">
+                                            <input type="text" #codeInput matInput formControlName="code"
+                                                UpperCaseDirective autocomplete="off" />
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+
+                                </div>
+                            </div>
+
+                            <div class="row mt-3">
+                                <label for="inputPassword" id="ID001" class="col-sm-2 col-form-label">
+                                    Created By </label>
+                                <div class="col-sm-2">
+                                    <mat-form-field style="width: 100%" appearance="outline">
+                                        <input type="text" #codeInput matInput formControlName="code" UpperCaseDirective
+                                            autocomplete="off" />
+                                    </mat-form-field>
+                                </div>
+                                <label for="inputPassword" id="ID001" class="col-sm-2 col-form-label">
+                                    Created On </label>
+                                <div class="col-sm-2">
+                                    <mat-form-field style="width: 100%" appearance="outline">
+                                        <input type="text" #codeInput matInput formControlName="code" UpperCaseDirective
+                                            autocomplete="off" />
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="boxed-label">
+                                <h6>Important Details</h6>
+                            </div>
+                            <div class="your-box-container">
+                                <div class="row">
+                                    <label for="inputPassword" id="ID001" class="col-sm-6 col-form-label">
+                                        Warranty Upto </label>
+                                    <div class="col-sm-6">
+                                        <mat-form-field style="width: 100%" appearance="outline">
+                                            <input type="text" #codeInput matInput formControlName="code"
+                                                UpperCaseDirective autocomplete="off" />
+                                        </mat-form-field>
+                                    </div>
+                                    <label for="inputPassword" id="ID001" class="col-sm-6 col-form-label">
+                                        Service Contr. Upto</label>
+                                    <div class="col-sm-6">
+                                        <mat-form-field style="width: 100%" appearance="outline">
+                                            <input type="text" #codeInput matInput formControlName="code"
+                                                UpperCaseDirective autocomplete="off" />
+                                        </mat-form-field>
+                                    </div>
+                                    <label for="inputPassword" id="ID001" class="col-sm-6 col-form-label">
+                                        Insurance Upto </label>
+                                    <div class="col-sm-6">
+                                        <mat-form-field style="width: 100%" appearance="outline">
+                                            <input type="text" #codeInput matInput formControlName="code"
+                                                UpperCaseDirective autocomplete="off" />
+                                        </mat-form-field>
+                                    </div>
+                                    <label for="inputPassword" id="ID001" class="col-sm-6 col-form-label">
+                                        Registration Upto </label>
+                                    <div class="col-sm-6">
+                                        <mat-form-field style="width: 100%" appearance="outline">
+                                            <input type="text" #codeInput matInput formControlName="code"
+                                                UpperCaseDirective autocomplete="off" />
+                                        </mat-form-field>
+                                    </div>
+                                    <label for="inputPassword" id="ID001" class="col-sm-6 col-form-label">
+                                        Certification Upto </label>
+                                    <div class="col-sm-6">
+                                        <mat-form-field style="width: 100%" appearance="outline">
+                                            <input type="text" #codeInput matInput formControlName="code"
+                                                UpperCaseDirective autocomplete="off" />
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </mat-tab>
+
+
+                <mat-tab label="User Defined">
+
+                    <div class="row mt-2">
+                        <div class="col-md-6">
+
+                            <div class="row">
+                                <label for="inputPassword" id="ID002" class="col-sm-4 col-form-label">User Defined :
+                                </label>
+                                <div class="col-sm-8">
+                                    <mat-form-field style="width: 100%" appearance="outline">
+                                        <input type="text" matInput formControlName="Branch" UpperCaseDirective />
+                                        <master-search class="masterSearch" [MasterSearchData]="BranchData"
+                                            (newRowClick)="BranchDataSelected($event)">
+                                        </master-search>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <label for="inputPassword" id="ID002" class="col-sm-4 col-form-label">User Defined :
+                                </label>
+                                <div class="col-sm-8">
+                                    <mat-form-field style="width: 100%" appearance="outline">
+                                        <input type="text" matInput formControlName="Branch" UpperCaseDirective />
+                                        <master-search class="masterSearch" [MasterSearchData]="BranchData"
+                                            (newRowClick)="BranchDataSelected($event)">
+                                        </master-search>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <label for="inputPassword" id="ID002" class="col-sm-4 col-form-label">User Defined :
+                                </label>
+                                <div class="col-sm-8">
+                                    <mat-form-field style="width: 100%" appearance="outline">
+                                        <input type="text" matInput formControlName="Branch" UpperCaseDirective />
+                                        <master-search class="masterSearch" [MasterSearchData]="BranchData"
+                                            (newRowClick)="BranchDataSelected($event)">
+                                        </master-search>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <label for="inputPassword" id="ID002" class="col-sm-4 col-form-label">User Defined :
+                                </label>
+                                <div class="col-sm-8">
+                                    <mat-form-field style="width: 100%" appearance="outline">
+                                        <input type="text" matInput formControlName="Branch" UpperCaseDirective />
+                                        <master-search class="masterSearch" [MasterSearchData]="BranchData"
+                                            (newRowClick)="BranchDataSelected($event)">
+                                        </master-search>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <label for="inputPassword" id="ID002" class="col-sm-4 col-form-label">User Defined :
+                                </label>
+                                <div class="col-sm-8">
+                                    <mat-form-field style="width: 100%" appearance="outline">
+                                        <input type="text" matInput formControlName="Branch" UpperCaseDirective />
+                                        <master-search class="masterSearch" [MasterSearchData]="BranchData"
+                                            (newRowClick)="BranchDataSelected($event)">
+                                        </master-search>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </mat-tab>
+            </mat-tab-group>
+        </form>
+    </div>
+</div>
