@@ -68,6 +68,7 @@ import { OvertimeMasterComponent } from './overtime-master/overtime-master.compo
 import { HolidayMasterComponent } from './holiday-master/holiday-master.component';
 import { SalesInvoiceComponent } from './sales-invoice/sales-invoice.component';
 import { ClientAuthorizationComponent } from './client-authorization/client-authorization.component';
+import { EmailTemplateComponent } from './email-template/email-template.component';
 
 
 @NgModule({
@@ -140,7 +141,8 @@ import { ClientAuthorizationComponent } from './client-authorization/client-auth
     OvertimeMasterComponent,
     HolidayMasterComponent,
     SalesInvoiceComponent,
-    ClientAuthorizationComponent
+    ClientAuthorizationComponent,
+    EmailTemplateComponent
   ],
   imports: [
     CommonModule,
