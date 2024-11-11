@@ -24,9 +24,11 @@ export class WholesaleSalesmanTargetComponent implements OnInit {
   ) { }
 
   wholesalesmanform: FormGroup = this.formBuilder.group({
-    mid: [""],
+    salesman: [""],
+    fin_year: [""],
+    datefrom: [""],
     code: [""],
-    description: [""],
+    dateto: [""],
    
   });
 

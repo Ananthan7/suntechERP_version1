@@ -8,7 +8,7 @@
 <!-- modal header component -->
 <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
   (deleteClick)="deleteClicked()"
-  [isViewDelete]="editMode" [isViewAuditTrail]="true"
+  [isViewDelete]="editMode" [isViewAuditTrail]="true"  [isViewSave]="!viewMode"
   [isViewPost]="true"></modal-header>
 
 <div class="row">
@@ -48,7 +48,7 @@
                     [max]="maxDate" />
                   <mat-datepicker-toggle matSuffix
                     [for]="vocdate"></mat-datepicker-toggle>
-                  <mat-datepicker [startAt]="currentDate"
+                  <mat-datepicker [startAt]="currentDate" [disabled]="isSaved"
                     #vocdate></mat-datepicker>
                 </mat-form-field>
               </div>

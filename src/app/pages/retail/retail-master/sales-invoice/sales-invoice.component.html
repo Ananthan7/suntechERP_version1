@@ -1,0 +1,253 @@
+<!-- header section starts -->
+<div class="card-content border-bottom d-flex justify-content-between p-2">
+  <h5 class="pos-modaltitle" id="modal-dia-metal">Sales Invoice</h5>
+  <button type="button" class="btn btn-close close-btn" (click)="close()">
+    <i class="feather icon-x close-icon"></i>
+  </button>
+</div>
+<!-- modal header component -->
+<modal-header
+  (saveClick)="formSave()"
+  (cancelClick)="close()"
+  (deleteClick)="deleteMaster()"
+></modal-header>
+<!-- content section -->
+<div class="container-fluid pt-3">
+  <form [formGroup]="SalesInvoiceMainForm">
+    <div class="row">
+      <div class="col-md-4">
+        <div class="row mb-1">
+          <label for="code" class="col-sm-5 col-form-label" id="ID029"
+            >Desc Code</label
+          >
+          <div class="col-md-7">
+            <mat-form-field style="width: 100%" appearance="outline">
+              <input matInput="text" formControlName="mode" />
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="row mb-1">
+          <label for="code" class="col-sm-5 col-form-label" id="ID029"
+            >Start From</label
+          >
+          <div class="col-md-4">
+            <mat-form-field style="width: 100%" appearance="outline">
+              <input matInput="text" formControlName="mode" />
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="row mb-1">
+          <label for="code" class="col-sm-5 col-form-label" id="ID029"
+            >Division</label
+          >
+          <div class="col-md-4">
+            <mat-form-field style="width: 100%" appearance="outline">
+              <input matInput="text" formControlName="mode" />
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <mat-radio-group
+          class="pt-4"
+          style="width: 100%"
+          appearance="outline"
+          formControlName="amltype"
+        >
+          <div class="row m-3">
+            <div class="col-md-6">
+              <mat-radio-button value="Individual" class="me-3"
+                >Wholesale</mat-radio-button
+              >
+            </div>
+
+            <div class="col-md-6">
+              <mat-radio-button value="Company">Retail</mat-radio-button>
+            </div>
+          </div>
+
+          <div class="row m-3">
+            <div class="col-md-6">
+              <mat-radio-button value="Individual" class="me-3"
+                >Metal</mat-radio-button
+              >
+            </div>
+
+            <div class="col-md-6">
+              <mat-radio-button value="Company">Dimond</mat-radio-button>
+            </div>
+          </div>
+        </mat-radio-group>
+
+        <div class="row m-3">
+          <mat-checkbox formControlName="creditCardLimitCheck" id="ID006">
+            Components Wise
+          </mat-checkbox>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="row mb-1">
+          <label for="code" class="col-sm-5 col-form-label" id="ID029"
+            >Attr Group</label
+          >
+          <div class="col-md-5">
+            <mat-form-field style="width: 100%" appearance="outline">
+              <input matInput="text" formControlName="mode" />
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="row mb-1">
+          <label for="code" class="col-sm-5 col-form-label" id="ID029"
+            >Comp FGroup</label
+          >
+          <div class="col-md-5">
+            <mat-form-field style="width: 100%" appearance="outline">
+              <input matInput="text" formControlName="mode" />
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="row mb-1">
+          <label for="code" class="col-sm-5 col-form-label" id="ID029"
+            >Base Price</label
+          >
+          <div class="col-md-5">
+            <mat-form-field style="width: 100%" appearance="outline">
+              <input matInput="text" formControlName="mode" />
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="row mb-1">
+          <div class="col-md-6"></div>
+          <div class="col-md-4">
+            <button
+              type="button"
+              class="col-md-12 p-4 mb-4 btn btn-primary text-center"
+            >
+              Apply
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <mat-tab-group #tabGroup>
+        <mat-tab label="Group Details">
+          <menu-buttons
+            [viewAddBtn]="true"
+            [viewDeleteBtn]="true"
+            [viewImportBtn]="false"
+            (addClick)="openRepairdetails()"
+            (deleteClick)="removedata()"
+          >
+          </menu-buttons>
+
+          <div class="col-md-12 mt-4">
+            <div class="row">
+              <dx-data-grid
+                [dataSource]="groupDetailsData"
+                #dataGrid
+                id="gridContainer"
+                keyExpr="MID"
+                [showBorders]="true"
+                (onSelectionChanged)="onSelectionChanged($event)"
+              >
+                <!-- Paging disabled -->
+                <dxo-paging [enabled]="false"></dxo-paging>
+
+                <!-- Cell Editing Enabled -->
+                <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
+
+                <!-- Multiple Selection Mode -->
+                <dxo-selection mode="multiple"></dxo-selection>
+
+                <!-- Virtual Scrolling -->
+                <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+                <!-- Columns Definition -->
+                <dxi-column
+                  *ngFor="let column of groupDetailsColumns"
+                  [dataField]="column.dataField"
+                  [caption]="column.caption"
+                  [allowEditing]="true"
+                  alignment="center"
+                ></dxi-column>
+              </dx-data-grid>
+            </div>
+          </div>
+        </mat-tab>
+        <mat-tab label="Branch Selection">
+          <div class="col-md-12 mt-4">
+            <dx-data-grid
+              [dataSource]="branchSelectionData"
+              #dataGrid
+              id="gridContainer"
+              keyExpr="MID"
+              [showBorders]="true"
+              (onSelectionChanged)="onSelectionChanged($event)"
+            >
+              <!-- Paging disabled -->
+              <dxo-paging [enabled]="false"></dxo-paging>
+
+              <!-- Cell Editing Enabled -->
+              <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
+
+              <!-- Multiple Selection Mode -->
+              <dxo-selection mode="multiple"></dxo-selection>
+
+              <!-- Virtual Scrolling -->
+              <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+              <!-- Columns Definition -->
+              <dxi-column
+                *ngFor="let column of salesManSelectionColumns"
+                [dataField]="column.dataField"
+                [caption]="column.caption"
+                [allowEditing]="true"
+                alignment="center"
+              ></dxi-column>
+            </dx-data-grid>
+          </div>
+        </mat-tab>
+        <mat-tab label="Sales Man Selection">
+          <div class="col-md-12 mt-4">
+            <dx-data-grid
+              [dataSource]="salesManSelectionData"
+              #dataGrid
+              id="gridContainer"
+              keyExpr="MID"
+              [showBorders]="true"
+              (onSelectionChanged)="onSelectionChanged($event)"
+            >
+              <!-- Paging disabled -->
+              <dxo-paging [enabled]="false"></dxo-paging>
+
+              <!-- Cell Editing Enabled -->
+              <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
+
+              <!-- Multiple Selection Mode -->
+              <dxo-selection mode="multiple"></dxo-selection>
+
+              <!-- Virtual Scrolling -->
+              <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+              <!-- Columns Definition -->
+              <dxi-column
+                *ngFor="let column of salesManSelectionColumns"
+                [dataField]="column.dataField"
+                [caption]="column.caption"
+                [allowEditing]="true"
+                alignment="center"
+              ></dxi-column>
+            </dx-data-grid>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+  </form>
+</div>

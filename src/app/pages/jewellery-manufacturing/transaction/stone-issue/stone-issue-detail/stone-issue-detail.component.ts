@@ -173,17 +173,17 @@ export class StoneIssueDetailComponent implements OnInit {
     shape: [''],
     clarity: [''],
     carat: ['', [Validators.required]],
-    size: [],
+    size: [''],
     SIEVE_SET: [''],
-    unitrate: [],
+    unitrate: [''],
     sieve: [''],
     SIEVE_DESC: [''],
-    amount: [],
+    amount: [''],
     PICTURE_PATH: [''],
     color: [''],
-    stockbal: [],
-    pointerwt: [],
-    otheratt: [],
+    stockbal: [''],
+    pointerwt: [''],
+    otheratt: [''],
     remarks: [''],
     consignment: [false],
     VOCTYPE: [''],
@@ -222,7 +222,7 @@ export class StoneIssueDetailComponent implements OnInit {
     this.setOnLoadDetails()
   }
   checkContent() {
-    if (this.content) {
+    if (this.content && this.content.FLAG) {
       this.stoneIssueDetailsFrom.controls.FLAG.setValue(this.content.HEADERDETAILS.FLAG)
       switch (this.content?.FLAG) {
         case 'VIEW':
@@ -245,8 +245,7 @@ export class StoneIssueDetailComponent implements OnInit {
   }
 
   setFormValues() {
-    if (!this.content) return
-    console.log(this.content, 'view&edit')
+    if (!this.content.FLAG) return
     this.branchCode = this.content.BRANCH_CODE || this.content.HEADERDETAILS.BRANCH_CODE;
     this.stoneIssueDetailsFrom.controls.VOCTYPE.setValue(this.content.VOCTYPE || this.content.HEADERDETAILS.VOCTYPE)
     this.stoneIssueDetailsFrom.controls.VOCNO.setValue(this.content.VOCNO || this.content.HEADERDETAILS.VOCNO)
@@ -305,7 +304,6 @@ export class StoneIssueDetailComponent implements OnInit {
 
   setOnLoadDetails() {
     let branchParam = this.comService.allbranchMaster;
-    console.log(branchParam, 'ui')
     // Set LOCTYPE_CODE only if it's not already set
     if (!this.stoneIssueDetailsFrom.controls.Location.value) {
       this.stoneIssueDetailsFrom.controls.Location.setValue(branchParam.DMFGMLOC);
@@ -403,9 +401,7 @@ export class StoneIssueDetailComponent implements OnInit {
     this.stockCodeData.WHERECONDITION += `@JOBNO='${this.comService.nullToString(form.jobNumber)}',`
     this.stockCodeData.WHERECONDITION += `@SUBJOBNO='${this.comService.nullToString(form.subjobnumber)}',`
     this.stockCodeData.WHERECONDITION += `@STOCKCODE='${this.comService.nullToString(form.stockCode)}',@LOOKUPFLAG=1`
-    this.stockCodeData.WHERECONDITION += `@BRANCHCODE='${this.comService.nullToString(form.branchCode)}'`
-    //   WHERECONDITION += `@strStockCode='${this.comService.nullToString(form.stockCode)}'`
-    // this.stockCodeData.WHERECONDITION = WHERECONDITION
+    // this.stockCodeData.WHERECONDITION += `@BRANCHCODE='${this.comService.nullToString(this.comService.branchCode)}'`
   }
 
   close(data?: any) {
@@ -527,7 +523,6 @@ export class StoneIssueDetailComponent implements OnInit {
     }
   }
   dataTochild(dataToChild?: any) {
-    console.log(this.content.HEADERDETAILS, 'pick')
     this.stoneIssueDetailsFrom.controls.worker.setValue(this.content.WORKER_CODE || this.content.HEADERDETAILS.worker)
     this.stoneIssueDetailsFrom.controls.workername.setValue(this.content.WORKER_NAME || this.content.HEADERDETAILS.workername)
   }
@@ -746,18 +741,19 @@ export class StoneIssueDetailComponent implements OnInit {
   }
 
   CollectRate() {
+    let form = this.stoneIssueDetailsFrom.value;
     let postData = {
       "SPID": "140",
       "parameter": {
-        SubJobNumber: this.stoneIssueDetailsFrom.value.subjobnumber,
-        SubStockCode: this.stoneIssueDetailsFrom.value.batchid,
-        StockCode: this.stoneIssueDetailsFrom.value.stockCode,
+        SubJobNumber: this.comService.nullToString(form.subjobnumber),
+        SubStockCode:  this.comService.nullToString(form.batchid),
+        StockCode:  this.comService.nullToString(form.stockCode),
         BranchCode: this.comService.nullToString(this.branchCode),
         DEFPRICESMANUF: '',
-        VocDate: this.stoneIssueDetailsFrom.value.VOCDATE
+        VocDate:  this.comService.nullToString(form.VOCDATE),
+        Divcode:  this.comService.nullToString(form.DIVCODE)
       }
     };
-    console.log('API Request Data:', postData);
     this.comService.showSnackBarMsg('MSG81447'); // Loading message
     // API call to execute the stored procedure
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
@@ -766,10 +762,10 @@ export class StoneIssueDetailComponent implements OnInit {
           this.comService.closeSnackBarMsg();
           if (result.status === "Success" && result.dynamicData && result.dynamicData.length > 0) {
             console.log('Valid Response Data:', result.dynamicData);
-            let data = result.dynamicData[1]
-            console.log(data, 'data')
-            let uniteRateValue = data[0].RATEFC;
-            this.stoneIssueDetailsFrom.controls.unitrate.setValue(uniteRateValue.toFixed(2));
+            let data = result.dynamicData[0]
+            let RATEFC = data[0].RATEFC;
+            this.stoneIssueDetailsFrom.controls.unitrate.setValue(RATEFC)
+            // this.setValueWithDecimal('unitrate',RATEFC,'AMOUNT')
           } else {
             this.comService.toastErrorByMsgId('MSG1747'); // "Not Found" error message
           }
@@ -785,20 +781,20 @@ export class StoneIssueDetailComponent implements OnInit {
 
   CalculatePiecesAndPointerWT() {
     // Get the form values
-      const pieces = this.stoneIssueDetailsFrom.controls.pieces.value || 0;
-      const pointerwt = this.stoneIssueDetailsFrom.controls.pointerwt.value || 0;
-      const calculatedCarat = pieces * pointerwt;
-      this.stoneIssueDetailsFrom.controls.carat.setValue(calculatedCarat.toFixed(3));
-      this.CollectRate()
-      this.checkPcsRequired()
-    }
-  
+    const pieces = this.stoneIssueDetailsFrom.controls.pieces.value || 0;
+    const pointerwt = this.stoneIssueDetailsFrom.controls.pointerwt.value || 0;
+    const calculatedCarat = pieces * pointerwt;
+    this.stoneIssueDetailsFrom.controls.carat.setValue(calculatedCarat.toFixed(3));
+    this.CollectRate()
+    this.checkPcsRequired()
+  }
+
   CalculateCaratAndUnitrate() {
-      const carat = this.stoneIssueDetailsFrom.controls.carat.value || 0;
-      const unitrate = this.stoneIssueDetailsFrom.controls.unitrate.value || 0;
-      const calculateamount = carat * unitrate;
-      this.stoneIssueDetailsFrom.controls.amount.setValue(calculateamount.toFixed(2))
-      this.checkCaratRequired()
+    const carat = this.stoneIssueDetailsFrom.controls.carat.value || 0;
+    const unitrate = this.stoneIssueDetailsFrom.controls.unitrate.value || 0;
+    const calculateamount = carat * unitrate;
+    this.stoneIssueDetailsFrom.controls.amount.setValue(calculateamount.toFixed(2))
+    this.checkCaratRequired()
   }
 
   CollectPointerWtValidation() {
@@ -812,7 +808,6 @@ export class StoneIssueDetailComponent implements OnInit {
         SIZE: this.stoneIssueDetailsFrom.value.size
       }
     };
-    console.log('API Request Data:', postData);
     this.comService.showSnackBarMsg('MSG81447'); // Loading message
     // API call to execute the stored procedure
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
@@ -890,9 +885,8 @@ export class StoneIssueDetailComponent implements OnInit {
 
   stockCodeValidate(event: any) {
     if (this.viewMode) return;
-
     // Check if the input is empty
-    if (event.target.value === '') {
+    if (event && event.target.value === '') {
       return;  // Exit if no input
     }
     this.setStockCodeWhereCondition()
@@ -905,7 +899,8 @@ export class StoneIssueDetailComponent implements OnInit {
         SUBJOBNO: this.stoneIssueDetailsFrom.value.subjobnumber,
         STOCKCODE: this.stoneIssueDetailsFrom.value.stockCode,
         BRANCHCODE: this.comService.branchCode,
-        SUBSTOCKCODE: this.stoneIssueDetailsFrom.value.batchid
+        SUBSTOCKCODE: this.stoneIssueDetailsFrom.value.stockCode,
+        LOCATION: this.stoneIssueDetailsFrom.value.Location
 
       }
     };
@@ -913,26 +908,18 @@ export class StoneIssueDetailComponent implements OnInit {
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
       .subscribe((result) => {
         this.comService.closeSnackBarMsg();
-
         if (result.status === "Success" && result.dynamicData[0]) {
           let data = result.dynamicData[0];
-          console.log(data, 'data');
-
           // Check if VALID_STOCK is 0, indicating an invalid stock code
           if (data[0].VALID_STOCK === 0) {
-            console.log(data, 'invalid stock');
-
             // Clear the stock code and open the lookup overlay
             this.overlaystockCodeSearch.closeOverlayPanel();
             this.stoneIssueDetailsFrom.controls.stockCode.setValue('');  // Clear stock code
             this.comService.toastErrorByMsgId('MSG1531');  // Show error message
             this.showOverleyPanel(event, 'stockCode');  // Automatically open the lookup overlay
-
           } else {
             let stockDetails = data[0];
-            console.log(stockDetails, 'valid stock data');
             this.stoneIssueDetailsFrom.controls.stockCodeDes.setValue(stockDetails.STOCK_DESCRIPTION);
-            this.stoneIssueDetailsFrom.controls.batchid.setValue(stockDetails.KARAT);
             this.stoneIssueDetailsFrom.controls.SIEVE_SET.setValue(stockDetails.SIEVE_SET);
             this.stoneIssueDetailsFrom.controls.size.setValue(stockDetails.SIZE);
             this.stoneIssueDetailsFrom.controls.batchid.setValue(stockDetails.STOCK_CODE);
@@ -941,10 +928,29 @@ export class StoneIssueDetailComponent implements OnInit {
             this.stoneIssueDetailsFrom.controls.pieces.setValue(stockDetails.PCS);
             this.stoneIssueDetailsFrom.controls.shape.setValue(stockDetails.SHAPE);
             this.stoneIssueDetailsFrom.controls.color.setValue(stockDetails.COLOR);
-
+            let DIVCODE = this.comService.nullToString(this.stoneIssueDetailsFrom.value.DIVCODE)
+            if (DIVCODE == "D" || DIVCODE == "W" || DIVCODE == "M") {
+              this.comService.formControlSetReadOnly('carat', true)
+              this.setValueWithDecimal('carat', '1', 'THREE')
+              this.stoneIssueDetailsFrom.controls.pieces.setValue('1');
+            } else {
+              let stock_transaction = result.dynamicData[1] || []
+              if (stock_transaction.length > 0) {
+                stock_transaction = this.comService.arrayEmptyObjectToString(stock_transaction)
+                let lblBalanc = stock_transaction[0]["GROSSWT"] || 0;
+                this.comService.formControlSetReadOnly('carat', false)
+                this.setValueWithDecimal('stockbal', lblBalanc, 'THREE')
+              }
+              this.setValueWithDecimal('carat', '0', 'THREE')
+            }
             // Additional validation logic
-            this.CollectPointerWtValidation();
             this.CollectRate()
+            if (DIVCODE == "L" || DIVCODE == "C" || DIVCODE == "Z") {
+              this.CollectPointerWtValidation();
+            }
+            let form = this.stoneIssueDetailsFrom.value;
+            let SAmount = this.comService.emptyToZero(form.carat) * this.comService.emptyToZero(form.unitrate)
+            this.setValueWithDecimal('amount', SAmount, 'AMOUNT')
             this.BoqAlert()
           }
 
@@ -964,8 +970,10 @@ export class StoneIssueDetailComponent implements OnInit {
 
     this.subscriptions.push(Sub);
   }
-
-
+ 
+  emptyToZero(val: any) {
+    return this.commonService.emptyToZero(val)
+  }
   getImageData() {
     let API = `Image/${this.stoneIssueDetailsFrom.value.jobNumber}`
     let Sub: Subscription = this.dataService.getDynamicAPI(API)

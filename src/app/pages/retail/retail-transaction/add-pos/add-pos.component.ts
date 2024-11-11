@@ -11936,19 +11936,23 @@ export class AddPosComponent implements OnInit {
     // return ((percent / 100) * total).toFixed(2);
   }
   setMetalRate(karatCode: any,screen:any) {
-    const value: any = this.karatRateDetails.filter(
+    const exchangeMetalRate: any = this.karatRateDetails.filter(
       (data: any) => data.KARAT_CODE == karatCode
     )[0].POPKARAT_RATE;
 
+    const salesMetalRate: any = this.karatRateDetails.filter(
+      (data: any) => data.KARAT_CODE == karatCode
+    )[0].KARAT_RATE;
+
     if (screen === "sales") {
       this.lineItemForm.controls['fcn_ad_metal_rate'].setValue(
-        this.comFunc.decimalQuantityFormat(value, 'METAL_RATE')
+        this.comFunc.decimalQuantityFormat(salesMetalRate, 'METAL_RATE')
       );
     } else {
       this.exchangeForm.controls['fcn_exchange_metal_rate'].setValue(
-        this.comFunc.decimalQuantityFormat(value, 'METAL_RATE')
+        this.comFunc.decimalQuantityFormat(exchangeMetalRate, 'METAL_RATE')
       );
-      this._exchangeItemchange.METAL_RATE_PERGMS_ITEMKARAT = value;
+      this._exchangeItemchange.METAL_RATE_PERGMS_ITEMKARAT = exchangeMetalRate;
     }
     
     
