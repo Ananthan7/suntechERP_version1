@@ -6,13 +6,15 @@
   </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" [isViewDelete]="false"
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
+  [isViewDelete]="false"
   (deleteClick)="deleteTableData()"></modal-header>
 <div class="row">
   <div class="row mb-2 text-right">
     <div class="col-md-12">
       <div class="p-1 bd-highlight">
-        <button type="button" class="btn btn-outline-primary  add-btn" (click)="addSalesOrder()">
+        <button type="button" class="btn btn-outline-primary  add-btn"
+          (click)="addSalesOrder()">
           Select Sales Order
         </button>
       </div>
@@ -22,19 +24,32 @@
     <form [formGroup]="meltingProcessFrom">
       <div class="container-fluid pt-3">
         <div class="row">
-          <div class="col-md-6">
-            <h6>{{branchCode}} - {{companyName}}</h6>
+          <div class="row mb-2">
+            <div class="col-md-4 text-left">
+              <h6>{{branchCode}} - {{companyName}}</h6>
+            </div>
+
+            <div class="col-md-4 text-center">
+              <label for="inputPassword">Posted</label>
+            </div>
+
+            <div
+              class="col-md-4 text-right d-flex align-items-center justify-content-end">
+              <label for="inputPassword" class="mr-2">Job Purity:</label>
+              <input type="text" matInput formControlName="jobpurity"
+                PurityDecimal readonly 
+                style="width: 100px;" />
+            </div>
           </div>
-          <div class="col-md-6">
-            <label for="inputPassword">Posted </label>
-          </div>
+
           <div class="col-md-3">
             <div class="row mb-1">
               <label for="inputPassword" class="col-sm-4">Voucher Type *
                 :</label>
               <div class="col-sm-8 ">
                 <mat-form-field appearance="outline" style="width: 100%;">
-                  <input type="text" matInput formControlName="vocType" readonly />
+                  <input type="text" matInput formControlName="vocType"
+                    readonly />
                 </mat-form-field>
               </div>
             </div>
@@ -42,8 +57,9 @@
               <label for="inputPassword" class="col-sm-4">Voucher No * :</label>
               <div class="col-sm-8">
                 <mat-form-field appearance="outline" style="width: 100%;">
-                  <input type="text" matInput formControlName="vocNo" (focusout)="ValidatingVocNo()"
-                    [readonly]="LOCKVOUCHERNO" />
+                  <input type="text" matInput formControlName="vocNo"
+                    (focusout)="ValidatingVocNo()"
+                    [readonly]="LOCKVOUCHERNO" class="text-right" />
                 </mat-form-field>
               </div>
             </div>
@@ -56,10 +72,14 @@
                   <input type="date" matInput />
                 </mat-form-field> -->
                 <mat-form-field appearance="outline" style="width: 100%">
-                  <input matInput [matDatepicker]="vocDate" formControlName="vocDate" placeholder="DD-MM-YYYY"
-                    [readonly]="viewMode" DateValidation [min]="minDate" [max]="maxDate" />
-                  <mat-datepicker-toggle matSuffix [for]="vocDate"></mat-datepicker-toggle>
-                  <mat-datepicker [startAt]="currentDate" #vocDate [disabled]="isSaved"></mat-datepicker>
+                  <input matInput [matDatepicker]="vocDate"
+                    formControlName="vocDate" placeholder="DD-MM-YYYY"
+                    [readonly]="viewMode" DateValidation [min]="minDate"
+                    [max]="maxDate" />
+                  <mat-datepicker-toggle matSuffix
+                    [for]="vocDate"></mat-datepicker-toggle>
+                  <mat-datepicker [startAt]="currentDate" #vocDate
+                    [disabled]="isSaved"></mat-datepicker>
                 </mat-form-field>
               </div>
             </div>
@@ -68,11 +88,14 @@
                 :</label>
               <div class="col-sm-8">
                 <mat-form-field appearance="outline" style="width: 100%;">
-                  <input type="text" matInput formControlName="meltingType" [readonly]="viewMode"
+                  <input type="text" matInput formControlName="meltingType"
+                    [readonly]="viewMode" UpperCaseDirective
                     (focusout)="validateLookupField($event,MeltingCodeData,'meltingType')"
                     (keydown)="lookupKeyPress($event,'meltingType')" />
-                  <master-search class="masterSearch" [MasterSearchData]="MeltingCodeData" #overlaymeltingTypecode
-                    *ngIf="!viewMode" (newRowClick)="MeltingCodeSelected($event)"></master-search>
+                  <master-search class="masterSearch"
+                    [MasterSearchData]="MeltingCodeData" #overlaymeltingTypecode
+                    *ngIf="!viewMode"
+                    (newRowClick)="MeltingCodeSelected($event)"></master-search>
                 </mat-form-field>
 
               </div>
@@ -84,16 +107,21 @@
                 Process:</label>
               <div class="col-sm-4">
                 <mat-form-field appearance="outline" style="width: 100%">
-                  <input type="text" matInput maxlength="6" formControlName="process" [readonly]="viewMode"
+                  <input type="text" matInput maxlength="6"
+                    formControlName="process" [readonly]="viewMode"
+                    UpperCaseDirective
                     (keydown)="lookupKeyPress($event,'process')"
                     (focusout)="validateLookupField($event,processCodeData,'process')" />
-                  <master-search class="masterSearch" [MasterSearchData]="processCodeData" *ngIf="!viewMode"
-                    #overlayprocesscode (newRowClick)="processCodeScpSelected($event)"></master-search>
+                  <master-search class="masterSearch"
+                    [MasterSearchData]="processCodeData" *ngIf="!viewMode"
+                    #overlayprocesscode
+                    (newRowClick)="processCodeScpSelected($event)"></master-search>
                 </mat-form-field>
               </div>
               <div class="col-sm-4">
                 <mat-form-field appearance="outline" style="width: 100%;">
-                  <input type="text" matInput class="text-right" formControlName="processDesc" [readonly]="viewMode" />
+                  <input type="text" matInput class="text-right" UpperCaseDirective
+                    formControlName="processDesc" readonly />
                 </mat-form-field>
               </div>
             </div>
@@ -101,16 +129,20 @@
               <label for="inputPassword" class="col-sm-4">Worker * :</label>
               <div class="col-sm-4">
                 <mat-form-field appearance="outline" style="width: 100%;">
-                  <input type="text" matInput formControlName="worker" [readonly]="viewMode"
+                  <input type="text" matInput formControlName="worker"
+                    [readonly]="viewMode" UpperCaseDirective
                     (keydown)="lookupKeyPress($event,'worker')"
                     (focusout)="validateLookupField($event,workerCodeData,'worker')" />
-                  <master-search class="masterSearch" [MasterSearchData]="workerCodeData" *ngIf="!viewMode"
-                    #overlaywokercode (newRowClick)="workerCodeSelected($event)"></master-search>
+                  <master-search class="masterSearch"
+                    [MasterSearchData]="workerCodeData" *ngIf="!viewMode"
+                    #overlaywokercode
+                    (newRowClick)="workerCodeSelected($event)"></master-search>
                 </mat-form-field>
               </div>
               <div class="col-sm-4">
                 <mat-form-field appearance="outline" style="width: 100%;">
-                  <input type="text" matInput formControlName="workerDesc" [readonly]="viewMode" />
+                  <input type="text" matInput formControlName="workerDesc" UpperCaseDirective
+                    readonly />
                 </mat-form-field>
               </div>
             </div>
@@ -120,7 +152,8 @@
               <label for="inputPassword" class="col-sm-4"> Color * :</label>
               <div class="col-sm-8">
                 <mat-form-field appearance="outline" style="width: 100%;">
-                  <input type="text" matInput formControlName="color" readonly />
+                  <input type="text" matInput formControlName="color" UpperCaseDirective
+                    readonly />
                 </mat-form-field>
               </div>
             </div>
@@ -128,7 +161,8 @@
               <label for="inputPassword" class="col-sm-4">Time : </label>
               <div class="col-sm-8">
                 <mat-form-field appearance="outline" style="width: 100%;">
-                  <input type="time" matInput formControlName="time" [readonly]="viewMode" />
+                  <input type="time" matInput formControlName="time"
+                    [readonly]="viewMode" />
                 </mat-form-field>
               </div>
             </div>
@@ -145,9 +179,12 @@
           </div>
           <div class="row">
             <div class="col-md-12">
-              <dx-data-grid #dataGrid id="gridContainer" [columnAutoWidth]="true" [showBorders]="true"
-                [showRowLines]="true" (onRowClick)="onRowClickHandler($event)" [allowColumnResizing]="true"
-                [allowColumnReordering]="true" height="200" [dataSource]="tableData">
+              <dx-data-grid #dataGrid id="gridContainer"
+                [columnAutoWidth]="true" [showBorders]="true"
+                [showRowLines]="true" (onRowClick)="onRowClickHandler($event)"
+                [allowColumnResizing]="true"
+                [allowColumnReordering]="true" height="200"
+                [dataSource]="tableData">
                 <!-- <dxo-paging [enabled]="false"></dxo-paging> -->
                 <dxo-editing mode="cell" [allowUpdating]="true">
                 </dxo-editing>
@@ -163,21 +200,36 @@
                 'stockcodedes', 'process','worker', 'pcs', 'grossweight',
                 'stoneweight', 'netweight', 'purity', 'pureweight',
                 'lossweight', 'purediff'];
-                <dxi-column [width]="100" dataField="SRNO" caption="SRNO"></dxi-column>
-                <dxi-column [width]="100" dataField="DIV" caption="DIV"></dxi-column>
-                <dxi-column [width]="100" dataField="JobNo" caption="Job No"></dxi-column>
-                <dxi-column [width]="100" dataField="StockCode" caption="Stock Code"></dxi-column>
-                <dxi-column [width]="100" dataField="stockCodeDes" caption="Stock Code Description"></dxi-column>
-                <dxi-column [width]="100" dataField="Process" caption="Process"></dxi-column>
-                <dxi-column [width]="100" dataField="Worker" caption="Worker"></dxi-column>
-                <dxi-column [width]="100" dataField="Pcs" caption="Pcs"></dxi-column>
-                <dxi-column [width]="100" dataField="GrossWeight" caption="Gross Weight"></dxi-column>
-                <dxi-column [width]="100" dataField="Stoneweight" caption="Stone Weight"></dxi-column>
-                <dxi-column [width]="100" dataField="Netweight" caption="Net Weight"></dxi-column>
-                <dxi-column [width]="100" dataField="Purity" caption="Purity"></dxi-column>
-                <dxi-column [width]="100" dataField="PureWeight" caption="Pure Weight"></dxi-column>
-                <dxi-column [width]="100" dataField="BalanceWeight" caption="Balance Weight"></dxi-column>
-                <dxi-column [width]="100" dataField="BalancePure" caption="Balance Pure"></dxi-column>
+                <dxi-column [width]="100" dataField="SRNO"
+                  caption="SRNO"></dxi-column>
+                <dxi-column [width]="100" dataField="DIV"
+                  caption="DIV"></dxi-column>
+                <dxi-column [width]="100" dataField="JobNo"
+                  caption="Job No"></dxi-column>
+                <dxi-column [width]="100" dataField="StockCode"
+                  caption="Stock Code"></dxi-column>
+                <dxi-column [width]="100" dataField="stockCodeDes"
+                  caption="Stock Code Description"></dxi-column>
+                <dxi-column [width]="100" dataField="Process"
+                  caption="Process"></dxi-column>
+                <dxi-column [width]="100" dataField="Worker"
+                  caption="Worker"></dxi-column>
+                <dxi-column [width]="100" dataField="Pcs"
+                  caption="Pcs"></dxi-column>
+                <dxi-column [width]="100" dataField="GrossWeight"
+                  caption="Gross Weight"></dxi-column>
+                <dxi-column [width]="100" dataField="Stoneweight"
+                  caption="Stone Weight"></dxi-column>
+                <dxi-column [width]="100" dataField="Netweight"
+                  caption="Net Weight"></dxi-column>
+                <dxi-column [width]="100" dataField="Purity"
+                  caption="Purity"></dxi-column>
+                <dxi-column [width]="100" dataField="PureWeight"
+                  caption="Pure Weight"></dxi-column>
+                <dxi-column [width]="100" dataField="BalanceWeight"
+                  caption="Balance Weight"></dxi-column>
+                <dxi-column [width]="100" dataField="BalancePure"
+                  caption="Balance Pure"></dxi-column>
 
                 <dxo-summary>
                   <dxi-total-item column="Pcs">
@@ -240,35 +292,47 @@
               <div class="row mt-3">
                 <div class="col-md-5">
                   <div class="row">
-                    <label for="inputPassword" class="col-sm-4 col-form-label">Stone Stock Code:</label>
+                    <label for="inputPassword"
+                      class="col-sm-4 col-form-label">Stone Stock Code:</label>
                     <div class="col-md-2">
                       <mat-form-field appearance="outline" style="width: 100%;">
-                        <input type="text" matInput formControlName="stoneStockCode" [readonly]="viewMode" />
+                        <input type="text" matInput UpperCaseDirective
+                          formControlName="stoneStockCode"
+                          [readonly]="viewMode" />
                       </mat-form-field>
                     </div>
                     <div class="col-md-2">
                       <mat-form-field appearance="outline" style="width: 100%;">
-                        <input type="text" matInput formControlName="stoneStockCodeNo" [readonly]="viewMode" />
+                        <input type="text" matInput UpperCaseDirective
+                          formControlName="stoneStockCodeNo"
+                          [readonly]="viewMode" />
                       </mat-form-field>
                     </div>
                     <div class="col-md-2">
                       <mat-form-field appearance="outline" style="width: 100%;">
-                        <input type="text" matInput formControlName="stoneStockCodeDesc" [readonly]="viewMode" />
+                        <input type="text" matInput UpperCaseDirective
+                          formControlName="stoneStockCodeDesc"
+                          [readonly]="viewMode" />
                       </mat-form-field>
                     </div>
                     <div class="col-md-2">
                       <mat-form-field appearance="outline" style="width: 100%;">
-                        <input type="text" matInput formControlName="stoneStockCodeValue" [readonly]="viewMode" />
+                        <input type="text" matInput UpperCaseDirective
+                          formControlName="stoneStockCodeValue"
+                          [readonly]="viewMode" />
                       </mat-form-field>
                     </div>
                   </div>
                 </div>
                 <div class="col-md-3">
                   <div class="row">
-                    <label for="inputPassword" class="col-sm-6 col-form-label">Stone Weight * :</label>
+                    <label for="inputPassword"
+                      class="col-sm-6 col-form-label">Stone Weight * :</label>
                     <div class="col-md-6">
                       <mat-form-field appearance="outline" style="width: 100%;">
-                        <input type="text" matInput formControlName="stoneWeight" style="text-align: right;"
+                        <input type="text" matInput UpperCaseDirective
+                          formControlName="stoneWeight"
+                          style="text-align: right;"
                           StoneDecimalInput [readonly]="viewMode" />
                       </mat-form-field>
                     </div>
@@ -276,10 +340,12 @@
                 </div>
                 <div class="col-md-2">
                   <div class="row">
-                    <label for="inputPassword" class="col-sm-5 col-form-label">Rate:</label>
+                    <label for="inputPassword"
+                      class="col-sm-5 col-form-label">Rate:</label>
                     <div class="col-md-6">
                       <mat-form-field appearance="outline" style="width: 100%;">
-                        <input type="number" matInput formControlName="rate" style="text-align: right;" SixDecimalInput
+                        <input type="number" matInput formControlName="rate"
+                          style="text-align: right;" SixDecimalInput
                           [readonly]="viewMode" />
                       </mat-form-field>
                     </div>
@@ -287,10 +353,12 @@
                 </div>
                 <div class="col-md-2">
                   <div class="row">
-                    <label for="inputPassword" class="col-sm-6 col-form-label">Stone Amount:</label>
+                    <label for="inputPassword"
+                      class="col-sm-6 col-form-label">Stone Amount:</label>
                     <div class="col-md-6">
                       <mat-form-field appearance="outline" style="width: 100%;">
-                        <input type="text" matInput formControlName="stoneAmount" AmountDecimalInput
+                        <input type="text" matInput
+                          formControlName="stoneAmount" AmountDecimalInput
                           style="text-align: right;" [readonly]="viewMode" />
                       </mat-form-field>
                     </div>
@@ -314,11 +382,14 @@
                   :</label>
                 <div class="col-sm-8">
                   <mat-form-field appearance="outline" style="width: 100%;">
-                    <input type="text" matInput formControlName="stockcodeRet"
-                      (keydown)="lookupKeyPress($event,'stockcodeRet')" [readonly]="viewMode"
+                    <input type="text" matInput formControlName="stockcodeRet" UpperCaseDirective
+                      (keydown)="lookupKeyPress($event,'stockcodeRet')"
+                      [readonly]="viewMode"
                       (focusout)="validateLookupField($event,stockCodeData,'stockcodeRet')" />
-                    <master-search class="masterSearch" [MasterSearchData]="stockCodeData" #overlaystockcodeRet
-                      *ngIf="!viewMode" (newRowClick)="stockCodeSelected($event)"></master-search>
+                    <master-search class="masterSearch"
+                      [MasterSearchData]="stockCodeData" #overlaystockcodeRet
+                      *ngIf="!viewMode"
+                      (newRowClick)="stockCodeSelected($event)"></master-search>
                   </mat-form-field>
 
                 </div>
@@ -328,7 +399,8 @@
                 </label>
                 <div class="col-sm-8">
                   <mat-form-field appearance="outline" style="width: 100%;">
-                    <input type="text" matInput formControlName="TotalgrossWt" style="text-align: right;"
+                    <input type="text" matInput formControlName="TotalgrossWt" UpperCaseDirective
+                      style="text-align: right;"
                       MetalDecimalInput [readonly]="viewMode" />
                   </mat-form-field>
                 </div>
@@ -337,7 +409,8 @@
                 <label for="inputPassword" class="col-sm-4"> Purity : </label>
                 <div class="col-sm-8">
                   <mat-form-field appearance="outline" style="width: 100%;">
-                    <input type="text" matInput formControlName="purity" style="text-align: right;" SixDecimalInput
+                    <input type="text" matInput formControlName="purity"
+                      style="text-align: right;" SixDecimalInput
                       [readonly]="viewMode" />
                   </mat-form-field>
                 </div>
@@ -346,7 +419,8 @@
                 <label for="inputPassword" class="col-sm-4">Pure Wt * : </label>
                 <div class="col-sm-8">
                   <mat-form-field appearance="outline" style="width: 100%;">
-                    <input type="text" matInput formControlName="TotalpureWt" style="text-align: right;"
+                    <input type="text" matInput formControlName="TotalpureWt"
+                      style="text-align: right;"
                       MetalDecimalInput [readonly]="viewMode" />
                   </mat-form-field>
                 </div>
@@ -356,11 +430,14 @@
                 </label>
                 <div class="col-sm-8">
                   <mat-form-field appearance="outline" style="width: 100%;">
-                    <input type="text" matInput formControlName="locationRet"
-                      (keydown)="lookupKeyPress($event,'locationRet')" [readonly]="viewMode"
+                    <input type="text" matInput formControlName="locationRet" UpperCaseDirective
+                      (keydown)="lookupKeyPress($event,'locationRet')"
+                      [readonly]="viewMode"
                       (focusout)="validateLookupField($event,locationCodeData,'locationRet')" />
-                    <master-search class="masterSearch" [MasterSearchData]="locationCodeData" #overlaylocationRet
-                      *ngIf="!viewMode" (newRowClick)="locationCodeSelected($event)"></master-search>
+                    <master-search class="masterSearch"
+                      [MasterSearchData]="locationCodeData" #overlaylocationRet
+                      *ngIf="!viewMode"
+                      (newRowClick)="locationCodeSelected($event)"></master-search>
                   </mat-form-field>
 
                 </div>
@@ -372,18 +449,22 @@
                   :</label>
                 <div class="col-sm-3">
                   <mat-form-field appearance="outline" style="width: 100%;">
-                    <input type="text" matInput formControlName="stockCodeScp"
-                      (keydown)="lookupKeyPress($event,'stockCodeScp')" [readonly]="viewMode"
+                    <input type="text" matInput formControlName="stockCodeScp" UpperCaseDirective
+                      (keydown)="lookupKeyPress($event,'stockCodeScp')"
+                      [readonly]="viewMode"
                       (focusout)="validateLookupField($event,stockCodeData,'stockCodeScp')" />
-                    <master-search class="masterSearch" [MasterSearchData]="stockCodeData" #overlaylstockCodeScp
-                      *ngIf="!viewMode" (newRowClick)="stockCodeScpSelected($event)"></master-search>
+                    <master-search class="masterSearch"
+                      [MasterSearchData]="stockCodeData" #overlaylstockCodeScp
+                      *ngIf="!viewMode"
+                      (newRowClick)="stockCodeScpSelected($event)"></master-search>
                   </mat-form-field>
 
                 </div>
                 <label for="inputPassword" class="col-sm-3">Loss * : </label>
                 <div class="col-sm-3">
                   <mat-form-field appearance="outline" style="width: 100%;">
-                    <input type="text" matInput formControlName="loss" style="text-align: right;" NumberOnly
+                    <input type="text" matInput formControlName="loss"
+                      style="text-align: right;" NumberOnly
                       readonly />
                   </mat-form-field>
                 </div>
@@ -393,14 +474,16 @@
                 </label>
                 <div class="col-sm-3">
                   <mat-form-field appearance="outline" style="width: 100%;">
-                    <input type="textt" matInput formControlName="RETgrossWt" style="text-align: right;"
+                    <input type="textt" matInput formControlName="RETgrossWt"
+                      style="text-align: right;"
                       MetalDecimalInput [readonly]="viewMode" />
                   </mat-form-field>
                 </div>
                 <label for="inputPassword" class="col-sm-3">Pure Wt * : </label>
                 <div class="col-sm-3">
                   <mat-form-field appearance="outline" style="width: 100%;">
-                    <input type="text" matInput formControlName="RETpureWt" style="text-align: right;" MetalDecimalInput
+                    <input type="text" matInput formControlName="RETpureWt"
+                      style="text-align: right;" MetalDecimalInput
                       readonly />
                   </mat-form-field>
                 </div>
@@ -409,7 +492,8 @@
                 <label for="inputPassword" class="col-sm-3"> Purity * :</label>
                 <div class="col-sm-3">
                   <mat-form-field appearance="outline" style="width: 100%;">
-                    <input type="text" matInput formControlName="purityRET" style="text-align: right;" SixDecimalInput
+                    <input type="text" matInput formControlName="purityRET"
+                      style="text-align: right;" SixDecimalInput
                       [readonly]="viewMode" />
                   </mat-form-field>
                 </div>
@@ -417,7 +501,8 @@
                 </label>
                 <div class="col-sm-3">
                   <mat-form-field appearance="outline" style="width: 100%;">
-                    <input type="text" matInput formControlName="balGross" style="text-align: right;" ThreeDecimalInput
+                    <input type="text" matInput formControlName="balGross"
+                      style="text-align: right;" ThreeDecimalInput
                       readonly />
                   </mat-form-field>
                 </div>
@@ -426,7 +511,8 @@
                 <label for="inputPassword" class="col-sm-3">Pure Wt : </label>
                 <div class="col-sm-3">
                   <mat-form-field appearance="outline" style="width: 100%;">
-                    <input type="text" matInput formControlName="RETpureWt" style="text-align: right;" MetalDecimalInput
+                    <input type="text" matInput formControlName="RETpureWt"
+                      style="text-align: right;" MetalDecimalInput
                       [readonly]="viewMode" />
                   </mat-form-field>
                 </div>
@@ -434,7 +520,8 @@
                 </label>
                 <div class="col-sm-3">
                   <mat-form-field appearance="outline" style="width: 100%;">
-                    <input type="text" matInput formControlName="balPure" style="text-align: right;" ThreeDecimalInput
+                    <input type="text" matInput formControlName="balPure"
+                      style="text-align: right;" ThreeDecimalInput
                       readonly />
                   </mat-form-field>
                 </div>
@@ -443,25 +530,32 @@
                 <label for="inputPassword" class="col-sm-3"> Location : </label>
                 <div class="col-sm-3">
                   <mat-form-field appearance="outline" style="width: 100%;">
-                    <input type="text" matInput formControlName="locationScp"
-                      (keydown)="lookupKeyPress($event,'locationScp')" [readonly]="viewMode"
+                    <input type="text" matInput formControlName="locationScp" UpperCaseDirective
+                      (keydown)="lookupKeyPress($event,'locationScp')"
+                      [readonly]="viewMode"
                       (focusout)="validateLookupField($event,locationCodeData,'locationScp')" />
-                    <master-search class="masterSearch" [MasterSearchData]="locationCodeData" #overlayllocationScp
-                      *ngIf="!viewMode" (newRowClick)="locationCodeScpSelected($event)"></master-search>
+                    <master-search class="masterSearch"
+                      [MasterSearchData]="locationCodeData" #overlayllocationScp
+                      *ngIf="!viewMode"
+                      (newRowClick)="locationCodeScpSelected($event)"></master-search>
                   </mat-form-field>
                 </div>
               </div>
             </div>
             <div class="col-md-12 mt-2">
-              <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true"
-                [allowColumnReordering]="true" [allowColumnResizing]="true" [columnAutoWidth]="true">
+              <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID"
+                [showBorders]="true"
+                [allowColumnReordering]="true" [allowColumnResizing]="true"
+                [columnAutoWidth]="true">
                 <dxo-paging [enabled]="false"></dxo-paging>
                 <dxo-editing mode="cell" [allowUpdating]="true">
                 </dxo-editing>
                 <dxo-selection mode="multiple"></dxo-selection>
                 <dxo-scrolling mode="virtual"></dxo-scrolling>
-                <dxi-column *ngFor="let data of column" dataField="{{ data }}" caption="{{ data }}"
-                  [allowEditing]="true" alignment="center" backgroundcolor="#000">
+                <dxi-column *ngFor="let data of column" dataField="{{ data }}"
+                  caption="{{ data }}"
+                  [allowEditing]="true" alignment="center"
+                  backgroundcolor="#000">
                 </dxi-column>
               </dx-data-grid>
             </div>
@@ -499,48 +593,58 @@
       </div> -->
         <div class="col-md-12 mt-2">
           <div class="row align-items-center">
-            <label for="inputPassword" class="col-md-1 col-form-label">Total>></label>
+            <label for="inputPassword"
+              class="col-md-1 col-form-label">Total>></label>
           </div>
           <div class="row align-items-center">
-            <label for="inputPassword" class="col-md-1 col-form-label">Issued:</label>
+            <label for="inputPassword"
+              class="col-md-1 col-form-label">Issued:</label>
             <div class="col-md-2">
               <mat-form-field appearance="outline" style="width: 100%;">
-                <input type="number" class="text-right" matInput formControlName="issued" [readonly]="viewMode" />
+                <input type="number" class="text-right" matInput
+                  formControlName="issued" [readonly]="viewMode" />
               </mat-form-field>
             </div>
-            <label for="inputPassword" class="col-md-1 col-form-label">Required:</label>
+            <label for="inputPassword"
+              class="col-md-1 col-form-label">Required:</label>
             <div class="col-md-2">
               <mat-form-field appearance="outline" style="width: 100%;">
-                <input type="number" class="text-right" matInput formControlName="required" [readonly]="viewMode" />
-              </mat-form-field>
-            </div>
-
-            <label for="inputPassword" class="col-md-1 col-form-label">Allocated:</label>
-            <div class="col-md-2">
-              <mat-form-field appearance="outline" style="width: 100%;">
-                <input type="number" class="text-right" matInput formControlName="allocated" [readonly]="viewMode" />
+                <input type="number" class="text-right" matInput
+                  formControlName="required" [readonly]="viewMode" />
               </mat-form-field>
             </div>
 
-            <label for="inputPassword" class="col-md-1 col-form-label">Balance:</label>
+            <label for="inputPassword"
+              class="col-md-1 col-form-label">Allocated:</label>
             <div class="col-md-2">
               <mat-form-field appearance="outline" style="width: 100%;">
-                <input type="number" class="text-right" matInput formControlName="balance" [readonly]="viewMode" />
+                <input type="number" class="text-right" matInput
+                  formControlName="allocated" [readonly]="viewMode" />
+              </mat-form-field>
+            </div>
+
+            <label for="inputPassword"
+              class="col-md-1 col-form-label">Balance:</label>
+            <div class="col-md-2">
+              <mat-form-field appearance="outline" style="width: 100%;">
+                <input type="number" class="text-right" matInput
+                  formControlName="balance" [readonly]="viewMode" />
               </mat-form-field>
             </div>
           </div>
         </div>
-
 
       </div>
       <div class="container">
         <div class="row">
           <div class="col-md-6">
             <div class="row my-2">
-              <label for="inputPassword" class="col-sm-3 col-form-label">Remarks:</label>
+              <label for="inputPassword"
+                class="col-sm-3 col-form-label">Remarks:</label>
               <div class="col-md-7">
                 <mat-form-field appearance="outline" style="width: 100%;">
-                  <input type="text" matInput formControlName="remarks" [readonly]="viewMode" />
+                  <input type="text" matInput formControlName="remarks"
+                    [readonly]="viewMode" />
                 </mat-form-field>
               </div>
             </div>
@@ -548,7 +652,8 @@
           <div class="col-md-6">
             <div class="d-flex flex-row">
               <div class="p-2">
-                <button type="button" class="btn btn-primary metal-issue-add-btn text-center"
+                <button type="button"
+                  class="btn btn-primary metal-issue-add-btn text-center"
                   (continueClick)="resetAllocation()">Reset Allocation</button>
               </div>
             </div>
