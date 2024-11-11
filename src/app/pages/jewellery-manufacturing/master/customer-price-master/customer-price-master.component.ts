@@ -336,10 +336,10 @@ export class CustomerPriceMasterComponent implements OnInit {
   // }
 
   labourTypeList = [
-    {
-      name: 'MAKING',
-      value: 'MAKING'
-    },
+    // {
+    //   name: 'MAKING',
+    //   value: 'MAKING'
+    // },
     {
       name: 'SETTING',
       value: 'SETTING'
