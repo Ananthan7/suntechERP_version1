@@ -1,0 +1,76 @@
+<div class="card-content border-bottom d-flex justify-content-between p-2">
+    <h5 class="pos-modaltitle" id="modal-dia-metal">Mobile App User</h5>
+    <button type="button" class="btn btn-close close-btn" (click)="close()">
+        <i class="feather icon-x close-icon"></i>
+    </button>
+</div>
+<!-- modal header component -->
+<modal-header (cancelClick)="close()" (saveClick)="formSubmit()" (deleteClick)="deleteRecord()"></modal-header>
+<div class="row">
+    <div class="col-md-12">
+        <form [formGroup]="mobileAppUserForm">
+            <div class="container-fluid pt-3">
+                <div class="row justify-content-between">
+                    <div class="col-md-6">
+                        <div class="row align-items-center mb-1">
+                            <label for="inputPassword" class="col-sm-4 col-form-label">Company Name :</label>
+                            <div class="col-md-6">
+                                <mat-form-field style="width: 100%;" appearance="outline">
+                                    <input type="text" matInput formControlName="code" />
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row align-items-center mb-1">
+                            <label for="inputPassword" class="col-sm-4 col-form-label">User Name :</label>
+                            <div class="col-md-6">
+                                <mat-form-field style="width: 100%;" appearance="outline">
+                                    <input type="text" matInput formControlName="code" />
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row align-items-center mb-1">
+                            <label for="inputPassword" class="col-sm-4 col-form-label">Password :</label>
+                            <div class="col-md-6">
+                                <mat-form-field style="width: 100%;" appearance="outline">
+                                    <input type="text" matInput formControlName="code" />
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row align-items-center mb-1">
+                            <mat-checkbox class="example-margin">Active</mat-checkbox>
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="row align-items-center mb-1">
+                            <label for="inputPassword" class="col-sm-4 col-form-label">Mob App Code :</label>
+                            <div class="col-md-6">
+                                <mat-form-field style="width: 100%;" appearance="outline">
+                                    <input type="text" matInput formControlName="code" />
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row align-items-center mb-1">
+                            <label for="inputPassword" class="col-sm-4 col-form-label">Email Id :</label>
+                            <div class="col-md-6">
+                                <mat-form-field style="width: 100%;" appearance="outline">
+                                    <input type="text" matInput formControlName="code" />
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row align-items-center mb-1">
+                            <label for="inputPassword" class="col-sm-4 col-form-label">Otp :</label>
+                            <div class="col-md-6">
+                                <mat-form-field style="width: 100%;" appearance="outline">
+                                    <input type="text" matInput formControlName="code" />
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </form>
+    </div>
+</div>
