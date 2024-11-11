@@ -1,0 +1,135 @@
+<div>
+    <!-- header section starts -->
+    <div class="card-content border-bottom d-flex justify-content-between p-2">
+        <h5 class="pos-modaltitle" id="modal-dia-metal">Fixed Assets Category Master</h5>
+        <button type="button" class="btn btn-close close-btn" (click)="close()">
+            <i class="feather icon-x close-icon"></i>
+        </button>
+    </div>
+    <!-- modal header component -->
+    <modal-header></modal-header>
+    <!-- content section -->
+    <div class="p-4 ">
+        <form [formGroup]="DocumentPrintSetupForm">
+            <div class="row mb-1">
+                <label for="inputPassword" id="ID001" class="col-sm-2 col-form-label">
+                    Code :</label>
+                <div class="col-sm-2">
+                    <mat-form-field style="width: 100%" appearance="outline">
+                        <input type="text" #codeInput matInput formControlName="code" UpperCaseDirective
+                            autocomplete="off" />
+                    </mat-form-field>
+                </div>
+                <label for="inputPassword" id="ID001" class="col-sm-2 col-form-label">
+                    Code :</label>
+                <div class="col-sm-3">
+                    <mat-form-field style="width: 100%" appearance="outline">
+                        <input type="text" #codeInput matInput formControlName="code" UpperCaseDirective
+                            autocomplete="off" />
+                    </mat-form-field>
+                </div>
+                <div class="col-md-3">
+                    <button class="btn btn-primary btn-sm rounded-2">Select Branch</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="boxed-label">
+                        <h6>Document Header Setting</h6>
+                    </div>
+                    <div class="your-box-container mb-2">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <mat-checkbox> Show Only Logo</mat-checkbox>
+                                <div class="boxed-label">
+                                    <h6>Logo Position</h6>
+                                </div>
+                                <div class="your-box-container mb-2">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <mat-checkbox> Left</mat-checkbox>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <mat-checkbox> Right</mat-checkbox>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <mat-checkbox> Center</mat-checkbox>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-9">
+                                <mat-checkbox> Show As Header</mat-checkbox>
+                                <div class="boxed-label">
+                                    <h6>Header</h6>
+                                </div>
+                                <div class="your-box-container mb-2">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <mat-checkbox> English</mat-checkbox>
+                                            <mat-form-field style="width: 100%;" appearance="outline">
+                                                <textarea matInput id="inputAddress" formControlName="address"
+                                                    rows="4"></textarea>
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <mat-checkbox> English & Arabic</mat-checkbox>
+                                            <mat-form-field style="width: 100%;" appearance="outline">
+                                                <textarea matInput id="inputAddress" formControlName="address"
+                                                    rows="4"></textarea>
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-9">
+                                <mat-checkbox> Show Combined Header(A4)</mat-checkbox>
+                                <div class="boxed-label">
+                                    <h6>Header</h6>
+                                </div>
+                                <div class="your-box-container mb-2">
+                                    <div class="row">
+                                        <div class="col-md-12 mb-3">
+                                            <mat-form-field style="width: 100%;" appearance="outline">
+                                                <textarea matInput id="inputAddress" formControlName="address"
+                                                    rows="4"></textarea>
+                                            </mat-form-field>
+                                        </div>
+                                        <mat-checkbox> Show Combined Header(A5)</mat-checkbox>
+                                        <div class="col-md-8">
+                                            <mat-form-field style="width: 100%;" appearance="outline">
+                                                <textarea matInput id="inputAddress" formControlName="address"
+                                                    rows="4"></textarea>
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="boxed-label mt-3">
+                                    <h6>Footer Setting</h6>
+                                </div>
+                                <div class="your-box-container mb-2">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <mat-checkbox> Footer Party Signature</mat-checkbox>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <mat-checkbox> Footer Checked By</mat-checkbox>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <mat-checkbox> Footer Prepared By</mat-checkbox>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <mat-checkbox> Footer Authorized By</mat-checkbox>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
