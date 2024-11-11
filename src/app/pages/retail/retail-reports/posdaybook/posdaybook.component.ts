@@ -448,8 +448,8 @@ export class POSDaybookComponent implements OnInit {
 
           { dataField: 'branch_code', caption: 'Branch Code' },
           { dataField: 'VOCTYPE', caption: 'Voucher Type' },
-          { dataField: 'sretamt', caption: 'sretamt', alignment: 'right' },
-          { dataField: 'scpamt', caption: 'scpamt', alignment: 'right' },
+          { dataField: 'sretamt', caption: 'Sal Return Amount', alignment: 'right' },
+          { dataField: 'scpamt', caption: 'Sal Exchange Amount', alignment: 'right' },
           { dataField: 'roundoff', caption: 'Round Off', alignment: 'right' },
           { dataField: 'lcreceived', caption: 'LC Received', alignment: 'right'},
           { dataField: 'fc', caption: 'fc' },
