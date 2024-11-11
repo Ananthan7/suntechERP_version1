@@ -83,6 +83,7 @@ import { MobileAppUserComponent } from "./mobile-app-user/mobile-app-user.compon
 import { FixedAssetsCategoryMasterComponent } from "./fixed-assets-category-master/fixed-assets-category-master.component";
 import { DocumentPrintSetupComponent } from "./document-print-setup/document-print-setup.component";
 import { EmailTemplateComponent } from "./email-template/email-template.component";
+import { FixedAssetsComponent } from "./fixed-assets/fixed-assets.component";
 @Component({
   selector: "app-retail-master",
   templateUrl: "./retail-master.component.html",
@@ -274,7 +275,9 @@ export class RetailMasterComponent implements OnInit {
       MobileAppUserComponent:MobileAppUserComponent,
       FixedAssetsCategoryMasterComponent: FixedAssetsCategoryMasterComponent,
       DocumentPrintSetupComponent:DocumentPrintSetupComponent,
-      EmailTemplateComponent:EmailTemplateComponent
+      EmailTemplateComponent:EmailTemplateComponent,
+      FixedAssetsComponent:FixedAssetsComponent
+
       // Add components and update in operationals > menu updation grid form component name
     };
     this.componentName = this.CommonService.getFormComponentName();
