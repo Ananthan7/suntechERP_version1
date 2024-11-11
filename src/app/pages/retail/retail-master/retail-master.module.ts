@@ -151,6 +151,7 @@ import { EmailTemplateComponent } from './email-template/email-template.componen
     ClientAuthorizationComponent,
     FixedAssetsCategoryMasterComponent,
     DocumentPrintSetupComponent,
+    EmailTemplateComponent
   ],
   imports: [
     CommonModule,

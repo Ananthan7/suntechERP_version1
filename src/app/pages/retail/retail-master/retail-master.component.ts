@@ -274,7 +274,7 @@ export class RetailMasterComponent implements OnInit {
       MobileAppUserComponent:MobileAppUserComponent,
       FixedAssetsCategoryMasterComponent: FixedAssetsCategoryMasterComponent,
       DocumentPrintSetupComponent:DocumentPrintSetupComponent,
-      EmailTemplateComponent:EmailTemplateComponent
+      EmailTemplateComponent:EmailTemplateComponent,
       // Add components and update in operationals > menu updation grid form component name
     };
     this.componentName = this.CommonService.getFormComponentName();
