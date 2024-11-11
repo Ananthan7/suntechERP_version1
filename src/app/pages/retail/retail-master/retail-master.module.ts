@@ -72,6 +72,7 @@ import { MobileAppUserComponent } from './mobile-app-user/mobile-app-user.compon
 import { MobileAppSettingComponent } from './mobile-app-setting/mobile-app-setting.component';
 import { FixedAssetsCategoryMasterComponent } from './fixed-assets-category-master/fixed-assets-category-master.component';
 import { DocumentPrintSetupComponent } from './document-print-setup/document-print-setup.component';
+import { EmailTemplateComponent } from './email-template/email-template.component';
 
 
 @NgModule({
@@ -145,12 +146,15 @@ import { DocumentPrintSetupComponent } from './document-print-setup/document-pri
     HolidayMasterComponent,
     SalesInvoiceComponent,
     ClientAuthorizationComponent,
+<<<<<<<<< Temporary merge branch 1
     
+=========
     MobileAppUserComponent,
     MobileAppSettingComponent,
     ClientAuthorizationComponent,
     FixedAssetsCategoryMasterComponent,
     DocumentPrintSetupComponent
+>>>>>>>>> Temporary merge branch 2
   ],
   imports: [
     CommonModule,
