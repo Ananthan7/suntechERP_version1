@@ -55,6 +55,13 @@
               <div class="col-md-3">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input matInput="text" formControlName="description" />
+                  <master-search
+                    (focusout)="openTab($event, 'design')"
+                    #overlayDesignCode
+                    [MasterSearchData]="designCode"
+                    class="masterSearch"
+                    (newRowClick)="lookupCodeSelected($event, 'CODE')"
+                  ></master-search>
                 </mat-form-field>
               </div>
 
@@ -76,7 +83,14 @@
               >
               <div class="col-md-3">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="description" />
+                  <mat-select formControlName="type">
+                    <mat-option
+                      *ngFor="let data of typeList"
+                      [value]="data.field"
+                    >
+                      {{ data.field }}
+                    </mat-option>
+                  </mat-select>
                 </mat-form-field>
               </div>
 
@@ -95,7 +109,14 @@
 
               <div class="col-md-3">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="description" />
+                  <mat-select formControlName="type">
+                    <mat-option
+                      *ngFor="let data of typeList"
+                      [value]="data.field"
+                    >
+                      {{ data.field }}
+                    </mat-option>
+                  </mat-select>
                 </mat-form-field>
               </div>
             </div>
@@ -105,23 +126,37 @@
                 for="description"
                 class="col-sm-2 col-form-label"
                 id="ID029"
-                >Transaction</label
+                >Transactions</label
               >
               <div class="col-md-3">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="description" />
+                  <mat-select formControlName="type">
+                    <mat-option
+                      *ngFor="let data of typeList"
+                      [value]="data.field"
+                    >
+                      {{ data.field }}
+                    </mat-option>
+                  </mat-select>
                 </mat-form-field>
               </div>
 
               <div class="col-md-2">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="description" />
+                  <mat-select formControlName="type">
+                    <mat-option
+                      *ngFor="let data of typeList"
+                      [value]="data.field"
+                    >
+                      {{ data.field }}
+                    </mat-option>
+                  </mat-select>
                 </mat-form-field>
               </div>
 
               <div class="col-md-5 pt-2">
                 <mat-checkbox formControlName="includeForTax" id="ID060"
-                  >Include In Sales
+                  >Include In Sales Analysis
                 </mat-checkbox>
               </div>
             </div>
@@ -135,13 +170,27 @@
               >
               <div class="col-md-3">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="description" />
+                  <mat-select formControlName="type">
+                    <mat-option
+                      *ngFor="let data of typeList"
+                      [value]="data.field"
+                    >
+                      {{ data.field }}
+                    </mat-option>
+                  </mat-select>
                 </mat-form-field>
               </div>
 
               <div class="col-md-2">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input matInput="text" formControlName="description" />
+                  <master-search
+                    (focusout)="openTab($event, 'design')"
+                    #overlayDesignCode
+                    [MasterSearchData]="designCode"
+                    class="masterSearch"
+                    (newRowClick)="lookupCodeSelected($event, 'CODE')"
+                  ></master-search>
                 </mat-form-field>
               </div>
 
@@ -161,13 +210,27 @@
               >
               <div class="col-md-3">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="description" />
+                  <mat-select formControlName="type">
+                    <mat-option
+                      *ngFor="let data of typeList"
+                      [value]="data.field"
+                    >
+                      {{ data.field }}
+                    </mat-option>
+                  </mat-select>
                 </mat-form-field>
               </div>
 
               <div class="col-md-2">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input matInput="text" formControlName="description" />
+                  <master-search
+                    (focusout)="openTab($event, 'design')"
+                    #overlayDesignCode
+                    [MasterSearchData]="designCode"
+                    class="masterSearch"
+                    (newRowClick)="lookupCodeSelected($event, 'CODE')"
+                  ></master-search>
                 </mat-form-field>
               </div>
 
@@ -187,7 +250,14 @@
               >
               <div class="col-md-5">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="description" />
+                  <mat-select formControlName="type">
+                    <mat-option
+                      *ngFor="let data of typeList"
+                      [value]="data.field"
+                    >
+                      {{ data.field }}
+                    </mat-option>
+                  </mat-select>
                 </mat-form-field>
               </div>
 
@@ -201,24 +271,24 @@
               </div>
             </div>
 
-
-
             <div class="row mb-1">
-
-                <div class="col-md-4">
-                    <fieldset class="custom-fieldset">
-                        <legend class="custom-legend">VAT Type
-                        </legend>
-                        <mat-radio-group aria-label="Select an option" formControlName="DailyTarget">
-                            <mat-radio-button value="F" id="ID012"
-                                class="mx-2"><b>Direct</b></mat-radio-button>
-                            <mat-radio-button value="P" id="ID013"
-                                class="mx-2"><b>Rcm</b></mat-radio-button>
-                        </mat-radio-group>
-                    </fieldset>
-                </div>
-         
+              <div class="col-md-4">
+                <fieldset class="custom-fieldset">
+                  <legend class="custom-legend">VAT Type</legend>
+                  <mat-radio-group
+                    aria-label="Select an option"
+                    formControlName="DailyTarget"
+                  >
+                    <mat-radio-button value="F" id="ID012" class="mx-2"
+                      ><b>Direct</b></mat-radio-button
+                    >
+                    <mat-radio-button value="P" id="ID013" class="mx-2"
+                      ><b>Rcm</b></mat-radio-button
+                    >
+                  </mat-radio-group>
+                </fieldset>
               </div>
+            </div>
 
             <!-- <div class="row mb-1">
               <label for="party" class="col-sm-2 col-form-label" id="ID029"
