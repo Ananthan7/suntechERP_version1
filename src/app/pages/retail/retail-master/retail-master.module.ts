@@ -146,15 +146,11 @@ import { EmailTemplateComponent } from './email-template/email-template.componen
     HolidayMasterComponent,
     SalesInvoiceComponent,
     ClientAuthorizationComponent,
-<<<<<<<<< Temporary merge branch 1
-    
-=========
     MobileAppUserComponent,
     MobileAppSettingComponent,
     ClientAuthorizationComponent,
     FixedAssetsCategoryMasterComponent,
-    DocumentPrintSetupComponent
->>>>>>>>> Temporary merge branch 2
+    DocumentPrintSetupComponent,
   ],
   imports: [
     CommonModule,
