@@ -481,7 +481,7 @@ export class CustomerEnquiryComponent implements OnInit {
         "STATE" : this.customerEnquiryForm.controls.state.value,
         "SALDATEFROM" : this.commonService.formatYYMMDD(this.customerEnquiryForm.controls.saleDateFrom.value),
         "SALDATETO" : this.commonService.formatYYMMDD(this.customerEnquiryForm.controls.dateTo.value),
-        "DIVISION" : this.customerEnquiryForm.controls.division.value,
+        "DIVISION" : null, //this.customerEnquiryForm.controls.division.value,
         "BRANCHLIST": this.customerEnquiryForm.controls.branch.value,
         "USERBRANCH" : localStorage.getItem('userbranch')
       },
