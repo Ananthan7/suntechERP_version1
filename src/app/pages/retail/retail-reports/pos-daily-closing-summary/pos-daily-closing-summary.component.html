@@ -71,33 +71,34 @@
             <div class="row">
                 <div class="col-md-6">
                     <h6 class="header_title" id="ID008">Pending Sales Order Summary</h6>
+                    <app-loader [isLoading]="isLoading"></app-loader>
                     <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true" [height]="202"
-                    [columnAutoWidth]="true"  [dataSource]="pendingSalesOrderSummaryArr">
+                    [columnAutoWidth]="true"  [dataSource]="pendingSalesOrderSummaryArr" *ngIf="!isLoading">
                         <dxo-paging [enabled]="false"></dxo-paging>
                         <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
                         <!-- <dxo-selection mode="multiple"></dxo-selection> -->
                         <dxo-scrolling mode="virtual"></dxo-scrolling>
 
-                        <dxi-column  dataField="voc_nos" caption="No.Inv" [allowResizing]="true"></dxi-column>
-                        <dxi-column  dataField="amount" caption="Amt.Rcvd" [allowResizing]="true"></dxi-column>
-                        <dxi-column  dataField="metal" caption="Gold" [allowResizing]="true"></dxi-column>
-                        <dxi-column  dataField="nonmetal" caption="Dia & Other" [allowResizing]="true"></dxi-column>
+                        <dxi-column  dataField="voc_nos" caption="No.Inv" [allowResizing]="true" alignment="right"></dxi-column>
+                        <dxi-column  dataField="amount" caption="Amt.Rcvd" [allowResizing]="true" alignment="right"></dxi-column>
+                        <dxi-column  dataField="metal" caption="Gold" [allowResizing]="true" alignment="right"></dxi-column>
+                        <dxi-column  dataField="nonmetal" caption="Dia & Other" [allowResizing]="true" alignment="right"></dxi-column>
                     </dx-data-grid>
                 </div>
 
                 <div class="col-md-6">
                     <h6 class="header_title" id="ID009">Transaction wise Summary</h6>
+                    <app-loader [isLoading]="isLoading"></app-loader>
                     <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true" [height]="200"
-                    [columnAutoWidth]="true"  [dataSource]="transactionWiseSummaryArr">
+                    [columnAutoWidth]="true"  [dataSource]="transactionWiseSummaryArr" *ngIf="!isLoading">
                         <dxo-paging [enabled]="false"></dxo-paging>
                         <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
                         <!-- <dxo-selection mode="multiple"></dxo-selection> -->
                         <dxo-scrolling mode="virtual"></dxo-scrolling>
     
                         <dxi-column  dataField="vocdescp" caption="Voucher" [allowResizing]="true"></dxi-column>
-                        <dxi-column  dataField="NO_VOCS" caption="NO_VOCS" [allowResizing]="true"></dxi-column>
-                        <dxi-column  dataField="amount" caption="Amount" [allowResizing]="true"></dxi-column>
-                       
+                        <dxi-column  dataField="NO_VOCS" caption="NO_VOCS" [allowResizing]="true" alignment="right"></dxi-column>
+                        <dxi-column  dataField="amount" caption="Amount" [allowResizing]="true" alignment="right"></dxi-column>
                         <dxi-column dataField="voctype" caption="voctype" [allowResizing]="true"></dxi-column>
                     </dx-data-grid>
                 </div>
@@ -268,39 +269,42 @@
                         <div class="row my-2">
                             <!-- <label for="inputPassword" class="col-sm-12 text-center col-form-label"></label> -->
                             <div class="col-md-12">
+                                <app-loader [isLoading]="isLoading"></app-loader>
                                 <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true" [showRowLines]="true"
-                                [allowColumnReordering]="true" height="200" [dataSource]="tableData" [columnAutoWidth]="true">
+                                [allowColumnReordering]="true" height="200" [dataSource]="tableData" [columnAutoWidth]="true"
+                                *ngIf="!isLoading">
                                     <dxo-paging [enabled]="false"></dxo-paging>
                                     <dxo-scrolling mode="virtual"></dxo-scrolling>
                                     
                                     <dxi-column dataField="divdesc" caption="Division" [allowResizing]="true"></dxi-column>
                                     <dxi-column dataField="Type" caption="Type" [allowResizing]="true"></dxi-column>
-                                    <dxi-column dataField="tpcs" caption="Pcs" [allowResizing]="true"></dxi-column>
-                                    <dxi-column dataField="PureWt" caption="Pure Wt" [allowResizing]="true"></dxi-column>
-                                    <dxi-column dataField="stQty" caption="St.Qty" [allowResizing]="true"></dxi-column>
-                                    <dxi-column dataField="StAmount" caption="St.Amt" [allowResizing]="true"></dxi-column>
-                                    <dxi-column dataField="mkgrate" caption="Mkg. Rate" [allowResizing]="true"></dxi-column>
-                                    <dxi-column dataField="mkgvalue" caption="Mkg. Value" [allowResizing]="true"></dxi-column>
-                                    <dxi-column dataField="metalvalue" caption="Metal Value" [allowResizing]="true"></dxi-column>
-                                    <dxi-column dataField="amount" caption="Total Amount" [allowResizing]="true"></dxi-column>
+                                    <dxi-column dataField="tpcs" caption="Pcs" [allowResizing]="true" alignment="right"></dxi-column>
+                                    <dxi-column dataField="PureWt" caption="Pure Wt" [allowResizing]="true" alignment="right"></dxi-column>
+                                    <dxi-column dataField="stQty" caption="St.Qty" [allowResizing]="true" alignment="right"></dxi-column>
+                                    <dxi-column dataField="StAmount" caption="St.Amt" [allowResizing]="true" alignment="right"></dxi-column>
+                                    <dxi-column dataField="mkgrate" caption="Mkg. Rate" [allowResizing]="true" alignment="right"></dxi-column>
+                                    <dxi-column dataField="mkgvalue" caption="Mkg. Value" [allowResizing]="true" alignment="right"></dxi-column>
+                                    <dxi-column dataField="metalvalue" caption="Metal Value" [allowResizing]="true" alignment="right"></dxi-column>
+                                    <dxi-column dataField="amount" caption="Total Amount" [allowResizing]="true" alignment="right"></dxi-column>
 
 
-                                    <dxi-column dataField="qty" caption="qty" [allowResizing]="true"></dxi-column>
-                                    <dxi-column dataField="division_code" caption="division_code" [allowResizing]="true"></dxi-column>
-                                    <dxi-column [allowResizing]="true" dataField="netwt" caption="netwt"></dxi-column>
-                                    <dxi-column [allowResizing]="true" dataField="kundanwt" caption="kundanwt"></dxi-column>
-                                    <dxi-column [allowResizing]="true" dataField="kundanvalue" caption="kundanvalue"></dxi-column>
-                                    <dxi-column [allowResizing]="true" dataField="kundanrate" caption="kundanrate"></dxi-column>
+                                    <dxi-column dataField="qty" caption="qty" [allowResizing]="true" alignment="right"></dxi-column>
+                                    <dxi-column dataField="division_code" caption="division_code" [allowResizing]="true"
+                                    alignment="right"></dxi-column>
+                                    <dxi-column [allowResizing]="true" dataField="netwt" caption="netwt" alignment="right"></dxi-column>
+                                    <dxi-column [allowResizing]="true" dataField="kundanwt" caption="kundanwt" alignment="right"></dxi-column>
+                                    <dxi-column [allowResizing]="true" dataField="kundanvalue" caption="kundanvalue" alignment="right"></dxi-column>
+                                    <dxi-column [allowResizing]="true" dataField="kundanrate" caption="kundanrate" alignment="right"></dxi-column>
 
                                     <dxo-summary>
-                                        <dxi-total-item column="tpcs" summaryType="sum" displayFormat="{0}" ></dxi-total-item>
-                                        <dxi-total-item column="PureWt" summaryType="sum" displayFormat="{0}" ></dxi-total-item>
-                                        <dxi-total-item column="stQty" summaryType="sum" displayFormat="{0}" ></dxi-total-item>
-                                        <dxi-total-item column="StAmount" summaryType="sum" displayFormat="{0}" ></dxi-total-item>
+                                        <dxi-total-item column="tpcs" summaryType="sum" displayFormat="{0}" alignment="right"></dxi-total-item>
+                                        <dxi-total-item column="PureWt" summaryType="sum" displayFormat="{0}" alignment="right"></dxi-total-item>
+                                        <dxi-total-item column="stQty" summaryType="sum" displayFormat="{0}" alignment="right"></dxi-total-item>
+                                        <dxi-total-item column="StAmount" summaryType="sum" displayFormat="{0}" alignment="right"></dxi-total-item>
 
-                                        <dxi-total-item column="mkgvalue" summaryType="sum" displayFormat="{0}" ></dxi-total-item>
-                                        <dxi-total-item column="metalvalue" summaryType="sum" displayFormat="{0}" ></dxi-total-item>
-                                        <dxi-total-item column="amount" summaryType="sum" displayFormat="{0}" ></dxi-total-item>
+                                        <dxi-total-item column="mkgvalue" summaryType="sum" displayFormat="{0}" alignment="right"></dxi-total-item>
+                                        <dxi-total-item column="metalvalue" summaryType="sum" displayFormat="{0}" alignment="right"></dxi-total-item>
+                                        <dxi-total-item column="amount" summaryType="sum" displayFormat="{0}" alignment="right"></dxi-total-item>
                                     </dxo-summary>
                                 </dx-data-grid>
                             </div>
@@ -311,8 +315,10 @@
                 <div class="row">
                     <div class="col-md-12">
                         <h6 class="header_title" id="ID012">Diamond Division</h6>
+                        <app-loader [isLoading]="isLoading"></app-loader>
                         <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true" [showRowLines]="true"
-                            [allowColumnReordering]="true" height="200" [dataSource]="DiamonDivsnTableData" [columnAutoWidth]="true">
+                            [allowColumnReordering]="true" height="200" [dataSource]="DiamonDivsnTableData" [columnAutoWidth]="true"
+                            *ngIf="!isLoading">
                                 <dxo-paging [enabled]="false"></dxo-paging>
                                 <!-- <dxo-selection mode="multiple"></dxo-selection> -->
                                 <dxo-scrolling mode="virtual"></dxo-scrolling>
@@ -320,20 +326,20 @@
                                 <!-- <dxi-column dataField="division_code" caption="Division Code"></dxi-column> -->
                                 <dxi-column dataField="divdesc" caption="Division" [allowResizing]="true"></dxi-column>
                                 <dxi-column dataField="type" caption="Type" [allowResizing]="true"></dxi-column>
-                                <dxi-column dataField="tpcs" caption="Pcs" [allowResizing]="true"></dxi-column>
+                                <dxi-column dataField="tpcs" caption="Pcs" [allowResizing]="true" alignment="right"></dxi-column>
     
     
                                 <dxi-column dataField="division_code" caption="division_code" [allowResizing]="true"></dxi-column>
-                                <dxi-column dataField="qty" caption="qty" [allowResizing]="true"></dxi-column>
+                                <dxi-column dataField="qty" caption="qty" [allowResizing]="true" alignment="right"></dxi-column>
                                 <dxi-column dataField="carat" caption="carat" [allowResizing]="true"></dxi-column>
-                                <dxi-column dataField="amount" caption="amount" [allowResizing]="true"></dxi-column>
-                                <dxi-column dataField="mkgrate" caption="mkgrate" [allowResizing]="true"></dxi-column>
-                                <dxi-column dataField="mkgvalue" caption="mkgvalue" [allowResizing]="true"></dxi-column>
-                                <dxi-column dataField="metalvalue" caption="metalvalue" [allowResizing]="true"></dxi-column>
+                                <dxi-column dataField="amount" caption="amount" [allowResizing]="true" alignment="right"></dxi-column>
+                                <dxi-column dataField="mkgrate" caption="mkgrate" [allowResizing]="true" alignment="right"></dxi-column>
+                                <dxi-column dataField="mkgvalue" caption="mkgvalue" [allowResizing]="true" alignment="right"></dxi-column>
+                                <dxi-column dataField="metalvalue" caption="metalvalue" [allowResizing]="true" alignment="right"></dxi-column>
     
                                 <dxo-summary>
-                                    <dxi-total-item column="tpcs"  summaryType="sum" displayFormat="{0}"> </dxi-total-item>
-                                    <dxi-total-item column="amount"  summaryType="sum" displayFormat="{0}"></dxi-total-item>
+                                    <dxi-total-item column="tpcs"  summaryType="sum" displayFormat="{0}" alignment="right"> </dxi-total-item>
+                                    <dxi-total-item column="amount"  summaryType="sum" displayFormat="{0}" alignment="right"></dxi-total-item>
                                 </dxo-summary>
                         </dx-data-grid>
                     </div>
@@ -343,36 +349,38 @@
 
         <div class="row mt-5">
             <div class="col-md-2">
-                <h6 class="header_title" id="ID013">Receipt Summary</h6>                
+                <h6 class="header_title" id="ID013">Receipt Summary</h6>
+                    <app-loader [isLoading]="isLoading"></app-loader>             
                     <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true" [showRowLines]="true"
-                    [allowColumnReordering]="true" height="200"  [columnAutoWidth]="false" [dataSource]="receiptSummaryArr">
+                    [allowColumnReordering]="true" height="200"  [columnAutoWidth]="false" [dataSource]="receiptSummaryArr" *ngIf="!isLoading">
                         <dxo-paging [enabled]="false"></dxo-paging>
                         <dxo-scrolling mode="virtual"></dxo-scrolling>
 
                         <dxi-column dataField="receipt_mode" caption="Receipt Mode" [allowResizing]="true"></dxi-column>
-                        <dxi-column dataField="AMOUNT" caption="Amount" [allowResizing]="true"></dxi-column>
+                        <dxi-column dataField="AMOUNT" caption="Amount" [allowResizing]="true" alignment="right"></dxi-column>
                     
                         <dxo-summary>
-                            <dxi-total-item column="AMOUNT" summaryType="sum" displayFormat="{0}" ></dxi-total-item>
+                            <dxi-total-item column="AMOUNT" summaryType="sum" displayFormat="{0}" alignment="right"></dxi-total-item>
                         </dxo-summary>
                     </dx-data-grid>
             </div>
             <div class="col-md-4">
                 <h6 class="header_title" id="ID014">Scrap Purchase Summary</h6>
+                <app-loader [isLoading]="isLoading"></app-loader>   
                 <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true" [showRowLines]="true"
-                [allowColumnReordering]="true" height="200" [dataSource]="scrapPurchseSummaryArr" [columnAutoWidth]="true">
+                [allowColumnReordering]="true" height="200" [dataSource]="scrapPurchseSummaryArr" [columnAutoWidth]="true" *ngIf="!isLoading">
                     <dxo-paging [enabled]="false"></dxo-paging>
                     <!-- <dxo-selection mode="multiple"></dxo-selection> -->
                     <dxo-scrolling mode="virtual"></dxo-scrolling>
 
                     <dxi-column dataField="PARTYCODE" caption="Party Code" [allowResizing]="true"></dxi-column>
                     <dxi-column dataField="STOCK_CODE" caption="Item Code" [allowResizing]="true"></dxi-column>                
-                    <dxi-column dataField="GROSSWT" caption="Gross Wt" [allowResizing]="true"></dxi-column>
-                    <dxi-column dataField="AMOUNT" caption="Amount" [allowResizing]="true"></dxi-column>
+                    <dxi-column dataField="GROSSWT" caption="Gross Wt" [allowResizing]="true" alignment="right"></dxi-column>
+                    <dxi-column dataField="AMOUNT" caption="Amount" [allowResizing]="true" alignment="right"></dxi-column>
                     
                     <dxo-summary>
-                        <dxi-total-item column="GROSSWT" summaryType="sum" displayFormat="{0}" ></dxi-total-item>
-                        <dxi-total-item column="AMOUNT" summaryType="sum" displayFormat="{0}" ></dxi-total-item>
+                        <dxi-total-item column="GROSSWT" summaryType="sum" displayFormat="{0}" alignment="right"></dxi-total-item>
+                        <dxi-total-item column="AMOUNT" summaryType="sum" displayFormat="{0}" alignment="right"></dxi-total-item>
                     </dxo-summary>
                 </dx-data-grid>
             </div>
@@ -387,28 +395,29 @@
                     <h6 class="header_title" id="ID016">Salesman wise summary</h6>
                 </div>
               </div>
-
+              <app-loader [isLoading]="isLoading"></app-loader>
                 <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true" [showRowLines]="true"
-                [allowColumnReordering]="true" height="200" [dataSource]="salesmanSummaryArr" [columnAutoWidth]="true">
+                [allowColumnReordering]="true" height="200" [dataSource]="salesmanSummaryArr" [columnAutoWidth]="true"
+                *ngIf="!isLoading">
                     <dxo-paging [enabled]="false"></dxo-paging>
                     <!-- <dxo-selection mode="multiple"></dxo-selection> -->
                     <dxo-scrolling mode="virtual"></dxo-scrolling>
                     
                     <dxi-column dataField="description" caption="Salesman" [allowResizing]="true"></dxi-column>
-                    <dxi-column dataField="voc_nos" caption="#Docs" [allowResizing]="true"></dxi-column>  
-                    <dxi-column dataField="amount" caption="Total Amount" [allowResizing]="true"></dxi-column>
-                    <dxi-column dataField="mkgvalue" caption="Making Value" [allowResizing]="true"></dxi-column>
+                    <dxi-column dataField="voc_nos" caption="#Docs" [allowResizing]="true" alignment="right"></dxi-column>  
+                    <dxi-column dataField="amount" caption="Total Amount" [allowResizing]="true" alignment="right"></dxi-column>
+                    <dxi-column dataField="mkgvalue" caption="Making Value" [allowResizing]="true" alignment="right"></dxi-column>
 
-                    <dxi-column dataField="sman_code" caption="sman_code" [allowResizing]="true"></dxi-column>
-                    <dxi-column dataField="metal" caption="metal" [allowResizing]="true"></dxi-column>
-                    <dxi-column dataField="nonmetal" caption="nonmetal" [allowResizing]="true"></dxi-column>
-                    <dxi-column dataField="DIA_CARAT" caption="DIA_CARAT" [allowResizing]="true"></dxi-column>
+                    <dxi-column dataField="sman_code" caption="Salesman Code" [allowResizing]="true"></dxi-column>
+                    <dxi-column dataField="metal" caption="metal" [allowResizing]="true" alignment="right"></dxi-column>
+                    <dxi-column dataField="nonmetal" caption="nonmetal" [allowResizing]="true" alignment="right"></dxi-column>
+                    <dxi-column dataField="DIA_CARAT" caption="DIA_CARAT" [allowResizing]="true" alignment="right"></dxi-column>
                     <dxi-column dataField="OTHER_CARAT" caption="OTHER_CARAT" [allowResizing]="true"></dxi-column>
 
 
                     <dxo-summary>
-                        <dxi-total-item column="amount"  summaryType="sum" displayFormat="{0}"> </dxi-total-item>
-                        <dxi-total-item column="mkgvalue"  summaryType="sum" displayFormat="{0}"></dxi-total-item>
+                        <dxi-total-item column="amount"  summaryType="sum" displayFormat="{0}" alignment="right"> </dxi-total-item>
+                        <dxi-total-item column="mkgvalue"  summaryType="sum" displayFormat="{0}" alignment="right"></dxi-total-item>
                     </dxo-summary>
                 </dx-data-grid>
             </div>
