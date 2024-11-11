@@ -426,6 +426,7 @@ export class POSDaybookComponent implements OnInit {
           for (const key in item) {
             if (typeof item[key] === 'number' && key !== 'mid' && key !== 'vocno') {
               item[key] = this.customizeText(item[key], 2);
+              item[key] = this.commonService.addCommaSepration(item[key]);
             }
           }
         });
@@ -510,6 +511,7 @@ export class POSDaybookComponent implements OnInit {
             for (const key in item) {
               if (typeof item[key] === 'number' && key !== 'mid') {
                 item[key] = this.customizeText(item[key], 2);
+                item[key] = this.commonService.addCommaSepration(item[key]);
               }
             }
           });
@@ -519,6 +521,7 @@ export class POSDaybookComponent implements OnInit {
             for (const key in item) {
               if (typeof item[key] === 'number' && key !== 'mid') {
                 item[key] = this.customizeText(item[key], 2);
+                item[key] = this.commonService.addCommaSepration(item[key]);
               }
             }
           });
@@ -529,6 +532,7 @@ export class POSDaybookComponent implements OnInit {
             for (const key in item) {
               if (typeof item[key] === 'number' && key !== 'mid') {
                 item[key] = this.customizeText(item[key], 2);
+                item[key] = this.commonService.addCommaSepration(item[key]);
               }
             }
           });
@@ -581,6 +585,7 @@ export class POSDaybookComponent implements OnInit {
           for (const key in item) {
             if (typeof item[key] === 'number' && key !== 'mid') {
               item[key] = this.customizeText(item[key], 2);
+              item[key] = this.commonService.addCommaSepration(item[key]);
             }
           }
         });
@@ -590,6 +595,7 @@ export class POSDaybookComponent implements OnInit {
           for (const key in item) {
             if (typeof item[key] === 'number' && key !== 'mid') {
               item[key] = this.customizeText(item[key], 2);
+              item[key] = this.commonService.addCommaSepration(item[key]);
             }
           }
         });
@@ -642,6 +648,7 @@ export class POSDaybookComponent implements OnInit {
           for (const key in item) {
             if (typeof item[key] === 'number' && key !== 'mid') {
               item[key] = this.customizeText(item[key], 2);
+              item[key] = this.commonService.addCommaSepration(item[key]);
             }
           }
         }); 
@@ -651,6 +658,7 @@ export class POSDaybookComponent implements OnInit {
           for (const key in item) {
             if (typeof item[key] === 'number' && key !== 'mid') {
               item[key] = this.customizeText(item[key], 2);
+              item[key] = this.commonService.addCommaSepration(item[key]);
             }
           }
         });
