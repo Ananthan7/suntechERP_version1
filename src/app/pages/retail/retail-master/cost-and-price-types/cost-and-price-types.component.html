@@ -52,7 +52,14 @@
               >
               <div class="col-md-4">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="party" />
+                  <mat-select formControlName="type">
+                    <mat-option
+                      *ngFor="let data of typeList"
+                      [value]="data.field"
+                    >
+                      {{ data.field }}
+                    </mat-option>
+                  </mat-select>
                 </mat-form-field>
               </div>
             </div>
@@ -64,6 +71,14 @@
               <div class="col-md-4">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input matInput="text" formControlName="division" />
+
+                  <master-search
+                    (focusout)="openTab($event, 'design')"
+                    #overlayDesignCode
+                    [MasterSearchData]="designCode"
+                    class="masterSearch"
+                    (newRowClick)="lookupCodeSelected($event, 'CODE')"
+                  ></master-search>
                 </mat-form-field>
               </div>
             </div>
@@ -92,7 +107,14 @@
               >
               <div class="col-md-4">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="standardPrice" />
+                  <mat-select formControlName="type">
+                    <mat-option
+                      *ngFor="let data of typeList"
+                      [value]="data.field"
+                    >
+                      {{ data.field }}
+                    </mat-option>
+                  </mat-select>
                 </mat-form-field>
               </div>
             </div>
@@ -106,7 +128,14 @@
               >
               <div class="col-md-4">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="minimumPrice" />
+                  <mat-select formControlName="type">
+                    <mat-option
+                      *ngFor="let data of typeList"
+                      [value]="data.field"
+                    >
+                      {{ data.field }}
+                    </mat-option>
+                  </mat-select>
                 </mat-form-field>
               </div>
             </div>
@@ -120,7 +149,14 @@
               >
               <div class="col-md-4">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="maximumPrice" />
+                  <mat-select formControlName="type">
+                    <mat-option
+                      *ngFor="let data of typeList"
+                      [value]="data.field"
+                    >
+                      {{ data.field }}
+                    </mat-option>
+                  </mat-select>
                 </mat-form-field>
               </div>
             </div>
@@ -174,8 +210,6 @@
             (deleteClick)="removeItemDetails()"
           >
           </menu-buttons>
-
-
 
           <div class="col-md-12">
             <dx-data-grid

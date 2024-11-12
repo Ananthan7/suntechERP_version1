@@ -38,6 +38,14 @@
               <div class="col-md-7">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input matInput="text" formControlName="costCenter" />
+
+                  <master-search
+                    (focusout)="openTab($event, 'design')"
+                    #overlayDesignCode
+                    [MasterSearchData]="designCode"
+                    class="masterSearch"
+                    (newRowClick)="lookupCodeSelected($event, 'CODE')"
+                  ></master-search>
                 </mat-form-field>
               </div>
             </div>
@@ -49,6 +57,14 @@
               <div class="col-md-7">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input matInput="text" formControlName="category" />
+
+                  <master-search
+                    (focusout)="openTab($event, 'design')"
+                    #overlayDesignCode
+                    [MasterSearchData]="designCode"
+                    class="masterSearch"
+                    (newRowClick)="lookupCodeSelected($event, 'CODE')"
+                  ></master-search>
                 </mat-form-field>
               </div>
             </div>
@@ -60,6 +76,13 @@
               <div class="col-md-7">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input matInput="text" formControlName="shape" />
+                  <master-search
+                    (focusout)="openTab($event, 'design')"
+                    #overlayDesignCode
+                    [MasterSearchData]="designCode"
+                    class="masterSearch"
+                    (newRowClick)="lookupCodeSelected($event, 'CODE')"
+                  ></master-search>
                 </mat-form-field>
               </div>
             </div>
@@ -71,6 +94,13 @@
               <div class="col-md-7">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input matInput="text" formControlName="color" />
+                  <master-search
+                    (focusout)="openTab($event, 'design')"
+                    #overlayDesignCode
+                    [MasterSearchData]="designCode"
+                    class="masterSearch"
+                    (newRowClick)="lookupCodeSelected($event, 'CODE')"
+                  ></master-search>
                 </mat-form-field>
               </div>
             </div>
@@ -82,6 +112,13 @@
               <div class="col-md-7">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input matInput="text" formControlName="vendor" />
+                  <master-search
+                    (focusout)="openTab($event, 'design')"
+                    #overlayDesignCode
+                    [MasterSearchData]="designCode"
+                    class="masterSearch"
+                    (newRowClick)="lookupCodeSelected($event, 'CODE')"
+                  ></master-search>
                 </mat-form-field>
               </div>
             </div>
@@ -118,6 +155,12 @@
                 </mat-form-field>
               </div>
             </div>
+
+            <div class="row mb-1">
+              <mat-checkbox formControlName="creditCardLimitCheck" id="ID006">
+                Allow Zero Pcs
+              </mat-checkbox>
+            </div>
           </div>
           <div class="col-md-3">
             <div class="row mb-1">
@@ -141,6 +184,14 @@
               <div class="col-md-7">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input matInput="text" formControlName="brand" />
+
+                  <master-search
+                    (focusout)="openTab($event, 'design')"
+                    #overlayDesignCode
+                    [MasterSearchData]="designCode"
+                    class="masterSearch"
+                    (newRowClick)="lookupCodeSelected($event, 'CODE')"
+                  ></master-search>
                 </mat-form-field>
               </div>
             </div>
@@ -155,6 +206,13 @@
               <div class="col-md-7">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input matInput="text" formControlName="subCategory" />
+                  <master-search
+                    (focusout)="openTab($event, 'design')"
+                    #overlayDesignCode
+                    [MasterSearchData]="designCode"
+                    class="masterSearch"
+                    (newRowClick)="lookupCodeSelected($event, 'CODE')"
+                  ></master-search>
                 </mat-form-field>
               </div>
             </div>
@@ -166,6 +224,13 @@
               <div class="col-md-7">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input matInput="text" formControlName="size" />
+                  <master-search
+                    (focusout)="openTab($event, 'design')"
+                    #overlayDesignCode
+                    [MasterSearchData]="designCode"
+                    class="masterSearch"
+                    (newRowClick)="lookupCodeSelected($event, 'CODE')"
+                  ></master-search>
                 </mat-form-field>
               </div>
             </div>
@@ -177,6 +242,14 @@
               <div class="col-md-7">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input matInput="text" formControlName="type" />
+
+                  <master-search
+                    (focusout)="openTab($event, 'design')"
+                    #overlayDesignCode
+                    [MasterSearchData]="designCode"
+                    class="masterSearch"
+                    (newRowClick)="lookupCodeSelected($event, 'CODE')"
+                  ></master-search>
                 </mat-form-field>
               </div>
             </div>
@@ -188,6 +261,13 @@
               <div class="col-md-7">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input matInput="text" formControlName="sieveSet" />
+                  <master-search
+                    (focusout)="openTab($event, 'design')"
+                    #overlayDesignCode
+                    [MasterSearchData]="designCode"
+                    class="masterSearch"
+                    (newRowClick)="lookupCodeSelected($event, 'CODE')"
+                  ></master-search>
                 </mat-form-field>
               </div>
             </div>
@@ -199,6 +279,13 @@
               <div class="col-md-7">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input matInput="text" formControlName="sieve" />
+                  <master-search
+                    (focusout)="openTab($event, 'design')"
+                    #overlayDesignCode
+                    [MasterSearchData]="designCode"
+                    class="masterSearch"
+                    (newRowClick)="lookupCodeSelected($event, 'CODE')"
+                  ></master-search>
                 </mat-form-field>
               </div>
             </div>
@@ -223,6 +310,12 @@
                   <input matInput="text" formControlName="lastTrans" />
                 </mat-form-field>
               </div>
+            </div>
+
+            <div class="row mb-1">
+              <mat-checkbox formControlName="creditCardLimitCheck" id="ID006">
+                Exclude From Transfer Wt.
+              </mat-checkbox>
             </div>
           </div>
 
@@ -295,6 +388,14 @@
                   <div class="col-md-2">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input matInput="text" formControlName="price1Code" />
+
+                      <master-search
+                        (focusout)="openTab($event, 'design')"
+                        #overlayDesignCode
+                        [MasterSearchData]="designCode"
+                        class="masterSearch"
+                        (newRowClick)="lookupCodeSelected($event, 'CODE')"
+                      ></master-search>
                     </mat-form-field>
                   </div>
 
@@ -324,6 +425,14 @@
                   <div class="col-md-2">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input matInput="text" formControlName="price2Code" />
+
+                      <master-search
+                        (focusout)="openTab($event, 'design')"
+                        #overlayDesignCode
+                        [MasterSearchData]="designCode"
+                        class="masterSearch"
+                        (newRowClick)="lookupCodeSelected($event, 'CODE')"
+                      ></master-search>
                     </mat-form-field>
                   </div>
 
@@ -353,6 +462,13 @@
                   <div class="col-md-2">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input matInput="text" formControlName="price3Code" />
+                      <master-search
+                        (focusout)="openTab($event, 'design')"
+                        #overlayDesignCode
+                        [MasterSearchData]="designCode"
+                        class="masterSearch"
+                        (newRowClick)="lookupCodeSelected($event, 'CODE')"
+                      ></master-search>
                     </mat-form-field>
                   </div>
 
@@ -382,6 +498,13 @@
                   <div class="col-md-2">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input matInput="text" formControlName="price4Code" />
+                      <master-search
+                        (focusout)="openTab($event, 'design')"
+                        #overlayDesignCode
+                        [MasterSearchData]="designCode"
+                        class="masterSearch"
+                        (newRowClick)="lookupCodeSelected($event, 'CODE')"
+                      ></master-search>
                     </mat-form-field>
                   </div>
 
@@ -411,6 +534,13 @@
                   <div class="col-md-2">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input matInput="text" formControlName="price5Code" />
+                      <master-search
+                        (focusout)="openTab($event, 'design')"
+                        #overlayDesignCode
+                        [MasterSearchData]="designCode"
+                        class="masterSearch"
+                        (newRowClick)="lookupCodeSelected($event, 'CODE')"
+                      ></master-search>
                     </mat-form-field>
                   </div>
 

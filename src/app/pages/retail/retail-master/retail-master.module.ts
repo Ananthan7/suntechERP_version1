@@ -68,6 +68,12 @@ import { OvertimeMasterComponent } from './overtime-master/overtime-master.compo
 import { HolidayMasterComponent } from './holiday-master/holiday-master.component';
 import { SalesInvoiceComponent } from './sales-invoice/sales-invoice.component';
 import { ClientAuthorizationComponent } from './client-authorization/client-authorization.component';
+import { MobileAppUserComponent } from './mobile-app-user/mobile-app-user.component';
+import { MobileAppSettingComponent } from './mobile-app-setting/mobile-app-setting.component';
+import { FixedAssetsCategoryMasterComponent } from './fixed-assets-category-master/fixed-assets-category-master.component';
+import { DocumentPrintSetupComponent } from './document-print-setup/document-print-setup.component';
+import { EmailTemplateComponent } from './email-template/email-template.component';
+import { FixedAssetsComponent } from './fixed-assets/fixed-assets.component';
 
 
 @NgModule({
@@ -140,7 +146,15 @@ import { ClientAuthorizationComponent } from './client-authorization/client-auth
     OvertimeMasterComponent,
     HolidayMasterComponent,
     SalesInvoiceComponent,
-    ClientAuthorizationComponent
+    ClientAuthorizationComponent,
+    MobileAppUserComponent,
+    MobileAppSettingComponent,
+    ClientAuthorizationComponent,
+    FixedAssetsCategoryMasterComponent,
+    DocumentPrintSetupComponent,
+    EmailTemplateComponent,
+    FixedAssetsComponent
+    
   ],
   imports: [
     CommonModule,
