@@ -21,7 +21,7 @@
                                 <div class="col-sm-3">
                                     <mat-form-field style="width: 100%" appearance="outline">
                                         <input type="text" #codeInput matInput formControlName="code" UpperCaseDirective
-                                            autocomplete="off" />
+                                            autocomplete="off"  [readonly]="viewMode || editMode"/>
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -31,11 +31,11 @@
                                 <div class="col-sm-6">
                                     <mat-form-field style="width: 100%" appearance="outline">
                                         <input type="text" #codeInput matInput formControlName="description" UpperCaseDirective
-                                            autocomplete="off" />
+                                            autocomplete="off" [readonly]="viewMode"/>
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-4">
-                                    <mat-checkbox (change)="checkBoxValue($event, 'leave_salary')" formControlName="leave_salary" class="example-margin">
+                                    <mat-checkbox (change)="checkBoxValue($event, 'leave_salary')" formControlName="leave_salary" class="example-margin" >
                                         Consider for Leave Salary</mat-checkbox>
                                 </div>
                             </div>
@@ -43,15 +43,15 @@
                                 <label for="inputPassword" id="ID002" class="col-sm-2 col-form-label">GL Code : </label>
                                 <div class="col-sm-3">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="glcode" UpperCaseDirective />
-                                        <master-search class="masterSearch" [MasterSearchData]="glCodeData"
+                                        <input type="text" matInput formControlName="glcode" [readonly]="viewMode" UpperCaseDirective (keydown)="lookupKeyPress($event,'glcode')" />
+                                        <master-search  *ngIf="viewMode == false" class="masterSearch" [MasterSearchData]="glCodeData" #overlayglcodeSearch
                                             (newRowClick)="glCodeSelected($event)">
                                         </master-search>
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-3">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="glcode_desc" UpperCaseDirective />
+                                        <input type="text" matInput formControlName="+" UpperCaseDirective [readonly]="viewMode"/>
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-4">
@@ -64,14 +64,14 @@
                                 </label>
                                 <div class="col-sm-3">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="countrycode" UpperCaseDirective />
-                                        <master-search [MasterSearchData]="countryCodeData" class="masterSearch" 
+                                        <input type="text" matInput formControlName="countrycode" [readonly]="viewMode" UpperCaseDirective  (keydown)="lookupKeyPress($event,'countrycode')"/>
+                                        <master-search  *ngIf="viewMode == false" [MasterSearchData]="countryCodeData" class="masterSearch" #overlaycountrycodeSearch
                                         (newRowClick)="countryCodeSelected($event)"></master-search>
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-3">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="countrycodedesc" UpperCaseDirective />
+                                        <input type="text" matInput formControlName="countrycodedesc" [readonly]="viewMode" UpperCaseDirective />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-4">
@@ -87,7 +87,7 @@
                             <div class="your-box-container">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <mat-radio-group aria-label="Select an option" formControlName="calc_method"
+                                        <mat-radio-group aria-label="Select an option" formControlName="calc_method" 
                                             class="d-flex flex-column">
                                             <mat-radio-button value="0"
                                                 class="mx-2"><b>Fixed</b></mat-radio-button>
@@ -102,7 +102,7 @@
                                             <div class="col-sm-8">
                                                 <mat-form-field style="width: 100%" appearance="outline">
                                                     <input type="number" #codeInput matInput formControlName="value"
-                                                        UpperCaseDirective autocomplete="off" />
+                                                        UpperCaseDirective [readonly]="viewMode" autocomplete="off" />
                                                 </mat-form-field>
                                             </div>
                                         </div>
@@ -121,8 +121,8 @@
                                 <label for="inputPassword" id="ID002" class="col-sm-3 col-form-label">Report Heading : </label>
                                 <div class="col-sm-7">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="report_heading" UpperCaseDirective />
-                                        <master-search class="masterSearch" [MasterSearchData]="reportCodeData"
+                                        <input type="text" matInput formControlName="report_heading" [readonly]="viewMode" UpperCaseDirective (keydown)="lookupKeyPress($event,'report_heading')"/>
+                                        <master-search class="masterSearch"  *ngIf="viewMode == false" [MasterSearchData]="reportCodeData"  #overlayreport_headingSearch
                                         (newRowClick)="reportCodeSelected($event)">
                                     </master-search>
                                     </mat-form-field>
@@ -167,8 +167,8 @@
                                 </label>
                                 <div class="col-sm-8">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="userdefined1" UpperCaseDirective />
-                                        <master-search class="masterSearch" [MasterSearchData]="countryCodeData"
+                                        <input type="text" matInput formControlName="userdefined1" UpperCaseDirective [readonly]="viewMode" />
+                                        <master-search class="masterSearch"  *ngIf="viewMode == false" [MasterSearchData]="countryCodeData"
                                         (newRowClick)="countryCodeSelected($event)">
                                     </master-search>
                                     </mat-form-field>
@@ -179,8 +179,8 @@
                                 </label>
                                 <div class="col-sm-8">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="userdefined2" UpperCaseDirective />
-                                        <master-search class="masterSearch" [MasterSearchData]="countryCodeData"
+                                        <input type="text" matInput formControlName="userdefined2" UpperCaseDirective [readonly]="viewMode"/>
+                                        <master-search class="masterSearch"  *ngIf="viewMode == false" [MasterSearchData]="countryCodeData"
                                         (newRowClick)="countryCodeSelected($event)">
                                     </master-search>
                                     </mat-form-field>
@@ -191,8 +191,8 @@
                                 </label>
                                 <div class="col-sm-8">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="userdefined3" UpperCaseDirective />
-                                        <master-search class="masterSearch" [MasterSearchData]="countryCodeData"
+                                        <input type="text" matInput formControlName="userdefined3" UpperCaseDirective [readonly]="viewMode"/>
+                                        <master-search class="masterSearch"  *ngIf="viewMode == false" [MasterSearchData]="countryCodeData"
                                         (newRowClick)="countryCodeSelected($event)">
                                     </master-search>
                                     </mat-form-field>
@@ -203,8 +203,8 @@
                                 </label>
                                 <div class="col-sm-8">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="userdefined4" UpperCaseDirective />
-                                        <master-search class="masterSearch" [MasterSearchData]="countryCodeData"
+                                        <input type="text" matInput formControlName="userdefined4" UpperCaseDirective [readonly]="viewMode"/>
+                                        <master-search class="masterSearch"  *ngIf="viewMode == false" [MasterSearchData]="countryCodeData"
                                         (newRowClick)="countryCodeSelected($event)">
                                     </master-search>
                                     </mat-form-field>
@@ -215,8 +215,8 @@
                                 </label>
                                 <div class="col-sm-8">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="userdefined5" UpperCaseDirective />
-                                        <master-search class="masterSearch" [MasterSearchData]="countryCodeData"
+                                        <input type="text" matInput formControlName="userdefined5" UpperCaseDirective [readonly]="viewMode"/>
+                                        <master-search class="masterSearch"  *ngIf="viewMode == false" [MasterSearchData]="countryCodeData"
                                         (newRowClick)="countryCodeSelected($event)">
                                     </master-search>
                                     </mat-form-field>
@@ -229,8 +229,8 @@
                                 </label>
                                 <div class="col-sm-8">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="userdefined6" UpperCaseDirective />
-                                        <master-search class="masterSearch" [MasterSearchData]="countryCodeData"
+                                        <input type="text" matInput formControlName="userdefined6" UpperCaseDirective [readonly]="viewMode"/>
+                                        <master-search class="masterSearch"  *ngIf="viewMode == false" [MasterSearchData]="countryCodeData"
                                         (newRowClick)="countryCodeSelected($event)">
                                     </master-search>
                                     </mat-form-field>
@@ -241,8 +241,8 @@
                                 </label>
                                 <div class="col-sm-8">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="userdefined7" UpperCaseDirective />
-                                        <master-search class="masterSearch" [MasterSearchData]="countryCodeData"
+                                        <input type="text" matInput formControlName="userdefined7" UpperCaseDirective [readonly]="viewMode"/>
+                                        <master-search class="masterSearch"  *ngIf="viewMode == false" [MasterSearchData]="countryCodeData"
                                         (newRowClick)="countryCodeSelected($event)">
                                     </master-search>
                                     </mat-form-field>
@@ -253,8 +253,8 @@
                                 </label>
                                 <div class="col-sm-8">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="userdefined8" UpperCaseDirective />
-                                        <master-search class="masterSearch" [MasterSearchData]="countryCodeData"
+                                        <input type="text" matInput formControlName="userdefined8" UpperCaseDirective [readonly]="viewMode"/>
+                                        <master-search class="masterSearch"  *ngIf="viewMode == false" [MasterSearchData]="countryCodeData"
                                         (newRowClick)="countryCodeSelected($event)">
                                     </master-search>
                                     </mat-form-field>
@@ -265,8 +265,8 @@
                                 </label>
                                 <div class="col-sm-8">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="userdefined9" UpperCaseDirective />
-                                        <master-search class="masterSearch" [MasterSearchData]="countryCodeData"
+                                        <input type="text" matInput formControlName="userdefined9" UpperCaseDirective [readonly]="viewMode"/>
+                                        <master-search class="masterSearch"  *ngIf="viewMode == false" [MasterSearchData]="countryCodeData"
                                         (newRowClick)="countryCodeSelected($event)">
                                     </master-search>
                                     </mat-form-field>
@@ -277,8 +277,8 @@
                                 </label>
                                 <div class="col-sm-8">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="userdefined10" UpperCaseDirective />
-                                        <master-search class="masterSearch" [MasterSearchData]="countryCodeData"
+                                        <input type="text" matInput formControlName="userdefined10" UpperCaseDirective [readonly]="viewMode"/>
+                                        <master-search class="masterSearch"  *ngIf="viewMode == false" [MasterSearchData]="countryCodeData"
                                         (newRowClick)="countryCodeSelected($event)">
                                     </master-search>
                                     </mat-form-field>
@@ -291,8 +291,8 @@
                                 </label>
                                 <div class="col-sm-8">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="userdefined11" UpperCaseDirective />
-                                        <master-search class="masterSearch" [MasterSearchData]="countryCodeData"
+                                        <input type="text" matInput formControlName="userdefined11" UpperCaseDirective [readonly]="viewMode"/>
+                                        <master-search class="masterSearch"  *ngIf="viewMode == false" [MasterSearchData]="countryCodeData"
                                             (newRowClick)="countryCodeSelected($event)">
                                         </master-search>
                                     </mat-form-field>
@@ -303,8 +303,8 @@
                                 </label>
                                 <div class="col-sm-8">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="userdefined12" UpperCaseDirective />
-                                        <master-search class="masterSearch" [MasterSearchData]="countryCodeData"
+                                        <input type="text" matInput formControlName="userdefined12" UpperCaseDirective [readonly]="viewMode"/>
+                                        <master-search class="masterSearch"  *ngIf="viewMode == false" [MasterSearchData]="countryCodeData"
                                         (newRowClick)="countryCodeSelected($event)">
                                     </master-search>
                                     </mat-form-field>
@@ -315,8 +315,8 @@
                                 </label>
                                 <div class="col-sm-8">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="userdefined13" UpperCaseDirective />
-                                        <master-search class="masterSearch" [MasterSearchData]="countryCodeData"
+                                        <input type="text" matInput formControlName="userdefined13" UpperCaseDirective [readonly]="viewMode"/>
+                                        <master-search class="masterSearch"  *ngIf="viewMode == false" [MasterSearchData]="countryCodeData"
                                         (newRowClick)="countryCodeSelected($event)">
                                     </master-search>
                                     </mat-form-field>
@@ -327,8 +327,8 @@
                                 </label>
                                 <div class="col-sm-8">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="userdefined14" UpperCaseDirective />
-                                        <master-search class="masterSearch" [MasterSearchData]="countryCodeData"
+                                        <input type="text" matInput formControlName="userdefined14" UpperCaseDirective [readonly]="viewMode"/>
+                                        <master-search class="masterSearch"  *ngIf="viewMode == false" [MasterSearchData]="countryCodeData"
                                             (newRowClick)="countryCodeSelected($event)">
                                         </master-search>
                                     </mat-form-field>
@@ -339,8 +339,8 @@
                                 </label>
                                 <div class="col-sm-8">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="userdefined15" UpperCaseDirective />
-                                        <master-search class="masterSearch" [MasterSearchData]="countryCodeData"
+                                        <input type="text" matInput formControlName="userdefined15" UpperCaseDirective [readonly]="viewMode"/>
+                                        <master-search class="masterSearch"  *ngIf="viewMode == false" [MasterSearchData]="countryCodeData"
                                         (newRowClick)="countryCodeSelected($event)">
                                     </master-search>
                                     </mat-form-field>

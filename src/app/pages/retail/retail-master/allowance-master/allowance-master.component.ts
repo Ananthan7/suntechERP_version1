@@ -10,6 +10,7 @@ import Swal from 'sweetalert2';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import themes from 'devextreme/ui/themes';
 import { MatCheckboxChange } from '@angular/material/checkbox';
+import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 
 @Component({
   selector: 'app-allowance-master',
@@ -17,6 +18,10 @@ import { MatCheckboxChange } from '@angular/material/checkbox';
   styleUrls: ['./allowance-master.component.scss']
 })
 export class AllowanceMasterComponent implements OnInit {
+
+  @ViewChild('overlayglcodeSearch') overlayglcodeSearch!: MasterSearchComponent;
+  @ViewChild('overlaycountrycodeSearch') overlaycountrycodeSearch!: MasterSearchComponent;
+  @ViewChild('overlayreport_headingSearch') overlayreport_headingSearch!: MasterSearchComponent;
 
   @Input() content!: any;
   selectedTabIndex = 0;
@@ -28,8 +33,8 @@ export class AllowanceMasterComponent implements OnInit {
   consider_for_overtime:any;
   avoid_fraction:any;
   leave_salary:any;
-
-      
+  viewMode: boolean = false;
+  editMode: boolean = false;
 
   allowanceMasterForm: FormGroup = this.formBuilder.group({
     code:[''],
@@ -80,8 +85,10 @@ export class AllowanceMasterComponent implements OnInit {
     if (this.content?.FLAG) {
     
       if (this.content?.FLAG == 'VIEW') {
-       
+        this.viewMode = true;
       } else if (this.content?.FLAG == 'EDIT') {
+        this.viewMode = false;
+        this.editMode = true;
        
       } else if (this.content?.FLAG == 'DELETE') {
 
@@ -387,5 +394,31 @@ export class AllowanceMasterComponent implements OnInit {
 
   BranchDataSelected(e:any){
 
+  }
+
+  lookupKeyPress(event: any, form?: any) {
+    if (event.key == 'Tab' && event.target.value == '') {
+      this.showOverleyPanel(event, form)
+    }
+    if (event.key === 'Enter') {
+      if (event.target.value == '') this.showOverleyPanel(event, form)
+      event.preventDefault();
+    }
+  }
+
+
+  showOverleyPanel(event: any, formControlName: string) {
+    switch (formControlName) {
+      case 'glcode':
+        this.overlayglcodeSearch.showOverlayPanel(event);
+        break;
+      case 'countrycode':
+        this.overlaycountrycodeSearch.showOverlayPanel(event);
+        break;
+      case 'report_heading':
+        this.overlayreport_headingSearch.showOverlayPanel(event);
+        break;
+      default:
+    }
   }
 }
