@@ -27,6 +27,30 @@ export class BoxMasterComponent implements OnInit {
   flag: any;
   boxNumber: any;
 
+  stockCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 23,
+    SEARCH_FIELD: "STOCK_CODE",
+    SEARCH_HEADING: "Stock Code",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "STOCK_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  };
+
+  locationCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 11,
+    SEARCH_FIELD: "LOCATION_CODE",
+    SEARCH_HEADING: "location Code",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "LOCATION_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  };
+
   columnHeadings: any[] = [
     { field: "PARTYCODE", caption: "Box No" },
     { field: "BRANCH_CODE", caption: "Form Serial No" },
@@ -60,30 +84,6 @@ export class BoxMasterComponent implements OnInit {
     stockcode: [""],
     stockcodedesc: [""],
   });
-
-  stockCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 23,
-    SEARCH_FIELD: "STOCK_CODE",
-    SEARCH_HEADING: "Stock Code",
-    SEARCH_VALUE: "",
-    WHERECONDITION: "STOCK_CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  };
-
-  locationCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 11,
-    SEARCH_FIELD: "LOCATION_CODE",
-    SEARCH_HEADING: "location Code",
-    SEARCH_VALUE: "",
-    WHERECONDITION: "LOCATION_CODE<> ''",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  };
 
   close(data?: any) {
     //TODO reset forms and data before closing
