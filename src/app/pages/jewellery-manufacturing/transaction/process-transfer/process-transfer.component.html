@@ -8,7 +8,7 @@
 <!-- modal header component -->
 <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
     [isloading]="isloading" [isViewDelete]="editMode"
-    [isViewAuditTrail]="true" [isViewPost]="true" 
+    [isViewAuditTrail]="true" [isViewPost]="true"
     [disableAuditTrail]="!isSaved" [disablePostBtn]="isViewPost"
     (deleteClick)="checkMaxVocNumber(1)"
     (auditTrailClick)="auditTrailClick()"
@@ -62,7 +62,7 @@
                             <div class="col-sm-3">
                                 <mat-form-field appearance="outline"
                                     style="width: 100%;">
-                                    <input type="text" matInput
+                                    <input type="number" matInput
                                         formControlName="VOCNO"
                                         (change)="ValidatingVocNo()"
                                         class="text-right"
