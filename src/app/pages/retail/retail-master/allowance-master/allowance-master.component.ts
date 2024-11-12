@@ -35,6 +35,7 @@ export class AllowanceMasterComponent implements OnInit {
   leave_salary:any;
   viewMode: boolean = false;
   editMode: boolean = false;
+  isDisableSaveBtn: boolean = false;
 
   allowanceMasterForm: FormGroup = this.formBuilder.group({
     code:[''],
@@ -392,6 +393,32 @@ export class AllowanceMasterComponent implements OnInit {
     });
   }
 
+  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    LOOKUPDATA.SEARCH_VALUE = event.target.value
+    if (event.target.value == '' || this.viewMode == true) return
+    let param = {
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+    }
+    this.commonService.toastInfoByMsgId('MSG81447');
+    let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
+      .subscribe((result) => {
+        this.isDisableSaveBtn = false;
+        let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+        if (data.length == 0) {
+          this.commonService.toastErrorByMsgId('MSG1531')
+          this.allowanceMasterForm.controls[FORMNAME].setValue('')
+          LOOKUPDATA.SEARCH_VALUE = ''
+          this.openOverlay(FORMNAME, event);
+          return
+        }
+
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+      })
+    }
+
   BranchDataSelected(e:any){
 
   }
@@ -419,6 +446,23 @@ export class AllowanceMasterComponent implements OnInit {
         this.overlayreport_headingSearch.showOverlayPanel(event);
         break;
       default:
+    }
+  }
+
+  openOverlay(FORMNAME: string, event: any) {
+    switch (FORMNAME) {
+      case 'glcode':
+        this.overlayglcodeSearch.showOverlayPanel(event);
+        break;
+      case 'countrycode':
+        this.overlaycountrycodeSearch.showOverlayPanel(event);
+        break;
+      case 'report_heading':
+        this.overlayreport_headingSearch.showOverlayPanel(event);
+        break;
+      default:
+        console.warn(`Unknown FORMNAME: ${FORMNAME}`);
+        break;
     }
   }
 }

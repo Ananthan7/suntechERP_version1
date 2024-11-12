@@ -43,7 +43,7 @@
                                 <label for="inputPassword" id="ID002" class="col-sm-2 col-form-label">GL Code : </label>
                                 <div class="col-sm-3">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="glcode" [readonly]="viewMode" UpperCaseDirective (keydown)="lookupKeyPress($event,'glcode')" />
+                                        <input type="text" matInput formControlName="glcode" [readonly]="viewMode" UpperCaseDirective (focusout)="validateLookupField($event,glCodeData,'glcode')" (keydown)="lookupKeyPress($event,'glcode')" />
                                         <master-search  *ngIf="viewMode == false" class="masterSearch" [MasterSearchData]="glCodeData" #overlayglcodeSearch
                                             (newRowClick)="glCodeSelected($event)">
                                         </master-search>
@@ -64,7 +64,7 @@
                                 </label>
                                 <div class="col-sm-3">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="countrycode" [readonly]="viewMode" UpperCaseDirective  (keydown)="lookupKeyPress($event,'countrycode')"/>
+                                        <input type="text" matInput formControlName="countrycode" [readonly]="viewMode" UpperCaseDirective (focusout)="validateLookupField($event,countryCodeData,'countrycode')"  (keydown)="lookupKeyPress($event,'countrycode')"/>
                                         <master-search  *ngIf="viewMode == false" [MasterSearchData]="countryCodeData" class="masterSearch" #overlaycountrycodeSearch
                                         (newRowClick)="countryCodeSelected($event)"></master-search>
                                     </mat-form-field>
@@ -121,7 +121,7 @@
                                 <label for="inputPassword" id="ID002" class="col-sm-3 col-form-label">Report Heading : </label>
                                 <div class="col-sm-7">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="report_heading" [readonly]="viewMode" UpperCaseDirective (keydown)="lookupKeyPress($event,'report_heading')"/>
+                                        <input type="text" matInput formControlName="report_heading" [readonly]="viewMode" UpperCaseDirective  (focusout)="validateLookupField($event,reportCodeData,'report_heading')" (keydown)="lookupKeyPress($event,'report_heading')"/>
                                         <master-search class="masterSearch"  *ngIf="viewMode == false" [MasterSearchData]="reportCodeData"  #overlayreport_headingSearch
                                         (newRowClick)="reportCodeSelected($event)">
                                     </master-search>
