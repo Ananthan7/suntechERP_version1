@@ -545,11 +545,8 @@ export class MeltingTypeComponent implements OnInit {
     // Set the calculated values in the form controls
     this.meltingTypeForm.controls.metal.setValue(this.commonService.decimalQuantityFormat(metalPercentage, 'AMOUNT'));
     this.meltingTypeForm.controls.alloy.setValue(this.commonService.decimalQuantityFormat(alloyPercentage, 'AMOUNT'));
-
     this.meltingTypeForm.controls.stockCode.setValue('');
-
     this.stockCodeData.WHERECONDITION = `KARAT_CODE ='${this.meltingTypeForm.value.karat}' AND PURITY = '${this.meltingTypeForm.value.purity}' AND SUBCODE = 0`;
-
   }
 
   StockCodeSelected(e: any) {

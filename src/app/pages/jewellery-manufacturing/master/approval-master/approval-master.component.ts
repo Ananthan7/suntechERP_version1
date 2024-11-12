@@ -110,11 +110,6 @@ export class ApprovalMasterComponent implements OnInit {
   }
 
 
-  sanitizeInput(event: any): void {
-    const input = event.target as HTMLInputElement;
-    input.value = input.value.replace(/[^a-zA-Z0-9-]/g, '');  // Remove special characters
-    this.approvalMasterForm.get('code')?.setValue(input.value, { emitEvent: false });
-  }
 
 
   setFormValues() {
