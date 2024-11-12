@@ -442,7 +442,7 @@ export class POSDaybookComponent implements OnInit {
           { dataField: 'invamt', caption: 'Invoice Amount', alignment: 'right' },
           { dataField: 'sretamt', caption: 'Sal Return Amount', alignment: 'right' },
           { dataField: 'scpamt', caption: 'Sal Exchange Amount', alignment: 'right' },
-          { dataField: 'advance', caption: 'Advance', alignment: 'right' },
+          { dataField: 'advance', caption: 'Advance Amount', alignment: 'right' },
           { dataField: 'roundoff', caption: 'Round Off', alignment: 'right' },
 
           { dataField: 'others', caption: 'Others', alignment: 'right' },

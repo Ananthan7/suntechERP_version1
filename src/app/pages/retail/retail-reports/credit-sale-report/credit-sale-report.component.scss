@@ -13,6 +13,14 @@
     line-height: 1.5;
 }
 
+// for mat-select dropdowns
+::ng-deep {
+  .cdk-overlay-container {
+    position: fixed;
+    z-index: 1070 !important;
+  }
+}
+
 //Save new template pop up
 .popup-content {
     display: flex;
@@ -37,6 +45,12 @@
     min-width: 125px;
     white-space: normal;
     padding-bottom: 0px;
+}
+.demo-button{
+  background-color: #295094 !important;
+  color: white;
+  padding: 5px 10px;
+  line-height: 1.5;
 }
 .cancelBTN{
     background-color: #B9C3D3;
