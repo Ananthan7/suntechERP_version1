@@ -7,10 +7,10 @@
         </button>
     </div>
     <!-- modal header component -->
-    <modal-header (cancelClick)="close()" (saveClick)="formSubmit()"></modal-header>
+    <modal-header (cancelClick)="close()" (saveClick)="formSubmit()" (deleteClick)="deleteallowance()"></modal-header>
     <!-- content section -->
     <div class="p-4 ">
-        <form [formGroup]="employeeMasterForm">
+        <form [formGroup]="allowanceMasterForm">
             <mat-tab-group>
                 <mat-tab label="General">
                     <div class="row  py-2">
@@ -30,12 +30,12 @@
                                     Description :</label>
                                 <div class="col-sm-6">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" #codeInput matInput formControlName="code" UpperCaseDirective
+                                        <input type="text" #codeInput matInput formControlName="description" UpperCaseDirective
                                             autocomplete="off" />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-4">
-                                    <mat-checkbox id="ID022" formControlName="FinalProcess" class="example-margin">
+                                    <mat-checkbox (change)="checkBoxValue($event, 'leave_salary')" formControlName="leave_salary" class="example-margin">
                                         Consider for Leave Salary</mat-checkbox>
                                 </div>
                             </div>
@@ -43,19 +43,19 @@
                                 <label for="inputPassword" id="ID002" class="col-sm-2 col-form-label">GL Code : </label>
                                 <div class="col-sm-3">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="Branch" UpperCaseDirective />
-                                        <master-search class="masterSearch" [MasterSearchData]="BranchData"
-                                            (newRowClick)="BranchDataSelected($event)">
+                                        <input type="text" matInput formControlName="glcode" UpperCaseDirective />
+                                        <master-search class="masterSearch" [MasterSearchData]="glCodeData"
+                                            (newRowClick)="glCodeSelected($event)">
                                         </master-search>
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-3">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="BranchDes" UpperCaseDirective />
+                                        <input type="text" matInput formControlName="glcode_desc" UpperCaseDirective />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-4">
-                                    <mat-checkbox id="ID022" formControlName="FinalProcess" class="example-margin">
+                                    <mat-checkbox (change)="checkBoxValue($event, 'credit_to_employeeAC')" formControlName="credit_to_employeeAC" class="example-margin">
                                         Credit To Employee's A/c</mat-checkbox>
                                 </div>
                             </div>
@@ -64,19 +64,18 @@
                                 </label>
                                 <div class="col-sm-3">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="Branch" UpperCaseDirective />
-                                        <master-search class="masterSearch" [MasterSearchData]="BranchData"
-                                            (newRowClick)="BranchDataSelected($event)">
-                                        </master-search>
+                                        <input type="text" matInput formControlName="countrycode" UpperCaseDirective />
+                                        <master-search [MasterSearchData]="countryCodeData" class="masterSearch" 
+                                        (newRowClick)="countryCodeSelected($event)"></master-search>
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-3">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="BranchDes" UpperCaseDirective />
+                                        <input type="text" matInput formControlName="countrycodedesc" UpperCaseDirective />
                                     </mat-form-field>
                                 </div>
                                 <div class="col-sm-4">
-                                    <mat-checkbox id="ID022" formControlName="FinalProcess" class="example-margin">
+                                    <mat-checkbox (change)="checkBoxValue($event, 'consider_for_overtime')" formControlName="consider_for_overtime" class="example-margin">
                                         Consider for Overtime</mat-checkbox>
                                 </div>
                             </div>
@@ -88,11 +87,11 @@
                             <div class="your-box-container">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <mat-radio-group aria-label="Select an option" formControlName="DailyTarget"
+                                        <mat-radio-group aria-label="Select an option" formControlName="calc_method"
                                             class="d-flex flex-column">
-                                            <mat-radio-button value="F" id="ID012"
+                                            <mat-radio-button value="0"
                                                 class="mx-2"><b>Fixed</b></mat-radio-button>
-                                            <mat-radio-button value="P" id="ID013"
+                                            <mat-radio-button value="1" 
                                                 class="mx-2"><b>Percentage</b></mat-radio-button>
                                         </mat-radio-group>
                                     </div>
@@ -102,15 +101,17 @@
                                                 Value</label>
                                             <div class="col-sm-8">
                                                 <mat-form-field style="width: 100%" appearance="outline">
-                                                    <input type="text" #codeInput matInput formControlName="code"
+                                                    <input type="number" #codeInput matInput formControlName="value"
                                                         UpperCaseDirective autocomplete="off" />
                                                 </mat-form-field>
                                             </div>
                                         </div>
                                         <div>
-                                            <mat-checkbox id="ID022" formControlName="FinalProcess"
+                                            <mat-checkbox
+                                            (change)="checkBoxValue($event, 'avoid_fraction')" 
+                                            formControlName="avoid_fraction"
                                                 class="example-margin">
-                                                Aviod Fraction
+                                                Avoid Fraction
                                             </mat-checkbox>
                                         </div>
                                     </div>
@@ -120,10 +121,10 @@
                                 <label for="inputPassword" id="ID002" class="col-sm-3 col-form-label">Report Heading : </label>
                                 <div class="col-sm-7">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="Branch" UpperCaseDirective />
-                                        <master-search class="masterSearch" [MasterSearchData]="BranchData"
-                                            (newRowClick)="BranchDataSelected($event)">
-                                        </master-search>
+                                        <input type="text" matInput formControlName="report_heading" UpperCaseDirective />
+                                        <master-search class="masterSearch" [MasterSearchData]="reportCodeData"
+                                        (newRowClick)="reportCodeSelected($event)">
+                                    </master-search>
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -133,8 +134,9 @@
                                 <label for="inputPassword" class="col-sm-3 col-form-label">Calculation Basis :</label>
                                 <div class="col-md-9">
                                     <mat-form-field style="width: 100%;" appearance="outline">
-                                        <mat-select>
-                                            <mat-option></mat-option>
+                                        <mat-select formControlName="calc_basis">
+                                            <mat-option value="0">sample</mat-option>
+                                            <mat-option value="1">sample1</mat-option>
                                             <mat-option></mat-option>
                                         </mat-select>
                                     </mat-form-field>
@@ -145,10 +147,10 @@
                                     <fieldset class="custom-fieldset">
                                         <legend class="custom-legend">Period
                                         </legend>
-                                        <mat-radio-group aria-label="Select an option" formControlName="DailyTarget">
-                                            <mat-radio-button value="F" id="ID012"
+                                        <mat-radio-group aria-label="Select an option" formControlName="period">
+                                            <mat-radio-button value="M" 
                                                 class="mx-2"><b>Monthly</b></mat-radio-button>
-                                            <mat-radio-button value="P" id="ID013"
+                                            <mat-radio-button value="Y" 
                                                 class="mx-2"><b>Yearly</b></mat-radio-button>
                                         </mat-radio-group>
                                     </fieldset>
@@ -165,10 +167,10 @@
                                 </label>
                                 <div class="col-sm-8">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="Branch" UpperCaseDirective />
-                                        <master-search class="masterSearch" [MasterSearchData]="BranchData"
-                                            (newRowClick)="BranchDataSelected($event)">
-                                        </master-search>
+                                        <input type="text" matInput formControlName="userdefined1" UpperCaseDirective />
+                                        <master-search class="masterSearch" [MasterSearchData]="countryCodeData"
+                                        (newRowClick)="countryCodeSelected($event)">
+                                    </master-search>
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -177,10 +179,10 @@
                                 </label>
                                 <div class="col-sm-8">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="Branch" UpperCaseDirective />
-                                        <master-search class="masterSearch" [MasterSearchData]="BranchData"
-                                            (newRowClick)="BranchDataSelected($event)">
-                                        </master-search>
+                                        <input type="text" matInput formControlName="userdefined2" UpperCaseDirective />
+                                        <master-search class="masterSearch" [MasterSearchData]="countryCodeData"
+                                        (newRowClick)="countryCodeSelected($event)">
+                                    </master-search>
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -189,10 +191,10 @@
                                 </label>
                                 <div class="col-sm-8">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="Branch" UpperCaseDirective />
-                                        <master-search class="masterSearch" [MasterSearchData]="BranchData"
-                                            (newRowClick)="BranchDataSelected($event)">
-                                        </master-search>
+                                        <input type="text" matInput formControlName="userdefined3" UpperCaseDirective />
+                                        <master-search class="masterSearch" [MasterSearchData]="countryCodeData"
+                                        (newRowClick)="countryCodeSelected($event)">
+                                    </master-search>
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -201,10 +203,10 @@
                                 </label>
                                 <div class="col-sm-8">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="Branch" UpperCaseDirective />
-                                        <master-search class="masterSearch" [MasterSearchData]="BranchData"
-                                            (newRowClick)="BranchDataSelected($event)">
-                                        </master-search>
+                                        <input type="text" matInput formControlName="userdefined4" UpperCaseDirective />
+                                        <master-search class="masterSearch" [MasterSearchData]="countryCodeData"
+                                        (newRowClick)="countryCodeSelected($event)">
+                                    </master-search>
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -213,10 +215,10 @@
                                 </label>
                                 <div class="col-sm-8">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="Branch" UpperCaseDirective />
-                                        <master-search class="masterSearch" [MasterSearchData]="BranchData"
-                                            (newRowClick)="BranchDataSelected($event)">
-                                        </master-search>
+                                        <input type="text" matInput formControlName="userdefined5" UpperCaseDirective />
+                                        <master-search class="masterSearch" [MasterSearchData]="countryCodeData"
+                                        (newRowClick)="countryCodeSelected($event)">
+                                    </master-search>
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -227,10 +229,10 @@
                                 </label>
                                 <div class="col-sm-8">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="Branch" UpperCaseDirective />
-                                        <master-search class="masterSearch" [MasterSearchData]="BranchData"
-                                            (newRowClick)="BranchDataSelected($event)">
-                                        </master-search>
+                                        <input type="text" matInput formControlName="userdefined6" UpperCaseDirective />
+                                        <master-search class="masterSearch" [MasterSearchData]="countryCodeData"
+                                        (newRowClick)="countryCodeSelected($event)">
+                                    </master-search>
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -239,10 +241,10 @@
                                 </label>
                                 <div class="col-sm-8">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="Branch" UpperCaseDirective />
-                                        <master-search class="masterSearch" [MasterSearchData]="BranchData"
-                                            (newRowClick)="BranchDataSelected($event)">
-                                        </master-search>
+                                        <input type="text" matInput formControlName="userdefined7" UpperCaseDirective />
+                                        <master-search class="masterSearch" [MasterSearchData]="countryCodeData"
+                                        (newRowClick)="countryCodeSelected($event)">
+                                    </master-search>
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -251,10 +253,10 @@
                                 </label>
                                 <div class="col-sm-8">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="Branch" UpperCaseDirective />
-                                        <master-search class="masterSearch" [MasterSearchData]="BranchData"
-                                            (newRowClick)="BranchDataSelected($event)">
-                                        </master-search>
+                                        <input type="text" matInput formControlName="userdefined8" UpperCaseDirective />
+                                        <master-search class="masterSearch" [MasterSearchData]="countryCodeData"
+                                        (newRowClick)="countryCodeSelected($event)">
+                                    </master-search>
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -263,10 +265,10 @@
                                 </label>
                                 <div class="col-sm-8">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="Branch" UpperCaseDirective />
-                                        <master-search class="masterSearch" [MasterSearchData]="BranchData"
-                                            (newRowClick)="BranchDataSelected($event)">
-                                        </master-search>
+                                        <input type="text" matInput formControlName="userdefined9" UpperCaseDirective />
+                                        <master-search class="masterSearch" [MasterSearchData]="countryCodeData"
+                                        (newRowClick)="countryCodeSelected($event)">
+                                    </master-search>
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -275,10 +277,10 @@
                                 </label>
                                 <div class="col-sm-8">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="Branch" UpperCaseDirective />
-                                        <master-search class="masterSearch" [MasterSearchData]="BranchData"
-                                            (newRowClick)="BranchDataSelected($event)">
-                                        </master-search>
+                                        <input type="text" matInput formControlName="userdefined10" UpperCaseDirective />
+                                        <master-search class="masterSearch" [MasterSearchData]="countryCodeData"
+                                        (newRowClick)="countryCodeSelected($event)">
+                                    </master-search>
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -289,9 +291,9 @@
                                 </label>
                                 <div class="col-sm-8">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="Branch" UpperCaseDirective />
-                                        <master-search class="masterSearch" [MasterSearchData]="BranchData"
-                                            (newRowClick)="BranchDataSelected($event)">
+                                        <input type="text" matInput formControlName="userdefined11" UpperCaseDirective />
+                                        <master-search class="masterSearch" [MasterSearchData]="countryCodeData"
+                                            (newRowClick)="countryCodeSelected($event)">
                                         </master-search>
                                     </mat-form-field>
                                 </div>
@@ -301,10 +303,10 @@
                                 </label>
                                 <div class="col-sm-8">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="Branch" UpperCaseDirective />
-                                        <master-search class="masterSearch" [MasterSearchData]="BranchData"
-                                            (newRowClick)="BranchDataSelected($event)">
-                                        </master-search>
+                                        <input type="text" matInput formControlName="userdefined12" UpperCaseDirective />
+                                        <master-search class="masterSearch" [MasterSearchData]="countryCodeData"
+                                        (newRowClick)="countryCodeSelected($event)">
+                                    </master-search>
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -313,10 +315,10 @@
                                 </label>
                                 <div class="col-sm-8">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="Branch" UpperCaseDirective />
-                                        <master-search class="masterSearch" [MasterSearchData]="BranchData"
-                                            (newRowClick)="BranchDataSelected($event)">
-                                        </master-search>
+                                        <input type="text" matInput formControlName="userdefined13" UpperCaseDirective />
+                                        <master-search class="masterSearch" [MasterSearchData]="countryCodeData"
+                                        (newRowClick)="countryCodeSelected($event)">
+                                    </master-search>
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -325,9 +327,9 @@
                                 </label>
                                 <div class="col-sm-8">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="Branch" UpperCaseDirective />
-                                        <master-search class="masterSearch" [MasterSearchData]="BranchData"
-                                            (newRowClick)="BranchDataSelected($event)">
+                                        <input type="text" matInput formControlName="userdefined14" UpperCaseDirective />
+                                        <master-search class="masterSearch" [MasterSearchData]="countryCodeData"
+                                            (newRowClick)="countryCodeSelected($event)">
                                         </master-search>
                                     </mat-form-field>
                                 </div>
@@ -337,10 +339,10 @@
                                 </label>
                                 <div class="col-sm-8">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="Branch" UpperCaseDirective />
-                                        <master-search class="masterSearch" [MasterSearchData]="BranchData"
-                                            (newRowClick)="BranchDataSelected($event)">
-                                        </master-search>
+                                        <input type="text" matInput formControlName="userdefined15" UpperCaseDirective />
+                                        <master-search class="masterSearch" [MasterSearchData]="countryCodeData"
+                                        (newRowClick)="countryCodeSelected($event)">
+                                    </master-search>
                                     </mat-form-field>
                                 </div>
                             </div>
