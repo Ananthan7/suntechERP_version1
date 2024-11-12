@@ -307,7 +307,7 @@
                                 <mat-form-field style="width: 70%;" appearance="outline">
                                     <input type="text" matInput maxlength="6" UpperCaseDirective
                                         formControlName="LOSS_ACCODE"
-                                        (change)="checkAccodeSelected($event,LossACCODEData,'LOSS_ACCODE')"
+                                        (change)="losscheckAccodeSelected($event,LossACCODEData,'LOSS_ACCODE')"
                                         (focusout)="validateLookupField($event,LossACCODEData,'LOSS_ACCODE')"
                                         [readonly]="islossReadOnly" tabindex="15"
                                         (keydown)="lookupKeyPress($event,'LOSS_ACCODE')" />

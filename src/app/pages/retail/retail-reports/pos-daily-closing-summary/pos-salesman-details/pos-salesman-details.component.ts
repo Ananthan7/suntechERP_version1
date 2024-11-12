@@ -16,6 +16,7 @@ export class PosSalesmanDetailsComponent implements OnInit {
   tableData: any = [];
   @Input() posDailyClosingSummaryFormData: any; //get data from PosDailyClosingSummaryComponent parent component
   htmlPreview: any;
+  isLoading: boolean = false;
 
   constructor(
     private activeModal: NgbActiveModal, private sanitizer: DomSanitizer,
@@ -24,6 +25,7 @@ export class PosSalesmanDetailsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.isLoading = true;
     this.toastr.info("Please wait for a moment!!");
     let API = "UspRptPosSalesmanwiseDetailsNet";
     let postData = {
@@ -38,13 +40,24 @@ export class PosSalesmanDetailsComponent implements OnInit {
       if (result.status == "Success") {
         this.toastr.success(result.status);                    
         this.tableData.push(result.dynamicData[0][0]);
+
+        this.tableData.forEach((item: any)=>{
+          for (const key in item) {
+            if (typeof item[key] === 'number') {
+              item[key] = this.comService.addCommaSepration(item[key]);
+            }
+          }
+        }) 
+        
+        this.isLoading = false;
         this.comService.closeSnackBarMsg();
       }
       else{
+        this.isLoading = false;
         this.toastr.error(result.status);
         this.comService.closeSnackBarMsg();
       }
-    },(err: any) => this.toastr.error(err)); this.comService.closeSnackBarMsg();
+    },(err: any) => this.toastr.error(err)); this.comService.closeSnackBarMsg(); this.isLoading = false;
   }
 
   close(data?: any) {

@@ -49,7 +49,7 @@ export class PricelistMasterComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   };
-  operatorsList = [
+  operatorsList = [ 
     { operation: '+', value: '+' },
     { operation: '-', value: '-' },
     { operation: '*', value: '*' },
@@ -370,6 +370,8 @@ export class PricelistMasterComponent implements OnInit {
     let priceFormula = ''
     if (form.priceMethod == 0) {
       priceFormula = `(((STOCK_LCCOST${form.addlValueSign}${form.addlValue})${form.priceSign}${form.priceValue})${form.finalPriceSign}${form.finalPriceValue})`
+      console.log(priceFormula);
+      
     } else if (form.priceMethod == 1) {
       priceFormula = form.priceValue
     }
@@ -382,10 +384,10 @@ export class PricelistMasterComponent implements OnInit {
       "MID": this.content ? this.content.MID : 0,
       "SYSTEM_DATE": this.commonService.formatDateTime(this.currentDate),
       "DONTCALCULATE": form.dontCalculate,
-      "FINALPRICE_SIGN": form.finalPriceSign || '',
-      "FINALPRICE_VALUE": this.commonService.emptyToZero(form.finalPriceValue),
-      "ADDLVALUE": this.commonService.emptyToZero(form.addlValue),
-      "ADDLVALUE_SIGN": form.addlValueSign || '',
+      "FINALPRICE_SIGN": form.finalPriceSign || '*',
+      "FINALPRICE_VALUE": this.commonService.emptyToZero(form.finalPriceValue) || 1,
+      "ADDLVALUE": this.commonService.emptyToZero(form.addlValue) || 1,
+      "ADDLVALUE_SIGN": form.addlValueSign || '*',
       "PRICE_ROUDOFF": form.priceRoundoff,
       "ROUNDOFF_DIGIT": this.commonService.emptyToZero(form.roundoff_digit),
       "PRICE_FORMULA": this.commonService.nullToString(priceFormula),

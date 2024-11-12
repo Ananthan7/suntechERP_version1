@@ -178,6 +178,14 @@ export class CustomerEnquiryComponent implements OnInit {
     LOAD_ONCLICK: true,
   };
 
+  SchemeMasterFindData: MasterSearchModel = {
+    VIEW_INPUT: true,
+    VIEW_ICON:false,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    API_VALUE: 'LoyaltyCardMaster/GetLoyaltyCardMasterList'
+  };
+
   constructor(private activeModal: NgbActiveModal, private formBuilder: FormBuilder, 
     private dataService: SuntechAPIService, private commonService: CommonServiceService, 
     private toastr: ToastrService, private sanitizer: DomSanitizer,
@@ -446,7 +454,7 @@ export class CustomerEnquiryComponent implements OnInit {
     }
   }
 
-  gridData(){
+  customerSelection(){
     let postData = {
       "SPID": "171",
       "parameter": {
@@ -466,14 +474,14 @@ export class CustomerEnquiryComponent implements OnInit {
         "MOBILE" : this.customerEnquiryForm.controls.mobileContact.value,
         "TELRES" : this.customerEnquiryForm.controls.telephoneContact.value,
         "EMAIL" : this.customerEnquiryForm.controls.Email.value,
-        "BIRTHFROMDATE" : this.customerEnquiryForm.controls.DOBValue.value,
-        "BIRTHTODATE" : this.customerEnquiryForm.controls.DOBValue2.value,
-        "WEDDINGFROMDATE" : this.customerEnquiryForm.controls.WeddingDateValue.value,
-        "WEDDINGTODATE" : this.customerEnquiryForm.controls.WeddingDateValue2.value,
+        "BIRTHFROMDATE" : this.commonService.formatYYMMDD(this.customerEnquiryForm.controls.DOBValue.value),
+        "BIRTHTODATE" : this.commonService.formatYYMMDD(this.customerEnquiryForm.controls.DOBValue2.value),
+        "WEDDINGFROMDATE" : this.commonService.formatYYMMDD(this.customerEnquiryForm.controls.WeddingDateValue.value),
+        "WEDDINGTODATE" : this.commonService.formatYYMMDD(this.customerEnquiryForm.controls.WeddingDateValue2.value),
         "STATE" : this.customerEnquiryForm.controls.state.value,
-        "SALDATEFROM" : this.customerEnquiryForm.controls.saleDateFrom.value,
-        "SALDATETO" : this.customerEnquiryForm.controls.dateTo.value,
-        "DIVISION" : this.customerEnquiryForm.controls.division.value,
+        "SALDATEFROM" : this.commonService.formatYYMMDD(this.customerEnquiryForm.controls.saleDateFrom.value),
+        "SALDATETO" : this.commonService.formatYYMMDD(this.customerEnquiryForm.controls.dateTo.value),
+        "DIVISION" : null, //this.customerEnquiryForm.controls.division.value,
         "BRANCHLIST": this.customerEnquiryForm.controls.branch.value,
         "USERBRANCH" : localStorage.getItem('userbranch')
       },
@@ -535,5 +543,9 @@ export class CustomerEnquiryComponent implements OnInit {
     } else {
       this.isDisableSaveBtn = false;
     }
+  }
+
+  getLoyaltyData(){
+
   }
 }
