@@ -1,6 +1,6 @@
 <!-- header section -->
 <div class="card-content border-bottom d-flex justify-content-between p-2">
-    <h5 class="pos-modaltitle" id="modal-dia-metal">Daily Retail Sales History</h5>
+    <h5 class="pos-modaltitle" id="modal-dia-metal">Scheme Register Dev Report</h5>
     <button type="button" class="btn btn-close close-btn" (click)="close()">
         <i class="feather icon-x close-icon"></i>
     </button>
@@ -11,25 +11,42 @@
 [isViewMore]="false" [isViewSave]="false" [isViewCancel]="false"></modal-header>
 
 <div class="row">
-    <form [formGroup]="dailySaleHistoryReportForm">
+    <form [formGroup]="schemeRegisterDevReportForm">
         <div class="container-fluid pt-3">
             <div class="row mb-1">
-                <label for="inputPassword"  class="col-sm-1 col-form-label"  id="ID001"> Branch</label>
+                <label for="inputPassword" class="col-sm-1 col-form-label" id="ID001"> Branch</label>
                 <div class="col-md-2">
                     <mat-form-field appearance="outline" style="width: -webkit-fill-available">
-                    <input matInput="text" name="branch" autocomplete="off" formControlName="branch"/>
-                    <app-branch-division [fetchData]="fetchedBranchData" (newRowClick)="selectedData($event)"
-                    class="branchDivisionelectr" [matTooltip]="branchDivisionControlsTooltip"
-                    matTooltipClass="custom-tooltip"  matTooltipPosition="above"></app-branch-division>
+                        <input matInput="text" name="branch" autocomplete="off" formControlName="branch"/>
+                        <app-branch-division [fetchData]="fetchedBranchData" (newRowClick)="selectedData($event)"
+                            class="branchDivisionelectr" [matTooltip]="branchDivisionControlsTooltip"
+                            matTooltipClass="custom-tooltip" matTooltipPosition="above"></app-branch-division>
                     </mat-form-field>
                 </div>
-    
+            
                 <div class="col-md-7">
                     <app-date (selectedDate)="setDateValue($event)" [dateValue]="dateToPass"></app-date>
-                </div> 
+                </div>
+            </div>
+            
+            <div class="row mb-1">
+                <label for="selectOption" class="col-sm-1 col-form-label"> Option</label>
+                <div class="col-md-2">
+                    <mat-form-field appearance="outline" style="width: 100%;">
+                        <select matNativeControl id="selectOption" name="selectOption" formControlName="selectOption">
+                            <option value="" disabled selected>Select an option</option>
+                            <option value="option1">Option 1</option>
+                            <option value="option2">Option 2</option>
+                            <option value="option3">Option 3</option>
+                        </select>
+                    </mat-form-field>
+                </div>
             </div>
 
-          
+            <div class="row mb-1">
+                <dx-data-grid></dx-data-grid>
+            </div>
+            
             <dx-popup [width]="300" [height]="180" [showTitle]="true" container=".dx-viewport"
             title="Template Data" [dragEnabled]="false" [showCloseButton]="false" (onHidden)="popupClosed()"
             [visible]="popupVisible">

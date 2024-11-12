@@ -33,6 +33,7 @@ import { TimeWiseSalesAnalysisComponent } from './time-wise-sales-analysis/time-
 import { SalesmanWiseProfitAnalysisComponent } from './salesman-wise-profit-analysis/salesman-wise-profit-analysis.component';
 import { POSSummaryComponent } from './possummary/possummary.component';
 import { DailyRetailSalesHistoryComponent } from './daily-retail-sales-history/daily-retail-sales-history.component';
+import { SchemeRegisterDevReportComponent } from './scheme-register-dev-report/scheme-register-dev-report.component';
 
 
 @NgModule({
@@ -64,7 +65,8 @@ import { DailyRetailSalesHistoryComponent } from './daily-retail-sales-history/d
     TimeWiseSalesAnalysisComponent,
     SalesmanWiseProfitAnalysisComponent,
     POSSummaryComponent,
-    DailyRetailSalesHistoryComponent
+    DailyRetailSalesHistoryComponent,
+    SchemeRegisterDevReportComponent
   ],
   imports: [
     CommonModule,
