@@ -22,7 +22,8 @@
                                     :</label>
                                 <div class="col-sm-6">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" id="code" matInput (focusout)="validateLookupField($event,codeData,'code')"
+                                        <input type="text" id="code" matInput 
+                                            (focusout)="alloyCodeValidate($event,codeData,'code')"
                                             formControlName="code"
                                             [readonly]="viewMode || editMode" [disabled]="viewMode" UpperCaseDirective
                                             autocomplete="off" (keydown)="lookupKeyPress($event,'code')" />
@@ -140,6 +141,12 @@
                                         <mat-checkbox class="example-margin" formControlName="silveralloy"
                                             [disabled]="viewMode">Silver
                                             Alloy</mat-checkbox>
+                                    </section>
+                                    <section class="example-section" id="ID010">
+                                        <mat-checkbox class="example-margin" 
+                                            formControlName="selectMasterOnly"
+                                            (change)="selectMasterOnlyChange($event)"
+                                            [disabled]="viewMode">Select From Master</mat-checkbox>
                                     </section>
                                 </div>
                             </div>
