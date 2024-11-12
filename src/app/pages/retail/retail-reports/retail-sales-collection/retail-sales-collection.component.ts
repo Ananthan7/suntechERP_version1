@@ -558,11 +558,17 @@ export class RetailSalesCollectionComponent implements OnInit {
           this.outputInGridBoolean = false;
           let data = result.dynamicData;
           let printContent = data[0][0].HTMLINPUT;
-          this.htmlPreview = this.sanitizer.bypassSecurityTrustHtml(printContent);
-          const blob = new Blob([this.htmlPreview.changingThisBreaksApplicationSecurity], { type: 'text/html' });
-          this.commonService.closeSnackBarMsg();
-          const url = URL.createObjectURL(blob);
-          window.open(url, '_blank');
+          if (Object.keys(printContent).length === 0) {
+            Swal.fire('No Data!', 'There is no data!', 'info');
+            this.commonService.closeSnackBarMsg();
+            return
+          } else {
+            this.htmlPreview = this.sanitizer.bypassSecurityTrustHtml(printContent);
+            const blob = new Blob([this.htmlPreview.changingThisBreaksApplicationSecurity], { type: 'text/html' });
+            this.commonService.closeSnackBarMsg();
+            const url = URL.createObjectURL(blob);
+            window.open(url, '_blank');
+          }
         }
       }
       else{

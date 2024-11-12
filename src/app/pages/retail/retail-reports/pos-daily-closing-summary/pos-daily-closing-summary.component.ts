@@ -121,10 +121,17 @@ export class PosDailyClosingSummaryComponent implements OnInit {
 
         this.salesManclosingInsert(),
       ];
+      const validObservables = insertObservables.filter(obs => obs !== undefined && obs !== null);
       // Use forkJoin to wait till observable calls to complete
-      forkJoin(insertObservables).subscribe(() => {
+      if (validObservables.length > 0) {
+        forkJoin(validObservables).subscribe(() => {
+          this.comService.closeSnackBarMsg();
+        });
+      } else {
+        console.error('No valid observables to execute.');
+        // Handle the case where no valid observables are present
         this.comService.closeSnackBarMsg();
-      });
+      }
     });
   
     this.branchCode = this.comService.branchCode;
@@ -142,7 +149,66 @@ export class PosDailyClosingSummaryComponent implements OnInit {
     );
   }
 
+  pendingSalesOrderSummaryDataFetch(){
+    let API = "UspOpsClsngSmanSummaryNet";
+    this.isLoading = true;
+    let postData = {    
+      "strBranch": this.branchCode,
+      "strFmDate": this.formatDateToYYYYMMDD( this.dateToPass.fromDate ),
+      "strToDate": this.formatDateToYYYYMMDD( this.dateToPass.toDate ),
+    };
+
+    this.dataService.postDynamicAPI(API, postData).subscribe((result) => {
+      if (result) {       
+        this.pendingSalesOrderSummaryArr =  result.dynamicData[0];
+        this.isLoading = false;
+
+        this.pendingSalesOrderSummaryArr.forEach((item: any)=>{
+          for (const key in item) {
+            if (typeof item[key] === 'number') {
+              item[key] = this.comService.addCommaSepration(item[key]);
+            }
+          }
+        })         
+      }
+    },(err) => alert(err));
+  }
+
+  vocherInsert() {
+    this.isLoading = true;
+    // this.comService.showSnackBarMsg('MSG81447');
+    let API = "UspPosClosingVoucherSummaryNet";
+    let postData = {    
+      "strBranch": this.branchCode,
+      "strFmDate": this.formatDateToYYYYMMDD( this.dateToPass.fromDate ),
+      "strToDate": this.formatDateToYYYYMMDD( this.dateToPass.toDate ),
+    };
+
+    let Sub: Subscription = this.dataService
+      .postDynamicAPI(API, postData)
+      .subscribe(
+        (result) => {
+          if (result) {      
+            // console.log('UspPosClosingVoucherSummaryNet', result.dynamicData[0])                 
+            this.transactionWiseSummaryArr = result.dynamicData[0];
+            this.isLoading = false;
+
+            this.transactionWiseSummaryArr.forEach((item: any)=>{
+              for (const key in item) {
+                if (typeof item[key] === 'number') {
+                  item[key] = this.comService.addCommaSepration(item[key]);
+                }
+              }
+            })  
+          }
+        },
+        (err) => alert(err)
+      );
+    this.subscriptions.push(Sub);
+  }
+
   metalInsert() {
+    this.isLoading = true;
     // this.comService.showSnackBarMsg('MSG81447');
     let API = "UspPosClosingMetalSalesNet";
     let postData = {
@@ -160,7 +226,15 @@ export class PosDailyClosingSummaryComponent implements OnInit {
           if (result) {
             // console.log('UspPosClosingMetalSalesNet', result.dynamicData[0])                  
             this.tableData = result.dynamicData[0];
-            // this.comService.closeSnackBarMsg();
+  
+            this.tableData.forEach((item: any)=>{
+              for (const key in item) {
+                if (typeof item[key] === 'number') {
+                  item[key] = this.comService.addCommaSepration(item[key]);
+                }
+              }
+            }) 
+            this.isLoading = false;
           }
         },
         (err) => alert(err)
@@ -169,6 +243,7 @@ export class PosDailyClosingSummaryComponent implements OnInit {
   }
 
   diamondInsert() {
+    this.isLoading = true;
     // this.comService.showSnackBarMsg('MSG81447');
     let API = "UspPosClsngDiamondSalesNet";
     let postData = {
@@ -186,6 +261,15 @@ export class PosDailyClosingSummaryComponent implements OnInit {
           if (result) {
             // console.log('UspPosClsngDiamondSalesNet', result.dynamicData[0])                  
             this.DiamonDivsnTableData = result.dynamicData[0]; 
+            this.isLoading = false;
+
+            this.DiamonDivsnTableData.forEach((item: any)=>{
+              for (const key in item) {
+                if (typeof item[key] === 'number') {
+                  item[key] = this.comService.addCommaSepration(item[key]);
+                }
+              }
+            }) 
             // this.comService.closeSnackBarMsg();             
           }
         },
@@ -194,32 +278,34 @@ export class PosDailyClosingSummaryComponent implements OnInit {
     this.subscriptions.push(Sub);
   }
 
-  vocherInsert() {
-    // this.comService.showSnackBarMsg('MSG81447');
-    let API = "UspPosClosingVoucherSummaryNet";
+  receiptSummaryDataFetch(){
+    this.isLoading = true;
+    let API = "UspPosClosingNetCollectionNet";
     let postData = {    
       "strBranch": this.branchCode,
       "strFmDate": this.formatDateToYYYYMMDD( this.dateToPass.fromDate ),
       "strToDate": this.formatDateToYYYYMMDD( this.dateToPass.toDate ),
     };
 
-    let Sub: Subscription = this.dataService
-      .postDynamicAPI(API, postData)
-      .subscribe(
-        (result) => {
-          if (result) {      
-            // console.log('UspPosClosingVoucherSummaryNet', result.dynamicData[0])                 
-            this.transactionWiseSummaryArr = result.dynamicData[0];
-            // this.comService.closeSnackBarMsg(); 
+    this.dataService.postDynamicAPI(API, postData).subscribe((result) => {
+      if (result) {       
+        this.receiptSummaryArr =  result.dynamicData[0]
+        this.isLoading = false;
+        
+        this.receiptSummaryArr.forEach((item: any)=>{
+          for (const key in item) {
+            if (typeof item[key] === 'number') {
+              item[key] = this.comService.addCommaSepration(item[key]);
+            }
           }
-        },
-        (err) => alert(err)
-      );
-    this.subscriptions.push(Sub);
+        }) 
+      }
+    },(err) => alert(err));
   }
 
   closingPurchaseNetInsert() {
     // this.comService.showSnackBarMsg('MSG81447');
+    this.isLoading = true;
     let API = "UspPosClosingPosPurchaseNet";
     let postData = {    
       "strBranch": this.branchCode,
@@ -234,6 +320,15 @@ export class PosDailyClosingSummaryComponent implements OnInit {
           if (result) {
             // console.log('UspPosClosingPosPurchaseNet', result.dynamicData[0])                     
             this.scrapPurchseSummaryArr = result.dynamicData[0];
+            this.isLoading = false;
+
+            this.scrapPurchseSummaryArr.forEach((item: any)=>{
+              for (const key in item) {
+                if (typeof item[key] === 'number') {
+                  item[key] = this.comService.addCommaSepration(item[key]);
+                }
+              }
+            }) 
             // this.comService.closeSnackBarMsg(); 
           }
         },
@@ -243,6 +338,7 @@ export class PosDailyClosingSummaryComponent implements OnInit {
   }
 
   posClsngSmanSummaryNet(){
+    this.isLoading = true;
     // this.comService.showSnackBarMsg('MSG81447');
     let API = "UspPosClsngSmanSummaryNet";
     let postData = { 
@@ -259,42 +355,21 @@ export class PosDailyClosingSummaryComponent implements OnInit {
           if (result) {
             // console.log('UspPosClsngSmanSummaryNet', result.dynamicData[0])
             this.salesmanSummaryArr = result.dynamicData[0];
+            this.isLoading = false;
+
+            this.salesmanSummaryArr.forEach((item: any)=>{
+              for (const key in item) {
+                if (typeof item[key] === 'number') {
+                  item[key] = this.comService.addCommaSepration(item[key]);
+                }
+              }
+            }) 
             // this.comService.closeSnackBarMsg(); 
           } 
         },
         (err) => alert(err)
       );
     this.subscriptions.push(Sub);
-  }
-
-  receiptSummaryDataFetch(){
-    let API = "UspPosClosingNetCollectionNet";
-    let postData = {    
-      "strBranch": this.branchCode,
-      "strFmDate": this.formatDateToYYYYMMDD( this.dateToPass.fromDate ),
-      "strToDate": this.formatDateToYYYYMMDD( this.dateToPass.toDate ),
-    };
-
-    this.dataService.postDynamicAPI(API, postData).subscribe((result) => {
-      if (result) {       
-        this.receiptSummaryArr =  result.dynamicData[0]           
-      }
-    },(err) => alert(err));
-  }
-
-  pendingSalesOrderSummaryDataFetch(){
-    let API = "UspOpsClsngSmanSummaryNet";
-    let postData = {    
-      "strBranch": this.branchCode,
-      "strFmDate": this.formatDateToYYYYMMDD( this.dateToPass.fromDate ),
-      "strToDate": this.formatDateToYYYYMMDD( this.dateToPass.toDate ),
-    };
-
-    this.dataService.postDynamicAPI(API, postData).subscribe((result) => {
-      if (result) {       
-        this.pendingSalesOrderSummaryArr =  result.dynamicData[0]           
-      }
-    },(err) => alert(err));
   }
 
   setDateValue(event: any){
@@ -320,9 +395,15 @@ export class PosDailyClosingSummaryComponent implements OnInit {
       this.salesManclosingInsert(),
     ];
 
-    forkJoin(insertObservables).subscribe(() => {
+    const validObservables = insertObservables.filter(obs => obs !== undefined && obs !== null);
+    if (validObservables.length > 0) {
+      forkJoin(validObservables).subscribe(() => {
+        this.comService.closeSnackBarMsg();
+      });
+    } else {
+      console.error('No valid observables to execute.');
       this.comService.closeSnackBarMsg();
-    });
+    }
   }
 
 
