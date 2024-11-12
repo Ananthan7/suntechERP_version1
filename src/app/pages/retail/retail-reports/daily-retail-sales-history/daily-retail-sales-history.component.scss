@@ -15,10 +15,10 @@
 
 // for mat-select dropdowns
 ::ng-deep {
-  .cdk-overlay-container {
-    position: fixed;
-    z-index: 1070 !important;
-  }
+    .cdk-overlay-container {
+      position: fixed;
+      z-index: 1070 !important;
+    }
 }
 
 //Save new template pop up

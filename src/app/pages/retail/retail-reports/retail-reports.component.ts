@@ -27,6 +27,7 @@ import { POSSales_Stock_ComparisonComponent } from './pos-sales-stock-comparison
 import { TimeWiseSalesAnalysisComponent } from './time-wise-sales-analysis/time-wise-sales-analysis.component';
 import { SalesmanWiseProfitAnalysisComponent } from './salesman-wise-profit-analysis/salesman-wise-profit-analysis.component';
 import { POSSummaryComponent } from './possummary/possummary.component';
+import { DailyRetailSalesHistoryComponent } from './daily-retail-sales-history/daily-retail-sales-history.component';
 @Component({
   selector: 'app-retail-reports',
   templateUrl: './retail-reports.component.html',
@@ -114,7 +115,9 @@ export class RetailReportsComponent implements OnInit {
       'POSSales_Stock_ComparisonComponent': POSSales_Stock_ComparisonComponent,
       'TimeWiseSalesAnalysisComponent': TimeWiseSalesAnalysisComponent,
       'SalesmanWiseProfitAnalysisComponent': SalesmanWiseProfitAnalysisComponent,
-      'POSSummaryComponent': POSSummaryComponent
+      'POSSummaryComponent': POSSummaryComponent,
+      'DailyRetailSalesHistoryComponent': DailyRetailSalesHistoryComponent,
+      
       // Add components and update in operationals > menu updation grid form component name
     }
     if (this.componentDbList[this.componentName]) {

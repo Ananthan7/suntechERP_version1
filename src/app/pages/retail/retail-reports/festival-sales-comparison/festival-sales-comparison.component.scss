@@ -13,6 +13,14 @@
     line-height: 1.5;
 }
 
+// for mat-select dropdowns
+::ng-deep {
+  .cdk-overlay-container {
+    position: fixed;
+    z-index: 1070 !important;
+  }
+}
+
 
 .popup-content {
     display: flex;
