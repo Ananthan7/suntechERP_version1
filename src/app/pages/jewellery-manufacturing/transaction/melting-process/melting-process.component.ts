@@ -45,6 +45,7 @@ export class MeltingProcessComponent implements OnInit {
   sequenceDetails: any[] = []
   meltingprocessDetailsData: any[] = [];
    isDisableSaveBtn: boolean = false;
+   isJobNumberSearchVisible: boolean = false;
   editMode: boolean = false;
   private subscriptions: Subscription[] = [];
   companyName = this.comService.allbranchMaster['BRANCH_NAME'];
@@ -277,8 +278,49 @@ export class MeltingProcessComponent implements OnInit {
     console.log(e);
     this.meltingProcessFrom.controls.meltingType.setValue(e['Melting Type']);
     this.meltingProcessFrom.controls.meltingType.setValue(e.MELTYPE_CODE);
+    this.meltingTypeValidate()
   }
+  
+  meltingTypeValidate(event?: any) {
+    const meltingTypeValue = this.meltingProcessFrom.value.meltingType;
+    console.log('Melting Type:', meltingTypeValue);
 
+    if (!meltingTypeValue) {
+      // this.commonService.toastErrorByMsgId('MSG1531');
+      return;
+    }
+
+    const API = `MeltingType/GetMeltingTypeList/${meltingTypeValue}`;
+
+    const sub: Subscription = this.dataService.getDynamicAPI(API).subscribe(
+      (result: any) => {
+        this.commonService.closeSnackBarMsg();
+        if (result.response) {
+          const data = result.response;
+          console.log(data, 'data')
+          this.meltingProcessFrom.controls.color.setValue(data.COLOR);
+          this.meltingProcessFrom.controls.jobpurity.setValue(data.PURITY);
+          // this.meltingProcessFrom.controls.Karat.setValue(data.KARAT_CODE)//KARAT_CODE
+          this.setValueWithDecimal('jobpurity', data.PURITY, 'PURITY')
+      
+        } else {
+       
+          this.commonService.toastErrorByMsgId('MSG1531');
+          this.meltingProcessFrom.controls.meltingtype.setValue('')
+          this.showOverleyPanel(event, 'meltingtype')
+
+        }
+      },
+      (err: any) => {
+        console.error('API Call Error:', err);
+        this.isJobNumberSearchVisible = false;
+        this.commonService.closeSnackBarMsg();
+        this.commonService.toastErrorByMsgId('MSG1531');
+      }
+    );
+
+    this.subscriptions.push(sub);
+  }
 
   locationCodeSelected(e: any) {
     console.log(e);
@@ -359,6 +401,7 @@ export class MeltingProcessComponent implements OnInit {
     issued: [''],
     MAIN_VOCTYPE: [''],
     FLAG: [null],
+    jobpurity: ['']
   });
 
 
@@ -851,7 +894,11 @@ export class MeltingProcessComponent implements OnInit {
       windowClass: 'modal-full-width',
     });
   }
-
+  setValueWithDecimal(formControlName: string, value: any, Decimal: string) {
+    this.meltingProcessFrom.controls[formControlName].setValue(
+      this.commonService.setCommaSerperatedNumber(value, Decimal)
+    )
+  }
 
 }
 

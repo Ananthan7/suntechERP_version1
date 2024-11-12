@@ -54,7 +54,15 @@
                                 <mat-form-field appearance="outline"
                                     style="width: 100%;">
                                     <input type="text" matInput readonly
-                                        formControlName="subJobNo">
+                                        formControlName="subJobNo"
+                                        (focusout)="subJobNumberValidate($event)"
+                                        (keydown)="lookupKeyPress($event,'subJobNo')">
+                                    <master-search class="masterSearch"
+                                        [MasterSearchData]="subJobNoCodeData"
+                                        #overlaysubjobnoSearch
+                                        (newRowClick)="subJobNoCodeSelected($event)"
+                                        *ngIf="!viewMode"></master-search>
+
                                 </mat-form-field>
                             </div>
                             <div class="col-sm-6">
@@ -357,7 +365,7 @@
                                         <input type="text" matInput
                                             formControlName="JOB_PCS"
                                             class="text-right"
-                                           readonly NumberOnly />
+                                            readonly NumberOnly />
                                     </mat-form-field>
                                 </div>
                             </div>
