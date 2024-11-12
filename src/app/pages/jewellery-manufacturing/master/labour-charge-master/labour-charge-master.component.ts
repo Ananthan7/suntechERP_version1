@@ -917,7 +917,7 @@ export class LabourChargeMasterComponent implements OnInit {
     this.stockCodeData.WHERECONDITION = `DIVISION_CODE = '${this.diamondlabourMasterForm.value.divisions}' and SUBCODE = '0'`;
     LOOKUPDATA.SEARCH_VALUE = event.target.value
     this.stockcodeDisable = false;
-    
+
     if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
@@ -932,7 +932,8 @@ export class LabourChargeMasterComponent implements OnInit {
         if (data.length == 0) {
           this.commonService.toastErrorByMsgId('MSG1531')
           this.diamondlabourMasterForm.controls[FORMNAME].setValue('')
-          this.renderer.selectRootElement(FORMNAME).focus();
+          // this.renderer.selectRootElement(FORMNAME).focus();
+          this.openOverlay(FORMNAME, event);
           LOOKUPDATA.SEARCH_VALUE = ''
           return
         }
@@ -941,6 +942,39 @@ export class LabourChargeMasterComponent implements OnInit {
         this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
       })
     this.subscriptions.push(Sub)
+  }
+
+
+  openOverlay(FORMNAME: string, event: any) {
+    switch (FORMNAME) {
+      case 'divisions':
+        this.overlaydivisionsSearch.showOverlayPanel(event);
+        break;
+      case 'currency':
+        this.overlaycurrencySearch.showOverlayPanel(event);
+        break;
+      case 'shape':
+        this.overlayshapeSearch.showOverlayPanel(event);
+        break;
+      case 'process':
+        this.overlayprocessSearch.showOverlayPanel(event);
+        break;
+      case 'size_from':
+        this.overlaysizefromSearch.showOverlayPanel(event);
+        break;
+      case 'labour_ac':
+        this.overlaylabouracSearch.showOverlayPanel(event);
+        break;
+      case 'size_to':
+        this.overlaysizetoSearch.showOverlayPanel(event);
+        break;
+      case 'sieve':
+        this.overlaysieveSearch.showOverlayPanel(event);
+        break;
+      default:
+        console.warn(`Unknown FORMNAME: ${FORMNAME}`);
+        break;
+    }
   }
 
 
@@ -1057,12 +1091,12 @@ export class LabourChargeMasterComponent implements OnInit {
   }
 
   close(data?: any) {
-    if (data){
+    if (data) {
       this.viewMode = true;
       this.activeModal.close(data);
       return
     }
-    if (this.content && this.content.FLAG == 'VIEW'){
+    if (this.content && this.content.FLAG == 'VIEW') {
       this.activeModal.close(data);
       return
     }
@@ -1202,31 +1236,31 @@ export class LabourChargeMasterComponent implements OnInit {
 
     if (this.diamondlabourMasterForm.value.labourType == 'SETTING') {
       this.renderer.selectRootElement('#shape').focus();
-  
+
       const shapeControl = this.diamondlabourMasterForm.get('shape');
       const sizeFromControl = this.diamondlabourMasterForm.get('size_from');
       const sizeToControl = this.diamondlabourMasterForm.get('size_to');
       const sieveControl = this.diamondlabourMasterForm.get('sieve');
-  
+
       shapeControl?.setValidators(Validators.required);
       sizeFromControl?.setValidators(Validators.required);
       sizeToControl?.setValidators(Validators.required);
       sieveControl?.setValidators(Validators.required);
-  
+
       shapeControl?.updateValueAndValidity();
       sizeFromControl?.updateValueAndValidity();
       sizeToControl?.updateValueAndValidity();
       sieveControl?.updateValueAndValidity();
-  
+
       // Check if any field has a value
       if (shapeControl?.value || sizeFromControl?.value || sizeToControl?.value || sieveControl?.value) {
-          return false; // Return true if at least one field has a value
-      } else if(!shapeControl?.value || !sizeFromControl?.value || !sizeToControl?.value || !sieveControl?.value) {
-          this.commonService.toastErrorByMsgId('Shape, Size From, Size To, or Sieve cannot be empty');
-          return true; // Return false if none of the fields have a value
+        return false; // Return true if at least one field has a value
+      } else if (!shapeControl?.value || !sizeFromControl?.value || !sizeToControl?.value || !sieveControl?.value) {
+        this.commonService.toastErrorByMsgId('Shape, Size From, Size To, or Sieve cannot be empty');
+        return true; // Return false if none of the fields have a value
       }
-  }
-  
+    }
+
 
     return false;
   }

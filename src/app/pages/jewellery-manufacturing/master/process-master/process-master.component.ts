@@ -1145,6 +1145,7 @@ export class ProcessMasterComponent implements OnInit {
     }
     this.processMasterForm.controls.RECOV_ACCODE.setValue(e.ACCODE);
     // this.accodeValidateSP(e.ACCODE, this.RecovACCODEData, 'RECOV_ACCODE')
+    this.recovAccodeValidateSP();
   }
 
   GAIN_ACCODESelected(e: any) {
@@ -1155,7 +1156,7 @@ export class ProcessMasterComponent implements OnInit {
     }
     this.processMasterForm.controls.GAIN_ACCODE.setValue(e.ACCODE);
     // this.accodeValidateSP(e.ACCODE, this.WipACCODEData, 'GAIN_ACCODE');
-
+    this.gainAccodeValidateSP();
   }
 
   /**use: common accode change validation */
@@ -1174,7 +1175,7 @@ export class ProcessMasterComponent implements OnInit {
 
     // this.accodeValidateSP(checkValue, LOOKUPDATA, formname)
     this.wipAccodeValidateSP();
-    this.lossAccodeValidateSP();
+    // this.lossAccodeValidateSP();
     
 
     if (this.isSameAccountCodeSelected(event.target.value, formname)) {
@@ -1201,6 +1202,58 @@ export class ProcessMasterComponent implements OnInit {
 
     // this.accodeValidateSP(checkValue, LOOKUPDATA, formname)
     this.lossAccodeValidateSP();
+    
+
+    if (this.isSameAccountCodeSelected(event.target.value, formname)) {
+      this.processMasterForm.controls[formname].setValue('');
+      this.commonService.toastErrorByMsgId('MSG1121')//code already exsist
+      //this.commonService.toastErrorByMsgId('Accode already selected');
+      return;
+    }
+  }
+
+  recovcheckAccodeSelected(event: any, LOOKUPDATA: MasterSearchModel, formname: string) {
+    console.log( event.target.value);
+
+    var checkValue =  event.target.value;
+    console.log(checkValue);
+
+
+    // LOOKUPDATA.SEARCH_VALUE = event.target.value
+    if (event.target.value == '') {
+      this.processMasterForm.controls[formname].setValue('');
+      return
+    }
+
+    // this.accodeValidateSP(checkValue, LOOKUPDATA, formname)
+    this.recovAccodeValidateSP();
+
+    
+
+    if (this.isSameAccountCodeSelected(event.target.value, formname)) {
+      this.processMasterForm.controls[formname].setValue('');
+      this.commonService.toastErrorByMsgId('MSG1121')//code already exsist
+      //this.commonService.toastErrorByMsgId('Accode already selected');
+      return;
+    }
+  }
+
+  gaincheckAccodeSelected(event: any, LOOKUPDATA: MasterSearchModel, formname: string) {
+    console.log( event.target.value);
+
+    var checkValue =  event.target.value;
+    console.log(checkValue);
+
+
+    // LOOKUPDATA.SEARCH_VALUE = event.target.value
+    if (event.target.value == '') {
+      this.processMasterForm.controls[formname].setValue('');
+      return
+    }
+
+    // this.accodeValidateSP(checkValue, LOOKUPDATA, formname)
+    this.gainAccodeValidateSP();
+
     
 
     if (this.isSameAccountCodeSelected(event.target.value, formname)) {
@@ -1247,51 +1300,11 @@ export class ProcessMasterComponent implements OnInit {
     let postData = {
       "SPID": "0176",
       "parameter": {
-        "strType":  "LOSS",
+        "strType": "WIP",
         "Adjust_AC":"",
-        "Wip_AC": "",
+        "Wip_AC": this.processMasterForm.value.WIPaccount,
         "Process_Code":"",
-        "Loss_AC": this.processMasterForm.value.LOSS_ACCODE,
-        "RecAccode":"",
-        "Gain_AC":"",
-      }
-    };
-    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
-      .subscribe((result) => {
-        if (result.status == "Success") {
-          const responseData = result.dynamicData[0][0];
-          console.log(responseData);
-          console.log(responseData.WIP_ACCODE);
-          if (responseData.LOSS_ACCODE == this.processMasterForm.value.LOSS_ACCODE) {
-            Swal.fire({
-              title: '',
-              text: 'Account code Already Exists in process  ' + responseData.PROCESS_CODE + '-' + responseData.DESCRIPTION,
-              icon: 'warning',
-              confirmButtonColor: '#336699',
-              confirmButtonText: 'Ok'
-            }).then(() => {
-              this.processMasterForm.controls.WIPaccount.setValue('');
-              this.renderer.selectRootElement('#code').focus();  
-            });
-          }          
-        }
-      }, err => {
-        this.commonService.toastErrorByMsgId('MSG81451');
-      });
-
-    this.subscriptions.push(Sub);
-  }
-
-
-  lossAccodeValidateSP(){
-    let postData = {
-      "SPID": "0176",
-      "parameter": {
-        "strType":  "LOSS",
-        "Adjust_AC":"",
-        "Wip_AC": "",
-        "Process_Code":"",
-        "Loss_AC":this.processMasterForm.value.LOSS_ACCODE,
+        "Loss_AC": "",
         "RecAccode":"",
         "Gain_AC":"",
       }
@@ -1322,7 +1335,123 @@ export class ProcessMasterComponent implements OnInit {
     this.subscriptions.push(Sub);
   }
 
-  
+
+  lossAccodeValidateSP(){
+    let postData = {
+      "SPID": "0176",
+      "parameter": {
+        "strType":  "LOSS",
+        "Adjust_AC":"",
+        "Wip_AC": "",
+        "Process_Code":"",
+        "Loss_AC": this.processMasterForm.value.LOSS_ACCODE,
+        "RecAccode":"",
+        "Gain_AC":"",
+      }
+    };
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        if (result.status == "Success") {
+          const responseData = result.dynamicData[0][0];
+          console.log(responseData);
+          console.log(responseData.LOSS_ACCODE);
+          if (responseData.LOSS_ACCODE == this.processMasterForm.value.LOSS_ACCODE) {
+            Swal.fire({
+              title: '',
+              text: 'Account code Already Exists in process  ' + responseData.PROCESS_CODE + '-' + responseData.DESCRIPTION,
+              icon: 'warning',
+              confirmButtonColor: '#336699',
+              confirmButtonText: 'Ok'
+            }).then(() => {
+              this.processMasterForm.controls.LOSS_ACCODE.setValue('');
+              this.renderer.selectRootElement('#code').focus();  
+            });
+          }          
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG81451');
+      });
+
+    this.subscriptions.push(Sub);
+  }
+
+  recovAccodeValidateSP(){
+    let postData = {
+      "SPID": "0176",
+      "parameter": {
+        "strType":  "RECOVERY",
+        "Adjust_AC":"",
+        "Wip_AC": "",
+        "Process_Code":"",
+        "Loss_AC": "",
+        "RecAccode": this.processMasterForm.value.RECOV_ACCODE,
+        "Gain_AC":"",
+      }
+    };
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        if (result.status == "Success") {
+          const responseData = result.dynamicData[0][0];
+          console.log(responseData);
+          console.log(responseData.RECOV_ACCODE);
+          if (responseData.RECOV_ACCODE == this.processMasterForm.value.RECOV_ACCODE) {
+            Swal.fire({
+              title: '',
+              text: 'Account code Already Exists in process  ' + responseData.PROCESS_CODE + '-' + responseData.DESCRIPTION,
+              icon: 'warning',
+              confirmButtonColor: '#336699',
+              confirmButtonText: 'Ok'
+            }).then(() => {
+              this.processMasterForm.controls.RECOV_ACCODE.setValue('');
+              this.renderer.selectRootElement('#code').focus();  
+            });
+          }          
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG81451');
+      });
+
+    this.subscriptions.push(Sub);
+  }
+
+  gainAccodeValidateSP(){
+    let postData = {
+      "SPID": "0176",
+      "parameter": {
+        "strType":  "GAIN",
+        "Adjust_AC":"",
+        "Wip_AC": "",
+        "Process_Code":"",
+        "Loss_AC": "",
+        "RecAccode": "",
+        "Gain_AC":this.processMasterForm.value.GAIN_ACCODE,
+      }
+    };
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        if (result.status == "Success") {
+          const responseData = result.dynamicData[0][0];
+          console.log(responseData);
+          console.log(responseData.GAIN_ACCODE);
+          if (responseData.GAIN_ACCODE == this.processMasterForm.value.GAIN_ACCODE) {
+            Swal.fire({
+              title: '',
+              text: 'Account code Already Exists in process  ' + responseData.PROCESS_CODE + '-' + responseData.DESCRIPTION,
+              icon: 'warning',
+              confirmButtonColor: '#336699',
+              confirmButtonText: 'Ok'
+            }).then(() => {
+              this.processMasterForm.controls.GAIN_ACCODE.setValue('');
+              this.renderer.selectRootElement('#code').focus();  
+            });
+          }          
+        }
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG81451');
+      });
+
+    this.subscriptions.push(Sub);
+  }
 
 
   /**use: validate all lookups to check data exists in db */
@@ -1571,14 +1700,12 @@ export class ProcessMasterComponent implements OnInit {
     if (this.processMasterForm.value.RecoveryProcess == true) {
       if (this.processMasterForm.controls.recStockCode.value == '') {
         this.renderer.selectRootElement('#recStockCode').focus();
-        // this.processMasterForm.get('recStockCode')?.setValidators(Validators.required);
         this.processMasterForm.get('recStockCode')?.setValidators(Validators.required);
       }
     }
     else {
       this.processMasterForm.get('recStockCode')?.clearValidators();
     }
-    console.log(event);
   }
 
 
