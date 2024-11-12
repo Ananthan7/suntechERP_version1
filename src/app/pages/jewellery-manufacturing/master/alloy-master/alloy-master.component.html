@@ -22,8 +22,8 @@
                                     :</label>
                                 <div class="col-sm-6">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" id="code" matInput (focusout)="checkCodeExists($event)"
-                                            (change)="prefixCodeValidate()" formControlName="code"
+                                        <input type="text" id="code" matInput (focusout)="validateLookupField($event,codeData,'code')"
+                                            formControlName="code"
                                             [readonly]="viewMode || editMode" [disabled]="viewMode" UpperCaseDirective
                                             autocomplete="off" (keydown)="lookupKeyPress($event,'code')" />
                                         <master-search class="masterSearch" *ngIf="!editMode && !viewMode"

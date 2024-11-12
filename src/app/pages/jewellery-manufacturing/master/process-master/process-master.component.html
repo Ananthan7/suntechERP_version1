@@ -175,12 +175,11 @@
                                         (focusout)="validateLookupField($event,StockProcessData,'recStockCode')"
                                         [readonly]="viewMode" tabindex="9"
                                         (keydown)="lookupKeyPress($event,'recStockCode')" />
-
                                     <master-search class="masterSearch" [MasterSearchData]="StockProcessData"
                                         #overlayrecStockCodeSearch (newRowClick)="StockProcesSelected($event)"
                                         *ngIf="!viewMode">
                                     </master-search>
-                                    <mat-error class="mt-2" *ngIf="processMasterForm.value.RecoveryProcess">
+                                    <mat-error class="mt-2" *ngIf="processMasterForm.value.RecoveryProcess == true">
                                         Process Description is <strong>required</strong>
                                     </mat-error>
                                 </mat-form-field>
@@ -320,7 +319,7 @@
                             <div class="col-sm-12">
                                 <mat-form-field style="width: 70%;" appearance="outline">
                                     <input type="text" matInput maxlength="6" UpperCaseDirective
-                                        (change)="checkAccodeSelected($event,RecovACCODEData,'RECOV_ACCODE')"
+                                        (change)="recovcheckAccodeSelected($event,RecovACCODEData,'RECOV_ACCODE')"
                                         (focusout)="validateLookupField($event,RecovACCODEData,'RECOV_ACCODE')"
                                         formControlName="RECOV_ACCODE" [readonly]="isRecovReadOnly || lossDisable"
                                         tabindex="19" (keydown)="lookupKeyPress($event,'RECOV_ACCODE')" />
@@ -334,7 +333,7 @@
                                 <mat-form-field style="width: 70%;" appearance="outline">
                                     <input type="text" matInput maxlength="6" UpperCaseDirective
                                         formControlName="GAIN_ACCODE"
-                                        (change)="checkAccodeSelected($event,WipACCODEData,'GAIN_ACCODE')"
+                                        (change)="gaincheckAccodeSelected($event,WipACCODEData,'GAIN_ACCODE')"
                                         (focusout)="validateLookupField($event,WipACCODEData,'GAIN_ACCODE')"
                                         [readonly]="isAlloWGainReadOnly" tabindex="21"
                                         (keydown)="lookupKeyPress($event,'GAIN_ACCODE')" />
