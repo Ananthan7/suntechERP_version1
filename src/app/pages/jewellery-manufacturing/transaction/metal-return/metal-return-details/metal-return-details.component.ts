@@ -22,6 +22,7 @@ export class MetalReturnDetailsComponent implements OnInit {
   @ViewChild('overlaylocationSearch') overlaylocationSearch!: MasterSearchComponent;
   @ViewChild('overlaystockCodeSearch') overlaystockCodeSearch!: MasterSearchComponent;
   @ViewChild('overlayReturnToStockCodeSearch') overlayReturnToStockCodeSearch!: MasterSearchComponent;
+  @ViewChild('overlaysubjobnoSearch') public overlaysubjobnoSearch!: MasterSearchComponent;
   @Input() content!: any;
   private subscriptions: Subscription[] = [];
   currentFilter: any;
@@ -95,6 +96,24 @@ export class MetalReturnDetailsComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
 
+  }
+  subJobNoCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 275,
+    SEARCH_FIELD: 'UNQ_JOB_ID',
+    SEARCH_HEADING: 'Sub Job Search',
+    SEARCH_VALUE: '',
+    WHERECONDITION: `isnull(WAX_STATUS,'') <> 'I' and Branch_code = '${this.comService.branchCode}'`,
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true
+  }
+  setSubJobCondition() {
+    let form = this.metalReturnDetailsForm.value;
+    this.subJobNoCodeData.WHERECONDITION = `isnull(WAX_STATUS,'') <> 'I' and Branch_code = '${this.comService.branchCode}'`
+    this.subJobNoCodeData.WHERECONDITION += `and job_number='${this.comService.nullToString(form.jobNumber)}'`
   }
   // stockCodeData: MasterSearchModel = {
   //   PAGENO: 1,
@@ -224,21 +243,21 @@ export class MetalReturnDetailsComponent implements OnInit {
     this.setValueWithDecimal('KARAT', this.content.KARAT, 'THREE')
     this.setValueWithDecimal('STONE_WT', this.content.STONE_WT, 'STONE')
   };
-  // setValueWithDecimal(formControlName: string, value: any, Decimal: string) {
-  //   this.metalReturnDetailsForm.controls[formControlName].setValue(
-  //     this.comService.setCommaSerperatedNumber(value, Decimal)
-  //   )
-  // }
   setValueWithDecimal(formControlName: string, value: any, Decimal: string) {
-    if (isNaN(value) || value === null || value === undefined) {
-      console.error(`Invalid value for ${formControlName}:`, value);
-      value = 0; // Or handle appropriately, e.g., `return;` if you don't want to set a default
-    }
-
     this.metalReturnDetailsForm.controls[formControlName].setValue(
       this.comService.setCommaSerperatedNumber(value, Decimal)
-    );
+    )
   }
+  // setValueWithDecimal(formControlName: string, value: any, Decimal: string) {
+  //   if (isNaN(value) || value === null || value === undefined) {
+  //     console.error(`Invalid value for ${formControlName}:`, value);
+  //     value = 0; // Or handle appropriately, e.g., `return;` if you don't want to set a default
+  //   }
+
+  //   this.metalReturnDetailsForm.controls[formControlName].setValue(
+  //     this.comService.setCommaSerperatedNumber(value, Decimal)
+  //   );
+  // }
   setOnLoadDetails() {
     let branchParam = this.comService.allbranchMaster;
     // Set LOCTYPE_CODE only if it's not already set
@@ -373,6 +392,13 @@ setLookupStockCodeWhereCondition() {
     // this.setLookup201WhereCondition()
     this.setLookupStockCodeWhereCondition();
   }
+
+  subJobNoCodeSelected(e: any) {
+    this.metalReturnDetailsForm.controls.subJobNo.setValue(e.UNQ_JOB_ID);
+    this.metalReturnDetailsForm.controls.subJobNoDes.setValue(e.PART_CODE);
+    this.subJobNumberValidate()
+  }
+
   lookupKeyPress(event: any, form?: any) {
     if (event.key == 'Tab' && event.target.value == '') {
       this.showOverleyPanel(event, form)
@@ -768,7 +794,8 @@ setLookupStockCodeWhereCondition() {
           this.setValueWithDecimal('KARAT', data[0].KARAT, 'THREE')
           this.setValueWithDecimal('STONE_WT', data[0].STONE, 'STONE')
           this.setValueWithDecimal('NET_WT', data[0].METAL - data[0].STONE, 'THREE')
-          this.setLookup201WhereCondition()
+          // this.setLookup201WhereCondition()
+          this.processCodeValidate()
           this.setLookupStockCodeWhereCondition();
         } else {
           this.comService.toastErrorByMsgId('MSG1747')
@@ -952,6 +979,9 @@ setLookupStockCodeWhereCondition() {
       case 'ReturnToStockCode':
         this.overlayReturnToStockCodeSearch.showOverlayPanel(event);
         break;
+        case 'subjobnumber':
+          this.overlaysubjobnoSearch.showOverlayPanel(event);
+          break;
       default:
 
     }

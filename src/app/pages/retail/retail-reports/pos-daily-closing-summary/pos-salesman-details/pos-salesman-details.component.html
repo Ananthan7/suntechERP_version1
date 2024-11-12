@@ -12,6 +12,7 @@
 <div class="container-fluid pt-3">
     <div class="row my-3">
         <div class="col-md-12">
+            <app-loader [isLoading]="isLoading"></app-loader>
             <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true" [showRowLines]="true"
                 [allowColumnReordering]="true" height="200"  [dataSource]="tableData"  [columnAutoWidth]="true">
                 <dxo-paging [enabled]="false"></dxo-paging>
