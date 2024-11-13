@@ -1,0 +1,76 @@
+<!-- menu section -->
+<app-menubar [menuTitle]="menuTitle" (subMenuChange)="getMasterGridData($event)"></app-menubar>
+
+<div class="row d-flex justify-content-between"
+    style="min-height: 100vh !important;">
+    <div class="col-md-2 col-sm-12">
+        <div class="card p-3">
+            <h5>Favorites</h5>
+            <ul>
+                <li><h6 class="favItems">Departement Master</h6></li>
+                <li><h6 class="favItems">Sales Master</h6></li>
+                <li><h6 class="favItems">Inventory Master</h6></li>
+                <li><h6 class="favItems">Departement Master</h6></li>
+                <li><h6 class="favItems">Inventory Master</h6></li>
+                <li><h6 class="favItems">Inventory Master</h6></li>
+                <li><h6 class="favItems">Job Master</h6></li>
+                <li><h6 class="favItems">Sales Master</h6></li>
+                <li><h6 class="favItems">Inventory Master</h6></li>
+            </ul>
+        </div>
+        <app-cardbox [header]="'Yield %'" [content]="'22'"></app-cardbox>
+        <app-cardbox [header]="'Through Out'" [content]="'44M'"></app-cardbox>
+        <div class="card p-3">
+            <div class="card_wrap h-100">
+                <h5>Defect Analysis</h5>
+                <img
+                    src="../../assets/images/chats/chat-7.png"
+                    alt="chat"
+                    width="100%" />
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8 col-sm-12">
+        <div class="card p-3">
+            <div class="col-md-12">
+                <div class="card_wrap">
+                    <h5 class="favItems">{{menuTitle}}</h5>
+                    <div class="module_form">
+                        <div class="row">
+                            <div class="col-md-12" style="min-height: 30vh;">
+                                <master-grid (AddBtnClick)="openModalView()">
+                                </master-grid>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card p-3">
+            <div class="col-md-6">
+                <div class="card_wrap">
+                    <h5>Avg Working Hours</h5>
+                    <img
+                        src="../../assets/images/chats/chat-5.png"
+                        alt="chat"
+                        width="100%"
+                        height=" 165px" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2 col-sm-12">
+        <app-cardbox [header]="'Cycle Time'" [content]="'32'"></app-cardbox>
+        <app-cardbox [header]="'Quantity Produced'" [content]="'44'"></app-cardbox>
+        <div class="card p-3">
+            <div class="card_wrap">
+                <h5>Overall</h5>
+                <img
+                    src="../../assets/images/chats/chat-2.png"
+                    alt="chat"
+                    width="100%" />
+            </div>
+        </div>
+        <app-cardbox [header]="'Quantity'" [content]="'4k'"></app-cardbox>
+    </div>
+</div>
