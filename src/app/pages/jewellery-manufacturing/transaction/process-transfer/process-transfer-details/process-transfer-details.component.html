@@ -156,9 +156,9 @@
                       <th>From</th>
                       <th>To</th>
                     </tr>
-                    <ng-container *ngTemplateOutlet="processWorkerOrder() ? workerTemplate : processTemplate">
+                    <ng-container *ngTemplateOutlet="processWorkerOrderFlag ? workerTemplate : processTemplate">
                     </ng-container>
-                    <ng-container *ngTemplateOutlet="processWorkerOrder() ? processTemplate : workerTemplate">
+                    <ng-container *ngTemplateOutlet="processWorkerOrderFlag ? processTemplate : workerTemplate">
                     </ng-container>
                     <ng-template #processTemplate>
                       <tr>

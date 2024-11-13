@@ -380,7 +380,14 @@ export class ProcessTransferDetailsComponent implements OnInit {
       this.renderer.selectRootElement('#jobNoSearch')?.focus();
     }
   }
+  processWorkerOrder() {
+    let flg = this.commonService.getCompanyParamValue('DIAMANFWORKERFOCUS')
+    if (flg) return true
+    return false;
+  }
+  processWorkerOrderFlag: boolean = false;
   setOnLoadDetails() {
+    this.processWorkerOrderFlag = this.processWorkerOrder()
     this.DIAMANFBARCODE = this.commonService.getCompanyParamValue('DIAMANFBARCODE')
     let HEADERDETAILS = this.content[0]?.HEADERDETAILS || {}
     if (HEADERDETAILS) {
@@ -539,11 +546,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     // set fomvalidater for checking previous value
     this.FORM_VALIDATER = this.processTransferdetailsForm.value;
   }
-  processWorkerOrder() {
-    let flg = this.commonService.getCompanyParamValue('DIAMANFWORKERFOCUS')
-    if (flg) return true
-    return false;
-  }
+ 
   locationCodeValidate(event: any) {
     let postData = {
       "SPID": "057",
