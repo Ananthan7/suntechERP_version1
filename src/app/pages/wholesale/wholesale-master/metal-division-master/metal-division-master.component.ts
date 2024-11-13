@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, Renderer2 } from '@angular/core';
+import { Component, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
@@ -7,6 +7,7 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 
 @Component({
   selector: 'app-metal-division-master',
@@ -15,7 +16,7 @@ import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstra
 })
 export class MetalDivisionMasterComponent implements OnInit {
 
-  subscriptions: any;
+  private subscriptions: Subscription[] = [];
   @Input() content!: any;
   tableData: any[] = [];
   viewMode: boolean = false;
@@ -24,6 +25,12 @@ export class MetalDivisionMasterComponent implements OnInit {
   editMode: boolean=false;
   isDisableSaveBtn: boolean = false;
   viewDisable: boolean = false;
+
+  @ViewChild('overlaycostcenterSearch') overlaycostcenterSearch!: MasterSearchComponent;
+  @ViewChild('overlaycostcentermakingSearch') overlaycostcentermakingSearch!: MasterSearchComponent;
+  @ViewChild('overlaystockcodeSearch') overlaystockcodeSearch!: MasterSearchComponent;
+
+
   
   constructor(
     private activeModal: NgbActiveModal,
@@ -330,6 +337,31 @@ export class MetalDivisionMasterComponent implements OnInit {
       return true;
     } else {
       return false;
+    }
+  }
+
+  lookupKeyPress(event: any, form?: any) {
+    if (event.key == 'Tab' && event.target.value == '') {
+      this.showOverleyPanel(event, form)
+    }
+    if (event.key === 'Enter') {
+      if (event.target.value == '') this.showOverleyPanel(event, form)
+      event.preventDefault();
+    }
+  }
+
+  showOverleyPanel(event: any, formControlName: string) {
+    switch (formControlName) {
+      case 'costcenter':
+        this.overlaycostcenterSearch.showOverlayPanel(event);
+        break;
+        case 'costcentermaking':
+          this.overlaycostcentermakingSearch.showOverlayPanel(event);
+          break;
+          case 'stockcode':
+          this.overlaystockcodeSearch.showOverlayPanel(event);
+          break;
+      default:
     }
   }
 
