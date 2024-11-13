@@ -144,10 +144,24 @@ export class GratuityMasterComponent implements OnInit {
     this.gratuityMasterForm.controls["basedOn"].setValue(DATA.BASED_ON);
     this.gratuityMasterForm.controls["countryCode"].setValue(DATA.COUNTRYCODE);
     this.gratuityMasterForm.controls["debitAc"].setValue(DATA.DEBITACCODE);
-    this.gratuityMasterForm.controls["amount"].setValue(DATA.FIXAMOUNT);
+    this.gratuityMasterForm.controls["amount"].setValue(
+      this.commonService.decimalQuantityFormat(DATA.FIXAMOUNT, "AMOUNT")
+    );
     this.gratuityMasterForm.controls["description"].setValue(DATA.DESCRIPTION);
     this.gratuityMasterForm.controls["type"].setValue(DATA.GRATTYPE);
     this.gratuityMasterForm.controls["noOfDaysAndYear"].setValue(DATA.YEARDAYS);
+    this.gratuityMasterForm.controls["excludeAnnualLeaves"].setValue(
+      DATA.DED_ANNUALLEAVE === 1
+    );
+    this.gratuityMasterForm.controls["excludePaidLeaves"].setValue(
+      DATA.DED_PAIDLEAVE === 1
+    );
+    this.gratuityMasterForm.controls["excludeUnpaidLeaves"].setValue(
+      DATA.DED_UPAIDLEAVE === 1
+    );
+    this.gratuityMasterForm.controls["excludeHalfPaidLeaves"].setValue(
+      DATA.DED_HPAIDLEAVE === 1
+    );
 
     this.gratuityMasterForm.controls["userDefined1"].setValue(DATA.UDF1);
     this.gratuityMasterForm.controls["userDefined2"].setValue(DATA.UDF2);
@@ -175,7 +189,7 @@ export class GratuityMasterComponent implements OnInit {
 
     Swal.fire({
       title: "Are you sure?",
-      text:   "You won't be able to revert this!",
+      text: "You won't be able to revert this!",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",

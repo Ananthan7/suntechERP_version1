@@ -8,6 +8,7 @@
   </div>
   <!-- modal header component -->
   <modal-header
+    *ngIf="flag !== 'VIEW'"
     (saveClick)="gratuityMasterFormSubmit()"
     (cancelClick)="close()"
     (deleteClick)="DeleteController()"
@@ -110,6 +111,7 @@
                       UpperCaseDirective
                     />
                     <master-search
+                      *ngIf="flag != 'VIEW'"
                       class="masterSearch"
                       [MasterSearchData]="debitAccCode"
                       (newRowClick)="
@@ -229,8 +231,9 @@
                     <input
                       [readonly]="flag === 'VIEW'"
                       type="text"
-                      #codeInput
+                      style="text-align: right"
                       matInput
+                      AmountDecimalInput
                       formControlName="amount"
                       UpperCaseDirective
                       autocomplete="off"
