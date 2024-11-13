@@ -50,7 +50,6 @@ export class GeneralReportsComponent implements OnInit {
     }
 
     openModalView(data?: any) {
-      debugger
       this.componentDbList = {
         // Add components and update in operationals > menu updation grid form component name
         'RetailKaratRateLogComponent': RetailKaratRateLogComponent,
@@ -80,6 +79,6 @@ export class GeneralReportsComponent implements OnInit {
       }, (reason) => {
         // Handle modal dismissal (if needed)
       });
-      modalRef.componentInstance.content = data;
+      modalRef.componentInstance.content = data || null;
     }
 }
