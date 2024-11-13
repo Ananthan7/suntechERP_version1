@@ -1,0 +1,188 @@
+::ng-deep {
+
+    // form field starts
+    .mat-form-field-outline-start {
+      border-radius: 3px 0 0 3px !important;
+      min-width: 24px !important;
+      background-color: #f7f8fb;
+    }
+  
+    .mat-form-field-outline-end {
+      border-radius: 0 3px 3px 0 !important;
+      min-width: 24px !important;
+      background-color: #f7f8fb;
+    }
+  
+    /* Add padding to move the label and input into the center to prevent overlapping the rounded border */
+    .mat-form-field-appearance-outline .mat-form-field-flex {
+      padding: 0 20px !important;
+    }
+  
+    .mat-form-field-appearance-outline .mat-form-field-infix {
+      padding: 0px 0px 8px 0px;
+    }
+  
+    .mat-form-field-appearance-outline .mat-form-field-outline {
+      color: #bcbcbc;
+    }
+  
+    .mat-form-field-appearance-outline .mat-form-field-wrapper {
+      margin: 0px !important;
+      height: 30px !important;
+    }
+  
+    .mat-form-field {
+      font-size: 13px !important;
+    }
+  
+    // form field ends
+  }
+  
+  // table section styles
+  .module_form {
+    // background: #F5F2ED;
+    height: 100%;
+  
+    .table_header {
+      // background: #3599cc;
+      background: #2f66b4;
+      padding: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+  
+      .btn-white {
+        background: #fff;
+        padding: 2px 8px;
+        font-size: 14px;
+        font-weight: 500;
+        margin-right: 10px;
+      }
+  
+      .icons_wrap {
+        display: flex;
+        align-items: center;
+  
+        a {
+          margin-left: 10px;
+        }
+  
+        .icons {
+          font-size: 24px;
+          margin-right: 10px;
+          color: #fff;
+        }
+  
+        .custom-control-label {
+          font-size: 16px;
+          font-weight: 400;
+          margin-top: 2px;
+          color: #fff;
+        }
+      }
+    }
+  }
+  
+  @media (min-width: 1200px) {
+    ::ng-deep {
+      .modal-full-width .modal-dialog {
+        max-width: 100vw;
+        margin: 0;
+        max-height: 100vh;
+        overflow-y: scroll;
+        overflow-x: hidden;
+      }
+  
+      .modal-full-width .modal-content {
+        max-height: 100vh;
+        border-radius: 0;
+        overflow-y: scroll;
+        overflow-x: hidden;
+      }
+  
+      // .modal-xl {
+      //   max-width: 95vw !important;
+      //   max-height: 90vh !important;
+      //   overflow-y: scroll;
+      //   overflow-x: hidden;
+      // }
+  
+      // .modal-content {
+      //   min-height: 90vh;
+      // }
+  
+      /* width */
+      ::-webkit-scrollbar {
+        width: 13px;
+      }
+  
+      /* Track */
+      ::-webkit-scrollbar-track {
+        background: #f3f3f3;
+      }
+  
+      /* Handle */
+      ::-webkit-scrollbar-thumb {
+        background: #a4a4a4;
+        border-radius: 5px;
+      }
+  
+      /* Handle on hover */
+      ::-webkit-scrollbar-thumb:hover {
+        background: #555;
+      }
+    }
+  }
+  
+  @media (min-width: 768px) {
+    ::ng-deep {
+      .modal-full-width .modal-dialog {
+        max-width: 100vw;
+        margin: 0;
+        height: 100vh;
+      }
+  
+      .modal-full-width .modal-content {
+        height: 100vh;
+        border-radius: 0;
+      }
+  
+      // .modal-xl {
+      //   max-width: 95vw !important;
+      //   max-height: 90vh !important;
+      //   overflow-y: scroll;
+      //   overflow-x: hidden;
+      // }
+    }
+  }
+  
+  ::ng-deep {
+    .dx-datagrid .dx-header-row {
+      font-size: 13px;
+    }
+  
+    body[data-layout-mode="dark"] {
+      #gridContainer {
+  
+        td,
+        .dx-widget,
+        .dx-datagrid-total-footer,
+        .dx-datagrid-nowrap {
+          color: #fff;
+          background-color: #03314d;
+        }
+  
+        .dx-datagrid-headers {
+          td {
+            color: #fff;
+            background-color: #105c8b !important;
+          }
+        }
+  
+        .dx-datagrid-summary-item,
+        .dx-datagrid-text-content {
+          color: #fff;
+        }
+      }
+    }
+  }
