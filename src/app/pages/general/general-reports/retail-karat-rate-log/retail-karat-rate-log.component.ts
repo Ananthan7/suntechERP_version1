@@ -138,7 +138,7 @@ export class RetailKaratRateLogComponent implements OnInit {
       this.retailkaratRateLogForm.controls.branch.setValue(formattedUserBranch);
       this.fetchedBranchDataParam = formattedUserBranch;
       this.fetchedBranchData= this.fetchedBranchDataParam?.split("#")
-      debugger
+      
       this.dateToPass = {
         fromDate:  this.commonService.formatYYMMDD(new Date()),
         toDate: this.commonService.formatYYMMDD(new Date()),
