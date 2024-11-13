@@ -83,6 +83,8 @@ export class AllowanceMasterComponent implements OnInit {
   ngOnInit(): void {
     this.setFormValues();
 
+    console.log(this.content)
+
     if (this.content?.FLAG) {
     
       if (this.content?.FLAG == 'VIEW') {
@@ -118,18 +120,18 @@ export class AllowanceMasterComponent implements OnInit {
   glCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 3,
-    SEARCH_FIELD: 'CODE',
+    LOOKUPID: 7,
+    SEARCH_FIELD: 'ACCODE',
     SEARCH_HEADING: 'GL CODE',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
+    WHERECONDITION: "ACCODE <> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
   glCodeSelected(e:any){
     console.log(e);
-    this.allowanceMasterForm.controls.glcode.setValue(e.CODE);
-    this.allowanceMasterForm.controls.glcode_desc.setValue(e.DESCRIPTION);
+    this.allowanceMasterForm.controls.glcode.setValue(e.ACCODE);
+    this.allowanceMasterForm.controls.glcode_desc.setValue(e.ACCOUNT_HEAD);
   }
 
   reportCodeData: MasterSearchModel = {
@@ -181,13 +183,17 @@ export class AllowanceMasterComponent implements OnInit {
 
   setFormValues() {
     if (!this.content) return;
+    console.log(this.content.ALLMST_BASIS);
     this.allowanceMasterForm.controls.code.setValue(this.content.ALLMST_CODE)
     this.allowanceMasterForm.controls.description.setValue(this.content.ALLMST_DESC)
     this.allowanceMasterForm.controls.glcode.setValue(this.content.ALLMST_ACCODE)
     this.allowanceMasterForm.controls.value.setValue(this.content.ALLMST_AMOUNT)
-    this.allowanceMasterForm.controls.calc_method.setValue(this.content.ALLMST_PERCENFIXED)
+    this.allowanceMasterForm.controls.calc_method.setValue(this.content.ALLMST_PERCENFIXED);
     this.allowanceMasterForm.controls.avoid_fraction.setValue(this.content.ALLMST_AVOIDFRACTION)
-    this.allowanceMasterForm.controls.calc_basis.setValue(this.content.ALLMST_BASIS)
+    this.allowanceMasterForm.controls.calc_basis.setValue(
+      this.content.ALLMST_BASIS ? 1 : 0
+  );
+  
     this.allowanceMasterForm.controls.report_heading.setValue(this.content.ALLMST_REPORTHEADINGTO)
     this.allowanceMasterForm.controls.period.setValue(this.content.ALLMST_YEARMONTHLY)
     this.allowanceMasterForm.controls.credit_to_employeeAC.setValue(this.content.ALLMST_CREDIT_EMPAC)
@@ -464,5 +470,247 @@ export class AllowanceMasterComponent implements OnInit {
         console.warn(`Unknown FORMNAME: ${FORMNAME}`);
         break;
     }
+  }
+
+  UDF1Data: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 130,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'UDF1',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "TYPES ='HRM UDF Field1'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  UDF1CodeSelected(e:any){
+    console.log(e);
+    this.allowanceMasterForm.controls.userdefined1.setValue(e.CODE);
+  }
+
+  UDF2Data: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 130,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'UDF1',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "TYPES ='HRM UDF Field2'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  UDF2CodeSelected(e:any){
+    console.log(e);
+    this.allowanceMasterForm.controls.userdefined2.setValue(e.CODE);
+  }
+  
+  UDF3Data: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 130,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'UDF3',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "TYPES ='HRM UDF Field3'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  UDF3CodeSelected(e:any){
+    console.log(e);
+    this.allowanceMasterForm.controls.userdefined3.setValue(e.CODE);
+  }
+
+  
+  UDF4Data: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 130,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'UDF4',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "TYPES ='HRM UDF Field4'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  UDF4CodeSelected(e:any){
+    console.log(e);
+    this.allowanceMasterForm.controls.userdefined4.setValue(e.CODE);
+  }
+    
+  UDF5Data: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 130,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'UDF5',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "TYPES ='HRM UDF Field5'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  UDF5CodeSelected(e:any){
+    console.log(e);
+    this.allowanceMasterForm.controls.userdefined5.setValue(e.CODE);
+  }
+      
+  UDF6Data: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 130,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'UDF6',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "TYPES ='HRM UDF Field6'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  UDF6CodeSelected(e:any){
+    console.log(e);
+    this.allowanceMasterForm.controls.userdefined6.setValue(e.CODE);
+  }
+        
+  UDF7Data: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 130,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'UDF6',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "TYPES ='HRM UDF Field7'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  UDF7CodeSelected(e:any){
+    console.log(e);
+    this.allowanceMasterForm.controls.userdefined7.setValue(e.CODE);
+  }
+        
+  UDF8Data: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 130,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'UDF8',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "TYPES ='HRM UDF Field8'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  UDF8CodeSelected(e:any){
+    console.log(e);
+    this.allowanceMasterForm.controls.userdefined8.setValue(e.CODE);
+  }
+          
+  UDF9Data: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 130,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'UDF9',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "TYPES ='HRM UDF Field9'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  UDF9CodeSelected(e:any){
+    console.log(e);
+    this.allowanceMasterForm.controls.userdefined9.setValue(e.CODE);
+  }
+
+            
+  UDF10Data: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 130,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'UDF10',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "TYPES ='HRM UDF Field10'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  UDF10CodeSelected(e:any){
+    console.log(e);
+    this.allowanceMasterForm.controls.userdefined10.setValue(e.CODE);
+  }
+              
+  UDF11Data: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 130,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'UDF11',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "TYPES ='HRM UDF Field11'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  UDF11CodeSelected(e:any){
+    console.log(e);
+    this.allowanceMasterForm.controls.userdefined11.setValue(e.CODE);
+  }
+                
+  UDF12Data: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 130,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'UDF12',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "TYPES ='HRM UDF Field12'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  UDF12CodeSelected(e:any){
+    console.log(e);
+    this.allowanceMasterForm.controls.userdefined12.setValue(e.CODE);
+  }
+                  
+  UDF13Data: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 130,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'UDF13',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "TYPES ='HRM UDF Field13'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  UDF13CodeSelected(e:any){
+    console.log(e);
+    this.allowanceMasterForm.controls.userdefined13.setValue(e.CODE);
+  }
+                    
+  UDF14Data: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 130,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'UDF14',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "TYPES ='HRM UDF Field14'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  UDF14CodeSelected(e:any){
+    console.log(e);
+    this.allowanceMasterForm.controls.userdefined14.setValue(e.CODE);
+  }
+                      
+  UDF15Data: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 130,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'UDF15',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "TYPES ='HRM UDF Field15'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+  UDF15CodeSelected(e:any){
+    console.log(e);
+    this.allowanceMasterForm.controls.userdefined15.setValue(e.CODE);
   }
 }

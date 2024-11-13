@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
@@ -7,6 +7,7 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 
 @Component({
   selector: 'app-karat-master',
@@ -14,10 +15,15 @@ import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstra
   styleUrls: ['./karat-master.component.scss']
 })
 export class KaratMasterComponent implements OnInit {
-  karatmasterFrom!: FormGroup;
-  subscriptions: any;
+  private subscriptions: Subscription[] = [];
   @Input() content!: any;
   tableData: any[] = [];
+  isDisableSaveBtn: boolean = false;
+  viewMode: boolean = false;
+  editMode: boolean = false;
+
+
+  @ViewChild('overlaydivisionSearch') overlaydivisionSearch!: MasterSearchComponent;
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -30,20 +36,21 @@ export class KaratMasterComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.karatmasterFrom = this.formBuilder.group({
-      division: ['',[Validators.required]],
-      karatcode: ['',[Validators.required]],
-      karatcodedes: ['',[Validators.required]],
-      standardpurity: ['0.000000',[Validators.required]],
-      minimum: ['0.000000'],
-      maximum: ['0.000000'],
-      sp_gravity: [''],
-      sp_variance: [''],
-      pos: [''],
-      pop_minmaxamt: [''],
-      scrap: [false],
-      showinweb: [false],
-    })
+
+    if (this.content?.FLAG) {
+      this.setFormValues();
+    console.log(this.content);
+      if (this.content.FLAG == 'VIEW') {
+        this.viewMode = true;
+      } else if (this.content.FLAG == 'EDIT') {
+        this.editMode = true;
+      } else if (this.content.FLAG == 'DELETE') {
+        this.viewMode = true;
+        this.deleteRecord()
+      }
+    }
+
+ 
 
     const standardpurityControl = this.karatmasterFrom.get('standardpurity');
 
@@ -61,6 +68,22 @@ export class KaratMasterComponent implements OnInit {
       console.error("Control 'standardpurity' not found in the form group.");
     }
   }
+
+  karatmasterFrom: FormGroup = this.formBuilder.group({
+    division: ['',[Validators.required]],
+    karatcode: ['',[Validators.required]],
+    karatcodedes: ['',[Validators.required]],
+    standardpurity: ['',[Validators.required]],
+    minimum: [''],
+    maximum: [''],
+    sp_gravity: [''],
+    sp_variance: [''],
+    pos: [''],
+    pop_minmaxamt: [''],
+    scrap: [false],
+    showinweb: [false],
+  })
+
 
   divisionCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -83,6 +106,23 @@ export class KaratMasterComponent implements OnInit {
     this.activeModal.close(data);
   }
 
+  setFormValues() {
+    if (!this.content) return
+
+    this.karatmasterFrom.controls.division.setValue(this.content.DIVISION_CODE);
+    this.karatmasterFrom.controls.karatcode.setValue(this.content.KARAT_CODE);
+    this.karatmasterFrom.controls.karatcodedes.setValue(this.content.KARAT_DESC);
+    this.karatmasterFrom.controls.standardpurity.setValue(this.content.STD_PURITY);
+    this.karatmasterFrom.controls.minimum.setValue(this.content.PURITY_FROM);
+    this.karatmasterFrom.controls.maximum.setValue(this.content.PURITY_TO);
+    this.karatmasterFrom.controls.sp_gravity.setValue(this.content.SPGRVT);
+    this.karatmasterFrom.controls.sp_variance.setValue(this.content.SPGRVT_VAR);
+    this.karatmasterFrom.controls.pos.setValue(this.content.POSMINMAXAMT);
+    this.karatmasterFrom.controls.pop_minmaxamt.setValue(this.content.POPMINMAXAMT);
+    this.karatmasterFrom.controls.scrap.setValue(this.content.IS_SCRAP);
+    this.karatmasterFrom.controls.showinweb.setValue(this.content.SHOWINWEB);
+
+  }
 
 
   formSubmit() {
@@ -98,19 +138,19 @@ export class KaratMasterComponent implements OnInit {
 
     let API = 'karatMaster/InsertKaratMaster'
     let postData = {
-      "KARAT_CODE": this.karatmasterFrom.value.karatcode || "",
-      "STD_PURITY": this.karatmasterFrom.value.standardpurity || 0,
-      "PURITY_FROM": 0,
-      "PURITY_TO": 0,
-      "MID": 0,
-      "SYSTEM_DATE": "2023-11-24T10:50:27.839Z",
-      "KARAT_DESC": this.karatmasterFrom.value.karatcodedes || "",
-      "SPGRVT": this.karatmasterFrom.value.sp_gravity || "",
-      "POSMINMAXAMT": this.karatmasterFrom.value.pos || "",
-      "DIVISION_CODE": this.karatmasterFrom.value.division || "",
-      "POPMINMAXAMT": this.karatmasterFrom.value.pop_minmaxamt || "",
-      "SPGRVT_VAR": this.karatmasterFrom.value.sp_variance || "",
-      "KARAT_DESC_AR": "string",
+      "KARAT_CODE": this.commonService.nullToString(this.karatmasterFrom.value.karatcode) ,
+      "STD_PURITY": this.commonService.emptyToZero(this.karatmasterFrom.value.standardpurity),
+      "PURITY_FROM": this.commonService.emptyToZero(this.karatmasterFrom.value.minimum),
+      "PURITY_TO": this.commonService.emptyToZero(this.karatmasterFrom.value.maximum),
+      "MID":this.commonService.emptyToZero(this.content?.MID),
+      "SYSTEM_DATE": "2024-11-13T09:15:17.534Z",
+      "KARAT_DESC": this.commonService.nullToString(this.karatmasterFrom.value.karatcodedes),
+      "SPGRVT": this.commonService.emptyToZero(this.karatmasterFrom.value.sp_gravity),
+      "POSMINMAXAMT": this.commonService.emptyToZero(this.karatmasterFrom.value.pos),
+      "DIVISION_CODE": this.commonService.nullToString(this.karatmasterFrom.value.division),
+      "POPMINMAXAMT": this.commonService.emptyToZero(this.karatmasterFrom.value.pop_minmaxamt),
+      "SPGRVT_VAR": this.commonService.emptyToZero(this.karatmasterFrom.value.sp_variance),
+      "KARAT_DESC_AR": "str",
       "IS_SCRAP": this.karatmasterFrom.value.scrap,
       "SHOWINWEB": this.karatmasterFrom.value.showinweb,
     }
@@ -136,7 +176,9 @@ export class KaratMasterComponent implements OnInit {
         } else {
           this.toastr.error('Not saved')
         }
-      }, err => alert(err))
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+      })
     this.subscriptions.push(Sub)
   }
   update() {
@@ -145,22 +187,22 @@ export class KaratMasterComponent implements OnInit {
       return
     }
 
-    let API = '/karatMaster/UpdateKaratMaster/' + this.content.KARAT_CODE
+    let API = 'karatMaster/UpdateKaratMaster/' + this.content.KARAT_CODE;
     let postData =
     {
-      "KARAT_CODE": this.karatmasterFrom.value.karatcode || "",
-      "STD_PURITY": this.karatmasterFrom.value.standardpurity || 0,
-      "PURITY_FROM": 0,
-      "PURITY_TO": 0,
-      "MID": 0,
-      "SYSTEM_DATE": "2023-11-24T10:50:27.839Z",
-      "KARAT_DESC": this.karatmasterFrom.value.karatcodedes || "",
-      "SPGRVT": this.karatmasterFrom.value.sp_gravity || "",
-      "POSMINMAXAMT": this.karatmasterFrom.value.pos || "",
-      "DIVISION_CODE": this.karatmasterFrom.value.division || "",
-      "POPMINMAXAMT": this.karatmasterFrom.value.pop_minmaxamt || "",
-      "SPGRVT_VAR": this.karatmasterFrom.value.sp_variance || "",
-      "KARAT_DESC_AR": "string",
+      "KARAT_CODE": this.commonService.nullToString(this.karatmasterFrom.value.karatcode) ,
+      "STD_PURITY": this.commonService.emptyToZero(this.karatmasterFrom.value.standardpurity),
+      "PURITY_FROM": this.commonService.emptyToZero(this.karatmasterFrom.value.minimum),
+      "PURITY_TO": this.commonService.emptyToZero(this.karatmasterFrom.value.maximum),
+      "MID":this.commonService.emptyToZero(this.content?.MID),
+      "SYSTEM_DATE": "2024-11-13T09:15:17.534Z",
+      "KARAT_DESC": this.commonService.nullToString(this.karatmasterFrom.value.karatcodedes),
+      "SPGRVT": this.commonService.emptyToZero(this.karatmasterFrom.value.sp_gravity),
+      "POSMINMAXAMT": this.commonService.emptyToZero(this.karatmasterFrom.value.pos),
+      "DIVISION_CODE": this.commonService.nullToString(this.karatmasterFrom.value.division),
+      "POPMINMAXAMT": this.commonService.emptyToZero(this.karatmasterFrom.value.pop_minmaxamt),
+      "SPGRVT_VAR": this.commonService.emptyToZero(this.karatmasterFrom.value.sp_variance),
+      "KARAT_DESC_AR": "str",
       "IS_SCRAP": this.karatmasterFrom.value.scrap,
       "SHOWINWEB": this.karatmasterFrom.value.showinweb,
     }
@@ -191,19 +233,7 @@ export class KaratMasterComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
   deleteRecord() {
-    if (!this.content.MID) {
-      Swal.fire({
-        title: '',
-        text: 'Please Select data to delete!',
-        icon: 'error',
-        confirmButtonColor: '#336699',
-        confirmButtonText: 'Ok'
-      }).then((result: any) => {
-        if (result.value) {
-        }
-      });
-      return
-    }
+    if (this.content && this.content.FLAG == 'VIEW') return
     Swal.fire({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",
@@ -255,4 +285,62 @@ export class KaratMasterComponent implements OnInit {
       }
     });
   }
-}
+
+  
+  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    LOOKUPDATA.SEARCH_VALUE = event.target.value
+    if (event.target.value == '' || this.viewMode == true) return
+    let param = {
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+    }
+    this.commonService.toastInfoByMsgId('MSG81447');
+    let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
+      .subscribe((result) => {
+        this.isDisableSaveBtn = false;
+        let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+        if (data.length == 0) {
+          this.commonService.toastErrorByMsgId('MSG1531')
+          this.karatmasterFrom.controls[FORMNAME].setValue('')
+          LOOKUPDATA.SEARCH_VALUE = ''
+          this.openOverlay(FORMNAME, event);
+          return
+        }
+
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+      })
+    }
+
+    lookupKeyPress(event: any, form?: any) {
+      if (event.key == 'Tab' && event.target.value == '') {
+        this.showOverleyPanel(event, form)
+      }
+      if (event.key === 'Enter') {
+        if (event.target.value == '') this.showOverleyPanel(event, form)
+        event.preventDefault();
+      }
+    }
+    
+    openOverlay(FORMNAME: string, event: any) {
+      switch (FORMNAME) {
+        case 'division':
+          this.overlaydivisionSearch.showOverlayPanel(event);
+          break;
+        default:
+          console.warn(`Unknown FORMNAME: ${FORMNAME}`);
+          break;
+      }
+    }
+
+    showOverleyPanel(event: any, formControlName: string) {
+      switch (formControlName) {
+        case 'glcode':
+          this.overlaydivisionSearch.showOverlayPanel(event);
+          break;
+        default:
+      }
+    }
+
+  }
