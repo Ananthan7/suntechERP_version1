@@ -76,7 +76,7 @@
               <div class="col-md-3">
                 <mat-form-field appearance="outline" style="width: 100%;">
                   <input type="text" matInput formControlName="UNQ_JOB_ID"
-                    UpperCaseDirective [readonly]="viewMode" id="UNQ_JOB_ID"
+                    UpperCaseDirective [readonly]="viewMode || editMode" id="UNQ_JOB_ID"
                     (keydown)="lookupKeyPress($event,'UNQ_JOB_ID')"
                     (change)="subJobNumberValidate($event)" />
                   <master-search class="masterSearch"
@@ -706,7 +706,7 @@
                 </div>
                 <div class="row d-flex justify-content-center">
                   <mat-form-field appearance="outline" style="width: 70%;">
-                    <input type="text" matInput formControlName="partCode"
+                    <input type="text" matInput formControlName="PART_CODE"
                       readonly />
                   </mat-form-field>
                 </div>

@@ -269,7 +269,7 @@ export class ProductionStockDetailComponent implements OnInit {
             item.PURITY = this.commonService.setCommaSerperatedNumber(item.PURITY, 'PURITY')
           })
           this.groupComponentDetails()// grouping data
-          this.generateTagline() 
+          this.tagLineCreation() // tagline creation
           this.setFormDecimal('metalValue', metalValue, 'AMOUNT')
           this.setFormDecimal('stockValue', stoneValue, 'AMOUNT')
           this.setFormDecimal('toatalLabour', toatalLabour, 'AMOUNT')
@@ -291,6 +291,30 @@ export class ProductionStockDetailComponent implements OnInit {
         this.commonService.toastErrorByMsgId('MSG1531')
       })
     this.subscriptions.push(Sub)
+  }
+  tagLineCreation() {
+    let postData = {
+      "SPID": "168",
+      "parameter": {
+        strMasterSales: 'M',
+	      strBranchCode: this.commonService.branchCode
+      }
+    }
+    this.commonService.showSnackBarMsg('MSG81447')
+    let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+      .subscribe((result) => {
+        this.commonService.closeSnackBarMsg()
+        if (result.status == "Success" && result.dynamicData[0]) {
+        
+        } else {
+          this.commonService.toastErrorByMsgId('MSG1747')
+        }
+      }, err => {
+        this.commonService.closeSnackBarMsg()
+        this.commonService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
+   
   }
   generateTagline() {
     let postData = {

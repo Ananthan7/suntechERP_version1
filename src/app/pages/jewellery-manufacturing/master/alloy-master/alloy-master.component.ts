@@ -280,6 +280,7 @@ export class AlloyMasterComponent implements OnInit {
     allowpcs: [''],
     excludeTransferWt: [''],
     silveralloy: [''],
+    selectMasterOnly: [true],
     picture_name: [''],
     FLAG: ['']
   });
@@ -644,13 +645,19 @@ export class AlloyMasterComponent implements OnInit {
 
 
   }
-
+  selectMasterOnlyChange(event:any){
+    this.codeData.VIEW_ICON = this.alloyMastereForm.value.selectMasterOnly;
+  }
+  alloyCodeValidate(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    if(this.alloyMastereForm.value.selectMasterOnly){
+      this.validateLookupField(event, LOOKUPDATA, FORMNAME)
+    }else{
+      this.checkCodeExists()
+    }
+  }
   /**use: validate all lookups to check data exists in db */
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
-
     LOOKUPDATA.SEARCH_VALUE = event.target.value
-    console.log(this.alloyMastereForm.value.costCenter);
-
 
     if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
     let param = {
@@ -1861,17 +1868,14 @@ export class AlloyMasterComponent implements OnInit {
         },
       ],
     };
-    console.log(postData, 'postData');
-
     return postData
   }
 
-  checkCodeExists(event: any) {
-    if (event.target.value == '') return
-    let API = 'DesignMaster/CheckIfDesignCodePresent/' + event.target.value
+  checkCodeExists() {
+    if (this.alloyMastereForm.value.code.toString() == '') return
+    let API = 'DesignMaster/CheckIfDesignCodePresent/' + this.alloyMastereForm.value.code
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
-        debugger
         if (result.checkifExists) {
           Swal.fire({
             title: '',

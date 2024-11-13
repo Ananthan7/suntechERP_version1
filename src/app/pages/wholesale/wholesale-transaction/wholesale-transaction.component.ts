@@ -7,6 +7,7 @@ import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { ActivatedRoute } from '@angular/router';
 import { MasterGridComponent } from 'src/app/shared/common/master-grid/master-grid.component';
 import { JewelleryAssemblingComponent } from './jewellery-assembling/jewellery-assembling.component';
+import { JewellerypurchaseComponent } from './jewellerypurchase/jewellerypurchase.component';
 @Component({
   selector: 'app-wholesale-transaction',
   templateUrl: './wholesale-transaction.component.html',
@@ -28,7 +29,7 @@ export class WholesaleTransactionComponent implements OnInit {
 
   private componentDbList: any = {
     'JewelleryAssemblingComponent': JewelleryAssemblingComponent,
-    
+    'JewellerypurchaseComponent' : JewellerypurchaseComponent,
 
     /*add components here and update in form component name menu updation in operationals */
   }

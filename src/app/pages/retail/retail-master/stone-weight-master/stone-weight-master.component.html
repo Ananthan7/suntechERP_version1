@@ -5,9 +5,9 @@
         <i class="feather icon-x close-icon"></i>
     </button>
 </div>
-<!-- modal header component -->
-<modal-header (cancelClick)="close()" (saveClick)="formSubmit()"></modal-header>
-<!-- content section -->
+
+<modal-header *ngIf="this.content?.FLAG != 'VIEW'" (cancelClick)="close()" (saveClick)="formSubmit()"></modal-header>
+
 
 <div class=" p-4">
     <form [formGroup]="stoneweightmaster" class="p-1">
@@ -19,8 +19,8 @@
                     <div class="col-md-8">
                         <mat-form-field style="width: 90%;" appearance="outline">
                             <input type="text" id="inputPassword" matInput formControlName="sieveset" />
-                            <master-search [MasterSearchData]="enteredCodeData" class="masterSearch"
-                            (newRowClick)="enteredCodeSelected($event)"></master-search>
+                            <master-search [MasterSearchData]="sieveSetcodeData" class="masterSearch"
+                            (newRowClick)="sieveSetcodeSelected($event)"></master-search>
                         </mat-form-field>
                     </div>
                 </div>
@@ -34,8 +34,8 @@
                     <div class="col-md-8">
                         <mat-form-field style="width: 90%;" appearance="outline">
                             <input type="text" id="inputPassword" matInput formControlName="division" />
-                            <master-search [MasterSearchData]="enteredCodeData" class="masterSearch"
-                            (newRowClick)="enteredCodeSelected($event)"></master-search>
+                            <master-search [MasterSearchData]="divisionCodeData" class="masterSearch"
+                            (newRowClick)="divisionCodeSelected($event)"></master-search>
                         </mat-form-field>
                     </div>
                 </div>
@@ -45,8 +45,8 @@
                     <div class="col-md-8">
                         <mat-form-field style="width: 90%;" appearance="outline">
                             <input type="text" id="inputPassword" matInput formControlName="sievefrom" />
-                            <master-search [MasterSearchData]="enteredCodeData" class="masterSearch"
-                            (newRowClick)="enteredCodeSelected($event)"></master-search>
+                            <master-search [MasterSearchData]="sieveFromCodeData" class="masterSearch"
+                            (newRowClick)="sievecodeselected($event)"></master-search>
                         </mat-form-field>
                     </div>
                 </div>
@@ -66,8 +66,8 @@
                     <div class="col-md-8">
                         <mat-form-field style="width: 90%;" appearance="outline">
                             <input type="text" id="inputPassword" matInput formControlName="sizefrom" />
-                            <master-search [MasterSearchData]="enteredCodeData" class="masterSearch"
-                            (newRowClick)="enteredCodeSelected($event)"></master-search>
+                            <master-search [MasterSearchData]="sizeFromCodeData" class="masterSearch"
+                            (newRowClick)="sizefromselected($event)"></master-search>
                         </mat-form-field>
                     </div>
                 </div>
@@ -86,7 +86,7 @@
                     <label for="inputPassword" class="col-sm-4 col-form-label">Pointer Wt</label>
                     <div class="col-md-8">
                         <mat-form-field style="width: 90%;" appearance="outline">
-                            <input type="text" id="inputPassword" matInput formControlName="pointerwt" />
+                            <input type="text" id="inputPassword" matInput formControlName="pointerwt" style="text-align:right" FourDecimalInput />
                            
                         </mat-form-field>
                     </div>
@@ -105,8 +105,8 @@
                     <div class="col-md-8">
                         <mat-form-field style="width: 90%;" appearance="outline">
                             <input type="text" id="inputPassword" matInput formControlName="shape" />
-                            <master-search [MasterSearchData]="enteredCodeData" class="masterSearch"
-                            (newRowClick)="enteredCodeSelected($event)"></master-search>
+                            <master-search [MasterSearchData]="ShapecodeData" class="masterSearch"
+                            (newRowClick)="ShapecodeSelected($event)"></master-search>
                         </mat-form-field>
                     </div>
                 </div>
@@ -116,8 +116,8 @@
                     <div class="col-md-8">
                         <mat-form-field style="width: 90%;" appearance="outline">
                             <input type="text" id="inputPassword" matInput formControlName="sieveto" />
-                            <master-search [MasterSearchData]="enteredCodeData" class="masterSearch"
-                            (newRowClick)="enteredCodeSelected($event)"></master-search>
+                            <master-search [MasterSearchData]="sieveToCodeData" class="masterSearch"
+                            (newRowClick)="sievetoselected($event)"></master-search>
                         </mat-form-field>
                     </div>
                 </div>
@@ -137,8 +137,8 @@
                     <div class="col-md-8">
                         <mat-form-field style="width: 90%;" appearance="outline">
                             <input type="text" id="inputPassword" matInput formControlName="sizeto" />
-                            <master-search [MasterSearchData]="enteredCodeData" class="masterSearch"
-                            (newRowClick)="enteredCodeSelected($event)"></master-search>
+                            <master-search [MasterSearchData]="sizeToCodeData" class="masterSearch"
+                            (newRowClick)="sizetoselected($event)"></master-search>
                         </mat-form-field>
                     </div>
                 </div>

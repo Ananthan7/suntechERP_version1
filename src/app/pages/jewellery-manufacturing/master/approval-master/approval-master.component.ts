@@ -110,11 +110,6 @@ export class ApprovalMasterComponent implements OnInit {
   }
 
 
-  sanitizeInput(event: any): void {
-    const input = event.target as HTMLInputElement;
-    input.value = input.value.replace(/[^a-zA-Z0-9-]/g, '');  // Remove special characters
-    this.approvalMasterForm.get('code')?.setValue(input.value, { emitEvent: false });
-  }
 
 
   setFormValues() {
@@ -188,8 +183,46 @@ export class ApprovalMasterComponent implements OnInit {
   }
 
   isNumeric(event: any) {
+    console.log(event);
+    if (event.key === "ArrowLeft") {
+      console.log("Left arrow key pressed");
+    } else if (event.key === "ArrowRight") {
+      console.log("Right arrow key pressed");
+    }
     return this.commonService.isNumeric(event);
   }
+
+  handleKeydown(event: KeyboardEvent, data: { value: string }) {
+    const inputElement = event.target as HTMLInputElement;
+    const cursorPosition = inputElement.selectionStart || 0;
+    let value = data.value || '';
+
+    if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        if (cursorPosition > 0) {
+            value = this.moveCharacter(value, cursorPosition, -1);
+            data.value = value;
+        }
+    } 
+    else if (event.key === "ArrowRight") {
+        event.preventDefault();
+
+        if (cursorPosition < value.length - 1) {
+            value = this.moveCharacter(value, cursorPosition, 1);
+            data.value = value;
+        }
+    }
+}
+
+moveCharacter(value: string, index: number, direction: number): string {
+    const newIndex = index + direction;
+    const charArray = value.split('');
+
+    [charArray[index], charArray[newIndex]] = [charArray[newIndex], charArray[index]];
+
+    return charArray.join('');
+}
+
 
   enforceMaxLength(event: any) {
     if (event.target.value.length > 10) {
@@ -204,6 +237,11 @@ export class ApprovalMasterComponent implements OnInit {
   // }
 
   close(data?: any) {
+    if (data){
+      this.viewMode = true;
+      this.activeModal.close(data);
+      return
+    }
     if (this.content && this.content.FLAG == 'VIEW'){
       this.activeModal.close(data);
       return
@@ -670,6 +708,12 @@ export class ApprovalMasterComponent implements OnInit {
   update() {
     if (this.submitValidations(this.approvalMasterForm.value)) return;
 
+    if (this.checkFinalApproval()) {
+      console.log("this")
+          this.toastr.error('Final Approval Type Not Selected');
+          return;
+    }
+
     let conditionMet = false;
 
     this.tableData.forEach((item: any, index: number) => {
@@ -816,6 +860,34 @@ export class ApprovalMasterComponent implements OnInit {
       this.subscriptions = []; // Clear the array
     }
   }
+
+  handleArrowKeyNavigation(event: KeyboardEvent) {
+    const isArrowKey = event.key === "ArrowUp" || event.key === "ArrowDown";
+
+    if (isArrowKey) {
+        // Prevent the default arrow key behavior
+        event.preventDefault();
+
+        // Logic to move the cursor within the cell goes here.
+        // For instance, using selectionStart and selectionEnd to manage cursor position within input
+        const activeElement = document.activeElement as HTMLInputElement;
+
+        if (activeElement && activeElement.tagName === 'INPUT') {
+            // Check if selectionStart is not null before proceeding
+            const currentPos = activeElement.selectionStart;
+
+            if (currentPos !== null) {
+                if (event.key === "ArrowUp" && currentPos > 0) {
+                    activeElement.setSelectionRange(currentPos - 1, currentPos - 1);
+                } else if (event.key === "ArrowDown" && currentPos < activeElement.value.length) {
+                    activeElement.setSelectionRange(currentPos + 1, currentPos + 1);
+                }
+            }
+        }
+    }
+}
+
+
 }
 
 
