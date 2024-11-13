@@ -40,6 +40,14 @@ export class MasterGridComponent implements OnInit {
   nextCall: any = 0
   //subscription variable
   subscriptions$: Subscription[] = [];
+
+  //report Dialogue modifications
+  @Input() templateViewForReports: boolean = false;
+  dataSource: any = [];
+  dropdownDataSource: any[] = [];
+  @Output() actionViewClick = new EventEmitter<any>();
+
+  
   constructor(
     private CommonService: CommonServiceService,
     private dataService: SuntechAPIService,
@@ -57,6 +65,7 @@ export class MasterGridComponent implements OnInit {
     this.tableName = this.CommonService.getqueryParamTable()
     // this.getGridVisibleSettings();
     this.getMasterGridData()
+    this.reportTemplateViewGridDataFetch()
   }
 
   addButtonClick() {
@@ -338,5 +347,128 @@ export class MasterGridComponent implements OnInit {
       this.subscriptions$ = []; // Clear the array
     }
   }
+
+  reportTemplateViewGridDataFetch(){
+    const payload = {
+      "SPID": "0115",
+      "parameter": {
+        "FLAG": 'FETCH',
+        "CONTROLS": JSON.stringify({
+            "CONTROL_HEADER": {
+              "USERNAME": localStorage.getItem('username'),
+              "TEMPLATEID": "",
+              "TEMPLATENAME": '',
+              "FORM_NAME": this.CommonService.getModuleName(),
+              "ISDEFAULT": 1
+            },
+            "CONTROL_DETAIL": {
+              "STRBRANCHCODES": '',
+              "STRVOCTYPES": '',
+              "FROMVOCDATE": '',
+              "TOVOCDATE": '',
+              "USERBRANCH": '',
+              "USERNAME": '',
+              "SHOWDATE": '',
+              "SHOWINVOICE": ''
+            }
+         })
+      }
+    };
+    this.dataService.postDynamicAPI('ExecueteSPInterface', payload)
+    .subscribe((result: any) => {
+      this.dataSource = result.dynamicData[0]
+      
+      this.dataSource.forEach((item: any) => {
+        console.log('data Refetch for retail template grid',item)
+        let parsedData;
+        try {
+          parsedData = JSON.parse(item['CONTROL_LIST_JSON']);
+        } catch (e) {
+          return;
+        }
+ 
+        const fromVocDate = parsedData.CONTROL_DETAIL?.FROMVOCDATE || parsedData.CONTROL_DETAIL?.STRFROMDATE ||
+          parsedData.CONTROL_DETAIL?.strFmDate || parsedData.CONTROL_DETAIL?.FrVocDate || parsedData.CONTROL_DETAIL?.str_FmDate
+          || parsedData.CONTROL_DETAIL?.strAsOnDate || parsedData.CONTROL_DETAIL?.FRVOCDATE || parsedData.CONTROL_DETAIL?.STRFMDATE;
+      
+        const toVocDate = parsedData.CONTROL_DETAIL?.TOVOCDATE || parsedData.CONTROL_DETAIL?.STRTODATE ||
+          parsedData.CONTROL_DETAIL?.strToDate || parsedData.CONTROL_DETAIL?.ToVocDate || parsedData.CONTROL_DETAIL?.str_ToDate
+          || parsedData.CONTROL_DETAIL?.strAsOnDate || parsedData.CONTROL_DETAIL?.TOVOCDATE;
+      
+        item.FROMVOCDATE = this.CommonService.formatYYMMDD(fromVocDate);
+        item.TOVOCDATE = this.CommonService.formatYYMMDD(toVocDate);
+      });
+
+      result.dynamicData[1].forEach((item: any)=>{ 
+       this.dropdownDataSource.push(item.PeriodType) 
+      })
+    }); 
+  }
+  onSelectBoxValueChanged(e: any) {
+    console.log('Selected Grid value:', e.value);
+    // Add your custom logic here
+  }
+  printGridData(data: any) {
+    let gridData= JSON.parse(data.data['CONTROL_LIST_JSON'])
+    let postData = {
+      "SPID": "0114",
+      "parameter": {
+        "STRBRANCHCODES": gridData.CONTROL_DETAIL.STRBRANCHCODES,
+        "STRVOCTYPES": gridData.CONTROL_DETAIL.STRVOCTYPES,
+        "FROMVOCDATE": gridData.CONTROL_DETAIL.FROMVOCDATE,
+        "TOVOCDATE": gridData.CONTROL_DETAIL.TOVOCDATE,
+        "flag": '',
+        "USERBRANCH": localStorage.getItem('userbranch'),
+        "USERNAME": localStorage.getItem('username')
+      }
+    }
+    console.log(postData)  
+    this.CommonService.showSnackBarMsg('MSG81447');
+    this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+    .subscribe((result: any) => {
+      this.CommonService.closeSnackBarMsg()
+      console.log(result);
+      let data = result.dynamicData;
+      // var WindowPrt = window.open(' ', ' ', 'width=900px, height=800px');
+      const screenWidth = window.screen.availWidth;
+      const screenHeight = window.screen.availHeight;
+      const WindowPrt = window.open('','',
+        `width=${screenWidth},height=${screenHeight}`);
+      if (WindowPrt === null) {
+        console.error('Failed to open the print window. Possibly blocked by a popup blocker.');
+        return;
+      }
+      let printContent = data[0][0].HTMLINPUT;
+      WindowPrt.document.write(printContent);
+      WindowPrt.document.close();
+      WindowPrt.focus();  
+      WindowPrt.onload = function () {
+        if (WindowPrt && WindowPrt.document.head) {
+          let styleElement = WindowPrt.document.createElement('style');
+          styleElement.textContent = `
+                      @page {
+                          size: A5 landscape;
+                      }
+                      body {
+                          margin: 0mm;
+                      }
+                  `;
+          WindowPrt.document.head.appendChild(styleElement);
+
+          setTimeout(() => {
+            if (WindowPrt) {
+              WindowPrt.print();
+            } else {
+              console.error('Print window was closed before printing could occur.');
+            }
+          }, 800);
+        }
+      };
+    }); 
+  }
+  viewClick(event: any){
+    this.actionViewClick.emit(event)
+  }
+
 
 }

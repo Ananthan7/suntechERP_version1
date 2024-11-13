@@ -1,6 +1,6 @@
 <!-- header section -->
 <div class="card-content border-bottom d-flex justify-content-between p-2">
-    <h5 class="pos-modaltitle" id="modal-dia-metal">Retail Karat Rate Log</h5>
+    <h5 class="pos-modaltitle" id="modal-dia-metal">Scheme Register</h5>
     <button type="button" class="btn btn-close close-btn" (click)="close()">
         <i class="feather icon-x close-icon"></i>
     </button>
@@ -11,7 +11,7 @@
 [isViewMore]="false" [isViewSave]="false" [isViewCancel]="false"></modal-header>
 
 <div class="row">
-    <form [formGroup]="retailkaratRateLogForm">
+    <form [formGroup]="schemeRegisterForm">
         <div class="container-fluid pt-3">
             <div class="row mb-1">
                 <label for="inputPassword"  class="col-sm-1 col-form-label"  id="ID001"> Branch</label>
@@ -29,19 +29,15 @@
                 </div> 
             </div>
 
-         
-
             <div class="row mb-1">
-                <dx-data-grid>
-                    <dxo-search-panel [visible]="true" [highlightCaseSensitive]="true"></dxo-search-panel>
-                    <dxo-paging [enabled]="false"></dxo-paging>
-                    <dxo-editing mode="cell" [allowUpdating]="false"></dxo-editing>
-
-                    <dxi-column alignment="left" dataField="VOCTYPE" caption="Branch Code"></dxi-column>
-                    <dxi-column alignment="right" dataField="DESCRIPTION" caption="Karat Code"></dxi-column>
-                    <dxi-column alignment="right" dataField="DESCRIPTION" caption="Karat Rate"></dxi-column>
-                    <dxi-column alignment="right" dataField="DESCRIPTION" caption="Date"></dxi-column>
-                </dx-data-grid>
+                <label for="inputPassword" id="ID002" class="col-sm-1 col-form-label">Customer</label>
+                <div class="col-md-2">
+                  <mat-form-field style="width: 100%;" appearance="outline">
+                    <input type="text" matInput formControlName="customercode" id="customercode" class="text-right"/>
+                      <master-search [MasterSearchData]="customerCodeData" class="masterSearch"  #overlaycodeSearch
+                      (newRowClick)="customerCodeScpSelected($event)"></master-search>
+                    </mat-form-field>
+                </div>
             </div>
         </div>
 

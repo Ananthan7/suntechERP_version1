@@ -1,21 +1,23 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { CommonServiceService } from 'src/app/services/common-service.service';
+import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 
 @Component({
-  selector: 'app-retail-karat-rate-log',
-  templateUrl: './retail-karat-rate-log.component.html',
-  styleUrls: ['./retail-karat-rate-log.component.scss']
+  selector: 'app-scheme-register',
+  templateUrl: './scheme-register.component.html',
+  styleUrls: ['./scheme-register.component.scss']
 })
-export class RetailKaratRateLogComponent implements OnInit {
-  retailkaratRateLogForm: FormGroup = this.formBuilder.group({
+export class SchemeRegisterComponent implements OnInit {
+  schemeRegisterForm: FormGroup = this.formBuilder.group({
     branch: [''],
     fromdate: [''],
     todate: [''],
     templateName: [''],
 
-
+    customercode: ['', [Validators.required]],
+    desc: [''],
   });
 
   fetchedBranchData: any[] =[];
@@ -27,6 +29,17 @@ export class RetailKaratRateLogComponent implements OnInit {
   popupVisible: boolean = false;
   templateNameHasValue: boolean= false;
 
+  customerCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 6,
+    SEARCH_FIELD: 'ACCOUNT_HEAD',
+    SEARCH_HEADING: 'Customer Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "account_mode in ('B','R','P')",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
   
   constructor(private activeModal: NgbActiveModal, private formBuilder: FormBuilder, private commonService: CommonServiceService,
   ) { }
@@ -87,34 +100,40 @@ export class RetailKaratRateLogComponent implements OnInit {
     this.branchDivisionControlsTooltip = content +'\n'+content2 +'\n'+ content3 +'\n'+ content4
 
     this.formattedBranchDivisionData = branchDivisionData
-    this.retailkaratRateLogForm.controls.branch.setValue(this.formattedBranchDivisionData);
+    this.schemeRegisterForm.controls.branch.setValue(this.formattedBranchDivisionData);
   }
 
   popupClosed(){
     if (this.content && Object.keys(this.content).length > 0) {
       console.log(this.content)
       let ParcedPreFetchData = JSON.parse(this.content?.CONTROL_LIST_JSON)
-      this.retailkaratRateLogForm.controls.templateName.setValue(ParcedPreFetchData.CONTROL_HEADER.TEMPLATENAME)
+      this.schemeRegisterForm.controls.templateName.setValue(ParcedPreFetchData.CONTROL_HEADER.TEMPLATENAME)
       this.popupVisible = false;
     }
     else{
       this.popupVisible = false;
-      this.retailkaratRateLogForm.controls.templateName.setValue(null)
+      this.schemeRegisterForm.controls.templateName.setValue(null)
     }
   }
 
   setDateValue(event: any){
     if(event.FromDate){
-      this.retailkaratRateLogForm.controls.fromdate.setValue(event.FromDate);
+      this.schemeRegisterForm.controls.fromdate.setValue(event.FromDate);
     }
     else if(event.ToDate){
-      this.retailkaratRateLogForm.controls.todate.setValue(event.ToDate);
+      this.schemeRegisterForm.controls.todate.setValue(event.ToDate);
     }
+  }
+
+  customerCodeScpSelected(e: any) {
+    console.log(e);
+    this.schemeRegisterForm.controls.customercode.setValue(e.ACCODE);
+    this.schemeRegisterForm.controls.desc.setValue(e.ACCOUNT_HEAD);
   }
 
   saveTemplate(){
     this.popupVisible = true;
-    console.log(this.retailkaratRateLogForm.controls.templateName.value)
+    console.log(this.schemeRegisterForm.controls.templateName.value)
   }
   saveTemplate_DB(){
 
@@ -135,10 +154,10 @@ export class RetailKaratRateLogComponent implements OnInit {
     if (this.content == null || Object.keys(this.content).length === 0) {
       const userBranch = localStorage.getItem('userbranch');
       const formattedUserBranch = userBranch ? `${userBranch}#` : null;
-      this.retailkaratRateLogForm.controls.branch.setValue(formattedUserBranch);
+      this.schemeRegisterForm.controls.branch.setValue(formattedUserBranch);
       this.fetchedBranchDataParam = formattedUserBranch;
       this.fetchedBranchData= this.fetchedBranchDataParam?.split("#")
-      
+
       this.dateToPass = {
         fromDate:  this.commonService.formatYYMMDD(new Date()),
         toDate: this.commonService.formatYYMMDD(new Date()),
@@ -147,4 +166,5 @@ export class RetailKaratRateLogComponent implements OnInit {
       //  this.templateNameHasValue = !!(this.content?.TEMPLATE_NAME);
     }
   }
+
 }

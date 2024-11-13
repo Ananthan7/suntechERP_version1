@@ -6,7 +6,7 @@
     <div class="table_header">
         <div class="d-flex">
             <button class="btn btn-white" (click)="addButtonClick()">
-                <i class="fa fa-plus"></i> Add
+                <i class="fa fa-plus"></i> {{ templateViewForReports ? 'Create New Template' : 'Add' }}
             </button>
             <div class="icons_wrap">
                 <!-- <a class="pe-2">
@@ -32,7 +32,7 @@
         </div>
     </div>
     <!-- common data grid -->
-    <dx-data-grid width="100%" #gridContainer id="gridContainer"
+    <dx-data-grid width="100%" #gridContainer id="gridContainer" *ngIf="!templateViewForReports"
         [allowColumnReordering]="true"
         [dataSource]="orderedItems" [showColumnLines]="true"
         [showRowLines]="true"
@@ -64,4 +64,74 @@
             dataField="{{data}}" caption="{{data}}" >
         </dxi-column> -->
     </dx-data-grid>
+</ng-container>
+
+<ng-container>
+    <div class="row">
+        <div class="col-md-12" *ngIf="templateViewForReports">  
+            <dx-data-grid [dataSource]="dataSource" [showBorders]="true" [allowColumnResizing]="true"
+            [columnAutoWidth]="true" [filterRow]="{ visible: true }" [paging]="{ pageSize: 10 }"  >
+          
+            <dxo-filter-row></dxo-filter-row>
+            <dxo-header-filter></dxo-header-filter>
+          
+            <dxi-column dataField="MID" caption="MID"></dxi-column>
+            <dxi-column dataField="TEMPLATE_NAME" caption="Report Template Name" width="150"></dxi-column>
+          
+            <dxi-column dataField="name" caption="Date Range" cellTemplate="dropdownCellTemplate"  width="150"></dxi-column>
+            <div *dxTemplate="let data of 'dropdownCellTemplate'">
+              <dx-select-box
+                [dataSource]="dropdownDataSource"  [value]="dropdownDataSource[0]"
+                valueField="PeriodType" displayField="PeriodType"
+                (onValueChanged)="onSelectBoxValueChanged($event)" ></dx-select-box>
+            </div>
+            
+            <dxi-column dataField="FROMVOCDATE" caption="From Date" width="120" cellTemplate="FROMVOCDATECell"></dxi-column>
+            <div *dxTemplate="let cellData of 'FROMVOCDATECell'">
+              <input type="date" [value]="cellData.value" class="retailGridCellInput">
+            </div>
+    
+            <dxi-column dataField="TOVOCDATE" caption="To Date"  width="120" cellTemplate="TOVOCDATECell"></dxi-column>
+            <div *dxTemplate="let cellData of 'TOVOCDATECell'">
+              <input type="date" [value]="cellData.value" class="retailGridCellInput">
+            </div>
+    
+            <dxi-column caption="Report Type" cellTemplate="cellTemplate"  width="140"></dxi-column>
+            <div *dxTemplate="let data of 'cellTemplate'">  
+              <div class="row mt-1 mx-1" style="margin-right: 1rem !important;">
+                <div class="icon-label-container">
+                  <i class="fa fa-print" style="color: #031082;" (click)="printGridData(data)"></i>
+                </div>
+                <div class="icon-label-container">
+                  <i class="fa fa-file-excel" style="color: green;"></i>
+                </div>
+                <div class="icon-label-container">
+                  <i class="fa fa-file-pdf" style="color: orangered;"></i>
+                </div>
+                <div class="icon-label-container">
+                  <i class="fa fa-envelope" style="color: deepskyblue;"></i>
+                </div>
+                <div class="icon-label-container">   
+                  <i class="fab fa-whatsapp" style="color: #29cf26"></i>
+                </div>
+              </div>
+            </div>
+    
+            <dxi-column caption="Actions" cellTemplate="cellTemplate2" width="100"></dxi-column>
+            <div *dxTemplate="let data of 'cellTemplate2'">  
+              <div class="row mt-1 mx-1" style="margin-right: 1rem !important;">
+                <div class="icon-label-container">
+                  <i class="fa fa-eye" style="color: #5497b2;" (click)="viewClick(data)"></i>
+                </div>
+                <div class="icon-label-container">
+                  <i class="fa fa-pen" style="color: #6c8ae5;"></i>
+                </div>
+                <div class="icon-label-container">
+                  <i class="fa fa-trash" style="color: #031082;"></i>
+                </div>
+              </div>
+            </div>
+          </dx-data-grid>
+        </div>
+    </div>
 </ng-container>

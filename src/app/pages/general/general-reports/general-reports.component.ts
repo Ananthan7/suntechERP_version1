@@ -4,6 +4,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { MasterGridComponent } from 'src/app/shared/common/master-grid/master-grid.component';
 import { RetailKaratRateLogComponent } from './retail-karat-rate-log/retail-karat-rate-log.component';
+import { SchemeRegisterComponent } from './scheme-register/scheme-register.component';
 
 @Component({
   selector: 'app-general-reports',
@@ -50,11 +51,11 @@ export class GeneralReportsComponent implements OnInit {
     }
 
     openModalView(data?: any) {
-      debugger
       this.componentDbList = {
         // Add components and update in operationals > menu updation grid form component name
         'RetailKaratRateLogComponent': RetailKaratRateLogComponent,
-
+        'SchemeRegisterComponent': SchemeRegisterComponent,
+        
       }
       let contents;
       if (this.componentDbList[this.componentName]) {
@@ -80,6 +81,6 @@ export class GeneralReportsComponent implements OnInit {
       }, (reason) => {
         // Handle modal dismissal (if needed)
       });
-      modalRef.componentInstance.content = data;
+      modalRef.componentInstance.content = data || null;
     }
 }
