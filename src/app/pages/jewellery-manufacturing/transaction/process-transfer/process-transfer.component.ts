@@ -155,6 +155,7 @@ export class ProcessTransferComponent implements OnInit {
             item.LOSS_QTY = this.commonService.decimalQuantityFormat(item.LOSS_QTY, 'METAL')
             item.VOCDATE = this.commonService.nullToString(item.VOCDATE.slice(0, 10))
             item.JOB_DATE = this.commonService.nullToString(item.JOB_DATE.slice(0, 10))
+            item.APPROVED_DATE = this.commonService.nullToString(item.APPROVED_DATE.slice(0, 10))
             item.IN_DATE = this.commonService.nullToString(item.IN_DATE.slice(0, 10))
             item.OUT_DATE = this.commonService.nullToString(item.OUT_DATE.slice(0, 10))
             this.detailData.push({

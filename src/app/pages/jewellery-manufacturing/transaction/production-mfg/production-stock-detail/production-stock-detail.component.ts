@@ -255,7 +255,7 @@ export class ProductionStockDetailComponent implements OnInit {
             toatalLabour += item.LAB_RATE
             if (item.METALSTONE = 'M') {
               metalValue += item.GROSS_WT
-            }else{
+            } else {
               stoneValue += item.GROSS_WT
               settingCharge += item.LAB_RATE
             }
@@ -296,16 +296,21 @@ export class ProductionStockDetailComponent implements OnInit {
     let postData = {
       "SPID": "168",
       "parameter": {
-        strMasterSales: 'M',
-	      strBranchCode: this.commonService.branchCode
+        'strMasterSales': 'M',
+        'strBranchCode': this.commonService.branchCode,
+        'strUnq_Job_Id': this.commonService.nullToString(this.DETAILSCREEN_DATA.UNQ_JOB_ID),
+        'strProcess_Code': this.commonService.nullToString(this.DETAILSCREEN_DATA.PROCESS_CODE),
+        'strWorker_Code': this.commonService.nullToString(this.DETAILSCREEN_DATA.WORKER_CODE),
+        'strVocdate': this.commonService.formatDate(this.DETAILSCREEN_DATA.VOCDATE),
       }
     }
     this.commonService.showSnackBarMsg('MSG81447')
     let Sub: Subscription = this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
       .subscribe((result) => {
         this.commonService.closeSnackBarMsg()
+        debugger
         if (result.status == "Success" && result.dynamicData[0]) {
-        
+          this.createTagLine(result.dynamicData[0])
         } else {
           this.commonService.toastErrorByMsgId('MSG1747')
         }
@@ -314,9 +319,25 @@ export class ProductionStockDetailComponent implements OnInit {
         this.commonService.toastErrorByMsgId('MSG1531')
       })
     this.subscriptions.push(Sub)
-   
+
   }
-  generateTagline() {
+  createTagLine(result: any) {
+    if (result.length > 0 && this.componentDataList.length > 0) {
+      let tagtext = ''
+      this.componentDataList.forEach((item: any, index: number) => {
+        result.forEach((res: any) => {
+          debugger
+          if(res.FEILDNAME == 'KARAT'){
+            tagtext += item.KARAT_CODE
+          }else{
+            tagtext = item[res.FEILDNAME] + item[res.SEPARATION]
+          }
+        });
+      })
+      this.setFormNullToString('TAGLINES', tagtext)
+    }
+  }
+  generateTaglineBrilliant() {
     let postData = {
       "SPID": "116",
       "parameter": {
@@ -336,7 +357,7 @@ export class ProductionStockDetailComponent implements OnInit {
           this.componentDataList.forEach((item: any, index: number) => {
             item.SRNO = index + 1
             if (item.METALSTONE = 'M') {
-              dblMetal += item.GROSS_WT.toFixed(this.commonService.mQtyDecimals)
+              dblMetal += this.commonService.decimalQuantityFormat(item.GROSS_WT, 'METAL')
               metalColor = this.commonService.nullToString(this.DETAILSCREEN_DATA.METAL_COLOR)
               strBrilliantTagLines = this.DETAILSCREEN_DATA.KARAT_CODE + "K" + metalColor + "-" + dblMetal + " GMS";
             }
@@ -350,9 +371,8 @@ export class ProductionStockDetailComponent implements OnInit {
               size = item.SIZE.toString();
             })
             if (size != '') strBrilliantTagLines += "SIZE " + size
-            this.setFormNullToString('TAGLINES', strBrilliantTagLines)
           }
-        
+          this.setFormNullToString('TAGLINES', strBrilliantTagLines)
         } else {
           this.commonService.toastErrorByMsgId('MSG1747')
         }
@@ -361,8 +381,9 @@ export class ProductionStockDetailComponent implements OnInit {
         this.commonService.toastErrorByMsgId('MSG1531')
       })
     this.subscriptions.push(Sub)
-   
+
   }
+
   groupComponentDetails() {
     let result: any[] = []
     this.componentDataList.reduce((res: any, value: any) => {
