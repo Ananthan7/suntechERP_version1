@@ -158,6 +158,7 @@ export class AlloyMasterComponent implements OnInit {
     SEARCH_HEADING: 'Account Master',
     SEARCH_VALUE: '',
     WHERECONDITION: "BRANCH_CODE = '" + this.branchCode + "' AND AC_OnHold = 0 ",
+    // WHERE BRANCH_CODE = 'DMCC' AND AC_OnHold = 0
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -996,8 +997,8 @@ export class AlloyMasterComponent implements OnInit {
     if (!this.prefixMasterDetail) {
     }
     //console.log(this.prefixMasterDetail.PREFIX_CODE);
-    // let API = 'PrefixMaster/UpdatePrefixMaster/' + this.alloyMastereForm.value.code
-    let API = 'PrefixMaster/UpdatePrefixMaster/' + this.alloyMastereForm.value.code.toUpperCase();
+    let API = 'PrefixMaster/UpdatePrefixMaster/' + this.prefixMasterDetail.PREFIX_CODE
+    // let API = 'PrefixMaster/UpdatePrefixMaster/' + this.alloyMastereForm.value.code.toUpperCase();
     let postData = this.prefixMasterDetail
 
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
@@ -1870,6 +1871,7 @@ export class AlloyMasterComponent implements OnInit {
     let API = 'DesignMaster/CheckIfDesignCodePresent/' + event.target.value
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result) => {
+        debugger
         if (result.checkifExists) {
           Swal.fire({
             title: '',
@@ -1882,6 +1884,8 @@ export class AlloyMasterComponent implements OnInit {
             }
           });
           this.alloyMastereForm.controls.code.setValue('')
+        }else{
+          this.prefixCodeValidate()
         }
       }, err => {
         this.alloyMastereForm.controls.code.setValue('')
