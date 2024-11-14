@@ -249,45 +249,8 @@
                     <div class="row mt-3">
                         <div class="col-md-4">
                             <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true " [viewImportBtn]="true"
-                                (addClick)="addTableData()" (deleteClick)="deleteTableData()">
+                                (addClick)="openNewJewelleryPurchaseDetails()" (deleteClick)="deleteTableData()">
                             </menu-buttons>
-                        </div>
-                        <div class="col-md-4">
-                            <mat-checkbox class="example-margin">Metal Value as Per Master Rate</mat-checkbox>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="row">
-                                <label for="inputPassword" class="col-sm-2 col-form-label">Total </label>
-                                <div class="col-sm-2">
-                                    <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="CountryCode" UpperCaseDirective />
-                                    </mat-form-field>
-                                </div>
-                                <div class="col-sm-2">
-                                    <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" #codeInput matInput formControlName="code" UpperCaseDirective
-                                            autocomplete="off" />
-                                    </mat-form-field>
-                                </div>
-                                <div class="col-sm-2">
-                                    <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" #codeInput matInput formControlName="code" UpperCaseDirective
-                                            autocomplete="off" />
-                                    </mat-form-field>
-                                </div>
-                                <div class="col-sm-2">
-                                    <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" #codeInput matInput formControlName="code" UpperCaseDirective
-                                            autocomplete="off" />
-                                    </mat-form-field>
-                                </div>
-                                <div class="col-sm-2">
-                                    <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" #codeInput matInput formControlName="code" UpperCaseDirective
-                                            autocomplete="off" />
-                                    </mat-form-field>
-                                </div>
-                            </div>
                         </div>
                         <div class="col-md-12">
 
@@ -316,8 +279,46 @@
                     </div>
                 </mat-tab>
                 <mat-tab label="Other Amount">
+                    <div class="row mt-3">
+                        <div class="col-md-4">
+                            <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true " [viewImportBtn]="false"
+                                (addClick)="AddNewOtherAmountTableData()" (deleteClick)="deleteTableData()">
+                            </menu-buttons>
+                        </div>
+                        <div class="col-md-12">
+                            <dx-data-grid id="gridContainer" [dataSource]="tableData" [showBorders]="true"
+                                [showColumnLines]="true" [showRowLines]="true" [allowColumnResizing]="true" class="mt-3"
+                                keyExpr="SRNO">
+                                <dxo-selection mode="single"></dxo-selection>
+                                <dxi-column dataField="SRNO" caption="SR No" class="tab"> </dxi-column>
+                                <dxi-column dataField="DIVISION_CODE" caption="Add"></dxi-column>
+                                <dxi-column dataField="DIVISION_CODE" caption="Description"></dxi-column>
+                                <dxi-column dataField="DIVISION_CODE" caption="Debit A/c"></dxi-column>
+                                <dxi-column dataField="DIVISION_CODE" caption="Credit A/c"></dxi-column>
+                                <dxi-column dataField="DIVISION_CODE" caption="Percentage"></dxi-column>
+                                <dxi-column dataField="DIVISION_CODE" caption="Amount"></dxi-column>
+                                <dxi-column dataField="DIVISION_CODE" caption="Narrtaion"></dxi-column>
+                            </dx-data-grid>
+                        </div>
+                    </div>
                 </mat-tab>
                 <mat-tab label="Consignment Detail">
+                    <div class="row mt-3">
+                        <div class="col-md-12">
+                            <dx-data-grid id="gridContainer" [dataSource]="tableData" [showBorders]="true"
+                                [showColumnLines]="true" [showRowLines]="true" [allowColumnResizing]="true" class="mt-3"
+                                keyExpr="SRNO">
+                                <dxo-selection mode="single"></dxo-selection>
+                                <dxi-column dataField="DIVISION_CODE" caption="No"></dxi-column>
+                                <dxi-column dataField="DIVISION_CODE" caption="Stock Code"></dxi-column>
+                                <dxi-column dataField="DIVISION_CODE" caption="Description"></dxi-column>
+                                <dxi-column dataField="DIVISION_CODE" caption="Quantity"></dxi-column>
+                                <dxi-column dataField="DIVISION_CODE" caption="Rate"></dxi-column>
+                                <dxi-column dataField="DIVISION_CODE" caption="Amount"></dxi-column>
+                                <dxi-column dataField="DIVISION_CODE" caption="AmountFC"></dxi-column>
+                            </dx-data-grid>
+                        </div>
+                    </div>
                 </mat-tab>
             </mat-tab-group>
             <div class="row mt-3">

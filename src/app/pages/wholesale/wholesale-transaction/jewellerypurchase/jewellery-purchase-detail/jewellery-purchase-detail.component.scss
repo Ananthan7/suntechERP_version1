@@ -1,0 +1,43 @@
+.boxed-label {
+    padding: 5px;
+    background-color: #f1f1f1;
+    background: #d9e3ec;
+    color: #fff !important;
+    border: 1px solid #3864b4;
+    text-align: center;
+    width: 100%;
+}
+
+.boxed-label h6 {
+    color: #000 !important;
+    margin-bottom: 0;
+}
+
+.your-box-container {
+    border: 1px solid #3864b4;
+    padding: 10px;
+}
+
+.img_box {
+    width: 100%;
+    height: 165px;
+    border: 1px solid #ddd;
+}
+
+fieldset {
+    padding: 10px;
+    border: solid 1px #949494;
+    position: relative;
+    margin-top: 25px;
+
+    legend {
+        color: #333334;
+        position: absolute;
+        top: -8px;
+        background: #fff;
+        width: 85px;
+        text-align: center;
+        font-size: 12px;
+        font-weight: 600;
+    }
+}
