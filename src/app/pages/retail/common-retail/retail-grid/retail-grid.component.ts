@@ -45,7 +45,8 @@ export class RetailGridComponent implements OnInit {
   printPreviewFlag: boolean = false;
   screenName: any;
   PermissionArray: any[] = [];
-  
+  templateFetched_Data: any;
+
   constructor(
     private CommonService: CommonServiceService,
     private dataService: SuntechAPIService,
@@ -366,7 +367,8 @@ export class RetailGridComponent implements OnInit {
       this.dataSource = result.dynamicData[0]
       
       this.dataSource.forEach((item: any) => {
-        // console.log('data Refetch for retail template grid',item)
+        console.log('data Refetch for retail template grid',item)
+        this.templateFetched_Data = item;
         let parsedData;
         try {
           parsedData = JSON.parse(item['CONTROL_LIST_JSON']);
@@ -396,23 +398,61 @@ export class RetailGridComponent implements OnInit {
     // Add your custom logic here
   }
 
-  printGridData(data: any) {
-    let gridData= JSON.parse(data.data['CONTROL_LIST_JSON'])
-    let postData = {
-      "SPID": "0114",
-      "parameter": {
-        "STRBRANCHCODES": gridData.CONTROL_DETAIL.STRBRANCHCODES,
-        "STRVOCTYPES": gridData.CONTROL_DETAIL.STRVOCTYPES,
-        "FROMVOCDATE": gridData.CONTROL_DETAIL.FROMVOCDATE,
-        "TOVOCDATE": gridData.CONTROL_DETAIL.TOVOCDATE,
-        "flag": '',
-        "USERBRANCH": localStorage.getItem('userbranch'),
-        "USERNAME": localStorage.getItem('username')
-      }
+  screenWisePayload(screenName: any, gridData: any){
+    let payloadData;
+
+    switch (screenName) {
+        case 'POS Salesman Wise Profit Analysis':
+          let logData =  {
+            "VOCTYPE": this.CommonService.getqueryParamVocType() || "",
+            "REFMID": "",
+            "USERNAME": this.CommonService.userName,
+            "MODE": "PRINT",
+            "DATETIME": this.CommonService.formatDateTime(new Date()),
+            "REMARKS":"",
+            "SYSTEMNAME": "",
+            "BRANCHCODE": this.CommonService.branchCode,
+            "VOCNO": "",
+            "VOCDATE": "",
+            "YEARMONTH" : this.CommonService.yearSelected
+          }
+          payloadData = {
+            "SPID": "181",
+            "parameter": {
+              "STRFMDATE": gridData.CONTROL_DETAIL.STRFMDATE,
+              "STRTODATE": gridData.CONTROL_DETAIL.STRTODATE,
+              "INTVALUE": gridData.CONTROL_DETAIL.INTVALUE,
+              "STRBRANCHES": gridData.CONTROL_DETAIL.STRBRANCHES,
+              "LOGDATA": JSON.stringify(logData)
+            }  
+          };
+        break;
+
+        case 'Pos Collections' :
+          payloadData = {
+            "SPID": "0114",
+            "parameter": {
+              "STRBRANCHCODES": gridData.CONTROL_DETAIL.STRBRANCHCODES,
+              "STRVOCTYPES": gridData.CONTROL_DETAIL.STRVOCTYPES,
+              "FROMVOCDATE": gridData.CONTROL_DETAIL.FROMVOCDATE,
+              "TOVOCDATE": gridData.CONTROL_DETAIL.TOVOCDATE,
+              "flag": '',
+              "USERBRANCH": localStorage.getItem('userbranch'),
+              "USERNAME": localStorage.getItem('username') 
+            } 
+          };
+        break;
+        
+      case ' ' :
+      break;
     }
-    console.log(postData)  
+    return payloadData
+  }
+  printGridData(data: any) {  //181
+    let gridData= JSON.parse(data.data['CONTROL_LIST_JSON'])
+    
     this.CommonService.showSnackBarMsg('MSG81447');
-    this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+    this.dataService.postDynamicAPI('ExecueteSPInterface', this.screenWisePayload(this.templateFetched_Data.FORM_NAME, gridData))
     .subscribe((result: any) => {
       this.CommonService.closeSnackBarMsg()
       console.log(result);
@@ -426,7 +466,7 @@ export class RetailGridComponent implements OnInit {
         console.error('Failed to open the print window. Possibly blocked by a popup blocker.');
         return;
       }
-      let printContent = data[0][0].HTMLINPUT;
+      let printContent = data[0][0].HTMLINPUT || data[0][0].HTMLOUT;
       WindowPrt.document.write(printContent);
       WindowPrt.document.close();
       WindowPrt.focus();  
