@@ -85,31 +85,33 @@ export class MetalReturnDetailsComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  // stockCodeData: MasterSearchModel = {
-  //   PAGENO: 1,
-  //   RECORDS: 10,
-  //   LOOKUPID: 201,
-  //   SEARCH_FIELD: 'STOCK_CODE',
-  //   SEARCH_HEADING: 'Stock Code',
-  //   SEARCH_VALUE: '',
-  //   WHERECONDITION: "STOCK_CODE<> ''",
-  //   VIEW_INPUT: true,
-  //   VIEW_TABLE: true,
-
-  // }
   stockCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 257,
     SEARCH_FIELD: 'STOCK_CODE',
-    SEARCH_HEADING: 'Stock Search',
+    SEARCH_HEADING: 'Stock Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: `@strUserName='',@strJob_Number='',@strUnq_Job_Id='',@strMetalStone='M',@strStock_Code=''${this.comService.branchCode}'`,
+    WHERECONDITION: "STOCK_CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
     FRONTENDFILTER: true
+
   }
+  // stockCodeData: MasterSearchModel = {
+  //   PAGENO: 1,
+  //   RECORDS: 10,
+  //   LOOKUPID: 257,
+  //   SEARCH_FIELD: 'STOCK_CODE',
+  //   SEARCH_HEADING: 'Stock Search',
+  //   SEARCH_VALUE: '',
+  //   WHERECONDITION: `@strUserName='',@strJob_Number='',@strUnq_Job_Id='',@strMetalStone='',@strStock_Code='',@strBranch_Code='${this.comService.branchCode}'`,
+  //   VIEW_INPUT: true,
+  //   VIEW_TABLE: true,
+  //   LOAD_ONCLICK: true,
+  //   FRONTENDFILTER: true
+  // }
 
   subJobNoCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -307,29 +309,29 @@ export class MetalReturnDetailsComponent implements OnInit {
 
   }
 
-  // setLookupStockCodeWhereCondition() {
-  //   let form = this.metalReturnDetailsForm.value;
-
-  //   // Construct the WHERE condition without '@' symbols
-  //   let where = `@strBranch_Code='${form.BRANCH_CODE}', `;
-  //   where += `@strJob_Number='${form.jobNumber}',`;
-  //   where += `@strUnq_Job_Id='${form.subJobNo}',`;
-  //   where += `@strMetalStone='${form.METAL_STONE}', `;
-  //   where += `@strStock_Code='${form.stockCode}', `;
-  //   where += `@strUserName='${this.comService.userName}'`;
-
-  //   // Assign to the stock code data
-  //   this.stockCodeData.WHERECONDITION = where;
-  // }
   setLookupStockCodeWhereCondition() {
     let form = this.metalReturnDetailsForm.value;
-    this.stockCodeData.WHERECONDITION = `@strBranch_Code='${this.comService.nullToString(form.BRANCH_CODE)}',`
-    this.stockCodeData.WHERECONDITION += `@strJob_Number='${this.comService.nullToString(form.jobNumber)}',`
-    this.stockCodeData.WHERECONDITION += `@strUnq_Job_Id='${this.comService.nullToString(form.subJobNo)}',`
-    this.stockCodeData.WHERECONDITION += `@strMetalStone='${this.comService.nullToString(form.METAL_STONE)}',`
-    this.stockCodeData.WHERECONDITION += `@strStock_Code='${this.comService.nullToString(form.stockCode)}'`
-    this.stockCodeData.WHERECONDITION += `@strUserName='${this.comService.nullToString(this.comService.userName)}'`
+
+    // Construct the WHERE condition without '@' symbols
+    let where = `@strBranch_Code='${form.BRANCH_CODE}', `;
+    where += `@strJob_Number='${form.jobNumber}',`;
+    where += `@strUnq_Job_Id='${form.subJobNo}',`;
+    where += `@strMetalStone='${form.METAL_STONE}', `;
+    where += `@strStock_Code='${form.stockCode}', `;
+    where += `@strUserName='${this.comService.userName}'`;
+
+    // Assign to the stock code data
+    this.stockCodeData.WHERECONDITION = where;
   }
+  // setLookupStockCodeWhereCondition() {
+  //   let form = this.metalReturnDetailsForm.value;
+  //   this.stockCodeData.WHERECONDITION = `@strBranch_Code='${this.comService.nullToString(form.BRANCH_CODE)}',`
+  //   this.stockCodeData.WHERECONDITION += `@strJob_Number='${this.comService.nullToString(form.jobNumber)}',`
+  //   this.stockCodeData.WHERECONDITION += `@strUnq_Job_Id='${this.comService.nullToString(form.subJobNo)}',`
+  //   this.stockCodeData.WHERECONDITION += `@strMetalStone='${this.comService.nullToString(form.METAL_STONE)}',`
+  //   this.stockCodeData.WHERECONDITION += `@strStock_Code='${this.comService.nullToString(form.stockCode)}'`
+  //   this.stockCodeData.WHERECONDITION += `@strUserName='${this.comService.nullToString(this.comService.userName)}'`
+  // }
 
   stoneValidate() {
     if (this.calculateNetWt()) {
@@ -395,10 +397,11 @@ export class MetalReturnDetailsComponent implements OnInit {
     this.jobNumberValidate({ target: { value: e.job_number } })
   }
   ProcessCodeSelected(e: any) {
+    console.log(e,'process')
     this.metalReturnDetailsForm.controls.processCode.setValue(e.PROCESS);
     this.metalReturnDetailsForm.controls.processCodeDesc.setValue(e.PROCESSDESC);
-    this.setLookup201WhereCondition()
-    // this.setLookupProcessCodeWhereCondition();
+    // this.setLookup201WhereCondition()
+    this.setLookupStockCodeWhereCondition()
     // this.ProcessCodeData.WHERECONDITION = `@strBranch_Code='${this.comService.userName}'',@strJob_Number='${this.jobNumberData}'`
   }
 
@@ -406,13 +409,13 @@ export class MetalReturnDetailsComponent implements OnInit {
     this.metalReturnDetailsForm.controls.stockCode.setValue(e.STOCK_CODE);
     this.metalReturnDetailsForm.controls.stockCodeDesc.setValue(e.STOCKDESC);
     this.setLookup201WhereCondition()
-    // this.setLookupStockCodeWhereCondition();
+    this.setLookupStockCodeWhereCondition();
   }
   ReturnTostockCodeSelected(e: any) {
     this.metalReturnDetailsForm.controls.ReturnToStockCode.setValue(e.STOCK_CODE);
     this.metalReturnDetailsForm.controls.ReturnToStockCodeDesc.setValue(e.STOCKDESC);
     this.setLookup201WhereCondition()
-    this.setLookupStockCodeWhereCondition();
+    // this.setLookupStockCodeWhereCondition();
   }
 
   subJobNoCodeSelected(e: any) {
@@ -715,12 +718,12 @@ export class MetalReturnDetailsComponent implements OnInit {
       SPID: "103",
       parameter: {
         strBranch_Code: this.comService.nullToString(form.BRANCH_CODE),
-        strJob_Number: form.jobNumber,
-        strUnq_Job_Id: form.subJobNo,
+        strJob_Number: this.comService.nullToString(form.jobNumber),
+        strUnq_Job_Id: this.comService.nullToString(form.subJobNo),
         strMetalStone: 'M',
-        strProcess_Code: form.processCode,
-        strWorker_Code: form.workerCode,
-        strStock_Code: form.stockCode,
+        strProcess_Code: this.comService.nullToString(form.processCode),
+        strWorker_Code: this.comService.nullToString(form.workerCode),
+        strStock_Code: this.comService.nullToString(form.stockCode),
         strUserName: this.comService.nullToString(form.userName),
       }
     };
@@ -751,9 +754,8 @@ export class MetalReturnDetailsComponent implements OnInit {
   }
 
   processCodeValidate(event?: any) {
-    this.showOverleyPanel(event, 'processCode'); // Show overlay panel initially
+    this.showOverleyPanel(event, 'processCode'); 
     const form = this.metalReturnDetailsForm.value;
-
     // Set up any necessary conditions
     this.setLookup201WhereCondition();
 
@@ -761,12 +763,12 @@ export class MetalReturnDetailsComponent implements OnInit {
       SPID: "103",
       parameter: {
         strBranch_Code: this.comService.nullToString(form.BRANCH_CODE),
-        strJob_Number: form.jobNumber,
-        strUnq_Job_Id: form.subJobNo,
+        strJob_Number: this.comService.nullToString(form.jobNumber),
+        strUnq_Job_Id: this.comService.nullToString(form.subJobNo),
         strMetalStone: 'M',
-        strProcess_Code: form.processCode,
-        strWorker_Code: form.workerCode,
-        strStock_Code: form.stockCode,
+        strProcess_Code: this.comService.nullToString(form.processCode),
+        strWorker_Code: this.comService.nullToString(form.workerCode),
+        strStock_Code: this.comService.nullToString(form.stockCode),
         strUserName: this.comService.nullToString(form.userName),
       }
     };
@@ -779,13 +781,10 @@ export class MetalReturnDetailsComponent implements OnInit {
 
         if (result.dynamicData && result.dynamicData[0].length > 0) {
           // Set description based on valid data
-          const validData = result.dynamicData[0][0]; // Assuming the first item contains the relevant data
-          this.metalReturnDetailsForm.controls.processCodeDesc.setValue(validData.PROCESSDESC.toUpperCase());
-
-          // Close overlay panel
-
+          const data = result.dynamicData[0][0];
+          console.log(data,'data') // Assuming the first item contains the relevant data
+          this.metalReturnDetailsForm.controls.processCodeDesc.setValue(data.PROCESSDESC.toUpperCase());
         } else {
-          // If invalid, clear the input field and re-display the overlay
           this.overlayprocessCodeSearch.closeOverlayPanel();
           this.metalReturnDetailsForm.controls.processCode.setValue('');
           this.metalReturnDetailsForm.controls.processCodeDesc.setValue('');
@@ -876,8 +875,9 @@ export class MetalReturnDetailsComponent implements OnInit {
           this.setValueWithDecimal('STONE_WT', data[0].STONE, 'STONE')
           this.setValueWithDecimal('NET_WT', data[0].METAL - data[0].STONE, 'THREE')
           this.setLookup201WhereCondition()
-          // this.processCodeValidate()
           this.setLookupStockCodeWhereCondition();
+          // this.processCodeValidate()
+         
         } else {
           // Handle case where no data is found
           this.comService.toastErrorByMsgId('MSG1531');
@@ -935,9 +935,10 @@ export class MetalReturnDetailsComponent implements OnInit {
             this.metalReturnDetailsForm.controls.KARAT_CODE.setValue(data[0].KARAT_CODE)
             this.metalReturnDetailsForm.controls.designCode.setValue(data[0].DESIGN_CODE)
             this.setSubJobCondition()
-            this.subJobNumberValidate()
             this.setLookup201WhereCondition()
             this.setLookupStockCodeWhereCondition()
+            this.subJobNumberValidate()
+       
           } else {
             this.comService.toastErrorByMsgId('MSG1531')
             this.metalReturnDetailsForm.controls.jobNumber.setValue('')
