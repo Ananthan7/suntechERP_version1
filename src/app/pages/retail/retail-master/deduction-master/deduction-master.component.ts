@@ -1,11 +1,13 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { MatCheckboxChange } from "@angular/material/checkbox";
+import { MatDialog } from "@angular/material/dialog";
 import { NgbActiveModal, NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { ToastrService } from "ngx-toastr";
 import { Subscription } from "rxjs";
 import { CommonServiceService } from "src/app/services/common-service.service";
 import { SuntechAPIService } from "src/app/services/suntech-api.service";
+import { DialogboxComponent } from "src/app/shared/common/dialogbox/dialogbox.component";
 import { MasterSearchModel } from "src/app/shared/data/master-find-model";
 import Swal from "sweetalert2";
 
@@ -21,6 +23,7 @@ export class DeductionMasterComponent implements OnInit {
 
   flag: any;
   code: any;
+  dialogBox: any;
   selectedTabIndex = 0;
   tableData: any = [];
   BranchData: MasterSearchModel = {};
@@ -55,6 +58,21 @@ export class DeductionMasterComponent implements OnInit {
     SEARCH_HEADING: "User Defined",
     SEARCH_VALUE: "",
     WHERECONDITION: "TYPES = 'HRM UDF Field2'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  };
+
+  glCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 7,
+    ORDER_TYPE: 0,
+    SEARCH_FIELD: "ACCODE",
+    SEARCH_HEADING: "GL Code",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "ACCODE <>''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -99,6 +117,7 @@ export class DeductionMasterComponent implements OnInit {
     private formBuilder: FormBuilder,
     private apiService: SuntechAPIService,
     private toastr: ToastrService,
+    public dialog: MatDialog,
     private commonService: CommonServiceService
   ) {}
 
@@ -477,5 +496,30 @@ export class DeductionMasterComponent implements OnInit {
     FORMNAMES.forEach((formName) => {
       this.deductionMasterForm.controls[formName].setValue("");
     });
+  }
+
+  openDialog(title: any, msg: any, okBtn: any, swapColor: any = false) {
+    this.dialogBox = this.dialog.open(DialogboxComponent, {
+      width: "40%",
+      disableClose: true,
+      data: { title, msg, okBtn, swapColor },
+    });
+  }
+
+  onInput(event: any, controller?: any, checkExistCode?: any) {
+    const input = event.target.value;
+
+    if (checkExistCode === true) {
+      let API = `DeductionMaster/CheckIfDeductionCodePresent/${input}`;
+      let sub: Subscription = this.apiService
+        .getDynamicAPI(API)
+        .subscribe((res) => {
+          if (res.checkifExists === true) {
+            let message = `Code Already Exist ! `;
+            this.deductionMasterForm.controls[controller].setValue("");
+            return this.openDialog("Warning", message, true);
+          }
+        });
+    }
   }
 }

@@ -31,6 +31,7 @@
                 <div class="col-sm-3">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      (change)="onInput($event, 'code', true)"
                       [readonly]="flag == 'VIEW'"
                       type="text"
                       #codeInput
@@ -87,10 +88,10 @@
                       (focusout)="
                         SPvalidateLookupFieldModified(
                           $event,
-                          countryCodeData,
+                          glCodeData,
                           ['glCode', 'glCodeDesc'],
                           false,
-                          ['CODE', 'DESCRIPTION'],
+                          ['ACCODE', 'ACCOUNT_HEAD'],
                           false
                         )
                       "
@@ -102,12 +103,12 @@
                     <master-search
                       *ngIf="flag != 'VIEW'"
                       class="masterSearch"
-                      [MasterSearchData]="countryCodeData"
+                      [MasterSearchData]="glCodeData"
                       (newRowClick)="
                         lookupSelect(
                           $event,
                           ['glCode', 'glCodeDesc'],
-                          ['CODE', 'DESCRIPTION']
+                          ['ACCODE', 'ACCOUNT_HEAD']
                         )
                       "
                     >
