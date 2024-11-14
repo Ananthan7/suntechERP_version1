@@ -33,7 +33,8 @@ export class SalesmanWiseProfitAnalysisComponent implements OnInit {
   popupVisible: boolean = false;
   templateNameHasValue: boolean= false;
   htmlPreview: any;
-  
+  isLoading: boolean =true;
+
   constructor(private activeModal: NgbActiveModal, private formBuilder: FormBuilder,
     private commonService: CommonServiceService,   private dataService: SuntechAPIService,
     private toastr: ToastrService,   private sanitizer: DomSanitizer) { }
@@ -299,7 +300,20 @@ export class SalesmanWiseProfitAnalysisComponent implements OnInit {
 
   prefillScreenValues(){
     if ( Object.keys(this.content).length > 0) {
-       this.templateNameHasValue = !!(this.content?.TEMPLATE_NAME);
+      this.isLoading = false;
+      let ParcedPreFetchData = JSON.parse(this.content?.CONTROL_LIST_JSON) //data from retailREPORT Component- modalRef instance
+
+      this.templateNameHasValue = !!ParcedPreFetchData.CONTROL_HEADER.TEMPLATENAME;
+      this.salesmanWiseProfitAnalysisForm.controls.templateName.setValue(ParcedPreFetchData?.CONTROL_HEADER.TEMPLATENAME)
+
+      console.log('data fetched from main grid',ParcedPreFetchData )
+      this.salesmanWiseProfitAnalysisForm.controls.branch.setValue(ParcedPreFetchData?.CONTROL_DETAIL.STRBRANCHES)
+      this.fetchedBranchData= ParcedPreFetchData?.CONTROL_DETAIL.STRBRANCHES
+
+      this.dateToPass = {
+        fromDate:  ParcedPreFetchData?.CONTROL_DETAIL.STRFMDATE,
+        toDate: ParcedPreFetchData?.CONTROL_DETAIL.STRTODATE
+      };
     }
     else{
       const userBranch = localStorage.getItem('userbranch');

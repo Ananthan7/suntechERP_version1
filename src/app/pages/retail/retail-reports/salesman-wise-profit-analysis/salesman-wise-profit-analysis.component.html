@@ -7,7 +7,7 @@
 </div>
 
 <!-- modal header component -->
-<modal-header (cancelClick)="close()" [isViewDelete]="false" 
+<modal-header (cancelClick)="close()" [isViewDelete]="false" [isloading]="isLoading"
 [isViewMore]="false" [isViewSave]="false" [isViewCancel]="false"></modal-header>
 
 <div class="row">
@@ -31,8 +31,9 @@
       
             <div class="row mb-1">
                 <h6 class="header_title" id="ID002">Diamond Section (Total Amount), Metal Section - Making charge</h6>
+                <app-loader [isLoading]="isLoading" class="loader-overlay" ></app-loader>
                 <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true" [height]="'auto'"
-                [columnAutoWidth]="true" [dataSource]="salesmanWiseProfitArr">
+                [columnAutoWidth]="true" [dataSource]="salesmanWiseProfitArr" *ngIf="!isLoading">
                     <dxo-paging [enabled]="false"></dxo-paging>
                     <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
                     <!-- <dxo-selection mode="multiple"></dxo-selection> -->
