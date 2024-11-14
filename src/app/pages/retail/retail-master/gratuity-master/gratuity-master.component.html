@@ -348,6 +348,7 @@
                       UpperCaseDirective
                     />
                     <master-search
+                    *ngIf="flag != 'VIEW'"
                       class="masterSearch"
                       [MasterSearchData]="userDefinedData"
                       (newRowClick)="
