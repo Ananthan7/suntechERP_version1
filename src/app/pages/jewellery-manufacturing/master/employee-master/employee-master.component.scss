@@ -3,3 +3,13 @@
     height: 165px;
     border: 1px solid #ddd;
 }
+
+::ng-deep {
+    .mat-tab-body-content {
+      overflow: hidden !important;
+    }
+    .cdk-overlay-container {
+      position: fixed;
+      z-index: 1070 !important;
+    }
+  }

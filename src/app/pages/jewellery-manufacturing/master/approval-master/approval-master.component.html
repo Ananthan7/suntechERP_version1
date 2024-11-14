@@ -68,7 +68,8 @@
                             <div class="col">
                                 <dx-data-grid id="gridContainer" [dataSource]="tableData" [showBorders]="true"
                                     [showColumnLines]="true" [showRowLines]="true" [allowColumnResizing]="true"
-                                    keyExpr="SRNO" (onSelectionChanged)="onSelectionChanged($event)">
+                                    keyExpr="SRNO" (onSelectionChanged)="onSelectionChanged($event)"
+                                    (onKeyDown)="handleArrowKeyNavigation($event)">
                                     <!-- <dxo-editing [allowUpdating]="true"></dxo-editing> -->
                                     <!-- <dxo-selection [selectAllMode]="allMode"
                                             [showCheckBoxesMode]="checkBoxesMode"
@@ -154,11 +155,16 @@
 
                                     </div> -->
                                     <div *dxTemplate="let data of 'mobilenumber'">
-                                        <input type="number" (change)="mobilenumber($event, data)"
-                                            style="text-align: left; width: 100%;" [value]="data.value"
-                                            [disabled]="data.value == '' || viewMode" [readonly]="viewMode"
-                                            (keypress)="isNumeric($event)" maxlength="10"
-                                            (input)="enforceMaxLength($event)" />
+                                        <input type="number"
+                                        (change)="mobilenumber($event, data)"
+                                        style="text-align: left; width: 100%;"
+                                        [value]="data.value"
+                                        [disabled]="data.value == '' || viewMode"
+                                        [readonly]="viewMode"
+                                        (keypress)="isNumeric($event)"
+                                        maxlength="10"
+                                        (keydown)="handleKeydown($event, data)"
+                                        (input)="enforceMaxLength($event)" />
                                         <!-- Additional handler to enforce max length -->
                                     </div>
 
