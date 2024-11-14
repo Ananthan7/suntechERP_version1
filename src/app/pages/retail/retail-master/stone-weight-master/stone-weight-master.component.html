@@ -18,7 +18,7 @@
                     <label for="inputPassword" class="col-sm-4 col-form-label">SieveSet</label>
                     <div class="col-md-8">
                         <mat-form-field style="width: 90%;" appearance="outline">
-                            <input type="text" id="inputPassword" matInput formControlName="sieveset" />
+                            <input type="text" id="inputPassword" matInput formControlName="sieveset" [readonly]="viewOnly"/>
                             <master-search [MasterSearchData]="sieveSetcodeData" class="masterSearch"
                             (newRowClick)="sieveSetcodeSelected($event)"></master-search>
                         </mat-form-field>
@@ -33,7 +33,7 @@
                     <label for="inputPassword" class="col-sm-4 col-form-label">Division</label>
                     <div class="col-md-8">
                         <mat-form-field style="width: 90%;" appearance="outline">
-                            <input type="text" id="inputPassword" matInput formControlName="division" />
+                            <input type="text" id="inputPassword" matInput formControlName="division"  [readonly]="viewOnly" />
                             <master-search [MasterSearchData]="divisionCodeData" class="masterSearch"
                             (newRowClick)="divisionCodeSelected($event)"></master-search>
                         </mat-form-field>
@@ -44,7 +44,7 @@
                     <label for="inputPassword" class="col-sm-4 col-form-label">Sieve From</label>
                     <div class="col-md-8">
                         <mat-form-field style="width: 90%;" appearance="outline">
-                            <input type="text" id="inputPassword" matInput formControlName="sievefrom" />
+                            <input type="text" id="inputPassword" matInput formControlName="sievefrom"  [readonly]="viewOnly"/>
                             <master-search [MasterSearchData]="sieveFromCodeData" class="masterSearch"
                             (newRowClick)="sievecodeselected($event)"></master-search>
                         </mat-form-field>
@@ -55,7 +55,7 @@
                     <label for="inputPassword" class="col-sm-4 col-form-label">Sieve From Desc</label>
                     <div class="col-md-8">
                         <mat-form-field style="width: 90%;" appearance="outline">
-                            <input type="text" id="inputPassword" matInput formControlName="sievefromdesc" />
+                            <input type="text" id="inputPassword" matInput formControlName="sievefromdesc"  [readonly]="viewOnly"/>
                           
                         </mat-form-field>
                     </div>
@@ -65,7 +65,7 @@
                     <label for="inputPassword" class="col-sm-4 col-form-label">Size From</label>
                     <div class="col-md-8">
                         <mat-form-field style="width: 90%;" appearance="outline">
-                            <input type="text" id="inputPassword" matInput formControlName="sizefrom" />
+                            <input type="text" id="inputPassword" matInput formControlName="sizefrom"  [readonly]="viewOnly" />
                             <master-search [MasterSearchData]="sizeFromCodeData" class="masterSearch"
                             (newRowClick)="sizefromselected($event)"></master-search>
                         </mat-form-field>
@@ -76,7 +76,7 @@
                     <label for="inputPassword" class="col-sm-4 col-form-label">Pcs/Carat</label>
                     <div class="col-md-8">
                         <mat-form-field style="width: 90%;" appearance="outline">
-                            <input type="text" id="inputPassword" matInput formControlName="pcs" />
+                            <input type="text" id="inputPassword" matInput formControlName="pcs"  [readonly]="viewOnly" />
                            
                         </mat-form-field>
                     </div>
@@ -86,7 +86,7 @@
                     <label for="inputPassword" class="col-sm-4 col-form-label">Pointer Wt</label>
                     <div class="col-md-8">
                         <mat-form-field style="width: 90%;" appearance="outline">
-                            <input type="text" id="inputPassword" matInput formControlName="pointerwt" style="text-align:right" FourDecimalInput />
+                            <input type="text" id="inputPassword" matInput formControlName="pointerwt" style="text-align:right" FourDecimalInput   [readonly]="viewOnly"/>
                            
                         </mat-form-field>
                     </div>
@@ -104,7 +104,7 @@
                     <label for="inputPassword" class="col-sm-4 col-form-label">Shape</label>
                     <div class="col-md-8">
                         <mat-form-field style="width: 90%;" appearance="outline">
-                            <input type="text" id="inputPassword" matInput formControlName="shape" />
+                            <input type="text" id="inputPassword" matInput formControlName="shape"  [readonly]="viewOnly" />
                             <master-search [MasterSearchData]="ShapecodeData" class="masterSearch"
                             (newRowClick)="ShapecodeSelected($event)"></master-search>
                         </mat-form-field>
@@ -115,7 +115,7 @@
                     <label for="inputPassword" class="col-sm-4 col-form-label">Sieve To</label>
                     <div class="col-md-8">
                         <mat-form-field style="width: 90%;" appearance="outline">
-                            <input type="text" id="inputPassword" matInput formControlName="sieveto" />
+                            <input type="text" id="inputPassword" matInput formControlName="sieveto"  [readonly]="viewOnly"/>
                             <master-search [MasterSearchData]="sieveToCodeData" class="masterSearch"
                             (newRowClick)="sievetoselected($event)"></master-search>
                         </mat-form-field>
@@ -126,7 +126,7 @@
                     <label for="inputPassword" class="col-sm-4 col-form-label">Sieve To Desc</label>
                     <div class="col-md-8">
                         <mat-form-field style="width: 90%;" appearance="outline">
-                            <input type="text" id="inputPassword" matInput formControlName="sievetodesc" />
+                            <input type="text" id="inputPassword" matInput formControlName="sievetodesc"  [readonly]="viewOnly"/>
                            
                         </mat-form-field>
                     </div>
@@ -136,7 +136,7 @@
                     <label for="inputPassword" class="col-sm-4 col-form-label">Size To</label>
                     <div class="col-md-8">
                         <mat-form-field style="width: 90%;" appearance="outline">
-                            <input type="text" id="inputPassword" matInput formControlName="sizeto" />
+                            <input type="text" id="inputPassword" matInput formControlName="sizeto"  [readonly]="viewOnly" />
                             <master-search [MasterSearchData]="sizeToCodeData" class="masterSearch"
                             (newRowClick)="sizetoselected($event)"></master-search>
                         </mat-form-field>
@@ -147,7 +147,7 @@
                     <label for="inputPassword" class="col-sm-4 col-form-label">Variance % +/-</label>
                     <div class="col-md-8">
                         <mat-form-field style="width: 90%;" appearance="outline">
-                            <input type="text" id="inputPassword" matInput formControlName="variance1" />
+                            <input type="text" id="inputPassword" matInput formControlName="variance1"  [readonly]="viewOnly"/>
                            
                         </mat-form-field>
                     </div>
@@ -157,7 +157,7 @@
                     <label for="inputPassword" class="col-sm-4 col-form-label">Variance % +/-</label>
                     <div class="col-md-8">
                         <mat-form-field style="width: 90%;" appearance="outline">
-                            <input type="text" id="inputPassword" matInput formControlName="variance2" />
+                            <input type="text" id="inputPassword" matInput formControlName="variance2"  [readonly]="viewOnly"/>
                             
                         </mat-form-field>
                     </div>
