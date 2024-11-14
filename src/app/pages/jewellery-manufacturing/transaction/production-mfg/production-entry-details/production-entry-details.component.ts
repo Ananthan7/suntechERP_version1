@@ -519,7 +519,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
         this.commonService.closeSnackBarMsg()
         if (result.status == "Success" && result.dynamicData[0]) {
           let data = result.dynamicData[0]
-          if (data[0] && data[0].UNQ_JOB_ID != '') {
+          if (data[0] && this.commonService.nullToString(data[0].UNQ_JOB_ID) != '') {
             this.setFormNullToString('JOB_NUMBER', data[0].JOB_NUMBER)
             this.setFormNullToString('UNQ_JOB_ID', data[0].UNQ_JOB_ID)
             this.setFormNullToString('JOB_DESCRIPTION', data[0].JOB_DESCRIPTION)
@@ -545,7 +545,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
             this.subJobNumberValidate()
             this.getDesignimagecode()
           } else {
-            this.commonService.toastErrorByMsgId('MSG1531')
+            this.commonService.toastErrorByMsgId('MSG1871')
             return
           }
         } else {

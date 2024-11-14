@@ -327,10 +327,10 @@ export class ProductionStockDetailComponent implements OnInit {
       this.componentDataList.forEach((item: any, index: number) => {
         result.forEach((res: any) => {
           debugger
-          if(res.FEILDNAME == 'KARAT'){
+          if(res.FIELDNAME == 'KARAT'){
             tagtext += item.KARAT_CODE
           }else{
-            tagtext = item[res.FEILDNAME] + item[res.SEPARATION]
+            tagtext += item[res.FIELDNAME] + res.SEPARATION
           }
         });
       })
