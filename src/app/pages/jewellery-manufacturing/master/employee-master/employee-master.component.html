@@ -7,7 +7,8 @@
         </button>
     </div>
     <!-- modal header component -->
-    <modal-header></modal-header>
+    <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
+        (deleteClick)="deleteEmployeeMaster()"></modal-header>
     <!-- content section -->
     <div class="p-4 ">
         <form [formGroup]="employeeMasterForm">
@@ -78,15 +79,15 @@
                         <label for="inputPassword" id="ID002" class="col-sm-2 col-form-label">Designation : </label>
                         <div class="col-sm-4">
                             <mat-form-field style="width: 100%" appearance="outline">
-                                <input type="text" matInput formControlName="Department" UpperCaseDirective />
-                                <master-search class="masterSearch" [MasterSearchData]="DepartmentData"
-                                    (newRowClick)="DepartmentSelected($event)">
+                                <input type="text" matInput formControlName="Designation" UpperCaseDirective />
+                                <master-search class="masterSearch" [MasterSearchData]="DesignationData"
+                                    (newRowClick)="DesignationSelected($event)">
                                 </master-search>
                             </mat-form-field>
                         </div>
                         <div class="col-sm-5">
                             <mat-form-field style="width: 100%" appearance="outline">
-                                <input type="text" matInput formControlName="DepartmentDes" UpperCaseDirective />
+                                <input type="text" matInput formControlName="DesignationDes" UpperCaseDirective />
                             </mat-form-field>
                         </div>
                     </div>
@@ -94,7 +95,7 @@
                         <label for="inputPassword" id="ID002" class="col-sm-2 col-form-label">Group Code : </label>
                         <div class="col-sm-4">
                             <mat-form-field style="width: 100%" appearance="outline">
-                                <input type="text" matInput formControlName="Department" UpperCaseDirective />
+                                <input type="text" matInput formControlName="GroupCode" UpperCaseDirective />
                             </mat-form-field>
                         </div>
                     </div>
@@ -117,25 +118,27 @@
                                         Grade</label>
                                     <div class="col-sm-2">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" #codeInput matInput formControlName="code"
+                                            <input type="text" #codeInput matInput formControlName="Grade"
                                                 UpperCaseDirective autocomplete="off" />
-                                            <master-search class="masterSearch" [MasterSearchData]="DepartmentData"
-                                                (newRowClick)="DepartmentSelected($event)">
+                                            <master-search class="masterSearch" [MasterSearchData]="GradeData"
+                                                (newRowClick)="GradeSelected($event)">
                                             </master-search>
                                         </mat-form-field>
                                     </div>
                                     <div class="col-sm-2">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" #codeInput matInput formControlName="code"
+                                            <input type="text" #codeInput matInput formControlName="GradeDes"
                                                 UpperCaseDirective autocomplete="off" />
                                         </mat-form-field>
                                     </div>
                                     <label for="inputPassword" class="col-sm-2 col-form-label">
                                         Date of Joinong</label>
                                     <div class="col-sm-2">
-                                        <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" #codeInput matInput formControlName="code"
-                                                UpperCaseDirective autocomplete="off" />
+                                        <mat-form-field style="width: 100%;" appearance="outline">
+                                            <input matInput [matDatepicker]="DOJ" [max]="DOJ" formControlName="DOJ"
+                                                placeholder="DD/MM/YYYY" DateValidation />
+                                            <mat-datepicker-toggle matSuffix [for]="DOJ"></mat-datepicker-toggle>
+                                            <mat-datepicker [startAt]="currentDate" #DOJ></mat-datepicker>
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -143,23 +146,28 @@
                                     <label for="inputPassword" class="col-sm-2 col-form-label">
                                         Date of Birth</label>
                                     <div class="col-sm-2">
-                                        <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" #codeInput matInput formControlName="code"
-                                                UpperCaseDirective autocomplete="off" />
-                                            <master-search class="masterSearch" [MasterSearchData]="DepartmentData"
-                                                (newRowClick)="DepartmentSelected($event)">
-                                            </master-search>
+                                        <mat-form-field style="width: 100%;" appearance="outline">
+                                            <input matInput [matDatepicker]="DOB" [max]="DOB" formControlName="DOB"
+                                                placeholder="DD/MM/YYYY" DateValidation />
+                                            <mat-datepicker-toggle matSuffix [for]="DOB"></mat-datepicker-toggle>
+                                            <mat-datepicker [startAt]="currentDate" #DOB></mat-datepicker>
                                         </mat-form-field>
                                     </div>
-                                    <div class="col-sm-2">
-
-                                    </div>
-                                    <label for="inputPassword" class="col-sm-2 col-form-label">
+                                    <label for="inputPassword" class="col-sm-2 col-form-label offset-md-2">
                                         Blood Group</label>
                                     <div class="col-sm-2">
-                                        <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" #codeInput matInput formControlName="code"
-                                                UpperCaseDirective autocomplete="off" />
+                                        <mat-form-field style="width: 100%;" appearance="outline">
+                                            <mat-select   formControlName="BloodGroup">
+                                                <mat-option value="1">A+</mat-option>
+                                                <mat-option value="2">A-</mat-option>
+                                                <mat-option value="3">B+</mat-option>
+                                                <mat-option value="4">B-</mat-option>
+                                                <mat-option value="5">AB+</mat-option>
+                                                <mat-option value="6">AB-</mat-option>
+                                                <mat-option value="7">O+</mat-option>
+                                                <mat-option value="8">O-</mat-option>
+                                                <mat-option value="9">Other</mat-option>
+                                            </mat-select>
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -168,10 +176,10 @@
                                         Nationality</label>
                                     <div class="col-sm-2">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" #codeInput matInput formControlName="code"
+                                            <input type="text" #codeInput matInput formControlName="Nationality"
                                                 UpperCaseDirective autocomplete="off" />
-                                            <master-search class="masterSearch" [MasterSearchData]="DepartmentData"
-                                                (newRowClick)="DepartmentSelected($event)">
+                                            <master-search class="masterSearch" [MasterSearchData]="NationalityData"
+                                                (newRowClick)="NationalitySelected($event)">
                                             </master-search>
                                         </mat-form-field>
                                     </div>
@@ -181,10 +189,10 @@
                                         Religion</label>
                                     <div class="col-sm-2">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" #codeInput matInput formControlName="code"
+                                            <input type="text" #codeInput matInput formControlName="Religion"
                                                 UpperCaseDirective autocomplete="off" />
-                                            <master-search class="masterSearch" [MasterSearchData]="DepartmentData"
-                                                (newRowClick)="DepartmentSelected($event)">
+                                            <master-search class="masterSearch" [MasterSearchData]="ReligionData"
+                                                (newRowClick)="ReligionSelected($event)">
                                             </master-search>
                                         </mat-form-field>
                                     </div>
@@ -194,7 +202,7 @@
                                         Father Name</label>
                                     <div class="col-sm-2">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" #codeInput matInput formControlName="code"
+                                            <input type="text" #codeInput matInput formControlName="FatherName"
                                                 UpperCaseDirective autocomplete="off" />
 
                                         </mat-form-field>
@@ -205,22 +213,23 @@
                                     <label for="inputPassword" class="col-sm-2 col-form-label">
                                         Gender</label>
                                     <div class="col-sm-2">
-                                        <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" #codeInput matInput formControlName="code"
-                                                UpperCaseDirective autocomplete="off" />
-
+                                        <mat-form-field style="width: 100%;" appearance="outline">
+                                            <mat-select   formControlName="Gender">
+                                                <mat-option value="1">Male</mat-option>
+                                                <mat-option value="2">FEMALE</mat-option>
+                                                <mat-option value="3">Other</mat-option>
+                                            </mat-select>
                                         </mat-form-field>
                                     </div>
-                                    <div class="col-md-2">
-
-                                    </div>
-                                    <label for="inputPassword" class="col-sm-2 col-form-label">
+                                    <label for="inputPassword" class="col-sm-2 offset-md-2 col-form-label">
                                         Maritial Status</label>
                                     <div class="col-sm-2">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" #codeInput matInput formControlName="code"
-                                                UpperCaseDirective autocomplete="off" />
-
+                                                <mat-select   formControlName="MaritialStatus">
+                                                    <mat-option value="1">Married</mat-option>
+                                                    <mat-option value="2">UnMarried</mat-option>
+                                                    <mat-option value="3">Single</mat-option>
+                                                </mat-select>
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -237,8 +246,9 @@
                                                 House Name</label>
                                             <div class="col-sm-8">
                                                 <mat-form-field style="width: 100%" appearance="outline">
-                                                    <input type="text" #codeInput matInput formControlName="code"
-                                                        UpperCaseDirective autocomplete="off" />
+                                                    <input type="text" #codeInput matInput
+                                                        formControlName="HomeHouseName" UpperCaseDirective
+                                                        autocomplete="off" />
                                                 </mat-form-field>
                                             </div>
                                         </div>
@@ -247,7 +257,8 @@
                                                 Address</label>
                                             <div class="col-sm-8">
                                                 <mat-form-field style="width: 100%" appearance="outline">
-                                                    <textarea matInput rows="3" formControlName="Address"></textarea>
+                                                    <textarea matInput rows="3"
+                                                        formControlName="HomeAddress"></textarea>
                                                 </mat-form-field>
                                             </div>
                                         </div>
@@ -256,11 +267,11 @@
                                                 Country</label>
                                             <div class="col-sm-8">
                                                 <mat-form-field style="width: 100%" appearance="outline">
-                                                    <input type="text" #codeInput matInput formControlName="code"
+                                                    <input type="text" #codeInput matInput formControlName="Country"
                                                         UpperCaseDirective autocomplete="off" />
                                                     <master-search class="masterSearch"
-                                                        [MasterSearchData]="DepartmentData"
-                                                        (newRowClick)="DepartmentSelected($event)">
+                                                        [MasterSearchData]="CountryCodeData"
+                                                        (newRowClick)="CountryCodeSelected($event)">
                                                     </master-search>
                                                 </mat-form-field>
                                             </div>
@@ -270,11 +281,11 @@
                                                 State</label>
                                             <div class="col-sm-8">
                                                 <mat-form-field style="width: 100%" appearance="outline">
-                                                    <input type="text" #codeInput matInput formControlName="code"
+                                                    <input type="text" #codeInput matInput formControlName="State"
                                                         UpperCaseDirective autocomplete="off" />
                                                     <master-search class="masterSearch"
-                                                        [MasterSearchData]="DepartmentData"
-                                                        (newRowClick)="DepartmentSelected($event)">
+                                                        [MasterSearchData]="StateCodeData"
+                                                        (newRowClick)="StateCodeSelected($event)">
                                                     </master-search>
                                                 </mat-form-field>
                                             </div>
@@ -284,11 +295,11 @@
                                                 Town / City</label>
                                             <div class="col-sm-8">
                                                 <mat-form-field style="width: 100%" appearance="outline">
-                                                    <input type="text" #codeInput matInput formControlName="code"
+                                                    <input type="text" #codeInput matInput formControlName="City"
                                                         UpperCaseDirective autocomplete="off" />
                                                     <master-search class="masterSearch"
-                                                        [MasterSearchData]="DepartmentData"
-                                                        (newRowClick)="DepartmentSelected($event)">
+                                                        [MasterSearchData]="CityCodeData"
+                                                        (newRowClick)="CityCodeSelected($event)">
                                                     </master-search>
                                                 </mat-form-field>
                                             </div>
@@ -298,7 +309,7 @@
                                                 Tel (Land)</label>
                                             <div class="col-sm-8">
                                                 <mat-form-field style="width: 100%" appearance="outline">
-                                                    <input type="text" #codeInput matInput formControlName="code"
+                                                    <input type="text" #codeInput matInput formControlName="LandLineNum"
                                                         UpperCaseDirective autocomplete="off" />
                                                 </mat-form-field>
                                             </div>
@@ -308,13 +319,13 @@
                                                 Tel (moblie)</label>
                                             <div class="col-sm-3">
                                                 <mat-form-field style="width: 100%" appearance="outline">
-                                                    <input type="text" #codeInput matInput formControlName="code"
+                                                    <input type="text" #codeInput matInput formControlName="MoblieCode"
                                                         UpperCaseDirective autocomplete="off" />
                                                 </mat-form-field>
                                             </div>
                                             <div class="col-sm-5">
                                                 <mat-form-field style="width: 100%" appearance="outline">
-                                                    <input type="text" #codeInput matInput formControlName="code"
+                                                    <input type="text" #codeInput matInput formControlName="MoblieNum"
                                                         UpperCaseDirective autocomplete="off" />
                                                 </mat-form-field>
                                             </div>
@@ -324,7 +335,7 @@
                                                 Email </label>
                                             <div class="col-sm-8">
                                                 <mat-form-field style="width: 100%" appearance="outline">
-                                                    <input type="text" #codeInput matInput formControlName="code"
+                                                    <input type="text" #codeInput matInput formControlName="email"
                                                         UpperCaseDirective autocomplete="off" />
                                                 </mat-form-field>
                                             </div>
@@ -340,7 +351,7 @@
                                                 Flat / House No</label>
                                             <div class="col-sm-8">
                                                 <mat-form-field style="width: 100%" appearance="outline">
-                                                    <input type="text" #codeInput matInput formControlName="code"
+                                                    <input type="text" #codeInput matInput formControlName="PRhouseName"
                                                         UpperCaseDirective autocomplete="off" />
                                                 </mat-form-field>
                                             </div>
@@ -350,7 +361,7 @@
                                                 Address</label>
                                             <div class="col-sm-8">
                                                 <mat-form-field style="width: 100%" appearance="outline">
-                                                    <textarea matInput rows="3" formControlName="Address"></textarea>
+                                                    <textarea matInput rows="3" formControlName="PRAddress"></textarea>
                                                 </mat-form-field>
                                             </div>
                                         </div>
@@ -359,11 +370,11 @@
                                                 Country</label>
                                             <div class="col-sm-8">
                                                 <mat-form-field style="width: 100%" appearance="outline">
-                                                    <input type="text" #codeInput matInput formControlName="code"
+                                                    <input type="text" #codeInput matInput formControlName="PRCountry"
                                                         UpperCaseDirective autocomplete="off" />
                                                     <master-search class="masterSearch"
-                                                        [MasterSearchData]="DepartmentData"
-                                                        (newRowClick)="DepartmentSelected($event)">
+                                                        [MasterSearchData]="PRCountryCodeData"
+                                                        (newRowClick)="PRCountryCodeSelected($event)">
                                                     </master-search>
                                                 </mat-form-field>
                                             </div>
@@ -373,11 +384,11 @@
                                                 State</label>
                                             <div class="col-sm-8">
                                                 <mat-form-field style="width: 100%" appearance="outline">
-                                                    <input type="text" #codeInput matInput formControlName="code"
+                                                    <input type="text" #codeInput matInput formControlName="PRState"
                                                         UpperCaseDirective autocomplete="off" />
                                                     <master-search class="masterSearch"
-                                                        [MasterSearchData]="DepartmentData"
-                                                        (newRowClick)="DepartmentSelected($event)">
+                                                        [MasterSearchData]="PRStateCodeData"
+                                                        (newRowClick)="PRStateCodeSelected($event)">
                                                     </master-search>
                                                 </mat-form-field>
                                             </div>
@@ -387,11 +398,11 @@
                                                 Town / City</label>
                                             <div class="col-sm-8">
                                                 <mat-form-field style="width: 100%" appearance="outline">
-                                                    <input type="text" #codeInput matInput formControlName="code"
+                                                    <input type="text" #codeInput matInput formControlName="PRCity"
                                                         UpperCaseDirective autocomplete="off" />
                                                     <master-search class="masterSearch"
-                                                        [MasterSearchData]="DepartmentData"
-                                                        (newRowClick)="DepartmentSelected($event)">
+                                                        [MasterSearchData]="PRCityCodeData"
+                                                        (newRowClick)="PRCityCodeSelected($event)">
                                                     </master-search>
                                                 </mat-form-field>
                                             </div>
@@ -401,7 +412,7 @@
                                                 Tel (Land)</label>
                                             <div class="col-sm-8">
                                                 <mat-form-field style="width: 100%" appearance="outline">
-                                                    <input type="text" #codeInput matInput formControlName="code"
+                                                    <input type="text" #codeInput matInput formControlName="PRLand"
                                                         UpperCaseDirective autocomplete="off" />
                                                 </mat-form-field>
                                             </div>
@@ -411,13 +422,14 @@
                                                 Tel (moblie)</label>
                                             <div class="col-sm-3">
                                                 <mat-form-field style="width: 100%" appearance="outline">
-                                                    <input type="text" #codeInput matInput formControlName="code"
-                                                        UpperCaseDirective autocomplete="off" />
+                                                    <input type="text" #codeInput matInput
+                                                        formControlName="PRMoblieCode" UpperCaseDirective
+                                                        autocomplete="off" />
                                                 </mat-form-field>
                                             </div>
                                             <div class="col-sm-5">
                                                 <mat-form-field style="width: 100%" appearance="outline">
-                                                    <input type="text" #codeInput matInput formControlName="code"
+                                                    <input type="text" #codeInput matInput formControlName="PRMoblieNo"
                                                         UpperCaseDirective autocomplete="off" />
                                                 </mat-form-field>
                                             </div>

@@ -5,7 +5,7 @@
   </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" (deleteClick)="deleteRecord()"></modal-header>
 <div class="row">
     <div class="col-md-12">
         <form [formGroup]="karatmasterFrom">
@@ -15,77 +15,83 @@
                       <div class="row align-items-center mb-1">
                         <label for="inputPassword" class="col-sm-2 col-form-label">Karat Code * :</label>
                         <div class="col-md-2">
-                          <mat-form-field style="width: 100%;">
-                            <input type="text" matInput formControlName="karatcode" />
+                          <mat-form-field style="width: 100%" appearance="outline">
+                            <input type="text" matInput formControlName="karatcode"  oninput="this.value = this.value.toUpperCase()" UpperCaseDirective  [readonly]="viewMode"/>
                           </mat-form-field>
                         </div>
                         <div class="col-md-8">
-                            <mat-form-field style="width: 100%;">
-                              <input type="text" matInput formControlName="karatcodedes" />
+                            <mat-form-field style="width: 100%" appearance="outline">
+                              <input type="text" matInput formControlName="karatcodedes"  oninput="this.value = this.value.toUpperCase()"  [readonly]="viewMode"/>
                             </mat-form-field>
                           </div>
                       </div>
                       <div class="row align-items-center mb-1">
                         <label for="inputPassword" class="col-sm-2 col-form-label">Standard Purity * :</label>
                         <div class="col-md-2">
-                          <mat-form-field style="width: 100%;">
-                            <input type="text" matInput formControlName="standardpurity" />
+                          <mat-form-field style="width: 100%" appearance="outline">
+                            <input type="text" maxlength="1" matInput formControlName="standardpurity" NumberOnly  [readonly]="viewMode"/>
                           </mat-form-field>
                         </div>
                         <label for="inputPassword" class="col-sm-2 col-form-label">Minimum :</label>
                         <div class="col-md-2">
-                          <mat-form-field style="width: 100%;">
-                            <input type="text" matInput formControlName="minimum" />
+                          <mat-form-field style="width: 100%" appearance="outline">
+                            <input type="number" maxlength="1" matInput formControlName="minimum" NumberOnly [readonly]="viewMode"/>
                           </mat-form-field>
                         </div>
                         <label for="inputPassword" class="col-sm-2 col-form-label">Maximum :</label>
                         <div class="col-md-2">
-                          <mat-form-field style="width: 100%;">
-                            <input type="text" matInput formControlName="maximum" />
+                          <mat-form-field style="width: 100%" appearance="outline">
+                            <input type="number" maxlength="1" matInput formControlName="maximum" NumberOnly [readonly]="viewMode"/>
                           </mat-form-field>
                         </div>
                       </div>
                       <div class="row align-items-center mb-1">
                         <label for="inputPassword" class="col-sm-2 col-form-label">Sp Gravity :</label>
                         <div class="col-md-2">
-                          <mat-form-field style="width: 100%;">
-                            <input type="number" matInput formControlName="sp_gravity" />
+                          <mat-form-field style="width: 100%" appearance="outline">
+                            <input type="number" matInput formControlName="sp_gravity"  [readonly]="viewMode"/>
                           </mat-form-field>
                         </div>
                         <label for="inputPassword" class="col-sm-2 col-form-label">SP. Variance % :</label>
                         <div class="col-md-2">
-                          <mat-form-field style="width: 100%;">
-                            <input type="number" matInput formControlName="sp_variance" />
+                          <mat-form-field style="width: 100%" appearance="outline">
+                            <input type="number" matInput formControlName="sp_variance"  [readonly]="viewMode"/>
                           </mat-form-field>
                         </div>
                         <label for="inputPassword" class="col-sm-2 col-form-label">Division * :</label>
                         <div class="col-md-2">
-                          <mat-form-field style="width: 70%;">
-                            <input type="text" matInput formControlName="division" />
+                          <mat-form-field style="width: 100%" appearance="outline">
+                            <input type="text" matInput formControlName="division" (focusout)="validateLookupField($event,divisionCodeData,'division')" (keydown)="lookupKeyPress($event,'division')"  [readonly]="viewMode"/>
+                            <master-search  [MasterSearchData]="divisionCodeData" *ngIf=" viewMode == false"  (newRowClick)="divisionCodeSelected($event)"  class="masterSearch" #overlaydivisionSearch>
+                            </master-search>
                           </mat-form-field>
-                          <master-search [MasterSearchData]="divisionCodeData" (newRowClick)="divisionCodeSelected($event)">
-                          </master-search>
+                        
                         </div>
                       </div>
                       <div class="row align-items-center mb-1">
                         <label for="inputPassword" class="col-sm-2 col-form-label">POS :</label>
                         <div class="col-md-2">
-                          <mat-form-field style="width: 100%;">
-                            <input type="number" matInput formControlName="pos" />
+                          <mat-form-field style="width: 100%" appearance="outline">
+                            <input type="number" matInput formControlName="pos"  [readonly]="viewMode"/>
                           </mat-form-field>
                         </div>
                         <label for="inputPassword" class="col-sm-2 col-form-label">POP MinMaxAmt :</label>
                         <div class="col-md-2">
-                          <mat-form-field style="width: 100%;">
-                            <input type="number" matInput formControlName="pop_minmaxamt" />
+                          <mat-form-field style="width: 100%" appearance="outline">
+                            <input type="number" matInput formControlName="pop_minmaxamt"  [readonly]="viewMode"/>
                           </mat-form-field>
                         </div>
                         <div class="col-md-2 offset-md-2">
-                            <mat-checkbox class="example-margin" formControlName="scrap" >Scrap </mat-checkbox>
+                            <mat-checkbox class="example-margin" formControlName="scrap"  [disabled]="viewMode">Scrap </mat-checkbox>
                         </div>
                         <div class="col-md-4">
-                            <mat-checkbox class="example-margin" formControlName="showinweb">Show In Web </mat-checkbox>
+                            <mat-checkbox class="example-margin" formControlName="showinweb" [disabled]="viewMode">Show In Web </mat-checkbox>
                         </div>
                       </div>
                     </div>
                   </div>
+                  </div>
+                  </form>
+                  </div>
+                  </div>
+                  
