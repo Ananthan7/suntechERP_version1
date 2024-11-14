@@ -24,3 +24,39 @@
         z-index: 1070 !important;
 }
 }
+
+.icons .image_box {
+    height: 150px;
+    width: 100%;
+  }
+
+  .icons {
+    width: 100%;
+    border: 1px solid #ddd;
+    margin-bottom: 2px;
+  }
+
+  .icon {
+    cursor: pointer;
+    margin: 0 10px; 
+    color: #333; 
+  }
+  
+  .icon:hover {
+    color: #007bff;
+}
+
+::ng-deep {
+  // form field starts
+  .mat-form-field-outline-start {
+    border-radius: 0px 0 0 0px !important;
+    min-width: 24px !important;
+    background-color: #f7f8fb;
+  }
+
+  .mat-form-field-outline-end {
+    border-radius: 0 0px 0px 0 !important;
+    min-width: 24px !important;
+    background-color: #f7f8fb;
+  }
+}
