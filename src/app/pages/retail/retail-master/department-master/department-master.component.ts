@@ -22,31 +22,374 @@ export class DepartmentMasterComponent implements OnInit {
   private subscriptions: Subscription[] = [];
   isloading: boolean = false;
   CountryCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 26,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Country Code',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "where TYPES ='country MASTER'",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
+      PAGENO: 1,
+      RECORDS: 10,
+      LOOKUPID: 3,
+      SEARCH_FIELD: 'CODE',
+      SEARCH_HEADING: 'Country Code',
+      SEARCH_VALUE: '',
+      WHERECONDITION: "TYPES = 'COUNTRY MASTER'",
+      VIEW_INPUT: true,
+      VIEW_TABLE: true,
   }
   DepartmentData: MasterSearchModel = {}
   oneTimeCodeData: MasterSearchModel = {}
-  leaveSalaryCodeData: MasterSearchModel = {}
-  airTicketCodeData: MasterSearchModel = {}
-  GratuityCodeData: MasterSearchModel = {}
+  leaveSalaryCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 7,
+    SEARCH_FIELD: 'ACCODE',
+    SEARCH_HEADING: 'Leave Salary Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "ACCODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  }
+  airTicketCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 7,
+    SEARCH_FIELD: 'ACCODE',
+    SEARCH_HEADING: 'Air Ticket Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "ACCODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  }
+  GratuityCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 7,
+    SEARCH_FIELD: 'ACCODE',
+    SEARCH_HEADING: 'Gratuity Code Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "ACCODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  }
   AIDebitExpCodeData: MasterSearchModel = {}
   AICreditCodeData: MasterSearchModel = {}
-  DebitExpensesLeaveSalData: MasterSearchModel = {}
-  DebitExpensesAirTicketData: MasterSearchModel = {}
-  DebitExpensesGratuityData: MasterSearchModel = {}
-  CreditExpensesLeaveSalData: MasterSearchModel = {}
-  CreditExpensesAirTicketData: MasterSearchModel = {}
-  CreditExpensesGratuityData: MasterSearchModel = {}
-  OtherAmountValueData: MasterSearchModel = {}
-  UserDefinedData: MasterSearchModel = {}
+  DebitExpensesLeaveSalData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 7,
+    SEARCH_FIELD: 'ACCODE',
+    SEARCH_HEADING: ' Leave Salary Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "ACCODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  }
+  DebitExpensesAirTicketData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 7,
+    SEARCH_FIELD: 'ACCODE',
+    SEARCH_HEADING: 'Air Ticket',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "ACCODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  }
+  DebitExpensesGratuityData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 7,
+    SEARCH_FIELD: 'ACCODE',
+    SEARCH_HEADING: 'Gratuity Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "ACCODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  }
+  CreditExpensesLeaveSalData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 7,
+    SEARCH_FIELD: 'ACCODE',
+    SEARCH_HEADING: ' Leave Salary Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "ACCODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  }
+  CreditExpensesAirTicketData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 7,
+    SEARCH_FIELD: 'ACCODE',
+    SEARCH_HEADING: 'Air Ticket',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "ACCODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  }
+  CreditExpensesGratuityData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 7,
+    SEARCH_FIELD: 'ACCODE',
+    SEARCH_HEADING: 'Gratuity Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "ACCODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  }
+  OtherAmountValueData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 7,
+    SEARCH_FIELD: 'ACCODE',
+    SEARCH_HEADING: ' Other Amount Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "ACCODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  }
+  UserDefinedData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 130,
+    ORDER_TYPE: 0,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "User Defined",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "TYPES = 'HRM UDF Field1'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  }
+
+  UserDefined2Data: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 130,
+    ORDER_TYPE: 0,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "User Defined",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "TYPES = 'HRM UDF Field2'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  }
+
+  UserDefined3Data: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 130,
+    ORDER_TYPE: 0,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "User Defined",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "TYPES = 'HRM UDF Field3'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  }
+
+  UserDefined4Data: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 130,
+    ORDER_TYPE: 0,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "User Defined",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "TYPES = 'HRM UDF Field4'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  }
+
+  UserDefined5Data: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 130,
+    ORDER_TYPE: 0,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "User Defined",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "TYPES = 'HRM UDF Field5'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  }
+
+  UserDefined6Data: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 130,
+    ORDER_TYPE: 0,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "User Defined",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "TYPES = 'HRM UDF Field6'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  }
+
+  UserDefined7Data: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 130,
+    ORDER_TYPE: 0,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "User Defined",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "TYPES = 'HRM UDF Field7'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  }
+
+  UserDefined8Data: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 130,
+    ORDER_TYPE: 0,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "User Defined",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "TYPES = 'HRM UDF Field8'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  }
+
+  UserDefined9Data: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 130,
+    ORDER_TYPE: 0,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "User Defined",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "TYPES = 'HRM UDF Field9'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  }
+
+  UserDefined10Data: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 130,
+    ORDER_TYPE: 0,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "User Defined",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "TYPES = 'HRM UDF Field10'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  }
+
+  UserDefined11Data: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 130,
+    ORDER_TYPE: 0,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "User Defined",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "TYPES = 'HRM UDF Field11'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  }
+
+  UserDefined12Data: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 130,
+    ORDER_TYPE: 0,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "User Defined",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "TYPES = 'HRM UDF Field12'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  }
+
+  UserDefined13Data: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 130,
+    ORDER_TYPE: 0,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "User Defined",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "TYPES = 'HRM UDF Field13'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  }
+
+  UserDefined14Data: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 130,
+    ORDER_TYPE: 0,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "User Defined",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "TYPES = 'HRM UDF Field14'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  }
+
+  UserDefined15Data: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 130,
+    ORDER_TYPE: 0,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "User Defined",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "TYPES = 'HRM UDF Field15'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  }
 
   departmentMasterForm: FormGroup = this.formBuilder.group({
     code: [''],
@@ -64,7 +407,7 @@ export class DepartmentMasterComponent implements OnInit {
     leaveSalaryCode: [''],
     airTicketCode: [''],
     GratuityCode: [''],
-    
+
     AIDebitExpCode: [''],
     AICreditCode: [''],
     DebitExpensesLeaveSal: [''],
@@ -135,54 +478,139 @@ export class DepartmentMasterComponent implements OnInit {
   }
 
   CountryCodeDataSelected(e: any) {
+    console.log(e);
+    this.departmentMasterForm.controls.CountryCode.setValue(e.CODE);
+    this.departmentMasterForm.controls.CountryCodeDes.setValue(e.DESCRIPTION);
 
+    
   }
 
   oneTimeCodeDataSelected(e: any) {
+    console.log(e);
 
   }
 
   leaveSalaryCodeDataSelected(e: any) {
+    console.log(e);
+    this.departmentMasterForm.controls.leaveSalaryCode.setValue(e.ACCODE);
+  }
+
+  airTicketCodeDataSelected(e: any) {
+    console.log(e);
+    this.departmentMasterForm.controls.airTicketCode.setValue(e.ACCODE);
+  }
+
+  GratuityCodeSelected(e: any) {
+    console.log(e);
+    this.departmentMasterForm.controls.GratuityCode.setValue(e.ACCODE);
+  }
+
+  AIDebitExpCodeSelected(e: any) {
+    console.log(e);
 
   }
 
-  airTicketCodeDataSelected(e: any) { }
+  AICreditCodeSelected(e: any) {
+    console.log(e);
 
-  GratuityCodeSelected(e: any) { }
+  }
 
-  AIDebitExpCodeSelected(e: any) { }
+  DebitExpensesLeaveSalDataSelected(e: any) {
+    console.log(e);
+    this.departmentMasterForm.controls.DebitExpensesLeaveSal.setValue(e.ACCODE);
+  }
 
-  AICreditCodeSelected(e: any) { }
+  DebitExpensesAirTicketSelected(e: any) {
+    console.log(e);
+    this.departmentMasterForm.controls.DebitExpensesAirTicket.setValue(e.ACCODE);
+  }
 
-  DebitExpensesLeaveSalDataSelected(e: any) { }
+  DebitExpensesGratuityDataSelected(e: any) {
+    console.log(e);
+    this.departmentMasterForm.controls.DebitExpensesGratuity.setValue(e.ACCODE);
+  }
 
-  DebitExpensesAirTicketSelected(e: any) { }
+  CreditExpensesLeaveSalDataSelected(e: any) {
+    console.log(e);
+    this.departmentMasterForm.controls.CreditExpensesLeaveSal.setValue(e.ACCODE);
+  }
 
-  DebitExpensesGratuityDataSelected(e: any) { }
+  CreditExpensesAirTicketSelected(e: any) {
+    console.log(e);
+    this.departmentMasterForm.controls.CreditExpensesAirTicket.setValue(e.ACCODE);
+  }
 
-  CreditExpensesLeaveSalDataSelected(e: any) { }
+  CreditExpensesGratuityDataSelected(e: any) {
+    console.log(e);
+    this.departmentMasterForm.controls.CreditExpensesGratuity.setValue(e.ACCODE);
+  }
 
-  CreditExpensesAirTicketSelected(e: any) { }
+  OtherAmountValueSelected(e: any) {
+    console.log(e);
+    this.departmentMasterForm.controls.OtherAmountValue.setValue(e.ACCODE);
 
-  CreditExpensesGratuityDataSelected(e: any) { }
+  }
 
-  OtherAmountValueSelected(e: any) { }
-
-  UserDefined1DataSelected(e: any) { }
-  UserDefined2DataSelected(e: any) { }
-  UserDefined3DataSelected(e: any) { }
-  UserDefined4DataSelected(e: any) { }
-  UserDefined5DataSelected(e: any) { }
-  UserDefined6DataSelected(e: any) { }
-  UserDefined7DataSelected(e: any) { }
-  UserDefined8DataSelected(e: any) { }
-  UserDefined9DataSelected(e: any) { }
-  UserDefined10DataSelected(e: any) { }
-  UserDefined11DataSelected(e: any) { }
-  UserDefined12DataSelected(e: any) { }
-  UserDefined13DataSelected(e: any) { }
-  UserDefined14DataSelected(e: any) { }
-  UserDefined15DataSelected(e: any) { }
+  UserDefined1DataSelected(e: any) { 
+    console.log(e); 
+    this.departmentMasterForm.controls.UserDefined1.setValue(e.CODE);
+  }
+  UserDefined2DataSelected(e: any) {
+    console.log(e);
+    this.departmentMasterForm.controls.UserDefined2.setValue(e.CODE);
+  }
+  UserDefined3DataSelected(e: any) { 
+    console.log(e);
+    this.departmentMasterForm.controls.UserDefined3.setValue(e.CODE);
+   }
+  UserDefined4DataSelected(e: any) { 
+    console.log(e);
+    this.departmentMasterForm.controls.UserDefined4.setValue(e.CODE);
+   }
+  UserDefined5DataSelected(e: any) { 
+    console.log(e);
+    this.departmentMasterForm.controls.UserDefined5.setValue(e.CODE);
+   }
+  UserDefined6DataSelected(e: any) { 
+    console.log(e);
+    this.departmentMasterForm.controls.UserDefined6.setValue(e.CODE);
+   }
+  UserDefined7DataSelected(e: any) { 
+    console.log(e);
+    this.departmentMasterForm.controls.UserDefined7.setValue(e.CODE);
+   }
+  UserDefined8DataSelected(e: any) { 
+    console.log(e);
+    this.departmentMasterForm.controls.UserDefined8.setValue(e.CODE);
+   }
+  UserDefined9DataSelected(e: any) { 
+    console.log(e);
+    this.departmentMasterForm.controls.UserDefined9.setValue(e.CODE);
+   }
+  UserDefined10DataSelected(e: any) { 
+    console.log(e);
+    this.departmentMasterForm.controls.UserDefined10.setValue(e.CODE);
+   }
+  UserDefined11DataSelected(e: any) { 
+    console.log(e);
+    this.departmentMasterForm.controls.UserDefined11.setValue(e.CODE);
+   }
+  UserDefined12DataSelected(e: any) { 
+    console.log(e);
+    this.departmentMasterForm.controls.UserDefined12.setValue(e.CODE);
+   }
+  UserDefined13DataSelected(e: any) { 
+    console.log(e);
+    this.departmentMasterForm.controls.UserDefined13.setValue(e.CODE);
+   }
+  UserDefined14DataSelected(e: any) { 
+    console.log(e);
+    this.departmentMasterForm.controls.UserDefined14.setValue(e.CODE);
+   }
+  UserDefined15DataSelected(e: any) { 
+    console.log(e);
+    this.departmentMasterForm.controls.UserDefined15.setValue(e.CODE);
+   }
 
   onchangeCheckBoxNum(e: any) {
     // console.log(e);
@@ -225,22 +653,22 @@ export class DepartmentMasterComponent implements OnInit {
       "PDEPTMST_BREAK3_TO": form.Shift3Break1To,
       "PDEPTMST_SHIFT": this.onchangeCheckBoxNum(form.shift),
       "PDEPTMST_WKGHRS_STATUS": 0,
-      "PDEPTMST_LEAVESALARY_PROVISION_ACCODE": "string",
-      "PDEPTMST_SALARY_PAYABLE_ACCODE": "string",
-      "PDEPTMST_GRATUITY_PROVISION_ACCODE": "string",
-      "PDEPTMST_AIRTICKET_PROVISION_ACCODE": "string",
+      "PDEPTMST_LEAVESALARY_PROVISION_ACCODE": "",
+      "PDEPTMST_SALARY_PAYABLE_ACCODE": "",
+      "PDEPTMST_GRATUITY_PROVISION_ACCODE": "",
+      "PDEPTMST_AIRTICKET_PROVISION_ACCODE": "",
       "OT_BASE": 0,
       "OT_NOM": 0,
       "OT_HOL": 0,
-      "LV_SCHEME": "string",
-      "GR_SCHEME": "string",
-      "TK_SCHEME": "string",
-      "COMP_LB_CODE": "string",
-      "OT_CODE": "string",
-      "PDEPTMST_OTHER_ACCODE": "string",
+      "LV_SCHEME": "",
+      "GR_SCHEME": "",
+      "TK_SCHEME": "",
+      "COMP_LB_CODE": "",
+      "OT_CODE": "",
+      "PDEPTMST_OTHER_ACCODE": "",
       "PDEPTMST_OTHERAC": 0,
       "OT_HOURS": 0,
-      "BASIC_ALLW": "string",
+      "BASIC_ALLW": "",
       "PDEPTMST_COUNTRYCODE": form.CountryCode,
       "UDF1": form.userDefined1,
       "UDF2": form.UserDefined2,
@@ -307,8 +735,8 @@ export class DepartmentMasterComponent implements OnInit {
 
   }
 
-  updateMeltingType() {
-    
+  updateEmployeeMaster() {
+
     let API = 'PayDepartmentMaster/UpdatePayDepartmentMaster' + this.departmentMasterForm.value.code;
     let postData = this.setPostData()
 
