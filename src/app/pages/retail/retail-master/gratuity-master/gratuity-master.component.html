@@ -30,7 +30,10 @@
                 >
                 <div class="col-sm-3">
                   <mat-form-field style="width: 100%" appearance="outline">
-                    <mat-select formControlName="type">
+                    <mat-select
+                      [disabled]="flag == 'VIEW'"
+                      formControlName="type"
+                    >
                       <mat-option
                         *ngFor="let data of typeList"
                         [value]="data.field"
@@ -104,11 +107,20 @@
                 <div class="col-sm-3">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      (focusout)="
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          debitAccCode,
+                          ['debitAc', 'debitAcDesc'],
+                          false,
+                          ['ACCODE', 'ACCOUNT_HEAD'],
+                          false
+                        )
+                      "
                       [readonly]="flag === 'VIEW'"
                       type="text"
                       matInput
                       formControlName="debitAc"
-                      UpperCaseDirective
                     />
                     <master-search
                       *ngIf="flag != 'VIEW'"
@@ -157,6 +169,16 @@
                 <div class="col-sm-3">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      (focusout)="
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          countryCodeData,
+                          ['countryCode', 'countryDesc'],
+                          false,
+                          ['CODE', 'DESCRIPTION'],
+                          false
+                        )
+                      "
                       type="text"
                       [readonly]="flag === 'VIEW'"
                       matInput
@@ -341,14 +363,23 @@
                 <div class="col-sm-8">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      (focusout)="
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          userDefinedData,
+                          ['userDefined1'],
+                          false,
+                          ['DESCRIPTION'],
+                          false
+                        )
+                      "
+                      [readonly]="flag == 'VIEW'"
                       type="text"
                       matInput
-                      [readonly]="flag === 'VIEW'"
                       formControlName="userDefined1"
-                      UpperCaseDirective
                     />
                     <master-search
-                    *ngIf="flag != 'VIEW'"
+                      *ngIf="flag != 'VIEW'"
                       class="masterSearch"
                       [MasterSearchData]="userDefinedData"
                       (newRowClick)="
@@ -369,13 +400,24 @@
                 <div class="col-sm-8">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
-                      [readonly]="flag === 'VIEW'"
+                      (focusout)="
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          userDefinedData,
+                          ['userDefined2'],
+                          false,
+                          ['DESCRIPTION'],
+                          false
+                        )
+                      "
+                      [readonly]="flag == 'VIEW'"
                       type="text"
                       matInput
                       formControlName="userDefined2"
                       UpperCaseDirective
                     />
                     <master-search
+                      *ngIf="flag != 'VIEW'"
                       class="masterSearch"
                       [MasterSearchData]="userDefinedData"
                       (newRowClick)="
@@ -396,18 +438,29 @@
                 <div class="col-sm-8">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
-                      [readonly]="flag === 'VIEW'"
+                      (focusout)="
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          userDefinedData,
+                          ['userDefined3'],
+                          false,
+                          ['DESCRIPTION'],
+                          false
+                        )
+                      "
+                      [readonly]="flag == 'VIEW'"
                       type="text"
                       matInput
                       formControlName="userDefined3"
                       UpperCaseDirective
                     />
                     <master-search
+                      *ngIf="flag != 'VIEW'"
                       class="masterSearch"
+                      [MasterSearchData]="userDefinedData"
                       (newRowClick)="
                         lookupSelect($event, 'userDefined3', 'DESCRIPTION')
                       "
-                      [MasterSearchData]="userDefinedData"
                     >
                     </master-search>
                   </mat-form-field>
@@ -423,18 +476,29 @@
                 <div class="col-sm-8">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
-                      [readonly]="flag === 'VIEW'"
+                      (focusout)="
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          userDefinedData,
+                          ['userDefined4'],
+                          false,
+                          ['DESCRIPTION'],
+                          false
+                        )
+                      "
+                      [readonly]="flag == 'VIEW'"
                       type="text"
                       matInput
                       formControlName="userDefined4"
                       UpperCaseDirective
                     />
                     <master-search
+                      *ngIf="flag != 'VIEW'"
                       class="masterSearch"
+                      [MasterSearchData]="userDefinedData"
                       (newRowClick)="
                         lookupSelect($event, 'userDefined4', 'DESCRIPTION')
                       "
-                      [MasterSearchData]="userDefinedData"
                     >
                     </master-search>
                   </mat-form-field>
@@ -450,18 +514,29 @@
                 <div class="col-sm-8">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
-                      [readonly]="flag === 'VIEW'"
+                      (focusout)="
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          userDefinedData,
+                          ['userDefined5'],
+                          false,
+                          ['DESCRIPTION'],
+                          false
+                        )
+                      "
+                      [readonly]="flag == 'VIEW'"
                       type="text"
                       matInput
                       formControlName="userDefined5"
                       UpperCaseDirective
                     />
                     <master-search
+                      *ngIf="flag != 'VIEW'"
                       class="masterSearch"
+                      [MasterSearchData]="userDefinedData"
                       (newRowClick)="
                         lookupSelect($event, 'userDefined5', 'DESCRIPTION')
                       "
-                      [MasterSearchData]="userDefinedData"
                     >
                     </master-search>
                   </mat-form-field>
@@ -479,18 +554,29 @@
                 <div class="col-sm-8">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
-                      [readonly]="flag === 'VIEW'"
+                      (focusout)="
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          userDefinedData,
+                          ['userDefined6'],
+                          false,
+                          ['DESCRIPTION'],
+                          false
+                        )
+                      "
+                      [readonly]="flag == 'VIEW'"
                       type="text"
                       matInput
                       formControlName="userDefined6"
                       UpperCaseDirective
                     />
                     <master-search
+                      *ngIf="flag != 'VIEW'"
                       class="masterSearch"
+                      [MasterSearchData]="userDefinedData"
                       (newRowClick)="
                         lookupSelect($event, 'userDefined6', 'DESCRIPTION')
                       "
-                      [MasterSearchData]="userDefinedData"
                     >
                     </master-search>
                   </mat-form-field>
@@ -506,18 +592,29 @@
                 <div class="col-sm-8">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
-                      [readonly]="flag === 'VIEW'"
+                      (focusout)="
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          userDefinedData,
+                          ['userDefined7'],
+                          false,
+                          ['DESCRIPTION'],
+                          false
+                        )
+                      "
+                      [readonly]="flag == 'VIEW'"
                       type="text"
                       matInput
                       formControlName="userDefined7"
                       UpperCaseDirective
                     />
                     <master-search
+                      *ngIf="flag != 'VIEW'"
                       class="masterSearch"
+                      [MasterSearchData]="userDefinedData"
                       (newRowClick)="
                         lookupSelect($event, 'userDefined7', 'DESCRIPTION')
                       "
-                      [MasterSearchData]="userDefinedData"
                     >
                     </master-search>
                   </mat-form-field>
@@ -533,18 +630,29 @@
                 <div class="col-sm-8">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
-                      [readonly]="flag === 'VIEW'"
+                      (focusout)="
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          userDefinedData,
+                          ['userDefined8'],
+                          false,
+                          ['DESCRIPTION'],
+                          false
+                        )
+                      "
+                      [readonly]="flag == 'VIEW'"
                       type="text"
                       matInput
                       formControlName="userDefined8"
                       UpperCaseDirective
                     />
                     <master-search
+                      *ngIf="flag != 'VIEW'"
                       class="masterSearch"
+                      [MasterSearchData]="userDefinedData"
                       (newRowClick)="
                         lookupSelect($event, 'userDefined8', 'DESCRIPTION')
                       "
-                      [MasterSearchData]="userDefinedData"
                     >
                     </master-search>
                   </mat-form-field>
@@ -560,18 +668,29 @@
                 <div class="col-sm-8">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
-                      [readonly]="flag === 'VIEW'"
+                      (focusout)="
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          userDefinedData,
+                          ['userDefined9'],
+                          false,
+                          ['DESCRIPTION'],
+                          false
+                        )
+                      "
+                      [readonly]="flag == 'VIEW'"
                       type="text"
                       matInput
                       formControlName="userDefined9"
                       UpperCaseDirective
                     />
                     <master-search
+                      *ngIf="flag != 'VIEW'"
                       class="masterSearch"
+                      [MasterSearchData]="userDefinedData"
                       (newRowClick)="
                         lookupSelect($event, 'userDefined9', 'DESCRIPTION')
                       "
-                      [MasterSearchData]="userDefinedData"
                     >
                     </master-search>
                   </mat-form-field>
@@ -587,13 +706,24 @@
                 <div class="col-sm-8">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
-                      [readonly]="flag === 'VIEW'"
+                      (focusout)="
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          userDefinedData,
+                          ['userDefined10'],
+                          false,
+                          ['DESCRIPTION'],
+                          false
+                        )
+                      "
+                      [readonly]="flag == 'VIEW'"
                       type="text"
                       matInput
                       formControlName="userDefined10"
                       UpperCaseDirective
                     />
                     <master-search
+                      *ngIf="flag != 'VIEW'"
                       class="masterSearch"
                       [MasterSearchData]="userDefinedData"
                       (newRowClick)="
@@ -616,13 +746,24 @@
                 <div class="col-sm-8">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
-                      [readonly]="flag === 'VIEW'"
+                      (focusout)="
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          userDefinedData,
+                          ['userDefined11'],
+                          false,
+                          ['DESCRIPTION'],
+                          false
+                        )
+                      "
+                      [readonly]="flag == 'VIEW'"
                       type="text"
                       matInput
                       formControlName="userDefined11"
                       UpperCaseDirective
                     />
                     <master-search
+                      *ngIf="flag != 'VIEW'"
                       class="masterSearch"
                       [MasterSearchData]="userDefinedData"
                       (newRowClick)="
@@ -643,13 +784,24 @@
                 <div class="col-sm-8">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
-                      [readonly]="flag === 'VIEW'"
+                      (focusout)="
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          userDefinedData,
+                          ['userDefined12'],
+                          false,
+                          ['DESCRIPTION'],
+                          false
+                        )
+                      "
+                      [readonly]="flag == 'VIEW'"
                       type="text"
                       matInput
                       formControlName="userDefined12"
                       UpperCaseDirective
                     />
                     <master-search
+                      *ngIf="flag != 'VIEW'"
                       class="masterSearch"
                       [MasterSearchData]="userDefinedData"
                       (newRowClick)="
@@ -670,13 +822,24 @@
                 <div class="col-sm-8">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      (focusout)="
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          userDefinedData,
+                          ['userDefined13'],
+                          false,
+                          ['DESCRIPTION'],
+                          false
+                        )
+                      "
+                      [readonly]="flag == 'VIEW'"
                       type="text"
-                      [readonly]="flag === 'VIEW'"
                       matInput
                       formControlName="userDefined13"
                       UpperCaseDirective
                     />
                     <master-search
+                      *ngIf="flag != 'VIEW'"
                       class="masterSearch"
                       [MasterSearchData]="userDefinedData"
                       (newRowClick)="
@@ -697,13 +860,24 @@
                 <div class="col-sm-8">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      (focusout)="
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          userDefinedData,
+                          ['userDefined14'],
+                          false,
+                          ['DESCRIPTION'],
+                          false
+                        )
+                      "
+                      [readonly]="flag == 'VIEW'"
                       type="text"
                       matInput
-                      [readonly]="flag === 'VIEW'"
                       formControlName="userDefined14"
                       UpperCaseDirective
                     />
                     <master-search
+                      *ngIf="flag != 'VIEW'"
                       class="masterSearch"
                       [MasterSearchData]="userDefinedData"
                       (newRowClick)="
@@ -724,13 +898,24 @@
                 <div class="col-sm-8">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      (focusout)="
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          userDefinedData,
+                          ['userDefined15'],
+                          false,
+                          ['DESCRIPTION'],
+                          false
+                        )
+                      "
+                      [readonly]="flag == 'VIEW'"
                       type="text"
-                      [readonly]="flag === 'VIEW'"
                       matInput
                       formControlName="userDefined15"
                       UpperCaseDirective
                     />
                     <master-search
+                      *ngIf="flag != 'VIEW'"
                       class="masterSearch"
                       [MasterSearchData]="userDefinedData"
                       (newRowClick)="
