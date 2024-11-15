@@ -598,6 +598,7 @@ export class PosDailyClosingSummaryComponent implements OnInit {
   }
 
   previewClick() {
+    this.isLoading = true;
     let postData = {
       "SPID": "150",
       "parameter": {
@@ -663,15 +664,18 @@ export class PosDailyClosingSummaryComponent implements OnInit {
         this.comService.closeSnackBarMsg();
         const url = URL.createObjectURL(blob);
         window.open(url, '_blank');
+        this.isLoading = false;
       }
       else{
-        this.toastr.error(result.message)
+        this.toastr.error(result.message);
+        this.isLoading = false;
         return
       }
     });      
   }
 
   printBtnClick(){
+    this.isLoading = true;
     let postData = {
       "SPID": "150",
       "parameter": {
@@ -681,10 +685,6 @@ export class PosDailyClosingSummaryComponent implements OnInit {
         "strToDate" : this.formatDateToYYYYMMDD(this.posDailyClosingSummaryForm.value.toDate),
         "str_MGroupBy": this.posDailyClosingSummaryForm.value.metalType,
         "LOGDATA" : '',
-        // "str_DGroupBy" : this.posDailyClosingSummaryForm.value.diamondType,
-        // 'USERNAME': localStorage.getItem('username'),
-        // 'MODE': localStorage.getItem('userbranch'),
-        // 'VOCTYPE': ''
       }
     }
  
@@ -710,10 +710,11 @@ export class PosDailyClosingSummaryComponent implements OnInit {
               printWindow?.focus();
               printWindow?.print();
               // printWindow?.close();
-             
+              this.isLoading = false;
             } else {
               Swal.fire('No Data!', 'There is no data to print!', 'info');
               this.comService.closeSnackBarMsg();
+              this.isLoading = false;
               return
             }
           }, 1500); 
@@ -721,7 +722,8 @@ export class PosDailyClosingSummaryComponent implements OnInit {
         }
       }
       else{
-        this.toastr.error(result.message)
+        this.toastr.error(result.message);
+        this.isLoading = false;
         return
       }
     });  

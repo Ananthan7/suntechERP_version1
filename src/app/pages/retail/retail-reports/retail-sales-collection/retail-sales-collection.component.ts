@@ -508,6 +508,7 @@ export class RetailSalesCollectionComponent implements OnInit {
   }
 
   previewClick() {
+    this.isLoading = true;
     let logData =  {
       "VOCTYPE": this.comService.getqueryParamVocType() || "",
       "REFMID": "",
@@ -553,6 +554,7 @@ export class RetailSalesCollectionComponent implements OnInit {
               alignment: key === 'Branch Name' ? 'left' : key === 'Voc No' ? 'right' : 'center'
             };
           });
+          this.isLoading = false;
         }
         else{
           this.outputInGridBoolean = false;
@@ -561,6 +563,7 @@ export class RetailSalesCollectionComponent implements OnInit {
           if (Object.keys(printContent).length === 0) {
             Swal.fire('No Data!', 'There is no data!', 'info');
             this.commonService.closeSnackBarMsg();
+            this.isLoading = false;
             return
           } else {
             this.htmlPreview = this.sanitizer.bypassSecurityTrustHtml(printContent);
@@ -568,11 +571,13 @@ export class RetailSalesCollectionComponent implements OnInit {
             this.commonService.closeSnackBarMsg();
             const url = URL.createObjectURL(blob);
             window.open(url, '_blank');
+            this.isLoading = false;
           }
         }
       }
       else{
-        this.toastr.error(result.message)
+        this.toastr.error(result.message);
+        this.isLoading = false;
         return
       }
     });      
@@ -618,6 +623,7 @@ export class RetailSalesCollectionComponent implements OnInit {
   }
   
   printBtnClick(){
+    this.isLoading = true;
     let logData =  {
       "VOCTYPE": this.comService.getqueryParamVocType() || "",
       "REFMID": "",
@@ -654,6 +660,7 @@ export class RetailSalesCollectionComponent implements OnInit {
 
       if (result.dynamicData) {
         this.commonService.closeSnackBarMsg();
+        this.isLoading = false;
       }
     });  
    
@@ -678,11 +685,12 @@ export class RetailSalesCollectionComponent implements OnInit {
         printWindow?.document.close();
         printWindow?.focus();
         printWindow?.print();
-        printWindow?.close();
-       
+        // printWindow?.close();
+        this.isLoading = false;
       } else {
         Swal.fire('No Data!', 'There is no data to print!', 'info');
         this.commonService.closeSnackBarMsg();
+        this.isLoading = false;
         return
       }
     }, 3000); 
