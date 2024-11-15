@@ -280,7 +280,7 @@
                                             style="width: 60%;">
                                             <input type="text" matInput
                                                 formControlName="DIVCODE"
-                                                placeholder="Div Code"
+                                                placeholder="Div Code" UpperCaseDirective
                                                 [readonly]="viewMode"
                                                 (focusout)="validateLookupField($event,divCodeData,'DIVCODE')" />
                                             <master-search class="masterSearch"
@@ -405,8 +405,8 @@
                                     <div class="col-md-3">
                                         <mat-form-field appearance="outline"
                                             style="width: 60%;">
-                                            <input type="text" matInput
-                                                formControlName="toDIVCODE"
+                                            <input type="text" matInput 
+                                                formControlName="toDIVCODE"  UpperCaseDirective
                                                 placeholder="Div Code"
                                                 readonly />
                                         </mat-form-field>

@@ -8,6 +8,7 @@ import { NgbActiveModal, NgbModal, NgbModalRef, } from "@ng-bootstrap/ng-bootstr
 import { ProductionStockDetailComponent } from "../production-stock-detail/production-stock-detail.component";
 import { SavedataModel } from "../savedata-model";
 import Swal from "sweetalert2";
+import { MasterSearchComponent } from "src/app/shared/common/master-search/master-search.component";
 
 @Component({
   selector: "app-production-entry-details",
@@ -15,6 +16,18 @@ import Swal from "sweetalert2";
   styleUrls: ["./production-entry-details.component.scss"],
 })
 export class ProductionEntryDetailsComponent implements OnInit {
+  @ViewChild('jobnoCodeOverlay') jobnoCodeOverlay!: MasterSearchComponent;
+  @ViewChild('customerCodeOverlay') customerCodeOverlay!: MasterSearchComponent;
+  @ViewChild('designCodeOverlay') designCodeOverlay!: MasterSearchComponent;
+  @ViewChild('locationCodeOverlay') locationCodeOverlay!: MasterSearchComponent;
+  @ViewChild('price1CodeOverlay') price1CodeOverlay!: MasterSearchComponent;
+  @ViewChild('prefixCodeOverlay') prefixCodeOverlay!: MasterSearchComponent;
+  @ViewChild('price2CodeOverlay') price2CodeOverlay!: MasterSearchComponent;
+  @ViewChild('price3CodeOverlay') price3CodeOverlay!: MasterSearchComponent;
+  @ViewChild('price4CodeOverlay') price4CodeOverlay!: MasterSearchComponent;
+  @ViewChild('price5CodeOverlay') price5CodeOverlay!: MasterSearchComponent;
+  @ViewChild('costCodeOverlay') costCodeOverlay!: MasterSearchComponent;
+  @ViewChild('priceSchemeOverlay') priceSchemeOverlay!: MasterSearchComponent;
   @Output() saveDetail = new EventEmitter<any>();
   @Output() closeDetail = new EventEmitter<any>();
   @Input() content!: any;
@@ -519,7 +532,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
         this.commonService.closeSnackBarMsg()
         if (result.status == "Success" && result.dynamicData[0]) {
           let data = result.dynamicData[0]
-          if (data[0] && data[0].UNQ_JOB_ID != '') {
+          if (data[0] && this.commonService.nullToString(data[0].UNQ_JOB_ID) != '') {
             this.setFormNullToString('JOB_NUMBER', data[0].JOB_NUMBER)
             this.setFormNullToString('UNQ_JOB_ID', data[0].UNQ_JOB_ID)
             this.setFormNullToString('JOB_DESCRIPTION', data[0].JOB_DESCRIPTION)
@@ -545,7 +558,8 @@ export class ProductionEntryDetailsComponent implements OnInit {
             this.subJobNumberValidate()
             this.getDesignimagecode()
           } else {
-            this.commonService.toastErrorByMsgId('MSG1531')
+            this.setFormNullToString('JOB_NUMBER', '')
+            this.commonService.toastErrorByMsgId('MSG1871')
             return
           }
         } else {
@@ -1112,6 +1126,57 @@ export class ProductionEntryDetailsComponent implements OnInit {
     this.productiondetailsFrom.controls[formControlName].setValue(
       this.commonService.setCommaSerperatedNumber(value, Decimal)
     )
+  }
+  lookupKeyPress(event: any, form?: any) {
+    if (event.key == 'Tab' && event.target.value == '') {
+      this.showOverleyPanel(event, form)
+    }
+    if (event.key === 'Enter') {
+      if (event.target.value == '') this.showOverleyPanel(event, form)
+      event.preventDefault();
+    }
+  }
+  showOverleyPanel(event: any, formControlName: string) {
+    if (event.target.value != '') return
+    switch (formControlName) {
+      case 'JOB_NUMBER':
+        this.jobnoCodeOverlay.showOverlayPanel(event);
+        break;
+      case 'CUSTOMER_CODE':
+        this.customerCodeOverlay.showOverlayPanel(event);
+        break;
+      case 'DESIGN_CODE':
+        this.designCodeOverlay.showOverlayPanel(event);
+        break;
+      case 'location':
+        this.locationCodeOverlay.showOverlayPanel(event);
+        break;
+      case 'price1':
+        this.price1CodeOverlay.showOverlayPanel(event);
+        break;
+      case 'PREFIX':
+        this.prefixCodeOverlay.showOverlayPanel(event);
+        break;
+      case 'price2':
+        this.price2CodeOverlay.showOverlayPanel(event);
+        break;
+      case 'price3':
+        this.price3CodeOverlay.showOverlayPanel(event);
+        break;
+      case 'price4':
+        this.price4CodeOverlay.showOverlayPanel(event);
+        break;
+      case 'price5':
+        this.price5CodeOverlay.showOverlayPanel(event);
+        break;
+      case 'COST_CODE':
+        this.costCodeOverlay.showOverlayPanel(event);
+        break;
+      // case 'CUSTOMER_CODE':
+      //   this.priceSchemeOverlay.showOverlayPanel(event);
+      //   break;
+      default:
+    }
   }
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {

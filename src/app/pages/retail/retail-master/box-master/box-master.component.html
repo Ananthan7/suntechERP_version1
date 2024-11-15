@@ -6,6 +6,7 @@
 </div>
 <!-- modal header component -->
 <modal-header
+  *ngIf="flag !== 'VIEW'"
   (cancelClick)="close()"
   (saveClick)="boxMasterMainFormSubmit()"
   (deleteClick)="DeleteController()"
@@ -24,6 +25,7 @@
               <div class="col-md-2">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
+                    style="text-align: right"
                     [readonly]="flag === 'VIEW'"
                     type="text"
                     matInput
@@ -40,6 +42,7 @@
               <div class="col-md-2">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
+                    style="text-align: right"
                     [readonly]="flag === 'VIEW'"
                     type="text"
                     matInput
@@ -56,6 +59,7 @@
               <div class="col-md-2">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
+                    style="text-align: right"
                     [readonly]="flag === 'VIEW'"
                     type="text"
                     matInput
@@ -69,6 +73,7 @@
               <div class="col-md-3">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
+                    style="text-align: right"
                     [readonly]="flag === 'VIEW'"
                     type="text"
                     matInput
@@ -85,6 +90,7 @@
               <div class="col-md-2">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
+                    style="text-align: right"
                     [readonly]="flag === 'VIEW'"
                     type="text"
                     matInput

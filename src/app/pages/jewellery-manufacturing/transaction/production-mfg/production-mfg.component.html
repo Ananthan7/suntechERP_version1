@@ -84,7 +84,7 @@
                     UpperCaseDirective [readonly]="viewMode"
                     (keydown)="lookupKeyPress($event,'SMAN')"
                     (focusout)="validateLookupField($event,enteredByCodeData,'SMAN')" />
-                  <master-search class="masterSearch"
+                  <master-search class="masterSearch" #overlayuserName
                     [MasterSearchData]="enteredByCodeData" *ngIf="!viewMode"
                     (newRowClick)="userDataSelected($event)">
                   </master-search>
@@ -112,10 +112,9 @@
                     formControlName="CURRENCY_RATE"
                     (keydown)="lookupKeyPress($event,'CURRENCY_RATE')"
                     (focusout)="validateLookupField($event,currencyMasterData,'CURRENCY_RATE')" />
-                  <master-search class="masterSearch" *ngIf="!viewMode"
+                  <master-search class="masterSearch" #OverlayCurrencyRate *ngIf="!viewMode"
                     [MasterSearchData]="currencyMasterData"
-                    (newRowClick)="currencyDataSelected($event)"
-                    #OverlayCurrencyRate>
+                    (newRowClick)="currencyDataSelected($event)">
                   </master-search>
                 </mat-form-field>
               </div>

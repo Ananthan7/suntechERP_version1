@@ -13,6 +13,7 @@ import Swal from 'sweetalert2';
   styleUrls: ['./stone-weight-master.component.scss']
 })
 export class StoneWeightMasterComponent implements OnInit {
+  viewOnly: boolean = false;
   private subscriptions: Subscription[] = [];
   data: any;
   viewMode: boolean = false;
@@ -190,6 +191,11 @@ export class StoneWeightMasterComponent implements OnInit {
   ngOnInit(): void {
     console.log(this.content);
     if (this.content?.FLAG == "EDIT" || this.content?.FLAG == "VIEW") {
+      if(this.content?.FLAG == "VIEW"){
+        this.viewOnly = true;
+      }else{
+        this.viewOnly = false;
+      }
       this.mid = this.content.MID;
       this.stoneweightmaster.controls.division.setValue(this.content.DIVCODE);
       this.stoneweightmaster.controls.shape.setValue(this.content.SHAPE);
@@ -207,6 +213,7 @@ export class StoneWeightMasterComponent implements OnInit {
       this.stoneweightmaster.controls.sieveto.setValue(this.content.SIEVE_TO);
     }
     else if (this.content?.FLAG == "DELETE") {
+      this.viewOnly = true;
       this.mid = this.content.MID;
       this.stoneweightmaster.controls.division.setValue(this.content.DIVCODE);
       this.stoneweightmaster.controls.shape.setValue(this.content.SHAPE);

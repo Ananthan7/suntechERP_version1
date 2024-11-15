@@ -380,7 +380,14 @@ export class ProcessTransferDetailsComponent implements OnInit {
       this.renderer.selectRootElement('#jobNoSearch')?.focus();
     }
   }
+  processWorkerOrder() {
+    let flg = this.commonService.getCompanyParamValue('DIAMANFWORKERFOCUS')
+    if (flg) return true
+    return false;
+  }
+  processWorkerOrderFlag: boolean = false;
   setOnLoadDetails() {
+    this.processWorkerOrderFlag = this.processWorkerOrder()
     this.DIAMANFBARCODE = this.commonService.getCompanyParamValue('DIAMANFBARCODE')
     let HEADERDETAILS = this.content[0]?.HEADERDETAILS || {}
     if (HEADERDETAILS) {
@@ -539,11 +546,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
     // set fomvalidater for checking previous value
     this.FORM_VALIDATER = this.processTransferdetailsForm.value;
   }
-  processWorkerOrder() {
-    let flg = this.commonService.getCompanyParamValue('DIAMANFWORKERFOCUS')
-    if (flg) return true
-    return false;
-  }
+ 
   locationCodeValidate(event: any) {
     let postData = {
       "SPID": "057",
@@ -846,7 +849,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       this.setFormNullToString('JOB_DESCRIPTION', data[0].JOB_DESCRIPTION)
       this.setFormNullToString('SUB_JOB_DESCRIPTION', data[0].DESCRIPTION)
       this.setFormNullToString('JOB_DATE', data[0].JOB_DATE)
-      this.setFormNullToString('PART_CODE', data[0].PART_CODE)
+      // this.setFormNullToString('PART_CODE', data[0].PART_CODE)
       this.setFormNullToString('DESIGN_CODE', data[0].DESIGN_CODE)
       this.setFormNullToString('SEQ_CODE', data[0].SEQ_CODE)
       this.setFormNullToString('METALLAB_TYPE', data[0].METALLAB_TYPE)
@@ -1086,6 +1089,8 @@ export class ProcessTransferDetailsComponent implements OnInit {
   setDataFromSalesOrderDj(job_salesorder: any) {
     this.setFormNullToString('JOB_PCS', this.emptyToZero(job_salesorder[0].PCS))
     // this.setFormNullToString('DESIGN_CODE', job_salesorder[0].DESIGN_CODE)
+      this.setFormNullToString('PART_CODE', job_salesorder[0].DESIGN_CODE)
+
     this.setFormNullToString('UNQ_DESIGN_ID', job_salesorder[0].UNQ_DESIGN_ID)
     this.setFormNullToString('PICTURE_PATH', job_salesorder[0].PICTURE_PATH)
     this.setFormNullToString('TREE_NO', job_salesorder[0].TREE_NO)
@@ -2638,7 +2643,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       "SCRAP_PURE_WT": scrapPureWt,
       "SCRAP_PUDIFF": this.emptyToZero((Number(form.scrapWeight) - Number(form.PURITY)) * scrapPureWt),
       "SCRAP_ACCODE": seqDataFrom.length > 0 ? this.commonService.nullToString(seqDataFrom[0].GAIN_AC) : '',
-      "APPROVED_DATE": this.commonService.formatYYMMDD(form.approveddate),
+      "APPROVED_DATE": this.commonService.formatDateTime(form.approveddate),
       "APPROVED_USER": this.commonService.nullToString(form.APPROVED_USER),
       "SCRAP_PCS": this.emptyToZero(form.METAL_ScrapPCS),
       "SCRAP_STONEWT": this.emptyToZero(form.METAL_ScrapStoneWt),
@@ -2791,7 +2796,7 @@ export class ProcessTransferDetailsComponent implements OnInit {
       "SCRAP_PURE_WT": this.emptyToZero(form.METAL_ScrapPureWt),
       "SCRAP_PUDIFF": this.emptyToZero((Number(form.METAL_ScrapGrWt) - Number(form.PURITY)) * form.METAL_ScrapPureWt),
       "SCRAP_ACCODE": seqDataFrom.length > 0 ? this.commonService.nullToString(seqDataFrom[0].GAIN_AC) : '',
-      "APPROVED_DATE": this.commonService.formatYYMMDD(form.approveddate),
+      "APPROVED_DATE": this.commonService.formatDateTime(form.approveddate),
       "APPROVED_USER": this.commonService.nullToString(form.APPROVED_USER),
       "SCRAP_PCS": this.emptyToZero(form.METAL_ScrapPCS),
       "SCRAP_STONEWT": this.emptyToZero(form.METAL_ScrapStoneWt),

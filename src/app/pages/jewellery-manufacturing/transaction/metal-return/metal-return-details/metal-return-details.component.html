@@ -86,7 +86,7 @@
                                         formControlName="processCode"
                                         [readonly]="viewMode"
                                         (keydown)="lookupKeyPress($event,'processCode')"
-                                        (focusout)="validateLookupField($event,ProcessCodeData,'processCode')" />
+                                        (focusout)="processCodeValidate($event)" />
                                     <master-search class="masterSearch"
                                         [MasterSearchData]="ProcessCodeData"
                                         #overlayprocessCodeSearch
@@ -116,7 +116,7 @@
                                         formControlName="workerCode"
                                         [readonly]="viewMode"
                                         (keydown)="lookupKeyPress($event,'workerCode')"
-                                        (focusout)="validateLookupField($event,WorkerCodeData,'workerCode')">
+                                        (focusout)="WorkerCodeValidate($event)">
                                     <master-search class="masterSearch"
                                         [MasterSearchData]="WorkerCodeData"
                                         #overlayworkerCodeSearch
@@ -243,7 +243,7 @@
                                         formControlName="ReturnToStockCode"
                                         [readonly]="viewMode"
                                         (keydown)="lookupKeyPress($event,'ReturnToStockCode')"
-                                        (focusout)="validateLookupField($event,stockCodeData,'ReturnToStockCode')" />
+                                        (focusout)="toreturnstockcodevalidate($event)" />
                                     <master-search class="masterSearch"
                                         [MasterSearchData]="stockCodeData"
                                         #overlayReturnToStockCodeSearch
