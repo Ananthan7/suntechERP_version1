@@ -16,14 +16,21 @@ import { MasterSearchComponent } from 'src/app/shared/common/master-search/maste
 })
 export class OtpMasterComponent implements OnInit {
   @ViewChild('overlaybranchSearch') overlaybranchSearch!: MasterSearchComponent;
+  @Input() content!: any; 
 
   
-
+  selectedTabIndex = 0;
+  tableData: any = [];
+  editMode: boolean = false;
+  codeEnable: boolean = false;
+  private subscriptions: Subscription[] = [];
+  isloading: boolean = false;
+  viewMode: boolean = false;
+  isDisabled: boolean = false;
+  editableMode: boolean = false;
+  currentDate = new Date();
   columnheader:any[] = ['S.No','Level','User', 'Mobile Number','Mobile Number','Email'];
 
-  subscriptions: any;
-  @Input() content!: any; 
-  tableData: any[] = [];
 
   constructor( 
     private activeModal: NgbActiveModal,
@@ -34,6 +41,20 @@ export class OtpMasterComponent implements OnInit {
     ) { }
  
   ngOnInit(): void {
+    if (this.content?.FLAG) {
+      this.setFormValues();
+      if (this.content?.FLAG == 'VIEW') {
+        this.isDisabled = true;
+        this.viewMode = true;
+      } else if (this.content?.FLAG == 'EDIT') {
+        this.viewMode = false;
+        this.editMode = true;
+        this.codeEnable = false;
+      } else if (this.content?.FLAG == 'DELETE') {
+        this.viewMode = true;
+        this.deleteRecord()
+      }
+    }
   }
   otpForm: FormGroup = this.formBuilder.group({
   
@@ -64,6 +85,11 @@ export class OtpMasterComponent implements OnInit {
   // }
 
   close(data?: any) {
+    if (data){
+      this.viewMode = true;
+      this.activeModal.close(data);
+      return
+    }
     if (this.content && this.content.FLAG == 'VIEW'){
       this.activeModal.close(data);
       return
@@ -83,6 +109,62 @@ export class OtpMasterComponent implements OnInit {
       }
     }
     )
+  }
+
+  lookupKeyPress(event: any, form?: any) {
+    if (event.key == 'Tab' && event.target.value == '') {
+      this.showOverleyPanel(event, form)
+    }
+    if (event.key === 'Enter') {
+      if (event.target.value == '') this.showOverleyPanel(event, form)
+      event.preventDefault();
+    }
+  }
+
+  showOverleyPanel(event: any, formControlName: string) {
+
+    if (formControlName == 'branch') {
+      this.overlaybranchSearch.showOverlayPanel(event)
+    }
+  }
+
+  openOverlay(formControlName: string, event: any) {
+    if (formControlName == 'branch') {
+      this.overlaybranchSearch.showOverlayPanel(event)
+    }
+  }
+
+  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    LOOKUPDATA.SEARCH_VALUE = event.target.value
+    if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
+    let param = {
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+    }
+    this.commonService.toastInfoByMsgId('MSG81447');
+    let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
+      .subscribe((result) => {
+        let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+        if (data.length == 0) {
+          this.commonService.toastErrorByMsgId('MSG1531')
+          this.otpForm.controls[FORMNAME].setValue('')
+          // this.renderer.selectRootElement(FORMNAME).focus();
+          LOOKUPDATA.SEARCH_VALUE = ''
+          this.openOverlay(FORMNAME, event);
+          return
+        }
+
+
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+      })
+    this.subscriptions.push(Sub)
+  }
+
+  setFormValues(){
+    this.otpForm.controls.branch.setValue(this.content.BRANCH_CODE)
+    this.otpForm.controls.branchdesc.setValue(this.content.BRANCH_DESCRIPTION)
   }
 
   submitValidation(form: any) {
@@ -258,20 +340,5 @@ export class OtpMasterComponent implements OnInit {
   //   }
   // }
 
-  lookupKeyPress(event: any, form?: any) {
-    if (event.key == 'Tab' && event.target.value == '') {
-      this.showOverleyPanel(event, form)
-    }
-    if (event.key === 'Enter') {
-      if (event.target.value == '') this.showOverleyPanel(event, form)
-      event.preventDefault();
-    }
-  }
-
-  showOverleyPanel(event: any, formControlName: string) {
-
-    if (formControlName == 'branch') {
-      this.overlaybranchSearch.showOverlayPanel(event)
-    }
-  }
+ 
 }

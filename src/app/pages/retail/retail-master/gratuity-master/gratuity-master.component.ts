@@ -115,9 +115,8 @@ export class GratuityMasterComponent implements OnInit {
     private commonService: CommonServiceService
   ) {}
   ngOnInit(): void {
-    this.flag = this.content?.FLAG;
+    this.content ? this.flag = this.content!.FLAG : console.log('No Content, Due to you are in ADD');
     this.initialController(this.flag, this.content);
-    console.log(this.content);
   }
 
   close(data?: any) {
@@ -379,5 +378,114 @@ export class GratuityMasterComponent implements OnInit {
       default:
         break;
     }
+  }
+
+  SPvalidateLookupFieldModified(
+    event: any,
+    LOOKUPDATA: MasterSearchModel,
+    FORMNAMES: string[],
+    isCurrencyField: boolean,
+    lookupFields?: string[],
+    FROMCODE?: boolean
+  ) {
+    const searchValue = event.target.value?.trim();
+
+    if (!searchValue || this.flag == "VIEW") return;
+
+    LOOKUPDATA.SEARCH_VALUE = searchValue;
+
+    const param = {
+      PAGENO: LOOKUPDATA.PAGENO,
+      RECORDS: LOOKUPDATA.RECORDS,
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECONDITION: LOOKUPDATA.WHERECONDITION,
+      searchField: LOOKUPDATA.SEARCH_FIELD,
+      searchValue: LOOKUPDATA.SEARCH_VALUE,
+    };
+
+    this.commonService.showSnackBarMsg("MSG81447");
+
+    const sub: Subscription = this.apiService
+      .postDynamicAPI("MasterLookUp", param)
+      .subscribe({
+        next: (result: any) => {
+          this.commonService.closeSnackBarMsg();
+          const data = result.dynamicData?.[0];
+
+          console.log("API Response Data:", data);
+
+          if (data?.length) {
+            if (LOOKUPDATA.FRONTENDFILTER && LOOKUPDATA.SEARCH_VALUE) {
+              let searchResult = this.commonService.searchAllItemsInArray(
+                data,
+                LOOKUPDATA.SEARCH_VALUE
+              );
+
+              console.log("Filtered Search Result:", searchResult);
+
+              if (FROMCODE === true) {
+                searchResult = [
+                  ...searchResult.filter(
+                    (item: any) =>
+                      item.MobileCountryCode === LOOKUPDATA.SEARCH_VALUE
+                  ),
+                  ...searchResult.filter(
+                    (item: any) =>
+                      item.MobileCountryCode !== LOOKUPDATA.SEARCH_VALUE
+                  ),
+                ];
+              } else if (FROMCODE === false) {
+                searchResult = [
+                  ...searchResult.filter(
+                    (item: any) => item.DESCRIPTION === LOOKUPDATA.SEARCH_VALUE
+                  ),
+                  ...searchResult.filter(
+                    (item: any) => item.DESCRIPTION !== LOOKUPDATA.SEARCH_VALUE
+                  ),
+                ];
+              }
+
+              if (searchResult?.length) {
+                const matchedItem = searchResult[0];
+
+                FORMNAMES.forEach((formName, index) => {
+                  const field = lookupFields?.[index];
+                  if (field && field in matchedItem) {
+                    this.gratuityMasterForm.controls[formName].setValue(
+                      matchedItem[field]
+                    );
+                  } else {
+                    console.error(
+                      `Property ${field} not found in matched item.`
+                    );
+                    this.commonService.toastErrorByMsgId("No data found");
+                    this.clearLookupData(LOOKUPDATA, FORMNAMES);
+                  }
+                });
+              } else {
+                this.commonService.toastErrorByMsgId("No data found");
+                this.clearLookupData(LOOKUPDATA, FORMNAMES);
+              }
+            }
+          } else {
+            this.commonService.toastErrorByMsgId("No data found");
+            this.clearLookupData(LOOKUPDATA, FORMNAMES);
+          }
+        },
+        error: () => {
+          this.commonService.toastErrorByMsgId("MSG2272");
+          this.clearLookupData(LOOKUPDATA, FORMNAMES);
+        },
+      });
+
+    this.subscriptions.push(sub);
+  }
+
+  // Clear multiple form controls
+  clearLookupData(LOOKUPDATA: MasterSearchModel, FORMNAMES: string[]) {
+    LOOKUPDATA.SEARCH_VALUE = "";
+    FORMNAMES.forEach((formName) => {
+      this.gratuityMasterForm.controls[formName].setValue("");
+    });
   }
 }

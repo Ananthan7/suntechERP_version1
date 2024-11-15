@@ -1,10 +1,11 @@
 import { DatePipe } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
+import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import Swal from 'sweetalert2';
 
@@ -14,27 +15,204 @@ import Swal from 'sweetalert2';
   styleUrls: ['./employee-master.component.scss']
 })
 export class EmployeeMasterComponent implements OnInit {
-  selectedTabIndex = 0;
   @Input() content!: any;
+
+  @ViewChild('overlayBranchSearch') overlayBranchSearch!: MasterSearchComponent;
+  @ViewChild('overlayDepartmentSearch') overlayDepartmentSearch!: MasterSearchComponent; //
+  @ViewChild('overlayDesignationSearch') overlayDesignationSearch!: MasterSearchComponent;
+  @ViewChild('overlayGradeSearch') overlayGradeSearch!: MasterSearchComponent;
+  @ViewChild('overlayReligionSearch') overlayReligionSearch!: MasterSearchComponent;
+  @ViewChild('overlayCountrySearch') overlayCountrySearch!: MasterSearchComponent;
+  @ViewChild('overlayStateSearch') overlayStateSearch!: MasterSearchComponent;
+  @ViewChild('overlayPRCityDataSearch') overlayPRCityDataSearch!: MasterSearchComponent;
+  @ViewChild('overlayPRStateCodeDataSearch') overlayPRStateCodeDataSearch!: MasterSearchComponent;
+  @ViewChild('overlayPRCountryCodeSearch') overlayPRCountryCodeSearch!: MasterSearchComponent;
+  @ViewChild('overlayCitySearch') overlayCitySearch!: MasterSearchComponent;
+  @ViewChild('overlayNationalitySearch') overlayNationalitySearch!: MasterSearchComponent; 
+
+  selectedTabIndex = 0;
   tableData: any = [];
+  editMode: boolean = false;
+  codeEnable: boolean = false;
   private subscriptions: Subscription[] = [];
+  isloading: boolean = false;
+  viewMode: boolean = false;
+  isDisabled: boolean = false;
+  editableMode: boolean = false;
   currentDate = new Date();
 
 
 
-  BranchData: MasterSearchModel = {}
-  DepartmentData: MasterSearchModel = {}
-  DesignationData: MasterSearchModel = {}
-  GradeData: MasterSearchModel = {}
-  DOBData: MasterSearchModel = {}
-  NationalityData: MasterSearchModel = {}
-  ReligionData: MasterSearchModel = {}
-  CountryCodeData: MasterSearchModel = {}
-  StateCodeData: MasterSearchModel = {}
-  CityCodeData: MasterSearchModel = {}
-  PRCountryCodeData: MasterSearchModel ={}
-  PRStateCodeData: MasterSearchModel ={}
-  PRCityCodeData: MasterSearchModel ={}
+  BranchData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 13,
+    SEARCH_FIELD: 'BRANCH_CODE',
+    SEARCH_HEADING: 'Branch',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "BRANCH_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  DepartmentData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Department code ',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "Types = 'FA DEPARTMENT'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  DesignationData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "Design Code",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "TYPES='HRM DESIGNATION MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  GradeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Grade Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "TYPES ='HRM GRADE MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  NationalityData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Nationality Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "TYPES='NATIONALITY MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  ReligionData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Religion Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE <> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  CountryCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Country Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "TYPES = 'COUNTRY MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  StateCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 27,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'State Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "TYPES='state master'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  CityCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 28,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'City Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "TYPES='REGION MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  PRCountryCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'Country Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "TYPES = 'COUNTRY MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  PRStateCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 27,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'State Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "TYPES='state master'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  PRCityCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 28,
+    SEARCH_FIELD: 'CODE',
+    SEARCH_HEADING: 'City Code',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "CODE <> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+
+  GenderList = [
+    {
+      name: 'Male',
+      value: 1
+    },
+    {
+      name: 'FEMALE',
+      value: 2
+    },
+    {
+      name: 'Other',
+      value: 3
+    },
+  ]
+
+  maritial = [
+    {
+      name: 'Married',
+      value: 1
+    },
+    {
+      name: 'Single',
+      value: 2
+    },
+  ]
 
   employeeMasterForm: FormGroup = this.formBuilder.group({
     code: [''],
@@ -51,12 +229,12 @@ export class EmployeeMasterComponent implements OnInit {
     GradeDes: [''], // No
     DOJ: [''],
     DOB: [''],
-    BloodGroup: [''], 
-    Nationality: [''], 
-    Religion:[''],
+    BloodGroup: [''],
+    Nationality: [''],
+    Religion: [''],
     FatherName: [''],
-    Gender: [''], 
-    MaritialStatus: [''], 
+    Gender: [''],
+    MaritialStatus: [''],
     HomeHouseName: [''],
     HomeAddress: [''],
     Country: [''],
@@ -81,9 +259,26 @@ export class EmployeeMasterComponent implements OnInit {
     private formBuilder: FormBuilder,
     private commonService: CommonServiceService,
     private dataService: SuntechAPIService,
+    private renderer: Renderer2,
   ) { }
 
   ngOnInit(): void {
+    // this.renderer.selectRootElement('#code')?.focus();
+    // this.codeEnable = true;
+    if (this.content?.FLAG) {
+      this.setFormValues();
+      if (this.content?.FLAG == 'VIEW') {
+        this.isDisabled = true;
+        this.viewMode = true;
+      } else if (this.content?.FLAG == 'EDIT') {
+        this.viewMode = false;
+        this.editMode = true;
+        this.codeEnable = false;
+      } else if (this.content?.FLAG == 'DELETE') {
+        this.viewMode = true;
+        this.deleteEmployeeMaster()
+      }
+    }
   }
 
   close(data?: any) {
@@ -113,47 +308,253 @@ export class EmployeeMasterComponent implements OnInit {
     )
   }
 
-  BranchDataSelected(data: any) {
-
+  BranchDataSelected(e: any) {
+    console.log(e);
+    this.employeeMasterForm.controls.Branch.setValue(e.BRANCH_CODE)
+    this.employeeMasterForm.controls.BranchDes.setValue(e.BRANCH_NAME)
   }
 
-  DepartmentSelected(data: any) {
-
+  DepartmentSelected(e: any) {
+    console.log(e);
   }
 
   DesignationSelected(e: any) {
+    console.log(e);
+    this.employeeMasterForm.controls.Designation.setValue(e.CODE)
+    this.employeeMasterForm.controls.DesignationDes.setValue(e.DESCRIPTION)
 
   }
 
   GradeSelected(e: any) {
-
-  }
-
-  DOBSelected(e: any) {
+    console.log(e);
+    this.employeeMasterForm.controls.Grade.setValue(e.CODE)
+    this.employeeMasterForm.controls.GradeDes.setValue(e.DESCRIPTION)
 
   }
 
   NationalitySelected(e: any) {
+    console.log(e);
+    this.employeeMasterForm.controls.Nationality.setValue(e.CODE)
 
   }
 
-  ReligionSelected(e: any) { }
+  ReligionSelected(e: any) {
+    console.log(e);
+    this.employeeMasterForm.controls.Religion.setValue(e.CODE)
 
-  CountryCodeSelected(e: any) { }
+  }
 
-  StateCodeSelected(e: any) { }
+  CountryCodeSelected(e: any) {
+    console.log(e);
+    this.employeeMasterForm.controls.Country.setValue(e.CODE)
+  }
 
-  CityCodeSelected(e: any) { }
+  StateCodeSelected(e: any) {
+    console.log(e);
+    this.employeeMasterForm.controls.State.setValue(e.CODE)
 
-  PRCountryCodeSelected(e: any) { }
+  }
 
-  PRStateCodeSelected(e: any) { }
+  CityCodeSelected(e: any) {
+    console.log(e);
+    this.employeeMasterForm.controls.City.setValue(e.CODE)
+  }
 
-  PRCityCodeSelected(e: any) { }
+  PRCountryCodeSelected(e: any) {
+    console.log(e);
+    this.employeeMasterForm.controls.PRCountry.setValue(e.CODE)
+
+  }
+
+  PRStateCodeSelected(e: any) {
+    console.log(e);
+    this.employeeMasterForm.controls.PRState.setValue(e.CODE)
+
+  }
+
+  PRCityCodeSelected(e: any) {
+    console.log(e);
+    this.employeeMasterForm.controls.PRCity.setValue(e.CODE)
+  }
 
   addTableData() { }
 
   deleteTableData() { }
+
+  lookupKeyPress(event: any, form?: any) {
+    if (event.key == 'Tab' && event.target.value == '') {
+      this.showOverleyPanel(event, form)
+    }
+    if (event.key === 'Enter') {
+      if (event.target.value == '') this.showOverleyPanel(event, form)
+      event.preventDefault();
+    }
+  }
+
+
+
+  showOverleyPanel(event: any, formControlName: string) {
+    switch (formControlName) {
+      case 'Branch':
+        this.overlayBranchSearch.showOverlayPanel(event);
+        break;
+      case 'Department':
+        this.overlayDepartmentSearch.showOverlayPanel(event);
+        break;
+      case 'Designation':
+        this.overlayDesignationSearch.showOverlayPanel(event);
+        break;
+      case 'Grade':
+        this.overlayGradeSearch.showOverlayPanel(event);
+        break;
+      case 'Religion':
+        this.overlayReligionSearch.showOverlayPanel(event);
+        break;
+      case 'Nationality':
+        this.overlayNationalitySearch.showOverlayPanel(event);
+        break;
+      case 'Country':
+        this.overlayCountrySearch.showOverlayPanel(event);
+        break;
+      case 'State':
+        this.overlayStateSearch.showOverlayPanel(event);
+        break;
+      case 'City':
+        this.overlayCitySearch.showOverlayPanel(event);
+        break;
+      case 'PRCity':
+        this.overlayPRCityDataSearch.showOverlayPanel(event);
+        break;
+      case 'PRStateCodeData':
+        this.overlayPRStateCodeDataSearch.showOverlayPanel(event);
+        break;
+      case 'PRCountryCodeData':
+        this.overlayPRCountryCodeSearch.showOverlayPanel(event);
+        break;
+      default:
+    }
+  }
+
+  openOverlay(FORMNAME: string, event: any) {
+    switch (FORMNAME) {
+      case 'Branch':
+        this.overlayBranchSearch.showOverlayPanel(event);
+        break;
+      case 'Department':
+        this.overlayDepartmentSearch.showOverlayPanel(event);
+        break;
+      case 'Designation':
+        this.overlayDesignationSearch.showOverlayPanel(event);
+        break;
+      case 'Grade':
+        this.overlayGradeSearch.showOverlayPanel(event);
+        break;
+      case 'Religion':
+        this.overlayReligionSearch.showOverlayPanel(event);
+        break;
+      case 'Nationality':
+        this.overlayNationalitySearch.showOverlayPanel(event);
+        break;
+      case 'Country':
+        this.overlayCountrySearch.showOverlayPanel(event);
+        break;
+      case 'State':
+        this.overlayStateSearch.showOverlayPanel(event);
+        break;
+      case 'City':
+        this.overlayCitySearch.showOverlayPanel(event);
+        break;
+      case 'PRCity':
+        this.overlayPRCityDataSearch.showOverlayPanel(event);
+        break;
+      case 'PRStateCodeData':
+        this.overlayPRStateCodeDataSearch.showOverlayPanel(event);
+        break;
+      case 'PRCountryCodeData':
+        this.overlayPRCountryCodeSearch.showOverlayPanel(event);
+        break;
+      default:
+    }
+  }
+
+  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    LOOKUPDATA.SEARCH_VALUE = event.target.value
+    if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
+    let param = {
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+    }
+    this.commonService.toastInfoByMsgId('MSG81447');
+    let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
+      .subscribe((result) => {
+        let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+        if (data.length == 0) {
+          this.commonService.toastErrorByMsgId('MSG1531')
+          this.employeeMasterForm.controls[FORMNAME].setValue('')
+          // this.renderer.selectRootElement(FORMNAME).focus();
+          LOOKUPDATA.SEARCH_VALUE = ''
+          this.openOverlay(FORMNAME, event);
+          return
+        }
+
+
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+      })
+    this.subscriptions.push(Sub)
+  }
+
+
+
+  setFormValues() {
+    if (!this.content) return
+
+    let API = 'EmployeeMaster/GetEmployeeMasterDetail/' + this.content.EMPMST_CODE;
+    let Sub: Subscription = this.dataService.getDynamicAPI(API)
+      .subscribe((result) => {
+        this.commonService.closeSnackBarMsg()
+        this.employeeMasterForm.controls.DOB.setValue(result.response.EMPMST_DOB)
+        this.employeeMasterForm.controls.DOJ.setValue(result.response.EMPMST_JOIN_DATE)
+      }, err => {
+        this.commonService.closeSnackBarMsg()
+        this.commonService.toastErrorByMsgId('MSG1531')
+      })
+    this.subscriptions.push(Sub)
+
+    this.employeeMasterForm.controls.code.setValue(this.content.EMPMST_CODE)
+    this.employeeMasterForm.controls.name.setValue(this.content.EMPMST_NAME)
+    this.employeeMasterForm.controls.otherLanguage.setValue(this.content.EMPMST_OTHERNAME)
+    this.employeeMasterForm.controls.Branch.setValue(this.content.EMPMST_BRANCH_CODE)
+    this.employeeMasterForm.controls.Department.setValue(this.content.EMPMST_DEPT_CODE)
+    this.employeeMasterForm.controls.Designation.setValue(this.content.EMPMST_DESG_CODE)
+    this.employeeMasterForm.controls.GroupCode.setValue(this.content.EMPMST_DEDACCCODE)
+    this.employeeMasterForm.controls.Grade.setValue(this.content.EMPMST_GRADE_CODE)
+    this.employeeMasterForm.controls.Nationality.setValue(this.content.EMPMST_NATIONALITY_CODE)
+    this.employeeMasterForm.controls.Religion.setValue(this.content.EMPMST_NATIONALITY_CODE)
+    this.employeeMasterForm.controls.DOB.setValue(this.content.EMPMST_DOB)
+    this.employeeMasterForm.controls.BloodGroup.setValue(this.content.EMPMST_BLOOD_GROUP)
+    this.employeeMasterForm.controls.FatherName.setValue(this.content.EMPMST_FATHER_NAME)
+    this.employeeMasterForm.controls.Gender.setValue(this.content.EMPMST_GENDER)
+    this.employeeMasterForm.controls.MaritialStatus.setValue(this.content.EMPMST_MARITAL_STATUS)
+    this.employeeMasterForm.controls.HomeHouseName.setValue(this.content.EMPMST_HOUSENAME_HM)
+    this.employeeMasterForm.controls.HomeAddress.setValue(this.content.EMPMST_ADDRESS_HM)
+    this.employeeMasterForm.controls.Country.setValue(this.content.EMPMST_COUNTRYCODE_HM)
+    this.employeeMasterForm.controls.State.setValue(this.content.EMPMST_STATECODE_HM)
+    this.employeeMasterForm.controls.City.setValue(this.content.EMPMST_TOWNCODE_HM)
+    this.employeeMasterForm.controls.MoblieCode.setValue(this.content.EMPMST_MOBILE_HM1)
+    this.employeeMasterForm.controls.MoblieNum.setValue(this.content.EMPMST_MOBILE_HM2)
+    this.employeeMasterForm.controls.LandLineNum.setValue(this.content.EMPMST_TEL_LAND_HM)
+    this.employeeMasterForm.controls.email.setValue(this.content.EMPMST_EMAIL)
+    this.employeeMasterForm.controls.PRhouseName.setValue(this.content.EMPMST_HOUSENAME_PR)
+    this.employeeMasterForm.controls.PRAddress.setValue(this.content.EMPMST_ADDRESS_PR)
+    this.employeeMasterForm.controls.PRCountry.setValue(this.content.EMPMST_COUNTRYCODE_PR)
+    this.employeeMasterForm.controls.PRState.setValue(this.content.EMPMST_STATECODE_PR)
+    this.employeeMasterForm.controls.PRCity.setValue(this.content.EMPMST_TOWNCODE_PR)
+    this.employeeMasterForm.controls.PRMoblieCode.setValue(this.content.EMPMST_MOBILE_PR1)
+    this.employeeMasterForm.controls.PRMoblieNo.setValue(this.content.EMPMST_MOBILE_PR2)
+    this.employeeMasterForm.controls.PRLand.setValue(this.content.EMPMST_TEL_LAND_PR)
+  }
 
   setPostData() {//this.commonService.nullToString()
     let form = this.employeeMasterForm.value
@@ -163,44 +564,44 @@ export class EmployeeMasterComponent implements OnInit {
       "EMPMST_NAME": this.commonService.nullToString(form.name),
       "EMPMST_OTHERNAME": this.commonService.nullToString(form.otherLanguage),
       "EMPMST_BRANCH_CODE": this.commonService.nullToString(form.Branch),
-      "EMPMST_VISABRANCH_CODE": this.commonService.nullToString(form.BranchDes),
+      "EMPMST_VISABRANCH_CODE": "str",
       "EMPMST_DEPT_CODE": this.commonService.nullToString(form.Department),
       "EMPMST_DESG_CODE": this.commonService.nullToString(form.Designation),
       "EMPMST_DEDACCCODE": this.commonService.nullToString(form.GroupCode),
-      "EMPMST_EMPSUBLEDGERAC": "",
-      "EMPMST_PICPATH": "",
-      "EMPMST_SIGNPATH": "",
+      "EMPMST_EMPSUBLEDGERAC": "str",
+      "EMPMST_PICPATH": "str",
+      "EMPMST_SIGNPATH": "str",
       "EMPMST_GRADE_CODE": this.commonService.nullToString(form.Grade),
-      "EMPMST_REPORTTO_CODE1": "",
-      "EMPMST_REPORTTO_CODE2": "",
-      "EMPMST_VISA_DESG_CODE": "",
-      "EMPMST_CATEGORY_CODE": "",
-      "EMPMST_TYPE_CODE": "",
-      "EMPMST_CAMP_CODE": "",
-      "EMPMST_LOCATION_CODE": "",
+      "EMPMST_REPORTTO_CODE1": "str",
+      "EMPMST_REPORTTO_CODE2": "str",
+      "EMPMST_VISA_DESG_CODE": "str",
+      "EMPMST_CATEGORY_CODE": "str",
+      "EMPMST_TYPE_CODE": "str",
+      "EMPMST_CAMP_CODE": "str",
+      "EMPMST_LOCATION_CODE": "str",
       "EMPMST_NATIONALITY_CODE": this.commonService.nullToString(form.Nationality),
       "EMPMST_RELIGION_CODE": this.commonService.nullToString(form.Religion),
-      "EMPMST_CONTRACT_CODE": "",
-      "EMPMST_DOB": this.commonService.nullToString(form.DOB),
+      "EMPMST_CONTRACT_CODE": "str",
+      "EMPMST_DOB": form.DOB,
       "EMPMST_BLOOD_GROUP": this.commonService.emptyToZero(form.BloodGroup),
       "EMPMST_FATHER_NAME": this.commonService.nullToString(form.FatherName),
-      "EMPMST_MOTHER_TONGUE": "",
+      "EMPMST_MOTHER_TONGUE": "str",
       "EMPMST_GENDER": this.commonService.emptyToZero(form.Gender),
       "EMPMST_MARITAL_STATUS": this.commonService.emptyToZero(form.MaritialStatus),
       "EMPMST_PROBATION_CONFIRMED": 0,
-      "EMPMST_PROBATION_PERIOD": "",
-      "EMPMST_PROBATION_STARTDATE": "",
-      "EMPMST_JOIN_DATE": this.commonService.nullToString(form.DOJ),
-      "EMPMST_CONFIRM_DATE": "",
+      "EMPMST_PROBATION_PERIOD": "str",
+      "EMPMST_PROBATION_STARTDATE": "2024-11-14T08:17:18.161Z",
+      "EMPMST_JOIN_DATE": form.DOJ,
+      "EMPMST_CONFIRM_DATE": "2024-11-14T08:17:18.161Z",
       "EMPMST_LEAVING_STATUS": true,
-      "EMPMST_LEAVE_DATE": "",
-      "EMPMST_REASON_CODE": "",
-      "EMPMST_LAST_ANUAL_LV_TAKEN": "",
-      "EMPMST_LAST_REJOIN_ON": "",
+      "EMPMST_LEAVE_DATE": "2024-11-14T08:17:18.161Z",
+      "EMPMST_REASON_CODE": "string",
+      "EMPMST_LAST_ANUAL_LV_TAKEN": "2024-11-14T08:17:18.161Z",
+      "EMPMST_LAST_REJOIN_ON": "2024-11-14T08:17:18.161Z",
       "EMPMST_TRAINING_MONTHS": 0,
       "EMPMST_NOTICE_PERIOD": 0,
-      "EMPMST_LAST_PRPDATE": "",
-      "EMPMST_LAST_OVTDATE": "",
+      "EMPMST_LAST_PRPDATE": "2024-11-14T08:17:18.161Z",
+      "EMPMST_LAST_OVTDATE": "2024-11-14T08:17:18.161Z",
       "EMPMST_LEAVESPERYEAR": 0,
       "EMPMST_PENDINGPERYEAR": 0,
       "EMPMST_LEAVESPERMONTH": 0,
@@ -209,33 +610,33 @@ export class EmployeeMasterComponent implements OnInit {
       "EMPMST_STOP_SALARY": true,
       "EMPMST_TIME_ATTREQU": true,
       "EMPMST_WITHOVT": true,
-      "EMPMST_CURRENCY": "",
-      "EMPMST_SALARY_ACCODE": "",
-      "EMPMST_SALARY_SUBLEDGERAC": "",
+      "EMPMST_CURRENCY": "str",
+      "EMPMST_SALARY_ACCODE": "str",
+      "EMPMST_SALARY_SUBLEDGERAC": "str",
       "EMPMST_JOBCOSTRATE": 0,
       "EMPMST_BASIC_SALARY": 0,
       "EMPMST_GROSS_ALLOWANCE": 0,
       "EMPMST_GROSS_DEDUCTION": 0,
       "EMPMST_GROSS_SALARY": 0,
       "EMPMST_TOTAL_CONTRACT_SALARY": 0,
-      "EMPMST_COMPANY_BANK_CODE": "",
-      "EMPMST_BANK_CODE": "",
-      "EMPMST_BANK_ACCOUNT_NO": "",
-      "EMPMST_AGENT_CODE": "",
-      "EMPMST_WPS_TYPE": "",
-      "EMPMST_NORMALOT_CODE": "",
-      "EMPMST_HOLIDAYOT_CODE": "",
+      "EMPMST_COMPANY_BANK_CODE": "str",
+      "EMPMST_BANK_CODE": "str",
+      "EMPMST_BANK_ACCOUNT_NO": "str",
+      "EMPMST_AGENT_CODE": "str",
+      "EMPMST_WPS_TYPE": "str",
+      "EMPMST_NORMALOT_CODE": "str",
+      "EMPMST_HOLIDAYOT_CODE": "str",
       "EMPMST_ELIGIBLE_LEAVE_SALARY": true,
       "EMPMST_ELIGIBLE_AIRTICKET": true,
       "EMPMST_ELIGIBLE_GRATUITY": true,
-      "EMPMST_LEAVESALARY_STARTDATE": "",
-      "EMPMST_AIRTKT_STARTDATE": "",
-      "EMPMST_GRATUITY_STARTDATE": "",
-      "EMPMST_LSALARY_CODE": "",
-      "EMPMST_AIRTIKT_CODE": "",
-      "EMPMST_GRTUITY_CODE": "",
-      "EMPMST_LAST_LEVSAL_DATE": "",
-      "EMPMST_LAST_AIRTKT_DATE": "",
+      "EMPMST_LEAVESALARY_STARTDATE": "2024-11-14T08:17:18.161Z",
+      "EMPMST_AIRTKT_STARTDATE": "2024-11-14T08:17:18.161Z",
+      "EMPMST_GRATUITY_STARTDATE": "2024-11-14T08:17:18.161Z",
+      "EMPMST_LSALARY_CODE": "str",
+      "EMPMST_AIRTIKT_CODE": "str",
+      "EMPMST_GRTUITY_CODE": "str",
+      "EMPMST_LAST_LEVSAL_DATE": "2024-11-14T08:17:18.161Z",
+      "EMPMST_LAST_AIRTKT_DATE": "2024-11-14T08:17:18.161Z",
       "EMPMST_HOUSENAME_HM": this.commonService.nullToString(form.HomeHouseName),
       "EMPMST_ADDRESS_HM": this.commonService.nullToString(form.HomeAddress),
       "EMPMST_COUNTRYCODE_HM": this.commonService.nullToString(form.Country),
@@ -277,6 +678,11 @@ export class EmployeeMasterComponent implements OnInit {
   }
 
   formSubmit() {
+    if (this.content?.FLAG == 'VIEW') return
+    if (this.content?.FLAG == 'EDIT') {
+      this.updateEmployeeMaster()
+      return
+    }
     let API = 'EmployeeMaster/InsertEmployeeMaster';
     let postData = this.setPostData();
 

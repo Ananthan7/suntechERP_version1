@@ -7,7 +7,12 @@
     </button>
   </div>
   <!-- modal header component -->
-  <modal-header></modal-header>
+  <modal-header
+    *ngIf="flag !== 'VIEW'"
+    (saveClick)="deductionMasterFormSubmit()"
+    (cancelClick)="close()"
+    (deleteClick)="DeleteController()"
+  ></modal-header>
   <!-- content section -->
   <div class="p-4">
     <form [formGroup]="deductionMasterForm">
@@ -26,6 +31,8 @@
                 <div class="col-sm-3">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      (change)="onInput($event, 'code', true)"
+                      [readonly]="flag == 'VIEW'"
                       type="text"
                       #codeInput
                       matInput
@@ -47,6 +54,7 @@
                 <div class="col-sm-6">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      [readonly]="flag == 'VIEW'"
                       type="text"
                       #codeInput
                       matInput
@@ -77,20 +85,30 @@
                 <div class="col-sm-3">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      (focusout)="
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          glCodeData,
+                          ['glCode', 'glCodeDesc'],
+                          false,
+                          ['ACCODE', 'ACCOUNT_HEAD'],
+                          false
+                        )
+                      "
+                      [readonly]="flag == 'VIEW'"
                       type="text"
                       matInput
                       formControlName="glCode"
-                      UpperCaseDirective
                     />
                     <master-search
                       *ngIf="flag != 'VIEW'"
                       class="masterSearch"
-                      [MasterSearchData]="countryCodeData"
+                      [MasterSearchData]="glCodeData"
                       (newRowClick)="
                         lookupSelect(
                           $event,
                           ['glCode', 'glCodeDesc'],
-                          ['CODE', 'DESCRIPTION']
+                          ['ACCODE', 'ACCOUNT_HEAD']
                         )
                       "
                     >
@@ -100,6 +118,7 @@
                 <div class="col-sm-3">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      [readonly]="flag == 'VIEW'"
                       type="text"
                       matInput
                       formControlName="glCodeDesc"
@@ -117,7 +136,22 @@
                 </label>
                 <div class="col-sm-3">
                   <mat-form-field style="width: 100%" appearance="outline">
-                    <input type="text" matInput formControlName="countryCode" />
+                    <input
+                      (focusout)="
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          countryCodeData,
+                          ['countryCode', 'countryDesc'],
+                          false,
+                          ['CODE', 'DESCRIPTION'],
+                          false
+                        )
+                      "
+                      [readonly]="flag == 'VIEW'"
+                      type="text"
+                      matInput
+                      formControlName="countryCode"
+                    />
                     <master-search
                       *ngIf="flag != 'VIEW'"
                       class="masterSearch"
@@ -136,6 +170,7 @@
                 <div class="col-sm-3">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      [readonly]="flag == 'VIEW'"
                       type="text"
                       matInput
                       formControlName="countryDesc"
@@ -153,14 +188,15 @@
                 <div class="row">
                   <div class="col-md-6">
                     <mat-radio-group
+                      [disabled]="flag == 'VIEW'"
                       aria-label="Select an option"
                       formControlName="method"
                       class="d-flex flex-column"
                     >
-                      <mat-radio-button value="fixed" class="mx-2"
+                      <mat-radio-button value="F" class="mx-2"
                         ><b>Fixed</b></mat-radio-button
                       >
-                      <mat-radio-button value="percentage" class="mx-2"
+                      <mat-radio-button value="P" class="mx-2"
                         ><b>Percentage</b></mat-radio-button
                       >
                     </mat-radio-group>
@@ -180,11 +216,12 @@
                           appearance="outline"
                         >
                           <input
+                            [readonly]="flag == 'VIEW'"
                             type="text"
-                            #codeInput
                             matInput
+                            style="text-align: right"
+                            AmountDecimalInput
                             formControlName="value"
-                            UpperCaseDirective
                             autocomplete="off"
                           />
                         </mat-form-field>
@@ -213,6 +250,17 @@
                 <div class="col-sm-7">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      (focusout)="
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          countryCodeData,
+                          ['reportHeadingCode'],
+                          false,
+                          ['DESCRIPTION'],
+                          false
+                        )
+                      "
+                      [readonly]="flag == 'VIEW'"
                       type="text"
                       matInput
                       formControlName="reportHeadingCode"
@@ -242,10 +290,13 @@
                 >
                 <div class="col-md-9">
                   <mat-form-field style="width: 100%" appearance="outline">
-                    <mat-select formControlName="calculationBasis">
+                    <mat-select
+                      [disabled]="flag == 'VIEW'"
+                      formControlName="calculationBasis"
+                    >
                       <mat-option
                         *ngFor="let data of calculationBasis"
-                        [value]="data.field"
+                        [value]="data.value"
                         >{{ data.field }}</mat-option
                       >
                     </mat-select>
@@ -257,14 +308,16 @@
                   <fieldset class="custom-fieldset">
                     <legend class="custom-legend">Period</legend>
                     <mat-radio-group
+                      [disabled]="flag == 'VIEW'"
                       aria-label="Select an option"
                       formControlName="period"
+                      (change)="periodController($event)"
                     >
-                      <mat-radio-button value="monthly" id="ID012" class="mx-2"
-                        ><b>Monthly</b></mat-radio-button
+                      <mat-radio-button value="M" id="ID012" class="mx-2"
+                        >Monthly</mat-radio-button
                       >
-                      <mat-radio-button value="yearly" id="ID013" class="mx-2"
-                        ><b>Yearly</b></mat-radio-button
+                      <mat-radio-button value="Y" id="ID013" class="mx-2"
+                        >Yearly</mat-radio-button
                       >
                     </mat-radio-group>
                   </fieldset>
@@ -286,10 +339,20 @@
                 <div class="col-sm-8">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      (focusout)="
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          userDefinedData,
+                          ['userDefined1'],
+                          false,
+                          ['DESCRIPTION'],
+                          false
+                        )
+                      "
+                      [readonly]="flag == 'VIEW'"
                       type="text"
                       matInput
                       formControlName="userDefined1"
-                      UpperCaseDirective
                     />
                     <master-search
                       *ngIf="flag != 'VIEW'"
@@ -313,6 +376,17 @@
                 <div class="col-sm-8">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      (focusout)="
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          userDefinedData,
+                          ['userDefined2'],
+                          false,
+                          ['DESCRIPTION'],
+                          false
+                        )
+                      "
+                      [readonly]="flag == 'VIEW'"
                       type="text"
                       matInput
                       formControlName="userDefined2"
@@ -340,6 +414,17 @@
                 <div class="col-sm-8">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      (focusout)="
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          userDefinedData,
+                          ['userDefined3'],
+                          false,
+                          ['DESCRIPTION'],
+                          false
+                        )
+                      "
+                      [readonly]="flag == 'VIEW'"
                       type="text"
                       matInput
                       formControlName="userDefined3"
@@ -367,6 +452,17 @@
                 <div class="col-sm-8">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      (focusout)="
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          userDefinedData,
+                          ['userDefined4'],
+                          false,
+                          ['DESCRIPTION'],
+                          false
+                        )
+                      "
+                      [readonly]="flag == 'VIEW'"
                       type="text"
                       matInput
                       formControlName="userDefined4"
@@ -394,6 +490,17 @@
                 <div class="col-sm-8">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      (focusout)="
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          userDefinedData,
+                          ['userDefined5'],
+                          false,
+                          ['DESCRIPTION'],
+                          false
+                        )
+                      "
+                      [readonly]="flag == 'VIEW'"
                       type="text"
                       matInput
                       formControlName="userDefined5"
@@ -423,6 +530,17 @@
                 <div class="col-sm-8">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      (focusout)="
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          userDefinedData,
+                          ['userDefined6'],
+                          false,
+                          ['DESCRIPTION'],
+                          false
+                        )
+                      "
+                      [readonly]="flag == 'VIEW'"
                       type="text"
                       matInput
                       formControlName="userDefined6"
@@ -450,6 +568,17 @@
                 <div class="col-sm-8">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      (focusout)="
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          userDefinedData,
+                          ['userDefined7'],
+                          false,
+                          ['DESCRIPTION'],
+                          false
+                        )
+                      "
+                      [readonly]="flag == 'VIEW'"
                       type="text"
                       matInput
                       formControlName="userDefined7"
@@ -477,6 +606,17 @@
                 <div class="col-sm-8">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      (focusout)="
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          userDefinedData,
+                          ['userDefined8'],
+                          false,
+                          ['DESCRIPTION'],
+                          false
+                        )
+                      "
+                      [readonly]="flag == 'VIEW'"
                       type="text"
                       matInput
                       formControlName="userDefined8"
@@ -504,6 +644,17 @@
                 <div class="col-sm-8">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      (focusout)="
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          userDefinedData,
+                          ['userDefined9'],
+                          false,
+                          ['DESCRIPTION'],
+                          false
+                        )
+                      "
+                      [readonly]="flag == 'VIEW'"
                       type="text"
                       matInput
                       formControlName="userDefined9"
@@ -531,6 +682,17 @@
                 <div class="col-sm-8">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      (focusout)="
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          userDefinedData,
+                          ['userDefined10'],
+                          false,
+                          ['DESCRIPTION'],
+                          false
+                        )
+                      "
+                      [readonly]="flag == 'VIEW'"
                       type="text"
                       matInput
                       formControlName="userDefined10"
@@ -560,6 +722,17 @@
                 <div class="col-sm-8">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      (focusout)="
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          userDefinedData,
+                          ['userDefined11'],
+                          false,
+                          ['DESCRIPTION'],
+                          false
+                        )
+                      "
+                      [readonly]="flag == 'VIEW'"
                       type="text"
                       matInput
                       formControlName="userDefined11"
@@ -587,6 +760,17 @@
                 <div class="col-sm-8">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      (focusout)="
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          userDefinedData,
+                          ['userDefined12'],
+                          false,
+                          ['DESCRIPTION'],
+                          false
+                        )
+                      "
+                      [readonly]="flag == 'VIEW'"
                       type="text"
                       matInput
                       formControlName="userDefined12"
@@ -614,6 +798,17 @@
                 <div class="col-sm-8">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      (focusout)="
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          userDefinedData,
+                          ['userDefined13'],
+                          false,
+                          ['DESCRIPTION'],
+                          false
+                        )
+                      "
+                      [readonly]="flag == 'VIEW'"
                       type="text"
                       matInput
                       formControlName="userDefined13"
@@ -641,6 +836,17 @@
                 <div class="col-sm-8">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      (focusout)="
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          userDefinedData,
+                          ['userDefined14'],
+                          false,
+                          ['DESCRIPTION'],
+                          false
+                        )
+                      "
+                      [readonly]="flag == 'VIEW'"
                       type="text"
                       matInput
                       formControlName="userDefined14"
@@ -668,6 +874,17 @@
                 <div class="col-sm-8">
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
+                      (focusout)="
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          userDefinedData,
+                          ['userDefined15'],
+                          false,
+                          ['DESCRIPTION'],
+                          false
+                        )
+                      "
+                      [readonly]="flag == 'VIEW'"
                       type="text"
                       matInput
                       formControlName="userDefined15"

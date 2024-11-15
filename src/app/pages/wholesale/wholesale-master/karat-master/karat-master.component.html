@@ -29,7 +29,7 @@
                         <label for="inputPassword" class="col-sm-2 col-form-label">Standard Purity * :</label>
                         <div class="col-md-2">
                           <mat-form-field style="width: 100%" appearance="outline">
-                            <input type="text" maxlength="1" matInput formControlName="standardpurity" NumberOnly  [readonly]="viewMode"/>
+                            <input type="text" maxlength="1" matInput formControlName="standardpurity" NumberOnly  [readonly]="viewMode" PurityDecimal/>
                           </mat-form-field>
                         </div>
                         <label for="inputPassword" class="col-sm-2 col-form-label">Minimum :</label>
@@ -78,7 +78,7 @@
                         <label for="inputPassword" class="col-sm-2 col-form-label">POP MinMaxAmt :</label>
                         <div class="col-md-2">
                           <mat-form-field style="width: 100%" appearance="outline">
-                            <input type="number" matInput formControlName="pop_minmaxamt"  [readonly]="viewMode"/>
+                            <input type="number" matInput formControlName="pop_minmaxamt"  [readonly]="viewMode" AmountDecimalInput/>
                           </mat-form-field>
                         </div>
                         <div class="col-md-2 offset-md-2">
