@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
+import { JewelleryPurchaseDetailComponent } from './jewellery-purchase-detail/jewellery-purchase-detail.component';
 
 @Component({
   selector: 'app-jewellerypurchase',
@@ -11,20 +12,23 @@ import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 export class JewellerypurchaseComponent implements OnInit {
 
   selectedTabIndex = 0;
-  tableData:any = [];
+  tableData: any = [];
+  modalReference!: NgbModalRef;
+
   BranchData: MasterSearchModel = {}
   DepartmentData: MasterSearchModel = {}
 
   JewellerypurchaseMasterForm: FormGroup = this.formBuilder.group({
-    code:[''],
-    Branch:[''],
-    address:[''],
-    CountryCode:[''],
+    code: [''],
+    Branch: [''],
+    address: [''],
+    CountryCode: [''],
   })
 
   constructor(
     private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
+    private modalService: NgbModal,
   ) { }
 
   ngOnInit(): void {
@@ -35,11 +39,22 @@ export class JewellerypurchaseComponent implements OnInit {
     this.activeModal.close(data);
   }
 
-  BranchDataSelected(e:any){
+  BranchDataSelected(e: any) {
 
   }
 
-  addTableData(){}
+  openNewJewelleryPurchaseDetails() {
+    this.modalReference = this.modalService.open(JewelleryPurchaseDetailComponent, {
+      size: 'xl',
+      backdrop: true,//'static'
+      keyboard: false,
+      windowClass: 'modal-full-width',
+    });
+  }
 
-  deleteTableData(){}
+  AddNewOtherAmountTableData(){
+
+  }
+
+  deleteTableData() { }
 }

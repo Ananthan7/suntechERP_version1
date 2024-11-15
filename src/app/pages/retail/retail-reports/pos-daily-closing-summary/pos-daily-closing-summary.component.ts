@@ -705,7 +705,7 @@ export class PosDailyClosingSummaryComponent implements OnInit {
               printWindow?.document.write(modifiedContent);
               printWindow?.focus();
               printWindow?.print();
-              printWindow?.close();
+              // printWindow?.close();
              
             } else {
               Swal.fire('No Data!', 'There is no data to print!', 'info');

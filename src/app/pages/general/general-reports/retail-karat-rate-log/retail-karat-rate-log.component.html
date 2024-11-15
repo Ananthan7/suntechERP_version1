@@ -1,0 +1,74 @@
+<!-- header section -->
+<div class="card-content border-bottom d-flex justify-content-between p-2">
+    <h5 class="pos-modaltitle" id="modal-dia-metal">Retail Karat Rate Log</h5>
+    <button type="button" class="btn btn-close close-btn" (click)="close()">
+        <i class="feather icon-x close-icon"></i>
+    </button>
+</div>
+
+<!-- modal header component -->
+<modal-header (cancelClick)="close()" [isViewDelete]="false" 
+[isViewMore]="false" [isViewSave]="false" [isViewCancel]="false"></modal-header>
+
+<div class="row">
+    <form [formGroup]="retailkaratRateLogForm">
+        <div class="container-fluid pt-3">
+            <div class="row mb-1">
+                <label for="inputPassword"  class="col-sm-1 col-form-label"  id="ID001"> Branch</label>
+                <div class="col-md-2">
+                    <mat-form-field appearance="outline" style="width: -webkit-fill-available">
+                    <input matInput="text" name="branch" autocomplete="off" formControlName="branch"/>
+                    <app-branch-division [fetchData]="fetchedBranchData" (newRowClick)="selectedData($event)"
+                    class="branchDivisionelectr" [matTooltip]="branchDivisionControlsTooltip"
+                    matTooltipClass="custom-tooltip"  matTooltipPosition="above"></app-branch-division>
+                    </mat-form-field>
+                </div>
+    
+                <div class="col-md-7">
+                    <app-date (selectedDate)="setDateValue($event)" [dateValue]="dateToPass"></app-date>
+                </div> 
+            </div>
+
+         
+
+            <div class="row mb-1">
+                <dx-data-grid>
+                    <dxo-search-panel [visible]="true" [highlightCaseSensitive]="true"></dxo-search-panel>
+                    <dxo-paging [enabled]="false"></dxo-paging>
+                    <dxo-editing mode="cell" [allowUpdating]="false"></dxo-editing>
+
+                    <dxi-column alignment="left" dataField="VOCTYPE" caption="Branch Code"></dxi-column>
+                    <dxi-column alignment="right" dataField="DESCRIPTION" caption="Karat Code"></dxi-column>
+                    <dxi-column alignment="right" dataField="DESCRIPTION" caption="Karat Rate"></dxi-column>
+                    <dxi-column alignment="right" dataField="DESCRIPTION" caption="Date"></dxi-column>
+                </dx-data-grid>
+            </div>
+        </div>
+
+        <dx-popup [width]="300" [height]="180" [showTitle]="true" container=".dx-viewport"
+        title="Template Data" [dragEnabled]="false" [showCloseButton]="false" (onHidden)="popupClosed()"
+        [visible]="popupVisible">
+            <div class="popup-content">
+                <div class="form-group">
+                    <label for="T_Name">Name:</label>
+                    <input type="text" id="T_Name" class="form-control" formControlName="templateName"/>
+                </div>
+                <div class="button-group d-flex">
+                    <button mat-flat-button [ngClass]="{SaveNew_template: templateNameHasValue,
+                        'btn-m-r-10': true, 'demo-button': true, 'btn-width': true, 'mx-1': true}"
+                    (click)="saveTemplate_DB()">
+                    {{ templateNameHasValue ? "Save as New Template" : "Save" }}
+                    </button>
+                    <button  mat-flat-button class="btn-m-r-10 btn-width mx-1 cancelBTN"
+                    (click)="popupClosed()">
+                    Cancel</button>
+                </div>
+            </div>
+        </dx-popup>
+ 
+        <div class="row mt-2 justify-content-end mx-2">       
+            <app-report-screen-buttons (saveTemplateClick)="saveTemplate()" (previewClicked)="previewClick()"
+            (printClicked)="printBtnClick()"></app-report-screen-buttons>
+        </div>
+    </form>
+</div>
