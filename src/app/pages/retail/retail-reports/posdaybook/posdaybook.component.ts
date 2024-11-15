@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -51,7 +52,7 @@ export class POSDaybookComponent implements OnInit {
 
   constructor(private activeModal: NgbActiveModal, private formBuilder: FormBuilder, 
     private dataService: SuntechAPIService, private commonService: CommonServiceService, 
-    private toastr: ToastrService, private sanitizer: DomSanitizer) { 
+    private toastr: ToastrService, private sanitizer: DomSanitizer, private datePipe: DatePipe) { 
 
   }
 
@@ -59,14 +60,6 @@ export class POSDaybookComponent implements OnInit {
     this. prefillScreenValues();
     this.currentTab = 'POS Register';
     this.POSRegisterGridData();
-  }
-
-  formatDate(dateString: string): string {
-    const date = new Date(dateString);
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
-    const year = date.getFullYear();
-    return `${day}-${month}-${year}`;
   }
 
   selectedData(data: any) {
@@ -122,11 +115,11 @@ export class POSDaybookComponent implements OnInit {
   setDateValue(event: any){
     if(event.FromDate){
       this.posDayBookForm.controls.fromDate.setValue(event.FromDate);
-      this.dateToPass.fromDate = event.FromDate
+      this.dateToPass.fromDate = this.datePipe.transform(event.FromDate, 'yyyy-MM-dd')!
     }
     else if(event.ToDate){
       this.posDayBookForm.controls.toDate.setValue(event.ToDate);
-      this.dateToPass.toDate = event.ToDate
+      this.dateToPass.toDate = this.datePipe.transform(event.ToDate, 'yyyy-MM-dd')!
     }
     switch(this.currentTab){
       case this.currentTab = 'POS Register': this.POSRegisterGridData(); break;
@@ -135,14 +128,6 @@ export class POSDaybookComponent implements OnInit {
       case this.currentTab = 'Others' : this.OthersGridData(); break;
     }
     
-  }
-
-  formatDateToYYYYMMDD(dateString: any) {
-    const date = new Date(dateString);
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
   }
 
   saveTemplate(){
@@ -227,8 +212,8 @@ export class POSDaybookComponent implements OnInit {
     let postData = {
       "SPID": "165",
       "parameter": {
-        "STRFMDATE" : this.formatDateToYYYYMMDD(this.dateToPass.fromDate),  
-        "STRTODATE" : this.formatDateToYYYYMMDD(this.dateToPass.toDate),   
+        "STRFMDATE" : this.dateToPass.fromDate,  
+        "STRTODATE" : this.dateToPass.toDate,   
         "STRBRANCH" : this.formattedBranchDivisionData || this.fetchedBranchDataParam,
         "USERBRANCH" : this.commonService.branchCode,
         "LOGDATA": JSON.stringify(logData)
@@ -364,8 +349,8 @@ export class POSDaybookComponent implements OnInit {
       this.fetchedBranchData= this.fetchedBranchDataParam?.split("#")
     
       this.dateToPass = {
-        fromDate:  this.formatDateToYYYYMMDD(new Date()),
-        toDate: this.formatDateToYYYYMMDD(new Date()),
+        fromDate:  this.datePipe.transform(new Date(), 'yyyy-MM-dd')!,
+        toDate: this.datePipe.transform(new Date(), 'yyyy-MM-dd')!,
       };
 
     }
@@ -388,8 +373,8 @@ export class POSDaybookComponent implements OnInit {
  
     let API = "POSDayBook/GetPOSRegisterGrid";
     let postData = {
-      "strFmDate": this.dateToPass.fromDate,
-      "strToDate": this.dateToPass.toDate,
+      "strFmDate": this.datePipe.transform(this.dateToPass.fromDate, 'yyyy-MM-dd')!,
+      "strToDate": this.datePipe.transform(this.dateToPass.toDate, 'yyyy-MM-dd')!,
       "strBranch": this.formattedBranchDivisionData? this.formattedBranchDivisionData : this.userLoginBranch
     };
     this.RegisterGridData = [];
@@ -565,14 +550,14 @@ export class POSDaybookComponent implements OnInit {
 
     const API1 = "POSDayBook/GetPOSAccountMovement";
     const postData1 = {
-        "strFmDate": this.formatDateToYYYYMMDD(this.dateToPass.fromDate),
+        "strFmDate": this.dateToPass.fromDate,
         "strToDate": this.dateToPass.toDate,
         "strBranch": this.formattedBranchDivisionData ? this.formattedBranchDivisionData : this.userLoginBranch
     };
 
     const API2 = "POSDayBook/GetPOSSalesOrdSumm";
     const postData2 = {
-      "strFmDate": this.formatDateToYYYYMMDD(this.dateToPass.fromDate),
+      "strFmDate": this.dateToPass.fromDate,
       "strToDate": this.dateToPass.toDate
     };
 
@@ -628,13 +613,13 @@ export class POSDaybookComponent implements OnInit {
 
     const API1 = "POSDayBook/GetSmanWiseSummgrid";
     const postData1 = {
-      "strFmDate": this.formatDateToYYYYMMDD(this.dateToPass.fromDate),
+      "strFmDate": this.dateToPass.fromDate,
       "strToDate": this.dateToPass.toDate,
     };
 
     const API2 = "POSDayBook/GetCashCreditSummgrid";
     const postData2 = {
-      "strFmDate": this.formatDateToYYYYMMDD(this.dateToPass.fromDate),
+      "strFmDate": this.dateToPass.fromDate,
       "strToDate": this.dateToPass.toDate,
       "strBranch": this.formattedBranchDivisionData ? this.formattedBranchDivisionData : this.userLoginBranch
     };
