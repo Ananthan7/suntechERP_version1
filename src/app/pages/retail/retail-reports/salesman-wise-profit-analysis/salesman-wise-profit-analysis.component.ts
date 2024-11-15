@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -37,7 +38,8 @@ export class SalesmanWiseProfitAnalysisComponent implements OnInit {
 
   constructor(private activeModal: NgbActiveModal, private formBuilder: FormBuilder,
     private commonService: CommonServiceService,   private dataService: SuntechAPIService,
-    private toastr: ToastrService,   private sanitizer: DomSanitizer) { }
+    private toastr: ToastrService,   private sanitizer: DomSanitizer,
+    private datePipe: DatePipe) { }
 
   ngOnInit(): void {
     this.prefillScreenValues();
@@ -156,7 +158,7 @@ export class SalesmanWiseProfitAnalysisComponent implements OnInit {
               "STRFMDATE" : this.dateToPass.fromDate,    
               "STRTODATE" : this.dateToPass.toDate,    
               "INTVALUE" : '',  
-              "STRBRANCHES" : this.formattedBranchDivisionData || this.fetchedBranchDataParam,
+              "STRBRANCHES" : this.formattedBranchDivisionData || this.fetchedBranchData,
               "LOGDATA" : ''
             }
          })
@@ -206,7 +208,7 @@ export class SalesmanWiseProfitAnalysisComponent implements OnInit {
         "STRFMDATE" : this.dateToPass.fromDate,    
 	      "STRTODATE" : this.dateToPass.toDate,    
 	      "INTVALUE" : '',  
-        "STRBRANCHES" : this.formattedBranchDivisionData || this.fetchedBranchDataParam,
+        "STRBRANCHES" : this.formattedBranchDivisionData || this.fetchedBranchData,
         "LOGDATA" : JSON.stringify(logData)
       }
     }
@@ -254,7 +256,7 @@ export class SalesmanWiseProfitAnalysisComponent implements OnInit {
         "STRFMDATE" : this.dateToPass.fromDate,    
 	      "STRTODATE" : this.dateToPass.toDate,    
 	      "INTVALUE" : '',  
-        "STRBRANCHES" : this.formattedBranchDivisionData || this.fetchedBranchDataParam,
+        "STRBRANCHES" : this.formattedBranchDivisionData || this.fetchedBranchData,
         "LOGDATA" : JSON.stringify(logData)
       }
     }
@@ -311,8 +313,8 @@ export class SalesmanWiseProfitAnalysisComponent implements OnInit {
       this.fetchedBranchData= ParcedPreFetchData?.CONTROL_DETAIL.STRBRANCHES
 
       this.dateToPass = {
-        fromDate:  ParcedPreFetchData?.CONTROL_DETAIL.STRFMDATE,
-        toDate: ParcedPreFetchData?.CONTROL_DETAIL.STRTODATE
+        fromDate: this.datePipe.transform(ParcedPreFetchData?.CONTROL_DETAIL.STRFMDATE, 'yyyy-MM-dd')!,
+        toDate: this.datePipe.transform(ParcedPreFetchData?.CONTROL_DETAIL.STRTODATE, 'yyyy-MM-dd')!
       };
     }
     else{
