@@ -34,7 +34,26 @@ export class MetalReturnComponent implements OnInit {
   tableData: any = [];
   tableDataHead: any[] = ['PROCESS', 'WORKER', 'JOB_NUMBER', 'UNQ_JOB_ID', 'DESIGN_CODE', 'STOCK_CODE', 'METAL', 'NETWT', 'PURITY', 'PUREWT'];
   metalReturnDetailsData: any[] = [];
-  columnhead: any[] = [''];
+  columnhead: any[] = [
+    { title: 'SRNO', field: 'SRNO', format: '', alignment: 'center' },
+    { title: 'Stock Code', field: 'STOCK_CODE', format: '', alignment: 'left' },
+    { title: 'Description', field: 'STOCK_DESCRIPTION', format: '', alignment: 'left' },
+    { title: 'Job Description', field: 'JOB_DESCRIPTION', format: '', alignment: 'left' },
+    { title: 'Pcs', field: 'PCS', format: '', alignment: 'left' },
+    { title: 'Design', field: 'DESIGN_CODE', format: '', alignment: 'left' },
+    { title: 'Division', field: 'DIVCODE', format: '', alignment: 'left' },
+    { title: 'Gross Wt', field: 'GROSSWT', format: '', alignment: 'right' },
+    { title: 'Pure Wt', field: 'PUREWT', format: '', alignment: 'right' },
+    { title: 'Job Number', field: 'JOB_NUMBER', format: '', alignment: 'left' },
+    { title: 'Uniq job Id', field: 'UNQ_JOB_ID', format: '', alignment: 'left' },
+    { title: 'PURITY', field: 'Purity', format: '', alignment: 'right' },
+    { title: 'Stone Wt', field: 'STONE_WT', format: '', alignment: 'right' },
+    { title: 'Net Wt', field: 'NET_WT', format: '', alignment: 'right' },
+    { title: 'Process Code', field: 'PROCESS_CODE', format: '', alignment: 'left' },
+    { title: 'Process Desc', field: 'PROCESS_NAME', format: '', alignment: 'left' },
+    { title: 'Worker', field: 'WORKER_CODE', format: '', alignment: 'left' },
+    { title: 'Worker Desc', field: 'WORKER_NAME', format: '', alignment: 'left' },
+   ];
   branchCode?: String;
   currentDate: any = this.commonService.currentDate;
   selectRowIndex: any;
@@ -132,6 +151,7 @@ export class MetalReturnComponent implements OnInit {
     };
     this.renderer.selectRootElement('#code')?.focus();
     if (this.content?.FLAG) {
+      this.setAllInitialValues()
       if (this.content.FLAG == 'VIEW' || this.content.FLAG == 'DELETE') {
         this.viewMode = true;
         this.LOCKVOUCHERNO = true;
@@ -147,7 +167,7 @@ export class MetalReturnComponent implements OnInit {
         this.deleteMeltingType()
       }
       this.metalReturnForm.controls.FLAG.setValue(this.content.FLAG)
-      this.setAllInitialValues()
+    
     } else {
       this.generateVocNo()
       this.setNewFormValue()
@@ -199,6 +219,7 @@ export class MetalReturnComponent implements OnInit {
         if (result.response) {
           let data = result.response
           this.metalReturnDetailsData = data.Details
+          console.log(this.metalReturnDetailsData,'ddddd')
           // data.Details.forEach((element: any) => {
           //   this.tableData.push({
           //     SRNO: element.SRNO,
@@ -1142,6 +1163,7 @@ export class MetalReturnComponent implements OnInit {
           let data = result.dynamicData[0]
           if (data) {
             this.tableData = data
+            console.log(this.tableData,'processtabledata')
           } else {
             this.commonService.toastErrorByMsgId('MSG1531')
             return

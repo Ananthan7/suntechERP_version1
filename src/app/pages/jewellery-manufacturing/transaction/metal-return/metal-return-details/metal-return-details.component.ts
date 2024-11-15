@@ -400,6 +400,8 @@ export class MetalReturnDetailsComponent implements OnInit {
     console.log(e,'process')
     this.metalReturnDetailsForm.controls.processCode.setValue(e.PROCESS);
     this.metalReturnDetailsForm.controls.processCodeDesc.setValue(e.PROCESSDESC);
+    this.metalReturnDetailsForm.controls.workerCode.setValue(e.WORKER);
+    this.metalReturnDetailsForm.controls.workerCodeDesc.setValue(e.WORKERDESC);
     // this.setLookup201WhereCondition()
     this.setLookupStockCodeWhereCondition()
     // this.ProcessCodeData.WHERECONDITION = `@strBranch_Code='${this.comService.userName}'',@strJob_Number='${this.jobNumberData}'`

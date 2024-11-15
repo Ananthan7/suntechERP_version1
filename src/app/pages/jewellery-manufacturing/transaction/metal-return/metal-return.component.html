@@ -5,9 +5,12 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" (deleteClick)="deleteMeltingType()"
-    [isViewDelete]="false" [isViewSave]="!viewMode" [isloading]="isloading" [isViewPost]="true"
-    [isViewAuditTrail]="true" [disableAuditTrail]="!isSaved" [isViewDelete]="editMode"></modal-header>
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
+    (deleteClick)="deleteMeltingType()"
+    [isViewDelete]="false" [isViewSave]="!viewMode" [isloading]="isloading"
+    [isViewPost]="true"
+    [isViewAuditTrail]="true" [disableAuditTrail]="!isSaved"
+    [isViewDelete]="editMode"></modal-header>
 <!-- content section -->
 <div class="row">
     <div class="col-md-12">
@@ -17,52 +20,78 @@
                     <h6>{{branchCode}} - {{companyName}}</h6>
                     <div class="col-md-4">
                         <div class="row mb-2">
-                            <label for="input" class="col-sm-4 col-form-label">Voucher *
+                            <label for="input"
+                                class="col-sm-4 col-form-label">Voucher *
                                 :</label>
                             <div class="col-sm-4 ">
-                                <mat-form-field appearance="outline" style="width: 100%;">
-                                    <input type="text" matInput formControlName="VOCTYPE" readonly />
+                                <mat-form-field appearance="outline"
+                                    style="width: 100%;">
+                                    <input type="text" matInput
+                                        formControlName="VOCTYPE" readonly />
                                 </mat-form-field>
                             </div>
                             <div class="col-sm-4 ">
-                                <mat-form-field appearance="outline" style="width: 100%;">
-                                    <input type="text" matInput formControlName="VOCNO" (focusout)="ValidatingVocNo()"
-                                        [readonly]="LOCKVOUCHERNO" style="text-align: right;" />
+                                <mat-form-field appearance="outline"
+                                    style="width: 100%;">
+                                    <input type="text" matInput
+                                        formControlName="VOCNO"
+                                        (focusout)="ValidatingVocNo()"
+                                        [readonly]="LOCKVOUCHERNO"
+                                        style="text-align: right;" />
                                 </mat-form-field>
                             </div>
                         </div>
                         <div class="row mb-2">
-                            <label for="input" class="col-sm-4 col-form-label">Voucher Date
+                            <label for="input"
+                                class="col-sm-4 col-form-label">Voucher Date
                                 :</label>
                             <div class="col-sm-4 ">
                                 <!-- <mat-form-field style="width: 100%;">
                                     <input type="text" matInput formControlName="vocDate" />
                                 </mat-form-field> -->
-                                <mat-form-field appearance="outline" style="width: 100%">
-                                    <input matInput DateValidation (dateChange)="formatDate($event)"
-                                        [matDatepicker]="vocDate" formControlName="vocDate" readonly
-                                        placeholder="DD/MM/YYYY" [min]="minDate" [max]="maxDate" />
-                                    <mat-datepicker-toggle matSuffix [for]="vocDate"></mat-datepicker-toggle>
-                                    <mat-datepicker #vocDate  [startAt]="currentDate" [disabled]="isSaved"></mat-datepicker>
+                                <mat-form-field appearance="outline"
+                                    style="width: 100%">
+                                    <input matInput DateValidation
+                                        (dateChange)="formatDate($event)"
+                                        [matDatepicker]="vocDate"
+                                        formControlName="vocDate" readonly
+                                        placeholder="DD/MM/YYYY" [min]="minDate"
+                                        [max]="maxDate" />
+                                    <mat-datepicker-toggle matSuffix
+                                        [for]="vocDate"></mat-datepicker-toggle>
+                                    <mat-datepicker #vocDate
+                                        [startAt]="currentDate"
+                                        [disabled]="isSaved"></mat-datepicker>
                                 </mat-form-field>
                             </div>
                             <div class="col-sm-4 ">
-                                <mat-form-field appearance="outline" style="width: 100%;">
-                                    <input type="datetime" matInput formControlName="vocTime" class="text-right"
+                                <mat-form-field appearance="outline"
+                                    style="width: 100%;">
+                                    <input type="datetime" matInput
+                                        formControlName="vocTime"
+                                        class="text-right"
                                         readonly />
                                 </mat-form-field>
                             </div>
                         </div>
                         <div class="row mb-2">
-                            <label for="input" class="col-sm-4 col-form-label">Entered
+                            <label for="input"
+                                class="col-sm-4 col-form-label">Entered
                                 By:</label>
                             <div class="col-sm-6">
-                                <mat-form-field appearance="outline" style="width: 100%;">
-                                    <input type="text" matInput formControlName="enteredBy" UpperCaseDirective
-                                        [readonly]="viewMode" (keydown)="lookupKeyPress($event,'enteredBy')"
+                                <mat-form-field appearance="outline"
+                                    style="width: 100%;">
+                                    <input type="text" matInput
+                                        formControlName="enteredBy"
+                                        UpperCaseDirective
+                                        [readonly]="viewMode"
+                                        (keydown)="lookupKeyPress($event,'enteredBy')"
                                         (focusout)="validateLookupField($event,SALESPERSON_CODEData,'enteredBy')" />
-                                   <master-search class="masterSearch"[MasterSearchData]="SALESPERSON_CODEData" #overlayenteredBy
-                                        (newRowClick)="userDataSelected($event)" *ngIf="!viewMode">
+                                    <master-search class="masterSearch"
+                                        [MasterSearchData]="SALESPERSON_CODEData"
+                                        #overlayenteredBy
+                                        (newRowClick)="userDataSelected($event)"
+                                        *ngIf="!viewMode">
                                     </master-search>
                                 </mat-form-field>
 
@@ -71,75 +100,115 @@
                     </div>
                     <div class="col-md-4">
                         <div class="row mb-2">
-                            <label for="input" class="col-sm-4 col-form-label">Process:</label>
+                            <label for="input"
+                                class="col-sm-4 col-form-label">Process:</label>
                             <div class="col-sm-7">
-                                <mat-form-field appearance="outline" style="width: 100%;">
-                                    <input type="text" matInput formControlName="process" UpperCaseDirective
-                                       id="code" [readonly]="viewMode" (keydown)="lookupKeyPress($event,'process')"
+                                <mat-form-field appearance="outline"
+                                    style="width: 100%;">
+                                    <input type="text" matInput
+                                        formControlName="process"
+                                        UpperCaseDirective
+                                        id="code" [readonly]="viewMode"
+                                        (keydown)="lookupKeyPress($event,'process')"
                                         (focusout)="validateLookupField($event,ProcessCodeData,'process')" />
-                                   <master-search class="masterSearch"[MasterSearchData]="ProcessCodeData" #overlayprocess
-                                        (newRowClick)="ProcessCodeSelected($event)" *ngIf="!viewMode">
+                                    <master-search class="masterSearch"
+                                        [MasterSearchData]="ProcessCodeData"
+                                        #overlayprocess
+                                        (newRowClick)="ProcessCodeSelected($event)"
+                                        *ngIf="!viewMode">
                                     </master-search>
                                 </mat-form-field>
 
                             </div>
                         </div>
                         <div class="row mb-2">
-                            <label for="input" class="col-sm-4 col-form-label">Worker:</label>
+                            <label for="input"
+                                class="col-sm-4 col-form-label">Worker:</label>
                             <div class="col-sm-7">
-                                <mat-form-field appearance="outline" style="width: 100%;">
-                                    <input type="text" matInput formControlName="worker" UpperCaseDirective
-                                        [readonly]="viewMode" (keydown)="lookupKeyPress($event,'worker')"
+                                <mat-form-field appearance="outline"
+                                    style="width: 100%;">
+                                    <input type="text" matInput
+                                        formControlName="worker"
+                                        UpperCaseDirective
+                                        [readonly]="viewMode"
+                                        (keydown)="lookupKeyPress($event,'worker')"
                                         (focusout)="validateLookupField($event,WorkerCodeData,'worker')" />
-                                   <master-search class="masterSearch"[MasterSearchData]="WorkerCodeData" #overlayworker
-                                        (newRowClick)="WorkerCodeSelected($event)" *ngIf="!viewMode">
+                                    <master-search class="masterSearch"
+                                        [MasterSearchData]="WorkerCodeData"
+                                        #overlayworker
+                                        (newRowClick)="WorkerCodeSelected($event)"
+                                        *ngIf="!viewMode">
                                     </master-search>
                                 </mat-form-field>
 
                             </div>
                         </div>
                         <div class="row mb-2">
-                            <label for="input" class="col-sm-4 col-form-label">Location:</label>
+                            <label for="input"
+                                class="col-sm-4 col-form-label">Location:</label>
                             <div class="col-sm-7">
-                                <mat-form-field appearance="outline" style="width: 100%">
-                                    <input type="text" matInput formControlName="location" UpperCaseDirective
-                                        [readonly]="viewMode" (keydown)="lookupKeyPress($event,'location')"
+                                <mat-form-field appearance="outline"
+                                    style="width: 100%">
+                                    <input type="text" matInput
+                                        formControlName="location"
+                                        UpperCaseDirective
+                                        [readonly]="viewMode"
+                                        (keydown)="lookupKeyPress($event,'location')"
                                         (focusout)="validateLookupField($event,locationCodeData,'location')" />
-                                  <master-search class="masterSearch" [MasterSearchData]="locationCodeData" #overlaylocation
-                                        (newRowClick)="locationCodeSelected($event)" *ngIf="!viewMode"></master-search>
+                                    <master-search class="masterSearch"
+                                        [MasterSearchData]="locationCodeData"
+                                        #overlaylocation
+                                        (newRowClick)="locationCodeSelected($event)"
+                                        *ngIf="!viewMode"></master-search>
                                 </mat-form-field>
 
                             </div>
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true" [showRowLines]="true"
-                            [allowColumnReordering]="true" (onCellClick)="onRowClickHandlers($event)"
-                            [allowColumnResizing]="true" [dataSource]="tableData" height="200" [columnAutoWidth]="true">
+                        <dx-data-grid #dataGrid id="gridContainer"
+                            [showBorders]="true" [showRowLines]="true"
+                            [allowColumnReordering]="true"
+                            (onCellClick)="onRowClickHandlers($event)"
+                            [allowColumnResizing]="true"
+                            [dataSource]="tableData" height="200"
+                            [columnAutoWidth]="true">
                             <dxo-paging [enabled]="false"></dxo-paging>
                             <dxo-editing mode="cell" [allowUpdating]="true">
                             </dxo-editing>
-                            <dxo-selection [mode]="viewMode ? 'none' : 'multiple'"></dxo-selection>
+                            <dxo-selection
+                                [mode]="viewMode ? 'none' : 'multiple'"></dxo-selection>
                             <dxo-scrolling mode="virtual"></dxo-scrolling>
 
-                            <dxi-column dataField="PROCESS" caption="PROCESS" [allowEditing]="!viewMode"></dxi-column>
-                            <dxi-column dataField="WORKER" caption="WORKER" [allowEditing]="!viewMode"></dxi-column>
-                            <dxi-column dataField="JOB_NUMBER" caption="JOB_NUMBER"
+                            <dxi-column dataField="PROCESS" caption="PROCESS"
                                 [allowEditing]="!viewMode"></dxi-column>
-                            <dxi-column dataField="UNQ_JOB_ID" caption="UNQ_JOB_ID"
+                            <dxi-column dataField="WORKER" caption="WORKER"
                                 [allowEditing]="!viewMode"></dxi-column>
-                            <dxi-column dataField="DESIGN_CODE" caption="DESIGN_CODE"
+                            <dxi-column dataField="JOB_NUMBER"
+                                caption="JOB_NUMBER"
                                 [allowEditing]="!viewMode"></dxi-column>
-                            <dxi-column dataField="STOCK_CODE" caption="STOCK_CODE"
+                            <dxi-column dataField="UNQ_JOB_ID"
+                                caption="UNQ_JOB_ID"
                                 [allowEditing]="!viewMode"></dxi-column>
-                            <dxi-column dataField="METAL" caption="METAL" [allowEditing]="!viewMode"></dxi-column>
-                            <dxi-column dataField="NETWT" caption="NETWT" [allowEditing]="!viewMode"></dxi-column>
-                            <dxi-column dataField="PURITY" caption="PURITY" [allowEditing]="!viewMode"></dxi-column>
-                            <dxi-column dataField="PUREWT" caption="PUREWT" [allowEditing]="!viewMode"></dxi-column>
+                            <dxi-column dataField="DESIGN_CODE"
+                                caption="DESIGN_CODE"
+                                [allowEditing]="!viewMode"></dxi-column>
+                            <dxi-column dataField="STOCK_CODE"
+                                caption="STOCK_CODE"
+                                [allowEditing]="!viewMode"></dxi-column>
+                            <dxi-column dataField="METAL" caption="METAL"
+                                [allowEditing]="!viewMode"></dxi-column>
+                            <dxi-column dataField="NETWT" caption="NETWT"
+                                [allowEditing]="!viewMode"></dxi-column>
+                            <dxi-column dataField="PURITY" caption="PURITY"
+                                [allowEditing]="!viewMode"></dxi-column>
+                            <dxi-column dataField="PUREWT" caption="PUREWT"
+                                [allowEditing]="!viewMode"></dxi-column>
 
                         </dx-data-grid>
                         <div class="p-2 bd-highlight">
-                            <button type="button" mat-flat-button (click)="onSelectRow()" *ngIf="!viewMode">
+                            <button type="button" mat-flat-button
+                                (click)="onSelectRow()" *ngIf="!viewMode">
                                 Select
                             </button>
                         </div>
@@ -147,75 +216,77 @@
                 </div>
                 <div class="row mt-2">
                     <div class="col-md-3 d-flex">
-                        <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true" [viewImportBtn]="false"
-                            *ngIf="!viewMode" (addClick)="openAddMetalReturnDetail()" (deleteClick)="deleteTableData()">
+                        <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true"
+                            [viewImportBtn]="false"
+                            *ngIf="!viewMode"
+                            (addClick)="openAddMetalReturnDetail()"
+                            (deleteClick)="deleteTableData()">
                         </menu-buttons>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-md-12">
-                        <dx-data-grid id="gridContainer" [dataSource]="metalReturnDetailsData" [showBorders]="true"
-                            [showRowLines]="true" (onRowClick)="onRowClickHandlerr($event)"
-                            (onRowDblClick)="onRowDoubleClickHandler($event)" [allowColumnResizing]="true"
-                            height="250px">
-                            <dxo-selection mode="single"></dxo-selection>
+                        <dx-data-grid id="gridContainer"
+                            [dataSource]="metalReturnDetailsData"
+                            [showBorders]="true"
+                            [showRowLines]="true"
+                            (onRowClick)="onRowClickHandlerr($event)"
+                            (onRowDblClick)="onRowDoubleClickHandler($event)"
+                            [allowColumnResizing]="true"
+                            [allowColumnReordering]="true"
+                            height="250px" [columnAutoWidth]="true">
+                            <dxo-selection mode="multiple"></dxo-selection>
                             <dxo-scrolling mode="virtual"></dxo-scrolling>
+                            <dxo-paging [enabled]="false"></dxo-paging>
 
-
-                            <dxi-column dataField="SRNO" caption="Sr #"></dxi-column>
-                            <dxi-column dataField="STOCK_CODE" caption="Stock Code"></dxi-column>
-                            <dxi-column dataField="STOCK_DESCRIPTION" caption="Description"></dxi-column>
-                            <dxi-column dataField="JOB_DESCRIPTION" caption="Job Description"></dxi-column>
-                            <dxi-column dataField="PCS" caption="Pcs"   alignment="right"></dxi-column>
-                            <dxi-column dataField="DESIGN_CODE" caption="Design"></dxi-column>
-                            <dxi-column dataField="DIVCODE" caption="Division"></dxi-column>
-                            <dxi-column dataField="GROSSWT" caption="Gross Wt"></dxi-column>
-                            <dxi-column dataField="PUREWT" caption="Pure Wt"></dxi-column>
-                            <dxi-column dataField="JOB_NUMBER" caption="Job Number"></dxi-column>
-                            <dxi-column dataField="UNQ_JOB_ID" caption="Uniq job Id"></dxi-column>
-                            <dxi-column dataField="PURITY" caption="Purity"   alignment="right"></dxi-column>
-                            <dxi-column dataField="STONE_WT" caption="Stone Wt"></dxi-column>
-                            <dxi-column dataField="NET_WT" caption="Net Wt"></dxi-column>
-                            <dxi-column dataField="PROCESS_CODE" caption="Process Code"></dxi-column>
-                            <dxi-column dataField="PROCESS_NAME" caption="Process Desc"></dxi-column>
-                            <dxi-column dataField="WORKER_CODE" caption="Worker"></dxi-column>
-                            <dxi-column dataField="WORKER_NAME" caption="Worker Desc"></dxi-column>
-
-                            <!-- <dxi-column dataField="GROSS_WT"
-                                caption="GROSS WT"
-                                [format]="gridAmountDecimalFormat"></dxi-column> -->
-
-
+                            <dxi-column *ngFor="let data of columnhead"
+                                dataField="{{ data.field }}"
+                                caption="{{ data.title }}"
+                                [format]="data.format" [allowEditing]="true"
+                                [alignment]="data.alignment"
+                                backgroundcolor="#000">
+                            </dxi-column>
                             <dxo-summary>
                                 <dxi-total-item column="SRNO">
                                 </dxi-total-item>
                                 <dxi-total-item column="PCS">
                                 </dxi-total-item>
-                                <dxi-total-item column="GROSS_WT" summaryType="sum"
-                                    [valueFormat]="gridMetalDecimalFormat" displayFormat="{0}">
-                                </dxi-total-item>
-                                <dxi-total-item column="PUREWT" summaryType="sum" [valueFormat]="gridMetalDecimalFormat"
+                                <dxi-total-item column="GROSS_WT"
+                                    summaryType="sum"
+                                    [valueFormat]="gridMetalDecimalFormat"
                                     displayFormat="{0}">
                                 </dxi-total-item>
-                                <dxi-total-item column="STONE_WT" summaryType="sum"
-                                    [valueFormat]="gridMetalDecimalFormat" displayFormat="{0}">
+                                <dxi-total-item column="PUREWT"
+                                    summaryType="sum"
+                                    [valueFormat]="gridMetalDecimalFormat"
+                                    displayFormat="{0}">
                                 </dxi-total-item>
-                                <dxi-total-item column="NET_WT" summaryType="sum" [valueFormat]="gridMetalDecimalFormat"
+                                <dxi-total-item column="STONE_WT"
+                                    summaryType="sum"
+                                    [valueFormat]="gridMetalDecimalFormat"
+                                    displayFormat="{0}">
+                                </dxi-total-item>
+                                <dxi-total-item column="NET_WT"
+                                    summaryType="sum"
+                                    [valueFormat]="gridMetalDecimalFormat"
                                     displayFormat="{0}">
                                 </dxi-total-item>
                             </dxo-summary>
-
                         </dx-data-grid>
                     </div>
 
                     <div class="col-md-4">
                         <div class="row my-2">
-                            <label for="inputPassword" class="col-sm-3 col-form-label">Remarks
+                            <label for="inputPassword"
+                                class="col-sm-3 col-form-label">Remarks
                                 :</label>
                             <div class="col-md-9">
-                                <mat-form-field appearance="outline" style="width: 100%;">
-                                    <input type="text" matInput formControlName="REMARKS" [readonly]="viewMode"
+                                <mat-form-field appearance="outline"
+                                    style="width: 100%;">
+                                    <input type="text" matInput
+                                        formControlName="REMARKS"
+                                        [readonly]="viewMode"
                                         maxlength="100" />
                                 </mat-form-field>
                             </div>
@@ -227,6 +298,7 @@
     </div>
 </div>
 <ng-template #metalReturnDetailScreen>
-    <app-metal-return-details [content]="dataToDetailScreen" (saveDetail)="setValuesToHeaderGrid($event)"
+    <app-metal-return-details [content]="dataToDetailScreen"
+        (saveDetail)="setValuesToHeaderGrid($event)"
         (closeDetail)="closeDetailScreen()"></app-metal-return-details>
 </ng-template>
