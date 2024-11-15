@@ -67,6 +67,7 @@ export class SalesmanWiseProfitAnalysisComponent implements OnInit {
       this.salesmanWiseProfitAnalysisForm.controls.todate.setValue(event.ToDate);
       this.dateToPass.toDate = this.commonService.formatYYMMDD(event.ToDate);
     }
+    this.gridData();
   }
 
   popupClosed(){
@@ -158,7 +159,7 @@ export class SalesmanWiseProfitAnalysisComponent implements OnInit {
               "STRFMDATE" : this.dateToPass.fromDate,    
               "STRTODATE" : this.dateToPass.toDate,    
               "INTVALUE" : '',  
-              "STRBRANCHES" : this.formattedBranchDivisionData || this.fetchedBranchData,
+              "STRBRANCHES" : this.salesmanWiseProfitAnalysisForm.controls.branch.value || this.fetchedBranchData,
               "LOGDATA" : ''
             }
          })
@@ -208,7 +209,7 @@ export class SalesmanWiseProfitAnalysisComponent implements OnInit {
         "STRFMDATE" : this.dateToPass.fromDate,    
 	      "STRTODATE" : this.dateToPass.toDate,    
 	      "INTVALUE" : '',  
-        "STRBRANCHES" : this.formattedBranchDivisionData || this.fetchedBranchData,
+        "STRBRANCHES" : this.salesmanWiseProfitAnalysisForm.controls.branch.value || this.fetchedBranchData,
         "LOGDATA" : JSON.stringify(logData)
       }
     }
@@ -256,7 +257,7 @@ export class SalesmanWiseProfitAnalysisComponent implements OnInit {
         "STRFMDATE" : this.dateToPass.fromDate,    
 	      "STRTODATE" : this.dateToPass.toDate,    
 	      "INTVALUE" : '',  
-        "STRBRANCHES" : this.formattedBranchDivisionData || this.fetchedBranchData,
+        "STRBRANCHES" : this.salesmanWiseProfitAnalysisForm.controls.branch.value || this.fetchedBranchData,
         "LOGDATA" : JSON.stringify(logData)
       }
     }
@@ -302,7 +303,6 @@ export class SalesmanWiseProfitAnalysisComponent implements OnInit {
 
   prefillScreenValues(){
     if ( Object.keys(this.content).length > 0) {
-      this.isLoading = false;
       let ParcedPreFetchData = JSON.parse(this.content?.CONTROL_LIST_JSON) //data from retailREPORT Component- modalRef instance
 
       this.templateNameHasValue = !!ParcedPreFetchData.CONTROL_HEADER.TEMPLATENAME;
@@ -325,9 +325,28 @@ export class SalesmanWiseProfitAnalysisComponent implements OnInit {
       this.fetchedBranchData= this.fetchedBranchDataParam?.split("#")
    
       this.dateToPass = {
-        fromDate:  this.formatDateToYYYYMMDD(new Date()),
-        toDate: this.formatDateToYYYYMMDD(new Date()),
+        fromDate:  this.datePipe.transform(new Date(), 'yyyy-MM-dd')!,
+        toDate: this.datePipe.transform(new Date(), 'yyyy-MM-dd')!,
       };
     }
+    this.isLoading = false;
+    this.gridData();
+  }
+
+  gridData(){
+    let API = "UspSmanDiaSalesNewNet/GetspSmanDiaSalesNewNet";
+    let postData = { 
+      "strFmDate": this.dateToPass.fromDate,   
+      "strToDate": this.dateToPass.toDate,
+      "intvalue": 0,
+      "strBranches": this.salesmanWiseProfitAnalysisForm.controls.branch.value || this.fetchedBranchData
+    };
+
+    this.dataService.postDynamicAPI(API, postData).subscribe(
+      (result) => {
+        console.log(result)
+      },
+        (err) => alert(err)
+      );
   }
 }
