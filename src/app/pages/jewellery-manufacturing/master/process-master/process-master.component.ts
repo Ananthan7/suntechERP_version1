@@ -39,8 +39,8 @@ export class ProcessMasterComponent implements OnInit {
   processTypeList: any[] = [];
   formattedTime: number = 0;
   formattedMaxTime: number = 0;
-  islossReadOnly = true;
-  isRecovReadOnly = true;
+  islossReadOnly: boolean = true;
+  isRecovReadOnly: boolean = true;
   isAlloWGainReadOnly = true;
   editableMode: boolean = false;
   lossDisable: boolean = false;
@@ -263,7 +263,6 @@ export class ProcessMasterComponent implements OnInit {
 
   ngOnInit(): void {
     this.lossDisable = true;
-    this.dele = true;
     this.searchModeLoss = false;
     this.searchModeRecov = false;
     this.searchModeAllow = false;
@@ -283,7 +282,6 @@ export class ProcessMasterComponent implements OnInit {
         this.onlossChange();
         this.onRecovery();
         this.onAllowGain();
-        this.dele = false;
       } else if (this.content.FLAG == 'DELETE') {
         this.viewMode = true;
         this.deleteProcessMaster()
@@ -291,8 +289,8 @@ export class ProcessMasterComponent implements OnInit {
     } else {
       this.postionCodeValidate();//to get position only for new entry
     }
-
   }
+  
   setValueWithDecimal(formControlName: string, value: any, Decimal: string) {
     this.processMasterForm.controls[formControlName].setValue(
       this.commonService.setCommaSerperatedNumber(value, Decimal)
@@ -1313,8 +1311,8 @@ export class ProcessMasterComponent implements OnInit {
       .subscribe((result) => {
         if (result.status == "Success") {
           const responseData = result.dynamicData[0][0];
-          console.log(responseData);
-          console.log(responseData.WIP_ACCODE);
+          // console.log(responseData);
+          // console.log(responseData.WIP_ACCODE);
           if (responseData.WIP_ACCODE == this.processMasterForm.value.WIPaccount) {
             Swal.fire({
               title: '',
@@ -1462,6 +1460,8 @@ export class ProcessMasterComponent implements OnInit {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
       WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
     }
+    console.log("this Working Now");
+    
     this.commonService.toastInfoByMsgId('MSG81447');
     let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
     let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
