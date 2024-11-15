@@ -328,6 +328,5 @@ export class FestivalMasterComponent implements OnInit {
     console.log('New date selected:', event.value);
     cellData.setValue(event.value);
   }
-  
 
 }

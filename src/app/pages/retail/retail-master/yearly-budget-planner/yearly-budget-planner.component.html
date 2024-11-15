@@ -24,8 +24,8 @@
                                         <mat-form-field style="width: 100%" appearance="outline">
                                             <input type="text" #codeInput matInput formControlName="branchcode"
                                                 UpperCaseDirective autocomplete="off" />
-                                            <master-search class="masterSearch" [MasterSearchData]="BranchData"
-                                                (newRowClick)="BranchDataSelected($event)">
+                                            <master-search class="masterSearch" [MasterSearchData]="branchCodeData"
+                                                (newRowClick)="branchCodeSelected($event)">
                                             </master-search>
                                         </mat-form-field>
                                     </div>
@@ -73,7 +73,7 @@
                                             <input type="text" #codeInput matInput formControlName="finyear"
                                                 UpperCaseDirective autocomplete="off" />
                                             <master-search class="masterSearch" [MasterSearchData]="BranchData"
-                                                (newRowClick)="BranchDataSelected($event)">
+                                                (newRowClick)="branchCodeSelected($event)">
                                             </master-search>
                                         </mat-form-field>
                                     </div>
@@ -129,7 +129,7 @@
                 <div class="row mt-2">
                     <div class="col-md-3">
                         <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true " [viewImportBtn]="false"
-                            [viewAddBtn]="!viewMode" [viewDeleteBtn]="!viewMode" (addClick)="addTableData()"
+                            [viewAddBtn]="!viewOnly" [viewDeleteBtn]="!viewOnly" (addClick)="addTableData()"
                             (deleteClick)="deleteTableData()">
                         </menu-buttons>
                     </div>

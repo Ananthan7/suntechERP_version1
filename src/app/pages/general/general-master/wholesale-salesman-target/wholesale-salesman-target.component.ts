@@ -14,7 +14,7 @@ import Swal from 'sweetalert2';
 })
 export class WholesaleSalesmanTargetComponent implements OnInit {
   @Input() content!: any;
-  maindetails :any =[];
+  maindetails :any[] =[];
   viewMode:boolean = false;
   modalReference!: NgbModalRef;
   wst_id:any;
@@ -271,6 +271,8 @@ export class WholesaleSalesmanTargetComponent implements OnInit {
       console.log('Data received from modal:', result);
       this.details = result;
       this.maindetails = result;
+      // this.maindetails.push(result);
+      console.log(result);
     }
   });
   }
