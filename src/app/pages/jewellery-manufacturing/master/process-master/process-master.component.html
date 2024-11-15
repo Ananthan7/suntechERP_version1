@@ -7,9 +7,11 @@
         </button>
     </div>
     <!-- modal header component -->
-    <modal-header (saveClick)="formSubmit()" (cancelClick)="close()" (deleteClick)="deleteProcessMaster()"
+    <!-- <modal-header (saveClick)="formSubmit()" (cancelClick)="close()" (deleteClick)="deleteProcessMaster()"
         [isloading]="isloading" [isViewDelete]="!viewMode" [isViewSave]="!viewMode" [isViewMore]="!viewMode"
-        [isViewDelete]="!dele"></modal-header>
+        [isViewDelete]="!dele"></modal-header> -->
+        <modal-header [isViewSave]="!viewMode"   [isloading]="isloading" [isViewCancel]="!viewMode" [isViewMore]="!viewMode"  [isViewAttachment]="!viewMode" (cancelClick)="close()"
+    (saveClick)="formSubmit()" (deleteClick)="deleteProcessMaster()" [isViewDelete]="!viewMode && editableMode"></modal-header>
     <!-- content section -->
     <div class="card py-3">
         <form [formGroup]="processMasterForm">
@@ -79,10 +81,10 @@
                                 <mat-form-field style="width: 100%;" appearance="outline">
                                     <input type="text" matInput maxlength="6" UpperCaseDirective
                                         formControlName="WIPaccount" (focus)="showAlertIfCodeIsEmpty()"
-                                        (change)="checkAccodeSelected($event,WipACCODEData,'WIPaccount')"
                                         (focusout)="validateLookupField($event,WipACCODEData,'WIPaccount')"
                                         [readonly]="viewMode" tabindex="4"
-                                        (keydown)="lookupKeyPress($event,'WIPaccount')" />
+                                        (keydown)="lookupKeyPress($event,'WIPaccount')"
+                                        (change)="checkAccodeSelected($event,WipACCODEData,'WIPaccount')"/>
                                     <master-search class="masterSearch" [MasterSearchData]="WipACCODEData"
                                         *ngIf="viewMode == false" #overlayWIPaccountSearch
                                         (newRowClick)="WIPaccountSelected($event)">

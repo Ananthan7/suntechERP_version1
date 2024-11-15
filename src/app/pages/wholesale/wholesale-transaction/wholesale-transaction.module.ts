@@ -11,6 +11,7 @@ import { JewelleryAssemblingStonesDetailsComponent } from './jewellery-assemblin
 import { JewelleryAssemblingMetalDetailsComponent } from './jewellery-assembling/jewellery-assembling-metal-details/jewellery-assembling-metal-details.component';
 import { JewellerypurchaseComponent } from './jewellerypurchase/jewellerypurchase.component';
 import { JewelleryPurchaseDetailComponent } from './jewellerypurchase/jewellery-purchase-detail/jewellery-purchase-detail.component';
+import { JewelleryPurchaseOtherAmountComponent } from './jewellerypurchase/jewellery-purchase-other-amount/jewellery-purchase-other-amount.component';
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import { JewelleryPurchaseDetailComponent } from './jewellerypurchase/jewellery-
     JewelleryAssemblingStonesDetailsComponent,
     JewelleryAssemblingMetalDetailsComponent,
     JewellerypurchaseComponent,
-    JewelleryPurchaseDetailComponent
+    JewelleryPurchaseDetailComponent,
+    JewelleryPurchaseOtherAmountComponent
   ],
   imports: [
     CommonModule,
