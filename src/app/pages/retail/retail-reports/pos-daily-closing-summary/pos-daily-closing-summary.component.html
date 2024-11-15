@@ -285,7 +285,8 @@
                                     <dxi-column dataField="mkgrate" caption="Mkg. Rate" [allowResizing]="true" alignment="right"></dxi-column>
                                     <dxi-column dataField="mkgvalue" caption="Mkg. Value" [allowResizing]="true" alignment="right"></dxi-column>
                                     <dxi-column dataField="metalvalue" caption="Metal Value" [allowResizing]="true" alignment="right"></dxi-column>
-                                    <dxi-column dataField="amount" caption="Total Amount" [allowResizing]="true" alignment="right"></dxi-column>
+                                    <dxi-column dataField="amount" caption="Total Amount" [allowResizing]="true" alignment="right"
+                                    [customizeText]="customizeContent"></dxi-column>
 
 
                                     <dxi-column dataField="qty" caption="qty" [allowResizing]="true" alignment="right"></dxi-column>
@@ -304,7 +305,8 @@
 
                                         <dxi-total-item column="mkgvalue" summaryType="sum" displayFormat="{0}" alignment="right"></dxi-total-item>
                                         <dxi-total-item column="metalvalue" summaryType="sum" displayFormat="{0}" alignment="right"></dxi-total-item>
-                                        <dxi-total-item column="amount" summaryType="sum" displayFormat="{0}" alignment="right"></dxi-total-item>
+                                        <dxi-total-item column="amount" summaryType="sum" displayFormat="{0}" alignment="right"
+                                        [customizeText]="customizeSummaryContent"></dxi-total-item>
                                     </dxo-summary>
                                 </dx-data-grid>
                             </div>

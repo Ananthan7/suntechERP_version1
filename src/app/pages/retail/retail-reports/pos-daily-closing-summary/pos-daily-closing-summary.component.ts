@@ -770,5 +770,15 @@ export class PosDailyClosingSummaryComponent implements OnInit {
     }
   }
 
+  customizeSummaryContent = (data: any) => {
+    // decimal point hanlder from commonService
+    return this.comService.decimalQuantityFormat(data.value, 'THREE');
+  };
+
+  customizeContent = (data: any) => {
+    // decimal point hanlder from commonService
+    return this.comService.commaSeperation(data.value)
+  };
+
 
 }
