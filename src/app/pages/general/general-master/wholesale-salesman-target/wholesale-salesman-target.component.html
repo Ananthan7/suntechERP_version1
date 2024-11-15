@@ -1,5 +1,5 @@
 <div class="card-content border-bottom d-flex justify-content-between p-2">
-    <h5 class="pos-modaltitle" id="modal-dia-metal"> WholeSale Target
+    <h5 class="pos-modaltitle" id="modal-dia-metal"> WholeSale Salesman Target
     </h5>
     <button type="button" class="btn btn-close close-btn" (click)="close()">
         <i class="feather icon-x close-icon"></i>
@@ -18,8 +18,8 @@
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%;" appearance="outline">
                             <input type="text" id="inputPassword" matInput formControlName="salesman" />
-                            <master-search [MasterSearchData]="enteredCodeData" class="masterSearch"
-                                (newRowClick)="enteredCodeSelected($event)"></master-search>
+                            <master-search [MasterSearchData]="salesmanCodeData" class="masterSearch"
+                                (newRowClick)="selectedsalesman($event)"></master-search>
                         </mat-form-field>
                     </div>
 
