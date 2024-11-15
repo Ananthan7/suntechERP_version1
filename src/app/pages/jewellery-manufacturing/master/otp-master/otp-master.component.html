@@ -5,8 +5,7 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
-(deleteClick)="deleteRecord()"></modal-header>
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" (deleteClick)="deleteRecord()"></modal-header>
 <div class="row">
     <div class="col-md-12">
         <form [formGroup]="otpForm">
@@ -18,40 +17,45 @@
                                 <div class="row align-items-center mb-1">
                                     <label for="inputPassword" class="col-sm-2 col-form-label">Branch * :</label>
                                     <div class="col-md-3">
-                                      <mat-form-field appearance="outline"  style="width: 100%;">
-                                        <input type="text" matInput formControlName="branch"   (keydown)="lookupKeyPress($event,'orderType')"/>
-                                        <master-search [MasterSearchData]="branchCodeData"   #overlaybranchSearch
-                                        (newRowClick)="branchSelected($event)" class="masterSearch"></master-search>
-                                      </mat-form-field>
-                                    
+                                        <mat-form-field appearance="outline" style="width: 100%;">
+                                            <input type="text" matInput formControlName="branch" [readonly]="viewMode"
+                                                (focusout)="validateLookupField($event,branchCodeData,'branch')"
+                                                (keydown)="lookupKeyPress($event,'branch')" />
+                                            <master-search [MasterSearchData]="branchCodeData" #overlaybranchSearch
+                                                (newRowClick)="branchSelected($event)" *ngIf="!viewMode"
+                                                class="masterSearch"></master-search>
+                                        </mat-form-field>
+
                                     </div>
                                     <div class="col-md-4">
-                                        <mat-form-field appearance="outline"  style="width: 100%;">
-                                          <input type="text" matInput formControlName="branchdesc" />
+                                        <mat-form-field appearance="outline" style="width: 100%;">
+                                            <input type="text" matInput formControlName="branchdesc"
+                                                [readonly]="viewMode || codeEnable" />
                                         </mat-form-field>
-                                      </div>
-                                  </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        
-                       
+
+
                     </div>
-    
-                  
+
+
                 </div>
                 <div class="col-md-12">
-                    <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [allowColumnResizing]="true" [showBorders]="true">
+                    <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [allowColumnResizing]="true"
+                        [showBorders]="true">
                         <dxo-paging [enabled]="false"></dxo-paging>
                         <dxo-editing mode="cell" [allowUpdating]="true">
                         </dxo-editing>
                         <dxo-selection mode="multiple"></dxo-selection>
                         <dxo-scrolling mode="virtual"></dxo-scrolling>
-        
-                        <dxi-column *ngFor="let data of columnheader" dataField="{{ data }}"  caption="{{ data }}"
-                          [allowEditing]="true" alignment="center" backgroundcolor="#000">
+
+                        <dxi-column *ngFor="let data of columnheader" dataField="{{ data }}" caption="{{ data }}"
+                            [allowEditing]="true" alignment="center" backgroundcolor="#000">
                         </dxi-column>
-                      </dx-data-grid>
-                   </div>
+                    </dx-data-grid>
+                </div>
             </div>
         </form>
     </div>

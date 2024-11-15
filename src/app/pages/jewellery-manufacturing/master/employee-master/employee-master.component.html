@@ -20,16 +20,16 @@
                             Code :</label>
                         <div class="col-sm-4">
                             <mat-form-field style="width: 100%" appearance="outline">
-                                <input type="text" #codeInput matInput formControlName="code" UpperCaseDirective  [readonly]="viewMode || editMode"
-                                    autocomplete="off" />
+                                <input type="text" #codeInput matInput formControlName="code" UpperCaseDirective
+                                    [readonly]="viewMode || editMode" autocomplete="off" />
                             </mat-form-field>
                         </div>
                         <label for="inputPassword" class="col-sm-2 col-form-label">
                             Name :</label>
                         <div class="col-sm-4">
                             <mat-form-field style="width: 100%" appearance="outline">
-                                <input type="text" matInput formControlName="name" UpperCaseDirective
-                                    autocomplete="off"   [readonly]="viewMode || codeEnable"/>
+                                <input type="text" matInput formControlName="name" UpperCaseDirective autocomplete="off"
+                                    [readonly]="viewMode || codeEnable" />
                             </mat-form-field>
                         </div>
                     </div>
@@ -39,7 +39,7 @@
                         <div class="col-sm-9">
                             <mat-form-field style="width: 100%" appearance="outline">
                                 <input type="text" #codeInput matInput formControlName="otherLanguage"
-                                    UpperCaseDirective autocomplete="off"   [readonly]="viewMode || codeEnable"/>
+                                    UpperCaseDirective autocomplete="off" [readonly]="viewMode || codeEnable" />
                             </mat-form-field>
                         </div>
                     </div>
@@ -47,15 +47,19 @@
                         <label for="inputPassword" id="ID002" class="col-sm-2 col-form-label">Branch : </label>
                         <div class="col-sm-4">
                             <mat-form-field style="width: 100%" appearance="outline">
-                                <input type="text" matInput formControlName="Branch" UpperCaseDirective   [readonly]="viewMode || codeEnable"/>
-                                <master-search *ngIf="!viewMode"  class="masterSearch" [MasterSearchData]="BranchData"
-                                    (newRowClick)="BranchDataSelected($event)">
+                                <input type="text" matInput formControlName="Branch" UpperCaseDirective
+                                    [readonly]="viewMode || codeEnable"
+                                    (focusout)="validateLookupField($event,BranchData,'Branch')"
+                                    (keydown)="lookupKeyPress($event,'Branch')" />
+                                <master-search *ngIf="!viewMode" #overlayBranchSearch class="masterSearch"
+                                    [MasterSearchData]="BranchData" (newRowClick)="BranchDataSelected($event)">
                                 </master-search>
                             </mat-form-field>
                         </div>
                         <div class="col-sm-5">
                             <mat-form-field style="width: 100%" appearance="outline">
-                                <input type="text" matInput formControlName="BranchDes" UpperCaseDirective   [readonly]="viewMode || codeEnable"/>
+                                <input type="text" matInput formControlName="BranchDes" UpperCaseDirective
+                                    [readonly]="viewMode || codeEnable" />
                             </mat-form-field>
                         </div>
                     </div>
@@ -63,15 +67,19 @@
                         <label for="inputPassword" id="ID002" class="col-sm-2 col-form-label">Department : </label>
                         <div class="col-sm-4">
                             <mat-form-field style="width: 100%" appearance="outline">
-                                <input type="text" matInput formControlName="Department" UpperCaseDirective   [readonly]="viewMode || codeEnable"/>
-                                <master-search *ngIf="!viewMode"  class="masterSearch" [MasterSearchData]="DepartmentData"
-                                    (newRowClick)="DepartmentSelected($event)">
+                                <input type="text" matInput formControlName="Department" UpperCaseDirective
+                                    [readonly]="viewMode || codeEnable"
+                                    (focusout)="validateLookupField($event,DepartmentData,'Department')"
+                                    (keydown)="lookupKeyPress($event,'Department')" />
+                                <master-search *ngIf="!viewMode" #overlayDepartmentSearch class="masterSearch"
+                                    [MasterSearchData]="DepartmentData" (newRowClick)="DepartmentSelected($event)">
                                 </master-search>
                             </mat-form-field>
                         </div>
                         <div class="col-sm-5">
                             <mat-form-field style="width: 100%" appearance="outline">
-                                <input type="text" matInput formControlName="DepartmentDes" UpperCaseDirective   [readonly]="viewMode || codeEnable"/>
+                                <input type="text" matInput formControlName="DepartmentDes" UpperCaseDirective
+                                    [readonly]="viewMode || codeEnable" />
                             </mat-form-field>
                         </div>
                     </div>
@@ -79,15 +87,19 @@
                         <label for="inputPassword" id="ID002" class="col-sm-2 col-form-label">Designation : </label>
                         <div class="col-sm-4">
                             <mat-form-field style="width: 100%" appearance="outline">
-                                <input type="text" matInput formControlName="Designation" UpperCaseDirective   [readonly]="viewMode || codeEnable"/>
-                                <master-search *ngIf="!viewMode"  class="masterSearch" [MasterSearchData]="DesignationData"
-                                    (newRowClick)="DesignationSelected($event)">
+                                <input type="text" matInput formControlName="Designation" UpperCaseDirective
+                                    [readonly]="viewMode || codeEnable"
+                                    (focusout)="validateLookupField($event,DesignationData,'Designation')"
+                                    (keydown)="lookupKeyPress($event,'Designation')" />
+                                <master-search *ngIf="!viewMode" #overlayDesignationSearch class="masterSearch"
+                                    [MasterSearchData]="DesignationData" (newRowClick)="DesignationSelected($event)">
                                 </master-search>
                             </mat-form-field>
                         </div>
                         <div class="col-sm-5">
                             <mat-form-field style="width: 100%" appearance="outline">
-                                <input type="text" matInput formControlName="DesignationDes" UpperCaseDirective   [readonly]="viewMode || codeEnable"/>
+                                <input type="text" matInput formControlName="DesignationDes" UpperCaseDirective
+                                    [readonly]="viewMode || codeEnable" />
                             </mat-form-field>
                         </div>
                     </div>
@@ -95,7 +107,8 @@
                         <label for="inputPassword" id="ID002" class="col-sm-2 col-form-label">Group Code : </label>
                         <div class="col-sm-4">
                             <mat-form-field style="width: 100%" appearance="outline">
-                                <input type="text" matInput formControlName="GroupCode" UpperCaseDirective   [readonly]="viewMode || codeEnable"/>
+                                <input type="text" matInput formControlName="GroupCode" UpperCaseDirective
+                                    [readonly]="viewMode || codeEnable" />
                             </mat-form-field>
                         </div>
                     </div>
@@ -119,16 +132,20 @@
                                     <div class="col-sm-2">
                                         <mat-form-field style="width: 100%" appearance="outline">
                                             <input type="text" #codeInput matInput formControlName="Grade"
-                                                UpperCaseDirective autocomplete="off"   [readonly]="viewMode || codeEnable"/>
-                                            <master-search *ngIf="!viewMode"  class="masterSearch" [MasterSearchData]="GradeData"
-                                                (newRowClick)="GradeSelected($event)">
+                                                UpperCaseDirective autocomplete="off"
+                                                [readonly]="viewMode || codeEnable"
+                                                (focusout)="validateLookupField($event,GradeData,'Grade')"
+                                                (keydown)="lookupKeyPress($event,'Grade')" />
+                                            <master-search *ngIf="!viewMode" class="masterSearch" #overlayGradeSearch
+                                                [MasterSearchData]="GradeData" (newRowClick)="GradeSelected($event)">
                                             </master-search>
                                         </mat-form-field>
                                     </div>
                                     <div class="col-sm-2">
                                         <mat-form-field style="width: 100%" appearance="outline">
                                             <input type="text" #codeInput matInput formControlName="GradeDes"
-                                                UpperCaseDirective autocomplete="off"   [readonly]="viewMode || codeEnable"/>
+                                                UpperCaseDirective autocomplete="off"
+                                                [readonly]="viewMode || codeEnable" />
                                         </mat-form-field>
                                     </div>
                                     <label for="inputPassword" class="col-sm-2 col-form-label">
@@ -136,7 +153,8 @@
                                     <div class="col-sm-2">
                                         <mat-form-field style="width: 100%;" appearance="outline">
                                             <input matInput [matDatepicker]="DOJ" [max]="DOJ" formControlName="DOJ"
-                                                placeholder="DD/MM/YYYY" DateValidation   [readonly]="viewMode || codeEnable"/>
+                                                placeholder="DD/MM/YYYY" DateValidation
+                                                [readonly]="viewMode || codeEnable" />
                                             <mat-datepicker-toggle matSuffix [for]="DOJ"></mat-datepicker-toggle>
                                             <mat-datepicker [startAt]="currentDate" #DOJ></mat-datepicker>
                                         </mat-form-field>
@@ -148,7 +166,8 @@
                                     <div class="col-sm-2">
                                         <mat-form-field style="width: 100%;" appearance="outline">
                                             <input matInput [matDatepicker]="DOB" [max]="DOB" formControlName="DOB"
-                                                placeholder="DD/MM/YYYY" DateValidation   [readonly]="viewMode || codeEnable"/>
+                                                placeholder="DD/MM/YYYY" DateValidation
+                                                [readonly]="viewMode || codeEnable" />
                                             <mat-datepicker-toggle matSuffix [for]="DOB"></mat-datepicker-toggle>
                                             <mat-datepicker [startAt]="currentDate" #DOB></mat-datepicker>
                                         </mat-form-field>
@@ -177,8 +196,12 @@
                                     <div class="col-sm-2">
                                         <mat-form-field style="width: 100%" appearance="outline">
                                             <input type="text" #codeInput matInput formControlName="Nationality"
-                                                UpperCaseDirective autocomplete="off"   [readonly]="viewMode || codeEnable"/>
-                                            <master-search *ngIf="!viewMode"  class="masterSearch" [MasterSearchData]="NationalityData"
+                                                UpperCaseDirective autocomplete="off"
+                                                [readonly]="viewMode || codeEnable" 
+                                                (focusout)="validateLookupField($event,NationalityData,'Nationality')"
+                                                (keydown)="lookupKeyPress($event,'Nationality')"/>
+                                            <master-search *ngIf="!viewMode" class="masterSearch"
+                                                [MasterSearchData]="NationalityData"  #overlayNationalitySearch
                                                 (newRowClick)="NationalitySelected($event)">
                                             </master-search>
                                         </mat-form-field>
@@ -190,8 +213,12 @@
                                     <div class="col-sm-2">
                                         <mat-form-field style="width: 100%" appearance="outline">
                                             <input type="text" #codeInput matInput formControlName="Religion"
-                                                UpperCaseDirective autocomplete="off"   [readonly]="viewMode || codeEnable"/>
-                                            <master-search *ngIf="!viewMode"  class="masterSearch" [MasterSearchData]="ReligionData"
+                                                UpperCaseDirective autocomplete="off"
+                                                [readonly]="viewMode || codeEnable" 
+                                                (focusout)="validateLookupField($event,ReligionData,'Religion')"
+                                                (keydown)="lookupKeyPress($event,'Religion')"/>
+                                            <master-search *ngIf="!viewMode" class="masterSearch"
+                                                [MasterSearchData]="ReligionData" #overlayReligionSearch
                                                 (newRowClick)="ReligionSelected($event)">
                                             </master-search>
                                         </mat-form-field>
@@ -203,7 +230,8 @@
                                     <div class="col-sm-2">
                                         <mat-form-field style="width: 100%" appearance="outline">
                                             <input type="text" #codeInput matInput formControlName="FatherName"
-                                                UpperCaseDirective autocomplete="off"   [readonly]="viewMode || codeEnable"/>
+                                                UpperCaseDirective autocomplete="off"
+                                                [readonly]="viewMode || codeEnable" />
 
                                         </mat-form-field>
                                     </div>
@@ -216,7 +244,7 @@
                                         <mat-form-field style="width: 100%;" appearance="outline">
                                             <mat-select formControlName="Gender" [disabled]="viewMode">
                                                 <mat-option *ngFor="let option of GenderList" [value]="option.value">
-                                                  {{ option.name }}
+                                                    {{ option.name }}
                                                 </mat-option>
                                                 <!-- <mat-option value="1">Male</mat-option>
                                                 <mat-option value="2">FEMALE</mat-option>
@@ -230,7 +258,7 @@
                                         <mat-form-field style="width: 100%" appearance="outline">
                                             <mat-select formControlName="MaritialStatus" [disabled]="viewMode">
                                                 <mat-option *ngFor="let option of maritial" [value]="option.value">
-                                                  {{ option.name }}
+                                                    {{ option.name }}
                                                 </mat-option>
                                                 <!-- <mat-option value="1">Married</mat-option>
                                                 <mat-option value="2">UnMarried</mat-option>
@@ -254,7 +282,7 @@
                                                 <mat-form-field style="width: 100%" appearance="outline">
                                                     <input type="text" #codeInput matInput
                                                         formControlName="HomeHouseName" UpperCaseDirective
-                                                        autocomplete="off"   [readonly]="viewMode || codeEnable"/>
+                                                        autocomplete="off" [readonly]="viewMode || codeEnable" />
                                                 </mat-form-field>
                                             </div>
                                         </div>
@@ -263,8 +291,9 @@
                                                 Address</label>
                                             <div class="col-sm-8">
                                                 <mat-form-field style="width: 100%" appearance="outline">
-                                                    <textarea matInput rows="3"
-                                                        formControlName="HomeAddress" autocomplete="off"   [readonly]="viewMode || codeEnable"></textarea>
+                                                    <textarea matInput rows="3" formControlName="HomeAddress"
+                                                        autocomplete="off"
+                                                        [readonly]="viewMode || codeEnable"></textarea>
                                                 </mat-form-field>
                                             </div>
                                         </div>
@@ -274,9 +303,12 @@
                                             <div class="col-sm-8">
                                                 <mat-form-field style="width: 100%" appearance="outline">
                                                     <input type="text" #codeInput matInput formControlName="Country"
-                                                        UpperCaseDirective autocomplete="off"   [readonly]="viewMode || codeEnable"/>
-                                                    <master-search *ngIf="!viewMode"  class="masterSearch"
-                                                        [MasterSearchData]="CountryCodeData"
+                                                        UpperCaseDirective autocomplete="off"
+                                                        [readonly]="viewMode || codeEnable"
+                                                        (focusout)="validateLookupField($event,CountryCodeData,'Country')"
+                                                        (keydown)="lookupKeyPress($event,'Country')" />
+                                                    <master-search *ngIf="!viewMode" class="masterSearch"
+                                                        [MasterSearchData]="CountryCodeData" #overlayCountrySearch
                                                         (newRowClick)="CountryCodeSelected($event)">
                                                     </master-search>
                                                 </mat-form-field>
@@ -288,9 +320,12 @@
                                             <div class="col-sm-8">
                                                 <mat-form-field style="width: 100%" appearance="outline">
                                                     <input type="text" #codeInput matInput formControlName="State"
-                                                        UpperCaseDirective autocomplete="off"   [readonly]="viewMode || codeEnable"/>
-                                                    <master-search *ngIf="!viewMode"  class="masterSearch"
-                                                        [MasterSearchData]="StateCodeData"
+                                                        UpperCaseDirective autocomplete="off"
+                                                        [readonly]="viewMode || codeEnable" 
+                                                        (focusout)="validateLookupField($event,StateCodeData,'State')"
+                                                        (keydown)="lookupKeyPress($event,'State')" />
+                                                    <master-search *ngIf="!viewMode" class="masterSearch"
+                                                        [MasterSearchData]="StateCodeData" #overlayStateSearch
                                                         (newRowClick)="StateCodeSelected($event)">
                                                     </master-search>
                                                 </mat-form-field>
@@ -302,9 +337,12 @@
                                             <div class="col-sm-8">
                                                 <mat-form-field style="width: 100%" appearance="outline">
                                                     <input type="text" #codeInput matInput formControlName="City"
-                                                        UpperCaseDirective autocomplete="off"   [readonly]="viewMode || codeEnable"/>
-                                                    <master-search *ngIf="!viewMode"  class="masterSearch"
-                                                        [MasterSearchData]="CityCodeData"
+                                                        UpperCaseDirective autocomplete="off"
+                                                        [readonly]="viewMode || codeEnable" 
+                                                        (focusout)="validateLookupField($event,StateCodeData,'City')"
+                                                        (keydown)="lookupKeyPress($event,'City')" />
+                                                    <master-search *ngIf="!viewMode" class="masterSearch"
+                                                        [MasterSearchData]="CityCodeData" #overlayCitySearch
                                                         (newRowClick)="CityCodeSelected($event)">
                                                     </master-search>
                                                 </mat-form-field>
@@ -316,7 +354,8 @@
                                             <div class="col-sm-8">
                                                 <mat-form-field style="width: 100%" appearance="outline">
                                                     <input type="text" #codeInput matInput formControlName="LandLineNum"
-                                                        UpperCaseDirective autocomplete="off"   [readonly]="viewMode || codeEnable"/>
+                                                        UpperCaseDirective autocomplete="off"
+                                                        [readonly]="viewMode || codeEnable" />
                                                 </mat-form-field>
                                             </div>
                                         </div>
@@ -326,13 +365,15 @@
                                             <div class="col-sm-3">
                                                 <mat-form-field style="width: 100%" appearance="outline">
                                                     <input type="text" #codeInput matInput formControlName="MoblieCode"
-                                                        UpperCaseDirective autocomplete="off"   [readonly]="viewMode || codeEnable"/>
+                                                        UpperCaseDirective autocomplete="off"
+                                                        [readonly]="viewMode || codeEnable" />
                                                 </mat-form-field>
                                             </div>
                                             <div class="col-sm-5">
                                                 <mat-form-field style="width: 100%" appearance="outline">
                                                     <input type="text" #codeInput matInput formControlName="MoblieNum"
-                                                        UpperCaseDirective autocomplete="off"   [readonly]="viewMode || codeEnable"/>
+                                                        UpperCaseDirective autocomplete="off"
+                                                        [readonly]="viewMode || codeEnable" />
                                                 </mat-form-field>
                                             </div>
                                         </div>
@@ -342,7 +383,8 @@
                                             <div class="col-sm-8">
                                                 <mat-form-field style="width: 100%" appearance="outline">
                                                     <input type="text" #codeInput matInput formControlName="email"
-                                                        UpperCaseDirective autocomplete="off"   [readonly]="viewMode || codeEnable"/>
+                                                        UpperCaseDirective autocomplete="off"
+                                                        [readonly]="viewMode || codeEnable" />
                                                 </mat-form-field>
                                             </div>
                                         </div>
@@ -358,7 +400,8 @@
                                             <div class="col-sm-8">
                                                 <mat-form-field style="width: 100%" appearance="outline">
                                                     <input type="text" #codeInput matInput formControlName="PRhouseName"
-                                                        UpperCaseDirective autocomplete="off"   [readonly]="viewMode || codeEnable"/>
+                                                        UpperCaseDirective autocomplete="off"
+                                                        [readonly]="viewMode || codeEnable" />
                                                 </mat-form-field>
                                             </div>
                                         </div>
@@ -367,7 +410,9 @@
                                                 Address</label>
                                             <div class="col-sm-8">
                                                 <mat-form-field style="width: 100%" appearance="outline">
-                                                    <textarea matInput rows="3" formControlName="PRAddress" autocomplete="off"   [readonly]="viewMode || codeEnable"></textarea>
+                                                    <textarea matInput rows="3" formControlName="PRAddress"
+                                                        autocomplete="off"
+                                                        [readonly]="viewMode || codeEnable"></textarea>
                                                 </mat-form-field>
                                             </div>
                                         </div>
@@ -377,9 +422,12 @@
                                             <div class="col-sm-8">
                                                 <mat-form-field style="width: 100%" appearance="outline">
                                                     <input type="text" #codeInput matInput formControlName="PRCountry"
-                                                        UpperCaseDirective autocomplete="off"   [readonly]="viewMode || codeEnable"/>
-                                                    <master-search *ngIf="!viewMode"  class="masterSearch"
-                                                        [MasterSearchData]="PRCountryCodeData"
+                                                        UpperCaseDirective autocomplete="off"
+                                                        [readonly]="viewMode || codeEnable"
+                                                        (focusout)="validateLookupField($event,PRCountryCodeData,'PRCountryCodeData')"
+                                                        (keydown)="lookupKeyPress($event,'PRCountryCodeData')" />
+                                                    <master-search *ngIf="!viewMode" class="masterSearch"
+                                                        [MasterSearchData]="PRCountryCodeData" #overlayPRCountryCodeSearch
                                                         (newRowClick)="PRCountryCodeSelected($event)">
                                                     </master-search>
                                                 </mat-form-field>
@@ -391,9 +439,12 @@
                                             <div class="col-sm-8">
                                                 <mat-form-field style="width: 100%" appearance="outline">
                                                     <input type="text" #codeInput matInput formControlName="PRState"
-                                                        UpperCaseDirective autocomplete="off"   [readonly]="viewMode || codeEnable"/>
-                                                    <master-search *ngIf="!viewMode"  class="masterSearch"
-                                                        [MasterSearchData]="PRStateCodeData"
+                                                        UpperCaseDirective autocomplete="off"
+                                                        [readonly]="viewMode || codeEnable" 
+                                                        (focusout)="validateLookupField($event,PRStateCodeData,'PRStateCodeData')"
+                                                        (keydown)="lookupKeyPress($event,'PRStateCodeData')" />
+                                                    <master-search *ngIf="!viewMode" class="masterSearch"
+                                                        [MasterSearchData]="PRStateCodeData" #overlayPRStateCodeDataSearch
                                                         (newRowClick)="PRStateCodeSelected($event)">
                                                     </master-search>
                                                 </mat-form-field>
@@ -405,9 +456,12 @@
                                             <div class="col-sm-8">
                                                 <mat-form-field style="width: 100%" appearance="outline">
                                                     <input type="text" #codeInput matInput formControlName="PRCity"
-                                                        UpperCaseDirective autocomplete="off"   [readonly]="viewMode || codeEnable"/>
-                                                    <master-search *ngIf="!viewMode"  class="masterSearch"
-                                                        [MasterSearchData]="PRCityCodeData"
+                                                        UpperCaseDirective autocomplete="off"
+                                                        [readonly]="viewMode || codeEnable" 
+                                                        (focusout)="validateLookupField($event,PRCityCodeData,'PRCity')"
+                                                        (keydown)="lookupKeyPress($event,'PRCity')" />
+                                                    <master-search *ngIf="!viewMode" class="masterSearch"
+                                                        [MasterSearchData]="PRCityCodeData" #overlayPRCityDataSearch
                                                         (newRowClick)="PRCityCodeSelected($event)">
                                                     </master-search>
                                                 </mat-form-field>
@@ -419,7 +473,8 @@
                                             <div class="col-sm-8">
                                                 <mat-form-field style="width: 100%" appearance="outline">
                                                     <input type="text" #codeInput matInput formControlName="PRLand"
-                                                        UpperCaseDirective autocomplete="off"   [readonly]="viewMode || codeEnable"/>
+                                                        UpperCaseDirective autocomplete="off"
+                                                        [readonly]="viewMode || codeEnable" />
                                                 </mat-form-field>
                                             </div>
                                         </div>
@@ -430,13 +485,14 @@
                                                 <mat-form-field style="width: 100%" appearance="outline">
                                                     <input type="text" #codeInput matInput
                                                         formControlName="PRMoblieCode" UpperCaseDirective
-                                                        autocomplete="off"   [readonly]="viewMode || codeEnable"/>
+                                                        autocomplete="off" [readonly]="viewMode || codeEnable" />
                                                 </mat-form-field>
                                             </div>
                                             <div class="col-sm-5">
                                                 <mat-form-field style="width: 100%" appearance="outline">
                                                     <input type="text" #codeInput matInput formControlName="PRMoblieNo"
-                                                        UpperCaseDirective autocomplete="off"   [readonly]="viewMode || codeEnable"/>
+                                                        UpperCaseDirective autocomplete="off"
+                                                        [readonly]="viewMode || codeEnable" />
                                                 </mat-form-field>
                                             </div>
                                         </div>

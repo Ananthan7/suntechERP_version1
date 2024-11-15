@@ -1,10 +1,11 @@
 import { DatePipe } from '@angular/common';
-import { Component, Input, OnInit, Renderer2 } from '@angular/core';
+import { Component, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
+import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import Swal from 'sweetalert2';
 
@@ -682,6 +683,264 @@ export class DepartmentMasterComponent implements OnInit {
     this.departmentMasterForm.controls.UserDefined15.setValue(e.CODE);
   }
 
+  @ViewChild('overlayBranchSearch') overlayBranchSearch!: MasterSearchComponent;
+  @ViewChild('overlayCountryCodeSearch') overlayCountryCodeSearch!: MasterSearchComponent;
+  @ViewChild('overlayoneTimeCodeSearch') overlayoneTimeCodeSearch!: MasterSearchComponent;
+  @ViewChild('overlayleaveSalaryCodeSearch') overlayleaveSalaryCodeSearch!: MasterSearchComponent;
+  @ViewChild('overlayairTicketCodeSearch') overlayairTicketCodeSearch!: MasterSearchComponent;
+  @ViewChild('overlayGratuityCodeSearch') overlayGratuityCodeSearch!: MasterSearchComponent;
+  @ViewChild('overlayAIDebitExpCodeSearch') overlayAIDebitExpCodeSearch!: MasterSearchComponent;
+  @ViewChild('overlayAICreditCodeSearch') overlayAICreditCodeSearch!: MasterSearchComponent;
+  @ViewChild('overlayDebitExpensesLeaveSalSearch') overlayDebitExpensesLeaveSalSearch!: MasterSearchComponent;
+  @ViewChild('overlayDebitExpensesAirTicketSearch') overlayDebitExpensesAirTicketSearch!: MasterSearchComponent;
+  @ViewChild('overlayDebitExpensesGratuitySearch') overlayDebitExpensesGratuitySearch!: MasterSearchComponent;
+  @ViewChild('overlayCreditExpensesLeaveSalSearch') overlayCreditExpensesLeaveSalSearch!: MasterSearchComponent;
+  @ViewChild('overlayCreditExpensesAirTicketSearch') overlayCreditExpensesAirTicketSearch!: MasterSearchComponent;
+  @ViewChild('overlayOtherAmountValueSearch') overlayOtherAmountValueSearch!: MasterSearchComponent;
+  @ViewChild('overlayuserDefined1Search') overlayuserDefined1Search!: MasterSearchComponent;
+  @ViewChild('overlayuserDefined2Search') overlayuserDefined2Search!: MasterSearchComponent;
+  @ViewChild('overlayuserDefined3Search') overlayuserDefined3Search!: MasterSearchComponent;
+  @ViewChild('overlayuserDefined4Search') overlayuserDefined4Search!: MasterSearchComponent;
+  @ViewChild('overlayuserDefined5Search') overlayuserDefined5Search!: MasterSearchComponent;
+  @ViewChild('overlayuserDefined6Search') overlayuserDefined6Search!: MasterSearchComponent;
+  @ViewChild('overlayuserDefined7Search') overlayuserDefined7Search!: MasterSearchComponent;
+  @ViewChild('overlayuserDefined8Search') overlayuserDefined8Search!: MasterSearchComponent;
+  @ViewChild('overlayuserDefined9Search') overlayuserDefined9Search!: MasterSearchComponent;
+  @ViewChild('overlayuserDefined10Search') overlayuserDefined10Search!: MasterSearchComponent;
+  @ViewChild('overlayuserDefined11Search') overlayuserDefined11Search!: MasterSearchComponent;
+  @ViewChild('overlayuserDefine2d1Search') overlayuserDefined12Search!: MasterSearchComponent;
+  @ViewChild('overlayuserDefin3ed1Search') overlayuserDefined13Search!: MasterSearchComponent;
+  @ViewChild('overlayuserDefi4ned1Search') overlayuserDefined14Search!: MasterSearchComponent;
+  @ViewChild('overlayuserDef5ined1Search') overlayuserDefined15Search!: MasterSearchComponent;
+
+
+
+  lookupKeyPress(event: any, form?: any) {
+    if (event.key == 'Tab' && event.target.value == '') {
+      this.showOverleyPanel(event, form)
+    }
+    if (event.key === 'Enter') {
+      if (event.target.value == '') this.showOverleyPanel(event, form)
+      event.preventDefault();
+    }
+  }
+
+
+
+  showOverleyPanel(event: any, formControlName: string) {
+    switch (formControlName) {
+      case 'CountryCode':
+        this.overlayCountryCodeSearch.showOverlayPanel(event);
+        break;
+      case 'oneTimeCode':
+        this.overlayoneTimeCodeSearch.showOverlayPanel(event);
+        break;
+      case 'leaveSalaryCode':
+        this.overlayleaveSalaryCodeSearch.showOverlayPanel(event);
+        break;
+      case 'airTicketCode':
+        this.overlayairTicketCodeSearch.showOverlayPanel(event);
+        break;
+      case 'GratuityCode':
+        this.overlayGratuityCodeSearch.showOverlayPanel(event);
+        break;
+      case 'AIDebitExpCode':
+        this.overlayAIDebitExpCodeSearch.showOverlayPanel(event);
+        break;
+      case 'AICreditCode':
+        this.overlayAICreditCodeSearch.showOverlayPanel(event);
+        break;
+      case 'DebitExpensesLeaveSal':
+        this.overlayDebitExpensesLeaveSalSearch.showOverlayPanel(event);
+        break;
+      case 'DebitExpensesAirTicket':
+        this.overlayDebitExpensesAirTicketSearch.showOverlayPanel(event);
+        break;
+      case 'DebitExpensesGratuity':
+        this.overlayDebitExpensesGratuitySearch.showOverlayPanel(event);
+        break;
+      case 'CreditExpensesLeaveSal':
+        this.overlayCreditExpensesLeaveSalSearch.showOverlayPanel(event);
+        break;
+      case 'CreditExpensesAirTicket':
+        this.overlayCreditExpensesAirTicketSearch.showOverlayPanel(event);
+        break;
+      case 'CreditExpensesGratuity':
+        this.overlayCreditExpensesAirTicketSearch.showOverlayPanel(event);
+        break;
+      case 'OtherAmountValue':
+        this.overlayOtherAmountValueSearch.showOverlayPanel(event);
+        break;
+      case 'userDefined1':
+        this.overlayuserDefined1Search.showOverlayPanel(event);
+        break;
+      case 'userDefined2':
+        this.overlayuserDefined2Search.showOverlayPanel(event);
+        break;
+      case 'userDefined3':
+        this.overlayuserDefined3Search.showOverlayPanel(event);
+        break;
+      case 'userDefined4':
+        this.overlayuserDefined4Search.showOverlayPanel(event);
+        break;
+      case 'userDefined5':
+        this.overlayuserDefined5Search.showOverlayPanel(event);
+        break;
+      case 'userDefined6':
+        this.overlayuserDefined6Search.showOverlayPanel(event);
+        break;
+      case 'userDefined7':
+        this.overlayuserDefined7Search.showOverlayPanel(event);
+        break;
+      case 'userDefined8':
+        this.overlayuserDefined8Search.showOverlayPanel(event);
+        break;
+      case 'userDefined9':
+        this.overlayuserDefined9Search.showOverlayPanel(event);
+        break;
+      case 'userDefined10':
+        this.overlayuserDefined10Search.showOverlayPanel(event);
+        break;
+      case 'userDefined11':
+        this.overlayuserDefined11Search.showOverlayPanel(event);
+        break;
+      case 'userDefined12':
+        this.overlayuserDefined12Search.showOverlayPanel(event);
+        break;
+      case 'userDefined13':
+        this.overlayuserDefined13Search.showOverlayPanel(event);
+        break;
+      case 'userDefined14':
+        this.overlayuserDefined14Search.showOverlayPanel(event);
+        break;
+      case 'userDefined15':
+        this.overlayuserDefined15Search.showOverlayPanel(event);
+        break;
+      default:
+    }
+  }
+
+  openOverlay(FORMNAME: string, event: any) {
+    switch (FORMNAME) {
+      case 'CountryCode':
+        this.overlayCountryCodeSearch.showOverlayPanel(event);
+        break;
+      case 'oneTimeCode':
+        this.overlayoneTimeCodeSearch.showOverlayPanel(event);
+        break;
+      case 'leaveSalaryCode':
+        this.overlayleaveSalaryCodeSearch.showOverlayPanel(event);
+        break;
+      case 'airTicketCode':
+        this.overlayairTicketCodeSearch.showOverlayPanel(event);
+        break;
+      case 'GratuityCode':
+        this.overlayGratuityCodeSearch.showOverlayPanel(event);
+        break;
+      case 'AIDebitExpCode':
+        this.overlayAIDebitExpCodeSearch.showOverlayPanel(event);
+        break;
+      case 'AICreditCode':
+        this.overlayAICreditCodeSearch.showOverlayPanel(event);
+        break;
+      case 'DebitExpensesLeaveSal':
+        this.overlayDebitExpensesLeaveSalSearch.showOverlayPanel(event);
+        break;
+      case 'DebitExpensesAirTicket':
+        this.overlayDebitExpensesAirTicketSearch.showOverlayPanel(event);
+        break;
+      case 'DebitExpensesGratuity':
+        this.overlayDebitExpensesGratuitySearch.showOverlayPanel(event);
+        break;
+      case 'CreditExpensesLeaveSal':
+        this.overlayCreditExpensesLeaveSalSearch.showOverlayPanel(event);
+        break;
+      case 'CreditExpensesAirTicket':
+        this.overlayCreditExpensesAirTicketSearch.showOverlayPanel(event);
+        break;
+      case 'CreditExpensesGratuity':
+        this.overlayCreditExpensesAirTicketSearch.showOverlayPanel(event);
+        break;
+      case 'OtherAmountValue':
+        this.overlayOtherAmountValueSearch.showOverlayPanel(event);
+        break;
+      case 'userDefined1':
+        this.overlayuserDefined1Search.showOverlayPanel(event);
+        break;
+      case 'userDefined2':
+        this.overlayuserDefined2Search.showOverlayPanel(event);
+        break;
+      case 'userDefined3':
+        this.overlayuserDefined3Search.showOverlayPanel(event);
+        break;
+      case 'userDefined4':
+        this.overlayuserDefined4Search.showOverlayPanel(event);
+        break;
+      case 'userDefined5':
+        this.overlayuserDefined5Search.showOverlayPanel(event);
+        break;
+      case 'userDefined6':
+        this.overlayuserDefined6Search.showOverlayPanel(event);
+        break;
+      case 'userDefined7':
+        this.overlayuserDefined7Search.showOverlayPanel(event);
+        break;
+      case 'userDefined8':
+        this.overlayuserDefined8Search.showOverlayPanel(event);
+        break;
+      case 'userDefined9':
+        this.overlayuserDefined9Search.showOverlayPanel(event);
+        break;
+      case 'userDefined10':
+        this.overlayuserDefined10Search.showOverlayPanel(event);
+        break;
+      case 'userDefined11':
+        this.overlayuserDefined11Search.showOverlayPanel(event);
+        break;
+      case 'userDefined12':
+        this.overlayuserDefined12Search.showOverlayPanel(event);
+        break;
+      case 'userDefined13':
+        this.overlayuserDefined13Search.showOverlayPanel(event);
+        break;
+      case 'userDefined14':
+        this.overlayuserDefined14Search.showOverlayPanel(event);
+        break;
+      case 'userDefined15':
+        this.overlayuserDefined15Search.showOverlayPanel(event);
+        break;
+      default:
+    }
+  }
+
+  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    LOOKUPDATA.SEARCH_VALUE = event.target.value
+    if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
+    let param = {
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+    }
+    this.commonService.toastInfoByMsgId('MSG81447');
+    let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
+      .subscribe((result) => {
+        let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+        if (data.length == 0) {
+          this.commonService.toastErrorByMsgId('MSG1531')
+          this.departmentMasterForm.controls[FORMNAME].setValue('')
+          // this.renderer.selectRootElement(FORMNAME).focus();
+          LOOKUPDATA.SEARCH_VALUE = ''
+          this.openOverlay(FORMNAME, event);
+          return
+        }
+
+
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+      })
+    this.subscriptions.push(Sub)
+  }
+
   onchangeCheckBoxNum(e: any) {
     // console.log(e);
 
@@ -746,7 +1005,7 @@ export class DepartmentMasterComponent implements OnInit {
 
         const shift3Break2FromTime = result.response.PDEPTMST_BREAK3_FROM.split('T')[1].split('Z')[0].slice(0, 5);
         const shift3Break2ToTime = result.response.PDEPTMST_BREAK3_TO.split('T')[1].split('Z')[0].slice(0, 5);
-      
+
         this.departmentMasterForm.controls.Shift1From.setValue(shift1FromTime);
         this.departmentMasterForm.controls.Shift2From.setValue(shift2FromTime);
         this.departmentMasterForm.controls.Shift3From.setValue(shift3FromTime);
@@ -765,10 +1024,10 @@ export class DepartmentMasterComponent implements OnInit {
         this.departmentMasterForm.controls.Shift3Break1To.setValue(shift3Break1ToTime);
         this.departmentMasterForm.controls.Shift3Break2From.setValue(shift3Break2FromTime);
         this.departmentMasterForm.controls.Shift3Break2To.setValue(shift3Break2ToTime);
-        
+
         console.log(shift1FromTime);
-        
-        
+
+
       }, err => {
         this.commonService.closeSnackBarMsg()
         this.commonService.toastErrorByMsgId('MSG1531')
@@ -890,16 +1149,16 @@ export class DepartmentMasterComponent implements OnInit {
       "PDEPTMST_TYPEWEEKOFF1": this.onchangeCheckBoxNum(form.TYPEWEEKOFF1),
       "PDEPTMST_TYPEWEEKOFF2": this.onchangeCheckBoxNum(form.TYPEWEEKOFF2),
       "PDEPTMST_SHIFT2BREAK1": this.onchangeCheckBoxNum(form.Shift2Break1),
-      "PDEPTMST_SHIFT3BREAK1":this.onchangeCheckBoxNum(form.Shift3Break1),
-      "PDEPTMST_SHIFT1BREAK2":this.onchangeCheckBoxNum(form.Shift1Break2),
-      "PDEPTMST_SHIFT2BREAK2":this.onchangeCheckBoxNum(form.Shift2Break2),
-      "PDEPTMST_SHIFT3BREAK2":this.onchangeCheckBoxNum(form.Shift3Break2),
-      "PDEPTMST_S2BREAK1_FROM": this.commonService.nullToString(this.convertToISO(form.Shift2Break1From)) ,
+      "PDEPTMST_SHIFT3BREAK1": this.onchangeCheckBoxNum(form.Shift3Break1),
+      "PDEPTMST_SHIFT1BREAK2": this.onchangeCheckBoxNum(form.Shift1Break2),
+      "PDEPTMST_SHIFT2BREAK2": this.onchangeCheckBoxNum(form.Shift2Break2),
+      "PDEPTMST_SHIFT3BREAK2": this.onchangeCheckBoxNum(form.Shift3Break2),
+      "PDEPTMST_S2BREAK1_FROM": this.commonService.nullToString(this.convertToISO(form.Shift2Break1From)),
       "PDEPTMST_S2BREAK1_TO": this.commonService.nullToString(this.convertToISO(form.Shift2Break1To)),
-      "PDEPTMST_S3BREAK1_FROM": this.commonService.nullToString(this.convertToISO( form.Shift3Break1From)),
-      "PDEPTMST_S3BREAK1_TO": this.commonService.nullToString(this.convertToISO( form.Shift3Break1To)),
-      "PDEPTMST_S2BREAK2_FROM": this.commonService.nullToString(this.convertToISO(form.Shift2Break2From )) ,
-      "PDEPTMST_S2BREAK2_TO": this.commonService.nullToString(this.convertToISO( form.Shift2Break2To))
+      "PDEPTMST_S3BREAK1_FROM": this.commonService.nullToString(this.convertToISO(form.Shift3Break1From)),
+      "PDEPTMST_S3BREAK1_TO": this.commonService.nullToString(this.convertToISO(form.Shift3Break1To)),
+      "PDEPTMST_S2BREAK2_FROM": this.commonService.nullToString(this.convertToISO(form.Shift2Break2From)),
+      "PDEPTMST_S2BREAK2_TO": this.commonService.nullToString(this.convertToISO(form.Shift2Break2To))
     }
     return postData
   }
