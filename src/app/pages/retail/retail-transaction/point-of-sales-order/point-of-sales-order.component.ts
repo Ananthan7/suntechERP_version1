@@ -2902,13 +2902,13 @@ export class PointOfSalesOrderComponent implements OnInit {
     //   false
     // );
     if (this.viewOnly) {
-      this.modalService.dismissAll(data);
+      this.activeModal.close('reloadMainGrid');
     } else {
       this.openDialog("Warning", this.comFunc.getMsgByID("MSG1212"), false);
 
       this.dialogBox.afterClosed().subscribe((action: any) => {
         if (action == "Yes") {
-          this.modalService.dismissAll(data);
+          this.activeModal.close();
         }
       });
     }
@@ -9361,9 +9361,13 @@ export class PointOfSalesOrderComponent implements OnInit {
       this.ordered_items = [];
       this.sales_returns_items = [];
       this.exchange_items = [];
+      this.viewOnly=false;
       this.open(this.mymodal, false, null, false, false);
-    } else {
+      this.renderer.selectRootElement('#fcn_li_item_code')?.focus();
+    }
+    else {
       this.isPrintingEnabled = true;
+      this.viewOnly=true;
     }
   }
 
