@@ -22,8 +22,8 @@
                                         Code :</label>
                                     <div class="col-sm-4">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" #codeInput matInput formControlName="code"
-                                                UpperCaseDirective autocomplete="off" />
+                                            <input type="text" matInput formControlName="code" UpperCaseDirective
+                                                autocomplete="off" [readonly]="viewMode" />
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -32,8 +32,8 @@
                                         Description :</label>
                                     <div class="col-sm-8">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" #codeInput matInput formControlName="Description"
-                                                UpperCaseDirective autocomplete="off" />
+                                            <input type="text" matInput formControlName="Description" UpperCaseDirective
+                                                autocomplete="off" [readonly]="viewMode || codeEnable" />
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -43,17 +43,19 @@
                                     </label>
                                     <div class="col-sm-4">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" matInput formControlName="CountryCode"
-                                                UpperCaseDirective />
-                                            <master-search class="masterSearch" [MasterSearchData]="CountryCodeData"
+                                            <input type="text" matInput formControlName="CountryCode" UpperCaseDirective
+                                                [readonly]="viewMode || codeEnable" />
+                                            <master-search *ngIf="!viewMode" class="masterSearch"
+                                                [MasterSearchData]="CountryCodeData"
                                                 (newRowClick)="CountryCodeDataSelected($event)">
                                             </master-search>
                                         </mat-form-field>
                                     </div>
                                     <div class="col-sm-4">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" #codeInput matInput formControlName="CountryCodeDes"
-                                                UpperCaseDirective autocomplete="off" />
+                                            <input type="text" matInput formControlName="CountryCodeDes"
+                                                UpperCaseDirective autocomplete="off"
+                                                [readonly]="viewMode || codeEnable" />
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -62,7 +64,8 @@
                                         <fieldset class="custom-fieldset">
                                             <legend class="custom-legend">Shift
                                             </legend>
-                                            <mat-radio-group aria-label="Select an option" formControlName="shift">
+                                            <mat-radio-group aria-label="Select an option" formControlName="shift"
+                                                [disabled]="viewMode || codeEnable">
                                                 <mat-radio-button value="1" id="ID001" class="mx-2">Split
                                                     Shift</mat-radio-button>
                                                 <mat-radio-button value="0" id="ID002" class="mx-2">Straight
@@ -82,22 +85,31 @@
                                         1st Weekly Off</label>
                                     <div class="col-md-3">
                                         <mat-form-field style="width: 100%;" appearance="outline">
-                                            <mat-select formControlName="PDEPTMST_WEEKOFF1">
-                                                <mat-option></mat-option>
-                                                <mat-option></mat-option>
+                                            <mat-select formControlName="PDEPTMST_WEEKOFF1" [disabled]="viewMode">
+                                                <mat-option *ngFor="let option of PDEPTMST_WEEKOFF1"
+                                                    [value]="option.value">
+                                                    {{ option.name }}
+                                                </mat-option>
+                                                <!-- <mat-option value="1">Yes</mat-option>
+                                                <mat-option value="0">No</mat-option> -->
                                             </mat-select>
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-3">
                                         <mat-form-field style="width: 100%;" appearance="outline">
-                                            <mat-select formControlName="PDEPTMST_HALFDAY1">
-                                                <mat-option></mat-option>
-                                                <mat-option></mat-option>
+                                            <mat-select formControlName="PDEPTMST_HALFDAY1" [disabled]="viewMode">
+                                                <mat-option *ngFor="let option of PDEPTMST_WEEKOFF1"
+                                                    [value]="option.value">
+                                                    {{ option.name }}
+                                                </mat-option>
+                                                <!-- <mat-option value="1">Yes</mat-option>
+                                                <mat-option value="0">No</mat-option> -->
                                             </mat-select>
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-3">
-                                        <mat-checkbox class="example-margin" formControlName="TYPEWEEKOFF1">Full
+                                        <mat-checkbox [disabled]="viewMode || codeEnable" class="example-margin"
+                                            formControlName="TYPEWEEKOFF1">Full
                                             Day</mat-checkbox>
                                     </div>
                                 </div>
@@ -106,22 +118,31 @@
                                         2st Weekly Off</label>
                                     <div class="col-md-3">
                                         <mat-form-field style="width: 100%;" appearance="outline">
-                                            <mat-select formControlName="PDEPTMST_WEEKOFF2">
-                                                <mat-option></mat-option>
-                                                <mat-option></mat-option>
+                                            <mat-select formControlName="PDEPTMST_WEEKOFF2" [disabled]="viewMode">
+                                                <mat-option *ngFor="let option of PDEPTMST_WEEKOFF1"
+                                                    [value]="option.value">
+                                                    {{ option.name }}
+                                                </mat-option>
+                                                <!-- <mat-option value="1">Yes</mat-option>
+                                                <mat-option value="0">No</mat-option> -->
                                             </mat-select>
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-3">
                                         <mat-form-field style="width: 100%;" appearance="outline">
-                                            <mat-select formControlName="PDEPTMST_HALFDAY2">
-                                                <mat-option></mat-option>
-                                                <mat-option></mat-option>
+                                            <mat-select formControlName="PDEPTMST_HALFDAY2" [disabled]="viewMode">
+                                                <mat-option *ngFor="let option of PDEPTMST_WEEKOFF1"
+                                                    [value]="option.value">
+                                                    {{ option.name }}
+                                                </mat-option>
+                                                <!-- <mat-option value="1">Yes</mat-option>
+                                                <mat-option value="0">No</mat-option> -->
                                             </mat-select>
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-3">
-                                        <mat-checkbox class="example-margin" formControlName="TYPEWEEKOFF2">Full
+                                        <mat-checkbox [disabled]="viewMode || codeEnable" class="example-margin"
+                                            formControlName="TYPEWEEKOFF2">Full
                                             Day</mat-checkbox>
                                     </div>
                                 </div>
@@ -136,8 +157,9 @@
                                         <div class="col-sm-8">
                                             <mat-form-field style="width: 100%" appearance="outline">
                                                 <input type="text" matInput formControlName="oneTimeCode"
-                                                    UpperCaseDirective />
-                                                <master-search class="masterSearch" [MasterSearchData]="oneTimeCodeData"
+                                                    UpperCaseDirective [readonly]="viewMode || codeEnable" />
+                                                <master-search *ngIf="!viewMode" class="masterSearch"
+                                                    [MasterSearchData]="oneTimeCodeData"
                                                     (newRowClick)="oneTimeCodeDataSelected($event)">
                                                 </master-search>
                                             </mat-form-field>
@@ -151,8 +173,8 @@
                                         <div class="col-sm-8">
                                             <mat-form-field style="width: 100%" appearance="outline">
                                                 <input type="text" matInput formControlName="leaveSalaryCode"
-                                                    UpperCaseDirective />
-                                                <master-search class="masterSearch"
+                                                    UpperCaseDirective [readonly]="viewMode || codeEnable" />
+                                                <master-search *ngIf="!viewMode" class="masterSearch"
                                                     [MasterSearchData]="leaveSalaryCodeData"
                                                     (newRowClick)="leaveSalaryCodeDataSelected($event)">
                                                 </master-search>
@@ -167,8 +189,8 @@
                                         <div class="col-sm-8">
                                             <mat-form-field style="width: 100%" appearance="outline">
                                                 <input type="text" matInput formControlName="airTicketCode"
-                                                    UpperCaseDirective />
-                                                <master-search class="masterSearch"
+                                                    UpperCaseDirective [readonly]="viewMode || codeEnable" />
+                                                <master-search *ngIf="!viewMode" class="masterSearch"
                                                     [MasterSearchData]="airTicketCodeData"
                                                     (newRowClick)="airTicketCodeDataSelected($event)">
                                                 </master-search>
@@ -183,8 +205,8 @@
                                         <div class="col-sm-8">
                                             <mat-form-field style="width: 100%" appearance="outline">
                                                 <input type="text" matInput formControlName="GratuityCode"
-                                                    UpperCaseDirective />
-                                                <master-search class="masterSearch"
+                                                    UpperCaseDirective [readonly]="viewMode || codeEnable" />
+                                                <master-search *ngIf="!viewMode" class="masterSearch"
                                                     [MasterSearchData]="GratuityCodeData"
                                                     (newRowClick)="GratuityCodeSelected($event)">
                                                 </master-search>
@@ -221,104 +243,110 @@
 
                                     <div class="col-sm-1">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="time" #codeInput matInput formControlName="Shift1From"
-                                                UpperCaseDirective autocomplete="off" />
+                                            <input type="time" matInput formControlName="Shift1From"
+                                                autocomplete="off" />
                                         </mat-form-field>
                                     </div>
                                     <div class="col-sm-1">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="time" #codeInput matInput formControlName="Shift1To"
-                                                UpperCaseDirective autocomplete="off" />
+                                            <input type="time" matInput formControlName="Shift1To" autocomplete="off"
+                                                [readonly]="viewMode || codeEnable">
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-1 text-center ">
-                                        <mat-checkbox formControlName="Shift1Break1" class="example-margin">
+                                        <mat-checkbox [disabled]="viewMode || codeEnable" formControlName="Shift1Break1"
+                                            class="example-margin">
                                         </mat-checkbox>
                                     </div>
                                     <div class="col-sm-1">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="time" #codeInput matInput formControlName="Shift1Break1From"
-                                                UpperCaseDirective autocomplete="off" />
+                                            <input type="time" matInput formControlName="Shift1Break1From"
+                                                autocomplete="off" [readonly]="viewMode || codeEnable" />
                                         </mat-form-field>
                                     </div>
                                     <div class="col-sm-1">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="time" #codeInput matInput formControlName="Shift1Break1To"
-                                                UpperCaseDirective autocomplete="off" />
+                                            <input type="time" matInput formControlName="Shift1Break1To"
+                                                autocomplete="off" [readonly]="viewMode || codeEnable" />
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-1 text-center ">
-                                        <mat-checkbox formControlName="Shift1Break2" class="example-margin">
+                                        <mat-checkbox [disabled]="viewMode || codeEnable" formControlName="Shift1Break2"
+                                            class="example-margin">
                                         </mat-checkbox>
                                     </div>
                                     <div class="col-sm-1">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="time" #codeInput matInput formControlName="Shift1Break2From"
-                                                UpperCaseDirective autocomplete="off" />
+                                            <input type="time" matInput formControlName="Shift1Break2From"
+                                                autocomplete="off" [readonly]="viewMode || codeEnable" />
                                         </mat-form-field>
                                     </div>
                                     <div class="col-sm-1">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="time" #codeInput matInput formControlName="Shift1Break2To"
-                                                UpperCaseDirective autocomplete="off" />
+                                            <input type="time" matInput formControlName="Shift1Break2To"
+                                                autocomplete="off" [readonly]="viewMode || codeEnable" />
                                         </mat-form-field>
                                     </div>
                                 </div>
                                 <div class="row align-items-center mb-3">
                                     <div class="col-sm-1">
-                                        <mat-checkbox formControlName="Shift2" class="example-margin me-2">
+                                        <mat-checkbox [disabled]="viewMode || codeEnable" formControlName="Shift2"
+                                            class="example-margin me-2">
                                         </mat-checkbox>
                                         <label for="inputPassword" class="col-form-label">
                                             Shift 2</label>
                                     </div>
                                     <div class="col-sm-1">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="time" #codeInput matInput formControlName="Shift2From"
-                                                UpperCaseDirective autocomplete="off" />
+                                            <input type="time" matInput formControlName="Shift2From" autocomplete="off"
+                                                [readonly]="viewMode || codeEnable" />
                                         </mat-form-field>
                                     </div>
                                     <div class="col-sm-1">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="time" #codeInput matInput formControlName="Shift2To"
-                                                UpperCaseDirective autocomplete="off" />
+                                            <input type="time" matInput formControlName="Shift2To" autocomplete="off"
+                                                [readonly]="viewMode || codeEnable" />
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-1 text-center ">
-                                        <mat-checkbox formControlName="Shift2Break1" class="example-margin ">
+                                        <mat-checkbox [disabled]="viewMode || codeEnable" formControlName="Shift2Break1"
+                                            class="example-margin ">
                                         </mat-checkbox>
                                     </div>
                                     <div class="col-sm-1">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="time" #codeInput matInput formControlName="Shift2Break1From"
-                                                UpperCaseDirective autocomplete="off" />
+                                            <input type="time" matInput formControlName="Shift2Break1From"
+                                                autocomplete="off" [readonly]="viewMode || codeEnable" />
                                         </mat-form-field>
                                     </div>
                                     <div class="col-sm-1">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="time" #codeInput matInput formControlName="Shift2Break1To"
-                                                UpperCaseDirective autocomplete="off" />
+                                            <input type="time" matInput formControlName="Shift2Break1To"
+                                                autocomplete="off" [readonly]="viewMode || codeEnable" />
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-1 text-center ">
-                                        <mat-checkbox formControlName="Shift2Break2" class="example-margin">
+                                        <mat-checkbox [disabled]="viewMode || codeEnable" formControlName="Shift2Break2"
+                                            class="example-margin">
                                         </mat-checkbox>
                                     </div>
                                     <div class="col-sm-1">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="time" #codeInput matInput formControlName="Shift2Break2From"
-                                                UpperCaseDirective autocomplete="off" />
+                                            <input type="time" matInput formControlName="Shift2Break2From"
+                                                autocomplete="off" [readonly]="viewMode || codeEnable" />
                                         </mat-form-field>
                                     </div>
                                     <div class="col-sm-1">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="time" #codeInput matInput formControlName="Shift2Break2To"
-                                                UpperCaseDirective autocomplete="off" />
+                                            <input type="time" matInput formControlName="Shift2Break2To"
+                                                autocomplete="off" [readonly]="viewMode || codeEnable" />
                                         </mat-form-field>
                                     </div>
                                 </div>
                                 <div class="row align-items-center mb-3">
                                     <div class="col-sm-1">
-                                        <mat-checkbox formControlName="Shift3" class="example-margin me-2">
+                                        <mat-checkbox [disabled]="viewMode || codeEnable" formControlName="Shift3"
+                                            class="example-margin me-2">
                                         </mat-checkbox>
                                         <label for="inputPassword" class="col-form-label">
                                             Shift 3</label>
@@ -326,116 +354,52 @@
                                     </div>
                                     <div class="col-sm-1">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="time" #codeInput matInput formControlName="Shift3From"
-                                                UpperCaseDirective autocomplete="off" />
+                                            <input type="time" matInput formControlName="Shift3From" autocomplete="off"
+                                                [readonly]="viewMode || codeEnable" />
                                         </mat-form-field>
                                     </div>
                                     <div class="col-sm-1">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="time" #codeInput matInput formControlName="Shift3To"
-                                                UpperCaseDirective autocomplete="off" />
+                                            <input type="time" matInput formControlName="Shift3To" autocomplete="off"
+                                                [readonly]="viewMode || codeEnable" />
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-1 text-center ">
-                                        <mat-checkbox formControlName="Shift3Break1" class="example-margin">
+                                        <mat-checkbox [disabled]="viewMode || codeEnable" formControlName="Shift3Break1"
+                                            class="example-margin">
                                         </mat-checkbox>
                                     </div>
                                     <div class="col-sm-1">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="time" #codeInput matInput formControlName="Shift3Break1From"
-                                                UpperCaseDirective autocomplete="off" />
+                                            <input type="time" matInput formControlName="Shift3Break1From"
+                                                autocomplete="off" [readonly]="viewMode || codeEnable" />
                                         </mat-form-field>
                                     </div>
                                     <div class="col-sm-1">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="time" #codeInput matInput formControlName="Shift3Break1To"
-                                                UpperCaseDirective autocomplete="off" />
+                                            <input type="time" matInput formControlName="Shift3Break1To"
+                                                autocomplete="off" [readonly]="viewMode || codeEnable" />
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-1 text-center ">
-                                        <mat-checkbox formControlName="Shift3Break2" class="example-margin">
+                                        <mat-checkbox [disabled]="viewMode || codeEnable" formControlName="Shift3Break2"
+                                            class="example-margin">
                                         </mat-checkbox>
                                     </div>
                                     <div class="col-sm-1">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="time" #codeInput matInput formControlName="Shift3Break2From"
-                                                UpperCaseDirective autocomplete="off" />
+                                            <input type="time" matInput formControlName="Shift3Break2From"
+                                                autocomplete="off" [readonly]="viewMode || codeEnable" />
                                         </mat-form-field>
                                     </div>
                                     <div class="col-sm-1">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="time" #codeInput matInput formControlName="Shift3Break2To"
-                                                UpperCaseDirective autocomplete="off" />
+                                            <input type="time" matInput formControlName="Shift3Break2To"
+                                                autocomplete="off" [readonly]="viewMode || codeEnable" />
                                         </mat-form-field>
                                     </div>
                                 </div>
                             </div>
-                            <!-- <div class="col-md-4">
-                                <div class="row">
-
-
-                                </div>
-                                <div class="row mb-3 align-items-center">
-                                    <div class="col-md-1 text-center ">
-                                        <mat-checkbox formControlName="FinalProcess" class="example-margin">
-                                        </mat-checkbox>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="time" #codeInput matInput formControlName="code"
-                                                UpperCaseDirective autocomplete="off" />
-                                        </mat-form-field>
-                                    </div>
-
-                                    <div class="col-sm-5">
-                                        <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="time" #codeInput matInput formControlName="code"
-                                                UpperCaseDirective autocomplete="off" />
-                                        </mat-form-field>
-                                    </div>
-
-                                </div>
-                                <div class="row mb-3 align-items-center">
-                                    <div class="col-md-1 text-center ">
-                                        <mat-checkbox formControlName="FinalProcess" class="example-margin">
-                                        </mat-checkbox>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="time" #codeInput matInput formControlName="code"
-                                                UpperCaseDirective autocomplete="off" />
-                                        </mat-form-field>
-                                    </div>
-
-                                    <div class="col-sm-5">
-                                        <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="time" #codeInput matInput formControlName="code"
-                                                UpperCaseDirective autocomplete="off" />
-                                        </mat-form-field>
-                                    </div>
-
-                                </div>
-                                <div class="row mb-3 align-items-center">
-                                    <div class="col-md-1 text-center ">
-                                        <mat-checkbox formControlName="FinalProcess" class="example-margin">
-                                        </mat-checkbox>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="time" #codeInput matInput formControlName="code"
-                                                UpperCaseDirective autocomplete="off" />
-                                        </mat-form-field>
-                                    </div>
-
-                                    <div class="col-sm-5">
-                                        <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="time" #codeInput matInput formControlName="code"
-                                                UpperCaseDirective autocomplete="off" />
-                                        </mat-form-field>
-                                    </div>
-
-                                </div>
-                            </div> -->
                         </div>
                     </mat-tab>
                     <mat-tab label="Account Integration">
@@ -447,9 +411,10 @@
                                             Debit Expenses (Basic Salary / Wages) Code:</label>
                                         <div class="col-sm-4">
                                             <mat-form-field style="width: 100%" appearance="outline">
-                                                <input type="text" #codeInput matInput formControlName="AIDebitExpCode"
-                                                    UpperCaseDirective autocomplete="off" />
-                                                <master-search class="masterSearch"
+                                                <input type="text" matInput formControlName="AIDebitExpCode"
+                                                    UpperCaseDirective autocomplete="off"
+                                                    [readonly]="viewMode || codeEnable" />
+                                                <master-search *ngIf="!viewMode" class="masterSearch"
                                                     [MasterSearchData]="AIDebitExpCodeData"
                                                     (newRowClick)="AIDebitExpCodeSelected($event)">
                                                 </master-search>
@@ -459,9 +424,10 @@
                                             Credit Salary Payable / Accrued Salary Code :</label>
                                         <div class="col-sm-4">
                                             <mat-form-field style="width: 100%" appearance="outline">
-                                                <input type="text" #codeInput matInput formControlName="AICreditCode"
-                                                    UpperCaseDirective autocomplete="off" />
-                                                <master-search class="masterSearch"
+                                                <input type="text" matInput formControlName="AICreditCode"
+                                                    UpperCaseDirective autocomplete="off"
+                                                    [readonly]="viewMode || codeEnable" />
+                                                <master-search *ngIf="!viewMode" class="masterSearch"
                                                     [MasterSearchData]="AICreditCodeData"
                                                     (newRowClick)="AICreditCodeSelected($event)">
                                                 </master-search>
@@ -481,10 +447,10 @@
                                                 Leave Salary :</label>
                                             <div class="col-sm-8">
                                                 <mat-form-field style="width: 100%" appearance="outline">
-                                                    <input type="text" #codeInput matInput
-                                                        formControlName="DebitExpensesLeaveSal" UpperCaseDirective
-                                                        autocomplete="off" />
-                                                    <master-search class="masterSearch"
+                                                    <input type="text" matInput formControlName="DebitExpensesLeaveSal"
+                                                        UpperCaseDirective autocomplete="off"
+                                                        [readonly]="viewMode || codeEnable" />
+                                                    <master-search *ngIf="!viewMode" class="masterSearch"
                                                         [MasterSearchData]="DebitExpensesLeaveSalData"
                                                         (newRowClick)="DebitExpensesLeaveSalDataSelected($event)">
                                                     </master-search>
@@ -496,10 +462,10 @@
                                                 Air Ticket :</label>
                                             <div class="col-sm-8">
                                                 <mat-form-field style="width: 100%" appearance="outline">
-                                                    <input type="text" #codeInput matInput
-                                                        formControlName="DebitExpensesAirTicket" UpperCaseDirective
-                                                        autocomplete="off" />
-                                                    <master-search class="masterSearch"
+                                                    <input type="text" matInput formControlName="DebitExpensesAirTicket"
+                                                        UpperCaseDirective autocomplete="off"
+                                                        [readonly]="viewMode || codeEnable" />
+                                                    <master-search *ngIf="!viewMode" class="masterSearch"
                                                         [MasterSearchData]="DebitExpensesAirTicketData"
                                                         (newRowClick)="DebitExpensesAirTicketSelected($event)">
                                                     </master-search>
@@ -511,10 +477,10 @@
                                                 Gratuity :</label>
                                             <div class="col-sm-8">
                                                 <mat-form-field style="width: 100%" appearance="outline">
-                                                    <input type="text" #codeInput matInput
-                                                        formControlName="DebitExpensesGratuity" UpperCaseDirective
-                                                        autocomplete="off" />
-                                                    <master-search class="masterSearch"
+                                                    <input type="text" matInput formControlName="DebitExpensesGratuity"
+                                                        UpperCaseDirective autocomplete="off"
+                                                        [readonly]="viewMode || codeEnable" />
+                                                    <master-search *ngIf="!viewMode" class="masterSearch"
                                                         [MasterSearchData]="DebitExpensesGratuityData"
                                                         (newRowClick)="DebitExpensesGratuityDataSelected($event)">
                                                     </master-search>
@@ -533,10 +499,10 @@
                                                 Leave Salary :</label>
                                             <div class="col-sm-8">
                                                 <mat-form-field style="width: 100%" appearance="outline">
-                                                    <input type="text" #codeInput matInput
-                                                        formControlName="CreditExpensesLeaveSal" UpperCaseDirective
-                                                        autocomplete="off" />
-                                                    <master-search class="masterSearch"
+                                                    <input type="text" matInput formControlName="CreditExpensesLeaveSal"
+                                                        UpperCaseDirective autocomplete="off"
+                                                        [readonly]="viewMode || codeEnable" />
+                                                    <master-search *ngIf="!viewMode" class="masterSearch"
                                                         [MasterSearchData]="CreditExpensesLeaveSalData"
                                                         (newRowClick)="CreditExpensesLeaveSalDataSelected($event)">
                                                     </master-search>
@@ -548,10 +514,10 @@
                                                 Air Ticket :</label>
                                             <div class="col-sm-8">
                                                 <mat-form-field style="width: 100%" appearance="outline">
-                                                    <input type="text" #codeInput matInput
+                                                    <input type="text" matInput
                                                         formControlName="CreditExpensesAirTicket" UpperCaseDirective
-                                                        autocomplete="off" />
-                                                    <master-search class="masterSearch"
+                                                        autocomplete="off" [readonly]="viewMode || codeEnable" />
+                                                    <master-search *ngIf="!viewMode" class="masterSearch"
                                                         [MasterSearchData]="CreditExpensesAirTicketData"
                                                         (newRowClick)="CreditExpensesAirTicketSelected($event)">
                                                     </master-search>
@@ -563,10 +529,10 @@
                                                 Gratuity :</label>
                                             <div class="col-sm-8">
                                                 <mat-form-field style="width: 100%" appearance="outline">
-                                                    <input type="text" #codeInput matInput
-                                                        formControlName="CreditExpensesGratuity" UpperCaseDirective
-                                                        autocomplete="off" />
-                                                    <master-search class="masterSearch"
+                                                    <input type="text" matInput formControlName="CreditExpensesGratuity"
+                                                        UpperCaseDirective autocomplete="off"
+                                                        [readonly]="viewMode || codeEnable" />
+                                                    <master-search *ngIf="!viewMode" class="masterSearch"
                                                         [MasterSearchData]="CreditExpensesGratuityData"
                                                         (newRowClick)="CreditExpensesGratuityDataSelected($event)">
                                                     </master-search>
@@ -579,15 +545,16 @@
                                     <div class="your-box-container">
                                         <div class="row">
                                             <div class="col-md-6">
-                                                <mat-checkbox formControlName="OtherAmount" class="example-margin">
+                                                <mat-checkbox [disabled]="viewMode || codeEnable"
+                                                    formControlName="OtherAmount" class="example-margin">
                                                     Other Amount
                                                 </mat-checkbox>
                                             </div>
                                             <div class="col-md-6">
                                                 <mat-form-field style="width: 100%" appearance="outline">
                                                     <input type="text" matInput formControlName="OtherAmountValue"
-                                                        UpperCaseDirective />
-                                                    <master-search class="masterSearch"
+                                                        UpperCaseDirective [readonly]="viewMode || codeEnable" />
+                                                    <master-search *ngIf="!viewMode" class="masterSearch"
                                                         [MasterSearchData]="OtherAmountValueData"
                                                         (newRowClick)="OtherAmountValueSelected($event)">
                                                     </master-search>
@@ -618,8 +585,9 @@
                                     <div class="col-sm-8">
                                         <mat-form-field style="width: 100%" appearance="outline">
                                             <input type="text" matInput formControlName="userDefined1"
-                                                UpperCaseDirective />
-                                            <master-search class="masterSearch" [MasterSearchData]="UserDefinedData"
+                                                UpperCaseDirective [readonly]="viewMode || codeEnable" />
+                                            <master-search *ngIf="!viewMode" class="masterSearch"
+                                                [MasterSearchData]="UserDefinedData"
                                                 (newRowClick)="UserDefined1DataSelected($event)">
                                             </master-search>
                                         </mat-form-field>
@@ -631,8 +599,9 @@
                                     <div class="col-sm-8">
                                         <mat-form-field style="width: 100%" appearance="outline">
                                             <input type="text" matInput formControlName="UserDefined2"
-                                                UpperCaseDirective />
-                                            <master-search class="masterSearch" [MasterSearchData]="UserDefined2Data"
+                                                UpperCaseDirective [readonly]="viewMode || codeEnable" />
+                                            <master-search *ngIf="!viewMode" class="masterSearch"
+                                                [MasterSearchData]="UserDefined2Data"
                                                 (newRowClick)="UserDefined2DataSelected($event)">
                                             </master-search>
                                         </mat-form-field>
@@ -644,8 +613,9 @@
                                     <div class="col-sm-8">
                                         <mat-form-field style="width: 100%" appearance="outline">
                                             <input type="text" matInput formControlName="UserDefined3"
-                                                UpperCaseDirective />
-                                            <master-search class="masterSearch" [MasterSearchData]="UserDefined3Data"
+                                                UpperCaseDirective [readonly]="viewMode || codeEnable" />
+                                            <master-search *ngIf="!viewMode" class="masterSearch"
+                                                [MasterSearchData]="UserDefined3Data"
                                                 (newRowClick)="UserDefined3DataSelected($event)">
                                             </master-search>
                                         </mat-form-field>
@@ -657,8 +627,9 @@
                                     <div class="col-sm-8">
                                         <mat-form-field style="width: 100%" appearance="outline">
                                             <input type="text" matInput formControlName="UserDefined4"
-                                                UpperCaseDirective />
-                                            <master-search class="masterSearch" [MasterSearchData]="UserDefined4Data"
+                                                UpperCaseDirective [readonly]="viewMode || codeEnable" />
+                                            <master-search *ngIf="!viewMode" class="masterSearch"
+                                                [MasterSearchData]="UserDefined4Data"
                                                 (newRowClick)="UserDefined4DataSelected($event)">
                                             </master-search>
                                         </mat-form-field>
@@ -670,8 +641,9 @@
                                     <div class="col-sm-8">
                                         <mat-form-field style="width: 100%" appearance="outline">
                                             <input type="text" matInput formControlName="UserDefined5"
-                                                UpperCaseDirective />
-                                            <master-search class="masterSearch" [MasterSearchData]="UserDefined5Data"
+                                                UpperCaseDirective [readonly]="viewMode || codeEnable" />
+                                            <master-search *ngIf="!viewMode" class="masterSearch"
+                                                [MasterSearchData]="UserDefined5Data"
                                                 (newRowClick)="UserDefined5DataSelected($event)">
                                             </master-search>
                                         </mat-form-field>
@@ -685,8 +657,9 @@
                                     <div class="col-sm-8">
                                         <mat-form-field style="width: 100%" appearance="outline">
                                             <input type="text" matInput formControlName="UserDefined6"
-                                                UpperCaseDirective />
-                                            <master-search class="masterSearch" [MasterSearchData]="UserDefined6Data"
+                                                UpperCaseDirective [readonly]="viewMode || codeEnable" />
+                                            <master-search *ngIf="!viewMode" class="masterSearch"
+                                                [MasterSearchData]="UserDefined6Data"
                                                 (newRowClick)="UserDefined6DataSelected($event)">
                                             </master-search>
                                         </mat-form-field>
@@ -698,8 +671,9 @@
                                     <div class="col-sm-8">
                                         <mat-form-field style="width: 100%" appearance="outline">
                                             <input type="text" matInput formControlName="UserDefined7"
-                                                UpperCaseDirective />
-                                            <master-search class="masterSearch" [MasterSearchData]="UserDefined7Data"
+                                                UpperCaseDirective [readonly]="viewMode || codeEnable" />
+                                            <master-search *ngIf="!viewMode" class="masterSearch"
+                                                [MasterSearchData]="UserDefined7Data"
                                                 (newRowClick)="UserDefined7DataSelected($event)">
                                             </master-search>
                                         </mat-form-field>
@@ -711,8 +685,9 @@
                                     <div class="col-sm-8">
                                         <mat-form-field style="width: 100%" appearance="outline">
                                             <input type="text" matInput formControlName="UserDefined8"
-                                                UpperCaseDirective />
-                                            <master-search class="masterSearch" [MasterSearchData]="UserDefined8Data"
+                                                UpperCaseDirective [readonly]="viewMode || codeEnable" />
+                                            <master-search *ngIf="!viewMode" class="masterSearch"
+                                                [MasterSearchData]="UserDefined8Data"
                                                 (newRowClick)="UserDefined8DataSelected($event)">
                                             </master-search>
                                         </mat-form-field>
@@ -724,8 +699,9 @@
                                     <div class="col-sm-8">
                                         <mat-form-field style="width: 100%" appearance="outline">
                                             <input type="text" matInput formControlName="UserDefined9"
-                                                UpperCaseDirective />
-                                            <master-search class="masterSearch" [MasterSearchData]="UserDefined9Data"
+                                                UpperCaseDirective [readonly]="viewMode || codeEnable" />
+                                            <master-search *ngIf="!viewMode" class="masterSearch"
+                                                [MasterSearchData]="UserDefined9Data"
                                                 (newRowClick)="UserDefined9DataSelected($event)">
                                             </master-search>
                                         </mat-form-field>
@@ -738,8 +714,9 @@
                                     <div class="col-sm-8">
                                         <mat-form-field style="width: 100%" appearance="outline">
                                             <input type="text" matInput formControlName="UserDefined10"
-                                                UpperCaseDirective />
-                                            <master-search class="masterSearch" [MasterSearchData]="UserDefined10Data"
+                                                UpperCaseDirective [readonly]="viewMode || codeEnable" />
+                                            <master-search *ngIf="!viewMode" class="masterSearch"
+                                                [MasterSearchData]="UserDefined10Data"
                                                 (newRowClick)="UserDefined10DataSelected($event)">
                                             </master-search>
                                         </mat-form-field>
@@ -754,8 +731,9 @@
                                     <div class="col-sm-8">
                                         <mat-form-field style="width: 100%" appearance="outline">
                                             <input type="text" matInput formControlName="UserDefined11"
-                                                UpperCaseDirective />
-                                            <master-search class="masterSearch" [MasterSearchData]="UserDefined11Data"
+                                                UpperCaseDirective [readonly]="viewMode || codeEnable" />
+                                            <master-search *ngIf="!viewMode" class="masterSearch"
+                                                [MasterSearchData]="UserDefined11Data"
                                                 (newRowClick)="UserDefined11DataSelected($event)">
                                             </master-search>
                                         </mat-form-field>
@@ -768,8 +746,9 @@
                                     <div class="col-sm-8">
                                         <mat-form-field style="width: 100%" appearance="outline">
                                             <input type="text" matInput formControlName="UserDefined12"
-                                                UpperCaseDirective />
-                                            <master-search class="masterSearch" [MasterSearchData]="UserDefined12Data"
+                                                UpperCaseDirective [readonly]="viewMode || codeEnable" />
+                                            <master-search *ngIf="!viewMode" class="masterSearch"
+                                                [MasterSearchData]="UserDefined12Data"
                                                 (newRowClick)="UserDefined12DataSelected($event)">
                                             </master-search>
                                         </mat-form-field>
@@ -782,8 +761,9 @@
                                     <div class="col-sm-8">
                                         <mat-form-field style="width: 100%" appearance="outline">
                                             <input type="text" matInput formControlName="UserDefined13"
-                                                UpperCaseDirective />
-                                            <master-search class="masterSearch" [MasterSearchData]="UserDefined13Data"
+                                                UpperCaseDirective [readonly]="viewMode || codeEnable" />
+                                            <master-search *ngIf="!viewMode" class="masterSearch"
+                                                [MasterSearchData]="UserDefined13Data"
                                                 (newRowClick)="UserDefined13DataSelected($event)">
                                             </master-search>
                                         </mat-form-field>
@@ -796,8 +776,9 @@
                                     <div class="col-sm-8">
                                         <mat-form-field style="width: 100%" appearance="outline">
                                             <input type="text" matInput formControlName="UserDefined14"
-                                                UpperCaseDirective />
-                                            <master-search class="masterSearch" [MasterSearchData]="UserDefined14Data"
+                                                UpperCaseDirective [readonly]="viewMode || codeEnable" />
+                                            <master-search *ngIf="!viewMode" class="masterSearch"
+                                                [MasterSearchData]="UserDefined14Data"
                                                 (newRowClick)="UserDefined14DataSelected($event)">
                                             </master-search>
                                         </mat-form-field>
@@ -810,8 +791,9 @@
                                     <div class="col-sm-8">
                                         <mat-form-field style="width: 100%" appearance="outline">
                                             <input type="text" matInput formControlName="UserDefined15"
-                                                UpperCaseDirective />
-                                            <master-search class="masterSearch" [MasterSearchData]="UserDefined15Data"
+                                                UpperCaseDirective [readonly]="viewMode || codeEnable" />
+                                            <master-search *ngIf="!viewMode" class="masterSearch"
+                                                [MasterSearchData]="UserDefined15Data"
                                                 (newRowClick)="UserDefined15DataSelected($event)">
                                             </master-search>
                                         </mat-form-field>
