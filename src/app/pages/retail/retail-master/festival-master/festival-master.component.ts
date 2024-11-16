@@ -93,7 +93,8 @@ export class FestivalMasterComponent implements OnInit {
   ngOnInit(): void {
     console.log(this.content);
     // this.initializeMaindetails();
-    this.fm_id = this.content?.MID;
+    // this.fm_id = this.content?.MID;
+    this.fm_id = this.content?.CODE;
     console.log(this.fm_id);
     this.flag = this.content?.FLAG;
     this.initialController(this.flag, this.content);
@@ -192,6 +193,9 @@ export class FestivalMasterComponent implements OnInit {
       .subscribe((result: any) => {
         this.dyndatas = result.response;
         console.log(this.dyndatas);
+        // this.maindetails.push(...this.dyndatas?.Details)
+        this.maindetails = [...this.maindetails, ...this.dyndatas?.Details];
+
 
         this.flag = "EDIT";
 

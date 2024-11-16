@@ -6,6 +6,7 @@ import { WholesaleSalesmanTargetDetailsComponent } from './wholesale-salesman-ta
 import { Subscription } from 'rxjs';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import Swal from 'sweetalert2';
+import { CommonServiceService } from 'src/app/services/common-service.service';
 
 @Component({
   selector: 'app-wholesale-salesman-target',
@@ -32,6 +33,8 @@ export class WholesaleSalesmanTargetComponent implements OnInit {
     private formBuilder: FormBuilder,
     private modalService: NgbModal,
     private apiService: SuntechAPIService,
+    private commonService: CommonServiceService,
+
 
   ) { }
 
@@ -58,7 +61,7 @@ export class WholesaleSalesmanTargetComponent implements OnInit {
 
   enteredCodeSelected(e: any) {
     console.log(e);
-    this.wholesalesmanform.controls.sieveset.setValue(e.sieveset);
+    this.wholesalesmanform.controls.fin_year.setValue(e.CODE);
   }
 
   salesmanCodeData: MasterSearchModel = {
@@ -80,7 +83,8 @@ export class WholesaleSalesmanTargetComponent implements OnInit {
 
   ngOnInit(): void {
     console.log(this.content);
-    this.wst_id = this.content?.MID;
+    // this.wst_id = this.content?.MID;
+    this.wst_id = this.content?.TARGET_CODE;
     console.log(this.wst_id);
     this.flag = this.content?.FLAG;
     this.initialController(this.flag, this.content);
@@ -95,7 +99,10 @@ export class WholesaleSalesmanTargetComponent implements OnInit {
     let Sub: Subscription = this.apiService.getDynamicAPI(API)
       .subscribe((result: any) => {
         this.dyndatas = result.response;
-        console.log(this.dyndatas);
+        console.log(this.dyndatas.details);
+        
+        this.maindetails.push(...this.dyndatas?.details)
+
         this.flag = "EDIT";
       }, (err: any) => {
       })
@@ -106,6 +113,7 @@ export class WholesaleSalesmanTargetComponent implements OnInit {
 
   initialController(FLAG: any, DATA: any) {
     if (FLAG === "VIEW") {
+      this.viewMode = true;
       this.ViewController(DATA);
     }
     if (FLAG === "EDIT") {
@@ -147,10 +155,7 @@ export class WholesaleSalesmanTargetComponent implements OnInit {
       "FROM_DATE": this.wholesalesmanform.controls.datefrom.value,
       "TO_DATE": this.wholesalesmanform.controls.dateto.value,
       "MID": 0,
-      "details": [
-        this.details
-      ]
-
+      "details": this.maindetails
      
     }
 
@@ -270,15 +275,168 @@ export class WholesaleSalesmanTargetComponent implements OnInit {
     if (result) {
       console.log('Data received from modal:', result);
       this.details = result;
-      this.maindetails = result;
+      const newData = Array.isArray(result) ? result : [result];
+
+      newData.forEach(e => {
+        e.SLNO = this.maindetails.length + 1; 
+      });
+      
+      this.maindetails.push(...newData); 
+
+      // this.maindetails = result;
       // this.maindetails.push(result);
       console.log(result);
+      
     }
   });
   }
 
   deleteTableData(){
-    
+    this.maindetails.pop();
   }
+
+  SPvalidateLookupFieldModified(
+    event: any,
+    LOOKUPDATA: MasterSearchModel,
+    FORMNAMES: string[],
+    isCurrencyField: boolean,
+    lookupFields?: string[],
+    FROMCODE?: boolean
+  ) {
+    const searchValue = event.target.value?.trim();
+
+    if (!searchValue || this.flag == "VIEW") return;
+
+    LOOKUPDATA.SEARCH_VALUE = searchValue;
+
+    const param = {
+      PAGENO: LOOKUPDATA.PAGENO,
+      RECORDS: LOOKUPDATA.RECORDS,
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECONDITION: LOOKUPDATA.WHERECONDITION,
+      searchField: LOOKUPDATA.SEARCH_FIELD,
+      searchValue: LOOKUPDATA.SEARCH_VALUE,
+    };
+
+    this.commonService.showSnackBarMsg("MSG81447");
+
+    const sub: Subscription = this.apiService
+      .postDynamicAPI("MasterLookUp", param)
+      .subscribe({
+        next: (result: any) => {
+          this.commonService.closeSnackBarMsg();
+          const data = result.dynamicData?.[0];
+
+          console.log("API Response Data:", data);
+
+          if (data?.length) {
+            if (LOOKUPDATA.FRONTENDFILTER && LOOKUPDATA.SEARCH_VALUE) {
+
+              let searchResult = this.commonService.searchAllItemsInArray(
+                data,
+                LOOKUPDATA.SEARCH_VALUE
+              );
+
+              console.log("Filtered Search Result:", searchResult);
+
+              if (FROMCODE === true) {
+                searchResult = [
+                  ...searchResult.filter(
+                    (item: any) =>
+                      item.MobileCountryCode === LOOKUPDATA.SEARCH_VALUE
+                  ),
+                  ...searchResult.filter(
+                    (item: any) =>
+                      item.MobileCountryCode !== LOOKUPDATA.SEARCH_VALUE
+                  ),
+                ];
+              } else if (FROMCODE === false) {
+                searchResult = [
+                  ...searchResult.filter(
+                    (item: any) => item.DESCRIPTION === LOOKUPDATA.SEARCH_VALUE
+                  ),
+                  ...searchResult.filter(
+                    (item: any) => item.DESCRIPTION !== LOOKUPDATA.SEARCH_VALUE
+                  ),
+                ];
+              }
+
+              if (searchResult?.length) {
+                const matchedItem = searchResult[0];
+
+                FORMNAMES.forEach((formName, index) => {
+                  const field = lookupFields?.[index];
+                  if (field && field in matchedItem) {
+
+                    this.wholesalesmanform.controls[formName].setValue(
+                      matchedItem[field]
+                    );
+                  } else {
+                    console.error(
+                      `Property ${field} not found in matched item.`
+                    );
+                    this.commonService.toastErrorByMsgId("No data found");
+                    this.clearLookupData(LOOKUPDATA, FORMNAMES);
+                  }
+                });
+              } else {
+                this.commonService.toastErrorByMsgId("No data found");
+                this.clearLookupData(LOOKUPDATA, FORMNAMES);
+              }
+            }
+          } else {
+            this.commonService.toastErrorByMsgId("No data found");
+            this.clearLookupData(LOOKUPDATA, FORMNAMES);
+          }
+        },
+        error: () => {
+          this.commonService.toastErrorByMsgId("MSG2272");
+          this.clearLookupData(LOOKUPDATA, FORMNAMES);
+        },
+      });
+
+    this.subscriptions.push(sub);
+  }
+
+  clearLookupData(LOOKUPDATA: MasterSearchModel, FORMNAMES: string[]) {
+    LOOKUPDATA.SEARCH_VALUE = "";
+    FORMNAMES.forEach((formName) => {
+      this.wholesalesmanform.controls[formName].setValue("");
+    });
+  }
+
+  lookupSelect(e: any, controller?: any, modelfield?: any) {
+    console.log(e);
+    if (Array.isArray(controller) && Array.isArray(modelfield)) {
+      // Handle multiple controllers and fields
+      if (controller.length === modelfield.length) {
+        controller.forEach((ctrl, index) => {
+          const field = modelfield[index];
+          const value = e[field];
+          if (value !== undefined) {
+            this.wholesalesmanform.controls[ctrl].setValue(value);
+          } else {
+            console.warn(`Model field '${field}' not found in event object.`);
+          }
+        });
+      } else {
+        console.warn(
+          "Controller and modelfield arrays must be of equal length."
+        );
+      }
+    } else if (controller && modelfield) {
+      // Handle single controller and field
+      const value = e[modelfield];
+      if (value !== undefined) {
+        this.wholesalesmanform.controls[controller].setValue(value);
+      } else {
+        console.warn(`Model field '${modelfield}' not found in event object.`);
+      }
+    } else {
+      console.warn("Controller or modelfield is missing.");
+    }
+  }
+
+
 
 }

@@ -6,7 +6,9 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (cancelClick)="close()" (saveClick)="formSubmit()"></modal-header>
+<modal-header 
+ *ngIf="!this.viewMode"
+(cancelClick)="close()" (saveClick)="formSubmit()"></modal-header>
 <!-- content section -->
 
 <div class="container-fluid pt-3">
@@ -17,7 +19,18 @@
                     <label for="inputPassword" class="col-sm-2 col-form-label">SalesMan</label>
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%;" appearance="outline">
-                            <input type="text" id="inputPassword" matInput formControlName="salesman" />
+                            <input type="text" id="inputPassword" matInput formControlName="salesman"   [readonly]="viewMode"
+                            (focusout)="
+                            SPvalidateLookupFieldModified(
+                              $event,
+                              salesmanCodeData,
+                              ['salesman'],
+                              false,
+                              ['SALESPERSON_CODE'],
+                              false
+                            )
+                          " 
+                          />
                             <master-search [MasterSearchData]="salesmanCodeData" class="masterSearch"
                                 (newRowClick)="selectedsalesman($event)"></master-search>
                         </mat-form-field>
@@ -29,7 +42,18 @@
                     <label for="inputPassword" class="col-sm-2 col-form-label">Fin. Year </label>
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%;" appearance="outline">
-                            <input type="text" id="inputPassword" matInput formControlName="fin_year" />
+                            <input type="text" id="inputPassword" matInput formControlName="fin_year"    [readonly]="viewMode"
+                            (focusout)="
+                            SPvalidateLookupFieldModified(
+                              $event,
+                              enteredCodeData,
+                              ['fin_year'],
+                              false,
+                              ['CODE'],
+                              false
+                            )
+                          " 
+                            />
                             <master-search [MasterSearchData]="enteredCodeData" class="masterSearch"
                                 (newRowClick)="enteredCodeSelected($event)"></master-search>
                         </mat-form-field>
@@ -40,8 +64,8 @@
                         <div class="datepick">
                             <mat-form-field style="width: 100%" appearance="outline">
                                 <input matInput DateValidation [matDatepicker]="datefrom" formControlName="datefrom"
-                                    placeholder="DD/MM/YYYY" [disabled]="viewMode"/>
-                                <mat-datepicker-toggle matSuffix [for]="datefrom"></mat-datepicker-toggle>
+                                    placeholder="DD/MM/YYYY"  [readonly]="viewMode" [disabled]="viewMode"/>
+                                <mat-datepicker-toggle matSuffix [for]="datefrom" *ngIf="!viewMode"></mat-datepicker-toggle>
                                 <mat-datepicker #datefrom></mat-datepicker>
                             </mat-form-field>
                         </div>
@@ -53,18 +77,19 @@
                     <label for="inputPassword" class="col-sm-2 col-form-label">Code</label>
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%;" appearance="outline">
-                            <input type="text" id="inputPassword" matInput formControlName="code" />
+                            <input type="text" id="inputPassword" matInput formControlName="code"    [readonly]="viewMode"/>
                         </mat-form-field>
                     </div>
                     <label for="inputPassword" class="col-sm-2 col-form-label">Date To</label>
                     <div class="col-md-2">
                         <div class="datepick">
                             <mat-form-field style="width: 100%" appearance="outline">
-                                <input matInput DateValidation [matDatepicker]="dateto" formControlName="dateto"
-                                    placeholder="DD/MM/YYYY" [disabled]="viewMode"/>
-                                <mat-datepicker-toggle matSuffix [for]="dateto"></mat-datepicker-toggle>
+                                <input matInput [matDatepicker]="dateto" formControlName="dateto" 
+                                       placeholder="DD/MM/YYYY" [readonly]="viewMode" [disabled]="viewMode" />
+                                <mat-datepicker-toggle matSuffix [for]="dateto" *ngIf="!viewMode"></mat-datepicker-toggle>
                                 <mat-datepicker #dateto></mat-datepicker>
-                            </mat-form-field>
+                              </mat-form-field>
+                              
                         </div>
                     </div>
                 </div>
@@ -80,7 +105,7 @@
             </div>
 
             <dx-data-grid id="gridContainer" [dataSource]="maindetails" [showBorders]="true" [showColumnLines]="true"
-                [showRowLines]="true" [allowColumnResizing]="true" keyExpr="SRNO">
+                [showRowLines]="true" [allowColumnResizing]="true" keyExpr="SLNO">
 
 
                 <dxi-column dataField="SLNO" caption="S.NO"> </dxi-column>
