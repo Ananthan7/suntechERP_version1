@@ -61,11 +61,11 @@ export class SalesmanWiseProfitAnalysisComponent implements OnInit {
   setDateValue(event: any){
     if(event.FromDate){
       this.salesmanWiseProfitAnalysisForm.controls.fromdate.setValue(event.FromDate);
-      this.dateToPass.fromDate = this.commonService.formatYYMMDD(event.FromDate);
+      this.dateToPass.fromDate = this.datePipe.transform(event.FromDate, 'yyyy-MM-dd')!
     }
     else if(event.ToDate){
       this.salesmanWiseProfitAnalysisForm.controls.todate.setValue(event.ToDate);
-      this.dateToPass.toDate = this.commonService.formatYYMMDD(event.ToDate);
+      this.dateToPass.toDate =  this.datePipe.transform(event.ToDate, 'yyyy-MM-dd')!
     }
     this.gridData();
   }
@@ -82,11 +82,6 @@ export class SalesmanWiseProfitAnalysisComponent implements OnInit {
       this.salesmanWiseProfitAnalysisForm.controls.templateName.setValue(null)
     }
   }
-
-  customizeSummaryContent = (data: any) => {
-    // decimal point hanlder from commonService
-    return this.commonService.decimalQuantityFormat(data.value, 'THREE');
-  };
 
   selectedData(data: any) {
     console.log(data)
@@ -190,6 +185,7 @@ export class SalesmanWiseProfitAnalysisComponent implements OnInit {
   }
 
   previewClick(){
+    this.isLoading = true;
     let logData =  {
       "VOCTYPE": this.commonService.getqueryParamVocType() || "",
       "REFMID": "",
@@ -225,19 +221,23 @@ export class SalesmanWiseProfitAnalysisComponent implements OnInit {
           this.commonService.closeSnackBarMsg();
           const url = URL.createObjectURL(blob);
           window.open(url, '_blank');
+          this.isLoading = false;
         } else {
           Swal.fire('No Data!', 'There is no data!', 'info');
           this.commonService.closeSnackBarMsg();
+          this.isLoading = false;
         }
       }
       else{
         this.toastr.error(result.message)
+        this.isLoading = false;
         return
       }
     }); 
   }
 
   printBtnClick(){
+    this.isLoading = true;
     let logData =  {
       "VOCTYPE": this.commonService.getqueryParamVocType() || "",
       "REFMID": "",
@@ -283,9 +283,11 @@ export class SalesmanWiseProfitAnalysisComponent implements OnInit {
               printWindow?.document.write(modifiedContent);
               printWindow?.focus();
               printWindow?.print();
+              this.isLoading = false;
             } else {
               Swal.fire('No Data!', 'There is no data to print!', 'info');
               this.commonService.closeSnackBarMsg();
+              this.isLoading = false;
               return
             }
           }, 1500); 
@@ -293,7 +295,8 @@ export class SalesmanWiseProfitAnalysisComponent implements OnInit {
         }
       }
       else{
-        this.toastr.error(result.message)
+        this.toastr.error(result.message);
+        this.isLoading = false;
         return
       }
     });  
@@ -338,15 +341,33 @@ export class SalesmanWiseProfitAnalysisComponent implements OnInit {
     let postData = { 
       "strFmDate": this.dateToPass.fromDate,   
       "strToDate": this.dateToPass.toDate,
-      "intvalue": 0,
+      "intvalue": 1,
       "strBranches": this.salesmanWiseProfitAnalysisForm.controls.branch.value || this.fetchedBranchData
     };
 
     this.dataService.postDynamicAPI(API, postData).subscribe(
       (result) => {
-        console.log(result)
+        if (result && result.dynamicData && result.dynamicData.length > 0) {
+          this.salesmanWiseProfitArr = result.dynamicData[0];
+        } else {
+          this.salesmanWiseProfitArr = [];
+          this.toastr.warning('No data available for the given criteria.');
+        }
       },
-        (err) => alert(err)
-      );
+      (err) => {
+        this.toastr.error(err.message || 'An error occurred while fetching the data.');
+      }
+    );
   }
+  
+  customizeSummaryContent = (data: any) => {
+    // value separation handler from commonService
+    return this.commonService.setCommaSerperatedNumber(data.value, 'THREE');
+  };
+  customizeContent = (data: any) => {
+    // decimal point handler from commonService
+    return this.commonService.decimalQuantityFormat(data.value, 'THREE');
+  };
+
+
 }
