@@ -30,6 +30,7 @@ export class BuyBackPolicyComponent implements OnInit {
   isDisableSaveBtn: boolean = false;
   currentDate: any = this.commonService.currentDate;
   percent:any;
+  divisionOptions: { DIVISION_CODE: string; DESCRIPTION: string }[] = [];
 
   policycodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -65,6 +66,7 @@ export class BuyBackPolicyComponent implements OnInit {
 
   ngOnInit(): void {
     this.viewModeField = true;
+    this.getDivisionOptions()
     console.log(this.content);
     if (this.content?.FLAG) {
        this.setFormValues();
@@ -79,7 +81,40 @@ export class BuyBackPolicyComponent implements OnInit {
       }
     }
   }
- 
+
+  // getDivisionOptions(): void {
+
+  //   let API = 'BuyBackPolicyMaster/GetbuybackpolicyDivisondropdownList';
+  //   let Sub: Subscription = this.dataService.getDynamicAPI(API)
+  //   .subscribe((result) => {
+  //     this.divisionOptions = result.response;
+  //   }, err => {
+  //     this.commonService.closeSnackBarMsg()
+  //     this.commonService.toastErrorByMsgId('MSG1531')
+  //   })
+  // this.subscriptions.push(Sub)
+  // }
+
+  // Function to fetch division options
+  getDivisionOptions(): void {
+    const API = 'BuyBackPolicyMaster/GetbuybackpolicyDivisondropdownList';
+
+    const sub = this.dataService.getDynamicAPI(API).subscribe(
+      (result) => {
+        if (result?.response) {
+          this.divisionOptions = result.response;
+        } else {
+          this.commonService.toastErrorByMsgId('MSG1531');
+        }
+      },
+      (error) => {
+        console.error('Error fetching division options:', error);
+        this.commonService.toastErrorByMsgId('MSG1531');
+      }
+    );
+
+    this.subscriptions.push(sub);
+  }
 
   inputValidate(event: any) {
     if (event.target.value != '') {
