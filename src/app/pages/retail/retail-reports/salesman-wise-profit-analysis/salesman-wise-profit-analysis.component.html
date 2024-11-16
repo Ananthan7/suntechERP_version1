@@ -39,18 +39,27 @@
                     <!-- <dxo-selection mode="multiple"></dxo-selection> -->
                     <dxo-scrolling mode="virtual"></dxo-scrolling>
 
-                    <dxi-column  dataField="voc_nos" caption="Branch" [allowResizing]="true"></dxi-column>
-                    <dxi-column  dataField="voc_nos" caption="Code" [allowResizing]="true"></dxi-column>
-                    <dxi-column  dataField="voc_nos" caption="Name" [allowResizing]="true"></dxi-column>
-                    <dxi-column  dataField="voc_nos" caption="Div" [allowResizing]="true"></dxi-column>
-                    <dxi-column  dataField="voc_nos" caption="Gross Wt." [allowResizing]="true"></dxi-column>
-                    <dxi-column  dataField="voc_nos" caption="Sales Amt" [allowResizing]="true"></dxi-column>
-                    <dxi-column  dataField="voc_nos" caption="Cost" [allowResizing]="true"></dxi-column>
-                    <dxi-column  dataField="voc_nos" caption="Profit" [allowResizing]="true"></dxi-column>
-                    <dxi-column  dataField="voc_nos" caption="Share %" [allowResizing]="true"></dxi-column>
-                    <dxi-column  dataField="voc_nos" caption="Tag Price" [allowResizing]="true"></dxi-column>
-                    <dxi-column  dataField="voc_nos" caption="Avg Disc %" [allowResizing]="true"></dxi-column>
+                    <dxi-column dataField="Branch_Code" caption="Branch" [allowResizing]="true"></dxi-column>
+                    <dxi-column dataField="smancode" caption="Code" [allowResizing]="true"></dxi-column>
+                    <dxi-column dataField="smanname" caption="Name" [allowResizing]="true"></dxi-column>
+                    <dxi-column dataField="division" caption="Division" [allowResizing]="true"></dxi-column>
+                    <dxi-column dataField="salesamt" caption="Sales Amt" [allowResizing]="true" 
+                                [customizeText]="customizeContent"></dxi-column>
+                    <dxi-column dataField="costvalue" caption="Cost" [allowResizing]="true" 
+                                [customizeText]="customizeContent"></dxi-column>
+                    <dxi-column dataField="profit" caption="Profit" [allowResizing]="true" 
+                                [customizeText]="customizeContent"></dxi-column>
+                    <dxi-column dataField="shareper" caption="Share %" [allowResizing]="true" 
+                                [customizeText]="customizeContent"></dxi-column>
+                    <dxi-column dataField="tagprice" caption="Tag Price" [allowResizing]="true" 
+                                [customizeText]="customizeContent"></dxi-column>
+                    <dxi-column dataField="avgdisc" caption="Avg Disc %" [allowResizing]="true" 
+                                [customizeText]="customizeContent"></dxi-column>
 
+
+
+                    <dxi-column  dataField="discamt" caption="" [allowResizing]="true"></dxi-column>
+                    <dxi-column  dataField="qty" caption="" [allowResizing]="true"></dxi-column>
                     <dxo-summary>
                         <dxi-total-item column="Gross Wt." summaryType="sum" displayFormat="{0}" alignment="right"
                         [customizeText]="customizeSummaryContent"></dxi-total-item>
@@ -86,7 +95,7 @@
             </div>
         </dx-popup>
 
-        <div class="row mt-2 justify-content-end mx-2">
+        <div class="row mt-2 justify-content-end mx-2" [ngClass]="{'loading-class': isLoading }">
             <app-report-screen-buttons (saveTemplateClick)="saveTemplate()" (previewClicked)="previewClick()"
             (printClicked)="printBtnClick()"></app-report-screen-buttons>
         </div>

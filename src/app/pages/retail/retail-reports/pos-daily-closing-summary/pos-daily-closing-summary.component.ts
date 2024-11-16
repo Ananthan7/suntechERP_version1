@@ -16,6 +16,7 @@ import { stringify } from "querystring";
 import { DomSanitizer } from "@angular/platform-browser";
 import { CostCenterConsumablesDetailsComponent } from "src/app/pages/wholesale/wholesale-master/costcentre-consumable/cost-center-consumables-details/cost-center-consumables-details.component";
 import { tap } from "rxjs/operators";
+import { DatePipe } from "@angular/common";
 
 @Component({
   selector: "app-pos-daily-closing-summary",
@@ -101,7 +102,8 @@ export class PosDailyClosingSummaryComponent implements OnInit {
     private formBuilder: FormBuilder,
     private comService: CommonServiceService,
     private dataService: SuntechAPIService,
-    private toastr: ToastrService,   private sanitizer: DomSanitizer
+    private toastr: ToastrService,   private sanitizer: DomSanitizer,
+    private datePipe: DatePipe
   ) {}
 
   ngOnInit(): void {
@@ -133,7 +135,7 @@ export class PosDailyClosingSummaryComponent implements OnInit {
         this.comService.closeSnackBarMsg();
       }
     });
-  
+
     this.branchCode = this.comService.branchCode;
     this.yearMonth = this.comService.yearSelected;
 
@@ -166,6 +168,7 @@ export class PosDailyClosingSummaryComponent implements OnInit {
         this.pendingSalesOrderSummaryArr.forEach((item: any)=>{
           for (const key in item) {
             if (typeof item[key] === 'number') {
+              item[key] = this.comService.decimalQuantityFormat(item[key], 'THREE');
               item[key] = this.comService.addCommaSepration(item[key]);
             }
           }
@@ -227,13 +230,14 @@ export class PosDailyClosingSummaryComponent implements OnInit {
             // console.log('UspPosClosingMetalSalesNet', result.dynamicData[0])                  
             this.tableData = result.dynamicData[0];
   
-            this.tableData.forEach((item: any)=>{
-              for (const key in item) {
-                if (typeof item[key] === 'number') {
-                  item[key] = this.comService.addCommaSepration(item[key]);
-                }
-              }
-            }) 
+            // this.tableData.forEach((item: any)=>{
+            //   for (const key in item) {
+            //     if (typeof item[key] === 'number') {
+            //       item[key] = this.comService.addCommaSepration(item[key]);
+            //       item[key] = this.comService.decimalQuantityFormat(item[key], 'THREE');
+            //     }
+            //   }
+            // }) 
             this.isLoading = false;
           }
         },
@@ -594,6 +598,7 @@ export class PosDailyClosingSummaryComponent implements OnInit {
   }
 
   previewClick() {
+    this.isLoading = true;
     let postData = {
       "SPID": "150",
       "parameter": {
@@ -659,15 +664,18 @@ export class PosDailyClosingSummaryComponent implements OnInit {
         this.comService.closeSnackBarMsg();
         const url = URL.createObjectURL(blob);
         window.open(url, '_blank');
+        this.isLoading = false;
       }
       else{
-        this.toastr.error(result.message)
+        this.toastr.error(result.message);
+        this.isLoading = false;
         return
       }
     });      
   }
 
   printBtnClick(){
+    this.isLoading = true;
     let postData = {
       "SPID": "150",
       "parameter": {
@@ -677,10 +685,6 @@ export class PosDailyClosingSummaryComponent implements OnInit {
         "strToDate" : this.formatDateToYYYYMMDD(this.posDailyClosingSummaryForm.value.toDate),
         "str_MGroupBy": this.posDailyClosingSummaryForm.value.metalType,
         "LOGDATA" : '',
-        // "str_DGroupBy" : this.posDailyClosingSummaryForm.value.diamondType,
-        // 'USERNAME': localStorage.getItem('username'),
-        // 'MODE': localStorage.getItem('userbranch'),
-        // 'VOCTYPE': ''
       }
     }
  
@@ -706,10 +710,11 @@ export class PosDailyClosingSummaryComponent implements OnInit {
               printWindow?.focus();
               printWindow?.print();
               // printWindow?.close();
-             
+              this.isLoading = false;
             } else {
               Swal.fire('No Data!', 'There is no data to print!', 'info');
               this.comService.closeSnackBarMsg();
+              this.isLoading = false;
               return
             }
           }, 1500); 
@@ -717,7 +722,8 @@ export class PosDailyClosingSummaryComponent implements OnInit {
         }
       }
       else{
-        this.toastr.error(result.message)
+        this.toastr.error(result.message);
+        this.isLoading = false;
         return
       }
     });  
@@ -756,8 +762,8 @@ export class PosDailyClosingSummaryComponent implements OnInit {
       this.fetchedBranchData= this.fetchedBranchDataParam?.split("#")
 
       this.dateToPass = {
-        fromDate:  this.formatDateToYYYYMMDD(new Date()),
-        toDate: this.formatDateToYYYYMMDD(new Date()),
+        fromDate:  this.datePipe.transform(new Date(), 'yyyy-MM-dd')!,
+        toDate: this.datePipe.transform(new Date(), 'yyyy-MM-dd')!,
       };
 
       this.posDailyClosingSummaryForm.controls.transactionType.setValue(this.transactionOptions[2].value);
@@ -765,6 +771,16 @@ export class PosDailyClosingSummaryComponent implements OnInit {
       this.posDailyClosingSummaryForm.controls.diamondType.setValue(this.diamondOptions[0].FIELD);      
     }
   }
+
+  customizeSummaryContent = (data: any) => {
+    // decimal point hanlder from commonService
+    return this.comService.decimalQuantityFormat(data.value, 'THREE');
+  };
+
+  customizeContent = (data: any) => {
+    // decimal point hanlder from commonService
+    return this.comService.commaSeperation(data.value)
+  };
 
 
 }

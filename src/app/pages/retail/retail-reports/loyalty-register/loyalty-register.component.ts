@@ -7,6 +7,7 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { DatePipe } from '@angular/common';
 @Component({
   selector: 'app-loyalty-register',
   templateUrl: './loyalty-register.component.html',
@@ -41,7 +42,7 @@ export class LoyaltyRegisterComponent implements OnInit {
     private formBuilder: FormBuilder,
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
-    private commonService: CommonServiceService,
+    private commonService: CommonServiceService, private datePipe: DatePipe
   ) { }
 
   ngOnInit(): void {
@@ -340,8 +341,8 @@ export class LoyaltyRegisterComponent implements OnInit {
       var paresedItem = JSON.parse(this.content?.CONTROL_LIST_JSON);
 
       this.dateToPass = {
-        fromDate:  paresedItem?.CONTROL_DETAIL.STRFROMDATE,
-        toDate: paresedItem?.CONTROL_DETAIL.STRTODATE
+        fromDate: this.datePipe.transform(paresedItem?.CONTROL_DETAIL.STRFROMDATE, 'yyyy-MM-dd')!,
+        toDate: this.datePipe.transform(paresedItem?.CONTROL_DETAIL.STRTODATE, 'yyyy-MM-dd')!
       };
       this.dateToPass.fromDate? this.loyaltyregisterFrom.controls.fromdate.setValue(this.dateToPass.fromDate) : null
       this.dateToPass.toDate? this.loyaltyregisterFrom.controls.todate.setValue(this.dateToPass.toDate) : null
@@ -366,8 +367,8 @@ export class LoyaltyRegisterComponent implements OnInit {
       this.fetchedBranchData= this.fetchedBranchDataParam?.split("#")
    
       this.dateToPass = {
-        fromDate:  this.formatDateToYYYYMMDD(new Date()),
-        toDate: this.formatDateToYYYYMMDD(new Date()),
+        fromDate:  this.datePipe.transform(new Date(), 'yyyy-MM-dd')!,
+        toDate: this.datePipe.transform(new Date(), 'yyyy-MM-dd')!,
       };
     }
   }
