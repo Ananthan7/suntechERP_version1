@@ -86,7 +86,9 @@ export class ComponentSizeMasterComponent implements OnInit {
 
     if (height !== null && width !== null) {    
       const radiusValue = Math.pow(((width * width) / (8 * height) + (height / 2)), 3 / 3);
-      return parseFloat(radiusValue.toFixed(3)); 
+      
+      console.log(this.commonService.decimalQuantityFormat(radiusValue, 'METAL'));      
+      return parseFloat(this.commonService.decimalQuantityFormat(radiusValue, 'METAL')); 
     } else {
       return 0; 
     }
@@ -123,7 +125,9 @@ export class ComponentSizeMasterComponent implements OnInit {
       radius = this.setDecimalPoints(radius);
     }
 
-    const formattedRadius = radius.toFixed(3);
+    // const formattedRadius = radius.toFixed(3);
+    const formattedRadius = this.commonService.decimalQuantityFormat(radius, 'METAL');
+    
     const autoDesc = this.generateAutoDescription();
 
     // Update form with calculated `desc` only if it has not been manually edited
@@ -151,11 +155,17 @@ export class ComponentSizeMasterComponent implements OnInit {
       radius = this.setDecimalPoints(radius);
     }
 
-    const formattedRadius = radius.toFixed(3);
+    // const formattedRadius = radius.toFixed(3);
+    const formattedRadius = this.commonService.decimalQuantityFormat(radius, 'METAL');
     return `H${Number(height)}#,W${Number(width)}#,L${Number(length)}#,R${Number(formattedRadius)}#`;
   }
 
-
+  setDecimalPoints(value: number): number {
+    // Logic to set decimal point
+    console.log(value);
+   return (this.commonService.decimalQuantityFormat(value, 'METAL'))
+    // return parseFloat(value.toFixed(3)); // Return the value with exactly three decimal places
+  }
 
 
   private setInitialValues() {
@@ -166,7 +176,13 @@ export class ComponentSizeMasterComponent implements OnInit {
 
   }
 
-  codeValidate() {
+  codeValidate(event : any) {
+    if (this.content && this.content.FLAG == 'EDIT') {
+      return; // Exit the function if in edit mode
+    }
+    if (event.target.value === '' || this.viewMode) {
+      return; // Exit the function if the input is empty or in view mode
+    }
     const code = this.componentsizemasterForm.value.code;
     console.log(code);
 
@@ -221,10 +237,7 @@ export class ComponentSizeMasterComponent implements OnInit {
   }
 
 
-  setDecimalPoints(value: number): number {
-    // Logic to set decimal point
-    return parseFloat(value.toFixed(3)); // Return the value with exactly three decimal places
-  }
+
 
 
 
