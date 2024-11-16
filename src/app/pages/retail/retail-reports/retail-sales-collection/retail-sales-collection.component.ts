@@ -525,7 +525,7 @@ export class RetailSalesCollectionComponent implements OnInit {
     let postData = {
       "SPID": "0114",
       "parameter": {
-        "STRBRANCHCODES": this.formattedBranchDivisionData || this.fetchedBranchDataParam,
+        "STRBRANCHCODES": this.retailSalesCollection.controls.branch.value,
         "STRVOCTYPES": this.VocTypeParam, //this.commonService.getqueryParamVocType(),
         "FROMVOCDATE": this.formatDateToYYYYMMDD(this.dateToPass.fromDate),
         "TOVOCDATE": this.formatDateToYYYYMMDD(this.dateToPass.toDate) ,
