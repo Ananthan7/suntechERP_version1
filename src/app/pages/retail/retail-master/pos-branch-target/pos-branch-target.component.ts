@@ -47,19 +47,9 @@ export class PosBranchTargetComponent implements OnInit {
   purityval: any;
   isDisableSaveBtn: boolean = false;
   columnheads: any[] = ['Sr', 'Division', 'Default Alloy', 'Description', 'Alloy %'];
+  currentDate: any = this.commonService.currentDate;
 
-  colorData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 35,
-    SEARCH_FIELD: 'CODE',
-    SEARCH_HEADING: 'Color',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "TYPES = 'COLOR MASTER'",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-    LOAD_ONCLICK: true
-  }
+  
   karatcodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -71,42 +61,23 @@ export class PosBranchTargetComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  defaultAlloy: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 41,
-    SEARCH_FIELD: 'STOCK_CODE',
-    SEARCH_HEADING: 'Default Alloy Code',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "item = 'y' ",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-    LOAD_ONCLICK: true,
-  }
-  stockCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 23,
-    SEARCH_FIELD: 'STOCK_CODE',
-    SEARCH_HEADING: 'Stock Code',
-    SEARCH_VALUE: '',
-    WHERECONDITION: 'SUBCODE = 0',
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-    LOAD_ONCLICK: true,
-  }
-  buybackpolicy: FormGroup = this.formBuilder.group({
-    mid: [],
-    code: ['', [Validators.required]],
-    description: ['', [Validators.required]],
-    metal: [''],
-    color: ['', [Validators.required]],
-    karat: [''],
-    purity: [''],
-    alloy: [''],
-    stockCode: [''],
-    stockCodeDes: [''],
-    divCode: [''],
+ 
+  posbranchtarget: FormGroup = this.formBuilder.group({
+    code: [''],
+    dateFrom: [''],
+    dateTo: [''],
+    DailyTarget: [''],
+    finYear: [''],
+    diamond: [''],
+    goldMaking: [''],
+    goldQty: [''],
+    diaDivision: [''],
+    metalDivision: [''],
+    salesAmount: [''],
+    profit: [''],
+    quantity: [''],
+    makingCharge: [''],
+
 
   });
   @ViewChild('codeInput')
@@ -135,53 +106,30 @@ export class PosBranchTargetComponent implements OnInit {
         this.editMode = true;
       } else if (this.content?.FLAG == 'DELETE') {
         this.viewMode = true;
-        this.deleteMeltingType()
+        this.delete()
       }
     }
   }
-  ngAfterViewInit(): void {
-    this.codeInput.nativeElement.focus();
-  }
-  onSelectionChanged(event: any) {
-    const values: number[] = event.selectedRowKeys;
-    const indexes: number[] = [];
 
-    values.forEach((selectedValue: number) => {
-      const index = this.tableData.findIndex(item => parseFloat(item.SRNO) === selectedValue);
-
-      // Check if the value is not already in the selectedIndexes array
-      if (index !== -1 && !this.selectedIndexes.includes(index)) {
-        indexes.push(index);
-      }
-    });
-
-    this.selectedIndexes = indexes;
-    console.log(this.selectedIndexes);
-  }
-  checkCodeExists(event: any) {
-    if (this.content && this.content.FLAG == 'EDIT') {
-      return; // Exit the function if in edit mode
+  
+  formatDate(event: any) {
+    const inputValue = event.target.value;
+    let date = new Date(inputValue)
+    let yr = date.getFullYear()
+    let dt = date.getDate()
+    let dy = date.getMonth()
+    if (yr.toString().length > 4) {
+      let date = `${dt}/${dy}/` + yr.toString().slice(0, 4);
+      this.posbranchtarget.controls.dateFrom.setValue(new Date(date))
     }
-    if (event.target.value === '' || this.viewMode) {
-      return; // Exit the function if the input is empty or in view mode
+    if (yr.toString().length > 4) {
+      let date = `${dt}/${dy}/` + yr.toString().slice(0, 4);
+      this.posbranchtarget.controls.dateTo.setValue(new Date(date))
     }
-
-    const API = 'MeltingType/GetMeltingTypeList/' + event.target.value;
-    const sub = this.dataService.getDynamicAPI(API)
-      .subscribe((result) => {
-        if (result.status == 'Success') {
-          this.commonService.toastErrorByMsgId('MSG1121')//code already exsist
-          // Clear the input value
-          this.buybackpolicy.controls.code.setValue('');
-          this.codeEnabled()
-        }
-      }, err => {
-        this.buybackpolicy.reset();
-      });
-
-    this.subscriptions.push(sub);
   }
 
+
+  
   inputValidate(event: any) {
     if (event.target.value != '') {
       this.isDisableSaveBtn = true;
@@ -190,258 +138,94 @@ export class PosBranchTargetComponent implements OnInit {
     }
   }
 
-  /**use: validate all lookups to check data exists in db */
-  // validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
-  //   LOOKUPDATA.SEARCH_VALUE = event.target.value
-  //   if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
-  //   let param = {
-  //     LOOKUPID: LOOKUPDATA.LOOKUPID,
-  //     WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
-  //   }
-  //   this.commonService.toastInfoByMsgId('MSG81447');
-  //   let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
-  //   let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
-  //     .subscribe((result) => {
-  //       this.isDisableSaveBtn = false;
-  //       let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
-  //       if (data.length == 0) {
-  //         this.commonService.toastErrorByMsgId('MSG1531')
-  //         this.buybackpolicy.controls[FORMNAME].setValue('')
-  //         LOOKUPDATA.SEARCH_VALUE = ''
-  //         return
-  //       }
-
-  //     }, err => {
-  //       this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
-  //     })
-  //   this.subscriptions.push(Sub)
-  // }
-
-  // validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
-  //   LOOKUPDATA.SEARCH_VALUE = event.target.value
-  //   if (event.target.value == '' || this.viewMode == true) return
-  //   let param = {
-  //     LOOKUPID: LOOKUPDATA.LOOKUPID,
-  //     WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
-  //   }
-  //   this.commonService.showSnackBarMsg('MSG81447');
-  //   let API = `UspCommonInputFieldSearch/GetCommonInputFieldSearch/${param.LOOKUPID}/${param.WHERECOND}`
-  //   let Sub: Subscription = this.dataService.getDynamicAPI(API)
-  //     .subscribe((result) => {
-  //       this.commonService.closeSnackBarMsg()
-  //       this.isDisableSaveBtn = false;
-  //       let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
-  //       if (data.length == 0) {
-  //         this.commonService.toastErrorByMsgId('MSG1531')
-  //         this.buybackpolicy.controls[FORMNAME].setValue('')
-  //         LOOKUPDATA.SEARCH_VALUE = ''
-  //         return
-  //       }
-  //     }, err => {
-  //       this.commonService.toastErrorByMsgId('network issue found')
-  //     })
-  //   this.subscriptions.push(Sub)
-  // }
-  handleLookupError(FORMNAME: string, LOOKUPDATA: MasterSearchModel) {
-    this.commonService.toastErrorByMsgId('MSG1531');
-    this.buybackpolicy.controls[FORMNAME].setValue('');
-    LOOKUPDATA.SEARCH_VALUE = '';
-    if (FORMNAME === 'karat') {
-      this.buybackpolicy.controls.purity.setValue('');
-      this.buybackpolicy.controls.alloy.setValue('');
-      this.buybackpolicy.controls.metal.setValue('');
-    }
-  }
-
-  /**use: validate all lookups to check data exists in db */
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
-    LOOKUPDATA.SEARCH_VALUE = event.target.value;
-
-    if (event.target.value === '' || this.viewMode === true || this.editMode === true) {
-        return;
-    }
-
+    LOOKUPDATA.SEARCH_VALUE = event.target.value
+    if (event.target.value == '' || this.viewMode == true) return
     let param = {
-        LOOKUPID: LOOKUPDATA.LOOKUPID,
-        WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
-    };
-
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+    }
     this.commonService.toastInfoByMsgId('MSG81447');
-
-    let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch';
-    let Sub: Subscription = this.dataService.postDynamicAPI(API, param).subscribe((result) => {
+    let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
+      .subscribe((result) => {
         this.isDisableSaveBtn = false;
-        let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0]);
-
-        if (data.length === 0) {
-            this.handleLookupError(FORMNAME, LOOKUPDATA); // Call handleLookupError if no data is found
-            return;
+        let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+        if (data.length == 0) {
+          this.commonService.toastErrorByMsgId('MSG1531')
+          this.posbranchtarget.controls[FORMNAME].setValue('')
+          LOOKUPDATA.SEARCH_VALUE = ''
+          //this.openOverlay(FORMNAME, event);
+          return
         }
 
-        const matchedItem = data.find((item: any) => item.KARAT_CODE.toUpperCase() === event.target.value.toUpperCase());
-
-        if (matchedItem) {
-            // Set the form control value with the matched item code
-            this.buybackpolicy.controls[FORMNAME].setValue(matchedItem.KARAT_CODE);
-
-            // Call the karatcodeSelected function with the matched item
-            this.karatcodeSelected(matchedItem);
-        } else {
-            // If no match found, reset the form control and SEARCH_VALUE
-            this.handleLookupError(FORMNAME, LOOKUPDATA); // Call handleLookupError if no match is found
-        }
-
-    }, err => {
-        this.commonService.toastErrorByMsgId('MSG2272');
-    });
-
-    this.subscriptions.push(Sub);
-}
-
-  codeEnabled() {
-    if (this.buybackpolicy.value.code == '') {
-      this.codeEnable = true;
-    }
-    else {
-      this.codeEnable = false;
-    }
-  }
-
-  addTableData() {
-    const formValue = this.buybackpolicy.value;
-
-    if (!formValue.code) {
-      this.commonService.toastErrorByMsgId('MSG1124') //"Code cannot be empty"
-      return;
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+      })
     }
 
-    if (!formValue.description) {
-      this.commonService.toastErrorByMsgId('MSG1193')//"description cannot be empty"
-      return;
-    }
-    if (!formValue.color) {
-      this.commonService.toastErrorByMsgId('MSG1125')//"color cannot be empty"
-      return;
-    }
-    let length = this.tableData.length;
-    this.slNo = length + 1;
-    let data = {
-      "UNIQUEID": 0,
-      "SRNO": this.slNo,
-      "MELTYPE_CODE": "Y",
-      "MELTYPE_DESCRIPTION": this.commonService.nullToString(this.buybackpolicy.value.description),
-      "KARAT_CODE": this.buybackpolicy.value.karat,
-      "PURITY": this.commonService.transformDecimalVB(6, this.buybackpolicy.value.purity),
-      "DIVISION_CODE": 'Y',
-      "DEF_ALLOY_STOCK": "",
-      "DEF_ALLOY_DESCRIPTION": "",
-      "ALLOY_PER": this.commonService.decimalQuantityFormat(0, 'AMOUNT'),
-    };
-    this.tableData.push(data);
-  }
-  /**use: validations for saving details
-   * returns: true or false
-   */
-  submitValidations(): boolean {
-    if (this.content?.FLAG == 'VIEW') return true;
-    if (this.content?.FLAG == 'EDIT') {
-      this.updateMeltingType();
-      return true;
-    }
-    let form = this.buybackpolicy.value
-    // if (this.commonService.nullToString(form.code) == '') {
-    //   this.toastr.error('Code is required');
-    //   return true;
-    // }
-    // if (this.commonService.nullToString(form.description) == '') {
-    //   this.toastr.error('description is required');
-    //   return true;
-    // }
-    // if (this.commonService.nullToString(form.color) == '') {
-    //   this.toastr.error('color is required');
-    //   return true;
-    // }
-    if (this.tableData.length == 0) {
-      this.commonService.toastErrorByMsgId('MSG1453') //details not added
-      // this.toastr.error('details not added');
-      return true;
-    }
-
-    const totalAlloyPer = this.tableData
-      .map((item) => parseFloat(item.ALLOY_PER) || 0)
-      .reduce((acc, val) => acc + val, 0);
-
-    if (totalAlloyPer !== 100 && totalAlloyPer > 100) {
-      this.commonService.toastErrorByMsgId('MSG7954')
-      return true
-    } else if ((totalAlloyPer !== 100 && totalAlloyPer < 100)) {
-      this.commonService.toastErrorByMsgId('MSG7954')
-      return true
-    }
-
-    // Check if any Default Alloy is empty
-    const defaultAlloyEmpty = this.tableData.some(item => !item.DEF_ALLOY_STOCK);
-    const defaultAlloyPer = this.tableData.some(item => item.ALLOY_PER == 0);
-
-    if (defaultAlloyPer) {
-      this.commonService.toastErrorByMsgId('MSG7954')
-      // this.toastr.error("Alloy %  cannot be Zero's ");
-      return true;
-    }
-    if (defaultAlloyEmpty) {
-      this.commonService.toastErrorByMsgId('MSG1817')
-      // this.toastr.error('Default Alloy cannot be empty');
-      return true;
-    }
-
-    if(totalAlloyPer < 100){
-      console.log('This Working If Condition');
-      this.commonService.toastErrorByMsgId('MSG7954')
-      return true
-    }
-
-    return false;
-  }
-  setPostData(form: any) {
+  setPostData() {
     return {
-      "MID": this.content?.MID || 0,
-      "MELTYPE_CODE": this.commonService.nullToString(form.code?.toUpperCase()),
-      "MELTYPE_DESCRIPTION": this.commonService.nullToString(form.description?.toUpperCase()),
-      "KARAT_CODE": this.commonService.nullToString(form.karat),
-      "PURITY": this.commonService.transformDecimalVB(6, form.purity),
-      "METAL_PER": this.commonService.emptyToZero(form.metal),
-      "ALLOY_PER": this.commonService.emptyToZero(form.alloy),
-      "CREATED_BY": this.commonService.nullToString(this.userName),
-      "COLOR": this.commonService.nullToString(form.color?.toUpperCase()),
-      "STOCK_CODE": this.commonService.nullToString(form.stockCode),
-      "MELTING_TYPE_DETAIL": this.tableData,
+      "MID": 0,
+      "TARGET_CODE": this.commonService.nullToString(this.posbranchtarget.value.code),
+      "TARGET_DESCRIPTION": "string",
+      "FYEARCODE": this.commonService.nullToString(this.posbranchtarget.value.finYear),
+      "FROM_DATE": this.posbranchtarget.value.dateFrom,
+      "TO_DATE": this.posbranchtarget.value.dateTo,
+      "METAL_DIAMOND": true,
+      "SALES_PROFIT": true,
+      "GROUP1_TYPE": "string",
+      "GROUP2_TYPE": "string",
+      "GROUP3_TYPE": "string",
+      "DIA_AMOUNT": this.commonService.emptyToZero(this.posbranchtarget.value.diamond),
+      "GOLD_AMOUNT":  this.commonService.emptyToZero(this.posbranchtarget.value.goldMaking),
+      "GOLD_QTY":  this.commonService.emptyToZero(this.posbranchtarget.value.goldQty),
+      "SYSTEM_DATE": "2024-11-15T09:45:19.213Z",
+      "DIA_DIVISIONS":  this.commonService.nullToString(this.posbranchtarget.value.diaDivision),
+      "MTL_DIVISIONS": this.commonService.nullToString(this.posbranchtarget.value.metalDivision),
+      "SALES_AMOUNT":this.commonService.nullToString(this.posbranchtarget.value.salesAmount),
+      "METAL_MKGCHARGE": this.commonService.nullToString(this.posbranchtarget.value.profit),
+      "METAL_QTY": this.commonService.nullToString(this.posbranchtarget.value.quantity),
+      "PROFIT": this.commonService.nullToString(this.posbranchtarget.value.makingCharge),
+      "DIA_TARGET_TYPE": true,
+      "MTL_TARGET_TYPE": true,
+      "Details": [
+        {
+          "TARGET_CODE": this.commonService.nullToString(this.posbranchtarget.value.code),
+          "BRANCH_CODE": "string",
+          "SRNO": 0,
+          "TARGET_GROUP1": "string",
+          "TARGET_GROUP2": "string",
+          "TARGET_GROUP3": "string",
+          "MONTH": "string",
+          "FYEARCODE":this.commonService.nullToString(this.posbranchtarget.value.finYear),
+          "TARGET_AMOUNT": 0,
+          "TARGET_WEIGHT": 0,
+          "DT_GOLDAMOUNT": 0,
+          "DT_GOLDQTY": 0,
+          "UNIQUEID": 0,
+          "AMOUNT": 0,
+          "MTL_TARGET": 0
+        }
+      ]
     }
   }
 
-  submitValidation(form: any) {
-    if (this.commonService.nullToString(form.code) == '') {
-      this.commonService.toastErrorByMsgId('MSG1124') //"Code cannot be empty"
-      return true
-    }
-
-    else if (this.commonService.nullToString(form.description) == '') {
-      this.commonService.toastErrorByMsgId('MSG1193')//"description cannot be empty"
-      return true
-    }
-    else if (this.commonService.nullToString(form.color) == '') {
-      this.commonService.toastErrorByMsgId('MSG1125')//"color cannot be empty"
-      return true
-    }
-    return false;
+  close(data?: any) {
+    //TODO reset forms and data before closing
+    this.activeModal.close(data);
   }
+ 
 
   formSubmit() {
-    if (this.submitValidations()) return;
-    if (this.submitValidation(this.buybackpolicy.value)) return;
-    
 
-    let API = 'MeltingType/InsertMeltingType';
-    let postData = this.setPostData(this.buybackpolicy.value)
+    if (this.content && this.content.FLAG == 'EDIT') {
+      this.update()
+      return
+    }
+
+    let API = 'POSTargetMaster/InsertPosTargetMaster';
+    let postData = this.setPostData()
 
     let Sub: Subscription = this.dataService.postDynamicAPI(API, postData).subscribe(
       (result) => {
@@ -456,7 +240,7 @@ export class PosBranchTargetComponent implements OnInit {
               confirmButtonText: 'Ok',
             }).then((result: any) => {
               if (result.value) {
-                this.buybackpolicy.reset();
+                this.posbranchtarget.reset();
                 this.tableData = [];
                 this.close('reloadMainGrid');
               }
@@ -472,65 +256,15 @@ export class PosBranchTargetComponent implements OnInit {
   }
 
 
-  getRowDataForColumn(arg0: string) {
-    throw new Error('Method not implemented.');
-  }
-
-  onInput(event: Event): void {
-    const inputValue = (event.target as HTMLInputElement).value;
-
-    // Trim the input to 3 letters
-    const limitedValue = inputValue.slice(0, 3);
-
-    // Update the input value
-    (event.target as HTMLInputElement).value = limitedValue;
-  }
-  close(data?: any) {
-    //TODO reset forms and data before closing
-    this.activeModal.close(data);
-  }
-  resetAllocation() { }
-
-  colorDataSelected(data: any) {
-    this.buybackpolicy.controls.color.setValue(data.CODE)
-  }
 
   karatcodeSelected(e: any) {
-    console.log(e);
-    this.buybackpolicy.controls.karat.setValue(e.KARAT_CODE);
-    this.buybackpolicy.controls.purity.setValue(e.STD_PURITY);
-
-    console.log(this.buybackpolicy.value.karat);
-    console.log(this.buybackpolicy.value.purity);
-
-    // Calculate Metal and Alloy percentages
-    const purity = e.STD_PURITY;
-    const metalPercentage = (purity * 100).toFixed(4);
-    const alloyPercentage = (100 - parseFloat(metalPercentage)).toFixed(4);
-
-    // Set the calculated values in the form controls
-    this.buybackpolicy.controls.metal.setValue(this.commonService.decimalQuantityFormat(metalPercentage, 'AMOUNT'));
-    this.buybackpolicy.controls.alloy.setValue(this.commonService.decimalQuantityFormat(alloyPercentage, 'AMOUNT'));
-
-    this.buybackpolicy.controls.stockCode.setValue('');
-
-    this.stockCodeData.WHERECONDITION = `KARAT_CODE ='${this.buybackpolicy.value.karat}' AND PURITY = '${this.buybackpolicy.value.purity}' AND SUBCODE = 0`;
-
+    this.posbranchtarget.controls.finYear.setValue(e.KARAT_CODE);
   }
-
-  StockCodeSelected(e: any) {
-
-    console.log(e);
-    this.buybackpolicy.controls.stockCode.setValue(e.STOCK_CODE);
-    this.buybackpolicy.controls.stockCodeDes.setValue(e.DESCRIPTION);
-    this.buybackpolicy.controls.divCode.setValue(e.DIVISION_CODE);
-  }
-
 
 
   setFormValues() {
     if (!this.content) return
-    let API = 'MeltingType/GetMeltingTypeWithMID/' + this.content.MID;
+    let API = 'POSTargetMaster/GetPosTargetMasterDetail/'  + this.content.TARGET_CODE;
 
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
       .subscribe((result: any) => {
@@ -539,17 +273,20 @@ export class PosBranchTargetComponent implements OnInit {
           this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
           return
         }
-        this.buybackpolicy.controls.mid.setValue(data.MID);
-        this.buybackpolicy.controls.code.setValue(data.MELTYPE_CODE?.toUpperCase());
-        this.buybackpolicy.controls.description.setValue(data.MELTYPE_DESCRIPTION?.toUpperCase());
-        this.buybackpolicy.controls.karat.setValue(data.KARAT_CODE);
-        this.buybackpolicy.controls.purity.setValue(data.PURITY);
-        this.buybackpolicy.controls.metal.setValue(this.commonService.decimalQuantityFormat(data.METAL_PER, 'AMOUNT'));
-        this.buybackpolicy.controls.alloy.setValue(this.commonService.decimalQuantityFormat(data.ALLOY_PER, 'AMOUNT'));
-        this.buybackpolicy.controls.color.setValue(data.COLOR?.toUpperCase());
-        this.buybackpolicy.controls.stockCode.setValue(data.STOCK_CODE);
-        this.tableData = data.MELTING_TYPE_DETAIL;
-        this.formatGridData()
+        
+         this.posbranchtarget.controls.code.setValue(data.TARGET_CODE?.toUpperCase());
+         this.posbranchtarget.controls.finYear.setValue(data.FYEARCODE?.toUpperCase());
+         this.posbranchtarget.controls.dateFrom.setValue(data.FROM_DATE);
+         this.posbranchtarget.controls.dateTo.setValue(data.TO_DATE);
+         this.posbranchtarget.controls.diamond.setValue(data.DIA_AMOUNT);
+         this.posbranchtarget.controls.goldMaking.setValue(data.GOLD_AMOUNT);
+         this.posbranchtarget.controls.goldQty.setValue(data.GOLD_QTY);
+         this.posbranchtarget.controls.diaDivision.setValue(data.DIA_DIVISIONS);
+         this.posbranchtarget.controls.metalDivision.setValue(data.MTL_DIVISIONS);
+         this.posbranchtarget.controls.salesAmount.setValue(data.SALES_AMOUNT);
+         this.posbranchtarget.controls.profit.setValue(data.METAL_MKGCHARGE);
+         this.posbranchtarget.controls.quantity.setValue(data.METAL_QTY);
+         this.posbranchtarget.controls.makingCharge.setValue(data.PROFIT);
       })
     this.subscriptions.push(Sub)
   }
@@ -559,12 +296,10 @@ export class PosBranchTargetComponent implements OnInit {
     })
   }
 
-  updateMeltingType() {
-    if (this.submitValidations()) return;
-    if (this.submitValidation(this.buybackpolicy.value)) return;
+  update() {
     
-    let API = 'MeltingType/UpdateMeltingType/' + this.buybackpolicy.value.code;
-    let postData = this.setPostData(this.buybackpolicy.value)
+    let API = 'POSTargetMaster/UpdatePosTargetMaster/' + this.posbranchtarget.value.code;
+    let postData = this.setPostData()
 
     let Sub: Subscription = this.dataService.putDynamicAPI(API, postData)
       .subscribe((result) => {
@@ -578,7 +313,7 @@ export class PosBranchTargetComponent implements OnInit {
               confirmButtonText: 'Ok'
             }).then((result: any) => {
               if (result.value) {
-                this.buybackpolicy.reset();
+                this.posbranchtarget.reset();
                 this.tableData = [];
                 this.close('reloadMainGrid')
               }
@@ -594,21 +329,8 @@ export class PosBranchTargetComponent implements OnInit {
   }
 
   /**USE: delete Melting Type From Row */
-  deleteMeltingType() {
+  delete() {
     if (this.content && this.content.FLAG == 'VIEW') return
-    if (!this.content?.MELTYPE_CODE) {
-      Swal.fire({
-        title: '',
-        text: 'Please Select data to delete!',
-        icon: 'error',
-        confirmButtonColor: '#336699',
-        confirmButtonText: 'Ok'
-      }).then((result: any) => {
-        if (result.value) {
-        }
-      });
-      return
-    }
     Swal.fire({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",
@@ -619,7 +341,7 @@ export class PosBranchTargetComponent implements OnInit {
       confirmButtonText: 'Yes, delete!'
     }).then((result) => {
       if (result.isConfirmed) {
-        let API = 'MeltingType/DeleteMeltingType/' + this.content?.MELTYPE_CODE;
+        let API = 'POSTargetMaster/DeletePosTargetMaster/' + this.posbranchtarget.value.code;
         let Sub: Subscription = this.dataService.deleteDynamicAPI(API)
           .subscribe((result) => {
             if (result) {
@@ -632,7 +354,7 @@ export class PosBranchTargetComponent implements OnInit {
                   confirmButtonText: 'Ok'
                 }).then((result: any) => {
                   if (result.value) {
-                    this.buybackpolicy.reset()
+                    this.posbranchtarget.reset()
                     this.tableData = []
                     this.close('reloadMainGrid')
                   }
@@ -646,7 +368,7 @@ export class PosBranchTargetComponent implements OnInit {
                   confirmButtonText: 'Ok'
                 }).then((result: any) => {
                   if (result.value) {
-                    this.buybackpolicy.reset()
+                    this.posbranchtarget.reset()
                     this.tableData = []
                     this.close()
                   }
@@ -666,73 +388,6 @@ export class PosBranchTargetComponent implements OnInit {
       this.subscriptions.forEach(subscription => subscription.unsubscribe());// unsubscribe all subscription
       this.subscriptions = []; // Clear the array
     }
-  }
-
-  deleteTableData() {
-    console.log(this.commonService.transformDecimalVB(6, this.buybackpolicy.value.purity));
-    console.log(this.selectedIndexes);
-
-    if (this.selectedIndexes.length > 0) {
-      // Display confirmation dialog before deleting
-      Swal.fire({
-        title: 'Are you sure?',
-        text: "You won't be able to revert this!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete!'
-      }).then((result) => {
-        if (result.isConfirmed) {
-          // Proceed with deletion if user confirms
-          this.tableData = this.tableData.filter((data, index) => !this.selectedIndexes.includes(index));
-          this.resetSrNumber()
-        }
-
-      });
-
-    } else {
-      // Display error message if no record is selected
-      this.snackBar.open('Please select a record', 'OK', { duration: 2000 });
-    }
-  }
-
-  resetSrNumber() {
-    this.tableData.forEach((data, index) => {
-      data.SRNO = index + 1
-    });
-  }
-
-
-
-  defaultAlloySelected(data: any, value: any, controlName: string) {
-    let stockData = [];
-    stockData = this.tableData.filter((item: any) => item.DEF_ALLOY_STOCK == data.STOCK_CODE)
-    if (stockData.length > 0) {
-      this.commonService.toastErrorByMsgId('MSG1121')
-    }
-    else {
-      console.log(value);
-      console.log(data);
-      this.tableData[value.data.SRNO - 1].DEF_ALLOY_STOCK = data.STOCK_CODE;
-      this.tableData[value.data.SRNO - 1].DEF_ALLOY_DESCRIPTION = data.STOCK_DESCRIPTION;
-    }
-  }
-
-  // division(data: any, value: any) {
-
-  //   this.tableData[value.data.SRNO - 1].MELTYPE_CODE = data.target.value;
-  // }
-
-  alloyPer(data: any, value: any) {
-    this.tableData[value.data.SRNO - 1].ALLOY_PER = this.commonService.decimalQuantityFormat(data.target.value, 'AMOUNT');
-   if( this.tableData[value.data.SRNO - 1].ALLOY_PER >= 100){
-    this.commonService.toastErrorByMsgId('Only Enter Values Less Than 100%');
-   }
-  }
-
-  karatCodSearch(data: any) {
-
   }
 
   // lookupKeyPress(event: KeyboardEvent) {

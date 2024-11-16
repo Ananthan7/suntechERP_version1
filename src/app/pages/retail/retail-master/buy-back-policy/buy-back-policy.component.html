@@ -28,19 +28,36 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <!-- <div class="col-md-3">
                     <div class="row mb-2">
                         <label for="input" is="ID001" class="col-sm-4 col-form-label"> Divisions
                             :</label>
                         <div class="col-sm-8">
                             <mat-form-field appearance="outline" style="width: 100%;">
-                                <mat-select  formControlName="division" [disabled]="viewMode">
+                                <mat-select  formControlName="division" [disabled]="viewMode" >
                                 <mat-option value="s">Sample</mat-option>
                             </mat-select>
                             </mat-form-field>
                         </div>
                     </div>
-                </div>
+                </div> -->
+                <div class="col-md-3">
+                    <div class="row mb-2">
+                      <label for="input" id="ID001" class="col-sm-4 col-form-label"> Divisions :</label>
+                      <div class="col-sm-8">
+                        <mat-form-field appearance="outline" style="width: 100%;">
+                          <mat-select formControlName="division" [disabled]="viewMode">
+                            <!-- Dynamically populate options -->
+                            <mat-option *ngFor="let option of divisionOptions" [value]="option.DIVISION_CODE">
+                              {{ option.DESCRIPTION }}
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  
             </div>
 
             <div class="row">
