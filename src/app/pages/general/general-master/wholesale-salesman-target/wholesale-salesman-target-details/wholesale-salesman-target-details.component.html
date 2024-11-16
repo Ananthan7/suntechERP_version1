@@ -20,7 +20,7 @@
                     </div>
                     <div class="col-md-7">
                         <mat-form-field style="width: 100%;" appearance="outline">
-                            <input type="text" id="inputPassword" matInput formControlName="target_amount" />
+                            <input type="number" id="inputPassword" matInput formControlName="target_amount" AmountDecimalInput class="text-right" />
                         </mat-form-field>
                     </div>
                     <div class="col-md-2">
@@ -67,13 +67,14 @@
                             <input type="text" #codeInput maxlength="15" matInput formControlName="division">
                         </mat-form-field> -->
 
-                            <mat-form-field style="width: 100%" appearance="outline">
-                                <mat-select formControlName="division">
-                                    <mat-option *ngFor="let data of divisionlist" [value]="data.field">
-                                        {{ data.field }}
-                                    </mat-option>
-                                </mat-select>
-                            </mat-form-field>
+                        <mat-form-field style="width: 100%" appearance="outline">
+                            <mat-select formControlName="division" [(value)]="selectedDivision">
+                              <mat-option *ngFor="let data of divisionlist" [value]="data.value">
+                                {{ data.field }}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                          
                         </div>
                     </div>
 
@@ -100,8 +101,8 @@
                         <div class="col-sm-6">
                             <mat-form-field appearance="outline" style="width: 100%;">
                                 <input type="text" #codeInput maxlength="15" matInput formControlName="customer">
-                                <master-search [MasterSearchData]="enteredCodeData" class="masterSearch"
-                                    (newRowClick)="enteredCodeSelected($event)"></master-search>
+                                <master-search [MasterSearchData]="customerCodeData" class="masterSearch"
+                                    (newRowClick)="selectedcustomercode($event)"></master-search>
                             </mat-form-field>
                         </div>
                         <div class="col-md-2">
@@ -115,8 +116,8 @@
                         <div class="col-sm-6">
                             <mat-form-field appearance="outline" style="width: 100%;">
                                 <input type="text" #codeInput maxlength="15" matInput formControlName="country">
-                                <master-search [MasterSearchData]="enteredCodeData" class="masterSearch"
-                                    (newRowClick)="enteredCodeSelected($event)"></master-search>
+                                <master-search [MasterSearchData]="countryCodeData" class="masterSearch"
+                                    (newRowClick)="countrySelected($event)"></master-search>
                             </mat-form-field>
                         </div>
                         <div class="col-md-2 mb-1">
@@ -145,8 +146,8 @@
                         <div class="col-sm-6">
                             <mat-form-field appearance="outline" style="width: 100%;">
                                 <input type="text" #codeInput maxlength="15" matInput formControlName="divisions">
-                                <master-search [MasterSearchData]="enteredCodeData" class="masterSearch"
-                                    (newRowClick)="enteredCodeSelected($event)"></master-search>
+                                <master-search [MasterSearchData]="divisionCodeData" class="masterSearch"
+                                    (newRowClick)="divisionCodeSelected($event)"></master-search>
                             </mat-form-field>
                         </div>
                         <div class="col-md-2">

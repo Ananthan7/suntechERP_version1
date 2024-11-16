@@ -77,84 +77,62 @@
 
                 </dx-data-grid> -->
                 <dx-data-grid id="gridContainer" [dataSource]="maindetails" [showBorders]="true"
-                                    [showColumnLines]="true" [showRowLines]="true" [allowColumnResizing]="true"
-                                    keyExpr="SRNO" 
-                                    >
-                                    <!-- <dxo-editing [allowUpdating]="true"></dxo-editing> -->
-                                    <!-- <dxo-selection [selectAllMode]="allMode"
-                                            [showCheckBoxesMode]="checkBoxesMode"
-                                            mode="multiple"></dxo-selection> -->
-                                    <dxo-selection mode="single"></dxo-selection>
+                    [showColumnLines]="true" [showRowLines]="true" [allowColumnResizing]="true" keyExpr="SRNO">
 
-                                    <dxi-column caption="Details" alignment="center">
-                                        <dxi-column dataField="SRNO" caption="SN"> </dxi-column>
-                                        <dxi-column dataField="USER_CODE" caption="User Id" cellTemplate="usertemp">
-                                        </dxi-column>
-                                        <dxi-column dataField="APPR_TYPE" caption="Type" cellTemplate="typetemp">
-                                        </dxi-column>
-                                        <dxi-column dataField="APPRREQUIRED" caption="Mandatory"
-                                            cellTemplate="Mandatorytemp">
-                                        </dxi-column>
-                                        <dxi-column dataField="ATTACH_REQ" caption="Attachment Required" width="auto"
-                                            cellTemplate="atttemp">
-                                        </dxi-column>
-                                    </dxi-column>
-                                    
+                    <dxo-selection mode="single"></dxo-selection>
 
-                                    <div *dxTemplate="let data of 'usertemp'">
-                                        <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value"></a>
-                                       
-                                    </div>
+                    <dxi-column dataField="SRNO" caption="S.No"> </dxi-column>
+                    <dxi-column dataField="YEAR" caption="Year" cellTemplate="year">
+                    </dxi-column>
+                    <dxi-column dataField="FROM_DATE" caption="From date" cellTemplate="fromdate">
+                    </dxi-column>
+                    <dxi-column dataField="TO_DATE" caption="To Date" cellTemplate="todate">
+                    </dxi-column>
+                    <dxi-column dataField="TARGET" caption="Target" cellTemplate="target">
+                    </dxi-column>
+                    <!-- </dxi-column> -->
 
-                                  
 
-                                    <div *dxTemplate="let data1 of 'Mandatorytemp'">
+                    <div *dxTemplate="let data of 'year'">
+                        <mat-form-field style="width: 100%;" appearance="outline">
+                            <input type="text" id="inputPassword" matInput formControlName="year"
+                                [readonly]="viewOnly" />
+                        </mat-form-field>
+                    </div>
 
-                                        <input type="checkbox" 
-                                            [checked]="data1.value" [disabled]="viewMode" />
-                                    </div>
+                    <div *dxTemplate="let data of 'fromdate'">
+                        <mat-form-field style="width: 100%" appearance="outline">
+                            <input matInput [matDatepicker]="fromDate" placeholder="DD/MM/YYYY" formControlName="fromDate" [disabled]="viewMode" />
+                            <mat-datepicker-toggle matSuffix [for]="fromDate"></mat-datepicker-toggle>
+                            <mat-datepicker #fromDate></mat-datepicker>
+                        </mat-form-field>
+                    </div>
 
-                                    <div *dxTemplate="let data2 of 'atttemp'">
-                                        <input type="checkbox" 
-                                            [checked]="data2.value" [disabled]="viewMode" />
-                                    </div>
 
-                                    <div *dxTemplate="let data of 'messagetemp'">
-                                        <input type="checkbox"
-                                            [checked]="data.value" [disabled]="viewMode" />
-                                    </div>
-                                    <div *dxTemplate="let data of 'mobilenumber'">
-                                        <input type="number"
-                                        style="text-align: left; width: 100%;"
-                                        [value]="data.value"
-                                        [disabled]="data.value == '' || viewMode"
-                                        [readonly]="viewMode"
-                                        maxlength="10"/>
-                                    </div>
 
-                                    <div *dxTemplate="let data of 'emailtemp'">
-                                        <input type="checkbox" 
-                                            [checked]="data.value" [disabled]="viewMode" />
-                                    </div>
-                                    <div *dxTemplate="let data of 'emailid'">
-                                        <input type="email" [value]="data.value"
-                                            [disabled]="data.value == ''" style="width: 100%;" required maxlength="30"
-                                            [readonly]="viewMode" />
-                                    </div>
+                    <div *dxTemplate="let data1 of 'todate'">
+                        <mat-form-field style="width: 100%" appearance="outline">
+                            <input matInput [matDatepicker]="todate" placeholder="DD/MM/YYYY" formControlName="todate" [disabled]="viewMode" />
+                            <mat-datepicker-toggle matSuffix [for]="todate"></mat-datepicker-toggle>
+                            <mat-datepicker #todate></mat-datepicker>
+                        </mat-form-field>
+                    </div>
 
-                                    <div *dxTemplate="let data of 'systemtemp'">
-                                        <input type="checkbox" 
-                                            [checked]="data.value" [disabled]="viewMode" />
-                                    </div>
+                    <div *dxTemplate="let data of 'target'">
+                        <mat-form-field style="width: 100%;" appearance="outline">
+                            <input type="number" id="inputPassword" matInput formControlName="target"
+                                [readonly]="viewOnly" AmountDecimalInput style="text-align: right;" />
+                        </mat-form-field>
+                    </div>
 
-                                </dx-data-grid>
+                </dx-data-grid>
 
             </div>
         </div>
         <div class="row mt-2">
             <div class="col-md-3">
                 <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true " [viewImportBtn]="false"
-                    [viewAddBtn]="!viewMode" [viewDeleteBtn]="!viewMode" (addClick)="addTableData()" 
+                    [viewAddBtn]="!viewMode" [viewDeleteBtn]="!viewMode" (addClick)="addTableData()"
                     (deleteClick)="deleteTableData()">
                 </menu-buttons>
             </div>

@@ -1,5 +1,5 @@
 <div class="card-content border-bottom d-flex justify-content-between p-2">
-    <h5 class="pos-modaltitle" id="modal-dia-metal"> WholeSale Target
+    <h5 class="pos-modaltitle" id="modal-dia-metal"> WholeSale Salesman Target
     </h5>
     <button type="button" class="btn btn-close close-btn" (click)="close()">
         <i class="feather icon-x close-icon"></i>
@@ -18,8 +18,8 @@
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%;" appearance="outline">
                             <input type="text" id="inputPassword" matInput formControlName="salesman" />
-                            <master-search [MasterSearchData]="enteredCodeData" class="masterSearch"
-                                (newRowClick)="enteredCodeSelected($event)"></master-search>
+                            <master-search [MasterSearchData]="salesmanCodeData" class="masterSearch"
+                                (newRowClick)="selectedsalesman($event)"></master-search>
                         </mat-form-field>
                     </div>
 
@@ -83,12 +83,12 @@
                 [showRowLines]="true" [allowColumnResizing]="true" keyExpr="SRNO">
 
 
-                <dxi-column dataField="SRNO" caption="S.NO"> </dxi-column>
-                <dxi-column dataField="DETAIL_TARGET_CODE" caption="Detail Target Code" >
+                <dxi-column dataField="SLNO" caption="S.NO"> </dxi-column>
+                <dxi-column dataField="TARGET_CODE" caption="Detail Target Code" >
                 </dxi-column>
-                <dxi-column dataField="DESCRIPTION" caption="Description">
+                <dxi-column dataField="TARGET_DESC" caption="Description">
                 </dxi-column>
-                <dxi-column dataField="DIA/METAL" caption="Dia/Metal">
+                <dxi-column dataField="DIA_OR_MTL" caption="Dia/Metal">
                 </dxi-column>
                 <dxi-column dataField="TARGET_ON" caption="Target On" width="auto" >
                 </dxi-column>
@@ -96,7 +96,7 @@
                 </dxi-column>
                 <dxi-column dataField="CUSTOMER" caption="CUSTOMER">
                 </dxi-column>
-                <dxi-column dataField="DIVISION" caption="Division">
+                <dxi-column dataField="DIVISIONS" caption="Division">
                 </dxi-column>
                 
 

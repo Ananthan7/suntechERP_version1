@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
@@ -42,6 +43,10 @@ export class FestivalMasterComponent implements OnInit {
     mid: [""],
     code: [""],
     description: [""],
+    target: [""],
+    year: [""],
+    fromDate: [""],
+    todate: [""],
 
   });
 
@@ -49,6 +54,7 @@ export class FestivalMasterComponent implements OnInit {
     private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
     private apiService: SuntechAPIService,
+    private datePipe: DatePipe
 
 
 
@@ -203,7 +209,16 @@ export class FestivalMasterComponent implements OnInit {
       "CODE": this.festivalmasterform.controls.code.value,
       "DESCRIPTION": this.festivalmasterform.controls.description.value,
       "Details": [
-        this.maindetails[0]
+        {
+        UNIQUEID: this.maindetails.length + 1,
+        SRNO: this.maindetails.length + 1,
+        CODE: this.festivalmasterform.controls.code.value,
+        YEAR: this.festivalmasterform.controls.year.value,
+        FROMDATE: this.festivalmasterform.controls.fromDate.value,
+        TODATE:this.festivalmasterform.controls.todate.value,
+        FEST_TARGET: this.festivalmasterform.controls.target.value
+        }
+       
       ]
     }
 
@@ -276,16 +291,24 @@ export class FestivalMasterComponent implements OnInit {
         text: 'Description Cannot be Empty',
       });
     } else {
+      const fromDateFormatted = this.datePipe.transform(this.festivalmasterform.controls.fromDate.value, 'yyyy-MM-dd');
+      const toDateFormatted = this.datePipe.transform(this.festivalmasterform.controls.todate.value, 'yyyy-MM-dd');
       const newRow = {
         UNIQUEID: this.maindetails.length + 1,
         SRNO: this.maindetails.length + 1,
-        CODE: this.festivalmasterform.controls.code.value,
-        YEAR: this.curr_year,
-        FROMDATE: new Date(),
-        TODATE: new Date(),
-        FEST_TARGET: 0
+        CODE: "",
+        YEAR: "",
+        FROMDATE: "",
+        TODATE:"",
+        FEST_TARGET: ""
+        // UNIQUEID: this.maindetails.length + 1,
+        // SRNO: this.maindetails.length + 1,
+        // CODE: this.festivalmasterform.controls.code.value,
+        // YEAR: this.festivalmasterform.controls.year.value,
+        // FROMDATE: this.festivalmasterform.controls.fromDate.value,
+        // TODATE:this.festivalmasterform.controls.todate.value,
+        // FEST_TARGET: this.festivalmasterform.controls.target.value
       };
-
       console.log(newRow);
       this.maindetails.push(newRow);
     }
