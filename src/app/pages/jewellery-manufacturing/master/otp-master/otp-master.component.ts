@@ -30,8 +30,8 @@ export class OtpMasterComponent implements OnInit {
   editableMode: boolean = false;
   currentDate = new Date();
   columnheader:any[] = ['S.No','Level','User', 'Mobile Number','Mobile Number','Email'];
-
-
+  countryCode:any;
+  data:any[] = [];
   constructor( 
     private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
@@ -41,6 +41,10 @@ export class OtpMasterComponent implements OnInit {
     ) { }
  
   ngOnInit(): void {
+
+    this.countryCode = this.commonService.allbranchMaster.COUNTRY_CODE;
+    console.log(this.countryCode);
+    this.getData();
     if (this.content?.FLAG) {
       this.setFormValues();
       if (this.content?.FLAG == 'VIEW') {
@@ -84,6 +88,29 @@ export class OtpMasterComponent implements OnInit {
   //   this.activeModal.close(data);
   // }
 
+
+  getData() {
+    const api = 'OTPMaster/GetOtpMasterGrid/' + this.countryCode;
+    console.log(api);
+  
+    this.dataService.getDynamicAPI(api).subscribe((result: any) => {
+      const flatData: any[] = []; 
+  
+      if (Array.isArray(result.dynamicData)) {
+        result.dynamicData.forEach((subArray: any[]) => {
+          if (Array.isArray(subArray)) {
+            subArray.forEach((item: any) => {
+              flatData.push(item); 
+            });
+          } 
+        });
+      } 
+
+      this.data = flatData; 
+      console.log(this.data);
+    });
+  }
+  
   close(data?: any) {
     if (data){
       this.viewMode = true;
