@@ -431,6 +431,19 @@ export class RetailGridComponent implements OnInit {
         break;
 
         case 'Pos Collections' :
+          let POSCollectionlogData =  {
+            "VOCTYPE": this.CommonService.getqueryParamVocType() || "",
+            "REFMID": "",
+            "USERNAME": this.CommonService.userName,
+            "MODE": "PRINT",
+            "DATETIME": this.CommonService.formatDateTime(new Date()),
+            "REMARKS":"",
+            "SYSTEMNAME": "",
+            "BRANCHCODE": this.CommonService.branchCode,
+            "VOCNO": "",
+            "VOCDATE": "",
+            "YEARMONTH" : this.CommonService.yearSelected
+          }
           payloadData = {
             "SPID": "0114",
             "parameter": {
@@ -440,7 +453,8 @@ export class RetailGridComponent implements OnInit {
               "TOVOCDATE": gridData.CONTROL_DETAIL.TOVOCDATE,
               "flag": '',
               "USERBRANCH": localStorage.getItem('userbranch'),
-              "USERNAME": localStorage.getItem('username') 
+              "USERNAME": localStorage.getItem('username'),
+              "Logdata": JSON.stringify(POSCollectionlogData)
             } 
           };
         break;
