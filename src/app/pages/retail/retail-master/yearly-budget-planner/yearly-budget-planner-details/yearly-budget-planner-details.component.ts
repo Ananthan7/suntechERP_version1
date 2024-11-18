@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { Subscription } from 'rxjs';
 import { CommonServiceService } from 'src/app/services/common-service.service';
+import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 
@@ -11,6 +13,11 @@ import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
   styleUrls: ['./yearly-budget-planner-details.component.scss']
 })
 export class YearlyBudgetPlannerDetailsComponent implements OnInit {
+  branchCode?: any = localStorage.getItem("userbranch");
+  maindetails: any = [];
+  data:any=[];
+
+
 
   accountMasterData: any = {
     PAGENO: 1,
@@ -24,32 +31,29 @@ export class YearlyBudgetPlannerDetailsComponent implements OnInit {
     LOAD_ONCLICK: true,
   };
 
-  maindetails:any=[];
+  // maindetails:any=[];
+  private subscriptions: Subscription[] = [];
+
   constructor(
-    private activeModal:NgbActiveModal,
+    private activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
+    private dataService: SuntechAPIService,
+    private comService: CommonServiceService
+
 
 
   ) { }
 
   yearlybudgetdetailsform: FormGroup = this.formBuilder.group({
-   
+
     search: [""],
-  
-   
+
+
   });
 
-  formSubmit(){      
-    const postData = {
-      "SLNO": 0,
-      "BRANCH_CODE": "string",
-      "FYEARCODE": "stri",
-      "ACCODE": "string",
-      "ACCOUNT_HEAD": "string",
-      "BUDGET_AMOUNT": 0,
-      "PRV_YEAR_AMOUNT": 0,
-      "BUDGETED_AMT": 0
-    }
+  formSubmit() {
+   console.log(this.data);
+   this.close(this.data);
   }
 
   // accountMasterData: MasterSearchModel = {
@@ -65,14 +69,91 @@ export class YearlyBudgetPlannerDetailsComponent implements OnInit {
   //   LOAD_ONCLICK: true,
   // }
 
+  getPendingRepairJobs() {
+    let API = `MasterLookUp`;
+    let bodyData = {
+      "PAGENO": 1,
+      "RECORDS": 10,
+      "LOOKUPID": 276,
+      "ORDER_TYPE": 0,
+      "WHERECONDITION": "ACCOUNT_MODE  = 'L'  AND GROUP_LEVEL = 4  AND ACCODE <>''",
+      "searchField": "ACCODE",
+      "searchValue": ""
+  };  
+
+    let sub: Subscription = this.dataService
+      .postDynamicAPI(API, bodyData)
+      .subscribe((res: any) => {
+        if (res.status == "Success") {
+          const uniqueItems = new Set();
+
+          res.dynamicData[0].forEach((item: any) => {
+            const identifier = item.CODE; 
+          
+            if (!uniqueItems.has(identifier)) {
+              uniqueItems.add(identifier);
+            }
+          });
+          
+          this.maindetails = Array.from(uniqueItems)
+            .map((identifier: any) => {
+              return res.dynamicData[0].find((item: any) => item.CODE === identifier); // Replace 'CODE' with 'MID' if needed
+            })
+            .map((item: any) => ({
+              ...item,
+            }));
+          
+          this.maindetails.push(...res.dynamicData[1]);
+          
+          console.log(this.maindetails);
+
+        }
+      });
+  }
+
   ngOnInit(): void {
     // this.appendDataToGrid();
+    this.branchCode = this.comService.branchCode;
+    this.getPendingRepairJobs();
+
 
   }
 
   close(data?: any) {
     this.activeModal.close(data);
   }
+
+  onSelectionChanged(e: any) {
+    console.log(e);
+    this.data =[];
+    const selectedRows = e.selectedRowsData;
+    let count = 0;
+    const existingACCodes = new Set();
+
+    selectedRows.forEach((row: any) => {
+        if (!existingACCodes.has(row.ACCODE)) {
+            count++;
+            const post = {
+                "SLNO": count,               
+                "BRANCH_CODE": "string",      
+                "FYEARCODE": "stri",         
+                "ACCODE": row.CODE,          
+                "ACCOUNT_HEAD": row.ACCOUNT_HEAD, 
+                "BUDGET_AMOUNT": 0,          
+                "PRV_YEAR_AMOUNT": 0,       
+                "BUDGETED_AMT": 0
+            };
+            this.data.push(post);
+
+            existingACCodes.add(row.CODE);
+        }
+    });
+
+    console.log(this.data);
+}
+
+  
+  
 
 
 
