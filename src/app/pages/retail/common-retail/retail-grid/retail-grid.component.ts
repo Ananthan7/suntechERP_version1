@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
@@ -50,7 +51,7 @@ export class RetailGridComponent implements OnInit {
   constructor(
     private CommonService: CommonServiceService,
     private dataService: SuntechAPIService,
-    private snackBar: MatSnackBar,
+    private snackBar: MatSnackBar, private datePipe: DatePipe
     // private ChangeDetector: ChangeDetectorRef,
   ) {
     this.viewRowDetails = this.viewRowDetails.bind(this);
@@ -367,7 +368,7 @@ export class RetailGridComponent implements OnInit {
       this.dataSource = result.dynamicData[0]
       
       this.dataSource.forEach((item: any) => {
-        console.log('data Refetch for retail template grid',item)
+        // console.log('data Refetch for retail template grid',item)
         this.templateFetched_Data = item;
         let parsedData;
         try {
@@ -376,16 +377,17 @@ export class RetailGridComponent implements OnInit {
           return;
         }
  
-        const fromVocDate = parsedData.CONTROL_DETAIL?.FROMVOCDATE || parsedData.CONTROL_DETAIL?.STRFROMDATE ||
+        const fromVocDate = this.datePipe.transform(parsedData.CONTROL_DETAIL?.FROMVOCDATE || parsedData.CONTROL_DETAIL?.STRFROMDATE ||
           parsedData.CONTROL_DETAIL?.strFmDate || parsedData.CONTROL_DETAIL?.FrVocDate || parsedData.CONTROL_DETAIL?.str_FmDate
-          || parsedData.CONTROL_DETAIL?.strAsOnDate || parsedData.CONTROL_DETAIL?.FRVOCDATE || parsedData.CONTROL_DETAIL?.STRFMDATE;
+          || parsedData.CONTROL_DETAIL?.strAsOnDate || parsedData.CONTROL_DETAIL?.FRVOCDATE || parsedData.CONTROL_DETAIL?.STRFMDATE, 'yyyy-MM-dd')!
+        
       
-        const toVocDate = parsedData.CONTROL_DETAIL?.TOVOCDATE || parsedData.CONTROL_DETAIL?.STRTODATE ||
+        const toVocDate = this.datePipe.transform(parsedData.CONTROL_DETAIL?.TOVOCDATE || parsedData.CONTROL_DETAIL?.STRTODATE ||
           parsedData.CONTROL_DETAIL?.strToDate || parsedData.CONTROL_DETAIL?.ToVocDate || parsedData.CONTROL_DETAIL?.str_ToDate
-          || parsedData.CONTROL_DETAIL?.strAsOnDate || parsedData.CONTROL_DETAIL?.TOVOCDATE;
+          || parsedData.CONTROL_DETAIL?.strAsOnDate || parsedData.CONTROL_DETAIL?.TOVOCDATE, 'yyyy-MM-dd')!
       
-        item.FROMVOCDATE = this.CommonService.formatYYMMDD(fromVocDate);
-        item.TOVOCDATE = this.CommonService.formatYYMMDD(toVocDate);
+        item.FROMVOCDATE = fromVocDate;
+        item.TOVOCDATE = toVocDate;
       });
 
       result.dynamicData[1].forEach((item: any)=>{ 
@@ -429,6 +431,19 @@ export class RetailGridComponent implements OnInit {
         break;
 
         case 'Pos Collections' :
+          let POSCollectionlogData =  {
+            "VOCTYPE": this.CommonService.getqueryParamVocType() || "",
+            "REFMID": "",
+            "USERNAME": this.CommonService.userName,
+            "MODE": "PRINT",
+            "DATETIME": this.CommonService.formatDateTime(new Date()),
+            "REMARKS":"",
+            "SYSTEMNAME": "",
+            "BRANCHCODE": this.CommonService.branchCode,
+            "VOCNO": "",
+            "VOCDATE": "",
+            "YEARMONTH" : this.CommonService.yearSelected
+          }
           payloadData = {
             "SPID": "0114",
             "parameter": {
@@ -438,7 +453,8 @@ export class RetailGridComponent implements OnInit {
               "TOVOCDATE": gridData.CONTROL_DETAIL.TOVOCDATE,
               "flag": '',
               "USERBRANCH": localStorage.getItem('userbranch'),
-              "USERNAME": localStorage.getItem('username') 
+              "USERNAME": localStorage.getItem('username'),
+              "Logdata": JSON.stringify(POSCollectionlogData)
             } 
           };
         break;
