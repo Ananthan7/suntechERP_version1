@@ -64,6 +64,7 @@ export class CustomerEnquiryComponent implements OnInit {
     saleDateFrom: [''],
     dateTo: [''],
     showPicture : [false],
+    outputTo: [''],
 
 
     templateName: ['']
@@ -464,6 +465,7 @@ export class CustomerEnquiryComponent implements OnInit {
     this.popupVisible = true;
   }
   saveTemplate_DB(){
+    let postData = this.switchOutputTo(this.customerEnquiryForm.controls.outputTo.value)
     const payload = {
       "SPID": "0115",
       "parameter": {
@@ -477,11 +479,7 @@ export class CustomerEnquiryComponent implements OnInit {
               "ISDEFAULT": 1
             },
             "CONTROL_DETAIL": {
-              // "STRFMDATE" : this.dateToPass.fromDate,    
-              // "STRTODATE" : this.dateToPass.toDate,    
-              // "INTVALUE" : '',  
-              // "STRBRANCHES" : this.customerEnquiryForm.controls.branch.value || this.fetchedBranchData,
-              // "LOGDATA" : ''
+              postData
             }
          })
       }
@@ -510,8 +508,7 @@ export class CustomerEnquiryComponent implements OnInit {
     }); 
   }
 
-
-  previewClick() {
+  switchOutputTo(outputToValue: any){
     let logData =  {
       "VOCTYPE": this.commonService.getqueryParamVocType() || "",
       "REFMID": "",
@@ -525,63 +522,121 @@ export class CustomerEnquiryComponent implements OnInit {
       "VOCDATE": "",
       "YEARMONTH" : this.commonService.yearSelected
     }
+    let payloadData;
+    switch (outputToValue) {
+      case 'Customer Log':
+        payloadData = {
+          "SPID": "163",
+          "parameter": {
+            "USP_ID" : '',
+            "STRBRANCHES" : this.customerEnquiryForm.controls.branch.value,
+            "STRDATEFROM" : this.datePipe.transform(this.customerEnquiryForm.controls.saleDateFrom.value, 'yyyy-MM-dd'),
+            "STRDATETO" : this.datePipe.transform(this.customerEnquiryForm.controls.dateTo.value, 'yyyy-MM-dd'),
+            "LOGDATA" : logData,
+            "USERBRANCH" : localStorage.getItem('userbranch'),
+          }  
+        };
+      break;  
 
-    let postData = {
-      "SPID": "151",
-      "parameter": {
-        // "strBRANCHES": this.formattedBranchDivisionData || this.fetchedBranchDataParam,
-        // "FrVocDate":  this.formatDateToYYYYMMDD(''),
-        // "ToVocDate": this.formatDateToYYYYMMDD(this.retailAdvanceReceiptRegisterForm.controls.toDate.value),
-        // "Pending": this.retailAdvanceReceiptRegisterForm.controls.show.value,
-        // "Logdata": JSON.stringify(logData)
-      },
+      case 'Sales Register':
+        this.isLoading = false;
+        payloadData = {
+          "SPID": "",
+          "parameter": {
+            "strCertCode ": ''    
+          }  
+        };
+      break;
+
+      case 'Address Label':
+      this.isLoading = false; 
+      payloadData = {
+        "SPID": "",
+        "parameter": {
+          "strCertCode ": ''    
+        }  
+      };
+      break;
+
+      case 'Previlage Card':
+        payloadData = {
+          "SPID": "162",
+          "parameter": {
+            "strCertCode ": this.customerEnquiryForm.controls.customerfrom.value  //1344         
+          }  
+        };
+      break;
+
+      case 'Send Email':
+      this.isLoading = false;
+      payloadData = {
+        "SPID": "",
+        "parameter": {
+          "strCertCode ": ''    
+        }  
+      };
+      break;
+
+      case 'Send Card':
+      this.isLoading = false;
+      payloadData = {
+        "SPID": "",
+        "parameter": {
+          "strCertCode ": ''    
+        }  
+      };
+      break;
+
+      case 'Send SMS': 
+      this.isLoading = false; 
+      payloadData = {
+        "SPID": "",
+        "parameter": {
+          "strCertCode ": ''    
+        }  
+      };
+      break;
     }
-    console.log(postData)  
+    return payloadData;
+  }
+  previewClick() {
+    this.isLoading = true;
+    let postData = this.switchOutputTo(this.customerEnquiryForm.controls.outputTo.value)
     this.commonService.showSnackBarMsg('MSG81447');
     this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
     .subscribe((result: any) => {
       console.log(result);
       let data = result.dynamicData;
-      let printContent = data[0][0].HTMLINPUT;
-      this.htmlPreview = this.sanitizer.bypassSecurityTrustHtml(printContent);
-      const blob = new Blob([this.htmlPreview.changingThisBreaksApplicationSecurity], { type: 'text/html' });
-      this.commonService.closeSnackBarMsg();
-      const url = URL.createObjectURL(blob);
-      window.open(url, '_blank');
+      let printContent = data[0][0].HTMLOUT;
+      if (printContent && Object.keys(printContent).length > 0) {
+        this.htmlPreview = this.sanitizer.bypassSecurityTrustHtml(printContent);
+        const blob = new Blob([this.htmlPreview.changingThisBreaksApplicationSecurity], { type: 'text/html' });
+        this.commonService.closeSnackBarMsg();
+        const url = URL.createObjectURL(blob);
+        window.open(url, '_blank');
+        this.isLoading = false;
+      } else {
+        if(data[0][0].ERRORCODE == 1){
+          Swal.fire('No Data!', data[0][0].ERRMSG, 'error');
+          this.isLoading = false;
+        }
+        else{
+          Swal.fire('No Data!', 'There is no data!', 'info');
+          this.commonService.closeSnackBarMsg();
+          this.isLoading = false;
+        }
+      }
     });      
   }
 
   printBtnClick(){
-    let logData =  {
-      "VOCTYPE": this.commonService.getqueryParamVocType() || "",
-      "REFMID": "",
-      "USERNAME": this.commonService.userName,
-      "MODE": "PRINT",
-      "DATETIME": this.commonService.formatDateTime(new Date()),
-      "REMARKS":"",
-      "SYSTEMNAME": "",
-      "BRANCHCODE": this.commonService.branchCode,
-      "VOCNO": "",
-      "VOCDATE": "",
-      "YEARMONTH" : this.commonService.yearSelected
-    }
-
-    let postData = {
-      "SPID": "151",
-      "parameter": {
-        // "strBRANCHES": this.formattedBranchDivisionData || this.fetchedBranchDataParam,
-        // "FrVocDate":  this.formatDateToYYYYMMDD(this.retailAdvanceReceiptRegisterForm.controls.fromDate.value),
-        // "ToVocDate": this.formatDateToYYYYMMDD(this.retailAdvanceReceiptRegisterForm.controls.toDate.value),
-        // "Pending": this.retailAdvanceReceiptRegisterForm.controls.show.value,
-        // "Logdata": JSON.stringify(logData)
-      },
-    }
- 
+    this.isLoading = true;
+    let postData = this.switchOutputTo(this.customerEnquiryForm.controls.outputTo.value)
     this.commonService.showSnackBarMsg('MSG81447');
     this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
     .subscribe((result: any) => {
       let data = result.dynamicData;
-      let printContent = data[0][0].HTMLINPUT;
+      let printContent = data[0][0].HTMLOUT;
       this.htmlPreview = this.sanitizer.bypassSecurityTrustHtml(printContent);
 
       if (result.dynamicData) {
@@ -599,16 +654,16 @@ export class CustomerEnquiryComponent implements OnInit {
       if (content && Object.keys(content).length !== 0) {
         const modifiedContent = content.replace(/<title>.*?<\/title>/, `<title>${userBranchDesc.DESCRIPTION}</title>`);
 
-        const printWindow = window.open('', '', 'height=600,width=800');
+        const printWindow = window.open('', '', 'height=600,width=1000');
         printWindow?.document.write(modifiedContent);
         printWindow?.document.close();
         printWindow?.focus();
         printWindow?.print();
-        printWindow?.close();
-       
+        this.isLoading = false;
       } else {
         Swal.fire('No Data!', 'There is no data to print!', 'info');
         this.commonService.closeSnackBarMsg();
+        this.isLoading = false;
         return
       }
     }, 3000); 
@@ -644,7 +699,7 @@ export class CustomerEnquiryComponent implements OnInit {
 
       this.customerEnquiryForm.controls.MaritalStatusSelection.setValue(this.maritalStatusArr[0].value);
       this.customerEnquiryForm.controls.GenderSelection.setValue('M');
-
+      this.customerEnquiryForm.controls.outputTo.setValue('Customer Log')
 
       const now = new Date();
       const startDate = new Date(now.getFullYear(), now.getMonth(), 1);
