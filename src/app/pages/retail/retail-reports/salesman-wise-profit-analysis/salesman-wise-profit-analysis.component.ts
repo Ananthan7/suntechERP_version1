@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -37,7 +38,8 @@ export class SalesmanWiseProfitAnalysisComponent implements OnInit {
 
   constructor(private activeModal: NgbActiveModal, private formBuilder: FormBuilder,
     private commonService: CommonServiceService,   private dataService: SuntechAPIService,
-    private toastr: ToastrService,   private sanitizer: DomSanitizer) { }
+    private toastr: ToastrService,   private sanitizer: DomSanitizer,
+    private datePipe: DatePipe) { }
 
   ngOnInit(): void {
     this.prefillScreenValues();
@@ -59,12 +61,13 @@ export class SalesmanWiseProfitAnalysisComponent implements OnInit {
   setDateValue(event: any){
     if(event.FromDate){
       this.salesmanWiseProfitAnalysisForm.controls.fromdate.setValue(event.FromDate);
-      this.dateToPass.fromDate = this.commonService.formatYYMMDD(event.FromDate);
+      this.dateToPass.fromDate = this.datePipe.transform(event.FromDate, 'yyyy-MM-dd')!
     }
     else if(event.ToDate){
       this.salesmanWiseProfitAnalysisForm.controls.todate.setValue(event.ToDate);
-      this.dateToPass.toDate = this.commonService.formatYYMMDD(event.ToDate);
+      this.dateToPass.toDate =  this.datePipe.transform(event.ToDate, 'yyyy-MM-dd')!
     }
+    this.gridData();
   }
 
   popupClosed(){
@@ -79,11 +82,6 @@ export class SalesmanWiseProfitAnalysisComponent implements OnInit {
       this.salesmanWiseProfitAnalysisForm.controls.templateName.setValue(null)
     }
   }
-
-  customizeSummaryContent = (data: any) => {
-    // decimal point hanlder from commonService
-    return this.commonService.decimalQuantityFormat(data.value, 'THREE');
-  };
 
   selectedData(data: any) {
     console.log(data)
@@ -156,7 +154,7 @@ export class SalesmanWiseProfitAnalysisComponent implements OnInit {
               "STRFMDATE" : this.dateToPass.fromDate,    
               "STRTODATE" : this.dateToPass.toDate,    
               "INTVALUE" : '',  
-              "STRBRANCHES" : this.formattedBranchDivisionData || this.fetchedBranchDataParam,
+              "STRBRANCHES" : this.salesmanWiseProfitAnalysisForm.controls.branch.value || this.fetchedBranchData,
               "LOGDATA" : ''
             }
          })
@@ -187,6 +185,7 @@ export class SalesmanWiseProfitAnalysisComponent implements OnInit {
   }
 
   previewClick(){
+    this.isLoading = true;
     let logData =  {
       "VOCTYPE": this.commonService.getqueryParamVocType() || "",
       "REFMID": "",
@@ -206,7 +205,7 @@ export class SalesmanWiseProfitAnalysisComponent implements OnInit {
         "STRFMDATE" : this.dateToPass.fromDate,    
 	      "STRTODATE" : this.dateToPass.toDate,    
 	      "INTVALUE" : '',  
-        "STRBRANCHES" : this.formattedBranchDivisionData || this.fetchedBranchDataParam,
+        "STRBRANCHES" : this.salesmanWiseProfitAnalysisForm.controls.branch.value || this.fetchedBranchData,
         "LOGDATA" : JSON.stringify(logData)
       }
     }
@@ -222,19 +221,23 @@ export class SalesmanWiseProfitAnalysisComponent implements OnInit {
           this.commonService.closeSnackBarMsg();
           const url = URL.createObjectURL(blob);
           window.open(url, '_blank');
+          this.isLoading = false;
         } else {
           Swal.fire('No Data!', 'There is no data!', 'info');
           this.commonService.closeSnackBarMsg();
+          this.isLoading = false;
         }
       }
       else{
         this.toastr.error(result.message)
+        this.isLoading = false;
         return
       }
     }); 
   }
 
   printBtnClick(){
+    this.isLoading = true;
     let logData =  {
       "VOCTYPE": this.commonService.getqueryParamVocType() || "",
       "REFMID": "",
@@ -254,7 +257,7 @@ export class SalesmanWiseProfitAnalysisComponent implements OnInit {
         "STRFMDATE" : this.dateToPass.fromDate,    
 	      "STRTODATE" : this.dateToPass.toDate,    
 	      "INTVALUE" : '',  
-        "STRBRANCHES" : this.formattedBranchDivisionData || this.fetchedBranchDataParam,
+        "STRBRANCHES" : this.salesmanWiseProfitAnalysisForm.controls.branch.value || this.fetchedBranchData,
         "LOGDATA" : JSON.stringify(logData)
       }
     }
@@ -280,9 +283,11 @@ export class SalesmanWiseProfitAnalysisComponent implements OnInit {
               printWindow?.document.write(modifiedContent);
               printWindow?.focus();
               printWindow?.print();
+              this.isLoading = false;
             } else {
               Swal.fire('No Data!', 'There is no data to print!', 'info');
               this.commonService.closeSnackBarMsg();
+              this.isLoading = false;
               return
             }
           }, 1500); 
@@ -290,7 +295,8 @@ export class SalesmanWiseProfitAnalysisComponent implements OnInit {
         }
       }
       else{
-        this.toastr.error(result.message)
+        this.toastr.error(result.message);
+        this.isLoading = false;
         return
       }
     });  
@@ -300,7 +306,6 @@ export class SalesmanWiseProfitAnalysisComponent implements OnInit {
 
   prefillScreenValues(){
     if ( Object.keys(this.content).length > 0) {
-      this.isLoading = false;
       let ParcedPreFetchData = JSON.parse(this.content?.CONTROL_LIST_JSON) //data from retailREPORT Component- modalRef instance
 
       this.templateNameHasValue = !!ParcedPreFetchData.CONTROL_HEADER.TEMPLATENAME;
@@ -311,8 +316,8 @@ export class SalesmanWiseProfitAnalysisComponent implements OnInit {
       this.fetchedBranchData= ParcedPreFetchData?.CONTROL_DETAIL.STRBRANCHES
 
       this.dateToPass = {
-        fromDate:  ParcedPreFetchData?.CONTROL_DETAIL.STRFMDATE,
-        toDate: ParcedPreFetchData?.CONTROL_DETAIL.STRTODATE
+        fromDate: this.datePipe.transform(ParcedPreFetchData?.CONTROL_DETAIL.STRFMDATE, 'yyyy-MM-dd')!,
+        toDate: this.datePipe.transform(ParcedPreFetchData?.CONTROL_DETAIL.STRTODATE, 'yyyy-MM-dd')!
       };
     }
     else{
@@ -323,9 +328,49 @@ export class SalesmanWiseProfitAnalysisComponent implements OnInit {
       this.fetchedBranchData= this.fetchedBranchDataParam?.split("#")
    
       this.dateToPass = {
-        fromDate:  this.formatDateToYYYYMMDD(new Date()),
-        toDate: this.formatDateToYYYYMMDD(new Date()),
+        fromDate:  this.datePipe.transform(new Date(), 'yyyy-MM-dd')!,
+        toDate: this.datePipe.transform(new Date(), 'yyyy-MM-dd')!,
       };
     }
+    this.gridData();
   }
+
+  gridData(){
+    this.isLoading = true;
+    let API = "UspSmanDiaSalesNewNet/GetspSmanDiaSalesNewNet";
+    let postData = { 
+      "strFmDate": this.dateToPass.fromDate,   
+      "strToDate": this.dateToPass.toDate,
+      "intvalue": 1,
+      "strBranches": this.salesmanWiseProfitAnalysisForm.controls.branch.value || this.fetchedBranchData
+    };
+
+    this.dataService.postDynamicAPI(API, postData).subscribe(
+      (result) => {
+        if (result && result.dynamicData && result.dynamicData.length > 0) {
+          this.salesmanWiseProfitArr = result.dynamicData[0];
+          this.isLoading = false;
+        } else {
+          this.salesmanWiseProfitArr = [];
+          this.toastr.warning('No data available for the given criteria.');
+          this.isLoading = false;
+        }
+      },
+      (err) => {
+        this.toastr.error(err.message || 'An error occurred while fetching the data.');
+        this.isLoading = false;
+      }
+    );
+  }
+  
+  customizeSummaryContent = (data: any) => {
+    // value separation handler from commonService
+    return this.commonService.setCommaSerperatedNumber(data.value, 'THREE');
+  };
+  customizeContent = (data: any) => {
+    // decimal point handler from commonService
+    return this.commonService.decimalQuantityFormat(data.value, 'THREE');
+  };
+
+
 }

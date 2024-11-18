@@ -7,9 +7,11 @@
         </button>
     </div>
     <!-- modal header component -->
-    <modal-header (saveClick)="formSubmit()" (cancelClick)="close()" (deleteClick)="deleteProcessMaster()"
+    <!-- <modal-header (saveClick)="formSubmit()" (cancelClick)="close()" (deleteClick)="deleteProcessMaster()"
         [isloading]="isloading" [isViewDelete]="!viewMode" [isViewSave]="!viewMode" [isViewMore]="!viewMode"
-        [isViewDelete]="!dele"></modal-header>
+        [isViewDelete]="!dele"></modal-header> -->
+        <modal-header [isViewSave]="!viewMode"   [isloading]="isloading" [isViewCancel]="!viewMode" [isViewMore]="!viewMode"  [isViewAttachment]="!viewMode" (cancelClick)="close()"
+    (saveClick)="formSubmit()" (deleteClick)="deleteProcessMaster()" [isViewDelete]="!viewMode && editableMode"></modal-header>
     <!-- content section -->
     <div class="card py-3">
         <form [formGroup]="processMasterForm">
@@ -38,7 +40,7 @@
                                 <mat-form-field appearance="outline" style="width: 100%;">
                                     <input type="text" matInput #codeDes UpperCaseDirective id="codeDesc"
                                         placeholder="DESCRIPTION" formControlName="processDesc" maxlength="40"
-                                        (focus)="showAlertIfCodeIsEmpty()" [readonly]="viewMode" tabindex="2" />
+                                        (focus)="showAlertIfCodeIsEmpty()" [readonly]="viewMode || codeEnable" tabindex="2" />
                                     <mat-error class="mt-2" *ngIf="processMasterForm.controls.processType.touched 
                                 &&processMasterForm.controls.processDesc.hasError('required')">
                                         Process Description is <strong>required</strong>
@@ -53,7 +55,7 @@
                             <div class="col-sm-3 mt-2">
                                 <mat-form-field appearance="outline" style="width: 100%;">
                                     <mat-select tabindex="3" formControlName="processType" (change)="ProcessDes()"
-                                        (focus)="showAlertIfCodeIsEmpty()" [disabled]="viewMode">
+                                        (focus)="showAlertIfCodeIsEmpty()" [disabled]="viewMode || codeEnable">
                                         <mat-option *ngFor="let option of processTypeList" [value]="option.SRNO">
                                             {{ option.ENGLISH }}
                                         </mat-option>
@@ -65,7 +67,7 @@
                                     *ngIf="processMasterForm.value.TimeCalculateonProcess">*</span>
                             </label>
                             <div class="col-sm-5">
-                                <app-duration-picker [content]="yourContent" [viewMode]="viewMode"
+                                <app-duration-picker [content]="yourContent" [viewMode]="viewMode || codeEnable"
                                     (click)="showMaxContentAlert()" (updateDuration)="updateStandardTime($event)"
                                     [durationToSplit]="standTime" formControlName="stand_time"
                                     (focus)="showAlertIfCodeIsEmpty()" [disabled]="viewMode"></app-duration-picker>
@@ -79,10 +81,10 @@
                                 <mat-form-field style="width: 100%;" appearance="outline">
                                     <input type="text" matInput maxlength="6" UpperCaseDirective
                                         formControlName="WIPaccount" (focus)="showAlertIfCodeIsEmpty()"
-                                        (change)="checkAccodeSelected($event,WipACCODEData,'WIPaccount')"
                                         (focusout)="validateLookupField($event,WipACCODEData,'WIPaccount')"
-                                        [readonly]="viewMode" tabindex="4"
-                                        (keydown)="lookupKeyPress($event,'WIPaccount')" />
+                                        [readonly]="viewMode || codeEnable" tabindex="4"
+                                        (keydown)="lookupKeyPress($event,'WIPaccount')"
+                                        (change)="checkAccodeSelected($event,WipACCODEData,'WIPaccount')"/>
                                     <master-search class="masterSearch" [MasterSearchData]="WipACCODEData"
                                         *ngIf="viewMode == false" #overlayWIPaccountSearch
                                         (newRowClick)="WIPaccountSelected($event)">
@@ -95,7 +97,7 @@
                             </label>
                             <div class="col-sm-5">
                                 <app-duration-picker [content]="maxContent" [durationToSplit]="maxTime"
-                                    [viewMode]="viewMode" (click)="showMaxContentAlert()"
+                                    [viewMode]="viewMode || codeEnable" (click)="showMaxContentAlert()"
                                     (updateDuration)="updateMaximumTime($event)" formControlName="max_time"
                                     (focus)="showAlertIfCodeIsEmpty()"
                                     [disabled]="viewMode || codeEnable"></app-duration-picker>
@@ -110,7 +112,7 @@
                                         (focusout)="postionCodeValidates()" formControlName="Position"
                                         (focus)="showAlertIfCodeIsEmpty()"
                                         onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))"
-                                        [readonly]="viewMode" tabindex="5" />
+                                        [readonly]="viewMode || codeEnable" tabindex="5" />
                                 </mat-form-field>
                             </div>
                             <label for="input" id="ID007" class="col-sm-2 col-form-label">Tray Weight
@@ -119,7 +121,7 @@
                                 <mat-form-field appearance="outline" style="width: 100%;">
                                     <input type="text" matInput style="text-align: right;" formControlName="trayWeight"
                                         [max]="5" AmountDecimalInput (focus)="showAlertIfCodeIsEmpty()"
-                                        [readonly]="viewMode " tabindex="6" />
+                                        [readonly]="viewMode || codeEnable " tabindex="6" />
                                     <!-- <input type="number" matInput style="text-align: right;"
                                     formControlName="trayWeight"  [readonly]="viewMode" /> -->
                                 </mat-form-field>
@@ -135,7 +137,7 @@
                                         formControlName="approvalCode" #approvalCode id="approvalCode"
                                         (focus)="showAlertIfCodeIsEmpty()"
                                         (focusout)="validateLookupField($event,approvalCodeData,'approvalCode')"
-                                        [readonly]="viewMode" tabindex="7"
+                                        [readonly]="viewMode || codeEnable" tabindex="7"
                                         (keydown)="lookupKeyPress($event,'approvalCode')" />
                                     <master-search class="masterSearch" [MasterSearchData]="approvalCodeData"
                                         *ngIf="viewMode == false" #overlayapprovalCodeSearch
@@ -153,7 +155,7 @@
                                         formControlName="approvalProcess" #approvalProcess id="approvalProcess"
                                         (focus)="showAlertIfCodeIsEmpty()"
                                         (focusout)="validateLookupField($event,approvalProcessData,'approvalProcess')"
-                                        [readonly]="viewMode" tabindex="8"
+                                        [readonly]="viewMode || codeEnable" tabindex="8"
                                         (keydown)="lookupKeyPress($event,'approvalProcess')" />
                                     <master-search class="masterSearch" [MasterSearchData]="approvalProcessData"
                                         *ngIf="viewMode == false" #overlayapprovalProcessSearch
@@ -173,7 +175,7 @@
                                         formControlName="recStockCode" #recStockCode id="recStockCode"
                                         (focus)="showAlertIfCodeIsEmpty()"
                                         (focusout)="validateLookupField($event,StockProcessData,'recStockCode')"
-                                        [readonly]="viewMode" tabindex="9"
+                                        [readonly]="viewMode || codeEnable" tabindex="9"
                                         (keydown)="lookupKeyPress($event,'recStockCode')" />
                                     <master-search class="masterSearch" [MasterSearchData]="StockProcessData"
                                         #overlayrecStockCodeSearch (newRowClick)="StockProcesSelected($event)"
@@ -191,7 +193,7 @@
                                     <input type="text" matInput maxlength="6" UpperCaseDirective
                                         formControlName="jobNumber" (focus)="showAlertIfCodeIsEmpty()"
                                         (focusout)="validateLookupField($event,adjustAccodeData,'jobNumber')"
-                                        [readonly]="viewMode" (keydown)="lookupKeyPress($event,'jobNumber')" />
+                                        [readonly]="viewMode || codeEnable" (keydown)="lookupKeyPress($event,'jobNumber')" />
                                     <master-search class="masterSearch" [MasterSearchData]="jobNoData"
                                         *ngIf="viewMode == false" #overlayjobNoSearch
                                         (newRowClick)="jobNoSelected($event)">
@@ -206,7 +208,7 @@
                                 <mat-form-field style="width: 100%;" appearance="outline">
                                     <input type="text" matInput AmountDecimalInput style="text-align: right;"
                                         formControlName="labour_charge" maxlength="15"
-                                        (focus)="showAlertIfCodeIsEmpty()" [readonly]="viewMode" tabindex="10" />
+                                        (focus)="showAlertIfCodeIsEmpty()" [readonly]="viewMode || codeEnable" tabindex="10" />
                                 </mat-form-field>
                             </div>
                             <label for="input" id="ID011" class="col-sm-2 col-form-label">Adjust Accode :</label>
@@ -215,7 +217,7 @@
                                     <input type="text" matInput maxlength="6" UpperCaseDirective
                                         formControlName="ADJUST_ACCODE" (focus)="showAlertIfCodeIsEmpty()"
                                         (focusout)="validateLookupField($event,adjustAccodeData,'ADJUST_ACCODE')"
-                                        [readonly]="viewMode" (keydown)="lookupKeyPress($event,'ADJUST_ACCODE')" />
+                                        [readonly]="viewMode || codeEnable" (keydown)="lookupKeyPress($event,'ADJUST_ACCODE')" />
                                     <master-search class="masterSearch" [MasterSearchData]="adjustAccodeData"
                                         *ngIf="viewMode == false" #overlayadjustaccodeSearch
                                         (newRowClick)="adjustAccodeSelected($event)">
@@ -254,14 +256,14 @@
                                 <mat-form-field style="width: 100%;" appearance="outline">
                                     <input type="text" matInput style="text-align: right;"
                                         formControlName="loss_standard" [max]="3" tabindex="12" AmountDecimalInput
-                                        [readonly]="islossReadOnly" />
+                                        [readonly]="islossReadOnly || codeEnable" />
                                 </mat-form-field>
                             </div>
                             <div class="col-sm-12">
                                 <mat-form-field style="width: 100%;" appearance="outline">
                                     <input type="text" matInput style="text-align: right;"
                                         [readonly]="viewMode || lossDisable" formControlName="standard_end" [max]="3"
-                                        AmountDecimalInput [readonly]="isRecovReadOnly" tabindex="17" />
+                                        AmountDecimalInput [readonly]="isRecovReadOnly || codeEnable" tabindex="17" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -273,13 +275,13 @@
                             <div class="col-sm-12">
                                 <mat-form-field appearance="outline" style="width: 100%;">
                                     <input type="text" matInput style="text-align: right;" formControlName="loss_min"
-                                        [max]="3" AmountDecimalInput tabindex="13" [readonly]="islossReadOnly" />
+                                        [max]="3" AmountDecimalInput tabindex="13" [readonly]="islossReadOnly || codeEnable" />
                                 </mat-form-field>
                             </div>
                             <div class="col-sm-12">
                                 <mat-form-field style="width: 100%;" appearance="outline">
                                     <input type="text" matInput style="text-align: right;" formControlName="min_end"
-                                        [max]="3" AmountDecimalInput tabindex="18" [readonly]="isRecovReadOnly"
+                                        [max]="3" AmountDecimalInput tabindex="18" [readonly]="isRecovReadOnly || codeEnable"
                                         [readonly]="viewMode || lossDisable" />
                                 </mat-form-field>
                             </div>
@@ -293,7 +295,7 @@
                                 <mat-form-field style="width: 100%;" appearance="outline">
                                     <input type="text" matInput tabindex="14" AmountDecimalInput [max]="3"
                                         formControlName="loss_max" style="text-align: right;"
-                                        [readonly]="islossReadOnly" />
+                                        [readonly]="islossReadOnly || codeEnable" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -308,7 +310,7 @@
                                         formControlName="LOSS_ACCODE"
                                         (change)="losscheckAccodeSelected($event,LossACCODEData,'LOSS_ACCODE')"
                                         (focusout)="validateLookupField($event,LossACCODEData,'LOSS_ACCODE')"
-                                        [readonly]="islossReadOnly" tabindex="15"
+                                        [readonly]="islossReadOnly || codeEnable" tabindex="15"
                                         (keydown)="lookupKeyPress($event,'LOSS_ACCODE')" />
                                     <master-search class="masterSearch" [MasterSearchData]="LossACCODEData"
                                         *ngIf="!viewMode && searchModeLoss" #overlaylossaccodeSearch
@@ -321,7 +323,7 @@
                                     <input type="text" matInput maxlength="6" UpperCaseDirective
                                         (change)="recovcheckAccodeSelected($event,RecovACCODEData,'RECOV_ACCODE')"
                                         (focusout)="validateLookupField($event,RecovACCODEData,'RECOV_ACCODE')"
-                                        formControlName="RECOV_ACCODE" [readonly]="isRecovReadOnly || lossDisable"
+                                        formControlName="RECOV_ACCODE" [readonly]="isRecovReadOnly || lossDisable || codeEnable"
                                         tabindex="19" (keydown)="lookupKeyPress($event,'RECOV_ACCODE')" />
                                     <master-search class="masterSearch" [MasterSearchData]="RecovACCODEData"
                                         *ngIf="!viewMode && searchModeRecov && searchModeLoss"
@@ -335,7 +337,7 @@
                                         formControlName="GAIN_ACCODE"
                                         (change)="gaincheckAccodeSelected($event,WipACCODEData,'GAIN_ACCODE')"
                                         (focusout)="validateLookupField($event,WipACCODEData,'GAIN_ACCODE')"
-                                        [readonly]="isAlloWGainReadOnly" tabindex="21"
+                                        [readonly]="isAlloWGainReadOnly || codeEnable" tabindex="21"
                                         (keydown)="lookupKeyPress($event,'GAIN_ACCODE')" />
                                     <master-search class="masterSearch" [MasterSearchData]="WipACCODEData"
                                         *ngIf="!viewMode && searchModeAllow" #overlaygainaccodeSearch
@@ -347,7 +349,7 @@
                     </div>
                     <div class="col-md-2">
                         <div class="form-check mt-md-5">
-                            <mat-checkbox formControlName="loss_on_gross" id="ID020" [disabled]="viewMode|| lossDisable"
+                            <mat-checkbox formControlName="loss_on_gross" id="ID020" [disabled]="viewMode|| lossDisable  || codeEnable"
                                 class="example-margin">
                                 Loss on Gross only</mat-checkbox>
                         </div>

@@ -279,8 +279,7 @@
                             <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
                                 <input matInput="text" name="spouse" autocomplete="off" formControlName="nationality"/>
                                 <master-search #overlayNationality [MasterSearchData]="nationalityCode"
-                                class="masterSearch" (newRowClick)="nationalitySelected($event)"
-                  ></master-search>
+                                class="masterSearch" (newRowClick)="nationalitySelected($event)" ></master-search>
                             </mat-form-field>
                         </div>
             
@@ -357,8 +356,9 @@
                         </div>
                         <div class="col-md-4 d-flex align-items-center">
                             <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
-                                <input matInput="text" name="email" autocomplete="off" formControlName="loyalty"/>
-                                <master-search [MasterSearchData]="SchemeMasterFindData" class="masterSearch" (click)="getLoyaltyData()"
+                                <input matInput="text" name="email" autocomplete="off" formControlName="loyalty"
+                                (change)="loyaltyMasterSearch($event)"/>
+                                <master-search [MasterSearchData]="LoyaltyMasterFindData" class="masterSearch"
                                 (newRowClick)="stateSelected($event)"></master-search>
                             </mat-form-field>
                         </div>
@@ -393,22 +393,57 @@
 
             <div class="col-md-6">
                 <app-loader [isLoading]="isLoading" class="loader-overlay" ></app-loader>
-                <dx-data-grid width="100%" height="620px" #gridContainer id="gridContainer" [allowColumnReordering]="true"
+                <dx-data-grid width="100%" height="658px" #gridContainer id="gridContainer" [allowColumnReordering]="true"
                     [dataSource]="GridData" [showColumnLines]="true" [showRowLines]="true"
                     [showBorders]="true" [columnAutoWidth]="true" (onSelectionChanged)="onGridSelection($event)"
-                    [selectedRowKeys]="selectedRowKeys">
+                    [selectedRowKeys]="selectedRowKeys" *ngIf="!isLoading">
 
                     <dxo-filter-row [visible]="showFilterRow"></dxo-filter-row>
                     <dxo-paging [enabled]="false"></dxo-paging>
-                    <dxo-editing mode="cell" [allowUpdating]="true">
-                    </dxo-editing>
+                    <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
                     <dxo-selection mode="multiple" showCheckBoxesMode="always"></dxo-selection>
 
-                    <dxi-column alignment="center" dataField="VOCTYPE"></dxi-column>
-                    <dxi-column alignment="left" dataField="DESCRIPTION"></dxi-column>
+                    <dxi-column alignment="left" dataField="CODE" caption="Code" [allowResizing]="true" ></dxi-column>
+                    <dxi-column alignment="left" dataField="NAME" caption="Name" [allowResizing]="true" ></dxi-column>
+                    <dxi-column alignment="right" dataField="MOBILE" caption="Mobile" [allowResizing]="true" ></dxi-column>
+                    <dxi-column alignment="left" dataField="GENDER" caption="Gender" [allowResizing]="true" ></dxi-column>
+                    <dxi-column alignment="left" dataField="NATIONALITY" caption="Nationality" [allowResizing]="true" ></dxi-column>
+                    <dxi-column alignment="left" dataField="CITY" caption="City" [allowResizing]="true" ></dxi-column>
+                    <dxi-column alignment="left" dataField="CITY" caption="State" [allowResizing]="true" ></dxi-column>
+                    <dxi-column alignment="left" dataField="COUNTRY_CODE" caption="Country" [allowResizing]="true" ></dxi-column>
+                    <dxi-column alignment="left" dataField="TYPE" caption="Type" [allowResizing]="true" ></dxi-column>
+                    <dxi-column alignment="left" dataField="CATEGORY" caption="Category" [allowResizing]="true" ></dxi-column>
+                    <dxi-column alignment="right" dataField="DATE_OF_BIRTH" caption="Date Of Birth" [allowResizing]="true" 
+                    [customizeText]="customizeDateValue"></dxi-column>
+                    <dxi-column alignment="left" dataField="POSSMAN" caption="Sales Man" [allowResizing]="true" ></dxi-column>
+                    <dxi-column alignment="right" dataField="POSCUSTIDNO" caption="Customer ID" [allowResizing]="true" ></dxi-column>
+                    <dxi-column alignment="left" dataField="EMAIL1" caption="Email" [allowResizing]="true" ></dxi-column>
+                    <dxi-column alignment="left" dataField="MARITAL_ST" caption="Marital Status" [allowResizing]="true" ></dxi-column>
+                    <dxi-column alignment="right" dataField="SALAMOUNT" caption="Sales Amount" [allowResizing]="true" 
+                    [customizeText]="customizeContent"></dxi-column>
+                    <dxi-column alignment="right" dataField="TOTALSALES" caption="Total Sales" [allowResizing]="true" 
+                    [customizeText]="customizeContent"></dxi-column>
+                    <dxi-column alignment="left" dataField="CUST_TYPE" caption="Customer Type" [allowResizing]="true" ></dxi-column>
+                    <dxi-column alignment="right" dataField="LAST_UPDATED_DATE" caption="Last Updated Date" [allowResizing]="true" 
+                    [customizeText]="customizeDateValue"></dxi-column>
+                    <dxi-column alignment="right" dataField="SALVOCTYPE_NO" caption="Last Sale No." [allowResizing]="true" ></dxi-column>
+                    <dxi-column alignment="right" dataField="SALDATE" caption="Last Sale Date" [allowResizing]="true" 
+                    [customizeText]="customizeDateValue"></dxi-column>
+                    <dxi-column alignment="right" dataField="SALAMOUNT1" caption="Last Sale Amount" [allowResizing]="true" 
+                    [customizeText]="customizeContent"></dxi-column>
+                    <dxi-column alignment="left" dataField="SALBRLOC" caption="Last Sale Branch" [allowResizing]="true" ></dxi-column>
+
+
+
+                    <dxo-summary>
+                        <dxi-total-item column="Sales Amount" summaryType="sum" displayFormat="{0}" alignment="right"
+                        [customizeText]="customizeSummaryContent"></dxi-total-item>
+                        <dxi-total-item column="Total Sales" summaryType="sum" displayFormat="{0}" alignment="right"
+                        [customizeText]="customizeSummaryContent"></dxi-total-item>
+                    </dxo-summary>
                 </dx-data-grid>
 
-                <div class="row">
+                <div class="row" *ngIf="!isLoading">
                     <div class="my-2">
                         <div class="form-check">
                             <input class="form-check-input" formControlName="showPicture" type="checkbox" id="flexSwitchCheckDefault">
@@ -425,16 +460,36 @@
             </div>
             <div class="row">
                 <div class="col-md-2 mt-4">
-                    <button mat-flat-button color="primary" class="cancel-button btn-width mx-5"
+                    <button mat-flat-button color="primary" class="cancel-button Customer_btn-width mx-5"
                     (click)="customerSelection()"> Select Customer </button>
                 </div>
 
-                <div class="col-md-10">
+                <div class="col-md-10" [ngClass]="{'loading-class': isLoading }">
                     <app-report-screen-buttons (saveTemplateClick)="saveTemplate()" (previewClicked)="previewClick()"
                     (printClicked)="printBtnClick()"></app-report-screen-buttons>
                 </div>
             </div>
-            
         </div>
+
+        <dx-popup [width]="300" [height]="180" [showTitle]="true" container=".dx-viewport"
+        title="Template Data" [dragEnabled]="false" [showCloseButton]="false" (onHidden)="popupClosed()"
+        [visible]="popupVisible">
+            <div class="popup-content">
+                <div class="form-group">
+                    <label for="T_Name">Name:</label>
+                    <input type="text" id="T_Name" class="form-control" formControlName="templateName"/>
+                </div>
+                <div class="button-group d-flex">
+                    <button mat-flat-button [ngClass]="{SaveNew_template: templateNameHasValue,
+                        'btn-m-r-10': true, 'demo-button': true, 'btn-width': true, 'mx-1': true}"
+                    (click)="saveTemplate_DB()">
+                    {{ templateNameHasValue ? "Save as New Template" : "Save" }}
+                    </button>
+                    <button  mat-flat-button class="btn-m-r-10 btn-width mx-1 cancelBTN"
+                    (click)="popupClosed()">
+                    Cancel</button>
+                </div>
+            </div>
+        </dx-popup>
     </form>
 </div>
