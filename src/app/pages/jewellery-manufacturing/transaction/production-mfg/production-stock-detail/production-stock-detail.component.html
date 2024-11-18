@@ -182,9 +182,10 @@
                             <input type="text" matInput
                                 formControlName="SETTING_ACCODE"
                                 UpperCaseDirective
+                                (keydown)="lookupKeyPress($event,'SETTING_ACCODE')"
                                 (focusout)="validateLookupField($event,settingChrgData,'SETTING_ACCODE')" />
                             <master-search class="masterSearch"
-                                *ngIf="!viewMode"
+                                *ngIf="!viewMode" #settingChrgOverlay
                                 [MasterSearchData]="settingChrgData"
                                 (newRowClick)="settingChrgSelected($event)">
                             </master-search>
@@ -209,9 +210,10 @@
                             <input type="text" matInput
                                 formControlName="POLISH_ACCODE"
                                 UpperCaseDirective
+                                (keydown)="lookupKeyPress($event,'POLISH_ACCODE')"
                                 (focusout)="validateLookupField($event,polishChrgData,'POLISH_ACCODE')" />
                             <master-search class="masterSearch"
-                                *ngIf="!viewMode"
+                                *ngIf="!viewMode" #polishChrgOverlay
                                 [MasterSearchData]="polishChrgData"
                                 (newRowClick)="polishChrgSelected($event)">
                             </master-search>
@@ -236,9 +238,10 @@
                             <input type="text" matInput
                                 formControlName="RHODIUM_ACCODE"
                                 UpperCaseDirective
+                                (keydown)="lookupKeyPress($event,'RHODIUM_ACCODE')"
                                 (focusout)="validateLookupField($event,rhodiumChrgData,'RHODIUM_ACCODE')" />
                             <master-search class="masterSearch"
-                                *ngIf="!viewMode"
+                                *ngIf="!viewMode" #rhodiumChrgDataOverlay
                                 [MasterSearchData]="rhodiumChrgData"
                                 (newRowClick)="rhodiumChrgSelected($event)">
                             </master-search>
@@ -263,9 +266,10 @@
                             <input type="text" matInput
                                 formControlName="LABOUR_ACCODE"
                                 UpperCaseDirective
+                                (keydown)="lookupKeyPress($event,'LABOUR_ACCODE')"
                                 (focusout)="validateLookupField($event,labourChrgData,'LABOUR_ACCODE')" />
                             <master-search class="masterSearch"
-                                *ngIf="!viewMode"
+                                *ngIf="!viewMode" #labourChrgDataOverlay
                                 [MasterSearchData]="labourChrgData"
                                 (newRowClick)="labourChrgSelected($event)">
                             </master-search>
@@ -289,9 +293,10 @@
                             <input type="text" matInput
                                 formControlName="MISC_ACCODE"
                                 UpperCaseDirective
+                                (keydown)="lookupKeyPress($event,'MISC_ACCODE')"
                                 (focusout)="validateLookupField($event,miscChrgData,'MISC_ACCODE')" />
                             <master-search class="masterSearch"
-                                *ngIf="!viewMode"
+                                *ngIf="!viewMode" #miscChrgDataOverlay
                                 [MasterSearchData]="miscChrgData"
                                 (newRowClick)="miscChrgSelected($event)">
                             </master-search>
@@ -373,9 +378,10 @@
                             <input type="text" matInput
                                 formControlName="price1per"
                                 UpperCaseDirective
+                                (keydown)="lookupKeyPress($event,'price1per')"
                                 (focusout)="validateLookupField($event,priceCodeData,'price1per')" />
                             <master-search class="masterSearch"
-                                *ngIf="!viewMode"
+                                *ngIf="!viewMode" #priceCodeDataOverlay
                                 [MasterSearchData]="priceCodeData"
                                 (newRowClick)="priceOneCodeSelected($event)">
                             </master-search>
@@ -407,9 +413,10 @@
                             <input type="text" matInput
                                 formControlName="price2per"
                                 UpperCaseDirective
+                                (keydown)="lookupKeyPress($event,'price2per')"
                                 (focusout)="validateLookupField($event,priceCodeData,'price2per')" />
                             <master-search class="masterSearch"
-                                *ngIf="!viewMode"
+                                *ngIf="!viewMode" #priceCodeDataOverlay2
                                 [MasterSearchData]="priceCodeData"
                                 (newRowClick)="pricetwoCodeSelected($event)">
                             </master-search>
@@ -441,9 +448,10 @@
                             <input type="text" matInput
                                 formControlName="price3per"
                                 UpperCaseDirective
+                                (keydown)="lookupKeyPress($event,'price3per')"
                                 (focusout)="validateLookupField($event,priceCodeData,'price3per')" />
                             <master-search class="masterSearch"
-                                *ngIf="!viewMode"
+                                *ngIf="!viewMode" #priceCodeDataOverlay3
                                 [MasterSearchData]="priceCodeData"
                                 (newRowClick)="pricethreeCodeSelected($event)">
                             </master-search>
@@ -474,9 +482,10 @@
                             style="width: 100%;">
                             <input type="text" matInput
                                 formControlName="price4per"
+                                (keydown)="lookupKeyPress($event,'price4per')"
                                 (focusout)="validateLookupField($event,priceCodeData,'price4per')" />
                             <master-search class="masterSearch"
-                                *ngIf="!viewMode"
+                                *ngIf="!viewMode" #priceCodeDataOverlay4
                                 [MasterSearchData]="priceCodeData"
                                 (newRowClick)="pricefourCodeSelected($event)">
                             </master-search>
@@ -507,9 +516,10 @@
                             style="width: 100%;">
                             <input type="text" matInput
                                 formControlName="price5per"
+                                (keydown)="lookupKeyPress($event,'price5per')"
                                 (focusout)="validateLookupField($event,priceCodeData,'price5per')" />
                             <master-search class="masterSearch"
-                                *ngIf="!viewMode"
+                                *ngIf="!viewMode" #priceCodeDataOverlay5
                                 [MasterSearchData]="priceCodeData"
                                 (newRowClick)="pricefiveCodeSelected($event)">
                             </master-search>

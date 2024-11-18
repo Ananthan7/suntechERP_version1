@@ -5,8 +5,8 @@
             <i class="feather icon-x close-icon"></i>
         </button>
     </div>
-    
-<modal-header (cancelClick)="close()" (saveClick)="formSubmit()"></modal-header>
+
+    <modal-header (cancelClick)="close()" (saveClick)="formSubmit()"></modal-header>
 
 
 
@@ -22,10 +22,24 @@
                                         Branch Code :</label>
                                     <div class="col-sm-8">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" #codeInput matInput formControlName="branchcode"
-                                                UpperCaseDirective autocomplete="off" />
-                                            <master-search class="masterSearch" [MasterSearchData]="BranchData"
-                                                (newRowClick)="BranchDataSelected($event)">
+                                            <input type="text"  matInput formControlName="branchcode"
+                                                UpperCaseDirective autocomplete="off"
+                                                 (focusout)="
+                                                SPvalidateLookupFieldModified(
+                                                  $event,
+                                                  branchCodeData,
+                                                  ['branchcode'],
+                                                  false,
+                                                  ['BRANCH_CODE'],
+                                                  false
+                                                )
+                                              " />
+                                            <master-search 
+                                            class="masterSearch" 
+                                            [MasterSearchData]="branchCodeData"
+                                            (newRowClick)="
+                                            lookupSelect($event, 'branchcode', 'BRANCH_CODE')
+                                          ">
                                             </master-search>
                                         </mat-form-field>
                                     </div>
@@ -42,22 +56,13 @@
                                                 autocomplete="off" />
                                         </mat-form-field> -->
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input
-                                              matInput
-                                              [matDatepicker]="datefrom"
-                                              name="date_from"
-                                              placeholder="DD/MM/YYYY"
-                                              formControlName="date_from"
-                                              readonly="true"
-                                            />
-                                            <mat-datepicker-toggle
-                                              matSuffix
-                                              [for]="datefrom"
-                                            ></mat-datepicker-toggle>
-                                          </mat-form-field>
-                                          
-                                          <mat-datepicker #datefrom></mat-datepicker>
-                                          
+                                            <input matInput [matDatepicker]="datefrom" name="date_from"
+                                                placeholder="DD/MM/YYYY" formControlName="date_from" readonly="true" />
+                                            <mat-datepicker-toggle matSuffix [for]="datefrom"></mat-datepicker-toggle>
+                                        </mat-form-field>
+
+                                        <mat-datepicker #datefrom></mat-datepicker>
+
                                     </div>
                                 </div>
                             </div>
@@ -73,7 +78,7 @@
                                             <input type="text" #codeInput matInput formControlName="finyear"
                                                 UpperCaseDirective autocomplete="off" />
                                             <master-search class="masterSearch" [MasterSearchData]="BranchData"
-                                                (newRowClick)="BranchDataSelected($event)">
+                                                (newRowClick)="branchCodeSelected($event)">
                                             </master-search>
                                         </mat-form-field>
                                     </div>
@@ -90,21 +95,12 @@
                                                 autocomplete="off" />
                                         </mat-form-field> -->
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input
-                                              matInput
-                                              [matDatepicker]="dateto"
-                                              name="dateto"
-                                              placeholder="DD/MM/YYYY"
-                                              formControlName="dateto"
-                                              readonly="true"
-                                            />
-                                            <mat-datepicker-toggle
-                                              matSuffix
-                                              [for]="dateto"
-                                            ></mat-datepicker-toggle>
-                                          </mat-form-field>
-                                          
-                                          <mat-datepicker #dateto></mat-datepicker>
+                                            <input matInput [matDatepicker]="dateto" name="dateto"
+                                                placeholder="DD/MM/YYYY" formControlName="dateto" readonly="true" />
+                                            <mat-datepicker-toggle matSuffix [for]="dateto"></mat-datepicker-toggle>
+                                        </mat-form-field>
+
+                                        <mat-datepicker #dateto></mat-datepicker>
                                     </div>
                                 </div>
                             </div>
@@ -117,8 +113,8 @@
                             </div>
                             <div class="col-md-10">
                                 <mat-form-field style="width: 100%" appearance="outline">
-                                    <input type="text" #codeInput matInput formControlName="narration" UpperCaseDirective
-                                        autocomplete="off" />
+                                    <input type="text" #codeInput matInput formControlName="narration"
+                                        UpperCaseDirective autocomplete="off" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -129,7 +125,7 @@
                 <div class="row mt-2">
                     <div class="col-md-3">
                         <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true " [viewImportBtn]="false"
-                            [viewAddBtn]="!viewMode" [viewDeleteBtn]="!viewMode" (addClick)="addTableData()"
+                            [viewAddBtn]="!viewOnly" [viewDeleteBtn]="!viewOnly" (addClick)="addTableData()"
                             (deleteClick)="deleteTableData()">
                         </menu-buttons>
                     </div>

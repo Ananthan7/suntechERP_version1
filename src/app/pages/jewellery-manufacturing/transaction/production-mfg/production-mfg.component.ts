@@ -604,13 +604,15 @@ export class ProductionMfgComponent implements OnInit {
           }
           return
         }
-
+        if (FORMNAME === 'METAL_RATE'){
+          this.setMetalRate(data)
+        }
       }, err => {
         this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
       })
     this.subscriptions.push(Sub)
   }
-  setMetalRate() {
+  setMetalRate(data:any) {
   }
 
 
