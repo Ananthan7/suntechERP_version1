@@ -691,6 +691,7 @@ export class ProductionStockDetailComponent implements OnInit {
           this.commonService.toastErrorByMsgId('MSG1531')
           this.productionStockFrom.controls[FORMNAME].setValue('')
           LOOKUPDATA.SEARCH_VALUE = ''
+          this.showOverleyPanel(event, FORMNAME);
           return
         }
 

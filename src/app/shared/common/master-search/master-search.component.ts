@@ -178,12 +178,20 @@ export class MasterSearchComponent implements OnInit {
       case 269:
         this.setPURITY()
         break;
+      case 22:
+        this.setWHOLESALE_RATE()
+        break;
       //continue adding with conditions
       default:
         break;
     }
   }
 
+  setWHOLESALE_RATE() {
+    this.dataSource.forEach((item: any) => {
+      item.WHOLESALE_RATE = this.commonService.decimalQuantityFormat(item.WHOLESALE_RATE, 'RATE')
+    })
+  }
   setCurrencyRateConv() {
     this.dataSource.forEach((item: any) => {
       item.CONV_RATE = this.commonService.decimalQuantityFormat(item.CONV_RATE, 'RATE')
