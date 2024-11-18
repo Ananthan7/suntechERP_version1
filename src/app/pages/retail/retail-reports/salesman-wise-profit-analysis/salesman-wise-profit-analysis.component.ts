@@ -332,11 +332,11 @@ export class SalesmanWiseProfitAnalysisComponent implements OnInit {
         toDate: this.datePipe.transform(new Date(), 'yyyy-MM-dd')!,
       };
     }
-    this.isLoading = false;
     this.gridData();
   }
 
   gridData(){
+    this.isLoading = true;
     let API = "UspSmanDiaSalesNewNet/GetspSmanDiaSalesNewNet";
     let postData = { 
       "strFmDate": this.dateToPass.fromDate,   
@@ -349,13 +349,16 @@ export class SalesmanWiseProfitAnalysisComponent implements OnInit {
       (result) => {
         if (result && result.dynamicData && result.dynamicData.length > 0) {
           this.salesmanWiseProfitArr = result.dynamicData[0];
+          this.isLoading = false;
         } else {
           this.salesmanWiseProfitArr = [];
           this.toastr.warning('No data available for the given criteria.');
+          this.isLoading = false;
         }
       },
       (err) => {
         this.toastr.error(err.message || 'An error occurred while fetching the data.');
+        this.isLoading = false;
       }
     );
   }

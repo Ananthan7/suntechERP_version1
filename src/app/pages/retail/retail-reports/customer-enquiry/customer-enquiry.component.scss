@@ -32,7 +32,53 @@
     width: 80px; 
 }
 
-.btn-width {
+.Customer_btn-width {
     width: fit-content;
     text-align: center;
+}
+
+//Save new template pop up
+.popup-content {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 16px;
+  }
+  .form-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .form-group label {
+    width: 41px; 
+  }
+  .form-control {
+    flex: 1;
+    padding: 8px; 
+    border: 1px solid #ccc !important;
+}
+.SaveNew_template {
+    min-width: 125px;
+    white-space: normal;
+    padding-bottom: 0px;
+}
+.cancelBTN{
+    background-color: #B9C3D3;
+    width: 100px;
+}
+.btn-width {
+    width: 120px;
+    text-align: center;
+}
+.demo-button{
+    background-color: #295094 !important;
+    color: white;
+    padding: 5px 10px;
+    line-height: 1.5;
+}
+
+//Report screen disabling while report generation
+.loading-class {
+    pointer-events: none;
+    filter: grayscale(20%) blur(2px)
 }
