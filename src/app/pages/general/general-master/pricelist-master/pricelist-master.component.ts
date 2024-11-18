@@ -369,7 +369,8 @@ export class PricelistMasterComponent implements OnInit {
 
     let priceFormula = ''
     if (form.priceMethod == 0) {
-       priceFormula = `(((STOCK_LCCOST${form.addlValueSign}${Math.round(form.addlValue)})${form.priceSign}${Math.round(form.priceValue)})${form.finalPriceSign}${Math.round(form.finalPriceValue)})`;
+      //  priceFormula = `(((STOCK_LCCOST${form.addlValueSign}${Math.round(form.addlValue)})${form.priceSign}${Math.round(form.priceValue)})${form.finalPriceSign}${Math.round(form.finalPriceValue)})`;
+       priceFormula = `(((STOCK_LCCOST${form.addlValueSign}${form.addlValue})${form.priceSign}${form.priceValue})${form.finalPriceSign}${form.finalPriceValue})`;
 
       // priceFormula = `(((STOCK_LCCOST${form.addlValueSign}${form.addlValue.round()})${form.priceSign}${form.priceValue})${form.finalPriceSign}${form.finalPriceValue})`
       console.log(priceFormula);

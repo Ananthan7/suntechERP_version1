@@ -100,6 +100,7 @@ export class ApprovalMasterComponent implements OnInit {
         // this.processMasterForm();
       } else if (this.content.FLAG == 'EDIT') {
         this.editableMode = true;
+        this.codeEnable = false;
       } else if (this.content.FLAG == 'DELETE') {
         this.viewMode = true;
         this.deleteRecord()

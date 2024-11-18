@@ -1,0 +1,294 @@
+<div>
+    <!-- header section starts -->
+    <div class="card-content border-bottom d-flex justify-content-between p-2">
+        <h5 class="pos-modaltitle" id="modal-dia-metal">Jewellery Purchase Details (Other Amount)</h5>
+        <button type="button" class="btn btn-close close-btn" (click)="close()">
+            <i class="feather icon-x close-icon"></i>
+        </button>
+    </div>
+    <!-- modal header component -->
+    <modal-header (cancelClick)="close()"></modal-header>
+
+    <div class="p-4 ">
+        <form [formGroup]="JewellerypurchaseMasterDetailsForm">
+            <div class="row">
+                <div class="col-md-10">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h6>Extra Amount Details</h6>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="row">
+                                <label for="inputPassword" class="col-sm-4 col-form-label">
+                                    Code</label>
+                                <div class="col-sm-8">
+                                    <mat-form-field style="width: 100%" appearance="outline">
+                                        <input type="text" #codeInput matInput formControlName="code" UpperCaseDirective
+                                            autocomplete="off" />
+                                        <master-search class="masterSearch" [MasterSearchData]="DepartmentData"
+                                            (newRowClick)="BranchDataSelected($event)">
+                                        </master-search>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="row">
+                                <label for="inputPassword" class="col-sm-2 col-form-label">
+                                    Description</label>
+                                <div class="col-sm-10">
+                                    <mat-form-field style="width: 100%" appearance="outline">
+                                        <input type="text" #codeInput matInput formControlName="code" UpperCaseDirective
+                                            autocomplete="off" />
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+
+                    <div class="row">
+                        <label for="inputPassword" class="col-sm-4 col-form-label">
+                            Percentage</label>
+                        <div class="col-sm-8">
+                            <mat-form-field style="width: 100%" appearance="outline">
+                                <input type="text" #codeInput matInput formControlName="code" UpperCaseDirective
+                                    autocomplete="off" />
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="boxed-label mb-1">
+                        <h6>Debit</h6>
+                    </div>
+                    <div class="row">
+                        <label for="inputPassword" class="col-sm-4 col-form-label">
+                            Account Code</label>
+                        <div class="col-sm-8">
+                            <mat-form-field style="width: 100%" appearance="outline">
+                                <input type="text" #codeInput matInput formControlName="code" UpperCaseDirective
+                                    autocomplete="off" />
+                                <master-search class="masterSearch" [MasterSearchData]="DepartmentData"
+                                    (newRowClick)="BranchDataSelected($event)">
+                                </master-search>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label for="inputPassword" class="col-sm-4 col-form-label">
+                            Currency</label>
+                        <div class="col-sm-8">
+                            <mat-form-field style="width: 100%" appearance="outline">
+                                <input type="text" #codeInput matInput formControlName="code" UpperCaseDirective
+                                    autocomplete="off" />
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label for="inputPassword" class="col-sm-4 col-form-label">
+                            Amount LC</label>
+                        <div class="col-sm-8">
+                            <mat-form-field style="width: 100%" appearance="outline">
+                                <input type="text" #codeInput matInput formControlName="code" UpperCaseDirective
+                                    autocomplete="off" />
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label for="inputPassword" class="col-sm-4 col-form-label">
+                            Amount FC</label>
+                        <div class="col-sm-8">
+                            <mat-form-field style="width: 100%" appearance="outline">
+                                <input type="text" #codeInput matInput formControlName="code" UpperCaseDirective
+                                    autocomplete="off" />
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label for="inputPassword" class="col-sm-4 col-form-label">
+                            Amount LC + Tax</label>
+                        <div class="col-sm-8">
+                            <mat-form-field style="width: 100%" appearance="outline">
+                                <input type="text" #codeInput matInput formControlName="code" UpperCaseDirective
+                                    autocomplete="off" />
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label for="inputPassword" class="col-sm-4 col-form-label">
+                            Amount LC + Tax</label>
+                        <div class="col-sm-8">
+                            <mat-form-field style="width: 100%" appearance="outline">
+                                <input type="text" #codeInput matInput formControlName="code" UpperCaseDirective
+                                    autocomplete="off" />
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label for="inputPassword" class="col-sm-4 col-form-label">
+                            Amount FC + Tax</label>
+                        <div class="col-sm-8">
+                            <mat-form-field style="width: 100%" appearance="outline">
+                                <input type="text" #codeInput matInput formControlName="code" UpperCaseDirective
+                                    autocomplete="off" />
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="mb-5"></div>
+                    <div class="boxed-label">
+                        <h6>Quantity & component Details</h6>
+                    </div>
+                    <div class="your-box-container">
+                        <div class="row">
+                            <label for="inputPassword" class="col-sm-4 col-form-label">
+                                VAT No</label>
+                            <div class="col-sm-8">
+                                <mat-form-field style="width: 100%" appearance="outline">
+                                    <input type="text" #codeInput matInput formControlName="code" UpperCaseDirective
+                                        autocomplete="off" />
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label for="inputPassword" class="col-sm-4 col-form-label">
+                                Invoice No</label>
+                            <div class="col-sm-8">
+                                <mat-form-field style="width: 100%" appearance="outline">
+                                    <input type="text" #codeInput matInput formControlName="code" UpperCaseDirective
+                                        autocomplete="off" />
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label for="inputPassword" class="col-sm-4 col-form-label">
+                                HSN Code</label>
+                            <div class="col-sm-8">
+                                <mat-form-field style="width: 100%;"  appearance="outline">
+                                    <mat-select>
+                                        <mat-option></mat-option>
+                                        <mat-option></mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label for="inputPassword" class="col-sm-4 col-form-label">
+                                VAT %</label>
+                            <div class="col-sm-8">
+                                <mat-form-field style="width: 100%" appearance="outline">
+                                    <input type="text" #codeInput matInput formControlName="code" UpperCaseDirective
+                                        autocomplete="off" />
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label for="inputPassword" class="col-sm-4 col-form-label">
+                                Vat Amount</label>
+                            <div class="col-sm-8">
+                                <mat-form-field style="width: 100%" appearance="outline">
+                                    <input type="text" #codeInput matInput formControlName="code" UpperCaseDirective
+                                        autocomplete="off" />
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="mb-5"></div>
+
+                    <div class="boxed-label mb-1">
+                        <h6>Credit</h6>
+                    </div>
+                    <div class="row">
+                        <label for="inputPassword" class="col-sm-4 col-form-label">
+                            Account Code</label>
+                        <div class="col-sm-8">
+                            <mat-form-field style="width: 100%" appearance="outline">
+                                <input type="text" #codeInput matInput formControlName="code" UpperCaseDirective
+                                    autocomplete="off" />
+                                <master-search class="masterSearch" [MasterSearchData]="DepartmentData"
+                                    (newRowClick)="BranchDataSelected($event)">
+                                </master-search>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label for="inputPassword" class="col-sm-4 col-form-label">
+                            Currency</label>
+                        <div class="col-sm-8">
+                            <mat-form-field style="width: 100%" appearance="outline">
+                                <input type="text" #codeInput matInput formControlName="code" UpperCaseDirective
+                                    autocomplete="off" />
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label for="inputPassword" class="col-sm-4 col-form-label">
+                            Amount LC</label>
+                        <div class="col-sm-8">
+                            <mat-form-field style="width: 100%" appearance="outline">
+                                <input type="text" #codeInput matInput formControlName="code" UpperCaseDirective
+                                    autocomplete="off" />
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label for="inputPassword" class="col-sm-4 col-form-label">
+                            Amount FC</label>
+                        <div class="col-sm-8">
+                            <mat-form-field style="width: 100%" appearance="outline">
+                                <input type="text" #codeInput matInput formControlName="code" UpperCaseDirective
+                                    autocomplete="off" />
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label for="inputPassword" class="col-sm-4 col-form-label">
+                            Amount LC + Tax</label>
+                        <div class="col-sm-8">
+                            <mat-form-field style="width: 100%" appearance="outline">
+                                <input type="text" #codeInput matInput formControlName="code" UpperCaseDirective
+                                    autocomplete="off" />
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label for="inputPassword" class="col-sm-4 col-form-label">
+                            Amount LC + Tax</label>
+                        <div class="col-sm-8">
+                            <mat-form-field style="width: 100%" appearance="outline">
+                                <input type="text" #codeInput matInput formControlName="code" UpperCaseDirective
+                                    autocomplete="off" />
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label for="inputPassword" class="col-sm-4 col-form-label">
+                            Amount FC + Tax</label>
+                        <div class="col-sm-8">
+                            <mat-form-field style="width: 100%" appearance="outline">
+                                <input type="text" #codeInput matInput formControlName="code" UpperCaseDirective
+                                    autocomplete="off" />
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-10 mt-3">
+                    <div class="row">
+                        <label for="inputPassword" class="col-sm-2 col-form-label">
+                            Remark
+                        </label>
+                        <div class="col-sm-10">
+                            <mat-form-field style="width: 100%" appearance="outline">
+                                <input type="text" #codeInput matInput formControlName="code" UpperCaseDirective
+                                    autocomplete="off" />
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

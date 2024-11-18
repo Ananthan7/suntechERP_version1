@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { JewelleryPurchaseDetailComponent } from './jewellery-purchase-detail/jewellery-purchase-detail.component';
+import { JewelleryPurchaseOtherAmountComponent } from './jewellery-purchase-other-amount/jewellery-purchase-other-amount.component';
 
 @Component({
   selector: 'app-jewellerypurchase',
@@ -53,7 +54,12 @@ export class JewellerypurchaseComponent implements OnInit {
   }
 
   AddNewOtherAmountTableData(){
-
+    this.modalReference = this.modalService.open(JewelleryPurchaseOtherAmountComponent, {
+      size: 'xl',
+      backdrop: true,//'static'
+      keyboard: false,
+      windowClass: 'modal-full-width',
+    });
   }
 
   deleteTableData() { }

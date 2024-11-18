@@ -20,7 +20,7 @@
                 <mat-form-field appearance="outline" style="width: 100%;">
                   <input type="text" matInput class="text-left" formControlName="code"
                     [readonly]="editableMode || viewMode" id="code" (keyup)="codeEnabled()"
-                    (focusout)="codeValidate()"
+                    (focusout)="codeValidate($event)"
                     oninput="this.value = this.value.toUpperCase()" maxlength="6" appNoEmptySpace />
                 </mat-form-field>
               </div>

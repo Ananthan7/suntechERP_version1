@@ -121,3 +121,7 @@
 }
 
 
+.loading-class {
+    pointer-events: none;
+    filter: grayscale(20%) blur(2px)
+}

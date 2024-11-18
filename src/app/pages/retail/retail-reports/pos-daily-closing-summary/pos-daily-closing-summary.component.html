@@ -285,12 +285,13 @@
                                     <dxi-column dataField="mkgrate" caption="Mkg. Rate" [allowResizing]="true" alignment="right"></dxi-column>
                                     <dxi-column dataField="mkgvalue" caption="Mkg. Value" [allowResizing]="true" alignment="right"></dxi-column>
                                     <dxi-column dataField="metalvalue" caption="Metal Value" [allowResizing]="true" alignment="right"></dxi-column>
-                                    <dxi-column dataField="amount" caption="Total Amount" [allowResizing]="true" alignment="right"></dxi-column>
+                                    <dxi-column dataField="amount" caption="Total Amount" [allowResizing]="true" alignment="right"
+                                    [customizeText]="customizeContent"></dxi-column>
 
 
                                     <dxi-column dataField="qty" caption="qty" [allowResizing]="true" alignment="right"></dxi-column>
                                     <dxi-column dataField="division_code" caption="division_code" [allowResizing]="true"
-                                    alignment="right"></dxi-column>
+                                    alignment="left"></dxi-column>
                                     <dxi-column [allowResizing]="true" dataField="netwt" caption="netwt" alignment="right"></dxi-column>
                                     <dxi-column [allowResizing]="true" dataField="kundanwt" caption="kundanwt" alignment="right"></dxi-column>
                                     <dxi-column [allowResizing]="true" dataField="kundanvalue" caption="kundanvalue" alignment="right"></dxi-column>
@@ -304,7 +305,8 @@
 
                                         <dxi-total-item column="mkgvalue" summaryType="sum" displayFormat="{0}" alignment="right"></dxi-total-item>
                                         <dxi-total-item column="metalvalue" summaryType="sum" displayFormat="{0}" alignment="right"></dxi-total-item>
-                                        <dxi-total-item column="amount" summaryType="sum" displayFormat="{0}" alignment="right"></dxi-total-item>
+                                        <dxi-total-item column="amount" summaryType="sum" displayFormat="{0}" alignment="right"
+                                        [customizeText]="customizeSummaryContent"></dxi-total-item>
                                     </dxo-summary>
                                 </dx-data-grid>
                             </div>
@@ -423,7 +425,7 @@
             </div>
         </div>
 
-        <div class="row mt-2 justify-content-end mx-2">
+        <div class="row mt-2 justify-content-end mx-2" [ngClass]="{'loading-class': isLoading }">
             <app-report-screen-buttons (saveTemplateClick)="saveTemplate()" (previewClicked)="previewClick()"
             (printClicked)="printBtnClick()"></app-report-screen-buttons>
         </div>
