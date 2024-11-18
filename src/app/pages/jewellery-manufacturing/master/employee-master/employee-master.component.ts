@@ -1,10 +1,11 @@
 import { DatePipe } from '@angular/common';
-import { Component, Input, OnInit, Renderer2 } from '@angular/core';
+import { Component, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
+import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import Swal from 'sweetalert2';
 
@@ -15,6 +16,19 @@ import Swal from 'sweetalert2';
 })
 export class EmployeeMasterComponent implements OnInit {
   @Input() content!: any;
+
+  @ViewChild('overlayBranchSearch') overlayBranchSearch!: MasterSearchComponent;
+  @ViewChild('overlayDepartmentSearch') overlayDepartmentSearch!: MasterSearchComponent; //
+  @ViewChild('overlayDesignationSearch') overlayDesignationSearch!: MasterSearchComponent;
+  @ViewChild('overlayGradeSearch') overlayGradeSearch!: MasterSearchComponent;
+  @ViewChild('overlayReligionSearch') overlayReligionSearch!: MasterSearchComponent;
+  @ViewChild('overlayCountrySearch') overlayCountrySearch!: MasterSearchComponent;
+  @ViewChild('overlayStateSearch') overlayStateSearch!: MasterSearchComponent;
+  @ViewChild('overlayPRCityDataSearch') overlayPRCityDataSearch!: MasterSearchComponent;
+  @ViewChild('overlayPRStateCodeDataSearch') overlayPRStateCodeDataSearch!: MasterSearchComponent;
+  @ViewChild('overlayPRCountryCodeSearch') overlayPRCountryCodeSearch!: MasterSearchComponent;
+  @ViewChild('overlayCitySearch') overlayCitySearch!: MasterSearchComponent;
+  @ViewChild('overlayNationalitySearch') overlayNationalitySearch!: MasterSearchComponent; 
 
   selectedTabIndex = 0;
   tableData: any = [];
@@ -173,7 +187,7 @@ export class EmployeeMasterComponent implements OnInit {
     VIEW_TABLE: true,
   }
 
-  
+
   GenderList = [
     {
       name: 'Male',
@@ -366,6 +380,132 @@ export class EmployeeMasterComponent implements OnInit {
   addTableData() { }
 
   deleteTableData() { }
+
+  lookupKeyPress(event: any, form?: any) {
+    if (event.key == 'Tab' && event.target.value == '') {
+      this.showOverleyPanel(event, form)
+    }
+    if (event.key === 'Enter') {
+      if (event.target.value == '') this.showOverleyPanel(event, form)
+      event.preventDefault();
+    }
+  }
+
+
+
+  showOverleyPanel(event: any, formControlName: string) {
+    switch (formControlName) {
+      case 'Branch':
+        this.overlayBranchSearch.showOverlayPanel(event);
+        break;
+      case 'Department':
+        this.overlayDepartmentSearch.showOverlayPanel(event);
+        break;
+      case 'Designation':
+        this.overlayDesignationSearch.showOverlayPanel(event);
+        break;
+      case 'Grade':
+        this.overlayGradeSearch.showOverlayPanel(event);
+        break;
+      case 'Religion':
+        this.overlayReligionSearch.showOverlayPanel(event);
+        break;
+      case 'Nationality':
+        this.overlayNationalitySearch.showOverlayPanel(event);
+        break;
+      case 'Country':
+        this.overlayCountrySearch.showOverlayPanel(event);
+        break;
+      case 'State':
+        this.overlayStateSearch.showOverlayPanel(event);
+        break;
+      case 'City':
+        this.overlayCitySearch.showOverlayPanel(event);
+        break;
+      case 'PRCity':
+        this.overlayPRCityDataSearch.showOverlayPanel(event);
+        break;
+      case 'PRStateCodeData':
+        this.overlayPRStateCodeDataSearch.showOverlayPanel(event);
+        break;
+      case 'PRCountryCodeData':
+        this.overlayPRCountryCodeSearch.showOverlayPanel(event);
+        break;
+      default:
+    }
+  }
+
+  openOverlay(FORMNAME: string, event: any) {
+    switch (FORMNAME) {
+      case 'Branch':
+        this.overlayBranchSearch.showOverlayPanel(event);
+        break;
+      case 'Department':
+        this.overlayDepartmentSearch.showOverlayPanel(event);
+        break;
+      case 'Designation':
+        this.overlayDesignationSearch.showOverlayPanel(event);
+        break;
+      case 'Grade':
+        this.overlayGradeSearch.showOverlayPanel(event);
+        break;
+      case 'Religion':
+        this.overlayReligionSearch.showOverlayPanel(event);
+        break;
+      case 'Nationality':
+        this.overlayNationalitySearch.showOverlayPanel(event);
+        break;
+      case 'Country':
+        this.overlayCountrySearch.showOverlayPanel(event);
+        break;
+      case 'State':
+        this.overlayStateSearch.showOverlayPanel(event);
+        break;
+      case 'City':
+        this.overlayCitySearch.showOverlayPanel(event);
+        break;
+      case 'PRCity':
+        this.overlayPRCityDataSearch.showOverlayPanel(event);
+        break;
+      case 'PRStateCodeData':
+        this.overlayPRStateCodeDataSearch.showOverlayPanel(event);
+        break;
+      case 'PRCountryCodeData':
+        this.overlayPRCountryCodeSearch.showOverlayPanel(event);
+        break;
+      default:
+    }
+  }
+
+  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    LOOKUPDATA.SEARCH_VALUE = event.target.value
+    if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
+    let param = {
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+    }
+    this.commonService.toastInfoByMsgId('MSG81447');
+    let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
+      .subscribe((result) => {
+        let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+        if (data.length == 0) {
+          this.commonService.toastErrorByMsgId('MSG1531')
+          this.employeeMasterForm.controls[FORMNAME].setValue('')
+          // this.renderer.selectRootElement(FORMNAME).focus();
+          LOOKUPDATA.SEARCH_VALUE = ''
+          this.openOverlay(FORMNAME, event);
+          return
+        }
+
+
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+      })
+    this.subscriptions.push(Sub)
+  }
+
+
 
   setFormValues() {
     if (!this.content) return

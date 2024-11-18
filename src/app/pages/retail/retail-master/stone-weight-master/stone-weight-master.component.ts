@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
+import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import Swal from 'sweetalert2';
@@ -47,6 +48,8 @@ export class StoneWeightMasterComponent implements OnInit {
     private formBuilder: FormBuilder,
     private toastr: ToastrService,
     private dataService: SuntechAPIService,
+    // private apiService: SuntechAPIService,
+    private commonService: CommonServiceService,
 
   ) { }
 
@@ -78,6 +81,8 @@ export class StoneWeightMasterComponent implements OnInit {
     WHERECONDITION: "CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
   }
   sieveSetcodeSelected(value: any) {
     console.log(value);
@@ -94,6 +99,8 @@ export class StoneWeightMasterComponent implements OnInit {
     WHERECONDITION: "DIVISION_CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
   }
   divisionCodeSelected(e: any) {
     console.log(e);
@@ -110,6 +117,8 @@ export class StoneWeightMasterComponent implements OnInit {
     WHERECONDITION: "types = 'SIEVE MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
   }
 
   sievecodeselected(e: any) {
@@ -128,6 +137,8 @@ export class StoneWeightMasterComponent implements OnInit {
     WHERECONDITION: "types = 'SIEVE MASTER' AND CODE > ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
   }
 
   sievetoselected(e: any) {
@@ -146,6 +157,8 @@ export class StoneWeightMasterComponent implements OnInit {
     WHERECONDITION: "CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
   }
   ShapecodeSelected(value: any) {
     console.log(value);
@@ -162,7 +175,8 @@ export class StoneWeightMasterComponent implements OnInit {
     WHERECONDITION: "TYPES = 'SIZE MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
-    LOAD_ONCLICK: true
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
   }
   sizefromselected(e: any) {
     console.log(e);
@@ -180,7 +194,8 @@ export class StoneWeightMasterComponent implements OnInit {
     WHERECONDITION: "TYPES = 'SIZE MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
-    LOAD_ONCLICK: true
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
   }
 
   sizetoselected(e: any) {
@@ -191,9 +206,9 @@ export class StoneWeightMasterComponent implements OnInit {
   ngOnInit(): void {
     console.log(this.content);
     if (this.content?.FLAG == "EDIT" || this.content?.FLAG == "VIEW") {
-      if(this.content?.FLAG == "VIEW"){
+      if (this.content?.FLAG == "VIEW") {
         this.viewOnly = true;
-      }else{
+      } else {
         this.viewOnly = false;
       }
       this.mid = this.content.MID;
@@ -400,5 +415,147 @@ export class StoneWeightMasterComponent implements OnInit {
 
   addTableData() {
 
+  }
+
+  SPvalidateLookupFieldModified(
+    event: any,
+    LOOKUPDATA: MasterSearchModel,
+    FORMNAMES: string[],
+    isCurrencyField: boolean,
+    lookupFields?: string[],
+    FROMCODE?: boolean
+  ) {
+    const searchValue = event.target.value?.trim();
+
+    if (!searchValue || this.flag == "VIEW") return;
+
+    LOOKUPDATA.SEARCH_VALUE = searchValue;
+
+    const param = {
+      PAGENO: LOOKUPDATA.PAGENO,
+      RECORDS: LOOKUPDATA.RECORDS,
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECONDITION: LOOKUPDATA.WHERECONDITION,
+      searchField: LOOKUPDATA.SEARCH_FIELD,
+      searchValue: LOOKUPDATA.SEARCH_VALUE,
+    };
+
+    this.commonService.showSnackBarMsg("MSG81447");
+
+    const sub: Subscription = this.dataService
+      .postDynamicAPI("MasterLookUp", param)
+      .subscribe({
+        next: (result: any) => {
+          this.commonService.closeSnackBarMsg();
+          const data = result.dynamicData?.[0];
+
+          console.log("API Response Data:", data);
+
+          if (data?.length) {
+            if (LOOKUPDATA.FRONTENDFILTER && LOOKUPDATA.SEARCH_VALUE) {
+
+              let searchResult = this.commonService.searchAllItemsInArray(
+                data,
+                LOOKUPDATA.SEARCH_VALUE
+              );
+
+              console.log("Filtered Search Result:", searchResult);
+
+              if (FROMCODE === true) {
+                searchResult = [
+                  ...searchResult.filter(
+                    (item: any) =>
+                      item.MobileCountryCode === LOOKUPDATA.SEARCH_VALUE
+                  ),
+                  ...searchResult.filter(
+                    (item: any) =>
+                      item.MobileCountryCode !== LOOKUPDATA.SEARCH_VALUE
+                  ),
+                ];
+              } else if (FROMCODE === false) {
+                searchResult = [
+                  ...searchResult.filter(
+                    (item: any) => item.DESCRIPTION === LOOKUPDATA.SEARCH_VALUE
+                  ),
+                  ...searchResult.filter(
+                    (item: any) => item.DESCRIPTION !== LOOKUPDATA.SEARCH_VALUE
+                  ),
+                ];
+              }
+
+              if (searchResult?.length) {
+                const matchedItem = searchResult[0];
+
+                FORMNAMES.forEach((formName, index) => {
+                  const field = lookupFields?.[index];
+                  if (field && field in matchedItem) {
+
+                    this.stoneweightmaster.controls[formName].setValue(
+                      matchedItem[field]
+                    );
+                  } else {
+                    console.error(
+                      `Property ${field} not found in matched item.`
+                    );
+                    this.commonService.toastErrorByMsgId("No data found");
+                    this.clearLookupData(LOOKUPDATA, FORMNAMES);
+                  }
+                });
+              } else {
+                this.commonService.toastErrorByMsgId("No data found");
+                this.clearLookupData(LOOKUPDATA, FORMNAMES);
+              }
+            }
+          } else {
+            this.commonService.toastErrorByMsgId("No data found");
+            this.clearLookupData(LOOKUPDATA, FORMNAMES);
+          }
+        },
+        error: () => {
+          this.commonService.toastErrorByMsgId("MSG2272");
+          this.clearLookupData(LOOKUPDATA, FORMNAMES);
+        },
+      });
+
+    this.subscriptions.push(sub);
+  }
+
+  clearLookupData(LOOKUPDATA: MasterSearchModel, FORMNAMES: string[]) {
+    LOOKUPDATA.SEARCH_VALUE = "";
+    FORMNAMES.forEach((formName) => {
+      this.stoneweightmaster.controls[formName].setValue("");
+    });
+  }
+
+  lookupSelect(e: any, controller?: any, modelfield?: any) {
+    console.log(e);
+    if (Array.isArray(controller) && Array.isArray(modelfield)) {
+      // Handle multiple controllers and fields
+      if (controller.length === modelfield.length) {
+        controller.forEach((ctrl, index) => {
+          const field = modelfield[index];
+          const value = e[field];
+          if (value !== undefined) {
+            this.stoneweightmaster.controls[ctrl].setValue(value);
+          } else {
+            console.warn(`Model field '${field}' not found in event object.`);
+          }
+        });
+      } else {
+        console.warn(
+          "Controller and modelfield arrays must be of equal length."
+        );
+      }
+    } else if (controller && modelfield) {
+      // Handle single controller and field
+      const value = e[modelfield];
+      if (value !== undefined) {
+        this.stoneweightmaster.controls[controller].setValue(value);
+      } else {
+        console.warn(`Model field '${modelfield}' not found in event object.`);
+      }
+    } else {
+      console.warn("Controller or modelfield is missing.");
+    }
   }
 }
