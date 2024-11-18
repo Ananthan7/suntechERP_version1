@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { ProductionEntryDetailsComponent } from '../production-entry-details/production-entry-details.component';
+import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 
 @Component({
   selector: 'app-production-stock-detail',
@@ -690,6 +691,7 @@ export class ProductionStockDetailComponent implements OnInit {
           this.commonService.toastErrorByMsgId('MSG1531')
           this.productionStockFrom.controls[FORMNAME].setValue('')
           LOOKUPDATA.SEARCH_VALUE = ''
+          this.showOverleyPanel(event, FORMNAME);
           return
         }
 
@@ -728,6 +730,65 @@ export class ProductionStockDetailComponent implements OnInit {
     let result = Decimal ? this.commonService.setCommaSerperatedNumber(value, Decimal) : value
     this.productionStockFrom.controls[formControlName]?.setValue(result)
     this.FORM_VALIDATER[formControlName] = result
+  }
+  lookupKeyPress(event: any, form?: any) {
+    if (event.key == 'Tab' && event.target.value == '') {
+      this.showOverleyPanel(event, form)
+    }
+    if (event.key === 'Enter') {
+      if (event.target.value == '') this.showOverleyPanel(event, form)
+      event.preventDefault();
+    }
+  }
+  @ViewChild('settingChrgOverlay') settingChrgOverlay!: MasterSearchComponent;
+  @ViewChild('polishChrgOverlay') polishChrgOverlay!: MasterSearchComponent;
+  @ViewChild('rhodiumChrgDataOverlay') rhodiumChrgDataOverlay!: MasterSearchComponent;
+  @ViewChild('labourChrgDataOverlay') labourChrgDataOverlay!: MasterSearchComponent;
+  @ViewChild('miscChrgDataOverlay') miscChrgDataOverlay!: MasterSearchComponent;
+  @ViewChild('priceCodeDataOverlay') priceCodeDataOverlay!: MasterSearchComponent;
+  @ViewChild('priceCodeDataOverlay2') priceCodeDataOverlay2!: MasterSearchComponent;
+  @ViewChild('priceCodeDataOverlay3') priceCodeDataOverlay3!: MasterSearchComponent;
+  @ViewChild('priceCodeDataOverlay4') priceCodeDataOverlay4!: MasterSearchComponent;
+  @ViewChild('priceCodeDataOverlay5') priceCodeDataOverlay5!: MasterSearchComponent;
+
+  showOverleyPanel(event: any, formControlName: string) {
+    if (event.target.value != '') return
+    switch (formControlName) {
+      case 'SETTING_ACCODE':
+        this.settingChrgOverlay.showOverlayPanel(event);
+        break;
+      case 'POLISH_ACCODE':
+        this.polishChrgOverlay.showOverlayPanel(event);
+        break;
+      case 'RHODIUM_ACCODE':
+        this.rhodiumChrgDataOverlay.showOverlayPanel(event);
+        break;
+      case 'LABOUR_ACCODE':
+        this.labourChrgDataOverlay.showOverlayPanel(event);
+        break;
+      case 'MISC_ACCODE':
+        this.miscChrgDataOverlay.showOverlayPanel(event);
+        break;
+      case 'price1per':
+        this.priceCodeDataOverlay.showOverlayPanel(event);
+        break;
+      case 'price2per':
+        this.priceCodeDataOverlay2.showOverlayPanel(event);
+        break;
+      case 'price3per':
+        this.priceCodeDataOverlay3.showOverlayPanel(event);
+        break;
+      case 'price4per':
+        this.priceCodeDataOverlay4.showOverlayPanel(event);
+        break;
+      case 'price5per':
+        this.priceCodeDataOverlay5.showOverlayPanel(event);
+        break;
+      // case 'CUSTOMER_CODE':
+      //   this.priceSchemeOverlay.showOverlayPanel(event);
+      //   break;
+      default:
+    }
   }
   ngOnDestroy() {
     if (this.subscriptions.length > 0) {

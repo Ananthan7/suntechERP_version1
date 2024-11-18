@@ -20,6 +20,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
   @ViewChild('customerCodeOverlay') customerCodeOverlay!: MasterSearchComponent;
   @ViewChild('designCodeOverlay') designCodeOverlay!: MasterSearchComponent;
   @ViewChild('locationCodeOverlay') locationCodeOverlay!: MasterSearchComponent;
+  @ViewChild('loctypeCodeOverlay') loctypeCodeOverlay!: MasterSearchComponent;
   @ViewChild('price1CodeOverlay') price1CodeOverlay!: MasterSearchComponent;
   @ViewChild('prefixCodeOverlay') prefixCodeOverlay!: MasterSearchComponent;
   @ViewChild('price2CodeOverlay') price2CodeOverlay!: MasterSearchComponent;
@@ -560,9 +561,11 @@ export class ProductionEntryDetailsComponent implements OnInit {
           } else {
             this.setFormNullToString('JOB_NUMBER', '')
             this.commonService.toastErrorByMsgId('MSG1871')
+            this.jobnoCodeOverlay.showOverlayPanel(event)
             return
           }
         } else {
+          this.jobnoCodeOverlay.showOverlayPanel(event)
           this.commonService.toastErrorByMsgId('MSG1747')
         }
       }, err => {
@@ -901,6 +904,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
           this.commonService.toastErrorByMsgId('MSG1531')
           this.productiondetailsFrom.controls[formControlName].setValue('')
           LOOKUPDATA.SEARCH_VALUE = ''
+          this.showOverleyPanel(event, formControlName);
           return
         }
         if (formControlName == 'PREFIX') this.prefixCodeValidate()
@@ -1150,6 +1154,9 @@ export class ProductionEntryDetailsComponent implements OnInit {
         break;
       case 'location':
         this.locationCodeOverlay.showOverlayPanel(event);
+        break;
+      case 'LOCTYPE_CODE':
+        this.loctypeCodeOverlay.showOverlayPanel(event);
         break;
       case 'price1':
         this.price1CodeOverlay.showOverlayPanel(event);

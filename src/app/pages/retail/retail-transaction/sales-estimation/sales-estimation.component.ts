@@ -2740,14 +2740,15 @@ export class SalesEstimationComponent implements OnInit {
     //   false
     // );
     if (this.viewOnly) {
-      this.modalService.dismissAll(data);
+      this.activeModal.close('reloadMainGrid');
     } else {
       this.openDialog('Warning', this.comFunc.getMsgByID('MSG1212'), false);
 
       this.dialogBox.afterClosed().subscribe((action: any) => {
         if (action == 'Yes') {
+          this.activeModal.close();
 
-          this.modalService.dismissAll(data);
+          // this.modalService.dismissAll(data);
 
         }
       });
@@ -2893,7 +2894,9 @@ export class SalesEstimationComponent implements OnInit {
     if (!this.viewOnly) {
       this.salesReturnForm.controls.fcn_returns_branch.setValue(this.strBranchcode);
       this.salesReturnForm.controls.fcn_returns_fin_year.setValue(this.baseYear);
-      this.salesReturnForm.controls.fcn_returns_voc_type.setValue(this.vocType);
+      this.salesReturnForm.controls.fcn_returns_voc_type.setValue('POS');
+
+      // this.salesReturnForm.controls.fcn_returns_voc_type.setValue(this.vocType);
     }
 
     if (content._declarationTContainer.localNames[0] !==
@@ -8778,10 +8781,13 @@ export class SalesEstimationComponent implements OnInit {
       this.ordered_items = [];
       this.sales_returns_items = [];
       this.exchange_items = [];
-      this.open(this.mymodal, false, null, false, false)
+      this.viewOnly=false;
+      this.open(this.mymodal, false, null, false, false);
+      this.renderer.selectRootElement('#fcn_li_item_code')?.focus();
     }
     else {
       this.isPrintingEnabled = true;
+      this.viewOnly=true;
     }
   }
 
@@ -8858,6 +8864,15 @@ export class SalesEstimationComponent implements OnInit {
       // if (this.validateSalesReturnCust()) {
       //   return;
       // }
+      if (this.customerDataForm.value.tourVatRefuncYN && !this.customerDataForm.value.tourVatRefundNo) {
+        this.openDialog('Warning', 'Please fill Tourist VAT Details', true);
+        this.dialogBox.afterClosed().subscribe((data: any) => {
+          if (data == 'OK') { 
+            this.renderer.selectRootElement('#tourVatRefundNo').focus();
+          }
+        })
+        return
+      }
 
       const postData = {
         karatRate: this.karatRateDetails,
@@ -9204,7 +9219,7 @@ export class SalesEstimationComponent implements OnInit {
                 if (res.status == 'SUCCESS') {
                   this.snackBar.open('POS Updated Successfully', 'OK');
                   this.isNewButtonDisabled = false;
-                  this.viewOnly=true;
+                  // this.viewOnly=true;
                   this.vocDataForm.controls['fcn_voc_no'].setValue(res.response.retailEstimation.VOCNO);
 
                   // this.close('reloadMainGrid');
@@ -9268,7 +9283,7 @@ export class SalesEstimationComponent implements OnInit {
                 // let mid;
                 // mid = res.response.retailSales.MID;
                 this.midForInvoce = res.response.retailEstimation.MID;
-                this.viewOnly=true;
+                
                 // this.content.MID = res.response.retailSales.MID;
                 // console.log(this.content.MID)
                 // if (this.midForInvoce) {

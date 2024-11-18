@@ -20,7 +20,8 @@
                     </div>
                     <div class="col-md-7">
                         <mat-form-field style="width: 100%;" appearance="outline">
-                            <input type="text" id="inputPassword" matInput formControlName="target_amount" />
+                            <input type="number" id="inputPassword" matInput formControlName="target_amount"
+                                AmountDecimalInput class="text-right" />
                         </mat-form-field>
                     </div>
                     <div class="col-md-2">
@@ -29,242 +30,301 @@
                 </div>
 
             </div>
-        
 
-        <div class="col-md-6">
 
-            <div class="row">
-                <div class="boxed-label">
-                    <h6>General Filter</h6>
-                </div>
-                <div class="your-box-container">
-                    <div class="row">
-                        <label for="input" is="ID001" class="col-sm-4 col-form-label">Detail Target Code
-                            :</label>
-                        <div class="col-sm-8">
-                            <mat-form-field appearance="outline" style="width: 100%;">
-                                <input type="text" #codeInput maxlength="15" matInput
-                                    formControlName="detail_target_code">
+            <div class="col-md-6">
 
-                            </mat-form-field>
-                        </div>
+                <div class="row">
+                    <div class="boxed-label">
+                        <h6>General Filter</h6>
                     </div>
-                    <div class="row">
-                        <label for="input" is="ID001" class="col-sm-4 col-form-label">Description
-                            :</label>
-                        <div class="col-sm-8">
-                            <mat-form-field appearance="outline" style="width: 100%;">
-                                <input type="text" #codeInput maxlength="15" matInput formControlName="description">
-                            </mat-form-field>
-                        </div>
-                    </div>
+                    <div class="your-box-container">
+                        <div class="row">
+                            <label for="input" is="ID001" class="col-sm-4 col-form-label">Detail Target Code
+                                :</label>
+                            <div class="col-sm-8">
+                                <mat-form-field appearance="outline" style="width: 100%;">
+                                    <input type="text" #codeInput maxlength="15" matInput
+                                        formControlName="detail_target_code">
 
-                    <div class="row">
-                        <label for="input" is="ID001" class="col-sm-4 col-form-label">Division
-                            :</label>
-                        <div class="col-sm-8">
-                            <!-- <mat-form-field appearance="outline" style="width: 100%;">
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label for="input" is="ID001" class="col-sm-4 col-form-label">Description
+                                :</label>
+                            <div class="col-sm-8">
+                                <mat-form-field appearance="outline" style="width: 100%;">
+                                    <input type="text" #codeInput maxlength="15" matInput formControlName="description">
+                                </mat-form-field>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <label for="input" is="ID001" class="col-sm-4 col-form-label">Division
+                                :</label>
+                            <div class="col-sm-8">
+                                <!-- <mat-form-field appearance="outline" style="width: 100%;">
                             <input type="text" #codeInput maxlength="15" matInput formControlName="division">
                         </mat-form-field> -->
 
-                            <mat-form-field style="width: 100%" appearance="outline">
-                                <mat-select formControlName="division">
-                                    <mat-option *ngFor="let data of divisionlist" [value]="data.field">
-                                        {{ data.field }}
-                                    </mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                        </div>
-                    </div>
+                                <mat-form-field style="width: 100%" appearance="outline">
+                                    <mat-select formControlName="division" [(value)]="selectedDivision">
+                                        <mat-option *ngFor="let data of divisionlist" [value]="data.value">
+                                            {{ data.field }}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
 
-                    <div class="row">
-                        <label for="input" is="ID001" class="col-sm-4 col-form-label">Target On
-                            :</label>
-                        <div class="col-sm-8">
-                            <!-- <mat-form-field appearance="outline" style="width: 100%;">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <label for="input" is="ID001" class="col-sm-4 col-form-label">Target On
+                                :</label>
+                            <div class="col-sm-8">
+                                <!-- <mat-form-field appearance="outline" style="width: 100%;">
                             <input type="text" #codeInput maxlength="15" matInput formControlName="target_on">
                         </mat-form-field> -->
-                            <mat-form-field style="width: 100%" appearance="outline">
-                                <mat-select formControlName="target_on">
-                                    <mat-option *ngFor="let data of targetonlist" [value]="data.field">
-                                        {{ data.field }}
-                                    </mat-option>
-                                </mat-select>
-                            </mat-form-field>
+                                <mat-form-field style="width: 100%" appearance="outline">
+                                    <mat-select formControlName="target_on">
+                                        <mat-option *ngFor="let data of targetonlist" [value]="data.field">
+                                            {{ data.field }}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
                         </div>
+
+                        <div class="row mb-1">
+                            <label for="input" is="ID001" class="col-sm-4 col-form-label">Customer
+                                :</label>
+                            <div class="col-sm-6">
+                                <mat-form-field appearance="outline" style="width: 100%;">
+                                    <input type="text" #codeInput maxlength="15" matInput formControlName="customer"
+                                        (focusout)="
+                                                SPvalidateLookupFieldModified(
+                                                  $event,
+                                                  customerCodeData,
+                                                  ['customer'],
+                                                  false,
+                                                  ['ACCODE'],
+                                                  false
+                                                )
+                                              ">
+                                    <master-search [MasterSearchData]="customerCodeData" class="masterSearch"
+                                        (newRowClick)="selectedcustomercode($event)"></master-search>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-2">
+                                <button mat-raised-button color="primary" (click)="clear('customer')">Clear</button>
+                            </div>
+                        </div>
+
+                        <div class="row mb-1">
+                            <label for="input" is="ID001" class="col-sm-4 col-form-label">Country
+                                :</label>
+                            <div class="col-sm-6">
+                                <mat-form-field appearance="outline" style="width: 100%;">
+                                    <input type="text" #codeInput maxlength="15" matInput formControlName="country"
+                                        (focusout)="
+                                SPvalidateLookupFieldModified(
+                                  $event,
+                                  CountryCodeData,
+                                  ['country'],
+                                  false,
+                                  ['CODE'],
+                                  false
+                                )
+                              ">
+                                    <master-search [MasterSearchData]="CountryCodeData" class="masterSearch"
+                                        (newRowClick)="countrySelected($event)"></master-search>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-2 mb-1">
+                                <button mat-raised-button color="primary" (click)="clear('country')">Clear</button>
+                            </div>
+                        </div>
+
+                        <div class="row mb-1">
+                            <label for="input" is="ID001" class="col-sm-4 col-form-label">Area
+                                :</label>
+                            <div class="col-sm-6">
+                                <mat-form-field appearance="outline" style="width: 100%;">
+                                    <input type="text" #codeInput maxlength="15" matInput formControlName="area"
+                                        (focusout)="
+                                SPvalidateLookupFieldModified(
+                                  $event,
+                                  areacodedata,
+                                  ['area'],
+                                  false,
+                                  ['CODE'],
+                                  false
+                                )
+                              ">
+                                    <master-search [MasterSearchData]="areacodedata" class="masterSearch"
+                                        (newRowClick)="areaSelected($event)"></master-search>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-2">
+                                <button mat-raised-button color="primary" (click)="clear('area')">Clear</button>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <label for="input" is="ID001" class="col-sm-4 col-form-label">Divisions
+                                :</label>
+                            <div class="col-sm-6">
+                                <mat-form-field appearance="outline" style="width: 100%;">
+                                    <input type="text" #codeInput maxlength="15" matInput formControlName="divisions"
+                                        (focusout)="
+                                SPvalidateLookupFieldModified(
+                                  $event,
+                                  divisionCodeData,
+                                  ['divisions'],
+                                  false,
+                                  ['DIVISION_CODE'],
+                                  false
+                                )
+                              ">
+                                    <master-search [MasterSearchData]="divisionCodeData" class="masterSearch"
+                                        (newRowClick)="divisionCodeSelected($event)"></master-search>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-2">
+                                <button mat-raised-button color="primary" (click)="clear('divisions')">Clear</button>
+                            </div>
+                        </div>
+
+
                     </div>
+                </div>
 
-                    <div class="row mb-1">
-                        <label for="input" is="ID001" class="col-sm-4 col-form-label">Customer
-                            :</label>
-                        <div class="col-sm-6">
-                            <mat-form-field appearance="outline" style="width: 100%;">
-                                <input type="text" #codeInput maxlength="15" matInput formControlName="customer">
-                                <master-search [MasterSearchData]="enteredCodeData" class="masterSearch"
-                                    (newRowClick)="enteredCodeSelected($event)"></master-search>
-                            </mat-form-field>
-                        </div>
-                        <div class="col-md-2">
-                            <button mat-raised-button color="primary" (click)="clear('customer')">Clear</button>
-                        </div>
+                <div class="row mt-2">
+                    <div class="boxed-label">
+                        <h6>Inventory Filters</h6>
                     </div>
+                    <div class="your-box-container">
 
-                    <div class="row mb-1">
-                        <label for="input" is="ID001" class="col-sm-4 col-form-label">Country
-                            :</label>
-                        <div class="col-sm-6">
-                            <mat-form-field appearance="outline" style="width: 100%;">
-                                <input type="text" #codeInput maxlength="15" matInput formControlName="country">
-                                <master-search [MasterSearchData]="enteredCodeData" class="masterSearch"
-                                    (newRowClick)="enteredCodeSelected($event)"></master-search>
-                            </mat-form-field>
+                        <div class="row mb-1">
+                            <div class="col-md-2">
+                                <mat-form-field style="width: 100%" appearance="outline">
+                                    <mat-select formControlName="type1">
+                                        <mat-option *ngFor="let data of typeList" [value]="data.field">
+                                            {{ data.field }}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+
+
+                            <div class="col-sm-8">
+                                <mat-form-field appearance="outline" style="width: 100%;">
+                                    <input type="text" #codeInput maxlength="15" matInput
+                                        formControlName="detail_target_code1">
+                                    <master-search [MasterSearchData]="enteredCodeData" class="masterSearch"
+                                        (newRowClick)="enteredCodeSelected($event)"></master-search>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="col-md-2">
+                                <button mat-raised-button color="primary"
+                                    (click)="clear('detail_target_code1')">Clear</button>
+                            </div>
                         </div>
-                        <div class="col-md-2 mb-1">
-                            <button mat-raised-button color="primary" (click)="clear('country')">Clear</button>
+
+                        <div class="row mb-1">
+                            <div class="col-md-2">
+                                <mat-form-field style="width: 100%" appearance="outline">
+                                    <mat-select formControlName="type2">
+                                        <mat-option *ngFor="let data of typeList" [value]="data.field">
+                                            {{ data.field }}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+
+
+                            <div class="col-sm-8">
+                                <mat-form-field appearance="outline" style="width: 100%;">
+                                    <input type="text" #codeInput maxlength="15" matInput
+                                        formControlName="detail_target_code2" (focusout)="
+                                    SPvalidateLookupFieldModified(
+                                      $event,
+                                      enteredCodeData,
+                                      ['detail_target_code2'],
+                                      false,
+                                      ['DIVISION_CODE'],
+                                      false
+                                    )
+                                  ">
+                                    <master-search [MasterSearchData]="enteredCodeData" class="masterSearch"
+                                        (newRowClick)="enteredCodeSelected($event)"></master-search>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-2">
+                                <button mat-raised-button color="primary"
+                                    (click)="clear('detail_target_code2')">Clear</button>
+
+                            </div>
                         </div>
+
+                        <div class="row">
+                            <div class="col-md-2">
+                                <mat-form-field style="width: 100%" appearance="outline">
+                                    <mat-select formControlName="type3">
+                                        <mat-option *ngFor="let data of typeList" [value]="data.field">
+                                            {{ data.field }}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+
+
+                            <div class="col-sm-8">
+                                <mat-form-field appearance="outline" style="width: 100%;">
+                                    <input type="text" #codeInput maxlength="15" matInput
+                                        formControlName="detail_target_code3" (focusout)="
+                                SPvalidateLookupFieldModified(
+                                  $event,
+                                  enteredCodeData,
+                                  ['detail_target_code3'],
+                                  false,
+                                  ['DIVISION_CODE'],
+                                  false
+                                )
+                              ">
+                                    <master-search [MasterSearchData]="enteredCodeData" class="masterSearch"
+                                        (newRowClick)="enteredCodeSelected($event)"></master-search>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="col-md-2">
+                                <button mat-raised-button color="primary"
+                                    (click)="clear('detail_target_code3')">Clear</button>
+                            </div>
+                        </div>
+
                     </div>
-
-                    <div class="row mb-1">
-                        <label for="input" is="ID001" class="col-sm-4 col-form-label">Area
-                            :</label>
-                        <div class="col-sm-6">
-                            <mat-form-field appearance="outline" style="width: 100%;">
-                                <input type="text" #codeInput maxlength="15" matInput formControlName="area">
-                                <master-search [MasterSearchData]="enteredCodeData" class="masterSearch"
-                                    (newRowClick)="enteredCodeSelected($event)"></master-search>
-                            </mat-form-field>
-                        </div>
-                        <div class="col-md-2">
-                            <button mat-raised-button color="primary" (click)="clear('area')">Clear</button>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <label for="input" is="ID001" class="col-sm-4 col-form-label">Divisions
-                            :</label>
-                        <div class="col-sm-6">
-                            <mat-form-field appearance="outline" style="width: 100%;">
-                                <input type="text" #codeInput maxlength="15" matInput formControlName="divisions">
-                                <master-search [MasterSearchData]="enteredCodeData" class="masterSearch"
-                                    (newRowClick)="enteredCodeSelected($event)"></master-search>
-                            </mat-form-field>
-                        </div>
-                        <div class="col-md-2">
-                            <button mat-raised-button color="primary" (click)="clear('divisions')">Clear</button>
-                        </div>
-                    </div>
-
-
                 </div>
             </div>
 
-            <div class="row mt-2">
-                <div class="boxed-label">
-                    <h6>Inventory Filters</h6>
-                </div>
-                <div class="your-box-container">
+            <div class="col-md-6 mt-1">
+                <dx-data-grid style=" height: 350px;">
+                    <dxi-column dataField="MONTH" caption="Month"></dxi-column>
+                    <dxi-column dataField="TARGET_AMOUNT" caption="Target Amount"></dxi-column>
+                </dx-data-grid>
 
-                    <div class="row mb-1">
-                        <div class="col-md-2">
-                            <mat-form-field style="width: 100%" appearance="outline">
-                                <mat-select formControlName="type1">
-                                    <mat-option *ngFor="let data of typeList" [value]="data.field">
-                                        {{ data.field }}
-                                    </mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                        </div>
-
-
-                        <div class="col-sm-8">
-                            <mat-form-field appearance="outline" style="width: 100%;">
-                                <input type="text" #codeInput maxlength="15" matInput
-                                    formControlName="detail_target_code1">
-                                <master-search [MasterSearchData]="enteredCodeData" class="masterSearch"
-                                    (newRowClick)="enteredCodeSelected($event)"></master-search>
-                            </mat-form-field>
-                        </div>
-
-                        <div class="col-md-2">
-                            <button mat-raised-button color="primary"
-                                (click)="clear('detail_target_code1')">Clear</button>
-                        </div>
-                    </div>
-
-                    <div class="row mb-1">
-                        <div class="col-md-2">
-                            <mat-form-field style="width: 100%" appearance="outline">
-                                <mat-select formControlName="type2">
-                                    <mat-option *ngFor="let data of typeList" [value]="data.field">
-                                        {{ data.field }}
-                                    </mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                        </div>
-
-
-                        <div class="col-sm-8">
-                            <mat-form-field appearance="outline" style="width: 100%;">
-                                <input type="text" #codeInput maxlength="15" matInput
-                                    formControlName="detail_target_code2">
-                                <master-search [MasterSearchData]="enteredCodeData" class="masterSearch"
-                                    (newRowClick)="enteredCodeSelected($event)"></master-search>
-                            </mat-form-field>
-                        </div>
-                        <div class="col-md-2">
-                            <button mat-raised-button color="primary"
-                                (click)="clear('detail_target_code2')">Clear</button>
-
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-2">
-                            <mat-form-field style="width: 100%" appearance="outline">
-                                <mat-select formControlName="type3">
-                                    <mat-option *ngFor="let data of typeList" [value]="data.field">
-                                        {{ data.field }}
-                                    </mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                        </div>
-
-
-                        <div class="col-sm-8">
-                            <mat-form-field appearance="outline" style="width: 100%;">
-                                <input type="text" #codeInput maxlength="15" matInput
-                                    formControlName="detail_target_code3">
-                                <master-search [MasterSearchData]="enteredCodeData" class="masterSearch"
-                                    (newRowClick)="enteredCodeSelected($event)"></master-search>
-                            </mat-form-field>
-                        </div>
-
-                        <div class="col-md-2">
-                            <button mat-raised-button color="primary"
-                                (click)="clear('detail_target_code3')">Clear</button>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-6 mt-1">
-            <dx-data-grid style=" height: 350px;">
-                <dxi-column dataField="MONTH" caption="Month"></dxi-column>
-                <dxi-column dataField="TARGET_AMOUNT" caption="Target Amount"></dxi-column>
-            </dx-data-grid>
-
-            <div class="row mt-4">
-                <label class="col-form-label">Target Selection</label>
+                <div class="row mt-4">
+                    <label class="col-form-label">Target Selection</label>
                     <mat-form-field style="width: 100%;" appearance="outline">
                         <textarea matInput id="inputAddress" formControlName="target_selection" rows="4"></textarea>
                     </mat-form-field>
-                
-            </div>
 
+                </div>
+
+            </div>
         </div>
-    </div>
 
     </form>
 
