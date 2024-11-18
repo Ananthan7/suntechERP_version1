@@ -1,5 +1,6 @@
 {  
-    "baseUrl": "http://uatdata.suntechlive.com:118/api/",
+    "baseUrl": "http://94.200.156.234:85/api/",
+    "//baseUrl": "http://uatdata.suntechlive.com:118/api/",
     "//baseUrl_JHR": "http://5.195.165.122:106/api/",
     "//baseUrl_MEENA": "http://5.195.165.122:94/api/",
     "//baseUrl": "http://94.200.156.234:443/api/",
