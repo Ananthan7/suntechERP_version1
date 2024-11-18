@@ -431,7 +431,7 @@ export class ComponentMasterComponent implements OnInit {
   }
 
 
- 
+
 
 
   divisionCodeSelected(value: any, data: any, controlName: string) {
@@ -717,12 +717,12 @@ export class ComponentMasterComponent implements OnInit {
     let Sub: Subscription = this.dataService
       .getDynamicAPI(
         `DesignMaster/GetComponentsGridinCompMaster/${this.componentmasterForm.value.code}`
-      ) .subscribe((result) => {
+      ).subscribe((result) => {
         this.snackBar.dismiss();
         if (result.status == "Success") {
           const data = result.dynamicData;
         }
-    });
+      });
   }
 
   sizeCodeSelected(e: any) {
@@ -811,12 +811,12 @@ export class ComponentMasterComponent implements OnInit {
   // }
 
   close(data?: any) {
-    if (data){
+    if (data) {
       this.viewMode = true;
       this.activeModal.close(data);
       return
     }
-    if (this.content && this.content.FLAG == 'VIEW'){
+    if (this.content && this.content.FLAG == 'VIEW') {
       this.activeModal.close(data);
       return
     }
@@ -1032,6 +1032,14 @@ export class ComponentMasterComponent implements OnInit {
     console.log(this.tableData);
 
     let form = this.componentmasterForm.value
+    // let heightValueData = form.height.toFixed(2);
+    // let heightValueData = parseFloat(form.height).toFixed(2);
+    // let lengthValueData = parseFloat(form.length).toFixed(2);
+    let heightValueData = !isNaN(parseFloat(form.height)) ? parseFloat(form.height) : 0;
+    let formattedHeight = heightValueData % 1 === 0 ? heightValueData.toString() : heightValueData.toFixed(2);
+    let lengthValueData = !isNaN(parseFloat(form.length)) ? parseFloat(form.length) : 0;
+    let formattedLength = lengthValueData % 1 === 0 ? lengthValueData.toString() : lengthValueData.toFixed(2);
+
     let postData = {
       "DESIGN_CODE": this.commonService.nullToString(form.code) || "",
       "DESIGN_DESCRIPTION": this.commonService.nullToString(form.codedes) || "",
@@ -1288,9 +1296,9 @@ export class ComponentMasterComponent implements OnInit {
       "CC_MAKING": "",
       "STONE_INCLUDED": false,
       "CAD_REQUIRED": false,
-      "HEIGHT": this.commonService.nullToString(form.height),
+      "HEIGHT": this.commonService.nullToString(formattedHeight),
       "RADIUS": this.commonService.nullToString(form.radius),
-      "LENGTH": this.commonService.nullToString(form.length),
+      "LENGTH": this.commonService.nullToString(formattedLength),
       "COMPSIZE_CODE": this.commonService.nullToString(form.size),
       "COMPSET_CODE": this.commonService.nullToString(form.sizeSet),
       "PROD_VARIANCE": 0,
