@@ -123,5 +123,5 @@
 
 .loading-class {
     pointer-events: none;
-    // background-color: rgba(218, 215, 215, 0.7);
+    filter: grayscale(20%) blur(2px)
 }
