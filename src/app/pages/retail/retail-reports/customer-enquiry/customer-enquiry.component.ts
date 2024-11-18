@@ -484,8 +484,6 @@ export class CustomerEnquiryComponent implements OnInit {
          })
       }
     };
-    console.log(payload)
-    return
     this.commonService.showSnackBarMsg('MSG81447');
     this.dataService.postDynamicAPI('ExecueteSPInterface', payload)
     .subscribe((result: any) => {
