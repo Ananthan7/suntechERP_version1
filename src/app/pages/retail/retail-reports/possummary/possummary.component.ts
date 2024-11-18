@@ -1,7 +1,10 @@
+import { DatePipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrService } from 'ngx-toastr';
 import { CommonServiceService } from 'src/app/services/common-service.service';
+import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 
 @Component({
   selector: 'app-possummary',
@@ -38,7 +41,8 @@ export class POSSummaryComponent implements OnInit {
   templateNameHasValue: boolean = false
 
   constructor(private activeModal: NgbActiveModal, private formBuilder: FormBuilder,
-    private commonService: CommonServiceService) { }
+    private commonService: CommonServiceService, private dataService: SuntechAPIService,
+    private toastr: ToastrService, private datePipe: DatePipe) { }
 
   ngOnInit(): void {
     this.prefillScreenValues();
@@ -60,9 +64,11 @@ export class POSSummaryComponent implements OnInit {
   setDateValue(event: any){
     if(event.FromDate){
       this.POS_SummaryForm.controls.fromdate.setValue(event.FromDate);
+      this.dateToPass.fromDate = this.datePipe.transform(event.FromDate, 'yyyy-MM-dd')!
     }
     else if(event.ToDate){
       this.POS_SummaryForm.controls.todate.setValue(event.ToDate);
+      this.dateToPass.toDate = this.datePipe.transform(event.ToDate, 'yyyy-MM-dd')!
     }
   }
 
@@ -148,8 +154,34 @@ export class POSSummaryComponent implements OnInit {
 
   }
   POSCollectnGridData(){
-
+    this.isLoading = true;
+    let API = "RptPOSSummaryShowPosNetCollectionNet";
+    let postData = { 
+      "Branches": this.POS_SummaryForm.controls.branch.value,
+      "FromDate": this.dateToPass.fromDate,
+      "ToDate": this.dateToPass.toDate,
+      "Vouchers": "",
+      "ShopCtrlAc": ""
+    };
+    this.dataService.postDynamicAPI(API, postData).subscribe(
+      (result) => {
+        if (result && result.dynamicData && result.dynamicData.length > 0) {
+          console.log(result)
+          // this.salesmanWiseProfitArr = result.dynamicData[0];
+          // this.isLoading = false;
+        } else {
+          // this.salesmanWiseProfitArr = [];
+          // this.toastr.warning('No data available for the given criteria.');
+          // this.isLoading = false;
+        }
+      },
+      (err) => {
+        // this.toastr.error(err.message || 'An error occurred while fetching the data.');
+        // this.isLoading = false;
+      }
+    );
   }
+ 
   posPurchaseGridData(){
 
   }
