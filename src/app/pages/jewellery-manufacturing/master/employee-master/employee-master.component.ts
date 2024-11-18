@@ -40,7 +40,7 @@ export class EmployeeMasterComponent implements OnInit {
   isDisabled: boolean = false;
   editableMode: boolean = false;
   currentDate = new Date();
-
+  maindetails:any[]=[];
 
 
   BranchData: MasterSearchModel = {
@@ -252,6 +252,12 @@ export class EmployeeMasterComponent implements OnInit {
     PRLand: [''],
     PRMoblieCode: [''],
     PRMoblieNo: [''],
+    addRow:[''],
+    todate:[''],
+    code1:[''],
+    documentnumber:[''],
+    description:[''],
+    media:[''],
   })
 
   constructor(
@@ -377,7 +383,18 @@ export class EmployeeMasterComponent implements OnInit {
     this.employeeMasterForm.controls.PRCity.setValue(e.CODE)
   }
 
-  addTableData() { }
+  addTableData() {
+      
+      const addRow = {
+        CODE: this.employeeMasterForm.controls.code1.value,
+        DESCRIPTION: this.employeeMasterForm.controls.description.value,
+        DOCUMENT_NO: this.employeeMasterForm.controls.documentnumber.value,
+        TODATE: this.employeeMasterForm.controls.todate.value,
+        ATTACHMENT:this.employeeMasterForm.controls.media.value,
+      };
+      console.log(addRow);
+      this.maindetails.push(addRow);
+  }
 
   deleteTableData() { }
 
