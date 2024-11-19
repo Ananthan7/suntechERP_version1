@@ -508,10 +508,19 @@ moveCharacter(value: string, index: number, direction: number): string {
       this.commonService.toastErrorByMsgId('MSG1933')//User Name Cannot be empty
       return true
     }
+    
     else if (this.checkFinalApproval()) {
       this.commonService.toastErrorByMsgId('MSG81520')//Final option should be selected
       return true
     }
+
+    // this.tableData.forEach((item: any, index: number) => {
+    //   const userId = item.USER_CODE;
+    //   if (userId != '') {        
+    //     this.commonService.toastErrorByMsgId('MSG1933');
+    //     return;
+    // }
+    // });
 
     return false;
   }
@@ -548,8 +557,9 @@ moveCharacter(value: string, index: number, direction: number): string {
       // console.log('mobileNo:', mobileNo);
       // console.log('emailId:', emailId);
 
-      if (userId != '') {        
+      if (userId == undefined) {     
           this.commonService.toastErrorByMsgId('MSG1933');
+          conditionMet = true;
           return;
       }
 
@@ -567,27 +577,12 @@ moveCharacter(value: string, index: number, direction: number): string {
           conditionMet = true;
           return;
         }
-      }
+      }return
     });
 
 
 
-
-    // if (this.approvalMasterForm.invalid) {
-    //   this.toastr.error('Select all required fields');
-    //   return;
-    // }
-
-
     if (!conditionMet) {
-      // Continue with the rest of your code for submission
-      // if (this.checkFinalApproval()) {
-      //   this.toastr.error('final optional should be selected');
-      //   return;
-      // }
-
-
-
 
       // Omit mobilenum and emailId from postData when mobileCheck or emailCheck is true
       const postData: any = {

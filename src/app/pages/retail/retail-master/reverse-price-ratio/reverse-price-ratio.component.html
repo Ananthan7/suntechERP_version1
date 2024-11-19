@@ -16,8 +16,8 @@
                 <div class="col-md-2">
                     <div>
                         <mat-radio-group aria-label="Select an option" formControlName="metalDiamond">
-                            <mat-radio-button value="true"  class="mx-3"> Metal </mat-radio-button>
-                            <mat-radio-button value="false"  class="mx-3">Diamond</mat-radio-button>
+                            <mat-radio-button [value]="true"  class="mx-3"> Metal </mat-radio-button>
+                            <mat-radio-button [value]="false"  class="mx-3">Diamond</mat-radio-button>
                         </mat-radio-group>
                     </div>
                 </div>
@@ -27,7 +27,7 @@
                             :</label>
                         <div class="col-sm-6">
                             <mat-form-field appearance="outline" style="width: 100%;">
-                                <input type="text" #codeInput maxlength="15" matInput formControlName="divisioncode">
+                                <input type="text" #codeInput maxlength="1" matInput formControlName="divisioncode">
 
                             </mat-form-field>
                         </div>
