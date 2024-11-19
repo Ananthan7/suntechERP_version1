@@ -1072,7 +1072,7 @@ export class DepartmentMasterComponent implements OnInit {
     this.departmentMasterForm.controls.CreditExpensesLeaveSal.setValue(this.content.LV_SCHEME)
     this.departmentMasterForm.controls.CreditExpensesAirTicket.setValue(this.content.GR_SCHEME)
     this.departmentMasterForm.controls.CreditExpensesGratuity.setValue(this.content.TK_SCHEME)
-    this.departmentMasterForm.controls.IDebitExpCode.setValue(this.content.COMP_LB_CODE)
+    this.departmentMasterForm.controls.AIDebitExpCode.setValue(this.content.COMP_LB_CODE)
     this.departmentMasterForm.controls.AICreditCode.setValue(this.content.OT_CODE)
     this.departmentMasterForm.controls.OtherAmountValue.setValue(this.content.PDEPTMST_OTHER_ACCODE)
     this.departmentMasterForm.controls.OtherAmount.setValue(this.content.PDEPTMST_OTHERAC)
@@ -1081,6 +1081,8 @@ export class DepartmentMasterComponent implements OnInit {
     this.departmentMasterForm.controls.Shift1Break2.setValue(this.content.PDEPTMST_SHIFT1BREAK2)
     this.departmentMasterForm.controls.Shift2Break2.setValue(this.content.PDEPTMST_SHIFT2BREAK2)
     this.departmentMasterForm.controls.Shift3Break2.setValue(this.content.PDEPTMST_SHIFT3BREAK2)
+
+
   }
 
   setPostData() {
@@ -1124,7 +1126,7 @@ export class DepartmentMasterComponent implements OnInit {
       "LV_SCHEME": this.commonService.nullToString(form.CreditExpensesLeaveSal),
       "GR_SCHEME": this.commonService.nullToString(form.CreditExpensesAirTicket),
       "TK_SCHEME": this.commonService.nullToString(form.CreditExpensesGratuity),
-      "COMP_LB_CODE": this.commonService.nullToString(form.IDebitExpCode),
+      "COMP_LB_CODE": this.commonService.nullToString(form.AIDebitExpCode),
       "OT_CODE": this.commonService.nullToString(form.AICreditCode),
       "PDEPTMST_OTHER_ACCODE": this.commonService.nullToString(form.OtherAmountValue),
       "PDEPTMST_OTHERAC": this.onchangeCheckBoxNum(form.OtherAmount),

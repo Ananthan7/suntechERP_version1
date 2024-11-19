@@ -26,7 +26,7 @@ export class LoanSalaryAdvanceMasterComponent implements OnInit {
   editableMode: boolean = false;
   editMode: boolean = false;
   codeEnable: boolean = false;
-
+  currentDate = new Date()
   LoanSalaryAdvanceMasterForm: FormGroup = this.formBuilder.group({
       mid: [''],
       vocno: [''],
@@ -116,10 +116,30 @@ export class LoanSalaryAdvanceMasterComponent implements OnInit {
         this.deleteRecord();
       }
     }
+    this.generateVocNo();
+    this.setvoucherTypeMaster();
+    this.LoanSalaryAdvanceMasterForm.controls.voc_type.setValue(this.commonService.getqueryParamVocType())
+    this.LoanSalaryAdvanceMasterForm.controls.voc_date.setValue(this.commonService.currentDate);
   }
+  generateVocNo() {
+    const API = `GenerateNewVoucherNumber/GenerateNewVocNum/${this.commonService.getqueryParamVocType()}/${this.commonService.branchCode}/${this.commonService.yearSelected}/${this.commonService.formatYYMMDD(this.currentDate)}`;
+    this.dataService.getDynamicAPI(API)
+      .subscribe((resp) => {
+        if (resp.status == "Success") {
+          console.log(resp);
+          
+          this.LoanSalaryAdvanceMasterForm.controls.vocno.setValue(resp.newvocno);
+       }
+  });
+ }
 
-
-
+ setvoucherTypeMaster() {
+  let frm = this.LoanSalaryAdvanceMasterForm.value
+  const vocTypeMaster = this.commonService.getVoctypeMasterByVocTypeMain(frm.branch_code, frm.voc_type, frm.dt_voctype)
+  console.log(vocTypeMaster);
+  
+}
+  
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
