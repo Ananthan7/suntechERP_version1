@@ -17,6 +17,7 @@ import { MasterSearchComponent } from "src/app/shared/common/master-search/maste
 })
 export class ProductionEntryDetailsComponent implements OnInit {
   @ViewChild('jobnoCodeOverlay') jobnoCodeOverlay!: MasterSearchComponent;
+  @ViewChild('overlaySubjobNoSearch') overlaySubjobNoSearch!: MasterSearchComponent;
   @ViewChild('customerCodeOverlay') customerCodeOverlay!: MasterSearchComponent;
   @ViewChild('designCodeOverlay') designCodeOverlay!: MasterSearchComponent;
   @ViewChild('locationCodeOverlay') locationCodeOverlay!: MasterSearchComponent;
@@ -75,6 +76,19 @@ export class ProductionEntryDetailsComponent implements OnInit {
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
+  }
+  subJobNoSearch: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 258,
+    SEARCH_FIELD: 'UNQ_JOB_ID',
+    SEARCH_HEADING: 'Sub Job Search',
+    SEARCH_VALUE: '',
+    WHERECONDITION: `ISNULL(PROD_REF,0)=0 and Branch_code = '${this.commonService.branchCode}' and UNQ_JOB_ID <> ''`,
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true
   }
   customerCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -306,7 +320,10 @@ export class ProductionEntryDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.setHeaderDetails()
-    this.setInitialValues()
+  }
+  ngAfterViewInit() {
+    this.subJobNoSearch.VIEW_ICON = false;
+    this.setInitialValues() //set all values from parent to child
   }
   setHeaderDetails() {
     this.branchCode = this.commonService.branchCode;
@@ -500,6 +517,7 @@ export class ProductionEntryDetailsComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
+
   prefixCodeValidate() {
     let API = 'PrefixMaster/GetPrefixMasterDetail/' + this.productiondetailsFrom.value.PREFIX
     let Sub: Subscription = this.dataService.getDynamicAPI(API)
@@ -533,6 +551,18 @@ export class ProductionEntryDetailsComponent implements OnInit {
         this.commonService.closeSnackBarMsg()
         if (result.status == "Success" && result.dynamicData[0]) {
           let data = result.dynamicData[0]
+          debugger
+          if (data.length > 0) {
+            this.subJobNoSearch.VIEW_ICON = true;
+            this.subJobNoSearch.WHERECONDITION += `AND job_number='${this.productiondetailsFrom.value.JOB_NUMBER?.toString()}'`
+            // if (data.length == 1) {
+            //   this.subJobNumberValidate()
+            //   return
+            // }
+            // if (data.length > 1) { // condition for multiple subjob
+            //   this.overlaySubjobNoSearch.showOverlayPanel(event) // opening lookup with subjobs
+            // }
+          }
           if (data[0] && this.commonService.nullToString(data[0].UNQ_JOB_ID) != '') {
             this.setFormNullToString('JOB_NUMBER', data[0].JOB_NUMBER)
             this.setFormNullToString('UNQ_JOB_ID', data[0].UNQ_JOB_ID)
@@ -642,6 +672,11 @@ export class ProductionEntryDetailsComponent implements OnInit {
         this.commonService.toastErrorByMsgId('MSG1531');
       })
     this.subscriptions.push(Sub)
+  }
+  subJobNumberSelected(event: any) {
+    this.productiondetailsFrom.controls.UNQ_JOB_ID.setValue(event.UNQ_JOB_ID)
+    this.productiondetailsFrom.controls.SUB_JOB_DESCRIPTION.setValue(event.DESCRIPTION)
+    this.subJobNumberValidate()
   }
   setPendingPcs(result: any) {
     if (result.dynamicData && result.dynamicData[1].length > 0) {
@@ -1147,6 +1182,9 @@ export class ProductionEntryDetailsComponent implements OnInit {
     switch (formControlName) {
       case 'JOB_NUMBER':
         this.jobnoCodeOverlay.showOverlayPanel(event);
+        break;
+      case 'UNQ_JOB_ID':
+        this.overlaySubjobNoSearch.showOverlayPanel(event);
         break;
       case 'CUSTOMER_CODE':
         this.customerCodeOverlay.showOverlayPanel(event);

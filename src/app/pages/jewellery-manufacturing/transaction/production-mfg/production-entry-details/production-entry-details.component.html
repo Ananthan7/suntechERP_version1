@@ -49,8 +49,15 @@
             :</label>
           <div class="col-sm-3">
             <mat-form-field appearance="outline" style="width: 100%;">
-              <input type="text" readonly matInput
-                formControlName="UNQ_JOB_ID" />
+              <input type="text" matInput formControlName="UNQ_JOB_ID"
+                UpperCaseDirective [readonly]="viewMode || editMode" id="UNQ_JOB_ID"
+                (keydown)="lookupKeyPress($event,'UNQ_JOB_ID')"
+                (change)="subJobNumberValidate($event)" />
+              <master-search class="masterSearch"
+                [MasterSearchData]="subJobNoSearch"
+                *ngIf="!viewMode" #overlaySubjobNoSearch
+                (newRowClick)="subJobNumberSelected($event)">
+              </master-search>
             </mat-form-field>
           </div>
           <div class="col-sm-5">

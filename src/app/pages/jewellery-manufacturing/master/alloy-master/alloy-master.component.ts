@@ -97,7 +97,7 @@ export class AlloyMasterComponent implements OnInit {
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Type Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "TYPES = 'TYPE MASTER'",
+    WHERECONDITION: "TYPES = 'TYPE MASTER' ORDER BY CODE",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
