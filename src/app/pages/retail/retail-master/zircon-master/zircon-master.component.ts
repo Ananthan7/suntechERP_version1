@@ -40,6 +40,7 @@ export class ZirconMasterComponent implements OnInit {
   @Input() content!: any;
   private subscriptions: Subscription[] = [];
   flag: any;
+  currentDate: Date = new Date();
   code: any;
   allowZeroPcs: any;
   excludeFromTransferWt: any;
@@ -47,14 +48,182 @@ export class ZirconMasterComponent implements OnInit {
   image: File | null = null;
   fetchedPicture: string | null = null;
 
-  countryCodeData: MasterSearchModel = {
+  costCenterCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 15,
+    SEARCH_FIELD: "COST_CODE",
+    SEARCH_HEADING: "COST CENTER CODE",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "COST_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  };
+
+  priceCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 82,
+    SEARCH_FIELD: "PRICE_CODE",
+    SEARCH_HEADING: "PRICE CODE ",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "PRICE_CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  };
+
+  categoryCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 3,
     SEARCH_FIELD: "CODE",
-    SEARCH_HEADING: "Country Code",
+    SEARCH_HEADING: "CATEGORY CODE",
     SEARCH_VALUE: "",
-    WHERECONDITION: "TYPES = 'COUNTRY MASTER'",
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  };
+
+  vendorCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 7,
+    SEARCH_FIELD: "ACCODE",
+    SEARCH_HEADING: "VENDOR CODE",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "ACCODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  };
+
+  vendorRefCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "VENDOR REF",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  };
+
+  shapeCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "SHAPE CODE",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  };
+
+  colorCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 35,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "COLOR CODE",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  };
+
+  subCategoryCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 31,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "SUB-CATEGORY CODE",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "TYPES = 'SUB CATEGORY MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  };
+
+  brandCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "BRAND CODE",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  };
+
+  sizeCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "SIZE CODE",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  };
+
+  typeCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "TYPE CODE",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  };
+
+  sieveSetCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "SIEVE SET CODE",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "CODE<> ''",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  };
+
+  sieveCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: "CODE",
+    SEARCH_HEADING: "SIEVE CODE",
+    SEARCH_VALUE: "",
+    WHERECONDITION: "CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -77,7 +246,7 @@ export class ZirconMasterComponent implements OnInit {
     color: [""],
     vendor: [""],
     vendorRef: [""],
-    createdOn: [""],
+    createdOn: [this.currentDate],
     createdBy: [""],
     description: [""],
     brand: [""],
@@ -119,13 +288,13 @@ export class ZirconMasterComponent implements OnInit {
 
   ngOnInit(): void {
     console.log(this.content);
-    
+
     this.content
       ? (this.flag = this.content!.FLAG)
       : console.log("No Content, Due to you are in ADD");
 
     this.initialController(this.flag, this.content);
-    this.setFlag(this.flag)
+    this.setFlag(this.flag);
   }
 
   initialController(FLAG: any, DATA: any) {
@@ -477,21 +646,21 @@ export class ZirconMasterComponent implements OnInit {
       STOCK_CODE: this.zirconMasterMainForm.value.code,
       STOCK_DESCRIPTION: this.zirconMasterMainForm.value.description,
       CURRENCY_CODE: this.zirconMasterMainForm.value.currencyCode,
-      CC_RATE: 0,
+      CC_RATE: this.zirconMasterMainForm.value.currencyDesc,
       COST_CODE: "string",
       TYPE_CODE: this.zirconMasterMainForm.value.type,
       CATEGORY_CODE: this.zirconMasterMainForm.value.category,
       SUBCATEGORY_CODE: this.zirconMasterMainForm.value.subCategory,
       BRAND_CODE: this.zirconMasterMainForm.value.brand,
-      COUNTRY_CODE: "string",
-      SUPPLIER_CODE: "string",
-      SUPPLIER_REF: "string",
+      COUNTRY_CODE: this.zirconMasterMainForm.value.brand,
+      SUPPLIER_CODE: this.zirconMasterMainForm.value.vendor,
+      SUPPLIER_REF: this.zirconMasterMainForm.value.vendorRef,
       DESIGN_CODE: "string",
       SET_REF: "string",
       PICTURE_NAME: this.zirconMasterMainForm.value.picture,
       PICTURE_NAME1: "string",
-      STOCK_FCCOST: 0,
-      STOCK_LCCOST: 0,
+      STOCK_FCCOST: this.zirconMasterMainForm.value.weightAvgCostCode,
+      STOCK_LCCOST: this.zirconMasterMainForm.value.weightAvgCostDesc,
       PRICE1PER: this.zirconMasterMainForm.value.priceOnePercent,
       PRICE2PER: this.zirconMasterMainForm.value.priceTwoPercent,
       PRICE3PER: this.zirconMasterMainForm.value.priceThreePercent,
@@ -546,8 +715,8 @@ export class ZirconMasterComponent implements OnInit {
       GW: 0,
       MODEL_NO: "string",
       MODEL_YEAR: 0,
-      OPENED_ON: new Date(),
-      OPENED_BY: "string",
+      OPENED_ON: this.zirconMasterMainForm.value.createdOn,
+      OPENED_BY: this.zirconMasterMainForm.value.createdBy,
       FIRST_TRN: this.zirconMasterMainForm.value.firstTrans,
       LAST_TRN: this.zirconMasterMainForm.value.lastTrans,
       MID: 0,

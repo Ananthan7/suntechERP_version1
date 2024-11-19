@@ -51,7 +51,7 @@
                     (focusout)="
                       SPvalidateLookupFieldModified(
                         $event,
-                        countryCodeData,
+                        costCenterCodeData,
                         ['costCenter'],
                         false,
                         ['CODE'],
@@ -64,7 +64,7 @@
                     *ngIf="flag != 'VIEW'"
                     #overlayCostCenter
                     class="masterSearch"
-                    [MasterSearchData]="countryCodeData"
+                    [MasterSearchData]="costCenterCodeData"
                     (newRowClick)="
                       lookupSelect($event, ['costCenter'], ['CODE'])
                     "
@@ -88,7 +88,7 @@
                     (focusout)="
                       SPvalidateLookupFieldModified(
                         $event,
-                        countryCodeData,
+                        categoryCodeData,
                         ['category'],
                         false,
                         ['CODE'],
@@ -102,7 +102,7 @@
                     *ngIf="flag != 'VIEW'"
                     #overlayCategory
                     class="masterSearch"
-                    [MasterSearchData]="countryCodeData"
+                    [MasterSearchData]="categoryCodeData"
                     (newRowClick)="lookupSelect($event, ['category'], ['CODE'])"
                   >
                   </master-search>
@@ -124,7 +124,7 @@
                     (focusout)="
                       SPvalidateLookupFieldModified(
                         $event,
-                        countryCodeData,
+                        shapeCodeData,
                         ['shape'],
                         false,
                         ['CODE'],
@@ -137,7 +137,7 @@
                     *ngIf="flag != 'VIEW'"
                     #overlayShape
                     class="masterSearch"
-                    [MasterSearchData]="countryCodeData"
+                    [MasterSearchData]="shapeCodeData"
                     (newRowClick)="lookupSelect($event, ['shape'], ['CODE'])"
                   >
                   </master-search>
@@ -159,7 +159,7 @@
                     (focusout)="
                       SPvalidateLookupFieldModified(
                         $event,
-                        countryCodeData,
+                        colorCodeData,
                         ['color'],
                         false,
                         ['CODE'],
@@ -172,7 +172,7 @@
                     *ngIf="flag != 'VIEW'"
                     #overlayColor
                     class="masterSearch"
-                    [MasterSearchData]="countryCodeData"
+                    [MasterSearchData]="colorCodeData"
                     (newRowClick)="lookupSelect($event, ['color'], ['CODE'])"
                   >
                   </master-search>
@@ -194,7 +194,7 @@
                     (focusout)="
                       SPvalidateLookupFieldModified(
                         $event,
-                        countryCodeData,
+                        vendorCodeData,
                         ['vendor'],
                         false,
                         ['CODE'],
@@ -207,7 +207,7 @@
                     *ngIf="flag != 'VIEW'"
                     #overlayVendor
                     class="masterSearch"
-                    [MasterSearchData]="countryCodeData"
+                    [MasterSearchData]="vendorCodeData"
                     (newRowClick)="lookupSelect($event, ['vendor'], ['CODE'])"
                   >
                   </master-search>
@@ -238,11 +238,22 @@
               <div class="col-md-7">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
-                    type="text"
-                    [readonly]="flag === 'VIEW'"
                     matInput
+                    [matDatepicker]="createdOn"
+                    name="createdOn"
+                    DateValidation
                     formControlName="createdOn"
+                    [readonly]="true"
                   />
+                  <mat-datepicker-toggle
+                    [disabled]="true"
+                    matSuffix
+                    [for]="createdOn"
+                  ></mat-datepicker-toggle>
+                  <mat-datepicker
+                    [startAt]="currentDate"
+                    #createdOn
+                  ></mat-datepicker>
                 </mat-form-field>
               </div>
             </div>
@@ -307,7 +318,7 @@
                     (focusout)="
                       SPvalidateLookupFieldModified(
                         $event,
-                        countryCodeData,
+                        brandCodeData,
                         ['brand'],
                         false,
                         ['CODE'],
@@ -320,7 +331,7 @@
                     *ngIf="flag != 'VIEW'"
                     #overlayBrand
                     class="masterSearch"
-                    [MasterSearchData]="countryCodeData"
+                    [MasterSearchData]="brandCodeData"
                     (newRowClick)="lookupSelect($event, ['brand'], ['CODE'])"
                   >
                   </master-search>
@@ -345,7 +356,7 @@
                     (focusout)="
                       SPvalidateLookupFieldModified(
                         $event,
-                        countryCodeData,
+                        subCategoryCodeData,
                         ['subCategory'],
                         false,
                         ['CODE'],
@@ -358,7 +369,7 @@
                     *ngIf="flag != 'VIEW'"
                     #overlaySubCategory
                     class="masterSearch"
-                    [MasterSearchData]="countryCodeData"
+                    [MasterSearchData]="subCategoryCodeData"
                     (newRowClick)="
                       lookupSelect($event, ['subCategory'], ['CODE'])
                     "
@@ -382,7 +393,7 @@
                     (focusout)="
                       SPvalidateLookupFieldModified(
                         $event,
-                        countryCodeData,
+                        sizeCodeData,
                         ['size'],
                         false,
                         ['CODE'],
@@ -395,7 +406,7 @@
                     *ngIf="flag != 'VIEW'"
                     #overlaySize
                     class="masterSearch"
-                    [MasterSearchData]="countryCodeData"
+                    [MasterSearchData]="sizeCodeData"
                     (newRowClick)="lookupSelect($event, ['size'], ['CODE'])"
                   >
                   </master-search>
@@ -417,7 +428,7 @@
                     (focusout)="
                       SPvalidateLookupFieldModified(
                         $event,
-                        countryCodeData,
+                        typeCodeData,
                         ['type'],
                         false,
                         ['CODE'],
@@ -430,7 +441,7 @@
                     *ngIf="flag != 'VIEW'"
                     #overlayType
                     class="masterSearch"
-                    [MasterSearchData]="countryCodeData"
+                    [MasterSearchData]="typeCodeData"
                     (newRowClick)="lookupSelect($event, ['type'], ['CODE'])"
                   >
                   </master-search>
@@ -452,7 +463,7 @@
                     (focusout)="
                       SPvalidateLookupFieldModified(
                         $event,
-                        countryCodeData,
+                        sieveSetCodeData,
                         ['sieveSet'],
                         false,
                         ['CODE'],
@@ -465,7 +476,7 @@
                     *ngIf="flag != 'VIEW'"
                     #overlaySieveSet
                     class="masterSearch"
-                    [MasterSearchData]="countryCodeData"
+                    [MasterSearchData]="sieveSetCodeData"
                     (newRowClick)="lookupSelect($event, ['sieveSet'], ['CODE'])"
                   >
                   </master-search>
@@ -487,7 +498,7 @@
                     (focusout)="
                       SPvalidateLookupFieldModified(
                         $event,
-                        countryCodeData,
+                        sieveCodeData,
                         ['sieve'],
                         false,
                         ['CODE'],
@@ -500,7 +511,7 @@
                     *ngIf="flag != 'VIEW'"
                     #overlaySieve
                     class="masterSearch"
-                    [MasterSearchData]="countryCodeData"
+                    [MasterSearchData]="sieveCodeData"
                     (newRowClick)="lookupSelect($event, ['sieve'], ['CODE'])"
                   >
                   </master-search>
@@ -570,7 +581,9 @@
               <div class="col-md-5">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
-                    type="text"
+                    class="text-right"
+                    AmountDecimalInput
+                    type="number"
                     [readonly]="flag === 'VIEW'"
                     matInput
                     formControlName="currencyDesc"
@@ -589,7 +602,9 @@
               <div class="col-md-4">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
-                    type="text"
+                    class="text-right"
+                    type="number"
+                    AmountDecimalInput
                     [readonly]="flag === 'VIEW'"
                     matInput
                     formControlName="weightAvgCostCode"
@@ -600,7 +615,9 @@
               <div class="col-md-5">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
-                    type="text"
+                    class="text-right"
+                    type="number"
+                    AmountDecimalInput
                     [readonly]="flag === 'VIEW'"
                     matInput
                     formControlName="weightAvgCostDesc"
@@ -625,19 +642,19 @@
                 <div class="row mb-1">
                   <label class="col-sm-2 col-form-label" id="ID029">Cost</label>
 
-                  <label class="col-sm-2 col-form-label" id="ID029">Code</label>
+                  <label class="col-sm-3 col-form-label" id="ID029">Code</label>
 
-                  <label class="col-sm-2 col-form-label" id="ID029">%</label>
+                  <label class="col-sm-3 col-form-label" id="ID029">%</label>
 
-                  <label class="col-sm-3 col-form-label" id="ID029">FC</label>
-                  <label class="col-sm-3 col-form-label" id="ID029">LC</label>
+                  <label class="col-sm-2 col-form-label" id="ID029">FC</label>
+                  <label class="col-sm-2 col-form-label" id="ID029">LC</label>
                 </div>
 
                 <div class="row mb-1">
                   <label for="price1" class="col-sm-2 col-form-label" id="ID029"
                     >Price 1</label
                   >
-                  <div class="col-md-2">
+                  <div class="col-md-3">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
                         type="text"
@@ -647,7 +664,7 @@
                         (focusout)="
                           SPvalidateLookupFieldModified(
                             $event,
-                            countryCodeData,
+                            priceCodeData,
                             [
                               'priceOneCode',
                               'priceOnePercent',
@@ -655,7 +672,12 @@
                               'priceOneFc'
                             ],
                             false,
-                            ['CODE', 'CODE', 'CODE', 'CODE'],
+                            [
+                              'PRICE_CODE',
+                              'PRICE_CODE',
+                              'PRICE_CODE',
+                              'PRICE_CODE'
+                            ],
                             false
                           )
                         "
@@ -665,7 +687,7 @@
                         *ngIf="flag != 'VIEW'"
                         #overlayPriceOneCode
                         class="masterSearch"
-                        [MasterSearchData]="countryCodeData"
+                        [MasterSearchData]="priceCodeData"
                         (newRowClick)="
                           lookupSelect(
                             $event,
@@ -675,7 +697,12 @@
                               'priceOneLc',
                               'priceOneFc'
                             ],
-                            ['CODE', 'CODE', 'CODE', 'CODE']
+                            [
+                              'PRICE_CODE',
+                              'PRICE_CODE',
+                              'PRICE_CODE',
+                              'PRICE_CODE'
+                            ]
                           )
                         "
                       >
@@ -683,7 +710,7 @@
                     </mat-form-field>
                   </div>
 
-                  <div class="col-md-2">
+                  <div class="col-md-3">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
                         type="text"
@@ -694,7 +721,7 @@
                     </mat-form-field>
                   </div>
 
-                  <div class="col-md-3">
+                  <div class="col-md-2">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
                         type="number"
@@ -705,7 +732,7 @@
                     </mat-form-field>
                   </div>
 
-                  <div class="col-md-3">
+                  <div class="col-md-2">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
                         type="number"
@@ -721,7 +748,7 @@
                   <label for="price2" class="col-sm-2 col-form-label" id="ID029"
                     >Price 2</label
                   >
-                  <div class="col-md-2">
+                  <div class="col-md-3">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
                         type="text"
@@ -731,7 +758,7 @@
                         (focusout)="
                           SPvalidateLookupFieldModified(
                             $event,
-                            countryCodeData,
+                            priceCodeData,
                             [
                               'priceTwoCode',
                               'priceTwoPercent',
@@ -739,7 +766,12 @@
                               'priceTwoFc'
                             ],
                             false,
-                            ['CODE', 'CODE', 'CODE', 'CODE'],
+                            [
+                              'PRICE_CODE',
+                              'PRICE_CODE',
+                              'PRICE_CODE',
+                              'PRICE_CODE'
+                            ],
                             false
                           )
                         "
@@ -749,7 +781,7 @@
                         *ngIf="flag != 'VIEW'"
                         #overlayPriceTwoCode
                         class="masterSearch"
-                        [MasterSearchData]="countryCodeData"
+                        [MasterSearchData]="priceCodeData"
                         (newRowClick)="
                           lookupSelect(
                             $event,
@@ -759,7 +791,12 @@
                               'priceTwoLc',
                               'priceTwoFc'
                             ],
-                            ['CODE', 'CODE', 'CODE', 'CODE']
+                            [
+                              'PRICE_CODE',
+                              'PRICE_CODE',
+                              'PRICE_CODE',
+                              'PRICE_CODE'
+                            ]
                           )
                         "
                       >
@@ -767,7 +804,7 @@
                     </mat-form-field>
                   </div>
 
-                  <div class="col-md-2">
+                  <div class="col-md-3">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
                         type="text"
@@ -778,7 +815,7 @@
                     </mat-form-field>
                   </div>
 
-                  <div class="col-md-3">
+                  <div class="col-md-2">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
                         type="number"
@@ -789,7 +826,7 @@
                     </mat-form-field>
                   </div>
 
-                  <div class="col-md-3">
+                  <div class="col-md-2">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
                         type="number"
@@ -805,7 +842,7 @@
                   <label for="price3" class="col-sm-2 col-form-label" id="ID029"
                     >Price 3</label
                   >
-                  <div class="col-md-2">
+                  <div class="col-md-3">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
                         type="text"
@@ -815,7 +852,7 @@
                         (focusout)="
                           SPvalidateLookupFieldModified(
                             $event,
-                            countryCodeData,
+                            priceCodeData,
                             [
                               'priceThreeCode',
                               'priceThreePercent',
@@ -823,7 +860,12 @@
                               'priceThreeFc'
                             ],
                             false,
-                            ['CODE', 'CODE', 'CODE', 'CODE'],
+                            [
+                              'PRICE_CODE',
+                              'PRICE_CODE',
+                              'PRICE_CODE',
+                              'PRICE_CODE'
+                            ],
                             false
                           )
                         "
@@ -833,7 +875,7 @@
                         *ngIf="flag != 'VIEW'"
                         #overlayPriceThreeCode
                         class="masterSearch"
-                        [MasterSearchData]="countryCodeData"
+                        [MasterSearchData]="priceCodeData"
                         (newRowClick)="
                           lookupSelect(
                             $event,
@@ -843,7 +885,12 @@
                               'priceThreeLc',
                               'priceThreeFc'
                             ],
-                            ['CODE', 'CODE', 'CODE', 'CODE']
+                            [
+                              'PRICE_CODE',
+                              'PRICE_CODE',
+                              'PRICE_CODE',
+                              'PRICE_CODE'
+                            ]
                           )
                         "
                       >
@@ -851,7 +898,7 @@
                     </mat-form-field>
                   </div>
 
-                  <div class="col-md-2">
+                  <div class="col-md-3">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
                         type="text"
@@ -862,7 +909,7 @@
                     </mat-form-field>
                   </div>
 
-                  <div class="col-md-3">
+                  <div class="col-md-2">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
                         type="number"
@@ -873,7 +920,7 @@
                     </mat-form-field>
                   </div>
 
-                  <div class="col-md-3">
+                  <div class="col-md-2">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
                         type="number"
@@ -889,7 +936,7 @@
                   <label for="price4" class="col-sm-2 col-form-label" id="ID029"
                     >Price 4</label
                   >
-                  <div class="col-md-2">
+                  <div class="col-md-3">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
                         type="text"
@@ -899,7 +946,7 @@
                         (focusout)="
                           SPvalidateLookupFieldModified(
                             $event,
-                            countryCodeData,
+                            priceCodeData,
                             [
                               'priceFourCode',
                               'priceFourPercent',
@@ -907,7 +954,12 @@
                               'priceFourFc'
                             ],
                             false,
-                            ['CODE', 'CODE', 'CODE', 'CODE'],
+                            [
+                              'PRICE_CODE',
+                              'PRICE_CODE',
+                              'PRICE_CODE',
+                              'PRICE_CODE'
+                            ],
                             false
                           )
                         "
@@ -917,7 +969,7 @@
                         *ngIf="flag != 'VIEW'"
                         #overlayPriceFourCode
                         class="masterSearch"
-                        [MasterSearchData]="countryCodeData"
+                        [MasterSearchData]="priceCodeData"
                         (newRowClick)="
                           lookupSelect(
                             $event,
@@ -927,7 +979,12 @@
                               'priceFourLc',
                               'priceFourFc'
                             ],
-                            ['CODE', 'CODE', 'CODE', 'CODE']
+                            [
+                              'PRICE_CODE',
+                              'PRICE_CODE',
+                              'PRICE_CODE',
+                              'PRICE_CODE'
+                            ]
                           )
                         "
                       >
@@ -935,7 +992,7 @@
                     </mat-form-field>
                   </div>
 
-                  <div class="col-md-2">
+                  <div class="col-md-3">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
                         type="text"
@@ -946,7 +1003,7 @@
                     </mat-form-field>
                   </div>
 
-                  <div class="col-md-3">
+                  <div class="col-md-2">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
                         type="number"
@@ -957,7 +1014,7 @@
                     </mat-form-field>
                   </div>
 
-                  <div class="col-md-3">
+                  <div class="col-md-2">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
                         type="number"
@@ -973,7 +1030,7 @@
                   <label for="price5" class="col-sm-2 col-form-label" id="ID029"
                     >Price 5</label
                   >
-                  <div class="col-md-2">
+                  <div class="col-md-3">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
                         type="text"
@@ -983,7 +1040,7 @@
                         (focusout)="
                           SPvalidateLookupFieldModified(
                             $event,
-                            countryCodeData,
+                            priceCodeData,
                             [
                               'priceFiveCode',
                               'priceFivePercent',
@@ -991,7 +1048,12 @@
                               'priceFiveFc'
                             ],
                             false,
-                            ['CODE', 'CODE', 'CODE', 'CODE'],
+                            [
+                              'PRICE_CODE',
+                              'PRICE_CODE',
+                              'PRICE_CODE',
+                              'PRICE_CODE'
+                            ],
                             false
                           )
                         "
@@ -1001,7 +1063,7 @@
                         *ngIf="flag != 'VIEW'"
                         #overlayPriceFiveCode
                         class="masterSearch"
-                        [MasterSearchData]="countryCodeData"
+                        [MasterSearchData]="priceCodeData"
                         (newRowClick)="
                           lookupSelect(
                             $event,
@@ -1011,7 +1073,12 @@
                               'priceFiveLc',
                               'priceFiveFc'
                             ],
-                            ['CODE', 'CODE', 'CODE', 'CODE']
+                            [
+                              'PRICE_CODE',
+                              'PRICE_CODE',
+                              'PRICE_CODE',
+                              'PRICE_CODE'
+                            ]
                           )
                         "
                       >
@@ -1019,7 +1086,7 @@
                     </mat-form-field>
                   </div>
 
-                  <div class="col-md-2">
+                  <div class="col-md-3">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
                         type="text"
@@ -1030,7 +1097,7 @@
                     </mat-form-field>
                   </div>
 
-                  <div class="col-md-3">
+                  <div class="col-md-2">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
                         type="number"
@@ -1041,7 +1108,7 @@
                     </mat-form-field>
                   </div>
 
-                  <div class="col-md-3">
+                  <div class="col-md-2">
                     <mat-form-field style="width: 100%" appearance="outline">
                       <input
                         type="number"
