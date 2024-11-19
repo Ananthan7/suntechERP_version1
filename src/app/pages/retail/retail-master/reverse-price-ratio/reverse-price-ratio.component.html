@@ -15,7 +15,7 @@
             <div class="row">
                 <div class="col-md-2">
                     <div>
-                        <mat-radio-group aria-label="Select an option" formControlName="metalDiamond">
+                        <mat-radio-group aria-label="Select an option" formControlName="metalDiamond"  [disabled]="viewMode">
                             <mat-radio-button [value]="true"  class="mx-3"> Metal </mat-radio-button>
                             <mat-radio-button [value]="false"  class="mx-3">Diamond</mat-radio-button>
                         </mat-radio-group>
@@ -27,7 +27,7 @@
                             :</label>
                         <div class="col-sm-6">
                             <mat-form-field appearance="outline" style="width: 100%;">
-                                <input type="text" #codeInput maxlength="1" matInput formControlName="divisioncode">
+                                <input type="text" #codeInput maxlength="1" matInput formControlName="divisioncode"  [readonly]="viewMode || editMode">
 
                             </mat-form-field>
                         </div>
@@ -39,7 +39,7 @@
                             :</label>
                             <div class="col-sm-3">
                                 <mat-form-field appearance="outline" style="width: 100%;">
-                                    <input type="text" #codeInput maxlength="15" matInput formControlName="branchCode">
+                                    <input type="text" #codeInput maxlength="15" matInput formControlName="branchCode"   [readonly]="viewMode">
                                 </mat-form-field>
                             </div>
                         <div class="col-sm-6">
@@ -53,29 +53,29 @@
                     <div class="row mb-3">
                     <div class="col-md-6 py-2">
                         <div class="row mb-3">
-                            <mat-checkbox class="example-margin" class="col-md-3" id="ID001" formControlName="directPropotion">Direct Propotion</mat-checkbox>
+                            <mat-checkbox class="example-margin" class="col-md-3" formControlName="directPropotion"  [disabled]="viewMode">Direct Propotion</mat-checkbox>
                         </div>
                         <div class="row mb-3">
-                            <mat-checkbox class="example-margin" class="col-md-3"  formControlName="metalRatio">Metal Ratio</mat-checkbox>
+                            <mat-checkbox class="example-margin" class="col-md-3"  formControlName="metalRatio"  [disabled]="viewMode">Metal Ratio</mat-checkbox>
                             <div class="col-md-4">
                                 <mat-form-field appearance="outline" style="width: 100%;">
-                                    <input class="text-right" type="number" #codeInput maxlength="15" matInput formControlName="metalRatioDetail"  >
+                                    <input class="text-right" type="number" #codeInput maxlength="15" matInput formControlName="metalRatioDetail" [readonly]="viewMode" >
                                 </mat-form-field>
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <mat-checkbox class="example-margin" class="col-md-3" formControlName="stoneRatio">Stone Ratio</mat-checkbox>
+                            <mat-checkbox class="example-margin" class="col-md-3" formControlName="stoneRatio"  [disabled]="viewMode">Stone Ratio</mat-checkbox>
                             <div class="col-md-4">
                                 <mat-form-field appearance="outline" style="width: 100%;">
-                                    <input class="text-right" type="number" #codeInput maxlength="15" matInput formControlName="stoneRatioDetail"  >
+                                    <input class="text-right" type="number" #codeInput maxlength="15" matInput formControlName="stoneRatioDetail" [readonly]="viewMode" >
                                 </mat-form-field>
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <mat-checkbox class="example-margin" class="col-md-3"  formControlName="labourRatio">Labour Ratio</mat-checkbox>
+                            <mat-checkbox class="example-margin" class="col-md-3"  formControlName="labourRatio"  [disabled]="viewMode">Labour Ratio</mat-checkbox>
                             <div class="col-md-4">
                                 <mat-form-field appearance="outline" style="width: 100%;">
-                                    <input class="text-right" type="number" #codeInput maxlength="15" matInput formControlName="labourRatioDetail"  >
+                                    <input class="text-right" type="number" #codeInput maxlength="15" matInput formControlName="labourRatioDetail"  [readonly]="viewMode">
                                 </mat-form-field>
                             </div>
                         </div>
@@ -83,26 +83,26 @@
 
                     <div class="col-md-6 py-5">
                         <div class="row mb-3">
-                            <mat-checkbox class="example-margin" class="col-md-3" formControlName="kundanRatio">Kundan Ratio</mat-checkbox>
+                            <mat-checkbox class="example-margin" class="col-md-3" formControlName="kundanRatio"  [disabled]="viewMode">Kundan Ratio</mat-checkbox>
                             <div class="col-md-4">
                                 <mat-form-field appearance="outline" style="width: 100%;">
-                                    <input class="text-right" type="number" #codeInput maxlength="15" matInput formControlName="kundanRatioDetail">
+                                    <input class="text-right" type="number" #codeInput maxlength="15" matInput formControlName="kundanRatioDetail" [readonly]="viewMode">
                                 </mat-form-field>
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <mat-checkbox class="example-margin" class="col-md-3" formControlName="wastageRatio">Wastage Ratio</mat-checkbox>
+                            <mat-checkbox class="example-margin" class="col-md-3" formControlName="wastageRatio"  [disabled]="viewMode">Wastage Ratio</mat-checkbox>
                             <div class="col-md-4">
                                 <mat-form-field appearance="outline" style="width: 100%;">
-                                    <input class="text-right" type="number" #codeInput maxlength="15" matInput formControlName="wastageRatioDetail">
+                                    <input class="text-right" type="number" #codeInput maxlength="15" matInput formControlName="wastageRatioDetail" [readonly]="viewMode">
                                 </mat-form-field>
                             </div>
                         </div>
                       <div class="row mb-3">
-                            <mat-checkbox class="example-margin" class="col-md-3"  formControlName="total">Total %</mat-checkbox>
+                            <mat-checkbox class="example-margin" class="col-md-3"  formControlName="total"  [disabled]="viewMode">Total %</mat-checkbox>
                             <div class="col-md-4">
                                 <mat-form-field appearance="outline" style="width: 100%;">
-                                    <input class="text-right" type="number" #codeInput maxlength="15" matInput formControlName="totalDetail">
+                                    <input class="text-right" type="number" #codeInput maxlength="15" matInput formControlName="totalDetail" [readonly]="viewMode">
                                 </mat-form-field>
                             </div>
                         </div>
@@ -113,38 +113,38 @@
                     <div class="row mb-3">
                     <div class="col-md-6 py-2">
                         <div class="row mb-3">
-                            <mat-checkbox class="example-margin" class="col-md-3" id="ID001" formControlName="directPropotion">Direct Propotion</mat-checkbox>
+                            <mat-checkbox class="example-margin" class="col-md-3" formControlName="directPropotion"  [disabled]="viewMode">Direct Propotion</mat-checkbox>
                         </div>
                         <div class="row mb-3">
-                            <mat-checkbox class="example-margin" class="col-md-3" formControlName="metalRatioDia">Metal Ratio</mat-checkbox>
+                            <mat-checkbox class="example-margin" class="col-md-3" formControlName="metalRatioDia"  [disabled]="viewMode">Metal Ratio</mat-checkbox>
                             <div class="col-md-4">
                                 <mat-form-field appearance="outline" style="width: 100%;">
-                                    <input class="text-right" type="number" #codeInput maxlength="15" matInput formControlName="metalRatioDiaDetail">
+                                    <input class="text-right" type="number" #codeInput maxlength="15" matInput formControlName="metalRatioDiaDetail" [readonly]="viewMode">
                                 </mat-form-field>
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <mat-checkbox class="example-margin" class="col-md-3" formControlName="stoneRatioDia">Stone Ratio</mat-checkbox>
+                            <mat-checkbox class="example-margin" class="col-md-3" formControlName="stoneRatioDia"  [disabled]="viewMode">Stone Ratio</mat-checkbox>
                             <div class="col-md-4">
                                 <mat-form-field appearance="outline" style="width: 100%;">
-                                    <input class="text-right" type="number" #codeInput maxlength="15" matInput formControlName="stoneRatioDetail">
+                                    <input class="text-right" type="number" #codeInput maxlength="15" matInput formControlName="stoneRatioDetail" [readonly]="viewMode">
                                 </mat-form-field>
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <mat-checkbox class="example-margin" class="col-md-3" formControlName="labourRatioDia">Labour Ratio</mat-checkbox>
+                            <mat-checkbox class="example-margin" class="col-md-3" formControlName="labourRatioDia"  [disabled]="viewMode">Labour Ratio</mat-checkbox>
                             <div class="col-md-4">
                                 <mat-form-field appearance="outline" style="width: 100%;">
-                                    <input class="text-right" type="number" #codeInput maxlength="15" matInput formControlName="labourRatioDiaDetail">
+                                    <input class="text-right" type="number" #codeInput maxlength="15" matInput formControlName="labourRatioDiaDetail" [readonly]="viewMode">
                                 </mat-form-field>
                             </div>
                         </div>
                             
                         <div class="row mb-3">
-                            <mat-checkbox class="example-margin" class="col-md-3" formControlName="totalDia">Total %</mat-checkbox>
+                            <mat-checkbox class="example-margin" class="col-md-3" formControlName="totalDia"  [disabled]="viewMode">Total %</mat-checkbox>
                             <div class="col-md-4">
                                 <mat-form-field appearance="outline" style="width: 100%;">
-                                    <input class="text-right" type="number" #codeInput maxlength="15" matInput formControlName="totalDiaDetail">
+                                    <input class="text-right" type="number" #codeInput maxlength="15" matInput formControlName="totalDiaDetail" [readonly]="viewMode">
                                 </mat-form-field>
                             </div>
                         </div>
@@ -152,45 +152,45 @@
 
                     <div class="col-md-6 py-2">
                         <div class="row mb-3">
-                            <mat-checkbox class="example-margin" class="col-md-3" formControlName="stoneSplittingRatio">Stone Splitting Ratio</mat-checkbox>
+                            <mat-checkbox class="example-margin" class="col-md-3" formControlName="stoneSplittingRatio"  [disabled]="viewMode">Stone Splitting Ratio</mat-checkbox>
                         </div>
                         <div class="row mb-3">
-                            <mat-checkbox class="example-margin" class="col-md-3" formControlName="LooseSplittingRatio">Loose Diamond Ratio</mat-checkbox>
+                            <mat-checkbox class="example-margin" class="col-md-3" formControlName="LooseSplittingRatio"  [disabled]="viewMode">Loose Diamond Ratio</mat-checkbox>
                             <div class="col-md-4">
                                 <mat-form-field appearance="outline" style="width: 100%;">
-                                    <input class="text-right" type="number" #codeInput maxlength="15" matInput formControlName="LooseSplittingRatioDetail">
+                                    <input class="text-right" type="number" #codeInput maxlength="15" matInput formControlName="LooseSplittingRatioDetail" [readonly]="viewMode">
                                 </mat-form-field>
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <mat-checkbox class="example-margin" class="col-md-3" formControlName="colorstoneRatio">Color Stone Ratio</mat-checkbox>
+                            <mat-checkbox class="example-margin" class="col-md-3" formControlName="colorstoneRatio"  [disabled]="viewMode">Color Stone Ratio</mat-checkbox>
                             <div class="col-md-4">
                                 <mat-form-field appearance="outline" style="width: 100%;">
-                                    <input class="text-right" type="number" #codeInput maxlength="15" matInput formControlName="colorstoneRatioDetail">
+                                    <input class="text-right" type="number" #codeInput maxlength="15" matInput formControlName="colorstoneRatioDetail" [readonly]="viewMode">
                                 </mat-form-field>
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <mat-checkbox class="example-margin" class="col-md-3" formControlName="pearlsRatio">Pearls Ratio</mat-checkbox>
+                            <mat-checkbox class="example-margin" class="col-md-3" formControlName="pearlsRatio"  [disabled]="viewMode">Pearls Ratio</mat-checkbox>
                             <div class="col-md-4">
                                 <mat-form-field appearance="outline" style="width: 100%;">
-                                    <input class="text-right" type="number" #codeInput maxlength="15" matInput formControlName="pearlsRatioDetail">
+                                    <input class="text-right" type="number" #codeInput maxlength="15" matInput formControlName="pearlsRatioDetail" [readonly]="viewMode">
                                 </mat-form-field>
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <mat-checkbox class="example-margin" class="col-md-3" formControlName="zirconRatio">Zircon Ratio</mat-checkbox>
+                            <mat-checkbox class="example-margin" class="col-md-3" formControlName="zirconRatio"  [disabled]="viewMode">Zircon Ratio</mat-checkbox>
                             <div class="col-md-4">
                                 <mat-form-field appearance="outline" style="width: 100%;">
-                                    <input class="text-right" type="number" #codeInput maxlength="15" matInput formControlName="zirconRatioDetail">
+                                    <input class="text-right" type="number" #codeInput maxlength="15" matInput formControlName="zirconRatioDetail" [readonly]="viewMode">
                                 </mat-form-field>
                             </div>
                         </div>
                       <div class="row mb-3">
-                            <mat-checkbox class="example-margin" class="col-md-3" formControlName="totalDiaone">Total %</mat-checkbox>
+                            <mat-checkbox class="example-margin" class="col-md-3" formControlName="totalDiaone"  [disabled]="viewMode">Total %</mat-checkbox>
                             <div class="col-md-4">
                                 <mat-form-field appearance="outline" style="width: 100%;">
-                                    <input class="text-right" type="number" #codeInput maxlength="15" matInput formControlName="totalDiaoneDetail">
+                                    <input class="text-right" type="number" #codeInput maxlength="15" matInput formControlName="totalDiaoneDetail" [readonly]="viewMode">
                                 </mat-form-field>
                             </div>
                         </div>
