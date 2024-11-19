@@ -17,7 +17,7 @@
                 <label for="inputPassword"  class="col-sm-1 col-form-label"  id="ID001"> Branch</label>
                 <div class="col-md-2">
                     <mat-form-field appearance="outline" style="width: -webkit-fill-available">
-                    <input matInput="text" name="branch" autocomplete="off" formControlName="branch"/>
+                    <input matInput="text" name="branch" autocomplete="off" formControlName="branch" readonly/>
                     <app-branch-division [fetchData]="fetchedBranchData" (newRowClick)="selectedData($event)"
                     class="branchDivisionelectr" [matTooltip]="branchDivisionControlsTooltip"
                     matTooltipClass="custom-tooltip"  matTooltipPosition="above"></app-branch-division>

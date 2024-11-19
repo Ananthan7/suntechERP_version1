@@ -701,11 +701,10 @@ export class CustomerEnquiryComponent implements OnInit {
       this.customerEnquiryForm.controls.GenderSelection.setValue('M');
       this.customerEnquiryForm.controls.outputTo.setValue('Customer Log')
 
-      const now = new Date();
-      const startDate = new Date(now.getFullYear(), now.getMonth(), 1);
-      const endDate = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-      this.customerEnquiryForm.controls.saleDateFrom.setValue(startDate)
-      this.customerEnquiryForm.controls.dateTo.setValue(endDate)
+      const startDate_Year = new Date(new Date().getFullYear(), 0, 1);
+      const endDate_Year = new Date(new Date().getFullYear(), 11, 31);
+      this.customerEnquiryForm.controls.saleDateFrom.setValue(startDate_Year)
+      this.customerEnquiryForm.controls.dateTo.setValue(endDate_Year)
 
     }
   }

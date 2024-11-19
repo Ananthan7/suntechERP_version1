@@ -1,5 +1,6 @@
 .branchDivisionelectr{
     position: absolute;
+    cursor: pointer;
 }
 ::ng-deep .mat-tooltip.custom-tooltip {
     background-color: #151414;
@@ -64,4 +65,10 @@
     color: white;
     padding: 5px 10px;
     line-height: 1.5;
+}
+
+//Report screen disabling while report generation
+.loading-class {
+    pointer-events: none;
+    filter: grayscale(20%) blur(2px)
 }
