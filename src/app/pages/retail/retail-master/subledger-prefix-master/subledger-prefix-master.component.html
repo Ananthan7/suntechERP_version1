@@ -21,14 +21,14 @@
                                     <label for="prefixcode" class="col-sm-2 col-form-label">Prefix Code:</label>
                                     <div class="col-md-4 p-0 ms-2">
                                         <mat-form-field style="width: 100%;" appearance="outline">
-                                            <input type="text" id="prefixcode" matInput   formControlName="prefixcode" [disabled]="viewOnly"
+                                            <input type="text" id="prefixcode" matInput   formControlName="prefixcode" [readonly]="viewOnly" (change)="isexistingcode()"
                                                 class="p-0"/>
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-4 p-0">
                                         <mat-form-field style="width: 100%;" appearance="outline">
-                                            <input type="text" id="prefixcodedesc" matInput
-                                                formControlName="prefixcodedesc" class="p-0" [disabled]="viewOnly" />
+                                            <input type="text" id="prefixcodedesc" matInput 
+                                                formControlName="prefixcodedesc" class="p-0" [readonly]="viewOnly" />
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -40,7 +40,7 @@
                             <label for="last_no" class="col-sm-1 col-form-label me-4">Last No:</label>
                             <div class="col-md-4 ms-4">
                                 <mat-form-field style="width: 100%;" appearance="outline">
-                                    <input type="text" id="last_no" matInput formControlName="last_no" [disabled]="viewOnly"
+                                    <input type="text" id="last_no" matInput formControlName="last_no" style="text-align: right;" [readonly]="viewOnly"
                                         />
                                 </mat-form-field>
                             </div>
