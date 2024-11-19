@@ -443,12 +443,25 @@
                     </dxo-summary>
                 </dx-data-grid>
 
-                <div class="row" *ngIf="!isLoading">
-                    <div class="my-2">
-                        <div class="form-check">
-                            <input class="form-check-input" formControlName="showPicture" type="checkbox" id="flexSwitchCheckDefault">
-                            <label class="form-check-label l_1" for="showPicture" id="ID023">Show Picture</label>
-                        </div>
+                <div class="row mt-2" *ngIf="!isLoading">
+                    <div class="col-md-3">
+                        <input class="form-check-input" formControlName="showPicture" type="checkbox" id="flexSwitchCheckDefault">
+                        <label class="form-check-label mx-2" for="showPicture" id="ID023">Show Picture</label>
+                    </div>
+
+                    <label class="form-check-label col-md-2" for="showPicture" id="ID024">Output To</label>
+                    <div class="col-md-4 px-0">
+                        <mat-form-field appearance="outline" ngClass="me-1" style="width:100%">
+                            <mat-select  formControlName="outputTo">
+                              <mat-option value="Customer Log">Customer Log</mat-option>
+                              <mat-option value="Sales Register">Sales Register</mat-option>
+                              <mat-option value="Address Label">Address Label</mat-option>
+                              <mat-option value="Previlage Card">Previlage Card</mat-option>
+                              <mat-option value="Send Email">Send Email</mat-option>
+                              <mat-option value="Send Card">Send Card</mat-option>
+                              <mat-option value="Send SMS">Send SMS</mat-option>
+                            </mat-select>
+                        </mat-form-field>
                     </div>
                 </div>
             </div>
@@ -456,15 +469,15 @@
 
         <div class="row">
             <div class="col">
-                <label for="label" class="col-form-label text-danger" id="ID024">Remove the Sales from date to List all Customers</label>
+                <label for="label" class="col-form-label text-danger" id="ID025">Remove the Sales from date to List all Customers</label>
             </div>
-            <div class="row">
+            <div class="row" [ngClass]="{'loading-class': isLoading }">
                 <div class="col-md-2 mt-4">
                     <button mat-flat-button color="primary" class="cancel-button Customer_btn-width mx-5"
                     (click)="customerSelection()"> Select Customer </button>
                 </div>
 
-                <div class="col-md-10" [ngClass]="{'loading-class': isLoading }">
+                <div class="col-md-10">
                     <app-report-screen-buttons (saveTemplateClick)="saveTemplate()" (previewClicked)="previewClick()"
                     (printClicked)="printBtnClick()"></app-report-screen-buttons>
                 </div>

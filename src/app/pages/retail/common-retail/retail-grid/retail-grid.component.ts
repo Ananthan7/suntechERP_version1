@@ -458,6 +458,29 @@ export class RetailGridComponent implements OnInit {
             } 
           };
         break;
+
+        case 'Retail Customer Enquiry' :
+        let CustomerEnquirylogData =  {
+          "VOCTYPE": this.CommonService.getqueryParamVocType() || "",
+          "REFMID": "",
+          "USERNAME": this.CommonService.userName,
+          "MODE": "PRINT",
+          "DATETIME": this.CommonService.formatDateTime(new Date()),
+          "REMARKS":"",
+          "SYSTEMNAME": "",
+          "BRANCHCODE": this.CommonService.branchCode,
+          "VOCNO": "",
+          "VOCDATE": "",
+          "YEARMONTH" : this.CommonService.yearSelected
+        }
+        payloadData = {
+          "SPID": "",
+          "parameter": {
+          
+            "Logdata": JSON.stringify(CustomerEnquirylogData)
+          } 
+        };
+      break;
         
       case ' ' :
       break;
