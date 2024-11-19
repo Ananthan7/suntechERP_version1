@@ -277,7 +277,7 @@ export class OtpMasterComponent implements OnInit {
   update() {
     if (this.submitValidation(this.otpForm.value)) return;
 
-    let API = "OTPMaster/UpdateOTPMaster/" + this.content.MID;
+    let API = "OTPMaster/UpdateOTPMaster/" + this.content.BRANCH_CODE;
     let postData = {
       BRANCH_CODE: "string",
       BRANCH_DESCRIPTION: "string",
@@ -320,7 +320,7 @@ export class OtpMasterComponent implements OnInit {
   }
   deleteRecord() {
     if (this.content && this.content.FLAG == "VIEW") return;
-    if (!this.content.MID) {
+    if (!this.content.BRANCH_CODE) {
       Swal.fire({
         title: "",
         text: "Please Select data to delete!",
@@ -343,7 +343,7 @@ export class OtpMasterComponent implements OnInit {
       confirmButtonText: "Yes, delete!",
     }).then((result) => {
       if (result.isConfirmed) {
-        let API = "OTPMaster/DeleteOTPMaster/" + this.content.MID;
+        let API = "OTPMaster/DeleteOTPMaster/" + this.content.BRANCH_CODE;
         let Sub: Subscription = this.dataService
           .deleteDynamicAPI(API)
           .subscribe(
