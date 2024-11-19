@@ -127,44 +127,52 @@
                 </dx-data-grid> -->
 
                 <dx-data-grid id="gridContainer" [dataSource]="maindetails" [showBorders]="true"
-              [showColumnLines]="true" [showRowLines]="true" [allowColumnResizing]="true" keyExpr="SRNO">
-  
-  <dxo-selection mode="single"></dxo-selection>
-  
-  <dxi-column dataField="SRNO" caption="S.No"> </dxi-column>
-  <dxi-column dataField="YEAR" caption="Year" cellTemplate="year"> </dxi-column>
-  <dxi-column dataField="FROMDATE" caption="From date" cellTemplate="fromdate"> </dxi-column>
-  <dxi-column dataField="TODATE" caption="To Date" cellTemplate="todate"> </dxi-column>
-  <dxi-column dataField="FEST_TARGET" caption="Target" cellTemplate="target"> </dxi-column>
+                    [showColumnLines]="true" [showRowLines]="true" [allowColumnResizing]="true" keyExpr="SRNO">
 
-  <div *dxTemplate="let data of 'year'">
-    <mat-form-field style="width: 100%;" appearance="outline">
-      <input type="text" matInput formControlName="year" [readonly]="viewOnly" />
-    </mat-form-field>
-  </div>
+                    <dxo-selection mode="single"></dxo-selection>
 
-  <div *dxTemplate="let data of 'fromdate'">
-    <mat-form-field style="width: 100%" appearance="outline">
-      <input matInput [matDatepicker]="fromDate" placeholder="DD/MM/YYYY" formControlName="fromDate" [disabled]="viewMode" />
-      <mat-datepicker-toggle matSuffix [for]="fromDate"></mat-datepicker-toggle>
-      <mat-datepicker #fromDate></mat-datepicker>
-    </mat-form-field>
-  </div>
+                    <dxi-column dataField="SRNO" caption="S.No"> </dxi-column>
 
-  <div *dxTemplate="let data1 of 'todate'">
-    <mat-form-field style="width: 100%" appearance="outline">
-      <input matInput [matDatepicker]="todate" placeholder="DD/MM/YYYY" formControlName="todate" [disabled]="viewMode" />
-      <mat-datepicker-toggle matSuffix [for]="todate"></mat-datepicker-toggle>
-      <mat-datepicker #todate></mat-datepicker>
-    </mat-form-field>
-  </div>
+                    <dxi-column dataField="year" caption="Year">
+                        <ng-template dxTemplate="let data">
+                            <mat-form-field style="width: 100%;" appearance="outline">
+                                <input type="text" matInput [value]="data.year" [readonly]="viewOnly" />
+                            </mat-form-field>
+                        </ng-template>
+                    </dxi-column>
 
-  <div *dxTemplate="let data of 'target'">
-    <mat-form-field style="width: 100%;" appearance="outline">
-      <input type="number" matInput formControlName="target" [readonly]="viewOnly" style="text-align: right;" />
-    </mat-form-field>
-  </div>
-</dx-data-grid>
+                    
+                    <dxi-column dataField="FROMDATE" caption="From date" cellTemplate="fromdate"> </dxi-column>
+                    <dxi-column dataField="TODATE" caption="To Date" cellTemplate="todate"> </dxi-column>
+                    <dxi-column dataField="FEST_TARGET" caption="Target" cellTemplate="target"> </dxi-column>
+
+
+
+                    <div *dxTemplate="let data of 'fromdate'">
+                        <mat-form-field style="width: 100%" appearance="outline">
+                            <input matInput [matDatepicker]="fromDate" placeholder="DD/MM/YYYY"
+                                [disabled]="viewMode" (change)="datechange($event,data)"/>
+                            <mat-datepicker-toggle matSuffix [for]="fromDate"></mat-datepicker-toggle>
+                            <mat-datepicker #fromDate></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+
+                    <div *dxTemplate="let data1 of 'todate'">
+                        <mat-form-field style="width: 100%" appearance="outline">
+                            <input matInput [matDatepicker]="todate" placeholder="DD/MM/YYYY" formControlName="todate"
+                                [disabled]="viewMode" />
+                            <mat-datepicker-toggle matSuffix [for]="todate"></mat-datepicker-toggle>
+                            <mat-datepicker #todate></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+
+                    <div *dxTemplate="let data of 'target'">
+                        <mat-form-field style="width: 100%;" appearance="outline">
+                            <input type="number" matInput formControlName="target" [readonly]="viewOnly" AmountDecimalInput
+                                style="text-align: right;" />
+                        </mat-form-field>
+                    </div>
+                </dx-data-grid>
 
 
             </div>

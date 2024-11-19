@@ -8,9 +8,10 @@
 
 <!-- modal header component -->
 <modal-header
-  (saveClick)="formSave()"
+  *ngIf="flag !== 'VIEW'"
+  (saveClick)="costAndPriceTypeMainFormSubmit()"
   (cancelClick)="close()"
-  (deleteClick)="deleteMaster()"
+  (deleteClick)="DeleteController()"
 ></modal-header>
 
 <!-- content section -->
@@ -27,7 +28,13 @@
               >
               <div class="col-md-4">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="code" />
+                  <input
+                    [readonly]="flag === 'VIEW'"
+                    UpperCaseDirective
+                    matInput
+                    type="text"
+                    formControlName="code"
+                  />
                 </mat-form-field>
               </div>
             </div>
@@ -39,9 +46,15 @@
                 id="ID029"
                 >Description</label
               >
-              <div class="col-md-6">
+              <div class="col-md-4">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="description" />
+                  <input
+                    [readonly]="flag === 'VIEW'"
+                    UpperCaseDirective
+                    matInput
+                    type="text"
+                    formControlName="description"
+                  />
                 </mat-form-field>
               </div>
             </div>
@@ -52,12 +65,12 @@
               >
               <div class="col-md-4">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <mat-select formControlName="type">
+                  <mat-select formControlName="party">
                     <mat-option
-                      *ngFor="let data of typeList"
-                      [value]="data.field"
+                      *ngFor="let data of partyDropdown"
+                      [value]="data.VALUE"
                     >
-                      {{ data.field }}
+                      {{ data.FIELD }}
                     </mat-option>
                   </mat-select>
                 </mat-form-field>
@@ -70,28 +83,54 @@
               >
               <div class="col-md-4">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="division" />
+                  <input
+                    [readonly]="flag === 'VIEW'"
+                    matInput
+                    type="text"
+                    formControlName="division"
+                    UpperCaseDirective
+                    (focusout)="
+                      SPvalidateLookupFieldModified(
+                        $event,
+                        divisionCodeData,
+                        ['division'],
+                        false,
+                        ['DIVISION_CODE'],
+                        false
+                      )
+                    "
+                  />
 
                   <master-search
-                    (focusout)="openTab($event, 'design')"
-                    #overlayDesignCode
-                    [MasterSearchData]="designCode"
+                    (focusout)="openTab($event, 'division')"
+                    *ngIf="flag != 'VIEW'"
+                    #overlayDivision
                     class="masterSearch"
-                    (newRowClick)="lookupCodeSelected($event, 'CODE')"
-                  ></master-search>
+                    [MasterSearchData]="divisionCodeData"
+                    (newRowClick)="
+                      lookupSelect($event, ['division'], ['DIVISION_CODE'])
+                    "
+                  >
+                  </master-search>
                 </mat-form-field>
               </div>
             </div>
 
             <div class="row mb-1">
               <div class="col-md-6">
-                <mat-checkbox formControlName="applyPriceValue" id="ID060"
+                <mat-checkbox
+                  class="example-margin"
+                  formControlName="applyPriceValue"
+                  (change)="matBoxChecker($event, 'applyPriceValue')"
                   >Apply Price Value</mat-checkbox
                 >
               </div>
 
               <div class="col-md-6">
-                <mat-checkbox formControlName="forceMaking" id="ID060"
+                <mat-checkbox
+                  class="example-margin"
+                  formControlName="forceMaking"
+                  (change)="matBoxChecker($event, 'forceMaking')"
                   >Force Making Charges On Net. Wt.</mat-checkbox
                 >
               </div>
@@ -107,12 +146,12 @@
               >
               <div class="col-md-4">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <mat-select formControlName="type">
+                  <mat-select formControlName="standardPrice">
                     <mat-option
-                      *ngFor="let data of typeList"
-                      [value]="data.field"
+                      *ngFor="let data of stdMaxAndMinPriceDropdown"
+                      [value]="data.VALUE"
                     >
-                      {{ data.field }}
+                      {{ data.FIELD }}
                     </mat-option>
                   </mat-select>
                 </mat-form-field>
@@ -128,12 +167,12 @@
               >
               <div class="col-md-4">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <mat-select formControlName="type">
+                  <mat-select formControlName="minimumPrice">
                     <mat-option
-                      *ngFor="let data of typeList"
-                      [value]="data.field"
+                      *ngFor="let data of stdMaxAndMinPriceDropdown"
+                      [value]="data.VALUE"
                     >
-                      {{ data.field }}
+                      {{ data.FIELD }}
                     </mat-option>
                   </mat-select>
                 </mat-form-field>
@@ -149,12 +188,12 @@
               >
               <div class="col-md-4">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <mat-select formControlName="type">
+                  <mat-select formControlName="maximumPrice">
                     <mat-option
-                      *ngFor="let data of typeList"
-                      [value]="data.field"
+                      *ngFor="let data of stdMaxAndMinPriceDropdown"
+                      [value]="data.VALUE"
                     >
-                      {{ data.field }}
+                      {{ data.FIELD }}
                     </mat-option>
                   </mat-select>
                 </mat-form-field>
@@ -170,7 +209,15 @@
               >
               <div class="col-md-4">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="standardVariance" />
+                  <input
+                    [readonly]="flag === 'VIEW'"
+                    AmountDecimalInput
+                    matInput
+                    class="text-right"
+                    type="number"
+                    formControlName="standardVariance"
+                    (keydown)="preventInvalidInput($event)"
+                  />
                 </mat-form-field>
               </div>
             </div>
@@ -184,7 +231,15 @@
               >
               <div class="col-md-4">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="defaultWastage" />
+                  <input
+                    [readonly]="flag === 'VIEW'"
+                    AmountDecimalInput
+                    matInput
+                    class="text-right"
+                    type="number"
+                    formControlName="defaultWastage"
+                    (keydown)="preventInvalidInput($event)"
+                  />
                 </mat-form-field>
               </div>
 
@@ -203,11 +258,12 @@
           <h4 class="mt-2 mb-4">Item Details</h4>
 
           <menu-buttons
+            *ngIf="flag !== 'VIEW'"
             [viewAddBtn]="true"
             [viewDeleteBtn]="true"
             [viewImportBtn]="false"
-            (addClick)="openItemdetails()"
-            (deleteClick)="removeItemDetails()"
+            (addClick)="openItemDetailsRow()"
+            (deleteClick)="removeItemDetailsRow()"
           >
           </menu-buttons>
 
@@ -220,19 +276,35 @@
               [showRowLines]="true"
               class="mt-3"
               [paging]="{ pageSize: 5 }"
+              [editing]="{ mode: 'cell', allowUpdating: true }"
+              [selection]="{ mode: 'multiple' }"
+              (onSelectionChanged)="onRowSelectionChanged($event)"
+              (onCellValueChanged)="onCellValueChanged($event)"
             >
               <dxo-paging [enabled]="true"></dxo-paging>
               <dxo-pager [showInfo]="true"></dxo-pager>
-              <dxo-selection mode="single"></dxo-selection>
+              <dxo-selection mode="multiple"></dxo-selection>
 
               <dxi-column
-                *ngFor="let data of columnHeadings"
-                [dataField]="data.field"
-                [caption]="data.caption"
+                *ngFor="let data of detailsGridColumnHeadings"
+                [dataField]="data.FIELD"
+                [caption]="data.CAPTION"
                 [allowEditing]="true"
                 alignment="center"
-                backgroundcolor="#000"
               >
+                <ng-template dxTemplate="cellTemplate" let-cellData="cellData">
+                  <mat-form-field style="width: 100%" appearance="outline">
+                    <input
+                      [readonly]="flag === 'VIEW'"
+                      class="form-control"
+                      matInput
+                      type="text"
+                      [value]="cellData.data[data.FIELD]"
+                      (change)="updateCellData(cellData, data.FIELD, $event)"
+                      placeholder="{{ data.CAPTION }}"
+                    />
+                  </mat-form-field>
+                </ng-template>
               </dxi-column>
             </dx-data-grid>
           </div>

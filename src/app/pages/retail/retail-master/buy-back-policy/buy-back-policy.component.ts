@@ -36,10 +36,10 @@ export class BuyBackPolicyComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 103,
-    SEARCH_FIELD: 'CODE',
+    SEARCH_FIELD: '',
     SEARCH_HEADING: 'Policy Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<> ''",
+    WHERECONDITION: "",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -259,7 +259,7 @@ export class BuyBackPolicyComponent implements OnInit {
 
   policycodeSelected(e: any) {
     console.log(e);
-    this.buybackpolicy.controls.policycode.setValue(e.KARAT_CODE);
+    this.buybackpolicy.controls.policycode.setValue(e.FYEARCODE);
   }
 
   update() {

@@ -71,6 +71,15 @@ export class WholesaleSalesmanTargetComponent implements OnInit {
     VIEW_TABLE:true,
 }
 
+setcodevalues(){
+  let salesmancode = this.wholesalesmanform.controls.salesman.value;
+  let finyearcode = this.wholesalesmanform.controls.fin_year.value;
+  if(salesmancode != "" && finyearcode != ""){
+    let data_code = salesmancode + '-' + finyearcode;
+    this.wholesalesmanform.controls.code.setValue(data_code);
+  }
+}
+
  selectedfinyear(e:any){
   console.log(e);
   this.wholesalesmanform.controls.fin_year.setValue(e.FYEARCODE);
@@ -116,7 +125,7 @@ export class WholesaleSalesmanTargetComponent implements OnInit {
 
   detailsapi(wst_id: any) {
     this.viewOnly = true;
-    let API = `WhlSmanTargetHeader/GetWhlSmanTargetHeaderDetail/${this.wst_id}`;
+    let API = `WhlSmanTargetHeader/GetWhlSmanTargetFullDetail/${this.wst_id}`;
     let Sub: Subscription = this.apiService.getDynamicAPI(API)
       .subscribe((result: any) => {
         this.dyndatas = result.response;
