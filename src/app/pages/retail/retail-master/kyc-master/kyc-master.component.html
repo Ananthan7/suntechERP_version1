@@ -56,17 +56,30 @@
 
                 <div class="row">
                     <dx-data-grid id="gridContainer" [dataSource]="maindetails" [showBorders]="true"
-                        [showColumnLines]="true" [showRowLines]="true" [allowColumnResizing]="true" keyExpr="SRNO">
+                        [showColumnLines]="true" [showRowLines]="true" [allowColumnResizing]="true" keyExpr="KYC_SRNO">
 
-                        <dxi-column dataField="SRNO" caption="S.NO">
+                        <dxi-column dataField="KYC_SRNO" caption="S.NO">
+                        </dxi-column>
+                        <dxi-column dataField="KYC_DOCTYPE" caption="Doc. Type" cellTemplate="kyc_doctype"> </dxi-column>
+
+                        <div *dxTemplate="let data of 'kyc_doctype'">
+                            <input type="text" [disabled]="viewMode"  (change)="docType(data,$event)" [value]="data.value" style="width: 100%;" />
+                        </div>
+
+                        <dxi-column dataField="KYC_DOCDESC" caption="Doc. Desc" cellTemplate="doc_desc"> </dxi-column>
+
+                        <div *dxTemplate="let data of 'doc_desc'">
+                            
+                            <input type="text" [disabled]="viewMode"  (change)="docTypeDes(data,$event)" [value]="data.value" style="width: 100%;" />
+                        </div>
+
+
+                        <!-- <dxi-column dataField="DOC_DESC" caption="Doc.Desc" cellTemp="doc_desc">
                         </dxi-column>
 
-                        <dxi-column dataField="DOC_TYPE" caption="Doc.Type" format="dd/MM/yyyy">
-                        </dxi-column>
-
-                        <dxi-column dataField="DOC_DESC" caption="Doc.Desc">
-                        </dxi-column>
-
+                        <div *dxTemplate="let data of 'doc_desc'">
+                            <input type="text" [disabled]="viewMode" [value]="data.value" (change)="docTypeDes(data,$event)" style="width: 100%;" />
+                        </div> -->
                     </dx-data-grid>
                 </div>
             </div>
