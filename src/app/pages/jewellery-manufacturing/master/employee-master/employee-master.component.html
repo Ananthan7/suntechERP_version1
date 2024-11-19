@@ -1,469 +1,1109 @@
 <div>
-    <!-- header section starts -->
-    <div class="card-content border-bottom d-flex justify-content-between p-2">
-        <h5 class="pos-modaltitle" id="modal-dia-metal">Employee Master</h5>
-        <button type="button" class="btn btn-close close-btn" (click)="closed()">
-            <i class="feather icon-x close-icon"></i>
-        </button>
-    </div>
-    <!-- modal header component -->
-    <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
-        (deleteClick)="deleteEmployeeMaster()"></modal-header>
-    <!-- content section -->
-    <div class="p-4 ">
-        <form [formGroup]="employeeMasterForm">
-            <div class="row justify-content-between">
-
-                <div class="col-6">
-                    <div class="row mb-1">
-                        <label for="inputPassword" id="ID001" class="col-sm-2 col-form-label">
-                            Code :</label>
-                        <div class="col-sm-4">
-                            <mat-form-field style="width: 100%" appearance="outline">
-                                <input type="text" #codeInput matInput formControlName="code" UpperCaseDirective  [readonly]="viewMode || editMode"
-                                    autocomplete="off" />
-                            </mat-form-field>
-                        </div>
-                        <label for="inputPassword" class="col-sm-2 col-form-label">
-                            Name :</label>
-                        <div class="col-sm-4">
-                            <mat-form-field style="width: 100%" appearance="outline">
-                                <input type="text" matInput formControlName="name" UpperCaseDirective
-                                    autocomplete="off"   [readonly]="viewMode || codeEnable"/>
-                            </mat-form-field>
-                        </div>
-                    </div>
-                    <div class="row mb-1">
-                        <label for="inputPassword" id="ID001" class="col-sm-3 col-form-label">
-                            Other Language :</label>
-                        <div class="col-sm-9">
-                            <mat-form-field style="width: 100%" appearance="outline">
-                                <input type="text" #codeInput matInput formControlName="otherLanguage"
-                                    UpperCaseDirective autocomplete="off"   [readonly]="viewMode || codeEnable"/>
-                            </mat-form-field>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <label for="inputPassword" id="ID002" class="col-sm-2 col-form-label">Branch : </label>
-                        <div class="col-sm-4">
-                            <mat-form-field style="width: 100%" appearance="outline">
-                                <input type="text" matInput formControlName="Branch" UpperCaseDirective   [readonly]="viewMode || codeEnable"/>
-                                <master-search *ngIf="!viewMode"  class="masterSearch" [MasterSearchData]="BranchData"
-                                    (newRowClick)="BranchDataSelected($event)">
-                                </master-search>
-                            </mat-form-field>
-                        </div>
-                        <div class="col-sm-5">
-                            <mat-form-field style="width: 100%" appearance="outline">
-                                <input type="text" matInput formControlName="BranchDes" UpperCaseDirective   [readonly]="viewMode || codeEnable"/>
-                            </mat-form-field>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <label for="inputPassword" id="ID002" class="col-sm-2 col-form-label">Department : </label>
-                        <div class="col-sm-4">
-                            <mat-form-field style="width: 100%" appearance="outline">
-                                <input type="text" matInput formControlName="Department" UpperCaseDirective   [readonly]="viewMode || codeEnable"/>
-                                <master-search *ngIf="!viewMode"  class="masterSearch" [MasterSearchData]="DepartmentData"
-                                    (newRowClick)="DepartmentSelected($event)">
-                                </master-search>
-                            </mat-form-field>
-                        </div>
-                        <div class="col-sm-5">
-                            <mat-form-field style="width: 100%" appearance="outline">
-                                <input type="text" matInput formControlName="DepartmentDes" UpperCaseDirective   [readonly]="viewMode || codeEnable"/>
-                            </mat-form-field>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <label for="inputPassword" id="ID002" class="col-sm-2 col-form-label">Designation : </label>
-                        <div class="col-sm-4">
-                            <mat-form-field style="width: 100%" appearance="outline">
-                                <input type="text" matInput formControlName="Designation" UpperCaseDirective   [readonly]="viewMode || codeEnable"/>
-                                <master-search *ngIf="!viewMode"  class="masterSearch" [MasterSearchData]="DesignationData"
-                                    (newRowClick)="DesignationSelected($event)">
-                                </master-search>
-                            </mat-form-field>
-                        </div>
-                        <div class="col-sm-5">
-                            <mat-form-field style="width: 100%" appearance="outline">
-                                <input type="text" matInput formControlName="DesignationDes" UpperCaseDirective   [readonly]="viewMode || codeEnable"/>
-                            </mat-form-field>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <label for="inputPassword" id="ID002" class="col-sm-2 col-form-label">Group Code : </label>
-                        <div class="col-sm-4">
-                            <mat-form-field style="width: 100%" appearance="outline">
-                                <input type="text" matInput formControlName="GroupCode" UpperCaseDirective   [readonly]="viewMode || codeEnable"/>
-                            </mat-form-field>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-2">
-                    <div class="image_box">
-                        <div class="img_box">
-
-                        </div>
-                    </div>
-                </div>
+  <!-- header section starts -->
+  <div class="card-content border-bottom d-flex justify-content-between p-2">
+    <h5 class="pos-modaltitle" id="modal-dia-metal">Employee Master</h5>
+    <button type="button" class="btn btn-close close-btn" (click)="closed()">
+      <i class="feather icon-x close-icon"></i>
+    </button>
+  </div>
+  <!-- modal header component -->
+  <modal-header
+    (saveClick)="formSubmit()"
+    (cancelClick)="close()"
+    (deleteClick)="deleteEmployeeMaster()"
+  ></modal-header>
+  <!-- content section -->
+  <div class="p-4">
+    <form [formGroup]="employeeMasterForm">
+      <div class="row justify-content-between">
+        <div class="col-6">
+          <div class="row mb-1">
+            <label
+              for="inputPassword"
+              id="ID001"
+              class="col-sm-2 col-form-label"
+            >
+              Code :</label
+            >
+            <div class="col-sm-4">
+              <mat-form-field style="width: 100%" appearance="outline">
+                <input
+                  type="text"
+                  #codeInput
+                  matInput
+                  formControlName="code"
+                  UpperCaseDirective
+                  [readonly]="viewMode || editMode"
+                  autocomplete="off"
+                />
+              </mat-form-field>
             </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <mat-tab-group [(selectedIndex)]="selectedTabIndex">
-                        <mat-tab label="General">
-                            <div class="pt-2">
-                                <div class="row mb-1">
-                                    <label for="inputPassword" class="col-sm-2 col-form-label">
-                                        Grade</label>
-                                    <div class="col-sm-2">
-                                        <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" #codeInput matInput formControlName="Grade"
-                                                UpperCaseDirective autocomplete="off"   [readonly]="viewMode || codeEnable"/>
-                                            <master-search *ngIf="!viewMode"  class="masterSearch" [MasterSearchData]="GradeData"
-                                                (newRowClick)="GradeSelected($event)">
-                                            </master-search>
-                                        </mat-form-field>
-                                    </div>
-                                    <div class="col-sm-2">
-                                        <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" #codeInput matInput formControlName="GradeDes"
-                                                UpperCaseDirective autocomplete="off"   [readonly]="viewMode || codeEnable"/>
-                                        </mat-form-field>
-                                    </div>
-                                    <label for="inputPassword" class="col-sm-2 col-form-label">
-                                        Date of Joinong</label>
-                                    <div class="col-sm-2">
-                                        <mat-form-field style="width: 100%;" appearance="outline">
-                                            <input matInput [matDatepicker]="DOJ" [max]="DOJ" formControlName="DOJ"
-                                                placeholder="DD/MM/YYYY" DateValidation   [readonly]="viewMode || codeEnable"/>
-                                            <mat-datepicker-toggle matSuffix [for]="DOJ"></mat-datepicker-toggle>
-                                            <mat-datepicker [startAt]="currentDate" #DOJ></mat-datepicker>
-                                        </mat-form-field>
-                                    </div>
-                                </div>
-                                <div class="row mb-1">
-                                    <label for="inputPassword" class="col-sm-2 col-form-label">
-                                        Date of Birth</label>
-                                    <div class="col-sm-2">
-                                        <mat-form-field style="width: 100%;" appearance="outline">
-                                            <input matInput [matDatepicker]="DOB" [max]="DOB" formControlName="DOB"
-                                                placeholder="DD/MM/YYYY" DateValidation   [readonly]="viewMode || codeEnable"/>
-                                            <mat-datepicker-toggle matSuffix [for]="DOB"></mat-datepicker-toggle>
-                                            <mat-datepicker [startAt]="currentDate" #DOB></mat-datepicker>
-                                        </mat-form-field>
-                                    </div>
-                                    <label for="inputPassword" class="col-sm-2 col-form-label offset-md-2">
-                                        Blood Group</label>
-                                    <div class="col-sm-2">
-                                        <mat-form-field style="width: 100%;" appearance="outline">
-                                            <mat-select formControlName="BloodGroup">
-                                                <mat-option value="1">A+</mat-option>
-                                                <mat-option value="2">A-</mat-option>
-                                                <mat-option value="3">B+</mat-option>
-                                                <mat-option value="4">B-</mat-option>
-                                                <mat-option value="5">AB+</mat-option>
-                                                <mat-option value="6">AB-</mat-option>
-                                                <mat-option value="7">O+</mat-option>
-                                                <mat-option value="8">O-</mat-option>
-                                                <mat-option value="9">Other</mat-option>
-                                            </mat-select>
-                                        </mat-form-field>
-                                    </div>
-                                </div>
-                                <div class="row mb-1">
-                                    <label for="inputPassword" class="col-sm-2 col-form-label">
-                                        Nationality</label>
-                                    <div class="col-sm-2">
-                                        <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" #codeInput matInput formControlName="Nationality"
-                                                UpperCaseDirective autocomplete="off"   [readonly]="viewMode || codeEnable"/>
-                                            <master-search *ngIf="!viewMode"  class="masterSearch" [MasterSearchData]="NationalityData"
-                                                (newRowClick)="NationalitySelected($event)">
-                                            </master-search>
-                                        </mat-form-field>
-                                    </div>
-                                </div>
-                                <div class="row mb-1">
-                                    <label for="inputPassword" class="col-sm-2 col-form-label">
-                                        Religion</label>
-                                    <div class="col-sm-2">
-                                        <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" #codeInput matInput formControlName="Religion"
-                                                UpperCaseDirective autocomplete="off"   [readonly]="viewMode || codeEnable"/>
-                                            <master-search *ngIf="!viewMode"  class="masterSearch" [MasterSearchData]="ReligionData"
-                                                (newRowClick)="ReligionSelected($event)">
-                                            </master-search>
-                                        </mat-form-field>
-                                    </div>
-                                </div>
-                                <div class="row mb-1">
-                                    <label for="inputPassword" class="col-sm-2 col-form-label">
-                                        Father Name</label>
-                                    <div class="col-sm-2">
-                                        <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" #codeInput matInput formControlName="FatherName"
-                                                UpperCaseDirective autocomplete="off"   [readonly]="viewMode || codeEnable"/>
+            <label for="inputPassword" class="col-sm-2 col-form-label">
+              Name :</label
+            >
+            <div class="col-sm-4">
+              <mat-form-field style="width: 100%" appearance="outline">
+                <input
+                  type="text"
+                  matInput
+                  formControlName="name"
+                  UpperCaseDirective
+                  autocomplete="off"
+                  [readonly]="viewMode || codeEnable"
+                />
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row mb-1">
+            <label
+              for="inputPassword"
+              id="ID001"
+              class="col-sm-3 col-form-label"
+            >
+              Other Language :</label
+            >
+            <div class="col-sm-9">
+              <mat-form-field style="width: 100%" appearance="outline">
+                <input
+                  type="text"
+                  #codeInput
+                  matInput
+                  formControlName="otherLanguage"
+                  UpperCaseDirective
+                  autocomplete="off"
+                  [readonly]="viewMode || codeEnable"
+                />
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row">
+            <label
+              for="inputPassword"
+              id="ID002"
+              class="col-sm-2 col-form-label"
+              >Branch :
+            </label>
+            <div class="col-sm-4">
+              <mat-form-field style="width: 100%" appearance="outline">
+                <input
+                  type="text"
+                  matInput
+                  formControlName="Branch"
+                  UpperCaseDirective
+                  [readonly]="viewMode || codeEnable"
+                  (focusout)="validateLookupField($event, BranchData, 'Branch')"
+                  (keydown)="lookupKeyPress($event, 'Branch')"
+                />
+                <master-search
+                  *ngIf="!viewMode"
+                  #overlayBranchSearch
+                  class="masterSearch"
+                  [MasterSearchData]="BranchData"
+                  (newRowClick)="BranchDataSelected($event)"
+                >
+                </master-search>
+              </mat-form-field>
+            </div>
+            <div class="col-sm-5">
+              <mat-form-field style="width: 100%" appearance="outline">
+                <input
+                  type="text"
+                  matInput
+                  formControlName="BranchDes"
+                  UpperCaseDirective
+                  [readonly]="viewMode || codeEnable"
+                />
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row">
+            <label
+              for="inputPassword"
+              id="ID002"
+              class="col-sm-2 col-form-label"
+              >Department :
+            </label>
+            <div class="col-sm-4">
+              <mat-form-field style="width: 100%" appearance="outline">
+                <input
+                  type="text"
+                  matInput
+                  formControlName="Department"
+                  UpperCaseDirective
+                  [readonly]="viewMode || codeEnable"
+                  (focusout)="
+                    validateLookupField($event, DepartmentData, 'Department')
+                  "
+                  (keydown)="lookupKeyPress($event, 'Department')"
+                />
+                <master-search
+                  *ngIf="!viewMode"
+                  #overlayDepartmentSearch
+                  class="masterSearch"
+                  [MasterSearchData]="DepartmentData"
+                  (newRowClick)="DepartmentSelected($event)"
+                >
+                </master-search>
+              </mat-form-field>
+            </div>
+            <div class="col-sm-5">
+              <mat-form-field style="width: 100%" appearance="outline">
+                <input
+                  type="text"
+                  matInput
+                  formControlName="DepartmentDes"
+                  UpperCaseDirective
+                  [readonly]="viewMode || codeEnable"
+                />
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row">
+            <label
+              for="inputPassword"
+              id="ID002"
+              class="col-sm-2 col-form-label"
+              >Designation :
+            </label>
+            <div class="col-sm-4">
+              <mat-form-field style="width: 100%" appearance="outline">
+                <input
+                  type="text"
+                  matInput
+                  formControlName="Designation"
+                  UpperCaseDirective
+                  [readonly]="viewMode || codeEnable"
+                  (focusout)="
+                    validateLookupField($event, DesignationData, 'Designation')
+                  "
+                  (keydown)="lookupKeyPress($event, 'Designation')"
+                />
+                <master-search
+                  *ngIf="!viewMode"
+                  #overlayDesignationSearch
+                  class="masterSearch"
+                  [MasterSearchData]="DesignationData"
+                  (newRowClick)="DesignationSelected($event)"
+                >
+                </master-search>
+              </mat-form-field>
+            </div>
+            <div class="col-sm-5">
+              <mat-form-field style="width: 100%" appearance="outline">
+                <input
+                  type="text"
+                  matInput
+                  formControlName="DesignationDes"
+                  UpperCaseDirective
+                  [readonly]="viewMode || codeEnable"
+                />
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row">
+            <label
+              for="inputPassword"
+              id="ID002"
+              class="col-sm-2 col-form-label"
+              >Group Code :
+            </label>
+            <div class="col-sm-4">
+              <mat-form-field style="width: 100%" appearance="outline">
+                <input
+                  type="text"
+                  matInput
+                  formControlName="GroupCode"
+                  UpperCaseDirective
+                  [readonly]="viewMode || codeEnable"
+                />
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div class="image_box">
+            <div class="img_box"></div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <mat-tab-group [(selectedIndex)]="selectedTabIndex">
+            <mat-tab label="General">
+              <div class="pt-2">
+                <div class="row mb-1">
+                  <label for="inputPassword" class="col-sm-2 col-form-label">
+                    Grade</label
+                  >
+                  <div class="col-sm-2">
+                    <mat-form-field style="width: 100%" appearance="outline">
+                      <input
+                        type="text"
+                        #codeInput
+                        matInput
+                        formControlName="Grade"
+                        UpperCaseDirective
+                        autocomplete="off"
+                        [readonly]="viewMode || codeEnable"
+                        (focusout)="
+                          validateLookupField($event, GradeData, 'Grade')
+                        "
+                        (keydown)="lookupKeyPress($event, 'Grade')"
+                      />
+                      <master-search
+                        *ngIf="!viewMode"
+                        class="masterSearch"
+                        #overlayGradeSearch
+                        [MasterSearchData]="GradeData"
+                        (newRowClick)="GradeSelected($event)"
+                      >
+                      </master-search>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-sm-2">
+                    <mat-form-field style="width: 100%" appearance="outline">
+                      <input
+                        type="text"
+                        #codeInput
+                        matInput
+                        formControlName="GradeDes"
+                        UpperCaseDirective
+                        autocomplete="off"
+                        [readonly]="viewMode || codeEnable"
+                      />
+                    </mat-form-field>
+                  </div>
+                  <label for="inputPassword" class="col-sm-2 col-form-label">
+                    Date of Joinong</label
+                  >
+                  <div class="col-sm-2">
+                    <mat-form-field style="width: 100%" appearance="outline">
+                      <input
+                        matInput
+                        [matDatepicker]="DOJ"
+                        [max]="DOJ"
+                        formControlName="DOJ"
+                        placeholder="DD/MM/YYYY"
+                        DateValidation
+                        [readonly]="viewMode || codeEnable"
+                      />
+                      <mat-datepicker-toggle
+                        matSuffix
+                        [for]="DOJ"
+                      ></mat-datepicker-toggle>
+                      <mat-datepicker
+                        [startAt]="currentDate"
+                        #DOJ
+                      ></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row mb-1">
+                  <label for="inputPassword" class="col-sm-2 col-form-label">
+                    Date of Birth</label
+                  >
+                  <div class="col-sm-2">
+                    <mat-form-field style="width: 100%" appearance="outline">
+                      <input
+                        matInput
+                        [matDatepicker]="DOB"
+                        [max]="DOB"
+                        formControlName="DOB"
+                        placeholder="DD/MM/YYYY"
+                        DateValidation
+                        [readonly]="viewMode || codeEnable"
+                      />
+                      <mat-datepicker-toggle
+                        matSuffix
+                        [for]="DOB"
+                      ></mat-datepicker-toggle>
+                      <mat-datepicker
+                        [startAt]="currentDate"
+                        #DOB
+                      ></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                  <label
+                    for="inputPassword"
+                    class="col-sm-2 col-form-label offset-md-2"
+                  >
+                    Blood Group</label
+                  >
+                  <div class="col-sm-2">
+                    <mat-form-field style="width: 100%" appearance="outline">
+                      <mat-select formControlName="BloodGroup">
+                        <mat-option value="1">A+</mat-option>
+                        <mat-option value="2">A-</mat-option>
+                        <mat-option value="3">B+</mat-option>
+                        <mat-option value="4">B-</mat-option>
+                        <mat-option value="5">AB+</mat-option>
+                        <mat-option value="6">AB-</mat-option>
+                        <mat-option value="7">O+</mat-option>
+                        <mat-option value="8">O-</mat-option>
+                        <mat-option value="9">Other</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row mb-1">
+                  <label for="inputPassword" class="col-sm-2 col-form-label">
+                    Nationality</label
+                  >
+                  <div class="col-sm-2">
+                    <mat-form-field style="width: 100%" appearance="outline">
+                      <input
+                        type="text"
+                        #codeInput
+                        matInput
+                        formControlName="Nationality"
+                        UpperCaseDirective
+                        autocomplete="off"
+                        [readonly]="viewMode || codeEnable"
+                        (focusout)="
+                          validateLookupField(
+                            $event,
+                            NationalityData,
+                            'Nationality'
+                          )
+                        "
+                        (keydown)="lookupKeyPress($event, 'Nationality')"
+                      />
+                      <master-search
+                        *ngIf="!viewMode"
+                        class="masterSearch"
+                        [MasterSearchData]="NationalityData"
+                        #overlayNationalitySearch
+                        (newRowClick)="NationalitySelected($event)"
+                      >
+                      </master-search>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row mb-1">
+                  <label for="inputPassword" class="col-sm-2 col-form-label">
+                    Religion</label
+                  >
+                  <div class="col-sm-2">
+                    <mat-form-field style="width: 100%" appearance="outline">
+                      <input
+                        type="text"
+                        #codeInput
+                        matInput
+                        formControlName="Religion"
+                        UpperCaseDirective
+                        autocomplete="off"
+                        [readonly]="viewMode || codeEnable"
+                        (focusout)="
+                          validateLookupField($event, ReligionData, 'Religion')
+                        "
+                        (keydown)="lookupKeyPress($event, 'Religion')"
+                      />
+                      <master-search
+                        *ngIf="!viewMode"
+                        class="masterSearch"
+                        [MasterSearchData]="ReligionData"
+                        #overlayReligionSearch
+                        (newRowClick)="ReligionSelected($event)"
+                      >
+                      </master-search>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row mb-1">
+                  <label for="inputPassword" class="col-sm-2 col-form-label">
+                    Father Name</label
+                  >
+                  <div class="col-sm-2">
+                    <mat-form-field style="width: 100%" appearance="outline">
+                      <input
+                        type="text"
+                        #codeInput
+                        matInput
+                        formControlName="FatherName"
+                        UpperCaseDirective
+                        autocomplete="off"
+                        [readonly]="viewMode || codeEnable"
+                      />
+                    </mat-form-field>
+                  </div>
+                </div>
 
-                                        </mat-form-field>
-                                    </div>
-                                </div>
-
-                                <div class="row mb-1">
-                                    <label for="inputPassword" class="col-sm-2 col-form-label">
-                                        Gender</label>
-                                    <div class="col-sm-2">
-                                        <mat-form-field style="width: 100%;" appearance="outline">
-                                            <mat-select formControlName="Gender" [disabled]="viewMode">
-                                                <mat-option *ngFor="let option of GenderList" [value]="option.value">
-                                                  {{ option.name }}
-                                                </mat-option>
-                                                <!-- <mat-option value="1">Male</mat-option>
+                <div class="row mb-1">
+                  <label for="inputPassword" class="col-sm-2 col-form-label">
+                    Gender</label
+                  >
+                  <div class="col-sm-2">
+                    <mat-form-field style="width: 100%" appearance="outline">
+                      <mat-select
+                        formControlName="Gender"
+                        [disabled]="viewMode"
+                      >
+                        <mat-option
+                          *ngFor="let option of GenderList"
+                          [value]="option.value"
+                        >
+                          {{ option.name }}
+                        </mat-option>
+                        <!-- <mat-option value="1">Male</mat-option>
                                                 <mat-option value="2">FEMALE</mat-option>
                                                 <mat-option value="3">Other</mat-option> -->
-                                            </mat-select>
-                                        </mat-form-field>
-                                    </div>
-                                    <label for="inputPassword" class="col-sm-2 offset-md-2 col-form-label">
-                                        Maritial Status</label>
-                                    <div class="col-sm-2">
-                                        <mat-form-field style="width: 100%" appearance="outline">
-                                            <mat-select formControlName="MaritialStatus" [disabled]="viewMode">
-                                                <mat-option *ngFor="let option of maritial" [value]="option.value">
-                                                  {{ option.name }}
-                                                </mat-option>
-                                                <!-- <mat-option value="1">Married</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <label
+                    for="inputPassword"
+                    class="col-sm-2 offset-md-2 col-form-label"
+                  >
+                    Maritial Status</label
+                  >
+                  <div class="col-sm-2">
+                    <mat-form-field style="width: 100%" appearance="outline">
+                      <mat-select
+                        formControlName="MaritialStatus"
+                        [disabled]="viewMode"
+                      >
+                        <mat-option
+                          *ngFor="let option of maritial"
+                          [value]="option.value"
+                        >
+                          {{ option.name }}
+                        </mat-option>
+                        <!-- <mat-option value="1">Married</mat-option>
                                                 <mat-option value="2">UnMarried</mat-option>
                                                 <mat-option value="3">Single</mat-option> -->
-                                            </mat-select>
-                                        </mat-form-field>
-                                    </div>
-                                </div>
-                            </div>
-                        </mat-tab>
-                        <mat-tab label="Contact Details">
-                            <div class="row">
-                                <div class="col-md-6 ">
-                                    <div class="border p-2">
-                                        <label for="inputPassword" class="col-sm-12 col-form-label">
-                                            Address in Home Country</label>
-                                        <div class="row mb-1">
-                                            <label for="inputPassword" class="col-sm-2 col-form-label">
-                                                House Name</label>
-                                            <div class="col-sm-8">
-                                                <mat-form-field style="width: 100%" appearance="outline">
-                                                    <input type="text" #codeInput matInput
-                                                        formControlName="HomeHouseName" UpperCaseDirective
-                                                        autocomplete="off"   [readonly]="viewMode || codeEnable"/>
-                                                </mat-form-field>
-                                            </div>
-                                        </div>
-                                        <div class="row mb-1">
-                                            <label for="inputPassword" class="col-sm-2 col-form-label">
-                                                Address</label>
-                                            <div class="col-sm-8">
-                                                <mat-form-field style="width: 100%" appearance="outline">
-                                                    <textarea matInput rows="3"
-                                                        formControlName="HomeAddress" autocomplete="off"   [readonly]="viewMode || codeEnable"></textarea>
-                                                </mat-form-field>
-                                            </div>
-                                        </div>
-                                        <div class="row mb-1">
-                                            <label for="inputPassword" class="col-sm-2 col-form-label">
-                                                Country</label>
-                                            <div class="col-sm-8">
-                                                <mat-form-field style="width: 100%" appearance="outline">
-                                                    <input type="text" #codeInput matInput formControlName="Country"
-                                                        UpperCaseDirective autocomplete="off"   [readonly]="viewMode || codeEnable"/>
-                                                    <master-search *ngIf="!viewMode"  class="masterSearch"
-                                                        [MasterSearchData]="CountryCodeData"
-                                                        (newRowClick)="CountryCodeSelected($event)">
-                                                    </master-search>
-                                                </mat-form-field>
-                                            </div>
-                                        </div>
-                                        <div class="row mb-1">
-                                            <label for="inputPassword" class="col-sm-2 col-form-label">
-                                                State</label>
-                                            <div class="col-sm-8">
-                                                <mat-form-field style="width: 100%" appearance="outline">
-                                                    <input type="text" #codeInput matInput formControlName="State"
-                                                        UpperCaseDirective autocomplete="off"   [readonly]="viewMode || codeEnable"/>
-                                                    <master-search *ngIf="!viewMode"  class="masterSearch"
-                                                        [MasterSearchData]="StateCodeData"
-                                                        (newRowClick)="StateCodeSelected($event)">
-                                                    </master-search>
-                                                </mat-form-field>
-                                            </div>
-                                        </div>
-                                        <div class="row mb-1">
-                                            <label for="inputPassword" class="col-sm-2 col-form-label">
-                                                Town / City</label>
-                                            <div class="col-sm-8">
-                                                <mat-form-field style="width: 100%" appearance="outline">
-                                                    <input type="text" #codeInput matInput formControlName="City"
-                                                        UpperCaseDirective autocomplete="off"   [readonly]="viewMode || codeEnable"/>
-                                                    <master-search *ngIf="!viewMode"  class="masterSearch"
-                                                        [MasterSearchData]="CityCodeData"
-                                                        (newRowClick)="CityCodeSelected($event)">
-                                                    </master-search>
-                                                </mat-form-field>
-                                            </div>
-                                        </div>
-                                        <div class="row mb-1">
-                                            <label for="inputPassword" class="col-sm-2 col-form-label">
-                                                Tel (Land)</label>
-                                            <div class="col-sm-8">
-                                                <mat-form-field style="width: 100%" appearance="outline">
-                                                    <input type="text" #codeInput matInput formControlName="LandLineNum"
-                                                        UpperCaseDirective autocomplete="off"   [readonly]="viewMode || codeEnable"/>
-                                                </mat-form-field>
-                                            </div>
-                                        </div>
-                                        <div class="row mb-1">
-                                            <label for="inputPassword" class="col-sm-2 col-form-label">
-                                                Tel (moblie)</label>
-                                            <div class="col-sm-3">
-                                                <mat-form-field style="width: 100%" appearance="outline">
-                                                    <input type="text" #codeInput matInput formControlName="MoblieCode"
-                                                        UpperCaseDirective autocomplete="off"   [readonly]="viewMode || codeEnable"/>
-                                                </mat-form-field>
-                                            </div>
-                                            <div class="col-sm-5">
-                                                <mat-form-field style="width: 100%" appearance="outline">
-                                                    <input type="text" #codeInput matInput formControlName="MoblieNum"
-                                                        UpperCaseDirective autocomplete="off"   [readonly]="viewMode || codeEnable"/>
-                                                </mat-form-field>
-                                            </div>
-                                        </div>
-                                        <div class="row mb-1">
-                                            <label for="inputPassword" class="col-sm-2 col-form-label">
-                                                Email </label>
-                                            <div class="col-sm-8">
-                                                <mat-form-field style="width: 100%" appearance="outline">
-                                                    <input type="text" #codeInput matInput formControlName="email"
-                                                        UpperCaseDirective autocomplete="off"   [readonly]="viewMode || codeEnable"/>
-                                                </mat-form-field>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 ">
-                                    <div class="border p-2">
-                                        <label for="inputPassword" class="col-sm-12 col-form-label">
-                                            Present Address</label>
-                                        <div class="row mb-1">
-                                            <label for="inputPassword" class="col-sm-2 col-form-label">
-                                                Flat / House No</label>
-                                            <div class="col-sm-8">
-                                                <mat-form-field style="width: 100%" appearance="outline">
-                                                    <input type="text" #codeInput matInput formControlName="PRhouseName"
-                                                        UpperCaseDirective autocomplete="off"   [readonly]="viewMode || codeEnable"/>
-                                                </mat-form-field>
-                                            </div>
-                                        </div>
-                                        <div class="row mb-1">
-                                            <label for="inputPassword" class="col-sm-2 col-form-label">
-                                                Address</label>
-                                            <div class="col-sm-8">
-                                                <mat-form-field style="width: 100%" appearance="outline">
-                                                    <textarea matInput rows="3" formControlName="PRAddress" autocomplete="off"   [readonly]="viewMode || codeEnable"></textarea>
-                                                </mat-form-field>
-                                            </div>
-                                        </div>
-                                        <div class="row mb-1">
-                                            <label for="inputPassword" class="col-sm-2 col-form-label">
-                                                Country</label>
-                                            <div class="col-sm-8">
-                                                <mat-form-field style="width: 100%" appearance="outline">
-                                                    <input type="text" #codeInput matInput formControlName="PRCountry"
-                                                        UpperCaseDirective autocomplete="off"   [readonly]="viewMode || codeEnable"/>
-                                                    <master-search *ngIf="!viewMode"  class="masterSearch"
-                                                        [MasterSearchData]="PRCountryCodeData"
-                                                        (newRowClick)="PRCountryCodeSelected($event)">
-                                                    </master-search>
-                                                </mat-form-field>
-                                            </div>
-                                        </div>
-                                        <div class="row mb-1">
-                                            <label for="inputPassword" class="col-sm-2 col-form-label">
-                                                State</label>
-                                            <div class="col-sm-8">
-                                                <mat-form-field style="width: 100%" appearance="outline">
-                                                    <input type="text" #codeInput matInput formControlName="PRState"
-                                                        UpperCaseDirective autocomplete="off"   [readonly]="viewMode || codeEnable"/>
-                                                    <master-search *ngIf="!viewMode"  class="masterSearch"
-                                                        [MasterSearchData]="PRStateCodeData"
-                                                        (newRowClick)="PRStateCodeSelected($event)">
-                                                    </master-search>
-                                                </mat-form-field>
-                                            </div>
-                                        </div>
-                                        <div class="row mb-1">
-                                            <label for="inputPassword" class="col-sm-2 col-form-label">
-                                                Town / City</label>
-                                            <div class="col-sm-8">
-                                                <mat-form-field style="width: 100%" appearance="outline">
-                                                    <input type="text" #codeInput matInput formControlName="PRCity"
-                                                        UpperCaseDirective autocomplete="off"   [readonly]="viewMode || codeEnable"/>
-                                                    <master-search *ngIf="!viewMode"  class="masterSearch"
-                                                        [MasterSearchData]="PRCityCodeData"
-                                                        (newRowClick)="PRCityCodeSelected($event)">
-                                                    </master-search>
-                                                </mat-form-field>
-                                            </div>
-                                        </div>
-                                        <div class="row mb-1">
-                                            <label for="inputPassword" class="col-sm-2 col-form-label">
-                                                Tel (Land)</label>
-                                            <div class="col-sm-8">
-                                                <mat-form-field style="width: 100%" appearance="outline">
-                                                    <input type="text" #codeInput matInput formControlName="PRLand"
-                                                        UpperCaseDirective autocomplete="off"   [readonly]="viewMode || codeEnable"/>
-                                                </mat-form-field>
-                                            </div>
-                                        </div>
-                                        <div class="row mb-1">
-                                            <label for="inputPassword" class="col-sm-2 col-form-label">
-                                                Tel (moblie)</label>
-                                            <div class="col-sm-3">
-                                                <mat-form-field style="width: 100%" appearance="outline">
-                                                    <input type="text" #codeInput matInput
-                                                        formControlName="PRMoblieCode" UpperCaseDirective
-                                                        autocomplete="off"   [readonly]="viewMode || codeEnable"/>
-                                                </mat-form-field>
-                                            </div>
-                                            <div class="col-sm-5">
-                                                <mat-form-field style="width: 100%" appearance="outline">
-                                                    <input type="text" #codeInput matInput formControlName="PRMoblieNo"
-                                                        UpperCaseDirective autocomplete="off"   [readonly]="viewMode || codeEnable"/>
-                                                </mat-form-field>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </mat-tab>
-                        <mat-tab label="Documents / Insurance">
-                            <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true " [viewImportBtn]="false"
-                                (addClick)="addTableData()" (deleteClick)="deleteTableData()">
-                            </menu-buttons>
-
-                            <dx-data-grid id="gridContainer" [dataSource]="tableData" [showBorders]="true"
-                                [showColumnLines]="true" [showRowLines]="true" [allowColumnResizing]="true"
-                                class="mt-3"> >
-                                <dxo-selection mode="single"></dxo-selection>
-                                <dxi-column dataField="Code" caption="Code" class="tab"> </dxi-column>
-                                <dxi-column caption="Description" cellTemplate="division"> </dxi-column>
-                                <dxi-column caption="Document No"> </dxi-column>
-                                <dxi-column caption="Expiry Date"> </dxi-column>
-                                <dxi-column caption="Attachment"> </dxi-column>
-                            </dx-data-grid>
-                        </mat-tab>
-                    </mat-tab-group>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
                 </div>
-            </div>
-        </form>
-    </div>
+              </div>
+            </mat-tab>
+            <mat-tab label="Contact Details">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="border p-2">
+                    <label for="inputPassword" class="col-sm-12 col-form-label">
+                      Address in Home Country</label
+                    >
+                    <div class="row mb-1">
+                      <label
+                        for="inputPassword"
+                        class="col-sm-2 col-form-label"
+                      >
+                        House Name</label
+                      >
+                      <div class="col-sm-8">
+                        <mat-form-field
+                          style="width: 100%"
+                          appearance="outline"
+                        >
+                          <input
+                            type="text"
+                            #codeInput
+                            matInput
+                            formControlName="HomeHouseName"
+                            UpperCaseDirective
+                            autocomplete="off"
+                            [readonly]="viewMode || codeEnable"
+                          />
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div class="row mb-1">
+                      <label
+                        for="inputPassword"
+                        class="col-sm-2 col-form-label"
+                      >
+                        Address</label
+                      >
+                      <div class="col-sm-8">
+                        <mat-form-field
+                          style="width: 100%"
+                          appearance="outline"
+                        >
+                          <textarea
+                            matInput
+                            rows="3"
+                            formControlName="HomeAddress"
+                            autocomplete="off"
+                            [readonly]="viewMode || codeEnable"
+                          ></textarea>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div class="row mb-1">
+                      <label
+                        for="inputPassword"
+                        class="col-sm-2 col-form-label"
+                      >
+                        Country</label
+                      >
+                      <div class="col-sm-8">
+                        <mat-form-field
+                          style="width: 100%"
+                          appearance="outline"
+                        >
+                          <input
+                            type="text"
+                            #codeInput
+                            matInput
+                            formControlName="Country"
+                            UpperCaseDirective
+                            autocomplete="off"
+                            [readonly]="viewMode || codeEnable"
+                            (focusout)="
+                              validateLookupField(
+                                $event,
+                                CountryCodeData,
+                                'Country'
+                              )
+                            "
+                            (keydown)="lookupKeyPress($event, 'Country')"
+                          />
+                          <master-search
+                            *ngIf="!viewMode"
+                            class="masterSearch"
+                            [MasterSearchData]="CountryCodeData"
+                            #overlayCountrySearch
+                            (newRowClick)="CountryCodeSelected($event)"
+                          >
+                          </master-search>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div class="row mb-1">
+                      <label
+                        for="inputPassword"
+                        class="col-sm-2 col-form-label"
+                      >
+                        State</label
+                      >
+                      <div class="col-sm-8">
+                        <mat-form-field
+                          style="width: 100%"
+                          appearance="outline"
+                        >
+                          <input
+                            type="text"
+                            #codeInput
+                            matInput
+                            formControlName="State"
+                            UpperCaseDirective
+                            autocomplete="off"
+                            [readonly]="viewMode || codeEnable"
+                            (focusout)="
+                              validateLookupField(
+                                $event,
+                                StateCodeData,
+                                'State'
+                              )
+                            "
+                            (keydown)="lookupKeyPress($event, 'State')"
+                          />
+                          <master-search
+                            *ngIf="!viewMode"
+                            class="masterSearch"
+                            [MasterSearchData]="StateCodeData"
+                            #overlayStateSearch
+                            (newRowClick)="StateCodeSelected($event)"
+                          >
+                          </master-search>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div class="row mb-1">
+                      <label
+                        for="inputPassword"
+                        class="col-sm-2 col-form-label"
+                      >
+                        Town / City</label
+                      >
+                      <div class="col-sm-8">
+                        <mat-form-field
+                          style="width: 100%"
+                          appearance="outline"
+                        >
+                          <input
+                            type="text"
+                            #codeInput
+                            matInput
+                            formControlName="City"
+                            UpperCaseDirective
+                            autocomplete="off"
+                            [readonly]="viewMode || codeEnable"
+                            (focusout)="
+                              validateLookupField($event, StateCodeData, 'City')
+                            "
+                            (keydown)="lookupKeyPress($event, 'City')"
+                          />
+                          <master-search
+                            *ngIf="!viewMode"
+                            class="masterSearch"
+                            [MasterSearchData]="CityCodeData"
+                            #overlayCitySearch
+                            (newRowClick)="CityCodeSelected($event)"
+                          >
+                          </master-search>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div class="row mb-1">
+                      <label
+                        for="inputPassword"
+                        class="col-sm-2 col-form-label"
+                      >
+                        Tel (Land)</label
+                      >
+                      <div class="col-sm-8">
+                        <mat-form-field
+                          style="width: 100%"
+                          appearance="outline"
+                        >
+                          <input
+                            type="text"
+                            #codeInput
+                            matInput
+                            formControlName="LandLineNum"
+                            UpperCaseDirective
+                            autocomplete="off"
+                            [readonly]="viewMode || codeEnable"
+                          />
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div class="row mb-1">
+                      <label
+                        for="inputPassword"
+                        class="col-sm-2 col-form-label"
+                      >
+                        Tel (moblie)</label
+                      >
+                      <div class="col-sm-3">
+                        <mat-form-field
+                          style="width: 100%"
+                          appearance="outline"
+                        >
+                          <input
+                            type="text"
+                            #codeInput
+                            matInput
+                            formControlName="MoblieCode"
+                            UpperCaseDirective
+                            autocomplete="off"
+                            [readonly]="viewMode || codeEnable"
+                          />
+                        </mat-form-field>
+                      </div>
+                      <div class="col-sm-5">
+                        <mat-form-field
+                          style="width: 100%"
+                          appearance="outline"
+                        >
+                          <input
+                            type="text"
+                            #codeInput
+                            matInput
+                            formControlName="MoblieNum"
+                            UpperCaseDirective
+                            autocomplete="off"
+                            [readonly]="viewMode || codeEnable"
+                          />
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div class="row mb-1">
+                      <label
+                        for="inputPassword"
+                        class="col-sm-2 col-form-label"
+                      >
+                        Email
+                      </label>
+                      <div class="col-sm-8">
+                        <mat-form-field
+                          style="width: 100%"
+                          appearance="outline"
+                        >
+                          <input
+                            type="text"
+                            #codeInput
+                            matInput
+                            formControlName="email"
+                            UpperCaseDirective
+                            autocomplete="off"
+                            [readonly]="viewMode || codeEnable"
+                          />
+                        </mat-form-field>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="border p-2">
+                    <label for="inputPassword" class="col-sm-12 col-form-label">
+                      Present Address</label
+                    >
+                    <div class="row mb-1">
+                      <label
+                        for="inputPassword"
+                        class="col-sm-2 col-form-label"
+                      >
+                        Flat / House No</label
+                      >
+                      <div class="col-sm-8">
+                        <mat-form-field
+                          style="width: 100%"
+                          appearance="outline"
+                        >
+                          <input
+                            type="text"
+                            #codeInput
+                            matInput
+                            formControlName="PRhouseName"
+                            UpperCaseDirective
+                            autocomplete="off"
+                            [readonly]="viewMode || codeEnable"
+                          />
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div class="row mb-1">
+                      <label
+                        for="inputPassword"
+                        class="col-sm-2 col-form-label"
+                      >
+                        Address</label
+                      >
+                      <div class="col-sm-8">
+                        <mat-form-field
+                          style="width: 100%"
+                          appearance="outline"
+                        >
+                          <textarea
+                            matInput
+                            rows="3"
+                            formControlName="PRAddress"
+                            autocomplete="off"
+                            [readonly]="viewMode || codeEnable"
+                          ></textarea>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div class="row mb-1">
+                      <label
+                        for="inputPassword"
+                        class="col-sm-2 col-form-label"
+                      >
+                        Country</label
+                      >
+                      <div class="col-sm-8">
+                        <mat-form-field
+                          style="width: 100%"
+                          appearance="outline"
+                        >
+                          <input
+                            type="text"
+                            #codeInput
+                            matInput
+                            formControlName="PRCountry"
+                            UpperCaseDirective
+                            autocomplete="off"
+                            [readonly]="viewMode || codeEnable"
+                            (focusout)="
+                              validateLookupField(
+                                $event,
+                                PRCountryCodeData,
+                                'PRCountryCodeData'
+                              )
+                            "
+                            (keydown)="
+                              lookupKeyPress($event, 'PRCountryCodeData')
+                            "
+                          />
+                          <master-search
+                            *ngIf="!viewMode"
+                            class="masterSearch"
+                            [MasterSearchData]="PRCountryCodeData"
+                            #overlayPRCountryCodeSearch
+                            (newRowClick)="PRCountryCodeSelected($event)"
+                          >
+                          </master-search>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div class="row mb-1">
+                      <label
+                        for="inputPassword"
+                        class="col-sm-2 col-form-label"
+                      >
+                        State</label
+                      >
+                      <div class="col-sm-8">
+                        <mat-form-field
+                          style="width: 100%"
+                          appearance="outline"
+                        >
+                          <input
+                            type="text"
+                            #codeInput
+                            matInput
+                            formControlName="PRState"
+                            UpperCaseDirective
+                            autocomplete="off"
+                            [readonly]="viewMode || codeEnable"
+                            (focusout)="
+                              validateLookupField(
+                                $event,
+                                PRStateCodeData,
+                                'PRStateCodeData'
+                              )
+                            "
+                            (keydown)="
+                              lookupKeyPress($event, 'PRStateCodeData')
+                            "
+                          />
+                          <master-search
+                            *ngIf="!viewMode"
+                            class="masterSearch"
+                            [MasterSearchData]="PRStateCodeData"
+                            #overlayPRStateCodeDataSearch
+                            (newRowClick)="PRStateCodeSelected($event)"
+                          >
+                          </master-search>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div class="row mb-1">
+                      <label
+                        for="inputPassword"
+                        class="col-sm-2 col-form-label"
+                      >
+                        Town / City</label
+                      >
+                      <div class="col-sm-8">
+                        <mat-form-field
+                          style="width: 100%"
+                          appearance="outline"
+                        >
+                          <input
+                            type="text"
+                            #codeInput
+                            matInput
+                            formControlName="PRCity"
+                            UpperCaseDirective
+                            autocomplete="off"
+                            [readonly]="viewMode || codeEnable"
+                            (focusout)="
+                              validateLookupField(
+                                $event,
+                                PRCityCodeData,
+                                'PRCity'
+                              )
+                            "
+                            (keydown)="lookupKeyPress($event, 'PRCity')"
+                          />
+                          <master-search
+                            *ngIf="!viewMode"
+                            class="masterSearch"
+                            [MasterSearchData]="PRCityCodeData"
+                            #overlayPRCityDataSearch
+                            (newRowClick)="PRCityCodeSelected($event)"
+                          >
+                          </master-search>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div class="row mb-1">
+                      <label
+                        for="inputPassword"
+                        class="col-sm-2 col-form-label"
+                      >
+                        Tel (Land)</label
+                      >
+                      <div class="col-sm-8">
+                        <mat-form-field
+                          style="width: 100%"
+                          appearance="outline"
+                        >
+                          <input
+                            type="text"
+                            #codeInput
+                            matInput
+                            formControlName="PRLand"
+                            UpperCaseDirective
+                            autocomplete="off"
+                            [readonly]="viewMode || codeEnable"
+                          />
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div class="row mb-1">
+                      <label
+                        for="inputPassword"
+                        class="col-sm-2 col-form-label"
+                      >
+                        Tel (moblie)</label
+                      >
+                      <div class="col-sm-3">
+                        <mat-form-field
+                          style="width: 100%"
+                          appearance="outline"
+                        >
+                          <input
+                            type="text"
+                            #codeInput
+                            matInput
+                            formControlName="PRMoblieCode"
+                            UpperCaseDirective
+                            autocomplete="off"
+                            [readonly]="viewMode || codeEnable"
+                          />
+                        </mat-form-field>
+                      </div>
+                      <div class="col-sm-5">
+                        <mat-form-field
+                          style="width: 100%"
+                          appearance="outline"
+                        >
+                          <input
+                            type="text"
+                            #codeInput
+                            matInput
+                            formControlName="PRMoblieNo"
+                            UpperCaseDirective
+                            autocomplete="off"
+                            [readonly]="viewMode || codeEnable"
+                          />
+                        </mat-form-field>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </mat-tab>
+            <mat-tab label="Documents / Insurance">
+              <div class="row mt-2">
+                <div class="col-md-3">
+                  <menu-buttons
+                    [viewAddBtn]="true"
+                    [viewDeleteBtn]="true"
+                    [viewImportBtn]="false"
+                    [viewAddBtn]="!viewMode"
+                    [viewDeleteBtn]="!viewMode"
+                    (addClick)="addTableData()"
+                    (deleteClick)="deleteTableData()"
+                  >
+                  </menu-buttons>
+                </div>
+              </div>
+              <!-- <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true " [viewImportBtn]="false"
+                                (addClick)="addTableData()" (deleteClick)="deleteTableData()">
+                            </menu-buttons> -->
+              <h3 class="mt-3">Document Details</h3>
+              <dx-data-grid
+                id="gridContainer"
+                [dataSource]="maindetails"
+                [showBorders]="true"
+                [showColumnLines]="true"
+                [showRowLines]="true"
+                [allowColumnResizing]="true"
+              >
+                <dxo-selection mode="single"></dxo-selection>
+
+                <!-- <dxi-column dataField="SRNO" caption="S.No"> </dxi-column> -->
+                <dxi-column
+                  dataField="Code"
+                  caption="Code"
+                  cellTemplate="code"
+                >
+                </dxi-column>
+                <dxi-column
+                  dataField="Description"
+                  caption="Description"
+                  cellTemplate="description"
+                >
+                </dxi-column>
+                <dxi-column
+                  dataField="Document No"
+                  caption="Document No"
+                  cellTemplate="documentnumber"
+                >
+                </dxi-column>
+                <dxi-column
+                  dataField="TO_DATE"
+                  caption="To Date"
+                  cellTemplate="todate"
+                >
+                </dxi-column>
+                <dxi-column
+                  dataField="Attachmnet"
+                  caption="Attachment"
+                  cellTemplate="media"
+                >
+                </dxi-column>
+
+               
+                <div *dxTemplate="let data of 'code'">
+                    <!-- <mat-form-field style="width: 100%" appearance="outline"> -->
+                      <input
+                      class="form-control"
+                        type="text"
+                        id="code1"
+                        formControlName="code1"
+                      />
+                    <!-- </mat-form-field> -->
+                  </div>
+                  
+                  <div *dxTemplate="let data of 'description'">
+                    <!-- <mat-form-field style="width: 100%" appearance="outline"> -->
+                      <input
+                      class="form-control"
+                        type="text"
+                        id="description"
+                        formControlName="description"
+                      />
+                    <!-- </mat-form-field> -->
+                  </div>
+                  
+                  <div *dxTemplate="let data of 'todate'">
+                    <!-- <mat-form-field style="width: 100%" appearance="outline"> -->
+                      <input
+                      class="form-control"
+                        type="date"
+                        placeholder="DD/MM/YYYY"
+                        formControlName="todate"
+                        [disabled]="viewMode"
+                      />
+                      <!-- <mat-datepicker-toggle matSuffix [for]="todate"></mat-datepicker-toggle>
+                      <mat-datepicker #todate></mat-datepicker> -->
+                    <!-- </mat-form-field> -->
+                  </div>
+                  
+                  <div *dxTemplate="let data of 'documentnumber'">
+                    <!-- <mat-form-field style="width: 100%" appearance="outline"> -->
+                      <input
+                        class="form-control"
+                        type="number"
+                        id="documentnumber"
+                        formControlName="documentnumber"
+                        style="text-align: right"
+                      />
+                    <!-- </mat-form-field> -->
+                  </div>
+                  
+                  <div *dxTemplate="let data of 'media'">
+                    <!-- <mat-form-field style="width: 100%" appearance="outline"> -->
+                      <input
+                        type="file"
+                        id="media"
+                        formControlName="media"
+                      />
+                    <!-- </mat-form-field> -->
+                  </div>
+                  
+              </dx-data-grid>
+            </mat-tab>
+          </mat-tab-group>
+        </div>
+      </div>
+    </form>
+  </div>
 </div>

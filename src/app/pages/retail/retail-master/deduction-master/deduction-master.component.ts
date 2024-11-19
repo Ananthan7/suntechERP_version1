@@ -122,7 +122,9 @@ export class DeductionMasterComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.flag = this.content!.FLAG;
+    this.content
+      ? (this.flag = this.content!.FLAG)
+      : console.log("No Content, Due to you are in ADD");
     this.initialController(this.flag, this.content);
   }
 

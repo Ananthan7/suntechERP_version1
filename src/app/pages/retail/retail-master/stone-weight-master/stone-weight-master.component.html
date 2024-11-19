@@ -18,9 +18,19 @@
                     <label for="inputPassword" class="col-sm-4 col-form-label">SieveSet</label>
                     <div class="col-md-8">
                         <mat-form-field style="width: 90%;" appearance="outline">
-                            <input type="text" id="inputPassword" matInput formControlName="sieveset" [readonly]="viewOnly"/>
+                            <input type="text" id="inputPassword" matInput formControlName="sieveset"
+                                [readonly]="viewOnly" (focusout)="
+                                                SPvalidateLookupFieldModified(
+                                                  $event,
+                                                  sieveSetcodeData,
+                                                  ['sieveset'],
+                                                  false,
+                                                  ['CODE'],
+                                                  false
+                                                )
+                                              " />
                             <master-search [MasterSearchData]="sieveSetcodeData" class="masterSearch"
-                            (newRowClick)="sieveSetcodeSelected($event)"></master-search>
+                                (newRowClick)="sieveSetcodeSelected($event)"></master-search>
                         </mat-form-field>
                     </div>
                 </div>
@@ -33,9 +43,19 @@
                     <label for="inputPassword" class="col-sm-4 col-form-label">Division</label>
                     <div class="col-md-8">
                         <mat-form-field style="width: 90%;" appearance="outline">
-                            <input type="text" id="inputPassword" matInput formControlName="division"  [readonly]="viewOnly" />
+                            <input type="text" id="inputPassword" matInput formControlName="division"
+                                [readonly]="viewOnly" (focusout)="
+                            SPvalidateLookupFieldModified(
+                              $event,
+                              divisionCodeData,
+                              ['division'],
+                              false,
+                              ['DIVISION_CODE'],
+                              false
+                            )
+                          " />
                             <master-search [MasterSearchData]="divisionCodeData" class="masterSearch"
-                            (newRowClick)="divisionCodeSelected($event)"></master-search>
+                                (newRowClick)="divisionCodeSelected($event)"></master-search>
                         </mat-form-field>
                     </div>
                 </div>
@@ -44,9 +64,19 @@
                     <label for="inputPassword" class="col-sm-4 col-form-label">Sieve From</label>
                     <div class="col-md-8">
                         <mat-form-field style="width: 90%;" appearance="outline">
-                            <input type="text" id="inputPassword" matInput formControlName="sievefrom"  [readonly]="viewOnly"/>
+                            <input type="text" id="inputPassword" matInput formControlName="sievefrom"
+                                [readonly]="viewOnly" (focusout)="
+                            SPvalidateLookupFieldModified(
+                              $event,
+                              sieveFromCodeData,
+                              ['sievefrom','sievefromdesc'],
+                              false,
+                              ['CODE','DESCRIPTION'],
+                              false
+                            )
+                          " />
                             <master-search [MasterSearchData]="sieveFromCodeData" class="masterSearch"
-                            (newRowClick)="sievecodeselected($event)"></master-search>
+                                (newRowClick)="sievecodeselected($event)"></master-search>
                         </mat-form-field>
                     </div>
                 </div>
@@ -55,8 +85,9 @@
                     <label for="inputPassword" class="col-sm-4 col-form-label">Sieve From Desc</label>
                     <div class="col-md-8">
                         <mat-form-field style="width: 90%;" appearance="outline">
-                            <input type="text" id="inputPassword" matInput formControlName="sievefromdesc"  [readonly]="viewOnly"/>
-                          
+                            <input type="text" id="inputPassword" matInput formControlName="sievefromdesc"
+                                [readonly]="viewOnly" />
+
                         </mat-form-field>
                     </div>
                 </div>
@@ -65,9 +96,19 @@
                     <label for="inputPassword" class="col-sm-4 col-form-label">Size From</label>
                     <div class="col-md-8">
                         <mat-form-field style="width: 90%;" appearance="outline">
-                            <input type="text" id="inputPassword" matInput formControlName="sizefrom"  [readonly]="viewOnly" />
+                            <input type="text" id="inputPassword" matInput formControlName="sizefrom"
+                                [readonly]="viewOnly" (focusout)="
+                            SPvalidateLookupFieldModified(
+                              $event,
+                              sizeFromCodeData,
+                              ['sizefrom'],
+                              false,
+                              ['CODE'],
+                              false
+                            )
+                          " />
                             <master-search [MasterSearchData]="sizeFromCodeData" class="masterSearch"
-                            (newRowClick)="sizefromselected($event)"></master-search>
+                                (newRowClick)="sizefromselected($event)"></master-search>
                         </mat-form-field>
                     </div>
                 </div>
@@ -76,8 +117,9 @@
                     <label for="inputPassword" class="col-sm-4 col-form-label">Pcs/Carat</label>
                     <div class="col-md-8">
                         <mat-form-field style="width: 90%;" appearance="outline">
-                            <input type="text" id="inputPassword" matInput formControlName="pcs"  [readonly]="viewOnly" />
-                           
+                            <input type="text" id="inputPassword" matInput formControlName="pcs"
+                                [readonly]="viewOnly" />
+
                         </mat-form-field>
                     </div>
                 </div>
@@ -86,27 +128,38 @@
                     <label for="inputPassword" class="col-sm-4 col-form-label">Pointer Wt</label>
                     <div class="col-md-8">
                         <mat-form-field style="width: 90%;" appearance="outline">
-                            <input type="text" id="inputPassword" matInput formControlName="pointerwt" style="text-align:right" FourDecimalInput   [readonly]="viewOnly"/>
-                           
+                            <input type="text" id="inputPassword" matInput formControlName="pointerwt"
+                                style="text-align:right" FourDecimalInput [readonly]="viewOnly" />
+
                         </mat-form-field>
                     </div>
                 </div>
-               
 
-                
+
+
             </div>
 
             <div class="col-md-4">
 
-               
+
 
                 <div class="row">
                     <label for="inputPassword" class="col-sm-4 col-form-label">Shape</label>
                     <div class="col-md-8">
                         <mat-form-field style="width: 90%;" appearance="outline">
-                            <input type="text" id="inputPassword" matInput formControlName="shape"  [readonly]="viewOnly" />
+                            <input type="text" id="inputPassword" matInput formControlName="shape" [readonly]="viewOnly"
+                                (focusout)="
+                            SPvalidateLookupFieldModified(
+                              $event,
+                              ShapecodeData,
+                              ['shape'],
+                              false,
+                              ['CODE'],
+                              false
+                            )
+                          " />
                             <master-search [MasterSearchData]="ShapecodeData" class="masterSearch"
-                            (newRowClick)="ShapecodeSelected($event)"></master-search>
+                                (newRowClick)="ShapecodeSelected($event)"></master-search>
                         </mat-form-field>
                     </div>
                 </div>
@@ -115,9 +168,19 @@
                     <label for="inputPassword" class="col-sm-4 col-form-label">Sieve To</label>
                     <div class="col-md-8">
                         <mat-form-field style="width: 90%;" appearance="outline">
-                            <input type="text" id="inputPassword" matInput formControlName="sieveto"  [readonly]="viewOnly"/>
+                            <input type="text" id="inputPassword" matInput formControlName="sieveto"
+                                [readonly]="viewOnly" (focusout)="
+                            SPvalidateLookupFieldModified(
+                              $event,
+                              sieveToCodeData,
+                              ['sieveto','sievetodesc'],
+                              false,
+                              ['CODE','DESCRIPTION'],
+                              false
+                            )
+                          " />
                             <master-search [MasterSearchData]="sieveToCodeData" class="masterSearch"
-                            (newRowClick)="sievetoselected($event)"></master-search>
+                                (newRowClick)="sievetoselected($event)"></master-search>
                         </mat-form-field>
                     </div>
                 </div>
@@ -126,8 +189,9 @@
                     <label for="inputPassword" class="col-sm-4 col-form-label">Sieve To Desc</label>
                     <div class="col-md-8">
                         <mat-form-field style="width: 90%;" appearance="outline">
-                            <input type="text" id="inputPassword" matInput formControlName="sievetodesc"  [readonly]="viewOnly"/>
-                           
+                            <input type="text" id="inputPassword" matInput formControlName="sievetodesc"
+                                [readonly]="viewOnly" />
+
                         </mat-form-field>
                     </div>
                 </div>
@@ -136,9 +200,19 @@
                     <label for="inputPassword" class="col-sm-4 col-form-label">Size To</label>
                     <div class="col-md-8">
                         <mat-form-field style="width: 90%;" appearance="outline">
-                            <input type="text" id="inputPassword" matInput formControlName="sizeto"  [readonly]="viewOnly" />
+                            <input type="text" id="inputPassword" matInput formControlName="sizeto"
+                                [readonly]="viewOnly" (focusout)="
+                            SPvalidateLookupFieldModified(
+                              $event,
+                              sizeToCodeData,
+                              ['sizeto'],
+                              false,
+                              ['CODE'],
+                              false
+                            )
+                          " />
                             <master-search [MasterSearchData]="sizeToCodeData" class="masterSearch"
-                            (newRowClick)="sizetoselected($event)"></master-search>
+                                (newRowClick)="sizetoselected($event)"></master-search>
                         </mat-form-field>
                     </div>
                 </div>
@@ -147,8 +221,9 @@
                     <label for="inputPassword" class="col-sm-4 col-form-label">Variance % +/-</label>
                     <div class="col-md-8">
                         <mat-form-field style="width: 90%;" appearance="outline">
-                            <input type="text" id="inputPassword" matInput formControlName="variance1"  [readonly]="viewOnly"/>
-                           
+                            <input type="text" id="inputPassword" matInput formControlName="variance1"
+                                [readonly]="viewOnly" />
+
                         </mat-form-field>
                     </div>
                 </div>
@@ -157,15 +232,16 @@
                     <label for="inputPassword" class="col-sm-4 col-form-label">Variance % +/-</label>
                     <div class="col-md-8">
                         <mat-form-field style="width: 90%;" appearance="outline">
-                            <input type="text" id="inputPassword" matInput formControlName="variance2"  [readonly]="viewOnly"/>
-                            
+                            <input type="text" id="inputPassword" matInput formControlName="variance2"
+                                [readonly]="viewOnly" />
+
                         </mat-form-field>
                     </div>
                 </div>
 
             </div>
 
-               
+
         </div>
     </form>
 </div>

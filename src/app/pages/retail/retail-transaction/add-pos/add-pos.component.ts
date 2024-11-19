@@ -2711,14 +2711,14 @@ export class AddPosComponent implements OnInit {
     //   false
     // );
     if (this.viewOnly) {
-      this.modalService.dismissAll(data);
+      this.activeModal.close('reloadMainGrid');
     } else {
       this.openDialog('Warning', this.comFunc.getMsgByID('MSG1212'), false);
 
       this.dialogBox.afterClosed().subscribe((action: any) => {
         if (action == 'Yes') {
 
-          this.modalService.dismissAll(data);
+          this.activeModal.close();
 
         }
       });
@@ -8755,10 +8755,13 @@ export class AddPosComponent implements OnInit {
       this.ordered_items = [];
       this.sales_returns_items = [];
       this.exchange_items = [];
-      this.open(this.mymodal, false, null, false, false)
+      this.viewOnly=false;
+      this.open(this.mymodal, false, null, false, false);
+      this.renderer.selectRootElement('#fcn_li_item_code')?.focus();
     }
     else {
       this.isPrintingEnabled = true;
+      this.viewOnly=true;
     }
   }
 
@@ -9224,7 +9227,6 @@ export class AddPosComponent implements OnInit {
                 if (res.status == 'SUCCESS') {
                   this.snackBar.open('POS Updated Successfully', 'OK');
                   this.isNewButtonDisabled = false;
-                  this.viewOnly=true;
                   this.vocDataForm.controls['fcn_voc_no'].setValue(res.response.retailSales.VOCNO);
 
                   // this.close('reloadMainGrid');
@@ -9288,7 +9290,6 @@ export class AddPosComponent implements OnInit {
                 // let mid;
                 // mid = res.response.retailSales.MID;
                 this.midForInvoce = res.response.retailSales.MID;
-                this.viewOnly=true;
                 // this.content.MID = res.response.retailSales.MID;
                 // console.log(this.content.MID)
                 if (this.midForInvoce) {
@@ -15122,7 +15123,7 @@ export class AddPosComponent implements OnInit {
         }
         else {
           this.estimationList = [];
-          this.openDialog('Warning', this.comFunc.getMsgByID(result.message.match(/MSG\d+/)[0]), true);
+          this.openDialog('Warning', this.comFunc.getMsgByID('MSG81534'), true);
 
           this.dialogBox.afterClosed().subscribe((action: any) => {
 
