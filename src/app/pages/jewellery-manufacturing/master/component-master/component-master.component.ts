@@ -372,6 +372,46 @@ export class ComponentMasterComponent implements OnInit {
     VIEW_TABLE: true,
   }
 
+   // sizeCodeData: MasterSearchModel = {
+  //   PAGENO: 1,
+  //   RECORDS: 10,
+  //   LOOKUPID: 89,
+  //   SEARCH_FIELD: 'COMPSIZE_CODE',
+  //   SEARCH_HEADING: 'Size',
+  //   SEARCH_VALUE: '',
+  //   WHERECONDITION: `COMPSET_CODE='${this.componentmasterForm.value.sizeSet}'`,
+  //   VIEW_INPUT: true,
+  //   VIEW_TABLE: true,
+  //   LOAD_ONCLICK: true,
+  // }
+
+  sizegridCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'types',
+    SEARCH_HEADING: 'Size',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "types = 'SIZE MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
+
+
+  sizeCodeData: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 89,
+    SEARCH_FIELD: 'types',
+    SEARCH_HEADING: 'Size',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+  }
+
 
   componentmasterForm: FormGroup = this.formBuilder.group({
     code: ["", [Validators.required]],
@@ -430,20 +470,12 @@ export class ComponentMasterComponent implements OnInit {
 
   }
 
-
-
-
-
   divisionCodeSelected(value: any, data: any, controlName: string) {
     console.log(value);
     console.log(data);
-
     this.tableData[data.data.SRNO - 1].DIVCODE = value.DIVISION_CODE;
-
     console.log(this.tableData);
-
     this.stockCodeData.WHERECONDITION = `DIVISION = '${value.DIVISION_CODE}'`;
-
     console.log(value.DIVISION)
     console.log(value.DIVISION_CODE)
     if (value.DIVISION === 'M') {
@@ -464,14 +496,10 @@ export class ComponentMasterComponent implements OnInit {
   stockCodeDataSelected(value: any, data: any, controlName: string,) {
 
     console.log(this.tableData);
-
     this.tableData[data.data.SRNO - 1].STOCK_CODE = value.STOCK_CODE;
     this.tableData[data.data.SRNO - 1].DESCRIPTION = value.DESCRIPTION;
-
     console.log(this.tableData);
-
     this.stockCodeValidate(this.tableData[data.data.SRNO - 1]);
-
     //  this.stockCodeData.WHERECONDITION = `DIVCODE = '${this.componentmasterForm.value.metalDivision}' and SUBCODE = '0'`;
   }
 
@@ -485,45 +513,7 @@ export class ComponentMasterComponent implements OnInit {
   }
 
 
-  // sizeCodeData: MasterSearchModel = {
-  //   PAGENO: 1,
-  //   RECORDS: 10,
-  //   LOOKUPID: 89,
-  //   SEARCH_FIELD: 'COMPSIZE_CODE',
-  //   SEARCH_HEADING: 'Size',
-  //   SEARCH_VALUE: '',
-  //   WHERECONDITION: `COMPSET_CODE='${this.componentmasterForm.value.sizeSet}'`,
-  //   VIEW_INPUT: true,
-  //   VIEW_TABLE: true,
-  //   LOAD_ONCLICK: true,
-  // }
-
-  sizegridCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 3,
-    SEARCH_FIELD: 'types',
-    SEARCH_HEADING: 'Size',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "types = 'SIZE MASTER'",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-    LOAD_ONCLICK: true,
-  }
-
-
-  sizeCodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 89,
-    SEARCH_FIELD: 'types',
-    SEARCH_HEADING: 'Size',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-    LOAD_ONCLICK: true,
-  }
+ 
 
   checkCode(): boolean {
     if (this.componentmasterForm.value.code == '') {
@@ -532,6 +522,7 @@ export class ComponentMasterComponent implements OnInit {
     }
     return false
   }
+
   prefixCodeValidate() {
     const code = this.componentmasterForm.value.code;
     if (!code) return;
@@ -556,6 +547,7 @@ export class ComponentMasterComponent implements OnInit {
       })
     this.subscriptions.push(Sub)
   }
+
   incrementAndPadNumber(input: any, incrementBy: any) {
     // Convert the input to an integer and increment it
     let incrementedValue = parseInt(input, 10) + incrementBy;
@@ -565,6 +557,7 @@ export class ComponentMasterComponent implements OnInit {
 
     return paddedValue;
   }
+
   updatePrefixMaster() {
     if (!this.prefixMasterDetail) {
     }
@@ -595,9 +588,6 @@ export class ComponentMasterComponent implements OnInit {
   sieveFromCodeSelected(value: any, data: any, controlName: string) {
     if (this.checkCode()) return
     this.tableData[data.data.SRNO - 1].SIEVE_FROM = value.CODE;
-
-
-
     this.sieveToCodeData.WHERECONDITION = `types = 'SIEVE MASTER' AND CODE > '${value.SIEVE_FROM}'`;
   }
 
@@ -897,7 +887,11 @@ export class ComponentMasterComponent implements OnInit {
 
     };
     this.tableData.push(data);
-    this.tableData.filter((data, i) => data.SRNO = i + 1)
+    // this.tableData.filter((data, i) => data.SRNO = i + 1)
+    this.tableData.forEach((item, i) => {
+      item.SRNO = i + 1;
+      item.isDisabled = true;
+    });
   }
 
   onSelectionChanged(event: any) {
@@ -1016,6 +1010,15 @@ export class ComponentMasterComponent implements OnInit {
 
     this.images = this.content.PICTURE_NAME
     this.tableData = this.content.DESIGN_STNMTL_DETAIL
+
+    this.dataService.getDynamicAPI('DesignMaster/GetDesignMasterDetails/' + this.content.DESIGN_CODE)
+      .subscribe((data) => {
+        if (data.status == 'Success') {
+          this.tableData = data.response.DESIGN_STNMTL_DETAIL;
+        }
+      });
+
+    //
   }
 
 
