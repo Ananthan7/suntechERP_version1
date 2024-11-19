@@ -32,11 +32,7 @@
                             <div class="col-sm-6">
                                 <mat-form-field style="width: 80%;" appearance="outline">
                                     <input type="text" matInput formControlName="codedes" UpperCaseDirective
-                                        autocomplete="off"/>
-                                    <!-- <master-search [MasterSearchData]="codeCodeData" class="mstrScrch"
-                                        (newRowClick)="codeCodeSelected($event)" #overlaycodedescSearch
-                                        *ngIf="!editMode && !viewMode">
-                                    </master-search> -->
+                                        autocomplete="off"    [readonly]="viewMode"/>
                                 </mat-form-field>
                             </div>
                         </div>
