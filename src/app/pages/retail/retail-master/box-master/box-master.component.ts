@@ -52,13 +52,13 @@ export class BoxMasterComponent implements OnInit {
   };
 
   columnHeadings: any[] = [
-    { field: "PARTYCODE", caption: "Box No" },
-    { field: "BRANCH_CODE", caption: "Form Serial No" },
-    { field: "VOCTYPE", caption: "Pcs" },
-    { field: "DIVISION", caption: "Sub Pcs" },
-    { field: "QTY", caption: "To Serial No" },
-    { field: "amount", caption: "Stock Code" },
-    { field: "PROFIT", caption: "Location" },
+    { field: "BOX_NO", caption: "Box No" },
+    { field: "FROM_SERIALNO", caption: "Form Serial No" },
+    { field: "PCS", caption: "Pcs" },
+    { field: "SUB_PCS", caption: "Sub Pcs" },
+    { field: "TO_SERIALNO", caption: "To Serial No" },
+    { field: "STOCK_CODE", caption: "Stock Code" },
+    { field: "LOCTYPE_CODE", caption: "Location" },
   ];
   constructor(
     private activeModal: NgbActiveModal,
@@ -66,12 +66,15 @@ export class BoxMasterComponent implements OnInit {
     private formBuilder: FormBuilder,
     private apiService: SuntechAPIService,
     private toastr: ToastrService,
+    private dataService: SuntechAPIService,
     private commonService: CommonServiceService
   ) {}
 
   ngOnInit(): void {
     this.flag = this.content!.FLAG;
     this.initialController(this.flag, this.content);
+    this.grid()
+
   }
 
   boxMasterMainForm: FormGroup = this.formBuilder.group({
@@ -291,5 +294,26 @@ export class BoxMasterComponent implements OnInit {
       default:
         console.warn(`Unknown form control name: ${formControlName}`);
     }
+  }
+
+
+  grid(){
+    
+    this.dataService.getDynamicAPI('BoxMaster/GetBoxMasterList/' )
+    .subscribe((data) => {
+          if (data.status === 'Success' && data.response) {
+            this.itemDetailsData = data.response.map((item: any, index: number) => {
+              return { ...item, SELECT1: false, SRNO: index + 1 };
+            });
+            console.log(this.itemDetailsData);
+          } else {
+            this.commonService.toastErrorByMsgId('MSG1531');
+          }
+        },
+        err => {
+          console.error('Error fetching data:', err);
+          this.commonService.toastErrorByMsgId('MSG1531');
+        }
+      );
   }
 }
