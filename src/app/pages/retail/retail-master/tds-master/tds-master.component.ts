@@ -35,6 +35,7 @@ export class TdsMasterComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.flag = this.content?.FLAG;
   }
 
   tdsform: FormGroup = this.formBuilder.group({
@@ -139,7 +140,23 @@ export class TdsMasterComponent implements OnInit {
 
 
   close(data?: any) {
-    this.activeModal.close(data);
+    // this.activeModal.close(data);
+    if(this.flag == undefined || this.flag == 'EDIT'){
+      Swal.fire({
+        title: "Confirm",
+        text: "Are you sure you want to close this window?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.activeModal.close(data);
+        }
+      });
+    }else{
+      this.activeModal.close(data);
+    }
   }
 
   formSubmit() {

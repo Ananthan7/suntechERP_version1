@@ -22,6 +22,8 @@ export class SubledgerPrefixMasterComponent implements OnInit {
   private subscriptions: Subscription[] = [];
   viewOnly: boolean = false;
   curr_branch : any = localStorage.getItem('userbranch');
+  disable_code:boolean = false;
+
 
 
 
@@ -88,6 +90,9 @@ export class SubledgerPrefixMasterComponent implements OnInit {
     this.unq_id = this.content?.PREFIX_CODE;
     console.log(this.unq_id);
     this.flag = this.content?.FLAG;
+    if(this.flag == 'EDIT'){
+      this.disable_code = true;
+    }
     this.initialController(this.flag, this.content);
     if (this?.flag == "EDIT" || this?.flag == 'VIEW') {
       this.detailsapi(this.unq_id);
@@ -287,7 +292,23 @@ export class SubledgerPrefixMasterComponent implements OnInit {
   }
 
   close(data?: any) {
-    this.activeModal.close(data);
+    // this.activeModal.close(data);
+    if(this.flag == undefined || this.flag == 'EDIT'){
+      Swal.fire({
+        title: "Confirm",
+        text: "Are you sure you want to close this window?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.activeModal.close(data);
+        }
+      });
+    }else{
+      this.activeModal.close(data);
+    }
   }
 
 }

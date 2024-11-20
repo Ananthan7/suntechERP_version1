@@ -6,7 +6,7 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (cancelClick)="close()" (saveClick)="formSubmit()"></modal-header>
+<modal-header (cancelClick)="close()" (saveClick)="formSubmit()" (deleteClick)="DeleteController()"></modal-header>
 <!-- content section -->
 
 <div class="container-fluid pt-3">
@@ -21,7 +21,7 @@
                         <label for="prefixcode" class="col-sm-2 col-form-label me-4">Kyc Code:</label>
                         <div class="col-md-2 p-0 ms-2">
                             <mat-form-field style="width: 100%;" appearance="outline">
-                                <input type="text" id="kyccode" matInput class="p-0" formControlName="kyccode" />
+                                <input type="text" id="kyccode" matInput class="p-0" formControlName="kyccode"  [readonly]="viewOnly || disable_code"/>
                             </mat-form-field>
                         </div>
                         <div class="col-md-5 p-0">

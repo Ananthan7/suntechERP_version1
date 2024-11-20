@@ -6,7 +6,7 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (cancelClick)="close()" (saveClick)="formSubmit()"></modal-header>
+<modal-header (cancelClick)="close()" (saveClick)="formSubmit()"  (deleteClick)="DeleteController()"></modal-header>
 <!-- content section -->
 
 <div class="container-fluid pt-3">
@@ -21,7 +21,7 @@
                                     <label for="prefixcode" class="col-sm-2 col-form-label">Prefix Code:</label>
                                     <div class="col-md-4 p-0 ms-2">
                                         <mat-form-field style="width: 100%;" appearance="outline">
-                                            <input type="text" id="prefixcode" matInput   formControlName="prefixcode" [readonly]="viewOnly" (change)="isexistingcode()"
+                                            <input type="text" id="prefixcode" matInput   formControlName="prefixcode" [readonly]="viewOnly || disable_code" (change)="isexistingcode()"
                                                 class="p-0"/>
                                         </mat-form-field>
                                     </div>

@@ -20,6 +20,7 @@ export class FixedAssetsComponent implements OnInit {
   username = localStorage.getItem('username');
   viewOnly: boolean = false;
   dyndatas: any = [];
+  disable_code:boolean = false;
 
 
   constructor(
@@ -98,6 +99,9 @@ export class FixedAssetsComponent implements OnInit {
     this.fa_id = this.content?.MID;
     console.log(this.fa_id);
     this.flag = this.content?.FLAG;
+    if(this.flag == 'EDIT'){
+      this.disable_code = true;
+    }
     this.initialController(this.flag, this.content);
   }
 
@@ -474,7 +478,7 @@ export class FixedAssetsComponent implements OnInit {
         this.fixedassetsform.controls.userdefined_3.setValue(this.dyndatas.UDF3);
         this.fixedassetsform.controls.userdefined_4.setValue(this.dyndatas.UDF4);
         this.fixedassetsform.controls.userdefined_5.setValue(this.dyndatas.UDF5);
-        this.flag = "EDIT";
+        // this.flag = "EDIT";
 
       }, (err: any) => {
 
@@ -543,7 +547,23 @@ export class FixedAssetsComponent implements OnInit {
 
 
   close(data?: any) {
-    this.activeModal.close(data);
+    // this.activeModal.close(data);
+    if(this.flag == undefined || this.flag == 'EDIT'){
+      Swal.fire({
+        title: "Confirm",
+        text: "Are you sure you want to close this window?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.activeModal.close(data);
+        }
+      });
+    }else{
+      this.activeModal.close(data);
+    }
   }
 
   formSubmit() {

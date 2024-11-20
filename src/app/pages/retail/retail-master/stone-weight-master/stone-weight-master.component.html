@@ -6,7 +6,7 @@
     </button>
 </div>
 
-<modal-header *ngIf="this.content?.FLAG != 'VIEW'" (cancelClick)="close()" (saveClick)="formSubmit()"></modal-header>
+<modal-header *ngIf="this.content?.FLAG != 'VIEW'" (cancelClick)="close()" (saveClick)="formSubmit()"  (deleteClick)="deleteTableData()"></modal-header>
 
 
 <div class=" p-4">

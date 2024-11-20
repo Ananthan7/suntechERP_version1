@@ -205,6 +205,7 @@ export class StoneWeightMasterComponent implements OnInit {
 
   ngOnInit(): void {
     console.log(this.content);
+    this.flag = this.content?.FLAG;
     if (this.content?.FLAG == "EDIT" || this.content?.FLAG == "VIEW") {
       if (this.content?.FLAG == "VIEW") {
         this.viewOnly = true;
@@ -361,7 +362,23 @@ export class StoneWeightMasterComponent implements OnInit {
 
 
   close(data?: any) {
+    // console.log(this.flag)
+    if(this.flag == undefined || this.flag == 'EDIT'){
+    Swal.fire({
+      title: "Confirm",
+      text: "Are you sure you want to close this window?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: 'Yes',
+      cancelButtonText: 'No'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.activeModal.close(data);
+      }
+    });
+  }else{
     this.activeModal.close(data);
+  }
   }
 
   deleteTableData() {

@@ -21,6 +21,8 @@ export class KycMasterComponent implements OnInit {
   private subscriptions: Subscription[] = [];
   viewOnly:boolean = false;
   dyndatas:any;
+  disable_code:boolean = false;
+
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -40,9 +42,11 @@ export class KycMasterComponent implements OnInit {
   ngOnInit(): void {
     console.log(this.content);
     this.flag = this.content?.FLAG;
+    if(this.flag == 'EDIT'){
+      this.disable_code = true;
+    }
     this.kyc_id = this.content?.KYC_CODE;
     console.log(this.kyc_id);
-    this.flag = this.content?.FLAG;
     this.kycform.controls.kyccode.setValue(this.content?.KYC_CODE);
     this.kycform.controls.kyccodedesc.setValue(this.content?.KYC_DESC);
     this.kycform.controls.transactionlimit.setValue(this.content?.KYC_TRANSLIMIT);
@@ -63,7 +67,6 @@ export class KycMasterComponent implements OnInit {
         console.log(this.dyndatas);
         // this.maindetails.push(...this.dyndatas?.Details)
         this.maindetails = [...this.maindetails, ...this.dyndatas?.Details];
-        this.flag = "EDIT";
       }, (err: any) => {
 
       })
@@ -146,7 +149,23 @@ export class KycMasterComponent implements OnInit {
 
 
   close(data?: any) {
-    this.activeModal.close(data);
+    // this.activeModal.close(data);
+    if(this.flag == undefined || this.flag == 'EDIT'){
+      Swal.fire({
+        title: "Confirm",
+        text: "Are you sure you want to close this window?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.activeModal.close(data);
+        }
+      });
+    }else{
+      this.activeModal.close(data);
+    }
   }
 
   formSubmit(){
