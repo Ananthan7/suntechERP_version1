@@ -7,7 +7,9 @@
         </button>
     </div>
     <!-- modal header component -->
-    <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
+    <modal-header 
+    [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode"
+    (saveClick)="formSubmit()" (cancelClick)="close()"[isViewDelete]="!viewMode && editableMode"
         (deleteClick)="deleteDepartmentMaster()"></modal-header>
     <!-- content section -->
     <div class="row p-4 ">
