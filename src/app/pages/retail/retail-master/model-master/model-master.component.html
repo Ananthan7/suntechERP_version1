@@ -7,7 +7,12 @@
         </button>
     </div>
     <!-- modal header component -->
-    <modal-header></modal-header>
+    <modal-header
+    [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode"
+    (saveClick)="formSubmit()"
+    (cancelClick)="close()"[isViewDelete]="!viewMode && editableMode"
+    (deleteClick)="deleteRecord()"
+    ></modal-header>
     <!-- content section -->
     <div class="row p-4 ">
         <div class="col-md-12">
@@ -21,13 +26,13 @@
                                         Model Code :</label>
                                     <div class="col-sm-3">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" #codeInput matInput formControlName="code"
+                                            <input type="text" #codeInput matInput formControlName="model_code"
                                                 UpperCaseDirective autocomplete="off" />
                                         </mat-form-field>
                                     </div>
                                     <div class="col-sm-6">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" #codeInput matInput formControlName="code"
+                                            <input type="text" #codeInput matInput formControlName="model_description"
                                                 UpperCaseDirective autocomplete="off" />
                                         </mat-form-field>
                                     </div>
@@ -37,7 +42,7 @@
                                         Type Code :</label>
                                     <div class="col-sm-3">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" matInput formControlName="Branch" UpperCaseDirective />
+                                            <input type="text" matInput formControlName="type_code" UpperCaseDirective />
                                             <master-search class="masterSearch" [MasterSearchData]="BranchData"
                                                 (newRowClick)="BranchDataSelected($event)">
                                             </master-search>
@@ -47,7 +52,7 @@
                                         Sub Category :</label>
                                     <div class="col-sm-3">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" matInput formControlName="Branch" UpperCaseDirective />
+                                            <input type="text" matInput formControlName="subcategory_code" UpperCaseDirective />
                                             <master-search class="masterSearch" [MasterSearchData]="BranchData"
                                                 (newRowClick)="BranchDataSelected($event)">
                                             </master-search>
@@ -59,7 +64,7 @@
                                         Category Code :</label>
                                     <div class="col-sm-3">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" matInput formControlName="Branch" UpperCaseDirective />
+                                            <input type="text" matInput formControlName="category_code" UpperCaseDirective />
                                             <master-search class="masterSearch" [MasterSearchData]="BranchData"
                                                 (newRowClick)="BranchDataSelected($event)">
                                             </master-search>
@@ -69,7 +74,7 @@
                                         Brand :</label>
                                     <div class="col-sm-3">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" matInput formControlName="Branch" UpperCaseDirective />
+                                            <input type="text" matInput formControlName="branch_code" UpperCaseDirective />
                                             <master-search class="masterSearch" [MasterSearchData]="BranchData"
                                                 (newRowClick)="BranchDataSelected($event)">
                                             </master-search>
@@ -87,7 +92,7 @@
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <mat-radio-group aria-label="Select an option"
-                                                        formControlName="DailyTarget">
+                                                        formControlName="fixed_rate">
                                                         <mat-radio-button value="F" id="ID012"
                                                             class="mx-2">Fixed</mat-radio-button>
                                                         <mat-radio-button value="P" id="ID013" class="mx-2">Markup
@@ -100,7 +105,7 @@
                                                     Standard Rate :</label>
                                                 <div class="col-sm-6">
                                                     <mat-form-field style="width: 100%" appearance="outline">
-                                                        <input type="text" #codeInput matInput formControlName="code"
+                                                        <input type="text" class="text-right" #codeInput AmountDecimalInput matInput formControlName="making_std_rate"
                                                             UpperCaseDirective autocomplete="off" />
                                                     </mat-form-field>
                                                 </div>
@@ -110,7 +115,7 @@
                                                     Minumum Rate :</label>
                                                 <div class="col-sm-6">
                                                     <mat-form-field style="width: 100%" appearance="outline">
-                                                        <input type="text" #codeInput matInput formControlName="code"
+                                                        <input type="text" #codeInput class="text-right" matInput AmountDecimalInput formControlName="markup_min_per"
                                                             UpperCaseDirective autocomplete="off" />
                                                     </mat-form-field>
                                                 </div>
@@ -120,7 +125,7 @@
                                                     Maximum Rate :</label>
                                                 <div class="col-sm-6">
                                                     <mat-form-field style="width: 100%" appearance="outline">
-                                                        <input type="text" #codeInput matInput formControlName="code"
+                                                        <input type="text" #codeInput class="text-right" matInput AmountDecimalInput formControlName="markup_max_per"
                                                             UpperCaseDirective autocomplete="off" />
                                                     </mat-form-field>
                                                 </div>
@@ -129,7 +134,7 @@
                                         <div class="col-md-4">
                                             <div class="mt-3">
                                                 <mat-radio-group aria-label="Select an option"
-                                                    formControlName="DailyTarget" class="d-flex flex-column">
+                                                    formControlName="std_wt" class="d-flex flex-column">
                                                     <mat-radio-button value="F" id="ID014" class="m-1">Gross
                                                         Wt</mat-radio-button>
                                                     <mat-radio-button value="P" id="ID015" class="m-1">
@@ -156,7 +161,7 @@
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <mat-radio-group aria-label="Select an option"
-                                                        formControlName="DailyTarget">
+                                                        formControlName="markup_per">
                                                         <mat-radio-button value="F" id="ID012"
                                                             class="mx-2">Fixed</mat-radio-button>
                                                         <mat-radio-button value="P" id="ID013" class="mx-2">Markup
@@ -169,7 +174,7 @@
                                                     Standard Rate :</label>
                                                 <div class="col-sm-6">
                                                     <mat-form-field style="width: 100%" appearance="outline">
-                                                        <input type="text" #codeInput matInput formControlName="code"
+                                                        <input type="text" #codeInput AmountDecimalInput class="text-right" matInput formControlName="std_stone_rate"
                                                             UpperCaseDirective autocomplete="off" />
                                                     </mat-form-field>
                                                 </div>
@@ -179,7 +184,7 @@
                                                     Minumum Rate :</label>
                                                 <div class="col-sm-6">
                                                     <mat-form-field style="width: 100%" appearance="outline">
-                                                        <input type="text" #codeInput matInput formControlName="code"
+                                                        <input type="text" #codeInput class="text-right" AmountDecimalInput matInput formControlName="min_stone_rate"
                                                             UpperCaseDirective autocomplete="off" />
                                                     </mat-form-field>
                                                 </div>
@@ -189,7 +194,7 @@
                                                     Maximum Rate :</label>
                                                 <div class="col-sm-6">
                                                     <mat-form-field style="width: 100%" appearance="outline">
-                                                        <input type="text" #codeInput matInput formControlName="code"
+                                                        <input type="text" #codeInput AmountDecimalInput class="text-right" matInput formControlName="max_stone_rate"
                                                             UpperCaseDirective autocomplete="off" />
                                                     </mat-form-field>
                                                 </div>
@@ -208,7 +213,7 @@
                                     </label>
                                     <div class="col-sm-8">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" matInput formControlName="Branch" UpperCaseDirective />
+                                            <input type="text" matInput formControlName="udf1" UpperCaseDirective />
                                             <master-search class="masterSearch" [MasterSearchData]="BranchData"
                                                 (newRowClick)="BranchDataSelected($event)">
                                             </master-search>
@@ -220,7 +225,7 @@
                                     </label>
                                     <div class="col-sm-8">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" matInput formControlName="Branch" UpperCaseDirective />
+                                            <input type="text" matInput formControlName="udf2" UpperCaseDirective />
                                             <master-search class="masterSearch" [MasterSearchData]="BranchData"
                                                 (newRowClick)="BranchDataSelected($event)">
                                             </master-search>
@@ -232,7 +237,7 @@
                                     </label>
                                     <div class="col-sm-8">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" matInput formControlName="Branch" UpperCaseDirective />
+                                            <input type="text" matInput formControlName="udf3" UpperCaseDirective />
                                             <master-search class="masterSearch" [MasterSearchData]="BranchData"
                                                 (newRowClick)="BranchDataSelected($event)">
                                             </master-search>
@@ -244,7 +249,7 @@
                                     </label>
                                     <div class="col-sm-8">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" matInput formControlName="Branch" UpperCaseDirective />
+                                            <input type="text" matInput formControlName="udf4" UpperCaseDirective />
                                             <master-search class="masterSearch" [MasterSearchData]="BranchData"
                                                 (newRowClick)="BranchDataSelected($event)">
                                             </master-search>
@@ -256,7 +261,7 @@
                                     </label>
                                     <div class="col-sm-8">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" matInput formControlName="Branch" UpperCaseDirective />
+                                            <input type="text" matInput formControlName="udf5" UpperCaseDirective />
                                             <master-search class="masterSearch" [MasterSearchData]="BranchData"
                                                 (newRowClick)="BranchDataSelected($event)">
                                             </master-search>
@@ -268,7 +273,7 @@
                                     </label>
                                     <div class="col-sm-8">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" matInput formControlName="Branch" UpperCaseDirective />
+                                            <input type="text" matInput formControlName="udf6" UpperCaseDirective />
                                             <master-search class="masterSearch" [MasterSearchData]="BranchData"
                                                 (newRowClick)="BranchDataSelected($event)">
                                             </master-search>
@@ -280,7 +285,7 @@
                                     </label>
                                     <div class="col-sm-8">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" matInput formControlName="Branch" UpperCaseDirective />
+                                            <input type="text" matInput formControlName="udf7" UpperCaseDirective />
                                             <master-search class="masterSearch" [MasterSearchData]="BranchData"
                                                 (newRowClick)="BranchDataSelected($event)">
                                             </master-search>
@@ -292,7 +297,7 @@
                                     </label>
                                     <div class="col-sm-8">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" matInput formControlName="Branch" UpperCaseDirective />
+                                            <input type="text" matInput formControlName="udf8" UpperCaseDirective />
                                             <master-search class="masterSearch" [MasterSearchData]="BranchData"
                                                 (newRowClick)="BranchDataSelected($event)">
                                             </master-search>
@@ -306,7 +311,7 @@
                                     </label>
                                     <div class="col-sm-8">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" matInput formControlName="Branch" UpperCaseDirective />
+                                            <input type="text" matInput formControlName="udf9" UpperCaseDirective />
                                             <master-search class="masterSearch" [MasterSearchData]="BranchData"
                                                 (newRowClick)="BranchDataSelected($event)">
                                             </master-search>
@@ -318,7 +323,7 @@
                                     </label>
                                     <div class="col-sm-8">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" matInput formControlName="Branch" UpperCaseDirective />
+                                            <input type="text" matInput formControlName="udf10" UpperCaseDirective />
                                             <master-search class="masterSearch" [MasterSearchData]="BranchData"
                                                 (newRowClick)="BranchDataSelected($event)">
                                             </master-search>
@@ -330,7 +335,7 @@
                                     </label>
                                     <div class="col-sm-8">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" matInput formControlName="Branch" UpperCaseDirective />
+                                            <input type="text" matInput formControlName="udf11" UpperCaseDirective />
                                             <master-search class="masterSearch" [MasterSearchData]="BranchData"
                                                 (newRowClick)="BranchDataSelected($event)">
                                             </master-search>
@@ -342,7 +347,7 @@
                                     </label>
                                     <div class="col-sm-8">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" matInput formControlName="Branch" UpperCaseDirective />
+                                            <input type="text" matInput formControlName="udf12" UpperCaseDirective />
                                             <master-search class="masterSearch" [MasterSearchData]="BranchData"
                                                 (newRowClick)="BranchDataSelected($event)">
                                             </master-search>
@@ -354,7 +359,7 @@
                                     </label>
                                     <div class="col-sm-8">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" matInput formControlName="Branch" UpperCaseDirective />
+                                            <input type="text" matInput formControlName="udf13" UpperCaseDirective />
                                             <master-search class="masterSearch" [MasterSearchData]="BranchData"
                                                 (newRowClick)="BranchDataSelected($event)">
                                             </master-search>
@@ -366,7 +371,7 @@
                                     </label>
                                     <div class="col-sm-8">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" matInput formControlName="Branch" UpperCaseDirective />
+                                            <input type="text" matInput formControlName="udf14" UpperCaseDirective />
                                             <master-search class="masterSearch" [MasterSearchData]="BranchData"
                                                 (newRowClick)="BranchDataSelected($event)">
                                             </master-search>
@@ -378,7 +383,7 @@
                                     </label>
                                     <div class="col-sm-8">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" matInput formControlName="Branch" UpperCaseDirective />
+                                            <input type="text" matInput formControlName="udf15" UpperCaseDirective />
                                             <master-search class="masterSearch" [MasterSearchData]="BranchData"
                                                 (newRowClick)="BranchDataSelected($event)">
                                             </master-search>
