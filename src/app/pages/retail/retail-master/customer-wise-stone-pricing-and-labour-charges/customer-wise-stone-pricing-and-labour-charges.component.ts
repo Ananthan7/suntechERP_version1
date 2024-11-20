@@ -153,6 +153,13 @@ export class CustomerWiseStonePricingAndLabourChargesComponent implements OnInit
     this.customerWiseStonePriceForm.controls.pricecode.setValue(this.content.PRICECODE)
     this.customerWiseStonePriceForm.controls.currency.setValue(this.content.CURRENCY_CODE)
     this.customerWiseStonePriceForm.controls.currencyDetail.setValue(this.content.CURRENCY_RATE)
+  //  this.customerWiseStonePriceForm.controls.applyinPOS.setValue(this.content.PRINT_COUNT)
+    this.customerWiseStonePriceForm.controls.applyinPOS.setValue(
+      this.content.PRINT_COUNT === 1 ? true : false
+    );
+    
+
+
 
     this.dataService.getDynamicAPI('CustomerPriceMaster/GetCustomerPriceMasterDetail/' + this.content.PRICECODE)
       .subscribe((data) => {
@@ -180,7 +187,7 @@ export class CustomerWiseStonePricingAndLabourChargesComponent implements OnInit
       "LAB_TYPE": "string",
       "MARKUP_PER": 0,
       "CUSTOMER_NAME": "string",
-      "PRINT_COUNT": 0,
+      "PRINT_COUNT": this.customerWiseStonePriceForm.value.applyinPOS ? 1 : 0,
       "VALID_FROM": this.customerWiseStonePriceForm.value.validFrom,
       "ADD_ON_RATE": 0,
       "CURRENCY_CODE":  this.commonService.nullToString(this.customerWiseStonePriceForm.value.currency),
@@ -374,19 +381,19 @@ export class CustomerWiseStonePricingAndLabourChargesComponent implements OnInit
   }
   
   categorytemp(data:any,value: any){
-    this.tableData[value.data.SRNO - 1].CATEGORY = data.target.value;
+    this.tableData[value.data.SRNO - 1].CUSTOMER_CODE = data.target.value;
   }
     
   subCategorytemp(data:any,value: any){
-    this.tableData[value.data.SRNO - 1].SUB_CATEGORY = data.target.value;
+    this.tableData[value.data.SRNO - 1].PRICE_CODE = data.target.value;
   }
       
   brandtemp(data:any,value: any){
-    this.tableData[value.data.SRNO - 1].BRAND = data.target.value;
+    this.tableData[value.data.SRNO - 1].DESCRIPTION = data.target.value;
   }
       
   stoneTypetemp(data:any,value: any){
-    this.tableData[value.data.SRNO - 1].STONE = data.target.value;
+    this.tableData[value.data.SRNO - 1].CURRENCYCODE = data.target.value;
   }
       
   shapeTypetemp(data:any,value: any){
@@ -475,12 +482,12 @@ export class CustomerWiseStonePricingAndLabourChargesComponent implements OnInit
   }
    
   categorylabtemp(data:any,value: any){
-    this.tableData2[value.data.SRNO - 1].Category = data.target.value;
+    this.tableData2[value.data.SRNO - 1].CUSTOMER_CODE = data.target.value;
   }
 
    
   subCategorylabtemp(data:any,value: any){
-    this.tableData2[value.data.SRNO - 1].SubCategory = data.target.value;
+    this.tableData2[value.data.SRNO - 1].LABOUR_CODE = data.target.value;
   }
      
   shapelabtemp(data:any,value: any){

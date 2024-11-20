@@ -15,7 +15,7 @@
         <div class="row justify-content-between mb-4">
           <div class="col-md-10">
             <div class="row align-items-center mb-1">
-              <label for="inputPassword" class="col-sm-2 col-form-label">Price Code * :</label>
+              <label for="inputPassword" class="col-sm-2 col-form-label">Price Code :</label>
               <div class="col-md-2">
                 <mat-form-field style="width: 100%;" appearance="outline">
                   <input type="text" matInput formControlName="pricecode"  oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode"/>
@@ -25,7 +25,7 @@
             </div>
 
             <div class="row align-items-center mb-1">
-              <label for="inputPassword" class="col-sm-2 col-form-label">Currency * :</label>
+              <label for="inputPassword" class="col-sm-2 col-form-label">Currency :</label>
               <div class="col-md-2">
                 <mat-form-field style="width: 100%;" appearance="outline">
                   <input type="text" matInput formControlName="currency"  oninput="this.value = this.value.toUpperCase()" [readonly]="viewMode"/>
@@ -45,7 +45,7 @@
 
 
             <div class="row align-items-center mb-1">
-              <label for="inputPassword" class="col-sm-2 col-form-label">Valid From * :</label>
+              <label for="inputPassword" class="col-sm-2 col-form-label">Valid From :</label>
               <div class="col-md-2">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input matInput DateValidation [matDatepicker]="validFrom" formControlName="validFrom"
@@ -84,13 +84,13 @@
                 </dxi-column>
                 <dxi-column dataField="LABTYPE" caption="Type" cellTemplate="typetemp">
                 </dxi-column>
-                <dxi-column dataField="CATEGORY" caption="Category" cellTemplate="categorytemp">
+                <dxi-column dataField="CUSTOMER_CODE" caption="Category" cellTemplate="categorytemp">
                 </dxi-column>
-                <dxi-column dataField="SUB_CATEGORY" caption="Sub Category" cellTemplate="subCategorytemp">
+                <dxi-column dataField="PRICE_CODE" caption="Sub Category" cellTemplate="subCategorytemp">
                 </dxi-column>
-                <dxi-column dataField="BRAND" caption="Brand" cellTemplate="brandtemp">
+                <dxi-column dataField="DESCRIPTION" caption="Brand" cellTemplate="brandtemp">
                 </dxi-column>
-                <dxi-column dataField="STONE" caption="Stone Type" cellTemplate="stoneTypetemp">
+                <dxi-column dataField="CURRENCYCODE" caption="Stone Type" cellTemplate="stoneTypetemp">
                 </dxi-column>
                 <dxi-column dataField="SHAPE" caption="Shape" cellTemplate="shapeTypetemp">
                 </dxi-column>
@@ -203,9 +203,9 @@
                   </dxi-column>
                   <dxi-column dataField="PROCESS_TYPE" caption="Type" cellTemplate="typelabtemp">
                   </dxi-column>
-                  <dxi-column dataField="Category" caption="Category" cellTemplate="categorylabtemp">
+                  <dxi-column dataField="CUSTOMER_CODE" caption="Category" cellTemplate="categorylabtemp">
                   </dxi-column>
-                  <dxi-column dataField="SubCategory" caption="Sub Category" cellTemplate="subCategorylabtemp">
+                  <dxi-column dataField="LABOUR_CODE" caption="Sub Category" cellTemplate="subCategorylabtemp">
                   </dxi-column>
                   <dxi-column dataField="SHAPE" caption="Shape" cellTemplate="shapelabtemp">
                   </dxi-column>
