@@ -9,6 +9,7 @@ import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatSelectChange } from '@angular/material/select';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-pos-crm-dashboard',
@@ -45,7 +46,7 @@ export class PosCrmDashboardComponent implements OnInit {
     private activeModal: NgbActiveModal,
     private modalService: NgbModal,
     private formBuilder: FormBuilder,
-    private dataService: SuntechAPIService,
+    private dataService: SuntechAPIService, private datePipe: DatePipe,
     private toastr: ToastrService, private sanitizer: DomSanitizer,
     private commonService: CommonServiceService,
   ) { 
@@ -90,6 +91,7 @@ export class PosCrmDashboardComponent implements OnInit {
   }
 
   initAPI(){
+    this.isLoading = true;
     const apiUrl = '/UspGetPosCRMDashboardFilterFields/GetUspPosCRMDashboardFilter/'
   
     this.dataService.getDynamicAPI(apiUrl).subscribe((resp: any) => {
@@ -104,6 +106,7 @@ export class PosCrmDashboardComponent implements OnInit {
         this.metalSectionArr = resp.dynamicData[3];
 
         this.prefillScreenValues();
+        this.isLoading = false;
       }
     });
   }
@@ -164,21 +167,21 @@ export class PosCrmDashboardComponent implements OnInit {
     }
   }
   
-  formatDateToYYYYMMDD(dateString: any) {
-    const date = new Date(dateString);
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
-  }
+  headerCellFormatting(e: any) {
+    // to make grid header center aligned
+    if (e.rowType === 'header') {
+      e.cellElement.style.textAlign = 'center';
+    }
+  } 
 
   setDateValue(event: any){
     if(event.FromDate){
-      this.posCRMdasbordForm.controls.fromDate.setValue(event.FromDate);
-      console.log(event.FromDate)
+      this.posCRMdasbordForm.controls.fromdate.setValue(event.FromDate);
+      this.dateToPass.fromDate = this.datePipe.transform(event.FromDate, 'yyyy-MM-dd')!
     }
     else if(event.ToDate){
-      this.posCRMdasbordForm.controls.toDate.setValue(event.ToDate);
+      this.posCRMdasbordForm.controls.todate.setValue(event.ToDate);
+      this.dateToPass.toDate =  this.datePipe.transform(event.ToDate, 'yyyy-MM-dd')!
     }
   }
 
@@ -249,11 +252,12 @@ export class PosCrmDashboardComponent implements OnInit {
   }
 
   previewClick() {
+    this.isLoading = true;
     let postData = {
       "SPID": "152",
       "parameter": {
-        "str_FmDate" : this.formatDateToYYYYMMDD(this.posCRMdasbordForm.value.fromDate),
-        "str_ToDate" : this.formatDateToYYYYMMDD(this.posCRMdasbordForm.value.toDate),
+        "str_FmDate" : this.datePipe.transform(this.posCRMdasbordForm.value.fromDate, 'yyyy-MM-dd'),
+        "str_ToDate" : this.datePipe.transform(this.posCRMdasbordForm.value.toDate, 'yyyy-MM-dd'),
         "bln_ShowBuyingPattern": JSON.stringify(this.posCRMdasbordForm.controls.showBuyingPatternBln.value? 0 : 1),
         "str_DiaBuyPatternField": this.posCRMdasbordForm.controls.diamondsection.value,
         "str_MtlBuyPatternField": this.posCRMdasbordForm.controls.metal.value,
@@ -276,20 +280,23 @@ export class PosCrmDashboardComponent implements OnInit {
         this.commonService.closeSnackBarMsg();
         const url = URL.createObjectURL(blob);
         window.open(url, '_blank');
+        this.isLoading = false;
       }
       else{
         this.toastr.error(result.message)
+        this.isLoading = false;
         return
       }
     });      
   }
 
   printBtnClick(){
+    this.isLoading = true;
     let postData = {
       "SPID": "152",
-      "parameter": {
-        "str_FmDate" : this.formatDateToYYYYMMDD(this.posCRMdasbordForm.value.fromDate),
-        "str_ToDate" : this.formatDateToYYYYMMDD(this.posCRMdasbordForm.value.toDate),
+      "parameter": { 
+        "str_FmDate" : this.datePipe.transform(this.posCRMdasbordForm.value.fromDate, 'yyyy-MM-dd'),
+        "str_ToDate" : this.datePipe.transform(this.posCRMdasbordForm.value.toDate, 'yyyy-MM-dd'),
         "bln_ShowBuyingPattern": JSON.stringify(this.posCRMdasbordForm.controls.showBuyingPatternBln.value? 0 : 1),
         "str_DiaBuyPatternField": this.posCRMdasbordForm.controls.diamondsection.value,
         "str_MtlBuyPatternField": this.posCRMdasbordForm.controls.metal.value,
@@ -322,10 +329,11 @@ export class PosCrmDashboardComponent implements OnInit {
               printWindow?.focus();
               printWindow?.print();
               printWindow?.close();
-             
+              this.isLoading = false;
             } else {
               Swal.fire('No Data!', 'There is no data to print!', 'info');
               this.commonService.closeSnackBarMsg();
+              this.isLoading = false;
               return
             }
           }, 1500); 
@@ -333,7 +341,8 @@ export class PosCrmDashboardComponent implements OnInit {
         }
       }
       else{
-        this.toastr.error(result.message)
+        this.toastr.error(result.message);
+        this.isLoading = false;
         return
       }
     });  
@@ -357,8 +366,8 @@ export class PosCrmDashboardComponent implements OnInit {
               "ISDEFAULT": 1
             },
             "CONTROL_DETAIL": {
-              "str_FmDate" : this.formatDateToYYYYMMDD(this.posCRMdasbordForm.value.fromDate),
-              "str_ToDate" : this.formatDateToYYYYMMDD(this.posCRMdasbordForm.value.toDate),
+              "str_FmDate" :  this.datePipe.transform(this.posCRMdasbordForm.value.fromDate, 'yyyy-MM-dd'),
+              "str_ToDate" : this.datePipe.transform(this.posCRMdasbordForm.value.toDate, 'yyyy-MM-dd'),
               "bln_ShowBuyingPattern": JSON.stringify(this.posCRMdasbordForm.controls.showBuyingPatternBln.value? 0 : 1),
               "str_DiaBuyPatternField": this.posCRMdasbordForm.controls.diamondsection.value,
               "str_MtlBuyPatternField": this.posCRMdasbordForm.controls.metal.value,
@@ -429,8 +438,8 @@ export class PosCrmDashboardComponent implements OnInit {
       this.fetchedBranchData= this.fetchedBranchDataParam?.split("#")
    
       this.dateToPass = {
-        fromDate:  this.formatDateToYYYYMMDD(new Date()),
-        toDate: this.formatDateToYYYYMMDD(new Date()),
+        fromDate:  this.datePipe.transform(new Date(), 'yyyy-MM-dd')!,
+        toDate: this.datePipe.transform(new Date(), 'yyyy-MM-dd')!
       };
 
       this.posCRMdasbordForm.controls.festival.setValue(1)

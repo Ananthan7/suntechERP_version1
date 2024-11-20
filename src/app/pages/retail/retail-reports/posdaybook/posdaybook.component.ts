@@ -62,6 +62,13 @@ export class POSDaybookComponent implements OnInit {
     this.POSRegisterGridData();
   }
 
+  headerCellFormatting(e: any) {
+    // to make grid header center aligned
+    if (e.rowType === 'header') {
+      e.cellElement.style.textAlign = 'center';
+    }
+  } 
+
   selectedData(data: any) {
     console.log(data)
     // let content= ``, content2 =``,  content3 =``, content4 =``
@@ -196,6 +203,7 @@ export class POSDaybookComponent implements OnInit {
   }
 
   previewClick(){
+    this.isLoading = true;
     let logData =  {
       "VOCTYPE": this.commonService.getqueryParamVocType() || "",
       "REFMID": "",
@@ -233,15 +241,18 @@ export class POSDaybookComponent implements OnInit {
         this.commonService.closeSnackBarMsg();
         const url = URL.createObjectURL(blob);
         window.open(url, '_blank');
+        this.isLoading = false;
       }
       else{
-        this.toastr.error(result.message)
+        this.toastr.error(result.message);
+        this.isLoading = false;
         return
       }
     });      
   }
 
   printBtnClick(){
+    this.isLoading = true;
     let logData =  {
       "VOCTYPE": this.commonService.getqueryParamVocType() || "",
       "REFMID": "",
@@ -298,11 +309,12 @@ export class POSDaybookComponent implements OnInit {
         printWindow?.document.close();
         printWindow?.focus();
         printWindow?.print();
-        printWindow?.close();
+        this.isLoading = false;
        
       } else {
         Swal.fire('No Data!', 'There is no data to print!', 'info');
         this.commonService.closeSnackBarMsg();
+        this.isLoading = false;
         return
       }
     }, 3000); 
@@ -381,29 +393,12 @@ export class POSDaybookComponent implements OnInit {
     this.RegisterGridcolumnkeys = [];
     this.dataService.postDynamicAPI(API, postData).subscribe((result: any) => {
       if (result.status == "Success") {
-        this.isLoading = false;
         if(result.dynamicData.length>0){
           this.commonService.showSnackBarMsg('data loaded successfully!');
         }
         else{
           this.commonService.showSnackBarMsg('No Data!');
         }
-        // const newFilteredItem = { ...result.dynamicData[0] };
-        // delete newFilteredItem.mid; // Removing the mid property
-        // this.RegisterGridData.push(newFilteredItem);                 
-        // this.RegisterGridcolumnkeys = Object.keys(this.RegisterGridData);
-        // this.RegisterGridcolumnkeys.map((key: any) => key.replace(/_/g, ' '));
-   
-
-        // this.RegisterGridData.forEach((item: any) => {
-        //   item.vocdate = this.formatDate(item.vocdate)
-        //   for (const key in item) {
-        //     if (typeof item[key] === 'number' && key !== 'mid') {
-        //       item[key] = this.customizeText(item[key]);
-        //     }
-        //   }
-        // });
-
 
         this.RegisterGridData = result.dynamicData[0];
         console.log(this.RegisterGridData)
@@ -457,10 +452,12 @@ export class POSDaybookComponent implements OnInit {
     this.isLoading = false;
   }
   customizeText(data: any, decimalPoints: any) {
-    return Number(data).toFixed(decimalPoints);
+    const formattedValue = this.commonService.decimalQuantityFormat(data.value, 'AMOUNT');
+    return Number(formattedValue).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   }
   customizeSummaryContent(data: any) {
-    return Number(data.value).toFixed(2);
+   // value separation handler from commonService
+   return this.commonService.setCommaSerperatedNumber(data.value, 'AMOUNT');
   }
 
   POSCollectn_GoldPurchaseGridData(){

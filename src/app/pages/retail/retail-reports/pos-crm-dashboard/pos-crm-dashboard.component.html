@@ -161,7 +161,8 @@
         <div class="col-md-12 mt-3">
             <mat-tab-group>
                 <mat-tab label="Customer Details">
-                    <dx-data-grid></dx-data-grid>
+                    <app-loader [isLoading]="isLoading" class="loader-overlay" ></app-loader>
+                    <dx-data-grid *ngIf="!isLoading" (onCellPrepared)="headerCellFormatting($event)"></dx-data-grid>
                 </mat-tab>
 
                 <mat-tab label="Summary">
@@ -174,7 +175,8 @@
                             </div>
                             <div class="row">
                                 <div class="col">
-                                    <dx-data-grid></dx-data-grid>
+                                    <app-loader [isLoading]="isLoading" class="loader-overlay" ></app-loader>
+                                    <dx-data-grid *ngIf="!isLoading" (onCellPrepared)="headerCellFormatting($event)"></dx-data-grid>
                                 </div>
                             </div>
                         </div>
@@ -187,7 +189,8 @@
                             </div>
                             <div class="row">
                                 <div class="col">
-                                    <dx-data-grid></dx-data-grid>
+                                    <app-loader [isLoading]="isLoading" class="loader-overlay" ></app-loader>
+                                    <dx-data-grid *ngIf="!isLoading" (onCellPrepared)="headerCellFormatting($event)"></dx-data-grid>
                                 </div>
                             </div>
                         </div>  

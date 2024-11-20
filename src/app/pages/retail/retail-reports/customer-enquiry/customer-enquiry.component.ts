@@ -219,6 +219,13 @@ export class CustomerEnquiryComponent implements OnInit {
     this.activeModal.close(data);
   }
   
+  headerCellFormatting(e: any) {
+    // to make grid header center aligned
+    if (e.rowType === 'header') {
+      e.cellElement.style.textAlign = 'center';
+    }
+  } 
+
   popupClosed(){
     if (this.content && Object.keys(this.content).length > 0) {
       console.log(this.content)

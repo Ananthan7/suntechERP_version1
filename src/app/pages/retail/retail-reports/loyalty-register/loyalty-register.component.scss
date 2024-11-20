@@ -73,3 +73,17 @@
   padding: 5px 10px;
   line-height: 1.5;
 }
+
+// for mat-select dropdowns
+::ng-deep {
+  .cdk-overlay-container {
+    position: fixed;
+    z-index: 1070 !important;
+  }
+}
+
+//Report screen disabling while report generation
+.loading-class {
+  pointer-events: none;
+  filter: grayscale(20%) blur(2px)
+}

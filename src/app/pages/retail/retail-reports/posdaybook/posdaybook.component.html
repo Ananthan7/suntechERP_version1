@@ -41,7 +41,7 @@
                    <div class="row mt-1">
                         <app-loader [isLoading]="isLoading"></app-loader>
                         <dx-data-grid [columnAutoWidth]="true" [dataSource]="RegisterGridData" [columns]="RegisterGridcolumnkeys"
-                        *ngIf="!isLoading">
+                        *ngIf="!isLoading" (onCellPrepared)="headerCellFormatting($event)">
                             <dxo-paging [pageSize]="12"></dxo-paging>
                             <dxo-editing mode="cell" [allowUpdating]="false"></dxo-editing>
                             <dxo-scrolling mode="standard"></dxo-scrolling>
@@ -68,7 +68,7 @@
                             <div class="grid-label text-center mt-1" id="ID002">Net Collection</div>
                             <app-loader [isLoading]="isLoading"></app-loader>
                             <dx-data-grid #dataGrid id="gridContainer" [dataSource]="Collectn_GoldPurchaseGrid" [showBorders]="true"
-                            [allowColumnResizing]="true" *ngIf="!isLoading">
+                            [allowColumnResizing]="true" *ngIf="!isLoading" (onCellPrepared)="headerCellFormatting($event)">
                                 <dxo-paging [pageSize]="12"></dxo-paging>
                                 <dxo-editing mode="cell" [allowUpdating]="false"></dxo-editing>
                                 <dxo-scrolling mode="standard"></dxo-scrolling>
@@ -88,7 +88,7 @@
                             <div class="grid-label text-center mt-1" id="ID003">Old Gold Purchase Summary</div>
                             <app-loader [isLoading]="isLoading"></app-loader>
                             <dx-data-grid #dataGrid id="gridContainer" [dataSource]="GoldSum_collection" [showBorders]="true"
-                            [allowColumnResizing]="true" *ngIf="!isLoading">
+                            [allowColumnResizing]="true" *ngIf="!isLoading" (onCellPrepared)="headerCellFormatting($event)">
                                 <dxo-paging [pageSize]="12"></dxo-paging>
                                 <dxo-editing mode="cell" [allowUpdating]="false"></dxo-editing>
                                 <dxo-scrolling mode="standard"></dxo-scrolling>
@@ -110,7 +110,7 @@
                             <div class="grid-label text-center mt-1" id="ID004">POS Account Balance</div>
                             <app-loader [isLoading]="isLoading"></app-loader>
                             <dx-data-grid #dataGrid id="gridContainer" [dataSource]="accountBalanceGrid" [showBorders]="true"
-                            [allowColumnResizing]="true" *ngIf="!isLoading">
+                            [allowColumnResizing]="true" *ngIf="!isLoading" (onCellPrepared)="headerCellFormatting($event)">
                                 <dxo-paging [pageSize]="12"></dxo-paging>
                                 <dxo-editing mode="cell" [allowUpdating]="false"></dxo-editing>
                                 <dxo-scrolling mode="standard"></dxo-scrolling>
@@ -134,7 +134,7 @@
                             <div class="grid-label text-center mt-1" id="ID005">POS Account Movement</div>
                             <app-loader [isLoading]="isLoading"></app-loader>
                             <dx-data-grid #dataGrid id="gridContainer" [dataSource]="acccountMovementGrid" [showBorders]="true"
-                            [allowColumnResizing]="true" *ngIf="!isLoading">
+                            [allowColumnResizing]="true" *ngIf="!isLoading" (onCellPrepared)="headerCellFormatting($event)">
                                 <dxo-paging [pageSize]="12"></dxo-paging>
                                 <dxo-editing mode="cell" [allowUpdating]="false"></dxo-editing>
                                 <dxo-scrolling mode="standard"></dxo-scrolling>
@@ -157,7 +157,7 @@
                             <div class="grid-label text-center mt-1" id="ID006">POS Sales Order Summary</div>
                             <app-loader [isLoading]="isLoading"></app-loader>
                             <dx-data-grid #dataGrid id="gridContainer" [dataSource]="salesOrderSumaryGrid" [showBorders]="true"
-                            [allowColumnResizing]="true" *ngIf="!isLoading">
+                            [allowColumnResizing]="true" *ngIf="!isLoading" (onCellPrepared)="headerCellFormatting($event)">
                                 <dxo-paging [pageSize]="12"></dxo-paging>
                                 <dxo-editing mode="cell" [allowUpdating]="false"></dxo-editing>
                                 <dxo-scrolling mode="standard"></dxo-scrolling>
@@ -186,7 +186,7 @@
                             <div class="grid-label text-center mt-1" id="ID007">Salesman Wise Summary</div>
                             <app-loader [isLoading]="isLoading"></app-loader>
                             <dx-data-grid #dataGrid id="gridContainer" [dataSource]="salesmanSummaryGridArr" [showBorders]="true"
-                            [allowColumnResizing]="true" *ngIf="!isLoading">
+                            [allowColumnResizing]="true" *ngIf="!isLoading" (onCellPrepared)="headerCellFormatting($event)">
                                 <dxo-paging [pageSize]="12"></dxo-paging>
                                 <dxo-editing mode="cell" [allowUpdating]="false"></dxo-editing>
                                 <dxo-scrolling mode="standard"></dxo-scrolling>
@@ -212,7 +212,7 @@
                             <div class="grid-label text-center mt-1" id="ID008">Cash & Credit Card Receipt Summary</div>
                             <app-loader [isLoading]="isLoading"></app-loader>
                             <dx-data-grid #dataGrid id="gridContainer" [dataSource]="cashCreditSmryGrid" [showBorders]="true"
-                            [allowColumnResizing]="true" *ngIf="!isLoading">
+                            [allowColumnResizing]="true" *ngIf="!isLoading" (onCellPrepared)="headerCellFormatting($event)">
                                 <dxo-paging [pageSize]="12"></dxo-paging>
                                 <dxo-editing mode="cell" [allowUpdating]="false"></dxo-editing>
                                 <dxo-scrolling mode="standard"></dxo-scrolling>
@@ -234,7 +234,7 @@
             </mat-tab-group>
         </div>
 
-        <div class="row">
+        <div class="row" [ngClass]="{'loading-class': isLoading }">
             <app-report-screen-buttons (saveTemplateClick)="saveTemplate()" (previewClicked)="previewClick()"
             (printClicked)="printBtnClick()"></app-report-screen-buttons>
         </div>
