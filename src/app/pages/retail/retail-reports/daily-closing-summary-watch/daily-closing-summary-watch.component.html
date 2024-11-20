@@ -62,8 +62,9 @@
             <div class="row mb-2">
                 <div class="col-md-6">
                     <h6 class="header_title" id="ID005">Pending Sales Order Summary</h6>
-                    <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true" [height]="'auto'"
-                    [columnAutoWidth]="true" [dataSource]="pendingSalesOrderSummaryArr">
+                    <app-loader [isLoading]="isLoading" class="loader-overlay" ></app-loader>
+                    <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true" [height]="'auto'" *ngIf="!isLoading"
+                    [columnAutoWidth]="true" [dataSource]="pendingSalesOrderSummaryArr" (onCellPrepared)="headerCellFormatting($event)">
                         <dxo-paging [enabled]="false"></dxo-paging>
                         <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
                         <!-- <dxo-selection mode="multiple"></dxo-selection> -->
@@ -78,8 +79,9 @@
 
                 <div class="col-md-6">
                     <h6 class="header_title" id="ID006">Transaction wise Summary</h6>
-                    <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true" [height]="'auto'"
-                    [columnAutoWidth]="true" [dataSource]="transactionWiseSummaryArr">
+                    <app-loader [isLoading]="isLoading" class="loader-overlay" ></app-loader>
+                    <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true" [height]="'auto'" *ngIf="!isLoading"
+                    [columnAutoWidth]="true" [dataSource]="transactionWiseSummaryArr" (onCellPrepared)="headerCellFormatting($event)">
                         <dxo-paging [enabled]="false"></dxo-paging>
                         <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
                         <!-- <dxo-selection mode="multiple"></dxo-selection> -->
@@ -94,8 +96,9 @@
 
             <div class="row mb-2">
                 <h6 class="header_title" id="ID007">Point Of Sales Summary (Watch)</h6>
-                <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true" [height]="'auto'"
-                [columnAutoWidth]="true" [dataSource]="pendingSalesOrderSummaryArr">
+                <app-loader [isLoading]="isLoading" class="loader-overlay" ></app-loader>
+                <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true" [height]="'auto'" *ngIf="!isLoading"
+                [columnAutoWidth]="true" [dataSource]="pendingSalesOrderSummaryArr" (onCellPrepared)="headerCellFormatting($event)">
                     <dxo-paging [enabled]="false"></dxo-paging>
                     <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
                     <!-- <dxo-selection mode="multiple"></dxo-selection> -->
@@ -118,8 +121,9 @@
             <div class="row mb-2">
                 <div class="col-md-2">
                     <h6 class="header_title" id="ID008">Receipt Summary</h6>
-                    <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true" [height]="'auto'"
-                    [columnAutoWidth]="true" [dataSource]="pendingSalesOrderSummaryArr">
+                    <app-loader [isLoading]="isLoading" class="loader-overlay" ></app-loader>
+                    <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true" [height]="'auto'"  *ngIf="!isLoading"
+                    [columnAutoWidth]="true" [dataSource]="pendingSalesOrderSummaryArr" (onCellPrepared)="headerCellFormatting($event)">
                         <dxo-paging [enabled]="false"></dxo-paging>
                         <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
                         <!-- <dxo-selection mode="multiple"></dxo-selection> -->
@@ -136,8 +140,9 @@
 
                 <div class="col-md-10">
                     <h6 class="header_title" id="ID009">Salesman wise Summary</h6>
-                    <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true" [height]="'auto'"
-                    [columnAutoWidth]="true" [dataSource]="pendingSalesOrderSummaryArr">
+                    <app-loader [isLoading]="isLoading" class="loader-overlay" ></app-loader>
+                    <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true" [height]="'auto'" *ngIf="!isLoading"
+                    [columnAutoWidth]="true" [dataSource]="pendingSalesOrderSummaryArr" (onCellPrepared)="headerCellFormatting($event)">
                         <dxo-paging [enabled]="false"></dxo-paging>
                         <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
                         <!-- <dxo-selection mode="multiple"></dxo-selection> -->
@@ -179,7 +184,7 @@
                 </div>
             </dx-popup>
 
-            <div class="row mt-2 justify-content-end mx-2">
+            <div class="row mt-2 justify-content-end mx-2" [ngClass]="{'loading-class': isLoading }">
                 <app-report-screen-buttons (saveTemplateClick)="saveTemplate()" (previewClicked)="previewClick()"
                 (printClicked)="printBtnClick()"></app-report-screen-buttons>
             </div>

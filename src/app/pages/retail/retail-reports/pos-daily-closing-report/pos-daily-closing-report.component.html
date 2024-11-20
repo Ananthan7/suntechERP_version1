@@ -106,8 +106,9 @@
 
               <div class="row bg-secondary mt-2">
                 <h5 class="text-white pt-2 px-3" id="ID009">Old Gold Purchase</h5>
+                <app-loader [isLoading]="isLoading" class="loader-overlay" ></app-loader>
                 <dx-data-grid [showBorders]="true" [allowColumnResizing]="true" [columnAutoWidth]="true"
-                #dataGrid id="gridContainer" >
+                #dataGrid id="gridContainer" *ngIf="!isLoading" (onCellPrepared)="headerCellFormatting($event)">
                   <dxi-column dataField="ItemCode" caption="Item Code" alignment="center" [width]="150"></dxi-column>
                   <dxi-column dataField="GrossWt" caption="Gross Wt" alignment="right" [width]="100"></dxi-column>
                   <dxi-column dataField="Amount" caption="Amount" alignment="right" [width]="100"></dxi-column>
@@ -247,8 +248,9 @@
               <div class="border border-3 mt-2" style="background-color: #f1f1f1;">
                 <div class="row mt-2">
                   <div class="col-md-6">
+                    <app-loader [isLoading]="isLoading" class="loader-overlay" ></app-loader>
                     <dx-data-grid [showBorders]="true" [allowColumnResizing]="true" [columnAutoWidth]="true"
-                    #dataGrid id="gridContainer" class="h-75" >
+                    #dataGrid id="gridContainer" class="h-75" *ngIf="!isLoading" (onCellPrepared)="headerCellFormatting($event)">
                       <dxi-column dataField="Dinomination" caption="Dinomination" alignment="center" [width]="150"></dxi-column>
                       <dxi-column dataField="Count" caption="Count" alignment="right" [width]="100"></dxi-column>
                       <dxi-column dataField="Amount" caption="Amount" alignment="right" [width]="100"></dxi-column>
@@ -548,8 +550,9 @@
               <div class="border border-3 mt-2">
                 <div class="row mt-2">
                   <div class="col-md-6" style="background-color: #f1f1f1;">
+                    <app-loader [isLoading]="isLoading" class="loader-overlay" ></app-loader>
                     <dx-data-grid [showBorders]="true" [allowColumnResizing]="true" [columnAutoWidth]="true"
-                    #dataGrid id="gridContainer" class="h-75 mt-2" >
+                    #dataGrid id="gridContainer" class="h-75 mt-2" *ngIf="!isLoading" (onCellPrepared)="headerCellFormatting($event)">
                       <dxi-column dataField="Dinomination" caption="Dinomination" alignment="center" [width]="150"></dxi-column>
                       <dxi-column dataField="Count" caption="Count" alignment="right" [width]="100"></dxi-column>
                       <dxi-column dataField="Amount" caption="Amount" alignment="right" [width]="100"></dxi-column>
@@ -703,7 +706,7 @@
           </div>
         </div> -->
 
-        <div class="row">
+        <div class="row" [ngClass]="{'loading-class': isLoading }">
           <app-report-screen-buttons ></app-report-screen-buttons>
         </div>
     </form>  

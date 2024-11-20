@@ -49,7 +49,7 @@
                     <h6 class="header_title" id="ID005">Point Of Sales Summary</h6>
                     <app-loader [isLoading]="isLoading"></app-loader>
                     <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true" [height]="'auto'"
-                    [columnAutoWidth]="true" [dataSource]="pointOfSalesSummaryArr" *ngIf="!isLoading">
+                    [columnAutoWidth]="true" [dataSource]="pointOfSalesSummaryArr" *ngIf="!isLoading" (onCellPrepared)="headerCellFormatting($event)">
                         <dxo-paging [pageSize]="6"></dxo-paging>
                         <dxo-editing mode="cell" [allowUpdating]="false"></dxo-editing>
                         <dxo-scrolling mode="standard"></dxo-scrolling>
@@ -76,7 +76,7 @@
                     <h6 class="header_title" id="ID006">Receipts</h6>
                     <app-loader [isLoading]="isLoading"></app-loader>
                     <dx-data-grid #dataGrid id="gridContainer" [showBorders]="true" [height]="'auto'"
-                    [columnAutoWidth]="true" [dataSource]="receiptSummaryArr" *ngIf="!isLoading">
+                    [columnAutoWidth]="true" [dataSource]="receiptSummaryArr" *ngIf="!isLoading" (onCellPrepared)="headerCellFormatting($event)">
                         <dxo-paging [pageSize]="6"></dxo-paging>
                         <dxo-editing mode="cell" [allowUpdating]="false"></dxo-editing>
                         <dxo-scrolling mode="standard"></dxo-scrolling>
@@ -105,7 +105,8 @@
                     <mat-tab label="Available Stock">
                        <div class="row mt-1">
                             <app-loader [isLoading]="tabChangeLoader"></app-loader>
-                            <dx-data-grid [columnAutoWidth]="true" [dataSource]="availableStockGridDataArr" *ngIf="!tabChangeLoader">
+                            <dx-data-grid [columnAutoWidth]="true" [dataSource]="availableStockGridDataArr" *ngIf="!tabChangeLoader"
+                            (onCellPrepared)="headerCellFormatting($event)">
                                 <dxo-paging [pageSize]="6"></dxo-paging>
                                 <dxo-editing mode="cell" [allowUpdating]="false"></dxo-editing>
                                 <dxo-scrolling mode="standard"></dxo-scrolling>
@@ -124,7 +125,8 @@
                     <mat-tab label="POS Collection">
                         <div class="row mt-1">
                             <app-loader [isLoading]="tabChangeLoader"></app-loader>
-                            <dx-data-grid [columnAutoWidth]="true" [dataSource]="posCollectionGridDataArr" *ngIf="!tabChangeLoader">
+                            <dx-data-grid [columnAutoWidth]="true" [dataSource]="posCollectionGridDataArr" *ngIf="!tabChangeLoader"
+                            (onCellPrepared)="headerCellFormatting($event)">
                                 <dxo-paging [pageSize]="6"></dxo-paging>
                                 <dxo-editing mode="cell" [allowUpdating]="false"></dxo-editing>
                                 <dxo-scrolling mode="standard"></dxo-scrolling>
@@ -145,7 +147,8 @@
                     <mat-tab label="POS Purchase">
                         <div class="row mt-1">
                             <app-loader [isLoading]="tabChangeLoader"></app-loader>
-                            <dx-data-grid [columnAutoWidth]="true" [dataSource]="posPurchaseGridDataArr" *ngIf="!tabChangeLoader">
+                            <dx-data-grid [columnAutoWidth]="true" [dataSource]="posPurchaseGridDataArr" *ngIf="!tabChangeLoader"
+                            (onCellPrepared)="headerCellFormatting($event)">
                                 <dxo-paging [pageSize]="6"></dxo-paging>
                                 <dxo-editing mode="cell" [allowUpdating]="false"></dxo-editing>
                                 <dxo-scrolling mode="standard"></dxo-scrolling>
@@ -169,7 +172,8 @@
                     <mat-tab label="Accounts">
                         <div class="row mt-1">
                             <app-loader [isLoading]="tabChangeLoader"></app-loader>
-                            <dx-data-grid [columnAutoWidth]="true" [dataSource]="accountsGridDataArr" *ngIf="!tabChangeLoader">
+                            <dx-data-grid [columnAutoWidth]="true" [dataSource]="accountsGridDataArr" *ngIf="!tabChangeLoader"
+                            (onCellPrepared)="headerCellFormatting($event)">
                                 <dxo-paging [pageSize]="6"></dxo-paging>
                                 <dxo-editing mode="cell" [allowUpdating]="false"></dxo-editing>
                                 <dxo-scrolling mode="standard"></dxo-scrolling>

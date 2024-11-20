@@ -61,6 +61,13 @@ export class POSSummaryComponent implements OnInit {
     });
   }
 
+  headerCellFormatting(e: any) {
+    // to make grid header center aligned
+    if (e.rowType === 'header') {
+      e.cellElement.style.textAlign = 'center';
+    }
+  } 
+
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
@@ -406,8 +413,9 @@ export class POSSummaryComponent implements OnInit {
     return this.commonService.setCommaSerperatedNumber(data.value, 'AMOUNT');
   };
   customizeMainGridContent = (data: any) => {
-    // decimal point handler from commonService
-    return this.commonService.decimalQuantityFormat(data.value, 'AMOUNT');
+    const formattedValue = this.commonService.decimalQuantityFormat(data.value, 'AMOUNT');
+
+    return Number(formattedValue).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   };
 
   customizeSummaryContent = (data: any) => {
@@ -415,13 +423,15 @@ export class POSSummaryComponent implements OnInit {
     return this.commonService.setCommaSerperatedNumber(data.value, 'AMOUNT');
   };
   customizeContent = (data: any) => {
-    // decimal point handler from commonService
-    return this.commonService.decimalQuantityFormat(data.value, 'AMOUNT');
+    const formattedValue = this.commonService.decimalQuantityFormat(data.value, 'AMOUNT');
+
+    return Number(formattedValue).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   };
 
   customizePOS_ClctnContent = (data: any) => {
-    // decimal point handler from commonService
-    return this.commonService.decimalQuantityFormat(data.value, 'AMOUNT');
+    const formattedValue = this.commonService.decimalQuantityFormat(data.value, 'AMOUNT');
+
+    return Number(formattedValue).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   };
   customizePOS_ClctnSummaryContent = (data: any) => {
     // value separation handler from commonService
@@ -429,8 +439,9 @@ export class POSSummaryComponent implements OnInit {
   };
  
   customizePOS_PurChseContent = (data: any) => {
-    // decimal point handler from commonService
-    return this.commonService.decimalQuantityFormat(data.value, 'AMOUNT');
+    const formattedValue = this.commonService.decimalQuantityFormat(data.value, 'AMOUNT');
+
+    return Number(formattedValue).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   };
   customizePOS_PurChseSummaryContent = (data: any) => {
     // value separation handler from commonService
@@ -438,8 +449,9 @@ export class POSSummaryComponent implements OnInit {
   };
 
   customizeAccountsContent = (data: any) => {
-    // decimal point handler from commonService
-    return this.commonService.decimalQuantityFormat(data.value, 'AMOUNT');
+    const formattedValue = this.commonService.decimalQuantityFormat(data.value, 'AMOUNT');
+
+    return Number(formattedValue).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   };
   customizeAccountsSummaryContent = (data: any) => {
     // value separation handler from commonService

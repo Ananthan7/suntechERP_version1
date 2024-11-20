@@ -170,15 +170,6 @@ export class RetailAdvanceReceiptRegisterComponent implements OnInit {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
-
-
-  formatDateToYYYYMMDD(dateString: any) {
-    const date = new Date(dateString);
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
-  }
  
   selectedData(data: any) {
     console.log(data)
@@ -237,20 +228,20 @@ export class RetailAdvanceReceiptRegisterComponent implements OnInit {
     this.retailAdvanceReceiptRegisterForm.controls.reportTo.setValue(event.value);
     console.log(this.retailAdvanceReceiptRegisterForm.controls.reportTo.value)
   }
+  
   setDateValue(event: any){
     if(event.FromDate){
-      this.retailAdvanceReceiptRegisterForm.controls.fromDate.setValue(event.FromDate);
-      console.log(event.FromDate)
+      this.retailAdvanceReceiptRegisterForm.controls.fromdate.setValue(event.FromDate);
+      this.dateToPass.fromDate = this.datePipe.transform(event.FromDate, 'yyyy-MM-dd')!
     }
     else if(event.ToDate){
-      this.retailAdvanceReceiptRegisterForm.controls.toDate.setValue(event.ToDate);
-      console.log(this.retailAdvanceReceiptRegisterForm)
-      this.toDateValitation()
+      this.retailAdvanceReceiptRegisterForm.controls.todate.setValue(event.ToDate);
+      this.dateToPass.toDate =  this.datePipe.transform(event.ToDate, 'yyyy-MM-dd')!
     }
   }
 
   previewClick() {
-    console.log(this.retailAdvanceReceiptRegisterForm)
+    this.isLoading = true;
     let logData =  {
       "VOCTYPE": this.comService.getqueryParamVocType() || "",
       "REFMID": "",
@@ -269,28 +260,41 @@ export class RetailAdvanceReceiptRegisterComponent implements OnInit {
       "SPID": "151",
       "parameter": {
         "strBRANCHES": this.formattedBranchDivisionData || this.fetchedBranchDataParam,
-        "FrVocDate":  this.formatDateToYYYYMMDD(this.retailAdvanceReceiptRegisterForm.controls.fromDate.value),
-        "ToVocDate": this.formatDateToYYYYMMDD(this.retailAdvanceReceiptRegisterForm.controls.toDate.value),
+        "FrVocDate":  this.datePipe.transform(this.retailAdvanceReceiptRegisterForm.controls.fromDate.value, 'yyyy-MM-dd'),
+        "ToVocDate": this.datePipe.transform(this.retailAdvanceReceiptRegisterForm.controls.toDate.value, 'yyyy-MM-dd'),
         "Pending": this.retailAdvanceReceiptRegisterForm.controls.show.value,
         "Logdata": JSON.stringify(logData)
       },
-    }
-    console.log(postData)  
+    }  
     this.comService.showSnackBarMsg('MSG81447');
     this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
     .subscribe((result: any) => {
-      console.log(result);
-      let data = result.dynamicData;
-      let printContent = data[0][0].HTMLINPUT;
-      this.htmlPreview = this.sanitizer.bypassSecurityTrustHtml(printContent);
-      const blob = new Blob([this.htmlPreview.changingThisBreaksApplicationSecurity], { type: 'text/html' });
-      this.comService.closeSnackBarMsg();
-      const url = URL.createObjectURL(blob);
-      window.open(url, '_blank');
-    });      
+      if(result.status != "Failed"){
+        let data = result.dynamicData;
+        let printContent = data[0][0].HTMLINPUT;
+        if (printContent && Object.keys(printContent).length > 0) {
+          this.htmlPreview = this.sanitizer.bypassSecurityTrustHtml(printContent);
+          const blob = new Blob([this.htmlPreview.changingThisBreaksApplicationSecurity], { type: 'text/html' });
+          this.comService.closeSnackBarMsg();
+          const url = URL.createObjectURL(blob);
+          window.open(url, '_blank');
+          this.isLoading = false;
+        } else {
+          Swal.fire('No Data!', 'There is no data!', 'info');
+          this.comService.closeSnackBarMsg();
+          this.isLoading = false;
+        }
+      }
+      else{
+        this.toastr.error(result.message)
+        this.isLoading = false;
+        return
+      }
+    }); 
   }
 
   printBtnClick(){
+    this.isLoading = true;
     let logData =  {
       "VOCTYPE": this.comService.getqueryParamVocType() || "",
       "REFMID": "",
@@ -309,8 +313,8 @@ export class RetailAdvanceReceiptRegisterComponent implements OnInit {
       "SPID": "151",
       "parameter": {
         "strBRANCHES": this.formattedBranchDivisionData || this.fetchedBranchDataParam,
-        "FrVocDate":  this.formatDateToYYYYMMDD(this.retailAdvanceReceiptRegisterForm.controls.fromDate.value),
-        "ToVocDate": this.formatDateToYYYYMMDD(this.retailAdvanceReceiptRegisterForm.controls.toDate.value),
+        "FrVocDate":  this.datePipe.transform(this.retailAdvanceReceiptRegisterForm.controls.fromDate.value, 'yyyy-MM-dd'),
+        "ToVocDate": this.datePipe.transform(this.retailAdvanceReceiptRegisterForm.controls.toDate.value, 'yyyy-MM-dd'),
         "Pending": this.retailAdvanceReceiptRegisterForm.controls.show.value,
         "Logdata": JSON.stringify(logData)
       },
@@ -349,11 +353,12 @@ export class RetailAdvanceReceiptRegisterComponent implements OnInit {
         printWindow?.document.close();
         printWindow?.focus();
         printWindow?.print();
-        printWindow?.close();
+        this.isLoading = false;
        
       } else {
         Swal.fire('No Data!', 'There is no data to print!', 'info');
         this.comService.closeSnackBarMsg();
+        this.isLoading = false;
         return
       }
     }, 3000); 
@@ -391,8 +396,8 @@ export class RetailAdvanceReceiptRegisterComponent implements OnInit {
             },
             "CONTROL_DETAIL": {
               "strBRANCHES": this.formattedBranchDivisionData || this.fetchedBranchDataParam,
-              "FrVocDate":  this.formatDateToYYYYMMDD(this.retailAdvanceReceiptRegisterForm.controls.fromDate.value),
-              "ToVocDate": this.formatDateToYYYYMMDD(this.retailAdvanceReceiptRegisterForm.controls.toDate.value),
+              "FrVocDate":  this.datePipe.transform(this.retailAdvanceReceiptRegisterForm.controls.fromDate.value, 'yyyy-MM-dd'),
+              "ToVocDate": this.datePipe.transform(this.retailAdvanceReceiptRegisterForm.controls.toDate.value, 'yyyy-MM-dd'),
               "Pending": this.retailAdvanceReceiptRegisterForm.controls.show.value,
               "Logdata": JSON.stringify(logData)
             }
@@ -465,8 +470,8 @@ export class RetailAdvanceReceiptRegisterComponent implements OnInit {
       this.fetchedBranchData= this.fetchedBranchDataParam?.split("#")
    
       this.dateToPass = {
-        fromDate:  this.formatDateToYYYYMMDD(new Date()),
-        toDate: this.formatDateToYYYYMMDD(new Date()),
+        fromDate:  this.datePipe.transform(new Date(), 'yyyy-MM-dd')!,
+        toDate: this.datePipe.transform(new Date(), 'yyyy-MM-dd')!,
       };
     }
   }

@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
@@ -88,21 +89,21 @@ export class PosDailyClosingReportComponent implements OnInit {
   templateNameHasValue: boolean= false;
   selectedRowKeys: any[] = [];
   VocTypeParam: any = [];
+  isLoading: boolean = false;
 
 
-  constructor( private activeModal: NgbActiveModal,  private formBuilder: FormBuilder,) { }
+  constructor( private activeModal: NgbActiveModal,  private formBuilder: FormBuilder,  private datePipe: DatePipe) { }
 
   ngOnInit(): void {
     this.prefillScreenValues()
   }
 
-  formatDateToYYYYMMDD(dateString: any) {
-    const date = new Date(dateString);
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
-  }
+ headerCellFormatting(e: any) {
+    // to make grid header center aligned
+    if (e.rowType === 'header') {
+      e.cellElement.style.textAlign = 'center';
+    }
+  } 
 
   selectedData(data: any) {
     console.log(data)
@@ -248,9 +249,9 @@ export class PosDailyClosingReportComponent implements OnInit {
       this.fetchedBranchDataParam = formattedUserBranch;
       this.fetchedBranchData= this.fetchedBranchDataParam?.split("#")
    
-      this.dateToPass = {
-        fromDate:  this.formatDateToYYYYMMDD(new Date()),
-        toDate: this.formatDateToYYYYMMDD(new Date()),
+      this.dateToPass = { 
+        fromDate:  this.datePipe.transform(new Date(), 'yyyy-MM-dd')!,
+        toDate: this.datePipe.transform(new Date(), 'yyyy-MM-dd')!,
       };
 
       let vocTypeArr: any= []

@@ -109,8 +109,9 @@
     <div class="row  mt-1 pt-3 mb-3">
       <mat-tab-group style="background-color: #f5f2ee;" [selectedIndex]="this.divisionMS == 'ID' ? 1 : 0">
         <mat-tab label="M T D Status">
+          <app-loader [isLoading]="isLoading" class="loader-overlay" ></app-loader>
           <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true" [allowColumnReordering]="true"
-            [allowColumnResizing]="true" [columnAutoWidth]="true">
+            [allowColumnResizing]="true" [columnAutoWidth]="true" *ngIf="isLoading" (onCellPrepared)="headerCellFormatting($event)">
             <dxo-paging [enabled]="false"></dxo-paging>
             <dxo-editing mode="cell" [allowUpdating]="true">
             </dxo-editing>
@@ -124,7 +125,7 @@
         </mat-tab>
         <mat-tab label="Y T D Status">
           <dx-data-grid #dataGrid id="gridContainer" keyExpr="ID" [showBorders]="true" [allowColumnReordering]="true"
-            [allowColumnResizing]="true" [columnAutoWidth]="true">
+            [allowColumnResizing]="true" [columnAutoWidth]="true" *ngIf="isLoading" (onCellPrepared)="headerCellFormatting($event)">
             <dxo-paging [enabled]="false"></dxo-paging>
             <dxo-editing mode="cell" [allowUpdating]="true">
             </dxo-editing>
@@ -164,7 +165,7 @@
       </div>
     </dx-popup>
 
-    <div class="row mt-2 justify-content-end mx-2">
+    <div class="row mt-2 justify-content-end mx-2" [ngClass]="{'loading-class': isLoading }">
       <app-report-screen-buttons (saveTemplateClick)="saveTemplate()" (previewClicked)="previewClick()"
       (printClicked)="printBtnClick()"></app-report-screen-buttons>
     </div>

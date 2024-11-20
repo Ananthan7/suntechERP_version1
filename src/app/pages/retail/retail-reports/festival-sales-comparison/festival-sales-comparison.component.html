@@ -67,7 +67,8 @@
         <div class="col-md-12 mt-3">
             <mat-tab-group style="background-color: #f5f2ee;">
                 <mat-tab label="Diamond Division">
-                    <dx-data-grid></dx-data-grid>
+                    <app-loader [isLoading]="isLoading" class="loader-overlay" ></app-loader>
+                    <dx-data-grid (onCellPrepared)="headerCellFormatting($event)" *ngIf="!isLoading"></dx-data-grid>
                 </mat-tab>
                 <mat-tab label="Metal Division">
                 </mat-tab>
@@ -98,7 +99,7 @@
             </div>
         </dx-popup>
 
-        <div class="row mt-2 justify-content-end mx-2">       
+        <div class="row mt-2 justify-content-end mx-2" [ngClass]="{'loading-class': isLoading }">       
             <app-report-screen-buttons (saveTemplateClick)="saveTemplate()" (previewClicked)="previewClick()"
             (printClicked)="printBtnClick()"></app-report-screen-buttons>
         </div>

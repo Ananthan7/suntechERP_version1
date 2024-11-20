@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
@@ -30,11 +31,12 @@ export class FestivalSalesComparisonComponent implements OnInit {
 
   dateToPass: { fromDate: string; toDate: string } = { fromDate: '', toDate: '' };
   fetchedBranchDataParam: any= [];
+  isLoading: boolean = false;
 
 
   constructor( private formBuilder: FormBuilder,
     private toastr: ToastrService,
-    private commonService: CommonServiceService,
+    private commonService: CommonServiceService, private datePipe: DatePipe,
     private dataService: SuntechAPIService,   private activeModal: NgbActiveModal,
   ) { }
 
@@ -46,22 +48,22 @@ export class FestivalSalesComparisonComponent implements OnInit {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
-  
-  formatDateToYYYYMMDD(dateString: any) {
-    const date = new Date(dateString);
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
-  }
+
+  headerCellFormatting(e: any) {
+    // to make grid header center aligned
+    if (e.rowType === 'header') {
+      e.cellElement.style.textAlign = 'center';
+    }
+  } 
 
   setDateValue(event: any){
     if(event.FromDate){
       this.festivalSalesComparisonForm.controls.fromdate.setValue(event.FromDate);
-      console.log(event.FromDate)
+      this.dateToPass.fromDate = this.datePipe.transform(event.FromDate, 'yyyy-MM-dd')!
     }
     else if(event.ToDate){
       this.festivalSalesComparisonForm.controls.todate.setValue(event.ToDate);
+      this.dateToPass.toDate =  this.datePipe.transform(event.ToDate, 'yyyy-MM-dd')!
     }
   }
 
@@ -130,8 +132,8 @@ export class FestivalSalesComparisonComponent implements OnInit {
       this.fetchedBranchData= this.fetchedBranchDataParam?.split("#")
    
       this.dateToPass = {
-        fromDate:  this.formatDateToYYYYMMDD(new Date()),
-        toDate: this.formatDateToYYYYMMDD(new Date()),
+        fromDate:  this.datePipe.transform(new Date(), 'yyyy-MM-dd')!,
+        toDate: this.datePipe.transform(new Date(), 'yyyy-MM-dd')!
       };
     }
   }
@@ -197,57 +199,32 @@ export class FestivalSalesComparisonComponent implements OnInit {
   }
 
   previewClick() {
+    this.isLoading = true
+
     let postData = {
-      "SPID": "0118",
+      "SPID": "",
       "parameter": {
         
       }
     }
-    console.log(postData)  
-    this.commonService.showSnackBarMsg('MSG81447');
-    this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
-    .subscribe((result: any) => {
-      console.log(result);
-      let data = result.dynamicData;
-      const width = window.innerWidth;
-      const height = window.innerHeight;
-      const windowFeatures = `width=${width},height=${height},fullscreen=yes`;
-      var WindowPrt = window.open(' ', ' ', windowFeatures);
-      if (WindowPrt === null) {
-        console.error('Failed to open the print window. Possibly blocked by a popup blocker.');
-        return;
-      }
-      let printContent = data[0][0].HTMLINPUT;
-      WindowPrt.document.write(printContent);
-      WindowPrt.document.close();
-      WindowPrt.focus();  
-      WindowPrt.onload = function () {
-        if (WindowPrt && WindowPrt.document.head) {
-          let styleElement = WindowPrt.document.createElement('style');
-          styleElement.textContent = `
-                      @page {
-                          size: A5 landscape;
-                      }
-                      body {
-                          margin: 0mm;
-                      }
-                  `;
-          WindowPrt.document.head.appendChild(styleElement);
-
-          setTimeout(() => {
-            if (WindowPrt) {
-              WindowPrt.print();
-            } else {
-              console.error('Print window was closed before printing could occur.');
-            }
-          }, 800);
-        }
-      };
-      this.commonService.closeSnackBarMsg()
-    });      
+    console.log(postData) 
+    setTimeout(()=>{
+      this.isLoading = false;
+    }, 300)     
   }
 
   printBtnClick(){
-    
+    this.isLoading = true
+
+    let postData = {
+      "SPID": "",
+      "parameter": {
+        
+      }
+    }
+    console.log(postData) 
+    setTimeout(()=>{
+      this.isLoading = false;
+    }, 300)  
   }
 }
