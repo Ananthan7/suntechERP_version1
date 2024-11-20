@@ -8,6 +8,7 @@
 
 <!-- modal header component -->
 <modal-header
+  *ngIf="flag !== 'VIEW'"
   (saveClick)="certificateMasterMainFormSubmit()"
   (cancelClick)="close()"
   (deleteClick)="DeleteController()"
@@ -84,9 +85,7 @@
                     #overlayLedger
                     class="masterSearch"
                     [MasterSearchData]="countryCodeData"
-                    (newRowClick)="
-                      lookupSelect($event, ['ledger'], ['CODE'])
-                    "
+                    (newRowClick)="lookupSelect($event, ['ledger'], ['CODE'])"
                   >
                   </master-search>
                 </mat-form-field>

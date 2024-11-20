@@ -250,8 +250,15 @@ export class FixingCommodityMasterComponent implements OnInit {
 
  // karatDetail:[''],
 
+
  setFormValues() {
  if (!this.content) return;
+
+ let API = 'FixingCommodityMaster/GetFixingCommodityMasterDetail/' + this.content.MID;
+ let Sub: Subscription = this.dataService.getDynamicAPI(API)
+ .subscribe((result) => {
+   this.commonService.closeSnackBarMsg()
+   console.log(result.response)
 
     this.fixingcommodityForm.controls.itemType.setValue(this.content.ITEMTYPE);
     this.fixingcommodityForm.controls.divisionCode.setValue(this.content.DIVISION_CODE);
@@ -261,9 +268,9 @@ export class FixingCommodityMasterComponent implements OnInit {
     this.fixingcommodityForm.controls.costcenterMC.setValue(this.content.CC_METAL);
     this.fixingcommodityForm.controls.karat.setValue(this.content.KARAT_CODE);
     this.fixingcommodityForm.controls.category.setValue(this.content.CATEGORY_CODE);
-    this.fixingcommodityForm.controls.inPieces.setValue(this.content.IN_PCS);
+    this.fixingcommodityForm.controls.inPieces.setValue(result.response.IN_PCS);
     this.fixingcommodityForm.controls.pcs.setValue(this.content.PCS2GMS);
-    this.fixingcommodityForm.controls.pcsdrpdwn.setValue(this.content.PCS2GMS_UNIT);
+    this.fixingcommodityForm.controls.pcsdrpdwn.setValue(result.response.PCS2GMS_UNIT);
     this.fixingcommodityForm.controls.purchaseRateType.setValue(this.content.PUR_RATE_TYPE);
     this.fixingcommodityForm.controls.purchaseConvFactor.setValue(this.content.PUR_CONV_FACTOR);
     this.fixingcommodityForm.controls.purchaseCurrencyExRate.setValue(this.content.PUR_CURRENCY_CODE);
@@ -273,14 +280,14 @@ export class FixingCommodityMasterComponent implements OnInit {
     this.fixingcommodityForm.controls.salesCurrencyExRate.setValue(this.content.SAL_CURRENCY_CODE);
     this.fixingcommodityForm.controls.salesCurrencyExRateDetails.setValue(this.content.SAL_CURRENCY_RATE);
     this.fixingcommodityForm.controls.reorderStockReaches.setValue(this.content.RO_LEVEL_QTY);
-    this.fixingcommodityForm.controls.reorderStockReachesDrpdwn.setValue(this.content.RO_LEVEL_QTY_UNIT);
+    this.fixingcommodityForm.controls.reorderStockReachesDrpdwn.setValue(result.response.RO_LEVEL_QTY_UNIT);
     this.fixingcommodityForm.controls.reorderRateReaches.setValue(this.content.RO_LEVEL_RATE);
-    this.fixingcommodityForm.controls.reorderRateReachesDrpdwn.setValue(this.content.RO_LEVEL_RATE_UNIT);
+    this.fixingcommodityForm.controls.reorderRateReachesDrpdwn.setValue(result.response.RO_LEVEL_RATE_UNIT);
     this.fixingcommodityForm.controls.minimumOrderQty.setValue(this.content.RO_QTY_MIN);
-    this.fixingcommodityForm.controls.minimumOrderQtyDrpdwn.setValue(this.content.RO_QTY_MIN_UNIT);
+    this.fixingcommodityForm.controls.minimumOrderQtyDrpdwn.setValue(result.response.RO_QTY_MIN_UNIT);
     this.fixingcommodityForm.controls.maximumOrderQty.setValue(this.content.RO_QTY_MAX);
-    this.fixingcommodityForm.controls.maximumOrderQtyDrpdwn.setValue(this.content.RO_QTY_MAX_UNIT);
-    this.fixingcommodityForm.controls.on.setValue(this.content.OPENED_ON);
+    this.fixingcommodityForm.controls.maximumOrderQtyDrpdwn.setValue(result.response.RO_QTY_MAX_UNIT);
+    this.fixingcommodityForm.controls.on.setValue(result.response.OPENED_ON);
     this.fixingcommodityForm.controls.by.setValue(this.content.OPENED_BY);
     this.fixingcommodityForm.controls.firstTrans.setValue(this.content.FIRST_TRN);
     this.fixingcommodityForm.controls.lastTrans.setValue(this.content.LAST_TRN);
@@ -290,6 +297,18 @@ export class FixingCommodityMasterComponent implements OnInit {
     this.fixingcommodityForm.controls.makingCurrencyDetail.setValue(this.content.MKG_CURRENCY);
     this.fixingcommodityForm.controls.makingCurrency.setValue(this.content.MKG_CURRENCY_RATE);
     this.fixingcommodityForm.controls.standardRate.setValue(this.content.MKG_STD_RATE);
+    this.fixingcommodityForm.controls.divisionCodedetail.setValue(this.content.REMARKS);
+    this.fixingcommodityForm.controls.karatDetail.setValue(this.content.BRAND_CODE);
+
+
+  }, err => {
+    this.commonService.closeSnackBarMsg()
+    this.commonService.toastErrorByMsgId('MSG1531')
+  })
+this.subscriptions.push(Sub)
+
+
+
     }
 
 
@@ -307,7 +326,7 @@ export class FixingCommodityMasterComponent implements OnInit {
       "VENDOR_CODE": "string",
       "VENDOR_REF": "string",
       "TYPE_CODE": "string",
-      "BRAND_CODE": "string",
+      "BRAND_CODE": this.commonService.nullToString(this.fixingcommodityForm.value.karatDetail),
       "CATEGORY_CODE": this.commonService.nullToString(this.fixingcommodityForm.value.category),
       "COUNTRY_CODE": "string",
       "SUB_CATEGORY_CODE": "string",
@@ -317,7 +336,7 @@ export class FixingCommodityMasterComponent implements OnInit {
       "STD_PRE_RATE": 0,
       "PRE_UNIT": 0,
       "MIN_PRE_RATE": 0,
-      "REMARKS": "string",
+      "REMARKS": this.commonService.nullToString(this.fixingcommodityForm.value.divisionCodedetail),
       "PUR_RATE_TYPE": this.commonService.nullToString(this.fixingcommodityForm.value.purchaseRateType),
       "PUR_CONV_FACTOR": this.commonService.emptyToZero(this.fixingcommodityForm.value.purchaseConvFactor),
       "PUR_CURRENCY_CODE": this.commonService.nullToString(this.fixingcommodityForm.value.purchaseCurrencyExRate),

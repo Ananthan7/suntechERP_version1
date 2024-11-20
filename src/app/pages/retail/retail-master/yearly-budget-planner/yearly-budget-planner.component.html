@@ -22,9 +22,8 @@
                                         Branch Code :</label>
                                     <div class="col-sm-8">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text"  matInput formControlName="branchcode"
-                                                UpperCaseDirective autocomplete="off"
-                                                 (focusout)="
+                                            <input type="text" matInput formControlName="branchcode" UpperCaseDirective
+                                                autocomplete="off" (focusout)="
                                                 SPvalidateLookupFieldModified(
                                                   $event,
                                                   branchCodeData,
@@ -33,11 +32,9 @@
                                                   ['BRANCH_CODE'],
                                                   false
                                                 )
-                                              " />
-                                            <master-search 
-                                            class="masterSearch" 
-                                            [MasterSearchData]="branchCodeData"
-                                            (newRowClick)="
+                                              " [readonly]="viewMode" [disabled]="viewMode" />
+                                            <master-search class="masterSearch" [MasterSearchData]="branchCodeData"
+                                                (newRowClick)="
                                             lookupSelect($event, 'branchcode', 'BRANCH_CODE')
                                           ">
                                             </master-search>
@@ -57,7 +54,8 @@
                                         </mat-form-field> -->
                                         <mat-form-field style="width: 100%" appearance="outline">
                                             <input matInput [matDatepicker]="datefrom" name="date_from"
-                                                placeholder="DD/MM/YYYY" formControlName="date_from" readonly="true" />
+                                                placeholder="DD/MM/YYYY" formControlName="date_from" readonly="true"
+                                                [readonly]="viewMode" [disabled]="viewMode" />
                                             <mat-datepicker-toggle matSuffix [for]="datefrom"></mat-datepicker-toggle>
                                         </mat-form-field>
 
@@ -76,9 +74,10 @@
                                     <div class="col-sm-8">
                                         <mat-form-field style="width: 100%" appearance="outline">
                                             <input type="text" #codeInput matInput formControlName="finyear"
-                                                UpperCaseDirective autocomplete="off" />
-                                            <master-search class="masterSearch" [MasterSearchData]="BranchData"
-                                                (newRowClick)="branchCodeSelected($event)">
+                                                UpperCaseDirective autocomplete="off" [readonly]="viewMode"
+                                                [disabled]="viewMode" />
+                                            <master-search class="masterSearch" [MasterSearchData]="finyearcodedata"
+                                                (newRowClick)="selectedfinyear($event)">
                                             </master-search>
                                         </mat-form-field>
                                     </div>
@@ -96,7 +95,8 @@
                                         </mat-form-field> -->
                                         <mat-form-field style="width: 100%" appearance="outline">
                                             <input matInput [matDatepicker]="dateto" name="dateto"
-                                                placeholder="DD/MM/YYYY" formControlName="dateto" readonly="true" />
+                                                placeholder="DD/MM/YYYY" formControlName="dateto" readonly="true"
+                                                [readonly]="viewMode" [disabled]="viewMode" />
                                             <mat-datepicker-toggle matSuffix [for]="dateto"></mat-datepicker-toggle>
                                         </mat-form-field>
 
@@ -114,7 +114,7 @@
                             <div class="col-md-10">
                                 <mat-form-field style="width: 100%" appearance="outline">
                                     <input type="text" #codeInput matInput formControlName="narration"
-                                        UpperCaseDirective autocomplete="off" />
+                                        [readonly]="viewMode" [disabled]="viewMode" autocomplete="off" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -134,17 +134,17 @@
                 <div class="row">
                     <div class="col-md-8">
                         <dx-data-grid id="gridContainer" [dataSource]="maindetails" [showBorders]="true"
-                            [showColumnLines]="true" [showRowLines]="true" [allowColumnResizing]="true" keyExpr="SRNO"
+                            [showColumnLines]="true" [showRowLines]="true" [allowColumnResizing]="true" keyExpr="SLNO"
                             style="height: 250px;">
 
-                            <dxi-column dataField="SRNO" caption="S.NO">
+                            <dxi-column dataField="SLNO" caption="S.NO">
                             </dxi-column>
 
-                            <dxi-column dataField="ACCOUNT_CODE" caption="Account Code" format="dd/MM/yyyy">
+                            <dxi-column dataField="ACCODE" caption="Account Code" format="dd/MM/yyyy">
                             </dxi-column>
 
 
-                            <dxi-column dataField="ACCOUNT_NAME" caption="Account Name">
+                            <dxi-column dataField="ACCOUNT_HEAD" caption="Account Name">
                             </dxi-column>
 
                             <dxi-column dataField="LAST_YEAR_AMOUNT" caption="Last Year Amount">
@@ -164,7 +164,7 @@
                             </mat-form-field>
                         </div>
                         <div class="row">
-                            <dx-data-grid id="gridContainer" [dataSource]="maindetails" [showBorders]="true"
+                            <dx-data-grid id="gridContainer" [dataSource]="maindetails_data" [showBorders]="true"
                                 [showColumnLines]="true" [showRowLines]="true" [allowColumnResizing]="true"
                                 keyExpr="SRNO" style="height: 220px;">
 
@@ -192,7 +192,8 @@
                             </div>
                             <div class="col-md-4 p-0">
                                 <mat-form-field style="width: 100%;" appearance="outline">
-                                    <input type="text" id="inputPassword" matInput formControlName="increase" />
+                                    <input type="text" id="inputPassword" matInput formControlName="increase"
+                                        [readonly]="viewMode" [disabled]="viewMode" />
                                 </mat-form-field>
                             </div>
                             <div class="col-md-4 p-0">
