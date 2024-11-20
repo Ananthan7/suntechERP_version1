@@ -20,6 +20,7 @@ export class FixingCommodityMasterComponent implements OnInit {
   selectedIndexes: any = [];
   viewMode: boolean = false;
   isDisableSaveBtn: boolean = false;
+  editMode: boolean = false;
   currentDate: any = this.commonService.currentDate;
   
   @ViewChild('divisionCodedetailcodeSearch') divisionCodedetailcodeSearch!: MasterSearchComponent;
@@ -32,12 +33,6 @@ export class FixingCommodityMasterComponent implements OnInit {
   @ViewChild('makingCurrencyDetailSearch') makingCurrencyDetailSearch!: MasterSearchComponent;
 
 
-
-  
-  
-  
-  
-  
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -57,7 +52,7 @@ export class FixingCommodityMasterComponent implements OnInit {
        this.viewMode = true;
      } else if (this.content.FLAG == 'EDIT') {
        this.viewMode = false;
-      
+      this.editMode = true;
      } else if (this.content?.FLAG == 'DELETE') {
        this.viewMode = true;
        this.delete()
@@ -270,7 +265,7 @@ export class FixingCommodityMasterComponent implements OnInit {
     this.fixingcommodityForm.controls.category.setValue(this.content.CATEGORY_CODE);
     this.fixingcommodityForm.controls.inPieces.setValue(result.response.IN_PCS);
     this.fixingcommodityForm.controls.pcs.setValue(this.content.PCS2GMS);
-    this.fixingcommodityForm.controls.pcsdrpdwn.setValue(result.response.PCS2GMS_UNIT);
+    this.fixingcommodityForm.controls.pcsdrpdwn.setValue(result.response.PCS2GMS_UNIT.toString());
     this.fixingcommodityForm.controls.purchaseRateType.setValue(this.content.PUR_RATE_TYPE);
     this.fixingcommodityForm.controls.purchaseConvFactor.setValue(this.content.PUR_CONV_FACTOR);
     this.fixingcommodityForm.controls.purchaseCurrencyExRate.setValue(this.content.PUR_CURRENCY_CODE);
@@ -280,20 +275,20 @@ export class FixingCommodityMasterComponent implements OnInit {
     this.fixingcommodityForm.controls.salesCurrencyExRate.setValue(this.content.SAL_CURRENCY_CODE);
     this.fixingcommodityForm.controls.salesCurrencyExRateDetails.setValue(this.content.SAL_CURRENCY_RATE);
     this.fixingcommodityForm.controls.reorderStockReaches.setValue(this.content.RO_LEVEL_QTY);
-    this.fixingcommodityForm.controls.reorderStockReachesDrpdwn.setValue(result.response.RO_LEVEL_QTY_UNIT);
+    this.fixingcommodityForm.controls.reorderStockReachesDrpdwn.setValue(result.response.RO_LEVEL_QTY_UNIT.toString());
     this.fixingcommodityForm.controls.reorderRateReaches.setValue(this.content.RO_LEVEL_RATE);
-    this.fixingcommodityForm.controls.reorderRateReachesDrpdwn.setValue(result.response.RO_LEVEL_RATE_UNIT);
+    this.fixingcommodityForm.controls.reorderRateReachesDrpdwn.setValue(result.response.RO_LEVEL_RATE_UNIT.toString());
     this.fixingcommodityForm.controls.minimumOrderQty.setValue(this.content.RO_QTY_MIN);
-    this.fixingcommodityForm.controls.minimumOrderQtyDrpdwn.setValue(result.response.RO_QTY_MIN_UNIT);
+    this.fixingcommodityForm.controls.minimumOrderQtyDrpdwn.setValue(result.response.RO_QTY_MIN_UNIT.toString());
     this.fixingcommodityForm.controls.maximumOrderQty.setValue(this.content.RO_QTY_MAX);
-    this.fixingcommodityForm.controls.maximumOrderQtyDrpdwn.setValue(result.response.RO_QTY_MAX_UNIT);
+    this.fixingcommodityForm.controls.maximumOrderQtyDrpdwn.setValue(result.response.RO_QTY_MAX_UNIT.toString());
     this.fixingcommodityForm.controls.on.setValue(result.response.OPENED_ON);
     this.fixingcommodityForm.controls.by.setValue(this.content.OPENED_BY);
     this.fixingcommodityForm.controls.firstTrans.setValue(this.content.FIRST_TRN);
     this.fixingcommodityForm.controls.lastTrans.setValue(this.content.LAST_TRN);
     this.fixingcommodityForm.controls.margin.setValue(this.content.MARGIN_PERCENTAGE);
     this.fixingcommodityForm.controls.qtyRoundOff.setValue(this.content.QTY_ROUNDOFF);
-    this.fixingcommodityForm.controls.makingUnit.setValue(this.content.MKG_UNIT);
+    this.fixingcommodityForm.controls.makingUnit.setValue(this.content.MKG_UNIT.toString());
     this.fixingcommodityForm.controls.makingCurrencyDetail.setValue(this.content.MKG_CURRENCY);
     this.fixingcommodityForm.controls.makingCurrency.setValue(this.content.MKG_CURRENCY_RATE);
     this.fixingcommodityForm.controls.standardRate.setValue(this.content.MKG_STD_RATE);
@@ -495,8 +490,35 @@ this.subscriptions.push(Sub)
 
 
 
-  close(data?: any){
-    this.activeModal.close(data);
+  // close(data?: any){
+  //   this.activeModal.close(data);
+  // }
+
+  close(data?: any) {
+    if (data){
+      this.viewMode = true;
+      this.activeModal.close(data);
+      return
+    }
+    if (this.content && this.content.FLAG == 'VIEW'){
+      this.activeModal.close(data);
+      return
+    }
+    Swal.fire({
+      title: 'Do you want to exit?',
+      text: '',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes!',
+      cancelButtonText: 'No'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.activeModal.close(data);
+      }
+    }
+    )
   }
 
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
