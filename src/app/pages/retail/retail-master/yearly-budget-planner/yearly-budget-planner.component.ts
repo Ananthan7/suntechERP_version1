@@ -23,10 +23,13 @@ export class YearlyBudgetPlannerComponent implements OnInit {
   dyndatas: any;
   BranchData: MasterSearchModel = {};
   maindetails: any = [];
+  maindetails_data: any = [];
   private subscriptions: Subscription[] = [];
   viewOnly: boolean = false;
   userDefinedData: any;
-
+  username: any = localStorage.getItem('username');
+  viewMode: boolean = false;
+  branch_code:any;
 
 
   constructor(
@@ -54,7 +57,8 @@ export class YearlyBudgetPlannerComponent implements OnInit {
   ngOnInit(): void {
     console.log(this.content);
     // this.initializeMaindetails();
-    this.unq_id = this.content?.MID;
+    this.unq_id = this.content?.FYEARCODE;
+    this.branch_code = this.content?.BRANCH_CODE;
     console.log(this.unq_id);
     this.flag = this.content?.FLAG;
     this.initialController(this.flag, this.content);
@@ -63,8 +67,29 @@ export class YearlyBudgetPlannerComponent implements OnInit {
     }
   }
 
+  finyearcodedata: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 103,
+    SEARCH_FIELD: '',
+    SEARCH_HEADING: 'FIN YEAR',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+  }
+
+  selectedfinyear(e: any) {
+    console.log(e);
+    this.yearlybudgetform.controls.finyear.setValue(e.FYEARCODE);
+    this.yearlybudgetform.controls.date_from.setValue(e.STARTYEAR);
+    this.yearlybudgetform.controls.dateto.setValue(e.ENDYEAR);
+  }
+
   initialController(FLAG: any, DATA: any) {
     if (FLAG === "VIEW") {
+      this.viewMode = true;
+
       this.ViewController(DATA);
     }
     if (FLAG === "EDIT") {
@@ -90,19 +115,21 @@ export class YearlyBudgetPlannerComponent implements OnInit {
   }
 
   detailsapi(fm_id: any) {
-    this.viewOnly = true;
+    // this.viewOnly = true;
 
-    let API = `BudgetMaster/GetBudgetMasterDetail/${this.unq_id}/${this.fyear}`;
+    let API = `BudgetMaster/GetBudgetMasterDetail/${this.branch_code}/${this.unq_id}`;
     let Sub: Subscription = this.apiService.getDynamicAPI(API)
       .subscribe((result: any) => {
         this.dyndatas = result.response;
+        this.maindetails.push(...result.response.Details);
+        // ('#gridContainer').reload();
+        console.log(result.response.Details)
         console.log(this.dyndatas);
         this.flag = "EDIT";
       }, (err: any) => {
 
       })
     this.subscriptions.push(Sub);
-    console.log(this.dyndatas.FA_CATEGORY);
   }
 
 
@@ -118,7 +145,7 @@ export class YearlyBudgetPlannerComponent implements OnInit {
       confirmButtonText: "Yes, delete!",
     }).then((result) => {
       if (result.isConfirmed) {
-        const API = `FestivalMaster/DeleteFestivalMaster/${this.unq_id}`;
+        const API = `BudgetMaster/DeleteBudgetMaster/${this.branch_code}/${this.unq_id}`;
         const Sub: Subscription = this.apiService
           .deleteDynamicAPI(API)
           .subscribe({
@@ -182,28 +209,19 @@ export class YearlyBudgetPlannerComponent implements OnInit {
     const postData = {
       "BRANCH_CODE": this.yearlybudgetform.controls.branchcode.value,
       "FYEARCODE": this.yearlybudgetform.controls.finyear.value,
-      "CREATED_BY": this.yearlybudgetform.controls.code.value,
-      "CREATED_ON": this.yearlybudgetform.controls.code.value,
+      "CREATED_BY": this.username,
+      "CREATED_ON": new Date(),
       "FROM_DATE": this.yearlybudgetform.controls.date_from.value,
       "TO_DATE": this.yearlybudgetform.controls.dateto.value,
       "MID": 0,
       "NARRATION": this.yearlybudgetform.controls.narration.value,
-      "Details": [
-        {
-          "SLNO": 0,
-          "BRANCH_CODE": "string",
-          "FYEARCODE": "stri",
-          "ACCODE": "string",
-          "ACCOUNT_HEAD": "string",
-          "BUDGET_AMOUNT": 0,
-          "PRV_YEAR_AMOUNT": 0,
-          "BUDGETED_AMT": 0
-        }
-      ]
+      "Details":
+        this.maindetails
+
     }
 
     if (this.flag === "EDIT") {
-      let API = `BudgetMaster/UpdateBudgetMaster/${this.unq_id}`;
+      let API = `BudgetMaster/UpdateBudgetMaster/${this.branch_code}/${this.unq_id}`;
       let sub: Subscription = this.apiService
         .putDynamicAPI(API, postData)
         .subscribe((result) => {
@@ -431,7 +449,5 @@ export class YearlyBudgetPlannerComponent implements OnInit {
       console.warn("Controller or modelfield is missing.");
     }
   }
-
-
 
 }

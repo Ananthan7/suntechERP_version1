@@ -42,8 +42,8 @@ export class MetalReturnComponent implements OnInit {
     { title: 'Pcs', field: 'PCS', format: '', alignment: 'left' },
     { title: 'Design', field: 'DESIGN_CODE', format: '', alignment: 'left' },
     { title: 'Division', field: 'DIVCODE', format: '', alignment: 'left' },
-    { title: 'Gross Wt', field: 'GROSSWT', format: '', alignment: 'right' },
-    { title: 'Pure Wt', field: 'PUREWT', format: '', alignment: 'right' },
+    { title: 'Gross Wt', field: 'GROSS_WT', format: '', alignment: 'right' },
+    { title: 'Pure Wt', field: 'PURE_WT', format: '', alignment: 'right' },
     { title: 'Job Number', field: 'JOB_NUMBER', format: '', alignment: 'left' },
     { title: 'Uniq job Id', field: 'UNQ_JOB_ID', format: '', alignment: 'left' },
     { title: 'PURITY', field: 'Purity', format: '', alignment: 'right' },
@@ -90,6 +90,8 @@ export class MetalReturnComponent implements OnInit {
     WHERECONDITION: "PROCESS_CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true
   }
   WorkerCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -101,6 +103,8 @@ export class MetalReturnComponent implements OnInit {
     WHERECONDITION: "WORKER_CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true
   }
   locationCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -219,6 +223,7 @@ export class MetalReturnComponent implements OnInit {
         if (result.response) {
           let data = result.response
           this.metalReturnDetailsData = data.Details
+          this.formatMainGrid()
           console.log(this.metalReturnDetailsData,'ddddd')
           // data.Details.forEach((element: any) => {
           //   this.tableData.push({
@@ -456,29 +461,46 @@ export class MetalReturnComponent implements OnInit {
     });
   }
 
-  async setValuesToHeaderGrid(DATA: any) {
+  // async setValuesToHeaderGrid(DATA: any) {
+  //   console.log(DATA, 'detailDataToParent');
+  //   this.formatMainGrid()
+  //   let detailDataToParent = DATA.POSTDATA;
+
+  //   // Check if SRNO is not zero (update existing entry)
+  //   if (detailDataToParent.SRNO !== 0) {
+  //     // Update existing entry in metalReturnDetailsData
+  //     this.metalReturnDetailsData[detailDataToParent.SRNO - 1] = detailDataToParent;
+  //   } else {
+  //     // Check for duplicates before adding a new entry
+  //     // if (await this.addItemWithCheck(this.metalReturnDetailsData, detailDataToParent)) return;
+
+  //     // Add new entry to metalReturnDetailsData
+  //     this.metalReturnDetailsData.push(detailDataToParent);
+  //     this.recalculateSRNO(); // Recalculate SRNO for new entries
+  //   }
+
+  //   // Handle flags for further actions
+  //   if (DATA.FLAG === 'SAVE') {
+  //     this.closeDetailScreen();
+  //   } else if (DATA.FLAG === 'CONTINUE') {
+  //     this.commonService.showSnackBarMsg('Details added successfully');
+  //   }
+  // }
+  setValuesToHeaderGrid(DATA: any) {
     console.log(DATA, 'detailDataToParent');
-    let detailDataToParent = DATA.POSTDATA;
-
-    // Check if SRNO is not zero (update existing entry)
-    if (detailDataToParent.SRNO !== 0) {
-      // Update existing entry in metalReturnDetailsData
-      this.metalReturnDetailsData[detailDataToParent.SRNO - 1] = detailDataToParent;
+    let detailDataToParent = DATA.POSTDATA
+    if (detailDataToParent.SRNO != 0) {
+      this.metalReturnDetailsData[detailDataToParent.SRNO - 1] = detailDataToParent
     } else {
-      // Check for duplicates before adding a new entry
-      // if (await this.addItemWithCheck(this.metalReturnDetailsData, detailDataToParent)) return;
-
-      // Add new entry to metalReturnDetailsData
+      detailDataToParent.SRNO = this.metalReturnDetailsData.length + 1
       this.metalReturnDetailsData.push(detailDataToParent);
-      this.recalculateSRNO(); // Recalculate SRNO for new entries
     }
-
-    // Handle flags for further actions
-    if (DATA.FLAG === 'SAVE') {
-      this.closeDetailScreen();
-    } else if (DATA.FLAG === 'CONTINUE') {
-      this.commonService.showSnackBarMsg('Details added successfully');
-    }
+    this.formatMainGrid()
+    this.columnhead.push(detailDataToParent)
+    if (DATA.FLAG == 'SAVE') this.closeDetailScreen();
+    if (DATA.FLAG == 'CONTINUE' || DATA.FLAG == 'CHANGEJOB') {
+      this.commonService.showSnackBarMsg('Details added successfully')
+    };
   }
 
 
@@ -939,6 +961,16 @@ export class MetalReturnComponent implements OnInit {
         }
       });
   }
+  formatMainGrid() {
+    this.metalReturnDetailsData.forEach((item: any, index: any) => {
+      item.SRNO = index + 1
+      item.GROSS_WT = this.commonService.setCommaSerperatedNumber(item.GROSS_WT, 'METAL')
+      item.NET_WT = this.commonService.setCommaSerperatedNumber(item.NET_WT, 'METAL')
+      item.PURITY = this.commonService.setCommaSerperatedNumber(item.PURITY, 'PURITY')
+      item.PURE_WT = this.commonService.setCommaSerperatedNumber(item.PURE_WT, 'METAL')
+      item.TOTAL_AMOUNTFC = this.commonService.setCommaSerperatedNumber(item.TOTAL_AMOUNTFC, 'AMOUNT')
+    })
+  }
 
   setPostData(form: any) {
     console.log(form, 'form');
@@ -1208,9 +1240,10 @@ export class MetalReturnComponent implements OnInit {
         // const matchedItem = data.find((item: any) => item.CODE.toUpperCase() === inputValue);
         // if (matchedItem) {
         //   this.diamondlabourMasterForm.controls[FORMNAME].setValue(matchedItem.CODE);
-        if (FORMNAME === 'process') {
+        if (FORMNAME === 'process' || FORMNAME === 'worker') {
           this.processWorkerValidate()
         }
+        
         // } else {
         //   this.handleLookupError(FORMNAME, LOOKUPDATA);
         // }

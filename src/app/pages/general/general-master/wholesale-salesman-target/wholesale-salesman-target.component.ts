@@ -59,9 +59,30 @@ export class WholesaleSalesmanTargetComponent implements OnInit {
     VIEW_TABLE: true,
   }
 
+  finyearcodedata: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 103,
+    SEARCH_FIELD: '',
+    SEARCH_HEADING: 'FIN YEAR',
+    SEARCH_VALUE: '',
+    WHERECONDITION:"",
+    VIEW_INPUT: true,
+    VIEW_TABLE:true,
+}
+
+ selectedfinyear(e:any){
+  console.log(e);
+  this.wholesalesmanform.controls.fin_year.setValue(e.FYEARCODE);
+  this.wholesalesmanform.controls.datefrom.setValue(e.STARTYEAR);
+  this.wholesalesmanform.controls.dateto.setValue(e.ENDYEAR);
+ }
+
   enteredCodeSelected(e: any) {
     console.log(e);
-    this.wholesalesmanform.controls.fin_year.setValue(e.CODE);
+    this.wholesalesmanform.controls.fin_year.setValue(e.FYEARCODE);
+    this.wholesalesmanform.controls.fin_year.setValue(e.STARTYEAR);
+    this.wholesalesmanform.controls.fin_year.setValue(e.ENDYEAR);
   }
 
   salesmanCodeData: MasterSearchModel = {
@@ -107,7 +128,6 @@ export class WholesaleSalesmanTargetComponent implements OnInit {
       }, (err: any) => {
       })
     this.subscriptions.push(Sub);
-    console.log(this.dyndatas.FA_CATEGORY);
   }
 
 

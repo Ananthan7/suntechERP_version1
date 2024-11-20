@@ -108,8 +108,6 @@ export class MeltingTypeComponent implements OnInit {
     purity: [''],
     alloy: [''],
     stockCode: [''],
-    stockCodeDes: [''],
-    divCode: [''],
 
   });
   @ViewChild('codeInput')
@@ -125,6 +123,8 @@ export class MeltingTypeComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    // console.log(this.content.KARAT_CODE);
+    
     this.viewModeField = true;
     if (this.content?.FLAG) {
       this.setFormValues();
@@ -136,6 +136,7 @@ export class MeltingTypeComponent implements OnInit {
         this.viewMode = false;
         this.codeEnable = false;
         this.editMode = true;
+        this.stockCodeData.WHERECONDITION = `KARAT_CODE ='${this.content.KARAT_CODE}' AND PURITY = '${this.content.PURITY}' AND SUBCODE = 0`;
       } else if (this.content?.FLAG == 'DELETE') {
         this.viewMode = true;
         this.deleteMeltingType()
@@ -550,11 +551,8 @@ export class MeltingTypeComponent implements OnInit {
   }
 
   StockCodeSelected(e: any) {
-
     console.log(e);
     this.meltingTypeForm.controls.stockCode.setValue(e.STOCK_CODE);
-    this.meltingTypeForm.controls.stockCodeDes.setValue(e.DESCRIPTION);
-    this.meltingTypeForm.controls.divCode.setValue(e.DIVISION_CODE);
   }
 
 
