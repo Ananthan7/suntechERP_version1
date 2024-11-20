@@ -20,8 +20,8 @@
                             :</label>
                         <div class="col-sm-8">
                             <mat-form-field appearance="outline" style="width: 100%;">
-                                <input type="text" #codeInput maxlength="15" matInput formControlName="policycode" (focusout)="validateLookupField($event,policycodeData,'policycode')"  (keydown)="lookupKeyPress($event,'policycode')" [readonly]="viewMode">
-                                <master-search *ngIf=" viewMode == false" [MasterSearchData]="policycodeData"
+                                <input type="text" #codeInput maxlength="6" matInput formControlName="policycode" (focusout)="validateLookupField($event,policycodeData,'policycode')"  (keydown)="lookupKeyPress($event,'policycode')" [readonly]="viewMode || editMode">
+                                <master-search *ngIf=" viewMode == false && editMode == false" [MasterSearchData]="policycodeData"
                                     (newRowClick)="policycodeSelected($event)" class="masterSearch" #overlaypolicycodeSearch>
                                 </master-search>
                             </mat-form-field>
@@ -100,7 +100,7 @@
                             :</label>
                         <div class="col-sm-4">
                             <mat-form-field appearance="outline" style="width: 100%;">
-                                <input type="text" #codeInput maxlength="15" matInput formControlName="percentage" class="text-right" [readonly]="viewMode">
+                                <input type="number" #codeInput maxlength="15" matInput formControlName="percentage" NumberOnly class="text-right" [readonly]="viewMode">
 
                             </mat-form-field>
                         </div>
