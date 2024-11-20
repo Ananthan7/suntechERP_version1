@@ -77,7 +77,7 @@
                     <label for="inputPassword" class="col-sm-2 col-form-label">Code</label>
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%;" appearance="outline">
-                            <input type="text" id="inputPassword" matInput formControlName="code"    [readonly]="viewMode"/>
+                            <input type="text" id="inputPassword" matInput formControlName="code"  (focusin)="setcodevalues()"  [readonly]="viewMode"/>
                         </mat-form-field>
                     </div>
                     <label for="inputPassword" class="col-sm-2 col-form-label">Date To</label>

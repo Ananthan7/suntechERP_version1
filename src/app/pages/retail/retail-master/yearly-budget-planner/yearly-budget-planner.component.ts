@@ -50,7 +50,7 @@ export class YearlyBudgetPlannerComponent implements OnInit {
     dateto: [''],
     narration: [''],
     datefrom: [''],
-    description: [''],
+    description: [{value: '', disabled: true}],
     increase: [''],
   })
 

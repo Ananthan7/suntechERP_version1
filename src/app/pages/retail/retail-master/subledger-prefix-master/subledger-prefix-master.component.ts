@@ -39,7 +39,7 @@ export class SubledgerPrefixMasterComponent implements OnInit {
   festivalmasterform: FormGroup = this.formBuilder.group({
     prefixcode: [""],
     prefixcodedesc: [""],
-    last_no: [""],
+    last_no: ["0000"],
 
   });
 
@@ -53,6 +53,32 @@ export class SubledgerPrefixMasterComponent implements OnInit {
     WHERECONDITION: "DIVISION='S'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+  }
+
+  isexistingcode(){
+    if(this.flag == 'VIEW' || this.flag == 'EDIT'){
+      return;
+    }
+    let code = this.festivalmasterform.controls.prefixcode.value;
+    if(code != ""){
+      let API = `PrefixMaster/CheckIfPrefixCodePresent/${code}`;
+      let Sub: Subscription = this.apiService.getDynamicAPI(API)
+        .subscribe((result: any) => {
+         let code_exists = result.checkifExists;
+         console.log(code_exists);;
+         if(code_exists == true){
+          Swal.fire(
+            'Error',
+            'Code already exists',
+          );
+          this.festivalmasterform.controls.prefixcode.reset();
+        }  
+          
+        }, (err: any) => {
+  
+        })
+      this.subscriptions.push(Sub);
+    }
   }
 
 
@@ -166,45 +192,45 @@ export class SubledgerPrefixMasterComponent implements OnInit {
       "PREFIX_CODE": this.festivalmasterform.controls.prefixcode.value,
       "DESCRIPTION": this.festivalmasterform.controls.prefixcodedesc.value,
       "LAST_NO": this.festivalmasterform.controls.last_no.value,
-      "CURRENCY_CODE": "stri",
+      "CURRENCY_CODE": "" ,//"stri",
       "CONV_RATE": 0,
-      "COST_CODE": "string",
-      "CATEGORY_CODE": "string",
-      "SUBCATEGORY_CODE": "string",
+      "COST_CODE":  "" ,//"string",
+      "CATEGORY_CODE":  "" ,//"string",
+      "SUBCATEGORY_CODE":  "" ,//"string",
       "BRAND_CODE": this.curr_branch,
-      "TYPE_CODE": "string",
-      "COUNTRY_CODE": "string",
+      "TYPE_CODE":  "" ,//"string",
+      "COUNTRY_CODE":  "" ,//"string",
       "MID": 0,
-      "DIVISION": "s",
-      "SYSTEM_DATE": "2024-11-18T08:34:11.298Z",
-      "PM_BRANCHCODE": "string",
+      "DIVISION":  "" ,//"s",
+      "SYSTEM_DATE":  new Date(),//"2024-11-18T08:34:11.298Z",
+      "PM_BRANCHCODE":  "" ,//"string",
       "JOB_PREFIX": true,
       "SETREF_PREFIX": true,
-      "BRANCH_CODE": "string",
+      "BRANCH_CODE":  "" ,//"string",
       "BOIL_PREFIX": true,
       "SCHEME_PREFIX": true,
-      "UDF1": "string",
-      "UDF2": "string",
-      "UDF3": "string",
-      "UDF4": "string",
-      "UDF5": "string",
-      "UDF6": "string",
-      "UDF7": "string",
-      "UDF8": "string",
-      "UDF9": "string",
-      "UDF10": "string",
-      "UDF11": "string",
-      "UDF12": "string",
-      "UDF13": "string",
-      "UDF14": "string",
-      "UDF15": "string",
+      "UDF1":  "" ,//"string",
+      "UDF2":  "" ,//"string",
+      "UDF3":  "" ,//"string",
+      "UDF4": "" ,// "string",
+      "UDF5":  "" ,//"string",
+      "UDF6": "" ,// "string",
+      "UDF7":  "" ,//"string",
+      "UDF8":  "" ,//"string",
+      "UDF9":  "" ,//"string",
+      "UDF10":  "" ,//"string",
+      "UDF11":  "" ,//"string",
+      "UDF12":  "" ,//"string",
+      "UDF13":  "" ,//"string",
+      "UDF14":  "" ,//"string",
+      "UDF15":  "" ,//"string",
       "TAG_WT": 0,
       "COMP_PREFIX": true,
       "DESIGN_PREFIX": true,
       "REFINE_PREFIX": true,
       "SUBLEDGER_PREFIX": true,
-      "SUFFIX_CODE": "stri",
-      "HSN_CODE": "string"
+      "SUFFIX_CODE": "" ,// "stri",
+      "HSN_CODE": "" ,// "string"
     }
 
     if (this.flag === "EDIT") {

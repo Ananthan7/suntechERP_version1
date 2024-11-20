@@ -16,7 +16,7 @@ export class WholesaleSalesmanTargetDetailsComponent implements OnInit {
   selectedDivision: string = "";
   flag: any;
   private subscriptions: Subscription[] = [];
-
+  sel_data:any;
 
 
 
@@ -79,6 +79,25 @@ export class WholesaleSalesmanTargetDetailsComponent implements OnInit {
     this.wholesaledetailsform.controls.customer.setValue(e.ACCODE);
   }
 
+  inventorycodedata: MasterSearchModel =  {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 111,
+    ORDER_TYPE: 0,
+    SEARCH_HEADING: "Inventory",
+    WHERECONDITION: " @strSelectedField='Category'",
+    SEARCH_FIELD: "", 
+    SEARCH_VALUE: "",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true
+  };
+  selectedinventory(e: any, field: string) {
+    console.log(e);
+    this.wholesaledetailsform.controls[field].setValue(e.Code);
+  }
+
   CountryCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -115,6 +134,20 @@ export class WholesaleSalesmanTargetDetailsComponent implements OnInit {
     this.wholesaledetailsform.controls.country.setValue(value.CODE);
   }
 
+  filrec(){
+    console.log(this.sel_data);
+   if(this.sel_data != '' || this.sel_data != null || this.sel_data != undefined){
+      return 'S';
+   }else{
+      return 'M';
+   }
+  }
+
+  logSelectedValue() {
+    this.sel_data = this.wholesaledetailsform.controls.division.value;
+    console.log('Selected Division:', this.sel_data);
+  }
+
   divisionCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -122,7 +155,7 @@ export class WholesaleSalesmanTargetDetailsComponent implements OnInit {
     SEARCH_FIELD: 'DIVISION_CODE',
     SEARCH_HEADING: 'Division',
     SEARCH_VALUE: '',
-    WHERECONDITION: `DIVISION  = 'M'`,
+    WHERECONDITION: `DIVISION = '${this.filrec()}'`, 
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
