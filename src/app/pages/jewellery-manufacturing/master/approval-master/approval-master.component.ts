@@ -9,6 +9,7 @@ import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import themes from 'devextreme/ui/themes';
+import { AttachmentUploadComponent } from 'src/app/shared/common/attachment-upload/attachment-upload.component';
 
 @Component({
   selector: 'app-approval-master',
@@ -17,7 +18,7 @@ import themes from 'devextreme/ui/themes';
 })
 export class ApprovalMasterComponent implements OnInit {
 
-
+  @ViewChild(AttachmentUploadComponent) attachmentUploadComponent?: AttachmentUploadComponent;
   @Input() content!: any;
   tableData: any[] = [];
   selectedIndexes: any = [];
@@ -101,17 +102,27 @@ export class ApprovalMasterComponent implements OnInit {
       } else if (this.content.FLAG == 'EDIT') {
         this.editableMode = true;
         this.codeEnable = false;
+
       } else if (this.content.FLAG == 'DELETE') {
         this.viewMode = true;
         this.deleteRecord()
       }
     }
-
-
   }
 
+  Attachedfile: any[] = [];
+  savedAttachments: any[] = [];
 
+  attachmentClicked() {
+    this.attachmentUploadComponent?.showDialog()
+  }
 
+  uploadSubmited(file: any) {
+
+    this.Attachedfile = file
+    console.log(this.Attachedfile);
+    
+  }
 
   setFormValues() {
     if (!this.content) return
@@ -143,7 +154,7 @@ export class ApprovalMasterComponent implements OnInit {
     if (event.target.value === '' || this.viewMode) {
       return; // Exit the function if the input is empty or in view mode
     }
-    console.log('this w');
+    // console.log('this w');
     
     const API = 'ApprovalMaster/CheckIfApprCodePresent/' + event.target.value;
     const sub = this.dataService.getDynamicAPI(API)
@@ -271,8 +282,8 @@ moveCharacter(value: string, index: number, direction: number): string {
       this.commonService.toastErrorByMsgId('MSG1932')
     }
     else {
-      console.log(value);
-      console.log(data);
+      // console.log(value);
+      // console.log(data);
       this.tableData[value.data.SRNO - 1].USER_CODE = data.UsersName;
       this.userId = data.UsersName;
     }
@@ -392,18 +403,18 @@ moveCharacter(value: string, index: number, direction: number): string {
 
   onSelectionChanged(event: any) {
     const values = event.selectedRowKeys;
-    console.log(values);
+    // console.log(values);
     let indexes: Number[] = [];
     this.tableData.reduce((acc, value, index) => {
       if (values.includes(parseFloat(value.SRNO))) {
         acc.push(index);
-        console.log(acc);
+        // console.log(acc);
 
       }
       return acc;
     }, indexes);
     this.selectedIndexes = indexes;
-    console.log(this.selectedIndexes);
+    // console.log(this.selectedIndexes);
   }
 
 
@@ -463,14 +474,17 @@ moveCharacter(value: string, index: number, direction: number): string {
   }
 
   checkFinalApproval() {
-
     let final = []
 
     final = this.tableData.filter((item: any) => item.APPR_TYPE == '2')
-    console.log(final);
+    // console.log(final);
     return final.length == 0
+  }
 
-
+  checkUserName(){
+    if(this.tableData.filter((item: any) => item.USER_CODE == '')) {
+      this.commonService.toastErrorByMsgId('MSG1933')//User Name Cannot be empty
+    }
   }
 
   submitValidations(form: any) {
@@ -490,23 +504,23 @@ moveCharacter(value: string, index: number, direction: number): string {
     }
 
     else if (this.userId == undefined) {
-      console.log("In");
-      // this.toastr.error('User Name Cannot be empty')MSG1933
+      // console.log("In");
       this.commonService.toastErrorByMsgId('MSG1933')//User Name Cannot be empty
       return true
-      // return Swal.fire({
-      //   title: '',
-      //   text: 'User Name Cannot be empty',
-      //   icon: 'error',
-      //   confirmButtonColor: '#336699',
-      //   confirmButtonText: 'Ok'
-      // })
     }
+    
     else if (this.checkFinalApproval()) {
       this.commonService.toastErrorByMsgId('MSG81520')//Final option should be selected
       return true
     }
 
+    // this.tableData.forEach((item: any, index: number) => {
+    //   const userId = item.USER_CODE;
+    //   if (userId != '') {        
+    //     this.commonService.toastErrorByMsgId('MSG1933');
+    //     return;
+    // }
+    // });
 
     return false;
   }
@@ -526,22 +540,28 @@ moveCharacter(value: string, index: number, direction: number): string {
 
     if (this.submitValidations(this.approvalMasterForm.value)) return;
 
+
     let conditionMet = false;
 
     this.tableData.forEach((item: any, index: number) => {
-      console.log(`Checking item at index ${index}:`, item);
-
+      // console.log(`Checking item at index ${index}:`, item);
+      const userId = item.USER_CODE;
       const orgMessageChecked = item.ORG_MESSAGE;
       const emailChecked = item.EMAIL;
       const mobileNo = item.MOBILE_NO;
       const emailId = item.EMAIL_ID;
 
 
-      console.log('orgMessageChecked:', orgMessageChecked);
-      console.log('emailChecked:', emailChecked);
-      console.log('mobileNo:', mobileNo);
-      console.log('emailId:', emailId);
+      // console.log('orgMessageChecked:', orgMessageChecked);
+      // console.log('emailChecked:', emailChecked);
+      // console.log('mobileNo:', mobileNo);
+      // console.log('emailId:', emailId);
 
+      if (userId == undefined) {     
+          this.commonService.toastErrorByMsgId('MSG1933');
+          conditionMet = true;
+          return;
+      }
 
       if (orgMessageChecked != '') {
         if (!mobileNo.trim()) {
@@ -557,27 +577,12 @@ moveCharacter(value: string, index: number, direction: number): string {
           conditionMet = true;
           return;
         }
-      }
+      }return
     });
 
 
 
-
-    // if (this.approvalMasterForm.invalid) {
-    //   this.toastr.error('Select all required fields');
-    //   return;
-    // }
-
-
     if (!conditionMet) {
-      // Continue with the rest of your code for submission
-      // if (this.checkFinalApproval()) {
-      //   this.toastr.error('final optional should be selected');
-      //   return;
-      // }
-
-
-
 
       // Omit mobilenum and emailId from postData when mobileCheck or emailCheck is true
       const postData: any = {
@@ -586,7 +591,7 @@ moveCharacter(value: string, index: number, direction: number): string {
         "approvalDetails": this.tableData,
       };
 
-      console.log(postData);
+      // console.log(postData);
 
       let API = 'ApprovalMaster/InsertApprovalMaster';
 

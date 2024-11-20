@@ -65,6 +65,7 @@
             id="gridContainer"
             [allowColumnResizing]="true"
             [showBorders]="true"
+            (onSelectionChanged)="getRowData($event)"
           >
             <dxo-paging [enabled]="false"></dxo-paging>
             <dxo-editing mode="cell" [allowUpdating]="true"> </dxo-editing>

@@ -308,8 +308,8 @@ export class ComponentSizeMasterComponent implements OnInit {
       "MID": this.content?.MID || 0,
       "COMPSIZE_CODE": this.commonService.nullToString(form.code),
       "DESCRIPTION": this.commonService.nullToString(form.desc),
-      "RADIUS": this.commonService.nullToString(form.radius),
-      "LENGTH": this.commonService.nullToString(form.length),
+      "RADIUS": this.commonService.nullToString(form.radius) || 0,
+      "LENGTH": this.commonService.nullToString(form.length) || 0,
       "WIDTH": this.commonService.nullToString(form.width),
       "HEIGHT": this.commonService.nullToString(form.height),
     }

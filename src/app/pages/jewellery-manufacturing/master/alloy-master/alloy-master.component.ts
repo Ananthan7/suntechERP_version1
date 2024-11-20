@@ -837,8 +837,10 @@ export class AlloyMasterComponent implements OnInit {
   percentageCalculate(strpriceLC: any) {
     let weightAvgCostLC = this.commonService.emptyToZero(this.alloyMastereForm.value.weightAvgCostLC)
     let avgPercentage = ((parseInt(strpriceLC) - weightAvgCostLC) / weightAvgCostLC) * 100
+    console.log(avgPercentage)
     return avgPercentage.toFixed(1)
   }
+
   /** price calculation */
   TagPrice_Calculation(item: any) {
     let form = this.alloyMastereForm.value

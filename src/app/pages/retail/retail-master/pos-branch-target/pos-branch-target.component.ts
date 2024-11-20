@@ -53,11 +53,11 @@ export class PosBranchTargetComponent implements OnInit {
   karatcodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 17,
-    SEARCH_FIELD: 'KARAT_CODE',
-    SEARCH_HEADING: 'Karat Code',
+    LOOKUPID: 103,
+    SEARCH_FIELD: '',
+    SEARCH_HEADING: 'FIN YEAR',
     SEARCH_VALUE: '',
-    WHERECONDITION: "KARAT_CODE<> ''",
+    WHERECONDITION: "",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -258,7 +258,7 @@ export class PosBranchTargetComponent implements OnInit {
 
 
   karatcodeSelected(e: any) {
-    this.posbranchtarget.controls.finYear.setValue(e.KARAT_CODE);
+    this.posbranchtarget.controls.finYear.setValue(e.FYEARCODE);
   }
 
 
