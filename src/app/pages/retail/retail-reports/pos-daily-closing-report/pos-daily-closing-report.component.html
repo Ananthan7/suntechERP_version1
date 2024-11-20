@@ -17,7 +17,7 @@
         </div>
         <div class="col-md-2 d-flex align-items-center">
             <mat-form-field appearance="outline" style="width: -webkit-fill-available;">
-              <input matInput="text" name="branch" autocomplete="off" formControlName="branch"/>
+              <input matInput="text" name="branch" autocomplete="off" formControlName="branch" readonly/>
               <app-branch-division [fetchData]="fetchedBranchData"
                 (newRowClick)="selectedData($event)" [branchView]="true" [divisionView]="false"
                 [additionalFilterAreaView]="false" [additionalFilterBCategView]="false"

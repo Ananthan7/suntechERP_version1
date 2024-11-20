@@ -31,8 +31,8 @@ export class DateComponent implements OnInit {
   async ngAfterViewInit() {
     await new Promise(resolve => setTimeout(resolve, 2000)); // 2000 milliseconds (2 seconds)
     console.log('fetched date', this.dateValue)
-    this.dateForm.get('fromDate')?.setValue(this.dateValue?.fromDate, { emitEvent: false });
-    this.dateForm.get('toDate')?.setValue(this.dateValue?.toDate, { emitEvent: false });
+    this.dateForm.controls.fromDate.setValue(this.dateValue?.fromDate, { emitEvent: false });
+    this.dateForm.controls.toDate.setValue(this.dateValue?.toDate, { emitEvent: false });
   }
   
 

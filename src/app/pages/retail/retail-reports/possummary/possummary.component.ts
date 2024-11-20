@@ -3,6 +3,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
+import { forkJoin, Observable } from 'rxjs';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 
@@ -32,13 +33,14 @@ export class POSSummaryComponent implements OnInit {
   pointOfSalesSummaryArr: any = [];
   receiptSummaryArr: any = [];
   isLoading: boolean = false;
-  currentTab: any;
+  currentTabIndex: number = 0;
   availableStockGridDataArr: any = [];
   posCollectionGridDataArr: any = [];
   posPurchaseGridDataArr: any = [];
   accountsGridDataArr: any = [];
   popupVisible: boolean = false;
   templateNameHasValue: boolean = false
+  tabChangeLoader: boolean = false;
 
   constructor(private activeModal: NgbActiveModal, private formBuilder: FormBuilder,
     private commonService: CommonServiceService, private dataService: SuntechAPIService,
@@ -46,6 +48,17 @@ export class POSSummaryComponent implements OnInit {
 
   ngOnInit(): void {
     this.prefillScreenValues();
+    // this.pointOfSalesSummaryGridData();
+
+    this.pointOfSalesSummary_ReceiptGridData().subscribe({
+      next: () => {
+        //trigger onTabChange only after completing pointOfSalesSummaryGridData API call
+        this.onTabChange({ index: this.currentTabIndex });
+      },
+      error: (err: any) => {
+        console.error('API call failed', err);
+      }
+    });
   }
 
   close(data?: any) {
@@ -70,6 +83,15 @@ export class POSSummaryComponent implements OnInit {
       this.POS_SummaryForm.controls.todate.setValue(event.ToDate);
       this.dateToPass.toDate = this.datePipe.transform(event.ToDate, 'yyyy-MM-dd')!
     }
+
+    this.pointOfSalesSummary_ReceiptGridData().subscribe({
+      next: () => {
+        this.onTabChange({ index: this.currentTabIndex });
+      },
+      error: (err: any) => {
+        console.error('API call failed', err);
+      }
+    });
   }
 
   popupClosed(){
@@ -84,11 +106,6 @@ export class POSSummaryComponent implements OnInit {
       this.POS_SummaryForm.controls.templateName.setValue(null)
     }
   }
-
-  customizeSummaryContent = (data: any) => {
-    // decimal point hanlder from commonService
-    return this.commonService.decimalQuantityFormat(data.value, 'THREE');
-  };
 
   selectedData(data: any) {
     console.log(data)
@@ -141,20 +158,119 @@ export class POSSummaryComponent implements OnInit {
   }
 
 
+  pointOfSalesSummary_ReceiptGridData(): Observable<any>{
+    this.isLoading = true;
+    let API1 = "RptPosSummaryShowVoctypeNet";
+    let postData1 = { 
+      "Branches":  this.POS_SummaryForm.controls.branch.value,
+      "FromDate":  this.dateToPass.fromDate,
+      "ToDate":  this.dateToPass.toDate,
+      "Vouchers": "",
+      "VocTypeWise": 0
+    };
+
+    let API2 = "UspPOSReceiptsNet";
+    let receiptPostData = { 
+      "strDateFm":  this.dateToPass.fromDate, 
+      "strDateTo": this.dateToPass.toDate,
+      "strBranch": this.POS_SummaryForm.controls.branch.value,
+      "strBRFLAG": false 
+    };
+    
+    forkJoin({
+      salesSummaryData: this.dataService.postDynamicAPI(API1, postData1),
+      receiptSummaryData: this.dataService.postDynamicAPI(API2, receiptPostData),
+    }).subscribe({
+        next: (result) => {
+          if (result) {
+            this.pointOfSalesSummaryArr = result.salesSummaryData.dynamicData[0];
+            this.receiptSummaryArr = result.receiptSummaryData.dynamicData[0];
+
+            if(result.salesSummaryData.dynamicData[0].length>0 ||  result.receiptSummaryData.dynamicData[0].length>0){
+              this.commonService.showSnackBarMsg('data loaded successfully!');
+              this.isLoading = false;
+            }
+            else{
+              this.commonService.showSnackBarMsg('No data available for the given criteria in POS Summary and POS Receipt!');
+              this.isLoading = false;
+            }
+          }
+          else{
+            this.pointOfSalesSummaryArr = [];
+            this.receiptSummaryArr = [];
+            this.isLoading = false;
+          }
+        },
+        error: (error) => {
+            console.error('Error loading data:', error);
+            this.commonService.showSnackBarMsg('Error loading data.');
+            this.isLoading = false;
+        },
+        complete: () => {
+          this.isLoading = false;
+        }
+    });
+    return new Observable(observer => {
+      setTimeout(() => {
+        observer.next();
+        observer.complete();
+      }, 2000);
+    });
+  }
+
   onTabChange(event: any){
-    this.currentTab = event.tab.textLabel
-    switch(this.currentTab){
-      case 'Available Stock': this.availableStockGridData(); break;
-      case 'POS Collection': this.POSCollectnGridData(); break;
-      case 'POS Purchase' : this.posPurchaseGridData(); break;
-      case 'Accounts' : this.accountsGridData(); break;
+    this.currentTabIndex = event.index; 
+    switch(this.currentTabIndex){
+      case 0: 
+      this.availableStockGridData();
+      break;
+      case 1: 
+        this.POSCollectnGridData();
+        break;
+      case 2: 
+        this.posPurchaseGridData();
+        break;
+      case 3: 
+        this.accountsGridData();
+        break;
+      default:
+        break;
     }
   }
   availableStockGridData(){
-
+    this.tabChangeLoader = true;
+    let API = "RptPosSummaryStockBalanceNet";
+    let postData = { 
+      "Asondate": this.dateToPass.toDate,
+      "branches": this.POS_SummaryForm.controls.branch.value,
+      "Vouchers": "",
+      "FixingStcode": ""
+    };
+    this.dataService.postDynamicAPI(API, postData).subscribe(
+      (result) => {
+        if (result && result.dynamicData) {
+          if(result.dynamicData[0].length> 0){
+            this.availableStockGridDataArr = result.dynamicData[0];
+            this.toastr.success(result.dynamicData.status || 'Success');
+          }
+          else{
+            this.toastr.warning('No data available for the given criteria in Available Stock.');
+          }
+          this.tabChangeLoader = false;
+        } else {
+          this.posCollectionGridDataArr = [];
+          this.toastr.warning('No data available for the given criteria in Available Stock.');
+          this.tabChangeLoader = false;
+        }
+      },
+      (err) => {
+        this.toastr.error(err.message || 'An error occurred while fetching the data.');
+        this.tabChangeLoader = false;
+      }
+    );
   }
   POSCollectnGridData(){
-    this.isLoading = true;
+    this.tabChangeLoader = true;
     let API = "RptPOSSummaryShowPosNetCollectionNet";
     let postData = { 
       "Branches": this.POS_SummaryForm.controls.branch.value,
@@ -165,28 +281,86 @@ export class POSSummaryComponent implements OnInit {
     };
     this.dataService.postDynamicAPI(API, postData).subscribe(
       (result) => {
-        if (result && result.dynamicData && result.dynamicData.length > 0) {
-          console.log(result)
-          // this.salesmanWiseProfitArr = result.dynamicData[0];
-          // this.isLoading = false;
+        if (result && result.dynamicData) {
+          if(result.dynamicData[0].length> 0){
+            this.posCollectionGridDataArr = result.dynamicData[0];
+            this.toastr.success(result.dynamicData.status || 'Success');
+          }
+          else{
+            this.toastr.warning('No data available for the given criteria in POS Collection.');
+          }
+          this.tabChangeLoader = false;
         } else {
-          // this.salesmanWiseProfitArr = [];
-          // this.toastr.warning('No data available for the given criteria.');
-          // this.isLoading = false;
+          this.posCollectionGridDataArr = [];
+          this.toastr.warning('No data available for the given criteria in POS Collection.');
+          this.tabChangeLoader = false;
         }
       },
       (err) => {
-        // this.toastr.error(err.message || 'An error occurred while fetching the data.');
-        // this.isLoading = false;
+        this.toastr.error(err.message || 'An error occurred while fetching the data.');
+        this.tabChangeLoader = false;
       }
     );
   }
- 
   posPurchaseGridData(){
-
+    this.tabChangeLoader = true;
+    let API = "RptPOSSummaryShowPOSPurchaseNet";
+    let postData = { 
+      "Branches": this.POS_SummaryForm.controls.branch.value,
+      "FromDate": this.dateToPass.fromDate,
+      "ToDate": this.dateToPass.toDate,
+      "Vouchers": ""
+    };
+    this.dataService.postDynamicAPI(API, postData).subscribe((result) => {
+      if (result && result.dynamicData) {
+        if(result.dynamicData[0].length> 0){
+          this.posPurchaseGridDataArr = result.dynamicData[0];
+          this.toastr.success(result.dynamicData.status || 'Success');
+        }
+        else{
+          this.toastr.warning('No data available for the given criteria in POS Purchase.');
+        }
+        this.tabChangeLoader = false;
+      } else {
+        this.posCollectionGridDataArr = [];
+        this.toastr.warning('No data available for the given criteria in POS Purchase.');
+        this.tabChangeLoader = false;
+        }
+      },
+      (err) => {
+        this.toastr.error(err.message || 'An error occurred while fetching the data.');
+        this.tabChangeLoader = false;
+      }
+    );
   }
   accountsGridData(){
-
+    this.tabChangeLoader = true;
+    let API = "RptPOSSummaryShowPOSAccountsNet";
+    let postData = { 
+      "branches": this.POS_SummaryForm.controls.branch.value,
+    };
+    this.dataService.postDynamicAPI(API, postData).subscribe((result) => {
+      if (result && result.dynamicData) {
+        if(result.dynamicData[0].length> 0){
+          console.log(result.dynamicData[0])
+          this.accountsGridDataArr = result.dynamicData[0];
+          this.toastr.success(result.dynamicData.status || 'Success');
+        }
+        else{
+          this.toastr.warning('No data available for the given criteria in Accounts.');
+        }
+        this.tabChangeLoader = false;
+      } else {
+        this.posCollectionGridDataArr = [];
+        this.toastr.warning('No data available for the given criteria in Accounts.');
+        this.tabChangeLoader = false;
+        }
+      },
+      (err) => {
+        this.toastr.error(err.message || 'An error occurred while fetching the data.');
+        this.tabChangeLoader = false;
+      }
+    );
   }
 
   saveTemplate(){
@@ -225,4 +399,51 @@ export class POSSummaryComponent implements OnInit {
       };
     }
   }
+
+
+  customizeMainGridSummaryContent = (data: any) => {
+    // value separation handler from commonService
+    return this.commonService.setCommaSerperatedNumber(data.value, 'AMOUNT');
+  };
+  customizeMainGridContent = (data: any) => {
+    // decimal point handler from commonService
+    return this.commonService.decimalQuantityFormat(data.value, 'AMOUNT');
+  };
+
+  customizeSummaryContent = (data: any) => {
+    // value separation handler from commonService
+    return this.commonService.setCommaSerperatedNumber(data.value, 'AMOUNT');
+  };
+  customizeContent = (data: any) => {
+    // decimal point handler from commonService
+    return this.commonService.decimalQuantityFormat(data.value, 'AMOUNT');
+  };
+
+  customizePOS_ClctnContent = (data: any) => {
+    // decimal point handler from commonService
+    return this.commonService.decimalQuantityFormat(data.value, 'AMOUNT');
+  };
+  customizePOS_ClctnSummaryContent = (data: any) => {
+    // value separation handler from commonService
+    return this.commonService.setCommaSerperatedNumber(data.value, 'AMOUNT');
+  };
+ 
+  customizePOS_PurChseContent = (data: any) => {
+    // decimal point handler from commonService
+    return this.commonService.decimalQuantityFormat(data.value, 'AMOUNT');
+  };
+  customizePOS_PurChseSummaryContent = (data: any) => {
+    // value separation handler from commonService
+    return this.commonService.setCommaSerperatedNumber(data.value, 'AMOUNT');
+  };
+
+  customizeAccountsContent = (data: any) => {
+    // decimal point handler from commonService
+    return this.commonService.decimalQuantityFormat(data.value, 'AMOUNT');
+  };
+  customizeAccountsSummaryContent = (data: any) => {
+    // value separation handler from commonService
+    return this.commonService.setCommaSerperatedNumber(data.value, 'AMOUNT');
+  };
+  
 }
