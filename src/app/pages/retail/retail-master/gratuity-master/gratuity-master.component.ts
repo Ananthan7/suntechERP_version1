@@ -115,13 +115,29 @@ export class GratuityMasterComponent implements OnInit {
     private commonService: CommonServiceService
   ) {}
   ngOnInit(): void {
-    this.content ? this.flag = this.content!.FLAG : console.log('No Content, Due to you are in ADD');
+    this.flag = this.content
+      ? this.content.FLAG
+      : (this.content = { FLAG: "ADD" }).FLAG;
     this.initialController(this.flag, this.content);
   }
 
   close(data?: any) {
-    //TODO reset forms and data before closing
-    this.activeModal.close(data);
+    if (this.flag !== "VIEW") {
+      Swal.fire({
+        title: "Are you sure you want to close this ?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, Close!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.activeModal.close(data);
+        }
+      });
+    } else {
+      this.activeModal.close(data);
+    }
   }
 
   initialController(FLAG: any, DATA: any) {

@@ -12,6 +12,7 @@
   (saveClick)="costAndPriceTypeMainFormSubmit()"
   (cancelClick)="close()"
   (deleteClick)="DeleteController()"
+  [isViewDelete]="flag == 'VIEW'"
 ></modal-header>
 
 <!-- content section -->
@@ -29,7 +30,7 @@
               <div class="col-md-4">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
-                    [readonly]="flag === 'VIEW'"
+                    [readonly]="flag === 'VIEW' || flag === 'EDIT'"
                     UpperCaseDirective
                     matInput
                     type="text"

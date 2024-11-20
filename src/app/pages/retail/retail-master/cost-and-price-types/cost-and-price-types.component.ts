@@ -99,7 +99,6 @@ export class CostAndPriceTypesComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    console.log(this.content);
 
     this.flag = this.content
       ? this.content.FLAG
@@ -220,7 +219,22 @@ export class CostAndPriceTypesComponent implements OnInit {
   }
 
   close(data?: any) {
-    this.activeModal.close(data);
+    if (this.flag !== "VIEW") {
+      Swal.fire({
+        title: "Are you sure you want to close this ?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, Close!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.activeModal.close(data);
+        }
+      });
+    } else {
+      this.activeModal.close(data);
+    }
   }
 
   costAndPriceTypeMainFormSubmit() {
