@@ -10,6 +10,7 @@
   (cancelClick)="close()"
   (saveClick)="boxMasterMainFormSubmit()"
   (deleteClick)="DeleteController()"
+  [isViewDelete]="flag == 'VIEW'"
 ></modal-header>
 
 <div class="row">
@@ -26,7 +27,7 @@
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
                     style="text-align: right"
-                    [readonly]="flag === 'VIEW'"
+                    [readonly]="flag === 'VIEW' || flag === 'EDIT'"
                     type="text"
                     matInput
                     formControlName="boxno"

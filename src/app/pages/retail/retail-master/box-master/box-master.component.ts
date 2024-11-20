@@ -66,15 +66,14 @@ export class BoxMasterComponent implements OnInit {
     private formBuilder: FormBuilder,
     private apiService: SuntechAPIService,
     private toastr: ToastrService,
-    private dataService: SuntechAPIService,
     private commonService: CommonServiceService
   ) {}
 
   ngOnInit(): void {
-    this.flag = this.content!.FLAG;
+    this.flag = this.content
+      ? this.content.FLAG
+      : (this.content = { FLAG: "ADD" }).FLAG;
     this.initialController(this.flag, this.content);
-    this.grid()
-
   }
 
   boxMasterMainForm: FormGroup = this.formBuilder.group({
@@ -89,18 +88,34 @@ export class BoxMasterComponent implements OnInit {
   });
 
   close(data?: any) {
-    //TODO reset forms and data before closing
-    this.activeModal.close(data);
+    if (this.flag !== "VIEW") {
+      Swal.fire({
+        title: "Are you sure you want to close this ?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, Close!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.activeModal.close(data);
+        }
+      });
+    } else {
+      this.activeModal.close(data);
+    }
   }
 
   initialController(FLAG: any, DATA: any) {
+    if (FLAG === "ADD") {
+      this.boxMasterGridData();
+    }
     if (FLAG === "VIEW") {
       this.ViewController(DATA);
     }
     if (FLAG === "EDIT") {
       this.editController(DATA);
     }
-
     if (FLAG === "DELETE") {
       this.DeleteController(DATA);
     }
@@ -296,24 +311,24 @@ export class BoxMasterComponent implements OnInit {
     }
   }
 
-
-  grid(){
-    
-    this.dataService.getDynamicAPI('BoxMaster/GetBoxMasterList/' )
-    .subscribe((data) => {
-          if (data.status === 'Success' && data.response) {
-            this.itemDetailsData = data.response.map((item: any, index: number) => {
+  boxMasterGridData() {
+    let API = `BoxMaster/GetBoxMasterList`;
+    let sub: Subscription = this.apiService.getDynamicAPI(API).subscribe(
+      (result) => {
+        if (result.status.trim() === "Success" && result.response) {
+          this.itemDetailsData = result.response.map(
+            (item: any, index: number) => {
               return { ...item, SELECT1: false, SRNO: index + 1 };
-            });
-            console.log(this.itemDetailsData);
-          } else {
-            this.commonService.toastErrorByMsgId('MSG1531');
-          }
-        },
-        err => {
-          console.error('Error fetching data:', err);
-          this.commonService.toastErrorByMsgId('MSG1531');
+            }
+          );
+        } else {
+          this.commonService.toastErrorByMsgId("MSG1531");
         }
-      );
+      },
+      (err) => {
+        console.error("Error fetching data:", err);
+        this.commonService.toastErrorByMsgId("MSG1531");
+      }
+    );
   }
 }

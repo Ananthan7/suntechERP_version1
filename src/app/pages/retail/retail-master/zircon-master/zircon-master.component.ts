@@ -55,7 +55,7 @@ export class ZirconMasterComponent implements OnInit {
     SEARCH_FIELD: "COST_CODE",
     SEARCH_HEADING: "COST CENTER CODE",
     SEARCH_VALUE: "",
-    WHERECONDITION: "COST_CODE<> ''",
+    WHERECONDITION: " TYPE='PRECIOUS STONES' ",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -83,7 +83,7 @@ export class ZirconMasterComponent implements OnInit {
     SEARCH_FIELD: "CODE",
     SEARCH_HEADING: "CATEGORY CODE",
     SEARCH_VALUE: "",
-    WHERECONDITION: "CODE<> ''",
+    WHERECONDITION: " TYPES='CATEGORY MASTER' ",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -125,7 +125,7 @@ export class ZirconMasterComponent implements OnInit {
     SEARCH_FIELD: "CODE",
     SEARCH_HEADING: "SHAPE CODE",
     SEARCH_VALUE: "",
-    WHERECONDITION: "CODE<> ''",
+    WHERECONDITION: " TYPES='SHAPE MASTER' AND DIV_Z=1",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -139,7 +139,7 @@ export class ZirconMasterComponent implements OnInit {
     SEARCH_FIELD: "CODE",
     SEARCH_HEADING: "COLOR CODE",
     SEARCH_VALUE: "",
-    WHERECONDITION: "CODE<> ''",
+    WHERECONDITION: " TYPES='COLOR MASTER AND DIV_Z=1",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -153,7 +153,7 @@ export class ZirconMasterComponent implements OnInit {
     SEARCH_FIELD: "CODE",
     SEARCH_HEADING: "SUB-CATEGORY CODE",
     SEARCH_VALUE: "",
-    WHERECONDITION: "TYPES = 'SUB CATEGORY MASTER'",
+    WHERECONDITION: " TYPES='SUB CATEGORY MASTER' ",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -167,7 +167,7 @@ export class ZirconMasterComponent implements OnInit {
     SEARCH_FIELD: "CODE",
     SEARCH_HEADING: "BRAND CODE",
     SEARCH_VALUE: "",
-    WHERECONDITION: "CODE<> ''",
+    WHERECONDITION: "TYPES='BRAND MASTER' AND DIV_Z=1",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -181,7 +181,7 @@ export class ZirconMasterComponent implements OnInit {
     SEARCH_FIELD: "CODE",
     SEARCH_HEADING: "SIZE CODE",
     SEARCH_VALUE: "",
-    WHERECONDITION: "CODE<> ''",
+    WHERECONDITION: "TYPES='SIZE MASTER' AND DIV_Z=1",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -195,7 +195,7 @@ export class ZirconMasterComponent implements OnInit {
     SEARCH_FIELD: "CODE",
     SEARCH_HEADING: "TYPE CODE",
     SEARCH_VALUE: "",
-    WHERECONDITION: "CODE<> ''",
+    WHERECONDITION: " TYPES='TYPE MASTER' ",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -209,7 +209,7 @@ export class ZirconMasterComponent implements OnInit {
     SEARCH_FIELD: "CODE",
     SEARCH_HEADING: "SIEVE SET CODE",
     SEARCH_VALUE: "",
-    WHERECONDITION: "CODE<> ''",
+    WHERECONDITION: " TYPES='SIEVE SET MASTER' AND DIV_Z=1",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -223,7 +223,7 @@ export class ZirconMasterComponent implements OnInit {
     SEARCH_FIELD: "CODE",
     SEARCH_HEADING: "SIEVE CODE",
     SEARCH_VALUE: "",
-    WHERECONDITION: "CODE<> ''",
+    WHERECONDITION: " TYPES='SIEVE MASTER' AND DIV_Z=1",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -431,7 +431,22 @@ export class ZirconMasterComponent implements OnInit {
   }
 
   close(data?: any) {
-    this.activeModal.close(data);
+    if (this.flag !== "VIEW") {
+      Swal.fire({
+        title: "Are you sure you want to close this ?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, Close!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.activeModal.close(data);
+        }
+      });
+    } else {
+      this.activeModal.close(data);
+    }
   }
 
   openTab(event: any, formControlName: string) {

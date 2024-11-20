@@ -12,6 +12,7 @@
   (saveClick)="WPSAgentMasterFormSubmit()"
   (cancelClick)="close()"
   (deleteClick)="DeleteController()"
+  [isViewDelete]="flag == 'VIEW'"
 ></modal-header>
   <!-- content section -->
   <div class="p-4">
@@ -32,7 +33,7 @@
                   <mat-form-field style="width: 100%" appearance="outline">
                     <input
                       type="text"
-                      [readonly]="flag == 'VIEW'"
+                      [readonly]="flag === 'VIEW' || flag === 'EDIT'"
                       matInput
                       formControlName="code"
                       (change)="onInput($event, 'code', true)"
