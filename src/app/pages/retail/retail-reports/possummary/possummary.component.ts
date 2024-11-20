@@ -1,11 +1,13 @@
 import { DatePipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { DomSanitizer } from '@angular/platform-browser';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { forkJoin, Observable } from 'rxjs';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-possummary',
@@ -41,10 +43,12 @@ export class POSSummaryComponent implements OnInit {
   popupVisible: boolean = false;
   templateNameHasValue: boolean = false
   tabChangeLoader: boolean = false;
+  htmlPreview: any;
+
 
   constructor(private activeModal: NgbActiveModal, private formBuilder: FormBuilder,
     private commonService: CommonServiceService, private dataService: SuntechAPIService,
-    private toastr: ToastrService, private datePipe: DatePipe) { }
+    private toastr: ToastrService, private datePipe: DatePipe, private sanitizer: DomSanitizer) { }
 
   ngOnInit(): void {
     this.prefillScreenValues();
@@ -71,14 +75,6 @@ export class POSSummaryComponent implements OnInit {
   close(data?: any) {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
-  }
-
-  formatDateToYYYYMMDD(dateString: any) {
-    const date = new Date(dateString);
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
   }
 
   setDateValue(event: any){
@@ -375,21 +371,184 @@ export class POSSummaryComponent implements OnInit {
     console.log(this.POS_SummaryForm.controls.templateName.value)
   }
   saveTemplate_DB(){
+    let logData =  {
+      "VOCTYPE": this.commonService.getqueryParamVocType() || "",
+      "REFMID": "",
+      "USERNAME": this.commonService.userName,
+      "MODE": "PRINT",
+      "DATETIME": this.commonService.formatDateTime(new Date()),
+      "REMARKS":"",
+      "SYSTEMNAME": "",
+      "BRANCHCODE": this.commonService.branchCode,
+      "VOCNO": "",
+      "VOCDATE": "",
+      "YEARMONTH" : this.commonService.yearSelected
+    }
+    const payload = {
+      "SPID": "0115",
+      "parameter": {
+        "FLAG": 'INSERT',
+        "CONTROLS": JSON.stringify({
+            "CONTROL_HEADER": {
+              "USERNAME": localStorage.getItem('username'),
+              "TEMPLATEID": this.commonService.getModuleName(),
+              "TEMPLATENAME": this.POS_SummaryForm.controls.templateName.value,
+              "FORM_NAME": this.commonService.getModuleName(),
+              "ISDEFAULT": 1
+            },
+            "CONTROL_DETAIL": {
+              "STRFMDATE" : this.dateToPass.fromDate,   
+              "STRTODATE" : this.dateToPass.toDate,   
+              "STRBRANCH" : this.formattedBranchDivisionData,
+              "USERBRANCH" : this.commonService.branchCode,
+              "LOGDATA": JSON.stringify(logData)
+            }
+         })
+      }
+    };
 
+    this.commonService.showSnackBarMsg('MSG81447');
+    this.dataService.postDynamicAPI('ExecueteSPInterface', payload)
+    .subscribe((result: any) => {
+      console.log(result);
+      let data = result.dynamicData.map((item: any) => item[0].ERRORMESSAGE);
+      let Notifdata = result.dynamicData.map((item: any) => item[0].ERRORCODE);
+      if (Notifdata == 1) {
+        this.commonService.closeSnackBarMsg()
+        Swal.fire({
+          title: data || 'Success',
+          text: '',
+          icon: 'success',
+          confirmButtonColor: '#336699',
+          confirmButtonText: 'Ok'
+        })
+        this.popupVisible = false;
+        this.activeModal.close(data);
+      }
+      else {
+        this.toastr.error(Notifdata)
+      }
+    }); 
   }
 
   previewClick(){
-
+    this.isLoading = true;
+    this.tabChangeLoader = true;
+    let postData = {
+      "SPID": "0182",
+      "parameter": {
+       "Branches ": this.POS_SummaryForm.controls.branch.value,
+       "FromDate ": this.dateToPass.fromDate, 
+       "ToDate ": this.dateToPass.toDate, 
+       "Vouchers ": '',
+       "VocTypeWise ": 0,
+      }
+    }
+ 
+    this.commonService.showSnackBarMsg('MSG81447');
+    this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+    .subscribe((result: any) => {
+      if(result.status != "Failed"){
+        let data = result.dynamicData;
+        let printContent = data[0][0].POS_Summary_HTML;
+        this.htmlPreview = this.sanitizer.bypassSecurityTrustHtml(printContent);
+        const blob = new Blob([this.htmlPreview.changingThisBreaksApplicationSecurity], { type: 'text/html' });
+        this.commonService.closeSnackBarMsg();
+        const url = URL.createObjectURL(blob);
+        window.open(url, '_blank');
+        this.isLoading = false;
+        this.tabChangeLoader = false;
+      }
+      else{
+        this.toastr.error(result.message);
+        this.isLoading = false;
+        this.tabChangeLoader = false;
+        return
+      }
+    });      
   }
 
   printBtnClick(){
+    this.isLoading = true;
+    this.tabChangeLoader = true;
+    let logData =  {
+      "VOCTYPE": this.commonService.getqueryParamVocType() || "",
+      "REFMID": "",
+      "USERNAME": this.commonService.userName,
+      "MODE": "PRINT",
+      "DATETIME": this.commonService.formatDateTime(new Date()),
+      "REMARKS":"",
+      "SYSTEMNAME": "",
+      "BRANCHCODE": this.commonService.branchCode,
+      "VOCNO": "",
+      "VOCDATE": "",
+      "YEARMONTH" : this.commonService.yearSelected
+    }
+    let postData = {
+      "SPID": "0182",
+      "parameter": {
+       "Branches ": this.POS_SummaryForm.controls.branch.value,
+       "FromDate ": this.dateToPass.fromDate, 
+       "ToDate ": this.dateToPass.toDate, 
+       "Vouchers ": '',
+       "VocTypeWise ": 0,
+      }
+    }
+    this.commonService.showSnackBarMsg('MSG81447');
+    this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+    .subscribe((result: any) => {
+      let data = result.dynamicData;
+      let printContent = data[0][0].POS_Summary_HTML;
+      this.htmlPreview = this.sanitizer.bypassSecurityTrustHtml(printContent);
 
+      if (result.dynamicData) {
+        this.commonService.closeSnackBarMsg();
+      }
+    });  
+   
+    
+    setTimeout(() => {
+      const content = this.htmlPreview?.changingThisBreaksApplicationSecurity;
+      
+      let  userBranchDesc:any  = localStorage.getItem('BRANCH_PARAMETER')
+      userBranchDesc = JSON.parse(userBranchDesc)
+
+      if (content && Object.keys(content).length !== 0) {
+        const modifiedContent = content.replace(/<title>.*?<\/title>/, `<title>${userBranchDesc.DESCRIPTION}</title>`);
+
+        const printWindow = window.open('', '', 'height=600,width=800');
+        printWindow?.document.write(modifiedContent);
+        printWindow?.document.close();
+        printWindow?.focus();
+        printWindow?.print();
+        this.isLoading = false;
+        this.tabChangeLoader = false;
+       
+      } else {
+        Swal.fire('No Data!', 'There is no data to print!', 'info');
+        this.commonService.closeSnackBarMsg();
+        this.isLoading = false;
+        this.tabChangeLoader = false;
+        return
+      }
+    }, 3000); 
   }
 
 
   prefillScreenValues(){
     if ( Object.keys(this.content).length > 0) {
-      //  this.templateNameHasValue = !!(this.content?.TEMPLATE_NAME);
+      this.isLoading = false;
+
+      this.templateNameHasValue = !!(this.content?.TEMPLATE_NAME);
+
+      this.dateToPass = {
+        fromDate:  this.content?.FROMVOCDATE,
+        toDate: this.content?.TOVOCDATE,
+      };
+
+      let ParcedPreFetchData = JSON.parse(this.content?.CONTROL_LIST_JSON) //data from retailREPORT Component- modalRef instance
+      this.POS_SummaryForm.controls.branch.setValue(`${ParcedPreFetchData?.CONTROL_DETAIL?.USERBRANCH}#`);
+     
     }
     else{
       const userBranch = localStorage.getItem('userbranch');
@@ -398,12 +557,11 @@ export class POSSummaryComponent implements OnInit {
       this.fetchedBranchDataParam = formattedUserBranch;
       this.fetchedBranchData= this.fetchedBranchDataParam?.split("#")
    
-      // let x = this.commonService.formatYYMMDD(new Date());
-      // console.log(x)
       this.dateToPass = {
-        fromDate:  this.formatDateToYYYYMMDD(new Date()),
-        toDate: this.formatDateToYYYYMMDD(new Date()),
+        fromDate:  this.datePipe.transform(new Date(), 'yyyy-MM-dd')!,
+        toDate: this.datePipe.transform(new Date(), 'yyyy-MM-dd')!,
       };
+
     }
   }
 

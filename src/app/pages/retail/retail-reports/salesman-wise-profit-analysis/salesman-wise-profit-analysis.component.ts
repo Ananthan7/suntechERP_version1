@@ -136,6 +136,19 @@ export class SalesmanWiseProfitAnalysisComponent implements OnInit {
     console.log(this.salesmanWiseProfitAnalysisForm.controls.templateName.value)
   }
   saveTemplate_DB(){
+    let logData =  {
+      "VOCTYPE": this.commonService.getqueryParamVocType() || "",
+      "REFMID": "",
+      "USERNAME": this.commonService.userName,
+      "MODE": "PRINT",
+      "DATETIME": this.commonService.formatDateTime(new Date()),
+      "REMARKS":"",
+      "SYSTEMNAME": "",
+      "BRANCHCODE": this.commonService.branchCode,
+      "VOCNO": "",
+      "VOCDATE": "",
+      "YEARMONTH" : this.commonService.yearSelected
+    }
     const payload = {
       "SPID": "0115",
       "parameter": {
@@ -153,7 +166,7 @@ export class SalesmanWiseProfitAnalysisComponent implements OnInit {
               "STRTODATE" : this.dateToPass.toDate,    
               "INTVALUE" : '',  
               "STRBRANCHES" : this.salesmanWiseProfitAnalysisForm.controls.branch.value || this.fetchedBranchData,
-              "LOGDATA" : ''
+              "LOGDATA" : JSON.stringify(logData)
             }
          })
       }
