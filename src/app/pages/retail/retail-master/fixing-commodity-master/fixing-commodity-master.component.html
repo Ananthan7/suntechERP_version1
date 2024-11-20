@@ -65,7 +65,7 @@
                                     :</label>
                                 <div class="col-md-9">
                                     <mat-form-field appearance="outline" style="width: 100%;">
-                                        <input type="text" #codeInput maxlength="15" matInput formControlName="description">
+                                        <input type="text" #codeInput maxlength="25" matInput formControlName="description">
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -100,7 +100,7 @@
                                     :</label>
                                 <div class="col-md-2">
                                     <mat-form-field appearance="outline" style="width: 100%;">
-                                        <input type="text" #codeInput maxlength="15" matInput formControlName="qtyRoundOff">
+                                        <input type="text" #codeInput maxlength="15" matInput formControlName="qtyRoundOff" class="text-right">
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -146,13 +146,14 @@
                                 </div>
                                 <div class="col-md-3">
                                     <mat-form-field appearance="outline" style="width: 100%;">
-                                        <input type="text" #codeInput maxlength="15" matInput formControlName="pcs">
+                                        <input type="number" #codeInput maxlength="15" matInput formControlName="pcs" class="text-right" NumberOnly>
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-3">
                                     <mat-form-field appearance="outline" style="width: 100%;">
                                         <mat-select name="selectedValue" formControlName="pcsdrpdwn">
                                             <mat-option value="1">Sample</mat-option>
+                                            <mat-option value="2">Sample2</mat-option>
                                         </mat-select>
                                     </mat-form-field>
                                 </div>
@@ -224,8 +225,8 @@
                                             <div class="row py-2">
                                                 <div class="col-sm-12">
                                                     <mat-form-field appearance="outline" style="width: 100%;">
-                                                        <input type="text" #codeInput maxlength="15" matInput
-                                                            formControlName="purchaseConvFactor">
+                                                        <input type="number" #codeInput maxlength="15" matInput
+                                                            formControlName="purchaseConvFactor"  class="text-right">
 
                                                     </mat-form-field>
                                                 </div>
@@ -240,8 +241,8 @@
                                                 </div>
                                                 <div class="col-sm-8">
                                                     <mat-form-field appearance="outline" style="width: 100%;">
-                                                        <input type="text" #codeInput maxlength="15" matInput
-                                                            formControlName="purchaseCurrencyExRateDetails">
+                                                        <input type="number" #codeInput maxlength="15" matInput
+                                                            formControlName="purchaseCurrencyExRateDetails" class="text-right">
                                                     </mat-form-field>
                                                 </div>
                                             </div>
@@ -268,8 +269,8 @@
                                             <div class="row py-2">
                                                 <div class="col-sm-12">
                                                     <mat-form-field appearance="outline" style="width: 100%;">
-                                                        <input type="text" #codeInput maxlength="15" matInput
-                                                            formControlName="salesConvFactor">
+                                                        <input type="number" #codeInput maxlength="15" matInput
+                                                            formControlName="salesConvFactor" class="text-right">
 
                                                     </mat-form-field>
                                                 </div>
@@ -284,8 +285,8 @@
                                                 </div>
                                                 <div class="col-sm-8">
                                                     <mat-form-field appearance="outline" style="width: 100%;">
-                                                        <input type="text" #codeInput maxlength="15" matInput
-                                                            formControlName="salesCurrencyExRateDetails">
+                                                        <input type="number" #codeInput maxlength="15" matInput
+                                                            formControlName="salesCurrencyExRateDetails" class="text-right">
 
                                                     </mat-form-field>
                                                 </div>
@@ -320,8 +321,8 @@
                                                 :</label>
                                             <div class="col-md-3">
                                                 <mat-form-field appearance="outline" style="width: 100%;">
-                                                    <input type="text" #codeInput maxlength="15" matInput
-                                                        formControlName="makingCurrency">
+                                                    <input type="number" #codeInput maxlength="15" matInput
+                                                        formControlName="makingCurrency" class="text-right">
                                                 </mat-form-field>
                                             </div>
                                             <div class="col-md-6">
@@ -340,8 +341,8 @@
                                                 :</label>
                                             <div class="col-md-9">
                                                 <mat-form-field appearance="outline" style="width: 100%;">
-                                                    <input type="text" #codeInput maxlength="15" matInput
-                                                        formControlName="standardRate">
+                                                    <input type="number" #codeInput maxlength="15" matInput
+                                                        formControlName="standardRate" class="text-right">
                                                 </mat-form-field>
                                             </div>
                                         </div>
@@ -350,8 +351,8 @@
                                                 :</label>
                                             <div class="col-md-4">
                                                 <mat-form-field appearance="outline" style="width: 100%;">
-                                                    <input type="text" #codeInput maxlength="15" matInput
-                                                        formControlName="margin">
+                                                    <input type="number" #codeInput maxlength="15" matInput
+                                                        formControlName="margin"  class="text-right">
                                                 </mat-form-field>
                                             </div>
                                         </div>
@@ -374,8 +375,8 @@
                                                 :</label>
                                             <div class="col-md-4">
                                                 <mat-form-field appearance="outline" style="width: 100%;">
-                                                    <input type="text" #codeInput maxlength="15" matInput
-                                                        formControlName="reorderStockReaches">
+                                                    <input type="number" #codeInput maxlength="15" matInput
+                                                        formControlName="reorderStockReaches"  class="text-right">
                                                 </mat-form-field>
                                             </div>
                                             <div class="col-md-4">
@@ -392,8 +393,8 @@
                                                 :</label>
                                             <div class="col-md-4">
                                                 <mat-form-field appearance="outline" style="width: 100%;">
-                                                    <input type="text" #codeInput maxlength="15" matInput
-                                                        formControlName="reorderRateReaches">
+                                                    <input type="number" #codeInput maxlength="15" matInput
+                                                        formControlName="reorderRateReaches"  class="text-right">
                                                 </mat-form-field>
                                             </div>
                                             <div class="col-md-4">
@@ -414,8 +415,8 @@
                                                 :</label>
                                             <div class="col-md-4">
                                                 <mat-form-field appearance="outline" style="width: 100%;">
-                                                    <input type="text" #codeInput maxlength="15" matInput
-                                                        formControlName="minimumOrderQty">
+                                                    <input type="number" #codeInput maxlength="15" matInput
+                                                        formControlName="minimumOrderQty" class="text-right">
                                                 </mat-form-field>
                                             </div>
                                             <div class="col-md-4">
@@ -432,8 +433,8 @@
                                                 :</label>
                                             <div class="col-md-4">
                                                 <mat-form-field appearance="outline" style="width: 100%;">
-                                                    <input type="text" #codeInput maxlength="15" matInput
-                                                        formControlName="maximumOrderQty">
+                                                    <input type="number" #codeInput maxlength="15" matInput
+                                                        formControlName="maximumOrderQty" class="text-right">
                                                 </mat-form-field>
                                             </div>
                                             <div class="col-md-4">

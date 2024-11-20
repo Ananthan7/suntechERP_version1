@@ -28,10 +28,17 @@
         <div class="col-md-6">
         <div class="row mt-3">
             <dx-data-grid id="gridContainer" [dataSource]="maindetails" [showBorders]="true" [showColumnLines]="true"
-            [showRowLines]="true" [allowColumnResizing]="true" keyExpr="SRNO">
+            [showRowLines]="true" [allowColumnResizing]="true"                
+                 (onSelectionChanged)="onSelectionChanged($event)"
 
+            >
 
-            <dxi-column type="boolean" dataField="isSelected" caption="Select" width="80"></dxi-column>
+            <dxo-paging [enabled]="false"></dxo-paging>
+                    <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
+                    <dxo-selection mode="multiple"></dxo-selection>
+                    <dxo-scrolling mode="virtual"></dxo-scrolling>
+
+            <!-- <dxi-column type="boolean" dataField="isSelected" caption="Select" width="80"></dxi-column> -->
             <dxi-column dataField="CODE" caption="Code"></dxi-column>
             <dxi-column dataField="ACCOUNT_HEAD" caption="Account Head"></dxi-column>
         

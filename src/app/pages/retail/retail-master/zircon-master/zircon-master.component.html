@@ -8,9 +8,10 @@
 
 <!-- modal header component -->
 <modal-header
-  (saveClick)="formSave()"
+  *ngIf="flag !== 'VIEW'"
+  (saveClick)="zirconMasterMainFormSubmit()"
   (cancelClick)="close()"
-  (deleteClick)="deleteMaster()"
+  (deleteClick)="DeleteController()"
 ></modal-header>
 
 <!-- content section -->
@@ -26,7 +27,12 @@
               >
               <div class="col-md-7">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="code  " />
+                  <input
+                    type="text"
+                    [readonly]="flag === 'VIEW'"
+                    matInput
+                    formControlName="code"
+                  />
                 </mat-form-field>
               </div>
             </div>
@@ -37,15 +43,33 @@
               >
               <div class="col-md-7">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="costCenter" />
-
+                  <input
+                    type="text"
+                    [readonly]="flag === 'VIEW'"
+                    matInput
+                    formControlName="costCenter"
+                    (focusout)="
+                      SPvalidateLookupFieldModified(
+                        $event,
+                        countryCodeData,
+                        ['costCenter'],
+                        false,
+                        ['CODE'],
+                        false
+                      )
+                    "
+                  />
                   <master-search
-                    (focusout)="openTab($event, 'design')"
-                    #overlayDesignCode
-                    [MasterSearchData]="designCode"
+                    (focusout)="openTab($event, 'costCenter')"
+                    *ngIf="flag != 'VIEW'"
+                    #overlayCostCenter
                     class="masterSearch"
-                    (newRowClick)="lookupCodeSelected($event, 'CODE')"
-                  ></master-search>
+                    [MasterSearchData]="countryCodeData"
+                    (newRowClick)="
+                      lookupSelect($event, ['costCenter'], ['CODE'])
+                    "
+                  >
+                  </master-search>
                 </mat-form-field>
               </div>
             </div>
@@ -56,15 +80,32 @@
               >
               <div class="col-md-7">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="category" />
+                  <input
+                    type="text"
+                    [readonly]="flag === 'VIEW'"
+                    matInput
+                    formControlName="category"
+                    (focusout)="
+                      SPvalidateLookupFieldModified(
+                        $event,
+                        countryCodeData,
+                        ['category'],
+                        false,
+                        ['CODE'],
+                        false
+                      )
+                    "
+                  />
 
                   <master-search
-                    (focusout)="openTab($event, 'design')"
-                    #overlayDesignCode
-                    [MasterSearchData]="designCode"
+                    (focusout)="openTab($event, 'category')"
+                    *ngIf="flag != 'VIEW'"
+                    #overlayCategory
                     class="masterSearch"
-                    (newRowClick)="lookupCodeSelected($event, 'CODE')"
-                  ></master-search>
+                    [MasterSearchData]="countryCodeData"
+                    (newRowClick)="lookupSelect($event, ['category'], ['CODE'])"
+                  >
+                  </master-search>
                 </mat-form-field>
               </div>
             </div>
@@ -75,14 +116,31 @@
               >
               <div class="col-md-7">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="shape" />
+                  <input
+                    type="text"
+                    [readonly]="flag === 'VIEW'"
+                    matInput
+                    formControlName="shape"
+                    (focusout)="
+                      SPvalidateLookupFieldModified(
+                        $event,
+                        countryCodeData,
+                        ['shape'],
+                        false,
+                        ['CODE'],
+                        false
+                      )
+                    "
+                  />
                   <master-search
-                    (focusout)="openTab($event, 'design')"
-                    #overlayDesignCode
-                    [MasterSearchData]="designCode"
+                    (focusout)="openTab($event, 'shape')"
+                    *ngIf="flag != 'VIEW'"
+                    #overlayShape
                     class="masterSearch"
-                    (newRowClick)="lookupCodeSelected($event, 'CODE')"
-                  ></master-search>
+                    [MasterSearchData]="countryCodeData"
+                    (newRowClick)="lookupSelect($event, ['shape'], ['CODE'])"
+                  >
+                  </master-search>
                 </mat-form-field>
               </div>
             </div>
@@ -93,14 +151,31 @@
               >
               <div class="col-md-7">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="color" />
+                  <input
+                    type="text"
+                    [readonly]="flag === 'VIEW'"
+                    matInput
+                    formControlName="color"
+                    (focusout)="
+                      SPvalidateLookupFieldModified(
+                        $event,
+                        countryCodeData,
+                        ['color'],
+                        false,
+                        ['CODE'],
+                        false
+                      )
+                    "
+                  />
                   <master-search
-                    (focusout)="openTab($event, 'design')"
-                    #overlayDesignCode
-                    [MasterSearchData]="designCode"
+                    (focusout)="openTab($event, 'color')"
+                    *ngIf="flag != 'VIEW'"
+                    #overlayColor
                     class="masterSearch"
-                    (newRowClick)="lookupCodeSelected($event, 'CODE')"
-                  ></master-search>
+                    [MasterSearchData]="countryCodeData"
+                    (newRowClick)="lookupSelect($event, ['color'], ['CODE'])"
+                  >
+                  </master-search>
                 </mat-form-field>
               </div>
             </div>
@@ -111,14 +186,31 @@
               >
               <div class="col-md-7">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="vendor" />
+                  <input
+                    type="text"
+                    [readonly]="flag === 'VIEW'"
+                    matInput
+                    formControlName="vendor"
+                    (focusout)="
+                      SPvalidateLookupFieldModified(
+                        $event,
+                        countryCodeData,
+                        ['vendor'],
+                        false,
+                        ['CODE'],
+                        false
+                      )
+                    "
+                  />
                   <master-search
-                    (focusout)="openTab($event, 'design')"
-                    #overlayDesignCode
-                    [MasterSearchData]="designCode"
+                    (focusout)="openTab($event, 'vendor')"
+                    *ngIf="flag != 'VIEW'"
+                    #overlayVendor
                     class="masterSearch"
-                    (newRowClick)="lookupCodeSelected($event, 'CODE')"
-                  ></master-search>
+                    [MasterSearchData]="countryCodeData"
+                    (newRowClick)="lookupSelect($event, ['vendor'], ['CODE'])"
+                  >
+                  </master-search>
                 </mat-form-field>
               </div>
             </div>
@@ -129,7 +221,12 @@
               >
               <div class="col-md-7">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="vendorRef" />
+                  <input
+                    type="text"
+                    [readonly]="flag === 'VIEW'"
+                    matInput
+                    formControlName="vendorRef"
+                  />
                 </mat-form-field>
               </div>
             </div>
@@ -140,7 +237,12 @@
               >
               <div class="col-md-7">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="createdOn" />
+                  <input
+                    type="text"
+                    [readonly]="flag === 'VIEW'"
+                    matInput
+                    formControlName="createdOn"
+                  />
                 </mat-form-field>
               </div>
             </div>
@@ -151,13 +253,22 @@
               >
               <div class="col-md-7">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="createdBy" />
+                  <input
+                    type="text"
+                    [readonly]="flag === 'VIEW'"
+                    matInput
+                    formControlName="createdBy"
+                  />
                 </mat-form-field>
               </div>
             </div>
 
             <div class="row mb-1">
-              <mat-checkbox formControlName="creditCardLimitCheck" id="ID006">
+              <mat-checkbox
+                class="example-margin"
+                formControlName="allowZeroPcs"
+                (change)="matBoxChecker($event, 'allowZeroPcs')"
+              >
                 Allow Zero Pcs
               </mat-checkbox>
             </div>
@@ -172,7 +283,12 @@
               >
               <div class="col-md-7">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="description" />
+                  <input
+                    type="text"
+                    [readonly]="flag === 'VIEW'"
+                    matInput
+                    formControlName="description"
+                  />
                 </mat-form-field>
               </div>
             </div>
@@ -183,15 +299,31 @@
               >
               <div class="col-md-7">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="brand" />
-
+                  <input
+                    type="text"
+                    [readonly]="flag === 'VIEW'"
+                    matInput
+                    formControlName="brand"
+                    (focusout)="
+                      SPvalidateLookupFieldModified(
+                        $event,
+                        countryCodeData,
+                        ['brand'],
+                        false,
+                        ['CODE'],
+                        false
+                      )
+                    "
+                  />
                   <master-search
-                    (focusout)="openTab($event, 'design')"
-                    #overlayDesignCode
-                    [MasterSearchData]="designCode"
+                    (focusout)="openTab($event, 'brand')"
+                    *ngIf="flag != 'VIEW'"
+                    #overlayBrand
                     class="masterSearch"
-                    (newRowClick)="lookupCodeSelected($event, 'CODE')"
-                  ></master-search>
+                    [MasterSearchData]="countryCodeData"
+                    (newRowClick)="lookupSelect($event, ['brand'], ['CODE'])"
+                  >
+                  </master-search>
                 </mat-form-field>
               </div>
             </div>
@@ -205,14 +337,33 @@
               >
               <div class="col-md-7">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="subCategory" />
+                  <input
+                    type="text"
+                    [readonly]="flag === 'VIEW'"
+                    matInput
+                    formControlName="subCategory"
+                    (focusout)="
+                      SPvalidateLookupFieldModified(
+                        $event,
+                        countryCodeData,
+                        ['subCategory'],
+                        false,
+                        ['CODE'],
+                        false
+                      )
+                    "
+                  />
                   <master-search
-                    (focusout)="openTab($event, 'design')"
-                    #overlayDesignCode
-                    [MasterSearchData]="designCode"
+                    (focusout)="openTab($event, 'subCategory')"
+                    *ngIf="flag != 'VIEW'"
+                    #overlaySubCategory
                     class="masterSearch"
-                    (newRowClick)="lookupCodeSelected($event, 'CODE')"
-                  ></master-search>
+                    [MasterSearchData]="countryCodeData"
+                    (newRowClick)="
+                      lookupSelect($event, ['subCategory'], ['CODE'])
+                    "
+                  >
+                  </master-search>
                 </mat-form-field>
               </div>
             </div>
@@ -223,14 +374,31 @@
               >
               <div class="col-md-7">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="size" />
+                  <input
+                    type="text"
+                    [readonly]="flag === 'VIEW'"
+                    matInput
+                    formControlName="size"
+                    (focusout)="
+                      SPvalidateLookupFieldModified(
+                        $event,
+                        countryCodeData,
+                        ['size'],
+                        false,
+                        ['CODE'],
+                        false
+                      )
+                    "
+                  />
                   <master-search
-                    (focusout)="openTab($event, 'design')"
-                    #overlayDesignCode
-                    [MasterSearchData]="designCode"
+                    (focusout)="openTab($event, 'size')"
+                    *ngIf="flag != 'VIEW'"
+                    #overlaySize
                     class="masterSearch"
-                    (newRowClick)="lookupCodeSelected($event, 'CODE')"
-                  ></master-search>
+                    [MasterSearchData]="countryCodeData"
+                    (newRowClick)="lookupSelect($event, ['size'], ['CODE'])"
+                  >
+                  </master-search>
                 </mat-form-field>
               </div>
             </div>
@@ -241,15 +409,31 @@
               >
               <div class="col-md-7">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="type" />
-
+                  <input
+                    type="text"
+                    [readonly]="flag === 'VIEW'"
+                    matInput
+                    formControlName="type"
+                    (focusout)="
+                      SPvalidateLookupFieldModified(
+                        $event,
+                        countryCodeData,
+                        ['type'],
+                        false,
+                        ['CODE'],
+                        false
+                      )
+                    "
+                  />
                   <master-search
-                    (focusout)="openTab($event, 'design')"
-                    #overlayDesignCode
-                    [MasterSearchData]="designCode"
+                    (focusout)="openTab($event, 'type')"
+                    *ngIf="flag != 'VIEW'"
+                    #overlayType
                     class="masterSearch"
-                    (newRowClick)="lookupCodeSelected($event, 'CODE')"
-                  ></master-search>
+                    [MasterSearchData]="countryCodeData"
+                    (newRowClick)="lookupSelect($event, ['type'], ['CODE'])"
+                  >
+                  </master-search>
                 </mat-form-field>
               </div>
             </div>
@@ -260,14 +444,31 @@
               >
               <div class="col-md-7">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="sieveSet" />
+                  <input
+                    type="text"
+                    [readonly]="flag === 'VIEW'"
+                    matInput
+                    formControlName="sieveSet"
+                    (focusout)="
+                      SPvalidateLookupFieldModified(
+                        $event,
+                        countryCodeData,
+                        ['sieveSet'],
+                        false,
+                        ['CODE'],
+                        false
+                      )
+                    "
+                  />
                   <master-search
-                    (focusout)="openTab($event, 'design')"
-                    #overlayDesignCode
-                    [MasterSearchData]="designCode"
+                    (focusout)="openTab($event, 'sieveSet')"
+                    *ngIf="flag != 'VIEW'"
+                    #overlaySieveSet
                     class="masterSearch"
-                    (newRowClick)="lookupCodeSelected($event, 'CODE')"
-                  ></master-search>
+                    [MasterSearchData]="countryCodeData"
+                    (newRowClick)="lookupSelect($event, ['sieveSet'], ['CODE'])"
+                  >
+                  </master-search>
                 </mat-form-field>
               </div>
             </div>
@@ -278,14 +479,31 @@
               >
               <div class="col-md-7">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="sieve" />
+                  <input
+                    type="text"
+                    [readonly]="flag === 'VIEW'"
+                    matInput
+                    formControlName="sieve"
+                    (focusout)="
+                      SPvalidateLookupFieldModified(
+                        $event,
+                        countryCodeData,
+                        ['sieve'],
+                        false,
+                        ['CODE'],
+                        false
+                      )
+                    "
+                  />
                   <master-search
-                    (focusout)="openTab($event, 'design')"
-                    #overlayDesignCode
-                    [MasterSearchData]="designCode"
+                    (focusout)="openTab($event, 'sieve')"
+                    *ngIf="flag != 'VIEW'"
+                    #overlaySieve
                     class="masterSearch"
-                    (newRowClick)="lookupCodeSelected($event, 'CODE')"
-                  ></master-search>
+                    [MasterSearchData]="countryCodeData"
+                    (newRowClick)="lookupSelect($event, ['sieve'], ['CODE'])"
+                  >
+                  </master-search>
                 </mat-form-field>
               </div>
             </div>
@@ -296,7 +514,12 @@
               >
               <div class="col-md-7">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="firstTrans" />
+                  <input
+                    type="text"
+                    [readonly]="flag === 'VIEW'"
+                    matInput
+                    formControlName="firstTrans"
+                  />
                 </mat-form-field>
               </div>
             </div>
@@ -307,13 +530,22 @@
               >
               <div class="col-md-7">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="lastTrans" />
+                  <input
+                    type="text"
+                    [readonly]="flag === 'VIEW'"
+                    matInput
+                    formControlName="lastTrans"
+                  />
                 </mat-form-field>
               </div>
             </div>
 
             <div class="row mb-1">
-              <mat-checkbox formControlName="creditCardLimitCheck" id="ID006">
+              <mat-checkbox
+                class="example-margin"
+                formControlName="excludeFromTransferWt"
+                (change)="matBoxChecker($event, 'excludeFromTransferWt')"
+              >
                 Exclude From Transfer Wt.
               </mat-checkbox>
             </div>
@@ -326,13 +558,23 @@
               >
               <div class="col-md-4">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="CurrencyCode" />
+                  <input
+                    type="text"
+                    [readonly]="flag === 'VIEW'"
+                    matInput
+                    formControlName="currencyCode"
+                  />
                 </mat-form-field>
               </div>
 
               <div class="col-md-5">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="CurrencyDesc" />
+                  <input
+                    type="text"
+                    [readonly]="flag === 'VIEW'"
+                    matInput
+                    formControlName="currencyDesc"
+                  />
                 </mat-form-field>
               </div>
             </div>
@@ -346,13 +588,23 @@
               >
               <div class="col-md-4">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="weightAvgCostCode" />
+                  <input
+                    type="text"
+                    [readonly]="flag === 'VIEW'"
+                    matInput
+                    formControlName="weightAvgCostCode"
+                  />
                 </mat-form-field>
               </div>
 
               <div class="col-md-5">
                 <mat-form-field style="width: 100%" appearance="outline">
-                  <input matInput="text" formControlName="weightAvgCostDesc" />
+                  <input
+                    type="text"
+                    [readonly]="flag === 'VIEW'"
+                    matInput
+                    formControlName="weightAvgCostDesc"
+                  />
                 </mat-form-field>
               </div>
             </div>
@@ -387,33 +639,80 @@
                   >
                   <div class="col-md-2">
                     <mat-form-field style="width: 100%" appearance="outline">
-                      <input matInput="text" formControlName="price1Code" />
-
+                      <input
+                        type="text"
+                        [readonly]="flag === 'VIEW'"
+                        matInput
+                        formControlName="priceOneCode"
+                        (focusout)="
+                          SPvalidateLookupFieldModified(
+                            $event,
+                            countryCodeData,
+                            [
+                              'priceOneCode',
+                              'priceOnePercent',
+                              'priceOneLc',
+                              'priceOneFc'
+                            ],
+                            false,
+                            ['CODE', 'CODE', 'CODE', 'CODE'],
+                            false
+                          )
+                        "
+                      />
                       <master-search
-                        (focusout)="openTab($event, 'design')"
-                        #overlayDesignCode
-                        [MasterSearchData]="designCode"
+                        (focusout)="openTab($event, 'priceOneCode')"
+                        *ngIf="flag != 'VIEW'"
+                        #overlayPriceOneCode
                         class="masterSearch"
-                        (newRowClick)="lookupCodeSelected($event, 'CODE')"
-                      ></master-search>
+                        [MasterSearchData]="countryCodeData"
+                        (newRowClick)="
+                          lookupSelect(
+                            $event,
+                            [
+                              'priceOneCode',
+                              'priceOnePercent',
+                              'priceOneLc',
+                              'priceOneFc'
+                            ],
+                            ['CODE', 'CODE', 'CODE', 'CODE']
+                          )
+                        "
+                      >
+                      </master-search>
                     </mat-form-field>
                   </div>
 
                   <div class="col-md-2">
                     <mat-form-field style="width: 100%" appearance="outline">
-                      <input matInput="text" formControlName="price1Percent" />
+                      <input
+                        type="text"
+                        [readonly]="flag === 'VIEW'"
+                        matInput
+                        formControlName="priceOnePercent"
+                      />
                     </mat-form-field>
                   </div>
 
                   <div class="col-md-3">
                     <mat-form-field style="width: 100%" appearance="outline">
-                      <input matInput="text" formControlName="priceFc" />
+                      <input
+                        type="number"
+                        [readonly]="flag === 'VIEW'"
+                        matInput
+                        formControlName="priceOneFc"
+                      />
                     </mat-form-field>
                   </div>
 
                   <div class="col-md-3">
                     <mat-form-field style="width: 100%" appearance="outline">
-                      <input matInput="text" formControlName="price1Lc" />
+                      <input
+                        type="number"
+                        [readonly]="flag === 'VIEW'"
+                        matInput
+                        formControlName="priceOneLc"
+                      />
                     </mat-form-field>
                   </div>
                 </div>
@@ -424,33 +723,80 @@
                   >
                   <div class="col-md-2">
                     <mat-form-field style="width: 100%" appearance="outline">
-                      <input matInput="text" formControlName="price2Code" />
-
+                      <input
+                        type="text"
+                        [readonly]="flag === 'VIEW'"
+                        matInput
+                        formControlName="priceTwoCode"
+                        (focusout)="
+                          SPvalidateLookupFieldModified(
+                            $event,
+                            countryCodeData,
+                            [
+                              'priceTwoCode',
+                              'priceTwoPercent',
+                              'priceTwoLc',
+                              'priceTwoFc'
+                            ],
+                            false,
+                            ['CODE', 'CODE', 'CODE', 'CODE'],
+                            false
+                          )
+                        "
+                      />
                       <master-search
-                        (focusout)="openTab($event, 'design')"
-                        #overlayDesignCode
-                        [MasterSearchData]="designCode"
+                        (focusout)="openTab($event, 'priceTwoCode')"
+                        *ngIf="flag != 'VIEW'"
+                        #overlayPriceTwoCode
                         class="masterSearch"
-                        (newRowClick)="lookupCodeSelected($event, 'CODE')"
-                      ></master-search>
+                        [MasterSearchData]="countryCodeData"
+                        (newRowClick)="
+                          lookupSelect(
+                            $event,
+                            [
+                              'priceTwoCode',
+                              'priceTwoPercent',
+                              'priceTwoLc',
+                              'priceTwoFc'
+                            ],
+                            ['CODE', 'CODE', 'CODE', 'CODE']
+                          )
+                        "
+                      >
+                      </master-search>
                     </mat-form-field>
                   </div>
 
                   <div class="col-md-2">
                     <mat-form-field style="width: 100%" appearance="outline">
-                      <input matInput="text" formControlName="price2Percent" />
+                      <input
+                        type="text"
+                        [readonly]="flag === 'VIEW'"
+                        matInput
+                        formControlName="priceTwoPercent"
+                      />
                     </mat-form-field>
                   </div>
 
                   <div class="col-md-3">
                     <mat-form-field style="width: 100%" appearance="outline">
-                      <input matInput="text" formControlName="price2Fc" />
+                      <input
+                        type="number"
+                        [readonly]="flag === 'VIEW'"
+                        matInput
+                        formControlName="priceTwoFc"
+                      />
                     </mat-form-field>
                   </div>
 
                   <div class="col-md-3">
                     <mat-form-field style="width: 100%" appearance="outline">
-                      <input matInput="text" formControlName="price2Lc" />
+                      <input
+                        type="number"
+                        [readonly]="flag === 'VIEW'"
+                        matInput
+                        formControlName="priceTwoLc"
+                      />
                     </mat-form-field>
                   </div>
                 </div>
@@ -461,32 +807,80 @@
                   >
                   <div class="col-md-2">
                     <mat-form-field style="width: 100%" appearance="outline">
-                      <input matInput="text" formControlName="price3Code" />
+                      <input
+                        type="text"
+                        [readonly]="flag === 'VIEW'"
+                        matInput
+                        formControlName="priceThreeCode"
+                        (focusout)="
+                          SPvalidateLookupFieldModified(
+                            $event,
+                            countryCodeData,
+                            [
+                              'priceThreeCode',
+                              'priceThreePercent',
+                              'priceThreeLc',
+                              'priceThreeFc'
+                            ],
+                            false,
+                            ['CODE', 'CODE', 'CODE', 'CODE'],
+                            false
+                          )
+                        "
+                      />
                       <master-search
-                        (focusout)="openTab($event, 'design')"
-                        #overlayDesignCode
-                        [MasterSearchData]="designCode"
+                        (focusout)="openTab($event, 'priceThreeCode')"
+                        *ngIf="flag != 'VIEW'"
+                        #overlayPriceThreeCode
                         class="masterSearch"
-                        (newRowClick)="lookupCodeSelected($event, 'CODE')"
-                      ></master-search>
+                        [MasterSearchData]="countryCodeData"
+                        (newRowClick)="
+                          lookupSelect(
+                            $event,
+                            [
+                              'priceThreeCode',
+                              'priceThreePercent',
+                              'priceThreeLc',
+                              'priceThreeFc'
+                            ],
+                            ['CODE', 'CODE', 'CODE', 'CODE']
+                          )
+                        "
+                      >
+                      </master-search>
                     </mat-form-field>
                   </div>
 
                   <div class="col-md-2">
                     <mat-form-field style="width: 100%" appearance="outline">
-                      <input matInput="text" formControlName="price3Percent" />
+                      <input
+                        type="text"
+                        [readonly]="flag === 'VIEW'"
+                        matInput
+                        formControlName="priceThreePercent"
+                      />
                     </mat-form-field>
                   </div>
 
                   <div class="col-md-3">
                     <mat-form-field style="width: 100%" appearance="outline">
-                      <input matInput="text" formControlName="price3Fc" />
+                      <input
+                        type="number"
+                        [readonly]="flag === 'VIEW'"
+                        matInput
+                        formControlName="priceThreeFc"
+                      />
                     </mat-form-field>
                   </div>
 
                   <div class="col-md-3">
                     <mat-form-field style="width: 100%" appearance="outline">
-                      <input matInput="text" formControlName="price3Lc" />
+                      <input
+                        type="number"
+                        [readonly]="flag === 'VIEW'"
+                        matInput
+                        formControlName="priceThreeLc"
+                      />
                     </mat-form-field>
                   </div>
                 </div>
@@ -497,32 +891,80 @@
                   >
                   <div class="col-md-2">
                     <mat-form-field style="width: 100%" appearance="outline">
-                      <input matInput="text" formControlName="price4Code" />
+                      <input
+                        type="text"
+                        [readonly]="flag === 'VIEW'"
+                        matInput
+                        formControlName="priceFourCode"
+                        (focusout)="
+                          SPvalidateLookupFieldModified(
+                            $event,
+                            countryCodeData,
+                            [
+                              'priceFourCode',
+                              'priceFourPercent',
+                              'priceFourLc',
+                              'priceFourFc'
+                            ],
+                            false,
+                            ['CODE', 'CODE', 'CODE', 'CODE'],
+                            false
+                          )
+                        "
+                      />
                       <master-search
-                        (focusout)="openTab($event, 'design')"
-                        #overlayDesignCode
-                        [MasterSearchData]="designCode"
+                        (focusout)="openTab($event, 'priceFourCode')"
+                        *ngIf="flag != 'VIEW'"
+                        #overlayPriceFourCode
                         class="masterSearch"
-                        (newRowClick)="lookupCodeSelected($event, 'CODE')"
-                      ></master-search>
+                        [MasterSearchData]="countryCodeData"
+                        (newRowClick)="
+                          lookupSelect(
+                            $event,
+                            [
+                              'priceFourCode',
+                              'priceFourPercent',
+                              'priceFourLc',
+                              'priceFourFc'
+                            ],
+                            ['CODE', 'CODE', 'CODE', 'CODE']
+                          )
+                        "
+                      >
+                      </master-search>
                     </mat-form-field>
                   </div>
 
                   <div class="col-md-2">
                     <mat-form-field style="width: 100%" appearance="outline">
-                      <input matInput="text" formControlName="price4Percent" />
+                      <input
+                        type="text"
+                        [readonly]="flag === 'VIEW'"
+                        matInput
+                        formControlName="priceFourPercent"
+                      />
                     </mat-form-field>
                   </div>
 
                   <div class="col-md-3">
                     <mat-form-field style="width: 100%" appearance="outline">
-                      <input matInput="text" formControlName="price4Fc" />
+                      <input
+                        type="number"
+                        [readonly]="flag === 'VIEW'"
+                        matInput
+                        formControlName="priceFourFc"
+                      />
                     </mat-form-field>
                   </div>
 
                   <div class="col-md-3">
                     <mat-form-field style="width: 100%" appearance="outline">
-                      <input matInput="text" formControlName="price4Lc" />
+                      <input
+                        type="number"
+                        [readonly]="flag === 'VIEW'"
+                        matInput
+                        formControlName="priceFourLc"
+                      />
                     </mat-form-field>
                   </div>
                 </div>
@@ -533,32 +975,80 @@
                   >
                   <div class="col-md-2">
                     <mat-form-field style="width: 100%" appearance="outline">
-                      <input matInput="text" formControlName="price5Code" />
+                      <input
+                        type="text"
+                        [readonly]="flag === 'VIEW'"
+                        matInput
+                        formControlName="priceFiveCode"
+                        (focusout)="
+                          SPvalidateLookupFieldModified(
+                            $event,
+                            countryCodeData,
+                            [
+                              'priceFiveCode',
+                              'priceFivePercent',
+                              'priceFiveLc',
+                              'priceFiveFc'
+                            ],
+                            false,
+                            ['CODE', 'CODE', 'CODE', 'CODE'],
+                            false
+                          )
+                        "
+                      />
                       <master-search
-                        (focusout)="openTab($event, 'design')"
-                        #overlayDesignCode
-                        [MasterSearchData]="designCode"
+                        (focusout)="openTab($event, 'priceFiveCode')"
+                        *ngIf="flag != 'VIEW'"
+                        #overlayPriceFiveCode
                         class="masterSearch"
-                        (newRowClick)="lookupCodeSelected($event, 'CODE')"
-                      ></master-search>
+                        [MasterSearchData]="countryCodeData"
+                        (newRowClick)="
+                          lookupSelect(
+                            $event,
+                            [
+                              'priceFiveCode',
+                              'priceFivePercent',
+                              'priceFiveLc',
+                              'priceFiveFc'
+                            ],
+                            ['CODE', 'CODE', 'CODE', 'CODE']
+                          )
+                        "
+                      >
+                      </master-search>
                     </mat-form-field>
                   </div>
 
                   <div class="col-md-2">
                     <mat-form-field style="width: 100%" appearance="outline">
-                      <input matInput="text" formControlName="price5Percent" />
+                      <input
+                        type="text"
+                        [readonly]="flag === 'VIEW'"
+                        matInput
+                        formControlName="priceFivePercent"
+                      />
                     </mat-form-field>
                   </div>
 
                   <div class="col-md-3">
                     <mat-form-field style="width: 100%" appearance="outline">
-                      <input matInput="text" formControlName="price5Fc" />
+                      <input
+                        type="number"
+                        [readonly]="flag === 'VIEW'"
+                        matInput
+                        formControlName="priceFiveFc"
+                      />
                     </mat-form-field>
                   </div>
 
                   <div class="col-md-3">
                     <mat-form-field style="width: 100%" appearance="outline">
-                      <input matInput="text" formControlName="price5Lc" />
+                      <input
+                        type="number"
+                        [readonly]="flag === 'VIEW'"
+                        matInput
+                        formControlName="priceFiveLc"
+                      />
                     </mat-form-field>
                   </div>
                 </div>
@@ -580,10 +1070,30 @@
               <div class="col-md-12 p-2 mt-1">
                 <div class="icons">
                   <div class="image_box">
-                    <!-- <img
-                            class="image_box"
-                            alt="picture"
-                          /> -->
+                    <img
+                      class="image_box"
+                      *ngIf="fetchedPicture"
+                      [src]="fetchedPicture"
+                      alt="picture"
+                    />
+
+                    <div class="p-1 bd-highlight">
+                      <button
+                        type="button"
+                        class="btn btn-primary add-btn"
+                        (click)="fileInput.click()"
+                      >
+                        <i class="fas fa-image"></i>
+                      </button>
+                      <input
+                        type="file"
+                        formControlName="picture"
+                        #fileInput
+                        accept=".jpg,.jpeg,.png,.gif"
+                        (change)="handleFileSelection($event, fileInput)"
+                        style="display: none"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>

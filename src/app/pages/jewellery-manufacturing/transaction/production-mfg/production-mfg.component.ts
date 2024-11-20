@@ -613,6 +613,7 @@ export class ProductionMfgComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
   setMetalRate(data:any) {
+    this.setFormDecimal('METAL_RATE',data[0].WHOLESALE_RATE,'RATE')
   }
 
 

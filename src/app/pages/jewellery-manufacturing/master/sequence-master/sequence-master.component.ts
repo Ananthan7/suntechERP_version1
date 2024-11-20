@@ -258,8 +258,8 @@ export class SequenceMasterComponent implements OnInit {
                   obj.WIP_ACCODE = this.commonService.nullToString(item.WIP_ACCODE),
                   obj.LAB_ACCODE = this.commonService.nullToString(item.LAB_ACCODE),
                   obj.POINTS = item.POINTS || 0,
-                  obj.GAIN_ACCODE = "",
-                  obj.GAIN_AC = this.commonService.nullToString(item.GAIN_AC),
+                  obj.GAIN_ACCODE = this.commonService.nullToString(item.GAIN_AC),
+                  obj.GAIN_AC = "",
                   obj.TIMEON_PROCESS = item.TIMEON_PROCESS
 
               }
@@ -685,13 +685,13 @@ export class SequenceMasterComponent implements OnInit {
           "WIP_ACCODE": this.commonService.nullToString(item.WIP_ACCODE),
           "LAB_ACCODE": this.commonService.nullToString(item.LAB_ACCODE),
           "POINTS": item.POINTS || 0,
-          "GAIN_ACCODE": "", // Populate this field as needed
-          "GAIN_AC": this.commonService.nullToString(item.GAIN_ACCODE),
+          "GAIN_ACCODE": this.commonService.nullToString(item.GAIN_ACCODE), // Populate this field as needed
+          "GAIN_AC": "",
           "TRAY_WT": item.TRAY_WT || 0,
-          "PACKET_CODE": this.commonService.nullToString(item.PROCESS_CODE),
+          "PACKET_CODE": "",
           "LOSS_ON_GROSS": item.LOSS_ON_GROSS || false,
           "TIMEON_PROCESS": item.TIMEON_PROCESS || false,
-          "LABCHRG_PERHOUR": item.LABCHRG_PERHOUR || 0
+          "LABCHRG_PERHOUR": 0
         };
       });
 

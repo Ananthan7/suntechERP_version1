@@ -633,7 +633,8 @@ export class ProductionEntryDetailsComponent implements OnInit {
           if (data[0].PROCESS?.toUpperCase() != 'FINAL') this.pendingProcessValidate()
           // this.fillStoneDetails()
         } else {
-          this.commonService.toastErrorByMsgId('MSG1747');
+          // this.commonService.toastErrorByMsgId('MSG1747');
+          this.showConfirmationDialog(this.commonService.getMsgByID('MSG1456'))
         }
         this.setPendingPcs(result)
       }, err => {
@@ -683,7 +684,8 @@ export class ProductionEntryDetailsComponent implements OnInit {
           }
           this.openPendingProcessModal()
         } else {
-          this.commonService.toastErrorByMsgId('MSG1747');
+          // this.commonService.toastErrorByMsgId('MSG1456');
+          this.showConfirmationDialog(this.commonService.getMsgByID('MSG1456'))
         }
       }, err => {
         this.commonService.closeSnackBarMsg();
