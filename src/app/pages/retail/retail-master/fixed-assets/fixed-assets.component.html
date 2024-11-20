@@ -5,7 +5,9 @@
             <i class="feather icon-x close-icon"></i>
         </button>
     </div>
-    <modal-header (cancelClick)="close()" (saveClick)="formSubmit()"  (deleteClick)="DeleteController()"></modal-header>
+    <modal-header (cancelClick)="close()" (saveClick)="formSubmit()"  (deleteClick)="DeleteController()"
+     [isViewDelete]="editMode" [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode"
+    ></modal-header>
     <div class="p-4 ">
         <form [formGroup]="fixedassetsform">
             <mat-tab-group>
@@ -58,7 +60,7 @@
                                 <div class="col-md-3">
                                     <mat-form-field style="width: 100%" appearance="outline">
                                         <input type="text" matInput formControlName="assets_code"
-                                            [readonly]="viewOnly" />
+                                            [readonly]="viewOnly" maxlength="15"/>
                                     </mat-form-field>
                                 </div>
                             </div>

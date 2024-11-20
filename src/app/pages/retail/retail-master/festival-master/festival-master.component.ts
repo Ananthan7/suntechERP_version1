@@ -39,6 +39,8 @@ export class FestivalMasterComponent implements OnInit {
   gridForm: any;
   data: any = [];
   disable_code:boolean = false;
+  editMode: boolean = false;
+
 
 
   festivalmasterform: FormGroup = this.formBuilder.group({
@@ -73,6 +75,8 @@ export class FestivalMasterComponent implements OnInit {
     this.initialController(this.flag, this.content);
     if(this.flag == 'EDIT'){
       this.disable_code = true;
+      this.editMode = true;
+
     }
     if (this?.flag == "EDIT" || this?.flag == 'VIEW') {
       this.detailsapi(this.fm_id);

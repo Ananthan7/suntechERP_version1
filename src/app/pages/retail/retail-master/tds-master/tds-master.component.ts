@@ -18,6 +18,8 @@ export class TdsMasterComponent implements OnInit {
   maindetails:any=[];
   private subscriptions: Subscription[] = [];
   viewOnly: boolean = false;
+  viewMode: boolean = false;
+  editMode: boolean = false;
   dyndatas: any;
   tds:any;
   flag: any;
@@ -50,9 +52,12 @@ export class TdsMasterComponent implements OnInit {
   initialController(FLAG: any, DATA: any) {
     if (FLAG === "VIEW") {
       this.ViewController(DATA);
+      this.viewMode = true;
     }
     if (FLAG === "EDIT") {
       this.editController(DATA);
+      this.editMode = true;
+      
     }
 
     if (FLAG === "DELETE") {

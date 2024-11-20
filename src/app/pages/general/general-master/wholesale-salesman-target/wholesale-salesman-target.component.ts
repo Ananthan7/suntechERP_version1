@@ -27,6 +27,7 @@ export class WholesaleSalesmanTargetComponent implements OnInit {
   username = localStorage.getItem('username');
   postdata:any;
   disable_code:boolean = false;
+  editMode: boolean = false;
 
 
 
@@ -128,6 +129,7 @@ setcodevalues(){
     this.flag = this.content?.FLAG;
     if(this.flag == 'EDIT'){
       this.disable_code = true;
+      this.editMode = true;
     }
     this.initialController(this.flag, this.content);
     if (this?.flag == "EDIT" || this?.flag == 'VIEW') {

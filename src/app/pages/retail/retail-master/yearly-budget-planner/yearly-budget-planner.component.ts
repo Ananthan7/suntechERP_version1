@@ -29,6 +29,7 @@ export class YearlyBudgetPlannerComponent implements OnInit {
   userDefinedData: any;
   username: any = localStorage.getItem('username');
   viewMode: boolean = false;
+  editMode: boolean = false;
   branch_code:any;
 
 
@@ -64,6 +65,9 @@ export class YearlyBudgetPlannerComponent implements OnInit {
     this.initialController(this.flag, this.content);
     if (this?.flag == "EDIT" || this?.flag == 'VIEW') {
       this.detailsapi(this.unq_id);
+    }
+    if(this.flag == 'EDIT'){
+      this.editMode = true;
     }
   }
 

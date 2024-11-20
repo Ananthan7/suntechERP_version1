@@ -6,7 +6,8 @@
     </button>
 </div>
 
-<modal-header *ngIf="this.content?.FLAG != 'VIEW'" (cancelClick)="close()" (saveClick)="formSubmit()"  (deleteClick)="deleteTableData()"></modal-header>
+<modal-header *ngIf="this.content?.FLAG != 'VIEW'" (cancelClick)="close()" (saveClick)="formSubmit()"  (deleteClick)="deleteTableData()" [isViewDelete]="editMode" [isViewSave]="!viewMode" [isViewCancel]="!viewMode"
+[isViewMore]="!viewMode"></modal-header >
 
 
 <div class=" p-4">
@@ -222,7 +223,7 @@
                     <div class="col-md-8">
                         <mat-form-field style="width: 90%;" appearance="outline">
                             <input type="text" id="inputPassword" matInput formControlName="variance1"
-                                [readonly]="viewOnly" />
+                                [readonly]="viewOnly"  AmountDecimalInput/>
 
                         </mat-form-field>
                     </div>
@@ -233,7 +234,7 @@
                     <div class="col-md-8">
                         <mat-form-field style="width: 90%;" appearance="outline">
                             <input type="text" id="inputPassword" matInput formControlName="variance2"
-                                [readonly]="viewOnly" />
+                                [readonly]="viewOnly" AmountDecimalInput />
 
                         </mat-form-field>
                     </div>
