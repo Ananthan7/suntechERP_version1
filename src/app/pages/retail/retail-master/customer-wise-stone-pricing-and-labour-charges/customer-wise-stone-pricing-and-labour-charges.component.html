@@ -5,7 +5,7 @@
   </button>
 </div>
 <!-- modal header component -->
-<modal-header (cancelClick)="close()" (saveClick)="formSubmit()" (deleteClick)="deleteRecord()"></modal-header>
+<modal-header (cancelClick)="close()" (saveClick)="formSubmit()" (deleteClick)="deleteRecord()" [isViewDelete]="editMode" [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode"></modal-header>
 
 
 <div class="row">
@@ -34,9 +34,9 @@
 
               <div class="col-md-2">
                 <mat-form-field style="width: 100%;" appearance="outline">
-                  <input type="text" matInput formControlName="currencyDetail"  [readonly]="viewMode"/>
+                  <input type="text" matInput formControlName="currencyDetail"  [readonly]="viewMode" (focusout)="validateLookupField($event,curencyCodeData,'currencyDetail')"  (keydown)="lookupKeyPress($event,'currencyDetail')"/>
                   <master-search [MasterSearchData]="curencyCodeData"  *ngIf=" viewMode == false" class="masterSearch"
-                    (newRowClick)="curencyCodeSelected($event)">
+                    (newRowClick)="curencyCodeSelected($event)" #currencyDetailcodeSearch>
                   </master-search>
                 </mat-form-field>
               </div>
@@ -277,8 +277,8 @@
                     </div>
                     <div *dxTemplate="let data of 'ctfromtemp'">
 
-                      <input type="text" [disabled]="viewMode" [value]="data.value"
-                        (change)="ctfromtemp($event,data)" style="width: 100%;" />
+                      <input type="number" [disabled]="viewMode" [value]="data.value"
+                        (change)="ctfromtemp($event,data)" style="width: 100%;" class="text-right"/>
                     </div>
 
 
