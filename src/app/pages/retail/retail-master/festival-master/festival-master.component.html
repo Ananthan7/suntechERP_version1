@@ -6,7 +6,9 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (cancelClick)="close()" (saveClick)="formSubmit()"></modal-header>
+<modal-header (cancelClick)="close()" (saveClick)="formSubmit()"  (deleteClick)="DeleteController()"
+[isViewDelete]="editMode" [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode"
+></modal-header>
 <!-- content section -->
 
 <div class="container-fluid pt-3">
@@ -19,7 +21,7 @@
                     <div class="col-md-2">
                         <mat-form-field style="width: 100%;" appearance="outline">
                             <input type="text" id="inputPassword" matInput formControlName="code"
-                                [readonly]="viewOnly" />
+                            [readonly]="viewOnly || disable_code"  maxlength="6" />
                         </mat-form-field>
                     </div>
 

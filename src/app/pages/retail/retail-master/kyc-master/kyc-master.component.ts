@@ -21,6 +21,9 @@ export class KycMasterComponent implements OnInit {
   private subscriptions: Subscription[] = [];
   viewOnly:boolean = false;
   dyndatas:any;
+  disable_code:boolean = false;
+  editMode:boolean = false;
+
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -40,9 +43,15 @@ export class KycMasterComponent implements OnInit {
   ngOnInit(): void {
     console.log(this.content);
     this.flag = this.content?.FLAG;
+    if(this.flag == 'EDIT'){
+      this.disable_code = true;
+      this.editMode = true;
+    }
+    if(this.flag == 'VIEW'){
+      this.viewMode = true;
+    }
     this.kyc_id = this.content?.KYC_CODE;
     console.log(this.kyc_id);
-    this.flag = this.content?.FLAG;
     this.kycform.controls.kyccode.setValue(this.content?.KYC_CODE);
     this.kycform.controls.kyccodedesc.setValue(this.content?.KYC_DESC);
     this.kycform.controls.transactionlimit.setValue(this.content?.KYC_TRANSLIMIT);
@@ -63,7 +72,6 @@ export class KycMasterComponent implements OnInit {
         console.log(this.dyndatas);
         // this.maindetails.push(...this.dyndatas?.Details)
         this.maindetails = [...this.maindetails, ...this.dyndatas?.Details];
-        this.flag = "EDIT";
       }, (err: any) => {
 
       })
@@ -146,8 +154,31 @@ export class KycMasterComponent implements OnInit {
 
 
   close(data?: any) {
-    this.activeModal.close(data);
-  }
+    if (data){
+      this.viewMode = true;
+      this.activeModal.close(data);
+      return
+    }
+    if (this.content && this.content.FLAG == 'VIEW'){
+      this.activeModal.close(data);
+      return
+    }
+    Swal.fire({
+      title: 'Do you want to exit?',
+      text: '',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes!',
+      cancelButtonText: 'No'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.activeModal.close(data);
+      }
+    }
+    )
+  }
 
   formSubmit(){
 

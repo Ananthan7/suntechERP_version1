@@ -37,7 +37,11 @@ export class FestivalMasterComponent implements OnInit {
   dyndatas: any = [];
   viewOnly: boolean = false;
   gridForm: any;
-  data: any = []
+  data: any = [];
+  disable_code:boolean = false;
+  editMode: boolean = false;
+
+
 
   festivalmasterform: FormGroup = this.formBuilder.group({
     mid: [""],
@@ -69,6 +73,11 @@ export class FestivalMasterComponent implements OnInit {
     console.log(this.fm_id);
     this.flag = this.content?.FLAG;
     this.initialController(this.flag, this.content);
+    if(this.flag == 'EDIT'){
+      this.disable_code = true;
+      this.editMode = true;
+
+    }
     if (this?.flag == "EDIT" || this?.flag == 'VIEW') {
       this.detailsapi(this.fm_id);
     }
@@ -176,7 +185,24 @@ export class FestivalMasterComponent implements OnInit {
 
 
   close(data?: any) {
-    this.activeModal.close(data);
+    // this.activeModal.close(data);
+    console.log(this.flag)
+    if(this.flag == undefined || this.flag == 'EDIT'){
+      Swal.fire({
+        title: "Confirm",
+        text: "Are you sure you want to close this window?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.activeModal.close(data);
+        }
+      });
+    }else{
+      this.activeModal.close(data);
+    }
   }
 
   detailsapi(fm_id: any) {
@@ -189,7 +215,7 @@ export class FestivalMasterComponent implements OnInit {
         console.log(this.dyndatas);
         // this.maindetails.push(...this.dyndatas?.Details)
         this.maindetails = [...this.maindetails, ...this.dyndatas?.Details];
-        this.flag = "EDIT";
+        // this.flag = "EDIT";
       }, (err: any) => {
 
       })
