@@ -452,7 +452,7 @@
                                     <div *dxTemplate="let data of 'stockTypetemp'">
                                         <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value"></a>
                                         <master-search (change)="stockType($event,data)" *ngIf="!isPCSDisabled"
-                                            [MasterSearchData]="stocktypeCodeData"
+                                            [MasterSearchData]="stonetypeCodeData"
                                             (newRowClick)="stocktypeCodeSelected($event,data,'stockTypetemp')">
                                         </master-search>
                                         <!-- <input type="text" (change)="stockType($event,data)" [value]="data.value"

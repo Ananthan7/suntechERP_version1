@@ -97,12 +97,12 @@ export class ComponentMasterComponent implements OnInit {
     const condition = 'L'; // This value would be dynamically determined
 
     if (condition === 'L') {
-      return "DIVISION_CODE NOT IN ('X','W','D','M','U','N','A','Z')";
+      return "DIVISION_CODE NOT IN ('X','W','D','M','U','N','A','Z') ORDER BY DIVISION_CODE";
     } else if (condition === 'Z') {
-      return "DIVISION_CODE NOT IN ('X','W','D','M','U','N','A','L')";
+      return "DIVISION_CODE NOT IN ('X','W','D','M','U','N','A','L') ORDER BY DIVISION_CODE";
     } else {
       // Default condition if none of the specific conditions are met
-      return "DIVISION_CODE <> ''";
+      return "DIVISION_CODE <> '' ORDER BY DIVISION_CODE ";
     }
   }
 
@@ -114,7 +114,7 @@ export class ComponentMasterComponent implements OnInit {
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Category type',
     SEARCH_VALUE: '',
-    WHERECONDITION: "TYPES = 'CATEGORY MASTER'",
+    WHERECONDITION: "TYPES = 'CATEGORY MASTER' ORDER BY CODE",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -125,7 +125,7 @@ export class ComponentMasterComponent implements OnInit {
     SEARCH_FIELD: 'KARAT_CODE',
     SEARCH_HEADING: 'Karat Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "KARAT_CODE<> ''",
+    WHERECONDITION: "KARAT_CODE <> '' ORDER BY KARAT_CODE",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -135,7 +135,7 @@ export class ComponentMasterComponent implements OnInit {
     LOOKUPID: 14,
     SEARCH_FIELD: 'PREFIX_CODE',
     SEARCH_HEADING: 'Prefix master',
-    WHERECONDITION: "COMP_PREFIX='1'",
+    WHERECONDITION: "COMP_PREFIX='1' ORDER BY PREFIX_CODE",
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
   }
@@ -146,7 +146,7 @@ export class ComponentMasterComponent implements OnInit {
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Type Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "TYPES ='TYPE MASTER'",
+    WHERECONDITION: "TYPES ='TYPE MASTER' ORDER BY CODE",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -157,26 +157,10 @@ export class ComponentMasterComponent implements OnInit {
     SEARCH_FIELD: 'COMPSET_CODE',
     SEARCH_HEADING: 'Size set',
     SEARCH_VALUE: '',
-    WHERECONDITION: "COMPSET_CODE<> ''",
+    WHERECONDITION: "COMPSET_CODE <> '' ORDER BY COMPSET_CODE",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-  // sizeCodeData: MasterSearchModel = {
-  //   PAGENO: 1,
-  //   RECORDS: 10,
-  //   LOOKUPID: 89,
-  //   SEARCH_FIELD: 'COMPSIZE_CODE',
-  //   SEARCH_HEADING: 'Size',
-  //   SEARCH_VALUE: '',
-  //   WHERECONDITION: "COMPSIZE_CODE <>''",
-  //   VIEW_INPUT: true,
-  //   VIEW_TABLE: true,
-  //   LOAD_ONCLICK: true,
-  // }
-
-
-
-
   shapeCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -184,12 +168,10 @@ export class ComponentMasterComponent implements OnInit {
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Shape',
     SEARCH_VALUE: '',
-    WHERECONDITION: "types='SHAPE MASTER'",
+    WHERECONDITION: "types='SHAPE MASTER' ORDER BY CODE",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
-
-
   settingTypeCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -197,10 +179,9 @@ export class ComponentMasterComponent implements OnInit {
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Setting Type',
     SEARCH_VALUE: '',
-    WHERECONDITION: "TYPES='SETTING TYPE MASTER'",
+    WHERECONDITION: "TYPES='SETTING TYPE MASTER' ORDER BY CODE",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
-    //LOAD_ONCLICK:true,
   }
   processSeqCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -209,7 +190,7 @@ export class ComponentMasterComponent implements OnInit {
     SEARCH_FIELD: 'SEQ_CODE',
     SEARCH_HEADING: 'Sequence ',
     SEARCH_VALUE: '',
-    WHERECONDITION: "SEQ_CODE<> ''",
+    WHERECONDITION: "SEQ_CODE<> '' ORDER BY SEQ_CODE",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -220,46 +201,31 @@ export class ComponentMasterComponent implements OnInit {
     SEARCH_FIELD: 'COST_CODE',
     SEARCH_HEADING: 'Cost Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "TYPE = 'PRECIOUS STONES'",
+    WHERECONDITION: "TYPE = 'PRECIOUS STONES' ORDER BY COST_CODE",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
 
-  CodeData: MasterSearchModel = {
-    PAGENO: 1,
-    RECORDS: 10,
-    LOOKUPID: 15,
-    SEARCH_FIELD: 'TYPE',
-    SEARCH_HEADING: 'Cost Code',
-    SEARCH_VALUE: '',
-    WHERECONDITION: "TYPE = 'PRECIOUS STONES'",
-    VIEW_INPUT: true,
-    VIEW_TABLE: true,
-  }
-
-
-  stocktypeCodeData: MasterSearchModel = {
+  stonetypeCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 3,
-    SEARCH_FIELD: 'types',
+    SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Stone Type',
     SEARCH_VALUE: '',
-    WHERECONDITION: "types = 'STONE TYPE MASTER'",
+    WHERECONDITION: "types = 'STONE TYPE MASTER' ORDER BY CODE",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
   }
-
-
   colorCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 3,
-    SEARCH_FIELD: 'Types',
+    SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Color Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "Types = 'COLOR MASTER'",
+    WHERECONDITION: "Types = 'COLOR MASTER' ORDER BY CODE",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -268,7 +234,7 @@ export class ComponentMasterComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 3,
-    SEARCH_FIELD: 'Types',
+    SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Code',
     SEARCH_VALUE: '',
     WHERECONDITION: "Types = 'CLARITY MASTER'",
@@ -280,7 +246,7 @@ export class ComponentMasterComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 3,
-    SEARCH_FIELD: 'types',
+    SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'SIEVE',
     SEARCH_VALUE: '',
     WHERECONDITION: "types = 'SIEVE MASTER'",
@@ -295,7 +261,7 @@ export class ComponentMasterComponent implements OnInit {
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<>''",
+    WHERECONDITION: "CODE<>'' ORDER BY CODE",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -319,7 +285,7 @@ export class ComponentMasterComponent implements OnInit {
     SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Pointer Wt',
     SEARCH_VALUE: '',
-    WHERECONDITION: "CODE<>''",
+    WHERECONDITION: "CODE<>'' ORDER BY CODE",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -328,7 +294,7 @@ export class ComponentMasterComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 3,
-    SEARCH_FIELD: 'Types',
+    SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Color Code',
     SEARCH_VALUE: '',
     WHERECONDITION: "Types = 'COLOR MASTER'",
@@ -340,7 +306,7 @@ export class ComponentMasterComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 3,
-    SEARCH_FIELD: 'Types',
+    SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Code',
     SEARCH_VALUE: '',
     WHERECONDITION: "Types = 'CLARITY MASTER'",
@@ -352,7 +318,7 @@ export class ComponentMasterComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 3,
-    SEARCH_FIELD: 'types',
+    SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'SIEVE MASTER',
     SEARCH_VALUE: '',
     WHERECONDITION: "types = 'SIEVE MASTER'",
@@ -364,7 +330,7 @@ export class ComponentMasterComponent implements OnInit {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 3,
-    SEARCH_FIELD: 'types',
+    SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Sieve To',
     SEARCH_VALUE: '',
     WHERECONDITION: "types = 'SIEVE MASTER' AND CODE > ''",
@@ -372,24 +338,11 @@ export class ComponentMasterComponent implements OnInit {
     VIEW_TABLE: true,
   }
 
-   // sizeCodeData: MasterSearchModel = {
-  //   PAGENO: 1,
-  //   RECORDS: 10,
-  //   LOOKUPID: 89,
-  //   SEARCH_FIELD: 'COMPSIZE_CODE',
-  //   SEARCH_HEADING: 'Size',
-  //   SEARCH_VALUE: '',
-  //   WHERECONDITION: `COMPSET_CODE='${this.componentmasterForm.value.sizeSet}'`,
-  //   VIEW_INPUT: true,
-  //   VIEW_TABLE: true,
-  //   LOAD_ONCLICK: true,
-  // }
-
   sizegridCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
     LOOKUPID: 3,
-    SEARCH_FIELD: 'types',
+    SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Size',
     SEARCH_VALUE: '',
     WHERECONDITION: "types = 'SIZE MASTER'",

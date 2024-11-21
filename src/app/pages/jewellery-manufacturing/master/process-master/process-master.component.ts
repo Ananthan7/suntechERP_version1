@@ -1159,12 +1159,6 @@ export class ProcessMasterComponent implements OnInit {
 
   /**use: common accode change validation */
   checkAccodeSelected(event: any, LOOKUPDATA: MasterSearchModel, formname: string) {
-    console.log(event.target.value);
-
-    var checkValue = event.target.value;
-    console.log(checkValue);
-
-
     // LOOKUPDATA.SEARCH_VALUE = event.target.value
     if (event.target.value == '') {
       this.processMasterForm.controls[formname].setValue('');
@@ -1174,8 +1168,6 @@ export class ProcessMasterComponent implements OnInit {
     // this.accodeValidateSP(checkValue, LOOKUPDATA, formname)
     this.wipAccodeValidateSP();
     // this.lossAccodeValidateSP();
-
-
     if (this.isSameAccountCodeSelected(event.target.value, formname)) {
       this.processMasterForm.controls[formname].setValue('');
       this.commonService.toastErrorByMsgId('MSG1121')//code already exsist
@@ -1459,18 +1451,12 @@ export class ProcessMasterComponent implements OnInit {
 
   /**use: validate all lookups to check data exists in db */
   validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
-    console.log('Focusout event triggered:', event);
-    console.log('Focusout event triggered:', event.target.value);
-    console.log('LOOKUPDATA:', LOOKUPDATA);
-    console.log('FORMNAME:', FORMNAME);
     LOOKUPDATA.SEARCH_VALUE = event.target.value
-    if (event.target.value == '' || this.viewMode == true || this.editMode == true) return
+    if (event.target.value == '' || this.viewMode) return
     let param = {
       LOOKUPID: LOOKUPDATA.LOOKUPID,
       WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
     }
-    console.log("this Working Now");
-
     this.commonService.toastInfoByMsgId('MSG81447');
     let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
     let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
@@ -1482,7 +1468,6 @@ export class ProcessMasterComponent implements OnInit {
           LOOKUPDATA.SEARCH_VALUE = ''
           return
         }
-
       }, err => {
         this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
       })
@@ -1761,14 +1746,8 @@ export class ProcessMasterComponent implements OnInit {
     }
   }
 
-  // lookupKeyPress(event: KeyboardEvent) {
-  //   if (event.key === 'Enter') {
-  //     event.preventDefault();
-  //   }
-  // }
-
-
   lookupKeyPress(event: any, form?: any) {
+    this.showAlertIfCodeIsEmpty()
     if (event.key == 'Tab' && event.target.value == '') {
       this.showOverleyPanel(event, form)
     }
