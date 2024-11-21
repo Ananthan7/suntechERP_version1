@@ -53,21 +53,28 @@
                         <dxo-paging [pageSize]="6"></dxo-paging>
                         <dxo-editing mode="cell" [allowUpdating]="false"></dxo-editing>
                         <dxo-scrolling mode="standard"></dxo-scrolling>
-    
-                        <dxi-column  dataField="BRANCH_CODE" caption="Branch Code" [allowResizing]="true" width="200"></dxi-column>
-                        <dxi-column  dataField="DIVISION_CODE" caption="Division" [allowResizing]="true" width="100"></dxi-column>
-                        <dxi-column  dataField="DIVISION" caption="Division Name" [allowResizing]="true"></dxi-column>
-                        <dxi-column  dataField="PCS" caption="PCS" [allowResizing]="true" alignment="right"></dxi-column>
+
+                        <dxo-grouping [autoExpandAll]="true"></dxo-grouping>
+                        <dxo-group-panel [visible]="true"></dxo-group-panel>
+
+                        <dxi-column  dataField="BRANCH_CODE" caption="Branch Code" [allowResizing]="true" width="200"
+                        [allowReordering]="true" [allowGrouping]="true"></dxi-column>
+                        <dxi-column  dataField="DIVISION_CODE" caption="Division" [allowResizing]="true" width="100"
+                        [allowReordering]="true" [allowGrouping]="true"></dxi-column>
+                        <dxi-column  dataField="DIVISION" caption="Division Name" [allowResizing]="true"
+                        [allowReordering]="true" [allowGrouping]="true"></dxi-column>
+                        <dxi-column  dataField="PCS" caption="PCS" [allowResizing]="true" alignment="right"
+                        [allowReordering]="true" [allowGrouping]="true"></dxi-column>
                         <dxi-column  dataField="QTY" caption="Quantity" [allowResizing]="true" alignment="right"
-                        [customizeText]="customizeMainGridContent"></dxi-column>
+                        [customizeText]="customizeMainGridContent" [allowReordering]="true" [allowGrouping]="true"></dxi-column>
                         <dxi-column  dataField="amount" caption="Amount" [allowResizing]="true" alignment="right"
-                        [customizeText]="customizeMainGridContent"></dxi-column>
+                        [customizeText]="customizeMainGridContent" [allowReordering]="true" [allowGrouping]="true"></dxi-column>
                         <dxi-column  dataField="VATAmount" caption="VAT/ GST Amount" [allowResizing]="true" alignment="right"
-                        [customizeText]="customizeMainGridContent"></dxi-column>
+                        [customizeText]="customizeMainGridContent" [allowReordering]="true" [allowGrouping]="true"></dxi-column>
                         <dxi-column  dataField="GrossAmount" caption="Gross Amount" [allowResizing]="true" alignment="right"
-                        [customizeText]="customizeMainGridContent"></dxi-column>
+                        [customizeText]="customizeMainGridContent" [allowReordering]="true" [allowGrouping]="true"></dxi-column>
                         <dxi-column  dataField="PROFIT" caption="Profit" [allowResizing]="true" alignment="right"
-                        [customizeText]="customizeMainGridContent"></dxi-column>
+                        [customizeText]="customizeMainGridContent" [allowReordering]="true" [allowGrouping]="true"></dxi-column>
 
                     </dx-data-grid>
                 </div>
@@ -81,13 +88,19 @@
                         <dxo-editing mode="cell" [allowUpdating]="false"></dxo-editing>
                         <dxo-scrolling mode="standard"></dxo-scrolling>
     
-                        <dxi-column  dataField="Tmp_Brcode" caption="Branch" [allowResizing]="true"></dxi-column>
-                        <dxi-column  dataField="Tmp_CrMode" caption="Credit Mode" [allowResizing]="true"></dxi-column>
-                        <dxi-column  dataField="Division_Name" caption="Division Name" [allowResizing]="true"></dxi-column>
+                        <dxo-grouping [autoExpandAll]="true"></dxo-grouping>
+                        <dxo-group-panel [visible]="true"></dxo-group-panel>
+
+                        <dxi-column  dataField="Tmp_Brcode" caption="Branch" [allowResizing]="true"
+                        [allowReordering]="true" [allowGrouping]="true"></dxi-column>
+                        <dxi-column  dataField="Tmp_CrMode" caption="Credit Mode" [allowResizing]="true"
+                        [allowReordering]="true" [allowGrouping]="true"></dxi-column>
+                        <dxi-column  dataField="Division_Name" caption="Division Name" [allowResizing]="true"
+                        [allowReordering]="true" [allowGrouping]="true"></dxi-column>
                         <dxi-column  dataField="Tmp_AmountFc" caption="Amount FC" [allowResizing]="true" alignment="right"
-                        [customizeText]="customizeMainGridContent"></dxi-column>
+                        [customizeText]="customizeMainGridContent" [allowReordering]="true" [allowGrouping]="true"></dxi-column>
                         <dxi-column  dataField="Tmp_AmountLc" caption="Amount LC" [allowResizing]="true" alignment="right"
-                        [customizeText]="customizeMainGridContent"></dxi-column>
+                        [customizeText]="customizeMainGridContent" [allowReordering]="true" [allowGrouping]="true"></dxi-column>
 
                         
                         <dxo-summary>
@@ -111,12 +124,17 @@
                                 <dxo-editing mode="cell" [allowUpdating]="false"></dxo-editing>
                                 <dxo-scrolling mode="standard"></dxo-scrolling>
 
-                                <dxi-column  dataField="branch_code" caption="Branch" [allowResizing]="true"></dxi-column>
-                                <dxi-column  dataField="division" caption="Division" [allowResizing]="true"></dxi-column>
+                                <dxo-grouping [autoExpandAll]="true"></dxo-grouping>
+                                <dxo-group-panel [visible]="true"></dxo-group-panel>
+
+                                <dxi-column  dataField="branch_code" caption="Branch" [allowResizing]="true"
+                                [allowReordering]="true" [allowGrouping]="true"></dxi-column>
+                                <dxi-column  dataField="division" caption="Division" [allowResizing]="true"
+                                [allowReordering]="true" [allowGrouping]="true"></dxi-column>
                                 <dxi-column  dataField="quantity" caption="Qty/Pcs" [allowResizing]="true" alignment="right"
-                                [customizeText]="customizeContent"></dxi-column>
+                                [customizeText]="customizeContent" [allowGrouping]="true" [allowReordering]="true"></dxi-column>
                                 <dxi-column  dataField="cost" caption="Cost" [allowResizing]="true" alignment="right"
-                                [customizeText]="customizeContent"></dxi-column>
+                                [customizeText]="customizeContent" [allowReordering]="true" [allowGrouping]="true"></dxi-column>
 
                             </dx-data-grid>
                        </div>
@@ -131,10 +149,15 @@
                                 <dxo-editing mode="cell" [allowUpdating]="false"></dxo-editing>
                                 <dxo-scrolling mode="standard"></dxo-scrolling>
 
-                                <dxi-column  dataField="branch_code" caption="Branch" [allowResizing]="true"></dxi-column>
-                                <dxi-column  dataField="ReceiptMode" caption="Mode of Receipts" [allowResizing]="true"></dxi-column>
+                                <dxo-grouping [autoExpandAll]="true"></dxo-grouping>
+                                <dxo-group-panel [visible]="true"></dxo-group-panel>
+                                
+                                <dxi-column  dataField="branch_code" caption="Branch" [allowResizing]="true"
+                                [allowReordering]="true" [allowGrouping]="true"></dxi-column>
+                                <dxi-column  dataField="ReceiptMode" caption="Mode of Receipts" [allowResizing]="true"
+                                [allowReordering]="true" [allowGrouping]="true"></dxi-column>
                                 <dxi-column  dataField="Amount" caption="Amount" [allowResizing]="true" alignment="right"
-                                [customizeText]="customizePOS_ClctnContent"></dxi-column>
+                                [customizeText]="customizePOS_ClctnContent" [allowReordering]="true" [allowGrouping]="true"></dxi-column>
 
                                 <dxo-summary>
                                     <dxi-total-item column="Amount" summaryType="sum" displayFormat="{0}" alignment="right"
@@ -153,11 +176,15 @@
                                 <dxo-editing mode="cell" [allowUpdating]="false"></dxo-editing>
                                 <dxo-scrolling mode="standard"></dxo-scrolling>
 
-                                <dxi-column  dataField="branch_code" caption="Branch" [allowResizing]="true"></dxi-column>
+                                <dxo-grouping [autoExpandAll]="true"></dxo-grouping>
+                                <dxo-group-panel [visible]="true"></dxo-group-panel>
+
+                                <dxi-column  dataField="branch_code" caption="Branch" [allowResizing]="true"
+                                [allowReordering]="true" [allowGrouping]="true"></dxi-column>
                                 <dxi-column  dataField="GrossWt" caption="Gross Weight" [allowResizing]="true"
-                                [customizeText]="customizePOS_PurChseContent"></dxi-column>
+                                [customizeText]="customizePOS_PurChseContent" [allowReordering]="true" [allowGrouping]="true"></dxi-column>
                                 <dxi-column  dataField="Amount" caption="Amount" [allowResizing]="true" alignment="right"
-                                [customizeText]="customizePOS_PurChseContent"></dxi-column>
+                                [customizeText]="customizePOS_PurChseContent" [allowReordering]="true" [allowGrouping]="true"></dxi-column>
 
                                 <dxo-summary>
                                     <dxi-total-item column="Gross Weight" summaryType="sum" displayFormat="{0}" alignment="right"
@@ -178,11 +205,17 @@
                                 <dxo-editing mode="cell" [allowUpdating]="false"></dxo-editing>
                                 <dxo-scrolling mode="standard"></dxo-scrolling>
 
-                                <dxi-column  dataField="accCode" caption="ACC Code" [allowResizing]="true"></dxi-column>
-                                <dxi-column  dataField="description" caption="Description" [allowResizing]="true"></dxi-column>
-                                <dxi-column  dataField="branch" caption="Branch" [allowResizing]="true"></dxi-column>
+                                <dxo-grouping [autoExpandAll]="true"></dxo-grouping>
+                                <dxo-group-panel [visible]="true"></dxo-group-panel>
+
+                                <dxi-column  dataField="accCode" caption="ACC Code" [allowResizing]="true"
+                                [allowReordering]="true" [allowGrouping]="true"></dxi-column>
+                                <dxi-column  dataField="description" caption="Description" [allowResizing]="true"
+                                [allowReordering]="true" [allowGrouping]="true"></dxi-column>
+                                <dxi-column  dataField="branch" caption="Branch" [allowResizing]="true"
+                                [allowReordering]="true" [allowGrouping]="true"></dxi-column>
                                 <dxi-column  dataField="amount" caption="Amount" [allowResizing]="true" alignment="right"
-                                [customizeText]="customizeAccountsContent"></dxi-column>
+                                [customizeText]="customizeAccountsContent" [allowReordering]="true" [allowGrouping]="true"></dxi-column>
 
                                 <dxo-summary>
                                     <dxi-total-item column="Amount" summaryType="sum" displayFormat="{0}" alignment="right"
