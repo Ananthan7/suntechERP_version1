@@ -20,6 +20,9 @@ export class FixedAssetsComponent implements OnInit {
   username = localStorage.getItem('username');
   viewOnly: boolean = false;
   dyndatas: any = [];
+  viewMode: boolean = false;
+  editMode: boolean = false;
+  disable_code:boolean = false;
 
 
   constructor(
@@ -98,6 +101,12 @@ export class FixedAssetsComponent implements OnInit {
     this.fa_id = this.content?.MID;
     console.log(this.fa_id);
     this.flag = this.content?.FLAG;
+    if(this.flag == 'EDIT'){
+      this.disable_code = true;
+    }else if(this.content?.FLAG == 'VIEW'){
+        this.viewOnly = true;
+        this.viewMode = true;
+    }
     this.initialController(this.flag, this.content);
   }
 
@@ -272,7 +281,7 @@ export class FixedAssetsComponent implements OnInit {
     SEARCH_FIELD: 'SUBLEDGER_CODE',
     SEARCH_HEADING: 'Sub Ledger Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "SUBLEDGER_CODE<> ''",
+    WHERECONDITION: "SUBLEDGER_CODE<>''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -289,9 +298,9 @@ export class FixedAssetsComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 104,
     ORDER_TYPE: 0,
-    SEARCH_HEADING: 'fixing assets code',
+    SEARCH_HEADING: 'Fixing assets code',
     SEARCH_VALUE: "",
-    SEARCH_FIELD: "CODE",
+    SEARCH_FIELD:  " + txtFACategory.Text.Trim() + ",
     WHERECONDITION: "",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
@@ -474,7 +483,7 @@ export class FixedAssetsComponent implements OnInit {
         this.fixedassetsform.controls.userdefined_3.setValue(this.dyndatas.UDF3);
         this.fixedassetsform.controls.userdefined_4.setValue(this.dyndatas.UDF4);
         this.fixedassetsform.controls.userdefined_5.setValue(this.dyndatas.UDF5);
-        this.flag = "EDIT";
+        // this.flag = "EDIT";
 
       }, (err: any) => {
 
@@ -543,7 +552,23 @@ export class FixedAssetsComponent implements OnInit {
 
 
   close(data?: any) {
-    this.activeModal.close(data);
+    // this.activeModal.close(data);
+    if(this.flag == undefined || this.flag == 'EDIT'){
+      Swal.fire({
+        title: "Confirm",
+        text: "Are you sure you want to close this window?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.activeModal.close(data);
+        }
+      });
+    }else{
+      this.activeModal.close(data);
+    }
   }
 
   formSubmit() {

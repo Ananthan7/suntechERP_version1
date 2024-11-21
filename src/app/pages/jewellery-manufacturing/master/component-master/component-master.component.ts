@@ -801,12 +801,12 @@ export class ComponentMasterComponent implements OnInit {
   // }
 
   close(data?: any) {
-    if (data) {
+    if (data){
       this.viewMode = true;
       this.activeModal.close(data);
       return
     }
-    if (this.content && this.content.FLAG == 'VIEW') {
+    if (this.content && this.content.FLAG == 'VIEW'){
       this.activeModal.close(data);
       return
     }
@@ -895,18 +895,32 @@ export class ComponentMasterComponent implements OnInit {
   }
 
   onSelectionChanged(event: any) {
-    const values: number[] = event.selectedRowKeys;
-    const indexes: number[] = [];
+    // const values: number[] = event.selectedRowKeys;
+    // const indexes: number[] = [];
 
-    values.forEach((selectedValue: number) => {
-      const index = this.tableData.findIndex(item => parseFloat(item.SRNO) === selectedValue);
+    // values.forEach((selectedValue: number) => {
+    //   const index = this.tableData.findIndex(item => parseFloat(item.SRNO) === selectedValue);
 
-      // Check if the value is not already in the selectedIndexes array
-      if (index !== -1 && !this.selectedIndexes.includes(index)) {
-        indexes.push(index);
+    //   // Check if the value is not already in the selectedIndexes array
+    //   if (index !== -1 && !this.selectedIndexes.includes(index)) {
+    //     indexes.push(index);
+    //   }
+    // });
+
+    // this.selectedIndexes = indexes;
+    // console.log(this.selectedIndexes);
+
+    
+    const values = event.selectedRowKeys;
+    console.log(values);
+    let indexes: Number[] = [];
+    this.tableData.reduce((acc, value, index) => {
+      if (values.includes(parseFloat(value.SRNO))) {
+        acc.push(index);
+        console.log(acc);
       }
-    });
-
+      return acc;
+    }, indexes);
     this.selectedIndexes = indexes;
     console.log(this.selectedIndexes);
   }
@@ -931,36 +945,91 @@ export class ComponentMasterComponent implements OnInit {
   //   }
   // }
 
+  // deleteTableData() {
+  //   console.log('Selected indexes:', this.selectedIndexes);
+  //   if (this.selectedIndexes.length > 0) {
+
+  //     // Show the confirmation dialog before deleting
+  //     this.showConfirmationDialog().then((result) => {
+  //       if (result.isConfirmed) {
+  //         // Proceed with deletion if the user confirms
+  //         this.selectedIndexes.sort((a: number, b: number) => b - a);
+
+  //         console.log('Before deletion - tableData:', this.tableData);
+
+  //         this.selectedIndexes.forEach((indexToRemove: number) => {
+  //           console.log('Deleting index:', indexToRemove);
+  //           this.tableData.splice(indexToRemove, 2);
+  //         });
+
+  //         console.log('After deletion - tableData:', this.tableData);
+
+  //         this.selectedIndexes = [];
+  //         this.snackBar.open('Records deleted successfully', 'OK', { duration: 2000 });
+  //       }
+  //     });
+
+  //   } else {
+  //     this.snackBar.open('Please select a record', 'OK', { duration: 2000 });
+  //   }
+  // }
+
+
   deleteTableData() {
-    console.log('Selected indexes:', this.selectedIndexes);
-    if (this.selectedIndexes.length > 0) {
-
-      // Show the confirmation dialog before deleting
-      this.showConfirmationDialog().then((result) => {
+    console.log("After Selecting " + this.selectedIndexes);
+  
+    if (this.selectedIndexes !== undefined && this.selectedIndexes.length > 0) {
+      // Display confirmation dialog before deleting
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete!'
+      }).then((result) => {
         if (result.isConfirmed) {
-          // Proceed with deletion if the user confirms
-          this.selectedIndexes.sort((a: number, b: number) => b - a);
-
-          console.log('Before deletion - tableData:', this.tableData);
-
-          this.selectedIndexes.forEach((indexToRemove: number) => {
-            console.log('Deleting index:', indexToRemove);
-            this.tableData.splice(indexToRemove, 2);
-          });
-
-          console.log('After deletion - tableData:', this.tableData);
-
-          this.selectedIndexes = [];
-          this.snackBar.open('Records deleted successfully', 'OK', { duration: 2000 });
+          if (this.tableData.length > 0) {
+            // Log the selected indexes before filtering
+            // console.log('Selected indexes to delete:', this.selectedIndexes);
+  
+            if (this.selectedIndexes && this.selectedIndexes.length > 0) {
+              // console.log('Before deletion, tableData length:', this.tableData.length);
+  
+              // Filter out items whose index is included in the selectedIndexes
+              this.tableData = this.tableData.filter((data, index) => {
+                const shouldDelete = !this.selectedIndexes.includes(index);
+                // console.log(`Index ${index} - Should Delete: ${!shouldDelete}`);
+                return shouldDelete;
+              });
+  
+              // console.log('After deletion, tableData length:', this.tableData.length);
+              // console.log('Table data:', this.tableData);
+              // Reset selectedIndexes after deletion
+              this.selectedIndexes = [];
+              // console.log('Selected indexes after reset:', this.selectedIndexes);
+  
+              // Show success message after deletion
+              this.snackBar.open('Data deleted successfully!', 'OK', { duration: 2000 });
+  
+              // Update serial numbers after deletion
+              this.tableData.forEach((item: any, i: number) => {
+                item.SRNO = i + 1; // Reset serial numbers starting from 1
+              });
+  
+            } else {
+              // console.warn('No indexes selected for deletion.');
+            }
+          } else {
+            this.snackBar.open('No data to delete!', 'OK', { duration: 2000 });
+          }
         }
       });
-
     } else {
       this.snackBar.open('Please select a record', 'OK', { duration: 2000 });
     }
   }
-
-
 
 
   setFormValues() {

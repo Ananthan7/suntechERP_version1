@@ -7,7 +7,12 @@
         </button>
     </div>
     <!-- modal header component -->
-    <modal-header></modal-header>
+    <modal-header
+    [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode"
+    (saveClick)="formSubmit()"
+    (cancelClick)="close()"[isViewDelete]="!viewMode && editableMode"
+    (deleteClick)="deleteRecord()"
+    ></modal-header>
     <!-- content section -->
     <div class="row p-4 ">
         <div class="col-md-12">
@@ -22,13 +27,13 @@
                                         Voc Type :</label>
                                     <div class="col-sm-2">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" #codeInput matInput formControlName="code"
+                                            <input type="text" #codeInput matInput formControlName="voc_type"
                                                 UpperCaseDirective autocomplete="off" />
                                         </mat-form-field>
                                     </div>
                                     <div class="col-sm-2">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" #codeInput matInput formControlName="code"
+                                            <input type="text" #codeInput matInput formControlName="vocno"
                                                 UpperCaseDirective autocomplete="off" />
                                         </mat-form-field>
                                     </div>
@@ -41,7 +46,7 @@
                                         <div class="datepick">
                                             <mat-form-field style="width: 100%" appearance="outline">
                                                 <input matInput DateValidation [matDatepicker]="vocDate"
-                                                    formControlName="vocDate" placeholder="DD/MM/YYYY" />
+                                                    formControlName="voc_date" placeholder="DD/MM/YYYY" />
                                                 <mat-datepicker-toggle matSuffix
                                                     [for]="vocDate"></mat-datepicker-toggle>
                                                 <mat-datepicker #vocDate></mat-datepicker>
@@ -55,7 +60,7 @@
                                     </label>
                                     <div class="col-sm-2">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" matInput formControlName="Branch" UpperCaseDirective />
+                                            <input type="text" matInput formControlName="loan_emp_code" UpperCaseDirective />
                                             <master-search class="masterSearch" [MasterSearchData]="BranchData"
                                                 (newRowClick)="BranchDataSelected($event)">
                                             </master-search>
@@ -63,7 +68,7 @@
                                     </div>
                                     <div class="col-sm-2">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" matInput formControlName="BranchDes"
+                                            <input type="text" matInput formControlName="loan_dept_code"
                                                 UpperCaseDirective />
                                         </mat-form-field>
                                     </div>
@@ -74,7 +79,7 @@
                                         : </label>
                                     <div class="col-sm-2">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" matInput formControlName="Branch" UpperCaseDirective />
+                                            <input type="text" matInput formControlName="loan_divn_code" UpperCaseDirective />
                                             <master-search class="masterSearch" [MasterSearchData]="BranchData"
                                                 (newRowClick)="BranchDataSelected($event)">
                                             </master-search>
@@ -82,7 +87,7 @@
                                     </div>
                                     <div class="col-sm-2">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" matInput formControlName="BranchDes"
+                                            <input type="text" matInput formControlName="loan_modified_by"
                                                 UpperCaseDirective />
                                         </mat-form-field>
                                     </div>
@@ -92,24 +97,24 @@
                                     </label>
                                     <div class="col-sm-2">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" matInput formControlName="Branch" UpperCaseDirective />
+                                            <input type="text" AmountDecimalInput class="text-right"matInput formControlName="loan_amount" UpperCaseDirective />
                                         </mat-form-field>
                                     </div>
                                     <label for="inputPassword" id="ID002" class="col-sm-2 col-form-label">Issue Date :
                                     </label>
                                     <div class="col-sm-2">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input matInput DateValidation [matDatepicker]="vocDate"
-                                                formControlName="vocDate" placeholder="DD/MM/YYYY" />
-                                            <mat-datepicker-toggle matSuffix [for]="vocDate"></mat-datepicker-toggle>
-                                            <mat-datepicker #vocDate></mat-datepicker>
+                                            <input matInput DateValidation [matDatepicker]="loan_issue_date"
+                                                formControlName="loan_issue_date" placeholder="DD/MM/YYYY" />
+                                            <mat-datepicker-toggle matSuffix [for]="loan_issue_date"></mat-datepicker-toggle>
+                                            <mat-datepicker #loan_issue_date></mat-datepicker>
                                         </mat-form-field>
                                     </div>
                                     <label for="inputPassword" id="ID002" class="col-sm-2 col-form-label">Ref 1 :
                                     </label>
                                     <div class="col-sm-2">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" matInput formControlName="Branch" UpperCaseDirective />
+                                            <input type="text" matInput formControlName="loan_ref1" UpperCaseDirective />
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -118,26 +123,26 @@
                                     </label>
                                     <div class="col-sm-2">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" matInput formControlName="Branch" UpperCaseDirective />
+                                            <input type="text" matInput AmountDecimalInput class="text-right" formControlName="loan_installments" UpperCaseDirective />
                                         </mat-form-field>
                                     </div>
-                                    <label for="inputPassword" id="ID002" class="col-sm-2 col-form-label">Deducation
+                                    <label for="inputPassword" id="ID002" class="col-sm-2 col-form-label">Deduction
                                         From :
                                     </label>
 
                                     <div class="col-sm-2">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input matInput DateValidation [matDatepicker]="vocDate"
-                                                formControlName="vocDate" placeholder="DD/MM/YYYY" />
-                                            <mat-datepicker-toggle matSuffix [for]="vocDate"></mat-datepicker-toggle>
-                                            <mat-datepicker #vocDate></mat-datepicker>
+                                            <input matInput DateValidation [matDatepicker]="loan_deduction_fm_date"
+                                                formControlName="loan_deduction_fm_date" placeholder="DD/MM/YYYY" />
+                                            <mat-datepicker-toggle matSuffix [for]="loan_deduction_fm_date"></mat-datepicker-toggle>
+                                            <mat-datepicker #loan_deduction_fm_date></mat-datepicker>
                                         </mat-form-field>
                                     </div>
                                     <label for="inputPassword" id="ID002" class="col-sm-2 col-form-label">Ref 2 :
                                     </label>
                                     <div class="col-sm-2">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" matInput formControlName="Branch" UpperCaseDirective />
+                                            <input type="text" matInput formControlName="loan_ref2" UpperCaseDirective />
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -147,7 +152,7 @@
                                         : </label>
                                     <div class="col-sm-2">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" matInput formControlName="Branch" UpperCaseDirective />
+                                            <input type="text" matInput formControlName="loan_intervals" UpperCaseDirective />
                                         </mat-form-field>
                                     </div>
                                     <label for="inputPassword" id="ID002" class="col-sm-2 col-form-label">Deducation To
@@ -156,10 +161,10 @@
 
                                     <div class="col-sm-2">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input matInput DateValidation [matDatepicker]="vocDate"
-                                                formControlName="vocDate" placeholder="DD/MM/YYYY" />
-                                            <mat-datepicker-toggle matSuffix [for]="vocDate"></mat-datepicker-toggle>
-                                            <mat-datepicker #vocDate></mat-datepicker>
+                                            <input matInput DateValidation [matDatepicker]="loan_deduction_to_date"
+                                                formControlName="loan_deduction_to_date" placeholder="DD/MM/YYYY" />
+                                            <mat-datepicker-toggle matSuffix [for]="loan_deduction_to_date"></mat-datepicker-toggle>
+                                            <mat-datepicker #loan_deduction_to_date></mat-datepicker>
                                         </mat-form-field>
                                     </div>
                                     <label for="inputPassword" id="ID002" class="col-sm-2 col-form-label">Payment Voc
@@ -167,7 +172,7 @@
                                     </label>
                                     <div class="col-sm-2">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" matInput formControlName="Branch" UpperCaseDirective />
+                                            <input type="text" matInput formControlName="loan_pay_doc_details" UpperCaseDirective />
                                         </mat-form-field>
                                     </div>
                                 </div>
@@ -177,7 +182,7 @@
                                     </label>
                                     <div class="col-sm-7">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" matInput formControlName="Branch" UpperCaseDirective />
+                                            <input type="text" matInput formControlName="loan_narration" UpperCaseDirective />
                                         </mat-form-field>
                                     </div>
                                     <div class="col-sm-2">
@@ -214,7 +219,7 @@
                                         </label>
                                         <div class="col-sm-2">
                                             <mat-form-field style="width: 100%" appearance="outline">
-                                                <input type="text" matInput formControlName="Branch"
+                                                <input type="text" AmountDecimalInput class="text-right" matInput formControlName="loandet_amount"
                                                     UpperCaseDirective />
                                             </mat-form-field>
                                         </div>
@@ -223,7 +228,7 @@
                                         </label>
                                         <div class="col-sm-2">
                                             <mat-form-field style="width: 100%" appearance="outline">
-                                                <input type="text" matInput formControlName="Branch"
+                                                <input type="text" AmountDecimalInput class="text-right" matInput formControlName="loandet_repaid_amount"
                                                     UpperCaseDirective />
                                             </mat-form-field>
                                         </div>
@@ -232,7 +237,7 @@
                                         </label>
                                         <div class="col-sm-2">
                                             <mat-form-field style="width: 100%" appearance="outline">
-                                                <input type="text" matInput formControlName="Branch"
+                                                <input type="text"  class="text-right" AmountDecimalInput matInput formControlName="loandet_balance_amount"
                                                     UpperCaseDirective />
                                             </mat-form-field>
                                         </div>
@@ -245,7 +250,7 @@
                                         </label>
                                         <div class="col-sm-4">
                                             <mat-form-field style="width: 100%" appearance="outline">
-                                                <input type="text" matInput formControlName="Branch"
+                                                <input type="date" matInput formControlName="loandet_closing_date"
                                                     UpperCaseDirective />
                                             </mat-form-field>
                                         </div>
@@ -266,7 +271,7 @@
                                     </label>
                                     <div class="col-sm-8">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" matInput formControlName="Branch" UpperCaseDirective />
+                                            <input type="text" matInput formControlName="udf1" UpperCaseDirective />
                                             <master-search class="masterSearch" [MasterSearchData]="BranchData"
                                                 (newRowClick)="BranchDataSelected($event)">
                                             </master-search>
@@ -278,7 +283,7 @@
                                     </label>
                                     <div class="col-sm-8">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" matInput formControlName="Branch" UpperCaseDirective />
+                                            <input type="text" matInput formControlName="udf2" UpperCaseDirective />
                                             <master-search class="masterSearch" [MasterSearchData]="BranchData"
                                                 (newRowClick)="BranchDataSelected($event)">
                                             </master-search>
@@ -290,7 +295,7 @@
                                     </label>
                                     <div class="col-sm-8">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" matInput formControlName="Branch" UpperCaseDirective />
+                                            <input type="text" matInput formControlName="udf3" UpperCaseDirective />
                                             <master-search class="masterSearch" [MasterSearchData]="BranchData"
                                                 (newRowClick)="BranchDataSelected($event)">
                                             </master-search>
@@ -302,7 +307,7 @@
                                     </label>
                                     <div class="col-sm-8">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" matInput formControlName="Branch" UpperCaseDirective />
+                                            <input type="text" matInput formControlName="udf4" UpperCaseDirective />
                                             <master-search class="masterSearch" [MasterSearchData]="BranchData"
                                                 (newRowClick)="BranchDataSelected($event)">
                                             </master-search>
@@ -314,7 +319,7 @@
                                     </label>
                                     <div class="col-sm-8">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" matInput formControlName="Branch" UpperCaseDirective />
+                                            <input type="text" matInput formControlName="udf5" UpperCaseDirective />
                                             <master-search class="masterSearch" [MasterSearchData]="BranchData"
                                                 (newRowClick)="BranchDataSelected($event)">
                                             </master-search>
@@ -328,7 +333,7 @@
                                     </label>
                                     <div class="col-sm-8">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" matInput formControlName="Branch" UpperCaseDirective />
+                                            <input type="text" matInput formControlName="udf6" UpperCaseDirective />
                                             <master-search class="masterSearch" [MasterSearchData]="BranchData"
                                                 (newRowClick)="BranchDataSelected($event)">
                                             </master-search>
@@ -340,7 +345,7 @@
                                     </label>
                                     <div class="col-sm-8">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" matInput formControlName="Branch" UpperCaseDirective />
+                                            <input type="text" matInput formControlName="udf7" UpperCaseDirective />
                                             <master-search class="masterSearch" [MasterSearchData]="BranchData"
                                                 (newRowClick)="BranchDataSelected($event)">
                                             </master-search>
@@ -352,7 +357,7 @@
                                     </label>
                                     <div class="col-sm-8">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" matInput formControlName="Branch" UpperCaseDirective />
+                                            <input type="text" matInput formControlName="udf8" UpperCaseDirective />
                                             <master-search class="masterSearch" [MasterSearchData]="BranchData"
                                                 (newRowClick)="BranchDataSelected($event)">
                                             </master-search>
@@ -364,7 +369,7 @@
                                     </label>
                                     <div class="col-sm-8">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" matInput formControlName="Branch" UpperCaseDirective />
+                                            <input type="text" matInput formControlName="udf9" UpperCaseDirective />
                                             <master-search class="masterSearch" [MasterSearchData]="BranchData"
                                                 (newRowClick)="BranchDataSelected($event)">
                                             </master-search>
@@ -377,7 +382,7 @@
                                     </label>
                                     <div class="col-sm-8">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" matInput formControlName="Branch" UpperCaseDirective />
+                                            <input type="text" matInput formControlName="udf10" UpperCaseDirective />
                                             <master-search class="masterSearch" [MasterSearchData]="BranchData"
                                                 (newRowClick)="BranchDataSelected($event)">
                                             </master-search>
@@ -392,7 +397,7 @@
                                     </label>
                                     <div class="col-sm-8">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" matInput formControlName="Branch" UpperCaseDirective />
+                                            <input type="text" matInput formControlName="udf11" UpperCaseDirective />
                                             <master-search class="masterSearch" [MasterSearchData]="BranchData"
                                                 (newRowClick)="BranchDataSelected($event)">
                                             </master-search>
@@ -405,7 +410,7 @@
                                     </label>
                                     <div class="col-sm-8">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" matInput formControlName="Branch" UpperCaseDirective />
+                                            <input type="text" matInput formControlName="udf12" UpperCaseDirective />
                                             <master-search class="masterSearch" [MasterSearchData]="BranchData"
                                                 (newRowClick)="BranchDataSelected($event)">
                                             </master-search>
@@ -418,7 +423,7 @@
                                     </label>
                                     <div class="col-sm-8">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" matInput formControlName="Branch" UpperCaseDirective />
+                                            <input type="text" matInput formControlName="udf13" UpperCaseDirective />
                                             <master-search class="masterSearch" [MasterSearchData]="BranchData"
                                                 (newRowClick)="BranchDataSelected($event)">
                                             </master-search>
@@ -431,7 +436,7 @@
                                     </label>
                                     <div class="col-sm-8">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" matInput formControlName="Branch" UpperCaseDirective />
+                                            <input type="text" matInput formControlName="udf14" UpperCaseDirective />
                                             <master-search class="masterSearch" [MasterSearchData]="BranchData"
                                                 (newRowClick)="BranchDataSelected($event)">
                                             </master-search>
@@ -444,7 +449,7 @@
                                     </label>
                                     <div class="col-sm-8">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" matInput formControlName="Branch" UpperCaseDirective />
+                                            <input type="text" matInput formControlName="udf15" UpperCaseDirective />
                                             <master-search class="masterSearch" [MasterSearchData]="BranchData"
                                                 (newRowClick)="BranchDataSelected($event)">
                                             </master-search>

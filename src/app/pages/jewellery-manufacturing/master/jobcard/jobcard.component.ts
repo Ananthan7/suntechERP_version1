@@ -53,6 +53,7 @@ export class JobcardComponent implements OnInit {
   pageTitle: any;
   currentFilter: any;
   showFilterRow: boolean = false;
+  isSaved: boolean = true;
   showHeaderFilter: boolean = false;
   divisionMS: any = 'ID';
   itemList: any[] = []
@@ -744,10 +745,12 @@ export class JobcardComponent implements OnInit {
 
         this.mainmetalCodeData.WHERECONDITION = `kARAT_CODE = '${this.jobCardFrom.value.karat}' and PURITY = '${this.jobCardFrom.value.purity}'`;
         // this.tableData[0].Pcs = result.response.PCS;
+        console.log(this.tableData[0],'content')
         this.tableData[0].metal_color = result.response.COLOR;
         this.tableData[0].metal_wt = result.response.METAL_WT;
         this.tableData[0].stone_wt = result.response.STONE_WT;
         this.tableData[0].gross_wt = result.response.GROSS_WT;
+        this.tableData[0].part_code = result.response.PART_CODE;
 
         // Get the first object from DESIGN_STNMTL_DETAIL array
 
@@ -915,8 +918,6 @@ export class JobcardComponent implements OnInit {
       });
     this.subscriptions.push(Sub);
   }
-
-
 
 
   customerCodeSelected(e: any) {

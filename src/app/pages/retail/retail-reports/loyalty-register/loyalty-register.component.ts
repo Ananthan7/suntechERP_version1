@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { DatePipe } from '@angular/common';
+import { DomSanitizer } from '@angular/platform-browser';
 @Component({
   selector: 'app-loyalty-register',
   templateUrl: './loyalty-register.component.html',
@@ -33,15 +34,12 @@ export class LoyaltyRegisterComponent implements OnInit {
   branchDivisionControlsTooltip: any;
   fetchedBranchData: any[] =[];
   dateToPass: { fromDate: string; toDate: string } = { fromDate: '', toDate: '' };
- 
+  htmlPreview: any;
 
 
-  constructor(
-    private activeModal: NgbActiveModal,
-    private modalService: NgbModal,
-    private formBuilder: FormBuilder,
-    private dataService: SuntechAPIService,
-    private toastr: ToastrService,
+
+  constructor( private activeModal: NgbActiveModal, private modalService: NgbModal, private formBuilder: FormBuilder,
+    private dataService: SuntechAPIService, private toastr: ToastrService, private sanitizer: DomSanitizer,
     private commonService: CommonServiceService, private datePipe: DatePipe
   ) { }
 
@@ -120,6 +118,17 @@ export class LoyaltyRegisterComponent implements OnInit {
     }
   }
 
+  setDateValue(event: any){
+    if(event.FromDate){
+      this.loyaltyregisterFrom.controls.fromdate.setValue(event.FromDate);
+      this.dateToPass.fromDate = this.datePipe.transform(event.FromDate, 'yyyy-MM-dd')!
+    }
+    else if(event.ToDate){
+      this.loyaltyregisterFrom.controls.todate.setValue(event.ToDate);
+      this.dateToPass.toDate =  this.datePipe.transform(event.ToDate, 'yyyy-MM-dd')!
+    }
+  }
+
   selectedData(data: any) {
     console.log(data)
     // let content= ``, content2 =``,  content3 =``, content4 =``
@@ -173,14 +182,8 @@ export class LoyaltyRegisterComponent implements OnInit {
     this.loyaltyregisterFrom.controls.branch.setValue(this.formattedBranchDivisionData);
   }
 
-  formatDateToYYYYMMDD(dateString: any) {
-    const date = new Date(dateString);
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
-  }
   previewClick() {
+    this.isLoading = true;
     let logData =  {
       "VOCTYPE": this.commonService.getqueryParamVocType() || "",
       "REFMID": "",
@@ -198,8 +201,8 @@ export class LoyaltyRegisterComponent implements OnInit {
     let postData = {
       "SPID": "0118",
       "parameter": {
-        "STRFROMDATE": this.formatDateToYYYYMMDD(this.loyaltyregisterFrom.value.fromdate),
-        "STRTODATE": this.formatDateToYYYYMMDD(this.loyaltyregisterFrom.value.todate),
+        "STRFROMDATE":  this.dateToPass.fromDate,
+        "STRTODATE": this.dateToPass.toDate,
         "STRCUSTCODEFROM": this.loyaltyregisterFrom.value.customerfrom,
         "STRCUSTCODETO": this.loyaltyregisterFrom.value.customerto,
         "STRPOINTSFROM": JSON.stringify(this.loyaltyregisterFrom.value.pointsfrom),
@@ -208,52 +211,101 @@ export class LoyaltyRegisterComponent implements OnInit {
         "Logdata": JSON.stringify(logData)
       }
     }
-    console.log(postData)  
     this.commonService.showSnackBarMsg('MSG81447');
     this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
     .subscribe((result: any) => {
-      console.log(result);
-      let data = result.dynamicData;
-      const width = window.innerWidth;
-      const height = window.innerHeight;
-      const windowFeatures = `width=${width},height=${height},fullscreen=yes`;
-      var WindowPrt = window.open(' ', ' ', windowFeatures);
-      if (WindowPrt === null) {
-        console.error('Failed to open the print window. Possibly blocked by a popup blocker.');
-        return;
-      }
-      let printContent = data[0][0].HTMLINPUT;
-      WindowPrt.document.write(printContent);
-      WindowPrt.document.close();
-      WindowPrt.focus();  
-      WindowPrt.onload = function () {
-        if (WindowPrt && WindowPrt.document.head) {
-          let styleElement = WindowPrt.document.createElement('style');
-          styleElement.textContent = `
-                      @page {
-                          size: A5 landscape;
-                      }
-                      body {
-                          margin: 0mm;
-                      }
-                  `;
-          WindowPrt.document.head.appendChild(styleElement);
-
-          setTimeout(() => {
-            if (WindowPrt) {
-              WindowPrt.print();
-            } else {
-              console.error('Print window was closed before printing could occur.');
-            }
-          }, 800);
+      if(result.status != "Failed"){
+        let data = result.dynamicData;
+        let printContent = data[0][0].HTMLOUT;
+        if (printContent && Object.keys(printContent).length > 0) {
+          this.htmlPreview = this.sanitizer.bypassSecurityTrustHtml(printContent);
+          const blob = new Blob([this.htmlPreview.changingThisBreaksApplicationSecurity], { type: 'text/html' });
+          this.commonService.closeSnackBarMsg();
+          const url = URL.createObjectURL(blob);
+          window.open(url, '_blank');
+          this.isLoading = false;
+        } else {
+          Swal.fire('No Data!', 'There is no data!', 'info');
+          this.commonService.closeSnackBarMsg();
+          this.isLoading = false;
         }
-      };
-      this.commonService.closeSnackBarMsg()
-    });      
+      }
+      else{
+        this.toastr.error(result.message)
+        this.isLoading = false;
+        return
+      }
+    });     
   }
 
   printBtnClick(){
+    this.isLoading = true;
+    let logData =  {
+      "VOCTYPE": this.commonService.getqueryParamVocType() || "",
+      "REFMID": "",
+      "USERNAME": this.commonService.userName,
+      "MODE": "PRINT",
+      "DATETIME": this.commonService.formatDateTime(new Date()),
+      "REMARKS":"",
+      "SYSTEMNAME": "",
+      "BRANCHCODE": this.commonService.branchCode,
+      "VOCNO": "",
+      "VOCDATE": "",
+      "YEARMONTH" : this.commonService.yearSelected
+    }
 
+    let postData = {
+      "SPID": "0118",
+      "parameter": {
+        "STRFROMDATE":  this.dateToPass.fromDate,
+        "STRTODATE": this.dateToPass.toDate,
+        "STRCUSTCODEFROM": this.loyaltyregisterFrom.value.customerfrom,
+        "STRCUSTCODETO": this.loyaltyregisterFrom.value.customerto,
+        "STRPOINTSFROM": JSON.stringify(this.loyaltyregisterFrom.value.pointsfrom),
+        "STRPOINTSTO":  JSON.stringify(this.loyaltyregisterFrom.value.pointsto),
+        "STRBRANCHES": this.formattedBranchDivisionData || this.fetchedBranchDataParam,
+        "Logdata": JSON.stringify(logData)
+      }
+    }
+    this.commonService.showSnackBarMsg('MSG81447');
+    this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+    .subscribe((result: any) => {
+      let data = result.dynamicData;
+      if(result.status == "Success"){
+        
+        let printContent = data[0][0].HTML;
+        this.htmlPreview = this.sanitizer.bypassSecurityTrustHtml(printContent);
+        if(this.htmlPreview.changingThisBreaksApplicationSecurity){
+
+          setTimeout(() => {
+            const content = this.htmlPreview?.changingThisBreaksApplicationSecurity;
+
+            let  userBranchDesc:any  = localStorage.getItem('BRANCH_PARAMETER')
+            userBranchDesc = JSON.parse(userBranchDesc)
+      
+            if (content && Object.keys(content).length !== 0) {
+              const modifiedContent = content.replace(/<title>.*?<\/title>/, `<title>${userBranchDesc.DESCRIPTION}</title>`);
+              const printWindow = window.open('', '', 'height=600,width=800');
+              printWindow?.document.write(modifiedContent);
+              printWindow?.focus();
+              printWindow?.print();
+              this.isLoading = false;
+            } else {
+              Swal.fire('No Data!', 'There is no data to print!', 'info');
+              this.commonService.closeSnackBarMsg();
+              this.isLoading = false;
+              return
+            }
+          }, 1500); 
+
+        }
+      }
+      else{
+        this.toastr.error(result.message);
+        this.isLoading = false;
+        return
+      }
+    });  
   }
   
   popupClosed(){
@@ -287,8 +339,8 @@ export class LoyaltyRegisterComponent implements OnInit {
               "ISDEFAULT": 1
             },
             "CONTROL_DETAIL": {
-              "STRFROMDATE": this.formatDateToYYYYMMDD(this.loyaltyregisterFrom.value.fromdate),
-              "STRTODATE": this.formatDateToYYYYMMDD(this.loyaltyregisterFrom.value.todate),
+              "STRFROMDATE": this.dateToPass.fromDate,
+              "STRTODATE": this.dateToPass.toDate,
               "STRCUSTCODEFROM": this.loyaltyregisterFrom.value.customerfrom,
               "STRCUSTCODETO": this.loyaltyregisterFrom.value.customerto,
               "STRPOINTSFROM": JSON.stringify(this.loyaltyregisterFrom.value.pointsfrom),
@@ -320,16 +372,6 @@ export class LoyaltyRegisterComponent implements OnInit {
         this.toastr.error(Notifdata)
       }
     });   
-  }
-
-  setDateValue(event: any){
-    if(event.FromDate){
-      this.loyaltyregisterFrom.controls.fromdate.setValue(event.FromDate);
-      console.log(event.FromDate)
-    }
-    else if(event.ToDate){
-      this.loyaltyregisterFrom.controls.todate.setValue(event.ToDate);
-    }
   }
 
   prefillScreenValues(){

@@ -109,3 +109,9 @@
     background-color: #B9C3D3;
     // width: 100px;
 }
+
+//Report screen disabling while report generation
+.loading-class {
+    pointer-events: none;
+    filter: grayscale(20%) blur(2px)
+}

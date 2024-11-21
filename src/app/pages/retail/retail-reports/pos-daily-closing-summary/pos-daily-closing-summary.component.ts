@@ -446,6 +446,13 @@ export class PosDailyClosingSummaryComponent implements OnInit {
     this.activeModal.close(data);
   }
 
+  headerCellFormatting(e: any) {
+    // to make grid header center aligned
+    if (e.rowType === 'header') {
+      e.cellElement.style.textAlign = 'center';
+    }
+  } 
+  
   openPosDailyClosingBranch() {
     const modalRef: NgbModalRef = this.modalService.open(
       PosDailyClosingBranchComponent,

@@ -1,3 +1,4 @@
+import { Code } from 'angular-feather/icons';
 import { Component, Input, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
@@ -26,7 +27,7 @@ export class SubLedgerMasterComponent implements OnInit {
   editableMode: boolean = false;
   editMode: boolean = false;
   codeEnable: boolean = false;
-
+  data: any;
   CityCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
@@ -77,13 +78,14 @@ export class SubLedgerMasterComponent implements OnInit {
     designation: [""],
     email: [""],
     mobile: [""],
-    subLedgerDetail: this.formBuilder.group({
-      refMid: [""],
-      sNo: [""],
-      code: [""],
-      sl_accode: [""],
-      sl_accode_des: [""],
-    }),
+    sl_accode: [""],
+    // subLedgerDetail: this.formBuilder.group({
+    refMid: [""],
+    sNo: [""],
+    // code: [""],
+    // sl_accode: [""],
+    sl_accode_des: [""],
+    // }),
   });
 
   constructor(
@@ -100,6 +102,7 @@ export class SubLedgerMasterComponent implements OnInit {
         this.isDisabled = true;
         this.viewMode = true;
       } else if (this.content?.FLAG == "EDIT") {
+        this.addContactTableData();
         this.viewMode = false;
         this.editMode = true;
         this.codeEnable = false;
@@ -111,8 +114,30 @@ export class SubLedgerMasterComponent implements OnInit {
   }
 
   close(data?: any) {
-    //TODO reset forms and data before closing
-    this.activeModal.close(data);
+    if (data){
+      this.viewMode = true;
+      this.activeModal.close(data);
+      return
+    }
+    if (this.content && this.content.FLAG == 'VIEW'){
+      this.activeModal.close(data);
+      return
+    }
+    Swal.fire({
+      title: 'Do you want to exit?',
+      text: '',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes!',
+      cancelButtonText: 'No'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.activeModal.close(data);
+      }
+    }
+    )
   }
 
   BranchDataSelected(e: any) {}
@@ -130,31 +155,41 @@ export class SubLedgerMasterComponent implements OnInit {
   }
 
   addTableData() {
-    const subLedgerDetail =
-      this.SubLedgerMasterForm.get("subLedgerDetail")?.value;
-    console.log(subLedgerDetail);
-    const sNoValue = subLedgerDetail?.code;
-    console.log(sNoValue);
-    
+    console.log(this.SubLedgerMasterForm.controls.sl_accode.value);
+    let sl_accode = this.SubLedgerMasterForm.controls.sl_accode.value;
+    let sl_accode_des = this.SubLedgerMasterForm.controls.sl_accode_des.value;
+    let len = this.tableData.length;
     const data = {
-      refMid: subLedgerDetail.refMid || 0,
-      sNo: this.tableData.length + 1,
-      code: subLedgerDetail.code || "",
-      sl_accode: subLedgerDetail.sl_accode || "",
-      sl_accode_des: subLedgerDetail.sl_accode_des || "",
+      REFMID: 0,
+      SRNO: len + 1,
+      SL_CODE: this.SubLedgerMasterForm.value.Code,
+      SL_ACCODE: "",
+      SL_ACCODE_DESC: "",
     };
 
     console.log(data);
     this.tableData.push(data);
-
-    // this.SubLedgerMasterForm.get("subLedgerDetail")?.reset({
-    //   refMid: "",
-    //   code: "",
-    //   sl_accode: "",
-    //   sl_accode_des: "",
-    // });
   }
 
+  getAccode(data: any, value: any) {
+    console.log(data);
+    console.log(data.target.value);
+    this.tableData[value.data.SRNO - 1].SL_ACCODE = data.target.value;
+    // this.tableData.SL_ACCODE = data.target.value;
+  }
+
+
+  getAccodeDec(data: any, value: any) {
+    // this.tableData.SL_ACCODE_DESC = data.target.value;
+    this.tableData[value.data.SRNO - 1].SL_ACCODE_DESC = data.target.value;
+
+  }
+  getEmail(data: any, value: any) {
+    this.ContacttableData.EMAIL = data.target.value;
+  }
+  getMobile(data: any, value: any) {
+    this.ContacttableData.MOBILE_NO = data.target.value;
+  }
   addContactTableData() {
     const data = {
       name: this.SubLedgerMasterForm.value.name,
@@ -170,13 +205,22 @@ export class SubLedgerMasterComponent implements OnInit {
   setFormValues() {
     if (!this.content) return;
 
-    // let api ='AllowanceMaster/GetAllowanceMasterWithCode/'+this.content.ALLMST_CODE;
-    // console.log(api);
-    // let Sub: Subscription = this.dataService.getDynamicAPI(api).subscribe((result:any)=>{
-    //   this.data = result.response;
-    //   console.log(this.data);
+    let api =
+      "SubLedgerMaster/GetSubLedgerHeaderAndDetails/" + this.content.SL_CODE;
+    console.log(api);
+    let Sub: Subscription = this.dataService
+      .getDynamicAPI(api)
+      .subscribe((result: any) => {
+        this.data = result.response;
+        console.log(this.data);
+        this.tableData = this.data.subLedgerDetail;
+        // console.log(details);
 
-    // })
+        // details.forEach((detail: any) => {
+        //   console.log("Detail:", detail);
+        // });
+      });
+    console.log(this.content);
 
     this.SubLedgerMasterForm.controls.code.setValue(this.content.SL_CODE);
     this.SubLedgerMasterForm.controls.description.setValue(
@@ -195,23 +239,25 @@ export class SubLedgerMasterComponent implements OnInit {
     this.SubLedgerMasterForm.controls.country.setValue(this.content.COUNTRY);
     this.SubLedgerMasterForm.controls.state.setValue(this.content.STATE);
     this.SubLedgerMasterForm.controls.city.setValue(this.content.CITY);
+    this.SubLedgerMasterForm.controls.mobile.setValue(this.content.MOBILE_NO);
+    this.SubLedgerMasterForm.controls.email.setValue(this.content.EMAIL);
   }
 
   setPostData() {
     let form = this.SubLedgerMasterForm.value;
-    let contactRow = this.ContacttableData[0];
+    let contactRow = this.ContacttableData;
     console.log(contactRow);
-
+    console.log(this.tableData);
     return {
       SL_CODE: this.commonService.nullToString(form.code),
       DESCRIPTION: this.commonService.nullToString(form.description),
       // MOBILE_NO: this.SubLedgerMasterForm.value.mobile || "",
-      MOBILE_NO: contactRow.mobile || "",
+      MOBILE_NO: contactRow.MOBILE_NO || "",
       TELEPHONE_NO: "",
       // EMAIL: this.SubLedgerMasterForm.value.email || "",
-      EMAIL: contactRow.email || "",
+      EMAIL: contactRow.EMAIL || "",
       ADDRESS: this.commonService.nullToString(form.address),
-      ACTIVE: this.commonService.nullToString(form.active),
+      ACTIVE: form.active ? true : false,
       ALLOCATED_ACCOUNT: this.commonService.nullToString(
         form.allocated_account
       ),
@@ -224,13 +270,7 @@ export class SubLedgerMasterComponent implements OnInit {
       CITY: this.commonService.nullToString(form.city),
       MID: 0,
       ACC_MODE: "s",
-      subLedgerDetail: this.tableData.map((row: any) => ({
-        REFMID: row.refMid || 0,
-        SRNO: row.sNo || 0,
-        SL_CODE: row.code || "",
-        SL_ACCODE: row.sl_accode || "",
-        SL_ACCODE_DESC: row.sl_accode_des || "",
-      })),
+      subLedgerDetail: this.tableData,
     };
   }
 

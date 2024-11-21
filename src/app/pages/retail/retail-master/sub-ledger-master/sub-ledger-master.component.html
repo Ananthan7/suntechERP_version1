@@ -8,9 +8,10 @@
   </div>
   <!-- modal header component -->
   <modal-header
-  (saveClick)="formSubmit()"
-  (cancelClick)="close()"
-  (deleteClick)="deleteRecord()"
+  [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode"
+    (saveClick)="formSubmit()"
+    (cancelClick)="close()"[isViewDelete]="!viewMode && editableMode"
+    (deleteClick)="deleteRecord()"
   ></modal-header>
   <!-- content section -->
   <div class="row p-4">
@@ -210,48 +211,43 @@
                       [showColumnLines]="true"
                       [showRowLines]="true"
                       [allowColumnResizing]="true"
+                      keyExpr="SRNO"
                       class="mt-3"
-                     
                     >
                       <dxo-selection mode="single"></dxo-selection>
-                      <dxi-column dataField="SRNO" caption="SN" class="tab" cellTemplate="sNo">
-                      </dxi-column>
-                      <dxi-column dataField="DIVISION_CODE" caption="A/C Code" cellTemplate="sl_accode">
+                      <dxi-column dataField="SRNO" caption="SN" class="tab">
                       </dxi-column>
                       <dxi-column
-                        dataField="DEF_ALLOY_STOCK"
+                        dataField="SL_ACCODE"
+                        caption="A/C Code"
+                        cellTemplate="sl_accode"
+                      >
+                      </dxi-column>
+                      <dxi-column
+                        dataField="SL_ACCODE_DESC"
                         caption="A/C Description"
                         cellTemplate="sl_accode_des"
                       >
                       </dxi-column>
-                      <div [formGroupName]="'subLedgerDetail'">
-                    <div *dxTemplate="let data of 'sNo'">
-                        <input
-                          class="form-control"
-                          type="text" 
-                          formControlName="sNo"
-                          [value]="data.value"
-                        />
-                      </div>
-  
-                      <div *dxTemplate="let data of 'sl_accode'">
-                        <input
-                          class="form-control"
-                          type="text"
-                          id="description"
-                          formControlName="sl_accode"
-                          [value]="data.value"
-                        />
-                      </div>
-  
-                      <div *dxTemplate="let data of 'sl_accode_des'">
-                        <input
-                          class="form-control"
-                          type="text"
-                          formControlName="sl_accode_des"
-                          [value]="data.value"
-                        />
-                      </div>
+                      <div>
+                        <div *dxTemplate="let data of 'sl_accode'">
+                          <input
+                            class="form-control"
+                            type="text"
+                            id="description"
+                            [value]="data.value"
+                            (change)="getAccode($event, data)"
+                          />
+                        </div>
+
+                        <div *dxTemplate="let data of 'sl_accode_des'">
+                          <input
+                            class="form-control"
+                            type="text"
+                            [value]="data.value"
+                            (change)="getAccodeDec($event, data)"
+                          />
+                        </div>
                       </div>
                     </dx-data-grid>
                   </div>
@@ -302,7 +298,6 @@
                     [showRowLines]="true"
                     [allowColumnResizing]="true"
                     class="mt-3"
-                    
                   >
                     <dxo-selection mode="single"></dxo-selection>
                     <dxi-column
@@ -356,6 +351,7 @@
                         type="text"
                         formControlName="email"
                         [value]="data.value"
+                        (change)="getEmail($event, data)"
                       />
                     </div>
 
@@ -364,8 +360,9 @@
                         class="form-control"
                         type="number"
                         formControlName="mobile"
-                        style="text-align: right"
+                       
                         [value]="data.value"
+                        (change)="getMobile($event, data)"
                       />
                     </div>
                   </dx-data-grid>

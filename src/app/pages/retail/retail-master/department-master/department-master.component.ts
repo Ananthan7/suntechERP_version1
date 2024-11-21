@@ -56,11 +56,11 @@ export class DepartmentMasterComponent implements OnInit {
   leaveSalaryCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 7,
-    SEARCH_FIELD: 'ACCODE',
+    LOOKUPID: 125,
+    SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Leave Salary Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "ACCODE<> ''",
+    WHERECONDITION: "CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -69,11 +69,11 @@ export class DepartmentMasterComponent implements OnInit {
   airTicketCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 7,
-    SEARCH_FIELD: 'ACCODE',
+    LOOKUPID: 126,
+    SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Air Ticket Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "ACCODE<> ''",
+    WHERECONDITION: "CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -82,11 +82,11 @@ export class DepartmentMasterComponent implements OnInit {
   GratuityCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 7,
-    SEARCH_FIELD: 'ACCODE',
+    LOOKUPID: 127,
+    SEARCH_FIELD: 'CODE',
     SEARCH_HEADING: 'Gratuity Code Code',
     SEARCH_VALUE: '',
-    WHERECONDITION: "ACCODE<> ''",
+    WHERECONDITION: "CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
     LOAD_ONCLICK: true,
@@ -544,8 +544,30 @@ export class DepartmentMasterComponent implements OnInit {
   }
 
   close(data?: any) {
-    //TODO reset forms and data before closing
-    this.activeModal.close(data);
+    if (data){
+      this.viewMode = true;
+      this.activeModal.close(data);
+      return
+    }
+    if (this.content && this.content.FLAG == 'VIEW'){
+      this.activeModal.close(data);
+      return
+    }
+    Swal.fire({
+      title: 'Do you want to exit?',
+      text: '',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes!',
+      cancelButtonText: 'No'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.activeModal.close(data);
+      }
+    }
+    )
   }
 
   CountryCodeDataSelected(e: any) {
@@ -1072,7 +1094,7 @@ export class DepartmentMasterComponent implements OnInit {
     this.departmentMasterForm.controls.CreditExpensesLeaveSal.setValue(this.content.LV_SCHEME)
     this.departmentMasterForm.controls.CreditExpensesAirTicket.setValue(this.content.GR_SCHEME)
     this.departmentMasterForm.controls.CreditExpensesGratuity.setValue(this.content.TK_SCHEME)
-    this.departmentMasterForm.controls.IDebitExpCode.setValue(this.content.COMP_LB_CODE)
+    this.departmentMasterForm.controls.AIDebitExpCode.setValue(this.content.COMP_LB_CODE)
     this.departmentMasterForm.controls.AICreditCode.setValue(this.content.OT_CODE)
     this.departmentMasterForm.controls.OtherAmountValue.setValue(this.content.PDEPTMST_OTHER_ACCODE)
     this.departmentMasterForm.controls.OtherAmount.setValue(this.content.PDEPTMST_OTHERAC)
@@ -1081,6 +1103,8 @@ export class DepartmentMasterComponent implements OnInit {
     this.departmentMasterForm.controls.Shift1Break2.setValue(this.content.PDEPTMST_SHIFT1BREAK2)
     this.departmentMasterForm.controls.Shift2Break2.setValue(this.content.PDEPTMST_SHIFT2BREAK2)
     this.departmentMasterForm.controls.Shift3Break2.setValue(this.content.PDEPTMST_SHIFT3BREAK2)
+
+
   }
 
   setPostData() {
@@ -1124,7 +1148,7 @@ export class DepartmentMasterComponent implements OnInit {
       "LV_SCHEME": this.commonService.nullToString(form.CreditExpensesLeaveSal),
       "GR_SCHEME": this.commonService.nullToString(form.CreditExpensesAirTicket),
       "TK_SCHEME": this.commonService.nullToString(form.CreditExpensesGratuity),
-      "COMP_LB_CODE": this.commonService.nullToString(form.IDebitExpCode),
+      "COMP_LB_CODE": this.commonService.nullToString(form.AIDebitExpCode),
       "OT_CODE": this.commonService.nullToString(form.AICreditCode),
       "PDEPTMST_OTHER_ACCODE": this.commonService.nullToString(form.OtherAmountValue),
       "PDEPTMST_OTHERAC": this.onchangeCheckBoxNum(form.OtherAmount),

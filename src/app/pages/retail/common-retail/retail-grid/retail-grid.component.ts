@@ -459,6 +459,32 @@ export class RetailGridComponent implements OnInit {
           };
         break;
 
+        case 'POS Summary':
+          let SummaryLogData =  {
+            "VOCTYPE": this.CommonService.getqueryParamVocType() || "",
+            "REFMID": "",
+            "USERNAME": this.CommonService.userName,
+            "MODE": "PRINT",
+            "DATETIME": this.CommonService.formatDateTime(new Date()),
+            "REMARKS":"",
+            "SYSTEMNAME": "",
+            "BRANCHCODE": this.CommonService.branchCode,
+            "VOCNO": "",
+            "VOCDATE": "",
+            "YEARMONTH" : this.CommonService.yearSelected
+          }
+          payloadData = {
+            "SPID": "0182",
+            "parameter": {
+             "Branches ": gridData.CONTROL_DETAIL.USERBRANCH,
+             "FromDate ": gridData.CONTROL_DETAIL.STRFMDATE, 
+             "ToDate ": gridData.CONTROL_DETAIL.STRTODATE, 
+             "Vouchers ": '',
+             "VocTypeWise ": 0,
+            }
+          }
+        break;
+  
         case 'Retail Customer Enquiry' :
         let CustomerEnquirylogData =  {
           "VOCTYPE": this.CommonService.getqueryParamVocType() || "",
@@ -481,13 +507,15 @@ export class RetailGridComponent implements OnInit {
           } 
         };
       break;
+
+    
         
       case ' ' :
       break;
     }
     return payloadData
   }
-  printGridData(data: any) {  //181
+  printGridData(data: any) {
     let gridData= JSON.parse(data.data['CONTROL_LIST_JSON'])
     
     this.CommonService.showSnackBarMsg('MSG81447');
@@ -505,7 +533,7 @@ export class RetailGridComponent implements OnInit {
         console.error('Failed to open the print window. Possibly blocked by a popup blocker.');
         return;
       }
-      let printContent = data[0][0].HTMLINPUT || data[0][0].HTMLOUT;
+      let printContent = data[0][0].HTMLINPUT || data[0][0].HTMLOUT || data[0][0].POS_Summary_HTML;;
       WindowPrt.document.write(printContent);
       WindowPrt.document.close();
       WindowPrt.focus();  

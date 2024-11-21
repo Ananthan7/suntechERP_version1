@@ -128,7 +128,7 @@
                   <button mat-flat-button color="primary" class="mx-2 cancelBTN" > Cancel </button>
                   <button mat-flat-button color="primary" style="width: 100px;"> Go </button>
                 </div>   -->
-          <div class="row mt-2 justify-content-end mx-2">
+          <div class="row mt-2 justify-content-end mx-2" [ngClass]="{'loading-class': isLoading }">
             <app-report-screen-buttons (saveTemplateClick)="saveTemplate()" (previewClicked)="previewClick()"
             (printClicked)="printBtnClick()"></app-report-screen-buttons>
           </div>

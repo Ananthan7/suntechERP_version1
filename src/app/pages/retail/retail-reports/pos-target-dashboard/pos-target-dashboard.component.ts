@@ -1,6 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { DomSanitizer } from '@angular/platform-browser';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
@@ -46,7 +47,9 @@ export class PosTargetDashboardComponent implements OnInit {
   dateToPass: { fromDate: string; toDate: string } = { fromDate: '', toDate: '' };
 
   fetchedBranchDataParam: any = [];
-  
+  isLoading: boolean = false;
+  htmlPreview: any;
+
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -55,7 +58,7 @@ export class PosTargetDashboardComponent implements OnInit {
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
     private commonService: CommonServiceService,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,  private sanitizer: DomSanitizer,
   ) { }
 
   ngOnInit(): void {
@@ -105,6 +108,13 @@ export class PosTargetDashboardComponent implements OnInit {
       console.error('Invalid date input');
     }
   }
+
+  headerCellFormatting(e: any) {
+    // to make grid header center aligned
+    if (e.rowType === 'header') {
+      e.cellElement.style.textAlign = 'center';
+    }
+  } 
 
   formSubmit(){
     
@@ -156,10 +166,11 @@ export class PosTargetDashboardComponent implements OnInit {
   setDateValue(event: any){
     if(event.FromDate){
       this.POSTargetStatusForm.controls.fromdate.setValue(event.FromDate);
-      console.log(event.FromDate)
+      this.dateToPass.fromDate = this.datePipe.transform(event.FromDate, 'yyyy-MM-dd')!
     }
     else if(event.ToDate){
       this.POSTargetStatusForm.controls.todate.setValue(event.ToDate);
+      this.dateToPass.toDate =  this.datePipe.transform(event.ToDate, 'yyyy-MM-dd')!
     }
   }
 
@@ -228,14 +239,6 @@ export class PosTargetDashboardComponent implements OnInit {
       this.POSTargetStatusForm.controls.templateName.setValue(null)
     }
   }
-
-  formatDateToYYYYMMDD(dateString: any) {
-    const date = new Date(dateString);
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
-  }
   
   saveTemplate(){
     this.popupVisible = true;
@@ -256,7 +259,7 @@ export class PosTargetDashboardComponent implements OnInit {
             },
             "CONTROL_DETAIL": {
               "str_CurrFyear": localStorage.getItem('YEAR'),
-              "strAsOnDate": this.formatDateToYYYYMMDD(this.POSTargetStatusForm.controls.todate.value),
+              "strAsOnDate": this.datePipe.transform(this.POSTargetStatusForm.controls.todate.value, 'yyyy-MM-dd'),
               "StrBranchList": this.POSTargetStatusForm.controls.branch.value,
               "intShowSummary": this.POSTargetStatusForm.controls.showSelection.value,
               "LOGDATA ": JSON.stringify(this.logDataParam)
@@ -288,64 +291,72 @@ export class PosTargetDashboardComponent implements OnInit {
     });   
   }
 
-  previewClick() {
-    debugger
+  previewClick(){
+    this.isLoading = true;
+    let logData =  {
+      "VOCTYPE": this.commonService.getqueryParamVocType() || "",
+      "REFMID": "",
+      "USERNAME": this.commonService.userName,
+      "MODE": "PRINT",
+      "DATETIME": this.commonService.formatDateTime(new Date()),
+      "REMARKS":"",
+      "SYSTEMNAME": "",
+      "BRANCHCODE": this.commonService.branchCode,
+      "VOCNO": "",
+      "VOCDATE": "",
+      "YEARMONTH" : this.commonService.yearSelected
+    }
     let postData = {
       "SPID": "0154",
-      "parameter": {
+      "parameter": { 
         "str_CurrFyear": localStorage.getItem('YEAR'),
-        "strAsOnDate": this.formatDateToYYYYMMDD(this.POSTargetStatusForm.controls.todate.value),
+        "strAsOnDate": this.datePipe.transform(this.POSTargetStatusForm.controls.todate.value, 'yyyy-MM-dd'),
         "StrBranchList": this.POSTargetStatusForm.controls.branch.value,
         "intShowSummary": this.POSTargetStatusForm.controls.showSelection.value,
-        "LOGDATA ": JSON.stringify(this.logDataParam)
+        "LOGDATA ": JSON.stringify(logData)
       }
     }
-    console.log(postData)  
+ 
     this.commonService.showSnackBarMsg('MSG81447');
     this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
     .subscribe((result: any) => {
-      console.log(result);
-      let data = result.dynamicData;
-      const width = window.innerWidth;
-      const height = window.innerHeight;
-      const windowFeatures = `width=${width},height=${height},fullscreen=yes`;
-      var WindowPrt = window.open(' ', ' ', windowFeatures);
-      if (WindowPrt === null) {
-        console.error('Failed to open the print window. Possibly blocked by a popup blocker.');
-        return;
-      }
-      let printContent = data[0][0].Column1;
-      WindowPrt.document.write(printContent);
-      WindowPrt.document.close();
-      WindowPrt.focus();  
-      WindowPrt.onload = function () {
-        if (WindowPrt && WindowPrt.document.head) {
-          let styleElement = WindowPrt.document.createElement('style');
-          styleElement.textContent = `
-                      @page {
-                          size: A5 landscape;
-                      }
-                      body {
-                          margin: 0mm;
-                      }
-                  `;
-          WindowPrt.document.head.appendChild(styleElement);
-
-          setTimeout(() => {
-            if (WindowPrt) {
-              WindowPrt.print();
-            } else {
-              console.error('Print window was closed before printing could occur.');
-            }
-          }, 800);
+      if(result.status != "Failed"){
+        let data = result.dynamicData;
+        let printContent = data[0][0].HTMLOUT;
+        if (printContent && Object.keys(printContent).length > 0) {
+          this.htmlPreview = this.sanitizer.bypassSecurityTrustHtml(printContent);
+          const blob = new Blob([this.htmlPreview.changingThisBreaksApplicationSecurity], { type: 'text/html' });
+          this.commonService.closeSnackBarMsg();
+          const url = URL.createObjectURL(blob);
+          window.open(url, '_blank');
+          this.isLoading = false;
+        } else {
+          Swal.fire('No Data!', 'There is no data!', 'info');
+          this.commonService.closeSnackBarMsg();
+          this.isLoading = false;
         }
-      };
-      this.commonService.closeSnackBarMsg()
-    });      
+      }
+      else{
+        this.toastr.error(result.message)
+        this.isLoading = false;
+        return
+      }
+    }); 
   }
-
+  
   printBtnClick(){
+    this.isLoading = true
 
+    let postData = {
+      "SPID": "",
+      "parameter": {
+        
+      }
+    }
+    console.log(postData) 
+    setTimeout(()=>{
+      this.isLoading = false;
+    }, 300)  
   }
 
   prefillScreenValues(){
@@ -373,8 +384,8 @@ export class PosTargetDashboardComponent implements OnInit {
       this.fetchedBranchData= this.fetchedBranchDataParam?.split("#")
    
       this.dateToPass = {
-        fromDate:  this.formatDateToYYYYMMDD(new Date()),
-        toDate: this.formatDateToYYYYMMDD(new Date()),
+        fromDate:  this.datePipe.transform(new Date(), 'yyyy-MM-dd')!,
+        toDate: this.datePipe.transform(new Date(), 'yyyy-MM-dd')!,
       };
     }
   }

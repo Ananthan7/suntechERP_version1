@@ -255,9 +255,7 @@ export class MfgGridComponent implements OnInit {
             .map((key) => {
               return { FIELD_NAME: key };
             });
-          // this.orderedItemsHead = this.orderedItemsHead.filter((item:any)=> {
-          //   return item.FIELD_NAME !== 'FLAG' && item.FIELD_NAME !== 'COUNT' && item.FIELD_NAME !== 'MID'
-          // })
+          // CONDITION TO INCLUDE AND REMOVE GRID COLOUMNS
           this.orderedItemsHead = this.orderedItemsHead.filter((item: any) => {
             let shouldInclude = true;
             switch (item.FIELD_NAME) {
@@ -266,6 +264,7 @@ export class MfgGridComponent implements OnInit {
               case 'MID':
               case 'SRNO':
               case 'DOCTIME':
+              case 'PRINT_COUNT':
                 shouldInclude = false;
                 break;
               default:

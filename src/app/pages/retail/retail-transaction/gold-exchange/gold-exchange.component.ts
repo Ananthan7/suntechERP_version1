@@ -1138,7 +1138,7 @@ export class GoldExchangeComponent implements OnInit {
       "TOTAL_PUDIFF": 0,
       "TOTAL_STONEDIFF": 0,
       "ITEM_VALUE_FC": this.goldExchangeForm.value.rndOfAmtDes ?? "0.00",
-      "ITEM_VALUE_CC": this.goldExchangeForm.value.rndOfAmtDes,
+      "ITEM_VALUE_CC": this.goldExchangeForm.value.rndOfAmtDes?? "0.00",
       "PARTY_VALUE_FC": 0,
       "PARTY_VALUE_CC": 0,
       "NET_VALUE_FC": this.goldExchangeForm.value.rndNetAmtDes ?? "0.00",

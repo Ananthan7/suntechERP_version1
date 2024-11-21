@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { DomSanitizer } from '@angular/platform-browser';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-pos-salesman-commission',
@@ -68,7 +69,7 @@ export class PosSalesmanCommissionComponent implements OnInit {
     private dataService: SuntechAPIService,
     private toastr: ToastrService,
     private commonService: CommonServiceService,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer, private datePipe: DatePipe
   ) { }
 
   ngOnInit(): void {
@@ -79,6 +80,13 @@ export class PosSalesmanCommissionComponent implements OnInit {
     //TODO reset forms and data before closing
     this.activeModal.close(data);
   }
+
+  headerCellFormatting(e: any) {
+    // to make grid header center aligned
+    if (e.rowType === 'header') {
+      e.cellElement.style.textAlign = 'center';
+    }
+  } 
 
   selectedData(data: any) {
     console.log(data)
@@ -177,29 +185,21 @@ export class PosSalesmanCommissionComponent implements OnInit {
       this.fetchedBranchData= this.fetchedBranchDataParam?.split("#")
    
       this.dateToPass = {
-        fromDate:  this.formatDateToYYYYMMDD(new Date()),
-        toDate: this.formatDateToYYYYMMDD(new Date()),
+        fromDate:  this.datePipe.transform(new Date(), 'yyyy-MM-dd')!,
+        toDate: this.datePipe.transform(new Date(), 'yyyy-MM-dd')!,
       };
 
     }
   }
 
-  formatDateToYYYYMMDD(dateString: any) {
-    const date = new Date(dateString);
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
-  }
-
   setDateValue(event: any){
     if(event.FromDate){
       this.SalesmanCommissionForm.controls.fromdate.setValue(event.FromDate);
-      this.dateToPass.fromDate = event.FromDate
+      this.dateToPass.fromDate = this.datePipe.transform(event.FromDate, 'yyyy-MM-dd')!
     }
     else if(event.ToDate){
       this.SalesmanCommissionForm.controls.todate.setValue(event.ToDate);
-      this.dateToPass.toDate = event.ToDate
+      this.dateToPass.toDate =  this.datePipe.transform(event.ToDate, 'yyyy-MM-dd')!
     }
   }
 
@@ -252,8 +252,8 @@ export class PosSalesmanCommissionComponent implements OnInit {
               "STRBRANCHES" : this.formattedBranchDivisionData || this.fetchedBranchDataParam,
               "STRFRSMAN" : this.SalesmanCommissionForm.controls.salesManFrom.value,
               "STRTOSMAN" : this.SalesmanCommissionForm.controls.salesManTo.value,
-              "FRVOCDATE" : this.formatDateToYYYYMMDD(this.dateToPass.fromDate),
-              "TOVOCDATE" : this.formatDateToYYYYMMDD(this.dateToPass.toDate),
+              "FRVOCDATE" : this.datePipe.transform(this.dateToPass.fromDate, 'yyyy-MM-dd'),
+              "TOVOCDATE" : this.datePipe.transform(this.dateToPass.toDate, 'yyyy-MM-dd'),
               "LOGINBRANCH" : this.userLoginBranch,
               "LOGDATA" : '',
             }
@@ -285,6 +285,7 @@ export class PosSalesmanCommissionComponent implements OnInit {
   }
 
   previewClick() {
+    this.isLoading = true;
     let postData = {
       "SPID": "0159",
       "parameter": {
@@ -293,8 +294,8 @@ export class PosSalesmanCommissionComponent implements OnInit {
         "STRBRANCHES" : this.formattedBranchDivisionData || this.fetchedBranchDataParam,
         "STRFRSMAN" : this.SalesmanCommissionForm.controls.salesManFrom.value,
         "STRTOSMAN" : this.SalesmanCommissionForm.controls.salesManTo.value,
-        "FRVOCDATE" : this.formatDateToYYYYMMDD(this.dateToPass.fromDate),
-        "TOVOCDATE" : this.formatDateToYYYYMMDD(this.dateToPass.toDate),
+        "FRVOCDATE" : this.datePipe.transform(this.dateToPass.fromDate, 'yyyy-MM-dd'),
+        "TOVOCDATE" : this.datePipe.transform(this.dateToPass.toDate, 'yyyy-MM-dd'),
         "LOGINBRANCH" : this.userLoginBranch,
         "LOGDATA" : '',
       }
@@ -312,41 +313,18 @@ export class PosSalesmanCommissionComponent implements OnInit {
         this.commonService.closeSnackBarMsg();
         const url = URL.createObjectURL(blob);
         window.open(url, '_blank');
+        this.isLoading = false;
       }
       else{
-        this.toastr.error(result.message)
+        this.toastr.error(result.message);
+        this.isLoading = false;
         return
       }
-   
-      // WindowPrt.document.write(printContent);
-      // WindowPrt.document.close();
-      // WindowPrt.focus();  
-      // WindowPrt.onload = function () {
-      //   if (WindowPrt && WindowPrt.document.head) {
-      //     let styleElement = WindowPrt.document.createElement('style');
-      //     styleElement.textContent = `
-      //                 @page {
-      //                     size: A5 landscape;
-      //                 }
-      //                 body {
-      //                     margin: 0mm;
-      //                 }
-      //             `;
-      //     WindowPrt.document.head.appendChild(styleElement);
-
-      //     setTimeout(() => {
-      //       if (WindowPrt) {
-      //         WindowPrt.print();
-      //       } else {
-      //         console.error('Print window was closed before printing could occur.');
-      //       }
-      //     }, 800);
-      //   }
-      // };
     });      
   }
 
   printBtnClick(){
+    this.isLoading = true;
     let logData =  {
       "VOCTYPE": this.commonService.getqueryParamVocType() || "",
       "REFMID": "",
@@ -365,8 +343,8 @@ export class PosSalesmanCommissionComponent implements OnInit {
       "parameter": {
         "STRBRANCHCODES": this.formattedBranchDivisionData || this.fetchedBranchDataParam,
         "STRVOCTYPES": this.VocTypeParam, //this.commonService.getqueryParamVocType(),
-        "FROMVOCDATE": this.formatDateToYYYYMMDD(this.dateToPass.fromDate),
-        "TOVOCDATE": this.formatDateToYYYYMMDD(this.dateToPass.toDate) ,
+        "FROMVOCDATE": this.datePipe.transform(this.dateToPass.fromDate, 'yyyy-MM-dd'),
+        "TOVOCDATE": this.datePipe.transform(this.dateToPass.toDate, 'yyyy-MM-dd') ,
         "flag": '',
         "USERBRANCH": localStorage.getItem('userbranch'),
         "USERNAME": localStorage.getItem('username'),
@@ -396,11 +374,11 @@ export class PosSalesmanCommissionComponent implements OnInit {
               printWindow?.document.close();
               printWindow?.focus();
               printWindow?.print();
-              printWindow?.close();
-             
+              this.isLoading = false;
             } else {
               Swal.fire('No Data!', 'There is no data to print!', 'info');
               this.commonService.closeSnackBarMsg();
+              this.isLoading = false;
               return
             }
           }, 1500); 
@@ -408,7 +386,8 @@ export class PosSalesmanCommissionComponent implements OnInit {
         }
       }
       else{
-        this.toastr.error(result.message)
+        this.toastr.error(result.message);
+        this.isLoading = false;
         return
       }
     });  

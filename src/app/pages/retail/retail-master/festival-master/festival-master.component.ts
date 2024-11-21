@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
@@ -37,6 +37,10 @@ export class FestivalMasterComponent implements OnInit {
   dyndatas: any = [];
   viewOnly: boolean = false;
   gridForm: any;
+  data: any = [];
+  disable_code:boolean = false;
+  editMode: boolean = false;
+
 
 
   festivalmasterform: FormGroup = this.formBuilder.group({
@@ -44,7 +48,7 @@ export class FestivalMasterComponent implements OnInit {
     code: [""],
     description: [""],
     target: [""],
-    year: [""],
+    year: this.formBuilder.array([]),
     fromDate: [""],
     todate: [""],
 
@@ -60,35 +64,6 @@ export class FestivalMasterComponent implements OnInit {
 
   ) { }
 
-  // initializeMaindetails() {
-  //   const startYear = 2009;
-
-  //   let curr_year = localStorage.getItem('YEAR');
-  //   if (!curr_year) {
-  //     curr_year = new Date().getFullYear().toString(); 
-  //   }
-
-  //   const currentYear = Number(curr_year);
-
-  //   const numRows = currentYear - startYear + 1; 
-  //   this.maindetails = [];  
-
-  //   for (let i = 0; i < numRows; i++) {
-  //     const year = startYear + i;
-  //     const newRow: RowData = {
-  //       SRNO: i + 1,             
-  //       YEAR: year.toString(),    
-  //       FROM_DATE: new Date(),   
-  //       TO_DATE: new Date(),      
-  //       TARGET: '',               
-  //     };
-  //     this.maindetails.push(newRow);
-  //   }
-
-  //   console.log(this.maindetails);
-  // }
-
-
 
   ngOnInit(): void {
     console.log(this.content);
@@ -98,15 +73,43 @@ export class FestivalMasterComponent implements OnInit {
     console.log(this.fm_id);
     this.flag = this.content?.FLAG;
     this.initialController(this.flag, this.content);
+    if(this.flag == 'EDIT'){
+      this.disable_code = true;
+      this.editMode = true;
+
+    }
     if (this?.flag == "EDIT" || this?.flag == 'VIEW') {
       this.detailsapi(this.fm_id);
     }
     this.gridForm = this.formBuilder.group({
-      rows: this.formBuilder.array([])  // Dynamic rows will go here
+      rows: this.formBuilder.array([])
     });
 
+    this.loadYears();
 
   }
+
+  loadYears() {
+    const currentYear = new Date().getFullYear();
+    const yearsList = Array.from({ length: 10 }, (_, index) => currentYear - (9 - index));
+    const reversedYearsList = yearsList.reverse();
+    this.data.year = reversedYearsList;
+    const yearsFormArray = this.festivalmasterform.get('year') as FormArray;
+
+    yearsList.forEach((year, index) => {
+      yearsFormArray.push(this.formBuilder.group({
+        year: [year],
+        fromDate: [""],
+        toDate: [""],
+        target: [""],
+        SRNO: [index + 1]
+      }));
+    });
+
+    this.maindetails = yearsFormArray.value;
+    console.log(this.maindetails);
+  }
+
 
   initialController(FLAG: any, DATA: any) {
     if (FLAG === "VIEW") {
@@ -182,7 +185,24 @@ export class FestivalMasterComponent implements OnInit {
 
 
   close(data?: any) {
-    this.activeModal.close(data);
+    // this.activeModal.close(data);
+    console.log(this.flag)
+    if(this.flag == undefined || this.flag == 'EDIT'){
+      Swal.fire({
+        title: "Confirm",
+        text: "Are you sure you want to close this window?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.activeModal.close(data);
+        }
+      });
+    }else{
+      this.activeModal.close(data);
+    }
   }
 
   detailsapi(fm_id: any) {
@@ -195,35 +215,40 @@ export class FestivalMasterComponent implements OnInit {
         console.log(this.dyndatas);
         // this.maindetails.push(...this.dyndatas?.Details)
         this.maindetails = [...this.maindetails, ...this.dyndatas?.Details];
-
-
-        this.flag = "EDIT";
-
+        // this.flag = "EDIT";
       }, (err: any) => {
 
       })
     this.subscriptions.push(Sub);
     console.log(this.dyndatas.FA_CATEGORY);
+    console.log(this.maindetails);
   }
 
   formSubmit() {
 
+    let valuedata:any=[];
+    this.maindetails.forEach((e:any) => {
+      if(e.fromDate != "" && e.toDate != ""){
+        valuedata = e;
+      }
+    });
     const postData = {
       "MID": 0,
       "CODE": this.festivalmasterform.controls.code.value,
       "DESCRIPTION": this.festivalmasterform.controls.description.value,
-      "Details": [
-        {
-        UNIQUEID: this.maindetails.length + 1,
-        SRNO: this.maindetails.length + 1,
-        CODE: this.festivalmasterform.controls.code.value,
-        YEAR: this.festivalmasterform.controls.year.value,
-        FROMDATE: this.festivalmasterform.controls.fromDate.value,
-        TODATE:this.festivalmasterform.controls.todate.value,
-        FEST_TARGET: this.festivalmasterform.controls.target.value
-        }
-       
-      ]
+      "Details": valuedata
+      //  [
+      //   {
+      //     UNIQUEID: this.maindetails.length + 1,
+      //     SRNO: this.maindetails.length + 1,
+      //     CODE: this.festivalmasterform.controls.code.value,
+      //     YEAR: this.festivalmasterform.controls.year.value,
+      //     FROMDATE: this.festivalmasterform.controls.fromDate.value,
+      //     TODATE: this.festivalmasterform.controls.todate.value,
+      //     FEST_TARGET: this.festivalmasterform.controls.target.value
+      //   }
+
+      // ]
     }
 
     if (this.flag === "EDIT") {
@@ -303,7 +328,7 @@ export class FestivalMasterComponent implements OnInit {
         CODE: "",
         YEAR: "",
         FROMDATE: "",
-        TODATE:"",
+        TODATE: "",
         FEST_TARGET: ""
         // UNIQUEID: this.maindetails.length + 1,
         // SRNO: this.maindetails.length + 1,
@@ -331,6 +356,11 @@ export class FestivalMasterComponent implements OnInit {
   onDateChanged(event: any, cellData: any) {
     console.log('New date selected:', event.value);
     cellData.setValue(event.value);
+  }
+
+  datechange(data: any, value: any) {
+    console.log(data, value);
+    this.maindetails[value.data.SRNO - 1].FROMDATE = data.target.value;
   }
 
 }
