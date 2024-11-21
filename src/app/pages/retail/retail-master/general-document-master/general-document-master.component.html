@@ -5,7 +5,9 @@
             <i class="feather icon-x close-icon"></i>
         </button>
     </div>
-    <modal-header (cancelClick)="close()" (saveClick)="formSubmit()"></modal-header>
+    <modal-header (cancelClick)="close()" (saveClick)="formSubmit()" (deleteClick)="DeleteController()"
+[isViewDelete]="editMode" [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode"
+    ></modal-header>
     <div class="p-4 ">
         <form [formGroup]="generaldocumentform">
 
@@ -18,7 +20,7 @@
                                     Code :</label>
                                 <div class="col-sm-3">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" #codeInput matInput formControlName="code" UpperCaseDirective
+                                        <input type="text" #codeInput matInput formControlName="code" UpperCaseDirective [readonly]="viewOnly || codeedit"
                                             autocomplete="off" />
                                     </mat-form-field>
                                 </div>
@@ -28,7 +30,7 @@
                                     Description :</label>
                                 <div class="col-sm-6">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" #codeInput matInput formControlName="description" UpperCaseDirective
+                                        <input type="text" #codeInput matInput formControlName="description" UpperCaseDirective [readonly]="viewOnly"
                                             autocomplete="off" />
                                     </mat-form-field>
                                 </div>
@@ -38,7 +40,7 @@
                                     (+/-) : </label>
                                 <div class="col-sm-2">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="reminderdays" UpperCaseDirective />
+                                        <input type="number" matInput formControlName="reminderdays" UpperCaseDirective  [readonly]="viewOnly"/>
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -55,12 +57,12 @@
                                         <tr class="mt-3">
                                             <td>Customer</td>
                                             <td>
-                                                <mat-checkbox id="ID022" formControlName="cust_applicable"
+                                                <mat-checkbox formControlName="cust_applicable"  [disabled]="viewOnly"
                                                     class="example-margin">
                                                 </mat-checkbox>
                                             </td>
                                             <td>
-                                                <mat-checkbox id="ID022" formControlName="cust_mandatory"
+                                                <mat-checkbox  formControlName="cust_mandatory" [disabled]="viewOnly"
                                                     class="example-margin">
                                                 </mat-checkbox>
                                             </td>
@@ -69,12 +71,12 @@
                                         <tr class="mt-0">
                                             <td>Branch</td>
                                             <td>
-                                                <mat-checkbox id="ID022" formControlName="branch_applicable"
+                                                <mat-checkbox formControlName="branch_applicable" [disabled]="viewOnly"
                                                     class="example-margin">
                                                 </mat-checkbox>
                                             </td>
                                             <td>
-                                                <mat-checkbox id="ID022" formControlName="branch_mandatory"
+                                                <mat-checkbox formControlName="branch_mandatory" [disabled]="viewOnly"
                                                     class="example-margin">
                                                 </mat-checkbox>
                                             </td>
@@ -83,12 +85,12 @@
                                         <tr class="mt-0">
                                             <td>Supplier</td>
                                             <td>
-                                                <mat-checkbox id="ID022" formControlName="supplier_applicable"
+                                                <mat-checkbox  formControlName="supplier_applicable" [disabled]="viewOnly"
                                                     class="example-margin">
                                                 </mat-checkbox>
                                             </td>
                                             <td>
-                                                <mat-checkbox id="ID022" formControlName="supplier_mandatory"
+                                                <mat-checkbox formControlName="supplier_mandatory" [disabled]="viewOnly"
                                                     class="example-margin">
                                                 </mat-checkbox>
                                             </td>
@@ -97,12 +99,12 @@
                                         <tr class="mt-0">
                                             <td>Employee</td>
                                             <td>
-                                                <mat-checkbox id="ID022" formControlName="employee_applicable"
+                                                <mat-checkbox  formControlName="employee_applicable" [disabled]="viewOnly"
                                                     class="example-margin">
                                                 </mat-checkbox>
                                             </td>
                                             <td>
-                                                <mat-checkbox id="ID022" formControlName="employee_mandatory"
+                                                <mat-checkbox formControlName="employee_mandatory" [disabled]="viewOnly"
                                                     class="example-margin">
                                                 </mat-checkbox>
                                             </td>
@@ -126,9 +128,19 @@
                                 </label>
                                 <div class="col-sm-8">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="user_defined_1" UpperCaseDirective />
-                                        <master-search class="masterSearch" [MasterSearchData]="BranchData"
-                                            (newRowClick)="BranchDataSelected($event)">
+                                        <input type="text" matInput formControlName="user_defined_1" UpperCaseDirective 
+                                        [readonly]="viewOnly" (focusout)="
+                                            SPvalidateLookupFieldModified(
+                                              $event,
+                                              UDF1Data,
+                                              ['user_defined_1'],
+                                              false,
+                                              ['CODE'],
+                                              false
+                                            )
+                                          "/>
+                                        <master-search class="masterSearch" [MasterSearchData]="UDF1Data"
+                                            (newRowClick)="UDF1CodeSelected($event)">
                                         </master-search>
                                     </mat-form-field>
                                 </div>
@@ -138,9 +150,19 @@
                                 </label>
                                 <div class="col-sm-8">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="user_defined_2" UpperCaseDirective />
-                                        <master-search class="masterSearch" [MasterSearchData]="BranchData"
-                                            (newRowClick)="BranchDataSelected($event)">
+                                        <input type="text" matInput formControlName="user_defined_2" UpperCaseDirective 
+                                        [readonly]="viewOnly" (focusout)="
+                                            SPvalidateLookupFieldModified(
+                                              $event,
+                                              UDF2Data,
+                                              ['user_defined_2'],
+                                              false,
+                                              ['CODE'],
+                                              false
+                                            )
+                                          "  />
+                                        <master-search class="masterSearch" [MasterSearchData]="UDF2Data"
+                                        (newRowClick)="UDF2CodeSelected($event)">
                                         </master-search>
                                     </mat-form-field>
                                 </div>
@@ -150,10 +172,20 @@
                                 </label>
                                 <div class="col-sm-8">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="user_defined_3" UpperCaseDirective />
-                                        <master-search class="masterSearch" [MasterSearchData]="BranchData"
-                                            (newRowClick)="BranchDataSelected($event)">
-                                        </master-search>
+                                        <input type="text" matInput formControlName="user_defined_3" UpperCaseDirective 
+                                        [readonly]="viewOnly" (focusout)="
+                                        SPvalidateLookupFieldModified(
+                                          $event,
+                                          UDF3Data,
+                                          ['user_defined_3'],
+                                          false,
+                                          ['CODE'],
+                                          false
+                                        )
+                                      "  />
+                                        <master-search class="masterSearch" [MasterSearchData]="UDF3Data"
+                                        (newRowClick)="UDF3CodeSelected($event)">
+                                    </master-search>
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -162,10 +194,20 @@
                                 </label>
                                 <div class="col-sm-8">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="user_defined_4" UpperCaseDirective />
-                                        <master-search class="masterSearch" [MasterSearchData]="BranchData"
-                                            (newRowClick)="BranchDataSelected($event)">
-                                        </master-search>
+                                        <input type="text" matInput formControlName="user_defined_4" UpperCaseDirective 
+                                        [readonly]="viewOnly" (focusout)="
+                                        SPvalidateLookupFieldModified(
+                                          $event,
+                                          UDF3Data,
+                                          ['user_defined_4'],
+                                          false,
+                                          ['CODE'],
+                                          false
+                                        )
+                                      " />
+                                        <master-search class="masterSearch" [MasterSearchData]="UDF4Data"
+                                        (newRowClick)="UDF4CodeSelected($event)">
+                                    </master-search>
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -174,10 +216,20 @@
                                 </label>
                                 <div class="col-sm-8">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="user_defined_5" UpperCaseDirective />
-                                        <master-search class="masterSearch" [MasterSearchData]="BranchData"
-                                            (newRowClick)="BranchDataSelected($event)">
-                                        </master-search>
+                                        <input type="text" matInput formControlName="user_defined_5" UpperCaseDirective 
+                                        [readonly]="viewOnly" (focusout)="
+                                        SPvalidateLookupFieldModified(
+                                          $event,
+                                          UDF5Data,
+                                          ['user_defined_5'],
+                                          false,
+                                          ['CODE'],
+                                          false
+                                        )
+                                      " />
+                                        <master-search class="masterSearch" [MasterSearchData]="UDF5Data"
+                                        (newRowClick)="UDF5CodeSelected($event)">
+                                    </master-search>
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -188,9 +240,19 @@
                                 </label>
                                 <div class="col-sm-8">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="user_defined_6" UpperCaseDirective />
-                                        <master-search class="masterSearch" [MasterSearchData]="BranchData"
-                                            (newRowClick)="BranchDataSelected($event)">
+                                        <input type="text" matInput formControlName="user_defined_6" UpperCaseDirective 
+                                        [readonly]="viewOnly" (focusout)="
+                                        SPvalidateLookupFieldModified(
+                                          $event,
+                                          UDF6Data,
+                                          ['user_defined_6'],
+                                          false,
+                                          ['CODE'],
+                                          false
+                                        )
+                                      "/>
+                                        <master-search class="masterSearch" [MasterSearchData]="UDF6Data"
+                                            (newRowClick)="UDF6CodeSelected($event)">
                                         </master-search>
                                     </mat-form-field>
                                 </div>
@@ -200,9 +262,19 @@
                                 </label>
                                 <div class="col-sm-8">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="user_defined_7" UpperCaseDirective />
-                                        <master-search class="masterSearch" [MasterSearchData]="BranchData"
-                                            (newRowClick)="BranchDataSelected($event)">
+                                        <input type="text" matInput formControlName="user_defined_7" UpperCaseDirective 
+                                        [readonly]="viewOnly" (focusout)="
+                                        SPvalidateLookupFieldModified(
+                                          $event,
+                                          UDF7Data,
+                                          ['user_defined_7'],
+                                          false,
+                                          ['CODE'],
+                                          false
+                                        )
+                                      "/>
+                                        <master-search class="masterSearch" [MasterSearchData]="UDF7Data"
+                                            (newRowClick)="UDF7CodeSelected($event)">
                                         </master-search>
                                     </mat-form-field>
                                 </div>
@@ -212,9 +284,19 @@
                                 </label>
                                 <div class="col-sm-8">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="user_defined_8" UpperCaseDirective />
-                                        <master-search class="masterSearch" [MasterSearchData]="BranchData"
-                                            (newRowClick)="BranchDataSelected($event)">
+                                        <input type="text" matInput formControlName="user_defined_8" UpperCaseDirective 
+                                        [readonly]="viewOnly" (focusout)="
+                                        SPvalidateLookupFieldModified(
+                                          $event,
+                                          UDF8Data,
+                                          ['user_defined_8'],
+                                          false,
+                                          ['CODE'],
+                                          false
+                                        )
+                                      " />
+                                        <master-search class="masterSearch" [MasterSearchData]="UDF8Data"
+                                            (newRowClick)="UDF8CodeSelected($event)">
                                         </master-search>
                                     </mat-form-field>
                                 </div>
@@ -224,9 +306,19 @@
                                 </label>
                                 <div class="col-sm-8">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="user_defined_9" UpperCaseDirective />
-                                        <master-search class="masterSearch" [MasterSearchData]="BranchData"
-                                            (newRowClick)="BranchDataSelected($event)">
+                                        <input type="text" matInput formControlName="user_defined_9" UpperCaseDirective 
+                                        [readonly]="viewOnly" (focusout)="
+                                        SPvalidateLookupFieldModified(
+                                          $event,
+                                          UDF9Data,
+                                          ['user_defined_9'],
+                                          false,
+                                          ['CODE'],
+                                          false
+                                        )
+                                      " />
+                                        <master-search class="masterSearch" [MasterSearchData]="UDF9Data"
+                                            (newRowClick)="UDF9CodeSelected($event)">
                                         </master-search>
                                     </mat-form-field>
                                 </div>
@@ -236,9 +328,19 @@
                                 </label>
                                 <div class="col-sm-8">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="user_defined_10" UpperCaseDirective />
-                                        <master-search class="masterSearch" [MasterSearchData]="BranchData"
-                                            (newRowClick)="BranchDataSelected($event)">
+                                        <input type="text" matInput formControlName="user_defined_10" UpperCaseDirective 
+                                        [readonly]="viewOnly" (focusout)="
+                                        SPvalidateLookupFieldModified(
+                                          $event,
+                                          UDF10Data,
+                                          ['user_defined_10'],
+                                          false,
+                                          ['CODE'],
+                                          false
+                                        )
+                                      " />
+                                        <master-search class="masterSearch" [MasterSearchData]="UDF10Data"
+                                            (newRowClick)="UDF10CodeSelected($event)">
                                         </master-search>
                                     </mat-form-field>
                                 </div>
@@ -250,9 +352,19 @@
                                 </label>
                                 <div class="col-sm-8">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="user_defined_11" UpperCaseDirective />
-                                        <master-search class="masterSearch" [MasterSearchData]="BranchData"
-                                            (newRowClick)="BranchDataSelected($event)">
+                                        <input type="text" matInput formControlName="user_defined_11" UpperCaseDirective 
+                                        [readonly]="viewOnly" (focusout)="
+                                        SPvalidateLookupFieldModified(
+                                          $event,
+                                          UDF11Data,
+                                          ['user_defined_11'],
+                                          false,
+                                          ['CODE'],
+                                          false
+                                        )
+                                      "  />
+                                        <master-search class="masterSearch" [MasterSearchData]="UDF11Data"
+                                            (newRowClick)="UDF11CodeSelected($event)">
                                         </master-search>
                                     </mat-form-field>
                                 </div>
@@ -262,9 +374,19 @@
                                 </label>
                                 <div class="col-sm-8">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="user_defined_12" UpperCaseDirective />
-                                        <master-search class="masterSearch" [MasterSearchData]="BranchData"
-                                            (newRowClick)="BranchDataSelected($event)">
+                                        <input type="text" matInput formControlName="user_defined_12" UpperCaseDirective 
+                                        [readonly]="viewOnly" (focusout)="
+                                        SPvalidateLookupFieldModified(
+                                          $event,
+                                          UDF125Data,
+                                          ['user_defined_12'],
+                                          false,
+                                          ['CODE'],
+                                          false
+                                        )
+                                      "  />
+                                        <master-search class="masterSearch" [MasterSearchData]="UDF125Data"
+                                            (newRowClick)="UDF12CodeSelected($event)">
                                         </master-search>
                                     </mat-form-field>
                                 </div>
@@ -274,9 +396,19 @@
                                 </label>
                                 <div class="col-sm-8">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="user_defined_13" UpperCaseDirective />
-                                        <master-search class="masterSearch" [MasterSearchData]="BranchData"
-                                            (newRowClick)="BranchDataSelected($event)">
+                                        <input type="text" matInput formControlName="user_defined_13" UpperCaseDirective 
+                                        [readonly]="viewOnly" (focusout)="
+                                        SPvalidateLookupFieldModified(
+                                          $event,
+                                          UDF13Data,
+                                          ['user_defined_13'],
+                                          false,
+                                          ['CODE'],
+                                          false
+                                        )
+                                      " />
+                                        <master-search class="masterSearch" [MasterSearchData]="UDF13Data"
+                                            (newRowClick)="UDF13CodeSelected($event)">
                                         </master-search>
                                     </mat-form-field>
                                 </div>
@@ -286,9 +418,19 @@
                                 </label>
                                 <div class="col-sm-8">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="user_defined_14" UpperCaseDirective />
-                                        <master-search class="masterSearch" [MasterSearchData]="BranchData"
-                                            (newRowClick)="BranchDataSelected($event)">
+                                        <input type="text" matInput formControlName="user_defined_14" UpperCaseDirective 
+                                        [readonly]="viewOnly" (focusout)="
+                                        SPvalidateLookupFieldModified(
+                                          $event,
+                                          UDF14Data,
+                                          ['user_defined_14'],
+                                          false,
+                                          ['CODE'],
+                                          false
+                                        )
+                                      " />
+                                        <master-search class="masterSearch" [MasterSearchData]="UDF14Data"
+                                            (newRowClick)="UDF14CodeSelected($event)">
                                         </master-search>
                                     </mat-form-field>
                                 </div>
@@ -298,9 +440,19 @@
                                 </label>
                                 <div class="col-sm-8">
                                     <mat-form-field style="width: 100%" appearance="outline">
-                                        <input type="text" matInput formControlName="user_defined_15" UpperCaseDirective />
-                                        <master-search class="masterSearch" [MasterSearchData]="BranchData"
-                                            (newRowClick)="BranchDataSelected($event)">
+                                        <input type="text" matInput formControlName="user_defined_15" UpperCaseDirective 
+                                        [readonly]="viewOnly" (focusout)="
+                                        SPvalidateLookupFieldModified(
+                                          $event,
+                                          UDF15Data,
+                                          ['user_defined_15'],
+                                          false,
+                                          ['CODE'],
+                                          false
+                                        )
+                                      "  />
+                                        <master-search class="masterSearch" [MasterSearchData]="UDF15Data"
+                                            (newRowClick)="UDF15CodeSelected($event)">
                                         </master-search>
                                     </mat-form-field>
                                 </div>

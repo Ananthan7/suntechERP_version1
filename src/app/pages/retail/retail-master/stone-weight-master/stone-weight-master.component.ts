@@ -57,18 +57,18 @@ export class StoneWeightMasterComponent implements OnInit {
   stoneweightmaster: FormGroup = this.formBuilder.group({
     mid: [""],
     sieveset: [""],
-    division: [""],
+    division: ["L"],
     sievefrom: [""],
     sievefromdesc: [""],
     sizefrom: [""],
-    pcs: [""],
-    pointerwt: [""],
-    shape: [""],
+    pcs: ["0"],
+    pointerwt: ["0.0000"],
+    shape: ["RD"],
     sieveto: [""],
     sievetodesc: [""],
     sizeto: [""],
-    variance1: [""],
-    variance2: [""],
+    variance1: ["0.00"],
+    variance2: ["0.00"],
 
   });
 
