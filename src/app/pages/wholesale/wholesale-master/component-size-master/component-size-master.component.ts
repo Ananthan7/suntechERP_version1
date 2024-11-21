@@ -237,7 +237,31 @@ export class ComponentSizeMasterComponent implements OnInit {
   }
 
 
+  submitValidations(form: any) { 
 
+    if (this.componentsizemasterForm.value.height > this.componentsizemasterForm.value.width / 2) {
+      this.toastr.error('The Height must be Less than the Half of the Width')
+      return true;
+    }
+
+    if (this.componentsizemasterForm.invalid) {
+      this.toastr.error('select all required fields')
+      return true
+    } 
+
+    if (form.height == 0) {
+      this.commonService.toastErrorByMsgId('height cannot be zero or negative') 
+      return true
+    }else if (form.width == 0) {
+      this.commonService.toastErrorByMsgId('width cannot be zero or negative') 
+      return true
+    }else if (form.length == 0) {
+      this.commonService.toastErrorByMsgId('length cannot be zero or negative') 
+      return true
+    }
+
+    return false;
+  }
 
 
 
@@ -249,23 +273,21 @@ export class ComponentSizeMasterComponent implements OnInit {
   formSubmit() {
     console.log(this.componentsizemasterForm.value);
 
-    if (this.content?.FLAG == 'VIEW') return
-    if (this.content?.FLAG == 'EDIT') {
+    // if (this.content?.FLAG == 'VIEW') return
+    // if (this.content?.FLAG == 'EDIT') {
 
+    //   this.update()
+    //   return
+    // }
+
+    if (this.content && this.content.FLAG == 'EDIT') {
       this.update()
       return
     }
 
-    if (this.componentsizemasterForm.value.height > this.componentsizemasterForm.value.width / 2) {
-      this.toastr.error('The Height must be Less than the Half of the Width')
-      return;
-    }
-
-
-    if (this.componentsizemasterForm.invalid) {
-      this.toastr.error('select all required fields')
-      return
-    }
+   
+    
+    if (this.submitValidations(this.componentsizemasterForm.value)) return;
 
     let API = 'ComponentSizeMaster/InsertComponentSizeMaster'
     let postData = this.setPostData()
@@ -317,16 +339,17 @@ export class ComponentSizeMasterComponent implements OnInit {
   }
 
   update() {
-    if (this.componentsizemasterForm.invalid) {
-      this.toastr.error('select all required fields')
-      return
-    }
+    // if (this.componentsizemasterForm.invalid) {
+    //   this.toastr.error('select all required fields')
+    //   return
+    // }
 
-    if (this.componentsizemasterForm.value.height > this.componentsizemasterForm.value.width / 2) {
-      this.toastr.error('The Height must be Less than the Half of the Width')
-      return;
-    }
+    // if (this.componentsizemasterForm.value.height > this.componentsizemasterForm.value.width / 2) {
+    //   this.toastr.error('The Height must be Less than the Half of the Width')
+    //   return;
+    // }
 
+    if (this.submitValidations(this.componentsizemasterForm.value)) return;
 
     let API = 'ComponentSizeMaster/UpdateComponentSizeMaster/' + this.content.COMPSIZE_CODE
     let postData = this.setPostData()

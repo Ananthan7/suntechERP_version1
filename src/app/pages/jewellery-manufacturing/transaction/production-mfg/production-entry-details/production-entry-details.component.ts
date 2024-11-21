@@ -551,7 +551,6 @@ export class ProductionEntryDetailsComponent implements OnInit {
         this.commonService.closeSnackBarMsg()
         if (result.status == "Success" && result.dynamicData[0]) {
           let data = result.dynamicData[0]
-          debugger
           if (data.length > 0) {
             this.subJobNoSearch.VIEW_ICON = true;
             this.subJobNoSearch.WHERECONDITION += `AND job_number='${this.productiondetailsFrom.value.JOB_NUMBER?.toString()}'`

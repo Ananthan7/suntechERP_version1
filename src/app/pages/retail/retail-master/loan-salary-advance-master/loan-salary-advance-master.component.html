@@ -8,8 +8,9 @@
     </div>
     <!-- modal header component -->
     <modal-header
+    [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode"
     (saveClick)="formSubmit()"
-    (cancelClick)="close()"
+    (cancelClick)="close()"[isViewDelete]="!viewMode && editableMode"
     (deleteClick)="deleteRecord()"
     ></modal-header>
     <!-- content section -->
@@ -96,7 +97,7 @@
                                     </label>
                                     <div class="col-sm-2">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" matInput formControlName="loan_amount" UpperCaseDirective />
+                                            <input type="text" AmountDecimalInput class="text-right"matInput formControlName="loan_amount" UpperCaseDirective />
                                         </mat-form-field>
                                     </div>
                                     <label for="inputPassword" id="ID002" class="col-sm-2 col-form-label">Issue Date :
@@ -122,7 +123,7 @@
                                     </label>
                                     <div class="col-sm-2">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" matInput formControlName="loan_installments" UpperCaseDirective />
+                                            <input type="text" matInput AmountDecimalInput class="text-right" formControlName="loan_installments" UpperCaseDirective />
                                         </mat-form-field>
                                     </div>
                                     <label for="inputPassword" id="ID002" class="col-sm-2 col-form-label">Deduction
@@ -218,7 +219,7 @@
                                         </label>
                                         <div class="col-sm-2">
                                             <mat-form-field style="width: 100%" appearance="outline">
-                                                <input type="text" matInput formControlName="loandet_amount"
+                                                <input type="text" AmountDecimalInput class="text-right" matInput formControlName="loandet_amount"
                                                     UpperCaseDirective />
                                             </mat-form-field>
                                         </div>
@@ -227,7 +228,7 @@
                                         </label>
                                         <div class="col-sm-2">
                                             <mat-form-field style="width: 100%" appearance="outline">
-                                                <input type="text" matInput formControlName="loandet_repaid_amount"
+                                                <input type="text" AmountDecimalInput class="text-right" matInput formControlName="loandet_repaid_amount"
                                                     UpperCaseDirective />
                                             </mat-form-field>
                                         </div>
@@ -236,7 +237,7 @@
                                         </label>
                                         <div class="col-sm-2">
                                             <mat-form-field style="width: 100%" appearance="outline">
-                                                <input type="text" matInput formControlName="loandet_balance_amount"
+                                                <input type="text"  class="text-right" AmountDecimalInput matInput formControlName="loandet_balance_amount"
                                                     UpperCaseDirective />
                                             </mat-form-field>
                                         </div>

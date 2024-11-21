@@ -345,9 +345,9 @@ export class SequenceMasterComponent implements OnInit {
 
       }
     })
-    if (this.checkCondtion == true) {
-      return true;
-    }
+    // if (this.checkCondtion == true) {
+    //   return true;
+    // }
 
     this.dataSource.forEach((item: any) => {
       if (item.isChecked == true && item.STD_TIME > item.MAX_TIME) {

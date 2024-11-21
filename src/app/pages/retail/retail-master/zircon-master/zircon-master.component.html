@@ -12,6 +12,7 @@
   (saveClick)="zirconMasterMainFormSubmit()"
   (cancelClick)="close()"
   (deleteClick)="DeleteController()"
+  [isViewDelete]="flag == 'VIEW'"
 ></modal-header>
 
 <!-- content section -->
@@ -29,7 +30,7 @@
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
                     type="text"
-                    [readonly]="flag === 'VIEW'"
+                    [readonly]="flag === 'VIEW' || flag === 'EDIT'"
                     matInput
                     formControlName="code"
                   />
@@ -54,7 +55,7 @@
                         costCenterCodeData,
                         ['costCenter'],
                         false,
-                        ['CODE'],
+                        ['COST_CODE'],
                         false
                       )
                     "
@@ -66,7 +67,7 @@
                     class="masterSearch"
                     [MasterSearchData]="costCenterCodeData"
                     (newRowClick)="
-                      lookupSelect($event, ['costCenter'], ['CODE'])
+                      lookupSelect($event, ['costCenter'], ['COST_CODE'])
                     "
                   >
                   </master-search>
@@ -197,7 +198,7 @@
                         vendorCodeData,
                         ['vendor'],
                         false,
-                        ['CODE'],
+                        ['ACCODE'],
                         false
                       )
                     "
@@ -208,7 +209,7 @@
                     #overlayVendor
                     class="masterSearch"
                     [MasterSearchData]="vendorCodeData"
-                    (newRowClick)="lookupSelect($event, ['vendor'], ['CODE'])"
+                    (newRowClick)="lookupSelect($event, ['vendor'], ['ACCODE'])"
                   >
                   </master-search>
                 </mat-form-field>
