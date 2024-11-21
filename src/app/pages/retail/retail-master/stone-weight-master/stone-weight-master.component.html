@@ -30,7 +30,7 @@
                                                   false
                                                 )
                                               " />
-                            <master-search [MasterSearchData]="sieveSetcodeData" class="masterSearch"
+                            <master-search *ngIf="this.flag !='VIEW'" [MasterSearchData]="sieveSetcodeData" class="masterSearch"
                                 (newRowClick)="sieveSetcodeSelected($event)"></master-search>
                         </mat-form-field>
                     </div>
@@ -45,7 +45,7 @@
                     <div class="col-md-8">
                         <mat-form-field style="width: 90%;" appearance="outline">
                             <input type="text" id="inputPassword" matInput formControlName="division"
-                                [readonly]="viewOnly" (focusout)="
+                                [readonly]="true" (focusout)="
                             SPvalidateLookupFieldModified(
                               $event,
                               divisionCodeData,
@@ -55,7 +55,7 @@
                               false
                             )
                           " />
-                            <master-search [MasterSearchData]="divisionCodeData" class="masterSearch"
+                            <master-search *ngIf="this.flag !='VIEW'" [MasterSearchData]="divisionCodeData" class="masterSearch"
                                 (newRowClick)="divisionCodeSelected($event)"></master-search>
                         </mat-form-field>
                     </div>
@@ -76,7 +76,7 @@
                               false
                             )
                           " />
-                            <master-search [MasterSearchData]="sieveFromCodeData" class="masterSearch"
+                            <master-search *ngIf="this.flag !='VIEW'" [MasterSearchData]="sieveFromCodeData" class="masterSearch"
                                 (newRowClick)="sievecodeselected($event)"></master-search>
                         </mat-form-field>
                     </div>
@@ -108,7 +108,7 @@
                               false
                             )
                           " />
-                            <master-search [MasterSearchData]="sizeFromCodeData" class="masterSearch"
+                            <master-search *ngIf="this.flag !='VIEW'" [MasterSearchData]="sizeFromCodeData" class="masterSearch"
                                 (newRowClick)="sizefromselected($event)"></master-search>
                         </mat-form-field>
                     </div>
@@ -130,7 +130,7 @@
                     <div class="col-md-8">
                         <mat-form-field style="width: 90%;" appearance="outline">
                             <input type="text" id="inputPassword" matInput formControlName="pointerwt"
-                                style="text-align:right" FourDecimalInput [readonly]="viewOnly" />
+                                 FourDecimalInput [readonly]="viewOnly" />
 
                         </mat-form-field>
                     </div>
@@ -159,7 +159,7 @@
                               false
                             )
                           " />
-                            <master-search [MasterSearchData]="ShapecodeData" class="masterSearch"
+                            <master-search *ngIf="this.flag !='VIEW'" [MasterSearchData]="ShapecodeData" class="masterSearch"
                                 (newRowClick)="ShapecodeSelected($event)"></master-search>
                         </mat-form-field>
                     </div>
@@ -180,7 +180,7 @@
                               false
                             )
                           " />
-                            <master-search [MasterSearchData]="sieveToCodeData" class="masterSearch"
+                            <master-search *ngIf="this.flag !='VIEW'" [MasterSearchData]="sieveToCodeData" class="masterSearch"
                                 (newRowClick)="sievetoselected($event)"></master-search>
                         </mat-form-field>
                     </div>
@@ -212,7 +212,7 @@
                               false
                             )
                           " />
-                            <master-search [MasterSearchData]="sizeToCodeData" class="masterSearch"
+                            <master-search *ngIf="this.flag !='VIEW'" [MasterSearchData]="sizeToCodeData" class="masterSearch"
                                 (newRowClick)="sizetoselected($event)"></master-search>
                         </mat-form-field>
                     </div>
