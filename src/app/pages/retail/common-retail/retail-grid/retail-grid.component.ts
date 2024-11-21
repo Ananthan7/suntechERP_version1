@@ -515,7 +515,7 @@ export class RetailGridComponent implements OnInit {
     }
     return payloadData
   }
-  printGridData(data: any) {  //181
+  printGridData(data: any) {
     let gridData= JSON.parse(data.data['CONTROL_LIST_JSON'])
     
     this.CommonService.showSnackBarMsg('MSG81447');
