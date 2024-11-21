@@ -6,6 +6,7 @@ import {
   Validators,
 } from "@angular/forms";
 import { MatCheckboxChange } from "@angular/material/checkbox";
+import { MatSelectChange } from "@angular/material/select";
 import { NgbActiveModal, NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { ToastrService } from "ngx-toastr";
 import { Subscription } from "rxjs";
@@ -50,9 +51,19 @@ export class GratuityMasterComponent implements OnInit {
   tableData: any = [];
   flag: any;
   code: any;
-  typeList = [{ field: "Yes" }, { field: "No" }];
+  gridData: any;
   typeData: any;
+  typeAsParams: any;
+  postDataDetails: any = [];
+  optionalData: any;
   private subscriptions: Subscription[] = [];
+
+  columnHeadings: any[] = [
+    { FIELD: "SRNO", CAPTION: "SRNO" },
+    { FIELD: "GRATTYPE", CAPTION: "TYPE" },
+    { FIELD: "YPERIOD", CAPTION: "YEAR PERIOD" },
+    { FIELD: "NDAYS", CAPTION: "NO OF DAYS" },
+  ];
 
   debitAccCode: MasterSearchModel = {
     PAGENO: 1,
@@ -146,7 +157,7 @@ export class GratuityMasterComponent implements OnInit {
     private commonService: CommonServiceService
   ) {}
   ngOnInit(): void {
-    console.log(this.commonService.getComboFilterByID("BasedOn"));
+    console.log(this.content);
 
     this.flag = this.content
       ? this.content.FLAG
@@ -191,46 +202,82 @@ export class GratuityMasterComponent implements OnInit {
     }
   }
 
-  ViewController(DATA: any) {
+  async ViewController(DATA: any) {
     this.code = DATA.CODE;
-    this.gratuityMasterForm.controls["code"].setValue(DATA.CODE);
-    this.gratuityMasterForm.controls["basedOn"].setValue(DATA.BASED_ON);
-    this.gratuityMasterForm.controls["countryCode"].setValue(DATA.COUNTRYCODE);
-    this.gratuityMasterForm.controls["debitAc"].setValue(DATA.DEBITACCODE);
-    this.gratuityMasterForm.controls["amount"].setValue(
-      this.commonService.decimalQuantityFormat(DATA.FIXAMOUNT, "AMOUNT")
-    );
-    this.gratuityMasterForm.controls["description"].setValue(DATA.DESCRIPTION);
-    this.gratuityMasterForm.controls["type"].setValue(DATA.GRATTYPE);
-    this.gratuityMasterForm.controls["noOfDaysAndYear"].setValue(DATA.YEARDAYS);
-    this.gratuityMasterForm.controls["excludeAnnualLeaves"].setValue(
-      DATA.DED_ANNUALLEAVE === 1
-    );
-    this.gratuityMasterForm.controls["excludePaidLeaves"].setValue(
-      DATA.DED_PAIDLEAVE === 1
-    );
-    this.gratuityMasterForm.controls["excludeUnpaidLeaves"].setValue(
-      DATA.DED_UPAIDLEAVE === 1
-    );
-    this.gratuityMasterForm.controls["excludeHalfPaidLeaves"].setValue(
-      DATA.DED_HPAIDLEAVE === 1
-    );
 
-    this.gratuityMasterForm.controls["userDefined1"].setValue(DATA.UDF1);
-    this.gratuityMasterForm.controls["userDefined2"].setValue(DATA.UDF2);
-    this.gratuityMasterForm.controls["userDefined3"].setValue(DATA.UDF3);
-    this.gratuityMasterForm.controls["userDefined4"].setValue(DATA.UDF4);
-    this.gratuityMasterForm.controls["userDefined5"].setValue(DATA.UDF5);
-    this.gratuityMasterForm.controls["userDefined6"].setValue(DATA.UDF6);
-    this.gratuityMasterForm.controls["userDefined7"].setValue(DATA.UDF7);
-    this.gratuityMasterForm.controls["userDefined8"].setValue(DATA.UDF8);
-    this.gratuityMasterForm.controls["userDefined9"].setValue(DATA.UDF9);
-    this.gratuityMasterForm.controls["userDefined10"].setValue(DATA.UDF10);
-    this.gratuityMasterForm.controls["userDefined11"].setValue(DATA.UDF11);
-    this.gratuityMasterForm.controls["userDefined12"].setValue(DATA.UDF12);
-    this.gratuityMasterForm.controls["userDefined13"].setValue(DATA.UDF13);
-    this.gratuityMasterForm.controls["userDefined14"].setValue(DATA.UDF14);
-    this.gratuityMasterForm.controls["userDefined15"].setValue(DATA.UDF15);
+    try {
+      const ALTERDATA = await this.optionalViewData(DATA.CODE);
+
+      const ALTERDATADETAILS = ALTERDATA.Details.map(
+        (item: any, index: number) => {
+          return {
+            ...item,
+            SRNO: index + 1,
+          };
+        }
+      );
+
+      console.log(ALTERDATADETAILS);
+
+      this.gratuityMasterForm.controls["code"].setValue(DATA.CODE);
+      this.gratuityMasterForm.controls["basedOn"].setValue(DATA.BASED_ON);
+      this.gratuityMasterForm.controls["countryCode"].setValue(
+        DATA.COUNTRYCODE
+      );
+
+      this.gratuityMasterForm.controls["countryDesc"].setValue(
+        ALTERDATA.COUNTRYCODE_DESCRIPTION
+      );
+      this.gratuityMasterForm.controls["debitAc"].setValue(DATA.DEBITACCODE);
+      this.gratuityMasterForm.controls["debitAcDesc"].setValue(
+        ALTERDATA.DEBITACCODE_DESCRIPTION
+      );
+      this.gratuityMasterForm.controls["amount"].setValue(
+        this.commonService.decimalQuantityFormat(DATA.FIXAMOUNT, "AMOUNT")
+      );
+      this.gratuityMasterForm.controls["description"].setValue(
+        DATA.DESCRIPTION
+      );
+      console.log(DATA.GRATTYPE);
+      
+      this.gratuityMasterForm.controls["type"].setValue(DATA.GRATTYPE);
+      this.gratuityMasterForm.controls["noOfDaysAndYear"].setValue(
+        DATA.YEARDAYS
+      );
+      this.gratuityMasterForm.controls["excludeAnnualLeaves"].setValue(
+        DATA.DED_ANNUALLEAVE === 1
+      );
+      this.gratuityMasterForm.controls["excludePaidLeaves"].setValue(
+        DATA.DED_PAIDLEAVE === 1
+      );
+      this.gratuityMasterForm.controls["excludeUnpaidLeaves"].setValue(
+        DATA.DED_UPAIDLEAVE === 1
+      );
+      this.gratuityMasterForm.controls["excludeHalfPaidLeaves"].setValue(
+        DATA.DED_HPAIDLEAVE === 1
+      );
+
+      this.gratuityMasterForm.controls["userDefined1"].setValue(DATA.UDF1);
+      this.gratuityMasterForm.controls["userDefined2"].setValue(DATA.UDF2);
+      this.gratuityMasterForm.controls["userDefined3"].setValue(DATA.UDF3);
+      this.gratuityMasterForm.controls["userDefined4"].setValue(DATA.UDF4);
+      this.gratuityMasterForm.controls["userDefined5"].setValue(DATA.UDF5);
+      this.gratuityMasterForm.controls["userDefined6"].setValue(DATA.UDF6);
+      this.gratuityMasterForm.controls["userDefined7"].setValue(DATA.UDF7);
+      this.gratuityMasterForm.controls["userDefined8"].setValue(DATA.UDF8);
+      this.gratuityMasterForm.controls["userDefined9"].setValue(DATA.UDF9);
+      this.gratuityMasterForm.controls["userDefined10"].setValue(DATA.UDF10);
+      this.gratuityMasterForm.controls["userDefined11"].setValue(DATA.UDF11);
+      this.gratuityMasterForm.controls["userDefined12"].setValue(DATA.UDF12);
+      this.gratuityMasterForm.controls["userDefined13"].setValue(DATA.UDF13);
+      this.gratuityMasterForm.controls["userDefined14"].setValue(DATA.UDF14);
+      this.gratuityMasterForm.controls["userDefined15"].setValue(DATA.UDF15);
+
+      this.gridData = ALTERDATADETAILS;
+    } catch (error) {
+      console.error("Error in ViewController:", error);
+      this.commonService.showSnackBarMsg("Content only loaded");
+    }
   }
 
   editController(DATA: any) {
@@ -306,7 +353,6 @@ export class GratuityMasterComponent implements OnInit {
         );
       }
     } else if (controller && modelfield) {
-      // Handle single controller and field
       const value = e[modelfield];
       if (value !== undefined) {
         this.gratuityMasterForm.controls[controller].setValue(value);
@@ -334,6 +380,15 @@ export class GratuityMasterComponent implements OnInit {
     });
 
     if (!requiredFieldsInvalid) {
+      this.postDataDetails = this.gridData.map((item: any, index: number) => {
+        return {
+          UNIQUEID: 0,
+          CODE: this.code,
+          YPERIOD: item.YPERIOD,
+          NDAYS: item.NDAYS,
+        };
+      });
+
       let postData = {
         MID: 0,
         CODE: this.gratuityMasterForm.value.code,
@@ -363,14 +418,7 @@ export class GratuityMasterComponent implements OnInit {
         UDF13: this.gratuityMasterForm.value.userDefined13,
         UDF14: this.gratuityMasterForm.value.userDefined14,
         UDF15: this.gratuityMasterForm.value.userDefined15,
-        Details: [
-          {
-            UNIQUEID: 0,
-            CODE: "string",
-            YPERIOD: "string",
-            NDAYS: 0,
-          },
-        ],
+        Details: this.postDataDetails,
       };
 
       if (this.flag === "EDIT") {
@@ -554,7 +602,6 @@ export class GratuityMasterComponent implements OnInit {
     this.subscriptions.push(sub);
   }
 
-  // Clear multiple form controls
   clearLookupData(LOOKUPDATA: MasterSearchModel, FORMNAMES: string[]) {
     LOOKUPDATA.SEARCH_VALUE = "";
     FORMNAMES.forEach((formName) => {
@@ -690,7 +737,7 @@ export class GratuityMasterComponent implements OnInit {
     switch (this.flag) {
       case "VIEW":
         this.gratuityMasterForm.controls["excludeAnnualLeaves"].disable();
-        this.gratuityMasterForm.controls["type"].disable();
+        // this.gratuityMasterForm.controls["type"].disable();
         this.gratuityMasterForm.controls["excludeUnpaidLeaves"].disable();
         this.gratuityMasterForm.controls["excludePaidLeaves"].disable();
         this.gratuityMasterForm.controls["excludeHalfPaidLeaves"].disable();
@@ -700,5 +747,51 @@ export class GratuityMasterComponent implements OnInit {
       default:
         break;
     }
+  }
+
+  GetGridThroughType(event: MatSelectChange) {
+    this.typeAsParams = event.value;
+    this.GratuityGridData(this.typeAsParams);
+  }
+
+  GratuityGridData(type: any) {
+    let API = `PayGratuityMaster/GratuityMasterGridData/${type}`;
+    let sub: Subscription = this.apiService.getDynamicAPI(API).subscribe(
+      (result) => {
+        if (result.status.trim() === "Success") {
+          this.gridData = result.dynamicData[0].map(
+            (item: any, index: number) => {
+              return { ...item, SRNO: index + 1 };
+            }
+          );
+        }
+      },
+      (err) => {
+        console.error("Error fetching data:", err);
+        this.commonService.toastErrorByMsgId("MSG1531");
+      }
+    );
+  }
+
+  optionalViewData(CODE: any): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let API = `PayGratuityMaster/GetPayGratuityMasterDetail/${CODE}`;
+      this.apiService.getDynamicAPI(API).subscribe(
+        (result) => {
+          if (result.status.trim() === "Success") {
+            console.log(result.response);
+            this.optionalData = result.response;
+            resolve(this.optionalData);
+          } else {
+            reject(new Error("Failed to fetch data"));
+          }
+        },
+        (err) => {
+          console.error("Error fetching data:", err);
+          this.commonService.toastErrorByMsgId("MSG1531");
+          reject(err);
+        }
+      );
+    });
   }
 }
