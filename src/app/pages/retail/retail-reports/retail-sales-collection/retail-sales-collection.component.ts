@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -61,7 +62,7 @@ export class RetailSalesCollectionComponent implements OnInit {
   outputGridDataSource: any;
   OutputGridColumns: any;
   
-  constructor(  private activeModal: NgbActiveModal,
+  constructor(  private activeModal: NgbActiveModal, private datePipe: DatePipe,
     private formBuilder: FormBuilder, private dataService: SuntechAPIService,  private comService: CommonServiceService,
     private commonService: CommonServiceService,   private toastr: ToastrService, private sanitizer: DomSanitizer
   ) { }
@@ -493,7 +494,8 @@ export class RetailSalesCollectionComponent implements OnInit {
         "FROMVOCDATE": this.formatDateToYYYYMMDD(this.dateToPass.fromDate),
         "TOVOCDATE": this.formatDateToYYYYMMDD(this.dateToPass.toDate) ,
         "flag": this.retailSalesCollection.controls.OutpuGridView.value == true? 'GRID' : 
-        this.retailSalesCollection.controls.showSalesRegisterCheckbox.value == true? 'REGISTER' : '',
+        this.retailSalesCollection.controls.showSalesRegisterCheckbox.value == true? 'REGISTER' :
+        this.retailSalesCollection.controls.showOnlySummaryCheckbox.value == true? 'Summary' : '',
         "USERBRANCH": localStorage.getItem('userbranch'),
         "USERNAME": localStorage.getItem('username'),
         "Logdata": JSON.stringify(logData)
@@ -508,15 +510,22 @@ export class RetailSalesCollectionComponent implements OnInit {
           this.outputInGridBoolean = true;
           this.outputGridDataSource = result.dynamicData[0];
 
-          this.OutputGridColumns = Object.keys(this.outputGridDataSource[0] || {}).map(key => {
-            return {
-              dataField: key,
-              caption: key,
-              width: key === 'Branch Name' ? 400 : 120,
-              alignment: key === 'Branch Name' ? 'left' : key === 'Voc No' ? 'right' : 'center'
-            };
-          });
-          this.isLoading = false;
+          if(this.outputGridDataSource.length == 0){
+            this.outputInGridBoolean = false;
+            Swal.fire('No Data!', 'There is no data!', 'info');
+            this.isLoading = false;
+          }
+          else{
+            this.OutputGridColumns = Object.keys(this.outputGridDataSource[0] || {}).map(key => {
+              return {
+                dataField: key,
+                caption: key,
+                width: key === 'Branch Name' ? 400 : 120,
+                alignment: this.setAlignment(key) 
+              };
+            });
+            this.isLoading = false;
+          }
         }
         else if(this.retailSalesCollection.controls.showSalesRegisterCheckbox.value == true){
           let data = result.dynamicData;
@@ -560,45 +569,29 @@ export class RetailSalesCollectionComponent implements OnInit {
         return
       }
     });      
+  }
+  setAlignment(key: string): string {
+    const isNumberType = typeof this.outputGridDataSource[0][key] === 'number';
+  
+    if (isNumberType) {
+      return 'right';
+    }
+
+    if( key === 'Year'){
+      return 'right';
+    }
 
 
-    // this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
-    // .subscribe((result: any) => {
-    //   console.log(result);
-    //   let data = result.dynamicData;
-    //   this.commonService.closeSnackBarMsg()
-    //   var WindowPrt = window.open(' ', ' ', 'width=900px, height=800px');
-    //   if (WindowPrt === null) {
-    //     console.error('Failed to open the print window. Possibly blocked by a popup blocker.');
-    //     return;
-    //   }
-    //   let printContent = data[0][0].HTMLINPUT;
-    //   WindowPrt.document.write(printContent);
-    //   WindowPrt.document.close();
-    //   WindowPrt.focus();  
-    //   WindowPrt.onload = function () {
-    //     if (WindowPrt && WindowPrt.document.head) {
-    //       let styleElement = WindowPrt.document.createElement('style');
-    //       styleElement.textContent = `
-    //                   @page {
-    //                       size: A5 landscape;
-    //                   }
-    //                   body {
-    //                       margin: 0mm;
-    //                   }
-    //               `;
-    //       WindowPrt.document.head.appendChild(styleElement);
+    if (key === 'Voc Date') {
+      this.outputGridDataSource.forEach((item: any) => {
+        const formattedDate = this.datePipe.transform(item[key], 'yyyy-MM-dd');
+        item[key] = formattedDate || 'Invalid Date';
+      });
+      return this.outputGridDataSource, 'right';
+    }
+   
 
-    //       setTimeout(() => {
-    //         if (WindowPrt) {
-    //           WindowPrt.print();
-    //         } else {
-    //           console.error('Print window was closed before printing could occur.');
-    //         }
-    //       }, 800);
-    //     }
-    //   };
-    // });   
+    return 'left';
   }
   
   printBtnClick(){
@@ -623,7 +616,9 @@ export class RetailSalesCollectionComponent implements OnInit {
         "STRVOCTYPES": this.VocTypeParam, //this.commonService.getqueryParamVocType(),
         "FROMVOCDATE": this.formatDateToYYYYMMDD(this.dateToPass.fromDate),
         "TOVOCDATE": this.formatDateToYYYYMMDD(this.dateToPass.toDate) ,
-        "flag": '',
+        "flag": this.retailSalesCollection.controls.OutpuGridView.value == true? 'GRID' : 
+        this.retailSalesCollection.controls.showSalesRegisterCheckbox.value == true? 'REGISTER' :
+        this.retailSalesCollection.controls.showOnlySummaryCheckbox.value == true? 'Summary' : '',
         "USERBRANCH": localStorage.getItem('userbranch'),
         "USERNAME": localStorage.getItem('username'),
         "Logdata": JSON.stringify(logData)
