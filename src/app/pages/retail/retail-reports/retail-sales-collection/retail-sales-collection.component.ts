@@ -3,6 +3,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import * as moment from 'moment';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { CommonServiceService } from 'src/app/services/common-service.service';
@@ -571,16 +572,9 @@ export class RetailSalesCollectionComponent implements OnInit {
     });      
   }
   setAlignment(key: string): string {
-    const isNumberType = typeof this.outputGridDataSource[0][key] === 'number';
-  
-    if (isNumberType) {
-      return 'right';
-    }
-
     if( key === 'Year'){
       return 'right';
     }
-
 
     if (key === 'Voc Date') {
       this.outputGridDataSource.forEach((item: any) => {
@@ -589,9 +583,28 @@ export class RetailSalesCollectionComponent implements OnInit {
       });
       return this.outputGridDataSource, 'right';
     }
-   
 
-    return 'left';
+    if (key === 'Time') {
+      this.outputGridDataSource.forEach((item: any) => {
+        const formattedTime = moment(item[key], "HH:mm:ss.SSSSSSS").format("hh:mm:ss A");
+        item[key] = formattedTime || 'Invalid Time';
+      });
+      return this.outputGridDataSource, 'right';
+    }
+   
+    this.outputGridDataSource.forEach((item: any) => {
+      Object.keys(item).forEach((key) => {
+        if(key == 'Net Amount' || key == 'Sales Return' || key == 'Metal Amount' || key == 'Making Amount'  
+          || key == 'Cost' || key == 'Profit' ||key == 'Discount Amount' || key == 'Tax Amount CC' || key == 'Diamond Amount'
+          || key == 'Tax Amount FC' || key == 'Net Wt.' || key == 'Purchase Wt' || key == 'Advance Amount' || key == 'ADCBV'
+          || key == 'CASH' || key == 'CASHQR' || key == 'Credit Sales' || key == 'Gold Rate' || key == 'ADV' || key == 'Credit Sales'  ){
+          if (typeof item[key] === 'number') {
+            item[key] = this.customizeMainGridContent( item[key] )
+          }
+        }
+      });
+    });
+    return this.outputGridDataSource, 'right';
   }
   
   printBtnClick(){
@@ -673,4 +686,9 @@ export class RetailSalesCollectionComponent implements OnInit {
   onOutputInGridPopupHidden(){
     this.outputInGridBoolean = !this.outputInGridBoolean;
   }
+
+  customizeMainGridContent = (data: any) => {
+    const formattedValue = this.commonService.decimalQuantityFormat(data, 'AMOUNT');
+    return Number(formattedValue).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  };
 }
