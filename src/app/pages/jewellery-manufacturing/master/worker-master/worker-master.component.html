@@ -9,7 +9,10 @@
     <!-- modal header component -->
     <modal-header (saveClick)="formSubmit()" (cancelClick)="close()" [isloading]="isloading"
         (deleteClick)="deleteWorkerMaster()" [isViewDelete]="editMode" [isViewSave]="!viewMode"
-        [disableSaveBtn]="isDisableSaveBtn" [isViewCancel]="!viewMode" [isViewMore]="!viewMode"></modal-header>
+        [disableSaveBtn]="isDisableSaveBtn" [isViewCancel]="!viewMode" [isViewMore]="!viewMode"
+        [isViewAttachment]="!viewMode" (attachmentClick)="attachmentClicked()"></modal-header>
+    <!-- component to upload attachment -->
+    <attachment-upload (uploadSubmit)="uploadSubmited($event)" [savedAttachment]="savedAttachments"></attachment-upload>
     <!-- content section -->
     <div class="card">
         <form [formGroup]="workerMasterForm">
@@ -22,8 +25,8 @@
                             <mat-form-field appearance="outline">
                                 <input type="text" matInput placeholder="WORKER CODE" maxlength="6" id="WorkerCode"
                                     formControlName="WorkerCode" id="code" [readonly]="viewMode || editMode" #code
-                                    appAlphabetOnly UpperCaseDirective
-                                    (focusout)="checkWorkerExists($event)" (keyup)="codeEnabled()" autocomplete="off" />
+                                    appAlphabetOnly UpperCaseDirective (focusout)="checkWorkerExists($event)"
+                                    (keyup)="codeEnabled()" autocomplete="off" />
                                 <!-- <mat-error
                                     *ngIf="workerMasterForm.controls.WorkerCode.touched 
                                         && workerMasterForm.controls.WorkerCode.hasError('required')">
@@ -31,9 +34,9 @@
                                 </mat-error> -->
                             </mat-form-field>
                             <mat-form-field appearance="outline" class="mx-1" style="width: -webkit-fill-available;">
-                                <input type="text" matInput placeholder="DESCRIPTION" appAlphabetOnly UpperCaseDirective maxlength="40"
-                                    formControlName="WorkerDESCRIPTION" [readonly]="viewMode || codeEnable"
-                                    maxlength="30" />
+                                <input type="text" matInput placeholder="DESCRIPTION" appAlphabetOnly UpperCaseDirective
+                                    maxlength="40" formControlName="WorkerDESCRIPTION"
+                                    [readonly]="viewMode || codeEnable" maxlength="30" />
                             </mat-form-field>
                         </div>
                     </div>

@@ -5,8 +5,11 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()"  [isViewDelete]="!viewMode && editableMode" [isViewSave]="!viewMode" [isViewCancel]="!viewMode"
-    [isViewMore]="!viewMode" (cancelClick)="close()" (deleteClick)="deleteComponentMaster()"></modal-header>
+<modal-header (saveClick)="formSubmit()" [isViewDelete]="!viewMode && editableMode" [isViewSave]="!viewMode"
+    [isViewCancel]="!viewMode" [isViewMore]="!viewMode" (cancelClick)="close()" (deleteClick)="deleteComponentMaster()"
+    [isViewAttachment]="!viewMode" (attachmentClick)="attachmentClicked()"></modal-header>
+<!-- component to upload attachment -->
+<attachment-upload (uploadSubmit)="uploadSubmited($event)" [savedAttachment]="savedAttachments"></attachment-upload>
 <div class="container-fluid pt-3">
     <form [formGroup]="componentmasterForm">
         <div class="col-md-12">

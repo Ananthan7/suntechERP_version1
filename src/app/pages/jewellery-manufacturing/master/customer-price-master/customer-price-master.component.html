@@ -7,7 +7,9 @@
 <!-- modal header component -->
 <modal-header (cancelClick)="close()" (saveClick)="formSubmit()" (deleteClick)="deleteRecord()"
   [isViewDelete]="editMode  && !viewMode" [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode"
-  [disableSaveBtn]="isDisableSaveBtn"></modal-header>
+  [disableSaveBtn]="isDisableSaveBtn" [isViewAttachment]="!viewMode" (attachmentClick)="attachmentClicked()"></modal-header>
+  <!-- component to upload attachment -->
+  <attachment-upload (uploadSubmit)="uploadSubmited($event)" [savedAttachment]="savedAttachments"></attachment-upload>
 <div class="row">
   <div class="col-md-12">
     <form [formGroup]="customerpricemasterForm">

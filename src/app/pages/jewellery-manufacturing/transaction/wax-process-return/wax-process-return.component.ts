@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
+import { AttachmentUploadComponent } from 'src/app/shared/common/attachment-upload/attachment-upload.component';
 @Component({
   selector: 'app-wax-process-return',
   templateUrl: './wax-process-return.component.html',
@@ -21,7 +22,10 @@ export class WaxProcessReturnComponent implements OnInit {
   @ViewChild('overlaytoworkerSearch') overlaytoworkerSearch!: MasterSearchComponent;
   @ViewChild('overlayenteredBySearch') overlayenteredBySearch!: MasterSearchComponent;
   @ViewChild('overlaywaxcodeSearch') overlaywaxcodeSearch!: MasterSearchComponent;
+  @ViewChild(AttachmentUploadComponent) attachmentUploadComponent?: AttachmentUploadComponent;
 
+  Attachedfile: any[] = [];
+  savedAttachments: any[] = [];
   columnhead: any[] = ['Sr No', 'Job No', 'Design', 'Party', 'S.O', 'S.O Date', 'Del Date', 'Gross Weight', 'Metal Weight', 'Stone Weight', 'Wax Weight', 'Issue Pcs', 'Return Pcs', 'Karat'];
   @Input() content!: any;
   tableData: any[] = [];
@@ -166,6 +170,15 @@ export class WaxProcessReturnComponent implements OnInit {
       this.comService.getqueryParamMainVocType()
     )
     this.setvoucherTypeMaster()
+  }
+
+  attachmentClicked() {
+    this.attachmentUploadComponent?.showDialog()
+  }
+
+  uploadSubmited(file: any) {
+    this.Attachedfile = file
+    console.log(this.Attachedfile);    
   }
 
   userDataSelected(value: any) {

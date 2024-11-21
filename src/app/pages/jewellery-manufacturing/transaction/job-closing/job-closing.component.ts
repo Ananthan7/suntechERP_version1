@@ -8,6 +8,7 @@ import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import Swal from 'sweetalert2';
 import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
+import { AttachmentUploadComponent } from 'src/app/shared/common/attachment-upload/attachment-upload.component';
 
 @Component({
   selector: 'app-job-closing',
@@ -22,6 +23,10 @@ export class JobClosingComponent implements OnInit {
   @ViewChild('overlayreasoncode') overlayreasoncode!: MasterSearchComponent;
   @ViewChild('overlaymetallocationcode') overlaymetallocationcode!: MasterSearchComponent;
   @ViewChild('overlaystonelocationcode') overlaystonelocationcode!: MasterSearchComponent;
+  @ViewChild(AttachmentUploadComponent) attachmentUploadComponent?: AttachmentUploadComponent;
+
+  Attachedfile: any[] = [];
+  savedAttachments: any[] = [];
 
   tableData: any[] = [];
   tableDatas: any[] = [];
@@ -159,6 +164,15 @@ export class JobClosingComponent implements OnInit {
     )
   }
 
+  
+  attachmentClicked() {
+    this.attachmentUploadComponent?.showDialog()
+  }
+
+  uploadSubmited(file: any) {
+    this.Attachedfile = file
+    console.log(this.Attachedfile);    
+  }
 
   change(event: any) {
     console.log(event);

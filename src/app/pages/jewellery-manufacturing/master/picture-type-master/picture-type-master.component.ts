@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
@@ -9,6 +9,7 @@ import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import themes from 'devextreme/ui/themes';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { AttachmentUploadComponent } from 'src/app/shared/common/attachment-upload/attachment-upload.component';
 
 @Component({
   selector: 'app-picture-type-master',
@@ -21,6 +22,7 @@ export class PictureTypeMasterComponent implements OnInit {
   allMode: string;
   checkBoxesMode: string;
   viewMode=false;
+  @ViewChild(AttachmentUploadComponent) attachmentUploadComponent?: AttachmentUploadComponent;
 
 subscriptions: any;
   @Input() content!: any; 
@@ -49,6 +51,20 @@ subscriptions: any;
   setFormValues() {
   
    
+  }
+
+  Attachedfile: any[] = [];
+  savedAttachments: any[] = [];
+
+  attachmentClicked() {
+    this.attachmentUploadComponent?.showDialog()
+  }
+
+  uploadSubmited(file: any) {
+
+    this.Attachedfile = file
+    console.log(this.Attachedfile);
+
   }
 
   picturetypemasterForm: FormGroup = this.formBuilder.group({

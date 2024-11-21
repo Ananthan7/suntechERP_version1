@@ -11,6 +11,7 @@ import { MeltingProcessDetailsComponent } from './melting-process-details/meltin
 import { JobAllocationComponent } from '../job-allocation/job-allocation.component';
 import { JobAllocationMeltingComponent } from './job-allocation-melting/job-allocation-melting.component';
 import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
+import { AttachmentUploadComponent } from 'src/app/shared/common/attachment-upload/attachment-upload.component';
 
 
 @Component({
@@ -27,6 +28,10 @@ export class MeltingProcessComponent implements OnInit {
   @ViewChild('overlayprocesscode') overlayprocesscode!: MasterSearchComponent;
   @ViewChild('overlaywokercode') overlaywokercode!: MasterSearchComponent;
   @ViewChild('overlaymeltingTypecode') overlaymeltingTypecode!: MasterSearchComponent;
+  @ViewChild(AttachmentUploadComponent) attachmentUploadComponent?: AttachmentUploadComponent;
+
+  Attachedfile: any[] = [];
+  savedAttachments: any[] = [];
   @Input() content!: any;
   tableData: any[] = [];
   detailData: any[] = [];
@@ -174,6 +179,16 @@ export class MeltingProcessComponent implements OnInit {
       this.setvalues()
       this.setvoucherTypeMaster()
     }
+  }
+
+
+  attachmentClicked() {
+    this.attachmentUploadComponent?.showDialog()
+  }
+
+  uploadSubmited(file: any) {
+    this.Attachedfile = file
+    console.log(this.Attachedfile);    
   }
 
   setAllInitialValues() {

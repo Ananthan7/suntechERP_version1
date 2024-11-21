@@ -13,7 +13,9 @@
     (deleteClick)="checkMaxVocNumber(1)"
     (auditTrailClick)="auditTrailClick()"
     (postClick)="AccountPosting()"
-    [isViewSave]="!viewMode"></modal-header>
+    [isViewSave]="!viewMode" [isViewAttachment]="!viewMode" (attachmentClick)="attachmentClicked()"></modal-header>
+    <!-- component to upload attachment -->
+<attachment-upload (uploadSubmit)="uploadSubmited($event)" [savedAttachment]="savedAttachments"></attachment-upload>
 <div class="row">
     <div class="col-md-12">
         <form [formGroup]="processTransferFrom">

@@ -6,6 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { CommonServiceService } from 'src/app/services/common-service.service';
 import { SuntechAPIService } from 'src/app/services/suntech-api.service';
+import { AttachmentUploadComponent } from 'src/app/shared/common/attachment-upload/attachment-upload.component';
 import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import Swal from 'sweetalert2';
@@ -81,6 +82,8 @@ export class ProcessMasterComponent implements OnInit {
   @ViewChild('codeInput1') codeInput1!: ElementRef;
   @ViewChild('approvalProcessInput') approvalProcessInput!: ElementRef;
   @ViewChild('recStockCode') recStockCode!: ElementRef;
+  @ViewChild(AttachmentUploadComponent) attachmentUploadComponent?: AttachmentUploadComponent;
+
 
   accountMasterData: MasterSearchModel = {
     PAGENO: 1,
@@ -384,6 +387,20 @@ export class ProcessMasterComponent implements OnInit {
     if (this.processMasterForm.value.processCode == '') {
       this.commonService.toastErrorByMsgId('MSG1680')//Process Code cannot be empty
     }
+  }
+
+  Attachedfile: any[] = [];
+  savedAttachments: any[] = [];
+
+  attachmentClicked() {
+    this.attachmentUploadComponent?.showDialog()
+  }
+
+  uploadSubmited(file: any) {
+
+    this.Attachedfile = file
+    console.log(this.Attachedfile);
+
   }
 
   jobNumberShow() {

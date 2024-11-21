@@ -9,6 +9,7 @@ import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
 import Swal from 'sweetalert2';
 import { ChangeDetectorRef } from '@angular/core';
 import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
+import { AttachmentUploadComponent } from 'src/app/shared/common/attachment-upload/attachment-upload.component';
 
 @Component({
   selector: 'app-worker-mastchangedCheckboxr',
@@ -20,6 +21,7 @@ export class WorkerMasterComponent implements OnInit {
   @ViewChild('overlayWorkerAcCodeSearch') overlayWorkerAcCodeSearch!: MasterSearchComponent;
   @ViewChild('overlayNameOfSupervisorSearch') overlayNameOfSupervisorSearch!: MasterSearchComponent;
   @ViewChild('overlaydefaultprocessSearch') overlaydefaultprocessSearch!: MasterSearchComponent;
+  @ViewChild(AttachmentUploadComponent) attachmentUploadComponent?: AttachmentUploadComponent;
 
 
 
@@ -217,6 +219,19 @@ export class WorkerMasterComponent implements OnInit {
 
   }
 
+  Attachedfile: any[] = [];
+  savedAttachments: any[] = [];
+
+  attachmentClicked() {
+    this.attachmentUploadComponent?.showDialog()
+  }
+
+  uploadSubmited(file: any) {
+
+    this.Attachedfile = file
+    console.log(this.Attachedfile);
+
+  }
 
   setValueWithDecimal(formControlName: string, value: any, Decimal: string) {
     this.workerMasterForm.controls[formControlName].setValue(

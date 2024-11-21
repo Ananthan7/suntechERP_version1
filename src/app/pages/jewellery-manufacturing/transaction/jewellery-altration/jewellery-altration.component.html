@@ -8,7 +8,9 @@
 <!-- modal header component -->
 <modal-header (saveClick)="formSubmit()" (cancelClick)="close()"
   (deleteClick)="deleteRecord()" [isViewAuditTrail]="true"
-  [isViewPost]="true" [isViewDelete]="editMode"></modal-header>
+  [isViewPost]="true" [isViewDelete]="editMode" [isViewAttachment]="!viewMode" (attachmentClick)="attachmentClicked()"></modal-header>
+  <!-- component to upload attachment -->
+  <attachment-upload (uploadSubmit)="uploadSubmited($event)" [savedAttachment]="savedAttachments"></attachment-upload>
 
 <div class="container-fluid">
   <form [formGroup]="jewelleryaltrationFrom">

@@ -6,7 +6,10 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()"></modal-header>
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" [isViewAttachment]="true" (attachmentClick)="attachmentClicked()"></modal-header>
+<!-- component to upload attachment -->
+<attachment-upload (uploadSubmit)="uploadSubmited($event)" [savedAttachment]="savedAttachments"></attachment-upload>
+
 <div class="row">
     <div class="col-md-12">
         <form [formGroup]="jobtransactionFrom">

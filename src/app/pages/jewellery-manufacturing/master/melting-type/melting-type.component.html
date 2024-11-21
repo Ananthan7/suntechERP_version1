@@ -7,7 +7,9 @@
 </div>
 <!-- modal header component -->
 <modal-header [isViewDelete]="editMode" [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode"
-    (saveClick)="formSubmit()" (cancelClick)="close()" (deleteClick)="deleteMeltingType()"></modal-header>
+    (saveClick)="formSubmit()" (cancelClick)="close()" (deleteClick)="deleteMeltingType()" [isViewAttachment]="!viewMode" (attachmentClick)="attachmentClicked()"></modal-header>
+    <!-- component to upload attachment -->
+    <attachment-upload (uploadSubmit)="uploadSubmited($event)" [savedAttachment]="savedAttachments"></attachment-upload>
 <!-- content section -->
 <div class="row">
     <form [formGroup]="meltingTypeForm">
