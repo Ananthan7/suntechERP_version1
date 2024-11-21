@@ -17,7 +17,59 @@ export class ModelMasterComponent implements OnInit {
   @Input() content!: any;
   selectedTabIndex = 0;
   tableData:any = [];
-  BranchData: MasterSearchModel = {}
+  TypeCode: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'ACCODE',
+    SEARCH_HEADING: 'Debit Expenses',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "TYPES='TYPE MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  }
+  CategoryMaster: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'ACCODE',
+    SEARCH_HEADING: 'Debit Expenses',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "TYPES='CATEGORY MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  }
+  Brand: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'ACCODE',
+    SEARCH_HEADING: 'Debit Expenses',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "TYPES='BRAND MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  }
+  SubCategoryMaster: MasterSearchModel = {
+    PAGENO: 1,
+    RECORDS: 10,
+    LOOKUPID: 3,
+    SEARCH_FIELD: 'ACCODE',
+    SEARCH_HEADING: 'Debit Expenses',
+    SEARCH_VALUE: '',
+    WHERECONDITION: "TYPES='SUB CATEGORY MASTER'",
+    VIEW_INPUT: true,
+    VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
+  }
+  BranchData:MasterSearchModel = {};
   DepartmentData: MasterSearchModel = {}
   isloading: boolean = false;
   viewMode: boolean = false;
@@ -96,6 +148,22 @@ export class ModelMasterComponent implements OnInit {
     }
   }
 
+  TypeCodeDataSelected(e:any){
+    console.log(e);
+    this.modelMasterForm.controls['type_code'].setValue(e.CODE);
+  }
+  SubCategoryDataSelected(e:any){
+    console.log(e);
+    this.modelMasterForm.controls['subcategory_code'].setValue(e.CODE);
+  }
+  CategoryDataSelected(e:any){
+    console.log(e);
+    this.modelMasterForm.controls['category_code'].setValue(e.CODE);
+  }
+  BranchCodeDataSelected(e:any){
+    console.log(e);
+    this.modelMasterForm.controls['branch_code'].setValue(e.CODE);
+  }
   close(data?: any) {
     if (data){
       this.viewMode = true;
@@ -171,6 +239,12 @@ export class ModelMasterComponent implements OnInit {
 
   setPostData() {
     let form = this.modelMasterForm.value; 
+    
+    console.log(
+      this.modelMasterForm.value.cal_stone_on
+    );
+    
+  
     return {
       MID: 0,
       MODEL_CODE: this.commonService.nullToString(form.model_code),
@@ -209,8 +283,8 @@ export class ModelMasterComponent implements OnInit {
       STD_STONE_RATE: this.commonService.emptyToZero( form.std_stone_rate) || 0,
       MIN_STONE_RATE: this.commonService.emptyToZero(form.min_stone_rate) || 0,
       MAX_STONE_RATE: this.commonService.emptyToZero (form.max_stone_rate) || 0,
-      CAL_STONE_ON:  true,
-      CALC_ON_WT: true
+      CAL_STONE_ON:  form.cal_stone_on = true? true:false,
+      CALC_ON_WT: form.calc_on_wt = true? true:false,
     };
   }
   formSubmit() {
