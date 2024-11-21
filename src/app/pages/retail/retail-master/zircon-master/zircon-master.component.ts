@@ -47,6 +47,7 @@ export class ZirconMasterComponent implements OnInit {
   imageName: any;
   image: File | null = null;
   fetchedPicture: string | null = null;
+  branchCode: any;
 
   costCenterCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -258,7 +259,7 @@ export class ZirconMasterComponent implements OnInit {
     firstTrans: [""],
     lastTrans: [""],
     currencyCode: [""],
-    currencyDesc: [""],
+    currencyRate: [""],
     weightAvgCostCode: [""],
     weightAvgCostDesc: [""],
     picture: [""],
@@ -287,7 +288,7 @@ export class ZirconMasterComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    console.log(this.content);
+    this.branchCode = this.commonService.branchCode;
 
     this.content
       ? (this.flag = this.content!.FLAG)
@@ -661,7 +662,7 @@ export class ZirconMasterComponent implements OnInit {
       STOCK_CODE: this.zirconMasterMainForm.value.code,
       STOCK_DESCRIPTION: this.zirconMasterMainForm.value.description,
       CURRENCY_CODE: this.zirconMasterMainForm.value.currencyCode,
-      CC_RATE: this.zirconMasterMainForm.value.currencyDesc,
+      CC_RATE: this.zirconMasterMainForm.value.currencyRate,
       COST_CODE: "string",
       TYPE_CODE: this.zirconMasterMainForm.value.type,
       CATEGORY_CODE: this.zirconMasterMainForm.value.category,
@@ -1182,5 +1183,37 @@ export class ZirconMasterComponent implements OnInit {
       this.zirconMasterMainForm.controls["allowZeroPcs"].enable();
       this.zirconMasterMainForm.controls["excludeFromTransferWt"].enable();
     }
+  }
+
+  diamondPriceCalculation() {
+    let payload = {
+      strBranchCode: this.branchCode,
+      strPriceCode: this.zirconMasterMainForm.value.priceOneCode,
+      dblCostValueFC: this.zirconMasterMainForm.value.weightAvgCostCode,
+      strCurrCode: this.zirconMasterMainForm.value.currencyCode,
+      dblConv_Rate: this.zirconMasterMainForm.value.currencyRate,
+    };
+    let API = `UspDiamondPriceCalculation/GetUspDiamondPriceCalculation`;
+    let sub: Subscription = this.apiService
+      .postDynamicAPI(API, payload)
+      .subscribe(
+        (result) => {
+          if (result.status.trim() === "Success" && result.response) {
+            console.log(result);
+
+            // this.itemDetailsData = result.response.map(
+            //   (item: any, index: number) => {
+            //     return { ...item, SELECT1: false, SRNO: index + 1 };
+            //   }
+            // );
+          } else {
+            this.commonService.toastErrorByMsgId("MSG1531");
+          }
+        },
+        (err) => {
+          console.error("Error fetching data:", err);
+          this.commonService.toastErrorByMsgId("MSG1531");
+        }
+      );
   }
 }

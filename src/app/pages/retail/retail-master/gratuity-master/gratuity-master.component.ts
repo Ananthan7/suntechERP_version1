@@ -1,11 +1,17 @@
-import { Component, Input, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup } from "@angular/forms";
+import { Component, Input, OnInit, ViewChild } from "@angular/core";
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from "@angular/forms";
 import { MatCheckboxChange } from "@angular/material/checkbox";
 import { NgbActiveModal, NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { ToastrService } from "ngx-toastr";
 import { Subscription } from "rxjs";
 import { CommonServiceService } from "src/app/services/common-service.service";
 import { SuntechAPIService } from "src/app/services/suntech-api.service";
+import { MasterSearchComponent } from "src/app/shared/common/master-search/master-search.component";
 import { MasterSearchModel } from "src/app/shared/data/master-find-model";
 import Swal from "sweetalert2";
 
@@ -15,12 +21,37 @@ import Swal from "sweetalert2";
   styleUrls: ["./gratuity-master.component.scss"],
 })
 export class GratuityMasterComponent implements OnInit {
+  @ViewChild("overlayDebitAc") overlayDebitAc!: MasterSearchComponent;
+  @ViewChild("overlayCountryCode") overlayCountryCode!: MasterSearchComponent;
+  @ViewChild("overlayUserDefined1") overlayUserDefined1!: MasterSearchComponent;
+  @ViewChild("overlayUserDefined2") overlayUserDefined2!: MasterSearchComponent;
+  @ViewChild("overlayUserDefined3") overlayUserDefined3!: MasterSearchComponent;
+  @ViewChild("overlayUserDefined4") overlayUserDefined4!: MasterSearchComponent;
+  @ViewChild("overlayUserDefined5") overlayUserDefined5!: MasterSearchComponent;
+  @ViewChild("overlayUserDefined6") overlayUserDefined6!: MasterSearchComponent;
+  @ViewChild("overlayUserDefined7") overlayUserDefined7!: MasterSearchComponent;
+  @ViewChild("overlayUserDefined8") overlayUserDefined8!: MasterSearchComponent;
+  @ViewChild("overlayUserDefined9") overlayUserDefined9!: MasterSearchComponent;
+  @ViewChild("overlayUserDefined10")
+  overlayUserDefined10!: MasterSearchComponent;
+  @ViewChild("overlayUserDefined11")
+  overlayUserDefined11!: MasterSearchComponent;
+  @ViewChild("overlayUserDefined12")
+  overlayUserDefined12!: MasterSearchComponent;
+  @ViewChild("overlayUserDefined13")
+  overlayUserDefined13!: MasterSearchComponent;
+  @ViewChild("overlayUserDefined14")
+  overlayUserDefined14!: MasterSearchComponent;
+  @ViewChild("overlayUserDefined15")
+  overlayUserDefined15!: MasterSearchComponent;
+
   @Input() content!: any;
   selectedTabIndex = 0;
   tableData: any = [];
   flag: any;
   code: any;
   typeList = [{ field: "Yes" }, { field: "No" }];
+  typeData: any;
   private subscriptions: Subscription[] = [];
 
   debitAccCode: MasterSearchModel = {
@@ -69,16 +100,16 @@ export class GratuityMasterComponent implements OnInit {
 
   gratuityMasterForm: FormGroup = this.formBuilder.group({
     type: [""],
-    code: [""],
-    description: [""],
+    code: ["", [Validators.required]],
+    description: ["", [Validators.required]],
     branch: [""],
     BranchDes: [""],
     excludeAnnualLeaves: [""],
-    debitAc: [""],
-    debitAcDesc: [""],
+    debitAc: ["", [Validators.required]],
+    debitAcDesc: ["", [Validators.required]],
     excludeUnpaidLeaves: [""],
-    countryCode: [""],
-    countryDesc: [""],
+    countryCode: ["", [Validators.required]],
+    countryDesc: ["", [Validators.required]],
     excludePaidLeaves: [""],
     basedOn: [""],
     amount: [""],
@@ -115,14 +146,17 @@ export class GratuityMasterComponent implements OnInit {
     private commonService: CommonServiceService
   ) {}
   ngOnInit(): void {
+    console.log(this.commonService.getComboFilterByID("BasedOn"));
+
     this.flag = this.content
       ? this.content.FLAG
       : (this.content = { FLAG: "ADD" }).FLAG;
     this.initialController(this.flag, this.content);
+    this.setFlag(this.flag, this.content);
   }
 
-  close(data?: any) {
-    if (this.flag !== "VIEW") {
+  close(data?: any, calling?: boolean) {
+    if (this.flag !== "VIEW" && !calling) {
       Swal.fire({
         title: "Are you sure you want to close this ?",
         icon: "warning",
@@ -141,10 +175,14 @@ export class GratuityMasterComponent implements OnInit {
   }
 
   initialController(FLAG: any, DATA: any) {
+    if (FLAG === "ADD") {
+      this.gratuityTypeData();
+    }
     if (FLAG === "VIEW") {
       this.ViewController(DATA);
     }
     if (FLAG === "EDIT") {
+      this.gratuityTypeData();
       this.editController(DATA);
     }
 
@@ -228,7 +266,7 @@ export class GratuityMasterComponent implements OnInit {
               });
 
               response.status === "Success"
-                ? this.close("reloadMainGrid")
+                ? this.close("reloadMainGrid", true)
                 : console.log("Delete Error");
             },
             error: (err) => {
@@ -281,96 +319,115 @@ export class GratuityMasterComponent implements OnInit {
   }
 
   gratuityMasterFormSubmit() {
-    let postData = {
-      MID: 0,
-      CODE: this.gratuityMasterForm.value.code,
-      DESCRIPTION: this.gratuityMasterForm.value.description,
-      DEBITACCODE: this.gratuityMasterForm.value.debitAc,
-      BASED_ON: this.gratuityMasterForm.value.basedOn,
-      FIXAMOUNT: this.gratuityMasterForm.value.amount,
-      DED_ANNUALLEAVE: this.excludeAnnualLeaves == true ? 1 : 0,
-      DED_PAIDLEAVE: this.excludePaidLeaves == true ? 1 : 0,
-      DED_UPAIDLEAVE: this.excludeUnpaidLeaves == true ? 1 : 0,
-      DED_HPAIDLEAVE: this.excludeHalfPaidLeaves == true ? 1 : 0,
-      YEARDAYS: this.gratuityMasterForm.value.noOfDaysAndYear,
-      GRATTYPE: this.gratuityMasterForm.value.type,
-      COUNTRYCODE: this.gratuityMasterForm.value.countryCode,
-      UDF1: this.gratuityMasterForm.value.userDefined1,
-      UDF2: this.gratuityMasterForm.value.userDefined2,
-      UDF3: this.gratuityMasterForm.value.userDefined3,
-      UDF4: this.gratuityMasterForm.value.userDefined4,
-      UDF5: this.gratuityMasterForm.value.userDefined5,
-      UDF6: this.gratuityMasterForm.value.userDefined6,
-      UDF7: this.gratuityMasterForm.value.userDefined7,
-      UDF8: this.gratuityMasterForm.value.userDefined8,
-      UDF9: this.gratuityMasterForm.value.userDefined9,
-      UDF10: this.gratuityMasterForm.value.userDefined10,
-      UDF11: this.gratuityMasterForm.value.userDefined11,
-      UDF12: this.gratuityMasterForm.value.userDefined12,
-      UDF13: this.gratuityMasterForm.value.userDefined13,
-      UDF14: this.gratuityMasterForm.value.userDefined14,
-      UDF15: this.gratuityMasterForm.value.userDefined15,
-      Details: [
-        {
-          UNIQUEID: 0,
-          CODE: "string",
-          YPERIOD: "string",
-          NDAYS: 0,
-        },
-      ],
-    };
+    Object.keys(this.gratuityMasterForm.controls).forEach((controlName) => {
+      const control = this.gratuityMasterForm.controls[controlName];
+      if (control.validator && control.validator({} as AbstractControl)) {
+        control.markAsTouched();
+      }
+    });
 
-    if (this.flag === "EDIT") {
-      let API = `PayGratuityMaster/UpdatePayGratuityMaster/${this.code}`;
-      let sub: Subscription = this.apiService
-        .putDynamicAPI(API, postData)
-        .subscribe((result) => {
-          if (result.status.trim() === "Success") {
-            Swal.fire({
-              title: "Success",
-              text: result.message ? result.message : "Updated successfully!",
-              icon: "success",
-              confirmButtonColor: "#336699",
-              confirmButtonText: "Ok",
-            });
+    const requiredFieldsInvalid = Object.keys(
+      this.gratuityMasterForm.controls
+    ).some((controlName) => {
+      const control = this.gratuityMasterForm.controls[controlName];
+      return control.hasError("required") && control.touched;
+    });
 
-            this.close("reloadMainGrid");
-          } else {
-            // Handle cases where the result is not successful or undefined
-            Swal.fire({
-              title: "Failed",
-              text: result.message ? result.message : "Failed!",
-              icon: "error",
-              confirmButtonColor: "#336699",
-              confirmButtonText: "Ok",
-            });
-          }
-        });
+    if (!requiredFieldsInvalid) {
+      let postData = {
+        MID: 0,
+        CODE: this.gratuityMasterForm.value.code,
+        DESCRIPTION: this.gratuityMasterForm.value.description,
+        DEBITACCODE: this.gratuityMasterForm.value.debitAc,
+        BASED_ON: this.gratuityMasterForm.value.basedOn,
+        FIXAMOUNT: this.gratuityMasterForm.value.amount,
+        DED_ANNUALLEAVE: this.excludeAnnualLeaves == true ? 1 : 0,
+        DED_PAIDLEAVE: this.excludePaidLeaves == true ? 1 : 0,
+        DED_UPAIDLEAVE: this.excludeUnpaidLeaves == true ? 1 : 0,
+        DED_HPAIDLEAVE: this.excludeHalfPaidLeaves == true ? 1 : 0,
+        YEARDAYS: this.gratuityMasterForm.value.noOfDaysAndYear,
+        GRATTYPE: this.gratuityMasterForm.value.type,
+        COUNTRYCODE: this.gratuityMasterForm.value.countryCode,
+        UDF1: this.gratuityMasterForm.value.userDefined1,
+        UDF2: this.gratuityMasterForm.value.userDefined2,
+        UDF3: this.gratuityMasterForm.value.userDefined3,
+        UDF4: this.gratuityMasterForm.value.userDefined4,
+        UDF5: this.gratuityMasterForm.value.userDefined5,
+        UDF6: this.gratuityMasterForm.value.userDefined6,
+        UDF7: this.gratuityMasterForm.value.userDefined7,
+        UDF8: this.gratuityMasterForm.value.userDefined8,
+        UDF9: this.gratuityMasterForm.value.userDefined9,
+        UDF10: this.gratuityMasterForm.value.userDefined10,
+        UDF11: this.gratuityMasterForm.value.userDefined11,
+        UDF12: this.gratuityMasterForm.value.userDefined12,
+        UDF13: this.gratuityMasterForm.value.userDefined13,
+        UDF14: this.gratuityMasterForm.value.userDefined14,
+        UDF15: this.gratuityMasterForm.value.userDefined15,
+        Details: [
+          {
+            UNIQUEID: 0,
+            CODE: "string",
+            YPERIOD: "string",
+            NDAYS: 0,
+          },
+        ],
+      };
+
+      if (this.flag === "EDIT") {
+        let API = `PayGratuityMaster/UpdatePayGratuityMaster/${this.code}`;
+        let sub: Subscription = this.apiService
+          .putDynamicAPI(API, postData)
+          .subscribe((result) => {
+            if (result.status.trim() === "Success") {
+              Swal.fire({
+                title: "Success",
+                text: result.message ? result.message : "Updated successfully!",
+                icon: "success",
+                confirmButtonColor: "#336699",
+                confirmButtonText: "Ok",
+              });
+
+              this.close("reloadMainGrid", true);
+            } else {
+              Swal.fire({
+                title: "Failed",
+                text: result.message ? result.message : "Failed!",
+                icon: "error",
+                confirmButtonColor: "#336699",
+                confirmButtonText: "Ok",
+              });
+            }
+          });
+      } else {
+        let API = `PayGratuityMaster/InsertPayGratuityMaster`;
+        let sub: Subscription = this.apiService
+          .postDynamicAPI(API, postData)
+          .subscribe((result) => {
+            if (result.status.trim() === "Success") {
+              Swal.fire({
+                title: "Success",
+                text: result.message
+                  ? result.message
+                  : "Inserted successfully!",
+                icon: "success",
+                confirmButtonColor: "#336699",
+                confirmButtonText: "Ok",
+              });
+
+              this.close("reloadMainGrid", true);
+            } else {
+              Swal.fire({
+                title: "Failed",
+                text: "Not Inserted Successfully",
+                icon: "error",
+                confirmButtonColor: "#336699",
+                confirmButtonText: "Ok",
+              });
+            }
+          });
+      }
     } else {
-      let API = `PayGratuityMaster/InsertPayGratuityMaster`;
-      let sub: Subscription = this.apiService
-        .postDynamicAPI(API, postData)
-        .subscribe((result) => {
-          if (result.status.trim() === "Success") {
-            Swal.fire({
-              title: "Success",
-              text: result.message ? result.message : "Inserted successfully!",
-              icon: "success",
-              confirmButtonColor: "#336699",
-              confirmButtonText: "Ok",
-            });
-
-            this.close("reloadMainGrid");
-          } else {
-            Swal.fire({
-              title: "Failed",
-              text: "Not Inserted Successfully",
-              icon: "error",
-              confirmButtonColor: "#336699",
-              confirmButtonText: "Ok",
-            });
-          }
-        });
+      this.commonService.showSnackBarMsg("Please fill mandatory fields.");
     }
   }
 
@@ -503,5 +560,145 @@ export class GratuityMasterComponent implements OnInit {
     FORMNAMES.forEach((formName) => {
       this.gratuityMasterForm.controls[formName].setValue("");
     });
+  }
+  openTab(event: any, formControlName: string) {
+    if (event.target.value === "") {
+      this.openPanel(event, formControlName);
+    }
+  }
+
+  openPanel(event: any, formControlName: string) {
+    switch (formControlName) {
+      case "debitAc":
+        this.overlayDebitAc.showOverlayPanel(event);
+        break;
+      case "countryCode":
+        this.overlayCountryCode.showOverlayPanel(event);
+        break;
+      case "userDefined1":
+        this.overlayUserDefined1.showOverlayPanel(event);
+        break;
+
+      case "userDefined2":
+        this.overlayUserDefined2.showOverlayPanel(event);
+        break;
+
+      case "userDefined3":
+        this.overlayUserDefined3.showOverlayPanel(event);
+        break;
+
+      case "userDefined4":
+        this.overlayUserDefined4.showOverlayPanel(event);
+        break;
+
+      case "userDefined5":
+        this.overlayUserDefined5.showOverlayPanel(event);
+        break;
+
+      case "userDefined6":
+        this.overlayUserDefined6.showOverlayPanel(event);
+        break;
+
+      case "userDefined7":
+        this.overlayUserDefined7.showOverlayPanel(event);
+        break;
+
+      case "userDefined8":
+        this.overlayUserDefined8.showOverlayPanel(event);
+        break;
+
+      case "userDefined9":
+        this.overlayUserDefined9.showOverlayPanel(event);
+        break;
+
+      case "userDefined10":
+        this.overlayUserDefined10.showOverlayPanel(event);
+        break;
+
+      case "userDefined11":
+        this.overlayUserDefined11.showOverlayPanel(event);
+        break;
+
+      case "userDefined12":
+        this.overlayUserDefined12.showOverlayPanel(event);
+        break;
+
+      case "userDefined13":
+        this.overlayUserDefined13.showOverlayPanel(event);
+        break;
+
+      case "userDefined14":
+        this.overlayUserDefined14.showOverlayPanel(event);
+        break;
+
+      case "userDefined15":
+        this.overlayUserDefined15.showOverlayPanel(event);
+        break;
+
+      default:
+        console.warn(`Unknown form control name: ${formControlName}`);
+    }
+  }
+
+  onKeyDown(
+    event: KeyboardEvent,
+    controllers: string[],
+    codeData: MasterSearchModel
+  ) {
+    const inputElement = event.target as HTMLInputElement;
+
+    if (event.key === "Backspace" || event.key === "Delete") {
+      setTimeout(() => {
+        if (inputElement.value.trim() === "") {
+          this.clearRelevantFields(controllers, codeData);
+        }
+      }, 0);
+    }
+  }
+
+  clearRelevantFields(controllers: string[], codeData: MasterSearchModel) {
+    controllers.forEach((controllerName) => {
+      const control = this.gratuityMasterForm.controls[controllerName];
+      if (control) {
+        control.setValue("");
+      } else {
+        console.warn(`Control ${controllerName} not found in the form.`);
+      }
+    });
+
+    this.clearLookupData(codeData, controllers);
+  }
+
+  gratuityTypeData() {
+    let API = `PayGratuityMaster/GratuityMasterTypeDropdown`;
+    let sub: Subscription = this.apiService.getDynamicAPI(API).subscribe(
+      (result) => {
+        if (result.status.trim() === "Success") {
+          this.typeData = result.dynamicData[0] || [];
+        }
+      },
+      (err) => {
+        console.error("Error fetching data:", err);
+        this.commonService.showSnackBarMsg("Type Field is not binding...!");
+      }
+    );
+  }
+
+  setFlag(currentFlag: string, DATA: any): void {
+    this.flag = currentFlag;
+
+    switch (this.flag) {
+      case "VIEW":
+        this.gratuityMasterForm.controls["excludeAnnualLeaves"].disable();
+        this.gratuityMasterForm.controls["type"].disable();
+        this.gratuityMasterForm.controls["excludeUnpaidLeaves"].disable();
+        this.gratuityMasterForm.controls["excludePaidLeaves"].disable();
+        this.gratuityMasterForm.controls["excludeHalfPaidLeaves"].disable();
+
+        break;
+
+      default:
+        break;
+    }
   }
 }

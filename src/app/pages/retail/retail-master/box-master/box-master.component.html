@@ -26,19 +26,28 @@
               <div class="col-md-2">
                 <mat-form-field style="width: 100%" appearance="outline">
                   <input
-                    style="text-align: right"
+                    class="text-right"
                     [readonly]="flag === 'VIEW' || flag === 'EDIT'"
                     type="text"
                     matInput
                     formControlName="boxno"
+                    maxlength="12"
                   />
+
+                  <mat-error
+                    *ngIf="
+                      boxMasterMainForm.controls['boxno'].hasError('required')
+                    "
+                  >
+                    Box No is required.
+                  </mat-error>
                 </mat-form-field>
               </div>
             </div>
 
             <div class="row align-items-center mb-1">
               <label for="inputPassword" class="col-sm-2 col-form-label"
-                >Form Serial No * :</label
+                >From Serial No * :</label
               >
               <div class="col-md-2">
                 <mat-form-field style="width: 100%" appearance="outline">
@@ -47,8 +56,18 @@
                     [readonly]="flag === 'VIEW'"
                     type="text"
                     matInput
-                    formControlName="formserialno"
+                    formControlName="fromserialno"
                   />
+
+                  <mat-error
+                    *ngIf="
+                      boxMasterMainForm.controls['fromserialno'].hasError(
+                        'required'
+                      )
+                    "
+                  >
+                    From Serial No is required.
+                  </mat-error>
                 </mat-form-field>
               </div>
             </div>
@@ -66,6 +85,14 @@
                     matInput
                     formControlName="pcs"
                   />
+
+                  <mat-error
+                    *ngIf="
+                      boxMasterMainForm.controls['pcs'].hasError('required')
+                    "
+                  >
+                    Pcs is required.
+                  </mat-error>
                 </mat-form-field>
               </div>
               <label for="inputPassword" class="col-sm-2 col-form-label"
@@ -109,6 +136,15 @@
                     type="text"
                     matInput
                     formControlName="location"
+                    (focusout)="
+                      SPvalidateLookupFieldModified(
+                        $event,
+                        locationCodeData,
+                        ['location'],
+                        false,
+                        ['LOCATION_CODE']
+                      )
+                    "
                   />
 
                   <master-search
@@ -121,6 +157,16 @@
                       lookupSelect($event, 'location', 'LOCATION_CODE')
                     "
                   ></master-search>
+
+                  <mat-error
+                    *ngIf="
+                      boxMasterMainForm.controls['location'].hasError(
+                        'required'
+                      )
+                    "
+                  >
+                    Location is required.
+                  </mat-error>
                 </mat-form-field>
               </div>
             </div>
@@ -136,6 +182,18 @@
                     type="text"
                     matInput
                     formControlName="stockcode"
+                    (keydown)="
+                      onKeyDown($event, ['stockcode', 'stockcodedesc'])
+                    "
+                    (focusout)="
+                      SPvalidateLookupFieldModified(
+                        $event,
+                        stockCodeData,
+                        ['stockcode', 'stockcodedesc'],
+                        false,
+                        ['STOCK_CODE', 'DESCRIPTION']
+                      )
+                    "
                   />
 
                   <master-search
@@ -161,6 +219,9 @@
                     type="text"
                     matInput
                     formControlName="stockcodedesc"
+                    (keydown)="
+                      onKeyDown($event, ['stockcode', 'stockcodedesc'])
+                    "
                   />
                 </mat-form-field>
               </div>
