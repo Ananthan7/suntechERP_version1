@@ -411,7 +411,7 @@ export class ZirconMasterComponent implements OnInit {
               });
 
               response.status === "Success"
-                ? this.close("reloadMainGrid")
+                ? this.close("reloadMainGrid", true)
                 : console.log("Delete Error");
             },
             error: (err) => {
@@ -431,8 +431,8 @@ export class ZirconMasterComponent implements OnInit {
     });
   }
 
-  close(data?: any) {
-    if (this.flag !== "VIEW") {
+  close(data?: any, calling?: boolean) {
+    if (this.flag !== "VIEW" && !calling) {
       Swal.fire({
         title: "Are you sure you want to close this ?",
         icon: "warning",
@@ -1081,7 +1081,7 @@ export class ZirconMasterComponent implements OnInit {
               confirmButtonText: "Ok",
             });
 
-            this.close("reloadMainGrid");
+            this.close("reloadMainGrid", true);
           } else {
             // Handle cases where the result is not successful or undefined
             Swal.fire({
@@ -1107,7 +1107,7 @@ export class ZirconMasterComponent implements OnInit {
               confirmButtonText: "Ok",
             });
 
-            this.close("reloadMainGrid");
+            this.close("reloadMainGrid", true);
           } else {
             Swal.fire({
               title: "Failed",
