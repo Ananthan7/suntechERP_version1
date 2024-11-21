@@ -5,7 +5,7 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" [isViewDelete]="editMode" [isViewSave]="!viewMode" [isViewCancel]="!viewMode"
+<modal-header (saveClick)="formSubmit()"  [isViewDelete]="!viewMode && editableMode" [isViewSave]="!viewMode" [isViewCancel]="!viewMode"
     [isViewMore]="!viewMode" (cancelClick)="close()" (deleteClick)="deleteComponentMaster()"></modal-header>
 <div class="container-fluid pt-3">
     <form [formGroup]="componentmasterForm">
@@ -32,7 +32,7 @@
                             <div class="col-sm-6">
                                 <mat-form-field style="width: 80%;" appearance="outline">
                                     <input type="text" matInput formControlName="codedes" UpperCaseDirective
-                                        autocomplete="off"    [readonly]="viewMode"/>
+                                        autocomplete="off" [readonly]="viewMode" />
                                 </mat-form-field>
                             </div>
                         </div>
@@ -419,9 +419,14 @@
                                     <dxi-column dataField="SIEVE_FROM" caption="Sieve from"
                                         cellTemplate="sieveFromtemp">
                                     </dxi-column>
+                                    <dxi-column dataField="Description" caption="Description"
+                                        cellTemplate="descriptiontemp">
+                                    </dxi-column>
                                     <dxi-column dataField="SIEVE_TO" caption="Sieve To" cellTemplate="sieveTotemp">
                                     </dxi-column>
-
+                                    <dxi-column dataField="Description" caption="Description"
+                                        cellTemplate="descriptiontemp">
+                                    </dxi-column>
                                     <div *dxTemplate="let data of 'divisiontemp'">
                                         <a href="javascript:void(0)" class="mx-1" [innerHTML]="data.value"></a>
                                         <master-search [MasterSearchData]="divisionCode"
@@ -455,8 +460,8 @@
                                     </div>
 
                                     <div *dxTemplate="let data of 'pcstemp'">
-                                        <input type="number" (change)="pcstemp($event,data)" NumberOnly class="text-right"
-                                            [value]="data.value" style="width: 100%;" required />
+                                        <input type="number" (change)="pcstemp($event,data)" NumberOnly
+                                            class="text-right" [value]="data.value" style="width: 100%;" required />
                                     </div>
 
                                     <!-- <div
@@ -618,13 +623,13 @@
         <div class="col-md-12">
             <div class="row mb-2">
                 <div class="col-md-5 offset-sm-11">
-                        <button type="button" class="btn btn-outline-primary  add-btn">
-                            Image
-                            <input type="file" class="uploadproduct" accept=".png, .jpg, .jpeg" #fileInput
-                                (change)="onFileChangedimage($event)" multiple [readonly]="viewMode" />
-                        </button>
+                    <button type="button" class="btn btn-outline-primary  add-btn">
+                        Image
+                        <input type="file" class="uploadproduct" accept=".png, .jpg, .jpeg" #fileInput
+                            (change)="onFileChangedimage($event)" multiple [readonly]="viewMode" />
+                    </button>
 
-                        <!-- <button type="button" id="ID017" [disabled]="viewMode"
+                    <!-- <button type="button" id="ID017" [disabled]="viewMode"
                             class="btn btn-outline-primary metal-issue-del-btn w-auto mx-2">
                             Image
                             <input type="file" class="uploadproduct" accept=".png, .jpg, .jpeg" #fileInput

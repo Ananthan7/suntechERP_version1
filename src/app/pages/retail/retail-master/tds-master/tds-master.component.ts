@@ -18,6 +18,8 @@ export class TdsMasterComponent implements OnInit {
   maindetails:any=[];
   private subscriptions: Subscription[] = [];
   viewOnly: boolean = false;
+  viewMode: boolean = false;
+  editMode: boolean = false;
   dyndatas: any;
   tds:any;
   flag: any;
@@ -35,6 +37,7 @@ export class TdsMasterComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.flag = this.content?.FLAG;
   }
 
   tdsform: FormGroup = this.formBuilder.group({
@@ -49,9 +52,12 @@ export class TdsMasterComponent implements OnInit {
   initialController(FLAG: any, DATA: any) {
     if (FLAG === "VIEW") {
       this.ViewController(DATA);
+      this.viewMode = true;
     }
     if (FLAG === "EDIT") {
       this.editController(DATA);
+      this.editMode = true;
+      
     }
 
     if (FLAG === "DELETE") {
@@ -139,7 +145,23 @@ export class TdsMasterComponent implements OnInit {
 
 
   close(data?: any) {
-    this.activeModal.close(data);
+    // this.activeModal.close(data);
+    if(this.flag == undefined || this.flag == 'EDIT'){
+      Swal.fire({
+        title: "Confirm",
+        text: "Are you sure you want to close this window?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.activeModal.close(data);
+        }
+      });
+    }else{
+      this.activeModal.close(data);
+    }
   }
 
   formSubmit() {

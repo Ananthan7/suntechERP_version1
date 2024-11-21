@@ -45,6 +45,13 @@ export class POSSales_Stock_ComparisonComponent implements OnInit {
     this.activeModal.close(data);
   }
 
+  headerCellFormatting(e: any) {
+    // to make grid header center aligned
+    if (e.rowType === 'header') {
+      e.cellElement.style.textAlign = 'center';
+    }
+  } 
+
   popupClosed(){
     if (this.content && Object.keys(this.content).length > 0) {
       console.log(this.content)
@@ -135,15 +142,37 @@ export class POSSales_Stock_ComparisonComponent implements OnInit {
     console.log(this.POS_Sales_Stock_ComparisonForm.controls.templateName.value)
   }
   saveTemplate_DB(){
-
+      
   }
 
   previewClick(){
+    this.isLoading = true
 
+    let postData = {
+      "SPID": "",
+      "parameter": {
+        
+      }
+    }
+    console.log(postData) 
+    setTimeout(()=>{
+      this.isLoading = false;
+    }, 300)     
   }
 
   printBtnClick(){
+    this.isLoading = true
 
+    let postData = {
+      "SPID": "",
+      "parameter": {
+        
+      }
+    }
+    console.log(postData) 
+    setTimeout(()=>{
+      this.isLoading = false;
+    }, 300)     
   }
 
 

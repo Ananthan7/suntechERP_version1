@@ -104,3 +104,9 @@
     width: 120px;
     text-align: center;
 }
+
+//Report screen disabling while report generation
+.loading-class {
+    pointer-events: none;
+    filter: grayscale(20%) blur(2px)
+}

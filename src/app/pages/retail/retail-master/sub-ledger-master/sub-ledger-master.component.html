@@ -8,8 +8,9 @@
   </div>
   <!-- modal header component -->
   <modal-header
+  [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode"
     (saveClick)="formSubmit()"
-    (cancelClick)="close()"
+    (cancelClick)="close()"[isViewDelete]="!viewMode && editableMode"
     (deleteClick)="deleteRecord()"
   ></modal-header>
   <!-- content section -->
@@ -359,7 +360,7 @@
                         class="form-control"
                         type="number"
                         formControlName="mobile"
-                        style="text-align: right"
+                       
                         [value]="data.value"
                         (change)="getMobile($event, data)"
                       />

@@ -148,11 +148,11 @@ export class MetalIssueDetailsComponent implements OnInit {
   subJobNoCodeData: MasterSearchModel = {
     PAGENO: 1,
     RECORDS: 10,
-    LOOKUPID: 258,
+    LOOKUPID: 275,
     SEARCH_FIELD: 'UNQ_JOB_ID',
     SEARCH_HEADING: 'Sub Job Search',
     SEARCH_VALUE: '',
-    WHERECONDITION: `ISNULL(PROD_REF,0)=0 and Branch_code = '${this.comService.branchCode}'`,
+    WHERECONDITION: `Branch_code = '${this.comService.branchCode}' AND isnull(WAX_STATUS,'') <> 'I'`,
     VIEW_INPUT: true,
     VIEW_TABLE: true,
   }
@@ -278,9 +278,9 @@ export class MetalIssueDetailsComponent implements OnInit {
     this.metalIssueDetailsForm.controls.subJobNoDes.setValue(this.content.JOB_DESCRIPTION)
     this.metalIssueDetailsForm.controls.stockCode.setValue(this.content.STOCK_CODE)
     this.metalIssueDetailsForm.controls.stockCodeDes.setValue(this.content.STOCK_DESCRIPTION)
-    this.metalIssueDetailsForm.controls.toStockCode.setValue(this.content.STOCK_CODE);
-    this.metalIssueDetailsForm.controls.toStockCodeDes.setValue(this.content.STOCK_DESCRIPTION);
-    this.metalIssueDetailsForm.controls.toDIVCODE.setValue(this.content.DIVCODE);
+    this.metalIssueDetailsForm.controls.toStockCode.setValue(this.content.TO_STOCK_CODE);
+    this.metalIssueDetailsForm.controls.toStockCodeDes.setValue(this.content.TO_STOCK_DESCRIPTION);
+    this.metalIssueDetailsForm.controls.toDIVCODE.setValue(this.content.TO_DIVCODE);
     this.metalIssueDetailsForm.controls.KARAT_CODE.setValue(this.content.KARAT_CODE)
     this.metalIssueDetailsForm.controls.DESIGN_CODE.setValue(this.content.DESIGN_CODE)
     this.metalIssueDetailsForm.controls.location.setValue(this.content.LOCTYPE_CODE);
@@ -563,7 +563,7 @@ export class MetalIssueDetailsComponent implements OnInit {
       "PUDIFF": this.comService.emptyToZero(form.purityDiff),
       "JOB_PURITY": this.comService.emptyToZero(form.jobPurity),
       "EXCLUDE_TRANSFER_WT": form.EXCLUDE_TRANSFER_WT,
-      "TO_DIVCODE": this.comService.nullToString(form.DIVCODE),
+      "TO_DIVCODE": this.comService.nullToString(form.toDIVCODE),
       "TO_PURITY": this.comService.nullToString(form.PURITY)
     }
   }
@@ -670,7 +670,7 @@ export class MetalIssueDetailsComponent implements OnInit {
   }
   setSubJobCondition() {
     let form = this.metalIssueDetailsForm.value;
-    this.subJobNoCodeData.WHERECONDITION = `ISNULL(PROD_REF,0)=0 and Branch_code = '${this.comService.branchCode}'`
+    this.subJobNoCodeData.WHERECONDITION = `Branch_code = '${this.comService.branchCode}' AND isnull(WAX_STATUS,'') <> 'I'`
     this.subJobNoCodeData.WHERECONDITION += `and job_number='${this.comService.nullToString(form.jobNumber)}'`
   }
   isJobNumberEmpty(flag: boolean) {
@@ -715,6 +715,7 @@ export class MetalIssueDetailsComponent implements OnInit {
             this.metalIssueDetailsForm.controls.PART_CODE.setValue(data[0].PART_CODE)
             this.metalIssueDetailsForm.controls.KARAT_CODE.setValue(data[0].KARAT_CODE)
             this.metalIssueDetailsForm.controls.DESIGN_CODE.setValue(data[0].DESIGN_CODE)
+            this.metalIssueDetailsForm.controls.JOB_PCS.setValue(data[0].PCS)
             this.setValueWithDecimal('jobPurity', data[0].JOB_PURITY, 'PURITY')
             this.setSubJobCondition()
             this.subJobNumberValidate()
@@ -806,7 +807,7 @@ export class MetalIssueDetailsComponent implements OnInit {
           // this.metalIssueDetailsForm.controls.DESIGN_CODE.setValue('')
           this.setProcessCodeWhereCondition()
           this.setWorkerCodeWhereCondition()
-          this.comService.toastErrorByMsgId('MSG1747')
+          // this.comService.toastErrorByMsgId('MSG1747')
         }
       }, err => {
         this.comService.closeSnackBarMsg()
@@ -880,6 +881,8 @@ export class MetalIssueDetailsComponent implements OnInit {
         SUBJOBNO: this.comService.nullToString(this.metalIssueDetailsForm.value.subJobNo),
         STOCKCODE: this.comService.nullToString(this.metalIssueDetailsForm.value.stockCode),
         LOOKUPFLAG: '0',
+        BranchCode: this.comService.branchCode,
+        LoctypeCode: this.comService.nullToString(this.metalIssueDetailsForm.value.location),
       }
     };
 
@@ -902,15 +905,18 @@ export class MetalIssueDetailsComponent implements OnInit {
             data = this.comService.searchAllItemsInArray(data, event.target.value?.toString().toUpperCase())
           }
           // Handle the valid stock case
-          let stockData = data[0];
-          // Set the purity value in the form
-          this.setValueWithDecimal('PURITY', stockData?.PURITY, 'PURITY')
-          this.setValueWithDecimal('STONE_WT', stockData?.STONE_WT, 'STONE')
-          this.metalIssueDetailsForm.controls.pcs.setValue(this.comService.emptyToZero(stockData?.BALANCE_PCS));
-          this.metalIssueDetailsForm.controls.stockCodeDes.setValue(stockData?.DESCRIPTION);
-          this.metalIssueDetailsForm.controls.toStockCode.setValue(stockData?.STOCK_CODE);
-          this.metalIssueDetailsForm.controls.toStockCodeDes.setValue(stockData?.DESCRIPTION);
-          this.metalIssueDetailsForm.controls.toDIVCODE.setValue(stockData?.DIVISION);
+          this.metalIssueDetailsForm.controls.pcs.setValue(this.comService.emptyToZero(data[0]?.BALANCE_PCS));
+          this.metalIssueDetailsForm.controls.stockCodeDes.setValue(data[0]?.DESCRIPTION);
+          this.metalIssueDetailsForm.controls.toStockCode.setValue(data[0]?.STOCK_CODE);
+          this.metalIssueDetailsForm.controls.toStockCodeDes.setValue(data[0]?.DESCRIPTION);
+          this.metalIssueDetailsForm.controls.toDIVCODE.setValue(data[0]?.DIVISION);
+          this.setValueWithDecimal('PURITY', data[0]?.PURITY, 'PURITY')
+          // result for getting weight values from sp
+          let stockTransaction:any = result.dynamicData[1] || [];
+          this.setValueWithDecimal('PURE_WT',  Math.max(0, stockTransaction[0]?.PUREWT), 'METAL')
+          this.setValueWithDecimal('STONE_WT',  Math.max(0, stockTransaction[0]?.STONEWT), 'STONE')
+          this.setValueWithDecimal('GROSS_WT',  Math.max(0, stockTransaction[0]?.GROSSWT), 'METAL')
+          this.setValueWithDecimal('NET_WT',  Math.max(0, stockTransaction[0]?.NETWT), 'METAL')
         } else {
           this.comService.toastErrorByMsgId('MSG1747');
           this.metalIssueDetailsForm.controls.stockCode.setValue('');
@@ -924,6 +930,7 @@ export class MetalIssueDetailsComponent implements OnInit {
 
     this.subscriptions.push(Sub);
   }
+  
   toStockCodeValidate(event?: any) {
     if (this.viewMode) return;
     if (event && event.target.value == '') {

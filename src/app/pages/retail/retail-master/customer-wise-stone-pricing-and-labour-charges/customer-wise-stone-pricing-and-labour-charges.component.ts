@@ -25,9 +25,12 @@ export class CustomerWiseStonePricingAndLabourChargesComponent implements OnInit
   tableData2: any[] = [];
   tableData3: any[] = [];
   viewMode: boolean = false;
+  editMode: boolean = false;
   private subscriptions: Subscription[] = [];
   @Input() content!: any;
   currentDate: any = this.commonService.currentDate;
+  @ViewChild('currencyDetailcodeSearch') currencyDetailcodeSearch!: MasterSearchComponent;
+  
 
   stonePricingHeadings: any[] = [
     { field: "PARTYCODE", caption: "Sr No" },
@@ -91,7 +94,7 @@ export class CustomerWiseStonePricingAndLabourChargesComponent implements OnInit
        this.viewMode = true;
      } else if (this.content.FLAG == 'EDIT') {
        this.viewMode = false;
-      
+       this.editMode = true;
      } else if (this.content?.FLAG == 'DELETE') {
        this.viewMode = true;
        this.deleteRecord()
@@ -144,15 +147,45 @@ export class CustomerWiseStonePricingAndLabourChargesComponent implements OnInit
   }
 
   close(data?: any) {
-    //TODO reset forms and data before closing
-    this.activeModal.close(data);
+    if (data){
+      this.viewMode = true;
+      this.activeModal.close(data);
+      return
+    }
+    if (this.content && this.content.FLAG == 'VIEW'){
+      this.activeModal.close(data);
+      return
+    }
+    Swal.fire({
+      title: 'Do you want to exit?',
+      text: '',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes!',
+      cancelButtonText: 'No'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.activeModal.close(data);
+      }
+    }
+    )
   }
+ 
 
   setFormValues() {
     if (!this.content) return
     this.customerWiseStonePriceForm.controls.pricecode.setValue(this.content.PRICECODE)
     this.customerWiseStonePriceForm.controls.currency.setValue(this.content.CURRENCY_CODE)
     this.customerWiseStonePriceForm.controls.currencyDetail.setValue(this.content.CURRENCY_RATE)
+  //  this.customerWiseStonePriceForm.controls.applyinPOS.setValue(this.content.PRINT_COUNT)
+    this.customerWiseStonePriceForm.controls.applyinPOS.setValue(
+      this.content.PRINT_COUNT === 1 ? true : false
+    );
+    
+
+
 
     this.dataService.getDynamicAPI('CustomerPriceMaster/GetCustomerPriceMasterDetail/' + this.content.PRICECODE)
       .subscribe((data) => {
@@ -180,7 +213,7 @@ export class CustomerWiseStonePricingAndLabourChargesComponent implements OnInit
       "LAB_TYPE": "string",
       "MARKUP_PER": 0,
       "CUSTOMER_NAME": "string",
-      "PRINT_COUNT": 0,
+      "PRINT_COUNT": this.customerWiseStonePriceForm.value.applyinPOS ? 1 : 0,
       "VALID_FROM": this.customerWiseStonePriceForm.value.validFrom,
       "ADD_ON_RATE": 0,
       "CURRENCY_CODE":  this.commonService.nullToString(this.customerWiseStonePriceForm.value.currency),
@@ -374,19 +407,19 @@ export class CustomerWiseStonePricingAndLabourChargesComponent implements OnInit
   }
   
   categorytemp(data:any,value: any){
-    this.tableData[value.data.SRNO - 1].CATEGORY = data.target.value;
+    this.tableData[value.data.SRNO - 1].CUSTOMER_CODE = data.target.value;
   }
     
   subCategorytemp(data:any,value: any){
-    this.tableData[value.data.SRNO - 1].SUB_CATEGORY = data.target.value;
+    this.tableData[value.data.SRNO - 1].PRICE_CODE = data.target.value;
   }
       
   brandtemp(data:any,value: any){
-    this.tableData[value.data.SRNO - 1].BRAND = data.target.value;
+    this.tableData[value.data.SRNO - 1].DESCRIPTION = data.target.value;
   }
       
   stoneTypetemp(data:any,value: any){
-    this.tableData[value.data.SRNO - 1].STONE = data.target.value;
+    this.tableData[value.data.SRNO - 1].CURRENCYCODE = data.target.value;
   }
       
   shapeTypetemp(data:any,value: any){
@@ -475,12 +508,12 @@ export class CustomerWiseStonePricingAndLabourChargesComponent implements OnInit
   }
    
   categorylabtemp(data:any,value: any){
-    this.tableData2[value.data.SRNO - 1].Category = data.target.value;
+    this.tableData2[value.data.SRNO - 1].CUSTOMER_CODE = data.target.value;
   }
 
    
   subCategorylabtemp(data:any,value: any){
-    this.tableData2[value.data.SRNO - 1].SubCategory = data.target.value;
+    this.tableData2[value.data.SRNO - 1].LABOUR_CODE = data.target.value;
   }
      
   shapelabtemp(data:any,value: any){
@@ -538,6 +571,67 @@ export class CustomerWiseStonePricingAndLabourChargesComponent implements OnInit
     }
     this.tableData3[value.data.SRNO - 1].CALC_ON_GROSS = value;
   }
+
+  
+  validateLookupField(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
+    LOOKUPDATA.SEARCH_VALUE = event.target.value
+    if (event.target.value == '' || this.viewMode == true) return
+    let param = {
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ''}`
+    }
+    this.commonService.toastInfoByMsgId('MSG81447');
+    let API = 'UspCommonInputFieldSearch/GetCommonInputFieldSearch'
+    let Sub: Subscription = this.dataService.postDynamicAPI(API, param)
+      .subscribe((result) => {
+       
+        let data = this.commonService.arrayEmptyObjectToString(result.dynamicData[0])
+        if (data.length == 0) {
+          this.commonService.toastErrorByMsgId('MSG1531')
+          this.customerWiseStonePriceForm.controls[FORMNAME].setValue('')
+          LOOKUPDATA.SEARCH_VALUE = ''
+          this.openOverlay(FORMNAME, event);
+          return
+        }
+
+      }, err => {
+        this.commonService.toastErrorByMsgId('MSG2272')//Error occured, please try again
+      })
+    }
+
+
+    lookupKeyPress(event: any, form?: any) {
+      if (event.key == 'Tab' && event.target.value == '') {
+        this.showOverleyPanel(event, form)
+      }
+      if (event.key === 'Enter') {
+        if (event.target.value == '') this.showOverleyPanel(event, form)
+        event.preventDefault();
+      }
+    }
+  
+  
+    showOverleyPanel(event: any, formControlName: string) {
+      switch (formControlName) {
+        case 'currencyDetail':
+          this.currencyDetailcodeSearch.showOverlayPanel(event);
+          break;
+        default:
+      }
+    }
+  
+  
+    openOverlay(FORMNAME: string, event: any) {
+      switch (FORMNAME) {
+        case 'currencyDetail':
+          this.currencyDetailcodeSearch.showOverlayPanel(event);
+          break;
+        default:
+          console.warn(`Unknown FORMNAME: ${FORMNAME}`);
+          break;
+      }
+    }
+  
 
   removeItemDetails() {}
 

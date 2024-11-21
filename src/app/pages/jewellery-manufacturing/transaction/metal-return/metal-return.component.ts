@@ -46,7 +46,7 @@ export class MetalReturnComponent implements OnInit {
     { title: 'Pure Wt', field: 'PURE_WT', format: '', alignment: 'right' },
     { title: 'Job Number', field: 'JOB_NUMBER', format: '', alignment: 'left' },
     { title: 'Uniq job Id', field: 'UNQ_JOB_ID', format: '', alignment: 'left' },
-    { title: 'PURITY', field: 'Purity', format: '', alignment: 'right' },
+    { title: 'Purity', field: 'PURITY', format: '', alignment: 'right' },
     { title: 'Stone Wt', field: 'STONE_WT', format: '', alignment: 'right' },
     { title: 'Net Wt', field: 'NET_WT', format: '', alignment: 'right' },
     { title: 'Process Code', field: 'PROCESS_CODE', format: '', alignment: 'left' },
@@ -968,6 +968,7 @@ export class MetalReturnComponent implements OnInit {
       item.NET_WT = this.commonService.setCommaSerperatedNumber(item.NET_WT, 'METAL')
       item.PURITY = this.commonService.setCommaSerperatedNumber(item.PURITY, 'PURITY')
       item.PURE_WT = this.commonService.setCommaSerperatedNumber(item.PURE_WT, 'METAL')
+      item.STONE_WT = this.commonService.setCommaSerperatedNumber(item.STONE_WT, 'METAL')
       item.TOTAL_AMOUNTFC = this.commonService.setCommaSerperatedNumber(item.TOTAL_AMOUNTFC, 'AMOUNT')
     })
   }

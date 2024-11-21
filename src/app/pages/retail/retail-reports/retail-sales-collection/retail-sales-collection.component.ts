@@ -136,38 +136,11 @@ export class RetailSalesCollectionComponent implements OnInit {
     console.log(this.retailSalesCollection.controls.reportTo.value)
   }
 
-  // getAPIData(data?: any) {
-  //   let payload: any
-  //   if(data){
-  //     payload = {
-  //       "strReportName": "POS_COLLECTION_A",
-  //       "strMainVouchers": this.voucherData,
-  //       "strExcludeVouchers": "",
-  //       "strWhereCond": "",
-  //       "strLoginBranch": "", //this.comService.branchCode
-  //     };
-  //   } else{
-  //     payload = {
-  //       "strReportName": "POS_COLLECTION_A",
-  //       "strMainVouchers": this.voucherData,
-  //       "strExcludeVouchers": "",
-  //       "strWhereCond": "",
-  //       "strLoginBranch": "", //this.comService.branchCode
-  //     };
-  //   }
-  //   this.isLoading = true;
-  //   this.dataService.postDynamicAPI('GetReportVouchers', payload).subscribe((response) => {
-  //     console.log('Retailsales API call data', response);
-  //     this.APIData = response.dynamicData[0] || [];
-  //     this.prefillScreenValues()
-  //     setTimeout(() => {
-  //       this.isLoading = false;
-  //     }, 1000);
-  //   },(error: any) => {
-  //     console.error('Error occurred:', error);
-  //     this.isLoading = false;
-  //   });
-  // }
+  onCellPrepared(e: any) {
+    if (e.rowType === 'header') {
+      e.cellElement.style.textAlign = 'center';
+    }
+  } 
 
   onSalesCheckboxChange(value: boolean){
     if(value){
@@ -419,16 +392,6 @@ export class RetailSalesCollectionComponent implements OnInit {
       const uniqueArray = [...new Set( vocTypeArr )];
       const plainText = uniqueArray.join('');
       this.VocTypeParam = plainText
-
-    //   // let defaultVoctype = ['POS','RIN','PSR', 'POSC','POSEX','POSER', PCR]
-    //   const selectedKeys = this.APIData.filter(item => item.MAIN_VOCTYPE!== 'PCR').map(item => item);
-    //   this.selectedRowKeys = selectedKeys;
-    //   const selectedSet = new Set(this.selectedRowKeys.map(item => item.SRNO));
-    //   this.APIData.sort((a, b) => {
-    //     const aIsSelected = selectedSet.has(a.SRNO) ? 1 : 0;
-    //     const bIsSelected = selectedSet.has(b.SRNO) ? 1 : 0;
-    //     return bIsSelected - aIsSelected;
-    //   });
     }
   }
 
@@ -529,7 +492,8 @@ export class RetailSalesCollectionComponent implements OnInit {
         "STRVOCTYPES": this.VocTypeParam, //this.commonService.getqueryParamVocType(),
         "FROMVOCDATE": this.formatDateToYYYYMMDD(this.dateToPass.fromDate),
         "TOVOCDATE": this.formatDateToYYYYMMDD(this.dateToPass.toDate) ,
-        "flag": this.retailSalesCollection.controls.OutpuGridView.value == true? 'GRID' : '',
+        "flag": this.retailSalesCollection.controls.OutpuGridView.value == true? 'GRID' : 
+        this.retailSalesCollection.controls.showSalesRegisterCheckbox.value == true? 'REGISTER' : '',
         "USERBRANCH": localStorage.getItem('userbranch'),
         "USERNAME": localStorage.getItem('username'),
         "Logdata": JSON.stringify(logData)
@@ -539,8 +503,6 @@ export class RetailSalesCollectionComponent implements OnInit {
     this.commonService.showSnackBarMsg('MSG81447');
     this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
     .subscribe((result: any) => {
-      console.log(result);
-      this.previewpopup = true;
       if(result.status != "Failed"){
         if(this.retailSalesCollection.controls.OutpuGridView.value == true){
           this.outputInGridBoolean = true;
@@ -555,6 +517,23 @@ export class RetailSalesCollectionComponent implements OnInit {
             };
           });
           this.isLoading = false;
+        }
+        else if(this.retailSalesCollection.controls.showSalesRegisterCheckbox.value == true){
+          let data = result.dynamicData;
+          let SalesRegisterprintContent = data[0][0].HTMLOUT;
+          if (Object.keys(SalesRegisterprintContent).length === 0) {
+            Swal.fire('No Data!', 'There is no data!', 'info');
+            this.commonService.closeSnackBarMsg();
+            this.isLoading = false;
+            return
+          } else {
+            this.htmlPreview = this.sanitizer.bypassSecurityTrustHtml(SalesRegisterprintContent);
+            const blob = new Blob([this.htmlPreview.changingThisBreaksApplicationSecurity], { type: 'text/html' });
+            this.commonService.closeSnackBarMsg();
+            const url = URL.createObjectURL(blob);
+            window.open(url, '_blank');
+            this.isLoading = false;
+          }
         }
         else{
           this.outputInGridBoolean = false;

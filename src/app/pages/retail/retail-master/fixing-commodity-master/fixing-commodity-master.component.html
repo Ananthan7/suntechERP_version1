@@ -6,7 +6,8 @@
     </button>
 </div>
 <!-- modal header component -->
-<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" (deleteClick)="delete()"></modal-header>
+<modal-header (saveClick)="formSubmit()" (cancelClick)="close()" (deleteClick)="delete()" [isViewDelete]="editMode"  [isViewSave]="!viewMode" [isViewCancel]="!viewMode"
+[isViewMore]="!viewMode"></modal-header>
 <!-- content section -->
 
 <div class="pos-sales-modalbody modelbody">
@@ -22,7 +23,8 @@
                                 <div class="col-md-8">
                                     <mat-form-field appearance="outline" style="width: 100%;">
                                         <mat-select name="selectedValue" formControlName="itemType" [disabled]="viewMode">
-                                            <mat-option value="s">Sample</mat-option>
+                                            <mat-option value="M">Metal</mat-option>
+                                            <mat-option value="C">Commodity</mat-option>
                                         </mat-select>
                                     </mat-form-field>
                                 </div>
@@ -152,8 +154,11 @@
                                 <div class="col-md-3">
                                     <mat-form-field appearance="outline" style="width: 100%;">
                                         <mat-select name="selectedValue" formControlName="pcsdrpdwn" [disabled]="viewMode">
-                                            <mat-option value="1">Sample</mat-option>
-                                            <mat-option value="2">Sample2</mat-option>
+                                            <mat-option value="1">GMS</mat-option>
+                                            <mat-option value="2">PCS</mat-option>
+                                            <mat-option value="3">LENGTH</mat-option>
+                                            <mat-option value="4">GOZ</mat-option>
+                                            <mat-option value="5">%</mat-option>
                                         </mat-select>
                                     </mat-form-field>
                                 </div>
@@ -310,7 +315,11 @@
                                             <div class="col-md-4">
                                                 <mat-form-field appearance="outline" style="width: 100%;">
                                                     <mat-select name="selectedValue"  formControlName="makingUnit"  [disabled]="viewMode">
-                                                        <mat-option value="1">Sample</mat-option>
+                                                        <mat-option value="1">GMS</mat-option>
+                                                        <mat-option value="2">PCS</mat-option>
+                                                        <mat-option value="3">LENGTH</mat-option>
+                                                        <mat-option value="4">GOZ</mat-option>
+                                                        <mat-option value="5">%</mat-option>
                                                     </mat-select>
                                                 </mat-form-field>
                                             </div>
@@ -382,7 +391,11 @@
                                             <div class="col-md-4">
                                                 <mat-form-field appearance="outline" style="width: 100%;">
                                                     <mat-select name="selectedValue" formControlName="reorderStockReachesDrpdwn" [disabled]="viewMode">
-                                                        <mat-option value="1">Sample</mat-option>
+                                                        <mat-option value="1">GMS</mat-option>
+                                                        <mat-option value="2">PCS</mat-option>
+                                                        <mat-option value="3">LENGTH</mat-option>
+                                                        <mat-option value="4">GOZ</mat-option>
+                                                        <mat-option value="5">%</mat-option>
                                                     </mat-select>
                                                 </mat-form-field>
                                             </div>
@@ -400,7 +413,11 @@
                                             <div class="col-md-4">
                                                 <mat-form-field appearance="outline" style="width: 100%;">
                                                     <mat-select name="selectedValue" formControlName="reorderRateReachesDrpdwn" [disabled]="viewMode">
-                                                        <mat-option value="1">Sample</mat-option>
+                                                        <mat-option value="1">GMS</mat-option>
+                                                        <mat-option value="2">PCS</mat-option>
+                                                        <mat-option value="3">LENGTH</mat-option>
+                                                        <mat-option value="4">GOZ</mat-option>
+                                                        <mat-option value="5">%</mat-option>
                                                     </mat-select>
                                                 </mat-form-field>
                                             </div>
@@ -422,7 +439,11 @@
                                             <div class="col-md-4">
                                                 <mat-form-field appearance="outline" style="width: 100%;">
                                                     <mat-select name="selectedValue"  formControlName="minimumOrderQtyDrpdwn" [disabled]="viewMode">
-                                                        <mat-option value="1">Sample</mat-option>
+                                                        <mat-option value="1">GMS</mat-option>
+                                                        <mat-option value="2">PCS</mat-option>
+                                                        <mat-option value="3">LENGTH</mat-option>
+                                                        <mat-option value="4">GOZ</mat-option>
+                                                        <mat-option value="5">%</mat-option>
                                                     </mat-select>
                                                 </mat-form-field>
                                             </div>
@@ -440,7 +461,11 @@
                                             <div class="col-md-4">
                                                 <mat-form-field appearance="outline" style="width: 100%;">
                                                     <mat-select name="selectedValue" formControlName="maximumOrderQtyDrpdwn" [disabled]="viewMode">
-                                                        <mat-option value="1">Sample</mat-option>
+                                                        <mat-option value="1">GMS</mat-option>
+                                                        <mat-option value="2">PCS</mat-option>
+                                                        <mat-option value="3">LENGTH</mat-option>
+                                                        <mat-option value="4">GOZ</mat-option>
+                                                        <mat-option value="5">%</mat-option>
                                                     </mat-select>
                                                 </mat-form-field>
                                             </div>
