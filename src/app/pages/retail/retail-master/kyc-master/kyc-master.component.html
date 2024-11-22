@@ -23,12 +23,12 @@
                         <label for="prefixcode" class="col-sm-2 col-form-label me-4">Kyc Code:</label>
                         <div class="col-md-2 p-0 ms-2">
                             <mat-form-field style="width: 100%;" appearance="outline">
-                                <input type="text" id="kyccode" matInput class="p-0" formControlName="kyccode"  [readonly]="viewOnly || disable_code" maxlength="20"/>
+                                <input type="text" id="kyccode" matInput class="p-0" formControlName="kyccode"  [readonly]="viewOnly || disable_code" maxlength="20" (focusout)="checkcode()" />
                             </mat-form-field>
                         </div>
                         <div class="col-md-5 p-0">
                             <mat-form-field style="width: 100%;" appearance="outline">
-                                <input type="text" id="kyccodedesc" matInput formControlName="kyccodedesc"
+                                <input type="text" id="kyccodedesc" matInput formControlName="kyccodedesc" [readonly]="viewOnly" (focusout)="checkdesc()"
                                     class="p-0" />
                             </mat-form-field>
                         </div>
@@ -38,7 +38,7 @@
                         <label for="last_no" class="col-sm-2 pe-0 col-form-label me-4">Transaction Limit:</label>
                         <div class="col-md-4 ">
                             <mat-form-field style="width: 100%;" appearance="outline">
-                                <input type="number" id="last_no" matInput formControlName="transactionlimit"
+                                <input type="number" id="last_no" matInput formControlName="transactionlimit" [readonly]="viewOnly"
                                     style="text-align: right;" />
                             </mat-form-field>
                         </div>
@@ -47,7 +47,7 @@
                          
                 </fieldset>
 
-                <div class="row mb-2">
+                <div class="row mb-2" *ngIf="this.flag !='VIEW'">
                     <div class="col-md-3">
                         <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true " [viewImportBtn]="false"
                             [viewAddBtn]="!viewMode" [viewDeleteBtn]="!viewMode" (addClick)="addTableData()"

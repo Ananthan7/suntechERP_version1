@@ -24,6 +24,7 @@ export class TdsMasterComponent implements OnInit {
   tds:any;
   flag: any;
   curr_branch :any = localStorage.getItem('userbranch');
+  disable_code:boolean = false;
 
   
 
@@ -38,6 +39,21 @@ export class TdsMasterComponent implements OnInit {
 
   ngOnInit(): void {
     this.flag = this.content?.FLAG;
+    this.unq_id = this.content?.PREFIX_CODE;
+    console.log(this.unq_id);
+    console.log(this.content);
+    this.flag = this.content?.TDS_CODE;
+    if(this.flag == 'EDIT'){
+      this.disable_code = true;
+      this.editMode = true;
+    }else if(this.flag == 'VIEW'){
+      this.viewMode = true;
+    }
+    this.initialController(this.flag, this.content);
+    if (this?.flag == "EDIT" || this?.flag == 'VIEW') {
+      this.detailsapi(this.unq_id);
+    }
+
   }
 
   tdsform: FormGroup = this.formBuilder.group({
@@ -145,23 +161,30 @@ export class TdsMasterComponent implements OnInit {
 
 
   close(data?: any) {
-    // this.activeModal.close(data);
-    if(this.flag == undefined || this.flag == 'EDIT'){
-      Swal.fire({
-        title: "Confirm",
-        text: "Are you sure you want to close this window?",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonText: 'Yes',
-        cancelButtonText: 'No'
-      }).then((result) => {
-        if (result.isConfirmed) {
-          this.activeModal.close(data);
-        }
-      });
-    }else{
+    if (data){
+      this.viewMode = true;
       this.activeModal.close(data);
+      return
     }
+    if (this.content && this.content.FLAG == 'VIEW'){
+      this.activeModal.close(data);
+      return
+    }
+    Swal.fire({
+      title: 'Do you want to exit?',
+      text: '',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes!',
+      cancelButtonText: 'No'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.activeModal.close(data);
+      }
+  }
+  )
   }
 
   formSubmit() {

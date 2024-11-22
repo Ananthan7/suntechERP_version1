@@ -24,7 +24,7 @@
                                         Branch Code :</label>
                                     <div class="col-sm-8">
                                         <mat-form-field style="width: 100%" appearance="outline">
-                                            <input type="text" matInput formControlName="branchcode" UpperCaseDirective
+                                            <input type="text" matInput formControlName="branchcode" id="branch_code" UpperCaseDirective
                                                 autocomplete="off" (focusout)="
                                                 SPvalidateLookupFieldModified(
                                                   $event,
@@ -35,10 +35,10 @@
                                                   false
                                                 )
                                               " [readonly]="viewMode" [disabled]="viewMode" />
-                                            <master-search class="masterSearch" [MasterSearchData]="branchCodeData"
+                                            <master-search *ngIf="this.flag !='VIEW'" class="masterSearch" [MasterSearchData]="branchCodeData"
                                                 (newRowClick)="
                                             lookupSelect($event, 'branchcode', 'BRANCH_CODE')
-                                          ">
+                                          "  (focusout)="checkcode()">
                                             </master-search>
                                         </mat-form-field>
                                     </div>
@@ -78,7 +78,7 @@
                                             <input type="text" #codeInput matInput formControlName="finyear"
                                                 UpperCaseDirective autocomplete="off" [readonly]="viewMode"
                                                 [disabled]="viewMode" />
-                                            <master-search class="masterSearch" [MasterSearchData]="finyearcodedata"
+                                            <master-search  *ngIf="this.flag !='VIEW'" class="masterSearch" [MasterSearchData]="finyearcodedata"
                                                 (newRowClick)="selectedfinyear($event)">
                                             </master-search>
                                         </mat-form-field>
@@ -125,7 +125,7 @@
                 </div>
 
                 <div class="row mt-2">
-                    <div class="col-md-3">
+                    <div class="col-md-3" *ngIf="this.flag !='VIEW'">
                         <menu-buttons [viewAddBtn]="true" [viewDeleteBtn]="true " [viewImportBtn]="false"
                             [viewAddBtn]="!viewOnly" [viewDeleteBtn]="!viewOnly" (addClick)="addTableData()"
                             (deleteClick)="deleteTableData()">
