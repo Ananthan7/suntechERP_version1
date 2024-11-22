@@ -157,7 +157,9 @@ export class GratuityMasterComponent implements OnInit {
     private commonService: CommonServiceService
   ) {}
   ngOnInit(): void {
-    console.log(this.content);
+    console.log(this.commonService.getComboFilterByID("GRATUITY BASED ON"));
+    console.log(this.commonService.comboFilter);
+
 
     this.flag = this.content
       ? this.content.FLAG
@@ -239,11 +241,12 @@ export class GratuityMasterComponent implements OnInit {
         DATA.DESCRIPTION
       );
       console.log(DATA.GRATTYPE);
-      
+
       this.gratuityMasterForm.controls["type"].setValue(DATA.GRATTYPE);
       this.gratuityMasterForm.controls["noOfDaysAndYear"].setValue(
         DATA.YEARDAYS
       );
+      this.gratuityMasterForm.controls["noOfDaysAndMonth"].setValue(30);
       this.gratuityMasterForm.controls["excludeAnnualLeaves"].setValue(
         DATA.DED_ANNUALLEAVE === 1
       );
