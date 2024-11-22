@@ -56,6 +56,7 @@ export class GratuityMasterComponent implements OnInit {
   typeAsParams: any;
   postDataDetails: any = [];
   optionalData: any;
+  basedOnDropdown: any;
   private subscriptions: Subscription[] = [];
 
   columnHeadings: any[] = [
@@ -85,7 +86,7 @@ export class GratuityMasterComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 3,
     SEARCH_FIELD: "CODE",
-    SEARCH_HEADING: "Country Code",
+    SEARCH_HEADING: "COUNTRY CODE",
     SEARCH_VALUE: "",
     WHERECONDITION: "TYPES = 'COUNTRY MASTER'",
     VIEW_INPUT: true,
@@ -157,7 +158,7 @@ export class GratuityMasterComponent implements OnInit {
     private commonService: CommonServiceService
   ) {}
   ngOnInit(): void {
-    console.log(this.content);
+    console.log(this.commonService.getComboFilterByID(""));
 
     this.flag = this.content
       ? this.content.FLAG
@@ -188,6 +189,11 @@ export class GratuityMasterComponent implements OnInit {
   initialController(FLAG: any, DATA: any) {
     if (FLAG === "ADD") {
       this.gratuityTypeData();
+      this.basedOnDropdown = this.getUniqueValues(
+        this.commonService.getComboFilterByID("GRATUITY BASED ON"),
+        "ENGLISH"
+      );
+      console.log(this.basedOnDropdown);
     }
     if (FLAG === "VIEW") {
       this.ViewController(DATA);
@@ -239,11 +245,12 @@ export class GratuityMasterComponent implements OnInit {
         DATA.DESCRIPTION
       );
       console.log(DATA.GRATTYPE);
-      
+
       this.gratuityMasterForm.controls["type"].setValue(DATA.GRATTYPE);
       this.gratuityMasterForm.controls["noOfDaysAndYear"].setValue(
         DATA.YEARDAYS
       );
+      this.gratuityMasterForm.controls["noOfDaysAndMonth"].setValue(30);
       this.gratuityMasterForm.controls["excludeAnnualLeaves"].setValue(
         DATA.DED_ANNUALLEAVE === 1
       );
@@ -793,5 +800,13 @@ export class GratuityMasterComponent implements OnInit {
         }
       );
     });
+  }
+
+  getUniqueValues(List: any[], field: string) {
+    return List.filter(
+      (item, index, self) =>
+        index ===
+        self.findIndex((t) => t[field] === item[field] && t[field] !== "")
+    );
   }
 }

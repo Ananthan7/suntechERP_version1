@@ -182,16 +182,16 @@
                         onKeyDown(
                           $event,
                           ['bankCode', 'bankDesc'],
-                          countryCodeData
+                          bankCodeData
                         )
                       "
                       (focusout)="
                         SPvalidateLookupFieldModified(
                           $event,
-                          countryCodeData,
+                          bankCodeData,
                           ['bankCode', 'bankDesc'],
                           false,
-                          ['CODE', 'DESCRIPTION'],
+                          ['ACCODE', 'ACCOUNT_HEAD'],
                           false
                         )
                       "
@@ -205,12 +205,12 @@
                       (focusout)="openTab($event, 'bankCode')"
                       *ngIf="flag != 'VIEW'"
                       class="masterSearch"
-                      [MasterSearchData]="countryCodeData"
+                      [MasterSearchData]="bankCodeData"
                       (newRowClick)="
                         lookupSelect(
                           $event,
                           ['bankCode', 'bankDesc'],
-                          ['CODE', 'DESCRIPTION']
+                          ['ACCODE', 'ACCOUNT_HEAD']
                         )
                       "
                     >
@@ -313,13 +313,13 @@
                         onKeyDown(
                           $event,
                           ['preferedCompnyBankCode', 'preferedCompnyBankDesc'],
-                          countryCodeData
+                          companyBankCodeData
                         )
                       "
                       (focusout)="
                         SPvalidateLookupFieldModified(
                           $event,
-                          countryCodeData,
+                          companyBankCodeData,
                           ['preferedCompnyBankCode', 'preferedCompnyBankDesc'],
                           false,
                           ['CODE', 'DESCRIPTION'],
@@ -336,7 +336,7 @@
                       (focusout)="openTab($event, 'preferedCompnyBankCode')"
                       *ngIf="flag != 'VIEW'"
                       class="masterSearch"
-                      [MasterSearchData]="countryCodeData"
+                      [MasterSearchData]="companyBankCodeData"
                       (newRowClick)="
                         lookupSelect(
                           $event,
