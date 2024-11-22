@@ -77,51 +77,51 @@
 }
 
 
-::ng-deep {
+// ::ng-deep {
 
-  // form field starts
-  .mat-form-field-outline-start {
-    border-radius: 3px 0 0 3px !important;
-    min-width: 24px !important;
-    background-color: #f7f8fb;
-  }
+//   // form field starts
+//   .mat-form-field-outline-start {
+//     border-radius: 3px 0 0 3px !important;
+//     min-width: 24px !important;
+//     background-color: #f7f8fb;
+//   }
 
-  .mat-form-field-outline-end {
-    border-radius: 0 3px 3px 0 !important;
-    min-width: 24px !important;
-    background-color: #f7f8fb;
-  }
+//   .mat-form-field-outline-end {
+//     border-radius: 0 3px 3px 0 !important;
+//     min-width: 24px !important;
+//     background-color: #f7f8fb;
+//   }
 
-  /* Add padding to move the label and input into the center to prevent overlapping the rounded border */
-  .mat-form-field-appearance-outline .mat-form-field-flex {
-    padding: 0 20px !important;
-  }
+//   /* Add padding to move the label and input into the center to prevent overlapping the rounded border */
+//   .mat-form-field-appearance-outline .mat-form-field-flex {
+//     padding: 0 20px !important;
+//   }
 
-  .mat-form-field-appearance-outline .mat-form-field-infix {
-    padding: 0px 0px 8px 0px;
-  }
+//   .mat-form-field-appearance-outline .mat-form-field-infix {
+//     padding: 0px 0px 8px 0px;
+//   }
 
-  .mat-form-field-appearance-outline .mat-form-field-outline {
-    color: #bcbcbc;
-  }
+//   .mat-form-field-appearance-outline .mat-form-field-outline {
+//     color: #bcbcbc;
+//   }
 
-  .mat-form-field-appearance-outline .mat-form-field-wrapper {
-    margin: 0px !important;
-    height: 30px !important;
-  }
+//   .mat-form-field-appearance-outline .mat-form-field-wrapper {
+//     margin: 0px !important;
+//     height: 30px !important;
+//   }
 
-  // form field ends
+//   // form field ends
 
-  .cdk-overlay-container {
-    position: fixed;
-    z-index: 1070 !important;
-  }
+//   .cdk-overlay-container {
+//     position: fixed;
+//     z-index: 1070 !important;
+//   }
 
-  .mat-tab-body-content {
-    width: 100%;
-    overflow-x: hidden !important;
-  }
-}
+//   .mat-tab-body-content {
+//     width: 100%;
+//     overflow-x: hidden !important;
+//   }
+// }
 
 
 // table section styles
@@ -280,4 +280,20 @@
  border-radius: 5px;
  margin-top: 10px;
  margin-bottom: 10px;
+}
+
+::ng-deep {
+
+  // form field starts
+  .mat-form-field-outline-start {
+    border-radius: 3px 0 0 3px !important;
+    min-width: 24px !important;
+    background-color: #f7f8fb;
+  }
+
+  .mat-form-field-outline-end {
+    border-radius: 0 3px 3px 0 !important;
+    min-width: 24px !important;
+    background-color: #f7f8fb;
+  }
 }

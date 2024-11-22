@@ -1,6 +1,14 @@
 ::ng-deep {
-    .cdk-overlay-container {
-        position: fixed;
-        z-index: 1070 !important;
+  // form field starts
+  .mat-form-field-outline-start {
+    border-radius: 0px 0 0 0px !important;
+    min-width: 24px !important;
+    background-color: #f7f8fb;
+  }
+
+  .mat-form-field-outline-end {
+    border-radius: 0 0px 0px 0 !important;
+    min-width: 24px !important;
+    background-color:#f7f8fb;
   }
 }
