@@ -8,9 +8,12 @@
   </div>
   <!-- modal header component -->
   <modal-header
-  [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode"
+    [isViewSave]="!viewMode"
+    [isViewCancel]="!viewMode"
+    [isViewMore]="!viewMode"
     (saveClick)="formSubmit()"
-    (cancelClick)="close()"[isViewDelete]="!viewMode && editableMode"
+    (cancelClick)="close()"
+    [isViewDelete]="!viewMode && editableMode"
     (deleteClick)="deleteEmployeeMaster()"
   ></modal-header>
   <!-- content section -->
@@ -92,8 +95,18 @@
                   formControlName="Branch"
                   UpperCaseDirective
                   [readonly]="viewMode || codeEnable"
-                  (focusout)="validateLookupField($event, BranchData, 'Branch')"
-                  (keydown)="lookupKeyPress($event, 'Branch')"
+                  (focusout)="
+                    SPvalidateLookupFieldModified(
+                      $event,
+                      BranchData,
+                      ['Branch', 'BranchDes'],
+                      false,
+                      ['BRANCH_CODE', 'BRANCH_NAME']
+                    )
+                  "
+                  (keydown)="
+                    onKeyDown($event, ['Branch', 'BranchDes'], BranchData)
+                  "
                 />
                 <master-search
                   *ngIf="!viewMode"
@@ -112,6 +125,9 @@
                   matInput
                   formControlName="BranchDes"
                   UpperCaseDirective
+                  (keydown)="
+                    onKeyDown($event, ['Branch', 'BranchDes'], BranchData)
+                  "
                   [readonly]="viewMode || codeEnable"
                 />
               </mat-form-field>
@@ -135,7 +151,7 @@
                   (focusout)="
                     validateLookupField($event, DepartmentData, 'Department')
                   "
-                  (keydown)="lookupKeyPress($event, 'Department')"
+                  (keydown)="onKeyDown($event, ['Department'], DepartmentData)"
                 />
                 <master-search
                   *ngIf="!viewMode"
@@ -177,7 +193,9 @@
                   (focusout)="
                     validateLookupField($event, DesignationData, 'Designation')
                   "
-                  (keydown)="lookupKeyPress($event, 'Designation')"
+                  (keydown)="
+                    onKeyDown($event, ['Designation'], DesignationData)
+                  "
                 />
                 <master-search
                   *ngIf="!viewMode"
@@ -249,7 +267,7 @@
                         (focusout)="
                           validateLookupField($event, GradeData, 'Grade')
                         "
-                        (keydown)="lookupKeyPress($event, 'Grade')"
+                        (keydown)="onKeyDown($event, ['Grade'], GradeData)"
                       />
                       <master-search
                         *ngIf="!viewMode"
@@ -367,7 +385,9 @@
                             'Nationality'
                           )
                         "
-                        (keydown)="lookupKeyPress($event, 'Nationality')"
+                        (keydown)="
+                          onKeyDown($event, ['Nationality'], NationalityData)
+                        "
                       />
                       <master-search
                         *ngIf="!viewMode"
@@ -397,7 +417,9 @@
                         (focusout)="
                           validateLookupField($event, ReligionData, 'Religion')
                         "
-                        (keydown)="lookupKeyPress($event, 'Religion')"
+                        (keydown)="
+                          onKeyDown($event, ['Religion'], ReligionData)
+                        "
                       />
                       <master-search
                         *ngIf="!viewMode"
@@ -558,7 +580,9 @@
                                 'Country'
                               )
                             "
-                            (keydown)="lookupKeyPress($event, 'Country')"
+                            (keydown)="
+                              onKeyDown($event, ['Country'], CountryCodeData)
+                            "
                           />
                           <master-search
                             *ngIf="!viewMode"
@@ -598,7 +622,9 @@
                                 'State'
                               )
                             "
-                            (keydown)="lookupKeyPress($event, 'State')"
+                            (keydown)="
+                              onKeyDown($event, ['State'], StateCodeData)
+                            "
                           />
                           <master-search
                             *ngIf="!viewMode"
@@ -634,7 +660,9 @@
                             (focusout)="
                               validateLookupField($event, StateCodeData, 'City')
                             "
-                            (keydown)="lookupKeyPress($event, 'City')"
+                            (keydown)="
+                              onKeyDown($event, ['City'], CityCodeData)
+                            "
                           />
                           <master-search
                             *ngIf="!viewMode"
@@ -816,7 +844,11 @@
                               )
                             "
                             (keydown)="
-                              lookupKeyPress($event, 'PRCountryCodeData')
+                              onKeyDown(
+                                $event,
+                                ['PRCountry'],
+                                PRCountryCodeData
+                              )
                             "
                           />
                           <master-search
@@ -858,7 +890,7 @@
                               )
                             "
                             (keydown)="
-                              lookupKeyPress($event, 'PRStateCodeData')
+                              onKeyDown($event, ['PRState'], PRStateCodeData)
                             "
                           />
                           <master-search
@@ -899,7 +931,9 @@
                                 'PRCity'
                               )
                             "
-                            (keydown)="lookupKeyPress($event, 'PRCity')"
+                            (keydown)="
+                              onKeyDown($event, ['PRCity'], PRCityCodeData)
+                            "
                           />
                           <master-search
                             *ngIf="!viewMode"
@@ -1010,11 +1044,7 @@
                 <dxo-selection mode="single"></dxo-selection>
 
                 <!-- <dxi-column dataField="SRNO" caption="S.No"> </dxi-column> -->
-                <dxi-column
-                  dataField="Code"
-                  caption="Code"
-                  cellTemplate="code"
-                >
+                <dxi-column dataField="Code" caption="Code" cellTemplate="code">
                 </dxi-column>
                 <dxi-column
                   dataField="Description"
@@ -1041,65 +1071,59 @@
                 >
                 </dxi-column>
 
-               
                 <div *dxTemplate="let data of 'code'">
-                    <!-- <mat-form-field style="width: 100%" appearance="outline"> -->
-                      <input
-                      class="form-control"
-                        type="text"
-                        id="code1"
-                        formControlName="code1"
-                      />
-                    <!-- </mat-form-field> -->
-                  </div>
-                  
-                  <div *dxTemplate="let data of 'description'">
-                    <!-- <mat-form-field style="width: 100%" appearance="outline"> -->
-                      <input
-                      class="form-control"
-                        type="text"
-                        id="description"
-                        formControlName="description"
-                      />
-                    <!-- </mat-form-field> -->
-                  </div>
-                  
-                  <div *dxTemplate="let data of 'todate'">
-                    <!-- <mat-form-field style="width: 100%" appearance="outline"> -->
-                      <input
-                      class="form-control"
-                        type="date"
-                        placeholder="DD/MM/YYYY"
-                        formControlName="todate"
-                        [disabled]="viewMode"
-                      />
-                      <!-- <mat-datepicker-toggle matSuffix [for]="todate"></mat-datepicker-toggle>
+                  <!-- <mat-form-field style="width: 100%" appearance="outline"> -->
+                  <input
+                    class="form-control"
+                    type="text"
+                    id="code1"
+                    formControlName="code1"
+                  />
+                  <!-- </mat-form-field> -->
+                </div>
+
+                <div *dxTemplate="let data of 'description'">
+                  <!-- <mat-form-field style="width: 100%" appearance="outline"> -->
+                  <input
+                    class="form-control"
+                    type="text"
+                    id="description"
+                    formControlName="description"
+                  />
+                  <!-- </mat-form-field> -->
+                </div>
+
+                <div *dxTemplate="let data of 'todate'">
+                  <!-- <mat-form-field style="width: 100%" appearance="outline"> -->
+                  <input
+                    class="form-control"
+                    type="date"
+                    placeholder="DD/MM/YYYY"
+                    formControlName="todate"
+                    [disabled]="viewMode"
+                  />
+                  <!-- <mat-datepicker-toggle matSuffix [for]="todate"></mat-datepicker-toggle>
                       <mat-datepicker #todate></mat-datepicker> -->
-                    <!-- </mat-form-field> -->
-                  </div>
-                  
-                  <div *dxTemplate="let data of 'documentnumber'">
-                    <!-- <mat-form-field style="width: 100%" appearance="outline"> -->
-                      <input
-                        class="form-control"
-                        type="number"
-                        id="documentnumber"
-                        formControlName="documentnumber"
-                        style="text-align: right"
-                      />
-                    <!-- </mat-form-field> -->
-                  </div>
-                  
-                  <div *dxTemplate="let data of 'media'">
-                    <!-- <mat-form-field style="width: 100%" appearance="outline"> -->
-                      <input
-                        type="file"
-                        id="media"
-                        formControlName="media"
-                      />
-                    <!-- </mat-form-field> -->
-                  </div>
-                  
+                  <!-- </mat-form-field> -->
+                </div>
+
+                <div *dxTemplate="let data of 'documentnumber'">
+                  <!-- <mat-form-field style="width: 100%" appearance="outline"> -->
+                  <input
+                    class="form-control"
+                    type="number"
+                    id="documentnumber"
+                    formControlName="documentnumber"
+                    style="text-align: right"
+                  />
+                  <!-- </mat-form-field> -->
+                </div>
+
+                <div *dxTemplate="let data of 'media'">
+                  <!-- <mat-form-field style="width: 100%" appearance="outline"> -->
+                  <input type="file" id="media" formControlName="media" />
+                  <!-- </mat-form-field> -->
+                </div>
               </dx-data-grid>
             </mat-tab>
           </mat-tab-group>
