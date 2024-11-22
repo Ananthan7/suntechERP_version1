@@ -31,6 +31,7 @@ export class DepartmentMasterComponent implements OnInit {
   @ViewChild('overlayDebitExpensesGratuitySearch') overlayDebitExpensesGratuitySearch!: MasterSearchComponent;
   @ViewChild('overlayCreditExpensesLeaveSalSearch') overlayCreditExpensesLeaveSalSearch!: MasterSearchComponent;
   @ViewChild('overlayCreditExpensesAirTicketSearch') overlayCreditExpensesAirTicketSearch!: MasterSearchComponent;
+  @ViewChild('overlayCreditExpensesGratuitySearch') overlayCreditExpensesGratuitySearch!: MasterSearchComponent;
   @ViewChild('overlayOtherAmountValueSearch') overlayOtherAmountValueSearch!: MasterSearchComponent;
   @ViewChild('overlayuserDefined1Search') overlayuserDefined1Search!: MasterSearchComponent;
   @ViewChild('overlayuserDefined2Search') overlayuserDefined2Search!: MasterSearchComponent;
@@ -69,6 +70,8 @@ export class DepartmentMasterComponent implements OnInit {
     WHERECONDITION: "TYPES = 'COUNTRY MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
   }
   oneTimeCodeData: MasterSearchModel = {
     PAGENO: 1,
@@ -790,7 +793,7 @@ export class DepartmentMasterComponent implements OnInit {
         this.overlayCreditExpensesAirTicketSearch.showOverlayPanel(event);
         break;
       case 'CreditExpensesGratuity':
-        this.overlayCreditExpensesAirTicketSearch.showOverlayPanel(event);
+        this.overlayCreditExpensesGratuitySearch.showOverlayPanel(event);
         break;
       case 'OtherAmountValue':
         this.overlayOtherAmountValueSearch.showOverlayPanel(event);
@@ -883,7 +886,7 @@ export class DepartmentMasterComponent implements OnInit {
         this.overlayCreditExpensesAirTicketSearch.showOverlayPanel(event);
         break;
       case 'CreditExpensesGratuity':
-        this.overlayCreditExpensesAirTicketSearch.showOverlayPanel(event);
+        this.overlayCreditExpensesGratuitySearch.showOverlayPanel(event);
         break;
       case 'OtherAmountValue':
         this.overlayOtherAmountValueSearch.showOverlayPanel(event);
@@ -965,6 +968,102 @@ export class DepartmentMasterComponent implements OnInit {
     this.subscriptions.push(Sub)
   }
 
+  SPvalidateLookupFieldModified(
+    event: any,
+    LOOKUPDATA: MasterSearchModel,
+    FORMNAMES: string[],
+    isCurrencyField: boolean,
+    lookupFields?: string[],
+    FROMCODE?: boolean
+  ) {
+    const searchValue = event.target.value?.trim();
+
+    // if (!searchValue || this.flag == "VIEW") return;
+
+    LOOKUPDATA.SEARCH_VALUE = searchValue;
+
+    const param = {
+      PAGENO: LOOKUPDATA.PAGENO,
+      RECORDS: LOOKUPDATA.RECORDS,
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECONDITION: LOOKUPDATA.WHERECONDITION,
+      searchField: LOOKUPDATA.SEARCH_FIELD,
+      searchValue: LOOKUPDATA.SEARCH_VALUE,
+    };
+
+    this.commonService.showSnackBarMsg("MSG81447");
+
+    const sub: Subscription = this.dataService
+      .postDynamicAPI("MasterLookUp", param)
+      .subscribe({
+        next: (result: any) => {
+          this.commonService.closeSnackBarMsg();
+          const data = result.dynamicData?.[0];
+
+          console.log("API Response Data:", data);
+
+          if (data?.length) {
+            console.log("In");
+
+            if (LOOKUPDATA.FRONTENDFILTER && LOOKUPDATA.SEARCH_VALUE) {
+              let searchResult = this.commonService.searchAllItemsInArray(
+                data,
+                LOOKUPDATA.SEARCH_VALUE
+              );
+
+              console.log("Up");
+
+              console.log("Filtered Search Result:", searchResult);
+
+              if (searchResult?.length) {
+                const matchedItem = searchResult[0];
+                console.log(FORMNAMES);
+                console.log(matchedItem);
+                
+                
+
+                FORMNAMES.forEach((formName, index) => {
+                  const field = lookupFields?.[index];
+                  if (field && field in matchedItem) {
+                    console.log(field);
+                    
+                    this.departmentMasterForm.controls[formName].setValue(
+                      matchedItem[field]
+                    );
+                  } else {
+                    console.error(
+                      `Property ${field} not found in matched item.`
+                    );
+                    this.commonService.toastErrorByMsgId("No data found");
+                    this.clearLookupData(LOOKUPDATA, FORMNAMES);
+                  }
+                });
+              } else {
+                this.commonService.toastErrorByMsgId("No data found");
+                this.clearLookupData(LOOKUPDATA, FORMNAMES);
+              }
+            }
+          } else {
+            this.commonService.toastErrorByMsgId("No data found");
+            this.clearLookupData(LOOKUPDATA, FORMNAMES);
+          }
+        },
+        error: () => {
+          this.commonService.toastErrorByMsgId("MSG2272");
+          this.clearLookupData(LOOKUPDATA, FORMNAMES);
+        },
+      });
+
+    this.subscriptions.push(sub);
+  }
+
+  clearLookupData(LOOKUPDATA: MasterSearchModel, FORMNAMES: string[]) {
+    LOOKUPDATA.SEARCH_VALUE = "";
+    FORMNAMES.forEach((formName) => {
+      this.departmentMasterForm.controls[formName].setValue("");
+    });
+  }
+
   onchangeCheckBoxNum(e: any) {
     // console.log(e);
 
@@ -975,7 +1074,38 @@ export class DepartmentMasterComponent implements OnInit {
     }
   }
 
+  onKeyDown(event: KeyboardEvent, controllers: string[], LOOKUPDATA:MasterSearchModel) {
+    const inputElement = event.target as HTMLInputElement;
 
+    if (event.key === "Backspace" || event.key === "Delete") {
+      console.log("DELETE");
+      setTimeout(() => {
+        if (inputElement.value.trim() === "") {
+          this.clearRelevantFields(controllers, LOOKUPDATA);
+        }
+      }, 0);
+    } else if(event.key == "Tab"){
+      console.log("Tab");
+      console.log(controllers);
+      console.log(event);
+      
+      this.lookupKeyPress(event,controllers[0])
+
+    }
+  }
+
+  clearRelevantFields(controllers: string[], LOOKUPDATA:MasterSearchModel) {
+    controllers.forEach((controllerName) => {
+      const control = this.departmentMasterForm.controls[controllerName];
+      if (control) {
+        control.setValue("");
+      } else {
+        console.warn(`Control ${controllerName} not found in the form.`);
+      }
+    });
+
+    this.clearLookupData(LOOKUPDATA, controllers);
+  }
 
 
 
