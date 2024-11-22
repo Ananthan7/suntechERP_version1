@@ -204,7 +204,8 @@ export class SubLedgerMasterComponent implements OnInit {
 
   setFormValues() {
     if (!this.content) return;
-
+    console.log(this.content);
+    
     let api =
       "SubLedgerMaster/GetSubLedgerHeaderAndDetails/" + this.content.SL_CODE;
     console.log(api);
