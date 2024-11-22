@@ -33,11 +33,8 @@
                 <label for="selectOption" class="col-sm-1 col-form-label">Status</label>
                 <div class="col-md-2">
                     <mat-form-field appearance="outline" style="width: 100%;">
-                        <select matNativeControl id="selectOption" name="selectOption" formControlName="selectOption">
-                            <option value="" disabled selected>Select an option</option>
-                            <option value="option1">Option 1</option>
-                            <option value="option2">Option 2</option>
-                            <option value="option3">Option 3</option>
+                        <select matNativeControl id="selectOption" name="selectOption" formControlName="status">
+                            <option *ngFor="let status of statuses" [value]="status">{{ status | uppercase }}</option>
                         </select>
                     </mat-form-field>
                 </div>

@@ -1,7 +1,10 @@
+import { DatePipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrService } from 'ngx-toastr';
 import { CommonServiceService } from 'src/app/services/common-service.service';
+import { SuntechAPIService } from 'src/app/services/suntech-api.service';
 
 @Component({
   selector: 'app-scheme-register-dev-report',
@@ -16,7 +19,7 @@ export class SchemeRegisterDevReportComponent implements OnInit {
     todate: [''],
     templateName: [''],
   
-
+    status: ['']
   });
 
   fetchedBranchData: any[] =[];
@@ -27,14 +30,16 @@ export class SchemeRegisterDevReportComponent implements OnInit {
   fetchedBranchDataParam: any= [];
   popupVisible: boolean = false;
   templateNameHasValue: boolean= false;
+  statuses = ['joining', 'matured', 'redeemed', 'collection', 'cancelled', 'live', 'paydue'];
 
   
   constructor(private activeModal: NgbActiveModal, private formBuilder: FormBuilder, private commonService: CommonServiceService,
-
+    private datePipe: DatePipe, private toastr: ToastrService, private dataService: SuntechAPIService,
   ) { }
 
   ngOnInit(): void {
     this.prefillScreenValues();
+    this.gridDataFetch();
   }
 
   close(data?: any) {
@@ -95,11 +100,13 @@ export class SchemeRegisterDevReportComponent implements OnInit {
   setDateValue(event: any){
     if(event.FromDate){
       this.schemeRegisterDevReportForm.controls.fromdate.setValue(event.FromDate);
-      console.log(event.FromDate)
+      this.dateToPass.fromDate = this.datePipe.transform(event.FromDate, 'yyyy-MM-dd')!
     }
     else if(event.ToDate){
       this.schemeRegisterDevReportForm.controls.todate.setValue(event.ToDate);
+      this.dateToPass.toDate = this.datePipe.transform(event.ToDate, 'yyyy-MM-dd')!
     }
+    this.gridDataFetch();
   }
 
   popupClosed(){
@@ -115,6 +122,36 @@ export class SchemeRegisterDevReportComponent implements OnInit {
     }
   }
 
+  gridDataFetch(){
+    this.schemeRegisterDevReportForm.controls.status.setValue(this.statuses[0]);;
+    
+    let API = "GetUspSchemeRegisterDevExpress";
+    let postData = { 
+      "strBRANCHES": this.schemeRegisterDevReportForm.controls.branch.value,
+      "FROMDATE": this.dateToPass.fromDate,
+      "TODATE": this.dateToPass.toDate,
+      "Status": this.schemeRegisterDevReportForm.controls.status.value
+    
+    };
+    this.dataService.postDynamicAPI(API, postData).subscribe((result) => {
+      if (result && result.dynamicData) {
+        if(result.dynamicData[0].length> 0){
+          console.log(result.dynamicData[0])
+
+          this.toastr.success(result.dynamicData.status || 'Success');
+        }
+        else{
+          this.toastr.warning('No data available for the given criteria.');
+        }
+      } else {
+        this.toastr.warning('No data available for the given criteria.');
+        }
+      },
+      (err) => {
+        this.toastr.error(err.message || 'An error occurred while fetching the data.');
+      }
+    );
+  }
 
   saveTemplate(){
     this.popupVisible = true;
@@ -147,10 +184,19 @@ export class SchemeRegisterDevReportComponent implements OnInit {
       this.fetchedBranchData= this.fetchedBranchDataParam?.split("#")
    
       this.dateToPass = {
-        fromDate:  this.commonService.formatYYMMDD(new Date()),
-        toDate: this.commonService.formatYYMMDD(new Date()),
+        fromDate:  this.datePipe.transform(new Date(), 'yyyy-MM-dd')!,
+        toDate: this.datePipe.transform(new Date(), 'yyyy-MM-dd')!,
       };
     }
   }
 
+  customizeMainGridSummaryContent = (data: any) => {
+    // value separation handler from commonService
+    return this.commonService.setCommaSerperatedNumber(data.value, 'AMOUNT');
+  };
+  customizeMainGridContent = (data: any) => {
+    const formattedValue = this.commonService.decimalQuantityFormat(data.value, 'AMOUNT');
+
+    return Number(formattedValue).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  };
 }
