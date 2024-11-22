@@ -274,7 +274,7 @@ export class ComponentMasterComponent implements OnInit {
     RECORDS: 10,
     LOOKUPID: 3,
     SEARCH_FIELD: 'TYPES',
-    SEARCH_HEADING: 'SETTING TYPE MASTER',
+    SEARCH_HEADING: 'GENERAL MASTER',
     SEARCH_VALUE: '',
     WHERECONDITION: "TYPES='SETTING TYPE MASTER'",
     VIEW_INPUT: true,
@@ -427,13 +427,8 @@ export class ComponentMasterComponent implements OnInit {
   }
 
   divisionCodeSelected(value: any, data: any, controlName: string) {
-    console.log(value);
-    console.log(data);
     this.tableData[data.data.SRNO - 1].DIVCODE = value.DIVISION_CODE;
-    console.log(this.tableData);
     this.stockCodeData.WHERECONDITION = `DIVISION = '${value.DIVISION_CODE}'`;
-    console.log(value.DIVISION)
-    console.log(value.DIVISION_CODE)
     if (value.DIVISION === 'M') {
       this.isPCSDisabled = true;
     } else {
@@ -444,9 +439,11 @@ export class ComponentMasterComponent implements OnInit {
     } else {
       this.iskaratDisabled = false;
     }
-
   }
-
+  viewKaratCodeSearch(data:any){
+    if(data.DIVISION == 'S') return false;
+    return true
+  }
   Attachedfile: any[] = [];
   savedAttachments: any[] = [];
 
