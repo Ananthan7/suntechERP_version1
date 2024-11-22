@@ -317,6 +317,7 @@ export class LoanSalaryAdvanceMasterComponent implements OnInit {
         loandet_closing_date:['']
       // })
   })
+  branchCode: any;
 
   constructor(
     private activeModal: NgbActiveModal,
@@ -328,6 +329,8 @@ export class LoanSalaryAdvanceMasterComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+
+    this.branchCode = this.commonService.branchCode;
     if (this.content?.FLAG) {
       // this.setFormValues();
       if (this.content?.FLAG == "VIEW") {
@@ -405,7 +408,7 @@ export class LoanSalaryAdvanceMasterComponent implements OnInit {
       VOCNO: this.commonService.emptyToZero(form.vocno) ,
       VOCTYPE: this.commonService.nullToString(form.voc_type),
       VOCDATE: form.voc_date ? new Date(form.voc_date).toISOString() : new Date().toISOString(),
-      BRANCH_CODE: this.commonService.nullToString(form.branch_code),
+      BRANCH_CODE: this.branchCode,
       YEARMONTH: this.commonService.nullToString(form.yearmonth),
       LOAN_DIVN_CODE: this.commonService.nullToString(form.loan_divn_code),
       LOAN_DEPT_CODE: this.commonService.nullToString(form.loan_dept_code),

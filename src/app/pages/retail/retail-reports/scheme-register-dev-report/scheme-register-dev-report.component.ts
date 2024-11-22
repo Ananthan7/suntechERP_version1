@@ -1,7 +1,12 @@
+import { DatePipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { DomSanitizer } from '@angular/platform-browser';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrService } from 'ngx-toastr';
 import { CommonServiceService } from 'src/app/services/common-service.service';
+import { SuntechAPIService } from 'src/app/services/suntech-api.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-scheme-register-dev-report',
@@ -16,7 +21,7 @@ export class SchemeRegisterDevReportComponent implements OnInit {
     todate: [''],
     templateName: [''],
   
-
+    status: ['']
   });
 
   fetchedBranchData: any[] =[];
@@ -27,15 +32,28 @@ export class SchemeRegisterDevReportComponent implements OnInit {
   fetchedBranchDataParam: any= [];
   popupVisible: boolean = false;
   templateNameHasValue: boolean= false;
+  statuses = ['joining', 'matured', 'redeemed', 'collection', 'cancelled', 'live', 'paydue'];
+  schemeRegisterDevArr: any = [];
+  isLoading: boolean = false;
+  htmlPreview: any;
 
   
   constructor(private activeModal: NgbActiveModal, private formBuilder: FormBuilder, private commonService: CommonServiceService,
-
+    private datePipe: DatePipe, private toastr: ToastrService, private dataService: SuntechAPIService,
+    private sanitizer: DomSanitizer,
   ) { }
 
   ngOnInit(): void {
     this.prefillScreenValues();
+    this.gridDataFetch();
   }
+
+  headerCellFormatting(e: any) {
+    // to make grid header center aligned
+    if (e.rowType === 'header') {
+      e.cellElement.style.textAlign = 'center';
+    }
+  } 
 
   close(data?: any) {
     //TODO reset forms and data before closing
@@ -95,11 +113,13 @@ export class SchemeRegisterDevReportComponent implements OnInit {
   setDateValue(event: any){
     if(event.FromDate){
       this.schemeRegisterDevReportForm.controls.fromdate.setValue(event.FromDate);
-      console.log(event.FromDate)
+      this.dateToPass.fromDate = this.datePipe.transform(event.FromDate, 'yyyy-MM-dd')!
     }
     else if(event.ToDate){
       this.schemeRegisterDevReportForm.controls.todate.setValue(event.ToDate);
+      this.dateToPass.toDate = this.datePipe.transform(event.ToDate, 'yyyy-MM-dd')!
     }
+    this.gridDataFetch();
   }
 
   popupClosed(){
@@ -115,6 +135,39 @@ export class SchemeRegisterDevReportComponent implements OnInit {
     }
   }
 
+  gridDataFetch(){
+    this.schemeRegisterDevReportForm.controls.status.setValue(this.statuses[0]);;
+    this.isLoading = true;
+    let API = "UspSchemeRegisterDevExpress/GetUspSchemeRegisterDevExpress";
+    let postData = { 
+      "strBRANCHES": this.schemeRegisterDevReportForm.controls.branch.value,
+      "FROMDATE": this.dateToPass.fromDate,
+      "TODATE": this.dateToPass.toDate,
+      "Status": this.schemeRegisterDevReportForm.controls.status.value
+    
+    };
+    this.dataService.postDynamicAPI(API, postData).subscribe((result) => {
+      if (result && result.dynamicData) {
+        if(result.dynamicData[0].length> 0){
+          this.schemeRegisterDevArr = result.dynamicData[0];
+          this.toastr.success(result.dynamicData.status || 'Success');
+          this.isLoading = false;
+        }
+        else{
+          this.toastr.warning('No data available for the given criteria.');
+          this.isLoading = false;
+        }
+      } else {
+        this.toastr.warning('No data available for the given criteria.');
+        this.isLoading = false;
+        }
+      },
+      (err) => {
+        this.toastr.error(err.message || 'An error occurred while fetching the data.');
+        this.isLoading = false;
+      }
+    );
+  }
 
   saveTemplate(){
     this.popupVisible = true;
@@ -125,7 +178,64 @@ export class SchemeRegisterDevReportComponent implements OnInit {
   }
 
   previewClick(){
-    
+    this.isLoading = true;
+    let logData =  {
+      "VOCTYPE": this.commonService.getqueryParamVocType() || "",
+      "REFMID": "",
+      "USERNAME": this.commonService.userName,
+      "MODE": "PRINT",
+      "DATETIME": this.commonService.formatDateTime(new Date()),
+      "REMARKS":"",
+      "SYSTEMNAME": "",
+      "BRANCHCODE": this.commonService.branchCode,
+      "VOCNO": "",
+      "VOCDATE": "",
+      "YEARMONTH" : this.commonService.yearSelected
+    }
+    let postData = {
+      "SPID": "203",
+      "parameter": {
+        "strBRANCHES": this.schemeRegisterDevReportForm.controls.branch.value,
+        "FrVocDate": this.dateToPass.fromDate,
+        "ToVocDate": this.dateToPass.toDate,
+        "Status": this.schemeRegisterDevReportForm.controls.status.value,
+        "TillToVocDate": this.datePipe.transform(new Date(), 'yyyy-MM-dd'),
+        "LOGDATA" : JSON.stringify(logData)
+      }
+    }
+    this.commonService.showSnackBarMsg('MSG81447');
+    this.dataService.postDynamicAPI('ExecueteSPInterface', postData)
+    .subscribe((result: any) => {
+      if(result.status != "Failed"){
+        let data = result.dynamicData;
+        let printContent = data[0][0].HTMLOUT;
+        if (printContent && Object.keys(printContent).length > 0) {
+          this.htmlPreview = this.sanitizer.bypassSecurityTrustHtml(printContent);
+          const blob = new Blob([this.htmlPreview.changingThisBreaksApplicationSecurity], { type: 'text/html' });
+          this.commonService.closeSnackBarMsg();
+          const url = URL.createObjectURL(blob);
+          window.open(url, '_blank');
+          this.isLoading = false;
+        } else {
+          Swal.fire('No Data!', 'There is no data!', 'info');
+          this.commonService.closeSnackBarMsg();
+          this.isLoading = false;
+        }
+
+        let errNotifdata = result.dynamicData.map((item: any) => item[0].ERRMSG);
+        let Notifdata = result.dynamicData.map((item: any) => item[0].ERRORCODE);
+        if (Notifdata == 1) {
+          this.commonService.closeSnackBarMsg();
+          this.isLoading = false;
+          Swal.fire('Error!', errNotifdata[0], 'error');
+        }
+      }
+      else{
+        this.toastr.error(result.message)
+        this.isLoading = false;
+        return
+      }
+    }); 
   }
 
   printBtnClick(){
@@ -147,10 +257,26 @@ export class SchemeRegisterDevReportComponent implements OnInit {
       this.fetchedBranchData= this.fetchedBranchDataParam?.split("#")
    
       this.dateToPass = {
-        fromDate:  this.commonService.formatYYMMDD(new Date()),
-        toDate: this.commonService.formatYYMMDD(new Date()),
+        fromDate:  this.datePipe.transform(new Date(), 'yyyy-MM-dd')!,
+        toDate: this.datePipe.transform(new Date(), 'yyyy-MM-dd')!,
       };
     }
   }
+
+  customizeGridSummaryContent = (data: any) => {
+    // value separation handler from commonService
+    return this.commonService.setCommaSerperatedNumber(data.value, 'AMOUNT');
+  };
+  customizeGridContent = (data: any) => {
+    const formattedValue = this.commonService.decimalQuantityFormat(data.value, 'AMOUNT');
+
+    return Number(formattedValue).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  };
+
+  nullObjectHandler(cellData : any) {
+    // to handle {} response datafields
+    return (cellData.value && Object.keys(cellData.value).length > 0) ? cellData.value : null;
+  }
+
 
 }

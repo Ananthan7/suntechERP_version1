@@ -8,9 +8,12 @@
   </div>
   <!-- modal header component -->
   <modal-header
-  [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode"
+    [isViewSave]="!viewMode"
+    [isViewCancel]="!viewMode"
+    [isViewMore]="!viewMode"
     (saveClick)="formSubmit()"
-    (cancelClick)="close()"[isViewDelete]="!viewMode && editableMode"
+    (cancelClick)="close()"
+    [isViewDelete]="!viewMode && editableMode"
     (deleteClick)="deleteEmployeeMaster()"
   ></modal-header>
   <!-- content section -->
@@ -92,8 +95,18 @@
                   formControlName="Branch"
                   UpperCaseDirective
                   [readonly]="viewMode || codeEnable"
-                  (focusout)="validateLookupField($event, BranchData, 'Branch')"
-                  (keydown)="lookupKeyPress($event, 'Branch')"
+                  (focusout)="
+                    SPvalidateLookupFieldModified(
+                      $event,
+                      BranchData,
+                      ['Branch', 'BranchDes'],
+                      false,
+                      ['BRANCH_CODE', 'BRANCH_NAME']
+                    )
+                  "
+                  (keydown)="
+                    onKeyDown($event, ['Branch', 'BranchDes'], BranchData)
+                  "
                 />
                 <master-search
                   *ngIf="!viewMode"
@@ -112,6 +125,9 @@
                   matInput
                   formControlName="BranchDes"
                   UpperCaseDirective
+                  (keydown)="
+                    onKeyDown($event, ['Branch', 'BranchDes'], BranchData)
+                  "
                   [readonly]="viewMode || codeEnable"
                 />
               </mat-form-field>
@@ -133,9 +149,15 @@
                   UpperCaseDirective
                   [readonly]="viewMode || codeEnable"
                   (focusout)="
-                    validateLookupField($event, DepartmentData, 'Department')
+                    SPvalidateLookupFieldModified(
+                      $event,
+                      BranchData,
+                      ['Department', 'DepartmentDes'],
+                      false,
+                      ['DEPT_CODE', 'DEPT_NAME']
+                    )
                   "
-                  (keydown)="lookupKeyPress($event, 'Department')"
+                  (keydown)="onKeyDown($event, ['Department','DepartmentDes'], DepartmentData)"
                 />
                 <master-search
                   *ngIf="!viewMode"
@@ -152,6 +174,7 @@
                 <input
                   type="text"
                   matInput
+                  (keydown)="onKeyDown($event, ['Department','DepartmentDes'], DepartmentData)"
                   formControlName="DepartmentDes"
                   UpperCaseDirective
                   [readonly]="viewMode || codeEnable"
@@ -175,9 +198,17 @@
                   UpperCaseDirective
                   [readonly]="viewMode || codeEnable"
                   (focusout)="
-                    validateLookupField($event, DesignationData, 'Designation')
+                  SPvalidateLookupFieldModified(
+                    $event,
+                    DesignationData,
+                    ['Designation', 'DesignationDes'],
+                    false,
+                    ['CODE', 'DESCRIPTION']
+                  )
+                "
+                  (keydown)="
+                    onKeyDown($event, ['Designation','DesignationDes'], DesignationData)
                   "
-                  (keydown)="lookupKeyPress($event, 'Designation')"
                 />
                 <master-search
                   *ngIf="!viewMode"
@@ -195,6 +226,9 @@
                   type="text"
                   matInput
                   formControlName="DesignationDes"
+                  (keydown)="
+                  onKeyDown($event, ['Designation','DesignationDes'], DesignationData)
+                "
                   UpperCaseDirective
                   [readonly]="viewMode || codeEnable"
                 />
@@ -247,9 +281,15 @@
                         autocomplete="off"
                         [readonly]="viewMode || codeEnable"
                         (focusout)="
-                          validateLookupField($event, GradeData, 'Grade')
-                        "
-                        (keydown)="lookupKeyPress($event, 'Grade')"
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          GradeData,
+                          ['Grade', 'GradeDes'],
+                          false,
+                          ['CODE', 'DESCRIPTION']
+                        )
+                      "
+                        (keydown)="onKeyDown($event, ['Grade','GradeDes'], GradeData)"
                       />
                       <master-search
                         *ngIf="!viewMode"
@@ -267,6 +307,7 @@
                         type="text"
                         #codeInput
                         matInput
+                        (keydown)="onKeyDown($event, ['Grade','GradeDes'], GradeData)"
                         formControlName="GradeDes"
                         UpperCaseDirective
                         autocomplete="off"
@@ -361,13 +402,17 @@
                         autocomplete="off"
                         [readonly]="viewMode || codeEnable"
                         (focusout)="
-                          validateLookupField(
-                            $event,
-                            NationalityData,
-                            'Nationality'
-                          )
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          NationalityData,
+                          ['Nationality'],
+                          false,
+                          ['CODE']
+                        )
+                      "
+                        (keydown)="
+                          onKeyDown($event, ['Nationality'], NationalityData)
                         "
-                        (keydown)="lookupKeyPress($event, 'Nationality')"
                       />
                       <master-search
                         *ngIf="!viewMode"
@@ -395,9 +440,17 @@
                         autocomplete="off"
                         [readonly]="viewMode || codeEnable"
                         (focusout)="
-                          validateLookupField($event, ReligionData, 'Religion')
+                        SPvalidateLookupFieldModified(
+                          $event,
+                          ReligionData,
+                          ['Religion'],
+                          false,
+                          ['CODE']
+                        )
+                      "
+                        (keydown)="
+                          onKeyDown($event, ['Religion'], ReligionData)
                         "
-                        (keydown)="lookupKeyPress($event, 'Religion')"
                       />
                       <master-search
                         *ngIf="!viewMode"
@@ -552,13 +605,17 @@
                             autocomplete="off"
                             [readonly]="viewMode || codeEnable"
                             (focusout)="
-                              validateLookupField(
-                                $event,
-                                CountryCodeData,
-                                'Country'
-                              )
+                            SPvalidateLookupFieldModified(
+                              $event,
+                              CountryCodeData,
+                              ['Country'],
+                              false,
+                              ['CODE']
+                            )
+                          "
+                            (keydown)="
+                              onKeyDown($event, ['Country'], CountryCodeData)
                             "
-                            (keydown)="lookupKeyPress($event, 'Country')"
                           />
                           <master-search
                             *ngIf="!viewMode"
@@ -592,13 +649,17 @@
                             autocomplete="off"
                             [readonly]="viewMode || codeEnable"
                             (focusout)="
-                              validateLookupField(
-                                $event,
-                                StateCodeData,
-                                'State'
-                              )
+                            SPvalidateLookupFieldModified(
+                              $event,
+                              StateCodeData,
+                              ['State'],
+                              false,
+                              ['CODE']
+                            )
+                          "
+                            (keydown)="
+                              onKeyDown($event, ['State'], StateCodeData)
                             "
-                            (keydown)="lookupKeyPress($event, 'State')"
                           />
                           <master-search
                             *ngIf="!viewMode"
@@ -632,9 +693,17 @@
                             autocomplete="off"
                             [readonly]="viewMode || codeEnable"
                             (focusout)="
-                              validateLookupField($event, StateCodeData, 'City')
+                            SPvalidateLookupFieldModified(
+                              $event,
+                              CityCodeData,
+                              ['City'],
+                              false,
+                              ['CODE']
+                            )
+                          "
+                            (keydown)="
+                              onKeyDown($event, ['City'], CityCodeData)
                             "
-                            (keydown)="lookupKeyPress($event, 'City')"
                           />
                           <master-search
                             *ngIf="!viewMode"
@@ -809,14 +878,20 @@
                             autocomplete="off"
                             [readonly]="viewMode || codeEnable"
                             (focusout)="
-                              validateLookupField(
-                                $event,
-                                PRCountryCodeData,
-                                'PRCountryCodeData'
-                              )
-                            "
+                            SPvalidateLookupFieldModified(
+                              $event,
+                              PRCountryCodeData,
+                              ['PRCountry'],
+                              false,
+                              ['CODE']
+                            )
+                          "
                             (keydown)="
-                              lookupKeyPress($event, 'PRCountryCodeData')
+                              onKeyDown(
+                                $event,
+                                ['PRCountry'],
+                                PRCountryCodeData
+                              )
                             "
                           />
                           <master-search
@@ -851,14 +926,16 @@
                             autocomplete="off"
                             [readonly]="viewMode || codeEnable"
                             (focusout)="
-                              validateLookupField(
-                                $event,
-                                PRStateCodeData,
-                                'PRStateCodeData'
-                              )
-                            "
+                            SPvalidateLookupFieldModified(
+                              $event,
+                              PRStateCodeData,
+                              ['PRState'],
+                              false,
+                              ['CODE']
+                            )
+                          "
                             (keydown)="
-                              lookupKeyPress($event, 'PRStateCodeData')
+                              onKeyDown($event, ['PRState'], PRStateCodeData)
                             "
                           />
                           <master-search
@@ -893,13 +970,17 @@
                             autocomplete="off"
                             [readonly]="viewMode || codeEnable"
                             (focusout)="
-                              validateLookupField(
-                                $event,
-                                PRCityCodeData,
-                                'PRCity'
-                              )
+                            SPvalidateLookupFieldModified(
+                              $event,
+                              PRCityCodeData,
+                              ['PRCity'],
+                              false,
+                              ['CODE']
+                            )
+                          "
+                            (keydown)="
+                              onKeyDown($event, ['PRCity'], PRCityCodeData)
                             "
-                            (keydown)="lookupKeyPress($event, 'PRCity')"
                           />
                           <master-search
                             *ngIf="!viewMode"
@@ -1010,11 +1091,7 @@
                 <dxo-selection mode="single"></dxo-selection>
 
                 <!-- <dxi-column dataField="SRNO" caption="S.No"> </dxi-column> -->
-                <dxi-column
-                  dataField="Code"
-                  caption="Code"
-                  cellTemplate="code"
-                >
+                <dxi-column dataField="Code" caption="Code" cellTemplate="code">
                 </dxi-column>
                 <dxi-column
                   dataField="Description"
@@ -1041,65 +1118,59 @@
                 >
                 </dxi-column>
 
-               
                 <div *dxTemplate="let data of 'code'">
-                    <!-- <mat-form-field style="width: 100%" appearance="outline"> -->
-                      <input
-                      class="form-control"
-                        type="text"
-                        id="code1"
-                        formControlName="code1"
-                      />
-                    <!-- </mat-form-field> -->
-                  </div>
-                  
-                  <div *dxTemplate="let data of 'description'">
-                    <!-- <mat-form-field style="width: 100%" appearance="outline"> -->
-                      <input
-                      class="form-control"
-                        type="text"
-                        id="description"
-                        formControlName="description"
-                      />
-                    <!-- </mat-form-field> -->
-                  </div>
-                  
-                  <div *dxTemplate="let data of 'todate'">
-                    <!-- <mat-form-field style="width: 100%" appearance="outline"> -->
-                      <input
-                      class="form-control"
-                        type="date"
-                        placeholder="DD/MM/YYYY"
-                        formControlName="todate"
-                        [disabled]="viewMode"
-                      />
-                      <!-- <mat-datepicker-toggle matSuffix [for]="todate"></mat-datepicker-toggle>
+                  <!-- <mat-form-field style="width: 100%" appearance="outline"> -->
+                  <input
+                    class="form-control"
+                    type="text"
+                    id="code1"
+                    formControlName="code1"
+                  />
+                  <!-- </mat-form-field> -->
+                </div>
+
+                <div *dxTemplate="let data of 'description'">
+                  <!-- <mat-form-field style="width: 100%" appearance="outline"> -->
+                  <input
+                    class="form-control"
+                    type="text"
+                    id="description"
+                    formControlName="description"
+                  />
+                  <!-- </mat-form-field> -->
+                </div>
+
+                <div *dxTemplate="let data of 'todate'">
+                  <!-- <mat-form-field style="width: 100%" appearance="outline"> -->
+                  <input
+                    class="form-control"
+                    type="date"
+                    placeholder="DD/MM/YYYY"
+                    formControlName="todate"
+                    [disabled]="viewMode"
+                  />
+                  <!-- <mat-datepicker-toggle matSuffix [for]="todate"></mat-datepicker-toggle>
                       <mat-datepicker #todate></mat-datepicker> -->
-                    <!-- </mat-form-field> -->
-                  </div>
-                  
-                  <div *dxTemplate="let data of 'documentnumber'">
-                    <!-- <mat-form-field style="width: 100%" appearance="outline"> -->
-                      <input
-                        class="form-control"
-                        type="number"
-                        id="documentnumber"
-                        formControlName="documentnumber"
-                        style="text-align: right"
-                      />
-                    <!-- </mat-form-field> -->
-                  </div>
-                  
-                  <div *dxTemplate="let data of 'media'">
-                    <!-- <mat-form-field style="width: 100%" appearance="outline"> -->
-                      <input
-                        type="file"
-                        id="media"
-                        formControlName="media"
-                      />
-                    <!-- </mat-form-field> -->
-                  </div>
-                  
+                  <!-- </mat-form-field> -->
+                </div>
+
+                <div *dxTemplate="let data of 'documentnumber'">
+                  <!-- <mat-form-field style="width: 100%" appearance="outline"> -->
+                  <input
+                    class="form-control"
+                    type="number"
+                    id="documentnumber"
+                    formControlName="documentnumber"
+                    style="text-align: right"
+                  />
+                  <!-- </mat-form-field> -->
+                </div>
+
+                <div *dxTemplate="let data of 'media'">
+                  <!-- <mat-form-field style="width: 100%" appearance="outline"> -->
+                  <input type="file" id="media" formControlName="media" />
+                  <!-- </mat-form-field> -->
+                </div>
               </dx-data-grid>
             </mat-tab>
           </mat-tab-group>

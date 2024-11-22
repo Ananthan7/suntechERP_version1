@@ -327,9 +327,8 @@ export class ProductionStockDetailComponent implements OnInit {
       let tagtext = ''
       this.componentDataList.forEach((item: any, index: number) => {
         result.forEach((res: any) => {
-          debugger
           if(res.FIELDNAME == 'KARAT'){
-            tagtext += item.KARAT_CODE
+            tagtext += item.KARAT_CODE + res.SEPARATION
           }else{
             tagtext += item[res.FIELDNAME] + res.SEPARATION
           }

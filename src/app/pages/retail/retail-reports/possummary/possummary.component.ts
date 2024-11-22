@@ -345,7 +345,6 @@ export class POSSummaryComponent implements OnInit {
     this.dataService.postDynamicAPI(API, postData).subscribe((result) => {
       if (result && result.dynamicData) {
         if(result.dynamicData[0].length> 0){
-          console.log(result.dynamicData[0])
           this.accountsGridDataArr = result.dynamicData[0];
           this.toastr.success(result.dynamicData.status || 'Success');
         }

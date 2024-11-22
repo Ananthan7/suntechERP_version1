@@ -6,9 +6,12 @@
 </div>
 <!-- modal header component -->
 <modal-header
-[isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode"
+  [isViewSave]="!viewMode"
+  [isViewCancel]="!viewMode"
+  [isViewMore]="!viewMode"
   (saveClick)="formSubmit()"
-  (cancelClick)="close()"[isViewDelete]="!viewMode && editableMode"
+  (cancelClick)="close()"
+  [isViewDelete]="!viewMode && editableMode"
   (deleteClick)="deleteRecord()"
 ></modal-header>
 <div class="row">
@@ -30,18 +33,48 @@
                         matInput
                         formControlName="branch"
                         [readonly]="viewMode"
-                        (focusout)="
-                          validateLookupField($event, branchCodeData, 'branch')
+                        (keydown)="
+                          onKeyDown(
+                            $event,
+                            ['branch', 'branchdesc'],
+                            branchCodeData
+                          )
                         "
-                        (keydown)="lookupKeyPress($event, 'branch')"
+                        (focusout)="
+                          SPvalidateLookupFieldModified(
+                            $event,
+                            branchCodeData,
+                            ['branch', 'branchdesc'],
+                            false,
+                            ['BRANCH_CODE', 'BRANCH_NAME'],
+                            false
+                          )
+                        "
                       />
                       <master-search
                         [MasterSearchData]="branchCodeData"
-                        #overlaybranchSearch
-                        (newRowClick)="branchSelected($event)"
+                        #overlayBranch
+                        (focusout)="openTab($event, 'branch')"
+                        (newRowClick)="
+                          lookupSelect(
+                            $event,
+                            ['branch', 'branchdesc'],
+                            ['BRANCH_CODE', 'BRANCH_NAME']
+                          )
+                        "
                         *ngIf="!viewMode"
                         class="masterSearch"
                       ></master-search>
+
+                      <mat-error
+                        *ngIf="
+                          otpForm.controls['branch'].hasError(
+                            'required'
+                          )
+                        "
+                      >
+                        Branch Code is required.
+                      </mat-error>
                     </mat-form-field>
                   </div>
                   <div class="col-md-4">
@@ -52,6 +85,16 @@
                         formControlName="branchdesc"
                         [readonly]="viewMode || codeEnable"
                       />
+
+                      <mat-error
+                        *ngIf="
+                          otpForm.controls['branchdesc'].hasError(
+                            'required'
+                          )
+                        "
+                      >
+                        Branch Desc is required.
+                      </mat-error>
                     </mat-form-field>
                   </div>
                 </div>

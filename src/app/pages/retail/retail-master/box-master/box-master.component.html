@@ -126,48 +126,53 @@
                   />
                 </mat-form-field>
               </div>
-              <label for="inputPassword" class="col-sm-2 col-form-label"
-                >Location * :</label
-              >
-              <div class="col-md-3">
-                <mat-form-field style="width: 100%" appearance="outline">
-                  <input
-                    [readonly]="flag === 'VIEW'"
-                    type="text"
-                    matInput
-                    formControlName="location"
-                    (focusout)="
-                      SPvalidateLookupFieldModified(
-                        $event,
-                        locationCodeData,
-                        ['location'],
-                        false,
-                        ['LOCATION_CODE']
-                      )
-                    "
-                  />
-
-                  <master-search
-                    *ngIf="flag != 'VIEW'"
-                    (focusout)="openTab($event, 'location')"
-                    #overlaylocationCode
-                    [MasterSearchData]="locationCodeData"
-                    class="masterSearch"
-                    (newRowClick)="
-                      lookupSelect($event, 'location', 'LOCATION_CODE')
-                    "
-                  ></master-search>
-
-                  <mat-error
-                    *ngIf="
-                      boxMasterMainForm.controls['location'].hasError(
-                        'required'
-                      )
-                    "
+              <div class="col-md-5" *ngIf="flag == 'ADD'">
+                <div class="row">
+                  <label for="inputPassword" class="col-sm-4 col-form-label"
+                    >Location *:</label
                   >
-                    Location is required.
-                  </mat-error>
-                </mat-form-field>
+
+                  <div class="col-md-7">
+                    <mat-form-field style="width: 100%" appearance="outline">
+                      <input
+                        [readonly]="flag === 'VIEW'"
+                        type="text"
+                        matInput
+                        formControlName="location"
+                        (focusout)="
+                          SPvalidateLookupFieldModified(
+                            $event,
+                            locationCodeData,
+                            ['location'],
+                            false,
+                            ['LOCATION_CODE']
+                          )
+                        "
+                      />
+
+                      <master-search
+                        *ngIf="flag != 'VIEW'"
+                        (focusout)="openTab($event, 'location')"
+                        #overlaylocationCode
+                        [MasterSearchData]="locationCodeData"
+                        class="masterSearch"
+                        (newRowClick)="
+                          lookupSelect($event, 'location', 'LOCATION_CODE')
+                        "
+                      ></master-search>
+
+                      <mat-error
+                        *ngIf="
+                          boxMasterMainForm.controls['location'].hasError(
+                            'required'
+                          )
+                        "
+                      >
+                        Location is required.
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                </div>
               </div>
             </div>
 

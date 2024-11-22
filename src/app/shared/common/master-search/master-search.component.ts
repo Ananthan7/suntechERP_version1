@@ -19,6 +19,7 @@ export class MasterSearchComponent implements OnInit {
   @ViewChild('dropdown') dropDown!: NgbDropdown;
   @Output() newRowClick = new EventEmitter();
   @Output() focusOut = new EventEmitter();
+  @Output() iconClick = new EventEmitter();
   @Input() MasterSearchData!: MasterSearchModel;
   searchFieldLabel: any;
   searchNameLabel: any;
@@ -211,6 +212,7 @@ export class MasterSearchComponent implements OnInit {
     // if (this.MasterSearchData?.LOAD_ONCLICK) {
     //   this.loadData();
     // }
+    this.iconClick.emit(event)
     this.loadData();
     // if (this.MasterSearchData?.SEARCH_VALUE) {
     //   this.loadData();

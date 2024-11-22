@@ -53,6 +53,8 @@ export class EmployeeMasterComponent implements OnInit {
     WHERECONDITION: "BRANCH_CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
   }
 
   DepartmentData: MasterSearchModel = {
@@ -65,6 +67,8 @@ export class EmployeeMasterComponent implements OnInit {
     WHERECONDITION: "Types = 'FA DEPARTMENT'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
   }
 
   DesignationData: MasterSearchModel = {
@@ -77,6 +81,8 @@ export class EmployeeMasterComponent implements OnInit {
     WHERECONDITION: "TYPES='HRM DESIGNATION MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
   }
 
   GradeData: MasterSearchModel = {
@@ -89,6 +95,8 @@ export class EmployeeMasterComponent implements OnInit {
     WHERECONDITION: "TYPES ='HRM GRADE MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
   }
 
   NationalityData: MasterSearchModel = {
@@ -101,7 +109,10 @@ export class EmployeeMasterComponent implements OnInit {
     WHERECONDITION: "TYPES='NATIONALITY MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
   }
+
 
   ReligionData: MasterSearchModel = {
     PAGENO: 1,
@@ -113,6 +124,8 @@ export class EmployeeMasterComponent implements OnInit {
     WHERECONDITION: "CODE <> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
   }
 
   CountryCodeData: MasterSearchModel = {
@@ -125,6 +138,8 @@ export class EmployeeMasterComponent implements OnInit {
     WHERECONDITION: "TYPES = 'COUNTRY MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
   }
 
   StateCodeData: MasterSearchModel = {
@@ -137,6 +152,8 @@ export class EmployeeMasterComponent implements OnInit {
     WHERECONDITION: "TYPES='state master'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
   }
 
   CityCodeData: MasterSearchModel = {
@@ -149,6 +166,8 @@ export class EmployeeMasterComponent implements OnInit {
     WHERECONDITION: "TYPES='REGION MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
   }
 
   PRCountryCodeData: MasterSearchModel = {
@@ -161,6 +180,8 @@ export class EmployeeMasterComponent implements OnInit {
     WHERECONDITION: "TYPES = 'COUNTRY MASTER'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
   }
 
   PRStateCodeData: MasterSearchModel = {
@@ -173,6 +194,8 @@ export class EmployeeMasterComponent implements OnInit {
     WHERECONDITION: "TYPES='state master'",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
   }
 
   PRCityCodeData: MasterSearchModel = {
@@ -185,6 +208,8 @@ export class EmployeeMasterComponent implements OnInit {
     WHERECONDITION: "CODE <> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
   }
 
 
@@ -464,10 +489,10 @@ export class EmployeeMasterComponent implements OnInit {
       case 'PRCity':
         this.overlayPRCityDataSearch.showOverlayPanel(event);
         break;
-      case 'PRStateCodeData':
+      case 'PRState':
         this.overlayPRStateCodeDataSearch.showOverlayPanel(event);
         break;
-      case 'PRCountryCodeData':
+      case 'PRCountry':
         this.overlayPRCountryCodeSearch.showOverlayPanel(event);
         break;
       default:
@@ -853,5 +878,135 @@ export class EmployeeMasterComponent implements OnInit {
         this.subscriptions.push(Sub)
       }
     });
+  }
+
+  onKeyDown(event: KeyboardEvent, controllers: string[], LOOKUPDATA:MasterSearchModel) {
+    const inputElement = event.target as HTMLInputElement;
+
+    if (event.key === "Backspace" || event.key === "Delete") {
+      console.log("DELETE");
+      setTimeout(() => {
+        if (inputElement.value.trim() === "") {
+          this.clearRelevantFields(controllers, LOOKUPDATA);
+        }
+      }, 0);
+    } else if(event.key == "Tab"){
+      console.log("Tab");
+      console.log(controllers);
+      console.log(event);
+      
+      this.lookupKeyPress(event,controllers[0])
+
+    }
+  }
+
+  clearRelevantFields(controllers: string[], LOOKUPDATA:MasterSearchModel) {
+    controllers.forEach((controllerName) => {
+      const control = this.employeeMasterForm.controls[controllerName];
+      if (control) {
+        control.setValue("");
+      } else {
+        console.warn(`Control ${controllerName} not found in the form.`);
+      }
+    });
+
+    this.clearLookupData(LOOKUPDATA, controllers);
+  }
+
+  clearLookupData(LOOKUPDATA: MasterSearchModel, FORMNAMES: string[]) {
+    LOOKUPDATA.SEARCH_VALUE = "";
+    FORMNAMES.forEach((formName) => {
+      this.employeeMasterForm.controls[formName].setValue("");
+    });
+  }
+
+  
+  SPvalidateLookupFieldModified(
+    event: any,
+    LOOKUPDATA: MasterSearchModel,
+    FORMNAMES: string[],
+    isCurrencyField: boolean,
+    lookupFields?: string[],
+    FROMCODE?: boolean
+  ) {
+    const searchValue = event.target.value?.trim();
+
+    // if (!searchValue || this.flag == "VIEW") return;
+
+    LOOKUPDATA.SEARCH_VALUE = searchValue;
+
+    const param = {
+      PAGENO: LOOKUPDATA.PAGENO,
+      RECORDS: LOOKUPDATA.RECORDS,
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECONDITION: LOOKUPDATA.WHERECONDITION,
+      searchField: LOOKUPDATA.SEARCH_FIELD,
+      searchValue: LOOKUPDATA.SEARCH_VALUE,
+    };
+
+    this.commonService.showSnackBarMsg("MSG81447");
+
+    const sub: Subscription = this.dataService
+      .postDynamicAPI("MasterLookUp", param)
+      .subscribe({
+        next: (result: any) => {
+          this.commonService.closeSnackBarMsg();
+          const data = result.dynamicData?.[0];
+
+          console.log("API Response Data:", data);
+
+          if (data?.length) {
+            console.log("In");
+
+            if (LOOKUPDATA.FRONTENDFILTER && LOOKUPDATA.SEARCH_VALUE) {
+              let searchResult = this.commonService.searchAllItemsInArray(
+                data,
+                LOOKUPDATA.SEARCH_VALUE
+              );
+
+              console.log("Up");
+
+              console.log("Filtered Search Result:", searchResult);
+
+              if (searchResult?.length) {
+                const matchedItem = searchResult[0];
+                console.log(FORMNAMES);
+                console.log(matchedItem);
+                
+                
+
+                FORMNAMES.forEach((formName, index) => {
+                  const field = lookupFields?.[index];
+                  if (field && field in matchedItem) {
+                    console.log(field);
+                    
+                    this.employeeMasterForm.controls[formName].setValue(
+                      matchedItem[field]
+                    );
+                  } else {
+                    console.error(
+                      `Property ${field} not found in matched item.`
+                    );
+                    this.commonService.toastErrorByMsgId("No data found");
+                    this.clearLookupData(LOOKUPDATA, FORMNAMES);
+                  }
+                });
+              } else {
+                this.commonService.toastErrorByMsgId("No data found");
+                this.clearLookupData(LOOKUPDATA, FORMNAMES);
+              }
+            }
+          } else {
+            this.commonService.toastErrorByMsgId("No data found");
+            this.clearLookupData(LOOKUPDATA, FORMNAMES);
+          }
+        },
+        error: () => {
+          this.commonService.toastErrorByMsgId("MSG2272");
+          this.clearLookupData(LOOKUPDATA, FORMNAMES);
+        },
+      });
+
+    this.subscriptions.push(sub);
   }
 }

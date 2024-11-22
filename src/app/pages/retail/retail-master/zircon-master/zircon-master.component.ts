@@ -289,6 +289,8 @@ export class ZirconMasterComponent implements OnInit {
 
   ngOnInit(): void {
     this.branchCode = this.commonService.branchCode;
+    console.log();
+    
 
     this.content
       ? (this.flag = this.content!.FLAG)

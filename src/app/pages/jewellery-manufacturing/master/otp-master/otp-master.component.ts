@@ -15,7 +15,8 @@ import { MasterSearchComponent } from "src/app/shared/common/master-search/maste
   styleUrls: ["./otp-master.component.scss"],
 })
 export class OtpMasterComponent implements OnInit {
-  @ViewChild("overlaybranchSearch") overlaybranchSearch!: MasterSearchComponent;
+  @ViewChild("overlayBranch") overlayBranch!: MasterSearchComponent;
+
   @Input() content!: any;
 
   selectedTabIndex = 0;
@@ -79,6 +80,8 @@ export class OtpMasterComponent implements OnInit {
     WHERECONDITION: "BRANCH_CODE<> ''",
     VIEW_INPUT: true,
     VIEW_TABLE: true,
+    LOAD_ONCLICK: true,
+    FRONTENDFILTER: true,
   };
   branchSelected(e: any) {
     console.log(e);
@@ -139,71 +142,6 @@ export class OtpMasterComponent implements OnInit {
     });
   }
 
-  lookupKeyPress(event: any, form?: any) {
-    if (event.key == "Tab" && event.target.value == "") {
-      this.showOverleyPanel(event, form);
-    }
-    if (event.key === "Enter") {
-      if (event.target.value == "") this.showOverleyPanel(event, form);
-      event.preventDefault();
-    }
-  }
-
-  showOverleyPanel(event: any, formControlName: string) {
-    if (formControlName == "branch") {
-      this.overlaybranchSearch.showOverlayPanel(event);
-    }
-  }
-
-  openOverlay(formControlName: string, event: any) {
-    if (formControlName == "branch") {
-      this.overlaybranchSearch.showOverlayPanel(event);
-    }
-  }
-
-  validateLookupField(
-    event: any,
-    LOOKUPDATA: MasterSearchModel,
-    FORMNAME: string
-  ) {
-    LOOKUPDATA.SEARCH_VALUE = event.target.value;
-    if (
-      event.target.value == "" ||
-      this.viewMode == true ||
-      this.editMode == true
-    )
-      return;
-    let param = {
-      LOOKUPID: LOOKUPDATA.LOOKUPID,
-      WHERECOND: `${LOOKUPDATA.SEARCH_FIELD}='${event.target.value}' ${
-        LOOKUPDATA.WHERECONDITION ? `AND ${LOOKUPDATA.WHERECONDITION}` : ""
-      }`,
-    };
-    this.commonService.toastInfoByMsgId("MSG81447");
-    let API = "UspCommonInputFieldSearch/GetCommonInputFieldSearch";
-    let Sub: Subscription = this.dataService
-      .postDynamicAPI(API, param)
-      .subscribe(
-        (result) => {
-          let data = this.commonService.arrayEmptyObjectToString(
-            result.dynamicData[0]
-          );
-          if (data.length == 0) {
-            this.commonService.toastErrorByMsgId("MSG1531");
-            this.otpForm.controls[FORMNAME].setValue("");
-            // this.renderer.selectRootElement(FORMNAME).focus();
-            LOOKUPDATA.SEARCH_VALUE = "";
-            this.openOverlay(FORMNAME, event);
-            return;
-          }
-        },
-        (err) => {
-          this.commonService.toastErrorByMsgId("MSG2272"); //Error occured, please try again
-        }
-      );
-    this.subscriptions.push(Sub);
-  }
-
   setFormValues() {
     this.otpForm.controls.branch.setValue(this.content.BRANCH_CODE);
     this.otpForm.controls.branchdesc.setValue(this.content.BRANCH_DESCRIPTION);
@@ -231,7 +169,7 @@ export class OtpMasterComponent implements OnInit {
 
     let API = "OTPMaster/InsertOTPMaster";
     console.log(this.data);
-  
+
     const postData = this.data.map((item: any) => ({
       BRANCH_CODE: this.otpForm.value.branch || "",
       BRANCH_DESCRIPTION: this.otpForm.value.branchdesc || "",
@@ -240,12 +178,12 @@ export class OtpMasterComponent implements OnInit {
       LEVEL_MOBILE1: item.LEVEL_MOBILE1 || "string",
       LEVEL_MOBILE2: item.LEVEL_MOBILE2 || "string",
       LEVEL_EMAIL: item.LEVEL_EMAIL || "string",
-      SYSTEM_DATE: new Date().toISOString(), 
+      SYSTEM_DATE: new Date().toISOString(),
       MID: 0,
     }));
 
     console.log(postData);
-    
+
     let Sub: Subscription = this.dataService
       .postDynamicAPI(API, postData)
       .subscribe(
@@ -389,10 +327,10 @@ export class OtpMasterComponent implements OnInit {
     });
   }
 
-  getRowData(e:any){
+  getRowData(e: any) {
     console.log(e);
-    const selectedRows = e.selectedRowsData; 
-    console.log('Selected Rows:', selectedRows);
+    const selectedRows = e.selectedRowsData;
+    console.log("Selected Rows:", selectedRows);
     this.data = selectedRows;
   }
   // lookupKeyPress(event: KeyboardEvent) {
@@ -400,4 +338,166 @@ export class OtpMasterComponent implements OnInit {
   //     event.preventDefault();
   //   }
   // }
+
+  onKeyDown(
+    event: KeyboardEvent,
+    controllers: string[],
+    codeData: MasterSearchModel
+  ) {
+    const inputElement = event.target as HTMLInputElement;
+
+    if (event.key === "Backspace" || event.key === "Delete") {
+      setTimeout(() => {
+        if (inputElement.value.trim() === "") {
+          this.clearRelevantFields(controllers, codeData);
+        }
+      }, 0);
+    }
+  }
+
+  clearRelevantFields(controllers: string[], codeData: MasterSearchModel) {
+    controllers.forEach((controllerName) => {
+      const control = this.otpForm.controls[controllerName];
+      if (control) {
+        control.setValue("");
+      } else {
+        console.warn(`Control ${controllerName} not found in the form.`);
+      }
+    });
+
+    this.clearLookupData(codeData, controllers);
+  }
+
+  SPvalidateLookupFieldModified(
+    event: any,
+    LOOKUPDATA: MasterSearchModel,
+    FORMNAMES: string[],
+    isCurrencyField: boolean,
+    lookupFields?: string[],
+    FROMCODE?: boolean
+  ) {
+    const searchValue = event.target.value?.trim();
+
+    // if (!searchValue || this.flag == "VIEW") return;
+
+    LOOKUPDATA.SEARCH_VALUE = searchValue;
+
+    const param = {
+      PAGENO: LOOKUPDATA.PAGENO,
+      RECORDS: LOOKUPDATA.RECORDS,
+      LOOKUPID: LOOKUPDATA.LOOKUPID,
+      WHERECONDITION: LOOKUPDATA.WHERECONDITION,
+      searchField: LOOKUPDATA.SEARCH_FIELD,
+      searchValue: LOOKUPDATA.SEARCH_VALUE,
+    };
+
+    this.commonService.showSnackBarMsg("MSG81447");
+
+    const sub: Subscription = this.dataService
+      .postDynamicAPI("MasterLookUp", param)
+      .subscribe({
+        next: (result: any) => {
+          this.commonService.closeSnackBarMsg();
+          const data = result.dynamicData?.[0];
+
+          console.log("API Response Data:", data);
+
+          if (data?.length) {
+            if (LOOKUPDATA.FRONTENDFILTER && LOOKUPDATA.SEARCH_VALUE) {
+              let searchResult = this.commonService.searchAllItemsInArray(
+                data,
+                LOOKUPDATA.SEARCH_VALUE
+              );
+
+              console.log("Filtered Search Result:", searchResult);
+
+              if (searchResult?.length) {
+                const matchedItem = searchResult[0];
+
+                FORMNAMES.forEach((formName, index) => {
+                  const field = lookupFields?.[index];
+                  if (field && field in matchedItem) {
+                    this.otpForm.controls[formName].setValue(
+                      matchedItem[field]
+                    );
+                  } else {
+                    console.error(
+                      `Property ${field} not found in matched item.`
+                    );
+                    this.commonService.toastErrorByMsgId("No data found");
+                    this.clearLookupData(LOOKUPDATA, FORMNAMES);
+                  }
+                });
+              } else {
+                this.commonService.toastErrorByMsgId("No data found");
+                this.clearLookupData(LOOKUPDATA, FORMNAMES);
+              }
+            }
+          } else {
+            this.commonService.toastErrorByMsgId("No data found");
+            this.clearLookupData(LOOKUPDATA, FORMNAMES);
+          }
+        },
+        error: () => {
+          this.commonService.toastErrorByMsgId("MSG2272");
+          this.clearLookupData(LOOKUPDATA, FORMNAMES);
+        },
+      });
+
+    this.subscriptions.push(sub);
+  }
+
+  clearLookupData(LOOKUPDATA: MasterSearchModel, FORMNAMES: string[]) {
+    LOOKUPDATA.SEARCH_VALUE = "";
+    FORMNAMES.forEach((formName) => {
+      this.otpForm.controls[formName].setValue("");
+    });
+  }
+
+  openTab(event: any, formControlName: string) {
+    if (event.target.value === "") {
+      this.openPanel(event, formControlName);
+    }
+  }
+
+  openPanel(event: any, formControlName: string) {
+    switch (formControlName) {
+      case "branch":
+        this.overlayBranch.showOverlayPanel(event);
+        break;
+      default:
+        console.warn(`Unknown form control name: ${formControlName}`);
+    }
+  }
+
+  lookupSelect(e: any, controller?: any, modelfield?: any) {
+    console.log(e);
+    if (Array.isArray(controller) && Array.isArray(modelfield)) {
+      // Handle multiple controllers and fields
+      if (controller.length === modelfield.length) {
+        controller.forEach((ctrl, index) => {
+          const field = modelfield[index];
+          const value = e[field];
+          if (value !== undefined) {
+            this.otpForm.controls[ctrl].setValue(value);
+          } else {
+            console.warn(`Model field '${field}' not found in event object.`);
+          }
+        });
+      } else {
+        console.warn(
+          "Controller and modelfield arrays must be of equal length."
+        );
+      }
+    } else if (controller && modelfield) {
+      const value = e[modelfield];
+      if (value !== undefined) {
+        this.otpForm.controls[controller].setValue(value);
+      } else {
+        console.warn(`Model field '${modelfield}' not found in event object.`);
+      }
+    } else {
+      console.warn("Controller or modelfield is missing.");
+    }
+  }
 }

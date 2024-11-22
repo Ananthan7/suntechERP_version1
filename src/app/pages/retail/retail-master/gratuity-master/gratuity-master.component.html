@@ -305,13 +305,14 @@
                 >
                 <div class="col-sm-3">
                   <mat-form-field style="width: 100%" appearance="outline">
-                    <input
-                      [readonly]="flag === 'VIEW'"
-                      type="text"
-                      matInput
-                      formControlName="basedOn"
-                      autocomplete="off"
-                    />
+                    <mat-select formControlName="basedOn">
+                      <mat-option
+                        *ngFor="let data of basedOnDropdown"
+                        [value]="data.ENGLISH"
+                      >
+                        {{ data.ENGLISH }}
+                      </mat-option>
+                    </mat-select>
                   </mat-form-field>
                 </div>
                 <label
