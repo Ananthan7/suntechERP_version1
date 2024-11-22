@@ -9,6 +9,7 @@ import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { StoneReturnDetailsComponent } from './stone-return-details/stone-return-details.component';
 import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
+import { AttachmentUploadComponent } from 'src/app/shared/common/attachment-upload/attachment-upload.component';
 @Component({
   selector: 'app-stone-return',
   templateUrl: './stone-return.component.html',
@@ -19,7 +20,10 @@ export class StoneReturnComponent implements OnInit {
   @ViewChild('overlayenterdBySearch') overlayenterdBySearch!: MasterSearchComponent;
   @ViewChild('overlayBaseCurrencyCode') overlayBaseCurrencyCode!: MasterSearchComponent;
   @ViewChild('overlayCurrencyCode') overlayCurrencyCode!: MasterSearchComponent;
+  @ViewChild(AttachmentUploadComponent) attachmentUploadComponent?: AttachmentUploadComponent;
 
+  Attachedfile: any[] = [];
+  savedAttachments: any[] = [];
 
   columnhead: any[] = [
     { title: 'SRNO', field: 'SRNO', format: '', alignment: 'center' },
@@ -218,6 +222,16 @@ export class StoneReturnComponent implements OnInit {
       this.setvoucherTypeMaster()
     }
   }
+
+  attachmentClicked() {
+    this.attachmentUploadComponent?.showDialog()
+  }
+
+  uploadSubmited(file: any) {
+    this.Attachedfile = file
+    console.log(this.Attachedfile);    
+  }
+
   setFormValues() {
     if (this.content?.FLAG) return
     this.stonereturnFrom.controls.VOCTYPE.setValue(this.commonService.getqueryParamVocType())

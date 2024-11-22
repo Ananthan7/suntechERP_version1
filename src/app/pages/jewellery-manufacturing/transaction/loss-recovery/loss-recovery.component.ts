@@ -8,6 +8,7 @@ import { Subscription } from "rxjs";
 import Swal from "sweetalert2";
 import { NgbActiveModal, NgbModal, NgbModalRef, } from "@ng-bootstrap/ng-bootstrap";
 import { MasterSearchComponent } from "src/app/shared/common/master-search/master-search.component";
+import { AttachmentUploadComponent } from "src/app/shared/common/attachment-upload/attachment-upload.component";
 @Component({
   selector: 'app-loss-recovery',
   templateUrl: './loss-recovery.component.html',
@@ -16,7 +17,10 @@ import { MasterSearchComponent } from "src/app/shared/common/master-search/maste
 export class LossRecoveryComponent implements OnInit {
   @ViewChild('overlayReceicvedBy') overlayReceicvedBy!: MasterSearchComponent;
   @ViewChild('overlayEnterBy') overlayEnterBy!: MasterSearchComponent;
+  @ViewChild(AttachmentUploadComponent) attachmentUploadComponent?: AttachmentUploadComponent;
 
+  Attachedfile: any[] = [];
+  savedAttachments: any[] = [];
   isloading: boolean = false;
   divisionMS: any = 'ID';
   branchCode?: string;
@@ -187,6 +191,15 @@ export class LossRecoveryComponent implements OnInit {
       }
     }
     )
+  }
+
+  attachmentClicked() {
+    this.attachmentUploadComponent?.showDialog()
+  }
+
+  uploadSubmited(file: any) {
+    this.Attachedfile = file
+    console.log(this.Attachedfile);    
   }
 
   userDataSelected(e: any) {

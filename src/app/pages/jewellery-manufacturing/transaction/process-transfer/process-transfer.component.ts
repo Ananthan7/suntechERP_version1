@@ -10,6 +10,7 @@ import { ProcessTransferDetailsComponent } from './process-transfer-details/proc
 import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 import { AuditTrailComponent } from 'src/app/shared/common/audit-trail/audit-trail.component';
 import { environment } from 'src/environments/environment';
+import { AttachmentUploadComponent } from 'src/app/shared/common/attachment-upload/attachment-upload.component';
 
 
 @Component({
@@ -21,6 +22,11 @@ export class ProcessTransferComponent implements OnInit {
   @ViewChild('salesmanOverlay') salesmanOverlay!: MasterSearchComponent;
   @ViewChild('OverlayCurrencyRate') OverlayCurrencyRate!: MasterSearchComponent;
   @ViewChild(AuditTrailComponent) auditTrailComponent?: AuditTrailComponent;
+  @ViewChild(AttachmentUploadComponent) attachmentUploadComponent?: AttachmentUploadComponent;
+
+  Attachedfile: any[] = [];
+  savedAttachments: any[] = [];
+
 
   @Input() content!: any;
   tableData: any[] = [];
@@ -139,6 +145,16 @@ export class ProcessTransferComponent implements OnInit {
       currency: this.commonService.compCurrency
     };
   }
+
+  attachmentClicked() {
+    this.attachmentUploadComponent?.showDialog()
+  }
+
+  uploadSubmited(file: any) {
+    this.Attachedfile = file
+    console.log(this.Attachedfile);    
+  }
+
   /**USE: get InitialLoadData */
   setInitialValues() {
     if (!this.content?.MID) return

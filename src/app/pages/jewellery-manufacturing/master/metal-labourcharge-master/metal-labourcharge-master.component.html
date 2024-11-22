@@ -10,7 +10,9 @@
     <!-- modal header component -->
     <modal-header (cancelClick)="close()" (deleteClick)="deleteMeltingType()" [isViewSave]="!viewMode"
         (saveClick)="formSubmit()" [isViewCancel]="!viewMode" [isViewMore]="!viewMode"
-        [isViewDelete]="editMode"></modal-header>
+        [isViewDelete]="editMode" [isViewAttachment]="!viewMode" (attachmentClick)="attachmentClicked()"></modal-header>
+        <!-- component to upload attachment -->
+        <attachment-upload (uploadSubmit)="uploadSubmited($event)" [savedAttachment]="savedAttachments"></attachment-upload>
     <!-- content section -->
     <div class="card m-2 row">
         <!-- <mat-tab-group [selectedIndex]="this.divisionMS == 'ID'? 1 : 0"> -->

@@ -8,6 +8,7 @@ import { CommonServiceService } from 'src/app/services/common-service.service';
 import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
+import { AttachmentUploadComponent } from 'src/app/shared/common/attachment-upload/attachment-upload.component';
 
 
 @Component({
@@ -36,7 +37,7 @@ export class AlloyMasterComponent implements OnInit {
 
 
 
-
+  @ViewChild(AttachmentUploadComponent) attachmentUploadComponent?: AttachmentUploadComponent;
   @Input() content!: any;
   private subscriptions: Subscription[] = [];
 
@@ -326,6 +327,20 @@ export class AlloyMasterComponent implements OnInit {
     this.setCompanyCurrency();
   }
 
+  Attachedfile: any[] = [];
+  savedAttachments: any[] = [];
+
+  attachmentClicked() {
+    this.attachmentUploadComponent?.showDialog()
+  }
+
+  uploadSubmited(file: any) {
+
+    this.Attachedfile = file
+    console.log(this.Attachedfile);
+
+  }
+
   //number validation
   isNumeric(event: any) {
     return this.commonService.isNumeric(event);
@@ -337,12 +352,12 @@ export class AlloyMasterComponent implements OnInit {
   // }
 
   close(data?: any) {
-    if (data){
+    if (data) {
       this.viewMode = true;
       this.activeModal.close(data);
       return
     }
-    if (this.content && this.content.FLAG == 'VIEW'){
+    if (this.content && this.content.FLAG == 'VIEW') {
       this.activeModal.close(data);
       return
     }
@@ -645,13 +660,13 @@ export class AlloyMasterComponent implements OnInit {
 
 
   }
-  selectMasterOnlyChange(event:any){
+  selectMasterOnlyChange(event: any) {
     this.codeData.VIEW_ICON = this.alloyMastereForm.value.selectMasterOnly;
   }
   alloyCodeValidate(event: any, LOOKUPDATA: MasterSearchModel, FORMNAME: string) {
-    if(this.alloyMastereForm.value.selectMasterOnly){
+    if (this.alloyMastereForm.value.selectMasterOnly) {
       this.validateLookupField(event, LOOKUPDATA, FORMNAME)
-    }else{
+    } else {
       this.checkCodeExists()
     }
   }
@@ -921,7 +936,7 @@ export class AlloyMasterComponent implements OnInit {
 
 
 
- 
+
 
   currencySelectedAed() {
     if (this.alloyMastereForm.controls.currency.value != "AED") {
@@ -1070,7 +1085,7 @@ export class AlloyMasterComponent implements OnInit {
 
     return paddedValue;
   }
- 
+
 
   checkStockCode(): boolean {
     // if(this.content.FLAG == 'VIEW' || this.content.FLAG == 'EDIT'){
@@ -1305,7 +1320,7 @@ export class AlloyMasterComponent implements OnInit {
   }
 
   validateStockLC() {
-  
+
     if (this.alloyMastereForm.value.price1code.length > 0) {
       if (this.price1Array.length > 0) {
         let LC = this.TagPrice_Calculation(this.price1Array[0])
@@ -1314,7 +1329,7 @@ export class AlloyMasterComponent implements OnInit {
         this.price1LcChange();
       }
     }
- 
+
 
     if (this.alloyMastereForm.value.price2code.length > 0) {
       if (this.price2Array.length > 0) {
@@ -1324,7 +1339,7 @@ export class AlloyMasterComponent implements OnInit {
       }
     }
 
-   
+
 
     if (this.alloyMastereForm.value.price3code.length > 0) {
       if (this.price3Array.length > 0) {
@@ -1333,7 +1348,7 @@ export class AlloyMasterComponent implements OnInit {
         this.price3LcChange();
       }
     }
-   
+
 
     if (this.alloyMastereForm.value.price4code.length > 0) {
       if (this.price4Array.length > 0) {
@@ -1342,7 +1357,7 @@ export class AlloyMasterComponent implements OnInit {
         this.price4LcChange();
       }
     }
- 
+
 
     if (this.alloyMastereForm.value.price5code.length > 0) {
       if (this.price5Array.length > 0) {
@@ -1890,7 +1905,7 @@ export class AlloyMasterComponent implements OnInit {
             }
           });
           this.alloyMastereForm.controls.code.setValue('')
-        }else{
+        } else {
           this.prefixCodeValidate()
         }
       }, err => {

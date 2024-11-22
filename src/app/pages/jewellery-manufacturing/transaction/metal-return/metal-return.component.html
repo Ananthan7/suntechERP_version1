@@ -10,7 +10,9 @@
     [isViewDelete]="false" [isViewSave]="!viewMode" [isloading]="isloading"
     [isViewPost]="true"
     [isViewAuditTrail]="true" [disableAuditTrail]="!isSaved"
-    [isViewDelete]="editMode"></modal-header>
+    [isViewDelete]="editMode" [isViewAttachment]="!viewMode" (attachmentClick)="attachmentClicked()"></modal-header>
+    <!-- component to upload attachment -->
+<attachment-upload (uploadSubmit)="uploadSubmited($event)" [savedAttachment]="savedAttachments"></attachment-upload>
 <!-- content section -->
 <div class="row">
     <div class="col-md-12">

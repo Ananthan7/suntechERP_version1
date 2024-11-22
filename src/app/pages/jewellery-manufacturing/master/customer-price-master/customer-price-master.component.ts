@@ -9,6 +9,7 @@ import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import themes from 'devextreme/ui/themes';
 import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
+import { AttachmentUploadComponent } from 'src/app/shared/common/attachment-upload/attachment-upload.component';
 
 
 
@@ -19,6 +20,8 @@ import { MasterSearchComponent } from 'src/app/shared/common/master-search/maste
 })
 export class CustomerPriceMasterComponent implements OnInit {
   @ViewChild('overlaycodeSearch') overlaycodeSearch!: MasterSearchComponent;
+  @ViewChild(AttachmentUploadComponent) attachmentUploadComponent?: AttachmentUploadComponent;
+
   viewMode: boolean = false;
   editableMode: boolean = false;
   editMode: boolean = false;
@@ -124,6 +127,21 @@ export class CustomerPriceMasterComponent implements OnInit {
     //  this.getStonePriceData()
     //  this.getLabourChargeMasterList()
   }
+
+  Attachedfile: any[] = [];
+  savedAttachments: any[] = [];
+
+  attachmentClicked() {
+    this.attachmentUploadComponent?.showDialog()
+  }
+
+  uploadSubmited(file: any) {
+
+    this.Attachedfile = file
+    console.log(this.Attachedfile);
+
+  }
+
   setInitialValues() {
     this.customerpricemasterForm.controls.date.setValue(this.commonService.currentDate)
     this.customerpricemasterForm.controls.MAIN_VOCTYPE.setValue(this.commonService.getqueryParamMainVocType())

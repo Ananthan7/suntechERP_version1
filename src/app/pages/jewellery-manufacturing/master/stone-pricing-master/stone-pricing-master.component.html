@@ -9,7 +9,9 @@
     <!-- modal header component -->
     <modal-header [isViewSave]="!viewMode" [isViewCancel]="!viewMode" [isViewMore]="!viewMode"
         (saveClick)="formSubmit()" (cancelClick)="close()" (deleteClick)="deleteStonepriceMaster()"
-        [isViewDelete]="editMode"></modal-header>
+        [isViewDelete]="editMode" [isViewAttachment]="!viewMode" (attachmentClick)="attachmentClicked()"></modal-header>
+        <!-- component to upload attachment -->
+        <attachment-upload (uploadSubmit)="uploadSubmited($event)" [savedAttachment]="savedAttachments"></attachment-upload>
     <!-- content section -->
     <div class="row">
         <div class="p-4 ">

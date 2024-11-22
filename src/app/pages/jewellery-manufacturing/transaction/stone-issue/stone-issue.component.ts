@@ -15,6 +15,7 @@ import Swal from 'sweetalert2';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 // import { StoneIssueDetailComponent } from './stone-issue-detail/stone-issue-detail.component';
 import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
+import { AttachmentUploadComponent } from 'src/app/shared/common/attachment-upload/attachment-upload.component';
 
 
 @Component({
@@ -27,6 +28,10 @@ export class StoneIssueComponent implements OnInit {
   @ViewChild('overlaySALESPERSON_CODESearch') overlaySALESPERSON_CODESearch!: MasterSearchComponent;
   @ViewChild('overlayworkerSearch') overlayworkerSearch!: MasterSearchComponent;
   @ViewChild('overlayCurrencyCode') overlayCurrencyCode!: MasterSearchComponent;
+  @ViewChild(AttachmentUploadComponent) attachmentUploadComponent?: AttachmentUploadComponent;
+
+  Attachedfile: any[] = [];
+  savedAttachments: any[] = [];
   modalReference!: NgbModalRef;
 
   currentFilter: any;
@@ -154,6 +159,19 @@ export class StoneIssueComponent implements OnInit {
     // };
 
   }
+
+
+
+
+  attachmentClicked() {
+    this.attachmentUploadComponent?.showDialog()
+  }
+
+  uploadSubmited(file: any) {
+    this.Attachedfile = file
+    console.log(this.Attachedfile);    
+  }
+
   setvalues() {
     this.branchCode = this.comService.branchCode;
     this.stoneissueFrom.controls.VOCTYPE.setValue(this.comService.getqueryParamVocType())

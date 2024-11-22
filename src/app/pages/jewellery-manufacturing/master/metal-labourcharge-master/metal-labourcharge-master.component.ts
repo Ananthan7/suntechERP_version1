@@ -9,6 +9,7 @@ import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
 import { MasterSearchComponent } from 'src/app/shared/common/master-search/master-search.component';
 import { Console } from 'console';
+import { AttachmentUploadComponent } from 'src/app/shared/common/attachment-upload/attachment-upload.component';
 
 @Component({
   selector: 'app-metal-labourcharge-master',
@@ -26,6 +27,8 @@ export class MetalLabourchargeMasterComponent implements OnInit {
   @ViewChild('overlaycategorySearch') overlaycategorySearch!: MasterSearchComponent;
   @ViewChild('overlaysubCategorySearch') overlaysubCategorySearch!: MasterSearchComponent;
   @ViewChild('overlaybrandSearch') overlaybrandSearch!: MasterSearchComponent;
+  @ViewChild(AttachmentUploadComponent) attachmentUploadComponent?: AttachmentUploadComponent;
+
 
   @Input() content!: any;
   viewMode: boolean = false;
@@ -473,6 +476,21 @@ export class MetalLabourchargeMasterComponent implements OnInit {
     } else {
       this.isDisableSaveBtn = false;
     }
+  }
+
+  
+  Attachedfile: any[] = [];
+  savedAttachments: any[] = [];
+
+  attachmentClicked() {
+    this.attachmentUploadComponent?.showDialog()
+  }
+
+  uploadSubmited(file: any) {
+
+    this.Attachedfile = file
+    console.log(this.Attachedfile);
+
   }
 
   ngAfterViewInit() {
