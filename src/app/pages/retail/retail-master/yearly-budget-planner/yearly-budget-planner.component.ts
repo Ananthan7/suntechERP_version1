@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Renderer2 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { MasterSearchModel } from 'src/app/shared/data/master-find-model';
@@ -38,6 +38,7 @@ export class YearlyBudgetPlannerComponent implements OnInit {
     private formBuilder: FormBuilder,
     private modalService: NgbModal,
     private apiService: SuntechAPIService,
+    private renderer: Renderer2,
     private commonService: CommonServiceService,
 
 
@@ -63,11 +64,19 @@ export class YearlyBudgetPlannerComponent implements OnInit {
     console.log(this.unq_id);
     this.flag = this.content?.FLAG;
     this.initialController(this.flag, this.content);
-    if (this?.flag == "EDIT" || this?.flag == 'VIEW') {
+    if (this?.flag == "EDIT" || this?.flag == 'VIEW' || this.flag == 'DELETE') {
       this.detailsapi(this.unq_id);
     }
-    if(this.flag == 'EDIT'){
+    if(this.flag == 'EDIT' || this.flag == "DELETE"){
       this.editMode = true;
+    }
+  }
+
+  checkcode() {
+    const branchcodeval = this.yearlybudgetform.controls.branchcode;
+    if (!branchcodeval.value || branchcodeval.value.trim() === "") {
+      this.commonService.toastErrorByMsgId('MSG1124');
+      this.renderer.selectRootElement('#branch_code')?.focus();
     }
   }
 
@@ -129,7 +138,7 @@ export class YearlyBudgetPlannerComponent implements OnInit {
         // ('#gridContainer').reload();
         console.log(result.response.Details)
         console.log(this.dyndatas);
-        this.flag = "EDIT";
+        // this.flag = "EDIT";
       }, (err: any) => {
 
       })
@@ -205,23 +214,30 @@ export class YearlyBudgetPlannerComponent implements OnInit {
   }
 
   close(data?: any) {
-    // this.activeModal.close(data); 
-    if(this.flag == undefined || this.flag == 'EDIT'){
+    if (data){
+      this.viewMode = true;
+      this.activeModal.close(data);
+      return
+    }
+    if (this.content && this.content.FLAG == 'VIEW'){
+      this.activeModal.close(data);
+      return
+    }
     Swal.fire({
-      title: "Confirm",
-      text: "Are you sure you want to close this window?",
-      icon: "warning",
+      title: 'Do you want to exit?',
+      text: '',
+      icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: 'Yes',
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes!',
       cancelButtonText: 'No'
     }).then((result) => {
       if (result.isConfirmed) {
         this.activeModal.close(data);
       }
-    });
-  }else{
-    this.activeModal.close(data);
   }
+  )
   }
 
   formSubmit() {
